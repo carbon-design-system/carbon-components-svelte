@@ -123,15 +123,21 @@
 
   .#{$prefix}--side-nav--rail {
     width: mini-units(6);
+    // ccs: a transition takes its delay from the state it moves to, so
+    // collapsing waits `leaveDelayMs` and the `:hover` rule's delay
+    // (`enterDelayMs`) applies to expanding. `SideNav` sets both inline.
+    transition-delay: var(--ccs-side-nav-rail-leave-delay, 0ms);
   }
 
   .#{$prefix}--side-nav--expanded {
     width: mini-units(32);
+    transition-delay: 0ms; // ccs: open a rail from the menu button at once
   }
 
   @media (any-hover: hover) {
     .#{$prefix}--side-nav.#{$prefix}--side-nav--rail:not(.#{$prefix}--side-nav--fixed):hover {
       width: mini-units(32);
+      transition-delay: var(--ccs-side-nav-rail-enter-delay, 0ms); // ccs
     }
   }
 
@@ -555,6 +561,8 @@
 @mixin side-nav-rail-focus {
   .#{$prefix}--side-nav.#{$prefix}--side-nav--rail:not(.#{$prefix}--side-nav--fixed):focus-within {
     width: mini-units(32);
+    // Skip the hover enter delay.
+    transition-delay: 0ms;
   }
 }
 

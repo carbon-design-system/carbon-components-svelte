@@ -79,6 +79,19 @@
   /** Specify the ARIA label for the resize handle. */
   export let resizeHandleLabel = "Resize side navigation";
 
+  /**
+   * Specify the delay in milliseconds before the rail expands on hover.
+   * Has no effect unless `rail` is `true`.
+   */
+  export let enterDelayMs = 100;
+
+  /**
+   * Specify the delay in milliseconds before the hover-expanded rail
+   * collapses once the pointer leaves it.
+   * Has no effect unless `rail` is `true`.
+   */
+  export let leaveDelayMs = 0;
+
   import { createEventDispatcher, onMount, tick } from "svelte";
   import {
     acquireBodyScrollLock,
@@ -179,6 +192,17 @@
     dispatchResize(prevWidth);
   }
 
+  // `leaveDelayMs` is for the pointer leaving the rail, not for closing it
+  // from the menu button. A transition takes its delay from the style it
+  // moves to, and changing the delay later doesn't touch a running one. So
+  // drop the delay, flush styles to start the collapse, then restore it.
+  async function collapseRailNow() {
+    skipRailLeaveDelay = true;
+    await tick();
+    navRef?.getBoundingClientRect();
+    skipRailLeaveDelay = false;
+  }
+
   function handleResizeHandleMouseEnter() {
     resizeCursorTimer = setTimeout(() => {
       resizeCursorVisible = true;
@@ -203,9 +227,11 @@
   let resizeStartWidth = 0;
   let resizeCursorVisible = false;
   let resizeCursorTimer = undefined;
+  let skipRailLeaveDelay = false;
 
   $: if (prevIsOpen !== isOpen) {
     dispatch(isOpen ? "open" : "close");
+    if (rail && !isOpen) collapseRailNow();
     prevIsOpen = isOpen;
   }
   // Only update the collapsed store after hydration (winWidth is known).
@@ -306,6 +332,10 @@
     ? "hidden"
     : undefined}
   style:--ccs-side-nav-width={resizeEnabled ? `${renderedWidth}px` : undefined}
+  style:--ccs-side-nav-rail-enter-delay={rail ? `${enterDelayMs}ms` : undefined}
+  style:--ccs-side-nav-rail-leave-delay={rail && !skipRailLeaveDelay
+    ? `${leaveDelayMs}ms`
+    : undefined}
   {...$$restProps}
 >
   <slot />

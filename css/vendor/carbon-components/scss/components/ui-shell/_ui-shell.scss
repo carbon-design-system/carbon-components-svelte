@@ -353,6 +353,14 @@
       display: none;
     }
   }
+
+  // Show the scrollbar in step with the width: the nav's delay is the
+  // hover enter delay, the leave delay, or none, by state.
+  .#{$prefix}--side-nav--rail .#{$prefix}--side-nav__items {
+    transition-behavior: allow-discrete;
+    transition-delay: inherit;
+    transition-property: scrollbar-width;
+  }
 }
 
 @include exports('ccs-ui-shell') {
