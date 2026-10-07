@@ -7,8 +7,10 @@
   export let size: ComponentProps<Menu>["size"] = "sm";
   export let maxHeight: ComponentProps<Menu>["maxHeight"] = undefined;
   export let disabledIndex: number | undefined = undefined;
+  export let moveFocusOnClick = false;
 
   let anchor: HTMLButtonElement;
+  let elsewhere: HTMLInputElement;
   let open = false;
 
   const items = ["First", "Second", "Third"];
@@ -31,9 +33,14 @@
   {#each items as text, index}
     <MenuItem
       disabled={index === disabledIndex}
-      on:click={() => console.log("click", text)}
+      on:click={() => {
+        console.log("click", text);
+        if (moveFocusOnClick) elsewhere.focus();
+      }}
     >
       {text}
     </MenuItem>
   {/each}
 </Menu>
+
+<input aria-label="Elsewhere" bind:this={elsewhere}>

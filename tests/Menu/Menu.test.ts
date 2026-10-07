@@ -227,6 +227,29 @@ describe("Menu", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("returns focus to the anchor after selecting an item with the keyboard", async () => {
+    render(MenuFixture);
+
+    const trigger = screen.getByRole("button", { name: "Trigger" });
+    await user.click(trigger);
+    expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("leaves focus where an item's click handler moved it", async () => {
+    render(MenuFixture, { props: { moveFocusOnClick: true } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    await user.keyboard("{Enter}");
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
+  });
+
   it("does not select or close when clicking a disabled item", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MenuFixture, { props: { disabledIndex: 0 } });
