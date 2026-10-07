@@ -139,6 +139,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -341,6 +342,9 @@
           } else if (expandable && expanded) {
             expanded = false;
             event.preventDefault();
+            // Collapsing makes the input inert, so focus would fall to
+            // <body>. Move it to the magnifier button that replaces it.
+            tick().then(() => returnFocus(searchRef, ref));
           }
         } else if (event.key === "Enter") {
           event.preventDefault();

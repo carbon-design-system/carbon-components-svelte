@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import SearchEscapeCollapse from "./SearchEscapeCollapse.test.svelte";
 
 describe("Search Escape key", () => {
@@ -21,6 +22,18 @@ describe("Search Escape key", () => {
     await fireEvent.keyDown(input, { key: "Escape" });
     expect(onClear).toHaveBeenCalledTimes(1);
     expect(search).not.toHaveClass("bx--search--expanded");
+  });
+
+  it("moves focus to the magnifier button when Escape collapses it", async () => {
+    render(SearchEscapeCollapse, { props: { expanded: true } });
+
+    const input = screen.getByRole("searchbox");
+    input.focus();
+
+    await fireEvent.keyDown(input, { key: "Escape" });
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Search" })).toHaveFocus();
   });
 
   it("does not dispatch clear on Escape when the non-expandable field is already empty", async () => {
