@@ -12,7 +12,12 @@ description: Forms provide a structured way to collect user input, working with 
     Select,
     SelectItem,
     Stack,
-    Button,} from "carbon-components-svelte";
+    Button,
+    TextInput,
+    NumberInput,
+    Dropdown,
+    DatePicker,
+    DatePickerInput,} from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -40,6 +45,31 @@ submits. The placeholder option has an empty value and the select is
       <SelectItem value="team" text="Team" />
     </Select>
     <Button type="submit">Submit</Button>
+  </Stack>
+</Form>
+
+## Sizes
+
+Set `size` on `Form` to size every field inside it. Text inputs, number
+inputs, selects, dropdowns, date and time pickers, and their skeletons all
+inherit it. A field's own `size` takes precedence.
+
+<Form size="xs" on:submit={(e) => e.preventDefault()}>
+  <Stack gap={5}>
+    <TextInput name="service" labelText="Service name" value="billing-api" />
+    <NumberInput name="replicas" labelText="Replicas" value={3} />
+    <Dropdown
+      labelText="Region"
+      selectedId="us-east-1"
+      items={[
+        { id: "us-east-1", text: "US East (N. Virginia)" },
+        { id: "eu-west-1", text: "EU West (Ireland)" },
+      ]}
+    />
+    <DatePicker datePickerType="single">
+      <DatePickerInput labelText="Maintenance window" placeholder="mm/dd/yyyy" />
+    </DatePicker>
+    <TextInput size="sm" name="owner" labelText="Owner (small)" value="platform-team" />
   </Stack>
 </Form>
 
