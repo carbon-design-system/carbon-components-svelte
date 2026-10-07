@@ -208,6 +208,19 @@ describe("DataTableBatchSelectionToolbar", () => {
     );
   });
 
+  it("leaves focus where an action handler moved it after closing the bar", async () => {
+    render(DataTableBatchSelectionToolbar, {
+      props: { selectedRowIds: ["a", "b"], moveFocusOnDelete: true },
+    });
+
+    screen.getByText("Delete").focus();
+    await user.keyboard("{Enter}");
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
+  });
+
   it("applies inert to batch actions when no rows are selected", () => {
     const { container } = render(DataTableBatchSelectionToolbar, {
       props: {

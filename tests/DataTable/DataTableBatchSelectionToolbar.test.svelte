@@ -25,6 +25,9 @@
   export let selectedRowIds: ComponentProps<DataTable>["selectedRowIds"] = [];
   export let active: ComponentProps<ToolbarBatchActions>["active"] = undefined;
   export let controlled = false;
+  export let moveFocusOnDelete = false;
+
+  let elsewhere: HTMLInputElement;
 </script>
 
 <div data-testid="selected-ids">{JSON.stringify(selectedRowIds)}</div>
@@ -42,8 +45,13 @@
     >
       <Button
         kind="danger"
-        on:click={() => {
+        on:click={async () => {
           console.log("delete", selectedRowIds);
+          if (moveFocusOnDelete) {
+            selectedRowIds = [];
+            await tick();
+            elsewhere.focus();
+          }
         }}
       >
         Delete
@@ -59,3 +67,5 @@
     <ToolbarContent> <Button>Create balancer</Button> </ToolbarContent>
   </Toolbar>
 </DataTable>
+
+<input aria-label="Elsewhere" bind:this={elsewhere}>

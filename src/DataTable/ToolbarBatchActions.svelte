@@ -28,6 +28,7 @@
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
 
   import Button from "../Button/Button.svelte";
+  import { returnFocus } from "../utils/focus.js";
 
   let batchSelectedIds = [];
   let wrapperRef = null;
@@ -85,10 +86,9 @@
     ) {
       // The bar is about to go inert while it still contains focus (e.g.
       // Cancel was just activated). Move focus to a stable element before
-      // the browser drops it to `document.body`.
-      tick().then(() => {
-        ctxToolbar?.getRef?.()?.focus();
-      });
+      // the browser drops it to `document.body`, unless an action handler
+      // moved it elsewhere in the meantime.
+      tick().then(() => returnFocus(ctxToolbar?.getRef?.(), wrapperRef));
     }
     prevShowActions = showActions;
   }
