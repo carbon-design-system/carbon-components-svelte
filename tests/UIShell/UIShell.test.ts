@@ -888,6 +888,49 @@ describe("UIShell", () => {
         expect(content).not.toHaveStyle({ marginLeft: "0px" });
       });
 
+      it("should keep the rail margin on mobile when SideNav is a closed rail", async () => {
+        setViewportWidth(500);
+
+        const { container } = render(UiShell, {
+          props: { sideNavRail: true, sideNavIsOpen: false },
+        });
+
+        await flushMacrotask();
+
+        const content = container.querySelector<HTMLElement>(".bx--content");
+        expect(content?.style.marginLeft).toBe("3rem");
+      });
+
+      it("should keep the rail margin on mobile when SideNav is an expanded rail", async () => {
+        setViewportWidth(500);
+
+        const { container } = render(UiShell, {
+          props: { sideNavRail: true, sideNavIsOpen: true },
+        });
+
+        await flushMacrotask();
+
+        // The expanded rail overlays content instead of pushing it 16rem.
+        expect(container.querySelector(".bx--side-nav")).toHaveClass(
+          "bx--side-nav--expanded",
+        );
+        const content = container.querySelector<HTMLElement>(".bx--content");
+        expect(content?.style.marginLeft).toBe("3rem");
+      });
+
+      it("should not set an inline margin for a rail on desktop", async () => {
+        setViewportWidth(1200);
+
+        const { container } = render(UiShell, {
+          props: { sideNavRail: true, sideNavIsOpen: false },
+        });
+
+        await flushMacrotask();
+
+        const content = container.querySelector<HTMLElement>(".bx--content");
+        expect(content?.style.marginLeft).toBe("");
+      });
+
       it("should unset left margin when SideNav is collapsed on desktop", async () => {
         setViewportWidth(1200); // Desktop viewport
 

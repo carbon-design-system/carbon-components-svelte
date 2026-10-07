@@ -13,12 +13,20 @@
    * By default, the `SideNav` applies a left margin of `3rem` to `Content`
    * if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
    *
-   * Unset the left margin if:
-   * - `SideNav` is collapsed and it's not the `rail` variant, OR
-   * - `SideNav` overlays content on mobile (below the breakpoint)
+   * Unset the left margin if `SideNav` is not the `rail` variant and:
+   * - it's collapsed, OR
+   * - it overlays content on mobile (below the breakpoint)
+   *
+   * The rail stays visible on mobile, so keep its `3rem` margin there.
+   * Pin it so an expanded rail overlays content instead of pushing it.
    */
-  $: unsetLeftMargin =
-    ($isSideNavCollapsed && !$isSideNavRail) || $isSideNavMobile;
+  $: marginLeft = $isSideNavRail
+    ? $isSideNavMobile
+      ? "3rem"
+      : undefined
+    : $isSideNavCollapsed || $isSideNavMobile
+      ? 0
+      : undefined;
 
   // A resizable `SideNav` shares its width so the CSS margin can follow it;
   // custom properties don't inherit across siblings.
@@ -29,7 +37,7 @@
 <main
   {id}
   class:bx--content={true}
-  style:margin-left={unsetLeftMargin ? 0 : undefined}
+  style:margin-left={marginLeft}
   style:--ccs-side-nav-width={sideNavWidthStyle}
   {...$$restProps}
 >
