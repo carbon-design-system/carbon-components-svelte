@@ -26,7 +26,7 @@ describe("TreeView toggle:change", () => {
     const onToggle = vi.fn();
     render(TreeViewExpandedChange, { onToggleChange, onToggle });
 
-    const analytics = document.getElementById("1");
+    const analytics = document.querySelector('[data-tree-row-id="1"]');
     assert(analytics instanceof HTMLElement);
     const toggle = analytics.querySelector(".bx--tree-parent-node__toggle");
     assert(toggle instanceof HTMLElement);

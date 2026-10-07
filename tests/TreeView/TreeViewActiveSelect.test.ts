@@ -34,7 +34,7 @@ describe("TreeView auto-select on active node", () => {
     const { component } = render(TreeViewActiveSelect);
     await tick();
 
-    const first = document.getElementById("1");
+    const first = document.querySelector('[data-tree-row-id="1"]');
     if (!first) throw new Error("expected node 1");
     await user.click(first);
     expect(component.selectedIds).toEqual([1]);

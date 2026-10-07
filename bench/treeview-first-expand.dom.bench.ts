@@ -53,7 +53,7 @@ task("first expand, 5000-child node (not virtualized)", async () => {
   });
 
   const toggle = container.querySelector(
-    '[id="1"] .bx--tree-parent-node__toggle',
+    '[data-tree-row-id="1"] .bx--tree-parent-node__toggle',
   );
   await fireEvent.click(toggle);
   await tick();
@@ -72,7 +72,7 @@ task("first expand, 5000-child node (virtualized)", async () => {
   });
 
   const toggle = container.querySelector(
-    '[id="1"] .bx--tree-parent-node__toggle',
+    '[data-tree-row-id="1"] .bx--tree-parent-node__toggle',
   );
   await fireEvent.click(toggle);
   await tick();
@@ -97,7 +97,7 @@ const steadyNotVirtualized = render(TreeView, {
 
 task("steady-state re-toggle, 5000-child node (not virtualized)", async () => {
   const toggle = steadyNotVirtualized.container.querySelector(
-    '[id="1"] .bx--tree-parent-node__toggle',
+    '[data-tree-row-id="1"] .bx--tree-parent-node__toggle',
   );
   await fireEvent.click(toggle);
   await tick();
@@ -114,7 +114,7 @@ const steadyVirtualized = render(TreeView, {
 
 task("steady-state re-toggle, 5000-child node (virtualized)", async () => {
   const toggle = steadyVirtualized.container.querySelector(
-    '[id="1"] .bx--tree-parent-node__toggle',
+    '[data-tree-row-id="1"] .bx--tree-parent-node__toggle',
   );
   await fireEvent.click(toggle);
   await tick();

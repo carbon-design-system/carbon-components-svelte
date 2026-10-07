@@ -599,7 +599,7 @@
           focusVirtualRowById(id);
           return;
         }
-        const selector = `[id="${CSS.escape(String(id))}"]`;
+        const selector = treeRowIdSelector(id);
         let target = ref?.querySelector(selector);
         for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
           // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
@@ -789,7 +789,8 @@
 
   /**
    * `String(node.id)` → `node.id`, built on first use. Row elements carry
-   * `id={node.id}`, which the DOM stringifies; this recovers numeric ids.
+   * the node id in `data-tree-row-id`, which the DOM stringifies; this
+   * recovers numeric ids.
    * @type {Map<string, Node["id"]> | null}
    */
   let cachedIdByDomId = null;
@@ -806,7 +807,7 @@
         cachedIdByDomId.set(String(id), id);
       }
     }
-    return cachedIdByDomId.get(element.id);
+    return cachedIdByDomId.get(element.getAttribute(TREE_ROW_ID_ATTR));
   }
 
   /**
@@ -1313,7 +1314,7 @@
             ref?.querySelectorAll(
               '[role="treeitem"]:not(.bx--tree-node--hidden)',
             ) ?? [],
-          ).map((element) => [element.id, element]),
+          ).map((element) => [element.getAttribute(TREE_ROW_ID_ATTR), element]),
         );
         for (const n of cachedFlattenedNodes) {
           if (n.disabled) continue;

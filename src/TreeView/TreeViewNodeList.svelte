@@ -188,8 +188,9 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <li
     bind:this={ref}
+    data-tree-row-id={id}
     role="treeitem"
-    {id}
+    id="{$treeId}-{id}"
     tabindex={disabled ? undefined : -1}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
