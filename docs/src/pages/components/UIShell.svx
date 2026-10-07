@@ -163,6 +163,14 @@ Set `rail` on the side nav to use the rail variant. Expanded side nav menu items
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
+### Rail hover delay
+
+A rail expands once the pointer rests on it for `enterDelayMs` (default `100`), so passing over it on the way to the content doesn't flash it open. It collapses `leaveDelayMs` after the pointer leaves (default `0`). Keyboard focus expands it at once, and touch never does.
+
+This example waits `300` ms in both directions.
+
+<FileSource src="/framed/UIShell/HeaderNavRailDelay" />
+
 ### Fixed rail
 
 Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, instead of temporarily expanding.
