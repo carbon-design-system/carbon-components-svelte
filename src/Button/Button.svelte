@@ -21,7 +21,8 @@
    * Specify the size of button.
    * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
    * Falls back to the size set by an ancestor `ActionSet` when unset.
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * Use `"xs"` for icon-only buttons in dense layouts.
+   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl"}
    * @default "default"
    */
   export let size = undefined;
@@ -296,6 +297,7 @@
     class: [
       "bx--btn",
       expressive && "bx--btn--expressive",
+      effectiveSize === "xs" && "bx--btn--xs",
       effectiveSize === "small" && "bx--btn--sm",
       effectiveSize === "field" && "bx--btn--field",
       effectiveSize === "lg" && "bx--btn--lg",

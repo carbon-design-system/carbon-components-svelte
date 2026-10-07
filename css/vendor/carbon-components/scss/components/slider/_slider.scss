@@ -703,3 +703,16 @@
 @include exports("slider-vertical") {
   @include slider-vertical;
 }
+
+// carbon-components-svelte patch
+// Extra-small (`xs`, 24px) number input, centered on the track like the
+// default size.
+@mixin slider-xs {
+  .#{$prefix}--slider-text-input--xs {
+    height: to-rem(24px);
+  }
+}
+
+@include exports('slider-xs') {
+  @include slider-xs;
+}

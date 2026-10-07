@@ -357,3 +357,33 @@
 .#{$prefix}--file__selected-file--sm .#{$prefix}--file-filename {
   min-width: 0;
 }
+
+// carbon-components-svelte patch
+// Extra-small (`xs`, 24px) file rows for `FileUploader size="xs"` and
+// `FileUploaderItem size="xs"`, per the condensed Carbon spec.
+@mixin file-uploader-xs {
+  .#{$prefix}--file__selected-file--xs {
+    min-height: to-rem(24px);
+    gap: 0 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--file__selected-file--xs .#{$prefix}--file-filename-group {
+    flex-direction: row;
+    align-items: baseline;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--file__selected-file--invalid.#{$prefix}--file__selected-file--xs {
+    padding: 0;
+  }
+
+  .#{$prefix}--file__selected-file--invalid.#{$prefix}--file__selected-file--xs
+    .#{$prefix}--form-requirement {
+    padding-top: to-rem(3px);
+    padding-bottom: to-rem(3px);
+  }
+}
+
+@include exports('file-uploader-xs') {
+  @include file-uploader-xs;
+}

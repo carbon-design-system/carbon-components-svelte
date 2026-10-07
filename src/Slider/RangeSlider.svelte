@@ -14,6 +14,13 @@
   export let value = 0;
 
   /**
+   * Set the size of the number input.
+   * Inherits `"xs"` from a parent `Form`.
+   * @type {"xs"}
+   */
+  export let size = undefined;
+
+  /**
    * Specify the upper bound value of the slider.
    * Kept when the owning form resets.
    * @bindable writable
@@ -147,7 +154,8 @@
   /** Set to `true` to select a text input's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, getContext, tick } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
@@ -414,6 +422,10 @@
       dragging = false;
     }
   }
+
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? ($formSize === "xs" ? "xs" : undefined);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -469,6 +481,7 @@
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         class:bx--slider-text-input--lower={true}
+        class:bx--slider-text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--light={light}
         class:bx--text-input--invalid={showInvalid}
         class:bx--slider-text-input--warn={showWarn}
@@ -703,6 +716,7 @@
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         class:bx--slider-text-input--upper={true}
+        class:bx--slider-text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--light={light}
         class:bx--text-input--invalid={showInvalid}
         class:bx--slider-text-input--warn={showWarn}

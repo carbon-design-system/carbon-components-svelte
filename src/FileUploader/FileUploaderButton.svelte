@@ -158,6 +158,7 @@
   class:bx--btn--danger={kind === "danger"}
   class:bx--btn--danger-tertiary={kind === "danger-tertiary"}
   class:bx--btn--danger-ghost={kind === "danger-ghost"}
+  class:bx--btn--xs={size === "xs"}
   class:bx--btn--sm={size === "small"}
   class:bx--btn--field={size === "field"}
   class:bx--btn--lg={size === "lg"}
