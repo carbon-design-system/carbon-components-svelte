@@ -287,6 +287,12 @@ Use slots to customize the elements and styles. Destructure the original classes
     <Text slot="descriptionChildren" let:props {...props} tag="span" type="body-long-02">Your organization's active load balancers.</Text>
 </DataTable>
 
+## AI label
+
+Mark AI-generated content with `AILabel` in three slots. The `decorator` slot puts a label beside the title. The `headerDecorator` slot renders for each header with `let:header`, and a column with an active label shows the AI gradient. The `rowDecorator` slot renders for each row with `let:row` in a narrow leading column, and a row with an active label shows the AI gradient.
+
+<FileSource src="/framed/DataTable/DataTableAILabel" />
+
 ## Width
 
 Control the table and column widths.
