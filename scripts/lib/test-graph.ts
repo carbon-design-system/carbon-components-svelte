@@ -384,7 +384,14 @@ const IGNORED = [
 ].map(globToRegExp);
 
 /** Roots the graph reads; any other changed file runs everything. */
-const GRAPH_ROOTS = ["src/", "tests/", "e2e/", "css/", "scripts/"];
+const GRAPH_ROOTS = [
+  "src/",
+  "tests/",
+  "e2e/",
+  "css/",
+  "scripts/",
+  "crassus.config.ts",
+];
 
 const COMPAT_HARNESS = /^tests-svelte[34]\//;
 

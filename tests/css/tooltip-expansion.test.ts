@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { parseRules, type Rule } from "../../scripts/lib/css-cascade";
+import { parseRules, type Rule } from "crassus";
 import { compileEntry } from "./compile";
 
 async function compileAll(): Promise<Rule[]> {

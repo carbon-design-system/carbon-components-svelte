@@ -1,5 +1,7 @@
 node_modules
 .cache
+# crassus capture/usage fixtures and reports
+.crassus
 **/.vite
 test-results
 playwright-report

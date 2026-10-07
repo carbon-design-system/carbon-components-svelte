@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { parseRules } from "../../scripts/lib/css-cascade";
+import { parseRules } from "crassus";
 import { compileEntry } from "./compile";
 
 // `transition` with no property (a bare duration) or with `all` animates

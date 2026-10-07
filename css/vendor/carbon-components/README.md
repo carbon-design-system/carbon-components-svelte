@@ -65,8 +65,8 @@ readonly field inside a modal) belongs in that later component's file, next
 to the rule it beats, not padded here.
 
 Guards: `bun run check:css --base <ref>` (compiled-rule cascade diff) and
-`bun e2e/cascade-snapshot.ts` (computed-style snapshot of the e2e fixtures);
-see each script's header.
+`bun run check:css:snapshot` with `check:css:snapshot:diff` (computed-style
+snapshot of the e2e fixtures); see the "Guards" table in CONTRIBUTING.md.
 
 `css/_*.scss` still holds v11 backports with no v10 base (fluid-*, popover,
 stack, ...) and utilities, registered in `css/_carbon-styles.scss`, the

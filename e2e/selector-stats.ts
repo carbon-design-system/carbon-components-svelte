@@ -44,7 +44,7 @@
  */
 import { writeFile } from "node:fs/promises";
 import { type Browser, type CDPSession, chromium, type Page } from "playwright";
-import { fixtures, startServer } from "./cascade-snapshot";
+import { fixtures, startServer } from "./fixture-server";
 
 const PORT = 4177;
 const [scenarioKey, ...rest] = process.argv.slice(2);

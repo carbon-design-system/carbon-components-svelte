@@ -49,6 +49,8 @@ const REPO: Record<string, string> = {
   "e2e/modal.test.ts": `test("x", async ({ page }) => {\n  await page.goto("/modal.html?theme=g10");\n});`,
   "e2e/vite.config.ts": `import { defineConfig } from "vite";`,
   "scripts/build-css.ts": `import { watch } from "node:fs";\n// @depends-on css/**`,
+  "crassus.config.ts": `import path from "node:path";`,
+  "tests/scripts/crassus-config.test.ts": `import config from "../../crassus.config";`,
 };
 
 function context(files: Iterable<string> = Object.keys(REPO)): ParseContext {
@@ -325,6 +327,14 @@ describe("planTests", () => {
     expect(plan(["css/_button.scss"])).toEqual({
       unit: "tests/css/button.test.ts tests/css/unknown.test.ts",
       e2e: "all",
+      reasons: [],
+    });
+  });
+
+  it("runs a root-level config's importers, not everything", () => {
+    expect(plan(["crassus.config.ts"])).toEqual({
+      unit: "tests/css/unknown.test.ts tests/scripts/crassus-config.test.ts",
+      e2e: "none",
       reasons: [],
     });
   });

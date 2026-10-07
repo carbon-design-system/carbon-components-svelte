@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { deadDeclarations } from "../../scripts/lib/css-overrides";
+import { deadDeclarations } from "crassus";
 import { compileEntry } from "./compile";
 
 // `white.scss` too: a static theme compiles the token branches all.scss
