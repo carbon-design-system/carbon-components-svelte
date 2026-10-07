@@ -4,7 +4,7 @@ description: Buttons trigger actions like submitting a form or navigating, with 
 ---
 
 <script>
-  import { BadgeIndicator, Box, Button, ButtonSkeleton, Stack } from "carbon-components-svelte";
+  import { BadgeIndicator, Box, Button, ButtonSkeleton, Stack, TooltipGroup } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
@@ -135,6 +135,18 @@ Set `isSelected` to `true` to enable the selected state for an icon-only, ghost 
 When multiple icon-only buttons are placed next to each other, only one tooltip will be visible at a time. Hovering a new button automatically hides the previous tooltip, ensuring the correct button is always clicked.
 
 <FileSource src="/framed/Button/AdjacentIconOnlyButtons" />
+
+### Tooltip group
+
+Wrap a toolbar of icon-only buttons in a [TooltipGroup](/components/TooltipGroup) to mark them as one set. Once one tooltip is open, moving to the next button shows its tooltip right away, with no enter delay or fade-in. Moving out to a tooltip outside the group waits for the full delay.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={1}>
+    <Button kind="ghost" iconDescription="Add" icon={Add} />
+    <Button kind="ghost" iconDescription="Delete" icon={TrashCan} />
+    <Button kind="ghost" iconDescription="Login" icon={Login} />
+  </Stack>
+</TooltipGroup>
 
 ### Badge
 
