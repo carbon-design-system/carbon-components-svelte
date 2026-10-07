@@ -73,13 +73,15 @@
     }
   }
 
-  .#{$prefix}--number--xl.#{$prefix}--number input[type='number'],
-  .#{$prefix}--number--xl.#{$prefix}--number input[type='text'] {
+  // ccs: no stepper room when `hideSteppers` removes the steppers
+  .#{$prefix}--number--xl.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
+  .#{$prefix}--number--xl.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
     padding-right: to-rem(144px);
   }
 
-  .#{$prefix}--number--sm.#{$prefix}--number input[type='number'],
-  .#{$prefix}--number--sm.#{$prefix}--number input[type='text'] {
+  // ccs: no stepper room when `hideSteppers` removes the steppers
+  .#{$prefix}--number--sm.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
+  .#{$prefix}--number--sm.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
     padding-right: to-rem(112px);
   }
 
