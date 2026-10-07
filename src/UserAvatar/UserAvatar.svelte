@@ -77,6 +77,13 @@
   export let tooltipText = undefined;
 
   /**
+   * Set an id for the avatar element.
+   * With `tooltipText`, the tooltip id derives from it as `{id}-tooltip`.
+   * @type {string}
+   */
+  export let id = undefined;
+
+  /**
    * Set the alignment of the tooltip relative to the avatar.
    * @type {"start" | "center" | "end"}
    */
@@ -251,6 +258,7 @@
     {align}
     {direction}
     {portalTooltip}
+    id={id === undefined ? undefined : `${id}-tooltip`}
     bind:open={tooltipOpen}
     on:close={releaseTooltip}
     data-overflow={groupOverflow ? "true" : undefined}
@@ -258,6 +266,7 @@
   >
     <span
       bind:this={ref}
+      {id}
       {...$$restProps}
       class={avatarClass}
       on:click
@@ -292,6 +301,7 @@
   <svelte:element
     this={avatarTag}
     bind:this={ref}
+    {id}
     {...$$restProps}
     class={avatarClass}
     href={isLink ? href : undefined}
