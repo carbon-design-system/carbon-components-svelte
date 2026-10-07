@@ -1,6 +1,6 @@
 A complete [Svelte](https://github.com/sveltejs/svelte) component library that implements the [IBM Carbon Design System](https://www.carbondesignsystem.com/). Ship accessible, consistent, production-ready interfaces.
 
-- **90+ components** — from inputs to data tables
+- **100+ components** — from inputs to data tables
 - **5 built-in themes** — two light, three dark
 - **Fully typed TypeScript API** — props, events, and slots
 - **WCAG 2.1 AA** — keyboard and screen-reader ready
@@ -93,7 +93,7 @@ Or use the [Theme component](/components/Theme) to manage the theme reactively.
 
 ## Faster builds, smaller bundles
 
-The fast path is enough to build. [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) trims build times and bundle size with two drop-in tools for faster HMR in development and leaner CSS when you ship.
+The fast path is enough to build. [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) trims build times and bundle size with three drop-in tools: faster HMR in development, and leaner CSS and JavaScript when you ship. Each works on its own.
 
 Add carbon-preprocess-svelte as a dev dependency:
 
@@ -117,7 +117,29 @@ Rewrites barrel imports to direct source paths, dramatically cutting cold build 
 
 ### optimizeCss
 
-Tree-shakes unused Carbon CSS at build time, often removing hundreds of kilobytes from production bundles.
+Tree-shakes unused Carbon CSS at build time, often removing hundreds of kilobytes from production bundles. Set `propAware: true` to also remove styles for prop values your app never passes.
+
+### optimizeComponents
+
+Rewrites each Carbon component your app renders for the props it passes, removing branches and child components that can never run. It runs on production builds only, and fails the build if a module outside its `content` globs imports a Carbon component. For Webpack and Rspack, use `OptimizeComponentsPlugin`.
+
+```javascript
+// vite.config.js
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import {
+  optimizeComponents,
+  optimizeCss,
+  optimizeImports,
+} from "carbon-preprocess-svelte";
+
+export default {
+  plugins: [
+    optimizeComponents(),
+    svelte({ preprocess: [optimizeImports()] }),
+    optimizeCss({ propAware: true }),
+  ],
+};
+```
 
 ### Configure your bundler
 
@@ -143,29 +165,24 @@ export default {
 **SvelteKit:**
 
 ```javascript
-// svelte.config.js
-import adapter from "@sveltejs/adapter-static";
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { optimizeImports } from "carbon-preprocess-svelte";
-
-const config = {
-  preprocess: [vitePreprocess(), optimizeImports()],
-  kit: { adapter: adapter() },
-};
-
-export default config;
-```
-
-```javascript
 // vite.config.js
+import adapter from "@sveltejs/adapter-static";
 import { sveltekit } from "@sveltejs/kit/vite";
-import { optimizeCss } from "carbon-preprocess-svelte";
-import { defineConfig } from "vite";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import { optimizeCss, optimizeImports } from "carbon-preprocess-svelte";
 
-export default defineConfig({
-  plugins: [sveltekit(), optimizeCss()],
-});
+export default {
+  plugins: [
+    sveltekit({
+      preprocess: [vitePreprocess(), optimizeImports()],
+      adapter: adapter(),
+    }),
+    optimizeCss(),
+  ],
+};
 ```
+
+On SvelteKit 2, pass the same `preprocess` in `svelte.config.js` and the adapter under `kit`.
 
 **Rollup:**
 
@@ -187,6 +204,8 @@ export default {
 ```
 
 **Webpack:**
+
+Rspack implements Webpack's plugin and loader APIs, so the same configuration works in `rspack.config.mjs`.
 
 ```javascript
 // webpack.config.mjs
@@ -277,8 +296,8 @@ Documentation is available in LLM-friendly plain text for use with coding assist
 
 The Carbon Svelte collection includes packages for icons, pictograms, and data visualization:
 
-- **Carbon Components Svelte** — 90+ components — [GitHub](https://github.com/carbon-design-system/carbon-components-svelte)
+- **Carbon Components Svelte** — 100+ components — [GitHub](https://github.com/carbon-design-system/carbon-components-svelte)
 - **Carbon Icons Svelte** — 2,700+ icons — [GitHub](https://github.com/carbon-design-system/carbon-icons-svelte)
 - **Carbon Pictograms Svelte** — 1,500+ pictograms — [GitHub](https://github.com/carbon-design-system/carbon-pictograms-svelte)
 - **Carbon Charts Svelte** — 25+ charts, powered by d3 — [GitHub](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)
-- **Carbon Preprocess Svelte** — Collection of Carbon Svelte preprocessors — [GitHub](https://github.com/carbon-design-system/carbon-preprocess-svelte)
+- **Carbon Preprocess Svelte** — Svelte preprocessors and build plugins — [GitHub](https://github.com/carbon-design-system/carbon-preprocess-svelte)

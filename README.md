@@ -8,7 +8,7 @@
 
 Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) component library that implements the [Carbon Design System](https://www.carbondesignsystem.com/), an open source design system by IBM. Ship accessible, consistent, production-ready interfaces.
 
-- **90+ components**: from inputs to data tables
+- **100+ components**: from inputs to data tables
 - **5 built-in themes**: two light, three dark
 - **Fully typed TypeScript API**: props, events, and slots
 - **WCAG 2.1 AA**: keyboard and screen-reader ready
@@ -18,7 +18,7 @@ The Carbon Svelte ecosystem also includes:
 - **[Carbon Icons Svelte](https://github.com/carbon-design-system/carbon-icons-svelte)**: 2,700+ Carbon icons as Svelte components
 - **[Carbon Pictograms Svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte)**: 1,500+ Carbon pictograms as Svelte components
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 25+ charts, powered by d3
-- **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
+- **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Svelte preprocessors and build plugins for Carbon
 
 ## [Documentation](https://svelte.carbondesignsystem.com)
 
@@ -51,7 +51,7 @@ Before importing components, you will need to first apply Carbon component style
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All five themes (White, Gray 10, Gray 80, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 
-Each StyleSheet is [generated](scripts/build-css.ts) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/main/packages/carbon-components) library.
+Each StyleSheet is [compiled](scripts/build-css.ts) from Carbon v10 SCSS ([carbon-components@10.58](css/vendor/carbon-components), vendored) and this library's own partials in [css](css).
 
 The compiled CSS is generated from the following `.scss` files:
 
@@ -86,11 +86,11 @@ import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/all.css";
 ```
 
-### SCSS
+### Smaller CSS
 
-The most performant method to load styles is to import SCSS directly from carbon-components. Although it requires more set up, you can reduce the size of the bundle CSS by importing individual component styles instead of a pre-compiled CSS StyleSheet.
+Each precompiled StyleSheet contains the styles for every component. To ship only the styles your app uses, add [`optimizeCss`](#optimizecss) to your production build.
 
-Refer to the [official Carbon guide on SASS](https://github.com/carbon-design-system/carbon/blob/v10/docs/guides/sass.md) for documentation.
+The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yourself misses styles for components and variants that only this library provides.
 
 ### Dynamic theming
 
@@ -144,7 +144,7 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 ## Preprocessors & Plugins
 
-[carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) is a collection of Svelte preprocessors for Carbon. It trims build times and bundle size with two drop-in tools for faster HMR in development and leaner CSS when you ship.
+[carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) is a collection of Svelte preprocessors and build plugins for Carbon. It trims build times and bundle size with three drop-in tools: faster compiles in development, leaner CSS and leaner JavaScript when you ship. Each works on its own.
 
 > [!NOTE]
 > Using `carbon-preprocess-svelte` is optional and not a prerequisite for this library. It should be installed as a development dependency.
@@ -162,6 +162,12 @@ yarn add -D carbon-preprocess-svelte
 # Bun
 bun add -D carbon-preprocess-svelte
 ```
+
+| Tool | Type | What it does |
+| :--- | :--- | :--- |
+| [`optimizeImports`](#optimizeimports) | Svelte preprocessor | Rewrites barrel imports to source paths, for faster dev and build times |
+| [`optimizeCss`](#optimizecss) | Build plugin | Removes unused Carbon styles from production CSS |
+| [`optimizeComponents`](#optimizecomponents) | Build plugin | Rewrites Carbon components for the props your app passes, removing code it never runs |
 
 ### `optimizeImports`
 
@@ -188,7 +194,7 @@ The preprocessor optimizes imports from the following packages:
 
 ### `optimizeCss`
 
-`optimizeCss` is a Vite plugin that removes unused Carbon styles at build time, often removing hundreds of kilobytes from production bundles. The plugin is compatible with Rollup ([Vite](https://vitejs.dev/guide/api-plugin) extends the Rollup plugin API).
+`optimizeCss` is a build plugin that removes unused Carbon styles at build time, often removing hundreds of kilobytes from production bundles. It runs on Vite, Rollup, and Rolldown. For Webpack and Rspack, use `OptimizeCssPlugin`.
 
 `carbon-components-svelte@0.85.0` or greater is required.
 
@@ -205,7 +211,57 @@ dist/assets/index-Ceijs3eO.js   53.65 kB │ gzip: 15.88 kB
 ```
 
 > [!NOTE]
-> This is a plugin and not a Svelte preprocessor. It should be added to the list of `vite.plugins`. For Vite set-ups, this plugin is only run when building the app. For Rollup and Webpack, you should conditionally apply the plugin to only execute when building for production.
+> This is a plugin and not a Svelte preprocessor. Add it to your bundler's `plugins`. Vite runs it on `vite build` only, and `OptimizeCssPlugin` runs in Webpack's production mode only. Under Rollup and Rolldown, add it to production builds only.
+
+#### Prop-aware pruning
+
+Set `propAware: true` to also remove styles for the prop values your app never passes.
+
+```js
+optimizeCss({ propAware: true });
+```
+
+```svelte
+<Button kind="tertiary">Save</Button>
+<!-- kept:   .bx--btn, .bx--btn--tertiary
+     pruned: the other kinds and sizes, .bx--skeleton, the icon-only tooltip -->
+```
+
+It reads literal props, constants, and props passed through your own wrapper components. A value it can't read (a reassigned variable, a store, `bind:`, a spread) keeps every variant.
+
+### `optimizeComponents`
+
+`optimizeComponents` rewrites each Carbon component your app renders for the props it passes. Values that never change become literals, and branches that can't run are removed, along with child components only those branches render (a skeleton, a tooltip portal). It is the JavaScript counterpart of prop-aware CSS pruning and uses the same analysis.
+
+```js
+// vite.config.js
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import {
+  optimizeComponents,
+  optimizeCss,
+  optimizeImports,
+} from "carbon-preprocess-svelte";
+
+export default {
+  plugins: [
+    optimizeComponents(),
+    svelte({ preprocess: [optimizeImports()] }),
+    optimizeCss({ propAware: true }),
+  ],
+};
+```
+
+| Bundler | Set-up | Runs on |
+| :--- | :--- | :--- |
+| Vite, SvelteKit, Astro | add `optimizeComponents()` to `vite.plugins`; it orders itself first | `vite build` only, never `vite dev` |
+| Rollup, Rolldown | list `optimizeComponents()` before the Svelte plugin | production builds only (add it conditionally) |
+| Webpack, Rspack | add `new OptimizeComponentsPlugin()` to `plugins` | `mode: "production"` only |
+
+- It analyzes the files matched by `content` (default: source files under `src/`) before the build. If a module outside `content` imports a Carbon component, the build fails instead of shipping wrong code.
+- SvelteKit and Astro server and client builds are rewritten alike, so prerendered pages hydrate as before.
+- Set `report: true` to print what each build rewrote.
+
+Refer to the [carbon-preprocess-svelte documentation](https://github.com/carbon-design-system/carbon-preprocess-svelte#optimizecomponents) for every option.
 
 ### Configure your bundler
 
@@ -231,29 +287,24 @@ export default {
 **SvelteKit**
 
 ```js
-// svelte.config.js
-import adapter from "@sveltejs/adapter-static";
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { optimizeImports } from "carbon-preprocess-svelte";
-
-const config = {
-  preprocess: [vitePreprocess(), optimizeImports()],
-  kit: { adapter: adapter() },
-};
-
-export default config;
-```
-
-```js
 // vite.config.js
+import adapter from "@sveltejs/adapter-static";
 import { sveltekit } from "@sveltejs/kit/vite";
-import { optimizeCss } from "carbon-preprocess-svelte";
-import { defineConfig } from "vite";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import { optimizeCss, optimizeImports } from "carbon-preprocess-svelte";
 
-export default defineConfig({
-  plugins: [sveltekit(), optimizeCss()],
-});
+export default {
+  plugins: [
+    sveltekit({
+      preprocess: [vitePreprocess(), optimizeImports()],
+      adapter: adapter(),
+    }),
+    optimizeCss(),
+  ],
+};
 ```
+
+On SvelteKit 2, pass the same `preprocess` in `svelte.config.js` and the adapter under `kit`.
 
 **Rollup**
 
@@ -275,6 +326,8 @@ export default {
 ```
 
 **Webpack**
+
+Rspack implements Webpack's plugin and loader APIs, so the same configuration works in `rspack.config.mjs`.
 
 ```js
 // webpack.config.mjs
@@ -370,7 +423,7 @@ Documentation is available in LLM-friendly plain text for use with coding assist
 
 ## TypeScript support
 
-[TypeScript definitions](types) are generated by [sveld](https://github.com/carbon-design-system/sveld).
+Every component ships TypeScript definitions for its props, events, and slots (`src/**/*.svelte.d.ts`), generated from the component source by [sveld](https://github.com/carbon-design-system/sveld).
 
 ## Contributing
 

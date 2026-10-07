@@ -45,13 +45,13 @@
     iconsExample,
     iconsInstallCmds,
     installCmds,
+    optimizeComponentsConfig,
     pictogramsExample,
     pictogramsInstallCmds,
     preprocessInstallCmds,
     preprocessors,
     rollupConfig,
     sveltekitConfig,
-    sveltekitViteConfig,
     themeCssImport,
     themeHtml,
     themeToggle,
@@ -205,8 +205,8 @@
             >
               carbon-preprocess-svelte
             </OutboundLink>
-            trims build times and bundle size with two drop-in tools for faster
-            HMR in development and leaner CSS when you ship.
+            trims build times and bundle size with three drop-in tools: faster
+            HMR in development, and leaner CSS and JavaScript when you ship.
           </Text>
         </svelte:fragment>
       </DocSectionHeader>
@@ -257,17 +257,9 @@
                   </DocCodeBox>
                 </TabContent>
                 <TabContent flush>
-                  <Stack gap={3}>
-                    <DocCodeBox>
-                      <CodeBlock language="javascript" code={sveltekitConfig} />
-                    </DocCodeBox>
-                    <DocCodeBox>
-                      <CodeBlock
-                        language="javascript"
-                        code={sveltekitViteConfig}
-                      />
-                    </DocCodeBox>
-                  </Stack>
+                  <DocCodeBox>
+                    <CodeBlock language="javascript" code={sveltekitConfig} />
+                  </DocCodeBox>
                 </TabContent>
                 <TabContent flush>
                   <DocCodeBox>
@@ -282,6 +274,19 @@
               </svelte:fragment>
             </Tabs>
           </div>
+        </svelte:fragment>
+      </DocSplitRow>
+
+      <DocSplitRow
+        variant="step"
+        step="03"
+        title="Optimize components"
+        description="Optionally, add optimizeComponents before the Svelte plugin and turn on propAware in optimizeCss. Both run on production builds only. For Webpack and Rspack, use OptimizeComponentsPlugin."
+      >
+        <svelte:fragment slot="right">
+          <DocCodeBox>
+            <CodeBlock language="javascript" code={optimizeComponentsConfig} />
+          </DocCodeBox>
         </svelte:fragment>
       </DocSplitRow>
     </Grid>

@@ -55,26 +55,21 @@ ${usage}`;
 const imp = (names: string, mod: string) => `import ${names} from "${mod}";`;
 const CPS = "carbon-preprocess-svelte";
 
-export const sveltekitConfig = `// svelte.config.js
+export const sveltekitConfig = `// vite.config.js
 ${imp("adapter", "@sveltejs/adapter-static")}
-${imp("{ vitePreprocess }", "@sveltejs/vite-plugin-svelte")}
-${imp("{ optimizeImports }", CPS)}
-
-const config = {
-  preprocess: [vitePreprocess(), optimizeImports()],
-  kit: { adapter: adapter() },
-};
-
-export default config;`;
-
-export const sveltekitViteConfig = `// vite.config.js
 ${imp("{ sveltekit }", "@sveltejs/kit/vite")}
-${imp("{ optimizeCss }", CPS)}
-${imp("{ defineConfig }", "vite")}
+${imp("{ vitePreprocess }", "@sveltejs/vite-plugin-svelte")}
+${imp("{ optimizeCss, optimizeImports }", CPS)}
 
-export default defineConfig({
-  plugins: [sveltekit(), optimizeCss()],
-});`;
+export default {
+  plugins: [
+    sveltekit({
+      preprocess: [vitePreprocess(), optimizeImports()],
+      adapter: adapter(),
+    }),
+    optimizeCss(),
+  ],
+};`;
 
 export const viteConfig = `// vite.config.js
 ${imp("{ svelte, vitePreprocess }", "@sveltejs/vite-plugin-svelte")}
@@ -124,6 +119,22 @@ export default {
   plugins: [new OptimizeCssPlugin()],
 };`;
 
+export const optimizeComponentsConfig = `// vite.config.js
+${imp("{ svelte }", "@sveltejs/vite-plugin-svelte")}
+import {
+  optimizeComponents,
+  optimizeCss,
+  optimizeImports,
+} from "${CPS}";
+
+export default {
+  plugins: [
+    optimizeComponents(),
+    svelte({ preprocess: [optimizeImports()] }),
+    optimizeCss({ propAware: true }),
+  ],
+};`;
+
 export const preprocessors = [
   {
     title: "optimizeImports",
@@ -132,6 +143,10 @@ export const preprocessors = [
   {
     title: "optimizeCss",
     body: "Tree-shakes unused Carbon CSS at build time, often removing hundreds of kilobytes from production bundles.",
+  },
+  {
+    title: "optimizeComponents",
+    body: "Rewrites Carbon components for the props your app passes, removing code it never runs from production bundles.",
   },
 ] as const;
 
