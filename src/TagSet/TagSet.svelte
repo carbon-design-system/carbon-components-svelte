@@ -80,6 +80,7 @@
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { returnFocus } from "../utils/focus.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
@@ -95,8 +96,34 @@
   const sharedSize = writable(size);
   $: sharedSize.set(size);
 
+  /** @type {(node: HTMLElement | undefined) => HTMLElement | null} */
+  function focusableIn(node) {
+    if (!node) return null;
+    if (node.matches("button:not(:disabled), a[href]")) return node;
+    return node.querySelector("button:not(:disabled)");
+  }
+
   function handleTagClose(item) {
-    dispatch("close:tag", { tag: item, index: $items.indexOf(item) });
+    const index = $items.indexOf(item);
+    // Closing usually removes the tag, unmounting its focused close button.
+    // Hand focus to the next visible tag, else the previous one, else the
+    // overflow trigger, instead of letting it fall to <body>.
+    const hadFocus = item.node?.contains(document.activeElement);
+    const neighbours = hadFocus
+      ? [...$items.slice(index + 1), ...$items.slice(0, index).reverse()]
+          .filter((other) => !$overflowIds.has(other.id))
+          .map((other) => focusableIn(other.node))
+      : [];
+
+    dispatch("close:tag", { tag: item, index });
+
+    if (!hadFocus) return;
+    tick().then(() => {
+      if (item.node?.isConnected) return;
+      returnFocus(
+        [...neighbours, overflowTriggerRef].find((el) => el?.isConnected),
+      );
+    });
   }
 
   // Route register, unregister, and update through the same batched queue.
