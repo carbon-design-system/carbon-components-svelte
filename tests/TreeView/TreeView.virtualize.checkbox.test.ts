@@ -92,7 +92,7 @@ describe("TreeView virtualize + selectionMode=checkbox", () => {
     tree.dispatchEvent(new Event("scroll"));
     await tick();
 
-    expect(document.getElementById("spark")).toBeNull();
+    expect(document.querySelector('[data-tree-row-id="spark"]')).toBeNull();
 
     tree.scrollTop = 0;
     tree.dispatchEvent(new Event("scroll"));

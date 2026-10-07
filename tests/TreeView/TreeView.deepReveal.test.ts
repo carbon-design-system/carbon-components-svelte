@@ -11,7 +11,7 @@ describe("TreeView deep reveal", () => {
 
     await waitFor(
       () => {
-        const el = document.getElementById(String(DEPTH - 1));
+        const el = document.querySelector(`[data-tree-row-id="${DEPTH - 1}"]`);
         expect(el).toBeInstanceOf(HTMLElement);
         expect(el).toHaveFocus();
       },

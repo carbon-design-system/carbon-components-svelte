@@ -11,9 +11,9 @@ describe("TreeView deep reveal", () => {
 
     await waitFor(
       () => {
-        expect(document.getElementById(String(DEPTH - 1))).toBeInstanceOf(
-          HTMLElement,
-        );
+        expect(
+          document.querySelector(`[data-tree-row-id="${DEPTH - 1}"]`),
+        ).toBeInstanceOf(HTMLElement);
       },
       { timeout: 15_000 },
     );

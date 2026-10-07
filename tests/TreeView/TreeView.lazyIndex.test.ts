@@ -20,7 +20,7 @@ describe("TreeView lazy flat index", () => {
 
     await user.click(screen.getByTestId("show-node"));
     await waitFor(() => {
-      expect(document.getElementById("3")).toHaveFocus();
+      expect(document.querySelector('[data-tree-row-id="3"]')).toHaveFocus();
     });
 
     expect(screen.getByTestId("expanded-count").textContent).not.toBe(

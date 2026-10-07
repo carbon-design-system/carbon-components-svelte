@@ -411,8 +411,8 @@ describe.each(testCases)("$name", ({ component }) => {
     const firstItem = treeItemById(0);
     const analytics = treeItemById(1);
 
-    expect(document.getElementById("2")).toBeNull();
-    expect(document.getElementById("3")).toBeNull();
+    expect(document.querySelector('[data-tree-row-id="2"]')).toBeNull();
+    expect(document.querySelector('[data-tree-row-id="3"]')).toBeNull();
 
     firstItem.focus();
     await user.keyboard("{ArrowDown}");
@@ -924,10 +924,10 @@ describe("TreeView Props", () => {
       expandedIds: [1],
     });
 
-    const analyticsItem = document.getElementById("1");
-    const engineItem = document.getElementById("2");
-    const sqlItem = document.getElementById("5");
-    const db2Item = document.getElementById("6");
+    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
+    const engineItem = document.querySelector('[data-tree-row-id="2"]');
+    const sqlItem = document.querySelector('[data-tree-row-id="5"]');
+    const db2Item = document.querySelector('[data-tree-row-id="6"]');
     assert(analyticsItem instanceof HTMLElement);
     assert(engineItem instanceof HTMLElement);
     assert(sqlItem instanceof HTMLElement);
@@ -940,7 +940,7 @@ describe("TreeView Props", () => {
     expect(sqlItem).toHaveAttribute("aria-selected", "true");
     expect(db2Item).toHaveAttribute("aria-selected", "true");
 
-    expect(document.getElementById("3")).toBeNull();
+    expect(document.querySelector('[data-tree-row-id="3"]')).toBeNull();
     expect(component.selectedIds).not.toContain(3);
   });
 
@@ -952,9 +952,9 @@ describe("TreeView Props", () => {
       expandedIds: [1, 2],
     });
 
-    const analyticsItem = document.getElementById("1");
-    const sparkItem = document.getElementById("3");
-    const hadoopItem = document.getElementById("4");
+    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
+    const sparkItem = document.querySelector('[data-tree-row-id="3"]');
+    const hadoopItem = document.querySelector('[data-tree-row-id="4"]');
     assert(analyticsItem instanceof HTMLElement);
     assert(sparkItem instanceof HTMLElement);
     assert(hadoopItem instanceof HTMLElement);
@@ -974,8 +974,8 @@ describe("TreeView Props", () => {
       expandedIds: [1, 2],
     });
 
-    const analyticsItem = document.getElementById("1");
-    const sparkItem = document.getElementById("3");
+    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
+    const sparkItem = document.querySelector('[data-tree-row-id="3"]');
     assert(analyticsItem instanceof HTMLElement);
     assert(sparkItem instanceof HTMLElement);
 
@@ -1044,7 +1044,7 @@ describe("TreeView Props", () => {
 
     // Children of collapsed parents should NOT be selected
     // (e.g., id=2 "IBM Analytics Engine" is a child of collapsed Analytics)
-    expect(document.getElementById("2")).toBeNull();
+    expect(document.querySelector('[data-tree-row-id="2"]')).toBeNull();
     expect(component.selectedIds).not.toContain(2);
   });
 
@@ -1066,9 +1066,9 @@ describe("TreeView Props", () => {
     await user.keyboard("{/Shift}");
 
     // Analytics' children are visible, so they should be in the range
-    const engineItem = document.getElementById("2");
-    const sqlItem = document.getElementById("5");
-    const db2Item = document.getElementById("6");
+    const engineItem = document.querySelector('[data-tree-row-id="2"]');
+    const sqlItem = document.querySelector('[data-tree-row-id="5"]');
+    const db2Item = document.querySelector('[data-tree-row-id="6"]');
     assert(engineItem instanceof HTMLElement);
     assert(sqlItem instanceof HTMLElement);
     assert(db2Item instanceof HTMLElement);
@@ -1118,10 +1118,10 @@ describe("TreeView Props", () => {
     });
 
     const aiItem = treeItemById(0);
-    const analyticsItem = document.getElementById("1");
-    const engineItem = document.getElementById("2");
-    const sqlItem = document.getElementById("5");
-    const db2Item = document.getElementById("6");
+    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
+    const engineItem = document.querySelector('[data-tree-row-id="2"]');
+    const sqlItem = document.querySelector('[data-tree-row-id="5"]');
+    const db2Item = document.querySelector('[data-tree-row-id="6"]');
     assert(analyticsItem instanceof HTMLElement);
     assert(engineItem instanceof HTMLElement);
     assert(sqlItem instanceof HTMLElement);
@@ -2245,7 +2245,7 @@ describe("TreeView autoCollapse", () => {
 
     const treeId = container.querySelector('[role="tree"]')?.id;
     expect(treeId).toBeTruthy();
-    const parent = container.querySelector("#parent");
+    const parent = container.querySelector('[data-tree-row-id="parent"]');
     const subtreeId = parent?.getAttribute("aria-owns");
     expect(subtreeId).toBe(`${treeId}-parent-subtree`);
 
@@ -2274,13 +2274,15 @@ describe("TreeView autoCollapse", () => {
       ],
     });
 
-    const parent = container.querySelector("#p");
+    const parent = container.querySelector('[data-tree-row-id="p"]');
     assert(parent instanceof HTMLElement);
     parent.focus();
 
     await user.keyboard("{ArrowRight}");
 
-    const linkChild = container.querySelector("#child-link");
+    const linkChild = container.querySelector(
+      '[data-tree-row-id="child-link"]',
+    );
     expect(linkChild?.tagName).toBe("A");
     expect(linkChild).toHaveFocus();
   });
@@ -2364,6 +2366,24 @@ describe("TreeView duplicate ids", () => {
       const referenced = document.getElementById(labelledby as string);
       expect(referenced).not.toBeNull();
       expect(tree.contains(referenced)).toBe(true);
+    }
+  });
+  it("keeps row ids unique when two trees share node ids", () => {
+    const { container } = render(TreeViewDuplicateIds);
+    const ids = Array.from(container.querySelectorAll("[id]"), (el) => el.id);
+
+    expect(ids.filter((id, index) => ids.indexOf(id) !== index)).toEqual([]);
+
+    for (const tree of container.querySelectorAll('[role="tree"]')) {
+      const rows = tree.querySelectorAll('[role="treeitem"]');
+      expect(
+        Array.from(rows, (row) => row.getAttribute("data-tree-row-id")),
+      ).toEqual(["0", "1", "2"]);
+
+      expect(Array.from(rows, (row) => row.id)).toEqual(
+        ["0", "1", "2"].map((nodeId) => `${tree.id}-${nodeId}`),
+      );
+      expect(rows[0]).toHaveAttribute("aria-owns", `${tree.id}-0-subtree`);
     }
   });
 });

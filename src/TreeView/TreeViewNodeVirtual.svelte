@@ -96,7 +96,7 @@
     <a
       data-tree-row-id={id}
       role="treeitem"
-      {id}
+      id="{$treeId}-{id}"
       href={disabled ? undefined : href}
       target={disabled ? undefined : target}
       rel={resolveLinkRel(target)}
@@ -135,7 +135,7 @@
   <li
     data-tree-row-id={id}
     role="treeitem"
-    {id}
+    id="{$treeId}-{id}"
     style:height="{itemHeight}px"
     style:padding-left="{indentRem}rem"
     tabindex={disabled ? undefined : isTabAnchor ? 0 : -1}
