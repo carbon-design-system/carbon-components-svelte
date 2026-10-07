@@ -33,7 +33,7 @@ git remote -v
 bun setup
 ```
 
-This installs root and docs dependencies and generates TypeScript definitions and `docs/src/COMPONENT_API.json`.
+This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`.
 
 Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/), [Routify 3](https://routify.dev/docs), Svelte 5, and MDsveX. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
 
@@ -66,7 +66,7 @@ Patterns:
 - Reset cached positional state (scroll offset, highlighted index, measured sizes) reactively when its source collection changes, not just on open/close. A value cached against the old list, such as a scroll position into pre-filter results, silently points past the end of the new one. Use a `$:` guard comparing against the previous length or identity.
 - Do not assign to a variable that a `$:` statement derives. The next flush recomputes it from its inputs, so the manual write is dead at best and misleading at worst. Change the inputs instead. `DataTable`'s `selectAll` is derived from `selectedRowIds`; clearing the selection is enough.
 - Put component-level JSDoc first (`@restProps`, `@slot`, `@template`), then **all `export let` props** (each with its own JSDoc), then **imports**, then local logic. See [`Button.svelte`](src/Button/Button.svelte) and [`Box.svelte`](src/Box/Box.svelte).
-- Keep small, component-specific helpers inline in the `<script>` block. Extract to `src/utils/` only when the logic is shared across components or complex enough to unit-test in isolation. See [`debounce.js`](src/utils/debounce.js) and [`isOutsideClick.js`](src/utils/is-outside-click.js). Token primitives such as [`Text.svelte`](src/Text/Text.svelte) and [`Box.svelte`](src/Box/Box.svelte) map props to utility classes and inline styles directly; their themeable rules live in `css/_type.scss`, `css/_box.scss`, and related partials.
+- Keep small, component-specific helpers inline in the `<script>` block. Extract to `src/utils/` only when the logic is shared across components or complex enough to unit-test in isolation. See [`debounce.js`](src/utils/debounce.js) and [`is-outside-click.js`](src/utils/is-outside-click.js). Token primitives such as [`Text.svelte`](src/Text/Text.svelte) and [`Box.svelte`](src/Box/Box.svelte) map props to utility classes and inline styles directly; their themeable rules live in `css/_type.scss`, `css/_box.scss`, and related partials.
 - Check `src/utils/` before hand-rolling a helper. Hover-intent timers ([`createDelayedSetter`](src/utils/delayed-setter.js)), index wrapping and clamping ([`moveIndex`](src/utils/move-index.js), [`clampIndex`](src/utils/clamp-index.js), `clamp` in [`numeric-format.js`](src/utils/numeric-format.js)), shared `window` listeners ([`addPooledListener`](src/utils/window-listener-pool.js)), portal tooltip gaps ([`iconTooltipPortalGaps`](src/Portal/icon-tooltip-portal-gaps.js)), value comparison ([`deepEqual`](src/utils/deep-equal.js): `Date` by time, arrays and plain objects walked, functions and non-plain objects such as `Map`, `Set`, DOM nodes, and class instances by identity), and [`noop`](src/utils/noop.js) all exist and are already used by sibling components. Confirm the edge cases match before swapping: `createDelayedSetter` runs a non-positive delay synchronously, not as `setTimeout(fn, 0)`, `clamp` checks `max` before `min`, which differs from two sequential `if`s when the bounds cross, and `deepEqual` deliberately returns `false` for two different `Map`s or DOM elements even when they look alike, since neither exposes its state as own enumerable keys.
 - Prefer `||` over `??` for a fallback whose input is a possibly-empty string. `??` only substitutes on `null`/`undefined`, so a prop that defaults to `""` (`minLabel`, `maxLabel`, and similar text props) still passes the empty string through unchanged instead of falling back. `Slider`'s `formatRangeLabel` had exactly this bug (`label ?? numericValue`, shipped in a release) while the near-identical `RangeSlider` copy used `label || numericValue` and rendered correctly.
 - Before extracting a helper duplicated across sibling components to `src/utils/`, diff every copy line by line. Matching names and parameter shapes do not guarantee matching behavior: copies drift as one component picks up a fix or feature the other doesn't. `Tabs`'s scroll-overflow check carries a Firefox sub-pixel epsilon that `TabsVertical`'s otherwise-identical copy never got. Extract once every copy is confirmed identical; where they've drifted, fix the bug in its own commit first, then extract. Some superficially similar helpers are not safe to merge at all: the tooltip claim/release logic in `Button`, `CopyButton`, `Tab`, `Switch`, and `UserAvatar` shares a name and purpose but differs in delay semantics per component, so leave those separate rather than forcing one abstraction.
@@ -74,9 +74,9 @@ Patterns:
 - Interpolate attribute values with Svelte's attribute syntax, not template literals: `id="{treeId}-{id}-subtree"`, not ``id={`${treeId}-${id}-subtree`}``. Keep template literals only when a value needs nested quotes or logic the shorthand can't express (see `aria-label` in [`PinCodeInput.svelte`](src/PinCodeInput/PinCodeInput.svelte)).
 - Compound components use `setContext` / `getContext` with `carbon:` keys ([`CheckboxGroup.svelte`](src/Checkbox/CheckboxGroup.svelte)). For a group whose children register themselves, expose `{ items, register(item), unregister(id), update(id, patch) }` on the context, where `items` is a `writable` store of registered entries. Sort by `Node.compareDocumentPosition` at registration time, not mount order, since children can mount out of DOM order when conditionally rendered. See `UserAvatarGroup` / `UserAvatar` and `TagSet` / `Tag`. When a child needs to trigger a group-level action, such as a close button the group must react to, add a `notify*` method to the context and call it in addition to the child's own local dispatch, so the component still works standalone outside the group. Route every mutator (`register`, `unregister`, `update`) through [`batchStoreUpdates`](src/utils/batch-store-updates.js). Mixing a direct `items.update(...)` with a batched call can read a stale array. See [Batching child registration](#batching-child-registration).
 - Prefer a data-array prop (`items`, `tags`) plus a per-item slot when the collection needs bulk operations that only make sense on structured data: search, filtering, virtualization, reordering (`ComboBox`, `MultiSelect`, `TreeView`). Prefer child composition, real component instances as `<slot />` children, when items are simple, independently-styled elements a consumer would reach for standalone (`Tag`, `UserAvatar`); `UserAvatarGroup` / `TagSet` register those children via context instead of taking a data array.
-- Default element IDs use `ccs-${Math.random().toString(36)}`.
+- Default element IDs come from `uniqueId()` in [`unique-id.js`](src/utils/unique-id.js).
 - Key `{#each}` blocks, for example `(item.id ?? index)` (see [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte)).
-- Put shared logic in `src/utils/`, for example [`debounce.js`](src/utils/debounce.js) and [`isOutsideClick.js`](src/utils/is-outside-click.js). Prefer pure, DOM-free functions for layout, geometry, and state-decision math (see [`virtualize.js`](src/utils/virtualize.js)). They are unit-testable in isolation, so edge cases get covered once in a util test instead of through expensive component renders.
+- Put shared logic in `src/utils/`, for example [`debounce.js`](src/utils/debounce.js) and [`is-outside-click.js`](src/utils/is-outside-click.js). Prefer pure, DOM-free functions for layout, geometry, and state-decision math (see [`virtualize.js`](src/utils/virtualize.js)). They are unit-testable in isolation, so edge cases get covered once in a util test instead of through expensive component renders.
 - ComboBox, Dropdown, and MultiSelect share listbox behavior (virtualization, keyboard navigation, outside-click) through `src/utils/`. When you change shared menu behavior, apply and test the change in all three. The per-component wiring is parallel but not abstracted.
 - Use Carbon v10 markup: `bx--` BEM classes in templates; SCSS patches use `$prefix` and tokens. See [Custom styles](#custom-styles-patching-carbon-v10).
 - Do not add themeable styles in per-component `<style>` blocks (see [Custom styles](#custom-styles-patching-carbon-v10)).
@@ -261,7 +261,7 @@ example`.
 | `docs/src/pages/components/{Component}.svx` | Main component page (for example `Button.svx`): prose + examples |
 | `docs/src/pages/framed/{Component}/{Example}.svelte` | Interactive demos referenced by `<FileSource>` |
 
-Routify picks up new `.svx` files automatically. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. No separate nav registration is required.
+Routify picks up new `.svx` files automatically. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
 
 Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [SVX gotchas](#svx-gotchas).
 
@@ -476,8 +476,9 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 2. JSDoc all public API → `bun build:docs`
 3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow the prose conventions in [Prose and inline code](#prose-and-inline-code).
 4. Add framed examples only where interactivity requires them
-5. Preview with `cd docs && bun dev`
-6. Add a catalog thumbnail at `thumbnails/{component-name}.svg`. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
+5. Add the page to a category in `docs/src/component-categories.ts` and its first version to `docs/src/component-since-versions.ts`
+6. Preview with `cd docs && bun dev`
+7. Add a catalog thumbnail at `thumbnails/{component-name}.svg`. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
 
 ### Custom styles (patching Carbon v10)
 
@@ -1128,7 +1129,7 @@ The following applies only to project maintainers.
 
 This library publishes to NPM with [provenance](https://docs.npmjs.com/generating-provenance-statements) via a [GitHub workflow](https://github.com/carbon-design-system/carbon-components-svelte/blob/master/.github/workflows/release.yml).
 
-Pushing a tag that starts with `v` (for example `v0.81.1`) triggers the workflow. It runs `bun ci`, `bun build:docs`, and `bunx culls --preserve=svelte` before publishing to NPM.
+Pushing a tag that starts with `v` (for example `v0.81.1`) triggers the workflow. It runs `bun ci` and `bun run release:build` (generates docs and types, strips doc comments, builds every CSS theme, and prunes `package.json`), checks the package contents with `scripts/check-package-contents.ts`, then publishes to NPM.
 
 Maintainers still do a few things locally before tagging.
 
@@ -1140,7 +1141,6 @@ On a clean `master` branch, run `bun run release`. That will:
 
 - Bump the semantic version in `package.json`
 - Generate notes in `CHANGELOG.md`
-- Run `bun run build:docs` to update generated documentation
 
 It does not commit or tag. Do that manually:
 
