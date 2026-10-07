@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>table-of-contents</title>
+    <g id="table-of-contents" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="track" fill="var(--cds-border-subtle, #e0e0e0)" x="105" y="36" width="2" height="108"></rect>
+        <rect id="active-bar" fill="var(--cds-interactive-01, #0f62fe)" x="105" y="58" width="2" height="22"></rect>
+        <rect id="item-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="119" y="43" width="72" height="8"></rect>
+        <rect id="item-2-active" fill="var(--cds-text-secondary, #525252)" x="119" y="65" width="96" height="8"></rect>
+        <rect id="nested-item-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="133" y="86" width="60" height="6"></rect>
+        <rect id="nested-item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="133" y="104" width="72" height="6"></rect>
+        <rect id="item-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="119" y="129" width="84" height="8"></rect>
+    </g>
+</svg>
