@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// CopyText: inline text with a compact trailing copy button
+/// @access private
+/// @group components
+@mixin copy-text {
+  // Inline, so a wrapped value keeps the button at the end of its last line.
+  .#{$prefix}--copy-text__value {
+    overflow-wrap: anywhere;
+  }
+
+  // Pull the button's 24px box into the line height so it never grows the
+  // text's row, and follow the value with a small gap.
+  .#{$prefix}--copy-text .#{$prefix}--copy-btn.#{$prefix}--copy-btn--sm {
+    display: inline-flex;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    min-height: 0;
+    margin-block: (-$carbon--spacing-02);
+    margin-inline-start: $carbon--spacing-02;
+    vertical-align: middle;
+  }
+}
+
+@include exports("copy-text") {
+  @include copy-text;
+}
