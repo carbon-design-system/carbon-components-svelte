@@ -155,6 +155,7 @@
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import Button from "../Button/Button.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
@@ -226,6 +227,9 @@
   $: modalBodyId = `bx--modal-body--${id}`;
   $: ariaLabel =
     modalLabel ?? $$props["aria-label"] ?? modalAriaLabel ?? modalHeading;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -237,6 +241,8 @@
   class:bx--modal-tall={!passiveModal}
   class:is-visible={open}
   class:bx--modal--danger={danger}
+  class:bx--modal--decorator={$$slots.decorator}
+  class:bx--modal--ai-label={$aiLabelState === "active"}
   inert={open ? undefined : true}
   {...$$restProps}
   aria-label={undefined}
@@ -331,6 +337,15 @@
       <h3 id={modalHeadingId} class:bx--modal-header__heading={true}>
         <slot name="heading">{modalHeading}</slot>
       </h3>
+      {#if $$slots.decorator}
+        <Decorator
+          class="bx--modal--inner__decorator"
+          state={aiLabelState}
+          labelSize="sm"
+        >
+          <slot name="decorator" />
+        </Decorator>
+      {/if}
       {#if !passiveModal && !hideCloseButton}
         <button
           bind:this={buttonRef}
