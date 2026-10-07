@@ -246,6 +246,19 @@
     height: 2.5rem;
   }
 
+  // ccs: size the skeleton like the field it stands in for
+  .#{$prefix}--select--xs.#{$prefix}--skeleton {
+    height: to-rem(24px);
+  }
+
+  .#{$prefix}--select--sm.#{$prefix}--skeleton {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--select--xl.#{$prefix}--skeleton {
+    height: to-rem(48px);
+  }
+
   .#{$prefix}--select.#{$prefix}--skeleton .#{$prefix}--select-input {
     display: none;
   }

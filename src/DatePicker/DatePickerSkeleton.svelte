@@ -1,4 +1,10 @@
 <script>
+  /**
+   * Set the size of the skeleton to match the field it stands in for.
+   * @type {"xs" | "sm" | "xl"}
+   */
+  export let size = undefined;
+
   /** Set to `true` to use the range variant */
   export let range = false;
 
@@ -27,6 +33,9 @@
         <div
           class:bx--date-picker__input={true}
           class:bx--skeleton={true}
+          class:bx--date-picker__input--xs={size === "xs"}
+          class:bx--date-picker__input--sm={size === "sm"}
+          class:bx--date-picker__input--xl={size === "xl"}
         ></div>
       </div>
     {/each}
