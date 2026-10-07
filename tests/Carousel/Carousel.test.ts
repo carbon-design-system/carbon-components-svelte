@@ -56,6 +56,17 @@ describe("Carousel", () => {
     );
   });
 
+  it("leaves focus where a change handler moved it at a bound", async () => {
+    render(Carousel, { props: { selectedIndex: 1, moveFocusOnChange: true } });
+
+    const next = screen.getByRole("button", { name: "Next slide" });
+    next.focus();
+    await user.keyboard("{Enter}");
+
+    expect(next).toBeDisabled();
+    expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
+  });
+
   it("dispatches change with the new index on navigation", async () => {
     render(Carousel);
 
