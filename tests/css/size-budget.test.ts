@@ -11,11 +11,13 @@ import { compileEntry } from "./compile";
 // trips one, raise it to the new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // min 667,390 and gzip 77,643 measured locally after TableOfContents
-  "all.scss": { min: 680_800, gzip: 79_200 },
-  // min 574,769 and gzip 68,194 measured locally after the field skeleton
-  // sizes and TableOfContents
-  "white.scss": { min: 586_300, gzip: 69_600 },
+  // min 690,859 and gzip 80,395 measured locally after TableOfContents,
+  // the `xs` sizes, and every AILabel surface (component, field
+  // decorators, tile/modal/table surfaces, and the per-theme `--cds-ai-*`
+  // tokens); CI gzip runs ~1.5 kB above local
+  "all.scss": { min: 704_700, gzip: 82_000 },
+  // min 593,703 and gzip 70,623 measured locally after the same changes
+  "white.scss": { min: 605_600, gzip: 72_100 },
 };
 
 describe("css size budget", () => {

@@ -15,6 +15,7 @@ const PARTIALS = readdirSync(CSS_DIR).filter(
 // Sass maps, functions, and declaration mixins other partials import, and the
 // `$ccs-theme-switching`-gated theme scopes.
 const NO_EXPORTS = new Set([
+  "_ai-tokens.scss",
   "_carbon-styles.scss",
   "_fill-tokens.scss",
   "_fluid-shared.scss",

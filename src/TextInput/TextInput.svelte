@@ -2,6 +2,7 @@
   /**
    * @event {null | number | string} change
    * @event {null | number | string} input
+   * @slot {{}} decorator - Render an `AILabel` or another decorator at the end of the field.
    */
 
   /**
@@ -94,6 +95,8 @@
   export let selectTextOnFocus = false;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -115,6 +118,9 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
   const dispatch = createEventDispatcher();
 
   function parse(raw) {
@@ -242,6 +248,9 @@
       data-warn={showWarn || undefined}
       class:bx--text-input__field-wrapper={true}
       class:bx--text-input__field-wrapper--warning={showWarn}
+      class:bx--text-input__field-wrapper--decorator={$$slots.decorator &&
+        !isFluid}
+      class:bx--text-input__field-wrapper--ai-label={$aiLabelState === "active"}
     >
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
@@ -299,6 +308,15 @@
         on:blur
         on:paste
       >
+      {#if $$slots.decorator}
+        <Decorator
+          class="bx--field-decorator bx--text-input__field-inner-wrapper--decorator"
+          size={effectiveSize}
+          state={aiLabelState}
+        >
+          <slot name="decorator" />
+        </Decorator>
+      {/if}
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
       {/if}

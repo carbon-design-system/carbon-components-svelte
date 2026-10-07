@@ -1,0 +1,240 @@
+// Carbon v11 AI theme tokens (the `ai-*` group in @carbon/themes 11.82),
+// which carbon-components v10 does not ship. Values are copied verbatim, so
+// they are written as `rgb()` literals rather than palette variables. g80 has
+// no v11 counterpart and takes the g90 values.
+//
+// `all.scss` emits them as `--cds-ai-*` custom properties per theme; the
+// static theme builds resolve them to plain values. Read them with
+// `ai-token("ai-aura-start")`.
+
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// prettier-ignore
+$ai-colors: (
+  "ai-aura-start": (
+    fallback: rgba(69, 137, 255, 0.1),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(69, 137, 255, 0.1)),
+      (theme: $carbon--theme--g10, value: rgba(69, 137, 255, 0.1)),
+      (theme: $carbon--theme--g80, value: rgba(69, 137, 255, 0.1)),
+      (theme: $carbon--theme--g90, value: rgba(69, 137, 255, 0.1)),
+      (theme: $carbon--theme--g100, value: rgba(69, 137, 255, 0.1)),
+    ),
+  ),
+  "ai-aura-start-sm": (
+    fallback: rgba(69, 137, 255, 0.16),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(69, 137, 255, 0.16)),
+      (theme: $carbon--theme--g10, value: rgba(69, 137, 255, 0.16)),
+      (theme: $carbon--theme--g80, value: rgba(69, 137, 255, 0.16)),
+      (theme: $carbon--theme--g90, value: rgba(69, 137, 255, 0.16)),
+      (theme: $carbon--theme--g100, value: rgba(69, 137, 255, 0.16)),
+    ),
+  ),
+  "ai-aura-end": (
+    fallback: rgba(255, 255, 255, 0),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(255, 255, 255, 0)),
+      (theme: $carbon--theme--g10, value: rgba(255, 255, 255, 0)),
+      (theme: $carbon--theme--g80, value: rgba(0, 0, 0, 0)),
+      (theme: $carbon--theme--g90, value: rgba(0, 0, 0, 0)),
+      (theme: $carbon--theme--g100, value: rgba(0, 0, 0, 0)),
+    ),
+  ),
+  "ai-border-start": (
+    fallback: rgba(166, 200, 255, 0.64),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(166, 200, 255, 0.64)),
+      (theme: $carbon--theme--g10, value: rgba(166, 200, 255, 0.64)),
+      (theme: $carbon--theme--g80, value: rgba(166, 200, 255, 0.36)),
+      (theme: $carbon--theme--g90, value: rgba(166, 200, 255, 0.36)),
+      (theme: $carbon--theme--g100, value: rgba(166, 200, 255, 0.36)),
+    ),
+  ),
+  "ai-border-end": (
+    fallback: rgb(120, 169, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(120, 169, 255)),
+      (theme: $carbon--theme--g10, value: rgb(120, 169, 255)),
+      (theme: $carbon--theme--g80, value: rgb(69, 137, 255)),
+      (theme: $carbon--theme--g90, value: rgb(69, 137, 255)),
+      (theme: $carbon--theme--g100, value: rgb(69, 137, 255)),
+    ),
+  ),
+  "ai-border-strong": (
+    fallback: rgb(69, 137, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(69, 137, 255)),
+      (theme: $carbon--theme--g10, value: rgb(69, 137, 255)),
+      (theme: $carbon--theme--g80, value: rgb(120, 169, 255)),
+      (theme: $carbon--theme--g90, value: rgb(120, 169, 255)),
+      (theme: $carbon--theme--g100, value: rgb(120, 169, 255)),
+    ),
+  ),
+  "ai-inner-shadow": (
+    fallback: rgba(69, 137, 255, 0.1),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(69, 137, 255, 0.1)),
+      (theme: $carbon--theme--g10, value: rgba(69, 137, 255, 0.1)),
+      (theme: $carbon--theme--g80, value: rgba(69, 137, 255, 0.16)),
+      (theme: $carbon--theme--g90, value: rgba(69, 137, 255, 0.16)),
+      (theme: $carbon--theme--g100, value: rgba(69, 137, 255, 0.16)),
+    ),
+  ),
+  "ai-popover-background": (
+    fallback: rgb(255, 255, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(255, 255, 255)),
+      (theme: $carbon--theme--g10, value: rgb(255, 255, 255)),
+      (theme: $carbon--theme--g80, value: rgb(22, 22, 22)),
+      (theme: $carbon--theme--g90, value: rgb(22, 22, 22)),
+      (theme: $carbon--theme--g100, value: rgb(22, 22, 22)),
+    ),
+  ),
+  "ai-popover-caret-bottom": (
+    fallback: rgb(120, 169, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(120, 169, 255)),
+      (theme: $carbon--theme--g10, value: rgb(120, 169, 255)),
+      (theme: $carbon--theme--g80, value: rgb(69, 137, 255)),
+      (theme: $carbon--theme--g90, value: rgb(69, 137, 255)),
+      (theme: $carbon--theme--g100, value: rgb(69, 137, 255)),
+    ),
+  ),
+  "ai-popover-caret-bottom-background": (
+    fallback: rgb(234, 241, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(234, 241, 255)),
+      (theme: $carbon--theme--g10, value: rgb(234, 241, 255)),
+      (theme: $carbon--theme--g80, value: rgb(32, 45, 69)),
+      (theme: $carbon--theme--g90, value: rgb(32, 45, 69)),
+      (theme: $carbon--theme--g100, value: rgb(32, 45, 69)),
+    ),
+  ),
+  "ai-popover-caret-bottom-background-actions": (
+    fallback: rgb(233, 239, 250),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(233, 239, 250)),
+      (theme: $carbon--theme--g10, value: rgb(233, 239, 250)),
+      (theme: $carbon--theme--g80, value: rgb(30, 40, 58)),
+      (theme: $carbon--theme--g90, value: rgb(30, 40, 58)),
+      (theme: $carbon--theme--g100, value: rgb(30, 40, 58)),
+    ),
+  ),
+  "ai-popover-caret-center": (
+    fallback: rgb(160, 195, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(160, 195, 255)),
+      (theme: $carbon--theme--g10, value: rgb(160, 195, 255)),
+      (theme: $carbon--theme--g80, value: rgb(72, 112, 181)),
+      (theme: $carbon--theme--g90, value: rgb(72, 112, 181)),
+      (theme: $carbon--theme--g100, value: rgb(72, 112, 181)),
+    ),
+  ),
+  "ai-popover-shadow-outer-01": (
+    fallback: rgba(0, 67, 206, 0.06),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(0, 67, 206, 0.06)),
+      (theme: $carbon--theme--g10, value: rgba(0, 67, 206, 0.06)),
+      (theme: $carbon--theme--g80, value: rgba(0, 0, 0, 0.12)),
+      (theme: $carbon--theme--g90, value: rgba(0, 0, 0, 0.12)),
+      (theme: $carbon--theme--g100, value: rgba(0, 0, 0, 0.12)),
+    ),
+  ),
+  "ai-popover-shadow-outer-02": (
+    fallback: rgba(0, 0, 0, 0.04),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(0, 0, 0, 0.04)),
+      (theme: $carbon--theme--g10, value: rgba(0, 0, 0, 0.04)),
+      (theme: $carbon--theme--g80, value: rgba(0, 0, 0, 0.08)),
+      (theme: $carbon--theme--g90, value: rgba(0, 0, 0, 0.08)),
+      (theme: $carbon--theme--g100, value: rgba(0, 0, 0, 0.08)),
+    ),
+  ),
+  "ai-aura-hover-start": (
+    fallback: rgba(69, 137, 255, 0.32),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(69, 137, 255, 0.32)),
+      (theme: $carbon--theme--g10, value: rgba(69, 137, 255, 0.32)),
+      (theme: $carbon--theme--g80, value: rgba(69, 137, 255, 0.4)),
+      (theme: $carbon--theme--g90, value: rgba(69, 137, 255, 0.4)),
+      (theme: $carbon--theme--g100, value: rgba(69, 137, 255, 0.4)),
+    ),
+  ),
+  "ai-aura-hover-end": (
+    fallback: rgba(255, 255, 255, 0),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(255, 255, 255, 0)),
+      (theme: $carbon--theme--g10, value: rgba(255, 255, 255, 0)),
+      (theme: $carbon--theme--g80, value: rgba(0, 0, 0, 0)),
+      (theme: $carbon--theme--g90, value: rgba(0, 0, 0, 0)),
+      (theme: $carbon--theme--g100, value: rgba(0, 0, 0, 0)),
+    ),
+  ),
+  "ai-aura-hover-background": (
+    fallback: rgb(237, 245, 255),
+    values: (
+      (theme: $carbon--theme--white, value: rgb(237, 245, 255)),
+      (theme: $carbon--theme--g10, value: rgb(237, 245, 255)),
+      (theme: $carbon--theme--g80, value: rgb(71, 71, 71)),
+      (theme: $carbon--theme--g90, value: rgb(71, 71, 71)),
+      (theme: $carbon--theme--g100, value: rgb(51, 51, 51)),
+    ),
+  ),
+  "ai-drop-shadow": (
+    fallback: rgba(15, 98, 254, 0.1),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(15, 98, 254, 0.1)),
+      (theme: $carbon--theme--g10, value: rgba(15, 98, 254, 0.1)),
+      (theme: $carbon--theme--g80, value: rgba(0, 0, 0, 0.28)),
+      (theme: $carbon--theme--g90, value: rgba(0, 0, 0, 0.28)),
+      (theme: $carbon--theme--g100, value: rgba(0, 0, 0, 0.28)),
+    ),
+  ),
+  "ai-overlay": (
+    fallback: rgba(0, 17, 65, 0.5),
+    values: (
+      (theme: $carbon--theme--white, value: rgba(0, 17, 65, 0.5)),
+      (theme: $carbon--theme--g10, value: rgba(0, 17, 65, 0.5)),
+      (theme: $carbon--theme--g80, value: rgba(0, 0, 0, 0.5)),
+      (theme: $carbon--theme--g90, value: rgba(0, 0, 0, 0.5)),
+      (theme: $carbon--theme--g100, value: rgba(0, 0, 0, 0.5)),
+    ),
+  ),
+);
+
+/// Value of an AI theme token for the theme being compiled.
+/// @access private
+/// @param {String} $name - Token name, such as `ai-aura-start`
+/// @returns {String}
+@function ai-token($name) {
+  @return get-token-value($ai-colors, $name);
+}
+
+/// Gradient for a field that holds an active `AILabel`: an aura rising from
+/// the bottom edge and a stronger bottom border.
+/// @access private
+/// @group components
+@mixin ai-field-gradient {
+  background-image: linear-gradient(
+    0deg,
+    ai-token("ai-aura-start-sm") 0%,
+    15%,
+    ai-token("ai-aura-end") 50%,
+    transparent 100%
+  );
+  border-bottom-color: ai-token("ai-border-strong");
+}
+
+/// Row and column aura for data tables: strongest at the left edge.
+/// @access private
+/// @group components
+@mixin ai-table-gradient {
+  background-image: linear-gradient(
+    to right,
+    ai-token("ai-aura-start-sm") 0%,
+    ai-token("ai-aura-end") 50%,
+    transparent 50%
+  );
+}
