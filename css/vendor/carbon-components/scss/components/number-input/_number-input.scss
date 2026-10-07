@@ -519,6 +519,19 @@
     }
   }
 
+  // ccs: size the skeleton like the field it stands in for
+  .#{$prefix}--number--xs.#{$prefix}--skeleton {
+    height: to-rem(24px);
+  }
+
+  .#{$prefix}--number--sm.#{$prefix}--skeleton {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--number--xl.#{$prefix}--skeleton {
+    height: to-rem(48px);
+  }
+
   // Windows HCM fix
   /* stylelint-disable */
   .#{$prefix}--number__control-btn:hover,

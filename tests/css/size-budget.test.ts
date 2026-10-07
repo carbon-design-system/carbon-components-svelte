@@ -15,9 +15,10 @@ const BUDGETS: Record<string, { min: number; gzip: number }> = {
   // pinned `orientation` layouts (the row and column rules, emitted once
   // more outside their breakpoints); CI gzip runs ~1.5 kB above local
   "all.scss": { min: 669_400, gzip: 77_800 },
-  // min measured 564,002 and gzip 66,701 locally after the vertical
-  // slider grid layout and TabsVertical's pinned `orientation` layouts
-  "white.scss": { min: 575_300, gzip: 68_000 },
+  // gzip measured 68,001 locally after the field skeleton sizes (min
+  // 564,002 after the vertical slider grid layout and TabsVertical's
+  // pinned `orientation` layouts)
+  "white.scss": { min: 575_300, gzip: 69_400 },
 };
 
 describe("css size budget", () => {

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import DatePickerSkeletonComponent from "carbon-components-svelte/DatePicker/DatePickerSkeleton.svelte";
 import { user } from "../utils/user";
 import FluidDatePickerSkeleton from "./DatePicker.fluidSkeleton.test.svelte";
 import DatePickerSkeleton from "./DatePickerSkeleton.test.svelte";
@@ -17,6 +18,21 @@ describe("DatePickerSkeleton", () => {
       container.querySelectorAll(".bx--date-picker-container"),
     ).toHaveLength(1);
   });
+
+  it.each(["xs", "sm", "xl"] as const)(
+    "sizes every input with the %s modifier",
+    (size) => {
+      const { container } = render(DatePickerSkeletonComponent, {
+        props: { range: true, size },
+      });
+
+      const inputs = container.querySelectorAll(".bx--date-picker__input");
+      expect(inputs).toHaveLength(2);
+      for (const input of inputs) {
+        expect(input).toHaveClass(`bx--date-picker__input--${size}`);
+      }
+    },
+  );
 
   it("renders the range variant", () => {
     const { container } = render(DatePickerSkeleton, {

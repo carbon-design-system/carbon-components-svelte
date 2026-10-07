@@ -788,6 +788,18 @@ describe("TimePicker", () => {
     expect(secondSelect.querySelector(".bx--skeleton.bx--select")).toBeTruthy();
   });
 
+  it("passes the skeleton size to the input and selects", () => {
+    render(TimePickerSkeleton, { props: { size: "xs" } });
+
+    const skeleton = screen.getByTestId("time-picker-skeleton");
+    expect(skeleton.querySelector(".bx--text-input")).toHaveClass(
+      "bx--text-input--xs",
+    );
+    for (const select of skeleton.querySelectorAll(".bx--select")) {
+      expect(select).toHaveClass("bx--select--xs");
+    }
+  });
+
   it("renders fluid skeleton state", () => {
     render(TimePickerFluidSkeleton);
 
