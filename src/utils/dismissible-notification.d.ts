@@ -3,7 +3,7 @@ export interface DismissibleNotification {
   sync: (open: boolean, timeout: number) => void;
   handleMouseenter: () => void;
   handleMouseleave: (event: MouseEvent) => void;
-  handleFocusIn: () => void;
+  handleFocusIn: (event: FocusEvent) => void;
   handleFocusOut: (event: FocusEvent) => void;
   dispose: () => void;
 }
