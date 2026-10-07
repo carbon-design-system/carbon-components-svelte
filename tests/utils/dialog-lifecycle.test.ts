@@ -8,6 +8,7 @@ function createHarness(
   const setOpen = vi.fn();
   const focus = vi.fn();
   const saveFocusReturn = vi.fn();
+  const restoreFocusReturn = vi.fn();
   let liveOpen = false;
 
   const lifecycle = createDialogLifecycle({
@@ -15,6 +16,8 @@ function createHarness(
     setOpen,
     preventCloseOnClickOutside: () => false,
     saveFocusReturn,
+    restoreFocusReturn,
+    getContainer: () => null,
     focus,
     getOpen: () => liveOpen,
     ...overrides,
@@ -26,6 +29,7 @@ function createHarness(
     setOpen,
     focus,
     saveFocusReturn,
+    restoreFocusReturn,
     setLiveOpen: (value: boolean) => {
       liveOpen = value;
     },
@@ -125,6 +129,36 @@ describe("createDialogLifecycle", () => {
       expect(dispatch).toHaveBeenCalledWith("close", {
         trigger: "programmatic",
       });
+    });
+
+    it("restores focus after close when the container has no transition", async () => {
+      const { lifecycle, restoreFocusReturn, setLiveOpen } = createHarness();
+
+      setLiveOpen(true);
+      lifecycle.syncOpen(true);
+      setLiveOpen(false);
+      lifecycle.syncOpen(false);
+      await Promise.resolve().then().then().then();
+
+      expect(restoreFocusReturn).toHaveBeenCalledTimes(1);
+    });
+
+    it("leaves the restore to transitionend when the container transitions", async () => {
+      vi.stubGlobal("getComputedStyle", () => ({
+        transitionDuration: "0s, 0.24s",
+      }));
+      const { lifecycle, restoreFocusReturn, setLiveOpen } = createHarness({
+        getContainer: () => ({}) as Element,
+      });
+
+      setLiveOpen(true);
+      lifecycle.syncOpen(true);
+      setLiveOpen(false);
+      lifecycle.syncOpen(false);
+      await Promise.resolve().then().then().then();
+
+      expect(restoreFocusReturn).not.toHaveBeenCalled();
+      vi.unstubAllGlobals();
     });
 
     it("a closing transition already dispatched by close() does not double-dispatch", async () => {
