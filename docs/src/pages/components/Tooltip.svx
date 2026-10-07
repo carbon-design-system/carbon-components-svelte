@@ -4,7 +4,7 @@ description: Tooltips display contextual information on hover or focus, with sup
 ---
 
 <script>
-  import { Box, Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
+  import { Box, Stack, Tooltip, TooltipFooter, TooltipGroup, Link, Button } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
 </script>
 
@@ -144,6 +144,24 @@ Customize the enter and leave delay with `enterDelayMs` and `leaveDelayMs`. Defa
     This tooltip has a 500ms enter delay and a 200ms leave delay.
   </p>
 </Tooltip>
+
+## Tooltip group
+
+Wrap related tooltips in a [TooltipGroup](/components/TooltipGroup). Once one is open on hover, moving to the next trigger opens it right away, with no enter delay, and closes the first. A tooltip opened with the keyboard stays open so focus inside it isn't lost. Inside a group, `enterDelayMs` and `leaveDelayMs` default to the group's delays.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={7}>
+    <Tooltip triggerText="Region">
+      <p>Where your resources run. Pick the one closest to your users.</p>
+    </Tooltip>
+    <Tooltip triggerText="Plan">
+      <p>Sets your monthly quota. You can change plans at any time.</p>
+    </Tooltip>
+    <Tooltip triggerText="Retention">
+      <p>How long logs are kept before they are deleted.</p>
+    </Tooltip>
+  </Stack>
+</TooltipGroup>
 
 ## Portal
 
