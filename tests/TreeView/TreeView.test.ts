@@ -2243,15 +2243,17 @@ describe("TreeView autoCollapse", () => {
       ],
     });
 
+    const treeId = container.querySelector('[role="tree"]')?.id;
+    expect(treeId).toBeTruthy();
     const parent = container.querySelector("#parent");
     const subtreeId = parent?.getAttribute("aria-owns");
-    expect(subtreeId).toMatch(/^tree-.+-parent-subtree$/);
+    expect(subtreeId).toBe(`${treeId}-parent-subtree`);
 
     const subtree = document.getElementById(subtreeId as string);
     expect(subtree?.getAttribute("role")).toBe("group");
 
     const labelledBy = subtree?.getAttribute("aria-labelledby");
-    expect(labelledBy).toMatch(/^tree-.+-parent__label$/);
+    expect(labelledBy).toBe(`${treeId}-parent__label`);
 
     const labelEl = document.getElementById(labelledBy as string);
     expect(labelEl?.textContent?.trim()).toBe("Top Parent");

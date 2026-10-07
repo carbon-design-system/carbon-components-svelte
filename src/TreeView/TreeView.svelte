@@ -362,6 +362,13 @@
   export let hideLabel = false;
 
   /**
+   * Set an id for the tree element.
+   * The label, node label, subtree, and checkbox ids derive from it,
+   * for example `{id}-label` and `{id}-{node.id}-subtree`.
+   */
+  export let id = uniqueId();
+
+  /**
    * Set to `true` to automatically collapse sibling nodes when expanding a node.
    * When enabled, only one node at each level can be expanded at a time.
    */
@@ -665,8 +672,10 @@
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
   const dispatch = createEventDispatcher();
-  const labelId = uniqueId("label");
-  const treeId = uniqueId("tree");
+  /** @type {import("svelte/store").Writable<string>} */
+  const treeId = writable(id);
+  $: treeId.set(id);
+  $: labelId = `${id}-label`;
 
   /** @type {import("svelte/store").Writable<boolean>} */
   const sharedMultiselect = writable(multiselect);
@@ -2108,6 +2117,7 @@
 {#if virtualConfig}
   <ul
     {...$$restProps}
+    {id}
     role="tree"
     bind:this={scrollContainerRef}
     tabindex="-1"
@@ -2152,6 +2162,7 @@
 {:else}
   <ul
     {...$$restProps}
+    {id}
     role="tree"
     bind:this={ref}
     class:bx--tree={true}

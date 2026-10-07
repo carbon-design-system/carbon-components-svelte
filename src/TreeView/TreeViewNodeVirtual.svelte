@@ -29,6 +29,7 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   const {
+    treeId,
     activeNodeId,
     selectedIdSet,
     checkedIdSet,
@@ -172,6 +173,7 @@
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
         <Checkbox
+          id="{$treeId}-{id}-checkbox"
           decorative
           hideLabel
           labelText=""
