@@ -47,6 +47,16 @@ A long selected label truncates with an ellipsis before the clear button instead
   { id: "2", text: "Fax" },
 ]} />
 
+### Clearable (invalid)
+
+With `invalid` or `warn` set, the status icon sits left of the clear button, and a long label truncates before both.
+
+<Dropdown clearable invalid invalidText="This contact method is no longer supported" labelText="Contact" selectedId="1" items={[
+  { id: "0", text: "Slack" },
+  { id: "1", text: "Legacy pager gateway for the platform on-call rotation in us-east-1 (deprecated, migrate to Slack before the next quarter)" },
+  { id: "2", text: "Fax" },
+]} />
+
 ### Clear button text
 
 Override the assistive text for the clear interaction with `clearSelectionText` (appended to the field's description whenever there is a selection to clear) and `selectionClearedText` (announced through the status live region after clearing). Both only apply when `clearable` is `true`.
