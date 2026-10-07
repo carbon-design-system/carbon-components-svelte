@@ -104,6 +104,14 @@ describe("DatePicker", () => {
     expect(wrapper).toHaveClass("bx--date-picker--light");
   });
 
+  it.each(["xs", "sm", "xl"] as const)("renders the %s size", (size) => {
+    render(DatePicker, { size });
+
+    expect(screen.getByLabelText("Date")).toHaveClass(
+      `bx--date-picker__input--${size}`,
+    );
+  });
+
   it("renders short variant", () => {
     const { container } = render(DatePicker, { short: true });
 

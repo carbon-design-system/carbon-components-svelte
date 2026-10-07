@@ -583,3 +583,16 @@
 @include exports('datepicker-range-length') {
   @include date-picker-range-length;
 }
+
+// carbon-components-svelte patch
+// Extra-small (`xs`, 24px) input, matching the other field components'
+// `size="xs"`. v10 only ships sm/md/xl.
+@mixin date-picker-xs {
+  .#{$prefix}--date-picker__input--xs {
+    height: to-rem(24px);
+  }
+}
+
+@include exports('datepicker-xs') {
+  @include date-picker-xs;
+}

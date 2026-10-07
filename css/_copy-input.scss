@@ -14,6 +14,10 @@
     white-space: nowrap;
   }
 
+  .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xs {
+    padding-right: to-rem(24px);
+  }
+
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
     padding-right: to-rem(32px);
   }
@@ -29,6 +33,8 @@
       padding-right: $carbon--spacing-08;
     }
 
+    // The fluid copy button stays 32px at every size.
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xs,
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
       padding-right: $carbon--spacing-07;
     }
@@ -92,6 +98,12 @@
     &:disabled .#{$prefix}--snippet__icon {
       fill: $icon-disabled;
     }
+  }
+
+  .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--xs
+    ~ .#{$prefix}--copy-btn {
+    width: to-rem(24px);
   }
 
   .#{$prefix}--copy-input__field-wrapper

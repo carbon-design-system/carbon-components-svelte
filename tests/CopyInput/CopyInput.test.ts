@@ -38,6 +38,17 @@ describe("CopyInput", () => {
     expect(input).toHaveValue("secret-token-123");
   });
 
+  it.each(["xs", "sm", "xl"] as const)("renders the %s size", (size) => {
+    render(CopyInput, { size, inline: true });
+
+    expect(screen.getByLabelText("API token")).toHaveClass(
+      `bx--text-input--${size}`,
+    );
+    expect(screen.getByText("API token")).toHaveClass(
+      `bx--label--inline--${size}`,
+    );
+  });
+
   it("describes the input with the helper text", () => {
     render(CopyInput, { props: { helperText: "Helper text" } });
 

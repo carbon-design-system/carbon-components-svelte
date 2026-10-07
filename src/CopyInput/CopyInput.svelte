@@ -41,7 +41,7 @@
 
   /**
    * Set the size of the input.
-   * @type {"sm" | "xl"}
+   * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
 
@@ -196,6 +196,7 @@
           class:bx--visually-hidden={hideLabel}
           class:bx--label--disabled={disabled}
           class:bx--label--inline={inline}
+          class:bx--label--inline--xs={size === "xs"}
           class:bx--label--inline--sm={size === "sm"}
           class:bx--label--inline--xl={size === "xl"}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
@@ -252,6 +253,7 @@
         {name}
         class:bx--text-input={true}
         class:bx--text-input--light={light}
+        class:bx--text-input--xs={size === "xs"}
         class:bx--text-input--sm={size === "sm"}
         class:bx--text-input--xl={size === "xl"}
         {...$$restProps}

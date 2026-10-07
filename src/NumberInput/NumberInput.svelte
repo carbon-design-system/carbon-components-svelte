@@ -29,7 +29,7 @@
 
   /**
    * Set the size of the input.
-   * @type {"sm" | "xl"}
+   * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
 
@@ -493,6 +493,7 @@
     class:bx--number--light={light}
     class:bx--number--nolabel={hideLabel}
     class:bx--number--nosteppers={hideSteppers}
+    class:bx--number--xs={size === "xs"}
     class:bx--number--sm={size === "sm"}
     class:bx--number--xl={size === "xl"}
   >

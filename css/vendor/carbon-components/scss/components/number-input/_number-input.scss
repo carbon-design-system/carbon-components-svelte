@@ -83,6 +83,13 @@
     padding-right: to-rem(112px);
   }
 
+  // ccs: xs size (Carbon React `size="xs"`), two 24px steppers + 48px,
+  // none when `hideSteppers` removes the steppers
+  .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
+  .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
+    padding-right: to-rem(96px);
+  }
+
   .#{$prefix}--number input[type='number']:disabled,
   .#{$prefix}--number input[type='text']:disabled {
     border-bottom-color: transparent;
@@ -344,6 +351,11 @@
     right: to-rem(80px);
   }
 
+  // ccs: xs size
+  .#{$prefix}--number--xs .#{$prefix}--number__invalid {
+    right: to-rem(64px);
+  }
+
   .#{$prefix}--number__invalid + .#{$prefix}--number__rule-divider {
     position: absolute;
     right: to-rem(80px);
@@ -359,6 +371,13 @@
     .#{$prefix}--number__invalid
     + .#{$prefix}--number__rule-divider {
     right: to-rem(64px);
+  }
+
+  // ccs: xs size
+  .#{$prefix}--number--xs
+    .#{$prefix}--number__invalid
+    + .#{$prefix}--number__rule-divider {
+    right: to-rem(48px);
   }
 
   .#{$prefix}--number__control-btn.down-icon:hover
@@ -442,6 +461,25 @@
     &::after {
       // height: calc(100% - 4px) is calculated differently in Safari
       height: to-rem(28px);
+    }
+  }
+
+  // ccs: xs size
+  .#{$prefix}--number--xs input[type='number'],
+  .#{$prefix}--number--xs input[type='text'] {
+    height: to-rem(24px);
+  }
+
+  .#{$prefix}--number--xs .#{$prefix}--number__controls {
+    width: to-rem(48px);
+  }
+
+  .#{$prefix}--number--xs .#{$prefix}--number__control-btn {
+    width: to-rem(24px);
+
+    &::before,
+    &::after {
+      height: to-rem(20px);
     }
   }
 

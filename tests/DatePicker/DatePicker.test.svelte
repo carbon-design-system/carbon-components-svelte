@@ -32,6 +32,7 @@
   export let portalMenu = false;
   export let pattern: ComponentProps<DatePickerInput>["pattern"] = undefined;
   export let selectTextOnFocus: ComponentProps<DatePickerInput>["selectTextOnFocus"] = false;
+  export let size: ComponentProps<DatePickerInput>["size"] = undefined;
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
   export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
@@ -77,6 +78,7 @@
     {hideLabel}
     {pattern}
     {selectTextOnFocus}
+    {size}
     on:focus={(e) => onfocus?.(e)}
   />
 </DatePicker>
