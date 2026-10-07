@@ -679,3 +679,9 @@ nothing is selected.
 Show a loading state with `ComboBoxSkeleton`.
 
 <ComboBoxSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<ComboBoxSkeleton size="xs" />

@@ -204,6 +204,12 @@ Show a loading state with the default skeleton variant.
 
 <TextInputSkeleton />
 
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<TextInputSkeleton size="xs" />
+
 ### Without label
 
 Show a loading state without a label by setting `hideLabel` to `true`.

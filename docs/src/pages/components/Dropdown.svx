@@ -530,3 +530,9 @@ submission, like a disabled native `<select>`.
 Show a loading state with the dropdown skeleton.
 
 <DropdownSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<DropdownSkeleton size="xs" />

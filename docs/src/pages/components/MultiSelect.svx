@@ -654,3 +654,9 @@ Set `readonly` to `true` to display non-editable values. The menu can still be o
 Show a loading state with `MultiSelectSkeleton`.
 
 <MultiSelectSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<MultiSelectSkeleton size="xs" />

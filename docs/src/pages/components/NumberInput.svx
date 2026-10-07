@@ -209,6 +209,12 @@ Use the small size for compact layouts by setting `size` to `"sm"`. This is idea
 
 <NumberInput size="sm" labelText="Clusters" value={0} />
 
+### Extra-small
+
+Use the extra-small size for dense layouts, such as toolbars and table rows, by setting `size` to `"xs"`.
+
+<NumberInput size="xs" labelText="Clusters" value={0} />
+
 ## Light
 
 Use the light variant for light backgrounds.
@@ -299,6 +305,12 @@ Make the input read-only by setting `readonly` to `true`. This allows viewing bu
 Show a loading state with the number input skeleton. This is useful while data is being fetched.
 
 <NumberInputSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<NumberInputSkeleton size="xs" />
 
 ### Without label
 

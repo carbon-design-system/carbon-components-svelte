@@ -108,6 +108,12 @@ Use the small size for more compact inputs by setting `size` to `"sm"`.
 
 <CopyInput size="sm" labelText="Small" value="npm install carbon-components-svelte" />
 
+### Extra-small
+
+Use the extra-small size for dense layouts by setting `size` to `"xs"`.
+
+<CopyInput size="xs" labelText="Extra small" value="npm install carbon-components-svelte" />
+
 ## Disabled
 
 Set `disabled` to disable the input and copy button.
@@ -228,6 +234,12 @@ Display a loading skeleton for the fluid copy input variant.
 Show a loading state with the default skeleton variant.
 
 <CopyInputSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<CopyInputSkeleton size="xs" />
 
 ### Without label
 

@@ -527,6 +527,21 @@ Set `size` to `"sm"` on DatePickerInput for a compact input.
   <DatePickerInput size="sm" labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+### Extra-small
+
+Set `size` to `"xs"` on DatePickerInput for dense layouts.
+
+<DatePicker datePickerType="single">
+  <DatePickerInput size="xs" labelText="Invoice due date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Extra-small (range)
+
+<DatePicker datePickerType="range">
+  <DatePickerInput size="xs" labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="xs" labelText="Report period end" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ## States
 
 Reflect validation and interaction states.
@@ -602,6 +617,12 @@ The readonly state also works with range pickers.
 Show a loading state with the skeleton component.
 
 <DatePickerSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<DatePickerSkeleton size="xs" />
 
 ### Range
 

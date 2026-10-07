@@ -324,6 +324,21 @@ Use the small size for more compact time pickers by setting `size` to `"sm"`.
   </TimePickerSelect>
 </TimePicker>
 
+### Extra-small
+
+Use the extra-small size for dense layouts by setting `size` to `"xs"`.
+
+<TimePicker size="xs" labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect labelText="Period" value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect labelText="Timezone" value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
 ## States
 
 Reflect validation and interaction states.
@@ -393,3 +408,9 @@ Set `readonly` to display a value while preventing edits. Unlike disabled, the i
 Show a loading state with `TimePickerSkeleton`.
 
 <TimePickerSkeleton />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<TimePickerSkeleton size="xs" />
