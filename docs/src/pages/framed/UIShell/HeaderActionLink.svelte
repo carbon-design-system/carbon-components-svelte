@@ -25,7 +25,11 @@
       icon={LogoGithub}
       aria-label="GitHub repository"
     />
-    <HeaderGlobalAction iconDescription="Notifications" icon={Notification} />
+    <HeaderGlobalAction
+      iconDescription="Notifications"
+      tooltipAlignment="end"
+      icon={Notification}
+    />
   </HeaderUtilities>
 </Header>
 
