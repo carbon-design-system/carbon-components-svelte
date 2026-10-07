@@ -61,6 +61,7 @@
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
+  import { returnFocusOnClose } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
 
@@ -117,6 +118,14 @@
       pickEdgeMenuItem(event.key, get(menuItems))?.focus();
     }
   }
+
+  // Closing unmounts the panel, so focus inside it (e.g. on an item whose
+  // handler set `isOpen` to false) would fall to <body>.
+  const syncFocusReturn = returnFocusOnClose(
+    () => ref,
+    () => refMenu,
+  );
+  $: syncFocusReturn(isOpen);
 </script>
 
 <span class:bx--header-switcher={true}>
