@@ -8,3 +8,8 @@ export function restoreFocus(): {
   save(): void;
   restore(): void;
 };
+
+export function returnFocus(
+  target: HTMLElement | null | undefined,
+  region?: Element | null,
+): void;

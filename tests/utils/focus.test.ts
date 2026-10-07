@@ -1,4 +1,8 @@
-import { initialFocus, restoreFocus } from "../../src/utils/focus.js";
+import {
+  initialFocus,
+  restoreFocus,
+  returnFocus,
+} from "../../src/utils/focus.js";
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -109,5 +113,51 @@ describe("restoreFocus", () => {
 
     focusReturn.restore();
     expect(document.activeElement).toBe(other);
+  });
+});
+
+describe("returnFocus", () => {
+  it("focuses the target when focus was dropped to <body>", () => {
+    const container = setup('<button id="trigger"></button>');
+    const trigger = container.querySelector<HTMLElement>("#trigger");
+
+    returnFocus(trigger);
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it("focuses the target when focus is still inside the region", () => {
+    const container = setup(`
+      <button id="trigger"></button>
+      <div id="menu"><button id="item"></button></div>
+    `);
+    const trigger = container.querySelector<HTMLElement>("#trigger");
+    container.querySelector<HTMLElement>("#item")?.focus();
+
+    returnFocus(trigger, container.querySelector("#menu"));
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it("leaves focus alone when it moved outside the region", () => {
+    const container = setup(`
+      <button id="trigger"></button>
+      <div id="menu"><button id="item"></button></div>
+      <input id="elsewhere" />
+    `);
+    const elsewhere = container.querySelector<HTMLElement>("#elsewhere");
+    elsewhere?.focus();
+
+    returnFocus(
+      container.querySelector<HTMLElement>("#trigger"),
+      container.querySelector("#menu"),
+    );
+    expect(document.activeElement).toBe(elsewhere);
+  });
+
+  it("is a no-op when the target is disconnected or missing", () => {
+    const detached = document.createElement("button");
+
+    returnFocus(detached);
+    returnFocus(null);
+    expect(document.activeElement).toBe(document.body);
   });
 });

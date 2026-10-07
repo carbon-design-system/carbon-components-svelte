@@ -137,6 +137,7 @@
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { returnFocus } from "../utils/focus.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -314,16 +315,7 @@
   // a consumer that moved focus elsewhere (e.g. an `on:select` handler opening
   // a modal): only take focus if it was dropped or is still inside the search.
   function focusSearchButton() {
-    tick().then(() => {
-      const activeElement = document.activeElement;
-      if (
-        !activeElement ||
-        activeElement === document.body ||
-        refSearch?.contains(activeElement)
-      ) {
-        searchButtonRef?.focus();
-      }
-    });
+    tick().then(() => returnFocus(searchButtonRef, refSearch));
   }
 
   function reset() {

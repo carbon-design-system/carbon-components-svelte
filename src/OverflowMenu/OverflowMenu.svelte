@@ -106,6 +106,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { returnFocus } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
@@ -209,13 +210,8 @@
     if (shouldContinue) {
       // The menu unmounts on close, so focus would fall to <body>. Return it
       // to the trigger unless the item's handler already moved it elsewhere.
-      const active = document.activeElement;
-      const restoreFocus =
-        !active || active === document.body || menuRef?.contains(active);
       open = false;
-      if (restoreFocus && buttonRef?.isConnected) {
-        buttonRef.focus({ preventScroll: true });
-      }
+      returnFocus(buttonRef, menuRef);
     }
   }
 
