@@ -6,7 +6,8 @@ the page in kebab case (`ToggleButtonGroup.svx` →
 `thumbnailPath`, and they're the preview a catalog shows next to the
 component name.
 
-New components usually ship without one. Check before each release.
+New components usually ship without one, and without the `carbon.yml`
+entry that makes the catalog show it. Check both before each release.
 
 ## Find what's missing
 
@@ -17,7 +18,17 @@ bun run thumbnails missing
 It keys off the docs pages, not `src/`. Pages like `ClickableTile` live
 inside another folder (`src/Tile/`), and folders like `ListBox` or
 `FormItem` have no page. It also lists thumbnails with no page, except
-`skeleton.svg` and `tabs-vertical.svg`, which back `carbon.yml` entries.
+`tabs-vertical.svg`, which backs the `tabs-vertical` catalog entry
+(TabsVertical is documented on the Tabs page), and `skeleton.svg`, which
+nothing references yet.
+
+`missing` doesn't read `carbon.yml`. To list thumbnails with no catalog
+entry:
+
+```sh
+comm -23 <(ls thumbnails/*.svg | xargs -n1 basename | sort) \
+  <(grep -o "thumbnails/[a-z0-9-]*\.svg" carbon.yml | sed "s#thumbnails/##" | sort -u)
+```
 
 `scripts/thumbnails.ts` has three more commands, used in the
 [recipe](#recipe): `audit` checks the mechanical rules below, `sheet`
@@ -289,11 +300,42 @@ under a filter is the one raw color `audit` allows.
    Check each against the principles above, and cut whatever isn't
    the one idea.
 9. Commit as `chore: add thumbnail SVGs for <components>`.
+10. Add a `carbon.yml` entry for each new thumbnail, in a separate
+    commit (`chore: add <components> to carbon.yml`). See
+    [Catalog entries](#catalog-entries).
 
 For a cleanup that shouldn't change the picture (renaming ids,
 inlining `<use>`, swapping a raw hex for its token), render every
 touched file before and after and compare the pixels. Visual review
 misses one-pixel shifts and dropped shadows; a diff doesn't.
+
+## Catalog entries
+
+`carbon.yml` lists one asset per component under `assets:`, keyed by the
+thumbnail name and kept in alphabetical order. A component that Carbon
+also ships inherits its name and description from `carbon-styles`, so its
+entry only adds `thumbnailPath`, `externalDocsUrl`, and the demo link. A
+Svelte-only component spells everything out:
+
+```yaml
+  table-of-contents:
+    name: Table of contents
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/table-of-contents.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TableOfContents
+```
+
+`name` is the page name in sentence case. A component documented inside
+another page links to that page's section, as `tabs-vertical` links to
+`Tabs#vertical`. Check that the file still parses:
+`bun -e 'Bun.YAML.parse(await Bun.file("carbon.yml").text())'`.
 
 ## Gotchas
 
@@ -306,4 +348,4 @@ misses one-pixel shifts and dropped shadows; a diff doesn't.
 | Real text: outline it, don't use `<text>` | `<text>` falls back to Helvetica or Arial wherever Plex isn't installed. Link, Text, Truncate, RelativeTime, and the numerals in OrderedList and PaginationNav are outlined paths instead: IBM Plex Sans Regular (from `@ibm/plex-sans`, drawn with Python `fontTools`), 12px by default, baseline at y 95 and centered on x 160 for a single phrase. Round coordinates to one or two decimals and keep phrases short; outlined glyphs cost about 500 B each against the 8 KB budget. |
 | Icons are 32-unit paths | Copy the `<path d>` from `node_modules/carbon-icons-svelte/lib/<Icon>.svelte` and apply `transform="translate(x, y) scale(0.5)"` for a 16px icon. |
 | `sheet` needs `rsvg-convert` | `brew install librsvg`. No ImageMagick needed. |
-| A new thumbnail doesn't add a catalog entry | `carbon.yml` is a separate edit (`thumbnailPath: './thumbnails/<name>.svg'` plus `demoLinks`). Thumbnail PRs so far (#3800, #4186) left it alone. |
+| A new thumbnail doesn't add a catalog entry | The catalog only shows what `carbon.yml` lists, so a thumbnail with no entry never appears. Add the entry in its own commit; see [Catalog entries](#catalog-entries). |
