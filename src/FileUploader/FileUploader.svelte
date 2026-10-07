@@ -163,6 +163,7 @@
 
   /**
    * Specify the size of the file uploader button.
+   * At `"xs"`, the file rows are extra small too.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
   export let size = "small";
@@ -365,6 +366,7 @@
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
+        class:bx--file__selected-file--xs={size === "xs"}
       >
         <span class:bx--file-filename-group={true}>
           <p class:bx--file-filename={true}>{file.name}</p>

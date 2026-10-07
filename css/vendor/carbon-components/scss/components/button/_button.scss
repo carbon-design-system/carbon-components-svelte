@@ -137,6 +137,11 @@
       padding: $button-padding-ghost-sm;
     }
 
+    // ccs: xs size
+    &.#{$prefix}--btn--xs {
+      padding: to-rem(2px) $carbon--spacing-05;
+    }
+
     // V11: remove field
     &.#{$prefix}--btn--field { // ccs: dropped unrendered --md alias
       padding: $button-padding-ghost-field;
@@ -250,6 +255,11 @@
     padding-left: to-rem(7px);
   }
 
+  // ccs: xs size, a 24px square around the 16px icon
+  .#{$prefix}--btn--xs.#{$prefix}--btn--icon-only {
+    padding: to-rem(3px);
+  }
+
   .#{$prefix}--btn--danger {
     @include button-theme(
       $danger-01,
@@ -338,6 +348,11 @@
         padding: $button-padding-ghost-sm;
       }
 
+      // ccs: xs size
+      &.#{$prefix}--btn--xs {
+        padding: to-rem(2px) $carbon--spacing-05;
+      }
+
       // V11: Remove field
       &.#{$prefix}--btn--field { // ccs: dropped unrendered --md alias
         padding: $button-padding-ghost-field;
@@ -348,6 +363,12 @@
   .#{$prefix}--btn--sm {
     min-height: to-rem(32px);
     padding: $button-padding-sm;
+  }
+
+  // ccs: xs size (Carbon React IconButton `size="xs"`), 24px tall
+  .#{$prefix}--btn--xs {
+    min-height: to-rem(24px);
+    padding: to-rem(2px) to-rem(40px) to-rem(2px) to-rem(12px);
   }
 
   // V11: change xl to 2xl

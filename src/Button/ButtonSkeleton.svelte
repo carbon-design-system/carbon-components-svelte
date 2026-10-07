@@ -7,7 +7,7 @@
 
   /**
    * Specify the size of button skeleton.
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl"}
    */
   export let size = "default";
 
@@ -24,6 +24,7 @@
     class:bx--skeleton={true}
     class:bx--btn={true}
     class:bx--btn--field={size === "field"}
+    class:bx--btn--xs={size === "xs"}
     class:bx--btn--sm={size === "small"}
     class:bx--btn--lg={size === "lg"}
     class:bx--btn--xl={size === "xl"}
@@ -42,6 +43,7 @@
     class:bx--skeleton={true}
     class:bx--btn={true}
     class:bx--btn--field={size === "field"}
+    class:bx--btn--xs={size === "xs"}
     class:bx--btn--sm={size === "small"}
     class:bx--btn--lg={size === "lg"}
     class:bx--btn--xl={size === "xl"}

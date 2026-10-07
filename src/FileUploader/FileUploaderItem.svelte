@@ -11,7 +11,7 @@
 
   /**
    * Specify the size of button skeleton.
-   * @type {"default" | "field" | "small"}
+   * @type {"default" | "field" | "small" | "xs"}
    */
   export let size = "default";
 
@@ -65,6 +65,7 @@
   class:bx--file__selected-file--invalid={invalid}
   class:bx--file__selected-file--md={size === "field"}
   class:bx--file__selected-file--sm={size === "small"}
+  class:bx--file__selected-file--xs={size === "xs"}
   {...$$restProps}
   on:mouseover
   on:mouseenter
