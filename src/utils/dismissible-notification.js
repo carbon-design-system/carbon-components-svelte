@@ -1,4 +1,5 @@
 // @ts-check
+import { returnFocus } from "./focus.js";
 import { createHoverFocusPause } from "./pause-on-hover-focus.js";
 import { createTimeoutDismiss } from "./timeout-dismiss.js";
 
@@ -7,7 +8,8 @@ import { createTimeoutDismiss } from "./timeout-dismiss.js";
  * `InlineNotification` and `ToastNotification`: closing dispatches a
  * cancelable "close" event (detail `{ timeout }`) and only applies `setOpen(false)`
  * when no listener calls `preventDefault()`; an auto-dismiss timeout closes
- * the same way, with `timeout: true`.
+ * the same way, with `timeout: true`. Closing while focus is inside returns
+ * it to the element focused before focus entered the notification.
  * @param {object} options
  * @param {(
  *   name: string,
@@ -21,7 +23,7 @@ import { createTimeoutDismiss } from "./timeout-dismiss.js";
  *   sync: (open: boolean, timeout: number) => void,
  *   handleMouseenter: () => void,
  *   handleMouseleave: (event: MouseEvent) => void,
- *   handleFocusIn: () => void,
+ *   handleFocusIn: (event: FocusEvent) => void,
  *   handleFocusOut: (event: FocusEvent) => void,
  *   dispose: () => void,
  * }}
@@ -35,6 +37,33 @@ export function createDismissibleNotification({
 
   const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
     createHoverFocusPause(dismiss, getPauseOnHover);
+
+  /** @type {HTMLElement | null} */
+  let prevFocus = null;
+  /** @type {Element | null} */
+  let root = null;
+  let wasOpen = false;
+
+  /**
+   * Remember where focus came from when it enters from outside, so closing
+   * (which unmounts the focused close or action button) can send it back.
+   * @param {FocusEvent} event
+   */
+  function trackFocusIn(event) {
+    handleFocusIn();
+    const current = event.currentTarget;
+    if (!(current instanceof Element)) return;
+    root = current;
+    const from = event.relatedTarget;
+    if (!(from instanceof Node && current.contains(from))) {
+      prevFocus = from instanceof HTMLElement ? from : null;
+    }
+  }
+
+  function restoreFocus() {
+    returnFocus(prevFocus, root);
+    prevFocus = null;
+  }
 
   /**
    * Close the notification. `closeFromTimeout` is passed through verbatim
@@ -52,6 +81,7 @@ export function createDismissibleNotification({
     );
     if (shouldContinue) {
       setOpen(false);
+      restoreFocus();
     }
   }
 
@@ -60,6 +90,10 @@ export function createDismissibleNotification({
    * @param {number} timeout
    */
   function sync(open, timeout) {
+    // Also covers a consumer setting `open` to false (e.g. from an action
+    // button), which skips `close()`.
+    if (wasOpen && !open) restoreFocus();
+    wasOpen = open;
     dismiss.sync(open, timeout, () => close(true));
   }
 
@@ -68,7 +102,7 @@ export function createDismissibleNotification({
     sync,
     handleMouseenter,
     handleMouseleave,
-    handleFocusIn,
+    handleFocusIn: trackFocusIn,
     handleFocusOut,
     dispose: dismiss.clear,
   };

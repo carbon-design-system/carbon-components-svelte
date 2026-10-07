@@ -146,4 +146,30 @@ describe("createDismissibleNotification", () => {
       { cancelable: true },
     );
   });
+
+  it("close() leaves focus alone when a close listener moved it outside", () => {
+    const before = document.createElement("button");
+    const root = document.createElement("div");
+    const inside = document.createElement("button");
+    const elsewhere = document.createElement("input");
+    root.append(inside);
+    document.body.append(before, root, elsewhere);
+
+    const notification = createDismissibleNotification({
+      dispatch: vi.fn(() => {
+        elsewhere.focus();
+        return true;
+      }),
+      getPauseOnHover: () => false,
+      setOpen: vi.fn(),
+    });
+    root.addEventListener("focusin", notification.handleFocusIn);
+    before.focus();
+    inside.focus();
+
+    notification.close();
+
+    expect(document.activeElement).toBe(elsewhere);
+    document.body.innerHTML = "";
+  });
 });
