@@ -86,7 +86,7 @@
   .#{$prefix}--select-input__wrapper[data-invalid]
     .#{$prefix}--select-input:not(:focus),
   .#{$prefix}--list-box[data-invalid],
-  .#{$prefix}--combo-box[data-invalid] .#{$prefix}--text-input:not(:focus) {
+  .#{$prefix}--combo-box[data-invalid]:not(.#{$prefix}--multi-select) .#{$prefix}--text-input:not(:focus) { // ccs: a filterable MultiSelect outlines its list box; its input sits right of the tags and would draw a second edge
     @include focus-outline('invalid');
   }
 
