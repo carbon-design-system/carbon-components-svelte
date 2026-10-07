@@ -36,7 +36,7 @@ describe("missingThumbnails and orphanThumbnails", () => {
         ["Meter"],
         ["meter", "skeleton", "tabs-vertical", "old"],
       ),
-    ).toEqual(["old"]);
+    ).toEqual(["skeleton", "old"]);
   });
 });
 

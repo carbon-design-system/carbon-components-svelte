@@ -19,8 +19,8 @@ It keys off the docs pages, not `src/`. Pages like `ClickableTile` live
 inside another folder (`src/Tile/`), and folders like `ListBox` or
 `FormItem` have no page. It also lists thumbnails with no page, except
 `tabs-vertical.svg`, which backs the `tabs-vertical` catalog entry
-(TabsVertical is documented on the Tabs page), and `skeleton.svg`, which
-nothing references yet.
+(TabsVertical is documented on the Tabs page). Any other thumbnail with
+no page is for a component that doesn't exist; delete it.
 
 `missing` doesn't read `carbon.yml`. To list thumbnails with no catalog
 entry:
@@ -179,7 +179,7 @@ Look-alike pairs and the trait that separates them:
 | Modal / ComposedModal | plain / dashed outlines around header, body, and footer |
 | Form / FluidForm | labels above fields / labels inside joined fields |
 | Tooltip / TooltipIcon / TooltipDefinition / Toggletip | icon with a bubble above / icon button with a side label / underlined term / pressed trigger with a link inside |
-| Skeleton / SkeletonText / SkeletonPlaceholder / SkeletonIcon | card / paragraph / block / small square |
+| SkeletonText / SkeletonPlaceholder / SkeletonIcon | paragraph / block / small square |
 | Meter / ProgressBar | status-colored fill / blue fill |
 
 ## Color tokens
