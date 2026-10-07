@@ -162,7 +162,8 @@
   function handleKeydown(event) {
     if (event.key === "Escape") {
       event.stopPropagation();
-      refIcon?.focus();
+      // With `hideIcon`, the trigger is `ref` and `refIcon` is never bound.
+      (hideIcon ? ref : refIcon)?.focus();
       open = false;
     }
   }

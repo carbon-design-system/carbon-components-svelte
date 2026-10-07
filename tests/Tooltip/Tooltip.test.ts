@@ -12,6 +12,7 @@ import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
+import TooltipHideIconFooter from "./TooltipHideIconFooter.test.svelte";
 import TooltipNoLabel from "./TooltipNoLabel.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
 import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
@@ -294,6 +295,20 @@ describe("Tooltip", () => {
     await fireEvent.focus(trigger);
 
     expect(screen.getByRole("link", { name: "Learn more" })).toHaveFocus();
+  });
+
+  it("returns focus to the trigger on Escape from the content with hideIcon", async () => {
+    render(TooltipHideIconFooter);
+
+    const trigger = screen.getByRole("button", { name: "Resource list" });
+    await fireEvent.focus(trigger);
+    const link = screen.getByRole("link", { name: "Learn more" });
+    expect(link).toHaveFocus();
+
+    await fireEvent.keyDown(link, { key: "Escape" });
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
   });
 
   it("should not move focus into the footer when opened via mouse hover", async () => {
