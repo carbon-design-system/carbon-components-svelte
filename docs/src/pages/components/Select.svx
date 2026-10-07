@@ -4,7 +4,7 @@ description: Selects provide a dropdown menu for selecting a single option, with
 ---
 
 <script>
-  import { Select, SelectItem, SelectItemGroup, SelectSkeleton, FluidSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, Select, SelectItem, SelectItemGroup, SelectSkeleton, FluidSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -143,6 +143,19 @@ Set `disabled` on `SelectItemGroup` to disable every item within a group.
     <SelectItem value="business" text="Business" />
     <SelectItem value="enterprise" text="Enterprise" />
   </SelectItemGroup>
+</Select>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<Select labelText="Account plan" selected="team">
+  <SelectItem value="starter" text="Starter" />
+  <SelectItem value="team" text="Team" />
+  <SelectItem value="business" text="Business" />
+  <AILabel slot="decorator">
+    <p>Recommended from your current seat count.</p>
+  </AILabel>
 </Select>
 
 ## Sizes

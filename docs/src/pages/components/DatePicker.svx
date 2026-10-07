@@ -4,7 +4,7 @@ description: Date pickers collect dates through simple typed fields, single cale
 ---
 
 <script>
-  import { DatePicker, DatePickerSkeleton, FluidDatePickerSkeleton, DatePickerInput, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, DatePicker, DatePickerSkeleton, FluidDatePickerSkeleton, DatePickerInput, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -371,6 +371,18 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 <DatePicker>
   <DatePickerInput hideLabel labelText="Report date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<DatePicker datePickerType="single">
+  <DatePickerInput labelText="Renewal date" placeholder="mm/dd/yyyy">
+    <AILabel slot="decorator">
+      <p>Estimated from your current usage trend.</p>
+    </AILabel>
+  </DatePickerInput>
 </DatePicker>
 
 ## Light

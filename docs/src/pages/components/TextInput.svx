@@ -4,7 +4,7 @@ description: Text inputs provide a single-line field for short text like usernam
 ---
 
 <script>
-  import { TextInput, TextInputSkeleton, FluidTextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, TextInput, TextInputSkeleton, FluidTextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -80,6 +80,16 @@ Set `selectTextOnFocus` to select the full value when the field receives focus.
 The action takes a boolean, so pass an expression to turn it on and off. Pass `false` when the field is disabled or when selecting on focus is switched off, which mirrors how [TimePicker](/components/TimePicker) applies it.
 
 <FileSource src="/framed/TextInput/PreserveFocusSelectionToggling" />
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<TextInput labelText="Workspace name" value="analytics-prod">
+  <AILabel slot="decorator">
+    <p>Suggested from the project you selected.</p>
+  </AILabel>
+</TextInput>
 
 ## Light
 
