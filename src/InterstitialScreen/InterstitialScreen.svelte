@@ -14,6 +14,7 @@
 
   /**
    * Element to return focus to when the screen closes.
+   * Defaults to the element that had focus when the screen opened.
    * @bindable writable
    * @type {HTMLElement | undefined}
    */
@@ -32,6 +33,7 @@
   import { writable } from "svelte/store";
   import ComposedModal from "../ComposedModal/ComposedModal.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { returnFocus } from "../utils/focus.js";
 
   const dispatch = createEventDispatcher();
 
@@ -93,13 +95,33 @@
 
     open = false;
     progStep.set(0);
+  }
 
-    if (launcherButtonRef) {
-      const target = launcherButtonRef;
-      setTimeout(() => {
-        target.focus();
-      }, 0);
+  /** @type {HTMLElement | null} */
+  let openerFocus = null;
+  let wasOpen = false;
+
+  // Closing unmounts the screen and its focused button, so focus would fall
+  // to <body>. Return it to `launcherButtonRef`, else to whatever had focus
+  // when the screen opened, unless a close handler already moved it. Also
+  // covers a consumer setting `open` to false directly.
+  $: syncFocusReturn(open);
+
+  /** @type {(isOpen: boolean) => void} */
+  function syncFocusReturn(isOpen) {
+    if (isOpen && !wasOpen) {
+      openerFocus =
+        typeof document !== "undefined" &&
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+    } else if (!isOpen && wasOpen) {
+      const target = launcherButtonRef ?? openerFocus;
+      const region = ref;
+      openerFocus = null;
+      setTimeout(() => returnFocus(target, region), 0);
     }
+    wasOpen = isOpen;
   }
 
   setContext("carbon:InterstitialScreen", {
