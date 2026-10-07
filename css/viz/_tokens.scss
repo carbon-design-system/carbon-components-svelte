@@ -1,0 +1,204 @@
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/colors/colors";
+
+/// Data visualization palettes, emitted as `--cds-viz-*` custom properties.
+/// Values follow Carbon's data visualization color guidance, cross-checked
+/// against `@carbon/charts` `scss/_color-palette.scss` (2026-09-20):
+/// https://carbondesignsystem.com/data-visualization/color-palettes/
+/// Carbon defines two variants only: light (white, g10) and dark (g80, g90,
+/// g100).
+/// @access private
+/// @group viz
+
+/// Categorical, 14 colors in fixed order: `--cds-viz-cat-01` to `-14`.
+$viz-categorical: (
+  light: (
+    $purple-70, $cyan-50, $teal-70, $magenta-70, $red-50, $red-90, $green-60,
+    $blue-80, $magenta-50, $yellow-50, $teal-50, $cyan-90, $orange-70,
+    $purple-50,
+  ),
+  dark: (
+    $purple-60, $cyan-40, $teal-60, $magenta-40, $red-50, $red-10, $green-30,
+    $blue-50, $magenta-60, $yellow-40, $teal-40, $cyan-20, $orange-60,
+    $purple-30,
+  ),
+);
+
+/// Prescribed high-contrast groups for 1 to 5 series, several options each:
+/// `--cds-viz-group-<size>-<option>-<index>`. Not index lists into the 14:
+/// the light and dark options pick different hues, and two light options use
+/// swatches outside the 14.
+$viz-groups: (
+  light: (
+    1: (($purple-70,), ($blue-80,), ($cyan-50,), ($teal-60,)),
+    2: (
+      ($purple-70, $teal-50), ($purple-60, $red-90), ($magenta-70, $red-90),
+      ($cyan-50, $teal-70), ($teal-50, $blue-80),
+    ),
+    3: (
+      ($magenta-50, $cyan-50, $purple-70), ($magenta-70, $red-50, $red-90),
+      ($purple-50, $teal-70, $blue-80), ($purple-50, $teal-70, $magenta-70),
+      ($cyan-90, $purple-70, $teal-50),
+    ),
+    4: (
+      ($purple-70, $cyan-90, $teal-50, $magenta-50),
+      ($magenta-70, $red-50, $red-90, $purple-50),
+      ($teal-50, $blue-80, $purple-50, $magenta-70),
+    ),
+    5: (
+      ($purple-70, $cyan-50, $teal-70, $magenta-70, $red-90),
+      ($blue-80, $teal-50, $magenta-70, $red-90, $purple-50),
+    ),
+  ),
+  dark: (
+    1: (($purple-30,), ($blue-50,), ($cyan-40,), ($teal-40,)),
+    2: (
+      ($purple-60, $teal-40), ($purple-60, $magenta-40), ($magenta-40, $red-10),
+      ($blue-50, $cyan-20), ($teal-60, $green-30),
+    ),
+    3: (
+      ($purple-60, $teal-40, $cyan-20), ($purple-60, $magenta-40, $red-10),
+      ($blue-50, $teal-40, $purple-30), ($blue-50, $green-30, $red-10),
+      ($teal-60, $green-30, $cyan-20),
+    ),
+    4: (
+      ($purple-60, $teal-40, $cyan-20, $blue-50),
+      ($blue-50, $teal-40, $purple-30, $red-10),
+      ($teal-60, $red-10, $cyan-40, $green-30),
+    ),
+    5: (
+      ($purple-60, $teal-40, $cyan-20, $blue-50, $magenta-40),
+      ($blue-50, $teal-40, $purple-30, $red-10, $green-30),
+    ),
+  ),
+);
+
+/// Sequential ramps, 11 steps from low to high: `--cds-viz-seq-<hue>-01` to
+/// `-11`. Low is the step nearest the background, so dark themes reverse the
+/// swatch order.
+$viz-sequential: (
+  purple: (
+    #ffffff, $purple-10, $purple-20, $purple-30, $purple-40, $purple-50,
+    $purple-60, $purple-70, $purple-80, $purple-90, $purple-100,
+  ),
+  blue: (
+    #ffffff, $blue-10, $blue-20, $blue-30, $blue-40, $blue-50, $blue-60,
+    $blue-70, $blue-80, $blue-90, $blue-100,
+  ),
+  cyan: (
+    #ffffff, $cyan-10, $cyan-20, $cyan-30, $cyan-40, $cyan-50, $cyan-60,
+    $cyan-70, $cyan-80, $cyan-90, $cyan-100,
+  ),
+  teal: (
+    #ffffff, $teal-10, $teal-20, $teal-30, $teal-40, $teal-50, $teal-60,
+    $teal-70, $teal-80, $teal-90, $teal-100,
+  ),
+);
+
+/// Diverging ramps, 17 steps around a neutral midpoint at 09:
+/// `--cds-viz-div-<low>-<high>-01` to `-17`. Dark themes flip each half so
+/// the extremes stay the most visible steps against the background. The
+/// midpoint matches the background: white, or Gray 100 in dark themes, where
+/// `@carbon/charts` keeps white and the neutral step reads as the loudest.
+$viz-diverging: (
+  red-cyan: (
+    low: ($red-80, $red-70, $red-60, $red-50, $red-40, $red-30, $red-20, $red-10),
+    high: ($cyan-10, $cyan-20, $cyan-30, $cyan-40, $cyan-50, $cyan-60, $cyan-70, $cyan-80),
+  ),
+  purple-teal: (
+    low: ($purple-80, $purple-70, $purple-60, $purple-50, $purple-40, $purple-30, $purple-20, $purple-10),
+    high: ($teal-10, $teal-20, $teal-30, $teal-40, $teal-50, $teal-60, $teal-70, $teal-80),
+  ),
+);
+
+@function viz-pad($n) {
+  @return if($n < 10, "0#{$n}", "#{$n}");
+}
+
+@function viz-reverse($list) {
+  $out: ();
+  @for $i from length($list) through 1 {
+    $out: append($out, nth($list, $i), comma);
+  }
+  @return $out;
+}
+
+/// Flat `(name: color)` map of every viz token for `$mode`.
+/// @param {String} $mode - `light` or `dark`
+@function viz-token-map($mode) {
+  $tokens: ();
+
+  $i: 1;
+  @each $color in map-get($viz-categorical, $mode) {
+    $tokens: map-merge($tokens, ("cat-#{viz-pad($i)}": $color));
+    $i: $i + 1;
+  }
+
+  @each $size, $options in map-get($viz-groups, $mode) {
+    $o: 1;
+    @each $option in $options {
+      $c: 1;
+      @each $color in $option {
+        $tokens: map-merge($tokens, ("group-#{$size}-#{$o}-#{$c}": $color));
+        $c: $c + 1;
+      }
+      $o: $o + 1;
+    }
+  }
+
+  @each $hue, $ramp in $viz-sequential {
+    $steps: if($mode == dark, viz-reverse($ramp), $ramp);
+    $s: 1;
+    @each $color in $steps {
+      $tokens: map-merge($tokens, ("seq-#{$hue}-#{viz-pad($s)}": $color));
+      $s: $s + 1;
+    }
+  }
+
+  @each $name, $halves in $viz-diverging {
+    $low: map-get($halves, low);
+    $high: map-get($halves, high);
+    @if $mode == dark {
+      $low: viz-reverse($low);
+      $high: viz-reverse($high);
+    }
+    $mid: if($mode == dark, $gray-100, #ffffff);
+    $steps: join(append($low, $mid, comma), $high, comma);
+    $s: 1;
+    @each $color in $steps {
+      $tokens: map-merge($tokens, ("div-#{$name}-#{viz-pad($s)}": $color));
+      $s: $s + 1;
+    }
+  }
+
+  @return $tokens;
+}
+
+/// Declare the viz tokens for `$mode`. Pass `$base` to skip tokens whose value
+/// matches that mode, the way non-default themes do in `all.scss`.
+/// @param {String} $mode - `light` or `dark`
+/// @param {String} $base [null]
+@mixin viz-tokens($mode, $base: null) {
+  $base-tokens: if($base, viz-token-map($base), ());
+
+  @each $name, $color in viz-token-map($mode) {
+    @if map-get($base-tokens, $name) != $color {
+      --cds-viz-#{$name}: #{$color};
+    }
+  }
+}
+
+/// Semantic series colors (`--cds-viz-interactive`, `-neutral`, `-success`,
+/// `-error`, `-warning`, `-info`) and label colors for text drawn on a mark
+/// (`--cds-viz-text-01`, `-inverse-01`). Aliases of core theme tokens, so JS can name
+/// one property that resolves under `all.css` (a `var()` reference) and under
+/// the static theme builds (a literal, since those declare no `--cds-*`).
+@mixin viz-semantic-tokens {
+  --cds-viz-interactive: #{$interactive-04};
+  --cds-viz-neutral: #{$icon-secondary};
+  --cds-viz-success: #{$support-success};
+  --cds-viz-error: #{$support-error};
+  --cds-viz-warning: #{$support-warning};
+  --cds-viz-info: #{$support-info};
+  --cds-viz-text-01: #{$text-01};
+  --cds-viz-inverse-01: #{$inverse-01};
+}
