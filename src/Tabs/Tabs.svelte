@@ -91,7 +91,6 @@
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
@@ -232,18 +231,17 @@
 
   /**
    * Claim a tab's position. When there is a `content` slot, also reserve
-   * the id of the panel at the same position so the tab can point
-   * `aria-controls` at it before the panel renders. A panel with its own
-   * `id` keeps it, so on the server the tab's `aria-controls` can name an
-   * id that does not exist; registration corrects it after mount.
+   * the id of the panel at the same position, `{tabId}-panel`, so the tab
+   * can point `aria-controls` at it before the panel renders. A panel with
+   * its own `id` keeps it, so on the server the tab's `aria-controls` can
+   * name an id that does not exist; registration corrects it after mount.
    * @type {(id: string) => undefined | { panelId: string | undefined }}
    */
   function claimTab(id) {
     const claimed = { id, panelId: undefined };
     const index = initialTabs.claim(claimed);
-    // Closed: skip generating an id nobody will use.
     if (index === undefined) return undefined;
-    const panelId = $$slots.content ? uniqueId() : undefined;
+    const panelId = $$slots.content ? `${id}-panel` : undefined;
     claimed.panelId = panelId;
     const isSelected =
       selectedId === undefined ? index === selectedIndex : id === selectedId;

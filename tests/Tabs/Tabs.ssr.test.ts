@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
@@ -74,5 +75,23 @@ describe("Tabs server render", () => {
     expect(tabs[0]).toHaveAttribute("aria-controls", panels[0].id);
     expect(tabs[1]).not.toHaveAttribute("aria-controls", "own-panel");
     expect(panels[1]).toHaveAttribute("aria-labelledby", tabs[1].id);
+  });
+
+  it("renders identical markup when every tab has an id", () => {
+    const renderRaw = () => render(TabsSsr, { props: {} }).body;
+
+    expect(renderRaw()).toBe(renderRaw());
+  });
+
+  it("derives each panel id from its tab id", () => {
+    const { document } = renderSSR(TabsSsr);
+    const { tabs, panels } = getParts(document);
+
+    expect(panels.map((panel) => panel.id)).toEqual([
+      "tab-a-panel",
+      "tab-b-panel",
+      "tab-c-panel",
+    ]);
+    expect(tabs[0]).toHaveAttribute("aria-controls", "tab-a-panel");
   });
 });

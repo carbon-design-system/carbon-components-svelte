@@ -1,6 +1,7 @@
 <script>
   /**
    * Set an id for the top-level element.
+   * Without one, the panel takes `{tabId}-panel` from the tab at its position.
    * Prefer a stable value when pairing panels with dynamic tabs.
    */
   export let id = uniqueId();
