@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.113.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.113.0...v0.113.1) (2026-10-07)
+
+### Bug Fixes
+
+- **tooltip-definition:** anchor the inline tooltip to its term ([e2d8c3a](https://github.com/carbon-design-system/carbon-components-svelte/commit/e2d8c3a8f1dda3ee25bfb1269ab1b93096df123c))
+- **tooltip-definition:** keep the caret visible while the tooltip shows ([b3445a8](https://github.com/carbon-design-system/carbon-components-svelte/commit/b3445a8b2e6641d7e864d9618c48efc79ad5fe17))
+
 ### [0.113.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.0...v0.113.0) (2026-10-01)
 
 ### ⚠ BREAKING CHANGES
