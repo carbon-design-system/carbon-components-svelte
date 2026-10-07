@@ -76,6 +76,9 @@
     .#{$prefix}--header__action:not(.#{$prefix}--header-search-button):focus {
     border-width: $button-border-width;
     border-color: $focus;
+    // HeaderGlobalAction renders a `.bx--btn`, whose focus box-shadow would
+    // thicken the ring past HeaderAction / HeaderActionLink's 2px border.
+    box-shadow: none;
     outline: none;
   }
 
