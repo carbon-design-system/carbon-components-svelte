@@ -2,9 +2,9 @@
   // Renders the full direction x alignment matrix for every component that
   // includes the `tooltip--trigger` / `tooltip--placement` mixins (see
   // css/vendor/carbon-components/scss/globals/scss/_tooltip.scss), so a CSS
-  // refactor of those mixins can be verified byte-for-byte via
-  // e2e/cascade-snapshot.ts. Imported by direct path, like the other
-  // fixtures that don't need the full barrel.
+  // refactor of those mixins can be verified byte-for-byte via the
+  // computed-style snapshot (`crassus capture`). Imported by direct path,
+  // like the other fixtures that don't need the full barrel.
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
   import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
@@ -122,7 +122,7 @@
     regressed to a partial custom-property set instead of the complete one
     each leaf writes today, this inner element's geometry would drift
     toward the outer's `left` values instead of its own `top` ones - the
-    cascade-snapshot equivalence check asserts against this fixture.
+    computed-style snapshot equivalence check asserts against this fixture.
   -->
   <TooltipIcon
     data-testid="ti-nested-outer"

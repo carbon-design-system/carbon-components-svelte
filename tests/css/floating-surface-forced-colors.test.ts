@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { parseRules } from "../../scripts/lib/css-cascade";
+import { parseRules } from "crassus";
 import { compileEntry } from "./compile";
 
 // Floating surfaces are separated from the page only by a box-shadow, which

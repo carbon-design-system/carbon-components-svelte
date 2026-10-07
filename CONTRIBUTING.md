@@ -583,10 +583,11 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 
 | Command | Use |
 | --- | --- |
-| `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref. Run for any refactor that should not change output. |
-| `bun run check:css:overrides` | Declarations that can never win. Also runs in CI as `tests/css/overrides.test.ts`. |
-| `bun e2e/cascade-snapshot.ts` | Computed-style snapshot of the e2e fixtures. |
-| `bun run check:css:usage` | Browser-measured "never wins" worklist. Evidence, not proof. |
+| `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref (`crassus diff`). Run for any refactor that should not change output. The base is built in a temporary worktree and cached by commit; `--no-cache` rebuilds it. |
+| `bun run check:css:overrides` | Declarations that can never win (`crassus dead`), with their `.scss` line. Also runs in CI as `tests/css/overrides.test.ts`. |
+| `bun run check:css:snapshot <dir>` | Computed styles of every e2e fixture (`crassus capture`), per theme, viewport and forced `:hover`/`:focus`/`:active` state. Add `--base <ref>` to capture a ref in a temporary worktree. |
+| `bun run check:css:snapshot:diff <base> <head>` | Compares two captures (`crassus snapshot-diff`), grouped by `property: before -> after`. Ground truth for a refactor that must not change what the browser resolves. |
+| `bun run check:css:usage` | Browser-measured "never wins" worklist (`crassus usage`), written to `.crassus/usage/report.md`. Evidence, not proof. |
 
 Tests in `tests/css/` that budget the compiled sheet, each with the number to lower when you improve it:
 
@@ -598,7 +599,9 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
 | `conventions.test.ts` | Source rules, with exact baselines for what predates them. |
 
-Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets a `css-cascade` job whose summary shows the rule delta and size movement against the base branch; it is informational and never blocks.
+Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets a `css-cascade` job whose summary shows the rule delta and size movement against the base branch and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
+
+All four come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes`, `--viewport WxH` or `--no-states`. `crassus --help` lists the options; `--format json` gives the same report as data.
 
 Compiled-output and source conventions are enforced by the tests in `tests/css/`. A new rule about how CSS is written or emitted should land with a test there.
 

@@ -33,8 +33,9 @@
 </script>
 
 <!--
-  Every DataTable variant on one page, for e2e/cascade-snapshot.ts. Tables are
-  kept to four rows so the forced-state pass stays within its element budget.
+  Every DataTable variant on one page, for the computed-style snapshot
+  (`crassus capture`). Tables are kept to four rows so the forced-state pass
+  stays within its element budget.
 -->
 <section data-testid="sizes">
   {#each ["compact", "short", "medium", "tall"] as size}

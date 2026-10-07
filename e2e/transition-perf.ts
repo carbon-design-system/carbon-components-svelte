@@ -15,7 +15,7 @@
  * Run once before a CSS edit and once after, then compare the two reports.
  */
 import { chromium } from "playwright";
-import { fixtures, startServer } from "./cascade-snapshot";
+import { fixtures, startServer } from "./fixture-server";
 
 const PORT = 4175;
 const [scenarioKey, ...rest] = process.argv.slice(2);

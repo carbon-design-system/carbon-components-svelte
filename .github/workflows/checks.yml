@@ -86,8 +86,7 @@ jobs:
               - '.github/**'
             css:
               - 'css/**'
-              - 'scripts/check-css-cascade.ts'
-              - 'scripts/lib/css-*.ts'
+              - 'crassus.config.ts'
             docs-deploy:
               - 'src/**'
               - 'css/**'
@@ -107,9 +106,10 @@ jobs:
         run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
 
   # Informational: prints the compiled-rule delta, specificity histogram and
-  # size movement against the base branch in the job summary. The script exits
-  # non-zero on a cascade flip candidate, which over-reports by design, so the
-  # job never blocks a merge.
+  # size movement against the base branch in the job summary, and annotates
+  # each cascade flip at its .scss line. crassus exits non-zero on a cascade
+  # flip candidate, which over-reports by design, so the job never blocks a
+  # merge.
   css-cascade:
     needs: [changes]
     if: github.event_name == 'pull_request' && needs.changes.outputs.css == 'true'
@@ -124,15 +124,9 @@ jobs:
       - name: Cascade diff against the base branch
         env:
           BASE_REF: ${{ github.base_ref }}
-        run: |
-          status=0
-          bun run check:css --base "origin/$BASE_REF" > cascade.txt 2>&1 || status=$?
-          {
-            echo '```'
-            head -c 60000 cascade.txt
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-          exit "$status"
+        # One run: annotations on stdout, the human report (fenced, cut to
+        # fit the 1 MiB summary limit) appended to the job summary.
+        run: bun run check:css --base "origin/$BASE_REF" --format github --summary "$GITHUB_STEP_SUMMARY"
 
   test:
     needs: [changes]

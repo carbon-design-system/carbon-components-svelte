@@ -16,8 +16,9 @@
 </script>
 
 <!--
-  Every Tabs variant on one page, for e2e/cascade-snapshot.ts. Capture at
-  1280x900 and 320x640 so both sides of the `md` breakpoint are covered.
+  Every Tabs variant on one page, for the computed-style snapshot
+  (`crassus capture`). Its 320 and 1280 px viewports cover both sides of
+  the `md` breakpoint.
 -->
 <section data-testid="line">
   <Tabs>

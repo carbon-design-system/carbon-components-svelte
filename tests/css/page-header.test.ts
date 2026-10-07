@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { parseRules } from "../../scripts/lib/css-cascade";
+import { parseRules } from "crassus";
 import { compileEntry } from "./compile";
 
 describe("page header", () => {
@@ -20,7 +20,7 @@ describe("page header", () => {
     const row = rules.find((r) => r.selector === ".bx--page-header__tabs-row");
     // Cancels the header's bottom padding, whatever its size.
     expect(row?.decls.get("margin-block-end")).toBe(
-      "calc(-1*var(--ccs-page-header-padding-block))",
+      "calc(-1 * var(--ccs-page-header-padding-block))",
     );
     expect(row?.decls.has("margin-inline")).toBe(false);
 
@@ -38,7 +38,7 @@ describe("page header", () => {
         r.selector === ".bx--page-header--divider .bx--page-header__tabs-row",
     );
     expect(overlap?.decls.get("margin-block-end")).toBe(
-      "calc(-1*var(--ccs-page-header-padding-block) - 1px)",
+      "calc(-1 * var(--ccs-page-header-padding-block) - 1px)",
     );
   }, 30_000);
 

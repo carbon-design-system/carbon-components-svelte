@@ -25,7 +25,15 @@ import {
  *
  * Each output is `all`, `none`, or a space-separated list of test files.
  */
-const GRAPH_ROOTS = ["src", "tests", "e2e", "css", "scripts"];
+// Directories, plus the root-level config a test imports.
+const GRAPH_ROOTS = [
+  "src",
+  "tests",
+  "e2e",
+  "css",
+  "scripts",
+  "crassus.config.ts",
+];
 const RUNTIME_BUILTIN = /^(?:node:|bun(?:$|:))/;
 const LOCKFILE_PACKAGE = /^\s+"([^"]+)": \["\1@/gm;
 const ROOT = spawnSync("git", ["rev-parse", "--show-toplevel"], {

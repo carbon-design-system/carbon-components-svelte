@@ -26,10 +26,11 @@
 </script>
 
 <!--
-  Classic UI Shell for e2e/cascade-snapshot.ts. g100 header, white side nav,
-  open header panel, ProfileMenu, and HeaderSwitcher. The panel,
-  ProfileMenu, and HeaderSwitcher have color-scheme: dark or cascade-order
-  rules that only apply while open under the header.
+  Classic UI Shell for the computed-style snapshot (`crassus capture`). g100
+  header, white side nav, open header panel, ProfileMenu, and
+  HeaderSwitcher. The panel, ProfileMenu, and HeaderSwitcher have
+  color-scheme: dark or cascade-order rules that only apply while open
+  under the header.
 -->
 <Header companyName="E2E" platformName="Classic" theme="classic">
   <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>

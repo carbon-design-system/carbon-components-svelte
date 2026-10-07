@@ -34,11 +34,11 @@
 </script>
 
 <!--
-  UI Shell variants for e2e/cascade-snapshot.ts: rail side nav with icons,
-  expanded submenu, selected states, header actions (icon, icon+text, link,
-  global), an open header panel, header nav with a selected item and an
-  expanded menu, and the header nav mirrored into the side nav below `lg`.
-  Capture at 1280x900 and 320x640.
+  UI Shell variants for the computed-style snapshot (`crassus capture`): rail
+  side nav with icons, expanded submenu, selected states, header actions
+  (icon, icon+text, link, global), an open header panel, header nav with a
+  selected item and an expanded menu, and the header nav mirrored into the
+  side nav below `lg`. Its 320 and 1280 px viewports cover both.
 -->
 <Header companyName="E2E" platformName="Variants" bind:isSideNavOpen>
   <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
