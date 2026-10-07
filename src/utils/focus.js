@@ -30,9 +30,11 @@ export function initialFocus({
 
 /**
  * Save focus before an overlay opens and restore it on close when the element
- * is still connected.
+ * is still connected. Pass the overlay as `region` to skip the restore when
+ * focus has already moved outside it (e.g. a close handler opened another
+ * dialog).
  *
- * @returns {{ save: () => void; restore: () => void }}
+ * @returns {{ save: () => void; restore: (region?: Element | null) => void }}
  */
 export function restoreFocus() {
   /** @type {HTMLElement | null} */
@@ -46,13 +48,24 @@ export function restoreFocus() {
           ? document.activeElement
           : null;
     },
-    restore() {
-      if (prevFocus?.isConnected) {
-        prevFocus.focus();
-        prevFocus = null;
-      }
+    restore(region) {
+      if (!prevFocus?.isConnected) return;
+      if (region === undefined || focusIsFree(region)) prevFocus.focus();
+      prevFocus = null;
     },
   };
+}
+
+/**
+ * Whether focus was dropped to `<body>` or is still inside `region`, i.e.
+ * nothing else has claimed it since `region` started closing.
+ *
+ * @param {Element | null | undefined} region
+ * @returns {boolean}
+ */
+function focusIsFree(region) {
+  const active = document.activeElement;
+  return !active || active === document.body || !!region?.contains(active);
 }
 
 /**
@@ -67,7 +80,6 @@ export function restoreFocus() {
  * @returns {void}
  */
 export function returnFocus(target, region) {
-  const active = document.activeElement;
-  if (active && active !== document.body && !region?.contains(active)) return;
+  if (!focusIsFree(region)) return;
   if (target?.isConnected) target.focus({ preventScroll: true });
 }

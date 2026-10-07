@@ -116,6 +116,39 @@ describe("restoreFocus", () => {
   });
 });
 
+describe("restoreFocus with a region", () => {
+  it("restores when focus is still inside the region", () => {
+    const container = setup(`
+      <button id="trigger"></button>
+      <div id="dialog"><button id="inside"></button></div>
+    `);
+    const trigger = container.querySelector<HTMLElement>("#trigger");
+    trigger?.focus();
+    const focusReturn = restoreFocus();
+    focusReturn.save();
+    container.querySelector<HTMLElement>("#inside")?.focus();
+
+    focusReturn.restore(container.querySelector("#dialog"));
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it("skips the restore when focus moved outside the region", () => {
+    const container = setup(`
+      <button id="trigger"></button>
+      <div id="dialog"><button id="inside"></button></div>
+      <input id="elsewhere" />
+    `);
+    container.querySelector<HTMLElement>("#trigger")?.focus();
+    const focusReturn = restoreFocus();
+    focusReturn.save();
+    const elsewhere = container.querySelector<HTMLElement>("#elsewhere");
+    elsewhere?.focus();
+
+    focusReturn.restore(container.querySelector("#dialog"));
+    expect(document.activeElement).toBe(elsewhere);
+  });
+});
+
 describe("returnFocus", () => {
   it("focuses the target when focus was dropped to <body>", () => {
     const container = setup('<button id="trigger"></button>');
