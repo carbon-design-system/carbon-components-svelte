@@ -374,3 +374,9 @@ Show a loading state with the skeleton variant.
 Show a loading state without a label by setting `hideLabel` to `true`.
 
 <SelectSkeleton hideLabel />
+
+### Sizes
+
+Set `size` to match the field the skeleton stands in for.
+
+<SelectSkeleton size="xs" />
