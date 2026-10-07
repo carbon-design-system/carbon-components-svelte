@@ -3,7 +3,7 @@ description: Expandable tiles show a summary and reveal more content on demand, 
 ---
 
 <script>
-  import { Box, ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
+  import { AILabel, Box, ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -56,6 +56,16 @@ Display the tile expanded by default with `expanded`.
 <ExpandableTile expanded>
   <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
   <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
+</ExpandableTile>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner at the `"xs"` size.
+
+<ExpandableTile>
+  <div slot="above" style="height: 8rem">Incident summary</div>
+  <div slot="below">The primary database failed over after a storage node stopped responding.</div>
+  <AILabel slot="decorator" />
 </ExpandableTile>
 
 ## Light

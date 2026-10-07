@@ -3,7 +3,7 @@ description: Clickable tiles are interactive content areas that link to another 
 ---
 
 <script>
-  import { ClickableTile } from "carbon-components-svelte";
+  import { AILabel, ClickableTile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -36,6 +36,15 @@ Handle the `click` event to override default link behavior. Call `e.preventDefau
   }}
 >
   Create incident
+</ClickableTile>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner, outside the link at the `"xs"` size.
+
+<ClickableTile href="https://www.carbondesignsystem.com/">
+  Open the usage forecast
+  <AILabel slot="decorator" />
 </ClickableTile>
 
 ## Light

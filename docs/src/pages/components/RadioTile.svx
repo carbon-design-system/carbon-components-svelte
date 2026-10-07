@@ -4,7 +4,7 @@ description: Radio tiles provide a tile-based interface for choosing a single op
 ---
 
 <script>
-  import { TileGroup, RadioTile } from "carbon-components-svelte";
+  import { AILabel, TileGroup, RadioTile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -78,6 +78,18 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
   <RadioTile value="plus">
     Plus plan
   </RadioTile>
+</TileGroup>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner at the `"xs"` size.
+
+<TileGroup legend="Recommended region">
+  <RadioTile value="us-east-1" checked>
+    US East (N. Virginia)
+    <AILabel slot="decorator" />
+  </RadioTile>
+  <RadioTile value="eu-west-1">EU West (Ireland)</RadioTile>
 </TileGroup>
 
 ## Light

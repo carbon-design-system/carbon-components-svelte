@@ -4,7 +4,7 @@ description: Selectable tiles provide a tile-based interface for choosing multip
 ---
 
 <script>
-  import { SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
+  import { AILabel, SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -90,6 +90,15 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
     EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner, beside the checkmark at the `"xs"` size.
+
+<SelectableTile>
+  Recommended plan: Team
+  <AILabel slot="decorator" />
+</SelectableTile>
 
 ## Light
 
