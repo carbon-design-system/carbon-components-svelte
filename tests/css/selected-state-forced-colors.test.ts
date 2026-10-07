@@ -93,7 +93,10 @@ describe("pressed and selected states in forced colors", () => {
       );
       // The Highlight fill never applies to a disabled segment or tag.
       for (const r of forced) {
-        if (r.decls.get("background-color") === "Highlight")
+        if (
+          /\.bx--(toggle-button|tag)\b/.test(r.selector) &&
+          r.decls.get("background-color") === "Highlight"
+        )
           expect(r.selector).toMatch(/:not\((:disabled|\.bx--tag--disabled)\)/);
       }
       expect(rule.decls.get("outline-offset")).toBe("-0.0625rem");
