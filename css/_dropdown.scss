@@ -13,6 +13,20 @@
   .#{$prefix}--list-box__field--clearable {
     padding-right: to-rem(72px);
   }
+
+  // The invalid and warn icons render before the field, so the list box
+  // carries the marker. Like ComboBox, the icon moves left of the clear
+  // button and the field reserves room for both.
+  .#{$prefix}--dropdown--clearable .#{$prefix}--list-box__invalid-icon {
+    right: to-rem(66px);
+  }
+
+  .#{$prefix}--dropdown--clearable[data-invalid]
+    .#{$prefix}--list-box__field--clearable,
+  .#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(98px);
+  }
 }
 
 @include exports("dropdown-clearable") {
