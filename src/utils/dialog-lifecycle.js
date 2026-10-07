@@ -39,6 +39,12 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  *   focus; called synchronously, before "open" is dispatched.
  * @param {() => void} options.focus - Re-focus the dialog on a later
  *   (post-mount) open transition. Always deferred with `tick()` here.
+ * @param {() => void} options.restoreFocusReturn - Restore the focus
+ *   saved by `saveFocusReturn`. Each component calls it on the closing
+ *   transform `transitionend`; this factory also calls it after close when
+ *   the container has no transition, so that event never fires.
+ * @param {() => Element | null} options.getContainer - The element whose
+ *   transform transition ends the close animation.
  * @param {() => boolean} options.getOpen - Re-read the current `open`
  *   prop value inside the deferred `tick()` callback, which needs the
  *   *live* value (the dialog may have closed again before the tick
@@ -56,6 +62,8 @@ export function createDialogLifecycle({
   preventCloseOnClickOutside,
   saveFocusReturn,
   focus,
+  restoreFocusReturn,
+  getContainer,
   getOpen,
 }) {
   let closeDispatched = false;
@@ -92,6 +100,13 @@ export function createDialogLifecycle({
           });
         }
         closeDispatched = false;
+        // With transitions disabled (e.g. a consumer's `transition: none`),
+        // `transitionend` never fires, so restore focus here instead.
+        tick().then(() => {
+          if (!getOpen() && !hasTransition(getContainer())) {
+            restoreFocusReturn();
+          }
+        });
       }
     } else if (nextOpen) {
       prevOpen = true;
@@ -111,4 +126,16 @@ export function createDialogLifecycle({
   }
 
   return { close, outsideDismiss, setMounted, syncOpen };
+}
+
+/**
+ * @param {Element | null} element
+ * @returns {boolean}
+ */
+function hasTransition(element) {
+  if (!element) return false;
+  const { transitionDuration } = getComputedStyle(element);
+  return transitionDuration
+    .split(",")
+    .some((duration) => Number.parseFloat(duration) > 0);
 }

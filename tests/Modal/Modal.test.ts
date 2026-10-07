@@ -422,6 +422,19 @@ describe("Modal", () => {
     expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
   });
 
+  it("returns focus to the trigger without a closing transition", async () => {
+    render(ModalFocusReturnTest);
+
+    const trigger = screen.getByRole("button", { name: "Open Modal" });
+    await user.click(trigger);
+    await tick();
+    await user.click(screen.getByLabelText("Close the modal"));
+    await tick();
+    await tick();
+
+    expect(trigger).toHaveFocus();
+  });
+
   it("returns focus to trigger when closed via Escape key", async () => {
     const { container } = render(ModalFocusReturnTest, {
       props: {},

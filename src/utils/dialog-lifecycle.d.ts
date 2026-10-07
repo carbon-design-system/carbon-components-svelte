@@ -12,6 +12,8 @@ export interface DialogLifecycleOptions {
   setOpen: (open: boolean) => void;
   preventCloseOnClickOutside: () => boolean;
   saveFocusReturn: () => void;
+  restoreFocusReturn: () => void;
+  getContainer: () => Element | null;
   focus: () => void;
   getOpen: () => boolean;
 }

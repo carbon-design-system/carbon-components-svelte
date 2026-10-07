@@ -91,6 +91,8 @@
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
     saveFocusReturn: focusReturn.save,
+    restoreFocusReturn: () => focusReturn.restore(ref),
+    getContainer: () => innerModalRef,
     focus: () => focus(),
     getOpen: () => open,
   });
