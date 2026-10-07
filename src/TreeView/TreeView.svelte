@@ -1,4 +1,15 @@
 <script context="module">
+  export {
+    filterTreeById,
+    filterTreeByText,
+    filterTreeNodes,
+  } from "../utils/filter-tree-nodes.js";
+  export { toHierarchy } from "../utils/to-hierarchy.js";
+  export {
+    resolveCheckboxState,
+    toggleCheckboxNode,
+  } from "../utils/tree-checkbox-state.js";
+
   import { deepEqual } from "../utils/deep-equal.js";
   import {
     fingerprintTree,

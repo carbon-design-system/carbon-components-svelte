@@ -1,5 +1,6 @@
 <script>
-  import { Stack, TreeView, toHierarchy } from "carbon-components-svelte";
+  import { Stack, TreeView } from "carbon-components-svelte";
+  import { toHierarchy } from "carbon-components-svelte/src/TreeView/TreeView.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
   let nodesFlat = [

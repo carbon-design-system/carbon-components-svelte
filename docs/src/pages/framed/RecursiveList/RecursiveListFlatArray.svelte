@@ -1,5 +1,6 @@
 <script>
-  import { RecursiveList, toHierarchy } from "carbon-components-svelte";
+  import { RecursiveList } from "carbon-components-svelte";
+  import { toHierarchy } from "carbon-components-svelte/src/RecursiveList/RecursiveList.svelte";
 
   const nodesFlat = [
     { id: 1, text: "Infrastructure" },
