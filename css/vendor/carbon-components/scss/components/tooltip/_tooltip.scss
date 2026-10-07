@@ -283,23 +283,11 @@
     white-space: nowrap;
   }
 
-  // ccs: the visible/hover/focus/hidden state rules (`tooltip--trigger-state`)
-  // never vary by type or position, so every CSS-only trigger in the bundle
-  // - this component's, `.#{$prefix}--btn--icon-only`'s (button/_button.scss)
-  // and the password toggle's (which reuses the icon-only rules, see
-  // text-input/_text-input.scss) - shares this one rule instead of each
-  // `tooltip--trigger` call site repeating it. Every trigger element always
-  // carries both classes below (see the Svelte components), so this is the
-  // same selector shape (2 classes) `tooltip--trigger` used per call site
-  // before, not a specificity change.
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y {
-    @include tooltip--trigger-state;
-  }
-
-  // ccs: same idea, for the rest of the `$tooltip-type: 'icon'` trigger body
+  // ccs: like the shared state rule below, for the rest of the
+  // `$tooltip-type: 'icon'` trigger body
   // (position/display/focus/cursor/pseudo-element base/transition/content -
-  // everything `tooltip--trigger('icon', ...)` emits besides state, already
-  // shared above). This component's icon trigger and
+  // everything `tooltip--trigger('icon', ...)` emits besides state, which
+  // is shared below). This component's icon trigger and
   // `.#{$prefix}--btn--icon-only` (button/_button.scss) both emit it
   // identically, so one rule covers both families instead of each repeating
   // it. Every selector below is exactly the 2-class compound
@@ -325,6 +313,23 @@
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top,
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom {
     @include tooltip--trigger('definition', (state,));
+  }
+
+  // ccs: the visible/hover/focus/hidden state rules (`tooltip--trigger-state`)
+  // never vary by type or position, so every CSS-only trigger in the bundle
+  // - this component's, `.#{$prefix}--btn--icon-only`'s (button/_button.scss)
+  // and the password toggle's (which reuses the icon-only rules, see
+  // text-input/_text-input.scss) - shares this one rule instead of each
+  // `tooltip--trigger` call site repeating it. Every trigger element always
+  // carries both classes below (see the Svelte components), so this is the
+  // same selector shape (2 classes) `tooltip--trigger` used per call site
+  // before, not a specificity change. It must come after the icon and
+  // definition trigger bodies, as upstream's per-type state block did: the
+  // definition body hides its caret with `opacity: 0` at the same
+  // specificity as the `opacity: 1` here, so emitting this first left the
+  // caret fading in and then snapping back to hidden.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y {
+    @include tooltip--trigger-state;
   }
 
   .#{$prefix}--tooltip__trigger {
