@@ -88,6 +88,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/BadgeIndicator
+  big-number:
+    name: Big number
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/big-number.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BigNumber
+  bleed:
+    name: Bleed
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/bleed.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Bleed
   box:
     name: Box
     status: stable
@@ -149,6 +173,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ButtonSet
     tags:
       - input-control
+  carousel:
+    name: Carousel
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/carousel.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Carousel
   checkbox:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/checkbox/usage
@@ -305,6 +341,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TooltipDefinition
+  description-list:
+    name: Description list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/description-list.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DescriptionList
   dialog:
     name: Dialog
     status: stable
@@ -329,6 +377,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Disclosure
+  divider:
+    name: Divider
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/divider.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Divider
   dropdown:
     status: stable
     framework: svelte
@@ -400,6 +460,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Form
+  full-page-error:
+    name: Full page error
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/full-page-error.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FullPageError
   grid:
     status: stable
     framework: svelte
@@ -473,6 +545,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/InlineNotification
     tags:
       - system-feedback
+  interstitial-screen:
+    name: Interstitial screen
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/interstitial-screen.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/InterstitialScreen
   link:
     status: stable
     framework: svelte
@@ -531,6 +615,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/MenuButton
+  meter:
+    name: Meter
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/meter.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Meter
   modal:
     status: stable
     framework: svelte
@@ -601,6 +697,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/OverflowMenu
     tags:
       - input-control
+  page-header:
+    name: Page header
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/page-header.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PageHeader
   pagination:
     status: stable
     framework: svelte
@@ -726,6 +834,30 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/RecursiveList
     tags:
       - data-display
+  relative-time:
+    name: Relative time
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/relative-time.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RelativeTime
+  scroll-gradient:
+    name: Scroll gradient
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/scroll-gradient.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ScrollGradient
   search:
     status: stable
     framework: svelte
@@ -868,6 +1000,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/StructuredList
+  table-of-contents:
+    name: Table of contents
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/table-of-contents.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TableOfContents
   tabs:
     status: stable
     framework: svelte
@@ -878,6 +1022,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Tabs
+  tabs-vertical:
+    name: Vertical tabs
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tabs-vertical.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Tabs#vertical
   tag:
     status: stable
     framework: svelte
@@ -983,6 +1139,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Toggle
+  toggle-button-group:
+    name: Toggle button group
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/toggle-button-group.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ToggleButtonGroup
   toggletip:
     name: Toggletip
     status: stable
@@ -1103,3 +1271,15 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/UserAvatarGroup
+  virtual-list:
+    name: Virtual list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/virtual-list.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/VirtualList
