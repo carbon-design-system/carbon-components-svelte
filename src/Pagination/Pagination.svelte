@@ -1,19 +1,19 @@
 <script context="module">
   import { tick } from "svelte";
+  import { returnFocus } from "../utils/focus.js";
 
   /**
    * When a nav button becomes disabled as a result of its own click, the
    * browser blurs it (moving focus to the body). Refocus the other button
-   * so keyboard/AT users don't lose their place.
+   * so keyboard/AT users don't lose their place, unless a `change` handler
+   * moved focus elsewhere in the meantime.
    * @param {HTMLElement | null} clickedRef
    * @param {HTMLElement | null} otherRef
    */
   async function refocusIfDisabled(clickedRef, otherRef) {
-    const wasFocused = document.activeElement === clickedRef;
+    if (document.activeElement !== clickedRef) return;
     await tick();
-    if (wasFocused && clickedRef?.disabled && otherRef) {
-      otherRef.focus();
-    }
+    if (clickedRef?.disabled) returnFocus(otherRef, clickedRef);
   }
 
   /**
