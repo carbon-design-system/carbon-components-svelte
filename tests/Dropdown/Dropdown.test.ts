@@ -308,6 +308,25 @@ describe("Dropdown", () => {
     );
   });
 
+  it("marks the list box while the clear button renders", async () => {
+    const { container, rerender } = render(Dropdown, {
+      props: { items, labelText: "Contact", clearable: true, invalid: true },
+    });
+    const listBox = container.querySelector(".bx--list-box");
+
+    expect(listBox).not.toHaveClass("bx--dropdown--clearable");
+
+    await rerender({
+      items,
+      selectedId: "0",
+      labelText: "Contact",
+      clearable: true,
+      invalid: true,
+    });
+
+    expect(listBox).toHaveClass("bx--dropdown--clearable");
+  });
+
   it("should clear the selection and dispatch clear when clicking the clear button", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Dropdown, {

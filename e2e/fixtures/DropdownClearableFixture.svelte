@@ -33,3 +33,39 @@
     warnText="This selection may be incorrect"
   />
 </div>
+
+<div data-testid="dropdown-clearable-inline-invalid">
+  <Dropdown
+    labelText="Contact"
+    {items}
+    selectedId="0"
+    clearable
+    inline
+    invalid
+    invalidText="This field is required"
+  />
+</div>
+
+<div data-testid="dropdown-clearable-fluid-invalid">
+  <Dropdown
+    labelText="Contact"
+    {items}
+    selectedId="0"
+    clearable
+    fluid
+    invalid
+    invalidText="This field is required"
+  />
+</div>
+
+<div data-testid="dropdown-clearable-xs-invalid">
+  <Dropdown
+    labelText="Contact"
+    {items}
+    selectedId="0"
+    clearable
+    size="xs"
+    invalid
+    invalidText="This field is required"
+  />
+</div>

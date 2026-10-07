@@ -665,6 +665,7 @@
     direction === "top" && "bx--list-box--up",
     showInvalid && "bx--dropdown--invalid",
     showWarn && "bx--dropdown--warning",
+    clearable && selectedId !== undefined && "bx--dropdown--clearable",
     open && "bx--dropdown--open",
     size === "xs" && "bx--dropdown--xs",
     size === "sm" && "bx--dropdown--sm",
