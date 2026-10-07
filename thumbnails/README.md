@@ -27,7 +27,7 @@ themes.
 ## Design principles
 
 A thumbnail is a glyph, not a screenshot. People see it at a fraction
-of its size in a grid of ninety others, so it has one job: make the
+of its size in a grid full of others, so it has one job: make the
 component recognizable and tell it apart from its neighbors.
 
 **One idea per thumbnail.** Pick the single trait that defines the
