@@ -56,6 +56,7 @@
       icon={rail ? Pin : PinFilled}
       isActive={!rail}
       iconDescription={rail ? "Pin side nav open" : "Unpin side nav"}
+      tooltipAlignment="end"
       on:click={togglePin}
     />
   </HeaderUtilities>
