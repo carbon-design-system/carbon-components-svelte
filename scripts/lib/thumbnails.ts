@@ -36,7 +36,11 @@ export const RAW_COLOR_EXCEPTIONS = new Set([
   "user-avatar-group",
 ]);
 
-/** Thumbnails backing `carbon.yml` entries that have no docs page. */
+/**
+ * Thumbnails with no docs page of their own: `tabs-vertical` backs the
+ * `carbon.yml` entry for TabsVertical (documented on the Tabs page), and
+ * `skeleton` isn't referenced yet.
+ */
 export const PAGELESS_THUMBNAILS = new Set(["skeleton", "tabs-vertical"]);
 
 export const THUMBNAIL_SIZE_BUDGET = 8_000;
