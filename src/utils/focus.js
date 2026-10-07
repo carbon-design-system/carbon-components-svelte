@@ -54,3 +54,20 @@ export function restoreFocus() {
     },
   };
 }
+
+/**
+ * Move focus to `target` after a close or removal, unless something else
+ * already took it. Only acts when focus was dropped to `<body>` or is still
+ * inside `region` (the popup or row being closed), so a consumer handler that
+ * moved focus elsewhere wins. Checks at call time, so call it after any
+ * `tick()` the close needs.
+ *
+ * @param {HTMLElement | null | undefined} target
+ * @param {Element | null | undefined} [region]
+ * @returns {void}
+ */
+export function returnFocus(target, region) {
+  const active = document.activeElement;
+  if (active && active !== document.body && !region?.contains(active)) return;
+  if (target?.isConnected) target.focus({ preventScroll: true });
+}
