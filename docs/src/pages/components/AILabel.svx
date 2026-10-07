@@ -146,6 +146,18 @@ Tiles, clickable tiles, selectable tiles, radio tiles, and expandable tiles show
   </SelectableTile>
 </Stack>
 
+## Data tables
+
+A data table has three slots: `decorator` beside the title, `headerDecorator` for AI columns, and `rowDecorator` for AI rows. See [DataTable](/components/DataTable#ai-label).
+
+<FileSource src="/framed/DataTable/DataTableAILabel" />
+
+## Modals
+
+`Modal` and `ComposedModal` show the AI surface and put the label beside the close button. See [Modal](/components/Modal#ai-label).
+
+<FileSource src="/framed/Modal/ModalAILabel" />
+
 ## Revert
 
 Set `revertActive` to `true` after the user edits an AI-generated value. The label turns into a revert button. Clicking it sets `revertActive` back to `false` and dispatches `revert`, so you can restore the AI value.
