@@ -330,6 +330,8 @@
     onMount,
     tick,
   } from "svelte";
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -385,6 +387,9 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
@@ -869,6 +874,8 @@
 
   $: comboBoxListBoxClass = [
     "bx--combo-box",
+    $$slots.decorator && !isFluid && "bx--list-box--decorator",
+    $aiLabelState === "active" && "bx--list-box--ai-label",
     direction === "top" && "bx--list-box--up",
     showWarn && "bx--combo-box--warning",
     readonly && "bx--combo-box--readonly",
@@ -1047,6 +1054,15 @@
     size={effectiveSize}
     warn={showWarn}
   >
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--field-decorator bx--list-box__inner-wrapper--decorator"
+        size={effectiveSize}
+        state={aiLabelState}
+      >
+        <slot name="decorator" />
+      </Decorator>
+    {/if}
     <div
       style={isFluid ? undefined : "display: contents"}
       class:bx--list-box__field--wrapper={isFluid}

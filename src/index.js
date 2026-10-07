@@ -2,6 +2,8 @@ export { default as Accordion } from "./Accordion/Accordion.svelte";
 export { default as AccordionItem } from "./Accordion/AccordionItem.svelte";
 export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svelte";
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
+export { default as AILabel } from "./AILabel/AILabel.svelte";
+export { default as AILabelActions } from "./AILabel/AILabelActions.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
 export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelte";
 export { default as BigNumber } from "./BigNumber/BigNumber.svelte";

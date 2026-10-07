@@ -15,15 +15,18 @@ const THEME_ENTRIES = [
 ];
 
 // all.scss needs the component token maps before its `:root` theme blocks;
-// these imports define variables only and emit no CSS.
+// these imports define variables only and emit no CSS. `./ai-tokens` holds
+// the v11 AI tokens, which v10 does not vendor.
 const ALL_ONLY_IMPORTS = [
   "carbon-components/scss/globals/scss/component-tokens",
   "carbon-components/scss/components/tag/tokens",
   "carbon-components/scss/components/notification/tokens",
+  "./ai-tokens",
 ];
 
 // Partials imported by other css/_*.scss partials, not by the manifest.
 const UNREGISTERED_PARTIALS = [
+  "_ai-tokens.scss",
   "_fill-tokens.scss",
   "_fluid-shared.scss",
   "_spacing-scale.scss",
@@ -44,7 +47,10 @@ const localImports = (file: string) =>
 describe("theme entry files", () => {
   it("every theme entry imports only the shared manifest locally", () => {
     for (const entry of [...THEME_ENTRIES, "all.scss"]) {
-      expect(localImports(entry), entry).toEqual(["./carbon-styles"]);
+      const locals = localImports(entry).filter(
+        (specifier) => !ALL_ONLY_IMPORTS.includes(specifier),
+      );
+      expect(locals, entry).toEqual(["./carbon-styles"]);
     }
   });
 
