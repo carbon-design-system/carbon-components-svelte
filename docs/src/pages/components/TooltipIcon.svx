@@ -3,7 +3,7 @@ description: Tooltip icons show contextual information on hover or focus of an i
 ---
 
 <script>
-  import { Box, Text, TooltipIcon } from "carbon-components-svelte";
+  import { Box, Stack, Text, TooltipGroup, TooltipIcon } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
   import Filter from "carbon-icons-svelte/lib/Filter.svelte";
 </script>
@@ -78,9 +78,21 @@ Use the default slot to fully customize the trigger content, replacing what the 
 
 ## Custom delay
 
-Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 300ms.
+Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 0ms, so the tooltip hides as soon as the pointer leaves. Keyboard focus shows the tooltip at once.
 
 <TooltipIcon tooltipText="Slow to appear" icon={Carbon} enterDelayMs={500} leaveDelayMs={500} />
+
+## Tooltip group
+
+Wrap related tooltip icons in a [TooltipGroup](/components/TooltipGroup). Once one tooltip is open, moving to the next icon shows its tooltip right away, with no enter delay or fade-in. Inside a group, `enterDelayMs` and `leaveDelayMs` default to the group's delays.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={3}>
+    <TooltipIcon tooltipText="Synced 2 minutes ago" icon={Carbon} />
+    <TooltipIcon tooltipText="Filters applied: status, owner" icon={Filter} />
+    <TooltipIcon tooltipText="Metrics cover every workspace" icon={Carbon} />
+  </Stack>
+</TooltipGroup>
 
 ## Disabled
 
