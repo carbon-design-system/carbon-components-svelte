@@ -13,3 +13,8 @@ export function returnFocus(
   target: HTMLElement | null | undefined,
   region?: Element | null,
 ): void;
+
+export function returnFocusOnClose(
+  getTrigger: () => HTMLElement | null | undefined,
+  getPanel: () => Element | null | undefined,
+): (open: boolean) => void;

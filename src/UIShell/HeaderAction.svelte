@@ -79,6 +79,7 @@
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { returnFocusOnClose } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -115,6 +116,14 @@
       ref?.focus();
     }
   }
+
+  // Closing unmounts the panel, so focus inside it (e.g. on an item whose
+  // handler set `isOpen` to false) would fall to <body>.
+  const syncFocusReturn = returnFocusOnClose(
+    () => ref,
+    () => refPanel,
+  );
+  $: syncFocusReturn(isOpen);
 </script>
 
 <button

@@ -1,4 +1,5 @@
 // @ts-check
+import { tick } from "svelte";
 
 const selectorFirstInput =
   'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
@@ -82,4 +83,25 @@ function focusIsFree(region) {
 export function returnFocus(target, region) {
   if (!focusIsFree(region)) return;
   if (target?.isConnected) target.focus({ preventScroll: true });
+}
+
+/**
+ * Return focus to a trigger when its panel closes while holding focus, however
+ * it closed (including a consumer setting `open` to false from an item's
+ * handler). Call the returned function from a `$:` block with the open state:
+ * it checks focus before the panel unmounts and moves it after.
+ *
+ * @param {() => HTMLElement | null | undefined} getTrigger
+ * @param {() => Element | null | undefined} getPanel
+ * @returns {(open: boolean) => void}
+ */
+export function returnFocusOnClose(getTrigger, getPanel) {
+  let wasOpen = false;
+  return (open) => {
+    const panel = getPanel();
+    if (wasOpen && !open && panel?.contains(document.activeElement)) {
+      tick().then(() => returnFocus(getTrigger(), panel));
+    }
+    wasOpen = open;
+  };
 }
