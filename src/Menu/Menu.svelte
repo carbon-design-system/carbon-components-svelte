@@ -97,7 +97,13 @@
    */
   export let target = null;
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { derived, writable } from "svelte/store";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
@@ -185,6 +191,11 @@
   const indentedColumn = createColumnRegistry();
   const iconColumn = createColumnRegistry();
 
+  // A submenu leaves Escape/Tab to the root menu, which closes the whole tree
+  // and focuses its anchor. Handling it here too would focus the parent item
+  // just as the root unmounts it, dropping focus to <body>.
+  const isSubmenu = !!getContext("carbon:Menu");
+
   setContext("carbon:Menu", {
     close,
     registerIndented: indentedColumn.register,
@@ -269,7 +280,7 @@
   }
 
   function handleEscape(event) {
-    if (!open) return;
+    if (!open || isSubmenu) return;
     // Tab is treated like Escape: without this, focus would leave the
     // (possibly portaled) menu for whatever happens to be next in the DOM.
     if (event.key === "Escape" || event.key === "Tab") {

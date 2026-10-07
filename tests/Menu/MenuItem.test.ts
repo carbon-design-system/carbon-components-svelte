@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import MenuItemRadioGroupFixture from "./MenuItem.radioGroup.test.svelte";
@@ -194,6 +195,39 @@ describe("MenuItem", () => {
         screen.queryByRole("menuitem", { name: "PDF" }),
       ).not.toBeInTheDocument();
       expect(screen.getByRole("menuitem", { name: "Export as" })).toHaveFocus();
+    });
+
+    it.each(["{Escape}", "{Tab}"])(
+      "closes the whole tree on %s inside the submenu and refocuses the trigger",
+      async (key) => {
+        render(MenuItemFixture);
+
+        const trigger = screen.getByRole("button", { name: "Trigger" });
+        await user.click(trigger);
+        screen.getByRole("menuitem", { name: "Export as" }).focus();
+        await user.keyboard("{ArrowRight}");
+        expect(screen.getByRole("menuitem", { name: "PDF" })).toHaveFocus();
+
+        await user.keyboard(key);
+        await tick();
+
+        expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+        expect(trigger).toHaveFocus();
+      },
+    );
+
+    it("refocuses the trigger after selecting a nested item with the keyboard", async () => {
+      render(MenuItemFixture);
+
+      const trigger = screen.getByRole("button", { name: "Trigger" });
+      await user.click(trigger);
+      screen.getByRole("menuitem", { name: "Export as" }).focus();
+      await user.keyboard("{ArrowRight}");
+      await user.keyboard("{Enter}");
+      await tick();
+
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
     });
 
     it("prevents ArrowLeft's default action (page scroll) when closing the submenu", async () => {
