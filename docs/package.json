@@ -10,7 +10,8 @@
     "build:sitemap": "bun scripts/generate-sitemap.ts",
     "format-component-api": "bun scripts/format-component-api.ts",
     "build:vite": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "bun test scripts/__tests__"
   },
   "devDependencies": {
     "@roxi/routify": "^3.6.4",
