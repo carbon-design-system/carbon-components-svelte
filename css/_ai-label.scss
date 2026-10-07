@@ -287,6 +287,39 @@ $ai-label-sizes: (
       .#{$prefix}--link:visited:hover {
       color: $link-primary-hover;
     }
+
+    // Interactive tiles with an active AI label: a stronger aura on hover
+    .#{$prefix}--tile--ai-label.#{$prefix}--tile--clickable:hover,
+    .#{$prefix}--tile--ai-label.#{$prefix}--tile--selectable:hover,
+    .#{$prefix}--tile--ai-label.#{$prefix}--tile--expandable:hover {
+      background:
+        linear-gradient(
+            to top,
+            ai-token("ai-aura-hover-start") 0%,
+            15%,
+            ai-token("ai-aura-hover-end") 50%
+          )
+          padding-box,
+        linear-gradient(
+            ai-token("ai-aura-hover-background"),
+            ai-token("ai-aura-hover-background")
+          )
+          padding-box,
+        linear-gradient(
+            to bottom,
+            ai-token("ai-border-start"),
+            ai-token("ai-border-end")
+          )
+          border-box,
+        linear-gradient(
+            ai-token("ai-aura-hover-background"),
+            ai-token("ai-aura-hover-background")
+          )
+          border-box;
+      box-shadow:
+        inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px) ai-token("ai-inner-shadow"),
+        0 to-rem(4px) to-rem(10px) to-rem(2px) ai-token("ai-drop-shadow");
+    }
   }
 
   // The callout's surface is a gradient, which forced colors drop.
@@ -585,4 +618,175 @@ $ai-label-sizes: (
 
 @include exports("ai-label-fields") {
   @include ai-label-fields;
+}
+
+/// `decorator` slots of checkboxes, radio buttons, their groups, and tags
+/// @access private
+/// @group components
+@mixin ai-label-selection {
+  // Checkbox and RadioButton: the decorator follows the label text, and the
+  // validation and helper text wrap below.
+  .#{$prefix}--checkbox-wrapper--decorator,
+  .#{$prefix}--radio-button-wrapper--decorator {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .#{$prefix}--checkbox-wrapper--decorator > .#{$prefix}--checkbox__validation-msg,
+  .#{$prefix}--checkbox-wrapper--decorator > .#{$prefix}--form__helper-text {
+    width: 100%;
+  }
+
+  .#{$prefix}--radio-button-wrapper--decorator .#{$prefix}--radio-button__label {
+    margin-right: 0;
+  }
+
+  .#{$prefix}--checkbox-wrapper-inner--decorator,
+  .#{$prefix}--radio-button-wrapper-inner--decorator {
+    display: inline-flex;
+    margin-left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--radio-button-wrapper-inner--decorator {
+    margin-right: $carbon--spacing-05;
+  }
+
+  // CheckboxGroup and RadioButtonGroup: the decorator follows the legend.
+  .#{$prefix}--radio-button-group--decorator {
+    display: block;
+  }
+
+  .#{$prefix}--radio-button-group--decorator::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+
+  .#{$prefix}--checkbox-group--decorator > .#{$prefix}--label,
+  .#{$prefix}--radio-button-group--decorator > .#{$prefix}--label,
+  .#{$prefix}--checkbox-group-inner--decorator,
+  .#{$prefix}--radio-button-group-inner--decorator {
+    float: left;
+  }
+
+  .#{$prefix}--checkbox-group-inner--decorator,
+  .#{$prefix}--radio-button-group-inner--decorator {
+    display: inline-flex;
+    margin-left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--checkbox-group--decorator > .#{$prefix}--checkbox-wrapper,
+  .#{$prefix}--checkbox-group--decorator
+    > .#{$prefix}--checkbox-group__validation-msg,
+  .#{$prefix}--radio-button-group--decorator
+    > .#{$prefix}--radio-button-group-inner--decorator
+    + .#{$prefix}--radio-button-wrapper,
+  .#{$prefix}--radio-button-group--vertical.#{$prefix}--radio-button-group--decorator
+    > .#{$prefix}--radio-button-wrapper,
+  .#{$prefix}--radio-button-group--decorator
+    > .#{$prefix}--radio-button-group__validation-msg {
+    clear: both;
+  }
+
+  .#{$prefix}--radio-button-group--decorator > .#{$prefix}--radio-button-wrapper {
+    float: left;
+  }
+
+  .#{$prefix}--radio-button-group--vertical.#{$prefix}--radio-button-group--decorator
+    > .#{$prefix}--radio-button-wrapper {
+    float: none;
+  }
+
+  // Tag: an inline AI label in the tag's own color
+  .#{$prefix}--tag__decorator {
+    display: inline-flex;
+    margin-left: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--tag__decorator .#{$prefix}--toggletip-button {
+    margin-left: 1px;
+    color: currentColor;
+  }
+
+  .#{$prefix}--tag__decorator .#{$prefix}--ai-label__text::before {
+    background-color: currentColor;
+  }
+
+  .#{$prefix}--tag--filter .#{$prefix}--tag__decorator {
+    margin-right: $carbon--spacing-02;
+  }
+}
+
+@include exports("ai-label-selection") {
+  @include ai-label-selection;
+}
+
+/// Tile `decorator` slots and the AI surface on tiles with an active
+/// `AILabel`
+/// @access private
+/// @group components
+@mixin ai-label-tiles {
+  .#{$prefix}--tile--decorator,
+  .#{$prefix}--tile__wrapper--decorator {
+    position: relative;
+  }
+
+  .#{$prefix}--tile--inner-decorator {
+    position: absolute;
+    z-index: 1;
+    top: $carbon--spacing-05;
+    right: $carbon--spacing-05;
+    display: flex;
+  }
+
+  // Clear of the checkmark in the top-right corner
+  .#{$prefix}--tile__wrapper--selectable .#{$prefix}--tile--inner-decorator,
+  .#{$prefix}--tile__wrapper--radio
+    .#{$prefix}--tile--is-selected
+    + .#{$prefix}--tile--inner-decorator {
+    right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--tile--ai-label {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(
+          to top,
+          ai-token("ai-aura-start") 0%,
+          15%,
+          ai-token("ai-aura-end") 50%
+        )
+        padding-box,
+      linear-gradient($ui-01, $ui-01) padding-box,
+      linear-gradient(
+          to bottom,
+          ai-token("ai-border-start"),
+          ai-token("ai-border-end")
+        )
+        border-box,
+      linear-gradient($ui-01, $ui-01) border-box;
+    box-shadow:
+      inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px) ai-token("ai-inner-shadow"),
+      0 to-rem(4px) to-rem(8px) 0 ai-token("ai-drop-shadow");
+  }
+
+  // A selected tile keeps a solid border so the selection still reads.
+  .#{$prefix}--tile--ai-label.#{$prefix}--tile--is-selected {
+    background:
+      linear-gradient(
+          to top,
+          ai-token("ai-aura-start") 0%,
+          15%,
+          ai-token("ai-aura-end") 50%
+        )
+        padding-box,
+      linear-gradient($ui-01, $ui-01) padding-box,
+      linear-gradient($border-inverse, $border-inverse) border-box;
+  }
+}
+
+@include exports("ai-label-tiles") {
+  @include ai-label-tiles;
 }
