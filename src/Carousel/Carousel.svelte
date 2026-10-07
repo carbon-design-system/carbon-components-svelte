@@ -63,6 +63,7 @@
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { initCarousel } from "../utils/carousel.js";
+  import { returnFocus } from "../utils/focus.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -175,11 +176,12 @@
     await tick();
 
     // Clicking a button up to a bound disables it; hand focus to the other
-    // button instead of letting it drop to `<body>`.
+    // button instead of letting it drop to `<body>`, unless a `change`
+    // handler already moved it.
     if (focused === prevButton && prevDisabled && !nextDisabled) {
-      nextButton?.focus();
+      returnFocus(nextButton, prevButton);
     } else if (focused === nextButton && nextDisabled && !prevDisabled) {
-      prevButton?.focus();
+      returnFocus(prevButton, nextButton);
     }
   }
 

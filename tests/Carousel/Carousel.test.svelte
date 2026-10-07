@@ -11,7 +11,10 @@
     | ((current: number, total: number) => string)
     | undefined = undefined;
 
+  export let moveFocusOnChange = false;
+
   let currentIndex = -1;
+  let elsewhere: HTMLInputElement;
   let previousIndex = -1;
 </script>
 
@@ -24,6 +27,7 @@
   on:change={(e) => {
     currentIndex = e.detail.currentIndex;
     previousIndex = e.detail.previousIndex;
+    if (moveFocusOnChange) elsewhere.focus();
   }}
 >
   <CarouselItem>Slide one</CarouselItem>
@@ -50,3 +54,5 @@
 >
   Add and select slide
 </button>
+
+<input aria-label="Elsewhere" bind:this={elsewhere}>
