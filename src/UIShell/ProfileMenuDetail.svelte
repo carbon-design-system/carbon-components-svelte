@@ -7,13 +7,22 @@
    */
   export let label = undefined;
 
-  const id = uniqueId();
+  /**
+   * Set an id for the top-level element.
+   * The label id derives from it as `{id}-label`.
+   */
+  export let id = uniqueId();
 </script>
 
-<div class:bx--profile-menu__detail={true}>
+<div {id} class:bx--profile-menu__detail={true}>
   <div class:bx--profile-menu__detail-text={true}>
-    <span {id} class:bx--profile-menu__detail-label={true}>{label}</span>
-    <span aria-labelledby={id} class:bx--profile-menu__detail-value={true}>
+    <span id="{id}-label" class:bx--profile-menu__detail-label={true}
+      >{label}</span
+    >
+    <span
+      aria-labelledby="{id}-label"
+      class:bx--profile-menu__detail-value={true}
+    >
       <slot />
     </span>
   </div>
