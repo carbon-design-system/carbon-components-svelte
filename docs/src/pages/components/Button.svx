@@ -202,6 +202,14 @@ Set `size="small"` for small buttons.
 <Button size="small" kind="ghost">Ghost</Button>
 <Button size="small" kind="danger">Danger</Button>
 
+### Extra-small
+
+Set `size="xs"` for a 24px button. Use it for icon-only buttons in dense layouts, such as table rows and toolbars.
+
+<Button size="xs" iconDescription="Add" icon={Add} />
+<Button size="xs" kind="ghost" iconDescription="Delete" icon={TrashCan} />
+<Button size="xs">Primary</Button>
+
 ### Large
 
 Set `size="lg"` for large buttons.

@@ -13,6 +13,13 @@ Create a basic slider with a label and the default range from 0 to 100.
 
 <Slider labelText="Instances" value={0} />
 
+## Sizes
+
+Set `size` to `"xs"` for a 24px number input. Inside a `Form` with `size="xs"`, sliders inherit it.
+
+<Slider size="xs" labelText="Instances" value={4} max={10} />
+<RangeSlider size="xs" labelText="Maintenance window (hours)" value={2} valueUpper={6} max={24} />
+
 ## Helper text
 
 Add helper text below the slider to provide additional context or instructions.
