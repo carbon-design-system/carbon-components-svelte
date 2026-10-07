@@ -104,6 +104,51 @@ describe("scrollIntoViewWithinMenu", () => {
     expect(container.scrollTop).toBe(50);
   });
 
+  describe("block alignment", () => {
+    function build() {
+      return buildMenu({
+        scrollable: true,
+        containerTop: 0,
+        containerBottom: 100,
+        itemTop: 140,
+        itemBottom: 160,
+      });
+    }
+
+    it("aligns the item to the top with start", () => {
+      const { container, item } = build();
+      scrollIntoViewWithinMenu(item, '[role="listbox"]', "start");
+      // 50 + (140 - 0)
+      expect(container.scrollTop).toBe(190);
+    });
+
+    it("aligns the item to the bottom with end", () => {
+      const { container, item } = build();
+      scrollIntoViewWithinMenu(item, '[role="listbox"]', "end");
+      // 50 + (160 - 100)
+      expect(container.scrollTop).toBe(110);
+    });
+
+    it("centers the item with center", () => {
+      const { container, item } = build();
+      scrollIntoViewWithinMenu(item, '[role="listbox"]', "center");
+      // 50 + (150 - 50)
+      expect(container.scrollTop).toBe(150);
+    });
+
+    it("scrolls an already visible item with start", () => {
+      const { container, item } = buildMenu({
+        scrollable: true,
+        containerTop: 0,
+        containerBottom: 100,
+        itemTop: 40,
+        itemBottom: 60,
+      });
+      scrollIntoViewWithinMenu(item, '[role="listbox"]', "start");
+      expect(container.scrollTop).toBe(90);
+    });
+  });
+
   describe("container selector", () => {
     it("resolves a listbox container by default", () => {
       const { container, item } = buildMenu({
