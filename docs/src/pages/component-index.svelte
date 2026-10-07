@@ -17,6 +17,7 @@
     StructuredListRow,
     Tag,
     Text,
+    TooltipGroup,
   } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
   import { onMount } from "svelte";
@@ -218,97 +219,103 @@
       <Column class="table-col">
         <div class="table-wrap">
           <div class="table-scroll">
-            <StructuredList condensed class="component-list">
-              <StructuredListHead>
-                <StructuredListRow head>
-                  {#each columns as column (column.key)}
-                    <StructuredListCell
-                      head
-                      sortable
-                      sortAlways
-                      active={sortKey === column.key}
-                      sortDirection={sortDirection === "asc"
-                        ? "ascending"
-                        : "descending"}
-                      on:sort={(e) =>
-                        handleSort(column.key, e.detail.direction)}
-                    >
-                      {column.key === "name"
-                        ? `Component (${visible.length})`
-                        : column.label}
-                    </StructuredListCell>
-                  {/each}
-                  <StructuredListCell head class="links-cell" />
-                </StructuredListRow>
-              </StructuredListHead>
-              <StructuredListBody>
-                {#each visible as entry (entry.name)}
-                  <StructuredListRow>
-                    <StructuredListCell>
-                      <Stack
-                        orientation="horizontal"
-                        gap={3}
-                        align="flex-start"
-                        wrap="wrap"
-                        class="component-name-cell"
+            <TooltipGroup>
+              <StructuredList condensed class="component-list">
+                <StructuredListHead>
+                  <StructuredListRow head>
+                    {#each columns as column (column.key)}
+                      <StructuredListCell
+                        head
+                        sortable
+                        sortAlways
+                        active={sortKey === column.key}
+                        sortDirection={sortDirection === "asc"
+                          ? "ascending"
+                          : "descending"}
+                        on:sort={(e) =>
+                          handleSort(column.key, e.detail.direction)}
                       >
-                        <Link href={$url(entry.href)}>
-                          {entry.name}
-                        </Link>
-                        {#if entry.isNew}
-                          <Tag size="sm" inline>New</Tag>
-                        {/if}
-                      </Stack>
-                    </StructuredListCell>
-                    <StructuredListCell>
-                      <Text type="body-short-01" color="secondary"
-                        >{entry.category}</Text
-                      >
-                    </StructuredListCell>
-                    <StructuredListCell>
-                      <Text type="body-short-01" color="secondary">
-                        {entry.sinceVersion ?? "—"}
-                      </Text>
-                    </StructuredListCell>
-                    <StructuredListCell class="links-cell">
-                      <Stack
-                        orientation="horizontal"
-                        gap={6}
-                        align="center"
-                        justify="end"
-                        class="doc-links"
-                      >
-                        <Link
-                          inline
-                          muted
-                          href={sourceRepoUrl(entry.sourcePath)}
-                          target="_blank"
+                        {column.key === "name"
+                          ? `Component (${visible.length})`
+                          : column.label}
+                      </StructuredListCell>
+                    {/each}
+                    <StructuredListCell head class="links-cell" />
+                  </StructuredListRow>
+                </StructuredListHead>
+                <StructuredListBody>
+                  {#each visible as entry (entry.name)}
+                    <StructuredListRow>
+                      <StructuredListCell>
+                        <Stack
+                          orientation="horizontal"
+                          gap={3}
+                          align="flex-start"
+                          wrap="wrap"
+                          class="component-name-cell"
                         >
-                          Source code
-                        </Link>
-                        <Stack orientation="horizontal" gap={2} align="center">
+                          <Link href={$url(entry.href)}>
+                            {entry.name}
+                          </Link>
+                          {#if entry.isNew}
+                            <Tag size="sm" inline>New</Tag>
+                          {/if}
+                        </Stack>
+                      </StructuredListCell>
+                      <StructuredListCell>
+                        <Text type="body-short-01" color="secondary"
+                          >{entry.category}</Text
+                        >
+                      </StructuredListCell>
+                      <StructuredListCell>
+                        <Text type="body-short-01" color="secondary">
+                          {entry.sinceVersion ?? "—"}
+                        </Text>
+                      </StructuredListCell>
+                      <StructuredListCell class="links-cell">
+                        <Stack
+                          orientation="horizontal"
+                          gap={6}
+                          align="center"
+                          justify="end"
+                          class="doc-links"
+                        >
                           <Link
                             inline
                             muted
-                            href={entry.markdownHref}
+                            href={sourceRepoUrl(entry.sourcePath)}
                             target="_blank"
                           >
-                            Markdown
+                            Source code
                           </Link>
-                          <CopyMarkdownButton
-                            name={entry.name}
-                            href={entry.markdownHref}
-                            bytes={markdownBytesFor(entry.name)}
-                            size="sm"
-                            tooltipPosition="right"
-                          />
+                          <Stack
+                            orientation="horizontal"
+                            gap={2}
+                            align="center"
+                          >
+                            <Link
+                              inline
+                              muted
+                              href={entry.markdownHref}
+                              target="_blank"
+                            >
+                              Markdown
+                            </Link>
+                            <CopyMarkdownButton
+                              name={entry.name}
+                              href={entry.markdownHref}
+                              bytes={markdownBytesFor(entry.name)}
+                              size="sm"
+                              tooltipPosition="right"
+                            />
+                          </Stack>
                         </Stack>
-                      </Stack>
-                    </StructuredListCell>
-                  </StructuredListRow>
-                {/each}
-              </StructuredListBody>
-            </StructuredList>
+                      </StructuredListCell>
+                    </StructuredListRow>
+                  {/each}
+                </StructuredListBody>
+              </StructuredList>
+            </TooltipGroup>
           </div>
 
           {#if visible.length === 0}
