@@ -33,6 +33,22 @@ describe("HeaderNavMenu close event", () => {
     expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
   });
 
+  it("lets Tab move focus past the menu when leaving the last item", async () => {
+    const onClose = vi.fn();
+    render(HeaderNavMenuClose, { props: { onClose } });
+
+    const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
+    menuTrigger.focus();
+    await user.keyboard("{ArrowUp}");
+    expect(screen.getByRole("menuitem", { name: "Menu Item 2" })).toHaveFocus();
+
+    await user.tab();
+
+    expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "blur" });
+    expect(screen.getByRole("button", { name: "After" })).toHaveFocus();
+  });
+
   it('dispatches close with trigger "outside-click" when clicking outside', async () => {
     const onClose = vi.fn();
     render(HeaderNavMenuClose, { props: { onClose } });
