@@ -41,6 +41,7 @@
 
   /**
    * Set the size of the input.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -135,13 +136,19 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const ctx = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
 
   let focused = false;
   let hovered = false;
@@ -196,9 +203,9 @@
           class:bx--visually-hidden={hideLabel}
           class:bx--label--disabled={disabled}
           class:bx--label--inline={inline}
-          class:bx--label--inline--xs={size === "xs"}
-          class:bx--label--inline--sm={size === "sm"}
-          class:bx--label--inline--xl={size === "xl"}
+          class:bx--label--inline--xs={effectiveSize === "xs"}
+          class:bx--label--inline--sm={effectiveSize === "sm"}
+          class:bx--label--inline--xl={effectiveSize === "xl"}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
         >
           <slot name="labelChildren"> {labelText} </slot>
@@ -253,9 +260,9 @@
         {name}
         class:bx--text-input={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--xs={size === "xs"}
-        class:bx--text-input--sm={size === "sm"}
-        class:bx--text-input--xl={size === "xl"}
+        class:bx--text-input--xs={effectiveSize === "xs"}
+        class:bx--text-input--sm={effectiveSize === "sm"}
+        class:bx--text-input--xl={effectiveSize === "xl"}
         {...$$restProps}
         on:focus
         on:focus={handleFocus}

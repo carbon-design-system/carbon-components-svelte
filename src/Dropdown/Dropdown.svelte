@@ -76,6 +76,7 @@
 
   /**
    * Specify the size of the dropdown field.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = undefined;
@@ -256,6 +257,7 @@
   } from "svelte";
   import {
     FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import Checkmark from "../icons/Checkmark.svelte";
@@ -306,6 +308,9 @@
   const scrollEndTracker = createScrollEndTracker();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
@@ -439,7 +444,7 @@
     shouldVirtualize,
     virtualize,
     wrapOptions,
-    size,
+    size: effectiveSize,
     fluid: hasFluidMenuItems,
     scrollTop: listScrollTop,
   });
@@ -667,9 +672,9 @@
     showWarn && "bx--dropdown--warning",
     clearable && selectedId !== undefined && "bx--dropdown--clearable",
     open && "bx--dropdown--open",
-    size === "xs" && "bx--dropdown--xs",
-    size === "sm" && "bx--dropdown--sm",
-    size === "xl" && "bx--dropdown--xl",
+    effectiveSize === "xs" && "bx--dropdown--xs",
+    effectiveSize === "sm" && "bx--dropdown--sm",
+    effectiveSize === "xl" && "bx--dropdown--xl",
     inline && "bx--dropdown--inline",
     disabled && "bx--dropdown--disabled",
     light && "bx--dropdown--light",
@@ -718,7 +723,7 @@
   {/if}
   <ListBox
     {type}
-    {size}
+    size={effectiveSize}
     class={dropdownListBoxClass}
     on:click={(event) => {
       if (disabled || readonly) return;

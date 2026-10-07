@@ -43,6 +43,7 @@
 <script>
   /**
    * Set the size of the input.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -110,6 +111,7 @@
   export let selectTextOnFocus = false;
 
   import { getContext, tick } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import Calendar from "../icons/Calendar.svelte";
   import Close from "../icons/Close.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -122,6 +124,10 @@
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
 
   const {
     range,
@@ -271,9 +277,9 @@
       class:bx--date-picker__input--invalid={showInvalid}
       class:bx--date-picker__input--with-icon={hasIcon}
       class:bx--date-picker__input--with-clear={showClear}
-      class:bx--date-picker__input--xs={size === "xs"}
-      class:bx--date-picker__input--sm={size === "sm"}
-      class:bx--date-picker__input--xl={size === "xl"}
+      class:bx--date-picker__input--xs={effectiveSize === "xs"}
+      class:bx--date-picker__input--sm={effectiveSize === "sm"}
+      class:bx--date-picker__input--xl={effectiveSize === "xl"}
       class:bx--date-picker__input--ghost-text={$multiple}
       on:input
       on:input={(event) => {
@@ -308,9 +314,9 @@
         class:bx--date-picker__input-overlay={true}
         class:bx--date-picker__input--with-icon={hasIcon}
         class:bx--date-picker__input--with-clear={showClear}
-        class:bx--date-picker__input--xs={size === "xs"}
-        class:bx--date-picker__input--sm={size === "sm"}
-        class:bx--date-picker__input--xl={size === "xl"}
+        class:bx--date-picker__input--xs={effectiveSize === "xs"}
+        class:bx--date-picker__input--sm={effectiveSize === "sm"}
+        class:bx--date-picker__input--xl={effectiveSize === "xl"}
         aria-hidden="true"
       >
         <span>{overlayValue}</span>

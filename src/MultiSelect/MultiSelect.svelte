@@ -110,6 +110,7 @@
 
   /**
    * Set the size of the multiselect.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = undefined;
@@ -400,6 +401,7 @@
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import {
     FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -460,6 +462,9 @@
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: effectivePortalMenu =
@@ -1247,7 +1252,7 @@
     // A header is not as tall as an option, so a grouped menu measures its
     // rows the way a menu of wrapped options does.
     wrapOptions: wrapOptions || grouped,
-    size,
+    size: effectiveSize,
     fluid: hasFluidMenuItems,
     scrollTop: listScrollTop,
   });
@@ -1354,7 +1359,7 @@
     invalidId={errorId}
     {open}
     {light}
-    {size}
+    size={effectiveSize}
     warn={showWarn}
     warnText={isFluid ? "" : warnText}
     {warnId}

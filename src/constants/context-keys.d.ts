@@ -9,3 +9,9 @@ export const MODAL_CONTEXT_KEY: "carbon:Modal";
  * so items register with either parent.
  */
 export const PROFILE_MENU_CONTEXT_KEY: "carbon:ProfileMenu";
+
+/**
+ * Set by `Form`; read by form fields and their skeletons to inherit `size`
+ * when their own `size` is unset.
+ */
+export const FORM_SIZE_CONTEXT_KEY: "carbon:FormSize";

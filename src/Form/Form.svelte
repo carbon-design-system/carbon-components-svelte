@@ -54,7 +54,22 @@
    */
   export let actions = [];
 
-  import { onMount } from "svelte";
+  /**
+   * Set the size of every field in the form.
+   * A field's own `size` takes precedence.
+   * @type {"xs" | "sm" | "xl"}
+   */
+  export let size = undefined;
+
+  import { onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+
+  /** @type {import("svelte/store").Writable<undefined | "xs" | "sm" | "xl">} */
+  const sharedSize = writable(size);
+  $: sharedSize.set(size);
+
+  setContext(FORM_SIZE_CONTEXT_KEY, sharedSize);
 
   onMount(() => {
     if (!ref || actions.length === 0) return;

@@ -29,6 +29,7 @@
 
   /**
    * Set the size of the input.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -196,7 +197,10 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import Add from "../icons/Add.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -227,6 +231,9 @@
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
 
   function updateValue(isIncrementing, multiplier = 1) {
     // When the input is empty (null) or zero and stepStartValue is set,
@@ -493,9 +500,9 @@
     class:bx--number--light={light}
     class:bx--number--nolabel={hideLabel}
     class:bx--number--nosteppers={hideSteppers}
-    class:bx--number--xs={size === "xs"}
-    class:bx--number--sm={size === "sm"}
-    class:bx--number--xl={size === "xl"}
+    class:bx--number--xs={effectiveSize === "xs"}
+    class:bx--number--sm={effectiveSize === "sm"}
+    class:bx--number--xl={effectiveSize === "xl"}
   >
     {#if $$slots.labelChildren || labelText}
       <label

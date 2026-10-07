@@ -1,6 +1,7 @@
 <script>
   /**
    * Set the size of the skeleton to match the field it stands in for.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -10,6 +11,13 @@
 
   /** Set to `true` to use the short variant */
   export let short = false;
+
+  import { getContext } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
 </script>
 
 <div
@@ -33,9 +41,9 @@
         <div
           class:bx--date-picker__input={true}
           class:bx--skeleton={true}
-          class:bx--date-picker__input--xs={size === "xs"}
-          class:bx--date-picker__input--sm={size === "sm"}
-          class:bx--date-picker__input--xl={size === "xl"}
+          class:bx--date-picker__input--xs={effectiveSize === "xs"}
+          class:bx--date-picker__input--sm={effectiveSize === "sm"}
+          class:bx--date-picker__input--xl={effectiveSize === "xl"}
         ></div>
       </div>
     {/each}
