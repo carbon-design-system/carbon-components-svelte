@@ -589,6 +589,17 @@ Combine `filterable` and `invalid` to show validation errors on a filterable mul
     {id: "2", text: "Fax"}]}"
   />
 
+### Invalid (filterable with selection)
+
+The invalid outline wraps the whole field, selection tag included.
+
+<MultiSelect filterable invalid invalidText="Choose at least two contact methods" labelText="Contact" placeholder="Filter contact methods..."
+    selectedIds={["1"]}
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Warning
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about unassociated accounts.
