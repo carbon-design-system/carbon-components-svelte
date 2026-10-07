@@ -32,6 +32,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
+  import { returnFocus } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
 
@@ -106,13 +107,20 @@
   class:bx--header__submenu={true}
   class:bx--header__submenu--current={isCurrentSubmenu}
   on:click={(event) => {
-    if (!menuRef.contains(event.target)) {
-      event.preventDefault();
+    if (menuRef.contains(event.target)) {
+      // Activating an item closes the menu and hides the focused item, so
+      // hand focus back to the trigger unless navigation moved it.
+      expanded = false;
+      tick().then(() => returnFocus(ref, menuRef));
+      return;
     }
+    event.preventDefault();
     expanded = !expanded;
   }}
   on:keydown={(event) => {
-    if (event.key === "Enter") {
+    // Enter on an item fires a click, which the handler above closes on;
+    // toggling here as well reopened the menu.
+    if (event.key === "Enter" && !menuRef.contains(event.target)) {
       event.stopPropagation();
       expanded = !expanded;
     }

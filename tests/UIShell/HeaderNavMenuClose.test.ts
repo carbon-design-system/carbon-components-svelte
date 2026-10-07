@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import HeaderNavMenuClose from "./HeaderNavMenuClose.test.svelte";
 
@@ -77,6 +78,34 @@ describe("HeaderNavMenu close event", () => {
 
     await user.click(screen.getByRole("menuitem", { name: "Menu Item 1" }));
     expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("closes and returns focus to the trigger after Enter on a menu item", async () => {
+    render(HeaderNavMenuClose);
+
+    const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
+    menuTrigger.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("menuitem", { name: "Menu Item 1" })).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(menuTrigger).toHaveFocus();
+  });
+
+  it("returns focus to the trigger after clicking a menu item", async () => {
+    render(HeaderNavMenuClose);
+
+    const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
+    menuTrigger.focus();
+    await user.keyboard(" ");
+    await user.click(screen.getByRole("menuitem", { name: "Menu Item 1" }));
+    await tick();
+
+    expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(menuTrigger).toHaveFocus();
   });
 
   it("does not dispatch close on outside clicks while collapsed", async () => {
