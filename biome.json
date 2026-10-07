@@ -222,6 +222,27 @@
           }
         }
       }
+    },
+    {
+      "includes": ["dom-env/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useTopLevelRegex": "off",
+            "noNamespaceImport": "off"
+          },
+          "style": {
+            "useTemplate": "off",
+            "noParameterAssign": "off"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "off"
+          },
+          "complexity": {
+            "noArguments": "off"
+          }
+        }
+      }
     }
   ]
 }
