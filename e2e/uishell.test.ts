@@ -66,6 +66,21 @@ test.describe("UIShell header nav menu (desktop)", () => {
     await page.keyboard.press("Escape");
     await expect(submenuTrigger).toBeFocused();
   });
+
+  test("Enter on a submenu item closes it and returns focus to the trigger", async ({
+    page,
+  }) => {
+    const submenuTrigger = page.getByRole("menuitem", { name: "Submenu" });
+    await submenuTrigger.focus();
+    await page.keyboard.press("Space");
+    await expect(
+      page.getByRole("menuitem", { name: "Sub link one" }),
+    ).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    await expect(submenuTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(submenuTrigger).toBeFocused();
+  });
 });
 
 test.describe("UIShell HeaderSearch", () => {
