@@ -6,7 +6,7 @@ export function initialFocus(options: {
 
 export function restoreFocus(): {
   save(): void;
-  restore(): void;
+  restore(region?: Element | null): void;
 };
 
 export function returnFocus(

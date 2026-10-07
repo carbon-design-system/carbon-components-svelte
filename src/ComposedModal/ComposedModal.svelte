@@ -234,7 +234,7 @@
   on:transitionend={(event) => {
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
-      if (!open) focusReturn.restore();
+      if (!open) focusReturn.restore(ref);
     }
   }}
 >

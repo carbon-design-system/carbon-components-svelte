@@ -402,6 +402,26 @@ describe("Modal", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("leaves focus where a close handler moved it", async () => {
+    const { container } = render(ModalFocusReturnTest, {
+      props: { moveFocusOnClose: true },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Open Modal" }));
+    await tick();
+    await user.click(screen.getByLabelText("Close the modal"));
+    await tick();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
+  });
+
   it("returns focus to trigger when closed via Escape key", async () => {
     const { container } = render(ModalFocusReturnTest, {
       props: {},

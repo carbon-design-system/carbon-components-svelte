@@ -105,12 +105,13 @@
     node.close();
   }
 
-  function handleClose() {
+  /** @param {Event & { currentTarget: HTMLDialogElement }} event */
+  function handleClose(event) {
     const trigger = pendingTrigger ?? "close-button";
     pendingTrigger = null;
     open = false;
     dispatch("close", { trigger });
-    focusReturn.restore();
+    focusReturn.restore(event.currentTarget);
   }
 </script>
 
