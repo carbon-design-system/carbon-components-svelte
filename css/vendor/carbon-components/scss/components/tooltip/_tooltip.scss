@@ -239,6 +239,10 @@
   }
 
   .#{$prefix}--tooltip--definition.#{$prefix}--tooltip--a11y {
+    // ccs: from the pruned `tooltip--definition--legacy` block. The
+    // tooltip is a sibling of the trigger, so this wrapper is what its
+    // absolute position resolves against.
+    position: relative;
     // Wrapping element set to inline since the tooltip isn't contained within the trigger (affects center and end alignments)
     // Also allows for Definition Tooltip to be used within a paragraph of text as defined in the usage guidelines
     display: inline-flex;
