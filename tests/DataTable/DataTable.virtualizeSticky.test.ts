@@ -10,13 +10,20 @@ describe("DataTable virtualize + stickyHeader", () => {
     );
 
   it("sizes the virtual window from a numeric stickyHeaderMaxHeight", () => {
-    // itemHeight is 48 (medium, the default size) and stickyHeaderMaxHeight
+    // itemHeight is 48 (the unset default size) and stickyHeaderMaxHeight
     // is 240, so the virtual window should render ceil(240 / 48) + overscan
     // (3) = 8 rows, not the 10-row-default window (itemHeight * 10 = 480,
     // which would render 13 rows).
     render(DataTableVirtualizeSticky);
 
     expect(renderedRowCount()).toBe(8);
+  });
+
+  it("estimates rows at the 40px height that `medium` renders", () => {
+    render(DataTableVirtualizeSticky, { props: { size: "medium" } });
+
+    // `bx--data-table--md` rows are 40px: ceil(240 / 40) + overscan (3) = 9.
+    expect(renderedRowCount()).toBe(9);
   });
 
   it("falls back to the maxVisibleRows default when stickyHeaderMaxHeight is a string", () => {
