@@ -39,7 +39,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import Close from "../icons/Close.svelte";
 
   const defaultTranslations = {
@@ -49,9 +49,19 @@
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:MultiSelect");
 
+  // `bind:this` may already have nulled `ref` by the time the cleanup runs,
+  // so keep the node that was declared for `releaseRef`.
+  let declaredRef = null;
+
   $: if (ctx && ref) {
+    declaredRef = ref;
     ctx.declareRef({ key: "selection", ref });
   }
+
+  onMount(() => () => {
+    if (declaredRef) ctx?.releaseRef?.({ key: "selection", ref: declaredRef });
+  });
+
   $: translationId =
     selectionCount !== undefined && selectionCount > 1
       ? translationIds.clearAll
