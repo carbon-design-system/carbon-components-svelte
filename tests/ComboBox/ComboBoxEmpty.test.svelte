@@ -3,6 +3,7 @@
   import type { ComponentProps } from "svelte";
 
   export let emptyText: ComponentProps<ComboBox>["emptyText"] = undefined;
+  export let loading = false;
 
   const items = [
     { id: "0", text: "Slack" },
@@ -14,6 +15,7 @@
   labelText="Contact"
   {items}
   {emptyText}
+  {loading}
   shouldFilterItem={(item, value) =>
     item.text.toLowerCase().includes(value.toLowerCase())}
 />

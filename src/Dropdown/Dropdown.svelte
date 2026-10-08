@@ -215,6 +215,16 @@
   export let virtualize = undefined;
 
   /**
+   * Set to `true` to show a loading row after the options while the menu is
+   * open, such as while fetching more items on `scrollend`. Marks the menu
+   * `aria-busy` and hides the empty state; the options stay interactive.
+   */
+  export let loading = false;
+
+  /** Specify the text of the loading row */
+  export let loadingText = "Loading...";
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -291,6 +301,7 @@
     FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -303,6 +314,7 @@
     ListBoxSelection,
   } from "../ListBox/index.js";
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
   import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
@@ -1051,6 +1063,7 @@
         {highlightedId}
         {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
+        aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
@@ -1305,6 +1318,11 @@
               {/each}
             </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if loading}
+          <ListBoxMenuStatus>
+            <InlineLoading description={loadingText} />
+          </ListBoxMenuStatus>
         {/if}
       </ListBoxMenu>
     {/if}
