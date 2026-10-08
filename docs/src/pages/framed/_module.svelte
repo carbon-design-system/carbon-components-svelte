@@ -72,27 +72,33 @@
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 
+  /* Column guides. Each column draws its top and left edges inside its box
+     and its right and bottom edges just outside, so neighboring columns and
+     stacked rows paint the same pixels: one 1px line, not two side by side
+     as with per-column outlines. */
   :global(.framed :not(.bx--content) [class^="bx--col"]),
   :global(.framed .bx--css-grid-column) {
-    outline: 1px solid var(--cds-interactive);
+    box-shadow:
+      inset 1px 1px 0 0 var(--cds-interactive),
+      1px 1px 0 0 var(--cds-interactive);
   }
 
   /* A column that holds a subgrid is outlined by the subgrid's columns. */
   :global(.framed .bx--css-grid-column:has(> .bx--subgrid)) {
-    outline: 0;
+    box-shadow: none;
   }
 
   :global(.framed .bx--content [class^="bx--col"]) {
-    outline: 0;
+    box-shadow: none;
   }
 
   :global(.framed .bx--page-header__body [class^="bx--col"]) {
-    outline: 0;
+    box-shadow: none;
   }
 
   /* Table of contents examples show a page layout, not the grid itself. */
   :global(.framed .bx--row:has(.bx--toc) > [class^="bx--col"]) {
-    outline: 0;
+    box-shadow: none;
   }
 
   :global([data-outline]) {
