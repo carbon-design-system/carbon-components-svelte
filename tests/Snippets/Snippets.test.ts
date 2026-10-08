@@ -51,6 +51,22 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
+  describe("MultiSelect", () => {
+    it("should render the tag snippet with item, index, and props", async () => {
+      render(Snippets);
+
+      const first = screen.getByTestId("multiselect-tag-0");
+      expect(first).toHaveTextContent("Option 1");
+      expect(first).toHaveClass("bx--tag--teal", "bx--tag--filter");
+      expect(screen.getByTestId("multiselect-tag-1")).toHaveTextContent(
+        "Option 3",
+      );
+
+      await user.click(within(first).getByRole("button"));
+      expect(screen.queryByTestId("multiselect-tag-1")).not.toBeInTheDocument();
+    });
+  });
+
   describe("Dropdown", () => {
     it("should render snippet with item and index arguments", async () => {
       render(Snippets);

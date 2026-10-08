@@ -219,3 +219,17 @@
 @include exports("multiselect-skeleton") {
   @include multiselect-skeleton;
 }
+
+// carbon-components-svelte patch (multi-select-tags)
+/// Selected-item tags below the field (`selectionDisplay="tags"`).
+/// @access private
+/// @group multi-select
+@mixin multiselect-tags {
+  .#{$prefix}--multi-select__tags {
+    margin-top: $carbon--spacing-03;
+  }
+}
+
+@include exports("multiselect-tags") {
+  @include multiselect-tags;
+}
