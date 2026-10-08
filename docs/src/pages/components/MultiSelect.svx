@@ -660,6 +660,12 @@ Set `readonly` to `true` to display non-editable values. The menu can still be o
   ]}
 />
 
+## Required
+
+Set `required` to keep a surrounding form from submitting until at least one item is selected. Disabled items do not count, as they are left out of the submission. The browser reports the missing value on the field, and the field is marked required for screen readers.
+
+<FileSource src="/framed/MultiSelect/MultiSelectRequired" />
+
 ## Skeleton
 
 Show a loading state with `MultiSelectSkeleton`.
