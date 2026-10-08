@@ -70,6 +70,7 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ group: string; items: ReadonlyArray<Item & { checked: boolean }>; }} group
    * @slot {{ item: Item; index: number; props: { filter: boolean; disabled: boolean; value: Item["id"]; title: string; maxWidth: string; }; }} tag
+   * @slot {{ value: string; }} empty
    * @restProps {input | button}
    */
 
@@ -323,6 +324,16 @@
   };
 
   /**
+   * Specify the message shown in the menu when no items match the filter.
+   * Only used when `filterable` is `true`.
+   * Pass a function to build it from the typed value.
+   * Set to `""` to show no message; `filterResultsText` still announces
+   * the result count.
+   * @type {string | ((value: string) => string)}
+   */
+  export let emptyText = "No results";
+
+  /**
    * Default group name for the hidden inputs that mirror the current
    * selection for native form submission (`FormData`). Used per item
    * unless `itemToInput` returns its own `name`. Each input's value
@@ -459,6 +470,7 @@
     ListBoxSelection,
   } from "../ListBox/index.js";
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
   import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
@@ -1361,6 +1373,14 @@
     announcedFilterCount = null;
     statusText = "";
   }
+  $: hasNoMatches = filterable && open && filterResultCount === 0;
+  $: emptyMessage = hasNoMatches
+    ? typeof emptyText === "function"
+      ? emptyText(value)
+      : emptyText
+    : "";
+  // A row after the options, not an option, so arrow keys never reach it.
+  $: showEmpty = hasNoMatches && ($$slots.empty || emptyMessage !== "");
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
@@ -2032,9 +2052,7 @@
                               <slot
                                 {item}
                                 index={actualIndex}
-                                selected={item.isSelectAll
-                                  ? allSelected
-                                  : item.checked}
+                                selected={optionChecked}
                                 {highlighted}
                               >
                                 {itemToString(item)}
@@ -2163,9 +2181,7 @@
                             <slot
                               {item}
                               {index}
-                              selected={item.isSelectAll
-                                ? allSelected
-                                : item.checked}
+                              selected={optionChecked}
                               {highlighted}
                             >
                               {itemToString(item)}
@@ -2179,6 +2195,14 @@
               {/each}
             </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if showEmpty}
+          <!-- Svelte 3 leaks the forwarded default slot's props into every
+               slot's context, so they are `{@const}`s: here, outside the
+               options, they read as undefined instead of throwing. -->
+          <ListBoxMenuStatus>
+            <slot name="empty" {value}>{emptyMessage}</slot>
+          </ListBoxMenuStatus>
         {/if}
       </ListBoxMenu>
     {/if}
