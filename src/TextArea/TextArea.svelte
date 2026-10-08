@@ -35,21 +35,32 @@
   export let maxRows = undefined;
 
   /**
-   * Specify the max character count.
+   * Specify the max count.
+   * Counts characters by default; see `counterMode`.
    * @type {number}
    */
   export let maxCount = undefined;
 
   /**
-   * Override the character counter text read by screen readers.
-   * @type {(count: number, max: number) => string}
+   * Specify what `maxCount` limits.
+   * `"word"` counts words with `Intl.Segmenter` when available.
+   * @type {"character" | "word"}
    */
-  export let counterText = function counterText(count, max) {
-    return `${count} of ${max} characters`;
-  };
+  export let counterMode = "character";
 
-  /** Specify the text announced when the character limit is reached */
-  export let limitReachedText = "Character limit reached";
+  /**
+   * Override the counter text read by screen readers.
+   * @type {(count: number, max: number) => string}
+   * @default `${count} of ${max} characters`, or `${count} of ${max} words` when `counterMode` is `"word"`
+   */
+  export let counterText = undefined;
+
+  /**
+   * Specify the text announced when the limit is reached.
+   * @type {string}
+   * @default "Character limit reached", or "Word limit reached" when `counterMode` is `"word"`
+   */
+  export let limitReachedText = undefined;
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -120,12 +131,28 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { wordCount, wordLimitAction } from "../utils/word-count.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
 
+  /**
+   * @param {string} text
+   * @param {"character" | "word"} mode
+   */
+  function measure(text, mode) {
+    return mode === "word" ? wordCount(text) : graphemeCount(text);
+  }
+
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: counterId = `counter-${id}`;
-  $: count = graphemeCount(value ?? "");
+  $: count = measure(value ?? "", counterMode);
+  $: resolvedCounterText =
+    counterText ??
+    ((c, m) =>
+      `${c} of ${m} ${counterMode === "word" ? "words" : "characters"}`);
+  $: resolvedLimitReachedText =
+    limitReachedText ??
+    (counterMode === "word" ? "Word limit reached" : "Character limit reached");
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
@@ -155,7 +182,7 @@
       .filter(Boolean)
       .join(" ") || undefined;
 
-  let prevCount = graphemeCount(value ?? "");
+  let prevCount = measure(value ?? "", counterMode);
   let limitAnnouncement = "";
 
   $: {
@@ -165,7 +192,7 @@
       count === maxCount &&
       prevCount !== maxCount
     ) {
-      limitAnnouncement = limitReachedText;
+      limitAnnouncement = resolvedLimitReachedText;
     } else if (count !== maxCount) {
       limitAnnouncement = "";
     }
@@ -278,6 +305,19 @@
     if (!data) return;
 
     const { value: current, selectionStart: start, selectionEnd: end } = ref;
+
+    if (counterMode === "word") {
+      const action = wordLimitAction(current, start, end, data, maxCount);
+      if (action === "allow") return;
+
+      event.preventDefault();
+      if (action === "block") return;
+
+      ref.setRangeText(action.insert, start, end, "end");
+      ref.dispatchEvent(new Event("input", { bubbles: true }));
+      return;
+    }
+
     const kept = current.slice(0, start) + current.slice(end);
     if (
       graphemeCount(kept.slice(0, start) + data + kept.slice(start)) <= maxCount
@@ -328,7 +368,7 @@
         >
           <span aria-hidden="true">{count}/{maxCount}</span>
           <span id={counterId} class:bx--visually-hidden={true}>
-            {counterText(count, maxCount)}
+            {resolvedCounterText(count, maxCount)}
           </span>
         </div>
       {/if}

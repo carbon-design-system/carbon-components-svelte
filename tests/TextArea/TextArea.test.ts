@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
+import TextAreaCounterMode from "./TextArea.counterMode.test.svelte";
 import TextAreaFluidForm from "./TextArea.fluidForm.test.svelte";
 import TextAreaFluidSkeleton from "./TextArea.fluidSkeleton.test.svelte";
 import TextAreaFluidSlot from "./TextArea.fluidSlot.test.svelte";
@@ -218,6 +219,145 @@ describe("TextArea", () => {
     await fireEvent.input(textarea);
 
     expect(liveRegion).toHaveTextContent("No more room");
+  });
+
+  describe("counterMode", () => {
+    function beforeInput(
+      textarea: HTMLTextAreaElement,
+      data: string,
+      inputType = "insertText",
+    ) {
+      const event = new InputEvent("beforeinput", {
+        inputType,
+        data,
+        bubbles: true,
+        cancelable: true,
+      });
+      textarea.dispatchEvent(event);
+      return event;
+    }
+
+    function setup(value: string, maxCount: number, caret = value.length) {
+      render(TextArea, { props: { counterMode: "word", maxCount, value } });
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      textarea.focus();
+      textarea.setSelectionRange(caret, caret);
+      return textarea;
+    }
+
+    it("counts words in the visible and hidden counter", () => {
+      render(TextArea, {
+        props: { counterMode: "word", maxCount: 3, value: "one two" },
+      });
+
+      expect(screen.getByText("2/3")).toBeInTheDocument();
+      expect(screen.getByText("2 of 3 words")).toBeInTheDocument();
+    });
+
+    it("blocks a new word at the cap but allows whitespace", () => {
+      const textarea = setup("one two three", 3);
+
+      expect(beforeInput(textarea, " four").defaultPrevented).toBe(true);
+      expect(textarea.value).toBe("one two three");
+      expect(beforeInput(textarea, " ").defaultPrevented).toBe(false);
+    });
+
+    it("allows extending the last word at the cap", () => {
+      const textarea = setup("one two thr", 3);
+
+      expect(beforeInput(textarea, "ee").defaultPrevented).toBe(false);
+    });
+
+    it("truncates a paste to the word limit", () => {
+      const textarea = setup("", 2);
+
+      const event = beforeInput(textarea, "a b c d e", "insertFromPaste");
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(textarea.value.trim()).toBe("a b");
+    });
+
+    it("announces the word limit when it is reached", async () => {
+      render(TextArea, {
+        props: { counterMode: "word", maxCount: 3, value: "one two" },
+      });
+      const liveRegion = document.querySelector('[aria-live="polite"]');
+      assert(liveRegion);
+      expect(liveRegion).toHaveTextContent("");
+
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      textarea.value = "one two three";
+      await fireEvent.input(textarea);
+      expect(liveRegion).toHaveTextContent("Word limit reached");
+
+      textarea.value = "one two three four";
+      await fireEvent.input(textarea);
+      expect(liveRegion).toHaveTextContent("");
+    });
+
+    it("uses limitReachedText over the word default", async () => {
+      render(TextArea, {
+        props: {
+          counterMode: "word",
+          maxCount: 3,
+          value: "one two",
+          limitReachedText: "Stop",
+        },
+      });
+
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      textarea.value = "one two three";
+      await fireEvent.input(textarea);
+
+      expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
+        "Stop",
+      );
+    });
+
+    it("keeps character strings when counterMode is omitted", async () => {
+      render(TextArea, { props: { maxCount: 100, value: "hi" } });
+
+      expect(screen.getByText("2 of 100 characters")).toBeInTheDocument();
+
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      textarea.value = "x".repeat(100);
+      await fireEvent.input(textarea);
+      expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
+        "Character limit reached",
+      );
+    });
+
+    it("switches the counter from characters to words without remounting", async () => {
+      render(TextAreaCounterMode);
+
+      const textarea = screen.getByRole("textbox");
+      expect(screen.getByText("7/10")).toBeInTheDocument();
+      expect(screen.getByText("7 of 10 characters")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Count words" }));
+
+      expect(screen.getByRole("textbox")).toBe(textarea);
+      expect(screen.getByText("2/10")).toBeInTheDocument();
+      expect(screen.getByText("2 of 10 words")).toBeInTheDocument();
+    });
+
+    it("marks a value already over the word limit without changing it", () => {
+      render(TextArea, {
+        props: { counterMode: "word", maxCount: 2, value: "one two three" },
+      });
+
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      expect(textarea).toHaveAttribute("aria-invalid", "true");
+      expect(textarea.value).toBe("one two three");
+      expect(
+        screen.getByText("3/2").closest(".bx--text-area__label-counter"),
+      ).toHaveClass("bx--text-area__label-counter--error");
+    });
   });
 
   it("does not render a live region when maxCount is unset", () => {

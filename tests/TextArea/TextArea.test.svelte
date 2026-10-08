@@ -9,6 +9,7 @@
   export let grow = false;
   export let maxRows: ComponentProps<TextArea>["maxRows"] = undefined;
   export let maxCount: ComponentProps<TextArea>["maxCount"] = undefined;
+  export let counterMode: ComponentProps<TextArea>["counterMode"] = undefined;
   export let counterText: ComponentProps<TextArea>["counterText"] = undefined;
   export let limitReachedText: ComponentProps<TextArea>["limitReachedText"] =
     undefined;
@@ -37,6 +38,7 @@
   {grow}
   {maxRows}
   {maxCount}
+  {counterMode}
   {counterText}
   {limitReachedText}
   {light}
