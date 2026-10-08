@@ -86,6 +86,7 @@
     deselect,
     selectedValue,
     groupName,
+    groupForm,
     fallbackName,
     groupRequired,
     readonly: groupReadonly,
@@ -93,6 +94,7 @@
     helperId,
   } = ctx ?? {
     groupName: readable(undefined),
+    groupForm: readable(undefined),
     groupRequired: readable(undefined),
     selectedValue: readable(checked ? value : undefined),
     readonly: readable(false),
@@ -212,7 +214,7 @@
     type="radio"
     {id}
     name={$groupName ?? (name || fallbackName)}
-    {form}
+    form={$groupForm ?? form}
     {checked}
     {disabled}
     required={$groupRequired ?? required}
