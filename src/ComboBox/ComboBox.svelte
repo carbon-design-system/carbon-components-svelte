@@ -43,6 +43,7 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
    * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
+   * @slot {{ value: string; }} empty
    */
 
   /**
@@ -250,6 +251,15 @@
       : `${count} result${count === 1 ? "" : "s"} available`;
   };
 
+  /**
+   * Specify the message shown in the menu when no items match the filter.
+   * Pass a function to build it from the typed value.
+   * Set to `""` to show no message; `filterResultsText` still announces
+   * the result count.
+   * @type {string | ((value: string) => string)}
+   */
+  export let emptyText = "No results";
+
   /** Set an id for the list box component */
   export let id = uniqueId();
 
@@ -327,6 +337,7 @@
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import {
     MENU_PAGE_STEP,
@@ -750,6 +761,14 @@
     announcedFilterCount = null;
     statusText = "";
   }
+  $: hasNoMatches = open && filteredItems.length === 0;
+  $: emptyMessage = hasNoMatches
+    ? typeof emptyText === "function"
+      ? emptyText(value)
+      : emptyText
+    : "";
+  // A row after the options, not an option, so arrow keys never reach it.
+  $: showEmpty = hasNoMatches && ($$slots.empty || emptyMessage !== "");
   $: highlightedId =
     filteredItems[highlightedIndex] == null
       ? undefined
@@ -1496,6 +1515,11 @@
               {/each}
             </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if showEmpty}
+          <ListBoxMenuStatus>
+            <slot name="empty" {value}>{emptyMessage}</slot>
+          </ListBoxMenuStatus>
         {/if}
       </ListBoxMenu>
     {/if}

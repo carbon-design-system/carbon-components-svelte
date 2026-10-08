@@ -1,0 +1,29 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Status row after a list box menu's options: the empty filter result and
+/// the loading indicator of `ComboBox`, `Dropdown`, and `MultiSelect`. Carbon
+/// v10 has neither, so this is new markup rather than a backport.
+///
+/// The row lines up with an option's text and is at least as tall as a
+/// default option, so the menu does not collapse to a sliver around it.
+/// @access private
+/// @group list-box
+@mixin list-box-menu-status {
+  .#{$prefix}--list-box__menu-status {
+    @include type-style("body-short-01");
+
+    display: flex;
+    min-height: to-rem(40px);
+    align-items: center;
+    padding: 0 $carbon--spacing-05;
+    color: $text-secondary;
+    cursor: default;
+  }
+}
+
+@include exports("list-box-menu-status") {
+  @include list-box-menu-status;
+}
