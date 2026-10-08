@@ -1,5 +1,5 @@
 ---
-components: ["Form", "FormGroup"]
+components: ["Form", "FormGroup", "FormItem", "FormLabel", "FormHelperText", "FormRequirement"]
 description: Forms provide a structured way to collect user input, working with controls like checkboxes, radio buttons, and selects.
 ---
 
@@ -133,6 +133,107 @@ an error with a warning icon.
     <Checkbox name="contact" value="sms" labelText="SMS" />
   </FormGroup>
 </Form>
+
+## Custom controls
+
+`FormLabel`, `FormHelperText`, and `FormRequirement` are the label, helper
+text, and invalid or warn message that fields like `TextInput` render. Use
+them to give a native or third-party control the same look.
+
+### Associate parts with a control
+
+Wrap the parts in a `FormItem` and apply its `control` action to the control.
+The label's `for`, the control's `id`, and the ids its `aria-describedby`
+lists all derive from `controlId`, so no id is written by hand. Render a
+`FormRequirement` only while there is a message: while it's mounted, the
+control is described by it, and an invalid message sets `aria-invalid` and
+the `invalid` slot prop.
+
+<FileSource src="/framed/Form/FormCustomControl" />
+
+### Non-native controls
+
+A `<label for>` only names native form elements. When the `control` action is
+applied to anything else, such as a `div` with `role="combobox"`, it also sets
+`aria-labelledby` to the `FormLabel`.
+
+```svelte
+<FormItem let:control>
+  <FormLabel>Assignee</FormLabel>
+  <div
+    role="combobox"
+    tabindex="0"
+    aria-expanded="false"
+    aria-controls="assignee-menu"
+    use:control
+  >
+    Choose a person
+  </div>
+  <FormHelperText>They are notified when assigned</FormHelperText>
+</FormItem>
+```
+
+### Component controls
+
+An action can't be applied to a component. When the control is a component
+that forwards attributes to its focusable element, pass the slot props
+instead: `controlId`, `labelId`, `describedBy`, and `invalid`.
+
+```svelte
+<FormItem let:controlId let:labelId let:describedBy let:invalid>
+  <FormLabel>Assignee</FormLabel>
+  <PersonPicker
+    id={controlId}
+    aria-labelledby={labelId}
+    aria-describedby={describedBy}
+    aria-invalid={invalid || undefined}
+  />
+  <FormHelperText>They are notified when assigned</FormHelperText>
+</FormItem>
+```
+
+### Sizes and fluid forms
+
+Inside a `Form` with `size`, the `size` slot prop holds that size, and inside
+a `FluidForm` the `fluid` slot prop is `true`. Use them to style the control
+like the fields around it.
+
+```svelte
+<Form size="sm">
+  <FormItem let:control let:size>
+    <FormLabel>Work email</FormLabel>
+    <input
+      class="bx--text-input"
+      class:bx--text-input--sm={size === "sm"}
+      class:bx--text-input--xl={size === "xl"}
+      use:control
+    />
+  </FormItem>
+</Form>
+```
+
+### Without FormItem
+
+Each part also works on its own. Set `for` on the label and `id` on the helper
+text or message, then reference them from the control.
+
+```svelte
+<FormLabel for="nickname">Nickname</FormLabel>
+<input
+  id="nickname"
+  class="bx--text-input"
+  aria-describedby="nickname-helper"
+/>
+<FormHelperText id="nickname-helper">Shown on your profile</FormHelperText>
+```
+
+| Do | Why |
+| --- | --- |
+| Use `TextInput`, `Select`, and the other fields when they fit | They already pair their label, helper text, and messages with the control. |
+| Render `FormRequirement` with `{#if}` instead of hiding it | Only a mounted message describes the control or marks it invalid. |
+| Set the control's id through `controlId` on `FormItem` | The `control` action overwrites the control's `id` with `controlId`. |
+| Also pass `id={controlId}` to the control when you server render | The `control` action runs only in the browser, so without it the label's `for` matches no id in the server HTML. |
+| Style the control from the `invalid` and `warn` slot props | The parts only render text; the control's own invalid styles are up to you. |
 
 ## Submission
 
