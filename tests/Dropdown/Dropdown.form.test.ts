@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import Dropdown from "./Dropdown.form.test.svelte";
+import DropdownFormAttribute from "./Dropdown.formAttribute.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -139,5 +140,11 @@ describe("Dropdown form participation", () => {
     });
 
     expect(new FormData(getForm()).get("contact")).toBe("42");
+  });
+
+  it("submits with the form named by the `form` attribute", () => {
+    render(DropdownFormAttribute);
+
+    expect(new FormData(getForm()).get("contact")).toBe("1");
   });
 });
