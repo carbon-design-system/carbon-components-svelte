@@ -130,8 +130,8 @@ By default, the tile uses a button element to toggle expand/collapse.
 If you need interactive content inside the tile, set `hasInteractiveContent` to render a div instead and avoid invalid HTML nesting.
 
 Only the chevron button toggles the tile. Press <DocKbd label="Tab" /> to move
-through the tile's links and buttons to the chevron, then press
-<DocKbd label="Enter" /> or <DocKbd label="Space" /> to expand or collapse it.
+through the tile's links and buttons to the chevron, then
+press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to expand or collapse it.
 
 | Do | Why |
 | --- | --- |

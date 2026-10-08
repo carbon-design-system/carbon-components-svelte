@@ -401,6 +401,18 @@ In `.svx` files, markdown prose is compiled as Svelte. **Bare `{ ... }` in prose
 
 Always wrap object literals and expressions in backticks, or rephrase without braces. See [`DataTable.svx`](docs/src/pages/components/DataTable.svx) sort section for a real incident.
 
+**Don't start a wrapped prose line with a component tag.** mdsvex ends the paragraph at a line that opens with a tag such as `<DocKbd>`, and the rest loses Markdown parsing, so its backticks render literally. Keep the preceding word on the tag's line:
+
+```md
+<!-- Bad -->
+Tab to the chevron, then press
+<DocKbd label="Enter" /> to toggle `expanded`.
+
+<!-- Good -->
+Tab to the chevron, then
+press <DocKbd label="Enter" /> to toggle `expanded`.
+```
+
 | Avoid | Prefer |
 | --- | --- |
 | Trivializers: "easy", "easily", "makes it easier to", "for performance reasons" | State the behavior directly |

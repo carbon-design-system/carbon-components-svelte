@@ -8,8 +8,8 @@ description: Clickable tiles are interactive content areas that link to another 
 
 ## Basic
 
-Create a clickable tile with an href to link to another page. Press
-<DocKbd label="Enter" /> or <DocKbd label="Space" /> to follow the link; both
+Create a clickable tile with an href to link to another page.
+Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to follow the link; both
 fire `on:click` like a mouse click.
 
 <ClickableTile href="https://cloud.ibm.com/docs/api-gateway/">
@@ -19,8 +19,8 @@ API documentation
 ## Reactive example
 
 Bind to `clicked` to read whether the tile has been activated. Without
-`href`, the tile acts as a button: <DocKbd label="Tab" /> to it and press
-<DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle `clicked`.
+`href`, the tile acts as a button: <DocKbd label="Tab" /> to it and
+press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle `clicked`.
 
 <FileSource src="/framed/ClickableTile/ReactiveClickableTile" />
 
