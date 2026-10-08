@@ -349,6 +349,15 @@ describe("FileUploader", () => {
     expect(button).toHaveClass("bx--btn--disabled");
   });
 
+  it("should forward capture to the input", () => {
+    const { container } = render(FileUploader, {
+      props: { capture: "environment" },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    expect(input).toHaveAttribute("capture", "environment");
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploader, {
       props: { accept: [".jpg", ".png"] },

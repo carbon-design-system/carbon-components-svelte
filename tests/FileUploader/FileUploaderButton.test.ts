@@ -83,6 +83,22 @@ describe("FileUploaderButton", () => {
     expect(input).toBeDisabled();
   });
 
+  it("should forward capture to the input", () => {
+    const { container } = render(FileUploaderButton, {
+      props: { capture: "environment" },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    expect(input).toHaveAttribute("capture", "environment");
+  });
+
+  it("should omit capture by default", () => {
+    const { container } = render(FileUploaderButton);
+
+    const input = container.querySelector('input[type="file"]');
+    expect(input).not.toHaveAttribute("capture");
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploaderButton, {
       props: { accept: [".jpg", ".png", "image/*"] },
