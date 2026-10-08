@@ -81,25 +81,3 @@ export function shouldVirtualizeMenu({ items, virtualize }) {
     items.length > DEFAULT_VIRTUAL_LIST_CONFIG.threshold
   );
 }
-
-/**
- * Handle the `invalid` event of a required list box's validated input:
- * cancel the browser's own error bubble, since the field shows Carbon's
- * invalid state instead, and focus the field when it is the first invalid
- * control in its form, the one the browser would have focused.
- *
- * @param {Event} event The `invalid` event.
- * @param {HTMLElement | null | undefined} focusTarget The field to focus.
- */
-export function handleRequiredInvalid(event, focusTarget) {
-  event.preventDefault();
-  const input = /** @type {HTMLInputElement} */ (event.target);
-  const firstInvalid = input.form
-    ? Array.from(input.form.elements).find(
-        (element) =>
-          /** @type {HTMLInputElement} */ (element).willValidate &&
-          !(/** @type {HTMLInputElement} */ (element).validity.valid),
-      )
-    : input;
-  if (firstInvalid === input) focusTarget?.focus();
-}

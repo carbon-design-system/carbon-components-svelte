@@ -26,8 +26,7 @@
   export let focusTarget = null;
 
   import { createEventDispatcher } from "svelte";
-  import { formReset } from "../utils/form-reset.js";
-  import { handleRequiredInvalid } from "./list-box-utils.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
 
   const dispatch = createEventDispatcher();
 </script>
@@ -42,9 +41,8 @@
   value={hasValue ? "selected" : ""}
   {disabled}
   {readonly}
-  use:formReset={() => dispatch("reset")}
-  on:invalid={(event) => {
-    handleRequiredInvalid(event, focusTarget);
-    dispatch("invalid");
+  use:requiredInvalid={{
+    onChange: (missing) => dispatch(missing ? "invalid" : "reset"),
+    getFocusTarget: () => focusTarget,
   }}
 >
