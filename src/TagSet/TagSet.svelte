@@ -53,6 +53,15 @@
    */
   export let maxVisible = undefined;
 
+  /**
+   * Keyboard navigation between tags. `"tab"` puts every interactive tag in
+   * the tab order. `"roving"` makes the set a single tab stop: arrow keys,
+   * Home, and End move between tags and the "+N" indicator, and Delete or
+   * Backspace closes a focused dismissible tag.
+   * @type {"tab" | "roving"}
+   */
+  export let navigation = "tab";
+
   /** Set to `true` to wrap all tags instead of collapsing to overflow. */
   export let multiline = false;
 
@@ -90,6 +99,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -103,12 +113,26 @@
   const overflowIds = writable(new Set());
   const sharedSize = writable(size);
   $: sharedSize.set(size);
+  const sharedNavigation = writable(navigation);
+  $: sharedNavigation.set(navigation);
 
-  /** @type {(node: HTMLElement | undefined) => HTMLElement | null} */
+  // Roving tab stop: the registered item id (or the overflow indicator)
+  // whose element is the set's single `tabindex="0"`. `null` until mounted,
+  // so server-rendered tags keep their native tab order.
+  const OVERFLOW_TAB_STOP = "overflow";
+  /** @type {import("svelte/store").Writable<string | null>} */
+  const tabStopId = writable(null);
+
+  /**
+   * The element a tag contributes to keyboard navigation: the tag itself
+   * when it's a button or link, else its close button. Skips the truncation
+   * tooltip trigger inside a capped-width label.
+   * @type {(node: HTMLElement | undefined) => HTMLElement | null}
+   */
   function focusableIn(node) {
     if (!node) return null;
     if (node.matches("button:not(:disabled), a[href]")) return node;
-    return node.querySelector("button:not(:disabled)");
+    return node.querySelector(".bx--tag__close-icon:not(:disabled)");
   }
 
   function handleTagClose(item) {
@@ -143,6 +167,8 @@
     items,
     overflowIds,
     size: sharedSize,
+    navigation: sharedNavigation,
+    tabStopId,
     register: (item) => {
       batchedItemsUpdate((current) =>
         current.some((existing) => existing.id === item.id)
@@ -172,6 +198,55 @@
   $: overflowTooltipText = overflowTags.map((tag) => tag.label).join(", ");
 
   let overflowTriggerRef = null;
+  let overflowButtonRef = null;
+
+  /**
+   * Visible tags with a focusable element, in DOM order, then the "+N"
+   * indicator when it shows. Reads `visibleCount` directly so it's current
+   * inside `measure()`, before the derived overflow values update.
+   * @type {() => { id: string; element: HTMLElement }[]}
+   */
+  function rovingItems() {
+    if (navigation !== "roving") return [];
+    const entries = $items
+      .slice(0, visibleCount)
+      .map((item) => ({ id: item.id, element: focusableIn(item.node) }))
+      .filter((entry) => entry.element);
+    if (visibleCount < $items.length && overflowButtonRef) {
+      entries.push({ id: OVERFLOW_TAB_STOP, element: overflowButtonRef });
+    }
+    return entries;
+  }
+
+  // Keep the tab stop on an element that's still visible and enabled, else
+  // move it to the first one.
+  function syncTabStop() {
+    if (navigation !== "roving") {
+      tabStopId.set(null);
+      return;
+    }
+    const entries = rovingItems();
+    if (entries.some((entry) => entry.id === $tabStopId)) return;
+    tabStopId.set(entries[0]?.id ?? null);
+  }
+
+  /** @param {FocusEvent} event */
+  function handleFocusIn(event) {
+    const entry = rovingItems().find((entry) => entry.element === event.target);
+    if (entry) tabStopId.set(entry.id);
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleKeydown(event) {
+    if (event.key !== "Delete" && event.key !== "Backspace") return;
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (!target.matches(".bx--tag__close-icon")) return;
+    if (!rovingItems().some((entry) => entry.element === target)) return;
+    event.preventDefault();
+    // Same path as a pointer click, so the tag's own `close` fires too.
+    target.click();
+  }
 
   function measure() {
     if (multiline) {
@@ -199,6 +274,7 @@
     }
 
     overflowIds.set(new Set($items.slice(visibleCount).map((item) => item.id)));
+    syncTabStop();
   }
 
   const throttledMeasure = rafThrottle(measure);
@@ -222,6 +298,7 @@
     $items;
     maxVisible;
     multiline;
+    navigation;
     if (wrapperRef) tick().then(measure);
   }
 
@@ -239,7 +316,26 @@
   }
 </script>
 
-<div bind:this={wrapperRef} {id} class:bx--tag-set={true} {...$$restProps}>
+<div
+  bind:this={wrapperRef}
+  {id}
+  use:rovingFocus={{
+    selector: "button, a[href]",
+    getItems: () => rovingItems().map((entry) => entry.element),
+    getActiveIndex: () =>
+      Math.max(
+        0,
+        rovingItems().findIndex((entry) => entry.id === $tabStopId),
+      ),
+    onMove: (index) => tabStopId.set(rovingItems()[index]?.id ?? null),
+    focusOnMove: true,
+    wrap: false,
+  }}
+  class:bx--tag-set={true}
+  {...$$restProps}
+  on:focusin={handleFocusIn}
+  on:keydown={handleKeydown}
+>
   <Stack
     orientation="horizontal"
     align="center"
@@ -255,6 +351,12 @@
     <slot />
     <TagSetOverflow
       bind:triggerRef={overflowTriggerRef}
+      bind:buttonRef={overflowButtonRef}
+      tabindex={$tabStopId === null
+        ? undefined
+        : $tabStopId === OVERFLOW_TAB_STOP
+          ? "0"
+          : "-1"}
       id="{id}-overflow"
       count={overflowCount}
       tags={overflowTags}
