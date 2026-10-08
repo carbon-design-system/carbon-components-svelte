@@ -77,6 +77,13 @@
   export let name = "";
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the file input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -187,6 +194,7 @@
     {disabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}
     {name}
+    {form}
     {multiple}
     class:bx--file-input={true}
     on:change={({ target }) => {
