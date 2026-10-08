@@ -210,7 +210,8 @@
 
   /**
    * Set an id for the top-level element.
-   * The file input id derives from it as `{id}-input`.
+   * The file input id derives from it as `{id}-input`, and the label
+   * description id as `{id}-description`.
    */
   export let id = uniqueId();
 
@@ -234,6 +235,9 @@
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
+
+  $: descriptionId = `${id}-description`;
+  $: hasDescription = Boolean(labelDescription || $$slots.labelDescription);
 
   let prevFiles = [];
 
@@ -324,8 +328,9 @@
       <slot name="labelTitle"> {labelTitle} </slot>
     </p>
   {/if}
-  {#if labelDescription || $$slots.labelDescription}
+  {#if hasDescription}
     <p
+      id={descriptionId}
       class:bx--label-description={true}
       class:bx--label-description--disabled={disabled}
     >
@@ -344,6 +349,7 @@
     {multiple}
     {kind}
     size={effectiveSize}
+    describedBy={hasDescription ? descriptionId : undefined}
     bind:ref
     bind:files
     on:change={(event) => {
