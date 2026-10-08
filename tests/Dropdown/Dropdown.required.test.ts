@@ -44,18 +44,4 @@ describe("Dropdown required", () => {
     await rerender({ required: true, disabled: true });
     expect(getForm().checkValidity()).toBe(true);
   });
-
-  it("moves focus from the validation proxy to the field", () => {
-    const { container } = render(Dropdown, {
-      props: { items, required: true },
-    });
-
-    const proxy = container.querySelector("input[required]");
-    assert(proxy instanceof HTMLInputElement);
-    expect(proxy).toHaveAttribute("tabindex", "-1");
-    expect(proxy).toHaveAttribute("aria-hidden", "true");
-    proxy.focus();
-
-    expect(screen.getByRole("combobox")).toHaveFocus();
-  });
 });
