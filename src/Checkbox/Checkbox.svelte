@@ -135,6 +135,7 @@
   const {
     selectedValues,
     groupName,
+    groupForm,
     groupRequired,
     readonly: groupReadonly,
     invalid: groupInvalid,
@@ -143,6 +144,7 @@
   } = ctx ?? {
     selectedValues: readable([]),
     groupName: readable(undefined),
+    groupForm: readable(undefined),
     groupRequired: readable(undefined),
     readonly: readable(false),
     invalid: readable(false),
@@ -251,7 +253,7 @@
       style:display={decorative ? "none" : undefined}
       bind:indeterminate
       name={effectiveName}
-      {form}
+      form={$groupForm ?? form}
       required={effectiveRequired}
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}
