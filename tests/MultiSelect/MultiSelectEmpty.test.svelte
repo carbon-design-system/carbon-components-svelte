@@ -4,6 +4,7 @@
 
   export let filterable = true;
   export let emptyText: ComponentProps<MultiSelect>["emptyText"] = undefined;
+  export let loading = false;
 
   const items = [
     { id: "0", text: "Slack" },
@@ -17,4 +18,5 @@
   {items}
   {filterable}
   {emptyText}
+  {loading}
 />
