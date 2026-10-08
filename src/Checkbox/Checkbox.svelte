@@ -75,6 +75,13 @@
   export let name = "";
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the checkbox with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the title attribute for the label element.
    * @type {string}
    * @bindable readonly
@@ -244,6 +251,7 @@
       style:display={decorative ? "none" : undefined}
       bind:indeterminate
       name={effectiveName}
+      {form}
       required={effectiveRequired}
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}
