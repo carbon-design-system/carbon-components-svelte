@@ -93,7 +93,7 @@
         {#each Array.from({ length: rows }, (_, i) => i) as row (row)}
           <tr>
             {#each cols as col (col)}
-              <td><span></span></td>
+              <td class:bx--table-cell={true}><span></span></td>
             {/each}
           </tr>
         {/each}

@@ -1070,6 +1070,12 @@ Use `rowClass` to apply custom CSS classes to rows. Pass a string for a static c
 
 <FileSource src="/framed/DataTable/DataTableRowClass" />
 
+### Custom cell classes
+
+Set `cellClass` to a string or a function that returns a class for each data cell. The function receives the row, cell, rowIndex, cellIndex, selected, and expanded. It does not apply to the select, expand, header, or footer cells.
+
+<FileSource src="/framed/DataTable/DataTableCellClass" />
+
 ## Footer
 
 Use the `footerCell` slot to render a summary row aligned to the table columns. The slot receives each header, so it can decide what to render per column and leave the rest blank.
