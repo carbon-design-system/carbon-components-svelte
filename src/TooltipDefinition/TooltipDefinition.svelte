@@ -181,6 +181,7 @@
     on:mouseleave
     on:focus
     on:focus={clickToOpen ? undefined : showOnFocus}
+    on:blur
     on:blur={hide}
   >
     <slot />

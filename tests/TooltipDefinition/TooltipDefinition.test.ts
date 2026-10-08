@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
+import TooltipDefinitionBlur from "./TooltipDefinitionBlur.test.svelte";
 import TooltipDefinitionGroup from "./TooltipDefinitionGroup.test.svelte";
 import TooltipDefinitionPortal from "./TooltipDefinitionPortal.test.svelte";
 
@@ -393,5 +394,15 @@ describe("TooltipDefinition", () => {
 
       vi.useRealTimers();
     });
+  });
+
+  it("forwards blur from the trigger", async () => {
+    render(TooltipDefinitionBlur);
+
+    await user.tab();
+    expect(screen.getByRole("button", { name: "APR" })).toHaveFocus();
+    await user.tab();
+
+    expect(screen.getByTestId("blur-count")).toHaveTextContent("1");
   });
 });
