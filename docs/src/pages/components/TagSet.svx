@@ -94,6 +94,20 @@ Set `containingElement` to measure a different element instead of `TagSet`'s own
 
 <FileSource src="/framed/TagSet/TagSetContainingElement" />
 
+### Indicator label
+
+Screen readers announce the "+N" indicator as "+3 more tags" by default. Set `overflowLabel` to a function of the hidden count to localize it or name what the tags are. Start the label with the visible "+N" so speech-input users can say what they see.
+
+<Box maxWidth="12rem">
+  <TagSet overflowLabel={(count) => `+${count} more environments`}>
+    <Tag type="red">Production</Tag>
+    <Tag type="blue">Staging</Tag>
+    <Tag type="purple">Development</Tag>
+    <Tag type="green">QA</Tag>
+    <Tag type="magenta">Sandbox</Tag>
+  </TagSet>
+</Box>
+
 ## Overflow tooltip
 
 Control the content and positioning of the tooltip shown by the "+N" indicator.
