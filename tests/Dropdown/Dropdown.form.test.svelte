@@ -11,6 +11,8 @@
   export let open: ComponentProps<Dropdown>["open"] = false;
   export let disabled: ComponentProps<Dropdown>["disabled"] = false;
   export let required: ComponentProps<Dropdown>["required"] = false;
+  export let invalid: ComponentProps<Dropdown>["invalid"] = false;
+  export let invalidText: ComponentProps<Dropdown>["invalidText"] = "";
 </script>
 
 <form data-testid="form">
@@ -25,6 +27,8 @@
     bind:open
     {disabled}
     {required}
+    {invalid}
+    {invalidText}
     labelText="Contact"
   />
 </form>
