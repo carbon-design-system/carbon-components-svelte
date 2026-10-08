@@ -90,6 +90,8 @@
   const groupItemId = tagSet ? uniqueId("ctag") : undefined;
   const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
   const groupSize = tagSet?.size ?? readable(undefined);
+  const groupNavigation = tagSet?.navigation ?? readable("tab");
+  const groupTabStopId = tagSet?.tabStopId ?? readable(null);
 
   let labelRef = null;
   let truncated = false;
@@ -99,12 +101,24 @@
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
 
+  // A roving `TagSet` owns the tab order: only its current tab stop is
+  // tabbable. `undefined` leaves the native order (standalone, or before the
+  // set has picked a tab stop).
+  $: rovingTabindex =
+    $groupNavigation === "roving" && $groupTabStopId !== null
+      ? $groupTabStopId === groupItemId
+        ? "0"
+        : "-1"
+      : undefined;
+
   // Interactive tags are already buttons, and link tags are already anchors.
   // Wrapping the label in `TooltipDefinition` would nest interactive
-  // elements, so use the native `title` instead.
-  $: showTruncationTooltip = truncated && !interactive && !href;
+  // elements, so use the native `title` instead. A roving `TagSet` is a
+  // single tab stop, which the tooltip's focusable trigger would break.
+  $: showTruncationTooltip =
+    truncated && !interactive && !href && $groupNavigation !== "roving";
   $: nativeTitle =
-    truncated && (interactive || href) ? truncationLabel : undefined;
+    truncated && !showTruncationTooltip ? truncationLabel : undefined;
 
   async function measureTruncation() {
     const token = ++measureToken;
@@ -183,6 +197,7 @@
     bind:this={ref}
     {id}
     data-overflow={groupOverflow ? "true" : undefined}
+    title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
@@ -233,7 +248,11 @@
       id="{id}-close"
       aria-label={title}
       aria-labelledby="{id}-close {id}-label"
+      aria-keyshortcuts={$groupNavigation === "roving"
+        ? "Delete Backspace"
+        : undefined}
       class:bx--tag__close-icon={true}
+      tabindex={rovingTabindex}
       {disabled}
       {title}
       on:click|stopPropagation={handleClose}
@@ -248,6 +267,7 @@
     role={disabled ? "link" : undefined}
     {id}
     aria-disabled={disabled || undefined}
+    tabindex={rovingTabindex}
     rel={resolveLinkRel($$restProps.target)}
     data-overflow={groupOverflow ? "true" : undefined}
     title={nativeTitle}
@@ -291,7 +311,7 @@
     {id}
     {disabled}
     aria-disabled={disabled}
-    tabindex={disabled ? "-1" : undefined}
+    tabindex={disabled ? "-1" : rovingTabindex}
     title={nativeTitle}
     data-overflow={groupOverflow ? "true" : undefined}
     class:bx--tag={true}
@@ -332,6 +352,7 @@
     bind:this={ref}
     {id}
     data-overflow={groupOverflow ? "true" : undefined}
+    title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
