@@ -58,6 +58,22 @@ describe("FormLabel", () => {
     expect(label).toHaveAttribute("for", "custom-input-id");
   });
 
+  it("should set the for attribute from the for prop", () => {
+    render(FormLabelTest, {
+      props: { htmlFor: "email", slotContent: "Email" },
+    });
+
+    expect(screen.getByText("Email")).toHaveAttribute("for", "email");
+  });
+
+  it("should prefer for over the deprecated id prop", () => {
+    render(FormLabelTest, {
+      props: { htmlFor: "email", id: "legacy", slotContent: "Email" },
+    });
+
+    expect(screen.getByText("Email")).toHaveAttribute("for", "email");
+  });
+
   it("should not set its own id outside a FormItem", () => {
     render(FormLabelTest, { props: { slotContent: "Email" } });
 

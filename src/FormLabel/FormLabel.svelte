@@ -1,5 +1,19 @@
 <script>
-  /** Set an id to be used by the label element */
+  let forId = undefined;
+
+  /**
+   * Set the id of the control this label is for.
+   * Inside a `FormItem`, defaults to the item's `controlId`.
+   * @type {string}
+   */
+  export { forId as for };
+
+  /**
+   * Set the id of the control this label is for.
+   * @deprecated use `for` instead. Despite its name, this sets the
+   * label's `for` attribute, not its `id`.
+   * @type {string}
+   */
   export let id = undefined;
 
   /**
@@ -21,7 +35,7 @@
   const setPartId = formItem?.part("label") ?? noop;
   const fallbackId = uniqueId();
 
-  $: htmlFor = id ?? $controlId ?? fallbackId;
+  $: htmlFor = forId ?? id ?? $controlId ?? fallbackId;
   // Only a label for the item's own control labels it.
   $: labelId =
     formItem && htmlFor === $controlId ? `label-${$controlId}` : undefined;
