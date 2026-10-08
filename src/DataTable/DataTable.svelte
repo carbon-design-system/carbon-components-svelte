@@ -105,6 +105,7 @@
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
+   * @slot {{ filtered: boolean; }} empty
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -172,6 +173,13 @@
    * @type {ReadonlyArray<Row>}
    */
   export let rows = [];
+
+  /**
+   * Specify the text to render in a single row spanning all columns
+   * when no rows are displayed and the `empty` slot is not provided.
+   * An empty string renders nothing.
+   */
+  export let emptyText = "";
 
   /**
    * Set the size of the data table.
@@ -1047,6 +1055,12 @@
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
     (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
+
+  // No rows are displayed: `rows` is empty, or filtering/hiding left nothing.
+  $: isEmpty =
+    rowsToVirtualize.length === 0 || (hideMode && matchedRowIdsSet.size === 0);
+  // Distinguishes "no data" from "no search results" for the `empty` slot.
+  $: emptyFiltered = isEmpty && rows.length > 0;
 </script>
 
 <TableContainer {id} {useStaticWidth} {...$$restProps}>
@@ -1281,6 +1295,15 @@
         </TableRow>
       </TableHead>
       <TableBody>
+        {#if isEmpty && ($$slots.empty || emptyText)}
+          <tr class:bx--data-table--empty-row={true}>
+            <TableCell colspan={totalColumns}>
+              <div aria-live="polite" class:bx--data-table--empty={true}>
+                <slot name="empty" filtered={emptyFiltered}>{emptyText}</slot>
+              </div>
+            </TableCell>
+          </tr>
+        {/if}
         {#if virtualData?.isVirtualized}
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
