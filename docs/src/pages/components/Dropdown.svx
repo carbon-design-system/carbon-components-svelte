@@ -159,6 +159,36 @@ available to screen readers.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## Groups
+
+Set `group` on items to list them under a non-selectable header. Items without a group are listed first, without a header, followed by the groups in the order they first occur in `items`. The arrow keys move between options and skip the headers.
+
+Each group is exposed to screen readers as a group named by its label. The selection is still a single id.
+
+<Dropdown labelText="Region" label="Select a region"
+  items="{[{id: "0", text: "Frankfurt", group: "Europe"},
+    {id: "1", text: "Toronto", group: "Americas"},
+    {id: "2", text: "London", group: "Europe"},
+    {id: "3", text: "São Paulo", group: "Americas"},
+    {id: "4", text: "Global (any region)"}]}"
+/>
+
+### Custom header
+
+Override the `group` slot to customize a header. Use `let:group` for the label and `let:items` for the group's items. The slot changes the visible header only; screen readers still announce the plain label.
+
+<Dropdown labelText="Region" label="Select a region"
+  items="{[{id: "0", text: "Frankfurt", group: "Europe"},
+    {id: "1", text: "Toronto", group: "Americas"},
+    {id: "2", text: "London", group: "Europe"},
+    {id: "3", text: "São Paulo", group: "Americas"},
+    {id: "4", text: "Global (any region)"}]}"
+>
+  <svelte:fragment slot="group" let:group let:items={groupItems}>
+    {group} ({groupItems.length})
+  </svelte:fragment>
+</Dropdown>
+
 ## Menu
 
 Control the menu's position, portalling, and open state.
@@ -197,6 +227,14 @@ Set `open` to `true` to render the dropdown already expanded. The prop is bindab
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Loading
+
+Set `loading` to `true` to show a loading row after the options, such as while fetching items the first time the menu opens. The menu is marked busy for screen readers, and any options already listed stay selectable.
+
+Set `loadingText` to change the row's text.
+
+<FileSource src="/framed/Dropdown/DropdownLoading" />
+
 ### Wrapped options
 
 Option labels are truncated to one line. At a 320px viewport, that hides text and can leave two options looking identical, a WCAG 1.4.10 Reflow failure.
@@ -223,7 +261,7 @@ Set `virtualize={false}` to explicitly disable virtualization, even for large li
 
 ### Load more
 
-`scrollend` fires when the menu is scrolled near the bottom so you can append the next page of `items`. Same pattern as [ComboBox load more](/components/ComboBox#load-more): handle `on:scrollend`, keep prior items visible while loading, and track in-flight status locally (or with the `empty` slot when appropriate). The event is a near-bottom load-more signal, not the browser's native `scrollend`.
+`scrollend` fires when the menu is scrolled near the bottom so you can append the next page of `items`. Same pattern as [ComboBox load more](/components/ComboBox#load-more): handle `on:scrollend`, keep prior items visible while loading, and set `loading` while the next page is in flight to show a loading row after them. The event is a near-bottom load-more signal, not the browser's native `scrollend`.
 
 <FileSource src="/framed/Dropdown/ScrollEndDropdown" />
 

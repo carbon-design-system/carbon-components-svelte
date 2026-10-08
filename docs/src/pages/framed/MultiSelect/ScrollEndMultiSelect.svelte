@@ -1,5 +1,5 @@
 <script>
-  import { InlineLoading, MultiSelect, Stack } from "carbon-components-svelte";
+  import { MultiSelect, Stack } from "carbon-components-svelte";
 
   const PAGE_SIZE = 40;
   const TOTAL = 200;
@@ -34,11 +34,11 @@
     placeholder="Open and scroll to the bottom…"
     {items}
     virtualize={{ containerHeight: 240, threshold: 1 }}
+    {loading}
+    loadingText="Loading more…"
     on:scrollend={loadMore}
   />
-  {#if loading}
-    <InlineLoading description="Loading more…" />
-  {:else if !hasMore}
+  {#if !hasMore}
     <p>Loaded all {TOTAL} items.</p>
   {:else}
     <p>
