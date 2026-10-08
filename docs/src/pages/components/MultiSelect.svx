@@ -235,6 +235,47 @@ Set `openOnClear` to `true` to open the menu after clearing the selection via th
     {id: "2", text: "Fax"}]}"
   />
 
+## Selected tags
+
+Set `selectionDisplay` to `"tags"` to list each selected item as a tag below the field, so users can see and change the selection without opening the menu. Closing a tag deselects the item, the same as unchecking its option. The count in the field still clears everything at once.
+
+The tags are a single tab stop after the field: the arrow keys move between them, and <DocKbd label="Delete" /> or <DocKbd label="Backspace" /> removes the focused one. Tags follow the order of `items`, so they don't move as the menu re-sorts.
+
+<MultiSelect selectionDisplay="tags" selectedIds="{["us-east", "eu-de", "jp-tok"]}" labelText="Regions" label="Select regions..."
+    items="{[{id: "us-east", text: "US East"},
+    {id: "us-south", text: "US South"},
+    {id: "eu-de", text: "EU Germany"},
+    {id: "eu-gb", text: "EU United Kingdom"},
+    {id: "jp-tok", text: "Tokyo"},
+    {id: "au-syd", text: "Sydney"}]}"
+  />
+
+### Collapsed overflow
+
+Tags wrap onto as many rows as they need. Set `tagOverflow` to `"collapse"` to keep them on one row, with the rest behind a "+N" indicator.
+
+<div style="max-width: 20rem">
+  <MultiSelect selectionDisplay="tags" tagOverflow="collapse" selectedIds="{["us-east", "us-south", "eu-de", "eu-gb", "jp-tok"]}" labelText="Regions" label="Select regions..."
+      items="{[{id: "us-east", text: "US East"},
+      {id: "us-south", text: "US South"},
+      {id: "eu-de", text: "EU Germany"},
+      {id: "eu-gb", text: "EU United Kingdom"},
+      {id: "jp-tok", text: "Tokyo"},
+      {id: "au-syd", text: "Sydney"}]}"
+    />
+</div>
+
+### Tag colors
+
+Set `tagProps` to a function that returns props for each selected item's tag, such as a color `type`.
+
+<MultiSelect selectionDisplay="tags" selectedIds="{["critical", "low"]}" labelText="Severity" label="Select severities..."
+    tagProps={(item) => ({ type: item.id === "critical" ? "red" : "gray" })}
+    items="{[{id: "critical", text: "Critical"},
+    {id: "high", text: "High"},
+    {id: "low", text: "Low"}]}"
+  />
+
 ## Groups
 
 Set `group` on items to list them under a non-selectable header. Groups appear in the order they first occur in `items`, and sorting and selection feedback apply within each group. Items without a group are listed first, without a header.
