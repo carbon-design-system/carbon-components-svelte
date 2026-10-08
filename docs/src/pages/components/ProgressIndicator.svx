@@ -33,6 +33,8 @@ Create a horizontal progress indicator with four steps.
   />
 </ProgressIndicator>
 
+<DocKbd label="Tab" /> reaches every enabled step. <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> (or <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> when vertical) move focus between steps. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled step. <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects a completed step.
+
 ## Step selection
 
 Control which step is active, and how clicking a step affects that selection.
@@ -69,29 +71,6 @@ Disable automatic step selection when clicking completed steps. Incomplete steps
   <ProgressStep
     label="Deploy"
     description="Waiting to release to production"
-  />
-</ProgressIndicator>
-
-## Keyboard navigation
-
-<DocKbd label="Tab" /> reaches every enabled step. <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> (or <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> when vertical) move focus between steps. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled step. <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects a completed step.
-
-<ProgressIndicator currentIndex={2}>
-  <ProgressStep complete
-    label="Build"
-    description="Build completed successfully"
-  />
-  <ProgressStep complete
-    label="Test"
-    description="Automated test suite passed"
-  />
-  <ProgressStep
-    label="Stage"
-    description="Deploying to the staging environment"
-  />
-  <ProgressStep disabled
-    label="Deploy"
-    description="Blocked until the stage step completes"
   />
 </ProgressIndicator>
 
