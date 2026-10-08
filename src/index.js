@@ -200,6 +200,7 @@ export { default as TabsVerticalSkeleton } from "./Tabs/TabsVerticalSkeleton.sve
 export { default as SelectableTag } from "./Tag/SelectableTag.svelte";
 export { default as Tag } from "./Tag/Tag.svelte";
 export { default as TagSkeleton } from "./Tag/TagSkeleton.svelte";
+export { default as TagInput } from "./TagInput/TagInput.svelte";
 export { default as TagSet } from "./TagSet/TagSet.svelte";
 export { default as Text } from "./Text/Text.svelte";
 export { default as FluidTextAreaSkeleton } from "./TextArea/FluidTextAreaSkeleton.svelte";
