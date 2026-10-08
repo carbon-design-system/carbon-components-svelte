@@ -56,9 +56,11 @@
 
   /**
    * Specify the size of the file uploader button.
+   * Inherits the height of the parent `Form` size when unset,
+   * otherwise defaults to `"small"`.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
-  export let size = "small";
+  export let size = undefined;
 
   /**
    * Specify the label text.
@@ -110,12 +112,17 @@
    */
   export let hideTooltip = false;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { formButtonSize } from "../utils/form-button-size.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
 
   let initialLabelText = labelText;
 
@@ -166,11 +173,11 @@
   class:bx--btn--danger={kind === "danger"}
   class:bx--btn--danger-tertiary={kind === "danger-tertiary"}
   class:bx--btn--danger-ghost={kind === "danger-ghost"}
-  class:bx--btn--xs={size === "xs"}
-  class:bx--btn--sm={size === "small"}
-  class:bx--btn--field={size === "field"}
-  class:bx--btn--lg={size === "lg"}
-  class:bx--btn--xl={size === "xl"}
+  class:bx--btn--xs={effectiveSize === "xs"}
+  class:bx--btn--sm={effectiveSize === "small"}
+  class:bx--btn--field={effectiveSize === "field"}
+  class:bx--btn--lg={effectiveSize === "lg"}
+  class:bx--btn--xl={effectiveSize === "xl"}
   class:bx--btn--icon-only={hasIconOnly}
   class:bx--tooltip__trigger={hasIconOnly && !hideTooltip}
   class:bx--tooltip--a11y={hasIconOnly && !hideTooltip}
