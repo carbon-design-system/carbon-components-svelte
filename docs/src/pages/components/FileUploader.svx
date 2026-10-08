@@ -4,7 +4,7 @@ description: File uploaders handle file uploads with a button trigger, drag-and-
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, Stack, formatFileSize } from "carbon-components-svelte";
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, Form, Stack, formatFileSize } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 </script>
@@ -149,6 +149,21 @@ front camera (selfies). Desktop browsers ignore it and open the file picker.
   buttonLabel="Add photo"
   status="edit"
 />
+
+### Form size
+
+Inside a `Form` with `size`, the button and rows match the height of the other
+fields: `xs` is 24px, `sm` is 32px, and `xl` is 48px. Outside a sized form, or
+when `size` is set on the uploader, the uploader's own `size` applies.
+
+<Form size="xs">
+  <FileUploader
+    labelTitle="Upload files"
+    buttonLabel="Add file"
+    status="edit"
+    files={[new File(["a"], "Q3-financial-report.pdf")]}
+  />
+</Form>
 
 ### Per-file status
 
