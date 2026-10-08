@@ -96,6 +96,15 @@ The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yours
 
 To switch themes at runtime, import the combined "all.css" StyleSheet instead of a single theme. It bundles all five themes and toggles between them through a `theme` attribute on the HTML element.
 
+Importing `all.css` costs about 9 kB gzip more than a single theme, because every theme shares the same component styles and only differing tokens are added per theme.
+
+| File                        | Raw    | gzip  |
+| --------------------------- | ------ | ----- |
+| `css/white.css` (one theme) | 565 kB | 66 kB |
+| `css/all.css` (five themes) | 657 kB | 76 kB |
+
+Measured 2026-10-05 with `CI=true bun build:css:themes` and `gzip -9`. Choose `all.css` only when the theme must change at runtime.
+
 ```js
 import "carbon-components-svelte/css/all.css";
 ```
@@ -197,6 +206,8 @@ The preprocessor optimizes imports from the following packages:
 `optimizeCss` is a build plugin that removes unused Carbon styles at build time, often removing hundreds of kilobytes from production bundles. It runs on Vite, Rollup, and Rolldown. For Webpack and Rspack, use `OptimizeCssPlugin`.
 
 `carbon-components-svelte@0.85.0` or greater is required.
+
+Example from a Vite build of a small sample app (measured against an earlier `all.css`; current unoptimized size is about 657 kB):
 
 ```diff
 $ vite build
