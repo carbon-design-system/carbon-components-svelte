@@ -19,9 +19,10 @@
 
   /**
    * Specify the size of the tag.
+   * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
    * @type {"sm" | "default" | "lg"}
    */
-  export let size = "default";
+  export let size = undefined;
 
   /** Set to `true` to disable the tag */
   export let disabled = false;
@@ -35,10 +36,42 @@
   /** Set an id for the tag */
   export let id = uniqueId();
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  // Inside a `TagSet`, register like `Tag` does so the group can measure
+  // this tag and collapse it into the "+N" indicator once it no longer fits.
+  const tagSet = getContext("carbon:TagSet");
+  const groupItemId = tagSet ? uniqueId("ctag") : undefined;
+  const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
+  const groupSize = tagSet?.size ?? readable(undefined);
+
+  let buttonRef = null;
+
+  $: resolvedSize = size ?? $groupSize ?? "default";
+
+  if (tagSet) {
+    onMount(() => {
+      tagSet.register({
+        id: groupItemId,
+        node: buttonRef,
+        label: buttonRef?.textContent?.trim() ?? "",
+        type,
+        size: resolvedSize,
+        disabled,
+        filter: false,
+      });
+      return () => tagSet.unregister(groupItemId);
+    });
+  }
+
+  $: if (tagSet) {
+    tagSet.update(groupItemId, { type, size: resolvedSize, disabled });
+  }
+  $: groupOverflow = !!tagSet && $groupOverflowIds.has(groupItemId);
 
   function toggle() {
     if (disabled) return;
@@ -48,8 +81,10 @@
 </script>
 
 <button
+  bind:this={buttonRef}
   type="button"
   aria-pressed={selected}
+  data-overflow={groupOverflow ? "true" : undefined}
   {id}
   {disabled}
   aria-disabled={disabled}
@@ -58,8 +93,8 @@
   class:bx--tag--selectable={true}
   class:bx--tag--selectable-selected={selected}
   class:bx--tag--disabled={disabled}
-  class:bx--tag--sm={size === "sm"}
-  class:bx--tag--lg={size === "lg"}
+  class:bx--tag--sm={resolvedSize === "sm"}
+  class:bx--tag--lg={resolvedSize === "lg"}
   class:bx--tag--red={type === "red"}
   class:bx--tag--magenta={type === "magenta"}
   class:bx--tag--purple={type === "purple"}
