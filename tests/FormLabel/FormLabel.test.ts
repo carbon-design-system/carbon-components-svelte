@@ -58,6 +58,12 @@ describe("FormLabel", () => {
     expect(label).toHaveAttribute("for", "custom-input-id");
   });
 
+  it("should not set its own id outside a FormItem", () => {
+    render(FormLabelTest, { props: { slotContent: "Email" } });
+
+    expect(screen.getByText("Email")).not.toHaveAttribute("id");
+  });
+
   it("should render slot content", () => {
     render(FormLabelTest, {
       props: {
