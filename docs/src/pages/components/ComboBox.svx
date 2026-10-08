@@ -650,10 +650,11 @@ Display a loading skeleton for the fluid combo box variant.
 ## Form name
 
 Set `name` so the combo box participates in native form submission (for
-example SvelteKit form actions and `FormData`). Unlike [Dropdown](/components/Dropdown#form-name),
-`name` lands directly on the always-mounted text input, so it submits
-the displayed text (`value`), not `selectedId`, empty string when
+example SvelteKit form actions and `FormData`). Like [Dropdown](/components/Dropdown#form-name),
+`name` mounts a hidden input that submits `selectedId`, or an empty string when
 nothing is selected.
+
+Set `inputName` to also submit the typed text, for example alongside `allowCustomValue`, where the text matches no item and `name` submits an empty string.
 
 ```svelte
 <script>

@@ -145,7 +145,7 @@ What each control submits under its `name`:
 | `SelectableTileGroup` | One entry per selected tile `value`; read them with `getAll`. |
 | `Select` | The selected `SelectItem` value, as a string. |
 | `Dropdown` | `selectedId`, as a string; `""` when nothing is selected. |
-| `ComboBox` | The displayed text, not `selectedId`. |
+| `ComboBox` | `selectedId`, as a string; `""` when nothing is selected. Set `inputName` to also submit the text. |
 | `MultiSelect` | One entry per selected item `id`; read them with `getAll`. |
 | `DatePicker` | Each `DatePickerInput`'s text in `dateFormat`; a range picker's two inputs each take their own `name`. |
 | `TimePicker`, `TimePickerSelect` | The time text and each select's value, under their own names. |

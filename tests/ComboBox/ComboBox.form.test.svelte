@@ -6,6 +6,9 @@
   export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
   export let value: ComponentProps<ComboBox>["value"] = "";
   export let name: ComponentProps<ComboBox>["name"] = undefined;
+  export let inputName: ComponentProps<ComboBox>["inputName"] = undefined;
+  export let disabled: ComponentProps<ComboBox>["disabled"] = false;
+  export let allowCustomValue: ComponentProps<ComboBox>["allowCustomValue"] = false;
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let open: ComponentProps<ComboBox>["open"] = false;
@@ -20,6 +23,9 @@
     bind:selectedId
     bind:value
     {name}
+    {inputName}
+    {disabled}
+    {allowCustomValue}
     {virtualize}
     {portalMenu}
     bind:open
