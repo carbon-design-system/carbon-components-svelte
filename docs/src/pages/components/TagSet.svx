@@ -169,6 +169,12 @@ Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag
 
 <FileSource src="/framed/TagSet/TagSetDismissible" />
 
+### Single tab stop
+
+By default, every dismissible or interactive tag is its own tab stop. Set `navigation="roving"` to make the whole set one tab stop instead: Tab enters the set, the arrow keys, Home, and End move between tags and the "+N" indicator, and Delete or Backspace closes the focused tag. Read-only tags are skipped. Use it when a set holds more than a handful of dismissible tags.
+
+<FileSource src="/framed/TagSet/TagSetRoving" />
+
 ## Selectable
 
 `SelectableTag` children take the set's `size` and collapse into the "+N" indicator like `Tag` children do.
