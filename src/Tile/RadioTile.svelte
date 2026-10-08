@@ -90,6 +90,7 @@
   const update = ctx?.update ?? noop;
   const selectedValue = ctx?.selectedValue ?? readable(undefined);
   const groupName = ctx?.groupName ?? readable(undefined);
+  const groupForm = ctx?.groupForm ?? readable(undefined);
   const fallbackName = ctx?.fallbackName;
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
   const groupDisabled = ctx?.groupDisabled ?? readable(false);
@@ -190,7 +191,7 @@
   type="radio"
   {id}
   name={$groupName ?? (name || fallbackName)}
-  {form}
+  form={$groupForm ?? form}
   {value}
   {checked}
   tabindex={effectiveDisabled ? undefined : tabindex}
