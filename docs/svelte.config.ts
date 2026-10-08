@@ -11,9 +11,13 @@ import type {
   Table,
 } from "mdast";
 import { escapeSvelte, mdsvex } from "mdsvex";
-import { format } from "prettier";
+import { format, version as prettierVersion } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
+import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with {
+  type: "json",
+};
 import Prism from "prismjs";
+import prismPkg from "prismjs/package.json" with { type: "json" };
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import { visit } from "unist-util-visit";
@@ -25,6 +29,7 @@ import "prismjs/components/prism-clike.js";
 import "prismjs/components/prism-javascript.js";
 import "prismjs/components/prism-typescript.js";
 import "prism-svelte";
+import prismSveltePkg from "prism-svelte/package.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -59,11 +64,19 @@ const MDSVEX_LANG_ALIASES = {
 
 const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
 
-const previewCodeCache = new Map<
-  string,
-  { formattedCode: string; highlightedCode: string }
->();
+type PreviewCode = { formattedCode: string; highlightedCode: string };
+
+const previewCodeCache = new Map<string, PreviewCode>();
 const createImportsCache = new Map<string, string>();
+
+/**
+ * Formatted and highlighted example code persists here so a cold build only
+ * runs prettier and Prism on examples that changed. Gitignored via `node_modules`.
+ */
+const PREVIEW_CODE_CACHE_DIR = path.join(
+  __dirname,
+  "node_modules/.cache/ccs-docs-preview-code",
+);
 
 function hashKey(s: string): string {
   return createHash("sha256").update(s, "utf8").digest("hex").slice(0, 32);
@@ -206,44 +219,93 @@ function createImports(source: string) {
   return result;
 }
 
-async function formatAndHighlightPreviewSvelte(combinedSource: string) {
-  const mode = SKIP_MDSVEX_PRETTIER ? "raw" : "fmt";
-  const cacheKey = `${mode}:${hashKey(combinedSource)}`;
-  const cached = previewCodeCache.get(cacheKey);
-  if (cached) return cached;
-
-  const formattedCode = SKIP_MDSVEX_PRETTIER
-    ? combinedSource
-    : await format(combinedSource, prettierSvelte);
+function highlightSvelte(formattedCode: string): PreviewCode {
   const highlightedCode = Prism.highlight(
     formattedCode,
     Prism.languages.svelte,
     "svelte",
   );
-  const out = { formattedCode, highlightedCode };
-  previewCodeCache.set(cacheKey, out);
+  return { formattedCode, highlightedCode };
+}
+
+/**
+ * Changing prettier, its Svelte plugin, the prettier options, Prism, or the
+ * loaded Prism grammars invalidates every entry.
+ */
+const PREVIEW_CODE_CACHE_SALT = JSON.stringify([
+  prettierVersion,
+  prettierPluginSveltePkg.version,
+  { ...prettierSvelte, plugins: undefined },
+  prismPkg.version,
+  prismSveltePkg.version,
+  Object.keys(Prism.languages),
+]);
+
+async function readPreviewCodeCache(file: string, key: string) {
+  try {
+    const entry = JSON.parse(await fs.promises.readFile(file, "utf8"));
+    if (
+      entry?.key === key &&
+      typeof entry.formattedCode === "string" &&
+      typeof entry.highlightedCode === "string"
+    ) {
+      return {
+        formattedCode: entry.formattedCode,
+        highlightedCode: entry.highlightedCode,
+      } as PreviewCode;
+    }
+  } catch {
+    // Missing or corrupt entry: format again.
+  }
+  return undefined;
+}
+
+let previewCodeCacheDirReady: Promise<unknown> | undefined;
+
+async function writePreviewCodeCache(
+  file: string,
+  key: string,
+  code: PreviewCode,
+) {
+  // Write to a unique temp file, then rename, so parallel builds never see a
+  // partial entry.
+  const tmp = `${file}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
+  try {
+    previewCodeCacheDirReady ??= fs.promises.mkdir(PREVIEW_CODE_CACHE_DIR, {
+      recursive: true,
+    });
+    await previewCodeCacheDirReady;
+    await fs.promises.writeFile(tmp, JSON.stringify({ key, ...code }));
+    await fs.promises.rename(tmp, file);
+  } catch {
+    await fs.promises.rm(tmp, { force: true }).catch(() => {});
+  }
+}
+
+async function formatAndHighlightSvelteCached(source: string) {
+  const key = createHash("sha256")
+    .update(PREVIEW_CODE_CACHE_SALT, "utf8")
+    .update("\0")
+    .update(source, "utf8")
+    .digest("hex");
+  const file = path.join(PREVIEW_CODE_CACHE_DIR, `${key}.json`);
+  const cached = await readPreviewCodeCache(file, key);
+  if (cached) return cached;
+
+  const out = highlightSvelte(await format(source, prettierSvelte));
+  await writePreviewCodeCache(file, key, out);
   return out;
 }
 
-async function formatAndHighlightFileSourceSvelte(
-  src: string,
-  sourceCode: string,
-  mtimeMs: number,
-) {
+async function formatAndHighlightSvelte(source: string) {
   const mode = SKIP_MDSVEX_PRETTIER ? "raw" : "fmt";
-  const cacheKey = `file:${src}:${mtimeMs}:${mode}`;
+  const cacheKey = `${mode}:${hashKey(source)}`;
   const cached = previewCodeCache.get(cacheKey);
   if (cached) return cached;
 
-  const formattedCode = SKIP_MDSVEX_PRETTIER
-    ? sourceCode
-    : await format(sourceCode, prettierSvelte);
-  const highlightedCode = Prism.highlight(
-    formattedCode,
-    Prism.languages.svelte,
-    "svelte",
-  );
-  const out = { formattedCode, highlightedCode };
+  const out = SKIP_MDSVEX_PRETTIER
+    ? highlightSvelte(source)
+    : await formatAndHighlightSvelteCached(source);
   previewCodeCache.set(cacheKey, out);
   return out;
 }
@@ -275,8 +337,9 @@ function plugin() {
       !node.value.startsWith("<script>")
     ) {
       const scriptBlock = createImports(node.value);
-      const { formattedCode, highlightedCode } =
-        await formatAndHighlightPreviewSvelte(scriptBlock + node.value);
+      const { formattedCode, highlightedCode } = await formatAndHighlightSvelte(
+        scriptBlock + node.value,
+      );
 
       node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}}>${node.value}</Preview>`;
     }
@@ -287,9 +350,8 @@ function plugin() {
 
       const filePath = path.join(__dirname, "src/pages", `${src}.svelte`);
       const sourceCode = stripDocsOnly(fs.readFileSync(filePath, "utf-8"));
-      const mtimeMs = fs.statSync(filePath).mtimeMs;
       const { formattedCode, highlightedCode } =
-        await formatAndHighlightFileSourceSvelte(src, sourceCode, mtimeMs);
+        await formatAndHighlightSvelte(sourceCode);
 
       node.value = `<Preview framed src="${src}" codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}} />`;
     }
