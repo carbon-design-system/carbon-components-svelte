@@ -307,6 +307,13 @@
   export let name = undefined;
 
   /**
+   * Set to `true` to require at least one selection. A wrapping `<form>`
+   * blocks submission, through native constraint validation, while no
+   * enabled item is selected.
+   */
+  export let required = false;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -414,6 +421,7 @@
     ListBoxSelection,
   } from "../ListBox/index.js";
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
+  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
@@ -1393,6 +1401,7 @@
             bind:this={inputRef}
             use:preserveFocusSelection={selectTextOnFocus && !disabled}
             bind:value
+            aria-required={required || undefined}
             {...$$restProps}
             role="combobox"
             tabindex="0"
@@ -1532,6 +1541,7 @@
           : showFieldFocus}
       >
         <ListBoxField
+          aria-required={required || undefined}
           {...$$restProps}
           role="combobox"
           tabindex="0"
@@ -1653,6 +1663,14 @@
           <ListBoxMenuIcon {open} {translateWithId} />
         </ListBoxField>
       </div>
+    {/if}
+    {#if required}
+      <ListBoxRequiredInput
+        hasValue={formItems.length > 0}
+        {disabled}
+        {readonly}
+        focusTarget={filterable ? inputRef : fieldRef}
+      />
     {/if}
     {#if open}
       <ListBoxMenu
