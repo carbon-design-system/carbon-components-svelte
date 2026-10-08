@@ -1,19 +1,48 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/layout/breakpoint";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/components/tag/tokens";
 
-/// GridOverlay: a fixed, full-viewport, non-interactive column overlay for
-/// checking layout against the real breakpoint grid.
+/// Opacity for fills drawn over the page, shared with LayoutInspector.
+/// Carbon has no opacity tokens, and theme tokens are opaque colors, so
+/// tinted layers fade as whole elements.
+/// @access private
+$ccs-annotation-opacity: 0.6 !default;
+
+/// Columns cover the whole viewport, so they fade at half that strength.
+/// @access private
+$ccs-grid-overlay-opacity: $ccs-annotation-opacity * 0.5;
+
+/// GridOverlay: a fixed, full-viewport, non-interactive overlay for checking
+/// layout against the real breakpoint grid and a baseline rhythm.
 /// @access private
 /// @group components
 @mixin grid-overlay {
+  // Every color is a Carbon theme token, set as a custom property so it
+  // can be overridden. Columns use the selection pair, `$highlight` for
+  // fills and `$interactive-04` for lines; rows use the magenta Tag pair,
+  // the light background for every row and the dark text color for the
+  // stronger rows.
   .#{$prefix}--grid-overlay {
+    --ccs-grid-overlay-fill: #{$highlight};
+    --ccs-grid-overlay-ink: #{$interactive-04};
+    --ccs-grid-overlay-row: #{get-token-value($tag-colors, "tag-background-magenta")};
+    --ccs-grid-overlay-row-strong: #{get-token-value($tag-colors, "tag-color-magenta")};
+
     position: fixed;
     inset: 0;
     // One above the highest layer in $z-indexes, so the overlay sits over
     // dropdowns and modals.
     z-index: z("dropdown") + 1;
     pointer-events: none;
+  }
+
+  .#{$prefix}--grid-overlay__grid {
+    height: 100%;
   }
 
   // Each column draws only its left edge and the row draws the right edge,
@@ -26,59 +55,206 @@
 
   .#{$prefix}--grid-overlay__col {
     position: relative;
-    // Literal color, not a theme token: the overlay must read the same in
-    // every theme, not shift with the page it is drawn over.
-    background-color: rgba(15, 98, 254, 0.1);
   }
 
+  // Each column has two faded layers: `::after` tints the whole column and
+  // draws its left edge; `::before` repeats the tint over the gutters only,
+  // so where the layers overlap the gutters read a step darker.
   .#{$prefix}--grid-overlay__col::before,
+  .#{$prefix}--grid-overlay__col::after,
   .#{$prefix}--grid-overlay__row::after {
     position: absolute;
     top: 0;
     bottom: 0;
     content: "";
+    opacity: $ccs-grid-overlay-opacity;
   }
 
   // Physical sides: every column's left edge plus the row's right edge
   // covers each boundary in either direction.
-  .#{$prefix}--grid-overlay__col::before {
+  .#{$prefix}--grid-overlay__col::after {
+    right: 0;
     left: 0;
-    border-left: 1px dashed rgba(15, 98, 254, 0.4);
+    border-left: 1px dashed var(--ccs-grid-overlay-ink);
+    background-color: var(--ccs-grid-overlay-fill);
   }
 
   .#{$prefix}--grid-overlay__row::after {
     right: 0;
-    border-right: 1px dashed rgba(15, 98, 254, 0.4);
+    border-right: 1px dashed var(--ccs-grid-overlay-ink);
   }
 
-  // Shade each column's padding (its gutter) on top of the column tint.
   // The stop widths repeat the column padding from carbon--make-col-ready,
   // built from the same gutter variables. That padding is physical
   // (padding-left/right), so the gradient runs `to right` in RTL too.
   .#{$prefix}--grid-overlay--gutters .#{$prefix}--grid-overlay__col {
     --ccs-grid-overlay-gutter-left: #{$carbon--grid-gutter * 0.5};
     --ccs-grid-overlay-gutter-right: #{$carbon--grid-gutter * 0.5};
+  }
 
+  .#{$prefix}--grid-overlay--gutters .#{$prefix}--grid-overlay__col::before {
+    right: 0;
+    left: 0;
     background-image: linear-gradient(
       to right,
-      rgba(15, 98, 254, 0.15) var(--ccs-grid-overlay-gutter-left),
+      var(--ccs-grid-overlay-fill) var(--ccs-grid-overlay-gutter-left),
       transparent var(--ccs-grid-overlay-gutter-left),
       transparent calc(100% - var(--ccs-grid-overlay-gutter-right)),
-      rgba(15, 98, 254, 0.15) calc(100% - var(--ccs-grid-overlay-gutter-right))
+      var(--ccs-grid-overlay-fill)
+        calc(100% - var(--ccs-grid-overlay-gutter-right))
     );
   }
 
-  .#{$prefix}--grid-overlay--gutters.#{$prefix}--grid--condensed
+  .#{$prefix}--grid-overlay--gutters
+    .#{$prefix}--grid--condensed
     .#{$prefix}--grid-overlay__col {
     --ccs-grid-overlay-gutter-left: #{$carbon--grid-gutter--condensed * 0.5};
     --ccs-grid-overlay-gutter-right: #{$carbon--grid-gutter--condensed * 0.5};
   }
 
   // Narrow wins over condensed, matching the column padding rules' order.
-  .#{$prefix}--grid-overlay--gutters.#{$prefix}--grid--narrow
+  .#{$prefix}--grid-overlay--gutters
+    .#{$prefix}--grid--narrow
     .#{$prefix}--grid-overlay__col {
     --ccs-grid-overlay-gutter-left: 0;
     --ccs-grid-overlay-gutter-right: #{$carbon--grid-gutter * 0.5};
+  }
+
+  // Margins: everything outside the row's box. The row's negative margins
+  // cancel the grid's inner padding, so its edges are the outer column
+  // edges; the rest of the viewport is grid margin (plus any space past
+  // the grid's max-width). Fixed boxes never add scrollable overflow, so
+  // the 100vw bands are safe.
+  .#{$prefix}--grid-overlay__margin {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100vw;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--ccs-grid-overlay-ink) 0 1px,
+      transparent 1px $carbon--spacing-03
+    );
+    opacity: $ccs-grid-overlay-opacity;
+  }
+
+  .#{$prefix}--grid-overlay__margin--start {
+    right: 100%;
+  }
+
+  .#{$prefix}--grid-overlay__margin--end {
+    left: 100%;
+  }
+
+  .#{$prefix}--grid-overlay__number {
+    @include type-style("label-01");
+
+    // Above the column's tint layer.
+    position: relative;
+    z-index: 1;
+    display: block;
+    padding-top: $carbon--spacing-02;
+    color: var(--ccs-grid-overlay-ink);
+    text-align: center;
+  }
+
+  // Baseline rows: two stacked 1px-line patterns, the major one repeating
+  // every `step * emphasis`. The layer's top and the pattern's shift are
+  // set from script, so the first row sits at the requested offset and
+  // follows the page as it scrolls.
+  .#{$prefix}--grid-overlay__baseline {
+    position: absolute;
+    top: var(--ccs-grid-overlay-baseline-top, 0);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image:
+      linear-gradient(
+        to bottom,
+        var(--ccs-grid-overlay-row-strong) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--ccs-grid-overlay-row) 1px, transparent 1px);
+    opacity: $ccs-annotation-opacity;
+    background-position: 0 var(--ccs-grid-overlay-baseline-shift, 0);
+    background-size:
+      100% var(--ccs-grid-overlay-baseline-major),
+      100% var(--ccs-grid-overlay-baseline-step);
+  }
+
+  // Text baselines: one 1px mark under each line of text, at its glyph
+  // baseline. Marks are placed in page coordinates and the layer is
+  // translated by the scroll position from script.
+  .#{$prefix}--grid-overlay__text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(
+      var(--ccs-grid-overlay-text-x, 0),
+      var(--ccs-grid-overlay-text-y, 0)
+    );
+  }
+
+  .#{$prefix}--grid-overlay__text-mark {
+    position: absolute;
+    height: 0;
+    // Support tokens: info without rows, success on a row, error off one.
+    border-top: 1px solid $support-04;
+  }
+
+  .#{$prefix}--grid-overlay__text-mark--on {
+    border-top-color: $support-02;
+  }
+
+  .#{$prefix}--grid-overlay__text-mark--off {
+    border-top-color: $support-01;
+  }
+
+  // Same shape as LayoutInspector's annotation labels: a small Carbon Tag
+  // in the red Tag token pair.
+  .#{$prefix}--grid-overlay__text-delta {
+    @include type-style("label-01");
+
+    position: absolute;
+    top: 0;
+    left: 100%;
+    display: inline-flex;
+    min-height: to-rem(18px);
+    align-items: center;
+    padding: 0 $carbon--spacing-03;
+    margin-left: $carbon--spacing-02;
+    background-color: get-token-value($tag-colors, "tag-background-red");
+    border-radius: to-rem(15px);
+    color: get-token-value($tag-colors, "tag-color-red");
+    font-variant-numeric: tabular-nums;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  // Breakpoint badge: Tooltip chrome (inverse tokens, 2px radius, the
+  // standard shadow) with `label-01` type, like LayoutInspector's summary.
+  .#{$prefix}--grid-overlay__label {
+    @include box-shadow;
+    @include type-style("label-01");
+
+    position: absolute;
+    right: $carbon--spacing-03;
+    bottom: $carbon--spacing-03;
+    display: flex;
+    align-items: baseline;
+    padding: $carbon--spacing-02 $carbon--spacing-04;
+    background-color: $inverse-02;
+    border-radius: to-rem(2px);
+    color: $inverse-01;
+    font-variant-numeric: tabular-nums;
+    gap: $carbon--spacing-04;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--grid-overlay__label strong {
+    @include type-style("heading-01");
+
+    text-transform: uppercase;
   }
 }
 
