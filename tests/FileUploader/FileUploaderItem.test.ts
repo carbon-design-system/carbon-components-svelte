@@ -293,4 +293,16 @@ describe("FileUploaderItem", () => {
     });
     vi.restoreAllMocks();
   });
+
+  it("should disable the remove button when disabled", async () => {
+    const ondelete = vi.fn();
+    render(FileUploaderItem, {
+      props: { name: "test.txt", status: "edit", disabled: true, ondelete },
+    });
+
+    const remove = screen.getByRole("button", { name: /remove file/i });
+    expect(remove).toBeDisabled();
+    await user.click(remove);
+    expect(ondelete).not.toHaveBeenCalled();
+  });
 });

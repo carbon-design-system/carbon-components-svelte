@@ -387,3 +387,17 @@
 @include exports('file-uploader-xs') {
   @include file-uploader-xs;
 }
+
+// carbon-components-svelte patch (disabled rows)
+// A disabled uploader also disables each row's remove button.
+.#{$prefix}--file__selected-file--disabled .#{$prefix}--file-filename {
+  color: $disabled-02;
+}
+
+.#{$prefix}--file__state-container .#{$prefix}--file-close:disabled {
+  cursor: not-allowed;
+}
+
+.#{$prefix}--file__state-container .#{$prefix}--file-close:disabled svg path {
+  fill: $disabled-02;
+}
