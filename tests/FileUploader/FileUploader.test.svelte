@@ -24,6 +24,7 @@
   export let disabled: ComponentProps<FileUploader>["disabled"] = false;
   export let accept: ComponentProps<FileUploader>["accept"] = [];
   export let capture: ComponentProps<FileUploader>["capture"] = undefined;
+  export let directory: ComponentProps<FileUploader>["directory"] = false;
   export let multiple: ComponentProps<FileUploader>["multiple"] = true;
   export let status: ComponentProps<FileUploader>["status"] = "edit";
   export let labelTitle: ComponentProps<FileUploader>["labelTitle"] = "";
@@ -59,6 +60,7 @@
     {disabled}
     {accept}
     {capture}
+    {directory}
     {labelTitle}
     {labelDescription}
     {name}
