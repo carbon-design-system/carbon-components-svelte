@@ -12,6 +12,12 @@ export const FORM_CONTEXT_KEY = "carbon:Form";
  */
 export const FORM_SIZE_CONTEXT_KEY = "carbon:FormSize";
 
+/**
+ * Set by `FormItem`; read by `FormLabel`, `FormHelperText`, and
+ * `FormRequirement` to derive ids from the item's control.
+ */
+export const FORM_ITEM_CONTEXT_KEY = "carbon:FormItem";
+
 /** Set by `Modal` and `ComposedModal`; read by overlays inside them. */
 export const MODAL_CONTEXT_KEY = "carbon:Modal";
 
