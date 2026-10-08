@@ -242,6 +242,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate the
+   * hidden `name` input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the button HTML element.
    * @bindable readonly
    */
@@ -735,7 +742,7 @@
     </label>
   {/if}
   {#if name}
-    <input type="hidden" {name} value={hiddenInputValue} {disabled}>
+    <input type="hidden" {name} value={hiddenInputValue} {disabled} {form}>
   {/if}
   <ListBox
     {type}
