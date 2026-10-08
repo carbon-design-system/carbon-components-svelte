@@ -70,7 +70,10 @@
    */
   export let fileSize = false;
 
-  /** Set to `true` to disable the file uploader */
+  /**
+   * Set to `true` to disable the file uploader.
+   * Also disables each file row's remove button.
+   */
   export let disabled = false;
 
   /**
@@ -423,6 +426,7 @@
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
+        class:bx--file__selected-file--disabled={disabled}
         class:bx--file__selected-file--xs={effectiveSize === "xs"}
       >
         <span class:bx--file-filename-group={true}>
@@ -438,6 +442,7 @@
             {iconDescription}
             status={rowStatus}
             invalid={rowInvalid}
+            {disabled}
             on:keydown
             on:keydown={(event) => {
               if (event.key === " " || event.key === "Enter") {
