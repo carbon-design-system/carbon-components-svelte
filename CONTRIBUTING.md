@@ -1169,7 +1169,9 @@ After the release is on NPM:
 
 2. Mark it as the latest release.
 
-3. On each related PR or issue, confirm the fix shipped. Future readers will want to know which version picked it up.
+3. Add screenshots for the release notes. The notes mark each spot with `<!-- screenshot: ... -->`; follow [Release screenshots](docs/release-screenshots.md) to generate them.
+
+4. On each related PR or issue, confirm the fix shipped. Future readers will want to know which version picked it up.
 
 ```md
 Released in [v0.81.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.81.1).
