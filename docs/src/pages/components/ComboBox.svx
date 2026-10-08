@@ -357,7 +357,7 @@ By default, item height matches the menu row for each size: 24px (`xs`), 32px (`
 
 ## Events
 
-Listen for selection, dismissal, and clear interactions. The `scrollend` load-more event is documented separately; see [Load more](#load-more).
+Listen for selection, the menu opening and closing, and clear interactions. The `scrollend` load-more event is documented separately; see [Load more](#load-more).
 
 ### Select
 
@@ -370,6 +370,20 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Webhook"}
   ]}  />
+
+### Open
+
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing opened it), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a combo box rendered already open.
+
+<ComboBox
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:open={(e) => console.log(e.detail.trigger)}
+/>
 
 ### Close
 

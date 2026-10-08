@@ -302,7 +302,7 @@ Manage multiple dropdowns in a form with coordinated state.
 
 ## Events
 
-Respond to selection, clearing, and menu-close interactions.
+Respond to selection, clearing, and the menu opening and closing.
 
 ### Select
 
@@ -325,6 +325,21 @@ Use `on:clear` to listen for the clear ("x") button that appears once there is a
     {id: "2", text: "Fax"}]}"
     on:clear="{(e) => console.log(e.detail)}"
   />
+
+### Open
+
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing a filter opened it), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a multi-select rendered already open.
+
+<MultiSelect
+  labelText="Contact"
+  label="Select contact methods..."
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:open={(e) => console.log(e.detail.trigger)}
+/>
 
 ### Close
 

@@ -286,7 +286,7 @@ Create multiple dropdowns that work together.
 
 ## Events
 
-Respond to selection, clearing, and menu-close interactions.
+Respond to selection, clearing, and the menu opening and closing.
 
 ### Select
 
@@ -319,6 +319,20 @@ Use `on:clear` to listen for the selection being cleared, either via the clear b
     { id: "2", text: "Fax" },
   ]}
   on:clear={(e) => console.log(e)}
+/>
+
+### Open
+
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"` or `"keydown"`, or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a dropdown rendered already open.
+
+<Dropdown
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:open={(e) => console.log(e.detail.trigger)}
 />
 
 ### Close
