@@ -1333,6 +1333,7 @@
       name={itemInput.name ?? name ?? item.id}
       value={itemInput.value ?? (name ? item.id : "")}
       {disabled}
+      form={$$restProps.form}
     >
   {/each}
   {#if labelText || $$slots.labelChildren}
