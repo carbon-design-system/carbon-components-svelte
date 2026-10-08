@@ -32,6 +32,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the fieldset and radio button inputs with. Overrides each button's own `form`.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the legend text.
    * Alternatively, use the named slot "legendChildren".
    * @example
@@ -116,6 +123,7 @@
    */
   const selectedValue = writable(selected);
   const groupName = writable(name || undefined);
+  const groupForm = writable(form);
   // Unnamed radios are separate controls, so arrow keys would not move the
   // selection. Buttons with no name of their own share this one when the
   // group has no `name` either.
@@ -196,6 +204,7 @@
   setContext("carbon:RadioButtonGroup", {
     selectedValue,
     groupName: readOnly(groupName),
+    groupForm: readOnly(groupForm),
     fallbackName,
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
@@ -223,6 +232,7 @@
   });
 
   $: $groupName = name || undefined;
+  $: $groupForm = form;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;
@@ -268,6 +278,7 @@
   <fieldset
     bind:this={fieldsetRef}
     use:formReset={handleFormReset}
+    {form}
     role="radiogroup"
     aria-orientation={orientation}
     aria-readonly={readonly || undefined}
