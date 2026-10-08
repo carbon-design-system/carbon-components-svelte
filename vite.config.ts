@@ -8,8 +8,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Server-render tests compile `.svelte` for the server. A `vmThreads` worker
 // reuses the client build an earlier jsdom file compiled, so these files run
-// in their own `forks` project.
-const SSR_TESTS = ["**/*.ssr.test.ts", "utils/ssr.test.ts"];
+// in their own `forks` project. Hydration tests build their fixtures with
+// their own `vite.build()` calls and need a node environment too.
+const SSR_TESTS = [
+  "**/*.ssr.test.ts",
+  "**/*.hydrate.test.ts",
+  "utils/ssr.test.ts",
+];
 
 /**
  * `dev` left `undefined` (the default) omits `compilerOptions` entirely, so

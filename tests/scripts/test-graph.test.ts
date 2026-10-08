@@ -222,6 +222,16 @@ describe("parseDependencies", () => {
     ]);
   });
 
+  it("accepts a @depends-on declaration for a non-literal import", () => {
+    expect(
+      deps("tests/x.ts", "// @depends-on src/**\nconst m = await import(url);"),
+    ).toEqual({
+      files: [],
+      patterns: [String(globToRegExp("src/**"))],
+      unknown: [],
+    });
+  });
+
   it("maps e2e page.goto() to the fixture page", () => {
     expect(
       deps(
