@@ -50,18 +50,3 @@ export declare function shouldVirtualizeMenu(options: {
   items: ArrayLike<unknown>;
   virtualize: boolean | object | undefined;
 }): boolean;
-
-/**
- * Handle the `invalid` event of a required list box's validated input.
- * Returns whether the field should show its invalid state: after a submit
- * attempt, not when code calls `checkValidity()`. On a submit attempt, the
- * field is focused if it's the first invalid control in the form.
- */
-export declare function handleRequiredInvalid(
-  event: Event,
-  options: {
-    focusTarget: HTMLElement | null | undefined;
-    /** Cancel the event even when no state shows, for a hidden proxy input. */
-    proxy?: boolean;
-  },
-): boolean;
