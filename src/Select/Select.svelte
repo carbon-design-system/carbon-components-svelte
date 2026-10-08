@@ -94,6 +94,7 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -115,6 +116,9 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
   /**
    * @type {import("svelte/store").Writable<string | number | undefined>}
    */
@@ -268,6 +272,9 @@
       <div class:bx--select-input--inline__wrapper={true}>
         <div
           class:bx--select-input__wrapper={true}
+          class:bx--select-input__wrapper--decorator={$$slots.decorator &&
+            !isFluid}
+          class:bx--select-input__wrapper--ai-label={$aiLabelState === "active"}
           data-invalid={showInvalid || undefined}
         >
           <select
@@ -295,6 +302,15 @@
             <slot />
           </select>
           <ChevronDown class="bx--select__arrow" />
+          {#if $$slots.decorator}
+            <Decorator
+              class="bx--field-decorator bx--select__inner-wrapper--decorator"
+              size={effectiveSize}
+              state={aiLabelState}
+            >
+              <slot name="decorator" />
+            </Decorator>
+          {/if}
           {#if showInvalid}
             <WarningFilled class="bx--select__invalid-icon" />
           {/if}
@@ -333,6 +349,9 @@
     {#if !inline}
       <div
         class:bx--select-input__wrapper={true}
+        class:bx--select-input__wrapper--decorator={$$slots.decorator &&
+          !isFluid}
+        class:bx--select-input__wrapper--ai-label={$aiLabelState === "active"}
         data-invalid={showInvalid || undefined}
       >
         <select
@@ -360,6 +379,15 @@
           <slot />
         </select>
         <ChevronDown class="bx--select__arrow" />
+        {#if $$slots.decorator}
+          <Decorator
+            class="bx--field-decorator bx--select__inner-wrapper--decorator"
+            size={effectiveSize}
+            state={aiLabelState}
+          >
+            <slot name="decorator" />
+          </Decorator>
+        {/if}
         {#if showInvalid}
           <WarningFilled class="bx--select__invalid-icon" />
         {/if}

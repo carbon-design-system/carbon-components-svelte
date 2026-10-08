@@ -82,7 +82,10 @@
   /** Specify the icon name attribute */
   export let iconName = "";
 
-  /** Specify the ARIA label for the toggletip button */
+  /**
+   * Specify the ARIA label for the toggletip button.
+   * Set to `""` to name the button by its content instead.
+   */
   export let iconDescription = "Show information";
 
   /**
@@ -104,6 +107,12 @@
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
+
+  /**
+   * Specify a class for the popover.
+   * The class is also applied when the popover is portalled.
+   */
+  export let popoverClass = undefined;
 
   /**
    * Set an id for the toggletip element.
@@ -236,7 +245,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       bind:this={ref}
       type="button"
       class:bx--toggletip-button={true}
-      aria-label={iconDescription}
+      aria-label={iconDescription || undefined}
       aria-expanded={open}
       aria-controls={contentId}
       aria-describedby={open ? contentId : undefined}
@@ -253,6 +262,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
         id={contentId}
         caret
         highContrast
+        class={popoverClass}
         style={popoverStyle}
       >
         <div class:bx--toggletip-content={true}>
@@ -285,6 +295,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       id={contentId}
       caret
       highContrast
+      class={popoverClass}
       style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(popoverAlign)}"
     >
       <!-- svelte-ignore a11y-no-static-element-interactions -->

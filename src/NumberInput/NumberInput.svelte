@@ -197,6 +197,8 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -234,6 +236,9 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 
   function updateValue(isIncrementing, multiplier = 1) {
     // When the input is empty (null) or zero and stepStartValue is set,
@@ -518,6 +523,8 @@
     <div
       class:bx--number__input-wrapper={true}
       class:bx--number__input-wrapper--warning={showWarn}
+      class:bx--number__input-wrapper--decorator={$$slots.decorator && !isFluid}
+      class:bx--number__input-wrapper--ai-label={$aiLabelState === "active"}
     >
       {#if useTextMode}
         {#if name}
@@ -631,6 +638,15 @@
             class="bx--number__invalid bx--number__invalid--warning"
           />
         {/if}
+      {/if}
+      {#if $$slots.decorator}
+        <Decorator
+          class="bx--field-decorator bx--number__inner-wrapper--decorator"
+          size={effectiveSize}
+          state={aiLabelState}
+        >
+          <slot name="decorator" />
+        </Decorator>
       {/if}
       {#if !hideSteppers}
         <div class:bx--number__controls={true}>

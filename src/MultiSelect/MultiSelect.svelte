@@ -399,6 +399,8 @@
     setContext,
     tick,
   } from "svelte";
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import {
     FORM_CONTEXT_KEY,
@@ -467,6 +469,9 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: effectivePortalMenu =
@@ -1287,6 +1292,8 @@
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
+    $$slots.decorator && !isFluid && "bx--list-box--decorator",
+    $aiLabelState === "active" && "bx--list-box--ai-label",
     direction === "top" && "bx--list-box--up",
     filterable && "bx--combo-box",
     filterable && "bx--multi-select--filterable",
@@ -1383,6 +1390,15 @@
       <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
+    {/if}
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--field-decorator bx--list-box__inner-wrapper--decorator"
+        size={effectiveSize}
+        state={aiLabelState}
+      >
+        <slot name="decorator" />
+      </Decorator>
     {/if}
     {#if filterable}
       <div

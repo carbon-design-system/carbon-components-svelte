@@ -20,3 +20,9 @@ export const MODAL_CONTEXT_KEY = "carbon:Modal";
  * so items register with either parent.
  */
 export const PROFILE_MENU_CONTEXT_KEY = "carbon:ProfileMenu";
+
+/**
+ * Set by fields that render a `decorator` slot; read by `AILabel` to size
+ * itself for the field and report its state back.
+ */
+export const AI_LABEL_HOST_CONTEXT_KEY = "carbon:AILabelHost";

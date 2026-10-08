@@ -107,6 +107,8 @@
   export let selectTextOnFocus = false;
 
   import { afterUpdate, getContext, onMount, tick } from "svelte";
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -122,6 +124,9 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: counterId = `counter-${id}`;
@@ -343,6 +348,8 @@
     class:bx--text-area__wrapper={true}
     class:bx--text-area__wrapper--readonly={readonly}
     class:bx--text-area__wrapper--warn={showWarn}
+    class:bx--text-area__wrapper--decorator={$$slots.decorator && !isFluid}
+    class:bx--text-area__wrapper--ai-label={$aiLabelState === "active"}
     data-invalid={showInvalid || undefined}
     data-warn={showWarn || undefined}
   >
@@ -387,6 +394,14 @@
       on:paste
       on:beforeinput={handleBeforeInput}
     ></textarea>
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--field-decorator bx--text-area__inner-wrapper--decorator"
+        state={aiLabelState}
+      >
+        <slot name="decorator" />
+      </Decorator>
+    {/if}
     {#if isFluid}
       <hr class:bx--text-area__divider={true}>
       {#if showInvalid}

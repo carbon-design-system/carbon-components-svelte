@@ -111,6 +111,8 @@
   export let selectTextOnFocus = false;
 
   import { getContext, tick } from "svelte";
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import Calendar from "../icons/Calendar.svelte";
   import Close from "../icons/Close.svelte";
@@ -128,6 +130,9 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 
   const {
     range,
@@ -255,6 +260,9 @@
     class:bx--date-picker-input__wrapper--warn={showWarn}
     class:bx--date-picker-input__wrapper--readonly={readonly}
     class:bx--date-picker-input__wrapper--disabled={disabled}
+    class:bx--date-picker-input__wrapper--decorator={$$slots.decorator &&
+      !$isFluid}
+    class:bx--date-picker-input__wrapper--ai-label={$aiLabelState === "active"}
   >
     <input
       bind:this={ref}
@@ -342,6 +350,15 @@
       <WarningAltFilled
         class="bx--date-picker__icon bx--date-picker__icon--warn"
       />
+    {/if}
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--field-decorator bx--date-picker-input-inner-wrapper--decorator"
+        size={effectiveSize}
+        state={aiLabelState}
+      >
+        <slot name="decorator" />
+      </Decorator>
     {/if}
     {#if showCalendarIcon}
       <Calendar

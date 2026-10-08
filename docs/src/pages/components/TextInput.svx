@@ -4,7 +4,7 @@ description: Text inputs provide a single-line field for short text like usernam
 ---
 
 <script>
-  import { TextInput, TextInputSkeleton, FluidTextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, TextInput, TextInputSkeleton, FluidTextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -70,6 +70,16 @@ The bound valueâ€”and the event detail dispatched by `on:input` and `on:change`â
 Set `selectTextOnFocus` to select the full value when the field receives focus.
 
 <TextInput selectTextOnFocus labelText="Workspace name" value="acme-production" />
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<TextInput labelText="Workspace name" value="analytics-prod">
+  <AILabel slot="decorator">
+    <p>Suggested from the project you selected.</p>
+  </AILabel>
+</TextInput>
 
 ## Light
 
