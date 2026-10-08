@@ -172,9 +172,11 @@
   /**
    * Specify the size of the file uploader button.
    * At `"xs"`, the file rows are extra small too.
+   * Inherits the height of the parent `Form` size when unset,
+   * otherwise defaults to `"small"`.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
-  export let size = "small";
+  export let size = undefined;
 
   /** Specify the button label */
   export let buttonLabel = "";
@@ -203,8 +205,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, getContext, tick } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -212,6 +216,9 @@
   import FileUploaderButton from "./FileUploaderButton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
 
   let prevFiles = [];
 
@@ -320,7 +327,7 @@
     {name}
     {multiple}
     {kind}
-    {size}
+    size={effectiveSize}
     bind:ref
     bind:files
     on:change={(event) => {
@@ -376,7 +383,7 @@
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
-        class:bx--file__selected-file--xs={size === "xs"}
+        class:bx--file__selected-file--xs={effectiveSize === "xs"}
       >
         <span class:bx--file-filename-group={true}>
           <p class:bx--file-filename={true} use:overflowTitle>{file.name}</p>
