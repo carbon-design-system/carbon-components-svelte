@@ -212,6 +212,12 @@ Use the small size variant for selectable tags.
 
 <SelectableTag size="sm">Compliant</SelectableTag>
 
+### Large
+
+Use the large size variant for selectable tags.
+
+<SelectableTag size="lg">Compliant</SelectableTag>
+
 ## Skeleton
 
 Use `TagSkeleton` to show a loading state with the default size.
