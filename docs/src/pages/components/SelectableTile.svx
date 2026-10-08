@@ -23,6 +23,13 @@ Group multiple selectable tiles together for multi-selection scenarios.
   </SelectableTile>
 </SelectableTileGroup>
 
+## Values
+
+| Do | Why |
+| --- | --- |
+| Give every tile a unique `value` | Tiles that share a value, including tiles that leave out `value`, select together. The group logs a warning when it finds a shared value. |
+| Remove a value from `selected` yourself when its tile goes away | Unmounting a tile, for example while filtering a list, keeps its value in `selected`, so the choice survives the filter. |
+
 ## Selection
 
 Hold <DocKbd label="Shift" /> while clicking a tile, or while pressing <DocKbd label="Enter" /> or <DocKbd label="Space" /> on a focused tile, to apply its new checked state to every tile between it and the last tile toggled. Disabled tiles are skipped.
@@ -46,7 +53,9 @@ Hold <DocKbd label="Shift" /> while clicking a tile, or while pressing <DocKbd l
 
 ### One-way binding
 
-Update selected values using the `select` and `deselect` events.
+Pass `selected` to `SelectableTileGroup` and update it from the `change` event, which fires once per toggle or range with every selected value. For per-tile reactions, `select` and `deselect` fire once for each tile that changes, including every tile in a range.
+
+Inside a group, the group's `selected` is the source of truth. A tile's own `selected` prop only sets its initial state, so update the group's array rather than each tile.
 
 <FileSource src="/framed/SelectableTile/SelectableTileReactiveOneWay" />
 
@@ -129,7 +138,7 @@ Disable specific tiles to prevent interaction.
 
 ### Entire group
 
-Disable every tile at once by setting `disabled` on `SelectableTileGroup`. This prevents selection natively through the underlying `fieldset`, but doesn't apply the muted disabled tile styling shown above—set `disabled` on each `SelectableTile` too for the visual state.
+Disable every tile at once by setting `disabled` on `SelectableTileGroup`. The underlying `fieldset` prevents selection, and each tile takes the disabled styling.
 
 <SelectableTileGroup legendText="Deployment regions" name="options-disabled-group" selected={["us-east-1", "us-west-2"]} disabled>
   <SelectableTile value="us-east-1">
@@ -145,7 +154,7 @@ Disable every tile at once by setting `disabled` on `SelectableTileGroup`. This 
 
 ## Checkmark label
 
-Customize the ARIA label announced for a tile's checkmark icon with `iconDescription`. Defaults to `"Tile checkmark"`.
+Set `iconDescription` to change the checkmark icon's tooltip, shown on hover. Defaults to `"Tile checkmark"`. Screen readers skip the icon and announce the checked state from the tile's checkbox.
 
 <SelectableTileGroup legendText="Deployment regions" name="options-checkmark-label" selected={["us-east-1"]}>
   <SelectableTile iconDescription="US East (N. Virginia) selected" value="us-east-1">

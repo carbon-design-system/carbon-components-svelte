@@ -1,6 +1,10 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import type SelectableTileComponent from "carbon-components-svelte/Tile/SelectableTile.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import SelectableTileTest from "./SelectableTile.test.svelte";
+import SelectableTileAria from "./SelectableTileAria.test.svelte";
+import SelectableTileChange from "./SelectableTileChange.test.svelte";
 import SelectableTileStandalone from "./SelectableTileStandalone.test.svelte";
 
 describe("SelectableTile", () => {
@@ -102,6 +106,17 @@ describe("SelectableTile", () => {
     expect(input).toBeDisabled();
   });
 
+  it("applies aria-describedby and aria-labelledby to the checkbox, not the label", () => {
+    render(SelectableTileAria);
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).toHaveAccessibleDescription("Billed monthly");
+    expect(checkbox).toHaveAccessibleName("Standard plan");
+
+    const tile = screen.getByTestId("tile");
+    expect(tile).not.toHaveAttribute("aria-describedby");
+    expect(tile).not.toHaveAttribute("aria-labelledby");
+  });
+
   it("hides the checkmark icon from assistive technology", () => {
     render(SelectableTileTest);
 
@@ -148,6 +163,32 @@ describe("SelectableTile", () => {
       expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
     });
 
+    it("forwards the input's change event after updating selected", async () => {
+      const onChange = vi.fn();
+      render(SelectableTileChange, { onChange });
+
+      await user.click(screen.getByRole("checkbox"));
+      expect(onChange).toHaveBeenCalledWith(true, true);
+
+      await user.click(screen.getByRole("checkbox"));
+      expect(onChange).toHaveBeenLastCalledWith(false, false);
+    });
+
+    it("toggles once when Enter is held down", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SelectableTileTest);
+      const checkbox = screen.getByRole("checkbox");
+      checkbox.focus();
+
+      await fireEvent.keyDown(checkbox, { key: "Enter" });
+      await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
+      await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
+
+      expect(checkbox).toBeChecked();
+      expect(consoleLog).toHaveBeenCalledTimes(1);
+      expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
+    });
+
     it("handles keyboard deselection", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(SelectableTileTest, { selected: true });
@@ -155,6 +196,21 @@ describe("SelectableTile", () => {
       await user.keyboard("{Tab}");
       await user.keyboard("{Enter}");
       expect(consoleLog).toHaveBeenCalledWith("deselect", expect.any(String));
+    });
+  });
+
+  describe("Generics", () => {
+    it("narrows value to a custom string literal type", () => {
+      type Region = "us-east-1" | "us-west-2";
+      type Props = ComponentProps<SelectableTileComponent<Region>>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<Region | undefined>();
+    });
+
+    it("defaults value to string when the generic is not specified", () => {
+      type Props = ComponentProps<SelectableTileComponent>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<string | undefined>();
     });
   });
 });
