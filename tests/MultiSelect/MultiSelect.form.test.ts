@@ -4,6 +4,7 @@ import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import { openMenu } from "./helpers";
 import MultiSelectForm from "./MultiSelect.form.test.svelte";
+import MultiSelectFormAttribute from "./MultiSelect.formAttribute.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -285,5 +286,11 @@ describe("MultiSelect native form serialization", () => {
     const formData = new FormData(getForm());
     expect(formData.has("0")).toBe(true);
     expect(formData.has("149")).toBe(true);
+  });
+
+  it("submits with the form named by the `form` attribute", () => {
+    render(MultiSelectFormAttribute);
+
+    expect(new FormData(getForm()).getAll("contact")).toEqual(["0", "1"]);
   });
 });
