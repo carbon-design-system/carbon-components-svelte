@@ -33,6 +33,8 @@
   export let buttonLabel: ComponentProps<FileUploader>["buttonLabel"] =
     "Add files";
   export let name: ComponentProps<FileUploader>["name"] = "";
+  export let minFileSize: ComponentProps<FileUploader>["minFileSize"] =
+    undefined;
   export let maxFileSize: ComponentProps<FileUploader>["maxFileSize"] =
     undefined;
   export let preventDuplicate: ComponentProps<FileUploader>["preventDuplicate"] = false;
@@ -61,6 +63,7 @@
     {labelTitle}
     {labelDescription}
     {name}
+    {minFileSize}
     {maxFileSize}
     {preventDuplicate}
     {orderFiles}

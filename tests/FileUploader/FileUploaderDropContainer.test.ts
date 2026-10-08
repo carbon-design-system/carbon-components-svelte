@@ -564,6 +564,27 @@ describe("FileUploaderDropContainer", () => {
     expect(event.detail[0].reason).toBe("invalid");
   });
 
+  it("should reject dropped files under minFileSize", async () => {
+    const rejectedHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: { multiple: true, minFileSize: 1, onrejected: rejectedHandler },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+    const empty = new File([], "empty.txt");
+    dropDiv.dispatchEvent(
+      createDragEvent("drop", [empty, new File(["a"], "a.txt")]),
+    );
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalledTimes(1);
+    });
+    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+      { file: empty, reason: "size" },
+    ]);
+  });
+
   it("should reject oversized files with reason size", async () => {
     const rejectedHandler = vi.fn();
     const changeHandler = vi.fn();
