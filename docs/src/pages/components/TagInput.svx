@@ -1,0 +1,147 @@
+---
+components: ["TagInput"]
+description: Tag inputs turn typed or pasted text into dismissible tags, for keywords, labels, recipients, and other lists of short values.
+---
+
+<script>
+  import { TagInput } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Type a value and press <DocKbd label="Enter" /> or type a comma to add it as a tag. Bind `value` to read or set the tags as an array of strings.
+
+To remove a tag, click its close button. From the keyboard, press <DocKbd label="Backspace" /> or <DocKbd label="ArrowLeft" /> at the start of the field to move to the tags, then <DocKbd label="Delete" /> or <DocKbd label="Backspace" /> to remove the focused one. The tags are a single tab stop: the arrow keys move between them, and <DocKbd label="Escape" />, <DocKbd label="End" />, or <DocKbd label="ArrowRight" /> on the last tag return to the field. Holding <DocKbd label="Backspace" /> to clear the text stops at the start of the field instead of running on into the tags.
+
+<FileSource src="/framed/TagInput/TagInputReactive" />
+
+| Do | Why |
+| --- | --- |
+| Use for open-ended values users type themselves, like keywords or email addresses | Tags show each value on its own and make it easy to remove one |
+| Use `MultiSelect` when the values come from a known list | A list of options is faster to scan than typing, and avoids typos |
+| Keep tags short | Long tags truncate at 13rem and show their full text on hover |
+
+## Adding tags
+
+### Delimiters
+
+Set `delimiter` to a string, an array of strings, or a regular expression. Typed text splits on it as you type. <DocKbd label="Enter" /> always adds the current text.
+
+<TagInput labelText="Keywords" placeholder="Separate with commas or semicolons" delimiter={[",", ";"]} />
+
+### Pasting lists
+
+Pasted text splits on the delimiter and on line breaks, so a column copied from a spreadsheet becomes one tag per row. Set `addOnPaste` to `false` to paste text as-is.
+
+<TagInput labelText="Allowed domains" placeholder="Paste a list of domains" />
+
+### Adding on blur
+
+Set `addOnBlur` to add any text left in the field when it loses focus.
+
+<TagInput labelText="Topics" placeholder="Add a topic" addOnBlur />
+
+### Normalizing
+
+Set `normalize` to transform text before it's checked and added. The default trims whitespace.
+
+<TagInput labelText="Hashtags" placeholder="Add a hashtag" normalize={(raw) => raw.trim().toLowerCase().replace(/^#/, "")} />
+
+## Validation
+
+A rejected value stays in the field with an inline message, so the user can fix it. Each rejection also dispatches `invalid` with the value and a `reason`.
+
+### Duplicates
+
+Duplicates are rejected by default, compared case-insensitively. Set `isDuplicate` to change the comparison, or `allowDuplicates` to accept repeats. Set `duplicateText` to change the message.
+
+<TagInput labelText="Topics" value={["Svelte"]} placeholder="Try adding svelte" />
+
+### Maximum
+
+Set `max` to cap the number of tags. Set `maxText` to change the message.
+
+<TagInput labelText="Top three skills" value={["Svelte", "TypeScript"]} max={3} placeholder="Add a skill" />
+
+### Custom validation
+
+Set `validate` to check each value. Return `true` to accept it, or a message to reject it.
+
+<TagInput
+  labelText="Recipients"
+  placeholder="Add an email address"
+  validate={(tag) => /^[^\s@]+@[^\s@]+$/.test(tag) || "Enter a valid email address"}
+/>
+
+## Tag colors
+
+Set `tagProps` to a function that returns props for each tag, such as a color `type`.
+
+<TagInput
+  labelText="Environments"
+  value={["production", "staging", "dev"]}
+  tagProps={(tag) => ({ type: tag === "production" ? "red" : "gray" })}
+/>
+
+## Placement
+
+### Below the field
+
+Set `tagPlacement` to `"below"` to list the tags under the field instead of inside it. Use it for long lists, so the field keeps a fixed height.
+
+<TagInput labelText="Topics" value={["Svelte", "TypeScript", "Carbon"]} tagPlacement="below" placeholder="Add a topic" />
+
+## Sizes
+
+Set `size` to match the surrounding fields. Tags scale with the field. Inside a `Form`, the field takes the form's `size` unless it sets its own.
+
+### Extra small
+
+<TagInput size="xs" labelText="Topics" value={["Svelte", "TypeScript"]} />
+
+### Small
+
+<TagInput size="sm" labelText="Topics" value={["Svelte", "TypeScript"]} />
+
+### Extra large
+
+<TagInput size="xl" labelText="Topics" value={["Svelte", "TypeScript"]} />
+
+## States
+
+### Invalid
+
+<TagInput labelText="Recipients" value={["ada@example.com"]} invalid invalidText="Add at least two recipients" />
+
+### Warning
+
+<TagInput labelText="Recipients" value={["ada@example.com"]} warn warnText="One recipient is outside your organization" />
+
+### Read-only
+
+A read-only field shows its tags without close buttons.
+
+<TagInput labelText="Topics" value={["Svelte", "TypeScript"]} readonly />
+
+### Disabled
+
+<TagInput labelText="Topics" value={["Svelte", "TypeScript"]} disabled />
+
+## Forms
+
+Set `name` to submit each tag as its own form value under that name. The text still being typed is not submitted. A form reset restores the tags the field started with. Set `required` to require at least one tag.
+
+<FileSource src="/framed/TagInput/TagInputForm" />
+
+## Events
+
+`add` and `remove` fire before a tag is added or removed. Both are cancelable: call `preventDefault()` to stop the change. `change` fires after, with the new array of tags.
+
+<TagInput
+  labelText="Topics"
+  placeholder="Add a topic"
+  on:add={(e) => console.log(e.detail)} // { value, source }
+  on:remove={(e) => console.log(e.detail)} // { value, index }
+  on:invalid={(e) => console.log(e.detail)} // { value, reason, message }
+  on:change={(e) => console.log(e.detail)} // string[]
+/>
