@@ -523,8 +523,19 @@
     }
   }
 
+  /**
+   * Clears a ref when the child that declared it unmounts, unless another
+   * child has declared a newer one for the same key since.
+   * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
+   */
+  function releaseRef({ key, ref }) {
+    if (key === "field" && fieldRef === ref) fieldRef = null;
+    if (key === "selection" && selectionRef === ref) selectionRef = null;
+  }
+
   setContext("carbon:MultiSelect", {
     declareRef,
+    releaseRef,
   });
 
   /**

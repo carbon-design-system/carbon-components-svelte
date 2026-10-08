@@ -23,14 +23,23 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:MultiSelect");
 
+  // `bind:this` may already have nulled `ref` by the time the cleanup runs,
+  // so keep the node that was declared for `releaseRef`.
+  let declaredRef = null;
+
   $: if (ctx && ref) {
+    declaredRef = ref;
     ctx.declareRef({ key: "field", ref });
   }
+
+  onMount(() => () => {
+    if (declaredRef) ctx?.releaseRef?.({ key: "field", ref: declaredRef });
+  });
 
   $: ariaExpanded = $$props["aria-expanded"];
   $: menuId = `menu-${id}`;
