@@ -337,10 +337,18 @@
 
   /**
    * Set to `true` to require at least one selection. A wrapping `<form>`
-   * blocks submission, through native constraint validation, while no
-   * enabled item is selected.
+   * blocks submission while no enabled item is selected, and the field
+   * shows its invalid state with `requiredInvalidText` instead of the
+   * browser's error bubble.
    */
   export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required multi-select
+   * blocks submission. Cleared once an item is selected. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select at least one item";
 
   /**
    * Obtain a reference to the input HTML element.
@@ -521,6 +529,8 @@
   }
 
   let fieldFocused = false;
+  /** Set when a required, empty multi-select blocked form submission. */
+  let requiredError = false;
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   /** Row index (see `toRowIndex`) last scrolled into view. */
@@ -1183,7 +1193,7 @@
     showInvalid,
     showWarn,
     helperText,
-    invalidText,
+    invalidText: shownInvalidText,
     warnText,
     isFluid,
     errorId,
@@ -1216,8 +1226,11 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   // Invalid/warn states are suppressed when the multi-select is disabled or read-only.
+  $: if (!required || formItems.length > 0) requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled,
     readonly,
@@ -1461,7 +1474,7 @@
     id={comboId}
     {disabled}
     invalid={showInvalid}
-    invalidText={isFluid ? "" : invalidText}
+    invalidText={isFluid ? "" : shownInvalidText}
     invalidId={errorId}
     {open}
     {light}
@@ -1778,6 +1791,8 @@
         {disabled}
         {readonly}
         focusTarget={filterable ? inputRef : fieldRef}
+        on:invalid={() => (requiredError = true)}
+        on:reset={() => (requiredError = false)}
       />
     {/if}
     {#if open}
@@ -2035,8 +2050,10 @@
   {#if isFluid}
     <hr class:bx--list-box__divider={true}>
   {/if}
-  {#if isFluid && showInvalid && invalidText}
-    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {#if isFluid && showInvalid && shownInvalidText}
+    <div id={errorId} class:bx--form-requirement={true}>
+      {shownInvalidText}
+    </div>
   {/if}
   {#if isFluid && showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
