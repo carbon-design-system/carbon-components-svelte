@@ -72,6 +72,12 @@ Set `hasScrollingContent` on `ModalBody` to enable vertical scrolling for length
 
 <FileSource src="/framed/Modal/ComposedModalScrollingContent" />
 
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the modal's content as AI-generated. The label sits beside the close button, and the modal shows the AI surface.
+
+<FileSource src="/framed/Modal/ComposedModalAILabel" />
+
 ## Buttons
 
 Configure the footer actions.

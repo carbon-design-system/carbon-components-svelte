@@ -415,6 +415,7 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
@@ -1049,15 +1050,100 @@
 
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
-    (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
+    (hasRowDecorator ? 1 : 0) +
+    (expandable ? 1 : 0) +
+    (isSelectionEnabled ? 1 : 0) +
+    visibleHeaders.length;
+
+  /** Sort on a header click and dispatch the header click events. */
+  function handleHeaderClick(event, header) {
+    dispatch("click", { header });
+
+    if (isHeaderSortable(header)) {
+      const currentSortDirection =
+        sortKey === header.key ? sortDirection : "none";
+      const effectiveSortAlways = header.sortAlways ?? sortAlways;
+      const sortDirectionMap = effectiveSortAlways
+        ? {
+            none: "ascending",
+            ascending: "descending",
+            descending: "ascending",
+          }
+        : {
+            none: "ascending",
+            ascending: "descending",
+            descending: "none",
+          };
+      const nextSortDirection = sortDirectionMap[currentSortDirection];
+      const nextSortKey = nextSortDirection === "none" ? null : header.key;
+      const applySort = dispatch(
+        "sort",
+        { key: nextSortKey, direction: nextSortDirection },
+        { cancelable: true },
+      );
+      if (applySort) {
+        sortDirection = nextSortDirection;
+        sortKey = nextSortKey;
+      }
+      dispatch("click:header", {
+        header,
+        sortDirection: nextSortDirection,
+        target: event.target,
+        currentTarget: event.currentTarget,
+      });
+    } else {
+      dispatch("click:header", {
+        header,
+        target: event.target,
+        currentTarget: event.currentTarget,
+      });
+    }
+  }
+
+  $: hasRowDecorator = $$slots.rowDecorator;
+
+  // The title decorator has no AI surface, so its state is not read.
+  const titleAILabelState = { set() {} };
+
+  /**
+   * AI label state per row id, set by an `AILabel` in the `rowDecorator`
+   * slot. Mutated in place: a Map is always "changed" to Svelte, so `set`
+   * still notifies.
+   * @type {import("svelte/store").Writable<Map<Row["id"], "active" | "revert">>}
+   */
+  const rowAILabelStates = writable(new Map());
+  /** @type {Map<Row["id"], { set: (value: undefined | "active" | "revert") => void }>} */
+  const rowAILabelSetters = new Map();
+
+  /** @param {Row["id"]} rowId */
+  function rowAILabelState(rowId) {
+    let setter = rowAILabelSetters.get(rowId);
+    if (!setter) {
+      setter = {
+        set(value) {
+          rowAILabelStates.update((states) => {
+            if (value === undefined) states.delete(rowId);
+            else states.set(rowId, value);
+            return states;
+          });
+        },
+      };
+      rowAILabelSetters.set(rowId, setter);
+    }
+    return setter;
+  }
 </script>
 
 <TableContainer {id} {useStaticWidth} {...$$restProps}>
   {#if title ||
     $$slots.titleChildren ||
     description ||
-    $$slots.descriptionChildren}
-    <div class:bx--data-table-header={true}>
+    $$slots.descriptionChildren ||
+    $$slots.decorator}
+    <div
+      class:bx--data-table-header={true}
+      class:bx--data-table-header--decorator={$$slots.decorator}
+    >
       {#if title || $$slots.titleChildren}
         <slot
           name="titleChildren"
@@ -1077,6 +1163,15 @@
             {description}
           </p>
         </slot>
+      {/if}
+      {#if $$slots.decorator}
+        <Decorator
+          class="bx--data-table-header__decorator"
+          state={titleAILabelState}
+          labelSize="xs"
+        >
+          <slot name="decorator" />
+        </Decorator>
       {/if}
     </div>
   {/if}
@@ -1106,6 +1201,9 @@
     >
       {#if hasCustomHeaderWidth}
         <colgroup>
+          {#if hasRowDecorator}
+            <col>
+          {/if}
           {#if expandable}
             <col>
           {/if}
@@ -1121,6 +1219,11 @@
         style={virtualScrollContainer ? "position: sticky; top: 0;" : undefined}
       >
         <TableRow>
+          {#if hasRowDecorator}
+            <th scope="col" class:bx--table-column-decorator={true}>
+              <span class:bx--visually-hidden={true}>AI label</span>
+            </th>
+          {/if}
           {#if expandable}
             <th
               scope="col"
@@ -1221,64 +1324,44 @@
                 </th>
               {/if}
             {:else}
-              <TableHeader
-                id="{id}-{header.key}"
-                class={formatAlignClass(header.columnAlign)}
-                style={formatHeaderWidth(header)}
-                sortable={isHeaderSortable(header)}
-                sortDirection={sortKey === header.key ? sortDirection : "none"}
-                active={sortKey === header.key}
-                {...tableHeaderTranslateWithId
-                  ? { translateWithId: tableHeaderTranslateWithId }
-                  : {}}
-                on:click={(event) => {
-                  dispatch("click", { header });
-
-                  if (isHeaderSortable(header)) {
-                    const currentSortDirection =
-                      sortKey === header.key ? sortDirection : "none";
-                    const effectiveSortAlways = header.sortAlways ?? sortAlways;
-                    const sortDirectionMap = effectiveSortAlways
-                      ? {
-                          none: "ascending",
-                          ascending: "descending",
-                          descending: "ascending",
-                        }
-                      : {
-                          none: "ascending",
-                          ascending: "descending",
-                          descending: "none",
-                        };
-                    const nextSortDirection =
-                      sortDirectionMap[currentSortDirection];
-                    const nextSortKey =
-                      nextSortDirection === "none" ? null : header.key;
-                    const applySort = dispatch(
-                      "sort",
-                      { key: nextSortKey, direction: nextSortDirection },
-                      { cancelable: true },
-                    );
-                    if (applySort) {
-                      sortDirection = nextSortDirection;
-                      sortKey = nextSortKey;
-                    }
-                    dispatch("click:header", {
-                      header,
-                      sortDirection: nextSortDirection,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  } else {
-                    dispatch("click:header", {
-                      header,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  }
-                }}
-              >
-                <slot name="cellHeader" {header}>{header.value}</slot>
-              </TableHeader>
+              {#if $$slots.headerDecorator}
+                <TableHeader
+                  id="{id}-{header.key}"
+                  class={formatAlignClass(header.columnAlign)}
+                  style={formatHeaderWidth(header)}
+                  sortable={isHeaderSortable(header)}
+                  sortDirection={sortKey === header.key
+                    ? sortDirection
+                    : "none"}
+                  active={sortKey === header.key}
+                  {...tableHeaderTranslateWithId
+                    ? { translateWithId: tableHeaderTranslateWithId }
+                    : {}}
+                  on:click={(event) => handleHeaderClick(event, header)}
+                >
+                  <slot name="cellHeader" {header}>{header.value}</slot>
+                  <svelte:fragment slot="decorator">
+                    <slot name="headerDecorator" {header} />
+                  </svelte:fragment>
+                </TableHeader>
+              {:else}
+                <TableHeader
+                  id="{id}-{header.key}"
+                  class={formatAlignClass(header.columnAlign)}
+                  style={formatHeaderWidth(header)}
+                  sortable={isHeaderSortable(header)}
+                  sortDirection={sortKey === header.key
+                    ? sortDirection
+                    : "none"}
+                  active={sortKey === header.key}
+                  {...tableHeaderTranslateWithId
+                    ? { translateWithId: tableHeaderTranslateWithId }
+                    : {}}
+                  on:click={(event) => handleHeaderClick(event, header)}
+                >
+                  <slot name="cellHeader" {header}>{header.value}</slot>
+                </TableHeader>
+              {/if}
             {/if}
           {/each}
         </TableRow>
@@ -1319,6 +1402,8 @@
                 ? "bx--data-table--highlighted-row"
                 : ""} {expandable && isSelectionEnabled
                 ? "bx--expandable-row--with-selection"
+                : ""} {$rowAILabelStates.get(row.id) === "active"
+                ? "bx--data-table--ai-label-row"
                 : ""} {rowClassValue ?? ""}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
@@ -1340,6 +1425,17 @@
                 dispatch("mouseleave:row", row);
               }}
             >
+              {#if hasRowDecorator}
+                <TableCell class="bx--table-column-decorator">
+                  <Decorator
+                    class="bx--table-column-decorator__inner"
+                    state={rowAILabelState(row.id)}
+                    labelAlign="start"
+                  >
+                    <slot name="rowDecorator" {row} />
+                  </Decorator>
+                </TableCell>
+              {/if}
               {#if expandable}
                 <TableCell
                   class="bx--table-expand"
@@ -1567,6 +1663,8 @@
                 ? "bx--data-table--highlighted-row"
                 : ""} {expandable && isSelectionEnabled
                 ? "bx--expandable-row--with-selection"
+                : ""} {$rowAILabelStates.get(row.id) === "active"
+                ? "bx--data-table--ai-label-row"
                 : ""} {rowClassValue ?? ""}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
@@ -1588,6 +1686,17 @@
                 dispatch("mouseleave:row", row);
               }}
             >
+              {#if hasRowDecorator}
+                <TableCell class="bx--table-column-decorator">
+                  <Decorator
+                    class="bx--table-column-decorator__inner"
+                    state={rowAILabelState(row.id)}
+                    labelAlign="start"
+                  >
+                    <slot name="rowDecorator" {row} />
+                  </Decorator>
+                </TableCell>
+              {/if}
               {#if expandable}
                 <TableCell
                   class="bx--table-expand"
@@ -1771,6 +1880,12 @@
       {#if $$slots.footerCell}
         <TableFoot>
           <TableRow>
+            {#if hasRowDecorator}
+              <td
+                aria-hidden="true"
+                class:bx--table-column-decorator={true}
+              ></td>
+            {/if}
             {#if expandable}
               <td aria-hidden="true" class:bx--table-expand={true}></td>
             {/if}

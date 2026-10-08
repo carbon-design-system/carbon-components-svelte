@@ -58,6 +58,7 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
@@ -197,6 +198,9 @@
   });
 
   $: lifecycle.syncOpen(open);
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -206,6 +210,8 @@
   class:bx--modal={true}
   class:is-visible={open}
   class:bx--modal--danger={danger}
+  class:bx--modal--decorator={$$slots.decorator}
+  class:bx--modal--ai-label={$aiLabelState === "active"}
   inert={open ? undefined : true}
   {id}
   {...$$restProps}
@@ -259,5 +265,14 @@
     on:mousedown={outsideDismiss.pressInside}
   >
     <slot />
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--modal--inner__decorator"
+        state={aiLabelState}
+        labelSize="sm"
+      >
+        <slot name="decorator" />
+      </Decorator>
+    {/if}
   </div>
 </div>

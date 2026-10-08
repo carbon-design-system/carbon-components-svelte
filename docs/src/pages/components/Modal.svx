@@ -91,6 +91,12 @@ Set `fullWidth` to remove the modal body padding so content spans edge to edge. 
 
 <FileSource src="/framed/Modal/FullWidthModal" />
 
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the modal's content as AI-generated. The label sits beside the close button, and the modal shows the AI surface.
+
+<FileSource src="/framed/Modal/ModalAILabel" />
+
 ## Buttons
 
 Configure the footer actions.
