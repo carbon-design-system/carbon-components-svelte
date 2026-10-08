@@ -5,6 +5,7 @@
 
   export let labels: string[] = ["Tag 1", "Tag 2", "Tag 3", "Tag 4"];
   export let dismissible = false;
+  export let values: Array<string | number> | undefined = undefined;
   export let maxVisible: ComponentProps<TagSet>["maxVisible"] = undefined;
   export let size: ComponentProps<TagSet>["size"] = undefined;
   export let gap: ComponentProps<TagSet>["gap"] = undefined;
@@ -25,7 +26,7 @@
   on:click:overflow={onOverflowClick}
   on:overflow:change={({ detail }) => onOverflowChange(detail)}
 >
-  {#each labels as label}
-    <Tag filter={dismissible}>{label}</Tag>
+  {#each labels as label, i}
+    <Tag filter={dismissible} value={values?.[i]}>{label}</Tag>
   {/each}
 </TagSet>
