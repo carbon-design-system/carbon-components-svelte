@@ -109,6 +109,9 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
+Long file names end in an ellipsis. Hovering a truncated name shows it in
+full.
+
 ### Custom label
 
 Use the `labelTitle` and `labelDescription` slots to provide custom label content instead of the `labelTitle` and `labelDescription` props.
