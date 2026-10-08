@@ -4,7 +4,7 @@ description: Displays a row of tags that collapses to fit the available width, m
 ---
 
 <script>
-  import { Box, Stack, Tag, TagSet } from "carbon-components-svelte";
+  import { Box, SelectableTag, Stack, Tag, TagSet } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -168,6 +168,19 @@ Override the `overflowTooltip` slot to replace the default plain-text tooltip wi
 Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response.
 
 <FileSource src="/framed/TagSet/TagSetDismissible" />
+
+## Selectable
+
+`SelectableTag` children take the set's `size` and collapse into the "+N" indicator like `Tag` children do.
+
+<Box maxWidth="16rem">
+  <TagSet size="sm">
+    <SelectableTag selected>Machine learning</SelectableTag>
+    <SelectableTag>Analytics</SelectableTag>
+    <SelectableTag>Security</SelectableTag>
+    <SelectableTag>Automation</SelectableTag>
+  </TagSet>
+</Box>
 
 ## Events
 
