@@ -124,6 +124,13 @@
   export let name = "";
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the value input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the HTML element.
    * @bindable readonly
    */
@@ -432,6 +439,7 @@
         type={hideTextInput ? "hidden" : inputType}
         id={inputId}
         {name}
+        {form}
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         class:bx--text-input--light={light}
