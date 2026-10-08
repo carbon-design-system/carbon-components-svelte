@@ -63,24 +63,18 @@
   export let tag = "section";
 
   import { getContext, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readable, readonly, writable } from "svelte/store";
 
-  /** @type {undefined | SectionLevel} */
-  const parentLevel = getContext("carbon:Section");
+  /** @type {import("svelte/store").Readable<0 | SectionLevel>} */
+  const parentLevel = getContext("carbon:Section") ?? readable(0);
 
-  /** @type {import ("svelte/store").Writable<SectionLevel>} */
+  /** @type {import("svelte/store").Writable<SectionLevel>} */
   const internalLevel = writable(level);
 
-  if (typeof parentLevel === "number") {
-    internalLevel.set(Math.min(parentLevel + 1, 6));
-  }
-
   // Custom level should override the inferred parent level.
-  if (level !== 1) {
-    internalLevel.set(level);
-  }
+  $: internalLevel.set(level === 1 ? Math.min($parentLevel + 1, 6) : level);
 
-  setContext("carbon:Section", $internalLevel);
+  setContext("carbon:Section", readonly(internalLevel));
 </script>
 
 <svelte:element this="{tag}"><slot /></svelte:element>
