@@ -390,7 +390,8 @@
 
 // carbon-components-svelte patch (disabled rows)
 // A disabled uploader also disables each row's remove button.
-.#{$prefix}--file__selected-file--disabled .#{$prefix}--file-filename {
+.#{$prefix}--file__selected-file--disabled .#{$prefix}--file-filename,
+.#{$prefix}--file__selected-file--disabled .#{$prefix}--file-size {
   color: $disabled-02;
 }
 
