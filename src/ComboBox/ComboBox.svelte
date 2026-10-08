@@ -342,7 +342,6 @@
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import {
-    handleRequiredInvalid,
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
   } from "../ListBox/list-box-utils.js";
@@ -369,7 +368,7 @@
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { submitAttempts } from "../utils/submit-attempt.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
   import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
@@ -618,7 +617,6 @@
     // Write the DOM even when `value` did not change: `afterUpdate`'s
     // restore-on-close block may have left stale text on the input.
     ref.value = nextValue;
-    requiredError = false;
   }
 
   afterUpdate(() => {
@@ -1008,7 +1006,10 @@
           use:preserveFocusSelection={selectTextOnFocus && !disabled}
           bind:value
           use:formReset={handleFormReset}
-          use:submitAttempts={required}
+          use:requiredInvalid={{
+            enabled: required,
+            onChange: (missing) => (requiredError = missing),
+          }}
           type="text"
           role="combobox"
           tabindex="0"
@@ -1206,11 +1207,6 @@
             }
           }}
           on:paste
-          on:invalid={(event) => {
-            if (handleRequiredInvalid(event, { focusTarget: ref })) {
-              requiredError = true;
-            }
-          }}
         >
         {#if showInvalid}
           <WarningFilled class="bx--list-box__invalid-icon" />

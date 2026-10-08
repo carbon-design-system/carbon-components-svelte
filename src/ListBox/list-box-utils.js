@@ -1,6 +1,5 @@
 // @ts-check
 
-import { isSubmitAttempt } from "../utils/submit-attempt.js";
 import { DEFAULT_VIRTUAL_LIST_CONFIG } from "../utils/virtualize.js";
 
 /**
@@ -82,63 +81,4 @@ export function shouldVirtualizeMenu({ items, virtualize }) {
     virtualize !== undefined ||
     items.length > DEFAULT_VIRTUAL_LIST_CONFIG.threshold
   );
-}
-
-/**
- * Whether `control` is invalid in a way the user should see: during a
- * submit attempt, or once the browser has flagged it `:user-invalid` (after
- * any submit attempt, including `requestSubmit()`, or an edit). A plain
- * `checkValidity()` call fires `invalid` too, and must not show errors.
- *
- * @param {HTMLInputElement} control
- * @returns {boolean}
- */
-function isUserInvalid(control) {
-  if (isSubmitAttempt(control.form)) return true;
-  try {
-    return control.matches(":user-invalid");
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Handle the `invalid` event of a required list box's validated input.
- *
- * Returns whether the field should show its invalid state: after a submit
- * attempt, not when code calls `checkValidity()`. In that case the
- * browser's error bubble is cancelled, since the field shows Carbon's state
- * instead. On a submit attempt, the field is also focused if it's the
- * first invalid control in the form, after the browser has focused any
- * other invalid control whose bubble wasn't cancelled.
- *
- * A `proxy` input (hidden, validating for a list box) is cancelled even
- * when no state shows, so the browser never focuses or anchors a bubble
- * to it.
- *
- * @param {Event} event The `invalid` event.
- * @param {{ focusTarget: HTMLElement | null | undefined; proxy?: boolean }} options
- * @returns {boolean}
- */
-export function handleRequiredInvalid(event, { focusTarget, proxy = false }) {
-  const input = /** @type {HTMLInputElement} */ (event.target);
-  const show = isUserInvalid(input);
-  if (show || proxy) event.preventDefault();
-  if (!show) return false;
-
-  if (isSubmitAttempt(input.form)) {
-    const firstInvalid = input.form
-      ? Array.from(input.form.elements).find(
-          (element) =>
-            /** @type {HTMLInputElement} */ (element).willValidate &&
-            !(/** @type {HTMLInputElement} */ (element).validity.valid),
-        )
-      : input;
-    if (firstInvalid === input) {
-      setTimeout(() => {
-        if (focusTarget?.isConnected) focusTarget.focus();
-      });
-    }
-  }
-  return true;
 }
