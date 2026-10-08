@@ -61,6 +61,14 @@
   /** Specify the `role` attribute of the drop container */
   export let role = "button";
 
+  /**
+   * Open the device camera instead of the file picker on mobile.
+   * `"user"` requests the front camera and `"environment"` the rear camera.
+   * Desktop browsers ignore it and open the file picker.
+   * @type {"user" | "environment" | undefined}
+   */
+  export let capture = undefined;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -186,6 +194,7 @@
     {id}
     {disabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}
+    {capture}
     {name}
     {multiple}
     class:bx--file-input={true}

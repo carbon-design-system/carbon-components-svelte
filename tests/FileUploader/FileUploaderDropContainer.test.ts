@@ -88,6 +88,15 @@ describe("FileUploaderDropContainer", () => {
     expect(label).not.toHaveAttribute("aria-disabled");
   });
 
+  it("should forward capture to the input", () => {
+    const { container } = render(FileUploaderDropContainer, {
+      props: { capture: "user" },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    expect(input).toHaveAttribute("capture", "user");
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { accept: [".pdf", ".doc"] },

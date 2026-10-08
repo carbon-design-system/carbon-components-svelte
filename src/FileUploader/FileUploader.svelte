@@ -99,6 +99,14 @@
    */
   export let files = [];
 
+  /**
+   * Open the device camera instead of the file picker on mobile.
+   * `"user"` requests the front camera and `"environment"` the rear camera.
+   * Desktop browsers ignore it and open the file picker.
+   * @type {"user" | "environment" | undefined}
+   */
+  export let capture = undefined;
+
   /** Set to `true` to allow multiple files */
   export let multiple = false;
 
@@ -307,6 +315,7 @@
     disableLabelChanges
     labelText={buttonLabel}
     {accept}
+    {capture}
     {name}
     {multiple}
     {kind}
