@@ -152,9 +152,10 @@ front camera (selfies). Desktop browsers ignore it and open the file picker.
 
 ### Form size
 
-Inside a `Form` with `size`, the button and rows match the height of the other
-fields: `xs` is 24px, `sm` is 32px, and `xl` is 48px. Outside a sized form, or
-when `size` is set on the uploader, the uploader's own `size` applies.
+Inside a `Form` with `size`, the add button matches the height of the other
+fields: `xs` is 24px, `sm` is 32px, and `xl` is 48px. In an `xs` form the file
+rows are 24px too. Outside a sized form, or when `size` is set on the uploader,
+the uploader's own `size` applies.
 
 <Form size="xs">
   <FileUploader
