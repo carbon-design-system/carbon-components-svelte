@@ -74,6 +74,7 @@
   const update = ctx?.update ?? noop;
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
+  const groupForm = ctx?.groupForm ?? readable(undefined);
 
   add({ value, selected });
 
@@ -102,7 +103,7 @@
   {id}
   {value}
   name={$groupName ?? name}
-  {form}
+  form={$groupForm ?? form}
   {title}
   {disabled}
   on:click={(event) => {
