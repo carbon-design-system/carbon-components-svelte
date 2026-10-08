@@ -90,4 +90,15 @@ describe("Tag truncation", () => {
       tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
     ).toBe(label);
   });
+
+  it("uses a native title, not a focusable tooltip, inside a roving TagSet", async () => {
+    mockOverflow(true);
+    render(TagMaxWidth, { props: { label, filter: true, roving: true } });
+    await tick();
+    await tick();
+
+    const tag = screen.getByText(label).closest(".bx--tag");
+    expect(tag).toHaveAttribute("title", label);
+    expect(tag?.querySelector(".bx--tag__label-tooltip")).toBeNull();
+  });
 });

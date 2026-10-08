@@ -55,10 +55,22 @@
   const groupItemId = tagSet ? uniqueId("ctag") : undefined;
   const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
   const groupSize = tagSet?.size ?? readable(undefined);
+  const groupNavigation = tagSet?.navigation ?? readable("tab");
+  const groupTabStopId = tagSet?.tabStopId ?? readable(null);
 
   let buttonRef = null;
 
   $: resolvedSize = size ?? $groupSize ?? "default";
+
+  // A roving `TagSet` owns the tab order: only its current tab stop is
+  // tabbable. `undefined` leaves the native order (standalone, or before the
+  // set has picked a tab stop).
+  $: rovingTabindex =
+    $groupNavigation === "roving" && $groupTabStopId !== null
+      ? $groupTabStopId === groupItemId
+        ? "0"
+        : "-1"
+      : undefined;
 
   if (tagSet) {
     onMount(() => {
@@ -101,7 +113,7 @@
   {id}
   {disabled}
   aria-disabled={disabled}
-  tabindex={disabled ? "-1" : undefined}
+  tabindex={disabled ? "-1" : rovingTabindex}
   class:bx--tag={true}
   class:bx--tag--selectable={true}
   class:bx--tag--selectable-selected={selected}
