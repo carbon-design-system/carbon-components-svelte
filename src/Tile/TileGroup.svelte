@@ -17,10 +17,19 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to require the selection of a radio button.
+   * Set to `true` to require the selection of a radio button. A wrapping
+   * `<form>` blocks submission while none is selected, and the group shows
+   * `requiredInvalidText` below the tiles instead of the browser's error
+   * bubble.
    * @type {boolean}
    */
   export let required = undefined;
+
+  /**
+   * Specify the invalid state text shown when a required group blocks
+   * submission. Cleared once a tile is selected.
+   */
+  export let requiredInvalidText = "Select an option";
 
   /**
    * Specify a name attribute for the radio button inputs.
@@ -48,7 +57,9 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -153,6 +164,11 @@
     update,
   });
 
+  const errorId = uniqueId();
+  /** Set when the group, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || $selectedValue != null) requiredError = false;
+
   $: selected = $selectedValue;
   $: selectedValue.set(selected);
   $: groupName.set(name || undefined);
@@ -163,8 +179,11 @@
 <fieldset
   bind:this={fieldsetRef}
   use:formReset={handleFormReset}
+  use:requiredInvalid={{ onChange: (missing) => (requiredError = missing) }}
   {disabled}
+  aria-describedby={requiredError ? errorId : undefined}
   class:bx--tile-group={true}
+  class:bx--tile-group--invalid={requiredError}
   {...$$restProps}
 >
   {#if legendText || $$slots.legendChildren}
@@ -173,4 +192,12 @@
     </legend>
   {/if}
   <div><slot /></div>
+  {#if requiredError}
+    <div class:bx--tile-group__validation-msg={true}>
+      <WarningFilled class="bx--tile-group__invalid-icon" />
+      <div id={errorId} class:bx--form-requirement={true}>
+        {requiredInvalidText}
+      </div>
+    </div>
+  {/if}
 </fieldset>

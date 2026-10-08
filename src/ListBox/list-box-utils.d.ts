@@ -50,12 +50,3 @@ export declare function shouldVirtualizeMenu(options: {
   items: ArrayLike<unknown>;
   virtualize: boolean | object | undefined;
 }): boolean;
-
-/**
- * Cancel the browser's error bubble for a required list box and focus the
- * field when it is the first invalid control in its form.
- */
-export declare function handleRequiredInvalid(
-  event: Event,
-  focusTarget: HTMLElement | null | undefined,
-): void;
