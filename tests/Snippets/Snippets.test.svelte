@@ -4,6 +4,7 @@
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
   import IconIndicator from "carbon-components-svelte/IconIndicator/IconIndicator.svelte";
+  import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
   import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
   import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import ProgressIndicator from "carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte";
@@ -229,3 +230,21 @@
     <Tag {...props} type="teal" data-testid="tag-input-tag-{index}">{tag}</Tag>
   {/snippet}
 </TagInput>
+
+<MultiSelect
+  data-testid="multiselect-tag-snippet"
+  labelText="Options"
+  {items}
+  selectionDisplay="tags"
+  selectedIds={["1", "3"]}
+>
+  {#snippet tag({
+    item,
+    index,
+    props,
+  })}
+    <Tag {...props} type="teal" data-testid="multiselect-tag-{index}">
+      {item.text}
+    </Tag>
+  {/snippet}
+</MultiSelect>

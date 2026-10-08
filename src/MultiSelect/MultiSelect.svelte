@@ -69,6 +69,7 @@
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ group: string; items: ReadonlyArray<Item & { checked: boolean }>; }} group
+   * @slot {{ item: Item; index: number; props: { filter: boolean; disabled: boolean; value: Item["id"]; title: string; maxWidth: string; }; }} tag
    * @restProps {input | button}
    */
 
@@ -143,6 +144,29 @@
    * @type {number | undefined}
    */
   export let maxSelectedItems = undefined;
+
+  /**
+   * How the field shows the selection. `"count"` shows only the count tag
+   * in the field. `"tags"` also lists each selected item as a dismissible
+   * tag below the field, so the selection stays visible while the menu is
+   * closed.
+   * @type {"count" | "tags"}
+   */
+  export let selectionDisplay = "count";
+
+  /**
+   * With `selectionDisplay="tags"`, `"wrap"` shows every selected tag on as
+   * many rows as needed, and `"collapse"` keeps one row and collapses the
+   * rest into a "+N" indicator.
+   * @type {"wrap" | "collapse"}
+   */
+  export let tagOverflow = "wrap";
+
+  /**
+   * With `selectionDisplay="tags"`, the accessible name prefix of each
+   * tag's remove button.
+   */
+  export let removeTagText = "Remove";
 
   /** Set to `true` to disable the dropdown */
   export let disabled = false;
@@ -439,6 +463,8 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import Tag from "../Tag/Tag.svelte";
+  import TagSet from "../TagSet/TagSet.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
@@ -500,6 +526,8 @@
   let prevSelectedIds = selectedIds.slice();
   /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
   let prevSelectedItemId = null;
+  /** Wrapper of the selected-item tags, for focus tracking. */
+  let selectedTagsRef = null;
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
   /** Accumulated characters for first-character typeahead in the non-filterable field. */
@@ -748,6 +776,34 @@
         ? sortedItem
         : { ...sortedItem, checked },
     );
+  }
+
+  /**
+   * Deselect the item behind a closed tag. Updates `selectedIds` along with
+   * the checked state, as `clear()` does: with the menu closed,
+   * `top-after-reopen` re-sorts from `selectedIds`, which would otherwise
+   * restore the check. `afterUpdate` then reports the change as `select`.
+   * @param {{ detail: { tag: { value?: string | number } } }} event
+   */
+  function handleTagClose({ detail }) {
+    if (disabled || readonly) return;
+    const id = detail.tag.value;
+    const entry = sortedItems.find((item) => item.id === id);
+    if (!entry?.checked || entry.disabled) return;
+
+    const hadFocus = selectedTagsRef?.contains(document.activeElement);
+    selectedIds = selectedIds.filter((selectedId) => selectedId !== id);
+    prevSelectedIds = selectedIds.slice();
+    sortedItems = sortedItems.map((item) =>
+      item.id === id ? { ...item, checked: false } : item,
+    );
+    syncSelectAllItem();
+
+    // With no tag left to take focus, hand it back to the field. `TagSet`
+    // moves focus to a neighbouring tag otherwise.
+    if (hadFocus && selectedIds.length === 0) {
+      tick().then(() => (filterable ? inputRef : fieldRef)?.focus());
+    }
   }
 
   /** Handle selection of an item, including isSelectAll logic. */
@@ -1198,6 +1254,14 @@
     (item) =>
       !item.isSelectAll && !item.disabled && selectedIdsSet.has(item.id),
   );
+  // Tags in `items` order, so they don't jump as `selectionFeedback`
+  // reorders the menu. Disabled selected items show as disabled tags.
+  $: selectedTagItems =
+    selectionDisplay === "tags"
+      ? items.filter((item) => !item.isSelectAll && selectedIdsSet.has(item.id))
+      : [];
+  $: tagSize =
+    effectiveSize === "xs" || effectiveSize === "sm" ? "sm" : "default";
   // Scope select-all to the currently visible (filtered) items, so it
   // doesn't check/uncheck items hidden by an active filter.
   $: selectAllScope = filterable && open ? filteredItems : sortedItems;
@@ -1946,6 +2010,32 @@
   {/if}
   {#if isFluid && showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
+  {#if selectedTagItems.length > 0}
+    <div bind:this={selectedTagsRef} class:bx--multi-select__tags={true}>
+      <TagSet
+        id="{id}-tags"
+        navigation="roving"
+        multiline={tagOverflow === "wrap"}
+        size={tagSize}
+        on:close:tag={handleTagClose}
+      >
+        {#each selectedTagItems as item, index (item.id)}
+          {@const props = {
+            filter: !readonly,
+            disabled: disabled || !!item.disabled,
+            value: item.id,
+            title: removeTagText,
+            maxWidth: "13rem",
+          }}
+          <!-- Spreading `props` onto any tag keeps it wired to the set: its
+               close button deselects the item by `value`. -->
+          <slot name="tag" {item} {index} {props}>
+            <Tag {...props}>{itemToString(item)}</Tag>
+          </slot>
+        {/each}
+      </TagSet>
+    </div>
   {/if}
   {#if !inline && !isFluid && !showInvalid && !showWarn && helperText}
     <div
