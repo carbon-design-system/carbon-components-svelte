@@ -73,8 +73,19 @@
    */
   export let ref = null;
 
-  /** Set to `true` to mark the field as required */
+  /**
+   * Set to `true` to mark the field as required. A wrapping `<form>` blocks
+   * submission while it is empty, and the field shows its invalid state with
+   * `requiredInvalidText` instead of the browser's error bubble.
+   */
   export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required field blocks
+   * submission. Cleared once the field has a value. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Enter a value";
 
   /** Set to `true` to use the inline variant */
   export let inline = false;
@@ -109,6 +120,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
@@ -145,8 +157,13 @@
     }
   }
 
+  /** Set when the field, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || (value != null && value !== "")) requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled,
     readonly,
@@ -263,6 +280,10 @@
         bind:this={ref}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:formReset={handleFormReset}
+        use:requiredInvalid={{
+          enabled: required,
+          onChange: (missing) => (requiredError = missing),
+        }}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
@@ -307,7 +328,7 @@
       {/if}
       {#if isFluid && showInvalid}
         <div class:bx--form-requirement={true} id={errorId} role="alert">
-          {invalidText}
+          {shownInvalidText}
         </div>
       {/if}
       {#if isFluid && showWarn}
@@ -326,7 +347,7 @@
     {/if}
     {#if !isFluid && showInvalid}
       <div class:bx--form-requirement={true} id={errorId} role="alert">
-        {invalidText}
+        {shownInvalidText}
       </div>
     {/if}
     {#if !isFluid && showWarn}
