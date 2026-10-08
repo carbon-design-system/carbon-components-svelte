@@ -319,11 +319,12 @@ function plugin() {
     // A paragraph that *opens* with `<DocKbd ...>` parses as a raw HTML
     // block instead of a normal paragraph (CommonMark treats a line
     // starting with a tag as an HTML block), so the whole paragraph becomes
-    // this "html" node directly under its parent (not nested inside a
-    // "paragraph" node) and never gets `carbonify()`'s `<p>` wrapper/class.
+    // this "html" node directly under the document root (not nested inside
+    // a "paragraph" node) and never gets `carbonify()`'s `<p>` wrapper/class.
     // Restore both here. A `<DocKbd ...>` used mid-sentence stays nested
     // inside a real "paragraph" node, which is already wrapped correctly,
-    // so only touch the block-level case.
+    // and one inside a table cell must stay inline, so only touch the
+    // root-level case.
     if (NO_PREVIEW_HTML_RE.test(node.value)) {
       if (isWholeParagraph) {
         node.value = `<p class="bx--type-body-long-02">${node.value}</p>`;
@@ -361,7 +362,7 @@ function plugin() {
     const jobs: Promise<void>[] = [];
     visit(tree, "html", (node, _index, parent) => {
       const isWholeParagraph =
-        (parent as { type?: string } | null)?.type !== "paragraph";
+        (parent as { type?: string } | null)?.type === "root";
       jobs.push(
         visitHtml(node as Parameters<typeof visitHtml>[0], isWholeParagraph),
       );
