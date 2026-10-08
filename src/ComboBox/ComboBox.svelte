@@ -303,6 +303,16 @@
   export let virtualize = undefined;
 
   /**
+   * Set to `true` to show a loading row after the options while the menu is
+   * open, such as while fetching more items on `scrollend`. Marks the menu
+   * `aria-busy` and hides the empty state; the options stay interactive.
+   */
+  export let loading = false;
+
+  /** Specify the text of the loading row */
+  export let loadingText = "Loading...";
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -328,6 +338,7 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -761,7 +772,7 @@
     announcedFilterCount = null;
     statusText = "";
   }
-  $: hasNoMatches = open && filteredItems.length === 0;
+  $: hasNoMatches = open && !loading && filteredItems.length === 0;
   $: emptyMessage = hasNoMatches
     ? typeof emptyText === "function"
       ? emptyText(value)
@@ -1251,6 +1262,7 @@
         {highlightedId}
         {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
+        aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
@@ -1519,6 +1531,11 @@
         {#if showEmpty}
           <ListBoxMenuStatus>
             <slot name="empty" {value}>{emptyMessage}</slot>
+          </ListBoxMenuStatus>
+        {/if}
+        {#if loading}
+          <ListBoxMenuStatus>
+            <InlineLoading description={loadingText} />
           </ListBoxMenuStatus>
         {/if}
       </ListBoxMenu>
