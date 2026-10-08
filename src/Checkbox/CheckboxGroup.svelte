@@ -154,7 +154,9 @@
 
   $: $groupName = name;
   $: $groupForm = form;
-  $: $groupRequired = required;
+  // A native required checkbox must itself be checked, so the group only
+  // marks its checkboxes required while none is: at least one, not all.
+  $: $groupRequired = required ? $selectedValues.length === 0 : required;
   $: $groupReadonly = readonly;
   $: $groupInvalid = invalid;
   $: $groupWarn = warn;
