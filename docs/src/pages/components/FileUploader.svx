@@ -132,6 +132,21 @@ Set `size` to `"xs"` for a 24px button and 24px file rows.
   multiple
 />
 
+### Camera capture
+
+Set `capture` to open the device camera instead of the file picker on mobile:
+`"environment"` for the rear camera (documents, receipts) or `"user"` for the
+front camera (selfies). Desktop browsers ignore it and open the file picker.
+
+<FileUploader
+  capture="environment"
+  accept={["image/*"]}
+  labelTitle="Photo of your receipt"
+  labelDescription="Take a photo or choose an image."
+  buttonLabel="Add photo"
+  status="edit"
+/>
+
 ### Per-file status
 
 Use `fileStatus` when files upload independently and should not share one
