@@ -5,11 +5,13 @@
   import type { ComponentProps } from "svelte";
 
   export let id: ComponentProps<FormLabel>["id"] = undefined;
+  export let htmlFor: ComponentProps<FormLabel>["for"] = undefined;
   export let slotContent = "";
 </script>
 
 <FormLabel
   {id}
+  for={htmlFor}
   on:click={() => console.log("click")}
   on:mouseover={() => console.log("mouseover")}
   on:mouseenter={() => console.log("mouseenter")}
