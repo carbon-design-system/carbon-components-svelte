@@ -56,6 +56,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the radio input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -205,6 +212,7 @@
     type="radio"
     {id}
     name={$groupName ?? (name || fallbackName)}
+    {form}
     {checked}
     {disabled}
     required={$groupRequired ?? required}
