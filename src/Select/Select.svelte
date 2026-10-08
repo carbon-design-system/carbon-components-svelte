@@ -65,8 +65,20 @@
    */
   export let ref = null;
 
-  /** Set to `true` to mark the field as required */
+  /**
+   * Set to `true` to mark the field as required. A wrapping `<form>` blocks
+   * submission while an empty-valued option is selected, and the field shows
+   * its invalid state with `requiredInvalidText` instead of the browser's
+   * error bubble.
+   */
   export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required select blocks
+   * submission. Cleared once an option with a value is selected. `invalid`
+   * and `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select an option";
 
   /** Set to `true` for the select to be read-only */
   export let readonly = false;
@@ -104,6 +116,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -214,8 +227,15 @@
     syncNativeSelectValue();
   }
   // Invalid/warn states are suppressed when the select is disabled or read-only.
+  /** Set when the select, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || ($selectedValue != null && $selectedValue !== "")) {
+    requiredError = false;
+  }
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled,
     readonly,
@@ -270,6 +290,9 @@
             aria-readonly={readonly || undefined}
             disabled={disabled || undefined}
             required={required || undefined}
+            use:requiredInvalid={{
+              onChange: (missing) => (requiredError = missing),
+            }}
             {id}
             {name}
             class:bx--select-input={true}
@@ -304,7 +327,7 @@
         {/if}
         {#if showInvalid}
           <div class:bx--form-requirement={true} id={errorId}>
-            {invalidText}
+            {shownInvalidText}
           </div>
         {/if}
         {#if showWarn}
@@ -335,6 +358,9 @@
           aria-describedby={describedById}
           disabled={disabled || undefined}
           required={required || undefined}
+          use:requiredInvalid={{
+            onChange: (missing) => (requiredError = missing),
+          }}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
           class:bx--select-input={true}
@@ -365,7 +391,7 @@
           <hr class:bx--select__divider={true}>
           {#if showInvalid}
             <div id={errorId} class:bx--form-requirement={true}>
-              {invalidText}
+              {shownInvalidText}
             </div>
           {/if}
           {#if showWarn}
@@ -390,7 +416,9 @@
         </div>
       {/if}
       {#if !isFluid && showInvalid}
-        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+        <div id={errorId} class:bx--form-requirement={true}>
+          {shownInvalidText}
+        </div>
       {/if}
       {#if !isFluid && showWarn}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
