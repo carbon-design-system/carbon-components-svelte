@@ -405,6 +405,12 @@
   .#{$prefix}--tag--lg.#{$prefix}--tag--filter {
     padding-right: 0;
   }
+
+  // Match the close button to the tag height, as `--sm` does.
+  .#{$prefix}--tag--lg .#{$prefix}--tag__close-icon {
+    width: to-rem(32px);
+    height: to-rem(32px);
+  }
 }
 
 /// Inline tag without default outer margin
