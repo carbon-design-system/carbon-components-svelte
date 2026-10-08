@@ -74,6 +74,28 @@ describe("TagSet", () => {
     expect(container.querySelector(".bx--tag-set-overflow--empty")).toBeNull();
   });
 
+  it("names the +N indicator with a noun, keeping the visible +N", async () => {
+    const { container } = render(TagSetFixture);
+
+    stubMeasurements(container, 110, 50);
+
+    expect(
+      await screen.findByRole("button", { name: "+3 more tags" }),
+    ).toBeInTheDocument();
+  });
+
+  it("names the +N indicator with a custom overflowLabel", async () => {
+    const { container } = render(TagSetFixture, {
+      overflowLabel: (count: number) => `${count} weitere Tags`,
+    });
+
+    stubMeasurements(container, 110, 50);
+
+    expect(
+      await screen.findByRole("button", { name: "3 weitere Tags" }),
+    ).toBeInTheDocument();
+  });
+
   it("shows the hidden labels as a plain-text tooltip, not more tags", async () => {
     const { container } = render(TagSetFixture);
 
