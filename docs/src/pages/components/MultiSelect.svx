@@ -294,6 +294,30 @@ Set `selectTextOnFocus` to select the full filter value when the field receives 
     {id: "2", text: "Fax"}]}"
   />
 
+### Empty state
+
+When the filter matches nothing, the menu shows "No results" in place of the options. Screen readers already hear the count from `filterResultsText`, so the message is hidden from them.
+
+Set `emptyText` to change the message, or pass a function that builds it from the filter text. Set it to `""` to leave the menu empty instead.
+
+<MultiSelect filterable labelText="Contact" placeholder="Filter contact methods..." emptyText="No matching contact methods"
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+Use the `empty` slot for richer content. `let:value` is the filter text.
+
+<MultiSelect filterable labelText="Contact" placeholder="Filter contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  >
+  <svelte:fragment slot="empty" let:value>
+    No contact method named "{value}".
+  </svelte:fragment>
+</MultiSelect>
+
 ## Multiple multi-selects
 
 Manage multiple dropdowns in a form with coordinated state.
@@ -302,7 +326,7 @@ Manage multiple dropdowns in a form with coordinated state.
 
 ## Events
 
-Respond to selection, clearing, and menu-close interactions.
+Respond to selection, clearing, and the menu opening and closing.
 
 ### Select
 
@@ -326,6 +350,21 @@ Use `on:clear` to listen for the clear ("x") button that appears once there is a
     on:clear="{(e) => console.log(e.detail)}"
   />
 
+### Open
+
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing a filter opened it), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a multi-select rendered already open.
+
+<MultiSelect
+  labelText="Contact"
+  label="Select contact methods..."
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:open={(e) => console.log(e.detail.trigger)}
+/>
+
 ### Close
 
 Use `on:close` to know when the menu is dismissed and why. `event.detail.trigger` is `"escape-key"` (<DocKbd label="Escape" />, or <DocKbd label="Alt" /> + <DocKbd label="ArrowUp" /> on an open menu) or `"outside-click"` (a click or focus outside the multi-select and its menu). Selecting an option keeps the menu open. Clicking the field to collapse it, or pressing <DocKbd label="Tab" />, closes the menu without dispatching `close`.
@@ -335,6 +374,17 @@ Use `on:close` to know when the menu is dismissed and why. `event.detail.trigger
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
     on:close="{(e) => console.log(e.detail.trigger)}"
+  />
+
+## Loading
+
+Set `loading` to `true` to show a loading row after the options, such as while fetching more items. The menu is marked busy for screen readers, the options stay selectable, and the [empty state](#empty-state) is held back.
+
+Set `loadingText` to change the row's text.
+
+<MultiSelect loading labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"}]}"
   />
 
 ## Virtualization
@@ -351,7 +401,7 @@ Set `virtualize={false}` to explicitly disable virtualization, even for large li
 
 ### Load more
 
-`scrollend` fires when the menu is scrolled near the bottom so you can append the next page of `items`. Same pattern as [ComboBox load more](/components/ComboBox#load-more): handle `on:scrollend`, keep prior items visible while loading, and track in-flight status locally (or with the `empty` slot when appropriate). The event is a near-bottom load-more signal, not the browser's native `scrollend`.
+`scrollend` fires when the menu is scrolled near the bottom so you can append the next page of `items`. Same pattern as [ComboBox load more](/components/ComboBox#load-more): handle `on:scrollend`, keep prior items visible while loading, and set `loading` while the next page is in flight to show a loading row after them. The event is a near-bottom load-more signal, not the browser's native `scrollend`.
 
 <FileSource src="/framed/MultiSelect/ScrollEndMultiSelect" />
 
@@ -659,6 +709,12 @@ Set `readonly` to `true` to display non-editable values. The menu can still be o
     { id: "2", text: "Fax" },
   ]}
 />
+
+## Required
+
+Set `required` to keep a surrounding form from submitting until at least one item is selected. Disabled items do not count, as they are left out of the submission. The browser reports the missing value on the field, and the field is marked required for screen readers.
+
+<FileSource src="/framed/MultiSelect/MultiSelectRequired" />
 
 ## Skeleton
 

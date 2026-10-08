@@ -33,6 +33,7 @@
    * @property {string} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @property {any} [icon] - Icon component shown left of the item text
+   * @property {string} [group] - Group label. Items sharing a label render together under a non-selectable header, ungrouped items first and groups in order of first appearance. A group with no items matching the filter is hidden.
    * @event select
    * @type {object}
    * @property {Item["id"]} selectedId
@@ -41,6 +42,14 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
+   * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
+   * @slot {{ value: string; }} empty
+   */
+
+  /**
+   * @event open
+   * @type {object}
+   * @property {"click" | "keydown" | "input" | "programmatic"} trigger
    */
 
   /**
@@ -204,7 +213,8 @@
    * `"hide"` falls back to `"remove"` when virtualization is enabled, which
    * also keeps `wrapOptions` correct on a windowed list: a hidden option has no
    * rendered height, so measuring one would put a zero into offsets it does not
-   * occupy.
+   * occupy. It also falls back when items are grouped, so a group whose items
+   * all fail the filter loses its header.
    * @type {"remove" | "hide"}
    */
   export let filterMode = "remove";
@@ -241,6 +251,15 @@
       : `${count} result${count === 1 ? "" : "s"} available`;
   };
 
+  /**
+   * Specify the message shown in the menu when no items match the filter.
+   * Pass a function to build it from the typed value.
+   * Set to `""` to show no message; `filterResultsText` still announces
+   * the result count.
+   * @type {string | ((value: string) => string)}
+   */
+  export let emptyText = "No results";
+
   /** Set an id for the list box component */
   export let id = uniqueId();
 
@@ -249,6 +268,12 @@
    * @type {string}
    */
   export let name = undefined;
+
+  /**
+   * Set to `true` to require a value. Sets `required` on the input, so a
+   * wrapping `<form>` blocks submission while it is empty.
+   */
+  export let required = false;
 
   /**
    * Obtain a reference to the input HTML element.
@@ -284,6 +309,16 @@
   export let virtualize = undefined;
 
   /**
+   * Set to `true` to show a loading row after the options while the menu is
+   * open, such as while fetching more items on `scrollend`. Marks the menu
+   * `aria-busy` and hides the empty state; the options stay interactive.
+   */
+  export let loading = false;
+
+  /** Specify the text of the loading row */
+  export let loadingText = "Loading...";
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -309,22 +344,31 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
   import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
+  import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
   } from "../ListBox/list-box-utils.js";
   import {
+    createGroupRows,
+    orderByGroup,
+    splitGroupRuns,
+  } from "../ListBox/menu-groups.js";
+  import {
     applyPostClearOptions,
     createMenuCloseHandler,
+    createMenuOpenHandler,
     createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
@@ -384,6 +428,16 @@
     },
   });
 
+  const buildGroupRows = createGroupRows();
+
+  // `openMenu(trigger)` opens a closed menu and records the cause, which
+  // `syncOpenEvent` reports in `open` once the menu has rendered.
+  const { openMenu, sync: syncOpenEvent } = createMenuOpenHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
+
   onMount(() => {
     return () => {
       announceFilterResults.cancel();
@@ -411,6 +465,16 @@
       : shouldFilterItem;
 
   /**
+   * Row position of the option at `index` in `filteredItems`. Group headers
+   * are rows too, so the two differ once items are grouped.
+   * @param {number} index
+   * @returns {number}
+   */
+  function toRowIndex(index) {
+    return groupRows && index >= 0 ? groupRows.rowIndexByItem[index] : index;
+  }
+
+  /**
    * @param {Event} event
    */
   function handleMenuScroll(event) {
@@ -433,7 +497,7 @@
     // "Focusability of disabled controls") so assistive-tech users can
     // discover them; the Enter handler and the option click handlers refuse
     // the actual selection.
-    const navigableItems = filteredItems?.length ? filteredItems : items;
+    const navigableItems = filteredItems?.length ? filteredItems : orderedItems;
     highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
     highlightOrigin = "keyboard";
   }
@@ -444,7 +508,7 @@
    * @param {1 | -1} direction
    */
   function changePage(direction) {
-    const navigableItems = filteredItems?.length ? filteredItems : items;
+    const navigableItems = filteredItems?.length ? filteredItems : orderedItems;
     highlightedIndex = clampIndex(
       highlightedIndex,
       direction * MENU_PAGE_STEP,
@@ -556,13 +620,14 @@
   }
 
   afterUpdate(() => {
+    syncOpenEvent();
     // Scroll to highlighted item when it changes via keyboard navigation
     // Only scroll if the item is outside the visible viewport
     const wasJustOpened = open && !prevOpen;
     prevHighlightedIndex = scheduleHighlightScroll({
       open,
       shouldVirtualize,
-      highlightedIndex,
+      highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
       highlightOrigin,
@@ -578,7 +643,7 @@
         // Set highlighted index to selected item so keyboard nav starts there
         highlightedIndex = selectedIndex;
         highlightOrigin = "keyboard";
-        prevHighlightedIndex = selectedIndex;
+        prevHighlightedIndex = toRowIndex(selectedIndex);
       }
     }
 
@@ -590,7 +655,12 @@
           selectedId !== undefined && selectedItem
             ? filteredItems.findIndex((item) => item.id === selectedId)
             : -1;
-        menuWindow.scrollIntoView(selectedIndex, "top");
+        const row = toRowIndex(selectedIndex);
+        // Keep the group header in view above the first option of a group.
+        menuWindow.scrollIntoView(
+          groupRows?.itemIndexByRow[row - 1] === -1 ? row - 1 : row,
+          "top",
+        );
       });
     }
     prevOpen = open;
@@ -679,12 +749,23 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
-  $: hideMode = filterMode === "hide" && !shouldVirtualize;
-  $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  $: grouped = items.some((item) => !!item.group);
+  // Each group is contiguous: ungrouped items first, then groups in order of
+  // first appearance. Highlight indexes point into this order.
+  $: orderedItems = grouped ? orderByGroup(items, (item) => item.group) : items;
+  $: hideMode = filterMode === "hide" && !shouldVirtualize && !grouped;
+  $: filteredItems = open
+    ? orderedItems.filter((item) => filterFn(item, value))
+    : [];
   $: filteredIndexById = new Map(
     filteredItems.map((item, index) => [item.id, index]),
   );
   $: menuItems = hideMode && open ? items : filteredItems;
+  // Group headers render as rows of their own, so the menu window indexes
+  // rows, not items. `toRowIndex` maps between the two. Built from the
+  // filtered items, so a group with no matches has no header.
+  $: groupRows = grouped && open ? buildGroupRows(menuItems) : null;
+  $: menuRows = groupRows ? groupRows.rows : menuItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
   // The default `shouldFilterItem` keeps every item, so only announce while a
   // filter can actually narrow the list.
@@ -697,17 +778,27 @@
     announcedFilterCount = null;
     statusText = "";
   }
+  $: hasNoMatches = open && !loading && filteredItems.length === 0;
+  $: emptyMessage = hasNoMatches
+    ? typeof emptyText === "function"
+      ? emptyText(value)
+      : emptyText
+    : "";
+  // A row after the options, not an option, so arrow keys never reach it.
+  $: showEmpty = hasNoMatches && ($$slots.empty || emptyMessage !== "");
   $: highlightedId =
     filteredItems[highlightedIndex] == null
       ? undefined
       : `${id}-${filteredItems[highlightedIndex].id}`;
 
   $: menuState = menuWindow.update({
-    items: menuItems,
-    getKey: (item) => item.id,
+    items: menuRows,
+    getKey: (row) => row.id,
     shouldVirtualize,
     virtualize,
-    wrapOptions,
+    // A header is not as tall as an option, so a grouped menu measures its
+    // rows the way a menu of wrapped options does.
+    wrapOptions: wrapOptions || grouped,
     size,
     fluid: hasFluidMenuItems,
     scrollTop: listScrollTop,
@@ -723,6 +814,12 @@
     isMeasured,
     isPinned,
   } = menuState);
+  // Each group's rendered rows sit inside one `role="group"` element.
+  $: menuRuns = splitGroupRuns(
+    itemsToRender,
+    isVirtualized ? startIndex : 0,
+    groupRows,
+  );
 
   $: if (typeahead) {
     const topItem = filteredItems.find((item) => !item.disabled);
@@ -880,7 +977,9 @@
   });
 
   function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
+    // The menu counts as inside even when not portaled: a click on a group
+    // header lands in it without closing the menu itself.
+    if (open && isOutsideClick(event, [ref, listRef])) {
       // Commit the inline suggestion on click-away so it matches Tab. The
       // dismissal cause is still the outside click; `select` fires reactively.
       acceptTypeaheadSuggestion();
@@ -951,18 +1050,19 @@
           {placeholder}
           {id}
           {name}
+          {required}
           {...$$restProps}
           class:bx--text-input={true}
           class:bx--text-input--light={light}
           class:bx--text-input--empty={value === ""}
           on:click={() => {
             if (disabled || readonly) return;
-            open = true;
+            openMenu("click");
           }}
           on:input
           on:input={(event) => {
             if (!open && event.target.value.length > 0) {
-              open = true;
+              openMenu("input");
             }
 
             if (!value.length) {
@@ -970,7 +1070,7 @@
               // has nothing to restore.
               highlightedIndex = -1;
               highlightOrigin = null;
-              open = true;
+              openMenu("input");
             }
           }}
           on:keydown
@@ -997,7 +1097,8 @@
                 return;
               }
               const wasOpen = open;
-              open = !open;
+              if (wasOpen) open = false;
+              else openMenu("keydown");
               if (
                 highlightOrigin === "keyboard" &&
                 highlightedIndex > -1 &&
@@ -1062,7 +1163,7 @@
               event.preventDefault();
               const navigableItems = filteredItems?.length
                 ? filteredItems
-                : items;
+                : orderedItems;
               highlightedIndex =
                 event.key === "Home" ? 0 : navigableItems.length - 1;
               highlightOrigin = "keyboard";
@@ -1072,14 +1173,14 @@
                 // APG combobox pattern: Alt+ArrowDown opens a closed menu
                 // without moving the highlight; Alt+ArrowUp closes an open one.
                 if (event.key === "ArrowDown" && !open) {
-                  open = true;
+                  openMenu("keydown");
                 } else if (event.key === "ArrowUp" && open) {
                   close("escape-key");
                 }
               } else if (open) {
                 change(step);
               } else {
-                open = true;
+                openMenu("keydown");
                 // `filteredItems` recomputes and `afterUpdate` highlights any
                 // selected item only after the update flushes; if nothing is
                 // highlighted by then, start at the first (ArrowDown) or last
@@ -1149,7 +1250,8 @@
           on:click={(event) => {
             if (disabled || readonly) return;
             event.stopPropagation();
-            open = !open;
+            if (open) open = false;
+            else openMenu("click");
           }}
           {translateWithId}
           {open}
@@ -1167,6 +1269,7 @@
         {highlightedId}
         {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
+        aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
@@ -1190,164 +1293,257 @@
             pinned={isPinned}
             measured={isMeasured}
           >
-            {#each itemsToRender as item, index (item.id)}
-              {@const actualIndex = startIndex + index}
-              {@const selected = selectedItem?.id === item.id}
-              {@const optionId = `${id}-${item.id}`}
-              <ListBoxMenuItem
-                id={optionId}
-                active={selectedId === item.id}
-                disabled={item.disabled}
-                hasLeftIcon={Boolean($$slots.icon || item.icon)}
-                aria-setsize={filteredItems.length}
-                aria-posinset={actualIndex + 1}
-                data-virtual-index={isMeasured ? actualIndex : undefined}
-                on:click={(event) => {
-                  if (item.disabled) {
-                    event.stopPropagation();
-                    return;
-                  }
-                  selectItem(item);
-                }}
-                on:mousedown={(event) => {
-                  // Keep focus on the field so screen readers don't
-                  // re-announce it on every option click.
-                  event.preventDefault();
-                }}
-                on:mouseenter={() => highlightItem(item)}
+            {#each menuRuns as run (run.key)}
+              <ListBoxMenuGroup
+                labelledBy={run.groupIndex > -1
+                  ? `group-${id}-${run.groupIndex}`
+                  : undefined}
               >
-                {#if $$slots.icon}
-                  <span
-                    class:bx--list-box__menu-item__icon={true}
-                    class:bx--list-box__menu-item__icon--left={true}
-                  >
-                    <HighlightSlot {optionId} let:highlighted>
-                      <slot
-                        name="icon"
-                        {item}
-                        index={actualIndex}
-                        {selected}
-                        {highlighted}
-                      />
-                    </HighlightSlot>
-                  </span>
-                {:else if item.icon}
-                  <span
-                    class:bx--list-box__menu-item__icon={true}
-                    class:bx--list-box__menu-item__icon--left={true}
-                  >
-                    <svelte:component this={item.icon} />
-                  </span>
-                {/if}
-                {#if $$slots.default}
-                  <HighlightSlot {optionId} let:highlighted>
-                    <slot {item} index={actualIndex} {selected} {highlighted} />
-                  </HighlightSlot>
-                {:else}
-                  {itemToString(item)}
-                {/if}
-                {#if $$slots.iconRight}
-                  <span
-                    class:bx--list-box__menu-item__icon={true}
-                    class:bx--list-box__menu-item__icon--right={true}
-                  >
-                    <HighlightSlot {optionId} let:highlighted>
-                      <slot
-                        name="iconRight"
-                        {item}
-                        index={actualIndex}
-                        {selected}
-                        {highlighted}
-                      />
-                    </HighlightSlot>
-                  </span>
-                {:else if selected}
-                  <Checkmark class="bx--list-box__menu-item__selected-icon" />
-                {/if}
-              </ListBoxMenuItem>
+                {#each run.rows as item, runIndex (item.id)}
+                  {@const rowIndex = run.start + runIndex}
+                  {@const actualIndex = groupRows
+                    ? groupRows.itemIndexByRow[rowIndex]
+                    : rowIndex}
+                  {#if actualIndex === -1}
+                    <!-- Hidden from assistive tech: the enclosing group is named
+                         by a hidden label, which stays rendered when a virtualized
+                         window leaves this header out. -->
+                    <div
+                      role="presentation"
+                      aria-hidden="true"
+                      data-virtual-index={isMeasured ? rowIndex : undefined}
+                      class:bx--list-box__menu-group-header={true}
+                      on:mousedown={(event) => {
+                        // Keep focus on the field, as options do.
+                        event.preventDefault();
+                      }}
+                    >
+                      <slot name="group" group={item.group} items={item.items}>
+                        {item.group}
+                      </slot>
+                    </div>
+                  {:else}
+                    {@const selected = selectedItem?.id === item.id}
+                    {@const optionId = `${id}-${item.id}`}
+                    <ListBoxMenuItem
+                      id={optionId}
+                      active={selectedId === item.id}
+                      disabled={item.disabled}
+                      hasLeftIcon={Boolean($$slots.icon || item.icon)}
+                      aria-setsize={filteredItems.length}
+                      aria-posinset={actualIndex + 1}
+                      data-virtual-index={isMeasured ? rowIndex : undefined}
+                      on:click={(event) => {
+                        if (item.disabled) {
+                          event.stopPropagation();
+                          return;
+                        }
+                        selectItem(item);
+                      }}
+                      on:mousedown={(event) => {
+                        // Keep focus on the field so screen readers don't
+                        // re-announce it on every option click.
+                        event.preventDefault();
+                      }}
+                      on:mouseenter={() => highlightItem(item)}
+                    >
+                      {#if $$slots.icon}
+                        <span
+                          class:bx--list-box__menu-item__icon={true}
+                          class:bx--list-box__menu-item__icon--left={true}
+                        >
+                          <HighlightSlot {optionId} let:highlighted>
+                            <slot
+                              name="icon"
+                              {item}
+                              index={actualIndex}
+                              {selected}
+                              {highlighted}
+                            />
+                          </HighlightSlot>
+                        </span>
+                      {:else if item.icon}
+                        <span
+                          class:bx--list-box__menu-item__icon={true}
+                          class:bx--list-box__menu-item__icon--left={true}
+                        >
+                          <svelte:component this={item.icon} />
+                        </span>
+                      {/if}
+                      {#if $$slots.default}
+                        <HighlightSlot {optionId} let:highlighted>
+                          <slot
+                            {item}
+                            index={actualIndex}
+                            {selected}
+                            {highlighted}
+                          />
+                        </HighlightSlot>
+                      {:else}
+                        {itemToString(item)}
+                      {/if}
+                      {#if $$slots.iconRight}
+                        <span
+                          class:bx--list-box__menu-item__icon={true}
+                          class:bx--list-box__menu-item__icon--right={true}
+                        >
+                          <HighlightSlot {optionId} let:highlighted>
+                            <slot
+                              name="iconRight"
+                              {item}
+                              index={actualIndex}
+                              {selected}
+                              {highlighted}
+                            />
+                          </HighlightSlot>
+                        </span>
+                      {:else if selected}
+                        <Checkmark
+                          class="bx--list-box__menu-item__selected-icon"
+                        />
+                      {/if}
+                    </ListBoxMenuItem>
+                  {/if}
+                {/each}
+              </ListBoxMenuGroup>
             {/each}
           </VirtualWindow>
         {:else}
-          {#each itemsToRender as item, index (item.id)}
-            {@const selected = selectedItem?.id === item.id}
-            {@const optionId = `${id}-${item.id}`}
-            {@const matchIndex = filteredIndexById.get(item.id)}
-            {@const slotIndex = matchIndex ?? index}
-            <ListBoxMenuItem
-              id={optionId}
-              active={selectedId === item.id}
-              disabled={item.disabled}
-              hasLeftIcon={Boolean($$slots.icon || item.icon)}
-              hidden={hideMode && matchIndex === undefined ? true : undefined}
-              aria-setsize={filteredItems.length}
-              aria-posinset={matchIndex === undefined
-                ? undefined
-                : matchIndex + 1}
-              data-virtual-index={isMeasured ? matchIndex : undefined}
-              on:click={(event) => {
-                if (item.disabled) {
-                  event.stopPropagation();
-                  return;
-                }
-                selectItem(item);
-              }}
-              on:mousedown={(event) => {
-                // Keep focus on the field so screen readers don't
-                // re-announce it on every option click.
-                event.preventDefault();
-              }}
-              on:mouseenter={() => highlightItem(item)}
+          {#each menuRuns as run (run.key)}
+            <ListBoxMenuGroup
+              labelledBy={run.groupIndex > -1
+                ? `group-${id}-${run.groupIndex}`
+                : undefined}
             >
-              {#if $$slots.icon}
-                <span
-                  class:bx--list-box__menu-item__icon={true}
-                  class:bx--list-box__menu-item__icon--left={true}
-                >
-                  <HighlightSlot {optionId} let:highlighted>
-                    <slot
-                      name="icon"
-                      {item}
-                      index={slotIndex}
-                      {selected}
-                      {highlighted}
-                    />
-                  </HighlightSlot>
-                </span>
-              {:else if item.icon}
-                <span
-                  class:bx--list-box__menu-item__icon={true}
-                  class:bx--list-box__menu-item__icon--left={true}
-                >
-                  <svelte:component this={item.icon} />
-                </span>
-              {/if}
-              {#if $$slots.default}
-                <HighlightSlot {optionId} let:highlighted>
-                  <slot {item} index={slotIndex} {selected} {highlighted} />
-                </HighlightSlot>
-              {:else}
-                {itemToString(item)}
-              {/if}
-              {#if $$slots.iconRight}
-                <span
-                  class:bx--list-box__menu-item__icon={true}
-                  class:bx--list-box__menu-item__icon--right={true}
-                >
-                  <HighlightSlot {optionId} let:highlighted>
-                    <slot
-                      name="iconRight"
-                      {item}
-                      index={slotIndex}
-                      {selected}
-                      {highlighted}
-                    />
-                  </HighlightSlot>
-                </span>
-              {:else if selected}
-                <Checkmark class="bx--list-box__menu-item__selected-icon" />
-              {/if}
-            </ListBoxMenuItem>
+              {#each run.rows as item, runIndex (item.id)}
+                {@const rowIndex = run.start + runIndex}
+                {@const index = groupRows
+                  ? groupRows.itemIndexByRow[rowIndex]
+                  : rowIndex}
+                {#if index === -1}
+                  <!-- Hidden from assistive tech: the enclosing group is named
+                       by a hidden label, which stays rendered when a virtualized
+                       window leaves this header out. -->
+                  <div
+                    role="presentation"
+                    aria-hidden="true"
+                    data-virtual-index={isMeasured ? rowIndex : undefined}
+                    class:bx--list-box__menu-group-header={true}
+                    on:mousedown={(event) => {
+                      // Keep focus on the field, as options do.
+                      event.preventDefault();
+                    }}
+                  >
+                    <slot name="group" group={item.group} items={item.items}>
+                      {item.group}
+                    </slot>
+                  </div>
+                {:else}
+                  {@const selected = selectedItem?.id === item.id}
+                  {@const optionId = `${id}-${item.id}`}
+                  {@const matchIndex = filteredIndexById.get(item.id)}
+                  {@const slotIndex = matchIndex ?? index}
+                  <ListBoxMenuItem
+                    id={optionId}
+                    active={selectedId === item.id}
+                    disabled={item.disabled}
+                    hasLeftIcon={Boolean($$slots.icon || item.icon)}
+                    hidden={hideMode && matchIndex === undefined
+                      ? true
+                      : undefined}
+                    aria-setsize={filteredItems.length}
+                    aria-posinset={matchIndex === undefined
+                      ? undefined
+                      : matchIndex + 1}
+                    data-virtual-index={isMeasured
+                      ? groupRows
+                        ? rowIndex
+                        : matchIndex
+                      : undefined}
+                    on:click={(event) => {
+                      if (item.disabled) {
+                        event.stopPropagation();
+                        return;
+                      }
+                      selectItem(item);
+                    }}
+                    on:mousedown={(event) => {
+                      // Keep focus on the field so screen readers don't
+                      // re-announce it on every option click.
+                      event.preventDefault();
+                    }}
+                    on:mouseenter={() => highlightItem(item)}
+                  >
+                    {#if $$slots.icon}
+                      <span
+                        class:bx--list-box__menu-item__icon={true}
+                        class:bx--list-box__menu-item__icon--left={true}
+                      >
+                        <HighlightSlot {optionId} let:highlighted>
+                          <slot
+                            name="icon"
+                            {item}
+                            index={slotIndex}
+                            {selected}
+                            {highlighted}
+                          />
+                        </HighlightSlot>
+                      </span>
+                    {:else if item.icon}
+                      <span
+                        class:bx--list-box__menu-item__icon={true}
+                        class:bx--list-box__menu-item__icon--left={true}
+                      >
+                        <svelte:component this={item.icon} />
+                      </span>
+                    {/if}
+                    {#if $$slots.default}
+                      <HighlightSlot {optionId} let:highlighted>
+                        <slot
+                          {item}
+                          index={slotIndex}
+                          {selected}
+                          {highlighted}
+                        />
+                      </HighlightSlot>
+                    {:else}
+                      {itemToString(item)}
+                    {/if}
+                    {#if $$slots.iconRight}
+                      <span
+                        class:bx--list-box__menu-item__icon={true}
+                        class:bx--list-box__menu-item__icon--right={true}
+                      >
+                        <HighlightSlot {optionId} let:highlighted>
+                          <slot
+                            name="iconRight"
+                            {item}
+                            index={slotIndex}
+                            {selected}
+                            {highlighted}
+                          />
+                        </HighlightSlot>
+                      </span>
+                    {:else if selected}
+                      <Checkmark
+                        class="bx--list-box__menu-item__selected-icon"
+                      />
+                    {/if}
+                  </ListBoxMenuItem>
+                {/if}
+              {/each}
+            </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if showEmpty}
+          <ListBoxMenuStatus>
+            <slot name="empty" {value}>{emptyMessage}</slot>
+          </ListBoxMenuStatus>
+        {/if}
+        {#if loading}
+          <ListBoxMenuStatus>
+            <InlineLoading description={loadingText} />
+          </ListBoxMenuStatus>
         {/if}
       </ListBoxMenu>
     {/if}
@@ -1371,6 +1567,11 @@
     >
       {helperText}
     </div>
+  {/if}
+  {#if groupRows}
+    {#each groupRows.headers as header, groupIndex (header.id)}
+      <span id="group-{id}-{groupIndex}" hidden>{header.group}</span>
+    {/each}
   {/if}
   <!-- Live region for selection announcements. Always rendered (even while
        empty) so assistive tech registers the region before its text changes. -->

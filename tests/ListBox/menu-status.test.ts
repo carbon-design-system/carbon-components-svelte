@@ -1,6 +1,7 @@
 import {
   applyPostClearOptions,
   createMenuCloseHandler,
+  createMenuOpenHandler,
   createStatusAnnouncer,
 } from "../../src/ListBox/menu-status.js";
 
@@ -95,5 +96,55 @@ describe("applyPostClearOptions", () => {
     await expect(
       applyPostClearOptions(undefined, setOpen, () => null),
     ).resolves.toBeUndefined();
+  });
+});
+
+describe("createMenuOpenHandler", () => {
+  function setup(initialOpen = false) {
+    const state = { open: initialOpen };
+    const dispatch = vi.fn();
+    const handler = createMenuOpenHandler({
+      getOpen: () => state.open,
+      setOpen: (next) => {
+        state.open = next;
+      },
+      dispatch,
+    });
+    return { state, dispatch, ...handler };
+  }
+
+  it("dispatches the recorded trigger once the open renders", () => {
+    const { state, dispatch, openMenu, sync } = setup();
+
+    openMenu("click");
+    expect(state.open).toBe(true);
+    expect(dispatch).not.toHaveBeenCalled();
+
+    sync();
+    sync();
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith("open", { trigger: "click" });
+  });
+
+  it('reports an unrecorded open as "programmatic"', () => {
+    const { state, dispatch, sync } = setup();
+
+    state.open = true;
+    sync();
+
+    expect(dispatch).toHaveBeenCalledWith("open", { trigger: "programmatic" });
+  });
+
+  it("skips an initially open menu and an open undone before rendering", () => {
+    const { state, dispatch, openMenu, sync } = setup(true);
+
+    sync();
+    state.open = false;
+    sync();
+    openMenu("keydown");
+    state.open = false;
+    sync();
+
+    expect(dispatch).not.toHaveBeenCalled();
   });
 });

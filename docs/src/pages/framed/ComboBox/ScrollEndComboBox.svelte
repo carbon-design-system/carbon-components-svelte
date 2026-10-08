@@ -1,5 +1,5 @@
 <script>
-  import { ComboBox, InlineLoading, Stack } from "carbon-components-svelte";
+  import { ComboBox, Stack } from "carbon-components-svelte";
 
   const PAGE_SIZE = 40;
   const TOTAL = 200;
@@ -35,11 +35,11 @@
     {items}
     shouldFilterItem={() => true}
     virtualize={{ containerHeight: 240, threshold: 1 }}
+    {loading}
+    loadingText="Loading more…"
     on:scrollend={loadMore}
   />
-  {#if loading}
-    <InlineLoading description="Loading more…" />
-  {:else if !hasMore}
+  {#if !hasMore}
     <p>Loaded all {TOTAL} items.</p>
   {:else}
     <p>

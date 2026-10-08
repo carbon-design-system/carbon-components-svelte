@@ -231,6 +231,36 @@ Besides `matched`, `fuzzyMatch` returns the `indices` of the characters that mat
 
 <FileSource src="/framed/ComboBox/ComboBoxHighlightMatch" />
 
+## Groups
+
+Set `group` on items to list them under a non-selectable header. Items without a group are listed first, without a header, followed by the groups in the order they first occur in `items`. The arrow keys move between options and skip the headers. While filtering, a group with no matching items is hidden, header and all.
+
+Each group is exposed to screen readers as a group named by its label. The selection is still a single id.
+
+<ComboBox labelText="Region" placeholder="Select a region"
+  items="{[{id: "0", text: "Frankfurt", group: "Europe"},
+    {id: "1", text: "Toronto", group: "Americas"},
+    {id: "2", text: "London", group: "Europe"},
+    {id: "3", text: "São Paulo", group: "Americas"},
+    {id: "4", text: "Global (any region)"}]}"
+/>
+
+### Custom header
+
+Override the `group` slot to customize a header. Use `let:group` for the label and `let:items` for the group's items. The slot changes the visible header only; screen readers still announce the plain label.
+
+<ComboBox labelText="Region" placeholder="Select a region"
+  items="{[{id: "0", text: "Frankfurt", group: "Europe"},
+    {id: "1", text: "Toronto", group: "Americas"},
+    {id: "2", text: "London", group: "Europe"},
+    {id: "3", text: "São Paulo", group: "Americas"},
+    {id: "4", text: "Global (any region)"}]}"
+>
+  <svelte:fragment slot="group" let:group let:items={groupItems}>
+    {group} ({groupItems.length})
+  </svelte:fragment>
+</ComboBox>
+
 ## Filtering
 
 By default, combobox filtering is synchronous and client-side. Customize the filter logic, label rendering, and when results reset.
@@ -247,7 +277,7 @@ Enable filtering to let users search through the options.
 
 By default (`filterMode="remove"`), filtering unmounts non-matching options and recreates them when they match again.
 
-Set `filterMode` to `"hide"` to keep every option mounted and hide non-matching ones with the `hidden` attribute. Keyboard navigation, `aria-setsize`, and `aria-posinset` still follow the matching items only. `"hide"` falls back to `"remove"` when virtualization is enabled. For typical ComboBox lists, `"remove"` is faster per keystroke because it only updates matching option nodes.
+Set `filterMode` to `"hide"` to keep every option mounted and hide non-matching ones with the `hidden` attribute. Keyboard navigation, `aria-setsize`, and `aria-posinset` still follow the matching items only. `"hide"` falls back to `"remove"` when virtualization is enabled or items are [grouped](#groups). For typical ComboBox lists, `"remove"` is faster per keystroke because it only updates matching option nodes.
 
 <ComboBox filterMode="hide" labelText="Alert channel" placeholder="Select alert channel"
 items={[
@@ -255,6 +285,34 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Webhook"}
   ]}  />
+
+### Empty state
+
+When the filter matches nothing, the menu shows "No results" in place of the options. Screen readers already hear the count from `filterResultsText`, so the message is hidden from them.
+
+Set `emptyText` to change the message, or pass a function that builds it from the typed text. Set it to `""` to leave the menu empty instead.
+
+<ComboBox labelText="Alert channel" placeholder="Type to filter" emptyText="No matching channels"
+shouldFilterItem={(item, value) => item.text.toLowerCase().includes(value.toLowerCase())}
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Webhook"}
+  ]}  />
+
+Use the `empty` slot for richer content. `let:value` is the typed text.
+
+<ComboBox labelText="Alert channel" placeholder="Type to filter"
+shouldFilterItem={(item, value) => item.text.toLowerCase().includes(value.toLowerCase())}
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Webhook"}
+  ]}>
+  <svelte:fragment slot="empty" let:value>
+    No channel named "{value}". Check the spelling or add it in Settings.
+  </svelte:fragment>
+</ComboBox>
 
 ### Custom label
 
@@ -274,6 +332,8 @@ The original value is automatically restored if you close the dropdown without m
 
 For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async behavior with a debounced input value change.
 
+Set `loading` to `true` while a request is in flight. The menu shows a loading row after the options, is marked busy for screen readers, and holds back the empty state until the results arrive.
+
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 
 ### Load more
@@ -282,7 +342,7 @@ For async (for example, server-side) filtering, bind to `value` and update `item
 
 This is a library load-more signal, named like Modal's lowercase `transitionend`. It is not the browser's native `scrollend` (scroll stopped).
 
-Keep prior items visible while the next page loads. Track in-flight status in local state, or surface it with the `empty` slot when the list is temporarily empty.
+Keep prior items visible while the next page loads, and set `loading` while the request is in flight to show a loading row after them. The options stay selectable.
 
 `scrollend` fires once per approach to the bottom. It re-arms after the user scrolls away, and when `items` grows so another page can be requested. Holding the scrollbar at the bottom does not spam the handler. The raw DOM `scroll` event is still forwarded via `on:scroll`.
 
@@ -357,7 +417,7 @@ By default, item height matches the menu row for each size: 24px (`xs`), 32px (`
 
 ## Events
 
-Listen for selection, dismissal, and clear interactions. The `scrollend` load-more event is documented separately; see [Load more](#load-more).
+Listen for selection, the menu opening and closing, and clear interactions. The `scrollend` load-more event is documented separately; see [Load more](#load-more).
 
 ### Select
 
@@ -370,6 +430,20 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Webhook"}
   ]}  />
+
+### Open
+
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing opened it), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a combo box rendered already open.
+
+<ComboBox
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:open={(e) => console.log(e.detail.trigger)}
+/>
 
 ### Close
 
@@ -673,6 +747,12 @@ nothing is selected.
   <Button type="submit">Submit</Button>
 </Form>
 ```
+
+## Required
+
+Set `required` to keep a surrounding form from submitting until the input has a value. `required` lands on the text input itself, like `name`. The browser reports the missing value on the field, and the field is marked required for screen readers.
+
+<FileSource src="/framed/ComboBox/ComboBoxRequired" />
 
 ## Skeleton
 

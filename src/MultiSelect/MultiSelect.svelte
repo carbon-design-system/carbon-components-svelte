@@ -64,10 +64,12 @@
    * @property {Item[]} unselected
    * @event {KeyboardEvent | MouseEvent} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
+   * @event {{ trigger: "click" | "keydown" | "input" | "programmatic" }} open
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ group: string; items: ReadonlyArray<Item & { checked: boolean }>; }} group
+   * @slot {{ value: string; }} empty
    * @restProps {input | button}
    */
 
@@ -295,6 +297,16 @@
   };
 
   /**
+   * Specify the message shown in the menu when no items match the filter.
+   * Only used when `filterable` is `true`.
+   * Pass a function to build it from the typed value.
+   * Set to `""` to show no message; `filterResultsText` still announces
+   * the result count.
+   * @type {string | ((value: string) => string)}
+   */
+  export let emptyText = "No results";
+
+  /**
    * Default group name for the hidden inputs that mirror the current
    * selection for native form submission (`FormData`). Used per item
    * unless `itemToInput` returns its own `name`. Each input's value
@@ -305,6 +317,13 @@
    * @type {string}
    */
   export let name = undefined;
+
+  /**
+   * Set to `true` to require at least one selection. A wrapping `<form>`
+   * blocks submission, through native constraint validation, while no
+   * enabled item is selected.
+   */
+  export let required = false;
 
   /**
    * Obtain a reference to the input HTML element.
@@ -368,6 +387,16 @@
   export let virtualize = undefined;
 
   /**
+   * Set to `true` to show a loading row after the options while the menu is
+   * open, such as while fetching more items on `scrollend`. Marks the menu
+   * `aria-busy` and hides the empty state; the options stay interactive.
+   */
+  export let loading = false;
+
+  /** Specify the text of the loading row */
+  export let loadingText = "Loading...";
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -402,6 +431,7 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
@@ -414,6 +444,8 @@
     ListBoxSelection,
   } from "../ListBox/index.js";
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
+  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
@@ -427,6 +459,7 @@
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
+    createMenuOpenHandler,
     createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
@@ -508,6 +541,14 @@
 
   const typeahead = createTypeaheadBuffer();
   const buildGroupRows = createGroupRows();
+
+  // `openMenu(trigger)` opens a closed menu and records the cause, which
+  // `syncOpenEvent` reports in `open` once the menu has rendered.
+  const { openMenu, sync: syncOpenEvent } = createMenuOpenHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -850,6 +891,7 @@
   });
 
   afterUpdate(() => {
+    syncOpenEvent();
     // Compare by length, not by IDs. This is intentional: `on:select`
     // should only fire in response to UI interaction (toggle/clear),
     // not programmatic `selectedIds` changes. A length check is sufficient
@@ -1220,6 +1262,14 @@
     announcedFilterCount = null;
     statusText = "";
   }
+  $: hasNoMatches = filterable && open && !loading && filterResultCount === 0;
+  $: emptyMessage = hasNoMatches
+    ? typeof emptyText === "function"
+      ? emptyText(value)
+      : emptyText
+    : "";
+  // A row after the options, not an option, so arrow keys never reach it.
+  $: showEmpty = hasNoMatches && ($$slots.empty || emptyMessage !== "");
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
@@ -1393,6 +1443,7 @@
             bind:this={inputRef}
             use:preserveFocusSelection={selectTextOnFocus && !disabled}
             bind:value
+            aria-required={required || undefined}
             {...$$restProps}
             role="combobox"
             tabindex="0"
@@ -1410,7 +1461,7 @@
             class:bx--text-input--light={light}
             on:click={() => {
               if (disabled) return;
-              open = true;
+              openMenu("click");
             }}
             on:keydown
             on:keydown={(event) => {
@@ -1438,12 +1489,12 @@
                   // APG combobox pattern: Alt+ArrowDown opens a closed menu
                   // without moving the highlight; Alt+ArrowUp closes an open one.
                   if (event.key === "ArrowDown" && !open) {
-                    open = true;
+                    openMenu("keydown");
                   } else if (event.key === "ArrowUp" && open) {
                     close("escape-key");
                   }
                 } else {
-                  if (!open) open = true;
+                  openMenu("keydown");
                   change(step);
                 }
               } else if (
@@ -1457,7 +1508,7 @@
                 close("escape-key");
               } else if (event.key === " ") {
                 if (readonly) event.preventDefault();
-                if (!open) open = true;
+                openMenu("keydown");
               } else if (event.key === "Backspace" && value === "") {
                 clear({ open: openOnClear });
               } else if (event.key === "Delete") {
@@ -1467,7 +1518,7 @@
             }}
             on:input
             on:input={() => {
-              if (!open) open = true;
+              openMenu("input");
             }}
             on:keyup
             on:focus
@@ -1512,7 +1563,8 @@
             on:click={(event) => {
               if (disabled) return;
               event.stopPropagation();
-              open = !open;
+              if (open) open = false;
+              else openMenu("click");
             }}
             {translateWithId}
             {open}
@@ -1532,6 +1584,7 @@
           : showFieldFocus}
       >
         <ListBoxField
+          aria-required={required || undefined}
           {...$$restProps}
           role="combobox"
           tabindex="0"
@@ -1544,7 +1597,8 @@
           }}
           on:click={() => {
             if (disabled) return;
-            open = !open;
+            if (open) open = false;
+            else openMenu("click");
           }}
           on:keydown={(event) => {
             // The field is only aria-disabled, so a click can still focus it.
@@ -1565,7 +1619,7 @@
               if (open) {
                 selectHighlightedItem(highlightedIndex, event.shiftKey);
               } else {
-                open = true;
+                openMenu("keydown");
               }
             } else if (event.key === "Tab") {
               // Tab dismisses without selecting; report it as a keyboard
@@ -1577,19 +1631,19 @@
                 // APG combobox pattern: Alt+ArrowDown opens a closed menu
                 // without moving the highlight; Alt+ArrowUp closes an open one.
                 if (event.key === "ArrowDown" && !open) {
-                  open = true;
+                  openMenu("keydown");
                 } else if (event.key === "ArrowUp" && open) {
                   close("escape-key");
                 }
               } else {
-                if (!open) open = true;
+                openMenu("keydown");
                 change(step);
               }
             } else if (event.key === "Enter") {
               if (open) {
                 selectHighlightedItem(highlightedIndex, event.shiftKey);
               } else {
-                open = true;
+                openMenu("keydown");
               }
             } else if (
               open &&
@@ -1605,7 +1659,7 @@
               // move the highlight to the first/last option. The filterable
               // variant deliberately leaves these keys to the text caret.
               event.preventDefault();
-              if (!open) open = true;
+              openMenu("keydown");
               highlightedIndex =
                 event.key === "Home" ? 0 : itemsToUse.length - 1;
               highlightOrigin = "keyboard";
@@ -1654,6 +1708,14 @@
         </ListBoxField>
       </div>
     {/if}
+    {#if required}
+      <ListBoxRequiredInput
+        hasValue={formItems.length > 0}
+        {disabled}
+        {readonly}
+        focusTarget={filterable ? inputRef : fieldRef}
+      />
+    {/if}
     {#if open}
       <ListBoxMenu
         aria-label={ariaLabel}
@@ -1668,6 +1730,7 @@
         highlightScroll={highlightOrigin !== "pointer"}
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
+        aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
@@ -1722,6 +1785,9 @@
                     </div>
                   {:else}
                     {@const optionId = `${id}-${item.id}`}
+                    {@const selected = item.isSelectAll
+                      ? allSelected
+                      : item.checked}
                     {@const itemDisabled =
                       item.disabled ||
                       (hasMaxSelectedItems && !!item.isSelectAll) ||
@@ -1787,9 +1853,7 @@
                             slot="labelChildren"
                             {item}
                             index={actualIndex}
-                            selected={item.isSelectAll
-                              ? allSelected
-                              : item.checked}
+                            {selected}
                             {highlighted}
                           >
                             {itemToString(item)}
@@ -1834,6 +1898,9 @@
                   </div>
                 {:else}
                   {@const optionId = `${id}-${item.id}`}
+                  {@const selected = item.isSelectAll
+                    ? allSelected
+                    : item.checked}
                   {@const itemDisabled =
                     item.disabled ||
                     (hasMaxSelectedItems && !!item.isSelectAll) ||
@@ -1888,9 +1955,7 @@
                           slot="labelChildren"
                           {item}
                           {index}
-                          selected={item.isSelectAll
-                            ? allSelected
-                            : item.checked}
+                          {selected}
                           {highlighted}
                         >
                           {itemToString(item)}
@@ -1902,6 +1967,19 @@
               {/each}
             </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if showEmpty}
+          <!-- Svelte 3 leaks the forwarded default slot's props into every
+               slot's context, so they are `{@const}`s: here, outside the
+               options, they read as undefined instead of throwing. -->
+          <ListBoxMenuStatus>
+            <slot name="empty" {value}>{emptyMessage}</slot>
+          </ListBoxMenuStatus>
+        {/if}
+        {#if loading}
+          <ListBoxMenuStatus>
+            <InlineLoading description={loadingText} />
+          </ListBoxMenuStatus>
         {/if}
       </ListBoxMenu>
     {/if}

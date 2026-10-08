@@ -23,6 +23,22 @@ export declare function createMenuCloseHandler(
   options: CreateMenuCloseHandlerOptions,
 ): (trigger: string) => void;
 
+export type CreateMenuOpenHandlerOptions = {
+  getOpen: () => boolean;
+  setOpen: (open: boolean) => void;
+  dispatch: (event: "open", detail: { trigger: string }) => void;
+};
+
+/**
+ * Build the `open` event bookkeeping for a listbox menu. `openMenu`
+ * opens a closed menu and records the cause; `sync`, called after each
+ * update, dispatches `open` once per closed-to-open transition, with
+ * `"programmatic"` when no cause was recorded.
+ */
+export declare function createMenuOpenHandler(
+  options: CreateMenuOpenHandlerOptions,
+): { openMenu: (trigger: string) => void; sync: () => void };
+
 /**
  * The tail shared by `clear()` implementations: wait for bindings to
  * settle, then optionally reopen and/or focus.
