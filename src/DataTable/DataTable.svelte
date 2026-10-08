@@ -459,13 +459,16 @@
   const tableSize = writable(size);
   $: $tableSize = size;
 
-  /** Default row heights based on size variant */
-  const DEFAULT_ROW_HEIGHTS = {
+  /** Row heights per size variant, matching `bx--data-table--<size>` */
+  const ROW_HEIGHTS = {
     compact: 24,
     short: 32,
-    medium: 48,
+    medium: 40,
     tall: 64,
   };
+
+  /** Row height when `size` is unset */
+  const DEFAULT_ROW_HEIGHT = 48;
 
   const expandIconProps = {
     "aria-hidden": "true",
@@ -924,7 +927,7 @@
           return compareValues(itemA, itemB, ascending);
         })
       : $tableRows;
-  $: defaultRowHeight = DEFAULT_ROW_HEIGHTS[size] || DEFAULT_ROW_HEIGHTS.medium;
+  $: defaultRowHeight = ROW_HEIGHTS[size] ?? DEFAULT_ROW_HEIGHT;
   $: virtualConfig = virtualize
     ? {
         itemHeight: defaultRowHeight,

@@ -3,6 +3,7 @@
   import type { ComponentProps } from "svelte";
 
   export let stickyHeaderMaxHeight: ComponentProps<DataTable>["stickyHeaderMaxHeight"] = 240;
+  export let size: ComponentProps<DataTable>["size"] = undefined;
 
   const headers = [
     { key: "name", value: "Name" },
@@ -16,4 +17,11 @@
   }));
 </script>
 
-<DataTable {headers} {rows} stickyHeader {stickyHeaderMaxHeight} virtualize />
+<DataTable
+  {headers}
+  {rows}
+  {size}
+  stickyHeader
+  {stickyHeaderMaxHeight}
+  virtualize
+/>
