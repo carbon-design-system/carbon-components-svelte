@@ -18,6 +18,17 @@ describe("FileUploaderButton", () => {
     expect(screen.getByRole("button")).toHaveClass("bx--btn--disabled");
   });
 
+  it("should select folders when directory is set", () => {
+    const { container, unmount } = render(FileUploaderButton, {
+      props: { directory: true },
+    });
+    expect(getFileInput(container)).toHaveAttribute("webkitdirectory");
+    unmount();
+
+    const { container: plain } = render(FileUploaderButton);
+    expect(getFileInput(plain)).not.toHaveAttribute("webkitdirectory");
+  });
+
   it("should update label text when files are selected (single file)", async () => {
     const { container } = render(FileUploaderButton, {
       props: { labelText: "Add file" },

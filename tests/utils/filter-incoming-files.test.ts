@@ -3,9 +3,15 @@ import {
   matchesAccept,
 } from "../../src/utils/filter-incoming-files.js";
 
-function makeFile(name: string, size: number, lastModified = 1) {
+function makeFile(
+  name: string,
+  size: number,
+  lastModified = 1,
+  relativePath = "",
+) {
   const file = new File(["x".repeat(size)], name, { type: "text/plain" });
   Object.defineProperty(file, "lastModified", { value: lastModified });
+  Object.defineProperty(file, "webkitRelativePath", { value: relativePath });
   return file;
 }
 
@@ -78,6 +84,17 @@ describe("filterIncomingFiles", () => {
       existingFiles: [makeFile("a.txt", 3, 5)],
     });
     expect(accepted).toEqual([file]);
+  });
+
+  it("keeps same-named files from different folders", () => {
+    const existing = makeFile("index.html", 10, 5, "site/index.html");
+    const nested = makeFile("index.html", 10, 5, "site/blog/index.html");
+    const { accepted, rejected } = filterIncomingFiles([nested], {
+      preventDuplicate: true,
+      existingFiles: [existing],
+    });
+    expect(accepted).toEqual([nested]);
+    expect(rejected).toEqual([]);
   });
 
   it("does not reject same-reference files in carryRefs", () => {
