@@ -270,6 +270,12 @@
   export let name = undefined;
 
   /**
+   * Set to `true` to require a value. Sets `required` on the input, so a
+   * wrapping `<form>` blocks submission while it is empty.
+   */
+  export let required = false;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -1044,6 +1050,7 @@
           {placeholder}
           {id}
           {name}
+          {required}
           {...$$restProps}
           class:bx--text-input={true}
           class:bx--text-input--light={light}
