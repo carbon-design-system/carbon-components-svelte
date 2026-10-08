@@ -161,6 +161,14 @@ Set `invalid` to `true` and provide `invalidText` to show a validation error for
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+### Required
+
+Set `required` on `RadioButtonGroup` to keep a surrounding form from submitting until a radio button is selected. When a submit is blocked, the field shows its invalid state instead of the browser's error bubble, and the first such field takes focus. The state clears once the field has a value or the form resets.
+
+Set `requiredInvalidText` to change the message, which defaults to "Select an option". Your own `invalid` and `invalidText` take precedence.
+
+<FileSource src="/framed/RadioButton/RadioButtonGroupRequired" />
+
 ### Warning
 
 Set `warn` to `true` and provide `warnText` to show a warning message for the group. `invalid` takes precedence over `warn` when both are set.

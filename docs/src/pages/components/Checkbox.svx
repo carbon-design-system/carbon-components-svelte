@@ -76,6 +76,14 @@ Set `invalid` to `true` and provide `invalidText` to show a validation error.
 
 <Checkbox labelText="I agree to the terms and conditions" invalid invalidText="You must agree to the terms and conditions to continue" />
 
+### Required
+
+Set `required` to keep a surrounding form from submitting until the checkbox is checked. On `CheckboxGroup`, `required` asks for at least one checked box, and the group reports the missing selection once rather than on every checkbox. When a submit is blocked, the field shows its invalid state instead of the browser's error bubble, and the first such field takes focus. The state clears once the field has a value or the form resets.
+
+Set `requiredInvalidText` to change the message, which defaults to "Check this box to continue" on `Checkbox` and "Select at least one option" on `CheckboxGroup`. Your own `invalid` and `invalidText` take precedence.
+
+<FileSource src="/framed/Checkbox/CheckboxRequired" />
+
 ### Warning
 
 Set `warn` to `true` and provide `warnText` to show a warning message. `invalid` takes precedence over `warn` when both are set.

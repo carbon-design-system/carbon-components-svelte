@@ -313,6 +313,14 @@ Show validation errors using the invalid state.
   <SelectItem value="enterprise" text="Enterprise" />
 </Select>
 
+### Required
+
+Set `required` to keep a surrounding form from submitting while an option with an empty value is selected, such as a "Choose a plan" placeholder. When a submit is blocked, the field shows its invalid state instead of the browser's error bubble, and the first such field takes focus. The state clears once the field has a value or the form resets.
+
+Set `requiredInvalidText` to change the message, which defaults to "Select an option". Your own `invalid` and `invalidText` take precedence.
+
+<FileSource src="/framed/Select/SelectRequired" />
+
 ### Warning
 
 Show warnings using the warning state.

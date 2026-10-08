@@ -180,6 +180,14 @@ Indicate an invalid state with an error message by setting `invalid` and providi
 
 <TextInput invalid invalidText="Workspace name is already taken. Please try another." labelText="Workspace name" placeholder="Enter workspace name..." />
 
+### Required
+
+Set `required` to keep a surrounding form from submitting while the field is empty. When a submit is blocked, the field shows its invalid state instead of the browser's error bubble, and the first such field takes focus. The state clears once the field has a value or the form resets.
+
+Set `requiredInvalidText` to change the message, which defaults to "Enter a value". Your own `invalid` and `invalidText` take precedence.
+
+<FileSource src="/framed/TextInput/TextInputRequired" />
+
 ### Warning
 
 Indicate a warning state with a message by setting `warn` and providing `warnText`.
