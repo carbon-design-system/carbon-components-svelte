@@ -279,4 +279,18 @@ describe("FileUploaderItem", () => {
     await user.unhover(item);
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
+
+  it("should set a title on a truncated name", async () => {
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(10);
+    vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(100);
+    render(FileUploaderItem, {
+      props: { name: "quarterly-report-final.pdf" },
+    });
+
+    const name = screen.getByText("quarterly-report-final.pdf");
+    await vi.waitFor(() => {
+      expect(name).toHaveAttribute("title", "quarterly-report-final.pdf");
+    });
+    vi.restoreAllMocks();
+  });
 });

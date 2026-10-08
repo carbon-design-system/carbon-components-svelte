@@ -198,6 +198,7 @@
   import { createEventDispatcher, tick } from "svelte";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
@@ -369,7 +370,7 @@
         class:bx--file__selected-file--xs={size === "xs"}
       >
         <span class:bx--file-filename-group={true}>
-          <p class:bx--file-filename={true}>{file.name}</p>
+          <p class:bx--file-filename={true} use:overflowTitle>{file.name}</p>
           {#if rowFileSize}
             <p class:bx--file-size={true}>{rowFileSize}</p>
           {/if}
