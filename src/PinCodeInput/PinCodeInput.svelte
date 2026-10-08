@@ -139,6 +139,13 @@
    */
   export let name = undefined;
 
+  /**
+   * Specify the id of a form element outside the component to associate the
+   * segments and the hidden `name` input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
@@ -554,7 +561,7 @@
       </legend>
     {/if}
     {#if name}
-      <input type="hidden" {name} {value}>
+      <input type="hidden" {name} {value} {form}>
     {/if}
     <div
       data-invalid={hasError || undefined}
@@ -581,6 +588,7 @@
             {disabled}
             {readonly}
             {required}
+            {form}
             aria-readonly={readonly || undefined}
             aria-label={segmentLabelText(index + 1, count, labelText, type)}
             aria-invalid={hasError || undefined}
