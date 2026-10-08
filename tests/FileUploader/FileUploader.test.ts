@@ -1277,4 +1277,175 @@ describe("FileUploader", () => {
 
     expect(screen.getByText("2048 octets (#0)")).toBeInTheDocument();
   });
+
+  it("should give each remove button a distinct name by default", async () => {
+    const { component } = render(FileUploader);
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, [
+      new File(["a"], "a.txt"),
+      new File(["b"], "b.txt"),
+    ]);
+
+    expect(
+      await screen.findByRole("button", { name: "Remove file a.txt" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Remove file b.txt" }),
+    ).toBeInTheDocument();
+  });
+
+  it("should describe an invalid row's remove button with its error message", async () => {
+    const { component } = render(FileUploader, {
+      props: {
+        fileInvalid: (file: File) => file.name === "bad.txt",
+        fileErrorSubject: (file: File) => `${file.name} is too large`,
+        fileErrorBody: () => "Select a smaller file.",
+      },
+    });
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, [
+      new File(["a"], "good.txt"),
+      new File(["b"], "bad.txt"),
+    ]);
+
+    const bad = await screen.findByRole("button", {
+      name: "Remove file bad.txt",
+    });
+    expect(bad).toHaveAccessibleDescription(
+      "bad.txt is too large Select a smaller file.",
+    );
+    expect(
+      screen.getByRole("button", { name: "Remove file good.txt" }),
+    ).not.toHaveAttribute("aria-describedby");
+  });
+
+  describe("change on removing a file", () => {
+    async function renderWithFiles(names: string[]) {
+      const events: string[] = [];
+      const onChange = vi.fn((e: CustomEvent<ReadonlyArray<File>>) => {
+        events.push(`change:${e.detail.map((f) => f.name).join(",")}`);
+      });
+      const { component } = render(FileUploader, {
+        props: {
+          onChange,
+          onRemove: () => events.push("remove"),
+          onClear: () => events.push("clear"),
+        },
+      });
+      assert(component.ref instanceof HTMLInputElement);
+      simulateFileSelection(
+        component.ref,
+        names.map((name) => new File([name], name)),
+      );
+      await screen.findByText(names[0]);
+      await tick();
+      events.length = 0;
+      onChange.mockClear();
+      return { component, events, onChange };
+    }
+
+    it("should dispatch change with the remaining files after remove", async () => {
+      const { events } = await renderWithFiles(["a.txt", "b.txt"]);
+
+      await user.click(
+        screen.getByRole("button", { name: "Remove file a.txt" }),
+      );
+
+      await vi.waitFor(() => {
+        expect(events).toEqual(["remove", "change:b.txt"]);
+      });
+    });
+
+    it("should dispatch change once when removing the last file", async () => {
+      const { events } = await renderWithFiles(["a.txt"]);
+
+      await user.click(
+        screen.getByRole("button", { name: "Remove file a.txt" }),
+      );
+
+      await vi.waitFor(() => {
+        expect(events).toEqual(["remove", "change:", "clear"]);
+      });
+    });
+
+    it("should not dispatch change when a file is removed programmatically", async () => {
+      const { component, events } = await renderWithFiles(["a.txt", "b.txt"]);
+
+      assert(component.files);
+      component.files = component.files.slice(1);
+
+      await vi.waitFor(() => {
+        expect(events).toEqual(["remove"]);
+      });
+      await tick();
+      expect(events).toEqual(["remove"]);
+    });
+  });
+
+  describe("focus after removing a file", () => {
+    async function renderWithFiles(names: string[]) {
+      const { component } = render(FileUploader);
+      assert(component.ref instanceof HTMLInputElement);
+      simulateFileSelection(
+        component.ref,
+        names.map((name) => new File([name], name)),
+      );
+      await vi.waitFor(() => {
+        expect(rows()).toHaveLength(names.length);
+      });
+      return component;
+    }
+
+    function rows() {
+      return [...document.querySelectorAll(".bx--file__selected-file")];
+    }
+
+    function removeButton(name: string) {
+      const row = rows().find((r) => r.textContent?.includes(name));
+      const button = row?.querySelector(".bx--file-close");
+      assert(button instanceof HTMLButtonElement);
+      return button;
+    }
+
+    async function removeWithKeyboard(name: string) {
+      removeButton(name).focus();
+      await user.keyboard("{Enter}");
+      await vi.waitFor(() => {
+        expect(screen.queryByText(name)).not.toBeInTheDocument();
+      });
+    }
+
+    it("should focus the next row's remove button", async () => {
+      await renderWithFiles(["a.txt", "b.txt", "c.txt"]);
+      await removeWithKeyboard("b.txt");
+      expect(removeButton("c.txt")).toHaveFocus();
+    });
+
+    it("should focus the previous row's remove button when the last row is removed", async () => {
+      await renderWithFiles(["a.txt", "b.txt"]);
+      await removeWithKeyboard("b.txt");
+      expect(removeButton("a.txt")).toHaveFocus();
+    });
+
+    it("should focus the add button when the only row is removed", async () => {
+      await renderWithFiles(["a.txt"]);
+      await removeWithKeyboard("a.txt");
+      expect(screen.getByRole("button", { name: "Add files" })).toHaveFocus();
+    });
+
+    it("should not move focus when a file is removed programmatically", async () => {
+      const component = await renderWithFiles(["a.txt", "b.txt"]);
+      const outside = document.createElement("button");
+      document.body.append(outside);
+      outside.focus();
+
+      assert(component.files);
+      component.files = component.files.slice(1);
+      await tick();
+      await tick();
+
+      expect(outside).toHaveFocus();
+      outside.remove();
+    });
+  });
 });

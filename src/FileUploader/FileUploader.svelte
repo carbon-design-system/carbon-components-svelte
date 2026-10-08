@@ -251,6 +251,43 @@
     });
   }
 
+  /** @type {null | HTMLDivElement} */
+  let fileContainer = null;
+
+  // Set when a row's remove button removes a file, so the next file-list
+  // diff also dispatches `change`. Read through `takeRemovedByUser` so the
+  // diff block doesn't re-run when the flag resets.
+  let removedByUser = false;
+
+  function takeRemovedByUser() {
+    const value = removedByUser;
+    removedByUser = false;
+    return value;
+  }
+
+  /**
+   * Remove a row's file. If the row held focus, move focus to the next row's
+   * remove button, else the previous row's, else the add button, so keyboard
+   * users don't lose their place.
+   * @param {File} file
+   */
+  async function removeFile(file) {
+    const index = files.indexOf(file);
+    if (index === -1) return;
+    const hadFocus =
+      fileContainer?.children[index]?.contains(document.activeElement) ?? false;
+    removedByUser = true;
+    files = files.filter((f) => f !== file);
+    if (!hadFocus) return;
+    await tick();
+    const rows = fileContainer?.children;
+    const row = rows?.[index] ?? rows?.[index - 1];
+    const target =
+      row?.querySelector(".bx--file-close") ??
+      fileContainer?.parentElement?.querySelector(":scope > .bx--btn");
+    if (target instanceof HTMLElement) target.focus();
+  }
+
   $: {
     const prevSet = new Set(prevFiles);
     const currentSet = new Set(files);
@@ -259,6 +296,9 @@
 
     if (added.length > 0 || removed.length > 0) {
       const cleared = prevFiles.length > 0 && files.length === 0;
+      // Clearing already dispatches `change`.
+      const changed = takeRemovedByUser() && !cleared;
+      const current = files;
 
       // Update prevFiles before dispatching. Defer notification events with
       // tick() so a throwing handler can't abort the file-list render.
@@ -266,6 +306,7 @@
       tick().then(() => {
         if (added.length > 0) dispatch("add", added);
         if (removed.length > 0) dispatch("remove", removed);
+        if (changed) dispatch("change", current);
 
         if (cleared) {
           dispatch("change", []);
@@ -346,7 +387,7 @@
       dispatch("change", files);
     }}
   />
-  <div class:bx--file-container={true}>
+  <div bind:this={fileContainer} class:bx--file-container={true}>
     {#each filesWithKeys as { file, key }, index (key)}
       {@const rowStatus = resolveFileOverride(fileStatus, status, file, index)}
       {@const rowInvalid = resolveFileOverride(fileInvalid, false, file, index)}
@@ -363,6 +404,8 @@
         index,
       )}
       {@const rowFileSize = resolveFileSize(fileSize, file, index)}
+      {@const rowErrorId =
+        rowInvalid && rowErrorSubject ? `${id}-error-${index}` : undefined}
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
@@ -381,20 +424,14 @@
             {iconDescription}
             status={rowStatus}
             invalid={rowInvalid}
+            aria-describedby={rowErrorId}
             on:keydown
-            on:keydown={(event) => {
-              if (event.key === " " || event.key === "Enter") {
-                files = files.filter((f) => f !== file);
-              }
-            }}
             on:click
-            on:click={() => {
-              files = files.filter((f) => f !== file);
-            }}
+            on:click={() => removeFile(file)}
           />
         </span>
-        {#if rowInvalid && rowErrorSubject}
-          <div class:bx--form-requirement={true}>
+        {#if rowErrorId}
+          <div id={rowErrorId} class:bx--form-requirement={true}>
             <div class:bx--form-requirement__title={true}>
               {rowErrorSubject}
             </div>

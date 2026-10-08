@@ -49,7 +49,7 @@
    * Pass a string, or a function receiving {@link FilenameIconDescriptionContext}.
    * When the resolved value is omitted or blank after trim, defaults are used:
    * - `uploading`: passed to `Loading` as `"uploading"`
-   * - `edit`: close button `aria-label` is `"Remove file"`
+   * - `edit`: close button `aria-label` is `"Remove file {fileName}"` (`"Remove file"` without a `fileName`)
    * - `complete`: checkmark `aria-label` / `title` are `"Upload complete"`
    * @type {string | undefined | ((ctx: FilenameIconDescriptionContext) => string | undefined)}
    */
@@ -95,7 +95,8 @@
     <WarningFilled class="bx--file-invalid" />
   {/if}
   <button
-    aria-label={resolvedIconLabel ?? "Remove file"}
+    aria-label={resolvedIconLabel ??
+      (fileName ? `Remove file ${fileName}` : "Remove file")}
     class:bx--file-close={true}
     type="button"
     tabindex="0"

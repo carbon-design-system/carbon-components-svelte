@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderItem from "./FileUploaderItem.test.svelte";
 
@@ -166,6 +167,53 @@ describe("FileUploaderItem", () => {
 
     const event = deleteHandler.mock.calls[0][0];
     expect(event.detail).toBe("file-1");
+  });
+
+  it("should describe the remove button with the error message when invalid", () => {
+    render(FileUploaderItem, {
+      props: {
+        name: "test.txt",
+        status: "edit",
+        invalid: true,
+        errorSubject: "File too large",
+        errorBody: "Select a smaller file.",
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Remove file test.txt" }),
+    ).toHaveAccessibleDescription("File too large Select a smaller file.");
+  });
+
+  it("should not describe the remove button when valid", () => {
+    render(FileUploaderItem, {
+      props: { name: "test.txt", status: "edit", errorSubject: "Unused" },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Remove file test.txt" }),
+    ).not.toHaveAttribute("aria-describedby");
+  });
+
+  it.each([
+    ["Enter", "{Enter}"],
+    ["Space", " "],
+  ])("should dispatch delete once per %s press", async (_, key) => {
+    const deleteHandler = vi.fn();
+    render(FileUploaderItem, {
+      props: {
+        name: "test.txt",
+        status: "edit",
+        id: "file-1",
+        ondelete: deleteHandler,
+      },
+    });
+
+    screen.getByRole("button", { name: "Remove file test.txt" }).focus();
+    await user.keyboard(key);
+    await tick();
+
+    expect(deleteHandler).toHaveBeenCalledTimes(1);
   });
 
   it("should handle iconDescription prop", () => {

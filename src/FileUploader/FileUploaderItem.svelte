@@ -55,6 +55,7 @@
 
   const dispatch = createEventDispatcher();
 
+  $: errorId = invalid && errorSubject ? `${id}-error` : undefined;
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
 </script>
@@ -80,21 +81,17 @@
   <span class:bx--file__state-container={true}>
     <Filename
       fileName={name}
-      on:keydown={(event) => {
-        if (event.key === " " || event.key === "Enter") {
-          dispatch("delete", id);
-        }
-      }}
       on:click={() => {
         dispatch("delete", id);
       }}
       {iconDescription}
       {status}
       {invalid}
+      aria-describedby={errorId}
     />
   </span>
-  {#if invalid && errorSubject}
-    <div class:bx--form-requirement={true}>
+  {#if errorId}
+    <div id={errorId} class:bx--form-requirement={true}>
       <div class:bx--form-requirement__title={true}>{errorSubject}</div>
       {#if errorBody}
         <p class:bx--form-requirement__supplement={true}>{errorBody}</p>

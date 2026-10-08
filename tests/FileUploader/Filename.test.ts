@@ -24,6 +24,19 @@ describe("Filename", () => {
     expect(closeButton).toHaveAttribute("aria-label", "Remove file");
   });
 
+  it("should name the close button after the file by default", () => {
+    const { container } = render(Filename, {
+      props: { status: "edit", fileName: "Q3-report.pdf" },
+    });
+
+    const closeButton = container.querySelector(".bx--file-close");
+    assert(closeButton);
+    expect(closeButton).toHaveAttribute(
+      "aria-label",
+      "Remove file Q3-report.pdf",
+    );
+  });
+
   it("should render complete status with checkmark", () => {
     const { container } = render(Filename, {
       props: { status: "complete" },
@@ -126,7 +139,7 @@ describe("Filename", () => {
 
     const closeButton = container.querySelector(".bx--file-close");
     assert(closeButton);
-    expect(closeButton).toHaveAttribute("aria-label", "Remove file");
+    expect(closeButton).toHaveAttribute("aria-label", "Remove file x.txt");
   });
 
   it("should fall back to defaults when iconDescription function returns only whitespace", () => {
