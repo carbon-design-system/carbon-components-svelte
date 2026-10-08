@@ -1,0 +1,48 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Status row after a list box menu's options: the empty filter result and
+/// the loading indicator of `ComboBox`, `Dropdown`, and `MultiSelect`. Carbon
+/// v10 has neither, so this is new markup rather than a backport.
+///
+/// The row lines up with an option's text and is at least as tall as an
+/// option of the list box's size, so the menu does not collapse to a sliver
+/// around it. Taller content, such as a 32px InlineLoading in an `xs` menu,
+/// grows the row.
+/// @access private
+/// @group list-box
+@mixin list-box-menu-status {
+  .#{$prefix}--list-box__menu-status {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: to-rem(40px);
+    align-items: center;
+    padding: 0 $carbon--spacing-05;
+    color: $text-secondary;
+    cursor: default;
+  }
+
+  .#{$prefix}--list-box--xs .#{$prefix}--list-box__menu-status {
+    min-height: to-rem(24px);
+  }
+
+  .#{$prefix}--list-box--sm .#{$prefix}--list-box__menu-status {
+    min-height: to-rem(32px);
+  }
+
+  .#{$prefix}--list-box--lg .#{$prefix}--list-box__menu-status,
+  .#{$prefix}--list-box--xl .#{$prefix}--list-box__menu-status {
+    min-height: to-rem(48px);
+  }
+
+  .#{$prefix}--list-box--inline .#{$prefix}--list-box__menu-status {
+    padding: 0 $carbon--spacing-03;
+  }
+}
+
+@include exports("list-box-menu-status") {
+  @include list-box-menu-status;
+}
