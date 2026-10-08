@@ -9,6 +9,9 @@
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let open: ComponentProps<ComboBox>["open"] = false;
+  export let required: ComponentProps<ComboBox>["required"] = false;
+  export let invalid: ComponentProps<ComboBox>["invalid"] = false;
+  export let invalidText: ComponentProps<ComboBox>["invalidText"] = "";
   export let onSelect: (event: CustomEvent) => void = () => {};
   export let onClear: (event: CustomEvent) => void = () => {};
 </script>
@@ -23,6 +26,9 @@
     {virtualize}
     {portalMenu}
     bind:open
+    {required}
+    {invalid}
+    {invalidText}
     labelText="Contact"
     on:select={onSelect}
     on:clear={onClear}

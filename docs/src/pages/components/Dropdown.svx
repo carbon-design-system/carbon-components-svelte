@@ -549,6 +549,16 @@ submission, like a disabled native `<select>`.
 </Form>
 ```
 
+## Required
+
+Set `required` to keep a surrounding form from submitting until an item is selected. A selected item that is disabled counts as no selection, as it does for `name`. The field is marked required for screen readers.
+
+When a submit is blocked, the field shows its invalid state instead of the browser's error bubble, and the first such field takes focus. The state clears once the field has a value or the form resets.
+
+Set `requiredInvalidText` to change the message, which defaults to "Select an item". Your own `invalid` and `invalidText` take precedence.
+
+<FileSource src="/framed/Dropdown/DropdownRequired" />
+
 ## Skeleton
 
 Show a loading state with the dropdown skeleton.

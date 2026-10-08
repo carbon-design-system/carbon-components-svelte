@@ -257,6 +257,21 @@
   export let name = undefined;
 
   /**
+   * Set to `true` to require a value. Sets `required` on the input, so a
+   * wrapping `<form>` blocks submission while it is empty, and the field
+   * shows its invalid state with `requiredInvalidText` instead of the
+   * browser's error bubble.
+   */
+  export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required combo box blocks
+   * submission. Cleared once the input has a value. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select an item";
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -325,6 +340,7 @@
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import {
+    handleRequiredInvalid,
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
   } from "../ListBox/list-box-utils.js";
@@ -364,6 +380,8 @@
     portalMenu === undefined ? !!insideModal : portalMenu;
 
   let fieldFocused = false;
+  /** Set when a required, empty combo box blocked form submission. */
+  let requiredError = false;
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
@@ -568,6 +586,7 @@
     // Write the DOM even when `value` did not change: `afterUpdate`'s
     // restore-on-close block may have left stale text on the input.
     ref.value = nextValue;
+    requiredError = false;
   }
 
   afterUpdate(() => {
@@ -676,8 +695,11 @@
   $: comboId = `combo-${id}`;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   // Invalid/warn states are suppressed when the combo box is disabled or read-only.
+  $: if (!required || value !== "") requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled,
     readonly,
@@ -960,13 +982,16 @@
           aria-disabled={disabled || undefined}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
-          aria-errormessage={showInvalid && invalidText ? errorId : undefined}
+          aria-errormessage={showInvalid && shownInvalidText
+            ? errorId
+            : undefined}
           aria-describedby={statusDescribedById}
           {disabled}
           {readonly}
           {placeholder}
           {id}
           {name}
+          {required}
           {...$$restProps}
           class:bx--text-input={true}
           class:bx--text-input--light={light}
@@ -1142,6 +1167,10 @@
             }
           }}
           on:paste
+          on:invalid={(event) => {
+            handleRequiredInvalid(event, ref);
+            requiredError = true;
+          }}
         >
         {#if showInvalid}
           <WarningFilled class="bx--list-box__invalid-icon" />
@@ -1373,9 +1402,9 @@
   {#if isFluid}
     <hr class:bx--list-box__divider={true}>
   {/if}
-  {#if showInvalid && invalidText}
+  {#if showInvalid && shownInvalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">
-      {invalidText}
+      {shownInvalidText}
     </div>
   {/if}
   {#if showWarn && warnText}

@@ -241,6 +241,21 @@
   export let name = undefined;
 
   /**
+   * Set to `true` to require a selection. A wrapping `<form>` blocks
+   * submission while nothing is selected or the selected item is disabled,
+   * and the field shows its invalid state with `requiredInvalidText`
+   * instead of the browser's error bubble.
+   */
+  export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required dropdown blocks
+   * submission. Cleared once an item is selected. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select an item";
+
+  /**
    * Obtain a reference to the button HTML element.
    * @bindable readonly
    */
@@ -275,6 +290,7 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox/index.js";
+  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
@@ -329,6 +345,8 @@
   let listScrollTop = 0;
   let prevOpen = false;
   let fieldFocused = false;
+  /** Set when a required, empty dropdown blocked form submission. */
+  let requiredError = false;
   let itemsById = new Map();
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
@@ -373,8 +391,11 @@
   $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id));
   $: selectionId = `selection-${id}`;
   // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
+  $: if (!required || hiddenInputValue !== "") requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled,
     readonly,
@@ -387,7 +408,7 @@
     // `inline` mode never shows the helper fallback (it also forces
     // `isFluid` off, but that alone wouldn't suppress the fallback).
     helperText: inline ? undefined : helperText,
-    invalidText,
+    invalidText: shownInvalidText,
     warnText,
     isFluid,
     errorId,
@@ -771,6 +792,7 @@
         aria-label={fieldAriaLabel}
         aria-expanded={open}
         aria-readonly={readonly || undefined}
+        aria-required={required || undefined}
         aria-haspopup="listbox"
         aria-activedescendant={highlightedId ?? ""}
         aria-controls={open ? menuId : undefined}
@@ -915,6 +937,16 @@
         />
       </button>
     </div>
+    {#if required}
+      <ListBoxRequiredInput
+        hasValue={hiddenInputValue !== ""}
+        {disabled}
+        {readonly}
+        focusTarget={ref}
+        on:invalid={() => (requiredError = true)}
+        on:reset={() => (requiredError = false)}
+      />
+    {/if}
     {#if open}
       <ListBoxMenu
         aria-label={menuAriaLabel}
@@ -1111,8 +1143,10 @@
   {#if isFluid}
     <hr class:bx--list-box__divider={true}>
   {/if}
-  {#if showInvalid && invalidText}
-    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {#if showInvalid && shownInvalidText}
+    <div id={errorId} class:bx--form-requirement={true}>
+      {shownInvalidText}
+    </div>
   {/if}
   {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
