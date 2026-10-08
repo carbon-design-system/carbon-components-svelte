@@ -10,6 +10,7 @@
   export let portalMenu: ComponentProps<Dropdown>["portalMenu"] = false;
   export let open: ComponentProps<Dropdown>["open"] = false;
   export let disabled: ComponentProps<Dropdown>["disabled"] = false;
+  export let required: ComponentProps<Dropdown>["required"] = false;
 </script>
 
 <form data-testid="form">
@@ -23,6 +24,7 @@
     {portalMenu}
     bind:open
     {disabled}
+    {required}
     labelText="Contact"
   />
 </form>
