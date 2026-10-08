@@ -288,9 +288,19 @@ file by name, size, and last modified. Rejected duplicates are reported via
 
 ### Disabled
 
-Disable the file uploader by setting `disabled` to `true`.
+Disable the file uploader by setting `disabled` to `true`. The add button and
+each row's remove button are disabled.
 
-<FileUploader disabled multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
+<FileUploader
+  disabled
+  multiple
+  labelTitle="Upload files"
+  buttonLabel="Add files"
+  labelDescription="Only JPEG files are accepted."
+  accept={[".jpg", ".jpeg"]}
+  status="edit"
+  files={[new File(["a"], "site-photo.jpg")]}
+/>
 
 ### Events
 
@@ -420,6 +430,12 @@ Provide detailed error messages for invalid files with `errorSubject` and
   status="edit"
   on:delete
 />
+
+### Disabled
+
+Set `disabled` to `true` to disable the remove button.
+
+<FileUploaderItem disabled name="Q3-financial-report.pdf" status="edit" />
 
 ### File size
 
