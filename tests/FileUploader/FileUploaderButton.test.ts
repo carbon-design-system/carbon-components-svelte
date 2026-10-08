@@ -99,6 +99,15 @@ describe("FileUploaderButton", () => {
     expect(input).not.toHaveAttribute("capture");
   });
 
+  it("should set aria-describedby on the button from describedBy", () => {
+    render(FileUploaderButton, { props: { describedBy: "upload-help" } });
+
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-describedby",
+      "upload-help",
+    );
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploaderButton, {
       props: { accept: [".jpg", ".png", "image/*"] },

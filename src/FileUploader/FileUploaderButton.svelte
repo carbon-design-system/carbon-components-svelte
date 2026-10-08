@@ -42,6 +42,14 @@
    */
   export let capture = undefined;
 
+  /**
+   * Id of an element that describes the button, such as text listing the
+   * accepted file types and size limit. Set as `aria-describedby` on the
+   * button so screen readers announce it with the label.
+   * @type {string | undefined}
+   */
+  export let describedBy = undefined;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -156,6 +164,7 @@
 <button
   type="button"
   on:click={() => ref?.click()}
+  aria-describedby={describedBy}
   {disabled}
   class:bx--btn={true}
   class:bx--btn--disabled={disabled}
