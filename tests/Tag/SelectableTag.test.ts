@@ -24,4 +24,12 @@ describe("SelectableTag", () => {
     const tag = screen.getByRole("button", { name: "Preselected" });
     expect(tag).toHaveAttribute("aria-pressed", "true");
   });
+
+  it("applies the large size class", () => {
+    render(SelectableTag);
+
+    const tag = screen.getByRole("button", { name: "Large" });
+    expect(tag).toHaveClass("bx--tag--lg");
+    expect(tag).not.toHaveClass("bx--tag--sm");
+  });
 });

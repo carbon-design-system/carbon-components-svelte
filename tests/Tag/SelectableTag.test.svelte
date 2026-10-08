@@ -7,3 +7,5 @@
 <SelectableTag selected>Preselected</SelectableTag>
 
 <SelectableTag disabled>Disabled</SelectableTag>
+
+<SelectableTag size="lg">Large</SelectableTag>

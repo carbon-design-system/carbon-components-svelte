@@ -17,7 +17,10 @@
    */
   export let type = undefined;
 
-  /** @type {"sm" | "default"} */
+  /**
+   * Specify the size of the tag.
+   * @type {"sm" | "default" | "lg"}
+   */
   export let size = "default";
 
   /** Set to `true` to disable the tag */
@@ -56,6 +59,7 @@
   class:bx--tag--selectable-selected={selected}
   class:bx--tag--disabled={disabled}
   class:bx--tag--sm={size === "sm"}
+  class:bx--tag--lg={size === "lg"}
   class:bx--tag--red={type === "red"}
   class:bx--tag--magenta={type === "magenta"}
   class:bx--tag--purple={type === "purple"}
