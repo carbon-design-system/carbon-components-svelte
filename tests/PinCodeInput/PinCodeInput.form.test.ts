@@ -6,6 +6,7 @@ import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import { getPinCodeInputs } from "./helpers";
 import PinCodeInputForm from "./PinCodeInput.form.test.svelte";
+import PinCodeInputFormAttribute from "./PinCodeInput.formAttribute.test.svelte";
 
 const getSegments = () => getPinCodeInputs().map((input) => input.value);
 describe("PinCodeInput form participation", () => {
@@ -112,5 +113,17 @@ describe("PinCodeInput form participation", () => {
       expect(getSegments()).toEqual(["1", "2", "", ""]);
       expect(getBoundText()).toBe("12");
     });
+  });
+
+  it("submits with the form named by the `form` attribute", () => {
+    render(PinCodeInputFormAttribute);
+
+    expect(new FormData(getForm()).get("otp")).toBe("1234");
+  });
+
+  it("validates required segments against the form named by `form`", () => {
+    render(PinCodeInputFormAttribute, { props: { value: "", required: true } });
+
+    expect(getForm().checkValidity()).toBe(false);
   });
 });
