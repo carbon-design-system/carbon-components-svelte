@@ -17,6 +17,7 @@
   export let value: ComponentProps<MultiSelect>["value"] = "";
   export let disabled: ComponentProps<MultiSelect>["disabled"] = false;
   export let readonly: ComponentProps<MultiSelect>["readonly"] = false;
+  export let required: ComponentProps<MultiSelect>["required"] = false;
 </script>
 
 <form data-testid="form">
@@ -28,6 +29,7 @@
     {itemToInput}
     {name}
     {filterable}
+    {required}
     {filterItem}
     {open}
     {virtualize}

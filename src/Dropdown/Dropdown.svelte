@@ -249,6 +249,13 @@
   export let form = undefined;
 
   /**
+   * Set to `true` to require a selection. A wrapping `<form>` blocks
+   * submission, through native constraint validation, while nothing is
+   * selected or the selected item is disabled.
+   */
+  export let required = false;
+
+  /**
    * Obtain a reference to the button HTML element.
    * @bindable readonly
    */
@@ -284,6 +291,7 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox/index.js";
+  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
@@ -783,6 +791,7 @@
         aria-label={fieldAriaLabel}
         aria-expanded={open}
         aria-readonly={readonly || undefined}
+        aria-required={required || undefined}
         aria-haspopup="listbox"
         aria-activedescendant={highlightedId ?? ""}
         aria-controls={open ? menuId : undefined}
@@ -928,6 +937,14 @@
         />
       </button>
     </div>
+    {#if required}
+      <ListBoxRequiredInput
+        hasValue={hiddenInputValue !== ""}
+        {disabled}
+        {readonly}
+        focusTarget={ref}
+      />
+    {/if}
     {#if open}
       <ListBoxMenu
         aria-label={menuAriaLabel}
