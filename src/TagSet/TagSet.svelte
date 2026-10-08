@@ -4,6 +4,7 @@
    * @property {string} id
    * @property {HTMLElement} node
    * @property {string} label
+   * @property {string | number} [value]
    * @property {string} [type]
    * @property {string} size
    * @property {boolean} disabled

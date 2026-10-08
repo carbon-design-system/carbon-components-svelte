@@ -136,6 +136,25 @@ describe("TagSet", () => {
     );
   });
 
+  it("includes the closed tag's value in close:tag", async () => {
+    const onTagClose = vi.fn();
+    const { container } = render(TagSetFixture, {
+      dismissible: true,
+      values: ["t1", "t2", "t3", "t4"],
+      onTagClose,
+    });
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    await user.click(closeButtons[2]);
+
+    expect(onTagClose).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({
+        tag: expect.objectContaining({ label: "Tag 3", value: "t3" }),
+        index: 2,
+      }),
+    );
+  });
+
   it("dispatches click:overflow when the indicator is clicked", async () => {
     const onOverflowClick = vi.fn();
     const { container } = render(TagSetFixture, { onOverflowClick });

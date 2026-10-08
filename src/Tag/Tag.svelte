@@ -55,6 +55,13 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
+  /**
+   * Specify a value that identifies the tag inside a `TagSet`.
+   * Returned as `tag.value` in the set's `close:tag` event.
+   * @type {string | number | undefined}
+   */
+  export let value = undefined;
+
   /** Set an id for the filterable tag */
   export let id = uniqueId();
 
@@ -135,6 +142,7 @@
         id: groupItemId,
         node: ref,
         label: labelRef?.textContent?.trim() ?? "",
+        value,
         type,
         size: resolvedSize,
         disabled,
@@ -146,6 +154,7 @@
 
   $: if (tagSet) {
     tagSet.update(groupItemId, {
+      value,
       type,
       size: resolvedSize,
       disabled,
