@@ -44,6 +44,12 @@
    */
 
   /**
+   * @event open
+   * @type {object}
+   * @property {"click" | "keydown" | "input" | "programmatic"} trigger
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
@@ -325,6 +331,7 @@
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
+    createMenuOpenHandler,
     createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
@@ -382,6 +389,14 @@
     onState: (state) => {
       menuState = state;
     },
+  });
+
+  // `openMenu(trigger)` opens a closed menu and records the cause, which
+  // `syncOpenEvent` reports in `open` once the menu has rendered.
+  const { openMenu, sync: syncOpenEvent } = createMenuOpenHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
   });
 
   onMount(() => {
@@ -556,6 +571,7 @@
   }
 
   afterUpdate(() => {
+    syncOpenEvent();
     // Scroll to highlighted item when it changes via keyboard navigation
     // Only scroll if the item is outside the visible viewport
     const wasJustOpened = open && !prevOpen;
@@ -957,12 +973,12 @@
           class:bx--text-input--empty={value === ""}
           on:click={() => {
             if (disabled || readonly) return;
-            open = true;
+            openMenu("click");
           }}
           on:input
           on:input={(event) => {
             if (!open && event.target.value.length > 0) {
-              open = true;
+              openMenu("input");
             }
 
             if (!value.length) {
@@ -970,7 +986,7 @@
               // has nothing to restore.
               highlightedIndex = -1;
               highlightOrigin = null;
-              open = true;
+              openMenu("input");
             }
           }}
           on:keydown
@@ -997,7 +1013,8 @@
                 return;
               }
               const wasOpen = open;
-              open = !open;
+              if (wasOpen) open = false;
+              else openMenu("keydown");
               if (
                 highlightOrigin === "keyboard" &&
                 highlightedIndex > -1 &&
@@ -1072,14 +1089,14 @@
                 // APG combobox pattern: Alt+ArrowDown opens a closed menu
                 // without moving the highlight; Alt+ArrowUp closes an open one.
                 if (event.key === "ArrowDown" && !open) {
-                  open = true;
+                  openMenu("keydown");
                 } else if (event.key === "ArrowUp" && open) {
                   close("escape-key");
                 }
               } else if (open) {
                 change(step);
               } else {
-                open = true;
+                openMenu("keydown");
                 // `filteredItems` recomputes and `afterUpdate` highlights any
                 // selected item only after the update flushes; if nothing is
                 // highlighted by then, start at the first (ArrowDown) or last
@@ -1149,7 +1166,8 @@
           on:click={(event) => {
             if (disabled || readonly) return;
             event.stopPropagation();
-            open = !open;
+            if (open) open = false;
+            else openMenu("click");
           }}
           {translateWithId}
           {open}
