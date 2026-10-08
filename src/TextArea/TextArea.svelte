@@ -107,7 +107,6 @@
   export let selectTextOnFocus = false;
 
   import { afterUpdate, getContext, onMount, tick } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -121,7 +120,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
 
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: counterId = `counter-${id}`;
@@ -132,10 +131,9 @@
     disabled,
     readonly,
   }));
-  $: overCount =
-    typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
+  $: overCount = hasMaxCount && count > maxCount && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
-  $: hasMaxCount = typeof maxCount === "number";
+  $: hasMaxCount = maxCount != null;
   $: errorMessageId = showInvalid ? errorId : undefined;
   $: describedBy =
     [
@@ -334,7 +332,7 @@
       {/if}
     </div>
   {/if}
-  {#if typeof maxCount === "number"}
+  {#if hasMaxCount}
     <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
       {limitAnnouncement}
     </div>

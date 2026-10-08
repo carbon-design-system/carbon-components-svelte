@@ -93,7 +93,6 @@
   export let selectTextOnFocus = false;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -107,7 +106,7 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const ctx = getContext(FORM_CONTEXT_KEY);
+  const ctx = getContext("carbon:Form");
   const dispatch = createEventDispatcher();
 
   function parse(raw) {

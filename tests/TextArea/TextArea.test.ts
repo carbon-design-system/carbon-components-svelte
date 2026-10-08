@@ -226,6 +226,15 @@ describe("TextArea", () => {
     expect(document.querySelector('[aria-live="polite"]')).toBeNull();
   });
 
+  it("does not render a counter or live region when maxCount is null", () => {
+    render(TextArea, {
+      props: { maxCount: null as unknown as number, value: "hi" },
+    });
+
+    expect(document.querySelector(".bx--text-area__label-counter")).toBeNull();
+    expect(document.querySelector('[aria-live="polite"]')).toBeNull();
+  });
+
   it("should handle invalid state", () => {
     render(TextArea, {
       props: { invalid: true, invalidText: "Invalid input" },

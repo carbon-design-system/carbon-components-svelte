@@ -22,7 +22,6 @@
   export let actions = [];
 
   import { setContext } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import Form from "../Form/Form.svelte";
 
   /**
@@ -34,7 +33,7 @@
    */
   const formContext = { isFluid: true };
 
-  setContext(FORM_CONTEXT_KEY, formContext);
+  setContext("carbon:Form", formContext);
 </script>
 
 <Form

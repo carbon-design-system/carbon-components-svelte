@@ -112,7 +112,6 @@
   export let id = uniqueId();
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import Popover from "../Popover/Popover.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
@@ -125,7 +124,7 @@
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
 
   let toggletipRef = null;
   let portalRef = null;

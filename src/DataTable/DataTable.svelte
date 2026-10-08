@@ -436,7 +436,6 @@
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
-  import TableContainer from "./TableContainer.svelte";
   import TableFoot from "./TableFoot.svelte";
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
@@ -1052,7 +1051,12 @@
     (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
 </script>
 
-<TableContainer {id} {useStaticWidth} {...$$restProps}>
+<div
+  {id}
+  class:bx--data-table-container={true}
+  class:bx--data-table-container--static={useStaticWidth}
+  {...$$restProps}
+>
   {#if title ||
     $$slots.titleChildren ||
     description ||
@@ -1791,4 +1795,4 @@
       {/if}
     </Table>
   </div>
-</TableContainer>
+</div>

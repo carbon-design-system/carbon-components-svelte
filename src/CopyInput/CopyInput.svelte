@@ -135,13 +135,12 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const ctx = getContext(FORM_CONTEXT_KEY);
+  const ctx = getContext("carbon:Form");
 
   let focused = false;
   let hovered = false;

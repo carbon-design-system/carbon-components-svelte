@@ -127,7 +127,6 @@
   export let debounce = 0;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -154,7 +153,7 @@
     skipSelectOnFocus = true;
     ref?.focus();
   }
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
 
   let searchRef = null;
   let prevExpanded = expanded;
