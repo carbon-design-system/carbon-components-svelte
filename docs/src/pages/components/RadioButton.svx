@@ -4,7 +4,7 @@ description: Radio buttons are a selection control for choosing a single option 
 ---
 
 <script>
-  import { RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip, Stack } from "carbon-components-svelte";
+  import { AILabel, RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip, Stack } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -105,6 +105,18 @@ Display radio buttons in a vertical layout.
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the option as AI-generated. On a `RadioButtonGroup`, the label follows the legend.
+
+<RadioButtonGroup legendText="Billing cycle" selected="annual">
+  <AILabel slot="decorator">
+    <p>Suggested because annual billing lowers your cost by 15%.</p>
+  </AILabel>
+  <RadioButton labelText="Monthly" value="monthly" />
+  <RadioButton labelText="Annual" value="annual" />
 </RadioButtonGroup>
 
 ## Helper text

@@ -13,6 +13,12 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
 <div
@@ -21,6 +27,8 @@
   class:bx--tile--light={light}
   class:bx--tile--full-height={fullHeight}
   class:bx--tile--no-padding={noPadding}
+  class:bx--tile--decorator={$$slots.decorator}
+  class:bx--tile--ai-label={$aiLabelState === "active"}
   {...$$restProps}
   on:click
   on:mouseover
@@ -28,4 +36,13 @@
   on:mouseleave
 >
   <slot />
+  {#if $$slots.decorator}
+    <Decorator
+      class="bx--tile--inner-decorator"
+      state={aiLabelState}
+      labelSize="xs"
+    >
+      <slot name="decorator" />
+    </Decorator>
+  {/if}
 </div>

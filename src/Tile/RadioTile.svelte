@@ -57,7 +57,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import {
     registerRadioButton,
@@ -66,6 +66,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TileWrapper from "./TileWrapper.svelte";
 
   // aria attributes should go to the input element, not the label.
   $: ariaDescribedBy = $$restProps["aria-describedby"];
@@ -175,57 +176,71 @@
     if (ctx || !ref) return;
     checked = ref.checked;
   }
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
-<input
-  bind:this={ref}
-  use:formReset={handleFormReset}
-  type="radio"
-  {id}
-  name={$groupName ?? (name || fallbackName)}
-  {value}
-  {checked}
-  tabindex={effectiveDisabled ? undefined : tabindex}
-  {disabled}
-  required={$groupRequired ?? required}
-  aria-describedby={ariaDescribedBy}
-  aria-labelledby={ariaLabelledBy}
-  class:bx--tile-input={true}
-  on:change
-  on:change={(event) => {
-    if (ctx) update(value);
-    else checked = event.currentTarget.checked;
-  }}
-  on:focus
-  on:blur
-  on:keydown
-  on:keydown={(event) => {
-    // Space is left to the native radio, which checks it and fires
-    // `change`. Enter has no native radio behavior beyond implicit form
-    // submission, so cancel that and click instead; an already-checked
-    // radio fires no `change`, matching a pointer click.
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (!event.currentTarget.checked) event.currentTarget.click();
-    }
-  }}
+<TileWrapper
+  decorated={$$slots.decorator}
+  state={aiLabelState}
+  class="bx--tile__wrapper--radio"
 >
-<label
-  for={id}
-  class:bx--tile={true}
-  class:bx--tile--selectable={true}
-  class:bx--tile--is-selected={checked}
-  class:bx--tile--light={light}
-  class:bx--tile--disabled={effectiveDisabled}
-  class:bx--tile--full-height={fullHeight}
-  {...labelRestProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
-  <span aria-hidden="true" class:bx--tile__checkmark={true}>
-    <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
-  </span>
-  <span class:bx--tile-content={true}> <slot /> </span>
-</label>
+  <input
+    bind:this={ref}
+    use:formReset={handleFormReset}
+    type="radio"
+    {id}
+    name={$groupName ?? (name || fallbackName)}
+    {value}
+    {checked}
+    tabindex={effectiveDisabled ? undefined : tabindex}
+    {disabled}
+    required={$groupRequired ?? required}
+    aria-describedby={ariaDescribedBy}
+    aria-labelledby={ariaLabelledBy}
+    class:bx--tile-input={true}
+    on:change
+    on:change={(event) => {
+      if (ctx) update(value);
+      else checked = event.currentTarget.checked;
+    }}
+    on:focus
+    on:blur
+    on:keydown
+    on:keydown={(event) => {
+      // Space is left to the native radio, which checks it and fires
+      // `change`. Enter has no native radio behavior beyond implicit form
+      // submission, so cancel that and click instead; an already-checked
+      // radio fires no `change`, matching a pointer click.
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (!event.currentTarget.checked) event.currentTarget.click();
+      }
+    }}
+  >
+  <label
+    for={id}
+    class:bx--tile={true}
+    class:bx--tile--selectable={true}
+    class:bx--tile--is-selected={checked}
+    class:bx--tile--light={light}
+    class:bx--tile--disabled={effectiveDisabled}
+    class:bx--tile--full-height={fullHeight}
+    class:bx--tile--decorator={$$slots.decorator}
+    class:bx--tile--ai-label={$aiLabelState === "active"}
+    {...labelRestProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <span aria-hidden="true" class:bx--tile__checkmark={true}>
+      <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
+    </span>
+    <span class:bx--tile-content={true}> <slot /> </span>
+  </label>
+  <svelte:fragment slot="decorator">
+    <slot name="decorator" />
+  </svelte:fragment>
+</TileWrapper>
