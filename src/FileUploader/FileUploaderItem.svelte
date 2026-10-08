@@ -50,6 +50,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
 
@@ -72,7 +73,7 @@
   on:mouseleave
 >
   <span class:bx--file-filename-group={true}>
-    <p class:bx--file-filename={true}>{name}</p>
+    <p class:bx--file-filename={true} use:overflowTitle>{name}</p>
     {#if fileSizeText}
       <p class:bx--file-size={true}>{fileSizeText}</p>
     {/if}

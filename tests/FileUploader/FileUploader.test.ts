@@ -1277,4 +1277,33 @@ describe("FileUploader", () => {
 
     expect(screen.getByText("2048 octets (#0)")).toBeInTheDocument();
   });
+
+  describe("long file names", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("should set a title on a truncated file name", async () => {
+      vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(10);
+      vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(
+        100,
+      );
+      render(FileUploader, {
+        props: { files: [new File(["a"], "quarterly-report-final.pdf")] },
+      });
+
+      const name = await screen.findByText("quarterly-report-final.pdf");
+      await vi.waitFor(() => {
+        expect(name).toHaveAttribute("title", "quarterly-report-final.pdf");
+      });
+    });
+
+    it("should not set a title on a file name that fits", async () => {
+      render(FileUploader, { props: { files: [new File(["a"], "a.txt")] } });
+
+      const name = await screen.findByText("a.txt");
+      await tick();
+      expect(name).not.toHaveAttribute("title");
+    });
+  });
 });
