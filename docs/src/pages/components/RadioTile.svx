@@ -148,6 +148,14 @@ The checkmark icon is hidden from screen readers; a tile's content is its access
   </RadioTile>
 </TileGroup>
 
+## Required
+
+Set `required` on `TileGroup` to keep a surrounding form from submitting until a tile is selected. When a submit is blocked, the group shows a message below the tiles instead of the browser's error bubble, and the first tile takes focus. The message clears once a tile is selected or the form resets.
+
+Set `requiredInvalidText` to change the message, which defaults to "Select an option".
+
+<FileSource src="/framed/RadioTile/TileGroupRequired" />
+
 ## Form submission
 
 A checked tile submits its `value` under the radio's `name`. See
