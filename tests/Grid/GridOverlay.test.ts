@@ -23,15 +23,15 @@ describe("GridOverlay", () => {
     const { container } = render(GridOverlay, {
       props: { open: true, condensed: true },
     });
-    const overlay = container.querySelector(".bx--grid-overlay");
-    expect(overlay).toHaveClass("bx--grid--condensed");
+    const grid = container.querySelector(".bx--grid-overlay__grid");
+    expect(grid).toHaveClass("bx--grid--condensed");
   });
 
   it("should render fullWidth variant", () => {
     const { container } = render(GridOverlay, {
       props: { open: true, fullWidth: true },
     });
-    expect(container.querySelector(".bx--grid-overlay")).toHaveClass(
+    expect(container.querySelector(".bx--grid-overlay__grid")).toHaveClass(
       "bx--grid--full-width",
     );
   });
@@ -47,7 +47,9 @@ describe("GridOverlay", () => {
     await rerender({ gutters: true, narrow: true, class: "custom" });
     const overlay = container.querySelector(".bx--grid-overlay");
     expect(overlay).toHaveClass("bx--grid-overlay--gutters");
-    expect(overlay).toHaveClass("bx--grid--narrow");
+    expect(container.querySelector(".bx--grid-overlay__grid")).toHaveClass(
+      "bx--grid--narrow",
+    );
     expect(overlay).toHaveClass("custom");
   });
 
