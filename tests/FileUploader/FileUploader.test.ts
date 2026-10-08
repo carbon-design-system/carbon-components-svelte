@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import FileUploaderDescriptionSlot from "./FileUploader.descriptionSlot.test.svelte";
 import FileUploaderPerFileStatusDemo from "./FileUploader.perFileStatus.test.svelte";
 import FileUploader from "./FileUploader.test.svelte";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
@@ -414,6 +415,32 @@ describe("FileUploader", () => {
     });
 
     expect(screen.getByText("Upload Files")).toBeInTheDocument();
+  });
+
+  it("should describe the add button with labelDescription", () => {
+    render(FileUploader, {
+      props: { labelDescription: "Max file size is 500 kB." },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Add files" }),
+    ).toHaveAccessibleDescription("Max file size is 500 kB.");
+  });
+
+  it("should describe the add button with the labelDescription slot", () => {
+    render(FileUploaderDescriptionSlot);
+
+    expect(
+      screen.getByRole("button", { name: "Add files" }),
+    ).toHaveAccessibleDescription("Max file size is 500 kB.");
+  });
+
+  it("should not describe the add button without a description", () => {
+    render(FileUploader);
+
+    expect(
+      screen.getByRole("button", { name: "Add files" }),
+    ).not.toHaveAttribute("aria-describedby");
   });
 
   it("should render labelDescription prop", () => {
