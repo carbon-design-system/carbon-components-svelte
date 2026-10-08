@@ -79,6 +79,14 @@
   export let accept = [];
 
   /**
+   * Specify the minimum file size in bytes.
+   * Smaller files are filtered out and reported via the `rejected` event
+   * with `reason: 'size'`. Use `1` to reject empty files.
+   * @type {number | undefined}
+   */
+  export let minFileSize = undefined;
+
+  /**
    * Specify the maximum file size in bytes.
    * Files exceeding this limit will be filtered out.
    * The limit is a raw byte count: use `5 * 1000 * 1000` for 5 MB
@@ -338,6 +346,7 @@
       const { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
         event.detail,
         {
+          minFileSize,
           maxFileSize,
           preventDuplicate,
           existingFiles: prevFiles,

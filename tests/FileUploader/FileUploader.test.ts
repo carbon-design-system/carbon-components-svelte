@@ -518,6 +518,23 @@ describe("FileUploader", () => {
     });
   });
 
+  it("should reject empty files with minFileSize", async () => {
+    const onRejected = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { minFileSize: 1, onRejected },
+    });
+
+    assert(component.ref instanceof HTMLInputElement);
+    const empty = new File([], "empty.txt");
+    simulateFileSelection(component.ref, [empty, new File(["a"], "a.txt")]);
+
+    expect(await screen.findByText("a.txt")).toBeInTheDocument();
+    expect(screen.queryByText("empty.txt")).not.toBeInTheDocument();
+    expect(onRejected.mock.calls[0][0].detail).toEqual([
+      { file: empty, reason: "size" },
+    ]);
+  });
+
   it("should accept files under maxFileSize limit", async () => {
     const { component } = render(FileUploader, {
       props: { maxFileSize: 1000 },

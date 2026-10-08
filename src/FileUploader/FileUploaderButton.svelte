@@ -23,6 +23,14 @@
   export let multiple = false;
 
   /**
+   * Specify the minimum file size in bytes.
+   * Smaller files are filtered out and reported via the `rejected` event
+   * with `reason: 'size'`. Use `1` to reject empty files.
+   * @type {number | undefined}
+   */
+  export let minFileSize = undefined;
+
+  /**
    * Specify the maximum file size in bytes.
    * @type {number | undefined}
    */
@@ -143,6 +151,7 @@
   /** @param {ReadonlyArray<File>} incoming */
   function processIncoming(incoming) {
     const { accepted, rejected } = filterIncomingFiles(incoming, {
+      minFileSize,
       maxFileSize,
       preventDuplicate: preventDuplicate && multiple,
       existingFiles: files,
