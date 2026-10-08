@@ -5,7 +5,10 @@ export type FileRejection = {
   reason: FileRejectionReason;
 };
 
-/** Stable identity key for duplicate detection (name, size, lastModified). */
+/**
+ * Stable identity key for duplicate detection (relative path, name, size,
+ * lastModified).
+ */
 export function fileIdentityKey(file: File): string;
 
 /**

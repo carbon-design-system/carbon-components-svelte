@@ -42,6 +42,14 @@
    */
   export let capture = undefined;
 
+  /**
+   * Set to `true` to select a folder instead of individual files.
+   * Every file inside the folder and its subfolders is added, and each
+   * keeps its `webkitRelativePath`. Browsers do not apply `accept` to
+   * folder contents.
+   */
+  export let directory = false;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -216,6 +224,7 @@
   tabindex="-1"
   accept={typeof accept === "string" ? accept : accept.join(",")}
   {capture}
+  webkitdirectory={directory || undefined}
   {disabled}
   {id}
   {multiple}

@@ -3,16 +3,22 @@ import {
   filterIncomingFiles,
 } from "../../src/utils/filter-incoming-files.js";
 
-function makeFile(name: string, size: number, lastModified = 1) {
+function makeFile(
+  name: string,
+  size: number,
+  lastModified = 1,
+  relativePath = "",
+) {
   const file = new File(["x".repeat(size)], name, { type: "text/plain" });
   Object.defineProperty(file, "lastModified", { value: lastModified });
+  Object.defineProperty(file, "webkitRelativePath", { value: relativePath });
   return file;
 }
 
 describe("fileIdentityKey", () => {
-  it("joins name, size, and lastModified", () => {
-    const file = makeFile("a.txt", 3, 42);
-    expect(fileIdentityKey(file)).toBe("a.txt\u00003\u000042");
+  it("joins relative path, name, size, and lastModified", () => {
+    const file = makeFile("a.txt", 3, 42, "docs/a.txt");
+    expect(fileIdentityKey(file)).toBe("docs/a.txt\u0000a.txt\u00003\u000042");
   });
 });
 
@@ -64,6 +70,17 @@ describe("filterIncomingFiles", () => {
     });
     expect(accepted).toEqual([unique]);
     expect(rejected).toEqual([{ file: duplicate, reason: "duplicate" }]);
+  });
+
+  it("keeps same-named files from different folders", () => {
+    const existing = makeFile("index.html", 10, 5, "site/index.html");
+    const nested = makeFile("index.html", 10, 5, "site/blog/index.html");
+    const { accepted, rejected } = filterIncomingFiles([nested], {
+      preventDuplicate: true,
+      existingFiles: [existing],
+    });
+    expect(accepted).toEqual([nested]);
+    expect(rejected).toEqual([]);
   });
 
   it("does not reject same-reference files in carryRefs", () => {
