@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import TagSetCustomTooltipFixture from "./TagSet.customTooltip.test.svelte";
 import TagSetFixture from "./TagSet.test.svelte";
+import TagSetSelectableFixture from "./TagSetSelectable.test.svelte";
 
 /** Stub `offsetWidth` on an element (jsdom has no real layout). */
 function stubWidth(el: Element, width: number) {
@@ -194,5 +195,27 @@ describe("TagSet", () => {
 
     const row = container.querySelector(".bx--tag-set__space");
     expect(row).toHaveStyle({ gap: "2rem" });
+  });
+
+  it("sizes slotted SelectableTags from the set unless they set their own", () => {
+    render(TagSetSelectableFixture, { size: "sm" });
+
+    expect(screen.getByRole("button", { name: "Tag 1" })).toHaveClass(
+      "bx--tag--sm",
+    );
+    const own = screen.getByRole("button", { name: "Tag 3" });
+    expect(own).toHaveClass("bx--tag--lg");
+    expect(own).not.toHaveClass("bx--tag--sm");
+  });
+
+  it("collapses SelectableTags that no longer fit into the +N indicator", async () => {
+    const { container } = render(TagSetSelectableFixture);
+
+    stubMeasurements(container, 110, 50);
+
+    await waitFor(() => {
+      expect(screen.getByText("+3")).toBeInTheDocument();
+    });
+    expect(visibleTagLabels(container)).toEqual(["Tag 1"]);
   });
 });
