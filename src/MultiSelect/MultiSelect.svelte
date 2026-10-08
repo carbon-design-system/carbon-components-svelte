@@ -64,6 +64,7 @@
    * @property {Item[]} unselected
    * @event {KeyboardEvent | MouseEvent} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
+   * @event {{ trigger: "click" | "keydown" | "input" | "programmatic" }} open
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
@@ -427,6 +428,7 @@
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
+    createMenuOpenHandler,
     createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
@@ -508,6 +510,14 @@
 
   const typeahead = createTypeaheadBuffer();
   const buildGroupRows = createGroupRows();
+
+  // `openMenu(trigger)` opens a closed menu and records the cause, which
+  // `syncOpenEvent` reports in `open` once the menu has rendered.
+  const { openMenu, sync: syncOpenEvent } = createMenuOpenHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -850,6 +860,7 @@
   });
 
   afterUpdate(() => {
+    syncOpenEvent();
     // Compare by length, not by IDs. This is intentional: `on:select`
     // should only fire in response to UI interaction (toggle/clear),
     // not programmatic `selectedIds` changes. A length check is sufficient
@@ -1410,7 +1421,7 @@
             class:bx--text-input--light={light}
             on:click={() => {
               if (disabled) return;
-              open = true;
+              openMenu("click");
             }}
             on:keydown
             on:keydown={(event) => {
@@ -1438,12 +1449,12 @@
                   // APG combobox pattern: Alt+ArrowDown opens a closed menu
                   // without moving the highlight; Alt+ArrowUp closes an open one.
                   if (event.key === "ArrowDown" && !open) {
-                    open = true;
+                    openMenu("keydown");
                   } else if (event.key === "ArrowUp" && open) {
                     close("escape-key");
                   }
                 } else {
-                  if (!open) open = true;
+                  openMenu("keydown");
                   change(step);
                 }
               } else if (
@@ -1457,7 +1468,7 @@
                 close("escape-key");
               } else if (event.key === " ") {
                 if (readonly) event.preventDefault();
-                if (!open) open = true;
+                openMenu("keydown");
               } else if (event.key === "Backspace" && value === "") {
                 clear({ open: openOnClear });
               } else if (event.key === "Delete") {
@@ -1467,7 +1478,7 @@
             }}
             on:input
             on:input={() => {
-              if (!open) open = true;
+              openMenu("input");
             }}
             on:keyup
             on:focus
@@ -1512,7 +1523,8 @@
             on:click={(event) => {
               if (disabled) return;
               event.stopPropagation();
-              open = !open;
+              if (open) open = false;
+              else openMenu("click");
             }}
             {translateWithId}
             {open}
@@ -1544,7 +1556,8 @@
           }}
           on:click={() => {
             if (disabled) return;
-            open = !open;
+            if (open) open = false;
+            else openMenu("click");
           }}
           on:keydown={(event) => {
             // The field is only aria-disabled, so a click can still focus it.
@@ -1565,7 +1578,7 @@
               if (open) {
                 selectHighlightedItem(highlightedIndex, event.shiftKey);
               } else {
-                open = true;
+                openMenu("keydown");
               }
             } else if (event.key === "Tab") {
               // Tab dismisses without selecting; report it as a keyboard
@@ -1577,19 +1590,19 @@
                 // APG combobox pattern: Alt+ArrowDown opens a closed menu
                 // without moving the highlight; Alt+ArrowUp closes an open one.
                 if (event.key === "ArrowDown" && !open) {
-                  open = true;
+                  openMenu("keydown");
                 } else if (event.key === "ArrowUp" && open) {
                   close("escape-key");
                 }
               } else {
-                if (!open) open = true;
+                openMenu("keydown");
                 change(step);
               }
             } else if (event.key === "Enter") {
               if (open) {
                 selectHighlightedItem(highlightedIndex, event.shiftKey);
               } else {
-                open = true;
+                openMenu("keydown");
               }
             } else if (
               open &&
@@ -1605,7 +1618,7 @@
               // move the highlight to the first/last option. The filterable
               // variant deliberately leaves these keys to the text caret.
               event.preventDefault();
-              if (!open) open = true;
+              openMenu("keydown");
               highlightedIndex =
                 event.key === "Home" ? 0 : itemsToUse.length - 1;
               highlightOrigin = "keyboard";

@@ -21,6 +21,12 @@
    */
 
   /**
+   * @event open
+   * @type {object}
+   * @property {"click" | "keydown" | "programmatic"} trigger
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
@@ -276,6 +282,7 @@
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
+    createMenuOpenHandler,
     createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
@@ -339,6 +346,14 @@
   });
 
   const typeahead = createTypeaheadBuffer();
+
+  // `openMenu(trigger)` opens a closed menu and records the cause, which
+  // `syncOpenEvent` reports in `open` once the menu has rendered.
+  const { openMenu, sync: syncOpenEvent } = createMenuOpenHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
 
   onMount(() => {
     return () => {
@@ -457,6 +472,7 @@
   $: scrollEndTracker.noteItemCount(items.length);
 
   afterUpdate(() => {
+    syncOpenEvent();
     prevHighlightedIndex = scheduleHighlightScroll({
       open,
       shouldVirtualize,
@@ -638,7 +654,7 @@
 
   function selectHighlighted() {
     if (!open) {
-      open = true;
+      openMenu("keydown");
       return;
     }
     const highlighted =
@@ -722,7 +738,8 @@
     class={dropdownListBoxClass}
     on:click={(event) => {
       if (disabled || readonly) return;
-      open = ref.contains(event.target) ? !open : false;
+      if (open || !ref.contains(event.target)) open = false;
+      else openMenu("click");
     }}
     {disabled}
     {open}
@@ -788,7 +805,7 @@
               // APG combobox pattern: Alt+ArrowDown opens a closed menu without
               // moving the highlight; Alt+ArrowUp closes an open one.
               if (event.key === "ArrowDown" && !open) {
-                open = true;
+                openMenu("keydown");
               } else if (event.key === "ArrowUp" && open) {
                 // APG combobox: Alt+ArrowUp dismisses an open menu without
                 // selecting, so it shares the keyboard-dismissal trigger.
@@ -797,7 +814,7 @@
             } else if (open) {
               change(step);
             } else {
-              open = true;
+              openMenu("keydown");
               // `afterUpdate` highlights any selected item only after the open
               // state flushes; if nothing is highlighted by then, start at the
               // first (ArrowDown) or last (ArrowUp) enabled item.
@@ -819,7 +836,7 @@
             if (open) {
               moveToEdge();
             } else {
-              open = true;
+              openMenu("keydown");
               // `afterUpdate` highlights the selected item once the open state
               // flushes; move to the edge after that so Home/End win.
               tick().then(moveToEdge);
@@ -851,7 +868,7 @@
             if (open) {
               typeaheadSearch(character);
             } else {
-              open = true;
+              openMenu("keydown");
               // `afterUpdate` highlights the selected item once the open state
               // flushes; search after that so the match starts past the
               // selection, the same way it does in an open menu.
@@ -890,7 +907,8 @@
           on:click={(event) => {
             event.stopPropagation();
             if (disabled || readonly) return;
-            open = !open;
+            if (open) open = false;
+            else openMenu("click");
           }}
           {translateWithId}
           {open}

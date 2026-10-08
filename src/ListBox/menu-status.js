@@ -41,6 +41,43 @@ export function createMenuCloseHandler({ getOpen, setOpen, dispatch }) {
 }
 
 /**
+ * Build the `open` event bookkeeping for a listbox menu, the counterpart of
+ * `createMenuCloseHandler`. `openMenu(trigger)` opens a closed menu and
+ * records why. `sync()`, called from `afterUpdate`, dispatches `open` once
+ * per closed-to-open transition that reached the DOM, so an open undone in
+ * the same handler reports nothing. A transition with no recorded trigger
+ * came from the consumer setting `open`, and reports `"programmatic"`.
+ * Mounting already open is not a transition.
+ *
+ * @param {Object} options
+ * @param {() => boolean} options.getOpen
+ * @param {(open: boolean) => void} options.setOpen
+ * @param {(event: "open", detail: { trigger: string }) => void} options.dispatch
+ * @returns {{ openMenu: (trigger: string) => void; sync: () => void }}
+ */
+export function createMenuOpenHandler({ getOpen, setOpen, dispatch }) {
+  let prevOpen = getOpen();
+  /** @type {string | null} */
+  let pendingTrigger = null;
+
+  return {
+    openMenu(trigger) {
+      if (getOpen()) return;
+      pendingTrigger = trigger;
+      setOpen(true);
+    },
+    sync() {
+      const open = getOpen();
+      const trigger = pendingTrigger ?? "programmatic";
+      const opened = open && !prevOpen;
+      prevOpen = open;
+      pendingTrigger = null;
+      if (opened) dispatch("open", { trigger });
+    },
+  };
+}
+
+/**
  * The tail shared by `clear()` implementations: wait for bindings to
  * settle, then optionally reopen and/or focus.
  *
