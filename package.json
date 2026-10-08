@@ -60,6 +60,7 @@
     "check:css:usage": "crassus usage",
     "check:package": "bun scripts/check-package-contents.ts",
     "thumbnails": "bun scripts/thumbnails.ts",
+    "release:screenshots": "bun scripts/release-screenshots.ts",
     "build:docs": "bun scripts/build-docs",
     "release:build": "bun scripts/release-build",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
