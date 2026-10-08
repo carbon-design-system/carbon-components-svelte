@@ -35,6 +35,9 @@
   /** @type {"top" | "bottom"} */
   export let overflowDirection = "bottom";
 
+  /** @type {(count: number) => string} */
+  export let overflowLabel = (count) => `+${count} more tags`;
+
   /** @type {"sm" | "default" | "lg" | undefined} */
   export let size = undefined;
 
@@ -68,6 +71,7 @@
     class:bx--tag--sm={size === "sm"}
     class:bx--tag--lg={size === "lg"}
   >
-    +{count}
+    <span aria-hidden="true">+{count}</span>
   </span>
+  <span class:bx--visually-hidden={true}>{overflowLabel(count)}</span>
 </TooltipDefinition>

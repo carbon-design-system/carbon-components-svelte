@@ -40,6 +40,13 @@
    */
   export let overflowDirection = "bottom";
 
+  /**
+   * Accessible name of the "+N" overflow indicator. Keep the visible "+N"
+   * in the name so speech-input users can say what they see.
+   * @type {(count: number) => string}
+   */
+  export let overflowLabel = (count) => `+${count} more tags`;
+
   /** Hard cap on visible tags regardless of available space.
    * @type {number | undefined}
    */
@@ -252,6 +259,7 @@
       tags={overflowTags}
       {overflowAlign}
       {overflowDirection}
+      {overflowLabel}
       {size}
       on:trigger={handleTriggerClick}
     >

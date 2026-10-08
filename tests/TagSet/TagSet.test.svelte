@@ -8,6 +8,7 @@
   export let maxVisible: ComponentProps<TagSet>["maxVisible"] = undefined;
   export let size: ComponentProps<TagSet>["size"] = undefined;
   export let gap: ComponentProps<TagSet>["gap"] = undefined;
+  export let overflowLabel: ComponentProps<TagSet>["overflowLabel"] = undefined;
 
   export let onTagClose: (detail: { tag: unknown; index: number }) => void =
     () => {};
@@ -19,6 +20,7 @@
   {maxVisible}
   {size}
   {gap}
+  {overflowLabel}
   on:close:tag={({ detail }) => onTagClose(detail)}
   on:click:overflow={onOverflowClick}
   on:overflow:change={({ detail }) => onOverflowChange(detail)}
