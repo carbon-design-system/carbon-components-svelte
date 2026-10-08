@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import { user } from "../utils/user";
 import HeadingTest from "./Heading.test.svelte";
+import SectionLevelChange from "./SectionLevelChange.test.svelte";
 
 describe("Heading", () => {
   it("should render as h1 by default inside a Section", () => {
@@ -95,5 +97,16 @@ describe("Section", () => {
     expect(section1).toBeTruthy();
     expect(section2).toBeTruthy();
     expect(section1?.contains(section2)).toBe(true);
+  });
+
+  it("updates heading levels when a Section's level changes", async () => {
+    render(SectionLevelChange);
+    expect(screen.getByText("Outer").tagName).toBe("H1");
+    expect(screen.getByText("Inner").tagName).toBe("H2");
+
+    await user.click(screen.getByRole("button", { name: "Set level 3" }));
+
+    expect(screen.getByText("Outer").tagName).toBe("H3");
+    expect(screen.getByText("Inner").tagName).toBe("H4");
   });
 });

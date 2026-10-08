@@ -37,11 +37,12 @@
   export let type = undefined;
 
   import { getContext } from "svelte";
+  import { readable } from "svelte/store";
 
-  /** @type {undefined | SectionLevel} */
-  const sectionLevel = getContext("carbon:Section");
+  /** @type {import("svelte/store").Readable<SectionLevel>} */
+  const sectionLevel = getContext("carbon:Section") ?? readable(1);
 
-  $: tag = `h${sectionLevel ?? 1}`;
+  $: tag = `h${$sectionLevel}`;
   $: headingClass = [type && `bx--type-${type}`, $$restProps.class]
     .filter(Boolean)
     .join(" ");
