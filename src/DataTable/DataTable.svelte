@@ -231,6 +231,13 @@
    */
   export let inputName = undefined;
 
+  /**
+   * Specify the id of a form element outside the table to associate the
+   * selection inputs with.
+   * @type {string | undefined}
+   */
+  export let inputForm = undefined;
+
   /** Set to `true` to use zebra styles */
   export let zebra = false;
 
@@ -1422,6 +1429,7 @@
                       <RadioButton
                         id={inputId}
                         name={selectionName}
+                        form={inputForm}
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
                         hideLabel
@@ -1438,6 +1446,7 @@
                       <InlineCheckbox
                         id={inputId}
                         name={selectionName}
+                        form={inputForm}
                         aria-label="Select row"
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
@@ -1648,6 +1657,7 @@
                       <RadioButton
                         id={inputId}
                         name={selectionName}
+                        form={inputForm}
                         checked={isSelected}
                         value={row.id}
                         hideLabel
@@ -1664,6 +1674,7 @@
                       <InlineCheckbox
                         id={inputId}
                         name={selectionName}
+                        form={inputForm}
                         aria-label="Select row"
                         checked={isSelected}
                         value={row.id}
