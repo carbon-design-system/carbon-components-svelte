@@ -32,6 +32,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     label: "Layout",
     components: [
       "Grid",
+      "LayoutInspector",
       "Stack",
       "Box",
       "Layer",
