@@ -1,0 +1,52 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+
+/// DevToolbar: a floating bar of icon toggles for the dev aids.
+///
+/// Built from library parts: each group is a small `ToggleButtonGroup` of
+/// icon-only `ToggleButton`s (with their own tooltips), and the collapse
+/// and expand controls are small ghost `Button`s with a `BadgeIndicator`.
+/// This partial only adds the floating surface, which is styled like a
+/// Carbon menu: `$ui-01`, the standard shadow, no radius.
+/// @access private
+/// @group components
+@mixin dev-toolbar {
+  .#{$prefix}--dev-toolbar {
+    @include box-shadow;
+
+    position: fixed;
+    bottom: $carbon--spacing-05;
+    left: 50%;
+    // Above GridOverlay and LayoutInspector.
+    z-index: z("dropdown") + 3;
+    display: flex;
+    max-width: calc(100vw - #{$carbon--spacing-05 * 2});
+    align-items: center;
+    background-color: $ui-01;
+    transform: translateX(-50%);
+  }
+
+  // The toolbar keeps its own direction when the RTL tool flips the page.
+  [dir="rtl"] .#{$prefix}--dev-toolbar {
+    direction: ltr;
+  }
+
+  // Groups sit flush on the bar, which already has their background.
+  .#{$prefix}--dev-toolbar .#{$prefix}--toggle-button-group {
+    flex: none;
+  }
+
+  .#{$prefix}--dev-toolbar__divider {
+    width: 1px;
+    height: $carbon--spacing-05;
+    flex: none;
+    margin: 0 $carbon--spacing-02;
+    background-color: $ui-03;
+  }
+}
+
+@include exports("dev-toolbar") {
+  @include dev-toolbar;
+}
