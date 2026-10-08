@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   let items = [];
+  let loading = false;
   let timeoutId;
   let inputValue = "";
 
@@ -47,9 +48,15 @@
 
   $: {
     clearTimeout(timeoutId);
+    // Debounce input value changes.
     timeoutId = setTimeout(async () => {
-      items = await fetchItems(inputValue);
-      // Debounce input value changes.
+      const query = inputValue;
+      loading = true;
+      const results = await fetchItems(query);
+      // A newer search has started; let it report instead.
+      if (query !== inputValue) return;
+      items = results;
+      loading = false;
     }, 150);
   }
 </script>
@@ -59,4 +66,7 @@
   placeholder="Type to search..."
   bind:value={inputValue}
   {items}
+  {loading}
+  emptyText={(value) =>
+    value ? `No channels match "${value}"` : "Type to search"}
 />
