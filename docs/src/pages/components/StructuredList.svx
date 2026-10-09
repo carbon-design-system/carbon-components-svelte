@@ -188,6 +188,8 @@ Customize the selection icon with the `icon` prop on `StructuredList`.
 
 Allow selecting more than one row with `multiple`. Selected becomes an array of values.
 
+The header row renders a "Select all rows" checkbox. It is checked when every row is selected and indeterminate when only some are. Activating it selects every row, or clears the selection if every row is already selected, and fires a single `change` event with the full array. A single-select list has no select-all checkbox.
+
 <FileSource src="/framed/StructuredList/StructuredListMultiSelect" />
 
 ## Sorting
