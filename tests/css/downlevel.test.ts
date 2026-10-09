@@ -9,12 +9,14 @@ const CSS_DIR = join(__dirname, "../../css");
 // Features newer than the Svelte 5 baseline (Chrome 87, Safari 14.0) that
 // lightningcss downlevels by duplicating the rule: flow-relative insets and
 // corner radii expand to `:lang()` RTL hacks (~900 bytes per declaration),
-// selector lists in `:not()` / `:is()` emit a `:-webkit-any` twin.
+// selector lists in `:not()` / `:is()` / `:where()` emit a `:-webkit-any`
+// twin. A `:where()` without a list passes through unchanged.
 const COSTLY_DOWNLEVELS = [
   /inset-inline-(start|end)\s*:/,
   /border-(start|end)-(start|end)-radius\s*:/,
   /:not\([^()]*,/,
-  /:(is|where)\(/,
+  /:is\(/,
+  /:where\([^()]*,/,
 ];
 
 describe("css downlevel cost", () => {

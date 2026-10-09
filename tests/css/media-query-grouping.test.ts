@@ -29,10 +29,12 @@ describe("any-hover media query grouping", () => {
     // components/tabs/_tabs.scss).
     // Raised again from 67 to 68 for the TableOfContents link's one hover
     // block (_table-of-contents.scss).
+    // Raised again from 68 to 69 for Prose's one hover block (links and
+    // heading anchors, _prose.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(68);
+    expect(blocks.length).toBeLessThanOrEqual(69);
   }, 30_000);
 });
