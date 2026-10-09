@@ -54,6 +54,15 @@
    */
   export let syncHover = true;
 
+  /**
+   * Specify where each chart's tooltip sits: in a corner of its plot that
+   * the data leaves free, top left first, so the tooltips of a row line up
+   * and cover nothing, or beside the hovered point as on a chart of its
+   * own. A chart with no free corner follows the point.
+   * @type {"fixed" | "follow"}
+   */
+  export let tooltipAlign = "fixed";
+
   /** Specify the title, shown as the caption */
   export let title = "";
 
@@ -64,12 +73,19 @@
    */
   export let ref = null;
 
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
+  import { FACETS_CONTEXT } from "../Chart/context.js";
   import { groupBy, toAccessor } from "../utils/accessor.js";
   import { extentBy } from "../utils/extent.js";
   import { nextId } from "../utils/next-id.js";
   import { niceDomain } from "../utils/ticks.js";
 
   const syncId = nextId("bx--viz-facets");
+  // The charts inside read how to place their tooltips.
+  const tooltipAlignStore = writable(tooltipAlign);
+  $: tooltipAlignStore.set(tooltipAlign);
+  setContext(FACETS_CONTEXT, { tooltipAlign: tooltipAlignStore });
 
   $: facetOf = toAccessor(facet);
   $: yOf = y === undefined ? undefined : toAccessor(y);
