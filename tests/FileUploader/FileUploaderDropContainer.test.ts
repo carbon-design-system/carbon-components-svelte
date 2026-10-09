@@ -97,6 +97,15 @@ describe("FileUploaderDropContainer", () => {
     expect(input).toHaveAttribute("capture", "user");
   });
 
+  it("should set aria-describedby on the drop target from describedBy", () => {
+    render(FileUploaderDropContainer, { props: { describedBy: "drop-help" } });
+
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-describedby",
+      "drop-help",
+    );
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { accept: [".pdf", ".doc"] },

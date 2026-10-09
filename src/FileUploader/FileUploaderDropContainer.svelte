@@ -69,6 +69,14 @@
    */
   export let capture = undefined;
 
+  /**
+   * Id of an element that describes the drop container, such as text listing the
+   * accepted file types and size limit. Set as `aria-describedby` on the
+   * drop container so screen readers announce it with the label.
+   * @type {string | undefined}
+   */
+  export let describedBy = undefined;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -169,6 +177,7 @@
   <label
     for={id}
     {role}
+    aria-describedby={describedBy}
     tabindex={disabled ? -1 : tabindex}
     aria-disabled={disabled || undefined}
     class:bx--file-browse-btn={true}

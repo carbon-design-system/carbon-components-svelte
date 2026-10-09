@@ -109,8 +109,10 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
-Long file names end in an ellipsis. Hovering a truncated name shows it in
-full.
+The `labelDescription` is linked to the add button with `aria-describedby`, so
+screen readers announce the accepted types and limits when the button is
+focused. Long file names end in an ellipsis. Hovering a truncated name shows
+it in full.
 
 ### Custom label
 
@@ -463,6 +465,21 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
 <FileUploaderDropContainer>
   <strong slot="labelChildren">Drag and drop files here or click to upload</strong>
 </FileUploaderDropContainer>
+
+### Description
+
+Set `describedBy` to the id of text that lists the accepted types and limits.
+It becomes the drop target's `aria-describedby`, so screen readers announce it
+on focus. `FileUploaderButton` accepts the same prop.
+
+<p id="drop-help" class="bx--label-description">
+  Max file size is 1 MB. Supported file types are .pdf and .docx.
+</p>
+<FileUploaderDropContainer
+  describedBy="drop-help"
+  accept={[".pdf", ".docx"]}
+  labelText="Drag and drop files here or click to upload"
+/>
 
 ### Programmatic input access
 
