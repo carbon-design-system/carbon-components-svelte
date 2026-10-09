@@ -82,6 +82,12 @@
     outline: none;
   }
 
+  // HeaderAction's icon tooltip trigger: the 2px border above is the focus
+  // ring, so drop the tooltip trigger's second ring around the icon.
+  .#{$prefix}--header__action.#{$prefix}--tooltip__trigger:focus svg {
+    outline: none;
+  }
+
   .#{$prefix}--header__global
     .#{$prefix}--header__action:not(.#{$prefix}--header-search-button):active {
     background-color: $background-active;

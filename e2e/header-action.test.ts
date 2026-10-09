@@ -11,6 +11,16 @@ test.describe("HeaderAction", () => {
     await page.goto("/header-actions.html");
   });
 
+  test("icon-only action draws one focus ring, not a second one around the icon", async ({
+    page,
+  }) => {
+    const help = page.getByRole("button", { name: "Help" });
+    await help.focus();
+
+    await expect(help).toHaveCSS("border-top-width", "2px");
+    await expect(help.locator("svg")).toHaveCSS("outline-style", "none");
+  });
+
   test("shows one tooltip at a time", async ({ page }) => {
     const notifications = page.getByRole("button", { name: "Notifications" });
     const help = page.getByRole("button", { name: "Help" });
