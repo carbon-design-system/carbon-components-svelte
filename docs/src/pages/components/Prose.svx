@@ -1,0 +1,254 @@
+---
+description: Prose sets running copy written as plain HTML, such as rendered Markdown or an article, with Carbon type styles, spacing, and line length.
+---
+
+<script>
+  import {
+    CodeSnippet,
+    InlineNotification,
+    Link,
+    Prose,
+    Text,
+  } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Wrap plain HTML in `Prose` to set it as running copy: paragraphs, headings, lists, links, inline `code`, code blocks, quotes, tables, rules, and figures. Each element gets a Carbon type style, the space between elements follows one rhythm, and lines stop at a readable length.
+
+<Prose>
+  <h3>Reporting API</h3>
+  <p>The reporting API returns usage and billing data for every project in your organization, so finance and engineering read the same numbers. Send requests with an <code>Authorization</code> header, as described in the <a href="#basic">setup guide</a>.</p>
+  <h4>Limits</h4>
+  <p>Requests are limited per key:</p>
+  <ul>
+    <li>600 requests per minute, shared by every endpoint.</li>
+    <li>13 months of history. <strong>Export</strong> anything you need to keep longer.
+      <ul>
+        <li>The export endpoint writes one file per day.</li>
+      </ul>
+    </li>
+  </ul>
+  <pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://api.example.com/v1/usage</code></pre>
+  <blockquote>
+    <p>Choose the region when you create the project. It can't be changed later.</p>
+  </blockquote>
+  <table>
+    <thead>
+      <tr><th>Status</th><th>Meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>200</code></td><td>Success</td></tr>
+      <tr><td><code>429</code></td><td>Rate limited. Retry after the number of seconds in <kbd>Retry-After</kbd>.</td></tr>
+    </tbody>
+  </table>
+  <hr />
+  <p>Responses are JSON, paginated at 100 records, with a cursor for the next page.</p>
+</Prose>
+
+## Variants
+
+Set `variant` to match the page the copy sits on. Each variant sets the body and heading type styles, the spacing between elements, and the line length. `condensed` shrinks the type but keeps compact's spacing and loosens caption-01's line height to 1.5, since 12px copy read line after line needs more room than a 12px label.
+
+| Variant | Body | Headings | Line length | Use for |
+| --- | --- | --- | --- | --- |
+| `condensed` | caption-01 (12px), 1.5 line height | heading-01 and label-01 | 96 characters | Notes in inspectors, side panels, and other dense console UI |
+| `default` | body-long-02 (16px) | Productive | 68 characters | Documentation, help, and other reading pages |
+| `compact` | body-long-01 (14px) | Smaller productive, tighter spacing | 80 characters | Descriptions and help inside dense product UI, such as a side panel or modal |
+| `spacious` | body-long-02 (16px) | Productive, one step larger, more room | 64 characters | Onboarding, getting-started guides, and other pages read once and slowly |
+| `expressive` | body-long-02 (16px) | Expressive, scaling with the viewport | 60 characters | Editorial and marketing pages |
+
+### Condensed
+
+<Prose variant="condensed">
+  <h3>Pod checkout-7f9c</h3>
+  <p>Restarted 3 times in the last hour after failing its readiness probe. Memory peaked at 94% of its limit before each restart.</p>
+  <h4>Events</h4>
+  <ul>
+    <li>OOMKilled at 14:02, 14:19, and 14:41</li>
+    <li>Scaled from 4 to 6 replicas at 14:45</li>
+  </ul>
+</Prose>
+
+### Compact
+
+<Prose variant="compact">
+  <h3>Retention policy</h3>
+  <p>Logs are kept for 30 days, then deleted. Audit events are kept for a year and can't be deleted early.</p>
+  <h4>Exceptions</h4>
+  <ul>
+    <li>Projects on a legal hold keep every log until the hold is lifted.</li>
+    <li>Deleted projects lose their logs after 7 days.</li>
+  </ul>
+</Prose>
+
+### Spacious
+
+<Prose variant="spacious">
+  <h3>Welcome to the console</h3>
+  <p>Create a project to get an API key, then send your first request. It takes about five minutes.</p>
+  <h4>Before you start</h4>
+  <p>You need an organization admin to approve billing.</p>
+</Prose>
+
+### Expressive
+
+<Prose variant="expressive">
+  <h3>Designing for the people who use it most</h3>
+  <p>We spent a month watching support agents work through their queues. Most of their time went to finding the customer's history, not answering the question.</p>
+  <blockquote>
+    <p>I know the answer in ten seconds. Finding the account takes two minutes.</p>
+  </blockquote>
+  <p>So the new console opens on the customer, not the ticket.</p>
+</Prose>
+
+## Max width
+
+Each variant caps the line length so long lines stay easy to follow. Set `maxWidth` to a number of pixels or any CSS length to change it, or `"none"` to fill the container, for example in a narrow column that already limits the width.
+
+<Prose maxWidth="none">
+  <p>This paragraph fills the whole column. It's set with the default variant's type and spacing, but without the 68-character line length, so it runs as wide as the space it's placed in.</p>
+</Prose>
+
+## Carbon components inside
+
+Prose doesn't style Carbon components or anything inside them, so components keep their own styles: a `Link` keeps its color, a `CodeSnippet` its background and padding, and `Text` its type style. That includes plain elements you pass into a component's slot, such as the link in this notification. Components still take part in the spacing between elements.
+
+<Prose>
+  <h3>Install</h3>
+  <p>Add the package with your package manager:</p>
+  <CodeSnippet code="npm i carbon-components-svelte" />
+  <InlineNotification lowContrast hideCloseButton kind="info" title="Styles">
+    <svelte:fragment slot="subtitleChildren">Import the CSS once, as the <a href="#carbon-components-inside">setup guide</a> shows.</svelte:fragment>
+  </InlineNotification>
+  <Text type="helper-text-01">Text keeps its own type style inside Prose.</Text>
+  <p>Read the <Link href="#carbon-components-inside">theming guide</Link> next.</p>
+</Prose>
+
+## Rendered HTML
+
+Prose styles markup it didn't render, such as HTML from a Markdown renderer or a CMS, set with `{@html}`. Only render HTML you trust or have sanitized.
+
+<FileSource src="/framed/Prose/ProseRenderedHtml" />
+
+## Wrapped sections
+
+Children of a `section` or `article` inside Prose are spaced the same way as children of Prose itself, so you can wrap each section, for example to give it an `id` for a [TableOfContents](/components/TableOfContents).
+
+<Prose>
+  <section>
+    <h3>Profile</h3>
+    <p>Your name, photo, and email address appear wherever teammates mention or assign you.</p>
+  </section>
+  <section>
+    <h3>Security</h3>
+    <p>Change your password, turn on two-factor authentication, and review the devices signed in to your account.</p>
+  </section>
+</Prose>
+
+## Nested
+
+A Prose inside another sets its own copy: each element takes its type from the nearest Prose, so a compact block inside a default page reads at 14px, and its lists keep their bullets.
+
+<Prose>
+  <p>Requests are limited per key. When you hit the limit, the API returns status 429 with a header that says how long to wait.</p>
+  <Prose variant="compact">
+    <p>Compact Prose nested in the page's Prose, for a note or a sidebar:</p>
+    <ul>
+      <li>Retry after the number of seconds in the header.</li>
+      <li>Batch requests to stay under the limit.</li>
+    </ul>
+  </Prose>
+  <p>Limits reset every minute.</p>
+</Prose>
+
+## Markdown output
+
+Prose styles what Markdown renderers produce for GitHub-flavored Markdown, so rendered pages need no components.
+
+### Aligned table columns
+
+Cells keep the alignment renderers set with the `align` attribute for `:---:` and `---:` columns.
+
+<Prose>
+  <table>
+    <thead>
+      <tr><th>Region</th><th align="center">Status</th><th align="right">Requests</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>us-east</td><td align="center">OK</td><td align="right">6,204,118</td></tr>
+      <tr><td>ap-south</td><td align="center">Degraded</td><td align="right">2,109,872</td></tr>
+    </tbody>
+  </table>
+</Prose>
+
+### Heading anchors
+
+Add an `a` with the `bx--prose__heading-anchor` class inside a heading to link to it. On devices that hover, it stays hidden until the heading is hovered or the link is focused. Give it an `aria-label` that names the section, such as "Link to Setup", since screen readers would otherwise read "#".
+
+Elements with an `id` inside Prose take `scroll-margin-top` from the `--ccs-prose-scroll-margin` custom property. Set it to a sticky header's height so links to a heading land below the header.
+
+<Prose>
+  <h4 id="prose-anchor-setup">Setup <a class="bx--prose__heading-anchor" href="#prose-anchor-setup" aria-label="Link to Setup">#</a></h4>
+  <p>Create a project in the console, then generate an API key.</p>
+</Prose>
+
+### Alerts
+
+GitHub alerts (`> [!NOTE]`) render as a `blockquote` with `data-alert` set to `note`, `tip`, `important`, `warning`, or `caution`. They take InlineNotification's colors without its JavaScript. Set `data-alert-title` to show a title, in the reader's language.
+
+<Prose>
+  <blockquote data-alert="note" data-alert-title="Note"><p>Keys are scoped to one project.</p></blockquote>
+  <blockquote data-alert="tip" data-alert-title="Tip"><p>Use one key per environment.</p></blockquote>
+  <blockquote data-alert="important" data-alert-title="Important"><p>Regions can't be changed after you create a project.</p></blockquote>
+  <blockquote data-alert="warning" data-alert-title="Warning"><p>Requests over the limit return <code>429</code>.</p></blockquote>
+  <blockquote data-alert="caution" data-alert-title="Caution"><p>Revoking a key breaks every client that uses it.</p></blockquote>
+</Prose>
+
+### Task lists
+
+Items with the `task-list-item` class, as GitHub and remark-gfm render task lists, show their checkbox in place of the bullet. Wrap each checkbox and its text in a `label`, so the checkbox has an accessible name.
+
+<Prose>
+  <ul class="contains-task-list">
+    <li class="task-list-item"><label><input type="checkbox" disabled checked /> Create the project</label></li>
+    <li class="task-list-item"><label><input type="checkbox" disabled /> Generate an API key</label></li>
+  </ul>
+</Prose>
+
+### Highlighted code
+
+Prose sets the padding, type, and surface of `pre`. Highlighters that mark tokens with classes, such as Prism, work as they are: load a Prism theme for the token colors. Shiki writes colors inline instead, so a light Shiki theme stays light in the g100 theme. Use Shiki's CSS variables theme and map its variables to Carbon tokens, so code follows the theme:
+
+```js
+import { createCssVariablesTheme, createHighlighter } from "shiki";
+
+const carbon = createCssVariablesTheme({ name: "carbon" });
+const highlighter = await createHighlighter({ themes: [carbon], langs: ["js"] });
+const html = highlighter.codeToHtml(code, { lang: "js", theme: "carbon" });
+```
+
+```css
+.bx--prose {
+  --shiki-foreground: var(--cds-text-01);
+  --shiki-background: var(--cds-ui-01);
+  --shiki-token-comment: var(--cds-text-02);
+  --shiki-token-keyword: var(--cds-link-01);
+  --shiki-token-string: var(--cds-support-02);
+  --shiki-token-constant: var(--cds-support-04);
+  --shiki-token-function: var(--cds-text-01);
+  --shiki-token-punctuation: var(--cds-text-02);
+}
+```
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Write plain elements (`p`, `h2`, `ul`, `a`) inside Prose, not `Text` for each one. | Prose styles plain markup. `Text` and other Carbon components keep their own type styles, so they don't match the copy around them. |
+| Use Prose for copy you didn't lay out element by element: rendered Markdown, CMS content, or long help text. | That's where styling each element with a component isn't possible or isn't worth it. For a few lines in a layout, `Text` gives finer control. |
+| Use `compact` inside product UI and `default` on pages people read from top to bottom. | Product UI is set at 14px, so 16px copy inside a panel looks out of scale. |
+| Set `maxWidth="none"` when the container already limits the width. | The line length cap would otherwise leave a gap beside the copy in a wide container. |
+| Restyle an element with one class and its element, such as `p.lead`. | Prose's element rules weigh one class and one element, so a class alone ties or loses. |
+| Put a Prose directly inside another Prose, or in a plain wrapper, rather than inside a Carbon component that sits in Prose. | Prose skips everything inside a Carbon component within it, and it can't tell a component's content from a Prose nested there, so Prose inside a Tile, Accordion, or Modal inside Prose renders unstyled. Telling them apart needs CSS `@scope`, which is newer than the browsers Carbon supports. |
