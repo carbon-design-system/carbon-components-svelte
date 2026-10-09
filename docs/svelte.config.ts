@@ -19,6 +19,7 @@ import Prism from "prismjs";
 import prismPkg from "prismjs/package.json" with { type: "json" };
 import rehypeSlug from "rehype-slug";
 import { visit } from "unist-util-visit";
+import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
@@ -534,9 +535,10 @@ function carbonify() {
 }
 
 export default {
-  extensions: [".svelte", ".svx"],
+  extensions: [".svelte", PAGE_EXTENSION],
   preprocess: [
     mdsvex({
+      extensions: [PAGE_EXTENSION],
       smartypants: false,
       highlight: { highlighter: mdsvexPrismHighlighter },
       remarkPlugins: [requireLeadingHeading, plugin, carbonify],

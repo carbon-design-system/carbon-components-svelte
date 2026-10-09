@@ -261,7 +261,7 @@ example`.
 | `docs/src/pages/components/{Component}.svx` | Main component page (for example `Button.svx`): prose + examples |
 | `docs/src/pages/framed/{Component}/{Example}.svelte` | Interactive demos referenced by `<FileSource>` |
 
-Routify picks up new `.svx` files automatically. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
+Routify picks up new `.svx` files automatically. The docs config and scripts read the extension from `PAGE_EXTENSION` in [`docs/scripts/constants.ts`](docs/scripts/constants.ts), so change it there. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
 
 Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [SVX gotchas](#svx-gotchas).
 

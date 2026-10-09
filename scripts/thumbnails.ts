@@ -17,6 +17,7 @@
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { $ } from "bun";
+import { PAGE_EXTENSION } from "../docs/scripts/constants";
 import { COMPONENT_CATEGORIES } from "../docs/src/component-categories";
 import {
   auditThumbnail,
@@ -38,7 +39,7 @@ async function listNames(dir: string, extension: string): Promise<string[]> {
 }
 
 const [command = "", ...args] = process.argv.slice(2);
-const pages = await listNames(PAGES_DIR, ".svx");
+const pages = await listNames(PAGES_DIR, PAGE_EXTENSION);
 const thumbnails = await listNames(THUMBNAILS_DIR, ".svg");
 
 if (command === "missing") {

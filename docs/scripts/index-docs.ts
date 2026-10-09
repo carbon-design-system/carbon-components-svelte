@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import GithubSlugger from "github-slugger";
-import { COMPONENTS_PATH } from "./constants";
+import { COMPONENTS_PATH, PAGE_EXTENSION } from "./constants";
+import { getComponentNames } from "./utils";
 
 const slugger = new GithubSlugger();
 
@@ -16,14 +17,14 @@ type SearchDocument = {
   isComponent: boolean;
 };
 
-const files = fs.readdirSync(COMPONENTS_PATH);
 const documents: SearchDocument[] = [];
 
-for (const file of files) {
+for (const componentName of getComponentNames()) {
   slugger.reset();
-  const [componentName] = file.split(".");
-  if (!componentName) continue;
-  const filePath = path.join(COMPONENTS_PATH, file);
+  const filePath = path.join(
+    COMPONENTS_PATH,
+    `${componentName}${PAGE_EXTENSION}`,
+  );
   const fileContent = fs.readFileSync(filePath, "utf8");
   const lines = fileContent.split("\n");
 
