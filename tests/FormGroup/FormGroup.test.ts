@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import FormGroupTest from "./FormGroup.test.svelte";
 
@@ -131,6 +132,20 @@ describe("FormGroup", () => {
     const message = screen.getByText("This is a message");
     expect(message).toBeInTheDocument();
     expect(message).toHaveClass("bx--form__requirement");
+  });
+
+  it("should announce the message only while invalid", async () => {
+    const { component } = render(FormGroupTest, {
+      props: { message: true, messageText: "Pick one", invalid: true },
+    });
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Pick one");
+
+    component.invalid = false;
+    await tick();
+
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByText("Pick one")).toBeInTheDocument();
   });
 
   it("should not render message when message prop is false", () => {
