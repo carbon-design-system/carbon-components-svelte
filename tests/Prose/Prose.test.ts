@@ -27,6 +27,12 @@ describe("Prose", () => {
     expect(screen.getByTestId("prose")).toHaveClass("bx--prose", modifier);
   });
 
+  it("adds the muted kbd modifier", () => {
+    render(Prose, { props: { kbd: "muted" } });
+
+    expect(screen.getByTestId("prose")).toHaveClass("bx--prose--kbd-muted");
+  });
+
   it("adds the full table width modifier", () => {
     render(Prose, { props: { tableWidth: "full" } });
 

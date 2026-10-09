@@ -40,6 +40,15 @@
    */
   export let tableWidth = "fit";
 
+  /**
+   * Set how `kbd` keys look. Either way, keys never change line spacing.
+   * - `"keycap"`: a flat key with a heavier bottom edge
+   * - `"muted"`: no box, semibold text in the secondary color, the way
+   *   `Menu` shows shortcuts; for dense copy and long key sequences
+   * @type {"keycap" | "muted"}
+   */
+  export let kbd = "keycap";
+
   /** Set to `true` to draw a rule above each `h2`, to set sections apart */
   export let dividers = false;
 
@@ -76,6 +85,7 @@
     linkTone === "muted" && "bx--prose--link-muted",
     dividers && "bx--prose--dividers",
     tableWidth === "full" && "bx--prose--table-full",
+    kbd === "muted" && "bx--prose--kbd-muted",
     $$restProps.class,
   ]
     .filter(Boolean)
