@@ -3,9 +3,9 @@ import { compileEntry } from "./compile";
 
 describe("all.scss token fallbacks", () => {
   it("omits var() fallbacks only for tokens the stylesheet declares", async () => {
-    const css = await compileEntry("all.scss", "compressed");
+    const css = await compileEntry("all.scss");
     const declared = new Set(
-      [...css.matchAll(/[{;](--cds-[\w-]+):/g)].map((m) => m[1]),
+      [...css.matchAll(/[{;\s](--cds-[\w-]+):/g)].map((m) => m[1]),
     );
     const bare = new Set(
       [...css.matchAll(/var\((--cds-[\w-]+)\)/g)].map((m) => m[1]),
