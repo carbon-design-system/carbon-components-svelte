@@ -181,6 +181,18 @@ describe("Search", () => {
     );
   });
 
+  it("should describe the input with helper text in a fluid search", () => {
+    render(Search, {
+      props: { fluid: true, helperText: "Search across all catalogs" },
+    });
+
+    const helper = screen.getByText("Search across all catalogs");
+    expect(getSearchInput("Default search")).toHaveAttribute(
+      "aria-describedby",
+      helper.id,
+    );
+  });
+
   it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
     render(Search, {
       props: { invalid: true, invalidText: "A search term is required" },

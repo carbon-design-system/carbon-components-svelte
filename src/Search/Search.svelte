@@ -197,11 +197,12 @@
     readonly,
   }));
   $: ({ errorId, warnId, helperId } = buildFieldIds(id));
+  // Unlike TextInput, Search renders helper text in fluid mode too, so
+  // it's described there as well.
   $: describedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
     helperText,
-    isFluid,
     errorId,
     warnId,
     helperId,
