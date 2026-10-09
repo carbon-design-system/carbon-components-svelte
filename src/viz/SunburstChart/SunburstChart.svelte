@@ -286,7 +286,11 @@
     >
       <slot
         center={sun.center
-          ? { id: sun.center.id, label: sun.center.label, value: sun.center.value }
+          ? {
+              id: sun.center.id,
+              label: sun.center.label,
+              value: sun.center.value,
+            }
           : null}
         total={sun.total}
         formattedTotal={formatValue(sun.total)}
@@ -326,7 +330,10 @@
         <ChartTooltipRow
           color={current.color}
           label={current.label}
-          value="{formatValue(current.value)} ({formatPercent(current.share, { locale, digits: 0 })})"
+          value="{formatValue(current.value)} ({formatPercent(current.share, {
+            locale,
+            digits: 0,
+          })})"
         />
       </div>
     {/if}

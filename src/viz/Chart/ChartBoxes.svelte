@@ -88,7 +88,10 @@
         $hover.x !== shape.slot}
     >
       <!-- Whiskers, from each end of the box out to its cap. -->
-      {#each [[shape.q1, shape.whiskerLow], [shape.q3, shape.whiskerHigh]] as [from, to], i (i)}
+      {#each [
+        [shape.q1, shape.whiskerLow],
+        [shape.q3, shape.whiskerHigh],
+      ] as [from, to], i (i)}
         <line
           class:bx--viz-boxes__whisker={true}
           x1={flipped ? from : shape.center}

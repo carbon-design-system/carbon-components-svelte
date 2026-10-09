@@ -201,7 +201,9 @@
             class:bx--viz-donut__track={true}
             cx={diameter / 2}
             cy={diameter / 2}
-            r={(diameter / 2) * (1 + Math.min(Math.max(innerRadius, 0), 0.95)) * 0.5}
+            r={(diameter / 2) *
+              (1 + Math.min(Math.max(innerRadius, 0), 0.95)) *
+              0.5}
             stroke-width={(diameter / 2) *
               (1 - Math.min(Math.max(innerRadius, 0), 0.95))}
           />

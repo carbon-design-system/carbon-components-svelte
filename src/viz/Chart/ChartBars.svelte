@@ -99,8 +99,7 @@
   {#each bars as bar (bar.key)}
     <rect
       class:bx--viz-bars__bar={true}
-      class:bx--viz-bars__bar--dimmed={$hover !== null &&
-        $hover.x !== bar.slot}
+      class:bx--viz-bars__bar--dimmed={$hover !== null && $hover.x !== bar.slot}
       x={bar.x}
       y={bar.y}
       width={bar.width}

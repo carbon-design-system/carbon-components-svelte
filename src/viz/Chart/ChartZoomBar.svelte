@@ -162,7 +162,10 @@
         on:pointercancel={onPointerUp}
         on:dblclick={() => apply([full[0], full[1]])}
       ></div>
-      {#each [{ kind: "start", label: startLabel, value: current[0] }, { kind: "end", label: endLabel, value: current[1] }] as handle (handle.kind)}
+      {#each [
+        { kind: "start", label: startLabel, value: current[0] },
+        { kind: "end", label: endLabel, value: current[1] },
+      ] as handle (handle.kind)}
         <button
           type="button"
           class="bx--viz-zoom__handle bx--viz-zoom__handle--{handle.kind}"

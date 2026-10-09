@@ -354,7 +354,8 @@
                   <text
                     class:bx--viz-marimekko__label={true}
                     x={cell.x0 + 6}
-                    y={cell.y0 + (room(cell).share ? 8 : (cell.y1 - cell.y0) / 2)}
+                    y={cell.y0 +
+                      (room(cell).share ? 8 : (cell.y1 - cell.y0) / 2)}
                     dy="0.32em"
                   >
                     {cell.key}

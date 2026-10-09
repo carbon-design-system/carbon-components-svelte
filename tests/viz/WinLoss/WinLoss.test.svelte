@@ -21,7 +21,14 @@
   selectable
   bind:selectedIndex
   label="Pick a day"
-  translations={{ win: "Sieg", wins: "Siege", loss: "Niederlage", losses: "Niederlagen", tie: "Remis", ties: "Remis" }}
+  translations={{
+    win: "Sieg",
+    wins: "Siege",
+    loss: "Niederlage",
+    losses: "Niederlagen",
+    tie: "Remis",
+    ties: "Remis",
+  }}
   data-testid="selectable"
   on:select={(e) => onselect(e.detail)}
 />

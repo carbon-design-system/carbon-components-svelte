@@ -62,9 +62,7 @@
       class:bx--viz-bars__band={true}
       x={$scales.horizontal ? $scales.plot.x0 : band.at}
       y={$scales.horizontal ? band.at : $scales.plot.y0}
-      width={$scales.horizontal
-        ? $scales.plot.x1 - $scales.plot.x0
-        : band.size}
+      width={$scales.horizontal ? $scales.plot.x1 - $scales.plot.x0 : band.size}
       height={$scales.horizontal
         ? band.size
         : $scales.plot.y1 - $scales.plot.y0}

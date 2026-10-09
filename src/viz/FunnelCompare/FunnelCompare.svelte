@@ -257,7 +257,10 @@
         <th scope="row" class:bx--viz-funnel-compare__label={true}>
           {row.label}
         </th>
-        {#each cells.slice(r * columns.length, (r + 1) * columns.length) as cell (cell.key)}
+        {#each cells.slice(
+          r * columns.length,
+          (r + 1) * columns.length,
+        ) as cell (cell.key)}
           <!-- One cell per funnel, the bar and its value, so every funnel
                takes the same share of the width. -->
           <td
@@ -274,14 +277,16 @@
                   class:bx--viz-funnel-compare__button={true}
                   tabindex={cells.indexOf(cell) === tabStopIndex ? 0 : -1}
                   aria-pressed={cell.key === selectedKey}
-                  aria-label="{cell.column.label}, {row.label}: {formatValue(cell.stage.stats.value)}"
+                  aria-label="{cell.column.label}, {row.label}: {formatValue(
+                    cell.stage.stats.value,
+                  )}"
                   on:click={(event) => select(cell, event)}
                   on:mouseenter={() => emit(cell)}
                   on:mouseleave={() => emit(null)}
                   on:focus={() => {
-                  focusedIndex = cells.indexOf(cell);
-                  emit(cell);
-                }}
+                    focusedIndex = cells.indexOf(cell);
+                    emit(cell);
+                  }}
                   on:blur={() => emit(null)}
                 >
                   <span class:bx--viz-funnel-compare__bar={true}></span>

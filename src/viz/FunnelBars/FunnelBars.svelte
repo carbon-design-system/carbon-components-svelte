@@ -322,7 +322,10 @@
         </th>
         <td class:bx--viz-funnel-bars__track-cell={true} aria-hidden="true">
           <div class:bx--viz-funnel-bars__track={true}>
-            {#if shape !== "tapered" && showDrop && i > 0 && stats.previousPct > stats.pct}
+            {#if shape !== "tapered" &&
+              showDrop &&
+              i > 0 &&
+              stats.previousPct > stats.pct}
               <div class:bx--viz-funnel-bars__drop={true}></div>
             {/if}
             <div class:bx--viz-funnel-bars__bar={true}></div>
@@ -355,7 +358,9 @@
         {/if}
         {#if showDuration}
           <td class:bx--viz-funnel-bars__duration={true}>
-            {#if i > 0 && typeof stage.medianDurationMs === "number" && Number.isFinite(stage.medianDurationMs)}
+            {#if i > 0 &&
+              typeof stage.medianDurationMs === "number" &&
+              Number.isFinite(stage.medianDurationMs)}
               {formatDuration(stage.medianDurationMs, { locale })}
             {/if}
           </td>
@@ -372,9 +377,7 @@
               <span aria-hidden="true">−{percent(stats.dropPct)}</span>
               <span class:bx--visually-hidden={true}
                 >{percent(stats.dropPct)}
-                drop{highlighted
-                  ? ", largest drop"
-                  : ""}</span
+                drop{highlighted ? ", largest drop" : ""}</span
               >
             {:else if highlighted}
               <span class:bx--visually-hidden={true}>Highlighted</span>

@@ -952,7 +952,8 @@
             iconDescription={text.remove}
             tooltipPosition="bottom"
             tooltipAlignment="end"
-            disabled={selected.nodes.length === 0 && selected.edges.length === 0}
+            disabled={selected.nodes.length === 0 &&
+              selected.edges.length === 0}
             on:click={removeSelected}
           />
           <Button
@@ -1111,7 +1112,12 @@
         >
           <slot
             name="node"
-            node={{ id: box.id, label: box.label, datum: box.datum, selected: selectedNodes.has(box.id) }}
+            node={{
+              id: box.id,
+              label: box.label,
+              datum: box.datum,
+              selected: selectedNodes.has(box.id),
+            }}
           >
             <span class:bx--viz-editor__label={true}>{box.label}</span>
           </slot>
@@ -1142,7 +1148,8 @@
     {#if minimap && boxes.length > 0}
       <svg
         class:bx--viz-editor__minimap={true}
-        viewBox="{bounds.x0} {bounds.y0} {bounds.x1 - bounds.x0} {bounds.y1 - bounds.y0}"
+        viewBox="{bounds.x0} {bounds.y0} {bounds.x1 - bounds.x0} {bounds.y1 -
+          bounds.y0}"
         aria-hidden="true"
         focusable="false"
       >

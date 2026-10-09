@@ -44,7 +44,9 @@
   on:transform={(e) => ontransform(e.detail)}
 />
 <output data-testid="transform"
-  >{transform ? `${transform.k},${transform.tx},${transform.ty}` : "fit"}</output
+  >{transform
+    ? `${transform.k},${transform.tx},${transform.ty}`
+    : "fit"}</output
 >
 <output data-testid="collapsed">{collapsed.join(",")}</output>
 <output data-testid="selected">{selected ?? ""}</output>

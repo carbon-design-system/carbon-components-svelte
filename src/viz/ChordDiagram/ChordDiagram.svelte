@@ -361,7 +361,9 @@
           <ChartTooltipRow
             color={anchor.color}
             label={chord.groups[active.index].key}
-            value="{formatValue(chord.groups[active.index].out)} {text.out}, {formatValue(
+            value="{formatValue(
+              chord.groups[active.index].out,
+            )} {text.out}, {formatValue(
               chord.groups[active.index].in,
             )} {text.in}"
           />

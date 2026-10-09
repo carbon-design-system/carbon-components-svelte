@@ -226,8 +226,8 @@
               <!-- svelte-ignore a11y-mouse-events-have-key-events -->
               <li
                 class:bx--viz-treemap__leaf={true}
-                class:bx--viz-treemap__leaf--tiny={leaf.span.width < MIN_WIDTH ||
-                  leaf.span.height < MIN_HEIGHT}
+                class:bx--viz-treemap__leaf--tiny={leaf.span.width <
+                  MIN_WIDTH || leaf.span.height < MIN_HEIGHT}
                 class:bx--viz-treemap__leaf--short={leaf.span.height <
                   MIN_HEIGHT_FOR_VALUE}
                 class:bx--viz-treemap__leaf--active={leaf.id === activeId}

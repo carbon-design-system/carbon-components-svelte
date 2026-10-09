@@ -307,7 +307,9 @@
       {#each sequence.actors as actor (actor.name)}
         <line
           class:bx--viz-sequence__lifeline={true}
-          class:bx--viz-sequence__lifeline--grouped={colorOfActor.get(actor.name) !== undefined}
+          class:bx--viz-sequence__lifeline--grouped={colorOfActor.get(
+            actor.name,
+          ) !== undefined}
           style:--bx-viz-color={colorOfActor.get(actor.name)}
           x1={actor.x}
           x2={actor.x}
@@ -316,7 +318,9 @@
         />
         <rect
           class:bx--viz-sequence__actor={true}
-          class:bx--viz-sequence__actor--grouped={colorOfActor.get(actor.name) !== undefined}
+          class:bx--viz-sequence__actor--grouped={colorOfActor.get(
+            actor.name,
+          ) !== undefined}
           style:--bx-viz-color={colorOfActor.get(actor.name)}
           x={actor.x - actorWidth / 2}
           y="0"
@@ -347,7 +351,8 @@
             class:bx--viz-sequence__hit={true}
             x={Math.min(message.x1, message.x2) - 4}
             y={message.y - rowHeight / 2}
-            width={Math.abs(message.x2 - message.x1) + (message.self ? actorGap : 8)}
+            width={Math.abs(message.x2 - message.x1) +
+              (message.self ? actorGap : 8)}
             height={rowHeight}
           />
           <path

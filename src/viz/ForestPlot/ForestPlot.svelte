@@ -356,9 +356,7 @@
             >
               {formatValue(row.estimate)}
               ({formatValue(row.lo)},
-              {formatValue(
-                row.hi,
-              )})
+              {formatValue(row.hi)})
             </text>
           {/if}
           <title>{describe(row)}</title>
@@ -398,9 +396,8 @@
               dy="0.32em"
             >
               {formatValue(forest.overall.estimate)}
-              ({formatValue(
-                forest.overall.lo,
-              )}, {formatValue(forest.overall.hi)})
+              ({formatValue(forest.overall.lo)},
+              {formatValue(forest.overall.hi)})
             </text>
           {/if}
           <title>{describe(forest.overall)}</title>
@@ -445,9 +442,7 @@
           <td>
             {formatValue(forest.overall.lo)}
             to
-            {formatValue(
-              forest.overall.hi,
-            )}
+            {formatValue(forest.overall.hi)}
           </td>
           {#if weightOf}
             <td></td>

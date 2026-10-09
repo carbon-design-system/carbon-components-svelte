@@ -468,7 +468,7 @@
           class:bx--viz-graph__node--selected={node.id === selected}
           class:bx--viz-graph__node--grouped={extra.get(node.id)?.color !==
             undefined}
-          class="bx--viz-graph__node--{extra.get(node.id)?.status ?? 'plain'}"
+          class="bx--viz-graph__node--{extra.get(node.id)?.status ?? "plain"}"
           style:--bx-viz-color={extra.get(node.id)?.color}
           transform="translate({node.x} {node.y})"
           on:click={(event) => select(node, event)}

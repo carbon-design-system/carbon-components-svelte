@@ -1046,8 +1046,9 @@
       <div
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
-        style:inset="{$scales.plot.y0}px {$size.width - $scales.plot.x1}px {$size.height -
-          $scales.plot.y1}px {$scales.plot.x0}px"
+        style:inset="{$scales.plot.y0}px {$size.width -
+          $scales.plot.x1}px {$size.height - $scales.plot.y1}px {$scales.plot
+          .x0}px"
       ></div>
     {:else if empty}
       <div class:bx--viz-chart__empty={true}>

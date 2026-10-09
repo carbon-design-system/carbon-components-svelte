@@ -469,11 +469,16 @@
           <td>{gantt.xLabel(task.from)}</td>
           <td>{gantt.xLabel(task.to)}</td>
           <td>
-            {task.progress === null ? "–" : formatPercent(task.progress, { locale, digits: 0 })}
+            {task.progress === null
+              ? "–"
+              : formatPercent(task.progress, { locale, digits: 0 })}
           </td>
           <td>
             {task.deps
-              .map((dep) => gantt.tasks.find((entry) => entry.id === dep)?.label ?? dep)
+              .map(
+                (dep) =>
+                  gantt.tasks.find((entry) => entry.id === dep)?.label ?? dep,
+              )
               .join(", ") || "–"}
           </td>
         </tr>

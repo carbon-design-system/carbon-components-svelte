@@ -234,7 +234,8 @@
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={active.cx > size / 2}
         aria-hidden="true"
-        style:left="{((active.cx + (active.cx > size / 2 ? -active.r : active.r)) /
+        style:left="{((active.cx +
+          (active.cx > size / 2 ? -active.r : active.r)) /
           size) *
           100}%"
         style:top="{(active.cy / size) * 100}%"

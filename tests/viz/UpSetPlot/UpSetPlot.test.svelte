@@ -20,7 +20,11 @@
 </script>
 
 <UpSetPlot
-  sets={[{ id: "a", label: "Alpha" }, { id: "b", label: "Beta" }, { id: "c", label: "Gamma" }]}
+  sets={[
+    { id: "a", label: "Alpha" },
+    { id: "b", label: "Beta" },
+    { id: "c", label: "Gamma" },
+  ]}
   {data}
   membership="tags"
   title="Tag combinations"

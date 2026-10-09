@@ -166,7 +166,7 @@
     {:else}
       <text
         class:bx--viz-axis__title={true}
-        transform="translate({position === 'left'
+        transform="translate({position === "left"
           ? 10
           : $size.width - 4},{(plot.y0 + plot.y1) / 2}) rotate(-90)"
         text-anchor="middle"

@@ -317,7 +317,9 @@
                   type="button"
                   class:bx--viz-spans__toggle={true}
                   aria-expanded={!row.collapsed}
-                  aria-label="{row.collapsed ? text.expand : text.collapse} {row.label}"
+                  aria-label="{row.collapsed
+                    ? text.expand
+                    : text.collapse} {row.label}"
                   on:click={() => toggle(row)}
                 >
                   <ChevronDown size={16} />
@@ -333,7 +335,8 @@
                   type="button"
                   class:bx--viz-timeline__segment={true}
                   class:bx--viz-timeline__button={true}
-                  class:bx--viz-timeline__segment--selected={row.id === selected}
+                  class:bx--viz-timeline__segment--selected={row.id ===
+                    selected}
                   tabindex={tree.rows.indexOf(row) === tabStopIndex ? 0 : -1}
                   aria-pressed={row.id === selected}
                   aria-label="{row.label}: {describe(row)}"

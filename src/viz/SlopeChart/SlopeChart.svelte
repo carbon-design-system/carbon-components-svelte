@@ -314,7 +314,7 @@
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <g
             class:bx--viz-slope__series={true}
-            class="bx--viz-slope__series--{colorBy === 'direction'
+            class="bx--viz-slope__series--{colorBy === "direction"
               ? tones[i]
               : colorBy}"
             class:bx--viz-slope__series--active={i === active}
@@ -376,9 +376,7 @@
             </text>
             <title>
               {line.label}: {formatValue(line.from)} to
-              {formatValue(
-                line.to,
-              )}, {formatChange(line.change)}
+              {formatValue(line.to)}, {formatChange(line.change)}
             </title>
           </g>
         {/each}

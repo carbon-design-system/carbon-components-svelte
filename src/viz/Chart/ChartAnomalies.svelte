@@ -81,7 +81,9 @@
       <title>{marker.name}</title>
       <path
         class:bx--viz-anomaly__marker={true}
-        d="M{marker.x},{marker.y - size}L{marker.x + size},{marker.y}L{marker.x},{marker.y + size}L{marker.x - size},{marker.y}Z"
+        d="M{marker.x},{marker.y - size}L{marker.x +
+          size},{marker.y}L{marker.x},{marker.y + size}L{marker.x -
+          size},{marker.y}Z"
         style:--bx-viz-color={marker.color}
       />
     </svg>

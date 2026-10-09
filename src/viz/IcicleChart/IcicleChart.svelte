@@ -343,7 +343,8 @@
         class:bx--viz-icicle__node--short={node.x1 - node.x0 <
           MIN_WIDTH_FOR_VALUE}
         class:bx--viz-icicle__node--active={node.id === activeId}
-        class:bx--viz-icicle__node--selected={selectable && node.id === selected}
+        class:bx--viz-icicle__node--selected={selectable &&
+          node.id === selected}
         style:left="{node.x0}%"
         style:width="{node.x1 - node.x0}%"
         style:top="{rowOf(node) * rowHeight}px"

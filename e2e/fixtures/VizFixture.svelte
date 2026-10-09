@@ -211,7 +211,8 @@
       Array.from({ length: 48 }, (_, i) => ({
         t: new Date(2026, 0, 1, 0, i * 30),
         host,
-        cpu: 30 + h * 15 + Math.round(Math.sin(i / 4 + h) * 25) + ((i * 13) % 9),
+        cpu:
+          30 + h * 15 + Math.round(Math.sin(i / 4 + h) * 25) + ((i * 13) % 9),
       })),
     )}
     x="t"
@@ -222,9 +223,31 @@
 
   <GanttChart
     data={[
-      { id: "spec", name: "spec", stream: "Design", from: new Date(2026, 8, 1), to: new Date(2026, 8, 8), done: 1 },
-      { id: "api", name: "checkout API", stream: "API", from: new Date(2026, 8, 8), to: new Date(2026, 8, 18), done: 0.5, after: "spec" },
-      { id: "web", name: "storefront", stream: "Web", from: new Date(2026, 8, 14), to: new Date(2026, 8, 24), after: "api" },
+      {
+        id: "spec",
+        name: "spec",
+        stream: "Design",
+        from: new Date(2026, 8, 1),
+        to: new Date(2026, 8, 8),
+        done: 1,
+      },
+      {
+        id: "api",
+        name: "checkout API",
+        stream: "API",
+        from: new Date(2026, 8, 8),
+        to: new Date(2026, 8, 18),
+        done: 0.5,
+        after: "spec",
+      },
+      {
+        id: "web",
+        name: "storefront",
+        stream: "Web",
+        from: new Date(2026, 8, 14),
+        to: new Date(2026, 8, 24),
+        after: "api",
+      },
     ]}
     id="id"
     label="name"
@@ -402,10 +425,34 @@
   <OrgChart
     data={[
       { id: "vp", manager: null, name: "A. Rivera", title: "VP Engineering" },
-      { id: "plat", manager: "vp", name: "K. Chen", title: "Director, Platform", team: "Platform" },
-      { id: "prod", manager: "vp", name: "J. Patel", title: "Director, Product", team: "Product" },
-      { id: "obs", manager: "plat", name: "M. Lee", title: "Observability", team: "Platform" },
-      { id: "checkout", manager: "prod", name: "S. Ng", title: "Checkout", team: "Product" },
+      {
+        id: "plat",
+        manager: "vp",
+        name: "K. Chen",
+        title: "Director, Platform",
+        team: "Platform",
+      },
+      {
+        id: "prod",
+        manager: "vp",
+        name: "J. Patel",
+        title: "Director, Product",
+        team: "Product",
+      },
+      {
+        id: "obs",
+        manager: "plat",
+        name: "M. Lee",
+        title: "Observability",
+        team: "Platform",
+      },
+      {
+        id: "checkout",
+        manager: "prod",
+        name: "S. Ng",
+        title: "Checkout",
+        team: "Product",
+      },
     ]}
     id="id"
     parent="manager"
@@ -447,11 +494,46 @@
 
   <SpanWaterfall
     data={[
-      { id: "gw", parent: null, name: "route", service: "gateway", start: 0, ms: 160 },
-      { id: "api", parent: "gw", name: "GET /checkout", service: "api", start: 20, ms: 90 },
-      { id: "db", parent: "api", name: "query orders", service: "db", start: 35, ms: 40 },
-      { id: "auth", parent: "gw", name: "session", service: "auth", start: 22, ms: 28 },
-      { id: "render", parent: "gw", name: "html", service: "api", start: 115, ms: 45 },
+      {
+        id: "gw",
+        parent: null,
+        name: "route",
+        service: "gateway",
+        start: 0,
+        ms: 160,
+      },
+      {
+        id: "api",
+        parent: "gw",
+        name: "GET /checkout",
+        service: "api",
+        start: 20,
+        ms: 90,
+      },
+      {
+        id: "db",
+        parent: "api",
+        name: "query orders",
+        service: "db",
+        start: 35,
+        ms: 40,
+      },
+      {
+        id: "auth",
+        parent: "gw",
+        name: "session",
+        service: "auth",
+        start: 22,
+        ms: 28,
+      },
+      {
+        id: "render",
+        parent: "gw",
+        name: "html",
+        service: "api",
+        start: 115,
+        ms: 45,
+      },
     ]}
     id="id"
     parent="parent"
@@ -465,10 +547,30 @@
 
   <StateTimeline
     data={[
-      { service: "api", status: "ok", from: new Date(2026, 0, 1, 0), to: new Date(2026, 0, 1, 6) },
-      { service: "api", status: "down", from: new Date(2026, 0, 1, 6), to: new Date(2026, 0, 1, 7) },
-      { service: "api", status: "ok", from: new Date(2026, 0, 1, 7), to: new Date(2026, 0, 1, 12) },
-      { service: "worker", status: "degraded", from: new Date(2026, 0, 1, 0), to: new Date(2026, 0, 1, 12) },
+      {
+        service: "api",
+        status: "ok",
+        from: new Date(2026, 0, 1, 0),
+        to: new Date(2026, 0, 1, 6),
+      },
+      {
+        service: "api",
+        status: "down",
+        from: new Date(2026, 0, 1, 6),
+        to: new Date(2026, 0, 1, 7),
+      },
+      {
+        service: "api",
+        status: "ok",
+        from: new Date(2026, 0, 1, 7),
+        to: new Date(2026, 0, 1, 12),
+      },
+      {
+        service: "worker",
+        status: "degraded",
+        from: new Date(2026, 0, 1, 0),
+        to: new Date(2026, 0, 1, 12),
+      },
     ]}
     row="service"
     state="status"
@@ -555,7 +657,10 @@
       {
         id: "paid",
         label: "Paid",
-        stages: stages.map((stage, i) => ({ ...stage, value: Math.round(stage.value * [0.8, 0.5, 0.4, 0.7][i]) })),
+        stages: stages.map((stage, i) => ({
+          ...stage,
+          value: Math.round(stage.value * [0.8, 0.5, 0.4, 0.7][i]),
+        })),
       },
     ]}
     label="Signup funnel by channel"
@@ -763,7 +868,14 @@
   <ParallelCoordinates
     data={[
       { name: "m5.large", tier: "general", cpu: 2, mem: 8, io: 40, cost: 96 },
-      { name: "m5.xlarge", tier: "general", cpu: 4, mem: 16, io: 60, cost: 192 },
+      {
+        name: "m5.xlarge",
+        tier: "general",
+        cpu: 4,
+        mem: 16,
+        io: 60,
+        cost: 192,
+      },
       { name: "c5.xlarge", tier: "compute", cpu: 4, mem: 8, io: 55, cost: 170 },
       { name: "r5.xlarge", tier: "memory", cpu: 4, mem: 32, io: 50, cost: 252 },
       { name: "i3.large", tier: "storage", cpu: 2, mem: 15, io: 95, cost: 156 },

@@ -65,7 +65,7 @@
   class:bx--viz-segments={true}
   class:bx--viz-segments--sm={size === "sm"}
   class:bx--viz-segments--lg={size === "lg"}
-  class="bx--viz-segments--{status ?? 'default'}"
+  class="bx--viz-segments--{status ?? "default"}"
   role={label ? "progressbar" : undefined}
   aria-label={label ? name : undefined}
   aria-valuemin={label ? 0 : undefined}
