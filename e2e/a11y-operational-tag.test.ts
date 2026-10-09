@@ -34,4 +34,18 @@ test.describe("OperationalTag a11y", () => {
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await expect(trigger).toBeFocused();
   });
+
+  test("closes a hidden tag from the TagSet popover", async ({ page }) => {
+    const indicator = page.getByRole("button", { name: "+3 more tags" });
+
+    await indicator.click();
+    await page.getByRole("button", { name: /Development/ }).click();
+
+    await expect(page.getByTestId("tags")).toHaveText(
+      "Production,Staging,QA,Sandbox",
+    );
+    await expect(
+      page.getByRole("button", { name: "+2 more tags" }),
+    ).toHaveAttribute("aria-expanded", "true");
+  });
 });

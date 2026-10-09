@@ -167,6 +167,18 @@ describe("rovingFocus", () => {
     expect(onMove).toHaveBeenCalledWith(0, expect.any(KeyboardEvent));
   });
 
+  it("itemsOnly ignores keydown from matching elements outside getItems", () => {
+    const { items, onMove } = setup(4, {
+      itemsOnly: true,
+      getItems: () => items.slice(0, 3),
+    });
+    keydown(items[3], "ArrowRight");
+    expect(onMove).not.toHaveBeenCalled();
+
+    keydown(items[0], "ArrowRight");
+    expect(onMove).toHaveBeenCalledWith(1, expect.any(KeyboardEvent));
+  });
+
   it("destroy removes the keydown listener", () => {
     const { items, onMove, action } = setup(3);
     action.destroy();

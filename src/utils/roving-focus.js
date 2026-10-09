@@ -20,6 +20,7 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
  * @property {() => number} getActiveIndex - Index to move from.
  * @property {(index: number, event: KeyboardEvent) => void} [onMove] - New index after a navigation key.
  * @property {boolean} [focusOnMove] - Call `.focus()` on the new item. Default `false`.
+ * @property {boolean} [itemsOnly] - Ignore keydown from elements outside `getItems()`, such as matching controls in a nested popover. Default `false`.
  */
 
 /**
@@ -95,6 +96,13 @@ export function rovingFocus(node, options) {
 
     const items = getItems();
     if (items.length === 0) return;
+    if (
+      currentOptions.itemsOnly &&
+      target !== node &&
+      !items.some((item) => item.contains(target))
+    ) {
+      return;
+    }
 
     let index = -1;
     if (
