@@ -25,6 +25,9 @@ const PUBLIC_UTILITIES = new Set([
   "bx--hang--right",
   // Added inside a Prose heading by a Markdown renderer or by hand.
   "bx--prose__heading-anchor",
+  // Wraps a page's Prose runs and live examples, added by a Markdown
+  // preprocessor or by hand.
+  "bx--prose-flow",
 ]);
 
 // Styled but never rendered, as found when this check landed. Removing the

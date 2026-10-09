@@ -167,6 +167,17 @@
       </p>
     </Prose>
   </Prose>
+  <div class="bx--prose-flow" data-testid="flow">
+    <Prose><p>Copy that sets up the example below.</p></Prose>
+    <CodeSnippet code="npm i carbon-components-svelte" />
+    <Prose data-testid="flow-after-component">
+      <p>Copy that follows the example.</p>
+    </Prose>
+    <Prose data-testid="flow-heading">
+      <h2>Next section</h2>
+      <p>A run that opens with a heading.</p>
+    </Prose>
+  </div>
   <div data-testid="outside">
     <InlineNotification lowContrast hideCloseButton kind="info" title="Note">
       <svelte:fragment slot="subtitleChildren">

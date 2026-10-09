@@ -781,6 +781,37 @@ $ccs-prose-variants: (
     --ccs-prose-anchor-color: #{$text-02};
     --ccs-prose-anchor-hover: #{$link-01};
   }
+
+  // A flow container for a page that alternates Prose runs with live
+  // examples, as a Markdown preprocessor emits one Prose per run of copy.
+  // Siblings get the flow gap and copy after an example gets more room,
+  // each read from the next element's root (its own variant) or from the
+  // container's defaults for components. Where `:has()` is supported, a run
+  // that opens with a heading takes that heading's space above it; below
+  // Chrome 105 runs keep the uniform gap.
+  $flow-root: ".#{$prefix}--prose-flow";
+  $default-variant: map-get($ccs-prose-variants, default);
+
+  #{$flow-root} {
+    --ccs-prose-flow: #{map-get($default-variant, flow)};
+  }
+
+  #{$flow-root} > * + * {
+    margin-block-start: var(--ccs-prose-flow);
+  }
+
+  #{$flow-root} > :not(#{$p}) + #{$p} {
+    margin-block-start: var(--ccs-prose-after-component);
+  }
+
+  #{$flow-root} > #{$p}:has(> h1:first-child),
+  #{$flow-root} > #{$p}:has(> h2:first-child) {
+    margin-block-start: var(--ccs-prose-heading-before-2);
+  }
+
+  #{$flow-root} > #{$p}:has(> h3:first-child) {
+    margin-block-start: var(--ccs-prose-heading-before-3);
+  }
 }
 
 @include exports("prose") {

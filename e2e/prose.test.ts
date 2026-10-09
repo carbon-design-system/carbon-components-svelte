@@ -197,6 +197,21 @@ test.describe("Prose", () => {
     expect(await margin(page.getByTestId("after-snippet"))).toBe("32px");
   });
 
+  test("spaces Prose runs and examples in a flow container", async ({
+    page,
+  }) => {
+    const flow = page.getByTestId("flow");
+    expect(
+      await style(flow.locator(":scope > .bx--snippet"), "margin-top"),
+    ).toBe("16px");
+    expect(
+      await style(page.getByTestId("flow-after-component"), "margin-top"),
+    ).toBe("32px");
+    expect(await style(page.getByTestId("flow-heading"), "margin-top")).toBe(
+      "64px",
+    );
+  });
+
   test("compact uses 14px copy and smaller headings", async ({ page }) => {
     await page.goto("/prose.html?variant=compact");
 
