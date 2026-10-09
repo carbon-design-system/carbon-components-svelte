@@ -7,6 +7,18 @@ import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
 describe("RangeSlider", () => {
+  it("names each thumb and text input by the label and its bound", () => {
+    render(RangeSlider, { props: { labelText: "Price" } });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    expect(lowerThumb).toHaveAccessibleName("Price Lower bound");
+    expect(upperThumb).toHaveAccessibleName("Price Upper bound");
+
+    const [lowerInput, upperInput] = screen.getAllByRole("spinbutton");
+    expect(lowerInput).toHaveAccessibleName("Price Lower bound");
+    expect(upperInput).toHaveAccessibleName("Price Upper bound");
+  });
+
   it("keeps read-only thumbs reachable by keyboard", async () => {
     render(RangeSlider, {
       props: { readonly: true, hideTextInput: true, value: 10 },

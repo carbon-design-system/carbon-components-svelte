@@ -395,6 +395,7 @@
   $: ({ errorId, warnId, readonlyId, helperId } = buildFieldIds(id));
   $: lowerInputId = `lower-input-${id}`;
   $: upperInputId = `upper-input-${id}`;
+  $: upperThumbId = `upper-thumb-${id}`;
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: leftUpper = range === 0 ? 0 : ((valueUpper - min) / range) * 100;
@@ -487,6 +488,7 @@
         class:bx--slider-text-input--warn={showWarn}
         {value}
         aria-label={ariaLabelInput}
+        aria-labelledby="{labelId} {lowerInputId}"
         {disabled}
         {readonly}
         {required}
@@ -557,6 +559,7 @@
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
+          aria-labelledby="{labelId} {id}"
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
@@ -618,12 +621,14 @@
           role="slider"
           tabindex={disabled || (readonly && !hideTextInput) ? undefined : 0}
           class:bx--slider__thumb={true}
+          id={upperThumbId}
           class:bx--slider__thumb--upper={true}
           aria-valuemax={max}
           aria-valuemin={upperMin}
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
+          aria-labelledby="{labelId} {upperThumbId}"
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
@@ -722,6 +727,7 @@
         class:bx--slider-text-input--warn={showWarn}
         value={valueUpper}
         aria-label={ariaLabelInputUpper}
+        aria-labelledby="{labelId} {upperInputId}"
         {disabled}
         {readonly}
         {required}
