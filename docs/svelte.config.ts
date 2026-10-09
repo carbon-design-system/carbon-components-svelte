@@ -18,6 +18,7 @@ import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with {
 import rehypeSlug from "rehype-slug";
 import { visit } from "unist-util-visit";
 import { highlight } from "../src/syntax/index.js";
+import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
@@ -504,9 +505,10 @@ function carbonify() {
 }
 
 export default {
-  extensions: [".svelte", ".svx"],
+  extensions: [".svelte", PAGE_EXTENSION],
   preprocess: [
     mdsvex({
+      extensions: [PAGE_EXTENSION],
       smartypants: false,
       highlight: { highlighter: mdsvexHighlighter },
       remarkPlugins: [requireLeadingHeading, plugin, carbonify],
