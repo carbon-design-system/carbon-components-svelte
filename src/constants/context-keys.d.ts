@@ -1,6 +1,12 @@
 /** Set by `FluidForm`; read by form fields to opt into fluid styles. */
 export const FORM_CONTEXT_KEY: "carbon:Form";
 
+/**
+ * Set by `FormItem`; read by `FormLabel`, `FormHelperText`, and
+ * `FormRequirement` to derive ids from the item's control.
+ */
+export const FORM_ITEM_CONTEXT_KEY: "carbon:FormItem";
+
 /** Set by `Modal` and `ComposedModal`; read by overlays inside them. */
 export const MODAL_CONTEXT_KEY: "carbon:Modal";
 

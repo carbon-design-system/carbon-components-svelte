@@ -1,0 +1,25 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Carbon hides `.bx--form-requirement` until a sibling selector such as
+/// `input[data-invalid] ~` reveals it, so a standalone `FormRequirement`
+/// carries a kind modifier that shows it. The doubled class outranks the
+/// base rule, which emits after this partial.
+/// @access private
+/// @group components
+@mixin form-requirement {
+  .#{$prefix}--form-requirement.#{$prefix}--form-requirement--invalid,
+  .#{$prefix}--form-requirement.#{$prefix}--form-requirement--warn {
+    display: block;
+    overflow: visible;
+    max-height: none;
+  }
+
+  .#{$prefix}--form-requirement.#{$prefix}--form-requirement--invalid {
+    color: $text-error;
+  }
+}
+
+@include exports("form-requirement") {
+  @include form-requirement;
+}

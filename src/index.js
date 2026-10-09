@@ -87,8 +87,10 @@ export { default as FileUploaderSkeleton } from "./FileUploader/FileUploaderSkel
 export { default as FluidForm } from "./FluidForm/FluidForm.svelte";
 export { default as Form } from "./Form/Form.svelte";
 export { default as FormGroup } from "./FormGroup/FormGroup.svelte";
+export { default as FormHelperText } from "./FormHelperText/FormHelperText.svelte";
 export { default as FormItem } from "./FormItem/FormItem.svelte";
 export { default as FormLabel } from "./FormLabel/FormLabel.svelte";
+export { default as FormRequirement } from "./FormRequirement/FormRequirement.svelte";
 export { default as FullPageError } from "./FullPageError/FullPageError.svelte";
 export { default as Column } from "./Grid/Column.svelte";
 export { default as Grid } from "./Grid/Grid.svelte";
