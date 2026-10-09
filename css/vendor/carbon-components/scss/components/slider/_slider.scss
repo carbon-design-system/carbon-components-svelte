@@ -143,8 +143,11 @@
       transform: translate(-50%, -50%);
     }
 
+    // ccs: also drop the base `:active` ring, or pressing a disabled thumb
+    // draws the blue $interactive-04 ring.
     &:active {
       background: $ui-03;
+      box-shadow: none;
       transform: translate(-50%, -50%);
     }
   }
@@ -171,6 +174,19 @@
     .#{$prefix}--slider--disabled ~ .#{$prefix}--slider-text-input:hover {
       color: $disabled-02;
       outline: none;
+    }
+
+    // RangeSlider handles (`slider-two-handle` below). Only recolor the
+    // non-focus icon; the focus-state icon must keep its $interactive-01
+    // fill even when the focused thumb is hovered. Disabled handles keep
+    // their muted fill.
+    .#{$prefix}--slider:not(.#{$prefix}--slider--disabled)
+      .#{$prefix}--slider__thumb--lower:hover
+      .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus),
+    .#{$prefix}--slider:not(.#{$prefix}--slider--disabled)
+      .#{$prefix}--slider__thumb--upper:hover
+      .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
+      fill: $text-02;
     }
   }
 
@@ -379,12 +395,6 @@
       background: transparent;
       box-shadow: none;
       transform: none;
-
-      // Only recolor the non-focus icon; the focus-state icon must keep its
-      // $interactive-01 fill even when the focused thumb is hovered.
-      .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
-        fill: $text-02;
-      }
     }
 
     &:active {
