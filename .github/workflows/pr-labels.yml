@@ -1,0 +1,71 @@
+name: PR labels
+
+# `pull_request_target` gives fork PRs a write token. Nothing here checks out
+# or runs PR code: the labeler reads .github/labeler.yml from the base branch,
+# and the title step reads the title as data, never via `${{ }}`.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
+        if: github.event.action != 'edited'
+        with:
+          sync-labels: true
+
+      # Conventional commit title -> type label, `!` -> breaking. On a title
+      # edit, labels the old title implied are removed; manual labels stay.
+      # Skipped on push so a label removed by hand isn't re-added.
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        if: github.event.action != 'synchronize'
+        with:
+          script: |
+            const TYPES = {
+              feat: "enhancement",
+              fix: "bug",
+              perf: "performance",
+              refactor: "refactor",
+            };
+            const BREAKING = "breaking changes";
+
+            const labelsFor = (title = "", body = "") => {
+              const match = /^(\w+)(?:\([^)]*\))?(!)?:/.exec(title);
+              const labels = new Set();
+              if (match && TYPES[match[1]]) labels.add(TYPES[match[1]]);
+              if (match?.[2] || /^BREAKING[ -]CHANGE:/m.test(body)) {
+                labels.add(BREAKING);
+              }
+              return labels;
+            };
+
+            const pr = context.payload.pull_request;
+            const changes = context.payload.changes ?? {};
+            const next = labelsFor(pr.title, pr.body ?? "");
+            const prev = labelsFor(
+              changes.title?.from ?? pr.title,
+              changes.body?.from ?? pr.body ?? "",
+            );
+            const current = new Set(pr.labels.map((label) => label.name));
+            const issue = { ...context.repo, issue_number: pr.number };
+
+            for (const name of prev) {
+              if (!next.has(name) && current.has(name)) {
+                await github.rest.issues.removeLabel({ ...issue, name });
+              }
+            }
+            const add = [...next].filter((name) => !current.has(name));
+            if (add.length) {
+              await github.rest.issues.addLabels({ ...issue, labels: add });
+            }

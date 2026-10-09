@@ -1,0 +1,65 @@
+# Path-based PR labels, applied by .github/workflows/pr-labels.yml.
+#
+# `any-glob-to-all-files` passes when a single glob matches every changed
+# file, so each "only" label lists its paths as one brace glob.
+
+# Scope: what kind of change this is, for picking review depth.
+
+"docs only":
+  - changed-files:
+      - any-glob-to-all-files: "{docs/**,examples/**,thumbnails/**,**/*.md}"
+
+"css only":
+  - changed-files:
+      - any-glob-to-all-files: "{css/**,crassus.config.ts}"
+
+"tests only":
+  - changed-files:
+      - any-glob-to-all-files: "{tests/**,tests-svelte3/**,tests-svelte4/**,e2e/**}"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-all-files: "{package.json,bun.lock,**/package.json,**/bun.lock}"
+
+# Touches: set alongside other labels.
+
+css:
+  - changed-files:
+      - any-glob-to-any-file: "css/**"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
+
+tooling:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "scripts/**"
+          - "bench/**"
+          - "biome.json"
+          - "vite.config*.ts"
+          - "playwright.config.ts"
+          - "ostia.config.ts"
+          - "tsconfig*.json"
+
+"svelte 3/4 compat":
+  - changed-files:
+      - any-glob-to-any-file: "{tests-svelte3,tests-svelte4}/**"
+
+# Areas.
+
+"ui shell":
+  - changed-files:
+      - any-glob-to-any-file: "{src,tests}/UIShell/**"
+
+tabs:
+  - changed-files:
+      - any-glob-to-any-file: "{src,tests}/Tabs/**"
+
+portal:
+  - changed-files:
+      - any-glob-to-any-file: "{src,tests}/Portal/**"
+
+fluid-form:
+  - changed-files:
+      - any-glob-to-any-file: "{src,tests}/FluidForm/**"
