@@ -74,13 +74,15 @@
   /** Set an id for the trigger button element. Also used to label the panel. */
   export let id = uniqueId();
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocusOnClose } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -88,11 +90,49 @@
   let refPanel = null;
 
   $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);
+
+  // Only one tooltip shows at a time: hovering one header action while
+  // another is focused hides the focused one's tooltip (mirrors Button).
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipHidden = tooltipHandoff.hidden;
+  const tooltipInstant = tooltipHandoff.instant;
+
+  let hovered = false;
+  let focused = false;
+
+  function handleMouseenter() {
+    if (!hasIconOnly) return;
+    hovered = true;
+    tooltipHandoff.claim();
+  }
+
+  function handleMouseleave() {
+    if (!hasIconOnly) return;
+    hovered = false;
+    if (!focused) tooltipHandoff.release();
+  }
+
+  function handleFocus() {
+    if (!hasIconOnly) return;
+    focused = true;
+    tooltipHandoff.claim({ instant: true });
+  }
+
+  function handleBlur() {
+    if (!hasIconOnly) return;
+    focused = false;
+    if (!hovered) tooltipHandoff.release();
+  }
+
+  onMount(() => tooltipHandoff.release);
+
   $: buttonClass = [
     hasIconOnly && "bx--btn",
     hasIconOnly && "bx--tooltip__trigger bx--tooltip--a11y",
     hasIconOnly && "bx--btn--icon-only--bottom",
     hasIconOnly && `bx--tooltip--align-${tooltipAlignment}`,
+    hasIconOnly && $tooltipHidden && "bx--tooltip--hidden",
+    hasIconOnly && $tooltipInstant && "bx--tooltip--instant",
     $$restProps.class,
   ]
     .filter(Boolean)
@@ -149,6 +189,10 @@
     isOpen = !isOpen;
     dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
   }}
+  on:mouseenter={handleMouseenter}
+  on:mouseleave={handleMouseleave}
+  on:focus={handleFocus}
+  on:blur={handleBlur}
 >
   {#if hasIconOnly}
     <span class:bx--assistive-text={true}>{iconDescription}</span>
