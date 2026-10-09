@@ -82,6 +82,13 @@
     outline: none;
   }
 
+  // Repeats `--text`'s reserved focus border (below) at this rule's
+  // specificity, which the `border` shorthand above would otherwise reset.
+  .#{$prefix}--header__global
+    .#{$prefix}--header__action--text:not(.#{$prefix}--header-search-button) {
+    border-width: $button-border-width;
+  }
+
   // HeaderAction's icon tooltip trigger: the 2px border above is the focus
   // ring, so drop the tooltip trigger's second ring around the icon.
   .#{$prefix}--header__action.#{$prefix}--tooltip__trigger:focus svg {
@@ -118,10 +125,15 @@
     fill: currentColor;
   }
 
+  // An auto-width text action reserves the 2px focus border at rest (the
+  // padding gives the extra pixel back) so `:focus` only swaps the border
+  // color instead of widening the button.
   .#{$prefix}--header__action--text {
     display: inline-flex;
     width: auto;
-    padding: 0 $carbon--spacing-05 $carbon--spacing-01;
+    border-width: $button-border-width;
+    padding: 0 calc(#{$carbon--spacing-05} - #{to-rem(1px)})
+      $carbon--spacing-01;
   }
 
   .#{$prefix}--header__action-text {
