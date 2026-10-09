@@ -1,0 +1,119 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TagInput: a text field that turns typed or pasted values into dismissible
+/// tags. The field wraps onto new rows as tags accumulate; the text input
+/// never narrows below 160px, so it drops to its own row instead of
+/// shrinking.
+/// @access private
+/// @group components
+@mixin tag-input {
+  .#{$prefix}--tag-input {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: to-rem(40px);
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-bottom: 1px solid $ui-04;
+    background-color: $field-01;
+    cursor: text;
+  }
+
+  .#{$prefix}--tag-input--xs {
+    min-height: to-rem(24px);
+    padding-top: to-rem(3px);
+    padding-bottom: to-rem(3px);
+  }
+
+  .#{$prefix}--tag-input--sm {
+    min-height: to-rem(32px);
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(7px);
+  }
+
+  .#{$prefix}--tag-input--xl {
+    min-height: to-rem(48px);
+  }
+
+  // Room for the status icon, which `bx--text-input__invalid-icon` pins to
+  // the right edge.
+  .#{$prefix}--tag-input--status {
+    padding-right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--tag-input--invalid {
+    outline: 2px solid $support-01;
+    outline-offset: -2px;
+  }
+
+  // After the invalid outline: focus wins while typing.
+  .#{$prefix}--tag-input--focused {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--tag-input--disabled {
+    border-bottom-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--tag-input--readonly {
+    border-bottom-color: $ui-03;
+    background-color: transparent;
+    cursor: default;
+  }
+
+  .#{$prefix}--tag-input__tags {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  // Grows to fill the row, and wraps to a new row rather than narrowing
+  // below 160px. `.bx--tag-set__space > *` pins children at
+  // `flex-shrink: 0`; let the input shrink in a field narrower than that.
+  .#{$prefix}--tag-input .#{$prefix}--tag-input__input {
+    @include type-style("body-short-01");
+
+    min-width: 0;
+    height: to-rem(24px);
+    flex: 1 1 to-rem(160px);
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    color: $text-01;
+    outline: none;
+  }
+
+  .#{$prefix}--tag-input--xs .#{$prefix}--tag-input__input,
+  .#{$prefix}--tag-input--sm .#{$prefix}--tag-input__input {
+    height: to-rem(18px);
+  }
+
+  .#{$prefix}--tag-input--xl .#{$prefix}--tag-input__input {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--tag-input__input::placeholder {
+    color: $text-05;
+    opacity: 1;
+  }
+
+  .#{$prefix}--tag-input__input:disabled {
+    color: $disabled-02;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--tag-input__input:disabled::placeholder {
+    color: $disabled-02;
+  }
+
+  .#{$prefix}--tag-input__tags--below {
+    margin-top: $carbon--spacing-03;
+  }
+}
+
+@include exports("tag-input") {
+  @include tag-input;
+}

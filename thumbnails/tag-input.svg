@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>tag-input</title>
+    <g id="tag-input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="56" width="64" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="72" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="103" width="168" height="1"></rect>
+        <g id="tag-1">
+            <rect fill="var(--cds-border-subtle, #e0e0e0)" x="84" y="79" width="46" height="18" rx="9"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="92" y="86" width="20" height="4"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="118" y="86" width="4" height="4"></rect>
+        </g>
+        <g id="tag-2">
+            <rect fill="var(--cds-border-subtle, #e0e0e0)" x="136" y="79" width="54" height="18" rx="9"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="144" y="86" width="28" height="4"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="178" y="86" width="4" height="4"></rect>
+        </g>
+        <rect id="placeholder" fill="var(--cds-text-placeholder, #a8a8a8)" x="198" y="84" width="36" height="8"></rect>
+        <rect id="helper-text" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="116" width="80" height="6"></rect>
+    </g>
+</svg>

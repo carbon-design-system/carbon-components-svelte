@@ -20,6 +20,20 @@
    */
   export let triggerRef = null;
 
+  /**
+   * Obtain a reference to the indicator's focusable button, for the
+   * parent's roving keyboard navigation.
+   * @bindable readonly
+   * @type {null | HTMLButtonElement}
+   */
+  export let buttonRef = null;
+
+  /**
+   * Roving `tabindex` from the parent. `undefined` keeps the native order.
+   * @type {"0" | "-1" | undefined}
+   */
+  export let tabindex = undefined;
+
   /** @type {string | undefined} */
   export let id = undefined;
 
@@ -49,9 +63,17 @@
   setContext("carbon:TagSet", undefined);
 
   const dispatch = createEventDispatcher();
+
+  // `TooltipDefinition` keeps its rest props on the outer wrapper, so set
+  // the roving `tabindex` on its button directly.
+  $: if (buttonRef) {
+    if (tabindex === undefined) buttonRef.removeAttribute("tabindex");
+    else buttonRef.setAttribute("tabindex", tabindex);
+  }
 </script>
 
 <TooltipDefinition
+  bind:ref={buttonRef}
   {id}
   align={overflowAlign}
   direction={overflowDirection}

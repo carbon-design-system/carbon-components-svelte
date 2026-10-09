@@ -62,6 +62,7 @@ $ccs-theme-switching: false !default;
 // tags at equal specificity and rely on emitting after it.
 @import "carbon-components/scss/components/tag/tag";
 @import "./tag-set";
+@import "./tag-input";
 @import "carbon-components/scss/components/list-box/list-box";
 @import "carbon-components/scss/components/list/list";
 @import "carbon-components/scss/components/loading/loading";
