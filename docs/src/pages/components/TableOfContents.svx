@@ -6,6 +6,7 @@ description: A table of contents lists the sections of a page as links and highl
   import {
     Column,
     Grid,
+    Prose,
     RadioButton,
     RadioButtonGroup,
     Row,
@@ -82,37 +83,29 @@ By default a section becomes active when its top reaches the top of the scroller
     <Column sm={4} md={5} lg={12}>
       <div style="position: relative">
         <div bind:this={lineContainer} style="height: 16rem; overflow-y: auto">
-          <Stack gap={9}>
-            <Stack tag="section" id="toc-line-overview" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Overview</Text>
-              <Stack gap={5}>
-                <Text>The reporting API returns usage and billing data for every project in your organization, so finance and engineering read the same numbers.</Text>
-                <Text>It's read-only. To change limits or plans, use the console.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-line-setup" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Setup</Text>
-              <Stack gap={5}>
-                <Text>Create a project in the console, then generate an API key under Settings. Keys are scoped to one project and can be revoked at any time.</Text>
-                <Text>Choose the region your data is stored in when you create the project. It can't be changed later.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-line-usage" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Usage</Text>
-              <Stack gap={5}>
-                <Text>Send a GET request with the key in the Authorization header. Responses are JSON, paginated at 100 records, with a cursor for the next page.</Text>
-                <Text>Errors return a status code and a message that names the field at fault.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-line-faq" gap={3}>
-              <Text tag="h4" type="productive-heading-03">FAQ</Text>
-              <Stack gap={5}>
-                <Text>Requests are limited to 600 per minute per key. Data is kept for 13 months, and support answers within one business day.</Text>
-                <Text>When you hit the limit, requests return status 429 with a header that says how many seconds to wait before retrying.</Text>
-                <Text>Export data you need for longer than 13 months to your own storage. The export endpoint writes one file per day.</Text>
-              </Stack>
-            </Stack>
-          </Stack>
+          <Prose>
+            <section id="toc-line-overview">
+              <h4>Overview</h4>
+              <p>The reporting API returns usage and billing data for every project in your organization, so finance and engineering read the same numbers.</p>
+              <p>It's read-only. To change limits or plans, use the console.</p>
+            </section>
+            <section id="toc-line-setup">
+              <h4>Setup</h4>
+              <p>Create a project in the console, then generate an API key under Settings. Keys are scoped to one project and can be revoked at any time.</p>
+              <p>Choose the region your data is stored in when you create the project. It can't be changed later.</p>
+            </section>
+            <section id="toc-line-usage">
+              <h4>Usage</h4>
+              <p>Send a GET request with the key in the Authorization header. Responses are JSON, paginated at 100 records, with a cursor for the next page.</p>
+              <p>Errors return a status code and a message that names the field at fault.</p>
+            </section>
+            <section id="toc-line-faq">
+              <h4>FAQ</h4>
+              <p>Requests are limited to 600 per minute per key. Data is kept for 13 months, and support answers within one business day.</p>
+              <p>When you hit the limit, requests return status 429 with a header that says how many seconds to wait before retrying.</p>
+              <p>Export data you need for longer than 13 months to your own storage. The export endpoint writes one file per day.</p>
+            </section>
+          </Prose>
         </div>
         <div
           aria-hidden="true"
@@ -140,37 +133,29 @@ When the sections scroll inside an element rather than the window, pass that ele
     <Column sm={4} md={5} lg={12}>
       <Stack gap={5}>
         <div bind:this={container} style="height: 16rem; overflow-y: auto">
-          <Stack gap={9}>
-            <Stack tag="section" id="toc-container-profile" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Profile</Text>
-              <Stack gap={5}>
-                <Text>Your name, photo, and email address appear wherever teammates mention or assign you.</Text>
-                <Text>Changes take effect right away, including in comments you've already left.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-container-security" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Security</Text>
-              <Stack gap={5}>
-                <Text>Change your password, turn on two-factor authentication, and review the devices signed in to your account.</Text>
-                <Text>Signing out a device ends its session within a minute.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-container-billing" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Billing</Text>
-              <Stack gap={5}>
-                <Text>Update the payment method, download past invoices, and choose who receives billing email.</Text>
-                <Text>Invoices are issued on the first of each month in your account's currency.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-container-notifications" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Notifications</Text>
-              <Stack gap={5}>
-                <Text>Choose which events send email, and whether to get them as they happen or in a daily digest.</Text>
-                <Text>Mentions and assignments always notify you, even with digests on, so nothing waiting on you gets buried.</Text>
-                <Text>Mobile push notifications follow the same settings. Mute a project to silence it everywhere for a set time.</Text>
-              </Stack>
-            </Stack>
-          </Stack>
+          <Prose>
+            <section id="toc-container-profile">
+              <h4>Profile</h4>
+              <p>Your name, photo, and email address appear wherever teammates mention or assign you.</p>
+              <p>Changes take effect right away, including in comments you've already left.</p>
+            </section>
+            <section id="toc-container-security">
+              <h4>Security</h4>
+              <p>Change your password, turn on two-factor authentication, and review the devices signed in to your account.</p>
+              <p>Signing out a device ends its session within a minute.</p>
+            </section>
+            <section id="toc-container-billing">
+              <h4>Billing</h4>
+              <p>Update the payment method, download past invoices, and choose who receives billing email.</p>
+              <p>Invoices are issued on the first of each month in your account's currency.</p>
+            </section>
+            <section id="toc-container-notifications">
+              <h4>Notifications</h4>
+              <p>Choose which events send email, and whether to get them as they happen or in a daily digest.</p>
+              <p>Mentions and assignments always notify you, even with digests on, so nothing waiting on you gets buried.</p>
+              <p>Mobile push notifications follow the same settings. Mute a project to silence it everywhere for a set time.</p>
+            </section>
+          </Prose>
         </div>
         <Text>Selected: <strong>{selectedId}</strong></Text>
       </Stack>
@@ -220,61 +205,45 @@ Set `level` to list a subsection under its section, such as an `h3` under an `h2
     </Column>
     <Column sm={4} md={5} lg={12}>
       <div bind:this={nestedContainer} style="height: 16rem; overflow-y: auto">
-        <Stack gap={9}>
-          <Stack tag="section" id="toc-nested-overview" gap={3}>
-            <Text tag="h4" type="productive-heading-03">Overview</Text>
-            <Stack gap={5}>
-              <Text>The design system is the shared set of tokens, components, and guidance behind every product we ship.</Text>
-              <Text>A core team maintains it. Anyone can propose a change by opening an issue with the problem it solves.</Text>
-            </Stack>
-          </Stack>
-          <Stack gap={7}>
-            <Stack tag="section" id="toc-nested-tokens" gap={3}>
-              <Text tag="h4" type="productive-heading-03">Design tokens</Text>
-              <Stack gap={5}>
-                <Text>Tokens are named values for color, spacing, and type. Design files and code read the same names, so a change in one place reaches every product.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-nested-colors" gap={3}>
-              <Text tag="h5" type="productive-heading-02">Colors</Text>
-              <Stack gap={5}>
-                <Text>Color tokens name a role, such as background or text on color, not a hue. Each theme maps the roles to its own palette.</Text>
-                <Text>Use the role that describes the job, and the contrast holds in every theme.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-nested-contrast" gap={3}>
-              <Text tag="h6" type="productive-heading-01">Contrast</Text>
-              <Stack gap={5}>
-                <Text>Text roles meet a 4.5:1 contrast ratio against the background roles they're paired with, and large text meets 3:1.</Text>
-                <Text>Check custom pairings with a contrast checker before shipping them.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-nested-spacing" gap={3}>
-              <Text tag="h5" type="productive-heading-02">Spacing</Text>
-              <Stack gap={5}>
-                <Text>Spacing comes from one scale that starts at 2px and roughly doubles at each step.</Text>
-                <Text>Use small steps inside a component and large ones between sections of a page.</Text>
-              </Stack>
-            </Stack>
-            <Stack tag="section" id="toc-nested-type" gap={3}>
-              <Text tag="h5" type="productive-heading-02">Type</Text>
-              <Stack gap={5}>
-                <Text>Each type style sets size, weight, and line height together, so text stays readable at every size.</Text>
-                <Text>Pick the style by role, such as a heading or body copy, not by the size you want.</Text>
-                <Text>Long-form text uses the body-long styles, which add line height for comfortable reading.</Text>
-              </Stack>
-            </Stack>
-          </Stack>
-          <Stack tag="section" id="toc-nested-components" gap={3}>
-            <Text tag="h4" type="productive-heading-03">Components</Text>
-            <Stack gap={5}>
-              <Text>Components are built from the tokens, so they follow the theme without extra work.</Text>
-              <Text>Each one documents when to use it, what it looks like in every state, and how it behaves with a keyboard.</Text>
-              <Text>Start from the component closest to what you need. If none fits, ask in the design system channel before building a new one; someone may already be working on it.</Text>
-              <Text>New components go through a short review for accessibility, theming, and naming before they're published.</Text>
-            </Stack>
-          </Stack>
-        </Stack>
+        <Prose>
+          <section id="toc-nested-overview">
+            <h4>Overview</h4>
+            <p>The design system is the shared set of tokens, components, and guidance behind every product we ship.</p>
+            <p>A core team maintains it. Anyone can propose a change by opening an issue with the problem it solves.</p>
+          </section>
+          <section id="toc-nested-tokens">
+            <h4>Design tokens</h4>
+            <p>Tokens are named values for color, spacing, and type. Design files and code read the same names, so a change in one place reaches every product.</p>
+          </section>
+          <section id="toc-nested-colors">
+            <h5>Colors</h5>
+            <p>Color tokens name a role, such as background or text on color, not a hue. Each theme maps the roles to its own palette.</p>
+            <p>Use the role that describes the job, and the contrast holds in every theme.</p>
+          </section>
+          <section id="toc-nested-contrast">
+            <h6>Contrast</h6>
+            <p>Text roles meet a 4.5:1 contrast ratio against the background roles they're paired with, and large text meets 3:1.</p>
+            <p>Check custom pairings with a contrast checker before shipping them.</p>
+          </section>
+          <section id="toc-nested-spacing">
+            <h5>Spacing</h5>
+            <p>Spacing comes from one scale that starts at 2px and roughly doubles at each step.</p>
+            <p>Use small steps inside a component and large ones between sections of a page.</p>
+          </section>
+          <section id="toc-nested-type">
+            <h5>Type</h5>
+            <p>Each type style sets size, weight, and line height together, so text stays readable at every size.</p>
+            <p>Pick the style by role, such as a heading or body copy, not by the size you want.</p>
+            <p>Long-form text uses the body-long styles, which add line height for comfortable reading.</p>
+          </section>
+          <section id="toc-nested-components">
+            <h4>Components</h4>
+            <p>Components are built from the tokens, so they follow the theme without extra work.</p>
+            <p>Each one documents when to use it, what it looks like in every state, and how it behaves with a keyboard.</p>
+            <p>Start from the component closest to what you need. If none fits, ask in the design system channel before building a new one; someone may already be working on it.</p>
+            <p>New components go through a short review for accessibility, theming, and naming before they're published.</p>
+          </section>
+        </Prose>
       </div>
     </Column>
   </Row>
@@ -282,7 +251,7 @@ Set `level` to list a subsection under its section, such as an `h3` under an `h2
 
 ## Generated from headings
 
-For rendered Markdown or other content you don't write item by item, read the headings after they render and map each one to an item. Here the `h4`s become top-level items and the `h5`s nest under them.
+For rendered Markdown or other content you don't write item by item, read the headings after they render and map each one to an item. Here the content is set in [Prose](/components/Prose), the `h4`s become top-level items, and the `h5`s nest under them.
 
 <Grid>
   <Row>
@@ -295,47 +264,25 @@ For rendered Markdown or other content you don't write item by item, read the he
     </Column>
     <Column sm={4} md={5} lg={12}>
       <div bind:this={article} style="height: 16rem; overflow-y: auto">
-        <Stack gap={9}>
-          <Stack gap={3}>
-            <Text tag="h4" type="productive-heading-03" id="toc-generated-install">Install</Text>
-            <Stack gap={5}>
-              <Text>Add the package with your package manager, then import the styles once in your app's entry point.</Text>
-              <Text>The styles include every theme, so you don't need a separate import to switch.</Text>
-            </Stack>
-          </Stack>
-          <Stack gap={7}>
-            <Stack gap={3}>
-              <Text tag="h4" type="productive-heading-03" id="toc-generated-configure">Configure</Text>
-              <Stack gap={5}>
-                <Text>Two settings cover most apps: the theme and the base path.</Text>
-              </Stack>
-            </Stack>
-            <Stack gap={3}>
-              <Text tag="h5" type="productive-heading-02" id="toc-generated-theme">Theme</Text>
-              <Stack gap={5}>
-                <Text>Pick one of the four themes, or follow the system preference so the app matches the operating system.</Text>
-                <Text>The theme can change at runtime without a reload.</Text>
-              </Stack>
-            </Stack>
-            <Stack gap={3}>
-              <Text tag="h5" type="productive-heading-02" id="toc-generated-base-path">Base path</Text>
-              <Stack gap={5}>
-                <Text>If the app isn't served from the root of its domain, set the base path so links and assets resolve.</Text>
-                <Text>Prefix in-page links with the same path.</Text>
-                <Text>Server-rendered apps read it from the request, so it can differ between environments.</Text>
-              </Stack>
-            </Stack>
-          </Stack>
-          <Stack gap={3}>
-            <Text tag="h4" type="productive-heading-03" id="toc-generated-deploy">Deploy</Text>
-            <Stack gap={5}>
-              <Text>Build once and serve the output from any static host. Nothing runs on the server.</Text>
-              <Text>Cache the hashed assets for a year and the HTML for a few minutes.</Text>
-              <Text>Preview deployments work the same way. Each branch gets its own URL, which you can share for review before merging.</Text>
-              <Text>To roll back, point the host at the previous build. There's no database migration to undo.</Text>
-            </Stack>
-          </Stack>
-        </Stack>
+        <Prose>
+          <h4 id="toc-generated-install">Install</h4>
+          <p>Add the package with your package manager, then import the styles once in your app's entry point.</p>
+          <p>The styles include every theme, so you don't need a separate import to switch.</p>
+          <h4 id="toc-generated-configure">Configure</h4>
+          <p>Two settings cover most apps: the theme and the base path.</p>
+          <h5 id="toc-generated-theme">Theme</h5>
+          <p>Pick one of the four themes, or follow the system preference so the app matches the operating system.</p>
+          <p>The theme can change at runtime without a reload.</p>
+          <h5 id="toc-generated-base-path">Base path</h5>
+          <p>If the app isn't served from the root of its domain, set the base path so links and assets resolve.</p>
+          <p>Prefix in-page links with the same path.</p>
+          <p>Server-rendered apps read it from the request, so it can differ between environments.</p>
+          <h4 id="toc-generated-deploy">Deploy</h4>
+          <p>Build once and serve the output from any static host. Nothing runs on the server.</p>
+          <p>Cache the hashed assets for a year and the HTML for a few minutes.</p>
+          <p>Preview deployments work the same way. Each branch gets its own URL, which you can share for review before merging.</p>
+          <p>To roll back, point the host at the previous build. There's no database migration to undo.</p>
+        </Prose>
       </div>
     </Column>
   </Row>

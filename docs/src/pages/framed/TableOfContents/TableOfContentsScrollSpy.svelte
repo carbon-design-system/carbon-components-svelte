@@ -2,11 +2,10 @@
   import {
     Column,
     Grid,
+    Prose,
     Row,
-    Stack,
     TableOfContents,
     TableOfContentsItem,
-    Text,
   } from "carbon-components-svelte";
 
   const sections = [
@@ -50,19 +49,14 @@
       </div>
     </Column>
     <Column sm={4} md={6} lg={12}>
-      <Stack gap={9}>
+      <Prose>
         {#each sections as section (section.id)}
-          <Stack
-            tag="section"
-            id={section.id}
-            gap={3}
-            style="min-height: 24rem"
-          >
-            <Text tag="h2" type="productive-heading-04">{section.title}</Text>
-            <Text>{section.body}</Text>
-          </Stack>
+          <section id={section.id} style="min-height: 24rem">
+            <h2>{section.title}</h2>
+            <p>{section.body}</p>
+          </section>
         {/each}
-      </Stack>
+      </Prose>
     </Column>
   </Row>
 </Grid>
