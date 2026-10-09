@@ -529,3 +529,56 @@
 @include exports('selectable-tag') {
   @include selectable-tag;
 }
+
+// carbon-components-svelte patch (operational tag)
+/// OperationalTag: a tag-styled button that discloses a popover. Carbon v10
+/// has no operational variant; this follows v11's (whole tag is the
+/// trigger, 2px focus outline) without v11's per-color border tokens.
+/// @access private
+/// @group components
+@mixin tag-operational {
+  .#{$prefix}--operational-tag {
+    position: relative;
+    display: inline-flex;
+  }
+
+  // A ring in the tag's own text color marks it as a trigger, standing in
+  // for v11's per-color `tag-border-*` tokens, which v10 doesn't ship.
+  .#{$prefix}--tag--operational {
+    border: 0;
+    margin: 0;
+    box-shadow: inset 0 0 0 1px currentColor;
+    font-family: inherit;
+  }
+
+  // Replaces `--interactive`'s inset focus shadow, keeping the ring.
+  .#{$prefix}--tag--operational:focus {
+    box-shadow: inset 0 0 0 1px currentColor;
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  // Gray types get a lighter neutral ring, closer to v11's gray-40 border.
+  // Their near-black text color would otherwise match an unselected
+  // `SelectableTag`'s `$border-inverse` border.
+  .#{$prefix}--tag--operational.#{$prefix}--tag--gray,
+  .#{$prefix}--tag--operational.#{$prefix}--tag--cool-gray,
+  .#{$prefix}--tag--operational.#{$prefix}--tag--warm-gray {
+    box-shadow: inset 0 0 0 1px $ui-04;
+  }
+
+  // Clear the trigger's 2px focus outline.
+  .#{$prefix}--operational-tag .#{$prefix}--popover {
+    --cds-popover-offset: #{$carbon--spacing-02};
+  }
+
+  .#{$prefix}--operational-tag__content {
+    @include type-style("body-short-01");
+
+    padding: $carbon--spacing-05;
+  }
+}
+
+@include exports("tag-operational") {
+  @include tag-operational;
+}

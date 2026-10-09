@@ -1,10 +1,10 @@
 ---
-components: ["Tag", "SelectableTag", "TagSkeleton"]
+components: ["Tag", "SelectableTag", "OperationalTag", "TagSkeleton"]
 description: Tags categorize content with a keyword or label, with various styles, sizes, and interactive states like filterable and selectable.
 ---
 
 <script>
-  import { Box, Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
+  import { Box, Link, OperationalTag, Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -181,6 +181,28 @@ Embed a tooltip within a tag to provide additional context.
     Armonk
   </TooltipDefinition>
 </Tag>
+
+## Operational
+
+Use `OperationalTag` for a tag that reveals related content, such as the rest of a list, in a popover. The whole tag is the trigger, and a ring in the tag's own color marks it as one. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to open it. <DocKbd label="Escape" /> closes it and returns focus to the tag; so does clicking outside or moving focus away. Put the popover content in the `content` slot.
+
+<OperationalTag type="blue">
+  3 policies
+  <Stack slot="content" gap={3}>
+    <Link href="#retention">Retention</Link>
+    <Link href="#encryption">Encryption at rest</Link>
+    <Link href="#access">Access review</Link>
+  </Stack>
+</OperationalTag>
+
+### Types
+
+`OperationalTag` takes the ten color `type`s; it has no `high-contrast` or `outline` variant. The default is `gray`.
+
+<OperationalTag type="gray">Gray</OperationalTag>
+<OperationalTag type="purple">Purple</OperationalTag>
+<OperationalTag type="teal">Teal</OperationalTag>
+<OperationalTag type="red">Red</OperationalTag>
 
 ## Selectable
 
