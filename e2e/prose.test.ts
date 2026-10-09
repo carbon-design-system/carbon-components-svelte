@@ -124,6 +124,12 @@ test.describe("Prose", () => {
     expect(
       await note.evaluate((el) => getComputedStyle(el, "::before").content),
     ).toBe('"Note"');
+    expect(
+      await style(
+        page.locator('blockquote[data-alert="important"]'),
+        "border-left-color",
+      ),
+    ).not.toBe(await style(note, "border-left-color"));
   });
 
   test("puts a task list's checkbox in place of the bullet", async ({
@@ -233,6 +239,24 @@ test.describe("Prose", () => {
     );
     expect(await style(page.getByTestId("full-first"), "padding-left")).toBe(
       "0px",
+    );
+  });
+
+  test("keeps inline details from moving lines", async ({ page }) => {
+    const sup = page.getByTestId("footnote-ref").locator("..");
+    expect(await style(sup, "line-height")).toBe("0px");
+    expect(
+      await style(page.getByTestId("footnote-ref"), "text-decoration-line"),
+    ).toBe("none");
+    expect(await style(page.getByTestId("footnotes"), "font-size")).toBe(
+      "14px",
+    );
+    expect(await style(page.getByTestId("raw-code"), "padding-left")).toBe(
+      "2.8px",
+    );
+    expect(await style(page.getByTestId("summary"), "cursor")).toBe("pointer");
+    expect(await style(page.getByTestId("nested-list"), "margin-top")).toBe(
+      "8px",
     );
   });
 

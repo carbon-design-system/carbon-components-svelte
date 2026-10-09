@@ -119,6 +119,38 @@
     <blockquote data-alert="caution" data-alert-title="Caution">
       <p>Revoking a key breaks every client that uses it.</p>
     </blockquote>
+    <p data-testid="footnoted">
+      Limits apply per key<sup class="footnote-ref"
+        ><a href="#fn-1" id="fnref-1" data-testid="footnote-ref">1</a></sup
+      >.
+    </p>
+    <details data-testid="details">
+      <summary data-testid="summary">Advanced options</summary>
+      <p>Set a custom timeout per request.</p>
+    </details>
+    <ul>
+      <li data-testid="parent-item">
+        Parent item
+        <ul data-testid="nested-list">
+          <li>Child item</li>
+        </ul>
+      </li>
+    </ul>
+    <section class="footnotes" data-testid="footnotes">
+      <ol>
+        <li id="fn-1">
+          <p>
+            Keys share one limit.
+            <a
+              href="#fnref-1"
+              class="footnote-backref"
+              aria-label="Back to reference 1"
+              >↩</a
+            >
+          </p>
+        </li>
+      </ol>
+    </section>
     <h2>Nested Prose</h2>
     <Prose variant="compact" data-testid="nested-prose">
       <p data-testid="nested-p">

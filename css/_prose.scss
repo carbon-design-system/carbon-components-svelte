@@ -496,8 +496,11 @@ $ccs-prose-variants: (
     color: $text-02;
   }
 
+  // A nested list follows its item's text node, which `* + *` misses.
   #{$p} li + li#{$x},
-  #{$p} li#{$x} > * + * {
+  #{$p} li#{$x} > * + *,
+  #{$p} li > ul#{$x},
+  #{$p} li > ol#{$x} {
     margin-block-start: var(--ccs-prose-list-gap);
   }
 
@@ -531,7 +534,9 @@ $ccs-prose-variants: (
   $alert-kinds: (
     note: ($support-info, get-token-value($notification-colors, "notification-background-info")),
     tip: ($support-success, get-token-value($notification-colors, "notification-background-success")),
-    important: ($support-info, get-token-value($notification-colors, "notification-background-info")),
+    // Important has no notification kind of its own; a strong neutral
+    // border on a neutral surface keeps it apart from Note in every theme.
+    important: ($ui-05, $ui-01),
     warning: ($support-warning, get-token-value($notification-colors, "notification-background-warning")),
     caution: ($support-error, get-token-value($notification-colors, "notification-background-error")),
   );
@@ -543,10 +548,12 @@ $ccs-prose-variants: (
     }
   }
 
+  // Inline code: a narrow inset, so the box doesn't read as a gap before
+  // punctuation (`value`, not `( value )`).
   #{$p} code#{$x} {
     @include carbon--font-family("mono");
 
-    padding: 0 $carbon--spacing-02;
+    padding: 0 0.2em;
     background-color: $field-01;
     border-radius: to-rem(4px);
     font-size: 0.875em;
@@ -587,6 +594,43 @@ $ccs-prose-variants: (
     background-color: transparent;
     border-radius: 0;
     font-size: inherit;
+  }
+
+  // Footnote references and other superscripts don't push their line apart.
+  #{$p} sup#{$x},
+  #{$p} sub#{$x} {
+    line-height: 0;
+  }
+
+  // Footnotes, as Markdown renderers emit them: a `section.footnotes` with a
+  // visually hidden heading, set smaller and in the secondary text color.
+  // References drop the underline, since the superscript already marks them.
+  // Back links keep it: an underline-free `↩` is told apart from the text
+  // by color alone (WCAG 1.4.1).
+  #{$p} .footnotes#{$x} {
+    color: $text-02;
+    font-size: 0.875em;
+  }
+
+  #{$p} .footnotes p#{$x} {
+    font-size: inherit;
+  }
+
+  #{$p} .footnote-ref a#{$x} {
+    text-decoration: none;
+  }
+
+  // `details` joins the flow (see `$flows`); its summary is a control.
+  #{$p} summary#{$x} {
+    cursor: pointer;
+  }
+
+  #{$p} summary#{$x}:focus {
+    outline: none;
+  }
+
+  #{$p} summary#{$x}:focus-visible {
+    outline: 2px solid $focus;
   }
 
   #{$p} hr#{$x} {
