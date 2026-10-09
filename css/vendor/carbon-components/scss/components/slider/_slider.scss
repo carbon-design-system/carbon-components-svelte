@@ -302,6 +302,13 @@
     }
   }
 
+  // A read-only thumb stays focusable, so give it back its size while
+  // focused; the shared thumb focus styles then show where focus is.
+  .#{$prefix}--slider-container--readonly .#{$prefix}--slider__thumb:focus {
+    height: to-rem(14px);
+    width: to-rem(14px);
+  }
+
   // Same shape as the disabled sibling rule above, so disabled still takes
   // precedence when both are set.
   .#{$prefix}--slider--readonly:not(.#{$prefix}--slider--disabled)

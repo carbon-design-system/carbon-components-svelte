@@ -251,21 +251,21 @@ describe("Slider", () => {
     expect(sliderElement).toHaveClass("bx--slider--readonly");
     expect(container).toHaveClass("bx--slider-container--readonly");
     expect(input).toHaveAttribute("readonly");
-    expect(slider).not.toHaveAttribute("tabindex");
+    expect(slider).toHaveAttribute("tabindex", "0");
   });
 
-  it("keeps a read-only thumb reachable by keyboard", async () => {
-    render(Slider, {
-      props: { readonly: true, hideTextInput: true, value: 50 },
-    });
+  it.each([false, true])(
+    "keeps a read-only thumb reachable by keyboard (hideTextInput: %s)",
+    async (hideTextInput) => {
+      render(Slider, {
+        props: { readonly: true, hideTextInput, value: 50 },
+      });
 
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{ArrowRight}");
-    expect(slider).toHaveAttribute("aria-valuenow", "50");
-  });
+      const slider = screen.getByRole("slider");
+      await user.tab();
+      expect(slider).toHaveFocus();
+    },
+  );
 
   it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
     const { container } = render(Slider, {
@@ -310,8 +310,9 @@ describe("Slider", () => {
     });
 
     const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).not.toHaveFocus();
+    slider.focus();
+    await user.keyboard("{ArrowRight}{ArrowUp}{End}{PageUp}");
+    expect(slider).toHaveAttribute("aria-valuenow", "50");
   });
 
   it("should not allow mouse dragging when readonly", async () => {
