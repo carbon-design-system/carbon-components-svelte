@@ -145,15 +145,18 @@ test.describe("Prose", () => {
     expect(checkboxBox?.x).toBeCloseTo(listBox?.x ?? Number.NaN, 0);
   });
 
-  test("condensed uses 12px copy and 16px top-level headings", async ({
+  test("condensed uses 14px copy on 18px lines and 20px top-level headings", async ({
     page,
   }) => {
     await page.goto("/prose.html?variant=condensed");
 
-    expect(await style(page.getByTestId("raw-p"), "font-size")).toBe("12px");
+    expect(await style(page.getByTestId("raw-p"), "font-size")).toBe("14px");
+    expect(
+      Number.parseFloat(await style(page.getByTestId("raw-p"), "line-height")),
+    ).toBeCloseTo(18, 1);
     expect(
       await style(page.getByRole("heading", { level: 1 }), "font-size"),
-    ).toBe("16px");
+    ).toBe("20px");
     expect(
       await style(
         page.getByRole("heading", { level: 3 }).first(),

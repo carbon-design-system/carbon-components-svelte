@@ -7,7 +7,7 @@
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-family";
 
 /// Type scale, spacing, and measure for each Prose variant, densest first:
-/// condensed (12px, with a 1.5 line height for reading), compact (14px), default (16px), spacious (16px with
+/// condensed (14px, `body-short-01`), compact (14px, `body-long-01`), default (16px), spacious (16px with
 /// larger headings and more room), and expressive (fluid editorial headings).
 /// `default` styles the base class; the others restyle from a modifier class
 /// emitted after it.
@@ -33,6 +33,7 @@ $ccs-prose-variants: (
     heading-after: $carbon--spacing-04,
     list-gap: $carbon--spacing-03,
     measure: 68ch,
+    keycap-size: 0.8125em,
     code: "code-02",
     table: "body-short-01",
     block-padding: $carbon--spacing-05,
@@ -43,32 +44,32 @@ $ccs-prose-variants: (
     column-gap-fit: $carbon--spacing-07,
   ),
   condensed: (
-    body: "caption-01",
+    // Carbon's smallest body token, with a shorter line height than
+    // compact's `body-long-01` and tighter spacing around headings, lists,
+    // and blocks. For side panels and inspectors, where every line counts.
+    body: "body-short-01",
     headings: (
+      "productive-heading-03",
       "productive-heading-02",
       "heading-01",
-      "label-01",
-      "label-01",
-      "label-01",
-      "label-01",
+      "heading-01",
+      "heading-01",
+      "heading-01",
     ),
-    // caption-01's 16px line height suits a label, not running copy: 12px
-    // text read line after line needs 1.5. The rhythm matches compact's, so
-    // condensed tightens the type, not the space between paragraphs.
-    body-line-height: 1.5,
     fluid: false,
     flow: $carbon--spacing-04,
     heading-before-2: $carbon--spacing-07,
     heading-before-3: $carbon--spacing-06,
     heading-before-4: $carbon--spacing-05,
     after-component: $carbon--spacing-06,
-    heading-after: $carbon--spacing-03,
-    list-gap: $carbon--spacing-02,
-    measure: 96ch,
-    // h3 and below use label-01, which is regular weight; set them semibold.
-    bold-from: 3,
+    heading-after: $carbon--spacing-02,
+    list-gap: $carbon--spacing-01,
+    measure: 80ch,
+    // Keycap size: condensed's 18px line needs a smaller key, since an
+    // inline box paints its font's full height plus the border.
+    keycap-size: 0.75em,
     code: "code-01",
-    table: "caption-01",
+    table: "body-short-01",
     block-padding: $carbon--spacing-03,
     cell-padding-block: $carbon--spacing-02,
     // Cell inline padding for `tableWidth="full"`, and the column gap for
@@ -95,6 +96,7 @@ $ccs-prose-variants: (
     heading-after: $carbon--spacing-03,
     list-gap: $carbon--spacing-02,
     measure: 80ch,
+    keycap-size: 0.8125em,
     code: "code-01",
     table: "body-short-01",
     block-padding: $carbon--spacing-04,
@@ -123,6 +125,7 @@ $ccs-prose-variants: (
     heading-after: $carbon--spacing-05,
     list-gap: $carbon--spacing-04,
     measure: 64ch,
+    keycap-size: 0.8125em,
     code: "code-02",
     table: "body-short-02",
     block-padding: $carbon--spacing-06,
@@ -151,6 +154,7 @@ $ccs-prose-variants: (
     heading-after: $carbon--spacing-05,
     list-gap: $carbon--spacing-03,
     measure: 60ch,
+    keycap-size: 0.8125em,
     code: "code-02",
     table: "body-short-01",
     block-padding: $carbon--spacing-05,
@@ -836,6 +840,7 @@ $ccs-prose-variants: (
         --ccs-prose-heading-before-3: map-get($variant, heading-before-3),
         --ccs-prose-heading-before-4: map-get($variant, heading-before-4),
         --ccs-prose-after-component: map-get($variant, after-component),
+        --ccs-prose-keycap-size: map-get($variant, keycap-size),
         --ccs-prose-heading-after: map-get($variant, heading-after),
         --ccs-prose-list-gap: map-get($variant, list-gap),
         --ccs-prose-block-padding: map-get($variant, block-padding),
@@ -887,7 +892,7 @@ $ccs-prose-variants: (
     --ccs-prose-kbd-background: #{$ui-01};
     --ccs-prose-kbd-color: #{$text-01};
     --ccs-prose-kbd-font-family: #{map-get($carbon--font-families, mono)};
-    --ccs-prose-kbd-font-size: 0.8125em;
+    --ccs-prose-kbd-font-size: var(--ccs-prose-keycap-size);
     --ccs-prose-kbd-font-weight: 400;
   }
 

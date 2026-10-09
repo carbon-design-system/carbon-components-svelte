@@ -7,8 +7,8 @@
   /**
    * Set the type scale and spacing for the copy inside.
    * - `"default"`: 16px body copy and productive headings, for reading pages
-   * - `"condensed"`: 12px body copy with a 1.5 line height and compact's
-   *   spacing, for inspectors, side panels, and notes in dense consoles
+   * - `"condensed"`: 14px body copy with a shorter line height and tighter
+   *   spacing than compact, for side panels and inspectors
    * - `"compact"`: 14px body copy and tighter spacing, for dense product UI
    * - `"spacious"`: 16px body copy with larger headings and more room
    * - `"expressive"`: expressive headings that scale with the viewport and
@@ -53,8 +53,8 @@
   export let dividers = false;
 
   /**
-   * Override the max width. Each variant caps the line length: 96 characters
-   * (condensed), 80 (compact), 68 (default), 64 (spacious), or 60
+   * Override the max width. Each variant caps the line length: 80 characters
+   * (condensed and compact), 68 (default), 64 (spacious), or 60
    * (expressive). Numbers are treated as pixels; strings accept any CSS
    * length, or `"none"` to fill the container.
    * @type {number | string | undefined}
