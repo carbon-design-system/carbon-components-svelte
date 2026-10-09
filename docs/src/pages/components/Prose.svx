@@ -49,11 +49,11 @@ Wrap plain HTML in `Prose` to set it as running copy: paragraphs, headings, list
 
 ## Variants
 
-Set `variant` to match the page the copy sits on. Each variant sets the body and heading type styles, the spacing between elements, and the line length. `condensed` shrinks the type but keeps compact's spacing and loosens caption-01's line height to 1.5, since 12px copy read line after line needs more room than a 12px label.
+Set `variant` to match the page the copy sits on. Each variant sets the body and heading type styles, the spacing between elements, and the line length. Space above a heading grows with its level, so a heading sits closer to what it introduces than to what came before it.
 
 | Variant | Body | Headings | Line length | Use for |
 | --- | --- | --- | --- | --- |
-| `condensed` | caption-01 (12px), 1.5 line height | heading-01 and label-01 | 96 characters | Notes in inspectors, side panels, and other dense console UI |
+| `condensed` | body-short-01 (14px), shorter line height | Smaller productive and heading-01 | 80 characters | Side panels and inspectors, where every line counts |
 | `default` | body-long-02 (16px) | Productive | 68 characters | Documentation, help, and other reading pages |
 | `compact` | body-long-01 (14px) | Smaller productive, tighter spacing | 80 characters | Descriptions and help inside dense product UI, such as a side panel or modal |
 | `spacious` | body-long-02 (16px) | Productive, one step larger, more room | 64 characters | Onboarding, getting-started guides, and other pages read once and slowly |
@@ -110,6 +110,94 @@ Each variant caps the line length so long lines stay easy to follow. Set `maxWid
 <Prose maxWidth="none">
   <p>This paragraph fills the whole column. It's set with the default variant's type and spacing, but without the 68-character line length, so it runs as wide as the space it's placed in.</p>
 </Prose>
+
+## Links
+
+Links are in the link color and underlined, and heading anchors match them. Set `linkTone="muted"` for copy dense with links, such as reference docs: links take the text color, still underlined, and anchors the secondary text color, and both turn link blue on hover. Links have no visited color, like `Link` by default.
+
+### Default
+
+<Prose>
+  <h4 id="prose-links-default">Setup <a class="bx--prose__heading-anchor" href="#prose-links-default" aria-label="Link to Setup">#</a></h4>
+  <p>Read the <a href="#links">setup guide</a>, then the <a href="#links">API reference</a>.</p>
+</Prose>
+
+### Muted
+
+<Prose linkTone="muted">
+  <h4 id="prose-links-muted">Setup <a class="bx--prose__heading-anchor" href="#prose-links-muted" aria-label="Link to Setup">#</a></h4>
+  <p>Read the <a href="#links">setup guide</a>, then the <a href="#links">API reference</a>.</p>
+</Prose>
+
+## Keyboard keys
+
+Keys look like flat keycaps by default. Set `kbd="muted"` for the shortcut style `Menu` uses, with no box, for dense copy and long key sequences. Either way, keys never change the space between lines.
+
+### Keycap
+
+<Prose>
+  <p>Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> to open the palette, then <kbd>Enter</kbd> to run the highlighted command.</p>
+</Prose>
+
+### Muted
+
+<Prose kbd="muted">
+  <p>Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> to open the palette, then <kbd>Enter</kbd> to run the highlighted command.</p>
+</Prose>
+
+## Tables
+
+The first and last columns line up with the copy. By default, `tableWidth="fit"` packs columns at their content width with a gap between them, so a short table reads with the copy around it. Set `tableWidth="full"` for wide or data-heavy tables: the table spans the line length with padded cells.
+
+### Fit
+
+<Prose>
+  <table>
+    <thead>
+      <tr><th>Setting</th><th>Default</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>timeout</code></td><td>30 seconds</td></tr>
+      <tr><td><code>retries</code></td><td>3</td></tr>
+    </tbody>
+  </table>
+</Prose>
+
+### Full
+
+<Prose tableWidth="full">
+  <table>
+    <thead>
+      <tr><th>Setting</th><th>Default</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>timeout</code></td><td>30 seconds</td></tr>
+      <tr><td><code>retries</code></td><td>3</td></tr>
+    </tbody>
+  </table>
+</Prose>
+
+## Section dividers
+
+Set `dividers` to draw a rule above each `h2`, so each section reads as one group even when examples interrupt the copy.
+
+<Prose dividers>
+  <h2>Install</h2>
+  <p>Add the package with your package manager.</p>
+  <h2>Configure</h2>
+  <p>Import the styles once, in your app's entry point.</p>
+</Prose>
+
+## Flow container
+
+A page that alternates copy with live examples, such as a Markdown page rendered with one Prose per run of copy, needs space between those runs. Wrap them in an element with the `bx--prose-flow` class: siblings get the flow gap, copy after an example gets more room, and a run that opens with a heading takes that heading's space above it. That last part uses `:has()`, so browsers without it keep the flow gap.
+
+<div class="bx--prose-flow">
+  <Prose><p>Add the package with your package manager:</p></Prose>
+  <CodeSnippet code="npm i carbon-components-svelte" />
+  <Prose><p>Then import the styles once, in your app's entry point.</p></Prose>
+  <Prose><h3>Themes</h3><p>Every theme ships in the same stylesheet.</p></Prose>
+</div>
 
 ## Carbon components inside
 
@@ -250,5 +338,8 @@ const html = highlighter.codeToHtml(code, { lang: "js", theme: "carbon" });
 | Use Prose for copy you didn't lay out element by element: rendered Markdown, CMS content, or long help text. | That's where styling each element with a component isn't possible or isn't worth it. For a few lines in a layout, `Text` gives finer control. |
 | Use `compact` inside product UI and `default` on pages people read from top to bottom. | Product UI is set at 14px, so 16px copy inside a panel looks out of scale. |
 | Set `maxWidth="none"` when the container already limits the width. | The line length cap would otherwise leave a gap beside the copy in a wide container. |
+| Use `linkTone="muted"` and `kbd="muted"` where links and keys are dense, such as reference docs and shortcut lists. | Link-colored or boxed runs every few words pull the eye away from the copy. |
+| Keep `tableWidth="fit"` for short tables, and use `"full"` for wide ones. | A two-column table stretched across the measure puts its columns far apart. |
+| Set `--ccs-prose-scroll-margin` to a sticky header's height. | Links to headings and sections land below the header instead of under it. |
 | Restyle an element with one class and its element, such as `p.lead`. | Prose's element rules weigh one class and one element, so a class alone ties or loses. |
 | Put a Prose directly inside another Prose, or in a plain wrapper, rather than inside a Carbon component that sits in Prose. | Prose skips everything inside a Carbon component within it, and it can't tell a component's content from a Prose nested there, so Prose inside a Tile, Accordion, or Modal inside Prose renders unstyled. Telling them apart needs CSS `@scope`, which is newer than the browsers Carbon supports. |
