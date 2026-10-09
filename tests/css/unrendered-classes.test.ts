@@ -32,7 +32,7 @@ const KNOWN_UNRENDERED = new Set([]);
 
 describe("unrendered classes", () => {
   it("every class in all.css is one a component can render", async () => {
-    const css = await compileEntry("all.scss", "compressed");
+    const css = await compileEntry("all.scss");
     const styled = new Set(
       [...css.matchAll(/\.(bx--[\w-]+)/g)].map((match) => match[1]),
     );

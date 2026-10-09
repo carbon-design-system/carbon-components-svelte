@@ -4,7 +4,7 @@ import { compileEntry } from "./compile";
 
 describe(":not() chains", () => {
   it("do not grow back where a marker class would do", async () => {
-    const css = await compileEntry("all.scss", "compressed");
+    const css = await compileEntry("all.scss");
     const chains = (selector: string) =>
       (selector.match(/:not\(/g) ?? []).length;
     const selectors = [...new Set(parseRules(css).map((r) => r.selector))];

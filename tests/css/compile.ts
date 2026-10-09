@@ -50,13 +50,12 @@ async function claim(
  * in its own worker, so a dozen of them compiling the same sheet at once is
  * what made this suite slow and its timeouts flaky. Results are cached on
  * disk under a hash of every `.scss` source, and a lock directory lets the
- * first worker compile while the rest wait for its output.
+ * first worker compile while the rest wait for its output. Always the
+ * expanded style: a second, compressed compile of the same entry would cost
+ * as much again, so a test that needs shipped bytes minifies this instead.
  */
-export async function compileEntry(
-  entry: string,
-  style: "expanded" | "compressed" = "expanded",
-): Promise<string> {
-  const key = `${hashSources()}-${entry}-${style}`;
+export async function compileEntry(entry: string): Promise<string> {
+  const key = `${hashSources()}-${entry}`;
   const cached = join(CACHE_DIR, `${key}.css`);
   const lock = join(CACHE_DIR, `${key}.lock`);
   mkdirSync(CACHE_DIR, { recursive: true });
@@ -66,7 +65,7 @@ export async function compileEntry(
 
   try {
     const { css } = await compileAsync(join(CSS_DIR, entry), {
-      style,
+      style: "expanded",
       loadPaths: [join(CSS_DIR, "vendor")],
       quietDeps: true,
       silenceDeprecations: [

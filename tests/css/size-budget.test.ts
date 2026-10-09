@@ -4,11 +4,14 @@ import { transform } from "lightningcss";
 import { targets } from "../../scripts/lib/css-targets";
 import { compileEntry } from "./compile";
 
-// Shipped size of each entry: sass compressed, then the same Lightning CSS
-// pass `BUILD_CSS_MINIFY=1` and release run. Ceilings sit about 2% above the
-// measured size so ordinary additions fit but a regression of the pruning
-// work (902 kB -> 673 kB for all.css) does not. When a deliberate addition
-// trips one, raise it to the new size plus 2% and say why in the commit.
+// Shipped size of each entry: the same Lightning CSS pass `BUILD_CSS_MINIFY=1`
+// and release run, applied to the expanded sheet the other css tests share
+// rather than to a second, compressed compile. It keeps a few spaces inside
+// `calc()` that sass compressed drops, so it reads under 100 bytes over the
+// shipped size. Ceilings sit about 2% above the measured size so ordinary
+// additions fit but a regression of the pruning work (902 kB -> 673 kB for
+// all.css) does not. When a deliberate addition trips one, raise it to the
+// new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
   // min 667,390 and gzip 77,643 measured locally after TableOfContents
@@ -21,7 +24,7 @@ const BUDGETS: Record<string, { min: number; gzip: number }> = {
 describe("css size budget", () => {
   for (const [entry, budget] of Object.entries(BUDGETS)) {
     it(`${entry} stays within its minified and gzipped budget`, async () => {
-      const css = await compileEntry(entry, "compressed");
+      const css = await compileEntry(entry);
       const { code } = transform({
         filename: entry.replace(".scss", ".css"),
         code: Buffer.from(css, "utf8"),
