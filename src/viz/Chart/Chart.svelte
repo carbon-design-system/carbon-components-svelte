@@ -264,6 +264,11 @@
   });
   const scaleOptions = writable({});
   const hover = writable(/** @type {any} */ (null));
+  // What last moved the hover: the tooltip waits for a pointer to settle,
+  // but a key press shows it at once.
+  const hoverOrigin = writable(
+    /** @type {"pointer" | "keyboard" | "sync"} */ ("pointer"),
+  );
   const hiddenStore = writable(hidden);
   const viewStore = writable(view);
   const titleStore = writable(title);
@@ -271,6 +276,9 @@
   const included = writable(/** @type {number[]} */ ([]));
   // How many mounted marks need one slot per x, as bars do.
   const bandRequests = writable(0);
+  // Whether a mark fills from the baseline, as bars do: a tooltip must not
+  // sit over the bodies, not only the tops.
+  const banded = derived(bandRequests, ($count) => $count > 0);
   // How many mounted marks want hover to follow the nearest point in both
   // directions, as points do, instead of the nearest x.
   let pointRequests = 0;
@@ -415,6 +423,8 @@
     scales,
     size,
     hover,
+    hoverOrigin,
+    banded,
     hidden: hiddenStore,
     view: viewStore,
     title: titleStore,
@@ -650,7 +660,11 @@
   function joinChannel(id) {
     sync?.leave();
     sync = id
-      ? joinSync(id, (x) => (x === null ? clearHover(true) : hoverAt(x, true)))
+      ? joinSync(id, (x) => {
+          hoverOrigin.set("sync");
+          if (x === null) clearHover(true);
+          else hoverAt(x, true);
+        })
       : null;
   }
 
@@ -813,6 +827,7 @@
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
+    hoverOrigin.set("pointer");
     const current = get(scales);
     if (pointRequests > 0) {
       const sx = ((event.clientX - rect.left) / rect.width) * get(size).width;
@@ -837,15 +852,7 @@
    *
    * @param {PointerEvent} event
    */
-  function onPointerLeave(event) {
-    const to = event.relatedTarget;
-    if (
-      to instanceof Element &&
-      ref?.contains(to) &&
-      to.closest(".bx--viz-chart-tooltip")
-    ) {
-      return;
-    }
+  function onPointerLeave() {
     clearHover();
   }
 
@@ -872,6 +879,7 @@
   function onPointKeydown(event) {
     const last = getPointIndex().flat.length - 1;
     if (last < 0) return;
+    hoverOrigin.set("keyboard");
     switch (event.key) {
       case "ArrowRight":
       case "ArrowDown":
@@ -910,6 +918,7 @@
       (group) => !group.hidden && group.xs.length > 0,
     );
     if (visible.length === 0) return;
+    hoverOrigin.set("keyboard");
     const group = visible[Math.min(focusSeries, visible.length - 1)];
     const last = group.xs.length - 1;
 

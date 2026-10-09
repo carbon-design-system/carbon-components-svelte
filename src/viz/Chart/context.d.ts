@@ -40,6 +40,10 @@ export type ChartContext<T> = {
   scales: Readable<ChartScales>;
   size: Readable<ChartSize>;
   hover: Readable<ChartHover<T>>;
+  /** What last moved the hover. A tooltip waits for a pointer, not a key. */
+  hoverOrigin: Readable<"pointer" | "keyboard" | "sync">;
+  /** Whether a mounted mark fills from the baseline, as bars do. */
+  banded: Readable<boolean>;
   hidden: Readable<ReadonlyArray<ChartSeriesKey>>;
   /** Whether the chart or its data table is showing. */
   view: Readable<"chart" | "table">;
@@ -94,3 +98,11 @@ export type ChartContext<T> = {
 };
 
 export const CHART_CONTEXT: "carbon:viz:Chart";
+
+/** What a facet grid tells the charts inside it. */
+export type FacetsContext = {
+  /** Where a chart's tooltip sits: a free corner of the plot, or by the point. */
+  tooltipAlign: Readable<"fixed" | "follow">;
+};
+
+export const FACETS_CONTEXT: "carbon:viz:SmallMultiples";

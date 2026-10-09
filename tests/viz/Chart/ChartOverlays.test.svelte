@@ -23,6 +23,7 @@
   export let thresholdTo: number | undefined = undefined;
   export let thresholdKind: "error" | "warning" = "error";
   export let customTooltip = false;
+  export let delay = 150;
   export let ontoggle: (detail: unknown) => void = () => {};
 </script>
 
@@ -49,7 +50,7 @@
   <ChartRuler data-testid="ruler" />
   <svelte:fragment slot="tooltip">
     {#if customTooltip}
-      <ChartTooltip data-testid="tooltip" let:points let:xLabel>
+      <ChartTooltip data-testid="tooltip" {delay} let:points let:xLabel>
         <strong>Day {xLabel}</strong>
         {#each points as point (point.series)}
           <ChartTooltipRow
@@ -60,7 +61,7 @@
         {/each}
       </ChartTooltip>
     {:else}
-      <ChartTooltip data-testid="tooltip" />
+      <ChartTooltip data-testid="tooltip" {delay} />
     {/if}
   </svelte:fragment>
   <ChartLegend slot="legend" data-testid="legend" />

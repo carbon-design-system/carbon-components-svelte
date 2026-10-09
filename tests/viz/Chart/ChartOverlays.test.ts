@@ -77,16 +77,57 @@ describe("ChartRuler and ChartTooltip", () => {
     expect(tooltip).toHaveTextContent("$60");
   });
 
-  it("stays open while the pointer is over it, and closes when it leaves", async () => {
+  it("never takes the pointer, and closes as soon as the pointer leaves the chart", async () => {
     render(ChartOverlays);
     await focusSecondPoint();
     const tooltip = screen.getByTestId("tooltip");
+    expect(tooltip).toHaveClass("bx--viz-chart-tooltip");
 
     await fireEvent.pointerLeave(chart(), { relatedTarget: tooltip });
-    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
-
-    await fireEvent.pointerLeave(tooltip);
     expect(screen.queryByTestId("tooltip")).toBeNull();
+  });
+
+  it("waits for a pointer to settle before showing, but shows at once from the keyboard", async () => {
+    render(ChartOverlays, { delay: 80 });
+    const svg = chart();
+    svg.getBoundingClientRect = () =>
+      ({
+        left: 0,
+        top: 0,
+        width: 640,
+        height: 288,
+        right: 640,
+        bottom: 288,
+        x: 0,
+        y: 0,
+        toJSON() {},
+      }) as DOMRect;
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    // A pointer passing over: the ruler follows, the tooltip waits.
+    await fireEvent.pointerMove(svg, { clientX: 320, clientY: 100 });
+    await wait(30);
+    expect(screen.getByTestId("ruler")).toBeInTheDocument();
+    expect(screen.queryByTestId("tooltip")).toBeNull();
+    await fireEvent.pointerLeave(svg);
+    await wait(120);
+    expect(screen.queryByTestId("tooltip")).toBeNull();
+
+    // A pointer that rests: the tooltip shows after the delay, then follows.
+    await fireEvent.pointerMove(svg, { clientX: 320, clientY: 100 });
+    await wait(30);
+    expect(screen.queryByTestId("tooltip")).toBeNull();
+    await wait(120);
+    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
+    await fireEvent.pointerMove(svg, { clientX: 500, clientY: 100 });
+    await wait(30);
+    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
+    await fireEvent.pointerLeave(svg);
+    expect(screen.queryByTestId("tooltip")).toBeNull();
+
+    // A key press shows it at once.
+    await focusSecondPoint();
+    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
   });
 });
 

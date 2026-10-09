@@ -167,9 +167,12 @@
     stroke: $ui-05;
   }
 
+  // The pointer passes through: a tooltip under a moving pointer must never
+  // take the events the chart is following.
   .#{$prefix}--viz-chart-tooltip {
     position: absolute;
     z-index: 1;
+    pointer-events: none;
     padding: $carbon--spacing-03 $carbon--spacing-05;
     background: $inverse-02;
     box-shadow: 0 2px 6px $shadow;
@@ -189,6 +192,11 @@
   // Over the hovered row of a horizontal chart.
   .#{$prefix}--viz-chart-tooltip--above {
     transform: translate($carbon--spacing-04, -100%);
+  }
+
+  // Pinned to a corner of the plot: no offset from the anchor.
+  .#{$prefix}--viz-chart-tooltip--fixed {
+    transform: none;
   }
 
   .#{$prefix}--viz-chart-tooltip__title {
