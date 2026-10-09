@@ -163,6 +163,12 @@ Override the `overflowTooltip` slot to replace the default plain-text tooltip wi
 
 <FileSource src="/framed/TagSet/TagSetCustomOverflowTooltip" />
 
+## Overflow popover
+
+Set `overflowMode="popover"` to turn the "+N" indicator into a button that opens the hidden tags themselves, in their own colors. Unlike the hover tooltip, it works on touch screens, and dismissible tags can still be closed from inside it. Closing one moves focus to the next tag in the popover. The `overflowTooltip` slot replaces the popover content.
+
+<FileSource src="/framed/TagSet/TagSetOverflowPopover" />
+
 ## Dismissible
 
 Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response. Set `value` on each `Tag` to read it back as `tag.value`, so you can remove by id rather than by position or label.
