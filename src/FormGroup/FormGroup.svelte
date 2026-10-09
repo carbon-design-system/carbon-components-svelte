@@ -68,6 +68,7 @@
   {#if message}
     <div
       id="{id}-message"
+      role={invalid ? "alert" : undefined}
       class:bx--form__requirement={true}
       class:bx--form__requirement--invalid={invalid}
     >
