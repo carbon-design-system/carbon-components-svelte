@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
   import type { ComponentProps } from "svelte";
