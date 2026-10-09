@@ -1,5 +1,8 @@
 import { expect, type Locator, test } from "@playwright/test";
 
+const width = (locator: Locator) =>
+  locator.evaluate((el) => el.getBoundingClientRect().width);
+
 const tooltipShown = (locator: Locator) =>
   locator
     .locator(".bx--assistive-text")
@@ -19,6 +22,19 @@ test.describe("HeaderAction", () => {
 
     await expect(help).toHaveCSS("border-top-width", "2px");
     await expect(help.locator("svg")).toHaveCSS("outline-style", "none");
+  });
+
+  test("text action keeps its width on focus", async ({ page }) => {
+    const action = page.getByRole("button", { name: "IBM Cloud" });
+    const atRest = await width(action);
+
+    await action.focus();
+    await expect(action).toHaveCSS("border-top-width", "2px");
+    expect(await width(action)).toBe(atRest);
+
+    await action.click();
+    await expect(action).toHaveAttribute("aria-expanded", "true");
+    expect(await width(action)).toBe(atRest);
   });
 
   test("shows one tooltip at a time", async ({ page }) => {
