@@ -6,6 +6,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
 import { carbonAlias } from "./carbon-alias.ts";
+import { PAGE_EXTENSION } from "./scripts/constants.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.resolve(__dirname, "dist");
@@ -54,7 +55,7 @@ export default defineConfig({
     },
     routify({
       routesDir: { default: "src/pages" },
-      extensions: [".svelte", ".svx"],
+      extensions: [".svelte", PAGE_EXTENSION],
     }),
     svelte(),
     /**
