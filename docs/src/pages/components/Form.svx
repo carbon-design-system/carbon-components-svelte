@@ -353,14 +353,15 @@ the default handling, here without resetting the form:
 
 ### Pending state
 
-Use the submit callback to track the request and disable the submit button
-while it runs, so a second click cannot send a duplicate request. Disable the
-button, not the fields: a disabled field is left out of the submission.
+Use the submit callback to track the request and set `loading` on the submit
+button while it runs. A loading button can't be activated, so a second submit
+cannot send a duplicate request, and unlike a disabled button it keeps focus.
+Leave the fields enabled: a disabled field is left out of the submission.
 
 ```svelte
 <script>
   import { enhance } from "$app/forms";
-  import { Button, Form, InlineLoading, TextInput } from "carbon-components-svelte";
+  import { Button, Form, TextInput } from "carbon-components-svelte";
 
   let submitting = false;
 
@@ -375,12 +376,8 @@ button, not the fields: a disabled field is left out of the submission.
 
 <Form method="POST" actions={[[enhance, trackSubmit]]}>
   <TextInput name="email" labelText="Email" />
-  <Button type="submit" disabled={submitting}>
-    {#if submitting}
-      <InlineLoading description="Saving..." />
-    {:else}
-      Save
-    {/if}
+  <Button type="submit" loading={submitting} loadingDescription="Saving">
+    Save
   </Button>
 </Form>
 ```
