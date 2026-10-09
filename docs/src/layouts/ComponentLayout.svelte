@@ -45,7 +45,6 @@
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
   export let description = "";
-  export let descriptionHtml = "";
 
   const componentMap = new Map(
     COMPONENT_API.components.map((c) => [c.moduleName, c]),
@@ -140,17 +139,7 @@
         <Text tag="h1" type="expressive-heading-06" color="primary">
           {component}
         </Text>
-        {#if descriptionHtml}
-          <div class="hero__description">
-            <Text
-              type="productive-heading-04"
-              color="secondary"
-              maxWidth="52ch"
-            >
-              {@html descriptionHtml}
-            </Text>
-          </div>
-        {:else if description}
+        {#if description}
           <div class="hero__description">
             <Text
               type="productive-heading-04"

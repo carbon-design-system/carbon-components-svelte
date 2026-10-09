@@ -286,7 +286,7 @@ The lead sentence lives in the frontmatter `description:` field, not in body pro
 - 1–2 plain sentences, ~180 characters max.
 - Describe what the component is _for_, not _how it works_. No implementation details ("resize observer", "forwards mouse events", "keyed for performance").
 - Renders as plain text: no inline `code` or `[links]`.
-- The body must start with a `##` heading. A leading body paragraph is re-extracted by the `heroIntro` remark plugin in [`svelte.config.ts`](docs/svelte.config.ts) and silently overrides the frontmatter `description`. When lifting an old intro, fold any trailing sentences or links into the `## Basic` prose.
+- The body must start with a `##` heading. The docs build fails on a leading body paragraph ([`require-leading-heading.ts`](docs/scripts/require-leading-heading.ts)). When lifting an old intro, fold any trailing sentences or links into the `## Basic` prose.
 
 ```svelte
 ---
