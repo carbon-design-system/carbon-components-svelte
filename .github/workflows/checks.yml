@@ -28,6 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        # `bun check` ships in canary only; pin to 1.5 once it's released.
+        with:
+          bun-version: canary
       - run: bun ci
       - run: bunx biome ci --error-on-warnings
 
