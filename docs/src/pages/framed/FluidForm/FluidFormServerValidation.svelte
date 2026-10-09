@@ -4,7 +4,6 @@
     Button,
     Dropdown,
     FluidForm,
-    InlineLoading,
     InlineNotification,
     Stack,
     TextArea,
@@ -107,13 +106,10 @@
     <Button
       type="submit"
       form="fluid-form-server-validation"
-      disabled={submitting}
+      loading={submitting}
+      loadingDescription="Creating"
     >
-      {#if submitting}
-        <InlineLoading description="Creating..." />
-      {:else}
-        Create application
-      {/if}
+      Create application
     </Button>
   </ActionSet>
 </Stack>

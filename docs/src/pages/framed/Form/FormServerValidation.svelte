@@ -2,7 +2,6 @@
   import {
     Button,
     Form,
-    InlineLoading,
     InlineNotification,
     Stack,
     TextInput,
@@ -84,12 +83,8 @@
         hideCloseButton
       />
     {/if}
-    <Button type="submit" disabled={submitting}>
-      {#if submitting}
-        <InlineLoading description="Sending..." />
-      {:else}
-        Send invite
-      {/if}
+    <Button type="submit" loading={submitting} loadingDescription="Sending">
+      Send invite
     </Button>
   </Stack>
 </Form>
