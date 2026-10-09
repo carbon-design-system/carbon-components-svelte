@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import FormItemTest from "./FormItem.test.svelte";
 import FormItemControlTest from "./FormItemControl.test.svelte";
+import FormItemSlotPropsTest from "./FormItemSlotProps.test.svelte";
 
 describe("FormItem", () => {
   it("should render with default props", () => {
@@ -181,5 +182,27 @@ describe("FormItem control association", () => {
     render(FormItemControlTest, { props: { disabled: true } });
 
     expect(screen.getByText("Email")).toHaveClass("bx--label--disabled");
+  });
+});
+
+describe("FormItem slot props", () => {
+  it("exposes the label id once a FormLabel mounts", () => {
+    render(FormItemSlotPropsTest);
+
+    expect(screen.getByTestId("plain")).toHaveTextContent(
+      "label-plain|undefined|false",
+    );
+  });
+
+  it("exposes the parent Form size", () => {
+    render(FormItemSlotPropsTest);
+
+    expect(screen.getByTestId("sized")).toHaveTextContent("sm|false");
+  });
+
+  it("exposes fluid inside a FluidForm", () => {
+    render(FormItemSlotPropsTest);
+
+    expect(screen.getByTestId("fluid")).toHaveTextContent("true");
   });
 });
