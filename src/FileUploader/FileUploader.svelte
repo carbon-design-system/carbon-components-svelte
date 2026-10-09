@@ -107,6 +107,14 @@
    */
   export let capture = undefined;
 
+  /**
+   * Set to `true` to select a folder instead of individual files.
+   * Every file inside the folder and its subfolders is added, and each row
+   * shows the file's path relative to the selected folder. Browsers do not
+   * apply `accept` to folder contents.
+   */
+  export let directory = false;
+
   /** Set to `true` to allow multiple files */
   export let multiple = false;
 
@@ -317,6 +325,7 @@
     labelText={buttonLabel}
     {accept}
     {capture}
+    {directory}
     {name}
     {multiple}
     {kind}
@@ -373,13 +382,14 @@
         index,
       )}
       {@const rowFileSize = resolveFileSize(fileSize, file, index)}
+      {@const rowName = file.webkitRelativePath || file.name}
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
         class:bx--file__selected-file--xs={size === "xs"}
       >
         <span class:bx--file-filename-group={true}>
-          <p class:bx--file-filename={true} use:overflowTitle>{file.name}</p>
+          <p class:bx--file-filename={true} use:overflowTitle>{rowName}</p>
           {#if rowFileSize}
             <p class:bx--file-size={true}>{rowFileSize}</p>
           {/if}
@@ -387,7 +397,7 @@
         <span class:bx--file__state-container={true}>
           <Filename
             {file}
-            fileName={file.name}
+            fileName={rowName}
             {iconDescription}
             status={rowStatus}
             invalid={rowInvalid}

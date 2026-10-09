@@ -99,6 +99,21 @@ describe("FileUploaderButton", () => {
     expect(input).not.toHaveAttribute("capture");
   });
 
+  it("should select folders when directory is set", () => {
+    const { container, unmount } = render(FileUploaderButton, {
+      props: { directory: true },
+    });
+    expect(container.querySelector('input[type="file"]')).toHaveAttribute(
+      "webkitdirectory",
+    );
+    unmount();
+
+    const { container: plain } = render(FileUploaderButton);
+    expect(plain.querySelector('input[type="file"]')).not.toHaveAttribute(
+      "webkitdirectory",
+    );
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploaderButton, {
       props: { accept: [".jpg", ".png", "image/*"] },

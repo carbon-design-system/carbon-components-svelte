@@ -1,12 +1,14 @@
 // @ts-check
 
 /**
- * Stable identity key for duplicate detection (name, size, lastModified).
+ * Stable identity key for duplicate detection (relative path, name, size,
+ * lastModified). The relative path keeps same-named files from different
+ * folders of a folder selection distinct.
  * @param {File} file
  * @returns {string}
  */
 export function fileIdentityKey(file) {
-  return `${file.name}\0${file.size}\0${file.lastModified}`;
+  return `${file.webkitRelativePath ?? ""}\0${file.name}\0${file.size}\0${file.lastModified}`;
 }
 
 /**

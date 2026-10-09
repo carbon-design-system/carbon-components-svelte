@@ -358,6 +358,22 @@ describe("FileUploader", () => {
     expect(input).toHaveAttribute("capture", "environment");
   });
 
+  it("should show each file's folder path when directory is set", async () => {
+    const { component } = render(FileUploader, {
+      props: { directory: true },
+    });
+    assert(component.ref instanceof HTMLInputElement);
+    expect(component.ref).toHaveAttribute("webkitdirectory");
+
+    const file = new File(["a"], "index.html");
+    Object.defineProperty(file, "webkitRelativePath", {
+      value: "site/blog/index.html",
+    });
+    simulateFileSelection(component.ref, [file]);
+
+    expect(await screen.findByText("site/blog/index.html")).toBeInTheDocument();
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploader, {
       props: { accept: [".jpg", ".png"] },

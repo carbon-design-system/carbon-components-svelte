@@ -150,6 +150,22 @@ front camera (selfies). Desktop browsers ignore it and open the file picker.
   status="edit"
 />
 
+### Folder upload
+
+Set `directory` to `true` to select a folder instead of individual files. Every
+file inside the folder and its subfolders is added, and each row shows the
+file's path relative to the selected folder. Browsers do not apply `accept` to
+folder contents, so filter them with `maxFileSize` or your own check on
+`change`.
+
+<FileUploader
+  directory
+  multiple
+  labelTitle="Upload a folder"
+  buttonLabel="Add folder"
+  status="edit"
+/>
+
 ### Per-file status
 
 Use `fileStatus` when files upload independently and should not share one
