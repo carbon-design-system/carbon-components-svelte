@@ -154,6 +154,7 @@ export { default as ProgressBar } from "./ProgressBar/ProgressBar.svelte";
 export { default as ProgressIndicator } from "./ProgressIndicator/ProgressIndicator.svelte";
 export { default as ProgressIndicatorSkeleton } from "./ProgressIndicator/ProgressIndicatorSkeleton.svelte";
 export { default as ProgressStep } from "./ProgressIndicator/ProgressStep.svelte";
+export { default as Prose } from "./Prose/Prose.svelte";
 export { default as RadioButton } from "./RadioButton/RadioButton.svelte";
 export { default as RadioButtonSkeleton } from "./RadioButton/RadioButtonSkeleton.svelte";
 export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup.svelte";

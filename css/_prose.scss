@@ -1,0 +1,731 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/components/notification/tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-family";
+
+/// Type scale, spacing, and measure for each Prose variant, densest first:
+/// condensed (12px, with a 1.5 line height for reading), compact (14px), default (16px), spacious (16px with
+/// larger headings and more room), and expressive (fluid editorial headings).
+/// `default` styles the base class; the others restyle from a modifier class
+/// emitted after it.
+/// @access private
+/// @group components
+$ccs-prose-variants: (
+  default: (
+    body: "body-long-02",
+    headings: (
+      "productive-heading-05",
+      "productive-heading-04",
+      "productive-heading-03",
+      "productive-heading-02",
+      "productive-heading-01",
+      "productive-heading-01",
+    ),
+    fluid: false,
+    flow: $carbon--spacing-05,
+    heading-before: $carbon--spacing-07,
+    heading-after: $carbon--spacing-04,
+    list-gap: $carbon--spacing-03,
+    measure: 68ch,
+    code: "code-02",
+    table: "body-short-01",
+    block-padding: $carbon--spacing-05,
+    cell-padding: ($carbon--spacing-03 $carbon--spacing-05),
+  ),
+  condensed: (
+    body: "caption-01",
+    headings: (
+      "productive-heading-02",
+      "heading-01",
+      "label-01",
+      "label-01",
+      "label-01",
+      "label-01",
+    ),
+    // caption-01's 16px line height suits a label, not running copy: 12px
+    // text read line after line needs 1.5. The rhythm matches compact's, so
+    // condensed tightens the type, not the space between paragraphs.
+    body-line-height: 1.5,
+    fluid: false,
+    flow: $carbon--spacing-04,
+    heading-before: $carbon--spacing-06,
+    heading-after: $carbon--spacing-03,
+    list-gap: $carbon--spacing-02,
+    measure: 96ch,
+    // h3 and below use label-01, which is regular weight; set them semibold.
+    bold-from: 3,
+    code: "code-01",
+    table: "caption-01",
+    block-padding: $carbon--spacing-03,
+    cell-padding: ($carbon--spacing-02 $carbon--spacing-03),
+  ),
+  compact: (
+    body: "body-long-01",
+    headings: (
+      "productive-heading-04",
+      "productive-heading-03",
+      "productive-heading-02",
+      "productive-heading-01",
+      "productive-heading-01",
+      "productive-heading-01",
+    ),
+    fluid: false,
+    flow: $carbon--spacing-04,
+    heading-before: $carbon--spacing-06,
+    heading-after: $carbon--spacing-03,
+    list-gap: $carbon--spacing-02,
+    measure: 80ch,
+    code: "code-01",
+    table: "body-short-01",
+    block-padding: $carbon--spacing-04,
+    cell-padding: ($carbon--spacing-02 $carbon--spacing-04),
+  ),
+  spacious: (
+    body: "body-long-02",
+    headings: (
+      "productive-heading-06",
+      "productive-heading-05",
+      "productive-heading-04",
+      "productive-heading-03",
+      "productive-heading-02",
+      "productive-heading-01",
+    ),
+    fluid: false,
+    flow: $carbon--spacing-06,
+    heading-before: $carbon--spacing-09,
+    heading-after: $carbon--spacing-05,
+    list-gap: $carbon--spacing-04,
+    measure: 64ch,
+    code: "code-02",
+    table: "body-short-02",
+    block-padding: $carbon--spacing-06,
+    cell-padding: ($carbon--spacing-04 $carbon--spacing-05),
+  ),
+  expressive: (
+    body: "body-long-02",
+    headings: (
+      "expressive-heading-05",
+      "expressive-heading-04",
+      "expressive-heading-03",
+      "expressive-heading-02",
+      "expressive-heading-01",
+      "heading-01",
+    ),
+    fluid: true,
+    flow: $carbon--spacing-06,
+    heading-before: $carbon--spacing-09,
+    heading-after: $carbon--spacing-05,
+    list-gap: $carbon--spacing-03,
+    measure: 60ch,
+    code: "code-02",
+    table: "body-short-01",
+    block-padding: $carbon--spacing-05,
+    cell-padding: ($carbon--spacing-03 $carbon--spacing-05),
+  ),
+);
+
+/// A type token property as a value: Carbon's custom property where the
+/// build emits them (`all.css`), the literal value otherwise.
+/// @access private
+/// @group components
+@function ccs-prose-token-value($name, $property, $value) {
+  @if global-variable-exists("feature-flags") and
+    map-get($feature-flags, "enable-css-custom-properties")
+  {
+    @if global-variable-exists("ccs-omit-token-fallbacks") and
+      $ccs-omit-token-fallbacks
+    {
+      @return var(--#{$custom-property-prefix}-#{$name}-#{$property});
+    }
+
+    @return var(--#{$custom-property-prefix}-#{$name}-#{$property}, #{$value});
+  }
+
+  @return $value;
+}
+
+/// The `--ccs-prose-#{$slot}-*` properties for a type token, as a map from
+/// custom property name to value. Every property a slot is read with is
+/// set, falling back to its initial value, so a nested root never inherits
+/// a property its own token lacks. `ccs-prose-sans` in `$overrides` stands
+/// for the sans font stack.
+/// @access private
+/// @group components
+@function ccs-prose-type-map($slot, $name, $overrides: ()) {
+  $token: map-remove(map-get($tokens, $name), breakpoints);
+  $defaults: (
+    font-size: null,
+    font-weight: 400,
+    line-height: normal,
+    letter-spacing: 0,
+  );
+  $map: ();
+
+  @if map-has-key($token, font-family) or map-has-key($overrides, font-family)
+  {
+    $defaults: map-merge((font-family: null), $defaults);
+  }
+
+  @each $property, $default in $defaults {
+    $value: map-get($overrides, $property);
+
+    @if $value == ccs-prose-sans {
+      $value: map-get($carbon--font-families, sans);
+    }
+
+    @if $value == null and map-has-key($token, $property) {
+      $value: ccs-prose-token-value(
+        $name,
+        $property,
+        map-get($token, $property)
+      );
+    }
+
+    @if $value == null {
+      $value: $default;
+    }
+
+    @if $value != null {
+      $map: map-merge($map, ("--ccs-prose-#{$slot}-#{$property}": $value));
+    }
+  }
+
+  @return $map;
+}
+
+/// Set `--ccs-prose-#{$slot}-*` for a fluid token at each breakpoint it
+/// defines, with the font size interpolated between breakpoints the way
+/// Carbon's `fluid-type` mixin does. The `sm` values come from
+/// `ccs-prose-type-map` with `ccs-prose-fluid-size($token, sm)`.
+/// @access private
+/// @group components
+@mixin ccs-prose-fluid-breakpoints($slot, $name, $overrides: ()) {
+  $token: map-get($tokens, $name);
+
+  @each $breakpoint, $values in map-get($token, breakpoints) {
+    @include carbon--breakpoint($breakpoint) {
+      @each $property, $value in map-remove($values, font-size) {
+        @if not map-has-key($overrides, $property) {
+          --ccs-prose-#{$slot}-#{$property}: #{$value};
+        }
+      }
+
+      --ccs-prose-#{$slot}-font-size: #{ccs-prose-fluid-size(
+          $token,
+          $breakpoint
+        )};
+    }
+  }
+}
+
+/// The fluid font size of a type token at a breakpoint, as Carbon's
+/// `fluid-type-size` mixin computes it.
+/// @access private
+/// @group components
+@function ccs-prose-fluid-size(
+  $token,
+  $name,
+  $breakpoints: $carbon--grid-breakpoints
+) {
+  $breakpoint: map-get($breakpoints, $name);
+  $fluid-sizes: map-get($token, breakpoints);
+  $fluid-breakpoint: if(
+    $name == sm,
+    map-remove($token, breakpoints),
+    map-get($fluid-sizes, $name)
+  );
+  $max-font-size: map-get($token, font-size);
+  $min-font-size: map-get($token, font-size);
+
+  @if map-has-key($fluid-breakpoint, font-size) {
+    $min-font-size: map-get($fluid-breakpoint, font-size);
+  }
+
+  $max-vw: map-get($breakpoint, width);
+  $min-vw: map-get($breakpoint, width);
+  $next: carbon--breakpoint-next($name, $breakpoints);
+  $next-fluid: null;
+
+  @while $next {
+    @if map-has-key($fluid-sizes, $next) {
+      $next-fluid: $next;
+      $next: null;
+    } @else {
+      $next: carbon--breakpoint-next($next, $breakpoints);
+    }
+  }
+
+  @if $next-fluid {
+    $max-font-size: map-get(map-get($fluid-sizes, $next-fluid), font-size);
+    $max-vw: map-get(map-get($breakpoints, $next-fluid), width);
+
+    @return calc(
+      #{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} *
+        ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
+    );
+  }
+
+  @return $min-font-size;
+}
+
+/// Prose sets running copy in plain HTML (`p`, `h1`–`h6`, lists, `a`,
+/// `code`, `pre`, `blockquote`, `table`, ...) with Carbon type tokens and a
+/// vertical rhythm, without a component per element.
+///
+/// Element rules skip (`$x`) anything with a Carbon class and anything inside
+/// a Carbon-classed element within Prose, so components and `Text` keep their
+/// own styles, and so do plain elements slotted into them (a link in an
+/// `InlineNotification` subtitle, CodeSnippet's `pre` and `code`, DataTable's
+/// `th`/`td`). Only ancestors inside the root count, so Prose inside a `Card`
+/// or `Column` is styled as usual, and a nested Prose root counts as a root,
+/// not a component, so Prose inside Prose keeps its styles. `:where()` keeps element rules at the
+/// specificity of one class and one element. The guard sits on the element a
+/// rule styles; its ancestors are covered by the descendant check.
+///
+/// The guard needs `:where()` and a complex `:not()` (Chrome 88, Safari 14),
+/// one release above the Chrome 87 baseline, where element rules drop and
+/// copy falls back to the root's type style and rhythm.
+///
+/// The rhythm rules space every child of the root (or of a `section` or
+/// `article` wrapper), components included.
+/// @access private
+/// @group components
+@mixin prose {
+  $p: ".#{$prefix}--prose";
+  $carbon: '[class*="#{$prefix}--"]';
+  $x: ":where(:not(#{$carbon}):not(#{$p} #{$carbon}:not(#{$p}) *))";
+  $headings: "h1", "h2", "h3", "h4", "h5", "h6";
+
+  #{$p} {
+    color: $text-01;
+    overflow-wrap: break-word;
+  }
+
+  // Vertical rhythm, for the root's children and for `section` and
+  // `article` wrappers inside it. Headings, and the wrappers that usually
+  // open with one, take more space above than below so each sits with the
+  // copy it introduces; the heading-after rule comes last so a heading
+  // straight after another stays close to it.
+  $flows: $p, "#{$p} section#{$x}", "#{$p} article#{$x}";
+  $flow: ();
+  $before: ();
+  $after: ();
+
+  @each $f in $flows {
+    $flow: append($flow, "#{$f} > * + *", comma);
+
+    @each $h in $headings {
+      $after: append($after, "#{$f} > #{$h} + *", comma);
+    }
+
+    @each $h in join($headings, ("section", "article")) {
+      $before: append($before, "#{$f} > * + #{$h}", comma);
+    }
+  }
+
+  #{$flow} {
+    margin-block-start: var(--ccs-prose-flow);
+  }
+
+  #{$before} {
+    margin-block-start: var(--ccs-prose-heading-before);
+  }
+
+  #{$after} {
+    margin-block-start: var(--ccs-prose-heading-after);
+  }
+
+  @each $h in $headings {
+    #{$p} #{$h}#{$x} {
+      text-wrap: balance;
+    }
+  }
+
+  #{$p} p#{$x} {
+    text-wrap: pretty;
+  }
+
+  // Anything a link can jump to (headings, sections) clears a sticky header
+  // when the page sets `--ccs-prose-scroll-margin` to its height.
+  #{$p} [id]#{$x} {
+    scroll-margin-top: var(--ccs-prose-scroll-margin, 0);
+  }
+
+  // A `#` link to its heading, added by a Markdown renderer or by hand.
+  // Visible on touch screens; on devices that hover, hidden until the
+  // heading is hovered or the link has keyboard focus.
+  .#{$prefix}--prose__heading-anchor {
+    margin-inline-start: $carbon--spacing-03;
+    color: $text-02;
+    font-weight: 400;
+    text-decoration: none;
+  }
+
+  .#{$prefix}--prose__heading-anchor:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--prose__heading-anchor:focus-visible {
+    opacity: 1;
+    outline: 2px solid $focus;
+  }
+
+  #{$p} a#{$x} {
+    color: $link-01;
+    text-decoration: underline;
+  }
+
+  #{$p} a#{$x}:focus-visible {
+    outline: 1px solid $focus;
+  }
+
+  // One hover block for links and heading anchors.
+  @media (any-hover: hover) {
+    #{$p} a#{$x}:hover {
+      color: $hover-primary-text;
+    }
+
+    .#{$prefix}--prose__heading-anchor {
+      opacity: 0;
+    }
+
+    #{$p} :hover > .#{$prefix}--prose__heading-anchor {
+      opacity: 1;
+    }
+
+    .#{$prefix}--prose__heading-anchor:hover {
+      color: $link-01;
+    }
+  }
+
+  #{$p} ul#{$x},
+  #{$p} ol#{$x} {
+    padding-inline-start: $carbon--spacing-06;
+  }
+
+  #{$p} ul#{$x} {
+    list-style: disc;
+  }
+
+  #{$p} ul ul#{$x} {
+    list-style: circle;
+  }
+
+  #{$p} ol#{$x} {
+    list-style: decimal;
+  }
+
+  // GitHub task lists (`- [x] Done`), as GitHub and remark-gfm render them:
+  // `li.task-list-item` with the checkbox first, optionally in a `label`.
+  // The checkbox replaces the bullet and sits in the list's gutter, so the
+  // text lines up with the items of other lists.
+  #{$p} .task-list-item#{$x} {
+    list-style: none;
+  }
+
+  #{$p} .task-list-item > input[type="checkbox"]#{$x}:first-child,
+  #{$p} .task-list-item > label > input[type="checkbox"]#{$x}:first-child {
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+    margin: 0;
+    margin-inline: calc(-1 * #{$carbon--spacing-06}) $carbon--spacing-03;
+    accent-color: $interactive-04;
+    vertical-align: -0.2em;
+  }
+
+  #{$p} li#{$x}::marker {
+    color: $text-02;
+  }
+
+  #{$p} li + li#{$x},
+  #{$p} li#{$x} > * + * {
+    margin-block-start: var(--ccs-prose-list-gap);
+  }
+
+  #{$p} blockquote#{$x} {
+    padding-inline-start: $carbon--spacing-05;
+    border-inline-start: $carbon--spacing-02 solid $ui-04;
+    color: $text-02;
+  }
+
+  #{$p} blockquote#{$x} > * + * {
+    margin-block-start: var(--ccs-prose-flow);
+  }
+
+  // GitHub alerts (`> [!NOTE]`) as plain HTML: `<blockquote data-alert="note"
+  // data-alert-title="Note">`. A tinted surface and a border in Carbon's
+  // notification colors, and a title read from `data-alert-title` so it can
+  // be translated. Kinds map to InlineNotification's: note and important to
+  // info, tip to success, warning to warning, caution to error.
+  #{$p} blockquote#{$x}[data-alert] {
+    padding: var(--ccs-prose-block-padding);
+    color: $text-01;
+  }
+
+  #{$p} blockquote#{$x}[data-alert-title]::before {
+    display: block;
+    margin-block-end: $carbon--spacing-02;
+    content: attr(data-alert-title);
+    font-weight: 600;
+  }
+
+  $alert-kinds: (
+    note: ($support-info, get-token-value($notification-colors, "notification-background-info")),
+    tip: ($support-success, get-token-value($notification-colors, "notification-background-success")),
+    important: ($support-info, get-token-value($notification-colors, "notification-background-info")),
+    warning: ($support-warning, get-token-value($notification-colors, "notification-background-warning")),
+    caution: ($support-error, get-token-value($notification-colors, "notification-background-error")),
+  );
+
+  @each $kind, $colors in $alert-kinds {
+    #{$p} blockquote#{$x}[data-alert="#{$kind}"] {
+      border-inline-start-color: nth($colors, 1);
+      background-color: nth($colors, 2);
+    }
+  }
+
+  #{$p} code#{$x},
+  #{$p} kbd#{$x} {
+    @include carbon--font-family("mono");
+
+    padding: 0 $carbon--spacing-02;
+    border-radius: to-rem(4px);
+    font-size: 0.875em;
+  }
+
+  #{$p} code#{$x} {
+    background-color: $field-01;
+  }
+
+  #{$p} kbd#{$x} {
+    border: 1px solid $ui-04;
+  }
+
+  #{$p} pre#{$x} {
+    padding: var(--ccs-prose-block-padding);
+    background-color: $ui-01;
+    color: $text-01;
+    overflow-x: auto;
+  }
+
+  // Code in a block takes the block's type and surface, not inline code's.
+  #{$p} pre code#{$x} {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    font-size: inherit;
+  }
+
+  #{$p} hr#{$x} {
+    height: 1px;
+    border: 0;
+    background-color: $ui-03;
+  }
+
+  #{$p} img#{$x} {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #{$p} figcaption#{$x} {
+    @include type-style("caption-01");
+
+    margin-block-start: $carbon--spacing-03;
+    color: $text-02;
+  }
+
+  #{$p} table#{$x} {
+    width: 100%;
+  }
+
+  #{$p} th#{$x},
+  #{$p} td#{$x} {
+    padding: var(--ccs-prose-cell-padding);
+    border-bottom: 1px solid $ui-03;
+    text-align: start;
+  }
+
+  // Cells keep the column alignment Markdown renderers and CMSs set with the
+  // `align` attribute (`:---:` in a GitHub table), which `text-align: start`
+  // above would otherwise override. Inline `text-align` styles already win.
+  @each $align in left, center, right, justify {
+    #{$p} th#{$x}[align="#{$align}"],
+    #{$p} td#{$x}[align="#{$align}"] {
+      text-align: $align;
+    }
+  }
+
+  #{$p} th#{$x} {
+    border-bottom-color: $ui-04;
+    color: $text-01;
+    font-weight: 600;
+  }
+
+  #{$p} dt#{$x} {
+    font-weight: 600;
+  }
+
+  #{$p} dt + dd#{$x} {
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  #{$p} dd + dt#{$x} {
+    margin-block-start: var(--ccs-prose-flow);
+  }
+
+  // Type: element rules read their type from custom properties that each
+  // root sets for its variant, so content takes its nearest root's values
+  // and a Prose nested in another keeps its own variant. The root itself
+  // reads the body properties it sets.
+  $type-properties: font-size, font-weight, line-height, letter-spacing;
+
+  #{$p},
+  #{$p} p#{$x} {
+    @each $property in $type-properties {
+      #{$property}: var(--ccs-prose-body-#{$property});
+    }
+  }
+
+  @for $level from 1 through 6 {
+    #{$p} h#{$level}#{$x} {
+      @each $property in $type-properties {
+        #{$property}: var(--ccs-prose-h#{$level}-#{$property});
+      }
+    }
+  }
+
+  #{$p} pre#{$x} {
+    font-family: var(--ccs-prose-code-font-family);
+
+    @each $property in $type-properties {
+      #{$property}: var(--ccs-prose-code-#{$property});
+    }
+  }
+
+  #{$p} table#{$x} {
+    @each $property in $type-properties {
+      #{$property}: var(--ccs-prose-table-#{$property});
+    }
+  }
+
+  #{$p} blockquote#{$x},
+  #{$p} blockquote > p#{$x} {
+    font-family: var(--ccs-prose-quote-font-family);
+
+    @each $property in $type-properties {
+      #{$property}: var(--ccs-prose-quote-#{$property});
+    }
+  }
+
+  // Alerts are notices, not quotations, so they keep the body type.
+  #{$p} blockquote#{$x}[data-alert],
+  #{$p} blockquote[data-alert] > p#{$x} {
+    font-family: inherit;
+
+    @each $property in $type-properties {
+      #{$property}: var(--ccs-prose-body-#{$property});
+    }
+  }
+
+  // Each root's custom properties. Every root has the base class, so the
+  // default variant's values sit on `.bx--prose` and a modifier sets only
+  // the ones it changes; a nested default root resets them on itself.
+  $default-vars: ();
+
+  @each $name, $variant in $ccs-prose-variants {
+    $root: if($name == default, $p, "#{$p}--#{$name}");
+    $fluid: map-get($variant, fluid);
+    $line-height: map-get($variant, body-line-height);
+    $bold-from: map-get($variant, bold-from);
+    $body: map-get($variant, body);
+    $vars: map-merge(
+      ccs-prose-type-map(
+        body,
+        $body,
+        if($line-height, (line-height: $line-height), ())
+      ),
+      ccs-prose-type-map(code, map-get($variant, code))
+    );
+    $vars: map-merge($vars, ccs-prose-type-map(table, map-get($variant, table)));
+
+    @if $name == expressive {
+      $vars: map-merge($vars, ccs-prose-type-map(quote, "quotation-01"));
+    } @else {
+      $vars: map-merge(
+        $vars,
+        ccs-prose-type-map(
+          quote,
+          $body,
+          (
+            font-family: ccs-prose-sans,
+            line-height: $line-height,
+          )
+        )
+      );
+    }
+
+    $fluid-headings: ();
+
+    @for $level from 1 through 6 {
+      $token: nth(map-get($variant, headings), $level);
+      $weight: if($bold-from and $level >= $bold-from, (font-weight: 600), ());
+      $is-fluid: $fluid and map-has-key(map-get($tokens, $token), breakpoints);
+      $overrides: $weight;
+
+      @if $is-fluid {
+        $overrides: map-merge(
+          $overrides,
+          (font-size: ccs-prose-fluid-size(map-get($tokens, $token), sm))
+        );
+        $fluid-headings: map-merge(
+          $fluid-headings,
+          (h#{$level}: ($token, $weight))
+        );
+      }
+
+      $vars: map-merge(
+        $vars,
+        ccs-prose-type-map(h#{$level}, $token, $overrides)
+      );
+    }
+
+    $vars: map-merge(
+      $vars,
+      (
+        --ccs-prose-flow: map-get($variant, flow),
+        --ccs-prose-heading-before: map-get($variant, heading-before),
+        --ccs-prose-heading-after: map-get($variant, heading-after),
+        --ccs-prose-list-gap: map-get($variant, list-gap),
+        --ccs-prose-block-padding: map-get($variant, block-padding),
+        --ccs-prose-cell-padding: map-get($variant, cell-padding),
+      )
+    );
+
+    @if $name == default {
+      $default-vars: $vars;
+    }
+
+    #{$root} {
+      @each $property, $value in $vars {
+        @if $name == default or map-get($default-vars, $property) != $value {
+          #{$property}: #{$value};
+        }
+      }
+
+      max-width: map-get($variant, measure);
+    }
+
+    @each $slot, $args in $fluid-headings {
+      #{$root} {
+        @include ccs-prose-fluid-breakpoints($slot, nth($args, 1), nth($args, 2));
+      }
+    }
+  }
+}
+
+@include exports("prose") {
+  @include prose;
+}
