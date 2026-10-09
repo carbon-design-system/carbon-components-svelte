@@ -22,6 +22,7 @@ import { visit } from "unist-util-visit";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
+import { tocHeadings } from "./scripts/toc-headings.ts";
 import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-css.js";
 import "prismjs/components/prism-clike.js";
@@ -35,6 +36,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
+const LAYOUT_OPEN_TAG_RE = /<Layout_MDSVEX_DEFAULT\b[^>]*>/;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 /** Prose-only inline HTML: do not wrap in Preview (see visitHtml). */
 const NO_PREVIEW_HTML_RE = /^\s*<DocKbd\b/;
@@ -273,9 +275,6 @@ function plugin() {
   };
 }
 
-const HEADING_REGEX = /<h([23])[^>]+id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
-const HEADING_ANCHOR_TAG_RE =
-  /<a\b[^>]*\bclass="heading-anchor"[^>]*>[\s\S]*?<\/a\s*>/g;
 const ADMONITION_RE = /^\[!(NOTE|WARNING|TIP|CAUTION)\]\s*/i;
 const ADMONITION_LINK_REF_RE = /^!(NOTE|WARNING|TIP|CAUTION)$/;
 const LEADING_WHITESPACE_RE = /^\n\s*/;
@@ -357,10 +356,6 @@ function isH2SectionIntro(
     isH2Heading(parent.children[index - 1]) &&
     isStandaloneSectionIntro(parent.children[index + 1])
   );
-}
-
-function tocLinkClasses(level: number): string {
-  return level === 3 ? "bx--link toc-nav__sub bx--type-label-01" : "bx--link";
 }
 
 /** Appends a `#` anchor link to each slugged h2/h3 so its heading can be hovered/copied. */
@@ -555,31 +550,11 @@ export default {
         if (NODE_MODULES_REGEX.test(filename)) return null;
         if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
 
-        const toc: { id: string; text: string; level: number }[] = [];
-
-        for (const match of content.matchAll(HEADING_REGEX)) {
-          const text = match[3].replace(HEADING_ANCHOR_TAG_RE, "").trim();
-          toc.push({ level: Number(match[1]), id: match[2], text });
-        }
-
+        // The layout renders the table of contents from the page's headings.
         let code = content.replace(
-          "</Layout_MDSVEX_DEFAULT>",
-          `<nav slot="aside" class="toc-nav">
-                ${toc
-                  .map(
-                    (item) =>
-                      `<a class="${tocLinkClasses(item.level)}" href="#${item.id}">${item.text}</a>`,
-                  )
-                  .join("")}
-                <div class="toc-section-label bx--type-label-01 bx--type-text-primary">Component API</div>
-                <a class="bx--link" href="#component-api-props">Props</a>
-                <a class="bx--link" href="#component-api-typedefs">Typedefs</a>
-                <a class="bx--link" href="#component-api-slots">Slots</a>
-                <a class="bx--link" href="#component-api-forwarded-events">Forwarded events</a>
-                <a class="bx--link" href="#component-api-dispatched-events">Dispatched events</a>
-                <a class="bx--link" href="#component-api-rest-props">restProps</a>
-              </nav>
-            </Layout_MDSVEX_DEFAULT>`,
+          LAYOUT_OPEN_TAG_RE,
+          (tag) =>
+            `${tag.slice(0, -1)} headings={${JSON.stringify(tocHeadings(content))}}>`,
         );
 
         // Auto-import Preview component used by the mdsvex remark plugin.

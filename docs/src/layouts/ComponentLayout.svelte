@@ -31,6 +31,7 @@
   import ComponentDocBarActions from "../components/ComponentDocBarActions.svelte";
   import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
   import ComponentTocLabel from "../components/ComponentTocLabel.svelte";
+  import ComponentTocNav from "../components/ComponentTocNav.svelte";
   import { componentTocOpen, DOC_THEMES, theme } from "../store";
   import { setupTocScrollSpy } from "../toc-scroll-spy";
 
@@ -45,6 +46,8 @@
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
   export let description = "";
+  /** The page's h2/h3 headings, for the table of contents. */
+  export let headings: { id: string; text: string; depth: number }[] = [];
 
   const componentMap = new Map(
     COMPONENT_API.components.map((c) => [c.moduleName, c]),
@@ -181,7 +184,7 @@
     </div>
     <div class="toc mobile">
       <ComponentTocLabel />
-      <slot name="aside" />
+      <ComponentTocNav {headings} />
     </div>
     <slot />
     <div class="component-api-header">
@@ -238,7 +241,7 @@
     <svelte:fragment slot="aside">
       <div class="toc">
         <ComponentTocLabel />
-        <slot name="aside" />
+        <ComponentTocNav {headings} />
       </div>
     </svelte:fragment>
   </ComponentDocLayout>
