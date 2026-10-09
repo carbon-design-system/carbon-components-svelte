@@ -165,6 +165,25 @@ test.describe("Prose", () => {
     );
   });
 
+  test("sets link tone per root", async ({ page }) => {
+    const linkBlue = await style(page.getByTestId("raw-link"), "color");
+    expect(await style(page.getByTestId("heading-anchor"), "color")).toBe(
+      linkBlue,
+    );
+    expect(await style(page.getByTestId("muted-link"), "color")).toBe(
+      await style(page.getByTestId("raw-p"), "color"),
+    );
+    expect(
+      await style(page.getByTestId("muted-link"), "text-decoration-line"),
+    ).toBe("underline");
+    expect(await style(page.getByTestId("muted-anchor"), "color")).not.toBe(
+      linkBlue,
+    );
+    expect(await style(page.getByTestId("nested-default-link"), "color")).toBe(
+      linkBlue,
+    );
+  });
+
   test("compact uses 14px copy and smaller headings", async ({ page }) => {
     await page.goto("/prose.html?variant=compact");
 

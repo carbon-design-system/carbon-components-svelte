@@ -18,6 +18,18 @@
   export let variant = "default";
 
   /**
+   * Set the link color.
+   * - `"default"`: links and heading anchors in the link color
+   * - `"muted"`: links in the text color, underlined, and heading anchors in
+   *   the secondary text color; both take the link color on hover. For copy
+   *   dense with links, such as reference docs.
+   *
+   * Links have no visited color, like `Link` by default.
+   * @type {"default" | "muted"}
+   */
+  export let linkTone = "default";
+
+  /**
    * Override the max width. Each variant caps the line length: 96 characters
    * (condensed), 80 (compact), 68 (default), 64 (spacious), or 60
    * (expressive). Numbers are treated as pixels; strings accept any CSS
@@ -47,6 +59,7 @@
     variant === "compact" && "bx--prose--compact",
     variant === "spacious" && "bx--prose--spacious",
     variant === "expressive" && "bx--prose--expressive",
+    linkTone === "muted" && "bx--prose--link-muted",
     $$restProps.class,
   ]
     .filter(Boolean)

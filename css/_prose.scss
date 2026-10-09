@@ -359,7 +359,7 @@ $ccs-prose-variants: (
   // heading is hovered or the link has keyboard focus.
   .#{$prefix}--prose__heading-anchor {
     margin-inline-start: $carbon--spacing-03;
-    color: $text-02;
+    color: var(--ccs-prose-anchor-color);
     font-weight: 400;
     text-decoration: none;
   }
@@ -373,8 +373,12 @@ $ccs-prose-variants: (
     outline: 2px solid $focus;
   }
 
+  // Link colors come from the root (`linkTone`), so a nested Prose keeps
+  // its own. Links have no visited color, like Carbon's `Link` by default:
+  // in docs and help, most links are revisited, and a second color there
+  // reads as noise rather than history.
   #{$p} a#{$x} {
-    color: $link-01;
+    color: var(--ccs-prose-link-color);
     text-decoration: underline;
   }
 
@@ -385,7 +389,7 @@ $ccs-prose-variants: (
   // One hover block for links and heading anchors.
   @media (any-hover: hover) {
     #{$p} a#{$x}:hover {
-      color: $hover-primary-text;
+      color: var(--ccs-prose-link-hover);
     }
 
     .#{$prefix}--prose__heading-anchor {
@@ -397,7 +401,7 @@ $ccs-prose-variants: (
     }
 
     .#{$prefix}--prose__heading-anchor:hover {
-      color: $link-01;
+      color: var(--ccs-prose-anchor-hover);
     }
   }
 
@@ -723,6 +727,24 @@ $ccs-prose-variants: (
         @include ccs-prose-fluid-breakpoints($slot, nth($args, 1), nth($args, 2));
       }
     }
+  }
+
+  // Link tone. The default shows links in the link color; `muted` sets body
+  // links in the text color (underlined, so they still read as links) and
+  // heading anchors in the secondary text color, both turning link blue on
+  // hover. Every root sets both, so a nested Prose keeps its own tone.
+  #{$p} {
+    --ccs-prose-link-color: #{$link-01};
+    --ccs-prose-link-hover: #{$hover-primary-text};
+    --ccs-prose-anchor-color: #{$link-01};
+    --ccs-prose-anchor-hover: #{$hover-primary-text};
+  }
+
+  #{$p}--link-muted {
+    --ccs-prose-link-color: #{$text-01};
+    --ccs-prose-link-hover: #{$link-01};
+    --ccs-prose-anchor-color: #{$text-02};
+    --ccs-prose-anchor-hover: #{$link-01};
   }
 }
 

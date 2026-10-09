@@ -145,6 +145,25 @@
       <ListItem>Carbon list item</ListItem>
     </UnorderedList>
   </Prose>
+  <Prose linkTone="muted" data-testid="muted-prose">
+    <h2 id="muted-heading">
+      Muted links
+      <a
+        class="bx--prose__heading-anchor"
+        href="#muted-heading"
+        aria-label="Link to Muted links"
+        data-testid="muted-anchor"
+        >#</a
+      >
+    </h2>
+    <p>Read the <a href="#setup" data-testid="muted-link">setup guide</a>.</p>
+    <Prose>
+      <p>
+        A default Prose inside keeps its
+        <a href="#setup" data-testid="nested-default-link">link color</a>.
+      </p>
+    </Prose>
+  </Prose>
   <div data-testid="outside">
     <InlineNotification lowContrast hideCloseButton kind="info" title="Note">
       <svelte:fragment slot="subtitleChildren">

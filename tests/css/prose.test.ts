@@ -14,7 +14,7 @@ describe("prose", () => {
       (s) =>
         // The root, its variants, and the root's rhythm rules space every
         // child, components included.
-        !/^\.bx--prose(--\w+)?$/.test(s) &&
+        !/^\.bx--prose(--[\w-]+)?$/.test(s) &&
         !/^\.bx--prose>(\*\+\*|\*\+(h\d|section|article)|h\d\+\*)$/.test(s) &&
         // Prose's own classes, such as the heading anchor.
         !s.includes("bx--prose__"),

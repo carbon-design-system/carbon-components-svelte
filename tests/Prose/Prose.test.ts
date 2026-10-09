@@ -27,6 +27,12 @@ describe("Prose", () => {
     expect(screen.getByTestId("prose")).toHaveClass("bx--prose", modifier);
   });
 
+  it("adds the muted link tone modifier", () => {
+    render(Prose, { props: { linkTone: "muted" } });
+
+    expect(screen.getByTestId("prose")).toHaveClass("bx--prose--link-muted");
+  });
+
   it.each([
     [480, "480px"],
     ["40rem", "40rem"],
