@@ -189,6 +189,22 @@
   export let pagesUnknown = false;
 
   /**
+   * Bump this to a new value whenever a fresh query changes what `totalItems`
+   * counts — a new search term, a newly applied filter, a different filter
+   * set entirely. Comparison is by strict inequality (`!==`), so any new
+   * value (including toggling back to a previously-seen one) resets `page`
+   * to `1`. Ignored on the initial render.
+   *
+   * Unlike an ordinary `totalItems` shrink (rows removed while browsing,
+   * which clamps `page` down to the new last page so the view stays close
+   * to where the user was — see the reactive block a few lines below this
+   * one), a `resetKey` change always jumps to page 1: a new query's results
+   * have no relationship to the previous page position.
+   * @type {unknown}
+   */
+  export let resetKey = undefined;
+
+  /**
    * Override the disabled state of the forward (next page) button.
    * Intended for use with `pagesUnknown` (controlled), where the consumer
    * knows when there is no more data to load.
@@ -251,6 +267,13 @@
   let prevPage = page;
   let prevPageSize = pageSize;
   let prevPageSizesKey;
+  let prevResetKey = resetKey;
+  // Tracks the highest page reached while `pagesUnknown` is true, since
+  // `totalPages` degenerates to 1 in that mode (totalItems defaults to 0,
+  // and the real total is unknowable). The page-number select uses this
+  // ceiling instead of `totalPages`, so a user who has advanced past page 1
+  // can still see and navigate back through the pages they've visited.
+  let maxPageSeen = page;
   let backBtnRef = null;
   let forwardBtnRef = null;
 
@@ -275,12 +298,20 @@
   }
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: if (!pagesUnknown && page > totalPages) page = totalPages;
+  $: if (resetKey !== prevResetKey) {
+    page = 1;
+    prevResetKey = resetKey;
+  }
   $: if (prevPage !== page || prevPageSize !== pageSize) {
     dispatch("update", { pageSize, page });
     prevPage = page;
     prevPageSize = pageSize;
   }
-  $: selectItems = getWindowedPages(page, totalPages, pageWindow);
+  $: if (pagesUnknown && page > maxPageSeen) maxPageSeen = page;
+  $: pageSelectTotalPages = pagesUnknown
+    ? Math.max(maxPageSeen, 1)
+    : totalPages;
+  $: selectItems = getWindowedPages(page, pageSelectTotalPages, pageWindow);
   $: internalBackButtonDisabled =
     backButtonDisabled ?? (disabled || page === 1);
   $: internalForwardButtonDisabled =
@@ -361,9 +392,9 @@
       <slot
         name="pageSelect"
         currentPage={page}
-        {totalPages}
+        totalPages={pageSelectTotalPages}
         currentPageSize={pageSize}
-        selectLabelText={pageSelectLabelText(totalPages)}
+        selectLabelText={pageSelectLabelText(pageSelectTotalPages)}
       >
         <!-- Native <option>s instead of SelectItem: a SelectItem
              registers a store subscriber per page (pageWindow, default
@@ -372,7 +403,7 @@
         <Select
           id="bx--pagination-select-{id}-pages"
           class="bx--select__page-number"
-          labelText={pageSelectLabelText(totalPages)}
+          labelText={pageSelectLabelText(pageSelectTotalPages)}
           inline
           hideLabel
           disabled={pageInputDisabled || disabled}

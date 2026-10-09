@@ -1,10 +1,10 @@
 ---
-components: ["Pagination", "PaginationSkeleton"]
+components: ["Pagination", "PaginationStatus", "PaginationSkeleton"]
 description: Pagination provides navigation controls for large data sets, showing the current page and total items, with configurable page sizes.
 ---
 
 <script>
-  import { Pagination, PaginationSkeleton, Toolbar, ToolbarContent } from "carbon-components-svelte";
+  import { Pagination, PaginationSkeleton, PaginationStatus, Toolbar, ToolbarContent } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -94,6 +94,16 @@ Because the total is unknown, this mode falls back to `itemText` and `pageText` 
   itemText={(min, max) => `Showing ${min}–${max}`}
   pageText={(page) => `Page ${page}`}
 />
+
+## Reset on a new query
+
+When rows are removed while the user is browsing, a shrinking `totalItems` clamps `page` to the new last page so the view stays close to where they were. A new search or filter is different: its results have no relationship to the previous page position, but `Pagination` cannot tell the two apart.
+
+Set `resetKey` to a value that identifies the current query, such as the search term. Whenever it changes, `page` jumps to `1`, even when `totalItems` also shrinks. Comparison is by strict inequality and the initial value is ignored, so leaving `resetKey` unset keeps the clamp-to-last-page behavior.
+
+In this example, go to the last page, then search for "Balancer 1". The results start on page 1 instead of the last page of matches.
+
+<FileSource src="/framed/Pagination/PaginationResetKey" />
 
 ## Page window
 
@@ -189,6 +199,20 @@ Use `on:click:button--previous` and `on:click:button--next` to listen specifical
   on:click:button--previous={(e) => console.log(e.detail)} // { page: number }
   on:click:button--next={(e) => console.log(e.detail)} // { page: number }
 />
+
+## Item count status
+
+`PaginationStatus` renders the same "1–10 of 102 items" text that `Pagination` shows, as a standalone element you can place anywhere. It announces changes to screen readers through a polite live region, which `Pagination` itself does not.
+
+Pass the same `page`, `pageSize`, and `totalItems` you give `Pagination`. Set `pagesUnknown` when the paired control does, and override `itemRangeText` or `itemText` to change the wording.
+
+<PaginationStatus page={1} pageSize={10} totalItems={102} />
+
+### Separate from the controls
+
+Because the readout is decoupled, the count can sit in a card header while a `simple` `Pagination` stays in a footer below scrolling content. Bind `page` on `Pagination` and pass it to `PaginationStatus`.
+
+<FileSource src="/framed/Pagination/PaginationStatusSplit" />
 
 ## Skeleton
 
