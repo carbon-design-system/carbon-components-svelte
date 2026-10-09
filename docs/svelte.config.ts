@@ -2,7 +2,6 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { walk } from "estree-walker";
 import type {
   Blockquote,
   List,
@@ -19,10 +18,9 @@ import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with {
 import Prism from "prismjs";
 import prismPkg from "prismjs/package.json" with { type: "json" };
 import rehypeSlug from "rehype-slug";
-import { parse } from "svelte/compiler";
 import { visit } from "unist-util-visit";
+import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
-import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-css.js";
 import "prismjs/components/prism-clike.js";
@@ -33,11 +31,6 @@ import prismSveltePkg from "prism-svelte/package.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const componentApiByName = new Set(
-  componentApi.components.map((c) => c.moduleName),
-);
-
-const ICON_NAME_REGEX = /[A-Z][a-z]*/;
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
@@ -48,12 +41,6 @@ const DOC_KBD_IMPORT_STMT =
   '  import DocKbd from "../../components/DocKbd.svelte";';
 const DOC_KBD_IMPORT_RE = /import\s+DocKbd\s+from/;
 const DOC_KBD_USAGE_RE = /<DocKbd\b/;
-/** Heuristics for skipping svelte/compiler parse in createImports (see snippetMayNeedCarbonImportScan). */
-const SNIPPET_PASCAL_COMPONENT_RE = /<[A-Z][A-Za-z0-9]*/;
-const SNIPPET_USE_ACTION_RE = /use:\s*\w/;
-const SNIPPET_ICON_MUSTACHE_RE = /\{\s*[A-Z][A-Za-z0-9]*\s*[},]/;
-const SNIPPET_TAG_RE = /<[a-zA-Z]/;
-const SNIPPET_MUSTACHE_ANY_RE = /\{/;
 
 const MDSVEX_LANG_ALIASES = {
   js: "javascript",
@@ -67,7 +54,6 @@ const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
 type PreviewCode = { formattedCode: string; highlightedCode: string };
 
 const previewCodeCache = new Map<string, PreviewCode>();
-const createImportsCache = new Map<string, string>();
 
 /**
  * Formatted and highlighted example code persists here so a cold build only
@@ -123,101 +109,6 @@ const prettierSvelte = {
   plugins: [prettierPluginSvelte],
   svelteSortOrder: "scripts-markup-styles-options" as const,
 };
-
-/** Avoid svelte/compiler parse when the snippet cannot reference Carbon components, actions, or icons. */
-function snippetMayNeedCarbonImportScan(source: string): boolean {
-  if (SNIPPET_PASCAL_COMPONENT_RE.test(source)) return true;
-  if (SNIPPET_USE_ACTION_RE.test(source)) return true;
-  if (SNIPPET_ICON_MUSTACHE_RE.test(source)) return true;
-  if (SNIPPET_TAG_RE.test(source) && SNIPPET_MUSTACHE_ANY_RE.test(source)) {
-    return true;
-  }
-  return false;
-}
-
-function createImportsUncached(source: string) {
-  const inlineComponents = new Set<string>();
-  const icons = new Set<string>();
-  const actions = new Set<string>();
-  let usesDocKbd = false;
-
-  // heuristic to guess if the inline component or expression name is a Carbon icon
-  const isIcon = (text: string) =>
-    ICON_NAME_REGEX.test(text) && !componentApiByName.has(text);
-
-  walk(parse(source) as unknown as Parameters<typeof walk>[0], {
-    enter(node) {
-      const n = node as {
-        type?: string;
-        name?: string;
-        expression?: { type?: string; name?: string };
-      };
-      if (n.type === "InlineComponent" && n.name) {
-        if (n.name === "DocKbd") {
-          usesDocKbd = true;
-          return;
-        }
-        if (n.name.startsWith("svelte:")) return;
-        if (isIcon(n.name)) {
-          icons.add(n.name);
-        } else {
-          inlineComponents.add(n.name);
-        }
-      } else if (n.type === "MustacheTag" && n.expression) {
-        if (
-          n.expression.type === "Identifier" &&
-          n.expression.name &&
-          isIcon(n.expression.name)
-        ) {
-          icons.add(n.expression.name);
-        }
-      } else if (n.type === "Action" && n.name) {
-        actions.add(n.name);
-      }
-    },
-  });
-
-  const actionImports = [...actions];
-  const ccsImports = [...inlineComponents, ...actionImports];
-  const iconImports = [...icons];
-
-  if (ccsImports.length === 0 && !usesDocKbd) return "";
-
-  const lines: string[] = [];
-  if (usesDocKbd) {
-    lines.push(DOC_KBD_IMPORT_STMT);
-  }
-  if (ccsImports.length > 0) {
-    lines.push(
-      `  import { ${ccsImports.join(", ")} } from "carbon-components-svelte";`,
-    );
-    if (icons.size > 0) {
-      for (const icon of iconImports) {
-        lines.push(
-          `  import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
-        );
-      }
-    }
-  }
-
-  if (lines.length === 0) return "";
-
-  return `<script>
-${lines.join("\n")}
-</script>
-
-`;
-}
-
-function createImports(source: string) {
-  const cached = createImportsCache.get(source);
-  if (cached !== undefined) return cached;
-  const result = snippetMayNeedCarbonImportScan(source)
-    ? createImportsUncached(source)
-    : "";
-  createImportsCache.set(source, result);
-  return result;
-}
 
 function highlightSvelte(formattedCode: string): PreviewCode {
   const highlightedCode = Prism.highlight(
@@ -315,6 +206,7 @@ function plugin() {
   async function visitHtml(
     node: { lang?: string; value: string } & import("unist").Node,
     isWholeParagraph: boolean,
+    pageScript: string | undefined,
   ) {
     // A paragraph that *opens* with `<DocKbd ...>` parses as a raw HTML
     // block instead of a normal paragraph (CommonMark treats a line
@@ -337,9 +229,8 @@ function plugin() {
       !node.value.startsWith("<FileSource") &&
       !node.value.startsWith("<script>")
     ) {
-      const scriptBlock = createImports(node.value);
       const { formattedCode, highlightedCode } = await formatAndHighlightSvelte(
-        scriptBlock + node.value,
+        exampleSource(node.value, pageScript),
       );
 
       node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}}>${node.value}</Preview>`;
@@ -359,12 +250,22 @@ function plugin() {
   }
 
   return async (tree: Parameters<typeof visit>[0]) => {
+    // An inline example's code view takes what it uses from the page script.
+    const pageScript = (
+      (tree as { children?: { type: string; value?: string }[] }).children ?? []
+    ).find(
+      (node) => node.type === "html" && isInstanceScript(node.value ?? ""),
+    )?.value;
     const jobs: Promise<void>[] = [];
     visit(tree, "html", (node, _index, parent) => {
       const isWholeParagraph =
         (parent as { type?: string } | null)?.type === "root";
       jobs.push(
-        visitHtml(node as Parameters<typeof visitHtml>[0], isWholeParagraph),
+        visitHtml(
+          node as Parameters<typeof visitHtml>[0],
+          isWholeParagraph,
+          pageScript,
+        ),
       );
     });
     await Promise.all(jobs);
