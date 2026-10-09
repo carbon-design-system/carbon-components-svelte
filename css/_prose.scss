@@ -36,7 +36,11 @@ $ccs-prose-variants: (
     code: "code-02",
     table: "body-short-01",
     block-padding: $carbon--spacing-05,
-    cell-padding: ($carbon--spacing-03 $carbon--spacing-05),
+    cell-padding-block: $carbon--spacing-03,
+    // Cell inline padding for `tableWidth="full"`, and the column gap for
+    // the default `"fit"`.
+    cell-padding-full: $carbon--spacing-05,
+    column-gap-fit: $carbon--spacing-07,
   ),
   condensed: (
     body: "caption-01",
@@ -66,7 +70,11 @@ $ccs-prose-variants: (
     code: "code-01",
     table: "caption-01",
     block-padding: $carbon--spacing-03,
-    cell-padding: ($carbon--spacing-02 $carbon--spacing-03),
+    cell-padding-block: $carbon--spacing-02,
+    // Cell inline padding for `tableWidth="full"`, and the column gap for
+    // the default `"fit"`.
+    cell-padding-full: $carbon--spacing-03,
+    column-gap-fit: $carbon--spacing-05,
   ),
   compact: (
     body: "body-long-01",
@@ -90,7 +98,11 @@ $ccs-prose-variants: (
     code: "code-01",
     table: "body-short-01",
     block-padding: $carbon--spacing-04,
-    cell-padding: ($carbon--spacing-02 $carbon--spacing-04),
+    cell-padding-block: $carbon--spacing-02,
+    // Cell inline padding for `tableWidth="full"`, and the column gap for
+    // the default `"fit"`.
+    cell-padding-full: $carbon--spacing-04,
+    column-gap-fit: $carbon--spacing-06,
   ),
   spacious: (
     body: "body-long-02",
@@ -114,7 +126,11 @@ $ccs-prose-variants: (
     code: "code-02",
     table: "body-short-02",
     block-padding: $carbon--spacing-06,
-    cell-padding: ($carbon--spacing-04 $carbon--spacing-05),
+    cell-padding-block: $carbon--spacing-04,
+    // Cell inline padding for `tableWidth="full"`, and the column gap for
+    // the default `"fit"`.
+    cell-padding-full: $carbon--spacing-05,
+    column-gap-fit: $carbon--spacing-07,
   ),
   expressive: (
     body: "body-long-02",
@@ -138,7 +154,11 @@ $ccs-prose-variants: (
     code: "code-02",
     table: "body-short-01",
     block-padding: $carbon--spacing-05,
-    cell-padding: ($carbon--spacing-03 $carbon--spacing-05),
+    cell-padding-block: $carbon--spacing-03,
+    // Cell inline padding for `tableWidth="full"`, and the column gap for
+    // the default `"fit"`.
+    cell-padding-full: $carbon--spacing-05,
+    column-gap-fit: $carbon--spacing-07,
   ),
 );
 
@@ -573,15 +593,37 @@ $ccs-prose-variants: (
     color: $text-02;
   }
 
+  // Tables are flush with the copy: no padding before the first column or
+  // after the last. `tableWidth` sets the rest from the root: `fit` (the
+  // default) packs columns at their content width with a column gap, like
+  // running copy; `full` spans the measure with padded cells.
   #{$p} table#{$x} {
-    width: 100%;
+    width: var(--ccs-prose-table-width);
   }
 
   #{$p} th#{$x},
   #{$p} td#{$x} {
-    padding: var(--ccs-prose-cell-padding);
+    padding: var(--ccs-prose-cell-padding-block)
+      var(--ccs-prose-cell-padding-inline);
     border-bottom: 1px solid $ui-03;
     text-align: start;
+  }
+
+  #{$p} th + th#{$x},
+  #{$p} td + td#{$x},
+  #{$p} th + td#{$x},
+  #{$p} td + th#{$x} {
+    padding-inline-start: var(--ccs-prose-column-gap);
+  }
+
+  #{$p} th#{$x}:first-child,
+  #{$p} td#{$x}:first-child {
+    padding-inline-start: 0;
+  }
+
+  #{$p} th#{$x}:last-child,
+  #{$p} td#{$x}:last-child {
+    padding-inline-end: 0;
   }
 
   // Cells keep the column alignment Markdown renderers and CMSs set with the
@@ -739,7 +781,9 @@ $ccs-prose-variants: (
         --ccs-prose-heading-after: map-get($variant, heading-after),
         --ccs-prose-list-gap: map-get($variant, list-gap),
         --ccs-prose-block-padding: map-get($variant, block-padding),
-        --ccs-prose-cell-padding: map-get($variant, cell-padding),
+        --ccs-prose-cell-padding-block: map-get($variant, cell-padding-block),
+        --ccs-prose-cell-padding-full: map-get($variant, cell-padding-full),
+        --ccs-prose-column-gap-fit: map-get($variant, column-gap-fit),
       )
     );
 
@@ -764,7 +808,7 @@ $ccs-prose-variants: (
     }
   }
 
-  // Link tone. The default shows links in the link color; `muted` sets body
+  // Root options. Link tone: the default shows links in the link color; `muted` sets body
   // links in the text color (underlined, so they still read as links) and
   // heading anchors in the secondary text color, both turning link blue on
   // hover. Every root sets both, so a nested Prose keeps its own tone.
@@ -773,6 +817,15 @@ $ccs-prose-variants: (
     --ccs-prose-link-hover: #{$hover-primary-text};
     --ccs-prose-anchor-color: #{$link-01};
     --ccs-prose-anchor-hover: #{$hover-primary-text};
+    --ccs-prose-table-width: auto;
+    --ccs-prose-cell-padding-inline: 0;
+    --ccs-prose-column-gap: var(--ccs-prose-column-gap-fit);
+  }
+
+  #{$p}--table-full {
+    --ccs-prose-table-width: 100%;
+    --ccs-prose-cell-padding-inline: var(--ccs-prose-cell-padding-full);
+    --ccs-prose-column-gap: var(--ccs-prose-cell-padding-full);
   }
 
   #{$p}--link-muted {

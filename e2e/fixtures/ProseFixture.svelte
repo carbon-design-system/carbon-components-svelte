@@ -167,6 +167,22 @@
       </p>
     </Prose>
   </Prose>
+  <Prose tableWidth="full" data-testid="full-table-prose">
+    <table data-testid="full-table">
+      <thead>
+        <tr>
+          <th data-testid="full-first">Region</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>eu-west</td>
+          <td>OK</td>
+        </tr>
+      </tbody>
+    </table>
+  </Prose>
   <div class="bx--prose-flow" data-testid="flow">
     <Prose><p>Copy that sets up the example below.</p></Prose>
     <CodeSnippet code="npm i carbon-components-svelte" />

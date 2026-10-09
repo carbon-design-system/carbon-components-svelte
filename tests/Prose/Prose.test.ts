@@ -27,6 +27,12 @@ describe("Prose", () => {
     expect(screen.getByTestId("prose")).toHaveClass("bx--prose", modifier);
   });
 
+  it("adds the full table width modifier", () => {
+    render(Prose, { props: { tableWidth: "full" } });
+
+    expect(screen.getByTestId("prose")).toHaveClass("bx--prose--table-full");
+  });
+
   it("adds the dividers modifier", () => {
     render(Prose, { props: { dividers: true } });
 

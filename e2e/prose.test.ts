@@ -212,6 +212,30 @@ test.describe("Prose", () => {
     );
   });
 
+  test("fits tables to their content with flush edges by default", async ({
+    page,
+  }) => {
+    const firstHeader = page
+      .getByRole("columnheader", { name: "Region" })
+      .first();
+    const fitTable = firstHeader.locator("xpath=ancestor::table");
+    const proseWidth = (await page.getByTestId("prose").boundingBox())?.width;
+    expect((await fitTable.boundingBox())?.width).toBeLessThan(proseWidth ?? 0);
+    expect(await style(firstHeader, "padding-left")).toBe("0px");
+    expect(await style(page.getByTestId("th-center"), "padding-left")).toBe(
+      "32px",
+    );
+
+    const fullTable = page.getByTestId("full-table");
+    expect((await fullTable.boundingBox())?.width).toBeCloseTo(
+      (await page.getByTestId("full-table-prose").boundingBox())?.width ?? 0,
+      0,
+    );
+    expect(await style(page.getByTestId("full-first"), "padding-left")).toBe(
+      "0px",
+    );
+  });
+
   test("compact uses 14px copy and smaller headings", async ({ page }) => {
     await page.goto("/prose.html?variant=compact");
 

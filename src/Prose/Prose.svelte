@@ -29,6 +29,17 @@
    */
   export let linkTone = "default";
 
+  /**
+   * Set how tables size. Either way, the first and last columns line up
+   * with the copy.
+   * - `"fit"`: columns at their content width with a gap between them, so
+   *   a short table reads with the copy around it
+   * - `"full"`: the table spans the line length with padded cells, for wide
+   *   or data-heavy tables
+   * @type {"fit" | "full"}
+   */
+  export let tableWidth = "fit";
+
   /** Set to `true` to draw a rule above each `h2`, to set sections apart */
   export let dividers = false;
 
@@ -64,6 +75,7 @@
     variant === "expressive" && "bx--prose--expressive",
     linkTone === "muted" && "bx--prose--link-muted",
     dividers && "bx--prose--dividers",
+    tableWidth === "full" && "bx--prose--table-full",
     $$restProps.class,
   ]
     .filter(Boolean)
