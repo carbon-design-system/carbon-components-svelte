@@ -541,7 +541,7 @@
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
           aria-describedby={resolveStatusDescribedBy({
-            showInvalid: hasErrorMessage,
+            showInvalid,
             showWarn,
             helperText,
             isFluid,
@@ -584,7 +584,7 @@
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
           aria-describedby={resolveStatusDescribedBy({
-            showInvalid: hasErrorMessage,
+            showInvalid,
             showWarn,
             helperText,
             isFluid,

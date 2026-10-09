@@ -663,6 +663,22 @@ describe("NumberInput", () => {
     expect(input).toHaveAttribute("aria-describedby", "helper-test-input");
   });
 
+  it("should not describe the input with hidden helper text while invalid", () => {
+    render(NumberInput, {
+      props: {
+        id: "test-input",
+        invalid: true,
+        invalidText: "",
+        helperText: "Helper",
+      },
+    });
+
+    expect(screen.queryByText("Helper")).not.toBeInTheDocument();
+    expect(screen.getByRole("spinbutton")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
   it("should not set aria-describedby when no error, warn, or helperText", () => {
     render(NumberInput, {
       props: { id: "test-input" },
