@@ -254,6 +254,19 @@ describe("Slider", () => {
     expect(slider).not.toHaveAttribute("tabindex");
   });
 
+  it("keeps a read-only thumb reachable by keyboard", async () => {
+    render(Slider, {
+      props: { readonly: true, hideTextInput: true, value: 50 },
+    });
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuenow", "50");
+  });
+
   it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
     const { container } = render(Slider, {
       props: { id: "test-slider", readonly: true },
