@@ -1,4 +1,5 @@
 import {
+  fireEvent,
   render,
   screen,
   waitForElementToBeRemoved,
@@ -9,6 +10,7 @@ import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import HeaderActionOutsideClick from "./HeaderAction.outsideClick.test.svelte";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
+import HeaderActionTooltipGroup from "./HeaderActionTooltipGroup.test.svelte";
 
 describe("HeaderAction", () => {
   it("supports custom textChildren slot", () => {
@@ -93,6 +95,35 @@ describe("HeaderAction", () => {
         await waitForElementToBeRemoved(panel, { timeout: 5000 });
       }
       expect(button).toHaveFocus();
+    });
+  });
+
+  describe("tooltip group", () => {
+    it("hides a focused action's tooltip while another action is hovered", async () => {
+      render(HeaderActionTooltipGroup);
+
+      const notifications = screen.getByRole("button", {
+        name: "Notifications",
+      });
+      const help = screen.getByRole("button", { name: "Help" });
+      const settings = screen.getByRole("button", { name: "Settings" });
+
+      await fireEvent.focus(notifications);
+      expect(notifications).not.toHaveClass("bx--tooltip--hidden");
+      expect(help).toHaveClass("bx--tooltip--hidden");
+      expect(settings).toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseEnter(help);
+      expect(notifications).toHaveClass("bx--tooltip--hidden");
+      expect(help).not.toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseEnter(settings);
+      expect(help).toHaveClass("bx--tooltip--hidden");
+      expect(settings).not.toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseLeave(settings);
+      await fireEvent.mouseLeave(help);
+      expect(notifications).not.toHaveClass("bx--tooltip--hidden");
     });
   });
 
