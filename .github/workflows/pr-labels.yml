@@ -11,9 +11,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+# Every label in .github/labeler.yml and the title step must already exist:
+# without `issues: write`, adding a missing label fails instead of creating it.
 permissions:
   contents: read
-  issues: write
   pull-requests: write
 
 jobs:
