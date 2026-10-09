@@ -16,6 +16,8 @@ describe("prose", () => {
         // child, components included.
         !/^\.bx--prose(--[\w-]+)?$/.test(s) &&
         !/^\.bx--prose>(\*\+\*|\*\+(h\d|section|article)|h\d\+\*)$/.test(s) &&
+        // Copy after a component: a rhythm rule between the root's children.
+        !s.startsWith(".bx--prose>:where(") &&
         // Prose's own classes, such as the heading anchor.
         !s.includes("bx--prose__"),
     );

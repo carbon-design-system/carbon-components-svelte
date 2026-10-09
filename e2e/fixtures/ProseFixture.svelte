@@ -140,7 +140,10 @@
       <CodeSnippet type="inline" code="npm i carbon-components-svelte" />
     </p>
     <CodeSnippet code="bun add carbon-components-svelte" />
-    <p><Link href="#setup">Carbon Link</Link> keeps its style.</p>
+    <p data-testid="after-snippet">
+      <Link href="#setup">Carbon Link</Link>
+      keeps its style.
+    </p>
     <UnorderedList>
       <ListItem>Carbon list item</ListItem>
     </UnorderedList>

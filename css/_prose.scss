@@ -26,7 +26,10 @@ $ccs-prose-variants: (
     ),
     fluid: false,
     flow: $carbon--spacing-05,
-    heading-before: $carbon--spacing-07,
+    heading-before-2: $carbon--spacing-10,
+    heading-before-3: $carbon--spacing-08,
+    heading-before-4: $carbon--spacing-07,
+    after-component: $carbon--spacing-07,
     heading-after: $carbon--spacing-04,
     list-gap: $carbon--spacing-03,
     measure: 68ch,
@@ -51,7 +54,10 @@ $ccs-prose-variants: (
     body-line-height: 1.5,
     fluid: false,
     flow: $carbon--spacing-04,
-    heading-before: $carbon--spacing-06,
+    heading-before-2: $carbon--spacing-07,
+    heading-before-3: $carbon--spacing-06,
+    heading-before-4: $carbon--spacing-05,
+    after-component: $carbon--spacing-06,
     heading-after: $carbon--spacing-03,
     list-gap: $carbon--spacing-02,
     measure: 96ch,
@@ -74,7 +80,10 @@ $ccs-prose-variants: (
     ),
     fluid: false,
     flow: $carbon--spacing-04,
-    heading-before: $carbon--spacing-06,
+    heading-before-2: $carbon--spacing-09,
+    heading-before-3: $carbon--spacing-07,
+    heading-before-4: $carbon--spacing-06,
+    after-component: $carbon--spacing-06,
     heading-after: $carbon--spacing-03,
     list-gap: $carbon--spacing-02,
     measure: 80ch,
@@ -95,7 +104,10 @@ $ccs-prose-variants: (
     ),
     fluid: false,
     flow: $carbon--spacing-06,
-    heading-before: $carbon--spacing-09,
+    heading-before-2: $carbon--spacing-11,
+    heading-before-3: $carbon--spacing-09,
+    heading-before-4: $carbon--spacing-08,
+    after-component: $carbon--spacing-08,
     heading-after: $carbon--spacing-05,
     list-gap: $carbon--spacing-04,
     measure: 64ch,
@@ -116,7 +128,10 @@ $ccs-prose-variants: (
     ),
     fluid: true,
     flow: $carbon--spacing-06,
-    heading-before: $carbon--spacing-09,
+    heading-before-2: $carbon--spacing-11,
+    heading-before-3: $carbon--spacing-09,
+    heading-before-4: $carbon--spacing-08,
+    after-component: $carbon--spacing-08,
     heading-after: $carbon--spacing-05,
     list-gap: $carbon--spacing-03,
     measure: 60ch,
@@ -304,15 +319,22 @@ $ccs-prose-variants: (
     overflow-wrap: break-word;
   }
 
-  // Vertical rhythm, for the root's children and for `section` and
-  // `article` wrappers inside it. Headings, and the wrappers that usually
-  // open with one, take more space above than below so each sits with the
-  // copy it introduces; the heading-after rule comes last so a heading
+  // Vertical rhythm, for the root's children and for `section`, `article`,
+  // and `details` wrappers inside it. Spacing follows the structure: a
+  // heading sits much closer to what it introduces than to what came before
+  // it, and the space above it grows with its level (`h2`, then `h3`, then
+  // `h4` to `h6` with the wrappers that usually open with one). Copy after
+  // a Carbon component, such as a live example, gets more room than the
+  // gap between paragraphs. The heading-after rule comes last so a heading
   // straight after another stays close to it.
-  $flows: $p, "#{$p} section#{$x}", "#{$p} article#{$x}";
+  $flows: $p, "#{$p} section#{$x}", "#{$p} article#{$x}", "#{$p} details#{$x}";
   $flow: ();
-  $before: ();
   $after: ();
+  $before-levels: (
+    2: ("h1", "h2"),
+    3: ("h3"),
+    4: ("h4", "h5", "h6", "section", "article"),
+  );
 
   @each $f in $flows {
     $flow: append($flow, "#{$f} > * + *", comma);
@@ -320,18 +342,28 @@ $ccs-prose-variants: (
     @each $h in $headings {
       $after: append($after, "#{$f} > #{$h} + *", comma);
     }
-
-    @each $h in join($headings, ("section", "article")) {
-      $before: append($before, "#{$f} > * + #{$h}", comma);
-    }
   }
 
   #{$flow} {
     margin-block-start: var(--ccs-prose-flow);
   }
 
-  #{$before} {
-    margin-block-start: var(--ccs-prose-heading-before);
+  #{$p} > :where(#{$carbon}) + :where(:not(#{$carbon})) {
+    margin-block-start: var(--ccs-prose-after-component);
+  }
+
+  @each $level, $elements in $before-levels {
+    $before: ();
+
+    @each $f in $flows {
+      @each $element in $elements {
+        $before: append($before, "#{$f} > * + #{$element}", comma);
+      }
+    }
+
+    #{$before} {
+      margin-block-start: var(--ccs-prose-heading-before-#{$level});
+    }
   }
 
   #{$after} {
@@ -700,7 +732,10 @@ $ccs-prose-variants: (
       $vars,
       (
         --ccs-prose-flow: map-get($variant, flow),
-        --ccs-prose-heading-before: map-get($variant, heading-before),
+        --ccs-prose-heading-before-2: map-get($variant, heading-before-2),
+        --ccs-prose-heading-before-3: map-get($variant, heading-before-3),
+        --ccs-prose-heading-before-4: map-get($variant, heading-before-4),
+        --ccs-prose-after-component: map-get($variant, after-component),
         --ccs-prose-heading-after: map-get($variant, heading-after),
         --ccs-prose-list-gap: map-get($variant, list-gap),
         --ccs-prose-block-padding: map-get($variant, block-padding),

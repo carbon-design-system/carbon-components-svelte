@@ -184,6 +184,19 @@ test.describe("Prose", () => {
     );
   });
 
+  test("spaces headings by level and copy after a component", async ({
+    page,
+  }) => {
+    const margin = (locator) => style(locator, "margin-top");
+    expect(await margin(page.getByRole("heading", { name: "Setup" }))).toBe(
+      "64px",
+    );
+    expect(await margin(page.getByRole("heading", { name: "Request" }))).toBe(
+      "40px",
+    );
+    expect(await margin(page.getByTestId("after-snippet"))).toBe("32px");
+  });
+
   test("compact uses 14px copy and smaller headings", async ({ page }) => {
     await page.goto("/prose.html?variant=compact");
 
