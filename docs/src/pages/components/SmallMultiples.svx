@@ -51,10 +51,10 @@ Set `sharedY` to `false` to let each chart fit its own data, when the shapes mat
 
 ## Any chart
 
-The slot can hold any chart. A categorical x has no shared domain, so pass only `yDomain`.
+The slot can hold any chart. A categorical x has no shared domain, so pass only `yDomain`; hover still follows across the charts by category when they share `syncId`.
 
-<SmallMultiples data={quarters} facet="region" y="deals" columns={3} title="Deals by quarter and region" let:facet let:rows let:yDomain>
-  <BarChart data={rows} x="quarter" y="deals" title={facet} {yDomain} height={160} legend={false} />
+<SmallMultiples data={quarters} facet="region" y="deals" columns={3} title="Deals by quarter and region" let:facet let:rows let:yDomain let:syncId>
+  <BarChart data={rows} x="quarter" y="deals" title={facet} {yDomain} {syncId} height={160} legend={false} />
 </SmallMultiples>
 
 ## Accessibility
