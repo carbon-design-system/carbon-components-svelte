@@ -782,6 +782,14 @@ $ccs-prose-variants: (
     --ccs-prose-anchor-hover: #{$link-01};
   }
 
+  // Section dividers: a rule and some room above each of the root's `h2`s,
+  // so a section reads as one group even when examples interrupt the copy.
+  // The child combinator keeps them to this root.
+  #{$p}--dividers > h2#{$x} {
+    padding-block-start: $carbon--spacing-06;
+    border-block-start: 1px solid $ui-03;
+  }
+
   // A flow container for a page that alternates Prose runs with live
   // examples, as a Markdown preprocessor emits one Prose per run of copy.
   // Siblings get the flow gap and copy after an example gets more room,

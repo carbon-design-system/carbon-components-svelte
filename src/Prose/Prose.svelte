@@ -29,6 +29,9 @@
    */
   export let linkTone = "default";
 
+  /** Set to `true` to draw a rule above each `h2`, to set sections apart */
+  export let dividers = false;
+
   /**
    * Override the max width. Each variant caps the line length: 96 characters
    * (condensed), 80 (compact), 68 (default), 64 (spacious), or 60
@@ -60,6 +63,7 @@
     variant === "spacious" && "bx--prose--spacious",
     variant === "expressive" && "bx--prose--expressive",
     linkTone === "muted" && "bx--prose--link-muted",
+    dividers && "bx--prose--dividers",
     $$restProps.class,
   ]
     .filter(Boolean)

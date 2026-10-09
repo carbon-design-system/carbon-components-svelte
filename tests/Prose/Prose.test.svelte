@@ -7,6 +7,7 @@
   export let tag: ComponentProps<Prose>["tag"] = undefined;
   export let ref: ComponentProps<Prose>["ref"] = null;
   export let linkTone: ComponentProps<Prose>["linkTone"] = undefined;
+  export let dividers: ComponentProps<Prose>["dividers"] = undefined;
 </script>
 
 <Prose
@@ -16,6 +17,7 @@
   {maxWidth}
   {tag}
   {linkTone}
+  {dividers}
   bind:ref
 >
   <h2>Overview</h2>

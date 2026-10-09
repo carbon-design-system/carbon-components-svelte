@@ -27,6 +27,12 @@ describe("Prose", () => {
     expect(screen.getByTestId("prose")).toHaveClass("bx--prose", modifier);
   });
 
+  it("adds the dividers modifier", () => {
+    render(Prose, { props: { dividers: true } });
+
+    expect(screen.getByTestId("prose")).toHaveClass("bx--prose--dividers");
+  });
+
   it("adds the muted link tone modifier", () => {
     render(Prose, { props: { linkTone: "muted" } });
 
