@@ -1,0 +1,27 @@
+---
+description: FloatingPosition places a floating element beside an anchor and flips sides when the preferred side does not fit.
+---
+
+## Basic
+
+Use `floatingPosition` to compute where a floating element goes. It is a pure function: pass the `anchorRect` and `floatingRect` from `getBoundingClientRect()`, the `viewport`, and the preferred `direction`. It returns `top`, `left`, and the `actualDirection` it chose.
+
+The function flips the direction when the preferred side lacks space and the opposite side has more. In this example, the anchor near the bottom of the viewport flips from `"bottom"` to `"top"`.
+
+<FileSource src="/framed/FloatingPosition/FloatingPositionBasic" />
+
+[FloatingPortal](/components/FloatingPortal) wraps this function and handles measuring, scrolling, and rendering for you.
+
+## Locked direction
+
+Set `lockedDirection` to skip flip detection and keep a side stable. Lock the side chosen when the floating element opened, so a change in its content never makes it jump to the opposite side.
+
+<FileSource src="/framed/FloatingPosition/FloatingPositionLocked" />
+
+## Intrinsic width
+
+By default, a floating element placed above or below the anchor matches the anchor's width. Set `intrinsicWidth` to `true` to use the element's own width. Set `intrinsicAlign` to `"start"`, `"center"`, or `"end"` to choose which anchor edge it aligns to.
+
+With `"start"` or `"end"`, the result includes `caretNudgePx`, the distance from the aligned edge to the anchor's center, so a caret stays centered on the anchor.
+
+<FileSource src="/framed/FloatingPosition/FloatingPositionIntrinsic" />

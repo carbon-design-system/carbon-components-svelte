@@ -1,0 +1,15 @@
+---
+description: TrapFocus keeps Tab and Shift+Tab inside a container, for custom dialogs that do not use Modal.
+---
+
+## Basic
+
+Use `trapFocus` in a `keydown` handler to keep keyboard focus inside a container. It is a helper, not an action: pass the `container` element and the keyboard `event`, and focus loops through the tabbable elements inside.
+
+The helper always calls `event.preventDefault()`, so call it only when `event.key` is `"Tab"`. Calling it for other keys blocks their default behavior. Press <DocKbd label="Tab" /> or <DocKbd label="Shift+Tab" /> in the dialog to see focus loop.
+
+<FileSource src="/framed/TrapFocus/TrapFocusBasic" />
+
+## With Modal
+
+[Modal](/components/Modal) and [ComposedModal](/components/ComposedModal) already trap focus. Use the helper for bespoke overlays that do not build on them.

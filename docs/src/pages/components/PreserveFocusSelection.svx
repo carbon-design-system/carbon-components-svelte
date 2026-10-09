@@ -1,0 +1,19 @@
+---
+description: PreserveFocusSelection keeps a select-on-focus selection after a click in Safari, where mouseup would collapse it.
+---
+
+## Basic
+
+Use the `preserveFocusSelection` action on a native text field that selects its text on focus. In Safari, the `mouseup` that ends a click collapses the selection. The action keeps it.
+
+The action does not select anything itself. Select the text in your own `focus` handler and pass `true` to turn the action on.
+
+<FileSource src="/framed/PreserveFocusSelection/PreserveFocusSelectionBasic" />
+
+## Toggling
+
+The action takes a boolean, so pass an expression to turn it on and off. Pass `false` when the field is disabled or when selecting on focus is switched off, which mirrors how [TimePicker](/components/TimePicker) applies it.
+
+[TextInput](/components/TextInput), [TextArea](/components/TextArea), [NumberInput](/components/NumberInput), [Search](/components/Search), and other text fields already apply the action through `selectTextOnFocus`. Reach for it directly only on a native field you build yourself.
+
+<FileSource src="/framed/PreserveFocusSelection/PreserveFocusSelectionToggling" />

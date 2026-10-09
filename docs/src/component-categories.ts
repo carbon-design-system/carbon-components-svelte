@@ -166,6 +166,12 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "SessionStorage",
       "ImageLoader",
       "Truncate",
+      "Dismiss",
+      "RovingFocus",
+      "TrapFocus",
+      "PreserveFocusSelection",
+      "FormReset",
+      "FloatingPosition",
     ],
   },
   {

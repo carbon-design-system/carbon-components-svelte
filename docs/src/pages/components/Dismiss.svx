@@ -1,0 +1,25 @@
+---
+description: Dismiss adds window listeners only while an element is open, so a closed popover, menu, or panel costs nothing.
+---
+
+## Basic
+
+Use the `dismiss` action on a custom panel to close it when the user clicks outside. Set `enabled` to the open state so the action adds the `window` listener only while the panel is open. Pass `type: "click"` with a `handler` that closes the panel when the click lands outside it.
+
+The panel's own trigger is also outside the panel, so the handler ignores clicks on the trigger and lets the trigger toggle the state.
+
+<FileSource src="/framed/Dismiss/DismissBasic" />
+
+## Multiple listeners
+
+Pass `listeners` to attach more than one listener, each with its own `type` and `handler`. Combine a `keydown` listener with a `click` listener to close the panel on <DocKbd label="Escape" /> and on an outside click.
+
+Listeners with the same `type` and options share one `window` listener across every control on the page.
+
+<FileSource src="/framed/Dismiss/DismissMultiple" />
+
+## Timing
+
+The action registers its listeners after a macrotask, not synchronously. Enabling it inside a click, such as a button that sets `open` to `true`, therefore never dismisses the panel with the same click that opened it.
+
+[Dropdown](/components/Dropdown) closes on outside click with this action, so a custom panel behaves the same way.

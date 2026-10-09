@@ -1,0 +1,25 @@
+---
+description: RovingFocus moves focus between items with arrow keys so a toolbar or tab list is one tab stop.
+---
+
+## Basic
+
+Use the `rovingFocus` action on a container so its items share a single tab stop. Pass a `selector` that matches the items, a `getActiveIndex` function that returns the current index, and an `onMove` callback that stores the next index.
+
+Press <DocKbd label="ArrowLeft" /> or <DocKbd label="ArrowRight" /> to move between items, and <DocKbd label="Home" /> or <DocKbd label="End" /> to jump to the first or last item. Set `focusOnMove` to `true` so the action focuses the new item. Give only the active item `tabindex="0"` and the rest `tabindex="-1"`.
+
+<FileSource src="/framed/RovingFocus/RovingFocusBasic" />
+
+## Orientation
+
+Set `orientation` to `"vertical"` to respond to <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> instead. Set it to `"both"` to respond to all four arrow keys, which suits a grid of items.
+
+<FileSource src="/framed/RovingFocus/RovingFocusOrientation" />
+
+## Wrapping and disabled items
+
+Focus wraps from the last item to the first by default. Set `wrap` to `false` to stop at the ends.
+
+Set `skipDisabled` to `true` to skip items that are disabled or have `aria-disabled`, so the arrow keys never land on them.
+
+<FileSource src="/framed/RovingFocus/RovingFocusWrap" />
