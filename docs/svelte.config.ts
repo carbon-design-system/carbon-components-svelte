@@ -17,6 +17,7 @@ import rehypeSlug from "rehype-slug";
 import { visit } from "unist-util-visit";
 import { highlight } from "../src/syntax/index.js";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
+import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -322,81 +323,6 @@ function serializeInlineNodes(nodes: PhrasingContent[]): string {
     .join("");
 }
 
-function paragraphToPlainText(nodes: PhrasingContent[]): string {
-  return nodes
-    .map((node: PhrasingContent): string => {
-      switch (node.type) {
-        case "text":
-          return node.value;
-        case "inlineCode":
-          return node.value;
-        case "strong":
-          return paragraphToPlainText(node.children);
-        case "emphasis":
-          return paragraphToPlainText(node.children);
-        case "link":
-          return paragraphToPlainText(node.children);
-        case "break":
-          return "\n";
-        default:
-          return "";
-      }
-    })
-    .join("");
-}
-
-function paragraphToHtml(node: Paragraph): string {
-  return serializeInlineNodes(node.children);
-}
-
-function heroIntro() {
-  return (
-    tree: Parameters<typeof visit>[0],
-    file: { path?: string; data?: { fm?: Record<string, string> } },
-  ) => {
-    if (
-      !file.path?.includes(`${path.sep}pages${path.sep}components${path.sep}`)
-    ) {
-      return;
-    }
-
-    const children = (tree as { children?: unknown[] }).children;
-    if (!children?.length) return;
-
-    const introIndices: number[] = [];
-
-    for (let i = 0; i < children.length; i++) {
-      const node = children[i] as { type?: string };
-      if (node.type === "paragraph") {
-        introIndices.push(i);
-      } else {
-        break;
-      }
-    }
-
-    if (introIndices.length === 0) return;
-
-    const paragraphs = introIndices.map((i) => children[i] as Paragraph);
-
-    const description = paragraphs
-      .map((p) => paragraphToPlainText(p.children))
-      .join("\n\n")
-      .trim();
-    const descriptionHtml = paragraphs
-      .map((p) => paragraphToHtml(p))
-      .join("<br/><br/>");
-
-    file.data = file.data ?? {};
-    file.data.fm = file.data.fm ?? {};
-    file.data.fm.description = description;
-    file.data.fm.descriptionHtml = descriptionHtml;
-
-    for (let i = introIndices.length - 1; i >= 0; i--) {
-      children.splice(introIndices[i], 1);
-    }
-  };
-}
-
 /** h2 intro that leads to subsections or a table—not a multi-paragraph demo block. */
 function isStandaloneSectionIntro(next: unknown): boolean {
   if (!next || typeof next !== "object" || !("type" in next)) return false;
@@ -614,7 +540,7 @@ export default {
     mdsvex({
       smartypants: false,
       highlight: { highlighter: mdsvexHighlighter },
-      remarkPlugins: [heroIntro, plugin, carbonify],
+      remarkPlugins: [requireLeadingHeading, plugin, carbonify],
       rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
       layout: {
         guide: path.join(__dirname, "src/layouts/GuideLayout.svelte"),

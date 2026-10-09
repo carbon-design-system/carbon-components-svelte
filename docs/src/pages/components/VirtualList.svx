@@ -33,9 +33,9 @@ description: VirtualList renders only the rows in view for long lists of arbitra
   }));
 </script>
 
-`VirtualList` renders each item through its default slot with `let:item` and `let:index`, but only mounts the items inside the scroll viewport plus `overscan` extra on each side. While scrolling, it also mounts items ahead of the viewport, as far as the last scroll moved and up to one `containerHeight`, so a fast scroll does not show blank space. `index` is the item's position in the full `items` array, not in the rendered window.
-
 ## Basic
+
+`VirtualList` renders each item through its default slot with `let:item` and `let:index`, but only mounts the items inside the scroll viewport plus `overscan` extra on each side. While scrolling, it also mounts items ahead of the viewport, as far as the last scroll moved and up to one `containerHeight`, so a fast scroll does not show blank space. `index` is the item's position in the full `items` array, not in the rendered window.
 
 Set `containerHeight` for the viewport and `itemHeight` for each row, both in pixels. Every row must render at exactly `itemHeight` for the scroll position to line up.
 
