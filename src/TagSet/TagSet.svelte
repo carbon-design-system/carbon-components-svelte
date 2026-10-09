@@ -20,7 +20,7 @@
    * @event {{ tag: TagSetItem; index: number }} close:tag - User clicks the close icon on a dismissible (`filter`) tag.
    * @event {{ count: number }} click:overflow - User clicks the "+N" indicator.
    * @event {{ count: number }} overflow:change - Dispatched when the number of overflowing tags changes, from a resize, a slotted-children change, or a `maxVisible` change.
-   * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip - Override the "+N" indicator's tooltip content. Defaults to a comma-separated list of the hidden labels.
+   * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip - Override what the "+N" indicator shows: its tooltip, or its popover with `overflowMode="popover"`. Defaults to the hidden labels as text, or as tags in the popover.
    * @restProps {div}
    */
 
@@ -40,6 +40,15 @@
    * @type {"top" | "bottom"}
    */
   export let overflowDirection = "bottom";
+
+  /**
+   * How the "+N" indicator shows the hidden tags. `"tooltip"` lists their
+   * labels in a hover tooltip. `"popover"` makes the indicator a button that
+   * opens a popover of the hidden tags themselves, so dismissible ones can
+   * still be closed and touch users can reach them.
+   * @type {"tooltip" | "popover"}
+   */
+  export let overflowMode = "tooltip";
 
   /**
    * Accessible name of the "+N" overflow indicator. Keep the visible "+N"
@@ -201,6 +210,8 @@
 
   let overflowTriggerRef = null;
   let overflowButtonRef = null;
+  let overflowContentRef = null;
+  let overflowOpen = false;
 
   /**
    * Visible tags with a focusable element, in DOM order, then the "+N"
@@ -230,6 +241,33 @@
     const entries = rovingItems();
     if (entries.some((entry) => entry.id === $tabStopId)) return;
     tabStopId.set(entries[0]?.id ?? null);
+  }
+
+  // Nothing left to disclose.
+  $: if (overflowCount === 0) overflowOpen = false;
+
+  /**
+   * A dismissible tag in the overflow popover was closed. Click the hidden
+   * original's close button, so its own `close` fires before `close:tag`, as
+   * it would from the row. The indicator keeps focus among the remaining
+   * popover tags.
+   * @param {CustomEvent<TagSetItem>} event
+   */
+  function handleOverflowTagClose({ detail: item }) {
+    /** @type {HTMLElement | null | undefined} */ (
+      item.node?.querySelector(".bx--tag__close-icon:not(:disabled)")
+    )?.click();
+  }
+
+  // The popover's last tag closed while it held focus: fall back to the
+  // "+N" indicator, else to the last visible tag.
+  function handleOverflowEmpty() {
+    const lastVisible = $items
+      .slice(0, visibleCount)
+      .map((other) => focusableIn(other.node))
+      .filter(Boolean)
+      .pop();
+    returnFocus(visibleCount < $items.length ? overflowButtonRef : lastVisible);
   }
 
   /** @param {FocusEvent} event */
@@ -336,6 +374,7 @@
     onMove: (index) => tabStopId.set(rovingItems()[index]?.id ?? null),
     focusOnMove: true,
     wrap: false,
+    itemsOnly: true,
   }}
   class:bx--tag-set={true}
   {...$$restProps}
@@ -358,6 +397,10 @@
     <TagSetOverflow
       bind:triggerRef={overflowTriggerRef}
       bind:buttonRef={overflowButtonRef}
+      bind:contentRef={overflowContentRef}
+      bind:open={overflowOpen}
+      mode={overflowMode}
+      customContent={!!$$slots.overflowTooltip}
       tabindex={$tabStopId === null
         ? undefined
         : $tabStopId === OVERFLOW_TAB_STOP
@@ -371,6 +414,8 @@
       {overflowLabel}
       {size}
       on:trigger={handleTriggerClick}
+      on:close={handleOverflowTagClose}
+      on:empty={handleOverflowEmpty}
     >
       <svelte:fragment slot="tooltip" let:tags let:count>
         <slot name="overflowTooltip" {tags} {count}>

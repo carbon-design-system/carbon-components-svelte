@@ -23,6 +23,8 @@ export type RovingFocusOptions = {
   onMove?: (index: number, event: KeyboardEvent) => void;
   /** Call `.focus()` on the new item. @default false */
   focusOnMove?: boolean;
+  /** Ignore keydown from elements outside `getItems()`, such as matching controls in a nested popover. @default false */
+  itemsOnly?: boolean;
 };
 
 /** Arrow/Home/End keydown on `node` calls `onMove` with the next index. */
