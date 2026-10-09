@@ -26,6 +26,9 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
+  /** Set to `true` to disable the remove button */
+  export let disabled = false;
+
   /** Specify the error subject text */
   export let errorSubject = "";
 
@@ -64,6 +67,7 @@
   {id}
   class:bx--file__selected-file={true}
   class:bx--file__selected-file--invalid={invalid}
+  class:bx--file__selected-file--disabled={disabled}
   class:bx--file__selected-file--md={size === "field"}
   class:bx--file__selected-file--sm={size === "small"}
   class:bx--file__selected-file--xs={size === "xs"}
@@ -92,6 +96,7 @@
       {iconDescription}
       {status}
       {invalid}
+      {disabled}
     />
   </span>
   {#if invalid && errorSubject}

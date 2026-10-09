@@ -358,6 +358,18 @@ describe("FileUploader", () => {
     expect(input).toHaveAttribute("capture", "environment");
   });
 
+  it("should disable each row's remove button when disabled", async () => {
+    const { container } = render(FileUploader, {
+      props: { disabled: true, files: [new File(["a"], "a.txt")] },
+    });
+
+    const remove = await screen.findByRole("button", { name: /remove file/i });
+    expect(remove).toBeDisabled();
+    expect(container.querySelector(".bx--file__selected-file")).toHaveClass(
+      "bx--file__selected-file--disabled",
+    );
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploader, {
       props: { accept: [".jpg", ".png"] },

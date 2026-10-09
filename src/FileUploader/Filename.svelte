@@ -67,6 +67,9 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
+  /** Set to `true` to disable the remove button */
+  export let disabled = false;
+
   $: resolvedIconLabel = resolveIconLabel(
     file,
     fileName,
@@ -99,6 +102,7 @@
     class:bx--file-close={true}
     type="button"
     tabindex="0"
+    {disabled}
     {...$$restProps}
     on:click
     on:keydown
