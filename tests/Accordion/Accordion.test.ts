@@ -9,6 +9,7 @@ import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
+import AccordionToggleChange from "./Accordion.toggleChange.test.svelte";
 import AccordionTypeToggle from "./Accordion.type-toggle.test.svelte";
 
 describe("Accordion", () => {
@@ -628,5 +629,129 @@ describe("Accordion", () => {
       "item-toggle",
       expect.anything(),
     );
+  });
+
+  describe("arrow-key navigation", () => {
+    it("moves focus to the next enabled header on ArrowDown", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.keyboard("{ArrowDown}");
+
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+
+    it("moves focus back to the first header on ArrowUp from the last", async () => {
+      render(Accordion);
+
+      screen.getByRole("button", { name: /Language Translator/ }).focus();
+      await user.keyboard("{ArrowUp}");
+
+      expect(
+        screen.getByRole("button", { name: /Natural Language Classifier/ }),
+      ).toHaveFocus();
+    });
+
+    it("moves focus to the first and last headers on Home and End", async () => {
+      render(Accordion);
+
+      screen.getByRole("button", { name: /Language Translator/ }).focus();
+      await user.keyboard("{Home}");
+      expect(
+        screen.getByRole("button", { name: /Natural Language Classifier/ }),
+      ).toHaveFocus();
+
+      await user.keyboard("{End}");
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+
+    it("does not change the expanded state", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.keyboard("{ArrowDown}{ArrowUp}{End}{Home}");
+
+      itemIsCollapsed(/Natural Language Classifier/);
+      itemIsCollapsed(/Natural Language Understanding/);
+      itemIsCollapsed(/Language Translator/);
+    });
+
+    it("keeps native Tab order", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.tab();
+
+      // The disabled header is skipped natively; focus follows DOM order.
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+  });
+
+  describe("toggle:change", () => {
+    const logged = (spy: { mock: { calls: unknown[][] } }) =>
+      spy.mock.calls
+        .filter(([name]) => name === "accordion-toggle-change")
+        .map(([, count]) => count);
+
+    it("dispatches the open count as items open and close", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange);
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      expect(logged(consoleLog)).toEqual([1]);
+
+      await user.click(screen.getByRole("button", { name: /Second/ }));
+      expect(logged(consoleLog)).toEqual([1, 2]);
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      expect(logged(consoleLog)).toEqual([1, 2, 1]);
+    });
+
+    it("does not dispatch for items mounted open", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange, { props: { open: true } });
+      await tick();
+
+      expect(consoleLog).not.toHaveBeenCalledWith(
+        "accordion-toggle-change",
+        expect.anything(),
+      );
+    });
+
+    it("settles at one when type is single", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange, { props: { type: "single" } });
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      await user.click(screen.getByRole("button", { name: /Second/ }));
+
+      itemIsCollapsed(/First/);
+      itemIsExpanded(/Second/);
+      expect(logged(consoleLog).at(-1)).toBe(1);
+      expect(logged(consoleLog)).not.toContain(2);
+    });
+
+    it("decrements the count when an open item is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange, { props: { thirdOpen: true } });
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      expect(logged(consoleLog)).toEqual([2]);
+
+      await user.click(screen.getByRole("button", { name: "Remove third" }));
+      expect(logged(consoleLog)).toEqual([2, 1]);
+    });
   });
 });

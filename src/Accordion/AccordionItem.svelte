@@ -83,6 +83,8 @@
     ctx.notifyOpen(itemKey);
   }
 
+  $: ctx.reportOpen(id, open);
+
   let previousType = get(ctx.typeStore);
 
   const unsubscribeType = ctx.typeStore.subscribe((value) => {
@@ -107,6 +109,7 @@
       unsubscribeDisableItems();
       unsubscribeOpenId();
       unsubscribeType();
+      ctx.reportOpen(id, false);
     };
   });
 </script>
