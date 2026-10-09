@@ -1,7 +1,7 @@
 <script>
   /**
    * @restProps {div}
-   * @slot {{ control: import("svelte/action").Action<HTMLElement>; controlId: string; describedBy: string | undefined; invalid: boolean; warn: boolean; }}
+   * @slot {{ control: import("svelte/action").Action<HTMLElement>; controlId: string; labelId: string | undefined; describedBy: string | undefined; invalid: boolean; warn: boolean; size: "xs" | "sm" | "xl" | undefined; fluid: boolean; }}
    */
 
   /**
@@ -15,9 +15,13 @@
   /** Set to `true` to style child labels and helper text as disabled */
   export let disabled = false;
 
-  import { setContext } from "svelte";
-  import { writable } from "svelte/store";
-  import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { getContext, setContext } from "svelte";
+  import { readable, writable } from "svelte/store";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_ITEM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -31,6 +35,10 @@
     "select",
     "textarea",
   ]);
+
+  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
+  const fluid = !!formContext?.isFluid;
 
   const sharedControlId = writable(controlId);
   const sharedDisabled = writable(disabled);
@@ -121,6 +129,7 @@
 
   $: sharedControlId.set(controlId);
   $: sharedDisabled.set(disabled);
+  $: labelId = $parts.label[0];
   $: invalid = $parts.invalid.length > 0;
   $: warn = $parts.warn.length > 0;
   $: describedBy = joinDescribedBy(
@@ -130,7 +139,7 @@
   );
   $: controlState.set({
     id: controlId,
-    labelId: $parts.label[0],
+    labelId,
     describedBy,
     invalid,
   });
@@ -144,5 +153,14 @@
   on:mouseenter
   on:mouseleave
 >
-  <slot {control} {controlId} {describedBy} {invalid} {warn} />
+  <slot
+    {control}
+    {controlId}
+    {labelId}
+    {describedBy}
+    {invalid}
+    {warn}
+    size={$formSize}
+    {fluid}
+  />
 </div>
