@@ -10,6 +10,7 @@
   export let dividers: ComponentProps<Prose>["dividers"] = undefined;
   export let tableWidth: ComponentProps<Prose>["tableWidth"] = undefined;
   export let kbd: ComponentProps<Prose>["kbd"] = undefined;
+  export let deferOffscreen: ComponentProps<Prose>["deferOffscreen"] = false;
 </script>
 
 <Prose
@@ -22,6 +23,7 @@
   {dividers}
   {tableWidth}
   {kbd}
+  {deferOffscreen}
   bind:ref
 >
   <h2>Overview</h2>
