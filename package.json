@@ -53,6 +53,7 @@
     "build:css": "bun scripts/build-css",
     "build:css:watch": "bun scripts/build-css --watch",
     "build:css:themes": "bun scripts/build-css --themes",
+    "build:syntax-tokens": "bun scripts/build-syntax-tokens.ts",
     "check:css": "crassus diff --entry all",
     "check:css:overrides": "crassus dead",
     "check:css:snapshot": "crassus capture",
@@ -74,6 +75,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "2.5.15",
+    "@carbon/themes": "11.82.0",
     "@playwright/test": "1.63.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@testing-library/jest-dom": "^7.0.1",
