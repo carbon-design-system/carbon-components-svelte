@@ -45,6 +45,13 @@
   export let fadeIn = false;
 
   /**
+   * Set to `true` to start loading the image once it comes within 600px of
+   * the viewport, instead of as soon as `src` is set.
+   * Server-rendered markup then marks the image `loading="lazy"`.
+   */
+  export let lazy = false;
+
+  /**
    * Method invoked to load the image provided a `src` value.
    * If no URL is provided, uses the component's `src` prop.
    * @type {(url?: string) => void}
@@ -69,6 +76,8 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import AspectRatio from "../AspectRatio/AspectRatio.svelte";
+  import { noop } from "../utils/noop.js";
+  import { observeIntersection } from "../utils/shared-observer.js";
 
   const dispatch = createEventDispatcher();
 
@@ -77,17 +86,49 @@
 
   let image = null;
 
+  /** In `lazy` mode, an empty element where the image will be, to observe. */
+  let sentinel = null;
+  let nearViewport = false;
+  let stopObserving = noop;
+
+  $: deferLoad = lazy && !nearViewport;
   $: loading = !loaded && !error;
-  $: if (src && typeof window !== "undefined") loadImage();
+  $: if (src && typeof window !== "undefined" && !deferLoad) loadImage();
+
+  /** @param {null | Element} element */
+  function watchSentinel(element) {
+    stopObserving();
+    stopObserving = noop;
+    if (!element) return;
+    if (typeof IntersectionObserver === "undefined") {
+      nearViewport = true;
+      return;
+    }
+    stopObserving = observeIntersection(
+      element,
+      (entry) => {
+        if (entry.isIntersecting) nearViewport = true;
+      },
+      { rootMargin: "600px" },
+    );
+  }
+
+  $: watchSentinel(deferLoad ? sentinel : null);
   $: if (loaded) dispatch("load");
   $: if (error) dispatch("error");
 
   onMount(() => {
-    return () => (image = null);
+    return () => {
+      stopObserving();
+      image = null;
+    };
   });
 </script>
 
 {#if ratio === undefined}
+  {#if deferLoad}
+    <span bind:this={sentinel} style:display="block" aria-hidden="true"></span>
+  {/if}
   {#if loading}
     <slot name="loading" />
   {/if}
@@ -107,6 +148,13 @@
   {/if}
 {:else}
   <AspectRatio {ratio}>
+    {#if deferLoad}
+      <span
+        bind:this={sentinel}
+        style:display="block"
+        aria-hidden="true"
+      ></span>
+    {/if}
     {#if loading}
       <slot name="loading" />
     {/if}
@@ -133,10 +181,17 @@
   visible `<img>` above takes over once the image has loaded. It is also in the
   first client render so hydration matches.
 
-  It only carries `src` and `alt`: forwarding `$$restProps` would duplicate
+  It only carries `src`, `alt`, and `loading="lazy"` in lazy mode, so preload
+  scanners skip it then. Forwarding `$$restProps` would duplicate
   attributes like `id` and `data-testid` with the visible `<img>`, and
   `srcset`/`crossorigin` could trigger a second request.
 -->
 {#if loading && src}
-  <img style:display="none" aria-hidden="true" {src} {alt}>
+  <img
+    style:display="none"
+    aria-hidden="true"
+    loading={lazy ? "lazy" : undefined}
+    {src}
+    {alt}
+  >
 {/if}
