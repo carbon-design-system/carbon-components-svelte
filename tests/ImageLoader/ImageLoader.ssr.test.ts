@@ -20,6 +20,12 @@ describe("ImageLoader server render", () => {
     expect(document.querySelector("img")).toHaveStyle({ display: "none" });
   });
 
+  it("marks the server <img> lazy in lazy mode", () => {
+    const { document } = renderSSR(ImageLoader, { src, lazy: true });
+
+    expect(document.querySelector("img")).toHaveAttribute("loading", "lazy");
+  });
+
   it("renders the <img> when an aspect ratio is set", () => {
     const { document } = renderSSR(ImageLoader, { src, ratio: "16x9" });
 

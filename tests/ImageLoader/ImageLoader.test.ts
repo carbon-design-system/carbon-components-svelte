@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import { tick } from "svelte";
 import ImageLoader from "./ImageLoader.test.svelte";
+import ImageLoaderLazyToggle from "./ImageLoaderLazyToggle.test.svelte";
 
 const validImageSrc =
   "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg";
@@ -161,5 +163,82 @@ describe("ImageLoader", () => {
 
     expect(error).toHaveBeenCalledTimes(1);
     expect(load).not.toHaveBeenCalled();
+  });
+
+  it("waits for the viewport before loading with lazy", async () => {
+    let trigger: ((isIntersecting: boolean) => void) | undefined;
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          trigger = (isIntersecting) =>
+            callback(
+              [{ isIntersecting, target: sentinel } as never],
+              this as never,
+            );
+        }
+        observe() {}
+        unobserve() {}
+      },
+    );
+    let sentinel: Element | null = null;
+    const { container } = render(ImageLoaderComponent, {
+      props: { src: validImageSrc, alt: "Logo", lazy: true },
+    });
+    sentinel = container.querySelector("span[aria-hidden]");
+
+    expect(FakeImage.instances).toHaveLength(0);
+    expect(container.querySelector("img")).toHaveAttribute("loading", "lazy");
+
+    trigger?.(false);
+    await tick();
+    expect(FakeImage.instances).toHaveLength(0);
+
+    trigger?.(true);
+    await tick();
+    expect(FakeImage.instances.map((image) => image.src)).toEqual([
+      validImageSrc,
+    ]);
+    expect(container.querySelector("span[aria-hidden]")).toBeNull();
+  });
+
+  it.each([
+    [undefined, "600px"],
+    ["1200px", "1200px"],
+  ])("observes with rootMargin %s in lazy mode", (rootMargin, expected) => {
+    const options: IntersectionObserverInit[] = [];
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(
+          _: IntersectionObserverCallback,
+          init: IntersectionObserverInit,
+        ) {
+          options.push(init);
+        }
+        observe() {}
+        unobserve() {}
+      },
+    );
+    render(ImageLoaderComponent, {
+      props: { src: validImageSrc, lazy: true, rootMargin },
+    });
+
+    expect(options).toEqual([{ rootMargin: expected, threshold: 0 }]);
+  });
+
+  it("doesn't reload a loaded image when lazy turns on", async () => {
+    vi.stubGlobal("IntersectionObserver", undefined);
+    const { component, container } = render(ImageLoaderLazyToggle, {
+      props: { src: validImageSrc },
+    });
+    await settle(validImageSrc, "onload");
+    expect(FakeImage.instances).toHaveLength(1);
+
+    component.lazy = true;
+    await tick();
+    await tick();
+    expect(FakeImage.instances).toHaveLength(1);
+    expect(visibleImg(container)).toBeTruthy();
   });
 });
