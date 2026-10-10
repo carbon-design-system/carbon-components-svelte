@@ -1,41 +1,44 @@
 <script>
   import {
-    Button,
     Column,
     Grid,
     GridOverlay,
+    LocalStorage,
     Row,
+    Text,
     Tile,
   } from "carbon-components-svelte";
 
-  let open = true;
+  let open = false;
 </script>
 
-<Grid fullWidth padding>
+<svelte:window
+  on:keydown={(e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "g") {
+      e.preventDefault();
+      open = !open;
+    }
+  }}
+/>
+
+<LocalStorage key="grid-overlay-open" bind:value={open} />
+
+<Grid padding>
   <Row>
     <Column>
-      <Button on:click={() => (open = !open)}>
-        {open ? "Hide" : "Show"}
-        full-width grid overlay
-      </Button>
+      <Text>
+        Click inside this frame, then press Ctrl+Shift+G (or Cmd+Shift+G). The
+        state survives a reload.
+      </Text>
     </Column>
-  </Row>
-  <Row>
-    <Column sm={4} md={8} lg={16}><Tile>Header</Tile></Column>
   </Row>
   <Row>
     <Column sm={4} md={5} lg={11}><Tile>Content</Tile></Column>
     <Column sm={4} md={3} lg={5}><Tile>Sidebar</Tile></Column>
   </Row>
-  <Row>
-    <Column sm={2} md={2} lg={4}><Tile>Card</Tile></Column>
-    <Column sm={2} md={2} lg={4}><Tile>Card</Tile></Column>
-    <Column sm={2} md={2} lg={4}><Tile>Card</Tile></Column>
-    <Column sm={2} md={2} lg={4}><Tile>Card</Tile></Column>
-  </Row>
 </Grid>
 
-<GridOverlay {open} fullWidth />
+<GridOverlay {open} baseline={8} label />
 
 <!-- docs-only:start -->
 <style>

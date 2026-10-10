@@ -23,8 +23,8 @@ describe("GridOverlay", () => {
     const { container } = render(GridOverlay, {
       props: { open: true, condensed: true },
     });
-    const overlay = container.querySelector(".bx--grid-overlay");
-    expect(overlay).toHaveClass("bx--grid--condensed");
+    const grid = container.querySelector(".bx--grid-overlay__grid");
+    expect(grid).toHaveClass("bx--grid--condensed");
   });
 
   it("should shade gutters only when gutters is set", () => {
@@ -41,7 +41,9 @@ describe("GridOverlay", () => {
     });
     const overlay = withGutters.querySelector(".bx--grid-overlay");
     expect(overlay).toHaveClass("bx--grid-overlay--gutters");
-    expect(overlay).toHaveClass("bx--grid--narrow");
+    expect(withGutters.querySelector(".bx--grid-overlay__grid")).toHaveClass(
+      "bx--grid--narrow",
+    );
     expect(overlay).toHaveClass("custom");
   });
 

@@ -72,6 +72,7 @@ export { default as DatePickerSkeleton } from "./DatePicker/DatePickerSkeleton.s
 export { default as FluidDatePickerSkeleton } from "./DatePicker/FluidDatePickerSkeleton.svelte";
 export { default as DescriptionList } from "./DescriptionList/DescriptionList.svelte";
 export { default as DescriptionListItem } from "./DescriptionList/DescriptionListItem.svelte";
+export { default as DevToolbar } from "./DevToolbar/DevToolbar.svelte";
 export { default as Dialog } from "./Dialog/Dialog.svelte";
 export { default as Disclosure } from "./Disclosure/Disclosure.svelte";
 export { default as Divider } from "./Divider/Divider.svelte";
@@ -104,6 +105,7 @@ export { default as InterstitialScreenBody } from "./InterstitialScreen/Intersti
 export { default as InterstitialScreenFooter } from "./InterstitialScreen/InterstitialScreenFooter.svelte";
 export { default as InterstitialScreenHeader } from "./InterstitialScreen/InterstitialScreenHeader.svelte";
 export { default as InterstitialScreenView } from "./InterstitialScreen/InterstitialScreenView.svelte";
+export { default as LayoutInspector } from "./LayoutInspector/LayoutInspector.svelte";
 export { default as Link } from "./Link/Link.svelte";
 export { default as LinkDownload } from "./Link/LinkDownload.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";

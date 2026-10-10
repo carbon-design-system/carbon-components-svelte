@@ -1,0 +1,183 @@
+---
+components: ["LayoutInspector"]
+description: A development aid that shows the box model, Carbon spacing and type tokens, and distances between elements, and flags off-scale spacing and small targets.
+---
+
+`LayoutInspector` answers the questions a design review asks: is this padding a spacing token, how far apart are these two elements, which type style is this text. Turn it on, hover the page, and read the answers in place.
+
+The inspector is a fixed, `pointer-events: none` layer, so the page stays fully clickable while it is open. Like [`GridOverlay`](/components/Grid#gridoverlay), it never toggles itself; the caller owns `open`.
+
+| Do | Why |
+| --- | --- |
+| Render it only in development | It reads computed styles of the hovered element on every pointer move, and the page scans walk the whole document |
+| Pair it with `GridOverlay` | The grid shows where things should go; the inspector shows the numbers behind where they are |
+
+## Spacing
+
+Hover any element to see its box model, the way browser devtools draw it: magenta for margin, green for padding, blue for the content box. Each side is labeled with its value. Labels on the Carbon spacing scale (2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 160 px) use the box color; a red label is off the scale.
+
+A card next to the element names the tokens, so `16` reads as `spacing-05`. For flex and grid containers, it also shows the `gap`.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspector" />
+
+### On and off the scale
+
+The scale is checked in `rem`, so it follows the root font size. Negative margins match by size.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorSpacing" />
+
+## Measure
+
+Hover an element, hold <DocKbd label="Alt" />, then hover a second element. On a Mac, <DocKbd label="Alt" /> is the <DocKbd label="⌥ Option" /> key. The inspector draws the distances between them, each labeled with its token:
+
+- Side by side or stacked: the gap between them.
+- One inside the other: the distance from each inner edge to the matching outer edge.
+- Overlapping: the distance between each pair of edges that differ.
+
+Release the key to go back to the box model. In these docs, click inside an example first so its frame receives key presses.
+
+Set `measureKey` to choose the key: `"Alt"` (the default), `"Shift"`, `"Control"`, or `"Meta"`. Use `"Shift"` on a keyboard without <DocKbd label="Alt" /> or <DocKbd label="⌥ Option" />, or when <DocKbd label="Alt" /> shortcuts in your app get in the way. The card's hint names the current key.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorMeasure" />
+
+Set `measure={false}` to turn measuring off.
+
+## Type
+
+Hover text to see its Carbon type token. The inspector matches font size, line height, weight, letter spacing, and family against the library's own `bx--type-*` classes, measured at the current viewport, so responsive tokens match at every breakpoint. Some tokens are aliases with identical values, such as `label-01` and `caption-01`; the card lists all matches. Text that matches no token says "no token", with its size, line height, and weight.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorType" />
+
+Set `type={false}` to hide the type row.
+
+## Colors and contrast
+
+Hover an element to see its colors on the card:
+
+- **text**: the text color, for elements with their own text.
+- **bg**: the background actually behind the element. If the element is transparent, this is the nearest ancestor's background, marked "inherited".
+- **border**: the border color, if the element has a border.
+- **contrast**: the WCAG contrast of the text against that background, rated AAA, AA, or "fails AA". Large text (24px, or 18.66px bold) needs 3:1 for AA; other text needs 4.5:1.
+
+Each color is named with the Carbon theme token that resolves to it, best fit for its role first, so a text color reads as `text-01` before `icon-01`. A color that matches no token is "off-palette". Token names come from the page's `--cds-*` custom properties, so they need a stylesheet that defines them, such as `all.css`; with a single-theme stylesheet the card shows plain values.
+
+The inspector cannot see what a background image or gradient looks like, so over one it reports the contrast as unknown, and the contrast lint skips that text. Check it by hand.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorColors" />
+
+Set `colors={false}` to hide the color rows.
+
+## Contrast lint
+
+Set `contrast` to outline all text below WCAG AA, labeled with its ratio and the ratio it needs. Text inside disabled controls is exempt, as WCAG allows.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorContrast" />
+
+## Lint
+
+Set `lint` to outline every element whose margin, padding, or gap is off the spacing scale, labeled with the values that missed. A badge in the corner counts them.
+
+By default, lint skips Carbon's own components: elements with a `bx--` class and their unstyled inner elements, such as the `<input>` inside `NumberInput`. Carbon uses a few deliberate off-scale values, so this keeps the check on your layout code. Set `lintCarbon` to check them too, and set `lintIgnore` to a selector to skip more, such as third-party widgets.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorLint" />
+
+Browsers report `auto` margins as pixel values, so lint cannot tell them apart from set ones. It skips equal left and right margins (centering) and margins wider than the largest token (160px). A one-sided `margin-left: auto` narrower than that is still flagged.
+
+## Target size
+
+Set `targets` to outline every interactive element smaller than `targetSize` in either direction, labeled with its size. The default `24` is the WCAG 2.2 AA minimum (2.5.8); `44` is the AAA size (2.5.5).
+
+A control's `<label>` counts toward its target, so a Carbon `Checkbox` passes even though its input is visually hidden. Links inside running text are exempt, as WCAG allows: an inline element whose parent also holds text is skipped. WCAG's spacing exception, where a small target passes if nothing else is within 24px of it, is not checked.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorTargets" />
+
+## Card
+
+The info card is a single element, reused as you move from one element to the next, with a fixed width so it does not resize as its content changes.
+
+Set `cardPlacement` to choose where the card goes:
+
+| Value | Behavior |
+| --- | --- |
+| `"cursor"` (default) | Follows the pointer, below and to the right. Near the right or bottom edge it flips to the other side, and it flips back only once there is clear room, so it does not jitter at an edge. |
+| `"corner"` | Stays docked in the bottom-right corner, so nothing moves while you read. It moves to the bottom-left while the pointer is near it. |
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorCard" />
+
+## Hover delay
+
+The box model waits for the pointer to rest before it appears, so sweeping across the page does not flash it. The timing works like [`TooltipGroup`](/components/TooltipGroup), with the same prop names:
+
+| Prop | Default | What it does |
+| --- | --- | --- |
+| `enterDelayMs` | `150` | How long the pointer must rest on one element before the box model first shows. The timer restarts on each new element. |
+| `leaveDelayMs` | `100` | How long the box model stays after the pointer leaves every element, so crossing a gap between elements does not hide it. |
+| `skipDelayMs` | `300` | How long after it hides that the box model comes back at once. |
+
+Once the box model shows, moving to another element updates it at once. Measuring never waits. Set `enterDelayMs` to `0` to show the box model at once.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorDelay" />
+
+## Theming
+
+Every color, type style, and spacing value in the inspector is a Carbon token.
+
+- **Annotations** are the box model, distances, and page marks. Each kind uses a Carbon Tag token pair, which adapts to the theme and is tested for contrast: the Tag background for fills and label backgrounds, and the Tag text color for lines and label text. Labels are small Carbon Tags (`label-01`, 18px, pill radius). The content box uses `$highlight` and `$interactive-04`, Carbon's selection colors. Tokens are opaque, so the box model fills fade as whole layers to keep the page visible.
+- **Chrome** is the card and the summary badge. It is built like a Carbon `Tooltip`: the inverse tokens (dark on light themes, light on dark themes), a 2px radius, the standard shadow, 16px padding, and a 288px width. Everything is flush left and reads top to bottom: the element, its size, then each fact as a label over its value. Labels use `label-01` and values `body-short-01`; only code is mono (`code-01`): hex values and token names.
+
+Carbon's palette has no orange Tag, so margins are magenta rather than the orange of browser devtools.
+
+Override any color with custom properties on the inspector, through `class` or `style`. Each takes any CSS color, including another token such as `var(--cds-tag-background-blue)`.
+
+| Kind | Fill | Line and label text |
+| --- | --- | --- |
+| Margin | `--ccs-layout-inspector-margin-fill`: `tag-background-magenta` | `--ccs-layout-inspector-margin-ink`: `tag-color-magenta` |
+| Padding | `--ccs-layout-inspector-padding-fill`: `tag-background-green` | `--ccs-layout-inspector-padding-ink`: `tag-color-green` |
+| Content | `--ccs-layout-inspector-content-fill`: `$highlight` | `--ccs-layout-inspector-content-ink`: `$interactive-04` |
+| Measure | `--ccs-layout-inspector-measure-fill`: `tag-background-purple` | `--ccs-layout-inspector-measure-ink`: `tag-color-purple` |
+| Off-scale labels | `--ccs-layout-inspector-off-fill`: `tag-background-red` | `--ccs-layout-inspector-off-ink`: `tag-color-red` |
+| Lint | `--ccs-layout-inspector-lint-fill`: `tag-background-red` | `--ccs-layout-inspector-lint-ink`: `tag-color-red` |
+| Contrast | `--ccs-layout-inspector-contrast-fill`: `tag-background-cyan` | `--ccs-layout-inspector-contrast-ink`: `tag-color-cyan` |
+| Targets | `--ccs-layout-inspector-target-fill`: `tag-background-teal` | `--ccs-layout-inspector-target-ink`: `tag-color-teal` |
+| Overflow | `--ccs-layout-inspector-overflow-fill`: `tag-background-cool-gray` | `--ccs-layout-inspector-overflow-ink`: `tag-color-cool-gray` |
+
+| Card | Default |
+| --- | --- |
+| `--ccs-layout-inspector-card-background` | `$inverse-02` |
+| `--ccs-layout-inspector-card-text` | `$inverse-01` |
+| `--ccs-layout-inspector-card-error` | `$inverse-support-01`, for failures and off-scale values |
+| `--ccs-layout-inspector-card-success` | `$inverse-support-02`, for passing contrast |
+
+The `GridOverlay` breakpoint badge follows the theme the same way.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorTheming" />
+
+## Overflow
+
+Set `overflow` to find two kinds of overflow:
+
+- **Horizontal page scroll.** When the page scrolls sideways, the inspector outlines the elements that cause it: those that reach past the page's edge while their parent does not, labeled with how far. Elements inside a box that clips or scrolls are left out, since they cannot widen the page.
+- **Clipped content.** Boxes with `overflow: hidden` or `clip` whose content does not fit, labeled with how much is hidden. Text cut off with `text-overflow: ellipsis` is labeled "truncated". Boxes that scroll are left alone, since their content is reachable.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorOverflow" />
+
+## With GridOverlay
+
+To get every tool behind one toolbar, use [`DevToolbar`](/components/DevToolbar) instead. To wire them up yourself, use both together, each behind its own shortcut. This example keeps both settings in `LocalStorage`.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorWithGridOverlay" />
+
+To keep both out of production builds, render them only in development. With Vite:
+
+```svelte
+{#if import.meta.env.DEV}
+  <GridOverlay open={grid} baseline={8} label />
+  <LayoutInspector open={inspector} />
+{/if}
+```
+
+## Playground
+
+Try every option together. The card on the right has a few off-scale values and a small link on purpose.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorPlayground" />

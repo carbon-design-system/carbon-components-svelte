@@ -1,0 +1,357 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/components/tag/tokens";
+
+/// Opacity for annotation fills drawn over the page, so the content under
+/// a margin, padding, or content box stays visible. Carbon has no opacity
+/// tokens; this is the one value the dev aids share.
+/// @access private
+$ccs-annotation-opacity: 0.6;
+
+/// LayoutInspector: a fixed, non-interactive dev aid that draws the box
+/// model of the hovered element, measures distances, and flags off-scale
+/// spacing, low contrast, small targets, and overflow.
+/// @access private
+/// @group components
+@mixin layout-inspector {
+  // Every color is a Carbon theme token, set as a custom property so it
+  // can be overridden:
+  //
+  // - Annotation hues use the Tag tokens, which come in theme-aware pairs
+  //   tested for contrast: `tag-background-*` for fills and label
+  //   backgrounds, `tag-color-*` for strokes and label text. The content
+  //   box uses `$highlight` and `$interactive-04`, Carbon's selection
+  //   colors.
+  // - The card and summary badge follow the theme like Tooltip, with the
+  //   inverse tokens.
+  .#{$prefix}--layout-inspector {
+    --ccs-layout-inspector-margin-fill: #{get-token-value($tag-colors, "tag-background-magenta")};
+    --ccs-layout-inspector-margin-ink: #{get-token-value($tag-colors, "tag-color-magenta")};
+    --ccs-layout-inspector-padding-fill: #{get-token-value($tag-colors, "tag-background-green")};
+    --ccs-layout-inspector-padding-ink: #{get-token-value($tag-colors, "tag-color-green")};
+    --ccs-layout-inspector-content-fill: #{$highlight};
+    --ccs-layout-inspector-content-ink: #{$interactive-04};
+    --ccs-layout-inspector-measure-fill: #{get-token-value($tag-colors, "tag-background-purple")};
+    --ccs-layout-inspector-measure-ink: #{get-token-value($tag-colors, "tag-color-purple")};
+    --ccs-layout-inspector-off-fill: #{get-token-value($tag-colors, "tag-background-red")};
+    --ccs-layout-inspector-off-ink: #{get-token-value($tag-colors, "tag-color-red")};
+    --ccs-layout-inspector-lint-fill: #{get-token-value($tag-colors, "tag-background-red")};
+    --ccs-layout-inspector-lint-ink: #{get-token-value($tag-colors, "tag-color-red")};
+    --ccs-layout-inspector-contrast-fill: #{get-token-value($tag-colors, "tag-background-cyan")};
+    --ccs-layout-inspector-contrast-ink: #{get-token-value($tag-colors, "tag-color-cyan")};
+    --ccs-layout-inspector-target-fill: #{get-token-value($tag-colors, "tag-background-teal")};
+    --ccs-layout-inspector-target-ink: #{get-token-value($tag-colors, "tag-color-teal")};
+    --ccs-layout-inspector-overflow-fill: #{get-token-value($tag-colors, "tag-background-cool-gray")};
+    --ccs-layout-inspector-overflow-ink: #{get-token-value($tag-colors, "tag-color-cool-gray")};
+    --ccs-layout-inspector-card-background: #{$inverse-02};
+    --ccs-layout-inspector-card-text: #{$inverse-01};
+    --ccs-layout-inspector-card-error: #{$inverse-support-01};
+    --ccs-layout-inspector-card-success: #{$inverse-support-02};
+
+    position: fixed;
+    inset: 0;
+    // Two above the highest layer in $z-indexes: over dropdowns, modals,
+    // and GridOverlay.
+    z-index: z("dropdown") + 2;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--layout-inspector__margin,
+  .#{$prefix}--layout-inspector__padding,
+  .#{$prefix}--layout-inspector__content,
+  .#{$prefix}--layout-inspector__outline,
+  .#{$prefix}--layout-inspector__segment,
+  .#{$prefix}--layout-inspector__mark {
+    position: absolute;
+    box-sizing: border-box;
+  }
+
+  // Box model -------------------------------------------------------------
+
+  // Tokens are opaque colors, so the fills fade as whole elements.
+  .#{$prefix}--layout-inspector__margin,
+  .#{$prefix}--layout-inspector__padding,
+  .#{$prefix}--layout-inspector__content {
+    opacity: $ccs-annotation-opacity;
+  }
+
+  .#{$prefix}--layout-inspector__margin {
+    border-style: solid;
+    border-color: var(--ccs-layout-inspector-margin-fill);
+  }
+
+  .#{$prefix}--layout-inspector__padding {
+    border-style: solid;
+    border-color: var(--ccs-layout-inspector-padding-fill);
+  }
+
+  .#{$prefix}--layout-inspector__content {
+    background-color: var(--ccs-layout-inspector-content-fill);
+    outline: 1px solid var(--ccs-layout-inspector-content-ink);
+    outline-offset: -1px;
+  }
+
+  .#{$prefix}--layout-inspector__outline {
+    outline: 1px solid var(--ccs-layout-inspector-measure-ink);
+  }
+
+  .#{$prefix}--layout-inspector__outline--anchor {
+    outline-width: 2px;
+  }
+
+  // Annotation labels: every value drawn on the page is a small Carbon Tag
+  // (`label-01`, 18px tall, pill radius) in the matching Tag token pair.
+  .#{$prefix}--layout-inspector__side,
+  .#{$prefix}--layout-inspector__segment-label,
+  .#{$prefix}--layout-inspector__mark-label {
+    @include type-style("label-01");
+
+    position: absolute;
+    display: inline-flex;
+    min-height: to-rem(18px);
+    align-items: center;
+    padding: 0 $carbon--spacing-03;
+    border-radius: to-rem(15px);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--layout-inspector__side {
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--layout-inspector__side--margin {
+    background-color: var(--ccs-layout-inspector-margin-fill);
+    color: var(--ccs-layout-inspector-margin-ink);
+  }
+
+  .#{$prefix}--layout-inspector__side--padding {
+    background-color: var(--ccs-layout-inspector-padding-fill);
+    color: var(--ccs-layout-inspector-padding-ink);
+  }
+
+  .#{$prefix}--layout-inspector__side.#{$prefix}--layout-inspector__side--off,
+  .#{$prefix}--layout-inspector__segment-label.#{$prefix}--layout-inspector__side--off {
+    background-color: var(--ccs-layout-inspector-off-fill);
+    color: var(--ccs-layout-inspector-off-ink);
+  }
+
+  // Distances -------------------------------------------------------------
+
+  // A 1px line, drawn as one border on a box 0px thick across the line.
+  .#{$prefix}--layout-inspector__segment {
+    height: 0;
+    border-top: 1px solid var(--ccs-layout-inspector-measure-ink);
+  }
+
+  .#{$prefix}--layout-inspector__segment--vertical {
+    width: 0;
+    border-top: 0;
+    border-left: 1px solid var(--ccs-layout-inspector-measure-ink);
+  }
+
+  .#{$prefix}--layout-inspector__segment-label {
+    top: 50%;
+    left: 50%;
+    background-color: var(--ccs-layout-inspector-measure-fill);
+    color: var(--ccs-layout-inspector-measure-ink);
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--layout-inspector__segment--vertical
+    .#{$prefix}--layout-inspector__segment-label {
+    left: $carbon--spacing-02;
+    transform: translateY(-50%);
+  }
+
+  // Card and summary badge: Carbon Tooltip chrome ------------------------
+
+  .#{$prefix}--layout-inspector__card,
+  .#{$prefix}--layout-inspector__summary {
+    @include box-shadow;
+
+    position: absolute;
+    background-color: var(--ccs-layout-inspector-card-background);
+    border-radius: to-rem(2px);
+    color: var(--ccs-layout-inspector-card-text);
+  }
+
+  // One card, reused for every element and positioned from script with a
+  // transform. Fixed at Tooltip's maximum width, so it does not resize as
+  // its content changes.
+  //
+  // Everything is flush left and reads top to bottom: a title, a meta
+  // line, then label-over-value pairs like a stacked description list.
+  // Prose and numbers are sans (`body-short-01`); only code is mono
+  // (`code-01`): selectors, hex values, and token names.
+  .#{$prefix}--layout-inspector__card {
+    @include type-style("body-short-01");
+
+    top: 0;
+    left: 0;
+    width: to-rem(288px);
+    max-width: calc(100vw - #{$carbon--spacing-05});
+    padding: $carbon--spacing-05;
+    font-variant-numeric: tabular-nums;
+    text-align: left;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--layout-inspector__card-title {
+    @include type-style("heading-01");
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--layout-inspector__card-meta {
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--layout-inspector__list {
+    display: flex;
+    flex-direction: column;
+    margin-top: $carbon--spacing-04;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--layout-inspector__term {
+    @include type-style("label-01");
+
+    display: flex;
+    align-items: center;
+    margin-bottom: $carbon--spacing-01;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--layout-inspector__desc {
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--layout-inspector__card code {
+    @include type-style("code-01");
+  }
+
+  // Legend swatches, 12px like Carbon Charts legends, ringed in the card's
+  // text color so a swatch matching the card still shows.
+  .#{$prefix}--layout-inspector__term--margin::before,
+  .#{$prefix}--layout-inspector__term--padding::before,
+  .#{$prefix}--layout-inspector__swatch {
+    width: to-rem(12px);
+    height: to-rem(12px);
+    flex: none;
+    box-shadow: 0 0 0 1px var(--ccs-layout-inspector-card-text);
+  }
+
+  .#{$prefix}--layout-inspector__term--margin::before,
+  .#{$prefix}--layout-inspector__term--padding::before {
+    content: "";
+  }
+
+  .#{$prefix}--layout-inspector__term--margin::before {
+    background-color: var(--ccs-layout-inspector-margin-fill);
+  }
+
+  .#{$prefix}--layout-inspector__term--padding::before {
+    background-color: var(--ccs-layout-inspector-padding-fill);
+  }
+
+  .#{$prefix}--layout-inspector__swatch {
+    display: inline-block;
+    margin-right: $carbon--spacing-03;
+    vertical-align: to-rem(-1px);
+  }
+
+  .#{$prefix}--layout-inspector__off {
+    color: var(--ccs-layout-inspector-card-error);
+  }
+
+  .#{$prefix}--layout-inspector__pass {
+    color: var(--ccs-layout-inspector-card-success);
+  }
+
+  .#{$prefix}--layout-inspector__hint {
+    @include type-style("label-01");
+
+    margin-top: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--layout-inspector__summary {
+    @include type-style("label-01");
+
+    bottom: $carbon--spacing-03;
+    left: $carbon--spacing-03;
+    display: flex;
+    padding: $carbon--spacing-02 $carbon--spacing-04;
+    font-variant-numeric: tabular-nums;
+    gap: $carbon--spacing-04;
+  }
+
+  // Page marks ------------------------------------------------------------
+
+  // Page marks live in page coordinates; the layer is translated by the
+  // scroll position from script.
+  .#{$prefix}--layout-inspector__page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(
+      var(--ccs-layout-inspector-x, 0),
+      var(--ccs-layout-inspector-y, 0)
+    );
+  }
+
+  .#{$prefix}--layout-inspector__mark--lint {
+    outline: 1px dashed var(--ccs-layout-inspector-lint-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--target {
+    outline: 2px solid var(--ccs-layout-inspector-target-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--contrast {
+    outline: 2px dotted var(--ccs-layout-inspector-contrast-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--overflow {
+    outline: 2px dashed var(--ccs-layout-inspector-overflow-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark-label {
+    bottom: calc(100% + #{$carbon--spacing-01});
+    left: 0;
+  }
+
+  .#{$prefix}--layout-inspector__mark--lint
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-lint-fill);
+    color: var(--ccs-layout-inspector-lint-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--target
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-target-fill);
+    color: var(--ccs-layout-inspector-target-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--contrast
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-contrast-fill);
+    color: var(--ccs-layout-inspector-contrast-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--overflow
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-overflow-fill);
+    color: var(--ccs-layout-inspector-overflow-ink);
+  }
+}
+
+@include exports("layout-inspector") {
+  @include layout-inspector;
+}

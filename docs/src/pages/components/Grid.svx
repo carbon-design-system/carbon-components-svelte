@@ -179,7 +179,8 @@ Draw the real breakpoint grid over the page to check content against the
 actual columns instead of eyeballing it. `GridOverlay` renders a fixed,
 `pointer-events: none` layer of 16 columns — hidden or shown per breakpoint
 the same way a regular `Column`'s numeric span does — so it lines up with
-`sm`/`md`/`lg`/`xlg`/`max` exactly.
+`sm`/`md`/`lg`/`xlg`/`max` exactly. It can also draw [baseline rows](#baseline-rows)
+to check vertical rhythm.
 
 `GridOverlay` never toggles its own visibility; the caller owns `open`.
 
@@ -213,6 +214,130 @@ Set `narrow` to match a narrow `Grid`, where each column drops its 16px left pad
 Set `fullWidth` to match a full-width `Grid`. It only differs from the default at the `max` breakpoint (1584px and above), where the default grid stops growing and the full-width grid keeps spanning the viewport.
 
 <FileSource src="/framed/Grid/GridOverlayFullWidth" />
+
+### Margins
+
+Set `margins` to hatch the grid's outer margins: the area outside the outermost columns. Anything drawn in the hatching has left the grid. At the `max` breakpoint the default grid stops growing, so its margins widen. Toggle `fullWidth` to compare.
+
+<FileSource src="/framed/Grid/GridOverlayMargins" />
+
+### Column numbers
+
+Set `numbers` to label each column at the top of the viewport. Use it to check spans and offsets, for example that `lg={11}` ends on column 11.
+
+<FileSource src="/framed/Grid/GridOverlayNumbers" />
+
+### Breakpoint label
+
+Set `label` to show a badge with the current breakpoint, its column count, and the viewport width. It answers "which grid am I looking at?" without opening devtools. Like a `Tooltip`, the badge follows the Carbon theme: dark on light themes, light on dark ones.
+
+<FileSource src="/framed/Grid/GridOverlayLabel" />
+
+### Baseline rows
+
+Columns check horizontal alignment. Baseline rows check vertical rhythm. Set `baseline` to a step in pixels to draw a horizontal line at every step. `8` matches Carbon's mini unit, the base of every spacing token, so box edges built from tokens land on a row.
+
+Every fourth row is drawn darker by default, so the rhythm is easier to read. The rows follow the page as it scrolls.
+
+The rows check boxes: element edges, spacing, and line boxes. They do not check where letters sit. See [Line boxes and glyph baselines](#line-boxes-and-glyph-baselines).
+
+<FileSource src="/framed/Grid/GridOverlayBaseline" />
+
+### Line boxes and glyph baselines
+
+Text has two "baselines", and the rows only line up with one of them.
+
+- **The line box** is the band each line of text takes up, as tall as its `line-height`. Most Carbon line heights (16, 20, 24, 28, 36) are multiples of 4, so with a 4px step their line boxes stack row to row. `body-short-01` is 18px tall, so its line boxes drift 2px per line.
+- **The glyph baseline** is the line the letters sit on. CSS places it inside the line box using the font's metrics, about one font size down. For IBM Plex Sans that is 14px into a `body-long-01` line and 21px into a `productive-heading-03` line. Most of these distances are not multiples of 4, so letters usually sit between rows even when the line box is on the rhythm.
+
+Carbon does not set type on a baseline grid, and CSS cannot snap glyph baselines to one without `text-box-trim`, which not every browser supports. So a gap between letters and rows is expected; it is not a bug in your layout.
+
+Set `textBaselines` to see both at once. The overlay draws a mark under every line of text at its real glyph baseline. With `baseline` set, a mark on a row is green, and a mark off a row is red with the distance to the nearest row, such as `+2`. With `label` set, the badge counts how many lines sit on a row.
+
+In this example, the dashed outlines are the elements. Their tops and bottoms land on the 4px rows; the marks under the text mostly do not.
+
+<FileSource src="/framed/Grid/GridOverlayBaselineType" />
+
+### Text baselines in a layout
+
+`textBaselines` measures every line of text on the page, including text inside components such as inputs, tags, and buttons. It measures again when the page resizes, changes, or loads a font. Use it to find text that sits at an odd offset from its neighbors, or to check a layout that does set type on a baseline grid.
+
+Set `baseline` to `0` to show the marks without rows; they are drawn in a neutral blue.
+
+<FileSource src="/framed/Grid/GridOverlayTextBaselines" />
+
+### Baseline offset
+
+Set `baselineOffset` to start the rhythm lower on the page. Use `48` below a UI Shell `Header`, which is 48px tall, so rows count from the top of the content instead of the top of the window.
+
+<FileSource src="/framed/Grid/GridOverlayBaselineOffset" />
+
+### Baseline anchor
+
+`baselineAnchor` sets what the rows are fixed to.
+
+| Value                | Behavior                                                    | Use it to                                   |
+| -------------------- | ----------------------------------------------------------- | ------------------------------------------- |
+| `"page"` (default)   | Rows move with the document, so they stay on the same content | Check content anywhere on a long page       |
+| `"viewport"`         | Rows stay still while the content scrolls under them        | Check fixed UI, such as headers and toolbars |
+
+The `"page"` anchor follows window scrolling. If your app scrolls an inner container instead of the window, the rows will not follow it; use `"viewport"`.
+
+<FileSource src="/framed/Grid/GridOverlayBaselineAnchor" />
+
+### Baseline emphasis
+
+Set `baselineEmphasis` to choose which rows are drawn darker. With an 8px step, `2` marks every 16px and `4` marks every 32px. `0` or `1` draws every row the same.
+
+<FileSource src="/framed/Grid/GridOverlayBaselineEmphasis" />
+
+### Custom colors
+
+Every overlay color is a Carbon theme token, so it adapts to the theme like the rest of the page:
+
+| What | Token |
+| --- | --- |
+| Column fill | `$highlight` |
+| Column lines and numbers | `$interactive-04` |
+| Baseline rows | `tag-background-magenta` |
+| Stronger baseline rows | `tag-color-magenta` |
+| Text baseline marks | `$support-04` (no rows), `$support-02` (on a row), `$support-01` (off a row) |
+| Text baseline offset labels | the red Tag token pair |
+
+Tokens are opaque, so the fills fade as whole layers. If the page underneath uses the same colors, set `color` and `baselineColor` to any CSS color, or a token such as `var(--cds-support-03)`.
+
+<FileSource src="/framed/Grid/GridOverlayColors" />
+
+You can also set the colors from CSS:
+
+```css
+.bx--grid-overlay {
+  --ccs-grid-overlay-fill: var(--cds-tag-background-purple);
+  --ccs-grid-overlay-ink: var(--cds-tag-color-purple);
+  --ccs-grid-overlay-row: var(--cds-tag-background-teal);
+  --ccs-grid-overlay-row-strong: var(--cds-tag-color-teal);
+}
+```
+
+### Keyboard toggle
+
+`GridOverlay` has no shortcut of its own. Wire one up in your app, and keep the state in `LocalStorage` so it survives a reload. This example toggles the overlay with <DocKbd label="Ctrl" />+<DocKbd label="Shift" />+<DocKbd label="G" /> (<DocKbd label="Cmd" />+<DocKbd label="Shift" />+<DocKbd label="G" /> on macOS).
+
+<FileSource src="/framed/Grid/GridOverlayKeyboard" />
+
+To keep the overlay out of production builds, render it only in development. With Vite:
+
+```svelte
+{#if import.meta.env.DEV}
+  <GridOverlay {open} baseline={8} label />
+{/if}
+```
+
+### Playground
+
+Try every option together. The `condensed`, `narrow`, and `fullWidth` controls change both the overlay and the `Grid` underneath, so they always match.
+
+<FileSource src="/framed/Grid/GridOverlayPlayground" />
 
 ## Breakpoints reference
 
