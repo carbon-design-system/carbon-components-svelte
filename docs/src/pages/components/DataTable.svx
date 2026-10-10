@@ -519,6 +519,24 @@ By default, stickyHeader caps the table height at 300px. Override the cap with `
 
 Set `virtualize` to render only the visible rows, improving performance for large datasets.
 
+### When to virtualize
+
+Every row a table renders costs time to mount, sort, and filter. Past a few hundred rows, set `virtualize` or `pageSize` so the table only renders the rows in view or on the current page. Virtualization stays opt-in because it changes the layout: the body gets a fixed height and the header sticks.
+
+Measured in Chromium on an Apple M2, with 1,000 rows and three columns (script, style, and layout):
+
+| Interaction | Every row rendered | `virtualize` |
+| --- | --- | --- |
+| Sort a column | about 30 ms | under 2 ms |
+| Search, narrowing to 111 rows | about 9 ms | under 2 ms |
+| Clear the search, remounting 889 rows | about 40 ms | under 2 ms |
+
+| Do | Why |
+| --- | --- |
+| Set `virtualize` or `pageSize` once a table can hold a few hundred rows. | A sort or a cleared search then touches only the rows in view, so it fits in a frame. |
+| Set `debounce` on `ToolbarSearch` when a large table renders every row. | Rows filter once typing pauses, so each keystroke paints right away. |
+| Keep cell slots light, such as text and icons, in tables that render every row. | Each row mounts its cells, so a widget in every cell multiplies the mount cost. |
+
 ### Large datasets
 
 Virtualization renders only rows visible in the viewport, improving performance for large datasets. Set `virtualize` to `true` to enable. The header stays visible while scrolling—sticky positioning is applied automatically. Use `stickyHeader` when you need the full sticky-header layout. Container height defaults to 10 rows (itemHeight × maxVisibleRows). With `stickyHeader`, a numeric `stickyHeaderMaxHeight` drives the container height instead, so the virtual window matches the visible scroll area; a string value such as `"50vh"` does not.
