@@ -33,6 +33,21 @@
 
 <ProgressBar labelText="Hidden label" hideLabel value={50} />
 
+<ProgressBar
+  kind="inline"
+  labelText="Hidden inline label"
+  hideLabel
+  value={50}
+  data-testid="hidden-label-inline"
+/>
+
+<ProgressBar
+  labelText="Hidden finished label"
+  hideLabel
+  status="finished"
+  data-testid="hidden-label-finished"
+/>
+
 <ProgressBar value={150} max={100} data-testid="over-max" />
 
 <ProgressBar value={-10} data-testid="under-zero" />
