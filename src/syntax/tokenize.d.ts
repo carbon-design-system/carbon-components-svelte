@@ -5,6 +5,7 @@
  */
 export type TokenType =
   | "angle-bracket"
+  | "annotation"
   | "attribute-name"
   | "attribute-value"
   | "bool"
@@ -18,6 +19,7 @@ export type TokenType =
   | "definition"
   | "definition-keyword"
   | "deleted"
+  | "escape"
   | "function"
   | "inserted"
   | "keyword"
