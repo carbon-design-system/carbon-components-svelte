@@ -435,7 +435,6 @@
   } from "./data-table-utils.js";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
-  import TableCell from "./TableCell.svelte";
   import TableContainer from "./TableContainer.svelte";
   import TableFoot from "./TableFoot.svelte";
   import TableHead from "./TableHead.svelte";
@@ -1307,7 +1306,7 @@
                     expanded: isExpanded,
                   })
                 : rowClass}
-            <TableRow
+            <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
               class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded
@@ -1341,7 +1340,7 @@
               }}
             >
               {#if expandable}
-                <TableCell
+                <td
                   class="bx--table-expand"
                   headers="{id}-expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
@@ -1381,7 +1380,7 @@
                       </slot>
                     </button>
                   {/if}
-                </TableCell>
+                </td>
               {/if}
               {#if isSelectionEnabled}
                 <td
@@ -1463,7 +1462,7 @@
                     </slot>
                   </td>
                 {:else}
-                  <TableCell
+                  <td
                     class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
@@ -1488,10 +1487,10 @@
                         ? cell.display(cell.value, row)
                         : cell.value}
                     </slot>
-                  </TableCell>
+                  </td>
                 {/if}
               {/each}
-            </TableRow>
+            </tr>
 
             {#if expandable}
               <tr
@@ -1509,7 +1508,7 @@
               >
                 {#if expandedRowIdsSet.has(row.id) &&
                   !nonExpandableRowIdsSet.has(row.id)}
-                  <TableCell colspan={totalColumns}>
+                  <td colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
                         name="expandedRow"
@@ -1517,7 +1516,7 @@
                         rowSelected={selectedRowIdsSet.has(row.id)}
                       />
                     </div>
-                  </TableCell>
+                  </td>
                 {/if}
               </tr>
             {/if}
@@ -1549,7 +1548,7 @@
                     expanded: isExpanded,
                   })
                 : rowClass}
-            <TableRow
+            <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
               hidden={hideMode && !matchedRowIdsSet.has(row.id)
@@ -1589,7 +1588,7 @@
               }}
             >
               {#if expandable}
-                <TableCell
+                <td
                   class="bx--table-expand"
                   headers="{id}-expand"
                   data-previous-value={isExpandable && isExpanded
@@ -1627,7 +1626,7 @@
                       </slot>
                     </button>
                   {/if}
-                </TableCell>
+                </td>
               {/if}
               {#if isSelectionEnabled}
                 <td
@@ -1709,7 +1708,7 @@
                     </slot>
                   </td>
                 {:else}
-                  <TableCell
+                  <td
                     class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
@@ -1734,10 +1733,10 @@
                         ? cell.display(cell.value, row)
                         : cell.value}
                     </slot>
-                  </TableCell>
+                  </td>
                 {/if}
               {/each}
-            </TableRow>
+            </tr>
 
             {#if expandable}
               <tr
@@ -1757,11 +1756,11 @@
                 }}
               >
                 {#if isExpanded && isExpandable}
-                  <TableCell colspan={totalColumns}>
+                  <td colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot name="expandedRow" {row} rowSelected={isSelected} />
                     </div>
-                  </TableCell>
+                  </td>
                 {/if}
               </tr>
             {/if}
