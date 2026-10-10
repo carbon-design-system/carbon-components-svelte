@@ -1,0 +1,40 @@
+@import "./carbon-tokens";
+
+/// Diff tokens color the line's background, not its text.
+/// @access private
+/// @group syntax
+$syntax-background-tokens: ("inserted", "deleted");
+
+/// Colors each token through its `--cds-syntax-<name>` property: a
+/// `.tok-<name>` class for highlighters that wrap tokens in spans, and a
+/// `::highlight(syntax-<name>)` rule for the CSS Custom Highlight API. Reads
+/// the properties only, so one stylesheet serves every theme.
+/// @access private
+/// @group syntax
+@mixin syntax-highlight {
+  @each $name, $color in map-get($ccs-syntax-tokens, light) {
+    $property: if(
+      index($syntax-background-tokens, $name),
+      background-color,
+      color
+    );
+
+    .tok-#{$name} {
+      #{$property}: var(--cds-syntax-#{$name});
+    }
+  }
+
+  // Kept apart from the `.tok-*` rules: a browser without the Highlight API
+  // drops any selector list that contains `::highlight()`.
+  @each $name, $color in map-get($ccs-syntax-tokens, light) {
+    $property: if(
+      index($syntax-background-tokens, $name),
+      background-color,
+      color
+    );
+
+    ::highlight(syntax-#{$name}) {
+      #{$property}: var(--cds-syntax-#{$name});
+    }
+  }
+}

@@ -1,0 +1,7 @@
+// Syntax highlighting for `carbon-components-svelte/syntax`: `.tok-*` classes
+// and `::highlight(syntax-*)` rules. Theme independent; load it with
+// `syntax-tokens.css` (or `syntax-tokens-<theme>.css`), which declares the
+// colors.
+@import "./syntax/highlight";
+
+@include syntax-highlight;
