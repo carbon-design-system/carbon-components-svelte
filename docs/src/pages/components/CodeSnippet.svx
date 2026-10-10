@@ -243,11 +243,11 @@ import "carbon-components-svelte/css/syntax.css";
 | Group | Token types |
 | --- | --- |
 | Keywords | `keyword` (including runes such as `$state`, `$:`, and directive prefixes such as `on`), `control-keyword` (including `{#each}` and `{@html}`), `definition-keyword`, `module-keyword` |
-| Names | `variable-name`, `definition` (including names that blocks and destructuring declare), `function`, `property-name`, `type-name`, `class-name`, `self`, `special` (including `$store` references) |
-| Literals | `string`, `special-string` (module specifiers such as `"carbon-components-svelte"`), `number`, `bool`, `null`, `regexp`, `color`, `unit` |
+| Names | `variable-name`, `definition` (including parameters and the names that blocks and destructuring declare), `function`, `property-name`, `type-name`, `class-name`, `self`, `special` (including `$store` references and template `${}` delimiters), `annotation` (decorators) |
+| Literals | `string`, `special-string` (module specifiers such as `"carbon-components-svelte"`), `escape` (escape sequences in strings), `number`, `bool`, `null`, `regexp`, `color`, `unit` |
 | Markup | `tag-name`, `attribute-name`, `attribute-value`, `angle-bracket`, `modifier` (directive modifiers such as `preventDefault`), `character` (HTML character references) |
 | Punctuation | `operator`, `punctuation`, `paren`, `brace`, `bracket` |
-| Comments | `comment`, `meta` |
+| Comments | `comment`, `meta` (including doctypes and diff headers) |
 | Diffs | `inserted`, `deleted` (color the background, not the text) |
 
 The other Carbon tokens, such as `heading-1`, `emphasis`, `link`, and `doc-comment`, are there for highlighters that emit them.
