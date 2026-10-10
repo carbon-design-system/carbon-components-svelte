@@ -115,6 +115,29 @@ html {
   background-color: var(--cds-layer-01, var(--cds-ui-01));
 }
 
+/**
+ * Carbon's syntax tokens leave strings in the text color; the docs color
+ * them magenta. Selectors match syntax-tokens.css, so these win by order.
+ */
+:root,
+:root[theme="white"],
+:root[theme="g10"] {
+  --cds-syntax-string: #9f1853; /* magenta 70 */
+  --cds-syntax-attribute-value: #9f1853;
+}
+
+:root[theme="g90"],
+:root[theme="g100"] {
+  --cds-syntax-string: #ff7eb6; /* magenta 40 */
+  --cds-syntax-attribute-value: #ff7eb6;
+}
+
+/* g80's snippet background is lighter: magenta 40 is 3.3:1 there. */
+:root[theme="g80"] {
+  --cds-syntax-string: #ffafd2; /* magenta 30 */
+  --cds-syntax-attribute-value: #ffafd2;
+}
+
 .token.builtin,
 .token.attr-name {
   color: #3ddbd9; /* teal 30 */
