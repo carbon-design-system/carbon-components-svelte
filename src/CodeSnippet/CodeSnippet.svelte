@@ -215,6 +215,7 @@
   } from "../utils/copy-feedback.js";
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
@@ -239,7 +240,8 @@
   let copyFailed = false;
   let prevExpanded = expanded;
   let exceedsThreshold = false;
-  let resizeObserver;
+  let mounted = false;
+  let stopObserving = noop;
 
   let containerRef = null;
   let yScrollable = false;
@@ -372,28 +374,41 @@
     overflowY = undefined;
   }
 
+  function onResize() {
+    measureHeight();
+    updateScrollState();
+  }
+
   // Re-measure whenever the snippet resizes (font load, content change, width
   // change causing reflow, expand/collapse transition), so the expand button
-  // and scroll fades only reflect real overflow.
-  $: if (resizeObserver) {
-    resizeObserver.disconnect();
+  // and scroll fades only reflect real overflow. Observing queues a first
+  // measurement, so it runs with every other snippet's in one batch after
+  // layout instead of forcing a layout per snippet.
+  $: if (mounted) {
+    stopObserving();
+    /** @type {Array<() => void>} */
+    const stops = [];
     if (type === "multi" && showMoreLess && ref) {
-      resizeObserver.observe(ref);
-      // Row-count props change the overflow threshold without a resize event.
+      // Row-count props change the overflow threshold without a resize, so
+      // observe again to queue a fresh measurement.
       maxCollapsedNumberOfRows;
       maxExpandedNumberOfRows;
-      measureHeight();
+      stops.push(observeResize(ref, onResize));
     } else {
       exceedsThreshold = false;
     }
     if (type === "multi" && containerRef) {
-      resizeObserver.observe(containerRef);
-      updateScrollState();
+      // The container only changes its scroll state. The content's own
+      // resize, observed above, covers the height threshold.
+      stops.push(observeResize(containerRef, updateScrollState));
     } else {
       yScrollable = false;
       atTop = true;
       atBottom = true;
     }
+    stopObserving = () => {
+      for (const stop of stops) stop();
+    };
   }
 
   $: showExpandButton = showMoreLess && type === "multi" && exceedsThreshold;
@@ -416,13 +431,10 @@
   }
 
   onMount(() => {
-    resizeObserver = new ResizeObserver(() => {
-      measureHeight();
-      updateScrollState();
-    });
+    mounted = true;
 
     return () => {
-      resizeObserver.disconnect();
+      stopObserving();
       copyFeedback.cleanup();
       disconnectModalObserver();
     };

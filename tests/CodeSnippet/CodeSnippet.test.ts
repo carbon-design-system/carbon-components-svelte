@@ -1030,4 +1030,63 @@ yarn -v`,
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("aria-label", "Code snippet");
   });
+
+  it("shares one ResizeObserver across multi-line snippets", async () => {
+    let created = 0;
+    const Base = globalThis.ResizeObserver;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class extends Base {
+        constructor(callback: ResizeObserverCallback) {
+          super(callback);
+          created++;
+        }
+      },
+    );
+    try {
+      const code = Array.from({ length: 20 }, (_, i) => `line ${i}`).join("\n");
+      for (let i = 0; i < 3; i++) {
+        render(CodeSnippet, { props: { type: "multi", code } });
+      }
+      await waitFor(() => expect(created).toBe(1));
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("measures the height once when content and container resize together", async () => {
+    let deliver: ResizeObserverCallback = () => {};
+    const observed = new Set<Element>();
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          deliver = callback;
+        }
+        observe(element: Element) {
+          observed.add(element);
+        }
+        unobserve(element: Element) {
+          observed.delete(element);
+        }
+        disconnect() {}
+      },
+    );
+    const getComputedStyle = vi.spyOn(window, "getComputedStyle");
+    try {
+      const code = Array.from({ length: 20 }, (_, i) => `line ${i}`).join("\n");
+      render(CodeSnippet, { props: { type: "multi", code } });
+      await waitFor(() => expect(observed.size).toBe(2));
+
+      getComputedStyle.mockClear();
+      const entries = [...observed].map(
+        (target) => ({ target }) as ResizeObserverEntry,
+      );
+      deliver(entries, {} as ResizeObserver);
+      expect(getComputedStyle).toHaveBeenCalledTimes(1);
+    } finally {
+      getComputedStyle.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  });
 });
