@@ -19,6 +19,7 @@
  *   | "bool"
  *   | "brace"
  *   | "bracket"
+ *   | "character"
  *   | "class-name"
  *   | "color"
  *   | "comment"
@@ -30,6 +31,7 @@
  *   | "inserted"
  *   | "keyword"
  *   | "meta"
+ *   | "modifier"
  *   | "module-keyword"
  *   | "null"
  *   | "number"
@@ -72,24 +74,27 @@
  * @typedef {[
  *   pattern: RegExp,
  *   type: TokenType | null | Classify<S>,
- *   when?: (state: S) => boolean,
+ *   when?: (state: S, at: number) => boolean,
  * ]} Rule
  */
 
-/** @typedef {{ code: string; out: Token[]; brackets: string[] }} ScriptState */
+/**
+ * `svelte` enables Svelte's script syntax: `$:` statements, runes, and
+ * `$store` references.
+ * @typedef {{ code: string; out: Token[]; brackets: string[]; svelte: boolean }} ScriptState
+ */
 
 /**
- * `depth` counts the braces and parentheses that hold declarations. `open`
- * lists every open brace and parenthesis, with an at-rule's `{` as `at`
- * (its body holds rules). `atRule` is set while an at-rule's prelude is
- * read. `number` marks that the previous token was a number, so letters
- * right after it are its unit.
+ * `selector` is set while the current statement (up to its `{`, `;`, or
+ * `}`) is a selector rather than a declaration or an at-rule prelude.
+ * `number` marks that the previous token was a number, so letters right
+ * after it are its unit. `scss` enables `//` comments, `$variables`, and
+ * `#{}` interpolation.
  * @typedef {{
  *   code: string;
- *   depth: number;
- *   open: string[];
- *   atRule: boolean;
+ *   selector: boolean;
  *   number: boolean;
+ *   scss: boolean;
  * }} CssState
  */
 
@@ -204,6 +209,14 @@ const OPEN_BRACKETS = new Set(["{", "(", "["]);
 /** Control keywords whose `{` opens an object, not a block: `return { a: 1 }`. */
 const VALUE_KEYWORDS = new Set(["return", "throw", "yield", "await", "case"]);
 const CLOSE_BRACKETS = new Set(["}", ")", "]"]);
+/** Svelte 5 runes; `$state.raw` and the like are a rune and a property. */
+const RUNES = new Set(
+  "$state $derived $effect $props $bindable $inspect $host".split(" "),
+);
+const REACTIVE_LABEL = /\$:(?!:)/y;
+const NEXT_IS_ASSIGN = /\s*=(?![=>])/y;
+const NEXT_IS_MEMBER = /^\s*[.(]/;
+const LINE_INDENT = /[ \t]/;
 /**
  * Last non-plain token before `end`, for context-dependent identifiers.
  * @param {Token[]} out
@@ -256,14 +269,16 @@ function sticky(pattern, code, at) {
  * @param {(token: Token, state: S) => void} [after]
  */
 function runRules(code, out, rules, state, after) {
+  const table = dispatchTable(rules);
   let pos = 0;
   while (pos < code.length) {
     /** @type {Token} */
     let token = { type: null, text: code[pos] };
-    for (const [pattern, type, when] of rules) {
-      if (when && !when(state)) continue;
-      const text = sticky(pattern, code, pos);
-      if (!text) continue;
+    const c = code.charCodeAt(pos);
+    for (const [pattern, type, when] of c < 128 ? table[c] : rules) {
+      pattern.lastIndex = pos;
+      const text = pattern.exec(code)?.[0];
+      if (!text || (when && !when(state, pos))) continue;
       token = {
         type: typeof type === "function" ? type(text, pos, state) : type,
         text,
@@ -299,6 +314,12 @@ const SCRIPT_RULES = [
         : "string",
   ],
   [JS_NUMBER, "number"],
+  // A Svelte 4 reactive statement, `$: doubled = count * 2`.
+  [
+    REACTIVE_LABEL,
+    "keyword",
+    (state, at) => state.svelte && startsLine(state.code, at),
+  ],
   [
     IDENTIFIER,
     (text, at, state) =>
@@ -307,31 +328,65 @@ const SCRIPT_RULES = [
         state.code,
         at,
         state.out,
-        state.brackets.at(-1) === "{",
+        state.brackets.at(-1),
+        state.svelte,
       ),
   ],
   [JS_OPERATOR, "operator"],
   [PUNCTUATION, (text) => punctuationType(text)],
 ];
-/** @type {Lexer} */
-const lexScript = (code, out) => {
+/**
+ * Whether only spaces and tabs come before `at` on its line.
+ * @param {string} code
+ * @param {number} at
+ */
+function startsLine(code, at) {
+  let i = at - 1;
+  while (i >= 0 && LINE_INDENT.test(code[i])) i--;
+  return i < 0 || code[i] === "\n";
+}
+/**
+ * @param {string} code
+ * @param {Token[]} out
+ * @param {boolean} [svelte] - read Svelte's script syntax too
+ */
+function lexScript(code, out, svelte = false) {
   runRules(
     code,
     out,
     SCRIPT_RULES,
-    /** @type {ScriptState} */ ({ code, out, brackets: [] }),
+    /** @type {ScriptState} */ ({ code, out, brackets: [], svelte }),
     ({ text }, state) => {
       if (OPEN_BRACKETS.has(text)) {
+        const previous = lastSignificant(state.out, state.out.length - 1);
         state.brackets.push(
-          text === "{" &&
-            opensBlock(lastSignificant(state.out, state.out.length - 1))
-            ? "block"
-            : text,
+          text !== "(" && startsPattern(previous, state.brackets.at(-1))
+            ? `${text}pattern`
+            : text === "{" && opensBlock(previous)
+              ? "block"
+              : text,
         );
       } else if (CLOSE_BRACKETS.has(text)) state.brackets.pop();
     },
   );
-};
+}
+/**
+ * Whether a `{` or `[` after `previous` opens a destructuring pattern:
+ * `let { a, b = 1 } = …`, `const [x, y] = …`, or one nested in another
+ * (`{ a: { b } }`, `[{ c }]`).
+ * @param {Token | undefined} previous
+ * @param {string | undefined} enclosing - the innermost open bracket
+ */
+function startsPattern(previous, enclosing) {
+  if (previous?.type === "definition-keyword") return true;
+  return (
+    enclosing?.endsWith("pattern") === true &&
+    (previous?.text === ":" ||
+      previous?.text === "," ||
+      previous?.text === "[" ||
+      previous?.text === "{")
+  );
+}
 /**
  * Whether a `{` after `previous` opens a block: `) {`, `=> {`, `else {`.
  * @param {Token | undefined} previous
@@ -348,11 +403,14 @@ function opensBlock(previous) {
  * @param {string} code
  * @param {number} pos
  * @param {Token[]} out
- * @param {boolean} inBraces - the innermost open bracket is an object or type `{`
+ * @param {string | undefined} bracket - the innermost open bracket: `{`,
+ *   `block`, `{pattern`, `[pattern`, …
+ * @param {boolean} svelte - Svelte's runes and `$store` references
  * @returns {TokenType | null}
  */
-function classifyIdentifier(name, code, pos, out, inBraces) {
+function classifyIdentifier(name, code, pos, out, bracket, svelte) {
   const previous = lastSignificant(out);
+  const inBraces = bracket === "{" || bracket === "{pattern";
   if (previous?.text === "." || previous?.text === "?.") {
     NEXT_IS_CALL.lastIndex = pos + name.length;
     return NEXT_IS_CALL.test(code) ? "function" : "property-name";
@@ -361,6 +419,23 @@ function classifyIdentifier(name, code, pos, out, inBraces) {
   if (inBraces && (!previous || BEFORE_KEY.has(previous.text))) {
     NEXT_IS_KEY_COLON.lastIndex = pos + name.length;
     if (NEXT_IS_KEY_COLON.test(code)) return "property-name";
+  }
+  // A name a destructuring pattern declares, not a default value after `=`.
+  if (
+    bracket?.endsWith("pattern") &&
+    previous?.text !== "=" &&
+    !NEXT_IS_MEMBER.test(code.slice(pos + name.length, pos + name.length + 2))
+  ) {
+    return "definition";
+  }
+  // `$: doubled = count * 2` declares `doubled`.
+  if (previous?.text === "$:") {
+    NEXT_IS_ASSIGN.lastIndex = pos + name.length;
+    if (NEXT_IS_ASSIGN.test(code)) return "definition";
+  }
+  // `$state(0)` is a rune; `$count` and `$$restProps` are Svelte's own.
+  if (svelte && name.length > 1 && name[0] === "$") {
+    return RUNES.has(name) ? "keyword" : "special";
   }
   if (CONTROL.has(name)) return "control-keyword";
   if (MODULE.has(name)) return "module-keyword";
@@ -380,6 +455,7 @@ function classifyIdentifier(name, code, pos, out, inBraces) {
   return null;
 }
 const CSS_COMMENT = /\/\*[\s\S]*?(?:\*\/|$)/y;
+const SCSS_LINE_COMMENT = /\/\/[^\n]*/y;
 const CSS_STRING = /"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?/y;
 const CSS_NUMBER = /-?(?:\d+\.?\d*|\.\d+)/y;
 const CSS_UNIT = /%|[a-z]+/iy;
@@ -387,6 +463,56 @@ const CSS_COLOR = /#[\da-f]{3,8}\b/iy;
 const CSS_AT_RULE = /@[\w-]+/y;
 const CSS_IDENT = /-?-?[A-Za-z_][\w-]*/y;
 const CSS_SELECTOR_MARK = /[.#:]{1,2}-?[A-Za-z_][\w-]*/y;
+const SCSS_VARIABLE = /\$[\w-]+/y;
+const SCSS_INTERPOLATION = /#\{[^}]*\}?/y;
+const CSS_STATEMENT_END = new Set(["{", ";", "}"]);
+/**
+ * Whether the statement starting at `at` is a selector: it reaches `{`
+ * before `;` or `}`, outside parentheses, strings, and comments, and isn't
+ * an at-rule. Statements are scanned once each, so a whole sheet stays
+ * linear.
+ * @param {string} code
+ * @param {number} at
+ * @param {boolean} scss
+ */
+function selectorAhead(code, at, scss) {
+  let depth = 0;
+  let first = true;
+  for (let i = at; i < code.length; i++) {
+    const c = code[i];
+    if (c === "/" && code[i + 1] === "*") {
+      const close = code.indexOf("*/", i + 2);
+      if (close < 0) return false;
+      i = close + 1;
+    } else if (scss && c === "/" && code[i + 1] === "/") {
+      const newline = code.indexOf("\n", i);
+      if (newline < 0) return false;
+      i = newline;
+    } else if (c === '"' || c === "'") {
+      const close = code.indexOf(c, i + 1);
+      if (close < 0) return false;
+      i = close;
+    } else if (first && c === "@") {
+      return false;
+    } else if (c === "(") {
+      depth++;
+    } else if (c === ")") {
+      depth = Math.max(0, depth - 1);
+    } else if (depth === 0 && CSS_STATEMENT_END.has(c)) {
+      // `#{…}` interpolation is part of the statement, not its end.
+      if (scss && c === "{" && code[i - 1] === "#") {
+        const close = code.indexOf("}", i);
+        if (close < 0) return false;
+        i = close;
+        continue;
+      }
+      return c === "{";
+    }
+    if (first && !WHITESPACE_CHAR.test(c)) first = false;
+  }
+  return false;
+}
+const WHITESPACE_CHAR = /\s/;
 /**
  * @param {string} text
  * @param {number} at
@@ -396,7 +522,7 @@ const CSS_SELECTOR_MARK = /[.#:]{1,2}-?[A-Za-z_][\w-]*/y;
 function cssIdentifier(text, at, state) {
   NEXT_IS_CALL.lastIndex = at + text.length;
   if (NEXT_IS_CALL.test(state.code)) return "function";
-  if (state.depth === 0) return "tag-name";
+  if (state.selector) return "tag-name";
   NEXT_IS_COLON.lastIndex = at + text.length;
   if (NEXT_IS_COLON.test(state.code)) return "property-name";
   return text.startsWith("--") ? "variable-name" : null;
@@ -405,51 +531,48 @@ function cssIdentifier(text, at, state) {
 const CSS_RULES = [
   [WHITESPACE, null],
   [CSS_COMMENT, "comment"],
+  [SCSS_LINE_COMMENT, "comment", (state) => state.scss],
+  [SCSS_INTERPOLATION, "special", (state) => state.scss],
+  [SCSS_VARIABLE, "variable-name", (state) => state.scss],
   [CSS_STRING, "string"],
   [CSS_AT_RULE, "keyword"],
-  [CSS_COLOR, "color", (state) => state.depth > 0],
+  [CSS_COLOR, "color", (state) => !state.selector],
   [
     CSS_SELECTOR_MARK,
     (text) => (text[0] === ":" ? "special" : "class-name"),
-    (state) => state.depth === 0,
+    (state) => state.selector,
   ],
-  [CSS_NUMBER, "number", (state) => state.depth > 0],
+  [CSS_NUMBER, "number", (state) => !state.selector],
   [CSS_UNIT, "unit", (state) => state.number],
   [CSS_IDENT, cssIdentifier],
   [PUNCTUATION, (text) => punctuationType(text)],
 ];
-/** @type {Lexer} */
-const lexCss = (code, out) => {
-  runRules(
+/**
+ * CSS, or SCSS with `scss`. Nested rules (CSS nesting, SCSS) and the rules
+ * inside `@media` and the like read as selectors.
+ * @param {string} code
+ * @param {Token[]} out
+ * @param {boolean} [scss]
+ */
+function lexCss(code, out, scss = false) {
+  /** @type {CssState} */
+  const state = {
     code,
-    out,
-    CSS_RULES,
-    /** @type {CssState} */ ({
-      code,
-      depth: 0,
-      number: false,
-      open: [],
-      atRule: false,
-    }),
-    (token, state) => {
-      if (token.type === "keyword" && token.text.startsWith("@")) {
-        state.atRule = true;
-      } else if (token.text === "{" || token.text === "(") {
-        const at = token.text === "{" && state.atRule && state.depth === 0;
-        state.open.push(at ? "at" : token.text);
-        if (!at) state.depth++;
-        if (token.text === "{") state.atRule = false;
-      } else if (token.text === "}" || token.text === ")") {
-        if (state.open.pop() !== "at") {
-          state.depth = Math.max(0, state.depth - 1);
-        }
-      } else if (token.text === ";") {
-        state.atRule = false;
-      }
-      state.number = token.type === "number";
-    },
-  );
-};
+    selector: selectorAhead(code, 0, scss),
+    number: false,
+    scss,
+  };
+  let end = 0;
+  runRules(code, out, CSS_RULES, state, (token, state) => {
+    end += token.text.length;
+    if (CSS_STATEMENT_END.has(token.text)) {
+      state.selector = selectorAhead(code, end, scss);
+    }
+    state.number = token.type === "number";
+  });
+}
+/** @type {Lexer} */
+const lexScss = (code, out) => lexCss(code, out, true);
 const MARKUP_COMMENT = /<!--[\s\S]*?(?:-->|$)/y;
 const TAG_OPEN = /<\/?(?=[A-Za-z])/y;
 const TAG_NAME = /[A-Za-z][\w.:-]*/y;
@@ -458,6 +581,107 @@ const QUOTED = /"[^"]*"?|'[^']*'?/y;
 const UNQUOTED = /[^\s>"'`=<]+/y;
 const BLOCK_TAG = /[#:/@][A-Za-z]+/y;
 const TEXT = /[^<{]+/y;
+const ENTITY = /&(?:#\d+|#x[\da-f]+|[a-z][a-z\d]*);/gi;
+const IDENTIFIER_TEXT = /^[A-Za-z_$][\w$]*$/;
+/** `on:click|once`, `bind:value`, `transition:fade|local`, … */
+const DIRECTIVE =
+  /^(on|bind|class|style|use|transition|in|out|animate|let):(.+)$/;
+const SCSS_LANG = /^["']?s[ac]ss["']?$/i;
+/**
+ * Bracket depth of each token in `tokens[from..]`, relative to the first.
+ * @param {Token[]} tokens
+ * @param {number} from
+ */
+function depths(tokens, from) {
+  /** @type {number[]} */
+  const result = [];
+  let depth = 0;
+  for (let i = from; i < tokens.length; i++) {
+    const { text } = tokens[i];
+    if (CLOSE_BRACKETS.has(text)) depth--;
+    result.push(depth);
+    if (OPEN_BRACKETS.has(text)) depth++;
+  }
+  return result;
+}
+/**
+ * Marks the names a binding pattern declares, in `tokens[from..to)`:
+ * `item`, `{ id, name }`, `[a, b]`, `{ id: renamed }`. Keys, types, and
+ * default values keep their colors.
+ * @param {Token[]} tokens
+ * @param {number} from
+ * @param {number} to
+ */
+function definePattern(tokens, from, to) {
+  for (let i = from; i < to; i++) {
+    const token = tokens[i];
+    if (
+      (token.type === null || token.type === "function") &&
+      IDENTIFIER_TEXT.test(token.text) &&
+      lastSignificant(tokens, i)?.text !== "="
+    ) {
+      token.type = "definition";
+    }
+  }
+}
+/**
+ * Index of the first token in `tokens[from..]` at bracket depth 0 that
+ * `match` accepts, or `tokens.length`.
+ * @param {Token[]} tokens
+ * @param {number} from
+ * @param {(token: Token) => boolean} match
+ */
+function findTopLevel(tokens, from, match) {
+  const levels = depths(tokens, from);
+  for (let i = from; i < tokens.length; i++) {
+    if (levels[i - from] === 0 && match(tokens[i])) return i;
+  }
+  return tokens.length;
+}
+/**
+ * Colors the names a block or tag declares, in its tokens `tokens[from..]`:
+ * `{#each items as item, i (item.id)}`, `{#each items, i}`,
+ * `{#await p then value}`, `{:then value}`, `{:catch error}`,
+ * `{#snippet row(item)}`, and `{@const total = a + b}`.
+ * @param {string} block - `#each`, `:then`, …
+ * @param {Token[]} tokens
+ * @param {number} from
+ */
+function defineBlockNames(block, tokens, from) {
+  const end = tokens.length;
+  if (block === "#each") {
+    const as = findTopLevel(
+      tokens,
+      from,
+      (t) => t.text === "as" && t.type === "keyword",
+    );
+    // Svelte 5 allows `{#each items, i}` without `as`.
+    const start =
+      as < end ? as + 1 : findTopLevel(tokens, from, (t) => t.text === ",");
+    const key = findTopLevel(tokens, start, (t) => t.text === "(");
+    definePattern(tokens, start, key);
+  } else if (block === ":then" || block === ":catch") {
+    definePattern(tokens, from, end);
+  } else if (block === "#await") {
+    // `then` and `catch` as words, not `p.then(…)`.
+    const then = findTopLevel(
+      tokens,
+      from,
+      (t) =>
+        (t.text === "then" && t.type === null) ||
+        (t.text === "catch" && t.type === "control-keyword"),
+    );
+    if (then < end) {
+      tokens[then].type = "control-keyword";
+      definePattern(tokens, then + 1, end);
+    }
+  } else if (block === "#snippet") {
+    definePattern(tokens, from, end);
+  } else if (block === "@const") {
+    const equals = findTopLevel(tokens, from, (t) => t.text === "=");
+    definePattern(tokens, from, equals);
+  }
+}
 /**
  * `{expression}` or `{#if …}`: braces, a block keyword, and the script inside.
  * @param {string} code
@@ -475,7 +699,9 @@ function lexMustache(code, pos, out) {
     out.push({ type: "control-keyword", text: block });
     inner = inner.slice(block.length);
   }
-  lexScript(inner, out);
+  const from = out.length;
+  lexScript(inner, out, true);
+  if (block) defineBlockNames(block, out, from);
   if (end >= 0) out.push({ type: "brace", text: "}" });
   return stop;
 }
@@ -512,6 +738,27 @@ function lexQuotedValue(code, start, out) {
   return pos;
 }
 /**
+ * An attribute name, with a directive split into its prefix, name, and
+ * modifiers: `on` `:` `click` `|` `preventDefault`.
+ * @param {string} name
+ * @param {Token[]} out
+ */
+function pushAttributeName(name, out) {
+  const directive = DIRECTIVE.exec(name);
+  if (!directive) {
+    out.push({ type: "attribute-name", text: name });
+    return;
+  }
+  out.push({ type: "keyword", text: directive[1] });
+  out.push({ type: "punctuation", text: ":" });
+  const [target, ...modifiers] = directive[2].split("|");
+  out.push({ type: "attribute-name", text: target });
+  for (const modifier of modifiers) {
+    out.push({ type: "operator", text: "|" });
+    if (modifier) out.push({ type: "modifier", text: modifier });
+  }
+}
+/**
  * A tag's attributes, up to its `>` or `/>`.
  * @param {string} code
  * @param {number} start
@@ -542,6 +789,11 @@ function lexAttributes(code, start, out) {
       whitespace || quoted || unquoted
         ? null
         : sticky(ATTRIBUTE_NAME, code, pos);
+    if (name && code[pos] !== "=") {
+      pushAttributeName(name, out);
+      pos += name.length;
+      continue;
+    }
     /** @type {Token} */
     const token = whitespace
       ? { type: null, text: whitespace }
@@ -552,13 +804,47 @@ function lexAttributes(code, start, out) {
               type: "attribute-value",
               text: /** @type {string} */ (quoted ?? unquoted),
             }
-          : name
-            ? { type: "attribute-name", text: name }
-            : { type: null, text: code[pos] };
+          : { type: null, text: code[pos] };
     out.push(token);
     pos += token.text.length;
   }
   return pos;
+}
+/**
+ * Text between tags, with character references (`&amp;`) split out.
+ * @param {string} text
+ * @param {Token[]} out
+ */
+function pushText(text, out) {
+  let last = 0;
+  if (text.includes("&")) {
+    for (const match of text.matchAll(ENTITY)) {
+      const at = match.index ?? 0;
+      if (at > last) out.push({ type: null, text: text.slice(last, at) });
+      out.push({ type: "character", text: match[0] });
+      last = at + match[0].length;
+    }
+  }
+  if (last < text.length) out.push({ type: null, text: text.slice(last) });
+}
+/**
+ * Whether the tag whose attribute tokens are `tokens[from..]` has
+ * `lang="scss"` (or `sass`).
+ * @param {Token[]} tokens
+ * @param {number} from
+ */
+function hasScssLang(tokens, from) {
+  for (let i = from; i < tokens.length - 2; i++) {
+    if (
+      tokens[i].type === "attribute-name" &&
+      (tokens[i].text === "lang" || tokens[i].text === "type") &&
+      tokens[i + 1].text === "=" &&
+      SCSS_LANG.test(tokens[i + 2].text.replace("text/", ""))
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 /** @type {Lexer} */
 const lexMarkup = (code, out) => {
@@ -577,7 +863,7 @@ const lexMarkup = (code, out) => {
     const open = sticky(TAG_OPEN, code, pos);
     if (!open) {
       const text = sticky(TEXT, code, pos) ?? code[pos];
-      out.push({ type: null, text });
+      pushText(text, out);
       pos += text.length;
       continue;
     }
@@ -585,6 +871,7 @@ const lexMarkup = (code, out) => {
     pos += open.length;
     const name = sticky(TAG_NAME, code, pos) ?? "";
     out.push({ type: "tag-name", text: name });
+    const attributes = out.length;
     pos = lexAttributes(code, pos + name.length, out);
     const close = code.startsWith("/>", pos)
       ? "/>"
@@ -602,7 +889,9 @@ const lexMarkup = (code, out) => {
     ) {
       const end = code.indexOf(`</${lower}`, pos);
       const stop = end < 0 ? code.length : end;
-      (lower === "script" ? lexScript : lexCss)(code.slice(pos, stop), out);
+      const body = code.slice(pos, stop);
+      if (lower === "script") lexScript(body, out, true);
+      else lexCss(body, out, hasScssLang(out, attributes));
       pos = stop;
     }
   }
@@ -683,6 +972,57 @@ const lexDiff = (code, out) => {
     out.push({ type, text: line });
   }
 };
+/**
+ * The characters each rule pattern can start with. `runRules` only tries
+ * the rules that can match the next character, so a position runs one or
+ * two patterns instead of every rule's. Patterns not listed are always
+ * tried.
+ * @type {Map<RegExp, RegExp>}
+ */
+const FIRST_CHAR = new Map([
+  [WHITESPACE, /\s/],
+  [JS_COMMENT, /\//],
+  [JS_REGEXP, /\//],
+  [JS_STRING, /[`"']/],
+  [JS_NUMBER, /[\d.]/],
+  [REACTIVE_LABEL, /\$/],
+  [IDENTIFIER, /[A-Za-z_$]/],
+  [JS_OPERATOR, /[=+\-.?!<>&|*%^~:/]/],
+  [PUNCTUATION, /[{}()[\];,.:]/],
+  [CSS_COMMENT, /\//],
+  [SCSS_LINE_COMMENT, /\//],
+  [SCSS_INTERPOLATION, /#/],
+  [SCSS_VARIABLE, /\$/],
+  [CSS_STRING, /["']/],
+  [CSS_AT_RULE, /@/],
+  [CSS_COLOR, /#/],
+  [CSS_SELECTOR_MARK, /[.#:]/],
+  [CSS_NUMBER, /[-\d.]/],
+  [CSS_UNIT, /[%A-Za-z]/],
+  [CSS_IDENT, /[-A-Za-z_]/],
+  [JSON_STRING, /"/],
+]);
+/** @type {WeakMap<object, Rule<any>[][]>} */
+const DISPATCH = new WeakMap();
+/**
+ * `rules` filtered by first character, for each ASCII character code.
+ * @template S
+ * @param {Rule<S>[]} rules
+ * @returns {Rule<S>[][]}
+ */
+function dispatchTable(rules) {
+  let table = DISPATCH.get(rules);
+  if (!table) {
+    table = Array.from({ length: 128 }, (_, code) =>
+      rules.filter(([pattern]) => {
+        const first = FIRST_CHAR.get(pattern);
+        return !first || first.test(String.fromCharCode(code));
+      }),
+    );
+    DISPATCH.set(rules, table);
+  }
+  return table;
+}
 /** @type {Record<string, Lexer>} */
 const LEXERS = {
   js: lexScript,
@@ -698,7 +1038,7 @@ const LEXERS = {
   xml: lexMarkup,
   svg: lexMarkup,
   css: lexCss,
-  scss: lexCss,
+  scss: lexScss,
   json: lexJson,
   jsonc: lexScript,
   sh: lexShell,
@@ -711,7 +1051,7 @@ const LEXERS = {
  * Tokens for `code` in `lang`, or `undefined` for a language it doesn't know.
  * The tokens' text joins back to `code` exactly.
  * @param {string} code
- * @param {string} lang - `js`, `ts`, `svelte`, `html`, `css`, `json`, `bash`, `diff`, and aliases
+ * @param {string} lang - `js`, `ts`, `svelte` (Svelte 4 and 5), `html`, `css`, `scss`, `json`, `bash`, `diff`, and aliases
  * @returns {Token[] | undefined}
  */
 export function tokenize(code, lang) {

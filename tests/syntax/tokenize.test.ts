@@ -59,7 +59,9 @@ describe("tokenize", () => {
       "angle-bracket:>",
       "angle-bracket:<",
       "tag-name:B",
-      "attribute-name:on:click",
+      "keyword:on",
+      "punctuation::",
+      "attribute-name:click",
       "operator:=",
       "brace:{",
       "paren:(",
@@ -120,7 +122,9 @@ describe("tokenize", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",
       "tag-name:B",
-      "attribute-name:on:click",
+      "keyword:on",
+      "punctuation::",
+      "attribute-name:click",
       "operator:=",
       'attribute-value:"',
       "brace:{",
@@ -228,5 +232,191 @@ describe("tokenize: keys, specifiers, and nesting", () => {
         "variable-name:--x",
       ]),
     );
+  });
+});
+
+/** `type:text` for the named tokens, in order. */
+const named = (code: string, lang = "svelte") => types(code, lang) ?? [];
+
+describe("tokenize: Svelte 4 and 5", () => {
+  test("declares the names blocks bind, not their expressions", () => {
+    expect(named("{#each items as item, i (item.id)}{/each}")).toEqual(
+      expect.arrayContaining(["definition:item", "definition:i"]),
+    );
+    expect(named("{#each items as item, i (item.id)}{/each}")).not.toContain(
+      "function:i",
+    );
+    expect(named("{#each rows as { id, cells: [first] }}{/each}")).toEqual(
+      expect.arrayContaining([
+        "definition:id",
+        "property-name:cells",
+        "definition:first",
+      ]),
+    );
+    // Svelte 5: no `as`.
+    expect(named("{#each { length: 3 }, i}{/each}")).toContain("definition:i");
+    expect(named("{#await p then value}{/await}")).toEqual(
+      expect.arrayContaining(["control-keyword:then", "definition:value"]),
+    );
+    expect(named("{#await load() catch error}{/await}")).toEqual(
+      expect.arrayContaining(["control-keyword:catch", "definition:error"]),
+    );
+    expect(named("{#await p.then(f)}{/await}")).not.toContain(
+      "control-keyword:then",
+    );
+    expect(named("{:then { data }}{:catch e}")).toEqual(
+      expect.arrayContaining(["definition:data", "definition:e"]),
+    );
+    expect(named("{@const { a, b } = pair}{@const total = a + b}")).toEqual(
+      expect.arrayContaining([
+        "definition:a",
+        "definition:b",
+        "definition:total",
+      ]),
+    );
+    expect(named("{#snippet row(item, index = 0)}{/snippet}")).toEqual(
+      expect.arrayContaining([
+        "definition:row",
+        "definition:item",
+        "definition:index",
+      ]),
+    );
+  });
+
+  test("splits directives into keyword, name, and modifiers", () => {
+    expect(
+      named(
+        '<a on:click|preventDefault|once={go} bind:this={el} style:--gap="1px" />',
+      ),
+    ).toEqual(
+      expect.arrayContaining([
+        "keyword:on",
+        "attribute-name:click",
+        "modifier:preventDefault",
+        "modifier:once",
+        "keyword:bind",
+        "attribute-name:this",
+        "keyword:style",
+        "attribute-name:--gap",
+      ]),
+    );
+    for (const prefix of [
+      "class",
+      "use",
+      "transition",
+      "in",
+      "out",
+      "animate",
+      "let",
+    ]) {
+      expect(named(`<a ${prefix}:x />`), prefix).toContain(`keyword:${prefix}`);
+    }
+    // Svelte 5 event attributes and `{@attach}` are plain attributes and tags.
+    expect(named("<a onclick={go} {@attach tip} />")).toEqual(
+      expect.arrayContaining([
+        "attribute-name:onclick",
+        "control-keyword:@attach",
+      ]),
+    );
+  });
+
+  test("colors runes, $store references, and $: statements in Svelte only", () => {
+    const script = `<script>
+  let { a = 1, b: renamed, ...rest } = $props();
+  let n = $state(0);
+  const d = $derived.by(() => n * 2);
+  $: doubled = $count * 2;
+  $: if (a) console.log($$restProps);
+</script>`;
+    expect(named(script)).toEqual(
+      expect.arrayContaining([
+        "definition:a",
+        "property-name:b",
+        "definition:renamed",
+        "definition:rest",
+        "keyword:$props",
+        "keyword:$state",
+        "keyword:$derived",
+        "keyword:$:",
+        "definition:doubled",
+        "special:$count",
+        "special:$$restProps",
+      ]),
+    );
+    // Plain JavaScript keeps `$` names as ordinary identifiers.
+    const js = named("const $el = $(x);\n$: a = 1;", "js");
+    expect(js).toContain("definition:$el");
+    expect(
+      js.filter((t) => t.startsWith("special:") || t === "keyword:$:"),
+    ).toEqual([]);
+  });
+
+  test("reads :global() selectors, nested rules, and SCSS in <style>", () => {
+    expect(named("<style>\n  :global(.x) .y { color: red }\n</style>")).toEqual(
+      expect.arrayContaining([
+        "special::global",
+        "class-name:.x",
+        "class-name:.y",
+      ]),
+    );
+    const scss = `<style lang="scss">
+  // comment
+  $gap: 1rem;
+  .card {
+    padding: $gap;
+    &:hover .title { color: #{$accent}; }
+    @media (min-width: 40rem) { padding: 0; }
+  }
+</style>`;
+    expect(named(scss)).toEqual(
+      expect.arrayContaining([
+        "comment:// comment",
+        "variable-name:$gap",
+        "property-name:padding",
+        "special::hover",
+        "class-name:.title",
+        "special:#{$accent}",
+        "property-name:min-width",
+      ]),
+    );
+    // Plain CSS nesting, without SCSS.
+    expect(named(".a { color: red; .b { margin: 0 } }", "css")).toEqual(
+      expect.arrayContaining(["class-name:.b", "property-name:margin"]),
+    );
+  });
+
+  test("splits character references out of text", () => {
+    expect(named("<p>a &amp; b &#123; c</p>")).toEqual(
+      expect.arrayContaining(["character:&amp;", "character:&#123;"]),
+    );
+  });
+
+  test("keeps every character of a full Svelte 4 and 5 component", () => {
+    const code = `<script lang="ts" generics="T">
+  import { fade } from "svelte/transition";
+  let { items = [], children }: { items: T[]; children?: any } = $props();
+  let open = $state(false);
+  $effect.pre(() => { if (open) console.log(items.length); });
+</script>
+
+<svelte:window on:keydown|preventDefault={(e) => e.key === "Escape" && (open = false)} />
+<svelte:boundary>
+  {#each items as item, i (i)}
+    <button class:active={open} transition:fade|local onclick={() => (open = !open)}>
+      {i}: {@html String(item)} &nbsp;
+    </button>
+  {:else}
+    {@render children?.()}
+  {/each}
+</svelte:boundary>
+
+<style lang="scss">
+  button { &.active { outline: 1px solid; } }
+</style>`;
+    expect(
+      tokenize(code, "svelte")
+        ?.map((token) => token.text)
+        .join(""),
+    ).toBe(code);
   });
 });

@@ -10,6 +10,7 @@ export type TokenType =
   | "bool"
   | "brace"
   | "bracket"
+  | "character"
   | "class-name"
   | "color"
   | "comment"
@@ -21,6 +22,7 @@ export type TokenType =
   | "inserted"
   | "keyword"
   | "meta"
+  | "modifier"
   | "module-keyword"
   | "null"
   | "number"
@@ -47,8 +49,8 @@ export interface Token {
 /**
  * Tokens for `code` in `lang`, or `undefined` for a language it doesn't know.
  * The tokens' text joins back to `code` exactly. Languages: `js`, `ts`,
- * `jsx`, `tsx`, `svelte`, `html`, `xml`, `svg`, `css`, `scss`, `json`,
- * `jsonc`, `sh`, `bash`, `shell`, `zsh`, and `diff`.
+ * `jsx`, `tsx`, `svelte` (Svelte 4 and 5), `html`, `xml`, `svg`, `css`,
+ * `scss`, `json`, `jsonc`, `sh`, `bash`, `shell`, `zsh`, and `diff`.
  */
 export function tokenize(code: string, lang: string): Token[] | undefined;
 
