@@ -200,7 +200,85 @@ Set `disabled` to `true` to disable interaction.
 
 ## Syntax highlighting
 
-CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and render highlighted HTML from Prism, Shiki, or another highlighter in the default slot with `{@html}`. Load language grammars and token theme CSS in your app.
+CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and color the rendered code with one of the approaches below.
+
+### Syntax subpackage
+
+`carbon-components-svelte/syntax` has a small highlighter for JavaScript, TypeScript, Svelte, HTML, CSS, JSON, shell, and diffs, colored with Carbon's syntax tokens. Its styles are separate stylesheets, so apps that don't highlight code don't load them.
+
+| Stylesheet | Contains | Load with |
+| --- | --- | --- |
+| `css/syntax-tokens.css` | `--cds-syntax-*` custom properties for Carbon's 88 syntax tokens, switched by `<html theme>` | `all.css` |
+| `css/syntax-tokens-<theme>.css` | The same properties for one theme | `<theme>.css` |
+| `css/syntax.css` | `.tok-*` classes and `::highlight(syntax-*)` rules that read the properties | Either tokens stylesheet |
+
+```js
+import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/syntax-tokens.css";
+import "carbon-components-svelte/css/syntax.css";
+```
+
+| Export | Use |
+| --- | --- |
+| `highlight(code, language)` | HTML with `tok-*` spans, for `{@html}` in the default slot |
+| `highlightCode` | Svelte action that colors code with the CSS Custom Highlight API, without changing the DOM |
+| `tokenize(code, language)` | `{ type, text }` runs, for your own renderer |
+
+### Build-time spans
+
+`highlight` returns HTML with each token in a `tok-*` span. Render it in the default slot.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxSpans" />
+
+### Highlight API
+
+`highlightCode` colors the first `<code>` inside the element it's on, so put it on a wrapper around the snippet. Selection and copy see plain text. Pass `code` so it re-highlights when the code changes. The [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API) is supported in Chrome 105, Safari 17.2, and Firefox 140; elsewhere the code stays plain.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxHighlightApi" />
+
+### Carbon syntax tokens
+
+`syntax-tokens.css` declares Carbon's values: one set for white and g10, and one for g80, g90, and g100 (Carbon defines no g80 values). Carbon tunes its dark set for g100, so on g80's and g90's lighter snippet backgrounds the tokens below 4.5:1 move to the next lighter step of the same color, such as blue 50 to blue 40 for `keyword` in g90. Each token `x` has a `--cds-syntax-x` property, and `syntax.css` adds a `.tok-x` class and a `::highlight(syntax-x)` rule. The highlighter emits these types:
+
+| Group | Token types |
+| --- | --- |
+| Keywords | `keyword`, `control-keyword`, `definition-keyword`, `module-keyword` |
+| Names | `variable-name`, `definition`, `function`, `property-name`, `type-name`, `class-name`, `self`, `special` |
+| Literals | `string`, `special-string` (module specifiers such as `"carbon-components-svelte"`), `number`, `bool`, `null`, `regexp`, `color`, `unit` |
+| Markup | `tag-name`, `attribute-name`, `attribute-value`, `angle-bracket` |
+| Punctuation | `operator`, `punctuation`, `paren`, `brace`, `bracket` |
+| Comments | `comment`, `meta` |
+| Diffs | `inserted`, `deleted` (color the background, not the text) |
+
+The other Carbon tokens, such as `heading-1`, `emphasis`, `link`, and `doc-comment`, are there for highlighters that emit them.
+
+### Custom token colors
+
+Override a `--cds-syntax-*` property to change a token's color. Match the selectors in `syntax-tokens.css`, load your CSS after it, and keep 4.5:1 contrast on each theme's snippet background. Carbon leaves strings in the text color; this site colors them magenta:
+
+```css
+:root,
+:root[theme="white"],
+:root[theme="g10"] {
+  --cds-syntax-string: #9f1853; /* magenta 70 */
+  --cds-syntax-attribute-value: #9f1853;
+}
+
+:root[theme="g90"],
+:root[theme="g100"] {
+  --cds-syntax-string: #ff7eb6; /* magenta 40 */
+  --cds-syntax-attribute-value: #ff7eb6;
+}
+
+:root[theme="g80"] {
+  --cds-syntax-string: #ffafd2; /* magenta 30 */
+  --cds-syntax-attribute-value: #ffafd2;
+}
+```
+
+### Third-party highlighter
+
+Render highlighted HTML from Prism, Shiki, or another highlighter in the default slot with `{@html}`. To match Carbon, color its token classes with the `--cds-syntax-*` properties, as this Prism example does.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxHighlight" />
 
