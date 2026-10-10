@@ -319,6 +319,9 @@
   }
 
   .#{$prefix}--content-switcher--low-contrast {
+    // Match the end switches' 4px corners so the gray fill doesn't show
+    // outside a selected end card's rounded ring.
+    border-radius: to-rem(4px);
     background-color: if($is-light-theme, $ui-03, transparent);
 
     .#{$prefix}--content-switcher-btn {
@@ -361,28 +364,49 @@
       }
     }
 
+    // The selected button keeps its 1px border slot (transparent) so the label
+    // doesn't shift, and the resting `border-color: $ui-04` above outranks
+    // Carbon's selected reset, so re-assert it here. The card ring is an
+    // outline inset over that slot rather than an `::after` shadow: `::after`
+    // fills only the padding box, so a ring there sat 1px inside the
+    // container edge and read as a second outline.
     .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
+      border-color: transparent;
+      border-radius: to-rem(4px);
+      outline: to-rem(1px) solid $border-inverse;
+      outline-offset: to-rem(-1px);
       background-color: transparent;
       color: $text-primary;
       font-weight: 600;
 
-      &:focus {
+      // The selected button is a stacking context (`z-index: 3`), and
+      // Chrome paints its own outline before positioned children, so the
+      // fill would cover the ring's sides on middle switches (which have no
+      // side border slot). A negative z-index keeps the fill under the
+      // outline and the label.
+      &::after {
+        z-index: -1;
         box-shadow: none;
       }
 
+      // Carbon's 2px focus ring as one outline; splitting it across the
+      // outline and an `::after` shadow left a seam where their corner
+      // curves diverged.
+      &:focus {
+        box-shadow: none;
+        outline: to-rem(2px) solid $focus;
+        outline-offset: to-rem(-2px);
+      }
+
       &:focus::after {
-        box-shadow: inset 0 0 0 to-rem(2px) $focus;
+        box-shadow: none;
         clip-path: none;
       }
 
       &:disabled {
-        border: to-rem(1px) solid $disabled-02;
-        border-radius: to-rem(4px);
+        border-color: transparent;
+        outline-color: $disabled-02;
         color: $text-disabled;
-
-        &::after {
-          box-shadow: none;
-        }
       }
     }
 
