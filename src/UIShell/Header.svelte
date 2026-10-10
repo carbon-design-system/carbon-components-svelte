@@ -93,23 +93,35 @@
    */
   export let theme = undefined;
 
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
-  import { isHeaderRendered, shouldRenderHamburgerMenu } from "./nav-store.js";
+  import {
+    shouldRenderHamburgerMenu,
+    trackHeaderRendered,
+  } from "./nav-store.js";
 
-  onMount(() => {
-    isHeaderRendered.set(true);
-    return () => {
-      isHeaderRendered.set(false);
-    };
-  });
+  onMount(() => trackHeaderRendered());
 
   /** @type {undefined | number} */
   let winWidth = undefined;
   let wasAboveBreakpoint = undefined;
+
+  const sharedExpansionBreakpoint = writable(expansionBreakpoint);
+  const sharedWinWidth = writable(undefined);
+
+  // `HeaderNav` reads these to switch at a custom `expansionBreakpoint`.
+  setContext("carbon:Header", {
+    expansionBreakpoint: sharedExpansionBreakpoint,
+    winWidth: sharedWinWidth,
+  });
+
+  $: $sharedExpansionBreakpoint = expansionBreakpoint;
+  $: $sharedWinWidth = winWidth;
   let userExplicitlySet = false;
 
   $: isAboveBreakpoint =
@@ -142,9 +154,11 @@
     wasAboveBreakpoint = isAboveBreakpoint;
   }
 
-  $: ariaLabel = companyName
-    ? companyName
-    : `${uiShellAriaLabel ?? $$props["aria-label"] ?? platformName}`;
+  // An explicit label wins over the visible names; omit an empty one.
+  $: ariaLabel =
+    uiShellAriaLabel ??
+    $$props["aria-label"] ??
+    (companyName || platformName || undefined);
   $: hamburgerAriaLabel =
     ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
 </script>
@@ -172,6 +186,7 @@
   {#if companyName || platformName || $$slots.company || $$slots.platform}
     <a
       {href}
+      rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
       class:bx--header__name={true}
       bind:this={ref}
       {...$$restProps}

@@ -31,3 +31,27 @@ describe("HeaderSideNavItems", () => {
     expect(links[1]).toHaveTextContent("Link 2");
   });
 });
+
+describe("HeaderSideNavItems roles", () => {
+  it("gives its menu items a menubar parent, like HeaderNav", () => {
+    render(HeaderSideNavItemsTest);
+
+    const list = screen.getByTestId("header-side-nav-items");
+    expect(list).toHaveAttribute("role", "menubar");
+    expect(list).toHaveAttribute("aria-orientation", "vertical");
+    for (const item of list.querySelectorAll('[role="menuitem"]')) {
+      expect(item.parentElement).toHaveAttribute("role", "none");
+      expect(item.parentElement?.parentElement).toBe(list);
+    }
+  });
+});
+
+describe("HeaderSideNavItems list semantics", () => {
+  it("sits in a list item of SideNavItems", () => {
+    render(HeaderSideNavItemsTest);
+
+    const wrapper = screen.getByTestId("header-side-nav-items").parentElement;
+    expect(wrapper?.tagName).toBe("LI");
+    expect(wrapper?.parentElement).toHaveClass("bx--side-nav__items");
+  });
+});

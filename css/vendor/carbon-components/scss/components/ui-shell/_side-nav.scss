@@ -210,7 +210,7 @@
 
   @media (any-hover: hover) {
     .#{$prefix}--side-nav__item:hover
-      .#{$prefix}--side-nav__item
+      .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active) // ccs: an active menu keeps its selected surface on hover
       > .#{$prefix}--side-nav__submenu:hover,
     .#{$prefix}--side-nav__item
       > .#{$prefix}--side-nav__link:hover,
@@ -302,8 +302,25 @@
     transform: rotate(180deg);
   }
 
-  .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__submenu {
+  .#{$prefix}--side-nav__item--large > .#{$prefix}--side-nav__submenu { // ccs: own row only, was a descendant selector
     height: mini-units(6);
+  }
+
+  .#{$prefix}--side-nav__item--active
+    > .#{$prefix}--side-nav__submenu[aria-expanded='false'] { // ccs: child combinator, so nested collapsed menus don't inherit
+    position: relative;
+    background-color: $layer-selected; // ccs: matches the current link
+    color: $text-primary;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 3px; // ccs: matches the current link's accent
+      background-color: $shell-side-nav-accent-01;
+      content: '';
+    }
   }
 
   .#{$prefix}--side-nav__menu {
@@ -374,7 +391,7 @@
       background-color $duration--fast-02 motion(standard, productive);
   }
 
-  .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__link { // ccs: flatten
+  .#{$prefix}--side-nav__item--large > .#{$prefix}--side-nav__link { // ccs: flatten, own row only (was a descendant selector)
     height: mini-units(6);
   }
 
@@ -719,4 +736,27 @@
 
 @include exports('side-nav-resize') {
   @include side-nav-resize;
+}
+
+// carbon-components-svelte patch (header side nav items expansion breakpoint)
+/// `HeaderSideNavItems` shows below Carbon's `lg` media query by default.
+/// When `expansionBreakpoint` is custom, the component adds a marker class
+/// from its measured window width. `--collapsed` (below the breakpoint)
+/// shows the items, matching the vendored rule's layout.
+/// @access private
+/// @group components
+@mixin side-nav-header-navigation-breakpoint {
+  .#{$prefix}--side-nav__header-navigation--expanded {
+    display: none;
+  }
+
+  .#{$prefix}--side-nav__header-navigation--collapsed {
+    position: relative;
+    display: block;
+    margin-bottom: to-rem(32px);
+  }
+}
+
+@include exports('side-nav-header-navigation-breakpoint') {
+  @include side-nav-header-navigation-breakpoint;
 }

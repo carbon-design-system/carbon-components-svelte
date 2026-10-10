@@ -92,7 +92,8 @@
    */
   export let leaveDelayMs = 0;
 
-  import { createEventDispatcher, onMount, tick } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import { writable } from "svelte/store";
   import {
     acquireBodyScrollLock,
     releaseBodyScrollLock,
@@ -218,6 +219,18 @@
 
   let navRef = undefined;
   let winWidth = undefined;
+
+  const sharedExpansionBreakpoint = writable(expansionBreakpoint);
+  const sharedWinWidth = writable(undefined);
+
+  // `HeaderSideNavItems` reads these to switch at a custom `expansionBreakpoint`.
+  setContext("carbon:SideNav", {
+    expansionBreakpoint: sharedExpansionBreakpoint,
+    winWidth: sharedWinWidth,
+  });
+
+  $: $sharedExpansionBreakpoint = expansionBreakpoint;
+  $: $sharedWinWidth = winWidth;
   let prevIsOpen = isOpen;
   // Double-clicking the handle restores the width the side nav started at.
   const initialWidth = width;
@@ -275,6 +288,8 @@
     return () => {
       shouldRenderHamburgerMenu.set(false);
       isSideNavMobile.set(false);
+      isSideNavCollapsed.set(false);
+      isSideNavRail.set(false);
       if (holdsBodyLock) {
         holdsBodyLock = false;
         releaseBodyScrollLock();
@@ -294,6 +309,9 @@
   <div
     on:click={() => {
       dispatch("click:overlay");
+      // Only the mobile overlay hides the nav, taking focus with it; hand
+      // it back to the hamburger, as Escape does.
+      if (isOpen && $isSideNavMobile) $hamburgerMenuRef?.focus();
       isOpen = false;
     }}
     class:bx--side-nav__overlay={true}
@@ -313,7 +331,7 @@
       trapFocus({ container: navRef, event });
     }
   }}
-  aria-hidden={!isOpen}
+  aria-hidden={!isOpen && !rail}
   aria-label={ariaLabel}
   class:bx--side-nav__navigation={true}
   class:bx--side-nav={true}

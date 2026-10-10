@@ -51,3 +51,15 @@ describe("createDomNodeRegistry", () => {
     expect(get(registry.items)).toEqual([a, b, c]);
   });
 });
+
+describe("createDomNodeRegistry flush", () => {
+  it("exposes pending registrations without waiting a microtask", () => {
+    const registry = createDomNodeRegistry();
+    const a = node();
+    registry.register(a);
+    expect(get(registry.items)).toEqual([]);
+
+    registry.flush();
+    expect(get(registry.items)).toEqual([a]);
+  });
+});

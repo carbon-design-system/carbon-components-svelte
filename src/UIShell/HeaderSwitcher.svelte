@@ -64,8 +64,11 @@
   import { returnFocusOnClose } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  const menuId = `${uniqueId()}-menu`;
 
   let refMenu = null;
 
@@ -115,6 +118,7 @@
         dispatch("open", { trigger: "toggle" });
       }
       await tick();
+      menuItemRegistry.flush();
       pickEdgeMenuItem(event.key, get(menuItems))?.focus();
     }
   }
@@ -139,8 +143,8 @@
       ],
     }}
     type="button"
-    aria-haspopup="true"
     aria-expanded={isOpen}
+    aria-controls={isOpen ? menuId : undefined}
     aria-label={text ? undefined : iconDescription}
     class:bx--header__action={true}
     class:bx--header__action--active={isOpen}
@@ -148,12 +152,13 @@
     class:bx--header-switcher__trigger={true}
     {...$$restProps}
     on:click
-    on:click|stopPropagation={async (event) => {
+    on:click={async (event) => {
       const wasOpen = isOpen;
       isOpen = !isOpen;
       dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
       if (!wasOpen && isOpen && event.detail === 0) {
         await tick();
+        menuItemRegistry.flush();
         get(menuItems)[0]?.focus();
       }
     }}
@@ -183,6 +188,7 @@
   {#if isOpen}
     <div
       bind:this={refMenu}
+      id={menuId}
       aria-label={iconDescription}
       class:bx--profile-menu={true}
       class:bx--header-switcher__menu={true}

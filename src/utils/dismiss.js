@@ -12,6 +12,13 @@ import {
  */
 
 /**
+ * Keyboard listeners register as soon as the action is enabled. Only the
+ * pointer listeners need the deferral below, and a key pressed right after
+ * opening (Chrome runs queued input before timers) must not be missed.
+ */
+const IMMEDIATE_TYPES = new Set(["keydown", "keyup"]);
+
+/**
  * Svelte action: `window` listeners while `enabled` is true.
  * Controls with the same `(type, options)` share one listener.
  * Handler updates in place without re-registering. SSR-safe.
@@ -27,12 +34,18 @@ export function dismiss(_node, options) {
   let addScheduled = false;
 
   /**
-   * @type {Array<{ key: string, pool: Pool, consumer: Consumer }>}
+   * One entry per spec; `null` while a deferred spec waits to register.
+   * @type {Array<{ key: string, pool: Pool, consumer: Consumer } | null>}
    */
   let registered = [];
 
+  // Only called with nothing registered: on creation, or after `remove()`.
   function add() {
-    if (typeof window === "undefined" || addScheduled) return;
+    if (typeof window === "undefined") return;
+    registered = specs.map((spec) =>
+      IMMEDIATE_TYPES.has(spec.type) ? registerConsumer(spec) : null,
+    );
+    if (addScheduled || registered.every(Boolean)) return;
     addScheduled = true;
     // Defer registration to the next task (not just a microtask). Enabling
     // synchronously within a click (e.g. a button outside the anchor setting
@@ -46,12 +59,14 @@ export function dismiss(_node, options) {
     setTimeout(() => {
       addScheduled = false;
       if (destroyed || !enabled) return;
-      registered = specs.map((spec) => registerConsumer(spec));
+      registered = specs.map(
+        (spec, i) => registered[i] ?? registerConsumer(spec),
+      );
     });
   }
 
   function remove() {
-    for (const entry of registered) unregisterConsumer(entry);
+    for (const entry of registered) if (entry) unregisterConsumer(entry);
     registered = [];
   }
 
@@ -71,7 +86,8 @@ export function dismiss(_node, options) {
 
       if (enabled && nextEnabled && sameShape) {
         nextSpecs.forEach((s, i) => {
-          registered[i].consumer.handler = s.handler;
+          const entry = registered[i];
+          if (entry) entry.consumer.handler = s.handler;
         });
         specs = nextSpecs;
         return;

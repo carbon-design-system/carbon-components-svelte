@@ -64,15 +64,18 @@ describe("HeaderAction", () => {
     const getActionButton = () =>
       screen.getByRole("button", { name: "Switcher" });
 
-    it("exposes aria-haspopup and toggles aria-expanded", async () => {
+    it("is a disclosure that controls its panel, not a menu button", async () => {
       render(HeaderActionOutsideClick);
 
       const button = getActionButton();
-      expect(button).toHaveAttribute("aria-haspopup", "true");
+      expect(button).not.toHaveAttribute("aria-haspopup");
       expect(button).toHaveAttribute("aria-expanded", "false");
+      expect(button).not.toHaveAttribute("aria-controls");
 
       await user.click(button);
       expect(button).toHaveAttribute("aria-expanded", "true");
+      const panel = screen.getByRole("region", { name: "Switcher" });
+      expect(button).toHaveAttribute("aria-controls", panel.id);
     });
 
     it("closes the panel and refocuses the trigger on Escape", async () => {

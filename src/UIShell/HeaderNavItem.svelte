@@ -39,12 +39,7 @@
   const id = uniqueId();
   const ctx = getContext("carbon:HeaderNavMenu");
 
-  let selectedItemIds = [];
   let menuItems = [];
-
-  const unsubSelectedItems = ctx?.selectedItems.subscribe((_selectedItems) => {
-    selectedItemIds = Object.keys(_selectedItems);
-  });
 
   const unsubMenuItems = ctx?.menuItems.subscribe((_menuItems) => {
     menuItems = _menuItems;
@@ -57,8 +52,8 @@
       ctx.registerMenuItem(ref);
     }
     return () => {
-      if (unsubSelectedItems) unsubSelectedItems();
       if (unsubMenuItems) unsubMenuItems();
+      ctx?.updateSelectedItems({ id, isSelected: false });
       if (ctx && ref) {
         ctx.unregisterMenuItem(ref);
       }
@@ -114,10 +109,10 @@
     on:focus
     on:blur
     on:blur={(event) => {
-      // Only close menu if blur is moving focus outside the menu
-      // (not when navigating between menu items with arrow keys)
+      // Only close menu if blur is moving focus outside the menu past its
+      // last item (not when navigating between menu items with arrow keys)
       if (
-        selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
+        menuItems[menuItems.length - 1] === ref &&
         (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
       ) {
         ctx?.closeMenu("blur");
