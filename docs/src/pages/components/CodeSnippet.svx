@@ -204,7 +204,7 @@ CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` 
 
 ### Syntax subpackage
 
-`carbon-components-svelte/syntax` has a small highlighter for JavaScript, TypeScript, Svelte, HTML, CSS, JSON, shell, and diffs, colored with Carbon's syntax tokens. Its styles are separate stylesheets, so apps that don't highlight code don't load them.
+`carbon-components-svelte/syntax` has a small highlighter for JavaScript, TypeScript, Svelte 4 and 5, HTML, CSS, SCSS, JSON, shell, and diffs, colored with Carbon's syntax tokens. Its styles are separate stylesheets, so apps that don't highlight code don't load them.
 
 | Stylesheet | Contains | Load with |
 | --- | --- | --- |
@@ -242,10 +242,10 @@ import "carbon-components-svelte/css/syntax.css";
 
 | Group | Token types |
 | --- | --- |
-| Keywords | `keyword`, `control-keyword`, `definition-keyword`, `module-keyword` |
-| Names | `variable-name`, `definition`, `function`, `property-name`, `type-name`, `class-name`, `self`, `special` |
+| Keywords | `keyword` (including runes such as `$state`, `$:`, and directive prefixes such as `on`), `control-keyword` (including `{#each}` and `{@html}`), `definition-keyword`, `module-keyword` |
+| Names | `variable-name`, `definition` (including names that blocks and destructuring declare), `function`, `property-name`, `type-name`, `class-name`, `self`, `special` (including `$store` references) |
 | Literals | `string`, `special-string` (module specifiers such as `"carbon-components-svelte"`), `number`, `bool`, `null`, `regexp`, `color`, `unit` |
-| Markup | `tag-name`, `attribute-name`, `attribute-value`, `angle-bracket` |
+| Markup | `tag-name`, `attribute-name`, `attribute-value`, `angle-bracket`, `modifier` (directive modifiers such as `preventDefault`), `character` (HTML character references) |
 | Punctuation | `operator`, `punctuation`, `paren`, `brace`, `bracket` |
 | Comments | `comment`, `meta` |
 | Diffs | `inserted`, `deleted` (color the background, not the text) |
