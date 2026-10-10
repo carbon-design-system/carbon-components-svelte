@@ -119,6 +119,28 @@ describe("ProgressBar", () => {
     expect(label).toHaveClass("bx--visually-hidden");
   });
 
+  it("collapses the label row when the label is hidden and nothing else shows", () => {
+    render(ProgressBar);
+
+    const el = screen.getByTestId("hidden-label-inline");
+    const row = el.querySelector(".bx--progress-bar__label");
+    expect(row).toHaveClass("bx--visually-hidden");
+    expect(
+      within(el).getByRole("progressbar", { name: "Hidden inline label" }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the label row visible for the status icon when the label is hidden", () => {
+    render(ProgressBar);
+
+    const el = screen.getByTestId("hidden-label-finished");
+    const row = el.querySelector(".bx--progress-bar__label");
+    expect(row).not.toHaveClass("bx--visually-hidden");
+    expect(screen.getByText("Hidden finished label")).toHaveClass(
+      "bx--visually-hidden",
+    );
+  });
+
   it("should cap values appropriately", () => {
     render(ProgressBar);
 
@@ -227,6 +249,9 @@ describe("ProgressBar", () => {
     const displayedValue = within(el).getByText("40 MB of 100 MB");
 
     expect(label).toHaveClass("bx--visually-hidden");
+    expect(el.querySelector(".bx--progress-bar__label")).not.toHaveClass(
+      "bx--visually-hidden",
+    );
     expect(displayedValue).not.toHaveClass("bx--visually-hidden");
     expect(progressBar).toHaveAttribute("aria-valuetext", "40 MB of 100 MB");
   });

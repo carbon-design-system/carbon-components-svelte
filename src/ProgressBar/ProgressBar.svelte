@@ -85,6 +85,9 @@
       ? Math.min(Math.max(capped / max, 0), 1)
       : 0;
 
+  $: hasStatusIcon = status === "error" || status === "finished";
+  $: hasValueText = !!valueText.trim() || !!$$slots.valueChildren;
+
   $: statusText =
     status === "error" ? errorText : status === "finished" ? finishedText : "";
   $: describedBy =
@@ -113,7 +116,10 @@
   class:bx--progress-bar--finished={status === "finished"}
   {...$$restProps}
 >
-  <div class:bx--progress-bar__label={true}>
+  <div
+    class:bx--progress-bar__label={true}
+    class:bx--visually-hidden={hideLabel && !hasStatusIcon && !hasValueText}
+  >
     <span
       id="{id}-label"
       class:bx--progress-bar__label-text={true}
@@ -122,13 +128,13 @@
     >
       <slot name="labelChildren"> {labelText} </slot>
     </span>
-    {#if status === "error" || status === "finished"}
+    {#if hasStatusIcon}
       <svelte:component
         this={statusIcons[status]}
         class="bx--progress-bar__status-icon"
       />
     {/if}
-    {#if valueText.trim() || $$slots.valueChildren}
+    {#if hasValueText}
       <span class:bx--progress-bar__value-text={true}>
         <slot name="valueChildren">{valueText}</slot>
       </span>
