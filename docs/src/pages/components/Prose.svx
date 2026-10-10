@@ -340,6 +340,18 @@ Other highlighters work too: color their tokens with the `--cds-syntax-*` proper
 }
 ```
 
+## Offscreen code blocks
+
+Set `deferOffscreen` on a page with many code blocks or figures. The browser then skips laying out and painting each `pre` and `figure` until it nears the viewport, with CSS `content-visibility: auto`. Each reserves 10rem until it first renders, then keeps its last rendered height. On a page of 60 highlighted code blocks of 20 lines each, rendering the copy took about 47 ms in Chromium, and 10 ms with `deferOffscreen`.
+
+Skipped blocks stay in find in page, anchor navigation, and the accessibility tree. Text alone is cheap to lay out, so a page without much code gains little. Tables aren't skipped: the containment that skipping needs clips anything that overflows.
+
+<Prose deferOffscreen>
+  <p>Run the build, then serve the output:</p>
+  <pre><code>npm run build
+npx vite preview</code></pre>
+</Prose>
+
 ## Usage
 
 | Do | Why |
