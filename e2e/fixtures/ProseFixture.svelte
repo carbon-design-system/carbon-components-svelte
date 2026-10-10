@@ -328,6 +328,20 @@
       </table>
     </Prose>
   </div>
+  <!-- Pushes the deferred block below the viewport. -->
+  <div style="height: 150vh"></div>
+  <Prose deferOffscreen>
+    <pre
+      data-testid="deferred-pre"
+    ><code>npm i carbon-components-svelte</code></pre>
+    <table data-testid="deferred-table">
+      <tbody>
+        <tr>
+          <td>eu-west</td>
+        </tr>
+      </tbody>
+    </table>
+  </Prose>
   <div data-testid="outside">
     <InlineNotification lowContrast hideCloseButton kind="info" title="Note">
       <svelte:fragment slot="subtitleChildren">

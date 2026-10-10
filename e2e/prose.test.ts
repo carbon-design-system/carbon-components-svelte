@@ -437,6 +437,24 @@ test.describe("Prose", () => {
     });
   }
 
+  test("skips rendering offscreen code blocks with deferOffscreen", async ({
+    page,
+  }) => {
+    // A skipped block keeps its own box; what it skips is its content.
+    const rendered = (testId: string) =>
+      page
+        .getByTestId(testId)
+        .locator(":scope > *")
+        .first()
+        .evaluate((el) => el.checkVisibility({ contentVisibilityAuto: true }));
+
+    expect(await rendered("deferred-pre")).toBe(false);
+    // Paint containment would clip a table's overflow, so tables render.
+    expect(await rendered("deferred-table")).toBe(true);
+    await page.getByTestId("deferred-pre").scrollIntoViewIfNeeded();
+    await expect.poll(() => rendered("deferred-pre")).toBe(true);
+  });
+
   test("compact uses 14px copy and smaller headings", async ({ page }) => {
     await page.goto("/prose.html?variant=compact");
 

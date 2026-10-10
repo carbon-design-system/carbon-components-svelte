@@ -65,6 +65,14 @@
   export let maxWidth = undefined;
 
   /**
+   * Set to `true` to skip rendering code blocks (`pre`) and figures while
+   * they are offscreen, with `content-visibility: auto`. They stay in find
+   * in page, anchor navigation, and the accessibility tree. Each reserves
+   * 10rem until it first renders, then its last rendered height.
+   */
+  export let deferOffscreen = false;
+
+  /**
    * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
@@ -89,6 +97,7 @@
     dividers && "bx--prose--dividers",
     tableWidth === "full" && "bx--prose--table-full",
     kbd === "muted" && "bx--prose--kbd-muted",
+    deferOffscreen && "bx--prose--defer-offscreen",
     $$restProps.class,
   ]
     .filter(Boolean)
