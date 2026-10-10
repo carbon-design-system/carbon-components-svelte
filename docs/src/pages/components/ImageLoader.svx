@@ -35,6 +35,16 @@ Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`,
 
 <ImageLoader ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
 
+## Lazy loading
+
+ImageLoader starts loading as soon as `src` is set, so an image far down the page downloads with the page. Set `lazy` to wait until the image comes within 600px of the viewport. The server-rendered markup then marks the image `loading="lazy"`, so the browser's preload scanner skips it too.
+
+Pair it with `ratio`, which reserves the image's space, so the page doesn't shift when it loads. Leave `lazy` off for images visible when the page opens, such as a hero image: they should load as early as possible.
+
+The 600px margin grows the viewport only. Inside a scroll container, such as a modal body, an image starts loading as it scrolls into the container's view.
+
+<ImageLoader lazy ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+
 ## Fade in
 
 Enable a smooth fade-in animation when the image loads successfully.
