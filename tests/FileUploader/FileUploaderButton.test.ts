@@ -564,6 +564,33 @@ describe("FileUploaderButton", () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
+  it("should reject files under minFileSize", async () => {
+    const changeHandler = vi.fn();
+    const rejectedHandler = vi.fn();
+    const { container } = render(FileUploaderButton, {
+      props: {
+        multiple: true,
+        minFileSize: 1,
+        onchange: changeHandler,
+        onrejected: rejectedHandler,
+      },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    const empty = new File([], "empty.txt");
+    const report = new File(["a"], "report.txt");
+    simulateFileSelection(input, [empty, report]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+    });
+    expect(changeHandler.mock.calls[0][0].detail).toEqual([report]);
+    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+      { file: empty, reason: "size" },
+    ]);
+  });
+
   describe("maxFileSize", () => {
     it("should reject oversized files and report them", async () => {
       const changeHandler = vi.fn();

@@ -240,6 +240,23 @@ each rejected file. Both lists show each file's size (see [File size](#file-size
 
 <FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
 
+### Minimum file size
+
+Set `minFileSize` to reject files smaller than a byte count. Use `1` to reject
+empty files, which a failed download or a cloud-only placeholder can produce.
+Smaller files are not added, and `rejected` fires with
+`{ file, reason: "size" }`, the same reason as `maxFileSize`.
+
+<FileUploader
+  minFileSize={1}
+  multiple
+  labelTitle="Upload files"
+  labelDescription="Empty files are rejected."
+  buttonLabel="Add files"
+  status="edit"
+  on:rejected={(e) => console.log(e.detail)}
+/>
+
 ### File size
 
 Set `fileSize` to show each file's size under its name. File sizes are hidden by
@@ -462,8 +479,8 @@ Customize file uploader item size with `size`. The default is `"default"`.
 Use the file uploader drop container for drag-and-drop file uploads. It supports
 multiple file selection, size and duplicate checks, and custom validation.
 
-Set `maxFileSize` and `preventDuplicate` for the same rejection reasons as
-`FileUploader` (`size`, `duplicate`). Use `validateFiles` for additional
+Set `minFileSize`, `maxFileSize`, and `preventDuplicate` for the same rejection
+reasons as `FileUploader` (`size`, `duplicate`). Use `validateFiles` for additional
 filtering; files it removes are reported with `reason: "invalid"`. Dispatches
 the same `add`, `change`, and `rejected` events described in
 [Events](#events).

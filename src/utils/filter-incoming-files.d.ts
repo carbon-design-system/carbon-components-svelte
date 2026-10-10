@@ -9,7 +9,7 @@ export type FileRejection = {
 export function fileIdentityKey(file: File): string;
 
 /**
- * Filter incoming files by max size and duplicate rules.
+ * Filter incoming files by min/max size and duplicate rules.
  *
  * `carryRefs` marks same-reference files from `existingFiles` that should not
  * be treated as duplicates (FileUploader button re-sends existing File objects).
@@ -17,6 +17,7 @@ export function fileIdentityKey(file: File): string;
 export function filterIncomingFiles(
   incoming: ReadonlyArray<File>,
   options?: {
+    minFileSize?: number;
     maxFileSize?: number;
     preventDuplicate?: boolean;
     existingFiles?: ReadonlyArray<File>;

@@ -10,10 +10,11 @@ export function fileIdentityKey(file) {
 }
 
 /**
- * Filter incoming files by max size and duplicate rules.
+ * Filter incoming files by min/max size and duplicate rules.
  *
  * @param {ReadonlyArray<File>} incoming
  * @param {{
+ *   minFileSize?: number;
  *   maxFileSize?: number;
  *   preventDuplicate?: boolean;
  *   existingFiles?: ReadonlyArray<File>;
@@ -26,6 +27,7 @@ export function fileIdentityKey(file) {
  */
 export function filterIncomingFiles(incoming, options = {}) {
   const {
+    minFileSize,
     maxFileSize,
     preventDuplicate = false,
     existingFiles = [],
@@ -37,10 +39,17 @@ export function filterIncomingFiles(incoming, options = {}) {
   /** @type {Array<{ file: File; reason: "size" | "duplicate" }>} */
   const rejected = [];
 
-  if (maxFileSize !== undefined) {
-    const oversized = accepted.filter((file) => file.size > maxFileSize);
-    accepted = accepted.filter((file) => file.size <= maxFileSize);
-    for (const file of oversized) {
+  if (minFileSize !== undefined || maxFileSize !== undefined) {
+    /** @param {File} file */
+    function isOutOfRange(file) {
+      return (
+        (minFileSize !== undefined && file.size < minFileSize) ||
+        (maxFileSize !== undefined && file.size > maxFileSize)
+      );
+    }
+    const outOfRange = accepted.filter(isOutOfRange);
+    accepted = accepted.filter((file) => !isOutOfRange(file));
+    for (const file of outOfRange) {
       rejected.push({ file, reason: "size" });
     }
   }

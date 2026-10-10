@@ -22,6 +22,14 @@
   export let multiple = false;
 
   /**
+   * Specify the minimum file size in bytes.
+   * Smaller files are filtered out and reported via the `rejected` event
+   * with `reason: 'size'`. Use `1` to reject empty files.
+   * @type {number | undefined}
+   */
+  export let minFileSize = undefined;
+
+  /**
    * Specify the maximum file size in bytes.
    * Files exceeding this limit are filtered out and reported via the
    * `rejected` event with `reason: 'size'`.
@@ -45,7 +53,7 @@
 
   /**
    * Override the default behavior of validating uploaded files.
-   * Runs after `maxFileSize` and `preventDuplicate` checks.
+   * Runs after the `minFileSize`, `maxFileSize`, and `preventDuplicate` checks.
    * Files removed by this function are reported via `rejected` with
    * `reason: 'invalid'`.
    * By default, files are not validated.
@@ -104,6 +112,7 @@
     const { accepted, rejected: builtInRejected } = filterIncomingFiles(
       incoming,
       {
+        minFileSize,
         maxFileSize,
         preventDuplicate,
         existingFiles: files,
