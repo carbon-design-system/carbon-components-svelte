@@ -1769,6 +1769,29 @@ describe("DataTable", () => {
     expect(consoleLog).toHaveBeenCalledWith("click:cell", expect.any(Object));
   });
 
+  it("dispatches cell events before row events on a cell click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(DataTable, { props: { headers, rows } });
+
+    const firstCell = within(getBodyRows()[0]).getAllByRole("cell")[0];
+    consoleLog.mockClear();
+    await user.click(firstCell);
+
+    const clicks = consoleLog.mock.calls.filter(([name]) =>
+      String(name).startsWith("click"),
+    );
+    expect(clicks.map(([name]) => name)).toEqual([
+      "click",
+      "click:cell",
+      "click",
+      "click:row",
+    ]);
+    expect(clicks[0][1]).toEqual(
+      expect.objectContaining({ cell: expect.any(Object) }),
+    );
+    expect(clicks[2][1]).not.toHaveProperty("cell");
+  });
+
   it("handles row hover events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(DataTable, {
