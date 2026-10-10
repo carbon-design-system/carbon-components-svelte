@@ -1,0 +1,78 @@
+---
+description: LazyMount defers rendering content until it nears the viewport or the browser is idle, holding a placeholder that reserves its space.
+---
+
+<script>
+  import { DataTable, LazyMount, SkeletonPlaceholder, SkeletonText } from "carbon-components-svelte";
+
+  const headers = [
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+  ];
+
+  const rows = Array.from({ length: 8 }, (_, i) => ({
+    id: i,
+    name: `Load balancer ${i + 1}`,
+    protocol: i % 2 ? "HTTPS" : "HTTP",
+    port: 3000 + i * 10,
+  }));
+
+  let mountedAt = "";
+</script>
+
+`LazyMount` renders its default slot once the wrapper comes within `rootMargin` (600px by default) of the viewport, so the content is ready before the reader scrolls to it. Until then it shows the `placeholder` slot and reserves `estimatedHeight`. Once mounted, content stays mounted.
+
+Every instance shares one `IntersectionObserver` per `rootMargin`. Without `IntersectionObserver`, content renders right away.
+
+## Basic
+
+Wrap a heavy widget, and set `estimatedHeight` close to its rendered height so the page doesn't shift when it mounts. A number is in pixels; any CSS length works.
+
+<LazyMount estimatedHeight={400}>
+  <DataTable {headers} {rows} />
+</LazyMount>
+
+## Placeholder
+
+Fill the `placeholder` slot to show something while the content waits, such as a skeleton.
+
+<LazyMount estimatedHeight="12rem">
+  <SkeletonText slot="placeholder" paragraph lines={4} />
+  <p>This paragraph rendered once it came near the viewport.</p>
+</LazyMount>
+
+## Idle
+
+Set `when` to `"idle"` to mount the content once the browser is idle, or sooner if it comes near the viewport. Use it for content just below the fold that should be ready without waiting for a scroll.
+
+<LazyMount when="idle" estimatedHeight={160}>
+  <SkeletonPlaceholder slot="placeholder" style="width: 100%; height: 160px" />
+  <DataTable size="short" {headers} rows={rows.slice(0, 3)} />
+</LazyMount>
+
+## Mount event
+
+`mount` is dispatched once, after the content first renders. Bind `mounted` to read whether it has.
+
+<LazyMount on:mount={() => (mountedAt = new Date().toLocaleTimeString())}>
+  <p>Mounted at {mountedAt}.</p>
+</LazyMount>
+
+## Eager
+
+Set `eager` to render the content right away, for example in tests, or for a page that must be complete when it loads. Content also mounts on `beforeprint`, so printing a page includes it.
+
+<LazyMount eager>
+  <p>This content rendered on the first pass.</p>
+</LazyMount>
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Wrap live examples, charts, large tables, and other widgets that are costly to mount. | They cost the most to render, and nobody sees them until scrolling there. |
+| Leave text, headings, and links unwrapped. | Content that hasn't mounted isn't in find in page, anchor links, or the accessibility tree. |
+| Set `estimatedHeight` close to the content's rendered height. | The page doesn't shift when the content mounts, and scroll anchors land in the right place. |
+| Show a placeholder for content inside a scroll container, such as a modal body. | `rootMargin` grows the viewport only, so content there mounts as it scrolls into the container's view, with no head start. |
+| Prefer CSS `content-visibility: auto` for static content that's costly to lay out. | The browser skips its rendering but keeps it in find in page and the accessibility tree. |
