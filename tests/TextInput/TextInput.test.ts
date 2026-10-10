@@ -577,6 +577,30 @@ describe("TextInput", () => {
     ).toBeInTheDocument();
   });
 
+  it("hides the inline label column when hideLabel leaves it empty", () => {
+    const { container } = render(TextInput, {
+      props: { inline: true, hideLabel: true },
+    });
+
+    expect(
+      container.querySelector(".bx--text-input__label-helper-wrapper"),
+    ).toHaveClass("bx--visually-hidden");
+    expect(
+      screen.getByRole("textbox", { name: "User name" }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the inline label column for helper text when hideLabel is set", () => {
+    const { container } = render(TextInput, {
+      props: { inline: true, hideLabel: true, helperText: "Helper text" },
+    });
+
+    expect(
+      container.querySelector(".bx--text-input__label-helper-wrapper"),
+    ).not.toHaveClass("bx--visually-hidden");
+    expect(screen.getByText("User name")).toHaveClass("bx--visually-hidden");
+  });
+
   it("should render field outer wrapper with inline class", () => {
     const { container } = render(TextInput, {
       props: { inline: true },
