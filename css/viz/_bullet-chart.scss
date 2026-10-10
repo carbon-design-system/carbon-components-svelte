@@ -1,0 +1,108 @@
+/// BulletChart: a measure against a target, over qualitative bands.
+/// @access private
+/// @group viz
+@mixin viz-bullet-chart {
+  .#{$prefix}--viz-bullet {
+    --bx-viz-size: #{to-rem(24px)};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-inline-size: to-rem(64px);
+  }
+
+  .#{$prefix}--viz-bullet--sm {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-bullet--lg {
+    --bx-viz-size: #{to-rem(32px)};
+  }
+
+  // Every layer shares one grid cell, so nothing is absolutely positioned and
+  // the graphic mirrors in RTL for free.
+  .#{$prefix}--viz-bullet__track {
+    display: grid;
+    flex: 1 1 auto;
+    align-items: center;
+    background: $ui-03;
+    block-size: var(--bx-viz-size);
+  }
+
+  .#{$prefix}--viz-bullet__bands,
+  .#{$prefix}--viz-bullet__measure,
+  .#{$prefix}--viz-bullet__target {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--viz-bullet__bands {
+    display: flex;
+    block-size: 100%;
+  }
+
+  // Bands darken toward the low end: one neutral at stepped opacity, so the
+  // ramp holds in every theme and never reads as a status color.
+  .#{$prefix}--viz-bullet__band {
+    flex: var(--bx-viz-pct) 1 0;
+    background: $ui-05;
+    opacity: calc(var(--bx-viz-step) * 0.07);
+  }
+
+  .#{$prefix}--viz-bullet__measure {
+    background: var(--bx-viz-color, #{$ui-05});
+    block-size: 34%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  // Taller than the measure, so it stays visible once the value passes it.
+  .#{$prefix}--viz-bullet__target {
+    background: $ui-05;
+    block-size: 75%;
+    inline-size: to-rem(2px);
+    // Slides from 0 to 100% minus its own width, so it never leaves the track.
+    margin-inline-start: calc(
+      var(--bx-viz-pct) * 1% - #{to-rem(2px)} * var(--bx-viz-pct) / 100
+    );
+    transition: margin-inline-start $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-bullet__value {
+    flex: none;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-bullet__measure,
+    .#{$prefix}--viz-bullet__target {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-bullet__track {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-bullet__band {
+      border-inline-end: 1px solid CanvasText;
+      background: none;
+      opacity: 1;
+    }
+
+    .#{$prefix}--viz-bullet__measure,
+    .#{$prefix}--viz-bullet__target {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-bullet-chart") {
+  @include viz-bullet-chart;
+}

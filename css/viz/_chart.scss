@@ -1,0 +1,726 @@
+/// Chart: the figure, plot box, and SVG root that chart marks compose inside.
+/// Marks set `fill` and `stroke` here by class, since static theme builds
+/// declare no `--cds-*` properties for an SVG attribute to read.
+/// @access private
+/// @group viz
+@mixin viz-chart {
+  .#{$prefix}--viz-chart {
+    position: relative;
+    margin: 0;
+    color: $text-primary;
+  }
+
+  // Title on one side, toolbar on the other.
+  .#{$prefix}--viz-chart__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
+    margin-block-end: $carbon--spacing-03;
+    min-block-size: to-rem(32px);
+  }
+
+  .#{$prefix}--viz-chart__header:empty {
+    display: none;
+  }
+
+  .#{$prefix}--viz-chart__title {
+    @include type-style("productive-heading-01");
+  }
+
+  .#{$prefix}--viz-chart-toolbar {
+    display: flex;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--viz-chart__table {
+    overflow: auto;
+  }
+
+  .#{$prefix}--viz-data-table:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  // Numbers line up on the right, in tabular figures.
+  .#{$prefix}--viz-data-table .#{$prefix}--viz-data-table__number {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-data-table th[scope="row"] {
+    font-weight: inherit;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  // Fullscreen has no page behind it, so the figure brings its own surface.
+  .#{$prefix}--viz-chart--fullscreen {
+    overflow: auto;
+    padding: $carbon--spacing-07;
+    background: $ui-background;
+  }
+
+  .#{$prefix}--viz-chart__plot {
+    position: relative;
+  }
+
+  // Pixels behind the SVG. Pointer events go to the SVG, which owns hover.
+  .#{$prefix}--viz-chart__canvas {
+    position: absolute;
+    display: block;
+    inline-size: 100%;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // While a point is hovered the layer fades as the SVG points would, and
+  // the hovered point is drawn on top in the SVG.
+  .#{$prefix}--viz-chart__canvas--dimmed {
+    opacity: 0.3;
+  }
+
+  // Covers the plot box only, so the axes stay visible while data loads.
+  // The shimmer comes from the core skeleton class on the same element.
+  .#{$prefix}--viz-chart__skeleton.#{$prefix}--skeleton__placeholder {
+    position: absolute;
+    block-size: auto;
+    inline-size: auto;
+  }
+
+  .#{$prefix}--viz-chart__empty {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    inset: 0;
+    pointer-events: none;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-chart__svg {
+    display: block;
+    overflow: visible;
+    inline-size: 100%;
+    // Horizontal pointer moves scrub the chart. Vertical ones scroll the page.
+    touch-action: pan-y;
+  }
+
+  .#{$prefix}--viz-chart__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-chart__svg:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .#{$prefix}--viz-axis__line {
+    shape-rendering: crispEdges;
+    stroke: $ui-04;
+  }
+
+  .#{$prefix}--viz-axis__label,
+  .#{$prefix}--viz-axis__title {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-grid__line {
+    shape-rendering: crispEdges;
+    stroke: $ui-03;
+  }
+
+  .#{$prefix}--viz-grid--dashed .#{$prefix}--viz-grid__line {
+    stroke-dasharray: 2 4;
+  }
+
+  .#{$prefix}--viz-line__path {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .#{$prefix}--viz-line__path--dashed {
+    stroke-dasharray: 6 4;
+  }
+
+  .#{$prefix}--viz-line__point {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  // A ring in the page background lifts the point off the line beneath it.
+  .#{$prefix}--viz-line__point--hover {
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-ruler {
+    pointer-events: none;
+    shape-rendering: crispEdges;
+    stroke: $ui-05;
+  }
+
+  // The pointer passes through: a tooltip under a moving pointer must never
+  // take the events the chart is following.
+  .#{$prefix}--viz-chart-tooltip {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    background: $inverse-02;
+    box-shadow: 0 2px 6px $shadow;
+    color: $inverse-01;
+    font-variant-numeric: tabular-nums;
+    min-inline-size: to-rem(128px);
+    transform: translateX($carbon--spacing-04);
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-chart-tooltip--flipped {
+    transform: translateX(calc(-100% - #{$carbon--spacing-04}));
+  }
+
+  // Over the hovered row of a horizontal chart.
+  .#{$prefix}--viz-chart-tooltip--above {
+    transform: translate($carbon--spacing-04, -100%);
+  }
+
+  // Pinned to a corner of the plot: no offset from the anchor.
+  .#{$prefix}--viz-chart-tooltip--fixed {
+    transform: none;
+  }
+
+  .#{$prefix}--viz-chart-tooltip__title {
+    margin-block-end: $carbon--spacing-02;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-chart-tooltip__row {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-chart-tooltip__swatch,
+  .#{$prefix}--viz-legend__swatch {
+    flex-shrink: 0;
+    background: var(--bx-viz-color);
+    block-size: to-rem(8px);
+    inline-size: to-rem(8px);
+  }
+
+  .#{$prefix}--viz-chart-tooltip__value {
+    margin-inline-start: auto;
+    padding-inline-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-legend__item {
+    display: inline-flex;
+    align-items: center;
+    padding: $carbon--spacing-01 $carbon--spacing-02;
+    border: 0;
+    background: none;
+    color: $text-secondary;
+    cursor: pointer;
+    gap: $carbon--spacing-02;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-legend__item:hover {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-legend__item:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--viz-legend__swatch {
+    border: 1px solid var(--bx-viz-color);
+    block-size: to-rem(12px);
+    inline-size: to-rem(12px);
+  }
+
+  // A hidden series reads as off three ways: hollow swatch, struck text,
+  // and the pressed state.
+  .#{$prefix}--viz-legend__item--hidden {
+    text-decoration: line-through;
+  }
+
+  .#{$prefix}--viz-legend__item--hidden .#{$prefix}--viz-legend__swatch {
+    background: transparent;
+  }
+
+  .#{$prefix}--viz-threshold__line {
+    shape-rendering: crispEdges;
+    stroke: $support-error;
+    stroke-dasharray: 4 4;
+  }
+
+  // A faint wash of the rule's color. The rule itself marks the edge, so the
+  // range never rests on the tint alone.
+  .#{$prefix}--viz-threshold__range {
+    fill: $support-error;
+    fill-opacity: 0.08;
+  }
+
+  .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__range {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--viz-threshold--success .#{$prefix}--viz-threshold__range {
+    fill: $support-success;
+  }
+
+  .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__range {
+    fill: $support-info;
+  }
+
+  .#{$prefix}--viz-threshold__label {
+    fill: $text-error;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__line {
+    stroke: $support-warning;
+  }
+
+  .#{$prefix}--viz-threshold--success .#{$prefix}--viz-threshold__line {
+    stroke: $support-success;
+  }
+
+  .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__line {
+    stroke: $support-info;
+  }
+
+  .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__label,
+  .#{$prefix}--viz-threshold--success .#{$prefix}--viz-threshold__label,
+  .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__label {
+    fill: $text-secondary;
+  }
+
+  .#{$prefix}--viz-zoom {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-zoom__track {
+    position: relative;
+    background: $ui-01;
+    // Dragging scrubs the range. A vertical swipe still scrolls the page.
+    touch-action: pan-y;
+  }
+
+  .#{$prefix}--viz-zoom__overview {
+    display: block;
+    block-size: 100%;
+    fill: $ui-04;
+    inline-size: 100%;
+  }
+
+  // Physical offsets: the chart above does not mirror in RTL, so neither
+  // does the bar that lines up with it.
+  .#{$prefix}--viz-zoom__window {
+    position: absolute;
+    right: calc((100 - var(--bx-viz-end)) * 1%);
+    left: calc(var(--bx-viz-start) * 1%);
+    box-shadow: inset 0 0 0 to-rem(1px) $interactive-04;
+    cursor: grab;
+    inset-block: 0;
+  }
+
+  .#{$prefix}--viz-zoom__window::before {
+    position: absolute;
+    background: $interactive-04;
+    content: "";
+    inset: 0;
+    opacity: 0.12;
+  }
+
+  .#{$prefix}--viz-zoom--dragging .#{$prefix}--viz-zoom__window {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--viz-zoom__handle {
+    position: absolute;
+    padding: 0;
+    border: 0;
+    margin-left: to-rem(-4px);
+    appearance: none;
+    background: $interactive-04;
+    cursor: ew-resize;
+    inline-size: to-rem(8px);
+    inset-block: 0;
+    touch-action: none;
+  }
+
+  .#{$prefix}--viz-zoom__handle--start {
+    left: calc(var(--bx-viz-start) * 1%);
+  }
+
+  .#{$prefix}--viz-zoom__handle--end {
+    left: calc(var(--bx-viz-end) * 1%);
+  }
+
+  .#{$prefix}--viz-zoom__handle:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-zoom__reset {
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    color: $link-01;
+    cursor: pointer;
+    margin-block-start: $carbon--spacing-02;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-zoom__reset:hover {
+    text-decoration: underline;
+  }
+
+  .#{$prefix}--viz-zoom__reset:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  // Direction is the whole point of a waterfall, so it gets the status
+  // colors, and a total the neutral. Connectors keep the steps readable
+  // without them.
+  .#{$prefix}--viz-waterfall__bar {
+    fill: var(--cds-viz-neutral);
+    shape-rendering: crispEdges;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-waterfall__bar--increase {
+    fill: var(--cds-viz-success);
+  }
+
+  .#{$prefix}--viz-waterfall__bar--decrease {
+    fill: var(--cds-viz-error);
+  }
+
+  .#{$prefix}--viz-waterfall__connector {
+    shape-rendering: crispEdges;
+    stroke: $ui-04;
+    stroke-dasharray: 2 2;
+  }
+
+  .#{$prefix}--viz-boxes__whisker {
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-boxes__range {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.3;
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1;
+  }
+
+  // The median is the one number a box plot is read for.
+  .#{$prefix}--viz-boxes__median {
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 3;
+  }
+
+  // Hollow, so an outlier never reads as a data point of the box.
+  .#{$prefix}--viz-boxes__outlier {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-boxes__box {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // A candle is a wick from low to high and a body from open to close.
+  // A rising candle is hollow by default, so direction never rests on
+  // color alone; a flat one is a hairline.
+  .#{$prefix}--viz-candles__candle {
+    --bx-viz-color: #{$ui-04};
+
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-candles__candle--up {
+    --bx-viz-color: var(--bx-viz-up, var(--cds-viz-success));
+  }
+
+  .#{$prefix}--viz-candles__candle--down {
+    --bx-viz-color: var(--bx-viz-down, var(--cds-viz-error));
+  }
+
+  .#{$prefix}--viz-candles__wick {
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color);
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-candles__body {
+    fill: var(--bx-viz-color);
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color);
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-candles__candle--hollow .#{$prefix}--viz-candles__body {
+    fill: $ui-background;
+  }
+
+  .#{$prefix}--viz-candles__candle--dimmed {
+    opacity: 0.3;
+  }
+
+  // A violin is the density mirrored about the category, with a slim
+  // quartile box and a median dot inside.
+  .#{$prefix}--viz-violins__violin {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-violins__body {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.35;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-violins__box {
+    stroke: $ui-05;
+    stroke-linecap: round;
+    stroke-width: 4;
+  }
+
+  .#{$prefix}--viz-violins__median {
+    fill: $ui-background;
+    stroke: $ui-05;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-violins__violin--dimmed {
+    opacity: 0.3;
+  }
+
+  // A swarm is one dot per value.
+  .#{$prefix}--viz-swarm__group {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-swarm__dot {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.85;
+    stroke: $ui-background;
+    stroke-width: 0.5;
+  }
+
+  .#{$prefix}--viz-swarm__group--dimmed {
+    opacity: 0.3;
+  }
+
+  // Density under a scatter: hexagons colored by count, or isolines.
+  .#{$prefix}--viz-hexbin__cell {
+    fill: var(--bx-viz-color);
+    stroke: $ui-background;
+    stroke-width: 0.5;
+  }
+
+  .#{$prefix}--viz-hexbin__cell--active {
+    stroke: $ui-05;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-contours__line {
+    fill: none;
+    stroke: var(--bx-viz-color);
+    stroke-linecap: round;
+    stroke-width: 1.5;
+  }
+
+  // Points behind a density layer are a faint texture, not the picture.
+  .#{$prefix}--viz-points--behind
+    .#{$prefix}--viz-points__point:not(.#{$prefix}--viz-points__point--active) {
+    fill-opacity: 0.18;
+    stroke: none;
+  }
+
+  .#{$prefix}--viz-boxes__box--dimmed {
+    opacity: 0.3;
+  }
+
+  // The bar is neutral: the dots carry the series colors, and the direction
+  // is read from which dot is which.
+  .#{$prefix}--viz-dumbbells__bar {
+    stroke: $ui-04;
+    stroke-linecap: round;
+    stroke-width: 3;
+  }
+
+  .#{$prefix}--viz-dumbbells__dot {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-dumbbells__pair {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-dumbbells__pair--dimmed {
+    opacity: 0.3;
+  }
+
+  .#{$prefix}--viz-lollipops__stem {
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-lollipops__head {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-lollipops__pop {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-lollipops__pop--dimmed {
+    opacity: 0.3;
+  }
+
+  // A translucent fill shows where points pile up. The stroke keeps each
+  // one countable.
+  .#{$prefix}--viz-points__point {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.3;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1.5;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-points__point--dimmed {
+    opacity: 0.3;
+  }
+
+  .#{$prefix}--viz-points__point--active {
+    fill-opacity: 1;
+    stroke: $ui-background;
+    stroke-width: 2;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-zoom__handle {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-zoom__window {
+      border: 1px solid Highlight;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-chart__canvas,
+    .#{$prefix}--viz-points__point,
+    .#{$prefix}--viz-dumbbells__pair,
+    .#{$prefix}--viz-waterfall__bar,
+    .#{$prefix}--viz-boxes__box,
+    .#{$prefix}--viz-lollipops__pop {
+      transition: none;
+    }
+  }
+
+  .#{$prefix}--viz-marker__line {
+    shape-rendering: crispEdges;
+    stroke: $ui-05;
+    stroke-dasharray: 2 2;
+  }
+
+  .#{$prefix}--viz-marker__label {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-band__fill {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  // A diamond in the error color, ringed in the page background so it sits
+  // on top of the line it flags.
+  .#{$prefix}--viz-anomaly__marker {
+    fill: $support-error;
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-area__fill {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-area__line {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-bars__bar {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    shape-rendering: crispEdges;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // Hovering a slot quiets the others rather than recoloring the focused one.
+  .#{$prefix}--viz-bars__bar--dimmed {
+    opacity: 0.4;
+  }
+
+  .#{$prefix}--viz-bars__band {
+    fill: $hover-ui;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-bars__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-bars__bar {
+      fill: CanvasText;
+      forced-color-adjust: none;
+      stroke: Canvas;
+    }
+  }
+}
+
+@include exports("viz-chart") {
+  @include viz-chart;
+}

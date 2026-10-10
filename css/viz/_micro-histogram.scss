@@ -1,0 +1,91 @@
+/// MicroHistogram: a distribution as a row of bars, with an optional marker.
+/// @access private
+/// @group viz
+@mixin viz-micro-histogram {
+  .#{$prefix}--viz-micro-histogram {
+    --bx-viz-size: #{to-rem(24px)};
+
+    display: inline-grid;
+    border-block-end: to-rem(1px) solid $ui-04;
+    block-size: var(--bx-viz-size);
+    inline-size: to-rem(96px);
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-micro-histogram--sm {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-micro-histogram--lg {
+    --bx-viz-size: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--viz-micro-histogram__bars,
+  .#{$prefix}--viz-micro-histogram__marker {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--viz-micro-histogram__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: to-rem(1px);
+    min-block-size: 0;
+  }
+
+  .#{$prefix}--viz-micro-histogram__bar {
+    flex: 1 1 0;
+    min-block-size: to-rem(1px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: calc(var(--bx-viz-pct) * 1%);
+    transition: block-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-micro-histogram__bar--empty {
+    visibility: hidden;
+  }
+
+  // With a marker, the other bins step back so the marked one stands out.
+  .#{$prefix}--viz-micro-histogram--marked
+    .#{$prefix}--viz-micro-histogram__bar {
+    opacity: 0.4;
+  }
+
+  .#{$prefix}--viz-micro-histogram--marked
+    .#{$prefix}--viz-micro-histogram__bar--marked {
+    opacity: 1;
+  }
+
+  // The tick carries the marker without relying on the emphasis above.
+  .#{$prefix}--viz-micro-histogram__marker {
+    background: $ui-05;
+    block-size: 100%;
+    inline-size: to-rem(1px);
+    margin-inline-start: calc(
+      var(--bx-viz-pct) * 1% - #{to-rem(1px)} * var(--bx-viz-pct) / 100
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-micro-histogram__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-micro-histogram__bar {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-micro-histogram__marker {
+      background: Highlight;
+      forced-color-adjust: none;
+      inline-size: to-rem(2px);
+    }
+  }
+}
+
+@include exports("viz-micro-histogram") {
+  @include viz-micro-histogram;
+}

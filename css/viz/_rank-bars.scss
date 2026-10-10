@@ -1,0 +1,120 @@
+/// RankBars: an ordered list as rows of a table, so ranks, labels, bars, and
+/// numbers align with no measurement. Bar length comes from `--bx-viz-pct`.
+/// @access private
+/// @group viz
+@mixin viz-rank-bars {
+  .#{$prefix}--viz-rank-bars {
+    --bx-viz-row-size: #{to-rem(8px)};
+
+    inline-size: 100%;
+    border-collapse: collapse;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-rank-bars--sm {
+    --bx-viz-row-size: #{to-rem(4px)};
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-rank-bars--lg {
+    --bx-viz-row-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-rank-bars th,
+  .#{$prefix}--viz-rank-bars td {
+    // Block padding only: the cell classes below own the inline padding.
+    padding-block: $carbon--spacing-02;
+    padding-inline: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-rank-bars .#{$prefix}--viz-rank-bars__rank {
+    padding-inline-end: $carbon--spacing-04;
+    color: $text-secondary;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-rank-bars .#{$prefix}--viz-rank-bars__label {
+    padding-inline-end: $carbon--spacing-05;
+    font-weight: inherit;
+    text-align: start;
+  }
+
+  // The bar column takes all the width the text columns leave over.
+  .#{$prefix}--viz-rank-bars__track-cell {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-rank-bars__bar {
+    min-inline-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: var(--bx-viz-row-size);
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-rank-bars .#{$prefix}--viz-rank-bars__value {
+    padding-inline-start: $carbon--spacing-05;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-rank-bars__row--other {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--viz-rank-bars__button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+
+  // The button is the focus target, but the ring belongs on the whole row.
+  .#{$prefix}--viz-rank-bars__button:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--viz-rank-bars--selectable .#{$prefix}--viz-rank-bars__row {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-rank-bars--selectable .#{$prefix}--viz-rank-bars__row:hover {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--viz-rank-bars__row--selected {
+    background: $selected-ui;
+  }
+
+  .#{$prefix}--viz-rank-bars--selectable
+    .#{$prefix}--viz-rank-bars__row:focus-within {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-rank-bars__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-rank-bars__bar {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-rank-bars") {
+  @include viz-rank-bars;
+}

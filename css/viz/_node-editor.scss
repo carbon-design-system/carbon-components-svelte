@@ -1,0 +1,227 @@
+/// NodeEditor: nodes that move and connect on a stage that pans and zooms.
+/// @access private
+/// @group viz
+@mixin viz-node-editor {
+  .#{$prefix}--viz-editor {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-editor__header {
+    display: flex;
+    align-items: center;
+    margin-block-end: $carbon--spacing-03;
+    min-block-size: to-rem(32px);
+  }
+
+  .#{$prefix}--viz-editor__header .#{$prefix}--viz-chart__title {
+    margin: 0;
+  }
+
+  .#{$prefix}--viz-editor__controls {
+    display: flex;
+    margin-inline-start: auto;
+  }
+
+  // A dotted grid, the snap grid made visible.
+  .#{$prefix}--viz-editor__stage {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid $ui-03;
+    background: $ui-background;
+    background-image: radial-gradient(#{$ui-03} 1px, transparent 1px);
+    background-size: to-rem(16px) to-rem(16px);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--viz-editor__stage.#{$prefix}--viewport--panning {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--viz-editor__stage--linking {
+    cursor: crosshair;
+  }
+
+  .#{$prefix}--viz-editor__edges,
+  .#{$prefix}--viz-editor__nodes {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+  }
+
+  .#{$prefix}--viz-editor__edges {
+    pointer-events: none;
+  }
+
+  .#{$prefix}--viz-editor__nodes {
+    pointer-events: none;
+    transform-origin: 0 0;
+  }
+
+  .#{$prefix}--viz-editor__edge-line {
+    fill: none;
+    stroke: $ui-04;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  // A wide, invisible twin keeps a thin edge easy to click.
+  .#{$prefix}--viz-editor__edge-hit {
+    fill: none;
+    cursor: pointer;
+    pointer-events: stroke;
+    stroke: transparent;
+    stroke-width: 12;
+  }
+
+  .#{$prefix}--viz-editor__edge--selected .#{$prefix}--viz-editor__edge-line {
+    stroke: $interactive-04;
+    stroke-width: 2.5;
+  }
+
+  .#{$prefix}--viz-editor__arrow {
+    fill: $ui-04;
+  }
+
+  .#{$prefix}--viz-editor__link {
+    fill: none;
+    stroke: $interactive-04;
+    stroke-dasharray: 4 3;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-editor__marquee {
+    fill: $interactive-04;
+    fill-opacity: 0.1;
+    stroke: $interactive-04;
+    stroke-dasharray: 4 3;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .#{$prefix}--viz-editor__node {
+    position: absolute;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-04;
+    border: 1px solid $ui-04;
+    background: $ui-background;
+    color: $text-primary;
+    cursor: grab;
+    pointer-events: auto;
+    text-align: start;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-editor__node:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--viz-editor__node--dragging {
+    cursor: grabbing;
+    box-shadow: 0 2px 6px $shadow;
+  }
+
+  .#{$prefix}--viz-editor__node--selected {
+    background: $selected-ui;
+    border-color: $ui-05;
+    box-shadow: inset 0 0 0 1px $ui-05;
+  }
+
+  .#{$prefix}--viz-editor__node--source {
+    border-color: $interactive-04;
+    box-shadow: inset 0 0 0 1px $interactive-04;
+  }
+
+  .#{$prefix}--viz-editor__node--target {
+    border-color: $interactive-04;
+    border-style: dashed;
+  }
+
+  .#{$prefix}--viz-editor__label {
+    overflow: hidden;
+    min-inline-size: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Ports sit on the node's border; an out port is a handle to drag from.
+  .#{$prefix}--viz-editor__port {
+    position: absolute;
+    border: 1.5px solid $ui-04;
+    background: $ui-background;
+    block-size: to-rem(10px);
+    border-radius: 50%;
+    inline-size: to-rem(10px);
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--viz-editor__port--out {
+    border-color: $interactive-04;
+    cursor: crosshair;
+  }
+
+  .#{$prefix}--viz-editor__port--out:hover {
+    background: $interactive-04;
+  }
+
+  .#{$prefix}--viz-editor__node--target .#{$prefix}--viz-editor__port--in {
+    background: $interactive-04;
+    border-color: $interactive-04;
+  }
+
+  .#{$prefix}--viz-editor__minimap {
+    position: absolute;
+    border: 1px solid $ui-03;
+    background: $ui-background;
+    block-size: to-rem(72px);
+    inline-size: to-rem(120px);
+    inset-block-end: $carbon--spacing-03;
+    pointer-events: none;
+    right: $carbon--spacing-03;
+  }
+
+  [dir="rtl"] .#{$prefix}--viz-editor__minimap {
+    right: auto;
+    left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-editor__minimap-node {
+    fill: $ui-04;
+  }
+
+  .#{$prefix}--viz-editor__minimap-window {
+    fill: $interactive-04;
+    fill-opacity: 0.12;
+    stroke: $interactive-04;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-editor__node,
+    .#{$prefix}--viz-editor__port {
+      border-color: CanvasText;
+    }
+
+    .#{$prefix}--viz-editor__node--selected {
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-editor__edge-line,
+    .#{$prefix}--viz-editor__link {
+      stroke: CanvasText;
+    }
+  }
+}
+
+@include exports("viz-node-editor") {
+  @include viz-node-editor;
+}

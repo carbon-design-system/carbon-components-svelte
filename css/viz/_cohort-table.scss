@@ -1,0 +1,107 @@
+/// CohortTable: retention by cohort and period, as a table whose cells are
+/// colored by value and always show it.
+/// @access private
+/// @group viz
+@mixin viz-cohort-table {
+  .#{$prefix}--viz-cohort {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-cohort__scroll {
+    overflow-x: auto;
+  }
+
+  .#{$prefix}--viz-cohort__table {
+    border-collapse: separate;
+    border-spacing: to-rem(2px);
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-cohort__table caption {
+    padding-block-end: $carbon--spacing-05;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-cohort__table th,
+  .#{$prefix}--viz-cohort__table td {
+    padding: 0 $carbon--spacing-03;
+    block-size: to-rem(32px);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-cohort__table th {
+    color: $text-secondary;
+    font-weight: inherit;
+  }
+
+  .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__label {
+    padding-inline-start: 0;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__size {
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__period,
+  .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__summary {
+    min-inline-size: to-rem(56px);
+    text-align: center;
+  }
+
+  .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__cell {
+    padding: 0;
+    background: var(--bx-viz-color);
+    color: var(--bx-viz-text-color);
+    text-align: center;
+  }
+
+  .#{$prefix}--viz-cohort__table tfoot th,
+  .#{$prefix}--viz-cohort__table tfoot td {
+    border-block-start: to-rem(1px) solid $ui-03;
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-cohort__button {
+    display: block;
+    padding: 0 $carbon--spacing-03;
+    border: 0;
+    appearance: none;
+    background: none;
+    block-size: to-rem(32px);
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-cohort__button:hover {
+    box-shadow: inset 0 0 0 to-rem(2px) $ui-05;
+  }
+
+  .#{$prefix}--viz-cohort__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__cell--selected {
+    box-shadow:
+      inset 0 0 0 to-rem(2px) $ui-05,
+      inset 0 0 0 to-rem(3px) $ui-background;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-cohort__table .#{$prefix}--viz-cohort__cell {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-cohort-table") {
+  @include viz-cohort-table;
+}

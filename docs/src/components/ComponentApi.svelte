@@ -190,7 +190,8 @@
               {/if}
             </StructuredListCell>
             <StructuredListCell>
-              {#each (prop.type || "").split(" | ") as type, i (type)}
+              <!-- Keyed by position: a tuple of unions repeats a name. -->
+              {#each (prop.type || "").split(" | ") as type, i (i)}
                 <div
                   class="cell"
                   style="z-index: {(prop.type || "").split(" | ").length - i}"

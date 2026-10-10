@@ -1,0 +1,234 @@
+/// UpSetPlot: set intersections as a table, a bar for each combination's
+/// size and a dot per set, joined where the combination spans several.
+/// @access private
+/// @group viz
+@mixin viz-upset-plot {
+  .#{$prefix}--viz-upset {
+    --bx-viz-row-size: #{to-rem(12px)};
+    --bx-viz-dot: #{to-rem(12px)};
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-upset--sm {
+    --bx-viz-row-size: #{to-rem(8px)};
+    --bx-viz-dot: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--viz-upset--lg {
+    --bx-viz-row-size: #{to-rem(16px)};
+    --bx-viz-dot: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-upset__table {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    inline-size: 100%;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-upset__table caption {
+    padding-block-end: $carbon--spacing-05;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-upset__table th,
+  .#{$prefix}--viz-upset__table td {
+    padding: $carbon--spacing-02 0;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  // Labels may wrap: they are the only column that can give.
+  .#{$prefix}--viz-upset__table .#{$prefix}--viz-upset__label {
+    padding-inline-end: $carbon--spacing-05;
+    font-weight: inherit;
+    min-inline-size: to-rem(160px);
+    text-align: start;
+    white-space: normal;
+  }
+
+  .#{$prefix}--viz-upset__size-head,
+  .#{$prefix}--viz-upset__set-head {
+    color: $text-secondary;
+    font-weight: 600;
+    text-align: start;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-upset__table .#{$prefix}--viz-upset__set-head {
+    padding-inline: $carbon--spacing-02;
+    text-align: center;
+  }
+
+  // The bar column takes the width the text and the dots leave over.
+  .#{$prefix}--viz-upset__table .#{$prefix}--viz-upset__size {
+    inline-size: 30%;
+    min-inline-size: to-rem(120px);
+    padding-inline-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-upset__group {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-upset__track {
+    display: block;
+    flex: 1 1 auto;
+    block-size: var(--bx-viz-row-size);
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--viz-upset__bar {
+    display: block;
+    min-inline-size: to-rem(1px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: 100%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-upset__value,
+  .#{$prefix}--viz-upset__total-value {
+    flex: none;
+    color: $text-secondary;
+    min-inline-size: 3ch;
+    text-align: end;
+  }
+
+  // A dot per set, on a faint line joining the members of a combination.
+  .#{$prefix}--viz-upset__table .#{$prefix}--viz-upset__cell {
+    position: relative;
+    padding-inline: $carbon--spacing-02;
+    text-align: center;
+  }
+
+  // Dots sit above the join line, so a set the row is not in reads as a
+  // gap in it rather than a stop along it.
+  .#{$prefix}--viz-upset__dot {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    border-radius: 50%;
+    background: $ui-03;
+    block-size: var(--bx-viz-dot);
+    inline-size: var(--bx-viz-dot);
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-upset__cell--member .#{$prefix}--viz-upset__dot {
+    background: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-upset__cell--member::before,
+  .#{$prefix}--viz-upset__cell--linked::before {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: to-rem(2px);
+    content: "";
+    transform: translateY(-50%);
+  }
+
+  // The line runs only between the first and last member of a row.
+  .#{$prefix}--viz-upset__cell--member:not(
+      .#{$prefix}--viz-upset__cell--linked
+    )::before {
+    display: none;
+  }
+
+  .#{$prefix}--viz-upset__totals th,
+  .#{$prefix}--viz-upset__totals td {
+    border-block-start: to-rem(1px) solid $ui-03;
+    color: $text-secondary;
+    vertical-align: top;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-upset__total {
+    text-align: center;
+  }
+
+  .#{$prefix}--viz-upset__total-track {
+    display: block;
+    margin: 0 auto $carbon--spacing-01;
+    background: $ui-03;
+    block-size: to-rem(24px);
+    inline-size: var(--bx-viz-dot);
+    position: relative;
+  }
+
+  .#{$prefix}--viz-upset__total-bar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: $ui-04;
+    block-size: calc(var(--bx-viz-pct) * 1%);
+  }
+
+  .#{$prefix}--viz-upset__button {
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-upset__button:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--viz-upset--selectable .#{$prefix}--viz-upset__row {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-upset--selectable .#{$prefix}--viz-upset__row:hover {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--viz-upset__row--selected {
+    background: $selected-ui;
+  }
+
+  .#{$prefix}--viz-upset__row:focus-within {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-upset__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-upset__bar,
+    .#{$prefix}--viz-upset__cell--member .#{$prefix}--viz-upset__dot,
+    .#{$prefix}--viz-upset__cell--member::before,
+    .#{$prefix}--viz-upset__cell--linked::before {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-upset__dot {
+      border: 1px solid CanvasText;
+    }
+  }
+}
+
+@include exports("viz-upset-plot") {
+  @include viz-upset-plot;
+}

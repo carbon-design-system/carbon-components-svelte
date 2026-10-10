@@ -1,0 +1,64 @@
+/// ChoroplethChart: regions of a map colored on a sequential ramp, drawn at a
+/// fixed logical size and scaled to the container. The legend reuses the
+/// heatmap's.
+/// @access private
+/// @group viz
+@mixin viz-choropleth-chart {
+  .#{$prefix}--viz-choropleth {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-choropleth .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-choropleth__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-choropleth__svg {
+    display: block;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-choropleth__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  // A hairline of the page background separates neighbors of one color.
+  .#{$prefix}--viz-choropleth__region {
+    fill: var(--bx-viz-color);
+    stroke: $ui-background;
+    stroke-linejoin: round;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  // No data: neutral, with an outline, so it cannot be read as a low value.
+  .#{$prefix}--viz-choropleth__region--empty {
+    fill: $ui-01;
+    stroke: $ui-04;
+  }
+
+  .#{$prefix}--viz-choropleth__outline {
+    fill: none;
+    pointer-events: none;
+    stroke: $ui-05;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-choropleth__region {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-choropleth-chart") {
+  @include viz-choropleth-chart;
+}

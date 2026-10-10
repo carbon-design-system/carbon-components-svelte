@@ -1,0 +1,68 @@
+---
+components: ["ParallelCoordinates"]
+description: Parallel coordinates draw one axis per variable, each on its own scale, and one line per row through them, to compare many things across many measures at once.
+---
+
+<script>
+  import { ParallelCoordinates } from "carbon-components-svelte/viz";
+
+  const instances = [
+    { name: "m5.large", tier: "general", cpu: 2, mem: 8, io: 40, cost: 96 },
+    { name: "m5.xlarge", tier: "general", cpu: 4, mem: 16, io: 60, cost: 192 },
+    { name: "m5.2xlarge", tier: "general", cpu: 8, mem: 32, io: 80, cost: 384 },
+    { name: "c5.large", tier: "compute", cpu: 2, mem: 4, io: 45, cost: 85 },
+    { name: "c5.xlarge", tier: "compute", cpu: 4, mem: 8, io: 55, cost: 170 },
+    { name: "c5.2xlarge", tier: "compute", cpu: 8, mem: 16, io: 75, cost: 340 },
+    { name: "r5.large", tier: "memory", cpu: 2, mem: 16, io: 40, cost: 126 },
+    { name: "r5.xlarge", tier: "memory", cpu: 4, mem: 32, io: 50, cost: 252 },
+    { name: "r5.2xlarge", tier: "memory", cpu: 8, mem: 64, io: 70, cost: 504 },
+    { name: "i3.large", tier: "storage", cpu: 2, mem: 15, io: 95, cost: 156 },
+    { name: "i3.xlarge", tier: "storage", cpu: 4, mem: 30, io: 100, cost: 312 },
+  ];
+
+  let brushes = { cpu: [3, 5] };
+  let kept = instances.length;
+</script>
+
+`ParallelCoordinates` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Carbon treats this as a [RadarChart](/components/RadarChart) with real axes, and prefers it in most cases: every variable is its own axis on its own scale, so the units can differ, and a row is a line through them. Patterns show as bundles of lines and crossings.
+
+## Basic
+
+Pass wide `data`, one row per line with a field per variable, and name the variables in `dimensions`. Each axis runs from the variable's lowest to highest value, rounded out. Set `series` to color lines by a field and `label` to name them.
+
+<ParallelCoordinates data={instances} dimensions={["cpu", "mem", "io", "cost"]} series="tier" label="name" title="Instance profiles" />
+
+## Dimensions
+
+A dimension may be an object with a `key`, a `label`, and a fixed `domain`, so an axis can be named and its ends pinned.
+
+<ParallelCoordinates
+  data={instances}
+  dimensions={[
+    { key: "cpu", label: "vCPU", domain: [0, 16] },
+    { key: "mem", label: "Memory, GB", domain: [0, 64] },
+    { key: "io", label: "I/O score" },
+    { key: "cost", label: "Monthly cost", domain: [0, 600] },
+  ]}
+  series="tier"
+  label="name"
+  title="Instance profiles, labelled axes"
+/>
+
+## Brushing
+
+Drag along an axis to keep only the rows whose value falls in that range; the rest fade. Double click the axis to clear it. Bind `brushes`, a range per dimension, to read or set them, or listen for `brush`, which carries the ranges and the rows that pass them all. Set `brush` to `false` to forbid it.
+
+<ParallelCoordinates data={instances} dimensions={["cpu", "mem", "io", "cost"]} series="tier" label="name" bind:brushes title="Instances with 4 vCPUs" on:brush={(e) => (kept = e.detail.data.length)} />
+
+<p>{kept} of {instances.length} instances pass.</p>
+
+## Interaction
+
+Hover a line, or focus the chart and use the arrow keys, to read a row: it stands out, the rest recede, and a tooltip lists its value on every axis. `hover` fires with the row and `select` on click, Enter, or Space. The legend toggles series.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move row by row, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused row is announced with every value. The figure also holds every row as a visually hidden table, one column per dimension. Brushing is a pointer gesture; set `brushes` from a control of your own for a keyboard path, and the `brush` event tells you what passes.

@@ -1,0 +1,49 @@
+---
+components: ["HivePlot"]
+description: Hive plot lays a network out on a few axes by node kind, so the same data always gives the same picture and hundreds of nodes stay readable.
+---
+
+<script>
+  import { HivePlot } from "carbon-components-svelte/viz";
+
+  const KINDS = { service: ["gateway", "web", "checkout", "catalog", "auth", "pricing", "search", "worker"], datastore: ["postgres", "redis", "elasticsearch", "s3"], queue: ["orders", "emails", "indexing"] };
+  const nodes = Object.entries(KINDS).flatMap(([kind, ids]) => ids.map((id) => ({ id, kind })));
+  const calls = [
+    ["gateway", "web"], ["gateway", "checkout"], ["gateway", "catalog"], ["web", "auth"], ["checkout", "auth"],
+    ["checkout", "pricing"], ["checkout", "postgres"], ["checkout", "orders"], ["catalog", "search"], ["catalog", "postgres"],
+    ["pricing", "redis"], ["search", "elasticsearch"], ["auth", "postgres"], ["auth", "redis"], ["worker", "orders"],
+    ["worker", "emails"], ["worker", "postgres"], ["worker", "s3"], ["indexing", "worker"], ["catalog", "indexing"],
+    ["web", "redis"], ["gateway", "auth"],
+  ].map(([from, to]) => ({ from, to }));
+
+  const loads = { gateway: 950, web: 800, checkout: 420, catalog: 610, auth: 700, pricing: 180, search: 350, worker: 120, postgres: 900, redis: 640, elasticsearch: 300, s3: 90, orders: 400, emails: 60, indexing: 150 };
+  const loaded = nodes.map((node) => ({ ...node, rps: loads[node.id] }));
+
+  let selected = null;
+</script>
+
+`HivePlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is the network chart without a force simulation: each kind of node gets an axis out from the center, nodes sit along their axis in a defined order, and links curve between axes. The layout is a function of the data, so it renders on the server, never jitters, and the same topology always looks the same. Use it when a [LayeredGraph](/components/LayeredGraph) has no natural direction and an [ArcDiagram](/components/ArcDiagram) has too many kinds of node for one line.
+
+## Basic
+
+Pass `nodes` with an `id` and an `axis` field, and `links` read with `source` and `target`. Axes appear in the order first seen, clockwise from the top; set `axes` to fix them. By default a node sits farther out the more links touch it.
+
+<HivePlot {nodes} links={calls} id="id" axis="kind" source="from" target="to" axes={["service", "datastore", "queue"]} title="Runtime topology" />
+
+## Position along the axis
+
+Set `position` to place nodes by a field of their own, such as load or size, larger farther out. `value` on a link is shown in its tooltip.
+
+<HivePlot nodes={loaded} links={calls} id="id" axis="kind" source="from" target="to" position="rps" axes={["service", "datastore", "queue"]} title="Runtime topology, by requests per second" />
+
+## Selection and size
+
+Bind `selected` or listen for `select`, whose detail carries the node and every link touching it. `diameter`, `innerRadius`, and `labelSpace` set the geometry; `colors` fixes an axis color.
+
+<HivePlot {nodes} links={calls} id="id" axis="kind" source="from" target="to" axes={["service", "datastore", "queue"]} bind:selected diameter={320} colors={{ queue: "warning" }} title="Pick a node" />
+
+## Accessibility
+
+The chart is a single tab stop. Down and Up walk the nodes axis by axis from the center out, and Right and Left jump to the next axis; each node is announced with its axis and how many links touch it, and those links light up. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every link.

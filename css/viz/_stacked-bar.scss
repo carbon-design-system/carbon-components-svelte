@@ -1,0 +1,119 @@
+/// StackedBar: parts of a whole as one horizontal bar, with optional labels.
+/// @access private
+/// @group viz
+@mixin viz-stacked-bar {
+  .#{$prefix}--viz-stacked-bar {
+    --bx-viz-size: #{to-rem(8px)};
+
+    display: flex;
+    flex-direction: column;
+    min-inline-size: to-rem(64px);
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-stacked-bar--sm {
+    --bx-viz-size: #{to-rem(4px)};
+  }
+
+  .#{$prefix}--viz-stacked-bar--lg {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-stacked-bar__track {
+    display: flex;
+    background: $ui-03;
+    block-size: var(--bx-viz-size);
+    // The gap separates neighbors without relying on color.
+    gap: to-rem(1px);
+  }
+
+  .#{$prefix}--viz-stacked-bar__segment {
+    flex: var(--bx-viz-pct) 1 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: to-rem(2px);
+    appearance: none;
+    background: var(--bx-viz-color, #{$interactive-04});
+    transition:
+      flex-grow $duration--moderate-01 carbon--motion(standard, productive),
+      opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-stacked-bar__segment--empty {
+    display: none;
+  }
+
+  .#{$prefix}--viz-stacked-bar--selectable
+    .#{$prefix}--viz-stacked-bar__segment {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-stacked-bar--selectable
+    .#{$prefix}--viz-stacked-bar__segment:focus-visible {
+    z-index: 1;
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-stacked-bar--has-selection
+    .#{$prefix}--viz-stacked-bar__segment:not(
+      .#{$prefix}--viz-stacked-bar__segment--selected
+    ) {
+    opacity: 0.3;
+  }
+
+  .#{$prefix}--viz-stacked-bar__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-stacked-bar__item {
+    display: inline-flex;
+    align-items: center;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-02;
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-stacked-bar__item--selected {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-stacked-bar__swatch {
+    flex: none;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: to-rem(8px);
+    inline-size: to-rem(8px);
+    margin-inline-end: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--viz-stacked-bar__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-stacked-bar__segment {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-stacked-bar__segment,
+    .#{$prefix}--viz-stacked-bar__swatch {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-stacked-bar__segment--selected {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-stacked-bar") {
+  @include viz-stacked-bar;
+}

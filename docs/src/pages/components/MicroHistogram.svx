@@ -1,0 +1,119 @@
+---
+components: ["MicroHistogram"]
+description: Micro histogram shows the shape of a distribution in the space of a table cell, with an optional marker for one reading.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { MicroHistogram } from "carbon-components-svelte/viz";
+
+  // A right-skewed sample, like request latencies.
+  const latencies = Array.from({ length: 400 }, (_, i) => {
+    const u = ((i * 7919) % 400) / 400 + 0.00125;
+    return Math.round(20 + -60 * Math.log(1 - u * 0.98));
+  });
+  const scores = Array.from({ length: 300 }, (_, i) => {
+    const a = ((i * 104729) % 300) / 300;
+    const b = ((i * 1299709) % 300) / 300;
+    return Math.round(50 + (a + b - 1) * 45);
+  });
+</script>
+
+`MicroHistogram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `values` and a `label`. Values are counted into bins, and the range is appended to the accessible name.
+
+<MicroHistogram values={latencies} label="Latency distribution" />
+
+## Bins
+
+Set `bins` to a target count or to a rule: `"sturges"` (the default) or `"freedman-diaconis"`, which suits skewed data. Set `domain` to bin over a fixed range.
+
+<Stack gap={5}>
+  <MicroHistogram values={latencies} bins={8} label="8 bins" />
+  <MicroHistogram values={latencies} bins={24} label="24 bins" />
+  <MicroHistogram values={latencies} bins="freedman-diaconis" label="Freedman–Diaconis" />
+  <MicroHistogram values={latencies} domain={[0, 600]} label="Fixed range" />
+</Stack>
+
+### Counted elsewhere
+
+Pass a list of `{ x0, x1, count }` to `bins` when the counting happens on the server. `values` is then ignored.
+
+<MicroHistogram
+  bins={[
+    { x0: 0, x1: 10, count: 4 },
+    { x0: 10, x1: 20, count: 18 },
+    { x0: 20, x1: 30, count: 31 },
+    { x0: 30, x1: 40, count: 22 },
+    { x0: 40, x1: 50, count: 9 },
+    { x0: 50, x1: 60, count: 3 },
+  ]}
+  label="Order value"
+/>
+
+## Marker
+
+Set `marker` to a value, such as the current reading. It is drawn as a tick, and the bin that holds it keeps full strength while the others step back.
+
+<Stack gap={5}>
+  <MicroHistogram values={latencies} marker={60} label="Latency, this request" />
+  <MicroHistogram values={latencies} marker={240} color="error" label="Latency, this request" />
+</Stack>
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={5}>
+  <MicroHistogram values={scores} color="neutral" label="Scores" />
+  <MicroHistogram values={scores} color={3} label="Scores" />
+</Stack>
+
+## Sizes
+
+The width is 96 pixels. Set `style` or a class to change it.
+
+<Stack gap={5}>
+  <MicroHistogram values={scores} size="sm" label="Small" />
+  <MicroHistogram values={scores} label="Medium (default)" />
+  <MicroHistogram values={scores} size="lg" label="Large" />
+  <MicroHistogram values={scores} size="lg" bins={30} style="inline-size: 16rem" label="Wide" />
+</Stack>
+
+## In a data table
+
+Share one `domain` across the rows so the shapes compare.
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "service", value: "Service" },
+    { key: "latency", value: "Latency" },
+  ]}
+  rows={[
+    { id: "a", service: "api", latency: { values: latencies, marker: 60 } },
+    { id: "b", service: "search", latency: { values: latencies.map((v) => v * 1.6), marker: 420 } },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "latency"}
+      <MicroHistogram
+        values={cell.value.values}
+        marker={cell.value.marker}
+        domain={[0, 600]}
+        bins={20}
+        size="sm"
+        label="{row.service} latency"
+      />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the graphic is announced as an image named with the label, the range, and the marker, such as "Latency, this request: range 0–400, marker 60". Set `translations` to translate the words "range" and "marker", and `format` to control how the numbers are written. Without a label it is hidden from assistive technology.

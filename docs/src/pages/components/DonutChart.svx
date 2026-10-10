@@ -1,0 +1,113 @@
+---
+components: ["DonutChart"]
+description: Donut chart shows the parts of a whole as a ring, beside a legend that lists every slice with its value.
+---
+
+<script>
+  import { BigNumber } from "carbon-components-svelte";
+  import { DonutChart } from "carbon-components-svelte/viz";
+
+  const sessions = [
+    { device: "Desktop", browser: "Chrome", sessions: 38200 },
+    { device: "Desktop", browser: "Safari", sessions: 9100 },
+    { device: "Desktop", browser: "Firefox", sessions: 4700 },
+    { device: "Mobile", browser: "Safari", sessions: 19800 },
+    { device: "Mobile", browser: "Chrome", sessions: 11200 },
+    { device: "Tablet", browser: "Safari", sessions: 8400 },
+    { device: "Tablet", browser: "Chrome", sessions: 2600 },
+    { device: "TV", browser: "Other", sessions: 4000 },
+    { device: "Watch", browser: "Other", sessions: 1300 },
+    { device: "Console", browser: "Other", sessions: 700 },
+  ];
+  const results = [
+    { status: "Passed", count: 182 },
+    { status: "Failed", count: 9 },
+    { status: "Skipped", count: 14 },
+  ];
+
+  let selected = null;
+</script>
+
+`DonutChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Angles are harder to compare than lengths. Use a donut for a few parts where the mix matters more than the exact values, and a [BarChart](/components/BarChart) when the parts need comparing. For a table cell, use [MicroDonut](/components/MicroDonut).
+
+## Basic
+
+Pass long `data` with a `value` and a `category` accessor. Rows that share a category are summed. Slices run clockwise from 12 o'clock, largest first, and hovering a slice or its legend entry dims the rest.
+
+<DonutChart data={sessions} value="sessions" category="device" title="Sessions by device" />
+
+## Center
+
+Fill the default slot to put content in the hole. The slot receives `total`, `formattedTotal`, and the `active` slice while one is hovered or focused.
+
+<DonutChart data={sessions} value="sessions" category="device" title="Sessions by device" let:total let:active>
+  <BigNumber
+    value={active ? active.value : total}
+    labelText={active ? active.label : "Sessions"}
+  />
+</DonutChart>
+
+## Legend
+
+The legend lists every slice, so it is also the text alternative. Set `valueType` to `"value"` or `"both"`, and `format` to `Intl.NumberFormat` options or a function. Set `legend` to `"bottom"` for a narrow column.
+
+<DonutChart
+  data={sessions}
+  value="sessions"
+  category="device"
+  title="Values and shares"
+  valueType="both"
+  legend="bottom"
+  diameter={160}
+/>
+
+## Folding
+
+`maxSlices` defaults to 6. The smallest categories past the limit fold into one neutral slice. Set `sort` to `false` to keep first-seen order, in which case the fold takes the last ones.
+
+<DonutChart data={sessions} value="sessions" category="device" title="Top 3 devices" maxSlices={4} />
+
+## Accessors
+
+An accessor is a key or a function, so the same rows can be cut another way.
+
+<DonutChart data={sessions} value="sessions" category="browser" title="Sessions by browser" />
+
+## Pie
+
+Set `innerRadius` to `0`. It is the hole's share of the radius, 0.6 by default.
+
+<DonutChart data={sessions} value="sessions" category="device" title="Sessions by device" innerRadius={0} diameter={160} />
+
+## Color
+
+Slices take Carbon's prescribed color groups in order, or the 14 categorical colors past five slices. Set `palette` to pick another group, or `colors` to override a category with a semantic name, a categorical index, a viz token name, or any CSS color.
+
+<DonutChart
+  data={results}
+  value="count"
+  category="status"
+  title="Test results"
+  valueType="value"
+  colors={{ Passed: "success", Failed: "error", Skipped: "neutral" }}
+  diameter={160}
+/>
+
+## Selectable
+
+Set `selectable` to turn the legend entries into toggle buttons. Clicking a slice selects it too. Bind `selected` or listen for `select`, whose detail holds the slice and the `rows` summed into it.
+
+<DonutChart
+  data={sessions}
+  value="sessions"
+  category="device"
+  title="Pick a device"
+  selectable
+  bind:selected
+/>
+
+## Accessibility
+
+The title is the figure's caption. The ring is hidden from assistive technology because the legend carries the same information as text: every category with its share or value. When `selectable`, the legend entries are toggle buttons in the tab order, and focusing one emphasizes its slice. Slices are separated by a gap, and emphasis dims the other slices instead of recoloring the active one, so nothing rests on color alone.

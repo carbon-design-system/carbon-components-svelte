@@ -1,0 +1,144 @@
+/// Heatmap: a table whose cells are colored by value. Being a table, its
+/// headers and cells are reachable with no extra work.
+/// @access private
+/// @group viz
+@mixin viz-heatmap {
+  .#{$prefix}--viz-heatmap {
+    --bx-viz-cell: #{to-rem(32px)};
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-heatmap--sm {
+    --bx-viz-cell: #{to-rem(24px)};
+  }
+
+  .#{$prefix}--viz-heatmap--lg {
+    --bx-viz-cell: #{to-rem(48px)};
+  }
+
+  .#{$prefix}--viz-heatmap__table {
+    border-collapse: separate;
+    border-spacing: to-rem(2px);
+    font-variant-numeric: tabular-nums;
+    inline-size: 100%;
+    table-layout: fixed;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-heatmap__table caption {
+    padding-block-end: $carbon--spacing-05;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-heatmap__table th {
+    color: $text-secondary;
+    font-weight: inherit;
+  }
+
+  .#{$prefix}--viz-heatmap__column {
+    padding-block-end: $carbon--spacing-02;
+    text-align: center;
+  }
+
+  .#{$prefix}--viz-heatmap__row,
+  .#{$prefix}--viz-heatmap__corner {
+    padding-inline-end: $carbon--spacing-03;
+    text-align: start;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  // The first column fits its labels. The rest share the width equally.
+  .#{$prefix}--viz-heatmap__table tr > :first-child {
+    inline-size: to-rem(96px);
+  }
+
+  .#{$prefix}--viz-heatmap__cell {
+    padding: 0;
+    background: var(--bx-viz-color);
+    block-size: var(--bx-viz-cell);
+    color: var(--bx-viz-text-color);
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  // No data: hatched, so it cannot be read as a low value.
+  .#{$prefix}--viz-heatmap__cell--empty {
+    background: repeating-linear-gradient(
+      -45deg,
+      #{$ui-03} 0,
+      #{$ui-03} to-rem(1px),
+      transparent to-rem(1px),
+      transparent to-rem(5px)
+    );
+  }
+
+  .#{$prefix}--viz-heatmap__button {
+    display: block;
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    block-size: var(--bx-viz-cell);
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-heatmap__button:hover {
+    box-shadow: inset 0 0 0 to-rem(2px) $ui-05;
+  }
+
+  .#{$prefix}--viz-heatmap__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  // An outline and an inner ring, so the state shows on any fill.
+  .#{$prefix}--viz-heatmap__cell--selected {
+    box-shadow:
+      inset 0 0 0 to-rem(2px) $ui-05,
+      inset 0 0 0 to-rem(3px) $ui-background;
+  }
+
+  .#{$prefix}--viz-heatmap__legend {
+    display: flex;
+    align-items: center;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-05;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-heatmap__ramp {
+    display: flex;
+    block-size: to-rem(8px);
+    inline-size: to-rem(120px);
+  }
+
+  .#{$prefix}--viz-heatmap__ramp > span {
+    flex: 1 1 0;
+    background: var(--bx-viz-color);
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-heatmap__cell,
+    .#{$prefix}--viz-heatmap__ramp > span {
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-heatmap__cell--empty {
+      border: 1px dashed CanvasText;
+      background: none;
+    }
+  }
+}
+
+@include exports("viz-heatmap") {
+  @include viz-heatmap;
+}

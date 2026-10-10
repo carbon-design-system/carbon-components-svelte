@@ -1,0 +1,148 @@
+---
+components: ["DeltaIndicator"]
+description: Delta indicator shows a signed change, such as period-over-period growth, with an arrow, a sign, and a color that each convey the direction.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { DeltaIndicator } from "carbon-components-svelte/viz";
+</script>
+
+`DeltaIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Set `value` to the change. Positive values point up and read as good. Negative values point down and read as bad.
+
+<Stack gap={3}>
+  <DeltaIndicator value={128} />
+  <DeltaIndicator value={-64} />
+  <DeltaIndicator value={0} />
+</Stack>
+
+## Direction
+
+### Lower is better
+
+Set `positive` to `"down"` for metrics where a decrease is the good outcome, such as churn, latency, or error rate. Only the color flips. The arrow always follows the sign.
+
+<Stack gap={3}>
+  <DeltaIndicator value={-320} positive="down" label="p95 latency (ms)" />
+  <DeltaIndicator value={45} positive="down" label="p95 latency (ms)" />
+</Stack>
+
+### Neutral threshold
+
+Set `threshold` to treat small changes as no change. An absolute change at or below the threshold renders neutral.
+
+<Stack gap={3}>
+  <DeltaIndicator value={0.004} format="percent" threshold={0.005} />
+  <DeltaIndicator value={0.04} format="percent" threshold={0.005} />
+</Stack>
+
+### Missing value
+
+A missing or non-finite `value` renders a dash.
+
+<DeltaIndicator value={undefined} />
+
+## Formatting
+
+### Percent
+
+Set `format` to `"percent"` to treat `value` as a ratio. `0.123` reads as `+12.3%`.
+
+<Stack gap={3}>
+  <DeltaIndicator value={0.123} format="percent" />
+  <DeltaIndicator value={-0.041} format="percent" />
+</Stack>
+
+### Fraction digits
+
+Set `fractionDigits` to control precision.
+
+<DeltaIndicator value={0.12345} format="percent" fractionDigits={2} />
+
+### Full numbers
+
+Large numbers use compact notation by default. Set `compact` to `false` to write them in full.
+
+<Stack gap={3}>
+  <DeltaIndicator value={12840} />
+  <DeltaIndicator value={12840} compact={false} />
+</Stack>
+
+### Number format options
+
+Pass [Intl.NumberFormat options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#options) to `format` for currencies and units.
+
+<Stack gap={3}>
+  <DeltaIndicator value={1250} format={{ style: "currency", currency: "USD" }} />
+  <DeltaIndicator value={-3.5} format={{ style: "unit", unit: "second" }} positive="down" />
+</Stack>
+
+### Custom function
+
+Pass a function to `format` for full control. A plus sign is still added to positive values.
+
+<DeltaIndicator value={3} format={(value) => `${value} seats`} />
+
+### Locale
+
+Set `locale` to format for a specific locale.
+
+<DeltaIndicator value={0.1234} format="percent" fractionDigits={2} locale="de-DE" />
+
+## Sizes
+
+Set `size` to match the surrounding text.
+
+<Stack gap={3}>
+  <DeltaIndicator value={0.123} format="percent" size="sm" label="Small" />
+  <DeltaIndicator value={0.123} format="percent" label="Medium (default)" />
+  <DeltaIndicator value={0.123} format="percent" size="lg" label="Large" />
+</Stack>
+
+## With label
+
+Set `label` to add trailing context.
+
+<DeltaIndicator value={0.082} format="percent" label="vs last week" />
+
+## Without icon
+
+Set `hideIcon` to drop the arrow. The sign stays, so the direction never rests on color alone.
+
+<DeltaIndicator value={-0.041} format="percent" hideIcon />
+
+## In a data table
+
+Numbers use tabular figures, so deltas line up in a column.
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "name", value: "Service" },
+    { key: "requests", value: "Requests" },
+    { key: "change", value: "Change" },
+  ]}
+  rows={[
+    { id: "a", name: "api", requests: "1.2M", change: 0.124 },
+    { id: "b", name: "checkout", requests: "340K", change: -0.031 },
+    { id: "c", name: "search", requests: "2.8M", change: 0.002 },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell>
+    {#if cell.key === "change"}
+      <DeltaIndicator value={cell.value} format="percent" threshold={0.005} size="sm" />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+The arrow is decorative and the visible number is hidden from assistive technology. A sentence is announced in their place: "Increased by 12.3%", "Decreased by 64", or "No change". Set `description` to override it, for example to localize it.
+
+<DeltaIndicator value={0.123} format="percent" description="Hausse de 12,3 %" />

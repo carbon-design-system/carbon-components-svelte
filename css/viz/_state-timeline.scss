@@ -1,0 +1,158 @@
+/// StateTimeline: rows of spans on a shared time scale, as a table so the
+/// row labels and spans line up with no measurement. The legend reuses the
+/// treemap's. EventTimeline is the same table with a dot per instant on a
+/// hairline instead of spans on a track.
+/// @access private
+/// @group viz
+@mixin viz-state-timeline {
+  .#{$prefix}--viz-timeline {
+    --bx-viz-row-size: #{to-rem(16px)};
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-timeline--sm {
+    --bx-viz-row-size: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--viz-timeline--lg {
+    --bx-viz-row-size: #{to-rem(24px)};
+  }
+
+  .#{$prefix}--viz-timeline__table {
+    border-collapse: collapse;
+    inline-size: 100%;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-timeline__table caption {
+    padding-block-end: $carbon--spacing-05;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-timeline__table th,
+  .#{$prefix}--viz-timeline__table td {
+    padding: to-rem(2px) 0;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-timeline__table .#{$prefix}--viz-timeline__label {
+    padding-inline-end: $carbon--spacing-05;
+    color: $text-secondary;
+    font-weight: inherit;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-timeline__track-cell {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-timeline__track {
+    position: relative;
+    background: $ui-01;
+    block-size: var(--bx-viz-row-size);
+  }
+
+  // Physical offsets: time runs left to right whatever the writing direction.
+  .#{$prefix}--viz-timeline__segment {
+    position: absolute;
+    top: 0;
+    left: calc(var(--bx-viz-start) * 1%);
+    padding: 0;
+    border: 0;
+    min-inline-size: to-rem(1px);
+    appearance: none;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: 100%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    // A hairline of the page background separates touching spans.
+    box-shadow: inset to-rem(1px) 0 0 $ui-background;
+  }
+
+  .#{$prefix}--viz-timeline--selectable .#{$prefix}--viz-timeline__segment {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-timeline__button:hover {
+    filter: brightness(1.15);
+  }
+
+  .#{$prefix}--viz-timeline__button:focus-visible,
+  .#{$prefix}--viz-timeline__segment--selected {
+    z-index: 1;
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  // Events: the track is a hairline through the middle of the row, and each
+  // mark a dot centered on its instant, ringed in the page background so
+  // two that coincide still read as more than one.
+  .#{$prefix}--viz-timeline--events .#{$prefix}--viz-timeline__track {
+    background: linear-gradient($ui-04, $ui-04) center / 100% to-rem(1px)
+      no-repeat;
+  }
+
+  .#{$prefix}--viz-timeline__event {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--bx-viz-start) * 1%);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    appearance: none;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: var(--bx-viz-row-size);
+    box-shadow: 0 0 0 to-rem(1px) $ui-background;
+    inline-size: var(--bx-viz-row-size);
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--viz-timeline--selectable .#{$prefix}--viz-timeline__event {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-timeline__event:focus-visible,
+  .#{$prefix}--viz-timeline__event--selected {
+    z-index: 1;
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-timeline__axis {
+    position: relative;
+    block-size: to-rem(20px);
+    border-block-start: to-rem(1px) solid $ui-04;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--viz-timeline__tick {
+    position: absolute;
+    top: to-rem(3px);
+    left: calc(var(--bx-viz-start) * 1%);
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  // The first and last labels would hang off the track.
+  .#{$prefix}--viz-timeline__tick:first-child {
+    transform: none;
+  }
+
+  .#{$prefix}--viz-timeline__tick:last-child {
+    transform: translateX(-100%);
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-timeline__segment,
+    .#{$prefix}--viz-timeline__event {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-state-timeline") {
+  @include viz-state-timeline;
+}

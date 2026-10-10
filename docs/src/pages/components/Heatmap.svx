@@ -1,0 +1,102 @@
+---
+components: ["Heatmap"]
+description: Heatmap colors the cells of a table by value, to show where two dimensions run high together.
+---
+
+<script>
+  import { Heatmap } from "carbon-components-svelte/viz";
+
+  const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const BLOCKS = ["00–04", "04–08", "08–12", "12–16", "16–20", "20–24"];
+  const SHAPE = [4, 9, 58, 66, 41, 17];
+  const requests = DAYS.flatMap((day, d) =>
+    BLOCKS.map((block, b) => ({
+      day,
+      block,
+      requests: Math.round(SHAPE[b] * (d > 4 ? 0.35 : 1) * (1 + ((d * 7 + b * 3) % 5) / 10) * 100),
+    })),
+  ).filter((row) => !(row.day === "Sun" && row.block === "00–04"));
+
+  const METRICS = ["Latency", "Errors", "Traffic", "Saturation"];
+  const R = [
+    [1, 0.72, 0.31, 0.64],
+    [0.72, 1, -0.12, 0.48],
+    [0.31, -0.12, 1, -0.55],
+    [0.64, 0.48, -0.55, 1],
+  ];
+  const correlation = METRICS.flatMap((a, i) => METRICS.map((b, j) => ({ a, b, r: R[i][j] })));
+
+  let selected = null;
+</script>
+
+`Heatmap` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+For a single row of cells, use [HeatStrip](/components/HeatStrip).
+
+## Basic
+
+Pass long `data` with `x`, `y`, and `value` accessors. Rows and columns keep first-seen order, rows that land on the same cell are summed, and a cell with no data is hatched so it cannot be read as a low value.
+
+<Heatmap data={requests} x="day" y="block" value="requests" title="Requests by day and time" rowHeader="Time" />
+
+## Cell labels
+
+Set `cellLabels` to write each value in its cell. The label color follows the fill, so it stays readable across the ramp. `format` takes `Intl.NumberFormat` options or a function.
+
+<Heatmap data={requests} x="day" y="block" value="requests" title="Requests by day and time" cellLabels />
+
+## Order
+
+Set `xOrder` and `yOrder` to fix the order. Keys outside the list are dropped, and keys with no data still get their row or column.
+
+<Heatmap
+  data={requests}
+  x="day"
+  y="block"
+  value="requests"
+  xOrder={["Sat", "Sun"]}
+  yOrder={["08–12", "12–16", "16–20"]}
+  title="Weekend daytime"
+  cellLabels
+/>
+
+## Palette and domain
+
+`palette` takes a sequential hue (`"blue"`, `"purple"`, `"cyan"`, `"teal"`) or a diverging palette (`"red-cyan"`, `"purple-teal"`). A diverging palette is centered on the middle of the `domain`, so set the domain when the midpoint matters, as it does for a correlation matrix.
+
+<Heatmap
+  data={correlation}
+  x="a"
+  y="b"
+  value="r"
+  palette="red-cyan"
+  domain={[-1, 1]}
+  format={{ maximumFractionDigits: 2 }}
+  cellLabels
+  size="lg"
+  title="Correlation between signals"
+/>
+
+## Sizes
+
+`size` sets the cell height: 24, 32, or 48 pixels. Columns share the width equally.
+
+<Heatmap data={requests} x="day" y="block" value="requests" palette="teal" size="sm" title="Small cells" />
+
+## Selectable
+
+Set `selectable` to turn cells into toggle buttons. Bind `selected` or listen for `select`, whose detail holds the cell and the `data` rows summed into it.
+
+<Heatmap
+  data={requests}
+  x="day"
+  y="block"
+  value="requests"
+  title="Pick a time slot"
+  selectable
+  bind:selected
+/>
+
+## Accessibility
+
+The heatmap is a table: the `title` is its caption, and every cell has a row header and a column header. Set `rowHeader` to name the header column. Each cell holds its value as text even when `cellLabels` is off, so nothing rests on color alone. When `selectable`, the grid is one tab stop and the arrow keys move between cells, skipping empty ones. The legend is hidden from assistive technology because the cells already carry their values.

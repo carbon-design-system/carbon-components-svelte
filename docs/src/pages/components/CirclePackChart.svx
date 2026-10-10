@@ -1,0 +1,70 @@
+---
+components: ["CirclePackChart"]
+description: Circle pack shows values as circles packed inside their parents, for a quick sense of what is large and what belongs together.
+---
+
+<script>
+  import { CirclePackChart } from "carbon-components-svelte/viz";
+
+  const repos = [
+    ["Platform", "gateway", 4100],
+    ["Platform", "scheduler", 2300],
+    ["Platform", "identity", 1700],
+    ["Platform", "billing", 1200],
+    ["Platform", "audit-log", 400],
+    ["Data", "warehouse", 2900],
+    ["Data", "etl", 1500],
+    ["Data", "notebooks", 600],
+    ["Data", "lineage", 250],
+    ["Web", "storefront", 3200],
+    ["Web", "design-system", 1900],
+    ["Web", "docs", 700],
+    ["Mobile", "ios", 1600],
+    ["Mobile", "android", 1400],
+  ].map(([team, repo, commits]) => ({ team, repo, commits }));
+</script>
+
+`CirclePackChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Circles waste space and their areas are hard to compare. Use a pack for an overview of what is big and what belongs together, and a [TreemapChart](/components/TreemapChart) or a [BarChart](/components/BarChart) when the values need reading.
+
+## Basic
+
+Pass long `data` with `value` and `label` accessors. Rows that share a label are summed, and a circle's area follows its value. Circles are placed largest first, each in the free spot nearest the center that touches two others, so the result is tight and the same on every render.
+
+<CirclePackChart data={repos} value="commits" label="repo" title="Commits by repository" />
+
+## Groups
+
+Set `group` to a parent accessor. Circles of one parent are packed inside a dashed outline and share its color. The outline is not filled, since its area is only the room its children need and says nothing about their total.
+
+<CirclePackChart data={repos} value="commits" label="repo" group="team" title="Commits by team and repository" />
+
+## Size
+
+The pack is drawn at `size` pixels square and scales down with its container. `padding` is the gap between circles. A circle carries a label only when it can hold one, shortened to fit.
+
+<CirclePackChart data={repos} value="commits" label="repo" group="team" size={280} padding={2} title="A smaller pack" />
+
+## Color
+
+Groups take Carbon's prescribed color groups in order. Set `palette` to pick another group, or `colors` to override a parent.
+
+<CirclePackChart
+  data={repos}
+  value="commits"
+  label="repo"
+  group="team"
+  palette={2}
+  colors={{ Mobile: "neutral" }}
+  size={320}
+  title="Commits by team and repository"
+/>
+
+## Interaction
+
+Hover a circle, or focus the chart and use the arrow keys, to read its label and value: the rest dim. `hover` fires with the leaf, and `select` on click, Enter, or Space. Both carry the `rows` summed into it.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move through the circles group by group, largest first, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused circle is announced with its group, label, and value. Circles say nothing to assistive technology, so the figure also holds every value as a visually hidden outline: groups, each with a list of its leaves. Labels carry a halo of the page background, so they stay readable over any color.

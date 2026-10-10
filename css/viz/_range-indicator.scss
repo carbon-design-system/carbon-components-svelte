@@ -1,0 +1,126 @@
+/// RangeIndicator: where a value sits within a range, over an optional
+/// quartile box.
+/// @access private
+/// @group viz
+@mixin viz-range-indicator {
+  .#{$prefix}--viz-range {
+    --bx-viz-size: #{to-rem(24px)};
+    --bx-viz-dot: #{to-rem(8px)};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-inline-size: to-rem(64px);
+  }
+
+  .#{$prefix}--viz-range--sm {
+    --bx-viz-size: #{to-rem(16px)};
+    --bx-viz-dot: #{to-rem(6px)};
+  }
+
+  .#{$prefix}--viz-range--lg {
+    --bx-viz-size: #{to-rem(32px)};
+    --bx-viz-dot: #{to-rem(10px)};
+  }
+
+  // Every layer shares one grid cell, so nothing is absolutely positioned and
+  // the graphic mirrors in RTL for free.
+  .#{$prefix}--viz-range__track {
+    display: grid;
+    flex: 1 1 auto;
+    align-items: center;
+    block-size: var(--bx-viz-size);
+  }
+
+  .#{$prefix}--viz-range__whisker,
+  .#{$prefix}--viz-range__box,
+  .#{$prefix}--viz-range__median,
+  .#{$prefix}--viz-range__value {
+    grid-area: 1 / 1;
+  }
+
+  // The line, with a cap at each end.
+  .#{$prefix}--viz-range__whisker {
+    border-inline: to-rem(1px) solid $ui-04;
+    background: linear-gradient($ui-04, $ui-04) center / 100% to-rem(1px)
+      no-repeat;
+    block-size: 50%;
+  }
+
+  .#{$prefix}--viz-range__box {
+    background: $ui-03;
+    block-size: 50%;
+    box-shadow: inset 0 0 0 to-rem(1px) $ui-04;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    margin-inline-start: calc(var(--bx-viz-start) * 1%);
+    transition:
+      inline-size $duration--moderate-01 carbon--motion(standard, productive),
+      margin-inline-start $duration--moderate-01
+        carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-range__median {
+    background: $ui-05;
+    block-size: 50%;
+    inline-size: to-rem(2px);
+    margin-inline-start: calc(
+      var(--bx-viz-pct) * 1% - #{to-rem(2px)} * var(--bx-viz-pct) / 100
+    );
+  }
+
+  // Slides from 0 to 100% minus its own width, so it never leaves the track.
+  .#{$prefix}--viz-range__value {
+    border-radius: 50%;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: var(--bx-viz-dot);
+    box-shadow: 0 0 0 to-rem(1px) $ui-background;
+    inline-size: var(--bx-viz-dot);
+    margin-inline-start: calc(
+      var(--bx-viz-pct) * 1% - var(--bx-viz-dot) * var(--bx-viz-pct) / 100
+    );
+    transition: margin-inline-start $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  // A value past either end becomes a ring, so clamping is never silent.
+  .#{$prefix}--viz-range__value--outside {
+    background: $ui-background;
+    box-shadow: inset 0 0 0 to-rem(2px) var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-range__end {
+    flex: none;
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-range__box,
+    .#{$prefix}--viz-range__value {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-range__whisker {
+      border-block-end: 1px solid CanvasText;
+      background: none;
+    }
+
+    .#{$prefix}--viz-range__box {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-range__median,
+    .#{$prefix}--viz-range__value {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-range-indicator") {
+  @include viz-range-indicator;
+}

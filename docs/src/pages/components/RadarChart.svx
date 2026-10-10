@@ -1,0 +1,64 @@
+---
+components: ["RadarChart"]
+description: Radar chart compares a few series across several measures that share a scale, as polygons over spokes.
+---
+
+<script>
+  import { RadarChart } from "carbon-components-svelte/viz";
+
+  const AXES = ["Performance", "Accessibility", "Best practices", "SEO", "Security", "Reliability"];
+  const SCORES = { Checkout: [92, 78, 85, 96, 70, 88], Search: [64, 91, 72, 80, 84, 69] };
+  const audits = Object.entries(SCORES).flatMap(([page, scores]) =>
+    AXES.map((category, i) => ({ page, category, score: scores[i] })),
+  );
+</script>
+
+`RadarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+A radar is good for one thing: seeing the shape of a profile, and how two or three profiles differ. Positions around a circle are hard to compare and the area of a polygon means nothing, so use a grouped [BarChart](/components/BarChart) when the values matter more than the shape.
+
+## Basic
+
+Pass long `data` with `axis`, `value`, and `series` accessors. Spokes keep first-seen order, clockwise from 12 o'clock. Every spoke shares one scale from zero, so the values must share a unit, such as scores out of 100.
+
+<RadarChart data={audits} axis="category" value="score" series="page" title="Audit scores by page" />
+
+## Scale
+
+The scale ends at the largest value, rounded out. Set `max` to fix it, which keeps several radars comparable.
+
+<RadarChart data={audits} axis="category" value="score" series="page" max={100} title="Audit scores, out of 100" />
+
+## Single series
+
+<RadarChart
+  data={audits.filter((row) => row.page === "Checkout")}
+  axis="category"
+  value="score"
+  max={100}
+  title="Checkout"
+  radius={96}
+/>
+
+## Color and format
+
+`palette` picks another of Carbon's color groups, and `colors` fixes a series. `format` takes `Intl.NumberFormat` options or a function.
+
+<RadarChart
+  data={audits}
+  axis="category"
+  value="score"
+  series="page"
+  max={100}
+  palette={2}
+  format={(value) => `${value} pts`}
+  title="Audit scores by page"
+/>
+
+## Interaction
+
+Hover near a spoke, or focus the chart and use the arrow keys, to read every series on it. Click a legend entry to hide a series. The last visible one cannot be hidden. Bind `hidden`, and listen for `hover` and `legend:toggle`.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move around the spokes and wrap, Home and End jump to the first and last, and Escape clears. The focused spoke is announced with every series, such as "SEO: Checkout 96, Search 80". A polygon says nothing to assistive technology, so the figure also holds every value as a visually hidden table of spokes by series. Set `axisHeader` and `legendLabel` to translate its first column header and the legend's name.

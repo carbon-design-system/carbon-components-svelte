@@ -1,0 +1,99 @@
+/// VarianceIndicator: a signed difference as a bar from a zero line, green
+/// or red by whether the sign is good.
+/// @access private
+/// @group viz
+@mixin viz-variance-indicator {
+  .#{$prefix}--viz-variance {
+    --bx-viz-size: #{to-rem(8px)};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    color: $text-primary;
+    min-inline-size: to-rem(64px);
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-variance--sm {
+    --bx-viz-size: #{to-rem(4px)};
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-variance--lg {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  // Two equal halves, so the zero line sits in the middle whatever the
+  // width, and the graphic mirrors in RTL for free.
+  .#{$prefix}--viz-variance__track {
+    display: grid;
+    flex: 1 1 auto;
+    block-size: var(--bx-viz-size);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .#{$prefix}--viz-variance__half {
+    display: flex;
+    justify-content: flex-end;
+    background: $ui-03;
+  }
+
+  .#{$prefix}--viz-variance__half--positive {
+    justify-content: flex-start;
+    border-inline-start: to-rem(1px) solid $ui-05;
+  }
+
+  .#{$prefix}--viz-variance__bar {
+    background: $ui-04;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    min-inline-size: to-rem(2px);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-variance--favorable .#{$prefix}--viz-variance__bar {
+    background: $support-success;
+  }
+
+  .#{$prefix}--viz-variance--unfavorable .#{$prefix}--viz-variance__bar {
+    background: $support-error;
+  }
+
+  .#{$prefix}--viz-variance__value {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    min-inline-size: 4ch;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-variance--favorable .#{$prefix}--viz-variance__value {
+    color: $support-success;
+  }
+
+  .#{$prefix}--viz-variance--unfavorable .#{$prefix}--viz-variance__value {
+    color: $support-error;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-variance__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-variance__half {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-variance__bar {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-variance-indicator") {
+  @include viz-variance-indicator;
+}

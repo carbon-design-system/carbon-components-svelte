@@ -1,0 +1,85 @@
+---
+components: ["VarianceIndicator"]
+description: Variance indicator shows a signed difference, such as actual minus plan, as a bar from a zero line, colored by whether the sign is good.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { VarianceIndicator } from "carbon-components-svelte/viz";
+
+  const rows = [
+    { id: "rev", metric: "Revenue", plan: 400000, actual: 418000, positive: "up" },
+    { id: "cost", metric: "Cost of sales", plan: 150000, actual: 162000, positive: "down" },
+    { id: "new", metric: "New customers", plan: 1200, actual: 1090, positive: "up" },
+    { id: "churn", metric: "Churned customers", plan: 80, actual: 64, positive: "down" },
+  ];
+</script>
+
+`VarianceIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It answers "how far off plan" at a glance: the bar grows from the middle toward the sign of the variance, and takes the success or error color by whether that sign is good. A [DeltaIndicator](/components/DeltaIndicator) writes a change; this draws one, so a column of them compares.
+
+## Basic
+
+Pass `value`, the variance, and a `label`. Set `max` to the variance that fills a whole side. Without it, the bar is full, so give every indicator in a set the same `max`.
+
+<Stack gap={5}>
+  <VarianceIndicator value={18000} max={30000} label="Revenue against plan" />
+  <VarianceIndicator value={-12000} max={30000} label="New customers against plan" />
+  <VarianceIndicator value={0} max={30000} label="Cost against plan" />
+</Stack>
+
+## Direction
+
+Set `positive` to `"down"` where a lower number is better, such as cost or latency. The bar still grows toward the sign; only the color changes.
+
+<Stack gap={5}>
+  <VarianceIndicator value={12000} max={30000} positive="down" label="Cost against plan" />
+  <VarianceIndicator value={-16} max={40} positive="down" label="Churned customers against plan" />
+</Stack>
+
+## Format
+
+`format` takes `Intl.NumberFormat` options or a function. A sign is always added. Set `showValue` to `false` to draw only the bar, when the number is written elsewhere.
+
+<Stack gap={5}>
+  <VarianceIndicator value={18000} max={30000} format={{ style: "currency", currency: "USD", notation: "compact" }} label="Revenue against plan" />
+  <VarianceIndicator value={-42} max={100} format={(v) => `${v} ms`} positive="down" label="Latency against objective" />
+  <VarianceIndicator value={-12000} max={30000} showValue={false} label="New customers against plan" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <VarianceIndicator value={18000} max={30000} size="sm" label="Small" />
+  <VarianceIndicator value={18000} max={30000} label="Medium (default)" />
+  <VarianceIndicator value={18000} max={30000} size="lg" label="Large" />
+</Stack>
+
+## In a data table
+
+A column of indicators with one `max` reads as a small chart. The metric and the numbers are in their own columns, so the indicator can be decorative.
+
+<DataTable
+  headers={[
+    { key: "metric", value: "Metric" },
+    { key: "plan", value: "Plan" },
+    { key: "actual", value: "Actual" },
+    { key: "variance", value: "Variance" },
+  ]}
+  {rows}
+>
+  <svelte:fragment slot="cell" let:row let:cell>
+    {#if cell.key === "variance"}
+      <VarianceIndicator value={row.actual - row.plan} max={row.plan * 0.1} positive={row.positive} size="sm" />
+    {:else if cell.key === "plan" || cell.key === "actual"}
+      {cell.value.toLocaleString()}
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the indicator is an image named with the label and the signed variance, such as "Revenue against plan, +18K". Without one it is decorative, for a table whose other columns already say the numbers. The sign is written as well as drawn, so the meaning never rests on color alone.

@@ -1,0 +1,70 @@
+/// ShareOfTotal: one part of a whole as a filled track and a percentage.
+/// @access private
+/// @group viz
+@mixin viz-share-of-total {
+  .#{$prefix}--viz-share {
+    --bx-viz-size: #{to-rem(8px)};
+
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-share--sm {
+    --bx-viz-size: #{to-rem(4px)};
+  }
+
+  .#{$prefix}--viz-share--lg {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-share__track {
+    background: $ui-03;
+    block-size: var(--bx-viz-size);
+    inline-size: to-rem(96px);
+  }
+
+  .#{$prefix}--viz-share__fill {
+    display: block;
+    min-inline-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: 100%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-share__fill--empty {
+    visibility: hidden;
+  }
+
+  .#{$prefix}--viz-share__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-share__fill {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-share__fill {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-share__track {
+      border: 1px solid CanvasText;
+    }
+  }
+}
+
+@include exports("viz-share-of-total") {
+  @include viz-share-of-total;
+}

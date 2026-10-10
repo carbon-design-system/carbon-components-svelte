@@ -1,0 +1,44 @@
+---
+components: ["TargetIndicator"]
+description: Target indicator shows progress toward a target with a tick for where the value should be by now, so pace reads at a glance.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { TargetIndicator } from "carbon-components-svelte/viz";
+</script>
+
+`TargetIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Use it for quota, budget burn, or any goal with a deadline: the fill is the value, the end of the track is the target, and a tick marks where the value should be by now. A [BulletChart](/components/BulletChart) compares a value against qualitative bands instead; [VarianceIndicator](/components/VarianceIndicator) shows a signed difference from plan.
+
+## Basic
+
+Pass `value`, `target`, and `expected`, the pace for today. The attainment and the pace are appended to the `label`. Set `showValue` to write the attainment next to the track.
+
+<TargetIndicator value={84} target={100} expected={78} label="Quota attainment" showValue />
+
+## Pace
+
+Behind pace is the only state that changes the color, and the tick says the same by position. Once the value passes the target, the track extends and a mark shows where the target was.
+
+<Stack gap={5}>
+  <TargetIndicator value={52} target={100} expected={78} label="Behind" showValue />
+  <TargetIndicator value={78} target={100} expected={78} label="On pace" showValue />
+  <TargetIndicator value={91} target={100} expected={78} label="Ahead" showValue />
+  <TargetIndicator value={118} target={100} expected={90} label="Met" showValue />
+</Stack>
+
+## Format and sizes
+
+`format` writes the values; `min` sets the start of the track when it is not zero.
+
+<Stack gap={5}>
+  <TargetIndicator value={1840000} target={2500000} expected={2100000} format={{ notation: "compact", style: "currency", currency: "USD" }} label="Bookings" showValue />
+  <TargetIndicator value={64} target={100} expected={70} size="sm" label="Small" />
+  <TargetIndicator value={64} target={100} expected={70} size="lg" label="Large" />
+</Stack>
+
+## Accessibility
+
+With a `label`, the graphic is an image named with the label, the value against the target, the attainment as a percentage, and the pace in words. Without one it is decorative. The words can be changed with `translations`.

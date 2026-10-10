@@ -1,0 +1,103 @@
+/// ComparisonBar: this period against the previous one, as two thin bars.
+/// @access private
+/// @group viz
+@mixin viz-comparison-bar {
+  .#{$prefix}--viz-comparison-bar {
+    --bx-viz-row-size: #{to-rem(8px)};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-05;
+    color: $text-primary;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-comparison-bar--sm {
+    --bx-viz-row-size: #{to-rem(4px)};
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-comparison-bar--lg {
+    --bx-viz-row-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-comparison-bar__table {
+    flex: 1 1 auto;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--viz-comparison-bar__table th,
+  .#{$prefix}--viz-comparison-bar__table td {
+    // Block padding only: the cell classes below own the inline padding.
+    padding-block: $carbon--spacing-01;
+    padding-inline: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-comparison-bar__table
+    .#{$prefix}--viz-comparison-bar__label {
+    padding-inline-end: $carbon--spacing-05;
+    font-weight: inherit;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-comparison-bar__track-cell {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-comparison-bar__bar {
+    min-inline-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: var(--bx-viz-row-size);
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-comparison-bar__table
+    .#{$prefix}--viz-comparison-bar__value {
+    padding-inline-start: $carbon--spacing-05;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-comparison-bar__row--previous {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--viz-comparison-bar__row--previous
+    .#{$prefix}--viz-comparison-bar__bar {
+    background: $ui-04;
+  }
+
+  .#{$prefix}--viz-comparison-bar__row--empty
+    .#{$prefix}--viz-comparison-bar__bar {
+    visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-comparison-bar__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-comparison-bar__bar {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-comparison-bar__row--previous
+      .#{$prefix}--viz-comparison-bar__bar {
+      border: 1px solid CanvasText;
+      background: none;
+    }
+  }
+}
+
+@include exports("viz-comparison-bar") {
+  @include viz-comparison-bar;
+}

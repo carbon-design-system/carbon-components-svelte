@@ -1,0 +1,134 @@
+/// OrgChart: a tree of cards, the root on top, drawn at a fixed logical
+/// size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-org-chart {
+  .#{$prefix}--viz-org {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-org .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-org__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-org__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-org__link {
+    fill: none;
+    stroke: $ui-04;
+    stroke-width: 1.5;
+    transition: stroke $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-org__link--active {
+    stroke: $interactive-04;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-org__node {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-org__card {
+    fill: $ui-background;
+    stroke: $ui-04;
+    stroke-width: 1;
+  }
+
+  // A group's color runs down the start edge of the card.
+  .#{$prefix}--viz-org__accent {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  // A card holding folded reports has a heavier frame, so the state never
+  // rests on the badge alone.
+  .#{$prefix}--viz-org__node--collapsed .#{$prefix}--viz-org__card,
+  .#{$prefix}--viz-org__node--active .#{$prefix}--viz-org__card {
+    stroke: $interactive-04;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-org__node--selected .#{$prefix}--viz-org__card {
+    fill: $selected-ui;
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-org__label {
+    fill: $text-primary;
+    font-weight: 600;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-org__sublabel {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  // The fold control sits on the card's bottom edge: a minus when open, a
+  // count of the folded reports when closed.
+  .#{$prefix}--viz-org__toggle-box {
+    fill: $ui-background;
+    stroke: $ui-04;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-org__node--collapsed .#{$prefix}--viz-org__toggle-box {
+    fill: $interactive-04;
+    stroke: $interactive-04;
+  }
+
+  .#{$prefix}--viz-org__toggle-mark {
+    fill: none;
+    stroke: $icon-primary;
+    stroke-linecap: round;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-org__toggle-text {
+    fill: $text-on-color;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-org--emphasis
+    .#{$prefix}--viz-org__link:not(.#{$prefix}--viz-org__link--active) {
+    stroke-opacity: 0.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-org__link {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-org__card,
+    .#{$prefix}--viz-org__toggle-box {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-org__node--selected .#{$prefix}--viz-org__card {
+      fill: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-org-chart") {
+  @include viz-org-chart;
+}

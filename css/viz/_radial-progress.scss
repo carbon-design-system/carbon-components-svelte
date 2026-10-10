@@ -1,0 +1,87 @@
+/// RadialProgress: a value on a circular, three-quarter, or half arc, with
+/// content in the center.
+/// @access private
+/// @group viz
+@mixin viz-radial-progress {
+  .#{$prefix}--viz-radial {
+    display: inline-grid;
+    // Keep the one row as tall as the arc when a flex parent stretches this.
+    align-content: start;
+    inline-size: var(--bx-viz-diameter);
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-radial__svg,
+  .#{$prefix}--viz-radial__center {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--viz-radial__svg {
+    display: block;
+    overflow: visible;
+  }
+
+  [dir="rtl"] .#{$prefix}--viz-radial__svg {
+    transform: scaleX(-1);
+  }
+
+  .#{$prefix}--viz-radial__track {
+    fill: $ui-03;
+  }
+
+  .#{$prefix}--viz-radial__fill {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  // Thresholds are ticks across the track, so status never rests on color.
+  .#{$prefix}--viz-radial__tick {
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-radial__center {
+    display: flex;
+    align-items: center;
+    align-self: start;
+    justify-content: center;
+    // As tall as the full circle, so content centers on the circle even when
+    // the arc is open at the bottom.
+    block-size: var(--bx-viz-diameter);
+    min-inline-size: 0;
+    text-align: center;
+  }
+
+  // A half arc has no room at its center line: sit on the baseline instead.
+  .#{$prefix}--viz-radial--half .#{$prefix}--viz-radial__center {
+    align-items: flex-end;
+    block-size: calc(var(--bx-viz-diameter) / 2);
+  }
+
+  .#{$prefix}--viz-radial__value {
+    color: $text-primary;
+    // Scales with the arc, so the text fits the hole at any diameter.
+    font-size: calc(var(--bx-viz-diameter) * 0.19);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-radial__track {
+      fill: none;
+      stroke: CanvasText;
+      stroke-width: 1;
+    }
+
+    .#{$prefix}--viz-radial__fill {
+      fill: Highlight;
+    }
+
+    .#{$prefix}--viz-radial__tick {
+      stroke: CanvasText;
+    }
+  }
+}
+
+@include exports("viz-radial-progress") {
+  @include viz-radial-progress;
+}

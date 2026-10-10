@@ -1,0 +1,152 @@
+/// TreemapChart: nested lists of absolutely positioned cells, sized in
+/// percentages, so the map follows its container with no measurement.
+/// @access private
+/// @group viz
+@mixin viz-treemap-chart {
+  .#{$prefix}--viz-treemap {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-treemap .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  // Padding is a share of the width, which holds the aspect ratio in every
+  // browser the library supports.
+  .#{$prefix}--viz-treemap__box {
+    position: relative;
+    padding-block-start: calc(100% / var(--bx-viz-ratio, 2));
+  }
+
+  .#{$prefix}--viz-treemap__groups,
+  .#{$prefix}--viz-treemap__leaves {
+    position: absolute;
+    inset: 0;
+  }
+
+  .#{$prefix}--viz-treemap__group,
+  .#{$prefix}--viz-treemap__leaf {
+    position: absolute;
+  }
+
+  // The gap between groups is wider than the one between their cells, which
+  // is what shows the hierarchy when neighbors share a hue.
+  .#{$prefix}--viz-treemap__group {
+    border: to-rem(2px) solid $ui-background;
+  }
+
+  .#{$prefix}--viz-treemap__leaf {
+    overflow: hidden;
+    border: to-rem(1px) solid $ui-background;
+    background: var(--bx-viz-color, #{$interactive-04});
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-treemap__cell,
+  .#{$prefix}--viz-treemap__button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: $carbon--spacing-02;
+    block-size: 100%;
+    inline-size: 100%;
+    row-gap: to-rem(2px);
+  }
+
+  .#{$prefix}--viz-treemap__button {
+    border: 0;
+    appearance: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-treemap__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  // Text sits on a chip of the page background, so it is readable over any
+  // cell color in any theme.
+  .#{$prefix}--viz-treemap__label,
+  .#{$prefix}--viz-treemap__value {
+    overflow: hidden;
+    padding: 0 $carbon--spacing-02;
+    background: $ui-background;
+    color: $text-primary;
+    max-inline-size: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-treemap__value {
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Too small to hold text. The tooltip and assistive technology still read it.
+  .#{$prefix}--viz-treemap__leaf--tiny .#{$prefix}--viz-treemap__label,
+  .#{$prefix}--viz-treemap__leaf--tiny .#{$prefix}--viz-treemap__value,
+  .#{$prefix}--viz-treemap__leaf--short .#{$prefix}--viz-treemap__value {
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    block-size: 1px;
+    clip: rect(0, 0, 0, 0);
+    inline-size: 1px;
+  }
+
+  .#{$prefix}--viz-treemap--emphasis
+    .#{$prefix}--viz-treemap__leaf:not(.#{$prefix}--viz-treemap__leaf--active) {
+    opacity: 0.4;
+  }
+
+  .#{$prefix}--viz-treemap__leaf--selected {
+    box-shadow:
+      inset 0 0 0 to-rem(2px) $ui-05,
+      inset 0 0 0 to-rem(3px) $ui-background;
+  }
+
+  .#{$prefix}--viz-treemap__legend {
+    display: flex;
+    flex-wrap: wrap;
+    color: $text-secondary;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+    margin-block-start: $carbon--spacing-03;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-treemap__legend-item {
+    display: inline-flex;
+    align-items: center;
+    column-gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--viz-treemap__swatch {
+    background: var(--bx-viz-color);
+    block-size: to-rem(12px);
+    inline-size: to-rem(12px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-treemap__leaf {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-treemap__leaf,
+    .#{$prefix}--viz-treemap__swatch {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-treemap-chart") {
+  @include viz-treemap-chart;
+}

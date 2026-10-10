@@ -22,12 +22,25 @@ import type {
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
 import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+import type {
+  scaleLinear,
+  Chart as VizChart,
+  DeltaIndicator as VizDeltaIndicator,
+  FunnelBars as VizFunnelBars,
+  vizColor,
+} from "carbon-components-svelte/viz";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/g10.css";
 import "carbon-components-svelte/css/g80.css";
 import "carbon-components-svelte/css/g90.css";
+import "carbon-components-svelte/css/viz.css";
+import "carbon-components-svelte/css/viz-g10.css";
+import "carbon-components-svelte/css/viz-g100.css";
+import "carbon-components-svelte/css/viz-g80.css";
+import "carbon-components-svelte/css/viz-g90.css";
+import "carbon-components-svelte/css/viz-white.css";
 import "carbon-components-svelte/css/white.css";
 
 type _BarrelButton = BarrelButton;
@@ -50,3 +63,8 @@ type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;
+type _VizChart = VizChart<{ date: Date; value: number }>;
+type _VizColor = ReturnType<typeof vizColor>;
+type _VizDeltaIndicator = VizDeltaIndicator;
+type _VizFunnelBars = VizFunnelBars<"a" | "b">;
+type _VizScaleLinear = ReturnType<typeof scaleLinear>;

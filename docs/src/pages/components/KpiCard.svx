@@ -1,0 +1,104 @@
+---
+components: ["KpiCard"]
+description: KPI card answers "how is this metric doing" on one tile: its name, its value, how it changed, its trend, and its target.
+---
+
+<script>
+  import { Column, Grid, Row } from "carbon-components-svelte";
+  import { BulletChart, KpiCard, ShareOfTotal, Sparkline } from "carbon-components-svelte/viz";
+
+  const usd = { style: "currency", currency: "USD", notation: "compact" };
+  const revenue = [92, 96, 101, 99, 108, 112, 118, 121, 119, 128];
+  const churn = [2.9, 2.8, 2.8, 2.6, 2.7, 2.5, 2.4, 2.3, 2.2, 2.1];
+  const latency = [180, 176, 190, 210, 240, 232, 228, 251, 262, 270];
+</script>
+
+`KpiCard` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Tile](/components/Tile) that lays out pieces the library already has: a formatted value, a [DeltaIndicator](/components/DeltaIndicator), and slots for a [Sparkline](/components/Sparkline) and a [BulletChart](/components/BulletChart).
+
+## Basic
+
+Pass a `label` and a `value`. `format` takes `Intl.NumberFormat` options or a function, and defaults to compact notation.
+
+<KpiCard label="Monthly revenue" value={1280000} format={usd} />
+
+## Delta
+
+Set `delta` for the change against a baseline, and `deltaLabel` to say which. `deltaFormat` is `"percent"` by default. Set `positive` to `"down"` for metrics where lower is better: the arrow still follows the sign, and only the color changes.
+
+<Grid narrow padding>
+  <Row>
+    <Column sm={4} md={4} lg={8}>
+      <KpiCard label="Monthly revenue" value={1280000} format={usd} delta={0.123} deltaLabel="vs last month" />
+    </Column>
+    <Column sm={4} md={4} lg={8}>
+      <KpiCard
+        label="Churn"
+        value={0.021}
+        format={{ style: "percent", maximumFractionDigits: 1 }}
+        delta={-0.004}
+        deltaLabel="vs last month"
+        positive="down"
+      />
+    </Column>
+  </Row>
+</Grid>
+
+## Trend and target
+
+Put a graphic in the `chart` slot and another in the `footer` slot. The chart is hidden from assistive technology, since the value and the delta already say what it shows, so give the footer graphic its own `label`. Size the graphic with its own props, such as a sparkline's `width` and `height`.
+
+<Grid narrow padding>
+  <Row>
+    <Column sm={4} md={4} lg={5}>
+      <KpiCard label="Monthly revenue" value={1280000} format={usd} delta={0.123} deltaLabel="vs last month">
+        <Sparkline slot="chart" values={revenue} fill width={240} height={48} />
+        <BulletChart slot="footer" value={1.28} target={1.5} max={2} size="sm" label="Against a 1.5M target" />
+      </KpiCard>
+    </Column>
+    <Column sm={4} md={4} lg={5}>
+      <KpiCard
+        label="Churn"
+        value={0.021}
+        format={{ style: "percent", maximumFractionDigits: 1 }}
+        delta={-0.004}
+        deltaLabel="vs last month"
+        positive="down"
+      >
+        <Sparkline slot="chart" values={churn} color="success" width={240} height={48} />
+        <ShareOfTotal slot="footer" value={21} total={1000} suffix="of accounts" size="sm" label="Churned accounts" />
+      </KpiCard>
+    </Column>
+    <Column sm={4} md={4} lg={6}>
+      <KpiCard label="p95 latency" value={270} format={(v) => `${v} ms`} delta={0.19} deltaLabel="vs last week" positive="down">
+        <Sparkline slot="chart" values={latency} color="error" width={240} height={48} />
+        <BulletChart slot="footer" value={270} target={250} max={400} bands={[200, 300]} size="sm" label="Against a 250 ms objective" />
+      </KpiCard>
+    </Column>
+  </Row>
+</Grid>
+
+## Link
+
+Set `href` to make the whole card a link, which suits a dashboard whose cards open a report.
+
+<KpiCard label="Open incidents" value={7} delta={-3} deltaFormat="number" deltaLabel="vs yesterday" positive="down" href="#" />
+
+## Loading
+
+Set `loading` while the value is on its way. A skeleton holds the value's place, so nothing jumps when it lands, and the card is marked busy.
+
+<KpiCard label="Monthly revenue" loading />
+
+## Custom value
+
+Fill the `value` slot to write the value yourself. It receives `formattedValue`.
+
+<KpiCard label="Uptime" value={0.9992} format={{ style: "percent", maximumFractionDigits: 2 }}>
+  <svelte:fragment slot="value" let:formattedValue>{formattedValue} <small>this quarter</small></svelte:fragment>
+</KpiCard>
+
+## Accessibility
+
+Everything that matters is text: the label, the value, and the delta, which says its direction in words. The `chart` slot is hidden from assistive technology because it repeats them. A missing value is a dash, not a zero. With an `href` the card is a single link named by its contents.

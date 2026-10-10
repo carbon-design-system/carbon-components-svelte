@@ -1,0 +1,63 @@
+/// HorizonChart: each series cut into layers and folded onto one short row,
+/// so many series and a long window fit a small height. The tooltip reuses
+/// the chart's.
+/// @access private
+/// @group viz
+@mixin viz-horizon-chart {
+  .#{$prefix}--viz-horizon {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-horizon .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-horizon__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-horizon__svg {
+    display: block;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-horizon__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-horizon__track {
+    fill: $ui-01;
+    stroke: $ui-background;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-horizon__band {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-horizon__label,
+  .#{$prefix}--viz-horizon__tick {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-horizon__ruler {
+    pointer-events: none;
+    shape-rendering: crispEdges;
+    stroke: $ui-05;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-horizon__band {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-horizon-chart") {
+  @include viz-horizon-chart;
+}

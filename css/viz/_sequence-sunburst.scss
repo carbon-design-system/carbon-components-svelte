@@ -1,0 +1,87 @@
+/// SequenceSunburst: a sunburst of ordered steps, with the path to the
+/// hovered step written above it.
+/// @access private
+/// @group viz
+@mixin viz-sequence-sunburst {
+  .#{$prefix}--viz-sequence-sunburst {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-sequence-sunburst .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  // The inner chart's own caption is the accessible name only.
+  .#{$prefix}--viz-sequence-sunburst
+    .#{$prefix}--viz-sunburst
+    > .#{$prefix}--viz-chart__title {
+    display: none;
+  }
+
+  .#{$prefix}--viz-sequence-sunburst__trail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    margin-block-end: $carbon--spacing-03;
+    min-block-size: to-rem(24px);
+    row-gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--viz-sequence-sunburst__path {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    gap: $carbon--spacing-02;
+    list-style: none;
+  }
+
+  // Each step is a chevron chip; the hovered step takes its arc's color.
+  .#{$prefix}--viz-sequence-sunburst__step {
+    padding: 0 $carbon--spacing-03;
+    background: $ui-03;
+    block-size: to-rem(24px);
+    color: $text-primary;
+    line-height: to-rem(24px);
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-sequence-sunburst__step:not(:last-child)::after {
+    content: "›";
+    margin-inline-start: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--viz-sequence-sunburst__step--current {
+    background: var(--bx-viz-color, #{$interactive-04});
+    color: $text-on-color;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-sequence-sunburst__share {
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-sequence-sunburst__step {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-sequence-sunburst__step--current {
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-sequence-sunburst") {
+  @include viz-sequence-sunburst;
+}

@@ -1,0 +1,67 @@
+---
+components: ["MarimekkoChart"]
+description: Marimekko chart shows share within share, as columns as wide as each category's size and cells as tall as each series' part of it.
+---
+
+<script>
+  import { MarimekkoChart } from "carbon-components-svelte/viz";
+
+  const SEGMENTS = [
+    ["Enterprise", 420],
+    ["Mid-market", 260],
+    ["SMB", 180],
+    ["Public sector", 90],
+  ];
+  const SHARES = {
+    Acme: [42, 31, 18, 55],
+    Beta: [24, 33, 26, 20],
+    Cerulean: [9, 16, 30, 5],
+    Other: [25, 20, 26, 20],
+  };
+  const market = SEGMENTS.flatMap(([segment, size], i) =>
+    Object.entries(SHARES).map(([vendor, shares]) => ({ segment, size, vendor, share: shares[i] })),
+  );
+
+  const traffic = [
+    { channel: "Search", device: "Desktop", sessions: 5200 },
+    { channel: "Search", device: "Mobile", sessions: 7100 },
+    { channel: "Search", device: "Tablet", sessions: 600 },
+    { channel: "Direct", device: "Desktop", sessions: 3900 },
+    { channel: "Direct", device: "Mobile", sessions: 2100 },
+    { channel: "Direct", device: "Tablet", sessions: 300 },
+    { channel: "Social", device: "Desktop", sessions: 700 },
+    { channel: "Social", device: "Mobile", sessions: 3400 },
+    { channel: "Social", device: "Tablet", sessions: 200 },
+    { channel: "Email", device: "Desktop", sessions: 1200 },
+    { channel: "Email", device: "Mobile", sessions: 900 },
+    { channel: "Email", device: "Tablet", sessions: 100 },
+  ];
+
+  let selected = null;
+</script>
+
+`MarimekkoChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a 100% stacked bar whose bars are also sized: each column is as wide as its category's share of the whole, and each cell as tall as its series' share of the column. A cell's area is then its share of everything. Use it for a market map or a mix within a mix; a plain [StackedBar](/components/StackedBar) is enough when the categories are all the same size.
+
+## Basic
+
+Pass long `data` with `x` for the category, `series` for the band, and `y` for the value. Each column's width follows its total, so the columns say how big the categories are before the cells say how they split.
+
+<MarimekkoChart data={traffic} x="channel" y="sessions" series="device" title="Sessions by channel and device" />
+
+## Column size from a field
+
+Set `xValue` to size the columns by a field of their own, such as market size, when the values are shares that already sum within each column. Set `sort` to `"value"` to put the widest column first.
+
+<MarimekkoChart data={market} x="segment" xValue="size" y="share" series="vendor" sort="value" format={{ notation: "compact" }} title="Market share by segment, segments by size" />
+
+## Labels, selection, and size
+
+Cells with room carry their series and share; set `labels` to `"none"` to leave them bare, and hover or use the keyboard for the tooltip. Bind `selected` or listen for `select`, whose detail carries the cell's share and the column's. `width` and `height` set the geometry; `colors` fixes a series' color and `palette` picks another color group.
+
+<MarimekkoChart data={market} x="segment" xValue="size" y="share" series="vendor" labels="none" bind:selected height={220} colors={{ Other: "neutral" }} title="Pick a cell" />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between columns, staying on the same series where it exists, and Up and Down move within a column; each cell is announced with its share of the column and the column's share of the whole. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with a row per series, a column per category, and the column's share in its header.

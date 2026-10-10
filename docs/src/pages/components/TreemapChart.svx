@@ -1,0 +1,93 @@
+---
+components: ["TreemapChart"]
+description: Treemap shows how a total divides among many parts, and their parents, as nested rectangles sized by value.
+---
+
+<script>
+  import { TreemapChart } from "carbon-components-svelte/viz";
+
+  const spend = [
+    ["Platform", "Compute", 41200],
+    ["Platform", "Storage", 18400],
+    ["Platform", "Networking", 9100],
+    ["Platform", "Observability", 6300],
+    ["Data", "Warehouse", 27800],
+    ["Data", "Streaming", 11900],
+    ["Data", "Notebooks", 3200],
+    ["Web", "CDN", 8700],
+    ["Web", "Edge functions", 4100],
+    ["Web", "Images", 1500],
+    ["Security", "Scanning", 5200],
+    ["Security", "Secrets", 900],
+  ].map(([team, service, cost]) => ({ team, service, cost }));
+
+  let selected = null;
+</script>
+
+`TreemapChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Areas are harder to compare than lengths. Use a treemap when there are too many parts for a [BarChart](/components/BarChart), or when the parents matter as much as the parts.
+
+## Basic
+
+Pass long `data` with `value` and `label` accessors. Rows that share a label are summed. Cells are laid out largest first from the top left, each as close to square as the packing allows.
+
+<TreemapChart data={spend} value="cost" label="service" title="Cloud spend by service" />
+
+## Groups
+
+Set `group` to a parent accessor. Cells of one parent sit together, share its color, and are set apart by a wider gap, and the legend names the parents.
+
+<TreemapChart data={spend} value="cost" label="service" group="team" title="Cloud spend by team and service" />
+
+## Values
+
+Set `valueType` to `"percent"` for each cell's share of the whole, or `"none"` for labels alone. `format` takes `Intl.NumberFormat` options or a function. What a cell shows depends on its shape: a short one drops its value, and a sliver shows no text at all. Its native tooltip and assistive technology still read it.
+
+<TreemapChart
+  data={spend}
+  value="cost"
+  label="service"
+  group="team"
+  valueType="percent"
+  title="Share of cloud spend"
+/>
+
+## Shape
+
+The width follows the container. `aspectRatio` is the width over the height, 2 by default. The layout uses it, so cells come out square on screen and not in some abstract unit box.
+
+<TreemapChart data={spend} value="cost" label="service" group="team" aspectRatio={4} title="A wide strip" />
+
+## Color
+
+Groups take Carbon's prescribed color groups in order, or the 14 categorical colors past five. Set `palette` to pick another group, or `colors` to override a parent.
+
+<TreemapChart
+  data={spend}
+  value="cost"
+  label="service"
+  group="team"
+  colors={{ Security: "error" }}
+  palette={2}
+  title="Cloud spend, security called out"
+  aspectRatio={3}
+/>
+
+## Selectable
+
+Set `selectable` to turn cells into toggle buttons. Bind `selected`, which is the group and the label joined by a slash, or listen for `select`, whose detail holds the leaf and the `rows` summed into it. `hover` fires as the pointer or focus moves between cells.
+
+<TreemapChart
+  data={spend}
+  value="cost"
+  label="service"
+  group="team"
+  title="Pick a service"
+  selectable
+  bind:selected
+/>
+
+## Accessibility
+
+The map is a list of groups, each holding a list of its cells, in order of size, so it reads as an outline: "Platform: Compute 41K, Storage 18K". Labels sit on a chip of the page background, so they hold their contrast over any cell color in any theme. When `selectable`, the cells share one tab stop and the arrow keys move between them in order of size. Hovering or focusing a cell dims the rest instead of recoloring it.

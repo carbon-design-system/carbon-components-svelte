@@ -1,0 +1,107 @@
+/// CalendarHeatmap: a year of days as a table, one column per week. The
+/// legend reuses the heatmap's ramp.
+/// @access private
+/// @group viz
+@mixin viz-calendar-heatmap {
+  .#{$prefix}--viz-calendar {
+    --bx-viz-cell: #{to-rem(12px)};
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  // 53 columns do not fit a narrow container: scroll instead of squeezing.
+  .#{$prefix}--viz-calendar__scroll {
+    overflow-x: auto;
+  }
+
+  .#{$prefix}--viz-calendar__table {
+    border-collapse: separate;
+    border-spacing: to-rem(2px);
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-calendar__table caption {
+    padding-block-end: $carbon--spacing-05;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-calendar__table th {
+    padding: 0;
+    color: $text-secondary;
+    font-weight: inherit;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-calendar__month {
+    padding-block-end: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--viz-calendar__table .#{$prefix}--viz-calendar__weekday {
+    padding-inline-end: $carbon--spacing-03;
+    // Labels are taller than a row: let them overflow it, centered.
+    block-size: var(--bx-viz-cell);
+    line-height: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-calendar__day,
+  .#{$prefix}--viz-calendar__pad {
+    padding: 0;
+    min-inline-size: var(--bx-viz-cell);
+    block-size: var(--bx-viz-cell);
+    inline-size: var(--bx-viz-cell);
+  }
+
+  .#{$prefix}--viz-calendar__day {
+    background: var(--bx-viz-color);
+  }
+
+  // No data: an outline, so it cannot be read as a low value.
+  .#{$prefix}--viz-calendar__day--empty {
+    background: none;
+    box-shadow: inset 0 0 0 to-rem(1px) $ui-03;
+  }
+
+  .#{$prefix}--viz-calendar__button {
+    display: block;
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    block-size: var(--bx-viz-cell);
+    cursor: pointer;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-calendar__button:hover {
+    box-shadow: inset 0 0 0 to-rem(1px) $ui-05;
+  }
+
+  .#{$prefix}--viz-calendar__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-calendar__day--selected {
+    outline: 2px solid $ui-05;
+    outline-offset: 1px;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-calendar__day {
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-calendar__day--empty {
+      border: 1px solid CanvasText;
+      box-shadow: none;
+    }
+  }
+}
+
+@include exports("viz-calendar-heatmap") {
+  @include viz-calendar-heatmap;
+}

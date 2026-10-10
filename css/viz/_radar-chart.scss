@@ -1,0 +1,85 @@
+/// RadarChart: series as polygons over spokes that share one scale. The
+/// legend and the tooltip reuse the chart's.
+/// @access private
+/// @group viz
+@mixin viz-radar-chart {
+  .#{$prefix}--viz-radar {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-radar .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-radar__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-radar__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-radar__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-radar__ring {
+    fill: none;
+    stroke: $ui-03;
+  }
+
+  .#{$prefix}--viz-radar__spoke {
+    stroke: $ui-03;
+  }
+
+  .#{$prefix}--viz-radar__spoke--active {
+    stroke: $ui-05;
+  }
+
+  .#{$prefix}--viz-radar__label,
+  .#{$prefix}--viz-radar__tick {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-radar__label--active {
+    fill: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-radar__tick {
+    fill: $text-helper;
+  }
+
+  // Translucent, so overlapping series stay readable through each other.
+  .#{$prefix}--viz-radar__area {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.2;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-radar__point {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 2;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-radar__area {
+      fill: none;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-radar-chart") {
+  @include viz-radar-chart;
+}

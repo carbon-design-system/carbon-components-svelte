@@ -1,0 +1,64 @@
+/// HeatStrip: one row of cells colored on a sequential ramp.
+/// @access private
+/// @group viz
+@mixin viz-heat-strip {
+  .#{$prefix}--viz-heat-strip {
+    --bx-viz-size: #{to-rem(24px)};
+
+    display: inline-flex;
+    block-size: var(--bx-viz-size);
+    gap: to-rem(1px);
+    inline-size: to-rem(192px);
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-heat-strip--sm {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-heat-strip--lg {
+    --bx-viz-size: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--viz-heat-strip__cell {
+    flex: 1 1 0;
+    background: var(--bx-viz-color);
+    // The lightest steps sit close to the background, so every cell gets a
+    // faint edge to stay countable.
+    box-shadow: inset 0 0 0 to-rem(1px) $ui-03;
+    transition: background-color $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  // No data: hatched, so it cannot be read as a low value.
+  .#{$prefix}--viz-heat-strip__cell--missing {
+    background: repeating-linear-gradient(
+      -45deg,
+      #{$ui-04} 0,
+      #{$ui-04} to-rem(1px),
+      transparent to-rem(1px),
+      transparent to-rem(4px)
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-heat-strip__cell {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-heat-strip__cell {
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-heat-strip__cell--missing {
+      border: 1px dashed CanvasText;
+      background: none;
+    }
+  }
+}
+
+@include exports("viz-heat-strip") {
+  @include viz-heat-strip;
+}

@@ -1,0 +1,89 @@
+/// AlluvialChart: flows between nodes as ribbons, drawn at a fixed logical
+/// size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-alluvial-chart {
+  .#{$prefix}--viz-alluvial {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-alluvial .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-alluvial__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-alluvial__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  // Translucent, so crossing ribbons stay readable through each other.
+  .#{$prefix}--viz-alluvial__link {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.35;
+    transition: fill-opacity $duration--fast-02
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-alluvial__link:hover {
+    fill-opacity: 0.6;
+  }
+
+  // Emphasis dims the rest instead of recoloring what is active.
+  .#{$prefix}--viz-alluvial__svg--emphasis .#{$prefix}--viz-alluvial__link {
+    fill-opacity: 0.1;
+  }
+
+  .#{$prefix}--viz-alluvial__svg--emphasis
+    .#{$prefix}--viz-alluvial__link--active {
+    fill-opacity: 0.6;
+  }
+
+  .#{$prefix}--viz-alluvial__node rect {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-alluvial__label {
+    fill: $text-primary;
+    // A halo of the page background keeps a label readable over a ribbon.
+    paint-order: stroke;
+    stroke: $ui-background;
+    stroke-linejoin: round;
+    stroke-width: 3;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-alluvial__value {
+    fill: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--viz-alluvial__node--active .#{$prefix}--viz-alluvial__label {
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-alluvial__link {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-alluvial__link,
+    .#{$prefix}--viz-alluvial__node rect {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-alluvial-chart") {
+  @include viz-alluvial-chart;
+}

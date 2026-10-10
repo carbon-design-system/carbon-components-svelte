@@ -1,0 +1,45 @@
+---
+components: ["RetentionChart"]
+description: Retention chart shows what share of each cohort is still around after each period, one line per cohort, against an optional baseline.
+---
+
+<script>
+  import { RetentionChart } from "carbon-components-svelte/viz";
+
+  const PERIODS = [0, 1, 7, 14, 30, 60, 90];
+  // Every cohort starts whole; later ones hold on a little better.
+  const cohorts = ["Jan", "Feb", "Mar", "Apr"].flatMap((cohort, c) =>
+    PERIODS.map((day, i) => ({
+      cohort,
+      day,
+      retained: i === 0 ? 1 : Math.min(1, [1, 0.72, 0.55, 0.46, 0.4, 0.34, 0.31][i] + c * 0.03 - c * 0.004 * i),
+    })),
+  );
+  const average = cohorts.reduce((sum, row) => sum + row.retained, 0) / cohorts.length;
+</script>
+
+`RetentionChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [LineChart](/components/LineChart) preset and takes the same props: the y axis always runs from 0% to 100%, values are read as fractions, every period is marked, and the curve never overshoots. The [CohortTable](/components/CohortTable) shows the same data as a grid, which suits many cohorts; the lines suit comparing a few.
+
+## Basic
+
+Pass long `data` with `x` for the period, `y` for the retained fraction, and `series` for the cohort.
+
+<RetentionChart data={cohorts} x="day" y="retained" series="cohort" title="Retention by signup cohort" xTitle="Days since signup" />
+
+## Baseline
+
+Set `baseline` to mark a rate, such as a target or the average across cohorts, and `baselineLabel` to name it.
+
+<RetentionChart data={cohorts} x="day" y="retained" series="cohort" baseline={average} baselineLabel="Average" title="Retention against the average" xTitle="Days since signup" />
+
+## Line chart props
+
+Every `LineChart` prop passes through: `curve`, `points`, `legend`, `tooltip`, `toolbar`, and so on.
+
+<RetentionChart data={cohorts} x="day" y="retained" series="cohort" curve="linear" points="hover" toolbar title="Retention, straight lines" height={240} />
+
+## Accessibility
+
+The chart is a single tab stop named by its `title`. The arrow keys move period by period, announcing every cohort's rate, and the toolbar swaps in a data table of the same values. Cohorts can be hidden from the legend.

@@ -1,0 +1,79 @@
+/// SpanWaterfall: a trace as the StateTimeline table, one span per row,
+/// indented by depth, with the critical path outlined.
+/// @access private
+/// @group viz
+@mixin viz-span-waterfall {
+  .#{$prefix}--viz-timeline--spans .#{$prefix}--viz-timeline__label {
+    padding-inline-start: calc(var(--bx-viz-depth, 0) * #{$carbon--spacing-05});
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-spans__name {
+    display: inline-flex;
+    align-items: center;
+    column-gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--viz-spans__toggle {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    margin-inline-start: -#{$carbon--spacing-02};
+    appearance: none;
+    background: none;
+    color: $icon-secondary;
+    cursor: pointer;
+    transition: transform $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-spans__toggle[aria-expanded="false"] {
+    transform: rotate(-90deg);
+  }
+
+  .#{$prefix}--viz-spans__toggle:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  // Room after the track for the length of a bar that reaches the end.
+  .#{$prefix}--viz-timeline--spans .#{$prefix}--viz-timeline__track-cell,
+  .#{$prefix}--viz-timeline--spans .#{$prefix}--viz-timeline__axis-cell {
+    padding-inline-end: to-rem(56px);
+  }
+
+  // The track is transparent here: rows are short bars, not full bands.
+  .#{$prefix}--viz-timeline--spans .#{$prefix}--viz-timeline__track {
+    background: none;
+  }
+
+  .#{$prefix}--viz-timeline--spans .#{$prefix}--viz-timeline__segment {
+    min-inline-size: to-rem(2px);
+    box-shadow: none;
+  }
+
+  .#{$prefix}--viz-spans__row--critical .#{$prefix}--viz-timeline__segment {
+    box-shadow: 0 0 0 to-rem(1px) $ui-05;
+  }
+
+  // The length sits just after the bar, like a value label.
+  .#{$prefix}--viz-spans__duration {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--bx-viz-start) * 1% + #{$carbon--spacing-02});
+    color: $text-secondary;
+    transform: translateY(-50%);
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-spans__toggle {
+      transition: none;
+    }
+  }
+}
+
+@include exports("viz-span-waterfall") {
+  @include viz-span-waterfall;
+}

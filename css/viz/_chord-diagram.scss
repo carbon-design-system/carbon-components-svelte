@@ -1,0 +1,107 @@
+/// ChordDiagram: groups around a circle and a ribbon per pair, drawn at a
+/// fixed logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-chord-diagram {
+  .#{$prefix}--viz-chord {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-chord .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-chord__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-chord__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-chord__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-chord__ribbon {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.55;
+    stroke: $ui-background;
+    stroke-width: 0.5;
+    transition: fill-opacity $duration--fast-02
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-chord__group {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-chord__arc {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 1;
+    transition: fill-opacity $duration--fast-02
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-chord__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-chord__group--active .#{$prefix}--viz-chord__label,
+  .#{$prefix}--viz-chord__group--selected .#{$prefix}--viz-chord__label {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-chord__group--selected .#{$prefix}--viz-chord__arc {
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  // Focus on a group or ribbon fades everything not touching it.
+  .#{$prefix}--viz-chord--emphasis
+    .#{$prefix}--viz-chord__ribbon:not(.#{$prefix}--viz-chord__ribbon--active) {
+    fill-opacity: 0.1;
+  }
+
+  .#{$prefix}--viz-chord--emphasis .#{$prefix}--viz-chord__ribbon--active {
+    fill-opacity: 0.8;
+  }
+
+  .#{$prefix}--viz-chord--emphasis
+    .#{$prefix}--viz-chord__group:not(.#{$prefix}--viz-chord__group--active)
+    .#{$prefix}--viz-chord__arc {
+    fill-opacity: 0.35;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-chord__ribbon,
+    .#{$prefix}--viz-chord__arc {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-chord__ribbon,
+    .#{$prefix}--viz-chord__arc {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-chord__group--selected .#{$prefix}--viz-chord__arc {
+      fill: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-chord-diagram") {
+  @include viz-chord-diagram;
+}
