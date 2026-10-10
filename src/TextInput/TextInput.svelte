@@ -171,7 +171,10 @@
   on:mouseleave
 >
   {#if inline}
-    <div class:bx--text-input__label-helper-wrapper={true}>
+    <div
+      class:bx--text-input__label-helper-wrapper={true}
+      class:bx--visually-hidden={hideLabel && maxCount == null && !helperText}
+    >
       {#if labelText || $$slots.labelChildren}
         <div class:bx--text-input__label-wrapper={true}>
           <label
