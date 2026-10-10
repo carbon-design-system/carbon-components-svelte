@@ -12,6 +12,11 @@
       "types": "./src/index.d.ts",
       "svelte": "./src/index.js"
     },
+    "./syntax": {
+      "types": "./src/syntax/index.d.ts",
+      "svelte": "./src/syntax/index.js",
+      "import": "./src/syntax/index.js"
+    },
     "./css/*.css": {
       "types": "./css/css.d.ts",
       "default": "./css/*.css"
