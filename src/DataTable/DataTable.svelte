@@ -42,6 +42,20 @@
   }
 
   /**
+   * Whether two cell records map the same row ids to the same cell arrays.
+   * @param {Record<string, unknown>} a
+   * @param {Record<string, unknown>} b
+   */
+  function sameCellRecords(a, b) {
+    const keys = Object.keys(a);
+    if (keys.length !== Object.keys(b).length) return false;
+    for (const key of keys) {
+      if (a[key] !== b[key]) return false;
+    }
+    return true;
+  }
+
+  /**
    * @param {ReadonlyArray<{ id: any }> | undefined} a
    * @param {ReadonlyArray<{ id: any }> | undefined} b
    */
@@ -1003,6 +1017,14 @@
     ? virtualData.visibleItems
     : rowsToVirtualize;
 
+  // The row `{#each}` blocks iterate ids, not row objects. Svelte 5's legacy
+  // mode treats every object item as changed whenever the list is reassigned,
+  // so iterating rows re-ran every row's and cell's props on each sort or
+  // filter. Ids compare by value: a reorder only moves rows. `rowById`
+  // follows `stableRows`, so a new `rows` array still refreshes every row.
+  $: rowById = new Map(stableRows.map((row) => [row.id, row]));
+  $: rowIdsToRender = rowsToRender.map((row) => row.id);
+
   // Walk the painted window, not `rows`. Virtualized and paginated tables
   // otherwise allocate cell records for every row on each `rows`/headers
   // invalidation. Compare against `stableRows`/`visibleHeaders`, not the raw
@@ -1017,10 +1039,15 @@
     visibleHeaders !== prevVisibleHeaders ||
     paintedRowListChanged(rowsToRender, prevRowsToRender)
   ) {
-    tableCellsByRowId = buildCellsForPaintedRows(
+    const nextCells = buildCellsForPaintedRows(
       rowsToRender ?? [],
       tableCellsByRowId,
     );
+    // A reorder (sort) reuses every row's cell array. Keep the old record
+    // then, so the per-row cell `{#each}` blocks don't re-run.
+    if (!sameCellRecords(nextCells, tableCellsByRowId)) {
+      tableCellsByRowId = nextCells;
+    }
     prevRows = stableRows;
     prevVisibleHeaders = visibleHeaders;
     prevRowsToRender = rowsToRender;
@@ -1293,7 +1320,8 @@
           {/if}
 
           <!-- Visible rows -->
-          {#each rowsToRender as row, index (row.id)}
+          {#each rowIdsToRender as rowId, index (rowId)}
+            {@const row = rowById.get(rowId)}
             {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
@@ -1534,7 +1562,8 @@
           {/if}
         {:else}
           <!-- Non-virtualized: render all rows normally -->
-          {#each rowsToRender as row, index (row.id)}
+          {#each rowIdsToRender as rowId, index (rowId)}
+            {@const row = rowById.get(rowId)}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}

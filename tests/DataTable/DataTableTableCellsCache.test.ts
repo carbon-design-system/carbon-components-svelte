@@ -1,5 +1,7 @@
-import { render, within } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
+import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import { tick } from "svelte";
+import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import DataTableTableCellsCache from "./DataTableTableCellsCache.test.svelte";
 import { getFirstBodyRow } from "./helpers";
@@ -123,5 +125,40 @@ describe("DataTable tableCellsByRowId caching", () => {
       within(getFirstBodyRow()).getByRole("cell", { name: "Alpha" }),
     );
     expect(lastCell).not.toBe(first);
+  });
+});
+
+describe("DataTable re-sorting", () => {
+  it("moves rendered rows without re-running cell display", async () => {
+    let calls = 0;
+    const headers = [
+      {
+        key: "name",
+        value: "Name",
+        display: (value: unknown) => {
+          calls++;
+          return String(value);
+        },
+      },
+    ];
+    const rows = [
+      { id: "a", name: "Bravo" },
+      { id: "b", name: "Alpha" },
+      { id: "c", name: "Charlie" },
+    ];
+    render(DataTable, { props: { sortable: true, headers, rows } });
+    const names = () =>
+      [...document.querySelectorAll("tbody tr")].map((tr) =>
+        tr.textContent?.trim(),
+      );
+    calls = 0;
+
+    await user.click(screen.getByRole("button", { name: /Name/ }));
+    expect(names()).toEqual(["Alpha", "Bravo", "Charlie"]);
+    await user.click(screen.getByRole("button", { name: /Name/ }));
+    expect(names()).toEqual(["Charlie", "Bravo", "Alpha"]);
+
+    // Svelte 3/4 re-run each block bodies whenever the list changes.
+    if (isSvelte5) expect(calls).toBe(0);
   });
 });
