@@ -127,6 +127,8 @@
   $: thresholdsId = `${id}-thresholds`;
   $: statusId = `${id}-status`;
 
+  $: hasValueText = !!valueText || !!$$slots.valueChildren;
+
   let prevStatus = undefined;
   let statusAnnouncement = "";
 
@@ -184,7 +186,10 @@
   class:bx--meter--over={overCapacity}
   {...$$restProps}
 >
-  <div class:bx--meter__label={true}>
+  <div
+    class:bx--meter__label={true}
+    class:bx--visually-hidden={hideLabel && !hasValueText}
+  >
     <span
       id="{id}-label"
       class:bx--meter__label-text={true}
@@ -192,7 +197,7 @@
     >
       <slot name="labelChildren">{labelText}</slot>
     </span>
-    {#if valueText || $$slots.valueChildren}
+    {#if hasValueText}
       <span class:bx--meter__value-text={true}>
         <slot name="valueChildren">{valueText}</slot>
       </span>
