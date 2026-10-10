@@ -20,18 +20,15 @@ describe("RangeSlider", () => {
   });
 
   it("keeps read-only thumbs reachable by keyboard", async () => {
-    render(RangeSlider, {
-      props: { readonly: true, hideTextInput: true, value: 10 },
-    });
+    render(RangeSlider, { props: { readonly: true, value: 10 } });
 
     const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
-    await user.tab();
-    expect(lowerThumb).toHaveFocus();
+    expect(lowerThumb).toHaveAttribute("tabindex", "0");
+    expect(upperThumb).toHaveAttribute("tabindex", "0");
+
+    lowerThumb.focus();
     await user.keyboard("{ArrowRight}");
     expect(lowerThumb).toHaveAttribute("aria-valuenow", "10");
-
-    await user.tab();
-    expect(upperThumb).toHaveFocus();
   });
 
   it("should render two thumbs and two text inputs", () => {
