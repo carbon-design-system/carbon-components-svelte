@@ -255,6 +255,9 @@
     // placement (formerly `.bx--tooltip--definition button.bx--tooltip--a11y`)
     margin: 0; // ccs: moved
     border-bottom: to-rem(1px) dotted $text-02;
+    // ccs: from the pruned `tooltip--definition--legacy` block. The trigger
+    // is a <button>, so without this it takes the UA `buttontext` color.
+    color: $text-primary;
     transition: border-color $duration--fast-02;
   }
 
@@ -264,12 +267,14 @@
   }
 
   // ccs: definition tooltips hosted by a Tag. The dotted dictionary-term
-  // underline does not suit a tag-styled trigger; a truncating tag's trigger
-  // also has to fill the tag and clip like the label it replaces. Same
+  // underline does not suit a tag-styled trigger, and the label keeps the
+  // tag's text color; a truncating tag's trigger also has to fill the tag and
+  // clip like the label it replaces. Same
   // compound as the rules around it so these win the hover/placement ties.
   .#{$prefix}--tag-set-overflow
     .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
     border-bottom: none;
+    color: inherit;
   }
 
   .#{$prefix}--tag__label-tooltip
@@ -279,6 +284,7 @@
     max-width: 100%;
     overflow: hidden;
     border-bottom: none;
+    color: inherit;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
