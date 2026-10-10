@@ -34,6 +34,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the select with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the select HTML element.
    * @bindable readonly
    */
@@ -154,6 +161,7 @@
           bind:this={ref}
           {id}
           {name}
+          {form}
           disabled={effectiveDisabled}
           {value}
           aria-readonly={effectiveReadonly || undefined}
@@ -204,6 +212,7 @@
       bind:this={ref}
       {id}
       {name}
+      {form}
       disabled={effectiveDisabled}
       {value}
       aria-readonly={effectiveReadonly || undefined}

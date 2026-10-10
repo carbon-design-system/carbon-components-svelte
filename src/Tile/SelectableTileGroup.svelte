@@ -22,6 +22,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the fieldset and checkbox inputs with. Overrides each tile's own `form`.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the legend text.
    * Alternatively, use the named slot "legendChildren".
    * @example
@@ -49,6 +56,10 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const groupName = writable(name);
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
+  const groupForm = writable(form);
   /**
    * @type {import("svelte/store").Readable<string | undefined>}
    */
@@ -161,6 +172,7 @@
   setContext("carbon:SelectableTileGroup", {
     selectedValues,
     groupName: groupNameReadonly,
+    groupForm: readonly(groupForm),
     add,
     remove,
     update,
@@ -169,11 +181,13 @@
   $: selected = $selectedValues;
   $: selectedValues.set(selected);
   $: groupName.set(name);
+  $: groupForm.set(form);
 </script>
 
 <fieldset
   bind:this={fieldsetRef}
   {disabled}
+  {form}
   class:bx--tile-group={true}
   {...$$restProps}
   on:mousedown|capture={(event) => {

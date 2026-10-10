@@ -139,6 +139,13 @@
   /** Set a name for the upper bound input element */
   export let nameUpper = "";
 
+  /**
+   * Specify the id of a form element outside the component to associate
+   * the lower and upper value inputs with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
   /** Specify the `aria-label` for the lower bound input and handle */
   export let ariaLabelInput = "Lower bound";
 
@@ -479,6 +486,7 @@
         type={hideTextInput ? "hidden" : inputType}
         id={lowerInputId}
         {name}
+        {form}
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         class:bx--slider-text-input--lower={true}
@@ -718,6 +726,7 @@
         type={hideTextInput ? "hidden" : inputType}
         id={upperInputId}
         name={nameUpper}
+        {form}
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         class:bx--slider-text-input--upper={true}

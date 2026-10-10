@@ -75,6 +75,13 @@
   export let name = "";
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the checkbox with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the title attribute for the label element.
    * @type {string}
    * @bindable readonly
@@ -128,6 +135,7 @@
   const {
     selectedValues,
     groupName,
+    groupForm,
     groupRequired,
     readonly: groupReadonly,
     invalid: groupInvalid,
@@ -136,6 +144,7 @@
   } = ctx ?? {
     selectedValues: readable([]),
     groupName: readable(undefined),
+    groupForm: readable(undefined),
     groupRequired: readable(undefined),
     readonly: readable(false),
     invalid: readable(false),
@@ -244,6 +253,7 @@
       style:display={decorative ? "none" : undefined}
       bind:indeterminate
       name={effectiveName}
+      form={$groupForm ?? form}
       required={effectiveRequired}
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}

@@ -56,6 +56,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the checkbox with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the value submitted with the form while toggled.
    * @type {string}
    */
@@ -139,6 +146,7 @@
     {disabled}
     {id}
     {name}
+    {form}
     {value}
   >
   <label

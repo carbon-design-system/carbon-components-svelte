@@ -26,6 +26,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the fieldset and checkbox inputs with. Overrides each checkbox's own `form`.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the legend text.
    * Alternatively, use the named slot "legendChildren".
    * @example
@@ -90,6 +97,7 @@
    */
   const selectedValues = writable(selected);
   const groupName = writable(name);
+  const groupForm = writable(form);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupInvalid = writable(invalid);
@@ -112,6 +120,7 @@
   setContext("carbon:CheckboxGroup", {
     selectedValues,
     groupName: readOnly(groupName),
+    groupForm: readOnly(groupForm),
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
     invalid: readOnly(groupInvalid),
@@ -137,6 +146,7 @@
   });
 
   $: $groupName = name;
+  $: $groupForm = form;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupInvalid = invalid;
@@ -170,6 +180,7 @@
   on:mouseleave
 >
   <fieldset
+    {form}
     class:bx--checkbox-group={true}
     class:bx--checkbox-group--readonly={readonly}
     class:bx--checkbox-group--invalid={showInvalid}

@@ -32,6 +32,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the fieldset and radio tile inputs with. Overrides each tile's own `form`.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Specify the legend text.
    * Alternatively, use the named slot "legendChildren".
    * @example
@@ -62,6 +69,10 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const groupName = writable(name || undefined);
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
+  const groupForm = writable(form);
   // Unnamed radios are separate controls, so arrow keys would not move
   // between tiles. Tiles with no name of their own share this one when the
   // group has no `name` either.
@@ -145,6 +156,7 @@
   setContext("carbon:TileGroup", {
     selectedValue,
     groupName: groupNameReadonly,
+    groupForm: readonly(groupForm),
     fallbackName,
     groupRequired: groupRequiredReadonly,
     groupDisabled: groupDisabledReadonly,
@@ -156,6 +168,7 @@
   $: selected = $selectedValue;
   $: selectedValue.set(selected);
   $: groupName.set(name || undefined);
+  $: groupForm.set(form);
   $: groupRequired.set(required);
   $: groupDisabled.set(disabled);
 </script>
@@ -164,6 +177,7 @@
   bind:this={fieldsetRef}
   use:formReset={handleFormReset}
   {disabled}
+  {form}
   class:bx--tile-group={true}
   {...$$restProps}
 >

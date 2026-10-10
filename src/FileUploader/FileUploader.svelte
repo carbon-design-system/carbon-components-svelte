@@ -194,6 +194,13 @@
   export let name = "";
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the file input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Set an id for the top-level element.
    * The file input id derives from it as `{id}-input`.
    */
@@ -325,6 +332,7 @@
     {accept}
     {capture}
     {name}
+    {form}
     {multiple}
     {kind}
     size={effectiveSize}

@@ -56,6 +56,13 @@
   export let name = undefined;
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the radio input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -79,6 +86,7 @@
     deselect,
     selectedValue,
     groupName,
+    groupForm,
     fallbackName,
     groupRequired,
     readonly: groupReadonly,
@@ -86,6 +94,7 @@
     helperId,
   } = ctx ?? {
     groupName: readable(undefined),
+    groupForm: readable(undefined),
     groupRequired: readable(undefined),
     selectedValue: readable(checked ? value : undefined),
     readonly: readable(false),
@@ -205,6 +214,7 @@
     type="radio"
     {id}
     name={$groupName ?? (name || fallbackName)}
+    form={$groupForm ?? form}
     {checked}
     {disabled}
     required={$groupRequired ?? required}

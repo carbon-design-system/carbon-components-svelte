@@ -47,6 +47,13 @@
   export let name = "";
 
   /**
+   * Specify the id of a form element outside the component to associate
+   * the checkbox with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -67,6 +74,7 @@
   const update = ctx?.update ?? noop;
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
+  const groupForm = ctx?.groupForm ?? readable(undefined);
 
   add({ value, selected });
 
@@ -95,6 +103,7 @@
   {id}
   {value}
   name={$groupName ?? name}
+  form={$groupForm ?? form}
   {title}
   {disabled}
   on:click={(event) => {
