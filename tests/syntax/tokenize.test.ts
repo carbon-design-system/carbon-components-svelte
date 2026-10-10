@@ -1,4 +1,5 @@
 // @vitest-environment node
+// biome-ignore-all lint/suspicious/noTemplateCurlyInString: the strings are source code to tokenize
 import { highlight, tokenize } from "../../src/syntax/tokenize.js";
 
 const types = (code: string, lang: string) =>
@@ -418,5 +419,174 @@ describe("tokenize: Svelte 4 and 5", () => {
         ?.map((token) => token.text)
         .join(""),
     ).toBe(code);
+  });
+});
+
+describe("tokenize: precision", () => {
+  test("splits template literals into strings, interpolations, and script", () => {
+    expect(types("`a ${b + `c ${d}`} e`", "js")).toEqual([
+      "string:`a ",
+      "special:${",
+      "operator:+",
+      "string:`c ",
+      "special:${",
+      "special:}",
+      "string:`",
+      "special:}",
+      "string: e`",
+    ]);
+    expect(types("html`<p>${x}</p>`", "js")?.[0]).toBe("function:html");
+  });
+
+  test("splits escape sequences out of strings", () => {
+    expect(types('"a\\nb\\u00e9\\u{1F600}"', "js")).toEqual([
+      'string:"a',
+      "escape:\\n",
+      "string:b",
+      "escape:\\u00e9",
+      "escape:\\u{1F600}",
+      'string:"',
+    ]);
+  });
+
+  test("declares parameters, not their types, defaults, or call arguments", () => {
+    const tokens = types(
+      "function f(a, { b = c }, ...rest) {}\nconst g = (x: Map<string, T>, y = z) => x;\nconst h = w => w;\nlist.map((item) => item);\ntry {} catch (err) {}\nclass A { m(p) {} }\nif (cond) {}\ncall(arg);",
+      "ts",
+    );
+    for (const name of ["a", "b", "rest", "x", "y", "w", "item", "err", "p"]) {
+      expect(tokens, name).toContain(`definition:${name}`);
+    }
+    for (const name of ["c", "z", "cond", "arg"]) {
+      expect(tokens, name).not.toContain(`definition:${name}`);
+    }
+    expect(tokens).toEqual(
+      expect.arrayContaining([
+        "type-name:Map",
+        "type-name:string",
+        "type-name:T",
+      ]),
+    );
+    // Methods with return types and TypeScript parameter properties.
+    const members = types(
+      "class R { async load(id: string, { retries = 3 }: O = {}): Promise<T> {} constructor(readonly config: C) {} }\nconst v = ok ? f(x) : y;",
+      "ts",
+    );
+    expect(members).toEqual(
+      expect.arrayContaining([
+        "definition:id",
+        "definition:retries",
+        "keyword:readonly",
+        "definition:config",
+      ]),
+    );
+    expect(members).not.toContain("definition:x");
+  });
+
+  test("colors private names, decorators, and TypeScript type keywords", () => {
+    expect(
+      types(
+        "class A extends B { #n = 0; @tracked x; }\ntype U<T> = T extends Array<infer E> ? E : never;\nfunction is(x: unknown): x is string {}",
+        "ts",
+      ),
+    ).toEqual(
+      expect.arrayContaining([
+        "keyword:extends",
+        "type-name:B",
+        "property-name:#n",
+        "annotation:@tracked",
+        "keyword:infer",
+        "keyword:is",
+        "type-name:string",
+      ]),
+    );
+  });
+
+  test("reads doctypes, attribute selectors, combinators, and !important", () => {
+    expect(types("<!doctype html><p>a</p>", "html")?.[0]).toBe(
+      "meta:<!doctype html>",
+    );
+    expect(
+      types("input[type='text'] > .a + b ~ c { color: red !important }", "css"),
+    ).toEqual(
+      expect.arrayContaining([
+        "attribute-name:type",
+        "attribute-value:'text'",
+        "operator:>",
+        "operator:+",
+        "operator:~",
+        "keyword:!important",
+      ]),
+    );
+  });
+
+  test("marks diff file headers and shell assignments", () => {
+    expect(
+      types(
+        "diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b",
+        "diff",
+      ),
+    ).toEqual([
+      "meta:diff --git a/x b/x\n",
+      "meta:--- a/x\n",
+      "meta:+++ b/x\n",
+      "meta:@@ -1 +1 @@\n",
+      "deleted:-a\n",
+      "inserted:+b",
+    ]);
+    expect(
+      types("NODE_ENV=production bun run $(git rev-parse HEAD)", "bash"),
+    ).toEqual(
+      expect.arrayContaining([
+        "variable-name:NODE_ENV",
+        "function:bun",
+        "operator:$(",
+        "function:git",
+      ]),
+    );
+  });
+
+  test("keeps every character of random slices of code in every language", () => {
+    const samples: [string, string][] = [
+      [
+        "svelte",
+        '<script lang="ts">\n  let { a = 1 }: P = $props();\n  $: b = `x ${a}`;\n</script>\n{#each items as { id }, i (id)}<B on:click|once={() => f(i)} {...rest}>&amp;{id}</B>{/each}\n<style lang="scss">\n  $g: 1rem; .a { &:hover { color: #{$c}; } }\n</style>',
+      ],
+      [
+        "ts",
+        'import { a } from "b";\nclass A extends B<T> { #x = "q\\"\\n"; @d m(p: string = `t${1}`): void { return /re[/]x/g.test(p) ? 1 : 2; } }\nconst f = (a, { b }) => a ?? b;',
+      ],
+      [
+        "css",
+        '@media (min-width: 1px) { a[href^="x"] > .b::before { content: "\\201C"; width: calc(1rem + 2px) !important; } }',
+      ],
+      ["json", '{ "a": [1, true, null, "x\\"y"], "b": { "c": -2.5e3 } }'],
+      [
+        "bash",
+        "# c\nFOO=bar baz --flag \"x $y\" 'z' | grep -q $(cmd ${V}) > out && echo $ done; (sub)",
+      ],
+      ["diff", "diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n c"],
+    ];
+    // Deterministic slices: unterminated strings, half tags, open braces.
+    let seed = 1;
+    const random = () => {
+      seed = (seed * 1_103_515_245 + 12_345) % 2_147_483_648;
+      return seed / 2_147_483_648;
+    };
+    for (const [lang, code] of samples) {
+      for (let i = 0; i < 300; i++) {
+        const start = Math.floor(random() * code.length);
+        const slice = code.slice(start, start + Math.floor(random() * 80));
+        const tokens = tokenize(slice, lang) ?? [];
+        expect(
+          tokens.map((t) => t.text).join(""),
+          `${lang}: ${JSON.stringify(slice)}`,
+        ).toBe(slice);
+        expect(
+          tokens.every((t) => t.text.length > 0),
+          lang,
+        ).toBe(true);
+      }
+    }
   });
 });
