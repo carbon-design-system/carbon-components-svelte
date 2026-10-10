@@ -5,7 +5,7 @@
 
   /**
    * @restProps {header}
-   * @slot {{}} Page content rendered after the header. `TabContent` placed here pairs with the `Tabs` in the `tabs` slot.
+   * @slot {{}} - Page content rendered after the header. `TabContent` placed here pairs with the `Tabs` in the `tabs` slot.
    * @slot {{}} breadcrumb - A `Breadcrumb` with its `BreadcrumbItem`s.
    * @slot {{}} breadcrumbEnd - Small actions at the end of the breadcrumb row.
    * @slot {{}} titleChildren - Rich title content inside the heading. Overrides `title`.
