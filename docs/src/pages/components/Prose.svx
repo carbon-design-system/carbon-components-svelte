@@ -111,6 +111,20 @@ Each variant caps the line length so long lines stay easy to follow. Set `maxWid
   <p>This paragraph fills the whole column. It's set with the default variant's type and spacing, but without the 68-character line length, so it runs as wide as the space it's placed in.</p>
 </Prose>
 
+## Offscreen code blocks
+
+Set `deferOffscreen` on a page with many code blocks or figures. The browser then skips laying out and painting each `pre` and `figure` until it nears the viewport, with CSS `content-visibility: auto`. Each reserves 10rem until it first renders, then keeps its last rendered height. On a page of 60 code blocks, layout at load dropped from about 49 ms to 13 ms.
+
+Skipped blocks stay in find in page, anchor navigation, and the accessibility tree. Text alone is cheap to lay out, so a page without much code gains little. Tables aren't skipped: the containment that skipping needs clips anything that overflows.
+
+To scroll to an element inside a code block with script, read its position first, for example with `getBoundingClientRect()`. `scrollIntoView` on an element inside a block that is still skipped does nothing.
+
+<Prose deferOffscreen>
+  <p>Run the build, then serve the output:</p>
+  <pre><code>npm run build
+npx vite preview</code></pre>
+</Prose>
+
 ## Carbon components inside
 
 Prose doesn't style Carbon components or anything inside them, so components keep their own styles: a `Link` keeps its color, a `CodeSnippet` its background and padding, and `Text` its type style. That includes plain elements you pass into a component's slot, such as the link in this notification. Components still take part in the spacing between elements.
