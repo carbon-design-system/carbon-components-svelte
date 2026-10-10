@@ -7,6 +7,7 @@ import {
   BASE_URL,
   COMPONENT_MD_SIZES_PATH,
   COMPONENTS_PATH,
+  PAGE_EXTENSION,
   RAW_COMPONENTS_OUT_DIR,
 } from "./constants";
 import { stripDocsOnly } from "./strip-docs-only.ts";
@@ -749,7 +750,10 @@ fs.mkdirSync(RAW_COMPONENTS_OUT_DIR, { recursive: true });
 const generatedMdByComponent: { componentName: string; md: string }[] = [];
 
 for (const componentName of getComponentNames()) {
-  const filePath = path.join(COMPONENTS_PATH, `${componentName}.svx`);
+  const filePath = path.join(
+    COMPONENTS_PATH,
+    `${componentName}${PAGE_EXTENSION}`,
+  );
   const fileContent = fs.readFileSync(filePath, "utf8");
   const { frontmatter, body } = splitFrontmatter(fileContent);
   const components = extractComponents(frontmatter);

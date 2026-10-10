@@ -7,9 +7,9 @@ description: A row of action buttons for a custom modal or panel footer that aut
   import { ActionSet, Box, Button } from "carbon-components-svelte";
 </script>
 
-Use `ActionSet` for custom footers you compose yourself, typically [ComposedModal](/components/ComposedModal#custom-footer-with-actionset)'s `ModalFooter` slot. [Modal](/components/Modal) builds its footer from props and has no footer slot.
-
 ## Basic
+
+Use `ActionSet` for custom footers you compose yourself, typically [ComposedModal](/components/ComposedModal#custom-footer-with-actionset)'s `ModalFooter` slot. [Modal](/components/Modal) builds its footer from props and has no footer slot.
 
 Compose `ActionSet` from ordinary `Button` children, the same way as [ButtonSet](/components/ButtonSet). `size` cascades to every child button that doesn't set its own `size`.
 

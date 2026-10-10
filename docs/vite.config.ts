@@ -5,6 +5,7 @@ import routify from "@roxi/routify/vite-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
+import { PAGE_EXTENSION } from "./scripts/constants.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const carbonRoot = path.resolve(__dirname, "..");
@@ -58,7 +59,7 @@ export default defineConfig({
     },
     routify({
       routesDir: { default: "src/pages" },
-      extensions: [".svelte", ".svx"],
+      extensions: [".svelte", PAGE_EXTENSION],
     }),
     svelte(),
     /**
