@@ -278,6 +278,23 @@ Set `size` to `"sm"` for a small content switcher.
   <Switch text="Archived" />
 </ContentSwitcher>
 
+## Auto width
+
+By default, switches split the width evenly, so a long label truncates while a short one leaves empty space. Set `autoWidth` to size each switch to its label. The switcher shrinks to fit its switches, and only truncates labels when its container is too narrow.
+
+<Stack gap={5}>
+  <ContentSwitcher>
+    <Switch text="All" />
+    <Switch text="Recently updated by teammates" />
+    <Switch text="Archived" />
+  </ContentSwitcher>
+  <ContentSwitcher autoWidth>
+    <Switch text="All" />
+    <Switch text="Recently updated by teammates" />
+    <Switch text="Archived" />
+  </ContentSwitcher>
+</Stack>
+
 ## Disabled
 
 Disable individual switches with `disabled`.
