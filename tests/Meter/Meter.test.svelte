@@ -76,6 +76,15 @@
   labelText="Storage"
   value={812}
   max={1000}
+  hideLabel
+  valueText="812 GB of 1 TB"
+  data-testid="hidden-label-value-text"
+/>
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
   helperText="Approaching limit"
   data-testid="helper-text"
 />

@@ -157,16 +157,29 @@ describe("Meter", () => {
     expect(meter).toHaveAttribute("aria-valuetext", "1200/1000, Error");
   });
 
-  it("visually hides only the label text when hideLabel is set", () => {
+  it("visually hides the whole label row when hideLabel is set", () => {
     render(Meter);
 
     const el = screen.getByTestId("hidden-label");
-    expect(el.querySelector(".bx--meter__label-text")).toHaveClass(
+    expect(el.querySelector(".bx--meter__label")).toHaveClass(
       "bx--visually-hidden",
     );
     expect(
       within(el).getByRole("meter", { name: "Storage" }),
     ).toBeInTheDocument();
+  });
+
+  it("keeps the label row for value text when hideLabel is set", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("hidden-label-value-text");
+    expect(el.querySelector(".bx--meter__label")).not.toHaveClass(
+      "bx--visually-hidden",
+    );
+    expect(el.querySelector(".bx--meter__label-text")).toHaveClass(
+      "bx--visually-hidden",
+    );
+    expect(within(el).getByText("812 GB of 1 TB")).toBeVisible();
   });
 
   it("links helper text via aria-describedby", () => {
