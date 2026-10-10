@@ -26,7 +26,6 @@
    * @property {number} [warning]
    * @property {number} [error]
    * @restProps {div}
-   * @slot {{}}
    */
 
   /** Specify the current amount, in the same units as `max`. */
