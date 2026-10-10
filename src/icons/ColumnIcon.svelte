@@ -2,6 +2,10 @@
 <script>
   export let size = 16;
 
+  /**
+   * Specify the icon title.
+   * @type {string | undefined}
+   */
   export let title = undefined;
 
   $: labelled = $$props["aria-label"] || $$props["aria-labelledby"] || title;
