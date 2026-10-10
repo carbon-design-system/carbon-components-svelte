@@ -38,6 +38,12 @@
   export let lowContrast = false;
 
   /**
+   * Set to `true` to size each switch to its label instead of splitting the
+   * width evenly. The switcher shrinks to fit its switches.
+   */
+  export let autoWidth = false;
+
+  /**
    * Obtain a reference to the tablist HTML element.
    * @type {HTMLDivElement | null}
    * @bindable readonly
@@ -383,6 +389,7 @@
   class:bx--content-switcher--xl={size === "xl"}
   class:bx--content-switcher--icon-only={iconOnly}
   class:bx--content-switcher--low-contrast={lowContrast}
+  class:bx--content-switcher--auto-width={autoWidth}
   {...$$restProps}
   on:click
   on:mouseover

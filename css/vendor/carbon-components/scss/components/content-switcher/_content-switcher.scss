@@ -206,6 +206,33 @@
   @include content-switcher;
 }
 
+// carbon-components-svelte patch (content-switcher-auto-width)
+// Switches split the width evenly by default, so long labels truncate while
+// short ones leave empty space. Auto width sizes each switch to its label and
+// shrinks the switcher to fit. Switches still shrink (and ellipsize) when the
+// container is narrower than the content. Emitted before icon-only so its
+// fixed square widths win by source order.
+
+/// Auto-width content switcher.
+/// @access private
+/// @group content-switcher
+@mixin content-switcher-auto-width {
+  .#{$prefix}--content-switcher--auto-width {
+    width: fit-content;
+    max-width: 100%;
+    justify-content: flex-start;
+  }
+
+  .#{$prefix}--content-switcher--auto-width .#{$prefix}--content-switcher-btn {
+    width: auto;
+    flex: 0 1 auto;
+  }
+}
+
+@include exports('content-switcher-auto-width') {
+  @include content-switcher-auto-width;
+}
+
 // carbon-components-svelte patch (formerly css/_content-switcher.scss)
 @import "carbon-components/scss/globals/scss/typography";
 

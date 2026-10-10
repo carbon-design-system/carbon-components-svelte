@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import ContentSwitcherAutoWidth from "./ContentSwitcher.autoWidth.test.svelte";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelte";
@@ -80,6 +81,14 @@ describe("ContentSwitcher", () => {
 
     expect(tablists[0]).toHaveClass("bx--content-switcher--low-contrast");
     expect(tablists[1]).not.toHaveClass("bx--content-switcher--low-contrast");
+  });
+
+  it("applies the auto-width modifier only when autoWidth is set", () => {
+    render(ContentSwitcherAutoWidth);
+
+    const tablists = screen.getAllByRole("tablist");
+    expect(tablists[0]).toHaveClass("bx--content-switcher--auto-width");
+    expect(tablists[1]).not.toHaveClass("bx--content-switcher--auto-width");
   });
 
   it("combines the low contrast and icon-only modifiers", async () => {
