@@ -9,14 +9,12 @@
   export let portalTooltip: boolean | undefined = undefined;
 
   import { CodeSnippet } from "carbon-components-svelte";
-  import Prism from "prismjs";
-  import "prismjs/components/prism-bash";
-  import "prismjs/components/prism-typescript";
-  import "prism-svelte";
+  import { highlight } from "carbon-components-svelte/syntax";
   import copy from "clipboard-copy";
 
-  $: grammar = Prism.languages[language] ?? Prism.languages.clike;
-  $: highlighted = Prism.highlight(code, grammar, language);
+  $: highlighted =
+    highlight(code, language) ??
+    code.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 </script>
 
 {#if type === "inline"}
