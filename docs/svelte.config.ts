@@ -16,20 +16,12 @@ import prettierPluginSvelte from "prettier-plugin-svelte";
 import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with {
   type: "json",
 };
-import Prism from "prismjs";
-import prismPkg from "prismjs/package.json" with { type: "json" };
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import { visit } from "unist-util-visit";
+import { highlight } from "../src/syntax/index.js";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
-import "prismjs/components/prism-markup.js";
-import "prismjs/components/prism-css.js";
-import "prismjs/components/prism-clike.js";
-import "prismjs/components/prism-javascript.js";
-import "prismjs/components/prism-typescript.js";
-import "prism-svelte";
-import prismSveltePkg from "prism-svelte/package.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -55,13 +47,6 @@ const SNIPPET_ICON_MUSTACHE_RE = /\{\s*[A-Z][A-Za-z0-9]*\s*[},]/;
 const SNIPPET_TAG_RE = /<[a-zA-Z]/;
 const SNIPPET_MUSTACHE_ANY_RE = /\{/;
 
-const MDSVEX_LANG_ALIASES = {
-  js: "javascript",
-  ts: "typescript",
-  html: "markup",
-  svg: "markup",
-} as const;
-
 const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
 
 type PreviewCode = { formattedCode: string; highlightedCode: string };
@@ -71,7 +56,7 @@ const createImportsCache = new Map<string, string>();
 
 /**
  * Formatted and highlighted example code persists here so a cold build only
- * runs prettier and Prism on examples that changed. Gitignored via `node_modules`.
+ * runs prettier and the highlighter on examples that changed. Gitignored via `node_modules`.
  */
 const PREVIEW_CODE_CACHE_DIR = path.join(
   __dirname,
@@ -90,7 +75,7 @@ function escapeHtmlText(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function mdsvexPrismHighlighter(
+function mdsvexHighlighter(
   code: string,
   lang: string | null | undefined,
   _meta: string | null | undefined,
@@ -99,18 +84,7 @@ function mdsvexPrismHighlighter(
 ): string {
   const raw = lang?.toLowerCase().trim() ?? "";
   const classLang = raw || "text";
-
-  const grammarKey = raw
-    ? (MDSVEX_LANG_ALIASES[raw as keyof typeof MDSVEX_LANG_ALIASES] ?? raw)
-    : "";
-  const grammar =
-    grammarKey && Prism.languages[grammarKey as keyof typeof Prism.languages]
-      ? Prism.languages[grammarKey as keyof typeof Prism.languages]
-      : null;
-
-  const inner = grammar
-    ? Prism.highlight(code, grammar, grammarKey)
-    : escapeHtmlText(code);
+  const inner = (raw && highlight(code, raw)) || escapeHtmlText(code);
   const highlighted = escapeSvelte(inner);
 
   return optimize
@@ -220,25 +194,21 @@ function createImports(source: string) {
 }
 
 function highlightSvelte(formattedCode: string): PreviewCode {
-  const highlightedCode = Prism.highlight(
-    formattedCode,
-    Prism.languages.svelte,
-    "svelte",
-  );
+  const highlightedCode = highlight(formattedCode, "svelte") ?? "";
   return { formattedCode, highlightedCode };
 }
 
 /**
- * Changing prettier, its Svelte plugin, the prettier options, Prism, or the
- * loaded Prism grammars invalidates every entry.
+ * Changing prettier, its Svelte plugin, the prettier options, or the
+ * highlighter invalidates every entry.
  */
 const PREVIEW_CODE_CACHE_SALT = JSON.stringify([
   prettierVersion,
   prettierPluginSveltePkg.version,
   { ...prettierSvelte, plugins: undefined },
-  prismPkg.version,
-  prismSveltePkg.version,
-  Object.keys(Prism.languages),
+  hashKey(
+    fs.readFileSync(path.join(__dirname, "../src/syntax/tokenize.js"), "utf8"),
+  ),
 ]);
 
 async function readPreviewCodeCache(file: string, key: string) {
@@ -716,7 +686,7 @@ export default {
   preprocess: [
     mdsvex({
       smartypants: false,
-      highlight: { highlighter: mdsvexPrismHighlighter },
+      highlight: { highlighter: mdsvexHighlighter },
       remarkPlugins: [heroIntro, plugin, carbonify],
       rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
       layout: {
