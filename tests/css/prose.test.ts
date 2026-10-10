@@ -25,4 +25,19 @@ describe("prose", () => {
       expect(selector, selector).toMatch(GUARD);
     }
   }, 30_000);
+
+  it("skips rendering offscreen code blocks and figures with the defer-offscreen modifier", async () => {
+    const rules = parseRules(await compileEntry("all.scss")).filter((r) =>
+      r.selector.includes("bx--prose--defer-offscreen"),
+    );
+    const selectors = rules.map((r) => r.selector).join(",");
+
+    expect(selectors).toMatch(/\.bx--prose--defer-offscreen pre:where/);
+    expect(selectors).toMatch(/\.bx--prose--defer-offscreen figure:where/);
+    expect(selectors).not.toMatch(/table/);
+    for (const rule of rules) {
+      expect(rule.decls.get("content-visibility")).toBe("auto");
+      expect(rule.decls.get("contain-intrinsic-size")).toBe("auto 10rem");
+    }
+  }, 30_000);
 });
