@@ -511,6 +511,15 @@ $ccs-prose-variants: (
     overflow-x: auto;
   }
 
+  // Skip rendering offscreen code blocks and figures. Paint containment
+  // clips overflow, which is why tables, which can overflow, aren't
+  // included; `pre` scrolls its own overflow.
+  #{$p}--defer-offscreen pre#{$x},
+  #{$p}--defer-offscreen figure#{$x} {
+    content-visibility: auto;
+    contain-intrinsic-size: auto to-rem(160px);
+  }
+
   // Code in a block takes the block's type and surface, not inline code's.
   #{$p} pre code#{$x} {
     padding: 0;

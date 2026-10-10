@@ -27,6 +27,14 @@ describe("Prose", () => {
     expect(screen.getByTestId("prose")).toHaveClass("bx--prose", modifier);
   });
 
+  it("adds the defer-offscreen modifier with deferOffscreen", () => {
+    render(Prose, { props: { deferOffscreen: true } });
+
+    expect(screen.getByTestId("prose")).toHaveClass(
+      "bx--prose--defer-offscreen",
+    );
+  });
+
   it.each([
     [480, "480px"],
     ["40rem", "40rem"],
