@@ -14,17 +14,15 @@ const componentMdSizesPath = path.resolve(
   "src/COMPONENT_MD_SIZES.json",
 );
 const componentMdSizesId = "\0component-md-sizes";
+// Prism language components expect a global `Prism`. Only the
+// CodeSnippet third-party highlighter example still loads one.
 const prismComponentRe = /[/\\]prismjs[/\\]components[/\\]prism-(?!core)/;
-const prismSvelteRe = /[/\\]prism-svelte[/\\]/;
 
 function prismGlobalFix() {
   return {
     name: "prism-global-fix",
     transform(code: string, id: string) {
       if (prismComponentRe.test(id)) {
-        return { code: `import Prism from "prismjs";\n${code}`, map: null };
-      }
-      if (prismSvelteRe.test(id)) {
         return { code: `import Prism from "prismjs";\n${code}`, map: null };
       }
     },
@@ -90,9 +88,7 @@ export default defineConfig({
       "carbon-components-svelte",
       "carbon-icons-svelte",
       "@roxi/routify",
-      "prismjs/components/prism-bash",
       "prismjs/components/prism-typescript",
-      "prism-svelte",
     ],
   },
   build: {
