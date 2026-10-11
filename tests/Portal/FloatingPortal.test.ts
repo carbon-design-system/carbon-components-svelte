@@ -658,4 +658,83 @@ describe("FloatingPortal", () => {
       expect(disconnectSpy).toHaveBeenCalled();
     });
   });
+
+  describe("floating content resize tracking", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      vi.restoreAllMocks();
+    });
+
+    it("shares one ResizeObserver across open portals", async () => {
+      let created = 0;
+      const Base = globalThis.ResizeObserver;
+      vi.stubGlobal(
+        "ResizeObserver",
+        class extends Base {
+          constructor(callback: ResizeObserverCallback) {
+            super(callback);
+            created++;
+          }
+        },
+      );
+
+      for (let i = 0; i < 3; i++) {
+        render(FloatingPortalTest, { props: { open: true } });
+      }
+      await tick();
+      await tick();
+
+      expect(document.querySelectorAll("[data-floating-portal]")).toHaveLength(
+        3,
+      );
+      expect(created).toBe(1);
+    });
+
+    it("repositions when the observer reports the floating content resized and stops on close", async () => {
+      let deliver: ResizeObserverCallback = () => {};
+      const observed = new Set<Element>();
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            deliver = callback;
+          }
+          observe(element: Element) {
+            observed.add(element);
+          }
+          unobserve(element: Element) {
+            observed.delete(element);
+          }
+          disconnect() {}
+        },
+      );
+      const getBoundingClientRect = vi.spyOn(
+        Element.prototype,
+        "getBoundingClientRect",
+      );
+
+      const { rerender } = render(FloatingPortalTest, {
+        props: { open: true },
+      });
+      const floating = await screen.findByText("Floating content");
+      await tick();
+      await tick();
+      expect(observed.has(floating)).toBe(true);
+
+      const readsOfFloating = () =>
+        getBoundingClientRect.mock.contexts.filter((el) => el === floating)
+          .length;
+      const before = readsOfFloating();
+
+      deliver(
+        [{ target: floating }] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+      expect(readsOfFloating()).toBeGreaterThan(before);
+
+      rerender({ open: false });
+      await tick();
+      expect(observed.size).toBe(0);
+    });
+  });
 });
