@@ -652,7 +652,9 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
@@ -1401,7 +1403,7 @@
     return () => {
       setMultiselectKeyListeners(false);
       resetTypeAheadBuffer.cancel();
-      resizeObserver?.disconnect();
+      stopObserving();
     };
   });
 
@@ -1674,26 +1676,25 @@
    * (`containerHeight: "80%"`) translate into a usable pixel value for
    * windowing math. Disconnect when virtualization is off or height is
    * no longer a relative string. */
-  let resizeObserver = null;
-  $: if (
-    virtualConfig &&
-    typeof virtualConfig.containerHeight === "string" &&
-    scrollContainerRef
-  ) {
-    if (typeof ResizeObserver === "undefined") {
-      measuredContainerHeight = scrollContainerRef.clientHeight;
-    } else {
-      resizeObserver?.disconnect();
-      resizeObserver = new ResizeObserver((entries) => {
-        const entry = entries[0];
-        if (entry) measuredContainerHeight = entry.contentRect.height;
-      });
-      resizeObserver.observe(scrollContainerRef);
+  let stopObserving = noop;
+  $: {
+    stopObserving();
+    stopObserving = noop;
+    if (
+      virtualConfig &&
+      typeof virtualConfig.containerHeight === "string" &&
+      scrollContainerRef
+    ) {
+      if (typeof ResizeObserver === "undefined") {
+        measuredContainerHeight = scrollContainerRef.clientHeight;
+      } else {
+        stopObserving = observeResize(scrollContainerRef, (entry) => {
+          measuredContainerHeight = entry.contentRect.height;
+        });
+      }
+    } else if (!virtualConfig) {
+      measuredContainerHeight = 0;
     }
-  } else {
-    resizeObserver?.disconnect();
-    resizeObserver = null;
-    if (!virtualConfig) measuredContainerHeight = 0;
   }
 
   $: virtualTabAnchorId = resolveVirtualTabAnchorId(
