@@ -13,7 +13,9 @@
   import EvalInput from "./EvalInput.svelte";
   import EventsPanel from "./EventsPanel.svelte";
   import LogRow from "./LogRow.svelte";
+  import NetworkPanel from "./NetworkPanel.svelte";
   import PerfPanel from "./PerfPanel.svelte";
+  import StoragePanel from "./StoragePanel.svelte";
   import {
     a11y,
     clearConsole,
@@ -23,6 +25,7 @@
     events,
     LEVELS,
     levels,
+    network,
     perfInteractions,
     preserve,
     query,
@@ -51,6 +54,7 @@
   $: eventCount = $events.length;
   $: a11yCount = $a11y.length;
   $: slowCount = $perfInteractions.length;
+  $: requestCount = $network.length;
   $: if (items) followTail();
 
   let autoScrolling = false;
@@ -95,6 +99,8 @@
       <Switch text="Events{eventCount ? ` (${eventCount})` : ""}" />
       <Switch text="A11y{a11yCount ? ` (${a11yCount})` : ""}" />
       <Switch text="Perf{slowCount ? ` (${slowCount})` : ""}" />
+      <Switch text="Network{requestCount ? ` (${requestCount})` : ""}" />
+      <Switch text="Storage" />
     </ContentSwitcher>
     {#if c.error}
       <Tag size="sm" type="red">{c.error} errors</Tag>
@@ -143,7 +149,9 @@
             ? clearEvents()
             : tab === 3
               ? clearPerf()
-              : undefined}
+              : tab === 4
+                ? network.set([])
+                : undefined}
     />
   </div>
 
@@ -171,8 +179,12 @@
     <EventsPanel {filter} />
   {:else if tab === 2}
     <A11yPanel {filter} />
-  {:else}
+  {:else if tab === 3}
     <PerfPanel />
+  {:else if tab === 4}
+    <NetworkPanel {filter} />
+  {:else}
+    <StoragePanel />
   {/if}
 </div>
 

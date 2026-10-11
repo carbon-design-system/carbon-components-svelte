@@ -334,6 +334,44 @@ ${SCRIPT_END}
     ],
   },
   {
+    id: "network-storage",
+    label: "Network & storage",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, LocalStorage, Stack, TextInput } from "carbon-components-svelte";
+
+  let name = "Ada";
+  let todo;
+
+  async function load() {
+    const res = await fetch("data:application/json,{\\"id\\":1,\\"title\\":\\"Ship the REPL\\",\\"done\\":false}");
+    todo = await res.json();
+  }
+
+  async function loadRemote() {
+    // Public CORS-enabled API; the preview sends Origin: null.
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos/2");
+    todo = await res.json();
+  }
+${SCRIPT_END}
+
+<LocalStorage key="repl-name" bind:value={name} />
+
+<Stack gap={5} style="max-width: 24rem">
+  <TextInput labelText="Name (saved to localStorage)" bind:value={name} />
+  <Stack orientation="horizontal" gap={3}>
+    <Button on:click={load}>Fetch a data: URL</Button>
+    <Button kind="secondary" on:click={loadRemote}>Fetch a public API</Button>
+  </Stack>
+  <p>{todo ? todo.title : "Nothing loaded"}</p>
+</Stack>
+`,
+      },
+    ],
+  },
+  {
     id: "carbon-lint",
     label: "Carbon usage lint",
     files: [

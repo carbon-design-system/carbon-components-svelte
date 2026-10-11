@@ -29,6 +29,25 @@ export function clearPerf() {
   perfFrames.set([]);
 }
 
+/** Network requests from the preview, merged start/end by id. */
+export const network = writable(/** @type {any[]} */ ([]));
+const MAX_REQUESTS = 500;
+
+export function netEvent(message) {
+  network.update((list) => {
+    if (message.phase === "start")
+      return [...list, { ...message }].slice(-MAX_REQUESTS);
+    return list.map((r) =>
+      r.id === message.id ? { ...r, ...message, done: true } : r,
+    );
+  });
+}
+
+/** Preview storage shims (localStorage/sessionStorage) as [key, value] entries. */
+export const storage = writable(
+  /** @type {{ area: string; entries: [string, string][] }[]} */ ([]),
+);
+
 /** Latest accessibility findings for the preview (replaced on each audit). */
 export const a11y = writable(/** @type {any[]} */ ([]));
 /** Carbon component events from the preview (instrumented dispatchers). */
@@ -154,6 +173,7 @@ export function runStarted() {
   else {
     entries.set([]);
     events.set([]);
+    network.set([]);
     collapsedGroups.set(new Set());
   }
 }

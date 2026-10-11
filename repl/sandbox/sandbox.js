@@ -7,6 +7,7 @@ import { mount, unmount } from "svelte";
 import { STATE_SYMBOL, snapshot } from "svelte-repl-devtools";
 import { audit } from "./inspect/a11y.js";
 import { installConsole } from "./inspect/console.js";
+import { installNetwork } from "./inspect/network.js";
 import { classifyStack } from "./inspect/origin.js";
 import { createPerf } from "./inspect/perf.js";
 import { createRemote } from "./inspect/remote.js";
@@ -92,6 +93,11 @@ async function onShellMessage({ data }) {
       break;
     case "unhighlight":
       highlightNode(null);
+      break;
+    case "storage-set":
+    case "storage-remove":
+    case "storage-clear":
+      editStorage(data);
       break;
     case "eval":
       respond(data, { done: true });
@@ -482,20 +488,79 @@ function teardown() {
 // ---------------------------------------------------------------------------
 // Opaque origin: Web Storage throws. Provide in-memory shims so demos still work.
 
+/**
+ * Shell edits act like another tab: apply them through the shim, then fire a
+ * `storage` event so bindings such as Carbon's LocalStorage pick them up.
+ */
+function editStorage({ type, area, key, value }) {
+  const store = window[area];
+  if (!store) return;
+  const fire = (k, oldValue, newValue) =>
+    window.dispatchEvent(
+      new StorageEvent("storage", {
+        key: k,
+        oldValue,
+        newValue,
+        url: location.href,
+      }),
+    );
+  if (type === "storage-set") {
+    const oldValue = store.getItem(key);
+    store.setItem(key, value);
+    fire(key, oldValue, String(value));
+  } else if (type === "storage-remove") {
+    const oldValue = store.getItem(key);
+    store.removeItem(key);
+    fire(key, oldValue, null);
+  } else {
+    store.clear();
+    fire(null, null, null);
+  }
+}
+
+/** In-memory stores behind the shims, shown and edited in the shell's Storage tab. */
+const storageAreas = new Map();
+let storageTimer;
+
+function reportStorage() {
+  storageTimer = undefined;
+  post({
+    type: "storage",
+    areas: [...storageAreas].map(([area, data]) => ({
+      area,
+      entries: [...data],
+    })),
+  });
+}
+
+function storageChanged() {
+  if (!storageTimer) storageTimer = native.setTimeout(reportStorage, 50);
+}
+
 for (const key of ["localStorage", "sessionStorage"]) {
   try {
     void window[key];
   } catch {
     const data = new Map();
+    storageAreas.set(key, data);
     const storage = {
       get length() {
         return data.size;
       },
       key: (i) => [...data.keys()][i] ?? null,
       getItem: (k) => (data.has(String(k)) ? data.get(String(k)) : null),
-      setItem: (k, v) => void data.set(String(k), String(v)),
-      removeItem: (k) => void data.delete(String(k)),
-      clear: () => data.clear(),
+      setItem: (k, v) => {
+        data.set(String(k), String(v));
+        storageChanged();
+      },
+      removeItem: (k) => {
+        data.delete(String(k));
+        storageChanged();
+      },
+      clear: () => {
+        data.clear();
+        storageChanged();
+      },
     };
     Object.defineProperty(window, key, { value: storage, configurable: true });
   }
@@ -580,6 +645,8 @@ const consoleApi = installConsole({
   modules,
   schedule: (fn) => native.setTimeout(fn, 16),
 });
+
+installNetwork({ post, preview: (value) => remote.preview(value) });
 
 // Hook for instrumented Carbon components (carbon-components-svelte/__devtools.js).
 globalThis.__ccsDevtools = { event: (e) => consoleApi.carbonEvent(e) };

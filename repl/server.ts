@@ -275,7 +275,7 @@ function sandboxCsp(dir: string) {
     `font-src ${SANDBOX_ORIGIN} data: ${FONT_ORIGIN}`,
     "img-src * data: blob:",
     "media-src * data: blob:",
-    "connect-src *",
+    "connect-src * data: blob:",
     "base-uri 'none'",
     "object-src 'none'",
   ].join("; ");

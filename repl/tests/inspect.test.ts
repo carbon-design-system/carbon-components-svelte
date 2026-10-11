@@ -346,3 +346,16 @@ describe("performance channel", () => {
     ).toBe("svelte");
   });
 });
+
+describe("network log", () => {
+  test("response bodies: JSON parses, text is kept, huge bodies are trimmed", async () => {
+    const { bodyValue } = await import("../sandbox/inspect/network.js");
+    expect(bodyValue('{"a":1}', "application/json")).toEqual({ a: 1 });
+    expect(bodyValue("[1,2]", "")).toEqual([1, 2]);
+    expect(bodyValue("<p>hi</p>", "text/html")).toBe("<p>hi</p>");
+    expect(bodyValue("{not json", "application/json")).toBe("{not json");
+    expect(
+      (bodyValue("x".repeat(300_000), "text/plain") as string).length,
+    ).toBe(200_000);
+  });
+});

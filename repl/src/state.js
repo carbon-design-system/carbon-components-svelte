@@ -8,9 +8,11 @@ import {
   push as consolePush,
   runStarted as consoleRunStarted,
   system as consoleSystem,
+  netEvent,
   perfFrames,
   perfInteractions,
   perfRuns,
+  storage as storageAreas,
 } from "./console/store.js";
 
 /** @type {any} */
@@ -143,6 +145,12 @@ function onEvent(message) {
       break;
     case "logs-dropped":
       consoleDropped(message.count);
+      break;
+    case "net":
+      netEvent(message);
+      break;
+    case "storage":
+      storageAreas.set(message.areas);
       break;
     case "perf-run":
       addPerf(perfRuns, [message]);
