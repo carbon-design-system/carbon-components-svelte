@@ -75,6 +75,20 @@ describe("Pagination", () => {
     );
   });
 
+  it("renders page size options independent of the size prop", () => {
+    render(Pagination, {
+      props: { size: "sm", totalItems: 102, pageSizes: [10, 15, 20] },
+    });
+
+    const select = screen.getByRole("combobox", { name: "Items per page:" });
+    const options = within(select).getAllByRole("option");
+    expect(options.map((option) => option.getAttribute("value"))).toEqual([
+      "10",
+      "15",
+      "20",
+    ]);
+  });
+
   it("should handle custom page sizes", () => {
     render(Pagination, {
       props: {
