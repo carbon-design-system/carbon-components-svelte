@@ -24,6 +24,7 @@
   setContext("carbon:UserAvatarGroup", {
     items: readable([]),
     max: readable(0),
+    /** @type {import("svelte/store").Readable<import("./UserAvatarGroup.svelte").UserAvatarGroupProps["size"]>} */
     size: parent?.size ?? readable(undefined),
     /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["register"]} */
     register: noop,
