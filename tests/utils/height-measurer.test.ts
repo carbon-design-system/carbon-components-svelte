@@ -453,4 +453,33 @@ describe("createHeightMeasurer", () => {
     await resize.deliver([{ target: elements[1], height: 30 }]);
     expect(onMeasure.mock.calls[0][0][4]).toBe(30);
   });
+
+  it("shares one observer across measurers and reports each only its own options", async () => {
+    const resize = installResizeObserver();
+    const onFirst = vi.fn();
+    const onSecond = vi.fn();
+    const first = createHeightMeasurer({ onMeasure: onFirst });
+    const second = createHeightMeasurer({ onMeasure: onSecond });
+    const firstContainer = buildWindow([0]);
+    const secondContainer = buildWindow([5]);
+
+    first.sync(firstContainer);
+    second.sync(secondContainer);
+    expect(resize.instanceCount).toBe(1);
+
+    await resize.deliver([
+      { target: optionAt(firstContainer, 0), height: 40 },
+      { target: optionAt(secondContainer, 5), height: 72 },
+    ]);
+
+    expect(onFirst).toHaveBeenCalledTimes(1);
+    expect(onFirst.mock.calls[0][0][0]).toBe(40);
+    expect(onFirst.mock.calls[0][0][5]).toBeUndefined();
+    expect(onSecond).toHaveBeenCalledTimes(1);
+    expect(onSecond.mock.calls[0][0][5]).toBe(72);
+
+    // One measurer letting go leaves the other observing.
+    first.disconnect();
+    expect(resize.observed).toEqual(new Set([optionAt(secondContainer, 5)]));
+  });
 });
