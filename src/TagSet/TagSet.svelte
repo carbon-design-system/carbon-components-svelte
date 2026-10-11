@@ -89,7 +89,9 @@
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
+  import { noop } from "../utils/noop.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -206,12 +208,12 @@
   onMount(() => {
     measure();
 
-    const observer = new ResizeObserver(throttledMeasure);
-    if (wrapperRef) observer.observe(wrapperRef);
-    if (containingElement) observer.observe(containingElement);
+    const stops = [wrapperRef, containingElement].map((element) =>
+      element ? observeResize(element, () => throttledMeasure()) : noop,
+    );
 
     return () => {
-      observer.disconnect();
+      for (const stop of stops) stop();
       throttledMeasure.cancel();
     };
   });
