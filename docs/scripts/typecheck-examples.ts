@@ -45,8 +45,6 @@ const IGNORED = [
  * anything fails the run, so the list only shrinks.
  */
 const KNOWN: Array<[file: string, message: RegExp]> = [
-  // BreadcrumbItem's `let:props` types `aria-current` as `string`.
-  ["src/pages/components/Breadcrumb.svx", /"aria-current"\?: string/],
   // `sort` gets the union of every cell type, so `new Date(a)` fails.
   ["src/pages/components/DataTable.svx", /^No overload matches this call/],
   // A computed column's `key` isn't a key of `Row`.
