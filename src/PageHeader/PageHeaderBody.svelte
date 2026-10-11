@@ -15,6 +15,7 @@
 
   import { getContext, setContext } from "svelte";
 
+  /** @type {import("../Tabs/Tabs.svelte").CarbonTabsContext | undefined} */
   const tabs = getContext("carbon:PageHeader")?.getTabs();
 
   if (tabs) setContext("carbon:Tabs", tabs);

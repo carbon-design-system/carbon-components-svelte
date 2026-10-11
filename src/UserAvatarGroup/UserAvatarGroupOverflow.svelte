@@ -25,8 +25,11 @@
     items: readable([]),
     max: readable(0),
     size: parent?.size ?? readable(undefined),
+    /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["register"]} */
     register: noop,
+    /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["unregister"]} */
     unregister: noop,
+    /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["updateName"]} */
     updateName: noop,
   });
 </script>

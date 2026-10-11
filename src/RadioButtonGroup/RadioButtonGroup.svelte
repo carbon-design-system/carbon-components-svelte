@@ -119,6 +119,7 @@
   // Unnamed radios are separate controls, so arrow keys would not move the
   // selection. Buttons with no name of their own share this one when the
   // group has no `name` either.
+  /** @type {string} */
   const fallbackName = uniqueId();
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);

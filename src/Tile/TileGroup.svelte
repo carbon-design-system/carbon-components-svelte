@@ -65,6 +65,7 @@
   // Unnamed radios are separate controls, so arrow keys would not move
   // between tiles. Tiles with no name of their own share this one when the
   // group has no `name` either.
+  /** @type {string} */
   const fallbackName = uniqueId();
   /**
    * @type {import("svelte/store").Writable<boolean | undefined>}
