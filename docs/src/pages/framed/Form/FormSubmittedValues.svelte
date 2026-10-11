@@ -31,7 +31,8 @@
   <Form
     on:submit={(e) => {
       e.preventDefault();
-      const entries = [...new FormData(e.currentTarget)];
+      const form = /** @type {HTMLFormElement} */ (e.currentTarget);
+      const entries = [...new FormData(form)];
       submitted = entries
         .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
         .join("\n");
