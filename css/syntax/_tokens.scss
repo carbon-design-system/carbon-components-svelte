@@ -1,0 +1,31 @@
+@import "./carbon-tokens";
+
+/// Declares a `--cds-syntax-<name>` custom property for each of Carbon's 88
+/// syntax tokens in one color scheme, with `$theme`'s contrast adjustments.
+/// @param {String} $scheme - `light` (white, g10) or `dark` (g80, g90, g100)
+/// @param {String} $theme [null] - a theme in `$ccs-syntax-contrast-adjustments`
+/// @access private
+/// @group syntax
+@mixin syntax-tokens($scheme, $theme: null) {
+  $tokens: map-get($ccs-syntax-tokens, $scheme);
+  @if $theme and map-has-key($ccs-syntax-contrast-adjustments, $theme) {
+    $tokens: map-merge(
+      $tokens,
+      map-get($ccs-syntax-contrast-adjustments, $theme)
+    );
+  }
+
+  @each $name, $color in $tokens {
+    --cds-syntax-#{$name}: #{$color};
+  }
+}
+
+/// Declares only `$theme`'s contrast adjustments, on top of its scheme.
+/// @param {String} $theme - a key of `$ccs-syntax-contrast-adjustments`
+/// @access private
+/// @group syntax
+@mixin syntax-contrast-adjustments($theme) {
+  @each $name, $color in map-get($ccs-syntax-contrast-adjustments, $theme) {
+    --cds-syntax-#{$name}: #{$color};
+  }
+}

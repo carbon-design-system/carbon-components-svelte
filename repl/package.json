@@ -9,6 +9,7 @@
     "start": "bun run build && bun run serve",
     "perf": "bun scripts/perf.ts",
     "test": "bun test tests",
-    "smoke": "bun scripts/smoke.ts"
+    "smoke": "bun scripts/smoke.ts",
+    "perf:editor": "bun scripts/editor-perf.ts"
   }
 }

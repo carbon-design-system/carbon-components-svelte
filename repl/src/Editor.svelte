@@ -5,6 +5,7 @@
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import { onMount } from "svelte";
+  import CodeEditor from "./CodeEditor.svelte";
   import {
     active,
     addFile,
@@ -12,18 +13,15 @@
     diagnostics,
     files,
     flushEdits,
+    recordPaint,
     removeFile,
     updateSource,
   } from "./state.js";
 
-  const LEADING_WHITESPACE = /^\s*/;
-  const OPENS_BLOCK = /[{([>]\s*$/;
-  const CLOSING_TAG = /<\/[\w-]+>\s*$/;
-
-  /** @type {HTMLTextAreaElement} */
-  let textarea;
+  const LANGUAGES = { svelte: "svelte", js: "js", json: "json" };
 
   $: file = $files[$active] ?? $files[0];
+  $: language = LANGUAGES[file?.name.split(".").pop()] ?? "js";
   $: fileDiagnostics = $diagnostics.filter(
     (d) => d.file === file?.name || !d.file,
   );
@@ -33,38 +31,6 @@
     // Take over from the bootstrap <pre> (same text, same metrics).
     document.getElementById("boot-code")?.remove();
   });
-
-  function insert(text) {
-    // execCommand keeps the native undo stack intact.
-    if (!document.execCommand("insertText", false, text)) {
-      textarea.setRangeText(
-        text,
-        textarea.selectionStart,
-        textarea.selectionEnd,
-        "end",
-      );
-      updateSource($active, textarea.value);
-    }
-  }
-
-  /** @param {KeyboardEvent} e */
-  function onKeydown(e) {
-    if (e.key === "Tab" && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
-      e.preventDefault();
-      insert("  ");
-    } else if (e.key === "Enter" && !e.metaKey && !e.ctrlKey) {
-      const before = textarea.value.slice(0, textarea.selectionStart);
-      const indent = before
-        .slice(before.lastIndexOf("\n") + 1)
-        .match(LEADING_WHITESPACE)[0];
-      const opens = OPENS_BLOCK.test(before) && !CLOSING_TAG.test(before);
-      e.preventDefault();
-      insert(`\n${indent}${opens ? "  " : ""}`);
-    } else if (e.key === "s" && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      compileNow();
-    }
-  }
 </script>
 
 <div class="tabs-row">
@@ -99,17 +65,15 @@
 </div>
 
 {#if file}
-  <textarea
-    bind:this={textarea}
-    class="repl-code editor"
-    spellcheck="false"
-    autocapitalize="off"
-    autocomplete="off"
-    aria-label="{file.name} source"
+  <CodeEditor
     value={file.source}
-    on:input={(e) => updateSource($active, e.currentTarget.value)}
-    on:keydown={onKeydown}
-  ></textarea>
+    {language}
+    diagnostics={fileDiagnostics}
+    label="{file.name} source"
+    on:input={(e) => updateSource($active, e.detail)}
+    on:save={compileNow}
+    on:paint={(e) => recordPaint(e.detail)}
+  />
 {/if}
 
 {#if fileDiagnostics.length || otherDiagnostics}
@@ -141,21 +105,6 @@
   .tabs-row :global(.bx--tabs) {
     flex: 1;
     min-width: 0;
-  }
-
-  .editor {
-    flex: 1;
-    min-height: 0;
-    width: 100%;
-    box-sizing: border-box;
-    border: 0;
-    outline: 0;
-    resize: none;
-    background: var(--cds-field-01, #fff);
-  }
-
-  .editor:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--cds-focus, #0f62fe);
   }
 
   .diagnostics {

@@ -1,4 +1,7 @@
 import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/syntax-tokens.css";
+import "carbon-components-svelte/css/syntax.css";
+import "./editor/editor.css";
 import { mount } from "svelte";
 import Console from "./Console.svelte";
 import Editor from "./Editor.svelte";

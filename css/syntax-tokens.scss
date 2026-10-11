@@ -1,0 +1,24 @@
+// Carbon's syntax theme tokens as `--cds-syntax-*` custom properties, for any
+// highlighter. Pairs with `all.css` and its `<html theme>` switching; with a
+// single-theme stylesheet, load the matching `syntax-tokens-<theme>.css`.
+@import "./syntax/tokens";
+
+// Default: white. g10 shares the light values.
+:root {
+  @include syntax-tokens(light);
+}
+
+// Carbon gives the dark themes one set; v11 has no g80, which takes it too.
+:root[theme="g80"],
+:root[theme="g90"],
+:root[theme="g100"] {
+  @include syntax-tokens(dark);
+}
+
+// Carbon tunes its dark set for g100's snippet background. On g80's and
+// g90's lighter ones, a few tokens move a palette step lighter to keep 4.5:1.
+@each $theme, $tokens in $ccs-syntax-contrast-adjustments {
+  :root[theme="#{$theme}"] {
+    @include syntax-contrast-adjustments($theme);
+  }
+}

@@ -81,6 +81,9 @@
       title="Compiler download + evaluation in the worker"
       >compiler {ms(m.compilerLoad)}</Tag
     >
+    <Tag size="sm" type="purple" title="Editor tokenize + highlight per edit"
+      >paint {m.paint === undefined ? "—" : `${m.paint.toFixed(1)} ms`}</Tag
+    >
     <Tag size="sm" type="blue" title="Last compile in the worker"
       >compile {ms(m.compile)}</Tag
     >

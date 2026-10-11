@@ -19,9 +19,11 @@ bun run start            # build artifacts + shell, then serve
 | `public/worker.js` | Compiler worker: compile, rewrite imports against the manifest, post modules straight to the iframe |
 | `sandbox/sandbox.js` | Preview runtime: keep-alive remount, side-effect teardown, console/error relay, storage shim |
 | `src/` | Shell UI built from carbon-components-svelte |
+| `src/CodeEditor.svelte`, `src/editor/` | Zero-dependency editor: textarea over a `<pre>` painted with the CSS Custom Highlight API (`StaticRange`, visible window only), tokens from `src/syntax` (#4303) |
 | `server.ts` | Two-origin static server (CSP, CORS, brotli, optional network shaping) |
 | `scripts/smoke.ts` | End-to-end check of every example, the edit loop and shared links |
 | `scripts/perf.ts` | Desktop / Phone cold + warm load and edit-loop measurements |
+| `scripts/editor-perf.ts` | Editor keystroke cost on real source, 1× and 4× CPU |
 
-Not in the spike: syntax highlighting, completions, service worker, version
-picker, npm tarball builds, URL format freeze.
+Not in the spike: completions, line wrapping, service worker, version picker,
+npm tarball builds, URL format freeze.
