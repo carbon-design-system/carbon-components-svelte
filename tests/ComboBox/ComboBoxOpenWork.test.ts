@@ -49,6 +49,58 @@ describe("ComboBox open work on long lists", () => {
     expect(state.idReads).toBeLessThan(COUNT / 2);
   });
 
+  describe("filter pass", () => {
+    const buildCountedItems = () => {
+      const state = { filterCalls: 0 };
+      const items = Array.from({ length: 200 }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i}`,
+      }));
+      const filter = items.filter.bind(items);
+      Object.defineProperty(items, "filter", {
+        value: (...args: Parameters<typeof filter>) => {
+          state.filterCalls++;
+          return filter(...args);
+        },
+      });
+      return { items, state };
+    };
+
+    it("skips the filter pass for the default shouldFilterItem", async () => {
+      const { items, state } = buildCountedItems();
+      render(ComboBox, { props: { items, placeholder: "Pick" } });
+      await user.click(getInput());
+      await user.type(getInput(), "Item 1");
+
+      expect(state.filterCalls).toBe(0);
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+      expect(screen.getAllByRole("option")[0]).toHaveAttribute(
+        "aria-setsize",
+        "200",
+      );
+    });
+
+    it("filters with a custom shouldFilterItem", async () => {
+      const { items, state } = buildCountedItems();
+      render(ComboBox, {
+        props: {
+          items,
+          placeholder: "Pick",
+          shouldFilterItem: (item: { text: string }, value: string) =>
+            item.text.includes(value),
+        },
+      });
+      await user.click(getInput());
+      await user.type(getInput(), "Item 19");
+
+      expect(state.filterCalls).toBeGreaterThan(0);
+      expect(screen.getAllByRole("option")[0]).toHaveAttribute(
+        "aria-setsize",
+        "11",
+      );
+    });
+  });
+
   it("still maps hovered options to their position when not virtualized", async () => {
     const items = Array.from({ length: 20 }, (_, i) => ({
       id: String(i),
