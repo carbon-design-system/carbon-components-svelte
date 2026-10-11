@@ -29,7 +29,7 @@
       <NumberInput
         size="sm"
         hideLabel
-        label="Quantity"
+        labelText="Quantity"
         min={0}
         bind:value={row.qty}
         on:input={() => {

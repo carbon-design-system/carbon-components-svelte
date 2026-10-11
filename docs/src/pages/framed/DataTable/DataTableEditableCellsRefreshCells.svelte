@@ -35,7 +35,7 @@
 <Stack gap={5}>
   <Button
     kind="secondary"
-    size="sm"
+    size="small"
     disabled={!hasEdits}
     on:click={updateTotals}
   >
@@ -61,7 +61,7 @@
         <NumberInput
           size="sm"
           hideLabel
-          label="Quantity"
+          labelText="Quantity"
           min={0}
           bind:value={row.qty}
           on:input={syncHasEdits}
