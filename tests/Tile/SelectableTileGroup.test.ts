@@ -5,6 +5,9 @@ import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
+import SelectableTileGroupDuplicate from "./SelectableTileGroupDuplicate.test.svelte";
+import SelectableTileGroupNested from "./SelectableTileGroupNested.test.svelte";
+import SelectableTileGroupNotify from "./SelectableTileGroupNotify.test.svelte";
 import SelectableTileGroupRange from "./SelectableTileGroupRange.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
 
@@ -57,6 +60,23 @@ describe("SelectableTileGroup", () => {
       expect(checkbox).toBeDisabled();
       expect(checkbox).not.toHaveAttribute("disabled");
     }
+
+    for (const tile of container.querySelectorAll(".bx--tile")) {
+      expect(tile).toHaveClass("bx--tile--disabled");
+    }
+  });
+
+  it("restores tile styling when the group is re-enabled", async () => {
+    const { component, container } = render(SelectableTileGroup, {
+      props: { disabled: true },
+    });
+
+    component.disabled = false;
+    await tick();
+
+    for (const tile of container.querySelectorAll(".bx--tile")) {
+      expect(tile).not.toHaveClass("bx--tile--disabled");
+    }
   });
 
   it("should handle custom name", () => {
@@ -99,6 +119,37 @@ describe("SelectableTileGroup", () => {
     await user.click(tiles[1]);
 
     expect(consoleLog).toHaveBeenCalledWith("deselect", "option2");
+  });
+
+  describe("change event", () => {
+    it("fires after select and deselect with every selected value", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SelectableTileGroup, { props: { selected: ["option1"] } });
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[2]);
+      expect(consoleLog.mock.calls).toEqual([
+        ["select", "option3"],
+        ["change", ["option1", "option3"]],
+      ]);
+      consoleLog.mockClear();
+
+      await user.click(checkboxes[0]);
+      expect(consoleLog.mock.calls).toEqual([
+        ["deselect", "option1"],
+        ["change", ["option3"]],
+      ]);
+    });
+
+    it("does not fire when selected is set programmatically", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { component } = render(SelectableTileGroup);
+
+      component.selected = ["option2"];
+      await flushMacrotask();
+
+      expect(consoleLog).not.toHaveBeenCalled();
+    });
   });
 
   it("should update selected values on checkbox change", async () => {
@@ -232,6 +283,76 @@ describe("SelectableTileGroup", () => {
     expect(component.groupSelected).toEqual(["b"]);
   });
 
+  describe("store notifications", () => {
+    it("notifies tiles once per toggle", async () => {
+      const onNotify = vi.fn();
+      render(SelectableTileGroupNotify, { props: { onNotify } });
+      await tick();
+      onNotify.mockClear();
+
+      await user.click(screen.getAllByRole("checkbox")[0]);
+      await tick();
+
+      expect(onNotify).toHaveBeenCalledTimes(1);
+    });
+
+    it("notifies tiles once when selected is set programmatically", async () => {
+      const onNotify = vi.fn();
+      const { component } = render(SelectableTileGroupNotify, {
+        props: { onNotify },
+      });
+      await tick();
+      onNotify.mockClear();
+
+      component.selected = ["b"];
+      await tick();
+
+      expect(onNotify).toHaveBeenCalledTimes(1);
+      expect(screen.getAllByRole("checkbox")[1]).toBeChecked();
+    });
+  });
+
+  describe("duplicate values", () => {
+    it("warns once when two tiles share a value", async () => {
+      const consoleWarn = vi
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
+      render(SelectableTileGroupDuplicate, {
+        props: { values: ["a", "a", "a"] },
+      });
+      await tick();
+
+      expect(consoleWarn).toHaveBeenCalledTimes(1);
+      expect(consoleWarn.mock.calls[0][0]).toContain('share the value "a"');
+    });
+
+    it("does not warn for unique values, including while tiles swap values", async () => {
+      const consoleWarn = vi.spyOn(console, "warn");
+      const { component } = render(SelectableTileGroupDuplicate);
+      await tick();
+
+      // Non-keyed `{#each}`: the first tile takes "b" before the second
+      // gives it up.
+      component.values = ["b", "c"];
+      await tick();
+
+      expect(consoleWarn).not.toHaveBeenCalled();
+    });
+
+    it("releases a value when its tile unmounts", async () => {
+      const consoleWarn = vi.spyOn(console, "warn");
+      const { component } = render(SelectableTileGroupDuplicate);
+      await tick();
+
+      component.values = ["a"];
+      await tick();
+      component.values = ["a", "b"];
+      await tick();
+
+      expect(consoleWarn).not.toHaveBeenCalled();
+    });
+  });
+
   describe("shift+click range selection", () => {
     it("selects, then deselects, a range between the anchor and the shift-clicked tile", async () => {
       render(SelectableTileGroup);
@@ -257,6 +378,53 @@ describe("SelectableTileGroup", () => {
       expect(checkboxes[0]).toBeChecked();
       expect(checkboxes[1]).not.toBeChecked();
       expect(checkboxes[2]).not.toBeChecked();
+    });
+
+    it("dispatches select and deselect for every tile the range changes", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SelectableTileGroup);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[0]);
+      consoleLog.mockClear();
+
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      // option1 was already selected, so only the newly selected tiles fire.
+      expect(consoleLog.mock.calls).toEqual([
+        ["select", "option2"],
+        ["select", "option3"],
+        ["change", ["option1", "option2", "option3"]],
+      ]);
+      consoleLog.mockClear();
+
+      await user.click(checkboxes[0]);
+      consoleLog.mockClear();
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      expect(consoleLog.mock.calls).toEqual([
+        ["deselect", "option2"],
+        ["deselect", "option3"],
+        ["change", []],
+      ]);
+    });
+
+    it("leaves tiles of a nested group out of the range", async () => {
+      const { component } = render(SelectableTileGroupNested);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[0]);
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      expect(component.outer).toEqual(["outer-1", "outer-2"]);
+      expect(component.inner).toEqual([]);
+      expect(checkboxes[1]).not.toBeChecked();
     });
 
     it("falls back to a single toggle when there is no prior anchor", async () => {
@@ -336,6 +504,11 @@ describe("SelectableTileGroup", () => {
       type DeselectEventDetail =
         DeselectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<DeselectEventDetail>().toEqualTypeOf<CustomValue>();
+
+      type ChangeEvent = Events["change"];
+      type ChangeEventDetail =
+        ChangeEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue[]>();
     });
 
     it("should default to string type when generic is not specified", () => {
