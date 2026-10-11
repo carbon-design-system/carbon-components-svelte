@@ -7,6 +7,7 @@ import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonLoading from "./ButtonLoading.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
+import ButtonTooltipAlignment from "./ButtonTooltipAlignment.test.svelte";
 import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
 
 describe("Button", () => {
@@ -215,6 +216,102 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Custom accessible name" })).toBe(
       button,
     );
+  });
+
+  describe("tooltipAlignment auto", () => {
+    beforeEach(() => {
+      Object.defineProperty(document.documentElement, "clientWidth", {
+        configurable: true,
+        value: 1000,
+      });
+    });
+
+    afterEach(() => {
+      // Drop the own property so the prototype getter applies again.
+      Reflect.deleteProperty(document.documentElement, "clientWidth");
+      vi.restoreAllMocks();
+    });
+
+    function stubLayout(left: number) {
+      const button = screen.getByRole("button", { name: "Clear console" });
+      const tip = button.querySelector(".bx--assistive-text");
+      assert(tip);
+      vi.spyOn(button, "getBoundingClientRect").mockReturnValue(
+        DOMRect.fromRect({ x: left, y: 0, width: 32, height: 32 }),
+      );
+      vi.spyOn(tip, "getBoundingClientRect").mockReturnValue(
+        DOMRect.fromRect({ x: 0, y: 0, width: 120, height: 24 }),
+      );
+      return button;
+    }
+
+    it("aligns to the end at the right viewport edge", async () => {
+      render(ButtonTooltipAlignment, { tooltipAlignment: "auto" });
+      const button = stubLayout(990);
+
+      await user.hover(button);
+      expect(button).toHaveClass("bx--tooltip--align-end");
+      expect(button).not.toHaveClass("bx--tooltip--align-auto");
+    });
+
+    it("aligns to the start at the left viewport edge", async () => {
+      render(ButtonTooltipAlignment, { tooltipAlignment: "auto" });
+      const button = stubLayout(0);
+
+      await user.hover(button);
+      expect(button).toHaveClass("bx--tooltip--align-start");
+    });
+
+    it("stays centered away from the edges", async () => {
+      render(ButtonTooltipAlignment, { tooltipAlignment: "auto" });
+      const button = stubLayout(484);
+
+      await user.hover(button);
+      expect(button).toHaveClass("bx--tooltip--align-center");
+    });
+
+    it("resolves on focus", async () => {
+      render(ButtonTooltipAlignment, { tooltipAlignment: "auto" });
+      const button = stubLayout(990);
+
+      await user.tab();
+      expect(button).toHaveFocus();
+      expect(button).toHaveClass("bx--tooltip--align-end");
+    });
+
+    it("resolves to center for side positions", async () => {
+      render(ButtonTooltipAlignment, {
+        tooltipAlignment: "auto",
+        tooltipPosition: "right",
+      });
+      const button = stubLayout(990);
+
+      await user.hover(button);
+      expect(button).toHaveClass("bx--tooltip--align-center");
+    });
+
+    it("does not measure with the default alignment", async () => {
+      render(ButtonTooltipAlignment);
+      const button = stubLayout(990);
+
+      await user.hover(button);
+      expect(button).toHaveClass("bx--tooltip--align-center");
+      expect(button.getBoundingClientRect).not.toHaveBeenCalled();
+    });
+
+    it("follows a fixed alignment set after auto", async () => {
+      const { rerender } = render(ButtonTooltipAlignment, {
+        tooltipAlignment: "auto",
+      });
+      const button = stubLayout(990);
+
+      await user.hover(button);
+      expect(button).toHaveClass("bx--tooltip--align-end");
+
+      await rerender({ tooltipAlignment: "start" });
+      const updated = screen.getByRole("button", { name: "Clear console" });
+      expect(updated).toHaveClass("bx--tooltip--align-start");
+    });
   });
 
   describe("portalTooltip", () => {
