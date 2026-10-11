@@ -102,7 +102,7 @@ function rounds(starts: number[], latency: number) {
 }
 
 async function editLoop(page: Page) {
-  const ta = page.locator("textarea");
+  const ta = page.locator("textarea.ce-input");
   await ta.click();
   await ta.evaluate((el: HTMLTextAreaElement) => {
     const i = el.value.indexOf("Clicked");

@@ -4,6 +4,14 @@
 // The document is kept alive between runs: library modules stay evaluated and
 // all.css stays parsed; only the user's modules are re-imported.
 import { mount, unmount } from "svelte";
+import { STATE_SYMBOL, snapshot } from "svelte-repl-devtools";
+import { audit } from "./inspect/a11y.js";
+import { installConsole } from "./inspect/console.js";
+import { installNetwork } from "./inspect/network.js";
+import { classifyStack } from "./inspect/origin.js";
+import { createPerf } from "./inspect/perf.js";
+import { createRemote } from "./inspect/remote.js";
+import { createTokenIndex } from "./inspect/tokens.js";
 
 const native = {
   setTimeout: window.setTimeout.bind(window),
@@ -27,6 +35,11 @@ let blobs = [];
 let latestSeq = -1;
 let runs = 0;
 const preloaded = new Set();
+/** Blob URL → REPL module name + source map, for mapping stack frames. */
+const modules = new Map();
+const remote = createRemote({ stateSymbol: STATE_SYMBOL, snapshot });
+/** Messages posted before the shell port arrives. */
+let pending = [];
 
 native.windowAdd("message", (event) => {
   if (event.source !== window.parent || shell || event.data?.type !== "init")
@@ -35,6 +48,8 @@ native.windowAdd("message", (event) => {
   shell = shellPort;
   shell.onmessage = onShellMessage;
   runPort.onmessage = onRun;
+  for (const message of pending) shell.postMessage(message);
+  pending = [];
   post({ type: "ready", at: now() });
 });
 
@@ -43,30 +58,310 @@ function now() {
 }
 
 function post(message) {
-  shell?.postMessage(message);
+  if (shell) shell.postMessage(message);
+  else pending.push(message);
 }
 
-function onShellMessage({ data }) {
-  if (data.type === "theme")
-    document.documentElement.setAttribute("theme", data.theme);
+function respond(data, payload) {
+  post({ type: "response", reqId: data.reqId, ...payload });
+}
+
+async function onShellMessage({ data }) {
+  switch (data.type) {
+    case "theme":
+      document.documentElement.setAttribute("theme", data.theme);
+      scheduleAudit();
+      break;
+    case "props":
+      respond(data, remote.properties(data.id, data.range));
+      break;
+    case "getter":
+      respond(data, remote.invokeGetter(data.id, data.key));
+      break;
+    case "json":
+      respond(data, remote.json(data.id));
+      break;
+    case "store-global": {
+      const result = remote.storeGlobal(data.id, window);
+      respond(data, result);
+      if (result.name)
+        consoleApi.result(remote.get(data.id), false, result.name);
+      break;
+    }
+    case "highlight":
+      highlightNode(remote.get(data.id));
+      break;
+    case "unhighlight":
+      highlightNode(null);
+      break;
+    case "storage-set":
+    case "storage-remove":
+    case "storage-clear":
+      editStorage(data);
+      break;
+    case "eval":
+      respond(data, { done: true });
+      await evaluate(data.code);
+      break;
+  }
+}
+
+/** Run an expression (or, failing that, statements) as a blob module. */
+async function evaluate(code) {
+  const run = async (source) => {
+    const href = URL.createObjectURL(
+      new Blob([source], { type: "text/javascript" }),
+    );
+    try {
+      return await import(href);
+    } finally {
+      URL.revokeObjectURL(href);
+    }
+  };
+  try {
+    consoleApi.result((await run(`export default (\n${code}\n);`)).default);
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) return consoleApi.result(error, true);
+    try {
+      await run(`${code}\nexport {};`);
+      consoleApi.result(undefined);
+    } catch (inner) {
+      consoleApi.result(inner, true);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dev mode: element → source. Dev-compiled REPL code calls __replMeta around
+// each `<Component>` render; DOM cloned meanwhile (including prod-compiled
+// Carbon components) is tagged with that location. Alt+click jumps there.
+
+const metaStack = [];
+
+globalThis.__replMeta = (
+  original,
+  FILENAME,
+  callback,
+  type,
+  component,
+  line,
+  column,
+  extra,
+) => {
+  if (type !== "component")
+    return original(callback, type, component, line, column, extra);
+  metaStack.push({
+    file: component[FILENAME],
+    line,
+    column: column + 1,
+    name: extra?.componentTag,
+  });
+  try {
+    return original(callback, type, component, line, column, extra);
+  } finally {
+    metaStack.pop();
+  }
+};
+
+function tagClone(node) {
+  const loc = metaStack.at(-1);
+  if (!loc || !node) return node;
+  if (node.nodeType === 11) {
+    for (const child of node.children) child.__repl_loc ??= loc;
+  } else if (node.nodeType === 1) {
+    node.__repl_loc ??= loc;
+  }
+  return node;
+}
+
+const nativeCloneNode = Node.prototype.cloneNode;
+Node.prototype.cloneNode = function (deep) {
+  return tagClone(nativeCloneNode.call(this, deep));
+};
+// Components with a dynamic tag (svelte:element, e.g. Stack's `as`) create
+// elements directly instead of cloning a template.
+for (const method of ["createElement", "createElementNS"]) {
+  const native = Document.prototype[method];
+  Document.prototype[method] = function (...args) {
+    return tagClone(native.apply(this, args));
+  };
+}
+
+const nativeImportNode = Document.prototype.importNode;
+Document.prototype.importNode = function (node, deep) {
+  return tagClone(nativeImportNode.call(this, node, deep));
+};
+
+/** Nearest source location for an element: own template, or the component call that rendered it. */
+function locate(element) {
+  for (let el = element; el && el !== document.body; el = el.parentElement) {
+    const meta = el.__svelte_meta?.loc;
+    if (meta)
+      return {
+        file: meta.file,
+        line: meta.line,
+        column: meta.column + 1,
+        tag: el.tagName.toLowerCase(),
+      };
+    if (el.__repl_loc) return { ...el.__repl_loc, tag: el.__repl_loc.name };
+  }
+  return null;
+}
+
+let inspecting = false;
+
+native.documentAdd(
+  "keydown",
+  (e) => {
+    if (e.key === "Alt") inspecting = true;
+  },
+  true,
+);
+native.documentAdd(
+  "keyup",
+  (e) => {
+    if (e.key === "Alt") {
+      inspecting = false;
+      highlightNode(null);
+    }
+  },
+  true,
+);
+const tokens = createTokenIndex(document);
+
+/** One-line inspector label: element, size, source, Carbon color tokens. */
+function inspectLabel(el) {
+  const rect = el.getBoundingClientRect();
+  const cls = el.classList.length
+    ? `.${[...el.classList].slice(0, 2).join(".")}`
+    : "";
+  const loc = locate(el);
+  const t = tokens.tokensFor(el);
+  const parts = [
+    `${el.tagName.toLowerCase()}${cls}`,
+    `${Math.round(rect.width)}×${Math.round(rect.height)}`,
+    loc ? `${loc.file}:${loc.line}` : "",
+    t.background ? `bg ${t.background.token}` : "",
+    t.color ? `text ${t.color.token}` : "",
+  ];
+  return parts.filter(Boolean).join("  ·  ");
+}
+
+native.documentAdd(
+  "mousemove",
+  (e) => {
+    const active = inspecting || e.altKey;
+    if (!active) return;
+    const el = /** @type {Element} */ (e.target);
+    if (el instanceof Element && el !== document.body)
+      highlightNode(el, inspectLabel(el));
+    else highlightNode(null);
+  },
+  true,
+);
+native.documentAdd(
+  "click",
+  (e) => {
+    if (!e.altKey) return;
+    if (e.shiftKey) {
+      // Alt+Shift+click: log the element with its Carbon tokens and source.
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const el = /** @type {Element} */ (e.target);
+      const style = getComputedStyle(el);
+      console.log("Inspect", el, {
+        source: locate(el) ?? undefined,
+        tokens: tokens.tokensFor(el),
+        font: `${style.fontWeight} ${style.fontSize}/${style.lineHeight} ${style.fontFamily.split(",")[0]}`,
+        size: `${Math.round(el.getBoundingClientRect().width)}×${Math.round(el.getBoundingClientRect().height)}`,
+      });
+      return;
+    }
+    const loc = locate(/** @type {Element} */ (e.target));
+    if (!loc) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    highlightNode(null);
+    post({ type: "jump", ...loc });
+  },
+  true,
+);
+
+let overlay;
+
+let overlayLabel;
+
+/** Outline a DOM node in the preview (log hover, Alt inspect), with an optional label. */
+function highlightNode(node, label = "") {
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.style.cssText =
+      "position:fixed;z-index:2147483647;pointer-events:none;outline:2px solid #0f62fe;background:rgb(15 98 254 / 12%);display:none";
+    overlayLabel = document.createElement("div");
+    overlayLabel.style.cssText =
+      "position:absolute;left:-2px;top:calc(100% + 4px);padding:2px 6px;white-space:nowrap;font:12px/16px 'IBM Plex Mono',monospace;color:#fff;background:#161616;";
+    overlay.append(overlayLabel);
+    document.documentElement.append(overlay);
+  }
+  overlayLabel.textContent = label;
+  overlayLabel.style.display = label ? "block" : "none";
+  let rect;
+  if (node instanceof Element) rect = node.getBoundingClientRect();
+  else if (node instanceof Text) {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    rect = range.getBoundingClientRect();
+  }
+  if (!rect || (!rect.width && !rect.height)) {
+    overlay.style.display = "none";
+    return;
+  }
+  if (node instanceof Element) node.scrollIntoView({ block: "nearest" });
+  Object.assign(overlay.style, {
+    display: "block",
+    top: `${rect.top}px`,
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+  });
 }
 
 // ---------------------------------------------------------------------------
 // Side-effect tracking so a run can be torn down without reloading the document.
 
+/**
+ * Only side effects created by REPL code (blob: modules) are torn down
+ * between runs. The Svelte runtime and library modules stay evaluated in this
+ * kept-alive document and own singletons (Svelte's global form `reset`
+ * listener, its animation loop, listener pools), so clearing those would
+ * break later runs. Library listeners still registered after unmount are
+ * reported as possible leaks instead.
+ */
 const tracked = {
   timeouts: new Set(),
   intervals: new Set(),
   frames: new Set(),
+  /** @type {[Function, string, any, any, { kind: string; file?: string }][]} */
   listeners: [],
 };
 
+const PLURAL_NOUN = /(listener|frame|timeout|interval)/;
+
+/** Who created a side effect (see ./inspect/origin.js). */
+function origin() {
+  return classifyStack(new Error().stack);
+}
+
+const fromUser = () => origin().kind === "user";
+
 window.setTimeout = (fn, ms, ...args) => {
+  const user = fromUser();
   const id = native.setTimeout(() => {
     tracked.timeouts.delete(id);
     if (typeof fn === "function") fn(...args);
   }, ms);
-  tracked.timeouts.add(id);
+  if (user) tracked.timeouts.add(id);
   return id;
 };
 window.clearTimeout = (id) => {
@@ -75,7 +370,7 @@ window.clearTimeout = (id) => {
 };
 window.setInterval = (fn, ms, ...args) => {
   const id = native.setInterval(fn, ms, ...args);
-  tracked.intervals.add(id);
+  if (fromUser()) tracked.intervals.add(id);
   return id;
 };
 window.clearInterval = (id) => {
@@ -83,24 +378,55 @@ window.clearInterval = (id) => {
   native.clearInterval(id);
 };
 window.requestAnimationFrame = (fn) => {
+  const user = fromUser();
   const id = native.requestAnimationFrame((t) => {
     tracked.frames.delete(id);
     fn(t);
   });
-  tracked.frames.add(id);
+  if (user) tracked.frames.add(id);
   return id;
 };
 window.cancelAnimationFrame = (id) => {
   tracked.frames.delete(id);
   native.cancelAnimationFrame(id);
 };
+const capture = (options) =>
+  typeof options === "boolean" ? options : !!options?.capture;
+
+/** Untrack a listener its owner removed itself, so teardown reports only real leftovers. */
+function untrack(remove, type, listener, options) {
+  const i = tracked.listeners.findIndex(
+    ([r, t, l, o]) =>
+      r === remove &&
+      t === type &&
+      l === listener &&
+      capture(o) === capture(options),
+  );
+  if (i !== -1) tracked.listeners.splice(i, 1);
+}
+
+function track(remove, type, listener, options) {
+  const from = origin();
+  if (from.kind === "user" || from.kind === "library") {
+    tracked.listeners.push([remove, type, listener, options, from]);
+  }
+}
+
 window.addEventListener = (type, listener, options) => {
-  tracked.listeners.push([native.windowRemove, type, listener, options]);
+  track(native.windowRemove, type, listener, options);
   native.windowAdd(type, listener, options);
 };
+window.removeEventListener = (type, listener, options) => {
+  untrack(native.windowRemove, type, listener, options);
+  native.windowRemove(type, listener, options);
+};
 document.addEventListener = (type, listener, options) => {
-  tracked.listeners.push([native.documentRemove, type, listener, options]);
+  track(native.documentRemove, type, listener, options);
   native.documentAdd(type, listener, options);
+};
+document.removeEventListener = (type, listener, options) => {
+  untrack(native.documentRemove, type, listener, options);
+  native.documentRemove(type, listener, options);
 };
 
 function teardown() {
@@ -108,125 +434,269 @@ function teardown() {
     try {
       unmount(current);
     } catch (error) {
-      report(error);
+      consoleApi.reportError(error);
     }
     current = undefined;
+  }
+  const userListeners = tracked.listeners.filter(
+    ([, , , , o]) => o.kind === "user",
+  );
+  const libraryListeners = tracked.listeners.filter(
+    ([, , , , o]) => o.kind === "library",
+  );
+  const types = (list) => [...new Set(list.map(([, type]) => type))].join(", ");
+  const leftovers = [
+    [tracked.intervals.size, "interval"],
+    [tracked.timeouts.size, "timeout"],
+    [tracked.frames.size, "animation frame"],
+    [
+      userListeners.length,
+      `window/document listener (${types(userListeners)})`,
+    ],
+  ]
+    .filter(([n]) => n > 0)
+    .map(
+      ([n, what]) =>
+        `${n} ${n === 1 ? what : what.replace(PLURAL_NOUN, "$1s")}`,
+    );
+  if (leftovers.length) {
+    post({
+      type: "teardown-report",
+      text: `Cleared ${leftovers.join(", ")} left by the previous run.`,
+    });
+  }
+  for (const [, type, , , o] of libraryListeners) {
+    if (o.reported) continue;
+    o.reported = true;
+    post({
+      type: "teardown-report",
+      level: "warn",
+      text: `A "${type}" listener added by ${o.file} is still registered after unmount (possible leak in the library).`,
+    });
   }
   for (const id of tracked.timeouts) native.clearTimeout(id);
   for (const id of tracked.intervals) native.clearInterval(id);
   for (const id of tracked.frames) native.cancelAnimationFrame(id);
-  for (const [remove, type, listener, options] of tracked.listeners)
+  for (const [remove, type, listener, options] of userListeners) {
     remove(type, listener, options);
+  }
   tracked.timeouts.clear();
   tracked.intervals.clear();
   tracked.frames.clear();
-  tracked.listeners = [];
+  tracked.listeners = libraryListeners;
   document.body.replaceChildren();
-  for (const url of blobs) URL.revokeObjectURL(url);
+  for (const url of blobs) {
+    URL.revokeObjectURL(url);
+    modules.delete(url);
+  }
   blobs = [];
+  remote.clear();
+  consoleApi.resetRun();
 }
 
 // ---------------------------------------------------------------------------
 // Opaque origin: Web Storage throws. Provide in-memory shims so demos still work.
+
+/**
+ * Shell edits act like another tab: apply them through the shim, then fire a
+ * `storage` event so bindings such as Carbon's LocalStorage pick them up.
+ */
+function editStorage({ type, area, key, value }) {
+  const store = window[area];
+  if (!store) return;
+  const fire = (k, oldValue, newValue) =>
+    window.dispatchEvent(
+      new StorageEvent("storage", {
+        key: k,
+        oldValue,
+        newValue,
+        url: location.href,
+      }),
+    );
+  if (type === "storage-set") {
+    const oldValue = store.getItem(key);
+    store.setItem(key, value);
+    fire(key, oldValue, String(value));
+  } else if (type === "storage-remove") {
+    const oldValue = store.getItem(key);
+    store.removeItem(key);
+    fire(key, oldValue, null);
+  } else {
+    store.clear();
+    fire(null, null, null);
+  }
+}
+
+/** In-memory stores behind the shims, shown and edited in the shell's Storage tab. */
+const storageAreas = new Map();
+let storageTimer;
+
+function reportStorage() {
+  storageTimer = undefined;
+  post({
+    type: "storage",
+    areas: [...storageAreas].map(([area, data]) => ({
+      area,
+      entries: [...data],
+    })),
+  });
+}
+
+function storageChanged() {
+  if (!storageTimer) storageTimer = native.setTimeout(reportStorage, 50);
+}
 
 for (const key of ["localStorage", "sessionStorage"]) {
   try {
     void window[key];
   } catch {
     const data = new Map();
+    storageAreas.set(key, data);
     const storage = {
       get length() {
         return data.size;
       },
       key: (i) => [...data.keys()][i] ?? null,
       getItem: (k) => (data.has(String(k)) ? data.get(String(k)) : null),
-      setItem: (k, v) => void data.set(String(k), String(v)),
-      removeItem: (k) => void data.delete(String(k)),
-      clear: () => data.clear(),
+      setItem: (k, v) => {
+        data.set(String(k), String(v));
+        storageChanged();
+      },
+      removeItem: (k) => {
+        data.delete(String(k));
+        storageChanged();
+      },
+      clear: () => {
+        data.clear();
+        storageChanged();
+      },
     };
     Object.defineProperty(window, key, { value: storage, configurable: true });
   }
 }
 
 // ---------------------------------------------------------------------------
-// Console + error relay (formatted here; the shell renders text only).
+// Accessibility channel: audit after each paint and after DOM changes.
 
-function format(value, depth = 0, seen = new Set()) {
-  if (typeof value === "string")
-    return depth === 0 ? value : JSON.stringify(value);
-  if (value === null || typeof value !== "object") {
-    if (typeof value === "function") return `ƒ ${value.name || "anonymous"}()`;
-    if (typeof value === "symbol" || typeof value === "bigint")
-      return value.toString();
-    return String(value);
-  }
-  if (value instanceof Error) return `${value.name}: ${value.message}`;
-  if (value instanceof Node) {
-    if (value instanceof Element) {
-      const id = value.id ? `#${value.id}` : "";
-      const cls = value.classList.length
-        ? `.${[...value.classList].join(".")}`
-        : "";
-      return `<${value.tagName.toLowerCase()}${id}${cls}>`;
-    }
-    return value.nodeName;
-  }
-  if (seen.has(value)) return "[Circular]";
-  if (depth > 3) return Array.isArray(value) ? "[…]" : "{…}";
-  seen.add(value);
-  let out;
-  if (Array.isArray(value)) {
-    const items = value.slice(0, 50).map((v) => format(v, depth + 1, seen));
-    if (value.length > 50) items.push(`…${value.length - 50} more`);
-    out = `[${items.join(", ")}]`;
-  } else if (value instanceof Map) {
-    out = `Map(${value.size}) {${[...value]
-      .slice(0, 50)
-      .map(
-        ([k, v]) =>
-          `${format(k, depth + 1, seen)} => ${format(v, depth + 1, seen)}`,
-      )
-      .join(", ")}}`;
-  } else if (value instanceof Set) {
-    out = `Set(${value.size}) {${[...value]
-      .slice(0, 50)
-      .map((v) => format(v, depth + 1, seen))
-      .join(", ")}}`;
-  } else {
-    const keys = Object.keys(value);
-    const items = keys
-      .slice(0, 50)
-      .map((k) => `${k}: ${format(value[k], depth + 1, seen)}`);
-    if (keys.length > 50) items.push(`…${keys.length - 50} more`);
-    const name =
-      value.constructor && value.constructor !== Object
-        ? `${value.constructor.name} `
-        : "";
-    out = `${name}{${items.join(", ")}}`;
-  }
-  seen.delete(value);
-  return out;
-}
+let auditTimer;
 
-for (const level of ["log", "info", "warn", "error", "debug"]) {
-  const original = console[level].bind(console);
-  console[level] = (...args) => {
-    original(...args);
-    post({
-      type: "console",
-      level,
-      text: args.map((a) => format(a)).join(" "),
+function runAudit() {
+  auditTimer = undefined;
+  let findings;
+  try {
+    findings = audit(document, { tokens });
+  } catch (error) {
+    native.setTimeout(() => {
+      throw error;
     });
+    return;
+  }
+  post({
+    type: "a11y",
+    findings: findings.map((f) => ({
+      rule: f.rule,
+      severity: f.severity,
+      message: f.message,
+      node: remote.preview(f.element),
+      source: locate(f.element) ?? undefined,
+    })),
+  });
+}
+
+function scheduleAudit() {
+  native.clearTimeout(auditTimer);
+  auditTimer = native.setTimeout(runAudit, 600);
+}
+
+const perf = createPerf({
+  post,
+  modules,
+  preview: (value) => remote.preview(value),
+  locate,
+  setTimeout: native.setTimeout,
+  requestAnimationFrame: native.requestAnimationFrame,
+});
+
+/** DOM nodes touched by a batch of mutation records (inserted subtrees count in full). */
+function changedNodes(records) {
+  let count = 0;
+  for (const r of records) {
+    if (r.type !== "childList") {
+      count++;
+      continue;
+    }
+    for (const nodes of [r.addedNodes, r.removedNodes]) {
+      for (const node of nodes) {
+        count +=
+          1 + (node.nodeType === 1 ? node.getElementsByTagName("*").length : 0);
+      }
+    }
+  }
+  return count;
+}
+
+/** Changed nodes per source location (dev mode tags), for the Perf tab's hotspots. */
+function changesBySource(records) {
+  const batch = [];
+  const at = (node) => {
+    const el = node.nodeType === 1 ? node : node.parentElement;
+    return el && el !== document.body ? locate(el) : null;
   };
+  for (const r of records.slice(0, 500)) {
+    if (r.type !== "childList") {
+      const loc = at(r.target);
+      if (loc) batch.push([loc, 1]);
+      continue;
+    }
+    // Inserted/removed subtrees count against their own component, not the
+    // container that received them.
+    for (const nodes of [r.addedNodes, r.removedNodes]) {
+      for (const node of nodes) {
+        const loc = at(node) ?? at(r.target);
+        if (loc)
+          batch.push([
+            loc,
+            1 +
+              (node.nodeType === 1 ? node.getElementsByTagName("*").length : 0),
+          ]);
+      }
+    }
+  }
+  return batch;
 }
 
-function report(error) {
-  const e = error instanceof Error ? error : new Error(format(error));
-  post({ type: "error", message: `${e.name}: ${e.message}`, stack: e.stack });
-}
+new MutationObserver((records) => {
+  perf.mutations(changedNodes(records));
+  perf.hotspots(changesBySource(records));
+  scheduleAudit();
+}).observe(document.body, {
+  subtree: true,
+  childList: true,
+  attributes: true,
+  characterData: true,
+});
 
-native.windowAdd("error", (event) => report(event.error ?? event.message));
-native.windowAdd("unhandledrejection", (event) => report(event.reason));
+// ---------------------------------------------------------------------------
+// Console: structured entries with remote handles (see ./inspect/).
+
+const consoleApi = installConsole({
+  remote,
+  post,
+  modules,
+  schedule: (fn) => native.setTimeout(fn, 16),
+});
+
+installNetwork({ post, preview: (value) => remote.preview(value) });
+
+// Hook for instrumented Carbon components (carbon-components-svelte/__devtools.js).
+globalThis.__ccsDevtools = { event: (e) => consoleApi.carbonEvent(e) };
+
+native.windowAdd("error", (event) =>
+  consoleApi.reportError(event.error ?? event.message),
+);
+native.windowAdd("unhandledrejection", (event) =>
+  consoleApi.reportError(event.reason),
+);
 
 // ---------------------------------------------------------------------------
 // Runs
@@ -269,6 +739,7 @@ async function onRun({ data }) {
   if (data.type !== "run") return;
   latestSeq = data.seq;
   preload(data.preload);
+  perf.runStart(data.seq);
 
   const urls = {};
   const created = [];
@@ -284,16 +755,24 @@ async function onRun({ data }) {
       );
       urls[module.name] = href;
       created.push(href);
+      modules.set(href, { name: module.name, map: module.map, code });
     }
     Component = (await import(urls[data.entry])).default;
+    perf.imported();
   } catch (error) {
-    for (const href of created) URL.revokeObjectURL(href);
-    report(error);
+    consoleApi.reportError(error);
+    for (const href of created) {
+      URL.revokeObjectURL(href);
+      modules.delete(href);
+    }
     post({ type: "run-failed", seq: data.seq });
     return;
   }
   if (data.seq !== latestSeq) {
-    for (const href of created) URL.revokeObjectURL(href);
+    for (const href of created) {
+      URL.revokeObjectURL(href);
+      modules.delete(href);
+    }
     return;
   }
 
@@ -304,8 +783,9 @@ async function onRun({ data }) {
   try {
     current = mount(Component, { target: document.body });
   } catch (error) {
-    report(error);
+    consoleApi.reportError(error);
   }
+  perf.mounted(data.modules.length);
   native.requestAnimationFrame(() =>
     native.setTimeout(
       () => post({ type: "painted", seq: data.seq, at: now(), runs }),

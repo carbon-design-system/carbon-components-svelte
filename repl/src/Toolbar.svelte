@@ -1,16 +1,22 @@
 <script>
+  import Button from "carbon-components-svelte/src/Button/Button.svelte";
   import CopyButton from "carbon-components-svelte/src/CopyButton/CopyButton.svelte";
   import InlineLoading from "carbon-components-svelte/src/InlineLoading/InlineLoading.svelte";
   import Select from "carbon-components-svelte/src/Select/Select.svelte";
   import SelectItem from "carbon-components-svelte/src/Select/SelectItem.svelte";
   import Tag from "carbon-components-svelte/src/Tag/Tag.svelte";
+  import Toggle from "carbon-components-svelte/src/Toggle/Toggle.svelte";
   import Header from "carbon-components-svelte/src/UIShell/Header.svelte";
+  import Debug from "carbon-icons-svelte/lib/Debug.svelte";
   import { examples } from "./examples.js";
   import {
     defaultFiles,
+    devMode,
     href,
     loadExample,
     metrics,
+    reportBug,
+    setDevMode,
     setTheme,
     status,
     theme,
@@ -20,6 +26,7 @@
 
   let example = "";
   let selectedTheme = $theme;
+  let dev = $devMode;
 
   $: if (example) {
     const match = examples.find((e) => e.id === example);
@@ -28,6 +35,7 @@
   }
 
   $: setTheme(selectedTheme);
+  $: setDevMode(dev);
   $: link = $href;
   $: m = $metrics;
   $: state = $status;
@@ -56,7 +64,25 @@
     {/each}
   </Select>
 
+  <div
+    class="dev"
+    title="Svelte dev checks, and Alt+click in the preview to jump to source"
+  >
+    <Toggle
+      size="sm"
+      labelText="Dev mode"
+      labelA="Dev mode"
+      labelB="Dev mode"
+      hideLabel
+      bind:toggled={dev}
+    />
+  </div>
+
   <CopyButton text={link} iconDescription="Copy link" feedback="Link copied" />
+
+  <Button kind="ghost" size="small" icon={Debug} on:click={reportBug}
+    >Report bug</Button
+  >
 
   <div class="status">
     {#if state === "compiling"}
@@ -114,6 +140,10 @@
 
   /* Carbon's .bx--form-item grows (flex: 1 1 auto); keep the controls packed. */
   .toolbar > :global(.bx--form-item) {
+    flex: none;
+  }
+
+  .dev {
     flex: none;
   }
 

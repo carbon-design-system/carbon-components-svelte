@@ -3,7 +3,7 @@ import "carbon-components-svelte/css/syntax-tokens.css";
 import "carbon-components-svelte/css/syntax.css";
 import "./editor/editor.css";
 import { mount } from "svelte";
-import Console from "./Console.svelte";
+import Console from "./console/Console.svelte";
 import Editor from "./Editor.svelte";
 import { init } from "./state.js";
 import Toolbar from "./Toolbar.svelte";

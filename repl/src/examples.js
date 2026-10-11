@@ -188,26 +188,210 @@ export const total = ${Array.from({ length: 20 }, (_, i) => `value${i}.weight`).
   },
   {
     id: "console",
-    label: "Console + errors",
+    label: "Console inspector",
     files: [
       {
         name: "App.svelte",
         source: `<script>
   import { Button, Stack } from "carbon-components-svelte";
 
-  console.log("Mounted", { at: new Date().toISOString(), nested: { list: [1, 2, 3] } });
-  console.warn("This is a warning");
+  const user = { name: "Ada", roles: ["admin", "editor"], meta: new Map([["since", 2019]]) };
+  user.self = user;
 
-  const ticker = setInterval(() => console.info("tick (cleared on every re-run)"), 2000);
+  console.log("Mounted", user);
+  console.info("%cStyled%c and plain", "color: #0f62fe; font-weight: 600", "");
+  console.warn("Deprecated prop", { prop: "size", use: "kind" });
+  console.table([
+    { id: 1, name: "Slack", enabled: true },
+    { id: 2, name: "Email", enabled: false },
+  ]);
+  console.group("Group");
+  console.log("Inside the group", Array.from({ length: 250 }, (_, i) => i * i));
+  console.groupEnd();
+  console.time("work");
+  for (let i = 0; i < 1e5; i++);
+  console.timeEnd("work");
+
+  let ticks = 0;
+  setInterval(() => console.count("tick"), 2000);
+
+  function boom() {
+    throw new Error("Boom from a click handler");
+  }
 ${SCRIPT_END}
 
 <Stack gap={5}>
-  <Button on:click={() => console.log("Clicked", new Map([["a", 1]]))}>Log</Button>
-  <Button kind="danger" on:click={() => { throw new Error("Boom"); }}>Throw</Button>
-  <Button kind="secondary" on:click={() => localStorage.setItem("k", "v") || console.log(localStorage.getItem("k"))}>
-    localStorage shim
-  </Button>
+  <Button on:click={(e) => console.log("Clicked", e.currentTarget)}>Log the button element</Button>
+  <Button kind="danger" on:click={boom}>Throw</Button>
+  <Button kind="secondary" on:click={() => console.trace("Trace from a handler")}>Trace</Button>
 </Stack>
+`,
+      },
+    ],
+  },
+  {
+    id: "state-stores",
+    label: "State & stores in the console",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, Stack } from "carbon-components-svelte";
+  import { writable } from "svelte/store";
+
+  let todos = $state([{ text: "Write docs", done: false }]);
+  let remaining = $derived(todos.filter((t) => !t.done).length);
+  const theme = writable({ name: "g100", contrast: "high" });
+
+  function add() {
+    todos.push({ text: \`Task \${todos.length + 1}\`, done: false });
+    console.log("todos", todos, "remaining", remaining);
+  }
+${SCRIPT_END}
+
+<Stack gap={5}>
+  <Button onclick={add}>Add a todo and log $state</Button>
+  <Button kind="secondary" onclick={() => console.log("theme store", theme)}>Log a store</Button>
+  <p>{remaining} remaining</p>
+</Stack>
+`,
+      },
+    ],
+  },
+  {
+    id: "a11y",
+    label: "Accessibility checks",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, Stack, TextInput } from "carbon-components-svelte";
+  import { Add } from "carbon-icons-svelte";
+${SCRIPT_END}
+
+<Stack gap={5} style="max-width: 24rem">
+  <TextInput placeholder="No labelText, so no accessible name" />
+  <TextInput labelText="Search" hideLabel placeholder="Hidden label is fine" />
+  <Button icon={Add} />
+  <Button icon={Add} iconDescription="Add" />
+  <p style="color: #c6c6c6">Low-contrast helper text</p>
+  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="16" height="16" />
+  <div id="dup">One</div>
+  <div id="dup">Two</div>
+</Stack>
+`,
+      },
+    ],
+  },
+  {
+    id: "perf",
+    label: "Performance channel",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, DataTable, Stack } from "carbon-components-svelte";
+
+  let rows = [];
+  let busyFor = 0;
+
+  function block(ms) {
+    const end = performance.now() + ms;
+    while (performance.now() < end);
+  }
+
+  function slowHandler() {
+    block(180); // a long task inside the click handler
+    busyFor += 180;
+  }
+
+  function renderMany() {
+    rows = Array.from({ length: 1500 }, (_, i) => ({
+      id: String(i),
+      name: \`Row \${i}\`,
+      value: Math.round(Math.random() * 1000),
+    }));
+  }
+${SCRIPT_END}
+
+<Stack gap={5}>
+  <Stack orientation="horizontal" gap={3}>
+    <Button on:click={slowHandler}>Slow click handler</Button>
+    <Button kind="secondary" on:click={renderMany}>Render 1,500 rows</Button>
+  </Stack>
+  <p>Blocked for {busyFor} ms so far</p>
+  {#if rows.length}
+    <DataTable
+      size="compact"
+      sortable
+      headers={[{ key: "name", value: "Name" }, { key: "value", value: "Value" }]}
+      {rows}
+    />
+  {/if}
+</Stack>
+`,
+      },
+    ],
+  },
+  {
+    id: "network-storage",
+    label: "Network & storage",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, LocalStorage, Stack, TextInput } from "carbon-components-svelte";
+
+  let name = "Ada";
+  let todo;
+
+  async function load() {
+    const res = await fetch("data:application/json,{\\"id\\":1,\\"title\\":\\"Ship the REPL\\",\\"done\\":false}");
+    todo = await res.json();
+  }
+
+  async function loadRemote() {
+    // Public CORS-enabled API; the preview sends Origin: null.
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos/2");
+    todo = await res.json();
+  }
+${SCRIPT_END}
+
+<LocalStorage key="repl-name" bind:value={name} />
+
+<Stack gap={5} style="max-width: 24rem">
+  <TextInput labelText="Name (saved to localStorage)" bind:value={name} />
+  <Stack orientation="horizontal" gap={3}>
+    <Button on:click={load}>Fetch a data: URL</Button>
+    <Button kind="secondary" on:click={loadRemote}>Fetch a public API</Button>
+  </Stack>
+  <p>{todo ? todo.title : "Nothing loaded"}</p>
+</Stack>
+`,
+      },
+    ],
+  },
+  {
+    id: "carbon-lint",
+    label: "Carbon usage lint",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Tab, Tabs, Tag, TextInput } from "carbon-components-svelte";
+
+  let value = "";
+${SCRIPT_END}
+
+<TextInput lableText="Name" bind:vlaue={value} on:chnage={() => {}} />
+
+<Tag typ="red">Typo in a short prop name</Tag>
+
+<Tab label="Outside its Tabs" />
+
+<Tabs>
+  <Tab label="Inside Tabs is fine" />
+</Tabs>
 `,
       },
     ],

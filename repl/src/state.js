@@ -1,5 +1,22 @@
-import { get, writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import { encodeHash } from "./codec.js";
+import {
+  a11y as a11yFindings,
+  addPerf,
+  dropped as consoleDropped,
+  entries as consoleEntries,
+  ingest as consoleIngest,
+  push as consolePush,
+  runStarted as consoleRunStarted,
+  system as consoleSystem,
+  entryText,
+  netEvent,
+  perfFrames,
+  perfHotspots,
+  perfInteractions,
+  perfRuns,
+  storage as storageAreas,
+} from "./console/store.js";
 
 /** @type {any} */
 let boot;
@@ -9,17 +26,25 @@ export const files = writable(
 );
 export const active = writable(0);
 export const theme = writable("white");
+/** Dev mode: compile REPL files with Svelte dev checks and element locations. */
+export const devMode = writable(false);
 export const status = writable(
   /** @type {"compiling" | "ready" | "error"} */ ("compiling"),
 );
-export const diagnostics = writable(/** @type {any[]} */ ([]));
-export const logs = writable(
-  /** @type {{ level: string; text: string }[]} */ ([]),
+export const compileDiagnostics = writable(/** @type {any[]} */ ([]));
+/** Uncaught runtime errors mapped to a source line; cleared on the next compile. */
+export const runtimeDiagnostics = writable(/** @type {any[]} */ ([]));
+export const diagnostics = derived(
+  [compileDiagnostics, runtimeDiagnostics],
+  ([$compile, $runtime]) => [...$compile, ...$runtime],
 );
+/** Compact component API (props, events, descriptions) for the event log. */
+export const componentApi = writable(/** @type {any} */ (null));
+/** Editor jump requests from the console: { file, line, column, seq }. */
+export const jump = writable(/** @type {any} */ (null));
 export const metrics = writable(/** @type {Record<string, number>} */ ({}));
 export const href = writable("");
 
-const MAX_LOGS = 500;
 const FILE_NAME = /^[\w.-]+\.(svelte|js|json)$/;
 let lastCompileMs = 10;
 let compileTimer;
@@ -29,16 +54,69 @@ export function init(repl) {
   boot = repl;
   files.set(repl.files.map((f) => ({ ...f })));
   theme.set(repl.options.theme);
+  devMode.set(!!repl.options.dev);
   href.set(location.href);
   repl.subscribe(onEvent);
+  const v = repl.versions;
+  fetch(`${repl.sandboxOrigin}/pkg/ccs@${v.ccs}/svelte@${v.svelte}/api.json`)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((api) => componentApi.set(api))
+    .catch(() => {});
   window.addEventListener("hashchange", () => location.reload());
 }
 
-function pushLog(level, text) {
-  logs.update((l) => {
-    const next = [...l, { level, text }];
-    return next.length > MAX_LOGS ? next.slice(-MAX_LOGS) : next;
-  });
+/** Request/response with the preview iframe (remote object protocol). */
+export function request(message) {
+  return boot.request(message);
+}
+
+export function postToPreview(message) {
+  boot.post(message);
+}
+
+/** Move the editor to a source location (from a console link). */
+export function jumpTo({ file, line, column }) {
+  const index = get(files).findIndex((f) => f.name === file);
+  if (index === -1) return;
+  flushEdits();
+  active.set(index);
+  jump.set({ file, line, column, seq: Date.now() });
+}
+
+function offsetOf(file, line, column) {
+  const source = get(files).find((f) => f.name === file)?.source;
+  if (source === undefined) return undefined;
+  let offset = 0;
+  for (let l = 1; l < line; l++) {
+    const next = source.indexOf("\n", offset);
+    if (next === -1) return undefined;
+    offset = next + 1;
+  }
+  return offset + Math.max(0, column - 1);
+}
+
+function runtimeErrors(entries) {
+  for (const entry of entries) {
+    if (entry.level !== "error" || !entry.uncaught || !entry.source) continue;
+    const { file, line, column } = entry.source;
+    const start = offsetOf(file, line, column);
+    if (start === undefined) continue;
+    const source = get(files).find((f) => f.name === file).source;
+    const lineEnd = source.indexOf("\n", start);
+    runtimeDiagnostics.update((list) => [
+      ...list,
+      {
+        file,
+        severity: "error",
+        runtime: true,
+        message: `Uncaught ${entry.args?.[0]?.desc ?? "error"}`,
+        line,
+        column: column - 1,
+        start,
+        end: lineEnd === -1 ? source.length : Math.max(lineEnd, start + 1),
+      },
+    ]);
+  }
 }
 
 function setMetric(name, value) {
@@ -56,11 +134,47 @@ function onEvent(message) {
     case "compiled":
       lastCompileMs = message.ms;
       setMetric("compile", message.ms);
-      diagnostics.set(message.diagnostics);
+      compileDiagnostics.set(message.diagnostics);
+      runtimeDiagnostics.set([]);
       status.set(message.ok ? "compiling" : "error");
       break;
     case "run-start":
-      logs.set([]);
+      runtimeDiagnostics.set([]);
+      consoleRunStarted();
+      break;
+    case "logs":
+      consoleIngest(message.entries);
+      runtimeErrors(message.entries);
+      break;
+    case "logs-dropped":
+      consoleDropped(message.count);
+      break;
+    case "net":
+      netEvent(message);
+      break;
+    case "storage":
+      storageAreas.set(message.areas);
+      break;
+    case "perf-run":
+      addPerf(perfRuns, [message]);
+      break;
+    case "perf-interactions":
+      addPerf(perfInteractions, message.items);
+      break;
+    case "perf-hotspots":
+      perfHotspots.set(message.items);
+      break;
+    case "perf-frames":
+      addPerf(perfFrames, message.items);
+      break;
+    case "a11y":
+      a11yFindings.set(message.findings);
+      break;
+    case "jump":
+      jumpTo(message);
+      break;
+    case "teardown-report":
+      consolePush(consoleSystem(message.level ?? "info", message.text));
       break;
     case "painted":
       status.set(
@@ -73,11 +187,8 @@ function onEvent(message) {
       if (message.sinceCompile !== undefined)
         setMetric("update", message.sinceCompile);
       break;
-    case "console":
-      pushLog(message.level, message.text);
-      break;
     case "error":
-      pushLog("error", message.message);
+      consolePush(consoleSystem("error", message.message));
       status.set("error");
       break;
     case "run-failed":
@@ -137,7 +248,7 @@ function scheduleHash(push = false) {
       const hash = await encodeHash(boot.hashPrefix, {
         files: get(files),
         versions: boot.versions,
-        options: { theme: get(theme) },
+        options: { theme: get(theme), ...(get(devMode) ? { dev: true } : {}) },
       });
       if (seq !== hashSeq) return;
       const url = `${location.pathname}${location.search}#${hash}`;
@@ -181,6 +292,37 @@ export function removeFile(index) {
   files.set(list.filter((_, i) => i !== index));
   active.set(0);
   scheduleCompile();
+}
+
+/** Open a prefilled GitHub issue for the current REPL (see report.js). */
+export async function reportBug() {
+  // Read the console before anything can start a new run (which clears it),
+  // and encode the link directly instead of waiting for the idle hash write.
+  const problems = get(consoleEntries)
+    .filter((e) => e.level === "error" || e.level === "warn")
+    .map((e) => ({ level: e.level, text: entryText(e) }));
+  flushEdits();
+  const hash = await encodeHash(boot.hashPrefix, {
+    files: get(files),
+    versions: boot.versions,
+    options: { theme: get(theme), ...(get(devMode) ? { dev: true } : {}) },
+  });
+  const { buildIssue } = await import("./report.js");
+  const { url } = buildIssue({
+    href: `${location.origin}${location.pathname}#${hash}`,
+    versions: boot.versions,
+    files: get(files),
+    problems,
+    userAgent: navigator.userAgent,
+  });
+  window.open(url, "_blank", "noopener");
+}
+
+export function setDevMode(value) {
+  if (value === get(devMode)) return;
+  devMode.set(value);
+  boot.options.dev = value;
+  compileNow();
 }
 
 export function setTheme(value) {

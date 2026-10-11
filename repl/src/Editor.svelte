@@ -4,7 +4,7 @@
   import Tabs from "carbon-components-svelte/src/Tabs/Tabs.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import CodeEditor from "./CodeEditor.svelte";
   import {
     active,
@@ -13,6 +13,7 @@
     diagnostics,
     files,
     flushEdits,
+    jump,
     recordPaint,
     removeFile,
     updateSource,
@@ -27,10 +28,21 @@
   );
   $: otherDiagnostics = $diagnostics.length - fileDiagnostics.length;
 
+  /** @type {CodeEditor} */
+  let editorRef;
+
   onMount(() => {
     // Take over from the bootstrap <pre> (same text, same metrics).
     document.getElementById("boot-code")?.remove();
   });
+
+  // Console links: the active file is already switched; wait for its text.
+  $: if ($jump) goJump($jump);
+
+  async function goJump({ line, column }) {
+    await tick();
+    editorRef?.goto(line, column);
+  }
 </script>
 
 <div class="tabs-row">
@@ -66,6 +78,7 @@
 
 {#if file}
   <CodeEditor
+    bind:this={editorRef}
     value={file.source}
     {language}
     diagnostics={fileDiagnostics}

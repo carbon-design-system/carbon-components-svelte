@@ -131,7 +131,7 @@ await page.waitForFunction(() =>
   document.querySelector("textarea")?.value.includes("Clicked"),
 );
 const before = await page.evaluate(() => (window as any).__paints);
-const textarea = page.locator("textarea");
+const textarea = page.locator("textarea.ce-input");
 await textarea.click();
 await textarea.evaluate((el: HTMLTextAreaElement) => {
   const i = el.value.indexOf("Clicked");
@@ -172,6 +172,53 @@ await sandbox(fresh)
   .locator("button", { hasText: "Pressed 0 times" })
   .waitFor();
 console.log(`✓ shared link reproduces (${link.length} chars)`);
+
+// Dev mode: Alt+click a (prod-compiled) Carbon component jumps to its line.
+{
+  const dev = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await dev.goto(APP);
+  await dev.waitForFunction(
+    () => window.__repl?.metrics?.previewPainted !== undefined,
+  );
+  await dev.locator(".dev .bx--toggle__switch").click();
+  // Wait for the dev-mode run: its Carbon button carries a source location.
+  await sandbox(dev).waitForFunction(
+    () =>
+      !!(
+        document.querySelector("button.bx--btn") as unknown as {
+          __repl_loc?: unknown;
+        }
+      )?.__repl_loc,
+  );
+  await sandbox(dev)
+    .locator("button.bx--btn")
+    .first()
+    .click({ modifiers: ["Alt"] });
+  // The jump crosses iframe → shell → editor asynchronously; poll the caret.
+  const lines = () =>
+    dev.evaluate(() => {
+      const t = document.querySelector(
+        "textarea.ce-input",
+      ) as HTMLTextAreaElement;
+      return {
+        caretLine: t.value.slice(0, t.selectionStart).split("\n").length,
+        buttonLine:
+          t.value.split("\n").findIndex((l) => l.includes("<Button")) + 1,
+      };
+    });
+  let { caretLine, buttonLine } = await lines();
+  for (let i = 0; i < 40 && caretLine !== buttonLine; i++) {
+    await dev.waitForTimeout(50);
+    ({ caretLine, buttonLine } = await lines());
+  }
+  if (caretLine !== buttonLine) {
+    throw new Error(
+      `Alt+click jumped to line ${caretLine}, expected ${buttonLine}`,
+    );
+  }
+  console.log(`✓ dev mode Alt+click → App.svelte:${caretLine}`);
+  await dev.close();
+}
 
 const relevant = errors.filter((e) => !/Boom|Error: Boom/.test(e));
 if (relevant.length) {

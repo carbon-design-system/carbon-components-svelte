@@ -13,16 +13,20 @@ const manifestReady = fetch(
 )
   .then((r) => r.json())
   .then(async (manifest) => {
-    const icons = await fetch(`${PKG_ORIGIN}${manifest.iconsIndex}`).then((r) =>
-      r.json(),
-    );
-    return { manifest, icons: new Set(icons.names) };
+    const [icons, api] = await Promise.all([
+      fetch(`${PKG_ORIGIN}${manifest.iconsIndex}`).then((r) => r.json()),
+      fetch(`${PKG_ORIGIN}${manifest.base}/api.json`)
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ]);
+    return { manifest, icons: new Set(icons.names), api };
   });
 
 const compilerStarted = performance.now();
 importScripts(`/compiler/svelte@${SVELTE}.js`);
 const compilerMs = performance.now() - compilerStarted;
-const { compile, compileModule, VERSION } = self.svelte;
+const { compile, compileModule, parse, VERSION } = self.svelte;
+importScripts("/lint.js");
 
 /** @type {MessagePort | undefined} */
 let runPort;
@@ -50,9 +54,9 @@ async function flush() {
   const job = pending;
   pending = undefined;
   if (!job) return;
-  const { manifest, icons } = await manifestReady;
+  const { manifest, icons, api } = await manifestReady;
   const started = performance.now();
-  const result = build(job, manifest, icons);
+  const result = build(job, manifest, icons, api);
   const ms = performance.now() - started;
   if (result.ok) {
     runPort.postMessage({
@@ -74,8 +78,23 @@ async function flush() {
 
 // ---------------------------------------------------------------------------
 
-function compileFile(name, source) {
-  const key = `${name}\0${source}`;
+/** Just what stack mapping needs; no sourcesContent. */
+function compactMap(map, name) {
+  return map
+    ? {
+        mappings: map.mappings,
+        sources: map.sources?.length ? map.sources : [name],
+      }
+    : undefined;
+}
+
+// Dev mode: route component render calls through the preview's hook so DOM
+// created by (prod-compiled) Carbon components is tagged with the user's
+// `<Component>` location. Same line, so source maps stay aligned.
+const SVELTE_META_CALL = /\$\.add_svelte_meta\(/g;
+
+function compileFile(name, source, dev = false) {
+  const key = `${name}\0${dev}\0${source}`;
   const hit = cache.get(key);
   if (hit) return hit;
   let out;
@@ -83,17 +102,30 @@ function compileFile(name, source) {
     const r = compile(source, {
       filename: name,
       generate: "client",
-      dev: false,
+      dev,
       css: "injected",
     });
-    out = { code: r.js.code, warnings: r.warnings };
+    out = {
+      code: dev
+        ? r.js.code.replace(
+            SVELTE_META_CALL,
+            "globalThis.__replMeta($.add_svelte_meta, $.FILENAME, ",
+          )
+        : r.js.code,
+      map: compactMap(r.js.map, name),
+      warnings: r.warnings,
+    };
   } else if (name.endsWith(".svelte.js")) {
     const r = compileModule(source, {
       filename: name,
       generate: "client",
-      dev: false,
+      dev,
     });
-    out = { code: r.js.code, warnings: r.warnings };
+    out = {
+      code: r.js.code,
+      map: compactMap(r.js.map, name),
+      warnings: r.warnings,
+    };
   } else if (name.endsWith(".js")) {
     out = { code: source, warnings: [] };
   } else if (name.endsWith(".json")) {
@@ -111,29 +143,26 @@ const NAMESPACE_IMPORT = /^\*\s*as\s+([\w$]+)$/;
 const BRACE_CLAUSE = /\{([^}]*)\}/;
 const AS_SEPARATOR = /\s+as\s+/;
 const ICON_DEEP_IMPORT = /^carbon-icons-svelte\/lib\/([\w]+)\.svelte$/;
-const WS_OR_COMMENT = /\s+|\/\/[^\n]*|\/\*[\s\S]*?\*\//y;
-const IMPORT = /import\s*(?:([^'"`;]*?)\s*from\s*)?(['"])([^'"\n]+)\2\s*;?/y;
+const IMPORT_LINE =
+  /^import\s*(?:([^'"`;]*?)\s*from\s*)?(['"])([^'"\n]+)\2\s*;?/gm;
+const EXPORT_DEFAULT = /^export default /m;
 
-/** Parses the leading import block (compiled output always hoists imports to the top). */
+/**
+ * Import statements at the start of a line, before the module's
+ * `export default`. Compiled output hoists imports there, though dev builds
+ * interleave statements like `App[$.FILENAME] = …` between them.
+ */
 function leadingImports(code) {
+  const limit = code.search(EXPORT_DEFAULT);
+  const region = limit === -1 ? code : code.slice(0, limit);
   const imports = [];
-  let i = 0;
-  for (;;) {
-    WS_OR_COMMENT.lastIndex = i;
-    while (WS_OR_COMMENT.test(code)) {
-      i = WS_OR_COMMENT.lastIndex;
-      WS_OR_COMMENT.lastIndex = i;
-    }
-    IMPORT.lastIndex = i;
-    const m = IMPORT.exec(code);
-    if (!m) break;
+  for (const m of region.matchAll(IMPORT_LINE)) {
     imports.push({
-      start: i,
-      end: IMPORT.lastIndex,
+      start: m.index,
+      end: m.index + m[0].length,
       clause: m[1]?.trim() ?? "",
       specifier: m[3],
     });
-    i = IMPORT.lastIndex;
   }
   return imports;
 }
@@ -169,7 +198,27 @@ function escapeRegExp(text) {
   return text.replace(REGEXP_SPECIAL, "\\$&");
 }
 
-function build(job, manifest, icons) {
+const lintCache = new Map();
+
+/** Carbon usage lint (public/lint.js), cached by file name + source. */
+function lintFile(file, api, isEntry) {
+  const key = `${file.name}\0${isEntry}\0${file.source}`;
+  let result = lintCache.get(key);
+  if (!result) {
+    result = self.ccsLint
+      .lint(file.source, file.name, { api, parse, isEntry })
+      .map((d) => {
+        const before = file.source.slice(0, d.start);
+        const line = before.split("\n").length;
+        return { ...d, line, column: d.start - (before.lastIndexOf("\n") + 1) };
+      });
+    if (lintCache.size > 200) lintCache.delete(lintCache.keys().next().value);
+    lintCache.set(key, result);
+  }
+  return result;
+}
+
+function build(job, manifest, icons, api) {
   const diagnostics = [];
   const modules = [];
   const libraryPaths = new Set();
@@ -193,10 +242,13 @@ function build(job, manifest, icons) {
   for (const file of job.files) {
     let compiled;
     try {
-      compiled = compileFile(file.name, file.source);
+      compiled = compileFile(file.name, file.source, !!job.dev);
     } catch (e) {
       error(file.name, e.message, e.start, e.end);
       continue;
+    }
+    if (api && file.name.endsWith(".svelte")) {
+      diagnostics.push(...lintFile(file, api, file.name === job.entry));
     }
     for (const w of compiled.warnings) {
       diagnostics.push({
@@ -243,7 +295,8 @@ function build(job, manifest, icons) {
       if (replacement !== undefined)
         code = code.slice(0, imp.start) + replacement + code.slice(imp.end);
     }
-    modules.push({ name: file.name, code, deps });
+    // Import rewrites stay on their original line, so the map still lines up.
+    modules.push({ name: file.name, code, deps, map: compiled.map });
   }
 
   if (!names.has(job.entry))
@@ -311,7 +364,7 @@ function rewrite(imp, ctx) {
         if (named.length) parts.push(`{ ${named.join(", ")} }`);
         return `import ${parts.join(", ")} from "carbon-components-svelte/${path}";`;
       })
-      .join("\n");
+      .join(" ");
   }
 
   if (s.startsWith("carbon-components-svelte/")) {
@@ -334,7 +387,7 @@ function rewrite(imp, ctx) {
         iconUrls.add(`${manifest.iconsBase}/${imported}.svelte`);
         return `import ${local} from "carbon-icons-svelte/lib/${imported}.svelte";`;
       })
-      .join("\n");
+      .join(" ");
   }
 
   const iconDeep = s.match(ICON_DEEP_IMPORT);
