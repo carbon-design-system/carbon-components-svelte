@@ -116,10 +116,10 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { createFrameJob } from "../utils/frame-batch.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { rafThrottle } from "../utils/raf-throttle.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -186,7 +186,13 @@
     if (ref) value = ref.value;
   }
 
-  function resize() {
+  // Resizing reads styles, collapses the height to measure the content, then
+  // sets the final height. Every growing TextArea scheduled in a frame runs
+  // each of those steps together, so they share one layout rather than
+  // forcing one apiece.
+
+  /** Read the styles that size the field, before any height is written. */
+  function readSizing() {
     if (!ref) return;
 
     const computed = getComputedStyle(ref);
@@ -195,16 +201,6 @@
     const borderTop = Number.parseFloat(computed.borderTopWidth) || 0;
     const borderBottom = Number.parseFloat(computed.borderBottomWidth) || 0;
     const isBorderBox = computed.boxSizing === "border-box";
-
-    // `height` excludes padding/border under content-box but includes them
-    // under border-box, while `scrollHeight` always includes padding only.
-    const toStyleHeight = (contentAndPaddingHeight) =>
-      isBorderBox
-        ? contentAndPaddingHeight + borderTop + borderBottom
-        : contentAndPaddingHeight - paddingTop - paddingBottom;
-
-    ref.style.height = "auto";
-    const { scrollHeight } = ref;
 
     let maxContentAndPaddingHeight;
     if (typeof maxRows === "number" && maxRows > 0) {
@@ -215,6 +211,44 @@
       maxContentAndPaddingHeight =
         maxRows * lineHeight + paddingTop + paddingBottom;
     }
+
+    return {
+      paddingTop,
+      paddingBottom,
+      borderTop,
+      borderBottom,
+      isBorderBox,
+      maxContentAndPaddingHeight,
+    };
+  }
+
+  /** @param {ReturnType<typeof readSizing>} sizing */
+  function collapse(sizing) {
+    if (!ref || !sizing) return;
+    ref.style.height = "auto";
+    return sizing;
+  }
+
+  /** @param {ReturnType<typeof readSizing>} sizing */
+  function measureContent(sizing) {
+    if (!ref || !sizing) return;
+    return { sizing, scrollHeight: ref.scrollHeight };
+  }
+
+  /** @param {ReturnType<typeof measureContent>} measured */
+  function applyHeight(measured) {
+    if (!ref || !measured) return;
+
+    const { sizing, scrollHeight } = measured;
+    const { paddingTop, paddingBottom, borderTop, borderBottom } = sizing;
+    const { maxContentAndPaddingHeight } = sizing;
+
+    // `height` excludes padding/border under content-box but includes them
+    // under border-box, while `scrollHeight` always includes padding only.
+    const toStyleHeight = (contentAndPaddingHeight) =>
+      sizing.isBorderBox
+        ? contentAndPaddingHeight + borderTop + borderBottom
+        : contentAndPaddingHeight - paddingTop - paddingBottom;
 
     if (
       maxContentAndPaddingHeight !== undefined &&
@@ -228,13 +262,18 @@
     }
   }
 
-  const scheduleResize = rafThrottle(resize);
+  const resizeJob = createFrameJob([
+    readSizing,
+    collapse,
+    measureContent,
+    applyHeight,
+  ]);
 
   afterUpdate(() => {
     if (!ref) return;
 
     if (grow) {
-      scheduleResize();
+      resizeJob.schedule();
     } else {
       ref.style.height = "";
       ref.style.overflowY = "";
@@ -251,18 +290,18 @@
           const { width } = entry.contentRect;
           if (grow && width !== lastWidth) {
             lastWidth = width;
-            scheduleResize();
+            resizeJob.schedule();
           }
         })
       : noop;
 
     document.fonts?.ready?.then(() => {
-      if (grow) scheduleResize();
+      if (grow) resizeJob.schedule();
     });
 
     return () => {
       stopObserving();
-      scheduleResize.cancel();
+      resizeJob.cancel();
     };
   });
 

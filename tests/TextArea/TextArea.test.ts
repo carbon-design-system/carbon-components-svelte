@@ -485,6 +485,49 @@ describe("TextArea", () => {
       expect(textarea.style.height).toBe("120px");
     });
 
+    it("measures every growing field before any field is given its final height", async () => {
+      const heightsSeenAtRead: string[][] = [];
+      const fields: HTMLTextAreaElement[] = [];
+      for (let i = 0; i < 3; i++) {
+        render(TextArea, {
+          props: { grow: true, labelText: `Field ${i}`, id: `field-${i}` },
+        });
+      }
+      for (let i = 0; i < 3; i++) {
+        const field = screen.getByLabelText(`Field ${i}`);
+        assert(field instanceof HTMLTextAreaElement);
+        Object.defineProperty(field, "scrollHeight", {
+          configurable: true,
+          get() {
+            heightsSeenAtRead.push(fields.map((other) => other.style.height));
+            return 80;
+          },
+        });
+        fields.push(field);
+      }
+
+      // Skip the frame the mount already scheduled, then ask for a fresh one.
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      heightsSeenAtRead.length = 0;
+      for (const field of fields) {
+        fireEvent.input(field, { target: { value: "a" } });
+      }
+      await tick();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      // Every field was collapsed before the first read and none was resized
+      // until the last, so the reads share one layout.
+      expect(heightsSeenAtRead).toHaveLength(3);
+      for (const heights of heightsSeenAtRead) {
+        expect(heights).toEqual(["auto", "auto", "auto"]);
+      }
+      expect(fields.map((field) => field.style.height)).toEqual([
+        "80px",
+        "80px",
+        "80px",
+      ]);
+    });
+
     it("switches to overflow-y auto once content exceeds maxRows", async () => {
       render(TextArea, { props: { grow: true, maxRows: 2 } });
 
