@@ -138,6 +138,7 @@
 
   /**
    * Clear all notifications.
+   * @returns {void}
    */
   export function clear() {
     notifications = [];
