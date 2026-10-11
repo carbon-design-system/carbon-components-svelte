@@ -63,11 +63,6 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
     "src/pages/framed/DataTable/DataTableFilterCustom.svelte",
     /'string \| number'/,
   ],
-  // `applyColumnSettings` returns `ColumnHeader[]`, not the input type.
-  [
-    "src/pages/framed/DataTable/DataTableToolbarColumnVisibilityPersist.svelte",
-    /^Type 'ColumnHeader\[\]'/,
-  ],
   // DatePicker's `change` detail is `string | { selectedDates, … }`.
   [
     "src/pages/framed/DatePicker/DatePickerErrorHandler.svelte",
