@@ -135,9 +135,8 @@ export function clearConsole() {
 
 export function dropped(count) {
   droppedTotal.update((n) => n + count);
-  push(
-    system("warn", `${count} messages dropped (more than 2,000 per second)`),
-  );
+  const noun = count === 1 ? "message" : "messages";
+  push(system("warn", `${count} ${noun} dropped (more than 2,000 per second)`));
 }
 
 export function toggleGroup(id) {

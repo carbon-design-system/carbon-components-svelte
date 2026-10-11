@@ -150,3 +150,29 @@ describe("source maps and stacks", () => {
     ]);
   });
 });
+
+describe("console flood", () => {
+  test("admits 2,000 per second and reports the rest after them", async () => {
+    const { installConsole } = await import("../sandbox/inspect/console.js");
+    const posted: { type: string; entries?: unknown[]; count?: number }[] = [];
+    const queue: (() => void)[] = [];
+    const saved = { ...console };
+    installConsole({
+      remote: createRemote(),
+      post: (m: (typeof posted)[number]) => posted.push(m),
+      schedule: (fn: () => void) => queue.push(fn),
+      modules: new Map(),
+    });
+    try {
+      for (let i = 0; i < 5000; i++) console.log("row", i);
+    } finally {
+      Object.assign(console, saved);
+    }
+    while (queue.length) queue.shift()?.();
+    const logged = posted
+      .filter((m) => m.type === "logs")
+      .reduce((n, m) => n + (m.entries?.length ?? 0), 0);
+    expect(logged).toBe(2000);
+    expect(posted.at(-1)).toEqual({ type: "logs-dropped", count: 3000 });
+  });
+});

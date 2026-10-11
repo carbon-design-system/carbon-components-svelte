@@ -37,13 +37,13 @@ export function installConsole({ remote, post, schedule, modules }) {
     stacksThisFlush = 0;
     const batch = queue.splice(0, MAX_PER_FLUSH);
     if (batch.length) post({ type: "logs", entries: batch });
-    if (dropped) {
-      post({ type: "logs-dropped", count: dropped });
-      dropped = 0;
-    }
     if (queue.length) {
       scheduled = true;
       schedule(flush);
+    } else if (dropped) {
+      // After the admitted entries, so the notice sits where the drops began.
+      post({ type: "logs-dropped", count: dropped });
+      dropped = 0;
     }
   }
 
