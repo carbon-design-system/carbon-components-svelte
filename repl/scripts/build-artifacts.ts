@@ -242,6 +242,117 @@ function parseIndexExports(indexFile: string) {
   return exports;
 }
 
+const GET_CONTEXT = /getContext\(\s*"(carbon:[\w-]+)"\s*\)/g;
+const SET_CONTEXT = /setContext\(\s*"(carbon:[\w-]+)"/g;
+// Destructured with no fallback: `} = getContext("carbon:Tabs");` or
+// `} = getContext("carbon:Select") || getContext("carbon:TimePickerSelect");`.
+const REQUIRED_CONTEXT =
+  /\}\s*=\s*((?:getContext\(\s*"carbon:[\w-]+"\s*\)\s*(?:\|\|\s*)?)+);/g;
+// Or kept in a variable that's later dereferenced without a null check.
+const CONTEXT_VARIABLE =
+  /const\s+(\w+)\s*=\s*((?:getContext\(\s*"carbon:[\w-]+"\s*\)\s*(?:\|\|\s*)?)+);/g;
+
+function dereferencedWithoutCheck(source: string, name: string) {
+  const unchecked = new RegExp(`(?<![?.\\w])${name}\\.(?!\\.)`);
+  const checked = new RegExp(
+    `${name}\\?\\.|if\\s*\\(\\s*!?\\s*${name}\\b|\\b${name}\\s*&&|!${name}\\b|${name}\\s*\\?\\s`,
+  );
+  return unchecked.test(source) && !checked.test(source);
+}
+
+/**
+ * Compact API for the REPL's completions and prop/event/nesting lint, from
+ * sveld's COMPONENT_API.json plus the context keys each component requires.
+ * A child "requires" a family context when it destructures it with no
+ * fallback (`} = getContext("carbon:Tabs");`), so rendering it outside the
+ * provider throws. Alternatives (`a || b`) mean either provider works.
+ */
+function buildApi(exports: Record<string, { path: string; name: string }>) {
+  const apiFile = join(ROOT, "docs/src/COMPONENT_API.json");
+  if (!existsSync(apiFile)) {
+    throw new Error(
+      "docs/src/COMPONENT_API.json is missing. Run `bun run build:docs` at the repo root first.",
+    );
+  }
+  const api = readJson(apiFile);
+  const byPath = new Map(
+    Object.entries(exports)
+      .filter(([, e]) => e.name === "default")
+      .map(([exported, e]) => [e.path, exported]),
+  );
+  const providers: Record<string, string[]> = {};
+  const components: Record<string, unknown> = {};
+  for (const c of api.components) {
+    const exported = byPath.get(c.filePath);
+    if (!exported) continue;
+    const source = readFileSync(join(ROOT, c.filePath), "utf8");
+    for (const m of source.matchAll(SET_CONTEXT)) {
+      providers[m[1]] ??= [];
+      providers[m[1]].push(exported);
+    }
+    const requires: string[][] = [];
+    for (const m of source.matchAll(REQUIRED_CONTEXT)) {
+      requires.push([...m[1].matchAll(GET_CONTEXT)].map((k) => k[1]));
+    }
+    for (const m of source.matchAll(CONTEXT_VARIABLE)) {
+      if (dereferencedWithoutCheck(source, m[1])) {
+        requires.push([...m[2].matchAll(GET_CONTEXT)].map((k) => k[1]));
+      }
+    }
+    components[exported] = {
+      path: c.filePath,
+      props: c.props
+        .filter(
+          (p: { isFunctionDeclaration?: boolean }) => !p.isFunctionDeclaration,
+        )
+        .map(
+          (p: {
+            name: string;
+            type?: string;
+            value?: string;
+            isRequired?: boolean;
+            description?: string;
+            reactive?: boolean;
+          }) => ({
+            name: p.name,
+            type: p.type,
+            default: p.value,
+            required: p.isRequired || undefined,
+            bindable: p.reactive || undefined,
+            description: p.description?.split("\n")[0] || undefined,
+          }),
+        ),
+      events: c.events.map(
+        (e: {
+          name: string;
+          type: string;
+          detail?: string;
+          description?: string;
+          element?: string;
+        }) => ({
+          name: e.name,
+          kind: e.type,
+          detail: e.detail,
+          element: e.element,
+          description: e.description || undefined,
+        }),
+      ),
+      slots: c.slots.map((s: { name: string }) => s.name),
+      rest: c.rest_props
+        ? { type: c.rest_props.type, name: c.rest_props.name }
+        : undefined,
+      requires: requires.length ? requires : undefined,
+    };
+  }
+  for (const c of Object.values(components) as { requires?: string[][] }[]) {
+    if (!c.requires) continue;
+    // Keep only keys some exported component provides (others are optional lookups).
+    c.requires = c.requires.filter((keys) => keys.some((k) => providers[k]));
+    if (!c.requires.length) c.requires = undefined;
+  }
+  return { components, providers };
+}
+
 function writeSandbox(
   runtime: { map: Record<string, string>; files: string[] },
   vendor: { map: Record<string, string> },
@@ -366,6 +477,13 @@ async function main() {
     deps,
   };
   write(join(CCS_DIR, "manifest.json"), JSON.stringify(manifest));
+  const api = buildApi(exports);
+  write(join(CCS_DIR, "api.json"), JSON.stringify(api));
+  sizes.push([
+    `ccs@${CCS_V}/svelte@${SVELTE_V}/api.json`,
+    1,
+    brotliSize(JSON.stringify(api)),
+  ]);
 
   writeSandbox(runtime, vendor);
 

@@ -13,16 +13,20 @@ const manifestReady = fetch(
 )
   .then((r) => r.json())
   .then(async (manifest) => {
-    const icons = await fetch(`${PKG_ORIGIN}${manifest.iconsIndex}`).then((r) =>
-      r.json(),
-    );
-    return { manifest, icons: new Set(icons.names) };
+    const [icons, api] = await Promise.all([
+      fetch(`${PKG_ORIGIN}${manifest.iconsIndex}`).then((r) => r.json()),
+      fetch(`${PKG_ORIGIN}${manifest.base}/api.json`)
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ]);
+    return { manifest, icons: new Set(icons.names), api };
   });
 
 const compilerStarted = performance.now();
 importScripts(`/compiler/svelte@${SVELTE}.js`);
 const compilerMs = performance.now() - compilerStarted;
-const { compile, compileModule, VERSION } = self.svelte;
+const { compile, compileModule, parse, VERSION } = self.svelte;
+importScripts("/lint.js");
 
 /** @type {MessagePort | undefined} */
 let runPort;
@@ -50,9 +54,9 @@ async function flush() {
   const job = pending;
   pending = undefined;
   if (!job) return;
-  const { manifest, icons } = await manifestReady;
+  const { manifest, icons, api } = await manifestReady;
   const started = performance.now();
-  const result = build(job, manifest, icons);
+  const result = build(job, manifest, icons, api);
   const ms = performance.now() - started;
   if (result.ok) {
     runPort.postMessage({
@@ -187,7 +191,27 @@ function escapeRegExp(text) {
   return text.replace(REGEXP_SPECIAL, "\\$&");
 }
 
-function build(job, manifest, icons) {
+const lintCache = new Map();
+
+/** Carbon usage lint (public/lint.js), cached by file name + source. */
+function lintFile(file, api, isEntry) {
+  const key = `${file.name}\0${isEntry}\0${file.source}`;
+  let result = lintCache.get(key);
+  if (!result) {
+    result = self.ccsLint
+      .lint(file.source, file.name, { api, parse, isEntry })
+      .map((d) => {
+        const before = file.source.slice(0, d.start);
+        const line = before.split("\n").length;
+        return { ...d, line, column: d.start - (before.lastIndexOf("\n") + 1) };
+      });
+    if (lintCache.size > 200) lintCache.delete(lintCache.keys().next().value);
+    lintCache.set(key, result);
+  }
+  return result;
+}
+
+function build(job, manifest, icons, api) {
   const diagnostics = [];
   const modules = [];
   const libraryPaths = new Set();
@@ -215,6 +239,9 @@ function build(job, manifest, icons) {
     } catch (e) {
       error(file.name, e.message, e.start, e.end);
       continue;
+    }
+    if (api && file.name.endsWith(".svelte")) {
+      diagnostics.push(...lintFile(file, api, file.name === job.entry));
     }
     for (const w of compiled.warnings) {
       diagnostics.push({

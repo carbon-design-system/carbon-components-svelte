@@ -230,6 +230,31 @@ ${SCRIPT_END}
     ],
   },
   {
+    id: "carbon-lint",
+    label: "Carbon usage lint",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Tab, Tabs, Tag, TextInput } from "carbon-components-svelte";
+
+  let value = "";
+${SCRIPT_END}
+
+<TextInput lableText="Name" bind:vlaue={value} on:chnage={() => {}} />
+
+<Tag kind="red">Typo in a prop with no attribute fallback</Tag>
+
+<Tab label="Outside its Tabs" />
+
+<Tabs>
+  <Tab label="Inside Tabs is fine" />
+</Tabs>
+`,
+      },
+    ],
+  },
+  {
     id: "compile-error",
     label: "Compile error + blocked import",
     files: [
