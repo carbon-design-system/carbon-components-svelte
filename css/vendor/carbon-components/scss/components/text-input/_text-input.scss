@@ -412,3 +412,32 @@
 @include exports("password-input-readonly-icon") {
   @include password-input-readonly-icon;
 }
+
+// carbon-components-svelte patch
+// Carbon's form item is `flex: 1 1 auto`, so an inline TextInput or
+// PasswordInput stretched across any flex row. Keep it at its content
+// width; it can still shrink. Double class beats the base `.bx--form-item`,
+// which emits after patches.
+//
+// The label column is `flex: 2` (or `1`) with a zero basis, so a content-
+// sized row gave it a share too narrow for its text and the label broke
+// mid-word. Sizing the label to its text makes that its minimum, up to the
+// column's own max-width.
+
+/// Inline text input form item
+/// @access private
+/// @group components
+@mixin text-input-inline-form-item {
+  .#{$prefix}--form-item.#{$prefix}--text-input-wrapper--inline {
+    flex: 0 1 auto;
+  }
+
+  .#{$prefix}--text-input-wrapper--inline .#{$prefix}--label--inline {
+    width: max-content;
+    max-width: 100%;
+  }
+}
+
+@include exports("text-input-inline-form-item") {
+  @include text-input-inline-form-item;
+}
