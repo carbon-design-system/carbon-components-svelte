@@ -94,7 +94,9 @@
    * participation, even while the menu is open.
    * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
-  export let itemToInput = function itemToInput(_item) {};
+  export let itemToInput = function itemToInput(_item) {
+    return {};
+  };
 
   /**
    * Set the selected ids.

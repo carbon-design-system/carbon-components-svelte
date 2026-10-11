@@ -335,8 +335,11 @@
             dispatch("change", { pageSize: nextSize, page: nextPage });
           }}
         >
-          {#each effectivePageSizes as size (size)}
-            <SelectItem value={size} text={size.toString()} />
+          {#each effectivePageSizes as pageSizeOption (pageSizeOption)}
+            <SelectItem
+              value={pageSizeOption}
+              text={pageSizeOption.toString()}
+            />
           {/each}
         </Select>
       {/if}

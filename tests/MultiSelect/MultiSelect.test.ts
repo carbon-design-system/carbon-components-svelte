@@ -951,6 +951,16 @@ describe("MultiSelect", () => {
       expect(screen.getByText("Slack (0)")).toBeInTheDocument();
     });
 
+    it("renders option checkboxes without itemToInput", async () => {
+      render(MultiSelect, { props: { items } });
+
+      await openMenu();
+      const option = screen.getByRole("option", { name: "Slack" });
+      const checkbox = option.querySelector('input[type="checkbox"]');
+      expect(checkbox).not.toHaveAttribute("title");
+      expect(option).toHaveTextContent("Slack");
+    });
+
     it("handles custom itemToInput", async () => {
       const props = {
         items,
