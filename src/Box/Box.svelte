@@ -91,7 +91,7 @@
    * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
    * @typedef {0 | SpacingScale | string} SpacingValue
    * @typedef {0 | SpacingScale | string} OffsetValue
-   * @restProps {any}
+   * @template {keyof HTMLElementTagNameMap} [Tag="div"]
    * @slot {{}}
    */
 
@@ -380,7 +380,7 @@
 
   /**
    * Specify the tag name.
-   * @type {keyof HTMLElementTagNameMap}
+   * @type {Tag}
    */
   export let tag = "div";
 
