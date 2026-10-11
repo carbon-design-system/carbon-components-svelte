@@ -28,6 +28,7 @@
 
   /**
    * Obtain a reference to the underlying anchor HTML element.
+   * @type {null | HTMLAnchorElement}
    * @bindable readonly
    */
   export let ref = null;

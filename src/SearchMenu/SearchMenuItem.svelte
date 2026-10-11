@@ -32,6 +32,11 @@
 
 <script>
   /**
+   * @template [Icon=any]
+   * @template [IconRight=any]
+   */
+
+  /**
    * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
    * @slot {{ query: string; matched: boolean; indices: number[]; segments: Array<{ text: string; match: boolean }> }}
    */
@@ -57,15 +62,15 @@
 
   /**
    * Specify the icon rendered before the label.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the icon rendered after the label, for example an external-link affordance.
-   * @type {any}
+   * @type {IconRight}
    */
-  export let iconRight = undefined;
+  export let iconRight = /** @type {IconRight} */ (undefined);
 
   /** Set to `true` to disable the item */
   export let disabled = false;

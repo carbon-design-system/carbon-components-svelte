@@ -458,6 +458,7 @@
   /**
    * Focus the first input segment.
    * @param {{ selectTextOnFocus?: boolean }} [options]
+   * @returns {void}
    */
   export function focusFirstInput(options = {}) {
     focusInput(0, options);
@@ -466,6 +467,7 @@
   /**
    * Focus the last input segment.
    * @param {{ selectTextOnFocus?: boolean }} [options]
+   * @returns {void}
    */
   export function focusLastInput(options = {}) {
     focusInput(count - 1, options);
@@ -474,6 +476,7 @@
   /**
    * Focus the first empty input segment, or the last if all are filled.
    * @param {{ selectTextOnFocus?: boolean }} [options]
+   * @returns {void}
    */
   export function focusNextEmptyInput(options = {}) {
     const firstEmpty = code.findIndex((char) => !char);
@@ -484,6 +487,7 @@
    * Focus the next input segment from the currently focused segment.
    * Does not wrap when the last segment is focused.
    * @param {{ selectTextOnFocus?: boolean }} [options]
+   * @returns {void}
    */
   export function focusNext(options = {}) {
     let focusedInputIndex = inputs.indexOf(
@@ -503,6 +507,7 @@
    * Clear all segments programmatically.
    * By default, focus is not moved. Set `options.focus` to `true` to focus the first segment after clearing.
    * @param {{ focus?: boolean }} [options]
+   * @returns {void}
    */
   export function clear(options = {}) {
     code = Array.from({ length: count }, () => "");

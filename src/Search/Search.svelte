@@ -154,7 +154,10 @@
 
   let skipSelectOnFocus = false;
 
-  /** Focus the input without selecting text, even when `selectTextOnFocus` is set. */
+  /**
+   * Focus the input without selecting text, even when `selectTextOnFocus` is set.
+   * @returns {void}
+   */
   export function focusWithoutSelect() {
     skipSelectOnFocus = true;
     ref?.focus();
