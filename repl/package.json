@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:artifacts": "bun scripts/build-artifacts.ts",
+    "build:app": "vite build",
+    "build": "bun run build:artifacts && bun run build:app",
+    "serve": "bun server.ts",
+    "start": "bun run build && bun run serve",
+    "perf": "bun scripts/perf.ts",
+    "test": "bun test tests",
+    "smoke": "bun scripts/smoke.ts"
+  }
+}

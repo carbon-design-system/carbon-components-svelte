@@ -21,6 +21,7 @@
       "**",
       "!!**/.*/**/*",
       "!!**/docs/src/pages/index.svelte",
+      "!!**/repl/index.html",
       "!**/*.svg"
     ]
   },
@@ -171,6 +172,20 @@
         "rules": {
           "correctness": {
             "noUnusedVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["repl/scripts/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noAwaitInLoops": "off",
+            "useTopLevelRegex": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
           }
         }
       }
