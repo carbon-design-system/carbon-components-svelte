@@ -10,6 +10,7 @@
     "build:sitemap": "bun scripts/generate-sitemap.ts",
     "format-component-api": "bun scripts/format-component-api.ts",
     "build:vite": "vite build",
+    "typecheck:examples": "bun scripts/typecheck-examples.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
