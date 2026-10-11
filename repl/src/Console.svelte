@@ -26,6 +26,7 @@
       size="small"
       icon={Clean}
       iconDescription="Clear console"
+      tooltipAlignment="end"
       on:click={() => logs.set([])}
     />
   </div>
