@@ -1,6 +1,7 @@
 <script>
   /**
    * @template [T=string]
+   * @template [Icon=any]
    */
 
   /**
@@ -122,9 +123,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the direction of the results menu.
