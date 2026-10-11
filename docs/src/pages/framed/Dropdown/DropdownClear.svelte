@@ -7,7 +7,7 @@
 <Dropdown
   clearable
   labelText="Contact"
-  label="Choose a contact method"
+  placeholder="Choose a contact method"
   selectedId="1"
   bind:this={ref}
   items={[
