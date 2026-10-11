@@ -1,5 +1,6 @@
 // Type-checks the docs examples against the library's types with
-// svelte-check, non-strict. Exits 1 on any error.
+// svelte-check, non-strict. Exits 1 on any error, except the ones only
+// TypeScript's inference produces (see `IGNORED`).
 //
 //   bun run build:docs   # from the repo root, for the .d.ts files
 //   cd docs && bun scripts/typecheck-examples.ts
@@ -20,6 +21,74 @@ const SVELTE_CHECK = path.join(DOCS, "../node_modules/.bin/svelte-check");
 
 const DOC_KBD_RE = /^\s*<DocKbd\b/;
 const RELATIVE_IMPORT_RE = /(from\s+|import\s+)(["'])(\.\.?\/[^"']+)\2/g;
+
+/**
+ * Errors a JavaScript reader never hits. The examples are plain JS, so
+ * TypeScript widens their literals and types DOM events loosely; flagging
+ * that would mean annotating every example. Wrong prop names, invalid
+ * literal values, and unknown events still fail.
+ */
+const IGNORED = [
+  // `let kind = "red"` widens to `string`, not Tag's `"red" | …`.
+  /^Type '(string|number|boolean)(\[\])?' is not assignable to type/,
+  // `const headers = [{ key: "name" }]` widens `key` to `string`.
+  /^Type '.*\bkey: string\b.*\[\]' is not assignable to type 'readonly DataTableHeader</,
+  // `e.target.value`: the target is typed `EventTarget`.
+  /^Property '\w+' does not exist on type '(EventTarget|Element)'/,
+  // `new Date(a) - new Date(b)`, and `a - b` on a `string | number` cell.
+  /^The (left|right)-hand side of an arithmetic operation must be/,
+];
+
+/**
+ * Library typing gaps that TypeScript users hit too: `[file, message]`.
+ * Fix the type, then delete the entry. An entry that no longer matches
+ * anything fails the run, so the list only shrinks.
+ */
+const KNOWN: Array<[file: string, message: RegExp]> = [
+  // BreadcrumbItem's `let:props` types `aria-current` as `string`.
+  ["src/pages/components/Breadcrumb.svx", /"aria-current"\?: string/],
+  // `sort` gets the union of every cell type, so `new Date(a)` fails.
+  ["src/pages/components/DataTable.svx", /^No overload matches this call/],
+  // A computed column's `key` isn't a key of `Row`.
+  [
+    "src/pages/framed/DataTable/DataTableEditableCells.svelte",
+    /DataTableEmptyHeader/,
+  ],
+  [
+    "src/pages/framed/DataTable/DataTableEditableCellsRefreshCells.svelte",
+    /DataTableEmptyHeader/,
+  ],
+  // ToolbarSearch's `shouldFilterRows` types the query `number | string`.
+  [
+    "src/pages/framed/DataTable/DataTableFilterCustom.svelte",
+    /'string \| number'/,
+  ],
+  // `applyColumnSettings` returns `ColumnHeader[]`, not the input type.
+  [
+    "src/pages/framed/DataTable/DataTableToolbarColumnVisibilityPersist.svelte",
+    /^Type 'ColumnHeader\[\]'/,
+  ],
+  // DatePicker's `change` detail is `string | { selectedDates, … }`.
+  [
+    "src/pages/framed/DatePicker/DatePickerErrorHandler.svelte",
+    /selectedDates/,
+  ],
+  // `locale` takes a full `CustomLocale`; flatpickr merges a partial one.
+  ["src/pages/framed/DatePicker/DatePickerLocale.svelte", /CustomLocale/],
+  // RecursiveList infers `Node` from the first node, not the union.
+  ["src/pages/framed/RecursiveList/RecursiveList.svelte", /^Type '\(/],
+  ["src/pages/framed/RecursiveList/RecursiveListOrdered.svelte", /^Type '\(/],
+  [
+    "src/pages/framed/RecursiveList/RecursiveListOrderedNative.svelte",
+    /^Type '\(/,
+  ],
+  // `let nodes` takes its type from the first of two tree shapes.
+  [
+    "src/pages/framed/TreeView/TreeViewPerformance.svelte",
+    /^Type '\{ id: number; text: string; \}\[\]'/,
+  ],
+];
+const knownHits = new Set<number>();
 
 type HtmlNode = {
   value: string;
@@ -145,18 +214,35 @@ const check = spawnSync(
 // `<timestamp> ERROR "<file>" <line>:<column> "<message>"`
 const ERROR_RE = /^\d+ ERROR "(.+?)" (\d+):(\d+) "(.*)"$/;
 let errors = 0;
+let diagnostics = 0;
 for (const line of check.stdout.split("\n")) {
   const match = line.match(ERROR_RE);
   if (!match) continue;
-  errors++;
-  const [, file, row, column, message] = match;
+  diagnostics++;
+  const [, file, row, column, raw] = match;
+  const message = JSON.parse(`"${raw}"`).split("\n")[0];
+  if (IGNORED.some((re) => re.test(message))) continue;
   const map = lineMaps.get(file);
+  const source = map
+    ? `src/pages/components/${file.replace(".svelte", ".svx")}`
+    : path.relative(DOCS, path.resolve(OUT, file));
+  const known = KNOWN.findIndex(([f, re]) => f === source && re.test(message));
+  if (known !== -1) {
+    knownHits.add(known);
+    continue;
+  }
+  errors++;
   const location = map
-    ? `src/pages/components/${file.replace(".svelte", ".svx")}:${map[Number(row) - 1] || "?"}`
-    : `${path.relative(DOCS, path.resolve(OUT, file))}:${row}:${column}`;
-  console.log(`${location}  ${JSON.parse(`"${message}"`).split("\n")[0]}`);
+    ? `${source}:${map[Number(row) - 1] || "?"}`
+    : `${source}:${row}:${column}`;
+  console.log(`${location}  ${message}`);
 }
-if (check.status !== 0 && errors === 0) {
+for (const [i, [file, re]] of KNOWN.entries()) {
+  if (knownHits.has(i)) continue;
+  errors++;
+  console.log(`${file}  Fixed? Remove its KNOWN entry: ${re}`);
+}
+if (check.status !== 0 && diagnostics === 0) {
   console.error(check.stdout, check.stderr);
   process.exit(check.status ?? 1);
 }
