@@ -84,12 +84,12 @@
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
-  import { createInitOrder } from "../utils/init-order.js";
   import { keyBy } from "../utils/key-by.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { createTabsInitClaims } from "../utils/tabs-init-claims.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
@@ -214,59 +214,21 @@
   /** @type {(id: string) => void} */
   const removeContent = registration.removeContent;
 
-  /**
-   * Tabs and panels claim their position here while they initialize, so the
-   * first render (and the server render, where registration never flushes)
-   * already shows the selected tab and panel and pairs their ids.
-   * Registration replaces these once it flushes; for static children the
-   * two agree. Closed on mount.
-   * @type {ReturnType<typeof createInitOrder<{ id: string; panelId: string | undefined }>>}
-   */
-  const initialTabs = createInitOrder();
-  /** @type {ReturnType<typeof createInitOrder<string>>} */
-  const initialPanels = createInitOrder();
-  let initialSelectedIndex = -1;
-
-  /**
-   * Claim a tab's position. When there is a `content` slot, also reserve
-   * the id of the panel at the same position, `{tabId}-panel`, so the tab
-   * can point `aria-controls` at it before the panel renders. A panel with
-   * its own `id` keeps it, so on the server the tab's `aria-controls` can
-   * name an id that does not exist; registration corrects it after mount.
-   * @type {(id: string) => undefined | { panelId: string | undefined }}
-   */
-  function claimTab(id) {
-    const claimed = { id, panelId: undefined };
-    const index = initialTabs.claim(claimed);
-    if (index === undefined) return undefined;
-    const panelId = $$slots.content ? `${id}-panel` : undefined;
-    claimed.panelId = panelId;
-    const isSelected =
-      selectedId === undefined ? index === selectedIndex : id === selectedId;
-    if (isSelected && initialSelectedIndex === -1) {
-      initialSelectedIndex = index;
-      selectedTab.set(id);
-    }
-    return { panelId };
-  }
-
-  /**
-   * Claim a panel's position. A panel without its own `id` takes the one
-   * its tab reserved.
-   * @type {(id: string, hasOwnId: boolean) => undefined | { id: string; tabId: string | undefined }}
-   */
-  function claimPanel(id, hasOwnId) {
-    const index = initialPanels.claim(id);
-    if (index === undefined) return undefined;
-    const tab = initialTabs.at(index);
-    const panelId = (!hasOwnId && tab?.panelId) || id;
-    const isSelected =
-      selectedId === undefined
-        ? index === selectedIndex
-        : index === initialSelectedIndex;
-    if (isSelected) selectedContent.set(panelId);
-    return { id: panelId, tabId: tab?.id };
-  }
+  // Tabs and panels claim their position while they initialize, so the
+  // first render (server included) shows the selection. Closed on mount.
+  const initialClaims = createTabsInitClaims({
+    selectedTab,
+    selectedContent,
+    getSelection: () => ({
+      selectedId,
+      selectedIndex,
+      hasContent: !!$$slots.content,
+    }),
+  });
+  /** @type {(id: string) => undefined | { panelId: string | undefined }} */
+  const claimTab = initialClaims.claimTab;
+  /** @type {(id: string, hasOwnId: boolean) => undefined | { id: string; tabId: string | undefined }} */
+  const claimPanel = initialClaims.claimPanel;
 
   /**
    * @type {(id: string) => void}
@@ -491,8 +453,7 @@
   });
 
   onMount(() => {
-    initialTabs.close();
-    initialPanels.close();
+    initialClaims.close();
     updateOverflow();
     const observer = new ResizeObserver(updateOverflow);
     if (refTabList) observer.observe(refTabList);
