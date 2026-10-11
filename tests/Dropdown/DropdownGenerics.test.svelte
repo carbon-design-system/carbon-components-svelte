@@ -13,7 +13,7 @@
 <Dropdown
   {items}
   selectedId="1"
-  label="Choose a product"
+  placeholder="Choose a product"
   labelText="Products"
   on:select={(e) => onSelect(e.detail)}
   let:item
