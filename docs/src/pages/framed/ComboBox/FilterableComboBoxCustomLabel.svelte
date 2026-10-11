@@ -8,14 +8,14 @@
   };
 
   function itemToString(item) {
-    return translation[item.key];
+    return translation[item.text];
   }
 
   function shouldFilterItem(item, value) {
     if (!value) return true;
     const comparison = value.toLowerCase();
     return (
-      item.key.toLowerCase().includes(comparison) ||
+      item.text.toLowerCase().includes(comparison) ||
       itemToString(item).toLowerCase().includes(comparison)
     );
   }
@@ -25,9 +25,9 @@
   labelText="Alert channel"
   placeholder="Select alert channel"
   items={[
-    { id: "0", key: "Slack" },
-    { id: "1", key: "Email" },
-    { id: "2", key: "Webhook" },
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Webhook" },
   ]}
   {shouldFilterItem}
   {itemToString}
