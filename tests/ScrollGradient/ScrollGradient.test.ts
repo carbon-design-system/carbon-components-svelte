@@ -110,6 +110,40 @@ describe("ScrollGradient", () => {
     observe.mockRestore();
   });
 
+  it("shares one ResizeObserver across instances and stops observing on unmount", async () => {
+    let created = 0;
+    const observed = new Set<Element>();
+    const Base = globalThis.ResizeObserver;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class extends Base {
+        constructor(callback: ResizeObserverCallback) {
+          super(callback);
+          created++;
+        }
+        observe(element: Element) {
+          observed.add(element);
+          super.observe(element);
+        }
+        unobserve(element: Element) {
+          observed.delete(element);
+          super.unobserve(element);
+        }
+      },
+    );
+
+    const first = render(ScrollGradient);
+    const second = render(ScrollGradient);
+    await tick();
+
+    expect(created).toBe(1);
+    expect(observed.size).toBe(4);
+
+    first.unmount();
+    second.unmount();
+    expect(observed.size).toBe(0);
+  });
+
   it("shows no gradients when content does not overflow", async () => {
     const { container } = render(ScrollGradient);
     await tick();

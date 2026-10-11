@@ -59,6 +59,7 @@
   export let scrollElementRef = null;
 
   import { onMount } from "svelte";
+  import { observeResize } from "../utils/shared-observer.js";
 
   let contentRef = null;
   let sentinelTop = null;
@@ -110,16 +111,16 @@
   }
 
   onMount(() => {
-    updateScrollable();
-
     // Scrollability changes only when the viewport or the content changes
     // size. Observing both catches slot updates, font swaps and wrapping
     // without a subtree MutationObserver, which fired (and forced a
     // scrollWidth/scrollHeight read) on every DOM mutation inside the
     // content, e.g. each row update of a wrapped DataTable.
-    const resizeObserver = new ResizeObserver(updateScrollable);
-    resizeObserver.observe(scrollElementRef);
-    resizeObserver.observe(contentRef);
+    //
+    // Observing queues a first measurement, which runs with every other
+    // gradient's in one batch instead of forcing a layout apiece.
+    const stopScrollElement = observeResize(scrollElementRef, updateScrollable);
+    const stopContent = observeResize(contentRef, updateScrollable);
 
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
@@ -148,7 +149,8 @@
     }
 
     return () => {
-      resizeObserver.disconnect();
+      stopScrollElement();
+      stopContent();
       intersectionObserver.disconnect();
     };
   });
