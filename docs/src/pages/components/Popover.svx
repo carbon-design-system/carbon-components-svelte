@@ -83,8 +83,8 @@ The default is top.
 </div>
 <div>
     Parent
-    <Popover open align="left-right">
-        left-right
+    <Popover open align="left-top">
+        left-top
     </Popover>
 </div>
 <div>

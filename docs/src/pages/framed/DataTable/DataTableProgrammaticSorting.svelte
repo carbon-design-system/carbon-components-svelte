@@ -11,7 +11,7 @@
 <Stack gap={5}>
   <div>
     <Button
-      size="sm"
+      size="small"
       kind="tertiary"
       disabled={sortKey === "port" && sortDirection === "ascending"}
       on:click={() => {
@@ -22,7 +22,7 @@
       Sort "port" in ascending order
     </Button>
     <Button
-      size="sm"
+      size="small"
       kind="tertiary"
       disabled={sortKey === "name" && sortDirection === "descending"}
       on:click={() => {
@@ -33,7 +33,7 @@
       Sort "name" in descending order
     </Button>
     <Button
-      size="sm"
+      size="small"
       kind="ghost"
       on:click={() => {
         sortKey = null;

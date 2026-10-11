@@ -20,7 +20,7 @@
   }
 </script>
 
-<OverflowMenu size="field">
+<OverflowMenu>
   <OverflowMenuItem
     text={copied ? "Copied!" : "Copy webhook URL"}
     disabled={copying}

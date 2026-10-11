@@ -37,12 +37,12 @@
     />
   </DatePicker>
   <Stack gap={3} orientation="horizontal">
-    <Button kind="tertiary" size="sm" on:click={() => selectManyDates(20)}>
+    <Button kind="tertiary" size="small" on:click={() => selectManyDates(20)}>
       Select 20 dates
     </Button>
-    <Button kind="tertiary" size="sm" on:click={() => selectManyDates(100)}>
+    <Button kind="tertiary" size="small" on:click={() => selectManyDates(100)}>
       Select 100 dates
     </Button>
-    <Button kind="tertiary" size="sm" on:click={clearAll}>Clear all</Button>
+    <Button kind="tertiary" size="small" on:click={clearAll}>Clear all</Button>
   </Stack>
 </Stack>
