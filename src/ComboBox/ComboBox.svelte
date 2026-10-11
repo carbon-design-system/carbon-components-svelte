@@ -727,12 +727,14 @@
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
   $: hideMode = filterMode === "hide" && !shouldVirtualize;
-  // The default `shouldFilterItem` keeps every item, so the open menu reuses
-  // `items` rather than copying all of them on each open and keystroke.
+  // The default `shouldFilterItem` keeps every item whatever is typed, so the
+  // open menu reuses `items` rather than copying all of them on each open, and
+  // `filterValue` stays put while typing so the list is not rebuilt per key.
+  $: filterValue = filterFn === defaultShouldFilter ? "" : value;
   $: filteredItems = open
     ? filterFn === defaultShouldFilter
       ? items
-      : items.filter((item) => filterFn(item, value))
+      : items.filter((item) => filterFn(item, filterValue))
     : [];
   $: menuItems = hideMode && open ? items : filteredItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
