@@ -5,7 +5,6 @@
    * @property {ColumnSize} [span]
    * @property {number} [offset]
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
-   * @restProps {div}
    * @slot {{props: { class: string; [key: string]: any; }}}
    */
 
