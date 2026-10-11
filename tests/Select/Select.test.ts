@@ -116,6 +116,10 @@ describe("Select", () => {
     const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).not.toHaveClass("bx--select--inline");
+    expect(selectWrapper.parentElement).toHaveClass("bx--form-item");
+    expect(selectWrapper.parentElement).not.toHaveClass(
+      "bx--select__form-item--inline",
+    );
   });
 
   it("renders inline variant", () => {
@@ -124,6 +128,11 @@ describe("Select", () => {
     const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).toHaveClass("bx--select--inline");
+    // The form item stays at its content width in a flex row.
+    expect(selectWrapper.parentElement).toHaveClass(
+      "bx--form-item",
+      "bx--select__form-item--inline",
+    );
   });
 
   it("renders default theme", () => {

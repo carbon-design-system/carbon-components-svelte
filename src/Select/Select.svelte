@@ -243,7 +243,11 @@
   );
 </script>
 
-<div class:bx--form-item={true} class:bx--select--fluid={isFluid}>
+<div
+  class:bx--form-item={true}
+  class:bx--select--fluid={isFluid}
+  class:bx--select__form-item--inline={inline}
+>
   <div
     class:bx--select={true}
     class:bx--select--inline={inline}

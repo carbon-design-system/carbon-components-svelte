@@ -327,3 +327,21 @@
 @include exports("select-readonly") {
   @include select-readonly;
 }
+
+// carbon-components-svelte patch
+// Carbon's form item is `flex: 1 1 auto`, so an inline select stretched
+// across any flex row. Keep it at its content width; it can still shrink.
+// Double class beats the base `.bx--form-item`, which emits after patches.
+
+/// Inline select form item
+/// @access private
+/// @group components
+@mixin select-inline-form-item {
+  .#{$prefix}--form-item.#{$prefix}--select__form-item--inline {
+    flex: 0 1 auto;
+  }
+}
+
+@include exports("select-inline-form-item") {
+  @include select-inline-form-item;
+}
