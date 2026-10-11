@@ -84,6 +84,25 @@ describe("applyColumnSettings", () => {
   });
 });
 
+describe("header types", () => {
+  type Header = { key: "name" | "port"; value: string };
+  const typed: Header[] = [
+    { key: "name", value: "Name" },
+    { key: "port", value: "Port" },
+  ];
+
+  it("applyColumnSettings returns the input header type", () => {
+    const result = applyColumnSettings(typed, toColumnSettings(typed));
+    expectTypeOf(result).toEqualTypeOf<Header[]>();
+  });
+
+  it("setColumnHidden returns the input header type", () => {
+    expectTypeOf(setColumnHidden(typed, "port", true)).toEqualTypeOf<
+      ReadonlyArray<Header>
+    >();
+  });
+});
+
 describe("setColumnHidden", () => {
   it("hides a visible column", () => {
     const result = setColumnHidden(headers, "name", true);

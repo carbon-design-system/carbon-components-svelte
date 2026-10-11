@@ -27,17 +27,17 @@ export function toColumnSettings(
  * appended after the ordered ones; keys in `order` with no matching header
  * are ignored) and set `columnHidden` from `settings.hidden`.
  */
-export function applyColumnSettings(
-  headers: ReadonlyArray<ColumnHeader>,
+export function applyColumnSettings<Header extends ColumnHeader>(
+  headers: ReadonlyArray<Header>,
   settings: ColumnSettings,
-): ColumnHeader[];
+): Header[];
 
 /**
  * Set `columnHidden` on the header matching `key`. Returns the same array
  * reference when the header is missing or already at the requested state.
  */
-export function setColumnHidden(
-  headers: ReadonlyArray<ColumnHeader>,
+export function setColumnHidden<Header extends ColumnHeader>(
+  headers: ReadonlyArray<Header>,
   key: string,
   hidden: boolean,
-): ReadonlyArray<ColumnHeader>;
+): ReadonlyArray<Header>;
