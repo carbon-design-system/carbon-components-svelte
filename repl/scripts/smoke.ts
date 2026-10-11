@@ -131,7 +131,7 @@ await page.waitForFunction(() =>
   document.querySelector("textarea")?.value.includes("Clicked"),
 );
 const before = await page.evaluate(() => (window as any).__paints);
-const textarea = page.locator("textarea");
+const textarea = page.locator("textarea.ce-input");
 await textarea.click();
 await textarea.evaluate((el: HTMLTextAreaElement) => {
   const i = el.value.indexOf("Clicked");

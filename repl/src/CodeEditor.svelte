@@ -194,6 +194,21 @@
     revealFrame = requestAnimationFrame(revealCaret);
   }
 
+  /** Put the caret at a 1-based line and column and scroll it into view. */
+  export function goto(line, column = 1) {
+    const lineStart =
+      starts[Math.max(0, Math.min(line - 1, starts.length - 1))] ?? 0;
+    const lineEnd = current.indexOf("\n", lineStart);
+    const offset = Math.min(
+      lineStart + Math.max(0, column - 1),
+      lineEnd === -1 ? current.length : lineEnd,
+    );
+    textarea.focus();
+    textarea.setSelectionRange(offset, offset);
+    updateActiveLine();
+    scheduleReveal();
+  }
+
   function onInput() {
     current = textarea.value;
     sync();

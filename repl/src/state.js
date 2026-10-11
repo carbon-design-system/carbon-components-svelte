@@ -1,5 +1,12 @@
-import { get, writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import { encodeHash } from "./codec.js";
+import {
+  dropped as consoleDropped,
+  ingest as consoleIngest,
+  push as consolePush,
+  runStarted as consoleRunStarted,
+  system as consoleSystem,
+} from "./console/store.js";
 
 /** @type {any} */
 let boot;
@@ -12,14 +19,18 @@ export const theme = writable("white");
 export const status = writable(
   /** @type {"compiling" | "ready" | "error"} */ ("compiling"),
 );
-export const diagnostics = writable(/** @type {any[]} */ ([]));
-export const logs = writable(
-  /** @type {{ level: string; text: string }[]} */ ([]),
+export const compileDiagnostics = writable(/** @type {any[]} */ ([]));
+/** Uncaught runtime errors mapped to a source line; cleared on the next compile. */
+export const runtimeDiagnostics = writable(/** @type {any[]} */ ([]));
+export const diagnostics = derived(
+  [compileDiagnostics, runtimeDiagnostics],
+  ([$compile, $runtime]) => [...$compile, ...$runtime],
 );
+/** Editor jump requests from the console: { file, line, column, seq }. */
+export const jump = writable(/** @type {any} */ (null));
 export const metrics = writable(/** @type {Record<string, number>} */ ({}));
 export const href = writable("");
 
-const MAX_LOGS = 500;
 const FILE_NAME = /^[\w.-]+\.(svelte|js|json)$/;
 let lastCompileMs = 10;
 let compileTimer;
@@ -34,11 +45,58 @@ export function init(repl) {
   window.addEventListener("hashchange", () => location.reload());
 }
 
-function pushLog(level, text) {
-  logs.update((l) => {
-    const next = [...l, { level, text }];
-    return next.length > MAX_LOGS ? next.slice(-MAX_LOGS) : next;
-  });
+/** Request/response with the preview iframe (remote object protocol). */
+export function request(message) {
+  return boot.request(message);
+}
+
+export function postToPreview(message) {
+  boot.post(message);
+}
+
+/** Move the editor to a source location (from a console link). */
+export function jumpTo({ file, line, column }) {
+  const index = get(files).findIndex((f) => f.name === file);
+  if (index === -1) return;
+  flushEdits();
+  active.set(index);
+  jump.set({ file, line, column, seq: Date.now() });
+}
+
+function offsetOf(file, line, column) {
+  const source = get(files).find((f) => f.name === file)?.source;
+  if (source === undefined) return undefined;
+  let offset = 0;
+  for (let l = 1; l < line; l++) {
+    const next = source.indexOf("\n", offset);
+    if (next === -1) return undefined;
+    offset = next + 1;
+  }
+  return offset + Math.max(0, column - 1);
+}
+
+function runtimeErrors(entries) {
+  for (const entry of entries) {
+    if (entry.level !== "error" || !entry.uncaught || !entry.source) continue;
+    const { file, line, column } = entry.source;
+    const start = offsetOf(file, line, column);
+    if (start === undefined) continue;
+    const source = get(files).find((f) => f.name === file).source;
+    const lineEnd = source.indexOf("\n", start);
+    runtimeDiagnostics.update((list) => [
+      ...list,
+      {
+        file,
+        severity: "error",
+        runtime: true,
+        message: `Uncaught ${entry.args?.[0]?.desc ?? "error"}`,
+        line,
+        column: column - 1,
+        start,
+        end: lineEnd === -1 ? source.length : Math.max(lineEnd, start + 1),
+      },
+    ]);
+  }
 }
 
 function setMetric(name, value) {
@@ -56,11 +114,23 @@ function onEvent(message) {
     case "compiled":
       lastCompileMs = message.ms;
       setMetric("compile", message.ms);
-      diagnostics.set(message.diagnostics);
+      compileDiagnostics.set(message.diagnostics);
+      runtimeDiagnostics.set([]);
       status.set(message.ok ? "compiling" : "error");
       break;
     case "run-start":
-      logs.set([]);
+      runtimeDiagnostics.set([]);
+      consoleRunStarted();
+      break;
+    case "logs":
+      consoleIngest(message.entries);
+      runtimeErrors(message.entries);
+      break;
+    case "logs-dropped":
+      consoleDropped(message.count);
+      break;
+    case "teardown-report":
+      consolePush(consoleSystem("info", message.text));
       break;
     case "painted":
       status.set(
@@ -73,11 +143,8 @@ function onEvent(message) {
       if (message.sinceCompile !== undefined)
         setMetric("update", message.sinceCompile);
       break;
-    case "console":
-      pushLog(message.level, message.text);
-      break;
     case "error":
-      pushLog("error", message.message);
+      consolePush(consoleSystem("error", message.message));
       status.set("error");
       break;
     case "run-failed":

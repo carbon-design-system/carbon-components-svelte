@@ -188,25 +188,42 @@ export const total = ${Array.from({ length: 20 }, (_, i) => `value${i}.weight`).
   },
   {
     id: "console",
-    label: "Console + errors",
+    label: "Console inspector",
     files: [
       {
         name: "App.svelte",
         source: `<script>
   import { Button, Stack } from "carbon-components-svelte";
 
-  console.log("Mounted", { at: new Date().toISOString(), nested: { list: [1, 2, 3] } });
-  console.warn("This is a warning");
+  const user = { name: "Ada", roles: ["admin", "editor"], meta: new Map([["since", 2019]]) };
+  user.self = user;
 
-  const ticker = setInterval(() => console.info("tick (cleared on every re-run)"), 2000);
+  console.log("Mounted", user);
+  console.info("%cStyled%c and plain", "color: #0f62fe; font-weight: 600", "");
+  console.warn("Deprecated prop", { prop: "size", use: "kind" });
+  console.table([
+    { id: 1, name: "Slack", enabled: true },
+    { id: 2, name: "Email", enabled: false },
+  ]);
+  console.group("Group");
+  console.log("Inside the group", Array.from({ length: 250 }, (_, i) => i * i));
+  console.groupEnd();
+  console.time("work");
+  for (let i = 0; i < 1e5; i++);
+  console.timeEnd("work");
+
+  let ticks = 0;
+  setInterval(() => console.count("tick"), 2000);
+
+  function boom() {
+    throw new Error("Boom from a click handler");
+  }
 ${SCRIPT_END}
 
 <Stack gap={5}>
-  <Button on:click={() => console.log("Clicked", new Map([["a", 1]]))}>Log</Button>
-  <Button kind="danger" on:click={() => { throw new Error("Boom"); }}>Throw</Button>
-  <Button kind="secondary" on:click={() => localStorage.setItem("k", "v") || console.log(localStorage.getItem("k"))}>
-    localStorage shim
-  </Button>
+  <Button on:click={(e) => console.log("Clicked", e.currentTarget)}>Log the button element</Button>
+  <Button kind="danger" on:click={boom}>Throw</Button>
+  <Button kind="secondary" on:click={() => console.trace("Trace from a handler")}>Trace</Button>
 </Stack>
 `,
       },

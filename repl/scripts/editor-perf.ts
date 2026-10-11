@@ -17,7 +17,7 @@ async function run(lines: number, rate: number) {
   const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
   await p.goto("http://localhost:5180/");
   await p.waitForFunction(() => window.__repl?.metrics?.previewPainted);
-  const ta = p.locator("textarea");
+  const ta = p.locator("textarea.ce-input");
   await ta.evaluate((el, text) => {
     el.focus();
     el.select();
