@@ -1,0 +1,6 @@
+// Carbon syntax tokens for the static `g10.css` theme build.
+@import "./syntax/tokens";
+
+:root {
+  @include syntax-tokens(light, g10);
+}
