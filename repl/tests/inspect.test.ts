@@ -383,3 +383,33 @@ describe("DOM update hotspots", () => {
     ]);
   });
 });
+
+describe("bug report", () => {
+  test("keeps link, versions and console; drops code before the link when too long", async () => {
+    const { buildIssue } = await import("../src/report.js");
+    const base = {
+      href: "https://repl.example/#xabc",
+      versions: { ccs: "0.113.1", svelte: "5.57.1", icons: "13.16.0" },
+      problems: [{ level: "error", text: "TypeError: boom" }],
+    };
+    const small = buildIssue({
+      ...base,
+      files: [{ name: "App.svelte", source: "<p>hi</p>" }],
+    });
+    expect(small.body).toContain(
+      "[Open in the Carbon REPL](https://repl.example/#xabc)",
+    );
+    expect(small.body).toContain(
+      "carbon-components-svelte 0.113.1 · svelte 5.57.1 · carbon-icons-svelte 13.16.0",
+    );
+    expect(small.body).toContain("[error] TypeError: boom");
+    expect(small.body).toContain("<p>hi</p>");
+    const huge = buildIssue({
+      ...base,
+      files: [{ name: "App.svelte", source: "x".repeat(20_000) }],
+    });
+    expect(huge.url.length).toBeLessThanOrEqual(7500);
+    expect(huge.body).toContain("The code is in the REPL link above.");
+    expect(huge.body).toContain("[error] TypeError: boom");
+  });
+});

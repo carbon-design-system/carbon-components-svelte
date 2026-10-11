@@ -4,10 +4,12 @@ import {
   a11y as a11yFindings,
   addPerf,
   dropped as consoleDropped,
+  entries as consoleEntries,
   ingest as consoleIngest,
   push as consolePush,
   runStarted as consoleRunStarted,
   system as consoleSystem,
+  entryText,
   netEvent,
   perfFrames,
   perfHotspots,
@@ -290,6 +292,30 @@ export function removeFile(index) {
   files.set(list.filter((_, i) => i !== index));
   active.set(0);
   scheduleCompile();
+}
+
+/** Open a prefilled GitHub issue for the current REPL (see report.js). */
+export async function reportBug() {
+  // Read the console before anything can start a new run (which clears it),
+  // and encode the link directly instead of waiting for the idle hash write.
+  const problems = get(consoleEntries)
+    .filter((e) => e.level === "error" || e.level === "warn")
+    .map((e) => ({ level: e.level, text: entryText(e) }));
+  flushEdits();
+  const hash = await encodeHash(boot.hashPrefix, {
+    files: get(files),
+    versions: boot.versions,
+    options: { theme: get(theme), ...(get(devMode) ? { dev: true } : {}) },
+  });
+  const { buildIssue } = await import("./report.js");
+  const { url } = buildIssue({
+    href: `${location.origin}${location.pathname}#${hash}`,
+    versions: boot.versions,
+    files: get(files),
+    problems,
+    userAgent: navigator.userAgent,
+  });
+  window.open(url, "_blank", "noopener");
 }
 
 export function setDevMode(value) {

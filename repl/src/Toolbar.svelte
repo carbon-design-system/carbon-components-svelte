@@ -1,4 +1,5 @@
 <script>
+  import Button from "carbon-components-svelte/src/Button/Button.svelte";
   import CopyButton from "carbon-components-svelte/src/CopyButton/CopyButton.svelte";
   import InlineLoading from "carbon-components-svelte/src/InlineLoading/InlineLoading.svelte";
   import Select from "carbon-components-svelte/src/Select/Select.svelte";
@@ -6,6 +7,7 @@
   import Tag from "carbon-components-svelte/src/Tag/Tag.svelte";
   import Toggle from "carbon-components-svelte/src/Toggle/Toggle.svelte";
   import Header from "carbon-components-svelte/src/UIShell/Header.svelte";
+  import Debug from "carbon-icons-svelte/lib/Debug.svelte";
   import { examples } from "./examples.js";
   import {
     defaultFiles,
@@ -13,6 +15,7 @@
     href,
     loadExample,
     metrics,
+    reportBug,
     setDevMode,
     setTheme,
     status,
@@ -76,6 +79,10 @@
   </div>
 
   <CopyButton text={link} iconDescription="Copy link" feedback="Link copied" />
+
+  <Button kind="ghost" size="small" icon={Debug} on:click={reportBug}
+    >Report bug</Button
+  >
 
   <div class="status">
     {#if state === "compiling"}
