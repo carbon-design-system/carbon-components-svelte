@@ -219,6 +219,31 @@ describe("TabsVertical", () => {
     });
   });
 
+  // Selection must be in the first render. Committing it after registration
+  // flushes fades the selected tab's color in on mount.
+  it("renders the initial selection synchronously on mount", () => {
+    render(TabsVertical, { props: { selected: 2 } });
+
+    const tabs = screen.getAllByRole("tab");
+    const panels = screen.getAllByRole("tabpanel", { hidden: true });
+    expect(tabs[2]).toHaveAttribute("aria-selected", "true");
+    expect(tabs[0]).toHaveAttribute("aria-selected", "false");
+    expect(panels[2]).not.toHaveAttribute("hidden");
+    expect(panels[0]).toHaveAttribute("hidden");
+  });
+
+  it("renders the initial selectedId synchronously on mount", () => {
+    render(TabsVerticalSelectedId, { props: { selectedId: "tab-c" } });
+
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(
+      screen.getByRole("tabpanel", { hidden: true, name: "Tab C" }),
+    ).not.toHaveAttribute("hidden");
+  });
+
   it("should select the initial tab from the selected prop", async () => {
     render(TabsVertical, { props: { selected: 2 } });
     await tick();

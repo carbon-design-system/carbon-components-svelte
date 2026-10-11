@@ -101,7 +101,7 @@
   } = getContext("carbon:Tabs");
 
   // Claim this tab's position before it renders; see `claimTab` in `Tabs`.
-  // `undefined` for a tab added after mount (or under `TabsVertical`).
+  // `undefined` for a tab added after mount.
   const initialTab = claimTab?.(id);
 
   // Icon-only tabs show `label` as a portalled tooltip on hover/focus.
