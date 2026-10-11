@@ -727,7 +727,13 @@
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
   $: hideMode = filterMode === "hide" && !shouldVirtualize;
-  $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  // The default `shouldFilterItem` keeps every item, so the open menu reuses
+  // `items` rather than copying all of them on each open and keystroke.
+  $: filteredItems = open
+    ? filterFn === defaultShouldFilter
+      ? items
+      : items.filter((item) => filterFn(item, value))
+    : [];
   $: menuItems = hideMode && open ? items : filteredItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
   // The default `shouldFilterItem` keeps every item, so only announce while a
