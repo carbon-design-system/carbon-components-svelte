@@ -284,6 +284,56 @@ ${SCRIPT_END}
     ],
   },
   {
+    id: "perf",
+    label: "Performance channel",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, DataTable, Stack } from "carbon-components-svelte";
+
+  let rows = [];
+  let busyFor = 0;
+
+  function block(ms) {
+    const end = performance.now() + ms;
+    while (performance.now() < end);
+  }
+
+  function slowHandler() {
+    block(180); // a long task inside the click handler
+    busyFor += 180;
+  }
+
+  function renderMany() {
+    rows = Array.from({ length: 1500 }, (_, i) => ({
+      id: String(i),
+      name: \`Row \${i}\`,
+      value: Math.round(Math.random() * 1000),
+    }));
+  }
+${SCRIPT_END}
+
+<Stack gap={5}>
+  <Stack orientation="horizontal" gap={3}>
+    <Button on:click={slowHandler}>Slow click handler</Button>
+    <Button kind="secondary" on:click={renderMany}>Render 1,500 rows</Button>
+  </Stack>
+  <p>Blocked for {busyFor} ms so far</p>
+  {#if rows.length}
+    <DataTable
+      size="compact"
+      sortable
+      headers={[{ key: "name", value: "Name" }, { key: "value", value: "Value" }]}
+      {rows}
+    />
+  {/if}
+</Stack>
+`,
+      },
+    ],
+  },
+  {
     id: "carbon-lint",
     label: "Carbon usage lint",
     files: [

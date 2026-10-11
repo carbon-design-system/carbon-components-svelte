@@ -256,3 +256,93 @@ describe("color and contrast", () => {
     expect(isLargeText(16, 700)).toBe(false);
   });
 });
+
+describe("performance channel", () => {
+  test("positionAt maps a character offset to line and column", async () => {
+    const { positionAt } = await import("../sandbox/inspect/perf.js");
+    expect(positionAt("ab\ncd\nef", 0)).toEqual({ line: 1, column: 1 });
+    expect(positionAt("ab\ncd\nef", 4)).toEqual({ line: 2, column: 2 });
+  });
+
+  test("interactions are named by the event that did the work and count DOM changes", async () => {
+    const { summarizeInteractions } = await import(
+      "../sandbox/inspect/perf.js"
+    );
+    const e = (
+      name: string,
+      id: number,
+      start: number,
+      duration: number,
+      processing: number,
+    ) =>
+      ({
+        name,
+        interactionId: id,
+        startTime: start,
+        duration,
+        processingStart: start + 2,
+        processingEnd: start + 2 + processing,
+        target: null,
+      }) as unknown as PerformanceEventTiming;
+    const rows = summarizeInteractions(
+      [
+        e("pointerdown", 1, 100, 120, 1),
+        e("click", 1, 104, 116, 180),
+        e("keydown", 0, 300, 50, 5),
+      ],
+      [
+        [150, 30],
+        [210, 5],
+        [400, 99],
+      ],
+    );
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      type: "click",
+      duration: 120,
+      inputDelay: 2,
+      processing: 181,
+      mutations: 35,
+    });
+  });
+
+  test("profile samples attribute a window to the innermost REPL frame", async () => {
+    const { attributeSamples, frameSource } = await import(
+      "../sandbox/inspect/perf.js"
+    );
+    const modules = new Map([["blob:null/1", { name: "App.svelte" }]]);
+    const trace = {
+      resources: [
+        "http://x/pkg/svelte@5.57.1/chunk.js",
+        "blob:null/1",
+        "http://x/pkg/ccs@local/svelte@5.57.1/src/DataTable/DataTable.svelte",
+      ],
+      frames: [
+        { name: "run", resourceId: 0, line: 1, column: 1 },
+        { name: "block", resourceId: 1, line: 12, column: 3 },
+        { name: "sort", resourceId: 2, line: 40, column: 1 },
+      ],
+      stacks: [
+        { frameId: 0 },
+        { frameId: 1, parentId: 0 },
+        { frameId: 2, parentId: 0 },
+      ],
+      samples: [
+        { timestamp: 10, stackId: 1 },
+        { timestamp: 20, stackId: 1 },
+        { timestamp: 30, stackId: 2 },
+        { timestamp: 99, stackId: 1 },
+      ],
+    };
+    const top = attributeSamples(trace, 0, 50, modules);
+    expect(
+      top.map((t) => [t.source.file, t.source.line ?? null, t.samples]),
+    ).toEqual([
+      ["App.svelte", 12, 2],
+      ["src/DataTable/DataTable.svelte", null, 1],
+    ]);
+    expect(
+      frameSource("http://x/pkg/svelte@5.57.1/chunk.js", 1, 1, modules).kind,
+    ).toBe("svelte");
+  });
+});

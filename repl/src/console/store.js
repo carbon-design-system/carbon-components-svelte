@@ -13,6 +13,22 @@ export const levels = writable(new Set(LEVELS));
 export const query = writable("");
 export const collapsedGroups = writable(new Set());
 export const droppedTotal = writable(0);
+/** Performance channel: run summaries, slow interactions, long frames. */
+export const perfRuns = writable(/** @type {any[]} */ ([]));
+export const perfInteractions = writable(/** @type {any[]} */ ([]));
+export const perfFrames = writable(/** @type {any[]} */ ([]));
+const MAX_PERF = 200;
+
+export function addPerf(store, items) {
+  store.update((list) => [...list, ...items].slice(-MAX_PERF));
+}
+
+export function clearPerf() {
+  perfRuns.set([]);
+  perfInteractions.set([]);
+  perfFrames.set([]);
+}
+
 /** Latest accessibility findings for the preview (replaced on each audit). */
 export const a11y = writable(/** @type {any[]} */ ([]));
 /** Carbon component events from the preview (instrumented dispatchers). */

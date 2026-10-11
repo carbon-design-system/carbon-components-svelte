@@ -303,6 +303,10 @@ function sandboxFetch(req: Request) {
         ...cors,
         ...revalidate,
         "Content-Security-Policy": sandboxCsp(join(file, "..")),
+        // Lets the preview sample its own stacks (JS Self-Profiling) to
+        // attribute long tasks; Long Animation Frames aren't reported in
+        // cross-site iframes.
+        "Document-Policy": "js-profiling",
       });
     }
     if (file) return serveFile(req, file, { ...cors, ...revalidate });

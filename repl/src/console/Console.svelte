@@ -13,14 +13,17 @@
   import EvalInput from "./EvalInput.svelte";
   import EventsPanel from "./EventsPanel.svelte";
   import LogRow from "./LogRow.svelte";
+  import PerfPanel from "./PerfPanel.svelte";
   import {
     a11y,
     clearConsole,
     clearEvents,
+    clearPerf,
     counts,
     events,
     LEVELS,
     levels,
+    perfInteractions,
     preserve,
     query,
     visible,
@@ -47,6 +50,7 @@
   $: c = $counts;
   $: eventCount = $events.length;
   $: a11yCount = $a11y.length;
+  $: slowCount = $perfInteractions.length;
   $: if (items) followTail();
 
   let autoScrolling = false;
@@ -90,6 +94,7 @@
       <Switch text="Console" />
       <Switch text="Events{eventCount ? ` (${eventCount})` : ""}" />
       <Switch text="A11y{a11yCount ? ` (${a11yCount})` : ""}" />
+      <Switch text="Perf{slowCount ? ` (${slowCount})` : ""}" />
     </ContentSwitcher>
     {#if c.error}
       <Tag size="sm" type="red">{c.error} errors</Tag>
@@ -131,7 +136,14 @@
       icon={Clean}
       iconDescription="Clear console"
       tooltipAlignment="end"
-      on:click={() => (tab === 0 ? clearConsole() : clearEvents())}
+      on:click={() =>
+        tab === 0
+          ? clearConsole()
+          : tab === 1
+            ? clearEvents()
+            : tab === 3
+              ? clearPerf()
+              : undefined}
     />
   </div>
 
@@ -157,8 +169,10 @@
     <EvalInput />
   {:else if tab === 1}
     <EventsPanel {filter} />
-  {:else}
+  {:else if tab === 2}
     <A11yPanel {filter} />
+  {:else}
+    <PerfPanel />
   {/if}
 </div>
 

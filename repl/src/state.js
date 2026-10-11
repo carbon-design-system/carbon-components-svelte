@@ -2,11 +2,15 @@ import { derived, get, writable } from "svelte/store";
 import { encodeHash } from "./codec.js";
 import {
   a11y as a11yFindings,
+  addPerf,
   dropped as consoleDropped,
   ingest as consoleIngest,
   push as consolePush,
   runStarted as consoleRunStarted,
   system as consoleSystem,
+  perfFrames,
+  perfInteractions,
+  perfRuns,
 } from "./console/store.js";
 
 /** @type {any} */
@@ -139,6 +143,15 @@ function onEvent(message) {
       break;
     case "logs-dropped":
       consoleDropped(message.count);
+      break;
+    case "perf-run":
+      addPerf(perfRuns, [message]);
+      break;
+    case "perf-interactions":
+      addPerf(perfInteractions, message.items);
+      break;
+    case "perf-frames":
+      addPerf(perfFrames, message.items);
       break;
     case "a11y":
       a11yFindings.set(message.findings);

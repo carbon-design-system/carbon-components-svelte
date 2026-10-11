@@ -8,6 +8,7 @@ import { STATE_SYMBOL, snapshot } from "svelte-repl-devtools";
 import { audit } from "./inspect/a11y.js";
 import { installConsole } from "./inspect/console.js";
 import { classifyStack } from "./inspect/origin.js";
+import { createPerf } from "./inspect/perf.js";
 import { createRemote } from "./inspect/remote.js";
 import { createTokenIndex } from "./inspect/tokens.js";
 
@@ -533,7 +534,37 @@ function scheduleAudit() {
   auditTimer = native.setTimeout(runAudit, 600);
 }
 
-new MutationObserver(scheduleAudit).observe(document.body, {
+const perf = createPerf({
+  post,
+  modules,
+  preview: (value) => remote.preview(value),
+  locate,
+  setTimeout: native.setTimeout,
+  requestAnimationFrame: native.requestAnimationFrame,
+});
+
+/** DOM nodes touched by a batch of mutation records (inserted subtrees count in full). */
+function changedNodes(records) {
+  let count = 0;
+  for (const r of records) {
+    if (r.type !== "childList") {
+      count++;
+      continue;
+    }
+    for (const nodes of [r.addedNodes, r.removedNodes]) {
+      for (const node of nodes) {
+        count +=
+          1 + (node.nodeType === 1 ? node.getElementsByTagName("*").length : 0);
+      }
+    }
+  }
+  return count;
+}
+
+new MutationObserver((records) => {
+  perf.mutations(changedNodes(records));
+  scheduleAudit();
+}).observe(document.body, {
   subtree: true,
   childList: true,
   attributes: true,
@@ -601,6 +632,7 @@ async function onRun({ data }) {
   if (data.type !== "run") return;
   latestSeq = data.seq;
   preload(data.preload);
+  perf.runStart(data.seq);
 
   const urls = {};
   const created = [];
@@ -616,9 +648,10 @@ async function onRun({ data }) {
       );
       urls[module.name] = href;
       created.push(href);
-      modules.set(href, { name: module.name, map: module.map });
+      modules.set(href, { name: module.name, map: module.map, code });
     }
     Component = (await import(urls[data.entry])).default;
+    perf.imported();
   } catch (error) {
     consoleApi.reportError(error);
     for (const href of created) {
@@ -645,6 +678,7 @@ async function onRun({ data }) {
   } catch (error) {
     consoleApi.reportError(error);
   }
+  perf.mounted(data.modules.length);
   native.requestAnimationFrame(() =>
     native.setTimeout(
       () => post({ type: "painted", seq: data.seq, at: now(), runs }),
