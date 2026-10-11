@@ -484,11 +484,37 @@
   }
 
   /**
-   * @param {Item} item
+   * Id-to-position map for one `filteredItems` array. Held in a plain object
+   * so building it while the template renders writes no component state.
+   * @type {{ list: null | ReadonlyArray<Item>, byId: Map<Item["id"], number> }}
    */
-  function highlightItem(item) {
+  const filteredIndex = { list: null, byId: new Map() };
+
+  /**
+   * Position of an option among the filtered items. The id-to-position map is
+   * built on first use for each filtered list rather than on every open, since
+   * a virtualized menu knows the position of every option it mounts and never
+   * asks. Taking the list as an argument keeps template callers reactive to it.
+   * @param {ReadonlyArray<Item>} list
+   * @param {Item["id"]} id
+   * @returns {number | undefined}
+   */
+  function getFilteredIndex(list, id) {
+    if (filteredIndex.list !== list) {
+      filteredIndex.list = list;
+      filteredIndex.byId = new Map(list.map((item, index) => [item.id, index]));
+    }
+    return filteredIndex.byId.get(id);
+  }
+
+  /**
+   * @param {Item} item
+   * @param {number} [knownIndex] The option's position among the filtered
+   * items, when the caller already has it.
+   */
+  function highlightItem(item, knownIndex) {
     if (item.disabled) return;
-    const matchIndex = filteredIndexById.get(item.id);
+    const matchIndex = knownIndex ?? getFilteredIndex(filteredItems, item.id);
     if (matchIndex === undefined) return;
     highlightedIndex = matchIndex;
     highlightOrigin = "pointer";
@@ -702,9 +728,6 @@
   $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
   $: hideMode = filterMode === "hide" && !shouldVirtualize;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
-  $: filteredIndexById = new Map(
-    filteredItems.map((item, index) => [item.id, index]),
-  );
   $: menuItems = hideMode && open ? items : filteredItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
   // The default `shouldFilterItem` keeps every item, so only announce while a
@@ -1237,7 +1260,7 @@
                   // re-announce it on every option click.
                   event.preventDefault();
                 }}
-                on:mouseenter={() => highlightItem(item)}
+                on:mouseenter={() => highlightItem(item, actualIndex)}
               >
                 {#if $$slots.icon}
                   <span
@@ -1294,7 +1317,7 @@
           {#each itemsToRender as item, index (item.id)}
             {@const selected = selectedItem?.id === item.id}
             {@const optionId = `${id}-${item.id}`}
-            {@const matchIndex = filteredIndexById.get(item.id)}
+            {@const matchIndex = getFilteredIndex(filteredItems, item.id)}
             {@const slotIndex = matchIndex ?? index}
             <ListBoxMenuItem
               id={optionId}
