@@ -33,7 +33,7 @@
   </p>
   <Dropdown
     portalMenu
-    titleText="Region"
+    labelText="Region"
     selectedId="us-south"
     items={[
       { id: "us-south", text: "Dallas (us-south)" },
