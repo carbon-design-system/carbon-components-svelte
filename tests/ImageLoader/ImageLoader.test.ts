@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import { tick } from "svelte";
 import ImageLoader from "./ImageLoader.test.svelte";
 
@@ -161,5 +162,42 @@ describe("ImageLoader", () => {
 
     expect(error).toHaveBeenCalledTimes(1);
     expect(load).not.toHaveBeenCalled();
+  });
+
+  it("waits for the viewport before loading with lazy", async () => {
+    let trigger: ((isIntersecting: boolean) => void) | undefined;
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          trigger = (isIntersecting) =>
+            callback(
+              [{ isIntersecting, target: sentinel } as never],
+              this as never,
+            );
+        }
+        observe() {}
+        unobserve() {}
+      },
+    );
+    let sentinel: Element | null = null;
+    const { container } = render(ImageLoaderComponent, {
+      props: { src: validImageSrc, alt: "Logo", lazy: true },
+    });
+    sentinel = container.querySelector("span[aria-hidden]");
+
+    expect(FakeImage.instances).toHaveLength(0);
+    expect(container.querySelector("img")).toHaveAttribute("loading", "lazy");
+
+    trigger?.(false);
+    await tick();
+    expect(FakeImage.instances).toHaveLength(0);
+
+    trigger?.(true);
+    await tick();
+    expect(FakeImage.instances.map((image) => image.src)).toEqual([
+      validImageSrc,
+    ]);
+    expect(container.querySelector("span[aria-hidden]")).toBeNull();
   });
 });
