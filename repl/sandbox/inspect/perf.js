@@ -152,6 +152,23 @@ export function summarizeInteractions(entries, mutationLog) {
 }
 
 /**
+ * Merge per-batch DOM change counts into run totals keyed by source location;
+ * returns the top `limit` rows.
+ * @param {Map<string, { source: any; count: number }>} totals
+ * @param {[any, number][]} batch [source location, nodes changed]
+ */
+export function addHotspots(totals, batch, limit = 10) {
+  for (const [source, count] of batch) {
+    if (!source) continue;
+    const key = `${source.file}:${source.line}:${source.column}`;
+    const entry = totals.get(key);
+    if (entry) entry.count += count;
+    else totals.set(key, { source, count });
+  }
+  return [...totals.values()].sort((a, b) => b.count - a.count).slice(0, limit);
+}
+
+/**
  * @param {{
  *   post: (message: unknown) => void;
  *   modules: Map<string, any>;
@@ -175,6 +192,9 @@ export function createPerf({
   let pendingFrames = [];
   let flushTimer;
   let run;
+  /** @type {Map<string, { source: any; count: number }>} */
+  let hotspots = new Map();
+  let hotspotsDirty = false;
 
   function schedule() {
     if (flushTimer) return;
@@ -200,6 +220,10 @@ export function createPerf({
       attributeFrames(frames).then((items) =>
         post({ type: "perf-frames", items }),
       );
+    }
+    if (hotspotsDirty) {
+      hotspotsDirty = false;
+      post({ type: "perf-hotspots", items: addHotspots(hotspots, []) });
     }
     const cutoff = performance.now() - 10_000;
     mutationLog = mutationLog.filter(([t]) => t > cutoff);
@@ -283,6 +307,15 @@ export function createPerf({
     },
     runStart(seq) {
       run = { seq, start: performance.now() };
+      hotspots = new Map();
+      hotspotsDirty = true;
+    },
+    /** Per-source DOM change counts for one mutation batch (dev mode locations). */
+    hotspots(batch) {
+      if (!batch.length) return;
+      addHotspots(hotspots, batch);
+      hotspotsDirty = true;
+      schedule();
     },
     imported() {
       if (run) run.imported = performance.now();

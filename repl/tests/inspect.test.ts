@@ -359,3 +359,27 @@ describe("network log", () => {
     ).toBe(200_000);
   });
 });
+
+describe("DOM update hotspots", () => {
+  test("totals per source location, largest first", async () => {
+    const { addHotspots } = await import("../sandbox/inspect/perf.js");
+    const totals = new Map();
+    const table = { file: "App.svelte", line: 30, column: 5, tag: "DataTable" };
+    const button = { file: "App.svelte", line: 12, column: 5, tag: "Button" };
+    addHotspots(totals, [
+      [table, 4500],
+      [button, 1],
+      [null, 99],
+    ]);
+    const top = addHotspots(totals, [[button, 3]]);
+    expect(
+      top.map((h: { source: { tag: string }; count: number }) => [
+        h.source.tag,
+        h.count,
+      ]),
+    ).toEqual([
+      ["DataTable", 4500],
+      ["Button", 4],
+    ]);
+  });
+});

@@ -17,6 +17,7 @@ export const droppedTotal = writable(0);
 export const perfRuns = writable(/** @type {any[]} */ ([]));
 export const perfInteractions = writable(/** @type {any[]} */ ([]));
 export const perfFrames = writable(/** @type {any[]} */ ([]));
+export const perfHotspots = writable(/** @type {any[]} */ ([]));
 const MAX_PERF = 200;
 
 export function addPerf(store, items) {
@@ -27,6 +28,7 @@ export function clearPerf() {
   perfRuns.set([]);
   perfInteractions.set([]);
   perfFrames.set([]);
+  perfHotspots.set([]);
 }
 
 /** Network requests from the preview, merged start/end by id. */

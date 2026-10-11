@@ -5,8 +5,13 @@
    * scripts mapped to REPL lines.
    */
   import Tag from "carbon-components-svelte/src/Tag/Tag.svelte";
-  import { jumpTo, postToPreview } from "../state.js";
-  import { perfFrames, perfInteractions, perfRuns } from "./store.js";
+  import { devMode, jumpTo, postToPreview } from "../state.js";
+  import {
+    perfFrames,
+    perfHotspots,
+    perfInteractions,
+    perfRuns,
+  } from "./store.js";
   import ValueTree from "./ValueTree.svelte";
 
   const ms = (v) => `${Math.round(v)} ms`;
@@ -14,6 +19,9 @@
   $: run = $perfRuns.at(-1);
   $: interactions = [...$perfInteractions].reverse();
   $: frames = [...$perfFrames].reverse();
+  $: hot = $perfHotspots;
+  $: dev = $devMode;
+  $: maxHot = hot[0]?.count ?? 1;
   $: worst = $perfInteractions.reduce((m, i) => Math.max(m, i.duration), 0);
 
   function sourceLabel(source) {
@@ -84,6 +92,31 @@
       Interact with the preview; anything slower than 16 ms shows up here.
     </p>
   {/each}
+
+  <h3>
+    DOM updates by component <span class="hint">this run, in dev mode</span>
+  </h3>
+  {#if !dev}
+    <p class="empty">
+      Turn on Dev mode to see which components cause the most DOM work.
+    </p>
+  {:else}
+    {#each hot as h (h.source.file + h.source.line + h.source.column)}
+      <div class="row hot">
+        <span class="count">{h.count.toLocaleString()}</span>
+        <span
+          class="bar"
+          style:width="{Math.max(2, (h.count / maxHot) * 100)}%"
+        ></span>
+        <button type="button" class="link" on:click={() => jumpTo(h.source)}>
+          {sourceLabel(h.source)}
+        </button>
+        <span class="muted">{h.source.tag ? `<${h.source.tag}>` : ""}</span>
+      </div>
+    {:else}
+      <p class="empty">No DOM updates yet.</p>
+    {/each}
+  {/if}
 
   <h3>
     Long tasks
@@ -173,6 +206,20 @@
 
   .type {
     font-weight: 600;
+  }
+
+  .hot {
+    grid-template-columns: 4rem 6rem auto 1fr;
+  }
+
+  .count {
+    text-align: right;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  .bar {
+    height: 0.5rem;
+    background: var(--cds-interactive-01, #0f62fe);
   }
 
   .target,

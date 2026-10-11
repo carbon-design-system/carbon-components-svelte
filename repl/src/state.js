@@ -10,6 +10,7 @@ import {
   system as consoleSystem,
   netEvent,
   perfFrames,
+  perfHotspots,
   perfInteractions,
   perfRuns,
   storage as storageAreas,
@@ -157,6 +158,9 @@ function onEvent(message) {
       break;
     case "perf-interactions":
       addPerf(perfInteractions, message.items);
+      break;
+    case "perf-hotspots":
+      perfHotspots.set(message.items);
       break;
     case "perf-frames":
       addPerf(perfFrames, message.items);

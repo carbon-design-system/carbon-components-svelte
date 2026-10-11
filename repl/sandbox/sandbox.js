@@ -178,6 +178,15 @@ const nativeCloneNode = Node.prototype.cloneNode;
 Node.prototype.cloneNode = function (deep) {
   return tagClone(nativeCloneNode.call(this, deep));
 };
+// Components with a dynamic tag (svelte:element, e.g. Stack's `as`) create
+// elements directly instead of cloning a template.
+for (const method of ["createElement", "createElementNS"]) {
+  const native = Document.prototype[method];
+  Document.prototype[method] = function (...args) {
+    return tagClone(native.apply(this, args));
+  };
+}
+
 const nativeImportNode = Document.prototype.importNode;
 Document.prototype.importNode = function (node, deep) {
   return tagClone(nativeImportNode.call(this, node, deep));
@@ -626,8 +635,39 @@ function changedNodes(records) {
   return count;
 }
 
+/** Changed nodes per source location (dev mode tags), for the Perf tab's hotspots. */
+function changesBySource(records) {
+  const batch = [];
+  const at = (node) => {
+    const el = node.nodeType === 1 ? node : node.parentElement;
+    return el && el !== document.body ? locate(el) : null;
+  };
+  for (const r of records.slice(0, 500)) {
+    if (r.type !== "childList") {
+      const loc = at(r.target);
+      if (loc) batch.push([loc, 1]);
+      continue;
+    }
+    // Inserted/removed subtrees count against their own component, not the
+    // container that received them.
+    for (const nodes of [r.addedNodes, r.removedNodes]) {
+      for (const node of nodes) {
+        const loc = at(node) ?? at(r.target);
+        if (loc)
+          batch.push([
+            loc,
+            1 +
+              (node.nodeType === 1 ? node.getElementsByTagName("*").length : 0),
+          ]);
+      }
+    }
+  }
+  return batch;
+}
+
 new MutationObserver((records) => {
   perf.mutations(changedNodes(records));
+  perf.hotspots(changesBySource(records));
   scheduleAudit();
 }).observe(document.body, {
   subtree: true,
