@@ -752,16 +752,14 @@
     (calendar?.altInput ?? inputRef)?.focus();
   }
 
-  /**
-   * A form reset restores each input's DOM value without firing any event,
-   * and flatpickr's own `selectedDates` (and any `altInput` text) are
-   * untouched by the browser entirely — neither the input DOM value change
-   * nor the calendar-internal state gets pushed anywhere on its own. Read
-   * what the browser just put in the DOM (not a value captured at creation,
-   * so a value a parent sets after mount is never discarded), and push it
-   * through `calendar.setDate(...)`, the same call `afterUpdate` already
-   * uses for every other externally-set value change.
-   */
+  // A form reset restores each input's DOM value without firing any event,
+  // and flatpickr's own `selectedDates` (and any `altInput` text) are
+  // untouched by the browser entirely — neither the input DOM value change
+  // nor the calendar-internal state gets pushed anywhere on its own. Read
+  // what the browser just put in the DOM (not a value captured at creation,
+  // so a value a parent sets after mount is never discarded), and push it
+  // through `calendar.setDate(...)`, the same call `afterUpdate` already
+  // uses for every other externally-set value change.
   function handleFormReset() {
     if ($range) {
       const nextFrom = inputRef?.value ?? "";
