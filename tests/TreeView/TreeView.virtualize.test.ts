@@ -311,12 +311,12 @@ describe("TreeView (virtualize)", () => {
     expect(findRowById(focusedRowId ?? "")).toHaveAttribute("tabindex", "0");
   });
 
-  it("disconnects ResizeObserver when virtualize is turned off", async () => {
-    const disconnect = vi.fn();
+  it("stops observing the container when virtualize is turned off", async () => {
+    const unobserve = vi.fn();
     class MockResizeObserver {
       observe = vi.fn();
-      unobserve = vi.fn();
-      disconnect = disconnect;
+      unobserve = unobserve;
+      disconnect = vi.fn();
       constructor(cb: ResizeObserverCallback) {
         void cb;
       }
@@ -330,7 +330,7 @@ describe("TreeView (virtualize)", () => {
     });
     await tick();
 
-    const callsAfterMount = disconnect.mock.calls.length;
+    const callsAfterMount = unobserve.mock.calls.length;
     await rerender({
       totalRoots: 20,
       childrenPerRoot: 0,
@@ -338,8 +338,81 @@ describe("TreeView (virtualize)", () => {
     });
     await tick();
 
-    expect(disconnect.mock.calls.length).toBeGreaterThan(callsAfterMount);
+    expect(unobserve.mock.calls.length).toBeGreaterThan(callsAfterMount);
     vi.unstubAllGlobals();
+  });
+
+  it("shares one ResizeObserver across trees with a relative container height", async () => {
+    let created = 0;
+    const Base = globalThis.ResizeObserver;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class extends Base {
+        constructor(callback: ResizeObserverCallback) {
+          super(callback);
+          created++;
+        }
+      },
+    );
+    try {
+      for (let i = 0; i < 3; i++) {
+        render(TreeViewVirtualize, {
+          totalRoots: 20,
+          childrenPerRoot: 0,
+          virtualize: { containerHeight: "100%" },
+        });
+      }
+      await tick();
+      expect(created).toBe(1);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it("windows rows to the measured height of a relative container", async () => {
+    let deliver: ResizeObserverCallback = () => {};
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          deliver = callback;
+        }
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    try {
+      render(TreeViewVirtualize, {
+        totalRoots: 500,
+        childrenPerRoot: 0,
+        virtualize: { containerHeight: "100%", maxVisibleRows: 10 },
+      });
+      await tick();
+      // Until measured, the window falls back to maxVisibleRows.
+      expect(countRows()).toBe(13);
+
+      deliver(
+        [
+          {
+            target: screen.getByRole("tree"),
+            contentRect: { height: 640 },
+          },
+        ] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+      await tick();
+
+      // The window is recomputed on the next scroll: ceil(641 / 32) + the
+      // overscan of 3.
+      const tree = screen.getByRole("tree");
+      tree.scrollTop = 1;
+      tree.dispatchEvent(new Event("scroll"));
+      await tick();
+      expect(countRows()).toBe(24);
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("clamps scrollTop when the visible list shrinks past the current scroll position", async () => {
