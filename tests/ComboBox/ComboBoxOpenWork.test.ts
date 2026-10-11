@@ -101,6 +101,50 @@ describe("ComboBox open work on long lists", () => {
     });
   });
 
+  describe("typing", () => {
+    const items = Array.from({ length: 50 }, (_, i) => ({
+      id: String(i),
+      text: `Item ${i}`,
+    }));
+
+    it("does not re-render options per keystroke with the default shouldFilterItem", async () => {
+      const itemToString = vi.fn((item: { text: string }) => item.text);
+      render(ComboBox, {
+        props: { items, itemToString, placeholder: "Pick", virtualize: false },
+      });
+      await user.click(getInput());
+      expect(screen.getAllByRole("option")).toHaveLength(50);
+      itemToString.mockClear();
+
+      await user.type(getInput(), "Item 1");
+
+      expect(getInput()).toHaveValue("Item 1");
+      expect(screen.getAllByRole("option")).toHaveLength(50);
+      expect(itemToString).not.toHaveBeenCalled();
+    });
+
+    it("re-renders options per keystroke with a custom shouldFilterItem", async () => {
+      const itemToString = vi.fn((item: { text: string }) => item.text);
+      render(ComboBox, {
+        props: {
+          items,
+          itemToString,
+          placeholder: "Pick",
+          virtualize: false,
+          shouldFilterItem: (item: { text: string }, value: string) =>
+            item.text.includes(value),
+        },
+      });
+      await user.click(getInput());
+      itemToString.mockClear();
+
+      await user.type(getInput(), "Item 1");
+
+      expect(screen.getAllByRole("option")).toHaveLength(11);
+      expect(itemToString).toHaveBeenCalled();
+    });
+  });
+
   it("still maps hovered options to their position when not virtualized", async () => {
     const items = Array.from({ length: 20 }, (_, i) => ({
       id: String(i),
