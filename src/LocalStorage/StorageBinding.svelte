@@ -113,10 +113,18 @@
     }
   }
 
+  /**
+   * Remove `key` from storage.
+   * @returns {void}
+   */
   export function clearItem() {
     storage.removeItem(key);
   }
 
+  /**
+   * Clear every key in storage.
+   * @returns {void}
+   */
   export function clearAll() {
     storage.clear();
   }
