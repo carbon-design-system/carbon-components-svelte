@@ -304,8 +304,14 @@
     color: $shell-header-text-01;
   }
 
+  // ccs: `min-height` lets long labels wrap onto more lines instead of
+  // overflowing a fixed-height row; the block padding keeps wrapped text
+  // off the row edges.
   .#{$prefix}--header__menu .#{$prefix}--header__menu-item {
-    height: mini-units(6);
+    height: auto;
+    min-height: mini-units(6);
+    padding-top: $spacing-03;
+    padding-bottom: $spacing-03;
   }
 
   .#{$prefix}--header__menu .#{$prefix}--header__menu-item:hover {
