@@ -50,7 +50,7 @@
   novalidate
   on:submit={async (e) => {
     e.preventDefault();
-    const formElement = e.currentTarget;
+    const formElement = /** @type {HTMLFormElement} */ (e.currentTarget);
     submitting = true;
     form = await inviteAction(new FormData(formElement));
     submitting = false;

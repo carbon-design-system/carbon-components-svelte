@@ -18,7 +18,8 @@
   <Form
     on:submit={(e) => {
       e.preventDefault();
-      const data = new FormData(e.currentTarget);
+      const form = /** @type {HTMLFormElement} */ (e.currentTarget);
+      const data = new FormData(form);
       // One value per radio group, one entry per selected tile.
       submitted = JSON.stringify(
         { plan: data.get("plan"), addons: data.getAll("addons") },
