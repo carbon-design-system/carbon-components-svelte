@@ -245,6 +245,7 @@
     list-style-type: none; // ccs: rendered as an `li`
 
     hr {
+      margin: 0; // ccs
       border: none; // ccs
     }
   }
