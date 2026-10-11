@@ -1624,4 +1624,78 @@ describe("TabsSkeleton", () => {
       expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
     });
   });
+
+  describe("shared ResizeObserver", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("shares one ResizeObserver across instances", async () => {
+      let created = 0;
+      const Base = globalThis.ResizeObserver;
+      vi.stubGlobal(
+        "ResizeObserver",
+        class extends Base {
+          constructor(callback: ResizeObserverCallback) {
+            super(callback);
+            created++;
+          }
+        },
+      );
+      for (let i = 0; i < 3; i++) {
+        render(Tabs);
+      }
+      await tick();
+      expect(created).toBe(1);
+    });
+
+    it("measures overflow from the observer's report and stops on unmount", async () => {
+      let deliver: ResizeObserverCallback = () => {};
+      const observed = new Set<Element>();
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            deliver = callback;
+          }
+          observe(element: Element) {
+            observed.add(element);
+          }
+          unobserve(element: Element) {
+            observed.delete(element);
+          }
+          disconnect() {}
+        },
+      );
+      const { container, unmount } = render(Tabs);
+      await tick();
+
+      const nav = screen.getByRole("tablist");
+      expect(observed.has(nav)).toBe(true);
+      expect(
+        container.querySelector(".bx--tab--overflow-nav-button"),
+      ).not.toBeInTheDocument();
+
+      Object.defineProperty(nav, "scrollWidth", {
+        configurable: true,
+        value: 600,
+      });
+      Object.defineProperty(nav, "clientWidth", {
+        configurable: true,
+        value: 200,
+      });
+      deliver(
+        [{ target: nav }] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+      await tick();
+
+      expect(
+        container.querySelector(".bx--tab--overflow-nav-button--next"),
+      ).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
+
+      unmount();
+      expect(observed.size).toBe(0);
+    });
+  });
 });

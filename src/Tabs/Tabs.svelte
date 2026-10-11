@@ -85,9 +85,11 @@
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
+  import { noop } from "../utils/noop.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { createTabsInitClaims } from "../utils/tabs-init-claims.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
@@ -168,6 +170,23 @@
       clientWidth,
       forwardEpsilon: 1,
     }));
+  }
+
+  let mounted = false;
+  let stopObserving = noop;
+
+  // Observing queues a measurement that runs with every other instance's in
+  // one batch after layout, instead of forcing a layout per instance. Observing
+  // again queues a fresh one.
+  function observeOverflow() {
+    stopObserving();
+    stopObserving = refTabList
+      ? observeResize(refTabList, updateOverflow)
+      : noop;
+  }
+
+  function remeasureOverflow() {
+    if (mounted) observeOverflow();
   }
 
   // Flag to trigger DOM reordering only when tabs change.
@@ -454,10 +473,12 @@
 
   onMount(() => {
     initialClaims.close();
-    updateOverflow();
-    const observer = new ResizeObserver(updateOverflow);
-    if (refTabList) observer.observe(refTabList);
-    return () => observer.disconnect();
+    mounted = true;
+    observeOverflow();
+    return () => {
+      mounted = false;
+      stopObserving();
+    };
   });
 
   let selectedIndex = selected;
@@ -485,7 +506,7 @@
   }
   // Recompute overflow when the set of tabs changes (added/removed/relabeled).
   $: if ($tabs) {
-    tick().then(updateOverflow);
+    tick().then(remeasureOverflow);
   }
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
