@@ -60,7 +60,9 @@
     revealItem,
     scrollToSection,
   } from "../utils/active-section.js";
+  import { noop } from "../utils/noop.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
 
   const dispatch = createEventDispatcher();
@@ -254,12 +256,13 @@
     mounted = true;
 
     // Items wrap differently as the nav resizes, which moves the active row.
-    const observer = new ResizeObserver(() => scheduleMeasure());
-    if (ref) observer.observe(ref);
+    const stopObserving = ref
+      ? observeResize(ref, () => scheduleMeasure())
+      : noop;
 
     return () => {
       mounted = false;
-      observer.disconnect();
+      stopObserving();
       unbindSpy?.();
       scheduleSpy.cancel();
       scheduleMeasure.cancel();
