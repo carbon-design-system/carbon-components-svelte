@@ -208,3 +208,25 @@ describe("Svelte-aware previews", () => {
     expect(r.properties(p.id).props[0]).toMatchObject({ name: "$value" });
   });
 });
+
+describe("side-effect origin", () => {
+  test("classifies REPL, library and Svelte frames, skipping the sandbox", async () => {
+    const { classifyStack } = await import("../sandbox/inspect/origin.js");
+    const at = (url: string) =>
+      `Error\n    at window.addEventListener (http://x/sandbox/sandbox.js:1:1)\n    at fn (${url}:3:4)`;
+    expect(classifyStack(at("blob:null/abc"))).toEqual({ kind: "user" });
+    expect(
+      classifyStack(
+        at(
+          "http://x/pkg/ccs@local/svelte@5.57.1/src/utils/window-listener-pool.js",
+        ),
+      ),
+    ).toEqual({
+      kind: "library",
+      file: "src/utils/window-listener-pool.js",
+    });
+    expect(
+      classifyStack(at("http://x/pkg/svelte@5.57.1/chunk-abc.js")),
+    ).toEqual({ kind: "svelte" });
+  });
+});

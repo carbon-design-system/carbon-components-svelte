@@ -137,7 +137,7 @@ function onEvent(message) {
       consoleDropped(message.count);
       break;
     case "teardown-report":
-      consolePush(consoleSystem("info", message.text));
+      consolePush(consoleSystem(message.level ?? "info", message.text));
       break;
     case "painted":
       status.set(

@@ -6,6 +6,7 @@
 import { mount, unmount } from "svelte";
 import { STATE_SYMBOL, snapshot } from "svelte-repl-devtools";
 import { installConsole } from "./inspect/console.js";
+import { classifyStack } from "./inspect/origin.js";
 import { createRemote } from "./inspect/remote.js";
 
 const native = {
@@ -155,19 +156,38 @@ function highlightNode(node) {
 // ---------------------------------------------------------------------------
 // Side-effect tracking so a run can be torn down without reloading the document.
 
+/**
+ * Only side effects created by REPL code (blob: modules) are torn down
+ * between runs. The Svelte runtime and library modules stay evaluated in this
+ * kept-alive document and own singletons (Svelte's global form `reset`
+ * listener, its animation loop, listener pools), so clearing those would
+ * break later runs. Library listeners still registered after unmount are
+ * reported as possible leaks instead.
+ */
 const tracked = {
   timeouts: new Set(),
   intervals: new Set(),
   frames: new Set(),
+  /** @type {[Function, string, any, any, { kind: string; file?: string }][]} */
   listeners: [],
 };
 
+const PLURAL_NOUN = /(listener|frame|timeout|interval)/;
+
+/** Who created a side effect (see ./inspect/origin.js). */
+function origin() {
+  return classifyStack(new Error().stack);
+}
+
+const fromUser = () => origin().kind === "user";
+
 window.setTimeout = (fn, ms, ...args) => {
+  const user = fromUser();
   const id = native.setTimeout(() => {
     tracked.timeouts.delete(id);
     if (typeof fn === "function") fn(...args);
   }, ms);
-  tracked.timeouts.add(id);
+  if (user) tracked.timeouts.add(id);
   return id;
 };
 window.clearTimeout = (id) => {
@@ -176,7 +196,7 @@ window.clearTimeout = (id) => {
 };
 window.setInterval = (fn, ms, ...args) => {
   const id = native.setInterval(fn, ms, ...args);
-  tracked.intervals.add(id);
+  if (fromUser()) tracked.intervals.add(id);
   return id;
 };
 window.clearInterval = (id) => {
@@ -184,11 +204,12 @@ window.clearInterval = (id) => {
   native.clearInterval(id);
 };
 window.requestAnimationFrame = (fn) => {
+  const user = fromUser();
   const id = native.requestAnimationFrame((t) => {
     tracked.frames.delete(id);
     fn(t);
   });
-  tracked.frames.add(id);
+  if (user) tracked.frames.add(id);
   return id;
 };
 window.cancelAnimationFrame = (id) => {
@@ -210,8 +231,15 @@ function untrack(remove, type, listener, options) {
   if (i !== -1) tracked.listeners.splice(i, 1);
 }
 
+function track(remove, type, listener, options) {
+  const from = origin();
+  if (from.kind === "user" || from.kind === "library") {
+    tracked.listeners.push([remove, type, listener, options, from]);
+  }
+}
+
 window.addEventListener = (type, listener, options) => {
-  tracked.listeners.push([native.windowRemove, type, listener, options]);
+  track(native.windowRemove, type, listener, options);
   native.windowAdd(type, listener, options);
 };
 window.removeEventListener = (type, listener, options) => {
@@ -219,7 +247,7 @@ window.removeEventListener = (type, listener, options) => {
   native.windowRemove(type, listener, options);
 };
 document.addEventListener = (type, listener, options) => {
-  tracked.listeners.push([native.documentRemove, type, listener, options]);
+  track(native.documentRemove, type, listener, options);
   native.documentAdd(type, listener, options);
 };
 document.removeEventListener = (type, listener, options) => {
@@ -236,17 +264,26 @@ function teardown() {
     }
     current = undefined;
   }
-  const listenerTypes = [...new Set(tracked.listeners.map(([, type]) => type))];
+  const userListeners = tracked.listeners.filter(
+    ([, , , , o]) => o.kind === "user",
+  );
+  const libraryListeners = tracked.listeners.filter(
+    ([, , , , o]) => o.kind === "library",
+  );
+  const types = (list) => [...new Set(list.map(([, type]) => type))].join(", ");
   const leftovers = [
     [tracked.intervals.size, "interval"],
     [tracked.timeouts.size, "timeout"],
     [tracked.frames.size, "animation frame"],
-    [tracked.listeners.length, "window/document listener"],
+    [
+      userListeners.length,
+      `window/document listener (${types(userListeners)})`,
+    ],
   ]
     .filter(([n]) => n > 0)
     .map(
       ([n, what]) =>
-        `${n} ${what}${n === 1 ? "" : "s"}${what.endsWith("listener") ? ` (${listenerTypes.join(", ")})` : ""}`,
+        `${n} ${n === 1 ? what : what.replace(PLURAL_NOUN, "$1s")}`,
     );
   if (leftovers.length) {
     post({
@@ -254,15 +291,25 @@ function teardown() {
       text: `Cleared ${leftovers.join(", ")} left by the previous run.`,
     });
   }
+  for (const [, type, , , o] of libraryListeners) {
+    if (o.reported) continue;
+    o.reported = true;
+    post({
+      type: "teardown-report",
+      level: "warn",
+      text: `A "${type}" listener added by ${o.file} is still registered after unmount (possible leak in the library).`,
+    });
+  }
   for (const id of tracked.timeouts) native.clearTimeout(id);
   for (const id of tracked.intervals) native.clearInterval(id);
   for (const id of tracked.frames) native.cancelAnimationFrame(id);
-  for (const [remove, type, listener, options] of tracked.listeners)
+  for (const [remove, type, listener, options] of userListeners) {
     remove(type, listener, options);
+  }
   tracked.timeouts.clear();
   tracked.intervals.clear();
   tracked.frames.clear();
-  tracked.listeners = [];
+  tracked.listeners = libraryListeners;
   document.body.replaceChildren();
   for (const url of blobs) {
     URL.revokeObjectURL(url);
