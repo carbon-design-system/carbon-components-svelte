@@ -1,0 +1,35 @@
+name: Docs examples
+
+# Type-checks the docs examples against the library's types. Runs only
+# when the docs change; `checks.yml` ignores `docs/**`.
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  IBM_TELEMETRY_DISABLED: true
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci --ignore-scripts
+      - run: bun ci --ignore-scripts
+        working-directory: docs
+
+      - name: Generate types
+        run: bun run build:docs
+
+      - name: Type-check examples
+        run: bun run typecheck:examples
+        working-directory: docs
