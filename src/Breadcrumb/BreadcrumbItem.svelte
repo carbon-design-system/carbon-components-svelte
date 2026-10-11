@@ -13,7 +13,7 @@
    * </BreadcrumbItem>
    * ```
    * @restProps {li}
-   * @slot {{props?: { "aria-current"?: string; class: "bx--link"; }}}
+   * @slot {{props?: { "aria-current"?: boolean | "true" | "false" | "page" | "step" | "location" | "date" | "time"; class: "bx--link"; }}}
    */
 
   /**
