@@ -50,6 +50,29 @@ describe("ContentSwitcher", () => {
     expect(tabs[2]).toHaveAttribute("tabindex", "-1");
   });
 
+  // Selection must be in the first render. Committing it a microtask later
+  // fades the fill in if anything recalculates styles in between.
+  it("renders the initial selection synchronously on mount", () => {
+    render(ContentSwitcher);
+    expect(screen.getAllByRole("tab")[0]).toHaveClass(
+      "bx--content-switcher--selected",
+    );
+  });
+
+  it("renders a mount-time `selected` Switch synchronously", () => {
+    render(ContentSwitcherSwitchSelected, { props: { second: true } });
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
+    expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
+  });
+
+  it("renders the initial selectedId synchronously", () => {
+    render(ContentSwitcherSelectedId, { props: { selectedId: "switch-b" } });
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
+    expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
+  });
+
   it("renders with different sizes", () => {
     render(ContentSwitcherSize);
 
