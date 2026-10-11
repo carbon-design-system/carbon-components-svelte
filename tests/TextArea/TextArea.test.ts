@@ -505,6 +505,76 @@ describe("TextArea", () => {
     });
   });
 
+  describe("shared ResizeObserver", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("shares one ResizeObserver across instances", async () => {
+      let created = 0;
+      const Base = globalThis.ResizeObserver;
+      vi.stubGlobal(
+        "ResizeObserver",
+        class extends Base {
+          constructor(callback: ResizeObserverCallback) {
+            super(callback);
+            created++;
+          }
+        },
+      );
+      for (let i = 0; i < 3; i++) {
+        render(TextArea, { props: { grow: true } });
+      }
+      await tick();
+      expect(created).toBe(1);
+    });
+
+    it("re-fits the height when the observer reports a new width and stops on unmount", async () => {
+      let deliver: ResizeObserverCallback = () => {};
+      const observed = new Set<Element>();
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            deliver = callback;
+          }
+          observe(element: Element) {
+            observed.add(element);
+          }
+          unobserve(element: Element) {
+            observed.delete(element);
+          }
+          disconnect() {}
+        },
+      );
+      const { unmount } = render(TextArea, { props: { grow: true } });
+      await tick();
+
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      expect(observed.has(textarea)).toBe(true);
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      Object.defineProperty(textarea, "scrollHeight", {
+        configurable: true,
+        value: 90,
+      });
+      expect(textarea.style.height).not.toBe("90px");
+      deliver(
+        [
+          { target: textarea, contentRect: { width: 300 } },
+        ] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      expect(textarea.style.height).toBe("90px");
+
+      unmount();
+      expect(observed.size).toBe(0);
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(TextArea);

@@ -117,8 +117,10 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
+  import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -244,21 +246,22 @@
   onMount(() => {
     if (typeof ResizeObserver === "undefined") return;
 
-    const observer = new ResizeObserver(([entry]) => {
-      const { width } = entry.contentRect;
-      if (grow && width !== lastWidth) {
-        lastWidth = width;
-        scheduleResize();
-      }
-    });
-    if (ref) observer.observe(ref);
+    const stopObserving = ref
+      ? observeResize(ref, (entry) => {
+          const { width } = entry.contentRect;
+          if (grow && width !== lastWidth) {
+            lastWidth = width;
+            scheduleResize();
+          }
+        })
+      : noop;
 
     document.fonts?.ready?.then(() => {
       if (grow) scheduleResize();
     });
 
     return () => {
-      observer.disconnect();
+      stopObserving();
       scheduleResize.cancel();
     };
   });
