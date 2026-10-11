@@ -4,13 +4,16 @@
   import Select from "carbon-components-svelte/src/Select/Select.svelte";
   import SelectItem from "carbon-components-svelte/src/Select/SelectItem.svelte";
   import Tag from "carbon-components-svelte/src/Tag/Tag.svelte";
+  import Toggle from "carbon-components-svelte/src/Toggle/Toggle.svelte";
   import Header from "carbon-components-svelte/src/UIShell/Header.svelte";
   import { examples } from "./examples.js";
   import {
     defaultFiles,
+    devMode,
     href,
     loadExample,
     metrics,
+    setDevMode,
     setTheme,
     status,
     theme,
@@ -20,6 +23,7 @@
 
   let example = "";
   let selectedTheme = $theme;
+  let dev = $devMode;
 
   $: if (example) {
     const match = examples.find((e) => e.id === example);
@@ -28,6 +32,7 @@
   }
 
   $: setTheme(selectedTheme);
+  $: setDevMode(dev);
   $: link = $href;
   $: m = $metrics;
   $: state = $status;
@@ -55,6 +60,20 @@
       <SelectItem value={t} text={t} />
     {/each}
   </Select>
+
+  <div
+    class="dev"
+    title="Svelte dev checks, and Alt+click in the preview to jump to source"
+  >
+    <Toggle
+      size="sm"
+      labelText="Dev mode"
+      labelA="Dev mode"
+      labelB="Dev mode"
+      hideLabel
+      bind:toggled={dev}
+    />
+  </div>
 
   <CopyButton text={link} iconDescription="Copy link" feedback="Link copied" />
 
@@ -114,6 +133,10 @@
 
   /* Carbon's .bx--form-item grows (flex: 1 1 auto); keep the controls packed. */
   .toolbar > :global(.bx--form-item) {
+    flex: none;
+  }
+
+  .dev {
     flex: none;
   }
 

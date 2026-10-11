@@ -88,8 +88,13 @@ function compactMap(map, name) {
     : undefined;
 }
 
-function compileFile(name, source) {
-  const key = `${name}\0${source}`;
+// Dev mode: route component render calls through the preview's hook so DOM
+// created by (prod-compiled) Carbon components is tagged with the user's
+// `<Component>` location. Same line, so source maps stay aligned.
+const SVELTE_META_CALL = /\$\.add_svelte_meta\(/g;
+
+function compileFile(name, source, dev = false) {
+  const key = `${name}\0${dev}\0${source}`;
   const hit = cache.get(key);
   if (hit) return hit;
   let out;
@@ -97,11 +102,16 @@ function compileFile(name, source) {
     const r = compile(source, {
       filename: name,
       generate: "client",
-      dev: false,
+      dev,
       css: "injected",
     });
     out = {
-      code: r.js.code,
+      code: dev
+        ? r.js.code.replace(
+            SVELTE_META_CALL,
+            "globalThis.__replMeta($.add_svelte_meta, $.FILENAME, ",
+          )
+        : r.js.code,
       map: compactMap(r.js.map, name),
       warnings: r.warnings,
     };
@@ -109,7 +119,7 @@ function compileFile(name, source) {
     const r = compileModule(source, {
       filename: name,
       generate: "client",
-      dev: false,
+      dev,
     });
     out = {
       code: r.js.code,
@@ -133,29 +143,26 @@ const NAMESPACE_IMPORT = /^\*\s*as\s+([\w$]+)$/;
 const BRACE_CLAUSE = /\{([^}]*)\}/;
 const AS_SEPARATOR = /\s+as\s+/;
 const ICON_DEEP_IMPORT = /^carbon-icons-svelte\/lib\/([\w]+)\.svelte$/;
-const WS_OR_COMMENT = /\s+|\/\/[^\n]*|\/\*[\s\S]*?\*\//y;
-const IMPORT = /import\s*(?:([^'"`;]*?)\s*from\s*)?(['"])([^'"\n]+)\2\s*;?/y;
+const IMPORT_LINE =
+  /^import\s*(?:([^'"`;]*?)\s*from\s*)?(['"])([^'"\n]+)\2\s*;?/gm;
+const EXPORT_DEFAULT = /^export default /m;
 
-/** Parses the leading import block (compiled output always hoists imports to the top). */
+/**
+ * Import statements at the start of a line, before the module's
+ * `export default`. Compiled output hoists imports there, though dev builds
+ * interleave statements like `App[$.FILENAME] = …` between them.
+ */
 function leadingImports(code) {
+  const limit = code.search(EXPORT_DEFAULT);
+  const region = limit === -1 ? code : code.slice(0, limit);
   const imports = [];
-  let i = 0;
-  for (;;) {
-    WS_OR_COMMENT.lastIndex = i;
-    while (WS_OR_COMMENT.test(code)) {
-      i = WS_OR_COMMENT.lastIndex;
-      WS_OR_COMMENT.lastIndex = i;
-    }
-    IMPORT.lastIndex = i;
-    const m = IMPORT.exec(code);
-    if (!m) break;
+  for (const m of region.matchAll(IMPORT_LINE)) {
     imports.push({
-      start: i,
-      end: IMPORT.lastIndex,
+      start: m.index,
+      end: m.index + m[0].length,
       clause: m[1]?.trim() ?? "",
       specifier: m[3],
     });
-    i = IMPORT.lastIndex;
   }
   return imports;
 }
@@ -235,7 +242,7 @@ function build(job, manifest, icons, api) {
   for (const file of job.files) {
     let compiled;
     try {
-      compiled = compileFile(file.name, file.source);
+      compiled = compileFile(file.name, file.source, !!job.dev);
     } catch (e) {
       error(file.name, e.message, e.start, e.end);
       continue;

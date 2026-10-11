@@ -190,7 +190,13 @@ ${"<"}/script>
           repl.compile = (files) => {
             seq += 1;
             sentAt.set(seq, performance.now());
-            worker.postMessage({ type: "compile", seq, entry: repl.entry, files });
+            worker.postMessage({
+              type: "compile",
+              seq,
+              entry: repl.entry,
+              files,
+              dev: !!repl.options.dev,
+            });
             return seq;
           };
           repl.post = (message) => shell.port1.postMessage(message);

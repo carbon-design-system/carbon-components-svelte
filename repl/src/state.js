@@ -16,6 +16,8 @@ export const files = writable(
 );
 export const active = writable(0);
 export const theme = writable("white");
+/** Dev mode: compile REPL files with Svelte dev checks and element locations. */
+export const devMode = writable(false);
 export const status = writable(
   /** @type {"compiling" | "ready" | "error"} */ ("compiling"),
 );
@@ -42,6 +44,7 @@ export function init(repl) {
   boot = repl;
   files.set(repl.files.map((f) => ({ ...f })));
   theme.set(repl.options.theme);
+  devMode.set(!!repl.options.dev);
   href.set(location.href);
   repl.subscribe(onEvent);
   const v = repl.versions;
@@ -136,6 +139,9 @@ function onEvent(message) {
     case "logs-dropped":
       consoleDropped(message.count);
       break;
+    case "jump":
+      jumpTo(message);
+      break;
     case "teardown-report":
       consolePush(consoleSystem(message.level ?? "info", message.text));
       break;
@@ -211,7 +217,7 @@ function scheduleHash(push = false) {
       const hash = await encodeHash(boot.hashPrefix, {
         files: get(files),
         versions: boot.versions,
-        options: { theme: get(theme) },
+        options: { theme: get(theme), ...(get(devMode) ? { dev: true } : {}) },
       });
       if (seq !== hashSeq) return;
       const url = `${location.pathname}${location.search}#${hash}`;
@@ -255,6 +261,13 @@ export function removeFile(index) {
   files.set(list.filter((_, i) => i !== index));
   active.set(0);
   scheduleCompile();
+}
+
+export function setDevMode(value) {
+  if (value === get(devMode)) return;
+  devMode.set(value);
+  boot.options.dev = value;
+  compileNow();
 }
 
 export function setTheme(value) {

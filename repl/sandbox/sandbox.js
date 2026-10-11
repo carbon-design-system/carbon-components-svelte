@@ -121,6 +121,117 @@ async function evaluate(code) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Dev mode: element → source. Dev-compiled REPL code calls __replMeta around
+// each `<Component>` render; DOM cloned meanwhile (including prod-compiled
+// Carbon components) is tagged with that location. Alt+click jumps there.
+
+const metaStack = [];
+
+globalThis.__replMeta = (
+  original,
+  FILENAME,
+  callback,
+  type,
+  component,
+  line,
+  column,
+  extra,
+) => {
+  if (type !== "component")
+    return original(callback, type, component, line, column, extra);
+  metaStack.push({
+    file: component[FILENAME],
+    line,
+    column: column + 1,
+    name: extra?.componentTag,
+  });
+  try {
+    return original(callback, type, component, line, column, extra);
+  } finally {
+    metaStack.pop();
+  }
+};
+
+function tagClone(node) {
+  const loc = metaStack.at(-1);
+  if (!loc || !node) return node;
+  if (node.nodeType === 11) {
+    for (const child of node.children) child.__repl_loc ??= loc;
+  } else if (node.nodeType === 1) {
+    node.__repl_loc ??= loc;
+  }
+  return node;
+}
+
+const nativeCloneNode = Node.prototype.cloneNode;
+Node.prototype.cloneNode = function (deep) {
+  return tagClone(nativeCloneNode.call(this, deep));
+};
+const nativeImportNode = Document.prototype.importNode;
+Document.prototype.importNode = function (node, deep) {
+  return tagClone(nativeImportNode.call(this, node, deep));
+};
+
+/** Nearest source location for an element: own template, or the component call that rendered it. */
+function locate(element) {
+  for (let el = element; el && el !== document.body; el = el.parentElement) {
+    const meta = el.__svelte_meta?.loc;
+    if (meta)
+      return {
+        file: meta.file,
+        line: meta.line,
+        column: meta.column + 1,
+        tag: el.tagName.toLowerCase(),
+      };
+    if (el.__repl_loc) return { ...el.__repl_loc, tag: el.__repl_loc.name };
+  }
+  return null;
+}
+
+let inspecting = false;
+
+native.documentAdd(
+  "keydown",
+  (e) => {
+    if (e.key === "Alt") inspecting = true;
+  },
+  true,
+);
+native.documentAdd(
+  "keyup",
+  (e) => {
+    if (e.key === "Alt") {
+      inspecting = false;
+      highlightNode(null);
+    }
+  },
+  true,
+);
+native.documentAdd(
+  "mousemove",
+  (e) => {
+    const active = inspecting || e.altKey;
+    if (!active) return;
+    const el = /** @type {Element} */ (e.target);
+    highlightNode(locate(el) ? el : null);
+  },
+  true,
+);
+native.documentAdd(
+  "click",
+  (e) => {
+    if (!e.altKey) return;
+    const loc = locate(/** @type {Element} */ (e.target));
+    if (!loc) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    highlightNode(null);
+    post({ type: "jump", ...loc });
+  },
+  true,
+);
+
 let overlay;
 
 /** Outline a logged DOM node in the preview while its log entry is hovered. */
