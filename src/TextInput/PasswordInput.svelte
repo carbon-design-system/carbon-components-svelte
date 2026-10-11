@@ -212,29 +212,34 @@
   on:mouseleave
 >
   {#if inline}
-    <label
-      for={id}
-      class:bx--label={true}
-      class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}
-      class:bx--label--inline={inline}
-      class:bx--label--inline--xs={inline && effectiveSize === "xs"}
-      class:bx--label--inline--sm={inline && effectiveSize === "sm"}
-      class:bx--label--inline--xl={inline && effectiveSize === "xl"}
-      class:bx--label--slotted={isFluid && $$slots.labelChildren}
+    <div
+      class:bx--text-input__label-helper-wrapper={true}
+      class:bx--visually-hidden={hideLabel && !helperText}
     >
-      <slot name="labelChildren"> {labelText} </slot>
-    </label>
-    {#if !isFluid && helperText}
-      <div
-        id={helperId}
-        class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
-        class:bx--form__helper-text--inline={inline}
+      <label
+        for={id}
+        class:bx--label={true}
+        class:bx--visually-hidden={hideLabel}
+        class:bx--label--disabled={disabled}
+        class:bx--label--inline={inline}
+        class:bx--label--inline--xs={inline && effectiveSize === "xs"}
+        class:bx--label--inline--sm={inline && effectiveSize === "sm"}
+        class:bx--label--inline--xl={inline && effectiveSize === "xl"}
+        class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
-        {helperText}
-      </div>
-    {/if}
+        <slot name="labelChildren"> {labelText} </slot>
+      </label>
+      {#if !isFluid && helperText}
+        <div
+          id={helperId}
+          class:bx--form__helper-text={true}
+          class:bx--form__helper-text--disabled={disabled}
+          class:bx--form__helper-text--inline={inline}
+        >
+          {helperText}
+        </div>
+      {/if}
+    </div>
   {/if}
   {#if !inline && (labelText || $$slots.labelChildren)}
     <label
