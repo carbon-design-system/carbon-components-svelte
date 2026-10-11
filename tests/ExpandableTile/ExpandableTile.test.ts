@@ -502,4 +502,70 @@ describe("ExpandableTile", () => {
       globalThis.ResizeObserver = OriginalResizeObserver;
     }
   });
+
+  describe("shared ResizeObserver", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("shares one ResizeObserver across tiles", async () => {
+      let created = 0;
+      const Base = globalThis.ResizeObserver;
+      vi.stubGlobal(
+        "ResizeObserver",
+        class extends Base {
+          constructor(callback: ResizeObserverCallback) {
+            super(callback);
+            created++;
+          }
+        },
+      );
+      for (let i = 0; i < 3; i++) {
+        render(ExpandableTile);
+      }
+      await tick();
+      expect(created).toBe(1);
+    });
+
+    it("sizes the collapsed tile from the above-the-fold height the observer reports", async () => {
+      let deliver: ResizeObserverCallback = () => {};
+      const observed = new Set<Element>();
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            deliver = callback;
+          }
+          observe(element: Element) {
+            observed.add(element);
+          }
+          unobserve(element: Element) {
+            observed.delete(element);
+          }
+          disconnect() {}
+        },
+      );
+      const { unmount } = render(ExpandableTile);
+      await tick();
+
+      const tile = screen.getByRole("button");
+      const above = tile.querySelector(".bx--tile-content");
+      assert(above);
+      expect(observed.has(above)).toBe(true);
+      expect(observed.has(tile)).toBe(true);
+      expect(tile.getAttribute("style")).toBe("max-height: none;");
+
+      deliver(
+        [
+          { target: above, contentRect: { height: 120 } },
+        ] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+      await tick();
+      expect(tile.getAttribute("style")).toBe("max-height: 120px;");
+
+      unmount();
+      expect(observed.size).toBe(0);
+    });
+  });
 });
