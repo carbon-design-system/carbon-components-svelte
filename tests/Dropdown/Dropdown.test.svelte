@@ -22,6 +22,7 @@
   export let warn: ComponentProps<Dropdown>["warn"] = false;
   export let warnText: ComponentProps<Dropdown>["warnText"] = "";
   export let helperText: ComponentProps<Dropdown>["helperText"] = "";
+  export let placeholder: ComponentProps<Dropdown>["placeholder"] = undefined;
   export let label: ComponentProps<Dropdown>["label"] = undefined;
   export let hideLabel: ComponentProps<Dropdown>["hideLabel"] = false;
   export let translateWithId: ComponentProps<Dropdown>["translateWithId"] =
@@ -64,6 +65,7 @@
   {warn}
   {warnText}
   {helperText}
+  {placeholder}
   {label}
   {hideLabel}
   {translateWithId}
