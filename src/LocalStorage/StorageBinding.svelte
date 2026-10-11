@@ -7,6 +7,7 @@
   /** @type {"localStorage" | "sessionStorage"} */
   export let storageType;
 
+  /** @type {string} */
   export let key;
 
   /** @type {any} */
