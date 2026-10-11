@@ -26,11 +26,14 @@
     z-index: 0;
     display: inline-flex;
     min-width: 0;
-    height: to-rem(40px);
+    // `min-height` so a label that wraps grows the segment instead of
+    // overflowing it; the group's default `align-items: stretch` keeps every
+    // segment the height of the tallest.
+    min-height: to-rem(40px);
     align-items: center;
     justify-content: center;
     column-gap: $carbon--spacing-03;
-    padding: 0 $carbon--spacing-05;
+    padding: $carbon--spacing-02 $carbon--spacing-05;
     background-color: $field-01;
     color: $text-02;
     cursor: pointer;
@@ -186,7 +189,7 @@
   }
 
   .#{$prefix}--toggle-button-group--sm .#{$prefix}--toggle-button {
-    height: to-rem(32px);
+    min-height: to-rem(32px);
   }
 
   .#{$prefix}--toggle-button-group--sm .#{$prefix}--toggle-button--icon-only {
@@ -194,7 +197,7 @@
   }
 
   .#{$prefix}--toggle-button-group--lg .#{$prefix}--toggle-button {
-    height: to-rem(48px);
+    min-height: to-rem(48px);
   }
 
   .#{$prefix}--toggle-button-group--lg .#{$prefix}--toggle-button--icon-only {
