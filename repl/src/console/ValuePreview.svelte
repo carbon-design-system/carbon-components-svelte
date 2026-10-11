@@ -8,6 +8,9 @@
   export let nested = false;
 </script>
 
+{#if value?.badge}
+  <span class="badge">{value.badge}</span>
+{/if}
 {#if !value}
   <span class="v-undefined">undefined</span>
 {:else if value.t === "string"}
@@ -35,6 +38,18 @@
 {/if}
 
 <style>
+  .badge {
+    display: inline-block;
+    margin-right: 0.25rem;
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-size: 0.625rem;
+    line-height: 1rem;
+    color: var(--cds-text-04, #fff);
+    background: var(--cds-interactive-01, #0f62fe);
+    vertical-align: 1px;
+  }
+
   .v-text {
     white-space: pre-wrap;
   }

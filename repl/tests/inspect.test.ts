@@ -176,3 +176,35 @@ describe("console flood", () => {
     expect(posted.at(-1)).toEqual({ type: "logs-dropped", count: 3000 });
   });
 });
+
+describe("Svelte-aware previews", () => {
+  test("$state proxies get a badge and preview their snapshot", () => {
+    const STATE = Symbol("$state");
+    const target = { count: 2 };
+    const proxy = new Proxy(target, {
+      has: (t, k) => k === STATE || k in t,
+    });
+    const r = createRemote({
+      stateSymbol: STATE,
+      snapshot: (v) => ({ ...(v as object) }),
+    });
+    expect(r.preview(proxy)).toMatchObject({
+      badge: "$state",
+      desc: "{count: 2}",
+    });
+    expect(r.preview({ count: 2 })).not.toHaveProperty("badge");
+  });
+
+  test("stores preview their current value and expand to $value", async () => {
+    const { writable } = await import("svelte/store");
+    const store = writable({ open: true });
+    const r = createRemote();
+    const p = r.preview(store) as { id: number; badge: string; desc: string };
+    expect(p).toMatchObject({
+      badge: "store",
+      sub: "store",
+      desc: "{open: true}",
+    });
+    expect(r.properties(p.id).props[0]).toMatchObject({ name: "$value" });
+  });
+});

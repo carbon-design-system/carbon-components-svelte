@@ -168,11 +168,22 @@ async function bundle(
   return { map, files };
 }
 
+/**
+ * Preview-only runtime hooks: Svelte doesn't export the `$state` proxy
+ * symbol, so this entry re-exports it from the same constants module the
+ * runtime chunk uses (one bundle, one Symbol) along with `snapshot`.
+ */
+const DEVTOOLS_RUNTIME = "svelte-repl-devtools";
+
 function buildRuntime() {
-  return bundle(
-    RUNTIME_SPECIFIERS,
-    RUNTIME_DIR,
-    (s) => `export * from "${s}";\n`,
+  const constants = join(
+    ROOT,
+    "node_modules/svelte/src/internal/client/constants.js",
+  );
+  return bundle([...RUNTIME_SPECIFIERS, DEVTOOLS_RUNTIME], RUNTIME_DIR, (s) =>
+    s === DEVTOOLS_RUNTIME
+      ? `export { STATE_SYMBOL } from ${JSON.stringify(constants)};\nexport { snapshot } from "svelte/internal/client";\n`
+      : `export * from "${s}";\n`,
   );
 }
 

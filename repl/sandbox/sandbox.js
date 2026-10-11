@@ -4,6 +4,7 @@
 // The document is kept alive between runs: library modules stay evaluated and
 // all.css stays parsed; only the user's modules are re-imported.
 import { mount, unmount } from "svelte";
+import { STATE_SYMBOL, snapshot } from "svelte-repl-devtools";
 import { installConsole } from "./inspect/console.js";
 import { createRemote } from "./inspect/remote.js";
 
@@ -31,7 +32,7 @@ let runs = 0;
 const preloaded = new Set();
 /** Blob URL → REPL module name + source map, for mapping stack frames. */
 const modules = new Map();
-const remote = createRemote();
+const remote = createRemote({ stateSymbol: STATE_SYMBOL, snapshot });
 /** Messages posted before the shell port arrives. */
 let pending = [];
 
@@ -235,6 +236,7 @@ function teardown() {
     }
     current = undefined;
   }
+  const listenerTypes = [...new Set(tracked.listeners.map(([, type]) => type))];
   const leftovers = [
     [tracked.intervals.size, "interval"],
     [tracked.timeouts.size, "timeout"],
@@ -242,7 +244,10 @@ function teardown() {
     [tracked.listeners.length, "window/document listener"],
   ]
     .filter(([n]) => n > 0)
-    .map(([n, what]) => `${n} ${what}${n === 1 ? "" : "s"}`);
+    .map(
+      ([n, what]) =>
+        `${n} ${what}${n === 1 ? "" : "s"}${what.endsWith("listener") ? ` (${listenerTypes.join(", ")})` : ""}`,
+    );
   if (leftovers.length) {
     post({
       type: "teardown-report",

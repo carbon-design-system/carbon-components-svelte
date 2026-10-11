@@ -16,7 +16,11 @@ const TYPED_ARRAY = Object.getPrototypeOf(Int8Array);
  *   | { t: "object"; id: number; sub: string; cls: string; desc: string; size?: number; source?: unknown }} Preview
  */
 
-export function createRemote() {
+/**
+ * @param {{ stateSymbol?: symbol; snapshot?: (value: unknown) => unknown }} [svelte]
+ *   Svelte runtime hooks, so `$state` proxies and stores preview as what they hold.
+ */
+export function createRemote(svelte = {}) {
   /** @type {Map<number, unknown>} */
   const handles = new Map();
   let nextId = 1;
@@ -49,6 +53,29 @@ export function createRemote() {
     }
     if (value === null) return { t: "null" };
     const sub = subtype(value);
+    if (isState(value)) {
+      const plain = svelte.snapshot ? svelte.snapshot(value) : value;
+      return {
+        t: "object",
+        id: handle(value),
+        sub,
+        cls: className(plain, sub),
+        desc: describe(plain, subtype(plain), 1),
+        size: sizeOf(value, sub),
+        badge: "$state",
+      };
+    }
+    if (isStore(value)) {
+      const current = readStore(value);
+      return {
+        t: "object",
+        id: handle(value),
+        sub: "store",
+        cls: "Store",
+        desc: current.ok ? describeValue(current.value) : "(unreadable)",
+        badge: "store",
+      };
+    }
     return {
       t: "object",
       id: handle(value),
@@ -57,6 +84,15 @@ export function createRemote() {
       desc: describe(value, sub, 1),
       size: sizeOf(value, sub),
     };
+  }
+
+  function isState(value) {
+    if (!svelte.stateSymbol || typeof value !== "object") return false;
+    try {
+      return svelte.stateSymbol in value;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -90,7 +126,13 @@ export function createRemote() {
         props.push({ name: String(i), value: preview(value[i]) });
       return { props };
     }
-    if (sub === "map") {
+    if (isStore(value)) {
+      const current = readStore(value);
+      props.push({
+        name: "$value",
+        value: current.ok ? preview(current.value) : { t: "undefined" },
+      });
+    } else if (sub === "map") {
       let i = 0;
       for (const [k, v] of value) {
         props.push({ name: String(i++), entry: [preview(k), preview(v)] });
@@ -194,6 +236,38 @@ export function createRemote() {
     has: (id) => handles.has(id),
     clear: () => handles.clear(),
   };
+}
+
+/** A Svelte store: anything with a subscribe function. */
+export function isStore(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    typeof value.subscribe === "function"
+  );
+}
+
+/** Current store value, read synchronously like `get()` from svelte/store. */
+export function readStore(store) {
+  let value;
+  let ok = false;
+  try {
+    const unsubscribe = store.subscribe((v) => {
+      value = v;
+      ok = true;
+    });
+    if (typeof unsubscribe === "function") unsubscribe();
+    else unsubscribe?.unsubscribe?.();
+  } catch {
+    ok = false;
+  }
+  return { ok, value };
+}
+
+function describeValue(v) {
+  return (v !== null && typeof v === "object") || typeof v === "function"
+    ? describe(v, subtype(v), 1)
+    : primitive(v);
 }
 
 export function subtype(value) {

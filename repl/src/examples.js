@@ -230,6 +230,35 @@ ${SCRIPT_END}
     ],
   },
   {
+    id: "state-stores",
+    label: "State & stores in the console",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, Stack } from "carbon-components-svelte";
+  import { writable } from "svelte/store";
+
+  let todos = $state([{ text: "Write docs", done: false }]);
+  let remaining = $derived(todos.filter((t) => !t.done).length);
+  const theme = writable({ name: "g100", contrast: "high" });
+
+  function add() {
+    todos.push({ text: \`Task \${todos.length + 1}\`, done: false });
+    console.log("todos", todos, "remaining", remaining);
+  }
+${SCRIPT_END}
+
+<Stack gap={5}>
+  <Button onclick={add}>Add a todo and log $state</Button>
+  <Button kind="secondary" onclick={() => console.log("theme store", theme)}>Log a store</Button>
+  <p>{remaining} remaining</p>
+</Stack>
+`,
+      },
+    ],
+  },
+  {
     id: "carbon-lint",
     label: "Carbon usage lint",
     files: [
@@ -243,7 +272,7 @@ ${SCRIPT_END}
 
 <TextInput lableText="Name" bind:vlaue={value} on:chnage={() => {}} />
 
-<Tag kind="red">Typo in a prop with no attribute fallback</Tag>
+<Tag typ="red">Typo in a short prop name</Tag>
 
 <Tab label="Outside its Tabs" />
 
