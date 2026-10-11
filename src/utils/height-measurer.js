@@ -1,5 +1,7 @@
 // @ts-check
 
+import { observeResize } from "./shared-observer.js";
+
 /**
  * Attribute a virtualized component stamps on every element in its window,
  * carrying the index of the item it renders. Measured heights are attributed
@@ -61,10 +63,11 @@ function readIndex(node) {
  * shape `virtualize.js` takes as `heights`. They carry the heights they replace
  * so a caller can work out how far the options above the viewport moved.
  *
- * One observer covers the whole window rather than one per element. Besides
- * being cheaper, it catches height changes no render pass would reveal: a web
- * font swapping in, a container resize, or the reader changing browser zoom
- * with the window still on screen.
+ * The whole window is observed on the shared observer rather than on one
+ * observer per element or per measurer. Besides being cheaper, it catches
+ * height changes no render pass would reveal: a web font swapping in, a
+ * container resize, or the reader changing browser zoom with the window still
+ * on screen.
  *
  * A batch is held until the next animation frame rather than reported from
  * inside the observer's callback. Acting on heights moves the window, since the
@@ -92,10 +95,13 @@ function readIndex(node) {
 export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
   /** @type {number[]} Indexed by item, sparse where unmeasured. */
   let heights = [];
-  /** @type {Set<Element>} */
-  const observed = new Set();
-  /** @type {ResizeObserver | null} */
-  let observer = null;
+  /**
+   * The elements being observed, each with its way to stop.
+   * @type {Map<Element, () => void>}
+   */
+  const observed = new Map();
+  /** Whether measuring is on: set by `sync`, cleared by `disconnect`. */
+  let active = false;
   /**
    * Heights measured since the last frame, by item index. A Map so a second
    * batch reporting the same option supersedes the first rather than queueing
@@ -133,27 +139,25 @@ export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
     batched = null;
     // A frame can still be pending when the caller tears the measurer down.
     // Dropping those measurements beats writing into a destroyed component.
-    if (observer === null || measurements === null) return;
+    if (!active || measurements === null) return;
     record(measurements);
   }
 
-  /** @param {ResizeObserverEntry[]} entries */
-  function handleResize(entries) {
-    if (observer === null) return;
+  /** @param {ResizeObserverEntry} entry */
+  function handleResize(entry) {
+    if (!active) return;
 
-    for (const entry of entries) {
-      // An element leaving the window is reported as a resize to nothing on
-      // its way out. Zero is a real height for one still in the document; for
-      // one that has left it only reports the removal.
-      if (!entry.target.isConnected || !observed.has(entry.target)) continue;
-      const index = readIndex(entry.target);
-      if (index < 0) continue;
-      batched ??= new Map();
-      const margins = includeMargins ? readVerticalMargins(entry.target) : 0;
-      batched.set(index, readEntryHeight(entry) + margins);
-    }
+    // An element leaving the window is reported as a resize to nothing on
+    // its way out. Zero is a real height for one still in the document; for
+    // one that has left it only reports the removal.
+    if (!entry.target.isConnected || !observed.has(entry.target)) return;
+    const index = readIndex(entry.target);
+    if (index < 0) return;
+    batched ??= new Map();
+    const margins = includeMargins ? readVerticalMargins(entry.target) : 0;
+    batched.set(index, readEntryHeight(entry) + margins);
 
-    if (batched === null || frame !== 0) return;
+    if (frame !== 0) return;
     frame = requestAnimationFrame(flush);
   }
 
@@ -171,7 +175,7 @@ export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
   /** Stop observing every element, dropping any batch not yet reported. */
   function unobserveAll() {
     cancelBatch();
-    observer?.disconnect();
+    for (const stop of observed.values()) stop();
     observed.clear();
   }
 
@@ -210,22 +214,19 @@ export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
       return;
     }
 
-    if (observer === null) {
-      observer = new ResizeObserver(handleResize);
-    }
+    active = true;
 
     const rendered = new Set(elements);
 
-    for (const element of observed) {
+    for (const [element, stop] of observed) {
       if (rendered.has(element)) continue;
-      observer.unobserve(element);
+      stop();
       observed.delete(element);
     }
 
     for (const element of rendered) {
       if (observed.has(element)) continue;
-      observer.observe(element);
-      observed.add(element);
+      observed.set(element, observeResize(element, handleResize));
     }
   }
 
@@ -251,7 +252,7 @@ export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
   /** Stop observing for good. Measurements are kept but never updated again. */
   function disconnect() {
     unobserveAll();
-    observer = null;
+    active = false;
   }
 
   return { sync, clear, disconnect };
