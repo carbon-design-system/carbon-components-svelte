@@ -299,4 +299,75 @@ describe("TableOfContents", () => {
       "bx--toc__bar--animated",
     );
   });
+
+  describe("shared ResizeObserver", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("shares one ResizeObserver across instances", async () => {
+      let created = 0;
+      const Base = globalThis.ResizeObserver;
+      vi.stubGlobal(
+        "ResizeObserver",
+        class extends Base {
+          constructor(callback: ResizeObserverCallback) {
+            super(callback);
+            created++;
+          }
+        },
+      );
+      for (let i = 0; i < 3; i++) {
+        render(TableOfContents, { noScrollSpy: true });
+      }
+      await nextFrame();
+      expect(created).toBe(1);
+    });
+
+    it("re-places the bar when the observer reports the nav resized and stops on unmount", async () => {
+      let deliver: ResizeObserverCallback = () => {};
+      const observed = new Set<Element>();
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            deliver = callback;
+          }
+          observe(element: Element) {
+            observed.add(element);
+          }
+          unobserve(element: Element) {
+            observed.delete(element);
+          }
+          disconnect() {}
+        },
+      );
+      const offsetHeight = vi
+        .spyOn(HTMLElement.prototype, "offsetHeight", "get")
+        .mockReturnValue(32);
+      const { unmount } = render(TableOfContents, {
+        selectedId: "overview",
+        noScrollSpy: true,
+      });
+      await nextFrame();
+
+      const nav = screen.getByTestId("toc");
+      const bar = nav.querySelector(".bx--toc__bar");
+      expect(observed.has(nav)).toBe(true);
+      expect(bar).toHaveStyle({ height: "32px" });
+
+      // A wrapping item changes the active row's height without a selection
+      // or item change.
+      offsetHeight.mockReturnValue(48);
+      deliver(
+        [{ target: nav }] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+      await nextFrame();
+      expect(bar).toHaveStyle({ height: "48px" });
+
+      unmount();
+      expect(observed.size).toBe(0);
+    });
+  });
 });
