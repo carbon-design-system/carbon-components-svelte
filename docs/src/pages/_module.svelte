@@ -358,6 +358,11 @@
           isSelected={$isActive($url("/right-to-left"))}
         />
         <SideNavLink
+          text="Performance"
+          href={$url("/performance")}
+          isSelected={$isActive($url("/performance"))}
+        />
+        <SideNavLink
           text="Component index"
           href={$url("/component-index")}
           isSelected={$isActive($url("/component-index"))}
