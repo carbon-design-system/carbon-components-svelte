@@ -24,9 +24,10 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, join, posix, relative, resolve } from "node:path";
+import { basename, dirname, join, posix, relative, resolve } from "node:path";
 import { brotliCompressSync } from "node:zlib";
 import { compile, VERSION } from "svelte/compiler";
+import { DEVTOOLS_MODULE, instrumentDispatcher } from "./lib/instrument.ts";
 
 const REPL = resolve(import.meta.dir, "..");
 const ROOT = resolve(REPL, "..");
@@ -190,6 +191,7 @@ function compileTree(
   outRoot: string,
   files: string[],
   label: string,
+  transform: (code: string, file: string) => string = (code) => code,
 ) {
   const deps: Record<string, string[]> = {};
   const failures: string[] = [];
@@ -211,6 +213,7 @@ function compileTree(
     } else {
       code = readFileSync(file, "utf8");
     }
+    code = transform(code, file);
     write(join(outRoot, rel), code);
     total += brotliSize(code);
     deps[rel] = staticSpecifiers(code).map((s) =>
@@ -432,7 +435,12 @@ async function main() {
     CCS_DIR,
     srcFiles,
     `ccs@${CCS_V}/svelte@${SVELTE_V}`,
+    (code, file) =>
+      file.endsWith(".svelte")
+        ? instrumentDispatcher(code, basename(file, ".svelte"))
+        : code,
   );
+  write(join(CCS_DIR, "__devtools.js"), DEVTOOLS_MODULE);
   const exports = parseIndexExports(join(ROOT, "src/index.js"));
   mkdirSync(join(PKG, `ccs@${CCS_V}`, "css"), { recursive: true });
   copyFileSync(allCss, join(PKG, `ccs@${CCS_V}`, "css/all.css"));

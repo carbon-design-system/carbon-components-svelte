@@ -13,6 +13,9 @@ export const levels = writable(new Set(LEVELS));
 export const query = writable("");
 export const collapsedGroups = writable(new Set());
 export const droppedTotal = writable(0);
+/** Carbon component events from the preview (instrumented dispatchers). */
+export const events = writable(/** @type {any[]} */ ([]));
+const MAX_EVENTS = 2000;
 
 let localId = 0;
 let runCount = 0;
@@ -70,7 +73,15 @@ function append(list, incoming) {
 }
 
 /** Entries from the preview (one batch per frame). */
-export function ingest(batch) {
+export function ingest(incoming) {
+  const carbonEvents = incoming.filter((e) => e.kind === "event");
+  if (carbonEvents.length) {
+    events.update((list) => [...list, ...carbonEvents].slice(-MAX_EVENTS));
+  }
+  const batch = carbonEvents.length
+    ? incoming.filter((e) => e.kind !== "event")
+    : incoming;
+  if (!batch.length) return;
   entries.update((list) => {
     let next = list;
     let pendingBatch = [];
@@ -124,8 +135,13 @@ export function runStarted() {
     push(system("separator", `Run ${runCount}`, { kind: "separator" }));
   else {
     entries.set([]);
+    events.set([]);
     collapsedGroups.set(new Set());
   }
+}
+
+export function clearEvents() {
+  events.set([]);
 }
 
 export function clearConsole() {

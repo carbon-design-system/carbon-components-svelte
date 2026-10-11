@@ -26,6 +26,8 @@ export const diagnostics = derived(
   [compileDiagnostics, runtimeDiagnostics],
   ([$compile, $runtime]) => [...$compile, ...$runtime],
 );
+/** Compact component API (props, events, descriptions) for the event log. */
+export const componentApi = writable(/** @type {any} */ (null));
 /** Editor jump requests from the console: { file, line, column, seq }. */
 export const jump = writable(/** @type {any} */ (null));
 export const metrics = writable(/** @type {Record<string, number>} */ ({}));
@@ -42,6 +44,11 @@ export function init(repl) {
   theme.set(repl.options.theme);
   href.set(location.href);
   repl.subscribe(onEvent);
+  const v = repl.versions;
+  fetch(`${repl.sandboxOrigin}/pkg/ccs@${v.ccs}/svelte@${v.svelte}/api.json`)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((api) => componentApi.set(api))
+    .catch(() => {});
   window.addEventListener("hashchange", () => location.reload());
 }
 

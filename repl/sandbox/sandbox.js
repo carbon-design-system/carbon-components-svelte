@@ -300,6 +300,9 @@ const consoleApi = installConsole({
   schedule: (fn) => native.setTimeout(fn, 16),
 });
 
+// Hook for instrumented Carbon components (carbon-components-svelte/__devtools.js).
+globalThis.__ccsDevtools = { event: (e) => consoleApi.carbonEvent(e) };
+
 native.windowAdd("error", (event) =>
   consoleApi.reportError(event.error ?? event.message),
 );

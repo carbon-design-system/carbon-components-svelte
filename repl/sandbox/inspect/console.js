@@ -263,6 +263,17 @@ export function installConsole({ remote, post, schedule, modules }) {
         args: [remote.preview(value)],
       });
     },
+    /** A Carbon component dispatched an event (see scripts/lib/instrument.ts). */
+    carbonEvent({ component, type, detail, cancelled }) {
+      emit({
+        kind: "event",
+        level: "event",
+        component,
+        eventType: type,
+        cancelled,
+        args: [remote.preview(detail)],
+      });
+    },
     resetRun() {
       groups.length = 0;
       timers.clear();

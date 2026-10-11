@@ -1,5 +1,7 @@
 <script>
   import Button from "carbon-components-svelte/src/Button/Button.svelte";
+  import ContentSwitcher from "carbon-components-svelte/src/ContentSwitcher/ContentSwitcher.svelte";
+  import Switch from "carbon-components-svelte/src/ContentSwitcher/Switch.svelte";
   import MultiSelect from "carbon-components-svelte/src/MultiSelect/MultiSelect.svelte";
   import Search from "carbon-components-svelte/src/Search/Search.svelte";
   import Tag from "carbon-components-svelte/src/Tag/Tag.svelte";
@@ -8,10 +10,13 @@
   import Clean from "carbon-icons-svelte/lib/Clean.svelte";
   import { tick } from "svelte";
   import EvalInput from "./EvalInput.svelte";
+  import EventsPanel from "./EventsPanel.svelte";
   import LogRow from "./LogRow.svelte";
   import {
     clearConsole,
+    clearEvents,
     counts,
+    events,
     LEVELS,
     levels,
     preserve,
@@ -25,6 +30,7 @@
   }));
 
   let selectedLevels = [...LEVELS];
+  let tab = 0;
   let preserveLog = false;
   let filter = "";
   let listHeight = 200;
@@ -37,6 +43,7 @@
   $: query.set(filter);
   $: items = $visible;
   $: c = $counts;
+  $: eventCount = $events.length;
   $: if (items) followTail();
 
   let autoScrolling = false;
@@ -76,7 +83,10 @@
 
 <div class="console">
   <div class="bar">
-    <span class="title">Console</span>
+    <ContentSwitcher size="sm" autoWidth bind:selectedIndex={tab}>
+      <Switch text="Console" />
+      <Switch text="Events{eventCount ? ` (${eventCount})` : ""}" />
+    </ContentSwitcher>
     {#if c.error}
       <Tag size="sm" type="red">{c.error} errors</Tag>
     {/if}
@@ -91,7 +101,7 @@
         bind:value={filter}
       />
     </div>
-    <div class="levels">
+    <div class="levels" class:hidden={tab === 1}>
       <MultiSelect
         type="inline"
         size="sm"
@@ -101,43 +111,49 @@
         bind:selectedIds={selectedLevels}
       />
     </div>
-    <Toggle
-      size="sm"
-      labelText="Preserve log"
-      hideLabel
-      labelA="Preserve"
-      labelB="Preserve"
-      bind:toggled={preserveLog}
-    />
+    <div class="preserve" title="Preserve log across runs">
+      <Toggle
+        size="sm"
+        labelText="Preserve log"
+        hideLabel
+        labelA=""
+        labelB=""
+        bind:toggled={preserveLog}
+      />
+    </div>
     <Button
       kind="ghost"
       size="small"
       icon={Clean}
       iconDescription="Clear console"
       tooltipAlignment="end"
-      on:click={clearConsole}
+      on:click={() => (tab === 0 ? clearConsole() : clearEvents())}
     />
   </div>
 
-  <div class="list" bind:clientHeight={listHeight}>
-    {#if items.length}
-      <VirtualList
-        bind:ref={listRef}
-        {items}
-        measured
-        itemHeight={28}
-        containerHeight={listHeight}
-        getKey={(entry) => entry.id}
-        let:item
-      >
-        <LogRow entry={item} />
-      </VirtualList>
-    {:else}
-      <p class="empty">Console output from the preview appears here.</p>
-    {/if}
-  </div>
+  {#if tab === 0}
+    <div class="list" bind:clientHeight={listHeight}>
+      {#if items.length}
+        <VirtualList
+          bind:ref={listRef}
+          {items}
+          measured
+          itemHeight={28}
+          containerHeight={listHeight}
+          getKey={(entry) => entry.id}
+          let:item
+        >
+          <LogRow entry={item} />
+        </VirtualList>
+      {:else}
+        <p class="empty">Console output from the preview appears here.</p>
+      {/if}
+    </div>
 
-  <EvalInput />
+    <EvalInput />
+  {:else}
+    <EventsPanel {filter} />
+  {/if}
 </div>
 
 <style>
@@ -162,9 +178,12 @@
     flex: none;
   }
 
-  .title {
-    font-size: 0.875rem;
-    font-weight: 600;
+  .hidden {
+    display: none;
+  }
+
+  .preserve {
+    flex: none;
   }
 
   .search {
