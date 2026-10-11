@@ -237,4 +237,68 @@ describe("TagSet", () => {
     });
     expect(visibleTagLabels(container)).toEqual(["Tag 1"]);
   });
+
+  describe("shared ResizeObserver", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("shares one ResizeObserver across instances", async () => {
+      let created = 0;
+      const Base = globalThis.ResizeObserver;
+      vi.stubGlobal(
+        "ResizeObserver",
+        class extends Base {
+          constructor(callback: ResizeObserverCallback) {
+            super(callback);
+            created++;
+          }
+        },
+      );
+      for (let i = 0; i < 3; i++) {
+        render(TagSetFixture);
+      }
+      await tick();
+      expect(created).toBe(1);
+    });
+
+    it("re-measures when the observer reports the wrapper resized and stops on unmount", async () => {
+      let deliver: ResizeObserverCallback = () => {};
+      const observed = new Set<Element>();
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            deliver = callback;
+          }
+          observe(element: Element) {
+            observed.add(element);
+          }
+          unobserve(element: Element) {
+            observed.delete(element);
+          }
+          disconnect() {}
+        },
+      );
+      const { container, unmount } = render(TagSetFixture);
+      await tick();
+
+      const wrapper = container.querySelector(".bx--tag-set");
+      assert(wrapper instanceof HTMLElement);
+      expect(observed.has(wrapper)).toBe(true);
+
+      stubMeasurements(container, 110, 50);
+      deliver(
+        [{ target: wrapper }] as unknown as ResizeObserverEntry[],
+        {} as ResizeObserver,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("+3")).toBeInTheDocument();
+      });
+
+      unmount();
+      expect(observed.size).toBe(0);
+    });
+  });
 });
