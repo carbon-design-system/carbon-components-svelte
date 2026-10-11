@@ -64,6 +64,7 @@
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { createTabsInitClaims } from "../utils/tabs-init-claims.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
@@ -200,6 +201,25 @@
   /** @type {(id: string) => void} */
   const removeContent = registration.removeContent;
 
+  // Tabs and panels claim their position while they initialize, so the
+  // first render (server included) shows the selection. Otherwise the
+  // selected tab renders unselected until registration flushes, and the
+  // overflow check on mount reads layout in between, so its color fades in.
+  // Closed on mount.
+  const initialClaims = createTabsInitClaims({
+    selectedTab,
+    selectedContent,
+    getSelection: () => ({
+      selectedId,
+      selectedIndex,
+      hasContent: !!$$slots.content,
+    }),
+  });
+  /** @type {(id: string) => undefined | { panelId: string | undefined }} */
+  const claimTab = initialClaims.claimTab;
+  /** @type {(id: string, hasOwnId: boolean) => undefined | { id: string; tabId: string | undefined }} */
+  const claimPanel = initialClaims.claimPanel;
+
   /**
    * @type {(id: string) => void}
    */
@@ -316,6 +336,8 @@
     remove,
     addContent,
     removeContent,
+    claimTab,
+    claimPanel,
     update,
     dismiss,
   });
@@ -362,6 +384,7 @@
   });
 
   onMount(() => {
+    initialClaims.close();
     updateOverflow();
     const observer = new ResizeObserver(updateOverflow);
     if (refTabList) observer.observe(refTabList);
