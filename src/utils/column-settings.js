@@ -28,9 +28,10 @@ export function toColumnSettings(headers) {
  * `settings.order` (headers missing from `order` keep their relative order,
  * appended after the ordered ones; keys in `order` with no matching header
  * are ignored) and set `columnHidden` from `settings.hidden`.
- * @param {ReadonlyArray<ColumnHeader>} headers
+ * @template {ColumnHeader} Header
+ * @param {ReadonlyArray<Header>} headers
  * @param {ColumnSettings} settings
- * @returns {ColumnHeader[]}
+ * @returns {Header[]}
  */
 export function applyColumnSettings(headers, settings) {
   const byKey = new Map(headers.map((header) => [header.key, header]));
@@ -49,10 +50,11 @@ export function applyColumnSettings(headers, settings) {
 /**
  * Set `columnHidden` on the header matching `key`. Returns the same array
  * reference when the header is missing or already at the requested state.
- * @param {ReadonlyArray<ColumnHeader>} headers
+ * @template {ColumnHeader} Header
+ * @param {ReadonlyArray<Header>} headers
  * @param {string} key
  * @param {boolean} hidden
- * @returns {ReadonlyArray<ColumnHeader>}
+ * @returns {ReadonlyArray<Header>}
  */
 export function setColumnHidden(headers, key, hidden) {
   const index = headers.findIndex((header) => header.key === key);
