@@ -2,7 +2,7 @@
   import { truncate } from "../Truncate/truncate.js";
 
   /**
-   * @restProps {any}
+   * @template {keyof HTMLElementTagNameMap} [Tag="p"]
    * @slot {{}}
    */
 
@@ -70,7 +70,7 @@
 
   /**
    * Specify the tag name.
-   * @type {keyof HTMLElementTagNameMap}
+   * @type {Tag}
    */
   export let tag = "p";
 

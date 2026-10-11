@@ -1,6 +1,6 @@
 <script>
   /**
-   * @restProps {any}
+   * @template {keyof HTMLElementTagNameMap} [Tag="div"]
    * @slot {{ props: { class: string; [key: string]: any; } }}
    */
 
@@ -79,7 +79,7 @@
 
   /**
    * Specify the tag name.
-   * @type {keyof HTMLElementTagNameMap}
+   * @type {Tag}
    */
   export let tag = "div";
 
