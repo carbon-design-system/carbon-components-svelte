@@ -50,7 +50,7 @@
     <Dropdown
       hideLabel
       size="xl"
-      titleText="Scope"
+      labelText="Scope"
       style="width: 12rem"
       bind:selectedId={scopeId}
       items={scopeItems}
