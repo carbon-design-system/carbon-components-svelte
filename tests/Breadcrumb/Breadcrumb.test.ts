@@ -10,6 +10,7 @@ import BreadcrumbOrientationVertical from "./Breadcrumb.orientation-vertical.tes
 import BreadcrumbSize from "./Breadcrumb.size.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
 import BreadcrumbSkeletonSm from "./Breadcrumb.skeleton-sm.test.svelte";
+import BreadcrumbSlotProps from "./Breadcrumb.slotProps.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
 
 describe("Breadcrumb", () => {
@@ -120,6 +121,16 @@ describe("Breadcrumb", () => {
 
     const links = screen.getAllByRole("link");
     expect(links[2]).toHaveAttribute("aria-current", "page");
+  });
+
+  it("spreads link class and aria-current onto a custom link", () => {
+    render(BreadcrumbSlotProps);
+
+    const links = screen.getAllByRole("link");
+    expect(links[0]).toHaveClass("bx--link");
+    expect(links[0]).not.toHaveAttribute("aria-current");
+    expect(links[1]).toHaveClass("bx--link");
+    expect(links[1]).toHaveAttribute("aria-current", "page");
   });
 
   it("updates when dynamic items change", async () => {
