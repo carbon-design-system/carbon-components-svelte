@@ -105,11 +105,16 @@
     height: 3rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
     padding: 0 1rem;
     background: var(--cds-ui-01, #f4f4f4);
     border-bottom: 1px solid var(--cds-ui-03, #e0e0e0);
     overflow-x: auto;
+  }
+
+  /* Carbon's .bx--form-item grows (flex: 1 1 auto); keep the controls packed. */
+  .toolbar > :global(.bx--form-item) {
+    flex: none;
   }
 
   .status {
