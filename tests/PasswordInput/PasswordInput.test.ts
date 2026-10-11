@@ -283,6 +283,35 @@ describe("PasswordInput", () => {
       expect(wrapper).toHaveClass("bx--text-input-wrapper--inline");
     });
 
+    it("puts the inline label in the same column as TextInput", () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        helperText: "Helper text",
+        inline: true,
+      });
+
+      const column = screen
+        .getByText("Password")
+        .closest(".bx--text-input__label-helper-wrapper");
+      expect(column).toContainElement(screen.getByText("Helper text"));
+      expect(column).not.toHaveClass("bx--visually-hidden");
+    });
+
+    it("hides the inline label column when hideLabel leaves it empty", () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        hideLabel: true,
+        inline: true,
+      });
+
+      expect(
+        screen
+          .getByText("Password")
+          .closest(".bx--text-input__label-helper-wrapper"),
+      ).toHaveClass("bx--visually-hidden");
+      expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    });
+
     it("should render in extra-small size", () => {
       render(PasswordInput, { labelText: "Password", size: "xs" });
 
