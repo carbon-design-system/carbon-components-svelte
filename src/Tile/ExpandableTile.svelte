@@ -62,12 +62,15 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { noop } from "../utils/noop.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
   let refAbove = null;
-  let resizeObserver;
+  let mounted = false;
+  let stopObserving = noop;
 
   /**
    * Internal, measured fallbacks. These are only used when the consumer has
@@ -95,27 +98,30 @@
     // waiting for the observer's first report.
     if (refAbove) measuredMaxHeight = refAbove.getBoundingClientRect().height;
     measurePadding();
-    if (typeof ResizeObserver === "undefined") return;
-
-    resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.target === refAbove) {
-          measuredMaxHeight = entry.contentRect.height;
-        } else if (entry.target === ref) {
-          measurePadding();
-        }
-      }
-    });
+    mounted = true;
 
     return () => {
-      resizeObserver.disconnect();
+      stopObserving();
     };
   });
 
-  $: if (resizeObserver) {
-    resizeObserver.disconnect();
-    if (refAbove) resizeObserver.observe(refAbove);
-    if (ref) resizeObserver.observe(ref);
+  // Follow the elements as they change, such as when `hasInteractiveContent`
+  // swaps the root tag.
+  $: if (mounted) {
+    stopObserving();
+    /** @type {Array<() => void>} */
+    const stops = [];
+    if (refAbove) {
+      stops.push(
+        observeResize(refAbove, (entry) => {
+          measuredMaxHeight = entry.contentRect.height;
+        }),
+      );
+    }
+    if (ref) stops.push(observeResize(ref, measurePadding));
+    stopObserving = () => {
+      for (const stop of stops) stop();
+    };
   }
 
   function toggle() {
