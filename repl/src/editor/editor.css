@@ -1,0 +1,10 @@
+/* Highlight pseudo-elements can't be scoped by Svelte; keep them global. */
+::highlight(repl-diagnostic-error) {
+  text-decoration: underline wavy var(--cds-support-01, #da1e28);
+  text-decoration-skip-ink: none;
+}
+
+::highlight(repl-diagnostic-warning) {
+  text-decoration: underline wavy var(--cds-support-03, #f1c21b);
+  text-decoration-skip-ink: none;
+}

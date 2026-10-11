@@ -163,6 +163,12 @@ function parseClause(clause) {
   return out;
 }
 
+const REGEXP_SPECIAL = /[.*+?^${}()|[\]\\]/g;
+
+function escapeRegExp(text) {
+  return text.replace(REGEXP_SPECIAL, "\\$&");
+}
+
 function build(job, manifest, icons) {
   const diagnostics = [];
   const modules = [];
@@ -171,7 +177,7 @@ function build(job, manifest, icons) {
   const names = new Set(job.files.map((f) => f.name));
   let ok = true;
 
-  const error = (file, message, start) => {
+  const error = (file, message, start, end) => {
     ok = false;
     diagnostics.push({
       file,
@@ -179,6 +185,8 @@ function build(job, manifest, icons) {
       message,
       line: start?.line,
       column: start?.column,
+      start: start?.character,
+      end: end?.character,
     });
   };
 
@@ -187,7 +195,7 @@ function build(job, manifest, icons) {
     try {
       compiled = compileFile(file.name, file.source);
     } catch (e) {
-      error(file.name, e.message, e.start);
+      error(file.name, e.message, e.start, e.end);
       continue;
     }
     for (const w of compiled.warnings) {
@@ -198,6 +206,8 @@ function build(job, manifest, icons) {
         code: w.code,
         line: w.start?.line,
         column: w.start?.column,
+        start: w.start?.character,
+        end: w.end?.character,
       });
     }
 
@@ -218,7 +228,16 @@ function build(job, manifest, icons) {
           iconUrls,
         });
       } catch (e) {
-        error(file.name, e.message);
+        // Rewrite errors come from compiled output; point at the specifier in the source.
+        const at = file.source.search(
+          new RegExp(`["']${escapeRegExp(imp.specifier)}["']`),
+        );
+        error(
+          file.name,
+          e.message,
+          at === -1 ? undefined : { character: at + 1 },
+          at === -1 ? undefined : { character: at + 1 + imp.specifier.length },
+        );
         continue;
       }
       if (replacement !== undefined)

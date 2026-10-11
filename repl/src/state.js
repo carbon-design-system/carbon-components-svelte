@@ -86,6 +86,13 @@ function onEvent(message) {
   }
 }
 
+/** Editor paint cost per edit (tokenize + highlight ranges), for the toolbar and perf runs. */
+export function recordPaint(detail) {
+  setMetric("paint", detail.ms);
+  boot.metrics.paintSamples ??= [];
+  boot.metrics.paintSamples.push(detail);
+}
+
 /** Adaptive debounce: max(50 ms, 2 × last compile). */
 function scheduleCompile() {
   clearTimeout(compileTimer);

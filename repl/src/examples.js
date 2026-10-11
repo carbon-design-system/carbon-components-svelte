@@ -161,6 +161,32 @@ ${SCRIPT_END}
     ],
   },
   {
+    id: "large-file",
+    label: "Large file (2,000 lines)",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Tag } from "carbon-components-svelte";
+  import { total } from "./generated.js";
+${SCRIPT_END}
+
+<Tag type="blue">total: {total}</Tag>
+`,
+      },
+      {
+        name: "generated.js",
+        source: `${Array.from(
+          { length: 1999 },
+          (_, i) =>
+            `export const value${i} = { id: "${i}", label: "Item ${i}", weight: ${i % 7} * 1.5 }; // row ${i}`,
+        ).join("\n")}
+export const total = ${Array.from({ length: 20 }, (_, i) => `value${i}.weight`).join(" + ")};
+`,
+      },
+    ],
+  },
+  {
     id: "console",
     label: "Console + errors",
     files: [
