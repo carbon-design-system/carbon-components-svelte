@@ -71,3 +71,24 @@ registerKeystrokeCase(
   "filter keystroke, DataTable 1000 rows, filterMode hide",
   hideInput,
 );
+
+// Clearing the search grows the rendered set back to every row, which in
+// "remove" mode re-creates ~889 rows. Each iteration narrows to ~111 rows and
+// clears again, so the timed closure covers the shrink and the full re-render.
+const registerClearCase = (title: string, input: HTMLInputElement): void => {
+  task(title, async () => {
+    await fireEvent.input(input, { target: { value: "row 7" } });
+    await tick();
+    await fireEvent.input(input, { target: { value: "" } });
+    await tick();
+  });
+};
+
+registerClearCase(
+  "filter then clear, DataTable 1000 rows, filterMode remove",
+  removeInput,
+);
+registerClearCase(
+  "filter then clear, DataTable 1000 rows, filterMode hide",
+  hideInput,
+);

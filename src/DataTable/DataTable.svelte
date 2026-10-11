@@ -1470,53 +1470,32 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
-                {#if cell.empty}
-                  <td
-                    class={formatAlignClass(cell.columnAlign)}
-                    class:bx--table-column-menu={cell.columnMenu}
+                <td
+                  class={formatAlignClass(cell.columnAlign)}
+                  class:bx--table-column-menu={cell.empty && cell.columnMenu}
+                  headers={cell.empty ? undefined : `${id}-${cell.key}`}
+                  on:click={(event) => {
+                    if (cell.empty) return;
+                    dispatch("click", { row, cell });
+                    dispatch("click:cell", {
+                      cell,
+                      target: event.target,
+                      currentTarget: event.currentTarget,
+                    });
+                  }}
+                >
+                  <slot
+                    name="cell"
+                    {row}
+                    {cell}
+                    rowIndex={actualIndex}
+                    cellIndex={j}
+                    rowSelected={isSelected}
+                    rowExpanded={isExpanded}
                   >
-                    <slot
-                      name="cell"
-                      {row}
-                      {cell}
-                      rowIndex={actualIndex}
-                      cellIndex={j}
-                      rowSelected={isSelected}
-                      rowExpanded={isExpanded}
-                    >
-                      {cell.display
-                        ? cell.display(cell.value, row)
-                        : cell.value}
-                    </slot>
-                  </td>
-                {:else}
-                  <td
-                    class={formatAlignClass(cell.columnAlign)}
-                    headers="{id}-{cell.key}"
-                    on:click={(event) => {
-                      dispatch("click", { row, cell });
-                      dispatch("click:cell", {
-                        cell,
-                        target: event.target,
-                        currentTarget: event.currentTarget,
-                      });
-                    }}
-                  >
-                    <slot
-                      name="cell"
-                      {row}
-                      {cell}
-                      rowIndex={actualIndex}
-                      cellIndex={j}
-                      rowSelected={isSelected}
-                      rowExpanded={isExpanded}
-                    >
-                      {cell.display
-                        ? cell.display(cell.value, row)
-                        : cell.value}
-                    </slot>
-                  </td>
-                {/if}
+                    {cell.display ? cell.display(cell.value, row) : cell.value}
+                  </slot>
+                </td>
               {/each}
             </tr>
 
@@ -1717,53 +1696,32 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
-                {#if cell.empty}
-                  <td
-                    class={formatAlignClass(cell.columnAlign)}
-                    class:bx--table-column-menu={cell.columnMenu}
+                <td
+                  class={formatAlignClass(cell.columnAlign)}
+                  class:bx--table-column-menu={cell.empty && cell.columnMenu}
+                  headers={cell.empty ? undefined : `${id}-${cell.key}`}
+                  on:click={(event) => {
+                    if (cell.empty) return;
+                    dispatch("click", { row, cell });
+                    dispatch("click:cell", {
+                      cell,
+                      target: event.target,
+                      currentTarget: event.currentTarget,
+                    });
+                  }}
+                >
+                  <slot
+                    name="cell"
+                    {row}
+                    {cell}
+                    rowIndex={index}
+                    cellIndex={j}
+                    rowSelected={isSelected}
+                    rowExpanded={isExpanded}
                   >
-                    <slot
-                      name="cell"
-                      {row}
-                      {cell}
-                      rowIndex={index}
-                      cellIndex={j}
-                      rowSelected={isSelected}
-                      rowExpanded={isExpanded}
-                    >
-                      {cell.display
-                        ? cell.display(cell.value, row)
-                        : cell.value}
-                    </slot>
-                  </td>
-                {:else}
-                  <td
-                    class={formatAlignClass(cell.columnAlign)}
-                    headers="{id}-{cell.key}"
-                    on:click={(event) => {
-                      dispatch("click", { row, cell });
-                      dispatch("click:cell", {
-                        cell,
-                        target: event.target,
-                        currentTarget: event.currentTarget,
-                      });
-                    }}
-                  >
-                    <slot
-                      name="cell"
-                      {row}
-                      {cell}
-                      rowIndex={index}
-                      cellIndex={j}
-                      rowSelected={isSelected}
-                      rowExpanded={isExpanded}
-                    >
-                      {cell.display
-                        ? cell.display(cell.value, row)
-                        : cell.value}
-                    </slot>
-                  </td>
-                {/if}
+                    {cell.display ? cell.display(cell.value, row) : cell.value}
+                  </slot>
+                </td>
               {/each}
             </tr>
 
