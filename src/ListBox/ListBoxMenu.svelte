@@ -81,6 +81,7 @@
     HIGHLIGHT_CURSOR_KEY,
   } from "./highlight-cursor.js";
 
+  /** @type {ReturnType<typeof import("./highlight-cursor.js").createHighlightCursor>} */
   const highlightCursor = createHighlightCursor();
   setContext(HIGHLIGHT_CURSOR_KEY, highlightCursor);
 

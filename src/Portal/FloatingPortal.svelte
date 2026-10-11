@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @slot {{ direction: "bottom" | "top" | "left" | "right" }}
    */
 

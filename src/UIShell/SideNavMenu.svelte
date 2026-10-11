@@ -40,6 +40,7 @@
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
   const parentMenu = getContext("carbon:SideNavMenu");
+  /** @type {number} */
   const depth = (parentMenu?.depth ?? 0) + 1;
   const parentIconDepth = parentMenu?.iconDepth ?? readable(0);
 
