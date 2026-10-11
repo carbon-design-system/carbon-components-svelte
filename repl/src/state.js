@@ -1,6 +1,7 @@
 import { derived, get, writable } from "svelte/store";
 import { encodeHash } from "./codec.js";
 import {
+  a11y as a11yFindings,
   dropped as consoleDropped,
   ingest as consoleIngest,
   push as consolePush,
@@ -138,6 +139,9 @@ function onEvent(message) {
       break;
     case "logs-dropped":
       consoleDropped(message.count);
+      break;
+    case "a11y":
+      a11yFindings.set(message.findings);
       break;
     case "jump":
       jumpTo(message);

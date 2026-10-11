@@ -230,3 +230,29 @@ describe("side-effect origin", () => {
     ).toEqual({ kind: "svelte" });
   });
 });
+
+describe("color and contrast", () => {
+  test("parses hex and rgb() colors", async () => {
+    const { parseColor, colorKey } = await import(
+      "../sandbox/inspect/tokens.js"
+    );
+    expect(parseColor("#0f62fe")).toEqual([15, 98, 254, 1]);
+    expect(parseColor("#fff")).toEqual([255, 255, 255, 1]);
+    expect(parseColor("rgba(0, 0, 0, 0.5)")).toEqual([0, 0, 0, 0.5]);
+    expect(parseColor("rgb(22 22 22 / 50%)")).toEqual([22, 22, 22, 0.5]);
+    expect(colorKey("#161616")).toBe(colorKey("rgb(22, 22, 22)"));
+    expect(colorKey("transparent")).toBeNull();
+  });
+
+  test("WCAG contrast and large text", async () => {
+    const { contrastRatio, isLargeText } = await import(
+      "../sandbox/inspect/tokens.js"
+    );
+    expect(contrastRatio([0, 0, 0], [255, 255, 255])).toBeCloseTo(21, 0);
+    // Carbon gray 30 on white fails 4.5:1.
+    expect(contrastRatio([198, 198, 198], [255, 255, 255])).toBeLessThan(4.5);
+    expect(isLargeText(24, 400)).toBe(true);
+    expect(isLargeText(19, 700)).toBe(true);
+    expect(isLargeText(16, 700)).toBe(false);
+  });
+});

@@ -400,8 +400,8 @@ function writeSandbox(
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="importmap">${importMapText}</script>
     ${preloads}
-    <link rel="stylesheet" href="${url(join(PKG, `ccs@${CCS_V}`, "css/all.css"))}">
-    <link rel="stylesheet" href="/sandbox/sandbox.css">
+    <link rel="stylesheet" crossorigin href="${url(join(PKG, `ccs@${CCS_V}`, "css/all.css"))}">
+    <link rel="stylesheet" crossorigin href="/sandbox/sandbox.css">
     <script type="module" src="/sandbox/sandbox.js"></script>
   </head>
   <body></body>

@@ -5,9 +5,11 @@
 // all.css stays parsed; only the user's modules are re-imported.
 import { mount, unmount } from "svelte";
 import { STATE_SYMBOL, snapshot } from "svelte-repl-devtools";
+import { audit } from "./inspect/a11y.js";
 import { installConsole } from "./inspect/console.js";
 import { classifyStack } from "./inspect/origin.js";
 import { createRemote } from "./inspect/remote.js";
+import { createTokenIndex } from "./inspect/tokens.js";
 
 const native = {
   setTimeout: window.setTimeout.bind(window),
@@ -66,6 +68,7 @@ async function onShellMessage({ data }) {
   switch (data.type) {
     case "theme":
       document.documentElement.setAttribute("theme", data.theme);
+      scheduleAudit();
       break;
     case "props":
       respond(data, remote.properties(data.id, data.range));
@@ -208,13 +211,35 @@ native.documentAdd(
   },
   true,
 );
+const tokens = createTokenIndex(document);
+
+/** One-line inspector label: element, size, source, Carbon color tokens. */
+function inspectLabel(el) {
+  const rect = el.getBoundingClientRect();
+  const cls = el.classList.length
+    ? `.${[...el.classList].slice(0, 2).join(".")}`
+    : "";
+  const loc = locate(el);
+  const t = tokens.tokensFor(el);
+  const parts = [
+    `${el.tagName.toLowerCase()}${cls}`,
+    `${Math.round(rect.width)}×${Math.round(rect.height)}`,
+    loc ? `${loc.file}:${loc.line}` : "",
+    t.background ? `bg ${t.background.token}` : "",
+    t.color ? `text ${t.color.token}` : "",
+  ];
+  return parts.filter(Boolean).join("  ·  ");
+}
+
 native.documentAdd(
   "mousemove",
   (e) => {
     const active = inspecting || e.altKey;
     if (!active) return;
     const el = /** @type {Element} */ (e.target);
-    highlightNode(locate(el) ? el : null);
+    if (el instanceof Element && el !== document.body)
+      highlightNode(el, inspectLabel(el));
+    else highlightNode(null);
   },
   true,
 );
@@ -222,6 +247,20 @@ native.documentAdd(
   "click",
   (e) => {
     if (!e.altKey) return;
+    if (e.shiftKey) {
+      // Alt+Shift+click: log the element with its Carbon tokens and source.
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const el = /** @type {Element} */ (e.target);
+      const style = getComputedStyle(el);
+      console.log("Inspect", el, {
+        source: locate(el) ?? undefined,
+        tokens: tokens.tokensFor(el),
+        font: `${style.fontWeight} ${style.fontSize}/${style.lineHeight} ${style.fontFamily.split(",")[0]}`,
+        size: `${Math.round(el.getBoundingClientRect().width)}×${Math.round(el.getBoundingClientRect().height)}`,
+      });
+      return;
+    }
     const loc = locate(/** @type {Element} */ (e.target));
     if (!loc) return;
     e.preventDefault();
@@ -234,15 +273,23 @@ native.documentAdd(
 
 let overlay;
 
-/** Outline a logged DOM node in the preview while its log entry is hovered. */
-function highlightNode(node) {
+let overlayLabel;
+
+/** Outline a DOM node in the preview (log hover, Alt inspect), with an optional label. */
+function highlightNode(node, label = "") {
   if (!overlay) {
     overlay = document.createElement("div");
     overlay.setAttribute("aria-hidden", "true");
     overlay.style.cssText =
       "position:fixed;z-index:2147483647;pointer-events:none;outline:2px solid #0f62fe;background:rgb(15 98 254 / 12%);display:none";
+    overlayLabel = document.createElement("div");
+    overlayLabel.style.cssText =
+      "position:absolute;left:-2px;top:calc(100% + 4px);padding:2px 6px;white-space:nowrap;font:12px/16px 'IBM Plex Mono',monospace;color:#fff;background:#161616;";
+    overlay.append(overlayLabel);
     document.documentElement.append(overlay);
   }
+  overlayLabel.textContent = label;
+  overlayLabel.style.display = label ? "block" : "none";
   let rect;
   if (node instanceof Element) rect = node.getBoundingClientRect();
   else if (node instanceof Text) {
@@ -452,6 +499,46 @@ for (const key of ["localStorage", "sessionStorage"]) {
     Object.defineProperty(window, key, { value: storage, configurable: true });
   }
 }
+
+// ---------------------------------------------------------------------------
+// Accessibility channel: audit after each paint and after DOM changes.
+
+let auditTimer;
+
+function runAudit() {
+  auditTimer = undefined;
+  let findings;
+  try {
+    findings = audit(document, { tokens });
+  } catch (error) {
+    native.setTimeout(() => {
+      throw error;
+    });
+    return;
+  }
+  post({
+    type: "a11y",
+    findings: findings.map((f) => ({
+      rule: f.rule,
+      severity: f.severity,
+      message: f.message,
+      node: remote.preview(f.element),
+      source: locate(f.element) ?? undefined,
+    })),
+  });
+}
+
+function scheduleAudit() {
+  native.clearTimeout(auditTimer);
+  auditTimer = native.setTimeout(runAudit, 600);
+}
+
+new MutationObserver(scheduleAudit).observe(document.body, {
+  subtree: true,
+  childList: true,
+  attributes: true,
+  characterData: true,
+});
 
 // ---------------------------------------------------------------------------
 // Console: structured entries with remote handles (see ./inspect/).

@@ -9,10 +9,12 @@
   import VirtualList from "carbon-components-svelte/src/VirtualList/VirtualList.svelte";
   import Clean from "carbon-icons-svelte/lib/Clean.svelte";
   import { tick } from "svelte";
+  import A11yPanel from "./A11yPanel.svelte";
   import EvalInput from "./EvalInput.svelte";
   import EventsPanel from "./EventsPanel.svelte";
   import LogRow from "./LogRow.svelte";
   import {
+    a11y,
     clearConsole,
     clearEvents,
     counts,
@@ -44,6 +46,7 @@
   $: items = $visible;
   $: c = $counts;
   $: eventCount = $events.length;
+  $: a11yCount = $a11y.length;
   $: if (items) followTail();
 
   let autoScrolling = false;
@@ -86,6 +89,7 @@
     <ContentSwitcher size="sm" autoWidth bind:selectedIndex={tab}>
       <Switch text="Console" />
       <Switch text="Events{eventCount ? ` (${eventCount})` : ""}" />
+      <Switch text="A11y{a11yCount ? ` (${a11yCount})` : ""}" />
     </ContentSwitcher>
     {#if c.error}
       <Tag size="sm" type="red">{c.error} errors</Tag>
@@ -101,7 +105,7 @@
         bind:value={filter}
       />
     </div>
-    <div class="levels" class:hidden={tab === 1}>
+    <div class="levels" class:hidden={tab !== 0}>
       <MultiSelect
         type="inline"
         size="sm"
@@ -151,8 +155,10 @@
     </div>
 
     <EvalInput />
-  {:else}
+  {:else if tab === 1}
     <EventsPanel {filter} />
+  {:else}
+    <A11yPanel {filter} />
   {/if}
 </div>
 

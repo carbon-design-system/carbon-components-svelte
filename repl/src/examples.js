@@ -259,6 +259,31 @@ ${SCRIPT_END}
     ],
   },
   {
+    id: "a11y",
+    label: "Accessibility checks",
+    files: [
+      {
+        name: "App.svelte",
+        source: `<script>
+  import { Button, Stack, TextInput } from "carbon-components-svelte";
+  import { Add } from "carbon-icons-svelte";
+${SCRIPT_END}
+
+<Stack gap={5} style="max-width: 24rem">
+  <TextInput placeholder="No labelText, so no accessible name" />
+  <TextInput labelText="Search" hideLabel placeholder="Hidden label is fine" />
+  <Button icon={Add} />
+  <Button icon={Add} iconDescription="Add" />
+  <p style="color: #c6c6c6">Low-contrast helper text</p>
+  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="16" height="16" />
+  <div id="dup">One</div>
+  <div id="dup">Two</div>
+</Stack>
+`,
+      },
+    ],
+  },
+  {
     id: "carbon-lint",
     label: "Carbon usage lint",
     files: [

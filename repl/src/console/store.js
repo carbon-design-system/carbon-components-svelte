@@ -13,6 +13,8 @@ export const levels = writable(new Set(LEVELS));
 export const query = writable("");
 export const collapsedGroups = writable(new Set());
 export const droppedTotal = writable(0);
+/** Latest accessibility findings for the preview (replaced on each audit). */
+export const a11y = writable(/** @type {any[]} */ ([]));
 /** Carbon component events from the preview (instrumented dispatchers). */
 export const events = writable(/** @type {any[]} */ ([]));
 const MAX_EVENTS = 2000;
