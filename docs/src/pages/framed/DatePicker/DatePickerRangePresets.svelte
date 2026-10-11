@@ -36,13 +36,13 @@
     <DatePickerInput labelText="Report period end" placeholder="mm/dd/yyyy" />
   </DatePicker>
   <Stack gap={3} orientation="horizontal">
-    <Button kind="tertiary" size="sm" on:click={() => selectLastDays(7)}>
+    <Button kind="tertiary" size="small" on:click={() => selectLastDays(7)}>
       Last 7 days
     </Button>
-    <Button kind="tertiary" size="sm" on:click={() => selectLastDays(30)}>
+    <Button kind="tertiary" size="small" on:click={() => selectLastDays(30)}>
       Last 30 days
     </Button>
-    <Button kind="tertiary" size="sm" on:click={selectThisMonth}>
+    <Button kind="tertiary" size="small" on:click={selectThisMonth}>
       This month
     </Button>
   </Stack>

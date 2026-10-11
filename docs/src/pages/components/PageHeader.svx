@@ -106,8 +106,8 @@ Use the `breadcrumbEnd` slot for small, page-wide actions such as share or favor
     </Breadcrumb>
   </svelte:fragment>
   <svelte:fragment slot="breadcrumbEnd">
-    <Button kind="ghost" size="small" iconOnly icon={Share} iconDescription="Share" />
-    <Button kind="ghost" size="small" iconOnly icon={Star} iconDescription="Add to favorites" />
+    <Button kind="ghost" size="small" icon={Share} iconDescription="Share" />
+    <Button kind="ghost" size="small" icon={Star} iconDescription="Add to favorites" />
   </svelte:fragment>
 </PageHeader>
 
@@ -230,8 +230,8 @@ Pair ghost icon-only buttons with the primary action for frequent secondary task
 
 <PageHeader title="Databases" subtitle="Manage your database instances">
   <svelte:fragment slot="actions">
-    <Button kind="ghost" iconOnly icon={Renew} iconDescription="Refresh" tooltipPosition="bottom" />
-    <Button kind="ghost" iconOnly icon={Download} iconDescription="Export" tooltipPosition="bottom" />
+    <Button kind="ghost" icon={Renew} iconDescription="Refresh" tooltipPosition="bottom" />
+    <Button kind="ghost" icon={Download} iconDescription="Export" tooltipPosition="bottom" />
     <Button icon={Add}>Create database</Button>
   </svelte:fragment>
 </PageHeader>
@@ -397,8 +397,8 @@ Use the `titleEnd` slot for small ghost icon buttons that act on the title itsel
 
 <PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
   <svelte:fragment slot="titleEnd">
-    <Button kind="ghost" size="small" iconOnly icon={Edit} iconDescription="Rename" />
-    <Button kind="ghost" size="small" iconOnly icon={Copy} iconDescription="Copy name" />
+    <Button kind="ghost" size="small" icon={Edit} iconDescription="Rename" />
+    <Button kind="ghost" size="small" icon={Copy} iconDescription="Copy name" />
   </svelte:fragment>
 </PageHeader>
 
