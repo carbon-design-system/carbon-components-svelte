@@ -165,6 +165,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "LocalStorage",
       "SessionStorage",
       "ImageLoader",
+      "LazyMount",
       "Truncate",
     ],
   },
