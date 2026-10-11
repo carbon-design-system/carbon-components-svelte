@@ -50,10 +50,17 @@
    */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { derived, get, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { createInitOrder } from "../utils/init-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
@@ -153,9 +160,40 @@
   }
 
   /**
+   * Switches claim their position here while they initialize, so the first
+   * render already shows the selected switch. Otherwise it renders
+   * unselected until registration flushes a microtask later, and any style
+   * recalc in between fades its fill in on mount. Registration replaces the
+   * claim once it flushes; for static children the two agree. Closed on
+   * mount.
+   * @type {ReturnType<typeof createInitOrder<string>>}
+   */
+  const initialSwitches = createInitOrder();
+  let claimedBySelected = false;
+
+  /**
+   * @type {(id: string, selected: boolean) => void}
+   */
+  function claimSwitch(id, selected) {
+    const index = initialSwitches.claim(id);
+    if (index === undefined) return;
+    if (selectedId !== undefined) {
+      if (id === selectedId) currentId.set(id);
+    } else if (selected) {
+      // Matches registration: the last `selected` switch wins. On the
+      // server, earlier switches have already rendered by then.
+      claimedBySelected = true;
+      currentId.set(id);
+    } else if (!claimedBySelected && index === selectedIndex) {
+      currentId.set(id);
+    }
+  }
+
+  /**
    * @type {(data: { id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }) => void}
    */
   function add({ id, text, selected, icon, disabled }) {
+    claimSwitch(id, selected);
     batchedSwitchesUpdate((current) => {
       if (current.some((s) => s.id === id)) {
         return current;
@@ -292,6 +330,10 @@
     pairs,
     addPanel,
     removePanel,
+  });
+
+  onMount(() => {
+    initialSwitches.close();
   });
 
   afterUpdate(() => {
