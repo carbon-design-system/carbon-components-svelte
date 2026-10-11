@@ -162,7 +162,21 @@ ${"<"}/script>
           );
           document.getElementById("preview-frame").append(iframe);
 
+          const pendingRequests = new Map();
+          let nextRequest = 0;
+          repl.request = (message) =>
+            new Promise((resolve) => {
+              const reqId = ++nextRequest;
+              pendingRequests.set(reqId, resolve);
+              shell.port1.postMessage({ ...message, reqId });
+            });
+
           shell.port1.onmessage = ({ data }) => {
+            if (data.type === "response") {
+              pendingRequests.get(data.reqId)?.(data);
+              pendingRequests.delete(data.reqId);
+              return;
+            }
             if (data.type === "painted") {
               const at = data.at - performance.timeOrigin;
               if (repl.metrics.previewPainted === undefined) repl.metrics.previewPainted = at;
@@ -179,6 +193,7 @@ ${"<"}/script>
             worker.postMessage({ type: "compile", seq, entry: repl.entry, files });
             return seq;
           };
+          repl.post = (message) => shell.port1.postMessage(message);
           repl.setTheme = (theme) => {
             repl.options.theme = theme;
             shell.port1.postMessage({ type: "theme", theme });

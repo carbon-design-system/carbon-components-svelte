@@ -291,6 +291,13 @@ function writeSandbox(
   for (const f of ["sandbox.js", "sandbox.css"]) {
     copyFileSync(join(REPL, "sandbox", f), join(SANDBOX_DIR, f));
   }
+  mkdirSync(join(SANDBOX_DIR, "inspect"), { recursive: true });
+  for (const f of readdirSync(join(REPL, "sandbox/inspect"))) {
+    copyFileSync(
+      join(REPL, "sandbox/inspect", f),
+      join(SANDBOX_DIR, "inspect", f),
+    );
+  }
 }
 
 async function main() {

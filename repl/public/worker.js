@@ -74,6 +74,16 @@ async function flush() {
 
 // ---------------------------------------------------------------------------
 
+/** Just what stack mapping needs; no sourcesContent. */
+function compactMap(map, name) {
+  return map
+    ? {
+        mappings: map.mappings,
+        sources: map.sources?.length ? map.sources : [name],
+      }
+    : undefined;
+}
+
 function compileFile(name, source) {
   const key = `${name}\0${source}`;
   const hit = cache.get(key);
@@ -86,14 +96,22 @@ function compileFile(name, source) {
       dev: false,
       css: "injected",
     });
-    out = { code: r.js.code, warnings: r.warnings };
+    out = {
+      code: r.js.code,
+      map: compactMap(r.js.map, name),
+      warnings: r.warnings,
+    };
   } else if (name.endsWith(".svelte.js")) {
     const r = compileModule(source, {
       filename: name,
       generate: "client",
       dev: false,
     });
-    out = { code: r.js.code, warnings: r.warnings };
+    out = {
+      code: r.js.code,
+      map: compactMap(r.js.map, name),
+      warnings: r.warnings,
+    };
   } else if (name.endsWith(".js")) {
     out = { code: source, warnings: [] };
   } else if (name.endsWith(".json")) {
@@ -243,7 +261,8 @@ function build(job, manifest, icons) {
       if (replacement !== undefined)
         code = code.slice(0, imp.start) + replacement + code.slice(imp.end);
     }
-    modules.push({ name: file.name, code, deps });
+    // Import rewrites stay on their original line, so the map still lines up.
+    modules.push({ name: file.name, code, deps, map: compiled.map });
   }
 
   if (!names.has(job.entry))
@@ -311,7 +330,7 @@ function rewrite(imp, ctx) {
         if (named.length) parts.push(`{ ${named.join(", ")} }`);
         return `import ${parts.join(", ")} from "carbon-components-svelte/${path}";`;
       })
-      .join("\n");
+      .join(" ");
   }
 
   if (s.startsWith("carbon-components-svelte/")) {
@@ -334,7 +353,7 @@ function rewrite(imp, ctx) {
         iconUrls.add(`${manifest.iconsBase}/${imported}.svelte`);
         return `import ${local} from "carbon-icons-svelte/lib/${imported}.svelte";`;
       })
-      .join("\n");
+      .join(" ");
   }
 
   const iconDeep = s.match(ICON_DEEP_IMPORT);

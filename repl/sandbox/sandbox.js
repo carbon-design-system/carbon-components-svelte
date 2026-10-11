@@ -4,6 +4,8 @@
 // The document is kept alive between runs: library modules stay evaluated and
 // all.css stays parsed; only the user's modules are re-imported.
 import { mount, unmount } from "svelte";
+import { installConsole } from "./inspect/console.js";
+import { createRemote } from "./inspect/remote.js";
 
 const native = {
   setTimeout: window.setTimeout.bind(window),
@@ -27,6 +29,11 @@ let blobs = [];
 let latestSeq = -1;
 let runs = 0;
 const preloaded = new Set();
+/** Blob URL → REPL module name + source map, for mapping stack frames. */
+const modules = new Map();
+const remote = createRemote();
+/** Messages posted before the shell port arrives. */
+let pending = [];
 
 native.windowAdd("message", (event) => {
   if (event.source !== window.parent || shell || event.data?.type !== "init")
@@ -35,6 +42,8 @@ native.windowAdd("message", (event) => {
   shell = shellPort;
   shell.onmessage = onShellMessage;
   runPort.onmessage = onRun;
+  for (const message of pending) shell.postMessage(message);
+  pending = [];
   post({ type: "ready", at: now() });
 });
 
@@ -43,12 +52,103 @@ function now() {
 }
 
 function post(message) {
-  shell?.postMessage(message);
+  if (shell) shell.postMessage(message);
+  else pending.push(message);
 }
 
-function onShellMessage({ data }) {
-  if (data.type === "theme")
-    document.documentElement.setAttribute("theme", data.theme);
+function respond(data, payload) {
+  post({ type: "response", reqId: data.reqId, ...payload });
+}
+
+async function onShellMessage({ data }) {
+  switch (data.type) {
+    case "theme":
+      document.documentElement.setAttribute("theme", data.theme);
+      break;
+    case "props":
+      respond(data, remote.properties(data.id, data.range));
+      break;
+    case "getter":
+      respond(data, remote.invokeGetter(data.id, data.key));
+      break;
+    case "json":
+      respond(data, remote.json(data.id));
+      break;
+    case "store-global": {
+      const result = remote.storeGlobal(data.id, window);
+      respond(data, result);
+      if (result.name)
+        consoleApi.result(remote.get(data.id), false, result.name);
+      break;
+    }
+    case "highlight":
+      highlightNode(remote.get(data.id));
+      break;
+    case "unhighlight":
+      highlightNode(null);
+      break;
+    case "eval":
+      respond(data, { done: true });
+      await evaluate(data.code);
+      break;
+  }
+}
+
+/** Run an expression (or, failing that, statements) as a blob module. */
+async function evaluate(code) {
+  const run = async (source) => {
+    const href = URL.createObjectURL(
+      new Blob([source], { type: "text/javascript" }),
+    );
+    try {
+      return await import(href);
+    } finally {
+      URL.revokeObjectURL(href);
+    }
+  };
+  try {
+    consoleApi.result((await run(`export default (\n${code}\n);`)).default);
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) return consoleApi.result(error, true);
+    try {
+      await run(`${code}\nexport {};`);
+      consoleApi.result(undefined);
+    } catch (inner) {
+      consoleApi.result(inner, true);
+    }
+  }
+}
+
+let overlay;
+
+/** Outline a logged DOM node in the preview while its log entry is hovered. */
+function highlightNode(node) {
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.style.cssText =
+      "position:fixed;z-index:2147483647;pointer-events:none;outline:2px solid #0f62fe;background:rgb(15 98 254 / 12%);display:none";
+    document.documentElement.append(overlay);
+  }
+  let rect;
+  if (node instanceof Element) rect = node.getBoundingClientRect();
+  else if (node instanceof Text) {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    rect = range.getBoundingClientRect();
+  }
+  if (!rect || (!rect.width && !rect.height)) {
+    overlay.style.display = "none";
+    return;
+  }
+  if (node instanceof Element) node.scrollIntoView({ block: "nearest" });
+  Object.assign(overlay.style, {
+    display: "block",
+    top: `${rect.top}px`,
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -94,13 +194,36 @@ window.cancelAnimationFrame = (id) => {
   tracked.frames.delete(id);
   native.cancelAnimationFrame(id);
 };
+const capture = (options) =>
+  typeof options === "boolean" ? options : !!options?.capture;
+
+/** Untrack a listener its owner removed itself, so teardown reports only real leftovers. */
+function untrack(remove, type, listener, options) {
+  const i = tracked.listeners.findIndex(
+    ([r, t, l, o]) =>
+      r === remove &&
+      t === type &&
+      l === listener &&
+      capture(o) === capture(options),
+  );
+  if (i !== -1) tracked.listeners.splice(i, 1);
+}
+
 window.addEventListener = (type, listener, options) => {
   tracked.listeners.push([native.windowRemove, type, listener, options]);
   native.windowAdd(type, listener, options);
 };
+window.removeEventListener = (type, listener, options) => {
+  untrack(native.windowRemove, type, listener, options);
+  native.windowRemove(type, listener, options);
+};
 document.addEventListener = (type, listener, options) => {
   tracked.listeners.push([native.documentRemove, type, listener, options]);
   native.documentAdd(type, listener, options);
+};
+document.removeEventListener = (type, listener, options) => {
+  untrack(native.documentRemove, type, listener, options);
+  native.documentRemove(type, listener, options);
 };
 
 function teardown() {
@@ -108,9 +231,23 @@ function teardown() {
     try {
       unmount(current);
     } catch (error) {
-      report(error);
+      consoleApi.reportError(error);
     }
     current = undefined;
+  }
+  const leftovers = [
+    [tracked.intervals.size, "interval"],
+    [tracked.timeouts.size, "timeout"],
+    [tracked.frames.size, "animation frame"],
+    [tracked.listeners.length, "window/document listener"],
+  ]
+    .filter(([n]) => n > 0)
+    .map(([n, what]) => `${n} ${what}${n === 1 ? "" : "s"}`);
+  if (leftovers.length) {
+    post({
+      type: "teardown-report",
+      text: `Cleared ${leftovers.join(", ")} left by the previous run.`,
+    });
   }
   for (const id of tracked.timeouts) native.clearTimeout(id);
   for (const id of tracked.intervals) native.clearInterval(id);
@@ -122,8 +259,13 @@ function teardown() {
   tracked.frames.clear();
   tracked.listeners = [];
   document.body.replaceChildren();
-  for (const url of blobs) URL.revokeObjectURL(url);
+  for (const url of blobs) {
+    URL.revokeObjectURL(url);
+    modules.delete(url);
+  }
   blobs = [];
+  remote.clear();
+  consoleApi.resetRun();
 }
 
 // ---------------------------------------------------------------------------
@@ -149,84 +291,21 @@ for (const key of ["localStorage", "sessionStorage"]) {
 }
 
 // ---------------------------------------------------------------------------
-// Console + error relay (formatted here; the shell renders text only).
+// Console: structured entries with remote handles (see ./inspect/).
 
-function format(value, depth = 0, seen = new Set()) {
-  if (typeof value === "string")
-    return depth === 0 ? value : JSON.stringify(value);
-  if (value === null || typeof value !== "object") {
-    if (typeof value === "function") return `ƒ ${value.name || "anonymous"}()`;
-    if (typeof value === "symbol" || typeof value === "bigint")
-      return value.toString();
-    return String(value);
-  }
-  if (value instanceof Error) return `${value.name}: ${value.message}`;
-  if (value instanceof Node) {
-    if (value instanceof Element) {
-      const id = value.id ? `#${value.id}` : "";
-      const cls = value.classList.length
-        ? `.${[...value.classList].join(".")}`
-        : "";
-      return `<${value.tagName.toLowerCase()}${id}${cls}>`;
-    }
-    return value.nodeName;
-  }
-  if (seen.has(value)) return "[Circular]";
-  if (depth > 3) return Array.isArray(value) ? "[…]" : "{…}";
-  seen.add(value);
-  let out;
-  if (Array.isArray(value)) {
-    const items = value.slice(0, 50).map((v) => format(v, depth + 1, seen));
-    if (value.length > 50) items.push(`…${value.length - 50} more`);
-    out = `[${items.join(", ")}]`;
-  } else if (value instanceof Map) {
-    out = `Map(${value.size}) {${[...value]
-      .slice(0, 50)
-      .map(
-        ([k, v]) =>
-          `${format(k, depth + 1, seen)} => ${format(v, depth + 1, seen)}`,
-      )
-      .join(", ")}}`;
-  } else if (value instanceof Set) {
-    out = `Set(${value.size}) {${[...value]
-      .slice(0, 50)
-      .map((v) => format(v, depth + 1, seen))
-      .join(", ")}}`;
-  } else {
-    const keys = Object.keys(value);
-    const items = keys
-      .slice(0, 50)
-      .map((k) => `${k}: ${format(value[k], depth + 1, seen)}`);
-    if (keys.length > 50) items.push(`…${keys.length - 50} more`);
-    const name =
-      value.constructor && value.constructor !== Object
-        ? `${value.constructor.name} `
-        : "";
-    out = `${name}{${items.join(", ")}}`;
-  }
-  seen.delete(value);
-  return out;
-}
+const consoleApi = installConsole({
+  remote,
+  post,
+  modules,
+  schedule: (fn) => native.setTimeout(fn, 16),
+});
 
-for (const level of ["log", "info", "warn", "error", "debug"]) {
-  const original = console[level].bind(console);
-  console[level] = (...args) => {
-    original(...args);
-    post({
-      type: "console",
-      level,
-      text: args.map((a) => format(a)).join(" "),
-    });
-  };
-}
-
-function report(error) {
-  const e = error instanceof Error ? error : new Error(format(error));
-  post({ type: "error", message: `${e.name}: ${e.message}`, stack: e.stack });
-}
-
-native.windowAdd("error", (event) => report(event.error ?? event.message));
-native.windowAdd("unhandledrejection", (event) => report(event.reason));
+native.windowAdd("error", (event) =>
+  consoleApi.reportError(event.error ?? event.message),
+);
+native.windowAdd("unhandledrejection", (event) =>
+  consoleApi.reportError(event.reason),
+);
 
 // ---------------------------------------------------------------------------
 // Runs
@@ -284,16 +363,23 @@ async function onRun({ data }) {
       );
       urls[module.name] = href;
       created.push(href);
+      modules.set(href, { name: module.name, map: module.map });
     }
     Component = (await import(urls[data.entry])).default;
   } catch (error) {
-    for (const href of created) URL.revokeObjectURL(href);
-    report(error);
+    consoleApi.reportError(error);
+    for (const href of created) {
+      URL.revokeObjectURL(href);
+      modules.delete(href);
+    }
     post({ type: "run-failed", seq: data.seq });
     return;
   }
   if (data.seq !== latestSeq) {
-    for (const href of created) URL.revokeObjectURL(href);
+    for (const href of created) {
+      URL.revokeObjectURL(href);
+      modules.delete(href);
+    }
     return;
   }
 
@@ -304,7 +390,7 @@ async function onRun({ data }) {
   try {
     current = mount(Component, { target: document.body });
   } catch (error) {
-    report(error);
+    consoleApi.reportError(error);
   }
   native.requestAnimationFrame(() =>
     native.setTimeout(
