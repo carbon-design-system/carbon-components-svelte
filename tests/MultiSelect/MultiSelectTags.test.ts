@@ -11,7 +11,9 @@ const selected = () =>
 const tagLabels = (container: HTMLElement) =>
   Array.from(
     container.querySelectorAll(".bx--multi-select__tags .bx--tag__label"),
-  ).map((el) => el.textContent?.trim());
+  )
+    .filter((el) => !el.closest(".bx--tag-set-overflow"))
+    .map((el) => el.textContent?.trim());
 
 describe("MultiSelect selectionDisplay=tags", () => {
   it("lists each selected item as a tag in items order", () => {
@@ -128,6 +130,18 @@ describe("MultiSelect selectionDisplay=tags", () => {
     expect(
       container.querySelector(".bx--multi-select__tags .bx--stack"),
     ).not.toHaveClass("bx--stack-wrap");
+  });
+
+  it("collapses hidden tags into a +N popover button", () => {
+    const { container } = render(MultiSelectTags, {
+      config: { tagOverflow: "collapse" },
+    });
+
+    expect(
+      container.querySelector(
+        ".bx--multi-select__tags .bx--tag-set-overflow button",
+      ),
+    ).toHaveAttribute("aria-expanded", "false");
   });
 
   it.each(["top", "fixed", "top-after-reopen"] as const)(
