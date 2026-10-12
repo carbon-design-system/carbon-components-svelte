@@ -32,9 +32,8 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
+  import { get, readable } from "svelte/store";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { moveIndex } from "../utils/move-index.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const id = uniqueId();
@@ -47,14 +46,22 @@
   // Everything is tabbable until the bar knows its items (and without a bar).
   $: tabindex = $tabStop === undefined || $tabStop === ref ? 0 : -1;
 
-  let menuItems = [];
-
-  const unsubMenuItems = ctx?.menuItems.subscribe((_menuItems) => {
-    menuItems = _menuItems;
-  });
-
   $: ctx?.updateSelectedItems({ id, isSelected });
   $: if (ref) menubar?.setCurrent(ref, isSelected);
+
+  // True when focus leaves the menu past its last item in DOM order. The item
+  // list is read on demand since only blur needs it.
+  function isLeavingMenu(relatedTarget) {
+    const items = get(ctx.menuItems);
+    return (
+      items.includes(ref) &&
+      !items.some(
+        (item) =>
+          ref.compareDocumentPosition(item) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ) &&
+      !items.includes(relatedTarget)
+    );
+  }
 
   onMount(() => {
     if (ctx && ref) {
@@ -69,7 +76,6 @@
         menubar.setCurrent(node, false);
         menubar.unregisterItem(node);
       }
-      if (unsubMenuItems) unsubMenuItems();
       ctx?.updateSelectedItems({ id, isSelected: false });
       if (ctx && ref) {
         ctx.unregisterMenuItem(ref);
@@ -97,28 +103,7 @@
     on:keyup
     on:keydown
     on:keydown={(event) => {
-      if (!ctx) return;
-
-      const currentIndex = menuItems.indexOf(ref);
-      if (currentIndex === -1) return;
-
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        // Move to next item, wrap to first
-        menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        // Move to previous item, wrap to last
-        menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
-      } else if (event.key === "Home") {
-        event.preventDefault();
-        // Focus first item
-        menuItems[0]?.focus();
-      } else if (event.key === "End") {
-        event.preventDefault();
-        // Focus last item
-        menuItems[menuItems.length - 1]?.focus();
-      } else if (event.key === "Escape") {
+      if (ctx && event.key === "Escape") {
         event.preventDefault();
         ctx.closeMenu("escape-key");
       }
@@ -128,11 +113,8 @@
     on:blur={(event) => {
       // Only close menu if blur is moving focus outside the menu past its
       // last item (not when navigating between menu items with arrow keys)
-      if (
-        menuItems[menuItems.length - 1] === ref &&
-        (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
-      ) {
-        ctx?.closeMenu("blur");
+      if (ctx && isLeavingMenu(event.relatedTarget)) {
+        ctx.closeMenu("blur");
       }
     }}
   >
