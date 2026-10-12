@@ -125,6 +125,15 @@
     fill: currentColor;
   }
 
+  // HeaderNavMenu trigger icon: label, icon, then the chevron. The chevron's
+  // own margin supplies the icon-to-chevron gap. Wins over the header's
+  // `:hover > svg` fill by order, so the icon tracks the text color.
+  .#{$prefix}--header__menu-title > svg:not(.#{$prefix}--header__menu-arrow) {
+    flex-shrink: 0;
+    margin-left: $carbon--spacing-03;
+    fill: currentColor;
+  }
+
   // An auto-width text action reserves the 2px focus border at rest (the
   // padding gives the extra pixel back) so `:focus` only swaps the border
   // color instead of widening the button.

@@ -1,5 +1,9 @@
 <script>
   /**
+   * @template [Icon=any]
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "blur"} trigger
@@ -19,6 +23,13 @@
    * @type {string}
    */
   export let text = undefined;
+
+  /**
+   * Specify an icon to render after the text, before the chevron.
+   * Alternatively, use the "icon" slot.
+   * @type {Icon}
+   */
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Obtain a reference to the HTML anchor element.
@@ -180,7 +191,12 @@
     on:focus
     on:blur
   >
-    {text}
+    <slot name="text">{text}</slot>
+    {#if icon || $$slots.icon}
+      <slot name="icon">
+        <svelte:component this={icon} size={16} />
+      </slot>
+    {/if}
     <ChevronDown class="bx--header__menu-arrow" />
   </a>
   <ul
