@@ -49,6 +49,16 @@
     color: $shell-panel-text-01;
     text-decoration: none;
 
+    // ccs: a `HeaderPanelLink` without an `href` renders a `<button>`; reset
+    // its chrome so it matches the anchor. Anchors are unaffected.
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    font-family: inherit;
+    text-align: start;
+
     @media (any-hover: hover) {
       &:hover:not(.#{$prefix}--switcher__item-link--selected) {
         background: $shell-panel-bg-02;
