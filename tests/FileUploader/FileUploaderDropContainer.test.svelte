@@ -12,7 +12,10 @@
   export let onrejected:
     | ((
         e: CustomEvent<
-          Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>
+          Array<{
+            file: File;
+            reason: "type" | "size" | "duplicate" | "invalid";
+          }>
         >,
       ) => void)
     | undefined = undefined;

@@ -193,6 +193,33 @@ describe("FileUploaderDropContainer", () => {
     });
   });
 
+  it("should reject dropped files that don't match accept", async () => {
+    const changeHandler = vi.fn();
+    const rejectedHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        accept: [".png", "image/jpeg"],
+        multiple: true,
+        onchange: changeHandler,
+        onrejected: rejectedHandler,
+      },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const png = new File(["a"], "logo.PNG", { type: "image/png" });
+    const jpeg = new File(["b"], "photo", { type: "image/jpeg" });
+    const text = new File(["c"], "notes.txt", { type: "text/plain" });
+    dropDiv.dispatchEvent(createDragEvent("drop", [png, jpeg, text]));
+
+    await vi.waitFor(() => expect(changeHandler).toHaveBeenCalled());
+    expect(changeHandler.mock.calls[0][0].detail).toEqual([png, jpeg]);
+    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+      { file: text, reason: "type" },
+    ]);
+  });
+
   it("should handle drop event and add files", async () => {
     const changeHandler = vi.fn();
     const { container } = render(FileUploaderDropContainer, {
