@@ -39,6 +39,13 @@
   import { moveIndex } from "../utils/move-index.js";
 
   const ctx = getContext("carbon:HeaderPanelLinks");
+  const panel = getContext("carbon:HeaderAction");
+
+  // Runs after the forwarded `click` handler so it can opt out with
+  // `event.preventDefault()`.
+  function handleClick(event) {
+    if (!event.defaultPrevented) panel?.select();
+  }
 
   onMount(() => {
     const node = ref;
@@ -85,6 +92,7 @@
       class:bx--switcher__item-link--selected={isSelected}
       {...$$restProps}
       on:click
+      on:click={handleClick}
       on:keydown
       on:keydown={handleKeydown}
     >
@@ -104,6 +112,7 @@
       class:bx--switcher__item-link--selected={isSelected}
       {...$$restProps}
       on:click
+      on:click={handleClick}
       on:keydown
       on:keydown={handleKeydown}
     >

@@ -6,7 +6,7 @@
    * @property {"toggle"} trigger
    * @event close
    * @type {object}
-   * @property {"outside-click" | "toggle" | "escape-key"} trigger
+   * @property {"outside-click" | "toggle" | "escape-key" | "select"} trigger
    */
 
   /**
@@ -71,10 +71,17 @@
   /** Set to `true` to prevent the panel from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
+  /**
+   * Set to `false` to keep the panel open after a `HeaderPanelLink` is activated.
+   * By default, activating a link closes the panel and dispatches `close`
+   * with `trigger: "select"`.
+   */
+  export let closeOnSelect = true;
+
   /** Set an id for the trigger button element. Also used to label the panel. */
   export let id = uniqueId();
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
@@ -156,6 +163,16 @@
       ref?.focus();
     }
   }
+
+  // Called by `HeaderPanelLink` once its click handlers have run.
+  /** @type {() => void} */
+  function select() {
+    if (!isOpen || !closeOnSelect) return;
+    isOpen = false;
+    dispatch("close", { trigger: "select" });
+  }
+
+  setContext("carbon:HeaderAction", { select });
 
   // Closing unmounts the panel, so focus inside it (e.g. on an item whose
   // handler set `isOpen` to false) would fall to <body>.
