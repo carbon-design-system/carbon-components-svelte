@@ -63,6 +63,20 @@ describe("TagSet", () => {
     spy.mockRestore();
   });
 
+  it("does not read layout on mount before the tags have registered", async () => {
+    const widthSpy = vi.spyOn(HTMLElement.prototype, "offsetWidth", "get");
+
+    render(TagSetFixture);
+
+    // Tags register in a batched microtask, so nothing is measurable yet.
+    expect(widthSpy).not.toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(widthSpy).toHaveBeenCalled();
+    });
+    widthSpy.mockRestore();
+  });
+
   it("renders every tag and no overflow indicator when everything fits", () => {
     const { container } = render(TagSetFixture);
 

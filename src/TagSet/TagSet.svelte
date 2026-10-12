@@ -206,7 +206,11 @@
   const throttledMeasure = rafThrottle(measure);
 
   onMount(() => {
-    measure();
+    // Tags register in a batched microtask after mount, so `$items` is almost
+    // always empty here and there is nothing to measure yet. Reading
+    // `offsetWidth` regardless forces a synchronous layout for every TagSet on
+    // the page; the re-measure below runs once the tags are registered.
+    if ($items.length > 0) measure();
 
     const stops = [wrapperRef, containingElement].map((element) =>
       element ? observeResize(element, () => throttledMeasure()) : noop,
