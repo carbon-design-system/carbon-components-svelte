@@ -1,0 +1,63 @@
+---
+components: ["CopyText"]
+description: Copy text renders a value inline with a compact copy button beside it, for endpoints, IDs, and other single values in a sentence or list.
+---
+
+<script>
+  import { CopyText, DescriptionList, DescriptionListItem, Text } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Pass the value as the default slot. By default, the button copies the rendered text at click time using the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText), with a `document.execCommand("copy")` fallback when that API is unavailable or rejects. For a standalone icon button, use [CopyButton](/components/CopyButton); for a labeled, editable-looking field, use [CopyInput](/components/CopyInput).
+
+<CopyText>postgres-prod-01.acme.io:5432</CopyText>
+
+## Text
+
+Set `text` to the string to copy. Use it when the copied value differs from what is displayed, such as a truncated URL. When the default slot is empty, `text` is also rendered as the value.
+
+<CopyText text="https://api.acme.io/webhooks/incoming/f8a2c91d">https://api.acme.io/…/f8a2c91d</CopyText>
+
+<CopyText text="f8a2c91d" />
+
+## Inline in text
+
+The value and button flow inline, so `CopyText` sits inside a sentence. Long values wrap, and the button follows the last line. When a value nearly fills its line, the button can drop to the next line by itself.
+
+<Text>Send requests to <CopyText>https://api.acme.io/v1</CopyText> with your API token in the <code>Authorization</code> header.</Text>
+
+## Custom feedback
+
+Set `feedback` to customize the message shown after copying. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`). Set `feedbackTimeout` to change how long feedback stays visible, in milliseconds (default `2000`).
+
+<CopyText text="f8a2c91d" feedback="Webhook ID copied" feedbackTimeout={4000} />
+
+## Icon description
+
+Set `iconDescription` to change the button's accessible name and hover tooltip. Give each button a distinct name when several appear on one page, so screen readers can tell them apart.
+
+<CopyText text="postgres-prod-01.acme.io:5432" iconDescription="Copy endpoint" />
+
+## Copy behavior
+
+Pass a function to `copy` to replace the default clipboard behavior. It receives the resolved text. On failure it should reject, so the button shows `errorFeedback` and dispatches `copy:error`. The component dispatches `copy` after a successful copy.
+
+<CopyText text="f8a2c91d" copy={(text) => navigator.clipboard.writeText(text.toUpperCase())} />
+
+## Tooltip
+
+The button shows a portalled tooltip on hover and focus, and the same surface shows the feedback after copying. Set `tooltipPosition` and `tooltipAlignment` to place it; see [CopyButton](/components/CopyButton#hover-tooltip) for the full behavior.
+
+<CopyText text="f8a2c91d" tooltipPosition="right" />
+
+## Description list
+
+Place `CopyText` in a `DescriptionListItem` to make one value copyable. The value is copied as rendered, or set `text` to copy something different from what is displayed.
+
+<DescriptionList>
+  <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
+  <DescriptionListItem term="Endpoint"><CopyText>postgres-prod-01.acme.io:5432</CopyText></DescriptionListItem>
+  <DescriptionListItem term="Webhook"><CopyText text="https://api.acme.io/webhooks/incoming/f8a2c91d">https://api.acme.io/…/f8a2c91d</CopyText></DescriptionListItem>
+  <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
+</DescriptionList>

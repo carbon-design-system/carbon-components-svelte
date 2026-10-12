@@ -1,9 +1,10 @@
 ---
+components: ["DescriptionList", "DescriptionListItem", "CopyText"]
 description: Description lists display term and detail pairs, such as metadata or properties, using native dl, dt, and dd elements.
 ---
 
 <script>
-  import { DescriptionList, DescriptionListItem } from "carbon-components-svelte";
+  import { CopyText, DescriptionList, DescriptionListItem } from "carbon-components-svelte";
 </script>
 
 `DescriptionList` renders a native `<dl>`. Each `DescriptionListItem` wraps one `<dt>` term and its `<dd>` detail, so screen readers announce them as a description list rather than a table. Use [StructuredList](/components/StructuredList) instead when rows need selection or tabular columns.
@@ -50,5 +51,16 @@ Use `gap` to pick a spacing step from 1–13 (the same scale as [Stack](/compone
 <DescriptionList gap={7}>
   <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
   <DescriptionListItem term="Engine">PostgreSQL 16.2</DescriptionListItem>
+  <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
+</DescriptionList>
+
+## Copyable value
+
+To copy one value, put [CopyText](/components/CopyText) in an item's detail. It renders the value inline with a compact copy button beside it. The value is copied as rendered, or set `text` to copy something different from what is displayed.
+
+<DescriptionList>
+  <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
+  <DescriptionListItem term="Endpoint"><CopyText>postgres-prod-01.acme.io:5432</CopyText></DescriptionListItem>
+  <DescriptionListItem term="Webhook"><CopyText text="https://api.acme.io/webhooks/incoming/f8a2c91d">https://api.acme.io/…/f8a2c91d</CopyText></DescriptionListItem>
   <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
 </DescriptionList>

@@ -52,6 +52,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ToggleButtonGroup",
       "Toolbar",
       "CopyButton",
+      "CopyText",
       "OverflowMenu",
       "ContextMenu",
       "MenuButton",
