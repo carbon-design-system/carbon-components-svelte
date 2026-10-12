@@ -68,9 +68,4 @@ export function resolveStatusDescribedBy(options: {
   includeErrorId?: boolean;
   requireInvalidText?: boolean;
   requireWarnText?: boolean;
-  /**
-   * Some fields (TextArea) also suppress the warn id while fluid,
-   * not just the helper id.
-   */
-  hideWarnWhenFluid?: boolean;
 }): string | undefined;

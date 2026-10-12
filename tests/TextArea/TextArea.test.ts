@@ -392,6 +392,18 @@ describe("TextArea", () => {
     expect(label).toHaveClass("bx--visually-hidden");
   });
 
+  it("should describe the textarea with the warning in fluid mode", () => {
+    render(TextArea, {
+      props: { fluid: true, warn: true, warnText: "Too informal" },
+    });
+
+    const warning = screen.getByText("Too informal");
+    expect(warning).toHaveAttribute("id");
+    expect(screen.getByRole("textbox")).toHaveAccessibleDescription(
+      "Too informal",
+    );
+  });
+
   it("should handle custom id", () => {
     render(TextArea, { props: { id: "custom-id" } });
 
