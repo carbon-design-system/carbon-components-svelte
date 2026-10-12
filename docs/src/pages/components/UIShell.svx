@@ -280,14 +280,7 @@ Within a `HeaderPanelLinks` list, ArrowUp and ArrowDown move focus between links
 
 Activating a link closes the panel and dispatches `close` with `trigger: "select"`. Call `event.preventDefault()` in the link's `click` handler to keep the panel open for that link, or set `closeOnSelect={false}` on `HeaderAction` to keep it open for every link. Focus returns to the panel button only if it would otherwise be lost.
 
-```svelte
-<HeaderAction iconDescription="Settings">
-  <HeaderPanelLinks>
-    <HeaderPanelLink href="/docs" text="Documentation" icon={Launch} />
-    <HeaderPanelLink on:click={toggleTheme}>Switch theme</HeaderPanelLink>
-  </HeaderPanelLinks>
-</HeaderAction>
-```
+<FileSource src="/framed/UIShell/HeaderPanelItems" />
 
 ### Events
 
