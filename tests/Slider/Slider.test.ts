@@ -375,6 +375,14 @@ describe("Slider", () => {
     expect(invalidText).toHaveClass("bx--slider__validation-msg");
     expect(invalidText).toHaveClass("bx--slider__validation-msg--invalid");
     expect(invalidText).toHaveClass("bx--form-requirement");
+    expect(screen.getByRole("alert")).toBe(invalidText);
+  });
+
+  it("should not announce the warning as an alert", () => {
+    render(Slider, { props: { warn: true, warnText: "Check value" } });
+
+    expect(screen.getByText("Check value")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("should not display invalid text when invalid is false", () => {
