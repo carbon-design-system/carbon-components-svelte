@@ -252,7 +252,7 @@ The tags are a single tab stop after the field: the arrow keys move between them
 
 ### Collapsed overflow
 
-Tags wrap onto as many rows as they need. Set `tagOverflow` to `"collapse"` to keep them on one row, with the rest behind a "+N" indicator.
+Tags wrap onto as many rows as they need. Set `tagOverflow` to `"collapse"` to keep them on one row, with the rest behind a "+N" button. The button opens the hidden tags in a popover, where they can still be removed.
 
 <div style="max-width: 20rem">
   <MultiSelect selectionDisplay="tags" tagOverflow="collapse" selectedIds="{["us-east", "us-south", "eu-de", "eu-gb", "jp-tok"]}" labelText="Regions" label="Select regions..."
