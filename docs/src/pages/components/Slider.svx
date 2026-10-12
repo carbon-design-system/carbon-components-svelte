@@ -244,6 +244,12 @@ Set `readonly` to `true` to display a value while preventing changes.
 
 <RangeSlider labelText="Alert threshold (%)" orientation="vertical" value={20} valueUpper={70} />
 
+### Read-only vertical range slider
+
+Set `readonly` to `true` to display the range while preventing changes. Each handle stays in the tab order so its value can still be read; arrow keys leave it unchanged.
+
+<RangeSlider labelText="Alert threshold (%)" orientation="vertical" readonly value={20} valueUpper={70} />
+
 ### Vertical range slider with fluid height
 
 The upper input sits beside the `max` label and the lower input beside the `min` label, so both stay aligned with the track ends as the container grows.

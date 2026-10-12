@@ -312,7 +312,7 @@
     >
       <div
         role="slider"
-        tabindex={disabled || (readonly && !hideTextInput) ? undefined : 0}
+        tabindex={disabled ? undefined : 0}
         class:bx--slider__thumb={true}
         style:left={orientation === "vertical" ? undefined : `${left}%`}
         style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
