@@ -45,6 +45,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { verticalListFocus } from "../utils/vertical-list-focus.js";
 
   const dispatch = createEventDispatcher();
 
@@ -147,6 +148,7 @@
 {#if isOpen}
   <div
     bind:this={refMenu}
+    use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
     id={menuId}
     aria-label={iconDescription}
     class:bx--profile-menu={true}
