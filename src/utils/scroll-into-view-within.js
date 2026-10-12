@@ -1,9 +1,10 @@
 // @ts-check
-// Scroll an item into view within its own scroll container (a menu or modal
-// body) without scrolling the document.
+// Scroll an item into view within its own scroll container (a menu, modal
+// body, or side nav list) without scrolling the document.
 //
 // `Element.scrollIntoView` scrolls every scrollable ancestor up to the
-// viewport, so a portaled menu would jump the whole page. This scopes the
+// viewport, so a portaled menu would jump the whole page. In Chromium it also
+// moves the sequential focus starting point to the item. This scopes the
 // adjustment to the container and is a no-op when the container is not
 // scrollable.
 
