@@ -172,6 +172,16 @@ Within a content switcher, only one switch's tooltip stays open at a time — ho
 
 Moving the pointer directly from one icon-only switch to a neighbor whose tooltip is already open skips the usual enter delay, so the tooltip swaps in immediately instead of waiting again. Hover across the icon-only switches in the examples above to feel this.
 
+## Icon with text
+
+Set `iconOnly` to `false` to show the icon before the visible `text`. The text stays the accessible name, so there is no tooltip.
+
+<ContentSwitcher>
+  <Switch icon={TableOfContents} iconOnly={false} text="Table of contents" />
+  <Switch icon={Dashboard} iconOnly={false} text="Dashboard" />
+  <Switch icon={List} iconOnly={false} text="List" />
+</ContentSwitcher>
+
 ## Low contrast
 
 Set `lowContrast` for the low contrast variant. The selected switch uses a light surface instead of the default inverse (dark) background, reducing the contrast between the switcher and surrounding content.
