@@ -22,12 +22,22 @@ import type {
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
 import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+import {
+  highlight,
+  highlightCode,
+  type Token,
+  type TokenType,
+  tokenize,
+} from "carbon-components-svelte/syntax";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/g10.css";
 import "carbon-components-svelte/css/g80.css";
 import "carbon-components-svelte/css/g90.css";
+import "carbon-components-svelte/css/syntax-tokens-g100.css";
+import "carbon-components-svelte/css/syntax-tokens.css";
+import "carbon-components-svelte/css/syntax.css";
 import "carbon-components-svelte/css/white.css";
 
 type _BarrelButton = BarrelButton;
@@ -50,3 +60,10 @@ type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;
+
+const _tokens: Token[] | undefined = tokenize("let a", "js");
+const _type: TokenType | null | undefined = _tokens?.[0]?.type;
+const _html: string | undefined = highlight("let a", "js");
+const _action: { destroy: () => void } = highlightCode(document.body, {
+  language: "js",
+});

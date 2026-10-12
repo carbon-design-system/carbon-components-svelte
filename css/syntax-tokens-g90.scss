@@ -1,0 +1,6 @@
+// Carbon syntax tokens for the static `g90.css` theme build.
+@import "./syntax/tokens";
+
+:root {
+  @include syntax-tokens(dark, g90);
+}
