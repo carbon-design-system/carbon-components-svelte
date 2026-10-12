@@ -41,11 +41,13 @@
     @include carbon--type-style('productive-heading-01');
 
     // ccs: flex centres the label exactly; the fixed padding drifted a few
-    // px against the type style's line-height.
+    // px against the type style's line-height. The 7px block padding leaves
+    // exactly one line in the content box, so a single line sits where a
+    // wrapped label's first line does.
     display: flex;
     min-height: $spacing-07;
     align-items: center;
-    padding: to-rem(6px) $spacing-05;
+    padding: to-rem(7px) $spacing-05;
     color: $shell-panel-text-01;
     text-decoration: none;
 
@@ -86,9 +88,14 @@
     flex: 1 1 auto;
   }
 
+  // ccs: one line tall and pinned to the top, so the icon lines up with the
+  // label's first line when it wraps.
   .#{$prefix}--switcher__item-icon {
     display: flex;
+    height: map-get($productive-heading-01, line-height) * 1em;
     flex: 0 0 auto;
+    align-items: center;
+    align-self: flex-start;
     margin-inline-start: $spacing-03;
   }
 
