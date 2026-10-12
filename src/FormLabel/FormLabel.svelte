@@ -29,7 +29,9 @@
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const formItem = getContext(FORM_ITEM_CONTEXT_KEY);
+  const context = getContext(FORM_ITEM_CONTEXT_KEY);
+  // A FormGroup's fieldset is named by its legend, not a label.
+  const formItem = context?.group ? undefined : context;
   const controlId = formItem?.controlId ?? readable(undefined);
   const parentDisabled = formItem?.disabled ?? readable(false);
   const setPartId = formItem?.part("label") ?? noop;
