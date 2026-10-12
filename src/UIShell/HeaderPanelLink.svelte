@@ -1,6 +1,7 @@
 <script>
   /**
-   * Specify the `href` attribute.
+   * Specify the `href` attribute to render an anchor.
+   * Omit it to render a button (for actions that do not navigate).
    * @type {string}
    */
   export let href = undefined;
@@ -9,8 +10,9 @@
   export let isSelected = false;
 
   /**
-   * Obtain a reference to the HTML anchor element.
+   * Obtain a reference to the HTML element (anchor or button).
    * @bindable readonly
+   * @type {null | HTMLAnchorElement | HTMLButtonElement}
    */
   export let ref = null;
 
@@ -18,16 +20,30 @@
 </script>
 
 <li class:bx--switcher__item={true}>
-  <a
-    bind:this={ref}
-    {href}
-    rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
-    aria-current={isSelected ? "page" : undefined}
-    class:bx--switcher__item-link={true}
-    class:bx--switcher__item-link--selected={isSelected}
-    {...$$restProps}
-    on:click
-  >
-    <slot />
-  </a>
+  {#if href}
+    <a
+      bind:this={ref}
+      {href}
+      rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
+      aria-current={isSelected ? "page" : undefined}
+      class:bx--switcher__item-link={true}
+      class:bx--switcher__item-link--selected={isSelected}
+      {...$$restProps}
+      on:click
+    >
+      <slot />
+    </a>
+  {:else}
+    <button
+      bind:this={ref}
+      type="button"
+      aria-current={isSelected ? "page" : undefined}
+      class:bx--switcher__item-link={true}
+      class:bx--switcher__item-link--selected={isSelected}
+      {...$$restProps}
+      on:click
+    >
+      <slot />
+    </button>
+  {/if}
 </li>
