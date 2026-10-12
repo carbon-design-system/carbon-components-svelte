@@ -49,6 +49,20 @@ function visibleTagLabels(container: HTMLElement): string[] {
 }
 
 describe("TagSet", () => {
+  it("orders registered tags with a linear number of DOM comparisons", async () => {
+    const labels = Array.from({ length: 60 }, (_, i) => `Tag ${i}`);
+    const spy = vi.spyOn(Node.prototype, "compareDocumentPosition");
+
+    const { container } = render(TagSetFixture, { labels });
+    await tick();
+    await tick();
+
+    expect(visibleTagLabels(container)).toHaveLength(60);
+    // Re-sorting the whole list for each registration costs ~n^2 / 2 = 1,800.
+    expect(spy.mock.calls.length).toBeLessThan(labels.length * 3);
+    spy.mockRestore();
+  });
+
   it("renders every tag and no overflow indicator when everything fits", () => {
     const { container } = render(TagSetFixture);
 

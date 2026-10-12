@@ -92,7 +92,7 @@
   import { noop } from "../utils/noop.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
+  import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
@@ -149,7 +149,7 @@
       batchedItemsUpdate((current) =>
         current.some((existing) => existing.id === item.id)
           ? current
-          : sortByDomOrder([...current, item]),
+          : insertByDomOrder(current, item),
       );
     },
     unregister: (id) => {

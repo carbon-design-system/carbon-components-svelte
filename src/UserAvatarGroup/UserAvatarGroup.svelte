@@ -79,7 +79,7 @@
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
+  import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
 
@@ -99,7 +99,7 @@
 
   // Avatars register in mount order, which differs from DOM order when they are
   // conditionally rendered. Each registers from its own `onMount`, so its node
-  // is already in the DOM; sortByDomOrder keeps the visible avatars and
+  // is already in the DOM; insertByDomOrder keeps the visible avatars and
   // overflow names tracking the rendered layout. Sorting after a batched
   // flush matches sorting after each registration.
 
@@ -116,7 +116,7 @@
       batchedItemsUpdate((current) =>
         current.some((item) => item.id === id)
           ? current
-          : sortByDomOrder([...current, { id, name, node }]),
+          : insertByDomOrder(current, { id, name, node }),
       );
     },
     unregister: (id) => {
