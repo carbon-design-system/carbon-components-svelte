@@ -168,6 +168,35 @@ describe("FileUploaderItem", () => {
     expect(event.detail).toBe("file-1");
   });
 
+  it.each(["click", "{Enter}", " "])(
+    "should dispatch delete once per activation (%s)",
+    async (action) => {
+      const deleteHandler = vi.fn();
+      const { container } = render(FileUploaderItem, {
+        props: {
+          name: "test.txt",
+          status: "edit",
+          id: "file-1",
+          ondelete: deleteHandler,
+        },
+      });
+
+      const closeButton = container.querySelector(
+        ".bx--file__state-container button",
+      );
+      assert(closeButton instanceof HTMLElement);
+
+      if (action === "click") {
+        await user.click(closeButton);
+      } else {
+        closeButton.focus();
+        await user.keyboard(action);
+      }
+
+      expect(deleteHandler).toHaveBeenCalledTimes(1);
+    },
+  );
+
   it("should handle iconDescription prop", () => {
     const { container } = render(FileUploaderItem, {
       props: {
