@@ -777,6 +777,7 @@
   {#if showInvalid}
     <div
       id={errorId}
+      role="alert"
       class:bx--slider__validation-msg={true}
       class:bx--slider__validation-msg--invalid={true}
       class:bx--form-requirement={true}

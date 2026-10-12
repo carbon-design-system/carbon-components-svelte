@@ -531,6 +531,18 @@ describe("RangeSlider", () => {
     expect(markEls[1]).toHaveStyle({ left: "50%" });
   });
 
+  it("announces the invalid message as an alert", () => {
+    render(RangeSliderComponent, {
+      props: {
+        labelText: "Range",
+        invalid: true,
+        invalidText: "Invalid range",
+      },
+    });
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Invalid range");
+  });
+
   it.each([
     ["disabled", { disabled: true }],
     ["readonly", { readonly: true }],
