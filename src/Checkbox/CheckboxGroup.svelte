@@ -42,6 +42,13 @@
   /** Set to `true` to visually hide the legend */
   export let hideLegend = false;
 
+  /**
+   * Specify the orientation of the checkboxes.
+   * `"horizontal"` lays them out in a wrapping row, each sized to its label.
+   * @type {"vertical" | "horizontal"}
+   */
+  export let orientation = "vertical";
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -171,6 +178,7 @@
 >
   <fieldset
     class:bx--checkbox-group={true}
+    class:bx--checkbox-group--horizontal={orientation === "horizontal"}
     class:bx--checkbox-group--readonly={readonly}
     class:bx--checkbox-group--invalid={showInvalid}
     class:bx--checkbox-group--warning={showWarn}

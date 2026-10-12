@@ -35,6 +35,27 @@
     margin-bottom: to-rem(3px);
   }
 
+  // Checkboxes in a wrapping row. The margins above space a vertical stack;
+  // in a row, the first one's top margin would drop it below the others.
+  .#{$prefix}--checkbox-group--horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: $carbon--spacing-02 $carbon--spacing-07;
+  }
+
+  .#{$prefix}--checkbox-group--horizontal
+    > .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+    flex: none;
+    margin: 0;
+  }
+
+  // Keep the validation message on its own line below the row.
+  .#{$prefix}--checkbox-group--horizontal
+    > .#{$prefix}--checkbox-group__validation-msg {
+    flex-basis: 100%;
+  }
+
   // Visually, we'll hide the checkbox input and create our own styled version
   // to match the specs.
   .#{$prefix}--checkbox {

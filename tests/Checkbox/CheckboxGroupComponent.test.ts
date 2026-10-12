@@ -318,6 +318,22 @@ describe("CheckboxGroup", () => {
     );
   });
 
+  it("lays out vertically by default", () => {
+    render(CheckboxGroupComponent);
+
+    expect(screen.getByRole("group")).not.toHaveClass(
+      "bx--checkbox-group--horizontal",
+    );
+  });
+
+  it("lays out in a row with orientation horizontal", () => {
+    render(CheckboxGroupComponent, { props: { orientation: "horizontal" } });
+
+    expect(screen.getByRole("group")).toHaveClass(
+      "bx--checkbox-group--horizontal",
+    );
+  });
+
   it("should support multiple selections", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CheckboxGroupComponent);
