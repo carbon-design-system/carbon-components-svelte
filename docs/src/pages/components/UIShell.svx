@@ -44,7 +44,7 @@ Group related links behind a dropdown with `HeaderNavMenu` inside `HeaderNav`, a
 
 Keyboard support follows the WAI-ARIA menu pattern: <DocKbd label="Enter" />, <DocKbd label="Space" />, <DocKbd label="ArrowDown" />, or <DocKbd label="ArrowUp" /> open the menu and move focus to the first or last item, <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> move between items once open, and <DocKbd label="Escape" /> closes the menu and returns focus to the trigger.
 
-`HeaderNav` is a WAI-ARIA menubar, so its top-level items (`HeaderNavItem`s and `HeaderNavMenu` triggers) are a single <DocKbd label="Tab" /> stop: the current page item (or the first item) takes focus, and the arrow keys move between the rest. <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> move between top-level items (wrapping at either end), <DocKbd label="Home" />/<DocKbd label="End" /> jump to the first or last, and typing a character focuses the next item whose label starts with it. While a menu is open, <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> close it and move to the adjacent top-level item, and typing a character focuses the next menu item starting with it.
+`HeaderNav` is a WAI-ARIA menubar, so its top-level items (`HeaderNavItem`s and `HeaderNavMenu` triggers) are a single <DocKbd label="Tab" /> stop: the current page item (or the first item) takes focus, and the arrow keys move between the rest. <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> move between top-level items (wrapping at either end), <DocKbd label="Home" />/<DocKbd label="End" /> jump to the first or last, and typing a character focuses the next item whose label starts with it. While a menu is open, <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> close it and move to the adjacent top-level item, opening its menu and focusing the first item when it is a `HeaderNavMenu`. Typing a character focuses the next menu item starting with it.
 
 Set `icon` on `HeaderNavMenu` to render a trailing icon between the text and the chevron, or use the `icon` slot. Replace the label with the `text` slot when it needs custom content; the trigger's accessible name follows what is rendered.
 
@@ -148,6 +148,8 @@ Only the row that sets `large` grows. Its children stay 32px unless they set it 
 On smaller screens, header links belong in the side nav, above the regular side nav items.
 
 Carbon hides the header nav below the large breakpoint (66rem). Duplicate those links with `HeaderSideNavItems`; its children only appear below that breakpoint. Set `hasDivider` to separate them from the regular side nav items below.
+
+`HeaderSideNavItems` is the same menubar laid out vertically: its items are a single <DocKbd label="Tab" /> stop, <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> move between them (wrapping at either end), and <DocKbd label="Home" />/<DocKbd label="End" /> and typing a character work as in the header. Because Up and Down move between items, a `HeaderNavMenu` opens with <DocKbd label="ArrowRight" /> (as well as <DocKbd label="Enter" /> or <DocKbd label="Space" />) and <DocKbd label="ArrowLeft" /> or <DocKbd label="Escape" /> closes it and returns focus to the trigger.
 
 Resize the viewport to see the switch.
 
