@@ -551,7 +551,7 @@
         <div
           bind:this={lowerThumbRef}
           role="slider"
-          tabindex={disabled || (readonly && !hideTextInput) ? undefined : 0}
+          tabindex={disabled ? undefined : 0}
           class:bx--slider__thumb={true}
           class:bx--slider__thumb--lower={true}
           aria-valuemax={lowerMax}
@@ -619,7 +619,7 @@
         <div
           bind:this={upperThumbRef}
           role="slider"
-          tabindex={disabled || (readonly && !hideTextInput) ? undefined : 0}
+          tabindex={disabled ? undefined : 0}
           class:bx--slider__thumb={true}
           id={upperThumbId}
           class:bx--slider__thumb--upper={true}
