@@ -535,6 +535,7 @@ Measured in Chromium on an Apple M2, with 1,000 rows and three columns (script, 
 | --- | --- |
 | Set `virtualize` or `pageSize` once a table can hold a few hundred rows. | A sort or a cleared search then touches only the rows in view, so it fits in a frame. |
 | Set `debounce` on `ToolbarSearch` when a large table renders every row. | Rows filter once typing pauses, so each keystroke paints right away. |
+| Set `deferFilter` on `ToolbarSearch` when clearing the search must paint at once. | The input and clear button update first, then the rows filter in the next task. Filtering becomes asynchronous. |
 | Keep cell slots light, such as text and icons, in tables that render every row. | Each row mounts its cells, so a widget in every cell multiplies the mount cost. |
 
 ### Large datasets
@@ -1010,6 +1011,14 @@ Pass a function to `shouldFilterRows` to implement custom filtering logic.
 Set `debounce` on `ToolbarSearch` to the number of milliseconds to wait after typing stops before rows are filtered, which keeps large tables responsive. The `value` still updates on every keystroke, and clearing the search filters immediately. The default of `0` filters on every keystroke.
 
 <FileSource src="/framed/DataTable/DataTableFilterDebounce" />
+
+### Deferred
+
+Set `deferFilter` on `ToolbarSearch` to let the browser paint before rows are filtered. The `value` updates at once, so the input and the clear button respond right away, and the table re-renders in the task that follows. Unlike `debounce`, clearing is deferred too, and typing is never delayed by a timer.
+
+Filtering becomes asynchronous: `filteredRowIds` and the rows update shortly after `value`, not in the same update. Rapid changes coalesce, so only the latest value is filtered. Combine it with `debounce` to wait for typing to pause first, then yield before filtering. The first filter on mount stays synchronous.
+
+<FileSource src="/framed/DataTable/DataTableFilterDefer" />
 
 ### Strategy
 
