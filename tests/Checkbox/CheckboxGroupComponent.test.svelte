@@ -18,6 +18,8 @@
   export let warnText: ComponentProps<CheckboxGroup>["warnText"] = "";
   export let id: ComponentProps<CheckboxGroup>["id"] = undefined;
   export let readonly: ComponentProps<CheckboxGroup>["readonly"] = false;
+  export let orientation: ComponentProps<CheckboxGroup>["orientation"] =
+    undefined;
   export let customClass = "";
   export let useSlot = false;
   export let checkboxInvalid = false;
@@ -37,6 +39,7 @@
     {warn}
     {warnText}
     {readonly}
+    {orientation}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
@@ -62,6 +65,7 @@
     {warn}
     {warnText}
     {readonly}
+    {orientation}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
