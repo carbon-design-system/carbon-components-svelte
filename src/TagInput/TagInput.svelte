@@ -4,6 +4,7 @@
    * @event {{ value: string; index: number }} remove - Cancelable. Dispatched before a tag is removed; call `preventDefault()` to keep it.
    * @event {{ value: string; reason: "duplicate" | "max" | "validate"; message?: string }} invalid - Dispatched when a value is rejected.
    * @event {string[]} change - Dispatched after tags are added or removed.
+   * @slot {{ tag: string; index: number; props: { filter: boolean; disabled: boolean; value: string; title: string; maxWidth: string; }; }} tag
    * @restProps {input}
    */
 
@@ -104,12 +105,6 @@
    * @type {number | undefined}
    */
   export let max = undefined;
-
-  /**
-   * Props for each tag, for example a color `type` per tag.
-   * @type {(tag: string, index: number) => { type?: "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline" }}
-   */
-  export let tagProps = () => ({});
 
   /** Specify the accessible name prefix of each tag's remove button */
   export let removeTagText = "Remove";
@@ -455,6 +450,21 @@
     }
   }
 
+  /**
+   * Props for each tag, passed to the `tag` slot. Spreading them onto any
+   * tag keeps its close button wired to removal.
+   * @param {string} tag
+   */
+  function tagSlotProps(tag) {
+    return {
+      filter: !readonly,
+      disabled,
+      value: tag,
+      title: removeTagText,
+      maxWidth: "13rem",
+    };
+  }
+
   function handleFormReset() {
     value = initialValue.slice();
     setDraft("");
@@ -514,16 +524,10 @@
     >
       {#if tagPlacement === "inline"}
         {#each value as tag, index (index)}
-          <Tag
-            {...tagProps(tag, index)}
-            filter={!readonly}
-            {disabled}
-            value={tag}
-            title={removeTagText}
-            maxWidth="13rem"
-          >
-            {tag}
-          </Tag>
+          {@const props = tagSlotProps(tag)}
+          <slot name="tag" {tag} {index} {props}>
+            <Tag {...props}>{tag}</Tag>
+          </slot>
         {/each}
       {/if}
       <input
@@ -574,16 +578,10 @@
       on:close:tag={handleTagClose}
     >
       {#each value as tag, index (index)}
-        <Tag
-          {...tagProps(tag, index)}
-          filter={!readonly}
-          {disabled}
-          value={tag}
-          title={removeTagText}
-          maxWidth="13rem"
-        >
-          {tag}
-        </Tag>
+        {@const props = tagSlotProps(tag)}
+        <slot name="tag" {tag} {index} {props}>
+          <Tag {...props}>{tag}</Tag>
+        </slot>
       {/each}
     </TagSet>
   {/if}

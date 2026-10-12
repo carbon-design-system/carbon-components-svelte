@@ -12,6 +12,8 @@
   import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
   import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
   import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
+  import Tag from "carbon-components-svelte/Tag/Tag.svelte";
+  import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
   import Theme from "carbon-components-svelte/Theme/Theme.svelte";
 
   const items = [
@@ -217,3 +219,13 @@
     <TabContent>Analyze content</TabContent>
   </svelte:fragment>
 </Tabs>
+
+<TagInput labelText="Topics" value={["alpha", "beta"]}>
+  {#snippet tag({
+    tag,
+    index,
+    props,
+  })}
+    <Tag {...props} type="teal" data-testid="tag-input-tag-{index}">{tag}</Tag>
+  {/snippet}
+</TagInput>

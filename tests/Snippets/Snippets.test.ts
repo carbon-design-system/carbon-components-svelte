@@ -37,6 +37,20 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
+  describe("TagInput", () => {
+    it("should render the tag snippet with tag, index, and props", async () => {
+      render(Snippets);
+
+      const first = screen.getByTestId("tag-input-tag-0");
+      expect(first).toHaveTextContent("alpha");
+      expect(first).toHaveClass("bx--tag--teal", "bx--tag--filter");
+
+      await user.click(within(first).getByRole("button"));
+      expect(screen.getByTestId("tag-input-tag-0")).toHaveTextContent("beta");
+      expect(screen.queryByTestId("tag-input-tag-1")).not.toBeInTheDocument();
+    });
+  });
+
   describe("Dropdown", () => {
     it("should render snippet with item and index arguments", async () => {
       render(Snippets);
