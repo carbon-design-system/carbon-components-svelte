@@ -12,22 +12,23 @@ const items = [
 ] as const;
 
 describe("ComboBox form participation", () => {
-  it("does not apply a name attribute to the input when name is omitted", () => {
-    render(ComboBox, {
+  it("renders no hidden input and no input name when name is omitted", () => {
+    const { container } = render(ComboBox, {
       props: { items, selectedId: "0", value: "Slack" },
     });
 
     expect(getInput()).not.toHaveAttribute("name");
+    expect(container.querySelector('input[type="hidden"]')).toBeNull();
     expect(Array.from(new FormData(getForm()).keys())).toHaveLength(0);
   });
 
-  it("serializes the initially selected value while the menu stays closed", () => {
+  it("serializes the initially selected id, not the text", () => {
     render(ComboBox, {
       props: { items, selectedId: "0", value: "Slack", name: "contact" },
     });
 
-    expect(getInput()).toHaveAttribute("name", "contact");
-    expect(new FormData(getForm()).get("contact")).toBe("Slack");
+    expect(getInput()).not.toHaveAttribute("name");
+    expect(new FormData(getForm()).get("contact")).toBe("0");
   });
 
   it("serializes an empty string when nothing is selected", () => {
@@ -38,7 +39,7 @@ describe("ComboBox form participation", () => {
     expect(new FormData(getForm()).get("contact")).toBe("");
   });
 
-  it("serializes the newly selected value after choosing an option from the menu", async () => {
+  it("serializes the newly selected id after choosing an option from the menu", async () => {
     render(ComboBox, {
       props: { items, name: "contact" },
     });
@@ -50,7 +51,7 @@ describe("ComboBox form participation", () => {
 
     expect(input).toHaveAttribute("aria-expanded", "false");
     const formData = new FormData(getForm());
-    expect(formData.getAll("contact")).toEqual(["Email"]);
+    expect(formData.getAll("contact")).toEqual(["1"]);
   });
 
   it("serializes an empty string after the selection is cleared", async () => {
@@ -66,7 +67,7 @@ describe("ComboBox form participation", () => {
     expect(new FormData(getForm()).get("contact")).toBe("");
   });
 
-  it("keeps FormData in sync while typing, and reverts to the selected value on blur without a match", async () => {
+  it("keeps the selected id while typing without a match, then blurring", async () => {
     render(ComboBox, {
       props: { items, selectedId: "0", value: "Slack", name: "contact" },
     });
@@ -75,16 +76,14 @@ describe("ComboBox form participation", () => {
     await user.click(input);
     await user.keyboard(" typing");
 
-    expect(new FormData(getForm()).get("contact")).toBe("Slack typing");
+    expect(new FormData(getForm()).get("contact")).toBe("0");
 
-    // No item matches "Slack typing" and allowCustomValue defaults to false,
-    // so losing focus without a selection restores the last selected value.
     await user.click(document.body);
 
-    expect(new FormData(getForm()).get("contact")).toBe("Slack");
+    expect(new FormData(getForm()).get("contact")).toBe("0");
   });
 
-  it("serializes the selected value while closed with virtualize enabled", () => {
+  it("serializes the selected id while closed with virtualize enabled", () => {
     const largeItems = Array.from({ length: 150 }, (_, i) => ({
       id: String(i),
       text: `Item ${i + 1}`,
@@ -100,7 +99,75 @@ describe("ComboBox form participation", () => {
       },
     });
 
-    expect(new FormData(getForm()).get("contact")).toBe("Item 43");
+    expect(new FormData(getForm()).get("contact")).toBe("42");
+  });
+
+  it("serializes an empty string when the selected item is disabled", () => {
+    const itemsWithDisabled = [
+      { id: "0", text: "Slack", disabled: true },
+      { id: "1", text: "Email" },
+    ];
+
+    render(ComboBox, {
+      props: { items: itemsWithDisabled, selectedId: "0", name: "contact" },
+    });
+
+    expect(new FormData(getForm()).get("contact")).toBe("");
+  });
+
+  describe("disabled", () => {
+    it("omits the field when a selection is present", () => {
+      const { container } = render(ComboBox, {
+        props: {
+          items,
+          selectedId: "1",
+          value: "Email",
+          name: "contact",
+          disabled: true,
+        },
+      });
+
+      expect(new FormData(getForm()).has("contact")).toBe(false);
+      expect(container.querySelector('input[type="hidden"]')).toBeDisabled();
+    });
+  });
+
+  describe("inputName", () => {
+    it("names the text input and submits the displayed text", () => {
+      render(ComboBox, {
+        props: {
+          items,
+          selectedId: "0",
+          value: "Slack",
+          name: "contact",
+          inputName: "contact_text",
+        },
+      });
+
+      expect(getInput()).toHaveAttribute("name", "contact_text");
+      const formData = new FormData(getForm());
+      expect(formData.get("contact")).toBe("0");
+      expect(formData.get("contact_text")).toBe("Slack");
+    });
+
+    it("submits custom text under inputName and an empty id under name", async () => {
+      render(ComboBox, {
+        props: {
+          items,
+          name: "contact",
+          inputName: "contact_text",
+          allowCustomValue: true,
+        },
+      });
+
+      await user.click(getInput());
+      await user.keyboard("Carrier pigeon");
+      await user.click(document.body);
+
+      const formData = new FormData(getForm());
+      expect(formData.get("contact_text")).toBe("Carrier pigeon");
+      expect(formData.get("contact")).toBe("");
+    });
   });
 });
 
@@ -154,6 +221,7 @@ describe("ComboBox form reset", () => {
     expect(getInput()).toHaveValue("Fax");
     expect(getBoundSelectedId()).toBe("2");
     expect(getBoundValue()).toBe("Fax");
+    expect(new FormData(getForm()).get("contact")).toBe("2");
     expect(onSelect.mock.calls.length).toBe(selectCountAfterSelecting);
   });
 
@@ -195,7 +263,7 @@ describe("ComboBox form reset", () => {
 
     expect(getInput()).toHaveValue("Email");
     expect(getBoundSelectedId()).toBe("1");
-    expect(new FormData(getForm()).get("contact")).toBe("Email");
+    expect(new FormData(getForm()).get("contact")).toBe("1");
   });
 
   it("matches numeric ids case-insensitively, preserving the restored text's casing", async () => {
