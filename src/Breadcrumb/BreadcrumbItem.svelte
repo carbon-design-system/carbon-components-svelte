@@ -31,6 +31,12 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
+  /**
+   * Obtain a reference to the `<li>` element.
+   * @bindable readonly
+   */
+  export let ref = null;
+
   import { getContext, setContext } from "svelte";
   import Link from "../Link/Link.svelte";
 
@@ -42,6 +48,7 @@
 </script>
 
 <li
+  bind:this={ref}
   class:bx--breadcrumb-item={true}
   class:bx--breadcrumb-item--current={isCurrentPage || ariaCurrent === "page"}
   {...liProps}
