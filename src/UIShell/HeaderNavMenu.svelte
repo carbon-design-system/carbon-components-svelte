@@ -58,6 +58,7 @@
     typeaheadIndex,
   } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { verticalListFocus } from "../utils/vertical-list-focus.js";
 
   const dispatch = createEventDispatcher();
 
@@ -267,6 +268,7 @@
   </a>
   <ul
     bind:this={menuRef}
+    use:verticalListFocus={{ selector: "[role='menuitem']" }}
     role="menu"
     aria-labelledby={triggerId}
     class:bx--header__menu={true}
