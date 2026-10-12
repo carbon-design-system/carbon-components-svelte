@@ -5,7 +5,7 @@
    * @property {"toggle"} trigger
    * @event close
    * @type {object}
-   * @property {"outside-click" | "toggle" | "escape-key"} trigger
+   * @property {"outside-click" | "toggle" | "escape-key" | "select"} trigger
    * @slot {{}} avatar - Optional leading avatar. Renders nothing by default.
    */
 
@@ -85,6 +85,7 @@
     menuItems,
     registerMenuItem,
     unregisterMenuItem,
+    select,
   });
 
   $: maxWidthStyle = toCssLength(maxWidth);
@@ -92,6 +93,13 @@
   function close(trigger) {
     isOpen = false;
     dispatch("close", { trigger });
+  }
+
+  // Called by `ProfileMenuItem` once its click handlers have run.
+  /** @type {() => void} */
+  function select() {
+    if (!isOpen) return;
+    close("select");
   }
 
   function handleOutsideClick(event) {
