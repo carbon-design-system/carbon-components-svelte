@@ -119,7 +119,8 @@
       }
     }}
   >
-    <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
+    <!-- Menu rows wrap long labels; top-level menubar items stay on one line. -->
+    <span class:bx--text-truncate--end={!ctx}><slot>{text}</slot></span>
     {#if icon || $$slots.icon}
       <slot name="icon">
         <svelte:component this={icon} size={16} />
