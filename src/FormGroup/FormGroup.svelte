@@ -34,12 +34,46 @@
 
   /**
    * Set an id for the fieldset element.
-   * The message id derives from it as `{id}-message`.
+   * The message id derives from it as `{id}-message`. `FormHelperText`
+   * and `FormRequirement` placed directly in the group derive theirs as
+   * `helper-{id}`, `error-{id}`, and `warn-{id}`.
    */
   export let id = uniqueId();
 
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
+  import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { joinDescribedBy } from "../utils/field-status.js";
+  import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const sharedId = writable(id);
+  const sharedDisabled = writable(disabled);
+  const formParts = createFormParts();
+  const parts = formParts.parts;
+  /**
+   * Registers a mounted part's id under its kind.
+   * @type {(kind: "label" | "helper" | "invalid" | "warn") => (id: string | undefined) => void}
+   */
+  const part = formParts.part;
+
+  // Helper text and messages placed directly in the group describe the
+  // fieldset. `group` tells FormLabel not to treat the fieldset as its
+  // control: a legend names a fieldset, not a label.
+  setContext(FORM_ITEM_CONTEXT_KEY, {
+    controlId: sharedId,
+    disabled: sharedDisabled,
+    part,
+    group: true,
+  });
+
+  $: sharedId.set(id);
+  $: sharedDisabled.set(disabled);
+  $: describedBy = joinDescribedBy(
+    message ? `${id}-message` : undefined,
+    partsDescribedBy($parts),
+  );
 </script>
 
 <fieldset
@@ -49,7 +83,7 @@
   class:bx--fieldset={true}
   class:bx--fieldset--no-margin={noMargin}
   aria-labelledby={$$restProps["aria-labelledby"] ?? (legendId || undefined)}
-  aria-describedby={message ? `${id}-message` : undefined}
+  aria-describedby={describedBy}
   {...$$restProps}
   on:click
   on:mouseover

@@ -23,6 +23,7 @@
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   /** Elements a `<label for>` names; others need `aria-labelledby`. */
@@ -44,7 +45,13 @@
   const sharedDisabled = writable(disabled);
 
   /** Ids of the mounted parts by kind, in registration order. */
-  const parts = writable({ label: [], helper: [], invalid: [], warn: [] });
+  const formParts = createFormParts();
+  const parts = formParts.parts;
+  /**
+   * Registers a mounted part's id under its kind.
+   * @type {(kind: "label" | "helper" | "invalid" | "warn") => (id: string | undefined) => void}
+   */
+  const part = formParts.part;
 
   const controlState = writable({
     id: controlId,
@@ -52,28 +59,6 @@
     describedBy: undefined,
     invalid: false,
   });
-
-  /**
-   * Create a setter that registers one part's id under `kind`.
-   * Setting `undefined` unregisters it.
-   * @param {"label" | "helper" | "invalid" | "warn"} kind
-   * @returns {(id: string | undefined) => void}
-   */
-  function part(kind) {
-    let registered = undefined;
-
-    return function setPartId(id) {
-      if (id === registered) return;
-      parts.update((current) => {
-        const ids = [...current[kind]];
-        const index = registered === undefined ? -1 : ids.indexOf(registered);
-        if (index !== -1) ids.splice(index, 1);
-        if (id !== undefined) ids.push(id);
-        return { ...current, [kind]: ids };
-      });
-      registered = id;
-    };
-  }
 
   setContext(FORM_ITEM_CONTEXT_KEY, {
     controlId: sharedControlId,
@@ -132,11 +117,7 @@
   $: labelId = $parts.label[0];
   $: invalid = $parts.invalid.length > 0;
   $: warn = $parts.warn.length > 0;
-  $: describedBy = joinDescribedBy(
-    ...$parts.invalid,
-    ...$parts.warn,
-    ...$parts.helper,
-  );
+  $: describedBy = partsDescribedBy($parts);
   $: controlState.set({
     id: controlId,
     labelId,
