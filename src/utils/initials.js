@@ -39,6 +39,17 @@ function getSegmenter(locale) {
  * @returns {string}
  */
 function firstGrapheme(word, locale) {
+  // Below U+0300 nothing combines or joins (CR/LF cannot occur in a word split
+  // on whitespace), so two such leading code units are two graphemes. This
+  // skips the ~10 ms first-use cost of constructing an `Intl.Segmenter` for
+  // names in Latin script, which is what nearly every avatar renders.
+  if (
+    word.charCodeAt(0) < 0x300 &&
+    (word.length === 1 || word.charCodeAt(1) < 0x300)
+  ) {
+    return word[0];
+  }
+
   if (hasSegmenter) {
     for (const { segment } of getSegmenter(locale).segment(word)) {
       return segment;
