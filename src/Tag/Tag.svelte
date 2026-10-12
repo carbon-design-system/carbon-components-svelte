@@ -72,9 +72,9 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import { readable } from "svelte/store";
+  import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
+  import { joinTagSet } from "../TagSet/join-tag-set.js";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -82,16 +82,24 @@
 
   const dispatch = createEventDispatcher();
 
-  // When rendered inside a `TagSet`, register so the group can measure this
-  // tag's natural width and mark it as overflow once it no longer fits. The
-  // group context is absent for a standalone tag, in which case none of this
-  // applies.
-  const tagSet = getContext("carbon:TagSet");
-  const groupItemId = tagSet ? uniqueId("ctag") : undefined;
-  const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
-  const groupSize = tagSet?.size ?? readable(undefined);
-  const groupNavigation = tagSet?.navigation ?? readable("tab");
-  const groupTabStopId = tagSet?.tabStopId ?? readable(null);
+  // Inside a `TagSet`, register so the set can measure this tag's natural
+  // width, collapse it into "+N" once it no longer fits, and include it in
+  // roving focus. Standalone, the stores are inert.
+  const group = joinTagSet(() => ({
+    node: ref,
+    label: labelRef?.textContent?.trim() ?? "",
+    value,
+    type,
+    size: resolvedSize,
+    disabled,
+    filter,
+  }));
+  const {
+    size: groupSize,
+    navigation: groupNavigation,
+    overflow: groupOverflow,
+    tabindex: rovingTabindex,
+  } = group;
 
   let labelRef = null;
   let truncated = false;
@@ -100,16 +108,6 @@
 
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
-
-  // A roving `TagSet` owns the tab order: only its current tab stop is
-  // tabbable. `undefined` leaves the native order (standalone, or before the
-  // set has picked a tab stop).
-  $: rovingTabindex =
-    $groupNavigation === "roving" && $groupTabStopId !== null
-      ? $groupTabStopId === groupItemId
-        ? "0"
-        : "-1"
-      : undefined;
 
   // Interactive tags are already buttons, and link tags are already anchors.
   // Wrapping the label in `TooltipDefinition` would nest interactive
@@ -150,36 +148,11 @@
     truncationLabel = "";
   }
 
-  if (tagSet) {
-    onMount(() => {
-      tagSet.register({
-        id: groupItemId,
-        node: ref,
-        label: labelRef?.textContent?.trim() ?? "",
-        value,
-        type,
-        size: resolvedSize,
-        disabled,
-        filter,
-      });
-      return () => tagSet.unregister(groupItemId);
-    });
-  }
-
-  $: if (tagSet) {
-    tagSet.update(groupItemId, {
-      value,
-      type,
-      size: resolvedSize,
-      disabled,
-      filter,
-    });
-  }
-  $: groupOverflow = !!tagSet && $groupOverflowIds.has(groupItemId);
+  $: group.update({ value, type, size: resolvedSize, disabled, filter });
 
   function handleClose() {
     dispatch("close");
-    if (tagSet) tagSet.notifyClose(groupItemId);
+    group.notifyClose();
   }
 </script>
 
@@ -196,7 +169,7 @@
   <div
     bind:this={ref}
     {id}
-    data-overflow={groupOverflow ? "true" : undefined}
+    data-overflow={$groupOverflow ? "true" : undefined}
     title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
@@ -252,7 +225,7 @@
         ? "Delete Backspace"
         : undefined}
       class:bx--tag__close-icon={true}
-      tabindex={rovingTabindex}
+      tabindex={$rovingTabindex}
       {disabled}
       {title}
       on:click|stopPropagation={handleClose}
@@ -267,9 +240,9 @@
     role={disabled ? "link" : undefined}
     {id}
     aria-disabled={disabled || undefined}
-    tabindex={rovingTabindex}
+    tabindex={$rovingTabindex}
     rel={resolveLinkRel($$restProps.target)}
-    data-overflow={groupOverflow ? "true" : undefined}
+    data-overflow={$groupOverflow ? "true" : undefined}
     title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
@@ -311,9 +284,9 @@
     {id}
     {disabled}
     aria-disabled={disabled}
-    tabindex={disabled ? "-1" : rovingTabindex}
+    tabindex={disabled ? "-1" : $rovingTabindex}
     title={nativeTitle}
-    data-overflow={groupOverflow ? "true" : undefined}
+    data-overflow={$groupOverflow ? "true" : undefined}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--interactive={true}
@@ -351,7 +324,7 @@
   <div
     bind:this={ref}
     {id}
-    data-overflow={groupOverflow ? "true" : undefined}
+    data-overflow={$groupOverflow ? "true" : undefined}
     title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
