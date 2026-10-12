@@ -67,6 +67,19 @@
   export let debounce = 0;
 
   /**
+   * Set to `true` to yield to the browser before rows are filtered, so the
+   * input and the clear button paint before a large table re-renders.
+   * `value` still updates immediately.
+   *
+   * Filtering becomes asynchronous: `filteredRowIds` and the table rows
+   * update shortly after `value`, and clearing no longer applies at once.
+   * Rapid changes coalesce, so only the latest value is filtered. Combined
+   * with `debounce`, the debounce delay elapses first, then the filter yields.
+   * The first filter on mount and server rendering stay synchronous.
+   */
+  export let deferFilter = false;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
    * @bindable readonly
@@ -105,28 +118,62 @@
 
   let debouncedFilter = null;
 
+  // Bumped on every filter request so a yielded filter that was overtaken
+  // (or outlived the component) skips itself.
+  let filterRequest = 0;
+  // Filtering defers only in the browser after the first render, so the initial
+  // filter and server-rendered markup stay synchronous.
+  let mounted = false;
+
+  // Called from the `$:` block below. A function call keeps `filterRequest`
+  // out of that block's dependencies.
+  function invalidatePending() {
+    filterRequest++;
+  }
+
   function applyFilter(searchValue, filter) {
     filteredRowIds = ctx.filterRows(searchValue, filter);
   }
 
+  function yieldToBrowser() {
+    return typeof globalThis.scheduler?.yield === "function"
+      ? globalThis.scheduler.yield()
+      : new Promise((resolve) => setTimeout(resolve, 0));
+  }
+
+  function runFilter(searchValue, filter) {
+    if (!deferFilter || !mounted) {
+      applyFilter(searchValue, filter);
+      return;
+    }
+    const request = filterRequest;
+    yieldToBrowser().then(() => {
+      if (request === filterRequest) applyFilter(searchValue, filter);
+    });
+  }
+
   $: {
     debouncedFilter?.cancel();
-    debouncedFilter = debounce > 0 ? debounceFn(applyFilter, debounce) : null;
+    debouncedFilter = debounce > 0 ? debounceFn(runFilter, debounce) : null;
   }
 
   onMount(() => {
+    mounted = true;
     return () => {
+      mounted = false;
+      invalidatePending();
       unsubscribe?.();
       debouncedFilter?.cancel();
     };
   });
 
   $: if (rows !== null) {
+    invalidatePending();
     if (debouncedFilter && String(value ?? "").length > 0) {
       debouncedFilter(value, shouldFilterRows);
     } else {
       debouncedFilter?.cancel();
-      applyFilter(value, shouldFilterRows);
+      runFilter(value, shouldFilterRows);
     }
   }
 
