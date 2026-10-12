@@ -1,6 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
+   * @restProps {a | button}
    */
 
   /**
