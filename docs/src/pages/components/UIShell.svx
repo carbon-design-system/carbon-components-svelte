@@ -272,9 +272,26 @@ Compose the panel content from `HeaderPanelLinks`, `HeaderPanelDivider`, and `He
 
 Set `isSelected` on `HeaderPanelLink` to mark the current selection — see "Cloud console" in the app switcher example above. It adds `aria-current="page"` and a persistent highlight style, the same pattern used by `isSelected` on `HeaderNavItem`, `SideNavLink`, and `SideNavMenuItem`.
 
+### Panel items
+
+`HeaderPanelLink` renders an anchor when `href` is set. Omit `href` for an action that does not navigate, such as switching a theme; it renders a `<button>` that is reachable with Tab and styled like the link. Set `text` instead of the default slot for a plain label, and `icon` (or the `icon` slot) to render an icon after it. Long labels wrap onto more lines while the icon keeps its size.
+
+Within a `HeaderPanelLinks` list, ArrowUp and ArrowDown move focus between links and wrap at the ends, and Home and End jump to the first and last link.
+
+Activating a link closes the panel and dispatches `close` with `trigger: "select"`. Call `event.preventDefault()` in the link's `click` handler to keep the panel open for that link, or set `closeOnSelect={false}` on `HeaderAction` to keep it open for every link. Focus returns to the panel button only if it would otherwise be lost.
+
+```svelte
+<HeaderAction iconDescription="Settings">
+  <HeaderPanelLinks>
+    <HeaderPanelLink href="/docs" text="Documentation" icon={Launch} />
+    <HeaderPanelLink on:click={toggleTheme}>Switch theme</HeaderPanelLink>
+  </HeaderPanelLinks>
+</HeaderAction>
+```
+
 ### Events
 
-`HeaderAction` dispatches `open` and `close` as the panel toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, or `"escape-key"`. Set `preventCloseOnClickOutside` to keep the panel open when the user clicks elsewhere on the page — useful when the panel hosts its own dismiss controls.
+`HeaderAction` dispatches `open` and `close` as the panel toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, `"escape-key"`, or `"select"`. Set `preventCloseOnClickOutside` to keep the panel open when the user clicks elsewhere on the page — useful when the panel hosts its own dismiss controls.
 
 ```svelte
 <HeaderAction
