@@ -1,5 +1,6 @@
 export { default as Accordion } from "./Accordion/Accordion.svelte";
 export { default as AccordionItem } from "./Accordion/AccordionItem.svelte";
+export { default as AccordionSearch } from "./Accordion/AccordionSearch.svelte";
 export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svelte";
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
