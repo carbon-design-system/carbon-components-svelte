@@ -28,43 +28,15 @@
   import { getContext, onMount } from "svelte";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { moveIndex } from "../utils/move-index.js";
 
   const ctx = getContext(PROFILE_MENU_CONTEXT_KEY);
-
-  let menuItems = [];
-  const unsubMenuItems = ctx?.menuItems.subscribe((_menuItems) => {
-    menuItems = _menuItems;
-  });
 
   onMount(() => {
     if (ctx && ref) ctx.registerMenuItem(ref);
     return () => {
-      unsubMenuItems?.();
       if (ctx && ref) ctx.unregisterMenuItem(ref);
     };
   });
-
-  function handleKeydown(event) {
-    if (!ctx) return;
-
-    const currentIndex = menuItems.indexOf(ref);
-    if (currentIndex === -1) return;
-
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      menuItems[0]?.focus();
-    } else if (event.key === "End") {
-      event.preventDefault();
-      menuItems[menuItems.length - 1]?.focus();
-    }
-  }
 </script>
 
 {#if href}
@@ -76,7 +48,6 @@
     {...$$restProps}
     on:click
     on:keydown
-    on:keydown={handleKeydown}
   >
     <span class:bx--profile-menu__item-label={true}>
       {#if $$slots.avatar}
@@ -98,7 +69,6 @@
     {...$$restProps}
     on:click
     on:keydown
-    on:keydown={handleKeydown}
   >
     <span class:bx--profile-menu__item-label={true}>
       {#if $$slots.avatar}
