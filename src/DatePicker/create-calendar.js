@@ -237,6 +237,7 @@ export function updateMonthNode(instance, locale) {
  *     dateFormat?: string;
  *     altFormat?: string;
  *     errorHandler?: (error: Error) => void;
+ *     ignoredFocusElements?: HTMLElement[];
  *     [option: string]: unknown;
  *   };
  *   base: HTMLInputElement;
@@ -635,6 +636,11 @@ export async function createCalendar({
     prevArrow:
       '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="5,8 10,3 10.7,3.7 6.4,8 10.7,12.3 10,13 "/><rect width="16" height="16" style="fill: none" /></svg>',
     ...options,
+    // flatpickr copies its defaults shallowly, so every instance shares one
+    // default `ignoredFocusElements` array, and the range plugin pushes its
+    // second input into it on ready. Give each instance its own, or every
+    // range picker ever mounted stays reachable (with its whole detached tree).
+    ignoredFocusElements: [...(options.ignoredFocusElements ?? [])],
     // `options.mode` also carries Carbon's "month"/"year" datePickerType,
     // used above to pick a plugin. flatpickr's own `mode` only understands
     // "single" | "multiple" | "range": pass "range"/"multiple" through as-is,
