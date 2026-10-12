@@ -91,9 +91,6 @@ export function joinDescribedBy(...ids) {
  *   resolver then skips straight past the invalid tier.
  * @param {boolean} [options.requireInvalidText=false]
  * @param {boolean} [options.requireWarnText=false]
- * @param {boolean} [options.hideWarnWhenFluid=false] - some fields
- *   (TextArea) also suppress the warn id while fluid, not just the
- *   helper id.
  * @returns {string | undefined}
  */
 export function resolveStatusDescribedBy({
@@ -109,16 +106,11 @@ export function resolveStatusDescribedBy({
   includeErrorId = true,
   requireInvalidText = false,
   requireWarnText = false,
-  hideWarnWhenFluid = false,
 }) {
   if (showInvalid && includeErrorId && (!requireInvalidText || invalidText)) {
     return errorId;
   }
-  if (
-    showWarn &&
-    !(hideWarnWhenFluid && isFluid) &&
-    (!requireWarnText || warnText)
-  ) {
+  if (showWarn && (!requireWarnText || warnText)) {
     return warnId;
   }
   if (!showInvalid && !showWarn && !isFluid && helperText) {

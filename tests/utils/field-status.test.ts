@@ -168,7 +168,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  it("hideWarnWhenFluid also suppresses the warn id while fluid", () => {
+  it("keeps the warn id while fluid", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -176,17 +176,6 @@ describe("resolveStatusDescribedBy", () => {
         showWarn: true,
         helperText: "help",
         isFluid: true,
-        hideWarnWhenFluid: true,
-      }),
-    ).toBeUndefined();
-    expect(
-      resolveStatusDescribedBy({
-        ...base,
-        showInvalid: false,
-        showWarn: true,
-        helperText: "help",
-        isFluid: false,
-        hideWarnWhenFluid: true,
       }),
     ).toBe("warn-x");
   });
