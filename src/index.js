@@ -15,6 +15,12 @@ export { default as Breakpoint } from "./Breakpoint/Breakpoint.svelte";
 export { breakpointObserver } from "./Breakpoint/breakpoint-observer.js";
 export { breakpoints } from "./Breakpoint/breakpoints.js";
 export { hideAtBreakpoint } from "./Breakpoint/hide-at-breakpoint.js";
+export {
+  mediaQuery,
+  orientation,
+  prefersColorScheme,
+  prefersReducedMotion,
+} from "./Breakpoint/media-query.js";
 export { default as Button } from "./Button/Button.svelte";
 export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";

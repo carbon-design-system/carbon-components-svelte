@@ -1,4 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import {
+  stubMatchMediaForSize,
+  stubMissingMatchMedia,
+} from "../utils/stub-match-media.js";
 import Breakpoint from "./Breakpoint.test.svelte";
 import BreakpointObserver from "./BreakpointObserver.test.svelte";
 import Breakpoints from "./Breakpoints.test.svelte";
@@ -117,6 +121,35 @@ describe("Breakpoint", () => {
     expect(() => render(BreakpointObserver)).not.toThrow();
     expect(screen.getByTestId("smaller-than-md").textContent).toBe("false");
     expect(screen.getByTestId("larger-than-md").textContent).toBe("false");
+  });
+
+  it("uses fallback and never dispatches change when matchMedia is missing", () => {
+    stubMissingMatchMedia();
+    const mockChangeHandler = vi.fn();
+
+    render(Breakpoint, {
+      props: { fallback: "md", onchange: mockChangeHandler },
+    });
+
+    expect(screen.getByTestId("current-size").textContent).toBe("md");
+    expect(screen.getByTestId("is-md").textContent).toBe("true");
+    expect(mockChangeHandler).not.toHaveBeenCalled();
+  });
+
+  it("prefers the measured size over the fallback", () => {
+    stubMatchMediaForSize("lg");
+
+    render(Breakpoint, { props: { fallback: "md" } });
+
+    expect(screen.getByTestId("current-size").textContent).toBe("lg");
+  });
+
+  it("passes fallback through to breakpointObserver", () => {
+    stubMissingMatchMedia();
+
+    render(BreakpointObserver, { props: { fallback: "sm" } });
+
+    expect(screen.getByTestId("smaller-than-md").textContent).toBe("true");
   });
 
   it("exposes breakpoint values", () => {
