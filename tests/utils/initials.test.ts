@@ -68,9 +68,28 @@ describe("getInitials", () => {
   it("reuses one segmenter per locale across calls", () => {
     const constructorSpy = vi.spyOn(Intl, "Segmenter");
 
-    getInitials("John Doe", { locale: "en" });
-    getInitials("Jane Roe", { locale: "en" });
+    getInitials("Иван Петров", { locale: "ru" });
+    getInitials("Мария Иванова", { locale: "ru" });
 
+    expect(constructorSpy).toHaveBeenCalledTimes(1);
+    constructorSpy.mockRestore();
+  });
+
+  it("skips the segmenter for names that start with two Latin code units", async () => {
+    vi.resetModules();
+    const { getInitials: getInitialsFresh } = await import(
+      "../../src/utils/initials.js"
+    );
+    const constructorSpy = vi.spyOn(Intl, "Segmenter");
+
+    expect(getInitialsFresh("John Doe")).toBe("JD");
+    expect(getInitialsFresh("émile zola")).toBe("ÉZ");
+    expect(getInitialsFresh("X Æ")).toBe("XÆ");
+    expect(constructorSpy).not.toHaveBeenCalled();
+
+    // A leading code unit at or above U+0300 (or an astral pair) still segments.
+    expect(getInitialsFresh("Иван")).toBe("И");
+    expect(getInitialsFresh("👩‍🚀 Astronaut")).toBe("👩‍🚀A");
     expect(constructorSpy).toHaveBeenCalledTimes(1);
     constructorSpy.mockRestore();
   });
