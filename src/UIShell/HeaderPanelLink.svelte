@@ -34,50 +34,15 @@
    */
   export let ref = null;
 
-  import { getContext, onMount } from "svelte";
+  import { getContext } from "svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { moveIndex } from "../utils/move-index.js";
 
-  const ctx = getContext("carbon:HeaderPanelLinks");
   const panel = getContext("carbon:HeaderAction");
 
   // Runs after the forwarded `click` handler so it can opt out with
   // `event.preventDefault()`.
   function handleClick(event) {
     if (!event.defaultPrevented) panel?.select();
-  }
-
-  onMount(() => {
-    const node = ref;
-    if (ctx && node) ctx.registerLink(node);
-    return () => {
-      if (ctx && node) ctx.unregisterLink(node);
-    };
-  });
-
-  // Mirrors Carbon React's `Switcher`: arrows wrap, Home/End jump to the ends.
-  function handleKeydown(event) {
-    if (!ctx || event.defaultPrevented) return;
-
-    const links = ctx.getLinks().filter((link) => !link.disabled);
-    const currentIndex = links.indexOf(ref);
-    if (currentIndex === -1) return;
-
-    let next;
-    if (event.key === "ArrowDown") {
-      next = links[moveIndex(currentIndex, 1, links.length)];
-    } else if (event.key === "ArrowUp") {
-      next = links[moveIndex(currentIndex, -1, links.length)];
-    } else if (event.key === "Home") {
-      next = links[0];
-    } else if (event.key === "End") {
-      next = links[links.length - 1];
-    } else {
-      return;
-    }
-
-    event.preventDefault();
-    next?.focus();
   }
 </script>
 
@@ -94,7 +59,6 @@
       on:click
       on:click={handleClick}
       on:keydown
-      on:keydown={handleKeydown}
     >
       <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
       {#if icon || $$slots.icon}
@@ -114,7 +78,6 @@
       on:click
       on:click={handleClick}
       on:keydown
-      on:keydown={handleKeydown}
     >
       <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
       {#if icon || $$slots.icon}
