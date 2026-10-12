@@ -37,6 +37,12 @@
       if (ctx && ref) ctx.unregisterMenuItem(ref);
     };
   });
+
+  // Runs after the forwarded `click` handler so it can opt out with
+  // `event.preventDefault()`.
+  function handleClick(event) {
+    if (!event.defaultPrevented) ctx?.select?.();
+  }
 </script>
 
 {#if href}
@@ -47,6 +53,7 @@
     class:bx--profile-menu__item={true}
     {...$$restProps}
     on:click
+    on:click={handleClick}
     on:keydown
   >
     <span class:bx--profile-menu__item-label={true}>
@@ -68,6 +75,7 @@
     class:bx--profile-menu__item={true}
     {...$$restProps}
     on:click
+    on:click={handleClick}
     on:keydown
   >
     <span class:bx--profile-menu__item-label={true}>

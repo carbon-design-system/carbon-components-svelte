@@ -31,7 +31,8 @@
       <ProfileMenuItem on:click={() => (logoutClicks += 1)}
         >Log out</ProfileMenuItem
       >
-      <span data-testid="logout-count">{logoutClicks}</span>
     </ProfileMenu>
   </HeaderUtilities>
 </Header>
+
+<span data-testid="logout-count">{logoutClicks}</span>

@@ -91,14 +91,14 @@ describe("ProfileMenu", () => {
     expect(screen.getByText("Plan")).toHaveAttribute("id", labelId as string);
   });
 
-  it("renders an action item as a button and forwards on:click", async () => {
+  it("renders an action item as a button, forwards on:click, and closes the menu", async () => {
     render(ProfileMenu);
 
     await user.click(getTrigger());
     await user.click(screen.getByRole("button", { name: "Log out" }));
 
     expect(screen.getByTestId("logout-count")).toHaveTextContent("1");
-    expect(getTrigger()).toHaveAttribute("aria-expanded", "true");
+    expect(getTrigger()).toHaveAttribute("aria-expanded", "false");
   });
 
   describe("outside click", () => {

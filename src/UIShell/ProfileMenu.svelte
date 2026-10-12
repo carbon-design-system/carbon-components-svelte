@@ -1,7 +1,11 @@
 <script>
   /**
-   * @event {null} open
-   * @event {null} close
+   * @event open
+   * @type {object}
+   * @property {"toggle"} trigger
+   * @event close
+   * @type {object}
+   * @property {"outside-click" | "toggle" | "escape-key" | "select"} trigger
    * @slot {{}} avatar - Trigger avatar. Falls back to a placeholder.
    */
 
@@ -65,11 +69,19 @@
     menuItems,
     registerMenuItem,
     unregisterMenuItem,
+    select,
   });
 
-  function close() {
+  function close(trigger) {
     isOpen = false;
-    dispatch("close");
+    dispatch("close", { trigger });
+  }
+
+  // Called by `ProfileMenuItem` once its click handlers have run.
+  /** @type {() => void} */
+  function select() {
+    if (!isOpen) return;
+    close("select");
   }
 
   function handleOutsideClick(event) {
@@ -78,13 +90,13 @@
       !preventCloseOnClickOutside &&
       isOutsideClick(event, [ref, refMenu])
     ) {
-      close();
+      close("outside-click");
     }
   }
 
   function handleKeydown(event) {
     if (isOpen && event.key === "Escape") {
-      close();
+      close("escape-key");
       ref?.focus();
     }
   }
@@ -94,7 +106,7 @@
       event.preventDefault();
       if (!isOpen) {
         isOpen = true;
-        dispatch("open");
+        dispatch("open", { trigger: "toggle" });
       }
       await tick();
       menuItemRegistry.flush();
@@ -132,7 +144,7 @@
   on:click={async (event) => {
     const wasOpen = isOpen;
     isOpen = !isOpen;
-    dispatch(isOpen ? "open" : "close");
+    dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
     if (!wasOpen && isOpen && event.detail === 0) {
       await tick();
       menuItemRegistry.flush();
