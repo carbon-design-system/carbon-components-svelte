@@ -6,6 +6,7 @@
     HeaderNavItem,
     HeaderNavMenu,
     HeaderSearch,
+    HeaderSideNavItems,
     HeaderUtilities,
     ProfileMenu,
     ProfileMenuDetail,
@@ -53,6 +54,14 @@
 
 <SideNav ariaLabel="Side navigation" bind:isOpen={isSideNavOpen}>
   <SideNavItems>
+    <HeaderSideNavItems>
+      <HeaderNavItem href="#" text="Side nav link" />
+      <HeaderNavMenu href="#" text="Side submenu">
+        <HeaderNavItem href="#" text="Side sub one" />
+        <HeaderNavItem href="#" text="Side sub two" />
+      </HeaderNavMenu>
+      <HeaderNavItem href="#" text="Side nav last" />
+    </HeaderSideNavItems>
     <SideNavLink href="#" text="Side item A" />
     <SideNavLink href="#" text="Side item B" />
   </SideNavItems>

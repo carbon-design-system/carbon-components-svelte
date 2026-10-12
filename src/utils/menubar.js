@@ -11,18 +11,21 @@ import {
 } from "./typeahead.js";
 
 /**
- * Roving-tabindex bookkeeping and horizontal keyboard navigation for a WAI-ARIA
- * menubar. Top-level items register their focusable element; the bar keeps one
- * of them as the single Tab stop (the last focused item, else the current-page
- * item, else the first). ArrowLeft and ArrowRight move between items with wrap,
- * Home and End jump to the ends, and typing a character focuses the next item
- * whose label starts with it.
+ * Roving-tabindex bookkeeping and keyboard navigation for a WAI-ARIA menubar.
+ * Top-level items register their focusable element; the bar keeps one of them
+ * as the single Tab stop (the last focused item, else the current-page item,
+ * else the first). ArrowLeft and ArrowRight (ArrowUp and ArrowDown when
+ * vertical) move between items with wrap, Home and End jump to the ends, and
+ * typing a character focuses the next item whose label starts with it.
  *
  * An item's submenu lives in the same container as its focusable element, so
  * key presses and focus inside an open submenu are attributed to the item that
- * owns it.
+ * owns it. In a vertical bar, all four arrows belong to an open submenu's own
+ * items.
  *
+ * @param {{ orientation?: "horizontal" | "vertical" }} [options]
  * @returns {{
+ *   orientation: "horizontal" | "vertical",
  *   register: (node: HTMLElement) => void,
  *   unregister: (node: HTMLElement) => void,
  *   setCurrent: (node: HTMLElement, isCurrent: boolean) => void,
@@ -32,7 +35,10 @@ import {
  *   destroy: () => void,
  * }}
  */
-export function createMenubar() {
+export function createMenubar({ orientation = "horizontal" } = {}) {
+  const vertical = orientation === "vertical";
+  const prevKey = vertical ? "ArrowUp" : "ArrowLeft";
+  const nextKey = vertical ? "ArrowDown" : "ArrowRight";
   const registry = createDomNodeRegistry();
   /** @type {import("svelte/store").Writable<ReadonlySet<HTMLElement>>} */
   const current = writable(new Set());
@@ -69,6 +75,7 @@ export function createMenubar() {
   }
 
   return {
+    orientation,
     register: registry.register,
     unregister: registry.unregister,
     setCurrent(node, isCurrent) {
@@ -107,8 +114,8 @@ export function createMenubar() {
       }
       const { key } = event;
       if (
-        key !== "ArrowLeft" &&
-        key !== "ArrowRight" &&
+        key !== prevKey &&
+        key !== nextKey &&
         key !== "Home" &&
         key !== "End"
       ) {
@@ -117,15 +124,21 @@ export function createMenubar() {
       registry.flush();
       const owner = ownerOf(event.target);
       if (!owner) return;
-      // Inside a submenu, Home and End belong to the submenu's own items.
-      if ((key === "Home" || key === "End") && event.target !== owner) return;
+      // Inside a submenu, Home and End belong to the submenu's own items, as
+      // do all the arrows when the bar is vertical.
+      if (
+        event.target !== owner &&
+        (vertical || key === "Home" || key === "End")
+      ) {
+        return;
+      }
 
       const nodes = getNodes();
       const index = nodes.indexOf(owner);
       const next =
-        key === "ArrowRight"
+        key === nextKey
           ? nodes[moveIndex(index, 1, nodes.length)]
-          : key === "ArrowLeft"
+          : key === prevKey
             ? nodes[moveIndex(index, -1, nodes.length)]
             : key === "Home"
               ? nodes[0]

@@ -23,6 +23,7 @@
     unregisterItem,
     setCurrent,
     tabStop,
+    orientation: menubar.orientation,
   });
 
   const { expansionBreakpoint, winWidth } = getContext("carbon:Header") ?? {

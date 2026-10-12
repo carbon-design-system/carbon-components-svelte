@@ -80,6 +80,9 @@
   // Present when this menu is a top-level item of a `HeaderNav`.
   const menubar = getContext("carbon:HeaderNav");
   const tabStop = menubar?.tabStop ?? readable(undefined);
+  // In a vertical bar (the side nav) Up and Down move between items, so the
+  // submenu opens with ArrowRight and closes with ArrowLeft instead.
+  const vertical = menubar?.orientation === "vertical";
   // Everything is tabbable until the bar knows its items (and without a bar).
   $: tabindex = $tabStop === undefined || $tabStop === ref ? 0 : -1;
 
@@ -157,6 +160,20 @@
     };
   });
 
+  /**
+   * Whether the key makes the menubar move focus to another top-level item.
+   * Inside the submenu a vertical bar leaves the arrows to the menu items.
+   * @param {KeyboardEvent} event
+   */
+  function movesBarFocus(event) {
+    const { key } = event;
+    if (key === "Home" || key === "End") return event.target === ref;
+    if (vertical) {
+      return event.target === ref && (key === "ArrowUp" || key === "ArrowDown");
+    }
+    return key === "ArrowLeft" || key === "ArrowRight";
+  }
+
   function handleOutsideClick(event) {
     if (expanded && isOutsideClick(event, ref)) {
       expanded = false;
@@ -195,14 +212,21 @@
       menubar &&
       expanded &&
       !event.defaultPrevented &&
-      !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) &&
-      (event.key === "ArrowLeft" ||
-        event.key === "ArrowRight" ||
-        (event.target === ref && (event.key === "Home" || event.key === "End")))
+      !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey)
     ) {
-      // The menubar moves focus to the adjacent item (it handles this event
-      // next as it bubbles); close first so the open menu isn't left behind.
-      closeMenu("blur");
+      if (movesBarFocus(event)) {
+        // The menubar moves focus to the adjacent item (it handles this event
+        // next as it bubbles); close first so the open menu isn't left behind.
+        closeMenu("blur");
+      } else if (
+        vertical &&
+        event.key === "ArrowLeft" &&
+        menuRef.contains(event.target)
+      ) {
+        // Back out of the submenu, like Escape.
+        event.preventDefault();
+        closeMenu("escape-key");
+      }
     }
   }}
 >
@@ -238,13 +262,20 @@
           await tick();
           $menuItems[0]?.focus();
         }
-      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      } else if (
+        vertical
+          ? event.key === "ArrowRight"
+          : event.key === "ArrowDown" || event.key === "ArrowUp"
+      ) {
         event.preventDefault();
         if (!expanded) {
           expanded = true;
         }
         await tick();
-        pickEdgeMenuItem(event.key, $menuItems)?.focus();
+        pickEdgeMenuItem(
+          event.key === "ArrowUp" ? "ArrowUp" : "ArrowDown",
+          $menuItems,
+        )?.focus();
       } else if (event.key === "Escape") {
         event.preventDefault();
         await closeMenu("escape-key");

@@ -106,6 +106,41 @@ test.describe("UIShell header nav menu (desktop)", () => {
     await expect(navLink).toBeFocused();
     await expect(submenuTrigger).toHaveAttribute("aria-expanded", "false");
   });
+
+  test("side nav menubar moves with Up and Down and opens submenus with Right", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.getByRole("button", { name: "Open menu" }).click();
+
+    const link = page.getByRole("menuitem", { name: "Side nav link" });
+    const trigger = page.getByRole("menuitem", { name: "Side submenu" });
+    const last = page.getByRole("menuitem", { name: "Side nav last" });
+    await link.focus();
+
+    await page.keyboard.press("ArrowDown");
+    await expect(trigger).toBeFocused();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    await page.keyboard.press("ArrowRight");
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      page.getByRole("menuitem", { name: "Side sub one" }),
+    ).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      page.getByRole("menuitem", { name: "Side sub two" }),
+    ).toBeFocused();
+
+    await page.keyboard.press("ArrowLeft");
+    await expect(trigger).toBeFocused();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    await page.keyboard.press("ArrowDown");
+    await expect(last).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(link).toBeFocused();
+  });
 });
 
 test.describe("UIShell HeaderSearch", () => {

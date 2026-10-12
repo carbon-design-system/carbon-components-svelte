@@ -5,9 +5,25 @@
    */
   export let hasDivider = false;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
   import { readable } from "svelte/store";
+  import { createMenubar } from "../utils/menubar.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
+
+  // The same menubar as `HeaderNav`, laid out vertically. Items register
+  // through the same context, so `HeaderNavItem` and `HeaderNavMenu` work
+  // unchanged.
+  const menubar = createMenubar({ orientation: "vertical" });
+
+  onMount(() => menubar.destroy);
+
+  setContext("carbon:HeaderNav", {
+    registerItem: menubar.register,
+    unregisterItem: menubar.unregister,
+    setCurrent: menubar.setCurrent,
+    tabStop: menubar.tabStop,
+    orientation: menubar.orientation,
+  });
 
   const { expansionBreakpoint, winWidth } = getContext("carbon:SideNav") ?? {
     expansionBreakpoint: readable(EXPANSION_BREAKPOINT),
@@ -32,6 +48,8 @@
     class:bx--side-nav__header-navigation--expanded={custom && expanded}
     class:bx--side-nav__header-navigation--collapsed={custom && !expanded}
     {...$$restProps}
+    on:keydown={menubar.handleKeydown}
+    on:focusin={menubar.handleFocusin}
   >
     <slot />
   </ul>
