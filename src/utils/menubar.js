@@ -4,13 +4,19 @@ import { derived, get, writable } from "svelte/store";
 import { createDomNodeRegistry } from "./dom-node-registry.js";
 import { moveIndex } from "./move-index.js";
 import { sortByDomOrder } from "./sort-by-dom-order.js";
+import {
+  createTypeaheadBuffer,
+  isTypeaheadKey,
+  typeaheadIndex,
+} from "./typeahead.js";
 
 /**
  * Roving-tabindex bookkeeping and horizontal keyboard navigation for a WAI-ARIA
  * menubar. Top-level items register their focusable element; the bar keeps one
  * of them as the single Tab stop (the last focused item, else the current-page
  * item, else the first). ArrowLeft and ArrowRight move between items with wrap,
- * Home and End jump to the ends.
+ * Home and End jump to the ends, and typing a character focuses the next item
+ * whose label starts with it.
  *
  * An item's submenu lives in the same container as its focusable element, so
  * key presses and focus inside an open submenu are attributed to the item that
@@ -23,6 +29,7 @@ import { sortByDomOrder } from "./sort-by-dom-order.js";
  *   tabStop: import("svelte/store").Readable<HTMLElement | undefined>,
  *   handleKeydown: (event: KeyboardEvent) => void,
  *   handleFocusin: (event: FocusEvent) => void,
+ *   destroy: () => void,
  * }}
  */
 export function createMenubar() {
@@ -52,6 +59,8 @@ export function createMenubar() {
     },
   );
 
+  const typeahead = createTypeaheadBuffer();
+
   /** @param {EventTarget | null} target */
   function ownerOf(target) {
     return getNodes().find((node) =>
@@ -74,6 +83,25 @@ export function createMenubar() {
     tabStop,
     handleKeydown(event) {
       if (event.defaultPrevented) return;
+      if (isTypeaheadKey(event)) {
+        registry.flush();
+        const nodes = getNodes();
+        const index = nodes.indexOf(/** @type {HTMLElement} */ (event.target));
+        // Typing inside a submenu belongs to the submenu.
+        if (index === -1) return;
+        const next = typeaheadIndex({
+          items: nodes,
+          query: typeahead.push(event.key),
+          itemToString: (node) => node.textContent?.trim() ?? "",
+          index,
+          isDisabled: () => false,
+        });
+        if (next !== index) {
+          event.preventDefault();
+          nodes[next].focus();
+        }
+        return;
+      }
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
         return;
       }
@@ -109,5 +137,6 @@ export function createMenubar() {
       const owner = ownerOf(event.target);
       if (owner) active.set(owner);
     },
+    destroy: typeahead.clear,
   };
 }
