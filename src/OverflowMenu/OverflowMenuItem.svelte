@@ -95,7 +95,7 @@
     onMount,
   } from "svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -116,7 +116,7 @@
       // `preventScroll` keeps a portaled menu from scrolling the document;
       // scroll the item into view within the menu's own scroll container.
       ref.focus({ preventScroll: true });
-      scrollIntoViewWithinMenu(ref, '[role="menu"]');
+      scrollIntoViewWithin(ref, '[role="menu"]');
     }
   });
 

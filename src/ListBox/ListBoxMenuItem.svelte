@@ -2,7 +2,7 @@
   import { getContext, onMount } from "svelte";
   import { noop } from "../utils/noop.js";
   import { overflowTitle } from "../utils/overflow-title.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { HIGHLIGHT_CURSOR_KEY } from "./highlight-cursor.js";
 
   /** Set to `true` to enable the active state */
@@ -41,7 +41,7 @@
     // Scroll highlighted item into view if using keyboard navigation.
     // Scoped to the menu's own scroll container so a portaled menu (whose
     // nearest scrollable ancestor is the document) does not scroll the page.
-    scrollIntoViewWithinMenu(ref);
+    scrollIntoViewWithin(ref);
   }
 
   // Do not put `--highlighted` on a `class:` directive when the listbox owns

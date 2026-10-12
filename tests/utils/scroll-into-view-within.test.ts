@@ -1,4 +1,4 @@
-import { scrollIntoViewWithinMenu } from "../../src/utils/scroll-into-view-within-menu.js";
+import { scrollIntoViewWithin } from "../../src/utils/scroll-into-view-within.js";
 import { virtualWindow } from "../../src/utils/virtual-window.js";
 import { rect } from "./rect";
 
@@ -33,7 +33,7 @@ function buildMenu(options: {
   return { container, item };
 }
 
-describe("scrollIntoViewWithinMenu", () => {
+describe("scrollIntoViewWithin", () => {
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -43,7 +43,7 @@ describe("scrollIntoViewWithinMenu", () => {
     item.getBoundingClientRect = () => rect({ top: -100, bottom: -80 });
     document.body.appendChild(item);
 
-    expect(() => scrollIntoViewWithinMenu(item)).not.toThrow();
+    expect(() => scrollIntoViewWithin(item)).not.toThrow();
   });
 
   it("does not scroll when the menu is not scrollable", () => {
@@ -55,7 +55,7 @@ describe("scrollIntoViewWithinMenu", () => {
       itemBottom: -30,
     });
 
-    scrollIntoViewWithinMenu(item);
+    scrollIntoViewWithin(item);
 
     expect(container.scrollTop).toBe(50);
   });
@@ -69,7 +69,7 @@ describe("scrollIntoViewWithinMenu", () => {
       itemBottom: 0,
     });
 
-    scrollIntoViewWithinMenu(item);
+    scrollIntoViewWithin(item);
 
     // scrollTop -= containerTop(0) - itemTop(-20) => 50 - 20 = 30
     expect(container.scrollTop).toBe(30);
@@ -84,7 +84,7 @@ describe("scrollIntoViewWithinMenu", () => {
       itemBottom: 130,
     });
 
-    scrollIntoViewWithinMenu(item);
+    scrollIntoViewWithin(item);
 
     // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
     expect(container.scrollTop).toBe(80);
@@ -99,7 +99,7 @@ describe("scrollIntoViewWithinMenu", () => {
       itemBottom: 60,
     });
 
-    scrollIntoViewWithinMenu(item);
+    scrollIntoViewWithin(item);
 
     expect(container.scrollTop).toBe(50);
   });
@@ -114,7 +114,7 @@ describe("scrollIntoViewWithinMenu", () => {
         itemBottom: 130,
       });
 
-      scrollIntoViewWithinMenu(item);
+      scrollIntoViewWithin(item);
 
       expect(container.scrollTop).toBe(80);
     });
@@ -129,7 +129,7 @@ describe("scrollIntoViewWithinMenu", () => {
         role: "menu",
       });
 
-      scrollIntoViewWithinMenu(item);
+      scrollIntoViewWithin(item);
 
       expect(container.scrollTop).toBe(50);
     });
@@ -144,7 +144,7 @@ describe("scrollIntoViewWithinMenu", () => {
         role: "menu",
       });
 
-      scrollIntoViewWithinMenu(item, '[role="menu"]');
+      scrollIntoViewWithin(item, '[role="menu"]');
 
       expect(container.scrollTop).toBe(80);
     });
@@ -159,7 +159,7 @@ describe("scrollIntoViewWithinMenu", () => {
         role: "menu",
       });
 
-      scrollIntoViewWithinMenu(item, '[role="menu"]');
+      scrollIntoViewWithin(item, '[role="menu"]');
 
       expect(container.scrollTop).toBe(50);
     });
@@ -177,7 +177,7 @@ describe("scrollIntoViewWithinMenu", () => {
     container.appendChild(layer);
     virtualWindow(layer, { offsetY: 40, scrollTop: 50, pinned: true });
 
-    scrollIntoViewWithinMenu(item);
+    scrollIntoViewWithin(item);
 
     // Scrolled 40px further, to 90; the rows move with it before a render.
     expect(container.scrollTop).toBe(90);

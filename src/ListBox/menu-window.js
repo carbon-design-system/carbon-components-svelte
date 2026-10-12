@@ -4,7 +4,7 @@ import {
   createHeightMeasurer,
   VIRTUAL_INDEX_ATTRIBUTE,
 } from "../utils/height-measurer.js";
-import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 import { syncPinnedWindow } from "../utils/virtual-window.js";
 import {
   getBoundedScrollTop,
@@ -234,7 +234,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     }
 
     const before = container.scrollTop;
-    scrollIntoViewWithinMenu(option);
+    scrollIntoViewWithin(option);
     if (container.scrollTop !== before) scrollTo(container.scrollTop);
   }
 
@@ -308,7 +308,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     );
     if (!(option instanceof HTMLElement)) return;
 
-    scrollIntoViewWithinMenu(option);
+    scrollIntoViewWithin(option);
     scrollTo(container.scrollTop);
   }
 

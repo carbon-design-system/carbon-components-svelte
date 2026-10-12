@@ -1,6 +1,6 @@
 // @ts-check
 import { writable } from "svelte/store";
-import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 
 export const HIGHLIGHT_CURSOR_KEY = "carbon:ListBoxHighlight";
 
@@ -82,7 +82,7 @@ export function createHighlightCursor() {
       applyClass(next, true, true);
       if (scroll && !next.matches(":hover")) {
         const inner = next.querySelector(".bx--list-box__menu-item__option");
-        scrollIntoViewWithinMenu(inner instanceof HTMLElement ? inner : next);
+        scrollIntoViewWithin(inner instanceof HTMLElement ? inner : next);
       }
     }
 

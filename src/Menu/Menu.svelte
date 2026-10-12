@@ -114,7 +114,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -235,7 +235,7 @@
     // `preventScroll` keeps a portaled menu from scrolling the document;
     // scroll the item into view within the menu's own scroll container.
     item.focus({ preventScroll: true });
-    scrollIntoViewWithinMenu(item, '[role="menu"]');
+    scrollIntoViewWithin(item, '[role="menu"]');
   }
 
   /** @returns {HTMLElement[]} */

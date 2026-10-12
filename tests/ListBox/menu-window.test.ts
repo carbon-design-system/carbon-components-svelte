@@ -1369,7 +1369,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
    * A menu that scrolls and whose options sit where a browser would put them:
    * stacked at `ITEM_HEIGHT`, moving under the container as it scrolls.
    * `buildContainer` leaves both out, the cases above placing by arithmetic
-   * without ever asking the DOM. `scrollIntoViewWithinMenu` needs both, since
+   * without ever asking the DOM. `scrollIntoViewWithin` needs both, since
    * it reads rects and gives up on a menu that cannot scroll.
    */
   function setupUnwindowed() {

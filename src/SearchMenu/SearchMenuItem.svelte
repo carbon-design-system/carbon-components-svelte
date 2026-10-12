@@ -94,7 +94,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { highlightSegments } from "../utils/fuzzy-match.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -160,7 +160,7 @@
   }
 
   $: if (shouldRender && highlighted && ref && !ref.matches(":hover")) {
-    scrollIntoViewWithinMenu(ref);
+    scrollIntoViewWithin(ref);
   }
 </script>
 
