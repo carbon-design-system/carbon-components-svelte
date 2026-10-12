@@ -322,18 +322,21 @@ function reverseIndex(graph: Graph): ReverseIndex {
 /**
  * Every node that transitively depends on one of `changed` (inclusive).
  * Files with unknown dependencies count as depending on any change unless
- * `includeUnknown` is false.
+ * `includeUnknown` is false. The walk doesn't enter `opaque` nodes.
  */
 export function affectedBy(
   graph: Graph,
   changed: Iterable<string>,
-  { includeUnknown = true } = {},
+  {
+    includeUnknown = true,
+    opaque,
+  }: { includeUnknown?: boolean; opaque?: RegExp } = {},
 ) {
   const { dependents, globbers, unknown } = reverseIndex(graph);
   const affected = new Set<string>();
   const queue: string[] = [];
   const visit = (path: string) => {
-    if (affected.has(path)) return;
+    if (affected.has(path) || opaque?.test(path)) return;
     affected.add(path);
     queue.push(path);
   };
@@ -356,6 +359,12 @@ export type Selection =
   | { mode: "all" }
   | { mode: "none" }
   | { mode: "some"; files: string[] };
+
+/**
+ * The sources that spell a class a `css/` change touched in the compiled
+ * stylesheets (see `scripts/lib/css-delta.ts`), or why it can't be narrowed.
+ */
+export type StyleSeeds = { files: string[] } | { reason: string };
 
 export type TestPlan = {
   unit: Selection;
@@ -396,7 +405,11 @@ const GRAPH_ROOTS = [
 const COMPAT_HARNESS = /^tests-svelte[34]\//;
 
 /** Changes to the selector itself can't be trusted to select themselves. */
-const SELECTOR = ["scripts/test-changed.ts", "scripts/lib/test-graph.ts"];
+const SELECTOR = [
+  "scripts/test-changed.ts",
+  "scripts/lib/test-graph.ts",
+  "scripts/lib/css-delta.ts",
+];
 
 /** Directories whose files only matter if some test reaches them. */
 const SUITE_ROOTS = { unit: "tests/", e2e: "e2e/" } as const;
@@ -413,14 +426,25 @@ function select(affected: Set<string>, tests: string[]): Selection {
   return { mode: "some", files };
 }
 
+/** Compiled stylesheet names (`all`) some file in the graph imports. */
+export function stylesheetEntries(graph: Graph): string[] {
+  return [...graph.keys()]
+    .filter((file) => BUILT_CSS.test(file))
+    .map((file) => posix.basename(file, ".css"))
+    .sort();
+}
+
 /**
  * Picks the unit and e2e test files `changed` can affect. `graph` is the head
  * revision; `changedBarrelNames` lists barrel names whose target moved.
+ * `styles` narrows the e2e tests a `css/` change selects from every page that
+ * loads a compiled stylesheet to the pages that render a changed class.
  */
 export function planTests(
   graph: Graph,
   changed: string[],
   barrelNamesChanged: string[] = [],
+  styles?: StyleSeeds,
 ): TestPlan {
   const reasons: string[] = [];
   const full = { unit: false, e2e: false };
@@ -470,9 +494,28 @@ export function planTests(
     }
   }
 
+  let e2eAffected = affected;
+  const stylesheets = relevant.filter((file) => file.startsWith("css/"));
+  if (styles && stylesheets.length > 0) {
+    if ("reason" in styles) {
+      reasons.push(`css/: ${styles.reason}`);
+      full.e2e = true;
+    } else {
+      // The compiled stylesheets stand in for the whole `css/` tree; the
+      // class users replace them. Other seeds still walk through them.
+      const rest = seeds.filter((file) => !stylesheets.includes(file));
+      e2eAffected = new Set([
+        ...affectedBy(graph, rest),
+        ...affectedBy(graph, [...stylesheets, ...styles.files], {
+          opaque: BUILT_CSS,
+        }),
+      ]);
+    }
+  }
+
   return {
     unit: full.unit ? { mode: "all" } : select(affected, tests.unit),
-    e2e: full.e2e ? { mode: "all" } : select(affected, tests.e2e),
+    e2e: full.e2e ? { mode: "all" } : select(e2eAffected, tests.e2e),
     reasons,
   };
 }
