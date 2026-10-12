@@ -97,11 +97,11 @@
   export let contentRef = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Popover from "../Popover/Popover.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -112,14 +112,20 @@
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
-  // Inside a `TagSet`, register like `Tag` does so the set can measure this
-  // tag, collapse it into its "+N" indicator, and include it in roving focus.
-  const tagSet = getContext("carbon:TagSet");
-  const groupItemId = tagSet ? uniqueId("ctag") : undefined;
-  const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
-  const groupSize = tagSet?.size ?? readable(undefined);
-  const groupNavigation = tagSet?.navigation ?? readable("tab");
-  const groupTabStopId = tagSet?.tabStopId ?? readable(null);
+  // Inside a `TagSet`, register like `Tag` does.
+  const group = joinTagSet(() => ({
+    node: ref,
+    label: ref?.textContent?.trim() ?? "",
+    type,
+    size: resolvedSize,
+    disabled,
+    filter: false,
+  }));
+  const {
+    size: groupSize,
+    overflow: groupOverflow,
+    tabindex: rovingTabindex,
+  } = group;
 
   let wrapperRef = null;
   let portalRef = null;
@@ -131,13 +137,6 @@
   let enableFrame;
 
   $: resolvedSize = size ?? $groupSize ?? "default";
-  $: rovingTabindex =
-    $groupNavigation === "roving" && $groupTabStopId !== null
-      ? $groupTabStopId === groupItemId
-        ? "0"
-        : "-1"
-      : undefined;
-  $: groupOverflow = !!tagSet && $groupOverflowIds.has(groupItemId);
   // Without `content`, the tag is a plain action trigger: no popover, and
   // no disclosure state.
   $: hasContent = !!$$slots.content;
@@ -148,24 +147,7 @@
   $: insideElements = [wrapperRef, portalRef];
   $: if (disabled || !hasContent) open = false;
 
-  if (tagSet) {
-    onMount(() => {
-      tagSet.register({
-        id: groupItemId,
-        node: ref,
-        label: ref?.textContent?.trim() ?? "",
-        type,
-        size: resolvedSize,
-        disabled,
-        filter: false,
-      });
-      return () => tagSet.unregister(groupItemId);
-    });
-  }
-
-  $: if (tagSet) {
-    tagSet.update(groupItemId, { type, size: resolvedSize, disabled });
-  }
+  $: group.update({ type, size: resolvedSize, disabled });
 
   function toggle() {
     if (!disabled && hasContent) open = !open;
@@ -230,7 +212,7 @@
 <span
   bind:this={wrapperRef}
   class:bx--operational-tag={true}
-  data-overflow={groupOverflow ? "true" : undefined}
+  data-overflow={$groupOverflow ? "true" : undefined}
   use:dismiss={{
     enabled: listenersEnabled,
     listeners: [{ type: "click", handler: handleOutsideClick }],
@@ -245,7 +227,7 @@
     {disabled}
     aria-expanded={hasContent ? open : undefined}
     aria-controls={hasContent ? contentId : undefined}
-    tabindex={rovingTabindex}
+    tabindex={$rovingTabindex}
     class:bx--tag={true}
     class:bx--tag--interactive={true}
     class:bx--tag--operational={true}

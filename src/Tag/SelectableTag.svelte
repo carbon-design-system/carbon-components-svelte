@@ -43,60 +43,32 @@
   /** Set an id for the tag */
   export let id = uniqueId();
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
+  import { createEventDispatcher } from "svelte";
+  import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
-  // Inside a `TagSet`, register like `Tag` does so the group can measure
-  // this tag and collapse it into the "+N" indicator once it no longer fits.
-  const tagSet = getContext("carbon:TagSet");
-  const groupItemId = tagSet ? uniqueId("ctag") : undefined;
-  const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
-  const groupSize = tagSet?.size ?? readable(undefined);
-  const groupNavigation = tagSet?.navigation ?? readable("tab");
-  const groupTabStopId = tagSet?.tabStopId ?? readable(null);
-
   let buttonRef = null;
 
+  // Inside a `TagSet`, register like `Tag` does.
+  const group = joinTagSet(() => ({
+    node: buttonRef,
+    label: buttonRef?.textContent?.trim() ?? "",
+    value,
+    type,
+    size: resolvedSize,
+    disabled,
+    filter: false,
+  }));
+  const {
+    size: groupSize,
+    overflow: groupOverflow,
+    tabindex: rovingTabindex,
+  } = group;
+
   $: resolvedSize = size ?? $groupSize ?? "default";
-
-  // A roving `TagSet` owns the tab order: only its current tab stop is
-  // tabbable. `undefined` leaves the native order (standalone, or before the
-  // set has picked a tab stop).
-  $: rovingTabindex =
-    $groupNavigation === "roving" && $groupTabStopId !== null
-      ? $groupTabStopId === groupItemId
-        ? "0"
-        : "-1"
-      : undefined;
-
-  if (tagSet) {
-    onMount(() => {
-      tagSet.register({
-        id: groupItemId,
-        node: buttonRef,
-        label: buttonRef?.textContent?.trim() ?? "",
-        value,
-        type,
-        size: resolvedSize,
-        disabled,
-        filter: false,
-      });
-      return () => tagSet.unregister(groupItemId);
-    });
-  }
-
-  $: if (tagSet) {
-    tagSet.update(groupItemId, {
-      value,
-      type,
-      size: resolvedSize,
-      disabled,
-    });
-  }
-  $: groupOverflow = !!tagSet && $groupOverflowIds.has(groupItemId);
+  $: group.update({ value, type, size: resolvedSize, disabled });
 
   function toggle() {
     if (disabled) return;
@@ -109,11 +81,11 @@
   bind:this={buttonRef}
   type="button"
   aria-pressed={selected}
-  data-overflow={groupOverflow ? "true" : undefined}
+  data-overflow={$groupOverflow ? "true" : undefined}
   {id}
   {disabled}
   aria-disabled={disabled}
-  tabindex={disabled ? "-1" : rovingTabindex}
+  tabindex={disabled ? "-1" : $rovingTabindex}
   class:bx--tag={true}
   class:bx--tag--selectable={true}
   class:bx--tag--selectable-selected={selected}
