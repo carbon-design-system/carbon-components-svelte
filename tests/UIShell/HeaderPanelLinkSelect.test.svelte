@@ -5,14 +5,12 @@
   import HeaderPanelLinks from "carbon-components-svelte/UIShell/HeaderPanelLinks.svelte";
   import HeaderUtilities from "carbon-components-svelte/UIShell/HeaderUtilities.svelte";
 
-  export let closeOnSelect = true;
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
 </script>
 
 <Header companyName="Test" platformName="Test">
   <HeaderUtilities>
     <HeaderAction
-      {closeOnSelect}
       transition={false}
       iconDescription="Switcher"
       on:close={onClose}

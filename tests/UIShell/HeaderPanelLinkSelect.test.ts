@@ -45,17 +45,6 @@ describe("HeaderPanelLink closes its HeaderAction panel", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it("stays open when closeOnSelect is false", async () => {
-    const onClose = vi.fn();
-    render(HeaderPanelLinkSelect, { props: { closeOnSelect: false, onClose } });
-
-    await user.click(trigger());
-    await user.click(screen.getByRole("button", { name: "Switch theme" }));
-
-    expect(trigger()).toHaveAttribute("aria-expanded", "true");
-    expect(onClose).not.toHaveBeenCalled();
-  });
-
   it("does nothing for a link outside any panel", async () => {
     const onClose = vi.fn();
     render(HeaderPanelLinkSelect, { props: { onClose } });

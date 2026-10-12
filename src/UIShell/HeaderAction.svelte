@@ -71,13 +71,6 @@
   /** Set to `true` to prevent the panel from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
-  /**
-   * Set to `false` to keep the panel open after a `HeaderPanelLink` is activated.
-   * By default, activating a link closes the panel and dispatches `close`
-   * with `trigger: "select"`.
-   */
-  export let closeOnSelect = true;
-
   /** Set an id for the trigger button element. Also used to label the panel. */
   export let id = uniqueId();
 
@@ -167,7 +160,7 @@
   // Called by `HeaderPanelLink` once its click handlers have run.
   /** @type {() => void} */
   function select() {
-    if (!isOpen || !closeOnSelect) return;
+    if (!isOpen) return;
     isOpen = false;
     dispatch("close", { trigger: "select" });
   }
