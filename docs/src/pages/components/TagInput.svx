@@ -4,7 +4,7 @@ description: Tag inputs turn typed or pasted text into dismissible tags, for key
 ---
 
 <script>
-  import { TagInput } from "carbon-components-svelte";
+  import { Tag, TagInput } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -73,15 +73,20 @@ Set `validate` to check each value. Return `true` to accept it, or a message to 
   validate={(tag) => /^[^\s@]+@[^\s@]+$/.test(tag) || "Enter a valid email address"}
 />
 
-## Tag colors
+## Custom tags
 
-Set `tagProps` to a function that returns props for each tag, such as a color `type`.
+Use the `tag` slot to render each tag yourself, for example with a color `type` or an icon. Spread the slot's `props` onto the tag so closing it still removes the value. Leave out `filter` to lock a tag in place.
 
 <TagInput
   labelText="Environments"
   value={["production", "staging", "dev"]}
-  tagProps={(tag) => ({ type: tag === "production" ? "red" : "gray" })}
-/>
+>
+  <svelte:fragment slot="tag" let:tag let:props>
+    <Tag {...props} type={tag === "production" ? "red" : "gray"}>{tag}</Tag>
+  </svelte:fragment>
+</TagInput>
+
+In Svelte 5, pass a snippet instead: `{#snippet tag({ tag, props })}`.
 
 ## Placement
 
