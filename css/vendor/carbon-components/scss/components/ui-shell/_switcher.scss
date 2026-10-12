@@ -78,6 +78,24 @@
     }
   }
 
+  // ccs: label and trailing icon of `HeaderPanelLink`. The label may wrap
+  // (`min-width: 0` lets it shrink below its content size) while the icon
+  // keeps its size, and tracks the link colour across hover/selected states.
+  .#{$prefix}--switcher__item-text {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .#{$prefix}--switcher__item-icon {
+    display: flex;
+    flex: 0 0 auto;
+    margin-inline-start: $spacing-03;
+  }
+
+  .#{$prefix}--switcher__item-icon svg {
+    fill: currentColor;
+  }
+
   // ccs: the selected item uses the same token as SideNavLink's
   // `[aria-current='page']` state.
   .#{$prefix}--switcher__item-link--selected {

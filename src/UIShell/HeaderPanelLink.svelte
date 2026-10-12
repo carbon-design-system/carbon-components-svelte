@@ -1,10 +1,28 @@
 <script>
   /**
+   * @template [Icon=any]
+   */
+
+  /**
    * Specify the `href` attribute to render an anchor.
    * Omit it to render a button (for actions that do not navigate).
    * @type {string}
    */
   export let href = undefined;
+
+  /**
+   * Specify the label text.
+   * Alternatively, use the default slot.
+   * @type {string}
+   */
+  export let text = undefined;
+
+  /**
+   * Specify an icon to render after the label.
+   * Alternatively, use the "icon" slot.
+   * @type {Icon}
+   */
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Set to `true` to mark the link as the current selection */
   export let isSelected = false;
@@ -31,7 +49,12 @@
       {...$$restProps}
       on:click
     >
-      <slot />
+      <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
+      {#if icon || $$slots.icon}
+        <span class:bx--switcher__item-icon={true}>
+          <slot name="icon"><svelte:component this={icon} size={16} /></slot>
+        </span>
+      {/if}
     </a>
   {:else}
     <button
@@ -43,7 +66,12 @@
       {...$$restProps}
       on:click
     >
-      <slot />
+      <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
+      {#if icon || $$slots.icon}
+        <span class:bx--switcher__item-icon={true}>
+          <slot name="icon"><svelte:component this={icon} size={16} /></slot>
+        </span>
+      {/if}
     </button>
   {/if}
 </li>
