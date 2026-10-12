@@ -59,7 +59,13 @@ export default defineConfig({
       { width: 1280, height: 900 },
       { width: 1600, height: 900 },
     ],
-    // index.html is the fixture nav, not a mounted fixture.
-    readySelector: "#app > *, body > nav",
+    // index.html is the fixture nav, not a mounted fixture, and
+    // table-of-contents-framed is static HTML around an iframe of another
+    // fixture: both are ready as served.
+    readySelector: "#app > *, body > nav, body > iframe",
+    // compare and bisect also fail where a property stops following a theme
+    // token without its value changing (a dropped `color: $text-primary`
+    // falling back to the user agent's), and `tokens` maps who uses which.
+    tokens: "--cds-",
   },
 });
