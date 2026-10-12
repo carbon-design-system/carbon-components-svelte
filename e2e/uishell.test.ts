@@ -81,6 +81,31 @@ test.describe("UIShell header nav menu (desktop)", () => {
     await expect(submenuTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(submenuTrigger).toBeFocused();
   });
+
+  test("menubar is one Tab stop and arrows move between top-level items", async ({
+    page,
+  }) => {
+    const navLink = page.getByRole("menuitem", { name: "Nav link" });
+    const submenuTrigger = page.getByRole("menuitem", { name: "Submenu" });
+    await navLink.focus();
+
+    await page.keyboard.press("Tab");
+    await expect(navLink).not.toBeFocused();
+    await expect(submenuTrigger).not.toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(navLink).toBeFocused();
+
+    await page.keyboard.press("ArrowRight");
+    await expect(submenuTrigger).toBeFocused();
+
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      page.getByRole("menuitem", { name: "Sub link one" }),
+    ).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(navLink).toBeFocused();
+    await expect(submenuTrigger).toHaveAttribute("aria-expanded", "false");
+  });
 });
 
 test.describe("UIShell HeaderSearch", () => {

@@ -32,12 +32,20 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { moveIndex } from "../utils/move-index.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const id = uniqueId();
   const ctx = getContext("carbon:HeaderNavMenu");
+  // Only a top-level item roves; items inside a `HeaderNavMenu` belong to its
+  // menu.
+  const menubar = ctx ? undefined : getContext("carbon:HeaderNav");
+  const tabStop = menubar?.tabStop ?? readable(undefined);
+
+  // Everything is tabbable until the bar knows its items (and without a bar).
+  $: tabindex = $tabStop === undefined || $tabStop === ref ? 0 : -1;
 
   let menuItems = [];
 
@@ -46,12 +54,21 @@
   });
 
   $: ctx?.updateSelectedItems({ id, isSelected });
+  $: if (ref) menubar?.setCurrent(ref, isSelected);
 
   onMount(() => {
     if (ctx && ref) {
       ctx.registerMenuItem(ref);
     }
+    if (menubar && ref) {
+      menubar.registerItem(ref);
+    }
+    const node = ref;
     return () => {
+      if (menubar && node) {
+        menubar.setCurrent(node, false);
+        menubar.unregisterItem(node);
+      }
       if (unsubMenuItems) unsubMenuItems();
       ctx?.updateSelectedItems({ id, isSelected: false });
       if (ctx && ref) {
@@ -65,7 +82,7 @@
   <a
     bind:this={ref}
     role="menuitem"
-    tabindex="0"
+    {tabindex}
     {href}
     rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     class:bx--header__menu-item={true}
