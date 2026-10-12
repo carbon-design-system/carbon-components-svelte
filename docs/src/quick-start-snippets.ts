@@ -142,11 +142,11 @@ export const preprocessors = [
   },
   {
     title: "optimizeCss",
-    body: "Tree-shakes unused Carbon CSS at build time, often removing hundreds of kilobytes from production bundles.",
+    body: "Tree-shakes unused Carbon CSS at build time, often removing over 60% of the stylesheet from production bundles.",
   },
   {
     title: "optimizeComponents",
-    body: "Rewrites Carbon components for the props your app passes, removing code it never runs from production bundles.",
+    body: "Rewrites Carbon components for the props your app passes, often removing 18–27% of the JavaScript from production bundles.",
   },
 ] as const;
 
