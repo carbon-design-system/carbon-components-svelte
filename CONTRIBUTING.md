@@ -600,11 +600,16 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 
 | Command | Use |
 | --- | --- |
-| `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref (`crassus diff`). Run for any refactor that should not change output. The base is built in a temporary worktree and cached by commit; `--no-cache` rebuilds it. |
+| `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref (`crassus diff`). Run for any refactor that should not change output. The base is built in a temporary worktree and cached by commit; `--no-cache` rebuilds it. Add `--confirm` to render each flagged flip in Chrome and drop the ones no fixture renders. |
+| `bun run check:css:compare [--base <ref>]` | Ground truth for a CSS change (`crassus compare`): today's fixtures with the stylesheet at the ref and now, read only where a changed rule can reach. Fails on visible changes and on properties that stop following a `--cds-*` token. `--report <dir>` writes change cards (crops, the winning rule at its `.scss` line, a suggested fix) as `index.html`, `report.md` and `report.json`. |
+| `bun run check:css:bisect <from>..<to>` | The commits in a range that changed what the fixtures render (`crassus bisect`). Use it to find which commit of a refactor caused a card. |
 | `bun run check:css:overrides` | Declarations that can never win (`crassus dead`), with their `.scss` line. Also runs in CI as `tests/css/overrides.test.ts`. |
+| `bun run check:css:tokens` | Which `--cds-*` tokens drive which properties, the unused ones, and colors set as literals or left to the user agent (`crassus tokens`). Evidence, not proof. |
+| `bun run check:css:coverage` | Which declarations decide a value the fixtures render (`crassus coverage`), per file and component. Low coverage means a fixture is missing, not that the CSS is dead. |
 | `bun run check:css:snapshot <dir>` | Computed styles of every e2e fixture (`crassus capture`), per theme, viewport and forced `:hover`/`:focus`/`:active` state. Add `--base <ref>` to capture a ref in a temporary worktree. |
-| `bun run check:css:snapshot:diff <base> <head>` | Compares two captures (`crassus snapshot-diff`), grouped by `property: before -> after`. Ground truth for a refactor that must not change what the browser resolves. |
+| `bun run check:css:snapshot:diff <base> <head>` | Compares two captures (`crassus snapshot-diff`), grouped by `property: before -> after`. Prefer `check:css:compare`, which keeps no snapshots. |
 | `bun run check:css:usage` | Browser-measured "never wins" worklist (`crassus usage`), written to `.crassus/usage/report.md`. Evidence, not proof. |
+| `bun run check:css:doctor` | Checks Chrome, free disk, load and the fixture setup before a long browser run (`crassus doctor`). |
 
 Tests in `tests/css/` that budget the compiled sheet, each with the number to lower when you improve it:
 
@@ -618,7 +623,9 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 
 Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets a `css-cascade` job whose summary shows the rule delta and size movement against the base branch and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
 
-All four come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes`, `--viewport WxH` or `--no-states`. `crassus --help` lists the options; `--format json` gives the same report as data.
+These come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes white --viewport 1280x900` or `--no-states`. They use Playwright's `chrome-headless-shell` when it's installed and half the cores, dropping to one tab while the machine is busy. `crassus --help` lists the options; `--format json` gives the same report as data.
+
+For an intended visual change, `crassus approve <id> --report <dir>` records its card in `crassus.approved.json`; `check:css:compare` then fails only on visible cards that file lacks. `crassus explain <id>`, `repro <id>`, `verify <id>` and `reduce <id>` (the fewest declaration edits that make the card) take the same `--report <dir>`.
 
 Compiled-output and source conventions are enforced by the tests in `tests/css/`. A new rule about how CSS is written or emitted should land with a test there.
 
