@@ -99,6 +99,7 @@
     releaseBodyScrollLock,
   } from "../utils/body-scroll-lock.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import {
@@ -283,7 +284,16 @@
     shouldRenderHamburgerMenu.set(!fixed);
     tick().then(() => {
       const activeItem = navRef?.querySelector('[aria-current="page"]');
-      activeItem?.scrollIntoView({ block: activeItemScrollBlock });
+      // Scroll only the nav's own list. `Element.scrollIntoView` also moves
+      // Chromium's sequential focus starting point to the item, so the first
+      // Tab would skip the skip link and the header.
+      if (activeItem instanceof HTMLElement) {
+        scrollIntoViewWithin(
+          activeItem,
+          ".bx--side-nav__items",
+          activeItemScrollBlock,
+        );
+      }
     });
     return () => {
       shouldRenderHamburgerMenu.set(false);
