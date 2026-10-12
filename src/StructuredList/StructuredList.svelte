@@ -46,6 +46,7 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -64,6 +65,12 @@
   const multipleValue = writable(multiple);
   const selectionValue = writable(selection);
   const iconValue = writable(icon);
+  /**
+   * Values of the mounted `StructuredListInput`s, in insertion order.
+   * @type {import("svelte/store").Writable<Value[]>}
+   */
+  const rowValues = writable([]);
+  const batchedRowValuesUpdate = batchStoreUpdates(rowValues);
 
   let prevSelectedValue = $selectedValue;
   let prevMultiple = multiple;
@@ -86,9 +93,29 @@
     }
   }
 
+  /**
+   * @type {(value: Value) => void}
+   */
+  function register(value) {
+    batchedRowValuesUpdate((values) => [...values, value]);
+  }
+
+  /**
+   * @type {(value: Value) => void}
+   */
+  function unregister(value) {
+    batchedRowValuesUpdate((values) => {
+      const index = values.indexOf(value);
+      return index === -1 ? values : values.filter((_, i) => i !== index);
+    });
+  }
+
   setContext("carbon:StructuredListWrapper", {
     selectedValue,
     update,
+    register,
+    unregister,
+    rowValues: readonly(rowValues),
     multiple: readonly(multipleValue),
     selection: readonly(selectionValue),
     icon: readonly(iconValue),
