@@ -8,6 +8,7 @@ import {
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import TagInput from "./TagInput.test.svelte";
+import TagInputTagSlot from "./TagInputTagSlot.test.svelte";
 
 const input = () => screen.getByRole("textbox", { name: "Topics" });
 const removeButton = (tag: string) =>
@@ -380,16 +381,23 @@ describe("TagInput", () => {
       ).toHaveTextContent("a");
     });
 
-    it("colors tags with tagProps", () => {
-      render(TagInput, {
-        value: ["urgent"],
-        config: { tagProps: () => ({ type: "red" as const }) },
-      });
+    it.each(["inline", "below"] as const)(
+      "renders each tag from the tag slot with tagPlacement=%s",
+      async (tagPlacement) => {
+        render(TagInputTagSlot, { tagPlacement });
 
-      expect(screen.getByText("urgent").closest(".bx--tag")).toHaveClass(
-        "bx--tag--red",
-      );
-    });
+        const urgent = removeButton("urgent").closest(".bx--tag");
+        expect(urgent).toHaveClass("bx--tag--red");
+        expect(urgent).toHaveAttribute("data-index", "1");
+        // The slot dropped `filter` for "locked", so it can't be removed.
+        expect(
+          screen.queryByRole("button", { name: "Remove locked" }),
+        ).not.toBeInTheDocument();
+
+        await user.click(removeButton("urgent"));
+        expect(shownValue()).toEqual(["locked", "later"]);
+      },
+    );
 
     it("describes the field with the keyboard instructions", () => {
       render(TagInput);
