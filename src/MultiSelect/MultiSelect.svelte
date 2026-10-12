@@ -157,7 +157,8 @@
   /**
    * With `selectionDisplay="tags"`, `"wrap"` shows every selected tag on as
    * many rows as needed, and `"collapse"` keeps one row and collapses the
-   * rest into a "+N" indicator.
+   * rest into a "+N" button. The button opens the hidden tags in a popover,
+   * where they can still be removed.
    * @type {"wrap" | "collapse"}
    */
   export let tagOverflow = "wrap";
@@ -2017,6 +2018,7 @@
         id="{id}-tags"
         navigation="roving"
         multiline={tagOverflow === "wrap"}
+        overflowMode="popover"
         size={tagSize}
         on:close:tag={handleTagClose}
       >
