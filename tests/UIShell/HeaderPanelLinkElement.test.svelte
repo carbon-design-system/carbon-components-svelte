@@ -12,7 +12,7 @@
 <HeaderPanelLinks>
   <HeaderPanelLink
     {href}
-    {...{ target: "_blank" }}
+    target="_blank"
     isSelected
     bind:ref
     on:click={(event) => {
