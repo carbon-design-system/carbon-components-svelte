@@ -48,16 +48,7 @@ Keyboard support follows the WAI-ARIA menu pattern: <DocKbd label="Enter" />, <D
 
 Set `icon` on `HeaderNavMenu` to render a trailing icon between the text and the chevron, or use the `icon` slot. Replace the label with the `text` slot when it needs custom content; the trigger's accessible name follows what is rendered.
 
-```svelte
-<HeaderNavMenu text="Manage" icon={Settings}>
-  <HeaderNavItem href="/account" text="Account" />
-</HeaderNavMenu>
-
-<HeaderNavMenu>
-  <span slot="text">Manage <strong>3</strong></span>
-  <HeaderNavItem href="/account" text="Account" />
-</HeaderNavMenu>
-```
+<FileSource src="/framed/UIShell/HeaderNavMenuTrigger" />
 
 `HeaderNavMenu` dispatches `close` with `event.detail.trigger` set to `"escape-key"`, `"outside-click"`, or `"blur"` (focus moved elsewhere, including with the arrow keys):
 
