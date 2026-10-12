@@ -15,14 +15,25 @@
   // unchanged.
   const menubar = createMenubar({ orientation: "vertical" });
 
+  /** @type {(node: HTMLElement, submenu?: { isOpen: () => boolean; open: () => void; close: () => void }) => void} */
+  const registerItem = menubar.register;
+  /** @type {(node: HTMLElement) => void} */
+  const unregisterItem = menubar.unregister;
+  /** @type {(node: HTMLElement, isCurrent: boolean) => void} */
+  const setCurrent = menubar.setCurrent;
+  /** @type {import("svelte/store").Readable<HTMLElement | undefined>} */
+  const tabStop = menubar.tabStop;
+  /** @type {"horizontal" | "vertical"} */
+  const orientation = menubar.orientation;
+
   onMount(() => menubar.destroy);
 
   setContext("carbon:HeaderNav", {
-    registerItem: menubar.register,
-    unregisterItem: menubar.unregister,
-    setCurrent: menubar.setCurrent,
-    tabStop: menubar.tabStop,
-    orientation: menubar.orientation,
+    registerItem,
+    unregisterItem,
+    setCurrent,
+    tabStop,
+    orientation,
   });
 
   const { expansionBreakpoint, winWidth } = getContext("carbon:SideNav") ?? {

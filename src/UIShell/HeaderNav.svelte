@@ -7,7 +7,7 @@
   // Top-level items register here so the bar is a single Tab stop that the
   // arrow keys rove through.
   const menubar = createMenubar();
-  /** @type {(node: HTMLElement) => void} */
+  /** @type {(node: HTMLElement, submenu?: { isOpen: () => boolean; open: () => void; close: () => void }) => void} */
   const registerItem = menubar.register;
   /** @type {(node: HTMLElement) => void} */
   const unregisterItem = menubar.unregister;
@@ -15,6 +15,8 @@
   const setCurrent = menubar.setCurrent;
   /** @type {import("svelte/store").Readable<HTMLElement | undefined>} */
   const tabStop = menubar.tabStop;
+  /** @type {"horizontal" | "vertical"} */
+  const orientation = menubar.orientation;
 
   onMount(() => menubar.destroy);
 
@@ -23,7 +25,7 @@
     unregisterItem,
     setCurrent,
     tabStop,
-    orientation: menubar.orientation,
+    orientation,
   });
 
   const { expansionBreakpoint, winWidth } = getContext("carbon:Header") ?? {
