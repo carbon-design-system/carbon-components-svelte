@@ -140,6 +140,17 @@ Use two-way binding with `bind:selected` to track and update the selected values
 
 <FileSource src="/framed/Checkbox/CheckboxGroupReactive" />
 
+### Horizontal
+
+Set `orientation` to `"horizontal"` to lay the checkboxes out in a row. Each checkbox is sized to its label, and the row wraps when it runs out of space. The legend, helper text, and validation text stay above and below the row.
+
+<CheckboxGroup orientation="horizontal" legendText="Show" name="prefs-horizontal" selected={["page", "markdown"]} helperText="Pick the views to compare">
+<Checkbox value="page" labelText="Page" />
+<Checkbox value="markdown" labelText="Markdown" />
+<Checkbox value="compiled" labelText="Compiled" />
+<Checkbox value="source" labelText="Source" />
+</CheckboxGroup>
+
 ### Hidden legend
 
 Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
