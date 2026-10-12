@@ -2,11 +2,13 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} rejected
+   * @event {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" }>} rejected
    */
 
   /**
    * Specify the accepted file types.
+   * Dropped files that don't match are reported through the `rejected`
+   * event with `reason: 'type'`, like the file picker would exclude them.
    * @type {ReadonlyArray<string>}
    */
   export let accept = [];
@@ -120,6 +122,7 @@
     const { accepted, rejected: builtInRejected } = filterIncomingFiles(
       incoming,
       {
+        accept,
         minFileSize,
         maxFileSize,
         preventDuplicate,
@@ -128,7 +131,7 @@
     );
     const validated = validateFiles(accepted);
     const acceptedSet = new Set(validated);
-    /** @type {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} */
+    /** @type {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" }>} */
     const rejected = [
       ...builtInRejected,
       ...accepted

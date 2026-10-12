@@ -1,6 +1,7 @@
 import {
   fileIdentityKey,
   filterIncomingFiles,
+  matchesAccept,
 } from "../../src/utils/filter-incoming-files.js";
 
 function makeFile(name: string, size: number, lastModified = 1) {
@@ -113,5 +114,43 @@ describe("filterIncomingFiles", () => {
     });
     expect(accepted).toEqual([]);
     expect(rejected).toEqual([{ file: oversizedDup, reason: "size" }]);
+  });
+});
+
+describe("matchesAccept", () => {
+  const file = (name: string, type: string) => new File(["x"], name, { type });
+
+  it("accepts every file for an empty list", () => {
+    expect(matchesAccept(file("a.bin", ""), [])).toBe(true);
+    expect(matchesAccept(file("a.bin", ""), "")).toBe(true);
+  });
+
+  it("matches extensions case-insensitively", () => {
+    expect(matchesAccept(file("Logo.PNG", "image/png"), [".png"])).toBe(true);
+    expect(matchesAccept(file("notes.txt", "text/plain"), [".png"])).toBe(
+      false,
+    );
+  });
+
+  it("matches MIME types and wildcards", () => {
+    expect(matchesAccept(file("a", "image/jpeg"), ["image/jpeg"])).toBe(true);
+    expect(matchesAccept(file("a", "image/webp"), ["image/*"])).toBe(true);
+    expect(matchesAccept(file("a", "text/plain"), ["image/*"])).toBe(false);
+    expect(matchesAccept(file("a", ""), ["image/*"])).toBe(false);
+  });
+
+  it("splits a comma-separated string", () => {
+    expect(matchesAccept(file("a.pdf", ""), "image/*, .pdf")).toBe(true);
+  });
+});
+
+describe("filterIncomingFiles accept", () => {
+  it("rejects files outside accept with reason type", () => {
+    const png = new File(["x"], "a.png", { type: "image/png" });
+    const txt = new File(["x"], "b.txt", { type: "text/plain" });
+    expect(filterIncomingFiles([png, txt], { accept: [".png"] })).toEqual({
+      accepted: [png],
+      rejected: [{ file: txt, reason: "type" }],
+    });
   });
 });
