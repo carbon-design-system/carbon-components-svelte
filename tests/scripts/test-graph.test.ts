@@ -9,6 +9,8 @@ import {
   parseBarrel,
   parseDependencies,
   planTests,
+  type StyleSeeds,
+  stylesheetEntries,
 } from "../../scripts/lib/test-graph";
 
 const BARREL_SOURCE = `
@@ -77,8 +79,8 @@ function deps(path: string, source: string, files?: string[]) {
 
 const graph = buildGraph(new Map(Object.entries(REPO)), context());
 
-function plan(changed: string[], barrelNames?: string[]) {
-  const { unit, e2e, reasons } = planTests(graph, changed, barrelNames);
+function plan(changed: string[], barrelNames?: string[], styles?: StyleSeeds) {
+  const { unit, e2e, reasons } = planTests(graph, changed, barrelNames, styles);
   return { unit: formatSelection(unit), e2e: formatSelection(e2e), reasons };
 }
 
@@ -329,6 +331,34 @@ describe("planTests", () => {
       e2e: "all",
       reasons: [],
     });
+  });
+
+  it("narrows a stylesheet change to the pages that render its classes", () => {
+    const styles = { files: ["src/Accordion/Accordion.svelte"] };
+    expect(plan(["css/_button.scss"], [], styles)).toEqual({
+      unit: "tests/css/button.test.ts tests/css/unknown.test.ts",
+      e2e: "e2e/accordion.test.ts",
+      reasons: [],
+    });
+    expect(plan(["css/_button.scss"], [], { files: [] }).e2e).toBe("none");
+    // A build script change still reaches every page through all.css.
+    expect(
+      plan(["css/_button.scss", "scripts/build-css.ts"], [], { files: [] }).e2e,
+    ).toBe("all");
+  });
+
+  it("runs every e2e test when a stylesheet change can't be narrowed", () => {
+    expect(
+      plan(["css/_button.scss"], [], { reason: "`:root` changed" }),
+    ).toEqual({
+      unit: "tests/css/button.test.ts tests/css/unknown.test.ts",
+      e2e: "all",
+      reasons: ["css/: `:root` changed"],
+    });
+  });
+
+  it("lists the compiled stylesheets the graph imports", () => {
+    expect(stylesheetEntries(graph)).toEqual(["all"]);
   });
 
   it("runs a root-level config's importers, not everything", () => {

@@ -692,6 +692,8 @@ A full run can be killed for lack of memory, with exit code 137. Pass `--maxWork
 
 `bun run test:changed` runs every unit test your branch can affect, including uncommitted edits. CI uses the same selection on pull requests for unit and E2E tests. It follows imports, so a `Button` change also runs the `Modal` tests that render a `Button`. Pass `--print` to see the plan without running it.
 
+A `css/` change compiles `all.css` at the merge base and on your branch, then runs only the E2E tests whose pages render a changed rule ([`css-delta.ts`](scripts/lib/css-delta.ts)). It finds those pages by the classes a rule requires, so spell class names in source: literally (`"bx--tag--red"`) or as a prefix before an interpolation (`bx--tag--{type}`, `` `bx--btn--${kind}` ``). A rule that requires no class (`:root`, a theme token, `@keyframes`) or only classes no source spells (flatpickr's) runs every E2E test.
+
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)

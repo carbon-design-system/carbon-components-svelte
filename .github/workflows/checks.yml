@@ -97,9 +97,14 @@ jobs:
 
       # PRs run only the unit and e2e tests the diff can reach in the static
       # dependency graph (scripts/lib/test-graph.ts). Zero-dependency, so no
-      # install. Pushes to master run everything, which catches any miss.
+      # install, except to compile and diff the CSS for a css/ change, which
+      # narrows the e2e tests to the pages that render a changed class
+      # (scripts/lib/css-delta.ts). Pushes to master run everything, which
+      # catches any miss.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         if: github.event_name == 'pull_request'
+      - run: bun ci --ignore-scripts
+        if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'
