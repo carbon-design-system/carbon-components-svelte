@@ -13,7 +13,7 @@
 
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
-  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 
   const composedModalCtx = getContext("carbon:ComposedModal");
   const modalLabel = composedModalCtx?.label ?? writable(undefined);
@@ -52,7 +52,7 @@
     // Keep a newly-focused element (e.g. via Tab) from being hidden under
     // the scroll gradient at the bottom of the content area.
     if (event.target instanceof HTMLElement) {
-      scrollIntoViewWithinMenu(event.target, ".bx--modal-content");
+      scrollIntoViewWithin(event.target, ".bx--modal-content");
     }
   }}
   {...$$restProps}

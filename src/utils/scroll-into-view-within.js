@@ -1,12 +1,11 @@
 // @ts-check
-// Scroll a highlighted option into view without scrolling the document.
+// Scroll an item into view within its own scroll container (a menu or modal
+// body) without scrolling the document.
 //
 // `Element.scrollIntoView` scrolls every scrollable ancestor up to the
-// viewport. When the list box menu is portaled to `document.body` (or has no
-// internal scroll container), the nearest scrollable ancestor is the document
-// itself, so calling it on highlight would jump the whole page. This scopes the
-// adjustment to the menu's own scroll container and is a no-op when the menu is
-// not scrollable.
+// viewport, so a portaled menu would jump the whole page. This scopes the
+// adjustment to the container and is a no-op when the container is not
+// scrollable.
 
 import { syncPinnedWindow } from "./virtual-window.js";
 
@@ -19,7 +18,7 @@ import { syncPinnedWindow } from "./virtual-window.js";
  * @param {string} [containerSelector] defaults to `[role="listbox"]`
  * @returns {void}
  */
-export function scrollIntoViewWithinMenu(
+export function scrollIntoViewWithin(
   node,
   containerSelector = '[role="listbox"]',
 ) {

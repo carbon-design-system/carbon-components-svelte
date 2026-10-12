@@ -161,7 +161,7 @@
   import Close from "../icons/Close.svelte";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { trackModal } from "./modal-store.js";
@@ -359,7 +359,7 @@
         // Keep a newly-focused element (e.g. via Tab) from being hidden
         // under the scroll gradient at the bottom of the content area.
         if (event.target instanceof HTMLElement) {
-          scrollIntoViewWithinMenu(event.target, ".bx--modal-content");
+          scrollIntoViewWithin(event.target, ".bx--modal-content");
         }
       }}
     >
