@@ -46,6 +46,7 @@
   import { returnFocus } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
@@ -63,6 +64,10 @@
   const unregisterMenuItem = menuItemRegistry.unregister;
 
   let menuRef = null;
+
+  const generatedId = uniqueId();
+  // The menu is named by the trigger, so follow a consumer-provided `id`.
+  $: triggerId = $$restProps.id ?? generatedId;
 
   /**
    * @type {(item: { id: string; isSelected: boolean }) => void}
@@ -145,7 +150,7 @@
     tabindex="0"
     aria-haspopup="menu"
     aria-expanded={expanded}
-    aria-label={text}
+    id={triggerId}
     {href}
     class:bx--header__menu-item={true}
     class:bx--header__menu-title={true}
@@ -202,7 +207,7 @@
   <ul
     bind:this={menuRef}
     role="menu"
-    aria-label={text}
+    aria-labelledby={triggerId}
     class:bx--header__menu={true}
   >
     <slot />

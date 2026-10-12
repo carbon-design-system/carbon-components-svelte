@@ -35,3 +35,33 @@ describe("HeaderNavMenu trigger content", () => {
     expect(icon.nextElementSibling).toHaveClass("bx--header__menu-arrow");
   });
 });
+
+describe("HeaderNavMenu accessible names", () => {
+  it("names the trigger from its content without an aria-label", () => {
+    render(Fixture);
+
+    const trigger = screen.getByRole("menuitem", { name: "Plain" });
+    expect(trigger).not.toHaveAttribute("aria-label");
+  });
+
+  it("names the menu with the trigger", () => {
+    render(Fixture);
+
+    const trigger = screen.getByRole("menuitem", { name: "Plain" });
+    const menu = screen.getByRole("menu", { name: "Plain", hidden: true });
+    expect(trigger.id).not.toBe("");
+    expect(menu).toHaveAttribute("aria-labelledby", trigger.id);
+    expect(menu).not.toHaveAttribute("aria-label");
+  });
+
+  it("follows slotted trigger content", () => {
+    render(Fixture);
+
+    expect(
+      screen.getByRole("menuitem", { name: "Custom label" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("menu", { name: "Custom label", hidden: true }),
+    ).toBeInTheDocument();
+  });
+});
