@@ -47,44 +47,25 @@
 </script>
 
 <li class:bx--switcher__item={true}>
-  {#if href}
-    <a
-      bind:this={ref}
-      {href}
-      rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
-      aria-current={isSelected ? "page" : undefined}
-      class:bx--switcher__item-link={true}
-      class:bx--switcher__item-link--selected={isSelected}
-      {...$$restProps}
-      on:click
-      on:click={handleClick}
-      on:keydown
-    >
-      <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
-      {#if icon || $$slots.icon}
-        <span class:bx--switcher__item-icon={true}>
-          <slot name="icon"><svelte:component this={icon} size={16} /></slot>
-        </span>
-      {/if}
-    </a>
-  {:else}
-    <button
-      bind:this={ref}
-      type="button"
-      aria-current={isSelected ? "page" : undefined}
-      class:bx--switcher__item-link={true}
-      class:bx--switcher__item-link--selected={isSelected}
-      {...$$restProps}
-      on:click
-      on:click={handleClick}
-      on:keydown
-    >
-      <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
-      {#if icon || $$slots.icon}
-        <span class:bx--switcher__item-icon={true}>
-          <slot name="icon"><svelte:component this={icon} size={16} /></slot>
-        </span>
-      {/if}
-    </button>
-  {/if}
+  <svelte:element
+    this={href ? "a" : "button"}
+    bind:this={ref}
+    {href}
+    type={href ? undefined : "button"}
+    rel={href ? resolveLinkRel($$restProps.target, $$restProps.rel) : undefined}
+    aria-current={isSelected ? "page" : undefined}
+    class:bx--switcher__item-link={true}
+    class:bx--switcher__item-link--selected={isSelected}
+    {...$$restProps}
+    on:click
+    on:click={handleClick}
+    on:keydown
+  >
+    <span class:bx--switcher__item-text={true}><slot>{text}</slot></span>
+    {#if icon || $$slots.icon}
+      <span class:bx--switcher__item-icon={true}>
+        <slot name="icon"><svelte:component this={icon} size={16} /></slot>
+      </span>
+    {/if}
+  </svelte:element>
 </li>
