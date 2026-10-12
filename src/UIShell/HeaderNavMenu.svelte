@@ -52,6 +52,11 @@
   import { returnFocus } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
+  import {
+    createTypeaheadBuffer,
+    isTypeaheadKey,
+    typeaheadIndex,
+  } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -120,10 +125,30 @@
   $: isCurrentSubmenu = $selectedItems.size > 0;
   $: if (ref) menubar?.setCurrent(ref, isCurrentSubmenu);
 
+  const typeahead = createTypeaheadBuffer();
+
+  /** Typing focuses the next item whose label starts with the typed text. */
+  function handleMenuKeydown(event) {
+    if (event.defaultPrevented || !isTypeaheadKey(event)) return;
+    const index = $menuItems.indexOf(event.target);
+    const next = typeaheadIndex({
+      items: $menuItems,
+      query: typeahead.push(event.key),
+      itemToString: (item) => item.textContent?.trim() ?? "",
+      index,
+      isDisabled: () => false,
+    });
+    if (next !== index) {
+      event.preventDefault();
+      $menuItems[next]?.focus();
+    }
+  }
+
   onMount(() => {
     const node = ref;
     if (menubar && node) menubar.registerItem(node);
     return () => {
+      typeahead.clear();
       if (menubar && node) {
         menubar.setCurrent(node, false);
         menubar.unregisterItem(node);
@@ -245,6 +270,7 @@
     role="menu"
     aria-labelledby={triggerId}
     class:bx--header__menu={true}
+    on:keydown={handleMenuKeydown}
   >
     <slot />
   </ul>

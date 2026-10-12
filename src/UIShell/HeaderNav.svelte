@@ -1,5 +1,5 @@
 <script>
-  import { getContext, setContext } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
   import { readable } from "svelte/store";
   import { createMenubar } from "../utils/menubar.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
@@ -15,6 +15,8 @@
   const setCurrent = menubar.setCurrent;
   /** @type {import("svelte/store").Readable<HTMLElement | undefined>} */
   const tabStop = menubar.tabStop;
+
+  onMount(() => menubar.destroy);
 
   setContext("carbon:HeaderNav", {
     registerItem,
