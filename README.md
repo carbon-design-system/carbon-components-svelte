@@ -88,7 +88,7 @@ import "carbon-components-svelte/css/all.css";
 
 ### Smaller CSS
 
-Each precompiled StyleSheet contains the styles for every component. To ship only the styles your app uses, add [`optimizeCss`](#optimizecss) to your production build.
+Each precompiled StyleSheet contains the styles for every component. To ship only the styles your app uses, add [`optimizeCss`](#optimizecss) to your production build. Set `propAware: true` to also drop the styles of prop values your app never passes; see [prop-aware pruning](#prop-aware-pruning).
 
 The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yourself misses styles for components and variants that only this library provides.
 
@@ -201,13 +201,13 @@ The preprocessor optimizes imports from the following packages:
 ```diff
 $ vite build
 
-Optimized index-CU4gbKFa.css
-- Before: 606.26 kB
-+ After:   53.22 kB (-91.22%)
+Optimized assets/index-Doxsm5Yz.css
+- Before: 557.37 kB
++ After:   46.16 kB (-91.72%)
 
-dist/index.html                  0.34 kB │ gzip:  0.24 kB
-dist/assets/index-CU4gbKFa.css  53.22 kB │ gzip:  6.91 kB
-dist/assets/index-Ceijs3eO.js   53.65 kB │ gzip: 15.88 kB
+dist/index.html                  0.33 kB │ gzip:  0.23 kB
+dist/assets/index-Doxsm5Yz.css  46.16 kB │ gzip:  6.12 kB
+dist/assets/index-BoBcXTHi.js   69.61 kB │ gzip: 24.35 kB
 ```
 
 > [!NOTE]
@@ -227,11 +227,15 @@ optimizeCss({ propAware: true });
      pruned: the other kinds and sizes, .bx--skeleton, the icon-only tooltip -->
 ```
 
-It reads literal props, constants, and props passed through your own wrapper components. A value it can't read (a reassigned variable, a store, `bind:`, a spread) keeps every variant.
+It reads literal props, constants and state nothing reassigns (including constants your own modules export), your own wrapper components, props forwarded with `{...$$restProps}` or `...rest`, object and array literals, and your own `{#if}` and `{#each}`. A value it can't read keeps every variant: a reassigned variable, a writable store, `bind:`, a spread of anything but a literal or forwarded props, or data fetched at runtime.
+
+Refer to the [carbon-preprocess-svelte documentation](https://github.com/carbon-design-system/carbon-preprocess-svelte#prop-aware-pruning) for details.
 
 ### `optimizeComponents`
 
-`optimizeComponents` rewrites each Carbon component your app renders for the props it passes. Values that never change become literals, and branches that can't run are removed, along with child components only those branches render (a skeleton, a tooltip portal). It is the JavaScript counterpart of prop-aware CSS pruning and uses the same analysis.
+`optimizeComponents` rewrites each Carbon component your app renders for the props it passes. Values that never change become literals, and branches that can't run are removed, along with child components only those branches render (a skeleton, a tooltip portal). It is the JavaScript counterpart of prop-aware CSS pruning and uses the same analysis. In typical apps it removes 18–27% of the production JavaScript.
+
+Your own wrapper components are rewritten the same way when every place that renders them is in `content`.
 
 ```js
 // vite.config.js
@@ -257,7 +261,8 @@ export default {
 | Rollup, Rolldown | list `optimizeComponents()` before the Svelte plugin | production builds only (add it conditionally) |
 | Webpack, Rspack | add `new OptimizeComponentsPlugin()` to `plugins` | `mode: "production"` only |
 
-- It analyzes the files matched by `content` (default: source files under `src/`) before the build. If a module outside `content` imports a Carbon component, the build fails instead of shipping wrong code.
+- It analyzes the files matched by `content` (default: source files under `src/`) before the build. If a module outside `content` renders a Carbon component, or one of your rewritten wrappers, including through a re-export or a dynamic `import()`, the build fails instead of shipping wrong code.
+- Wrappers imported through an alias (`$lib/Card.svelte`, `#lib/Card.svelte`) are resolved with the bundler's own resolver.
 - SvelteKit and Astro server and client builds are rewritten alike, so prerendered pages hydrate as before.
 - Set `report: true` to print what each build rewrote.
 
