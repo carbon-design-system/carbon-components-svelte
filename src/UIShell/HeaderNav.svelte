@@ -1,7 +1,27 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import { readable } from "svelte/store";
+  import { createMenubar } from "../utils/menubar.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
+
+  // Top-level items register here so the bar is a single Tab stop that the
+  // arrow keys rove through.
+  const menubar = createMenubar();
+  /** @type {(node: HTMLElement) => void} */
+  const registerItem = menubar.register;
+  /** @type {(node: HTMLElement) => void} */
+  const unregisterItem = menubar.unregister;
+  /** @type {(node: HTMLElement, isCurrent: boolean) => void} */
+  const setCurrent = menubar.setCurrent;
+  /** @type {import("svelte/store").Readable<HTMLElement | undefined>} */
+  const tabStop = menubar.tabStop;
+
+  setContext("carbon:HeaderNav", {
+    registerItem,
+    unregisterItem,
+    setCurrent,
+    tabStop,
+  });
 
   const { expansionBreakpoint, winWidth } = getContext("carbon:Header") ?? {
     expansionBreakpoint: readable(EXPANSION_BREAKPOINT),
@@ -21,7 +41,12 @@
   class:bx--header__nav--collapsed={custom && !expanded}
   {...$$restProps}
 >
-  <ul role="menubar" class:bx--header__menu-bar={true}>
+  <ul
+    role="menubar"
+    class:bx--header__menu-bar={true}
+    on:keydown={menubar.handleKeydown}
+    on:focusin={menubar.handleFocusin}
+  >
     <slot />
   </ul>
 </nav>

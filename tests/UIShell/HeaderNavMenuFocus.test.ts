@@ -14,8 +14,10 @@ describe("HeaderNavMenu focus on close", () => {
     await user.keyboard("{End}");
     expect(item("Storage")).toHaveFocus();
 
+    // The menubar is one Tab stop, so Tab leaves it rather than landing on
+    // the next top-level item.
     await user.tab();
-    expect(item("Pricing")).toHaveFocus();
+    expect(screen.getByRole("textbox", { name: "Search docs" })).toHaveFocus();
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
   });
 

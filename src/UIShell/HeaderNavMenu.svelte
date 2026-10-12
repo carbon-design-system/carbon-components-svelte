@@ -38,8 +38,14 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, setContext, tick } from "svelte";
-  import { get, writable } from "svelte/store";
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
+  import { get, readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
@@ -64,6 +70,12 @@
   const unregisterMenuItem = menuItemRegistry.unregister;
 
   let menuRef = null;
+
+  // Present when this menu is a top-level item of a `HeaderNav`.
+  const menubar = getContext("carbon:HeaderNav");
+  const tabStop = menubar?.tabStop ?? readable(undefined);
+  // Everything is tabbable until the bar knows its items (and without a bar).
+  $: tabindex = $tabStop === undefined || $tabStop === ref ? 0 : -1;
 
   const generatedId = uniqueId();
   // The menu is named by the trigger, so follow a consumer-provided `id`.
@@ -106,6 +118,18 @@
   });
 
   $: isCurrentSubmenu = $selectedItems.size > 0;
+  $: if (ref) menubar?.setCurrent(ref, isCurrentSubmenu);
+
+  onMount(() => {
+    const node = ref;
+    if (menubar && node) menubar.registerItem(node);
+    return () => {
+      if (menubar && node) {
+        menubar.setCurrent(node, false);
+        menubar.unregisterItem(node);
+      }
+    };
+  });
 
   function handleOutsideClick(event) {
     if (expanded && isOutsideClick(event, ref)) {
@@ -141,13 +165,25 @@
     if (event.key === "Enter" && !menuRef.contains(event.target)) {
       event.stopPropagation();
       expanded = !expanded;
+    } else if (
+      menubar &&
+      expanded &&
+      !event.defaultPrevented &&
+      !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) &&
+      (event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        (event.target === ref && (event.key === "Home" || event.key === "End")))
+    ) {
+      // The menubar moves focus to the adjacent item (it handles this event
+      // next as it bubbles); close first so the open menu isn't left behind.
+      closeMenu("blur");
     }
   }}
 >
   <a
     bind:this={ref}
     role="menuitem"
-    tabindex="0"
+    {tabindex}
     aria-haspopup="menu"
     aria-expanded={expanded}
     id={triggerId}
