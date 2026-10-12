@@ -11,6 +11,13 @@ import {
 } from "./typeahead.js";
 
 /**
+ * @typedef {object} MenubarSubmenu
+ * @property {() => boolean} isOpen
+ * @property {() => void} open Open the submenu and focus its first item.
+ * @property {() => void} close
+ */
+
+/**
  * Roving-tabindex bookkeeping and keyboard navigation for a WAI-ARIA menubar.
  * Top-level items register their focusable element; the bar keeps one of them
  * as the single Tab stop (the last focused item, else the current-page item,
@@ -23,10 +30,15 @@ import {
  * owns it. In a vertical bar, all four arrows belong to an open submenu's own
  * items.
  *
+ * An item that owns a submenu passes `isOpen`, `open` and `close` when it
+ * registers. Closing it when focus moves to another item is the bar's job, and
+ * so is opening the next submenu when a horizontal bar's ArrowLeft or
+ * ArrowRight leaves an open one.
+ *
  * @param {{ orientation?: "horizontal" | "vertical" }} [options]
  * @returns {{
  *   orientation: "horizontal" | "vertical",
- *   register: (node: HTMLElement) => void,
+ *   register: (node: HTMLElement, submenu?: MenubarSubmenu) => void,
  *   unregister: (node: HTMLElement) => void,
  *   setCurrent: (node: HTMLElement, isCurrent: boolean) => void,
  *   tabStop: import("svelte/store").Readable<HTMLElement | undefined>,
@@ -67,6 +79,12 @@ export function createMenubar({ orientation = "horizontal" } = {}) {
 
   const typeahead = createTypeaheadBuffer();
 
+  /**
+   * Items with a submenu register how to ask it to open and close.
+   * @type {Map<HTMLElement, MenubarSubmenu>}
+   */
+  const submenus = new Map();
+
   /** @param {EventTarget | null} target */
   function ownerOf(target) {
     return getNodes().find((node) =>
@@ -76,8 +94,14 @@ export function createMenubar({ orientation = "horizontal" } = {}) {
 
   return {
     orientation,
-    register: registry.register,
-    unregister: registry.unregister,
+    register(node, handlers) {
+      if (handlers) submenus.set(node, handlers);
+      registry.register(node);
+    },
+    unregister(node) {
+      submenus.delete(node);
+      registry.unregister(node);
+    },
     setCurrent(node, isCurrent) {
       current.update((set) => {
         if (set.has(node) === isCurrent) return set;
@@ -144,7 +168,20 @@ export function createMenubar({ orientation = "horizontal" } = {}) {
               ? nodes[0]
               : nodes[nodes.length - 1];
       event.preventDefault();
+      // Leaving an item closes its submenu so it isn't left open behind focus.
+      const leaving = submenus.get(owner);
+      const wasOpen = leaving?.isOpen() ?? false;
+      leaving?.close();
       next?.focus();
+      // Moving along a horizontal bar from an open submenu opens the next one.
+      if (
+        wasOpen &&
+        !vertical &&
+        next !== owner &&
+        (key === prevKey || key === nextKey)
+      ) {
+        submenus.get(next)?.open();
+      }
     },
     handleFocusin(event) {
       const owner = ownerOf(event.target);

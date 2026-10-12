@@ -149,7 +149,21 @@
 
   onMount(() => {
     const node = ref;
-    if (menubar && node) menubar.registerItem(node);
+    if (menubar && node) {
+      menubar.registerItem(node, {
+        isOpen: () => expanded,
+        // Reached by arrowing along the bar from another open menu.
+        open: async () => {
+          expanded = true;
+          await tick();
+          ($menuItems[0] ?? node).focus();
+        },
+        // The bar closes the menu when focus moves on to another item.
+        close: () => {
+          closeMenu("blur");
+        },
+      });
+    }
     return () => {
       typeahead.clear();
       if (menubar && node) {
@@ -158,20 +172,6 @@
       }
     };
   });
-
-  /**
-   * Whether the key makes the menubar move focus to another top-level item.
-   * Inside the submenu a vertical bar leaves the arrows to the menu items.
-   * @param {KeyboardEvent} event
-   */
-  function movesBarFocus(event) {
-    const { key } = event;
-    if (key === "Home" || key === "End") return event.target === ref;
-    if (vertical) {
-      return event.target === ref && (key === "ArrowUp" || key === "ArrowDown");
-    }
-    return key === "ArrowLeft" || key === "ArrowRight";
-  }
 
   function handleOutsideClick(event) {
     if (expanded && isOutsideClick(event, ref)) {
@@ -208,24 +208,16 @@
       event.stopPropagation();
       expanded = !expanded;
     } else if (
-      menubar &&
+      vertical &&
       expanded &&
+      event.key === "ArrowLeft" &&
       !event.defaultPrevented &&
-      !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey)
+      !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) &&
+      menuRef.contains(event.target)
     ) {
-      if (movesBarFocus(event)) {
-        // The menubar moves focus to the adjacent item (it handles this event
-        // next as it bubbles); close first so the open menu isn't left behind.
-        closeMenu("blur");
-      } else if (
-        vertical &&
-        event.key === "ArrowLeft" &&
-        menuRef.contains(event.target)
-      ) {
-        // Back out of the submenu, like Escape.
-        event.preventDefault();
-        closeMenu("escape-key");
-      }
+      // Back out of the submenu, like Escape.
+      event.preventDefault();
+      closeMenu("escape-key");
     }
   }}
 >
