@@ -134,6 +134,16 @@ an error with a warning icon.
   </FormGroup>
 </Form>
 
+### Helper text and messages
+
+Place `FormHelperText` and `FormRequirement` directly in a `FormGroup` to
+describe the whole group. Their ids derive from the group's `id`, and the
+fieldset's `aria-describedby` lists them while they're mounted, so screen
+readers read them when focus enters the group. Render `FormRequirement` with
+`{#if}` while there is an error. Check a box to clear the error.
+
+<FileSource src="/framed/Form/FormGroupParts" />
+
 ## Custom controls
 
 `FormLabel`, `FormHelperText`, and `FormRequirement` are the label, helper
