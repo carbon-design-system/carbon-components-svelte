@@ -301,13 +301,13 @@ Values of `lines` above `1` use multiline mode (end clamp only).
 
 Alternatively, wrap inline Text with the Truncate component:
 
-<Truncate lines={3}>
-  <Box maxWidth="20rem">
+<Box maxWidth="20rem">
+  <Truncate lines={3}>
     <Text tag="span" type="body-long-02">
       Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
     </Text>
-  </Box>
-</Truncate>
+  </Truncate>
+</Box>
 
 ## Typography inspiration
 
