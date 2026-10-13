@@ -80,6 +80,13 @@
   export let resizeHandleLabel = "Resize side navigation";
 
   /**
+   * Specify the delay in milliseconds before hovering the resize handle
+   * highlights it and shows the resize cursor.
+   * Has no effect unless `resizable` is `true`.
+   */
+  export let resizeEnterDelayMs = SEPARATOR_HOVER_DELAY_MS;
+
+  /**
    * Specify the delay in milliseconds before the rail expands on hover.
    * Has no effect unless `rail` is `true`.
    */
@@ -94,10 +101,12 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { SEPARATOR_HOVER_DELAY_MS } from "../constants/timing.js";
   import {
     acquireBodyScrollLock,
     releaseBodyScrollLock,
   } from "../utils/body-scroll-lock.js";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
@@ -121,11 +130,6 @@
 
   const RESIZE_KEYBOARD_STEP = 16;
   const RESIZE_KEYBOARD_LARGE_STEP = 64;
-  // Matches the accent line's `transition-delay` (`$duration--moderate-01`)
-  // in `_side-nav.scss`.
-  // `cursor` can't itself be transitioned, so the same delay is reproduced
-  // here in JS to keep the cursor and the highlight in sync.
-  const RESIZE_CURSOR_HOVER_DELAY = 150;
 
   // Rounded: `clientX` is fractional under zoom or on high-DPI displays.
   function clampWidth(value) {
@@ -139,8 +143,8 @@
     resizing = true;
     resizeStartX = event.clientX;
     resizeStartWidth = renderedWidth;
-    clearTimeout(resizeCursorTimer);
-    resizeCursorVisible = true;
+    scheduleResizeHover.cancel();
+    resizeHovered = true;
     // Dragging over page text would otherwise select it as the pointer
     // crosses it; suppress selection for the duration of the drag.
     document.body.classList.add("bx--side-nav-resizing");
@@ -201,15 +205,18 @@
     skipRailLeaveDelay = false;
   }
 
-  function handleResizeHandleMouseEnter() {
-    resizeCursorTimer = setTimeout(() => {
-      resizeCursorVisible = true;
-    }, RESIZE_CURSOR_HOVER_DELAY);
+  // Touch has no hover, and a pen or mouse pass over the handle shouldn't
+  // flash it.
+  function handleResizeHandlePointerenter(event) {
+    if (event.pointerType === "touch") return;
+    scheduleResizeHover(resizeEnterDelayMs, () => {
+      resizeHovered = true;
+    });
   }
 
-  function handleResizeHandleMouseLeave() {
-    clearTimeout(resizeCursorTimer);
-    if (!resizing) resizeCursorVisible = false;
+  function handleResizeHandlePointerleave() {
+    scheduleResizeHover.cancel();
+    if (!resizing) resizeHovered = false;
   }
 
   const dispatch = createEventDispatcher();
@@ -234,8 +241,10 @@
   let resizing = false;
   let resizeStartX = 0;
   let resizeStartWidth = 0;
-  let resizeCursorVisible = false;
-  let resizeCursorTimer = undefined;
+  // Set once the pointer has rested on the handle for `resizeEnterDelayMs`,
+  // and for the length of a drag.
+  let resizeHovered = false;
+  const scheduleResizeHover = createDelayedSetter();
   let skipRailLeaveDelay = false;
 
   $: if (prevIsOpen !== isOpen) {
@@ -299,7 +308,7 @@
         holdsBodyLock = false;
         releaseBodyScrollLock();
       }
-      clearTimeout(resizeCursorTimer);
+      scheduleResizeHover.cancel();
       stopResizing();
       sideNavWidth.set(undefined);
     };
@@ -374,7 +383,7 @@
       aria-label={resizeHandleLabel}
       tabindex="0"
       class:bx--side-nav__resize-handle={true}
-      style:cursor={resizing || resizeCursorVisible ? "col-resize" : undefined}
+      class:bx--side-nav__resize-handle--hover={resizeHovered}
       use:pointerDrag={{
         onStart: handleResizeStart,
         onMove: handleResizeMove,
@@ -382,8 +391,8 @@
       }}
       on:keydown={handleResizeKeydown}
       on:dblclick={handleResizeDoubleClick}
-      on:mouseenter={handleResizeHandleMouseEnter}
-      on:mouseleave={handleResizeHandleMouseLeave}
+      on:pointerenter={handleResizeHandlePointerenter}
+      on:pointerleave={handleResizeHandlePointerleave}
     ></div>
   {/if}
 </nav>
