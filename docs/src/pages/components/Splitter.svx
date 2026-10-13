@@ -33,6 +33,17 @@ Set `min` and `max` to keep the start pane within a percentage range. <DocKbd la
   </Splitter>
 </Box>
 
+### Pixel bounds
+
+Pass a pixel length such as `"200px"` to `min` or `max` to hold the start pane at a fixed size as the splitter resizes, for example a sidebar that should never get narrower than its content. `size` stays a percentage. When `min` is larger than `max`, `min` wins.
+
+<Box height="12rem" border="subtle">
+  <Splitter size={30} min="200px" max="400px" separatorLabel="Resize service list">
+    <Box slot="start" padding={5}>Services</Box>
+    <Box slot="end" padding={5}>billing-api · us-south · 3 replicas</Box>
+  </Splitter>
+</Box>
+
 ## Collapsed
 
 Use `bind:collapsed` to collapse the start pane to `min` from your own control, such as a toolbar button. Setting it back to `false` restores the size the pane had before. It also turns `true` whenever the user moves the separator to `min`, whether with <DocKbd label="Enter" />, <DocKbd label="Home" />, or a drag. A pane shrunk to nothing is inert, so its content leaves the tab order.
