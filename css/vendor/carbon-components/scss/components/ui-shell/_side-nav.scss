@@ -499,6 +499,29 @@
     }
   }
 
+  // ccs: a current header nav item mirrored into the side nav gets the side
+  // nav's current-page treatment (selected surface and leading accent bar)
+  // instead of the header bar's bottom underline.
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item[aria-current='page'],
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item--current {
+    background-color: $layer-selected;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--side-nav
+    .#{$prefix}--header__menu-item[aria-current='page']::after,
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item--current::after {
+    // Offset by the item's 2px transparent border so the bar lines up with
+    // `SideNavLink`'s at the panel edge.
+    top: -2px;
+    right: auto;
+    bottom: -2px;
+    left: -2px;
+    width: 3px;
+    border-bottom: 0;
+    background-color: $shell-side-nav-accent-01;
+  }
+
   .#{$prefix}--side-nav
     .#{$prefix}--header__menu-title[aria-expanded='true']
     + .#{$prefix}--header__menu {
@@ -516,6 +539,14 @@
     .#{$prefix}--header__menu-item { // ccs: flatten
       padding-left: 4.25rem;
       font-weight: 400;
+    }
+
+    // ccs: weight and surface match a current `SideNavMenuItem`.
+    .#{$prefix}--header__menu-item[aria-current='page'],
+    .#{$prefix}--header__menu-item--current {
+      background-color: $layer-selected;
+      color: $text-primary;
+      font-weight: 600;
     }
 
     @media (any-hover: hover) {
@@ -549,6 +580,14 @@
       .#{$prefix}--header__menu-item:hover
       .#{$prefix}--header__menu-arrow { // ccs: flatten
       fill: $shell-side-nav-text-01;
+    }
+
+    // ccs: a current header nav item keeps its selected surface on hover.
+    // Shares this block to stay under the hover-block budget.
+    .#{$prefix}--side-nav
+      .#{$prefix}--header__menu-item[aria-current='page']:hover,
+    .#{$prefix}--side-nav .#{$prefix}--header__menu-item--current:hover {
+      background-color: $layer-selected-hover;
     }
   }
 
