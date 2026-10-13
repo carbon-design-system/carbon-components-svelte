@@ -19,11 +19,11 @@ description: A table of contents lists the sections of a page as links and highl
   let selectedId;
 
   const staticItems = [
-    { id: "toc-static-overview", text: "Overview" },
-    { id: "toc-static-measures-of-success", text: "Measures of success" },
-    { id: "toc-static-key-moments", text: "Key moments" },
-    { id: "toc-static-tutorials", text: "Tutorials" },
-    { id: "toc-static-articles", text: "Articles" },
+    { id: "toc-static-overview", text: "Overview", body: "What the program covers, who it's for, and how long it runs." },
+    { id: "toc-static-measures-of-success", text: "Measures of success", body: "The adoption and satisfaction targets each team reports on every quarter." },
+    { id: "toc-static-key-moments", text: "Key moments", body: "The milestones where a team checks in: kickoff, first release, and the 90-day review." },
+    { id: "toc-static-tutorials", text: "Tutorials", body: "Step-by-step guides for setting up a project and shipping a first change." },
+    { id: "toc-static-articles", text: "Articles", body: "Background reading on the practices the program builds on." },
   ];
   let staticSelectedId = "toc-static-key-moments";
 
@@ -180,7 +180,7 @@ When the sections scroll inside an element rather than the window, pass that ele
 
 ## Without scroll spy
 
-Set `noScrollSpy` to control `selectedId` yourself, for example when the sections are tabs or steps rather than one scrolling page. Clicking an item still selects it. With no sections on the page to jump to, cancel each item's click so the browser or router doesn't follow the hash.
+Set `noScrollSpy` to control `selectedId` yourself, for example when the sections are tabs or steps rather than one scrolling page. Clicking an item still selects it. Here each section is a panel that shows only while its item is selected, so cancel each item's click to keep the browser or router from jumping to the hash.
 
 <Grid>
   <Row>
@@ -196,7 +196,14 @@ Set `noScrollSpy` to control `selectedId` yourself, for example when the section
       </TableOfContents>
     </Column>
     <Column sm={4} md={5} lg={12}>
-      <Text>Selected: <strong>{staticSelectedId}</strong></Text>
+      {#each staticItems as item (item.id)}
+        <section id={item.id} hidden={item.id !== staticSelectedId}>
+          <Stack gap={3}>
+            <Text tag="h4" type="productive-heading-03">{item.text}</Text>
+            <Text>{item.body}</Text>
+          </Stack>
+        </section>
+      {/each}
     </Column>
   </Row>
 </Grid>
