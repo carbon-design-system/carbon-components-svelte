@@ -1,6 +1,8 @@
 // @vitest-environment node
 import {
+  auditCatalog,
   auditThumbnail,
+  isSentenceCase,
   missingThumbnails,
   orphanThumbnails,
   thumbnailName,
@@ -109,6 +111,80 @@ describe("auditThumbnail", () => {
     const body = `<rect fill="var(--cds-ui-02, #ffffff)"></rect>`.repeat(200);
     expect(auditThumbnail("meter", svg(body))).toEqual([
       expect.stringMatching(/B exceeds the 8000 B budget$/),
+    ]);
+  });
+});
+
+describe("isSentenceCase", () => {
+  it("accepts sentence case and all-caps acronyms", () => {
+    expect(isSentenceCase("Toggle button group")).toBe(true);
+    expect(isSentenceCase("UI shell header")).toBe(true);
+    expect(isSentenceCase("PIN code input")).toBe(true);
+  });
+
+  it("rejects title case and a lower-case first word", () => {
+    expect(isSentenceCase("Toggle Button Group")).toBe(false);
+    expect(isSentenceCase("toggle button group")).toBe(false);
+  });
+});
+
+describe("auditCatalog", () => {
+  const asset = (page: string, thumbnail: string, name?: string) => ({
+    name,
+    thumbnailPath: `./thumbnails/${thumbnail}.svg`,
+    demoLinks: [
+      { url: `https://svelte.carbondesignsystem.com/components/${page}` },
+    ],
+  });
+
+  it("accepts assets that match their pages and thumbnails", () => {
+    const assets = {
+      button: asset("Button", "button"),
+      "tooltip-icon": asset("TooltipIcon", "tooltip-icon", "Tooltip icon"),
+      multiselect: asset("MultiSelect", "multiselect", "Multiselect"),
+      "tabs-vertical": asset("Tabs#vertical", "tabs-vertical", "Vertical tabs"),
+    };
+    expect(
+      auditCatalog(
+        assets,
+        ["Button", "TooltipIcon", "MultiSelect", "Tabs"],
+        ["button", "tooltip-icon", "multiselect", "tabs-vertical"],
+      ),
+    ).toEqual([]);
+  });
+
+  it("flags a misspelled name", () => {
+    const assets = {
+      "tooltip-icon": asset("TooltipIcon", "tooltip-icon", "Tootlip icon"),
+    };
+    expect(auditCatalog(assets, ["TooltipIcon"], ["tooltip-icon"])).toEqual([
+      'tooltip-icon: name "Tootlip icon" doesn\'t spell the key or TooltipIcon',
+    ]);
+  });
+
+  it("flags a name that isn't sentence case", () => {
+    const assets = {
+      "toggle-button-group": asset(
+        "ToggleButtonGroup",
+        "toggle-button-group",
+        "Toggle Button Group",
+      ),
+    };
+    expect(
+      auditCatalog(assets, ["ToggleButtonGroup"], ["toggle-button-group"]),
+    ).toEqual([
+      'toggle-button-group: name "Toggle Button Group" is not sentence case',
+    ]);
+  });
+
+  it("flags pages and thumbnails with no asset, and missing thumbnails", () => {
+    const assets = { meter: asset("Meter", "meter", "Meter") };
+    expect(
+      auditCatalog(assets, ["Meter", "LazyMount"], ["tooltip-group"]),
+    ).toEqual([
+      "meter: thumbnailPath ./thumbnails/meter.svg is not a file in thumbnails/",
+      "LazyMount has no carbon.yml asset",
+      "thumbnails/tooltip-group.svg has no carbon.yml asset",
     ]);
   });
 });

@@ -22,13 +22,20 @@ inside another folder (`src/Tile/`), and folders like `ListBox` or
 (TabsVertical is documented on the Tabs page). Any other thumbnail with
 no page is for a component that doesn't exist; delete it.
 
-`missing` doesn't read `carbon.yml`. To list thumbnails with no catalog
-entry:
+`missing` doesn't read `carbon.yml`. `catalog` does, and exits non-zero
+on any gap between it, the docs pages, and `thumbnails/`:
 
 ```sh
-comm -23 <(ls thumbnails/*.svg | xargs -n1 basename | sort) \
-  <(grep -o "thumbnails/[a-z0-9-]*\.svg" carbon.yml | sed "s#thumbnails/##" | sort -u)
+bun run thumbnails catalog
 ```
+
+It lists docs pages with no asset, assets whose `thumbnailPath` file is
+missing, thumbnails no asset uses, and `name`s that aren't sentence case
+or don't spell the asset's key or docs page (it would have caught
+"Tootlip icon"). Assets without a `name` inherit it from `carbon-styles`
+and skip the name checks. A page deliberately left out of the catalog
+goes in `UNCATALOGED_PAGES` in `scripts/lib/thumbnails.ts`, with a line
+here saying why. None are left out today.
 
 `scripts/thumbnails.ts` has three more commands, used in the
 [recipe](#recipe): `audit` checks the mechanical rules below, `sheet`
@@ -332,10 +339,13 @@ Svelte-only component spells everything out:
         url: https://svelte.carbondesignsystem.com/components/TableOfContents
 ```
 
-`name` is the page name in sentence case. A component documented inside
+`name` is the page name in Carbon's sentence case: "Toggle button group",
+not "Toggle Button Group". Acronyms stay upper case ("UI shell header",
+"PIN code input"), and Carbon's one-word names stay one word
+("Multiselect", "Toggletip"). A component documented inside
 another page links to that page's section, as `tabs-vertical` links to
-`Tabs#vertical`. Check that the file still parses:
-`bun -e 'Bun.YAML.parse(await Bun.file("carbon.yml").text())'`.
+`Tabs#vertical`. Check it with `bun run thumbnails catalog`, which also fails if the file
+doesn't parse.
 
 ## Gotchas
 
