@@ -49,3 +49,10 @@
   </Splitter>
 </div>
 <div data-testid="preview-size-display">{previewSize}</div>
+
+<div data-testid="pixel-container" style="width: 600px; height: 100px;">
+  <Splitter size={10} min="150px" separatorLabel="Resize sidebar">
+    <p slot="start">Sidebar</p>
+    <p slot="end">Content</p>
+  </Splitter>
+</div>

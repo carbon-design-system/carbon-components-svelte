@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import SplitterComponent from "carbon-components-svelte/Splitter/Splitter.svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import Splitter from "./Splitter.test.svelte";
 import SplitterNested from "./SplitterNested.test.svelte";
@@ -176,6 +177,114 @@ describe("Splitter", () => {
       await toggle();
 
       expect(separator).toHaveAttribute("aria-valuenow", "50");
+    });
+  });
+
+  describe("pixel bounds", () => {
+    let report: (width: number, height: number) => void = () => {};
+
+    beforeEach(() => {
+      class StubResizeObserver {
+        constructor(callback: ResizeObserverCallback) {
+          report = (width, height) =>
+            callback(
+              [...this.observed].map((target) => ({
+                target,
+                contentRect: { width, height },
+              })) as unknown as ResizeObserverEntry[],
+              this as unknown as ResizeObserver,
+            );
+        }
+        observed = new Set<Element>();
+        observe(target: Element) {
+          this.observed.add(target);
+        }
+        unobserve(target: Element) {
+          this.observed.delete(target);
+        }
+        disconnect() {}
+      }
+      vi.stubGlobal("ResizeObserver", StubResizeObserver);
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("converts pixel bounds against the measured width", async () => {
+      const { separator } = setup({ size: 50, min: "100px", max: "300px" });
+      report(400, 200);
+      await tick();
+
+      expect(separator).toHaveAttribute("aria-valuemin", "25");
+      expect(separator).toHaveAttribute("aria-valuemax", "75");
+
+      separator.focus();
+      await user.keyboard("{Home}");
+      expect(separator).toHaveAttribute("aria-valuenow", "25");
+      await user.keyboard("{End}");
+      expect(separator).toHaveAttribute("aria-valuenow", "75");
+    });
+
+    it("clamps a drag to a pixel min", async () => {
+      const { separator } = setup({ min: "100px" });
+      report(400, 200);
+      await tick();
+
+      await fireEvent.pointerDown(separator, { clientX: 200, pointerId: 1 });
+      await fireEvent.pointerMove(separator, { clientX: 0, pointerId: 1 });
+      await fireEvent.pointerUp(separator, { pointerId: 1 });
+
+      expect(separator).toHaveAttribute("aria-valuenow", "25");
+      expect(screen.getByTestId("bound-collapsed")).toHaveTextContent("true");
+    });
+
+    it("re-clamps when the splitter shrinks, without rewriting size", async () => {
+      const { separator, startPane } = setup({ size: 30, min: "100px" });
+      report(400, 200);
+      await tick();
+      expect(separator).toHaveAttribute("aria-valuenow", "30");
+
+      report(200, 200);
+      await tick();
+
+      expect(separator).toHaveAttribute("aria-valuemin", "50");
+      expect(separator).toHaveAttribute("aria-valuenow", "50");
+      expect(startPane.style.flexBasis).toBe("50%");
+      expect(screen.getByTestId("bound-size")).toHaveTextContent("30");
+    });
+
+    it("uses the height when vertical", async () => {
+      const { separator } = setup({ orientation: "vertical", min: "50px" });
+      report(400, 200);
+      await tick();
+
+      expect(separator).toHaveAttribute("aria-valuemin", "25");
+    });
+
+    it("lets a min larger than max win", async () => {
+      const { separator } = setup({ min: "300px", max: "200px" });
+      report(400, 200);
+      await tick();
+
+      expect(separator).toHaveAttribute("aria-valuemin", "75");
+      expect(separator).toHaveAttribute("aria-valuemax", "75");
+      expect(separator).toHaveAttribute("aria-valuenow", "75");
+    });
+
+    it("sets the pixel bounds on the start pane for before it is measured", () => {
+      const { startPane } = setup({ min: "100px", max: "300px" });
+
+      expect(startPane.style.minWidth).toBe("100px");
+      expect(startPane.style.maxWidth).toBe("300px");
+      expect(startPane.style.minHeight).toBe("");
+    });
+
+    it("sets min and max height when vertical", () => {
+      const { startPane } = setup({ orientation: "vertical", min: "100px" });
+
+      expect(startPane.style.minHeight).toBe("100px");
+      expect(startPane.style.minWidth).toBe("");
     });
   });
 
