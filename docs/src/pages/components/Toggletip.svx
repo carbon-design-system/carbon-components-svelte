@@ -5,7 +5,7 @@ description: Toggletips display contextual content in a popover that is toggled 
 
 <script>
   import { Toggletip, ToggletipFooter, Box, Button, Link, Stack } from "carbon-components-svelte";
-  import { Add } from "carbon-icons-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
 ## Basic
