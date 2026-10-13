@@ -5,7 +5,7 @@
     Grid,
     Header,
     HeaderAction,
-    HeaderPanelDivider,
+    HeaderPanelGroup,
     HeaderPanelLink,
     HeaderPanelLinks,
     HeaderUtilities,
@@ -45,18 +45,20 @@
   <HeaderUtilities>
     <HeaderAction bind:isOpen transition={transitions[selected].value}>
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switch product</HeaderPanelDivider>
-        <HeaderPanelLink href="/cloud" isSelected
-          >Cloud console</HeaderPanelLink
-        >
-        <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
-        <HeaderPanelLink href="/maximo"
-          >Maximo Application Suite</HeaderPanelLink
-        >
-        <HeaderPanelDivider>Resources</HeaderPanelDivider>
-        <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
-        <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
-        <HeaderPanelLink href="/community">Community</HeaderPanelLink>
+        <HeaderPanelGroup label="Switch product">
+          <HeaderPanelLink href="/cloud" isSelected
+            >Cloud console</HeaderPanelLink
+          >
+          <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
+          <HeaderPanelLink href="/maximo"
+            >Maximo Application Suite</HeaderPanelLink
+          >
+        </HeaderPanelGroup>
+        <HeaderPanelGroup label="Resources">
+          <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+          <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
+          <HeaderPanelLink href="/community">Community</HeaderPanelLink>
+        </HeaderPanelGroup>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
