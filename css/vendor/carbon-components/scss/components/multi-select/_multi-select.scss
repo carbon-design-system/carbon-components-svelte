@@ -17,6 +17,11 @@
 /// @group multi-select
 @mixin multiselect {
   .#{$prefix}--multi-select .#{$prefix}--list-box__field--wrapper {
+    // carbon-components-svelte patch: the focus outline is drawn on this
+    // wrapper (`--input-focused`). Positioned, it paints over the
+    // positioned field inside it and over the list box's invalid outline,
+    // as Dropdown's focused field does.
+    position: relative;
     display: inline-flex;
     width: 100%;
     height: calc(100% + 1px);
