@@ -6,6 +6,7 @@
     Tag,
     Tile,
   } from "carbon-components-svelte";
+  import { onMount } from "svelte";
 
   let anchor = null;
   let container = null;
@@ -17,9 +18,14 @@
   let offsetX = 0;
   let offsetY = 0;
 
-  const emptyImage = new Image();
-  emptyImage.src =
-    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  let emptyImage;
+
+  // `Image` is a browser global, so create it after mount, not during SSR.
+  onMount(() => {
+    emptyImage = new Image();
+    emptyImage.src =
+      "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  });
 
   function handleDragStart(e) {
     const rect = anchor.getBoundingClientRect();
