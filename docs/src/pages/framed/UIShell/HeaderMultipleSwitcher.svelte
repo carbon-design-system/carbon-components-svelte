@@ -5,7 +5,7 @@
     Grid,
     Header,
     HeaderAction,
-    HeaderPanelDivider,
+    HeaderPanelGroup,
     HeaderPanelLink,
     HeaderPanelLinks,
     HeaderUtilities,
@@ -25,28 +25,33 @@
       icon={Notification}
     >
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Today</HeaderPanelDivider>
-        <HeaderPanelLink href="/activity">
-          Cluster "mycluster-prod" was updated
-        </HeaderPanelLink>
-        <HeaderPanelDivider>Earlier</HeaderPanelDivider>
-        <HeaderPanelLink href="/billing">
-          Your monthly invoice is ready
-        </HeaderPanelLink>
+        <HeaderPanelGroup label="Today">
+          <HeaderPanelLink href="/activity">
+            Cluster "mycluster-prod" was updated
+          </HeaderPanelLink>
+        </HeaderPanelGroup>
+        <HeaderPanelGroup label="Earlier">
+          <HeaderPanelLink href="/billing">
+            Your monthly invoice is ready
+          </HeaderPanelLink>
+        </HeaderPanelGroup>
       </HeaderPanelLinks>
     </HeaderAction>
     <HeaderAction iconDescription="Help" icon={Help}>
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Support</HeaderPanelDivider>
-        <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
-        <HeaderPanelDivider>Community</HeaderPanelDivider>
-        <HeaderPanelLink href="/support">Open a case</HeaderPanelLink>
+        <HeaderPanelGroup label="Support">
+          <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+        </HeaderPanelGroup>
+        <HeaderPanelGroup label="Community">
+          <HeaderPanelLink href="/support">Open a case</HeaderPanelLink>
+        </HeaderPanelGroup>
       </HeaderPanelLinks>
     </HeaderAction>
     <HeaderAction text="IBM Cloud">
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switch product</HeaderPanelDivider>
-        <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
+        <HeaderPanelGroup label="Switch product">
+          <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
+        </HeaderPanelGroup>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
