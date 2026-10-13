@@ -5,7 +5,7 @@ description: A full-page error notifies the user that a requested page is unavai
 
 <script>
   import { FullPageError, Button, Link } from "carbon-components-svelte";
-  import { Robot } from "carbon-pictograms-svelte";
+  import Robot from "carbon-pictograms-svelte/lib/Robot.svelte";
 </script>
 
 ## Basic
