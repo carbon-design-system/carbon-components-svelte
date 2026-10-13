@@ -206,6 +206,91 @@ describe("Splitter", () => {
     });
   });
 
+  describe("collapsedSize", () => {
+    const boundCollapsed = () => screen.getByTestId("bound-collapsed");
+
+    it("collapses below min on Enter and restores", async () => {
+      const { separator, startPane } = setup({
+        size: 40,
+        min: 20,
+        collapsedSize: 0,
+      });
+
+      expect(separator).toHaveAttribute("aria-valuemin", "0");
+      separator.focus();
+      await user.keyboard("{Enter}");
+      expect(separator).toHaveAttribute("aria-valuenow", "0");
+      expect(startPane.style.flexBasis).toBe("0%");
+      expect(boundCollapsed()).toHaveTextContent("true");
+
+      await user.keyboard("{Enter}");
+      expect(separator).toHaveAttribute("aria-valuenow", "40");
+      expect(boundCollapsed()).toHaveTextContent("false");
+    });
+
+    it("keeps Home at min", async () => {
+      const { separator } = setup({ size: 40, min: 20, collapsedSize: 0 });
+
+      separator.focus();
+      await user.keyboard("{Home}");
+
+      expect(separator).toHaveAttribute("aria-valuenow", "20");
+      expect(boundCollapsed()).toHaveTextContent("false");
+    });
+
+    it("snaps a drag past halfway below min collapsed, and back open", async () => {
+      const { consoleLog, separator } = setup({
+        size: 50,
+        min: 20,
+        collapsedSize: 0,
+      });
+
+      await fireEvent.pointerDown(separator, { clientX: 200, pointerId: 1 });
+      // 15%: below min but short of halfway, so it holds at min.
+      await fireEvent.pointerMove(separator, { clientX: 60, pointerId: 1 });
+      expect(separator).toHaveAttribute("aria-valuenow", "20");
+      // 8%: past halfway, so it snaps collapsed.
+      await fireEvent.pointerMove(separator, { clientX: 32, pointerId: 1 });
+      expect(separator).toHaveAttribute("aria-valuenow", "0");
+      // 30%: open again.
+      await fireEvent.pointerMove(separator, { clientX: 120, pointerId: 1 });
+      expect(separator).toHaveAttribute("aria-valuenow", "30");
+      await fireEvent.pointerMove(separator, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerUp(separator, { pointerId: 1 });
+
+      expect(boundCollapsed()).toHaveTextContent("true");
+      expect(consoleLog.mock.calls).toEqual([["resize", { size: 0 }]]);
+    });
+
+    it("collapses below min when set, and renders a stored collapsed size", async () => {
+      const { separator } = setup({ size: 0, min: 20, collapsedSize: 0 });
+
+      expect(separator).toHaveAttribute("aria-valuenow", "0");
+      expect(boundCollapsed()).toHaveTextContent("true");
+
+      await user.click(
+        screen.getByRole("button", { name: "Toggle collapsed" }),
+      );
+      expect(separator).toHaveAttribute("aria-valuenow", "60");
+    });
+
+    it("renders a size between collapsedSize and min at min", () => {
+      const { separator } = setup({ size: 12, min: 20, collapsedSize: 0 });
+
+      expect(separator).toHaveAttribute("aria-valuenow", "20");
+      expect(screen.getByTestId("bound-size")).toHaveTextContent("12");
+    });
+
+    it("never collapses further than min when larger than min", async () => {
+      const { separator } = setup({ size: 40, min: 20, collapsedSize: 30 });
+
+      separator.focus();
+      await user.keyboard("{Enter}");
+
+      expect(separator).toHaveAttribute("aria-valuenow", "20");
+    });
+  });
+
   describe("pixel bounds", () => {
     let report: (width: number, height: number) => void = () => {};
 
@@ -294,6 +379,23 @@ describe("Splitter", () => {
       expect(separator).toHaveAttribute("aria-valuemin", "75");
       expect(separator).toHaveAttribute("aria-valuemax", "75");
       expect(separator).toHaveAttribute("aria-valuenow", "75");
+    });
+
+    it("drops a pixel min from the pane once it collapses below it", async () => {
+      const { separator, startPane } = setup({
+        size: 50,
+        min: "100px",
+        collapsedSize: 0,
+      });
+      report(400, 200);
+      await tick();
+      expect(startPane.style.minWidth).toBe("100px");
+
+      separator.focus();
+      await user.keyboard("{Enter}");
+
+      expect(separator).toHaveAttribute("aria-valuenow", "0");
+      expect(startPane.style.minWidth).toBe("");
     });
 
     it.each([
