@@ -5,7 +5,7 @@
     Grid,
     Header,
     HeaderAction,
-    HeaderPanelDivider,
+    HeaderPanelGroup,
     HeaderPanelLink,
     HeaderPanelLinks,
     HeaderUtilities,
@@ -28,30 +28,32 @@
       on:close={(event) => (trigger = event.detail.trigger)}
     >
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Resources</HeaderPanelDivider>
-        <HeaderPanelLink
-          href="https://cloud.ibm.com/docs"
-          target="_blank"
-          text="Documentation"
-          icon={Launch}
-        />
-        <HeaderPanelLink
-          href="https://cloud.ibm.com/status"
-          target="_blank"
-          text="Service status and incident history"
-          icon={Launch}
-        />
-        <HeaderPanelDivider>Preferences</HeaderPanelDivider>
-        <HeaderPanelLink
-          isSelected={theme === "white"}
-          text="Light theme"
-          on:click={() => (theme = "white")}
-        />
-        <HeaderPanelLink
-          isSelected={theme === "g100"}
-          text="Dark theme"
-          on:click={() => (theme = "g100")}
-        />
+        <HeaderPanelGroup label="Resources">
+          <HeaderPanelLink
+            href="https://cloud.ibm.com/docs"
+            target="_blank"
+            text="Documentation"
+            icon={Launch}
+          />
+          <HeaderPanelLink
+            href="https://cloud.ibm.com/status"
+            target="_blank"
+            text="Service status and incident history"
+            icon={Launch}
+          />
+        </HeaderPanelGroup>
+        <HeaderPanelGroup label="Preferences">
+          <HeaderPanelLink
+            isSelected={theme === "white"}
+            text="Light theme"
+            on:click={() => (theme = "white")}
+          />
+          <HeaderPanelLink
+            isSelected={theme === "g100"}
+            text="Dark theme"
+            on:click={() => (theme = "g100")}
+          />
+        </HeaderPanelGroup>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
