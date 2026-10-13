@@ -13,6 +13,14 @@
    */
   export let size = 50;
 
+  /**
+   * Set to `true` to collapse the start pane to `min`, and back to `false`
+   * to restore the size it had before. Moving the separator to `min` by
+   * any means also sets it to `true`.
+   * @bindable writable
+   */
+  export let collapsed = false;
+
   /** Set the minimum size of the start pane, as a percentage */
   export let min = 0;
 
@@ -91,8 +99,13 @@
   let resizing = false;
   let dragStartPoint = 0;
   let dragStartSize = 0;
-  // Size that Enter restores after collapsing the start pane to `min`.
+  // Size that Enter or `collapsed = false` restores after the start pane
+  // reaches `min`.
   let expandedSize = size;
+  // The `collapsed` value last matched to the size; a difference means the
+  // prop was set from outside. Starts `false` so `collapsed={true}` on
+  // mount collapses the pane.
+  let syncedCollapsed = false;
 
   // Drag math yields long fractions; two decimals is finer than a pixel on
   // any realistic splitter and keeps `aria-valuenow` readable.
@@ -104,7 +117,30 @@
   // gesture, for example to persist the final size.
   function dispatchResize(prevSize) {
     const nextSize = clamp(size, min, max);
-    if (nextSize !== prevSize) dispatch("resize", { size: nextSize });
+    if (nextSize === prevSize) return;
+    // Whatever moved it to `min` (Enter, Home, a drag), restoring goes back
+    // to where the gesture started.
+    if (nextSize <= min && prevSize > min) expandedSize = prevSize;
+    dispatch("resize", { size: nextSize });
+  }
+
+  function restoreSize() {
+    return expandedSize > min ? expandedSize : (min + max) / 2;
+  }
+
+  function syncCollapsed(nextCollapsed, currentSize) {
+    if (nextCollapsed !== syncedCollapsed) {
+      syncedCollapsed = nextCollapsed;
+      if (nextCollapsed && currentSize > min) {
+        expandedSize = currentSize;
+        setSize(min);
+      } else if (!nextCollapsed && currentSize <= min) {
+        setSize(restoreSize());
+      }
+      return;
+    }
+    const atMin = currentSize <= min;
+    if (atMin !== collapsed) collapsed = syncedCollapsed = atMin;
   }
 
   function getPointerAxis(event) {
@@ -149,12 +185,7 @@
       next = max;
     } else if (event.key === "Enter") {
       // Collapse the start pane, or restore it if already collapsed.
-      if (renderedSize > min) {
-        expandedSize = renderedSize;
-        next = min;
-      } else {
-        next = expandedSize;
-      }
+      next = renderedSize > min ? min : restoreSize();
     } else {
       return;
     }
@@ -171,6 +202,8 @@
     dispatchResize(prevSize);
   }
 
+  // Before `renderedSize`, so a size this sets renders in the same update.
+  $: syncCollapsed(collapsed, clamp(size, min, max));
   $: renderedSize = clamp(size, min, max);
   $: resolvedEnterDelayMs =
     enterDelayMs ?? parent?.enterDelayMs() ?? SEPARATOR_HOVER_DELAY_MS;
@@ -204,11 +237,13 @@
   class:bx--splitter--resizing={resizing}
   {...$$restProps}
 >
+  <!-- A pane shrunk to nothing is `inert`, so its content leaves the tab order. -->
   <div
     id="{id}-start"
     class:bx--splitter__pane={true}
     class:bx--splitter__pane--start={true}
     style:flex-basis="{renderedSize}%"
+    inert={renderedSize === 0 || undefined}
   >
     <slot name="start" />
   </div>
@@ -238,7 +273,11 @@
     on:pointerenter={handlePointerenter}
     on:pointerleave={handlePointerleave}
   ></div>
-  <div class:bx--splitter__pane={true} class:bx--splitter__pane--end={true}>
+  <div
+    class:bx--splitter__pane={true}
+    class:bx--splitter__pane--end={true}
+    inert={renderedSize === 100 || undefined}
+  >
     <slot name="end" />
   </div>
 </div>
