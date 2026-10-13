@@ -3,6 +3,7 @@
   import type { ComponentProps } from "svelte";
 
   export let size = 50;
+  export let collapsed = false;
   export let min = 0;
   export let max = 100;
   export let step = 1;
@@ -16,6 +17,7 @@
 
 <Splitter
   bind:size
+  bind:collapsed
   {min}
   {max}
   {step}
@@ -26,7 +28,11 @@
   data-testid="splitter"
   on:resize={(e) => console.log("resize", e.detail)}
 >
-  <div slot="start">Start pane</div>
-  <div slot="end">End pane</div>
+  <div slot="start">Start pane <a href="#start">Start link</a></div>
+  <div slot="end">End pane <a href="#end">End link</a></div>
 </Splitter>
 <div data-testid="bound-size">{size}</div>
+<div data-testid="bound-collapsed">{collapsed}</div>
+<button type="button" on:click={() => (collapsed = !collapsed)}>
+  Toggle collapsed
+</button>

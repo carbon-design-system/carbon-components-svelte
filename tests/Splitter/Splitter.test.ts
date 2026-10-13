@@ -112,6 +112,94 @@ describe("Splitter", () => {
     ]);
   });
 
+  describe("collapsed", () => {
+    const toggle = () =>
+      user.click(screen.getByRole("button", { name: "Toggle collapsed" }));
+    const boundCollapsed = () => screen.getByTestId("bound-collapsed");
+
+    it("collapses on mount and restores the given size", async () => {
+      const { separator } = setup({ size: 40, min: 10, collapsed: true });
+
+      expect(separator).toHaveAttribute("aria-valuenow", "10");
+      expect(screen.getByTestId("bound-size")).toHaveTextContent("10");
+
+      await toggle();
+
+      expect(separator).toHaveAttribute("aria-valuenow", "40");
+      expect(boundCollapsed()).toHaveTextContent("false");
+    });
+
+    it("collapses and restores when set, without firing resize", async () => {
+      const { consoleLog, separator } = setup({ size: 40, min: 10 });
+
+      await toggle();
+      expect(separator).toHaveAttribute("aria-valuenow", "10");
+      await toggle();
+      expect(separator).toHaveAttribute("aria-valuenow", "40");
+
+      expect(consoleLog).not.toHaveBeenCalled();
+    });
+
+    it("reflects Enter and Home, and restores to where the gesture began", async () => {
+      const { separator } = setup({ size: 40, min: 10 });
+
+      separator.focus();
+      await user.keyboard("{Enter}");
+      expect(boundCollapsed()).toHaveTextContent("true");
+      await user.keyboard("{Enter}");
+      expect(boundCollapsed()).toHaveTextContent("false");
+
+      await user.keyboard("{ArrowRight}{Home}");
+      expect(boundCollapsed()).toHaveTextContent("true");
+      await toggle();
+      expect(separator).toHaveAttribute("aria-valuenow", "41");
+    });
+
+    it("reflects a drag to min and restores the drag's start size", async () => {
+      const { separator } = setup({ size: 40, min: 10 });
+
+      await fireEvent.pointerDown(separator, { clientX: 160, pointerId: 1 });
+      await fireEvent.pointerMove(separator, { clientX: 0, pointerId: 1 });
+      await fireEvent.pointerUp(separator, { pointerId: 1 });
+      expect(boundCollapsed()).toHaveTextContent("true");
+
+      separator.focus();
+      await user.keyboard("{Enter}");
+      expect(separator).toHaveAttribute("aria-valuenow", "40");
+      expect(boundCollapsed()).toHaveTextContent("false");
+    });
+
+    it("restores to the middle of the range when it started at min", async () => {
+      const { separator } = setup({ size: 20, min: 20, max: 80 });
+
+      expect(boundCollapsed()).toHaveTextContent("true");
+      await toggle();
+
+      expect(separator).toHaveAttribute("aria-valuenow", "50");
+    });
+  });
+
+  it("makes a pane shrunk to nothing inert", async () => {
+    // Svelte 5 sets the `inert` property, which dom-env doesn't reflect to
+    // the attribute; Svelte 3 and 4 set the attribute.
+    const isInert = (element: Element) =>
+      (element as HTMLElement).inert || element.hasAttribute("inert");
+
+    const { separator, startPane } = setup({ size: 30 });
+    const endPane = screen.getByText("End pane").closest(".bx--splitter__pane");
+    assert(endPane);
+
+    expect(isInert(startPane)).toBe(false);
+    separator.focus();
+    await user.keyboard("{Home}");
+    expect(isInert(startPane)).toBe(true);
+    expect(isInert(endPane)).toBe(false);
+
+    await user.keyboard("{End}");
+    expect(isInert(startPane)).toBe(false);
+    expect(isInert(endPane)).toBe(true);
+  });
+
   it("follows a pointer drag and fires resize once on release", async () => {
     const { consoleLog, root, separator } = setup();
 
