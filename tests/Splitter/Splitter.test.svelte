@@ -6,6 +6,8 @@
   export let collapsed = false;
   export let min: ComponentProps<Splitter>["min"] = 0;
   export let max: ComponentProps<Splitter>["max"] = 100;
+  export let collapsedSize: ComponentProps<Splitter>["collapsedSize"] =
+    undefined;
   export let step = 1;
   export let orientation: ComponentProps<Splitter>["orientation"] =
     "horizontal";
@@ -20,6 +22,7 @@
   bind:collapsed
   {min}
   {max}
+  {collapsedSize}
   {step}
   {orientation}
   {disabled}
