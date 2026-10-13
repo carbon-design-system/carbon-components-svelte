@@ -112,6 +112,22 @@ test.describe("Splitter", () => {
     expect(box.y + box.height / 2 - innerRoot.y).toBeCloseTo(180, 0);
   });
 
+  test("holds a pixel min as the splitter resizes", async ({ page }) => {
+    const separator = page.getByRole("separator", { name: "Resize sidebar" });
+    const sidebar = page.getByText("Sidebar");
+
+    await expect(separator).toHaveAttribute("aria-valuemin", "25");
+    await expect(separator).toHaveAttribute("aria-valuenow", "25");
+    expect((await sidebar.boundingBox())?.width).toBeCloseTo(150, 0);
+
+    await page
+      .getByTestId("pixel-container")
+      .evaluate((node) => (node.style.width = "300px"));
+
+    await expect(separator).toHaveAttribute("aria-valuemin", "50");
+    expect((await sidebar.boundingBox())?.width).toBeCloseTo(150, 0);
+  });
+
   test("has no detectable accessibility violations", async ({ page }) => {
     // The preview iframe's srcdoc is scaffolding; axe would audit it as a
     // standalone page (main landmark, h1).

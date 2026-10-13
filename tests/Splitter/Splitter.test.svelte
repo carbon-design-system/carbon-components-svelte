@@ -4,8 +4,8 @@
 
   export let size = 50;
   export let collapsed = false;
-  export let min = 0;
-  export let max = 100;
+  export let min: ComponentProps<Splitter>["min"] = 0;
+  export let max: ComponentProps<Splitter>["max"] = 100;
   export let step = 1;
   export let orientation: ComponentProps<Splitter>["orientation"] =
     "horizontal";
