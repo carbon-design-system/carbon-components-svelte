@@ -81,6 +81,17 @@ Duplicate those items in `HeaderSideNavItems` so the links stay in the side nav 
 
 <FileSource src="/framed/UIShell/HeaderNavExternalLinks" />
 
+### Nav item badges
+
+Compose [BadgeIndicator](/components/BadgeIndicator) in the `badge` slot on `HeaderNavItem` to show a count or status next to the label. The badge renders inside the link, after the label and any `icon`, so a count becomes part of the link's accessible name, such as "Requests 3". In a `HeaderNavMenu` and in the side nav, the badge sits at the end of the row.
+
+| Do | Why |
+| --- | --- |
+| Add visually hidden text next to a dot badge | A badge without a `count` is an empty dot, so screen readers announce nothing. Put `<span class="bx--visually-hidden">New entries</span>` in the slot with it. |
+| Repeat the badge on the item in `HeaderSideNavItems` | Below the large breakpoint, the side nav renders its own copy of each item. |
+
+<FileSource src="/framed/UIShell/HeaderNavBadges" />
+
 ### Skip to content
 
 Pair `SkipToContent` with `Content` so keyboard users can jump past the header and navigation straight to the main content. By default `SkipToContent` links to `href="#main-content"` and `Content` renders with `id="main-content"`, so the two work together without extra configuration. Override both `href` and `id` together if you render more than one `Content` region, or need a different anchor.
@@ -121,7 +132,7 @@ A nested item with an icon places the icon where its siblings' text starts, as a
 
 ### Badges
 
-Compose a `badge` named slot into `SideNavLink` or `SideNavMenu` to render a status or count indicator next to the label, such as [BadgeIndicator](/components/BadgeIndicator).
+Compose a `badge` named slot into `SideNavLink`, `SideNavMenu`, or `SideNavMenuItem` to render a status or count indicator at the end of the row, such as [BadgeIndicator](/components/BadgeIndicator). For header nav items, see [Nav item badges](#nav-item-badges).
 
 <FileSource src="/framed/UIShell/SideNavBadge" />
 
