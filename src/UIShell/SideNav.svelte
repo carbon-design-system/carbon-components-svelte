@@ -99,6 +99,7 @@
     releaseBodyScrollLock,
   } from "../utils/body-scroll-lock.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
@@ -131,15 +132,11 @@
     return Math.round(Math.max(minWidth, Math.min(maxWidth, value)));
   }
 
-  function handleResizePointerDown(event) {
-    // Ignore secondary buttons; a right-click opens the context menu, which
-    // would swallow the matching `pointerup`.
-    if (event.button !== 0) return;
-    // Capture routes every later event for this pointer to the handle, even
-    // once it leaves the handle, the nav, or (in an iframe) the document.
-    event.currentTarget.setPointerCapture?.(event.pointerId);
+  // `pointerDrag` captures the pointer, so the drag follows it past the
+  // handle, the nav, or (in an iframe) the document, and ignores secondary
+  // buttons and other pointers.
+  function handleResizeStart(event) {
     resizing = true;
-    resizePointerId = event.pointerId;
     resizeStartX = event.clientX;
     resizeStartWidth = renderedWidth;
     clearTimeout(resizeCursorTimer);
@@ -149,8 +146,7 @@
     document.body.classList.add("bx--side-nav-resizing");
   }
 
-  function handleResizePointerMove(event) {
-    if (!resizing || event.pointerId !== resizePointerId) return;
+  function handleResizeMove(event) {
     width = clampWidth(resizeStartWidth + (event.clientX - resizeStartX));
   }
 
@@ -236,7 +232,6 @@
   // Double-clicking the handle restores the width the side nav started at.
   const initialWidth = width;
   let resizing = false;
-  let resizePointerId = undefined;
   let resizeStartX = 0;
   let resizeStartWidth = 0;
   let resizeCursorVisible = false;
@@ -380,11 +375,11 @@
       tabindex="0"
       class:bx--side-nav__resize-handle={true}
       style:cursor={resizing || resizeCursorVisible ? "col-resize" : undefined}
-      on:pointerdown={handleResizePointerDown}
-      on:pointermove={handleResizePointerMove}
-      on:pointerup={endResizing}
-      on:pointercancel={endResizing}
-      on:lostpointercapture={endResizing}
+      use:pointerDrag={{
+        onStart: handleResizeStart,
+        onMove: handleResizeMove,
+        onEnd: endResizing,
+      }}
       on:keydown={handleResizeKeydown}
       on:dblclick={handleResizeDoubleClick}
       on:mouseenter={handleResizeHandleMouseEnter}
