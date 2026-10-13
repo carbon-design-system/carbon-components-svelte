@@ -282,6 +282,14 @@
     transform: translateY(100%);
   }
 
+  // ccs: a menu that would run past the viewport's right edge aligns to its
+  // trigger's right edge instead (`HeaderNavMenu` sets the class on open).
+  .#{$prefix}--header__menu-title[aria-expanded='true']
+    + .#{$prefix}--header__menu--align-end {
+    right: 0;
+    left: auto;
+  }
+
   // ccs: submenu items sit on the `$layer` surface, so they and their
   // states use the layer tokens rather than the header's background tokens.
   .#{$prefix}--header__menu-title[aria-expanded='true']

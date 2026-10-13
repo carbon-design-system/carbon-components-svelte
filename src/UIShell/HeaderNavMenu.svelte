@@ -39,6 +39,7 @@
   export let ref = null;
 
   import {
+    afterUpdate,
     createEventDispatcher,
     getContext,
     onMount,
@@ -76,6 +77,23 @@
   const unregisterMenuItem = menuItemRegistry.unregister;
 
   let menuRef = null;
+
+  // Set when the menu, left-aligned under its trigger, would run past the
+  // viewport's right edge; it then aligns to the trigger's right edge.
+  let alignEnd = false;
+  let wasExpanded = false;
+
+  afterUpdate(() => {
+    if (expanded && !wasExpanded && menuRef) {
+      alignEnd =
+        menuRef.getBoundingClientRect().right >
+        document.documentElement.clientWidth;
+    } else if (!expanded) {
+      // Measure from the default position on the next open.
+      alignEnd = false;
+    }
+    wasExpanded = expanded;
+  });
 
   // Present when this menu is a top-level item of a `HeaderNav`.
   const menubar = getContext("carbon:HeaderNav");
@@ -295,6 +313,7 @@
     role="menu"
     aria-labelledby={triggerId}
     class:bx--header__menu={true}
+    class:bx--header__menu--align-end={alignEnd}
     on:keydown={handleMenuKeydown}
   >
     <slot />
