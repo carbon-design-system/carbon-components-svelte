@@ -9,7 +9,10 @@
   let storage;
   let toggled = false;
 
-  $: document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
+  // `document` is undefined during server-side rendering.
+  $: if (typeof document !== "undefined") {
+    document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
+  }
 </script>
 
 <Stack gap={6}>
