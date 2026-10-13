@@ -212,7 +212,7 @@ Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, 
 
 Set `resizable` to let the user drag the side nav's trailing edge to resize it with a mouse, pen, or touch. `width` is a bindable prop in pixels (default `256`), rendered clamped to `[minWidth, maxWidth]`, and `Content` offsets its left margin to match.
 
-The handle is also focusable: <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> step by 16px (64px with <DocKbd label="Shift" />), <DocKbd label="Home" />/<DocKbd label="End" /> jump to `minWidth`/`maxWidth`, and double-clicking it restores the starting width. Customize its accessible name with `resizeHandleLabel`.
+The handle is also focusable: <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> step by 16px (64px with <DocKbd label="Shift" />), <DocKbd label="Home" />/<DocKbd label="End" /> jump to `minWidth`/`maxWidth`, and double-clicking it restores the starting width. Customize its accessible name with `resizeHandleLabel`. Hovering highlights the handle and shows the resize cursor after `resizeEnterDelayMs` (default `150`), so passing over it on the way to the content doesn't flash it.
 
 `bind:width` updates on every step of a drag; the `resize` event fires once the gesture ends, with the final `width`. This example persists the width with `LocalStorage`, so it survives a reload.
 
