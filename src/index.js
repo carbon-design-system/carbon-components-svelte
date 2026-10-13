@@ -232,6 +232,7 @@ export { default as PasswordInputSkeleton } from "./TextInput/PasswordInputSkele
 export { default as TextInput } from "./TextInput/TextInput.svelte";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svelte";
 export { default as Theme } from "./Theme/Theme.svelte";
+export { themeScript } from "./Theme/theme-script.js";
 export { default as ClickableTile } from "./Tile/ClickableTile.svelte";
 export { default as ExpandableTile } from "./Tile/ExpandableTile.svelte";
 export { default as RadioTile } from "./Tile/RadioTile.svelte";
