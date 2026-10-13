@@ -676,8 +676,6 @@
     // Without this, a touch drag pans or scrolls the page instead of
     // delivering `pointermove` events to the handle.
     touch-action: none;
-    // `cursor` can't be transitioned/delayed in CSS; the component sets
-    // this inline once the same hover delay as the accent line has passed.
 
     // Drawn over the nav's own trailing 2px.
     &::after {
@@ -692,13 +690,14 @@
       transition: background-color $duration--fast-02 motion(standard, productive);
     }
 
-    @media (any-hover: hover) {
-      // Delayed only on entry (the :hover rule's own transition-delay is
-      // what applies when entering this state) so a quick mouse pass-over
-      // doesn't flash the handle.
-      &:hover::after {
+    // `cursor` can't be delayed in CSS, so the component adds this class
+    // once `resizeEnterDelayMs` has passed, and both the cursor and the
+    // accent line follow it. Leaving drops the class at once.
+    &--hover {
+      cursor: col-resize;
+
+      &::after {
         background-color: $focus;
-        transition-delay: $duration--moderate-01;
       }
     }
 

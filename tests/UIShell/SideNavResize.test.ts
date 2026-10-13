@@ -363,4 +363,65 @@ describe("SideNav resize", () => {
     expect(nav).not.toHaveClass("bx--side-nav--resizing");
     expect(document.body).not.toHaveClass("bx--side-nav-resizing");
   });
+
+  describe("hover delay", () => {
+    const HOVER = "bx--side-nav__resize-handle--hover";
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("marks the handle after the default 150ms and clears on leave", async () => {
+      render(SideNavResizeTest, { props: { resizable: true } });
+      const handle = getHandle();
+
+      await fireEvent.pointerEnter(handle, { pointerType: "mouse" });
+      await vi.advanceTimersByTimeAsync(149);
+      expect(handle).not.toHaveClass(HOVER);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(handle).toHaveClass(HOVER);
+
+      await fireEvent.pointerLeave(handle, { pointerType: "mouse" });
+      expect(handle).not.toHaveClass(HOVER);
+    });
+
+    it("uses resizeEnterDelayMs", async () => {
+      render(SideNavResizeTest, {
+        props: { resizable: true, resizeEnterDelayMs: 0 },
+      });
+      const handle = getHandle();
+
+      await fireEvent.pointerEnter(handle, { pointerType: "mouse" });
+
+      expect(handle).toHaveClass(HOVER);
+    });
+
+    it("ignores touch", async () => {
+      render(SideNavResizeTest, { props: { resizable: true } });
+      const handle = getHandle();
+
+      await fireEvent.pointerEnter(handle, { pointerType: "touch" });
+      await vi.advanceTimersByTimeAsync(150);
+
+      expect(handle).not.toHaveClass(HOVER);
+    });
+
+    it("marks the handle at once for a drag and keeps it while dragging", async () => {
+      render(SideNavResizeTest, { props: { resizable: true } });
+      const handle = getHandle();
+
+      await fireEvent.pointerDown(handle, { clientX: 256, pointerId: 1 });
+      expect(handle).toHaveClass(HOVER);
+      await fireEvent.pointerLeave(handle, { pointerType: "mouse" });
+      expect(handle).toHaveClass(HOVER);
+
+      await fireEvent.pointerUp(handle, { pointerId: 1 });
+      await fireEvent.pointerLeave(handle, { pointerType: "mouse" });
+      expect(handle).not.toHaveClass(HOVER);
+    });
+  });
 });

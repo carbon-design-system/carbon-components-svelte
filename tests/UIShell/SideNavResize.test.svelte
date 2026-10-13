@@ -12,6 +12,7 @@
   export let minWidth = 200;
   export let maxWidth = 480;
   export let resizeHandleLabel: string | undefined = undefined;
+  export let resizeEnterDelayMs = 150;
   export let onResize: ((detail: { width: number }) => void) | undefined =
     undefined;
 </script>
@@ -24,6 +25,7 @@
   {minWidth}
   {maxWidth}
   {resizeHandleLabel}
+  {resizeEnterDelayMs}
   isOpen
   fixed
   on:resize={(e) => onResize?.(e.detail)}
