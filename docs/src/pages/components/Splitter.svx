@@ -60,6 +60,17 @@ Use `bind:collapsed` to collapse the start pane to `min` from your own control, 
   </Button>
 </Stack>
 
+### Collapse below min
+
+Set `collapsedSize` to let the start pane collapse further than it resizes, such as a sidebar that stays at least `200px` wide but can still be hidden. <DocKbd label="Enter" /> and `collapsed` go to `collapsedSize`, and dragging past halfway between `min` and `collapsedSize` snaps the pane collapsed; dragging back snaps it open. <DocKbd label="Home" /> still stops at `min`.
+
+<Box height="12rem" border="subtle">
+  <Splitter size={30} min="200px" collapsedSize={0} separatorLabel="Resize service list">
+    <Box slot="start" padding={5}>Services</Box>
+    <Box slot="end" padding={5}>billing-api · us-south · 3 replicas</Box>
+  </Splitter>
+</Box>
+
 ## Vertical
 
 Set `orientation` to `"vertical"` to stack the panes, with the start pane on top. Use <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> to move the separator.
