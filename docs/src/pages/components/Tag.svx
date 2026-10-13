@@ -189,9 +189,9 @@ Use `OperationalTag` for a tag that reveals related content, such as the rest of
 <OperationalTag type="blue">
   3 policies
   <Stack slot="content" gap={3}>
-    <Link href="#retention">Retention</Link>
-    <Link href="#encryption">Encryption at rest</Link>
-    <Link href="#access">Access review</Link>
+    <Link href="#">Retention</Link>
+    <Link href="#">Encryption at rest</Link>
+    <Link href="#">Access review</Link>
   </Stack>
 </OperationalTag>
 

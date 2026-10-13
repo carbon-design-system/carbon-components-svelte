@@ -51,7 +51,7 @@
   </div>
 
   <div>
-    <Link href="#example">View audit log</Link>
+    <Link href="#">View audit log</Link>
   </div>
 
   <div><Tag type="blue">Production</Tag></div>

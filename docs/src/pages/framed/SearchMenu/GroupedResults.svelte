@@ -42,7 +42,7 @@
         text={item.name}
         value={item.id}
         icon={item.icon}
-        href="#resource"
+        href="#"
       />
     {/each}
   </SearchMenuGroup>
@@ -54,7 +54,7 @@
         text={item.name}
         value={item.id}
         icon={item.icon}
-        href="#catalog"
+        href="#"
       />
     {/each}
   </SearchMenuGroup>
@@ -63,13 +63,13 @@
     <SearchMenuItem
       persistent
       iconRight={Launch}
-      href="#support"
+      href="#"
       text={`Search "${value}" in Support cases`}
     />
     <SearchMenuItem
       persistent
       iconRight={Launch}
-      href="#docs"
+      href="#"
       text={`Search "${value}" in Docs`}
     />
   </SearchMenuGroup>
