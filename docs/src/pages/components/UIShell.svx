@@ -10,6 +10,7 @@ components:
     "HeaderNavMenu",
     "HeaderSideNavItems",
     "HeaderPanelDivider",
+    "HeaderPanelGroup",
     "HeaderPanelLink",
     "HeaderPanelLinks",
     "HeaderUtilities",
@@ -279,15 +280,33 @@ Control tooltip alignment with `tooltipAlignment`. Providing button text overrid
 
 ### Panel composition
 
-Compose the panel content from `HeaderPanelLinks`, `HeaderPanelDivider`, and `HeaderPanelLink`, as shown in both examples above. `HeaderPanelLinks` renders the list wrapper; `HeaderPanelDivider` renders a labelled separator (or a plain rule when it has no content) between groups of links; `HeaderPanelLink` renders each item. The same three components compose the notification and help panels in the multiple-switchers example — panel composition is not specific to the app switcher icon.
+Compose the panel content from `HeaderPanelLinks` and `HeaderPanelLink`, as shown in both examples above. `HeaderPanelLinks` renders the list wrapper and `HeaderPanelLink` renders each item. Group related links under a heading with `HeaderPanelGroup`, and separate groups that have no heading with a plain `HeaderPanelDivider`. The same components compose the notification and help panels in the multiple-switchers example — panel composition is not specific to the app switcher icon.
+
+| Component | Use it for |
+| :-------- | :--------- |
+| `HeaderPanelGroup` | A labelled group of links. Screen readers announce the group by its label. |
+| `HeaderPanelDivider` | A plain rule between links. A label passed to it is visual only, so prefer `HeaderPanelGroup` for labelled groups. |
 
 Set `isSelected` on `HeaderPanelLink` to mark the current selection — see "Cloud console" in the app switcher example above. It adds `aria-current="page"` and a persistent highlight style, the same pattern used by `isSelected` on `HeaderNavItem`, `SideNavLink`, and `SideNavMenuItem`.
+
+### Panel groups
+
+`HeaderPanelGroup` wraps its links in a nested list named by `label`, so a screen reader announces "Resources, list, 2 items" instead of reading the label as another list item. The visible label and rule are hidden from assistive technology to avoid announcing the label twice. It looks the same as a `HeaderPanelDivider` followed by links. Use the `labelChildren` slot for custom label content.
+
+```svelte
+<HeaderPanelLinks>
+  <HeaderPanelGroup label="Resources">
+    <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+    <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
+  </HeaderPanelGroup>
+</HeaderPanelLinks>
+```
 
 ### Panel items
 
 `HeaderPanelLink` renders an anchor when `href` is set. Omit `href` for an action that does not navigate, such as switching a theme; it renders a `<button>` that is reachable with Tab and styled like the link. Set `text` instead of the default slot for a plain label, and `icon` (or the `icon` slot) to render an icon after it. Long labels wrap onto more lines while the icon keeps its size.
 
-Within a `HeaderPanelLinks` list, ArrowUp and ArrowDown move focus between links and wrap at the ends, and Home and End jump to the first and last link.
+Within a `HeaderPanelLinks` list, ArrowUp and ArrowDown move focus between links, including across groups, and wrap at the ends. Home and End jump to the first and last link.
 
 Activating a link closes the panel and dispatches `close` with `trigger: "select"`. Call `event.preventDefault()` in the link's `click` handler to keep the panel open. Focus returns to the panel button only if it would otherwise be lost.
 

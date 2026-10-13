@@ -8,7 +8,7 @@
     HeaderNav,
     HeaderNavItem,
     HeaderNavMenu,
-    HeaderPanelDivider,
+    HeaderPanelGroup,
     HeaderPanelLink,
     HeaderPanelLinks,
     HeaderUtilities,
@@ -47,12 +47,14 @@
   <HeaderUtilities>
     <HeaderAction bind:isOpen>
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switch product</HeaderPanelDivider>
-        <HeaderPanelLink href="/cloud">Cloud console</HeaderPanelLink>
-        <HeaderPanelDivider>Resources</HeaderPanelDivider>
-        <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
-        <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
-        <HeaderPanelLink href="/community">Community</HeaderPanelLink>
+        <HeaderPanelGroup label="Switch product">
+          <HeaderPanelLink href="/cloud">Cloud console</HeaderPanelLink>
+        </HeaderPanelGroup>
+        <HeaderPanelGroup label="Resources">
+          <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+          <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
+          <HeaderPanelLink href="/community">Community</HeaderPanelLink>
+        </HeaderPanelGroup>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
