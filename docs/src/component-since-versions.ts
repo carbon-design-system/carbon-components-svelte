@@ -63,6 +63,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Portal: "0.95.0",
   ProgressBar: "0.37.0",
   ProgressIndicator: "0.2.0",
+  Prose: "0.114.0",
   RadioButton: "0.2.0",
   RadioTile: "0.2.0",
   RecursiveList: "0.39.0",
