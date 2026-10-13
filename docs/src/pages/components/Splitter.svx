@@ -4,7 +4,9 @@ description: Splitters divide a view into two resizable panes, such as a list be
 ---
 
 <script>
-  import { Box, Splitter } from "carbon-components-svelte";
+  import { Box, Button, Splitter, Stack } from "carbon-components-svelte";
+
+  let collapsed = false;
 </script>
 
 ## Basic
@@ -30,6 +32,22 @@ Set `min` and `max` to keep the start pane within a percentage range. <DocKbd la
     <Box slot="end" padding={5}>billing-api · us-south · 3 replicas</Box>
   </Splitter>
 </Box>
+
+## Collapsed
+
+Use `bind:collapsed` to collapse the start pane to `min` from your own control, such as a toolbar button. Setting it back to `false` restores the size the pane had before. It also turns `true` whenever the user moves the separator to `min`, whether with <DocKbd label="Enter" />, <DocKbd label="Home" />, or a drag. A pane shrunk to nothing is inert, so its content leaves the tab order.
+
+<Stack gap={5}>
+  <Box height="12rem" border="subtle">
+    <Splitter size={30} bind:collapsed separatorLabel="Resize file tree">
+      <Box slot="start" padding={5}>Files</Box>
+      <Box slot="end" padding={5}>deploy.yaml</Box>
+    </Splitter>
+  </Box>
+  <Button size="small" kind="tertiary" on:click={() => (collapsed = !collapsed)}>
+    {collapsed ? "Show files" : "Hide files"}
+  </Button>
+</Stack>
 
 ## Vertical
 
