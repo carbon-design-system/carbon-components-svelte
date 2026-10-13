@@ -146,3 +146,108 @@ export function auditThumbnail(name: string, svg: string): string[] {
 
   return [...new Set(problems)];
 }
+
+/** The parts of a `carbon.yml` asset that `auditCatalog` reads. */
+export interface CatalogAsset {
+  name?: string;
+  thumbnailPath?: string;
+  demoLinks?: { url?: string }[];
+}
+
+/**
+ * Docs pages deliberately left out of `carbon.yml`. Empty for now; add a
+ * page here, and to thumbnails/README.md, only when the maintainers decide
+ * it doesn't belong in the catalog.
+ */
+export const UNCATALOGED_PAGES = new Set<string>();
+
+const DOCS_PAGE_URL = /\/components\/([A-Za-z]+)/;
+const THUMBNAIL_PATH = /^\.\/thumbnails\/([a-z0-9-]+)\.svg$/;
+const ACRONYM = /^[A-Z0-9]{2,}$/;
+const LEADING_WORD = /^[A-Z][a-z0-9]*$/;
+const LOWER_WORD = /^[a-z0-9]+$/;
+
+/**
+ * Carbon's sentence case: the first letter upper case, the rest lower case,
+ * except all-caps acronyms ("UI shell header", "PIN code input").
+ */
+export function isSentenceCase(name: string): boolean {
+  return name
+    .split(" ")
+    .every(
+      (word, i) =>
+        ACRONYM.test(word) || (i === 0 ? LEADING_WORD : LOWER_WORD).test(word),
+    );
+}
+
+const sortedWords = (words: string[]) => words.sort().join(" ");
+
+/**
+ * Whether a display name spells its key or its docs page: "Tooltip icon"
+ * for `tooltip-icon`, "Multiselect" for MultiSelect. Word order is free,
+ * so "Vertical tabs" matches `tabs-vertical`; a misspelling like "Tootlip
+ * icon" matches neither.
+ */
+function nameMatches(name: string, key: string, page?: string): boolean {
+  const words = name.toLowerCase().split(" ");
+  const spellings = [key.replaceAll("-", ""), page?.toLowerCase()];
+  return (
+    spellings.includes(words.join("")) ||
+    sortedWords(words) === sortedWords(key.split("-"))
+  );
+}
+
+/**
+ * Checks `carbon.yml` assets against the docs pages and thumbnails: every
+ * page has an asset, every asset's thumbnail exists, every thumbnail is
+ * used, and every `name` is sentence case and spells its component. Assets
+ * without a `name` inherit it from `carbon-styles` and aren't checked.
+ */
+export function auditCatalog(
+  assets: Record<string, CatalogAsset>,
+  pageNames: string[],
+  thumbnailNames: string[],
+): string[] {
+  const problems: string[] = [];
+  const thumbnails = new Set(thumbnailNames);
+  const catalogedPages = new Set<string>();
+  const usedThumbnails = new Set<string>();
+
+  for (const [key, asset] of Object.entries(assets)) {
+    const page = asset.demoLinks
+      ?.map((link) => link.url?.match(DOCS_PAGE_URL)?.[1])
+      .find(Boolean);
+    if (page) catalogedPages.add(page);
+
+    const thumbnail = asset.thumbnailPath?.match(THUMBNAIL_PATH)?.[1];
+    if (thumbnail) usedThumbnails.add(thumbnail);
+    if (!thumbnail || !thumbnails.has(thumbnail)) {
+      problems.push(
+        `${key}: thumbnailPath ${asset.thumbnailPath ?? "(none)"} is not a file in thumbnails/`,
+      );
+    }
+
+    if (asset.name === undefined) continue;
+    if (!isSentenceCase(asset.name)) {
+      problems.push(`${key}: name "${asset.name}" is not sentence case`);
+    }
+    if (!nameMatches(asset.name, key, page)) {
+      problems.push(
+        `${key}: name "${asset.name}" doesn't spell the key or ${page ?? "its docs page"}`,
+      );
+    }
+  }
+
+  for (const page of pageNames) {
+    if (!catalogedPages.has(page) && !UNCATALOGED_PAGES.has(page)) {
+      problems.push(`${page} has no carbon.yml asset`);
+    }
+  }
+  for (const thumbnail of thumbnailNames) {
+    if (!usedThumbnails.has(thumbnail)) {
+      problems.push(`thumbnails/${thumbnail}.svg has no carbon.yml asset`);
+    }
+  }
+
+  return problems;
+}

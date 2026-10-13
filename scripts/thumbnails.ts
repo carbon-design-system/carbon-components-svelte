@@ -3,6 +3,7 @@
  * thumbnails/README.md for the design rules these enforce.
  *
  *   bun scripts/thumbnails.ts missing          # docs pages without a thumbnail
+ *   bun scripts/thumbnails.ts catalog          # carbon.yml gaps and bad names
  *   bun scripts/thumbnails.ts audit [names…]   # mechanical rule violations
  *   bun scripts/thumbnails.ts sheet [names…]   # contact sheet → .context/thumbnails-sheet.png
  *   bun scripts/thumbnails.ts sheet --category Layout
@@ -19,7 +20,9 @@ import path from "node:path";
 import { $ } from "bun";
 import { COMPONENT_CATEGORIES } from "../docs/src/component-categories";
 import {
+  auditCatalog,
   auditThumbnail,
+  type CatalogAsset,
   missingThumbnails,
   orphanThumbnails,
   thumbnailName,
@@ -28,6 +31,7 @@ import {
 const PAGES_DIR = "docs/src/pages/components";
 const THUMBNAILS_DIR = "thumbnails";
 const SHEET_DIR = ".context";
+const CATALOG_FILE = "carbon.yml";
 const XML_DECLARATION = /<\?xml[^>]*\?>/;
 
 async function listNames(dir: string, extension: string): Promise<string[]> {
@@ -50,6 +54,18 @@ if (command === "missing") {
     console.log(`${THUMBNAILS_DIR}/${orphan}.svg has no docs page`);
   }
   if (missing.length === 0) console.log("Every docs page has a thumbnail.");
+} else if (command === "catalog") {
+  const catalog: { assets: Record<string, CatalogAsset> } = Bun.YAML.parse(
+    await readFile(CATALOG_FILE, "utf8"),
+  );
+  const problems = auditCatalog(catalog.assets, pages, thumbnails);
+  for (const problem of problems) console.log(problem);
+  console.log(
+    problems.length === 0
+      ? `${CATALOG_FILE} matches the docs pages and thumbnails.`
+      : `${problems.length} problem(s) in ${CATALOG_FILE}.`,
+  );
+  process.exitCode = problems.length === 0 ? 0 : 1;
 } else if (command === "audit") {
   const names = args.length > 0 ? args : thumbnails;
   const results = await Promise.all(
@@ -173,7 +189,7 @@ if (command === "missing") {
   console.log(out);
 } else {
   console.error(
-    "Usage: bun scripts/thumbnails.ts <missing|audit|sheet|themes> [names…]",
+    "Usage: bun scripts/thumbnails.ts <missing|catalog|audit|sheet|themes> [names…]",
   );
   process.exitCode = 1;
 }
