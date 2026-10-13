@@ -7,6 +7,7 @@ export { default as HeaderNav } from "./HeaderNav.svelte";
 export { default as HeaderNavItem } from "./HeaderNavItem.svelte";
 export { default as HeaderNavMenu } from "./HeaderNavMenu.svelte";
 export { default as HeaderPanelDivider } from "./HeaderPanelDivider.svelte";
+export { default as HeaderPanelGroup } from "./HeaderPanelGroup.svelte";
 export { default as HeaderPanelLink } from "./HeaderPanelLink.svelte";
 export { default as HeaderPanelLinks } from "./HeaderPanelLinks.svelte";
 export { default as HeaderSearch } from "./HeaderSearch.svelte";

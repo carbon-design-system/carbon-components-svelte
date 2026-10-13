@@ -28,6 +28,20 @@
     margin-top: $spacing-05;
   }
 
+  // ccs: `HeaderPanelGroup` nests its links in a list of their own. Reset the
+  // list chrome, and drop the first-item top margin above, which only belongs
+  // to the first link of the whole panel. The group's label and rule sit
+  // between the previous links and these ones, as `HeaderPanelDivider` does.
+  .#{$prefix}--header-panel-group__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--header-panel-group__list > .#{$prefix}--switcher__item:nth-child(1) {
+    margin-top: 0;
+  }
+
   .#{$prefix}--switcher__item--divider {
     display: block;
     width: to-rem(224px);
