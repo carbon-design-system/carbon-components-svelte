@@ -291,6 +291,15 @@
     justify-content: flex-end;
   }
 
+  // ccs: with a badge, the chevron stops filling the row so the badge's
+  // `margin-left: auto` pushes it to the row's end, next to the chevron, as
+  // `SideNavLink` places its badge.
+  .#{$prefix}--side-nav__submenu-badge
+    + .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__submenu-chevron {
+    flex: 0 0 auto;
+    margin-left: $carbon--spacing-03;
+  }
+
   .#{$prefix}--side-nav__submenu-chevron > svg {
     width: to-rem(16px);
     height: to-rem(16px);
