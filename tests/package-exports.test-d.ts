@@ -34,6 +34,12 @@ import type {
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
+import type {
+  ColorToken,
+  colorTokens,
+  TypeToken,
+  typeTokens,
+} from "carbon-components-svelte/tokens";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";
@@ -60,6 +66,8 @@ type _MultiSelectSkeleton = MultiSelectSkeleton;
 type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
+type _ColorTokenValue = (typeof colorTokens)[ColorToken]["g100"];
+type _TypeTokenSize = (typeof typeTokens)[TypeToken]["font-size"];
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;
 type _Dismiss = ReturnType<typeof dismiss>;

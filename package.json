@@ -12,6 +12,10 @@
       "types": "./src/index.d.ts",
       "svelte": "./src/index.js"
     },
+    "./tokens": {
+      "types": "./src/tokens/index.d.ts",
+      "import": "./src/tokens/index.js"
+    },
     "./css/*.css": {
       "types": "./css/css.d.ts",
       "default": "./css/*.css"
@@ -53,6 +57,7 @@
     "build:css": "bun scripts/build-css",
     "build:css:watch": "bun scripts/build-css --watch",
     "build:css:themes": "bun scripts/build-css --themes",
+    "build:tokens": "bun scripts/build-tokens.ts",
     "check:css": "crassus diff --entry all",
     "check:css:overrides": "crassus dead",
     "check:css:snapshot": "crassus capture",
