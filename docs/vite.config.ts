@@ -5,9 +5,9 @@ import routify from "@roxi/routify/vite-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
+import { carbonAlias } from "./carbon-alias.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const carbonRoot = path.resolve(__dirname, "..");
 const outDir = path.resolve(__dirname, "dist");
 const componentMdSizesPath = path.resolve(
   __dirname,
@@ -31,19 +31,7 @@ function prismGlobalFix() {
 
 export default defineConfig({
   resolve: {
-    // An alias bypasses `package.json#exports`, so each subpath export
-    // needs its own entry. Array form: the first match wins.
-    alias: [
-      {
-        find: /^carbon-components-svelte\/syntax$/,
-        replacement: path.join(carbonRoot, "src/syntax/index.js"),
-      },
-      {
-        find: /^carbon-components-svelte\/tokens$/,
-        replacement: path.join(carbonRoot, "src/tokens/index.js"),
-      },
-      { find: "carbon-components-svelte", replacement: carbonRoot },
-    ],
+    alias: carbonAlias,
   },
   plugins: [
     prismGlobalFix(),

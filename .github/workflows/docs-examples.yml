@@ -1,8 +1,8 @@
 name: Docs examples
 
-# Type-checks the docs examples against the library's types and checks the
-# docs markup against the CSS. Runs only when the docs change; `checks.yml`
-# ignores `docs/**`.
+# Type-checks the docs examples against the library's types, checks the
+# docs markup against the CSS, and server-renders the framed examples.
+# Runs only when the docs change; `checks.yml` ignores `docs/**`.
 on:
   pull_request:
     paths:
@@ -38,4 +38,8 @@ jobs:
 
       - name: Type-check examples
         run: bun run typecheck:examples
+        working-directory: docs
+
+      - name: Server-render framed examples
+        run: bun run render:examples
         working-directory: docs

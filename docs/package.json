@@ -11,6 +11,7 @@
     "format-component-api": "bun scripts/format-component-api.ts",
     "build:vite": "vite build",
     "typecheck:examples": "bun scripts/typecheck-examples.ts",
+    "render:examples": "bun scripts/render-examples.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
