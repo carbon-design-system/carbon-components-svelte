@@ -38,6 +38,42 @@ With `persist` also set, the system preference wins when the page loads and the 
 
 <FileSource src="/framed/Theme/ThemeSystem" />
 
+## Apply before first paint
+
+`Theme` restores a persisted or system theme after it mounts, so a server-rendered or prerendered page first paints the default theme. To avoid the flash, inline `themeScript` as the first script in `<head>`. It returns a small script that sets the theme on `<html>` before the page renders.
+
+Pass `themeScript` the same `theme`, `persist`, `persistKey`, `system`, and `systemThemes` values as `Theme` so both pick the same theme.
+
+In SvelteKit, add a placeholder to `src/app.html` and replace it in a server hook.
+
+```html
+<!-- src/app.html -->
+<head>
+  %carbon.theme%
+  %sveltekit.head%
+</head>
+```
+
+```js
+// src/hooks.server.js
+import { themeScript } from "carbon-components-svelte";
+
+const script = `<script>${themeScript({ persist: true, system: true })}</script>`;
+
+export function handle({ event, resolve }) {
+  return resolve(event, {
+    transformPageChunk: ({ html }) => html.replace("%carbon.theme%", script),
+  });
+}
+```
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<Theme persist system />
+```
+
+For other setups, generate the string at build time and inline it the same way. With a Content Security Policy, add the page's nonce to the `<script>` tag.
+
 ## Custom theme
 
 Override default Carbon theme tokens using the `tokens` prop.
