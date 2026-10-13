@@ -557,6 +557,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/InterstitialScreen
+  lazy-mount:
+    name: Lazy mount
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/lazy-mount.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LazyMount
   link:
     status: stable
     framework: svelte
@@ -978,6 +990,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Slider
+  splitter:
+    name: Splitter
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/splitter.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Splitter
   stack:
     name: Stack
     status: stable
@@ -1197,6 +1221,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Tooltip
+  tooltip-group:
+    name: Tooltip group
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tooltip-group.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TooltipGroup
   tooltip-icon:
     name: Tootlip icon
     status: stable
