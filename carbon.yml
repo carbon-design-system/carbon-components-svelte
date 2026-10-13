@@ -756,7 +756,7 @@ assets:
       - form
       - contextual-navigation
   pin-code-input:
-    name: Pin code input
+    name: PIN code input
     status: stable
     type: component
     platform: web
@@ -1234,7 +1234,7 @@ assets:
         action: link
         url: https://svelte.carbondesignsystem.com/components/TooltipGroup
   tooltip-icon:
-    name: Tootlip icon
+    name: Tooltip icon
     status: stable
     type: component
     platform: web
