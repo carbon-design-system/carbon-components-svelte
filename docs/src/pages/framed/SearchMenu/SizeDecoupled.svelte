@@ -34,25 +34,25 @@
   placeholder="Search..."
 >
   <SearchMenuGroup label="Resource results">
-    <Link slot="action" href="#resources">View all</Link>
+    <Link slot="action" href="#">View all</Link>
     {#each resources as item (item.id)}
       <SearchMenuItem
         text={item.name}
         value={item.id}
         icon={item.icon}
-        href="#resource"
+        href="#"
       />
     {/each}
   </SearchMenuGroup>
 
   <SearchMenuGroup label="Catalog results">
-    <Link slot="action" href="#catalog">View all</Link>
+    <Link slot="action" href="#">View all</Link>
     {#each catalog as item (item.id)}
       <SearchMenuItem
         text={item.name}
         value={item.id}
         icon={item.icon}
-        href="#catalog"
+        href="#"
       />
     {/each}
   </SearchMenuGroup>
@@ -61,7 +61,7 @@
     <SearchMenuItem
       persistent
       iconRight={Launch}
-      href="#docs"
+      href="#"
       text={`Search "${value}" in Docs`}
     />
   </SearchMenuGroup>

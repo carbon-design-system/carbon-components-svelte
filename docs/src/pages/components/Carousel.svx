@@ -34,7 +34,7 @@ inside form fields, which keep their own arrow key behavior.
       <div><Tag type="green" size="sm">New</Tag></div>
       <h4>Scheduled deployments</h4>
       <p>Queue a release for a maintenance window and it ships automatically, with a rollback point created five minutes before it starts.</p>
-      <Link href="#scheduled-deployments">Read the release notes</Link>
+      <Link href="#">Read the release notes</Link>
     </Stack>
   </CarouselItem>
   <CarouselItem>
@@ -42,7 +42,7 @@ inside form fields, which keep their own arrow key behavior.
       <div><Tag type="blue" size="sm">Improved</Tag></div>
       <h4>Faster log search</h4>
       <p>Queries across 30 days of logs now return in under two seconds, and saved searches can be pinned to a dashboard.</p>
-      <Link href="#log-search">Try log search</Link>
+      <Link href="#">Try log search</Link>
     </Stack>
   </CarouselItem>
   <CarouselItem>
@@ -50,7 +50,7 @@ inside form fields, which keep their own arrow key behavior.
       <div><Tag type="purple" size="sm">Beta</Tag></div>
       <h4>Cost anomaly alerts</h4>
       <p>Get notified when a service's daily spend moves more than 20% from its 14-day baseline.</p>
-      <Link href="#cost-alerts">Join the beta</Link>
+      <Link href="#">Join the beta</Link>
     </Stack>
   </CarouselItem>
 </Carousel>
