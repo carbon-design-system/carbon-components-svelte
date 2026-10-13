@@ -4,6 +4,10 @@
    */
 
   /**
+   * @slot {{}} badge - Compose a `BadgeIndicator` after the label, inside the link.
+   */
+
+  /**
    * Specify the `href` attribute.
    * @type {string}
    */
@@ -124,6 +128,11 @@
       <slot name="icon">
         <svelte:component this={icon} size={16} />
       </slot>
+    {/if}
+    {#if $$slots.badge}
+      <span class:bx--header__menu-item-badge={true}
+        ><slot name="badge" /></span
+      >
     {/if}
   </a>
 </li>

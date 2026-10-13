@@ -134,6 +134,35 @@
     fill: currentColor;
   }
 
+  // `HeaderNavItem` badge: trails the label (and icon) inside the link, like
+  // `SideNavLink`'s badge. `BadgeIndicator` is built to overlay an icon
+  // button's corner, so it is reset into normal flow here.
+  .#{$prefix}--header__menu-item-badge {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin-left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--header__menu-item-badge > .#{$prefix}--badge-indicator {
+    position: static;
+    margin: 0;
+  }
+
+  // An item with an icon already spaces its children with `gap`.
+  .#{$prefix}--header__menu-item--icon > .#{$prefix}--header__menu-item-badge {
+    margin-left: 0;
+  }
+
+  // Menu and side nav rows are full width, so the badge sits at the row's
+  // end, as in `SideNavLink`. Emits after the rules above to win at equal
+  // specificity.
+  .#{$prefix}--header__menu .#{$prefix}--header__menu-item-badge,
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item-badge {
+    margin-left: auto;
+    padding-left: $carbon--spacing-03;
+  }
+
   // An auto-width text action reserves the 2px focus border at rest (the
   // padding gives the extra pixel back) so `:focus` only swaps the border
   // color instead of widening the button.
