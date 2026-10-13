@@ -150,3 +150,27 @@
 @include exports("switcher-forced-colors") {
   @include switcher-forced-colors;
 }
+
+// carbon-components-svelte patch (header-panel-group)
+// `HeaderPanelGroup` nests its links in a list of their own, with the
+// group's label and rule above it, as `HeaderPanelDivider` draws them.
+
+/// Reset the nested list's chrome, and drop the first-item top margin,
+/// which belongs only to the first link of the whole panel.
+/// @access private
+/// @group ui-shell
+@mixin header-panel-group {
+  .#{$prefix}--header-panel-group__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--header-panel-group__list > .#{$prefix}--switcher__item:nth-child(1) {
+    margin-top: 0;
+  }
+}
+
+@include exports("header-panel-group") {
+  @include header-panel-group;
+}

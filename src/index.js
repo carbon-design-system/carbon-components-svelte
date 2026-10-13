@@ -289,6 +289,7 @@ export { default as HeaderNav } from "./UIShell/HeaderNav.svelte";
 export { default as HeaderNavItem } from "./UIShell/HeaderNavItem.svelte";
 export { default as HeaderNavMenu } from "./UIShell/HeaderNavMenu.svelte";
 export { default as HeaderPanelDivider } from "./UIShell/HeaderPanelDivider.svelte";
+export { default as HeaderPanelGroup } from "./UIShell/HeaderPanelGroup.svelte";
 export { default as HeaderPanelLink } from "./UIShell/HeaderPanelLink.svelte";
 export { default as HeaderPanelLinks } from "./UIShell/HeaderPanelLinks.svelte";
 export { default as HeaderSearch } from "./UIShell/HeaderSearch.svelte";
