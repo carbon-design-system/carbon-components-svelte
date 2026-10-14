@@ -309,7 +309,8 @@ routing each tab to a separate page.
 Set `navigation` to render the tabs as page links. The links keep the browser's
 Tab order and arrow keys leave them alone. Label the navigation with
 `aria-label` and set `selected` or `selectedId` from the current route. Render the
-page content below the tabs without `TabContent`.
+page content below the tabs without `TabContent`. TabsVertical accepts
+`navigation` too (see [Sidebar navigation](#sidebar-navigation)).
 
 <Tabs navigation aria-label="Components" selected={1}>
   <Tab label="Accordion" href="/components/Accordion" />
@@ -815,6 +816,34 @@ The breakpoint follows the viewport, not the container. In a 320px side panel on
     </Box>
   </Stack>
 </Box>
+
+### Sidebar navigation
+
+Set `navigation` for a sidebar of page links, such as the sections of a
+settings page. It works as on [Tabs](#page-navigation): the links get
+`aria-current="page"` instead of tab semantics, and `activation` no longer
+applies. Put the current page in the `content` slot, without `TabContent`, so it
+renders beside the list.
+
+<TabsVertical navigation aria-label="Components" selected={1}>
+  <Tab label="Accordion" href="/components/Accordion" />
+  <Tab label="Breadcrumb" href="/components/Breadcrumb" />
+  <Tab label="Button" href="/components/Button" />
+  <Box slot="content" padding={5}>
+    <Text>The Breadcrumb page renders here.</Text>
+  </Box>
+</TabsVertical>
+
+```svelte
+<TabsVertical navigation aria-label="Settings" {selected}>
+  {#each links as link}
+    <Tab label={link.label} href={link.href} />
+  {/each}
+  <div slot="content">
+    <slot />
+  </div>
+</TabsVertical>
+```
 
 ### Sizes
 
