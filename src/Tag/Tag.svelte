@@ -76,6 +76,7 @@
   import Close from "../icons/Close.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
@@ -105,6 +106,15 @@
   let truncated = false;
   let truncationLabel = "";
   let measureToken = 0;
+
+  // In a filter tag, the close button is the only focusable element, so
+  // naming and description go there instead of onto the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: filterProps,
+  } = splitAriaNaming($$restProps));
 
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
@@ -190,7 +200,7 @@
     class:bx--tag--warm-gray={type === "warm-gray"}
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
-    {...$$restProps}
+    {...filterProps}
     style:max-width={maxWidth}
     on:click
     on:mouseover
@@ -219,8 +229,10 @@
     <button
       type="button"
       id="{id}-close"
-      aria-label={title}
-      aria-labelledby="{id}-close {id}-label"
+      aria-label={ariaLabel ?? title}
+      aria-labelledby={ariaLabelledBy ??
+        (ariaLabel ? undefined : `${id}-close ${id}-label`)}
+      aria-describedby={ariaDescribedBy}
       aria-keyshortcuts={$groupNavigation === "roving"
         ? "Delete Backspace"
         : undefined}
