@@ -119,12 +119,22 @@
    */
   export let id = uniqueId();
 
+  import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   $: helperId = `${id}-helper`;
   $: thresholdsId = `${id}-thresholds`;
   $: statusId = `${id}-status`;
+
+  // Consumer naming and description go on the `role="meter"` element.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   $: hasValueText = !!valueText || !!$$slots.valueChildren;
 
@@ -183,7 +193,7 @@
   class:bx--meter--warning={resolvedStatus === "warning"}
   class:bx--meter--error={resolvedStatus === "error"}
   class:bx--meter--over={overCapacity}
-  {...$$restProps}
+  {...wrapperProps}
 >
   <div
     class:bx--meter__label={true}
@@ -206,12 +216,13 @@
     role="meter"
     {id}
     class:bx--meter__track={true}
-    aria-labelledby="{id}-label"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy ?? (ariaLabel ? undefined : `${id}-label`)}
     aria-valuemin={0}
     aria-valuemax={max}
     aria-valuenow={cappedValue}
     aria-valuetext={resolvedValueText}
-    aria-describedby={describedBy}
+    aria-describedby={joinDescribedBy(describedBy, ariaDescribedBy)}
   >
     <div class:bx--meter__bar={true} style:transform="scaleX({ratio})"></div>
     {#each markers as marker (marker.kind)}
