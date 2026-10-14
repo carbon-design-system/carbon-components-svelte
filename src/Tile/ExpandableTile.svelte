@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {{ expanded: boolean }} toggle - Dispatched with the next expanded state when the user toggles the tile. Call `preventDefault()` to keep the current state.
+   * @restProps {button | div}
    */
 
   /**
@@ -62,6 +63,7 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -131,6 +133,15 @@
     }
   }
 
+  // With interactive content, the chevron button is the toggle, so naming
+  // and description go there instead of onto the tile `div`.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+
   $: iconText = expanded ? tileExpandedIconText : tileCollapsedIconText;
   $: label = expanded ? tileExpandedLabel : tileCollapsedLabel;
   $: effectiveMaxHeight = tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight;
@@ -155,7 +166,7 @@
   style:max-height={expanded || effectiveMaxHeight <= 0
     ? "none"
     : `${effectiveMaxHeight + effectivePadding}px`}
-  {...$$restProps}
+  {...hasInteractiveContent ? wrapperProps : $$restProps}
   on:click
   on:click={() => {
     if (!hasInteractiveContent) toggle();
@@ -180,7 +191,11 @@
       tabindex={hasInteractiveContent ? tabindex : undefined}
       class:bx--tile__chevron={true}
       aria-expanded={hasInteractiveContent ? expanded : undefined}
-      aria-label={hasInteractiveContent && !label ? iconText : undefined}
+      aria-label={hasInteractiveContent
+        ? (ariaLabel ?? (label ? undefined : iconText))
+        : undefined}
+      aria-labelledby={hasInteractiveContent ? ariaLabelledBy : undefined}
+      aria-describedby={hasInteractiveContent ? ariaDescribedBy : undefined}
       aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
       title={hasInteractiveContent ? iconText : undefined}
       on:click={() => {
