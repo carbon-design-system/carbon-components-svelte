@@ -314,6 +314,7 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
@@ -345,10 +346,15 @@
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
-  $: menuAriaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
-  // `aria-label` names the combobox button. On the role-less wrapper, where
-  // the rest props land, it is prohibited and never reaches assistive tech.
-  $: ({ "aria-label": fieldAriaLabel, ...wrapperProps } = $$restProps);
+  // Naming and description belong on the combobox button. On the role-less
+  // wrapper, where the rest props land, they never reach assistive tech.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+  $: menuAriaLabel = ariaLabel ?? (labelText || "Choose an item");
 
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
@@ -433,6 +439,7 @@
     readonly ? readonlyId : null,
     hasSelectionDescription ? selectionId : null,
     statusDescribedById,
+    ariaDescribedBy,
   );
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
   $: showFieldFocus = isFluid && (fieldFocused || open);
@@ -801,7 +808,8 @@
         class:bx--list-box__field--clearable={clearable &&
           selectedId !== undefined}
         tabindex="0"
-        aria-label={fieldAriaLabel}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
         aria-expanded={open}
         aria-readonly={readonly || undefined}
         aria-required={required || undefined}
