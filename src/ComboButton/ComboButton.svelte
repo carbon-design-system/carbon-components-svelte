@@ -110,9 +110,19 @@
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import Menu from "../Menu/Menu.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
 
   const dispatch = createEventDispatcher();
+
+  // Naming and description belong on the primary action button, not the
+  // wrapper. A consumer `aria-label` wins over `labelText`.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   let triggerRef = null;
 
@@ -138,7 +148,7 @@
   bind:this={ref}
   class:bx--combo-button={true}
   class:bx--combo-button--xs={size === "xs"}
-  {...$$restProps}
+  {...wrapperProps}
 >
   <Button
     kind="primary"
@@ -147,7 +157,9 @@
     {loading}
     {loadingDescription}
     class="bx--combo-button__primary-action"
-    aria-label={$$restProps["aria-label"] ?? labelText}
+    aria-label={ariaLabel ?? labelText}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
     on:click
     on:mousedown
     on:focus
