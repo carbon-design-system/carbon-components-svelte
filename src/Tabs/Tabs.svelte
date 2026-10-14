@@ -24,6 +24,7 @@
    * Choose whether arrow keys change the selection on focus.
    * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
    * focus; press Enter or Space to select.
+   * Ignored when `navigation` is set.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";

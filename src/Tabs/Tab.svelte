@@ -79,7 +79,6 @@
   export let tooltipAlignment = "center";
 
   import { getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -95,8 +94,7 @@
     useDismissible,
     hasSecondaryLabel,
     useContainer,
-    // `TabsVertical` has no navigation mode.
-    navigation = readable(false),
+    navigation,
     add,
     remove,
     claimTab,

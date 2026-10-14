@@ -23,9 +23,21 @@
    * Choose whether arrow keys change the selection on focus.
    * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
    * focus; press Enter or Space to select.
+   * Ignored when `navigation` is set.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";
+
+  /**
+   * Set to `true` to render the tabs as page navigation: a list of links
+   * where the selected link has `aria-current="page"`, instead of a tab list
+   * that switches panels in place. Links keep the browser's Tab order and
+   * arrow keys do not move between them. Give each `Tab` an `href`, set
+   * `selected` or `selectedId` from the current route, label the navigation
+   * with `aria-label`, and put the page in the `content` slot without
+   * `TabContent`.
+   */
+  export let navigation = false;
 
   /**
    * Specify the size of the vertical tabs.
@@ -130,6 +142,10 @@
   // Vertical tabs are never container type.
   const useContainer = writable(false);
   const useIconOnly = writable(false);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useNavigation = writable(navigation);
   // Icon-only tabs hand their tooltips off to each other, and to the rest
   // of an enclosing `TooltipGroup`.
   provideTooltipGroup();
@@ -350,6 +366,7 @@
     useFullWidth,
     useDismissible,
     useContainer,
+    navigation: useNavigation,
     hasSecondaryLabel,
     add,
     remove,
@@ -370,7 +387,7 @@
       tabs.update((currentTabs) =>
         syncDomOrder({
           root: refTabList,
-          selector: "[role='tab']",
+          selector: ".bx--tabs__nav-link",
           items: currentTabs,
         }),
       );
@@ -446,6 +463,7 @@
   // Roving focus follows the visual orientation: arrow Up/Down in the vertical
   // column, arrow Left/Right in the horizontal row.
   $: listOrientation = isRow ? "horizontal" : "vertical";
+  $: useNavigation.set(navigation);
   // Recompute overflow when the tabs change or the layout flips.
   $: if ($tabs || isRow) {
     tick().then(remeasureOverflow);
@@ -493,9 +511,10 @@
     {/if}
     <ul
       bind:this={refTabList}
-      role="tablist"
-      aria-orientation={listOrientation}
+      role={navigation ? undefined : "tablist"}
+      aria-orientation={navigation ? undefined : listOrientation}
       use:rovingFocus={{
+        // Navigation links have no tab role, so arrow keys leave them alone.
         selector: "[role='tab']",
         orientation: listOrientation,
         skipDisabled: true,
