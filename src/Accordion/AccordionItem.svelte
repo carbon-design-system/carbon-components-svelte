@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {{ open: boolean }} toggle - Dispatched with the next open state after a header click.
+   * @restProps {li}
    */
 
   /**
@@ -57,6 +58,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -76,6 +78,15 @@
       open = false;
     }
   });
+
+  // Naming and description belong on the heading button, not the `li`.
+  // A consumer `aria-label` wins over the `ariaLabel` prop.
+  $: ({
+    ariaLabel: restAriaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   $: if (disabled && open) open = false;
 
@@ -118,7 +129,7 @@
   class:bx--accordion__item--disabled={disabled}
   class:bx--accordion__item--expanding={animation === "expanding"}
   class:bx--accordion__item--collapsing={animation === "collapsing"}
-  {...$$restProps}
+  {...wrapperProps}
   on:animationend
   on:animationend={() => {
     animation = undefined;
@@ -129,7 +140,9 @@
     id="{id}-button"
     type="button"
     class:bx--accordion__heading={true}
-    aria-label={ariaLabel}
+    aria-label={restAriaLabel ?? ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
     aria-expanded={open}
     aria-controls="{id}-content"
     {disabled}
