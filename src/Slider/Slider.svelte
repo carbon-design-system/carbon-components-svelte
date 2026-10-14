@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @event {number} change
    * @event {number} input
    */
@@ -150,6 +151,7 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -172,6 +174,16 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  // Naming and description belong on the slider thumb and its text input,
+  // not the wrapper. A consumer `aria-label` replaces the visible label.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+  $: controlLabelledBy = ariaLabelledBy ?? (ariaLabel ? undefined : labelId);
 
   let trackRef = null;
   let textInputRef = null;
@@ -281,7 +293,7 @@
       { type: "touchcancel", handler: stopHolding },
     ],
   }}
-  {...$$restProps}
+  {...wrapperProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -327,7 +339,8 @@
         aria-valuemin={min}
         aria-valuenow={value}
         aria-valuetext={getValueText(value)}
-        aria-labelledby={labelId}
+        aria-label={ariaLabel}
+        aria-labelledby={controlLabelledBy}
         aria-orientation={orientation}
         aria-describedby={joinDescribedBy(
           readonly ? readonlyId : null,
@@ -339,6 +352,7 @@
             warnId,
             helperId,
           }),
+          ariaDescribedBy,
         )}
         aria-invalid={showInvalid || undefined}
         aria-readonly={readonly || undefined}
@@ -459,8 +473,8 @@
         class:bx--text-input--invalid={showInvalid}
         class:bx--slider-text-input--warn={showWarn}
         {value}
-        aria-labelledby={$$props["aria-label"] ? undefined : labelId}
-        aria-label={$$props["aria-label"] ?? "Slider number input"}
+        aria-labelledby={controlLabelledBy}
+        aria-label={ariaLabel ?? "Slider number input"}
         {disabled}
         {readonly}
         {required}
@@ -479,14 +493,17 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={resolveStatusDescribedBy({
-          showInvalid,
-          showWarn,
-          helperText,
-          errorId,
-          warnId,
-          helperId,
-        })}
+        aria-describedby={joinDescribedBy(
+          resolveStatusDescribedBy({
+            showInvalid,
+            showWarn,
+            helperText,
+            errorId,
+            warnId,
+            helperId,
+          }),
+          ariaDescribedBy,
+        )}
         on:focus
         on:focus={handleTextInputFocus}
         on:blur
