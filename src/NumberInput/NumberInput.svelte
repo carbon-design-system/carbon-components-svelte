@@ -208,6 +208,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -540,16 +541,6 @@
           type="text"
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
-          aria-describedby={resolveStatusDescribedBy({
-            showInvalid,
-            showWarn,
-            helperText,
-            isFluid,
-            errorId,
-            warnId,
-            helperId,
-            includeErrorId: false,
-          })}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -561,6 +552,19 @@
           {step}
           {readonly}
           {...$$restProps}
+          aria-describedby={joinDescribedBy(
+            resolveStatusDescribedBy({
+              showInvalid,
+              showWarn,
+              helperText,
+              isFluid,
+              errorId,
+              warnId,
+              helperId,
+              includeErrorId: false,
+            }),
+            $$restProps["aria-describedby"],
+          )}
           on:change={handleChange}
           on:input={handleInput}
           on:keydown={handleKeydown}
@@ -583,16 +587,6 @@
           type="number"
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
-          aria-describedby={resolveStatusDescribedBy({
-            showInvalid,
-            showWarn,
-            helperText,
-            isFluid,
-            errorId,
-            warnId,
-            helperId,
-            includeErrorId: false,
-          })}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -606,6 +600,19 @@
           value={value ?? ""}
           {readonly}
           {...$$restProps}
+          aria-describedby={joinDescribedBy(
+            resolveStatusDescribedBy({
+              showInvalid,
+              showWarn,
+              helperText,
+              isFluid,
+              errorId,
+              warnId,
+              helperId,
+              includeErrorId: false,
+            }),
+            $$restProps["aria-describedby"],
+          )}
           on:change={handleChange}
           on:input={handleInput}
           on:keydown={handleKeydown}

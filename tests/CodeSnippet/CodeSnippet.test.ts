@@ -116,13 +116,18 @@ describe("CodeSnippet", () => {
     );
   });
 
-  it("lets a rest aria-describedby override the inline default", () => {
+  it("joins a rest aria-describedby with the inline default", () => {
     render(CodeSnippet, {
-      props: { type: "inline", code: "x", "aria-describedby": "hint" },
+      props: {
+        type: "inline",
+        code: "x",
+        id: "snippet-1",
+        "aria-describedby": "hint",
+      },
     });
     expect(screen.getByRole("button")).toHaveAttribute(
       "aria-describedby",
-      "hint",
+      "snippet-1 hint",
     );
   });
 

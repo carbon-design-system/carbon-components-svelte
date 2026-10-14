@@ -141,6 +141,7 @@
   import { debounce as debounceFn } from "../utils/debounce.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -319,8 +320,11 @@
       aria-invalid={showInvalid || undefined}
       data-warn={showWarn || undefined}
       aria-errormessage={showInvalid ? errorId : undefined}
-      aria-describedby={describedById}
       {...$$restProps}
+      aria-describedby={joinDescribedBy(
+        describedById,
+        $$restProps["aria-describedby"],
+      )}
       tabindex={expandable && !expanded ? -1 : $$restProps.tabindex}
       inert={expandable && !expanded ? true : $$restProps.inert}
       on:change

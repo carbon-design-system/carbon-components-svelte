@@ -123,6 +123,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -287,16 +288,6 @@
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid ? errorId : undefined}
-        aria-describedby={resolveStatusDescribedBy({
-          showInvalid,
-          showWarn,
-          helperText,
-          isFluid,
-          errorId,
-          warnId,
-          helperId,
-          includeErrorId: false,
-        })}
         {id}
         {name}
         {placeholder}
@@ -313,6 +304,19 @@
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}
         {...$$restProps}
+        aria-describedby={joinDescribedBy(
+          resolveStatusDescribedBy({
+            showInvalid,
+            showWarn,
+            helperText,
+            isFluid,
+            errorId,
+            warnId,
+            helperId,
+            includeErrorId: false,
+          }),
+          $$restProps["aria-describedby"],
+        )}
         on:change
         on:input
         on:input={(event) => {

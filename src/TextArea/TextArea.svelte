@@ -123,6 +123,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -443,7 +444,6 @@
       bind:value
       aria-invalid={showInvalid || overCount || undefined}
       aria-errormessage={errorMessageId}
-      aria-describedby={describedBy}
       data-warn={showWarn || undefined}
       {disabled}
       {id}
@@ -458,6 +458,10 @@
       class:bx--text-area--warning={showWarn}
       style:resize={typeof cols === "number" || grow ? "none" : undefined}
       {...$$restProps}
+      aria-describedby={joinDescribedBy(
+        describedBy,
+        $$restProps["aria-describedby"],
+      )}
       on:change
       on:input
       on:keydown

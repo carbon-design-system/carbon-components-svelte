@@ -10,6 +10,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -229,7 +230,6 @@
   }}
   {disabled}
   type="button"
-  aria-describedby={describedBy}
   class:bx--tooltip__trigger={true}
   class:bx--tooltip--portal-active={effectivePortalTooltip}
   class:bx--tooltip--a11y={!effectivePortalTooltip}
@@ -250,6 +250,10 @@
   class:bx--tooltip--align-end={!effectivePortalTooltip && align === "end"}
   style:cursor={disabled ? "not-allowed" : "default"}
   {...$$restProps}
+  aria-describedby={joinDescribedBy(
+    describedBy,
+    $$restProps["aria-describedby"],
+  )}
   aria-label={portalLabel ?? $$restProps["aria-label"]}
   on:click
   on:click={() => {

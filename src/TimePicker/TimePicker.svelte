@@ -89,6 +89,7 @@
   import Stack from "../Stack/Stack.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -199,13 +200,6 @@
                   type="text"
                   aria-invalid={showInvalid || undefined}
                   aria-errormessage={showInvalid ? errorId : undefined}
-                  aria-describedby={resolveStatusDescribedBy({
-                    showInvalid,
-                    showWarn,
-                    errorId,
-                    warnId,
-                    includeErrorId: false,
-                  })}
                   {pattern}
                   {placeholder}
                   {maxlength}
@@ -214,6 +208,16 @@
                   {disabled}
                   readonly={readonly || undefined}
                   {...$$restProps}
+                  aria-describedby={joinDescribedBy(
+                    resolveStatusDescribedBy({
+                      showInvalid,
+                      showWarn,
+                      errorId,
+                      warnId,
+                      includeErrorId: false,
+                    }),
+                    $$restProps["aria-describedby"],
+                  )}
                   class:bx--time-picker__input-field={true}
                   class:bx--text-input={true}
                   on:change
@@ -299,15 +303,6 @@
               data-invalid={showInvalid || undefined}
               aria-invalid={showInvalid || undefined}
               aria-errormessage={showInvalid ? errorId : undefined}
-              aria-describedby={resolveStatusDescribedBy({
-                showInvalid,
-                showWarn,
-                helperText,
-                errorId,
-                warnId,
-                helperId,
-                includeErrorId: false,
-              })}
               {pattern}
               {placeholder}
               {maxlength}
@@ -316,6 +311,18 @@
               {disabled}
               readonly={readonly || undefined}
               {...$$restProps}
+              aria-describedby={joinDescribedBy(
+                resolveStatusDescribedBy({
+                  showInvalid,
+                  showWarn,
+                  helperText,
+                  errorId,
+                  warnId,
+                  helperId,
+                  includeErrorId: false,
+                }),
+                $$restProps["aria-describedby"],
+              )}
               class:bx--time-picker__input-field={true}
               class:bx--text-input={true}
               class:bx--text-input--light={light}

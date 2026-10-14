@@ -479,8 +479,11 @@
       aria-expanded={menuVisible}
       aria-controls={menuVisible ? menuDomId : undefined}
       aria-activedescendant={$highlightedId ?? undefined}
-      aria-describedby={describedById}
       {...$$restProps}
+      aria-describedby={joinDescribedBy(
+        describedById,
+        $$restProps["aria-describedby"],
+      )}
       on:focus
       on:focus={handleFocus}
       on:blur

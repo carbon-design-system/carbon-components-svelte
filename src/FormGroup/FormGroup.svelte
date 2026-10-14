@@ -83,8 +83,11 @@
   class:bx--fieldset={true}
   class:bx--fieldset--no-margin={noMargin}
   aria-labelledby={$$restProps["aria-labelledby"] ?? (legendId || undefined)}
-  aria-describedby={describedBy}
   {...$$restProps}
+  aria-describedby={joinDescribedBy(
+    describedBy,
+    $$restProps["aria-describedby"],
+  )}
   on:click
   on:mouseover
   on:mouseenter
