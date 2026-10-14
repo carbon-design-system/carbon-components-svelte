@@ -129,6 +129,7 @@
   import { readable } from "svelte/store";
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { getAvatarBackgroundColor } from "../utils/avatar-color.js";
   import { getInitials } from "../utils/initials.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -180,6 +181,14 @@
   // TooltipDefinition always renders a focusable button trigger. Use it only
   // when the avatar stays a non-interactive span.
   $: useTooltipWrapper = !!tooltipText && !isInteractive;
+  // With the tooltip wrapper, its button takes focus, so naming and
+  // description go there instead of onto the avatar span inside it.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: avatarProps,
+  } = splitAriaNaming($$restProps));
 
   const glyphSize = { sm: 16, md: 20, lg: 24, xl: 32 };
 
@@ -219,11 +228,14 @@
     id={id === undefined ? undefined : `${id}-tooltip`}
     data-overflow={groupOverflow ? "true" : undefined}
     data-avatar-group-overflow={$$restProps["data-avatar-group-overflow"]}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
   >
     <span
       bind:this={ref}
       {id}
-      {...$$restProps}
+      {...avatarProps}
       class={avatarClass}
       on:click
       on:mouseover
