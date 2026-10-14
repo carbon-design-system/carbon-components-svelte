@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @restProps {li}
+   */
+
   /** Set to `true` for the complete variant */
   export let complete = false;
 
@@ -32,10 +36,19 @@
   import CircleDash from "../icons/CircleDash.svelte";
   import Incomplete from "../icons/Incomplete.svelte";
   import Warning from "../icons/Warning.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   let step = {};
+
+  // Naming and description belong on the step button, not the `li`.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   $: stateSuffix = invalid ? ", invalid" : complete ? ", complete" : "";
 
@@ -70,13 +83,16 @@
   class:bx--progress-step--complete={complete}
   class:bx--progress-step--incomplete={!complete && !current}
   class:bx--progress-step--disabled={disabled}
-  {...$$restProps}
+  {...wrapperProps}
 >
   <button
     type="button"
     {disabled}
     aria-disabled={disabled}
     aria-current={current ? "step" : undefined}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
     tabindex={disabled ? "-1" : "0"}
     class:bx--progress-step-button={true}
     class:bx--progress-step-button--unclickable={current ||
