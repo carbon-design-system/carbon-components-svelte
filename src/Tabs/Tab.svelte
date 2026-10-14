@@ -1,6 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
+   * @restProps {li}
    */
 
   /**
@@ -79,6 +80,7 @@
   import { getContext, onMount } from "svelte";
   import Close from "../icons/Close.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -147,6 +149,16 @@
     };
   });
 
+  // Naming, description, and `aria-controls` belong on the `role="tab"`
+  // anchor, not the presentational `li`. A consumer `aria-label` wins over
+  // the icon-only label, and a consumer `aria-controls` over the panel id.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: { "aria-controls": ariaControls, ...wrapperProps },
+  } = splitAriaNaming($$restProps));
+
   $: selected = $selectedTab === id;
   $: registered = $tabsById[id] !== undefined;
   // Only the selected tab is a Tab-key stop. A tab that claimed its position
@@ -177,7 +189,7 @@
   class:bx--tabs__nav-item--container-selected={$useContainer &&
     selected &&
     !disabled}
-  {...$$restProps}
+  {...wrapperProps}
   on:click
   on:click={(event) => {
     if (disabled) {
@@ -210,8 +222,10 @@
     tabindex={disabled || (hasSelection && !selected) ? "-1" : tabindex}
     aria-selected={selected}
     aria-disabled={disabled}
-    aria-controls={panelId}
-    aria-label={$iconOnly ? label : undefined}
+    aria-controls={ariaControls ?? panelId}
+    aria-label={ariaLabel ?? ($iconOnly ? label : undefined)}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
     {id}
     {href}
     class:bx--tabs__nav-link={true}
