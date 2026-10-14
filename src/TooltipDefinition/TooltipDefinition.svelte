@@ -2,6 +2,7 @@
   /**
    * @event {null} open
    * @event {null} close
+   * @restProps {span}
    */
 
   /** Specify the tooltip text */
@@ -66,8 +67,10 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -76,6 +79,15 @@
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
+
+  // Naming and description belong on the trigger button, not the wrapper.
+  // A consumer `aria-describedby` joins the tooltip id.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   const PORTAL_VERTICAL_GAP_TOP_PX = -2;
   const PORTAL_VERTICAL_GAP_BOTTOM_PX = -3;
@@ -151,14 +163,16 @@
   use:dismiss={{ enabled: open, type: "keydown", handler: handleKeydown }}
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
-  {...$$restProps}
+  {...wrapperProps}
   on:mouseenter={clickToOpen ? undefined : scheduleShow}
   on:mouseleave={scheduleHide}
 >
   <button
     bind:this={ref}
     type="button"
-    aria-describedby={id}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={joinDescribedBy(id, ariaDescribedBy)}
     class:bx--tooltip--portal-active={effectivePortalTooltip}
     class:bx--tooltip--a11y={!effectivePortalTooltip}
     class:bx--tooltip__trigger={true}
