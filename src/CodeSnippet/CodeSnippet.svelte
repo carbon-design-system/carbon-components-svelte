@@ -213,6 +213,7 @@
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -483,8 +484,8 @@
       class:bx--snippet--light={light}
       class:bx--snippet--wraptext={wrapText}
       aria-label={copyLabel}
-      aria-describedby={id}
       {...$$restProps}
+      aria-describedby={joinDescribedBy(id, $$restProps["aria-describedby"])}
       on:click
       on:click={async () => {
         try {

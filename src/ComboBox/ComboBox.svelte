@@ -361,6 +361,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -1024,7 +1025,6 @@
           aria-errormessage={showInvalid && shownInvalidText
             ? errorId
             : undefined}
-          aria-describedby={statusDescribedById}
           {disabled}
           {readonly}
           {placeholder}
@@ -1032,6 +1032,10 @@
           {name}
           {required}
           {...$$restProps}
+          aria-describedby={joinDescribedBy(
+            statusDescribedById,
+            $$restProps["aria-describedby"],
+          )}
           class:bx--text-input={true}
           class:bx--text-input--light={light}
           class:bx--text-input--empty={value === ""}

@@ -140,7 +140,7 @@
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import { buildFieldIds } from "../utils/field-status.js";
+  import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -256,7 +256,6 @@
         readonly
         type={inputType}
         {value}
-        aria-describedby={helperText && !isFluid ? helperId : undefined}
         {disabled}
         {id}
         {name}
@@ -266,6 +265,10 @@
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}
         {...$$restProps}
+        aria-describedby={joinDescribedBy(
+          helperText && !isFluid ? helperId : undefined,
+          $$restProps["aria-describedby"],
+        )}
         on:focus
         on:focus={handleFocus}
         on:blur

@@ -1531,7 +1531,10 @@
             aria-disabled={disabled || undefined}
             aria-readonly={readonly || undefined}
             aria-controls={open ? menuId : undefined}
-            aria-describedby={fieldDescribedById}
+            aria-describedby={joinDescribedBy(
+              fieldDescribedById,
+              $$restProps["aria-describedby"],
+            )}
             class:bx--text-input={true}
             class:bx--text-input--empty={value === ""}
             class:bx--text-input--light={light}
@@ -1668,7 +1671,10 @@
           aria-expanded={open}
           aria-activedescendant={activeDescendantId}
           aria-controls={open ? menuId : undefined}
-          aria-describedby={fieldDescribedById}
+          aria-describedby={joinDescribedBy(
+            fieldDescribedById,
+            $$restProps["aria-describedby"],
+          )}
           on:focus={() => {
             fieldFocused = true;
           }}

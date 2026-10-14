@@ -59,6 +59,7 @@
 
   import { getContext } from "svelte";
   import { writable } from "svelte/store";
+  import { joinDescribedBy } from "../utils/field-status.js";
 
   // Context is only consulted for the standalone `TableContainer` + `Table`
   // composition: an explicit `labelledBy`/`describedBy` prop (set by
@@ -68,17 +69,19 @@
   const hasContextDescription =
     tableContainerCtx?.hasDescription ?? writable(false);
 
-  // A consumer-supplied aria-label/aria-labelledby/aria-describedby always
-  // wins over the id `TableContainer`/`DataTable` provide.
+  // A consumer-supplied aria-label/aria-labelledby wins over the id
+  // `TableContainer`/`DataTable` provide. A consumer aria-describedby joins
+  // the built-in description id.
   $: ariaLabelledby =
     !$$restProps["aria-label"] && !$$restProps["aria-labelledby"]
       ? (labelledBy ??
         ($hasContextTitle ? tableContainerCtx.titleId : undefined))
       : undefined;
-  $: ariaDescribedby = $$restProps["aria-describedby"]
-    ? undefined
-    : (describedBy ??
-      ($hasContextDescription ? tableContainerCtx.descriptionId : undefined));
+  $: ariaDescribedby = joinDescribedBy(
+    describedBy ??
+      ($hasContextDescription ? tableContainerCtx.descriptionId : undefined),
+    $$restProps["aria-describedby"],
+  );
 </script>
 
 {#if stickyHeader}
@@ -110,7 +113,6 @@
   <div class:bx--data-table-content={true}>
     <table
       aria-labelledby={ariaLabelledby}
-      aria-describedby={ariaDescribedby}
       class:bx--data-table={true}
       class:bx--data-table--compact={size === "compact"}
       class:bx--data-table--short={size === "short"}
@@ -122,6 +124,7 @@
       class:bx--data-table--sticky-header={stickyHeader}
       class:bx--data-table--fixed-layout={fixedLayout}
       {...$$restProps}
+      aria-describedby={ariaDescribedby}
       style={tableStyle}
     >
       <slot />

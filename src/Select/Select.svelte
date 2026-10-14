@@ -276,7 +276,6 @@
         >
           <select
             bind:this={ref}
-            aria-describedby={describedById}
             aria-invalid={showInvalid || undefined}
             aria-readonly={readonly || undefined}
             disabled={disabled || undefined}
@@ -288,6 +287,10 @@
             class:bx--select-input--sm={effectiveSize === "sm"}
             class:bx--select-input--xl={effectiveSize === "xl"}
             {...$$restProps}
+            aria-describedby={joinDescribedBy(
+              describedById,
+              $$restProps["aria-describedby"],
+            )}
             on:change={handleChange}
             on:change
             on:input
@@ -343,7 +346,6 @@
           bind:this={ref}
           {id}
           {name}
-          aria-describedby={describedById}
           disabled={disabled || undefined}
           required={required || undefined}
           aria-invalid={showInvalid || undefined}
@@ -353,6 +355,10 @@
           class:bx--select-input--sm={effectiveSize === "sm"}
           class:bx--select-input--xl={effectiveSize === "xl"}
           {...$$restProps}
+          aria-describedby={joinDescribedBy(
+            describedById,
+            $$restProps["aria-describedby"],
+          )}
           on:change={handleChange}
           on:change
           on:input

@@ -118,6 +118,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -263,7 +264,6 @@
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
       aria-errormessage={showInvalid ? errorId : undefined}
-      aria-describedby={describedBy}
       {id}
       {name}
       {placeholder}
@@ -272,6 +272,10 @@
       {disabled}
       {readonly}
       {...$$restProps}
+      aria-describedby={joinDescribedBy(
+        describedBy,
+        $$restProps["aria-describedby"],
+      )}
       value={currentValue}
       class:bx--date-picker__input={true}
       class:bx--date-picker__input--invalid={showInvalid}

@@ -103,6 +103,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -267,16 +268,6 @@
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid ? errorId : undefined}
-        aria-describedby={resolveStatusDescribedBy({
-          showInvalid,
-          showWarn,
-          helperText,
-          isFluid,
-          errorId,
-          warnId,
-          helperId,
-          includeErrorId: false,
-        })}
         {disabled}
         {id}
         {name}
@@ -293,6 +284,19 @@
         class:bx--text-input--xl={effectiveSize === "xl"}
         maxlength={maxCount ?? undefined}
         {...$$restProps}
+        aria-describedby={joinDescribedBy(
+          resolveStatusDescribedBy({
+            showInvalid,
+            showWarn,
+            helperText,
+            isFluid,
+            errorId,
+            warnId,
+            helperId,
+            includeErrorId: false,
+          }),
+          $$restProps["aria-describedby"],
+        )}
         on:change={handleChange}
         on:input={handleInput}
         on:keydown
