@@ -12,7 +12,7 @@
    * @event {{ error: unknown }} copy:error
    * @event {MouseEvent} mouseenter:copy-button
    * @event {MouseEvent} mouseleave:copy-button
-   * @restProps {div | button | span} Rest props are spread to the root div (single/multi, except `aria-label`, which labels the code container), the copy button (inline), or the span (inline with `hideCopyButton`).
+   * @restProps {div | button | span} Rest props are spread to the root div (single/multi, except `aria-label`, `aria-labelledby`, and `aria-describedby`, which go on the code container), the copy button (inline), or the span (inline with `hideCopyButton`).
    */
 
   /**
@@ -209,6 +209,7 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
@@ -221,6 +222,16 @@
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  // Single/multi: naming and description belong on the `role="textbox"`
+  // container, not the root `div`. A consumer `aria-label` wins over
+  // `codeLabel`.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   // Feedback is portalled by default; only an explicit `portalTooltip={false}`
   // opts back into Carbon's inline caret.
@@ -554,8 +565,7 @@
     class:bx--snippet--inline={type === "inline"}
     class:bx--snippet--multi={type === "multi"}
     class:bx--snippet--disabled={type !== "inline" && disabled}
-    {...$$restProps}
-    aria-label={undefined}
+    {...wrapperProps}
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -566,7 +576,9 @@
       tabindex={disabled ? undefined : "0"}
       aria-readonly="true"
       aria-multiline={type === "multi" ? "true" : undefined}
-      aria-label={$$restProps["aria-label"] ?? codeLabel}
+      aria-label={ariaLabel ?? codeLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       class:bx--snippet-container={true}
       class:bx--snippet-container--fade-top={showTopFade}
       class:bx--snippet-container--fade-bottom={showBottomFade}
