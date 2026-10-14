@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @template {string | number} [Value=string | number]
    * @event {Value} change
    */
@@ -108,6 +109,7 @@
   import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -118,6 +120,15 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  // Naming and description belong on the radiogroup, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+
   /**
    * @type {import("svelte/store").Writable<Value | undefined>}
    */
@@ -269,7 +280,7 @@
 <div
   {id}
   class:bx--form-item={true}
-  {...$$restProps}
+  {...wrapperProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -282,7 +293,12 @@
     role="radiogroup"
     aria-orientation={orientation}
     aria-readonly={readonly || undefined}
-    aria-describedby={joinDescribedBy(readonly ? readonlyId : null)}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={joinDescribedBy(
+      readonly ? readonlyId : null,
+      ariaDescribedBy,
+    )}
     class:bx--radio-button-group={true}
     class:bx--radio-button-group--vertical={orientation === "vertical"}
     class:bx--radio-button-group--label-left={labelPosition === "left"}

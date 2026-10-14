@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @template {string | number} [Value=string | number]
    */
 
@@ -70,6 +71,7 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -77,6 +79,14 @@
     registerRadioButton,
     updateGroupSelection,
   } from "./radio-button-registry.js";
+
+  // Naming and description belong on the input, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   const ctx = getContext("carbon:RadioButtonGroup");
 
@@ -205,8 +215,7 @@
   class:bx--radio-button-wrapper={true}
   class:bx--radio-button-wrapper--label-left={labelPosition === "left"}
   class:bx--radio-button-wrapper--readonly={effectiveReadonly}
-  {...$$restProps}
-  aria-label={undefined}
+  {...wrapperProps}
 >
   <input
     bind:this={ref}
@@ -222,10 +231,12 @@
     aria-describedby={joinDescribedBy(
       describeReadonly ? readonlyId : null,
       $helperId,
+      ariaDescribedBy,
     )}
     aria-label={labelText || $$slots.labelChildren
       ? undefined
-      : $$props["aria-label"] || undefined}
+      : ariaLabel || undefined}
+    aria-labelledby={ariaLabelledBy}
     class:bx--radio-button={true}
     on:focus
     on:blur
