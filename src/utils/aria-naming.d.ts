@@ -5,7 +5,7 @@
  * that is a child, the component places them there and spreads `rest`
  * on the root.
  */
-export function splitAriaNaming<T extends Record<string, any>>(
+export function splitAriaNaming<T extends Record<string, unknown>>(
   restProps: T,
 ): {
   ariaLabel: string | undefined;
