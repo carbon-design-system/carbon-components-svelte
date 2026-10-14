@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @event {{ value: number; valueUpper: number }} change
    * @event {{ value: number; valueUpper: number }} input
    * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} focus
@@ -165,6 +166,7 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -399,6 +401,18 @@
   }));
 
   $: labelId = `label-${id}`;
+  // Naming and description belong on the thumbs and text inputs, not the
+  // wrapper. Each control's name joins a group label with its own
+  // `ariaLabelInput*`; a consumer `aria-labelledby` or `aria-label`
+  // replaces the visible label as that group label.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+  $: ariaLabelId = `aria-label-${id}`;
+  $: groupLabelledBy = ariaLabelledBy ?? (ariaLabel ? ariaLabelId : labelId);
   $: ({ errorId, warnId, readonlyId, helperId } = buildFieldIds(id));
   $: lowerInputId = `lower-input-${id}`;
   $: upperInputId = `upper-input-${id}`;
@@ -451,7 +465,7 @@
       { type: "touchcancel", handler: stopHolding },
     ],
   }}
-  {...$$restProps}
+  {...wrapperProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -466,6 +480,9 @@
   >
     <slot name="labelChildren">{labelText}</slot>
   </label>
+  {#if ariaLabel}
+    <span id={ariaLabelId} hidden>{ariaLabel}</span>
+  {/if}
   <div
     class:bx--slider-container={true}
     class:bx--slider-container--two-handles={true}
@@ -496,7 +513,7 @@
         class:bx--slider-text-input--warn={showWarn}
         {value}
         aria-label={ariaLabelInput}
-        aria-labelledby="{labelId} {lowerInputId}"
+        aria-labelledby="{groupLabelledBy} {lowerInputId}"
         {disabled}
         {readonly}
         {required}
@@ -514,14 +531,17 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={resolveStatusDescribedBy({
-          showInvalid,
-          showWarn,
-          helperText,
-          errorId,
-          warnId,
-          helperId,
-        })}
+        aria-describedby={joinDescribedBy(
+          resolveStatusDescribedBy({
+            showInvalid,
+            showWarn,
+            helperText,
+            errorId,
+            warnId,
+            helperId,
+          }),
+          ariaDescribedBy,
+        )}
         on:focus={handleLowerInputFocus}
         on:blur={handleLowerInputBlur}
       >
@@ -567,7 +587,7 @@
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
-          aria-labelledby="{labelId} {id}"
+          aria-labelledby="{groupLabelledBy} {id}"
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
@@ -579,6 +599,7 @@
               warnId,
               helperId,
             }),
+            ariaDescribedBy,
           )}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
@@ -636,7 +657,7 @@
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
-          aria-labelledby="{labelId} {upperThumbId}"
+          aria-labelledby="{groupLabelledBy} {upperThumbId}"
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
@@ -648,6 +669,7 @@
               warnId,
               helperId,
             }),
+            ariaDescribedBy,
           )}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
@@ -736,7 +758,7 @@
         class:bx--slider-text-input--warn={showWarn}
         value={valueUpper}
         aria-label={ariaLabelInputUpper}
-        aria-labelledby="{labelId} {upperInputId}"
+        aria-labelledby="{groupLabelledBy} {upperInputId}"
         {disabled}
         {readonly}
         {required}
@@ -754,14 +776,17 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={resolveStatusDescribedBy({
-          showInvalid,
-          showWarn,
-          helperText,
-          errorId,
-          warnId,
-          helperId,
-        })}
+        aria-describedby={joinDescribedBy(
+          resolveStatusDescribedBy({
+            showInvalid,
+            showWarn,
+            helperText,
+            errorId,
+            warnId,
+            helperId,
+          }),
+          ariaDescribedBy,
+        )}
         on:focus={handleUpperInputFocus}
         on:blur={handleUpperInputBlur}
       >
