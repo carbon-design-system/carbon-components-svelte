@@ -1,5 +1,9 @@
 <script>
   /**
+   * @restProps {div}
+   */
+
+  /**
    * Specify the current value.
    * @type {number}
    */
@@ -56,12 +60,22 @@
 
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const statusIcons = {
     error: ErrorFilled,
     finished: CheckmarkFilled,
   };
+
+  // Consumer naming and description go on the `role="progressbar"` element.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   $: helperId = `${id}-helper`;
   $: statusDescriptionId = `${id}-status`;
@@ -114,7 +128,7 @@
   class:bx--progress-bar--indented={kind === "indented"}
   class:bx--progress-bar--error={status === "error"}
   class:bx--progress-bar--finished={status === "finished"}
-  {...$$restProps}
+  {...wrapperProps}
 >
   <div
     class:bx--progress-bar__label={true}
@@ -145,12 +159,13 @@
     {id}
     class:bx--progress-bar__track={true}
     aria-busy={status === "active"}
-    aria-labelledby="{id}-label"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy ?? (ariaLabel ? undefined : `${id}-label`)}
     aria-valuemin={indeterminate ? undefined : 0}
     aria-valuemax={indeterminate ? undefined : upper}
     aria-valuenow={indeterminate ? undefined : capped}
     aria-valuetext={valueText.trim() ? valueText : undefined}
-    aria-describedby={describedBy}
+    aria-describedby={joinDescribedBy(describedBy, ariaDescribedBy)}
   >
     <div
       class:bx--progress-bar__bar={true}
