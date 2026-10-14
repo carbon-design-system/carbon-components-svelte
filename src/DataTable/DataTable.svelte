@@ -439,6 +439,7 @@
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
   import { formReset } from "../utils/form-reset.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -1114,9 +1115,18 @@
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
     (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
+
+  // Rest props go on the container, but naming and description belong on
+  // the `table`. `Table` joins them with the title and description ids.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 </script>
 
-<TableContainer {id} {useStaticWidth} {...$$restProps}>
+<TableContainer {id} {useStaticWidth} {...wrapperProps}>
   {#if title ||
     $$slots.titleChildren ||
     description ||
@@ -1164,6 +1174,9 @@
       {fixedLayout}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       tableStyle={tableStyle || undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
         ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
