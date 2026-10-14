@@ -1,6 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
+   * @restProps {li}
    */
 
   /**
@@ -94,6 +95,7 @@
     getContext,
     onMount,
   } from "svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -120,6 +122,14 @@
     }
   });
 
+  // Naming and description belong on the menuitem, not the `role="none"` li.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+
   $: buttonProps = {
     role: "menuitem",
     tabindex: "-1",
@@ -131,6 +141,9 @@
     target: href && target ? target : undefined,
     rel: resolveLinkRel(target, rel),
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    "aria-describedby": ariaDescribedBy,
   };
 
   function handleClick(event) {
@@ -157,7 +170,7 @@
   class:bx--overflow-menu--divider={hasDivider}
   class:bx--overflow-menu-options__option--danger={danger}
   class:bx--overflow-menu-options__option--disabled={disabled}
-  {...$$restProps}
+  {...wrapperProps}
 >
   {#if href}
     <a bind:this={ref} {...buttonProps} on:click={handleClick} on:keydown>
