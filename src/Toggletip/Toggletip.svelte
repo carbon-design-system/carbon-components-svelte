@@ -45,6 +45,7 @@
 <script>
   /**
    * @template [Icon=any]
+   * @restProps {span}
    */
 
   /**
@@ -117,8 +118,10 @@
   import Popover from "../Popover/Popover.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -132,6 +135,15 @@
   let disconnectModalObserver = noop;
 
   $: contentId = `${id}-content`;
+
+  // Naming and description belong on the trigger button, not the wrapper.
+  // A consumer `aria-label` wins over `iconDescription`.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
 
@@ -230,16 +242,20 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
     }}
     on:keydown={handleKeydown}
     on:focusout={handleFocusout}
-    {...$$restProps}
+    {...wrapperProps}
   >
     <button
       bind:this={ref}
       type="button"
       class:bx--toggletip-button={true}
-      aria-label={iconDescription}
+      aria-label={ariaLabel ?? iconDescription}
+      aria-labelledby={ariaLabelledBy}
       aria-expanded={open}
       aria-controls={contentId}
-      aria-describedby={open ? contentId : undefined}
+      aria-describedby={joinDescribedBy(
+        open ? contentId : undefined,
+        ariaDescribedBy,
+      )}
       on:click={toggle}
     >
       <slot name="icon">
