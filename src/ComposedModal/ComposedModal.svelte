@@ -5,6 +5,7 @@
    * @event {null} open
    * @event transitionend
    * @property {boolean} open
+   * @restProps {div}
    */
 
   /**
@@ -60,7 +61,9 @@
   import { derived, writable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -173,8 +176,14 @@
   // The server cannot tell which headings the header renders, so it names the
   // dialog from both ("Label Title"); after mount the name is `$label || $title`
   // (the label alone when both are set). The name is a superset until then.
-  $: consumerLabel = $$props["aria-label"];
-  $: consumerLabelledby = $$props["aria-labelledby"];
+  // The root carries `role="presentation"`, so consumer naming and
+  // description go on the dialog element instead.
+  $: ({
+    ariaLabel: consumerLabel,
+    ariaLabelledBy: consumerLabelledby,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
   $: ariaLabel =
     consumerLabel ??
     (consumerLabelledby === undefined
@@ -208,9 +217,7 @@
   class:bx--modal--danger={danger}
   inert={open ? undefined : true}
   {id}
-  {...$$restProps}
-  aria-label={undefined}
-  aria-labelledby={undefined}
+  {...wrapperProps}
   on:keydown
   on:keydown={(event) => {
     if (open) {
@@ -246,7 +253,10 @@
     bind:this={innerModalRef}
     tabindex="-1"
     role={alert ? "alertdialog" : "dialog"}
-    aria-describedby={alert ? $bodyId : undefined}
+    aria-describedby={joinDescribedBy(
+      alert ? $bodyId : undefined,
+      ariaDescribedBy,
+    )}
     aria-modal="true"
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledby}
