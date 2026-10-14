@@ -1,5 +1,9 @@
 <script>
   /**
+   * @restProps {div}
+   */
+
+  /**
    * Specify the select value.
    * @type {number | string}
    * @bindable writable
@@ -50,6 +54,7 @@
   import { readable, writable } from "svelte/store";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -106,6 +111,14 @@
   $: effectiveDisabled = disabled || $parentDisabled;
   $: ({ readonlyId } = buildFieldIds(id));
 
+  // Naming and description belong on the select, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+
   function handleSelectChange(event) {
     let next = event.target.value;
     if (itemTypesByValue[next] === "number") next = Number(next);
@@ -140,7 +153,7 @@
       class:bx--time-picker__select={true}
       class:bx--select--readonly={effectiveReadonly}
       class:bx--select--disabled={effectiveDisabled}
-      {...$$restProps}
+      {...wrapperProps}
       on:click
       on:mouseover
       on:mouseenter
@@ -165,8 +178,11 @@
           disabled={effectiveDisabled}
           {value}
           aria-readonly={effectiveReadonly || undefined}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
           aria-describedby={joinDescribedBy(
             effectiveReadonly ? readonlyId : null,
+            ariaDescribedBy,
           )}
           class:bx--select-input={true}
           on:change={handleSelectChange}
@@ -197,7 +213,7 @@
     class:bx--select={true}
     class:bx--time-picker__select={true}
     class:bx--select--readonly={effectiveReadonly}
-    {...$$restProps}
+    {...wrapperProps}
     on:click
     on:mouseover
     on:mouseenter
@@ -216,7 +232,12 @@
       disabled={effectiveDisabled}
       {value}
       aria-readonly={effectiveReadonly || undefined}
-      aria-describedby={joinDescribedBy(effectiveReadonly ? readonlyId : null)}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={joinDescribedBy(
+        effectiveReadonly ? readonlyId : null,
+        ariaDescribedBy,
+      )}
       class:bx--select-input={true}
       on:change={handleSelectChange}
       on:change
