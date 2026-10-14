@@ -99,13 +99,21 @@ describe("FileUploaderButton", () => {
     expect(input).not.toHaveAttribute("capture");
   });
 
-  it("should set aria-describedby on the button from describedBy", () => {
-    render(FileUploaderButton, { props: { describedBy: "upload-help" } });
+  it("should move aria-describedby and aria-labelledby to the button", () => {
+    const { container } = render(FileUploaderButton, {
+      props: {
+        "aria-describedby": "upload-help",
+        "aria-labelledby": "upload-label",
+      },
+    });
 
-    expect(screen.getByRole("button")).toHaveAttribute(
-      "aria-describedby",
-      "upload-help",
-    );
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-describedby", "upload-help");
+    expect(button).toHaveAttribute("aria-labelledby", "upload-label");
+
+    const input = container.querySelector("input[type='file']");
+    expect(input).not.toHaveAttribute("aria-describedby");
+    expect(input).not.toHaveAttribute("aria-labelledby");
   });
 
   it("should respect accept prop", () => {

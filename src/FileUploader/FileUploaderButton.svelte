@@ -50,14 +50,6 @@
    */
   export let capture = undefined;
 
-  /**
-   * Id of an element that describes the button, such as text listing the
-   * accepted file types and size limit. Set as `aria-describedby` on the
-   * button so screen readers announce it with the label.
-   * @type {string | undefined}
-   */
-  export let describedBy = undefined;
-
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -141,6 +133,14 @@
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
 
+  // Rest props go to the hidden input, which never takes focus. Move the
+  // naming and description attributes to the button that does.
+  $: ({
+    "aria-describedby": ariaDescribedBy,
+    "aria-labelledby": ariaLabelledBy,
+    ...inputRestProps
+  } = $$restProps);
+
   let initialLabelText = labelText;
 
   // Determine if this is icon-only (has icon but no label content)
@@ -187,7 +187,8 @@
 <button
   type="button"
   on:click={() => ref?.click()}
-  aria-describedby={describedBy}
+  aria-describedby={ariaDescribedBy}
+  aria-labelledby={ariaLabelledBy}
   {disabled}
   class:bx--btn={true}
   class:bx--btn--disabled={disabled}
@@ -255,7 +256,7 @@
   {name}
   aria-label={hasIconOnly ? iconDescription : labelText}
   class:bx--visually-hidden={true}
-  {...$$restProps}
+  {...inputRestProps}
   on:change|stopPropagation={(event) => {
     processIncoming([...event.target.files]);
   }}

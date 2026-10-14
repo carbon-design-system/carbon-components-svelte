@@ -97,13 +97,21 @@ describe("FileUploaderDropContainer", () => {
     expect(input).toHaveAttribute("capture", "user");
   });
 
-  it("should set aria-describedby on the drop target from describedBy", () => {
-    render(FileUploaderDropContainer, { props: { describedBy: "drop-help" } });
+  it("should move aria-describedby and aria-labelledby to the drop target", () => {
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        "aria-describedby": "drop-help",
+        "aria-labelledby": "drop-label",
+      },
+    });
 
-    expect(screen.getByRole("button")).toHaveAttribute(
-      "aria-describedby",
-      "drop-help",
-    );
+    const target = screen.getByRole("button");
+    expect(target).toHaveAttribute("aria-describedby", "drop-help");
+    expect(target).toHaveAttribute("aria-labelledby", "drop-label");
+
+    const wrapper = container.querySelector(".bx--file");
+    expect(wrapper).not.toHaveAttribute("aria-describedby");
+    expect(wrapper).not.toHaveAttribute("aria-labelledby");
   });
 
   it("should respect accept prop", () => {

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import FileUploaderComponent from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderDescriptionSlot from "./FileUploader.descriptionSlot.test.svelte";
@@ -441,6 +442,39 @@ describe("FileUploader", () => {
     expect(
       screen.getByRole("button", { name: "Add files" }),
     ).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("should join a consumer aria-describedby with labelDescription", () => {
+    const { container } = render(FileUploaderComponent, {
+      props: {
+        id: "resume",
+        buttonLabel: "Add files",
+        labelDescription: "Max file size is 500 kB.",
+        "aria-describedby": "resume-error",
+      },
+    });
+
+    expect(screen.getByRole("button", { name: "Add files" })).toHaveAttribute(
+      "aria-describedby",
+      "resume-description resume-error",
+    );
+    expect(container.querySelector(".bx--form-item")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
+  it("should move aria-labelledby to the add button", () => {
+    const { container } = render(FileUploaderComponent, {
+      props: { "aria-labelledby": "resume-label" },
+    });
+
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-labelledby",
+      "resume-label",
+    );
+    expect(container.querySelector(".bx--form-item")).not.toHaveAttribute(
+      "aria-labelledby",
+    );
   });
 
   it("should render labelDescription prop", () => {
