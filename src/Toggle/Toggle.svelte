@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @event {{ toggled: boolean; }} toggle
    */
 
@@ -76,6 +77,7 @@
 
   import { createEventDispatcher } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -97,6 +99,14 @@
 
   $: showWarn = warn && !disabled && !readonly;
   $: ({ readonlyId, warnId } = buildFieldIds(id));
+
+  // Naming and description belong on the switch, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 </script>
 
 <div
@@ -104,7 +114,7 @@
   class:bx--toggle--readonly={readonly}
   class:bx--toggle--warning={showWarn}
   style:user-select="none"
-  {...$$restProps}
+  {...wrapperProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -119,9 +129,11 @@
     class:bx--toggle-input--small={size === "sm"}
     checked={toggled}
     aria-readonly={readonly || undefined}
+    aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(
       readonly ? readonlyId : null,
       showWarn ? warnId : null,
+      ariaDescribedBy,
     )}
     on:click={(event) => {
       if (readonly) event.preventDefault();
@@ -150,7 +162,7 @@
     {value}
   >
   <label
-    aria-label={labelText ? undefined : ($$props["aria-label"] ?? "Toggle")}
+    aria-label={labelText ? undefined : (ariaLabel ?? "Toggle")}
     for={id}
     class:bx--toggle-input__label={true}
   >
