@@ -117,6 +117,7 @@
   import { readable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -129,6 +130,14 @@
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  // Naming and description belong on the input, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   const ctx = getContext("carbon:CheckboxGroup");
 
@@ -237,7 +246,7 @@
     class:bx--checkbox-wrapper--readonly={effectiveReadonly}
     class:bx--checkbox-wrapper--invalid={showInvalid}
     class:bx--checkbox-wrapper--warning={showWarn}
-    {...$$restProps}
+    {...wrapperProps}
     on:click
     on:mouseover
     on:mouseenter
@@ -260,6 +269,8 @@
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}
       data-invalid={showInvalid || undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
       aria-describedby={joinDescribedBy(
         describeReadonly ? readonlyId : null,
         resolveStatusDescribedBy({
@@ -270,6 +281,7 @@
           warnId,
           helperId,
         }),
+        ariaDescribedBy,
       )}
       class:bx--checkbox={true}
       on:click={(event) => {
