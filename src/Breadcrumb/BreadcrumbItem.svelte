@@ -33,18 +33,27 @@
 
   import { getContext, setContext } from "svelte";
   import Link from "../Link/Link.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
 
   setContext("carbon:BreadcrumbItem", {});
 
   const { separator: separatorStore } = getContext("carbon:Breadcrumb");
 
   $: ({ "aria-current": ariaCurrent, ...liProps } = $$restProps);
+  // With an `href`, naming and description belong on the link, not the `li`.
+  // Without one there is no built-in focusable element, so they stay put.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: linkItemProps,
+  } = splitAriaNaming(liProps));
 </script>
 
 <li
   class:bx--breadcrumb-item={true}
   class:bx--breadcrumb-item--current={isCurrentPage || ariaCurrent === "page"}
-  {...liProps}
+  {...href ? linkItemProps : liProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -54,6 +63,9 @@
     <Link
       {href}
       aria-current={ariaCurrent ?? (isCurrentPage ? "page" : undefined)}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
     >
       {#if $$slots.icon || icon}
         <div class:bx--breadcrumb-item__icon={true}>
