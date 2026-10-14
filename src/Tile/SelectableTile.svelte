@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {label}
    * @event {string} "select"
    * @event {string} "deselect"
    */
@@ -62,6 +63,7 @@
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -92,6 +94,14 @@
     }
     selected = $selectedValues.includes(value);
   }
+
+  // Naming and description belong on the input, not the label.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: labelProps,
+  } = splitAriaNaming($$restProps));
 </script>
 
 <input
@@ -106,6 +116,9 @@
   form={$groupForm ?? form}
   {title}
   {disabled}
+  aria-label={ariaLabel}
+  aria-labelledby={ariaLabelledBy}
+  aria-describedby={ariaDescribedBy}
   on:click={(event) => {
     pendingShiftKey = event.shiftKey;
   }}
@@ -151,7 +164,7 @@
   class:bx--tile--light={light}
   class:bx--tile--disabled={disabled}
   class:bx--tile--full-height={fullHeight}
-  {...$$restProps}
+  {...labelProps}
   on:click
   on:mouseover
   on:mouseenter
