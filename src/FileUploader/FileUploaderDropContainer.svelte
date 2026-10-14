@@ -3,6 +3,7 @@
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
    * @event {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" }>} rejected
+   * @restProps {div}
    */
 
   /**
@@ -79,14 +80,6 @@
    */
   export let capture = undefined;
 
-  /**
-   * Id of an element that describes the drop container, such as text listing the
-   * accepted file types and size limit. Set as `aria-describedby` on the
-   * drop container so screen readers announce it with the label.
-   * @type {string | undefined}
-   */
-  export let describedBy = undefined;
-
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -162,12 +155,20 @@
   function handleFormReset() {
     files = [];
   }
+
+  // Rest props go to the wrapper, which never takes focus. Move the naming
+  // and description attributes to the drop target that does.
+  $: ({
+    "aria-describedby": ariaDescribedBy,
+    "aria-labelledby": ariaLabelledBy,
+    ...wrapperRestProps
+  } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--file={true}
-  {...$$restProps}
+  {...wrapperRestProps}
   on:dragover
   on:dragover|preventDefault|stopPropagation={(event) => {
     if (!disabled) {
@@ -203,7 +204,8 @@
   <label
     for={id}
     {role}
-    aria-describedby={describedBy}
+    aria-describedby={ariaDescribedBy}
+    aria-labelledby={ariaLabelledBy}
     tabindex={disabled ? -1 : tabindex}
     aria-disabled={disabled || undefined}
     class:bx--file-browse-btn={true}

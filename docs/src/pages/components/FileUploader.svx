@@ -111,8 +111,11 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 The `labelDescription` is linked to the add button with `aria-describedby`, so
 screen readers announce the accepted types and limits when the button is
-focused. Long file names end in an ellipsis. Hovering a truncated name shows
-it in full.
+focused. An `aria-describedby` or `aria-labelledby` you set on `FileUploader`
+also goes to the button. Your description ids join the built-in one.
+
+Long file names end in an ellipsis. Hovering a truncated name shows it in
+full.
 
 ### Custom label
 
@@ -501,15 +504,16 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
 
 ### Description
 
-Set `describedBy` to the id of text that lists the accepted types and limits.
-It becomes the drop target's `aria-describedby`, so screen readers announce it
-on focus. `FileUploaderButton` accepts the same prop.
+Set `aria-describedby` to the id of text that lists the accepted types and
+limits. It goes to the focusable drop target, not the wrapper, so screen
+readers announce it on focus. `aria-labelledby` works the same way.
+`FileUploaderButton` puts both on its button instead of the hidden input.
 
 <p id="drop-help" class="bx--label-description">
   Max file size is 1 MB. Supported file types are .pdf and .docx.
 </p>
 <FileUploaderDropContainer
-  describedBy="drop-help"
+  aria-describedby="drop-help"
   accept={[".pdf", ".docx"]}
   labelText="Drag and drop files here or click to upload"
 />

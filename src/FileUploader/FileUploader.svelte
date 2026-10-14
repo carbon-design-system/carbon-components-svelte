@@ -21,6 +21,7 @@
    * @event {ReadonlyArray<File>} change
    * @event {void} clear
    * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @restProps {div}
    */
 
   /**
@@ -223,6 +224,7 @@
 
   import { createEventDispatcher, getContext, tick } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
@@ -238,6 +240,14 @@
 
   $: descriptionId = `${id}-description`;
   $: hasDescription = Boolean(labelDescription || $$slots.labelDescription);
+
+  // The add button takes focus, not the wrapper, so it gets the naming and
+  // description attributes. A consumer's description joins the built-in one.
+  $: ({
+    "aria-describedby": ariaDescribedBy,
+    "aria-labelledby": ariaLabelledBy,
+    ...wrapperRestProps
+  } = $$restProps);
 
   let prevFiles = [];
 
@@ -314,7 +324,7 @@
 <div
   {id}
   class:bx--form-item={true}
-  {...$$restProps}
+  {...wrapperRestProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -349,7 +359,11 @@
     {multiple}
     {kind}
     size={effectiveSize}
-    describedBy={hasDescription ? descriptionId : undefined}
+    aria-describedby={joinDescribedBy(
+      hasDescription && descriptionId,
+      ariaDescribedBy,
+    )}
+    aria-labelledby={ariaLabelledBy}
     bind:ref
     bind:files
     on:change={(event) => {
