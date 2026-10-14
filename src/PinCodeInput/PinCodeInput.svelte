@@ -198,8 +198,10 @@
   } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -255,6 +257,14 @@
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
+
+  // Naming and description belong on the fieldset, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   $: legendId = `legend-${id}`;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
@@ -537,13 +547,15 @@
   class:bx--pin-code-input--readonly={readonly}
   class:bx--pin-code-input--fluid={isFluid}
   class:bx--pin-code-input--xs={effectiveSize === "xs"}
-  {...$$restProps}
+  {...wrapperProps}
 >
   <fieldset
     use:formReset={handleFormReset}
     class:bx--pin-code-input__fieldset={true}
     {disabled}
-    aria-describedby={describedById}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={joinDescribedBy(describedById, ariaDescribedBy)}
   >
     {#if labelText || $$slots.labelChildren}
       <!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
