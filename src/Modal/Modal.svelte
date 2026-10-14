@@ -11,6 +11,7 @@
    * @event click:button--secondary
    * @type {object}
    * @property {string} text
+   * @restProps {div}
    */
 
   /**
@@ -159,7 +160,9 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
@@ -224,8 +227,15 @@
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
   $: modalBodyId = `bx--modal-body--${id}`;
-  $: ariaLabel =
-    modalLabel ?? $$props["aria-label"] ?? modalAriaLabel ?? modalHeading;
+  // The root carries `role="presentation"`, so consumer naming and
+  // description go on the dialog element instead.
+  $: ({
+    ariaLabel: consumerLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
+  $: ariaLabel = modalLabel ?? consumerLabel ?? modalAriaLabel ?? modalHeading;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -238,8 +248,7 @@
   class:is-visible={open}
   class:bx--modal--danger={danger}
   inert={open ? undefined : true}
-  {...$$restProps}
-  aria-label={undefined}
+  {...wrapperProps}
   on:keydown
   on:keydown={(event) => {
     if (open) {
@@ -299,9 +308,13 @@
     bind:this={innerModalRef}
     tabindex="-1"
     role={alert ? (passiveModal ? "alert" : "alertdialog") : "dialog"}
-    aria-describedby={alert && !passiveModal ? modalBodyId : undefined}
+    aria-describedby={joinDescribedBy(
+      alert && !passiveModal ? modalBodyId : undefined,
+      ariaDescribedBy,
+    )}
     aria-modal="true"
     aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
     class:bx--modal-container={true}
     class:bx--modal-container--xs={size === "xs"}
     class:bx--modal-container--sm={size === "sm"}
