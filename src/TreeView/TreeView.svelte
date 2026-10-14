@@ -2131,8 +2131,10 @@
     class:bx--tree--multiselect-modifier={isMultiselect &&
       multiselectModifierActive}
     style="height: {containerHeightStyle}; overflow-y: auto;"
-    aria-label={hideLabel ? labelText : undefined}
-    aria-labelledby={hideLabel ? undefined : labelId}
+    aria-label={$$restProps["aria-label"] ??
+      (hideLabel ? labelText : undefined)}
+    aria-labelledby={$$restProps["aria-labelledby"] ??
+      (hideLabel || $$restProps["aria-label"] ? undefined : labelId)}
     aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
     on:mousedown|capture={syncModifierFromEvent}
     on:selectstart|capture={handleMultiselectSelectStart}
@@ -2174,8 +2176,10 @@
     class:bx--tree--checkbox={isCheckboxMode}
     class:bx--tree--multiselect-modifier={isMultiselect &&
       multiselectModifierActive}
-    aria-label={hideLabel ? labelText : undefined}
-    aria-labelledby={hideLabel ? undefined : labelId}
+    aria-label={$$restProps["aria-label"] ??
+      (hideLabel ? labelText : undefined)}
+    aria-labelledby={$$restProps["aria-labelledby"] ??
+      (hideLabel || $$restProps["aria-label"] ? undefined : labelId)}
     aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
     on:mousedown|capture={syncModifierFromEvent}
     on:selectstart|capture={handleMultiselectSelectStart}

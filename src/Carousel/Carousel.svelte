@@ -214,7 +214,7 @@
   class:bx--carousel={true}
   role="region"
   aria-roledescription="carousel"
-  aria-label={labelText}
+  aria-label={$$restProps["aria-label"] ?? labelText}
   on:keydown={handleKeydown}
 >
   <div
