@@ -38,9 +38,18 @@
 
   import { createEventDispatcher } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  // Naming and description belong on the trigger button, not the wrapper.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
 
   let animation = undefined;
 
@@ -59,7 +68,7 @@
   class:bx--disclosure--open={open}
   class:bx--disclosure--expanding={animation === "expanding"}
   class:bx--disclosure--collapsing={animation === "collapsing"}
-  {...$$restProps}
+  {...wrapperProps}
   on:animationend
   on:animationend={() => {
     animation = undefined;
@@ -68,6 +77,9 @@
   <button
     type="button"
     class:bx--disclosure__control={true}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
     aria-expanded={open}
     aria-controls="{id}-content"
     on:click
