@@ -177,8 +177,13 @@ $css--helpers: true;
 
   // `span.`: the page-size `<label>` shares the class.
   span.#{$prefix}--pagination__text { // ccs: element
-    margin-left: $carbon--spacing-05;
     color: $text-02;
+  }
+
+  // ccs: the gap after the page-size select, split out of the `span.` rule
+  // so a standalone `PaginationStatus` outside `__left` gets no indent.
+  .#{$prefix}--pagination__left .#{$prefix}--pagination__items-count {
+    margin-left: $carbon--spacing-05;
   }
 
   .#{$prefix}--pagination__button,
