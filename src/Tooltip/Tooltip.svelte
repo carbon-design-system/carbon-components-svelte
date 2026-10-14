@@ -3,6 +3,7 @@
    * @template [Icon=any]
    * @event {null} open
    * @event {null} close
+   * @restProps {div}
    */
 
   /**
@@ -115,7 +116,9 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -292,15 +295,29 @@
   else tooltipHandoff.release();
   $: if (!open) openedByHover.set(false);
   $: notifyOpenChange(open);
+  // Naming and description belong on the `role="button"` trigger, not the
+  // wrapper. A consumer `aria-describedby` joins the open tooltip id; a
+  // consumer `aria-label` or `aria-labelledby` replaces the built-in name.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperProps,
+  } = splitAriaNaming($$restProps));
   $: buttonProps = {
     role: "button",
     "aria-haspopup": "true",
     id: hideIcon ? triggerId : undefined,
     class: hideIcon ? "bx--tooltip__label" : "bx--tooltip__trigger",
     "aria-expanded": open,
-    "aria-describedby": open ? tooltipId : undefined,
-    "aria-labelledby": triggerText ? triggerId : undefined,
-    "aria-label": triggerText ? undefined : iconDescription,
+    "aria-describedby": joinDescribedBy(
+      open ? tooltipId : undefined,
+      ariaDescribedBy,
+    ),
+    "aria-labelledby":
+      ariaLabelledBy ??
+      (ariaLabel ? undefined : triggerText ? triggerId : undefined),
+    "aria-label": ariaLabel ?? (triggerText ? undefined : iconDescription),
     tabindex,
     style: hideIcon ? $$restProps.style : undefined,
   };
@@ -310,7 +327,7 @@
 <div
   style:position="relative"
   style:z-index={open ? 1 : undefined}
-  {...$$restProps}
+  {...wrapperProps}
   on:mouseleave={handleMouseleave}
 >
   {#if !hideIcon}
