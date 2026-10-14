@@ -12,13 +12,18 @@ const HYDRATION_MARKER = /<!--[\s\S]*?-->|<!>/g;
 const WHITESPACE_BETWEEN_TAGS = />\s+</g;
 
 /**
- * The random part of `uniqueId()` ids, one alternative per prefix `src/`
- * passes it. Matches inside derived ids too (`helper-ccs-…`, `ccs-…-label`).
- * The lookbehind skips custom properties (`--ccs-separator`) and classes
+ * A `uniqueId()` id: one alternative per prefix `src/` passes it, then the
+ * random part.
+ */
+export const RANDOM_ID_SOURCE =
+  "(?:ccs|cua|ctag|label|tree|structured-list)-[a-z0-9]{8,}";
+
+/**
+ * Matches inside derived ids too (`helper-ccs-…`, `ccs-…-label`). The
+ * lookbehind skips custom properties (`--ccs-separator`) and classes
  * (`bx--tree-node`, `__label-wrapper`).
  */
-export const RANDOM_ID =
-  /(?<!\w|--)(?:ccs|cua|ctag|label|tree|structured-list)-[a-z0-9]{8,}/g;
+export const RANDOM_ID = new RegExp(`(?<!\\w|--)${RANDOM_ID_SOURCE}`, "g");
 
 /**
  * Makes server output stable for assertions: strips hydration comments,

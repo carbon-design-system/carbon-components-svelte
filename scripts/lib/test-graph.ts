@@ -11,7 +11,8 @@ import { posix } from "node:path";
  * "depends on everything" instead of being dropped:
  *
  * - an import that doesn't resolve, a non-literal `import()`/`require()`/
- *   `page.goto()`, or an unknown bare specifier;
+ *   `page.goto()`, or an unknown bare specifier (a `// @depends-on` comment
+ *   also covers a non-literal `import()`/`require()`);
  * - a file that reads the disk (`node:fs`, Bun's file APIs) without
  *   declaring what it reads in a `// @depends-on <glob> [glob…]` comment.
  *
@@ -214,7 +215,11 @@ export function parseDependencies(
   for (const [, , specifier] of source.matchAll(CALL_WITH_LITERAL)) {
     add(specifier);
   }
-  if (NON_LITERAL_CALL.test(source)) {
+  const declared = [...source.matchAll(DEPENDS_ON)].flatMap(([, list]) =>
+    list.split(LIST_SEPARATOR).filter(Boolean),
+  );
+  // A declaration names what the import can reach, so it replaces the guess.
+  if (NON_LITERAL_CALL.test(source) && declared.length === 0) {
     deps.unknown.push("non-literal dynamic import");
   }
 
@@ -246,9 +251,6 @@ export function parseDependencies(
     }
   }
 
-  const declared = [...source.matchAll(DEPENDS_ON)].flatMap(([, list]) =>
-    list.split(LIST_SEPARATOR).filter(Boolean),
-  );
   for (const glob of declared) deps.patterns.push(globToRegExp(glob));
   if (READS_DISK.test(source) && declared.length === 0) {
     deps.unknown.push("reads the disk without @depends-on");
