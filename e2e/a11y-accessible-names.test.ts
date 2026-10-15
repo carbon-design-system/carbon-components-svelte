@@ -173,15 +173,8 @@ test("controls expose their names and descriptions", async ({ page }) => {
 
   const tree = await getAXTree(page);
   try {
-    // Skip the visually hidden file inputs behind the file uploader buttons.
-    // Chromium exposes them as buttons with the same name.
     const results = await Promise.all(
-      cases.map(async ({ role, name }) =>
-        (await tree.query(role, name)).filter(
-          (control) =>
-            !(control.tagName === "INPUT" && control.type === "file"),
-        ),
-      ),
+      cases.map(({ role, name }) => tree.query(role, name)),
     );
 
     for (const [
