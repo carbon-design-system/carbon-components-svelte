@@ -52,6 +52,13 @@ Set `showMoreText` and `showLessText` to customize the expand/collapse button te
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetCustomText" />
 
+### Full width
+
+A single-line or multi-line snippet stops at 48rem. Set `fullWidth` to fill the container, such as a log or a response in a wide panel.
+
+<CodeSnippet type="multi" fullWidth code={`GET /v1/projects?limit=10
+200 OK  80 ms  534 B`} />
+
 ### Wrapped text
 
 By default, the code snippet preserves text formatting and does not wrap text. Set `wrapText` to `true` to wrap long lines instead of scrolling horizontally.

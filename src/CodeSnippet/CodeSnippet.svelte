@@ -63,6 +63,12 @@
    */
   export let wrapText = false;
 
+  /**
+   * Set to `true` for a single-line or multi-line snippet to fill its
+   * container instead of stopping at 48rem.
+   */
+  export let fullWidth = false;
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -568,6 +574,7 @@
     class:bx--snippet--inline={type === "inline"}
     class:bx--snippet--multi={type === "multi"}
     class:bx--snippet--disabled={type !== "inline" && disabled}
+    class:bx--snippet--full-width={fullWidth}
     {...wrapperProps}
     on:mouseover
     on:mouseenter

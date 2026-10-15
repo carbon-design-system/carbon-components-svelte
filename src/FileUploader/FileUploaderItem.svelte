@@ -4,6 +4,12 @@
    */
 
   /**
+   * Set to `true` for the item to fill the container instead of
+   * stopping at 20rem.
+   */
+  export let fullWidth = false;
+
+  /**
    * Specify the file uploader status.
    * @type {"uploading" | "edit" | "complete"}
    */
@@ -66,6 +72,7 @@
 <span
   {id}
   class:bx--file__selected-file={true}
+  class:bx--file__selected-file--full-width={fullWidth}
   class:bx--file__selected-file--invalid={invalid}
   class:bx--file__selected-file--disabled={disabled}
   class:bx--file__selected-file--md={size === "field"}
