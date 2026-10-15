@@ -51,4 +51,20 @@ describe("Slider form reset", () => {
     expect(getInput(container).value).toBe("30");
     expect(getBoundText()).toBe("30");
   });
+
+  it("submits and keeps the value when read-only", async () => {
+    const { container, rerender } = render(SliderForm, {
+      props: { readonly: true, value: 30 },
+    });
+
+    expect(new FormData(getForm()).get("level")).toBe("30");
+
+    await rerender({ readonly: true, value: 55 });
+    getForm().reset();
+    await flushFormReset();
+
+    expect(getInput(container).value).toBe("55");
+    expect(getBoundText()).toBe("55");
+    expect(new FormData(getForm()).get("level")).toBe("55");
+  });
 });

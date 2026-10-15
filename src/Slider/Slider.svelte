@@ -299,8 +299,9 @@
   on:mouseenter
   on:mouseleave
 >
+  <!-- A hidden input cannot be labelled; the thumb is named through aria-labelledby. -->
   <label
-    for={inputId}
+    for={hideTextInput || readonly ? undefined : inputId}
     id={labelId}
     class:bx--label={true}
     class:bx--label--disabled={disabled}
@@ -462,7 +463,7 @@
         bind:this={textInputRef}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:reflectDefaultValue={value}
-        type={hideTextInput ? "hidden" : inputType}
+        type={hideTextInput || readonly ? "hidden" : inputType}
         id={inputId}
         {name}
         {form}
@@ -508,6 +509,20 @@
         on:focus={handleTextInputFocus}
         on:blur
       >
+      <!-- NVDA announces a read-only number input as editable, so a read-only
+        slider shows its value as text. The thumb already exposes the value. -->
+      {#if readonly && !hideTextInput}
+        <div
+          aria-hidden="true"
+          class:bx--text-input={true}
+          class:bx--slider-text-input={true}
+          class:bx--slider-text-input--readonly={true}
+          class:bx--text-input--light={light}
+          class:bx--slider-text-input--xs={effectiveSize === "xs"}
+        >
+          {value}
+        </div>
+      {/if}
     </div>
   </div>
   {#if showInvalid}

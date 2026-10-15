@@ -343,6 +343,16 @@
     ~ .#{$prefix}--slider-text-input {
     background-color: transparent;
   }
+
+  // A read-only slider shows its value as text in place of the number input.
+  // The container disables selection for dragging; the value stays copyable.
+  .#{$prefix}--slider-text-input--readonly {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    user-select: text;
+  }
 }
 
 /// Two-handle range slider (Carbon v11 port for v10)
