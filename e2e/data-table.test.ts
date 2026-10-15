@@ -272,4 +272,30 @@ test.describe("DataTable", () => {
     await expect(secondRowRadio).toBeChecked();
     await expect(firstRowRadio).not.toBeChecked();
   });
+
+  test("fits a narrow grid column and scrolls the table", async ({ page }) => {
+    const grid = page.getByTestId("data-table-narrow-grid");
+    const width = (
+      await grid.locator(".bx--data-table-container").boundingBox()
+    )?.width;
+    expect(width).toBe(300);
+
+    const scrolls = await grid
+      .locator(".bx--data-table-content")
+      .evaluate((node) => node.scrollWidth > node.clientWidth);
+    expect(scrolls).toBe(true);
+  });
+
+  test("lets the keyboard reach a table that scrolls", async ({ page }) => {
+    await expect(
+      page
+        .getByTestId("data-table-narrow-grid")
+        .locator(".bx--data-table-content"),
+    ).toHaveAttribute("tabindex", "0");
+    await expect(
+      page
+        .getByTestId("data-table-narrow-sticky")
+        .locator(".bx--data-table_inner-container"),
+    ).toHaveAttribute("tabindex", "0");
+  });
 });
