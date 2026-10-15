@@ -58,4 +58,21 @@ test.describe("Checkbox", () => {
       await label.evaluate((el) => getComputedStyle(el, "::after").transform),
     ).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
+
+  test.describe("inline", () => {
+    test("has no outer margin", async ({ page }) => {
+      const wrapper = page
+        .getByTestId("checkbox-row")
+        .locator(".bx--checkbox-wrapper");
+      await expect(wrapper).toHaveCSS("margin-top", "0px");
+      await expect(wrapper).toHaveCSS("margin-bottom", "0px");
+    });
+
+    test("keeps the stack margins without it", async ({ page }) => {
+      const wrapper = page
+        .getByTestId("checkbox-row-default")
+        .locator(".bx--checkbox-wrapper");
+      await expect(wrapper).toHaveCSS("margin-top", "3px");
+    });
+  });
 });
