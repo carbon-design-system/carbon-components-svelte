@@ -55,4 +55,28 @@ test.describe("Slider", () => {
     await expect(page.getByTestId("value-display")).toHaveText("100");
     await expect(thumb).toHaveAttribute("aria-valuenow", "100");
   });
+
+  test("shows a four-digit value in full", async ({ page }) => {
+    const input = page.getByRole("spinbutton", { name: "Monthly limit" });
+    await expect(input).toHaveValue("2500");
+    // An input's scrollWidth doesn't grow with clipped text, so measure the
+    // value against the room inside its padding.
+    const fits = await input.evaluate(async (node: HTMLInputElement) => {
+      await document.fonts.ready;
+      const style = getComputedStyle(node);
+      const context = document.createElement("canvas").getContext("2d");
+      if (!context) return false;
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      const spacing = Number.parseFloat(style.letterSpacing) || 0;
+      const text =
+        context.measureText(node.value).width + spacing * node.value.length;
+      const room =
+        node.clientWidth -
+        Number.parseFloat(style.paddingLeft) -
+        Number.parseFloat(style.paddingRight);
+      return text <= room;
+    });
+
+    expect(fits).toBe(true);
+  });
 });

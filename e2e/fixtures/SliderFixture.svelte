@@ -13,3 +13,5 @@
   step={1}
 />
 <div data-testid="value-display">{value}</div>
+
+<Slider labelText="Monthly limit" value={2500} min={500} max={5000} step={50} />
