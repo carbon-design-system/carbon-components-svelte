@@ -13,6 +13,7 @@
   export let maxLabel = "";
   export let formatValue: ((value: number) => string) | undefined = undefined;
   export let hideTextInput = false;
+  export let hideRangeLabels = false;
   export let fullWidth = false;
   export let orientation: ComponentProps<Slider>["orientation"] = "horizontal";
   export let min = 0;
@@ -66,6 +67,7 @@
     {maxLabel}
     {formatValue}
     {hideTextInput}
+    {hideRangeLabels}
     {fullWidth}
     {orientation}
     {light}
@@ -107,6 +109,7 @@
     {maxLabel}
     {formatValue}
     {hideTextInput}
+    {hideRangeLabels}
     {fullWidth}
     {orientation}
     {light}

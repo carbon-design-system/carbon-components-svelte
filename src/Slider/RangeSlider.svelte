@@ -89,6 +89,12 @@
   export let hideTextInput = false;
 
   /**
+   * Set to `true` to hide the min and max labels beside the track,
+   * as when a readout elsewhere already shows the range.
+   */
+  export let hideRangeLabels = false;
+
+  /**
    * Set to `true` for the slider to span
    * the full width of its containing element.
    * The track then also shrinks below its 200px minimum in a narrower one.
@@ -539,9 +545,11 @@
         />
       {/if}
     </div>
-    <span class:bx--slider__range-label={true}
-      >{formatRangeLabel(minLabel, min)}</span
-    >
+    {#if !hideRangeLabels}
+      <span class:bx--slider__range-label={true}
+        >{formatRangeLabel(minLabel, min)}</span
+      >
+    {/if}
     <div
       bind:this={ref}
       class:bx--slider={true}
@@ -718,9 +726,11 @@
         </div>
       {/if}
     </div>
-    <span class:bx--slider__range-label={true}
-      >{formatRangeLabel(maxLabel, max)}</span
-    >
+    {#if !hideRangeLabels}
+      <span class:bx--slider__range-label={true}
+        >{formatRangeLabel(maxLabel, max)}</span
+      >
+    {/if}
     <div
       class:bx--slider-text-input-wrapper={true}
       class:bx--slider-text-input-wrapper--upper={true}
