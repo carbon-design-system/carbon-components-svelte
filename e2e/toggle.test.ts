@@ -38,4 +38,29 @@ test.describe("Toggle", () => {
     const toggle = page.getByRole("switch", { name: "Disabled toggle" });
     await expect(toggle).toBeDisabled();
   });
+
+  test("lays the state text out inside the toggle's box", async ({ page }) => {
+    const row = page.getByTestId("toggle-row");
+    const textRight = await row
+      .locator(".bx--toggle__text--off")
+      .evaluate((node) => node.getBoundingClientRect().right);
+    const neighborLeft = await page
+      .getByTestId("toggle-row-neighbor")
+      .evaluate((node) => node.getBoundingClientRect().left);
+
+    expect(textRight).toBeLessThanOrEqual(neighborLeft);
+  });
+
+  test("keeps its width when the state flips", async ({ page }) => {
+    const toggle = page.getByTestId("toggle-row").locator(".bx--form-item");
+    const before = (await toggle.boundingBox())?.width ?? 0;
+    await page.getByTestId("toggle-row").getByText("Paused").click();
+    await expect(
+      page.getByRole("switch", { name: "Live prices" }),
+    ).toBeChecked();
+    const after = (await toggle.boundingBox())?.width ?? 0;
+
+    expect(before).toBeGreaterThan(48);
+    expect(after).toBe(before);
+  });
 });

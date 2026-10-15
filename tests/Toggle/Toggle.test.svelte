@@ -27,6 +27,8 @@
 
 <Toggle size="sm" labelText="Small toggle" />
 
+<Toggle labelText="No state text" labelA="" labelB="" />
+
 <Toggle disabled labelText="Disabled toggle" />
 
 <Toggle
