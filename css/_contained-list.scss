@@ -219,6 +219,41 @@
       .#{$prefix}--contained-list-item__content:not(:disabled):hover {
       background-color: $hover-ui;
     }
+
+    .#{$prefix}--contained-list-item--selected
+      .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+      background-color: $hover-selected-ui;
+    }
+
+    @media (forced-colors: active) {
+      .#{$prefix}--contained-list-item--selected
+        .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+        background-color: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+      }
+    }
+  }
+
+  // The selected item of a master list, whose details show beside it: a
+  // selected fill and a bar on its leading edge.
+  .#{$prefix}--contained-list-item--selected
+    .#{$prefix}--contained-list-item__content {
+    background-color: $selected-ui;
+    box-shadow: inset 3px 0 0 $interactive-04;
+  }
+
+  // Forced colors drop the fill and the bar, so mark the item with the
+  // system highlight instead, as ToggleButtonGroup does for a pressed button.
+  @media (forced-colors: active) {
+    .#{$prefix}--contained-list-item--selected
+      .#{$prefix}--contained-list-item__content {
+      background-color: Highlight;
+      color: HighlightText;
+      // Keep the browser from drawing its text backplate (Canvas) behind
+      // HighlightText, which hides the label.
+      forced-color-adjust: none;
+    }
   }
 
   .#{$prefix}--contained-list-item--clickable
