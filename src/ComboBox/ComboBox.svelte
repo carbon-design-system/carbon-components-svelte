@@ -927,12 +927,11 @@
   }
 
   /**
-   * Whether the input has focus. Asks the input's own root, so a ComboBox
-   * inside a shadow root is not mistaken for an unfocused one.
+   * Whether the input has focus.
    * @returns {boolean}
    */
   function inputHasFocus() {
-    return ref.getRootNode().activeElement === ref;
+    return document.activeElement === ref;
   }
 
   /**

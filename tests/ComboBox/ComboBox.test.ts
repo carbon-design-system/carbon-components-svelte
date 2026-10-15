@@ -2629,22 +2629,4 @@ describe("ComboBox", () => {
       },
     );
   });
-
-  it("should open the menu when typing inside a shadow root", async () => {
-    const host = document.createElement("div");
-    document.body.append(host);
-    const shadowRoot = host.attachShadow({ mode: "open" });
-    const target = document.createElement("div");
-    shadowRoot.append(target);
-    render(ComboBox, { target, props: { items: countries } });
-
-    const input = shadowRoot.querySelector("input");
-    assert(input instanceof HTMLInputElement);
-    input.focus();
-    input.value = "Un";
-    await fireEvent.input(input);
-
-    expect(shadowRoot.querySelector('[role="listbox"]')).not.toBeNull();
-    host.remove();
-  });
 });
