@@ -14,7 +14,7 @@ export const CONSUMER_LABEL_ID = "contract-label";
 export const CONSUMER_DESCRIPTION_ID = "contract-description";
 
 // biome-ignore lint/suspicious/noExplicitAny: cases render many component types
-type Rendered = RenderResult<any>;
+type Rendered = RenderResult<any, any>;
 
 export type AriaCase = {
   /** Component name, as exported from the package. */
