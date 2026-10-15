@@ -64,9 +64,9 @@ describe("FileUploaderDropContainer", () => {
     assert(input instanceof HTMLInputElement);
     expect(input).toBeDisabled();
 
-    const label = container.querySelector("label");
-    assert(label);
-    expect(label).toHaveClass("bx--file-browse-btn--disabled");
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target);
+    expect(target).toHaveClass("bx--file-browse-btn--disabled");
   });
 
   it("should expose aria-disabled and remove from tab order when disabled", () => {
@@ -74,18 +74,18 @@ describe("FileUploaderDropContainer", () => {
       props: { disabled: true },
     });
 
-    const label = container.querySelector("label");
-    assert(label instanceof HTMLElement);
-    expect(label).toHaveAttribute("aria-disabled", "true");
-    expect(label).toHaveAttribute("tabindex", "-1");
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target instanceof HTMLElement);
+    expect(target).toHaveAttribute("aria-disabled", "true");
+    expect(target).toHaveAttribute("tabindex", "-1");
   });
 
   it("should not expose aria-disabled when not disabled", () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const label = container.querySelector("label");
-    assert(label instanceof HTMLElement);
-    expect(label).not.toHaveAttribute("aria-disabled");
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target instanceof HTMLElement);
+    expect(target).not.toHaveAttribute("aria-disabled");
   });
 
   it("should forward capture to the input", () => {
@@ -790,10 +790,10 @@ describe("FileUploaderDropContainer", () => {
     assert(input instanceof HTMLInputElement);
 
     const clickSpy = vi.spyOn(input, "click");
-    const label = container.querySelector("label");
-    assert(label instanceof HTMLElement);
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target instanceof HTMLElement);
 
-    label.focus();
+    target.focus();
     await user.keyboard("{Enter}");
 
     expect(clickSpy).toHaveBeenCalled();
@@ -802,12 +802,12 @@ describe("FileUploaderDropContainer", () => {
   it("should place focusable role on a single element (no duplicated button semantics)", () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const label = container.querySelector("label");
-    assert(label instanceof HTMLElement);
-    // The label is the single focusable role="button" element (matches
-    // Carbon's reference markup and carries its custom focus outline).
-    expect(label).toHaveAttribute("tabindex", "0");
-    expect(label).toHaveAttribute("role", "button");
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target instanceof HTMLElement);
+    // The drop target is the single focusable role="button" element and
+    // carries Carbon's custom focus outline.
+    expect(target).toHaveAttribute("tabindex", "0");
+    expect(target).toHaveAttribute("role", "button");
 
     const dropContainer = container.querySelector(".bx--file__drop-container");
     assert(dropContainer instanceof HTMLElement);
@@ -821,9 +821,9 @@ describe("FileUploaderDropContainer", () => {
       props: { role: "button" },
     });
 
-    const label = container.querySelector("label");
-    assert(label instanceof HTMLElement);
-    expect(label).toHaveAttribute("role", "button");
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target instanceof HTMLElement);
+    expect(target).toHaveAttribute("role", "button");
   });
 
   it("should handle tabindex prop", () => {
@@ -831,9 +831,9 @@ describe("FileUploaderDropContainer", () => {
       props: { tabindex: "-1" },
     });
 
-    const label = container.querySelector("label");
-    assert(label instanceof HTMLElement);
-    expect(label).toHaveAttribute("tabindex", "-1");
+    const target = container.querySelector(".bx--file-browse-btn");
+    assert(target instanceof HTMLElement);
+    expect(target).toHaveAttribute("tabindex", "-1");
   });
 
   it("should handle name attribute", () => {
@@ -855,8 +855,66 @@ describe("FileUploaderDropContainer", () => {
     assert(input instanceof HTMLInputElement);
     expect(input).toHaveAttribute("id", "custom-drop");
 
-    const label = container.querySelector("label");
-    assert(label);
-    expect(label).toHaveAttribute("for", "custom-drop");
+    const target = screen.getByRole("button");
+    expect(target).toHaveAttribute("id", "custom-drop-drop-target");
+    expect(input).toHaveAttribute("aria-labelledby", "custom-drop-drop-target");
+  });
+
+  it("should render the drop target as a div, not a label", () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    // A <label> may not take role="button".
+    expect(container.querySelector("label")).toBeNull();
+    expect(screen.getByRole("button").tagName).toBe("DIV");
+  });
+
+  it("should open the file picker on click", async () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    const clickSpy = vi.spyOn(input, "click");
+
+    await user.click(screen.getByRole("button"));
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not open the file picker when disabled", async () => {
+    const { container } = render(FileUploaderDropContainer, {
+      props: { disabled: true },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    const clickSpy = vi.spyOn(input, "click");
+
+    await user.click(screen.getByRole("button"));
+
+    expect(clickSpy).not.toHaveBeenCalled();
+  });
+
+  it("should keep Space from scrolling the page", () => {
+    render(FileUploaderDropContainer);
+
+    const event = new KeyboardEvent("keydown", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+    screen.getByRole("button").dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it("should still let getByLabelText find the input", () => {
+    render(FileUploaderDropContainer, {
+      props: { labelText: "Drop files here" },
+    });
+
+    expect(screen.getByLabelText("Drop files here")).toHaveAttribute(
+      "type",
+      "file",
+    );
   });
 });

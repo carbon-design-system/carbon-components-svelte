@@ -156,6 +156,8 @@
     files = [];
   }
 
+  $: dropTargetId = `${id}-drop-target`;
+
   // Rest props go to the wrapper, which never takes focus. Move the naming
   // and description attributes to the drop target that does.
   $: ({
@@ -199,10 +201,11 @@
     }
   }}
 >
+  <!-- A <label> may not take role="button", so the drop target is a div
+       that opens the file picker itself. -->
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <label
-    for={id}
+  <div
+    id={dropTargetId}
     {role}
     aria-describedby={ariaDescribedBy}
     aria-labelledby={ariaLabelledBy}
@@ -210,10 +213,14 @@
     aria-disabled={disabled || undefined}
     class:bx--file-browse-btn={true}
     class:bx--file-browse-btn--disabled={disabled}
+    on:click={() => {
+      if (!disabled) ref.click();
+    }}
     on:keydown
     on:keydown={(event) => {
       if (event.key === " " || event.key === "Enter") {
-        ref.click();
+        event.preventDefault();
+        if (!disabled) ref.click();
       }
     }}
   >
@@ -223,13 +230,14 @@
     >
       <slot name="labelChildren"> {labelText} </slot>
     </div>
-  </label>
+  </div>
   <input
     bind:this={ref}
     use:formReset={handleFormReset}
     type="file"
     tabindex="-1"
     aria-hidden="true"
+    aria-labelledby={dropTargetId}
     {id}
     {disabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}

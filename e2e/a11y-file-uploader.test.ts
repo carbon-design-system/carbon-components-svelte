@@ -21,6 +21,15 @@ test.describe("FileUploader a11y", () => {
 });
 
 test.describe("FileUploaderDropContainer a11y", () => {
+  test("has no detectable accessibility violations", async ({ page }) => {
+    await page.goto("/file-uploader-drop-container.html");
+    await expect(page.getByRole("button")).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).include("#app").analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+
   test("exposes one drop target", async ({ page }) => {
     await page.goto("/file-uploader-drop-container.html");
 
