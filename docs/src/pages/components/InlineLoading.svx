@@ -19,6 +19,12 @@ Add a descriptive text to provide context about the loading operation.
 
 <InlineLoading description="Loading metrics..." />
 
+## Small size
+
+Set `size="sm"` for a status in a line of small text, such as "Saving…" in a toolbar or list row: 12px text and no minimum height.
+
+<InlineLoading size="sm" description="Saving…" />
+
 ## Statuses
 
 The component supports different status states to indicate progress:

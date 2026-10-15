@@ -30,6 +30,16 @@
     color: $text-02;
   }
 
+  // ccs: `size="sm"` fits a line of small text: label-sized text and no
+  // minimum height, which kept a status line 32px tall.
+  .#{$prefix}--inline-loading.#{$prefix}--inline-loading--sm {
+    min-height: 0;
+  }
+
+  .#{$prefix}--inline-loading--sm .#{$prefix}--inline-loading__text {
+    @include type-style('label-01');
+  }
+
   .#{$prefix}--inline-loading__animation {
     position: relative;
     display: flex;
