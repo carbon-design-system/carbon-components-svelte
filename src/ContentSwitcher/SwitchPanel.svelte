@@ -50,7 +50,7 @@
   bind:this={ref}
   role="tabpanel"
   tabindex="0"
-  aria-labelledby={switchId}
+  aria-labelledby={$$restProps["aria-label"] ? undefined : switchId}
   hidden={selected ? undefined : ""}
   {id}
   {...$$restProps}
