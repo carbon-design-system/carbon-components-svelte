@@ -95,4 +95,18 @@ describe("ComboBox close event", () => {
       trigger: "outside-click",
     });
   });
+
+  it('dispatches close with trigger "escape-key" on Tab when the text is already the selection', async () => {
+    const onClose = vi.fn();
+    render(ComboBoxClose, {
+      props: { onClose, selectedId: "1", value: "Email" },
+    });
+
+    await user.click(getInput());
+    await user.keyboard("{Tab}");
+
+    // Nothing new was selected, so Tab must not report a selection.
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
+  });
 });

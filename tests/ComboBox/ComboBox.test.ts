@@ -2477,4 +2477,174 @@ describe("ComboBox", () => {
     expect(listBox.children[0]).toHaveClass("bx--list-box__label");
     expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
+
+  const countries = [
+    { id: "US", text: "United States", price: 0 },
+    { id: "UK", text: "United Kingdom", price: 0 },
+  ];
+
+  describe("exact match on leave", () => {
+    it("should select an autofilled exact match when clicking away", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, { props: { items: countries } });
+
+      const input = getInput();
+      await user.click(input);
+      // Browser autofill writes the whole label and fires a single `input`.
+      input.value = "United States";
+      await fireEvent.input(input);
+
+      await user.click(document.body);
+
+      expect(input).toHaveValue("United States");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "US",
+        selectedItem: { id: "US", text: "United States", price: 0 },
+      });
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should select a typed exact match on Tab and normalize casing", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, { props: { items: countries } });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "united states");
+      await user.keyboard("{Tab}");
+
+      expect(input).toHaveValue("United States");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "US",
+        selectedItem: { id: "US", text: "United States", price: 0 },
+      });
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should still clear a partial match when clicking away", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, { props: { items: countries } });
+
+      const input = getInput();
+      await user.click(input);
+      // A prefix of both labels, not an exact match of either.
+      await user.type(input, "United");
+      await user.click(document.body);
+
+      expect(input).toHaveValue("");
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+
+    it("should select an exact match instead of keeping it as a custom value", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, { props: { items: countries, allowCustomValue: true } });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "united states");
+      await user.click(document.body);
+
+      // An exact label is in the items list, so it is not a custom value.
+      expect(input).toHaveValue("United States");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "US",
+        selectedItem: { id: "US", text: "United States", price: 0 },
+      });
+    });
+  });
+
+  describe("fill while another field has focus", () => {
+    // Autofill picked from another field fills this one without focusing it.
+    function renderWithOtherFieldFocused(props = {}) {
+      const { container } = render(ComboBox, {
+        props: { items: countries, ...props },
+      });
+      const otherField = document.createElement("input");
+      container.appendChild(otherField);
+      otherField.focus();
+      return otherField;
+    }
+
+    async function fill(text: string) {
+      const input = getInput();
+      input.value = text;
+      await fireEvent.input(input);
+      return input;
+    }
+
+    it("should select an exact match without opening the menu or taking focus", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const otherField = renderWithOtherFieldFocused();
+
+      const input = await fill("united states");
+
+      expect(input).toHaveValue("United States");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "US",
+        selectedItem: { id: "US", text: "United States", price: 0 },
+      });
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(otherField).toHaveFocus();
+    });
+
+    it("should not open the menu or take focus when the fill matches no item", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const otherField = renderWithOtherFieldFocused();
+
+      await fill("Canada");
+
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(otherField).toHaveFocus();
+    });
+
+    it("should clear the selection when the fill matches no item", async () => {
+      renderWithOtherFieldFocused({ selectedId: "US" });
+
+      const input = await fill("Canada");
+
+      expect(input).toHaveValue("");
+    });
+
+    it("should keep the filled text when it matches no item and allowCustomValue is set", async () => {
+      renderWithOtherFieldFocused({ selectedId: "US", allowCustomValue: true });
+
+      const input = await fill("Canada");
+
+      expect(input).toHaveValue("Canada");
+    });
+
+    it.each(["disabled", "readonly"])(
+      "should not select an exact match when %s",
+      async (prop) => {
+        const consoleLog = vi.spyOn(console, "log");
+        renderWithOtherFieldFocused({ [prop]: true });
+
+        await fill("United States");
+
+        expect(consoleLog).not.toHaveBeenCalledWith(
+          "select",
+          expect.anything(),
+        );
+      },
+    );
+  });
+
+  it("should open the menu when typing inside a shadow root", async () => {
+    const host = document.createElement("div");
+    document.body.append(host);
+    const shadowRoot = host.attachShadow({ mode: "open" });
+    const target = document.createElement("div");
+    shadowRoot.append(target);
+    render(ComboBox, { target, props: { items: countries } });
+
+    const input = shadowRoot.querySelector("input");
+    assert(input instanceof HTMLInputElement);
+    input.focus();
+    input.value = "Un";
+    await fireEvent.input(input);
+
+    expect(shadowRoot.querySelector('[role="listbox"]')).not.toBeNull();
+    host.remove();
+  });
 });

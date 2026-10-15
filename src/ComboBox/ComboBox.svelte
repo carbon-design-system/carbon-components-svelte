@@ -876,29 +876,56 @@
   }
 
   /**
-   * Commit the active typeahead suggestion when focus leaves the field.
-   * Mirrors the inline completion shown in the input: the highlighted item, or
-   * an exact case-insensitive match of the autocompleted value. Selecting
-   * normalizes the value to the item's casing and fires `select` reactively.
+   * Select `item` when focus leaves the field. Selecting normalizes the value
+   * to the item's casing and fires `select` reactively.
+   * @returns {true}
+   */
+  function commitOnLeave(item) {
+    valueBeforeOpen = "";
+    value = itemToString(item);
+    selectedId = item.id;
+    return true;
+  }
+
+  /**
+   * Commit the highlighted typeahead suggestion when focus leaves the field.
+   * Callers fall back to `commitExactMatch` for the autocompleted value.
    * Returns `true` when an item was committed.
    * @returns {boolean}
    */
   function acceptTypeaheadSuggestion() {
     if (!typeahead) return false;
-    let item =
+    const item =
       highlightedIndex > -1 ? filteredItems[highlightedIndex] : undefined;
-    if (!item) {
-      const inputValue = ref?.value ?? value;
-      item = filteredItems.find(
-        (candidate) =>
-          labelMatchesInput(candidate, inputValue) && !candidate.disabled,
-      );
-    }
     if (!item || item.disabled) return false;
-    valueBeforeOpen = "";
-    value = itemToString(item);
-    selectedId = item.id;
-    return true;
+    return commitOnLeave(item);
+  }
+
+  /**
+   * Select the enabled item whose label is an exact case-insensitive match
+   * of the input, as Enter does, so text the user typed or the browser
+   * autofilled is not thrown away when focus leaves the field. Text that
+   * already names the selected item commits nothing.
+   * Returns `true` when an item was committed.
+   * @returns {boolean}
+   */
+  function commitExactMatch() {
+    const inputValue = ref?.value ?? value;
+    const item = filteredItems.find(
+      (candidate) =>
+        labelMatchesInput(candidate, inputValue) && !candidate.disabled,
+    );
+    if (!item || item.id === selectedId) return false;
+    return commitOnLeave(item);
+  }
+
+  /**
+   * Whether the input has focus. Asks the input's own root, so a ComboBox
+   * inside a shadow root is not mistaken for an unfocused one.
+   * @returns {boolean}
+   */
+  function inputHasFocus() {
+    return ref.getRootNode().activeElement === ref;
   }
 
   /**
@@ -956,9 +983,10 @@
 
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
-      // Commit the inline suggestion on click-away so it matches Tab. The
-      // dismissal cause is still the outside click; `select` fires reactively.
-      acceptTypeaheadSuggestion();
+      // Commit the inline suggestion or an exact match on click-away so it
+      // matches Tab. The dismissal cause is still the outside click; `select`
+      // fires reactively.
+      acceptTypeaheadSuggestion() || commitExactMatch();
       close("outside-click");
     }
   }
@@ -1039,8 +1067,25 @@
             if (disabled || readonly) return;
             openMenu("click");
           }}
+          on:input|capture={(event) => {
+            // Autofill picked from another field fills this one without
+            // focusing it. Select an exact match here, in the capture phase,
+            // so the selection lands before `bind:value` triggers the
+            // unfocused-close reset in `afterUpdate`. Without a match, drop
+            // any old selection so that reset cannot restore its label over
+            // the filled text.
+            if (disabled || readonly || inputHasFocus()) return;
+            const match = items.find(
+              (item) =>
+                !item.disabled && labelMatchesInput(item, event.target.value),
+            );
+            selectedId = match?.id;
+          }}
           on:input
           on:input={(event) => {
+            // An unfocused fill leaves the menu and focus alone.
+            if (!inputHasFocus()) return;
+
             if (!open && event.target.value.length > 0) {
               openMenu("input");
             }
@@ -1111,10 +1156,11 @@
               highlightedIndex = -1;
               highlightOrigin = null;
             } else if (event.key === "Tab") {
-              // Commit a keyboard highlight or typeahead suggestion first.
-              // Tab is not prevented, so focus still advances.
+              // Commit a keyboard highlight, typeahead suggestion, or exact
+              // match first. Tab is not prevented, so focus still advances.
               const committed = commitHighlightedItem();
-              const accepted = committed || acceptTypeaheadSuggestion();
+              const accepted =
+                committed || acceptTypeaheadSuggestion() || commitExactMatch();
               if (!accepted) normalizeValue();
               close(accepted ? "select" : "escape-key");
             } else if (

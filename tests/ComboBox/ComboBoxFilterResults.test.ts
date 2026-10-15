@@ -30,9 +30,12 @@ describe("ComboBox filter result announcements", () => {
   const getStatus = () => screen.getByRole("status");
 
   // user-event stalls under fake timers, so these tests drive the input with
-  // fireEvent. An input event both sets `value` and opens the menu.
-  const type = (value: string) =>
-    fireEvent.input(getInput(), { target: { value } });
+  // fireEvent. An input event on the focused input both sets `value` and opens
+  // the menu.
+  const type = (value: string) => {
+    getInput().focus();
+    return fireEvent.input(getInput(), { target: { value } });
+  };
 
   // Escape also clears the selection, so close with Alt+ArrowUp instead.
   const closeMenu = () =>
