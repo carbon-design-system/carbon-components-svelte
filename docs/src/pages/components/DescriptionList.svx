@@ -32,6 +32,17 @@ Set `layout` to `"horizontal"` to place each term beside its detail.
   <DescriptionListItem term="Created">March 14, 2026</DescriptionListItem>
 </DescriptionList>
 
+### Summary
+
+Set `layout` to `"summary"` for an order or price breakdown. Each detail sits at the right edge in tabular figures, so amounts line up, and a long term wraps without pushing it. Set `total` on the last item to rule it off with a larger detail.
+
+<DescriptionList layout="summary" gap={3}>
+  <DescriptionListItem term="Subtotal">$128.00</DescriptionListItem>
+  <DescriptionListItem term="Shipping">$9.00</DescriptionListItem>
+  <DescriptionListItem term="Estimated tax">$10.24</DescriptionListItem>
+  <DescriptionListItem term="Total" total>$147.24</DescriptionListItem>
+</DescriptionList>
+
 ### Columns
 
 Set `columns` to arrange items in an equal-width grid.
