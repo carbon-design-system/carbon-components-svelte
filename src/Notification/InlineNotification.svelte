@@ -38,6 +38,13 @@
   export let closeButtonDescription = "Close notification";
 
   /**
+   * Set to `true` for the notification to fill its parent's width, without
+   * the default width limits and outer margin, as when it sits inside a card,
+   * a form, or another layout that spaces its own content.
+   */
+  export let fullWidth = false;
+
+  /**
    * Set to `true` to show the notification, `false` to hide it.
    * @bindable writable
    */
@@ -78,6 +85,7 @@
     class:bx--inline-notification--low-contrast={lowContrast}
     class:bx--inline-notification--high-contrast={!lowContrast}
     class:bx--inline-notification--hide-close-button={hideCloseButton}
+    class:bx--inline-notification--full-width={fullWidth}
     class:bx--inline-notification--error={kind === "error"}
     class:bx--inline-notification--low-contrast-error={lowContrast &&
       kind === "error"}
