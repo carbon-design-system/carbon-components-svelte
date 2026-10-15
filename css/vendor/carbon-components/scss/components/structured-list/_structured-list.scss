@@ -42,6 +42,12 @@
 
   }
 
+  // ccs: `noMargin` drops v10's bottom margin, as v11 does, for a list in
+  // a card or panel that sets its own spacing.
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--no-margin {
+    margin-bottom: 0;
+  }
+
   // Keeps the block class: outranks `.bx--structured-list--selection
   // .bx--structured-list-td:first-child` (0,3,0) below by order.
   .#{$prefix}--structured-list.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-td,

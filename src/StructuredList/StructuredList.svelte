@@ -19,6 +19,12 @@
   /** Set to `true` to flush the list */
   export let flush = false;
 
+  /**
+   * Set to `true` to remove the 5rem bottom margin, such as for a list in
+   * a card or panel that sets its own spacing.
+   */
+  export let noMargin = false;
+
   /** Set to `true` to use the selection variant */
   export let selection = false;
 
@@ -175,6 +181,7 @@
   class:bx--structured-list={true}
   class:bx--structured-list--selection={selection}
   class:bx--structured-list--condensed={condensed}
+  class:bx--structured-list--no-margin={noMargin}
   class:bx--structured-list--flush={flush}
   {...$$restProps}
   on:click

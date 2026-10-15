@@ -114,6 +114,23 @@ Use the flush variant to remove padding from the list.
   </StructuredListBody>
 </StructuredList>
 
+### No margin
+
+The list has a 5rem bottom margin. Set `noMargin` to remove it, such as for a list in a card or panel that sets its own spacing.
+
+<StructuredList condensed noMargin>
+  <StructuredListBody>
+    <StructuredListRow>
+      <StructuredListCell noWrap>Monthly payment</StructuredListCell>
+      <StructuredListCell>$1,843.20</StructuredListCell>
+    </StructuredListRow>
+    <StructuredListRow>
+      <StructuredListCell noWrap>Total interest</StructuredListCell>
+      <StructuredListCell>$148,551.04</StructuredListCell>
+    </StructuredListRow>
+  </StructuredListBody>
+</StructuredList>
+
 ## Selection
 
 Let users select one or more rows.
