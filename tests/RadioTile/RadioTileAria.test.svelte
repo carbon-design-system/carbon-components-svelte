@@ -8,6 +8,7 @@
     undefined;
   export let ariaLabelledBy: ComponentProps<RadioTile>["aria-labelledby"] =
     undefined;
+  export let ariaLabel: ComponentProps<RadioTile>["aria-label"] = undefined;
 </script>
 
 <TileGroup bind:selected>
@@ -15,6 +16,7 @@
     value="option1"
     aria-describedby={ariaDescribedBy}
     aria-labelledby={ariaLabelledBy}
+    aria-label={ariaLabel}
   >
     Option 1
   </RadioTile>
