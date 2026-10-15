@@ -56,4 +56,22 @@ test.describe("ProgressIndicator", () => {
 
     expect(clickableOutline).toBe(currentOutline);
   });
+
+  test.describe("spaceEqually in a narrow container", () => {
+    test("keeps every step inside the container", async ({ page }) => {
+      const container = page.getByTestId("progress-indicator-narrow");
+      const right = await container.evaluate(
+        (node) => node.getBoundingClientRect().right,
+      );
+      const stepRights = await container
+        .locator(".bx--progress-step")
+        .evaluateAll((steps) =>
+          steps.map((step) => step.getBoundingClientRect().right),
+        );
+      expect(stepRights).toHaveLength(4);
+      for (const stepRight of stepRights) {
+        expect(stepRight).toBeLessThanOrEqual(right);
+      }
+    });
+  });
 });
