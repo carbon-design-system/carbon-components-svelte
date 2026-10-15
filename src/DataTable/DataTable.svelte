@@ -164,7 +164,7 @@
    * @typedef {string | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass<Row=DataTableRow>
    * @type {object}
    * @property {DataTableRowClass<Row>} [rowClass]
-   * @restProps {div}
+   * @restProps {div} `aria-label` and `aria-labelledby` are set on the `<table>`.
    */
 
   /**
@@ -1114,9 +1114,26 @@
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
     (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
+
+  // `aria-label` and `aria-labelledby` name the table. On the container
+  // `div`, which has no role, they would name nothing, so they go to the
+  // `<table>` and the rest of `$$restProps` stays on the container.
+  // Only keys the consumer set: an `undefined` one would still override the
+  // title-derived `aria-labelledby` that `Table` sets before its rest props.
+  $: ({
+    "aria-label": tableAriaLabel,
+    "aria-labelledby": tableAriaLabelledby,
+    ...containerProps
+  } = $$restProps);
+  $: tableLabelProps = {
+    ...(tableAriaLabel !== undefined && { "aria-label": tableAriaLabel }),
+    ...(tableAriaLabelledby !== undefined && {
+      "aria-labelledby": tableAriaLabelledby,
+    }),
+  };
 </script>
 
-<TableContainer {id} {useStaticWidth} {...$$restProps}>
+<TableContainer {id} {useStaticWidth} {...containerProps}>
   {#if title ||
     $$slots.titleChildren ||
     description ||
@@ -1164,6 +1181,7 @@
       {fixedLayout}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
+      {...tableLabelProps}
       tableStyle={tableStyle || undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
         ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
