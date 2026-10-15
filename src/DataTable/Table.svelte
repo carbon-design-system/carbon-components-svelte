@@ -57,8 +57,10 @@
    */
   export let describedBy = undefined;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
+  import { noop } from "../utils/noop.js";
+  import { observeResize } from "../utils/shared-observer.js";
 
   // Context is only consulted for the standalone `TableContainer` + `Table`
   // composition: an explicit `labelledBy`/`describedBy` prop (set by
@@ -79,6 +81,46 @@
     ? undefined
     : (describedBy ??
       ($hasContextDescription ? tableContainerCtx.descriptionId : undefined));
+
+  /** @type {null | HTMLDivElement} */
+  let contentRef = null;
+  /** @type {null | HTMLTableElement} */
+  let tableRef = null;
+
+  // A table wider than `.bx--data-table-content` scrolls inside it. Keyboard
+  // users can only scroll that region once it takes focus, so it does while
+  // it overflows.
+  let scrollable = false;
+  let stopObserving = noop;
+
+  function updateScrollable() {
+    if (!contentRef) return;
+    // 1px absorbs sub-pixel widths, as in `Tabs`.
+    scrollable = contentRef.scrollWidth - contentRef.clientWidth > 1;
+  }
+
+  /**
+   * @param {null | HTMLDivElement} content
+   * @param {null | HTMLTableElement} table
+   */
+  function observeOverflow(content, table) {
+    stopObserving();
+    if (!content) {
+      stopObserving = noop;
+      scrollable = false;
+      return;
+    }
+    const stopContent = observeResize(content, updateScrollable);
+    const stopTable = table ? observeResize(table, updateScrollable) : noop;
+    stopObserving = () => {
+      stopContent();
+      stopTable();
+    };
+  }
+
+  $: observeOverflow(contentRef, tableRef);
+
+  onMount(() => () => stopObserving());
 </script>
 
 {#if stickyHeader}
@@ -107,8 +149,16 @@
     </table>
   </section>
 {:else}
-  <div class:bx--data-table-content={true}>
+  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+  <div
+    bind:this={contentRef}
+    class:bx--data-table-content={true}
+    tabindex={scrollable ? 0 : undefined}
+    role={scrollable && ariaLabelledby ? "region" : undefined}
+    aria-labelledby={scrollable ? ariaLabelledby : undefined}
+  >
     <table
+      bind:this={tableRef}
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}
       class:bx--data-table={true}

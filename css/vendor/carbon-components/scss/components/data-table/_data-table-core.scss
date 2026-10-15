@@ -16,6 +16,10 @@
 @mixin data-table-core {
   .#{$prefix}--data-table-container {
     position: relative;
+    // ccs: as a grid or flex item the container otherwise grows to the
+    // table's width and overflows its parent; at 0 it fits the parent and
+    // `.data-table-content` below scrolls the table.
+    min-width: 0;
     // Allow space for focus styles
     padding-top: $spacing-01;
   }
