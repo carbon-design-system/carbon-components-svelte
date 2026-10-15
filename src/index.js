@@ -79,6 +79,7 @@ export { default as Divider } from "./Divider/Divider.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";
+export { default as EmptyState } from "./EmptyState/EmptyState.svelte";
 export { default as Filename } from "./FileUploader/Filename.svelte";
 export { default as FileUploader } from "./FileUploader/FileUploader.svelte";
 export { default as FileUploaderButton } from "./FileUploader/FileUploaderButton.svelte";
