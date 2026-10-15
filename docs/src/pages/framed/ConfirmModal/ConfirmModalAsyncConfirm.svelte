@@ -1,17 +1,21 @@
 <script>
-  import { Button, ConfirmModal } from "carbon-components-svelte";
+  import { Button, ConfirmModal, Toggle } from "carbon-components-svelte";
 
   let open = false;
-  let deleting = false;
+  let fail = false;
 
-  function handleConfirm() {
-    deleting = true;
-    setTimeout(() => {
-      deleting = false;
-      open = false;
-    }, 300);
-  }
+  const deleteAccount = () =>
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (fail) reject(new Error("The account has an unpaid invoice."));
+        else resolve();
+      }, 800);
+    });
 </script>
+
+<Toggle labelText="Make the request fail" bind:toggled={fail} />
+
+<br>
 
 <Button kind="danger" on:click={() => (open = true)}>Delete account</Button>
 
@@ -19,9 +23,8 @@
   bind:open
   heading="Delete your account?"
   confirmText="Delete"
-  loading={deleting}
-  closeOnConfirm={false}
-  on:confirm={handleConfirm}
+  loadingDescription="Deleting"
+  onConfirm={deleteAccount}
 >
   <p>This will permanently delete your account and all of its data.</p>
 </ConfirmModal>

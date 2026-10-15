@@ -19,6 +19,8 @@
   export let size: ComponentProps<ConfirmModal>["size"] = undefined;
   export let preventCloseOnClickOutside: ComponentProps<ConfirmModal>["preventCloseOnClickOutside"] =
     undefined;
+  export let onConfirm: ComponentProps<ConfirmModal>["onConfirm"] = undefined;
+  export let errorText: ComponentProps<ConfirmModal>["errorText"] = undefined;
   export let onconfirm: (() => void) | undefined = undefined;
   export let oncancel: ((event: CustomEvent) => void) | undefined = undefined;
   export let onopen: (() => void) | undefined = undefined;
@@ -39,6 +41,8 @@
   {closeOnConfirm}
   {size}
   {preventCloseOnClickOutside}
+  {onConfirm}
+  {...errorText ? { errorText } : {}}
   on:confirm={() => onconfirm?.()}
   on:cancel={(e) => oncancel?.(e)}
   on:open={() => onopen?.()}

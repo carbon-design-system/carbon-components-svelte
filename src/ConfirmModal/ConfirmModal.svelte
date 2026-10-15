@@ -61,6 +61,19 @@
   export let closeOnConfirm = true;
 
   /**
+   * Specify work to run on confirm, such as a request. While a returned
+   * promise is pending, the confirm button shows its loading state and the
+   * modal can't be cancelled, as with `loading`. When it resolves, `confirm`
+   * is dispatched and the modal closes (unless `closeOnConfirm` is `false`).
+   * When it rejects, the modal stays open and shows the error.
+   * @type {undefined | (() => void | Promise<void>)}
+   */
+  export let onConfirm = undefined;
+
+  /** Specify the error shown when `onConfirm` rejects without a message */
+  export let errorText = "Something went wrong. Try again.";
+
+  /**
    * Set the size of the modal.
    * @type {"xs" | "sm" | "lg"}
    */
@@ -82,6 +95,7 @@
   import { createEventDispatcher } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Modal from "../Modal/Modal.svelte";
+  import InlineNotification from "../Notification/InlineNotification.svelte";
   import TextInput from "../TextInput/TextInput.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -90,6 +104,12 @@
   let phraseValue = "";
   let prevOpen = false;
   let phraseInputRef = null;
+  /** Whether `onConfirm` is running. */
+  let pending = false;
+  /** @type {string | undefined} */
+  let error = undefined;
+
+  $: busy = loading || pending;
 
   $: phraseMatches =
     confirmationPhrase == null || phraseValue === confirmationPhrase;
@@ -97,6 +117,7 @@
   $: {
     if (!prevOpen && open) {
       phraseValue = "";
+      error = undefined;
     }
     prevOpen = open;
   }
@@ -116,8 +137,23 @@
   // echo instead of dispatching a second, misleading "cancel".
   let selfClosing = false;
 
-  function handleSubmit() {
-    if (!phraseMatches) return;
+  async function handleSubmit() {
+    if (!phraseMatches || busy) return;
+    if (onConfirm) {
+      pending = true;
+      error = undefined;
+      try {
+        await onConfirm();
+      } catch (reason) {
+        error =
+          reason instanceof Error && reason.message
+            ? reason.message
+            : errorText;
+        return;
+      } finally {
+        pending = false;
+      }
+    }
     dispatch("confirm");
     if (closeOnConfirm) {
       selfClosing = true;
@@ -130,7 +166,7 @@
       selfClosing = false;
       return;
     }
-    if (loading) {
+    if (busy) {
       event.preventDefault();
       return;
     }
@@ -138,6 +174,7 @@
   }
 
   function handleClickSecondary() {
+    if (busy) return;
     dispatch("cancel", { trigger: "cancel-button" });
     selfClosing = true;
     open = false;
@@ -154,11 +191,11 @@
   modalHeading={heading}
   modalLabel={label}
   primaryButtonText={confirmText}
-  primaryButtonDisabled={!phraseMatches || loading}
-  primaryButtonLoading={loading}
+  primaryButtonDisabled={!phraseMatches || busy}
+  primaryButtonLoading={busy}
   primaryButtonLoadingDescription={loadingDescription}
-  secondaryButtons={[{ text: cancelText, disabled: loading }]}
-  preventCloseOnClickOutside={preventCloseOnClickOutside || loading}
+  secondaryButtons={[{ text: cancelText, disabled: busy }]}
+  preventCloseOnClickOutside={preventCloseOnClickOutside || busy}
   {selectorPrimaryFocus}
   {...$$restProps}
   on:open
@@ -185,8 +222,18 @@
         bind:ref={phraseInputRef}
         id="{id}-confirm-modal-phrase"
         labelText={confirmationLabel.replace("{phrase}", confirmationPhrase)}
+        disabled={pending}
         bind:value={phraseValue}
       />
     </div>
+  {/if}
+  {#if error}
+    <InlineNotification
+      fullWidth
+      lowContrast
+      hideCloseButton
+      kind="error"
+      title={error}
+    />
   {/if}
 </Modal>

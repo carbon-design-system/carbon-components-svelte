@@ -39,9 +39,15 @@ Set `confirmationPhrase` to require the user to type an exact phrase before the 
 
 ## Async confirm
 
-Set `loading` while the confirmed action is in progress. The confirm button shows a loading spinner, and both the cancel button and outside-click dismissal are disabled until it finishes. Pair with `closeOnConfirm={false}` so the modal stays open until you close it yourself.
+Pass the work to `onConfirm`. While the promise it returns is pending, the confirm button shows `loadingDescription`, and cancel, Escape and outside clicks are blocked. When it resolves, the modal dispatches `confirm` and closes. When it rejects, the modal stays open and shows the error's message, or `errorText`.
 
 <FileSource src="/framed/ConfirmModal/ConfirmModalAsyncConfirm" />
+
+### Manual loading
+
+To drive the state yourself, set `loading` while the action runs and `closeOnConfirm={false}`, and close the modal when it finishes.
+
+<FileSource src="/framed/ConfirmModal/ConfirmModalLoading" />
 
 ## Custom body
 
