@@ -31,6 +31,13 @@
    */
   export let delay = 0;
 
+  /**
+   * Set the size: `"sm"` fits a line of small text, such as a "Saving…"
+   * status in a toolbar or list row, with 12px text and no minimum height.
+   * @type {"sm" | "md"}
+   */
+  export let size = "md";
+
   import { createEventDispatcher, onMount } from "svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
@@ -72,6 +79,7 @@
 {#if visible}
   <div
     class:bx--inline-loading={true}
+    class:bx--inline-loading--sm={size === "sm"}
     role={status === "error" ? "alert" : "status"}
     aria-live={status === "error" ? "assertive" : "polite"}
     {...$$restProps}
