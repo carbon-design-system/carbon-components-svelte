@@ -85,6 +85,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Splitter: "0.114.0",
   Stack: "0.93.0",
   StarRating: "0.114.0",
+  Stepper: "0.114.0",
   StructuredList: "0.2.0",
   TableOfContents: "0.114.0",
   Tabs: "0.2.0",

@@ -1,0 +1,72 @@
+---
+components: ["Stepper"]
+description: Steppers walk through a multi-step flow, such as a checkout or sign-up, with progress, one step's content at a time, Back and Continue, and a final submit.
+---
+
+## Basic
+
+Pass the step labels to `steps` and render each step's content from the `currentIndex` slot prop. Continue moves forward and Back moves back; passed steps are marked complete, and focus moves to the new step. Click a completed step in the progress bar to go back to it.
+
+`validate` runs when Continue is pressed: mark the step's invalid fields and return `false` to stay, and focus moves to the first invalid field. On the last step, Continue becomes `submitText`. Pass the request as `submit`: the button shows a loading state until it settles, `submitted` becomes `true` on success, and on failure `submit:error` carries the error to show in the step.
+
+<FileSource src="/framed/Stepper/Stepper" />
+
+## Stepper or ProgressIndicator
+
+Stepper draws a [ProgressIndicator](/components/ProgressIndicator), so the two look the same. The difference is behavior: ProgressIndicator shows where the user is, and Stepper also runs the flow around it.
+
+| | Stepper | ProgressIndicator |
+| --- | --- | --- |
+| What it renders | The progress, the current step's content, and Back, Continue and submit buttons | The progress only |
+| What it manages | The current step, validation before moving on, focus on each new step, and the submitting and submitted states | Nothing beyond the highlighted step; you set `currentIndex` |
+| Use it for | A flow the user fills in one step at a time with the buttons below the content: checkout, sign-up, onboarding, a setup wizard | Progress shown somewhere else: a page header over a long form, a sidebar of steps, a flow whose buttons sit in a modal footer, or the status of a process the user doesn't drive, such as an order being shipped |
+
+## Validation
+
+### Async
+
+`validate` can return a promise, such as for a check the server makes. Continue shows `validatingDescription` while it runs, and a second press is ignored.
+
+```svelte
+<Stepper
+  steps={["Account", "Profile", "Review"]}
+  validate={async (index) => index !== 0 || (await isUsernameFree(username))}
+  validatingDescription="Checking username"
+  let:currentIndex
+>
+  …
+</Stepper>
+```
+
+### Disable Continue
+
+Set `nextDisabled` to keep Continue disabled until the step is ready, such as until a choice is made.
+
+```svelte
+<Stepper steps={["Method", "Set up"]} nextDisabled={!method} let:currentIndex>
+  …
+</Stepper>
+```
+
+## Conditional steps
+
+Change `steps` to add or remove a step, such as payment for a paid plan only. If the list gets shorter than the current step, the stepper moves to its last step.
+
+```svelte
+<Stepper steps={free ? ["Plan", "Review"] : ["Plan", "Payment", "Review"]} let:currentIndex>
+  …
+</Stepper>
+```
+
+## Submit yourself
+
+Without `submit`, handle the `submit` event and set `submitting` while the request runs, which shows the loading state and disables Back, then `submitted` when it succeeds.
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Keep each step to one task, such as an address or a payment method. | Users see one step at a time, so a long step hides what's left. |
+| Mark invalid fields in `validate` before returning `false`. | Focus moves to the first invalid field, so keyboard and screen reader users land on what needs fixing. |
+| Use ProgressIndicator on its own when the buttons belong somewhere else. | Stepper always puts Back and Continue under the step's content. |
+| Handle <DocKbd label="Enter" /> yourself if a step should advance from a field. | Continue is a regular button, not a form submit, so the stepper can sit inside your own form. |
