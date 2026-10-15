@@ -24,3 +24,8 @@
 <DescriptionList data-testid="empty-term">
   <DescriptionListItem>No term</DescriptionListItem>
 </DescriptionList>
+
+<DescriptionList data-testid="summary" layout="summary" gap={3}>
+  <DescriptionListItem term="Subtotal">$128.00</DescriptionListItem>
+  <DescriptionListItem term="Total" total>$147.24</DescriptionListItem>
+</DescriptionList>
