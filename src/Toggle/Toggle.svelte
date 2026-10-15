@@ -131,6 +131,7 @@
 
 <div
   class:bx--form-item={true}
+  class:bx--form-item--fit={true}
   class:bx--toggle--readonly={readonly}
   class:bx--toggle--invalid={showInvalid}
   class:bx--toggle--warning={showWarn}
