@@ -47,4 +47,22 @@ test.describe("Form item width in a flex row", () => {
       expect(await itemWidth(page, testId)).toBeGreaterThan(450);
     });
   }
+
+  for (const testId of [
+    "narrow-text-input",
+    "narrow-search",
+    "narrow-number-input",
+  ]) {
+    test(`${testId}: fields shrink to fit a narrow row`, async ({ page }) => {
+      const overflow = await page.getByTestId(testId).evaluate((row) => {
+        const right = row.getBoundingClientRect().right;
+        return Math.max(
+          ...[...row.querySelectorAll("*")].map(
+            (node) => node.getBoundingClientRect().right - right,
+          ),
+        );
+      });
+      expect(overflow).toBeLessThanOrEqual(0.5);
+    });
+  }
 });

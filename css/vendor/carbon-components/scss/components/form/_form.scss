@@ -39,6 +39,9 @@
     flex: 1 1 auto;
     flex-direction: column;
     align-items: flex-start;
+    // ccs: shrink below the input's intrinsic width (about 20 characters), so
+    // a field fits a narrow flex row or grid track instead of overflowing it.
+    min-width: 0;
   }
 
   // ccs: controls with a fixed size (a toggle, a checkbox, a time picker, a
@@ -46,6 +49,7 @@
   // row. Growing only pushed their neighbours to the far end.
   .#{$prefix}--form-item--fit {
     flex: 0 1 auto;
+    min-width: auto;
   }
 
   .#{$prefix}--label {

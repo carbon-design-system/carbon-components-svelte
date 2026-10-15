@@ -1,8 +1,11 @@
 <script>
   import {
+    Button,
     Checkbox,
     DatePicker,
     DatePickerInput,
+    NumberInput,
+    Search,
     Slider,
     TextInput,
     TimePicker,
@@ -54,7 +57,38 @@
   <span data-marker>35%</span>
 </div>
 
+<!-- Narrow rows: fields shrink to fit beside their neighbours. -->
+<div class="narrow" data-testid="narrow-text-input">
+  <TextInput labelText="Code" hideLabel placeholder="WELCOME10" />
+  <Button size="field">Apply</Button>
+</div>
+
+<div class="narrow" data-testid="narrow-search">
+  <Search placeholder="Search contacts" />
+  <Button size="field">Add</Button>
+</div>
+
+<div class="narrow-grid" data-testid="narrow-number-input">
+  <NumberInput labelText="Min" hideLabel hideSteppers value={1} />
+  <NumberInput labelText="Max" hideLabel hideSteppers value={9} />
+</div>
+
 <style>
+  .narrow {
+    display: flex;
+    gap: 8px;
+    width: 200px;
+    margin-bottom: 32px;
+  }
+
+  .narrow-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+    width: 200px;
+    margin-bottom: 32px;
+  }
+
   .row {
     display: flex;
     align-items: center;
