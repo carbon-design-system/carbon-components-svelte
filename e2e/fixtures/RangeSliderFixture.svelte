@@ -16,3 +16,16 @@
 />
 <div data-testid="value-display">{value}</div>
 <div data-testid="value-upper-display">{valueUpper}</div>
+
+<div data-testid="range-slider-narrow" style:width="320px">
+  <RangeSlider
+    fullWidth
+    labelText="Departure window"
+    ariaLabelInput="Earliest departure"
+    ariaLabelInputUpper="Latest departure"
+    value={6}
+    valueUpper={18}
+    min={0}
+    max={23}
+  />
+</div>
