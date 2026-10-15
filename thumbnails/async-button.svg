@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>async-button</title>
+    <g id="async-button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="button" fill="var(--cds-interactive-01, #0f62fe)" x="60" y="72" width="88" height="36"></rect>
+        <rect id="button-label" fill="var(--cds-text-04, #ffffff)" x="72" y="87" width="40" height="6"></rect>
+        <circle id="spinner" stroke="var(--cds-interactive-04, #0f62fe)" stroke-width="2" stroke-dasharray="30 10" cx="180" cy="90" r="8"></circle>
+        <rect id="status" fill="var(--cds-text-02, #525252)" x="196" y="87" width="64" height="6"></rect>
+    </g>
+</svg>

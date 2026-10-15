@@ -76,6 +76,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/AspectRatio
+  async-button:
+    name: Async button
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/async-button.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/AsyncButton
   badge-indicator:
     name: Badge indicator
     status: stable

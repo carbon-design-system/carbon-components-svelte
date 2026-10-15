@@ -1,0 +1,12 @@
+---
+components: ["AsyncButton"]
+description: Async buttons run a request on click and hand their place to an inline loading status, then a done message, without the layout jumping.
+---
+
+## Basic
+
+Pass the work to `onClick`. While its promise is pending, the button is replaced by an inline loading status with `activeText`, at the button's width. When it resolves, `finishedText` shows with a checkmark. When it rejects, the button comes back with the error beside it, so the action can be tried again.
+
+Bind `status` and set it back to `"idle"` to offer the action again, such as when the inputs it acted on change.
+
+<FileSource src="/framed/AsyncButton/AsyncButton" />
