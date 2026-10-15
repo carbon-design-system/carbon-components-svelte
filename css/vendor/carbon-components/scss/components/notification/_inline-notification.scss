@@ -358,3 +358,19 @@
 @include exports('inline-notifications') {
   @include inline-notifications;
 }
+
+// carbon-components-svelte patch
+// `fullWidth`: the notification fills its parent. The width limits above
+// follow viewport breakpoints, not the parent, and the margins space it on
+// a page. Inside a card or form the layout does both.
+@mixin inline-notification-full-width {
+  .#{$prefix}--inline-notification--full-width {
+    max-width: none;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+@include exports("inline-notification-full-width") {
+  @include inline-notification-full-width;
+}
