@@ -60,7 +60,12 @@ describe("InputGroup", () => {
     render(InputGroup, { invalid: true, invalidText: "Code expired" });
 
     expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByText("Code expired")).toHaveAttribute("role", "alert");
+    // The field is invalid without text of its own, so the group's
+    // message is the only alert and the field doesn't point at an empty one.
+    expect(screen.getByRole("alert")).toHaveTextContent("Code expired");
+    expect(screen.getByRole("textbox")).not.toHaveAttribute(
+      "aria-errormessage",
+    );
   });
 
   it.each([

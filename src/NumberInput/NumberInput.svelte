@@ -556,6 +556,8 @@
             resolveStatusDescribedBy({
               showInvalid,
               showWarn,
+              invalidText,
+              warnText,
               helperText,
               isFluid,
               errorId,
@@ -604,6 +606,8 @@
             resolveStatusDescribedBy({
               showInvalid,
               showWarn,
+              invalidText,
+              warnText,
               helperText,
               isFluid,
               errorId,
@@ -684,7 +688,7 @@
             {invalidText}
           </div>
         {/if}
-        {#if showWarn}
+        {#if showWarn && warnText}
           <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
         {/if}
       {/if}
@@ -703,7 +707,7 @@
         {invalidText}
       </div>
     {/if}
-    {#if !isFluid && showWarn}
+    {#if !isFluid && showWarn && warnText}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>

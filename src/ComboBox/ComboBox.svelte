@@ -441,7 +441,6 @@
     warnId,
     helperId,
     includeErrorId: false,
-    requireWarnText: true,
   });
 
   $: filterFn =

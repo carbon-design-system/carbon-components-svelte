@@ -208,6 +208,8 @@
   $: describedBy = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
+    invalidText,
+    warnText,
     helperText,
     errorId,
     warnId,
@@ -263,7 +265,7 @@
       use:attachFormReset={handleFormReset}
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
-      aria-errormessage={showInvalid ? errorId : undefined}
+      aria-errormessage={showInvalid && invalidText ? errorId : undefined}
       {id}
       {name}
       {placeholder}
@@ -355,12 +357,12 @@
       />
     {/if}
   </div>
-  {#if showInvalid}
+  {#if showInvalid && invalidText}
     <div class:bx--form-requirement={true} id={errorId} role="alert">
       {invalidText}
     </div>
   {/if}
-  {#if showWarn}
+  {#if showWarn && warnText}
     <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
   {/if}
   {#if !showInvalid && !showWarn && helperText}

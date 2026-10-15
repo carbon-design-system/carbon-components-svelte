@@ -134,7 +134,7 @@
     aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(
       readonly ? readonlyId : null,
-      showWarn ? warnId : null,
+      showWarn && warnText ? warnId : null,
       ariaDescribedBy,
     )}
     on:click={(event) => {
@@ -197,7 +197,9 @@
       <WarningAltFilled
         class="bx--toggle__invalid-icon bx--toggle__invalid-icon--warning"
       />
-      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {#if warnText}
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
     {/if}
   </div>
 </div>

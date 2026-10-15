@@ -206,6 +206,8 @@
   $: describedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
+    invalidText,
+    warnText,
     helperText,
     errorId,
     warnId,
@@ -319,7 +321,7 @@
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
       data-warn={showWarn || undefined}
-      aria-errormessage={showInvalid ? errorId : undefined}
+      aria-errormessage={showInvalid && invalidText ? errorId : undefined}
       {...$$restProps}
       aria-describedby={joinDescribedBy(
         describedById,
@@ -406,12 +408,12 @@
       {helperText}
     </div>
   {/if}
-  {#if showInvalid}
+  {#if showInvalid && invalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">
       {invalidText}
     </div>
   {/if}
-  {#if showWarn}
+  {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 {/if}

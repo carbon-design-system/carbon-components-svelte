@@ -66,6 +66,4 @@ export function resolveStatusDescribedBy(options: {
    * invalid tier.
    */
   includeErrorId?: boolean;
-  requireInvalidText?: boolean;
-  requireWarnText?: boolean;
 }): string | undefined;

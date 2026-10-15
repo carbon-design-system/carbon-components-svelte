@@ -86,8 +86,6 @@
     errorId,
     warnId,
     helperId,
-    requireInvalidText: true,
-    requireWarnText: true,
   });
 </script>
 
