@@ -1,0 +1,15 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Countdown: the time left, in tabular figures so the digits hold still.
+/// @access private
+/// @group components
+@mixin countdown {
+  .#{$prefix}--countdown__time {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@include exports("countdown") {
+  @include countdown;
+}
