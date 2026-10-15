@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
@@ -28,6 +29,7 @@ import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
+import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { AriaEntry } from "../contract";
@@ -402,5 +404,33 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "CheckboxGroup",
+    render: (attrs) =>
+      render(CheckboxGroup, {
+        props: { legendText: "Topics", helperText: "Pick any", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "CheckboxGroup",
+    variant: "invalid",
+    render: (attrs) =>
+      render(CheckboxGroup, {
+        props: {
+          legendText: "Topics",
+          invalid: true,
+          invalidText: "Pick one",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "TileGroup",
+    render: (attrs) =>
+      render(TileGroup, { props: { legendText: "Plans", ...attrs } }),
+    target: () => screen.getByRole("group"),
   },
 ];
