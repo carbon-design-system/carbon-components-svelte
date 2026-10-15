@@ -35,8 +35,10 @@
     @include focus-outline('reset');
 
     display: inline-flex;
+    // ccs: no 9.375rem min-width. The form item sizes the field, so it fits
+    // grid cells and narrow columns; border-box padding keeps the steppers'
+    // room.
     width: 100%;
-    min-width: 9.375rem;
     height: to-rem(40px);
     box-sizing: border-box;
     padding-right: to-rem(128px);
@@ -90,6 +92,30 @@
   .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
     padding-right: to-rem(96px);
+  }
+
+  // ccs: the padding above also holds the invalid or warning icon. Without
+  // one (`--neutral`), reserve only the steppers plus a gap, so a narrow
+  // field still shows its value. The md rule matches the base rule's weight:
+  // the later `--nosteppers` rule and the fluid variant still win over it.
+  .#{$prefix}--number--neutral input[type='number'],
+  .#{$prefix}--number--neutral input[type='text'] {
+    padding-right: to-rem(96px);
+  }
+
+  .#{$prefix}--number--xl.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
+  .#{$prefix}--number--xl.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
+    padding-right: to-rem(112px);
+  }
+
+  .#{$prefix}--number--sm.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
+  .#{$prefix}--number--sm.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
+    padding-right: to-rem(80px);
+  }
+
+  .#{$prefix}--number--xs.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
+  .#{$prefix}--number--xs.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
+    padding-right: to-rem(64px);
   }
 
   .#{$prefix}--number input[type='number']:disabled,
@@ -494,6 +520,12 @@
   .#{$prefix}--number--nosteppers input[type='number'],
   .#{$prefix}--number--nosteppers input[type='text'] {
     padding-right: to-rem(48px);
+  }
+
+  // ccs: no steppers and no status icon: the regular field inset.
+  .#{$prefix}--number--nosteppers.#{$prefix}--number--neutral input[type='number'],
+  .#{$prefix}--number--nosteppers.#{$prefix}--number--neutral input[type='text'] {
+    padding-right: $carbon--spacing-05;
   }
 
   .#{$prefix}--number--nosteppers .#{$prefix}--number__invalid {

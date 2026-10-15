@@ -193,4 +193,31 @@ test.describe("NumberInput", () => {
       await expect(input).toHaveValue("5");
     });
   });
+
+  test.describe("narrow columns", () => {
+    test("fits a column narrower than 150px", async ({ page }) => {
+      const cells = page.getByTestId("number-input-narrow");
+      const seats = cells.getByLabel("Seats");
+      const width = (await seats.boundingBox())?.width ?? 0;
+      expect(width).toBe(112);
+    });
+
+    test("shows the whole value beside the steppers", async ({ page }) => {
+      const budget = page
+        .getByTestId("number-input-narrow")
+        .getByLabel("Budget");
+      const fits = await budget.evaluate(
+        (node) => node.scrollWidth <= node.clientWidth,
+      );
+      expect(fits).toBe(true);
+      await expect(budget).toHaveCSS("padding-right", "96px");
+    });
+
+    test("keeps room for the invalid icon", async ({ page }) => {
+      const limit = page
+        .getByTestId("number-input-narrow-invalid")
+        .getByLabel("Budget limit");
+      await expect(limit).toHaveCSS("padding-right", "128px");
+    });
+  });
 });
