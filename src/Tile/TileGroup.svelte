@@ -53,6 +53,13 @@
   /** Set to `true` to visually hide the legend */
   export let hideLegend = false;
 
+  /**
+   * Set the size of every tile in the group: `"sm"` for compact tiles,
+   * such as rows in a list of choices.
+   * @type {"sm" | "md"}
+   */
+  export let size = undefined;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import { formReset } from "../utils/form-reset.js";
@@ -154,7 +161,11 @@
     selectedValue.set(checkedInput ? checkedInput.value : undefined);
   }
 
+  const groupSize = writable(size);
+  $: groupSize.set(size);
+
   setContext("carbon:TileGroup", {
+    groupSize: readonly(groupSize),
     selectedValue,
     groupName: groupNameReadonly,
     groupForm: readonly(groupForm),
