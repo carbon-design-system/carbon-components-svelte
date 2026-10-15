@@ -17,3 +17,5 @@
 <div data-testid="slider-narrow" style:width="240px">
   <Slider fullWidth labelText="Brightness" value={80} min={0} max={100} />
 </div>
+
+<Slider labelText="Monthly limit" value={2500} min={500} max={5000} step={50} />

@@ -181,6 +181,7 @@
     formatRangeLabel as formatSliderRangeLabel,
     getPointerPosition,
     getValueText as getSliderValueText,
+    getTextInputWidth,
     getTrackAxis,
     valueFromPointer,
   } from "../utils/slider-value.js";
@@ -192,6 +193,8 @@
   /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
   /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
+  $: textInputWidth = getTextInputWidth(min, max, step);
+
   const dispatch = createEventDispatcher();
 
   /** @type {HTMLDivElement | null} */
@@ -490,6 +493,7 @@
         {form}
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
+        style:width={textInputWidth}
         class:bx--slider-text-input--lower={true}
         class:bx--slider-text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--light={light}
@@ -731,6 +735,7 @@
         {form}
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
+        style:width={textInputWidth}
         class:bx--slider-text-input--upper={true}
         class:bx--slider-text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--light={light}
