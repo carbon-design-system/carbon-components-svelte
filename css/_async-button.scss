@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AsyncButton: a button that hands its place to an inline loading status
+/// while its work runs, at the same width so the layout holds still.
+/// @access private
+/// @group components
+@mixin async-button {
+  .#{$prefix}--async-button {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--async-button__button {
+    display: inline-flex;
+  }
+
+  // InlineLoading fills its parent by default; here it sits in a row.
+  .#{$prefix}--async-button .#{$prefix}--inline-loading {
+    width: auto;
+  }
+}
+
+@include exports("async-button") {
+  @include async-button;
+}
