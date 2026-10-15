@@ -43,6 +43,21 @@ describe("DataTable server render", () => {
     expect(html).toContain('aria-controls="people-expandable-row-a"');
   });
 
+  it.each(["aria-label", "aria-labelledby"])(
+    "sets %s on the table, not its container",
+    (attribute) => {
+      const html = renderRaw(DataTable, {
+        id: "query",
+        headers: props.headers,
+        rows: props.rows,
+        [attribute]: "results",
+      });
+
+      expect(html).toMatch(new RegExp(`<table[^>]*${attribute}="results"`));
+      expect(html).not.toMatch(new RegExp(`<div[^>]*${attribute}="results"`));
+    },
+  );
+
   it("names the selection inputs after the id", () => {
     const html = renderRaw(DataTable, props);
 
