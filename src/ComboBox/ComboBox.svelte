@@ -604,9 +604,7 @@
   function handleFormReset() {
     if (!ref) return;
     const nextValue = ref.defaultValue;
-    const matchedItem = items.find(
-      (item) => !item.disabled && labelMatchesInput(item, nextValue),
-    );
+    const matchedItem = findExactMatch(items, nextValue);
     const nextSelectedId = matchedItem ? matchedItem.id : undefined;
     // Pre-sync `prevSelectedId` so the reactive `selectedId` block treats
     // this as already seen and does not dispatch `select`; a reset fires no
@@ -876,6 +874,19 @@
   }
 
   /**
+   * The first enabled item in `list` whose label equals the typed text,
+   * ignoring case.
+   * @param {ReadonlyArray<Item>} list
+   * @param {string | undefined} inputValue
+   * @returns {Item | undefined}
+   */
+  function findExactMatch(list, inputValue) {
+    return list.find(
+      (item) => !item.disabled && labelMatchesInput(item, inputValue),
+    );
+  }
+
+  /**
    * Select `item` when focus leaves the field. Selecting normalizes the value
    * to the item's casing and fires `select` reactively.
    * @returns {true}
@@ -910,11 +921,7 @@
    * @returns {boolean}
    */
   function commitExactMatch() {
-    const inputValue = ref?.value ?? value;
-    const item = filteredItems.find(
-      (candidate) =>
-        labelMatchesInput(candidate, inputValue) && !candidate.disabled,
-    );
+    const item = findExactMatch(filteredItems, ref?.value ?? value);
     if (!item || item.id === selectedId) return false;
     return commitOnLeave(item);
   }
@@ -1075,11 +1082,7 @@
             // any old selection so that reset cannot restore its label over
             // the filled text.
             if (disabled || readonly || inputHasFocus()) return;
-            const match = items.find(
-              (item) =>
-                !item.disabled && labelMatchesInput(item, event.target.value),
-            );
-            selectedId = match?.id;
+            selectedId = findExactMatch(items, event.target.value)?.id;
           }}
           on:input
           on:input={(event) => {
@@ -1139,10 +1142,9 @@
                 }
               } else {
                 // Match typed value case-insensitively against the item label
-                const inputValue = ref?.value ?? value;
-                const matchedItem = filteredItems.find(
-                  (item) =>
-                    labelMatchesInput(item, inputValue) && !item.disabled,
+                const matchedItem = findExactMatch(
+                  filteredItems,
+                  ref?.value ?? value,
                 );
                 if (matchedItem) {
                   open = false;
