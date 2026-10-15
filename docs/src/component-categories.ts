@@ -82,6 +82,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "AILabel",
       "CodeSnippet",
       "RelativeTime",
+      "ChatLog",
       "Countdown",
     ],
   },

@@ -199,6 +199,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Carousel
+  chat-log:
+    name: Chat log
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/chat-log.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ChatLog
   checkbox:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/checkbox/usage
