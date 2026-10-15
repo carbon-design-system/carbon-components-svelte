@@ -10,3 +10,11 @@
     <p>Content for section 2</p>
   </AccordionItem>
 </Accordion>
+
+<div style="width: 480px">
+  <Accordion fullWidthContent data-testid="accordion-full-width">
+    <AccordionItem open title="Quiet hours">
+      <p>Notifications pause between these times.</p>
+    </AccordionItem>
+  </Accordion>
+</div>

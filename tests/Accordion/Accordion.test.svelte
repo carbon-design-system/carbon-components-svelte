@@ -8,6 +8,7 @@
   export let align: ComponentProps<Accordion>["align"] = "end";
   export let size: ComponentProps<Accordion>["size"] = undefined;
   export let flush: ComponentProps<Accordion>["flush"] = false;
+  export let fullWidthContent = false;
   export let customClass = "";
   export let itemClass = "";
   export let useSlot = false;
@@ -20,6 +21,7 @@
   {align}
   {size}
   {flush}
+  {fullWidthContent}
   class={customClass}
   on:click={() => {
     console.log("accordion-click");

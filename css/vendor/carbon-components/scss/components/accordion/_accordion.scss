@@ -151,6 +151,13 @@
     }
   }
 
+  // ccs: `fullWidthContent` keeps the content's right padding level with
+  // its left, instead of the reading gutter above, which is sized by the
+  // viewport and so takes a quarter of an accordion in a card or panel.
+  .#{$prefix}--accordion--full-width-content .#{$prefix}--accordion__content {
+    padding-right: $carbon--spacing-05;
+  }
+
   .#{$prefix}--accordion--start .#{$prefix}--accordion__heading {
     flex-direction: row;
   }
