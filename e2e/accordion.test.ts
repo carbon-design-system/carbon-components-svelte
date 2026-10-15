@@ -31,4 +31,17 @@ test.describe("Accordion", () => {
     await item1.getByRole("button").click();
     await expect(page.getByText("Content for section 1")).toBeVisible();
   });
+
+  test("keeps no reading gutter with fullWidthContent", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const padding = await page
+      .getByTestId("accordion-full-width")
+      .locator(".bx--accordion__content")
+      .evaluate((node) => {
+        const style = getComputedStyle(node);
+        return [style.paddingLeft, style.paddingRight];
+      });
+
+    expect(padding).toEqual(["16px", "16px"]);
+  });
 });

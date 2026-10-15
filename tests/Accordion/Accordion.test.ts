@@ -242,6 +242,16 @@ describe("Accordion", () => {
     itemIsCollapsed(/Language Translator/);
   });
 
+  it("applies the full-width content class", () => {
+    const { container } = render(Accordion, {
+      props: { fullWidthContent: true },
+    });
+
+    expect(container.querySelector(".bx--accordion")).toHaveClass(
+      "bx--accordion--full-width-content",
+    );
+  });
+
   it("applies flush class to skeleton", () => {
     render(AccordionSkeleton, { props: { flush: true } });
 

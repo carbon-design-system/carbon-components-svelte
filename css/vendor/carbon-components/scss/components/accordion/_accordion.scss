@@ -186,6 +186,13 @@
     }
   }
 
+  // ccs: `fullWidthContent` keeps the content's right padding level with
+  // its left, instead of the reading gutter above, which still takes a
+  // quarter of an accordion 40rem or wider.
+  .#{$prefix}--accordion--full-width-content .#{$prefix}--accordion__content {
+    padding-right: $carbon--spacing-05;
+  }
+
   .#{$prefix}--accordion--start .#{$prefix}--accordion__heading {
     flex-direction: row;
   }
