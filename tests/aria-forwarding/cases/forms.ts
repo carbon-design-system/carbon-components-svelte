@@ -23,6 +23,7 @@ import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
+import StarRating from "carbon-components-svelte/StarRating/StarRating.svelte";
 import StructuredListCell from "carbon-components-svelte/StructuredList/StructuredListCell.svelte";
 import StructuredListInput from "carbon-components-svelte/StructuredList/StructuredListInput.svelte";
 import StructuredListRow from "carbon-components-svelte/StructuredList/StructuredListRow.svelte";
@@ -445,5 +446,27 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("group"),
+  },
+  {
+    name: "StarRating",
+    render: (attrs) =>
+      render(StarRating, {
+        props: { legendText: "Rating", helperText: "Rate the stay", ...attrs },
+      }),
+    target: () => screen.getByRole("radiogroup"),
+  },
+  {
+    name: "StarRating",
+    variant: "read-only",
+    render: (attrs) =>
+      render(StarRating, {
+        props: {
+          readonly: true,
+          value: 4.5,
+          helperText: "212 reviews",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("img"),
   },
 ];
