@@ -190,6 +190,7 @@ export { default as SliderSkeleton } from "./Slider/SliderSkeleton.svelte";
 export { default as Splitter } from "./Splitter/Splitter.svelte";
 export { default as Stack } from "./Stack/Stack.svelte";
 export { default as StarRating } from "./StarRating/StarRating.svelte";
+export { default as Stepper } from "./Stepper/Stepper.svelte";
 export { default as StructuredList } from "./StructuredList/StructuredList.svelte";
 export { default as StructuredListBody } from "./StructuredList/StructuredListBody.svelte";
 export { default as StructuredListCell } from "./StructuredList/StructuredListCell.svelte";
