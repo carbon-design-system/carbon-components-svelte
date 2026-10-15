@@ -41,6 +41,13 @@
     align-items: flex-start;
   }
 
+  // ccs: controls with a fixed size (a toggle, a checkbox, a time picker, a
+  // date picker or slider without `fullWidth`) keep their own width in a flex
+  // row. Growing only pushed their neighbours to the far end.
+  .#{$prefix}--form-item--fit {
+    flex: 0 1 auto;
+  }
+
   .#{$prefix}--label {
     @include reset;
     @include type-style('label-01', $omit: (font-weight, line-height));
