@@ -133,7 +133,12 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Status",
-    components: ["IconIndicator", "ShapeIndicator", "FullPageError"],
+    components: [
+      "IconIndicator",
+      "ShapeIndicator",
+      "EmptyState",
+      "FullPageError",
+    ],
   },
   {
     label: "Data visualization",

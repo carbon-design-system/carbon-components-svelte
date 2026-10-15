@@ -30,6 +30,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Disclosure: "0.110.0",
   Divider: "0.113.0",
   Dropdown: "0.2.0",
+  EmptyState: "0.114.0",
   ExpandableTile: "0.2.0",
   FileUploader: "0.2.0",
   FloatingPortal: "0.101.0",
