@@ -10,6 +10,7 @@ import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUpload
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
 import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
+import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
 import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
@@ -431,6 +432,18 @@ export const forms: AriaEntry[] = [
     name: "TileGroup",
     render: (attrs) =>
       render(TileGroup, { props: { legendText: "Plans", ...attrs } }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "InputGroup",
+    render: (attrs) =>
+      render(InputGroup, {
+        props: {
+          labelText: "Promo code",
+          helperText: "One per order",
+          ...attrs,
+        },
+      }),
     target: () => screen.getByRole("group"),
   },
 ];
