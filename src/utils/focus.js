@@ -5,6 +5,41 @@ const selectorFirstInput =
   'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
 
 /**
+ * The focused element as seen from `node`'s tree. Inside a shadow root,
+ * `document.activeElement` is the shadow host, so read the root that `node`
+ * lives in. Falls back to the document when focus is outside that root.
+ * Use it to test whether focus is on or inside `node`.
+ *
+ * @param {Node | null | undefined} node
+ * @returns {Element | null}
+ */
+export function getActiveElement(node) {
+  if (typeof document === "undefined") return null;
+  const root = node?.getRootNode();
+  const active =
+    root && "activeElement" in root
+      ? /** @type {Document | ShadowRoot} */ (root).activeElement
+      : null;
+  return active ?? (node?.ownerDocument ?? document).activeElement;
+}
+
+/**
+ * The element that has focus, looking inside open shadow roots. Use it to
+ * save focus for a later restore: `document.activeElement` would save the
+ * shadow host, which cannot take focus back.
+ *
+ * @returns {Element | null}
+ */
+export function getFocusedElement() {
+  if (typeof document === "undefined") return null;
+  let active = document.activeElement;
+  while (active?.shadowRoot?.activeElement) {
+    active = active.shadowRoot.activeElement;
+  }
+  return active;
+}
+
+/**
  * Resolve initial dialog focus: `selectorPrimaryFocus`, then the first form
  * input, then the first truthy `fallbacks` entry. Returns `null` when
  * `selectorPrimaryFocus` is null or no target is found.
@@ -44,10 +79,8 @@ export function restoreFocus() {
     save() {
       // Also runs while rendering an open overlay on the server.
       if (typeof document === "undefined") return;
-      prevFocus =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
+      const active = getFocusedElement();
+      prevFocus = active instanceof HTMLElement ? active : null;
     },
     restore(region) {
       if (!prevFocus?.isConnected) return;
@@ -65,7 +98,7 @@ export function restoreFocus() {
  * @returns {boolean}
  */
 function focusIsFree(region) {
-  const active = document.activeElement;
+  const active = getActiveElement(region);
   return !active || active === document.body || !!region?.contains(active);
 }
 
@@ -99,7 +132,7 @@ export function returnFocusOnClose(getTrigger, getPanel) {
   let wasOpen = false;
   return (open) => {
     const panel = getPanel();
-    if (wasOpen && !open && panel?.contains(document.activeElement)) {
+    if (wasOpen && !open && panel?.contains(getActiveElement(panel))) {
       tick().then(() => returnFocus(getTrigger(), panel));
     }
     wasOpen = open;

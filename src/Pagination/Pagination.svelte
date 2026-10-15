@@ -1,6 +1,6 @@
 <script context="module">
   import { tick } from "svelte";
-  import { returnFocus } from "../utils/focus.js";
+  import { getActiveElement, returnFocus } from "../utils/focus.js";
 
   /**
    * When a nav button becomes disabled as a result of its own click, the
@@ -11,7 +11,7 @@
    * @param {HTMLElement | null} otherRef
    */
   async function refocusIfDisabled(clickedRef, otherRef) {
-    if (document.activeElement !== clickedRef) return;
+    if (getActiveElement(clickedRef) !== clickedRef) return;
     await tick();
     if (clickedRef?.disabled) returnFocus(otherRef, clickedRef);
   }

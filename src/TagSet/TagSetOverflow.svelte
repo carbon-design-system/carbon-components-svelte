@@ -84,6 +84,7 @@
   import OperationalTag from "../Tag/OperationalTag.svelte";
   import Tag from "../Tag/Tag.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { getActiveElement } from "../utils/focus.js";
 
   // The indicator is presentational, not a registered group item — shadow
   // the context so it can't be mistaken for one.
@@ -103,7 +104,7 @@
   /** @param {import("./TagSet.svelte").TagSetItem} tag */
   function handleTagClose(tag) {
     const position = tags.indexOf(tag);
-    pendingFocus = contentRef?.contains(document.activeElement)
+    pendingFocus = contentRef?.contains(getActiveElement(contentRef))
       ? { id: tag.id, position }
       : null;
     dispatch("close", tag);

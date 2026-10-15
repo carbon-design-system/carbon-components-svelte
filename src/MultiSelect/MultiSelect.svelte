@@ -492,6 +492,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { getActiveElement } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -821,7 +822,9 @@
     const entry = sortedItems.find((item) => item.id === id);
     if (!entry?.checked || entry.disabled) return;
 
-    const hadFocus = selectedTagsRef?.contains(document.activeElement);
+    const hadFocus = selectedTagsRef?.contains(
+      getActiveElement(selectedTagsRef),
+    );
     selectedIds = selectedIds.filter((selectedId) => selectedId !== id);
     prevSelectedIds = selectedIds.slice();
     sortedItems = sortedItems.map((item) =>

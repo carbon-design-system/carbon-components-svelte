@@ -1,4 +1,6 @@
 import {
+  getActiveElement,
+  getFocusedElement,
   initialFocus,
   restoreFocus,
   returnFocus,
@@ -192,5 +194,69 @@ describe("returnFocus", () => {
     returnFocus(detached);
     returnFocus(null);
     expect(document.activeElement).toBe(document.body);
+  });
+});
+
+describe("inside a shadow root", () => {
+  function setupShadow(html: string) {
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = host.attachShadow({ mode: "open" });
+    root.innerHTML = html;
+    return { host, root };
+  }
+
+  it("getActiveElement reads the node's root, not the shadow host", () => {
+    const { host, root } = setupShadow("<button>A</button>");
+    const button = root.querySelector("button");
+    button?.focus();
+
+    expect(document.activeElement).toBe(host);
+    expect(getActiveElement(button)).toBe(button);
+  });
+
+  it("getActiveElement falls back to the document when focus is outside the root", () => {
+    const { root } = setupShadow("<button>A</button>");
+    const outside = setup("<input />").querySelector("input");
+    outside?.focus();
+
+    expect(getActiveElement(root.querySelector("button"))).toBe(outside);
+  });
+
+  it("getFocusedElement looks inside open shadow roots", () => {
+    const { root } = setupShadow("<button>A</button>");
+    const button = root.querySelector("button");
+    button?.focus();
+
+    expect(getFocusedElement()).toBe(button);
+  });
+
+  it("restoreFocus returns focus to the saved element, not the host", () => {
+    const { root } = setupShadow("<button>Trigger</button>");
+    const trigger = root.querySelector("button");
+    const other = setup("<button>Other</button>").querySelector("button");
+    const focusReturn = restoreFocus();
+
+    trigger?.focus();
+    focusReturn.save();
+    other?.focus();
+    focusReturn.restore();
+
+    expect(root.activeElement).toBe(trigger);
+  });
+
+  it("returnFocus acts when focus is still inside a region in the root", () => {
+    const { root } = setupShadow(`
+      <button id="trigger">Trigger</button>
+      <div id="menu"><button id="item">Item</button></div>
+    `);
+    root.querySelector<HTMLElement>("#item")?.focus();
+
+    returnFocus(
+      root.querySelector<HTMLElement>("#trigger"),
+      root.querySelector("#menu"),
+    );
+
+    expect(root.activeElement).toBe(root.querySelector("#trigger"));
   });
 });

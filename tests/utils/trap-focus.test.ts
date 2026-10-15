@@ -28,7 +28,7 @@ function stubVisibleGeometry(el: HTMLElement) {
  * return the container plus its buttons. Each button is stubbed to look
  * like a normal, visible, laid-out element (see `stubVisibleGeometry`).
  */
-function setup(count: number) {
+function setup(count: number, parent: Node = document.body) {
   const container = document.createElement("div");
   const buttons = Array.from({ length: count }, (_, i) => {
     const button = document.createElement("button");
@@ -37,7 +37,7 @@ function setup(count: number) {
     container.appendChild(button);
     return button;
   });
-  document.body.appendChild(container);
+  parent.appendChild(container);
   return { container, buttons };
 }
 
@@ -204,5 +204,19 @@ describe("trapFocus", () => {
       );
     }
     getComputedStyle.mockRestore();
+  });
+});
+
+describe("trapFocus inside a shadow root", () => {
+  it("Tab advances from the focused element, not from the start", () => {
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = host.attachShadow({ mode: "open" });
+    const { container, buttons } = setup(3, root);
+    buttons[1].focus();
+
+    trapFocus({ container, event: tabEvent().event });
+
+    expect(root.activeElement).toBe(buttons[2]);
   });
 });

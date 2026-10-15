@@ -1,5 +1,7 @@
 // @ts-check
 
+import { getActiveElement } from "./focus.js";
+
 /**
  * Pause/resume a `createTimeoutDismiss()` timer while the pointer is over a
  * root element or focus is inside it. Shared by `ToastNotification` and
@@ -40,7 +42,7 @@ export function createHoverFocusPause(dismiss, getPauseOnHover) {
     if (!getPauseOnHover() || pointerInside(event)) return;
     if (
       event.currentTarget instanceof Node &&
-      event.currentTarget.contains(document.activeElement)
+      event.currentTarget.contains(getActiveElement(event.currentTarget))
     ) {
       return;
     }

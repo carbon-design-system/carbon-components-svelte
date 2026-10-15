@@ -1,5 +1,6 @@
 // @ts-check
 
+import { getActiveElement } from "./focus.js";
 import { rovingFocus } from "./roving-focus.js";
 
 /**
@@ -30,7 +31,7 @@ export function verticalListFocus(node, { selector, isDisabled }) {
     skipDisabled: isDisabled !== undefined,
     isDisabled,
     getActiveIndex: () =>
-      getItems().indexOf(/** @type {HTMLElement} */ (document.activeElement)),
+      getItems().indexOf(/** @type {HTMLElement} */ (getActiveElement(node))),
     onMove: (_index, event) => event.preventDefault(),
   });
 

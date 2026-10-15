@@ -203,6 +203,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { getActiveElement } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -498,7 +499,7 @@
    */
   export function focusNext(options = {}) {
     let focusedInputIndex = inputs.indexOf(
-      /** @type {HTMLInputElement} */ (document.activeElement),
+      /** @type {HTMLInputElement} */ (getActiveElement(ref)),
     );
     if (focusedInputIndex === -1) focusedInputIndex = focusedIndex;
     if (focusedInputIndex === -1) {

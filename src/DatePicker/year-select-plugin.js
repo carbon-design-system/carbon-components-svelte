@@ -1,4 +1,6 @@
 // @ts-check
+import { getActiveElement } from "../utils/focus.js";
+
 /**
  * Flatpickr plugin that replaces the day grid with a decade of years.
  * Mirrors the shape of flatpickr's bundled monthSelect plugin.
@@ -224,7 +226,7 @@ export function yearSelectPlugin(pluginConfig) {
       );
       let index = Array.prototype.indexOf.call(
         self.yearsContainer.children,
-        document.activeElement,
+        getActiveElement(self.yearsContainer),
       );
 
       if (index === -1) {
@@ -240,11 +242,12 @@ export function yearSelectPlugin(pluginConfig) {
             (12 + index + shifts[event.keyCode]) % 12
           ]
         ).focus();
-      } else if (
-        event.keyCode === 13 &&
-        self.yearsContainer.contains(document.activeElement)
-      ) {
-        setYear(/** @type {YearElement} */ (document.activeElement).dateObj);
+      } else if (event.keyCode === 13) {
+        // Read focus again: the branch above may have just moved it.
+        const active = getActiveElement(self.yearsContainer);
+        if (self.yearsContainer.contains(active)) {
+          setYear(/** @type {YearElement} */ (active).dateObj);
+        }
       }
     }
 

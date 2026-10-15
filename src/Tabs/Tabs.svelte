@@ -79,6 +79,7 @@
   import { derived, get, writable } from "svelte/store";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { getActiveElement } from "../utils/focus.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
@@ -294,14 +295,16 @@
     const tab = get(tabsById)[id];
     if (!tab) return;
 
-    const doc = refTabList?.ownerDocument;
-    const hadFocus = Boolean(doc && refTabList.contains(doc.activeElement));
+    const hadFocus = Boolean(
+      refTabList?.contains(getActiveElement(refTabList)),
+    );
     dispatch("dismiss", tab);
     if (!hadFocus) return;
 
     // Let the handler's removal render, then keep focus in the list.
     await tick();
-    if (!refTabList || (doc.activeElement && doc.activeElement !== doc.body)) {
+    const active = getActiveElement(refTabList);
+    if (!refTabList || (active && active !== refTabList.ownerDocument.body)) {
       return;
     }
 
@@ -357,7 +360,7 @@
       ? Array.from(refTabList.querySelectorAll("[role='tab']"))
       : [];
     const index = items.indexOf(
-      /** @type {Element} */ (refTabList?.ownerDocument.activeElement),
+      /** @type {Element} */ (getActiveElement(refTabList)),
     );
     if (index >= 0) return index;
     return focusedIndex >= 0 ? focusedIndex : selectedIndex;

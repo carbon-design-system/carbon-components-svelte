@@ -1,5 +1,7 @@
 // @ts-check
 
+import { getActiveElement } from "./focus.js";
+
 /**
  * The element that scrolls for `container`, or the document's when `null`.
  *
@@ -138,7 +140,7 @@ export function focusSection(target) {
   if (added) target.setAttribute("tabindex", "-1");
   target.focus({ preventScroll: true });
   if (!added) return;
-  if (document.activeElement === target) {
+  if (getActiveElement(target) === target) {
     target.addEventListener("blur", () => target.removeAttribute("tabindex"), {
       once: true,
     });

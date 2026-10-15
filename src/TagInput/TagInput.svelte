@@ -162,6 +162,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { getActiveElement } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -325,7 +326,7 @@
       return;
     }
 
-    const hadFocus = rootRef?.contains(document.activeElement);
+    const hadFocus = rootRef?.contains(getActiveElement(rootRef));
     value = value.filter((_, i) => i !== index);
     rejectionText = "";
     statusText = removedText(tag, value.length);

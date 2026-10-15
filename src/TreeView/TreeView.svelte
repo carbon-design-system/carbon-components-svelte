@@ -652,6 +652,7 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { getActiveElement } from "../utils/focus.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -1722,15 +1723,11 @@
    */
   function preserveVirtualFocusAfterScroll() {
     if (!scrollContainerRef) return;
-    const active = document.activeElement;
+    const active = getActiveElement(scrollContainerRef);
     if (!(active instanceof HTMLElement)) return;
     if (!scrollContainerRef.contains(active)) {
       // Focus already left the tree (e.g. body after unmount).
-      if (
-        active === document.body ||
-        !document.body.contains(active) ||
-        !active.isConnected
-      ) {
+      if (active === active.ownerDocument.body || !active.isConnected) {
         scrollContainerRef.focus({ preventScroll: true });
       }
       return;
@@ -1746,7 +1743,7 @@
     scrollTop = event.currentTarget.scrollTop;
     // Only recover focus when the tree already owned it at scroll start.
     // Otherwise incidental wheel scroll would steal focus from body / elsewhere.
-    const active = document.activeElement;
+    const active = getActiveElement(scrollContainerRef);
     const hadTreeFocus =
       active instanceof HTMLElement &&
       scrollContainerRef != null &&

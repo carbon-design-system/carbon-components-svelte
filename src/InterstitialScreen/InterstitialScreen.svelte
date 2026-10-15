@@ -33,7 +33,7 @@
   import { writable } from "svelte/store";
   import ComposedModal from "../ComposedModal/ComposedModal.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { returnFocus } from "../utils/focus.js";
+  import { getFocusedElement, returnFocus } from "../utils/focus.js";
 
   const dispatch = createEventDispatcher();
 
@@ -110,11 +110,9 @@
   /** @type {(isOpen: boolean) => void} */
   function syncFocusReturn(isOpen) {
     if (isOpen && !wasOpen) {
-      openerFocus =
-        typeof document !== "undefined" &&
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
+      // Also runs while rendering an open screen on the server.
+      const active = getFocusedElement();
+      openerFocus = active && active instanceof HTMLElement ? active : null;
     } else if (!isOpen && wasOpen) {
       const target = launcherButtonRef ?? openerFocus;
       const region = ref;

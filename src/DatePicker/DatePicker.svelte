@@ -311,6 +311,7 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { getActiveElement } from "../utils/focus.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -1487,10 +1488,9 @@
     if (time === undefined) return;
     setTimeout(() => {
       if (!calendar?.isOpen) return;
-      if (calendar.calendarContainer.contains(document.activeElement)) return;
-      const day = [
-        ...calendar.calendarContainer.querySelectorAll(".flatpickr-day"),
-      ].find(
+      const container = calendar.calendarContainer;
+      if (container.contains(getActiveElement(container))) return;
+      const day = [...container.querySelectorAll(".flatpickr-day")].find(
         (el) =>
           /** @type {any} */ (el).dateObj?.getTime() === time &&
           isFocusableDay(/** @type {HTMLElement} */ (el)),

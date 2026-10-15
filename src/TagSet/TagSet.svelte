@@ -106,7 +106,7 @@
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { returnFocus } from "../utils/focus.js";
+  import { getActiveElement, returnFocus } from "../utils/focus.js";
   import { noop } from "../utils/noop.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -151,7 +151,7 @@
     // Closing usually removes the tag, unmounting its focused close button.
     // Hand focus to the next visible tag, else the previous one, else the
     // overflow trigger, instead of letting it fall to <body>.
-    const hadFocus = item.node?.contains(document.activeElement);
+    const hadFocus = item.node?.contains(getActiveElement(item.node));
     const neighbours = hadFocus
       ? [...$items.slice(index + 1), ...$items.slice(0, index).reverse()]
           .filter((other) => !$overflowIds.has(other.id))

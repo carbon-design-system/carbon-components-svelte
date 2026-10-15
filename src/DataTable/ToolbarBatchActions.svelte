@@ -28,7 +28,7 @@
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
 
   import Button from "../Button/Button.svelte";
-  import { returnFocus } from "../utils/focus.js";
+  import { getActiveElement, returnFocus } from "../utils/focus.js";
 
   let batchSelectedIds = [];
   let wrapperRef = null;
@@ -82,7 +82,7 @@
     if (
       prevShowActions &&
       !showActions &&
-      wrapperRef?.contains(document.activeElement)
+      wrapperRef?.contains(getActiveElement(wrapperRef))
     ) {
       // The bar is about to go inert while it still contains focus (e.g.
       // Cancel was just activated). Move focus to a stable element before

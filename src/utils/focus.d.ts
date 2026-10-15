@@ -1,3 +1,7 @@
+export function getActiveElement(node: Node | null | undefined): Element | null;
+
+export function getFocusedElement(): Element | null;
+
 export function initialFocus(options: {
   container: Element | null | undefined;
   selectorPrimaryFocus?: string | null;

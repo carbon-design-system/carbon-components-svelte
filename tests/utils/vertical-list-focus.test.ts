@@ -3,6 +3,7 @@ import { verticalListFocus } from "../../src/utils/vertical-list-focus.js";
 function setup(
   labels: string[],
   options: { isDisabled?: (item: HTMLElement) => boolean } = {},
+  parent: Node = document.body,
 ) {
   const container = document.createElement("div");
   const items = labels.map((label) => {
@@ -12,7 +13,7 @@ function setup(
     container.appendChild(button);
     return button;
   });
-  document.body.appendChild(container);
+  parent.appendChild(container);
   const action = verticalListFocus(container, {
     selector: "[role='menuitem']",
     ...options,
@@ -87,5 +88,19 @@ describe("verticalListFocus", () => {
     items[0].focus();
     press(items[0], "ArrowDown");
     expect(items[0]).toHaveFocus();
+  });
+});
+
+describe("verticalListFocus inside a shadow root", () => {
+  it("moves focus from the focused item", () => {
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = host.attachShadow({ mode: "open" });
+    const { items } = setup(["a", "b", "c"], {}, root);
+    items[1].focus();
+
+    press(items[1], "ArrowDown");
+
+    expect(root.activeElement).toBe(items[2]);
   });
 });

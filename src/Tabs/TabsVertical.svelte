@@ -55,6 +55,7 @@
   import { breakpoints } from "../Breakpoint/breakpoints.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { getActiveElement } from "../utils/focus.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
@@ -304,7 +305,7 @@
       ? Array.from(refTabList.querySelectorAll("[role='tab']"))
       : [];
     const index = items.indexOf(
-      /** @type {Element} */ (refTabList?.ownerDocument.activeElement),
+      /** @type {Element} */ (getActiveElement(refTabList)),
     );
     if (index >= 0) return index;
     return focusedIndex >= 0 ? focusedIndex : selectedIndex;

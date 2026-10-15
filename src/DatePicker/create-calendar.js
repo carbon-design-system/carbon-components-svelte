@@ -1,6 +1,7 @@
 // @ts-check
 /// <reference path="./flatpickr-esm-plugins.d.ts" />
 import flatpickr from "flatpickr";
+import { getActiveElement } from "../utils/focus.js";
 import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
 
 /**
@@ -479,7 +480,7 @@ export async function createCalendar({
    */
   function handleParseError(error) {
     const value =
-      input && document.activeElement === input ? input.value : base.value;
+      input && getActiveElement(input) === input ? input.value : base.value;
     dispatch("error", { error, value });
     const userErrorHandler = errorHandlerBox.current;
     if (userErrorHandler) {

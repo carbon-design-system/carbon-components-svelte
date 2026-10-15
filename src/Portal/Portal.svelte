@@ -20,6 +20,7 @@
   export let ref = null;
 
   import { onMount } from "svelte";
+  import { getActiveElement } from "../utils/focus.js";
 
   // Render nothing on the server and on the first client render, so the
   // hydrated markup matches the server's. The content mounts after that,
@@ -47,7 +48,7 @@
     effectiveTarget &&
     ref.parentNode !== effectiveTarget
   ) {
-    const previouslyFocused = document.activeElement;
+    const previouslyFocused = getActiveElement(ref);
     const hadFocus = ref.contains(previouslyFocused);
     effectiveTarget.appendChild(ref);
     if (hadFocus && previouslyFocused instanceof HTMLElement) {

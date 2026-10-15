@@ -58,6 +58,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
+  import { getActiveElement, getFocusedElement } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -129,9 +130,10 @@
     prevY = 0;
     focusIndex = -1;
 
-    if (level === 1 && ref?.contains(document.activeElement)) {
+    if (level === 1 && ref?.contains(getActiveElement(ref))) {
       if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
-      if (ref.contains(document.activeElement)) document.activeElement.blur();
+      const active = getActiveElement(ref);
+      if (active instanceof HTMLElement && ref.contains(active)) active.blur();
     }
     returnFocus = null;
 
@@ -207,7 +209,7 @@
 
       if (level === 1) {
         if (!prevOpen) {
-          const active = document.activeElement;
+          const active = getFocusedElement();
           returnFocus =
             active instanceof HTMLElement &&
             active !== document.body &&

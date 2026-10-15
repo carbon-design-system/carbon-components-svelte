@@ -32,6 +32,7 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { getActiveElement } from "../utils/focus.js";
   import { keyBy } from "../utils/key-by.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -181,7 +182,7 @@
       const items = Array.from(
         listRef.querySelectorAll(".bx--progress-step-button"),
       );
-      return items.indexOf(document.activeElement);
+      return items.indexOf(getActiveElement(listRef));
     },
     onMove: (index, event) => {
       // Arrow keys would otherwise also scroll the page.

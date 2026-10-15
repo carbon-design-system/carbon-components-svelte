@@ -1,5 +1,7 @@
 // @ts-check
 
+import { getActiveElement } from "./focus.js";
+
 /**
  * Svelte action: keep a select-on-focus selection after a click in WebKit.
  *
@@ -23,14 +25,14 @@ export function preserveFocusSelection(node, enabled) {
   let pointerFocus = false;
 
   function handleMousedown() {
-    pointerFocus = node.ownerDocument.activeElement !== node;
+    pointerFocus = getActiveElement(node) !== node;
   }
 
   /** @param {Event} event */
   function handleMouseup(event) {
     if (!pointerFocus) return;
     pointerFocus = false;
-    if (!active || node.ownerDocument.activeElement !== node) return;
+    if (!active || getActiveElement(node) !== node) return;
     const { selectionStart, selectionEnd } = node;
     if (
       selectionStart === null ||

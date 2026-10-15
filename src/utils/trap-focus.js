@@ -1,5 +1,7 @@
 // @ts-check
 
+import { getActiveElement } from "./focus.js";
+
 // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
 const selectorTabbable = `
   a[href], area[href], input:not([disabled]):not([tabindex='-1']),
@@ -60,7 +62,7 @@ export function trapFocus({ container, event }) {
   }
 
   let index = tabbable.indexOf(
-    /** @type {HTMLElement} */ (document.activeElement),
+    /** @type {HTMLElement} */ (getActiveElement(container)),
   );
   if (index === -1) {
     index = event.shiftKey ? tabbable.length : -1;

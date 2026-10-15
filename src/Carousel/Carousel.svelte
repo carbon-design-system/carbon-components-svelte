@@ -63,7 +63,7 @@
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { initCarousel } from "../utils/carousel.js";
-  import { returnFocus } from "../utils/focus.js";
+  import { getActiveElement, returnFocus } from "../utils/focus.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -169,7 +169,7 @@
 
   /** @param {1 | -1} step */
   async function navigate(step) {
-    const focused = document.activeElement;
+    const focused = getActiveElement(prevButton ?? nextButton);
     const total = $views.length;
     const target = currentIndex + step;
     goTo(wrap && total > 0 ? (target + total) % total : target);
