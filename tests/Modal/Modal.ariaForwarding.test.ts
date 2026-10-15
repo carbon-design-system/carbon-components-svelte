@@ -79,4 +79,19 @@ describe("Modal aria forwarding", () => {
       container.querySelector(".bx--modal[role='presentation']"),
     ).not.toHaveAttribute("aria-label");
   });
+
+  it("prefers a consumer aria-label over modalLabel and keeps it off the region", () => {
+    render(Modal, {
+      props: {
+        open: true,
+        modalLabel: "Account",
+        modalHeading: "Terms",
+        hasScrollingContent: true,
+        "aria-label": "Custom",
+      },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAccessibleName("Custom");
+    expect(screen.getByRole("region")).toHaveAttribute("aria-label", "Account");
+  });
 });
