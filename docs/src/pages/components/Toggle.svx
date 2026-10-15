@@ -31,7 +31,7 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 ### Custom
 
-Customize toggle labels with `labelA` and `labelB`.
+Customize toggle labels with `labelA` and `labelB`. The toggle's width includes the longer of the two, so it does not shift neighboring content when the state changes. Set both to `""` to show the switch alone.
 
 <Toggle labelText="Maintenance mode" labelA="No" labelB="Yes" />
 
