@@ -82,6 +82,7 @@
     setContext,
   } from "svelte";
   import { SEPARATOR_HOVER_DELAY_MS } from "../constants/timing.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { noop } from "../utils/noop.js";
   import { clamp } from "../utils/numeric-format.js";
@@ -252,6 +253,11 @@
   // Before `renderedSize`, so a size this sets renders in the same update.
   $: syncCollapsed(collapsed, clamp(size, minPercent, maxPercent));
   $: renderedSize = clamp(size, minPercent, maxPercent);
+  // Rest props go on the root, but naming and description belong on the
+  // separator, the element that takes focus.
+  $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
+    splitAriaNaming($$restProps));
+
   $: resolvedEnterDelayMs =
     enterDelayMs ?? parent?.enterDelayMs() ?? SEPARATOR_HOVER_DELAY_MS;
   $: if (disabled) {
@@ -285,7 +291,7 @@
   class:bx--splitter={true}
   class:bx--splitter--vertical={orientation === "vertical"}
   class:bx--splitter--resizing={resizing}
-  {...$$restProps}
+  {...rest}
 >
   <!-- A pane shrunk to nothing is `inert`, so its content leaves the tab order. -->
   <div
@@ -307,7 +313,9 @@
   <div
     role="separator"
     tabindex={disabled ? undefined : 0}
-    aria-label={separatorLabel}
+    aria-label={ariaLabel ?? separatorLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
     aria-orientation={orientation === "vertical" ? "horizontal" : "vertical"}
     aria-controls="{id}-start"
     aria-valuenow={disabled ? undefined : renderedSize}
