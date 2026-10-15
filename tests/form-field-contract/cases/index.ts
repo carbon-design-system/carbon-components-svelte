@@ -335,6 +335,7 @@ export const exempt: Exemptions = {
   state: {
     InputGroup: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
+    StarRating: NOT_AUDITED,
   },
   reset: {
     ListBoxRequiredInput:
@@ -348,6 +349,7 @@ export const exempt: Exemptions = {
     RadioButtonGroup: NOT_A_TEXT_FIELD,
     RadioTile: NOT_A_TEXT_FIELD,
     SelectableTile: NOT_A_TEXT_FIELD,
+    StarRating: NOT_A_TEXT_FIELD,
     StructuredList: NOT_A_TEXT_FIELD,
     TagInput: NOT_A_TEXT_FIELD,
     TileGroup: NOT_A_TEXT_FIELD,
