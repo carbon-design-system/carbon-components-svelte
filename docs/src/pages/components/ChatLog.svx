@@ -1,0 +1,148 @@
+---
+components: ["ChatLog", "ChatMessage", "ChatDivider"]
+description: Chat logs show a conversation, with messages aligned by author, grouped when one author sends several in a row, day dividers, delivery status, attachments and a typing indicator.
+---
+
+<script>
+  import { ChatDivider, ChatLog, ChatMessage, ClickableTile, CodeSnippet, Link, linkSegments, Stack, Text, UserAvatar } from "carbon-components-svelte";
+  import Bot from "carbon-icons-svelte/lib/Bot.svelte";
+
+  const tracking = "Track it at https://shipping.example.com/track/1Z999AA1. The link javascript://example stays text.";
+</script>
+
+## Basic
+
+ChatLog is a `role="log"` region around a list of messages that scrolls itself. It starts at the latest message and keeps new messages in view while the reader is at the end, but leaves the scroll alone while they read back; a message the user sends always comes into view. It takes focus so keyboard users can scroll it. Name it with `labelText`, and give it a height, such as by placing it in a flex column, where it fills the space left.
+
+Each ChatMessage sets `from` to `"me"` (end-aligned, in the accent color) or `"them"` (start-aligned, beside the `avatar` slot), and `author` to who sent it, such as "Sam", or "You" for the user's own. Alignment alone doesn't tell screen reader users who is speaking, so they hear the author before each message. Set `continued` on a message from the same author as the one before, to group them. ChatDivider labels a break, such as a new day.
+
+<FileSource src="/framed/Chat/Chat" />
+
+The composer is a TextArea that grows with the message up to four lines (`grow`, `maxRows`). Enter sends and Shift+Enter starts a new line.
+
+## Grouping and time
+
+`groupChatMessages` works out the grouping from your messages' `author` and `time`. A message continues the group when it follows one from the same author within five minutes (`groupGap`), and the last message of each group is marked `last`, the place for its time and delivery status. A divider comes before each new day ("Today", "Yesterday", or a date) and after a pause of more than an hour (`dividerGap`), showing the time. Labels use `locale`; pass `label` to write your own.
+
+```svelte
+{#each groupChatMessages(messages) as item (item.key)}
+  {#if item.type === "divider"}
+    <ChatDivider>{item.label}</ChatDivider>
+  {:else}
+    <ChatMessage
+      from={item.message.from}
+      author={item.message.author}
+      continued={item.continued}
+      status={item.last ? item.message.status : undefined}
+    >
+      {item.message.text}
+      <svelte:fragment slot="meta">
+        {#if item.last}<RelativeTime date={item.message.time} />{/if}
+      </svelte:fragment>
+    </ChatMessage>
+  {/if}
+{/each}
+```
+
+## Group chats
+
+Set `showAuthor` to also show the author's name above the first message of each group, so readers can tell several people apart.
+
+<ChatLog labelText="Launch planning">
+  <ChatMessage author="Sam Carter" showAuthor>
+    <UserAvatar slot="avatar" size="sm" name="Sam Carter" />
+    The release notes are ready for review.
+  </ChatMessage>
+  <ChatMessage author="Priya Shah" showAuthor>
+    <UserAvatar slot="avatar" size="sm" name="Priya Shah" />
+    I'll take a look this afternoon.
+  </ChatMessage>
+  <ChatMessage author="Priya Shah" showAuthor continued>
+    <UserAvatar slot="avatar" size="sm" name="Priya Shah" />
+    Can we ship on Thursday?
+  </ChatMessage>
+</ChatLog>
+
+## Streaming replies
+
+Set `streaming` on a message while it is still arriving, such as an assistant's reply streamed word by word. A caret blinks at the end of the text, holding still when reduced motion is preferred. The log announces new messages as they arrive, so without `streaming` screen readers would read every chunk; with it, they wait and read the reply once, in full.
+
+```svelte
+<ChatMessage author="Assistant" streaming={!reply.done}>{reply.text}</ChatMessage>
+```
+
+## Delivery status
+
+Set `status` on your own message to `"sending"`, `"sent"`, `"delivered"`, `"read"` or `"failed"`, on the last message of a group. Each shows an icon and a word, which `statusText` can translate. A failed message adds a Retry button that dispatches `retry`.
+
+<ChatLog labelText="Conversation with Sam">
+  <ChatMessage from="me" author="You" status="read">
+    Can it come to my office instead?
+  </ChatMessage>
+  <ChatMessage from="me" author="You" status="failed">
+    It's the building on Pine Street.
+  </ChatMessage>
+</ChatLog>
+
+## Attachments
+
+Put cards, files, images and code blocks in the `attachments` slot. They sit under the bubble on the page's background, so they read the same in a message from anyone. Use the components you would use elsewhere: CodeSnippet for code, and ClickableTile for a link preview, so the whole card is the link. For an assistant, give UserAvatar an `icon`.
+
+<ChatLog labelText="Conversation with the assistant">
+  <ChatMessage from="me" author="You" status="read">
+    How do I list overdue invoices?
+  </ChatMessage>
+  <ChatMessage author="Assistant">
+    <UserAvatar slot="avatar" size="sm" icon={Bot} backgroundColor="purple" />
+    Call the invoices endpoint with a status filter.
+    <svelte:fragment slot="attachments">
+      <CodeSnippet code="GET /v1/invoices?status=overdue" />
+      <ClickableTile size="sm" href="#attachments">
+        <Stack gap={2}>
+          <Text type="heading-01">API reference: Invoices</Text>
+          <Text type="body-compact-01" color="secondary">List, filter and page through invoices.</Text>
+        </Stack>
+      </ClickableTile>
+    </svelte:fragment>
+  </ChatMessage>
+</ChatLog>
+
+## Links and rich text
+
+Message text rendered with `{text}` is escaped, so it can't inject markup, but its URLs aren't links. `linkSegments` splits plain text into text and links without parsing HTML. Only `http:`, `https:` and `mailto:` URLs become links (pass `schemes` to change them), so `javascript:` and `data:` stay text, and a link's text is its own URL.
+
+<ChatLog labelText="Conversation with support">
+  <ChatMessage author="Dana">
+    {#each linkSegments(tracking) as part}{#if part.href}<Link href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</Link>{:else}{part.text}{/if}{/each}
+  </ChatMessage>
+</ChatLog>
+
+| Do | Why |
+| --- | --- |
+| Render message text with `{text}`, or with `linkSegments` for clickable URLs. | Both treat the message as text, so nothing in it can run as markup. |
+| Never pass a message, or a model's reply, to `{@html}` as it is. | Svelte doesn't sanitize `{@html}`, and an assistant can repeat HTML injected into a page it read. |
+| Sanitize Markdown or rich text with a library such as DOMPurify before `{@html}`, allowing only the tags you need. | Which tags are safe depends on what your app shows. |
+| Check a link's scheme before putting user text in `href`. | Svelte doesn't block `javascript:` URLs in attributes; `linkSegments` does this for you. |
+| Set `rel="noopener noreferrer"` on links that open a new tab. | The new page can't reach back into yours or see where it came from. |
+
+## Meta and actions
+
+The `meta` slot sits under a message, such as for the time, and the `actions` slot beside it, such as for a reply button. Show the time on the last message of a group, as `groupChatMessages` marks it. Actions appear on hover or focus where the device can hover, and always on touch screens.
+
+<ChatLog labelText="Conversation with Sam">
+  <ChatMessage author="Sam">
+    <UserAvatar slot="avatar" size="sm" name="Sam Carter" />
+    Your order shipped this morning.
+    <span slot="meta">9:41 AM</span>
+  </ChatMessage>
+</ChatLog>
+
+## Typing indicator
+
+Set `typing` to show animated dots in place of the content. Screen readers hear `typingText`, announced as a status. The dots hold still when reduced motion is preferred.
+
+<ChatLog labelText="Conversation with Sam">
+  <ChatMessage typing typingText="Sam is typing">
+    <UserAvatar slot="avatar" size="sm" name="Sam Carter" />
+  </ChatMessage>
+</ChatLog>
