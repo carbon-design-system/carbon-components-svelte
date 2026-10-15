@@ -183,6 +183,17 @@ describe("RangeSlider", () => {
     expect(document.body).toHaveFocus();
   });
 
+  it.each([
+    [false, 2],
+    [true, 0],
+  ])("renders range labels: hideRangeLabels=%s", (hideRangeLabels, count) => {
+    const { container } = render(RangeSlider, { props: { hideRangeLabels } });
+
+    expect(container.querySelectorAll(".bx--slider__range-label")).toHaveLength(
+      count,
+    );
+  });
+
   it("should clamp lower value to not exceed upper value", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(RangeSlider, { props: { value: 10, valueUpper: 50 } });
