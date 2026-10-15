@@ -233,9 +233,7 @@
       $helperId,
       ariaDescribedBy,
     )}
-    aria-label={labelText || $$slots.labelChildren
-      ? undefined
-      : ariaLabel || undefined}
+    aria-label={ariaLabel || undefined}
     aria-labelledby={ariaLabelledBy}
     class:bx--radio-button={true}
     on:focus
