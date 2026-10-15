@@ -327,10 +327,13 @@ export const cases: FieldCase[] = [
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
+const NOT_AUDITED =
+  "covered by its own tests; not audited against the contract yet";
 
 export const exempt: Exemptions = {
   fluid: {},
   state: {
+    InputGroup: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
   },
   reset: {
