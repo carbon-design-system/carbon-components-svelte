@@ -190,11 +190,28 @@ describe("NumberInput", () => {
   });
 
   it("should handle readonly state", () => {
-    render(NumberInput, { props: { readonly: true } });
+    render(NumberInput, { props: { readonly: true, value: 5 } });
 
-    const input = screen.getByRole("spinbutton");
+    // NVDA announces a read-only number input as editable.
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("type", "text");
     expect(input).toHaveAttribute("readonly");
     expect(input).toHaveAttribute("aria-readonly", "true");
+    expect(input).toHaveValue("5");
+  });
+
+  it("keeps the same input when readonly toggles", async () => {
+    const { rerender } = render(NumberInput, { props: { value: 5 } });
+    const input = screen.getByRole("spinbutton");
+
+    await rerender({ readonly: true, value: 5 });
+    expect(screen.getByRole("textbox")).toBe(input);
+    expect(input).toHaveValue("5");
+
+    await rerender({ readonly: false, value: 5 });
+    expect(screen.getByRole("spinbutton")).toBe(input);
+    expect(input).toHaveValue(5);
   });
 
   it("should not change value via arrow keys when readonly in text mode", async () => {
@@ -284,7 +301,7 @@ describe("NumberInput", () => {
   it("should not change value via PageUp/PageDown when readonly", async () => {
     render(NumberInput, { props: { readonly: true, value: 50 } });
 
-    const input = screen.getByRole("spinbutton");
+    const input = screen.getByRole("textbox");
     input.focus();
     await user.keyboard("{PageUp}");
     expect(getBoundText()).toBe("50");
@@ -921,7 +938,7 @@ describe("NumberInput", () => {
       props: { readonly: true, invalid: true, invalidText: "Invalid" },
     });
 
-    const input = screen.getByRole("spinbutton");
+    const input = screen.getByRole("textbox");
     expect(input).not.toHaveAttribute("aria-invalid");
   });
 
@@ -1251,7 +1268,7 @@ describe("NumberInput", () => {
         props: { readonly: true, min: 5, max: 20, value: 25 },
       });
 
-      const input = screen.getByRole("spinbutton");
+      const input = screen.getByRole("textbox");
       expect(input).not.toHaveAttribute("aria-invalid");
     });
 
@@ -1381,7 +1398,7 @@ describe("NumberInput", () => {
         props: { value: 5, readonly: true, validate: () => false },
       });
 
-      const input = screen.getByRole("spinbutton");
+      const input = screen.getByRole("textbox");
       expect(input).not.toHaveAttribute("aria-invalid");
     });
   });

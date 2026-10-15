@@ -146,11 +146,11 @@ describe("NumberInput form participation", () => {
       render(NumberInputForm, {
         props: { allowEmpty: true, readonly: true, value: 5 },
       });
-      const input = screen.getByRole("spinbutton", { name: "Amount" });
+      const input = screen.getByRole("textbox", { name: "Amount" });
 
       await resetForm();
 
-      expect(input).toHaveValue(5);
+      expect(input).toHaveValue("5");
       expect(getBoundText()).toBe("5");
     });
   });

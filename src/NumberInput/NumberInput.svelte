@@ -589,12 +589,14 @@
           }}
         >
       {:else}
+        <!-- NVDA ignores `readonly` on a number input and announces it as
+          editable, so a read-only field renders as a text input. -->
         <input
           bind:this={ref}
           use:preserveFocusSelection={selectTextOnFocus && !disabled}
           use:formReset={handleFormReset}
           use:reflectDefaultValue={allowEmpty ? undefined : value}
-          type="number"
+          type={readonly ? "text" : "number"}
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
           data-invalid={showInvalid || undefined}
