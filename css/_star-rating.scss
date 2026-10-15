@@ -1,0 +1,134 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// StarRating: a radio per star, drawn as a star icon, or a read-only row
+/// of stars that fills partial stars for a fractional rating.
+/// @access private
+/// @group components
+@mixin star-rating {
+  .#{$prefix}--star-rating__fieldset {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--star-rating__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--star-rating__stars {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .#{$prefix}--star-rating__text {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--star-rating__star {
+    position: relative;
+    display: flex;
+    padding: $carbon--spacing-02;
+    color: $icon-secondary;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--star-rating__star--on {
+    color: $interactive;
+  }
+
+  .#{$prefix}--star-rating__icon {
+    width: to-rem(24px);
+    height: to-rem(24px);
+    fill: currentColor;
+  }
+
+  .#{$prefix}--star-rating--sm .#{$prefix}--star-rating__icon {
+    width: to-rem(16px);
+    height: to-rem(16px);
+  }
+
+  .#{$prefix}--star-rating--lg .#{$prefix}--star-rating__icon {
+    width: to-rem(32px);
+    height: to-rem(32px);
+  }
+
+  // The radio is hidden, so its star carries the focus ring.
+  .#{$prefix}--star-rating__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    clip-path: inset(50%);
+    opacity: 0;
+  }
+
+  .#{$prefix}--star-rating__input:focus-visible ~ .#{$prefix}--star-rating__icon {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--star-rating--disabled .#{$prefix}--star-rating__star {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--star-rating__validation-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    margin-top: $carbon--spacing-02;
+  }
+
+  // The row renders only while a message applies, so show it outright:
+  // Carbon reveals a message from a field's `[data-invalid]`, which a
+  // warning doesn't set.
+  .#{$prefix}--star-rating__validation-msg .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: none;
+    margin-top: 0;
+  }
+
+  .#{$prefix}--star-rating__invalid-icon {
+    flex: none;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--star-rating__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--star-rating__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+    opacity: 1;
+  }
+
+  // Read-only: an outline star with a filled star clipped to the rating.
+  .#{$prefix}--star-rating--readonly .#{$prefix}--star-rating__star {
+    padding: 0;
+    color: $icon-primary;
+    cursor: default;
+  }
+
+  .#{$prefix}--star-rating--readonly .#{$prefix}--star-rating__stars {
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--star-rating__fill {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc((1 - var(--ccs-star-rating-fill, 0)) * 100%) 0 0);
+  }
+}
+
+@include exports("star-rating") {
+  @include star-rating;
+}
