@@ -26,4 +26,15 @@ describe("CopyInput form reset", () => {
 
     expect(screen.getByRole("textbox")).toHaveValue("rotated-key");
   });
+
+  it("submits the value, not the mask, and keeps both after reset", async () => {
+    render(CopyInputForm, { props: { maskedValue: "a1b2••••" } });
+    const input = screen.getByRole("textbox");
+
+    getForm().reset();
+    await flushFormReset();
+
+    expect(input).toHaveValue("a1b2••••");
+    expect(new FormData(getForm()).getAll("apiKey")).toEqual(["a1b2c3d4"]);
+  });
 });

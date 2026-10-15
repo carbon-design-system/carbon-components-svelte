@@ -4,9 +4,13 @@ description: Copy inputs display a read-only value in a text field with a built-
 ---
 
 <script>
-  import { Box, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, Button, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, InputGroup, TooltipIcon } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
+  import View from "carbon-icons-svelte/lib/View.svelte";
+  import ViewOff from "carbon-icons-svelte/lib/ViewOff.svelte";
+
+  let shown = false;
 </script>
 
 ## Basic
@@ -62,6 +66,35 @@ Use `"focus"` to reveal while the input is focused.
 Use `"hover-focus"` to reveal while the field is hovered or focused. The value stays revealed while the pointer is over the copy button. A disabled field never reveals its value.
 
 <CopyInput labelText="API token" type="password" revealMode="hover-focus" value="sk-1234567890abcdef" />
+
+## Masked value
+
+Set `maskedValue` to show other text in place of `value`, such as a key with only its prefix and last characters. The copy button still copies `value`, and a form submits `value`. Unlike `type="password"`, browsers don't offer to save it as a password. `revealMode` works the same way.
+
+<CopyInput
+  labelText="Secret key"
+  value="key_9a8f2c4e1b7d34f2a"
+  maskedValue="key_••••••••4f2a"
+/>
+
+### Reveal with a button
+
+To reveal on click, clear `maskedValue` from a button beside the field.
+
+<InputGroup labelText="Signing secret">
+  <CopyInput
+    labelText="Signing secret"
+    hideLabel
+    value="sig_8c1f0a6e2b9d47a3e5f1c4b7a91f"
+    maskedValue={shown ? undefined : "sig_••••••••••••a91f"}
+  />
+  <Button
+    kind="ghost"
+    icon={shown ? ViewOff : View}
+    iconDescription={shown ? "Hide secret" : "Show secret"}
+    on:click={() => (shown = !shown)}
+  />
+</InputGroup>
 
 ## Truncation
 
