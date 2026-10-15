@@ -287,8 +287,9 @@
   on:mouseenter
   on:mouseleave
 >
+  <!-- A hidden input cannot be labelled; the thumb is named through aria-labelledby. -->
   <label
-    for={inputId}
+    for={hideTextInput || readonly ? undefined : inputId}
     id={labelId}
     class:bx--label={true}
     class:bx--label--disabled={disabled}

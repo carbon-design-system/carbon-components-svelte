@@ -154,6 +154,18 @@ describe("Slider", () => {
     expect(spinbutton).toHaveAttribute("type", "hidden");
   });
 
+  it.each([
+    ["hideTextInput", { hideTextInput: true }],
+    ["readonly", { readonly: true }],
+  ])("does not point the label at a hidden input (%s)", (_, props) => {
+    render(Slider, { props });
+
+    const label = screen.getByText("Test Slider").closest("label");
+    assert(label);
+    expect(label).not.toHaveAttribute("for");
+    expect(label.control).toBeNull();
+  });
+
   it("forwards focus and blur events from the number input", async () => {
     const onfocus = vi.fn();
     const onblur = vi.fn();
