@@ -1,0 +1,35 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Tile `size="sm"`: a compact tile, such as a row in a list of choices or
+/// one of several side by side, with less padding, no minimum height or
+/// width, and a selectable tile's checkmark pulled in so its gutter
+/// shrinks to match.
+/// @access private
+/// @group components
+@mixin tile-size {
+  .#{$prefix}--tile.#{$prefix}--tile--sm {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  // `noPadding` still removes all of it.
+  .#{$prefix}--tile.#{$prefix}--tile--sm:not(.#{$prefix}--tile--no-padding) {
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+  }
+
+  // The 16px checkmark sits 12px from the edge; 4px clears it. As specific
+  // as the padding rule above, so it follows and wins.
+  .#{$prefix}--tile.#{$prefix}--tile--selectable.#{$prefix}--tile--sm {
+    padding-right: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--tile--sm .#{$prefix}--tile__checkmark {
+    top: $carbon--spacing-04;
+    right: $carbon--spacing-04;
+  }
+}
+
+@include exports("tile-size") {
+  @include tile-size;
+}
