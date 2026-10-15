@@ -13,8 +13,9 @@ export const CONSUMER_LABEL = "Contract label";
 export const CONSUMER_LABEL_ID = "contract-label";
 export const CONSUMER_DESCRIPTION_ID = "contract-description";
 
+// `RenderResult<any>` rejects concrete results, so keep only what cases read.
 // biome-ignore lint/suspicious/noExplicitAny: cases render many component types
-type Rendered = RenderResult<any>;
+type Rendered = Pick<RenderResult<any>, "container" | "baseElement">;
 
 export type AriaCase = {
   /** Component name, as exported from the package. */
