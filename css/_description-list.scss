@@ -1,5 +1,6 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
 @import "./spacing-scale";
 
 /// DescriptionList renders real dl/dt/dd term-value pairs. Gap uses the same
@@ -47,6 +48,40 @@
   .#{$prefix}--description-list--horizontal .#{$prefix}--description-list-item dt {
     flex: 0 0 auto;
     min-width: 30%;
+  }
+
+  // Summary: a term that wraps, and its detail held to the right edge in
+  // tabular figures so amounts line up down the list.
+  .#{$prefix}--description-list--summary .#{$prefix}--description-list-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--description-list--summary .#{$prefix}--description-list-item dt {
+    min-width: 0;
+  }
+
+  // The detail keeps at least its longest word, so an amount never breaks,
+  // but longer text wraps instead of overflowing a narrow container.
+  .#{$prefix}--description-list--summary .#{$prefix}--description-list-item dd {
+    flex: 0 1 auto;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .#{$prefix}--description-list-item--total {
+    padding-top: $carbon--spacing-04;
+    border-top: 1px solid $ui-03;
+  }
+
+  .#{$prefix}--description-list-item--total dt {
+    color: $text-01;
+  }
+
+  .#{$prefix}--description-list-item.#{$prefix}--description-list-item--total dd {
+    @include type-style("productive-heading-03");
   }
 }
 
