@@ -1,6 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
+   * @restProps {a}
    */
 
   /** Set to `false` to hide the side nav by default */
@@ -97,6 +98,7 @@
   import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
@@ -154,11 +156,20 @@
     wasAboveBreakpoint = isAboveBreakpoint;
   }
 
-  // An explicit label wins over the visible names; omit an empty one.
+  // Naming and description belong on the banner landmark, not the name link.
+  $: ({
+    ariaLabel: consumerAriaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: linkProps,
+  } = splitAriaNaming($$restProps));
+
+  // An explicit label wins over the visible names; omit an empty one. A
+  // consumer `aria-labelledby` replaces the visible-name fallback.
   $: ariaLabel =
     uiShellAriaLabel ??
-    $$props["aria-label"] ??
-    (companyName || platformName || undefined);
+    consumerAriaLabel ??
+    (ariaLabelledBy ? undefined : companyName || platformName || undefined);
   $: hamburgerAriaLabel =
     ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
 </script>
@@ -167,6 +178,8 @@
 
 <header
   aria-label={ariaLabel}
+  aria-labelledby={ariaLabelledBy}
+  aria-describedby={ariaDescribedBy}
   class:bx--header={true}
   class:bx--header--ui-shell-classic={theme === "classic"}
 >
@@ -186,10 +199,10 @@
   {#if companyName || platformName || $$slots.company || $$slots.platform}
     <a
       {href}
-      rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
+      rel={resolveLinkRel(linkProps.target, linkProps.rel)}
       class:bx--header__name={true}
       bind:this={ref}
-      {...$$restProps}
+      {...linkProps}
       on:click
     >
       {#if companyName || $$slots.company}
