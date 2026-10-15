@@ -1,17 +1,22 @@
 import { render, screen } from "@testing-library/svelte";
+import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
 import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
+import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
+import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
 import Modal from "carbon-components-svelte/Modal/Modal.svelte";
+import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
 import NotificationButton from "carbon-components-svelte/Notification/NotificationButton.svelte";
+import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
@@ -32,10 +37,14 @@ import ComposedModal from "../fixtures/ComposedModal.test.svelte";
 import ContextMenu from "../fixtures/ContextMenu.test.svelte";
 import ContextMenuOption from "../fixtures/ContextMenuOption.test.svelte";
 import InterstitialScreen from "../fixtures/InterstitialScreen.test.svelte";
+import InterstitialScreenBody from "../fixtures/InterstitialScreenBody.test.svelte";
 import Link from "../fixtures/Link.test.svelte";
+import LinkDownload from "../fixtures/LinkDownload.test.svelte";
 import Menu from "../fixtures/Menu.test.svelte";
 import MenuItem from "../fixtures/MenuItem.test.svelte";
 import ModalBody from "../fixtures/ModalBody.test.svelte";
+import NotificationActionButton from "../fixtures/NotificationActionButton.test.svelte";
+import OutboundLink from "../fixtures/OutboundLink.test.svelte";
 import OverflowMenuItem from "../fixtures/OverflowMenuItem.test.svelte";
 import RadioTile from "../fixtures/RadioTile.test.svelte";
 import SelectableTile from "../fixtures/SelectableTile.test.svelte";
@@ -401,5 +410,129 @@ export const interactive: AriaEntry[] = [
         props: { name: "Ada Lovelace", tooltipText: "Ada Lovelace", ...attrs },
       }),
     target: () => screen.getByRole("button"),
+  },
+  {
+    name: "BigNumber",
+    render: (attrs) =>
+      render(BigNumber, {
+        props: { labelText: "Requests", value: 1200, ...attrs },
+      }),
+    target: () => screen.getByRole("figure"),
+  },
+  {
+    name: "BigNumber",
+    variant: "tooltip",
+    render: (attrs) =>
+      render(BigNumber, {
+        props: {
+          labelText: "Requests",
+          value: 1200,
+          tooltipDescription: "Last 24 hours",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("figure"),
+  },
+  {
+    name: "Dialog",
+    render: (attrs) => render(Dialog, { props: { open: true, ...attrs } }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "Dialog",
+    variant: "modal",
+    render: (attrs) =>
+      render(Dialog, { props: { open: true, modal: true, ...attrs } }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "FileUploaderItem",
+    exempt:
+      "file row container; its Filename control is named by iconDescription",
+  },
+  {
+    name: "FloatingPortal",
+    exempt: "positioning wrapper; the slotted content carries its own role",
+  },
+  {
+    name: "IconIndicator",
+    exempt:
+      "visible label with a decorative icon; no focusable or role element",
+  },
+  {
+    name: "InlineLoading",
+    render: (attrs) =>
+      render(InlineLoading, { props: { description: "Saving", ...attrs } }),
+    target: () => screen.getByRole("status"),
+  },
+  {
+    name: "InlineLoading",
+    variant: "error",
+    render: (attrs) =>
+      render(InlineLoading, {
+        props: { status: "error", description: "Failed", ...attrs },
+      }),
+    target: () => screen.getByRole("alert"),
+  },
+  {
+    name: "InlineNotification",
+    render: (attrs) =>
+      render(InlineNotification, {
+        props: { title: "Error", subtitle: "Try again", ...attrs },
+      }),
+    target: () => screen.getByRole("alert"),
+  },
+  {
+    name: "InterstitialScreenBody",
+    render: (attrs) => render(InterstitialScreenBody, { props: attrs }),
+    target: () => screen.getByRole("region"),
+  },
+  {
+    name: "InterstitialScreenFooter",
+    exempt:
+      "footer container; its buttons are fixed controls named by their text",
+  },
+  {
+    name: "LinkDownload",
+    render: (attrs) => render(LinkDownload, { props: attrs }),
+    target: () => screen.getByRole("link"),
+  },
+  {
+    name: "ListBoxMenuIcon",
+    exempt:
+      "chevron inside the list box field; its icon is named by translateWithId",
+  },
+  {
+    name: "ModalFooter",
+    exempt:
+      "footer container; its buttons are fixed controls named by their text",
+  },
+  {
+    name: "NotificationActionButton",
+    render: (attrs) => render(NotificationActionButton, { props: attrs }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "OutboundLink",
+    render: (attrs) => render(OutboundLink, { props: attrs }),
+    target: () => screen.getByRole("link"),
+  },
+  {
+    name: "ShapeIndicator",
+    exempt:
+      "visible label with a decorative shape; no focusable or role element",
+  },
+  {
+    name: "ToastNotification",
+    render: (attrs) =>
+      render(ToastNotification, {
+        props: {
+          title: "Saved",
+          subtitle: "All changes saved",
+          caption: "Just now",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("alert"),
   },
 ];
