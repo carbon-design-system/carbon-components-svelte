@@ -155,6 +155,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--form-item--fit={!isFluid}
   class:bx--time-picker__form-item--fluid={isFluid}
   on:click
   on:mouseover
