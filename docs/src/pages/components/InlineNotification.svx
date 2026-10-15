@@ -25,6 +25,12 @@ Automatically close the notification after a specified duration (in milliseconds
 
 <FileSource src="/framed/InlineNotification/InlineNotificationTimeout" />
 
+## Full width
+
+Set `fullWidth` to fill the parent's width without the default width limits and outer margin. Use it when the notification sits inside a card, form, or other layout that sizes and spaces its own content.
+
+<InlineNotification fullWidth kind="warning" title="Usage:" subtitle="Build minutes are close to the Team limit." />
+
 ## Title and subtitle
 
 Both the title and subtitle are optional and can be customized with slots.
