@@ -13,3 +13,7 @@
   step={1}
 />
 <div data-testid="value-display">{value}</div>
+
+<div data-testid="slider-narrow" style:width="240px">
+  <Slider fullWidth labelText="Brightness" value={80} min={0} max={100} />
+</div>

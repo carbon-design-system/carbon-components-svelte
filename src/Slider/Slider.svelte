@@ -86,6 +86,7 @@
   /**
    * Set to `true` for the slider to span
    * the full width of its containing element.
+   * The track then also shrinks below its 200px minimum in a narrower one.
    */
   export let fullWidth = false;
 
@@ -327,6 +328,7 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
+      style:min-width={fullWidth ? "0" : undefined}
       on:mousedown={startInteraction}
       on:touchstart={startInteraction}
     >

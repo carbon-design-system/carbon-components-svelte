@@ -55,4 +55,21 @@ test.describe("Slider", () => {
     await expect(page.getByTestId("value-display")).toHaveText("100");
     await expect(thumb).toHaveAttribute("aria-valuenow", "100");
   });
+
+  test("fits a narrow container with fullWidth", async ({ page }) => {
+    const container = page.getByTestId("slider-narrow");
+    const right = await container.evaluate(
+      (node) => node.getBoundingClientRect().right,
+    );
+    const parts = await container
+      .locator(".bx--slider-container > *")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => node.getBoundingClientRect().right),
+      );
+
+    expect(parts.length).toBeGreaterThan(1);
+    for (const partRight of parts) {
+      expect(partRight).toBeLessThanOrEqual(right);
+    }
+  });
 });

@@ -85,4 +85,21 @@ test.describe("RangeSlider", () => {
     await expect(page.getByTestId("value-upper-display")).toHaveText("20");
     await expect(page.getByTestId("value-display")).toHaveText("20");
   });
+
+  test("fits a narrow container with fullWidth", async ({ page }) => {
+    const container = page.getByTestId("range-slider-narrow");
+    const right = await container.evaluate(
+      (node) => node.getBoundingClientRect().right,
+    );
+    const parts = await container
+      .locator(".bx--slider-container > *")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => node.getBoundingClientRect().right),
+      );
+
+    expect(parts.length).toBeGreaterThan(1);
+    for (const partRight of parts) {
+      expect(partRight).toBeLessThanOrEqual(right);
+    }
+  });
 });
