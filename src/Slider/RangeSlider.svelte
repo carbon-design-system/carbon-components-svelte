@@ -471,8 +471,9 @@
   on:mouseenter
   on:mouseleave
 >
+  <!-- A hidden input cannot be labelled; the thumbs are named through aria-labelledby. -->
   <label
-    for={lowerInputId}
+    for={hideTextInput || readonly ? undefined : lowerInputId}
     id={labelId}
     class:bx--label={true}
     class:bx--label--disabled={disabled}
@@ -501,7 +502,7 @@
         bind:this={lowerInputRef}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:reflectDefaultValue={value}
-        type={hideTextInput ? "hidden" : inputType}
+        type={hideTextInput || readonly ? "hidden" : inputType}
         id={lowerInputId}
         {name}
         {form}
@@ -546,6 +547,21 @@
         on:focus={handleLowerInputFocus}
         on:blur={handleLowerInputBlur}
       >
+      <!-- NVDA announces a read-only number input as editable, so a read-only
+        slider shows its value as text. The thumb already exposes the value. -->
+      {#if readonly && !hideTextInput}
+        <div
+          aria-hidden="true"
+          class:bx--text-input={true}
+          class:bx--slider-text-input={true}
+          class:bx--slider-text-input--lower={true}
+          class:bx--slider-text-input--readonly={true}
+          class:bx--slider-text-input--xs={effectiveSize === "xs"}
+          class:bx--text-input--light={light}
+        >
+          {value}
+        </div>
+      {/if}
       {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
       {:else if showWarn}
@@ -748,7 +764,7 @@
         bind:this={upperInputRef}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:reflectDefaultValue={valueUpper}
-        type={hideTextInput ? "hidden" : inputType}
+        type={hideTextInput || readonly ? "hidden" : inputType}
         id={upperInputId}
         name={nameUpper}
         {form}
@@ -793,6 +809,19 @@
         on:focus={handleUpperInputFocus}
         on:blur={handleUpperInputBlur}
       >
+      {#if readonly && !hideTextInput}
+        <div
+          aria-hidden="true"
+          class:bx--text-input={true}
+          class:bx--slider-text-input={true}
+          class:bx--slider-text-input--upper={true}
+          class:bx--slider-text-input--readonly={true}
+          class:bx--slider-text-input--xs={effectiveSize === "xs"}
+          class:bx--text-input--light={light}
+        >
+          {valueUpper}
+        </div>
+      {/if}
       {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
       {:else if showWarn}
