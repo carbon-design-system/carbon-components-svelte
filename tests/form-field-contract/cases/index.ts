@@ -268,6 +268,7 @@ const NOT_AUDITED =
 export const exempt: Exemptions = {
   fluid: {},
   state: {
+    InputGroup: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
     Checkbox: NOT_AUDITED,
     CheckboxGroup: NOT_AUDITED,
