@@ -6,6 +6,7 @@ import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte
 import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
 import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.svelte";
 import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
+import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
@@ -543,5 +544,10 @@ export const interactive: AriaEntry[] = [
         props: { open: true, heading: "Delete this project?", ...attrs },
       }),
     target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "Countdown",
+    render: (attrs) => render(Countdown, { props: { seconds: 90, ...attrs } }),
+    target: () => screen.getByRole("timer"),
   },
 ];
