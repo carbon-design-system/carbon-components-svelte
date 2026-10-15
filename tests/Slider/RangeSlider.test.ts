@@ -168,6 +168,21 @@ describe("RangeSlider", () => {
     }
   });
 
+  it("leaves the thumbs as the only controls when read-only", async () => {
+    render(RangeSlider, { props: { readonly: true, value: 10 } });
+
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    await user.tab();
+    expect(lowerThumb).toHaveFocus();
+    await user.tab();
+    expect(upperThumb).toHaveFocus();
+    await user.tab();
+    expect(document.body).toHaveFocus();
+  });
+
   it("should clamp lower value to not exceed upper value", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(RangeSlider, { props: { value: 10, valueUpper: 50 } });
@@ -561,12 +576,14 @@ describe("RangeSlider", () => {
       { invalid: true, invalidText: "Invalid range" },
       { warn: true, warnText: "Check range" },
     ]) {
-      const { unmount } = render(RangeSliderComponent, {
+      const { container, unmount } = render(RangeSliderComponent, {
         props: { labelText: "Range", ...status, ...props },
       });
       expect(screen.queryByText("Invalid range")).not.toBeInTheDocument();
       expect(screen.queryByText("Check range")).not.toBeInTheDocument();
-      for (const input of screen.getAllByRole("spinbutton")) {
+      const inputs = container.querySelectorAll("input");
+      expect(inputs).toHaveLength(2);
+      for (const input of inputs) {
         expect(input).not.toHaveAttribute("aria-invalid");
         expect(input).not.toHaveAttribute("data-warn");
       }

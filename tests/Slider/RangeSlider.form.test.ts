@@ -39,4 +39,26 @@ describe("RangeSlider form reset", () => {
     expect(lower.value).toBe("25");
     expect(getBoundText()).toBe("25-75");
   });
+
+  it("submits and keeps both bounds when read-only", async () => {
+    const { container, rerender } = render(RangeSliderForm, {
+      props: { readonly: true, value: 30, valueUpper: 70 },
+    });
+    const data = () => {
+      const formData = new FormData(getForm());
+      return [formData.get("low"), formData.get("high")];
+    };
+
+    expect(data()).toEqual(["30", "70"]);
+
+    await rerender({ readonly: true, value: 25, valueUpper: 75 });
+    await resetForm();
+
+    const lower =
+      container.querySelector<HTMLInputElement>('input[name="low"]');
+    assert(lower);
+    expect(lower.value).toBe("25");
+    expect(getBoundText()).toBe("25-75");
+    expect(data()).toEqual(["25", "75"]);
+  });
 });

@@ -3,12 +3,14 @@
 
   export let value = 10;
   export let valueUpper = 90;
+  export let readonly = false;
 </script>
 
 <form data-testid="form">
   <RangeSlider
     bind:value
     bind:valueUpper
+    {readonly}
     name="low"
     nameUpper="high"
     labelText="Range"
