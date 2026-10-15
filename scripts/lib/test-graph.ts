@@ -67,6 +67,8 @@ const NAMED_CLAUSE = /\{([^}]*)\}/;
 const DEFAULT_OR_NAMESPACE = /^\s*[\w$*]/;
 const URL_REF = /^[a-z]+:|^\/\//;
 const STRING_LITERAL = /^["'`]([^"'`$]*)["'`]$/;
+/** A template literal that only interpolates its query string or hash. */
+const TEMPLATE_QUERY = /^`([^`$?#]*[?#])[^`]*`$/;
 const QUOTED = /["']([^"']+)["']/g;
 const LIST_SEPARATOR = /[\s,]+/;
 
@@ -233,9 +235,11 @@ export function parseDependencies(
 
   if (path.startsWith("e2e/")) {
     for (const [, argument] of source.matchAll(GOTO)) {
-      const url = argument.trim().match(STRING_LITERAL)?.[1];
+      const literal = argument.trim();
+      const url = (literal.match(STRING_LITERAL) ??
+        literal.match(TEMPLATE_QUERY))?.[1];
       if (url === undefined) {
-        deps.unknown.push(`non-literal goto(${argument.trim()})`);
+        deps.unknown.push(`non-literal goto(${literal})`);
       } else if (url.startsWith("/")) {
         const page = `e2e/fixtures${url.replace(QUERY, "")}`;
         if (context.exists(page)) deps.files.add(page);

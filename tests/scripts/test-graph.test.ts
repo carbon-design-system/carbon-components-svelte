@@ -235,9 +235,21 @@ describe("parseDependencies", () => {
       patterns: [],
       unknown: [],
     });
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    const queryOnly = "await page.goto(`/accordion.html?size=${size}`);";
+    expect(deps("e2e/x.test.ts", queryOnly)).toEqual({
+      files: ["e2e/fixtures/accordion.html"],
+      patterns: [],
+      unknown: [],
+    });
     expect(deps("e2e/x.test.ts", "await page.goto(url);").unknown).toEqual([
       "non-literal goto(url)",
     ]);
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    const dynamicPath = "`/${name}.html`";
+    expect(
+      deps("e2e/x.test.ts", `await page.goto(${dynamicPath});`).unknown,
+    ).toEqual([`non-literal goto(${dynamicPath})`]);
     expect(
       deps("e2e/x.test.ts", `await page.goto("/gone.html");`).unknown,
     ).toEqual([`missing fixture "/gone.html"`]);
