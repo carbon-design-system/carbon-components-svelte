@@ -548,6 +548,8 @@
           resolveStatusDescribedBy({
             showInvalid,
             showWarn,
+            invalidText,
+            warnText,
             helperText,
             errorId,
             warnId,
@@ -625,6 +627,8 @@
             resolveStatusDescribedBy({
               showInvalid,
               showWarn,
+              invalidText,
+              warnText,
               helperText,
               errorId,
               warnId,
@@ -696,6 +700,8 @@
             resolveStatusDescribedBy({
               showInvalid,
               showWarn,
+              invalidText,
+              warnText,
               helperText,
               errorId,
               warnId,
@@ -815,6 +821,8 @@
           resolveStatusDescribedBy({
             showInvalid,
             showWarn,
+            invalidText,
+            warnText,
             helperText,
             errorId,
             warnId,
@@ -847,7 +855,7 @@
       {/if}
     </div>
   </div>
-  {#if showInvalid}
+  {#if showInvalid && invalidText}
     <div
       id={errorId}
       role="alert"
@@ -858,7 +866,7 @@
       {invalidText}
     </div>
   {/if}
-  {#if showWarn}
+  {#if showWarn && warnText}
     <div
       id={warnId}
       class:bx--slider__validation-msg={true}
