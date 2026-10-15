@@ -41,6 +41,7 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Close from "../icons/Close.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
 
   const defaultTranslations = {
     [translationIds.clearAll]: "Clear all selected items",
@@ -61,6 +62,11 @@
   onMount(() => () => {
     if (declaredRef) ctx?.releaseRef?.({ key: "selection", ref: declaredRef });
   });
+
+  // With a selection count, the close icon takes focus, not the tag, so it
+  // gets the naming and description attributes.
+  $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
+    splitAriaNaming($$restProps));
 
   $: translationId =
     selectionCount !== undefined && selectionCount > 1
@@ -95,6 +101,7 @@
     class:bx--tag--high-contrast={true}
     class:bx--tag--disabled={disabled}
     aria-hidden={readonly || undefined}
+    {...rest}
   >
     <span
       class:bx--tag__label={true}
@@ -112,7 +119,9 @@
       on:keydown|stopPropagation={handleClearKeydown}
       {disabled}
       aria-disabled={readonly || undefined}
-      aria-label={description}
+      aria-label={ariaLabel ?? description}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       aria-hidden={readonly || undefined}
       title={description}
     >
