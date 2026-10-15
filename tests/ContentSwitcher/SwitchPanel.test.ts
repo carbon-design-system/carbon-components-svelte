@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import ContentSwitcherPanels from "./ContentSwitcher.panels.test.svelte";
 import { renderAndFlush } from "./helpers";
+import SwitchPanelAriaLabel from "./SwitchPanel.ariaLabel.test.svelte";
 
 function panel(id: string) {
   const element = document.getElementById(id);
@@ -25,6 +26,27 @@ describe("SwitchPanel", () => {
     expect(panel("three-panel")).toHaveAttribute(
       "aria-labelledby",
       "three-switch",
+    );
+  });
+
+  it("names the panel with a consumer aria-label instead of its switch", async () => {
+    await renderAndFlush(SwitchPanelAriaLabel, {
+      props: { "aria-label": "Summary" },
+    });
+
+    const element = panel("one-panel");
+    expect(element).not.toHaveAttribute("aria-labelledby");
+    expect(element).toHaveAccessibleName("Summary");
+  });
+
+  it("keeps a consumer aria-labelledby on the panel", async () => {
+    await renderAndFlush(SwitchPanelAriaLabel, {
+      props: { "aria-labelledby": "custom-label" },
+    });
+
+    expect(panel("one-panel")).toHaveAttribute(
+      "aria-labelledby",
+      "custom-label",
     );
   });
 
