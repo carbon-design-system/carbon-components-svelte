@@ -1,0 +1,22 @@
+---
+components: ["Stepper"]
+description: Steppers walk through a multi-step flow, such as a checkout or sign-up, with progress, one step's content at a time, Back and Continue, and a final submit.
+---
+
+## Basic
+
+Pass the step labels to `steps` and render each step's content from the `step` slot prop. Continue moves forward and Back moves back; passed steps are marked complete, and focus moves to the new step.
+
+`validate` runs when Continue is pressed: return `false` to stay on the step, after marking its invalid fields. On the last step, Continue becomes `submitText` and runs `onSubmit`. While its promise is pending the button shows a loading state; when it resolves, every step is complete, the buttons go away, and the `submitted` slot prop is `true`. A rejection shows its message above the buttons.
+
+<FileSource src="/framed/Stepper/Stepper" />
+
+## Disable Continue
+
+Set `nextDisabled` to keep Continue disabled until the step is ready, such as until a choice is made.
+
+```svelte
+<Stepper steps={["Method", "Set up"]} nextDisabled={!method} let:step>
+  …
+</Stepper>
+```
