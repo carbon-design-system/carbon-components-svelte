@@ -48,6 +48,21 @@
     outline-offset: -2px;
   }
 
+  // `.bx--form-requirement` stays hidden until a field's status reveals it.
+  // The vendored list in `_form.scss` predates TagInput, so show its
+  // invalid and warning messages here.
+  .#{$prefix}--tag-input[data-invalid] ~ .#{$prefix}--form-requirement,
+  .#{$prefix}--tag-input[data-warn] ~ .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+
+  .#{$prefix}--tag-input[data-invalid] ~ .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
   // After the invalid outline: focus wins while typing.
   .#{$prefix}--tag-input--focused {
     outline: 2px solid $focus;
