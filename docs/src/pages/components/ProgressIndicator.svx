@@ -12,7 +12,7 @@ description: Progress indicators show progress through a sequence of steps, with
 
 ## Basic
 
-Create a horizontal progress indicator with four steps.
+Create a horizontal progress indicator with four steps. It shows progress only; for a flow the user fills in step by step, with Back and Continue, validation and a final submit, use [Stepper](/components/Stepper), which draws this indicator.
 
 <ProgressIndicator currentIndex={2}>
   <ProgressStep complete
