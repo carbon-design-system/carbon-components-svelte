@@ -229,6 +229,7 @@
     use:formReset={handleFormReset}
     type="file"
     tabindex="-1"
+    aria-hidden="true"
     {id}
     {disabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}

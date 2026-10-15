@@ -97,6 +97,13 @@ describe("FileUploaderDropContainer", () => {
     expect(input).toHaveAttribute("capture", "user");
   });
 
+  it("should hide the native input from assistive technology", () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    const input = container.querySelector('input[type="file"]');
+    expect(input).toHaveAttribute("aria-hidden", "true");
+  });
+
   it("should move aria-describedby and aria-labelledby to the drop target", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: {
