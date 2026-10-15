@@ -17,6 +17,7 @@ import ContentSwitcherFixture from "../fixtures/ContentSwitcher.test.svelte";
 import HeaderNavFixture from "../fixtures/HeaderNav.test.svelte";
 import ProfileMenuItemFixture from "../fixtures/ProfileMenuItem.test.svelte";
 import ProgressStepFixture from "../fixtures/ProgressStep.test.svelte";
+import TableFixture from "../fixtures/Table.test.svelte";
 import TableHeaderFixture from "../fixtures/TableHeader.test.svelte";
 import TabsFixture from "../fixtures/Tabs.test.svelte";
 import ToggleButtonGroupFixture from "../fixtures/ToggleButtonGroup.test.svelte";
@@ -302,5 +303,17 @@ export const navigation: AriaEntry[] = [
     name: "ToggleButtonGroup",
     render: (attrs) => render(ToggleButtonGroupFixture, { props: attrs }),
     target: () => screen.getByRole("toolbar"),
+  },
+  {
+    name: "Table",
+    render: (attrs) => render(TableFixture, { props: attrs }),
+    target: () => screen.getByRole("table"),
+  },
+  {
+    name: "Table",
+    variant: "sticky header",
+    render: (attrs) =>
+      render(TableFixture, { props: { stickyHeader: true, ...attrs } }),
+    target: () => screen.getByRole("table"),
   },
 ];

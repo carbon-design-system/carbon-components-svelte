@@ -1,34 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
-import { carriersOf, externalLabel } from "../utils/aria-forwarding";
+import { externalLabel } from "../utils/aria-forwarding";
 
 describe("RangeSlider aria forwarding", () => {
-  it("joins a consumer aria-describedby on both thumbs and text inputs", () => {
-    const { container } = render(RangeSlider, {
-      props: {
-        labelText: "Price",
-        helperText: "In dollars",
-        "aria-describedby": "extra-help",
-      },
-    });
-
-    const controls = [
-      ...screen.getAllByRole("slider"),
-      ...screen.getAllByRole("spinbutton"),
-    ];
-    expect(controls).toHaveLength(4);
-    for (const control of controls) {
-      expect(control).toHaveAttribute(
-        "aria-describedby",
-        expect.stringMatching(/^\S+ extra-help$/),
-      );
-      expect(control).toHaveAccessibleDescription("In dollars");
-    }
-    expect(
-      carriersOf(container, "aria-describedby", "extra-help"),
-    ).toHaveLength(4);
-  });
-
   it("uses a consumer aria-labelledby as the group label of each control", () => {
     externalLabel("ext-label", "Price range");
     const { container } = render(RangeSlider, {

@@ -9,7 +9,7 @@
 </script>
 
 <TableContainer title="Orders" description="Orders from the last 30 days">
-  <Table {stickyHeader} aria-describedby="extra-help">
+  <Table {stickyHeader} {...$$restProps}>
     <TableBody>
       <TableRow>
         <TableCell>Cell</TableCell>

@@ -7,6 +7,7 @@ import Filename from "carbon-components-svelte/FileUploader/Filename.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
+import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
@@ -352,5 +353,54 @@ export const forms: AriaEntry[] = [
         props: { labelText: "Alerts", readonly: true, ...attrs },
       }),
     target: () => screen.getByRole("switch"),
+  },
+  {
+    name: "FormGroup",
+    render: (attrs) =>
+      render(FormGroup, {
+        props: {
+          legendText: "Contact",
+          message: true,
+          messageText: "Pick at least one",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "NumberInput",
+    variant: "text mode",
+    render: (attrs) =>
+      render(NumberInput, {
+        props: {
+          labelText: "Price",
+          helperText: "In dollars",
+          allowDecimal: true,
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "Select",
+    variant: "inline",
+    render: (attrs) =>
+      render(SelectFixture, { props: { inline: true, ...attrs } }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "TimePicker",
+    variant: "fluid",
+    render: (attrs) =>
+      render(TimePicker, {
+        props: {
+          fluid: true,
+          labelText: "Time",
+          warn: true,
+          warnText: "Outside office hours",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
 ];

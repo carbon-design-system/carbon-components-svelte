@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
+import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
 import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
@@ -19,9 +20,11 @@ import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
+import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import type { AriaEntry } from "../contract";
 import AccordionItem from "../fixtures/AccordionItem.test.svelte";
+import BreadcrumbItemFixture from "../fixtures/BreadcrumbItem.test.svelte";
 import Button from "../fixtures/Button.test.svelte";
 import CarouselItem from "../fixtures/CarouselItem.test.svelte";
 import ClickableTile from "../fixtures/ClickableTile.test.svelte";
@@ -377,5 +380,26 @@ export const interactive: AriaEntry[] = [
         props: { labelText: "Files", nodes, virtualize: true, ...attrs },
       }),
     target: () => screen.getByRole("tree"),
+  },
+  {
+    name: "BreadcrumbItem",
+    variant: "href",
+    render: (attrs) => render(BreadcrumbItemFixture, { props: attrs }),
+    target: () => screen.getByRole("link"),
+  },
+  {
+    name: "ComboButton",
+    render: (attrs) =>
+      render(ComboButton, { props: { labelText: "Save", ...attrs } }),
+    target: () => screen.getAllByRole("button")[0],
+  },
+  {
+    name: "UserAvatar",
+    variant: "tooltip",
+    render: (attrs) =>
+      render(UserAvatar, {
+        props: { name: "Ada Lovelace", tooltipText: "Ada Lovelace", ...attrs },
+      }),
+    target: () => screen.getByRole("button"),
   },
 ];

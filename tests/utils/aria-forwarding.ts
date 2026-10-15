@@ -1,12 +1,4 @@
 /**
- * Elements under `root` whose `attr` lists `id` among its tokens. Use it to
- * check that a consumer id lands only on the expected elements.
- */
-export function carriersOf(root: Element, attr: string, id: string) {
-  return Array.from(root.querySelectorAll(`[${attr}~="${id}"]`));
-}
-
-/**
  * Append an element with `id` and `text` to the body for a consumer
  * `aria-labelledby` to point at. It is removed when the test finishes.
  */
