@@ -79,3 +79,13 @@ export function valueFromPointer(
     offset?: number;
   },
 ): number | null;
+
+/**
+ * Width for the slider's text input when its longest value has more than
+ * three characters. Returns `undefined` to keep the stylesheet's width.
+ */
+export function getTextInputWidth(
+  min: number,
+  max: number,
+  step: number,
+): string | undefined;

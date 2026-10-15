@@ -3,6 +3,7 @@ import {
   getClientX,
   getClientY,
   getPointerPosition,
+  getTextInputWidth,
   getTrackAxis,
   getValueText,
   valueFromPointer,
@@ -182,5 +183,18 @@ describe("valueFromPointer", () => {
     expect(
       valueFromPointer(event, rect, { ...options, orientation: "vertical" }),
     ).toBeNull();
+  });
+});
+
+describe("getTextInputWidth", () => {
+  it.each([
+    ["three characters", 0, 100, 1, undefined],
+    ["a negative two-digit min", -50, 50, 1, undefined],
+    ["four digits", 0, 5000, 50, "calc(4.5ch + 2rem)"],
+    ["a negative three-digit min", -100, 100, 1, "calc(4.5ch + 2rem)"],
+    ["step decimals", 0, 10, 0.25, "calc(5.5ch + 2rem)"],
+    ["a decimal max with a whole step", 0, 99.5, 1, undefined],
+  ])("sizes for %s", (_case, min, max, step, expected) => {
+    expect(getTextInputWidth(min, max, step)).toBe(expected);
   });
 });

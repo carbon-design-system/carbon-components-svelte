@@ -72,4 +72,14 @@ test.describe("Slider", () => {
       expect(partRight).toBeLessThanOrEqual(right);
     }
   });
+
+  test("shows a four-digit value in full", async ({ page }) => {
+    const input = page.getByRole("spinbutton", { name: "Monthly limit" });
+    await expect(input).toHaveValue("2500");
+    const fits = await input.evaluate(
+      (node) => node.scrollWidth <= node.clientWidth,
+    );
+
+    expect(fits).toBe(true);
+  });
 });
