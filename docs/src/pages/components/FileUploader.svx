@@ -324,6 +324,12 @@ file by name, size, and last modified. Rejected duplicates are reported via
 
 <FileSource src="/framed/FileUploader/FileUploaderPreventDuplicate" />
 
+### Full width
+
+The selected files, and FileUploaderDropContainer's drop area, stop at 20rem. Set `fullWidth` on FileUploader, FileUploaderItem or FileUploaderDropContainer to fill the container.
+
+<FileUploaderDropContainer fullWidth labelText="Drag and drop files here or click to upload" multiple />
+
 ### Disabled
 
 Disable the file uploader by setting `disabled` to `true`.

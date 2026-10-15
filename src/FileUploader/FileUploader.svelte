@@ -70,6 +70,12 @@
    */
   export let fileSize = false;
 
+  /**
+   * Set to `true` for the selected files to fill the container instead of
+   * stopping at 20rem.
+   */
+  export let fullWidth = false;
+
   /** Set to `true` to disable the file uploader */
   export let disabled = false;
 
@@ -424,6 +430,7 @@
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
         class:bx--file__selected-file--xs={effectiveSize === "xs"}
+        class:bx--file__selected-file--full-width={fullWidth}
       >
         <span class:bx--file-filename-group={true}>
           <p class:bx--file-filename={true} use:overflowTitle>{file.name}</p>
