@@ -362,3 +362,18 @@
 @include exports("checkbox-validation") {
   @include checkbox-validation;
 }
+
+// carbon-components-svelte patch
+// `inline`: no outer margin. The margins above space a stack of checkboxes
+// by DOM position, so a checkbox alone in a cell or sharing a row with other
+// content picks up a stack's top and bottom margins it has no use for. The
+// extra class wins over those rules by order.
+@mixin checkbox-inline {
+  .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper.#{$prefix}--checkbox-wrapper--inline {
+    margin: 0;
+  }
+}
+
+@include exports("checkbox-inline") {
+  @include checkbox-inline;
+}

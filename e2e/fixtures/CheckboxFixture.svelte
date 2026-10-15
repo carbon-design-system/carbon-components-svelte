@@ -22,3 +22,23 @@
   checked
   indeterminate
 />
+
+<div
+  data-testid="checkbox-row"
+  style:display="flex"
+  style:align-items="center"
+  style:gap="16px"
+>
+  <Checkbox inline labelText="Mark reviewed" />
+  <span>3 files</span>
+</div>
+
+<div
+  data-testid="checkbox-row-default"
+  style:display="flex"
+  style:align-items="center"
+  style:gap="16px"
+>
+  <Checkbox labelText="Mark approved" />
+  <span>5 files</span>
+</div>
