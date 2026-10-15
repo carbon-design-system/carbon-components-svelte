@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
+import ChatLog from "carbon-components-svelte/Chat/ChatLog.svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
 import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.svelte";
@@ -549,5 +550,11 @@ export const interactive: AriaEntry[] = [
     name: "Countdown",
     render: (attrs) => render(Countdown, { props: { seconds: 90, ...attrs } }),
     target: () => screen.getByRole("timer"),
+  },
+  {
+    name: "ChatLog",
+    render: (attrs) =>
+      render(ChatLog, { props: { labelText: "Conversation", ...attrs } }),
+    target: () => screen.getByRole("log"),
   },
 ];
