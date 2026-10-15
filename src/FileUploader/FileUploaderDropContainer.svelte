@@ -109,6 +109,7 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formReset } from "../utils/form-reset.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
@@ -161,10 +162,11 @@
   // Rest props go to the wrapper, which never takes focus. Move the naming
   // and description attributes to the drop target that does.
   $: ({
-    "aria-describedby": ariaDescribedBy,
-    "aria-labelledby": ariaLabelledBy,
-    ...wrapperRestProps
-  } = $$restProps);
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: wrapperRestProps,
+  } = splitAriaNaming($$restProps));
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -207,6 +209,7 @@
   <div
     id={dropTargetId}
     {role}
+    aria-label={ariaLabel}
     aria-describedby={ariaDescribedBy}
     aria-labelledby={ariaLabelledBy}
     tabindex={disabled ? -1 : tabindex}
