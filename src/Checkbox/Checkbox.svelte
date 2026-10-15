@@ -56,6 +56,13 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
+  /**
+   * Set to `true` to omit the outer margin that spaces a stack of
+   * checkboxes, as when the checkbox sits in a table cell or a row
+   * that spaces its own content.
+   */
+  export let inline = false;
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -244,6 +251,7 @@
     class:bx--form-item={true}
     class:bx--form-item--fit={true}
     class:bx--checkbox-wrapper={true}
+    class:bx--checkbox-wrapper--inline={inline}
     class:bx--checkbox-wrapper--readonly={effectiveReadonly}
     class:bx--checkbox-wrapper--invalid={showInvalid}
     class:bx--checkbox-wrapper--warning={showWarn}
