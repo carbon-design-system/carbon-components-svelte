@@ -1,0 +1,182 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Chat: a scrolling log of messages, aligned by author and grouped when
+/// one author sends several in a row, with day dividers and a typing
+/// indicator.
+/// @access private
+/// @group components
+@mixin chat {
+  .#{$prefix}--chat-log {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .#{$prefix}--chat-message {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    margin-top: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--chat-message:first-child,
+  .#{$prefix}--chat-divider + .#{$prefix}--chat-message {
+    margin-top: 0;
+  }
+
+  .#{$prefix}--chat-message--continued {
+    margin-top: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--chat-message--me {
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--chat-message__avatar {
+    display: flex;
+    width: to-rem(24px);
+    flex: none;
+  }
+
+  .#{$prefix}--chat-message__main {
+    display: flex;
+    min-width: 0;
+    max-width: 82%;
+    flex-direction: column;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__main {
+    align-items: flex-end;
+  }
+
+  .#{$prefix}--chat-message__line {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__line {
+    flex-direction: row-reverse;
+  }
+
+  .#{$prefix}--chat-message__bubble {
+    @include type-style("body-long-01");
+
+    min-width: 0;
+    padding: $carbon--spacing-03 $carbon--spacing-04;
+    background-color: $ui-01;
+    color: $text-01;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__bubble {
+    background-color: $interactive-01;
+    color: $text-04;
+  }
+
+  .#{$prefix}--chat-message__meta {
+    @include type-style("label-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    color: $text-02;
+  }
+
+  // A meta slot whose content is conditional, such as a time shown only on
+  // the last of a run, takes no space when it renders nothing.
+  .#{$prefix}--chat-message__meta:empty {
+    display: none;
+  }
+
+  // Actions such as reply appear on hover or focus where a pointer can
+  // hover, and stay visible on touch screens.
+  @media (any-hover: hover) {
+    .#{$prefix}--chat-message__actions {
+      opacity: 0;
+      transition: opacity $duration--fast-02 motion(standard, productive);
+    }
+
+    .#{$prefix}--chat-message:hover .#{$prefix}--chat-message__actions,
+    .#{$prefix}--chat-message:focus-within .#{$prefix}--chat-message__actions {
+      opacity: 1;
+    }
+  }
+
+  .#{$prefix}--chat-message__bubble--typing {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    padding: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--chat-message__dot {
+    width: to-rem(6px);
+    height: to-rem(6px);
+    border-radius: 50%;
+    animation: chat-typing 1.2s ease-in-out infinite;
+    background-color: $text-02;
+  }
+
+  .#{$prefix}--chat-message__dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .#{$prefix}--chat-message__dot:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes chat-typing {
+    0%,
+    60%,
+    100% {
+      opacity: 0.4;
+      transform: none;
+    }
+
+    30% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--chat-message__dot {
+      animation: none;
+    }
+  }
+
+  .#{$prefix}--chat-divider {
+    @include type-style("label-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-04;
+    margin: $carbon--spacing-05 0;
+    color: $text-02;
+  }
+
+  .#{$prefix}--chat-divider:first-child {
+    margin-top: 0;
+  }
+
+  .#{$prefix}--chat-divider::before,
+  .#{$prefix}--chat-divider::after {
+    height: 1px;
+    flex: 1;
+    background-color: $ui-03;
+    content: "";
+  }
+}
+
+@include exports("chat") {
+  @include chat;
+}
