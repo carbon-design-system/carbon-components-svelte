@@ -70,19 +70,18 @@
     registerRadioButton,
     updateGroupSelection,
   } from "../RadioButton/radio-button-registry.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  // aria attributes should go to the input element, not the label.
-  $: ariaDescribedBy = $$restProps["aria-describedby"];
-  $: ariaLabelledBy = $$restProps["aria-labelledby"];
-  $: labelRestProps = Object.fromEntries(
-    Object.entries($$restProps).filter(
-      ([propKey]) =>
-        propKey !== "aria-describedby" && propKey !== "aria-labelledby",
-    ),
-  );
+  // Naming and description belong on the input, not the label.
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: labelRestProps,
+  } = splitAriaNaming($$restProps));
 
   const ctx = getContext("carbon:TileGroup");
   const add = ctx?.add ?? noop;
@@ -197,8 +196,9 @@
   tabindex={effectiveDisabled ? undefined : tabindex}
   {disabled}
   required={$groupRequired ?? required}
-  aria-describedby={ariaDescribedBy}
+  aria-label={ariaLabel}
   aria-labelledby={ariaLabelledBy}
+  aria-describedby={ariaDescribedBy}
   class:bx--tile-input={true}
   on:change
   on:change={(event) => {

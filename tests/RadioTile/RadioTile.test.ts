@@ -518,6 +518,17 @@ describe("RadioTile", () => {
       expect(label).not.toHaveAttribute("aria-labelledby");
     });
 
+    it("should apply aria-label to the input element, not the label", () => {
+      render(RadioTileAria, { ariaLabel: "Premium plan" });
+
+      const input = screen.getByRole("radio");
+      expect(input).toHaveAccessibleName("Premium plan");
+
+      const label = input.nextElementSibling;
+      assert(label instanceof HTMLLabelElement);
+      expect(label).not.toHaveAttribute("aria-label");
+    });
+
     it("should apply both aria-describedby and aria-labelledby to the input element", () => {
       render(RadioTileAria, {
         ariaDescribedBy: "description-id",
