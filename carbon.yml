@@ -399,6 +399,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Dropdown
+  empty-state:
+    name: Empty state
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/empty-state.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/EmptyState
   expandable-tile:
     name: Expandable tile
     status: stable
