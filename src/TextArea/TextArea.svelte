@@ -166,12 +166,14 @@
     typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: hasMaxCount = typeof maxCount === "number";
-  $: errorMessageId = showInvalid ? errorId : undefined;
+  $: errorMessageId = showInvalid && invalidText ? errorId : undefined;
   $: describedBy =
     [
       resolveStatusDescribedBy({
         showInvalid,
         showWarn,
+        invalidText,
+        warnText,
         helperText,
         isFluid,
         errorId,
@@ -500,12 +502,12 @@
       {helperText}
     </div>
   {/if}
-  {#if !isFluid && showInvalid}
+  {#if !isFluid && showInvalid && invalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">
       {invalidText}
     </div>
   {/if}
-  {#if !isFluid && showWarn}
+  {#if !isFluid && showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 </div>
