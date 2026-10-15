@@ -12,3 +12,12 @@
     <ProgressStep label="Fourth step" description="Step 4" complete={true} />
   </ProgressIndicator>
 </div>
+
+<div data-testid="progress-indicator-narrow" style:width="300px">
+  <ProgressIndicator spaceEqually preventChangeOnClick>
+    <ProgressStep label="Workspace" description="Step 1" />
+    <ProgressStep label="Team members" description="Step 2" />
+    <ProgressStep label="Billing plan" description="Step 3" />
+    <ProgressStep label="Review" description="Step 4" />
+  </ProgressIndicator>
+</div>
