@@ -154,6 +154,10 @@
   }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  // NVDA ignores `readonly` on a number input and announces it as editable,
+  // so a read-only number field renders as a text input.
+  $: typeOverride =
+    readonly && $$restProps.type === "number" ? { type: "text" } : {};
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -284,6 +288,7 @@
         class:bx--text-input--xl={effectiveSize === "xl"}
         maxlength={maxCount ?? undefined}
         {...$$restProps}
+        {...typeOverride}
         aria-describedby={joinDescribedBy(
           resolveStatusDescribedBy({
             showInvalid,

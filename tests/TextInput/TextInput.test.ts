@@ -203,6 +203,23 @@ describe("TextInput", () => {
     expect(screen.getByRole("textbox")).toHaveAttribute("readonly");
   });
 
+  it("renders a read-only number field as a text input", async () => {
+    const { rerender } = render(TextInput, {
+      props: { type: "number", readonly: true, value: 5 },
+    });
+
+    // NVDA announces a read-only number input as editable.
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("type", "text");
+    expect(input).toHaveAttribute("readonly");
+    expect(input).toHaveValue("5");
+
+    await rerender({ type: "number", readonly: false, value: 5 });
+    expect(screen.getByRole("spinbutton")).toBe(input);
+    expect(input).toHaveValue(5);
+  });
+
   it("should handle custom slots", () => {
     render(TextInputCustom);
 
