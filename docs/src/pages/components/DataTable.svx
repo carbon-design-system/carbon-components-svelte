@@ -168,6 +168,8 @@ When you edit multiple painted rows in place, call `refreshCells()` once to rebu
 
 Add a title and description above the table.
 
+Without a visible title, set `aria-label` on DataTable to name the table for screen readers. It is set on the `<table>` element.
+
 ### Props
 
 Add a title and description to provide context for the table data.
