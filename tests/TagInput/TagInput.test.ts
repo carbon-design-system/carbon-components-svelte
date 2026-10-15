@@ -343,6 +343,21 @@ describe("TagInput", () => {
   });
 
   describe("states", () => {
+    it("keeps the built-in descriptions before a consumer aria-describedby", () => {
+      render(TagInput, {
+        config: {
+          id: "topics",
+          helperText: "Press Enter",
+          "aria-describedby": "extra",
+        },
+      });
+
+      expect(input()).toHaveAttribute(
+        "aria-describedby",
+        "instructions-topics helper-topics extra",
+      );
+    });
+
     it("renders read-only tags without remove buttons", () => {
       render(TagInput, { value: ["a"], config: { readonly: true } });
 
