@@ -26,6 +26,40 @@ jobs:
         with:
           sync-labels: true
 
+      # A new default export in src/index.js -> "new-component". Path globs
+      # can't tell an added export from an edited one, so this reads the diff.
+      # Like `sync-labels`, it removes the label once the export is gone.
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        if: github.event.action != 'edited'
+        with:
+          script: |
+            const LABEL = "new-component";
+            const EXPORT = /^([+-])export \{ default as (\w+) \}/gm;
+
+            const pr = context.payload.pull_request;
+            const issue = { ...context.repo, issue_number: pr.number };
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              ...context.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+            const patch =
+              files.find((file) => file.filename === "src/index.js")?.patch ?? "";
+
+            const added = new Set();
+            const removed = new Set();
+            for (const [, sign, name] of patch.matchAll(EXPORT)) {
+              (sign === "+" ? added : removed).add(name);
+            }
+            const isNew = [...added].some((name) => !removed.has(name));
+            const has = pr.labels.some((label) => label.name === LABEL);
+
+            if (isNew && !has) {
+              await github.rest.issues.addLabels({ ...issue, labels: [LABEL] });
+            } else if (!isNew && has) {
+              await github.rest.issues.removeLabel({ ...issue, name: LABEL });
+            }
+
       # Conventional commit title -> type label, `!` -> breaking. On a title
       # edit, labels the old title implied are removed; manual labels stay.
       # Skipped on push so a label removed by hand isn't re-added.
