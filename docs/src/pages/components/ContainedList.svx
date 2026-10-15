@@ -7,6 +7,8 @@ description: Contained lists display items within a labeled container, with supp
   import { Box, Button, Search, ContainedList, ContainedListItem, Text } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Close from "carbon-icons-svelte/lib/Close.svelte";
+
+  let job = "Unit tests";
 </script>
 
 ## Basic
@@ -184,6 +186,18 @@ Set `href` to render a list item as an anchor with clickable styles. Prefer this
   >
     carbon-components-svelte
   </ContainedListItem>
+</ContainedList>
+
+### Selected item
+
+Set `selected` on the interactive or link item whose details show beside the list, such as the chosen job in a pipeline. It gets a selected fill, a bar on its leading edge, and `aria-current`.
+
+<ContainedList labelText="Jobs">
+  {#each ["Lint", "Unit tests", "Build", "Deploy"] as name (name)}
+    <ContainedListItem interactive selected={job === name} on:click={() => (job = name)}>
+      {name}
+    </ContainedListItem>
+  {/each}
 </ContainedList>
 
 ## Virtualization
