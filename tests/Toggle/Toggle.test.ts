@@ -274,6 +274,16 @@ describe("Toggle", () => {
     expect(screen.getByText("Label slot")).toBeInTheDocument();
   });
 
+  it("renders no state text when labelA and labelB are empty", () => {
+    render(Toggle);
+
+    const label = getToggle("No state text").nextElementSibling;
+    assert(label);
+    expect(label.querySelector(".bx--toggle__switch")).toBeInTheDocument();
+    expect(label.querySelector(".bx--toggle__text--off")).toBeNull();
+    expect(label.querySelector(".bx--toggle__text--on")).toBeNull();
+  });
+
   it("supports labelA slot", () => {
     render(Toggle);
 
