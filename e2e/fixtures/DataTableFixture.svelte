@@ -58,6 +58,25 @@
   ];
 
   let radioSelectedRowIds = ["q1"];
+
+  const wideHeaders = [
+    { key: "order", value: "Order" },
+    { key: "placed", value: "Placed" },
+    { key: "items", value: "Items" },
+    { key: "status", value: "Status" },
+    { key: "total", value: "Total" },
+  ];
+
+  const wideRows = [
+    {
+      id: "a",
+      order: "#47655",
+      placed: "Sep 21, 2026",
+      items: "Merino crew sweater, waxed canvas tote",
+      status: "Delivered",
+      total: "$162.00",
+    },
+  ];
 </script>
 
 <div data-testid="data-table-basic">
@@ -125,4 +144,17 @@
     rows={radioRows}
     bind:selectedRowIds={radioSelectedRowIds}
   />
+</div>
+
+<div
+  data-testid="data-table-narrow-grid"
+  style:display="grid"
+  style:grid-template-columns="1fr"
+  style:width="300px"
+>
+  <DataTable headers={wideHeaders} rows={wideRows} />
+</div>
+
+<div data-testid="data-table-narrow-sticky" style:width="300px">
+  <DataTable stickyHeader headers={wideHeaders} rows={wideRows} />
 </div>
