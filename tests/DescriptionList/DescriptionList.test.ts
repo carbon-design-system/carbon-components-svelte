@@ -22,6 +22,18 @@ describe("DescriptionList", () => {
     );
   });
 
+  it("applies the summary layout and marks a total item", () => {
+    render(DescriptionList);
+
+    const list = screen.getByTestId("summary");
+    expect(list).toHaveClass("bx--description-list--summary");
+    const total = within(list).getByText("Total").parentElement;
+    expect(total).toHaveClass("bx--description-list-item--total");
+    expect(within(list).getByText("Subtotal").parentElement).not.toHaveClass(
+      "bx--description-list-item--total",
+    );
+  });
+
   it("sets grid-template-columns when columns is greater than 1", () => {
     render(DescriptionList);
 
