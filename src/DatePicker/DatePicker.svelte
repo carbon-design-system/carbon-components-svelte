@@ -1775,6 +1775,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--form-item--fit={!fullWidth && !isFluid}
   class:bx--date-picker--fluid={isFluid}
   class:bx--date-picker--fluid--neutral={fluidNeutral}
   class:bx--date-picker--fluid--invalid={isFluid && $invalidAny}
