@@ -497,6 +497,21 @@ Set `short` to `true` on DatePicker for a narrower field, sized for a short form
   <DatePickerInput labelText="Card expiration" placeholder="mm/yy" />
 </DatePicker>
 
+### Full width
+
+Set `fullWidth` to `true` to fill the parent instead of the fixed field width, for example in a grid column or beside other full-width fields. A range splits the width between its two inputs.
+
+<DatePicker fullWidth datePickerType="single">
+  <DatePickerInput labelText="Invoice due date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Full width (range)
+
+<DatePicker fullWidth datePickerType="range">
+  <DatePickerInput labelText="Rental pick-up" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Rental return" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ### Extra-large
 
 Set `size` to `"xl"` on DatePickerInput for a more prominent input.
