@@ -1,8 +1,10 @@
 <script>
   import {
+    Button,
     Checkbox,
     DatePicker,
     DatePickerInput,
+    Search,
     Slider,
     TextInput,
     TimePicker,
@@ -54,7 +56,20 @@
   <span data-marker>35%</span>
 </div>
 
+<!-- A narrow row: the search shrinks to fit beside its neighbour. -->
+<div class="narrow" data-testid="narrow-search">
+  <Search placeholder="Search contacts" />
+  <Button size="field">Add</Button>
+</div>
+
 <style>
+  .narrow {
+    display: flex;
+    gap: 8px;
+    width: 200px;
+    margin-bottom: 32px;
+  }
+
   .row {
     display: flex;
     align-items: center;

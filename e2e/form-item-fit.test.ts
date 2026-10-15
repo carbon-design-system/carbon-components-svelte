@@ -47,4 +47,16 @@ test.describe("Form item width in a flex row", () => {
       expect(await itemWidth(page, testId)).toBeGreaterThan(450);
     });
   }
+
+  test("a search shrinks to fit a narrow row", async ({ page }) => {
+    const overflow = await page.getByTestId("narrow-search").evaluate((row) => {
+      const right = row.getBoundingClientRect().right;
+      return Math.max(
+        ...[...row.querySelectorAll("*")].map(
+          (node) => node.getBoundingClientRect().right - right,
+        ),
+      );
+    });
+    expect(overflow).toBeLessThanOrEqual(0.5);
+  });
 });
