@@ -75,6 +75,19 @@ panels. `flush` has no effect when `align` is `"start"`.
   </AccordionItem>
 </Accordion>
 
+### Full-width content
+
+Item content keeps a reading gutter on the right that grows to 25% of the accordion on wider viewports. Set `fullWidthContent` to drop it, such as for an accordion in a card or side panel.
+
+<Accordion fullWidthContent>
+  <AccordionItem open title="Notifications">
+    <p>Email digests go out every morning at 8:00 AM, and push notifications pause during quiet hours.</p>
+  </AccordionItem>
+  <AccordionItem title="Working hours">
+    <p>Teammates see when you're online and when you're away.</p>
+  </AccordionItem>
+</Accordion>
+
 ## Title
 
 Customize the item heading content and its accessible name.

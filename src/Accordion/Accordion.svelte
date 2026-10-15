@@ -19,6 +19,14 @@
    */
   export let flush = false;
 
+  /**
+   * Set to `true` for item content to use the full width of the accordion.
+   * By default it keeps a reading gutter on the right that grows to 25%
+   * of the width on wider viewports, which leaves little room in a card or
+   * side panel.
+   */
+  export let fullWidthContent = false;
+
   /** Set to `true` to disable the accordion */
   export let disabled = false;
 
@@ -100,6 +108,7 @@
     class:bx--accordion--sm={size === "sm"}
     class:bx--accordion--xl={size === "xl"}
     class:bx--accordion--flush={flush && align !== "start"}
+    class:bx--accordion--full-width-content={fullWidthContent}
     {...$$restProps}
     on:click
     on:mouseover
