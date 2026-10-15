@@ -51,3 +51,12 @@
     step={1}
   />
 </div>
+
+<div
+  data-testid="number-input-narrow"
+  style:display="grid"
+  style:grid-template-columns="7rem 10rem"
+>
+  <NumberInput labelText="Seats" size="sm" value={4} min={0} />
+  <NumberInput labelText="Budget" value={32000} min={0} />
+</div>
