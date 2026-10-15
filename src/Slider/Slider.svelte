@@ -169,9 +169,12 @@
   import {
     formatRangeLabel as formatSliderRangeLabel,
     getValueText as getSliderValueText,
+    getTextInputWidth,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  $: textInputWidth = getTextInputWidth(min, max, step);
 
   const dispatch = createEventDispatcher();
 
@@ -471,6 +474,7 @@
         {form}
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
+        style:width={textInputWidth}
         class:bx--text-input--light={light}
         class:bx--slider-text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--invalid={showInvalid}

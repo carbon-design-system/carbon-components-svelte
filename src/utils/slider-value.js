@@ -147,3 +147,35 @@ export function valueFromPointer(
     step,
   });
 }
+
+/**
+ * Characters in the integer part of `value`, counting a minus sign.
+ *
+ * @param {number} value
+ * @returns {number}
+ */
+function integerChars(value) {
+  return String(Math.trunc(Math.abs(value))).length + (value < 0 ? 1 : 0);
+}
+
+/**
+ * Width for the slider's text input when its longest value has more than
+ * three characters, which the fixed 4rem input clips. Counts the integer
+ * digits of `min` and `max`, a minus sign, and the decimals `step` allows.
+ * Returns `undefined` to keep the stylesheet's width.
+ *
+ * @param {number} min
+ * @param {number} max
+ * @param {number} step
+ * @returns {string | undefined}
+ */
+export function getTextInputWidth(min, max, step) {
+  const decimals = step.toString().split(".")[1]?.length || 0;
+  const chars =
+    Math.max(integerChars(min), integerChars(max)) +
+    (decimals ? decimals + 1 : 0);
+  if (chars <= 3) return undefined;
+  // Half a character of slack covers the type style's letter spacing; the
+  // 2rem is the input's horizontal padding.
+  return `calc(${chars + 0.5}ch + 2rem)`;
+}
