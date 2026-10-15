@@ -34,6 +34,13 @@
    */
   export let orientation = "horizontal";
 
+  /**
+   * Set to `true` to lay the buttons out as an even grid that wraps onto
+   * as many rows as it needs, such as for time slots. Columns are at
+   * least 5rem wide, so the count follows the width of the container.
+   */
+  export let wrap = false;
+
   /** Set to `true` to disable all buttons in the group */
   export let disabled = false;
 
@@ -223,6 +230,7 @@
   class:bx--toggle-button-group--sm={size === "sm"}
   class:bx--toggle-button-group--lg={size === "lg"}
   class:bx--toggle-button-group--vertical={orientation === "vertical"}
+  class:bx--toggle-button-group--wrap={wrap && orientation !== "vertical"}
   {...$$restProps}
   aria-label={groupAriaLabel}
   on:click
