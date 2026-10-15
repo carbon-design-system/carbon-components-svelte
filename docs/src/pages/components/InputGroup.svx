@@ -1,0 +1,83 @@
+---
+components: ["InputGroup"]
+description: Input groups attach a button or a second field to an input, such as a code and its Apply button or an amount and its currency, under one label and one message.
+---
+
+<script>
+  import { Button, InputGroup, NumberInput, Select, SelectItem, TextInput } from "carbon-components-svelte";
+  import Send from "carbon-icons-svelte/lib/Send.svelte";
+</script>
+
+## Basic
+
+Wrap a field and a button in InputGroup. The group's label names the set, and the button matches the field's height. Give each field its own `labelText` with `hideLabel`, so screen readers announce it inside the group.
+
+<InputGroup labelText="Promo code">
+  <TextInput hideLabel labelText="Promo code" placeholder="WELCOME10" />
+  <Button kind="tertiary">Apply</Button>
+</InputGroup>
+
+## Helper text
+
+Helper text sits under the whole group. Pass the `describedBy` slot prop to the field so it is announced with it.
+
+<InputGroup labelText="Workspace URL" helperText="Lowercase letters, numbers and dashes" let:describedBy>
+  <TextInput hideLabel labelText="Workspace URL" placeholder="northwind" aria-describedby={describedBy} />
+  <Button kind="tertiary">Check</Button>
+</InputGroup>
+
+## Icon button
+
+An icon-only button is square at the field's height.
+
+<InputGroup labelText="Message" hideLabel>
+  <TextInput hideLabel labelText="Message" placeholder="Write a reply" />
+  <Button icon={Send} iconDescription="Send" />
+</InputGroup>
+
+## Attached field
+
+Fields share the row. To give a second field a fixed width, such as a currency beside an amount, wrap it in an element with that width: anything that isn't a field keeps its own width.
+
+<InputGroup labelText="Amount">
+  <NumberInput hideLabel labelText="Amount" value={1200} hideSteppers />
+  <div style="width: 6rem">
+    <Select hideLabel labelText="Currency" selected="USD">
+      <SelectItem value="USD" />
+      <SelectItem value="EUR" />
+      <SelectItem value="GBP" />
+    </Select>
+  </div>
+</InputGroup>
+
+## Sizes
+
+Set `size` on the group to size its fields; buttons match their height. The group inherits the `size` of a parent `Form`.
+
+<InputGroup labelText="Promo code" size="sm">
+  <TextInput hideLabel labelText="Promo code" placeholder="WELCOME10" />
+  <Button kind="tertiary">Apply</Button>
+</InputGroup>
+
+<InputGroup labelText="Promo code" size="xl">
+  <TextInput hideLabel labelText="Promo code" placeholder="WELCOME10" />
+  <Button kind="tertiary">Apply</Button>
+</InputGroup>
+
+## States
+
+Reflect validation and interaction states. The message shows under the group, so it never pushes the button out of line. Pass the `invalid` or `warn` slot prop to the field it applies to, along with `describedBy`.
+
+### Invalid
+
+<InputGroup labelText="Email" invalid invalidText="Enter a valid email address" let:describedBy let:invalid>
+  <TextInput hideLabel labelText="Email" value="maria@" aria-describedby={describedBy} {invalid} />
+  <Button>Subscribe</Button>
+</InputGroup>
+
+### Warning
+
+<InputGroup labelText="Promo code" warn warnText="This code ends tonight" let:describedBy let:warn>
+  <TextInput hideLabel labelText="Promo code" value="FLASH20" aria-describedby={describedBy} {warn} />
+  <Button kind="tertiary">Apply</Button>
+</InputGroup>
