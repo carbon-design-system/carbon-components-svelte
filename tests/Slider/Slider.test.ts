@@ -166,6 +166,17 @@ describe("Slider", () => {
     expect(label.control).toBeNull();
   });
 
+  it.each([
+    [false, 2],
+    [true, 0],
+  ])("renders range labels: hideRangeLabels=%s", (hideRangeLabels, count) => {
+    const { container } = render(Slider, { props: { hideRangeLabels } });
+
+    expect(container.querySelectorAll(".bx--slider__range-label")).toHaveLength(
+      count,
+    );
+  });
+
   it("forwards focus and blur events from the number input", async () => {
     const onfocus = vi.fn();
     const onblur = vi.fn();
