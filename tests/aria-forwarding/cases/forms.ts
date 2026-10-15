@@ -41,7 +41,6 @@ const items = [
   { id: "2", text: "Two" },
 ];
 
-const SHARED_NAMING = "naming is shared by every thumb and text input";
 const OPEN_API = "open API question";
 
 export const forms: AriaEntry[] = [
@@ -249,11 +248,10 @@ export const forms: AriaEntry[] = [
       render(RangeSlider, {
         props: { labelText: "Price", helperText: "In USD", ...attrs },
       }),
-    target: () => screen.getAllByRole("slider")[0],
-    skip: {
-      "aria-describedby": SHARED_NAMING,
-      "aria-labelledby": SHARED_NAMING,
-    },
+    target: () => [
+      ...screen.getAllByRole("slider"),
+      ...screen.getAllByRole("spinbutton"),
+    ],
   },
   {
     name: "Search",
@@ -287,12 +285,7 @@ export const forms: AriaEntry[] = [
       render(Slider, {
         props: { labelText: "Volume", helperText: "0 to 100", ...attrs },
       }),
-    target: () => screen.getByRole("slider"),
-    skip: {
-      "aria-describedby": SHARED_NAMING,
-      "aria-labelledby": SHARED_NAMING,
-      "aria-label": SHARED_NAMING,
-    },
+    target: () => [screen.getByRole("slider"), screen.getByRole("spinbutton")],
   },
   {
     name: "StructuredListCell",
