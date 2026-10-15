@@ -32,9 +32,18 @@
     flex-direction: row;
   }
 
+  // ccs: no 8rem minimum. Equal steps share the container's width, so four
+  // steps fit a narrow column; long labels truncate.
   .#{$prefix}--progress--space-equal .#{$prefix}--progress-step {
-    min-width: 8rem;
+    min-width: 0;
     flex-grow: 1;
+  }
+
+  // ccs: let the button and its text shrink with the step, so the label's
+  // ellipsis applies instead of the text running into the next step.
+  .#{$prefix}--progress--space-equal .#{$prefix}--progress-step-button,
+  .#{$prefix}--progress--space-equal .#{$prefix}--progress-text {
+    min-width: 0;
   }
 
   .#{$prefix}--progress-line {
@@ -45,9 +54,9 @@
     border: $progress-indicator-bar-width;
   }
 
+  // ccs: the line spans its step and no further (no 128px minimum).
   .#{$prefix}--progress--space-equal .#{$prefix}--progress-line {
     width: 100%;
-    min-width: to-rem(128px);
   }
 
   .#{$prefix}--progress-step svg {

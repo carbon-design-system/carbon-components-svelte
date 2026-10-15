@@ -56,4 +56,36 @@ test.describe("ProgressIndicator", () => {
 
     expect(clickableOutline).toBe(currentOutline);
   });
+
+  test.describe("spaceEqually in a narrow container", () => {
+    test("keeps every step inside the container", async ({ page }) => {
+      const container = page.getByTestId("progress-indicator-narrow");
+      const right = await container.evaluate(
+        (node) => node.getBoundingClientRect().right,
+      );
+      const stepRights = await container
+        .locator(".bx--progress-step")
+        .evaluateAll((steps) =>
+          steps.map((step) => step.getBoundingClientRect().right),
+        );
+      expect(stepRights).toHaveLength(4);
+      for (const stepRight of stepRights) {
+        expect(stepRight).toBeLessThanOrEqual(right);
+      }
+    });
+
+    test("truncates a label instead of overlapping the next step", async ({
+      page,
+    }) => {
+      const label = page
+        .getByTestId("progress-indicator-narrow")
+        .getByText("Team members");
+      const { scrollWidth, clientWidth } = await label.evaluate((node) => ({
+        scrollWidth: node.scrollWidth,
+        clientWidth: node.clientWidth,
+      }));
+      expect(scrollWidth).toBeGreaterThan(clientWidth);
+      await expect(label).toHaveCSS("text-overflow", "ellipsis");
+    });
+  });
 });
