@@ -235,7 +235,10 @@
     ariaDescribedBy,
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
-  $: ariaLabel = modalLabel ?? consumerLabel ?? modalAriaLabel ?? modalHeading;
+  // A consumer `aria-label` names the dialog. The scrolling region keeps
+  // the built-in name so the consumer label stays on the dialog alone.
+  $: builtInLabel = modalLabel ?? modalAriaLabel ?? modalHeading;
+  $: ariaLabel = consumerLabel ?? builtInLabel;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -366,7 +369,7 @@
       class:bx--modal-scroll-content={hasScrollingContent}
       tabindex={hasScrollingContent ? "0" : undefined}
       role={hasScrollingContent ? "region" : undefined}
-      aria-label={hasScrollingContent ? ariaLabel : undefined}
+      aria-label={hasScrollingContent ? builtInLabel : undefined}
       aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}
       on:focusin={(event) => {
         // Keep a newly-focused element (e.g. via Tab) from being hidden
