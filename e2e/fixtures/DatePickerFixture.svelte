@@ -192,3 +192,29 @@
     />
   </DatePicker>
 </div>
+
+<div data-testid="date-picker-full-width" style:width="400px">
+  <DatePicker fullWidth datePickerType="single" value="03/15/2024">
+    <DatePickerInput labelText="Invoice due" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+  <DatePicker fullWidth datePickerType="simple" short>
+    <DatePickerInput labelText="Renewal" placeholder="mm/dd" />
+  </DatePicker>
+  <DatePicker fullWidth datePickerType="simple">
+    <DatePickerInput
+      labelText="Contract start"
+      placeholder="mm/dd/yyyy"
+      invalid
+      invalidText="Pick a date after today."
+    />
+  </DatePicker>
+  <DatePicker
+    fullWidth
+    datePickerType="range"
+    valueFrom="03/04/2024"
+    valueTo="03/08/2024"
+  >
+    <DatePickerInput labelText="Pick-up" placeholder="mm/dd/yyyy" />
+    <DatePickerInput labelText="Return" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+</div>

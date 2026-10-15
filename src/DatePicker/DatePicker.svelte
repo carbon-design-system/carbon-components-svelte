@@ -237,6 +237,12 @@
    */
   export let short = false;
 
+  /**
+   * Set to `true` to fill the parent's width instead of the fixed input width.
+   * A range splits the width between its two inputs.
+   */
+  export let fullWidth = false;
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -1797,6 +1803,7 @@
     {id}
     class:bx--date-picker={true}
     class:bx--date-picker--short={short}
+    class:bx--date-picker--full-width={fullWidth}
     class:bx--date-picker--light={light}
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||

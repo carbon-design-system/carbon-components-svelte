@@ -616,3 +616,42 @@
 @include exports('datepicker-xs') {
   @include date-picker-xs;
 }
+
+// carbon-components-svelte patch
+// `fullWidth` fills the parent instead of the fixed input widths above. Those
+// qualify `.bx--date-picker` with a type modifier, so these rules do the same
+// with `--full-width` and win on order.
+@mixin date-picker-full-width {
+  // flatpickr wraps the input in `.flatpickr-wrapper`, a flex item that
+  // otherwise keeps the input's intrinsic width.
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--full-width,
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--full-width
+    .#{$prefix}--date-picker-input__wrapper,
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--full-width
+    .flatpickr-wrapper {
+    width: 100%;
+  }
+
+  // Qualified through the wrapper to match the simple picker's short, invalid
+  // and warning widths, which come earlier and would otherwise win.
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--full-width
+    .#{$prefix}--date-picker-input__wrapper
+    .#{$prefix}--date-picker__input,
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--full-width
+    .#{$prefix}--date-picker-input__wrapper
+    ~ .#{$prefix}--form-requirement {
+    width: 100%;
+  }
+
+  // Range: the two inputs share the row.
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--full-width
+    .#{$prefix}--date-picker-container {
+    width: auto;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+}
+
+@include exports("date-picker-full-width") {
+  @include date-picker-full-width;
+}

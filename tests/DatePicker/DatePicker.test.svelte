@@ -16,6 +16,7 @@
   export let initialMonth: ComponentProps<DatePicker>["initialMonth"] = null;
   export let locale: ComponentProps<DatePicker>["locale"] = "en";
   export let short = false;
+  export let fullWidth = false;
   export let light = false;
   export let fluid = false;
   export let flatpickrProps: ComponentProps<DatePicker>["flatpickrProps"] = {
@@ -55,6 +56,7 @@
   {initialMonth}
   {locale}
   {short}
+  {fullWidth}
   {light}
   {fluid}
   {flatpickrProps}
