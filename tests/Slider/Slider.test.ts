@@ -250,7 +250,7 @@ describe("Slider", () => {
     assert(input);
     expect(sliderElement).toHaveClass("bx--slider--readonly");
     expect(container).toHaveClass("bx--slider-container--readonly");
-    expect(input).toHaveAttribute("readonly");
+    expect(input).toHaveAttribute("type", "hidden");
     expect(slider).toHaveAttribute("tabindex", "0");
   });
 
@@ -266,6 +266,37 @@ describe("Slider", () => {
       expect(slider).toHaveFocus();
     },
   );
+
+  it("leaves the thumb as the only control when read-only", async () => {
+    render(Slider, { props: { readonly: true, value: 50 } });
+
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+
+    await user.tab();
+    expect(screen.getByRole("slider")).toHaveFocus();
+    await user.tab();
+    expect(document.body).toHaveFocus();
+  });
+
+  it("shows the read-only value as text hidden from screen readers", async () => {
+    const { rerender } = render(Slider, {
+      props: { readonly: true, value: 50 },
+    });
+
+    expect(screen.getByText("50")).toHaveAttribute("aria-hidden", "true");
+
+    await rerender({ readonly: true, value: 60 });
+    expect(screen.getByText("60")).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("shows no read-only value text with hideTextInput", () => {
+    render(Slider, {
+      props: { readonly: true, hideTextInput: true, value: 50 },
+    });
+
+    expect(screen.queryByText("50")).not.toBeInTheDocument();
+  });
 
   it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
     const { container } = render(Slider, {

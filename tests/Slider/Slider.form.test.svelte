@@ -3,12 +3,14 @@
 
   export let value = 20;
   export let hideTextInput = false;
+  export let readonly = false;
 </script>
 
 <form data-testid="form">
   <Slider
     bind:value
     {hideTextInput}
+    {readonly}
     name="level"
     labelText="Level"
     min={0}
