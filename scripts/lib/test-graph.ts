@@ -67,6 +67,9 @@ const NAMED_CLAUSE = /\{([^}]*)\}/;
 const DEFAULT_OR_NAMESPACE = /^\s*[\w$*]/;
 const URL_REF = /^[a-z]+:|^\/\//;
 const STRING_LITERAL = /^["'`]([^"'`$]*)["'`]$/;
+// A template literal that only interpolates after `?` or `#`, so the page is
+// still known: `/modal.html?variant=${variant}`.
+const STATIC_PATH_TEMPLATE = /^`([^`$?#]*)[?#][^`]*`$/;
 const QUOTED = /["']([^"']+)["']/g;
 const LIST_SEPARATOR = /[\s,]+/;
 
@@ -233,7 +236,9 @@ export function parseDependencies(
 
   if (path.startsWith("e2e/")) {
     for (const [, argument] of source.matchAll(GOTO)) {
-      const url = argument.trim().match(STRING_LITERAL)?.[1];
+      const url =
+        argument.trim().match(STRING_LITERAL)?.[1] ??
+        argument.trim().match(STATIC_PATH_TEMPLATE)?.[1];
       if (url === undefined) {
         deps.unknown.push(`non-literal goto(${argument.trim()})`);
       } else if (url.startsWith("/")) {
