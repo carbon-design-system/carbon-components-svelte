@@ -48,4 +48,30 @@ test.describe("ToggleButtonGroup", () => {
       Math.round(underlineBox.y + underlineBox.height),
     );
   });
+
+  for (const [testId, columns] of [
+    ["wrap-wide", 5],
+    ["wrap-narrow", 3],
+  ] as const) {
+    test(`wraps into ${columns} even columns (${testId})`, async ({ page }) => {
+      const layout = await page.getByTestId(testId).evaluate((node) => {
+        const buttons = [...node.querySelectorAll(".bx--toggle-button")];
+        const lefts = new Set(
+          buttons.map((b) => Math.round(b.getBoundingClientRect().left)),
+        );
+        const widths = new Set(
+          buttons.map((b) => Math.round(b.getBoundingClientRect().width)),
+        );
+        const right = node.getBoundingClientRect().right;
+        const overflow = Math.max(
+          ...buttons.map((b) => b.getBoundingClientRect().right - right),
+        );
+        return { columns: lefts.size, widths: widths.size, overflow };
+      });
+
+      expect(layout.columns).toBe(columns);
+      expect(layout.widths).toBe(1);
+      expect(layout.overflow).toBeLessThanOrEqual(0.5);
+    });
+  }
 });

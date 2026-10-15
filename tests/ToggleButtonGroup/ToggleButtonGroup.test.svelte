@@ -13,6 +13,7 @@
   export let size: ComponentProps<ToggleButtonGroup>["size"] = undefined;
   export let orientation: ComponentProps<ToggleButtonGroup>["orientation"] =
     undefined;
+  export let wrap = false;
   export let disabled: ComponentProps<ToggleButtonGroup>["disabled"] = false;
   export let boldDisabled = false;
   export let labelText: ComponentProps<ToggleButtonGroup>["labelText"] =
@@ -26,6 +27,7 @@
   {required}
   {size}
   {orientation}
+  {wrap}
   {disabled}
   {labelText}
   aria-label={ariaLabel}
