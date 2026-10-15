@@ -730,6 +730,16 @@
     }
   }
 
+  // The server render and the first client paint show the selected item's
+  // text. `afterUpdate` fills `value` only after mount, which left the input
+  // empty in server HTML and until a lazily hydrated island hydrated. Plain
+  // top-level code runs once: as a `$:` block, Svelte 3 and 4 re-evaluated it
+  // on every keystroke and re-rendered the options.
+  if (!value && selectedId !== undefined) {
+    const initialItem = items.find((item) => item.id === selectedId);
+    if (initialItem) value = itemToString(initialItem);
+  }
+
   $: itemsById = new Map(items.map((item) => [item.id, item]));
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
