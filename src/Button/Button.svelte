@@ -157,6 +157,8 @@
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const actionSetSize = getContext("carbon:ActionSet")?.size;
+  // Inside an `InputGroup`, match the height of the group's fields.
+  const inputGroupSize = getContext("carbon:InputGroup")?.buttonSize;
 
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
   // Without an iconDescription there is nothing to show in a tooltip or
@@ -270,7 +272,7 @@
   $: isVisuallyDisabled = isDisabled || loading;
   $: effectiveSize = $$slots.badge
     ? "lg"
-    : (size ?? $actionSetSize ?? "default");
+    : (size ?? $actionSetSize ?? $inputGroupSize ?? "default");
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
