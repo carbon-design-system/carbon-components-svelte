@@ -199,10 +199,14 @@
                   bind:value
                   type="text"
                   aria-invalid={showInvalid || undefined}
-                  aria-errormessage={showInvalid ? errorId : undefined}
+                  aria-errormessage={showInvalid && invalidText
+                    ? errorId
+                    : undefined}
                   aria-describedby={resolveStatusDescribedBy({
                     showInvalid,
                     showWarn,
+                    invalidText,
+                    warnText,
                     errorId,
                     warnId,
                     includeErrorId: false,
@@ -299,10 +303,14 @@
               type="text"
               data-invalid={showInvalid || undefined}
               aria-invalid={showInvalid || undefined}
-              aria-errormessage={showInvalid ? errorId : undefined}
+              aria-errormessage={showInvalid && invalidText
+                ? errorId
+                : undefined}
               aria-describedby={resolveStatusDescribedBy({
                 showInvalid,
                 showWarn,
+                invalidText,
+                warnText,
                 helperText,
                 errorId,
                 warnId,
@@ -337,11 +345,15 @@
       </div>
     </div>
     {#if showInvalid}
-      <div id={errorId} class:bx--form-requirement={true} role="alert">
-        {invalidText}
-      </div>
+      {#if invalidText}
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
+          {invalidText}
+        </div>
+      {/if}
     {:else if showWarn}
-      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {#if warnText}
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
     {:else if helperText}
       <div
         id={helperId}

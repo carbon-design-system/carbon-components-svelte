@@ -1199,8 +1199,6 @@
     errorId,
     warnId,
     helperId,
-    requireInvalidText: true,
-    requireWarnText: true,
   });
   $: hasSelectionDescription = !readonly && selectionCount > 0;
   $: fieldDescribedById = joinDescribedBy(

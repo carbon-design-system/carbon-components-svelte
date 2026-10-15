@@ -122,7 +122,7 @@
     aria-readonly={readonly || undefined}
     aria-describedby={joinDescribedBy(
       readonly ? readonlyId : null,
-      showWarn ? warnId : null,
+      showWarn && warnText ? warnId : null,
     )}
     on:click={(event) => {
       if (readonly) event.preventDefault();
@@ -184,7 +184,9 @@
       <WarningAltFilled
         class="bx--toggle__invalid-icon bx--toggle__invalid-icon--warning"
       />
-      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {#if warnText}
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
     {/if}
   </div>
 </div>

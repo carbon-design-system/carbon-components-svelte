@@ -274,6 +274,8 @@
         resolveStatusDescribedBy({
           showInvalid,
           showWarn,
+          invalidText,
+          warnText,
           helperText,
           errorId,
           warnId,
@@ -330,12 +332,18 @@
     <div class:bx--checkbox__validation-msg={true}>
       {#if showInvalid}
         <WarningFilled class="bx--checkbox__invalid-icon" />
-        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+        {#if invalidText}
+          <div id={errorId} class:bx--form-requirement={true}>
+            {invalidText}
+          </div>
+        {/if}
       {:else if showWarn}
         <WarningAltFilled
           class="bx--checkbox__invalid-icon bx--checkbox__invalid-icon--warning"
         />
-        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+        {#if warnText}
+          <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+        {/if}
       {/if}
     </div>
     {#if helperText && !showInvalid && !showWarn}

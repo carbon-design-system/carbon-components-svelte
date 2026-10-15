@@ -231,6 +231,8 @@
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
+    invalidText,
+    warnText,
     helperText,
     isFluid,
     errorId,
@@ -313,12 +315,12 @@
             >{readonlyText}</span
           >
         {/if}
-        {#if showInvalid}
+        {#if showInvalid && invalidText}
           <div class:bx--form-requirement={true} id={errorId}>
             {invalidText}
           </div>
         {/if}
-        {#if showWarn}
+        {#if showWarn && warnText}
           <div class:bx--form-requirement={true} id={warnId}>
             {warnText}
           </div>
@@ -374,12 +376,12 @@
         {/if}
         {#if isFluid}
           <hr class:bx--select__divider={true}>
-          {#if showInvalid}
+          {#if showInvalid && invalidText}
             <div id={errorId} class:bx--form-requirement={true}>
               {invalidText}
             </div>
           {/if}
-          {#if showWarn}
+          {#if showWarn && warnText}
             <div id={warnId} class:bx--form-requirement={true}>
               {warnText}
             </div>
@@ -400,10 +402,10 @@
           {helperText}
         </div>
       {/if}
-      {#if !isFluid && showInvalid}
+      {#if !isFluid && showInvalid && invalidText}
         <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
       {/if}
-      {#if !isFluid && showWarn}
+      {#if !isFluid && showWarn && warnText}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     {/if}
