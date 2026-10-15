@@ -1,0 +1,42 @@
+---
+components: ["ChatLog", "ChatMessage", "ChatDivider"]
+description: Chat logs show a conversation, with messages aligned by author, grouped when one author sends several in a row, day dividers and a typing indicator.
+---
+
+<script>
+  import { ChatDivider, ChatLog, ChatMessage, UserAvatar } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+ChatLog is a `role="log"` list that scrolls itself. It starts at the latest message and keeps new messages in view while the reader is at the end, but leaves the scroll alone while they read back. Give it a height, such as by placing it in a flex column. Name it with `labelText`.
+
+Each ChatMessage sets `from` to `"me"` (end-aligned, in the accent color) or `"them"` (start-aligned, beside the `avatar` slot). Set `continued` on a message from the same author as the one before, to group them. ChatDivider labels a break, such as a new day.
+
+<FileSource src="/framed/Chat/Chat" />
+
+## Meta and actions
+
+The `meta` slot sits under a message, such as for the time or a delivery status, and the `actions` slot beside it, such as for a reply button.
+
+<ChatLog labelText="Conversation with Sam">
+  <ChatMessage>
+    <UserAvatar slot="avatar" size="sm" name="Sam Carter" />
+    Your order shipped this morning.
+    <span slot="meta">9:41 AM</span>
+  </ChatMessage>
+  <ChatMessage from="me">
+    Thank you!
+    <span slot="meta">9:42 AM · Read</span>
+  </ChatMessage>
+</ChatLog>
+
+## Typing indicator
+
+Set `typing` to show animated dots in place of the content. Screen readers hear `typingText`, announced as a status. The dots hold still when reduced motion is preferred.
+
+<ChatLog labelText="Conversation with Sam">
+  <ChatMessage typing typingText="Sam is typing">
+    <UserAvatar slot="avatar" size="sm" name="Sam Carter" />
+  </ChatMessage>
+</ChatLog>
