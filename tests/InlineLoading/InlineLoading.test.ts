@@ -23,6 +23,17 @@ describe("InlineLoading", () => {
     expect(wrapper.querySelector(".bx--loading")).toBeInTheDocument();
   });
 
+  it("applies the small size", () => {
+    render(InlineLoading);
+
+    expect(
+      screen.getByTestId("loader-sm").querySelector(".bx--inline-loading"),
+    ).toHaveClass("bx--inline-loading--sm");
+    expect(
+      screen.getByTestId("default-loader").querySelector(".bx--inline-loading"),
+    ).not.toHaveClass("bx--inline-loading--sm");
+  });
+
   it("renders with description", () => {
     render(InlineLoading);
     const wrapper = screen.getByTestId("loader-with-description");

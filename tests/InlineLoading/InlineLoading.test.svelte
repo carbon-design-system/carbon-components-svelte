@@ -4,6 +4,10 @@
 
 <div data-testid="default-loader"><InlineLoading /></div>
 
+<div data-testid="loader-sm">
+  <InlineLoading size="sm" description="Saving..." />
+</div>
+
 <div data-testid="loader-with-description">
   <InlineLoading description="Loading metrics..." />
 </div>
