@@ -178,14 +178,6 @@
       transform: translate(-50%, -50%);
     }
 
-    .#{$prefix}--slider--disabled
-      ~ .#{$prefix}--form-item
-      .#{$prefix}--slider-text-input:hover,
-    .#{$prefix}--slider--disabled ~ .#{$prefix}--slider-text-input:hover {
-      color: $disabled-02;
-      outline: none;
-    }
-
     // RangeSlider handles (`slider-two-handle` below). Only recolor the
     // non-focus icon; the focus-state icon must keep its $interactive-01
     // fill even when the focused thumb is hovered. Disabled handles keep
@@ -206,23 +198,6 @@
     .#{$prefix}--slider__thumb:focus
     ~ .#{$prefix}--slider__filled-track {
     background-color: $ui-03;
-  }
-
-  .#{$prefix}--slider--disabled
-    ~ .#{$prefix}--form-item
-    .#{$prefix}--slider-text-input,
-  .#{$prefix}--slider--disabled ~ .#{$prefix}--slider-text-input {
-    border: none;
-    background-color: $disabled-01;
-    color: $disabled-02;
-    cursor: not-allowed;
-    transition: none;
-
-    &:active,
-    &:focus {
-      color: $disabled-02;
-      outline: none;
-    }
   }
 
   .#{$prefix}--slider-container.#{$prefix}--skeleton
@@ -360,13 +335,6 @@
     &::before {
       display: block;
     }
-  }
-
-  // Same shape as the disabled sibling rule above, so disabled still takes
-  // precedence when both are set.
-  .#{$prefix}--slider--readonly:not(.#{$prefix}--slider--disabled)
-    ~ .#{$prefix}--slider-text-input {
-    background-color: transparent;
   }
 
   // A read-only slider shows its value as text in place of the number input.
