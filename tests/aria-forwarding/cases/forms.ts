@@ -469,4 +469,9 @@ export const forms: AriaEntry[] = [
       }),
     target: () => screen.getByRole("img"),
   },
+  {
+    name: "Stepper",
+    exempt:
+      "container; each step's panel is named by its label, and its buttons by their text",
+  },
 ];
