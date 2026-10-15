@@ -122,6 +122,7 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formReset } from "../utils/form-reset.js";
@@ -136,10 +137,11 @@
   // Rest props go to the hidden input, which never takes focus. Move the
   // naming and description attributes to the button that does.
   $: ({
-    "aria-describedby": ariaDescribedBy,
-    "aria-labelledby": ariaLabelledBy,
-    ...inputRestProps
-  } = $$restProps);
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: inputRestProps,
+  } = splitAriaNaming($$restProps));
 
   let initialLabelText = labelText;
 
@@ -187,6 +189,7 @@
 <button
   type="button"
   on:click={() => ref?.click()}
+  aria-label={ariaLabel}
   aria-describedby={ariaDescribedBy}
   aria-labelledby={ariaLabelledBy}
   {disabled}
