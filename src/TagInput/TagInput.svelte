@@ -538,6 +538,13 @@
         autocomplete="off"
         aria-invalid={showInvalid || undefined}
         aria-errormessage={showInvalid ? errorId : undefined}
+        {disabled}
+        {id}
+        {placeholder}
+        {readonly}
+        required={required && value.length === 0}
+        class:bx--tag-input__input={true}
+        {...$$restProps}
         aria-describedby={joinDescribedBy(
           interactive && instructionsId,
           resolveStatusDescribedBy({
@@ -549,14 +556,8 @@
             helperId,
             includeErrorId: false,
           }),
+          $$restProps["aria-describedby"],
         )}
-        {disabled}
-        {id}
-        {placeholder}
-        {readonly}
-        required={required && value.length === 0}
-        class:bx--tag-input__input={true}
-        {...$$restProps}
         on:input={handleInput}
         on:keydown={handleInputKeydown}
         on:keydown
