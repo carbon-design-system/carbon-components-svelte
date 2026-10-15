@@ -17,4 +17,15 @@ test.describe("InlineNotification", () => {
     await page.getByRole("button", { name: "Close notification" }).click();
     await expect(page.getByTestId("inline-notification")).not.toBeVisible();
   });
+
+  test("fills a wide parent with fullWidth, with no outer margin", async ({
+    page,
+  }) => {
+    const notification = page
+      .getByTestId("notification-wide")
+      .locator(".bx--inline-notification");
+    expect((await notification.boundingBox())?.width).toBe(1200);
+    await expect(notification).toHaveCSS("margin-top", "0px");
+    await expect(notification).toHaveCSS("margin-bottom", "0px");
+  });
 });

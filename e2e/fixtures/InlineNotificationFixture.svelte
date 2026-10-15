@@ -11,3 +11,14 @@
   subtitle="Notification subtitle"
   bind:open
 />
+
+<div data-testid="notification-wide" style:width="1200px">
+  <InlineNotification
+    fullWidth
+    hideCloseButton
+    role="status"
+    kind="warning"
+    title="Usage"
+    subtitle="Build minutes are close to the Team limit."
+  />
+</div>
