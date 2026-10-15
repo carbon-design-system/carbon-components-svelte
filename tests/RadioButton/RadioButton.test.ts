@@ -85,12 +85,12 @@ describe("RadioButton", () => {
     ).not.toHaveAttribute("aria-label");
   });
 
-  it("should prefer labelText as the accessible name and strip aria-label from the wrapper", () => {
+  it("should let a consumer aria-label override labelText and strip it from the wrapper", () => {
     const { container } = render(RadioButton, {
       props: { labelText: "Standard", "aria-label": "CDN" },
     });
 
-    expect(screen.getByRole("radio", { name: "Standard" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "CDN" })).toBeInTheDocument();
     expect(
       container.querySelector(".bx--radio-button-wrapper"),
     ).not.toHaveAttribute("aria-label");
