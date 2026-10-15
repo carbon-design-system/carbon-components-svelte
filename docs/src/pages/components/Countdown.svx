@@ -1,0 +1,26 @@
+---
+components: ["Countdown"]
+description: Countdowns show the time left on a hold, a session or a meter, counting down every second and announcing only the last minute and the end.
+---
+
+<script>
+  import { Countdown } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `seconds` to the length of the countdown. The time is written as m:ss, or h:mm:ss from an hour up, in a `role="timer"` element. Screen readers hear "One minute left" and "Time is up", not every second; set `oneMinuteText` and `expiredText` to change them. The `end` event fires at zero.
+
+<Countdown seconds={125} />
+
+## Format
+
+Set `format` to `"h:mm:ss"` to always show hours.
+
+<Countdown seconds={1800} format="h:mm:ss" />
+
+## Custom rendering
+
+The default slot receives `remaining`, `formatted` and `fraction` (the share of `seconds` left), such as for a ProgressBar. Bind `remaining` to extend the time, and `running` to pause.
+
+<FileSource src="/framed/Countdown/CountdownProgress" />
