@@ -56,6 +56,12 @@ Set `hideTextInput` to `true` to hide the numeric input while keeping the slider
 
 <Slider labelText="Instances" hideTextInput value={0} />
 
+### Hidden range labels
+
+Set `hideRangeLabels` to `true` to hide the min and max labels beside the track, as when a readout elsewhere already shows the range.
+
+<Slider labelText="Rollout" hideRangeLabels fullWidth value={35} />
+
 ### Input type
 
 Set `inputType` to change the native `type` attribute of the text input—for example, `"text"` to avoid the browser's built-in number spinner controls. The bound `value` stays numeric regardless of `inputType`.
