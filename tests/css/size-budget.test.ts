@@ -14,10 +14,12 @@ import { compileEntry } from "./compile";
 // new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // min 677,778 and gzip 79,179 measured locally after DatePicker `fullWidth`
-  "all.scss": { min: 691_400, gzip: 80_800 },
-  // min 584,406 and gzip 69,627 measured locally after DatePicker `fullWidth`
-  "white.scss": { min: 596_100, gzip: 71_100 },
+  // min 687,242 and gzip 80,720 measured locally after the compact-layout
+  // additions (InputGroup, StarRating, tile `size`, `fullWidth` caps,
+  // tabular figures and others)
+  "all.scss": { min: 701_000, gzip: 82_400 },
+  // min 592,449 and gzip 71,112 measured locally after the same additions
+  "white.scss": { min: 604_300, gzip: 72_600 },
 };
 
 describe("css size budget", () => {

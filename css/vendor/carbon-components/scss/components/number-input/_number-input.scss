@@ -35,6 +35,8 @@
     @include focus-outline('reset');
 
     display: inline-flex;
+    // ccs: tabular figures, so a value's digits keep their place as it steps.
+    font-variant-numeric: tabular-nums;
     // ccs: no 9.375rem min-width. The form item sizes the field, so it fits
     // grid cells and narrow columns; border-box padding keeps the steppers'
     // room.

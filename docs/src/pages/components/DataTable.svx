@@ -361,7 +361,7 @@ Set `fixedLayout` to `true` to take each header's `width` as the column's exact 
 
 ### Alignment
 
-Set `columnAlign` in `headers` to align a column's header and cells. Values are logical: `end` is the right edge in left-to-right text and the left edge in right-to-left text; the default, `start`, is the left edge. Sortable columns keep their sort affordance.
+Set `columnAlign` in `headers` to align a column's header and cells. Values are logical: `end` is the right edge in left-to-right text and the left edge in right-to-left text; the default, `start`, is the left edge. Sortable columns keep their sort affordance. An `end` column sets its digits in tabular figures, so numbers line up from row to row.
 
 <DataTable
   sortable

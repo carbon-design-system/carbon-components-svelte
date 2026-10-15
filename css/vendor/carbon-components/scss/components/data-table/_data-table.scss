@@ -295,6 +295,13 @@
   @each $align, $justify in $alignments {
     .#{$prefix}--data-table .#{$prefix}--table-column--align-#{$align} { // ccs: flatten
       text-align: $align;
+
+      // ccs: an end-aligned column usually holds numbers; tabular figures
+      // keep their digits in line from row to row. Kept in this rule, not a
+      // second one with the same selector, which some bundlers fold away.
+      @if $align == end {
+        font-variant-numeric: tabular-nums;
+      }
     }
 
     .#{$prefix}--data-table
