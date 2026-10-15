@@ -24,8 +24,12 @@ export type AriaCase = {
   variant?: string;
   /** Render with the consumer attributes passed as rest props. */
   render: (attrs: Partial<Record<AriaAttribute, string>>) => Rendered;
-  /** The element that takes focus or carries the role. */
-  target: (result: Rendered) => HTMLElement;
+  /**
+   * The element that takes focus or carries the role. Return several when
+   * the component shares its naming across controls, like a slider's thumb
+   * and text input.
+   */
+  target: (result: Rendered) => HTMLElement | HTMLElement[];
   /** Attributes this case doesn't check, each with the reason. */
   skip?: Partial<Record<AriaAttribute, string>>;
 };
