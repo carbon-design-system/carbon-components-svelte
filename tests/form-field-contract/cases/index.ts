@@ -90,7 +90,9 @@ export const cases: FieldCase[] = [
   {
     name: "NumberInput",
     component: NumberInput,
-    control: () => screen.getByRole("spinbutton"),
+    // Read-only renders a text input, which NVDA announces as read-only.
+    control: () =>
+      screen.queryByRole("spinbutton") ?? screen.getByRole("textbox"),
     state: {},
     fluid: {
       className: "bx--number-input--fluid",
