@@ -271,6 +271,8 @@
   $: describedById = resolveStatusDescribedBy({
     showInvalid: hasError,
     showWarn: hasWarn,
+    invalidText,
+    warnText,
     helperText,
     isFluid,
     errorId,
@@ -597,7 +599,7 @@
             aria-readonly={readonly || undefined}
             aria-label={segmentLabelText(index + 1, count, labelText, type)}
             aria-invalid={hasError || undefined}
-            aria-errormessage={hasError ? errorId : undefined}
+            aria-errormessage={hasError && invalidText ? errorId : undefined}
             data-invalid={hasError || undefined}
             data-warn={hasWarn || undefined}
             class:bx--text-input={true}
@@ -631,9 +633,11 @@
         {#if hasError}
           <div class:bx--pin-code-input__message={true}>
             <WarningFilled class="bx--pin-code-input__icon" />
-            <div class:bx--form-requirement={true} id={errorId} role="alert">
-              {invalidText}
-            </div>
+            {#if invalidText}
+              <div class:bx--form-requirement={true} id={errorId} role="alert">
+                {invalidText}
+              </div>
+            {/if}
           </div>
         {/if}
         {#if hasWarn}
@@ -641,7 +645,9 @@
             <WarningAltFilled
               class="bx--pin-code-input__icon bx--pin-code-input__icon--warning"
             />
-            <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
+            {#if warnText}
+              <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
+            {/if}
           </div>
         {/if}
       {/if}
@@ -655,12 +661,12 @@
         {helperText}
       </div>
     {/if}
-    {#if !isFluid && hasError}
+    {#if !isFluid && hasError && invalidText}
       <div class:bx--form-requirement={true} id={errorId} role="alert">
         {invalidText}
       </div>
     {/if}
-    {#if !isFluid && hasWarn}
+    {#if !isFluid && hasWarn && warnText}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
     {/if}
   </fieldset>

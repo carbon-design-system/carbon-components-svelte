@@ -206,6 +206,8 @@
     showInvalid,
     showWarn,
     isFluid,
+    invalidText,
+    warnText,
     helperText,
     errorId,
     warnId,
@@ -319,7 +321,7 @@
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
       data-warn={showWarn || undefined}
-      aria-errormessage={showInvalid ? errorId : undefined}
+      aria-errormessage={showInvalid && invalidText ? errorId : undefined}
       {...$$restProps}
       aria-describedby={joinDescribedBy(
         describedById,
@@ -401,10 +403,12 @@
            the status icon beside it, as on the other fluid fields. -->
       <hr class:bx--search__divider={true}>
       {#if showInvalid}
-        <div id={errorId} class:bx--form-requirement={true} role="alert">
-          {invalidText}
-        </div>
-      {:else}
+        {#if invalidText}
+          <div id={errorId} class:bx--form-requirement={true} role="alert">
+            {invalidText}
+          </div>
+        {/if}
+      {:else if warnText}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     {/if}
@@ -418,12 +422,12 @@
       {helperText}
     </div>
   {/if}
-  {#if showInvalid && !isFluid}
+  {#if showInvalid && !isFluid && invalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">
       {invalidText}
     </div>
   {/if}
-  {#if showWarn && !isFluid}
+  {#if showWarn && !isFluid && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 {/if}
