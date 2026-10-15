@@ -99,6 +99,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TimePicker",
       "Checkbox",
       "RadioButton",
+      "StarRating",
       "Toggle",
       "Form",
       "FluidForm",
