@@ -143,6 +143,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -728,7 +734,7 @@
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id));
   // Invalid/warn states are suppressed when the combo box is disabled or read-only.
   $: if (!required || value !== "") requiredError = false;
   $: shownInvalidText =
@@ -1071,6 +1077,7 @@
           {required}
           {...$$restProps}
           aria-describedby={joinDescribedBy(
+            readonly ? readonlyId : null,
             statusDescribedById,
             $$restProps["aria-describedby"],
           )}
@@ -1514,6 +1521,9 @@
     >
       {helperText}
     </div>
+  {/if}
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}
   <!-- Live region for selection announcements. Always rendered (even while
        empty) so assistive tech registers the region before its text changes. -->

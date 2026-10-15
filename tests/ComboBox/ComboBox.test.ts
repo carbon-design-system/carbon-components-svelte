@@ -2149,6 +2149,12 @@ describe("ComboBox", () => {
       );
     });
 
+    it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+      render(ComboBox, { readonly: true });
+
+      expect(getInput()).toHaveAccessibleDescription("Read-only");
+    });
+
     it("should keep aria-disabled when disabled", () => {
       render(ComboBox, { disabled: true });
 
