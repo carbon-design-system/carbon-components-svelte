@@ -673,4 +673,28 @@ test.describe("DatePicker", () => {
       expect(selection).toBe("");
     });
   });
+
+  test.describe("fullWidth", () => {
+    test("fills the container with a single input", async ({ page }) => {
+      const container = page.getByTestId("date-picker-full-width");
+      const width = (await container.getByLabel("Invoice due").boundingBox())
+        ?.width;
+
+      expect(width).toBe(400);
+    });
+
+    test("splits the container between range inputs", async ({ page }) => {
+      const container = page.getByTestId("date-picker-full-width");
+      const widths = await Promise.all(
+        ["Pick-up", "Return"].map(
+          async (label) =>
+            (await container.getByLabel(label).boundingBox())?.width ?? 0,
+        ),
+      );
+
+      // Carbon keeps a 1px gap between the two inputs.
+      expect(widths[0] + widths[1]).toBeCloseTo(399, 0);
+      expect(widths[0]).toBeCloseTo(widths[1], 0);
+    });
+  });
 });
