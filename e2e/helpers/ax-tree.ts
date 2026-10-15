@@ -6,10 +6,6 @@ export type AXControl = {
   description: string;
   invalid: boolean;
   errorMessage: string;
-  /** DOM tag name, such as "INPUT". */
-  tagName: string;
-  /** DOM `type` attribute, such as "file". */
-  type: string | undefined;
 };
 
 type AXNode = {
@@ -45,20 +41,12 @@ async function describe(cdp: CDPSession, node: AXNode): Promise<AXControl> {
     await Promise.all(errorNodes.map((n) => textOf(cdp, n.backendDOMNodeId)))
   ).join(" ");
 
-  const { node: dom } = await cdp.send("DOM.describeNode", {
-    backendNodeId: node.backendDOMNodeId,
-  });
-  const attributes = dom.attributes ?? [];
-  const typeIndex = attributes.indexOf("type");
-
   return {
     role: node.role?.value ?? "",
     name: node.name?.value ?? "",
     description: node.description?.value ?? "",
     invalid: prop("invalid")?.value === "true",
     errorMessage,
-    tagName: dom.nodeName,
-    type: typeIndex === -1 ? undefined : attributes[typeIndex + 1],
   };
 }
 
