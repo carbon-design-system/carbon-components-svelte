@@ -1,0 +1,79 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// EmptyState: an illustration, a title, a line of explanation and the
+/// actions that fill the space, centered in whatever holds it.
+/// @access private
+/// @group components
+@mixin empty-state {
+  .#{$prefix}--empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $carbon--spacing-07 $carbon--spacing-05;
+    text-align: center;
+  }
+
+  .#{$prefix}--empty-state__illustration {
+    display: flex;
+    margin-bottom: $carbon--spacing-05;
+    color: $icon-secondary;
+  }
+
+  .#{$prefix}--empty-state__illustration svg {
+    width: to-rem(64px);
+    height: to-rem(64px);
+    fill: currentColor;
+  }
+
+  .#{$prefix}--empty-state__title {
+    @include type-style("heading-compact-02");
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--empty-state__subtitle {
+    @include type-style("body-compact-01");
+
+    max-width: to-rem(352px);
+    margin-top: $carbon--spacing-03;
+    color: $text-secondary;
+    text-wrap: pretty;
+  }
+
+  .#{$prefix}--empty-state__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $carbon--spacing-03;
+    margin-top: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--empty-state--sm {
+    padding: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__illustration {
+    margin-bottom: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__illustration svg {
+    width: to-rem(48px);
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__title {
+    @include type-style("heading-01");
+  }
+
+  .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__actions {
+    margin-top: $carbon--spacing-04;
+  }
+}
+
+@include exports("empty-state") {
+  @include empty-state;
+}
