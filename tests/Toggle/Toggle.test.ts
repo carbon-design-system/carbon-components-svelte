@@ -209,9 +209,8 @@ describe("Toggle", () => {
     const { container } = render(ToggleNullishAriaLabel, {
       props: { ariaLabel: "" },
     });
-    const label = container.querySelector("label[aria-label]");
-    expect(label).toBeInTheDocument();
-    expect(label).toHaveAttribute("aria-label", "");
+    expect(screen.getByRole("switch")).toHaveAttribute("aria-label", "");
+    expect(container.querySelector("label[aria-label]")).toBeNull();
   });
 
   it("does not dispatch toggle event on mount", () => {

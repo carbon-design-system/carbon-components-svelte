@@ -129,6 +129,7 @@
     class:bx--toggle-input--small={size === "sm"}
     checked={toggled}
     aria-readonly={readonly || undefined}
+    aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(
       readonly ? readonlyId : null,
@@ -162,7 +163,7 @@
     {value}
   >
   <label
-    aria-label={labelText ? undefined : (ariaLabel ?? "Toggle")}
+    aria-label={labelText || ariaLabel !== undefined ? undefined : "Toggle"}
     for={id}
     class:bx--toggle-input__label={true}
   >
