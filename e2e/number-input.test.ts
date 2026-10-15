@@ -193,4 +193,35 @@ test.describe("NumberInput", () => {
       await expect(input).toHaveValue("5");
     });
   });
+
+  test.describe("narrow columns", () => {
+    test("fits a column narrower than 150px", async ({ page }) => {
+      const seats = page.getByTestId("number-input-narrow").getByLabel("Seats");
+      expect((await seats.boundingBox())?.width).toBe(112);
+    });
+
+    test("shows the whole value beside the steppers", async ({ page }) => {
+      const budget = page
+        .getByTestId("number-input-narrow")
+        .getByLabel("Budget");
+      // An input's scrollWidth doesn't grow with clipped text, so measure
+      // the value against the room inside its padding.
+      const fits = await budget.evaluate(async (node: HTMLInputElement) => {
+        await document.fonts.ready;
+        const style = getComputedStyle(node);
+        const context = document.createElement("canvas").getContext("2d");
+        if (!context) return false;
+        context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const spacing = Number.parseFloat(style.letterSpacing) || 0;
+        const text =
+          context.measureText(node.value).width + spacing * node.value.length;
+        const room =
+          node.clientWidth -
+          Number.parseFloat(style.paddingLeft) -
+          Number.parseFloat(style.paddingRight);
+        return text <= room;
+      });
+      expect(fits).toBe(true);
+    });
+  });
 });
