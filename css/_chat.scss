@@ -1,0 +1,314 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Chat: a scrolling log of messages, aligned by author and grouped when
+/// one author sends several in a row, with day dividers and a typing
+/// indicator.
+/// @access private
+/// @group components
+@mixin chat {
+  // In a flex column, the log takes the space left and scrolls inside it.
+  .#{$prefix}--chat-log {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  // Padding inside the scrolling area, so messages clear the edges of the
+  // panel that holds the log.
+  .#{$prefix}--chat-log__list {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-05;
+    margin: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--chat-message {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    margin-top: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--chat-message:first-child,
+  .#{$prefix}--chat-divider + .#{$prefix}--chat-message {
+    margin-top: 0;
+  }
+
+  .#{$prefix}--chat-message--continued {
+    margin-top: $carbon--spacing-02;
+  }
+
+  // A status line inside a group, such as Not sent or Sending, needs more
+  // room before the next message, so it reads as the line above's.
+  .#{$prefix}--chat-message--with-status + .#{$prefix}--chat-message--continued {
+    margin-top: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--chat-message--me {
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--chat-message__avatar {
+    display: flex;
+    width: to-rem(24px);
+    flex: none;
+  }
+
+  .#{$prefix}--chat-message__main {
+    display: flex;
+    min-width: 0;
+    max-width: 82%;
+    flex-direction: column;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__main {
+    align-items: flex-end;
+  }
+
+  .#{$prefix}--chat-message__author {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  // Top-aligned, so the bubble stays level with the avatar beside it.
+  .#{$prefix}--chat-message__line {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-02;
+  }
+
+  // Several actions sit in one row and don't squeeze the bubble.
+  .#{$prefix}--chat-message__actions {
+    display: flex;
+    flex: none;
+  }
+
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__line {
+    flex-direction: row-reverse;
+  }
+
+  // Text is inset 16px, as in CodeSnippet, Tile and file rows, so a
+  // bubble's text lines up with the attachments under it.
+  .#{$prefix}--chat-message__bubble {
+    @include type-style("body-01");
+
+    min-width: 0;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    background-color: ccs-token("chat-bubble-agent");
+    // The border is an inset shadow, so it doesn't change the bubble's size.
+    box-shadow: inset 0 0 0 1px ccs-token("chat-bubble-border");
+    color: ccs-token("chat-bubble-agent-text");
+    overflow-wrap: anywhere;
+  }
+
+  // Bubble colors are Carbon v11's chat tokens: your own messages on
+  // chat-bubble-user, everyone else's on chat-bubble-agent with a border.
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__bubble {
+    background-color: ccs-token("chat-bubble-user");
+    box-shadow: none;
+    color: ccs-token("chat-bubble-user-text");
+  }
+
+  // Links flow as text: a long URL wraps with the message, punctuation
+  // after a link stays on its line, and they are underlined, so they don't
+  // rely on color alone. Carbon's Link is otherwise an unbreakable
+  // inline-flex box in its own type style.
+  .#{$prefix}--chat-message__bubble a {
+    display: inline;
+    font: inherit;
+    text-decoration: underline;
+  }
+
+  // Links in your own message take its text color.
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__bubble a {
+    color: inherit;
+  }
+
+  // A blinking caret while a reply is still arriving, spanning the text
+  // from its ascenders to its descenders, in a quieter color than the text.
+  .#{$prefix}--chat-message--streaming .#{$prefix}--chat-message__bubble::after {
+    display: inline-block;
+    width: 0.5em;
+    height: 1em;
+    margin-left: $carbon--spacing-01;
+    animation: chat-caret 1s steps(1) infinite;
+    background-color: $icon-secondary;
+    content: "";
+    vertical-align: -0.2em;
+  }
+
+  .#{$prefix}--chat-message--me.#{$prefix}--chat-message--streaming
+    .#{$prefix}--chat-message__bubble::after {
+    background-color: currentColor;
+  }
+
+  @keyframes chat-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  // Cards, files, images and code sit under the bubble on the page's own
+  // background, so they read the same in a message from anyone. They keep
+  // the group's rhythm: as far apart as the bubble above and the bubbles
+  // of a continued group.
+  .#{$prefix}--chat-message__attachments {
+    display: flex;
+    max-width: 100%;
+    flex-direction: column;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--chat-message__attachments img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .#{$prefix}--chat-message--me .#{$prefix}--chat-message__attachments {
+    align-items: flex-end;
+  }
+
+  .#{$prefix}--chat-message__meta {
+    @include type-style("label-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--chat-message__status {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--chat-message__status-icon {
+    flex: none;
+    fill: currentColor;
+  }
+
+  .#{$prefix}--chat-message__status--failed {
+    color: $text-error;
+  }
+
+  .#{$prefix}--chat-message__status--failed .#{$prefix}--chat-message__status-icon {
+    fill: $support-error;
+  }
+
+  .#{$prefix}--chat-message__retry {
+    @include button-reset($width: false);
+
+    color: $link-primary;
+    font: inherit;
+    text-decoration: underline;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  // A meta slot whose content is conditional, such as a time shown only on
+  // the last of a run, takes no space when it renders nothing.
+  .#{$prefix}--chat-message__meta:empty {
+    display: none;
+  }
+
+  // Actions such as reply appear on hover or focus where a pointer can
+  // hover, and stay visible on touch screens.
+  @media (any-hover: hover) {
+    .#{$prefix}--chat-message__actions {
+      opacity: 0;
+      transition: opacity $duration--fast-02 motion(standard, productive);
+    }
+
+    .#{$prefix}--chat-message:hover .#{$prefix}--chat-message__actions,
+    .#{$prefix}--chat-message:focus-within .#{$prefix}--chat-message__actions {
+      opacity: 1;
+    }
+  }
+
+  .#{$prefix}--chat-message__bubble--typing {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    padding: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--chat-message__dot {
+    width: to-rem(6px);
+    height: to-rem(6px);
+    border-radius: 50%;
+    animation: chat-typing 1.2s ease-in-out infinite;
+    background-color: $text-secondary;
+  }
+
+  .#{$prefix}--chat-message__dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .#{$prefix}--chat-message__dot:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes chat-typing {
+    0%,
+    60%,
+    100% {
+      opacity: 0.4;
+      transform: none;
+    }
+
+    30% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--chat-message__dot,
+    .#{$prefix}--chat-message--streaming .#{$prefix}--chat-message__bubble::after {
+      animation: none;
+    }
+  }
+
+  .#{$prefix}--chat-divider {
+    @include type-style("label-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-04;
+    margin: $carbon--spacing-05 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--chat-divider:first-child {
+    margin-top: 0;
+  }
+
+  .#{$prefix}--chat-divider::before,
+  .#{$prefix}--chat-divider::after {
+    height: 1px;
+    flex: 1;
+    background-color: $layer-accent;
+    content: "";
+  }
+}
+
+@include exports("chat") {
+  @include chat;
+}
