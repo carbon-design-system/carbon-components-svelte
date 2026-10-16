@@ -205,6 +205,16 @@
       width: 75%;
       height: 1rem;
     }
+
+    // ccs: each bar centered in its cell's line, a heading's 18px and a
+    // row's 20px, so the skeleton's rows are as tall as the list's.
+    .#{$prefix}--structured-list-th span {
+      margin-block: to-rem(1px);
+    }
+
+    .#{$prefix}--structured-list-td span {
+      margin-block: to-rem(2px);
+    }
   }
 
   .#{$prefix}--structured-list.#{$prefix}--structured-list--selection.#{$prefix}--skeleton
