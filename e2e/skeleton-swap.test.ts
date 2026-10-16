@@ -32,6 +32,8 @@ const cases = [
     `toggle-${size}-hidden-label`,
     `toggle-${size}-no-label`,
   ]),
+  ...["xs", "md"].flatMap((size) => [`slider-${size}`, `range-slider-${size}`]),
+  "slider-hidden-input",
   ...[1, 2, 4, 8].flatMap((rows) => [
     `text-area-${rows}`,
     `fluid-text-area-${rows}`,

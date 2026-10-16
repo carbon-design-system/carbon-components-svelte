@@ -18,11 +18,15 @@
     PasswordInputSkeleton,
     PinCodeInput,
     PinCodeInputSkeleton,
+    RangeSlider,
+    RangeSliderSkeleton,
     Search,
     SearchSkeleton,
     Select,
     SelectItem,
     SelectSkeleton,
+    Slider,
+    SliderSkeleton,
     TextArea,
     TextAreaSkeleton,
     TextInput,
@@ -153,6 +157,27 @@
       <div data-part="skeleton"><ToggleSkeleton {size} /></div>
     </div>
   {/each}
+  {#each ["xs", undefined] as size}
+    {@const at = size ?? "md"}
+    <div data-testid="slider-{at}">
+      <div data-part="real">
+        <Slider {size} labelText="Volume" value={40} />
+      </div>
+      <div data-part="skeleton"><SliderSkeleton {size} /></div>
+    </div>
+    <div data-testid="range-slider-{at}">
+      <div data-part="real">
+        <RangeSlider {size} labelText="Price" valueFrom={20} valueTo={60} />
+      </div>
+      <div data-part="skeleton"><RangeSliderSkeleton {size} /></div>
+    </div>
+  {/each}
+  <div data-testid="slider-hidden-input">
+    <div data-part="real">
+      <Slider hideTextInput labelText="Volume" value={40} />
+    </div>
+    <div data-part="skeleton"><SliderSkeleton hideTextInput /></div>
+  </div>
   <div data-testid="date-picker-range">
     <div data-part="real">
       <DatePicker datePickerType="range">

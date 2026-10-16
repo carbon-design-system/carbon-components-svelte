@@ -223,17 +223,32 @@
     height: to-rem(12px);
   }
 
+  // ccs: a bar for the number input, which takes the slider's height
+  // (40px, or 24px at `xs`) and some of its width.
+  .#{$prefix}--slider-container.#{$prefix}--skeleton
+    .#{$prefix}--slider-text-input {
+    @include skeleton;
+  }
+
   .#{$prefix}--slider-container.#{$prefix}--skeleton
     .#{$prefix}--slider__track {
     cursor: default;
     pointer-events: none;
   }
 
+  // ccs: a skeleton thumb, not the dark live one, and no filled track:
+  // it's as wide as the track until a value sets its width.
   .#{$prefix}--slider-container.#{$prefix}--skeleton
     .#{$prefix}--slider__thumb {
+    @include skeleton($omit: (position));
+
     left: 50%;
     cursor: default;
-    pointer-events: none;
+  }
+
+  .#{$prefix}--slider-container.#{$prefix}--skeleton
+    .#{$prefix}--slider__filled-track {
+    display: none;
   }
 
   // Windows HCM fix
