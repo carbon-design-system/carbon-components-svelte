@@ -44,7 +44,9 @@ const cases = [
   "date-picker-short",
   "fluid-date-picker-320",
   "fluid-date-picker-200",
-  "pin-code-input",
+  ...["xs", "sm", "default", "xl"].map((size) => `pin-code-input-${size}`),
+  "fluid-pin-code-input-4",
+  "fluid-pin-code-input-6",
   ...["xs", "sm", "md", "lg"].map((size) => `pagination-${size}`),
   ...["small", "field", "default"].map((size) => `file-uploader-${size}`),
   "code-snippet-single",
@@ -74,13 +76,22 @@ test("skeletons are as tall as the components they stand in for", async ({
  * Fields whose width doesn't depend on their text: the skeleton's field
  * must be as wide as the component's.
  */
-const fieldWidths: Record<string, string> = {
+const fieldWidths: Record<string, string | [real: string, skeleton: string]> = {
   ...Object.fromEntries(
     sizes.map((size) => [`date-picker-${size}`, ".bx--date-picker__input"]),
   ),
   "date-picker-range": ".bx--date-picker__input",
   "date-picker-simple": ".bx--date-picker__input",
   "date-picker-short": ".bx--date-picker__input",
+  ...Object.fromEntries(
+    ["xs", "sm", "default", "xl"].map((size) => [
+      `pin-code-input-${size}`,
+      ".bx--pin-code-input__segments",
+    ]),
+  ),
+  // The fluid field's segments are as wide as their content.
+  "fluid-pin-code-input-4": [".bx--pin-code-input__segments", "> *"],
+  "fluid-pin-code-input-6": [".bx--pin-code-input__segments", "> *"],
   // The whole fluid field: 288px, or its container's width when narrower.
   "fluid-date-picker-320": "> *",
   "fluid-date-picker-200": "> *",
@@ -93,9 +104,13 @@ test("skeleton fields are as wide as the fields they stand in for", async ({
 
   for (const [id, field] of Object.entries(fieldWidths)) {
     const pair = page.getByTestId(id);
+    const [realField, skeletonField] =
+      typeof field === "string" ? [field, field] : field;
     const widths = (part: string) =>
       pair
-        .locator(`[data-part=${part}] ${field}`)
+        .locator(
+          `[data-part=${part}] ${part === "real" ? realField : skeletonField}`,
+        )
         .evaluateAll((els) =>
           els.map((el) => el.getBoundingClientRect().width),
         );

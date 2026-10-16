@@ -14,6 +14,7 @@
     FileUploader,
     FileUploaderSkeleton,
     FluidDatePickerSkeleton,
+    FluidPinCodeInputSkeleton,
     FluidTextAreaSkeleton,
     MultiSelect,
     MultiSelectSkeleton,
@@ -280,8 +281,22 @@
     </div>
     <div data-part="skeleton"><DatePickerSkeleton short /></div>
   </div>
-  <div data-testid="pin-code-input">
-    <div data-part="real"><PinCodeInput labelText="Code" /></div>
-    <div data-part="skeleton"><PinCodeInputSkeleton /></div>
-  </div>
+  {#each [4, 6] as count}
+    <div data-testid="fluid-pin-code-input-{count}">
+      <div data-part="real">
+        <PinCodeInput fluid {count} labelText="Code" />
+      </div>
+      <div data-part="skeleton"><FluidPinCodeInputSkeleton {count} /></div>
+    </div>
+  {/each}
+  {#each ["xs", "sm", "default", "xl"] as size}
+    <div data-testid="pin-code-input-{size}">
+      <div data-part="real">
+        <PinCodeInput {size} count={6} labelText="Code" />
+      </div>
+      <div data-part="skeleton">
+        <PinCodeInputSkeleton {size} count={6} />
+      </div>
+    </div>
+  {/each}
 </div>
