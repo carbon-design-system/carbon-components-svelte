@@ -1,12 +1,14 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 /**
  * Pass/fail definition of "easy to override": a consumer rule made of one
  * custom class (plus a state or one child element) must beat the library's
  * rule for the same property. Fixture: e2e/fixtures/consumer-override.css.
  *
- * Cases marked `test.fail()` are library selectors that still out-weigh a
- * single-class consumer rule; flip the mark when the selector is flattened.
+ * Each fixture loads once and every case reads from it. Cases with a `gap`
+ * are library selectors that still out-weigh a single-class consumer rule;
+ * they assert the override still loses, so they fail once the selector is
+ * flattened. Move the case out of the gap list then.
  */
 
 const RED = "rgb(200, 0, 0)";
@@ -15,202 +17,237 @@ const GRAY = "rgb(100, 100, 100)";
 const PINK = "rgb(255, 230, 230)";
 const PINK_HOVER = "rgb(255, 200, 200)";
 
-test.describe("consumer override", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/consumer-override.html");
-    // The pointer starts at (0,0), on top of the first button, so its hover
-    // rule would win the static assertions. Park it in empty space.
-    const size = page.viewportSize() ?? { width: 1280, height: 720 };
-    await page.mouse.move(size.width - 1, size.height - 1);
-  });
+type Case = {
+  name: string;
+  target: (page: Page) => Locator;
+  state?: "hover" | "focus";
+  property: string;
+  value: string;
+  /** The library selector that still wins. */
+  gap?: string;
+};
 
-  test.describe("button", () => {
-    test("background", async ({ page }) => {
-      await expect(page.getByTestId("btn")).toHaveCSS("background-color", RED);
-    });
+const id = (testId: string, child?: string) => (page: Page) =>
+  child
+    ? page.getByTestId(testId).locator(child).first()
+    : page.getByTestId(testId);
 
-    test("hover background", async ({ page }) => {
-      const btn = page.getByTestId("btn");
-      await btn.hover();
-      await expect(btn).toHaveCSS("background-color", RED_HOVER);
-    });
+const cell = (testId: string, row: number) => (page: Page) =>
+  page.getByTestId(testId).locator("tbody tr").nth(row).locator("td").last();
 
-    test("disabled background", async ({ page }) => {
-      await expect(page.getByTestId("btn-disabled")).toHaveCSS(
-        "background-color",
-        GRAY,
-      );
-    });
+async function check(page: Page, cases: Case[]) {
+  for (const { name, target, state, property, value, gap } of cases) {
+    const el = target(page);
+    // biome-ignore lint/performance/noAwaitInLoops: one pointer, one focus
+    if (state === "hover") await el.hover();
+    if (state === "focus") await el.focus();
+    if (!gap) {
+      await expect.soft(el, name).toHaveCSS(property, value);
+      continue;
+    }
+    // A losing override never matches, so `toHaveCSS` would retry until it
+    // times out. Let transitions settle and read the value once instead.
+    const actual = await el.evaluate(async (node, property) => {
+      await Promise.all(node.getAnimations().map((a) => a.finished));
+      return getComputedStyle(node).getPropertyValue(property);
+    }, property);
+    expect
+      .soft(actual, `${name} now wins over ${gap}; drop its gap`)
+      .not.toBe(value);
+  }
+}
 
-    test("icon-only focus border", async ({ page }) => {
-      const btn = page.getByTestId("icon-btn");
-      await btn.focus();
-      await expect(btn).toHaveCSS("border-top-color", RED);
-    });
+// Static cases first: a hover or focus case leaves its state behind.
+const cases: Case[] = [
+  {
+    name: "button background",
+    target: id("btn"),
+    property: "background-color",
+    value: RED,
+  },
+  {
+    name: "button disabled background",
+    target: id("btn-disabled"),
+    property: "background-color",
+    value: GRAY,
+  },
+  {
+    name: "button icon-only icon fill",
+    target: id("icon-btn", "svg"),
+    property: "fill",
+    value: RED,
+  },
+  {
+    name: "button icon-only icon path fill",
+    target: id("icon-btn", "svg path"),
+    property: "fill",
+    value: RED,
+  },
+  {
+    name: "button text icon color",
+    target: id("text-icon-btn"),
+    property: "color",
+    value: RED,
+  },
+  {
+    name: "button text icon fill",
+    target: id("text-icon-btn", "svg"),
+    property: "fill",
+    value: RED,
+  },
+  {
+    name: "button text icon path fill",
+    target: id("text-icon-btn", "svg path"),
+    property: "fill",
+    value: RED,
+  },
+  { name: "link color", target: id("link"), property: "color", value: RED },
+  {
+    name: "inline link text-decoration",
+    target: id("link-inline"),
+    property: "text-decoration-line",
+    value: "none",
+  },
+  {
+    name: "tag border",
+    target: id("tag"),
+    property: "border-top-color",
+    value: RED,
+  },
+  {
+    name: "tag background",
+    target: id("tag"),
+    property: "background-color",
+    value: PINK,
+  },
+  {
+    name: "data table row background",
+    target: cell("table", 0),
+    property: "background-color",
+    value: PINK,
+  },
+  {
+    name: "data table selected row background",
+    target: cell("table", 1),
+    property: "background-color",
+    value: PINK,
+  },
+  {
+    name: "data table zebra rowClass background",
+    target: cell("table-zebra", 1),
+    property: "background-color",
+    value: PINK,
+    gap: ".bx--data-table--zebra>tbody>tr:not(.bx--parent-row):nth-child(even)>td (0,3,3)",
+  },
+  {
+    name: "unselected tab underline",
+    target: (page) => page.getByTestId("tabs").locator(".my-tab a").nth(1),
+    property: "border-bottom-color",
+    value: RED,
+  },
+  {
+    name: "selected tab underline",
+    target: (page) => page.getByTestId("tabs").locator(".my-tab a").nth(0),
+    property: "border-bottom-color",
+    value: RED,
+  },
+  {
+    name: "container tab background",
+    target: (page) =>
+      page.getByTestId("tabs-container").locator(".my-container-tab").nth(1),
+    property: "background-color",
+    value: PINK,
+  },
+  {
+    name: "selected container tab background",
+    target: (page) =>
+      page.getByTestId("tabs-container").locator(".my-container-tab").nth(0),
+    property: "background-color",
+    value: PINK,
+  },
+  {
+    name: "toast icon fill",
+    target: id("toast", "svg"),
+    property: "fill",
+    value: RED,
+  },
+  {
+    name: "toast link color",
+    target: id("toast-link"),
+    property: "color",
+    value: RED,
+  },
+  {
+    name: "low-contrast toast background",
+    target: id("toast-low"),
+    property: "background-color",
+    value: PINK,
+  },
+  {
+    name: "inline notification icon fill",
+    target: id("inline", "svg"),
+    property: "fill",
+    value: RED,
+  },
+  {
+    name: "button hover background",
+    target: id("btn"),
+    state: "hover",
+    property: "background-color",
+    value: RED_HOVER,
+  },
+  {
+    name: "link hover color",
+    target: id("link"),
+    state: "hover",
+    property: "color",
+    value: RED_HOVER,
+  },
+  {
+    name: "data table hover row background",
+    target: cell("table", 2),
+    state: "hover",
+    property: "background-color",
+    value: PINK_HOVER,
+    gap: ".bx--data-table tbody tr:hover td (0,2,3)",
+  },
+  {
+    name: "button icon-only focus border",
+    target: id("icon-btn"),
+    state: "focus",
+    property: "border-top-color",
+    value: RED,
+  },
+];
 
-    test("icon-only icon fill", async ({ page }) => {
-      await expect(page.getByTestId("icon-btn").locator("svg")).toHaveCSS(
-        "fill",
-        RED,
-      );
-    });
+const contextCases: Case[] = [
+  {
+    name: "side nav link text color",
+    target: id("side-link", "span"),
+    property: "color",
+    value: RED,
+  },
+  {
+    // Needs `@layer` or a token-based layer context, not a flatten, so it
+    // stays a documented gap.
+    name: "text input background inside a modal",
+    target: id("modal-input"),
+    property: "background-color",
+    value: PINK,
+    gap: ".bx--modal .bx--text-input (0,2,0)",
+  },
+];
 
-    test("text icon follows color", async ({ page }) => {
-      const btn = page.getByTestId("text-icon-btn");
-      await expect(btn).toHaveCSS("color", RED);
-      await expect(btn.locator("svg")).toHaveCSS("fill", RED);
-      await expect(btn.locator("svg path").first()).toHaveCSS("fill", RED);
-    });
-  });
-
-  test.describe("button icon path", () => {
-    test("icon-only icon path fill", async ({ page }) => {
-      await expect(
-        page.getByTestId("icon-btn").locator("svg path").first(),
-      ).toHaveCSS("fill", RED);
-    });
-  });
-
-  test.describe("link", () => {
-    test("color", async ({ page }) => {
-      await expect(page.getByTestId("link")).toHaveCSS("color", RED);
-    });
-
-    test("hover color", async ({ page }) => {
-      const link = page.getByTestId("link");
-      await link.hover();
-      await expect(link).toHaveCSS("color", RED_HOVER);
-    });
-
-    test("inline link text-decoration", async ({ page }) => {
-      await expect(page.getByTestId("link-inline")).toHaveCSS(
-        "text-decoration-line",
-        "none",
-      );
-    });
-  });
-
-  test.describe("tag", () => {
-    test("border and background", async ({ page }) => {
-      const tag = page.getByTestId("tag");
-      await expect(tag).toHaveCSS("border-top-color", RED);
-      await expect(tag).toHaveCSS("background-color", PINK);
-    });
-  });
-
-  test.describe("data-table", () => {
-    const cell = (page: import("@playwright/test").Page, row: number) =>
-      page
-        .getByTestId("table")
-        .locator("tbody tr")
-        .nth(row)
-        .locator("td")
-        .last();
-
-    test("row background", async ({ page }) => {
-      await expect(cell(page, 0)).toHaveCSS("background-color", PINK);
-    });
-
-    test("selected row background", async ({ page }) => {
-      await expect(cell(page, 1)).toHaveCSS("background-color", PINK);
-    });
-
-    test("hover row background", async ({ page }) => {
-      // loses to `.bx--data-table tbody tr:hover td` (0,2,3)
-      test.fail();
-      const td = cell(page, 2);
-      await td.hover();
-      await expect(td).toHaveCSS("background-color", PINK_HOVER);
-    });
-  });
-
-  test.describe("tabs", () => {
-    const link = (page: import("@playwright/test").Page, i: number) =>
-      page.getByTestId("tabs").locator(".my-tab a").nth(i);
-
-    test("unselected tab underline", async ({ page }) => {
-      await expect(link(page, 1)).toHaveCSS("border-bottom-color", RED);
-    });
-
-    test("selected tab underline", async ({ page }) => {
-      await expect(link(page, 0)).toHaveCSS("border-bottom-color", RED);
-    });
-  });
-
-  test.describe("tabs container", () => {
-    test("tab background", async ({ page }) => {
-      await expect(
-        page.getByTestId("tabs-container").locator(".my-container-tab").nth(1),
-      ).toHaveCSS("background-color", PINK);
-    });
-
-    test("selected tab background", async ({ page }) => {
-      await expect(
-        page.getByTestId("tabs-container").locator(".my-container-tab").first(),
-      ).toHaveCSS("background-color", PINK);
-    });
-  });
-
-  test.describe("data-table zebra", () => {
-    test("rowClass background", async ({ page }) => {
-      // loses to `.bx--data-table--zebra>tbody>tr:not(.bx--parent-row):nth-child(even)>td` (0,3,3)
-      test.fail();
-      const td = page
-        .getByTestId("table-zebra")
-        .locator("tbody tr")
-        .nth(1)
-        .locator("td")
-        .last();
-      await expect(td).toHaveCSS("background-color", PINK);
-    });
-  });
-
-  test.describe("notification", () => {
-    test("toast icon fill", async ({ page }) => {
-      await expect(page.getByTestId("toast").locator("svg").first()).toHaveCSS(
-        "fill",
-        RED,
-      );
-    });
-
-    test("toast link color", async ({ page }) => {
-      await expect(page.getByTestId("toast-link")).toHaveCSS("color", RED);
-    });
-
-    test("low-contrast toast background", async ({ page }) => {
-      await expect(page.getByTestId("toast-low")).toHaveCSS(
-        "background-color",
-        PINK,
-      );
-    });
-
-    test("inline icon fill", async ({ page }) => {
-      await expect(page.getByTestId("inline").locator("svg").first()).toHaveCSS(
-        "fill",
-        RED,
-      );
-    });
-  });
+test("consumer overrides win over library rules", async ({ page }) => {
+  await page.goto("/consumer-override.html");
+  // The pointer starts at (0,0), on top of the first button, so its hover
+  // rule would win the static assertions. Park it in empty space.
+  const size = page.viewportSize() ?? { width: 1280, height: 720 };
+  await page.mouse.move(size.width - 1, size.height - 1);
+  await check(page, cases);
 });
 
-test.describe("consumer override in context", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/consumer-override-contexts.html");
-  });
-
-  test("side nav link text color", async ({ page }) => {
-    await expect(
-      page.getByTestId("side-link").locator("span").first(),
-    ).toHaveCSS("color", RED);
-  });
-
-  test("text input background inside a modal", async ({ page }) => {
-    // loses to `.bx--modal .bx--text-input` (0,2,0); needs `@layer` or a
-    // token-based layer context, not a flatten, so it stays a documented gap
-    test.fail();
-    await expect(page.getByTestId("modal-input")).toHaveCSS(
-      "background-color",
-      PINK,
-    );
-  });
+test("consumer overrides win inside other components", async ({ page }) => {
+  await page.goto("/consumer-override-contexts.html");
+  await check(page, contextCases);
 });

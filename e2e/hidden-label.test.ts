@@ -33,21 +33,22 @@ const cases: { id: string; control: string; axes?: ("x" | "y")[] }[] = [
   { id: "meter", control: "[role=meter]" },
 ];
 
-test.describe("hideLabel", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/hidden-label.html");
-  });
+// Every case only reads layout, so the fixture loads once for all of them.
+test("hideLabel leaves no space for the hidden label", async ({ page }) => {
+  await page.goto("/hidden-label.html");
 
-  for (const { id, control, axes = ["x", "y"] } of cases) {
-    test(`${id} leaves no space for the hidden label`, async ({ page }) => {
-      const wrapper = page.getByTestId(id);
-      const wrapperBox = await wrapper.boundingBox();
-      const controlBox = await wrapper.locator(control).first().boundingBox();
-      if (!wrapperBox || !controlBox) throw new Error(`${id} not rendered`);
+  for (const { id, control, axes = ["x", "y"] as const } of cases) {
+    const wrapper = page.getByTestId(id);
+    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
+    const wrapperBox = await wrapper.boundingBox();
+    const controlBox = await wrapper.locator(control).first().boundingBox();
+    expect.soft(wrapperBox && controlBox, `${id} rendered`).toBeTruthy();
+    if (!wrapperBox || !controlBox) continue;
 
-      for (const axis of axes) {
-        expect(controlBox[axis], axis).toBeCloseTo(wrapperBox[axis], 0);
-      }
-    });
+    for (const axis of axes) {
+      expect
+        .soft(controlBox[axis], `${id} ${axis}`)
+        .toBeCloseTo(wrapperBox[axis], 0);
+    }
   }
 });
