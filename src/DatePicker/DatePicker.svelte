@@ -230,7 +230,11 @@
   /** Specify the ARIA label for the clear button. */
   export let clearButtonLabelText = "Clear date";
 
-  /** Set to `true` to use the short variant */
+  /**
+   * Set to `true` for a narrower field, sized for a short format such as
+   * `dateFormat="m/y"`; a full date like `mm/dd/yyyy` is cut off. Only
+   * applies to the `"simple"` type.
+   */
   export let short = false;
 
   /** Set to `true` to enable the light variant */

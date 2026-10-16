@@ -491,10 +491,10 @@ Set `size` on DatePickerInput. The default is `md`.
 
 ### Short
 
-Set `short` to `true` on DatePicker for a narrower field. It only changes the field width for the default `"simple"` date picker type.
+Set `short` to `true` on DatePicker for a narrower field, sized for a short format such as month and year. A full date like `mm/dd/yyyy` doesn't fit and is cut off. It only changes the field width for the default `"simple"` date picker type.
 
-<DatePicker short>
-  <DatePickerInput labelText="Subscription renewal date" placeholder="mm/dd/yyyy" />
+<DatePicker short dateFormat="m/y">
+  <DatePickerInput labelText="Card expiration" placeholder="mm/yy" />
 </DatePicker>
 
 ### Extra-large
