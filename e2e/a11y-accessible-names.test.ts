@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import { getAXTree } from "./helpers/ax-tree";
+import { expect, test } from "./helpers/host";
 
 // axe checks that ARIA ids resolve, not that the text reaches the element
 // that takes focus or carries the role. These tests read the name and

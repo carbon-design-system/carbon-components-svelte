@@ -1,4 +1,5 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 /**
  * Pass/fail definition of "easy to override": a consumer rule made of one

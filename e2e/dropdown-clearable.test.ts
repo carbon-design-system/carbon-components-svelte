@@ -1,4 +1,5 @@
-import { expect, type Page, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 async function boxes(page: Page, testId: string) {
   const wrapper = page.getByTestId(testId);

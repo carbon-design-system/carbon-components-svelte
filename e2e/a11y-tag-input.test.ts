@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("TagInput a11y", () => {
   test.beforeEach(async ({ page }) => {

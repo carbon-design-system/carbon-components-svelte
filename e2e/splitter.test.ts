@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("Splitter", () => {
   test.beforeEach(async ({ page }) => {

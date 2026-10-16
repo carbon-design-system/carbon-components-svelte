@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 // A focus ring should appear at once. Tab through every focusable control in
 // the fixture and collect any outline or box-shadow transition running right

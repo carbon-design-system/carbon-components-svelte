@@ -1,4 +1,5 @@
-import { expect, type Page, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 // Forced colors (Windows contrast themes) repaint author colors with a few
 // system colors and drop box-shadows, so a state drawn only as a tint, an

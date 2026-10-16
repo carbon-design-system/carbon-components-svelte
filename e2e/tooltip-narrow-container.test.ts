@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("Tooltip in a narrow containing block", () => {
   test.beforeEach(async ({ page }) => {

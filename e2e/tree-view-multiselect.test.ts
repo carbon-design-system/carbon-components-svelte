@@ -1,4 +1,5 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 /**
  * Click on a tree node's label (not its children).

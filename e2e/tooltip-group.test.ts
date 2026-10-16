@@ -1,4 +1,5 @@
-import { expect, type Locator, test } from "@playwright/test";
+import type { Locator } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 /** Computed animation of an inline tooltip's text and caret. */
 const animations = (button: Locator) =>
