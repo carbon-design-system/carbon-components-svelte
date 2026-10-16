@@ -1,10 +1,10 @@
 ---
-components: ["TagInput"]
+components: ["TagInput", "TextInputSkeleton"]
 description: Tag inputs turn typed or pasted text into dismissible tags, for keywords, labels, recipients, and other lists of short values.
 ---
 
 <script>
-  import { Tag, TagInput } from "carbon-components-svelte";
+  import { Tag, TagInput, TextInputSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -131,6 +131,12 @@ A read-only field shows its tags without close buttons.
 ### Disabled
 
 <TagInput labelText="Topics" value={["Svelte", "TypeScript"]} disabled />
+
+## Skeleton
+
+An empty tag input is a labelled field the height of a text input, so `TextInputSkeleton` at the same `size` stands in for it while it loads. Tags that wrap onto more lines make the filled input taller.
+
+<TextInputSkeleton />
 
 ## Forms
 
