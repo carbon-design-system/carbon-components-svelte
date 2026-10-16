@@ -131,11 +131,15 @@ test.describe("MenuButton", () => {
       const parentBox = await page
         .getByRole("menuitem", { name: "Export as" })
         .boundingBox();
-      const submenuBox = await page
-        .getByRole("menuitem", { name: "PDF" })
-        .boundingBox();
-
-      expect(submenuBox.x).toBeLessThan(parentBox.x);
+      // The submenu renders on the right for a frame, then flips once it
+      // has measured itself, so poll rather than read the first position.
+      await expect
+        .poll(
+          async () =>
+            (await page.getByRole("menuitem", { name: "PDF" }).boundingBox())
+              ?.x,
+        )
+        .toBeLessThan(parentBox?.x ?? 0);
     });
   });
 });
