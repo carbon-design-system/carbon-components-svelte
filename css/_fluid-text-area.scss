@@ -215,7 +215,15 @@
     }
   }
 
+  // As tall as a fluid text area of the same `rows`: the label's 32px,
+  // the lines, the bottom padding and border, and at least its 64px
+  // minimum field. The bar fills the rest.
   .#{$prefix}--text-area--fluid__skeleton {
+    box-sizing: border-box;
+    block-size: calc(
+      var(--ccs-text-area-rows, 4) * #{to-rem(20px)} + #{to-rem(46px)}
+    );
+    min-block-size: to-rem(96px);
     padding: $carbon--spacing-05;
     background: $skeleton-01;
     border-block-end: 1px solid $skeleton-02;
@@ -233,7 +241,8 @@
 
   .#{$prefix}--text-area--fluid__skeleton
     .#{$prefix}--text-area.#{$prefix}--skeleton {
-    block-size: to-rem(64px);
+    flex: 1;
+    block-size: auto;
     inline-size: 80%;
   }
 }

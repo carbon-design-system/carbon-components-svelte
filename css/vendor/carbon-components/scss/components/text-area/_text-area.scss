@@ -85,7 +85,11 @@
   .#{$prefix}--text-area.#{$prefix}--skeleton {
     @include skeleton;
 
-    height: to-rem(100px);
+    // ccs: as tall as a text area of the same `rows`: its lines
+    // (body-long-01's 20px), padding and bottom border.
+    height: calc(
+      var(--ccs-text-area-rows, 4) * #{to-rem(20px)} + #{to-rem(23px)}
+    );
 
     &::placeholder {
       color: transparent;

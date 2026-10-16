@@ -9,6 +9,7 @@
     DatePickerSkeleton,
     Dropdown,
     DropdownSkeleton,
+    FluidTextAreaSkeleton,
     MultiSelect,
     MultiSelectSkeleton,
     NumberInput,
@@ -22,6 +23,8 @@
     Select,
     SelectItem,
     SelectSkeleton,
+    TextArea,
+    TextAreaSkeleton,
     TextInput,
     TextInputSkeleton,
   } from "carbon-components-svelte";
@@ -116,6 +119,16 @@
     <div data-testid="search-{size}">
       <div data-part="real"><Search {size} labelText="Search" /></div>
       <div data-part="skeleton"><SearchSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each [1, 2, 4, 8] as rows}
+    <div data-testid="text-area-{rows}">
+      <div data-part="real"><TextArea {rows} labelText="Notes" /></div>
+      <div data-part="skeleton"><TextAreaSkeleton {rows} /></div>
+    </div>
+    <div data-testid="fluid-text-area-{rows}">
+      <div data-part="real"><TextArea fluid {rows} labelText="Notes" /></div>
+      <div data-part="skeleton"><FluidTextAreaSkeleton {rows} /></div>
     </div>
   {/each}
   <div data-testid="date-picker-range">
