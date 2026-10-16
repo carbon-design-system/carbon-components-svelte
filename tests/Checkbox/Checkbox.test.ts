@@ -125,6 +125,18 @@ describe("Checkbox", () => {
     expect(input.indeterminate).toBe(true);
   });
 
+  it("drops the label's mixed state once a click settles the checkbox", async () => {
+    const { container } = render(Checkbox, {
+      labelText: "Select all",
+      indeterminate: true,
+    });
+    const label = container.querySelector(".bx--checkbox-label");
+    expect(label).toHaveAttribute("data-contained-checkbox-state", "mixed");
+
+    await user.click(screen.getByRole("checkbox"));
+    expect(label).not.toHaveAttribute("data-contained-checkbox-state");
+  });
+
   it("renders disabled state", () => {
     render(Checkbox, { disabled: true });
 
