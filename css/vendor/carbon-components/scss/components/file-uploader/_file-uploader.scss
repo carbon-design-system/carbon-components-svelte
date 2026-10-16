@@ -178,6 +178,12 @@
     }
   }
 
+  // ccs: `noMargin` drops the bottom margin for items in a flex or grid
+  // layout that sets its own gap.
+  .#{$prefix}--file__selected-file.#{$prefix}--file__selected-file--no-margin {
+    margin-bottom: 0;
+  }
+
   // V11: Remove --field
   .#{$prefix}--file__selected-file--md {
     min-height: to-rem(40px);

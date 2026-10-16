@@ -41,3 +41,13 @@ Set a custom width with `width`, as a percentage or pixel value. This works with
 In paragraph mode, each line's width varies around the `width` value instead of using it uniformly, for a more natural look.
 
 <SkeletonText paragraph width="50%" />
+
+## No margin
+
+Set `noMargin` to `true` to remove the bottom margin, for placeholders in a
+flex or grid layout that sets its own gap.
+
+<div style="display: flex; gap: var(--cds-spacing-05)">
+  <SkeletonText noMargin width="40%" />
+  <SkeletonText noMargin width="20%" />
+</div>

@@ -100,4 +100,18 @@ describe("SkeletonText", () => {
     await user.unhover(container);
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
+
+  it("removes the bottom margin with noMargin", () => {
+    render(SkeletonText, { props: { noMargin: true } });
+    expect(screen.getByRole("paragraph", { hidden: true })).toHaveClass(
+      "bx--skeleton__text--no-margin",
+    );
+  });
+
+  it("removes the bottom margin from every paragraph line", () => {
+    render(SkeletonText, { props: { paragraph: true, noMargin: true } });
+    for (const element of screen.getAllByRole("paragraph", { hidden: true })) {
+      expect(element).toHaveClass("bx--skeleton__text--no-margin");
+    }
+  });
 });

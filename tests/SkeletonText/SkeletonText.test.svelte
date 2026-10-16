@@ -5,6 +5,7 @@
   export let heading = false;
   export let paragraph = false;
   export let width = "100%";
+  export let noMargin = false;
 </script>
 
 <SkeletonText
@@ -12,6 +13,7 @@
   {heading}
   {paragraph}
   {width}
+  {noMargin}
   on:click={() => {
     console.log("click");
   }}
