@@ -27,6 +27,11 @@ const cases = [
   "multi-select-inline",
   "dropdown-hidden-label",
   ...["xs", "sm", "lg", "xl"].map((size) => `search-${size}`),
+  ...["default", "sm"].flatMap((size) => [
+    `toggle-${size}`,
+    `toggle-${size}-hidden-label`,
+    `toggle-${size}-no-label`,
+  ]),
   ...[1, 2, 4, 8].flatMap((rows) => [
     `text-area-${rows}`,
     `fluid-text-area-${rows}`,
