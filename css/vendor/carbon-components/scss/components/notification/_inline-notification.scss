@@ -29,6 +29,10 @@
     max-width: to-rem(288px);
     height: auto;
     min-height: to-rem(48px);
+    // ccs: lay out by the notification's own width (the container queries
+    // below), not the window's: a notification in a narrow card on a wide
+    // screen kept its action beside the text and squeezed the text.
+    container: #{$prefix}--inline-notification / inline-size;
     flex-wrap: wrap;
     @if not feature-flag-enabled('enable-v11-release') {
       margin-top: $carbon--spacing-05;
@@ -37,9 +41,10 @@
 
     color: $inverse-01;
 
+    // ccs: wraps at every width; the details' zero basis keeps a wide
+    // notification on one line.
     @include carbon--breakpoint(md) {
       max-width: to-rem(608px);
-      flex-wrap: nowrap;
     }
 
     @include carbon--breakpoint(lg) {
@@ -173,7 +178,10 @@
 
   .#{$prefix}--inline-notification__details {
     display: flex;
-    flex-grow: 1;
+    // ccs: a zero basis, so long text wraps inside the details rather than
+    // pushing the action onto the next line.
+    min-width: 0;
+    flex: 1 1 0%;
     margin: 0 $carbon--spacing-09 0 $carbon--spacing-05;
 
     @include carbon--breakpoint(md) {
@@ -287,6 +295,25 @@
 
     @include carbon--breakpoint(md) {
       position: static;
+    }
+  }
+
+  // ccs: below 30rem the notification takes Carbon's small-screen layout
+  // whatever the window's width: the text spans the row (clear of the
+  // close button pinned to the corner), and the action moves under it,
+  // in line with the text.
+  @container #{$prefix}--inline-notification (width < 30rem) {
+    .#{$prefix}--inline-notification__details {
+      flex-basis: 100%;
+      margin: 0 $carbon--spacing-09 0 $carbon--spacing-05;
+    }
+
+    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
+      margin: 0 0 $carbon--spacing-03 $carbon--spacing-08;
+    }
+
+    .#{$prefix}--inline-notification__close-button {
+      position: absolute;
     }
   }
 
