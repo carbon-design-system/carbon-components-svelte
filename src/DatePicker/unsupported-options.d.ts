@@ -13,3 +13,11 @@ export function getUnsupportedOptionWarnings(
   flatpickrProps: Record<string, unknown> | undefined,
   context: UnsupportedOptionContext,
 ): string[];
+
+/**
+ * The message for `short` on a type it has no effect on, or `undefined`
+ * for a `"simple"` picker.
+ */
+export function getShortWarning(
+  datePickerType: string | undefined,
+): string | undefined;

@@ -64,3 +64,14 @@ export function getUnsupportedOptionWarnings(flatpickrProps, context) {
       ([option, , message]) => `${PREFIX}flatpickrProps.${option} ${message}`,
     );
 }
+
+/**
+ * `short` only narrows the field of a `"simple"` picker.
+ *
+ * @param {string | undefined} datePickerType
+ * @returns {string | undefined}
+ */
+export function getShortWarning(datePickerType) {
+  if (datePickerType === "simple") return undefined;
+  return `${PREFIX}short only applies to datePickerType="simple"; it has no effect on "${datePickerType}".`;
+}

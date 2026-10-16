@@ -233,7 +233,7 @@
   /**
    * Set to `true` for a narrower field, sized for a short format such as
    * `dateFormat="m/y"`; a full date like `mm/dd/yyyy` is cut off. Only
-   * applies to the `"simple"` type.
+   * applies to the `"simple"` type; on other types it logs a warning.
    */
   export let short = false;
 
@@ -330,7 +330,10 @@
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
   } from "./date-picker-top-layer.js";
-  import { getUnsupportedOptionWarnings } from "./unsupported-options.js";
+  import {
+    getShortWarning,
+    getUnsupportedOptionWarnings,
+  } from "./unsupported-options.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
@@ -1674,6 +1677,13 @@
         reportedWarnings.add(message);
         console.warn(message);
       }
+    }
+  }
+  $: if (short) {
+    const message = getShortWarning(datePickerType);
+    if (message && !reportedWarnings.has(message)) {
+      reportedWarnings.add(message);
+      console.warn(message);
     }
   }
   // flatpickr mounts an inline calendar differently, at creation only.
