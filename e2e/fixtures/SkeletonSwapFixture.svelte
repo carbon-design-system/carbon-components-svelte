@@ -17,6 +17,8 @@
     PasswordInputSkeleton,
     PinCodeInput,
     PinCodeInputSkeleton,
+    Search,
+    SearchSkeleton,
     Select,
     SelectItem,
     SelectSkeleton,
@@ -110,6 +112,12 @@
     </div>
     <div data-part="skeleton"><DropdownSkeleton hideLabel /></div>
   </div>
+  {#each ["xs", "sm", "lg", "xl"] as size}
+    <div data-testid="search-{size}">
+      <div data-part="real"><Search {size} labelText="Search" /></div>
+      <div data-part="skeleton"><SearchSkeleton {size} /></div>
+    </div>
+  {/each}
   <div data-testid="date-picker-range">
     <div data-part="real">
       <DatePicker datePickerType="range">

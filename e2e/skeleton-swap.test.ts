@@ -26,6 +26,7 @@ const cases = [
   "dropdown-inline",
   "multi-select-inline",
   "dropdown-hidden-label",
+  ...["xs", "sm", "lg", "xl"].map((size) => `search-${size}`),
   "date-picker-range",
   "pin-code-input",
 ];

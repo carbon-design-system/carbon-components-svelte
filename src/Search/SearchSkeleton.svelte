@@ -7,7 +7,12 @@
    */
   export let size = undefined;
 
-  /** Set to `true` to hide the label text */
+  /**
+   * Set to `true` to hide the label text.
+   * @deprecated has no effect -- Search's label is always visually
+   * hidden, so the skeleton draws no label.
+   */
+  // svelte-ignore unused-export-let
   export let hideLabel = false;
 
   import { getContext } from "svelte";
@@ -30,8 +35,5 @@
   on:mouseenter
   on:mouseleave
 >
-  {#if !hideLabel}
-    <span class:bx--label={true}></span>
-  {/if}
   <div class:bx--search-input={true}></div>
 </div>
