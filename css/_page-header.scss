@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/grid/mixins";
@@ -112,6 +113,27 @@
   // Skeleton text widths are percentages, so the title group spans the row.
   .#{$prefix}--page-header-skeleton .#{$prefix}--page-header__title-group {
     flex: 1 1 auto;
+  }
+
+  // The skeleton's title and subtitle: a line of the header's type each,
+  // a bar in it (70% of the line), so either size keeps its height.
+  .#{$prefix}--page-header__skeleton-line {
+    position: relative;
+    margin: 0;
+  }
+
+  .#{$prefix}--page-header__skeleton-bar {
+    @include skeleton($omit: (position));
+
+    position: absolute;
+    top: 15%;
+    left: 0;
+    width: 30%;
+    height: 70%;
+  }
+
+  .#{$prefix}--page-header__skeleton-bar--subtitle {
+    width: 50%;
   }
 
   .#{$prefix}--page-header__eyebrow {

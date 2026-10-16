@@ -1,5 +1,7 @@
 <script>
   import {
+    BigNumber,
+    BigNumberSkeleton,
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbSkeleton,
@@ -25,6 +27,8 @@
     MultiSelectSkeleton,
     NumberInput,
     NumberInputSkeleton,
+    PageHeader,
+    PageHeaderSkeleton,
     Pagination,
     PaginationSkeleton,
     PasswordInput,
@@ -389,6 +393,26 @@
         />
       </div>
       <div data-part="skeleton"><TreeViewSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each ["default", "lg", "xl"] as size}
+    <div data-testid="big-number-{size}">
+      <div data-part="real">
+        <BigNumber {size} labelText="Revenue" value={128400} />
+      </div>
+      <div data-part="skeleton"><BigNumberSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each ["default", "sm"] as size}
+    <div data-testid="page-header-{size}">
+      <div data-part="real">
+        <PageHeader
+          {size}
+          title="Billing"
+          subtitle="Invoices and payment methods"
+        />
+      </div>
+      <div data-part="skeleton"><PageHeaderSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">

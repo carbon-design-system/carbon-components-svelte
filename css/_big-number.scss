@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
@@ -107,6 +108,27 @@
 
   .#{$prefix}--big-number__footer {
     margin-block-start: $carbon--spacing-03;
+  }
+
+  // BigNumberSkeleton: a bar in each row's line (70% of its height),
+  // the row keeping the line of its type so each size's height holds.
+  .#{$prefix}--big-number.#{$prefix}--skeleton .#{$prefix}--big-number__label,
+  .#{$prefix}--big-number.#{$prefix}--skeleton .#{$prefix}--big-number__value-row {
+    position: relative;
+  }
+
+  .#{$prefix}--big-number__skeleton-bar {
+    @include skeleton($omit: (position));
+
+    position: absolute;
+    top: 15%;
+    left: 0;
+    width: 60%;
+    height: 70%;
+  }
+
+  .#{$prefix}--big-number__skeleton-bar--label {
+    width: 40%;
   }
 }
 

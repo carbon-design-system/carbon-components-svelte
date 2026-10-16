@@ -6,8 +6,6 @@
    * @type {"default" | "lg" | "xl"}
    */
   export let size = "default";
-
-  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
 <figure
@@ -17,10 +15,17 @@
   class:bx--skeleton={true}
   {...$$restProps}
 >
+  <!-- Each row keeps a line of its own type (a non-breaking space), so the
+       skeleton is the big number's height at every size; the bar sits in
+       that line. -->
   <figcaption class:bx--big-number__label={true}>
-    <SkeletonText width="40%" />
+    <span
+      class:bx--big-number__skeleton-bar={true}
+      class:bx--big-number__skeleton-bar--label={true}
+    ></span
+    >&nbsp;
   </figcaption>
   <div class:bx--big-number__value-row={true}>
-    <SkeletonText width="60%" heading />
+    <span class:bx--big-number__skeleton-bar={true}></span>&nbsp;
   </div>
 </figure>

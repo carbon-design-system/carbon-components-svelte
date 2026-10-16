@@ -10,8 +10,16 @@ describe("PageHeaderSkeleton", () => {
     expect(node).toHaveClass("bx--page-header-skeleton");
     expect(node).toHaveClass("bx--page-header--divider");
     expect(node).toHaveClass("bx--box-fill-background");
-    expect(node.querySelectorAll(".bx--skeleton__text")).toHaveLength(2);
-    expect(node.querySelector(".bx--skeleton__heading")).not.toBeNull();
+    const lines = node.querySelectorAll(".bx--page-header__skeleton-line");
+    expect(lines).toHaveLength(2);
+    // Each a line of the header's own type, holding a bar.
+    expect(lines[0]).toHaveClass("bx--type-productive-heading-04");
+    expect(lines[1]).toHaveClass("bx--type-body-short-01");
+    for (const line of lines) {
+      expect(
+        line.querySelector(".bx--page-header__skeleton-bar"),
+      ).not.toBeNull();
+    }
     expect(node.querySelector(".bx--breadcrumb")).toBeNull();
     expect(node.querySelector(".bx--btn")).toBeNull();
     expect(node.querySelector(".bx--tabs")).toBeNull();
@@ -50,8 +58,10 @@ describe("PageHeaderSkeleton", () => {
       "bx--page-header--sm",
     );
 
-    expect(
-      screen.getByTestId("no-subtitle").querySelectorAll(".bx--skeleton__text"),
-    ).toHaveLength(1);
+    const lines = screen
+      .getByTestId("no-subtitle")
+      .querySelectorAll(".bx--page-header__skeleton-line");
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toHaveClass("bx--type-productive-heading-03");
   });
 });

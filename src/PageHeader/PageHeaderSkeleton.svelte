@@ -39,7 +39,6 @@
   import Box from "../Box/Box.svelte";
   import BreadcrumbSkeleton from "../Breadcrumb/BreadcrumbSkeleton.svelte";
   import ButtonSkeleton from "../Button/ButtonSkeleton.svelte";
-  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import TabsSkeleton from "../Tabs/TabsSkeleton.svelte";
 
   $: skeletonClass = [
@@ -65,9 +64,27 @@
 
     <div class:bx--page-header__title-row={true}>
       <div class:bx--page-header__title-group={true}>
-        <SkeletonText heading width="30%" />
+        <!-- Lines of the header's own type (a non-breaking space each), so
+             the skeleton is the header's height at either size; a bar sits
+             in each line. -->
+        <div
+          class:bx--page-header__skeleton-line={true}
+          class:bx--type-productive-heading-04={size !== "sm"}
+          class:bx--type-productive-heading-03={size === "sm"}
+        >
+          <span class:bx--page-header__skeleton-bar={true}></span>&nbsp;
+        </div>
         {#if subtitle}
-          <SkeletonText width="50%" />
+          <p
+            class:bx--page-header__skeleton-line={true}
+            class:bx--type-body-short-01={true}
+          >
+            <span
+              class:bx--page-header__skeleton-bar={true}
+              class:bx--page-header__skeleton-bar--subtitle={true}
+            ></span
+            >&nbsp;
+          </p>
         {/if}
       </div>
       {#if actions}
