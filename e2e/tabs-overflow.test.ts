@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 const NEXT = ".bx--tab--overflow-nav-button--next";
 const PREV = ".bx--tab--overflow-nav-button--previous";

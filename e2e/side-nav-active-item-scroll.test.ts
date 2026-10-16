@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("SideNav active item scroll", () => {
   test("scrolls the active item into view inside the side nav", async ({

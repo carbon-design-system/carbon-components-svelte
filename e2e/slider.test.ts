@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("Slider", () => {
   test.beforeEach(async ({ page }) => {

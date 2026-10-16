@@ -1,4 +1,5 @@
-import { expect, type Page, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 async function openMenu(page: Page, key: string) {
   await page.getByTestId(key).getByRole("combobox").click();

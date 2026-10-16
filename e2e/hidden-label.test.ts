@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 /**
  * `hideLabel` must hide the label without leaving its box behind: no indent

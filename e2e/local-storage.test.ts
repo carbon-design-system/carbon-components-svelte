@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 const STORAGE_KEY = "e2e-local-storage-key";
 

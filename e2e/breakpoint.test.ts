@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 // Carbon breakpoints: sm=320, md=672, lg=1056, xlg=1312, max=1584
 // Ranges used by breakpointObserver:

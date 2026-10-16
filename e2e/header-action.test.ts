@@ -1,4 +1,5 @@
-import { expect, type Locator, test } from "@playwright/test";
+import type { Locator } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 const width = (locator: Locator) =>
   locator.evaluate((el) => el.getBoundingClientRect().width);

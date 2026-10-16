@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("Modal with Dropdowns", () => {
   test.beforeEach(async ({ page }) => {

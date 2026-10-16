@@ -1,4 +1,5 @@
-import { expect, type Page, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 function toastWithText(page: Page, text: string) {
   return page.locator(".bx--toast-notification").filter({ hasText: text });

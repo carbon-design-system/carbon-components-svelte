@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 test.describe("Items resync — display derived from value + items", () => {
   test.beforeEach(async ({ page }) => {

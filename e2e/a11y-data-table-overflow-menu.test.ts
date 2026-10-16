@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 // The empty overflow-menu column header is a known, deferred gap: DataTable's
 // `{ empty: true }` header has no way for a consumer to supply accessible

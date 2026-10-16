@@ -1,4 +1,5 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 /** The rendered color of the pixel at (`x`, `y`) inside `locator`'s box. */
 async function pixelAt(page: Page, locator: Locator, x: number, y: number) {

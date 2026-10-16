@@ -1,4 +1,5 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
+import { expect, test } from "./helpers/host";
 
 // WebKit collapses a focus-time `select()` on the click's mouseup, so each
 // case clicks into the field and checks the whole value is still selected.
