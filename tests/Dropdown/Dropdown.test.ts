@@ -170,6 +170,9 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--sm");
 
+    await rerender({ items, selectedId: "0", size: "lg" });
+    expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--lg");
+
     await rerender({ items, selectedId: "0", size: "xl" });
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--xl");
   });
