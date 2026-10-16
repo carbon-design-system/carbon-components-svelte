@@ -64,7 +64,9 @@
   /**
    * Set the alignment of the tooltip relative to the icon.
    * Only applies to icon-only buttons.
-   * @type {"start" | "center" | "end"}
+   * `"auto"` picks start, center or end so the tooltip stays inside the viewport.
+   * It only applies to top and bottom positions.
+   * @type {"start" | "center" | "end" | "auto"}
    */
   export let tooltipAlignment = "center";
 
@@ -183,6 +185,39 @@
   let hovered = false;
   let focused = false;
 
+  // The alignment actually rendered; `"auto"` resolves on show, so this never
+  // holds `"auto"` and the consumer's prop is never written.
+  /** @type {"start" | "center" | "end"} */
+  let resolvedAlignment =
+    tooltipAlignment === "auto" ? "center" : tooltipAlignment;
+
+  $: if (tooltipAlignment !== "auto") resolvedAlignment = tooltipAlignment;
+
+  const VIEWPORT_MARGIN_PX = 8;
+
+  function resolveAlignment() {
+    if (tooltipAlignment !== "auto" || !ref) return;
+    if (tooltipPosition !== "top" && tooltipPosition !== "bottom") {
+      resolvedAlignment = "center";
+      return;
+    }
+    const rect = ref.getBoundingClientRect();
+    const tip = ref.querySelector(".bx--assistive-text");
+    const tipWidth = tip
+      ? tip.offsetWidth || tip.getBoundingClientRect().width
+      : 0;
+    const viewport = document.documentElement.clientWidth;
+    const center = rect.left + rect.width / 2;
+    const half = tipWidth / 2;
+    if (center - half < VIEWPORT_MARGIN_PX) {
+      resolvedAlignment = "start";
+    } else if (center + half > viewport - VIEWPORT_MARGIN_PX) {
+      resolvedAlignment = "end";
+    } else {
+      resolvedAlignment = "center";
+    }
+  }
+
   $: portalOpen =
     usePortal && !disabled && (hovered || focused) && $tooltipActive;
 
@@ -211,6 +246,7 @@
   // the active slot so the group can hide other tooltips and skip the fade.
   function handleMouseenter() {
     if (!hasTooltip) return;
+    resolveAlignment();
     hovered = true;
     tooltipHandoff.claim();
   }
@@ -223,6 +259,7 @@
 
   function handlePortalMouseEnter() {
     if (!usePortal || disabled) return;
+    resolveAlignment();
     tooltipHandoff.scheduleEnter(() => {
       hovered = true;
     });
@@ -239,6 +276,7 @@
   // Focus shows the tooltip at once, without the fade-in.
   function handleFocus() {
     if (!(hasTooltip || usePortal) || disabled) return;
+    resolveAlignment();
     focused = true;
     tooltipHandoff.claim({ instant: true });
   }
@@ -249,7 +287,7 @@
     if (!hovered) tooltipHandoff.release();
   }
 
-  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, resolvedAlignment);
 
   onMount(() => {
     return () => {
@@ -310,8 +348,8 @@
       hasTooltip && "bx--tooltip--a11y",
       hasTooltip && tooltipPosition && `bx--btn--icon-only--${tooltipPosition}`,
       hasTooltip &&
-        tooltipAlignment &&
-        `bx--tooltip--align-${tooltipAlignment}`,
+        resolvedAlignment &&
+        `bx--tooltip--align-${resolvedAlignment}`,
       hasTooltip && tooltipHidden && "bx--tooltip--hidden",
       hasTooltip && $tooltipInstant && "bx--tooltip--instant",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
@@ -544,7 +582,7 @@
     open={portalOpen}
     text={iconDescription}
     tooltipType="icon"
-    intrinsicAlign={tooltipAlignment}
+    intrinsicAlign={resolvedAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}
     horizontalGapRight={portalGaps.horizontalGapRight}
     gapTop={portalGaps.gapTop}

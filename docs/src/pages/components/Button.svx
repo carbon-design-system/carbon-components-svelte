@@ -7,6 +7,7 @@ description: Buttons trigger actions like submitting a form or navigating, with 
   import { BadgeIndicator, Box, Button, ButtonSkeleton, Stack, TooltipGroup } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+  import Clean from "carbon-icons-svelte/lib/Clean.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
 </script>
@@ -105,6 +106,10 @@ Set `href` to create an icon-only link button.
 Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
+
+Set `tooltipAlignment` to `"auto"` for buttons near a viewport edge, such as toolbar ends. The button picks start, center or end alignment when the tooltip shows, so the tooltip stays on screen. Auto alignment applies to top and bottom positions.
+
+<Button kind="ghost" tooltipAlignment="auto" iconDescription="Clear console" icon={Clean} />
 
 ### Portalled tooltip
 
