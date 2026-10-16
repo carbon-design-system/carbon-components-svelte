@@ -121,6 +121,7 @@
     <div class:bx--action-list={true}>
       <slot />
       <Button
+        size="default"
         class="bx--batch-summary__cancel"
         tabindex={showActions ? "0" : "-1"}
         on:click={cancel}

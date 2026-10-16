@@ -103,6 +103,7 @@
   {#if secondaryButtons.length > 0}
     {#each secondaryButtons as button (button.text)}
       <Button
+        size="default"
         kind={button.kind ?? "secondary"}
         disabled={button.disabled || button.loading}
         on:click={() => {
@@ -122,6 +123,7 @@
     {/each}
   {:else if secondaryButtonText}
     <Button
+      size="default"
       kind="secondary"
       class={secondaryClass}
       disabled={secondaryButtonLoading}
@@ -139,6 +141,7 @@
   {/if}
   {#if primaryButtonText}
     <Button
+      size="default"
       kind={danger ? "danger" : "primary"}
       disabled={primaryButtonDisabled || primaryButtonLoading}
       class={primaryClass}
