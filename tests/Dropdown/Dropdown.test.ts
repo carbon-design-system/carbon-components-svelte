@@ -3259,6 +3259,24 @@ describe("Dropdown", () => {
       expect(document.querySelector(".bx--list-box__divider")).toBeNull();
     });
 
+    it("shows helper text under an inline field and describes it", () => {
+      render(Dropdown, {
+        props: {
+          items,
+          labelText: "Contact",
+          type: "inline",
+          helperText: "Helper text",
+        },
+      });
+
+      const helper = screen.getByText("Helper text");
+      expect(helper).toHaveClass("bx--form__helper-text");
+      expect(screen.getByLabelText("Contact")).toHaveAttribute(
+        "aria-describedby",
+        expect.stringContaining(helper.id),
+      );
+    });
+
     it("renders fluid variant and suppresses helper text", () => {
       render(Dropdown, {
         props: {

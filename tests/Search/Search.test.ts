@@ -197,15 +197,18 @@ describe("Search", () => {
     );
   });
 
-  it("should describe the input with helper text in a fluid search", () => {
+  // Like the other fluid fields: the label sits inside the field and
+  // there's no line under it for helper text.
+  it("renders no helper text in a fluid search", () => {
     render(Search, {
       props: { fluid: true, helperText: "Search across all catalogs" },
     });
 
-    const helper = screen.getByText("Search across all catalogs");
-    expect(getSearchInput("Default search")).toHaveAttribute(
+    expect(
+      screen.queryByText("Search across all catalogs"),
+    ).not.toBeInTheDocument();
+    expect(getSearchInput("Default search")).not.toHaveAttribute(
       "aria-describedby",
-      helper.id,
     );
   });
 

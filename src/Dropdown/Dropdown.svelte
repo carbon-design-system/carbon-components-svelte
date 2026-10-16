@@ -423,9 +423,7 @@
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
-    // `inline` mode never shows the helper fallback (it also forces
-    // `isFluid` off, but that alone wouldn't suppress the fallback).
-    helperText: inline ? undefined : helperText,
+    helperText,
     invalidText: shownInvalidText,
     warnText,
     isFluid,
@@ -1176,7 +1174,7 @@
   {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
-  {#if !inline && !isFluid && !showInvalid && !showWarn && helperText}
+  {#if !isFluid && !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}
