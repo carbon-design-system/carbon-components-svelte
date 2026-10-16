@@ -70,6 +70,10 @@
 
     width: to-rem(75px);
     height: to-rem(14px);
+    // ccs: centered in the 16px line a real label takes, so the field
+    // below it sits where the real field does and swapping moves nothing.
+    margin-top: to-rem(1px);
+    margin-bottom: calc(#{$carbon--spacing-03} + #{to-rem(1px)});
   }
 
   // ccs: match v11 (sans) instead of v10's mono.

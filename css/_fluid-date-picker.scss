@@ -307,7 +307,7 @@
   }
 
   .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--label {
-    margin-block-end: to-rem(4px);
+    margin-block: 0 to-rem(4px);
   }
 
   .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--text-input {
