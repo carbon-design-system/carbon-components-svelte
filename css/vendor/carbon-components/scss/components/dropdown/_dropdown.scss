@@ -34,7 +34,9 @@
       margin: 0;
     }
 
-    .#{$prefix}--form-requirement {
+    // ccs: helper text sits under the field too, like the message.
+    .#{$prefix}--form-requirement,
+    .#{$prefix}--form__helper-text {
       grid-column: 2;
     }
   }

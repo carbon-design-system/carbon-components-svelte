@@ -1024,7 +1024,9 @@ describe("MultiSelect", () => {
     expect(screen.queryByText("Help")).not.toBeInTheDocument();
   });
 
-  it("does not show helper text if inline is true", () => {
+  // Inline shows it under the field, as inline TextInput and Select do;
+  // hiding it also left `aria-describedby` pointing at nothing.
+  it("shows helper text under an inline field and describes it", () => {
     render(MultiSelect, {
       props: {
         items,
@@ -1032,7 +1034,15 @@ describe("MultiSelect", () => {
         type: "inline",
       },
     });
-    expect(screen.queryByText("Help")).not.toBeInTheDocument();
+    const helper = screen.getByText("Help");
+    expect(helper).toHaveClass("bx--form__helper-text");
+    const ids = (
+      document
+        .querySelector("[aria-describedby]")
+        ?.getAttribute("aria-describedby") ?? ""
+    ).split(" ");
+    expect(ids).toContain(helper.id);
+    for (const id of ids) expect(document.getElementById(id)).not.toBeNull();
   });
 
   it("passes the click event as the clear event detail", async () => {

@@ -201,11 +201,11 @@
     readonly,
   }));
   $: ({ errorId, warnId, helperId } = buildFieldIds(id));
-  // Unlike TextInput, Search renders helper text in fluid mode too, so
-  // it's described there as well.
+  // Fluid fields render no helper text, as with the other fluid fields.
   $: describedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
+    isFluid,
     helperText,
     errorId,
     warnId,
@@ -397,7 +397,7 @@
       <svelte:component this={Close} size={effectiveSize === "xl" ? 20 : 16} />
     </button>
   </div>
-  {#if !showInvalid && !showWarn && helperText}
+  {#if !isFluid && !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}

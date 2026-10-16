@@ -2091,7 +2091,7 @@
       </TagSet>
     </div>
   {/if}
-  {#if !inline && !isFluid && !showInvalid && !showWarn && helperText}
+  {#if !isFluid && !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}
