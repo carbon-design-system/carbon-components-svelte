@@ -46,6 +46,7 @@ const cases = [
   "fluid-date-picker-200",
   "pin-code-input",
   ...["xs", "sm", "md", "lg"].map((size) => `pagination-${size}`),
+  ...["small", "field", "default"].map((size) => `file-uploader-${size}`),
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",

@@ -11,6 +11,8 @@
     DatePickerSkeleton,
     Dropdown,
     DropdownSkeleton,
+    FileUploader,
+    FileUploaderSkeleton,
     FluidDatePickerSkeleton,
     FluidTextAreaSkeleton,
     MultiSelect,
@@ -239,6 +241,19 @@
         <Pagination {size} totalItems={120} pageSizes={[10, 20]} />
       </div>
       <div data-part="skeleton"><PaginationSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each ["small", "field", "default"] as size}
+    <div data-testid="file-uploader-{size}">
+      <div data-part="real">
+        <FileUploader
+          {size}
+          labelTitle="Upload files"
+          labelDescription="Max file size is 500 MB."
+          buttonLabel="Add file"
+        />
+      </div>
+      <div data-part="skeleton"><FileUploaderSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">
