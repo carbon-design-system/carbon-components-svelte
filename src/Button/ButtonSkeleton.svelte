@@ -7,11 +7,20 @@
 
   /**
    * Specify the size of button skeleton.
+   * Falls back to the height of a parent `Form`'s size, as Button does.
    * @type {"default" | "field" | "small" | "xs" | "lg" | "xl"}
+   * @default "default"
    */
-  export let size = "default";
+  export let size = undefined;
 
+  import { getContext } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { formButtonSize } from "../utils/form-button-size.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
+
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? formButtonSize($formSize) ?? "default";
 </script>
 
 {#if href}
@@ -23,11 +32,11 @@
     aria-hidden="true"
     class:bx--skeleton={true}
     class:bx--btn={true}
-    class:bx--btn--field={size === "field"}
-    class:bx--btn--xs={size === "xs"}
-    class:bx--btn--sm={size === "small"}
-    class:bx--btn--lg={size === "lg"}
-    class:bx--btn--xl={size === "xl"}
+    class:bx--btn--field={effectiveSize === "field"}
+    class:bx--btn--xs={effectiveSize === "xs"}
+    class:bx--btn--sm={effectiveSize === "small"}
+    class:bx--btn--lg={effectiveSize === "lg"}
+    class:bx--btn--xl={effectiveSize === "xl"}
     {...$$restProps}
     on:click
     on:focus
@@ -42,11 +51,11 @@
   <div
     class:bx--skeleton={true}
     class:bx--btn={true}
-    class:bx--btn--field={size === "field"}
-    class:bx--btn--xs={size === "xs"}
-    class:bx--btn--sm={size === "small"}
-    class:bx--btn--lg={size === "lg"}
-    class:bx--btn--xl={size === "xl"}
+    class:bx--btn--field={effectiveSize === "field"}
+    class:bx--btn--xs={effectiveSize === "xs"}
+    class:bx--btn--sm={effectiveSize === "small"}
+    class:bx--btn--lg={effectiveSize === "lg"}
+    class:bx--btn--xl={effectiveSize === "xl"}
     {...$$restProps}
     on:click
     on:focus

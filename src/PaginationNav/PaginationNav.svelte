@@ -112,6 +112,7 @@
   <ul class:bx--pagination-nav__list={true}>
     <li class:bx--pagination-nav__list-item={true}>
       <Button
+        size="default"
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition={edgeTooltipPosition(tooltipPosition, "start")}
@@ -183,6 +184,7 @@
     {/if}
     <li class:bx--pagination-nav__list-item={true}>
       <Button
+        size="default"
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition={edgeTooltipPosition(tooltipPosition, "end")}

@@ -52,7 +52,9 @@ submits. The placeholder option has an empty value and the select is
 
 Set `size` on `Form` to size every field inside it. Text inputs, number
 inputs, selects, dropdowns, date and time pickers, and their skeletons all
-inherit it. A field's own `size` takes precedence.
+inherit it. Buttons take the same height (`xs`, `small` for `sm`, and the
+48px default for `xl`), unless inside an `ActionSet`. A field's or
+button's own `size` takes precedence.
 
 <Form size="xs" on:submit={(e) => e.preventDefault()}>
   <Stack gap={5}>
@@ -70,6 +72,7 @@ inherit it. A field's own `size` takes precedence.
       <DatePickerInput labelText="Maintenance window" placeholder="mm/dd/yyyy" />
     </DatePicker>
     <TextInput size="sm" name="owner" labelText="Owner (small)" value="platform-team" />
+    <Button type="submit">Deploy</Button>
   </Stack>
 </Form>
 

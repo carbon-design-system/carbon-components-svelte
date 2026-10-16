@@ -20,7 +20,9 @@
   /**
    * Specify the size of button.
    * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
-   * Falls back to the size set by an ancestor `ActionSet` when unset.
+   * Falls back to the size set by an ancestor `ActionSet` when unset, then
+   * to the height of a parent `Form`'s size (`xs`, `small` for `sm`,
+   * `default` for `xl`).
    * Use `"xs"` for icon-only buttons in dense layouts.
    * @type {"default" | "field" | "small" | "xs" | "lg" | "xl"}
    * @default "default"
@@ -154,11 +156,15 @@
   export let loadingDescription = undefined;
 
   import { getContext, onMount } from "svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_SIZE_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import Loading from "../Loading/Loading.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { formButtonSize } from "../utils/form-button-size.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -167,6 +173,8 @@
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const actionSetSize = getContext("carbon:ActionSet")?.size;
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
 
   $: hasIconOnly =
     Boolean(icon || $$slots.icon) && (iconOnly ?? !$$slots.default);
@@ -281,7 +289,7 @@
   $: isVisuallyDisabled = isDisabled || loading;
   $: effectiveSize = $$slots.badge
     ? "lg"
-    : (size ?? $actionSetSize ?? "default");
+    : (size ?? $actionSetSize ?? formButtonSize($formSize) ?? "default");
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
@@ -336,7 +344,7 @@
 {#if skeleton}
   <ButtonSkeleton
     {href}
-    {size}
+    size={effectiveSize}
     {...$$restProps}
     style={hasIconOnly && "width: 3rem;"}
     on:click

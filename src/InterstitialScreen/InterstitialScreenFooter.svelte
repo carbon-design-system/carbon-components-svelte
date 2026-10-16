@@ -79,6 +79,7 @@
   >
     {#if showSkip}
       <Button
+        size="default"
         kind="ghost"
         disabled={Boolean(loadingAction)}
         on:click={() => handleAction("skip")}
@@ -88,6 +89,7 @@
     {/if}
     {#if showBack}
       <Button
+        size="default"
         kind="secondary"
         disabled={Boolean(loadingAction)}
         on:click={() => handleAction("back")}
@@ -101,6 +103,7 @@
     {/if}
     {#if showNext}
       <Button
+        size="default"
         bind:ref={primaryButtonRef}
         disabled={Boolean(loadingAction)}
         on:click={() => handleAction("next")}
@@ -114,6 +117,7 @@
     {/if}
     {#if showStart}
       <Button
+        size="default"
         bind:ref={primaryButtonRef}
         icon={isMultiStep ? ArrowRight : undefined}
         disabled={Boolean(loadingAction)}
@@ -131,6 +135,7 @@
   <ModalFooter class="bx--interstitial-screen__footer" {...$$restProps}>
     {#if showSkip}
       <Button
+        size="default"
         kind="ghost"
         disabled={Boolean(loadingAction)}
         on:click={() => handleAction("skip")}
@@ -140,6 +145,7 @@
     {/if}
     {#if showBack}
       <Button
+        size="default"
         kind="secondary"
         disabled={Boolean(loadingAction)}
         on:click={() => handleAction("back")}
@@ -153,6 +159,7 @@
     {/if}
     {#if showNext}
       <Button
+        size="default"
         bind:ref={primaryButtonRef}
         disabled={Boolean(loadingAction)}
         on:click={() => handleAction("next")}
@@ -166,6 +173,7 @@
     {/if}
     {#if showStart}
       <Button
+        size="default"
         bind:ref={primaryButtonRef}
         icon={isMultiStep ? ArrowRight : undefined}
         disabled={Boolean(loadingAction)}

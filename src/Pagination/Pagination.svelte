@@ -409,6 +409,7 @@
     {/if}
     <div class:bx--pagination__control-buttons={true}>
       <Button
+        size="default"
         bind:ref={backBtnRef}
         kind="ghost"
         tooltipAlignment="center"
@@ -428,6 +429,7 @@
         }}
       />
       <Button
+        size="default"
         bind:ref={forwardBtnRef}
         kind="ghost"
         tooltipAlignment="end"
