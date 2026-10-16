@@ -138,6 +138,7 @@
   {disabled}
   {id}
   class:bx--content-switcher-btn={true}
+  class:bx--content-switcher-btn--icon={hasIcon}
   class:bx--content-switcher--selected={selected}
   {...$$restProps}
   on:click

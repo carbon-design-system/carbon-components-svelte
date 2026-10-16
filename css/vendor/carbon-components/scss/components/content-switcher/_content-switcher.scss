@@ -19,7 +19,10 @@
     display: flex;
     width: 100%;
     height: to-rem(40px);
-    justify-content: space-evenly;
+    // ccs: start-aligned, not space-evenly. Text switches fill the row
+    // either way; icon switches, at fixed widths, sit together in
+    // server-rendered markup, before the switcher is marked icon-only.
+    justify-content: flex-start;
   }
 
   .#{$prefix}--content-switcher--sm {
@@ -272,26 +275,30 @@
 @mixin content-switcher-icon-only {
   .#{$prefix}--content-switcher--icon-only {
     width: fit-content;
-    justify-content: flex-start;
   }
 
-  .#{$prefix}--content-switcher--icon-only .#{$prefix}--content-switcher-btn {
+  // ccs: the switch styles key on `--icon`, which each Switch sets as it
+  // renders, not the switcher's `--icon-only`, which is known only once
+  // the switches register: server-rendered markup lacked it, so icon
+  // switches drew at text widths and the selected fill hid its icon until
+  // hydration.
+  .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon {
     width: to-rem(40px);
     justify-content: center;
     padding: 0;
   }
 
-  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--sm
-    .#{$prefix}--content-switcher-btn {
+  .#{$prefix}--content-switcher--sm
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon {
     width: to-rem(32px);
   }
 
-  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xl
-    .#{$prefix}--content-switcher-btn {
+  .#{$prefix}--content-switcher--xl
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon {
     width: to-rem(48px);
   }
 
-  .#{$prefix}--content-switcher--icon-only .#{$prefix}--content-switcher-btn svg {
+  .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon svg {
     // The svg is a flex item, so z-index lifts it above the button's
     // `::after` selected-state fill overlay without needing `position`.
     z-index: 1;
@@ -300,21 +307,19 @@
   }
 
   // xl: 20px icon (Carbon React lg); sm/default stay 16px.
-  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xl
-    .#{$prefix}--content-switcher-btn
+  .#{$prefix}--content-switcher--xl
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon
     svg {
     block-size: to-rem(20px);
     inline-size: to-rem(20px);
   }
 
-  .#{$prefix}--content-switcher--icon-only
-    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
+  .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon.#{$prefix}--content-switcher--selected
     svg {
     fill: $icon-inverse;
   }
 
-  .#{$prefix}--content-switcher--icon-only
-    .#{$prefix}--content-switcher-btn:disabled
+  .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon:disabled
     svg {
     fill: $icon-disabled;
   }
@@ -450,16 +455,14 @@
     }
 
     // Unselected icon-only switches use $icon-secondary (Carbon React lowContrast).
-    &.#{$prefix}--content-switcher--icon-only
-      .#{$prefix}--content-switcher-btn
+    & .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon
       svg {
       fill: $icon-secondary;
     }
 
     // Selected icon-only switches use $icon-primary on the light card
     // (overrides the $icon-secondary fill above).
-    &.#{$prefix}--content-switcher--icon-only
-      .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
+    & .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon.#{$prefix}--content-switcher--selected
       svg {
       fill: $icon-primary;
     }
@@ -506,8 +509,7 @@
       background-color: Highlight;
     }
 
-    .#{$prefix}--content-switcher--icon-only
-      .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled)
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon.#{$prefix}--content-switcher--selected:not(:disabled)
       svg {
       fill: HighlightText;
     }
