@@ -1,9 +1,15 @@
 // @ts-check
-import { onMount } from "svelte";
+import { getContext, onMount } from "svelte";
 import { derived, writable } from "svelte/store";
 import { breakpoints } from "./breakpoints.js";
 
 /** @typedef {import("./breakpoints").BreakpointSize} BreakpointSize */
+
+/**
+ * Context key for a width store that stands in for the window's, set by
+ * `UIShellContainer` so breakpoints inside it follow the container.
+ */
+export const BREAKPOINT_WIDTH_CONTEXT = "carbon:BreakpointWidth";
 
 /**
  * Attaches `matchMedia` listeners for every breakpoint and invokes `callback`
@@ -59,14 +65,39 @@ export function observeBreakpoint(callback) {
 }
 
 /**
- * Creates a readable store that returns the current breakpoint size.
+ * The breakpoint size for a width in pixels, matching the media queries in
+ * {@link observeBreakpoint}: a width on a boundary takes the smaller size.
+ * @param {number} width
+ * @returns {BreakpointSize}
+ */
+function breakpointForWidth(width) {
+  if (width <= breakpoints.md) return "sm";
+  if (width <= breakpoints.lg) return "md";
+  if (width <= breakpoints.xlg) return "lg";
+  if (width <= breakpoints.max) return "xlg";
+  return "max";
+}
+
+/**
+ * Creates a readable store that returns the current breakpoint size: the
+ * window's, or inside a `UIShellContainer`, the container's. Call during
+ * component initialization.
  * It also provides functions for creating derived stores used to do comparisons.
  */
 export function breakpointObserver() {
   /** @type {import("svelte/store").Writable<BreakpointSize | undefined>} */
   const store = writable(undefined);
 
-  onMount(() => observeBreakpoint((size) => store.set(size)));
+  /** @type {import("svelte/store").Readable<number | undefined> | undefined} */
+  const containerWidth = getContext(BREAKPOINT_WIDTH_CONTEXT);
+
+  onMount(() =>
+    containerWidth
+      ? containerWidth.subscribe((width) => {
+          if (width !== undefined) store.set(breakpointForWidth(width));
+        })
+      : observeBreakpoint((size) => store.set(size)),
+  );
 
   return {
     subscribe: store.subscribe,

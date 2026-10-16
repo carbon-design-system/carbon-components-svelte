@@ -28,12 +28,16 @@
 
   import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { isHeaderRendered } from "../UIShell/nav-store.js";
+  import { getNavStores } from "../UIShell/nav-store.js";
   import { toCssLength } from "../utils/css-length.js";
 
   // Matches `.bx--header`'s fixed height (`mini-units(6)` in
   // _header.scss); Header has no prop to override it.
   const UI_SHELL_HEADER_HEIGHT = 48;
+
+  // Inside a contained shell, Content scrolls below the header, so a
+  // sticky toolbar there needs no offset for it.
+  const { isHeaderRendered } = getNavStores();
 
   let ref = null;
 

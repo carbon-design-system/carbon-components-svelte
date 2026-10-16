@@ -40,8 +40,10 @@ $ccs-themes: (
 // page's inverse colors rather than the Gray 100 header's: on a light page,
 // a light tooltip (and its caret) would vanish into the content. Capture the
 // page's values on the root element, before the header re-declares the
-// tokens. (`html` rather than `:root`, which names the theme blocks.)
-html {
+// tokens. (`html` rather than `:root`, which names the theme blocks.) A
+// `UIShellContainer` with its own theme is the page its tooltips open over.
+html,
+.#{$prefix}--ui-shell-container[theme] {
   --ccs-page-inverse-01: var(--cds-inverse-01);
   --ccs-page-inverse-02: var(--cds-inverse-02);
 }
