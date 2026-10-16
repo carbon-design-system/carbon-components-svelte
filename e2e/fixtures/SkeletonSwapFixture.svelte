@@ -34,6 +34,9 @@
     TextAreaSkeleton,
     TextInput,
     TextInputSkeleton,
+    TimePicker,
+    TimePickerSelect,
+    TimePickerSkeleton,
     Toggle,
     ToggleSkeleton,
   } from "carbon-components-svelte";
@@ -206,6 +209,24 @@
         </DatePicker>
       </div>
       <div data-part="skeleton"><FluidDatePickerSkeleton /></div>
+    </div>
+  {/each}
+  {#each sizes as size}
+    {@const at = size ?? "md"}
+    <div data-testid="time-picker-{at}">
+      <div data-part="real">
+        <TimePicker {size} labelText="Time" placeholder="hh:mm">
+          <TimePickerSelect value="pm" labelText="AM or PM">
+            <SelectItem value="am" text="AM" />
+            <SelectItem value="pm" text="PM" />
+          </TimePickerSelect>
+          <TimePickerSelect value="pdt" labelText="Time zone">
+            <SelectItem value="pdt" text="PDT" />
+            <SelectItem value="gmt" text="GMT" />
+          </TimePickerSelect>
+        </TimePicker>
+      </div>
+      <div data-part="skeleton"><TimePickerSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="date-picker-simple">

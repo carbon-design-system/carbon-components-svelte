@@ -39,6 +39,7 @@ const cases = [
     `fluid-text-area-${rows}`,
   ]),
   "date-picker-range",
+  ...sizes.map((size) => `time-picker-${size}`),
   "date-picker-simple",
   "date-picker-short",
   "fluid-date-picker-320",
@@ -112,4 +113,35 @@ test("a fluid date picker fits a container narrower than 288px", async ({
     .boundingBox();
   expect(box && field).toBeTruthy();
   if (box && field) expect(field.width).toBeLessThanOrEqual(box.width);
+});
+
+test("TimePickerSkeleton's input and first select are as wide as an AM/PM picker's", async ({
+  page,
+}) => {
+  await page.goto("/skeleton-swap.html");
+
+  for (const size of sizes) {
+    const pair = page.getByTestId(`time-picker-${size}`);
+    const boxes = (selector: string) =>
+      pair
+        .locator(selector)
+        .evaluateAll((els) =>
+          els.map((el) => Math.round(el.getBoundingClientRect().width)),
+        );
+    // The time zone select sizes to its options, so only the input and
+    // the AM/PM select are compared.
+    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
+    const real = await boxes(
+      "[data-part=real] :is(.bx--time-picker__input-field, .bx--time-picker__select)",
+    );
+    const skeleton = await boxes(
+      "[data-part=skeleton] :is(.bx--time-picker__input .bx--text-input, .bx--time-picker__select .bx--select)",
+    );
+    expect.soft(skeleton[0], `${size} input`).toBe(real[0]);
+    // The AM/PM select's width is its text's, which renders a pixel
+    // apart across browsers and sizes.
+    expect
+      .soft(Math.abs(skeleton[1] - real[1]), `${size} AM/PM select`)
+      .toBeLessThanOrEqual(2);
+  }
 });

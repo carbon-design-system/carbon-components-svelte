@@ -56,6 +56,17 @@
     }
   }
 
+  // ccs: TimePickerSkeleton's parts take the picker's widths: the
+  // 4.875rem input, and selects as wide as an AM/PM one (a select sizes
+  // to its options, which a skeleton can't know). Empty, they collapsed.
+  .#{$prefix}--time-picker__input .#{$prefix}--text-input.#{$prefix}--skeleton {
+    width: 4.875rem;
+  }
+
+  .#{$prefix}--time-picker__select .#{$prefix}--select.#{$prefix}--skeleton {
+    width: to-rem(85px);
+  }
+
   .#{$prefix}--time-picker--light .#{$prefix}--select-input {
     background-color: $field-02;
 
