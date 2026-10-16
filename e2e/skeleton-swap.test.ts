@@ -45,6 +45,7 @@ const cases = [
   "fluid-date-picker-320",
   "fluid-date-picker-200",
   "pin-code-input",
+  ...["xs", "sm", "md", "lg"].map((size) => `pagination-${size}`),
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",
