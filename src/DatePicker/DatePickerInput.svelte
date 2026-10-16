@@ -178,7 +178,10 @@
   // never matches. This class is the fix; see _date-picker.scss.
   // While the clear button shows, it takes the decorative calendar icon's
   // place, so a narrow (range) input keeps room for the date.
-  $: showCalendarIcon = $hasCalendar && !showInvalid && !showWarn && !showClear;
+  // A status icon takes the calendar's corner, except in fluid, where it
+  // sits beside the message instead and the calendar keeps its place.
+  $: showCalendarIcon =
+    $hasCalendar && !showClear && ($isFluid || (!showInvalid && !showWarn));
   $: hasIcon = showInvalid || showWarn || showCalendarIcon;
   // One button, on the last input, clears the whole selection.
   $: showClear =
@@ -202,12 +205,11 @@
   // while the (invisible) real input already has the freshly typed value.
   $: overlayValue = currentValue;
   $: ({ errorId, warnId, helperId } = buildFieldIds(id));
-  // Unlike its siblings, this field does not suppress the helper
-  // fallback while fluid (no `isFluid` passed here) — the helper
-  // text block below has the same omission.
+  // Fluid fields render no helper text, as with the other fluid fields.
   $: describedBy = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
+    isFluid: $isFluid,
     helperText,
     errorId,
     warnId,
@@ -363,7 +365,7 @@
   {#if showWarn}
     <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
   {/if}
-  {#if !showInvalid && !showWarn && helperText}
+  {#if !$isFluid && !showInvalid && !showWarn && helperText}
     <div
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}

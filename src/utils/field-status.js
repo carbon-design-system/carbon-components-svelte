@@ -80,9 +80,8 @@ export function joinDescribedBy(...ids) {
  * @param {unknown} [options.helperText]
  * @param {unknown} [options.invalidText]
  * @param {unknown} [options.warnText]
- * @param {boolean} [options.isFluid=false] - fluid mode renders the
- *   helper text inline, so it is not also pointed at from
- *   `aria-describedby`.
+ * @param {boolean} [options.isFluid=false] - fluid fields don't render
+ *   helper text, so `aria-describedby` doesn't point at it.
  * @param {string} options.errorId
  * @param {string} options.warnId
  * @param {string} [options.helperId]
