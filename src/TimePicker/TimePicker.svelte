@@ -35,7 +35,10 @@
   /** Specify the label text */
   export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
+  /**
+   * Set to `true` to visually hide the label text. In the fluid variant,
+   * the `TimePickerSelect` labels are hidden too.
+   */
   export let hideLabel = false;
 
   /** Set to `true` to indicate an invalid state */
@@ -113,12 +116,15 @@
 
   const groupReadonly = writable(readonly);
   const groupDisabled = writable(disabled);
+  // Fluid selects show their own labels; hiding the picker's hides theirs.
+  const groupHideLabel = writable(hideLabel);
 
   const timePickerContext = {
     isFluid: false,
     registerSelect,
     readonly: readOnly(groupReadonly),
     disabled: readOnly(groupDisabled),
+    hideLabel: readOnly(groupHideLabel),
   };
 
   setContext("carbon:TimePicker", timePickerContext);
@@ -146,6 +152,7 @@
   $: timePickerContext.isFluid = isFluid;
   $: groupReadonly.set(readonly);
   $: groupDisabled.set(disabled);
+  $: groupHideLabel.set(hideLabel);
   $: equalWidth = $selectCount !== 2;
   $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
 </script>
