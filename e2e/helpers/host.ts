@@ -6,12 +6,14 @@ import { type BrowserContext, test as base, type Page } from "@playwright/test";
 export { expect } from "@playwright/test";
 
 /**
- * A worker-scoped page on e2e/fixtures/host.html. `page.goto("/x.html")` for a
+ * A worker-scoped page on e2e/fixtures/host.html. Navigating to `/x.html` for a
  * fixture whose entry only mounts one component remounts that component in
  * place instead of navigating, and the page is reset between tests. Any other
  * URL navigates as usual.
  */
 
+// Entries are read as text, to learn which component each one mounts.
+// @reads e2e/fixtures/*.ts
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "../fixtures");
 const entries = new Map<string, string | null>();
 const FIXTURE_IMPORT = /^import \w+ from "\.\/(\w+Fixture)\.svelte";$/gm;

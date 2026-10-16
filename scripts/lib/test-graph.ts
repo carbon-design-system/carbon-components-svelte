@@ -15,6 +15,16 @@ import { posix } from "node:path";
  * - a file that reads the disk (`node:fs`, Bun's file APIs) without
  *   declaring what it reads in a `// @depends-on <glob> [glob…]` comment.
  *
+ * Two comments narrow that:
+ *
+ * - `// @reads <glob> [glob…]` declares files read as text. Only a direct
+ *   change to one of them affects the reader, not a change to what they
+ *   import (the e2e host reads fixture entries to learn which component
+ *   each one mounts).
+ * - `// @glob-registry` marks a file's `import.meta.glob` as a lookup
+ *   table, which adds no edges: whatever loads an entry from it names that
+ *   entry itself (each e2e test's `page.goto()`).
+ *
  * Named imports from the package barrel resolve to the re-exported file, not
  * to every component. That relies on the package's own
  * `"sideEffects": ["css/*.css"]` contract: no module in `src/` does anything
@@ -44,6 +54,8 @@ export type FileDeps = {
   files: Set<string>;
   /** Root-relative globs, compiled. */
   patterns: RegExp[];
+  /** Globs of files read as text; only a direct change to one counts. */
+  reads: RegExp[];
   /** Why this file's dependencies can't be known; non-empty = everything. */
   unknown: string[];
 };
@@ -89,6 +101,8 @@ const READS_DISK =
   /\b(?:from|import|require|importActual)\s*\(?\s*["'](?:node:)?(?:fs|fs\/promises|child_process)["']|\bBun\.(?:file|Glob|spawn)/;
 const DEPENDS_ON =
   /^\s*(?:\/\/|\/?\*+)\s*@depends-on\s+(.+?)\s*(?:\*\/)?\s*$/gm;
+const READS = /^\s*(?:\/\/|\/?\*+)\s*@reads\s+(.+?)\s*(?:\*\/)?\s*$/gm;
+const GLOB_REGISTRY = /^\s*(?:\/\/|\/?\*+)\s*@glob-registry\b/m;
 
 /** Compiles a root-relative glob (`**`, `*`, `?`, `{a,b}`) to a RegExp. */
 export function globToRegExp(glob: string): RegExp {
@@ -178,7 +192,12 @@ export function parseDependencies(
   source: string,
   context: ParseContext,
 ): FileDeps {
-  const deps: FileDeps = { files: new Set(), patterns: [], unknown: [] };
+  const deps: FileDeps = {
+    files: new Set(),
+    patterns: [],
+    reads: [],
+    unknown: [],
+  };
   const add = (specifier: string) => {
     const resolved = resolvePath(path, specifier, context);
     if (resolved === undefined) deps.unknown.push(`unresolved "${specifier}"`);
@@ -225,7 +244,7 @@ export function parseDependencies(
   if (globs.length !== [...source.matchAll(GLOB_CALL_ANY)].length) {
     deps.unknown.push("non-literal glob import");
   }
-  for (const [, argument] of globs) {
+  for (const [, argument] of GLOB_REGISTRY.test(source) ? [] : globs) {
     for (const [, glob] of argument.matchAll(QUOTED)) {
       // Negated patterns only narrow the match.
       if (glob.startsWith("!")) continue;
@@ -255,7 +274,11 @@ export function parseDependencies(
     list.split(LIST_SEPARATOR).filter(Boolean),
   );
   for (const glob of declared) deps.patterns.push(globToRegExp(glob));
-  if (READS_DISK.test(source) && declared.length === 0) {
+  const reads = [...source.matchAll(READS)].flatMap(([, list]) =>
+    list.split(LIST_SEPARATOR).filter(Boolean),
+  );
+  for (const glob of reads) deps.reads.push(globToRegExp(glob));
+  if (READS_DISK.test(source) && declared.length + reads.length === 0) {
     deps.unknown.push("reads the disk without @depends-on");
   }
 
@@ -275,6 +298,7 @@ export function buildGraph(
   const leaf = (): FileDeps => ({
     files: new Set(),
     patterns: [],
+    reads: [],
     unknown: [],
   });
   for (const [path, source] of sources) {
@@ -299,6 +323,7 @@ export function buildGraph(
 type ReverseIndex = {
   dependents: Map<string, string[]>;
   globbers: [string, RegExp[]][];
+  readers: [string, RegExp[]][];
   unknown: string[];
 };
 
@@ -310,6 +335,7 @@ function reverseIndex(graph: Graph): ReverseIndex {
   const index: ReverseIndex = {
     dependents: new Map(),
     globbers: [],
+    readers: [],
     unknown: [],
   };
   for (const [path, deps] of graph) {
@@ -318,6 +344,7 @@ function reverseIndex(graph: Graph): ReverseIndex {
       list ? list.push(path) : index.dependents.set(file, [path]);
     }
     if (deps.patterns.length > 0) index.globbers.push([path, deps.patterns]);
+    if (deps.reads.length > 0) index.readers.push([path, deps.reads]);
     if (deps.unknown.length > 0) index.unknown.push(path);
   }
   indexes.set(graph, index);
@@ -337,7 +364,7 @@ export function affectedBy(
     opaque,
   }: { includeUnknown?: boolean; opaque?: RegExp } = {},
 ) {
-  const { dependents, globbers, unknown } = reverseIndex(graph);
+  const { dependents, globbers, readers, unknown } = reverseIndex(graph);
   const affected = new Set<string>();
   const queue: string[] = [];
   const visit = (path: string) => {
@@ -346,7 +373,14 @@ export function affectedBy(
     queue.push(path);
   };
 
-  for (const path of changed) visit(path);
+  const changedPaths = [...changed];
+  for (const path of changedPaths) visit(path);
+  // Text reads only see the files themselves, not what they import.
+  for (const [reader, patterns] of readers) {
+    if (changedPaths.some((path) => patterns.some((re) => re.test(path)))) {
+      visit(reader);
+    }
+  }
   if (includeUnknown && affected.size > 0) unknown.forEach(visit);
   while (queue.length > 0) {
     const path = queue.pop() as string;
