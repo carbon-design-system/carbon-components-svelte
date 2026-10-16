@@ -312,6 +312,52 @@ describe("affectedBy", () => {
   });
 });
 
+describe("directives", () => {
+  // A host page globs every fixture but each test names its own, and its
+  // helper reads entries as text: neither may widen a fixture change.
+  const files = {
+    ...REPO,
+    "e2e/fixtures/host.ts": `// @glob-registry\nconst fixtures = import.meta.glob("./*Fixture.svelte");`,
+    "e2e/fixtures/host.html": `<script type="module" src="./host.ts"></script>`,
+    "e2e/helpers/host.ts": `import { readFileSync } from "node:fs";\n// @reads e2e/fixtures/*.ts\nawait page.goto("/host.html");`,
+    "e2e/hosted.test.ts": `import { test } from "./helpers/host";\nawait page.goto("/accordion.html");`,
+  };
+  const hosted = buildGraph(
+    new Map(Object.entries(files)),
+    context(Object.keys(files)),
+  );
+
+  it("@glob-registry adds no edges from the glob", () => {
+    expect(
+      deps(
+        "e2e/fixtures/host.ts",
+        files["e2e/fixtures/host.ts"],
+        Object.keys(files),
+      ).patterns,
+    ).toEqual([]);
+    expect(affectedBy(hosted, ["src/Modal/Modal.svelte"])).not.toContain(
+      "e2e/hosted.test.ts",
+    );
+  });
+
+  it("@reads counts only a direct change to a read file", () => {
+    expect(
+      deps(
+        "e2e/helpers/host.ts",
+        files["e2e/helpers/host.ts"],
+        Object.keys(files),
+      ).unknown,
+    ).toEqual([]);
+    expect(affectedBy(hosted, ["e2e/fixtures/modal.ts"])).toContain(
+      "e2e/hosted.test.ts",
+    );
+    // modal.ts imports ModalFixture, but the helper only reads modal.ts.
+    expect(
+      affectedBy(hosted, ["e2e/fixtures/ModalFixture.svelte"]),
+    ).not.toContain("e2e/hosted.test.ts");
+  });
+});
+
 describe("planTests", () => {
   it("runs a leaf component's tests, fixtures, and unknown-dependency tests", () => {
     expect(plan(["src/Accordion/Accordion.svelte"])).toEqual({

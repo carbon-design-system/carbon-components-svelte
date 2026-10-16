@@ -5,9 +5,12 @@ import "carbon-components-svelte/css/all.css";
 /**
  * One page per Playwright worker that swaps fixtures in place, so a test
  * skips the navigation, stylesheet parse and Svelte boot a fresh page costs.
- * e2e/helpers/host.ts routes `page.goto("/<fixture>.html")` here.
+ * e2e/helpers/host.ts routes a test's navigation to `/<fixture>.html` here.
  */
 
+// A lookup table, not a dependency of every test: each test's own
+// navigation names the fixture it renders.
+// @glob-registry
 const fixtures = import.meta.glob<{ default: Component }>("./*Fixture.svelte");
 
 const bodyChildren = new Set(document.body.children);
