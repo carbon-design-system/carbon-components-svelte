@@ -124,6 +124,12 @@
                 component index.
               </Link>
             </Text>
+            <Text type="caption-01" color="secondary">
+              Rendering on the server? Read the{" "}
+              <Link inline size="sm" href="/server-rendering">
+                server-side rendering guide.
+              </Link>
+            </Text>
           </Stack>
         </svelte:fragment>
       </DocSplitRow>

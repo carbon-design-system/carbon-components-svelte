@@ -44,6 +44,8 @@ const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 /** Prose-only inline HTML: do not wrap in Preview (see visitHtml). */
 const NO_PREVIEW_HTML_RE = /^\s*<DocKbd\b/;
+/** HTML comments (such as maintainer notes in guide pages) render nothing and must not become a Preview. */
+const HTML_COMMENT_RE = /^\s*<!--/;
 const DOC_KBD_IMPORT_STMT =
   '  import DocKbd from "../../components/DocKbd.svelte";';
 const DOC_KBD_IMPORT_RE = /import\s+DocKbd\s+from/;
@@ -331,6 +333,8 @@ function plugin() {
       }
       return;
     }
+
+    if (HTML_COMMENT_RE.test(node.value)) return;
 
     if (
       node.lang !== "svelte" &&
@@ -720,6 +724,7 @@ export default {
       remarkPlugins: [heroIntro, plugin, carbonify],
       rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
       layout: {
+        guide: path.join(__dirname, "src/layouts/GuideLayout.svelte"),
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },
     }),

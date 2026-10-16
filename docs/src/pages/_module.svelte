@@ -350,6 +350,11 @@
           isSelected={$isActive($url("/quick-start"))}
         />
         <SideNavLink
+          text="Server-side rendering"
+          href={$url("/server-rendering")}
+          isSelected={$isActive($url("/server-rendering"))}
+        />
+        <SideNavLink
           text="Component index"
           href={$url("/component-index")}
           isSelected={$isActive($url("/component-index"))}
