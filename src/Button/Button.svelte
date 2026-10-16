@@ -35,6 +35,16 @@
    */
   export let isSelected = false;
 
+  /**
+   * Set to `true` to render an icon-only button even when default content
+   * is passed (default content isn't rendered), as from a wrapper that
+   * forwards optional text; `false` to always render a labelled button.
+   * Unset, a button with an icon and no default content is icon-only.
+   * Without an icon, the button is always labelled.
+   * @type {boolean | undefined}
+   */
+  export let iconOnly = undefined;
+
   /** Set to `true` to span the full width of the container */
   export let fullWidth = false;
 
@@ -158,7 +168,8 @@
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const actionSetSize = getContext("carbon:ActionSet")?.size;
 
-  $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
+  $: hasIconOnly =
+    Boolean(icon || $$slots.icon) && (iconOnly ?? !$$slots.default);
   // Without an iconDescription there is nothing to show in a tooltip or
   // announce as the accessible name via the assistive-text span; skip the
   // whole tooltip apparatus and let the consumer's own aria-label/
@@ -363,7 +374,9 @@
             {iconDescription}
           </span>
         {/if}
-        <slot />
+        {#if !hasIconOnly}
+          <slot />
+        {/if}
         {#if loading}
           <Loading
             small
@@ -412,7 +425,9 @@
           {iconDescription}
         </span>
       {/if}
-      <slot />
+      {#if !hasIconOnly}
+        <slot />
+      {/if}
       {#if loading}
         <Loading
           small
@@ -462,7 +477,9 @@
           {iconDescription}
         </span>
       {/if}
-      <slot />
+      {#if !hasIconOnly}
+        <slot />
+      {/if}
       {#if loading}
         <Loading
           small
@@ -512,7 +529,9 @@
         {iconDescription}
       </span>
     {/if}
-    <slot />
+    {#if !hasIconOnly}
+      <slot />
+    {/if}
     {#if loading}
       <Loading
         small
