@@ -7,6 +7,8 @@
     CodeSnippetSkeleton,
     ComboBox,
     ComboBoxSkeleton,
+    ContentSwitcher,
+    ContentSwitcherSkeleton,
     CopyInput,
     CopyInputSkeleton,
     DatePicker,
@@ -49,6 +51,7 @@
     StructuredListHead,
     StructuredListRow,
     StructuredListSkeleton,
+    Switch,
     Tab,
     Tabs,
     TabsSkeleton,
@@ -344,6 +347,19 @@
       <div data-part="skeleton">
         <TabsSkeleton count={3} type={variant.type} size={variant.size} />
       </div>
+    </div>
+  {/each}
+  {#each ["sm", undefined, "xl"] as size}
+    {@const at = size ?? "md"}
+    <div data-testid="content-switcher-{at}">
+      <div data-part="real">
+        <ContentSwitcher {size}>
+          <Switch text="All" />
+          <Switch text="Active" />
+          <Switch text="Archived" />
+        </ContentSwitcher>
+      </div>
+      <div data-part="skeleton"><ContentSwitcherSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">
