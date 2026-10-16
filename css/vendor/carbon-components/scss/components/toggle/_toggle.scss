@@ -670,11 +670,11 @@
 }
 
 // carbon-components-svelte patch (toggle-validation)
-// Toggle warning state. v10 ships none of this for Toggle; the reveal shape
-// and tokens follow Checkbox's `checkbox-validation` patch in
+// Toggle invalid and warning states. v10 ships none of this for Toggle; the
+// reveal shape and tokens follow Checkbox's `checkbox-validation` patch in
 // css/vendor/carbon-components/scss/components/checkbox/_checkbox.scss.
 
-/// Toggle warning state.
+/// Toggle invalid and warning states.
 /// @access private
 /// @group toggle
 @mixin toggle-validation {
@@ -687,10 +687,14 @@
     margin-block-start: $carbon--spacing-03;
   }
 
+  .#{$prefix}--toggle--invalid .#{$prefix}--toggle__validation-msg,
   .#{$prefix}--toggle--warning .#{$prefix}--toggle__validation-msg {
     display: flex;
   }
 
+  .#{$prefix}--toggle--invalid
+    .#{$prefix}--toggle__validation-msg
+    .#{$prefix}--form-requirement,
   .#{$prefix}--toggle--warning
     .#{$prefix}--toggle__validation-msg
     .#{$prefix}--form-requirement {
@@ -703,6 +707,7 @@
 
   .#{$prefix}--toggle__invalid-icon {
     margin: to-rem(1px) to-rem(1px) 0 to-rem(3px);
+    fill: $support-error;
     min-inline-size: to-rem(16px);
   }
 

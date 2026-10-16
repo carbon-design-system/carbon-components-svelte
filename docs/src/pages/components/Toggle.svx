@@ -58,6 +58,18 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
 
 Reflect validation and interaction states.
 
+### Helper text
+
+Set `helperText` to explain what the setting does. It shows under the switch and describes it for assistive technology.
+
+<Toggle labelText="Auto-scaling" helperText="Adds instances when CPU stays over 70%" />
+
+### Invalid
+
+Set `invalid` to `true` and provide `invalidText` when the setting must change before the form can be submitted, such as accepting terms. An invalid state takes precedence over a warning and replaces the helper text.
+
+<Toggle labelText="Accept the terms" invalid invalidText="Accept the terms to continue" />
+
 ### Warning
 
 Set `warn` to `true` and provide `warnText` when a setting is valid but has consequences worth calling out. Tie `warn` to the state it describes so the message clears when the toggle changes.
