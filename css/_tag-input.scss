@@ -15,7 +15,11 @@
     width: 100%;
     min-height: to-rem(40px);
     align-items: center;
-    padding: $carbon--spacing-03 $carbon--spacing-05;
+    // The bottom padding is 1px short of the top, for the border: an empty
+    // field lands on its size's height, as a TextInput's does, rather than
+    // 1px over it.
+    padding: $carbon--spacing-03 $carbon--spacing-05
+      calc(#{$carbon--spacing-03} - 1px);
     border-bottom: 1px solid $ui-04;
     background-color: $field-01;
     cursor: text;
@@ -24,13 +28,13 @@
   .#{$prefix}--tag-input--xs {
     min-height: to-rem(24px);
     padding-top: to-rem(3px);
-    padding-bottom: to-rem(3px);
+    padding-bottom: to-rem(2px);
   }
 
   .#{$prefix}--tag-input--sm {
     min-height: to-rem(32px);
     padding-top: to-rem(7px);
-    padding-bottom: to-rem(7px);
+    padding-bottom: to-rem(6px);
   }
 
   .#{$prefix}--tag-input--xl {
