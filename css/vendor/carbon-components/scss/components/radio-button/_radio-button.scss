@@ -52,10 +52,15 @@
     @include hidden;
   }
 
+  // ccs: as wide as the circle and text, not the container. A radio
+  // button outside a group sat centered in its container (the wrapper's
+  // label was `justify-content: center`), and the blank space either
+  // side toggled it.
   .#{$prefix}--radio-button__label {
     @include type-style('body-short-01');
 
     display: flex;
+    width: fit-content;
     align-items: center;
     margin-right: $carbon--spacing-05;
     cursor: pointer;
@@ -145,7 +150,6 @@
   .#{$prefix}--radio-button-wrapper .#{$prefix}--radio-button__label {
     display: flex;
     align-items: flex-start;
-    justify-content: center;
     margin: 0;
   }
 
