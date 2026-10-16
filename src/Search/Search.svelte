@@ -396,6 +396,18 @@
     >
       <svelte:component this={Close} size={effectiveSize === "xl" ? 20 : 16} />
     </button>
+    {#if isFluid && (showInvalid || showWarn)}
+      <!-- Fluid: the message sits inside the field, under a divider, with
+           the status icon beside it, as on the other fluid fields. -->
+      <hr class:bx--search__divider={true}>
+      {#if showInvalid}
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
+          {invalidText}
+        </div>
+      {:else}
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
+    {/if}
   </div>
   {#if !showInvalid && !showWarn && helperText}
     <div
@@ -406,12 +418,12 @@
       {helperText}
     </div>
   {/if}
-  {#if showInvalid}
+  {#if showInvalid && !isFluid}
     <div id={errorId} class:bx--form-requirement={true} role="alert">
       {invalidText}
     </div>
   {/if}
-  {#if showWarn}
+  {#if showWarn && !isFluid}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 {/if}
