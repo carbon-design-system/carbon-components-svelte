@@ -66,6 +66,12 @@ const cases = [
   "page-header-sm",
   "code-snippet-single",
   "code-snippet-multi",
+  ...[1, 4, 8, 15].flatMap((lines) => [
+    `code-snippet-multi-${lines}`,
+    `code-snippet-skeleton-prop-${lines}`,
+  ]),
+  "code-snippet-skeleton-prop-rows",
+  "code-snippet-skeleton-prop-one-row",
   "radio-button",
 ];
 

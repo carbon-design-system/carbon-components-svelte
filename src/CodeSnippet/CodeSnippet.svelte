@@ -456,6 +456,9 @@
 {#if skeleton}
   <CodeSnippetSkeleton
     {type}
+    rows={code ? code.replace(/\n$/, "").split("\n").length : undefined}
+    {minCollapsedNumberOfRows}
+    {maxCollapsedNumberOfRows}
     {...$$restProps}
     on:click
     on:mouseover

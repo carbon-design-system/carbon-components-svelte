@@ -330,10 +330,19 @@
     height: $carbon--spacing-07;
   }
 
-  // ccs: as tall as the snippets they stand in for: a three-line multi
-  // snippet (its three bars), and a single one's 40px.
+  // ccs: as tall as the snippets they stand in for. A multi snippet's
+  // code area is its 16px rows plus 24px below, between its minimum and
+  // maximum collapsed rows (3 and 15 by default), inside 32px of padding;
+  // a single one is 40px.
   .#{$prefix}--snippet--multi.#{$prefix}--skeleton {
-    height: to-rem(104px);
+    height: calc(
+      clamp(
+          var(--ccs-code-snippet-min-rows, 3) * #{to-rem(16px)},
+          var(--ccs-code-snippet-rows, 3) * #{to-rem(16px)} + #{to-rem(24px)},
+          var(--ccs-code-snippet-max-rows, 15) * #{to-rem(16px)}
+        ) +
+        #{$carbon--spacing-07}
+    );
   }
 
   .#{$prefix}--snippet--single.#{$prefix}--skeleton {

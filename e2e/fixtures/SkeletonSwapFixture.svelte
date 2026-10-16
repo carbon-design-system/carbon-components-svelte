@@ -427,6 +427,78 @@
     </div>
     <div data-part="skeleton"><CodeSnippetSkeleton type="multi" /></div>
   </div>
+  {#each [1, 4, 8, 15] as lines}
+    <div data-testid="code-snippet-multi-{lines}">
+      <div data-part="real">
+        <CodeSnippet
+          type="multi"
+          code={Array.from({ length: lines }, (_, i) => `line ${i + 1}`).join(
+            "\n",
+          )}
+        />
+      </div>
+      <div data-part="skeleton">
+        <CodeSnippetSkeleton type="multi" rows={lines} />
+      </div>
+    </div>
+    <div data-testid="code-snippet-skeleton-prop-{lines}">
+      <div data-part="real">
+        <CodeSnippet
+          type="multi"
+          code={Array.from({ length: lines }, (_, i) => `line ${i + 1}`).join(
+            "\n",
+          )}
+        />
+      </div>
+      <div data-part="skeleton">
+        <CodeSnippet
+          skeleton
+          type="multi"
+          code={Array.from({ length: lines }, (_, i) => `line ${i + 1}`).join(
+            "\n",
+          )}
+        />
+      </div>
+    </div>
+  {/each}
+  <div data-testid="code-snippet-skeleton-prop-rows">
+    <div data-part="real">
+      <CodeSnippet
+        type="multi"
+        minCollapsedNumberOfRows={1}
+        maxCollapsedNumberOfRows={5}
+        code={"one\ntwo\nthree\nfour\nfive\nsix\nseven\n"}
+      />
+    </div>
+    <div data-part="skeleton">
+      <CodeSnippet
+        skeleton
+        type="multi"
+        minCollapsedNumberOfRows={1}
+        maxCollapsedNumberOfRows={5}
+        code={"one\ntwo\nthree\nfour\nfive\nsix\nseven\n"}
+      />
+    </div>
+  </div>
+  <div data-testid="code-snippet-skeleton-prop-one-row">
+    <div data-part="real">
+      <CodeSnippet
+        type="multi"
+        minCollapsedNumberOfRows={0}
+        maxCollapsedNumberOfRows={0}
+        code={"one\n"}
+      />
+    </div>
+    <div data-part="skeleton">
+      <CodeSnippet
+        skeleton
+        type="multi"
+        minCollapsedNumberOfRows={0}
+        maxCollapsedNumberOfRows={0}
+        code={"one\n"}
+      />
+    </div>
+  </div>
   <div data-testid="date-picker-simple">
     <div data-part="real">
       <DatePicker><DatePickerInput labelText="Date" /></DatePicker>
