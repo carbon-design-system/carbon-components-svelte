@@ -51,6 +51,8 @@ const cases = [
   ...["small", "field", "default"].map((size) => `file-uploader-${size}`),
   "breadcrumb-sm",
   "breadcrumb-md",
+  // Horizontal, spaced equally and vertical.
+  ...[0, 1, 2].map((layout) => `progress-indicator-${layout}`),
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",

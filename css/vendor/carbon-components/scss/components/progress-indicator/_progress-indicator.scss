@@ -196,12 +196,16 @@
     fill: $support-01;
   }
 
+  // ccs: the 14px bar centered in the line a step's label takes (its
+  // 1.45 line height, 8px below the step's top), so the skeleton is as
+  // tall as the indicator.
   .#{$prefix}--progress.#{$prefix}--skeleton .#{$prefix}--progress-label {
     @include skeleton;
 
     width: to-rem(40px);
     height: to-rem(14px);
-    margin-top: 0.625rem;
+    margin-top: calc(#{$carbon--spacing-03} + (1.45em - #{to-rem(14px)}) / 2);
+    margin-bottom: calc((1.45em - #{to-rem(14px)}) / 2);
   }
 
 
