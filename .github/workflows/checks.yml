@@ -134,9 +134,14 @@ jobs:
         run: bun run check:css --base "origin/$BASE_REF" --format github --summary "$GITHUB_STEP_SUMMARY"
 
   test:
+    name: test (${{ matrix.shard }}/2)
     needs: [changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
@@ -146,29 +151,34 @@ jobs:
         run: bun run build:docs
 
       - name: Test types (Svelte 5)
+        if: matrix.shard == 1
         run: bun run test:types
 
+      # Each shard runs half of the selected files, so an empty half passes.
       - name: Test (Svelte 5)
         env:
           TESTS: ${{ needs.changes.outputs.unit-tests }}
+          SHARD: ${{ matrix.shard }}/2
         run: |
           case "$TESTS" in
-            "" | all) bun run test ;;
+            "" | all) bunx vitest run --shard="$SHARD" --passWithNoTests ;;
             none) echo "No unit tests affected." ;;
-            *) read -ra files <<< "$TESTS" && bunx vitest run "${files[@]}" ;;
+            *) read -ra files <<< "$TESTS" && bunx vitest run --shard="$SHARD" --passWithNoTests "${files[@]}" ;;
           esac
 
+  # Starts as soon as the test selection is known, alongside the unit tests,
+  # rather than after them: waiting put both suites on the critical path.
   test-e2e:
-    needs: [static-checks, changes, test]
+    name: test-e2e (${{ matrix.shard }}/3)
+    needs: [changes]
     if: |
-      always() &&
-      !cancelled() &&
-      needs.static-checks.result == 'success' &&
-      needs.changes.result == 'success' &&
-      (needs.test.result == 'success' || needs.test.result == 'skipped') &&
       (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true') &&
       needs.changes.outputs.e2e-tests != 'none'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     # Official image includes Chromium/Firefox/WebKit + system deps
     # Bump tag with @playwright/test in bun.lock.
     container:
@@ -206,19 +216,23 @@ jobs:
         shell: bash
         env:
           TESTS: ${{ needs.changes.outputs.e2e-tests }}
+          SHARD: ${{ matrix.shard }}/3
         run: |
           case "$TESTS" in
-            "" | all) bunx playwright test --project=chromium ;;
-            *) read -ra files <<< "$TESTS" && bunx playwright test --project=chromium "${files[@]}" ;;
+            "" | all) bunx playwright test --project=chromium --shard="$SHARD" --pass-with-no-tests ;;
+            *) read -ra files <<< "$TESTS" && bunx playwright test --project=chromium --shard="$SHARD" --pass-with-no-tests "${files[@]}" ;;
           esac
 
   test-svelte-compat:
+    name: test-svelte-compat (${{ matrix.label }}, ${{ matrix.shard }}/2)
     needs: [changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        dir: [tests-svelte3, tests-svelte4]
+        shard: [1, 2]
         include:
           - dir: tests-svelte3
             label: Svelte 3
@@ -238,21 +252,23 @@ jobs:
         run: bun run build:docs
 
       - name: Test types (${{ matrix.label }})
+        if: matrix.shard == 1
         run: |
           cd ${{ matrix.dir }}
           bun run test:types
 
       # Selected files outside this harness's `include` (Svelte 5-only
-      # tests) are dropped, so an empty match passes.
+      # tests) are dropped, and a shard can get none, so an empty match passes.
       - name: Test (${{ matrix.label }})
         env:
           TESTS: ${{ needs.changes.outputs.unit-tests }}
+          SHARD: ${{ matrix.shard }}/2
         run: |
           cd ${{ matrix.dir }}
           case "$TESTS" in
-            "" | all) bun run test ;;
+            "" | all) bunx vitest run --shard="$SHARD" --passWithNoTests ;;
             none) echo "No unit tests affected." ;;
-            *) read -ra files <<< "$TESTS" && bunx vitest run --passWithNoTests "${files[@]/#/../}" ;;
+            *) read -ra files <<< "$TESTS" && bunx vitest run --shard="$SHARD" --passWithNoTests "${files[@]/#/../}" ;;
           esac
 
   deploy-docs:
