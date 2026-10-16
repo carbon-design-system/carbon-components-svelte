@@ -1,10 +1,16 @@
 <script>
   import {
+    ComboBox,
+    ComboBoxSkeleton,
     CopyInput,
     CopyInputSkeleton,
     DatePicker,
     DatePickerInput,
     DatePickerSkeleton,
+    Dropdown,
+    DropdownSkeleton,
+    MultiSelect,
+    MultiSelectSkeleton,
     NumberInput,
     NumberInputSkeleton,
     PasswordInput,
@@ -19,6 +25,8 @@
   } from "carbon-components-svelte";
 
   const sizes = ["xs", "sm", undefined, "xl"];
+  const listBoxSizes = ["xs", "sm", undefined, "lg", "xl"];
+  const items = [{ id: "eu", text: "Europe" }];
 </script>
 
 <!-- Each case renders a component and the skeleton that stands in for it,
@@ -63,6 +71,45 @@
       <div data-part="skeleton"><DatePickerSkeleton {size} /></div>
     </div>
   {/each}
+  {#each listBoxSizes as size}
+    {@const at = size ?? "md"}
+    <div data-testid="dropdown-{at}">
+      <div data-part="real">
+        <Dropdown {size} labelText="Region" {items} selectedId="eu" />
+      </div>
+      <div data-part="skeleton"><DropdownSkeleton {size} /></div>
+    </div>
+    <div data-testid="combo-box-{at}">
+      <div data-part="real">
+        <ComboBox {size} labelText="Region" {items} />
+      </div>
+      <div data-part="skeleton"><ComboBoxSkeleton {size} /></div>
+    </div>
+    <div data-testid="multi-select-{at}">
+      <div data-part="real">
+        <MultiSelect {size} labelText="Region" {items} />
+      </div>
+      <div data-part="skeleton"><MultiSelectSkeleton {size} /></div>
+    </div>
+  {/each}
+  <div data-testid="dropdown-inline">
+    <div data-part="real">
+      <Dropdown type="inline" labelText="Region" {items} selectedId="eu" />
+    </div>
+    <div data-part="skeleton"><DropdownSkeleton inline /></div>
+  </div>
+  <div data-testid="multi-select-inline">
+    <div data-part="real">
+      <MultiSelect type="inline" labelText="Region" {items} />
+    </div>
+    <div data-part="skeleton"><MultiSelectSkeleton inline /></div>
+  </div>
+  <div data-testid="dropdown-hidden-label">
+    <div data-part="real">
+      <Dropdown hideLabel labelText="Region" {items} selectedId="eu" />
+    </div>
+    <div data-part="skeleton"><DropdownSkeleton hideLabel /></div>
+  </div>
   <div data-testid="date-picker-range">
     <div data-part="real">
       <DatePicker datePickerType="range">

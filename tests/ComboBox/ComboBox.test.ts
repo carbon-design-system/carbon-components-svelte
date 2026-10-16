@@ -2453,14 +2453,15 @@ describe("ComboBox", () => {
 
     const skeleton = screen.getByTestId("combo-box-skeleton");
     expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass(
+    expect(skeleton).toHaveClass("bx--list-box__wrapper", "bx--form-item");
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass(
       "bx--skeleton",
       "bx--combo-box",
       "bx--list-box",
-      "bx--form-item",
     );
-    expect(skeleton.children).toHaveLength(1);
-    expect(skeleton.children[0]).toHaveClass("bx--list-box__field");
+    expect(skeleton.children[1].children[0]).toHaveClass("bx--list-box__field");
   });
 
   it("renders fluid skeleton state", () => {
