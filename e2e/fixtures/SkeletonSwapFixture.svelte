@@ -49,6 +49,9 @@
     StructuredListHead,
     StructuredListRow,
     StructuredListSkeleton,
+    Tab,
+    Tabs,
+    TabsSkeleton,
     TextArea,
     TextAreaSkeleton,
     TextInput,
@@ -319,6 +322,27 @@
       </div>
       <div data-part="skeleton">
         <StructuredListSkeleton rows={2} columns={2} {...variant} />
+      </div>
+    </div>
+  {/each}
+  {#each [
+    {},
+    { dismissible: true },
+    { dismissible: true, size: "sm" },
+    { dismissible: true, size: "xl" },
+    { type: "container" },
+    { type: "container", dismissible: true },
+  ] as variant, i}
+    <div data-testid="tabs-{i}">
+      <div data-part="real">
+        <Tabs {...variant}>
+          <Tab label="Overview" />
+          <Tab label="Alerts" />
+          <Tab label="Settings" />
+        </Tabs>
+      </div>
+      <div data-part="skeleton">
+        <TabsSkeleton count={3} type={variant.type} size={variant.size} />
       </div>
     </div>
   {/each}
