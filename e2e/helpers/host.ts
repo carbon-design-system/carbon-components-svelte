@@ -118,8 +118,11 @@ export const test = base.extend<
   },
 
   page: async ({ hostPage }, use, testInfo) => {
-    // A fresh page has its pointer at the origin and no emulation.
-    await hostPage.mouse.move(0, 0);
+    // Park the pointer where no fixture renders. At the origin it sits on
+    // the next fixture's first control, and Chrome hovers whatever mounts
+    // under a pointer it has seen, so a tooltip could open on its own.
+    const size = hostPage.viewportSize() ?? { width: 1280, height: 720 };
+    await hostPage.mouse.move(size.width - 1, size.height - 1);
     await use(hostPage);
     const { viewport } = testInfo.project.use;
     if (viewport) await hostPage.setViewportSize(viewport);
