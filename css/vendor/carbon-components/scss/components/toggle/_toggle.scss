@@ -144,201 +144,14 @@
       }
     }
 
-    .#{$prefix}--toggle__label {
-      @include type-style('label-01');
-
-      position: relative;
-      display: flex;
-      align-items: center;
-      margin: $carbon--spacing-03 0;
-      cursor: pointer;
-    }
-
-    // V11: It looks like this block no longer applies to any element.
-    // May need to check with Vue/Angular implementations,
-    // but I do not see any `toggle__appearance` in the rendered HTML.
-    // There seem to be quite a few references throughout this file.
-    .#{$prefix}--toggle__appearance {
-      position: relative;
-      width: to-rem(48px);
-      height: to-rem(24px);
-
-      &::before {
-        position: absolute;
-        top: 0;
-        display: block;
-        width: to-rem(48px);
-        height: to-rem(24px);
-        box-sizing: border-box;
-        background-color: $ui-04;
-        border-radius: to-rem(15px);
-        // Corresponds to the double-border for focused state (`0 0 0 1px $ui-02, 0 0 0 3px $focus`)
-        box-shadow: 0 0 0 1px transparent, 0 0 0 3px transparent;
-        content: '';
-        cursor: pointer;
-        // ccs: no `box-shadow`, which draws the focus ring, so the ring snaps
-        transition: background-color $duration--fast-01 motion(exit, productive);
-
-        @media screen and (prefers-reduced-motion: reduce) {
-          transition: none;
-        }
-      }
-
-      &::after {
-        position: absolute;
-        top: to-rem(3px);
-        left: to-rem(3px);
-        display: block;
-        width: to-rem(18px);
-        height: to-rem(18px);
-        box-sizing: border-box;
-        background-color: $icon-03;
-        border-radius: 50%;
-        content: '';
-        cursor: pointer;
-        transition: transform $duration--fast-01 motion(exit, productive);
-      }
-    }
-
-    .#{$prefix}--toggle__text--left,
-    .#{$prefix}--toggle__text--right {
-      @include type-style('body-short-01');
-
-      position: relative;
-      margin-left: $carbon--spacing-03;
-    }
-
+    // ccs: the rules for the old toggle markup (`__label`, `__appearance`)
+    // are gone with it. Only ToggleSkeleton draws `__text--left`: a bar
+    // where the toggle's Off/On text sits.
     .#{$prefix}--toggle__text--left {
       position: absolute;
       left: to-rem(48px);
+      margin-left: $carbon--spacing-03;
     }
-
-    .#{$prefix}--toggle:checked
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--left,
-    .#{$prefix}--toggle:not(:checked)
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--right {
-      visibility: hidden;
-    }
-
-    .#{$prefix}--toggle:checked
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--right,
-    .#{$prefix}--toggle:not(:checked)
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--left {
-      display: inline;
-    }
-
-    .#{$prefix}--toggle:checked
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance {
-      &::before {
-        background-color: $support-02;
-      }
-
-      &::after {
-        background-color: $icon-03;
-        transform: translateX(to-rem(24px));
-      }
-    }
-
-    .#{$prefix}--toggle
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance::before {
-      // Corresponds to the double-border for focused state (`0 0 0 1px $ui-02, 0 0 0 3px $focus`)
-      box-shadow: 0 0 0 1px transparent, 0 0 0 3px transparent;
-    }
-
-    .#{$prefix}--toggle:focus + .#{$prefix}--toggle__label,
-    .#{$prefix}--toggle:active
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance::before {
-      box-shadow: 0 0 0 1px $ui-03, 0 0 0 3px $focus;
-    }
-
-    .#{$prefix}--toggle:disabled + .#{$prefix}--toggle__label {
-      cursor: not-allowed;
-    }
-
-    .#{$prefix}--toggle:disabled
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance {
-      &::before {
-        background-color: $disabled-01;
-      }
-
-      &::after {
-        background-color: $disabled-02;
-      }
-
-      &::before,
-      &::after {
-        cursor: not-allowed;
-        // ccs: the track's background and the handle's transform, not `all`
-        transition: background-color $duration--fast-01 motion(exit, productive),
-          transform $duration--fast-01 motion(exit, productive);
-
-        @media screen and (prefers-reduced-motion: reduce) {
-          transition: none;
-        }
-      }
-    }
-
-    .#{$prefix}--toggle:disabled
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--left,
-    .#{$prefix}--toggle:disabled
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--right {
-      color: $disabled;
-    }
-
-    .#{$prefix}--toggle:disabled:active
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance:before {
-      box-shadow: none;
-    }
-
-
-    .#{$prefix}--toggle--small
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance {
-      width: to-rem(32px);
-      height: to-rem(16px);
-
-      &::before {
-        top: 0;
-        width: to-rem(32px);
-        height: to-rem(16px);
-        box-sizing: border-box;
-        border-radius: 0.9375rem;
-      }
-
-      &::after {
-        top: to-rem(3px);
-        left: to-rem(3px);
-        width: to-rem(10px);
-        height: to-rem(10px);
-      }
-    }
-
-    .#{$prefix}--toggle--small
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__text--left {
-      left: to-rem(32px);
-    }
-
-    .#{$prefix}--toggle--small:checked
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__appearance {
-      &::after {
-        margin-left: 0;
-        transform: translateX(to-rem(17px));
-      }
-    }
-
 
     .#{$prefix}--toggle-input {
       @include hidden;
@@ -524,15 +337,19 @@
       @include skeleton;
 
       width: 3rem;
-      margin-top: 0.5rem;
     }
 
+    // ccs: the switch keeps a real toggle's 1rem gap below the label,
+    // and the label bar sits centered in the label's 16px line, so the
+    // skeleton is as tall as the toggle. The bar is as wide as other
+    // field skeletons' label bars.
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       > div {
       overflow: hidden;
-      width: 1.5rem;
+      width: to-rem(75px);
       height: 0.5rem;
+      margin: to-rem(4px) 0;
       //hides text
       font-size: 0%;
       line-height: 0;
@@ -546,20 +363,6 @@
       @include skeleton;
 
       width: 2rem;
-      margin-top: 0.5rem;
-    }
-
-    .#{$prefix}--toggle-input--small.#{$prefix}--skeleton
-      + .#{$prefix}--toggle-input__label
-      > div {
-      overflow: hidden;
-      width: 1rem;
-      height: 0.5rem;
-      //hides text
-      font-size: 0%;
-      line-height: 0;
-
-      @include skeleton;
     }
 
     .#{$prefix}--toggle.#{$prefix}--skeleton
@@ -582,13 +385,7 @@
 
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
-      .#{$prefix}--toggle__switch::after,
-    .#{$prefix}--toggle.#{$prefix}--skeleton
-      + .#{$prefix}--toggle-input__label
-      .#{$prefix}--toggle__appearance::after,
-    .#{$prefix}--toggle.#{$prefix}--skeleton
-      + .#{$prefix}--toggle-input__label
-      .#{$prefix}--toggle__appearance::before {
+      .#{$prefix}--toggle__switch::after {
       display: none;
     }
 

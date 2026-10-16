@@ -27,6 +27,8 @@
     TextAreaSkeleton,
     TextInput,
     TextInputSkeleton,
+    Toggle,
+    ToggleSkeleton,
   } from "carbon-components-svelte";
 
   const sizes = ["xs", "sm", undefined, "xl"];
@@ -129,6 +131,26 @@
     <div data-testid="fluid-text-area-{rows}">
       <div data-part="real"><TextArea fluid {rows} labelText="Notes" /></div>
       <div data-part="skeleton"><FluidTextAreaSkeleton {rows} /></div>
+    </div>
+  {/each}
+  {#each ["default", "sm"] as size}
+    <div data-testid="toggle-{size}">
+      <div data-part="real"><Toggle {size} labelText="Alerts" /></div>
+      <div data-part="skeleton">
+        <ToggleSkeleton {size} labelText="Alerts" />
+      </div>
+    </div>
+    <div data-testid="toggle-{size}-hidden-label">
+      <div data-part="real">
+        <Toggle {size} hideLabel labelText="Alerts" />
+      </div>
+      <div data-part="skeleton">
+        <ToggleSkeleton {size} hideLabel labelText="Alerts" />
+      </div>
+    </div>
+    <div data-testid="toggle-{size}-no-label">
+      <div data-part="real"><Toggle {size} /></div>
+      <div data-part="skeleton"><ToggleSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="date-picker-range">
