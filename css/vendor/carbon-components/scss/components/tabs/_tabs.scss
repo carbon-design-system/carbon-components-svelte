@@ -870,6 +870,14 @@
     border-block-end: none;
   }
 
+  // The link keeps its height, so its now-empty bottom 2px overlaps the
+  // item's underline: the item stays the tab's height rather than 2px
+  // more, at every size.
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-link {
+    margin-block-end: -2px;
+  }
+
   // Container variant: move the inset top indicator from the link to the item.
   .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
