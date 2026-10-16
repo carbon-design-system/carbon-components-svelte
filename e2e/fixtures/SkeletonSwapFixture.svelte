@@ -29,6 +29,9 @@
     PasswordInputSkeleton,
     PinCodeInput,
     PinCodeInputSkeleton,
+    ProgressIndicator,
+    ProgressIndicatorSkeleton,
+    ProgressStep,
     RadioButton,
     RadioButtonSkeleton,
     RangeSlider,
@@ -270,6 +273,20 @@
         </Breadcrumb>
       </div>
       <div data-part="skeleton"><BreadcrumbSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each [{}, { spaceEqually: true }, { vertical: true }] as layout, i}
+    <div data-testid="progress-indicator-{i}">
+      <div data-part="real">
+        <ProgressIndicator currentIndex={1} {...layout}>
+          <ProgressStep label="Account" complete />
+          <ProgressStep label="Billing" />
+          <ProgressStep label="Review" />
+        </ProgressIndicator>
+      </div>
+      <div data-part="skeleton">
+        <ProgressIndicatorSkeleton count={3} {...layout} />
+      </div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">
