@@ -29,6 +29,11 @@
     align-items: center;
     border-bottom: 1px solid $shell-header-border-01;
     background-color: $shell-header-bg-01;
+    // ccs: set the header's own text color, so what inherits it follows the
+    // header's theme, not the page's. An icon-only header action's icon is
+    // `currentColor` on hover; under a classic (Gray 100) header on a light
+    // page it inherited the page's dark text and went dark on dark.
+    color: $shell-header-text-01;
   }
 
   .#{$prefix}--header__action {

@@ -36,6 +36,22 @@ $ccs-themes: (
   }
 }
 
+// Header tooltips open below the header, over the page, so they take the
+// page's inverse colors rather than the Gray 100 header's: on a light page,
+// a light tooltip (and its caret) would vanish into the content. Capture the
+// page's values on the root element, before the header re-declares the
+// tokens. (`html` rather than `:root`, which names the theme blocks.)
+html {
+  --ccs-page-inverse-01: var(--cds-inverse-01);
+  --ccs-page-inverse-02: var(--cds-inverse-02);
+}
+
+.#{$prefix}--header.#{$prefix}--header--ui-shell-classic
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y {
+  --cds-inverse-01: var(--ccs-page-inverse-01);
+  --cds-inverse-02: var(--ccs-page-inverse-02);
+}
+
 .#{$prefix}--side-nav.#{$prefix}--side-nav--ui-shell-classic {
   @include carbon--theme($carbon--theme--white, true, $ccs-themes) {
     @include emit-component-tokens($tag-colors, $ccs-themes);

@@ -533,6 +533,11 @@ const LEGACY_CDS_PROPERTIES = new Set([
   "--cds-scroll-gradient-color",
 ]);
 
+// Carbon tokens re-pointed inside a scope, not new names: a classic
+// header's tooltips open over the page, so they take the page's inverse
+// colors (`_ui-shell-classic.scss`).
+const REPOINTED_CDS_TOKENS = new Set(["--cds-inverse-01", "--cds-inverse-02"]);
+
 const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
   // `z("…")` covers anything that floats over the page; one digit is local
   // stacking inside the component's own box.
@@ -543,7 +548,9 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
   "new --cds-* property": (lines) =>
     lines.flatMap((line, index) =>
       [...line.split("//")[0].matchAll(/(?:^|[{;\s])(--cds-[\w-]+)\s*:/g)].some(
-        ([, property]) => !LEGACY_CDS_PROPERTIES.has(property),
+        ([, property]) =>
+          !LEGACY_CDS_PROPERTIES.has(property) &&
+          !REPOINTED_CDS_TOKENS.has(property),
       )
         ? [index + 1]
         : [],
