@@ -387,7 +387,13 @@
           }}
         >
           {#each selectItems as pageNumber (pageNumber)}
-            <option class:bx--select-option={true} value={pageNumber}>
+            <!-- `selected` so server-rendered markup shows the page;
+                 Select sets the value only once mounted. -->
+            <option
+              class:bx--select-option={true}
+              value={pageNumber}
+              selected={pageNumber === page}
+            >
               {pageNumber}
             </option>
           {/each}
