@@ -8,17 +8,20 @@ import { compileEntry } from "./compile";
 // and release run, applied to the expanded sheet the other css tests share
 // rather than to a second, compressed compile. It keeps a few spaces inside
 // `calc()` that sass compressed drops, so it reads under 100 bytes over the
-// shipped size. Ceilings sit about 2% above the measured size so ordinary
-// additions fit but a regression of the pruning work (902 kB -> 673 kB for
-// all.css) does not. When a deliberate addition trips one, raise it to the
-// new size plus 2% and say why in the commit.
-// `bun run check:css` prints the current numbers.
+// shipped size.
+//
+// This guards the pruning work (902 kB -> 673 kB for all.css), not each
+// feature: ceilings sit about 10% above the size measured below, so ordinary
+// additions do not trip it. Do not raise a ceiling to fit a feature. A failure
+// means a bulk regression (a re-synced vendored file, unpruned selectors,
+// lost minification) or growth worth reviewing as a whole. The `css-cascade`
+// job reports each PR's size movement. `bun run check:css` prints the current
+// numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // min 667,390 and gzip 77,643 measured locally after TableOfContents
-  "all.scss": { min: 680_800, gzip: 79_200 },
-  // min 574,769 and gzip 68,194 measured locally after the field skeleton
-  // sizes and TableOfContents
-  "white.scss": { min: 586_300, gzip: 69_600 },
+  // min 676,740 and gzip 78,910 measured 2026-10-15
+  "all.scss": { min: 745_000, gzip: 87_000 },
+  // min 583,368 and gzip 69,365 measured 2026-10-15
+  "white.scss": { min: 642_000, gzip: 76_000 },
 };
 
 describe("css size budget", () => {
