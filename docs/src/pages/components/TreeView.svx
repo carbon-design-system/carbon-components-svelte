@@ -1,9 +1,10 @@
 ---
+components: ["TreeView", "TreeViewSkeleton"]
 description: A tree view displays hierarchical data in a collapsible structure, with node selection, expansion, icons, and virtualization for large trees.
 ---
 
 <script>
-  import { TreeView } from "carbon-components-svelte";
+  import { TreeView, TreeViewSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -334,3 +335,9 @@ Use `filterTreeById` to filter nodes by their ID. Accepts either a single ID or 
 Use `filterTreeNodes` with a predicate function to implement custom filtering logic. The example demonstrates filtering by file extension, filtering leaf nodes only, and using the `includeChildren` option to include all descendants of matching nodes. By default, matching nodes and their ancestors are included.
 
 <FileSource src="/framed/TreeView/TreeViewFilterNodes" />
+
+## Skeleton
+
+Show a loading state with `TreeViewSkeleton`. Match the tree's `size` and its number of top-level rows with `count`, and set `hideLabel` when the tree hides its label.
+
+<TreeViewSkeleton count={5} />

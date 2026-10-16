@@ -58,6 +58,9 @@ const cases = [
   // Line and container tabs, dismissible at three sizes.
   ...[0, 1, 2, 3, 4, 5].map((variant) => `tabs-${variant}`),
   ...["sm", "md", "xl"].map((size) => `content-switcher-${size}`),
+  "tree-view-default",
+  "tree-view-compact",
+  "tree-view-hidden-label",
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",

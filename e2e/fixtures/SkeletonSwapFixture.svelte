@@ -64,6 +64,8 @@
     TimePickerSkeleton,
     Toggle,
     ToggleSkeleton,
+    TreeView,
+    TreeViewSkeleton,
   } from "carbon-components-svelte";
 
   const sizes = ["xs", "sm", undefined, "xl"];
@@ -360,6 +362,33 @@
         </ContentSwitcher>
       </div>
       <div data-part="skeleton"><ContentSwitcherSkeleton {size} /></div>
+    </div>
+  {/each}
+  <div data-testid="tree-view-hidden-label">
+    <div data-part="real">
+      <TreeView
+        labelText="Files"
+        hideLabel
+        nodes={[{ id: "a", text: "Reports" }]}
+      />
+    </div>
+    <div data-part="skeleton"><TreeViewSkeleton count={1} hideLabel /></div>
+  </div>
+  {#each ["default", "compact"] as size}
+    <div data-testid="tree-view-{size}">
+      <div data-part="real">
+        <TreeView
+          {size}
+          labelText="Files"
+          nodes={[
+            { id: "a", text: "Reports" },
+            { id: "b", text: "Invoices" },
+            { id: "c", text: "Receipts" },
+            { id: "d", text: "Archive" },
+          ]}
+        />
+      </div>
+      <div data-part="skeleton"><TreeViewSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">
