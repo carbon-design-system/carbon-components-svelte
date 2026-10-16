@@ -81,7 +81,9 @@
           <DatePickerInput {size} labelText="Date" />
         </DatePicker>
       </div>
-      <div data-part="skeleton"><DatePickerSkeleton {size} /></div>
+      <div data-part="skeleton">
+        <DatePickerSkeleton {size} datePickerType="single" />
+      </div>
     </div>
   {/each}
   {#each listBoxSizes as size}
@@ -191,7 +193,21 @@
         <DatePickerInput labelText="To" />
       </DatePicker>
     </div>
-    <div data-part="skeleton"><DatePickerSkeleton range /></div>
+    <div data-part="skeleton">
+      <DatePickerSkeleton datePickerType="range" />
+    </div>
+  </div>
+  <div data-testid="date-picker-simple">
+    <div data-part="real">
+      <DatePicker><DatePickerInput labelText="Date" /></DatePicker>
+    </div>
+    <div data-part="skeleton"><DatePickerSkeleton /></div>
+  </div>
+  <div data-testid="date-picker-short">
+    <div data-part="real">
+      <DatePicker short><DatePickerInput labelText="Date" /></DatePicker>
+    </div>
+    <div data-part="skeleton"><DatePickerSkeleton short /></div>
   </div>
   <div data-testid="pin-code-input">
     <div data-part="real"><PinCodeInput labelText="Code" /></div>

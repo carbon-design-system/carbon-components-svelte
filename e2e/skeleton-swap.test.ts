@@ -39,6 +39,8 @@ const cases = [
     `fluid-text-area-${rows}`,
   ]),
   "date-picker-range",
+  "date-picker-simple",
+  "date-picker-short",
   "pin-code-input",
   "radio-button",
 ];
@@ -58,5 +60,39 @@ test("skeletons are as tall as the components they stand in for", async ({
     if (!real || !skeleton) continue;
 
     expect.soft(skeleton.height, id).toBeCloseTo(real.height, 0);
+  }
+});
+
+/**
+ * Fields whose width doesn't depend on their text: the skeleton's field
+ * must be as wide as the component's.
+ */
+const fieldWidths: Record<string, string> = {
+  ...Object.fromEntries(
+    sizes.map((size) => [`date-picker-${size}`, ".bx--date-picker__input"]),
+  ),
+  "date-picker-range": ".bx--date-picker__input",
+  "date-picker-simple": ".bx--date-picker__input",
+  "date-picker-short": ".bx--date-picker__input",
+};
+
+test("skeleton fields are as wide as the fields they stand in for", async ({
+  page,
+}) => {
+  await page.goto("/skeleton-swap.html");
+
+  for (const [id, field] of Object.entries(fieldWidths)) {
+    const pair = page.getByTestId(id);
+    const widths = (part: string) =>
+      pair
+        .locator(`[data-part=${part}] ${field}`)
+        .evaluateAll((els) =>
+          els.map((el) => el.getBoundingClientRect().width),
+        );
+    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
+    const real = await widths("real");
+    const skeleton = await widths("skeleton");
+    expect.soft(real.length, `${id} rendered`).toBeGreaterThan(0);
+    expect.soft(skeleton.map(Math.round), id).toEqual(real.map(Math.round));
   }
 });
