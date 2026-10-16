@@ -711,6 +711,15 @@
     overflow: visible;
   }
 
+  // Before hydration (see the `Content` patch in _content.scss), draw a
+  // resizable nav at its width on large screens, not the 16rem default,
+  // so it doesn't narrow once JS marks it expanded.
+  @include carbon--breakpoint('lg') {
+    .#{$prefix}--side-nav--resizable:not(.#{$prefix}--side-nav--collapsed):not(.#{$prefix}--side-nav--rail) {
+      width: var(--ccs-side-nav-width, #{mini-units(32)});
+    }
+  }
+
   // A wider hit/hover target than the visible accent line (below), so the
   // handle stays easy to grab without widening what's drawn at the edge.
   // Mostly outside the nav, over the content's padding.
