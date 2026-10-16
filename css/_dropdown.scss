@@ -27,6 +27,26 @@
     .#{$prefix}--list-box__field--clearable {
     padding-right: to-rem(98px);
   }
+
+  // An inline field sets its padding and icon offset at higher specificity,
+  // so restate the clearable room for it; otherwise the value and the
+  // status icon run under the clear button.
+  .#{$prefix}--list-box.#{$prefix}--list-box--inline
+    .#{$prefix}--list-box__field.#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(72px);
+  }
+
+  .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable
+    .#{$prefix}--list-box__invalid-icon {
+    right: to-rem(66px);
+  }
+
+  .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable[data-invalid]
+    .#{$prefix}--list-box__field--clearable,
+  .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(98px);
+  }
 }
 
 @include exports("dropdown-clearable") {

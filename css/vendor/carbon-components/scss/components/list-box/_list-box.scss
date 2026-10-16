@@ -140,7 +140,11 @@ $list-box-menu-width: to-rem(300px);
     border-bottom: 0;
   }
 
+  // ccs: an inline field makes room for the warning icon too, as it does
+  // for the invalid one; it drew over the value.
   .#{$prefix}--list-box[data-invalid].#{$prefix}--list-box--inline
+    .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box.#{$prefix}--list-box--warning.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__field {
     padding-right: carbon--mini-units(7);
   }
