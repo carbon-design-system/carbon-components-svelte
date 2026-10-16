@@ -965,7 +965,7 @@ To add a new E2E test, copy the Breakpoint example. Create these files:
 | `e2e/fixtures/MyComponentFixture.svelte` | Svelte component that renders the component under test. Use `data-testid` on elements you want to query.         |
 | `e2e/fixtures/my-component.ts`           | Entry script that mounts the fixture into `#app`. Use the shared `mount()` utility from `./mount`.               |
 | `e2e/fixtures/my-component.html`         | HTML page with `<div id="app"></div>` and a script tag loading the entry module.                                 |
-| `e2e/my-component.test.ts`               | Playwright tests. Use `page.goto("/my-component.html")` in `beforeEach`, then `page.getByTestId(...)` to assert. |
+| `e2e/my-component.test.ts`               | Playwright tests. Use `page.goto("/my-component.html")` in `beforeEach` (or once, in a test that batches read-only cases), then `page.getByTestId(...)` to assert. |
 
 Example fixture mount (`my-component.ts`):
 
@@ -975,6 +975,18 @@ import { mount } from "./mount";
 
 mount(MyComponentFixture);
 ```
+
+#### Read-only checks share one page load
+
+Every test pays for a page load and mount, about 300 to 400ms in CI against a median test of about 550ms. When cases only read the page (layout, computed styles, attributes, a hover or focus state), load the fixture once and check every case in one test. See [`forced-colors.test.ts`](e2e/forced-colors.test.ts), [`hidden-label.test.ts`](e2e/hidden-label.test.ts) and [`consumer-override.test.ts`](e2e/consumer-override.test.ts).
+
+| Do | Why |
+| --- | --- |
+| Loop over a case table and assert with `expect.soft(value, caseName)` | One load instead of one per case, and a failing run names every broken case, not just the first. |
+| Run hover and focus cases after the static ones | Hover and focus persist and would change later reads. |
+| Keep tests that open, filter, type or scroll separate, or restore the state after each case | State left by one case changes what the next one reads. |
+| Keep each batched test under about 5 seconds | Playwright spreads tests, not cases, across workers; one long test runs on one worker. |
+| Assert an expected failure with a single read and `not`, not `test.fail()` around a retrying matcher | A retrying matcher that never matches waits out its 5 second timeout every run. |
 
 A few gotchas:
 
