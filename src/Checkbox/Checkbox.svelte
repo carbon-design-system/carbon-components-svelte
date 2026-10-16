@@ -315,6 +315,10 @@
     <label
       for={id}
       use:overflowTitle={{ title, measure: labelRef }}
+      data-contained-checkbox-state={indeterminate ? "mixed" : undefined}
+      data-contained-checkbox-disabled={indeterminate && disabled
+        ? "true"
+        : undefined}
       class:bx--checkbox-label={true}
     >
       <span

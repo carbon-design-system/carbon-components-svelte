@@ -15,3 +15,10 @@
   labelText="Disabled option"
   disabled={true}
 />
+
+<Checkbox
+  data-testid="checkbox-mixed"
+  labelText="Select all"
+  checked
+  indeterminate
+/>

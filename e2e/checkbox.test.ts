@@ -37,4 +37,25 @@ test.describe("Checkbox", () => {
     const checkbox = page.getByRole("checkbox", { name: "Disabled option" });
     await expect(checkbox).toBeDisabled();
   });
+
+  // Server markup can carry `checked` but not `indeterminate`, so the label
+  // is marked mixed until hydration; it still has to draw the dash.
+  test("a checked, indeterminate box draws the dash before hydration", async ({
+    page,
+  }) => {
+    const label = page.getByTestId("checkbox-mixed").locator("label");
+    await page
+      .getByTestId("checkbox-mixed")
+      .locator("input")
+      .evaluate((input: HTMLInputElement) => {
+        input.indeterminate = false;
+      });
+    await expect(label).toHaveAttribute(
+      "data-contained-checkbox-state",
+      "mixed",
+    );
+    expect(
+      await label.evaluate((el) => getComputedStyle(el, "::after").transform),
+    ).toBe("matrix(1, 0, 0, 1, 0, 0)");
+  });
 });
