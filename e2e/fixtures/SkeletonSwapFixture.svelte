@@ -43,6 +43,12 @@
     SelectSkeleton,
     Slider,
     SliderSkeleton,
+    StructuredList,
+    StructuredListBody,
+    StructuredListCell,
+    StructuredListHead,
+    StructuredListRow,
+    StructuredListSkeleton,
     TextArea,
     TextAreaSkeleton,
     TextInput,
@@ -286,6 +292,33 @@
       </div>
       <div data-part="skeleton">
         <ProgressIndicatorSkeleton count={3} {...layout} />
+      </div>
+    </div>
+  {/each}
+  {#each [{}, { condensed: true }, { flush: true }] as variant, i}
+    <div data-testid="structured-list-{i}">
+      <div data-part="real">
+        <StructuredList {...variant}>
+          <StructuredListHead>
+            <StructuredListRow head>
+              <StructuredListCell head>Instance</StructuredListCell>
+              <StructuredListCell head>Region</StructuredListCell>
+            </StructuredListRow>
+          </StructuredListHead>
+          <StructuredListBody>
+            <StructuredListRow>
+              <StructuredListCell>api-gateway</StructuredListCell>
+              <StructuredListCell>us-east</StructuredListCell>
+            </StructuredListRow>
+            <StructuredListRow>
+              <StructuredListCell>auth-service</StructuredListCell>
+              <StructuredListCell>eu-de</StructuredListCell>
+            </StructuredListRow>
+          </StructuredListBody>
+        </StructuredList>
+      </div>
+      <div data-part="skeleton">
+        <StructuredListSkeleton rows={2} columns={2} {...variant} />
       </div>
     </div>
   {/each}

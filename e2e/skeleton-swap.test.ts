@@ -53,6 +53,8 @@ const cases = [
   "breadcrumb-md",
   // Horizontal, spaced equally and vertical.
   ...[0, 1, 2].map((layout) => `progress-indicator-${layout}`),
+  // Default, condensed and flush.
+  ...[0, 1, 2].map((variant) => `structured-list-${variant}`),
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",

@@ -5,12 +5,20 @@
   /** Specify the number of columns */
   export let columns = 3;
 
+  /** Set to `true` to use the condensed variant */
+  export let condensed = false;
+
+  /** Set to `true` to flush the list */
+  export let flush = false;
+
   $: cols = Array.from({ length: columns }, (_, i) => i);
 </script>
 
 <div
   class:bx--skeleton={true}
   class:bx--structured-list={true}
+  class:bx--structured-list--condensed={condensed}
+  class:bx--structured-list--flush={flush}
   {...$$restProps}
   on:click
   on:mouseover
@@ -31,7 +39,7 @@
     {#each Array.from({ length: rows }, (_, i) => i) as row, index (row)}
       <div class:bx--structured-list-row={true}>
         {#each cols as col (col)}
-          <div class:bx--structured-list-td={true}></div>
+          <div class:bx--structured-list-td={true}><span></span></div>
         {/each}
       </div>
     {/each}
