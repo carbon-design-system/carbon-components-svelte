@@ -33,8 +33,12 @@
 
   // A tag past the fit count. Kept in the DOM (not `display: none`) so its
   // `offsetWidth` stays measurable if the container grows and it fits again.
+  // The empty "+N" counter is also a definition tooltip, whose
+  // `.bx--tooltip--definition.bx--tooltip--a11y { position: relative }`
+  // outranked a one-class selector and left it in the row, where it wrapped
+  // onto a line of its own.
   .#{$prefix}--tag-set__space [data-overflow="true"],
-  .#{$prefix}--tag-set-overflow--empty {
+  .#{$prefix}--tag-set__space .#{$prefix}--tag-set-overflow.#{$prefix}--tag-set-overflow--empty {
     position: absolute;
     visibility: hidden;
     pointer-events: none;
