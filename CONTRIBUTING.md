@@ -892,7 +892,7 @@ The default `bun run test` harness uses Svelte 5. Separate workspaces under `tes
 
 You only need these when fixing a failure reported from `bun run test:svelte3`, `bun run test:svelte4`, or their type-check scripts. Most changes do not require them.
 
-These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, and `tests/utils/ssr.test.ts`. A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files.
+These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, `tests/utils/ssr.test.ts`, and `tests/css/**` (compiled SCSS does not depend on the Svelte version). A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files.
 
 Before running a compatibility script, install that workspace's dependencies. Without a local `node_modules`, the run may fall back to the Svelte 5 harness:
 

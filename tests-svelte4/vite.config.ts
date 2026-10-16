@@ -28,6 +28,9 @@ export default defineConfig({
       "../tests/Snippets/**",
       "../tests/**/*.ssr.test.ts",
       "../tests/utils/ssr.test.ts",
+      // Compiled SCSS does not depend on the Svelte version; the root harness
+      // covers it.
+      "../tests/css/**",
     ],
     setupFiles: ["./setup-tests.ts"],
     // `@testing-library/*` resolve from the root `node_modules`, outside this
