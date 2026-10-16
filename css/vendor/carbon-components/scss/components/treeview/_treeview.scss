@@ -15,6 +15,17 @@
 /// @access private
 /// @group treeview
 @mixin treeview {
+  // ccs: TreeViewSkeleton holds its label bar and rows in a flow root,
+  // the bar block-level: inline, as a label is, an empty bar sits on a
+  // line box 2px taller than the label's.
+  .#{$prefix}--tree__skeleton {
+    display: flow-root;
+  }
+
+  .#{$prefix}--tree__skeleton > .#{$prefix}--label {
+    display: block;
+  }
+
   .#{$prefix}--tree {
     overflow: hidden;
 
@@ -63,6 +74,23 @@
     .#{$prefix}--tree-leaf-node {
       display: flex;
       padding-left: $spacing-08;
+    }
+
+    // ccs: TreeViewSkeleton: a bar where each leaf's text sits, in the
+    // row's height (32px, 24px compact), its widths varied.
+    .#{$prefix}--tree-node__skeleton {
+      @include skeleton;
+
+      width: 60%;
+      height: to-rem(14px);
+    }
+
+    .#{$prefix}--tree-node:nth-child(3n + 2) .#{$prefix}--tree-node__skeleton {
+      width: 45%;
+    }
+
+    .#{$prefix}--tree-node:nth-child(3n) .#{$prefix}--tree-node__skeleton {
+      width: 70%;
     }
 
     .#{$prefix}--tree-leaf-node.#{$prefix}--tree-node--with-icon {
