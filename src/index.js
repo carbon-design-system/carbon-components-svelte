@@ -36,6 +36,7 @@ export { default as ModalHeader } from "./ComposedModal/ModalHeader.svelte";
 export { default as ContainedList } from "./ContainedList/ContainedList.svelte";
 export { default as ContainedListItem } from "./ContainedList/ContainedListItem.svelte";
 export { default as ContentSwitcher } from "./ContentSwitcher/ContentSwitcher.svelte";
+export { default as ContentSwitcherSkeleton } from "./ContentSwitcher/ContentSwitcherSkeleton.svelte";
 export { default as Switch } from "./ContentSwitcher/Switch.svelte";
 export { default as SwitchPanel } from "./ContentSwitcher/SwitchPanel.svelte";
 export { default as ContextMenu } from "./ContextMenu/ContextMenu.svelte";

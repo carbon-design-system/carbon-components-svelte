@@ -1,10 +1,10 @@
 ---
-components: ["ContentSwitcher", "Switch", "SwitchPanel"]
+components: ["ContentSwitcher", "Switch", "SwitchPanel", "ContentSwitcherSkeleton"]
 description: Content switchers let users switch between views or sections of content, organizing related content into distinct categories.
 ---
 
 <script>
-  import { Box, ContentSwitcher, Switch, SwitchPanel, Stack } from "carbon-components-svelte";
+  import { Box, ContentSwitcher, ContentSwitcherSkeleton, Switch, SwitchPanel, Stack } from "carbon-components-svelte";
   import Bullhorn from "carbon-icons-svelte/lib/Bullhorn.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
@@ -303,3 +303,12 @@ Disable individual switches with `disabled`.
   <Switch disabled text="All" />
   <Switch disabled text="Archived" />
 </ContentSwitcher>
+
+## Skeleton
+
+Show a loading state with `ContentSwitcherSkeleton`. Match the switcher's `count` and `size` so the swap doesn't move the content below.
+
+<Stack gap={5}>
+  <ContentSwitcherSkeleton />
+  <ContentSwitcherSkeleton count={2} size="sm" />
+</Stack>

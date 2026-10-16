@@ -200,6 +200,35 @@
   .#{$prefix}--content-switcher-btn:focus {
     @include high-contrast-mode('focus');
   }
+
+  // ccs: ContentSwitcherSkeleton: a bar per switch, sharing the
+  // switcher's width and height, 1px apart where the switches' dividers
+  // are. Bars of their own: a switch's `::before` is its divider.
+  .#{$prefix}--content-switcher.#{$prefix}--skeleton {
+    gap: 1px;
+  }
+
+  .#{$prefix}--content-switcher__skeleton-switch {
+    @include skeleton;
+
+    flex: 1 1 0;
+    height: 100%;
+  }
+
+  .#{$prefix}--content-switcher--icon-only .#{$prefix}--content-switcher__skeleton-switch {
+    flex: 0 0 auto;
+    width: to-rem(40px);
+  }
+
+  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--sm
+    .#{$prefix}--content-switcher__skeleton-switch {
+    width: to-rem(32px);
+  }
+
+  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xl
+    .#{$prefix}--content-switcher__skeleton-switch {
+    width: to-rem(48px);
+  }
 }
 
 @include exports('content-switcher') {

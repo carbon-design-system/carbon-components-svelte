@@ -57,6 +57,7 @@ const cases = [
   ...[0, 1, 2].map((variant) => `structured-list-${variant}`),
   // Line and container tabs, dismissible at three sizes.
   ...[0, 1, 2, 3, 4, 5].map((variant) => `tabs-${variant}`),
+  ...["sm", "md", "xl"].map((size) => `content-switcher-${size}`),
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",
