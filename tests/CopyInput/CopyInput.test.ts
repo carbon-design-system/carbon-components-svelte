@@ -151,6 +151,23 @@ describe("CopyInput", () => {
     expect(input).toHaveAttribute("type", "password");
   });
 
+  // Copying an empty value would write nothing and still say "Copied!".
+  it("disables the copy button while the value is empty", async () => {
+    const { rerender } = render(CopyInput, { props: { value: "" } });
+    const button = screen.getByRole("button", { name: "Copy to clipboard" });
+    expect(button).toBeDisabled();
+
+    await rerender({ value: "secret-token-123" });
+    expect(button).toBeEnabled();
+  });
+
+  it("keeps the copy button enabled for an empty value with a custom copy", () => {
+    render(CopyInput, { props: { value: "", copy: () => {} } });
+    expect(
+      screen.getByRole("button", { name: "Copy to clipboard" }),
+    ).toBeEnabled();
+  });
+
   it("does not reveal a disabled value on hover", async () => {
     render(CopyInput, {
       props: { type: "password", revealMode: "hover-focus", disabled: true },
