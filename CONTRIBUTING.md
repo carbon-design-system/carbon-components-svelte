@@ -635,7 +635,7 @@ For an intended visual change, `crassus approve <id> --report <dir>` records its
 | --- | --- |
 | Add a test when you introduce a rule every partial must follow (no `:has()`, named transitions, budgeted `:not()` chains) | Nobody can check a whole-sheet property by eye, and a vendored re-sync can break it anywhere. |
 | Extend an existing invariant (`conventions`, `overrides`, `unrendered-*`) before writing a new file | One scan over the sheet is cheaper than another compile-and-find. |
-| Cover forced-colors and `prefers-contrast` rules here | No e2e fixture emulates those modes, so nothing else catches a regression. |
+| Cover forced-colors and `prefers-contrast` fixes with a row in `e2e/forced-colors.test.ts`, not here | Chromium reports forced values from `getComputedStyle`, so the row checks what the user sees, hover and focus cascades included. One fixture page keeps it to a few seconds. |
 | Don't assert that a selector carries the declaration you just added | It fails only if someone deletes that line, breaks on harmless selector refactors, and says nothing about whether the rule wins the cascade (`overrides.test.ts` checks that for every rule). |
 | Don't raise `size-budget.test.ts` to fit a feature | It guards bulk regressions; the `css-cascade` job reports each PR's size movement. |
 
