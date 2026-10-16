@@ -1,5 +1,8 @@
 <script>
   import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbSkeleton,
     CodeSnippet,
     CodeSnippetSkeleton,
     ComboBox,
@@ -255,6 +258,18 @@
         />
       </div>
       <div data-part="skeleton"><FileUploaderSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each ["sm", "md"] as size}
+    <div data-testid="breadcrumb-{size}" style="width: 340px">
+      <div data-part="real">
+        <Breadcrumb {size}>
+          <BreadcrumbItem href="/">Projects</BreadcrumbItem>
+          <BreadcrumbItem href="/">billing-api</BreadcrumbItem>
+          <BreadcrumbItem href="/" isCurrentPage>Settings</BreadcrumbItem>
+        </Breadcrumb>
+      </div>
+      <div data-part="skeleton"><BreadcrumbSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">

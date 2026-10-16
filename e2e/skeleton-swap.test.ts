@@ -49,6 +49,8 @@ const cases = [
   "fluid-pin-code-input-6",
   ...["xs", "sm", "md", "lg"].map((size) => `pagination-${size}`),
   ...["small", "field", "default"].map((size) => `file-uploader-${size}`),
+  "breadcrumb-sm",
+  "breadcrumb-md",
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",

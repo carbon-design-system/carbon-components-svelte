@@ -161,10 +161,13 @@
     background: transparent;
   }
 
+  // ccs: 75px, the width of other skeleton label bars and nearer a
+  // crumb's: at 100px three crumbs and their separators took 363px and
+  // wrapped where real ones fit on one line.
   .#{$prefix}--breadcrumb.#{$prefix}--skeleton .#{$prefix}--link {
     @include skeleton;
 
-    width: to-rem(100px);
+    width: to-rem(75px);
     height: 1rem;
   }
 }
