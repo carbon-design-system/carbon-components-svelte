@@ -40,6 +40,7 @@ const cases = [
   ]),
   "date-picker-range",
   "pin-code-input",
+  "radio-button",
 ];
 
 // Every case only reads layout, so the fixture loads once for all of them.

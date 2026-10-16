@@ -18,6 +18,8 @@
     PasswordInputSkeleton,
     PinCodeInput,
     PinCodeInputSkeleton,
+    RadioButton,
+    RadioButtonSkeleton,
     RangeSlider,
     RangeSliderSkeleton,
     Search,
@@ -177,6 +179,10 @@
       <Slider hideTextInput labelText="Volume" value={40} />
     </div>
     <div data-part="skeleton"><SliderSkeleton hideTextInput /></div>
+  </div>
+  <div data-testid="radio-button">
+    <div data-part="real"><RadioButton labelText="Daily" value="d" /></div>
+    <div data-part="skeleton"><RadioButtonSkeleton /></div>
   </div>
   <div data-testid="date-picker-range">
     <div data-part="real">
