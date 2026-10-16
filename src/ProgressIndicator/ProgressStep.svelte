@@ -59,6 +59,16 @@
   const change = ctx?.change ?? noop;
   const preventChangeOnClick = ctx?.preventChangeOnClick ?? writable(false);
 
+  // Current before the batched registration reports, so a server render
+  // marks it (see `initial` in ProgressIndicator).
+  if (ctx?.initial) {
+    const { claimIndex, currentIndex, selectedId } = ctx.initial;
+    const index = claimIndex();
+    current =
+      current ||
+      (selectedId === undefined ? index === currentIndex : selectedId === id);
+  }
+
   $: add({ id, complete, disabled });
 
   const unsubscribe = stepsById.subscribe((value) => {

@@ -134,6 +134,18 @@
     selectedId = resolved.id;
   }
 
+  // Steps register through a batched store update, which a server render
+  // finishes before. These let a step work out whether it's current as it
+  // initializes: its index in render order, against `currentIndex` (or its
+  // id against `selectedId`), as they stand at that moment.
+  let initialized = 0;
+  /** @type {{ claimIndex: () => number; currentIndex: number; selectedId: string | undefined }} */
+  const initial = {
+    claimIndex: () => initialized++,
+    currentIndex,
+    selectedId,
+  };
+
   setContext("carbon:ProgressIndicator", {
     steps,
     stepsById,
@@ -141,6 +153,7 @@
     add,
     remove,
     change,
+    initial,
   });
 
   // Combined into one statement (rather than a separate syncSelection()
