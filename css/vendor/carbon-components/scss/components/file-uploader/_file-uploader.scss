@@ -106,6 +106,27 @@
     color: $text-02;
   }
 
+  // ccs: FileUploaderSkeleton's title and description bars, each 14px
+  // and centered in its line (18px), with the same gaps below as the
+  // uploader's title and description.
+  .#{$prefix}--file--label.#{$prefix}--skeleton,
+  .#{$prefix}--label-description.#{$prefix}--skeleton {
+    @include skeleton;
+
+    height: to-rem(14px);
+    margin-top: to-rem(2px);
+  }
+
+  .#{$prefix}--file--label.#{$prefix}--skeleton {
+    width: to-rem(100px);
+    margin-bottom: calc(#{$carbon--spacing-03} + #{to-rem(2px)});
+  }
+
+  .#{$prefix}--label-description.#{$prefix}--skeleton {
+    width: to-rem(225px);
+    margin-bottom: calc(#{$carbon--spacing-05} + #{to-rem(2px)});
+  }
+
   .#{$prefix}--label-description--disabled {
     color: $disabled-02;
   }
