@@ -44,11 +44,20 @@
    */
   export let readonlyText = "Read-only";
 
+  /** Set to `true` to indicate an invalid state */
+  export let invalid = false;
+
+  /** Specify the invalid state text */
+  export let invalidText = "";
+
   /** Set to `true` to indicate a warning state */
   export let warn = false;
 
   /** Specify the warning state text */
   export let warnText = "";
+
+  /** Specify the helper text, shown under the switch */
+  export let helperText = "";
 
   /**
    * Specify a name attribute for the checkbox input.
@@ -77,8 +86,14 @@
 
   import { createEventDispatcher } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
+  import {
+    buildFieldIds,
+    joinDescribedBy,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -97,8 +112,13 @@
     toggled = ref.checked;
   }
 
-  $: showWarn = warn && !disabled && !readonly;
-  $: ({ readonlyId, warnId } = buildFieldIds(id));
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
+  $: ({ helperId, errorId, readonlyId, warnId } = buildFieldIds(id));
 
   // Naming and description belong on the switch, not the wrapper.
   $: ({
@@ -112,6 +132,7 @@
 <div
   class:bx--form-item={true}
   class:bx--toggle--readonly={readonly}
+  class:bx--toggle--invalid={showInvalid}
   class:bx--toggle--warning={showWarn}
   style:user-select="none"
   {...wrapperProps}
@@ -129,11 +150,19 @@
     class:bx--toggle-input--small={size === "sm"}
     checked={toggled}
     aria-readonly={readonly || undefined}
+    aria-invalid={showInvalid || undefined}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(
       readonly ? readonlyId : null,
-      showWarn ? warnId : null,
+      resolveStatusDescribedBy({
+        showInvalid,
+        showWarn,
+        helperText,
+        errorId,
+        warnId,
+        helperId,
+      }),
       ariaDescribedBy,
     )}
     on:click={(event) => {
@@ -188,11 +217,23 @@
     <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}
   <div class:bx--toggle__validation-msg={true}>
-    {#if showWarn}
+    {#if showInvalid}
+      <WarningFilled class="bx--toggle__invalid-icon" />
+      <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+    {:else if showWarn}
       <WarningAltFilled
         class="bx--toggle__invalid-icon bx--toggle__invalid-icon--warning"
       />
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>
+  {#if helperText && !showInvalid && !showWarn}
+    <div
+      id={helperId}
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
+    </div>
+  {/if}
 </div>

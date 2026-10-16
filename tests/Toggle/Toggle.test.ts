@@ -441,4 +441,77 @@ describe("Toggle", () => {
       expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
     });
   });
+
+  describe("invalid", () => {
+    it("renders the error message and marks the switch invalid", () => {
+      render(ToggleValidation, {
+        invalid: true,
+        invalidText: "Accept the terms to continue",
+      });
+
+      const toggle = screen.getByRole("switch");
+      expect(toggle.closest(".bx--form-item")).toHaveClass(
+        "bx--toggle--invalid",
+      );
+      expect(toggle).toHaveAttribute("aria-invalid", "true");
+
+      const message = screen.getByText("Accept the terms to continue");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(toggle).toHaveAttribute("aria-describedby", message.id);
+    });
+
+    it("takes precedence over a warning", () => {
+      render(ToggleValidation, {
+        invalid: true,
+        invalidText: "Required",
+        warn: true,
+        warnText: "Heads up",
+      });
+
+      expect(screen.getByText("Required")).toBeInTheDocument();
+      expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
+      expect(
+        screen.getByRole("switch").closest(".bx--form-item"),
+      ).not.toHaveClass("bx--toggle--warning");
+    });
+
+    it.each([
+      { disabled: true, readonly: false },
+      { disabled: false, readonly: true },
+    ])("suppresses the invalid state when %o", (state) => {
+      render(ToggleValidation, {
+        invalid: true,
+        invalidText: "Required",
+        ...state,
+      });
+
+      expect(screen.getByRole("switch")).not.toHaveAttribute("aria-invalid");
+      expect(screen.queryByText("Required")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("helper text", () => {
+    it("shows helper text under the switch and describes it", () => {
+      render(ToggleValidation, { helperText: "Applies to new projects" });
+
+      const helper = screen.getByText("Applies to new projects");
+      expect(helper).toHaveClass("bx--form__helper-text");
+      expect(screen.getByRole("switch")).toHaveAttribute(
+        "aria-describedby",
+        helper.id,
+      );
+    });
+
+    it("gives way to a message", () => {
+      render(ToggleValidation, {
+        helperText: "Applies to new projects",
+        warn: true,
+        warnText: "Heads up",
+      });
+
+      expect(
+        screen.queryByText("Applies to new projects"),
+      ).not.toBeInTheDocument();
+    });
+  });
 });
