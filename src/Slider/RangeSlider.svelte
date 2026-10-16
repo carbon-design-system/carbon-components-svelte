@@ -579,6 +579,7 @@
         <div
           bind:this={lowerThumbRef}
           role="slider"
+          aria-disabled={disabled || undefined}
           tabindex={disabled ? undefined : 0}
           class:bx--slider__thumb={true}
           class:bx--slider__thumb--lower={true}
@@ -648,6 +649,7 @@
         <div
           bind:this={upperThumbRef}
           role="slider"
+          aria-disabled={disabled || undefined}
           tabindex={disabled ? undefined : 0}
           class:bx--slider__thumb={true}
           id={upperThumbId}
