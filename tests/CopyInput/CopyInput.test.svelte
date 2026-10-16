@@ -14,6 +14,7 @@
   export let inline = false;
   export let id = "ccs-test";
   export let size: ComponentProps<CopyInput>["size"] = undefined;
+  export let copy: ComponentProps<CopyInput>["copy"] = undefined;
 </script>
 
 <CopyInput
@@ -28,6 +29,7 @@
   {inline}
   {id}
   {size}
+  {copy}
   on:copy={() => {
     console.log("copied");
   }}

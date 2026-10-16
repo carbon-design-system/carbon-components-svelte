@@ -49,7 +49,10 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /** Set to `true` to disable the input and copy button */
+  /**
+   * Set to `true` to disable the input and copy button. The copy button is
+   * also disabled while `value` is empty, unless `copy` is overridden.
+   */
   export let disabled = false;
 
   /** Set to `true` to use the inline variant */
@@ -287,7 +290,7 @@
         {portalTooltip}
         {tooltipPosition}
         {tooltipAlignment}
-        {disabled}
+        disabled={disabled || (!value && copy === copyText)}
         {copy}
         aria-describedby={hasLabel ? labelId : undefined}
         on:copy
