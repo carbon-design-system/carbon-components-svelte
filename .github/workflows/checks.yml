@@ -169,7 +169,7 @@ jobs:
   # Starts as soon as the test selection is known, alongside the unit tests,
   # rather than after them: waiting put both suites on the critical path.
   test-e2e:
-    name: test-e2e (${{ matrix.shard }}/3)
+    name: test-e2e (${{ matrix.shard }}/2)
     needs: [changes]
     if: |
       (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true') &&
@@ -178,7 +178,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2]
     # Official image includes Chromium/Firefox/WebKit + system deps
     # Bump tag with @playwright/test in bun.lock.
     container:
@@ -216,7 +216,7 @@ jobs:
         shell: bash
         env:
           TESTS: ${{ needs.changes.outputs.e2e-tests }}
-          SHARD: ${{ matrix.shard }}/3
+          SHARD: ${{ matrix.shard }}/2
         run: |
           case "$TESTS" in
             "" | all) bunx playwright test --project=chromium --shard="$SHARD" --pass-with-no-tests ;;
