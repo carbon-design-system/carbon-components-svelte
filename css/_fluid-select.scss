@@ -150,6 +150,8 @@
 
   .#{$prefix}--select--fluid__skeleton .#{$prefix}--label {
     @include fluid-skeleton-field;
+
+    margin-block-start: 0;
   }
 }
 

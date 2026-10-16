@@ -228,7 +228,7 @@
   }
 
   .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--label {
-    margin-block-end: $carbon--spacing-04;
+    margin-block: 0 $carbon--spacing-04;
   }
 
   .#{$prefix}--text-area--fluid__skeleton
