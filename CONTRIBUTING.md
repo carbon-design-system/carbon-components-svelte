@@ -966,7 +966,7 @@ To add a new E2E test, copy the Breakpoint example. Create these files:
 | `e2e/fixtures/MyComponentFixture.svelte` | Svelte component that renders the component under test. Use `data-testid` on elements you want to query.         |
 | `e2e/fixtures/my-component.ts`           | Entry script that mounts the fixture into `#app`. Use the shared `mount()` utility from `./mount`.               |
 | `e2e/fixtures/my-component.html`         | HTML page with `<div id="app"></div>` and a script tag loading the entry module.                                 |
-| `e2e/my-component.test.ts`               | Playwright tests. Use `page.goto("/my-component.html")` in `beforeEach` (or once, in a test that batches read-only cases), then `page.getByTestId(...)` to assert. |
+| `e2e/my-component.test.ts`               | Playwright tests. Import `test` and `expect` from `./helpers/host` (see below), use `page.goto("/my-component.html")` in `beforeEach` (or once, in a test that batches read-only cases), then `page.getByTestId(...)` to assert. |
 
 Example fixture mount (`my-component.ts`):
 
@@ -977,9 +977,25 @@ import { mount } from "./mount";
 mount(MyComponentFixture);
 ```
 
-#### Read-only checks share one page load
+Keep the entry to exactly that: one fixture import, `./mount`, and the `mount()` call. Anything else, such as an extra stylesheet, makes the page navigate instead of using the host.
 
-Every test pays for a page load and mount, about 300 to 400ms in CI against a median test of about 550ms. When cases only read the page (layout, computed styles, attributes, a hover or focus state), load the fixture once and check every case in one test. See [`forced-colors.test.ts`](e2e/forced-colors.test.ts), [`hidden-label.test.ts`](e2e/hidden-label.test.ts) and [`consumer-override.test.ts`](e2e/consumer-override.test.ts).
+#### Tests share one host page per worker
+
+A test that imports from [`e2e/helpers/host.ts`](e2e/helpers/host.ts) runs on one page per Playwright worker ([`e2e/fixtures/host.html`](e2e/fixtures/host.html)) that loads the CSS and Svelte once. `page.goto("/my-component.html")` remounts that fixture in place instead of loading a page, which made the median test about four times faster. Any URL whose entry does more than mount one fixture navigates as usual.
+
+Between tests the host unmounts the fixture and resets what a fresh page would not have: leftover portals, `<style>` tags a test added, `<html>` and `<body>` attributes, focus, scroll, storage, the URL query, viewport, media emulation and permissions. It parks the pointer in the bottom-right corner, since Chrome sends hover events for content that mounts under a pointer it has seen. `page.reload()` remounts the fixture and keeps storage, and the `context` fixture is the host page's context.
+
+| Do | Why |
+| --- | --- |
+| Import from `@playwright/test` instead when a test needs `addInitScript`, `page.clock`, `test.use({ viewport })`, a route or its own context | Those apply on a page load, which the host skips. |
+| Poll a layout read (`expect.poll`, `toPass`) that follows an action scheduling work for the next frame | A read taken once races that frame. Slow page loads used to hide these races; on the host they fail. |
+| Keep `goto(` out of e2e comments | The test selector reads it as a navigation and makes the file depend on every page. |
+
+A leak the reset misses shows up as a failure that depends on which tests ran earlier in the worker. Run the file with `--workers=1 --repeat-each=3` to reproduce it.
+
+#### Read-only checks share one page
+
+Each test pays for its setup: a remount on the host, or a page load (about 300 to 400ms in CI) for files that still navigate. When cases only read the page (layout, computed styles, attributes, a hover or focus state), load the fixture once and check every case in one test. See [`forced-colors.test.ts`](e2e/forced-colors.test.ts), [`hidden-label.test.ts`](e2e/hidden-label.test.ts) and [`consumer-override.test.ts`](e2e/consumer-override.test.ts).
 
 | Do | Why |
 | --- | --- |
