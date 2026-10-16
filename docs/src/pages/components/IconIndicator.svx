@@ -44,6 +44,12 @@ Set `size` to control the icon and label size.
 
 <IconIndicator kind="succeeded" label="Succeeded" size={20} />
 
+## Hidden label
+
+Set `hideLabel` to show only the icon, such as in a list where nearby text already says the status. Screen readers still read the label.
+
+<IconIndicator kind="succeeded" label="Delivered" hideLabel />
+
 ## Custom label
 
 Use the `labelChildren` slot for custom label content instead of `label`.

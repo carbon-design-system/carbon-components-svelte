@@ -19,6 +19,12 @@
    */
   export let size = 16;
 
+  /**
+   * Set to `true` to show only the icon, keeping the label for screen
+   * readers, such as when nearby text already says the status.
+   */
+  export let hideLabel = false;
+
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
   import CircleDash from "../icons/CircleDash.svelte";
@@ -51,6 +57,7 @@
 <div
   class:bx--icon-indicator={true}
   class:bx--icon-indicator--20={size === 20}
+  class:bx--icon-indicator--hide-label={hideLabel}
   {...$$restProps}
 >
   <svelte:component
@@ -58,5 +65,7 @@
     {size}
     class="bx--icon-indicator--{kind}"
   />
-  <slot name="labelChildren">{label}</slot>
+  <span class:bx--visually-hidden={hideLabel}>
+    <slot name="labelChildren">{label}</slot>
+  </span>
 </div>
