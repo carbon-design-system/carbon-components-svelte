@@ -88,6 +88,12 @@ Omit the label and provide an `iconDescription` for accessibility. This text is 
 
 <Button iconDescription="Tooltip text" icon={Add} />
 
+A button is icon-only when it has an icon and no default content. A wrapper that always passes content, even empty (`{#if text}{text}{/if}`), can't produce that; set `iconOnly` instead. `iconOnly={false}` keeps a labelled button.
+
+```svelte
+<Button icon={Add} iconDescription="Add" iconOnly>{#if text}{text}{/if}</Button>
+```
+
 ### Icon-only without iconDescription
 
 If you omit `iconDescription`, the button renders without Carbon's tooltip instead of an empty one. Supply your own `aria-label` (or `aria-labelledby`) so the button stays accessible.
