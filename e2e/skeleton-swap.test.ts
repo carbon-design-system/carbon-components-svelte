@@ -20,7 +20,7 @@ const cases = [
   ...["dropdown", "combo-box", "multi-select"].flatMap((id) =>
     sizes.map((size) => `${id}-${size}`),
   ),
-  // Dropdown's `lg` is 40px, not the 48px of the other list boxes (#4455).
+  "dropdown-lg",
   "combo-box-lg",
   "multi-select-lg",
   "dropdown-inline",

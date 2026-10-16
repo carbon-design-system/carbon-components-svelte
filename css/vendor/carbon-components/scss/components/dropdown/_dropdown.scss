@@ -67,7 +67,10 @@
     text-align: left;
   }
 
-  .#{$prefix}--dropdown--xl {
+  // ccs: `lg` is 48px, as on ComboBox and MultiSelect; `.bx--dropdown`'s
+  // own height otherwise wins over `.bx--list-box--lg`.
+  .#{$prefix}--dropdown--xl,
+  .#{$prefix}--dropdown--lg {
     height: to-rem(48px);
     max-height: to-rem(48px);
   }

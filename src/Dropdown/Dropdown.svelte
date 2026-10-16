@@ -723,6 +723,7 @@
     open && "bx--dropdown--open",
     effectiveSize === "xs" && "bx--dropdown--xs",
     effectiveSize === "sm" && "bx--dropdown--sm",
+    effectiveSize === "lg" && "bx--dropdown--lg",
     effectiveSize === "xl" && "bx--dropdown--xl",
     inline && "bx--dropdown--inline",
     disabled && "bx--dropdown--disabled",
