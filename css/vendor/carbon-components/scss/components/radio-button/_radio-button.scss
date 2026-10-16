@@ -131,6 +131,12 @@
     height: to-rem(18px);
   }
 
+  // ccs: the radio circle's margins around the bar, so the skeleton
+  // takes the 21px line a radio button does.
+  .#{$prefix}--radio-button-wrapper--skeleton {
+    padding-block: to-rem(1px) to-rem(2px);
+  }
+
   .#{$prefix}--radio-button__label.#{$prefix}--skeleton
     .#{$prefix}--radio-button__appearance {
     display: none;

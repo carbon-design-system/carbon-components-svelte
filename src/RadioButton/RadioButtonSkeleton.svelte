@@ -1,5 +1,6 @@
 <div
   class:bx--radio-button-wrapper={true}
+  class:bx--radio-button-wrapper--skeleton={true}
   {...$$restProps}
   on:click
   on:mouseover
