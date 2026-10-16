@@ -42,8 +42,11 @@ for (const optimizeFastScroll of [false, true]) {
 
       expect(metrics.clientHeight).toBe(300);
       // 300 wrapped options, most of them several lines tall: far taller than
-      // any single assumed row height would have produced.
-      expect(metrics.scrollHeight).toBeGreaterThan(ITEM_COUNT * 40);
+      // any single assumed row height would have produced. The list starts at
+      // that estimate and grows as rows are measured, so poll for it.
+      await expect
+        .poll(async () => (await readMenuMetrics(page)).scrollHeight)
+        .toBeGreaterThan(ITEM_COUNT * 40);
     });
 
     test("scrolling to the end reveals the last option in full", async ({
