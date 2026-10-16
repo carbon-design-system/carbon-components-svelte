@@ -106,6 +106,82 @@
     .#{$prefix}--search-input[disabled] {
     border-block-end: 1px solid $ui-03;
   }
+
+  // Invalid and warning: the field grows to hold its message, inside and
+  // under a divider as on the other fluid fields, with the status icon on
+  // the message's first line (not on the clear button). The input keeps
+  // its 64px; the magnifier and clear button stay on its value line.
+  .#{$prefix}--search--fluid[data-invalid],
+  .#{$prefix}--search--fluid[data-warn] {
+    flex-wrap: wrap;
+    block-size: auto;
+    background: $field-01;
+  }
+
+  .#{$prefix}--search--fluid[data-warn] {
+    border-block-end: 1px solid $ui-04;
+  }
+
+  .#{$prefix}--search--fluid[data-invalid]:not(:focus-within) {
+    @include focus-outline("invalid");
+  }
+
+  .#{$prefix}--search--fluid[data-invalid]:focus-within,
+  .#{$prefix}--search--fluid[data-warn]:focus-within {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--search--fluid[data-invalid] .#{$prefix}--search-input,
+  .#{$prefix}--search--fluid[data-warn] .#{$prefix}--search-input {
+    flex-basis: 100%;
+    block-size: to-rem(64px);
+    border-block-end: none;
+    outline: none;
+  }
+
+  .#{$prefix}--search--fluid[data-invalid] .#{$prefix}--search-magnifier-icon,
+  .#{$prefix}--search--fluid[data-warn] .#{$prefix}--search-magnifier-icon {
+    inset-block: to-rem(35px) auto;
+  }
+
+  .#{$prefix}--search--fluid[data-invalid] .#{$prefix}--search-close,
+  .#{$prefix}--search--fluid[data-warn] .#{$prefix}--search-close {
+    inset-block: to-rem(24px) auto;
+  }
+
+  // The divider draws the line under the value; the clear button's own
+  // underline would cut the outline.
+  .#{$prefix}--search--fluid[data-invalid] .#{$prefix}--search-close::after,
+  .#{$prefix}--search--fluid[data-warn] .#{$prefix}--search-close::after {
+    display: none;
+  }
+
+  // After the input, which the base styles give `order: 1`.
+  .#{$prefix}--search--fluid .#{$prefix}--search__divider {
+    @include fluid-divider-rule;
+
+    flex-basis: calc(100% - #{to-rem(32px)});
+    order: 2;
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--form-requirement {
+    @include fluid-requirement;
+    @include fluid-requirement-padding;
+
+    flex-basis: 100%;
+    order: 2;
+  }
+
+  .#{$prefix}--search--fluid[data-invalid] .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--search__invalid-icon {
+    // On the message's first line: 64px field, the divider, 8px padding.
+    @include fluid-status-icon(to-rem(72px));
+
+    transform: none;
+  }
 }
 
 @include exports("fluid-search") {
