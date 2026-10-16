@@ -601,7 +601,7 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 | Command | Use |
 | --- | --- |
 | `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref (`crassus diff`). Run for any refactor that should not change output. The base is built in a temporary worktree and cached by commit; `--no-cache` rebuilds it. Add `--confirm` to render each flagged flip in Chrome and drop the ones no fixture renders. |
-| `bun run check:css:compare [--base <ref>]` | Ground truth for a CSS change (`crassus compare`): today's fixtures with the stylesheet at the ref and now, read only where a changed rule can reach. Fails on visible changes and on properties that stop following a `--cds-*` token. `--report <dir>` writes change cards (crops, the winning rule at its `.scss` line, a suggested fix) as `index.html`, `report.md` and `report.json`. |
+| `bun run check:css:compare [--base <ref>]` | Ground truth for a CSS change (`crassus compare`): today's fixtures with the stylesheet at the ref and now, read only where a changed rule can reach. Fails on visible changes and on properties that stop following a `--cds-*` token. `--report <dir>` writes change cards (crops, the winning rule at its `.scss` line, a suggested fix) as `index.html`, `report.md` and `report.json`. Use it to verify a CSS-only change instead of writing a test. |
 | `bun run check:css:bisect <from>..<to>` | The commits in a range that changed what the fixtures render (`crassus bisect`). Use it to find which commit of a refactor caused a card. |
 | `bun run check:css:overrides` | Declarations that can never win (`crassus dead`), with their `.scss` line. Also runs in CI as `tests/css/overrides.test.ts`. |
 | `bun run check:css:tokens` | Which `--cds-*` tokens drive which properties, the unused ones, and colors set as literals or left to the user agent (`crassus tokens`). Evidence, not proof. |
@@ -627,7 +627,17 @@ These come from [crassus](https://github.com/metonym/crassus), configured in `cr
 
 For an intended visual change, `crassus approve <id> --report <dir>` records its card in `crassus.approved.json`; `check:css:compare` then fails only on visible cards that file lacks. `crassus explain <id>`, `repro <id>`, `verify <id>` and `reduce <id>` (the fewest declaration edits that make the card) take the same `--report <dir>`.
 
-Compiled-output and source conventions are enforced by the tests in `tests/css/`. A new rule about how CSS is written or emitted should land with a test there.
+#### What belongs in tests/css
+
+`tests/css/` holds checks that apply to the whole sheet: a rule about how every partial is written or how the compiled output is shaped. A fix or feature that changes one component's CSS does not get a test there. Confirm it with `check:css:compare` (approve the intended cards) or the Playwright computed-style recipe below.
+
+| Do | Why |
+| --- | --- |
+| Add a test when you introduce a rule every partial must follow (no `:has()`, named transitions, budgeted `:not()` chains) | Nobody can check a whole-sheet property by eye, and a vendored re-sync can break it anywhere. |
+| Extend an existing invariant (`conventions`, `overrides`, `unrendered-*`) before writing a new file | One scan over the sheet is cheaper than another compile-and-find. |
+| Cover forced-colors and `prefers-contrast` rules here | No e2e fixture emulates those modes, so nothing else catches a regression. |
+| Don't assert that a selector carries the declaration you just added | It fails only if someone deletes that line, breaks on harmless selector refactors, and says nothing about whether the rule wins the cascade (`overrides.test.ts` checks that for every rule). |
+| Don't raise `size-budget.test.ts` to fit a feature | It guards bulk regressions; the `css-cascade` job reports each PR's size movement. |
 
 When `check:css:overrides` reports a pair, work out which of the two values is the intended one before deleting anything. The checker proves the earlier declaration never wins; it does not know whether the later one is right. Deleting the flagged half of a `right: $carbon--spacing-03` / `right: auto` pair is how the fluid `CopyInput` button lost its offset.
 
@@ -802,7 +812,7 @@ Prioritize high-value coverage:
 
 - Default render and primary user interactions (open, select, submit, keyboard)
 - Accessibility roles, labels, and ARIA state changes
-- Regressions for bugs you fix
+- Regressions for bugs you fix. For a CSS-only bug, that means an e2e fixture that renders the broken state for `check:css:compare`, not a `tests/css/` assertion.
 - Existing prop combinations without your new prop. A prop that adds content next to something another prop hides (`valueText` beside a `hideLabel` label) can break the case where it is unset. The `valueText` tests covered `hideLabel` with value text but not without it, which is the case that regressed.
 - Boundary inputs to pure utils: zero or negative sizes, empty collections, divide-by-zero, and out-of-range indices. Assert the defined fallback (clamp, empty, identity) rather than only that it doesn't throw.
 - Generic/type contracts when adding `@template` props (see below)
@@ -813,6 +823,7 @@ Skip or avoid:
 - Redundant permutations of the same code path
 - Large fixture setups when a focused unit test on a util suffices
 - A case another test already covers. Search the component's folder before adding one, since behaviors such as close events often have a dedicated file (`OverflowMenuClose.test.ts`) beside the main one. Extend the existing test or add a row to its table instead.
+- A compiled-CSS test for a CSS-only change. See [What belongs in tests/css](#what-belongs-in-testscss).
 
 Add tests proportional to the change. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
 
