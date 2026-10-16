@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import PinCodeInputSkeletonComponent from "carbon-components-svelte/PinCodeInput/PinCodeInputSkeleton.svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
@@ -1124,6 +1125,7 @@ describe("PinCodeInput", () => {
     expect(skeleton).toHaveClass(
       "bx--form-item",
       "bx--text-input--fluid__skeleton",
+      "bx--pin-code-input--fluid__skeleton",
     );
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
@@ -1138,7 +1140,22 @@ describe("PinCodeInput", () => {
     expect(skeleton).toHaveClass("bx--form-item");
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+    expect(skeleton.children[1]).toHaveClass("bx--pin-code-input__segments");
+    // One segment per digit, as many as PinCodeInput's default `count`.
+    expect(skeleton.children[1].children).toHaveLength(4);
+    for (const segment of skeleton.children[1].children) {
+      expect(segment).toHaveClass("bx--skeleton", "bx--pin-code-input__field");
+    }
+  });
+
+  it("draws a segment per count at the skeleton's size", () => {
+    const { container } = render(PinCodeInputSkeletonComponent, {
+      props: { count: 6, size: "sm" },
+    });
+
+    const segments = container.querySelectorAll(".bx--pin-code-input__field");
+    expect(segments).toHaveLength(6);
+    expect(segments[0]).toHaveClass("bx--text-input--sm");
   });
 
   it("hides the skeleton label when hideLabel is true", () => {
@@ -1146,6 +1163,6 @@ describe("PinCodeInput", () => {
 
     const skeleton = screen.getByTestId("pin-code-input-skeleton");
     expect(skeleton.children).toHaveLength(1);
-    expect(skeleton.children[0]).toHaveClass("bx--skeleton", "bx--text-input");
+    expect(skeleton.children[0]).toHaveClass("bx--pin-code-input__segments");
   });
 });

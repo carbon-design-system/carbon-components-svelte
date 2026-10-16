@@ -200,6 +200,22 @@
     .#{$prefix}--pin-code-input__fields[data-invalid]:not(:focus-within) {
     @include focus-outline("invalid");
   }
+
+  // As tall and wide as a fluid PinCodeInput of the same `count`: its
+  // label's 32px, the 40px fields, the padding and border below, and
+  // 40px a segment between 16px of padding each side.
+  .#{$prefix}--text-input--fluid__skeleton.#{$prefix}--pin-code-input--fluid__skeleton {
+    box-sizing: border-box;
+    block-size: to-rem(86px);
+    inline-size: calc(
+      var(--ccs-pin-code-count, 4) * #{to-rem(40px)} + #{$carbon--spacing-07}
+    );
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--pin-code-input--fluid__skeleton .#{$prefix}--label {
+    inset-block-start: to-rem(48px);
+  }
 }
 
 @include exports("fluid-pin-code-input") {
