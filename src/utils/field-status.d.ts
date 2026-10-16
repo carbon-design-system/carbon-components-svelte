@@ -53,8 +53,8 @@ export function resolveStatusDescribedBy(options: {
   invalidText?: unknown;
   warnText?: unknown;
   /**
-   * Fluid mode renders the helper text inline, so it is not also
-   * pointed at from `aria-describedby`.
+   * Fluid fields don't render helper text, so `aria-describedby`
+   * doesn't point at it.
    */
   isFluid?: boolean;
   errorId: string;

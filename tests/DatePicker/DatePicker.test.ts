@@ -3483,6 +3483,58 @@ describe("DatePicker", () => {
       );
     });
 
+    // Like the other fluid fields: the label sits inside the field and
+    // there's no line under it for helper text.
+    it("renders no helper text", () => {
+      render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        helperText: "Shown under the field",
+      });
+
+      expect(
+        screen.queryByText("Shown under the field"),
+      ).not.toBeInTheDocument();
+      expect(screen.getByLabelText("Date")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+    });
+
+    // The status icon sits beside the message in fluid, so the calendar
+    // keeps its corner.
+    it.each([
+      { invalid: true, invalidText: "Invalid date" },
+      { warn: true, warnText: "Warning message" },
+    ])("keeps the calendar icon when %o", (props) => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        ...props,
+      });
+
+      const icons = container.querySelectorAll(".bx--date-picker__icon");
+      expect(icons).toHaveLength(2);
+      expect(
+        [...icons].filter(
+          (icon) =>
+            !icon.classList.contains("bx--date-picker__icon--invalid") &&
+            !icon.classList.contains("bx--date-picker__icon--warn"),
+        ),
+      ).toHaveLength(1);
+    });
+
+    it("swaps the calendar for the status icon outside fluid", () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+        invalid: true,
+        invalidText: "Invalid date",
+      });
+
+      const icons = container.querySelectorAll(".bx--date-picker__icon");
+      expect(icons).toHaveLength(1);
+      expect(icons[0]).toHaveClass("bx--date-picker__icon--invalid");
+    });
+
     it.each([{ disabled: true }, { readonly: true }])(
       "suppresses invalid and warn states when %o",
       (props) => {
