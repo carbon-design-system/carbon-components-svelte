@@ -17,6 +17,15 @@ const cases = [
     "copy-input",
     "date-picker",
   ].flatMap((id) => sizes.map((size) => `${id}-${size}`)),
+  ...["dropdown", "combo-box", "multi-select"].flatMap((id) =>
+    sizes.map((size) => `${id}-${size}`),
+  ),
+  // Dropdown's `lg` is 40px, not the 48px of the other list boxes (#4455).
+  "combo-box-lg",
+  "multi-select-lg",
+  "dropdown-inline",
+  "multi-select-inline",
+  "dropdown-hidden-label",
   "date-picker-range",
   "pin-code-input",
 ];

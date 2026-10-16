@@ -11,4 +11,20 @@ describe("DropdownSkeleton", () => {
       ).toHaveClass(`bx--list-box--${size}`);
     },
   );
+
+  it("draws a label bar above the field", () => {
+    const { container } = render(DropdownSkeleton);
+    const label = container.querySelector(".bx--label.bx--skeleton");
+    expect(label?.nextElementSibling).toHaveClass(
+      "bx--dropdown-v2",
+      "bx--skeleton",
+    );
+  });
+
+  it("leaves the label bar out with hideLabel", () => {
+    const { container } = render(DropdownSkeleton, {
+      props: { hideLabel: true },
+    });
+    expect(container.querySelector(".bx--label")).toBeNull();
+  });
 });
