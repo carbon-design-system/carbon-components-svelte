@@ -63,6 +63,7 @@
   const timePickerContext = getContext("carbon:TimePicker");
   const parentReadonly = timePickerContext?.readonly ?? readable(false);
   const parentDisabled = timePickerContext?.disabled ?? readable(false);
+  const parentHideLabel = timePickerContext?.hideLabel ?? readable(false);
 
   /**
    * @type {import("svelte/store").Writable<number | string>}
@@ -165,6 +166,7 @@
           class:bx--label={true}
           class:bx--label--disabled={effectiveDisabled}
           class:bx--label--slotted={$$slots.labelChildren}
+          class:bx--visually-hidden={$parentHideLabel}
         >
           <slot name="labelChildren"> {labelText} </slot>
         </label>
