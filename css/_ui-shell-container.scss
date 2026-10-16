@@ -1,0 +1,121 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// Just under `lg`, as `carbon--breakpoint-down("lg")` writes it.
+$ccs-ui-shell-container-below-lg: map-get(
+    map-get($carbon--grid-breakpoints, lg),
+    width
+  ) - 0.02;
+
+/// UIShellContainer: a UI Shell inside a box instead of across the window.
+///
+/// The shell's parts are `position: fixed` (header, side nav, its overlay,
+/// header panels). Layout and paint containment make the container their
+/// containing block, so the same rules place them against the container,
+/// and paint containment clips what would reach past it. Content scrolls
+/// below the header instead of the page.
+/// @access private
+/// @group ui-shell
+@mixin ui-shell-container {
+  .#{$prefix}--ui-shell-container {
+    position: relative;
+    overflow: hidden;
+    contain: layout paint;
+    container: bx--ui-shell / inline-size;
+    isolation: isolate;
+
+    > .#{$prefix}--content {
+      box-sizing: border-box;
+      height: 100%;
+      overflow: auto;
+    }
+
+    // Below the header, which `Content`'s top margin clears.
+    > .#{$prefix}--header ~ .#{$prefix}--content {
+      height: calc(100% - #{mini-units(6)});
+    }
+
+    // `theme`: the shell paints its own background and text over the
+    // page's; all.scss re-declares the tokens on it. `color-scheme`
+    // follows, for native scrollbars and controls; the dark themes'
+    // blocks set `dark`.
+    &[theme] {
+      background-color: $background;
+      color: $text-primary;
+      color-scheme: light;
+    }
+
+    // `expanded`: fill the window, over the page and the page's own shell,
+    // painting a background so the page doesn't show through.
+    &.#{$prefix}--ui-shell-container--expanded {
+      position: fixed;
+      z-index: z("header");
+      background-color: $background;
+      inset: 0;
+    }
+
+    // Window-sized overlays fill the container instead: the side nav's,
+    // and a modal's, which Carbon sizes in viewport units (window-sized
+    // from the container's corner, its dialog centered off the container).
+    .#{$prefix}--side-nav__overlay--mobile.#{$prefix}--side-nav__overlay-active {
+      inline-size: 100%;
+      block-size: 100%;
+    }
+
+    .#{$prefix}--modal {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  // Carbon switches the side nav at the `lg` media query, which sees the
+  // window. A contained shell switches at its own width, so below `lg`
+  // these mirror Carbon's rules. The named query only matches inside a
+  // `UIShellContainer`, so the selectors keep the originals' specificity
+  // and need no container in them.
+  //
+  // Once mounted, the shell measures the container and marks its parts,
+  // so the rules step aside for the marker classes. Before that (server-
+  // rendered markup on a wide screen), they keep a narrow container's nav
+  // closed and its content at the edge, where the window's `lg` rules
+  // would open it.
+  @container bx--ui-shell (max-width: #{$ccs-ui-shell-container-below-lg}) {
+    .#{$prefix}--side-nav--ux:not(.#{$prefix}--side-nav--expanded):not(.#{$prefix}--side-nav--rail) {
+      width: 0;
+    }
+
+    .#{$prefix}--side-nav__overlay-active {
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+    }
+
+    .#{$prefix}--side-nav .#{$prefix}--header__nav:not(.#{$prefix}--header__nav--expanded) {
+      display: block;
+    }
+
+    .#{$prefix}--side-nav__header-navigation:not(.#{$prefix}--side-nav__header-navigation--expanded) {
+      position: relative;
+      display: block;
+      margin-bottom: to-rem(32px);
+    }
+
+    // As _content.scss does below `lg`: a rail, fixed or expanded nav keeps
+    // its margin.
+    .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
+      ~ .#{$prefix}--content {
+      margin-left: 0;
+    }
+
+    .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
+      ~ .#{$prefix}--content {
+      margin-left: var(--ccs-side-nav-width, #{mini-units(32)});
+    }
+  }
+}
+
+@include exports("ui-shell-container") {
+  @include ui-shell-container;
+}

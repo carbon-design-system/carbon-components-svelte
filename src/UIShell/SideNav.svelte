@@ -120,14 +120,19 @@
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
-  import {
+  import { getNavStores } from "./nav-store.js";
+
+  // A `UIShellContainer`'s own stores, or the page-wide ones.
+  const {
     hamburgerMenuRef,
     isSideNavCollapsed,
     isSideNavMobile,
     isSideNavRail,
     shouldRenderHamburgerMenu,
     sideNavWidth,
-  } from "./nav-store.js";
+    containerWidth,
+    contained,
+  } = getNavStores();
 
   function handleEscape(event) {
     if (!dismissible || event.key !== "Escape") return;
@@ -243,7 +248,10 @@
   const dispatch = createEventDispatcher();
 
   let navRef = undefined;
+  let windowWidth = undefined;
+  // The container's width when contained, otherwise the window's.
   let winWidth = undefined;
+  $: winWidth = contained ? $containerWidth : windowWidth;
 
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
   const sharedWinWidth = writable(undefined);
@@ -310,7 +318,10 @@
   // lock so a Modal opened concurrently is not affected by this toggle.
   let holdsBodyLock = false;
   $: {
-    const shouldLockScroll = isOpen && !fixed && !rail && $isSideNavMobile;
+    // A contained shell's overlay covers only its container, so the page
+    // around it keeps scrolling.
+    const shouldLockScroll =
+      isOpen && !fixed && !rail && $isSideNavMobile && !contained;
     if (shouldLockScroll && !holdsBodyLock) {
       holdsBodyLock = true;
       acquireBodyScrollLock();
@@ -356,7 +367,7 @@
   });
 </script>
 
-<svelte:window bind:innerWidth={winWidth} />
+<svelte:window bind:innerWidth={windowWidth} />
 
 {#if !fixed}
   <!-- svelte-ignore a11y-click-events-have-key-events -->

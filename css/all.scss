@@ -67,8 +67,10 @@ $ccs-non-default-themes: (
   g100: $carbon--theme--g100,
 );
 
-// Default: white
+// Default: white. A `UIShellContainer` with a `theme` declares every token
+// too, so the page's theme doesn't show through where its own matches white.
 :root,
+.#{$prefix}--ui-shell-container[theme],
 .#{$prefix}--white,
 .#{$prefix}--g10,
 .#{$prefix}--g80,
@@ -83,6 +85,7 @@ $ccs-non-default-themes: (
 @each $name, $theme in $ccs-non-default-themes {
   // <html theme="…">
   :root[theme="#{$name}"],
+  .#{$prefix}--ui-shell-container[theme="#{$name}"],
   .#{$prefix}--#{$name} {
     @include ccs-theme-tokens($theme, $carbon--theme--white);
   }
