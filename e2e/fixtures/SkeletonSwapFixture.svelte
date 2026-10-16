@@ -9,6 +9,7 @@
     DatePickerSkeleton,
     Dropdown,
     DropdownSkeleton,
+    FluidDatePickerSkeleton,
     FluidTextAreaSkeleton,
     MultiSelect,
     MultiSelectSkeleton,
@@ -197,6 +198,16 @@
       <DatePickerSkeleton datePickerType="range" />
     </div>
   </div>
+  {#each [320, 200] as width}
+    <div data-testid="fluid-date-picker-{width}" style:width="{width}px">
+      <div data-part="real">
+        <DatePicker fluid datePickerType="single">
+          <DatePickerInput labelText="Date" />
+        </DatePicker>
+      </div>
+      <div data-part="skeleton"><FluidDatePickerSkeleton /></div>
+    </div>
+  {/each}
   <div data-testid="date-picker-simple">
     <div data-part="real">
       <DatePicker><DatePickerInput labelText="Date" /></DatePicker>
