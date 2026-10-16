@@ -1,4 +1,7 @@
-import { getUnsupportedOptionWarnings } from "../../src/DatePicker/unsupported-options.js";
+import {
+  getShortWarning,
+  getUnsupportedOptionWarnings,
+} from "../../src/DatePicker/unsupported-options.js";
 
 const base = {
   portalled: false,
@@ -79,5 +82,17 @@ describe("getUnsupportedOptionWarnings", () => {
         { ...base, datePickerType: "single" },
       ),
     ).toEqual([]);
+  });
+});
+
+describe("getShortWarning", () => {
+  it("returns nothing for a simple picker", () => {
+    expect(getShortWarning("simple")).toBeUndefined();
+  });
+
+  it("names the type short has no effect on", () => {
+    expect(getShortWarning("range")).toBe(
+      '[carbon-components-svelte] DatePicker: short only applies to datePickerType="simple"; it has no effect on "range".',
+    );
   });
 });

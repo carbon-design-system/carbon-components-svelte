@@ -804,6 +804,30 @@ describe("DatePicker", () => {
     >();
   });
 
+  describe("short on a non-simple picker", () => {
+    it("warns once that short has no effect", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        short: true,
+      });
+      await rerender({ datePickerType: "single", short: true });
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(
+        '[carbon-components-svelte] DatePicker: short only applies to datePickerType="simple"; it has no effect on "single".',
+      );
+      warn.mockRestore();
+    });
+
+    it("stays silent on a simple picker", () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      render(DatePicker, { datePickerType: "simple", short: true });
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+    });
+  });
+
   describe("unsupported flatpickrProps warnings", () => {
     it("warns once per option, not on every update", async () => {
       const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
