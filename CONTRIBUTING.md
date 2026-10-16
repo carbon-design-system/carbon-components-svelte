@@ -615,7 +615,7 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 
 | Test | Holds |
 | --- | --- |
-| `size-budget.test.ts` | Minified and gzipped size of `all.css` and `white.css`, about 2% above measured. |
+| `size-budget.test.ts` | Minified and gzipped size of `all.css` and `white.css`, about 10% above measured. Guards bulk regressions; do not raise it to fit a feature. |
 | `not-chains.test.ts` | Selectors with three or more `:not()`. |
 | `media-query-grouping.test.ts` | Number of `(any-hover: hover)` blocks. |
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
