@@ -141,15 +141,23 @@ for (const optimizeFastScroll of [false, true]) {
     test("the scrollbar spans the real length of the matching options", async ({
       page,
     }) => {
+      // The list opens at the estimated height and grows once the visible
+      // rows are measured. Compare against the measured length, not the
+      // estimate, or the filtered list can come out taller than it.
+      await expect
+        .poll(async () => (await readMenuMetrics(page)).scrollHeight)
+        .toBeGreaterThan(TOTAL_COUNT * 40);
       const unfiltered = await readMenuMetrics(page);
 
       await filterBy(page, field(page), "Even", MATCH_COUNT);
+      // Taller than any single assumed row height would have produced, and
+      // shorter than the whole list: the scrollbar describes the matches alone.
+      await expect
+        .poll(async () => (await readMenuMetrics(page)).scrollHeight)
+        .toBeGreaterThan(MATCH_COUNT * 40);
       const filtered = await readMenuMetrics(page);
 
       expect(filtered.clientHeight).toBe(300);
-      // Taller than any single assumed row height would have produced, and
-      // shorter than the whole list: the scrollbar describes the matches alone.
-      expect(filtered.scrollHeight).toBeGreaterThan(MATCH_COUNT * 40);
       expect(filtered.scrollHeight).toBeLessThan(unfiltered.scrollHeight);
     });
 

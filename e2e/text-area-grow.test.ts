@@ -9,14 +9,14 @@ test.describe("TextArea grow", () => {
     page,
   }) => {
     const textarea = page.getByTestId("grow-rows");
-    const { scrollHeight, clientHeight } = await textarea.evaluate(
-      (el: HTMLTextAreaElement) => ({
-        scrollHeight: el.scrollHeight,
-        clientHeight: el.clientHeight,
-      }),
-    );
-
-    expect(scrollHeight).toBeLessThanOrEqual(clientHeight);
+    // The textarea grows after it mounts, so poll until it fits its content.
+    await expect
+      .poll(() =>
+        textarea.evaluate(
+          (el: HTMLTextAreaElement) => el.scrollHeight - el.clientHeight,
+        ),
+      )
+      .toBeLessThanOrEqual(0);
   });
 
   test("caps growth at maxRows and scrolls the overflow", async ({ page }) => {
