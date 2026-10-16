@@ -275,7 +275,11 @@ for (const optimizeFastScroll of [false, true]) {
       await page.getByRole("option", { name: /Select all/ }).click();
       await scrollTo(page, 1200);
 
-      expectMenuHeld(await readMenuState(page), before, 3);
+      // Every option above the viewport is now checked, and so a pixel taller
+      // (see expectMenuHeld). No option is shorter than 40px, so at most
+      // 1200 / 40 of them sit above, which bounds the drift. Whether those
+      // rows are re-measured before the read is timing, so allow the bound.
+      expectMenuHeld(await readMenuState(page), before, 1200 / 40);
     });
 
     test("selected options sorted to the top on reopen land at the right offsets", async ({
