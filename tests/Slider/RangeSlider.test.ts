@@ -461,6 +461,16 @@ describe("RangeSlider", () => {
     expect(lowerThumb).not.toHaveAttribute("tabindex");
   });
 
+  it("announces both thumbs as disabled", () => {
+    render(RangeSlider, {
+      props: { value: 10, valueUpper: 90, disabled: true },
+    });
+
+    for (const thumb of screen.getAllByRole("slider")) {
+      expect(thumb).toHaveAttribute("aria-disabled", "true");
+    }
+  });
+
   // Regression: keyboard handling must live on each role="slider" thumb, not a
   // role="presentation" parent (which strips ARIA semantics from the
   // keyboard-handling element). Mirrors the Slider a11y fix in #3092.

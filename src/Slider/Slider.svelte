@@ -313,7 +313,7 @@
     class:bx--slider-container={true}
     class:bx--slider-container--readonly={readonly}
     class:bx--slider-container--vertical={orientation === "vertical"}
-    style:width={fullWidth && "100%"}
+    style:width={fullWidth ? "100%" : undefined}
   >
     <span class:bx--slider__range-label={true}
       >{formatRangeLabel(minLabel, min)}</span
@@ -332,6 +332,7 @@
     >
       <div
         role="slider"
+        aria-disabled={disabled || undefined}
         tabindex={disabled ? undefined : 0}
         class:bx--slider__thumb={true}
         style:left={orientation === "vertical" ? undefined : `${left}%`}

@@ -242,6 +242,10 @@ describe("Slider", () => {
     const label = screen.getByText("Test Slider");
 
     expect(slider.parentElement).toHaveClass("bx--slider--disabled");
+    // Out of the tab order, and announced as unavailable rather than as
+    // an operable slider.
+    expect(slider).not.toHaveAttribute("tabindex");
+    expect(slider).toHaveAttribute("aria-disabled", "true");
     expect(input).toBeDisabled();
     expect(label).toHaveClass("bx--label--disabled");
   });
