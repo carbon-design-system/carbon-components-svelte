@@ -61,6 +61,9 @@ const cases = [
   "tree-view-default",
   "tree-view-compact",
   "tree-view-hidden-label",
+  ...["default", "lg", "xl"].map((size) => `big-number-${size}`),
+  "page-header-default",
+  "page-header-sm",
   "code-snippet-single",
   "code-snippet-multi",
   "radio-button",
@@ -70,6 +73,8 @@ const cases = [
 test("skeletons are as tall as the components they stand in for", async ({
   page,
 }) => {
+  // Reads a hundred-odd pairs one at a time: slow in Firefox.
+  test.slow();
   await page.goto("/skeleton-swap.html");
 
   for (const id of cases) {
