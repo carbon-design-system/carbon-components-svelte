@@ -17,6 +17,8 @@
     MultiSelectSkeleton,
     NumberInput,
     NumberInputSkeleton,
+    Pagination,
+    PaginationSkeleton,
     PasswordInput,
     PasswordInputSkeleton,
     PinCodeInput,
@@ -229,6 +231,14 @@
         </TimePicker>
       </div>
       <div data-part="skeleton"><TimePickerSkeleton {size} /></div>
+    </div>
+  {/each}
+  {#each ["xs", "sm", "md", "lg"] as size}
+    <div data-testid="pagination-{size}">
+      <div data-part="real">
+        <Pagination {size} totalItems={120} pageSizes={[10, 20]} />
+      </div>
+      <div data-part="skeleton"><PaginationSkeleton {size} /></div>
     </div>
   {/each}
   <div data-testid="code-snippet-single">

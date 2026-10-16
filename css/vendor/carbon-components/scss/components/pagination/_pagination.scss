@@ -242,6 +242,13 @@ $css--helpers: true;
     fill: $disabled-02;
   }
 
+  // ccs: the skeleton's height is its size plus the top border, as the
+  // pagination's is: its controls fill `min-height` and the border sits
+  // above them. Border-box put the border inside, 1px short.
+  .#{$prefix}--pagination.#{$prefix}--skeleton {
+    box-sizing: content-box;
+  }
+
   .#{$prefix}--pagination.#{$prefix}--skeleton .#{$prefix}--skeleton__text {
     margin-right: 1rem;
     margin-bottom: 0;
