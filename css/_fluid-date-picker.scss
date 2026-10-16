@@ -15,15 +15,18 @@
 /// @group components
 @mixin fluid-date-picker {
   // `--fluid` on the outer form-item wrapper. Default width matches the 288px
-  // flatpickr calendar; stretches to 100% inside `.bx--form--fluid`.
+  // flatpickr calendar, narrowing to fit a smaller container; stretches to
+  // 100% inside `.bx--form--fluid`. The skeleton takes the same width.
   .#{$prefix}--date-picker--fluid {
     display: inline-flex;
     background: $field-01;
     inline-size: to-rem(288px);
+    max-inline-size: 100%;
     min-inline-size: to-rem(144px);
   }
 
-  .#{$prefix}--form--fluid .#{$prefix}--date-picker--fluid {
+  .#{$prefix}--form--fluid .#{$prefix}--date-picker--fluid,
+  .#{$prefix}--form--fluid .#{$prefix}--date-picker--fluid__skeleton {
     inline-size: 100%;
   }
 
@@ -294,6 +297,8 @@
     background: $skeleton-01;
     block-size: to-rem(64px);
     border-block-end: 1px solid $skeleton-02;
+    inline-size: to-rem(288px);
+    max-inline-size: 100%;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton--container {

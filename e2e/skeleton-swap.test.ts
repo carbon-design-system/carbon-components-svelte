@@ -41,6 +41,8 @@ const cases = [
   "date-picker-range",
   "date-picker-simple",
   "date-picker-short",
+  "fluid-date-picker-320",
+  "fluid-date-picker-200",
   "pin-code-input",
   "radio-button",
 ];
@@ -74,6 +76,9 @@ const fieldWidths: Record<string, string> = {
   "date-picker-range": ".bx--date-picker__input",
   "date-picker-simple": ".bx--date-picker__input",
   "date-picker-short": ".bx--date-picker__input",
+  // The whole fluid field: 288px, or its container's width when narrower.
+  "fluid-date-picker-320": "> *",
+  "fluid-date-picker-200": "> *",
 };
 
 test("skeleton fields are as wide as the fields they stand in for", async ({
@@ -95,4 +100,16 @@ test("skeleton fields are as wide as the fields they stand in for", async ({
     expect.soft(real.length, `${id} rendered`).toBeGreaterThan(0);
     expect.soft(skeleton.map(Math.round), id).toEqual(real.map(Math.round));
   }
+});
+
+test("a fluid date picker fits a container narrower than 288px", async ({
+  page,
+}) => {
+  await page.goto("/skeleton-swap.html");
+  const box = await page.getByTestId("fluid-date-picker-200").boundingBox();
+  const field = await page
+    .locator("[data-testid=fluid-date-picker-200] [data-part=real] > *")
+    .boundingBox();
+  expect(box && field).toBeTruthy();
+  if (box && field) expect(field.width).toBeLessThanOrEqual(box.width);
 });
