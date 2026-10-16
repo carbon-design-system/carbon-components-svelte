@@ -369,8 +369,10 @@ describe("Search", () => {
 
     expect(skeletons[2]).toHaveClass("bx--search--sm");
 
-    const hideLabelSkeleton = screen.getByTestId("skeleton-hide-label");
-    expect(hideLabelSkeleton.querySelector(".bx--label")).toBeNull();
+    // Search's label is always visually hidden, so no skeleton draws one.
+    for (const skeleton of skeletons) {
+      expect(skeleton.querySelector(".bx--label")).toBeNull();
+    }
   });
 
   it("supports custom label slot", () => {
