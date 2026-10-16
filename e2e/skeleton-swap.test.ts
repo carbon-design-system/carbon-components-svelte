@@ -45,6 +45,8 @@ const cases = [
   "fluid-date-picker-320",
   "fluid-date-picker-200",
   "pin-code-input",
+  "code-snippet-single",
+  "code-snippet-multi",
   "radio-button",
 ];
 

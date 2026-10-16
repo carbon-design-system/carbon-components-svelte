@@ -1,5 +1,7 @@
 <script>
   import {
+    CodeSnippet,
+    CodeSnippetSkeleton,
     ComboBox,
     ComboBoxSkeleton,
     CopyInput,
@@ -229,6 +231,18 @@
       <div data-part="skeleton"><TimePickerSkeleton {size} /></div>
     </div>
   {/each}
+  <div data-testid="code-snippet-single">
+    <div data-part="real">
+      <CodeSnippet code="npm i carbon-components-svelte" />
+    </div>
+    <div data-part="skeleton"><CodeSnippetSkeleton /></div>
+  </div>
+  <div data-testid="code-snippet-multi">
+    <div data-part="real">
+      <CodeSnippet type="multi" code={"one\ntwo\nthree"} />
+    </div>
+    <div data-part="skeleton"><CodeSnippetSkeleton type="multi" /></div>
+  </div>
   <div data-testid="date-picker-simple">
     <div data-part="real">
       <DatePicker><DatePickerInput labelText="Date" /></DatePicker>
