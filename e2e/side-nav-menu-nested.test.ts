@@ -50,18 +50,23 @@ async function rowHeight(page: Page, name: string) {
   return box.height;
 }
 
-test.describe("SideNavMenu nested indentation", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/side-nav-menu-nested.html");
-  });
+// Every check only reads layout, so each loads the fixture once.
+test("SideNavMenu nests each level one step past its parent", async ({
+  page,
+}) => {
+  await page.goto("/side-nav-menu-nested.html");
 
-  test("first-level rows keep Carbon's offsets", async ({ page }) => {
-    expect(await iconLeft(page, "Kubernetes")).toBeCloseTo(16, 0);
-    expect(await textLeft(page, "Kubernetes")).toBeCloseTo(56, 0);
-    expect(await textLeft(page, "Clusters")).toBeCloseTo(72, 0);
-    expect(await textLeft(page, "Storage")).toBeCloseTo(16, 0);
-    expect(await textLeft(page, "Volumes")).toBeCloseTo(32, 0);
-  });
+  // First-level rows keep Carbon's offsets.
+  for (const [name, read, expected] of [
+    ["Kubernetes", iconLeft, 16],
+    ["Kubernetes", textLeft, 56],
+    ["Clusters", textLeft, 72],
+    ["Storage", textLeft, 16],
+    ["Volumes", textLeft, 32],
+  ] as const) {
+    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
+    expect.soft(await read(page, name), name).toBeCloseTo(expected, 0);
+  }
 
   for (const [parent, child] of [
     ["Kubernetes", "Clusters"],
@@ -70,14 +75,14 @@ test.describe("SideNavMenu nested indentation", () => {
     ["Storage", "Volumes"],
     ["Backups", "Schedules"],
   ]) {
-    test(`${child} text starts one step past ${parent} text`, async ({
-      page,
-    }) => {
-      expect(await textLeft(page, child)).toBeCloseTo(
-        (await textLeft(page, parent)) + 16,
-        0,
-      );
-    });
+    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
+    const [childLeft, parentLeft] = await Promise.all([
+      textLeft(page, child),
+      textLeft(page, parent),
+    ]);
+    expect
+      .soft(childLeft, `${child} text starts one step past ${parent} text`)
+      .toBeCloseTo(parentLeft + 16, 0);
   }
 
   for (const [item, sibling] of [
@@ -85,35 +90,31 @@ test.describe("SideNavMenu nested indentation", () => {
     ["Rollouts", "Clusters"],
     ["Backups", "Volumes"],
   ]) {
-    test(`${item} icon sits in the ${sibling} text column`, async ({
-      page,
-    }) => {
-      expect(await iconLeft(page, item)).toBeCloseTo(
-        await textLeft(page, sibling),
-        0,
-      );
-    });
+    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
+    const [icon, column] = await Promise.all([
+      iconLeft(page, item),
+      textLeft(page, sibling),
+    ]);
+    expect
+      .soft(icon, `${item} icon sits in the ${sibling} text column`)
+      .toBeCloseTo(column, 0);
   }
 });
 
-test.describe("SideNavMenu large scoped to its own row", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/side-nav-menu-nested.html");
-  });
+test("SideNavMenu large applies to its own row only", async ({ page }) => {
+  await page.goto("/side-nav-menu-nested.html");
 
-  test("a large top-level menu trigger is 48px", async ({ page }) => {
-    expect(await rowHeight(page, "Compute")).toBeCloseTo(48, 0);
-  });
-
-  for (const name of ["Instances", "Images", "Snapshots"]) {
-    test(`${name} does not inherit large from its ancestor menu`, async ({
-      page,
-    }) => {
-      expect(await rowHeight(page, name)).toBeCloseTo(32, 0);
-    });
+  for (const [name, height] of [
+    // A large top-level menu trigger.
+    ["Compute", 48],
+    // Descendants do not inherit large from the ancestor menu.
+    ["Instances", 32],
+    ["Images", 32],
+    ["Snapshots", 32],
+    // A nested SideNavLink can set large itself.
+    ["Custom image", 48],
+  ] as const) {
+    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
+    expect.soft(await rowHeight(page, name), name).toBeCloseTo(height, 0);
   }
-
-  test("a nested SideNavLink can set large itself", async ({ page }) => {
-    expect(await rowHeight(page, "Custom image")).toBeCloseTo(48, 0);
-  });
 });

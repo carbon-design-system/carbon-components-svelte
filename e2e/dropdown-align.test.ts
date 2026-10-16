@@ -7,46 +7,42 @@ async function openMenu(page: Page, key: string) {
   const field = await page.getByTestId(key).getByRole("combobox").boundingBox();
   const box = await menu.boundingBox();
   if (!field || !box) throw new Error("missing box");
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
   return { field, menu: box };
 }
 
-test.describe("Dropdown menu alignment", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/dropdown-align.html");
-  });
+// One page load: each case opens its menu, measures it and closes it again.
+test("Dropdown menu aligns to its field", async ({ page }) => {
+  await page.goto("/dropdown-align.html");
 
   for (const portal of [false, true]) {
     const prefix = portal ? "portal" : "inline";
 
-    test(`${prefix}: keeps the inline width, left edge on the field`, async ({
-      page,
-    }) => {
+    // biome-ignore lint/performance/noAwaitInLoops: one menu open at a time
+    await test.step(`${prefix}: keeps the inline width, left edge on the field`, async () => {
       const { field, menu } = await openMenu(page, `${prefix}-start`);
-      expect(menu.width).toBeGreaterThan(field.width);
-      expect(menu.width).toBeCloseTo(288, 0);
-      expect(menu.x).toBeCloseTo(field.x, 0);
+      expect.soft(menu.width).toBeGreaterThan(field.width);
+      expect.soft(menu.width).toBeCloseTo(288, 0);
+      expect.soft(menu.x).toBeCloseTo(field.x, 0);
     });
 
-    test(`${prefix}: direction top opens the menu above the field`, async ({
-      page,
-    }) => {
+    await test.step(`${prefix}: direction top opens the menu above the field`, async () => {
       const { field, menu } = await openMenu(page, `${prefix}-start-top`);
-      expect(menu.y + menu.height).toBeLessThanOrEqual(field.y + 1);
-      expect(menu.x).toBeCloseTo(field.x, 0);
+      expect.soft(menu.y + menu.height).toBeLessThanOrEqual(field.y + 1);
+      expect.soft(menu.x).toBeCloseTo(field.x, 0);
     });
 
-    test(`${prefix}: end aligns the menu's right edge to the field`, async ({
-      page,
-    }) => {
+    await test.step(`${prefix}: end aligns the menu's right edge to the field`, async () => {
       const { field, menu } = await openMenu(page, `${prefix}-end`);
-      expect(menu.width).toBeCloseTo(288, 0);
-      expect(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
+      expect.soft(menu.width).toBeCloseTo(288, 0);
+      expect.soft(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
     });
 
-    test(`${prefix}: end combines with direction top`, async ({ page }) => {
+    await test.step(`${prefix}: end combines with direction top`, async () => {
       const { field, menu } = await openMenu(page, `${prefix}-end-top`);
-      expect(menu.y + menu.height).toBeLessThanOrEqual(field.y + 1);
-      expect(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
+      expect.soft(menu.y + menu.height).toBeLessThanOrEqual(field.y + 1);
+      expect.soft(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
     });
   }
 });

@@ -164,18 +164,15 @@ async function openMenu(page: Page, name: string) {
  * only which field opens the menu.
  */
 function describeListRenderedWhole(fieldName: string) {
-  test.describe("a list the component renders whole", () => {
-    test.beforeEach(async ({ page }) => {
-      await openMenu(page, fieldName);
-    });
+  // Each step only reads the open menu, so the menu opens once for all of them.
+  test("a list the component renders whole reflows", async ({ page }) => {
+    await openMenu(page, fieldName);
 
-    test("the document does not scroll horizontally", async ({ page }) => {
+    await test.step("the document does not scroll horizontally", async () => {
       expect(await documentScrollsHorizontally(page)).toBe(false);
     });
 
-    test("a long label is rendered in full, unclipped, over several lines", async ({
-      page,
-    }) => {
+    await test.step("a long label is rendered in full, unclipped, over several lines", async () => {
       const option = page.getByRole("option").first();
 
       // The whole label, not the part that fit before an ellipsis.
@@ -188,9 +185,7 @@ function describeListRenderedWhole(fieldName: string) {
       await expectLinesShareLeftEdge(option);
     });
 
-    test("a single unbroken token reflows instead of forcing sideways scroll", async ({
-      page,
-    }) => {
+    await test.step("a single unbroken token reflows instead of forcing sideways scroll", async () => {
       const option = page.getByRole("option").nth(1);
 
       await expect(option).toHaveText(UNBROKEN_LABEL);
@@ -201,9 +196,7 @@ function describeListRenderedWhole(fieldName: string) {
       expect(await documentScrollsHorizontally(page)).toBe(false);
     });
 
-    test("the overflow title removes itself once the text wraps", async ({
-      page,
-    }) => {
+    await test.step("the overflow title removes itself once the text wraps", async () => {
       // The title exists only while text overflows horizontally, which wrapping
       // ends. Verified rather than assumed: a hover-only tooltip is exactly the
       // mitigation this work replaces.
