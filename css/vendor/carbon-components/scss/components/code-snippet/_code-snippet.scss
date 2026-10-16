@@ -330,12 +330,14 @@
     height: $carbon--spacing-07;
   }
 
+  // ccs: as tall as the snippets they stand in for: a three-line multi
+  // snippet (its three bars), and a single one's 40px.
   .#{$prefix}--snippet--multi.#{$prefix}--skeleton {
-    height: to-rem(98px);
+    height: to-rem(104px);
   }
 
   .#{$prefix}--snippet--single.#{$prefix}--skeleton {
-    height: to-rem(56px);
+    height: $carbon--spacing-08;
   }
 
   .#{$prefix}--snippet.#{$prefix}--skeleton span {
