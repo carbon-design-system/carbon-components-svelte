@@ -33,4 +33,33 @@ describe("DataTableSkeleton", () => {
       "bx--data-table-content",
     );
   });
+
+  it("renders rows by columns cells", () => {
+    const { container } = render(DataTableSkeleton, {
+      props: { rows: 2, columns: 3 },
+    });
+
+    expect(container.querySelectorAll("thead th")).toHaveLength(3);
+    expect(container.querySelectorAll("tbody tr")).toHaveLength(2);
+    expect(container.querySelectorAll("tbody td")).toHaveLength(6);
+  });
+
+  it("labels columns from headers and ignores columns", () => {
+    const { container } = render(DataTableSkeleton, {
+      props: { columns: 7, rows: 1, headers: ["Name", { value: "Port" }] },
+    });
+
+    expect(
+      [...container.querySelectorAll("thead th")].map((th) => th.textContent),
+    ).toEqual(["Name", "Port"]);
+    expect(container.querySelectorAll("tbody td")).toHaveLength(2);
+  });
+
+  it("renders a blank header cell for an empty header", () => {
+    const { container } = render(DataTableSkeleton, {
+      props: { headers: ["Name", { empty: true }] },
+    });
+
+    expect(container.querySelectorAll("thead th")[1]).toHaveTextContent("");
+  });
 });

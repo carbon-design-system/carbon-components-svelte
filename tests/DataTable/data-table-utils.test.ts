@@ -867,6 +867,36 @@ describe("toCsv", () => {
     );
   });
 
+  it.each(["+", "-", "@", "\t"])(
+    "prefixes values starting with %j when escaping formulas",
+    (prefix) => {
+      expect(
+        toCsv(
+          [{ key: "name", value: "Name" }],
+          [{ id: "a", name: `${prefix}1` }],
+        ),
+      ).toBe(`Name\r\n'${prefix}1`);
+    },
+  );
+
+  it("serializes object and array values as JSON", () => {
+    const csv = toCsv(
+      [
+        { key: "tags", value: "Tags" },
+        { key: "owner", value: "Owner" },
+      ],
+      [{ id: "a", tags: ["x", "y"], owner: { name: "Ada" } }],
+    );
+
+    expect(csv).toBe('Tags,Owner\r\n"[""x"",""y""]","{""name"":""Ada""}"');
+  });
+
+  it("joins lines with a custom newline", () => {
+    expect(toCsv(headers, rows, { newline: "\n" })).toBe(
+      "Name,Port\nLoad Balancer 1,3000\nLoad Balancer 2,443",
+    );
+  });
+
   it("uses a custom delimiter for both separation and quoting", () => {
     const csv = toCsv(
       headers,
