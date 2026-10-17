@@ -1,14 +1,8 @@
 import { render } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.test.svelte";
-
-const netClick = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === "click").length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
 describe("ComboBox window listeners", () => {
   it("closed combo boxes register no window click listener", () => {
@@ -16,7 +10,7 @@ describe("ComboBox window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     for (let i = 0; i < 5; i++) render(ComboBox, { props: { open: false } });
-    expect(netClick(add, remove)).toBe(0);
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
 
     add.mockRestore();
     remove.mockRestore();
@@ -28,7 +22,7 @@ describe("ComboBox window listeners", () => {
 
     render(ComboBox, { props: { open: true } });
     await flushDismiss();
-    expect(netClick(add, remove)).toBe(1);
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
 
     add.mockRestore();
     remove.mockRestore();
@@ -40,11 +34,11 @@ describe("ComboBox window listeners", () => {
 
     render(ComboBox, { props: { open: true } });
     await flushDismiss();
-    expect(netClick(add, remove)).toBe(1);
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
 
     // An outside click closes the menu, which must tear down the listener.
     await user.click(document.body);
-    expect(netClick(add, remove)).toBe(0);
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
 
     add.mockRestore();
     remove.mockRestore();

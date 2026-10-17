@@ -1,14 +1,7 @@
 import { render } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import MultiSelect from "./MultiSelect.test.svelte";
-
-const net = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-  type: string,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === type).length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("MultiSelect window listeners", () => {
   it("closed MultiSelects register no window click/focusin listeners", () => {
@@ -19,8 +12,8 @@ describe("MultiSelect window listeners", () => {
       render(MultiSelect, { props: { open: false } });
     }
 
-    expect(net(add, remove, "click")).toBe(0);
-    expect(net(add, remove, "focusin")).toBe(0);
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
+    expect(netListenerCalls(add, remove, "focusin")).toBe(0);
 
     add.mockRestore();
     remove.mockRestore();
@@ -32,8 +25,8 @@ describe("MultiSelect window listeners", () => {
 
     render(MultiSelect, { props: { open: true } });
     await flushDismiss();
-    expect(net(add, remove, "click")).toBe(1);
-    expect(net(add, remove, "focusin")).toBe(1);
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
+    expect(netListenerCalls(add, remove, "focusin")).toBe(1);
 
     add.mockRestore();
     remove.mockRestore();
