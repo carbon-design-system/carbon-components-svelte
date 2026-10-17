@@ -438,10 +438,10 @@
   import { writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import RadioButton from "../RadioButton/RadioButton.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
   import { formReset } from "../utils/form-reset.js";
+  import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -1471,54 +1471,85 @@
                   {#if !nonSelectableRowIdsSet.has(row.id)}
                     {@const inputId = `${id}-${row.id}`}
                     {#if radio}
-                      <RadioButton
-                        id={inputId}
-                        name={selectionName}
-                        form={inputForm}
-                        checked={selectedRowIdsSet.has(row.id)}
-                        value={row.id}
-                        hideLabel
-                        labelText="Select row"
-                        on:change={() => {
-                          selectedRowIds = [row.id];
-                          dispatch("click:row--select", {
-                            row,
-                            selected: true,
-                          });
-                        }}
-                      />
+                      <div class:bx--radio-button-wrapper={true}>
+                        <input
+                          type="radio"
+                          class:bx--radio-button={true}
+                          id={inputId}
+                          name={selectionName}
+                          form={inputForm}
+                          checked={selectedRowIdsSet.has(row.id)}
+                          value={row.id}
+                          on:change={() => {
+                            selectedRowIds = [row.id];
+                            dispatch("click:row--select", {
+                              row,
+                              selected: true,
+                            });
+                          }}
+                        >
+                        <label
+                          class:bx--radio-button__label={true}
+                          for={inputId}
+                        >
+                          <span
+                            class:bx--radio-button__appearance={true}
+                          ></span>
+                          <span
+                            class:bx--radio-button__label-text={true}
+                            class:bx--visually-hidden={true}
+                            >Select row</span
+                          >
+                        </label>
+                      </div>
                     {:else}
-                      <InlineCheckbox
-                        id={inputId}
-                        name={selectionName}
-                        form={inputForm}
-                        aria-label="Select row"
-                        checked={selectedRowIdsSet.has(row.id)}
-                        value={row.id}
-                        on:click={(event) => {
-                          const checked = event.target.checked;
-                          const usedRange =
-                            event.shiftKey &&
-                            rangeAnchorRowId !== null &&
-                            selectRowRange(actualIndex, checked);
+                      <div class:bx--checkbox--inline={true}>
+                        <input
+                          type="checkbox"
+                          id={inputId}
+                          name={selectionName}
+                          form={inputForm}
+                          aria-label="Select row"
+                          value={row.id}
+                          checked={selectedRowIdsSet.has(row.id)}
+                          aria-checked={selectedRowIdsSet.has(row.id)}
+                          class:bx--checkbox={true}
+                          on:click={(event) => {
+                            const checked = event.target.checked;
+                            const usedRange =
+                              event.shiftKey &&
+                              rangeAnchorRowId !== null &&
+                              selectRowRange(actualIndex, checked);
 
-                          if (!usedRange) {
-                            const next = new Set(selectedRowIds);
-                            if (checked) {
-                              next.add(row.id);
-                            } else {
-                              next.delete(row.id);
+                            if (!usedRange) {
+                              const next = new Set(selectedRowIds);
+                              if (checked) {
+                                next.add(row.id);
+                              } else {
+                                next.delete(row.id);
+                              }
+                              selectedRowIds = [...next];
                             }
-                            selectedRowIds = [...next];
-                          }
 
-                          rangeAnchorRowId = row.id;
-                          dispatch("click:row--select", {
-                            row,
-                            selected: checked,
-                          });
-                        }}
-                      />
+                            rangeAnchorRowId = row.id;
+                            dispatch("click:row--select", {
+                              row,
+                              selected: checked,
+                            });
+                          }}
+                        >
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                        <label
+                          for={inputId}
+                          class:bx--checkbox-label={true}
+                          on:click={(event) =>
+                            forwardShiftClick(
+                              event,
+                              event.currentTarget.previousElementSibling,
+                            )}
+                        ></label>
+                      </div>
                     {/if}
                   {/if}
                 </td>
@@ -1699,54 +1730,85 @@
                   {#if isSelectable}
                     {@const inputId = `${id}-${row.id}`}
                     {#if radio}
-                      <RadioButton
-                        id={inputId}
-                        name={selectionName}
-                        form={inputForm}
-                        checked={isSelected}
-                        value={row.id}
-                        hideLabel
-                        labelText="Select row"
-                        on:change={() => {
-                          selectedRowIds = [row.id];
-                          dispatch("click:row--select", {
-                            row,
-                            selected: true,
-                          });
-                        }}
-                      />
+                      <div class:bx--radio-button-wrapper={true}>
+                        <input
+                          type="radio"
+                          class:bx--radio-button={true}
+                          id={inputId}
+                          name={selectionName}
+                          form={inputForm}
+                          checked={isSelected}
+                          value={row.id}
+                          on:change={() => {
+                            selectedRowIds = [row.id];
+                            dispatch("click:row--select", {
+                              row,
+                              selected: true,
+                            });
+                          }}
+                        >
+                        <label
+                          class:bx--radio-button__label={true}
+                          for={inputId}
+                        >
+                          <span
+                            class:bx--radio-button__appearance={true}
+                          ></span>
+                          <span
+                            class:bx--radio-button__label-text={true}
+                            class:bx--visually-hidden={true}
+                            >Select row</span
+                          >
+                        </label>
+                      </div>
                     {:else}
-                      <InlineCheckbox
-                        id={inputId}
-                        name={selectionName}
-                        form={inputForm}
-                        aria-label="Select row"
-                        checked={isSelected}
-                        value={row.id}
-                        on:click={(event) => {
-                          const checked = event.target.checked;
-                          const usedRange =
-                            event.shiftKey &&
-                            rangeAnchorRowId !== null &&
-                            selectRowRange(index, checked);
+                      <div class:bx--checkbox--inline={true}>
+                        <input
+                          type="checkbox"
+                          id={inputId}
+                          name={selectionName}
+                          form={inputForm}
+                          aria-label="Select row"
+                          value={row.id}
+                          checked={isSelected}
+                          aria-checked={isSelected}
+                          class:bx--checkbox={true}
+                          on:click={(event) => {
+                            const checked = event.target.checked;
+                            const usedRange =
+                              event.shiftKey &&
+                              rangeAnchorRowId !== null &&
+                              selectRowRange(index, checked);
 
-                          if (!usedRange) {
-                            const next = new Set(selectedRowIds);
-                            if (checked) {
-                              next.add(row.id);
-                            } else {
-                              next.delete(row.id);
+                            if (!usedRange) {
+                              const next = new Set(selectedRowIds);
+                              if (checked) {
+                                next.add(row.id);
+                              } else {
+                                next.delete(row.id);
+                              }
+                              selectedRowIds = [...next];
                             }
-                            selectedRowIds = [...next];
-                          }
 
-                          rangeAnchorRowId = row.id;
-                          dispatch("click:row--select", {
-                            row,
-                            selected: checked,
-                          });
-                        }}
-                      />
+                            rangeAnchorRowId = row.id;
+                            dispatch("click:row--select", {
+                              row,
+                              selected: checked,
+                            });
+                          }}
+                        >
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                        <label
+                          for={inputId}
+                          class:bx--checkbox-label={true}
+                          on:click={(event) =>
+                            forwardShiftClick(
+                              event,
+                              event.currentTarget.previousElementSibling,
+                            )}
+                        ></label>
+                      </div>
                     {/if}
                   {/if}
                 </td>
