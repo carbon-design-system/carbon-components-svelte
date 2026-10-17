@@ -107,8 +107,8 @@ describe("PinCodeInput programmatic accessors", () => {
   });
 
   it("clear empties all segments and dispatches change without moving focus by default", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(PinCodeInputProgrammatic);
+    const onChange = vi.fn();
+    render(PinCodeInputProgrammatic, { props: { onChange } });
     const inputs = getInputs();
 
     inputs[2].focus();
@@ -121,12 +121,9 @@ describe("PinCodeInput programmatic accessors", () => {
       expect(input.value).toBe("");
     }
     expect(inputs[0]).not.toHaveFocus();
-    expect(
-      consoleLog.mock.calls.some(
-        ([event, detail]) =>
-          event === "change" && (detail as { value: string }).value === "",
-      ),
-    ).toBe(true);
+    expect(onChange).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "" }),
+    );
   });
 
   it("clear focuses the first segment when focus is true", async () => {

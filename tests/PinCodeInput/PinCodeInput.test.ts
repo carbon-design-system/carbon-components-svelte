@@ -91,20 +91,17 @@ describe("PinCodeInput", () => {
     });
 
     it("dispatches one change per overwrite", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(PinCodeInput, { props: { value: "1234" } });
+      const onChange = vi.fn();
+      render(PinCodeInput, { props: { value: "1234", onChange } });
       const inputs = getInputs();
 
       await user.click(inputs[2]);
-      consoleLog.mockClear();
+      onChange.mockClear();
       await user.keyboard("9");
       await tick();
 
-      const changes = consoleLog.mock.calls.filter(
-        ([event]) => event === "change",
-      );
-      expect(changes).toEqual([
-        ["change", { value: "1294", code: ["1", "2", "9", "4"] }],
+      expect(onChange.mock.calls).toEqual([
+        [{ value: "1294", code: ["1", "2", "9", "4"] }],
       ]);
     });
 
@@ -308,49 +305,45 @@ describe("PinCodeInput", () => {
   });
 
   describe("Delete", () => {
-    const getChanges = (calls: unknown[][]) =>
-      calls.filter(([event]) => event === "change");
-
     it("does not dispatch change on an empty segment", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(PinCodeInput);
+      const onChange = vi.fn();
+      render(PinCodeInput, { props: { onChange } });
       const inputs = getInputs();
 
       inputs[1].focus();
-      consoleLog.mockClear();
       await user.keyboard("{Delete}");
       await tick();
 
-      expect(getChanges(consoleLog.mock.calls)).toEqual([]);
+      expect(onChange).not.toHaveBeenCalled();
       expect(inputs[1]).toHaveFocus();
     });
 
     it("clears a filled segment with one change", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(PinCodeInput, { props: { value: "1234" } });
+      const onChange = vi.fn();
+      render(PinCodeInput, { props: { value: "1234", onChange } });
       const inputs = getInputs();
 
       inputs[1].focus();
-      consoleLog.mockClear();
       await user.keyboard("{Delete}");
       await tick();
 
-      expect(getChanges(consoleLog.mock.calls)).toEqual([
-        ["change", { value: "134", code: ["1", "", "3", "4"] }],
+      expect(onChange.mock.calls).toEqual([
+        [{ value: "134", code: ["1", "", "3", "4"] }],
       ]);
     });
 
     it("does not dispatch change when read-only", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(PinCodeInput, { props: { readonly: true, value: "1234" } });
+      const onChange = vi.fn();
+      render(PinCodeInput, {
+        props: { readonly: true, value: "1234", onChange },
+      });
       const inputs = getInputs();
 
       inputs[1].focus();
-      consoleLog.mockClear();
       await user.keyboard("{Delete}");
       await tick();
 
-      expect(getChanges(consoleLog.mock.calls)).toEqual([]);
+      expect(onChange).not.toHaveBeenCalled();
       expect(inputs[1].value).toBe("2");
     });
   });
@@ -410,38 +403,32 @@ describe("PinCodeInput", () => {
   });
 
   it("dispatches complete and change events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(PinCodeInput);
+    const onChange = vi.fn();
+    const onComplete = vi.fn();
+    render(PinCodeInput, { props: { onChange, onComplete } });
     const inputs = getInputs();
 
     inputs[0].focus();
     await user.keyboard("1234");
     await tick();
 
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      true,
+    expect(onChange).toHaveBeenCalledTimes(4);
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(onComplete).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "1234" }),
     );
-    expect(
-      consoleLog.mock.calls.some(
-        ([event, detail]) =>
-          event === "complete" &&
-          (detail as { value: string }).value === "1234",
-      ),
-    ).toBe(true);
   });
 
   it("does not dispatch complete on initial render with a seeded value", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(PinCodeInput, { props: { value: "1234" } });
+    const onComplete = vi.fn();
+    render(PinCodeInput, { props: { value: "1234", onComplete } });
 
-    expect(consoleLog.mock.calls.some(([event]) => event === "complete")).toBe(
-      false,
-    );
+    expect(onComplete).not.toHaveBeenCalled();
   });
 
   it("distributes a full pasted code across all segments", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { component } = render(PinCodeInput);
+    const onPaste = vi.fn();
+    const { component } = render(PinCodeInput, { props: { onPaste } });
     const inputs = getInputs();
 
     inputs[0].focus();
@@ -452,17 +439,17 @@ describe("PinCodeInput", () => {
 
     expect(component.value).toBe("4321");
     expect(inputs[3]).toHaveFocus();
-    expect(
-      consoleLog.mock.calls.some(
-        ([event, detail]) =>
-          event === "paste" && (detail as { value: string }).value === "4321",
-      ),
-    ).toBe(true);
+    expect(onPaste).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "4321" }),
+    );
   });
 
   it("distributes multi-char autofill input across all segments", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { component } = render(PinCodeInput);
+    const onPaste = vi.fn();
+    const onComplete = vi.fn();
+    const { component } = render(PinCodeInput, {
+      props: { onPaste, onComplete },
+    });
     const inputs = getInputs();
 
     inputs[0].focus();
@@ -472,21 +459,15 @@ describe("PinCodeInput", () => {
     expect(component.value).toBe("1234");
     expect(component.code).toEqual(["1", "2", "3", "4"]);
     expect(inputs[3]).toHaveFocus();
-    expect(consoleLog.mock.calls.some(([event]) => event === "paste")).toBe(
-      false,
+    expect(onPaste).not.toHaveBeenCalled();
+    expect(onComplete).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "1234" }),
     );
-    expect(
-      consoleLog.mock.calls.some(
-        ([event, detail]) =>
-          event === "complete" &&
-          (detail as { value: string }).value === "1234",
-      ),
-    ).toBe(true);
   });
 
   it("does not dispatch paste when the clipboard has no valid characters", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(PinCodeInput);
+    const onPaste = vi.fn();
+    render(PinCodeInput, { props: { onPaste } });
     const inputs = getInputs();
 
     inputs[0].focus();
@@ -495,14 +476,12 @@ describe("PinCodeInput", () => {
     });
     await tick();
 
-    expect(consoleLog.mock.calls.some(([event]) => event === "paste")).toBe(
-      false,
-    );
+    expect(onPaste).not.toHaveBeenCalled();
   });
 
   it("dispatches paste with whitespace stripped from the clipboard value", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(PinCodeInput);
+    const onPaste = vi.fn();
+    render(PinCodeInput, { props: { onPaste } });
     const inputs = getInputs();
 
     inputs[0].focus();
@@ -511,12 +490,9 @@ describe("PinCodeInput", () => {
     });
     await tick();
 
-    expect(
-      consoleLog.mock.calls.some(
-        ([event, detail]) =>
-          event === "paste" && (detail as { value: string }).value === "4321",
-      ),
-    ).toBe(true);
+    expect(onPaste).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "4321" }),
+    );
   });
 
   it("masks the segments when mask is true", () => {

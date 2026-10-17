@@ -32,6 +32,10 @@
   export let required: ComponentProps<PinCodeInput>["required"] = false;
   export let segmentLabelText: ComponentProps<PinCodeInput>["segmentLabelText"] =
     undefined;
+  export let onChange: (detail: unknown) => void = () => {};
+  export let onComplete: (detail: unknown) => void = () => {};
+  export let onClear: () => void = () => {};
+  export let onPaste: (detail: unknown) => void = () => {};
 </script>
 
 <PinCodeInput
@@ -60,8 +64,8 @@
   {name}
   {required}
   {...segmentLabelText ? { segmentLabelText } : {}}
-  on:change={(e) => console.log("change", e.detail)}
-  on:complete={(e) => console.log("complete", e.detail)}
-  on:clear={() => console.log("clear")}
-  on:paste={(e) => console.log("paste", e.detail)}
+  on:change={(e) => onChange(e.detail)}
+  on:complete={(e) => onComplete(e.detail)}
+  on:clear={onClear}
+  on:paste={(e) => onPaste(e.detail)}
 />
