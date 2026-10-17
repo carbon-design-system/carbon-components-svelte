@@ -59,6 +59,21 @@ describe("Search debounce", () => {
     expect(onSearch).not.toHaveBeenCalled();
   });
 
+  it("does not dispatch search for a pending debounce after unmount", async () => {
+    const onSearch = vi.fn();
+    const { unmount } = render(SearchDebounce, {
+      props: { debounce: 200, onSearch },
+    });
+
+    await fireEvent.input(screen.getByRole("searchbox"), {
+      target: { value: "cloud" },
+    });
+    unmount();
+
+    await vi.advanceTimersByTimeAsync(200);
+    expect(onSearch).not.toHaveBeenCalled();
+  });
+
   it("cancels a pending debounce on Escape instead of firing search with the stale value", async () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { debounce: 200, onSearch } });

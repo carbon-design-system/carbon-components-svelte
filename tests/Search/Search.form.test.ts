@@ -97,3 +97,35 @@ describe("Search form reset", () => {
     expect(onClear).not.toHaveBeenCalled();
   });
 });
+
+describe("Search in a form", () => {
+  it("does not submit the form on Enter", async () => {
+    const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
+    render(SearchForm, { props: { onSubmit } });
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Search" }),
+      "shoes{Enter}",
+    );
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("focuses the input and dispatches expand/collapse when expanded is set by the parent", async () => {
+    const onExpand = vi.fn();
+    const onCollapse = vi.fn();
+    const { rerender } = render(SearchForm, {
+      props: { expandable: true, expanded: false, onExpand, onCollapse },
+    });
+    const input = screen.getByRole("searchbox", { name: "Search" });
+
+    await rerender({ expanded: true });
+    await vi.waitFor(() => expect(input).toHaveFocus());
+    expect(onExpand).toHaveBeenCalledOnce();
+    expect(onCollapse).not.toHaveBeenCalled();
+
+    await rerender({ expanded: false });
+    expect(onCollapse).toHaveBeenCalledOnce();
+    expect(onExpand).toHaveBeenCalledOnce();
+  });
+});

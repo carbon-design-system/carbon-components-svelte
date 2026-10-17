@@ -10,9 +10,10 @@
   export let onInput: (event: Event) => void = () => {};
   export let onChange: (event: Event) => void = () => {};
   export let onClear: (event: CustomEvent) => void = () => {};
+  export let onSubmit: (event: SubmitEvent) => void = () => {};
 </script>
 
-<form data-testid="form">
+<form data-testid="form" on:submit={onSubmit}>
   <Search
     bind:value
     bind:expanded
