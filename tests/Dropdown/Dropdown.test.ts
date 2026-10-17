@@ -270,6 +270,37 @@ describe("Dropdown", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("shows the placeholder when nothing is selected", () => {
+    render(Dropdown, {
+      props: { items, labelText: "Contact", placeholder: "Choose one" },
+    });
+
+    expect(screen.getByRole("combobox")).toHaveTextContent("Choose one");
+  });
+
+  it("prefers placeholder over the deprecated label", () => {
+    render(Dropdown, {
+      props: {
+        items,
+        labelText: "Contact",
+        placeholder: "Choose one",
+        label: "Old text",
+      },
+    });
+
+    const combobox = screen.getByRole("combobox");
+    expect(combobox).toHaveTextContent("Choose one");
+    expect(combobox).not.toHaveTextContent("Old text");
+  });
+
+  it("falls back to the deprecated label", () => {
+    render(Dropdown, {
+      props: { items, labelText: "Contact", label: "Old text" },
+    });
+
+    expect(screen.getByRole("combobox")).toHaveTextContent("Old text");
+  });
+
   it("should hide the clear button when there is no selection", () => {
     render(Dropdown, {
       props: {
