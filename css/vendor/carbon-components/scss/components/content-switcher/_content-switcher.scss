@@ -183,6 +183,28 @@
     white-space: nowrap;
   }
 
+  // ccs: icon beside the text (`Switch` with `icon` and `iconOnly={false}`).
+  // A flex row centers the icon on the text; the text span keeps the
+  // ellipsis, which doesn't apply to a flex container's own text.
+  .#{$prefix}--content-switcher__label--with-icon {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--content-switcher__label--with-icon > svg {
+    width: to-rem(16px);
+    height: to-rem(16px);
+    flex: none;
+    fill: currentColor;
+  }
+
+  .#{$prefix}--content-switcher__label-text {
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+  }
+
   .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
     z-index: 3;
     background-color: $layer-selected-inverse;

@@ -4,6 +4,7 @@ import { type ComponentProps, tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import IconOnly from "./ContentSwitcher.iconOnly.test.svelte";
 import IconOnlyMixed from "./ContentSwitcher.iconOnlyMixed.test.svelte";
+import IconWithText from "./ContentSwitcher.iconWithText.test.svelte";
 
 /** Open tooltips currently rendered in the portal. */
 describe("ContentSwitcher (icon-only)", () => {
@@ -39,6 +40,50 @@ describe("ContentSwitcher (icon-only)", () => {
     expect(
       container.querySelector(".bx--content-switcher__label"),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders the icon beside the visible text with `iconOnly={false}`", async () => {
+    const { container } = render(IconWithText);
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("tablist")).not.toHaveClass(
+      "bx--content-switcher--icon-only",
+    );
+
+    const dashboard = screen.getByRole("tab", { name: "Dashboard" });
+    expect(dashboard).not.toHaveAttribute("aria-label");
+    expect(dashboard.textContent?.trim()).toBe("Dashboard");
+
+    const label = dashboard.querySelector(".bx--content-switcher__label");
+    expect(label).toHaveClass("bx--content-switcher__label--with-icon");
+    expect(label?.firstElementChild?.tagName).toBe("svg");
+    expect(label?.firstElementChild).toHaveAttribute("aria-hidden", "true");
+    expect(
+      container.querySelectorAll(".bx--content-switcher__label-text"),
+    ).toHaveLength(2);
+
+    await fireEvent.focus(dashboard);
+    await tick();
+    expect(openTooltips()).toHaveLength(0);
+  });
+
+  it("switches to icon-only when `iconOnly` turns on", async () => {
+    const { rerender } = render(IconWithText);
+    await tick();
+    await tick();
+
+    await rerender({ iconOnly: true });
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("tablist")).toHaveClass(
+      "bx--content-switcher--icon-only",
+    );
+    expect(screen.getByRole("tab", { name: "Dashboard" })).toHaveAttribute(
+      "aria-label",
+      "Dashboard",
+    );
   });
 
   it("opens a tooltip on hover after the enter delay and closes after the leave delay", async () => {

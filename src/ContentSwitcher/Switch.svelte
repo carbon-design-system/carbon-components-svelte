@@ -23,9 +23,17 @@
    * Render an icon-only switch.
    * The parent `ContentSwitcher` becomes icon-only when every `Switch` sets `icon`.
    * `text` is used as the accessible label and the tooltip shown on hover and focus.
+   * Set `iconOnly` to `false` to show the icon beside the text instead.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
+
+  /**
+   * Set to `false` to show `icon` before the visible `text`, with no tooltip.
+   * Only read when `icon` is set. The default slot then replaces the text,
+   * not the icon.
+   */
+  export let iconOnly = true;
 
   /**
    * Set to `true` for the switch to be selected.
@@ -64,11 +72,13 @@
 
   const hasIcon = icon !== undefined;
 
+  $: showIconOnly = hasIcon && iconOnly;
+
   // Last `selected` value seen here, so the block below reacts to caller writes
   // and not to the currentId echo.
   let prevSelected = selected;
 
-  ctx.add({ id, text, selected, icon: hasIcon, disabled });
+  ctx.add({ id, text, selected, icon: hasIcon && iconOnly, disabled });
 
   const unsubscribe = ctx.currentId.subscribe((currentId) => {
     selected = prevSelected = currentId === id;
@@ -91,6 +101,13 @@
     ctx.setDisabled(id, disabled);
   }
 
+  // Same for `iconOnly`, which decides whether the switcher is icon-only.
+  let prevIconOnly = hasIcon && iconOnly;
+  $: if (showIconOnly !== prevIconOnly) {
+    prevIconOnly = showIconOnly;
+    ctx.setIconOnly(id, showIconOnly);
+  }
+
   // Icon-only switches show `text` as a portalled tooltip on hover/focus.
   // The portal keeps the tooltip from being clipped by overflow ancestors.
 
@@ -102,7 +119,7 @@
   // Gate on the active slot so only one tooltip shows at a time. When a
   // neighbor claims it, this one closes even while still hovered.
   $: tooltipOpen =
-    hasIcon && !disabled && (hovered || focused) && $tooltipActive;
+    showIconOnly && !disabled && (hovered || focused) && $tooltipActive;
 
   function showTooltip() {
     tooltipHandoff.scheduleEnter(() => {
@@ -135,7 +152,7 @@
     ? "0"
     : "-1"}
   aria-selected={selected}
-  aria-label={hasIcon ? text : undefined}
+  aria-label={showIconOnly ? text : undefined}
   aria-controls={$pairs.panelBySwitch[id]}
   {disabled}
   {id}
@@ -150,22 +167,22 @@
   on:mouseover
   on:mouseenter
   on:mouseenter={() => {
-    if (hasIcon) showTooltip();
+    if (showIconOnly) showTooltip();
   }}
   on:mouseleave
   on:mouseleave={() => {
-    if (hasIcon) hideTooltip();
+    if (showIconOnly) hideTooltip();
   }}
   on:focus
   on:focus={() => {
-    if (hasIcon) {
+    if (showIconOnly) {
       focused = true;
       tooltipHandoff.claim();
     }
   }}
   on:blur
   on:blur={() => {
-    if (hasIcon) {
+    if (showIconOnly) {
       focused = false;
       if (!hovered) tooltipHandoff.release();
     }
@@ -173,8 +190,18 @@
   on:keyup
   on:keydown
 >
-  {#if hasIcon}
+  {#if showIconOnly}
     <slot {selected}><svelte:component this={icon} /></slot>
+  {:else if hasIcon}
+    <span
+      class:bx--content-switcher__label={true}
+      class:bx--content-switcher__label--with-icon={true}
+    >
+      <svelte:component this={icon} />
+      <span class:bx--content-switcher__label-text={true}>
+        <slot {selected}>{text}</slot>
+      </span>
+    </span>
   {:else}
     <span class:bx--content-switcher__label={true}>
       <slot {selected}>{text}</slot>
@@ -182,7 +209,7 @@
   {/if}
 </button>
 
-{#if hasIcon}
+{#if showIconOnly}
   <PortalTooltip
     anchor={ref}
     direction="top"
