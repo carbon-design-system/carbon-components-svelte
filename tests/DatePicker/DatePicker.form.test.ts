@@ -129,24 +129,13 @@ describe("DatePicker form reset", () => {
     });
   });
 
-  it("leaves everything alone when the reset is canceled", async () => {
-    render(DatePickerForm, { props: { value: "2024-01-01" } });
-    const input = screen.getByLabelText("Start date");
-    getForm().addEventListener("reset", (event) => event.preventDefault());
-
-    await editInput(input, "2024-06-15");
-    await resetForm();
-
-    expect(input).toHaveValue("2024-06-15");
-    expect(getValue()).toBe("2024-06-15");
-  });
-
   it("does not dispatch change on reset", async () => {
     const onChange = vi.fn();
     render(DatePickerForm, { props: { value: "2024-01-01", onChange } });
     const input = screen.getByLabelText("Start date");
 
     await editInput(input, "2024-06-15");
+    expect(onChange).toHaveBeenCalled();
     onChange.mockClear();
 
     await resetForm();

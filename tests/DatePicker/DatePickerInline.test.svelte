@@ -21,5 +21,4 @@
   <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-<button type="button">Elsewhere</button>
 <p data-testid="value">{value}</p>
