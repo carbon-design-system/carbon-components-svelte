@@ -51,7 +51,6 @@ const KNOWN: Record<string, string> = {
   "CheckboxGroup invalid-not-alert": "role=alert follow-up after #4272",
   "RadioButtonGroup invalid-not-alert": "role=alert follow-up after #4272",
   "Select invalid-not-alert": "role=alert follow-up after #4272",
-  "MultiSelect invalid-not-alert": "role=alert follow-up after #4271",
 };
 
 const IDREF_ATTRIBUTES = [
