@@ -43,9 +43,6 @@
   export function findParentTreeNode(node) {
     if (node == null || !(node instanceof HTMLElement)) return null;
     if (node.classList.contains("bx--tree-parent-node")) return node;
-    if (node.classList.contains("bx--tree-node-link-parent")) {
-      return node.firstElementChild;
-    }
     if (node.classList.contains("bx--tree")) return null;
     if (node.parentNode instanceof HTMLElement) {
       return findParentTreeNode(node.parentNode);
