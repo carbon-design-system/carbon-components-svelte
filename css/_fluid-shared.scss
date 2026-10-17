@@ -6,17 +6,18 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 
 /// Absolutely positioned fluid label that overlays the top of a fluid field
-/// and scrolls horizontally instead of wrapping.
+/// and truncates with an ellipsis instead of wrapping. (Carbon scrolls it
+/// sideways with a hidden scrollbar, which makes a cut-off label a tab stop
+/// of its own in browsers that focus scroll containers.)
 /// @access private
 /// @group components
 @mixin fluid-label {
   position: absolute;
   z-index: 1;
-  display: flex;
-  align-items: center;
+  display: block;
   margin: 0;
-  overflow-x: scroll;
-  scrollbar-width: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   block-size: to-rem(16px);
   inline-size: calc(100% - to-rem(32px));
@@ -28,6 +29,8 @@
 /// @access private
 /// @group components
 @mixin fluid-label-slotted {
+  display: flex;
+  align-items: center;
   gap: $carbon--spacing-03;
   overflow: visible;
 }
