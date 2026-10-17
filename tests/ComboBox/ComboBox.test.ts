@@ -576,6 +576,25 @@ describe("ComboBox", () => {
     expect(clearButton).not.toHaveAttribute("open");
   });
 
+  // A combo box rendered open hasn't been opened by the user, so it
+  // leaves focus (and the page's scroll position) where they are.
+  it("does not take focus when rendered open", async () => {
+    render(ComboBox, { props: { open: true } });
+    await tick();
+
+    expect(getInput()).not.toHaveFocus();
+  });
+
+  it("focuses the input when opened after rendering", async () => {
+    const { rerender } = render(ComboBox, { props: { open: false } });
+    await tick();
+
+    await rerender({ open: true });
+    await tick();
+
+    expect(getInput()).toHaveFocus();
+  });
+
   it("should handle disabled state", () => {
     render(ComboBox, { props: { disabled: true } });
 

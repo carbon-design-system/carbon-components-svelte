@@ -398,6 +398,9 @@
   let prevInputLength = 0;
   let listScrollTop = 0;
   let prevOpen = false;
+  // Set after the first `afterUpdate`, so a combo box rendered open doesn't
+  // take focus (and scroll the page to itself) when it mounts.
+  let rendered = false;
   let statusText = "";
 
   /** @type {null | HTMLDivElement} */
@@ -663,9 +666,10 @@
 
     menuWindow.sync();
 
-    if (open) {
-      ref.focus();
+    if (wasJustOpened && rendered) ref.focus();
+    rendered = true;
 
+    if (open) {
       // Store the current value before clearing.
       if (clearFilterOnOpen && value && selectedItem && !valueBeforeOpen) {
         valueBeforeOpen = value;
