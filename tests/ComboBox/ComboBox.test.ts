@@ -562,6 +562,20 @@ describe("ComboBox", () => {
     expect(clearButton).toBeInTheDocument();
   });
 
+  // `open` belongs to the combo box, not its clear button; forwarded,
+  // it lands on the button's div as `open="false"`, which server markup
+  // leaves out.
+  it("does not put an open attribute on the clear button", async () => {
+    render(ComboBox, { props: { selectedId: "1", value: "Email" } });
+
+    const clearButton = screen.getByRole("button", {
+      name: "Clear selected item",
+    });
+    expect(clearButton).not.toHaveAttribute("open");
+    await user.click(getInput());
+    expect(clearButton).not.toHaveAttribute("open");
+  });
+
   it("should handle disabled state", () => {
     render(ComboBox, { props: { disabled: true } });
 
