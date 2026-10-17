@@ -4,6 +4,12 @@ import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 
 export const HIGHLIGHT_CURSOR_KEY = "carbon:ListBoxHighlight";
 
+/**
+ * Lets a listbox that renders its own option markup create the cursor and
+ * hand it to `ListBoxMenu`, which uses it instead of making its own.
+ */
+export const HIGHLIGHT_CURSOR_OWNER_KEY = "carbon:ListBoxHighlightOwner";
+
 const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
 
 /**
@@ -94,5 +100,26 @@ export function createHighlightCursor() {
     register,
     set,
     highlightedId: { subscribe: highlightedId.subscribe },
+  };
+}
+
+/**
+ * Svelte action: register an option node with a highlight cursor, the way
+ * `ListBoxMenuItem` does, for listboxes that render plain option markup.
+ *
+ * @param {HTMLElement} node
+ * @param {{ cursor: ReturnType<typeof createHighlightCursor>; id: string; active?: boolean }} params
+ * @returns {{ update: (params: { cursor: ReturnType<typeof createHighlightCursor>; id: string; active?: boolean }) => void; destroy: () => void }}
+ */
+export function highlightOption(node, params) {
+  let unregister = params.cursor.register(params.id, node, params.active);
+  return {
+    update(next) {
+      unregister();
+      unregister = next.cursor.register(next.id, node, next.active);
+    },
+    destroy() {
+      unregister();
+    },
   };
 }
