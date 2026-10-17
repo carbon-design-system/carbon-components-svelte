@@ -62,11 +62,13 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TileWrapper from "./TileWrapper.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -146,71 +148,85 @@
   $: label = expanded ? tileExpandedLabel : tileCollapsedLabel;
   $: effectiveMaxHeight = tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight;
   $: effectivePadding = tilePadding > 0 ? tilePadding : measuredPadding;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<svelte:element
-  this={hasInteractiveContent ? "div" : "button"}
-  bind:this={ref}
-  type={hasInteractiveContent ? undefined : "button"}
-  {id}
-  aria-expanded={hasInteractiveContent ? undefined : expanded}
-  tabindex={hasInteractiveContent ? undefined : tabindex}
-  title={hasInteractiveContent ? undefined : iconText}
-  class:bx--tile={true}
-  class:bx--tile--expandable={true}
-  class:bx--tile--expandable--interactive={hasInteractiveContent}
-  class:bx--tile--is-expanded={expanded}
-  class:bx--tile--light={light}
-  style:max-height={expanded || effectiveMaxHeight <= 0
-    ? "none"
-    : `${effectiveMaxHeight + effectivePadding}px`}
-  {...hasInteractiveContent ? wrapperProps : $$restProps}
-  on:click
-  on:click={() => {
-    if (!hasInteractiveContent) toggle();
-  }}
-  on:keydown
-  on:keypress
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  on:focus
-  on:blur
+<TileWrapper
+  decorated={$$slots.decorator}
+  state={aiLabelState}
+  class="bx--tile__wrapper--expandable"
 >
-  <div>
-    <div bind:this={refAbove} class:bx--tile-content={true}>
-      <span class:bx--tile-content__above-the-fold={true}>
-        <slot name="above" />
-      </span>
+  <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <svelte:element
+    this={hasInteractiveContent ? "div" : "button"}
+    bind:this={ref}
+    type={hasInteractiveContent ? undefined : "button"}
+    {id}
+    aria-expanded={hasInteractiveContent ? undefined : expanded}
+    tabindex={hasInteractiveContent ? undefined : tabindex}
+    title={hasInteractiveContent ? undefined : iconText}
+    class:bx--tile={true}
+    class:bx--tile--expandable={true}
+    class:bx--tile--expandable--interactive={hasInteractiveContent}
+    class:bx--tile--is-expanded={expanded}
+    class:bx--tile--light={light}
+    class:bx--tile--decorator={$$slots.decorator}
+    class:bx--tile--ai-label={$aiLabelState === "active"}
+    style:max-height={expanded || effectiveMaxHeight <= 0
+      ? "none"
+      : `${effectiveMaxHeight + effectivePadding}px`}
+    {...hasInteractiveContent ? wrapperProps : $$restProps}
+    on:click
+    on:click={() => {
+      if (!hasInteractiveContent) toggle();
+    }}
+    on:keydown
+    on:keypress
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    on:focus
+    on:blur
+  >
+    <div>
+      <div bind:this={refAbove} class:bx--tile-content={true}>
+        <span class:bx--tile-content__above-the-fold={true}>
+          <slot name="above" />
+        </span>
+      </div>
+      <svelte:element
+        this={hasInteractiveContent ? "button" : "div"}
+        type={hasInteractiveContent ? "button" : undefined}
+        tabindex={hasInteractiveContent ? tabindex : undefined}
+        class:bx--tile__chevron={true}
+        aria-expanded={hasInteractiveContent ? expanded : undefined}
+        aria-label={hasInteractiveContent
+          ? (ariaLabel ?? (label ? undefined : iconText))
+          : undefined}
+        aria-labelledby={hasInteractiveContent ? ariaLabelledBy : undefined}
+        aria-describedby={hasInteractiveContent ? ariaDescribedBy : undefined}
+        aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
+        title={hasInteractiveContent ? iconText : undefined}
+        on:click={() => {
+          if (hasInteractiveContent) toggle();
+        }}
+        on:focus
+        on:blur
+      >
+        <span>{label}</span>
+        <ChevronDown />
+      </svelte:element>
+      <div class:bx--tile-content={true}>
+        <span id="{id}-content" class:bx--tile-content__below-the-fold={true}>
+          <slot name="below" />
+        </span>
+      </div>
     </div>
-    <svelte:element
-      this={hasInteractiveContent ? "button" : "div"}
-      type={hasInteractiveContent ? "button" : undefined}
-      tabindex={hasInteractiveContent ? tabindex : undefined}
-      class:bx--tile__chevron={true}
-      aria-expanded={hasInteractiveContent ? expanded : undefined}
-      aria-label={hasInteractiveContent
-        ? (ariaLabel ?? (label ? undefined : iconText))
-        : undefined}
-      aria-labelledby={hasInteractiveContent ? ariaLabelledBy : undefined}
-      aria-describedby={hasInteractiveContent ? ariaDescribedBy : undefined}
-      aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
-      title={hasInteractiveContent ? iconText : undefined}
-      on:click={() => {
-        if (hasInteractiveContent) toggle();
-      }}
-      on:focus
-      on:blur
-    >
-      <span>{label}</span>
-      <ChevronDown />
-    </svelte:element>
-    <div class:bx--tile-content={true}>
-      <span id="{id}-content" class:bx--tile-content__below-the-fold={true}>
-        <slot name="below" />
-      </span>
-    </div>
-  </div>
-</svelte:element>
+  </svelte:element>
+  <svelte:fragment slot="decorator">
+    <slot name="decorator" />
+  </svelte:fragment>
+</TileWrapper>

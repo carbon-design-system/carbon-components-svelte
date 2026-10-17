@@ -4,7 +4,7 @@ description: Checkboxes let users select one or more options from a list, for mu
 ---
 
 <script>
-  import { Checkbox, CheckboxGroup, CheckboxSkeleton, Stack, Tooltip } from "carbon-components-svelte";
+  import { AILabel, Checkbox, CheckboxGroup, CheckboxSkeleton, Stack, Tooltip } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -52,6 +52,24 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
 Use `helperText` to provide additional context or instructions below the checkbox.
 
 <Checkbox labelText="Subscribe to newsletter" helperText="You can unsubscribe at any time" />
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the option as AI-generated. The label renders at the `"mini"` size, or `"md"` for the inline kind. On a `CheckboxGroup`, the label follows the legend.
+
+<Stack gap={5}>
+  <Checkbox labelText="Enable automatic failover" checked>
+    <AILabel slot="decorator">
+      <p>Recommended because this database had two outages last quarter.</p>
+    </AILabel>
+  </Checkbox>
+  <CheckboxGroup legendText="Alert channels">
+    <AILabel slot="decorator" />
+    <Checkbox labelText="Email" checked />
+    <Checkbox labelText="Slack" checked />
+    <Checkbox labelText="PagerDuty" />
+  </CheckboxGroup>
+</Stack>
 
 ## States
 

@@ -114,7 +114,8 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import { readable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -229,6 +230,14 @@
   // A decorative checkbox's owner (e.g. a MultiSelect option) already
   // announces read-only, so skip the per-checkbox description.
   $: describeReadonly = effectiveReadonly && !decorative;
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
+
+  /** @param {"default" | "inline"} kind */
+  function labelSizeForKind(kind) {
+    return kind === "inline" ? "md" : "mini";
+  }
 </script>
 
 {#if skeleton}
@@ -246,6 +255,7 @@
     class:bx--checkbox-wrapper--readonly={effectiveReadonly}
     class:bx--checkbox-wrapper--invalid={showInvalid}
     class:bx--checkbox-wrapper--warning={showWarn}
+    class:bx--checkbox-wrapper--decorator={$$slots.decorator}
     {...wrapperProps}
     on:click
     on:mouseover
@@ -325,6 +335,16 @@
         <slot name="labelChildren"> {labelText} </slot>
       </span>
     </label>
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--checkbox-wrapper-inner--decorator"
+        state={aiLabelState}
+        labelSize={labelSizeForKind}
+        labelAlign="start"
+      >
+        <slot name="decorator" />
+      </Decorator>
+    {/if}
     {#if describeReadonly}
       <span id={readonlyId} class:bx--visually-hidden={true}
         >{readonlyText}</span

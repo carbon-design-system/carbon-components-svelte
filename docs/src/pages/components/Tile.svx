@@ -3,7 +3,7 @@ description: Tiles provide a container for displaying content in a structured, c
 ---
 
 <script>
-  import { Box, Column, Grid, Row, Tile } from "carbon-components-svelte";
+  import { AILabel, Box, Column, Grid, Row, Tile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -11,6 +11,18 @@ description: Tiles provide a container for displaying content in a structured, c
 Create a basic tile container for your content.
 
 <Tile>Payments API — Operational, 99.98% uptime</Tile>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner at the `"xs"` size.
+
+<Tile>
+  <h4>Usage forecast</h4>
+  <p>Spend is projected to grow 12% next month.</p>
+  <AILabel slot="decorator">
+    <p>Generated from 90 days of billing data.</p>
+  </AILabel>
+</Tile>
 
 ## Light
 

@@ -61,11 +61,12 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import { readable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TileWrapper from "./TileWrapper.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -102,76 +103,90 @@
     ariaDescribedBy,
     rest: labelProps,
   } = splitAriaNaming($$restProps));
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
-<input
-  bind:this={ref}
-  type="checkbox"
-  tabindex={disabled ? undefined : tabindex}
-  class:bx--tile-input={true}
-  checked={selected}
-  {id}
-  {value}
-  name={$groupName ?? name}
-  form={$groupForm ?? form}
-  {title}
-  {disabled}
-  aria-label={ariaLabel}
-  aria-labelledby={ariaLabelledBy}
-  aria-describedby={ariaDescribedBy}
-  on:click={(event) => {
-    pendingShiftKey = event.shiftKey;
-  }}
-  on:change={() => {
-    if (disabled) return;
-    if (!ref) return;
-    const newSelected = ref.checked;
-    selected = newSelected;
-    if (hasGroup) {
-      update({ value, selected: newSelected, shiftKey: pendingShiftKey });
-    } else {
-      if (newSelected) {
-        dispatch("select", id);
+<TileWrapper
+  decorated={$$slots.decorator}
+  state={aiLabelState}
+  class="bx--tile__wrapper--selectable"
+>
+  <input
+    bind:this={ref}
+    type="checkbox"
+    tabindex={disabled ? undefined : tabindex}
+    class:bx--tile-input={true}
+    checked={selected}
+    {id}
+    {value}
+    name={$groupName ?? name}
+    form={$groupForm ?? form}
+    {title}
+    {disabled}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    aria-describedby={ariaDescribedBy}
+    on:click={(event) => {
+      pendingShiftKey = event.shiftKey;
+    }}
+    on:change={() => {
+      if (disabled) return;
+      if (!ref) return;
+      const newSelected = ref.checked;
+      selected = newSelected;
+      if (hasGroup) {
+        update({ value, selected: newSelected, shiftKey: pendingShiftKey });
       } else {
-        dispatch("deselect", id);
+        if (newSelected) {
+          dispatch("select", id);
+        } else {
+          dispatch("deselect", id);
+        }
       }
-    }
-    pendingShiftKey = false;
-  }}
-  on:keydown
-  on:keydown={(event) => {
-    if (disabled) return;
-    if (event.key === "Enter") {
-      event.preventDefault();
-      // Dispatching (rather than `ref.click()`) lets Shift be forwarded onto
-      // the resulting click, which still runs the checkbox's native
-      // pre-click activation (toggle + a follow-up "change").
-      ref.dispatchEvent(
-        new MouseEvent("click", {
-          shiftKey: event.shiftKey,
-          bubbles: true,
-          cancelable: true,
-        }),
-      );
-    }
-  }}
->
-<label
-  for={id}
-  class:bx--tile={true}
-  class:bx--tile--selectable={true}
-  class:bx--tile--is-selected={selected}
-  class:bx--tile--light={light}
-  class:bx--tile--disabled={disabled}
-  class:bx--tile--full-height={fullHeight}
-  {...labelProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
-  <span aria-hidden="true" class:bx--tile__checkmark={true}>
-    <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
-  </span>
-  <span class:bx--tile-content={true}> <slot /> </span>
-</label>
+      pendingShiftKey = false;
+    }}
+    on:keydown
+    on:keydown={(event) => {
+      if (disabled) return;
+      if (event.key === "Enter") {
+        event.preventDefault();
+        // Dispatching (rather than `ref.click()`) lets Shift be forwarded onto
+        // the resulting click, which still runs the checkbox's native
+        // pre-click activation (toggle + a follow-up "change").
+        ref.dispatchEvent(
+          new MouseEvent("click", {
+            shiftKey: event.shiftKey,
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      }
+    }}
+  >
+  <label
+    for={id}
+    class:bx--tile={true}
+    class:bx--tile--selectable={true}
+    class:bx--tile--is-selected={selected}
+    class:bx--tile--light={light}
+    class:bx--tile--disabled={disabled}
+    class:bx--tile--full-height={fullHeight}
+    class:bx--tile--decorator={$$slots.decorator}
+    class:bx--tile--ai-label={$aiLabelState === "active"}
+    {...labelProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <span aria-hidden="true" class:bx--tile__checkmark={true}>
+      <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
+    </span>
+    <span class:bx--tile-content={true}> <slot /> </span>
+  </label>
+  <svelte:fragment slot="decorator">
+    <slot name="decorator" />
+  </svelte:fragment>
+</TileWrapper>
