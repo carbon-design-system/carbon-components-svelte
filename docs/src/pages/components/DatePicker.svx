@@ -626,9 +626,9 @@ Set `size` to match the field the skeleton stands in for.
 
 ### Range
 
-Set `range` to `true` to render a skeleton for the range variant.
+Set `datePickerType` to the type of the picker the skeleton stands in for. `"range"` draws two inputs; `"single"` and the other calendar types draw one full-width input.
 
-<DatePickerSkeleton range />
+<DatePickerSkeleton datePickerType="range" />
 
 ### Short
 
