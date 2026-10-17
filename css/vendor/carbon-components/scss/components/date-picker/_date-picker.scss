@@ -32,11 +32,26 @@
     order: 1;
   }
 
+  // ccs: a container narrower than the picker's fixed widths shrinks it
+  // to fit: the containers may shrink below their content, and the inputs
+  // are no wider than them.
   .#{$prefix}--date-picker-container {
     position: relative;
     display: flex;
+    min-width: 0;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--single,
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--range {
+    max-width: 100%;
+  }
+
+  .#{$prefix}--date-picker-input__wrapper,
+  .#{$prefix}--date-picker .flatpickr-wrapper {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .#{$prefix}--date-picker-input__wrapper {
@@ -70,6 +85,7 @@
   .#{$prefix}--date-picker.#{$prefix}--date-picker--single
     .#{$prefix}--date-picker__input {
     width: to-rem(288px);
+    max-width: 100%;
   }
 
   .#{$prefix}--date-picker
@@ -214,6 +230,7 @@
   .#{$prefix}--date-picker--range .#{$prefix}--date-picker-container,
   .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input {
     width: to-rem(143.5px);
+    max-width: 100%;
   }
 
   // ccs: the icon spans 16-32px from the right edge. The 3rem default
