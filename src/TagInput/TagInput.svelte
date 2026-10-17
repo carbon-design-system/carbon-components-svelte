@@ -537,7 +537,7 @@
         type="text"
         autocomplete="off"
         aria-invalid={showInvalid || undefined}
-        aria-errormessage={showInvalid ? errorId : undefined}
+        aria-errormessage={showInvalid && errorText ? errorId : undefined}
         {disabled}
         {id}
         {placeholder}
@@ -550,6 +550,8 @@
           resolveStatusDescribedBy({
             showInvalid,
             showWarn,
+            invalidText: errorText,
+            warnText,
             helperText,
             errorId,
             warnId,
@@ -595,12 +597,12 @@
       {helperText}
     </div>
   {/if}
-  {#if showInvalid}
+  {#if showInvalid && errorText}
     <div class:bx--form-requirement={true} id={errorId} role="alert">
       {errorText}
     </div>
   {/if}
-  {#if showWarn}
+  {#if showWarn && warnText}
     <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
   {/if}
   {#if name}
