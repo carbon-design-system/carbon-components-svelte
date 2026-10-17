@@ -17,7 +17,7 @@ const renderField = (
   render(FieldHost, {
     props: {
       component: c.component,
-      props: { ...c.props, ...props },
+      fieldProps: { ...c.props, ...props },
       inFluidForm,
     },
   });
