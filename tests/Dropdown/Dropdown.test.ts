@@ -11,7 +11,6 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { rect } from "../utils/rect";
-import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import DropdownFluidForm from "./Dropdown.fluidForm.test.svelte";
@@ -1408,15 +1407,9 @@ describe("Dropdown", () => {
 
     const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
-    // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
-    // See: https://svelte.dev/docs/svelte/v5-migration-guide
-    // When label is undefined, it renders as "" instead of "undefined", so the button's
-    // accessible name falls back to the aria-label from ListBoxMenuIcon ("Open menu").
-    if (isSvelte5) {
-      expect(button).toHaveTextContent("Open menu");
-    } else {
-      expect(button).toHaveTextContent("undefined");
-    }
+    // With no label, the text falls back to ListBoxMenuIcon's "Open menu".
+    expect(button).toHaveTextContent("Open menu");
+    expect(button).not.toHaveTextContent("undefined");
   });
 
   it("should handle translateWithId prop", () => {
