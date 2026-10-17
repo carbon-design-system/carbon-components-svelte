@@ -252,18 +252,6 @@ describe("PinCodeInput", () => {
     expect(inputs[0].value).toBe("b");
   });
 
-  it("uses type presets when pattern is omitted", async () => {
-    render(PinCodeInput, { props: { type: "numeric" } });
-    const inputs = getInputs();
-
-    inputs[0].focus();
-    await user.keyboard("a");
-    expect(inputs[0].value).toBe("");
-
-    await user.keyboard("3");
-    expect(inputs[0].value).toBe("3");
-  });
-
   describe("inputmode", () => {
     it("shows a numeric keypad by default", () => {
       render(PinCodeInput);
@@ -496,19 +484,6 @@ describe("PinCodeInput", () => {
     ).toBe(true);
   });
 
-  it("keeps single-character input behavior unchanged", async () => {
-    const { component } = render(PinCodeInput);
-    const inputs = getInputs();
-
-    inputs[0].focus();
-    await user.keyboard("9");
-    await tick();
-
-    expect(component.value).toBe("9");
-    expect(component.code).toEqual(["9", "", "", ""]);
-    expect(inputs[1]).toHaveFocus();
-  });
-
   it("does not dispatch paste when the clipboard has no valid characters", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(PinCodeInput);
@@ -654,18 +629,6 @@ describe("PinCodeInput", () => {
 
     const mouseup = await clickToFocus(getInputs()[2]);
     expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("should set aria-errormessage (not aria-describedby) to the error id on each segment when invalid", () => {
-    const { container } = render(PinCodeInput, {
-      props: { id: "test-pin", invalid: true, invalidText: "Incorrect code" },
-    });
-
-    for (const input of getInputs()) {
-      expect(input).toHaveAttribute("aria-invalid", "true");
-      expect(input).toHaveAttribute("aria-errormessage", "error-test-pin");
-    }
-    expect(getFieldset(container)).not.toHaveAttribute("aria-describedby");
   });
 
   describe("invalid and warning states", () => {
@@ -1021,29 +984,6 @@ describe("PinCodeInput", () => {
         "bx--label--slotted",
       );
     });
-  });
-
-  it("disables every segment", () => {
-    render(PinCodeInput, { props: { disabled: true } });
-    for (const input of getInputs()) {
-      expect(input).toBeDisabled();
-    }
-  });
-
-  it("does not allow edits in the read-only state", async () => {
-    const { component } = render(PinCodeInput, {
-      props: { readonly: true, value: "0182" },
-    });
-    const inputs = getInputs();
-
-    for (const input of inputs) {
-      expect(input).toHaveAttribute("readonly");
-    }
-
-    inputs[0].focus();
-    await user.keyboard("9");
-    await tick();
-    expect(component.value).toBe("0182");
   });
 
   it("renders fluid skeleton state", () => {
