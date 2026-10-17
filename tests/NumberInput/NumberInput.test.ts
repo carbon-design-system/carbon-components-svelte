@@ -1922,7 +1922,7 @@ describe("NumberInput", () => {
       render(NumberInput, { props: { locale: "fr-FR", value: 3 } });
 
       const calls = spy.mock.calls.filter(([loc]) => loc === "fr-FR");
-      expect(calls.length).toBeLessThanOrEqual(1);
+      expect(calls).toHaveLength(1);
 
       spy.mockRestore();
     });
