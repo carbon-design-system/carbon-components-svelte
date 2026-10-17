@@ -935,7 +935,7 @@
           {#if selectedItem}
             {itemToString(selectedItem)}
           {:else}
-            {label}
+            {label ?? ""}
           {/if}
         </span>
         {#if clearable && selectedId !== undefined}
