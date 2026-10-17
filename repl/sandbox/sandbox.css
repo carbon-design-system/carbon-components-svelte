@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: var(--cds-ui-background, #fff);
+  color: var(--cds-text-01, #161616);
+}

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="repl-sandbox-origin" content="__SANDBOX_ORIGIN__">
+    <meta name="repl-defaults" content="__REPL_DEFAULTS__">
+    <link rel="preload" as="script" href="__COMPILER_URL__" fetchpriority="high">
+    <title>Carbon REPL</title>
+    <style>
+      html, body { margin: 0; height: 100%; }
+      body { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #f4f4f4; }
+      #header { position: fixed; inset: 0 0 auto 0; height: 6rem; z-index: 10; }
+      .repl-layout {
+        position: fixed; inset: 6rem 0 0 0;
+        display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+      #editor-pane { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid #c6c6c6; background: #fff; }
+      #preview-pane { display: grid; grid-template-rows: minmax(0, 1fr) minmax(8rem, 30%); min-height: 0; }
+      #preview-frame { position: relative; min-height: 0; background: #fff; }
+      #preview-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+      #console { min-height: 0; border-top: 1px solid #c6c6c6; background: #fff; }
+      .repl-code, #boot-code {
+        margin: 0; padding: 1rem; tab-size: 2;
+        font: 0.875rem/1.5 "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+        white-space: pre; overflow: auto; color: #161616;
+      }
+      #boot-code { flex: 1; margin-top: 3rem; }
+    </style>
+  </head>
+  <body>
+    <div id="header"></div>
+    <main class="repl-layout">
+      <section id="editor-pane" aria-label="Editor"><pre id="boot-code"></pre></section>
+      <section id="preview-pane" aria-label="Preview">
+        <div id="preview-frame"></div>
+        <div id="console"></div>
+      </section>
+    </main>
+    <script>
+      // Inline bootstrap: owns the preview pipeline so neither code nor preview
+      // waits for the shell bundle. Shows code from the URL hash immediately,
+      // starts the compiler worker, creates the sandbox iframe, wires ports.
+      (() => {
+        "use strict";
+        const SANDBOX = document.querySelector('meta[name="repl-sandbox-origin"]').content;
+        const DEFAULTS = JSON.parse(document.querySelector('meta[name="repl-defaults"]').content);
+        const HASH_PREFIX = "x";
+        const DEFAULT_FILES = [
+          {
+            name: "App.svelte",
+            source: `<script>
+  import { Button, ComboBox, Stack } from "carbon-components-svelte";
+  import { Add } from "carbon-icons-svelte";
+
+  let count = 0;
+  let selectedId = "1";
+
+  const items = [
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ];
+${"<"}/script>
+
+<Stack gap={5} style="max-width: 20rem">
+  <Button icon={Add} on:click={() => count++}>Clicked {count} times</Button>
+
+  <ComboBox
+    titleText="Contact"
+    placeholder="Select contact method"
+    bind:selectedId
+    {items}
+  />
+
+  <p>Selected: {items.find((item) => item.id === selectedId)?.text ?? "none"}</p>
+</Stack>
+`,
+          },
+        ];
+
+        const listeners = new Set();
+        const events = [];
+        const emit = (message) => {
+          events.push(message);
+          for (const fn of listeners) fn(message);
+        };
+        const sentAt = new Map();
+        let seq = 0;
+
+        const repl = {
+          sandboxOrigin: SANDBOX,
+          defaults: DEFAULTS,
+          defaultFiles: DEFAULT_FILES,
+          hashPrefix: HASH_PREFIX,
+          files: DEFAULT_FILES,
+          versions: { ...DEFAULTS },
+          options: { theme: "white" },
+          entry: "App.svelte",
+          metrics: {},
+          sentAt,
+          subscribe(fn) {
+            for (const m of events) fn(m);
+            listeners.add(fn);
+            return () => listeners.delete(fn);
+          },
+        };
+        window.__repl = repl;
+
+        const b64ToBytes = (s) =>
+          Uint8Array.fromBase64
+            ? Uint8Array.fromBase64(s, { alphabet: "base64url" })
+            : Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+
+        async function decode(hash) {
+          const bytes = b64ToBytes(hash);
+          const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+          const payload = JSON.parse(await new Response(stream).text());
+          return {
+            files: payload.f.map(([name, source]) => ({ name, source })),
+            versions: { ...DEFAULTS, ...payload.v },
+            options: { theme: "white", ...payload.o },
+          };
+        }
+
+        function showCode() {
+          const pre = document.getElementById("boot-code");
+          const entry = repl.files.find((f) => f.name === repl.entry) ?? repl.files[0];
+          pre.textContent = entry.source;
+          performance.mark("repl:code-inserted");
+          requestAnimationFrame(() =>
+            setTimeout(() => {
+              repl.metrics.codeVisible = performance.now();
+              emit({ type: "metric", name: "codeVisible" });
+            }, 0),
+          );
+        }
+
+        function start() {
+          showCode();
+          const v = repl.versions;
+          const worker = new Worker(
+            `/worker.js?svelte=${v.svelte}&ccs=${v.ccs}&pkg=${encodeURIComponent(SANDBOX)}`,
+          );
+          const run = new MessageChannel();
+          const shell = new MessageChannel();
+          worker.postMessage({ type: "init" }, [run.port1]);
+          worker.onmessage = ({ data }) => {
+            if (data.type === "compiled" && data.seq === 1) repl.metrics.firstCompiled = performance.now();
+            emit(data);
+          };
+          worker.onerror = (e) => emit({ type: "error", message: `Worker: ${e.message}` });
+
+          const iframe = document.createElement("iframe");
+          iframe.title = "Preview";
+          iframe.setAttribute("sandbox", "allow-scripts allow-modals allow-forms");
+          iframe.src = `${SANDBOX}/sandbox/ccs@${v.ccs}/svelte@${v.svelte}/`;
+          iframe.addEventListener(
+            "load",
+            () => iframe.contentWindow.postMessage({ type: "init" }, "*", [shell.port2, run.port2]),
+            { once: true },
+          );
+          document.getElementById("preview-frame").append(iframe);
+
+          shell.port1.onmessage = ({ data }) => {
+            if (data.type === "painted") {
+              const at = data.at - performance.timeOrigin;
+              if (repl.metrics.previewPainted === undefined) repl.metrics.previewPainted = at;
+              const sent = sentAt.get(data.seq);
+              if (sent !== undefined) data.sinceCompile = at - sent;
+            }
+            emit(data);
+          };
+
+          repl.worker = worker;
+          repl.compile = (files) => {
+            seq += 1;
+            sentAt.set(seq, performance.now());
+            worker.postMessage({ type: "compile", seq, entry: repl.entry, files });
+            return seq;
+          };
+          repl.setTheme = (theme) => {
+            repl.options.theme = theme;
+            shell.port1.postMessage({ type: "theme", theme });
+          };
+          repl.setTheme(repl.options.theme);
+          repl.compile(repl.files);
+        }
+
+        const hash = location.hash.slice(1);
+        repl.ready = (async () => {
+          if (hash.startsWith(HASH_PREFIX)) {
+            try {
+              Object.assign(repl, await decode(hash.slice(HASH_PREFIX.length)));
+            } catch (error) {
+              console.error("Could not decode the URL hash; showing the default example.", error);
+            }
+          }
+          start();
+          return repl;
+        })();
+      })();
+    </script>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
