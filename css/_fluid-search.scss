@@ -26,10 +26,6 @@
     clip: initial;
   }
 
-  .#{$prefix}--search--fluid .#{$prefix}--label::-webkit-scrollbar {
-    display: none;
-  }
-
   .#{$prefix}--search--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
     @include fluid-label-slotted;
   }

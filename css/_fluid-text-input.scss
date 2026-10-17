@@ -21,12 +21,14 @@
       outline $duration--fast-01 motion(standard, productive);
   }
 
+  // Block, not flex, so a long label can end in an ellipsis; slotted
+  // labels get their flex row back from `fluid-label-slotted`.
   .#{$prefix}--text-input--fluid .#{$prefix}--label {
     position: absolute;
     z-index: 1;
-    display: flex;
-    align-items: center;
+    display: block;
     margin: 0;
+    max-inline-size: calc(100% - #{$carbon--spacing-05 * 2});
     block-size: to-rem(16px);
     inset-block-start: to-rem(13px);
     inline-size: auto;
@@ -46,13 +48,9 @@
     color: $text-secondary;
   }
 
-  .#{$prefix}--text-input--fluid .#{$prefix}--label::-webkit-scrollbar {
-    display: none;
-  }
-
   .#{$prefix}--text-input--fluid .#{$prefix}--label {
-    overflow-x: scroll;
-    scrollbar-width: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
 

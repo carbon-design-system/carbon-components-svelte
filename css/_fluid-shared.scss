@@ -6,17 +6,18 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 
 /// Absolutely positioned fluid label that overlays the top of a fluid field
-/// and scrolls horizontally instead of wrapping.
+/// and truncates with an ellipsis instead of wrapping. (Carbon scrolls it
+/// sideways with a hidden scrollbar, which makes a cut-off label a tab stop
+/// of its own in browsers that focus scroll containers.)
 /// @access private
 /// @group components
 @mixin fluid-label {
   position: absolute;
   z-index: 1;
-  display: flex;
-  align-items: center;
+  display: block;
   margin: 0;
-  overflow-x: scroll;
-  scrollbar-width: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   block-size: to-rem(16px);
   inline-size: calc(100% - to-rem(32px));
@@ -24,12 +25,24 @@
   left: $carbon--spacing-05;
 }
 
-/// Slotted fluid label content (e.g. a tooltip icon) must not clip overflow.
+/// Slotted fluid label content (e.g. a toggletip button) can't end in an
+/// ellipsis without hiding a trailing control, so it scrolls sideways under
+/// a hidden scrollbar, as in Carbon, and focusing the control scrolls it
+/// into view. It stays inside the field instead of spilling past its edge.
 /// @access private
 /// @group components
 @mixin fluid-label-slotted {
+  display: flex;
+  align-items: center;
   gap: $carbon--spacing-03;
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  // Room for a focused control's 2px outline, which the scroll box would
+  // otherwise clip; the negative margin keeps the text where it was.
+  box-sizing: content-box;
+  padding: to-rem(2px);
+  margin: to-rem(-2px);
 }
 
 /// Reveals a `.bx--form-requirement` validation message that a fluid variant
