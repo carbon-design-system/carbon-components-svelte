@@ -91,4 +91,4 @@
   on:blur:stepper={(e) => onblurstepper?.(e)}
 />
 
-<div data-testid="value">{value}</div>
+<div data-testid="bound">{String(value)}</div>

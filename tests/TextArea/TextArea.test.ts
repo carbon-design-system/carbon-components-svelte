@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
+import { getBoundText } from "../utils/get-bound-text";
 import { nextFrame } from "../utils/next-frame";
 import { user } from "../utils/user";
 import TextAreaCounterMode from "./TextArea.counterMode.test.svelte";
@@ -398,7 +399,7 @@ describe("TextArea", () => {
 
     const textarea = screen.getByRole("textbox");
     await user.type(textarea, "Test value");
-    expect(screen.getByTestId("value").textContent).toBe("Test value");
+    expect(getBoundText()).toBe("Test value");
   });
 
   it("does not set a maxlength attribute when maxCount is set", () => {
