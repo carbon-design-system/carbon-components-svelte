@@ -144,7 +144,7 @@ describe("Search", () => {
     render(Search);
 
     const search = getSearchInput("Default search");
-    expect(search).not.toHaveAttribute("aria-busy", "true");
+    expect(search).not.toHaveAttribute("aria-busy");
   });
 
   it("uses a native type=search input", () => {
