@@ -5,6 +5,8 @@
 
   export let selectedRowIds: number[] = [];
   export let radio = false;
+  /** Leave `inputName` unset, so the inputs take the table's `id`. */
+  export let noInputName = false;
   export let onSelect: () => void = () => {};
 
   const headers = [{ key: "name", value: "Name" }] as const;
@@ -20,7 +22,7 @@
     selectable={!radio}
     batchSelection={!radio}
     {radio}
-    inputName="user"
+    inputName={noInputName ? undefined : "user"}
     bind:selectedRowIds
     {headers}
     {rows}

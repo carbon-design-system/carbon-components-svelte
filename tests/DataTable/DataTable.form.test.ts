@@ -46,17 +46,20 @@ describe("DataTable form reset", () => {
     expect(new FormData(getForm()).getAll("user")).toEqual([]);
   });
 
-  it("keeps rows checked by server-rendered markup, with their original ids", async () => {
-    render(DataTableForm);
+  it.each([false, true])(
+    "keeps rows checked by server-rendered markup, with their original ids (no inputName: %s)",
+    async (noInputName) => {
+      render(DataTableForm, { props: { noInputName } });
 
-    const [first, , third] = getRowInputs();
-    // Server-rendered markup carries the state as the `checked` attribute.
-    first.defaultChecked = true;
-    third.defaultChecked = true;
-    await user.click(getRowInputs()[1]);
+      const [first, , third] = getRowInputs();
+      // Server-rendered markup carries the state as the `checked` attribute.
+      first.defaultChecked = true;
+      third.defaultChecked = true;
+      await user.click(getRowInputs()[1]);
 
-    await resetForm();
+      await resetForm();
 
-    expect(getBoundText()).toBe("[1,3]");
-  });
+      expect(getBoundText()).toBe("[1,3]");
+    },
+  );
 });
