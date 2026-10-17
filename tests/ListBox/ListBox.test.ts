@@ -82,6 +82,10 @@ describe("ListBox", () => {
     expect(screen.getByText("Invalid selection")).toHaveClass(
       "bx--form-requirement",
     );
+    expect(screen.getByText("Invalid selection")).toHaveAttribute(
+      "role",
+      "alert",
+    );
   });
 
   it("should handle warning state", () => {

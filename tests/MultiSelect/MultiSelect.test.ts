@@ -419,6 +419,26 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--multi-select__wrapper--inline");
     });
 
+    it.each([
+      { fluid: false, filterable: false },
+      { fluid: true, filterable: false },
+      { fluid: false, filterable: true },
+    ])("announces the invalid message (%o)", (variant) => {
+      render(MultiSelect, {
+        props: {
+          items,
+          ...variant,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
+      });
+
+      expect(screen.getByText("Invalid selection")).toHaveAttribute(
+        "role",
+        "alert",
+      );
+    });
+
     it("handles invalid state", () => {
       render(MultiSelect, {
         props: {
