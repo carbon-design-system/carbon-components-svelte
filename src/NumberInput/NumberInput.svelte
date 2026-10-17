@@ -307,6 +307,7 @@
 
   let inputValue = value?.toString() ?? "";
   let prevValue;
+  let prevFormatter;
   let userInputActive = false;
   let inputFocused = false;
 
@@ -342,6 +343,10 @@
   $: if (useTextMode) {
     const valueChanged = value !== prevValue;
     prevValue = value;
+    // The formatter cache returns the same instance for equal options, so
+    // this only changes when `locale` or `formatOptions` really do.
+    const formatterChanged = formatter !== prevFormatter;
+    prevFormatter = formatter;
 
     if (userInputActive) {
       // Don't interfere with user typing
@@ -353,8 +358,13 @@
       // Sync inputValue to value when:
       // - The numeric values differ AND input is valid (preserves "1.0" formatting)
       // - OR value changed programmatically (force sync even if input is temporarily invalid)
+      // - OR the formatter changed, so the same value displays differently
       // This allows "1.5." to stay visible while user corrects their typo.
-      if ((parsedInput !== value && parsedInput !== null) || valueChanged) {
+      if (
+        (parsedInput !== value && parsedInput !== null) ||
+        valueChanged ||
+        formatterChanged
+      ) {
         inputValue = valueStr;
       }
     } else if (value == null && inputValue !== "") {

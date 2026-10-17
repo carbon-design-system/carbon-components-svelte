@@ -1801,6 +1801,18 @@ describe("NumberInput", () => {
       expect(input.value).toBe("1,234.50");
     });
 
+    it("reformats the value when formatOptions change", async () => {
+      const { rerender } = render(NumberInput, {
+        props: { locale: "en-US", value: 1000 },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveValue("1,000");
+
+      await rerender({ formatOptions: { minimumFractionDigits: 2 } });
+      expect(input).toHaveValue("1,000.00");
+    });
+
     it("should update formatting when value changes programmatically", async () => {
       const { rerender } = render(NumberInput, {
         props: { locale: "de-DE", value: 100, allowEmpty: true },
