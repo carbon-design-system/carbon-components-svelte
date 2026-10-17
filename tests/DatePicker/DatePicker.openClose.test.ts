@@ -7,6 +7,7 @@ import DatePickerClose from "./DatePickerClose.test.svelte";
 import DatePickerOpen from "./DatePickerOpen.test.svelte";
 import {
   dayByLabel,
+  findDay,
   firstDay,
   getDays,
   openCalendar,
@@ -77,6 +78,17 @@ describe("DatePicker bind:open", () => {
 
     expect(getBoundOpen()).toBe("false");
     expect(onclose.mock.calls[0][0].detail.trigger).toBe("select");
+  });
+
+  it("reports the selection in the open event", async () => {
+    const onopen = vi.fn();
+    render(DatePickerOpen, { props: { value: "01/15/2024", onopen } });
+
+    await openCalendar();
+
+    const { selectedDates, dateStr } = onopen.mock.calls[0][0].detail;
+    expect(dateStr).toBe("01/15/2024");
+    expect(selectedDates).toEqual([new Date(2024, 0, 15)]);
   });
 
   it("is ignored in simple mode", async () => {
@@ -244,6 +256,51 @@ describe("DatePicker close event", () => {
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
   });
 
+  it('dispatches close with trigger "outside-click" when focus leaves for an outside element', async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose, outsideButton: true } });
+
+    const calendar = await openCalendar();
+    // Only the input's blur: flatpickr's own document focus handler never
+    // sees this, so the picker's blur handling has to close it.
+    await fireEvent.blur(screen.getByLabelText("Date"), {
+      relatedTarget: screen.getByRole("button", { name: "Outside" }),
+    });
+    await settle();
+
+    expect(calendar).not.toHaveClass("open");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
+  });
+
+  it("keeps the calendar open when focus moves between range inputs", async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, {
+      props: { onClose, datePickerType: "range" },
+    });
+
+    const calendar = await openRangeCalendar();
+    await user.tab();
+    expect(screen.getByLabelText("End date")).toHaveFocus();
+    await settle();
+
+    expect(calendar).toHaveClass("open");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("keeps the calendar open when the window loses focus", async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose } });
+
+    const calendar = await openCalendar();
+    // Leaving the document gives the blur no `relatedTarget`.
+    await fireEvent.blur(screen.getByLabelText("Date"));
+    await settle();
+
+    expect(calendar).toHaveClass("open");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it('dispatches close with trigger "outside-click" when dismissing a partial range selection', async () => {
     const onClose = vi.fn();
     render(DatePickerClose, {
@@ -285,6 +342,16 @@ describe("DatePicker close event", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.selectedDates).toHaveLength(2);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("select");
+  });
+
+  it("reports the chosen date in the close event dateStr", async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose, value: "01/01/2025" } });
+
+    const calendar = await openCalendar();
+    await user.click(findDay(calendar, "15"));
+
+    expect(onClose.mock.calls[0][0].detail.dateStr).toBe("01/15/2025");
   });
 
   it('dispatches close with trigger "select" when changing an existing single value', async () => {

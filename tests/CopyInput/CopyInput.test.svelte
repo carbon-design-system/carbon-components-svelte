@@ -19,6 +19,7 @@
   export let onCopy = () => {};
   export let onCopyError = (_detail: { error: unknown }) => {};
   export let onMouseEnterCopyButton = (_event: MouseEvent) => {};
+  export let onMouseLeaveCopyButton = (_event: MouseEvent) => {};
 </script>
 
 <CopyInput
@@ -38,4 +39,5 @@
   on:copy={() => onCopy()}
   on:copy:error={(event) => onCopyError(event.detail)}
   on:mouseenter:copy-button={(event) => onMouseEnterCopyButton(event.detail)}
+  on:mouseleave:copy-button={(event) => onMouseLeaveCopyButton(event.detail)}
 />

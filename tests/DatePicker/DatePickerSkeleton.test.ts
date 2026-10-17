@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import DatePickerSkeletonComponent from "carbon-components-svelte/DatePicker/DatePickerSkeleton.svelte";
 import FluidDatePickerSkeleton from "carbon-components-svelte/DatePicker/FluidDatePickerSkeleton.svelte";
 import { user } from "../utils/user";
+import DatePickerSkeletonInForm from "./DatePickerSkeleton.form.test.svelte";
 import DatePickerSkeleton from "./DatePickerSkeleton.test.svelte";
 
 describe("DatePickerSkeleton", () => {
@@ -46,6 +47,37 @@ describe("DatePickerSkeleton", () => {
     expect(
       container.querySelectorAll(".bx--date-picker-container"),
     ).toHaveLength(2);
+  });
+
+  it.each([
+    ["single", 1],
+    ["month", 1],
+    ["range", 2],
+  ] as const)(
+    "renders datePickerType %s regardless of range",
+    (datePickerType, containers) => {
+      const { container } = render(DatePickerSkeleton, {
+        props: { datePickerType, range: datePickerType !== "range" },
+      });
+
+      const wrapper = container.querySelector(".bx--date-picker");
+      expect(wrapper).toHaveClass(
+        datePickerType === "range"
+          ? "bx--date-picker--range"
+          : "bx--date-picker--single",
+      );
+      expect(
+        container.querySelectorAll(".bx--date-picker-container"),
+      ).toHaveLength(containers);
+    },
+  );
+
+  it("inherits the size of a parent Form", () => {
+    render(DatePickerSkeletonInForm, { props: { size: "sm" } });
+
+    expect(
+      screen.getByTestId("skeleton").querySelector(".bx--date-picker__input"),
+    ).toHaveClass("bx--date-picker__input--sm");
   });
 
   it("applies the short modifier independently of range", () => {

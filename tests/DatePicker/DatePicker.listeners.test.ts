@@ -3,9 +3,11 @@ import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
+import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
+import DatePickerHost from "./DatePickerHost.test.svelte";
 import { renderCalendar } from "./flatpickr-instance";
-import { preloadFlatpickrPlugins } from "./helpers";
+import { openCalendar, preloadFlatpickrPlugins } from "./helpers";
 
 const mountRange = () => renderCalendar({ datePickerType: "range" });
 
@@ -58,6 +60,62 @@ describe("DatePicker window listeners", () => {
     await tick();
     expect(instance.isOpen).toBe(false);
     expect(netListenerCalls(add, remove, "click")).toBe(0);
+  });
+});
+
+describe("DatePicker fixed-position reposition listeners", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const spyOnWindow = () => ({
+    add: vi.spyOn(window, "addEventListener"),
+    remove: vi.spyOn(window, "removeEventListener"),
+  });
+
+  // flatpickr registers a `resize` listener of its own, so count what each
+  // step adds or removes rather than the absolute total.
+  const netCounts = (
+    add: ReturnType<typeof vi.spyOn>,
+    remove: ReturnType<typeof vi.spyOn>,
+  ) => ({
+    scroll: netListenerCalls(add, remove, "scroll"),
+    resize: netListenerCalls(add, remove, "resize"),
+  });
+
+  it("removes the scroll and resize listeners when the calendar closes", async () => {
+    const { add, remove } = spyOnWindow();
+    render(DatePickerHost);
+    await tick();
+    const before = netCounts(add, remove);
+
+    const calendar = await openCalendar();
+    const open = netCounts(add, remove);
+    expect(open.scroll).toBe(before.scroll + 1);
+    expect(open.resize).toBeGreaterThan(before.resize);
+
+    await user.click(document.body);
+    expect(calendar).not.toHaveClass("open");
+
+    const closed = netCounts(add, remove);
+    expect(closed.scroll).toBe(before.scroll);
+    expect(closed.resize).toBe(open.resize - 1);
+  });
+
+  it("removes the scroll and resize listeners when unmounted while open", async () => {
+    const { add, remove } = spyOnWindow();
+    const { unmount } = render(DatePickerHost);
+    await tick();
+    const before = netCounts(add, remove);
+
+    await openCalendar();
+    expect(netCounts(add, remove).scroll).toBe(before.scroll + 1);
+
+    unmount();
+
+    const after = netCounts(add, remove);
+    expect(after.scroll).toBe(before.scroll);
+    expect(after.resize).toBeLessThanOrEqual(before.resize);
   });
 });
 
