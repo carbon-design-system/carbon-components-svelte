@@ -11,6 +11,9 @@ describe("fixtures", () => {
 
   it("keeps only names containing the filter", async () => {
     const names = await fixtures("accordion");
-    expect(names).toEqual(["accordion", "accordion-nested"]);
+    expect(names).toEqual(
+      expect.arrayContaining(["accordion", "accordion-nested"]),
+    );
+    expect(names.every((name) => name.includes("accordion"))).toBe(true);
   });
 });
