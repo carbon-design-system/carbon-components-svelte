@@ -375,6 +375,26 @@ describe("MultiSelect", () => {
   });
 
   describe("variants and states", () => {
+    it.each([
+      { direction: "top" as const, hasUpClass: true },
+      { direction: "bottom" as const, hasUpClass: false },
+      { direction: undefined, hasUpClass: false },
+    ])(
+      "applies the upward list box class only for direction=$direction",
+      ({ direction, hasUpClass }) => {
+        render(MultiSelect, { props: { items, direction } });
+
+        const listBox = screen
+          .getByRole("combobox")
+          .closest(".bx--multi-select");
+        if (hasUpClass) {
+          expect(listBox).toHaveClass("bx--list-box--up");
+        } else {
+          expect(listBox).not.toHaveClass("bx--list-box--up");
+        }
+      },
+    );
+
     it("renders in light variant", async () => {
       render(MultiSelect, {
         props: {

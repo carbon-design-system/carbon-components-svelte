@@ -55,6 +55,7 @@
   export let fluid = false;
   export let condensed = false;
   export let id: ComponentProps<MultiSelect>["id"] = undefined;
+  export let direction: ComponentProps<MultiSelect>["direction"] = undefined;
 </script>
 
 <MultiSelect
@@ -96,6 +97,7 @@
   {open}
   {fluid}
   {condensed}
+  {direction}
   bind:sortedItems
   on:select={(e) => onSelect(e.detail)}
   on:clear={(e) => onClear(e.detail)}

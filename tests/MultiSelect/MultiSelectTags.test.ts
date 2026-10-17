@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { render, screen, waitFor, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import MultiSelectTagSlot from "./MultiSelectTagSlot.test.svelte";
@@ -14,6 +14,24 @@ const tagLabels = (container: HTMLElement) =>
   )
     .filter((el) => !el.closest(".bx--tag-set-overflow"))
     .map((el) => el.textContent?.trim());
+
+/** Stub `offsetWidth` so the TagSet fits one 50px tag next to its "+N" trigger. */
+function stubOverflowMeasurements(container: HTMLElement) {
+  const stub = (el: Element | null, width: number) => {
+    assert(el instanceof HTMLElement);
+    Object.defineProperty(el, "offsetWidth", {
+      configurable: true,
+      value: width,
+    });
+  };
+  stub(container.querySelector(".bx--tag-set"), 110);
+  for (const tag of container.querySelectorAll(
+    ".bx--tag-set__space > .bx--tag",
+  )) {
+    stub(tag, 50);
+  }
+  stub(container.querySelector(".bx--tag-set-overflow__popover-trigger"), 40);
+}
 
 describe("MultiSelect selectionDisplay=tags", () => {
   it("lists each selected item as a tag in items order", () => {
@@ -153,6 +171,29 @@ describe("MultiSelect selectionDisplay=tags", () => {
         ".bx--multi-select__tags .bx--tag-set-overflow button",
       ),
     ).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("deselects an item removed from the +N overflow popover", async () => {
+    const onSelect = vi.fn();
+    const { container } = render(MultiSelectTags, {
+      selectedIds: ["a", "b", "c"],
+      config: { tagOverflow: "collapse" },
+      onSelect,
+    });
+    stubOverflowMeasurements(container);
+
+    await user.click(
+      await screen.findByRole("button", { name: "+2 more tags" }),
+    );
+    const popover = container.querySelector(
+      ".bx--tag-set-overflow .bx--popover",
+    ) as HTMLElement;
+    await user.click(within(popover).getByRole("button", { name: /Gamma/ }));
+
+    expect(selected()).toEqual(["a", "b"]);
+    expect(onSelect).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ selectedIds: ["a", "b"] }),
+    );
   });
 
   it.each(["top", "fixed", "top-after-reopen"] as const)(

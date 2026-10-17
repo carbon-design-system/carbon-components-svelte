@@ -11,6 +11,12 @@ const items = [
   { id: "2", text: "Fax" },
 ] as const;
 
+async function shiftClick(element: HTMLElement) {
+  await user.keyboard("{Shift>}");
+  await user.click(element);
+  await user.keyboard("{/Shift}");
+}
+
 describe("MultiSelect", () => {
   describe("selection behavior", () => {
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
@@ -227,6 +233,77 @@ describe("MultiSelect", () => {
           expect(option).toHaveAttribute("aria-selected", "false");
         }
       }
+    });
+
+    it("deselects the range when the shift-clicked item is already checked", async () => {
+      const onSelect = vi.fn();
+      render(MultiSelect, {
+        props: { onSelect, items: rangeItems },
+      });
+
+      await openMenu();
+      await toggleOption("Alpha");
+      await shiftClick(screen.getByRole("option", { name: "Delta" }));
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toHaveLength(4);
+
+      // Delta is now the anchor and Alpha is checked, so the range unchecks.
+      await shiftClick(screen.getByRole("option", { name: "Alpha" }));
+
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "false");
+      }
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toEqual([]);
+    });
+
+    it("skips disabled items inside the range", async () => {
+      const onSelect = vi.fn();
+      render(MultiSelect, {
+        props: {
+          onSelect,
+          items: [
+            rangeItems[0],
+            { ...rangeItems[1], disabled: true },
+            rangeItems[2],
+            rangeItems[3],
+          ],
+        },
+      });
+
+      await openMenu();
+      await toggleOption("Alpha");
+      await shiftClick(screen.getByRole("option", { name: "Delta" }));
+
+      expect(screen.getByRole("option", { name: "Bravo" })).toHaveAttribute(
+        "aria-selected",
+        "false",
+      );
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toEqual(
+        expect.arrayContaining(["0", "2", "3"]),
+      );
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toHaveLength(3);
+    });
+
+    it("falls back to a single toggle when the anchor is filtered out", async () => {
+      const onSelect = vi.fn();
+      render(MultiSelect, {
+        props: {
+          onSelect,
+          items: rangeItems,
+          filterable: true,
+          placeholder: "Filter items...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter items...");
+      await user.click(input);
+      await toggleOption("Alpha");
+      // Typing "el" narrows the list to Delta only, removing the anchor.
+      await user.type(input, "el");
+      expect(screen.getAllByRole("option")).toHaveLength(1);
+
+      await shiftClick(screen.getByRole("option", { name: "Delta" }));
+
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toEqual(["0", "3"]);
     });
   });
 
