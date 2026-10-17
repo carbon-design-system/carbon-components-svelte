@@ -485,6 +485,7 @@
   {/if}
   <div
     class:bx--slider-container={true}
+    class:bx--slider-container--full-width={fullWidth}
     class:bx--slider-container--two-handles={true}
     class:bx--slider-container--readonly={readonly}
     class:bx--slider-container--vertical={orientation === "vertical"}

@@ -311,6 +311,7 @@
   </label>
   <div
     class:bx--slider-container={true}
+    class:bx--slider-container--full-width={fullWidth}
     class:bx--slider-container--readonly={readonly}
     class:bx--slider-container--vertical={orientation === "vertical"}
     style:width={fullWidth ? "100%" : undefined}
