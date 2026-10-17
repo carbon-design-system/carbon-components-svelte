@@ -21,6 +21,19 @@
 
     width: 100%;
     list-style: none;
+
+    // ccs: the content's right padding follows the accordion's width (the
+    // container queries below), not the window's: an accordion in a narrow
+    // panel on a wide screen kept 25% of its width as padding. Only from
+    // 480px up, where the window rules start to add padding; below that
+    // the accordion is never wider than the window.
+    @include carbon--breakpoint-up(480px) {
+      container: #{$prefix}--accordion / inline-size;
+      // ccs: as a size container it no longer takes its width from its
+      // content, so a parent that sizes to its content (an inline-block)
+      // would collapse it to 0. Size it as 20rem for that.
+      contain-intrinsic-inline-size: 20rem;
+    }
   }
 
   .#{$prefix}--accordion__item {
@@ -148,6 +161,28 @@
 
     > p {
       @include type-style('body-long-01');
+    }
+  }
+
+  // ccs: the same three steps as the window breakpoints above, by the
+  // accordion's own width. The first restates the default for a narrow
+  // accordion in a wide window; browsers without container queries keep
+  // the window rules.
+  @container #{$prefix}--accordion (width < 30rem) {
+    .#{$prefix}--accordion__content {
+      padding-right: $carbon--spacing-05;
+    }
+  }
+
+  @container #{$prefix}--accordion (30rem <= width < 40rem) {
+    .#{$prefix}--accordion__content {
+      padding-right: $carbon--spacing-09;
+    }
+  }
+
+  @container #{$prefix}--accordion (width >= 40rem) {
+    .#{$prefix}--accordion__content {
+      padding-right: 25%;
     }
   }
 
