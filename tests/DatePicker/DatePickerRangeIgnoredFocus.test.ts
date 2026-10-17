@@ -1,30 +1,13 @@
-import { render } from "@testing-library/svelte";
-import type { Instance } from "flatpickr/dist/types/instance";
-import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
+import { renderCalendar } from "./flatpickr-instance";
 
-const mountRange = async () => {
-  let captured: Instance | null = null;
-  const view = render(DatePickerCalendar, {
-    props: {
-      datePickerType: "range",
-      oncalendar: (cal: Instance | null | undefined) => {
-        captured = cal ?? null;
-      },
-    },
-  });
-  const instance = await vi.waitFor(() => {
-    if (!captured) throw new Error("calendar not set");
-    return captured as Instance;
-  });
-  return { instance, view };
-};
+const mountRange = () => renderCalendar({ datePickerType: "range" });
 
 describe("DatePicker range ignoredFocusElements", () => {
   it("does not share the array with other instances", async () => {
     const first = await mountRange();
     const firstElements = first.instance.config.ignoredFocusElements;
     expect(firstElements).toHaveLength(1);
-    first.view.unmount();
+    first.unmount();
 
     // flatpickr's range plugin pushes its second input into this array. A
     // default array shared across instances keeps every unmounted range

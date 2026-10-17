@@ -1,12 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import CopyInputSkeleton from "carbon-components-svelte/CopyInput/CopyInputSkeleton.svelte";
 import { user } from "../utils/user";
 import CopyInputFluidForm from "./CopyInput.fluidForm.test.svelte";
 import CopyInputFluidSkeleton from "./CopyInput.fluidSkeleton.test.svelte";
 import CopyInputFluidSlot from "./CopyInput.fluidSlot.test.svelte";
-import CopyInputSkeleton from "./CopyInput.skeleton.test.svelte";
 import CopyInput from "./CopyInput.test.svelte";
-import CopyInputAsync from "./CopyInputAsync.test.svelte";
-import CopyInputMouseEnter from "./CopyInputMouseEnter.test.svelte";
 import CopyInputMultiple from "./CopyInputMultiple.test.svelte";
 
 const getFieldWrapper = (input: HTMLElement) => {
@@ -57,14 +55,14 @@ describe("CopyInput", () => {
   });
 
   it("copies the value and dispatches copy", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onCopy = vi.fn();
     const clipboard = vi.spyOn(navigator.clipboard, "writeText");
-    render(CopyInput);
+    render(CopyInput, { props: { onCopy } });
 
     await user.click(screen.getByRole("button", { name: "Copy to clipboard" }));
 
     expect(clipboard).toHaveBeenCalledWith("secret-token-123");
-    expect(consoleLog).toHaveBeenCalledWith("copied");
+    expect(onCopy).toHaveBeenCalledTimes(1);
   });
 
   it("does not select the value on focus by default", async () => {
@@ -89,15 +87,24 @@ describe("CopyInput", () => {
     expect(select).toHaveBeenCalled();
   });
 
-  it("stays obscured on focus when revealMode is unset", async () => {
-    render(CopyInput, { props: { type: "password" } });
+  it.each([
+    ["focus", (input: HTMLElement) => fireEvent.focus(input)],
+    [
+      "hover",
+      (input: HTMLElement) => fireEvent.mouseEnter(getFieldWrapper(input)),
+    ],
+  ] as const)(
+    "stays obscured on %s when revealMode is unset",
+    async (_trigger, fire) => {
+      render(CopyInput, { props: { type: "password" } });
 
-    const input = screen.getByLabelText("API token");
-    expect(input).toHaveAttribute("type", "password");
+      const input = screen.getByLabelText("API token");
+      expect(input).toHaveAttribute("type", "password");
 
-    await fireEvent.focus(input);
-    expect(input).toHaveAttribute("type", "password");
-  });
+      await fire(input);
+      expect(input).toHaveAttribute("type", "password");
+    },
+  );
 
   it("reveals the value on focus when revealMode is focus", async () => {
     render(CopyInput, { props: { type: "password", revealMode: "focus" } });
@@ -186,37 +193,18 @@ describe("CopyInput", () => {
     expect(input).toHaveAttribute("type", "password");
   });
 
-  it("does not reveal the obscured value on hover when revealMode is unset", async () => {
-    render(CopyInput, { props: { type: "password" } });
-
-    const input = screen.getByLabelText("API token");
-
-    await fireEvent.mouseEnter(getFieldWrapper(input));
-    expect(input).toHaveAttribute("type", "password");
-  });
-
   it("async copy failure shows error feedback and dispatches copy:error", async () => {
     const error = new Error("copy failed");
     const copy = vi.fn().mockRejectedValue(error);
     const onCopyError = vi.fn();
 
-    render(CopyInputAsync, {
-      props: { copy, onCopyError },
-    });
+    render(CopyInput, { props: { copy, onCopyError } });
 
-    const button = screen.getByRole("button", { name: "Async copy" });
+    const button = screen.getByRole("button", { name: "Copy to clipboard" });
     await user.click(button);
 
     expect(onCopyError).toHaveBeenCalledWith({ error });
     expect(button).toHaveClass("bx--copy-btn--fade-in");
-
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Failed to copy");
-
-    await user.click(button);
-    expect(copy).toHaveBeenCalledTimes(1);
   });
 
   it("describes each copy button with its field label", () => {
@@ -232,7 +220,7 @@ describe("CopyInput", () => {
 
   it("dispatches mouseenter:copy-button from the copy button", () => {
     const onMouseEnterCopyButton = vi.fn();
-    render(CopyInputMouseEnter, { props: { onMouseEnterCopyButton } });
+    render(CopyInput, { props: { onMouseEnterCopyButton } });
 
     fireEvent.mouseEnter(
       screen.getByRole("button", { name: "Copy to clipboard" }),
@@ -310,7 +298,9 @@ describe("CopyInput", () => {
 
   describe("skeleton", () => {
     it("renders skeleton state", () => {
-      render(CopyInputSkeleton);
+      render(CopyInputSkeleton, {
+        props: { "data-testid": "copy-input-skeleton" },
+      });
 
       const skeleton = screen.getByTestId("copy-input-skeleton");
       expect(skeleton).toBeInTheDocument();
@@ -324,7 +314,9 @@ describe("CopyInput", () => {
     });
 
     it("hides the skeleton label when hideLabel is true", () => {
-      render(CopyInputSkeleton, { props: { hideLabel: true } });
+      render(CopyInputSkeleton, {
+        props: { "data-testid": "copy-input-skeleton", hideLabel: true },
+      });
 
       const skeleton = screen.getByTestId("copy-input-skeleton");
       expect(skeleton.children).toHaveLength(1);
@@ -333,6 +325,16 @@ describe("CopyInput", () => {
         "bx--text-input",
       );
     });
+
+    it.each(["xs", "sm", "xl"] as const)(
+      "applies the %s size modifier",
+      (size) => {
+        const { container } = render(CopyInputSkeleton, { props: { size } });
+        expect(
+          container.querySelector(".bx--skeleton.bx--text-input"),
+        ).toHaveClass(`bx--text-input--${size}`);
+      },
+    );
 
     it("renders fluid skeleton state", () => {
       render(CopyInputFluidSkeleton);

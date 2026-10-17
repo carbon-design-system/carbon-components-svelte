@@ -1,24 +1,20 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DatePickerClose from "./DatePickerClose.test.svelte";
+import { dayByLabel, firstDay, getDays, openCalendar } from "./helpers";
 
-afterEach(() => {
-  cleanup();
-});
-
-function ariaLabelForDayInCurrentMonth(day: number) {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), day).toLocaleDateString(
-    "en-US",
-    { weekday: "long", month: "long", day: "numeric", year: "numeric" },
-  );
+/** Opens the range picker's start input and returns the open calendar. */
+async function openRangeCalendar() {
+  await screen.findByLabelText("calendar-container");
+  await user.click(screen.getByLabelText("Start date"));
+  return waitFor(() => {
+    const calendar = document.querySelector<HTMLElement>(
+      ".flatpickr-calendar.open[aria-label='calendar-container']",
+    );
+    assert(calendar, "expected an open calendar");
+    return calendar;
+  });
 }
 
 describe("DatePicker close event", () => {
@@ -26,14 +22,8 @@ describe("DatePicker close event", () => {
     const onClose = vi.fn();
     render(DatePickerClose, { props: { onClose } });
 
-    await user.click(screen.getByLabelText("Date"));
-    const calendar = await screen.findByLabelText("calendar-container");
-    const day = calendar.querySelector<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
-    );
-    if (!day) throw new Error("expected a selectable day");
-
-    await user.click(day);
+    const calendar = await openCalendar();
+    await user.click(firstDay(calendar));
 
     expect(calendar).not.toHaveClass("open");
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -45,8 +35,7 @@ describe("DatePicker close event", () => {
     render(DatePickerClose, { props: { onClose } });
 
     const input = screen.getByLabelText("Date");
-    await user.click(input);
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await openCalendar();
     expect(calendar).toHaveClass("open");
 
     input.focus();
@@ -63,8 +52,7 @@ describe("DatePicker close event", () => {
     render(DatePickerClose, { props: { onClose, portalMenu: true } });
 
     const input = screen.getByLabelText("Date");
-    await user.click(input);
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await openCalendar();
     expect(calendar).toHaveClass("open");
     expect(document.body.contains(calendar)).toBe(true);
 
@@ -99,8 +87,7 @@ describe("DatePicker close event", () => {
       render(DatePickerClose, { props: { onClose, portalMenu } });
 
       const input = screen.getByLabelText("Date");
-      await user.click(input);
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await openCalendar();
       expect(calendar.parentElement === document.body).toBe(portalMenu);
       await user.keyboard("{ArrowDown}");
       expect(calendar.contains(document.activeElement)).toBe(true);
@@ -119,19 +106,14 @@ describe("DatePicker close event", () => {
     render(DatePickerClose, { props: { onClose } });
 
     const input = screen.getByLabelText("Date");
-    await user.click(input);
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await openCalendar();
     await user.keyboard("{ArrowDown}");
     await pressEscapeInGrid();
 
     await user.click(document.body);
     await user.click(input);
     await waitFor(() => expect(calendar).toHaveClass("open"));
-    const day = calendar.querySelector<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
-    );
-    if (!day) throw new Error("expected a selectable day");
-    await user.click(day);
+    await user.click(firstDay(calendar));
 
     expect(onClose).toHaveBeenCalledTimes(2);
     expect(onClose.mock.calls[1][0].detail.trigger).toBe("select");
@@ -142,8 +124,7 @@ describe("DatePicker close event", () => {
     render(DatePickerClose, { props: { onClose } });
 
     const input = screen.getByLabelText("Date");
-    await user.click(input);
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await openCalendar();
     expect(calendar).toHaveClass("open");
 
     input.focus();
@@ -162,8 +143,7 @@ describe("DatePicker close event", () => {
     const onClose = vi.fn();
     render(DatePickerClose, { props: { onClose } });
 
-    await user.click(screen.getByLabelText("Date"));
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await openCalendar();
     expect(calendar).toHaveClass("open");
 
     await user.click(document.body);
@@ -182,23 +162,9 @@ describe("DatePicker close event", () => {
       },
     });
 
-    await screen.findByLabelText("calendar-container");
-    await user.click(screen.getByLabelText("Start date"));
-    const calendar = await waitFor(() => {
-      const openCalendar = document.querySelector<HTMLElement>(
-        ".flatpickr-calendar.open[aria-label='calendar-container']",
-      );
-      if (!openCalendar) {
-        throw new Error("expected an open calendar");
-      }
-      return openCalendar;
-    });
-    const startDay = calendar.querySelector<HTMLElement>(
-      `[aria-label="${ariaLabelForDayInCurrentMonth(1)}"]`,
-    );
-    if (!startDay) throw new Error("expected a start day");
+    const calendar = await openRangeCalendar();
 
-    await user.click(startDay);
+    await user.click(dayByLabel(calendar, 1));
     await user.click(document.body);
     await tick();
 
@@ -216,31 +182,12 @@ describe("DatePicker close event", () => {
       },
     });
 
-    await screen.findByLabelText("calendar-container");
-    await user.click(screen.getByLabelText("Start date"));
-    const calendar = await waitFor(() => {
-      const openCalendar = document.querySelector<HTMLElement>(
-        ".flatpickr-calendar.open[aria-label='calendar-container']",
-      );
-      if (!openCalendar) {
-        throw new Error("expected an open calendar");
-      }
-      return openCalendar;
-    });
-    const startDay = calendar.querySelector<HTMLElement>(
-      `[aria-label="${ariaLabelForDayInCurrentMonth(1)}"]`,
-    );
-    if (!startDay) throw new Error("expected a start day");
+    const calendar = await openRangeCalendar();
 
-    await user.click(startDay);
+    await user.click(dayByLabel(calendar, 1));
     await tick();
 
-    const endDay = calendar.querySelector<HTMLElement>(
-      `[aria-label="${ariaLabelForDayInCurrentMonth(15)}"]`,
-    );
-    if (!endDay) throw new Error("expected an end day");
-
-    await user.click(endDay);
+    await user.click(dayByLabel(calendar, 15));
 
     await waitFor(() => expect(calendar).not.toHaveClass("open"));
     await tick();
@@ -258,12 +205,11 @@ describe("DatePicker close event", () => {
       },
     });
 
-    await user.click(screen.getByLabelText("Date"));
-    const calendar = await screen.findByLabelText("calendar-container");
-    const day = calendar.querySelector<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay):not(.selected)",
+    const calendar = await openCalendar();
+    const day = getDays(calendar).find(
+      (node) => !node.classList.contains("selected"),
     );
-    if (!day) throw new Error("expected a selectable day");
+    assert(day);
 
     await user.click(day);
 
