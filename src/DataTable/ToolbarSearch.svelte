@@ -59,7 +59,8 @@
   /**
    * Milliseconds of quiet time before rows are filtered. Filtering waits
    * until typing pauses; `value` still updates immediately; clearing
-   * applies at once. `0` filters synchronously on every keystroke.
+   * applies at once. `0` filters synchronously on every keystroke. A
+   * starting `value` filters on mount without waiting.
    *
    * Unrelated to the `search` event, which fires on <kbd>Enter</kbd>
    * regardless of this delay.
@@ -131,6 +132,13 @@
     filterRequest++;
   }
 
+  // The first filter runs right away, so a starting value filters the
+  // first render; only later edits wait for the debounce. A function call
+  // keeps `mounted` out of the `$:` block's dependencies.
+  function canDebounce() {
+    return mounted;
+  }
+
   function applyFilter(searchValue, filter) {
     filteredRowIds = ctx.filterRows(searchValue, filter);
   }
@@ -169,7 +177,7 @@
 
   $: if (rows !== null) {
     invalidatePending();
-    if (debouncedFilter && String(value ?? "").length > 0) {
+    if (debouncedFilter && canDebounce() && String(value ?? "").length > 0) {
       debouncedFilter(value, shouldFilterRows);
     } else {
       debouncedFilter?.cancel();
