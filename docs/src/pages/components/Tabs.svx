@@ -615,9 +615,10 @@ Container type tabs also support icons via `icon`.
 ### Secondary label
 
 Use `secondaryLabel` with container type tabs to display additional context below
-the primary label.
+the primary label. Set `tall` on `Tabs` so server-rendered markup uses the
+two-line layout too; without it, the tabs grow once they mount.
 
-<Tabs type="container">
+<Tabs type="container" tall>
   <Tab label="Engage" secondaryLabel="(21/25)" />
   <Tab label="Analyze" secondaryLabel="(12/16)" />
   <Tab label="Remediate" secondaryLabel="(0/7)" />
@@ -638,7 +639,7 @@ When only some tabs use secondaryLabel, the container still applies the taller
 min-height so all tab items align. Only tabs with a secondary label show the
 two-line layout.
 
-<Tabs type="container">
+<Tabs type="container" tall>
   <Tab label="Overview" />
   <Tab label="Details" secondaryLabel="(3)" />
   <Tab label="Settings" />

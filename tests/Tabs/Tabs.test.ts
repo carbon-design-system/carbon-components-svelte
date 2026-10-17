@@ -20,6 +20,7 @@ import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
+import TabsTall from "./TabsTall.test.svelte";
 
 describe("Tabs", () => {
   let consoleLog: Console["log"];
@@ -1346,6 +1347,21 @@ describe("Container tabs with secondary label", () => {
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).toHaveClass("bx--tabs--container");
     expect(tabsContainer).toHaveClass("bx--tabs--tall");
+  });
+
+  it("stays tall with `tall` when no tab has a secondary label", async () => {
+    render(TabsTall, { secondaryLabel: "" });
+    await tick();
+
+    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--tall");
+  });
+
+  it("follows `tall` when it changes", async () => {
+    const { rerender } = render(TabsTall, { secondaryLabel: "" });
+    await tick();
+
+    await rerender({ tall: false });
+    expect(screen.getByRole("navigation")).not.toHaveClass("bx--tabs--tall");
   });
 
   it("should render secondary label via prop", async () => {

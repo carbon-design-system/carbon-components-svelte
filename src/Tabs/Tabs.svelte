@@ -51,6 +51,14 @@
   export let iconOnly = false;
 
   /**
+   * Set to `true` to lay out container tabs for secondary labels from the
+   * first render. Tabs detect a `Tab` with a `secondaryLabel` once the tabs
+   * mount, so without it server-rendered markup is one line tall until
+   * hydration. Only applies when `type` is `"container"`.
+   */
+  export let tall = false;
+
+  /**
    * Specify the icon size for icon-only tabs.
    * `"lg"` uses the large scale (48px tabs with a 20px icon);
    * the default scale is 40px tabs with a 16px icon.
@@ -193,9 +201,11 @@
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
 
+  const useTall = writable(tall);
   const hasSecondaryLabel = derived(
-    tabs,
-    (_) => type === "container" && _.some((tab) => tab.hasSecondaryLabel),
+    [tabs, useContainer, useTall],
+    ([_, container, tall]) =>
+      container && (tall || _.some((tab) => tab.hasSecondaryLabel)),
   );
 
   /**
@@ -513,6 +523,7 @@
   $: useDismissible.set(dismissible);
   $: useContainer.set(type === "container");
   $: useIconOnly.set(iconOnly);
+  $: useTall.set(tall);
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
   $: resolvedSize = resolveTabsSize(size, maxSizeIndex);

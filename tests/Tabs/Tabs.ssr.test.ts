@@ -3,6 +3,7 @@ import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
+import TabsTall from "./TabsTall.test.svelte";
 
 function getParts(document: Document) {
   return {
@@ -93,5 +94,40 @@ describe("Tabs server render", () => {
       "tab-c-panel",
     ]);
     expect(tabs[0]).toHaveAttribute("aria-controls", "tab-a-panel");
+  });
+});
+
+describe("Tabs server render with `tall`", () => {
+  // Tabs learn a tab has a secondary label once it registers, after
+  // their own markup is written; `tall` says so up front.
+  it("lays out every container tab for secondary labels", () => {
+    const { document } = renderSSR(TabsTall);
+
+    expect(document.querySelector(".bx--tabs")).toHaveClass("bx--tabs--tall");
+    expect(
+      document.querySelectorAll(".bx--tabs__nav-item-label-wrapper"),
+    ).toHaveLength(2);
+    expect(
+      document.querySelectorAll(".bx--tabs__nav-item-secondary-label"),
+    ).toHaveLength(2);
+  });
+
+  it("renders one-line tabs without `tall`", () => {
+    const { document } = renderSSR(TabsTall, { tall: false });
+
+    expect(document.querySelector(".bx--tabs")).not.toHaveClass(
+      "bx--tabs--tall",
+    );
+  });
+
+  it("ignores `tall` on line tabs", () => {
+    const { document } = renderSSR(TabsTall, { type: "default" });
+
+    expect(document.querySelector(".bx--tabs")).not.toHaveClass(
+      "bx--tabs--tall",
+    );
+    expect(
+      document.querySelector(".bx--tabs__nav-item-label-wrapper"),
+    ).toBeNull();
   });
 });
