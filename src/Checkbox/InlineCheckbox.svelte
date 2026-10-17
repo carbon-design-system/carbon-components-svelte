@@ -56,9 +56,15 @@
   >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- Server markup can't set `indeterminate`, so the label carries the
+       mixed state until hydration does. -->
   <label
     for={id}
     {title}
+    data-contained-checkbox-state={indeterminate ? "mixed" : undefined}
+    data-contained-checkbox-disabled={indeterminate && $$restProps.disabled
+      ? "true"
+      : undefined}
     class:bx--checkbox-label={true}
     on:click={handleLabelClick}
   ></label>
