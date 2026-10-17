@@ -65,7 +65,7 @@
     .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
     block-size: to-rem(40px);
     inline-size: to-rem(40px);
-    min-inline-size: to-rem(40px);
+    min-inline-size: to-rem(24px);
     padding: 0;
     border: none;
     border-block-end: none;
@@ -84,21 +84,21 @@
     .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xs {
     block-size: to-rem(24px);
     inline-size: to-rem(24px);
-    min-inline-size: to-rem(24px);
+    min-inline-size: to-rem(16px);
   }
 
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--sm {
     block-size: to-rem(32px);
     inline-size: to-rem(32px);
-    min-inline-size: to-rem(32px);
+    min-inline-size: to-rem(20px);
   }
 
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xl {
     block-size: to-rem(48px);
     inline-size: to-rem(48px);
-    min-inline-size: to-rem(48px);
+    min-inline-size: to-rem(28px);
   }
 
   // v10 applies invalid outlines on unfocused inputs. Suppress those in the
