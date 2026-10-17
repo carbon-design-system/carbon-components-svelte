@@ -11,6 +11,13 @@
   export let disabled = false;
 
   /**
+   * Set to `true` to mark an `interactive` or `href` item as the current
+   * one, such as the item whose details show beside the list. It gets a
+   * selected fill and `aria-current`.
+   */
+  export let selected = false;
+
+  /**
    * Specify the `href` attribute.
    * Renders an anchor with clickable styles. Takes precedence over `interactive`.
    * @type {string}
@@ -34,12 +41,14 @@
     disabled: tag === "button" ? disabled : undefined,
     href: isLink ? href : undefined,
     rel: isLink ? resolveLinkRel($$restProps.target) : undefined,
+    "aria-current": isClickable && selected ? "true" : undefined,
   };
 </script>
 
 <li
   class:bx--contained-list-item="{true}"
   class:bx--contained-list-item--clickable="{isClickable}"
+  class:bx--contained-list-item--selected="{isClickable && selected}"
   class:bx--contained-list-item--with-icon="{icon}"
   class:bx--contained-list-item--with-action="{$$slots.action}"
 >
