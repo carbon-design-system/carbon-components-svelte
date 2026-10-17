@@ -34,6 +34,17 @@
     flex-direction: column;
   }
 
+  // ccs: the input and selects wrap onto a second row in a container too
+  // narrow for one, rather than overflowing it. Each select keeps its own
+  // width (`.bx--select` is otherwise 100%, a line to itself once wrapping).
+  .#{$prefix}--time-picker__input .#{$prefix}--stack-horizontal {
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--time-picker .#{$prefix}--time-picker__select {
+    width: auto;
+  }
+
   .#{$prefix}--time-picker .#{$prefix}--select-input {
     width: auto;
     min-width: auto;
