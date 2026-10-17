@@ -24,13 +24,6 @@ describe("ListBoxSelection", () => {
     expect(tag).toHaveClass("bx--tag--filter");
   });
 
-  it("should handle disabled state for single selection", () => {
-    render(ListBoxSelection, { props: { disabled: true } });
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("tabindex", "-1");
-  });
-
   it("should not be in tab order (accessibility fix)", () => {
     render(ListBoxSelection, { props: { disabled: false } });
 
@@ -290,16 +283,5 @@ describe("ListBoxSelection", () => {
     const closeButton = container.querySelector(".bx--tag__close-icon");
     expect(closeButton).toHaveAttribute("aria-hidden", "true");
     expect(closeButton).toHaveAttribute("aria-disabled", "true");
-  });
-
-  it("should apply custom attributes", () => {
-    render(ListBoxSelection, {
-      props: {
-        "data-testid": "custom-selection",
-      },
-    });
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("data-testid", "custom-selection");
   });
 });

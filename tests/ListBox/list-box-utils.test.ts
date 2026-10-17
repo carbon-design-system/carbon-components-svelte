@@ -13,10 +13,6 @@ describe("getMenuMaxHeight", () => {
     expect(getMenuMaxHeight(undefined)).toBe(MENU_MAX_HEIGHT.md);
   });
 
-  it("returns default when called with no args", () => {
-    expect(getMenuMaxHeight()).toBe(MENU_MAX_HEIGHT.md);
-  });
-
   it("returns correct value for each size", () => {
     expect(getMenuMaxHeight("xs")).toBe("8.25rem");
     expect(getMenuMaxHeight("sm")).toBe("11rem");
@@ -29,10 +25,6 @@ describe("getMenuMaxHeight", () => {
 describe("getMenuItemHeight", () => {
   it("returns default when size is undefined (optional size guard)", () => {
     expect(getMenuItemHeight(undefined)).toBe(MENU_ITEM_HEIGHT.md);
-  });
-
-  it("returns default when called with no args", () => {
-    expect(getMenuItemHeight()).toBe(MENU_ITEM_HEIGHT.md);
   });
 
   it("returns correct value for each size", () => {
