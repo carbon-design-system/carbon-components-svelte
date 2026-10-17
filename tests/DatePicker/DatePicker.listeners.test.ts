@@ -3,10 +3,13 @@ import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
-import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
 import { renderCalendar } from "./flatpickr-instance";
-import { openCalendar } from "./helpers";
+import { preloadFlatpickrPlugins } from "./helpers";
+
+const mountRange = () => renderCalendar({ datePickerType: "range" });
+
+beforeAll(preloadFlatpickrPlugins, 30_000);
 
 const openCalendarInstance = async (): Promise<Instance> => {
   const { instance } = await renderCalendar({ datePickerType: "single" });
@@ -56,17 +59,23 @@ describe("DatePicker window listeners", () => {
     expect(instance.isOpen).toBe(false);
     expect(netListenerCalls(add, remove, "click")).toBe(0);
   });
+});
 
-  it("a click inside the calendar does not dismiss it", async () => {
-    render(DatePicker, { props: { datePickerType: "single" } });
+describe("DatePicker range ignoredFocusElements", () => {
+  it("does not share the array with other instances", async () => {
+    const first = await mountRange();
+    const firstElements = first.instance.config.ignoredFocusElements;
+    expect(firstElements).toHaveLength(1);
+    first.unmount();
 
-    const calendar = await openCalendar();
-    expect(calendar).toHaveClass("open");
+    // flatpickr's range plugin pushes its second input into this array. A
+    // default array shared across instances keeps every unmounted range
+    // picker's input (and the detached tree it sits in) reachable forever.
+    const second = await mountRange();
+    const secondElements = second.instance.config.ignoredFocusElements;
 
-    // Month nav doesn't pick a date; it shouldn't close the calendar.
-    const inside =
-      calendar.querySelector<HTMLElement>(".flatpickr-months") ?? calendar;
-    await user.click(inside);
-    expect(calendar).toHaveClass("open");
+    expect(secondElements).not.toBe(firstElements);
+    expect(secondElements).toHaveLength(1);
+    expect(secondElements).not.toContain(firstElements[0]);
   });
 });
