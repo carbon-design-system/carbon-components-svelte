@@ -33,10 +33,6 @@
     @include fluid-label;
   }
 
-  .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label::-webkit-scrollbar {
-    display: none;
-  }
-
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
     @include fluid-label-slotted;

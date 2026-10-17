@@ -24,10 +24,6 @@
     @include fluid-label;
   }
 
-  .#{$prefix}--select--fluid .#{$prefix}--label::-webkit-scrollbar {
-    display: none;
-  }
-
   .#{$prefix}--select--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
     @include fluid-label-slotted;
   }

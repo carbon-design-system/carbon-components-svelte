@@ -571,7 +571,7 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
 const KNOWN_SHARED_VIOLATIONS: Record<string, number> = {
   "literal z-index: _profile-menu.scss": 1,
   "literal z-index: components/ui-shell/_ui-shell.scss": 2,
-  "element-qualified class: _fluid-pin-code-input.scss": 3,
+  "element-qualified class: _fluid-pin-code-input.scss": 2,
   "element-qualified class: components/data-table/_data-table.scss": 4,
 };
 
