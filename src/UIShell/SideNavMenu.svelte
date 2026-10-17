@@ -40,7 +40,9 @@
   import { getContext, onMount, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
+  import { getNavStores } from "./nav-store.js";
+
+  const { isSideNavCollapsed, isSideNavRail } = getNavStores();
 
   const parentMenu = getContext("carbon:SideNavMenu");
   /** @type {number} */

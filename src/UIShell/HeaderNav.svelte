@@ -3,6 +3,7 @@
   import { readable } from "svelte/store";
   import { createMenubar } from "../utils/menubar.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
+  import { getNavStores } from "./nav-store.js";
 
   // Top-level items register here so the bar is a single Tab stop that the
   // arrow keys rove through.
@@ -33,10 +34,16 @@
     winWidth: readable(undefined),
   };
 
-  // Only a custom breakpoint with a known width needs marker classes. The
-  // default path stays pure CSS so server-rendered pages don't shift layout.
+  // A contained shell measures its container, which the `lg` media query
+  // can't see, so it always uses the marker classes.
+  const { contained } = getNavStores();
+
+  // Only a custom breakpoint (or a container) with a known width needs
+  // marker classes. The default path stays pure CSS so server-rendered
+  // pages don't shift layout.
   $: custom =
-    $expansionBreakpoint !== EXPANSION_BREAKPOINT && $winWidth !== undefined;
+    ($expansionBreakpoint !== EXPANSION_BREAKPOINT || contained) &&
+    $winWidth !== undefined;
   $: expanded = custom && $winWidth >= $expansionBreakpoint;
 </script>
 

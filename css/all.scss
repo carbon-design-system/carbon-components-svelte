@@ -28,8 +28,10 @@ $ccs-omit-token-fallbacks: true;
 
 @import "./carbon-styles";
 
-// Default: white
-:root {
+// Default: white. A `UIShellContainer` with a `theme` declares every token
+// too, so the page's theme doesn't show through where its own matches white.
+:root,
+.bx--ui-shell-container[theme] {
   @include carbon--theme($carbon--theme--white, true) {
     @include emit-component-tokens($tag-colors);
     @include emit-component-tokens($notification-colors);
@@ -41,7 +43,8 @@ $ccs-omit-token-fallbacks: true;
 $ccs-theme-base: ($carbon--theme--white,);
 
 // <html theme="g10">
-:root[theme="g10"] {
+:root[theme="g10"],
+.bx--ui-shell-container[theme="g10"] {
   @include carbon--theme($carbon--theme--g10, true, $ccs-theme-base) {
     @include emit-component-tokens($tag-colors, $ccs-theme-base);
     @include emit-component-tokens($notification-colors, $ccs-theme-base);
@@ -49,7 +52,8 @@ $ccs-theme-base: ($carbon--theme--white,);
 }
 
 // <html theme="g80">
-:root[theme="g80"] {
+:root[theme="g80"],
+.bx--ui-shell-container[theme="g80"] {
   color-scheme: dark;
 
   @include carbon--theme($carbon--theme--g80, true, $ccs-theme-base) {
@@ -59,7 +63,8 @@ $ccs-theme-base: ($carbon--theme--white,);
 }
 
 // <html theme="g90">
-:root[theme="g90"] {
+:root[theme="g90"],
+.bx--ui-shell-container[theme="g90"] {
   color-scheme: dark;
 
   @include carbon--theme($carbon--theme--g90, true, $ccs-theme-base) {
@@ -69,7 +74,8 @@ $ccs-theme-base: ($carbon--theme--white,);
 }
 
 // <html theme="g100">
-:root[theme="g100"] {
+:root[theme="g100"],
+.bx--ui-shell-container[theme="g100"] {
   color-scheme: dark;
 
   @include carbon--theme($carbon--theme--g100, true, $ccs-theme-base) {
