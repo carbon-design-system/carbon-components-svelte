@@ -1,7 +1,13 @@
 // @vitest-environment node
 import { FORM_CONTEXT_KEY } from "carbon-components-svelte/constants/context-keys.js";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
-import { normalizeSSR, renderSSR } from "./ssr";
+import { normalizeSSR, renderSSR, stripHydrationMarkers } from "./ssr";
+
+describe("stripHydrationMarkers", () => {
+  it("removes a marker that one pass would leave behind", () => {
+    expect(stripHydrationMarkers("<!-<!---->--->a")).toBe("a");
+  });
+});
 
 describe("normalizeSSR", () => {
   it("strips Svelte's hydration comments", () => {

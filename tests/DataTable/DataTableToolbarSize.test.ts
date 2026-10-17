@@ -1,12 +1,12 @@
 import { render } from "@testing-library/svelte";
-import DataTableToolbarSize from "./DataTableToolbarSize.test.svelte";
+import ToolbarDensity from "./ToolbarDensity.test.svelte";
 
 describe("DataTable Toolbar size inheritance", () => {
   const toolbar = (container: HTMLElement) =>
     container.querySelector(".bx--table-toolbar");
 
   it("inherits the small toolbar from a short DataTable", () => {
-    const { container } = render(DataTableToolbarSize, {
+    const { container } = render(ToolbarDensity, {
       props: { tableSize: "short" },
     });
 
@@ -15,7 +15,7 @@ describe("DataTable Toolbar size inheritance", () => {
   });
 
   it("inherits the extra small toolbar from a compact DataTable", () => {
-    const { container } = render(DataTableToolbarSize, {
+    const { container } = render(ToolbarDensity, {
       props: { tableSize: "compact" },
     });
 
@@ -25,7 +25,7 @@ describe("DataTable Toolbar size inheritance", () => {
 
   it("inherits the default toolbar from medium/tall/unset DataTable sizes", () => {
     for (const tableSize of [undefined, "medium", "tall"] as const) {
-      const { container } = render(DataTableToolbarSize, {
+      const { container } = render(ToolbarDensity, {
         props: { tableSize },
       });
 
@@ -35,13 +35,13 @@ describe("DataTable Toolbar size inheritance", () => {
   });
 
   it("lets an explicit toolbar size override the inherited size", () => {
-    const { container } = render(DataTableToolbarSize, {
+    const { container } = render(ToolbarDensity, {
       props: { tableSize: "tall", toolbarSize: "sm" },
     });
 
     expect(toolbar(container)).toHaveClass("bx--table-toolbar--small");
 
-    const { container: container2 } = render(DataTableToolbarSize, {
+    const { container: container2 } = render(ToolbarDensity, {
       props: { tableSize: "short", toolbarSize: "default" },
     });
 
@@ -50,7 +50,7 @@ describe("DataTable Toolbar size inheritance", () => {
   });
 
   it("defaults to the normal toolbar when used standalone", () => {
-    const { container } = render(DataTableToolbarSize, {
+    const { container } = render(ToolbarDensity, {
       props: { standalone: true },
     });
 

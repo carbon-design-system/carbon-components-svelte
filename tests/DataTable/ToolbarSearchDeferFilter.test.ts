@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import ToolbarSearchDeferFilter from "./ToolbarSearchDeferFilter.test.svelte";
+import ToolbarSearchTiming from "./ToolbarSearchTiming.test.svelte";
 
 describe("ToolbarSearch deferFilter", () => {
   beforeEach(() => {
@@ -11,7 +11,9 @@ describe("ToolbarSearch deferFilter", () => {
   });
 
   it("updates value at once and filters after yielding", async () => {
-    const { component } = render(ToolbarSearchDeferFilter);
+    const { component } = render(ToolbarSearchTiming, {
+      props: { deferFilter: true },
+    });
     const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
@@ -25,7 +27,9 @@ describe("ToolbarSearch deferFilter", () => {
   });
 
   it("defers clearing", async () => {
-    const { component } = render(ToolbarSearchDeferFilter);
+    const { component } = render(ToolbarSearchTiming, {
+      props: { deferFilter: true },
+    });
     const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
     await vi.advanceTimersByTimeAsync(0);
@@ -42,7 +46,9 @@ describe("ToolbarSearch deferFilter", () => {
   });
 
   it("filters only the latest value after rapid input", async () => {
-    const { component } = render(ToolbarSearchDeferFilter);
+    const { component } = render(ToolbarSearchTiming, {
+      props: { deferFilter: true },
+    });
     const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "Balancer 2" } });
@@ -59,8 +65,8 @@ describe("ToolbarSearch deferFilter", () => {
   });
 
   it("debounces first, then yields", async () => {
-    const { component } = render(ToolbarSearchDeferFilter, {
-      props: { debounce: 300 },
+    const { component } = render(ToolbarSearchTiming, {
+      props: { deferFilter: true, debounce: 300 },
     });
     const input = screen.getByRole("searchbox");
 
@@ -79,7 +85,9 @@ describe("ToolbarSearch deferFilter", () => {
   it("uses scheduler.yield when available", async () => {
     const yieldMock = vi.fn(() => Promise.resolve());
     vi.stubGlobal("scheduler", { yield: yieldMock });
-    const { component } = render(ToolbarSearchDeferFilter);
+    const { component } = render(ToolbarSearchTiming, {
+      props: { deferFilter: true },
+    });
     const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
@@ -91,7 +99,7 @@ describe("ToolbarSearch deferFilter", () => {
   });
 
   it("filters synchronously when deferFilter is false", async () => {
-    const { component } = render(ToolbarSearchDeferFilter, {
+    const { component } = render(ToolbarSearchTiming, {
       props: { deferFilter: false },
     });
     const input = screen.getByRole("searchbox");

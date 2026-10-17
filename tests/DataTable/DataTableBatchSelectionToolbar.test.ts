@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DataTableBatchSelectionToolbar from "./DataTableBatchSelectionToolbar.test.svelte";
+import { getSelectAll } from "./helpers";
 
 describe("DataTableBatchSelectionToolbar", () => {
   it("renders toolbar when rows are selected", () => {
@@ -36,9 +37,7 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    const selectAll = screen.getByRole("checkbox", {
-      name: "Select all rows",
-    });
+    const selectAll = getSelectAll();
     expect(selectAll).toBeChecked();
 
     await user.click(screen.getByText("Cancel"));
@@ -59,8 +58,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     const toolbar = container.querySelector(".bx--batch-actions");
     expect(toolbar).not.toHaveClass("bx--batch-actions--active");
 
-    rerender({ active: true });
-    await tick();
+    await rerender({ active: true });
 
     expect(toolbar).toHaveClass("bx--batch-actions--active");
   });
@@ -73,8 +71,7 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    rerender({ selectedRowIds: ["a", "b"], active: false });
-    await tick();
+    await rerender({ selectedRowIds: ["a", "b"], active: false });
 
     const toolbar = container.querySelector(".bx--batch-actions");
     expect(toolbar).not.toHaveClass("bx--batch-actions--active");
@@ -98,20 +95,21 @@ describe("DataTableBatchSelectionToolbar", () => {
   });
 
   it("handles multiple batch actions", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const ondelete = vi.fn();
+    const onrestart = vi.fn();
     render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],
+        ondelete,
+        onrestart,
       },
     });
 
-    const deleteButton = screen.getByText("Delete");
-    await user.click(deleteButton);
-    expect(consoleLog).toHaveBeenCalledWith("delete", ["a", "b"]);
+    await user.click(screen.getByText("Delete"));
+    expect(ondelete).toHaveBeenCalledExactlyOnceWith(["a", "b"]);
 
-    const restartButton = screen.getByText("Restart");
-    await user.click(restartButton);
-    expect(consoleLog).toHaveBeenCalledWith("restart", ["a", "b"]);
+    await user.click(screen.getByText("Restart"));
+    expect(onrestart).toHaveBeenCalledExactlyOnceWith(["a", "b"]);
   });
 
   it("updates selected count when selection changes", async () => {
@@ -123,8 +121,7 @@ describe("DataTableBatchSelectionToolbar", () => {
 
     expect(screen.getByText("1 item selected")).toBeInTheDocument();
 
-    rerender({ selectedRowIds: ["a", "b", "c"] });
-    await tick();
+    await rerender({ selectedRowIds: ["a", "b", "c"] });
 
     expect(screen.getByText("3 items selected")).toBeInTheDocument();
   });
@@ -204,14 +201,12 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(batchActions).toHaveAttribute("inert");
     expect(toolbarContent).not.toHaveAttribute("inert");
 
-    rerender({ selectedRowIds: ["a", "b"] });
-    await tick();
+    await rerender({ selectedRowIds: ["a", "b"] });
 
     expect(batchActions).not.toHaveAttribute("inert");
     expect(toolbarContent).toHaveAttribute("inert");
 
-    rerender({ selectedRowIds: [] });
-    await tick();
+    await rerender({ selectedRowIds: [] });
 
     expect(batchActions).toHaveAttribute("inert");
     expect(toolbarContent).not.toHaveAttribute("inert");

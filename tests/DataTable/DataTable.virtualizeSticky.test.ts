@@ -1,44 +1,50 @@
 import { render, waitFor } from "@testing-library/svelte";
-import DataTableVirtualizeSticky from "./DataTable.virtualizeSticky.test.svelte";
+import DataTable from "./DataTable.test.svelte";
+import { getRenderedRowIds, makeRows } from "./helpers";
 
 describe("DataTable virtualize + stickyHeader", () => {
-  const renderedRowCount = () =>
-    document.querySelectorAll("tbody tr[data-row]").length;
-  const renderedRowIds = () =>
-    [...document.querySelectorAll("tbody tr[data-row]")].map((tr) =>
-      tr.getAttribute("data-row"),
-    );
+  const renderVirtualSticky = (
+    props: { size?: "medium"; stickyHeaderMaxHeight?: number | string } = {},
+  ) =>
+    render(DataTable, {
+      props: {
+        headers: [{ key: "name", value: "Name" }],
+        rows: makeRows(500),
+        stickyHeader: true,
+        stickyHeaderMaxHeight: 240,
+        virtualize: true,
+        ...props,
+      },
+    });
 
   it("sizes the virtual window from a numeric stickyHeaderMaxHeight", () => {
     // itemHeight is 48 (the unset default size) and stickyHeaderMaxHeight
     // is 240, so the virtual window should render ceil(240 / 48) + overscan
     // (3) = 8 rows, not the 10-row-default window (itemHeight * 10 = 480,
     // which would render 13 rows).
-    render(DataTableVirtualizeSticky);
+    renderVirtualSticky();
 
-    expect(renderedRowCount()).toBe(8);
+    expect(getRenderedRowIds().length).toBe(8);
   });
 
   it("estimates rows at the 40px height that `medium` renders", () => {
-    render(DataTableVirtualizeSticky, { props: { size: "medium" } });
+    renderVirtualSticky({ size: "medium" });
 
     // `bx--data-table--md` rows are 40px: ceil(240 / 40) + overscan (3) = 9.
-    expect(renderedRowCount()).toBe(9);
+    expect(getRenderedRowIds().length).toBe(9);
   });
 
   it("falls back to the maxVisibleRows default when stickyHeaderMaxHeight is a string", () => {
-    render(DataTableVirtualizeSticky, {
-      props: { stickyHeaderMaxHeight: "50vh" },
-    });
+    renderVirtualSticky({ stickyHeaderMaxHeight: "50vh" });
 
     // itemHeight (48) * maxVisibleRows (10) = 480; ceil(480 / 48) + overscan
     // (3) = 13 rows.
-    expect(renderedRowCount()).toBe(13);
+    expect(getRenderedRowIds().length).toBe(13);
   });
 
   it("updates the visible window when the sticky-header table scrolls", async () => {
-    render(DataTableVirtualizeSticky);
-    expect(renderedRowIds()).toContain("0");
+    renderVirtualSticky();
+    expect(getRenderedRowIds()).toContain("0");
 
     // `stickyHeader` makes the inner `<table>` the scrolling element, not
     // its wrapping `<section>`; scroll it directly, the same way a real
@@ -49,8 +55,8 @@ describe("DataTable virtualize + stickyHeader", () => {
     table.dispatchEvent(new Event("scroll"));
 
     await waitFor(() => {
-      expect(renderedRowIds()).not.toContain("0");
+      expect(getRenderedRowIds()).not.toContain("0");
     });
-    expect(renderedRowIds()).toContain("7");
+    expect(getRenderedRowIds()).toContain("7");
   });
 });

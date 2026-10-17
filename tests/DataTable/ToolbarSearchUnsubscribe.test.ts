@@ -16,14 +16,20 @@ describe("ToolbarSearch unsubscribes from tableRows before resubscribing", () =>
     // toggled, so it can only ever have exactly one live subscriber) isolates
     // the thing this test actually guards -- extra emissions from LEAKED
     // subscribers -- from that unrelated, expected replay fan-out.
-    const control = render(ToolbarSearchUnsubscribe);
-    const controlBaseline = control.component.subscribeCount;
+    const onControlTableRows = vi.fn();
+    const control = render(ToolbarSearchUnsubscribe, {
+      props: { onTableRows: onControlTableRows },
+    });
+    onControlTableRows.mockClear();
     await user.click(
       within(control.container).getByRole("button", { name: "Change rows" }),
     );
-    const controlDelta = control.component.subscribeCount - controlBaseline;
+    const controlDelta = onControlTableRows.mock.calls.length;
 
-    const { component, container } = render(ToolbarSearchUnsubscribe);
+    const onTableRows = vi.fn();
+    const { container } = render(ToolbarSearchUnsubscribe, {
+      props: { onTableRows },
+    });
     const toggleButton = within(container).getByRole("button", {
       name: "Toggle filter",
     });
@@ -35,7 +41,7 @@ describe("ToolbarSearch unsubscribes from tableRows before resubscribing", () =>
       await user.click(toggleButton);
     }
 
-    const baseline = component.subscribeCount;
+    onTableRows.mockClear();
 
     await user.click(
       within(container).getByRole("button", { name: "Change rows" }),
@@ -44,6 +50,6 @@ describe("ToolbarSearch unsubscribes from tableRows before resubscribing", () =>
     // Before the fix, each `false -> true` toggle leaked the previous
     // subscription, so a toggled instance would see more emissions than the
     // control instead of matching it exactly.
-    expect(component.subscribeCount - baseline).toBe(controlDelta);
+    expect(onTableRows).toHaveBeenCalledTimes(controlDelta);
   });
 });

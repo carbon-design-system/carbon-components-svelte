@@ -1,11 +1,16 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import ToolbarSearchSelectTextOnFocus from "./ToolbarSearchSelectTextOnFocus.test.svelte";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("ToolbarSearch selectTextOnFocus passthrough", () => {
   it("forwards selectTextOnFocus to the underlying Search field", async () => {
-    render(ToolbarSearchSelectTextOnFocus);
+    render(ToolbarSearchHost, {
+      props: {
+        value: "Alpha",
+        searchProps: { persistent: true, selectTextOnFocus: true },
+      },
+    });
 
     const input = screen.getByRole("searchbox");
     assert(input instanceof HTMLInputElement);

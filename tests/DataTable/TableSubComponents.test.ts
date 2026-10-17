@@ -117,91 +117,99 @@ describe("Table Sub-Components", () => {
 
   describe("TableCell", () => {
     it("should handle click events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "TableCell", slotContent: "Click me" },
+        props: { testComponent: "TableCell", slotContent: "Click me", onevent },
       });
 
       const td = container.querySelector("td");
       assert(td);
       await user.click(td);
-      expect(consoleLog).toHaveBeenCalledWith("click");
+      expect(onevent).toHaveBeenCalledWith("click");
     });
 
     it("should handle mouse events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "TableCell", slotContent: "Hover me" },
+        props: { testComponent: "TableCell", slotContent: "Hover me", onevent },
       });
 
       const td = container.querySelector("td");
       assert(td);
       await user.hover(td);
-      expect(consoleLog).toHaveBeenCalledWith("mouseover");
-      expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+      expect(onevent).toHaveBeenCalledWith("mouseover");
+      expect(onevent).toHaveBeenCalledWith("mouseenter");
 
       await user.unhover(td);
-      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+      expect(onevent).toHaveBeenCalledWith("mouseleave");
     });
   });
 
   describe("TableRow", () => {
     it("should handle click events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "TableRow", slotContent: "Click row" },
+        props: { testComponent: "TableRow", slotContent: "Click row", onevent },
       });
 
       const tr = container.querySelector("tr");
       assert(tr);
       await user.click(tr);
-      expect(consoleLog).toHaveBeenCalledWith("click");
+      expect(onevent).toHaveBeenCalledWith("click");
     });
 
     it("should handle mouse events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "TableRow", slotContent: "Hover row" },
+        props: { testComponent: "TableRow", slotContent: "Hover row", onevent },
       });
 
       const tr = container.querySelector("tr");
       assert(tr);
       await user.hover(tr);
-      expect(consoleLog).toHaveBeenCalledWith("mouseover");
-      expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+      expect(onevent).toHaveBeenCalledWith("mouseover");
+      expect(onevent).toHaveBeenCalledWith("mouseenter");
 
       await user.unhover(tr);
-      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+      expect(onevent).toHaveBeenCalledWith("mouseleave");
     });
   });
 
   describe("TableHead", () => {
     it("should handle click events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "TableHead", slotContent: "Click head" },
+        props: {
+          testComponent: "TableHead",
+          slotContent: "Click head",
+          onevent,
+        },
       });
 
       const thead = container.querySelector("thead");
       assert(thead);
       await user.click(thead);
-      expect(consoleLog).toHaveBeenCalledWith("click");
+      expect(onevent).toHaveBeenCalledWith("click");
     });
 
     it("should handle mouse events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "TableHead", slotContent: "Hover head" },
+        props: {
+          testComponent: "TableHead",
+          slotContent: "Hover head",
+          onevent,
+        },
       });
 
       const thead = container.querySelector("thead");
       assert(thead);
       await user.hover(thead);
-      expect(consoleLog).toHaveBeenCalledWith("mouseover");
-      expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+      expect(onevent).toHaveBeenCalledWith("mouseover");
+      expect(onevent).toHaveBeenCalledWith("mouseenter");
 
       await user.unhover(thead);
-      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+      expect(onevent).toHaveBeenCalledWith("mouseleave");
     });
   });
 

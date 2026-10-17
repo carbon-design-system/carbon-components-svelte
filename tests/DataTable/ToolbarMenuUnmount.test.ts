@@ -1,12 +1,11 @@
 import { render } from "@testing-library/svelte";
-import { tick } from "svelte";
 import { user } from "../utils/user";
-import ToolbarMenuUnmount from "./ToolbarMenuUnmount.test.svelte";
+import ToolbarMenuTest from "./ToolbarMenu.test.svelte";
 
 describe("ToolbarMenu overflow cleanup", () => {
   it("resets parent Toolbar overflow when the menu unmounts while open", async () => {
-    const { container, rerender } = render(ToolbarMenuUnmount, {
-      props: { showMenu: true },
+    const { container, rerender } = render(ToolbarMenuTest, {
+      props: { testComponent: "ToolbarMenu", slotContent: "Item" },
     });
 
     const toolbar = container.querySelector<HTMLElement>(".bx--table-toolbar");
@@ -17,8 +16,7 @@ describe("ToolbarMenu overflow cleanup", () => {
     await user.click(trigger);
     expect(toolbar.style.overflow).toBe("visible");
 
-    rerender({ showMenu: false });
-    await tick();
+    await rerender({ showMenu: false });
 
     expect(toolbar.style.overflow).toBe("inherit");
   });

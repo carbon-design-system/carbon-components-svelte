@@ -14,14 +14,24 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
-import DataTableSortPreventDefault from "./DataTable.sort.preventDefault.test.svelte";
 import DataTable from "./DataTable.test.svelte";
 import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
 import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
 import DataTableFooter from "./DataTableFooter.test.svelte";
-import DataTableHiddenColumnSearch from "./DataTableHiddenColumnSearch.test.svelte";
-import { getBodyRows, getColumnHeaderText } from "./helpers";
+import {
+  clickHeader,
+  eventDetails,
+  eventNames,
+  getBodyRows,
+  getCell,
+  getCells,
+  getColumnHeaderText,
+  getRenderedRowIds,
+  getRowTexts,
+  getSelectAll,
+} from "./helpers";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("DataTable", () => {
   const headers = [
@@ -73,7 +83,7 @@ describe("DataTable", () => {
       expect(rowElement).toBeInTheDocument();
       assert(rowElement);
 
-      const cells = within(rowElement).getAllByRole("cell");
+      const cells = getCells(rowElement);
       expect(cells.length).toBe(4);
 
       const protocolCell = Array.from(cells).find(
@@ -106,7 +116,7 @@ describe("DataTable", () => {
 
     const bodyRows = getBodyRows();
     for (const row of bodyRows) {
-      const cells = within(row).getAllByRole("cell");
+      const cells = getCells(row);
       cells.forEach((cell, i) => {
         expect(cell).toHaveAttribute("headers", columnHeaders[i].id);
       });
@@ -203,8 +213,7 @@ describe("DataTable", () => {
     const headerCells = screen.getAllByRole("columnheader");
     expect(headerCells.length).toBe(4);
 
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
+    await clickHeader("Name");
 
     const rowsAfterNameSort = getBodyRows();
     const firstRowName = within(rowsAfterNameSort[0]).getByRole("cell", {
@@ -212,7 +221,7 @@ describe("DataTable", () => {
     });
     expect(firstRowName).toHaveTextContent("Load Balancer 1");
 
-    await user.click(nameHeader);
+    await clickHeader("Name");
     const rowsAfterNameDescSort = getBodyRows();
     const firstRowNameDesc = within(rowsAfterNameDescSort[0]).getByRole(
       "cell",
@@ -222,70 +231,81 @@ describe("DataTable", () => {
     );
     expect(firstRowNameDesc).toHaveTextContent("Load Balancer 3");
 
-    const portHeader = screen.getByText("Port");
-    await user.click(portHeader);
+    await clickHeader("Port");
 
-    const rowsAfterPortSort = getBodyRows();
-    const firstRowPort = within(rowsAfterPortSort[0]).getAllByRole("cell")[2];
+    const firstRowPort = getCell(0, 2);
     expect(firstRowPort).toHaveTextContent("80");
 
-    await user.click(portHeader);
-    const rowsAfterPortDescSort = getBodyRows();
-    const firstRowPortDesc = within(rowsAfterPortDescSort[0]).getAllByRole(
-      "cell",
-    )[2];
+    await clickHeader("Port");
+    const firstRowPortDesc = getCell(0, 2);
     expect(firstRowPortDesc).toHaveTextContent("3000");
   });
 
-  it("sort: preventDefault skips client-side sort but still fires sort with detail", async () => {
-    const onsort = vi.fn();
-    render(DataTableSortPreventDefault, {
-      props: { preventSortDefault: true, onsort },
+  describe("sort preventDefault", () => {
+    const sortHeaders = [
+      { key: "name", value: "Name" },
+      { key: "port", value: "Port" },
+    ];
+    const sortRows = [
+      { id: "a", name: "Zebra", port: 1 },
+      { id: "b", name: "Alpha", port: 2 },
+    ];
+
+    it("skips client-side sort but still fires sort with detail", async () => {
+      const onsort = vi.fn();
+      render(DataTable, {
+        props: {
+          headers: sortHeaders,
+          rows: sortRows,
+          sortable: true,
+          preventSortDefault: true,
+          onsort,
+        },
+      });
+
+      await clickHeader("Name");
+
+      expect(onsort).toHaveBeenCalledTimes(1);
+      expect(onsort.mock.calls[0][0].detail).toEqual({
+        key: "name",
+        direction: "ascending",
+      });
+      expect(getCell(0, 0)).toHaveTextContent("Zebra");
     });
 
-    await user.click(screen.getByText("Name"));
-    await tick();
+    it("still reports the intended direction in click:header", async () => {
+      const onevent = vi.fn();
+      render(DataTable, {
+        props: {
+          headers: sortHeaders,
+          rows: sortRows,
+          sortable: true,
+          preventSortDefault: true,
+          onevent,
+        },
+      });
 
-    expect(onsort).toHaveBeenCalledTimes(1);
-    expect(onsort.mock.calls[0][0].detail).toEqual({
-      key: "name",
-      direction: "ascending",
+      await clickHeader("Name");
+
+      expect(eventDetails(onevent, "click:header")).toEqual([
+        expect.objectContaining({
+          header: expect.objectContaining({ key: "name" }),
+          sortDirection: "ascending",
+        }),
+      ]);
     });
 
-    const bodyRows = getBodyRows();
-    expect(within(bodyRows[0]).getByText("Zebra")).toBeInTheDocument();
-  });
+    it("applies client-side sort without preventDefault", async () => {
+      const onsort = vi.fn();
+      render(DataTable, {
+        props: { headers: sortHeaders, rows: sortRows, sortable: true, onsort },
+      });
 
-  it("sort: cancelled sort still reports intended direction in click:header", async () => {
-    const onclickheader = vi.fn();
-    render(DataTableSortPreventDefault, {
-      props: { preventSortDefault: true, onclickheader },
+      await clickHeader("Name");
+
+      expect(onsort).toHaveBeenCalledTimes(1);
+      expect(getCell(0, 0)).toHaveTextContent("Alpha");
     });
-
-    await user.click(screen.getByText("Name"));
-    await tick();
-
-    expect(onclickheader).toHaveBeenCalledTimes(1);
-    expect(onclickheader.mock.calls[0][0].detail).toEqual(
-      expect.objectContaining({
-        header: expect.objectContaining({ key: "name" }),
-        sortDirection: "ascending",
-      }),
-    );
-  });
-
-  it("sort: without preventDefault applies client-side sort", async () => {
-    const onsort = vi.fn();
-    render(DataTableSortPreventDefault, {
-      props: { preventSortDefault: false, onsort },
-    });
-
-    await user.click(screen.getByText("Name"));
-    await tick();
-
-    expect(onsort).toHaveBeenCalledTimes(1);
-    const bodyRows = getBodyRows();
-    expect(within(bodyRows[0]).getByText("Alpha")).toBeInTheDocument();
   });
 
   it("handles sorting with custom display and sort methods", async () => {
@@ -337,14 +357,11 @@ describe("DataTable", () => {
 
     const _table = screen.getByRole("table");
     const tableRows = getBodyRows();
-    const costCells = tableRows.map(
-      (row) => within(row).getAllByRole("cell")[1],
-    );
+    const costCells = tableRows.map((row) => getCells(row)[1]);
     expect(costCells[0]).toHaveTextContent("100 €");
     expect(costCells[1]).toHaveTextContent("200 €");
 
-    const dateHeader = screen.getByText("Expire date");
-    await user.click(dateHeader);
+    await clickHeader("Expire date");
 
     const rowsAfterDateSort = getBodyRows();
     expect(
@@ -358,7 +375,7 @@ describe("DataTable", () => {
       }),
     ).toHaveTextContent("Load Balancer 3");
 
-    await user.click(dateHeader);
+    await clickHeader("Expire date");
     const rowsAfterDateDescSort = getBodyRows();
     expect(
       within(rowsAfterDateDescSort[0]).getByRole("cell", {
@@ -405,19 +422,11 @@ describe("DataTable", () => {
       },
     });
 
-    const portHeader = screen.getByText("Port");
-    await user.click(portHeader);
+    await clickHeader("Port");
 
-    const rowsAfterPortSort = getBodyRows();
-    expect(
-      within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
-    ).toHaveTextContent("80");
-    expect(
-      within(rowsAfterPortSort[1]).getAllByRole("cell")[2],
-    ).toHaveTextContent("443");
-    expect(
-      within(rowsAfterPortSort[2]).getAllByRole("cell")[2],
-    ).toHaveTextContent("3000");
+    expect(getCell(0, 2)).toHaveTextContent("80");
+    expect(getCell(1, 2)).toHaveTextContent("443");
+    expect(getCell(2, 2)).toHaveTextContent("3000");
   });
 
   it("allows a header to opt into sorting when the table itself is not sortable", async () => {
@@ -464,26 +473,15 @@ describe("DataTable", () => {
       },
     });
 
-    const nameHeader = screen.getByText("Name");
+    await clickHeader("Name");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 1");
 
-    await user.click(nameHeader);
-    let tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 1",
-    );
-
-    await user.click(nameHeader);
-    tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 3",
-    );
+    await clickHeader("Name");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 3");
 
     // Click 3: descending -> ascending (NOT back to none)
-    await user.click(nameHeader);
-    tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 1",
-    );
+    await clickHeader("Name");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 1");
   });
 
   it("sortAlways: switches columns without resetting to none", async () => {
@@ -496,20 +494,11 @@ describe("DataTable", () => {
       },
     });
 
-    const nameHeader = screen.getByText("Name");
-    const portHeader = screen.getByText("Port");
+    await clickHeader("Name");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 1");
 
-    await user.click(nameHeader);
-    let tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 1",
-    );
-
-    await user.click(portHeader);
-    tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[2]).toHaveTextContent(
-      "80",
-    );
+    await clickHeader("Port");
+    expect(getCell(0, 2)).toHaveTextContent("80");
   });
 
   it("without sortAlways: third click resets to original order", async () => {
@@ -521,20 +510,15 @@ describe("DataTable", () => {
       },
     });
 
-    const nameHeader = screen.getByText("Name");
-
     // Click 1: ascending
-    await user.click(nameHeader);
+    await clickHeader("Name");
     // Click 2: descending
-    await user.click(nameHeader);
+    await clickHeader("Name");
     // Click 3: none (original order)
-    await user.click(nameHeader);
+    await clickHeader("Name");
 
-    const tableRows = getBodyRows();
     // Original order: Load Balancer 3, Load Balancer 1, Load Balancer 2
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 3",
-    );
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 3");
   });
 
   it("sort: third click dispatches sort with key null and direction none", async () => {
@@ -548,12 +532,11 @@ describe("DataTable", () => {
       },
     });
 
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
+    await clickHeader("Name");
     await tick();
-    await user.click(nameHeader);
+    await clickHeader("Name");
     await tick();
-    await user.click(nameHeader);
+    await clickHeader("Name");
     await tick();
 
     expect(sortHandler).toHaveBeenCalledTimes(3);
@@ -584,26 +567,17 @@ describe("DataTable", () => {
       },
     });
 
-    const nameHeader = screen.getByText("Name");
-    const portHeader = screen.getByText("Port");
-
     // Name has sortAlways: true (override) – third click stays sorted
-    await user.click(nameHeader);
-    await user.click(nameHeader);
-    await user.click(nameHeader);
-    let tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 1",
-    );
+    await clickHeader("Name");
+    await clickHeader("Name");
+    await clickHeader("Name");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 1");
 
     // Port has sortAlways: false (override) – third click unsorts
-    await user.click(portHeader);
-    await user.click(portHeader);
-    await user.click(portHeader);
-    tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 3",
-    );
+    await clickHeader("Port");
+    await clickHeader("Port");
+    await clickHeader("Port");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 3");
   });
 
   it("header.sortAlways overrides table: column with sortAlways: false allows unsort when table has sortAlways: true", async () => {
@@ -619,17 +593,12 @@ describe("DataTable", () => {
       },
     });
 
-    const portHeader = screen.getByText("Port");
-
     // Port has sortAlways: false – overrides table, third click unsorts
-    await user.click(portHeader);
-    await user.click(portHeader);
-    await user.click(portHeader);
+    await clickHeader("Port");
+    await clickHeader("Port");
+    await clickHeader("Port");
 
-    const tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 3",
-    );
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 3");
   });
 
   it("sorts using the top-level sort prop", async () => {
@@ -671,28 +640,16 @@ describe("DataTable", () => {
     });
 
     // Sort by name — should use the top-level sort (reverse alphabetical)
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
+    await clickHeader("Name");
 
-    const rowsAfterSort = getBodyRows();
-    expect(within(rowsAfterSort[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 3",
-    );
-    expect(within(rowsAfterSort[2]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 1",
-    );
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 3");
+    expect(getCell(2, 0)).toHaveTextContent("Load Balancer 1");
 
     // Sort by port — should use the top-level sort (numeric)
-    const portHeader = screen.getByText("Port");
-    await user.click(portHeader);
+    await clickHeader("Port");
 
-    const rowsAfterPortSort = getBodyRows();
-    expect(
-      within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
-    ).toHaveTextContent("80");
-    expect(
-      within(rowsAfterPortSort[2]).getAllByRole("cell")[2],
-    ).toHaveTextContent("3000");
+    expect(getCell(0, 2)).toHaveTextContent("80");
+    expect(getCell(2, 2)).toHaveTextContent("3000");
   });
 
   it("per-header sort overrides the top-level sort prop", async () => {
@@ -746,29 +703,17 @@ describe("DataTable", () => {
     });
 
     // Sort by name — should use the top-level sort (normal alphabetical)
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
+    await clickHeader("Name");
 
-    const rowsAfterNameSort = getBodyRows();
-    expect(
-      within(rowsAfterNameSort[0]).getAllByRole("cell")[0],
-    ).toHaveTextContent("Load Balancer 1");
-    expect(
-      within(rowsAfterNameSort[2]).getAllByRole("cell")[0],
-    ).toHaveTextContent("Load Balancer 3");
+    expect(getCell(0, 0)).toHaveTextContent("Load Balancer 1");
+    expect(getCell(2, 0)).toHaveTextContent("Load Balancer 3");
 
     // Sort by port — should use per-header sort (descending when ascending)
-    const portHeader = screen.getByText("Port");
-    await user.click(portHeader);
+    await clickHeader("Port");
 
-    const rowsAfterPortSort = getBodyRows();
     // Per-header sort reverses: ascending click → 3000 first
-    expect(
-      within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
-    ).toHaveTextContent("3000");
-    expect(
-      within(rowsAfterPortSort[2]).getAllByRole("cell")[2],
-    ).toHaveTextContent("80");
+    expect(getCell(0, 2)).toHaveTextContent("3000");
+    expect(getCell(2, 2)).toHaveTextContent("80");
   });
 
   it("calls top-level sort except where header.sort overrides", async () => {
@@ -796,14 +741,14 @@ describe("DataTable", () => {
       },
     });
 
-    await user.click(screen.getByText("Port"));
+    await clickHeader("Port");
     expect(tableSort).toHaveBeenCalled();
     expect(nameHeaderSort).not.toHaveBeenCalled();
 
     tableSort.mockClear();
     nameHeaderSort.mockClear();
 
-    await user.click(screen.getByText("Name"));
+    await clickHeader("Name");
     expect(nameHeaderSort).toHaveBeenCalled();
     expect(tableSort).not.toHaveBeenCalled();
   });
@@ -919,7 +864,7 @@ describe("DataTable", () => {
       },
     });
 
-    const selectAll = screen.getByRole("checkbox", { name: "Select all rows" });
+    const selectAll = getSelectAll();
     expect(selectAll).toBePartiallyChecked();
     expect(selectAll).not.toBeChecked();
   });
@@ -1206,9 +1151,10 @@ describe("DataTable", () => {
   });
 
   it("uses empty header key when passed (nullish coalescing)", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     const { container } = render(DataTable, {
       props: {
+        onevent,
         headers: [
           { key: "", value: "Empty Key Col" },
           { key: "name", value: "Name" },
@@ -1224,12 +1170,11 @@ describe("DataTable", () => {
     assert(firstCell);
     await user.click(firstCell);
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "click:cell",
+    expect(eventDetails(onevent, "click:cell")).toEqual([
       expect.objectContaining({
         cell: expect.objectContaining({ key: "" }),
       }),
-    );
+    ]);
   });
 
   it("applies custom column widths without forcing fixed layout", () => {
@@ -1307,7 +1252,7 @@ describe("DataTable", () => {
       expect(bodyRows).toHaveLength(rows.length);
 
       for (const row of bodyRows) {
-        const cells = within(row).getAllByRole("cell");
+        const cells = getCells(row);
         expect(cells[1]).toHaveClass("bx--table-column--align-start");
         expect(cells[2]).toHaveClass("bx--table-column--align-end");
         expect(cells[0].className).not.toMatch(/align/);
@@ -1354,13 +1299,13 @@ describe("DataTable", () => {
       expect(spacerRows.length).toBeGreaterThan(0);
 
       for (const row of dataRows) {
-        const cells = within(row).getAllByRole("cell");
+        const cells = getCells(row);
         expect(cells[1]).toHaveClass("bx--table-column--align-start");
         expect(cells[2]).toHaveClass("bx--table-column--align-end");
       }
 
       for (const row of spacerRows) {
-        for (const cell of within(row).getAllByRole("cell")) {
+        for (const cell of getCells(row)) {
           expect(cell.className).not.toMatch(/align/);
         }
       }
@@ -1473,7 +1418,7 @@ describe("DataTable", () => {
 
     const tableRows = getBodyRows();
     for (const row of tableRows) {
-      const cells = within(row).getAllByRole("cell");
+      const cells = getCells(row);
       expect(cells.length).toBe(5);
     }
   });
@@ -1553,8 +1498,7 @@ describe("DataTable", () => {
       within(firstPageRows[4]).getByRole("cell", { name: "Load Balancer 5" }),
     ).toHaveTextContent("Load Balancer 5");
 
-    rerender({ headers, rows: paginatedRows, pageSize: 5, page: 2 });
-    await tick();
+    await rerender({ headers, rows: paginatedRows, pageSize: 5, page: 2 });
 
     const secondPageRows = getBodyRows();
     expect(secondPageRows.length).toBe(5);
@@ -1565,8 +1509,7 @@ describe("DataTable", () => {
       within(secondPageRows[4]).getByRole("cell", { name: "Load Balancer 10" }),
     ).toHaveTextContent("Load Balancer 10");
 
-    rerender({ page: 3 });
-    await tick();
+    await rerender({ page: 3 });
 
     const thirdPageRows = getBodyRows();
     expect(thirdPageRows.length).toBe(5);
@@ -1579,34 +1522,31 @@ describe("DataTable", () => {
   });
 
   it("dispatches cell events before row events on a cell click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(DataTable, { props: { headers, rows } });
+    const onevent = vi.fn();
+    render(DataTable, { props: { headers, rows, onevent } });
 
-    const firstCell = within(getBodyRows()[0]).getAllByRole("cell")[0];
-    consoleLog.mockClear();
-    await user.click(firstCell);
+    await user.click(getCell(0, 0));
 
-    const clicks = consoleLog.mock.calls.filter(([name]) =>
-      String(name).startsWith("click"),
-    );
-    expect(clicks.map(([name]) => name)).toEqual([
+    expect(eventNames(onevent, "click")).toEqual([
       "click",
       "click:cell",
       "click",
       "click:row",
     ]);
-    expect(clicks[0][1]).toEqual(
+    const [cellClick, rowClick] = eventDetails(onevent, "click");
+    expect(cellClick).toEqual(
       expect.objectContaining({ cell: expect.any(Object) }),
     );
-    expect(clicks[2][1]).not.toHaveProperty("cell");
+    expect(rowClick).not.toHaveProperty("cell");
   });
 
   it("handles row hover events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     render(DataTable, {
       props: {
         headers,
         rows,
+        onevent,
       },
     });
 
@@ -1615,14 +1555,10 @@ describe("DataTable", () => {
     await user.hover(firstRow);
     await user.unhover(firstRow);
 
-    expect(consoleLog).toHaveBeenCalledWith(
+    expect(eventNames(onevent, "mouse")).toEqual([
       "mouseenter:row",
-      expect.any(Object),
-    );
-    expect(consoleLog).toHaveBeenCalledWith(
       "mouseleave:row",
-      expect.any(Object),
-    );
+    ]);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1594
@@ -1683,8 +1619,7 @@ describe("DataTable", () => {
     let selectedRow = container.querySelector(".bx--data-table--selected");
     expect(selectedRow).not.toBeInTheDocument();
 
-    rerender({ selectedRowIds: ["a"] });
-    await tick();
+    await rerender({ selectedRowIds: ["a"] });
 
     selectedRow = container.querySelector("tr[data-row='a']");
     expect(selectedRow).toHaveClass("bx--data-table--selected");
@@ -1707,8 +1642,7 @@ describe("DataTable", () => {
     );
     expect(expandedContent).not.toBeInTheDocument();
 
-    rerender({ expandedRowIds: ["a"] });
-    await tick();
+    await rerender({ expandedRowIds: ["a"] });
 
     expandedContent = container.querySelector(
       "[id$='-expandable-row-a'] .bx--child-row-inner-container",
@@ -1717,11 +1651,12 @@ describe("DataTable", () => {
   });
 
   it("includes target and currentTarget in click:row event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     const { container } = render(DataTable, {
       props: {
         headers,
         rows,
+        onevent,
       },
     });
 
@@ -1729,29 +1664,22 @@ describe("DataTable", () => {
     assert(firstRow);
     await user.click(firstRow);
 
-    expect(consoleLog).toHaveBeenCalledWith("click:row", {
-      row: expect.objectContaining({ id: "a" }),
-      target: expect.any(Object),
-      currentTarget: expect.any(Object),
-    });
-
-    const callArgs = consoleLog.mock.calls.find(
-      (call) => call[0] === "click:row",
-    );
-    expect(callArgs).toBeDefined();
-    if (callArgs) {
-      const detail = callArgs[1];
-      expect(detail.target).toBeInstanceOf(HTMLElement);
-      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
-    }
+    expect(eventDetails(onevent, "click:row")).toEqual([
+      {
+        row: expect.objectContaining({ id: "a" }),
+        target: expect.any(HTMLElement),
+        currentTarget: expect.any(HTMLElement),
+      },
+    ]);
   });
 
   it("includes target and currentTarget in click:cell event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     const { container } = render(DataTable, {
       props: {
         headers,
         rows,
+        onevent,
       },
     });
 
@@ -1759,56 +1687,40 @@ describe("DataTable", () => {
     assert(firstCell);
     await user.click(firstCell);
 
-    expect(consoleLog).toHaveBeenCalledWith("click:cell", {
-      cell: expect.objectContaining({ key: "name" }),
-      target: expect.any(Object),
-      currentTarget: expect.any(Object),
-    });
-
-    const callArgs = consoleLog.mock.calls.find(
-      (call) => call[0] === "click:cell",
-    );
-    expect(callArgs).toBeDefined();
-    if (callArgs) {
-      const detail = callArgs[1];
-      expect(detail.target).toBeInstanceOf(HTMLElement);
-      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
-    }
+    expect(eventDetails(onevent, "click:cell")).toEqual([
+      {
+        cell: expect.objectContaining({ key: "name" }),
+        target: expect.any(HTMLElement),
+        currentTarget: expect.any(HTMLElement),
+      },
+    ]);
   });
 
   it("includes target and currentTarget in click:header event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     render(DataTable, {
       props: {
         headers,
         rows,
         sortable: true,
+        onevent,
       },
     });
 
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
+    await clickHeader("Name");
 
-    expect(consoleLog).toHaveBeenCalledWith("click:header", {
-      header: expect.objectContaining({ key: "name" }),
-      sortDirection: "ascending",
-      target: expect.any(Object),
-      currentTarget: expect.any(Object),
-    });
-
-    const callArgs = consoleLog.mock.calls.find(
-      (call) => call[0] === "click:header",
-    );
-    expect(callArgs).toBeDefined();
-    if (callArgs) {
-      const detail = callArgs[1];
-      expect(detail.target).toBeInstanceOf(HTMLElement);
-      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
-    }
+    expect(eventDetails(onevent, "click:header")).toEqual([
+      {
+        header: expect.objectContaining({ key: "name" }),
+        sortDirection: "ascending",
+        target: expect.any(HTMLElement),
+        currentTarget: expect.any(HTMLElement),
+      },
+    ]);
   });
 
   it("includes target and currentTarget when clicking non-sortable header", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     const customHeaders = [
       { key: "name", value: "Name" },
       { key: "protocol", value: "Protocol", sort: false as const },
@@ -1819,69 +1731,54 @@ describe("DataTable", () => {
         headers: customHeaders,
         rows,
         sortable: true,
+        onevent,
       },
     });
 
-    const protocolHeader = screen.getByText("Protocol");
-    await user.click(protocolHeader);
+    await clickHeader("Protocol");
 
-    expect(consoleLog).toHaveBeenCalledWith("click:header", {
-      header: expect.objectContaining({ key: "protocol" }),
-      target: expect.any(Object),
-      currentTarget: expect.any(Object),
-    });
-
-    const callArgs = consoleLog.mock.calls.find(
-      (call) => call[0] === "click:header",
-    );
-    expect(callArgs).toBeDefined();
-    if (callArgs) {
-      const detail = callArgs[1];
-      expect(detail.target).toBeInstanceOf(HTMLElement);
-      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
-      expect(detail.sortDirection).toBeUndefined();
-    }
+    // toEqual treats a missing key as undefined, so this also checks that
+    // no sortDirection is reported for a non-sortable header.
+    expect(eventDetails(onevent, "click:header")).toEqual([
+      {
+        header: expect.objectContaining({ key: "protocol" }),
+        target: expect.any(HTMLElement),
+        currentTarget: expect.any(HTMLElement),
+      },
+    ]);
   });
 
   it("does not dispatch click:row when clicking checkbox", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     render(DataTable, {
       props: {
         selectable: true,
         headers,
         rows,
+        onevent,
       },
     });
 
-    const checkboxes = screen.getAllByRole("checkbox");
-    consoleLog.mockClear();
-    await user.click(checkboxes[0]);
+    await user.click(screen.getAllByRole("checkbox")[0]);
 
-    const clickRowCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "click:row",
-    );
-    expect(clickRowCalls).toHaveLength(0);
+    expect(eventDetails(onevent, "click:row")).toEqual([]);
   });
 
   it("does not dispatch click:row when clicking radio button", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onevent = vi.fn();
     render(DataTable, {
       props: {
         selectable: true,
         radio: true,
         headers,
         rows,
+        onevent,
       },
     });
 
-    const radioButtons = screen.getAllByRole("radio");
-    consoleLog.mockClear();
-    await user.click(radioButtons[0]);
+    await user.click(screen.getAllByRole("radio")[0]);
 
-    const clickRowCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "click:row",
-    );
-    expect(clickRowCalls).toHaveLength(0);
+    expect(eventDetails(onevent, "click:row")).toEqual([]);
   });
 
   it("applies custom table header translations", async () => {
@@ -2399,8 +2296,7 @@ describe("DataTable", () => {
           "is-expanded",
         );
 
-        rerender({ selectedRowIds: ["b"] });
-        await tick();
+        await rerender({ selectedRowIds: ["b"] });
 
         expect(container.querySelector("tr[data-row='a']")).not.toHaveClass(
           "is-selected",
@@ -2536,7 +2432,7 @@ describe("DataTable", () => {
       });
 
       // Without `maxItems`: 400 / 50 + 5 overscan = 13 rows.
-      expect(document.querySelectorAll("tbody tr[data-row]")).toHaveLength(5);
+      expect(getRenderedRowIds()).toHaveLength(5);
     });
 
     it("should maintain selection when virtualized", () => {
@@ -2624,7 +2520,7 @@ describe("DataTable", () => {
       });
 
       // 480px / 48px = 10 visible rows + 3 overscan. Paginating would give 10.
-      expect(document.querySelectorAll("tbody tr[data-row]")).toHaveLength(13);
+      expect(getRenderedRowIds()).toHaveLength(13);
     });
 
     it("renders newly painted cell values after virtualized scroll", async () => {
@@ -2876,11 +2772,6 @@ describe("DataTable", () => {
       { key: "rule", value: "Rule" },
     ];
 
-    const getRowText = (row: HTMLElement) =>
-      within(row)
-        .getAllByRole("cell")
-        .map((cell) => cell.textContent?.trim());
-
     it("renders no header or body cells for a hidden column", () => {
       render(DataTable, {
         props: { headers: headersWithHiddenProtocol, rows },
@@ -2893,7 +2784,7 @@ describe("DataTable", () => {
       const bodyRows = getBodyRows();
       expect(bodyRows).toHaveLength(3);
       bodyRows.forEach((row, index) => {
-        expect(getRowText(row)).toEqual([
+        expect(getRowTexts(row)).toEqual([
           rows[index].name,
           String(rows[index].port),
           rows[index].rule,
@@ -2918,13 +2809,35 @@ describe("DataTable", () => {
       expect(getExpandedCell()).toHaveAttribute("colspan", "4");
 
       await rerender({ selectable: true });
-      await tick();
 
       expect(getExpandedCell()).toHaveAttribute("colspan", "5");
     });
 
     it("excludes hidden columns from toolbar search", async () => {
-      render(DataTableHiddenColumnSearch);
+      render(ToolbarSearchHost, {
+        props: {
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol" },
+            { key: "rule", value: "Rule", columnHidden: true },
+          ],
+          rows: [
+            {
+              id: "a",
+              name: "Load Balancer 3",
+              protocol: "HTTP",
+              rule: "Round robin",
+            },
+            {
+              id: "b",
+              name: "Load Balancer 1",
+              protocol: "HTTP",
+              rule: "DNS delegation",
+            },
+          ],
+          searchProps: { shouldFilterRows: true },
+        },
+      });
 
       const searchInput = screen.getByRole("searchbox");
 
@@ -2953,7 +2866,7 @@ describe("DataTable", () => {
       });
 
       // Ports 80, 443, and 3000 belong to rows "c", "b", and "a".
-      expect(getBodyRows().map((row) => getRowText(row)[0])).toEqual([
+      expect(getBodyRows().map((row) => getRowTexts(row)[0])).toEqual([
         "Load Balancer 2",
         "Load Balancer 1",
         "Load Balancer 3",
@@ -2971,17 +2884,15 @@ describe("DataTable", () => {
       ]);
 
       await rerender({ headers: headersWithHiddenProtocol });
-      await tick();
 
       expect(getColumnHeaderText()).toEqual(["Name", "Port", "Rule"]);
-      expect(getRowText(getBodyRows()[0])).toEqual([
+      expect(getRowTexts(getBodyRows()[0])).toEqual([
         "Load Balancer 3",
         "3000",
         "Round robin",
       ]);
 
       await rerender({ headers });
-      await tick();
 
       expect(getColumnHeaderText()).toEqual([
         "Name",
@@ -2989,7 +2900,7 @@ describe("DataTable", () => {
         "Port",
         "Rule",
       ]);
-      expect(getRowText(getBodyRows()[0])).toEqual([
+      expect(getRowTexts(getBodyRows()[0])).toEqual([
         "Load Balancer 3",
         "HTTP",
         "3000",

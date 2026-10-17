@@ -1,7 +1,11 @@
-import { render, within } from "@testing-library/svelte";
-import type { DataTableValue } from "carbon-components-svelte/DataTable/DataTable.svelte";
+import { render } from "@testing-library/svelte";
 import DataTable from "./DataTable.test.svelte";
-import { getBodyRows, getColumnHeaderText } from "./helpers";
+import {
+  createSortFn,
+  getBodyRows,
+  getColumnHeaderText,
+  getRowTexts,
+} from "./helpers";
 
 describe("DataTable new-but-equal headers", () => {
   const buildRows = () => [
@@ -27,11 +31,6 @@ describe("DataTable new-but-equal headers", () => {
       rule: "DNS delegation",
     },
   ];
-
-  const createSortFn = () =>
-    vi.fn((a: DataTableValue, b: DataTableValue) =>
-      a < b ? -1 : a > b ? 1 : 0,
-    );
 
   const buildHeaders = (
     sortFn: ReturnType<typeof createSortFn>,
@@ -108,11 +107,10 @@ describe("DataTable new-but-equal headers", () => {
     await rerender({ headers });
     expect(getColumnHeaderText()).toEqual(["Name", "Protocol", "Rule"]);
 
-    const bodyRow = getBodyRows()[0];
-    expect(
-      within(bodyRow)
-        .getAllByRole("cell")
-        .map((cell) => cell.textContent?.trim()),
-    ).toEqual(["Load Balancer 3", "HTTP", "Round robin"]);
+    expect(getRowTexts(getBodyRows()[0])).toEqual([
+      "Load Balancer 3",
+      "HTTP",
+      "Round robin",
+    ]);
   });
 });

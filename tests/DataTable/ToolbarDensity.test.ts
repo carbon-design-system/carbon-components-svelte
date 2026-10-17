@@ -52,14 +52,14 @@ describe("ToolbarDensity", () => {
   });
 
   it("sets the bound size and dispatches change when an item is picked", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ToolbarDensity, { props: { standalone: true } });
+    const onchange = vi.fn();
+    render(ToolbarDensity, { props: { standalone: true, onchange } });
 
     await user.click(screen.getByRole("button", { name: "Row height" }));
     await user.click(screen.getByRole("menuitemradio", { name: "Tall" }));
 
     expect(screen.getByText("Size: tall")).toBeInTheDocument();
-    expect(consoleLog).toHaveBeenCalledWith("change", { size: "tall" });
+    expect(onchange).toHaveBeenCalledExactlyOnceWith({ size: "tall" });
   });
 
   it("renders only the sizes given", async () => {

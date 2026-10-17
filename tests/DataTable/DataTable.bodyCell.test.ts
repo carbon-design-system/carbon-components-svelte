@@ -1,12 +1,7 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTable from "./DataTable.test.svelte";
-import { getBodyRows } from "./helpers";
-
-const clickEvents = (spy: { mock: { calls: unknown[][] } }) =>
-  spy.mock.calls
-    .map(([name]) => String(name))
-    .filter((name) => name.startsWith("click"));
+import { eventNames, getBodyRows, getCells } from "./helpers";
 
 describe("DataTable body cells", () => {
   const rows = [
@@ -24,9 +19,7 @@ describe("DataTable body cells", () => {
       render(DataTable, { props: { headers, rows } });
 
       const nameHeader = screen.getAllByRole("columnheader")[0];
-      const [nameCell, actionsCell] = within(getBodyRows()[0]).getAllByRole(
-        "cell",
-      );
+      const [nameCell, actionsCell] = getCells(getBodyRows()[0]);
 
       expect(nameHeader.id).toBeTruthy();
       expect(nameCell).toHaveAttribute("headers", nameHeader.id);
@@ -34,20 +27,17 @@ describe("DataTable body cells", () => {
     });
 
     it("dispatches cell events for a data cell but not an empty cell", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(DataTable, { props: { headers, rows } });
+      const onevent = vi.fn();
+      render(DataTable, { props: { headers, rows, onevent } });
 
-      const [nameCell, actionsCell] = within(getBodyRows()[0]).getAllByRole(
-        "cell",
-      );
+      const [nameCell, actionsCell] = getCells(getBodyRows()[0]);
 
-      consoleLog.mockClear();
       await user.click(actionsCell);
-      expect(clickEvents(consoleLog)).toEqual(["click", "click:row"]);
+      expect(eventNames(onevent, "click")).toEqual(["click", "click:row"]);
 
-      consoleLog.mockClear();
+      onevent.mockClear();
       await user.click(nameCell);
-      expect(clickEvents(consoleLog)).toEqual([
+      expect(eventNames(onevent, "click")).toEqual([
         "click",
         "click:cell",
         "click",

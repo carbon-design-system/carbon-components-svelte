@@ -6,13 +6,13 @@
   import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
   import type { ComponentProps } from "svelte";
-  import FilterRowsSpy from "./FilterRowsSpy.svelte";
+  import ContextSpy from "./ContextSpy.svelte";
 
   export let debounce: ComponentProps<ToolbarSearch>["debounce"] = 0;
+  export let deferFilter: ComponentProps<ToolbarSearch>["deferFilter"] = false;
   export let value: ComponentProps<ToolbarSearch>["value"] = "";
   export let filteredRowIds: ComponentProps<ToolbarSearch>["filteredRowIds"] =
     [];
-  export let filterRowsCount = 0;
   export let onFilterRows: (() => void) | undefined = undefined;
 
   const rows = Array.from({ length: 6 }).map((_, i) => ({
@@ -24,15 +24,16 @@
 <DataTable headers={[{ key: "name", value: "Name" }]} {rows}>
   <Toolbar>
     <ToolbarContent>
-      <FilterRowsSpy bind:count={filterRowsCount} onFilter={onFilterRows}>
+      <ContextSpy onfilterrows={onFilterRows}>
         <ToolbarSearch
           shouldFilterRows
           persistent
           {debounce}
+          {deferFilter}
           bind:value
           bind:filteredRowIds
         />
-      </FilterRowsSpy>
+      </ContextSpy>
     </ToolbarContent>
   </Toolbar>
 </DataTable>

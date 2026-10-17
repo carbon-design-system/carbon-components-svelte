@@ -1,16 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
-import type { DataTableValue } from "carbon-components-svelte/DataTable/DataTable.svelte";
 import { user } from "../utils/user";
 import DataTable from "./DataTable.test.svelte";
-import DataTableActiveSearchEqualRows from "./DataTableActiveSearchEqualRows.test.svelte";
-import { getBodyRows } from "./helpers";
+import { createSortFn, getBodyRows } from "./helpers";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("DataTable new-but-equal rows", () => {
-  const createSortFn = () =>
-    vi.fn((a: DataTableValue, b: DataTableValue) =>
-      a < b ? -1 : a > b ? 1 : 0,
-    );
-
   const buildHeaders = (sortFn: ReturnType<typeof createSortFn>) => [
     { key: "name", value: "Name", sort: sortFn },
     { key: "port", value: "Port" },
@@ -117,8 +111,11 @@ describe("DataTable new-but-equal rows", () => {
       { id: "b", name: "Load Balancer 1" },
       { id: "c", name: "Load Balancer 2" },
     ];
-    const { rerender } = render(DataTableActiveSearchEqualRows, {
-      props: { rows: buildNamedRows() },
+    const { rerender } = render(ToolbarSearchHost, {
+      props: {
+        rows: buildNamedRows(),
+        searchProps: { shouldFilterRows: true },
+      },
     });
 
     await user.type(screen.getByRole("searchbox"), "load balancer 1");
