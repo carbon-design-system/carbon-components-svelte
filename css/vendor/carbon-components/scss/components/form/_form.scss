@@ -169,10 +169,6 @@
     margin: $carbon--spacing-02 0 0;
   }
 
-  .#{$prefix}--select--inline .#{$prefix}--form__helper-text {
-    margin-top: 0;
-  }
-
   .#{$prefix}--form__helper-text {
     @include type-style('helper-text-01');
 

@@ -14,3 +14,29 @@
 {#if selected}
   <p data-testid="selected-value">Selected: {selected}</p>
 {/if}
+
+<div data-testid="inline-helper">
+  <Select inline labelText="Region" helperText="Shown under the field">
+    <SelectItem value="eu" text="EU Germany" />
+  </Select>
+</div>
+<div data-testid="inline-invalid">
+  <Select inline labelText="Region" invalid invalidText="Fix this value">
+    <SelectItem value="eu" text="EU Germany" />
+  </Select>
+</div>
+<div data-testid="inline-warning">
+  <Select inline labelText="Region" warn warnText="Check this value">
+    <SelectItem value="eu" text="EU Germany" />
+  </Select>
+</div>
+<div data-testid="inline-sm">
+  <Select
+    inline
+    size="sm"
+    labelText="Region"
+    helperText="Shown under the field"
+  >
+    <SelectItem value="eu" text="EU Germany" />
+  </Select>
+</div>

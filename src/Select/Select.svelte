@@ -326,16 +326,17 @@
             {warnText}
           </div>
         {/if}
+        <!-- Under the field, where the messages it alternates with go. -->
+        {#if helperText && !showInvalid && !showWarn}
+          <div
+            id={helperId}
+            class:bx--form__helper-text={true}
+            class:bx--form__helper-text--disabled={disabled}
+          >
+            {helperText}
+          </div>
+        {/if}
       </div>
-      {#if helperText && !showInvalid && !showWarn}
-        <div
-          id={helperId}
-          class:bx--form__helper-text={true}
-          class:bx--form__helper-text--disabled={disabled}
-        >
-          {helperText}
-        </div>
-      {/if}
     {/if}
     {#if !inline}
       <div
