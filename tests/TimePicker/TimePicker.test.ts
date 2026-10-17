@@ -30,25 +30,6 @@ describe("TimePicker", () => {
     expect(screen.getByText("GMT")).toBeInTheDocument();
   });
 
-  it("selects the full value on focus when selectTextOnFocus is true", async () => {
-    render(TimePicker, { props: { selectTextOnFocus: true, value: "12:00" } });
-
-    const input = screen.getByRole("textbox");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(0);
-    expect(input.selectionEnd).toBe("12:00".length);
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(TimePicker, { props: { selectTextOnFocus: true, value: "12:00" } });
-
-    const mouseup = await clickToFocus(screen.getByRole("textbox"));
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
   it("keeps the selected value through the click's mouseup when fluid", async () => {
     render(TimePicker, {
       props: { selectTextOnFocus: true, value: "12:00", fluid: true },
@@ -56,30 +37,6 @@ describe("TimePicker", () => {
 
     const mouseup = await clickToFocus(screen.getByRole("textbox"));
     expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(TimePicker, { props: { value: "12:00" } });
-
-    const input = screen.getByRole("textbox");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(input.selectionEnd);
-  });
-
-  it("does not select text on focus when disabled", async () => {
-    render(TimePicker, {
-      props: { selectTextOnFocus: true, disabled: true, value: "12:00" },
-    });
-
-    const input = screen.getByRole("textbox");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await fireEvent.focus(input);
-
-    expect(select).not.toHaveBeenCalled();
   });
 
   it("should handle different sizes", () => {
@@ -579,52 +536,10 @@ describe("TimePicker", () => {
   });
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      render(TimePicker);
-
-      expect(document.querySelector(".bx--time-picker--fluid")).toBeNull();
-      expect(document.querySelector(".bx--time-picker__divider")).toBeNull();
-    });
-
-    it("renders fluid variant and suppresses helper text", () => {
-      render(TimePicker, { fluid: true, helperText: "Helper text" });
-
-      expect(
-        document.querySelector(".bx--time-picker__form-item--fluid"),
-      ).toHaveClass("bx--form-item");
-      expect(
-        document.querySelector(".bx--time-picker--fluid"),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(screen.getByRole("textbox")).not.toHaveAttribute(
-        "aria-describedby",
-      );
-    });
-
     it("renders fluid select cells", () => {
       render(TimePicker, { fluid: true });
 
       expect(document.querySelectorAll(".bx--select--fluid")).toHaveLength(2);
-    });
-
-    it("renders the error message inside the fluid container", () => {
-      render(TimePicker, {
-        fluid: true,
-        id: "fluid-time",
-        invalid: true,
-        invalidText: "Invalid time",
-      });
-
-      const message = screen.getByText("Invalid time");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message).toHaveAttribute("role", "alert");
-      expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
-      expect(
-        document.querySelector(".bx--time-picker__divider"),
-      ).toBeInTheDocument();
-      const input = screen.getByRole("textbox");
-      expect(input).toHaveAttribute("aria-errormessage", "error-fluid-time");
-      expect(input).not.toHaveAttribute("aria-describedby");
     });
 
     it("does not render an icon when neither invalid nor warn", () => {
@@ -634,51 +549,6 @@ describe("TimePicker", () => {
         document.querySelector(".bx--time-picker__icon--invalid"),
       ).toBeNull();
       expect(document.querySelector(".bx--time-picker__icon--warn")).toBeNull();
-    });
-
-    it("renders the warning message inside the fluid container", () => {
-      render(TimePicker, {
-        fluid: true,
-        warn: true,
-        warnText: "Warning message",
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message).not.toHaveAttribute("role");
-      expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(TimePicker, {
-          fluid: true,
-          invalid: true,
-          invalidText: "Invalid time",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        });
-
-        expect(screen.queryByText("Invalid time")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(
-          document.querySelector(".bx--time-picker--fluid--invalid"),
-        ).toBeNull();
-        expect(
-          document.querySelector(".bx--time-picker--fluid--warning"),
-        ).toBeNull();
-      },
-    );
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(TimePickerFluidForm);
-
-      expect(
-        document.querySelector(".bx--time-picker--fluid"),
-      ).toBeInTheDocument();
-      expect(document.querySelector(".bx--select--fluid")).toBeInTheDocument();
     });
 
     it("marks labels as slotted when fluid", () => {

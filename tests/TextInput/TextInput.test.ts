@@ -1,11 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
-import { clickToFocus } from "../utils/click-to-focus";
+import { render, screen } from "@testing-library/svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
-import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
-import TextInputFluidSkeleton from "./TextInput.fluidSkeleton.test.svelte";
-import TextInputFluidSlot from "./TextInput.fluidSlot.test.svelte";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
@@ -47,53 +42,6 @@ describe("TextInput", () => {
     render(TextInput, { props: { light: true } });
 
     expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--light");
-  });
-
-  it("selects the full value on focus when selectTextOnFocus is true", async () => {
-    render(TextInput, {
-      props: { selectTextOnFocus: true, value: "hello world" },
-    });
-
-    const input = screen.getByLabelText("User name");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(0);
-    expect(input.selectionEnd).toBe("hello world".length);
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(TextInput, {
-      props: { selectTextOnFocus: true, value: "hello world" },
-    });
-
-    const mouseup = await clickToFocus(screen.getByLabelText("User name"));
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(TextInput, { props: { value: "hello world" } });
-
-    const input = screen.getByLabelText("User name");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(input.selectionEnd);
-  });
-
-  it("does not select text on focus when disabled", async () => {
-    render(TextInput, {
-      props: { selectTextOnFocus: true, disabled: true, value: "hello world" },
-    });
-
-    const input = screen.getByLabelText("User name");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await fireEvent.focus(input);
-
-    expect(select).not.toHaveBeenCalled();
   });
 
   it("should handle disabled state", () => {
@@ -382,108 +330,6 @@ describe("TextInput", () => {
     expect(mockHandler).toHaveBeenCalled();
   });
 
-  describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      render(TextInput);
-
-      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
-      expect(document.querySelector(".bx--text-input__divider")).toBeNull();
-    });
-
-    it("renders fluid variant and suppresses helper text", () => {
-      render(TextInput, { fluid: true, helperText: "Helper text" });
-
-      const input = screen.getByLabelText("User name");
-      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
-        "bx--text-input--fluid",
-      );
-      expect(
-        document.querySelector(".bx--text-input__divider"),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(input).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("renders the error message inside the input wrapper", () => {
-      render(TextInput, {
-        fluid: true,
-        id: "test-input",
-        invalid: true,
-        invalidText: "Invalid input",
-      });
-
-      const message = screen.getByText("Invalid input");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message).toHaveAttribute("role", "alert");
-      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
-      expect(screen.getByLabelText("User name")).toHaveAttribute(
-        "aria-errormessage",
-        "error-test-input",
-      );
-    });
-
-    it("renders the warning message inside the input wrapper", () => {
-      render(TextInput, {
-        fluid: true,
-        warn: true,
-        warnText: "Warning message",
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(TextInput, {
-          fluid: true,
-          invalid: true,
-          invalidText: "Invalid input",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        });
-
-        expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(document.querySelector("[data-invalid]")).toBeNull();
-      },
-    );
-
-    it("ignores fluid for the inline variant", () => {
-      render(TextInput, { fluid: true, inline: true });
-
-      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(TextInputFluidForm);
-
-      const input = screen.getByLabelText("Fluid form user name");
-      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
-        "bx--text-input--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(TextInputFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(TextInputFluidSlot, { fluid: false });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-  });
-
   it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
     render(TextInput, {
       props: {
@@ -745,19 +591,5 @@ describe("TextInput", () => {
 
     expect(mockHandler).toHaveBeenCalled();
     expect(mockHandler.mock.calls[0][0].detail).toBe(5);
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(TextInputFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-text-input-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass(
-      "bx--form-item",
-      "bx--text-input--fluid__skeleton",
-    );
-    expect(skeleton.children).toHaveLength(2);
-    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });

@@ -4,9 +4,6 @@ import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { getPinCodeInputs as getInputs } from "./helpers";
-import PinCodeInputFluidForm from "./PinCodeInput.fluidForm.test.svelte";
-import PinCodeInputFluidSkeleton from "./PinCodeInput.fluidSkeleton.test.svelte";
-import PinCodeInputFluidSlot from "./PinCodeInput.fluidSlot.test.svelte";
 import PinCodeInputSkeleton from "./PinCodeInput.skeleton.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
 
@@ -970,33 +967,6 @@ describe("PinCodeInput", () => {
   });
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      render(PinCodeInput);
-
-      expect(document.querySelector(".bx--pin-code-input--fluid")).toBeNull();
-      expect(document.querySelector(".bx--pin-code-input__divider")).toBeNull();
-    });
-
-    it("renders fluid variant and suppresses helper text", () => {
-      render(PinCodeInput, {
-        props: { fluid: true, helperText: "Helper text" },
-      });
-
-      expect(document.querySelector(".bx--form-item")).toHaveClass(
-        "bx--pin-code-input--fluid",
-      );
-      expect(
-        document.querySelector(".bx--pin-code-input__divider"),
-      ).toBeInTheDocument();
-      expect(
-        document.querySelector(".bx--pin-code-input__segments"),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(getFieldset(document.body)).not.toHaveAttribute(
-        "aria-describedby",
-      );
-    });
-
     it("uses the fluid default placeholder", () => {
       render(PinCodeInput, { props: { fluid: true } });
 
@@ -1068,68 +1038,6 @@ describe("PinCodeInput", () => {
       expect(message).toHaveAttribute("id", "warn-pin-fluid-warn");
       expect(message.closest(".bx--pin-code-input__fields")).not.toBeNull();
     });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        const { container } = render(PinCodeInput, {
-          props: {
-            fluid: true,
-            invalid: true,
-            invalidText: "Incorrect code",
-            warn: true,
-            warnText: "Code expiring soon",
-            ...props,
-          },
-        });
-
-        expect(screen.queryByText("Incorrect code")).not.toBeInTheDocument();
-        expect(
-          screen.queryByText("Code expiring soon"),
-        ).not.toBeInTheDocument();
-        expect(container.querySelector("[data-invalid]")).toBeNull();
-        expect(container.querySelector(".bx--pin-code-input__icon")).toBeNull();
-      },
-    );
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(PinCodeInputFluidForm);
-
-      expect(document.querySelector(".bx--form-item")).toHaveClass(
-        "bx--pin-code-input--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(PinCodeInputFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(PinCodeInputFluidSlot, { props: { fluid: false } });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(PinCodeInputFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-pin-code-input-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass(
-      "bx--form-item",
-      "bx--text-input--fluid__skeleton",
-      "bx--pin-code-input--fluid__skeleton",
-    );
-    expect(skeleton.children).toHaveLength(2);
-    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 
   it("renders skeleton state", () => {

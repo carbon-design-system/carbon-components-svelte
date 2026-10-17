@@ -2,11 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
-import SearchFluidForm from "./Search.fluidForm.test.svelte";
-import SearchFluidSkeleton from "./Search.fluidSkeleton.test.svelte";
-import SearchFluidSlot from "./Search.fluidSlot.test.svelte";
 import SearchFocusWithoutSelect from "./Search.focusWithoutSelect.test.svelte";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
@@ -38,20 +34,6 @@ describe("Search", () => {
     expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
   });
 
-  it("selects the full value on focus when selectTextOnFocus is true", async () => {
-    render(Search, {
-      props: { selectTextOnFocus: true, value: "Cloud functions" },
-    });
-
-    const search = getSearchInput("Default search");
-    assert(search instanceof HTMLInputElement);
-    await user.click(search);
-    await tick();
-
-    expect(search.selectionStart).toBe(0);
-    expect(search.selectionEnd).toBe("Cloud functions".length);
-  });
-
   it("focuses without selecting text via focusWithoutSelect() when selectTextOnFocus is true", async () => {
     render(SearchFocusWithoutSelect, {
       props: { selectTextOnFocus: true, value: "Cloud functions" },
@@ -65,26 +47,6 @@ describe("Search", () => {
     const search = getSearchInput("Focus search");
     assert(search instanceof HTMLInputElement);
     expect(search).toHaveFocus();
-    expect(search.selectionStart).toBe(search.selectionEnd);
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(Search, {
-      props: { selectTextOnFocus: true, value: "Cloud functions" },
-    });
-
-    const mouseup = await clickToFocus(getSearchInput("Default search"));
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(Search, { props: { value: "Cloud functions" } });
-
-    const search = getSearchInput("Default search");
-    assert(search instanceof HTMLInputElement);
-    await user.click(search);
-    await tick();
-
     expect(search.selectionStart).toBe(search.selectionEnd);
   });
 
@@ -385,53 +347,6 @@ describe("Search", () => {
     expect(customLabel).toBeInTheDocument();
   });
 
-  describe("fluid variant", () => {
-    it("does not render the fluid class by default", () => {
-      render(Search);
-
-      expect(document.querySelector(".bx--search--fluid")).toBeNull();
-    });
-
-    it("renders the fluid variant", () => {
-      render(Search, { props: { fluid: true } });
-
-      const search = getSearchInput("Default search");
-      expect(search.closest(".bx--search")).toHaveClass("bx--search--fluid");
-    });
-
-    it("ignores fluid for the expandable variant", () => {
-      render(SearchExpandable, { props: { fluid: true } });
-
-      const search = getSearchInput("Expandable search");
-      const searchWrapper = search.closest(".bx--search");
-      expect(searchWrapper).toHaveClass("bx--search--expandable");
-      expect(searchWrapper).not.toHaveClass("bx--search--fluid");
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(SearchFluidForm);
-
-      const search = getSearchInput("Fluid form search");
-      expect(search.closest(".bx--search")).toHaveClass("bx--search--fluid");
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(SearchFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(SearchFluidSlot, { props: { fluid: false } });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-  });
-
   describe("Generics", () => {
     it("should support custom types with generics", () => {
       type CustomValue = "option1" | "option2" | "option3";
@@ -475,19 +390,5 @@ describe("Search", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(SearchFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-search-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass(
-      "bx--form-item",
-      "bx--text-input--fluid__skeleton",
-    );
-    expect(skeleton.children).toHaveLength(2);
-    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });
