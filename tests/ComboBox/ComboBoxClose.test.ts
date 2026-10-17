@@ -1,53 +1,29 @@
-import { render, screen } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
+import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import { contacts } from "../ListBox/family/cases";
+import ListBoxHost from "../ListBox/family/ListBoxHost.test.svelte";
 import { user } from "../utils/user";
-import ComboBoxClose from "./ComboBoxClose.test.svelte";
 import { getInput } from "./helpers";
 
+/**
+ * Close triggers every list box shares are in tests/ListBox/family/close.test.ts.
+ * What is left is how a close interacts with the typed value.
+ */
 describe("ComboBox close event", () => {
-  it('dispatches close with trigger "escape-key" on Escape', async () => {
+  const setup = (fieldProps: Record<string, unknown> = {}) => {
     const onClose = vi.fn();
-    render(ComboBoxClose, { props: { onClose } });
-
-    await user.click(getInput());
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.keyboard("{Escape}");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
-  });
-
-  it('dispatches close with trigger "outside-click" when clicking outside', async () => {
-    const onClose = vi.fn();
-    render(ComboBoxClose, { props: { onClose } });
-
-    await user.click(getInput());
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.click(screen.getByText("Outside"));
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({
-      trigger: "outside-click",
+    render(ListBoxHost, {
+      props: {
+        component: ComboBox,
+        fieldProps: { items: contacts, labelText: "Contact", ...fieldProps },
+        onClose,
+      },
     });
-  });
-
-  it('dispatches close with trigger "select" when clicking an item', async () => {
-    const onClose = vi.fn();
-    render(ComboBoxClose, { props: { onClose } });
-
-    await user.click(getInput());
-    await user.click(screen.getByText("Email"));
-
-    expect(getInput()).toHaveValue("Email");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "select" });
-  });
+    return onClose;
+  };
 
   it('dispatches close with trigger "select" when selecting via Enter', async () => {
-    const onClose = vi.fn();
-    render(ComboBoxClose, { props: { onClose } });
+    const onClose = setup();
 
     const input = getInput();
     await user.click(input);
@@ -58,26 +34,11 @@ describe("ComboBox close event", () => {
     expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "select" });
   });
 
-  it("does not dispatch close when the menu is already closed", async () => {
-    const onClose = vi.fn();
-    render(ComboBoxClose, { props: { onClose } });
-
-    // Escape while collapsed clears state but must not surface a close.
-    getInput().focus();
-    await user.keyboard("{Escape}");
-
-    expect(onClose).not.toHaveBeenCalled();
-  });
-
   it("restores the value on close without a selection and still dispatches close", async () => {
-    const onClose = vi.fn();
-    render(ComboBoxClose, {
-      props: {
-        onClose,
-        clearFilterOnOpen: true,
-        selectedId: "1",
-        value: "Email",
-      },
+    const onClose = setup({
+      clearFilterOnOpen: true,
+      selectedId: "1",
+      value: "Email",
     });
 
     const input = getInput();
@@ -88,7 +49,7 @@ describe("ComboBox close event", () => {
     expect(input).toHaveValue("");
 
     // Closing without a new selection restores the previous value.
-    await user.click(screen.getByText("Outside"));
+    await user.click(document.body);
     expect(input).toHaveValue("Email");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail).toEqual({
@@ -97,10 +58,7 @@ describe("ComboBox close event", () => {
   });
 
   it('dispatches close with trigger "escape-key" on Tab when the text is already the selection', async () => {
-    const onClose = vi.fn();
-    render(ComboBoxClose, {
-      props: { onClose, selectedId: "1", value: "Email" },
-    });
+    const onClose = setup({ selectedId: "1", value: "Email" });
 
     await user.click(getInput());
     await user.keyboard("{Tab}");

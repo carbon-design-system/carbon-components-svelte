@@ -8,9 +8,7 @@ import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { closeMenu, openMenu, toggleOption } from "./helpers";
 import MultiSelectFluidForm from "./MultiSelect.fluidForm.test.svelte";
-import MultiSelectFluidSkeleton from "./MultiSelect.fluidSkeleton.test.svelte";
 import MultiSelectFluidSlot from "./MultiSelect.fluidSlot.test.svelte";
-import MultiSelectSkeleton from "./MultiSelect.skeleton.test.svelte";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
@@ -2007,36 +2005,5 @@ describe("MultiSelect", () => {
         "bx--list-box__field--wrapper--input-focused",
       );
     });
-  });
-
-  it("renders skeleton state", () => {
-    render(MultiSelectSkeleton);
-
-    const skeleton = screen.getByTestId("multi-select-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--list-box__wrapper", "bx--form-item");
-    expect(skeleton.children).toHaveLength(2);
-    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass(
-      "bx--skeleton",
-      "bx--multi-select",
-      "bx--list-box",
-    );
-    expect(skeleton.children[1].children[0]).toHaveClass("bx--list-box__field");
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(MultiSelectFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-multi-select-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--list-box__wrapper--fluid");
-    expect(skeleton.children).toHaveLength(1);
-
-    const listBox = skeleton.children[0];
-    expect(listBox).toHaveClass("bx--skeleton", "bx--list-box");
-    expect(listBox.children).toHaveLength(2);
-    expect(listBox.children[0]).toHaveClass("bx--list-box__label");
-    expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
 });

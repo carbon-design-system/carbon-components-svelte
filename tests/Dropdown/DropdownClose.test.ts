@@ -1,70 +1,47 @@
 import { render, screen } from "@testing-library/svelte";
+import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import { contacts } from "../ListBox/family/cases";
+import ListBoxHost from "../ListBox/family/ListBoxHost.test.svelte";
 import { user } from "../utils/user";
-import DropdownClose from "./DropdownClose.test.svelte";
 
+/**
+ * Close triggers every list box shares are in tests/ListBox/family/close.test.ts.
+ * What is left is how a close treats the current selection.
+ */
 describe("Dropdown close event", () => {
-  it('dispatches close with trigger "escape-key" on Escape', async () => {
+  const setup = () => {
     const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
-
-    const button = screen.getByRole("combobox");
-    await user.click(button);
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.keyboard("{Escape}");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
-  });
-
-  it('dispatches close with trigger "outside-click" when clicking outside', async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
-
-    await user.click(screen.getByRole("combobox"));
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.click(document.body);
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({
-      trigger: "outside-click",
+    render(ListBoxHost, {
+      props: {
+        component: Dropdown,
+        fieldProps: { items: contacts, labelText: "Contact", selectedId: "0" },
+        onClose,
+      },
     });
-  });
+    return onClose;
+  };
 
-  it('dispatches close with trigger "select" when selecting an item', async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
+  it("toggles closed on a second click without dispatching open again", async () => {
+    const onOpen = vi.fn();
+    render(ListBoxHost, {
+      props: {
+        component: Dropdown,
+        fieldProps: { items: contacts, labelText: "Contact" },
+        onOpen,
+      },
+    });
 
-    await user.click(screen.getByRole("combobox"));
+    const field = screen.getByRole("combobox");
+    await user.click(field);
+    await user.click(field);
+    expect(field).toHaveAttribute("aria-expanded", "false");
 
-    const menuItem = screen
-      .getByText("Email")
-      .closest(".bx--list-box__menu-item");
-    expect(menuItem).not.toBeNull();
-    await user.click(menuItem as Element);
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "select" });
-  });
-
-  it('dispatches close with trigger "escape-key" on Tab', async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
-
-    await user.click(screen.getByRole("combobox"));
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.keyboard("{Tab}");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
+    await user.click(field);
+    expect(onOpen).toHaveBeenCalledTimes(2);
   });
 
   it("does not select the highlighted item when Tab dispatches close", async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
+    const onClose = setup();
 
     const button = screen.getByRole("combobox");
     await user.click(button);
@@ -76,47 +53,13 @@ describe("Dropdown close event", () => {
     expect(button).toHaveTextContent("Slack");
   });
 
-  it('dispatches close with trigger "escape-key" on Shift+Tab', async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
-
-    await user.click(screen.getByRole("combobox"));
-    await user.keyboard("{Shift>}{Tab}{/Shift}");
-
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
-  });
-
-  it("does not dispatch close when tabbing through a closed menu", async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
-
-    screen.getByRole("combobox").focus();
-    await user.keyboard("{Tab}");
-
-    expect(onClose).not.toHaveBeenCalled();
-  });
-
   it("does not dispatch close when clicking the already-selected item", async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
+    const onClose = setup();
 
     await user.click(screen.getByRole("combobox"));
     await user.click(screen.getByRole("option", { name: "Slack" }));
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(onClose).not.toHaveBeenCalled();
-  });
-
-  it("does not dispatch close when the menu is already closed", async () => {
-    const onClose = vi.fn();
-    render(DropdownClose, { props: { onClose } });
-
-    const button = screen.getByRole("combobox");
-    button.focus();
-    await user.keyboard("{Escape}");
-    await user.click(document.body);
-
     expect(onClose).not.toHaveBeenCalled();
   });
 });
