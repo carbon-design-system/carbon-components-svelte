@@ -24,6 +24,8 @@
 
     display: flex;
     width: to-rem(288px);
+    // ccs: no wider than its container, at either width.
+    max-width: 100%;
     height: auto;
     padding-left: $carbon--spacing-05;
     @if not feature-flag-enabled('enable-v11-release') {

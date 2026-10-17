@@ -25,7 +25,9 @@
     position: relative;
     display: flex;
     width: 100%;
-    min-width: to-rem(288px);
+    // ccs: at least 288px only where there's room: in a narrower container
+    // the notification fits it rather than spilling out.
+    min-width: min(#{to-rem(288px)}, 100%);
     max-width: to-rem(288px);
     height: auto;
     min-height: to-rem(48px);
@@ -33,6 +35,11 @@
     // below), not the window's: a notification in a narrow card on a wide
     // screen kept its action beside the text and squeezed the text.
     container: #{$prefix}--inline-notification / inline-size;
+    // ccs: as a size container it no longer takes its width from its
+    // content, and the percentage minimum above counts as 0 there, so a
+    // parent that sizes to its content (an inline-block, a table cell)
+    // would collapse it. Size it as 288px for that.
+    contain-intrinsic-inline-size: to-rem(288px);
     flex-wrap: wrap;
     @if not feature-flag-enabled('enable-v11-release') {
       margin-top: $carbon--spacing-05;
