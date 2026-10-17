@@ -28,5 +28,5 @@
     </TimePickerSelect>
   </TimePicker>
 </form>
-<p data-testid="value">{value}</p>
+<p data-testid="bound">{value}</p>
 <p data-testid="ampm">{ampm}</p>

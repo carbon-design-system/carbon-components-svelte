@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
+import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
 import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
 import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
@@ -347,7 +348,7 @@ describe("PasswordInput", () => {
 
       const input = screen.getByLabelText("Password");
       await user.type(input, "test123");
-      expect(screen.getByTestId("value")).toHaveTextContent("test123");
+      expect(getBoundText()).toBe("test123");
     });
 
     it("should handle focus and blur events", async () => {

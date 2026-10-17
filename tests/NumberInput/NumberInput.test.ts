@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
-import { isSvelte5 } from "../utils/svelte-version";
+import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
 import NumberInputFluidForm from "./NumberInput.fluidForm.test.svelte";
 import NumberInputFluidSkeleton from "./NumberInput.fluidSkeleton.test.svelte";
@@ -366,10 +366,10 @@ describe("NumberInput", () => {
     input.focus();
 
     await user.keyboard("{PageUp}");
-    expect(screen.getByTestId("value").textContent).toBe("10");
+    expect(getBoundText()).toBe("10");
 
     await user.keyboard("{PageDown}");
-    expect(screen.getByTestId("value").textContent).toBe("0");
+    expect(getBoundText()).toBe("0");
   });
 
   it("should step by 10x step on PageUp and PageDown in allowDecimal mode", async () => {
@@ -379,10 +379,10 @@ describe("NumberInput", () => {
     input.focus();
 
     await user.keyboard("{PageUp}");
-    expect(screen.getByTestId("value").textContent).toBe("1");
+    expect(getBoundText()).toBe("1");
 
     await user.keyboard("{PageDown}");
-    expect(screen.getByTestId("value").textContent).toBe("0");
+    expect(getBoundText()).toBe("0");
   });
 
   it("should clamp PageUp/PageDown values to min and max", async () => {
@@ -392,7 +392,7 @@ describe("NumberInput", () => {
     input.focus();
     await user.keyboard("{PageUp}");
 
-    expect(screen.getByTestId("value").textContent).toBe("100");
+    expect(getBoundText()).toBe("100");
   });
 
   it("should not change value via PageUp/PageDown when readonly", async () => {
@@ -401,10 +401,10 @@ describe("NumberInput", () => {
     const input = screen.getByRole("spinbutton");
     input.focus();
     await user.keyboard("{PageUp}");
-    expect(screen.getByTestId("value").textContent).toBe("50");
+    expect(getBoundText()).toBe("50");
 
     await user.keyboard("{PageDown}");
-    expect(screen.getByTestId("value").textContent).toBe("50");
+    expect(getBoundText()).toBe("50");
   });
 
   it("should not change value via PageUp/PageDown when disabled", () => {
@@ -414,7 +414,7 @@ describe("NumberInput", () => {
     input.dispatchEvent(
       new KeyboardEvent("keydown", { key: "PageUp", bubbles: true }),
     );
-    expect(screen.getByTestId("value").textContent).toBe("50");
+    expect(getBoundText()).toBe("50");
   });
 
   it("prevents PageUp/PageDown default actions (page scroll)", () => {
@@ -455,7 +455,7 @@ describe("NumberInput", () => {
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "5");
-    expect(screen.getByTestId("value").textContent).toBe("5");
+    expect(getBoundText()).toBe("5");
   });
 
   it("should handle increment/decrement buttons", async () => {
@@ -469,10 +469,10 @@ describe("NumberInput", () => {
     });
 
     await user.click(incrementButton);
-    expect(screen.getByTestId("value").textContent).toBe("1");
+    expect(getBoundText()).toBe("1");
 
     await user.click(decrementButton);
-    expect(screen.getByTestId("value").textContent).toBe("0");
+    expect(getBoundText()).toBe("0");
   });
 
   it("should show invalid state when value exceeds max via typing", async () => {
@@ -480,7 +480,7 @@ describe("NumberInput", () => {
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "25");
-    expect(screen.getByTestId("value").textContent).toBe("25");
+    expect(getBoundText()).toBe("25");
     expect(screen.getByRole("spinbutton")).toHaveAttribute(
       "aria-invalid",
       "true",
@@ -823,11 +823,7 @@ describe("NumberInput", () => {
     await user.clear(input);
     expect(input.value).toBe("");
 
-    if (isSvelte5) {
-      expect(screen.getByTestId("value").textContent).toBe("");
-    } else {
-      expect(screen.getByTestId("value").textContent).toBe("null");
-    }
+    expect(getBoundText()).toBe("null");
   });
 
   it("should sync input when value prop changes programmatically in allowDecimal mode", async () => {
@@ -873,10 +869,10 @@ describe("NumberInput", () => {
     });
 
     await user.click(incrementButton);
-    expect(screen.getByTestId("value").textContent).toBe("0.1");
+    expect(getBoundText()).toBe("0.1");
 
     await user.click(decrementButton);
-    expect(screen.getByTestId("value").textContent).toBe("0");
+    expect(getBoundText()).toBe("0");
   });
 
   it("should set tabindex -1 on stepper buttons", () => {
@@ -1008,7 +1004,7 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.tab();
 
-    expect(screen.getByTestId("value").textContent).toBe("0");
+    expect(getBoundText()).toBe("0");
     expect(input).toHaveValue(0);
   });
 
@@ -1022,7 +1018,7 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.tab();
 
-    expect(screen.getByTestId("value").textContent).toBe("4");
+    expect(getBoundText()).toBe("4");
     expect(input).toHaveValue(4);
   });
 
@@ -1038,7 +1034,7 @@ describe("NumberInput", () => {
 
     await user.click(incrementButton);
 
-    expect(screen.getByTestId("value").textContent).toBe("6");
+    expect(getBoundText()).toBe("6");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
@@ -1053,7 +1049,7 @@ describe("NumberInput", () => {
 
     await user.click(decrementButton);
 
-    expect(screen.getByTestId("value").textContent).toBe("-1");
+    expect(getBoundText()).toBe("-1");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
@@ -1067,14 +1063,8 @@ describe("NumberInput", () => {
     // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
     // See: https://svelte.dev/docs/svelte/v5-migration-guide
     // The actual bound value is still null, but DOM text interpolation renders it as "".
-    if (isSvelte5) {
-      const valueText = screen.getByTestId("value").textContent;
-      expect(valueText).toBe("");
-      expect(input).toHaveValue(null);
-    } else {
-      expect(screen.getByTestId("value").textContent).toBe("null");
-      expect(input).toHaveValue(null);
-    }
+    expect(getBoundText()).toBe("null");
+    expect(input).toHaveValue(null);
   });
 
   it("should not set error state when readonly and invalid", () => {
@@ -1095,12 +1085,7 @@ describe("NumberInput", () => {
     // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
     // See: https://svelte.dev/docs/svelte/v5-migration-guide
     // The actual bound value is still null, but DOM text interpolation renders it as "".
-    if (isSvelte5) {
-      const valueText = screen.getByTestId("value").textContent;
-      expect(valueText).toBe("");
-    } else {
-      expect(screen.getByTestId("value").textContent).toBe("null");
-    }
+    expect(getBoundText()).toBe("null");
   });
 
   it("should support restProps passthrough", () => {
@@ -1175,12 +1160,12 @@ describe("NumberInput", () => {
 
     await user.type(input, "1.5");
     expect(input.value).toBe("1.5");
-    expect(screen.getByTestId("value").textContent).toBe("1.5");
+    expect(getBoundText()).toBe("1.5");
 
     await user.type(input, ".");
     expect(input.value).toBe("1.5.");
 
-    expect(screen.getByTestId("value").textContent).toBe("1.5");
+    expect(getBoundText()).toBe("1.5");
   });
 
   it("should normalize invalid input to last valid value on blur in allowDecimal mode", async () => {
@@ -1193,11 +1178,11 @@ describe("NumberInput", () => {
 
     await user.type(input, "1.5.");
     expect(input.value).toBe("1.5.");
-    expect(screen.getByTestId("value").textContent).toBe("1.5");
+    expect(getBoundText()).toBe("1.5");
 
     await user.tab();
     expect(input.value).toBe("1.5");
-    expect(screen.getByTestId("value").textContent).toBe("1.5");
+    expect(getBoundText()).toBe("1.5");
   });
 
   describe("decimal separator normalization", () => {
@@ -1228,12 +1213,7 @@ describe("NumberInput", () => {
         await user.type(inputEl, input);
         await user.tab();
 
-        const valueDisplay = screen.getByTestId("value");
-        if (expectedValue === null) {
-          expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
-        } else {
-          expect(valueDisplay.textContent).toBe(expectedValue.toString());
-        }
+        expect(getBoundText()).toBe(String(expectedValue));
       },
     );
 
@@ -1246,8 +1226,7 @@ describe("NumberInput", () => {
       await user.clear(inputEl);
       await user.tab();
 
-      const valueDisplay = screen.getByTestId("value");
-      expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
+      expect(getBoundText()).toBe("null");
     });
   });
 
@@ -1263,7 +1242,7 @@ describe("NumberInput", () => {
 
       await user.click(decrementButton);
 
-      expect(screen.getByTestId("value").textContent).toBe("10");
+      expect(getBoundText()).toBe("10");
     });
 
     it("should jump to stepStartValue when incrementing from zero", async () => {
@@ -1277,7 +1256,7 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      expect(screen.getByTestId("value").textContent).toBe("10");
+      expect(getBoundText()).toBe("10");
     });
 
     it("should step normally after the first click", async () => {
@@ -1290,10 +1269,10 @@ describe("NumberInput", () => {
       });
 
       await user.click(incrementButton);
-      expect(screen.getByTestId("value").textContent).toBe("10");
+      expect(getBoundText()).toBe("10");
 
       await user.click(incrementButton);
-      expect(screen.getByTestId("value").textContent).toBe("11");
+      expect(getBoundText()).toBe("11");
     });
 
     it("should jump to stepStartValue in allowDecimal mode when stepping from null", async () => {
@@ -1311,7 +1290,7 @@ describe("NumberInput", () => {
       });
 
       await user.click(incrementButton);
-      expect(screen.getByTestId("value").textContent).toBe("5");
+      expect(getBoundText()).toBe("5");
     });
 
     it("should use stepStartValue over min as starting point", async () => {
@@ -1330,7 +1309,7 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      expect(screen.getByTestId("value").textContent).toBe("10");
+      expect(getBoundText()).toBe("10");
     });
   });
 
@@ -1568,7 +1547,7 @@ describe("NumberInput", () => {
       await user.type(input, "1234.5");
       await user.tab();
 
-      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+      expect(getBoundText()).toBe("1234.5");
       expect(input.value).toBe("1,234.5");
     });
 
@@ -1582,7 +1561,7 @@ describe("NumberInput", () => {
       await user.type(input, "3,14");
       await user.tab();
 
-      expect(screen.getByTestId("value").textContent).toBe("3.14");
+      expect(getBoundText()).toBe("3.14");
     });
 
     it("should handle null value with locale", () => {
@@ -1609,7 +1588,7 @@ describe("NumberInput", () => {
       const input = screen.getByRole("textbox");
       assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1.001");
-      expect(screen.getByTestId("value").textContent).toBe("1001");
+      expect(getBoundText()).toBe("1001");
     });
 
     it("should handle stepper decrement with locale formatting", async () => {
@@ -1626,7 +1605,7 @@ describe("NumberInput", () => {
       const input = screen.getByRole("textbox");
       assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("999");
-      expect(screen.getByTestId("value").textContent).toBe("999");
+      expect(getBoundText()).toBe("999");
     });
 
     it("should auto-invalidate with locale when value exceeds max", () => {
@@ -1692,7 +1671,7 @@ describe("NumberInput", () => {
       await user.type(input, "1.234,56");
       await user.tab();
 
-      expect(screen.getByTestId("value").textContent).toBe("1234.56");
+      expect(getBoundText()).toBe("1234.56");
     });
 
     it("should parse locale input without group separators", async () => {
@@ -1705,7 +1684,7 @@ describe("NumberInput", () => {
       await user.type(input, "1234,5");
       await user.tab();
 
-      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+      expect(getBoundText()).toBe("1234.5");
     });
 
     it("should update separator cache when locale changes", async () => {
@@ -1718,7 +1697,7 @@ describe("NumberInput", () => {
 
       await user.type(input, "1,234.5");
       await user.tab();
-      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+      expect(getBoundText()).toBe("1234.5");
 
       rerender({ locale: "de-DE", value: null, allowEmpty: true });
       await tick();
@@ -1726,7 +1705,7 @@ describe("NumberInput", () => {
       await user.clear(input);
       await user.type(input, "1.234,5");
       await user.tab();
-      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+      expect(getBoundText()).toBe("1234.5");
     });
 
     it("should parse Arabic-Indic digits typed with an Arabic locale", async () => {
@@ -1741,7 +1720,7 @@ describe("NumberInput", () => {
       await user.type(input, "١٢٣٤٫٥");
       await user.tab();
 
-      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+      expect(getBoundText()).toBe("1234.5");
     });
 
     it("should fall back to standard parsing when locale is removed", async () => {

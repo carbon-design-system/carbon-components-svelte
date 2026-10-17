@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
+import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
 import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
 import TextInputFluidSkeleton from "./TextInput.fluidSkeleton.test.svelte";
@@ -216,7 +217,7 @@ describe("TextInput", () => {
 
     const input = screen.getByRole("textbox");
     await user.type(input, "Test value");
-    expect(screen.getByTestId("value").textContent).toBe("Test value");
+    expect(getBoundText()).toBe("Test value");
   });
 
   it("should handle number type input", async () => {
@@ -584,7 +585,7 @@ describe("TextInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
-    expect(screen.getByTestId("value").textContent).toBe("null");
+    expect(getBoundText()).toBe("null");
   });
 
   it("should suppress warning text in readonly mode", () => {

@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TimePickerForm from "./TimePicker.form.test.svelte";
 
-const getValue = () => screen.getByTestId("value").textContent;
 const getAmpm = () => screen.getByTestId("ampm").textContent;
 
 describe("TimePicker form reset", () => {
@@ -25,7 +25,7 @@ describe("TimePicker form reset", () => {
     await resetForm();
 
     expect(input).toHaveValue("");
-    expect(getValue()).toBe("");
+    expect(getBoundText()).toBe("");
     expect(new FormData(getForm()).get("time")).toBe("");
   });
 
@@ -43,7 +43,7 @@ describe("TimePicker form reset", () => {
     await resetForm();
 
     expect(input).toHaveValue("");
-    expect(getValue()).toBe("");
+    expect(getBoundText()).toBe("");
   });
 
   it("resyncs a disabled field too", async () => {
@@ -58,7 +58,7 @@ describe("TimePicker form reset", () => {
     await resetForm();
 
     expect(input).toHaveValue("");
-    expect(getValue()).toBe("");
+    expect(getBoundText()).toBe("");
   });
 
   it("resyncs a readonly field too", async () => {
@@ -73,7 +73,7 @@ describe("TimePicker form reset", () => {
     await resetForm();
 
     expect(input).toHaveValue("");
-    expect(getValue()).toBe("");
+    expect(getBoundText()).toBe("");
   });
 
   it("leaves everything alone when the reset is canceled", async () => {
@@ -86,7 +86,7 @@ describe("TimePicker form reset", () => {
     await resetForm();
 
     expect(input).toHaveValue("09:15");
-    expect(getValue()).toBe("09:15");
+    expect(getBoundText()).toBe("09:15");
   });
 
   it("does not dispatch input or change on reset", async () => {

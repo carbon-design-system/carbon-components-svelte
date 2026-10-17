@@ -65,4 +65,4 @@
   on:paste
 />
 
-<div data-testid="value">{value}</div>
+<div data-testid="bound">{value}</div>

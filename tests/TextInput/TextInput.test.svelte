@@ -66,4 +66,4 @@
   on:paste={(e) => onpaste?.(e)}
 />
 
-<div data-testid="value">{String(value)}</div>
+<div data-testid="bound">{String(value)}</div>
