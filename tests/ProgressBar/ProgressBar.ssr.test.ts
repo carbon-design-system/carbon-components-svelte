@@ -1,12 +1,7 @@
 // @vitest-environment node
 
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
-import { render } from "svelte/server";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(ProgressBar, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
+import { renderRaw } from "../utils/ssr";
 
 describe("ProgressBar server render", () => {
   const props = {
@@ -14,15 +9,15 @@ describe("ProgressBar server render", () => {
     value: 40,
     labelText: "Upload",
     helperText: "40 MB",
-    status: "error",
+    status: "error" as const,
   };
 
   it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(ProgressBar, props)).toBe(renderRaw(ProgressBar, props));
   });
 
   it("derives the helper and status ids from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(ProgressBar, props);
 
     expect(html).toContain('id="upload-helper"');
     expect(html).toContain('id="upload-status"');

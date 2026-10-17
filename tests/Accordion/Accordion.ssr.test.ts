@@ -1,21 +1,16 @@
 // @vitest-environment node
-import { render } from "svelte/server";
+import { renderRaw } from "../utils/ssr";
 import AccordionSsr from "./AccordionSsr.test.svelte";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(AccordionSsr, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
 
 describe("Accordion server render", () => {
   const props = { firstId: "first", secondId: "second" };
 
   it("renders identical markup for explicit ids", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(AccordionSsr, props)).toBe(renderRaw(AccordionSsr, props));
   });
 
   it("derives the heading and panel ids from each item id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(AccordionSsr, props);
 
     expect(html).toContain('<li id="first"');
     expect(html).toContain('<li id="second"');
