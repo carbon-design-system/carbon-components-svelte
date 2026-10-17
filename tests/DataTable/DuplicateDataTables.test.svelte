@@ -10,10 +10,15 @@
     { id: "1", contact: { company: "Company 1" } },
     { id: "2", contact: { company: "Company 2" } },
   ];
+
+  let selectedA: ReadonlyArray<string> = [];
+  let selectedB: ReadonlyArray<string> = [];
 </script>
 
-<DataTable inputName="radio-select" radio {headers} {rows} />
-<DataTable inputName="radio-select" radio {headers} {rows} />
+<DataTable radio {headers} {rows} bind:selectedRowIds={selectedA} />
+<DataTable radio {headers} {rows} bind:selectedRowIds={selectedB} />
+<output data-testid="selected-a">{JSON.stringify(selectedA)}</output>
+<output data-testid="selected-b">{JSON.stringify(selectedB)}</output>
 
 <DataTable
   inputName="checkbox-select"

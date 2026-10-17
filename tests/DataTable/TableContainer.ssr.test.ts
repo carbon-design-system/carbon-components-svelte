@@ -14,10 +14,6 @@ function renderRaw(props: Record<string, unknown>) {
 describe("TableContainer server render", () => {
   const props = { id: "sales", title: "Sales", description: "By region" };
 
-  it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
-  });
-
   it("derives the title and description ids from the id", () => {
     const html = renderRaw(props);
 

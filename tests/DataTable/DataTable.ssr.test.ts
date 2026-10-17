@@ -2,7 +2,7 @@
 
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import { render } from "svelte/server";
-import { renderSSR } from "../utils/ssr";
+import { RANDOM_ID, renderSSR } from "../utils/ssr";
 
 /** Server output with only Svelte's hydration comments removed. */
 function renderRaw(props: Record<string, unknown>) {
@@ -27,8 +27,8 @@ describe("DataTable server render", () => {
     batchSelection: true,
   };
 
-  it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+  it("derives every id from an explicit id, with no random id left over", () => {
+    expect(renderRaw(props).match(RANDOM_ID)).toBeNull();
   });
 
   it("derives the title, header, cell and selection ids from the id", () => {
