@@ -73,8 +73,10 @@ describe("DatePicker bind:open", () => {
   });
 
   it("is ignored in simple mode", async () => {
-    render(DatePickerOpen, { props: { datePickerType: "simple", open: true } });
-    await tick();
+    const { rerender } = render(DatePickerOpen, {
+      props: { datePickerType: "simple" },
+    });
+    await rerender({ open: true });
     expect(screen.queryByLabelText("calendar-container")).toBeNull();
   });
 

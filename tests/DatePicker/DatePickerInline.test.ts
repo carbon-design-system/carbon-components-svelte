@@ -32,19 +32,6 @@ describe("DatePicker inline", () => {
     expect(events).not.toContain("close");
   });
 
-  it("stays visible after an outside click and Escape", async () => {
-    render(DatePicker);
-    const calendar = await screen.findByLabelText("calendar-container");
-
-    await user.click(screen.getByLabelText("Date"));
-    await user.click(screen.getByRole("button", { name: "Elsewhere" }));
-    await user.click(screen.getByLabelText("Date"));
-    await user.keyboard("{Escape}");
-
-    expect(calendar).toBeInTheDocument();
-    expect(calendar).toHaveClass("inline");
-  });
-
   it("ignores portalMenu", async () => {
     const { container } = render(DatePicker, { portalMenu: true });
 

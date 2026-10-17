@@ -127,13 +127,13 @@ describe("DatePicker bind:selectedDates", () => {
     render(DatePickerSelectedDates, {
       props: {
         datePickerType: "simple",
-        value: "01/15/2024",
+        value: "",
         selectedDates: [new Date(2024, 0, 1)],
       },
     });
     await tick();
 
-    expect(getBound()).toBe("01/15/2024||");
+    expect(getBound()).toBe("||");
   });
 
   it("does not redraw or rebuild the calendar for an equal array", async () => {

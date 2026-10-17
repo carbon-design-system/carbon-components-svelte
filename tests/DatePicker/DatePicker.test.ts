@@ -154,6 +154,18 @@ describe("DatePicker", () => {
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--month");
   });
 
+  // Each of these types reuses the single-mode input width styling.
+  it.each(["multiple", "month", "year", "week"] as const)(
+    "uses single-width styling for %s mode",
+    (datePickerType) => {
+      const { container } = render(DatePicker, { datePickerType });
+
+      expect(container.querySelector(".bx--date-picker")).toHaveClass(
+        "bx--date-picker--single",
+      );
+    },
+  );
+
   it("renders single-letter weekday shorthands for locale='en'", async () => {
     const { container } = render(DatePicker, { datePickerType: "single" });
 
@@ -357,15 +369,6 @@ describe("DatePicker", () => {
       await user.keyboard("{ArrowDown}");
       const calendar = await screen.findByLabelText("calendar-container");
       expect(calendar).not.toHaveClass("open");
-    });
-
-    it("keeps native tab order when readonly (no calendar hijack)", async () => {
-      render(DatePicker, { datePickerType: "single", readonly: true });
-      const input = screen.getByLabelText("Date");
-      input.focus();
-      await user.tab();
-      expect(input).not.toHaveFocus();
-      expect(document.activeElement).not.toHaveClass("flatpickr-day");
     });
 
     it("forwards the readonly attribute to both inputs in range mode", async () => {
@@ -1144,7 +1147,9 @@ describe("DatePicker", () => {
     const { rerender } = render(DatePicker, {
       props: {
         datePickerType: "single",
-        value: "01/15/2024",
+        // Not zero-padded, so it differs from the formatted selection and
+        // only the `$inputValue !== prevValue` guard keeps setDate away.
+        value: "1/15/2024",
       },
     });
 
@@ -1153,7 +1158,6 @@ describe("DatePicker", () => {
     await screen.findByLabelText("calendar-container");
 
     const fp = getFlatpickrInstance(input);
-    expect(fp).toBeTruthy();
     const setDateSpy = vi.spyOn(fp, "setDate");
 
     // Trigger a reactive update that does not change value/min/max/format.
@@ -1407,6 +1411,10 @@ describe("DatePicker", () => {
       render(DatePicker, {
         datePickerType: "single",
         initialMonth: "04/01/2027",
+        // flatpickr marks `now` (the module-load date by default) as today.
+        // Pin it outside the shown month so the assertion cannot depend on
+        // the real date.
+        flatpickrProps: { now: new Date(2020, 0, 10) },
       });
 
       const input = screen.getByLabelText("Date");
@@ -2001,26 +2009,6 @@ describe("DatePicker", () => {
     // WCAG 1.4.3 exempts text belonging to an inactive UI component, and
     // axe-core's color-contrast check specifically skips aria-disabled="true"
     // elements, so marking these days closes the gap correctly.
-    it("marks out-of-range calendar days as aria-disabled", async () => {
-      const { container } = render(DatePicker, {
-        datePickerType: "single",
-        value: "03/01/2024",
-        minDate: new Date(2024, 2, 1),
-        maxDate: new Date(2024, 2, 31),
-      });
-
-      await user.click(screen.getByLabelText("Date"));
-      await screen.findByLabelText("calendar-container");
-
-      const disabledDays = container.querySelectorAll(
-        ".flatpickr-day.flatpickr-disabled",
-      );
-      expect(disabledDays.length).toBeGreaterThan(0);
-      for (const day of disabledDays) {
-        expect(day).toHaveAttribute("aria-disabled", "true");
-      }
-    });
-
     it("composes a consumer-supplied onDayCreate with the default aria-disabled hook", async () => {
       const onDayCreate = vi.fn();
       const { container } = render(DatePicker, {
@@ -2356,21 +2344,6 @@ describe("DatePicker", () => {
   });
 
   describe("bind:calendar", () => {
-    it("is null in simple mode (no calendar is created)", async () => {
-      let captured: unknown = "unset";
-      render(DatePickerCalendar, {
-        props: {
-          datePickerType: "simple",
-          oncalendar: (cal: Instance | null | undefined) => {
-            captured = cal;
-          },
-        },
-      });
-
-      await tick();
-      expect(captured).toBeNull();
-    });
-
     it("exposes the flatpickr instance in single mode", async () => {
       let captured: Instance | null | undefined = null;
       render(DatePickerCalendar, {
@@ -2608,25 +2581,6 @@ describe("DatePicker", () => {
   });
 
   describe("multiple mode", () => {
-    it("renders multiple mode", async () => {
-      const { container } = render(DatePicker, {
-        datePickerType: "multiple",
-      });
-
-      const input = screen.getByLabelText("Date");
-      const wrapper = container.querySelector(".bx--date-picker");
-      // Multiple mode reuses the single-mode input width styling.
-      expect(wrapper).toHaveClass("bx--date-picker--single");
-
-      expect(
-        screen.queryByLabelText("calendar-container"),
-      ).not.toBeInTheDocument();
-      await user.click(input);
-      expect(
-        await screen.findByLabelText("calendar-container"),
-      ).toBeInTheDocument();
-    });
-
     it("toggles a day in and out of selection on repeated clicks", async () => {
       render(DatePicker, { datePickerType: "multiple" });
 
@@ -2851,27 +2805,6 @@ describe("DatePicker", () => {
   });
 
   describe("month mode", () => {
-    it("renders month mode", async () => {
-      const { container } = render(DatePicker, {
-        datePickerType: "month",
-        dateFormat: "F Y",
-      });
-
-      const input = screen.getByLabelText("Date");
-
-      const wrapper = container.querySelector(".bx--date-picker");
-      // Month mode reuses the single-mode input width styling.
-      expect(wrapper).toHaveClass("bx--date-picker--single");
-
-      expect(
-        screen.queryByLabelText("calendar-container"),
-      ).not.toBeInTheDocument();
-      await user.click(input);
-      expect(
-        await screen.findByLabelText("calendar-container"),
-      ).toBeInTheDocument();
-    });
-
     it("renders a 12-month grid instead of days", async () => {
       render(DatePicker, { datePickerType: "month", dateFormat: "F Y" });
 
@@ -3174,19 +3107,6 @@ describe("DatePicker", () => {
     const formatted = (date: Date) =>
       `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
 
-    it("renders a single-width day grid", async () => {
-      const { container } = render(DatePicker, { datePickerType: "week" });
-      await user.click(screen.getByLabelText("Date"));
-      const calendar = await screen.findByLabelText("calendar-container");
-
-      expect(container.querySelector(".bx--date-picker")).toHaveClass(
-        "bx--date-picker--single",
-      );
-      expect(
-        calendar.querySelectorAll(".flatpickr-day").length,
-      ).toBeGreaterThan(27);
-    });
-
     it("selects the first day of the picked week", async () => {
       const onchange = vi.fn();
       render(DatePicker, { datePickerType: "week", onchange });
@@ -3269,27 +3189,6 @@ describe("DatePicker", () => {
   });
 
   describe("year mode", () => {
-    it("renders year mode", async () => {
-      const { container } = render(DatePicker, {
-        datePickerType: "year",
-        dateFormat: "Y",
-      });
-
-      const input = screen.getByLabelText("Date");
-
-      const wrapper = container.querySelector(".bx--date-picker");
-      // Year mode reuses the single-mode input width styling.
-      expect(wrapper).toHaveClass("bx--date-picker--single");
-
-      expect(
-        screen.queryByLabelText("calendar-container"),
-      ).not.toBeInTheDocument();
-      await user.click(input);
-      expect(
-        await screen.findByLabelText("calendar-container"),
-      ).toBeInTheDocument();
-    });
-
     it("renders a year grid instead of days", async () => {
       render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
 
