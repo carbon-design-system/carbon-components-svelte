@@ -26,7 +26,7 @@ const skeletonOwners = Object.keys(sources)
 const contracts: [keyof Exemptions, keyof FieldCase, string[]][] = [
   ["fluid", "fluid", matching(/export let fluid\b/)],
   ["state", "state", matching(/export let warnText\b/)],
-  ["reset", "reset", matching(/use:formReset\b/)],
+  ["reset", "reset", matching(/use:(formReset|attachFormReset)\b/)],
   [
     "selectOnFocus",
     "selectOnFocus",
