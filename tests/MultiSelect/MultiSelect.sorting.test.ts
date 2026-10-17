@@ -190,19 +190,16 @@ describe("MultiSelect", () => {
       });
 
       it("keeps an external selection when the user then toggles another item", async () => {
-        const consoleLog = vi.spyOn(console, "log");
+        const onSelect = vi.fn();
         const { rerender } = render(MultiSelect, {
-          props: { items: unsortedItems, selectionFeedback: "fixed" },
+          props: { onSelect, items: unsortedItems, selectionFeedback: "fixed" },
         });
 
         await rerender({ selectedIds: ["2"] });
         await openMenu();
         await toggleOption("C");
 
-        const selectCalls = consoleLog.mock.calls.filter(
-          ([name]) => name === "select",
-        );
-        const selectedIds = selectCalls.at(-1)?.[1]?.selectedIds;
+        const selectedIds = onSelect.mock.calls.at(-1)?.[0]?.selectedIds;
         expect(selectedIds).toHaveLength(2);
         expect(selectedIds).toEqual(expect.arrayContaining(["2", "3"]));
       });
