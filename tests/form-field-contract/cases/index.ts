@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/svelte";
+import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import FluidPinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/FluidPinCodeInputSkeleton.svelte";
@@ -21,6 +22,27 @@ const textInputSkeleton = {
 };
 
 export const cases: FieldCase[] = [
+  {
+    name: "ComboBox",
+    component: ComboBox,
+    // A custom value makes the typed text the field's value, so a reset has
+    // something to clear without picking an item.
+    props: {
+      items: [
+        { id: "0", text: "Ada" },
+        { id: "1", text: "Grace" },
+      ],
+      allowCustomValue: true,
+    },
+    control: () => screen.getByRole("combobox"),
+    state: {},
+    fluid: {
+      className: "bx--list-box__wrapper--fluid",
+      wrapper: ".bx--list-box__wrapper--fluid",
+    },
+    reset: { initial: "Ada", typed: "x", events: ["input"] },
+    selectOnFocus: { value: "Ada" },
+  },
   {
     name: "TextInput",
     component: TextInput,
@@ -166,14 +188,12 @@ const NOT_AUDITED =
 
 export const exempt: Exemptions = {
   fluid: {
-    ComboBox: LISTBOX_AUDIT,
     CopyInput: LISTBOX_AUDIT,
     DatePicker: LISTBOX_AUDIT,
     Dropdown: LISTBOX_AUDIT,
     MultiSelect: LISTBOX_AUDIT,
   },
   state: {
-    ComboBox: LISTBOX_AUDIT,
     DatePickerInput: LISTBOX_AUDIT,
     Dropdown: LISTBOX_AUDIT,
     ListBox: LISTBOX_AUDIT,
@@ -187,7 +207,6 @@ export const exempt: Exemptions = {
     Toggle: NOT_AUDITED,
   },
   reset: {
-    ComboBox: LISTBOX_AUDIT,
     ListBoxRequiredInput: LISTBOX_AUDIT,
     MultiSelect: LISTBOX_AUDIT,
     NumberInput: "keeps its value on reset unless allowEmpty is set",
@@ -204,7 +223,6 @@ export const exempt: Exemptions = {
     Toggle: NOT_A_TEXT_FIELD,
   },
   selectOnFocus: {
-    ComboBox: LISTBOX_AUDIT,
     CopyInput: LISTBOX_AUDIT,
     DatePickerInput: LISTBOX_AUDIT,
     MultiSelect: LISTBOX_AUDIT,
@@ -216,7 +234,8 @@ export const exempt: Exemptions = {
     RangeSlider: "selects its number inputs, which its own tests cover",
   },
   fluidSkeleton: {
-    ComboBox: LISTBOX_AUDIT,
+    ComboBox:
+      "nests its field placeholder in a list box shape the contract doesn't model",
     CopyInput: LISTBOX_AUDIT,
     DatePicker: LISTBOX_AUDIT,
     Dropdown: LISTBOX_AUDIT,
