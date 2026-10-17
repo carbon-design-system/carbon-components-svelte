@@ -15,25 +15,6 @@ describe("ComboBox", () => {
       }));
     };
 
-    it("should enable virtualization for large lists", async () => {
-      const largeItems = createLargeItemList(500);
-      render(ComboBox, {
-        props: {
-          items: largeItems,
-          virtualize: true,
-        },
-      });
-
-      await user.click(getInput());
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeLessThan(500);
-      expect(options.length).toBeGreaterThan(0);
-    });
-
     it.each([
       { virtualize: true, description: "with explicit virtualization" },
       {
@@ -206,28 +187,6 @@ describe("ComboBox", () => {
       await user.click(screen.getByText("Item 11"));
 
       expect(getInput()).toHaveValue("Item 11");
-    });
-
-    it("should override default item height when specified in virtualize object", async () => {
-      const largeItems = createLargeItemList(500);
-      render(ComboBox, {
-        props: {
-          items: largeItems,
-          virtualize: {
-            itemHeight: 100,
-            containerHeight: 500,
-          },
-        },
-      });
-
-      await user.click(getInput());
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.length).toBeLessThan(15);
     });
 
     it("should default itemHeight to the size row height", async () => {

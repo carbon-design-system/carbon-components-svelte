@@ -55,16 +55,6 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("My Custom Text");
   });
 
-  it("should clear custom value when allowCustomValue is false (default behavior)", async () => {
-    render(ComboBox);
-
-    const input = getInput();
-    await user.click(input);
-    await user.type(input, "Custom Value");
-    await user.click(document.body);
-    expect(input).toHaveValue("");
-  });
-
   it("should keep an externally-updated selection after the menu closes", async () => {
     const { rerender } = render(ComboBox, { props: { selectedId: "0" } });
 

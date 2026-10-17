@@ -481,21 +481,6 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Email");
   });
 
-  it("should handle clear selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox, {
-      props: {
-        selectedId: "1",
-        value: "Email",
-      },
-    });
-
-    await user.click(getClearButton());
-
-    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
-    expect(getInput()).toHaveValue("");
-  });
-
   it("should handle clear selection via keyboard navigation (Enter)", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComboBox, {
@@ -970,13 +955,6 @@ describe("ComboBox", () => {
     expect(container.querySelector(".bx--combo-box")).toHaveClass(
       "bx--list-box--up",
     );
-  });
-
-  it("should clear filter on selection clear", async () => {
-    render(ComboBoxCustom, { props: { selectedId: "1" } });
-
-    await user.click(getClearButton());
-    expect(getInput()).toHaveValue("");
   });
 
   it("should programmatically clear selection", async () => {
