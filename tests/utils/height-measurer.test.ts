@@ -2,6 +2,7 @@ import {
   createHeightMeasurer,
   VIRTUAL_INDEX_ATTRIBUTE,
 } from "../../src/utils/height-measurer.js";
+import { nextFrame } from "./next-frame";
 import { rect } from "./rect";
 
 /** A rendered window: one element per item index, inside a scroll container. */
@@ -24,13 +25,6 @@ function optionAt(container: Element, index: number) {
     throw new Error(`no element for index ${index}`);
   }
   return element;
-}
-
-/** The measurer holds a batch until the next frame; this is that frame. */
-function nextFrame() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve());
-  });
 }
 
 /**

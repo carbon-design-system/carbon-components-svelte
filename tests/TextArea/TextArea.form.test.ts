@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { nextFrame } from "../utils/next-frame";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TextAreaForm from "./TextArea.form.test.svelte";
@@ -74,7 +75,7 @@ describe("TextArea form reset", () => {
       value: 120,
     });
     await user.type(textarea, "line one{enter}line two");
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await nextFrame();
     expect(textarea.style.height).toBe("120px");
 
     textarea.defaultValue = "hi";
@@ -83,7 +84,7 @@ describe("TextArea form reset", () => {
       value: 42,
     });
     await resetForm();
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await nextFrame();
 
     expect(textarea.style.height).toBe("42px");
     expect(textarea).toHaveValue("hi");

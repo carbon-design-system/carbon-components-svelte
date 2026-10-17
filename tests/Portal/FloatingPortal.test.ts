@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import FloatingPortalTest from "./FloatingPortal.test.svelte";
 
@@ -128,7 +129,7 @@ describe("FloatingPortal", () => {
       );
 
       window.dispatchEvent(new Event("scroll"));
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       expect(portalElement).toHaveAttribute("data-floating-direction", "top");
     });
@@ -157,7 +158,7 @@ describe("FloatingPortal", () => {
       );
 
       window.dispatchEvent(new Event("scroll"));
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       expect(portalElement).toHaveAttribute(
         "data-floating-direction",

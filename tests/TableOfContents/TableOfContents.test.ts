@@ -1,10 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import TableOfContents from "./TableOfContents.test.svelte";
-
-const nextFrame = () =>
-  new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 
 // Viewport-relative section tops, keyed by element id.
 let tops: Record<string, number> = {};
