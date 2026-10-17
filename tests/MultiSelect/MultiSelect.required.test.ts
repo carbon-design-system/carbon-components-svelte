@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import MultiSelect from "./MultiSelect.form.test.svelte";
+import MultiSelectFormAttribute from "./MultiSelect.formAttribute.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -26,6 +27,14 @@ describe("MultiSelect required", () => {
       expect(getForm().checkValidity()).toBe(false);
     },
   );
+
+  it("validates against the form named by the form attribute", () => {
+    render(MultiSelectFormAttribute, {
+      props: { selectedIds: [], required: true },
+    });
+
+    expect(getForm().checkValidity()).toBe(false);
+  });
 
   it("is not required by default", () => {
     render(MultiSelect, { props: { items } });
