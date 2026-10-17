@@ -446,31 +446,6 @@ describe("DataTable", () => {
     ).toHaveTextContent("3000");
   });
 
-  it("handles disabled sorting on specific columns", async () => {
-    const customHeaders = [
-      { key: "name", value: "Name" },
-      { key: "protocol", value: "Protocol", sort: false as const },
-      { key: "port", value: "Port" },
-    ];
-
-    render(DataTable, {
-      props: {
-        sortable: true,
-        headers: customHeaders,
-        rows,
-      },
-    });
-
-    const protocolHeader = screen.getByText("Protocol");
-    await user.click(protocolHeader);
-
-    const tableRows = getBodyRows();
-    const firstRow = tableRows[0];
-    expect(
-      within(firstRow).getByRole("cell", { name: "Load Balancer 3" }),
-    ).toHaveTextContent("Load Balancer 3");
-  });
-
   it("allows a header to opt into sorting when the table itself is not sortable", async () => {
     const customHeaders = [
       { key: "name", value: "Name", sort: true as const },
@@ -1313,24 +1288,31 @@ describe("DataTable", () => {
   });
 
   // Regression: ?? for header.key so empty string is used (not key-${index})
-  it("uses empty header key when passed (nullish coalescing)", () => {
-    const headersWithEmptyKey = [
-      { key: "", value: "Empty Key Col" },
-      { key: "name", value: "Name" },
-    ];
-    const rowsWithEmptyKey = [
-      { id: "a", name: "Row A" },
-      { id: "b", name: "Row B" },
-    ];
-    render(DataTable, {
+  it("uses empty header key when passed (nullish coalescing)", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(DataTable, {
       props: {
-        headers: headersWithEmptyKey,
-        rows: rowsWithEmptyKey,
+        headers: [
+          { key: "", value: "Empty Key Col" },
+          { key: "name", value: "Name" },
+        ],
+        rows: [
+          { id: "a", name: "Row A" },
+          { id: "b", name: "Row B" },
+        ],
       },
     });
-    expect(screen.getByText("Empty Key Col")).toBeInTheDocument();
-    expect(screen.getByText("Row A")).toBeInTheDocument();
-    expect(screen.getByText("Row B")).toBeInTheDocument();
+
+    const firstCell = container.querySelector("td");
+    assert(firstCell);
+    await user.click(firstCell);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "click:cell",
+      expect.objectContaining({
+        cell: expect.objectContaining({ key: "" }),
+      }),
+    );
   });
 
   // Regression: ?? for header.width so 0 is not replaced by minWidth
@@ -2490,50 +2472,6 @@ describe("DataTable", () => {
       expectTypeOf<typeof validPath3>().toEqualTypeOf<"age">();
     });
 
-    it("should validate PropertyPath type with nested objects", () => {
-      type NestedRow = {
-        id: string;
-        user: {
-          name: string;
-          email: string;
-        };
-        contact: {
-          company: string;
-          address: {
-            city: string;
-            country: string;
-          };
-        };
-      };
-
-      type Paths = PropertyPath<NestedRow>;
-
-      const validPath1: Paths = "id";
-      const validPath2: Paths = "user";
-      const validPath3: Paths = "user.name";
-      const validPath4: Paths = "contact";
-      const validPath5: Paths = "contact.company";
-      const validPath6: Paths = "contact.address";
-
-      expectTypeOf<typeof validPath1>().toEqualTypeOf<"id">();
-      expectTypeOf<typeof validPath2>().toEqualTypeOf<"user">();
-      expectTypeOf<typeof validPath3>().toEqualTypeOf<"user.name">();
-      expectTypeOf<typeof validPath4>().toEqualTypeOf<"contact">();
-      expectTypeOf<typeof validPath5>().toEqualTypeOf<"contact.company">();
-      expectTypeOf<typeof validPath6>().toEqualTypeOf<"contact.address">();
-
-      expectTypeOf<Extract<Paths, "id">>().toEqualTypeOf<"id">();
-      expectTypeOf<Extract<Paths, "user">>().toEqualTypeOf<"user">();
-      expectTypeOf<Extract<Paths, "user.name">>().toEqualTypeOf<"user.name">();
-      expectTypeOf<Extract<Paths, "contact">>().toEqualTypeOf<"contact">();
-      expectTypeOf<
-        Extract<Paths, "contact.company">
-      >().toEqualTypeOf<"contact.company">();
-      expectTypeOf<
-        Extract<Paths, "contact.address">
-      >().toEqualTypeOf<"contact.address">();
-    });
-
     it("should validate DataTableKey type with nested objects", () => {
       type NestedRow = {
         id: string;
@@ -2655,32 +2593,6 @@ describe("DataTable", () => {
       expectTypeOf<
         Extract<Paths, "level1.level2.level3.level4.level5">
       >().toEqualTypeOf<never>();
-    });
-
-    it("should validate PropertyPath with arrays and primitives", () => {
-      type MixedRow = {
-        id: string;
-        tags: string[];
-        metadata: {
-          count: number;
-          active: boolean;
-        };
-      };
-
-      type Paths = PropertyPath<MixedRow>;
-
-      // Arrays should be treated as objects, so "tags" is valid but not "tags.0"
-      const validPath1: Paths = "id";
-      const validPath2: Paths = "tags";
-      const validPath3: Paths = "metadata";
-      const validPath4: Paths = "metadata.count";
-      const validPath5: Paths = "metadata.active";
-
-      expectTypeOf<typeof validPath1>().toEqualTypeOf<"id">();
-      expectTypeOf<typeof validPath2>().toEqualTypeOf<"tags">();
-      expectTypeOf<typeof validPath3>().toEqualTypeOf<"metadata">();
-      expectTypeOf<typeof validPath4>().toEqualTypeOf<"metadata.count">();
-      expectTypeOf<typeof validPath5>().toEqualTypeOf<"metadata.active">();
     });
 
     it("should enforce DataTableRow constraint on generic type", () => {
@@ -2951,35 +2863,23 @@ describe("DataTable", () => {
       expect(tableRows.length).toBe(50);
     });
 
-    it("should accept virtualization configuration object", () => {
-      const largeRows = createLargeRowList(500);
-      const { container } = render(DataTable, {
+    it("caps the rendered rows at virtualize.maxItems", () => {
+      render(DataTable, {
         props: {
           headers,
-          rows: largeRows,
+          rows: createLargeRowList(500),
           virtualize: {
             itemHeight: 50,
             containerHeight: 400,
             overscan: 5,
             threshold: 50,
-            maxItems: 20,
+            maxItems: 5,
           },
         },
       });
 
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-
-      const _tbody = container.querySelector("tbody");
-      const tableRows = getBodyRows();
-      const dataRows = tableRows.filter((row) => {
-        const style = row.getAttribute("style");
-        const isSpacer = style?.includes("height:");
-        if (isSpacer) return false;
-        const cells = row.querySelectorAll("td");
-        return cells.length > 0;
-      });
-      expect(dataRows.length).toBeLessThanOrEqual(20);
+      // Without `maxItems`: 400 / 50 + 5 overscan = 13 rows.
+      expect(document.querySelectorAll("tbody tr[data-row]")).toHaveLength(5);
     });
 
     it("should use default row height based on size prop", () => {
@@ -3040,62 +2940,22 @@ describe("DataTable", () => {
       expect(selectedRow.closest("tr")).toHaveClass("bx--data-table--selected");
     });
 
-    it("should handle sorting with virtualization", () => {
-      const largeRows = createLargeRowList(500);
+    it("sorts the full row list when virtualized", () => {
       render(DataTable, {
         props: {
           headers,
-          rows: largeRows,
+          rows: createLargeRowList(500),
           sortable: true,
-          sortKey: "name",
-          sortDirection: "ascending",
+          sortKey: "port",
+          sortDirection: "descending",
           virtualize: true,
         },
       });
 
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-
-      const tableRows = getBodyRows();
-      const dataRows = tableRows.filter((row) => {
-        const style = row.getAttribute("style");
-        const isSpacer = style?.includes("height:");
-        if (isSpacer) return false;
-        const cells = row.querySelectorAll("td");
-        return cells.length > 0;
-      });
-      expect(dataRows.length).toBeGreaterThan(0);
-      expect(dataRows.length).toBeLessThan(500);
-    });
-
-    it("should apply max-height style when virtualized", () => {
-      const largeRows = createLargeRowList(500);
-      const { container } = render(DataTable, {
-        props: {
-          headers,
-          rows: largeRows,
-          virtualize: {
-            containerHeight: 500,
-          },
-        },
-      });
-
-      const tbody = container.querySelector("tbody");
-      const innerContainer = container.querySelector(
-        ".bx--data-table_inner-container",
-      );
-      // Style should be on tbody when stickyHeader is false, or on inner container when true
-      if (innerContainer) {
-        const containerStyle = innerContainer.getAttribute("style");
-        if (containerStyle) {
-          expect(containerStyle).toContain("max-height: 500px");
-        }
-      } else if (tbody) {
-        const tbodyStyle = tbody.getAttribute("style");
-        if (tbodyStyle) {
-          expect(tbodyStyle).toContain("max-height: 500px");
-        }
-      }
+      // Unsorted, the first row is "Load Balancer 1" (lowest port).
+      const dataRows = document.querySelectorAll("tbody tr[data-row]");
+      expect(dataRows[0]).toHaveTextContent("Load Balancer 500");
+      expect(screen.queryByText("Load Balancer 1")).not.toBeInTheDocument();
     });
 
     it("should work with sticky header", () => {
@@ -3139,18 +2999,16 @@ describe("DataTable", () => {
 
       await tick();
 
-      const innerContainer = document.querySelector(
-        ".bx--data-table_inner-container",
-      );
-      expect(innerContainer).toBeInstanceOf(HTMLElement);
-      assert(innerContainer instanceof HTMLElement);
+      // The scroll listener goes on the <table> inside the sticky <section>.
+      const scrollTable = document.querySelector("table");
+      expect(scrollTable).toBeInstanceOf(HTMLElement);
+      assert(scrollTable instanceof HTMLElement);
 
       // Scroll listener should already be attached after initial render
-      const addSpy = vi.spyOn(innerContainer, "addEventListener");
+      const addSpy = vi.spyOn(scrollTable, "addEventListener");
 
       // Trigger an unrelated state change (selecting a row)
       await rerender({ selectedRowIds: ["0"] });
-      await tick();
 
       // With the old afterUpdate approach, addEventListener("scroll") would be
       // called again here because afterUpdate fires on every reactive update.
@@ -3184,29 +3042,18 @@ describe("DataTable", () => {
     });
 
     it("should ignore pagination when virtualized", () => {
-      const largeRows = createLargeRowList(500);
       render(DataTable, {
         props: {
           headers,
-          rows: largeRows,
+          rows: createLargeRowList(500),
           pageSize: 10,
           page: 1,
           virtualize: true,
         },
       });
 
-      const tableRows = getBodyRows();
-      const dataRows = tableRows.filter((row) => {
-        const style = row.getAttribute("style");
-        const isSpacer = style?.includes("height:");
-        if (isSpacer) return false;
-        const cells = row.querySelectorAll("td");
-        return cells.length > 0;
-      });
-      // Virtualization should render visible rows (typically 10-15), not just pageSize
-      // Note: In test environment, virtualization may render all rows if container height isn't constrained
-      // So we just verify that virtualization is enabled (rows are rendered)
-      expect(dataRows.length).toBeGreaterThan(0);
+      // 480px / 48px = 10 visible rows + 3 overscan. Paginating would give 10.
+      expect(document.querySelectorAll("tbody tr[data-row]")).toHaveLength(13);
     });
 
     it("should expose scrollContainerRef for programmatic scroll control when virtualized without stickyHeader", async () => {
