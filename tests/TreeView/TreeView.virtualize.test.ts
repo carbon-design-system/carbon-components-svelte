@@ -216,24 +216,27 @@ describe("TreeView (virtualize)", () => {
     });
   });
 
-  it("Ctrl+A selects all currently visible (expanded) non-disabled rows", async () => {
-    const { component } = render(TreeViewVirtualize, {
-      totalRoots: 40,
-      childrenPerRoot: 0,
-      multiselect: true,
-      selectedIds: [],
-    });
+  it.each(["Control", "Meta"])(
+    "%s+A selects all currently visible (expanded) non-disabled rows",
+    async (modifier) => {
+      const { component } = render(TreeViewVirtualize, {
+        totalRoots: 40,
+        childrenPerRoot: 0,
+        multiselect: true,
+        selectedIds: [],
+      });
 
-    const first = treeItemById(0);
-    first.focus();
+      const first = treeItemById(0);
+      first.focus();
 
-    await user.keyboard("{Control>}a{/Control}");
-    await tick();
+      await user.keyboard(`{${modifier}>}a{/${modifier}}`);
+      await tick();
 
-    expect(component.selectedIds).toEqual(
-      Array.from({ length: 40 }, (_, i) => i),
-    );
-  });
+      expect(component.selectedIds).toEqual(
+        Array.from({ length: 40 }, (_, i) => i),
+      );
+    },
+  );
 
   it("Ctrl+click deselects a selected row that is not active", async () => {
     const { component } = render(TreeViewVirtualize, {
@@ -291,24 +294,27 @@ describe("TreeView (virtualize)", () => {
     expect(component.selectedIds).toEqual([]);
   });
 
-  it("Shift+Ctrl+End extends selection toward the end of the visible list", async () => {
-    const { component } = render(TreeViewVirtualize, {
-      totalRoots: 40,
-      childrenPerRoot: 0,
-      multiselect: true,
-      selectedIds: [],
-    });
+  it.each(["Control", "Meta"])(
+    "Shift+%s+End extends selection toward the end of the visible list",
+    async (modifier) => {
+      const { component } = render(TreeViewVirtualize, {
+        totalRoots: 40,
+        childrenPerRoot: 0,
+        multiselect: true,
+        selectedIds: [],
+      });
 
-    const first = treeItemById(0);
-    first.focus();
+      const first = treeItemById(0);
+      first.focus();
 
-    await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
-    await tick();
+      await user.keyboard(`{${modifier}>}{Shift>}{End}{/Shift}{/${modifier}}`);
+      await tick();
 
-    expect(component.selectedIds).toEqual(
-      Array.from({ length: 40 }, (_, i) => i),
-    );
-  });
+      expect(component.selectedIds).toEqual(
+        Array.from({ length: 40 }, (_, i) => i),
+      );
+    },
+  );
 
   it("keeps a single virtual tab stop when nodes arrives new-but-equal after arrow navigation", async () => {
     const { rerender } = render(TreeViewVirtualize, {

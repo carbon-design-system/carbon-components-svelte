@@ -1286,7 +1286,7 @@
     const isSelectAll =
       isMultiselect &&
       (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
-      event.ctrlKey;
+      (event.ctrlKey || event.metaKey);
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
@@ -1296,7 +1296,7 @@
         if (
           isMultiselect &&
           event.shiftKey &&
-          event.ctrlKey &&
+          (event.ctrlKey || event.metaKey) &&
           treeItem instanceof HTMLElement
         ) {
           const hid = nodeIdFromTreeItem(treeItem);
@@ -1311,7 +1311,7 @@
           if (
             isMultiselect &&
             event.shiftKey &&
-            event.ctrlKey &&
+            (event.ctrlKey || event.metaKey) &&
             nextFocusNode instanceof Element
           ) {
             const nid = nodeIdFromTreeItem(nextFocusNode);
@@ -1916,7 +1916,7 @@
     const isSelectAll =
       isMultiselect &&
       (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
-      event.ctrlKey;
+      (event.ctrlKey || event.metaKey);
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
@@ -1932,7 +1932,7 @@
         if (
           isMultiselect &&
           event.shiftKey &&
-          event.ctrlKey &&
+          (event.ctrlKey || event.metaKey) &&
           targetIdx >= 0
         ) {
           const from = Math.min(activeIdx, targetIdx);
