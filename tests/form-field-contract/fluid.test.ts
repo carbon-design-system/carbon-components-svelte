@@ -23,6 +23,7 @@ const renderField = (
   });
 
 describe.each(fluidCases)("%s fluid variant", (_, c) => {
+  const noValidation = !!c.fluid.skip?.validation;
   const fluidRoot = () => document.querySelector(`.${c.fluid.className}`);
 
   it("is off by default", () => {
@@ -56,7 +57,7 @@ describe.each(fluidCases)("%s fluid variant", (_, c) => {
     expect(screen.queryByText("Helper")).toBeNull();
   });
 
-  it.skipIf(c.fluid.skip?.messagesInWrapper)(
+  it.skipIf(noValidation || c.fluid.skip?.messagesInWrapper)(
     "renders the invalid message inside the field wrapper",
     () => {
       renderField(c, { fluid: true, invalid: true, invalidText: "Bad" });
@@ -74,13 +75,13 @@ describe.each(fluidCases)("%s fluid variant", (_, c) => {
     },
   );
 
-  it("announces the invalid message", () => {
+  it.skipIf(noValidation)("announces the invalid message", () => {
     renderField(c, { fluid: true, invalid: true, invalidText: "Bad" });
 
     expect(screen.getByText("Bad")).toHaveAttribute("role", "alert");
   });
 
-  it.skipIf(c.fluid.skip?.messagesInWrapper)(
+  it.skipIf(noValidation || c.fluid.skip?.messagesInWrapper)(
     "renders the warning message inside the field wrapper",
     () => {
       renderField(c, { fluid: true, warn: true, warnText: "Careful" });
@@ -91,7 +92,7 @@ describe.each(fluidCases)("%s fluid variant", (_, c) => {
     },
   );
 
-  it.each([{ disabled: true }, { readonly: true }])(
+  it.skipIf(noValidation).each([{ disabled: true }, { readonly: true }])(
     "suppresses invalid and warning states when %o",
     (state) => {
       renderField(c, {

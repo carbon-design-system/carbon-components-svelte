@@ -4,13 +4,10 @@ import { english } from "flatpickr/dist/l10n/default";
 import type { Instance } from "flatpickr/dist/types/instance";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { clickToFocus } from "../utils/click-to-focus";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
-import DatePickerFluidForm from "./DatePicker.fluidForm.test.svelte";
 import DatePickerFluidRange from "./DatePicker.fluidRange.test.svelte";
-import DatePickerFluidSlot from "./DatePicker.fluidSlot.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerDisplayFormat from "./DatePickerDisplayFormat.test.svelte";
 import DatePickerHost from "./DatePickerHost.test.svelte";
@@ -50,51 +47,6 @@ beforeAll(async () => {
 describe("DatePicker", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  it("selects the full value on focus when selectTextOnFocus is true", async () => {
-    render(DatePicker, { selectTextOnFocus: true, value: "01/01/2023" });
-
-    const input = screen.getByLabelText("Date");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(0);
-    expect(input.selectionEnd).toBe("01/01/2023".length);
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(DatePicker, { selectTextOnFocus: true, value: "01/01/2023" });
-
-    const mouseup = await clickToFocus(screen.getByLabelText("Date"));
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(DatePicker, { value: "01/01/2023" });
-
-    const input = screen.getByLabelText("Date");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(input.selectionEnd);
-  });
-
-  it("does not select text on focus when disabled", async () => {
-    render(DatePicker, {
-      selectTextOnFocus: true,
-      disabled: true,
-      value: "01/01/2023",
-    });
-
-    const input = screen.getByLabelText("Date");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await fireEvent.focus(input);
-
-    expect(select).not.toHaveBeenCalled();
   });
 
   it("does not select text in multiple mode when selectTextOnFocus is true", async () => {
@@ -785,7 +737,6 @@ describe("DatePicker", () => {
       invalid: true,
       invalidText: "Invalid date",
     });
-    expect(screen.getByText("Invalid date")).toBeInTheDocument();
     const wrapper = container.querySelector(".bx--date-picker-input__wrapper");
     expect(wrapper).toHaveClass("bx--date-picker-input__wrapper--invalid");
   });
@@ -795,7 +746,6 @@ describe("DatePicker", () => {
       warn: true,
       warnText: "Warning message",
     });
-    expect(screen.getByText("Warning message")).toBeInTheDocument();
     const wrapper = container.querySelector(".bx--date-picker-input__wrapper");
     expect(wrapper).toHaveClass("bx--date-picker-input__wrapper--warn");
   });
@@ -824,18 +774,8 @@ describe("DatePicker", () => {
       expect(
         container.querySelector(".bx--date-picker__icon--warn"),
       ).toBeNull();
-      expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
     },
   );
-
-  it("associates invalid text with the input via aria-errormessage", () => {
-    render(DatePicker, { invalid: true, invalidText: "Invalid date" });
-    const input = screen.getByLabelText("Date");
-    const invalidText = screen.getByText("Invalid date");
-    expect(input).toHaveAttribute("aria-errormessage", invalidText.id);
-    expect(input).not.toHaveAttribute("aria-describedby");
-  });
 
   it("forwards focus event from the input", () => {
     const focusHandler = vi.fn();
@@ -2736,24 +2676,6 @@ describe("DatePicker", () => {
   );
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      const { container } = render(DatePicker);
-
-      expect(container.querySelector(".bx--date-picker--fluid")).toBeNull();
-    });
-
-    it("renders the fluid modifier on the form-item wrapper", () => {
-      const { container } = render(DatePicker, {
-        fluid: true,
-        datePickerType: "single",
-      });
-
-      const formItem = container.querySelector(".bx--date-picker--fluid");
-      expect(formItem).toHaveClass("bx--form-item");
-      // The label stays in the DOM so it can be embedded inside the field.
-      expect(screen.getByText("Date")).toBeInTheDocument();
-    });
-
     it("renders the error message inside the fluid container", () => {
       const { container } = render(DatePicker, {
         fluid: true,
@@ -2762,11 +2684,9 @@ describe("DatePicker", () => {
         invalidText: "Invalid date",
       });
 
-      const message = screen.getByText("Invalid date");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--date-picker-container")).toHaveClass(
-        "bx--date-picker--fluid--invalid",
-      );
+      expect(
+        screen.getByText("Invalid date").closest(".bx--date-picker-container"),
+      ).toHaveClass("bx--date-picker--fluid--invalid");
       expect(
         container.querySelector(".bx--date-picker--fluid--invalid"),
       ).not.toBeNull();
@@ -2780,28 +2700,11 @@ describe("DatePicker", () => {
         warnText: "Warning message",
       });
 
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--date-picker-container")).toHaveClass(
-        "bx--date-picker--fluid--warn",
-      );
-    });
-
-    // Like the other fluid fields: the label sits inside the field and
-    // there's no line under it for helper text.
-    it("renders no helper text", () => {
-      render(DatePicker, {
-        fluid: true,
-        datePickerType: "single",
-        helperText: "Shown under the field",
-      });
-
       expect(
-        screen.queryByText("Shown under the field"),
-      ).not.toBeInTheDocument();
-      expect(screen.getByLabelText("Date")).not.toHaveAttribute(
-        "aria-describedby",
-      );
+        screen
+          .getByText("Warning message")
+          .closest(".bx--date-picker-container"),
+      ).toHaveClass("bx--date-picker--fluid--warn");
     });
 
     // The status icon sits beside the message in fluid, so the calendar
@@ -2862,28 +2765,6 @@ describe("DatePicker", () => {
         ).toBeNull();
       },
     );
-
-    it("inherits fluid from the FluidForm context", () => {
-      const { container } = render(DatePickerFluidForm);
-
-      expect(container.querySelector(".bx--date-picker--fluid")).not.toBeNull();
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(DatePickerFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(DatePickerFluidSlot, { fluid: false });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
-    });
 
     it("marks only the invalid range cell in fluid mode", () => {
       render(DatePickerFluidRange, {

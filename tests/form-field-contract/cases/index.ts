@@ -1,5 +1,7 @@
 import { screen } from "@testing-library/svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
+import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
@@ -17,6 +19,7 @@ import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svel
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import type { Exemptions, FieldCase } from "../contract";
+import DatePickerField from "../fixtures/DatePickerField.test.svelte";
 
 const textInputSkeleton = {
   className: "bx--text-input--fluid__skeleton",
@@ -225,6 +228,37 @@ export const cases: FieldCase[] = [
       field: "bx--text-input",
     },
   },
+  {
+    name: "CopyInput",
+    component: CopyInput,
+    control: () => screen.getByRole("textbox"),
+    fluid: {
+      className: "bx--text-input--fluid",
+      wrapper: ".bx--text-input__field-wrapper",
+      ignoredWith: { inline: true },
+      skip: { validation: "read-only; has no invalid or warning state" },
+    },
+    selectOnFocus: { value: "hello world" },
+    fluidSkeleton: { component: FluidCopyInputSkeleton, ...textInputSkeleton },
+  },
+  {
+    name: "DatePicker",
+    component: DatePickerField,
+    props: { datePickerType: "single" },
+    control: () => screen.getByRole("textbox"),
+    fluid: {
+      className: "bx--date-picker--fluid",
+      wrapper: ".bx--date-picker-container",
+    },
+  },
+  {
+    name: "DatePickerInput",
+    component: DatePickerField,
+    control: () => screen.getByRole("textbox"),
+    state: {},
+    selectOnFocus: { value: "01/01/2023" },
+    reset: { initial: "01/01/2023", typed: "x", events: ["input", "change"] },
+  },
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
@@ -232,12 +266,8 @@ const NOT_AUDITED =
   "covered by its own tests; not audited against the contract yet";
 
 export const exempt: Exemptions = {
-  fluid: {
-    CopyInput: NOT_AUDITED,
-    DatePicker: NOT_AUDITED,
-  },
+  fluid: {},
   state: {
-    DatePickerInput: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
     Checkbox: NOT_AUDITED,
     CheckboxGroup: NOT_AUDITED,
@@ -264,8 +294,6 @@ export const exempt: Exemptions = {
     Toggle: NOT_A_TEXT_FIELD,
   },
   selectOnFocus: {
-    CopyInput: NOT_AUDITED,
-    DatePickerInput: NOT_AUDITED,
     PinCodeInput: "selects the focused segment, which its own tests cover",
     HeaderSearch: "a UI shell search, not a form field",
     SearchMenu: "forwards the prop to Search",
@@ -276,8 +304,8 @@ export const exempt: Exemptions = {
   fluidSkeleton: {
     ComboBox:
       "nests its field placeholder in a list box shape the contract doesn't model",
-    CopyInput: NOT_AUDITED,
-    DatePicker: NOT_AUDITED,
+    DatePicker:
+      "wraps its label, field and calendar icon in one container the contract doesn't model",
     Dropdown:
       "nests its field placeholder in a list box shape the contract doesn't model",
     MultiSelect:
