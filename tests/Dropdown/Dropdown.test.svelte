@@ -80,9 +80,6 @@
   {wrapOptions}
   {portalMenu}
   on:select={(e) => onselect?.(e)}
-  on:clear={(e) => {
-    console.log("clear", e.type);
-    onclear?.(e);
-  }}
+  on:clear={(e) => onclear?.(e)}
   {...$$restProps}
 />
