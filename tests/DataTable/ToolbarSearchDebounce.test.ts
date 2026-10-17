@@ -25,6 +25,14 @@ describe("ToolbarSearch debounce", () => {
     expect(component.filteredRowIds).toHaveLength(1);
   });
 
+  it("filters a starting value right away", () => {
+    const { component } = render(ToolbarSearchDebounce, {
+      props: { debounce: 300, value: "Balancer 1" },
+    });
+
+    expect(component.filteredRowIds).toHaveLength(1);
+  });
+
   it("runs the filter once after the last of several rapid inputs", async () => {
     const { component } = render(ToolbarSearchDebounce, {
       props: { debounce: 300 },
