@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { createItems } from "../utils/create-items";
 import { setMenuMetrics } from "../utils/set-menu-metrics";
-import { createItems } from "./helpers";
 import MultiSelectScrollend from "./MultiSelectScrollend.test.svelte";
 
 describe("MultiSelect scrollend", () => {

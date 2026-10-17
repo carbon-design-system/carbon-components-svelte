@@ -3,7 +3,7 @@ import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import { tick } from "svelte";
-import { createItems } from "../Dropdown/helpers";
+import { createItems } from "../utils/create-items";
 import { user } from "../utils/user";
 
 type Item = ReturnType<typeof createItems>[number];
