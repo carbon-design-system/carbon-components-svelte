@@ -126,4 +126,22 @@ describe("toHierarchy", () => {
     // Leaves must not carry an empty `nodes` array.
     expect(emptyNodesKeys(result)).toEqual([]);
   });
+
+  it("nests children under a parent with id 0", () => {
+    const input = [{ id: 0 }, { id: 1, pid: 0 }];
+
+    expect(toHierarchy(input, (item) => item.pid)).toEqual([
+      { id: 0, nodes: [{ id: 1, pid: 0 }] },
+    ]);
+  });
+
+  it("leaves the input items untouched, so a rerun starts clean", () => {
+    const input = [{ id: 1 }, { id: 2, pid: 1 }].map((item) =>
+      Object.freeze(item),
+    );
+
+    toHierarchy(input, (item) => item.pid);
+
+    expect(toHierarchy([input[0]], (item) => item.pid)).toEqual([{ id: 1 }]);
+  });
 });

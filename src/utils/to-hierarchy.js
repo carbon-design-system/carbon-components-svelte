@@ -14,31 +14,23 @@
 export function toHierarchy(flatArray, getParentId) {
   /** @type {NodeLike[]} */
   const tree = [];
-  const childrenOf = new Map();
-  const itemsMap = new Map(flatArray.map((item) => [item.id, item]));
+  // Build on copies, so a rerun on the same items starts clean and frozen
+  // items work. Each copy drops any `nodes` left over from earlier input.
+  /** @type {NodeLike[]} */
+  const copies = flatArray.map(({ nodes: _, ...item }) => item);
+  const byId = new Map(copies.map((copy) => [copy.id, copy]));
 
-  for (const item of flatArray) {
-    const parentId = getParentId(item);
+  for (let index = 0; index < flatArray.length; index++) {
+    const copy = copies[index];
+    const parentId = getParentId(flatArray[index]);
+    // Check for null, not falsiness: `0` and `""` are valid ids.
+    const parent = parentId == null ? undefined : byId.get(parentId);
 
-    const children = childrenOf.get(item.id);
-    if (children) {
-      item.nodes = children;
-    }
-
-    const parentExists = parentId && itemsMap.has(parentId);
-
-    if (parentId && parentExists) {
-      if (!childrenOf.has(parentId)) {
-        childrenOf.set(parentId, []);
-      }
-      /** @type {NodeLike[]} */ (childrenOf.get(parentId)).push(item);
-
-      const parent = itemsMap.get(parentId);
-      if (parent) {
-        parent.nodes = childrenOf.get(parentId);
-      }
+    if (parent) {
+      if (!parent.nodes) parent.nodes = [];
+      parent.nodes.push(copy);
     } else {
-      tree.push(item);
+      tree.push(copy);
     }
   }
 
