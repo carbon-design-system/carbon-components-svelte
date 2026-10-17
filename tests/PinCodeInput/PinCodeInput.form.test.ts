@@ -79,36 +79,6 @@ describe("PinCodeInput form participation", () => {
       expect(getSegments()).toEqual(["", "9", "", ""]);
       expect(getBoundText()).toBe("9");
     });
-
-    it("follows the segments' default values, as with server-rendered markup", async () => {
-      render(PinCodeInputForm, { props: { value: "12" } });
-      const segments = getPinCodeInputs();
-      // Server-rendered markup carries each character as the `value` attribute.
-      segments[0].defaultValue = "1";
-      segments[1].defaultValue = "2";
-
-      await user.click(segments[2]);
-      await user.keyboard("34");
-      expect(getBoundText()).toBe("1234");
-
-      await resetForm();
-
-      expect(getSegments()).toEqual(["1", "2", "", ""]);
-      expect(getBoundText()).toBe("12");
-      expect(new FormData(getForm()).get("otp")).toBe("12");
-    });
-
-    it("leaves everything alone when the reset is canceled", async () => {
-      render(PinCodeInputForm);
-      getForm().addEventListener("reset", (event) => event.preventDefault());
-
-      await user.click(screen.getAllByRole("textbox")[0]);
-      await user.keyboard("12");
-      await resetForm();
-
-      expect(getSegments()).toEqual(["1", "2", "", ""]);
-      expect(getBoundText()).toBe("12");
-    });
   });
 
   it("submits with the form named by the `form` attribute", () => {

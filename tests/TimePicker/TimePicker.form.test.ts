@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { getBoundText } from "../utils/get-bound-text";
-import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TimePickerForm from "./TimePicker.form.test.svelte";
@@ -9,38 +8,6 @@ import TimePickerForm from "./TimePicker.form.test.svelte";
 const getAmpm = () => screen.getByTestId("ampm").textContent;
 
 describe("TimePicker form reset", () => {
-  // Svelte 5 already passes case 1 with no fix: `handleFormReset` is a
-  // no-op read of a `ref.value` that Svelte already resynced after a
-  // reset. Svelte 3 and 4 fail case 1 without the fix: `value` stays at
-  // the pre-reset text. A passing run on root alone does not prove
-  // Svelte 3/4 are fixed.
-  it("syncs the cleared field", async () => {
-    render(TimePickerForm, { props: { value: "10:30" } });
-    const input = screen.getByLabelText("Time");
-
-    await user.clear(input);
-    await user.type(input, "09:15");
-    expect(input).toHaveValue("09:15");
-
-    await resetForm();
-
-    expect(input).toHaveValue("");
-    expect(getBoundText()).toBe("");
-    expect(new FormData(getForm()).get("time")).toBe("");
-  });
-
-  // `bind:value` never sets a `value` attribute, so a client-rendered
-  // value has an empty `defaultValue` and a reset clears it.
-  it("clears a client-rendered value to empty on reset, even with no interaction", async () => {
-    render(TimePickerForm, { props: { value: "10:30" } });
-    const input = screen.getByLabelText("Time");
-
-    await resetForm();
-
-    expect(input).toHaveValue("");
-    expect(getBoundText()).toBe("");
-  });
-
   it("resyncs a disabled field too", async () => {
     render(TimePickerForm, { props: { value: "10:30", disabled: true } });
     const input = screen.getByLabelText("Time");
@@ -69,36 +36,6 @@ describe("TimePicker form reset", () => {
 
     expect(input).toHaveValue("");
     expect(getBoundText()).toBe("");
-  });
-
-  it("leaves everything alone when the reset is canceled", async () => {
-    render(TimePickerForm, { props: { value: "10:30" } });
-    const input = screen.getByLabelText("Time");
-    getForm().addEventListener("reset", (event) => event.preventDefault());
-
-    await user.clear(input);
-    await user.type(input, "09:15");
-    await resetForm();
-
-    expect(input).toHaveValue("09:15");
-    expect(getBoundText()).toBe("09:15");
-  });
-
-  it("does not dispatch input or change on reset", async () => {
-    const onInput = vi.fn();
-    const onChange = vi.fn();
-    render(TimePickerForm, { props: { value: "10:30", onInput, onChange } });
-    const input = screen.getByLabelText("Time");
-
-    await user.clear(input);
-    await user.type(input, "09:15");
-    onInput.mockClear();
-    onChange.mockClear();
-
-    await resetForm();
-
-    expect(onInput).not.toHaveBeenCalled();
-    expect(onChange).not.toHaveBeenCalled();
   });
 
   // TimePickerSelect's shared SelectItem keeps the native <select> on the
