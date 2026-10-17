@@ -6,15 +6,15 @@
     { id: "2", text: "Phone", price: 599, category: "Electronics" },
     { id: "3", text: "Desk", price: 299, category: "Furniture" },
   ] as const;
+
+  export let onSelect: (detail: unknown) => void = () => {};
 </script>
 
 <ComboBox
   {items}
   labelText="Products"
   placeholder="Select a product"
-  on:select={(e) => {
-    console.log("selected:", e.detail.selectedItem);
-  }}
+  on:select={(e) => onSelect(e.detail)}
   let:item
 >
   {@const { id, text, price, category } = item}

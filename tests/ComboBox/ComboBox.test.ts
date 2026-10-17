@@ -46,13 +46,14 @@ describe("ComboBox", () => {
   });
 
   it("should handle item selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox);
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect } });
 
     await user.click(getInput());
     await user.click(screen.getByText("Email"));
 
-    expect(consoleLog).toHaveBeenCalledWith("select", {
+    expect(onSelect).toHaveBeenCalledOnce();
+    expect(onSelect).toHaveBeenCalledWith({
       selectedId: "1",
       selectedItem: { id: "1", text: "Email", price: 200 },
     });
@@ -60,26 +61,26 @@ describe("ComboBox", () => {
   });
 
   it("should not re-dispatch select when clicking an already-selected item again", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox, { props: { selectedId: "1" } });
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect, selectedId: "1" } });
 
     await user.click(getInput());
     await user.click(screen.getByText("Email"));
 
-    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(onSelect).not.toHaveBeenCalled();
     expect(getInput()).toHaveValue("Email");
   });
 
   it("should not re-dispatch select when re-confirming an already-selected item with Enter", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox, { props: { selectedId: "1" } });
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect, selectedId: "1" } });
 
     const input = getInput();
     await user.click(input);
     // Opening the menu already highlights the current selection (Email).
     await user.keyboard("{Enter}");
 
-    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(onSelect).not.toHaveBeenCalled();
     expect(input).toHaveValue("Email");
   });
 
@@ -95,8 +96,8 @@ describe("ComboBox", () => {
   });
 
   it("should commit a keyboard-highlighted item on Tab, same as Enter", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox);
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect } });
 
     const input = getInput();
     await user.click(input);
@@ -104,7 +105,8 @@ describe("ComboBox", () => {
     await user.keyboard("{Tab}");
 
     expect(input).toHaveValue("Slack");
-    expect(consoleLog).toHaveBeenCalledWith("select", {
+    expect(onSelect).toHaveBeenCalledOnce();
+    expect(onSelect).toHaveBeenCalledWith({
       selectedId: "0",
       selectedItem: { id: "0", text: "Slack", price: 100 },
     });
@@ -363,8 +365,8 @@ describe("ComboBox", () => {
   });
 
   it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox);
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect } });
 
     const input = getInput();
     await user.click(input);
@@ -374,7 +376,7 @@ describe("ComboBox", () => {
     expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
     await user.keyboard("{Enter}");
-    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(onSelect).not.toHaveBeenCalled();
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     expect(input).toHaveValue("");
   });
@@ -482,15 +484,19 @@ describe("ComboBox", () => {
   });
 
   it("should handle clear selection via keyboard navigation (Enter)", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
+    const onClear = vi.fn();
     render(ComboBox, {
       props: {
+        onSelect,
+        onClear,
         selectedId: "1",
         value: "Email",
       },
     });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(onClear).not.toHaveBeenCalled();
     expect(getInput()).toHaveValue("Email");
 
     const clearButton = getClearButton();
@@ -498,20 +504,26 @@ describe("ComboBox", () => {
     expect(clearButton).toHaveFocus();
     await user.keyboard("{Enter}");
 
-    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    expect(onClear).toHaveBeenCalledOnce();
+    expect(onClear.mock.calls[0][0].type).toBe("clear");
+    expect(onSelect).not.toHaveBeenCalled();
     expect(getInput()).toHaveValue("");
   });
 
   it("should handle clear selection via keyboard navigation (Space)", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
+    const onClear = vi.fn();
     render(ComboBox, {
       props: {
+        onSelect,
+        onClear,
         selectedId: "1",
         value: "Email",
       },
     });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(onClear).not.toHaveBeenCalled();
     expect(getInput()).toHaveValue("Email");
 
     const clearButton = getClearButton();
@@ -520,7 +532,9 @@ describe("ComboBox", () => {
     await user.keyboard(" ");
     await tick();
 
-    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    expect(onClear).toHaveBeenCalledOnce();
+    expect(onClear.mock.calls[0][0].type).toBe("clear");
+    expect(onSelect).not.toHaveBeenCalled();
     // Wait for binding updates to complete
     await tick();
     expect(getInput()).toHaveValue("");
@@ -775,36 +789,36 @@ describe("ComboBox", () => {
     });
 
     it("dispatches clear with the keyboard event when Escape clears a selection", async () => {
-      const onclear = vi.fn();
-      render(ComboBox, { props: { selectedId: "1", onclear } });
+      const onClear = vi.fn();
+      render(ComboBox, { props: { selectedId: "1", onClear } });
 
       getInput().focus();
       await user.keyboard("{Escape}");
 
-      expect(onclear).toHaveBeenCalledOnce();
-      expect(onclear.mock.calls[0][0].detail).toBeInstanceOf(KeyboardEvent);
+      expect(onClear).toHaveBeenCalledOnce();
+      expect(onClear.mock.calls[0][0].detail).toBeInstanceOf(KeyboardEvent);
     });
 
     it("does not dispatch clear when Escape only clears typed text", async () => {
-      const onclear = vi.fn();
-      render(ComboBox, { props: { onclear } });
+      const onClear = vi.fn();
+      render(ComboBox, { props: { onClear } });
 
       const input = getInput();
       await user.click(input);
       await user.type(input, "sl");
       await user.keyboard("{Escape}");
 
-      expect(onclear).not.toHaveBeenCalled();
+      expect(onClear).not.toHaveBeenCalled();
     });
 
     it("does not dispatch clear on Escape when read-only", async () => {
-      const onclear = vi.fn();
-      render(ComboBox, { props: { selectedId: "1", readonly: true, onclear } });
+      const onClear = vi.fn();
+      render(ComboBox, { props: { selectedId: "1", readonly: true, onClear } });
 
       getInput().focus();
       await user.keyboard("{Escape}");
 
-      expect(onclear).not.toHaveBeenCalled();
+      expect(onClear).not.toHaveBeenCalled();
     });
 
     it("stays silent when Escape clears typed text without a selection", async () => {
@@ -860,14 +874,18 @@ describe("ComboBox", () => {
   });
 
   it("should clear input when clicking clear button", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox, { props: { selectedId: "1" } });
+    const onSelect = vi.fn();
+    const onClear = vi.fn();
+    render(ComboBox, { props: { selectedId: "1", onSelect, onClear } });
 
-    expect(consoleLog).not.toBeCalled();
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(onClear).not.toHaveBeenCalled();
     await user.click(getClearButton());
 
     expect(getInput()).toHaveValue("");
-    expect(consoleLog).toHaveBeenCalledWith("clear", "clear");
+    expect(onClear).toHaveBeenCalledOnce();
+    expect(onClear.mock.calls[0][0].type).toBe("clear");
+    expect(onSelect).not.toHaveBeenCalled();
   });
 
   it("should not reopen menu after clear button click by default", async () => {
@@ -1132,9 +1150,10 @@ describe("ComboBox", () => {
     const acceptAll = () => true;
 
     it("selects the item whose custom label is typed, on Enter", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBoxCustom, {
         props: {
+          onSelect,
           itemToString: (item: ComboBoxItem) => `Item ${item.text}`,
           shouldFilterItem: acceptAll,
         },
@@ -1145,7 +1164,8 @@ describe("ComboBox", () => {
       await user.type(input, "Item Email");
       await user.keyboard("{Enter}");
 
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "1",
         selectedItem: { id: "1", text: "Email" },
       });
@@ -1154,9 +1174,10 @@ describe("ComboBox", () => {
     });
 
     it("ignores case and normalizes the value to the label", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBoxCustom, {
         props: {
+          onSelect,
           itemToString: (item: ComboBoxItem) => `Item ${item.text}`,
           shouldFilterItem: acceptAll,
         },
@@ -1167,18 +1188,19 @@ describe("ComboBox", () => {
       await user.type(input, "item email");
       await user.keyboard("{Enter}");
 
-      expect(consoleLog).toHaveBeenCalledWith(
-        "select",
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith(
         expect.objectContaining({ selectedId: "1" }),
       );
       expect(input).toHaveValue("Item Email");
     });
 
     it("does not throw for items without text", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       type KeyItem = { id: string; key: string };
       render(ComboBoxCustom, {
         props: {
+          onSelect,
           items: [
             { id: "0", key: "Slack" },
             { id: "1", key: "Email" },
@@ -1194,17 +1216,18 @@ describe("ComboBox", () => {
       await user.type(input, "Email");
       await user.keyboard("{Enter}");
 
-      expect(consoleLog).toHaveBeenCalledWith(
-        "select",
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith(
         expect.objectContaining({ selectedId: "1" }),
       );
       expect(input).toHaveValue("Email");
     });
 
     it("does not select a disabled item whose label is typed", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBoxCustom, {
         props: {
+          onSelect,
           itemToString: (item: ComboBoxItem) => `Item ${item.text}`,
           shouldFilterItem: acceptAll,
         },
@@ -1215,13 +1238,14 @@ describe("ComboBox", () => {
       await user.type(input, "Item Fax");
       await user.keyboard("{Enter}");
 
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("commits a typeahead suggestion with a custom label on Tab", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBoxCustom, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple" },
@@ -1238,7 +1262,8 @@ describe("ComboBox", () => {
 
       await user.keyboard("{Tab}");
 
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "1",
         selectedItem: { id: "1", text: "Apple" },
       });
@@ -1556,8 +1581,8 @@ describe("ComboBox", () => {
 
   describe("Generics", () => {
     it("should infer generic type from items and support destructuring in slots", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ComboBoxGenerics);
+      const onSelect = vi.fn();
+      render(ComboBoxGenerics, { props: { onSelect } });
 
       const input = screen.getByRole("combobox");
       await user.click(input);
@@ -1570,11 +1595,15 @@ describe("ComboBox", () => {
 
       await user.click(screen.getByText("Laptop"));
 
-      expect(consoleLog).toHaveBeenCalledWith("selected:", {
-        id: "1",
-        text: "Laptop",
-        price: 999,
-        category: "Electronics",
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
+        selectedId: "1",
+        selectedItem: {
+          id: "1",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+        },
       });
     });
 
@@ -2118,14 +2147,14 @@ describe("ComboBox", () => {
     );
 
     it("should not dispatch select when typing Enter on a highlighted item while readonly", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ComboBox, { readonly: true, open: true });
+      const onSelect = vi.fn();
+      render(ComboBox, { props: { readonly: true, open: true, onSelect } });
 
       const input = getInput();
       input.focus();
       await user.keyboard("{ArrowDown}{Enter}");
 
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
       expect(input).toHaveValue("");
     });
   });
@@ -2469,8 +2498,8 @@ describe("ComboBox", () => {
 
   describe("exact match on leave", () => {
     it("should select an autofilled exact match when clicking away", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ComboBox, { props: { items: countries } });
+      const onSelect = vi.fn();
+      render(ComboBox, { props: { onSelect, items: countries } });
 
       const input = getInput();
       await user.click(input);
@@ -2481,7 +2510,8 @@ describe("ComboBox", () => {
       await user.click(document.body);
 
       expect(input).toHaveValue("United States");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "US",
         selectedItem: { id: "US", text: "United States", price: 0 },
       });
@@ -2489,8 +2519,8 @@ describe("ComboBox", () => {
     });
 
     it("should select a typed exact match on Tab and normalize casing", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ComboBox, { props: { items: countries } });
+      const onSelect = vi.fn();
+      render(ComboBox, { props: { onSelect, items: countries } });
 
       const input = getInput();
       await user.click(input);
@@ -2498,7 +2528,8 @@ describe("ComboBox", () => {
       await user.keyboard("{Tab}");
 
       expect(input).toHaveValue("United States");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "US",
         selectedItem: { id: "US", text: "United States", price: 0 },
       });
@@ -2506,8 +2537,8 @@ describe("ComboBox", () => {
     });
 
     it("should still clear a partial match when clicking away", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ComboBox, { props: { items: countries } });
+      const onSelect = vi.fn();
+      render(ComboBox, { props: { onSelect, items: countries } });
 
       const input = getInput();
       await user.click(input);
@@ -2516,12 +2547,14 @@ describe("ComboBox", () => {
       await user.click(document.body);
 
       expect(input).toHaveValue("");
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("should select an exact match instead of keeping it as a custom value", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ComboBox, { props: { items: countries, allowCustomValue: true } });
+      const onSelect = vi.fn();
+      render(ComboBox, {
+        props: { onSelect, items: countries, allowCustomValue: true },
+      });
 
       const input = getInput();
       await user.click(input);
@@ -2530,7 +2563,8 @@ describe("ComboBox", () => {
 
       // An exact label is in the items list, so it is not a custom value.
       expect(input).toHaveValue("United States");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "US",
         selectedItem: { id: "US", text: "United States", price: 0 },
       });
@@ -2557,13 +2591,14 @@ describe("ComboBox", () => {
     }
 
     it("should select an exact match without opening the menu or taking focus", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const otherField = renderWithOtherFieldFocused();
+      const onSelect = vi.fn();
+      const otherField = renderWithOtherFieldFocused({ onSelect });
 
       const input = await fill("united states");
 
       expect(input).toHaveValue("United States");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "US",
         selectedItem: { id: "US", text: "United States", price: 0 },
       });
@@ -2572,12 +2607,12 @@ describe("ComboBox", () => {
     });
 
     it("should not open the menu or take focus when the fill matches no item", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const otherField = renderWithOtherFieldFocused();
+      const onSelect = vi.fn();
+      const otherField = renderWithOtherFieldFocused({ onSelect });
 
       await fill("Canada");
 
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
       expect(otherField).toHaveFocus();
     });
@@ -2601,15 +2636,12 @@ describe("ComboBox", () => {
     it.each(["disabled", "readonly"])(
       "should not select an exact match when %s",
       async (prop) => {
-        const consoleLog = vi.spyOn(console, "log");
-        renderWithOtherFieldFocused({ [prop]: true });
+        const onSelect = vi.fn();
+        renderWithOtherFieldFocused({ [prop]: true, onSelect });
 
         await fill("United States");
 
-        expect(consoleLog).not.toHaveBeenCalledWith(
-          "select",
-          expect.anything(),
-        );
+        expect(onSelect).not.toHaveBeenCalled();
       },
     );
   });

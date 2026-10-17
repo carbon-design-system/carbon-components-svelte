@@ -23,6 +23,7 @@
     ComponentProps<ComboBox>["itemToString"]
   > = (item: ComboBoxItem) => item.text;
   export let typeahead = false;
+  export let onSelect: (detail: unknown) => void = () => {};
 </script>
 
 <ComboBox
@@ -35,9 +36,7 @@
   {typeahead}
   labelText="Contact with icons"
   placeholder="Select contact method"
-  on:select={(e) => {
-    console.log("select", e.detail);
-  }}
+  on:select={(e) => onSelect(e.detail)}
   let:item
 >
   <span>Item {item.text}</span>
