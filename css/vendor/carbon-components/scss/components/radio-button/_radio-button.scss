@@ -199,7 +199,7 @@
     .#{$prefix}--radio-button
     + .#{$prefix}--radio-button__label
     .#{$prefix}--radio-button__appearance {
-    border-color: $icon-disabled;
+    border-color: $icon-secondary;
   }
 
   .#{$prefix}--radio-button-group--readonly .#{$prefix}--radio-button__label,

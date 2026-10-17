@@ -229,13 +229,13 @@
   .#{$prefix}--checkbox-wrapper--readonly
     .#{$prefix}--checkbox
     + .#{$prefix}--checkbox-label::before {
-    border-color: $icon-disabled;
+    border-color: $icon-secondary;
   }
 
   .#{$prefix}--checkbox-wrapper--readonly
     .#{$prefix}--checkbox:checked
     + .#{$prefix}--checkbox-label::before {
-    border: 1px solid $icon-disabled;
+    border: 1px solid $icon-secondary;
     background: transparent;
   }
 
