@@ -19,18 +19,28 @@
 @mixin slider {
   .#{$prefix}--slider-container {
     display: flex;
+    max-width: 100%;
     align-items: center;
     user-select: none;
   }
 
   .#{$prefix}--slider {
     position: relative;
-    width: 100%;
-    min-width: to-rem(200px);
+    // ccs: 200px where there's room, as before, and down to 48px when the
+    // container is narrower: a 200px minimum pushed the number input out
+    // of narrow containers. `width` (not `flex-basis`), so the container
+    // sizes to it.
+    width: to-rem(200px);
+    min-width: to-rem(48px);
     max-width: to-rem(640px);
+    flex-shrink: 1;
     padding: $spacing-05 0;
     margin: 0 $carbon--spacing-05;
     cursor: pointer;
+  }
+
+  .#{$prefix}--slider-container--full-width .#{$prefix}--slider {
+    flex-grow: 1;
   }
 
   .#{$prefix}--slider__range-label {
