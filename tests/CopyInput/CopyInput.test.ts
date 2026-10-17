@@ -141,6 +141,15 @@ describe("CopyInput", () => {
     ).toBeEnabled();
   });
 
+  it("disables the input and the copy button", () => {
+    render(CopyInput, { props: { disabled: true } });
+
+    expect(screen.getByLabelText("API token")).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Copy to clipboard" }),
+    ).toBeDisabled();
+  });
+
   it("does not reveal a disabled value on hover", async () => {
     render(CopyInput, {
       props: { type: "password", revealMode: "hover-focus", disabled: true },
@@ -193,17 +202,21 @@ describe("CopyInput", () => {
     expect(unlabeled).not.toHaveAttribute("aria-describedby");
   });
 
-  it("dispatches mouseenter:copy-button from the copy button", () => {
-    const onMouseEnterCopyButton = vi.fn();
-    render(CopyInput, { props: { onMouseEnterCopyButton } });
+  it.each([
+    ["mouseenter", "onMouseEnterCopyButton", fireEvent.mouseEnter],
+    ["mouseleave", "onMouseLeaveCopyButton", fireEvent.mouseLeave],
+  ] as const)(
+    "dispatches %s:copy-button from the copy button",
+    (_, prop, fire) => {
+      const callback = vi.fn();
+      render(CopyInput, { props: { [prop]: callback } });
 
-    fireEvent.mouseEnter(
-      screen.getByRole("button", { name: "Copy to clipboard" }),
-    );
+      fire(screen.getByRole("button", { name: "Copy to clipboard" }));
 
-    expect(onMouseEnterCopyButton).toHaveBeenCalledTimes(1);
-    expect(onMouseEnterCopyButton.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
-  });
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(callback.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
+    },
+  );
 
   describe("fluid variant", () => {
     it("renders the divider", () => {

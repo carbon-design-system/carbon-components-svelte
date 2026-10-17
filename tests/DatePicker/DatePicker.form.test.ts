@@ -6,6 +6,7 @@ import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.test.svelte";
+import { getFlatpickrInstance } from "./flatpickr-instance";
 import { visibleInput } from "./helpers";
 
 const getValueFrom = () => getBoundText("valueFrom");
@@ -63,6 +64,24 @@ describe("DatePicker form reset", () => {
       expect(getValueTo()).toBe("");
       expect(new FormData(getForm()).get("tripStart")).toBe("");
       expect(new FormData(getForm()).get("tripEnd")).toBe("");
+    });
+
+    it("clears the calendar selection", async () => {
+      render(DatePickerForm, {
+        props: {
+          datePickerType: "range",
+          valueFrom: "2024-03-15",
+          valueTo: "2024-03-20",
+        },
+      });
+      const start = screen.getByLabelText("Start date");
+      await vi.waitFor(() =>
+        expect(getFlatpickrInstance(start).selectedDates).toHaveLength(2),
+      );
+
+      await resetForm();
+
+      expect(getFlatpickrInstance(start).selectedDates).toEqual([]);
     });
 
     it("clears both sides even when only one was edited", async () => {

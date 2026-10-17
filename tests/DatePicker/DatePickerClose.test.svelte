@@ -8,6 +8,8 @@
   export let valueFrom = "";
   export let valueTo = "";
   export let portalMenu: boolean | undefined = undefined;
+  // Renders a focus target outside the picker.
+  export let outsideButton = false;
 </script>
 
 <DatePicker
@@ -25,3 +27,6 @@
     <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
   {/if}
 </DatePicker>
+{#if outsideButton}
+  <button type="button">Outside</button>
+{/if}

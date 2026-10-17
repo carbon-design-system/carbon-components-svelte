@@ -1,4 +1,4 @@
-import { render } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { positionFlatpickrCalendarFixed } from "../../src/DatePicker/date-picker-top-layer.js";
 import { user } from "../utils/user";
 import DatePickerHost from "./DatePickerHost.test.svelte";
@@ -38,6 +38,27 @@ describe("DatePicker inside a top-layer dialog", () => {
     window.dispatchEvent(new Event("scroll"));
     window.dispatchEvent(new Event("scroll"));
     expect(frames).toHaveLength(1);
+  });
+});
+
+describe("DatePicker in a dialog", () => {
+  it("appends the calendar into the dialog", async () => {
+    render(DatePickerHost);
+
+    const calendar = await openCalendar();
+
+    expect(calendar.parentElement).toBe(document.querySelector("dialog"));
+  });
+
+  it("stays open when the dialog is clicked elsewhere", async () => {
+    render(DatePickerHost, { props: { dialogSibling: true } });
+
+    const calendar = await openCalendar();
+    // `click` only: flatpickr closes on `mousedown` by itself, and the
+    // picker's own click handler is what spares the rest of the dialog.
+    await fireEvent.click(screen.getByText("Dialog text"));
+
+    expect(calendar).toHaveClass("open");
   });
 });
 
@@ -158,5 +179,40 @@ describe("positionFlatpickrCalendarFixed", () => {
     expect(calendarContainer.classList.contains("rightMost")).toBe(false);
     expect(calendarContainer.style.left).toBe("100px");
     expect(calendarContainer.style.right).toBe("auto");
+  });
+
+  it("flips above the input when there is no room below", () => {
+    window.innerHeight = 500;
+    stubClientWidth(1414);
+
+    const positionElement = {
+      getBoundingClientRect: () => ({
+        top: 450,
+        bottom: 482,
+        left: 100,
+        right: 200,
+      }),
+      offsetHeight: 32,
+    } as unknown as HTMLElement;
+
+    const calendarContainer = document.createElement("div");
+    const content = document.createElement("div");
+    Object.defineProperty(content, "offsetHeight", {
+      configurable: true,
+      value: 300,
+    });
+    calendarContainer.appendChild(content);
+
+    const instance = {
+      calendarContainer,
+      _positionElement: positionElement,
+      _input: positionElement,
+    } as unknown as import("flatpickr/dist/types/instance").Instance;
+
+    positionFlatpickrCalendarFixed(instance, positionElement);
+
+    expect(calendarContainer.classList.contains("arrowBottom")).toBe(true);
+    // input top (450) - calendar height (300) - 2px gap
+    expect(calendarContainer.style.top).toBe("148px");
   });
 });

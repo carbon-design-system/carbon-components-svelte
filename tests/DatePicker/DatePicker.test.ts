@@ -235,6 +235,16 @@ describe("DatePicker", () => {
       expect(calendar).not.toHaveClass("open");
     });
 
+    it("closes an open calendar when it becomes readonly", async () => {
+      const { rerender } = render(DatePicker, { datePickerType: "single" });
+      const calendar = await openCalendar();
+      expect(calendar).toHaveClass("open");
+
+      await rerender({ readonly: true });
+
+      await vi.waitFor(() => expect(calendar).not.toHaveClass("open"));
+    });
+
     it("does not open the calendar on ArrowDown when readonly", async () => {
       render(DatePicker, { datePickerType: "single", readonly: true });
       const input = screen.getByLabelText("Date");
@@ -1004,6 +1014,61 @@ describe("DatePicker", () => {
   });
 
   describe("initialMonth", () => {
+    it("clamps into minDate when it falls outside", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        initialMonth: "01/01/2020",
+        minDate: new Date(2021, 5, 10),
+      });
+
+      const calendar = await openCalendar();
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("June");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2021);
+    });
+
+    it("applies again when the calendar reopens after the selection is cleared", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/05/2024",
+        initialMonth: "04/01/2027",
+        clearable: true,
+      });
+
+      const calendar = await openCalendar();
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+
+      await user.click(screen.getByRole("button", { name: "Clear date" }));
+      await user.keyboard("{Escape}");
+      await user.click(screen.getByLabelText("Date"));
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+    });
+
+    it.each([
+      ["month", "F Y", "April 2027", ".cur-year", "2020"],
+      ["year", "Y", "2027", ".flatpickr-yearSelect-range", "2019 - 2030"],
+    ] as const)(
+      "is ignored in %s mode",
+      async (datePickerType, dateFormat, initialMonth, selector, expected) => {
+        render(DatePicker, {
+          datePickerType,
+          dateFormat,
+          initialMonth,
+          flatpickrProps: { static: true, now: new Date(2020, 0, 10) },
+        });
+
+        const calendar = await openCalendar();
+
+        const shown = calendar.querySelector(selector);
+        assert(shown);
+        expect(
+          shown instanceof HTMLInputElement ? shown.value : shown.textContent,
+        ).toBe(expected);
+      },
+    );
+
     it("shows the initial month when there is no selection", async () => {
       render(DatePicker, {
         datePickerType: "single",
@@ -1729,6 +1794,74 @@ describe("DatePicker", () => {
       expect(getDayByNumber(calendar, 9)).not.toHaveClass("flatpickr-disabled");
       expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
     });
+
+    it("applies enabledDates set after mount and lifts the restriction when emptied", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+      });
+
+      const calendar = await openCalendar();
+      expect(getDayByNumber(calendar, 16)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+
+      await rerender({ enabledDates: ["03/15/2024"] });
+      await tick();
+
+      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+      expect(getDayByNumber(calendar, 16)).toHaveClass("flatpickr-disabled");
+
+      // Lifting the rule goes around flatpickr's `set("enable", undefined)`,
+      // which throws.
+      await rerender({ enabledDates: [] });
+      await tick();
+
+      expect(getDayByNumber(calendar, 16)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+    });
+
+    it("wins over flatpickrProps.enable; flatpickrProps.enable still applies once the prop is empty", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+        enabledDates: ["03/15/2024"],
+        flatpickrProps: { static: true, enable: ["03/20/2024"] },
+      });
+
+      const calendar = await openCalendar();
+
+      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+      expect(getDayByNumber(calendar, 20)).toHaveClass("flatpickr-disabled");
+
+      // A changed flatpickrProps.enable must not override enabledDates.
+      await rerender({
+        enabledDates: ["03/15/2024"],
+        flatpickrProps: { static: true, enable: ["03/21/2024"] },
+      });
+      await tick();
+
+      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+      expect(getDayByNumber(calendar, 21)).toHaveClass("flatpickr-disabled");
+
+      await rerender({
+        enabledDates: [],
+        flatpickrProps: { static: true, enable: ["03/21/2024"] },
+      });
+      await tick();
+
+      expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 21)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+    });
   });
 
   describe("disabledDates/enabledDates generics", () => {
@@ -1928,6 +2061,19 @@ describe("DatePicker", () => {
       },
     );
 
+    it("removes a portalled calendar from the document on unmount while open", async () => {
+      const { unmount } = render(DatePicker, {
+        datePickerType: "single",
+        portalMenu: true,
+      });
+      const calendar = await openCalendar();
+      expect(document.body.contains(calendar)).toBe(true);
+
+      unmount();
+
+      expect(document.body.contains(calendar)).toBe(false);
+    });
+
     it("does not reapply static:true on a reactive re-run (#3444)", async () => {
       const { rerender } = render(DatePicker, {
         datePickerType: "single",
@@ -2030,6 +2176,16 @@ describe("DatePicker", () => {
       assert(input instanceof HTMLInputElement);
       expect(input.value.split(", ")).toHaveLength(20);
       expect(input.value).toContain("01/20/2026");
+    });
+
+    it("mirrors typed text in the aria-hidden ghost overlay before blur", async () => {
+      render(DatePicker, { datePickerType: "multiple" });
+
+      await user.type(screen.getByLabelText("Date"), "01/0");
+
+      const overlay = document.querySelector(".bx--date-picker__input-overlay");
+      expect(overlay).toHaveAttribute("aria-hidden", "true");
+      expect(overlay?.querySelector("span")).toHaveTextContent("01/0");
     });
 
     describe("shift-click range selection", () => {
@@ -2529,6 +2685,144 @@ describe("DatePicker", () => {
       ).toHaveTextContent(
         `${yearsAfter[0]} - ${yearsAfter[yearsAfter.length - 1]}`,
       );
+    });
+
+    describe("keyboard", () => {
+      const ArrowLeft = 37;
+      const ArrowUp = 38;
+      const ArrowRight = 39;
+      const ArrowDown = 40;
+      const Enter = 13;
+
+      // flatpickr's key handlers read `keyCode`, which user-event omits.
+      // The first key lands on the calendar, which focuses the selected
+      // year; later keys follow the focused year cell.
+      const press = (calendar: HTMLElement, keyCode: number) =>
+        fireEvent.keyDown(
+          document.activeElement && calendar.contains(document.activeElement)
+            ? document.activeElement
+            : calendar,
+          { keyCode },
+        );
+      const focusedYear = () => document.activeElement?.textContent;
+
+      it("moves focus by one year with left and right and by a row with up and down", async () => {
+        render(DatePicker, {
+          datePickerType: "year",
+          dateFormat: "Y",
+          value: "2024",
+        });
+        const calendar = await openCalendar();
+
+        await press(calendar, ArrowRight);
+        expect(focusedYear()).toBe("2025");
+
+        await press(calendar, ArrowDown);
+        expect(focusedYear()).toBe("2028");
+
+        await press(calendar, ArrowUp);
+        expect(focusedYear()).toBe("2025");
+
+        await press(calendar, ArrowLeft);
+        expect(focusedYear()).toBe("2024");
+      });
+
+      it("wraps focus around the grid", async () => {
+        // 2019 is the 11th cell of the 2009-2020 grid: one row down wraps
+        // to the 2nd cell.
+        render(DatePicker, {
+          datePickerType: "year",
+          dateFormat: "Y",
+          value: "2019",
+        });
+        const calendar = await openCalendar();
+
+        await press(calendar, ArrowDown);
+
+        expect(focusedYear()).toBe("2010");
+      });
+
+      it("selects the focused year with Enter", async () => {
+        const onchange = vi.fn();
+        render(DatePicker, {
+          datePickerType: "year",
+          dateFormat: "Y",
+          value: "2024",
+          onchange,
+        });
+        const calendar = await openCalendar();
+
+        await press(calendar, ArrowDown);
+        await press(calendar, Enter);
+
+        expect(screen.getByLabelText("Date")).toHaveValue("2027");
+        expect(onchange).toHaveBeenCalledTimes(1);
+        expect(
+          calendar.querySelector(".flatpickr-yearSelect-year.selected"),
+        ).toHaveTextContent("2027");
+      });
+    });
+
+    it("highlights the selected year when the calendar opens", async () => {
+      render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+        value: "2024",
+      });
+
+      const calendar = await openCalendar();
+
+      expect(
+        calendar.querySelector(".flatpickr-yearSelect-year.selected"),
+      ).toHaveTextContent("2024");
+    });
+
+    it("pages by decade with the arrows and disables them at the min and max bounds", async () => {
+      render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+        value: "2024",
+        minDate: "2020",
+        maxDate: "2035",
+      });
+      const calendar = await openCalendar();
+      const range = () =>
+        calendar.querySelector(".flatpickr-yearSelect-range")?.textContent;
+      const prev = calendar.querySelector(".flatpickr-prev-month");
+      const next = calendar.querySelector(".flatpickr-next-month");
+      assert(prev && next);
+
+      expect(range()).toBe("2019 - 2030");
+      expect(prev).toHaveClass("flatpickr-disabled");
+      expect(next).not.toHaveClass("flatpickr-disabled");
+
+      await user.click(next);
+
+      expect(range()).toBe("2029 - 2040");
+      expect(prev).not.toHaveClass("flatpickr-disabled");
+      expect(next).toHaveClass("flatpickr-disabled");
+
+      await user.click(prev);
+
+      expect(range()).toBe("2019 - 2030");
+    });
+
+    it("ignores a click on a year outside minDate", async () => {
+      const onchange = vi.fn();
+      render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+        value: "2024",
+        minDate: "2022",
+        onchange,
+      });
+      const calendar = await openCalendar();
+
+      await user.click(within(calendar).getByText("2021"));
+
+      expect(screen.getByLabelText("Date")).toHaveValue("2024");
+      expect(onchange).not.toHaveBeenCalled();
+      expect(calendar).toHaveClass("open");
     });
   });
 

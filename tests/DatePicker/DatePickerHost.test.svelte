@@ -11,6 +11,8 @@
   export let modalOpen = true;
   export let open = true;
   export let closeOnOutsideClick = true;
+  // Renders a non-picker element inside the dialog.
+  export let dialogSibling = false;
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
 
   $: portalProps = inheritPortalMenu ? {} : { portalMenu };
@@ -21,6 +23,9 @@
     <DatePicker datePickerType="single" {...portalProps}>
       <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
     </DatePicker>
+    {#if dialogSibling}
+      <p>Dialog text</p>
+    {/if}
   </dialog>
 {:else if container === "popover"}
   <Popover bind:open {closeOnOutsideClick} on:close={onClose}>
