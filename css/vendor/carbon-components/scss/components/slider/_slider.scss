@@ -391,6 +391,27 @@
     margin-right: 4px;
   }
 
+  // ccs: the two-handle thumbs hang 16px past the track's ends. The column
+  // gap gave them room only between items, so where the row wraps and the
+  // track ends a line, the upper thumb hung past the container. The track
+  // keeps that room in its own margins (16px + 4px) instead, and the inputs
+  // keep their 16px; spacing in a full row is unchanged.
+  .#{$prefix}--slider-container--two-handles:not(.#{$prefix}--slider-container--vertical) {
+    column-gap: 0;
+
+    > .#{$prefix}--slider {
+      margin-inline: to-rem(20px);
+    }
+
+    > .#{$prefix}--slider-text-input-wrapper:first-child {
+      margin-inline-end: $carbon--spacing-05;
+    }
+
+    > .#{$prefix}--slider ~ .#{$prefix}--slider-text-input-wrapper {
+      margin-inline-start: $carbon--spacing-05;
+    }
+  }
+
   .#{$prefix}--slider-text-input-wrapper--hidden {
     display: none;
   }
