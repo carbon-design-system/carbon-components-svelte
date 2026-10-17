@@ -207,6 +207,23 @@ describe("ComboBox", () => {
       expect(spacer?.style.height).toBe("16000px");
     });
 
+    it.each([
+      [{ fluid: true }, "32000px"],
+      [{ fluid: true, condensed: true }, "20000px"],
+      [{ fluid: true, portalMenu: true }, "20000px"],
+    ])("should size rows for %o as %s total", async (props, height) => {
+      render(ComboBox, {
+        props: { items: createLargeItemList(500), virtualize: true, ...props },
+      });
+
+      await user.click(getInput());
+
+      const spacer = screen
+        .getByRole("listbox")
+        .querySelector<HTMLElement>(":scope > div");
+      expect(spacer?.style.height).toBe(height);
+    });
+
     it("should pin the window when virtualize sets optimizeFastScroll", async () => {
       render(ComboBox, {
         props: {
