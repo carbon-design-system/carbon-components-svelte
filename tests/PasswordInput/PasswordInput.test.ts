@@ -352,16 +352,17 @@ describe("PasswordInput", () => {
     });
 
     it("should handle focus and blur events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(PasswordInput, { labelText: "Password" });
+      const onFocus = vi.fn();
+      const onBlur = vi.fn();
+      render(PasswordInput, { labelText: "Password", onFocus, onBlur });
 
-      expect(consoleLog).not.toHaveBeenCalled();
       const input = screen.getByLabelText("Password");
       await user.click(input);
-      expect(consoleLog).toHaveBeenCalledWith("focus");
+      expect(onFocus).toHaveBeenCalledOnce();
+      expect(onBlur).not.toHaveBeenCalled();
 
       await user.tab();
-      expect(consoleLog).toHaveBeenCalledWith("blur");
+      expect(onBlur).toHaveBeenCalledOnce();
     });
   });
 

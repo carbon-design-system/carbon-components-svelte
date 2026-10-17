@@ -29,6 +29,8 @@
   export let ref: ComponentProps<PasswordInput>["ref"] = null;
   export let portalTooltip: ComponentProps<PasswordInput>["portalTooltip"] =
     undefined;
+  export let onFocus: () => void = () => {};
+  export let onBlur: () => void = () => {};
 </script>
 
 <PasswordInput
@@ -64,12 +66,8 @@
   on:change
   on:keydown
   on:keyup
-  on:focus={() => {
-    console.log("focus");
-  }}
-  on:blur={() => {
-    console.log("blur");
-  }}
+  on:focus={onFocus}
+  on:blur={onBlur}
   on:paste
 />
 
