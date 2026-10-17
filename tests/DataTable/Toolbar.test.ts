@@ -249,6 +249,18 @@ describe("DataTable Toolbar", () => {
       expect(batchActions).toHaveClass("bx--batch-actions--active");
     });
 
+    it("should render the selected count with a custom formatTotalSelected", () => {
+      render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1, 2, 3],
+          formatTotalSelected: (count: number) => `${count} chosen`,
+        },
+      });
+
+      expect(screen.getByText("3 chosen")).toBeInTheDocument();
+    });
+
     it("should render the cancel slot in place of the default text", () => {
       render(Toolbar, {
         props: {

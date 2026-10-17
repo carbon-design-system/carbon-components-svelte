@@ -81,6 +81,19 @@ describe("ToolbarSearch clear()", () => {
   });
 });
 
+describe("ToolbarSearch focus", () => {
+  it("expands an empty collapsed search on focus", async () => {
+    const { container } = render(ToolbarSearchHost);
+
+    const wrapper = container.querySelector(".bx--search");
+    expect(wrapper).not.toHaveClass("bx--toolbar-search-container-active");
+
+    await user.click(screen.getByRole("searchbox"));
+
+    expect(wrapper).toHaveClass("bx--toolbar-search-container-active");
+  });
+});
+
 describe("ToolbarSearch numeric value", () => {
   it("does not crash when value is a number and expands when non-zero", () => {
     const { container } = render(ToolbarSearchHost, {

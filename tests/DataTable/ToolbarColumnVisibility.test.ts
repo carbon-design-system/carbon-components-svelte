@@ -155,6 +155,24 @@ describe("ToolbarColumnVisibility", () => {
     ).toBeInTheDocument();
   });
 
+  it("restores a hidden column when its item is checked again", async () => {
+    render(ToolbarColumnVisibilityTest);
+
+    await user.click(screen.getByRole("button", { name: "Column visibility" }));
+    const item = screen.getByRole("menuitemcheckbox", { name: "Name" });
+    expect(item).toHaveAttribute("aria-checked", "true");
+
+    await user.click(item);
+    expect(item).toHaveAttribute("aria-checked", "false");
+    expect(screen.queryByRole("columnheader", { name: "Name" })).toBeNull();
+
+    await user.click(item);
+    expect(item).toHaveAttribute("aria-checked", "true");
+    expect(
+      screen.getByRole("columnheader", { name: "Name" }),
+    ).toBeInTheDocument();
+  });
+
   it("limits the menu to toggleableKeys, omitting the rest", async () => {
     render(ToolbarColumnVisibilityTest, {
       props: { toggleableKeys: ["protocol", "port"] },
