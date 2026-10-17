@@ -47,10 +47,12 @@ describe("any-hover media query grouping", () => {
     // (_inline-edit.scss).
     // Raised again from 72 to 73 for the toast action button's one hover
     // block (components/notification/_toast-notification.scss).
+    // Raised again from 73 to 74 for fluid Select's one hover block, which
+    // hides the status divider under a hovered field (_fluid-select.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(73);
+    expect(blocks.length).toBeLessThanOrEqual(74);
   }, 30_000);
 });

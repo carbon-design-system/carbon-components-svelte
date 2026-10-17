@@ -67,6 +67,22 @@
     @include fluid-divider-rule;
   }
 
+  // The hover tint stops at the field's edge, so the divider just under it
+  // read as a border 1px below the field. Hide it while the field is
+  // hovered, as fluid list boxes do.
+  @media (any-hover: hover) {
+    .#{$prefix}--select--fluid
+      .#{$prefix}--select--invalid:not(.#{$prefix}--select--readonly)
+      .#{$prefix}--select-input:hover:not(:disabled)
+      ~ .#{$prefix}--select__divider,
+    .#{$prefix}--select--fluid
+      .#{$prefix}--select--warning:not(.#{$prefix}--select--readonly)
+      .#{$prefix}--select-input:hover:not(:disabled)
+      ~ .#{$prefix}--select__divider {
+      border-color: transparent;
+    }
+  }
+
   .#{$prefix}--select--fluid
     .#{$prefix}--select-input__wrapper[data-invalid]
     .#{$prefix}--select-input,
