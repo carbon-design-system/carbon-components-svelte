@@ -764,7 +764,7 @@ describe("PinCodeInput", () => {
       expect(getFieldsWrapper(container)).not.toHaveAttribute("data-warn");
     });
 
-    it("hides helper text when invalid or warning", () => {
+    it("hides helper text when invalid or warning", async () => {
       const { rerender } = render(PinCodeInput, {
         props: {
           helperText: "Enter the code sent to your device",
@@ -777,7 +777,7 @@ describe("PinCodeInput", () => {
         screen.queryByText("Enter the code sent to your device"),
       ).not.toBeInTheDocument();
 
-      rerender({
+      await rerender({
         helperText: "Enter the code sent to your device",
         invalid: false,
         warn: true,
