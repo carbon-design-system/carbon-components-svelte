@@ -795,7 +795,9 @@ describe("TimePicker", () => {
     expect(skeleton.querySelector(".bx--text-input")).toHaveClass(
       "bx--text-input--xs",
     );
-    for (const select of skeleton.querySelectorAll(".bx--select")) {
+    const selects = skeleton.querySelectorAll(".bx--select");
+    expect(selects).toHaveLength(2);
+    for (const select of selects) {
       expect(select).toHaveClass("bx--select--xs");
     }
   });
