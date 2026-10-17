@@ -62,7 +62,6 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -205,7 +204,17 @@
       on:blur
     >
       <span>{label}</span>
-      <ChevronDown />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        fill="currentColor"
+        preserveAspectRatio="xMidYMid meet"
+        width="16"
+        height="16"
+        aria-hidden="true"
+      >
+        <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+      </svg>
     </svelte:element>
     <div class:bx--tile-content={true}>
       <span id="{id}-content" class:bx--tile-content__below-the-fold={true}>

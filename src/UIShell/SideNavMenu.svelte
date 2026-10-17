@@ -39,7 +39,6 @@
 
   import { getContext, onMount, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
   const parentMenu = getContext("carbon:SideNavMenu");
@@ -116,7 +115,17 @@
       class:bx--side-nav__icon--small={true}
       class:bx--side-nav__submenu-chevron={true}
     >
-      <ChevronDown />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        fill="currentColor"
+        preserveAspectRatio="xMidYMid meet"
+        width="16"
+        height="16"
+        aria-hidden="true"
+      >
+        <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+      </svg>
     </span>
   </button>
   <ul

@@ -62,7 +62,6 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -171,7 +170,29 @@
   on:mouseleave
 >
   <span aria-hidden="true" class:bx--tile__checkmark={true}>
-    <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      fill="currentColor"
+      preserveAspectRatio="xMidYMid meet"
+      width="16"
+      height="16"
+      aria-hidden={iconDescription || iconDescription ? undefined : true}
+      role={iconDescription || iconDescription ? "img" : undefined}
+      aria-label={iconDescription}
+    >
+      {#if iconDescription}
+        <title>{iconDescription}</title>
+      {/if}
+      <path
+        d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z"
+      ></path>
+      <path
+        fill="none"
+        d="M14 21.591L9 16.591 10.591 15 14 18.409 21.41 11 23.005 12.585 14 21.591z"
+        data-icon-path="inner-path"
+      ></path>
+    </svg>
   </span>
   <span class:bx--tile-content={true}> <slot /> </span>
 </label>

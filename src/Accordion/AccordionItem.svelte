@@ -57,7 +57,6 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
-  import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -159,7 +158,18 @@
     on:blur
     on:keydown
   >
-    <ChevronRight class="bx--accordion__arrow" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      fill="currentColor"
+      preserveAspectRatio="xMidYMid meet"
+      width="16"
+      height="16"
+      aria-hidden="true"
+      class="bx--accordion__arrow"
+    >
+      <path d="M22 16L12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"></path>
+    </svg>
     <div class:bx--accordion__title={true}>
       <slot name="title">{title ?? ""}</slot>
     </div>

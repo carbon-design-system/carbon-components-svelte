@@ -47,7 +47,6 @@
     tick,
   } from "svelte";
   import { get, readable, writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocus } from "../utils/focus.js";
@@ -305,7 +304,18 @@
         <svelte:component this={icon} size={16} />
       </slot>
     {/if}
-    <ChevronDown class="bx--header__menu-arrow" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      fill="currentColor"
+      preserveAspectRatio="xMidYMid meet"
+      width="16"
+      height="16"
+      aria-hidden="true"
+      class="bx--header__menu-arrow"
+    >
+      <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+    </svg>
   </a>
   <ul
     bind:this={menuRef}
