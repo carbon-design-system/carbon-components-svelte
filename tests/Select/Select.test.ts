@@ -16,12 +16,12 @@ describe("Select", () => {
   // Items register in one batched flush on mount. A dropped or reordered
   // registration shows up as a late item coerced to a string.
   it("keeps a late item's numeric value after many items register at once", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectManyItems, { count: 40 });
+    const onUpdate = vi.fn();
+    render(SelectManyItems, { count: 40, onUpdate });
 
     await user.selectOptions(screen.getByLabelText("Select label"), "39");
 
-    expect(consoleLog).toHaveBeenCalledWith("update", 39);
+    expect(onUpdate).toHaveBeenCalledWith(39);
   });
 
   it("renders with default props", () => {
@@ -49,35 +49,37 @@ describe("Select", () => {
   });
 
   it("emits events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Select);
+    const onChange = vi.fn();
+    const onInput = vi.fn();
+    const onUpdate = vi.fn();
+    render(Select, { onChange, onInput, onUpdate });
 
     const selectElement = screen.getByLabelText("Select label");
     await user.selectOptions(selectElement, "option-2");
 
-    expect(consoleLog).toHaveBeenCalledWith("change");
-    expect(consoleLog).toHaveBeenCalledWith("input");
-    expect(consoleLog).toHaveBeenCalledWith("update", "option-2");
-    expect(consoleLog).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenCalledOnce();
+    expect(onInput).toHaveBeenCalledOnce();
+    expect(onUpdate).toHaveBeenCalledOnce();
+    expect(onUpdate).toHaveBeenCalledWith("option-2");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
   it("does not dispatch update event on initial render", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Select);
+    const onUpdate = vi.fn();
+    render(Select, { onUpdate });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
   it("does not dispatch update event when toggled into view", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectToggle, { open: false });
+    const onUpdate = vi.fn();
+    render(SelectToggle, { open: false, onUpdate });
 
     await user.click(screen.getByRole("button", { name: "toggle" }));
 
     expect(screen.getByLabelText("Toggled select")).toBeInTheDocument();
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("renders default size", () => {
