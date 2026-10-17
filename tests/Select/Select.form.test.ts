@@ -23,6 +23,26 @@ describe("Select form reset", () => {
     expect(onUpdate).not.toHaveBeenCalled();
   });
 
+  it("binds the first item's value on mount without firing update", async () => {
+    const onUpdate = vi.fn();
+    render(SelectForm, { props: { onUpdate } });
+    await tick();
+
+    expect(getBoundText()).toBe("s");
+    expect(onUpdate).not.toHaveBeenCalled();
+  });
+
+  it("does not fire update when the parent sets selected", async () => {
+    const onUpdate = vi.fn();
+    const { rerender } = render(SelectForm, { props: { onUpdate } });
+
+    await rerender({ selected: "l" });
+    await tick();
+
+    expect(getBoundText()).toBe("l");
+    expect(onUpdate).not.toHaveBeenCalled();
+  });
+
   it("keeps a value set by the parent after mount", async () => {
     const { rerender } = render(SelectForm);
     const select = screen.getByRole("combobox", { name: "Size" });

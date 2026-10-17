@@ -12,6 +12,7 @@
   export let warnText = "";
   export let helperText = "";
   export let hideLabel = false;
+  export let noLabel = false;
   export let labelText = "Select label";
   export let size: ComponentProps<Select>["size"] = undefined;
   export let inline = false;
@@ -34,6 +35,7 @@
   {warnText}
   {helperText}
   {hideLabel}
+  {noLabel}
   {labelText}
   {size}
   {inline}
