@@ -25,6 +25,13 @@
   let filteredRowIds: ReadonlyArray<Row["id"]> = [];
   let searchValue = "";
 
+  // `true` selects the default filter. The union annotation is what lets
+  // ToolbarSearch infer its `Row` generic from `shouldFilterRows`; a bare
+  // boolean carries no row type, so `Row` would fall back to `DataTableRow`.
+  const filterRowsDefault = true as
+    | boolean
+    | ((row: Row, value: string | number) => boolean);
+
   const numericRows = [
     { id: 1, name: "Item 1", category: "Electronics" },
     { id: 2, name: "Item 2", category: "Furniture" },
@@ -41,6 +48,10 @@
 
   let numericFilteredRowIds: ReadonlyArray<NumericRow["id"]> = [];
   let numericSearchValue = "";
+
+  const numericFilterRowsDefault = true as
+    | boolean
+    | ((row: NumericRow, value: string | number) => boolean);
 
   interface ProductRow extends DataTableRow<string> {
     name: string;
@@ -79,7 +90,7 @@
       <!-- filteredRowIds should be typed as ReadonlyArray<Row["id"]>, i.e. ReadonlyArray<"row-1" | "row-2" | "row-3"> -->
       <ToolbarSearch
         bind:value={searchValue}
-        shouldFilterRows
+        shouldFilterRows={filterRowsDefault}
         bind:filteredRowIds
       />
     </ToolbarContent>
@@ -94,7 +105,7 @@
       <!-- numericFilteredRowIds should be typed as ReadonlyArray<NumericRow["id"]>, i.e. ReadonlyArray<1 | 2 | 3> -->
       <ToolbarSearch
         bind:value={numericSearchValue}
-        shouldFilterRows
+        shouldFilterRows={numericFilterRowsDefault}
         bind:filteredRowIds={numericFilteredRowIds}
       />
     </ToolbarContent>

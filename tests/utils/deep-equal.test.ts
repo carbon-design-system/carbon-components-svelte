@@ -35,8 +35,24 @@ describe("deepEqual", () => {
     ],
     [{ a: 1 }, { a: 1, b: 2 }],
     [{ a: 1 }, { b: 1 }],
+    [{ a: 1 }, { a: 2 }],
+    [{ a: { b: 1 } }, { a: { b: 2 } }],
+    [
+      [1, 2],
+      [1, 3],
+    ],
+    [/a/, /b/],
   ])("treats %j and %j as different", (a, b) => {
     expect(deepEqual(a, b)).toBe(false);
+  });
+
+  it("compares Symbol keys and their values", () => {
+    const sym = Symbol("test");
+    const other = Symbol("other");
+    expect(deepEqual({ [sym]: 1 }, { [sym]: 1 })).toBe(true);
+    expect(deepEqual({ [sym]: 1 }, { [sym]: 2 })).toBe(false);
+    expect(deepEqual({ [sym]: 1 }, { [other]: 1 })).toBe(false);
+    expect(deepEqual({ [sym]: 1 }, {})).toBe(false);
   });
 
   it("compares functions by identity", () => {
