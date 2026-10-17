@@ -322,4 +322,14 @@ describe("FileUploaderItem", () => {
     });
     vi.restoreAllMocks();
   });
+
+  it("removes the bottom margin with noMargin", () => {
+    const { container } = render(FileUploaderItem, {
+      props: { name: "test.txt", noMargin: true },
+    });
+
+    expect(container.querySelector(".bx--file__selected-file")).toHaveClass(
+      "bx--file__selected-file--no-margin",
+    );
+  });
 });

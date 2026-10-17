@@ -501,6 +501,16 @@ Customize file uploader item size with `size`. The default is `"default"`.
 <FileUploaderItem size="field" name="Q3-financial-report.pdf" status="uploading" />
 <FileUploaderItem size="small" name="Q3-financial-report.pdf" status="uploading" />
 
+### No margin
+
+Set `noMargin` to `true` to remove the bottom margin, for items in a flex
+or grid layout that sets its own gap.
+
+<div style="display: grid; gap: var(--cds-spacing-03)">
+  <FileUploaderItem noMargin name="invoice.pdf" status="complete" />
+  <FileUploaderItem noMargin name="receipt.png" status="complete" />
+</div>
+
 ## Drop container
 
 Use the file uploader drop container for drag-and-drop file uploads. It supports
