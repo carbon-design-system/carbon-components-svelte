@@ -8,7 +8,8 @@
   export let testComponent:
     | "Toolbar"
     | "ToolbarContent"
-    | "ToolbarBatchActions" = "Toolbar";
+    | "ToolbarBatchActions"
+    | "ToolbarBatchActionsCancelSlot" = "Toolbar";
   export let size: ComponentProps<Toolbar>["size"] = "default";
   export let ariaLabel: ComponentProps<Toolbar>["ariaLabel"] = undefined;
   export let sticky: ComponentProps<Toolbar>["sticky"] = undefined;
@@ -51,6 +52,12 @@
         {slotContent}
       {/if}
       <slot />
+    </ToolbarBatchActions>
+  </Toolbar>
+{:else if testComponent === "ToolbarBatchActionsCancelSlot"}
+  <Toolbar>
+    <ToolbarBatchActions {selectedIds} {active} {...$$restProps}>
+      <svelte:fragment slot="cancel">{slotContent}</svelte:fragment>
     </ToolbarBatchActions>
   </Toolbar>
 {/if}

@@ -32,15 +32,12 @@
 
 <div data-testid="selected-ids">{JSON.stringify(selectedRowIds)}</div>
 
-<DataTable batchSelection {headers} {rows} {selectedRowIds}>
+<DataTable batchSelection {headers} {rows} bind:selectedRowIds>
   <Toolbar>
     <ToolbarBatchActions
       {active}
-      on:cancel={async () => {
-        if (!controlled) {
-          selectedRowIds = [];
-          await tick();
-        }
+      on:cancel={(e) => {
+        if (controlled) e.preventDefault();
       }}
     >
       <Button
