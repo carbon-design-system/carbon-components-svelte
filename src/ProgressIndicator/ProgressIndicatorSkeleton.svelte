@@ -13,6 +13,7 @@
   class:bx--progress={true}
   class:bx--progress--vertical={vertical}
   class:bx--progress--space-equal={spaceEqually && !vertical}
+  style:--ccs-progress-steps={count}
   class:bx--skeleton={true}
   {...$$restProps}
   on:click

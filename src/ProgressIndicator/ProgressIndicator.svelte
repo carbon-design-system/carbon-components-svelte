@@ -183,6 +183,7 @@
   class:bx--progress={true}
   class:bx--progress--vertical={vertical}
   class:bx--progress--space-equal={spaceEqually && !vertical}
+  style:--ccs-progress-steps={$steps.length || undefined}
   {...$$restProps}
   use:rovingFocus={{
     selector: ".bx--progress-step-button",

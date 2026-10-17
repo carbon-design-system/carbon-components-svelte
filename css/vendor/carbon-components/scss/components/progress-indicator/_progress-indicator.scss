@@ -20,7 +20,22 @@
     @include reset;
 
     display: flex;
+    // ccs: steps that don't fit wrap rather than spill out, and the list
+    // is a named container, so a narrow one stacks its steps (below). As a
+    // size container it no longer takes its width from its steps, so it
+    // declares their width (`ProgressIndicator` sets the count); without
+    // that, a flex row or inline-block would collapse it.
+    flex-wrap: wrap;
+    container: #{$prefix}--progress / inline-size;
+    contain-intrinsic-inline-size: calc(
+      var(--ccs-progress-steps, 4) * #{to-rem(128px)}
+    );
     list-style: none;
+  }
+
+  // A vertical indicator already stacks; it sizes to its steps as before.
+  .#{$prefix}--progress.#{$prefix}--progress--vertical {
+    container-type: normal;
   }
 
   .#{$prefix}--progress-step {
@@ -252,6 +267,51 @@
     left: 0;
     width: 1px;
     height: 100%;
+  }
+
+  // ccs: narrower than four steps (32rem), a horizontal indicator stacks
+  // its steps as the vertical one does, whatever the window's width.
+  @container #{$prefix}--progress (width < 32rem) {
+    .#{$prefix}--progress-step {
+      flex-basis: 100%;
+    }
+
+    .#{$prefix}--progress-step,
+    .#{$prefix}--progress-step-button {
+      width: initial;
+      min-width: initial;
+      min-height: 3.625rem;
+      align-content: flex-start;
+    }
+
+    .#{$prefix}--progress-step svg,
+    .#{$prefix}--progress-step-button svg {
+      display: inline-block;
+      margin: to-rem(1px) $carbon--spacing-03 0;
+    }
+
+    .#{$prefix}--progress-label {
+      display: inline-block;
+      width: initial;
+      max-width: to-rem(160px);
+      margin: 0;
+      vertical-align: top;
+      white-space: initial;
+    }
+
+    .#{$prefix}--progress-optional {
+      position: static;
+      width: 100%;
+      margin: auto 0;
+    }
+
+    .#{$prefix}--progress-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+    }
   }
 }
 
