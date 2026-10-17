@@ -20,9 +20,11 @@
    */
 
   /**
-   * Specify whether each term/detail pair stacks (term above detail)
-   * or sits side by side (term beside detail).
-   * @type {"vertical" | "horizontal"}
+   * Specify whether each term/detail pair stacks (term above detail),
+   * sits side by side (term beside detail), or is a summary line with the
+   * detail right-aligned in tabular figures, as in an order total. Mark a
+   * summary's last item `total` to rule it off.
+   * @type {"vertical" | "horizontal" | "summary"}
    */
   export let layout = "vertical";
 
@@ -42,6 +44,7 @@
 <dl
   class:bx--description-list={true}
   class:bx--description-list--horizontal={layout === "horizontal"}
+  class:bx--description-list--summary={layout === "summary"}
   class:bx--description-list--columns={columns > 1}
   class:bx--description-list-gap-1={gap === 1}
   class:bx--description-list-gap-2={gap === 2}
