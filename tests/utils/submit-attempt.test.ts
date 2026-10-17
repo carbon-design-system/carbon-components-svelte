@@ -2,6 +2,7 @@ import {
   isSubmitAttempt,
   submitAttempts,
 } from "../../src/utils/submit-attempt";
+import { flushMacrotask } from "./flush-macrotask";
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -25,7 +26,7 @@ describe("submitAttempts", () => {
 
     form.querySelector("button")?.click();
     expect(during).toBe(true);
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(isSubmitAttempt(form)).toBe(false);
     action.destroy();
   });
