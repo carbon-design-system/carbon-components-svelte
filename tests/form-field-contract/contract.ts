@@ -1,7 +1,7 @@
 import type { ComponentType } from "svelte";
 
 /** Fluid behaviors a case can skip, each with the reason. */
-export type FluidBehavior = "hidesHelper" | "messagesInWrapper" | "alertRole";
+export type FluidBehavior = "hidesHelper" | "messagesInWrapper";
 
 export type FieldCase = {
   /** Component name, as exported from the package. */
