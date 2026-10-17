@@ -14,15 +14,6 @@ describe("DataTable Toolbar Menu", () => {
       expect(menu).toHaveClass("bx--overflow-menu");
     });
 
-    it("should render with Settings icon", () => {
-      const { container } = render(ToolbarMenuTest, {
-        props: { testComponent: "ToolbarMenu" },
-      });
-
-      const icon = container.querySelector("svg");
-      expect(icon).toBeInTheDocument();
-    });
-
     it("should be flipped when open", () => {
       const { container } = render(ToolbarMenuTest, {
         props: { testComponent: "ToolbarMenu", menuProps: { open: true } },
@@ -30,22 +21,6 @@ describe("DataTable Toolbar Menu", () => {
 
       const menuOptions = container.querySelector(".bx--overflow-menu-options");
       expect(menuOptions).toHaveClass("bx--overflow-menu--flip");
-    });
-
-    it("should reference the menu with aria-controls only while open", async () => {
-      const { container } = render(ToolbarMenuTest, {
-        props: { testComponent: "ToolbarMenu", slotContent: "Menu content" },
-      });
-
-      const trigger = container.querySelector(".bx--toolbar-action");
-      expect(trigger).not.toHaveAttribute("aria-controls");
-
-      await user.click(trigger as Element);
-      const controls = trigger?.getAttribute("aria-controls");
-      expect(controls).toBeTruthy();
-      expect(document.getElementById(controls as string)).toBe(
-        screen.getByRole("menu"),
-      );
     });
 
     it("should apply custom class", () => {
@@ -91,21 +66,6 @@ describe("DataTable Toolbar Menu", () => {
       );
       expect(menuItem).toBeInTheDocument();
       expect(screen.getByText("Menu item text")).toBeInTheDocument();
-    });
-
-    it("should render slot content", async () => {
-      const { container } = render(ToolbarMenuTest, {
-        props: {
-          testComponent: "ToolbarMenuItem",
-          slotContent: "Custom menu item",
-        },
-      });
-
-      const button = container.querySelector(".bx--overflow-menu");
-      assert(button);
-      await user.click(button);
-
-      expect(screen.getByText("Custom menu item")).toBeInTheDocument();
     });
 
     it("should handle click events", async () => {

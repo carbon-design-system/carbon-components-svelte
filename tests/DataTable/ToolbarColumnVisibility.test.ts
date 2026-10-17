@@ -169,14 +169,7 @@ describe("ToolbarColumnVisibility", () => {
     expect(
       screen.getByRole("menuitemcheckbox", { name: "Port" }),
     ).toBeInTheDocument();
-  });
 
-  it("leaves a non-toggleable column's visibility unaffected by other toggles", async () => {
-    render(ToolbarColumnVisibilityTest, {
-      props: { toggleableKeys: ["protocol", "port"] },
-    });
-
-    await user.click(screen.getByRole("button", { name: "Column visibility" }));
     await user.click(screen.getByRole("menuitemcheckbox", { name: "Port" }));
 
     expect(headersSnapshot()).toBe(

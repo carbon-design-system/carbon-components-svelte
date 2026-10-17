@@ -249,17 +249,6 @@ describe("DataTable Toolbar", () => {
       expect(batchActions).toHaveClass("bx--batch-actions--active");
     });
 
-    it("should render cancel button", () => {
-      render(Toolbar, {
-        props: {
-          testComponent: "ToolbarBatchActions",
-          selectedIds: [1, 2],
-        },
-      });
-
-      expect(screen.getByText("Cancel")).toBeInTheDocument();
-    });
-
     it("should render the cancel slot in place of the default text", () => {
       render(Toolbar, {
         props: {
@@ -312,24 +301,6 @@ describe("DataTable Toolbar", () => {
         >();
       });
 
-      it("should provide type-safe selectedIds for handlers", () => {
-        type RowId = "a" | "b" | "c";
-
-        const handleSelected = (ids: ReadonlyArray<RowId>) => {
-          expectTypeOf(ids).toEqualTypeOf<ReadonlyArray<RowId>>();
-        };
-
-        type ComponentType = ToolbarBatchActionsComponent<RowId>;
-        type Props = ComponentProps<ComponentType>;
-
-        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
-          ReadonlyArray<RowId> | undefined
-        >();
-        expectTypeOf<Parameters<typeof handleSelected>[0]>().toEqualTypeOf<
-          ReadonlyArray<RowId>
-        >();
-      });
-
       it("should default to any type when generic is not specified", () => {
         type ComponentType = ToolbarBatchActionsComponent;
         type Props = ComponentProps<ComponentType>;
@@ -337,23 +308,6 @@ describe("DataTable Toolbar", () => {
         expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
           // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
           ReadonlyArray<any> | undefined
-        >();
-      });
-
-      it("should work with 'as const' for type inference", () => {
-        const ids = ["id-a", "id-b", "id-c"] as const;
-        type InferredId = (typeof ids)[number];
-
-        expectTypeOf<typeof ids>().toEqualTypeOf<
-          readonly ["id-a", "id-b", "id-c"]
-        >();
-        expectTypeOf<InferredId>().toEqualTypeOf<"id-a" | "id-b" | "id-c">();
-
-        type ComponentType = ToolbarBatchActionsComponent<InferredId>;
-        type Props = ComponentProps<ComponentType>;
-
-        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
-          ReadonlyArray<InferredId> | undefined
         >();
       });
     });

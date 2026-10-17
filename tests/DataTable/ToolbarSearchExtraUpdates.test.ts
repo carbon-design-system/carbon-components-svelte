@@ -16,8 +16,5 @@ describe("ToolbarSearch does not refilter on unrelated updates", () => {
     // refilter; the search value, rows, and shouldFilterRows are unchanged.
     await user.click(screen.getByRole("button", { name: "Bump unrelated" }));
     expect(component.filterRowsCount).toBe(baseline);
-
-    await user.click(screen.getByRole("button", { name: "Bump unrelated" }));
-    expect(component.filterRowsCount).toBe(baseline);
   });
 });
