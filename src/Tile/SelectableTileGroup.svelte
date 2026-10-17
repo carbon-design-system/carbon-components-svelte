@@ -43,6 +43,13 @@
   /** Set to `true` to visually hide the legend */
   export let hideLegend = false;
 
+  /**
+   * Set the size of every tile in the group: `"sm"` for compact tiles,
+   * such as rows in a list of choices.
+   * @type {"sm" | "md"}
+   */
+  export let size = undefined;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
   import { rangeSlice } from "../utils/range-slice.js";
@@ -169,7 +176,11 @@
   /** True while Shift is held during a mousedown gesture inside the group; suppresses the browser's native Shift+click text-selection highlight spanning multiple tiles. */
   let shiftMouseActive = false;
 
+  const groupSize = writable(size);
+  $: groupSize.set(size);
+
   setContext("carbon:SelectableTileGroup", {
+    groupSize: readonly(groupSize),
     selectedValues,
     groupName: groupNameReadonly,
     groupForm: readonly(groupForm),

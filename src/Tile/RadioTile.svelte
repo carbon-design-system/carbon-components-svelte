@@ -13,6 +13,14 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /**
+   * Set the size: `"sm"` for a compact tile, such as a row in a list of
+   * choices, with less padding, no minimum height, and the checkmark
+   * pulled in. Defaults to the size of a parent tile group.
+   * @type {"sm" | "md"}
+   */
+  export let size = undefined;
+
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
@@ -93,6 +101,8 @@
   const fallbackName = ctx?.fallbackName;
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
   const groupDisabled = ctx?.groupDisabled ?? readable(false);
+  const groupSize = ctx?.groupSize ?? readable(undefined);
+  $: effectiveSize = size ?? $groupSize;
 
   // A disabled TileGroup disables the input natively through its fieldset;
   // mirror that in the tile's styling and tab order. The `disabled`
@@ -225,6 +235,7 @@
   class:bx--tile--selectable={true}
   class:bx--tile--is-selected={checked}
   class:bx--tile--light={light}
+  class:bx--tile--sm={effectiveSize === "sm"}
   class:bx--tile--disabled={effectiveDisabled}
   class:bx--tile--full-height={fullHeight}
   {...labelRestProps}
