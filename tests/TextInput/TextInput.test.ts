@@ -120,6 +120,61 @@ describe("TextInput", () => {
     expect(screen.getByText("9/100")).toBeInTheDocument();
   });
 
+  it("updates the character counter as the user types", async () => {
+    render(TextInput, { props: { maxCount: 10 } });
+    expect(screen.getByText("0/10")).toBeInTheDocument();
+
+    await user.type(screen.getByRole("textbox"), "abc");
+    expect(screen.getByText("3/10")).toBeInTheDocument();
+
+    await user.type(screen.getByRole("textbox"), "{Backspace}");
+    expect(screen.getByText("2/10")).toBeInTheDocument();
+  });
+
+  it("renders and updates the character counter in inline mode", async () => {
+    render(TextInput, { props: { inline: true, maxCount: 10 } });
+    const counter = screen.getByText("0/10");
+    expect(counter).toHaveClass("bx--text-input__label-counter");
+
+    await user.type(screen.getByRole("textbox"), "abcd");
+    expect(counter).toHaveTextContent("4/10");
+  });
+
+  it.each([
+    { hideLabel: true, maxCount: undefined, helperText: "", hidden: true },
+    { hideLabel: true, maxCount: 10, helperText: "", hidden: false },
+    { hideLabel: true, maxCount: undefined, helperText: "Help", hidden: false },
+    { hideLabel: false, maxCount: undefined, helperText: "", hidden: false },
+  ])(
+    "inline column hidden=$hidden for hideLabel=$hideLabel maxCount=$maxCount helperText=$helperText",
+    ({ hideLabel, maxCount, helperText, hidden }) => {
+      const { container } = render(TextInput, {
+        props: { inline: true, hideLabel, maxCount, helperText },
+      });
+
+      const column = container.querySelector(
+        ".bx--text-input__label-helper-wrapper",
+      );
+      expect(column?.classList.contains("bx--visually-hidden")).toBe(hidden);
+    },
+  );
+
+  it("clears invalid attributes and the message when invalid turns false", async () => {
+    const { rerender } = render(TextInput, {
+      props: { invalid: true, invalidText: "Required" },
+    });
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute("aria-errormessage");
+    expect(screen.getByText("Required")).toBeInTheDocument();
+
+    await rerender({ invalid: false });
+
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input).not.toHaveAttribute("aria-errormessage");
+    expect(screen.queryByText("Required")).not.toBeInTheDocument();
+  });
+
   it("should not show the character counter when maxCount is unset", () => {
     render(TextInput, { props: { value: "Test text" } });
 
