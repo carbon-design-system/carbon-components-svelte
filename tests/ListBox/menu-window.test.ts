@@ -2,6 +2,7 @@ import { tick } from "svelte";
 import { createMenuWindow } from "../../src/ListBox/menu-window.js";
 import { VIRTUAL_INDEX_ATTRIBUTE } from "../../src/utils/height-measurer.js";
 import { virtualWindow } from "../../src/utils/virtual-window.js";
+import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 
 type Item = { id: number; text: string };
@@ -63,13 +64,6 @@ function renderOptions(
     const height = heightAt(itemIndex);
     option.getBoundingClientRect = () => rect({ height });
     container.appendChild(option);
-  });
-}
-
-/** The measurer holds a batch until the next frame; this is that frame. */
-function nextFrame() {
-  return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve());
   });
 }
 

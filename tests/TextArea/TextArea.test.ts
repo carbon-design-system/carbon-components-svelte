@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
+import { nextFrame } from "../utils/next-frame";
 import { user } from "../utils/user";
 import TextAreaCounterMode from "./TextArea.counterMode.test.svelte";
 import TextAreaFluidForm from "./TextArea.fluidForm.test.svelte";
@@ -588,7 +589,7 @@ describe("TextArea", () => {
 
       rerender({ grow: true, value: "line 1\nline 2\nline 3" });
       await tick();
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       expect(textarea.style.height).toBe("120px");
     });
@@ -615,13 +616,13 @@ describe("TextArea", () => {
       }
 
       // Skip the frame the mount already scheduled, then ask for a fresh one.
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
       heightsSeenAtRead.length = 0;
       for (const field of fields) {
         fireEvent.input(field, { target: { value: "a" } });
       }
       await tick();
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       // Every field was collapsed before the first read and none was resized
       // until the last, so the reads share one layout.
@@ -649,7 +650,7 @@ describe("TextArea", () => {
 
       await user.type(textarea, "a long value that grows past the cap");
       await tick();
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       expect(textarea.style.height).toBe("40px");
       expect(textarea.style.overflowY).toBe("auto");
@@ -704,7 +705,7 @@ describe("TextArea", () => {
       const textarea = screen.getByRole("textbox");
       assert(textarea instanceof HTMLTextAreaElement);
       expect(observed.has(textarea)).toBe(true);
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       Object.defineProperty(textarea, "scrollHeight", {
         configurable: true,
@@ -717,7 +718,7 @@ describe("TextArea", () => {
         ] as unknown as ResizeObserverEntry[],
         {} as ResizeObserver,
       );
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await nextFrame();
 
       expect(textarea.style.height).toBe("90px");
 

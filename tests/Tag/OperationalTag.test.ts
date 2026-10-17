@@ -1,15 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { nextFrame } from "../utils/next-frame";
 import { user } from "../utils/user";
 import OperationalTag from "./OperationalTag.test.svelte";
 
 const trigger = () => screen.getByRole("button", { name: "3 policies" });
 const popover = (container: HTMLElement) =>
   container.querySelector(".bx--popover") as HTMLElement;
-
-/** Window listeners attach on the frame after opening. */
-const nextFrame = () =>
-  new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
 
 describe("OperationalTag", () => {
   it("toggles its popover from the whole tag", async () => {
