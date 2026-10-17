@@ -13,8 +13,8 @@ describe("ListBox", () => {
     const { container } = render(ListBox);
 
     const listbox = getRoot(container);
-    expect(listbox).toBeInTheDocument();
-    expect(listbox).toHaveClass("bx--list-box");
+    expect(listbox.className).toBe("bx--list-box");
+    expect(listbox).not.toHaveAttribute("data-invalid");
   });
 
   it("should not set a role on the root element", () => {
