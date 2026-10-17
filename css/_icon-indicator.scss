@@ -25,9 +25,15 @@
     color: $text-secondary;
   }
 
+  // The icon keeps its size beside a label long enough to wrap.
   .#{$prefix}--icon-indicator svg {
+    flex: none;
     margin-inline-end: $carbon--spacing-03;
     align-self: center;
+  }
+
+  .#{$prefix}--icon-indicator--hide-label svg {
+    margin-inline-end: 0;
   }
 
   .#{$prefix}--icon-indicator--20 {

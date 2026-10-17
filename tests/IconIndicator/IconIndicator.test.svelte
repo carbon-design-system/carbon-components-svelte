@@ -17,6 +17,8 @@
 
 <IconIndicator kind="failed" label="size 20" size={20} />
 
+<IconIndicator kind="succeeded" label="hidden label" hideLabel />
+
 <IconIndicator
   kind="failed"
   label="custom attrs"
