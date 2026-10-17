@@ -100,6 +100,7 @@ describe("TextInput form reset", () => {
     const input = screen.getByRole("textbox", { name: "User" });
 
     await user.type(input, "e");
+    expect(onInput).toHaveBeenCalled();
     onInput.mockClear();
 
     getForm().reset();

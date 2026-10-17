@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
-import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
 import TextInputFluidSkeleton from "./TextInput.fluidSkeleton.test.svelte";
@@ -628,16 +627,7 @@ describe("TextInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
-    // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
-    // See: https://svelte.dev/docs/svelte/v5-migration-guide
-    // The actual bound value is still null, but DOM text interpolation renders it as "".
-    if (isSvelte5) {
-      const valueDisplay = screen.getByTestId("value").textContent;
-      expect(valueDisplay).toBe("");
-    } else {
-      const valueDisplay = screen.getByTestId("value").textContent;
-      expect(valueDisplay).toBe("null");
-    }
+    expect(screen.getByTestId("value").textContent).toBe("null");
   });
 
   it("should support restProps on input element", () => {
