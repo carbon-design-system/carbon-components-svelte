@@ -925,6 +925,7 @@
           } else {
             return;
           }
+          if (readonly) return;
           selectHighlighted();
         }}
         {disabled}
