@@ -35,6 +35,18 @@
     />
   </div>
 
+  <!-- Six segments plus a status icon, in containers of two widths. -->
+  {#each [200, 400] as width (width)}
+    <div data-testid="pin-code-input-{width}" style="width: {width}px">
+      <PinCodeInput
+        labelText="Six-digit code"
+        count={6}
+        invalid
+        invalidText="Incorrect code"
+      />
+    </div>
+  {/each}
+
   <div data-testid="pin-code-input-disabled">
     <PinCodeInput labelText="Verification code" disabled={true} value="0182" />
   </div>
