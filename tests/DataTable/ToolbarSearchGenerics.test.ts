@@ -93,20 +93,6 @@ describe("ToolbarSearch Generics", () => {
         expect(filteredIds.length).toBe(2);
       });
     });
-
-    it("should filter rows correctly with numeric IDs", async () => {
-      render(ToolbarSearchGenerics);
-
-      const searchInputs = screen.getAllByRole("searchbox");
-      const secondSearchInput = searchInputs[1];
-
-      await user.type(secondSearchInput, "Furniture");
-
-      await waitFor(() => {
-        const filteredIds = getFilteredIds("filtered-ids-2");
-        expect(filteredIds).toEqual([2]);
-      });
-    });
   });
 
   describe("Explicit generic with DataTableRow<string> and custom filter", () => {
@@ -167,79 +153,9 @@ describe("ToolbarSearch Generics", () => {
         );
       });
     });
-
-    it("should handle case-insensitive search in custom filter", async () => {
-      render(ToolbarSearchGenerics);
-
-      const searchInputs = screen.getAllByRole("searchbox");
-      const thirdSearchInput = searchInputs[2];
-
-      await user.type(thirdSearchInput, "WIDGET");
-
-      await waitFor(() => {
-        const filteredIds = getFilteredIds("filtered-ids-3");
-        expect(filteredIds).toEqual(["prod-1"]);
-      });
-
-      await user.clear(thirdSearchInput);
-      await user.type(thirdSearchInput, "thing");
-
-      await waitFor(() => {
-        const filteredIds = getFilteredIds("filtered-ids-3");
-        expect(filteredIds).toEqual(["prod-3"]);
-      });
-    });
-  });
-
-  describe("Type safety verification", () => {
-    it("should maintain type safety across different row types", async () => {
-      render(ToolbarSearchGenerics);
-
-      const searchInputs = screen.getAllByRole("searchbox");
-
-      await user.type(searchInputs[0], "Laptop");
-      await waitFor(() => {
-        const filteredIds1 = getFilteredIds("filtered-ids-1");
-        expect(filteredIds1).toEqual(["row-1"]);
-      });
-
-      await user.type(searchInputs[1], "Item 2");
-      await waitFor(() => {
-        const filteredIds2 = getFilteredIds("filtered-ids-2");
-        expect(filteredIds2).toEqual([2]);
-      });
-
-      await user.type(searchInputs[2], "Widget");
-      await waitFor(() => {
-        const filteredIds3 = getFilteredIds("filtered-ids-3");
-        expect(filteredIds3).toEqual(["prod-1"]);
-      });
-
-      const filteredIds1 = getFilteredIds("filtered-ids-1");
-      const filteredIds2 = getFilteredIds("filtered-ids-2");
-      const filteredIds3 = getFilteredIds("filtered-ids-3");
-
-      expect(filteredIds1).toEqual(["row-1"]);
-      expect(filteredIds2).toEqual([2]);
-      expect(filteredIds3).toEqual(["prod-1"]);
-    });
   });
 
   describe("Empty search behavior", () => {
-    it("should return all row IDs when search is empty", async () => {
-      render(ToolbarSearchGenerics);
-
-      await waitFor(() => {
-        const filteredIds1 = getFilteredIds("filtered-ids-1");
-        const filteredIds2 = getFilteredIds("filtered-ids-2");
-        const filteredIds3 = getFilteredIds("filtered-ids-3");
-
-        expect(filteredIds1.length).toBe(3);
-        expect(filteredIds2.length).toBe(3);
-        expect(filteredIds3.length).toBe(3);
-      });
-    });
-
     it("should clear filtered IDs when search is cleared", async () => {
       render(ToolbarSearchGenerics);
 

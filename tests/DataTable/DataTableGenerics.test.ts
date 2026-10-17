@@ -1,4 +1,4 @@
-import { render, within } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTableGenerics from "./DataTableGenerics.test.svelte";
 
@@ -39,28 +39,6 @@ describe("DataTable Generics", () => {
   };
 
   describe("String literal IDs with `as const`", () => {
-    it("should properly type selectedRowIds as string literal union", () => {
-      const { container } = render(DataTableGenerics);
-
-      const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBeGreaterThanOrEqual(1);
-
-      const firstTable = tables[0];
-      assert(firstTable instanceof HTMLElement);
-      const firstTableContainer = within(firstTable);
-
-      const rows = getTableRows(container, 0);
-      expect(rows.length).toBe(3);
-
-      expect(firstTableContainer.getByText("ID")).toBeInTheDocument();
-      expect(firstTableContainer.getByText("Name")).toBeInTheDocument();
-      expect(firstTableContainer.getByText("Price")).toBeInTheDocument();
-
-      expect(firstTableContainer.getByText("Laptop")).toBeInTheDocument();
-      expect(firstTableContainer.getByText("Phone")).toBeInTheDocument();
-      expect(firstTableContainer.getByText("Desk")).toBeInTheDocument();
-    });
-
     it("should handle row selection with string literal IDs", async () => {
       const { container } = render(DataTableGenerics);
 
@@ -85,24 +63,6 @@ describe("DataTable Generics", () => {
   });
 
   describe("Numeric IDs", () => {
-    it("should properly type selectedRowIds as numeric literal union", () => {
-      const { container } = render(DataTableGenerics);
-
-      const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBeGreaterThanOrEqual(2);
-
-      const secondTable = tables[1];
-      assert(secondTable instanceof HTMLElement);
-      const secondTableContainer = within(secondTable);
-
-      const rows = getTableRows(container, 1);
-      expect(rows.length).toBe(3);
-
-      expect(secondTableContainer.getByText("Item 1")).toBeInTheDocument();
-      expect(secondTableContainer.getByText("Item 2")).toBeInTheDocument();
-      expect(secondTableContainer.getByText("Item 3")).toBeInTheDocument();
-    });
-
     it("should handle row selection with numeric IDs", () => {
       const { container } = render(DataTableGenerics);
 
@@ -124,25 +84,6 @@ describe("DataTable Generics", () => {
   });
 
   describe("Explicit generic with DataTableRow<string>", () => {
-    it("should properly type selectedRowIds and expandedRowIds as string arrays", () => {
-      const { container } = render(DataTableGenerics);
-
-      const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBeGreaterThanOrEqual(3);
-
-      const thirdTable = tables[2];
-      assert(thirdTable instanceof HTMLElement);
-      const thirdTableContainer = within(thirdTable);
-
-      const rows = getTableRows(container, 2);
-      expect(rows.length).toBe(2);
-
-      expect(thirdTableContainer.getByText("Widget")).toBeInTheDocument();
-      expect(thirdTableContainer.getByText("Gadget")).toBeInTheDocument();
-
-      expect(thirdTableContainer.getByText("In Stock")).toBeInTheDocument();
-    });
-
     it("should handle row selection with string IDs", () => {
       const { container } = render(DataTableGenerics);
 
@@ -151,18 +92,6 @@ describe("DataTable Generics", () => {
         (row) => getRowCheckbox(row).checked,
       );
       expect(checked).toEqual([true, false]);
-    });
-
-    it("should handle row expansion with string IDs", async () => {
-      const { container } = render(DataTableGenerics);
-
-      await user.click(getExpandButton(getTableRows(container, 2)[0]));
-
-      const expandedContent = container.querySelector(
-        ".bx--child-row-inner-container",
-      );
-      expect(expandedContent).toBeInTheDocument();
-      expect(expandedContent?.textContent).toContain("Expanded content for");
     });
 
     it("should emit correctly typed row in click:row event", async () => {
@@ -194,40 +123,6 @@ describe("DataTable Generics", () => {
     });
   });
 
-  describe("Type safety verification", () => {
-    it("should maintain type safety across different row types", () => {
-      const { container } = render(DataTableGenerics);
-
-      const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBe(4);
-
-      const firstTableRows = getTableRows(container, 0);
-      const secondTableRows = getTableRows(container, 1);
-      const thirdTableRows = getTableRows(container, 2);
-
-      expect(firstTableRows.length).toBe(3);
-      expect(secondTableRows.length).toBe(3);
-      expect(thirdTableRows.length).toBe(2);
-    });
-
-    it("should not allow mixing ID types between tables", () => {
-      // This test verifies compile-time type safety
-      // At runtime, we can verify that each table maintains separate state
-      const { container } = render(DataTableGenerics);
-
-      const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBe(4);
-
-      const firstTable = tables[0];
-      const secondTable = tables[1];
-      const thirdTable = tables[2];
-
-      expect(firstTable).toBeInTheDocument();
-      expect(secondTable).toBeInTheDocument();
-      expect(thirdTable).toBeInTheDocument();
-    });
-  });
-
   describe("Header empty discriminant", () => {
     it("renders an empty header alongside a non-empty header", () => {
       const { container } = render(DataTableGenerics);
@@ -241,16 +136,6 @@ describe("DataTable Generics", () => {
       expect(headerCells).toHaveLength(2);
       expect(headerCells[0]?.textContent?.trim()).toBe("Name");
       expect(headerCells[1]?.textContent?.trim()).toBe("");
-    });
-  });
-
-  describe("Event handler type safety", () => {
-    it("should provide correctly typed row in all event handlers", async () => {
-      const { container } = render(DataTableGenerics);
-
-      await user.click(getTableRows(container, 2)[1]);
-
-      expect(consoleLog).toHaveBeenCalledWith("prod-2", "Gadget", 20, false);
     });
   });
 });

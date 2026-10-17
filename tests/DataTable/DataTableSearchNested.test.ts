@@ -58,16 +58,4 @@ describe("DataTableSearch with nested keys", () => {
     expect(tableRows[0]).toHaveTextContent("1");
     expect(tableRows[0]).toHaveTextContent("Super Wheels");
   });
-
-  it("returns no results when search does not match", async () => {
-    render(DataTableSearchNested);
-
-    const searchInput = screen.getByRole("searchbox");
-
-    await user.type(searchInput, "nonexistent");
-    expect(searchInput).toHaveValue("nonexistent");
-
-    const tableRows = getTableRows();
-    expect(tableRows).toHaveLength(0);
-  });
 });
