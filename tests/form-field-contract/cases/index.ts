@@ -25,6 +25,7 @@ export const cases: FieldCase[] = [
     name: "TextInput",
     component: TextInput,
     control: () => screen.getByRole("textbox"),
+    reset: { initial: "ada", typed: "x", events: ["input", "change"] },
     state: {},
     fluid: {
       className: "bx--text-input--fluid",
@@ -38,6 +39,7 @@ export const cases: FieldCase[] = [
     name: "PasswordInput",
     component: PasswordInput,
     control: () => screen.getByLabelText("Field", { selector: "input" }),
+    reset: { initial: "s3cret", typed: "x", events: ["input", "change"] },
     state: {},
     fluid: {
       className: "bx--text-input--fluid",
@@ -50,6 +52,7 @@ export const cases: FieldCase[] = [
     name: "TextArea",
     component: TextArea,
     control: () => screen.getByRole("textbox"),
+    reset: { initial: "notes", typed: "x", events: ["input", "change"] },
     state: {},
     fluid: {
       className: "bx--text-area--fluid",
@@ -98,6 +101,7 @@ export const cases: FieldCase[] = [
     name: "Search",
     component: Search,
     control: () => screen.getByRole("searchbox"),
+    reset: { initial: "shoes", typed: "x", events: ["input", "change"] },
     state: {},
     fluid: {
       className: "bx--search--fluid",
@@ -115,6 +119,7 @@ export const cases: FieldCase[] = [
     name: "TimePicker",
     component: TimePicker,
     control: () => screen.getByRole("textbox"),
+    reset: { initial: "9:30", typed: "1", events: ["input", "change"] },
     state: {},
     fluid: {
       className: "bx--time-picker--fluid",
@@ -126,6 +131,18 @@ export const cases: FieldCase[] = [
     name: "PinCodeInput",
     component: PinCodeInput,
     control: () => screen.getAllByRole("textbox"),
+    reset: {
+      initial: "12",
+      typed: "34",
+      events: ["change"],
+      serverDefault: (value) => {
+        const segments = screen.getAllByRole("textbox");
+        assert(segments.every((s) => s instanceof HTMLInputElement));
+        [...value].forEach((char, i) => {
+          (segments[i] as HTMLInputElement).defaultValue = char;
+        });
+      },
+    },
     state: {
       // The fieldset carries the description for all segments.
       described: () => screen.getByRole("group"),
@@ -143,6 +160,7 @@ export const cases: FieldCase[] = [
 ];
 
 const LISTBOX_AUDIT = "covered by its own tests until the listbox family audit";
+const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
 const NOT_AUDITED =
   "covered by its own tests; not audited against the contract yet";
 
@@ -167,6 +185,23 @@ export const exempt: Exemptions = {
     Slider: NOT_AUDITED,
     TagInput: NOT_AUDITED,
     Toggle: NOT_AUDITED,
+  },
+  reset: {
+    ComboBox: LISTBOX_AUDIT,
+    ListBoxRequiredInput: LISTBOX_AUDIT,
+    MultiSelect: LISTBOX_AUDIT,
+    NumberInput: "keeps its value on reset unless allowEmpty is set",
+    Checkbox: NOT_A_TEXT_FIELD,
+    DataTable: NOT_A_TEXT_FIELD,
+    FileUploaderButton: NOT_A_TEXT_FIELD,
+    FileUploaderDropContainer: NOT_A_TEXT_FIELD,
+    RadioButton: NOT_A_TEXT_FIELD,
+    RadioButtonGroup: NOT_A_TEXT_FIELD,
+    RadioTile: NOT_A_TEXT_FIELD,
+    StructuredList: NOT_A_TEXT_FIELD,
+    TagInput: NOT_A_TEXT_FIELD,
+    TileGroup: NOT_A_TEXT_FIELD,
+    Toggle: NOT_A_TEXT_FIELD,
   },
   selectOnFocus: {
     ComboBox: LISTBOX_AUDIT,
