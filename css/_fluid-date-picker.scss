@@ -141,18 +141,14 @@
     border-block-end-style: solid;
   }
 
-  // Color is split from width/style above so `--readonly-only` can paint
+  // Color is split from width/style above so a read-only cell can paint
   // its own color below without competing for it: the two are mutually
-  // exclusive by class, not by specificity. `--neutral` replaces the
-  // invalid/warn `:not()` pair; `:not(--readonly-only)` is the one
-  // remaining exclusion this rule needs on top of that.
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral:not(
-      .#{$prefix}--date-picker--fluid--readonly-only
-    )
+  // exclusive by class, not by specificity.
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
     .#{$prefix}--date-picker--range
     .#{$prefix}--date-picker-container:not(
       .#{$prefix}--date-picker--fluid--invalid
-    ) {
+    ):not(.#{$prefix}--date-picker--fluid--readonly) {
     border-block-end-color: $ui-04;
   }
 
@@ -273,22 +269,31 @@
     @include focus-outline("outline");
   }
 
-  // `--readonly-only` is set by the component only when readonly applies and
-  // neither invalid nor warn override it. The range-neutral rule above now
-  // excludes it, so this only has to out-weigh the simple/single default
-  // border rules, which it already does on specificity or source order.
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly-only
+  // A read-only cell marks its own container (`--fluid--readonly`, set
+  // only when the cell isn't invalid or warn), so server markup draws it
+  // before the cells register with the picker. The picker's `--invalid` and
+  // `--warn`, set once they do, still override it when another cell has a
+  // status. The range-neutral rule above excludes read-only cells, so this
+  // only has to out-weigh the simple/single default border rules, which it
+  // does on specificity.
+  .#{$prefix}--date-picker--fluid:not(
+      .#{$prefix}--date-picker--fluid--invalid
+    ):not(.#{$prefix}--date-picker--fluid--warn)
     .#{$prefix}--date-picker
-    > .#{$prefix}--date-picker-container,
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly-only
-    .#{$prefix}--date-picker
+    > .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly,
+  .#{$prefix}--date-picker--fluid:not(
+      .#{$prefix}--date-picker--fluid--invalid
+    ):not(.#{$prefix}--date-picker--fluid--warn)
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly
     .#{$prefix}--date-picker__input {
     border-block-end-color: $ui-03;
   }
 
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly-only
+  .#{$prefix}--date-picker--fluid:not(
+      .#{$prefix}--date-picker--fluid--invalid
+    ):not(.#{$prefix}--date-picker--fluid--warn)
     .#{$prefix}--date-picker--range
-    > .#{$prefix}--date-picker-container:last-child
+    > .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly:last-child
     .#{$prefix}--date-picker__input {
     border-inline-start-color: $ui-03;
   }

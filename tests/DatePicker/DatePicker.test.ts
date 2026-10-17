@@ -3641,39 +3641,46 @@ describe("DatePicker", () => {
       expect(invalidCells).toHaveLength(1);
     });
 
-    it("sets the readonly-only class when readonly and not overridden by invalid/warn", () => {
+    it("marks a read-only fluid cell on its own container", () => {
       const { container } = render(DatePicker, {
         fluid: true,
         datePickerType: "single",
         readonly: true,
       });
 
-      expect(
-        container.querySelector(".bx--date-picker--fluid--readonly-only"),
-      ).not.toBeNull();
+      expect(container.querySelector(".bx--date-picker-container")).toHaveClass(
+        "bx--date-picker--fluid--readonly",
+      );
     });
 
-    it("does not set the readonly-only class when not readonly", () => {
+    it("does not mark an editable fluid cell read-only", () => {
       const { container } = render(DatePicker, {
         fluid: true,
         datePickerType: "single",
       });
 
       expect(
-        container.querySelector(".bx--date-picker--fluid--readonly-only"),
-      ).toBeNull();
+        container.querySelector(".bx--date-picker-container"),
+      ).not.toHaveClass("bx--date-picker--fluid--readonly");
     });
 
-    it("clears the readonly-only class when another range cell is invalid", () => {
+    // The read-only border keys off the picker's `--invalid` too, so a
+    // status on another cell still overrides it.
+    it("marks the picker invalid beside a read-only range cell", () => {
       const { container } = render(DatePickerFluidRange, {
         invalidFrom: true,
         invalidText: "Invalid start date",
         readonlyTo: true,
       });
 
+      const [from, to] = container.querySelectorAll(
+        ".bx--date-picker-container",
+      );
+      expect(from).not.toHaveClass("bx--date-picker--fluid--readonly");
+      expect(to).toHaveClass("bx--date-picker--fluid--readonly");
       expect(
-        container.querySelector(".bx--date-picker--fluid--readonly-only"),
-      ).toBeNull();
+        container.querySelector(".bx--date-picker--fluid--invalid"),
+      ).not.toBeNull();
     });
 
     it("sets the neutral class when neither invalid nor warn applies", () => {
