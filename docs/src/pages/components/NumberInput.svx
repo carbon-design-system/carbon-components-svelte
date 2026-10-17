@@ -4,7 +4,7 @@ description: Number inputs provide a controlled field for numeric values, with s
 ---
 
 <script>
-  import { NumberInput, NumberInputSkeleton, FluidNumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, NumberInput, NumberInputSkeleton, FluidNumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -192,6 +192,16 @@ detail includes the current value, direction, and original FocusEvent.
 ### Stepper
 
 <FileSource src="/framed/NumberInput/NumberInputStepperEvents" />
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<NumberInput labelText="Clusters" value={3}>
+  <AILabel slot="decorator">
+    <p>Recommended from last month's peak traffic.</p>
+  </AILabel>
+</NumberInput>
 
 ## Sizes
 

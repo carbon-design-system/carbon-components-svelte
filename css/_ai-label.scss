@@ -1,0 +1,588 @@
+// AILabel from @carbon/styles (`slug`/`ai-label`), rebuilt on this library's
+// Toggletip and Popover. Upstream selects the field states with `:has()`;
+// here fields emit marker classes instead (see `FieldDecorator.svelte`).
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./ai-tokens";
+
+$ai-label-sizes: (
+  mini: (16px, 9px, 12px),
+  2xs: (20px, 12px, 16px),
+  xs: (24px, 12px, 16px),
+  sm: (32px, 16px, 21px),
+  md: (40px, 16px, 21px),
+  lg: (48px, 16px, 21px),
+  xl: (64px, 20px, 26px),
+);
+
+/// AILabel button, explanation callout, and revert button
+/// @access private
+/// @group components
+@mixin ai-label {
+  .#{$prefix}--ai-label {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--ai-label .#{$prefix}--toggletip-button {
+    position: relative;
+    justify-content: center;
+    border: 1px solid $border-inverse;
+    background-color: transparent;
+    color: $text-primary;
+    font-family: carbon--font-family("sans");
+    font-weight: 600;
+    transition:
+      color $duration--fast-01 motion(entrance, productive),
+      background-color $duration--fast-01 motion(entrance, productive);
+  }
+
+  .#{$prefix}--ai-label .#{$prefix}--toggletip-button:focus {
+    @include focus-outline("outline");
+  }
+
+  @each $size, $values in $ai-label-sizes {
+    .#{$prefix}--ai-label--#{$size} .#{$prefix}--toggletip-button {
+      width: to-rem(nth($values, 1));
+      height: to-rem(nth($values, 1));
+      font-size: to-rem(nth($values, 2));
+      line-height: to-rem(nth($values, 3));
+    }
+  }
+
+  // 24px click target for the two sizes below it
+  .#{$prefix}--ai-label--mini .#{$prefix}--toggletip-button::after,
+  .#{$prefix}--ai-label--2xs .#{$prefix}--toggletip-button::after {
+    position: absolute;
+    width: to-rem(24px);
+    height: to-rem(24px);
+    content: "";
+  }
+
+  .#{$prefix}--ai-label__text {
+    position: relative;
+  }
+
+  // Inline kind: text with a leading dot instead of a boxed button
+  .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button {
+    width: auto;
+    height: auto;
+    padding: 0 $carbon--spacing-02;
+    border-color: transparent;
+    border-radius: 1px;
+    font-size: to-rem(12px);
+    line-height: normal;
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--md
+    .#{$prefix}--toggletip-button {
+    font-size: to-rem(14px);
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--lg
+    .#{$prefix}--toggletip-button,
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--xl
+    .#{$prefix}--toggletip-button {
+    font-size: to-rem(16px);
+  }
+
+  .#{$prefix}--ai-label--inline .#{$prefix}--ai-label__text {
+    padding-left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--ai-label--inline .#{$prefix}--ai-label__text::before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: to-rem(4px);
+    height: to-rem(4px);
+    background-color: $icon-primary;
+    content: "";
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--lg
+    .#{$prefix}--ai-label__text,
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--xl
+    .#{$prefix}--ai-label__text {
+    padding-left: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--lg
+    .#{$prefix}--ai-label__text::before,
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--xl
+    .#{$prefix}--ai-label__text::before {
+    width: to-rem(8px);
+    height: to-rem(8px);
+  }
+
+  .#{$prefix}--ai-label--inline-with-content .#{$prefix}--toggletip-button {
+    padding: to-rem(2px) $carbon--spacing-03;
+    border-color: $border-inverse;
+  }
+
+  .#{$prefix}--ai-label__additional-text {
+    @include type-style("body-short-02");
+
+    padding-left: $carbon--spacing-02;
+  }
+
+  // Explanation callout: a light surface with the AI aura and a gradient
+  // border, replacing the toggletip's high-contrast surface.
+  .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(
+          to top,
+          ai-token("ai-aura-start") 0%,
+          15%,
+          ai-token("ai-aura-end") 50%
+        )
+        padding-box,
+      linear-gradient(
+          ai-token("ai-popover-background"),
+          ai-token("ai-popover-background")
+        )
+        padding-box,
+      linear-gradient(
+          to bottom,
+          ai-token("ai-border-start"),
+          ai-token("ai-border-end")
+        )
+        border-box;
+    // The caret boxes inherit this color.
+    background-color: ai-token("ai-popover-background");
+    border-radius: to-rem(8px);
+    box-shadow:
+      inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px) ai-token("ai-inner-shadow"),
+      to-rem(-40px) to-rem(44px) to-rem(60px) to-rem(-24px) ai-token("ai-popover-shadow-outer-01"),
+      to-rem(-56px) to-rem(64px) to-rem(64px) to-rem(-24px) ai-token("ai-popover-shadow-outer-02");
+    color: $text-primary;
+  }
+
+  .#{$prefix}--ai-label-popover .#{$prefix}--toggletip-content {
+    min-width: to-rem(280px);
+    max-width: to-rem(320px);
+    padding: $carbon--spacing-06;
+  }
+
+  // Give each caret the border color of the callout edge it sits on: light
+  // at the top, strongest at the bottom.
+  .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents::after {
+    box-sizing: border-box;
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom-left
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom-right
+    .#{$prefix}--popover-contents::after {
+    border-top: 1px solid ai-token("ai-border-start");
+    border-left: 1px solid ai-token("ai-border-start");
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--top
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--top-left
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--top-right
+    .#{$prefix}--popover-contents::after {
+    border-right: 1px solid ai-token("ai-popover-caret-bottom");
+    border-bottom: 1px solid ai-token("ai-popover-caret-bottom");
+    background-color: ai-token("ai-popover-caret-bottom-background");
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--right
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--right-top
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--right-bottom
+    .#{$prefix}--popover-contents::after {
+    border-bottom: 1px solid ai-token("ai-popover-caret-center");
+    border-left: 1px solid ai-token("ai-popover-caret-center");
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--left
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--left-top
+    .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--left-bottom
+    .#{$prefix}--popover-contents::after {
+    border-top: 1px solid ai-token("ai-popover-caret-center");
+    border-right: 1px solid ai-token("ai-popover-caret-center");
+  }
+
+  // The toggletip styles links for its inverse surface; the callout is light.
+  .#{$prefix}--ai-label-popover .#{$prefix}--toggletip-content .#{$prefix}--link,
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:visited {
+    color: $link-primary;
+  }
+
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:active,
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:active:visited {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:focus {
+    @include focus-outline("outline");
+  }
+
+  // Action bar flush with the callout's bottom edge
+  .#{$prefix}--ai-label-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 to-rem(-24px) to-rem(-24px);
+    border-radius: 0 0 to-rem(7px) to-rem(7px);
+  }
+
+  .#{$prefix}--ai-label-actions .#{$prefix}--btn--primary {
+    order: 1;
+    border-bottom-right-radius: to-rem(7px);
+  }
+
+  // Revert button: a 24px square in extra-small fields
+  .#{$prefix}--ai-label--field-xs .#{$prefix}--ai-label__revert {
+    width: to-rem(24px);
+    height: to-rem(24px);
+    min-height: to-rem(24px);
+    padding: to-rem(3px);
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--ai-label .#{$prefix}--toggletip-button:hover {
+      background-color: $border-inverse;
+      color: $text-inverse;
+    }
+
+    .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button:hover {
+      border-color: $icon-secondary;
+      background-color: transparent;
+      color: $text-secondary;
+    }
+
+    .#{$prefix}--ai-label--inline
+      .#{$prefix}--toggletip-button:hover
+      .#{$prefix}--ai-label__text::before {
+      background-color: $icon-secondary;
+    }
+
+    .#{$prefix}--ai-label-popover
+      .#{$prefix}--toggletip-content
+      .#{$prefix}--link:hover,
+    .#{$prefix}--ai-label-popover
+      .#{$prefix}--toggletip-content
+      .#{$prefix}--link:visited:hover {
+      color: $link-primary-hover;
+    }
+  }
+
+  // The callout's surface is a gradient, which forced colors drop.
+  @include high-contrast-mode {
+    .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents {
+      background-color: Canvas;
+    }
+  }
+}
+
+@include exports("ai-label") {
+  @include ai-label;
+}
+
+/// Field `decorator` slots and the AI gradient on fields with an active
+/// `AILabel`
+/// @access private
+/// @group components
+@mixin ai-label-fields {
+  // Centered with flex, not a transform: a transform would make a stacking
+  // context and trap the open callout under the fields that follow.
+  .#{$prefix}--field-decorator {
+    position: absolute;
+    top: 0;
+    right: $carbon--spacing-05;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  // Fluid fields keep their icons on the value row, so the decorator moves
+  // to the label row, at the field's right edge.
+  .#{$prefix}--text-input--fluid .#{$prefix}--field-decorator,
+  .#{$prefix}--text-area--fluid .#{$prefix}--field-decorator,
+  .#{$prefix}--number-input--fluid .#{$prefix}--field-decorator,
+  .#{$prefix}--select--fluid .#{$prefix}--field-decorator,
+  .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--field-decorator,
+  .#{$prefix}--date-picker--fluid .#{$prefix}--field-decorator {
+    top: to-rem(13px);
+    right: $carbon--spacing-05;
+    bottom: auto;
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--field-decorator::after,
+  .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--field-decorator::after {
+    display: none;
+  }
+
+  // TextInput
+  .#{$prefix}--text-input__field-wrapper--decorator .#{$prefix}--text-input {
+    padding-right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--text-input__field-wrapper--decorator
+    .#{$prefix}--text-input--invalid,
+  .#{$prefix}--text-input__field-wrapper--decorator
+    .#{$prefix}--text-input--warning {
+    padding-right: $carbon--spacing-10;
+  }
+
+  .#{$prefix}--text-input__field-wrapper--decorator
+    .#{$prefix}--text-input__invalid-icon,
+  .#{$prefix}--text-input__field-wrapper--decorator
+    .#{$prefix}--text-input__readonly-icon {
+    right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--text-input__field-wrapper--ai-label .#{$prefix}--text-input {
+    @include ai-field-gradient;
+  }
+
+  // TextArea: pinned to the first line instead of centered
+  .#{$prefix}--text-area__inner-wrapper--decorator {
+    top: $carbon--spacing-04;
+    bottom: auto;
+  }
+
+  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area {
+    padding-right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area--invalid,
+  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area--warning {
+    padding-right: $carbon--spacing-10;
+  }
+
+  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area__invalid-icon {
+    right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--text-area__wrapper--ai-label .#{$prefix}--text-area {
+    @include ai-field-gradient;
+  }
+
+  // Select and the list boxes: left of the chevron, behind a divider
+  .#{$prefix}--select__inner-wrapper--decorator,
+  .#{$prefix}--list-box__inner-wrapper--decorator {
+    right: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--select__inner-wrapper--decorator::after,
+  .#{$prefix}--list-box__inner-wrapper--decorator::after {
+    position: absolute;
+    top: 50%;
+    right: to-rem(-8px);
+    width: 1px;
+    height: $carbon--spacing-05;
+    margin-top: to-rem(-8px);
+    background-color: $border-subtle;
+    content: "";
+  }
+
+  .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select-input {
+    padding-right: to-rem(72px);
+  }
+
+  .#{$prefix}--select-input__wrapper--decorator[data-invalid]
+    .#{$prefix}--select-input,
+  .#{$prefix}--select--warning
+    .#{$prefix}--select-input__wrapper--decorator
+    .#{$prefix}--select-input {
+    padding-right: $carbon--spacing-12;
+  }
+
+  .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select__invalid-icon {
+    right: to-rem(72px);
+  }
+
+  .#{$prefix}--select-input__wrapper--ai-label .#{$prefix}--select-input {
+    @include ai-field-gradient;
+  }
+
+  // Dropdown, ComboBox, and MultiSelect
+  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box--decorator .#{$prefix}--text-input {
+    padding-right: to-rem(72px);
+  }
+
+  .#{$prefix}--list-box--decorator[data-invalid] .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field {
+    padding-right: $carbon--spacing-12;
+  }
+
+  // The clear button moves left of the decorator.
+  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection {
+    right: to-rem(72px);
+  }
+
+  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection--multi {
+    right: auto;
+  }
+
+  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__invalid-icon {
+    right: to-rem(72px);
+  }
+
+  .#{$prefix}--list-box--decorator[data-invalid]
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input
+    + .#{$prefix}--list-box__invalid-icon,
+  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input
+    + .#{$prefix}--list-box__invalid-icon {
+    right: to-rem(98px);
+  }
+
+  .#{$prefix}--list-box--decorator[data-invalid]
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input--empty
+    + .#{$prefix}--list-box__invalid-icon,
+  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input--empty
+    + .#{$prefix}--list-box__invalid-icon {
+    right: to-rem(72px);
+  }
+
+  // ComboBox and filterable MultiSelect inputs paint over the list box.
+  // A clearable Dropdown keeps its label clear of the clear button, and its
+  // invalid or warn icon moves left of it.
+  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(104px);
+  }
+
+  .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable
+    .#{$prefix}--list-box__invalid-icon {
+    right: to-rem(98px);
+  }
+
+  .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable[data-invalid]
+    .#{$prefix}--list-box__field--clearable,
+  .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(122px);
+  }
+
+  // ComboBox text stops short of the invalid or warn icon.
+  .#{$prefix}--list-box--decorator[data-invalid]
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input,
+  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input {
+    padding-right: to-rem(122px);
+  }
+
+  .#{$prefix}--list-box--ai-label,
+  .#{$prefix}--list-box--ai-label .#{$prefix}--text-input {
+    @include ai-field-gradient;
+  }
+
+  // DatePicker: left of the calendar (or invalid) icon
+  .#{$prefix}--date-picker-input-inner-wrapper--decorator {
+    right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--date-picker-input__wrapper--decorator
+    .#{$prefix}--date-picker__input {
+    padding-right: $carbon--spacing-10;
+  }
+
+  .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon
+    ~ .#{$prefix}--date-picker-input-inner-wrapper--decorator {
+    right: $carbon--spacing-10;
+  }
+
+  .#{$prefix}--date-picker-input__wrapper--decorator
+    .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon {
+    padding-right: to-rem(88px);
+  }
+
+  .#{$prefix}--date-picker-input__wrapper--ai-label
+    .#{$prefix}--date-picker__input {
+    @include ai-field-gradient;
+  }
+
+  // NumberInput: left of the steppers, whose width follows the size
+  $number-steppers: (
+    "": 80px,
+    "xs": 48px,
+    "sm": 64px,
+    "xl": 96px,
+    "nosteppers": 0,
+  );
+
+  @each $modifier, $steppers in $number-steppers {
+    $scope: if(
+      $modifier == "",
+      "",
+      ".#{$prefix}--number--#{$modifier} "
+    );
+
+    #{$scope}.#{$prefix}--number__inner-wrapper--decorator {
+      right: to-rem($steppers + 16px);
+    }
+
+    #{$scope}.#{$prefix}--number__input-wrapper--decorator
+      .#{$prefix}--number__invalid {
+      right: to-rem($steppers + 40px);
+    }
+
+    // The base padding already leaves room for the decorator (steppers
+    // plus 48px). Only the invalid and warn icons need more.
+    #{$scope}.#{$prefix}--number__input-wrapper--decorator
+      input[type="number"][data-invalid],
+    #{$scope}.#{$prefix}--number__input-wrapper--decorator
+      input[type="text"][data-invalid],
+    #{$scope}.#{$prefix}--number__input-wrapper--decorator.#{$prefix}--number__input-wrapper--warning
+      input[type="number"],
+    #{$scope}.#{$prefix}--number__input-wrapper--decorator.#{$prefix}--number__input-wrapper--warning
+      input[type="text"] {
+      padding-right: to-rem($steppers + 72px);
+    }
+  }
+
+  .#{$prefix}--number__input-wrapper--ai-label input[type="number"],
+  .#{$prefix}--number__input-wrapper--ai-label input[type="text"] {
+    @include ai-field-gradient;
+  }
+
+  .#{$prefix}--number__input-wrapper--ai-label .#{$prefix}--number__control-btn {
+    border-bottom-color: ai-token("ai-border-strong");
+  }
+
+  // The stepper edges are painted in the field color, which would show as
+  // bars over the gradient.
+  .#{$prefix}--number__input-wrapper--ai-label
+    .#{$prefix}--number__control-btn::before,
+  .#{$prefix}--number__input-wrapper--ai-label
+    .#{$prefix}--number__control-btn::after {
+    background-color: transparent;
+  }
+}
+
+@include exports("ai-label-fields") {
+  @include ai-label-fields;
+}
