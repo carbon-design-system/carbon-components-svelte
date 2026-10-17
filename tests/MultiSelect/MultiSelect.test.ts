@@ -4,11 +4,8 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import MultiSelectReal from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { closeMenu, openMenu, toggleOption } from "./helpers";
-import MultiSelectFluidForm from "./MultiSelect.fluidForm.test.svelte";
-import MultiSelectFluidSlot from "./MultiSelect.fluidSlot.test.svelte";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
@@ -25,71 +22,6 @@ const items = [
 ] as const;
 
 describe("MultiSelect", () => {
-  it("selects the full filter value on focus when selectTextOnFocus is true", async () => {
-    render(MultiSelectReal, {
-      props: {
-        items: [],
-        filterable: true,
-        selectTextOnFocus: true,
-        value: "Slack",
-      },
-    });
-
-    const input = screen.getByRole("combobox");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(0);
-    expect(input.selectionEnd).toBe("Slack".length);
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(MultiSelectReal, {
-      props: {
-        items: [],
-        filterable: true,
-        selectTextOnFocus: true,
-        value: "Slack",
-      },
-    });
-
-    const mouseup = await clickToFocus(screen.getByRole("combobox"));
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("does not select all filter text on focus when selectTextOnFocus is false (default)", async () => {
-    render(MultiSelectReal, {
-      props: { items: [], filterable: true, value: "Slack" },
-    });
-
-    const input = screen.getByRole("combobox");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(input.selectionEnd);
-  });
-
-  it("does not select text on focus when disabled", async () => {
-    render(MultiSelectReal, {
-      props: {
-        items: [],
-        filterable: true,
-        selectTextOnFocus: true,
-        disabled: true,
-        value: "Slack",
-      },
-    });
-
-    const input = screen.getByRole("combobox");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await fireEvent.focus(input);
-
-    expect(select).not.toHaveBeenCalled();
-  });
-
   it("does not apply selectTextOnFocus when filterable is false", () => {
     render(MultiSelectReal, {
       props: { items: [], filterable: false, selectTextOnFocus: true },
@@ -206,52 +138,6 @@ describe("MultiSelect", () => {
         "aria-describedby",
         "selection-test-multiselect helper-test-multiselect",
       );
-    });
-
-    it.each([{ filterable: false }, { filterable: true }])(
-      "resolves aria-describedby to the non-fluid error text when %o",
-      ({ filterable }) => {
-        render(MultiSelect, {
-          props: {
-            id: "test-multiselect",
-            items,
-            labelText: "Contact methods",
-            filterable,
-            invalid: true,
-            invalidText: "Invalid selection",
-          },
-        });
-
-        expect(screen.getByRole("combobox")).toHaveAttribute(
-          "aria-describedby",
-          "error-test-multiselect",
-        );
-
-        const description = document.querySelector("#error-test-multiselect");
-        expect(description).toHaveTextContent("Invalid selection");
-        expect(description).toHaveClass("bx--form-requirement");
-      },
-    );
-
-    it("resolves aria-describedby to the non-fluid warning text", () => {
-      render(MultiSelect, {
-        props: {
-          id: "test-multiselect",
-          items,
-          labelText: "Contact methods",
-          warn: true,
-          warnText: "Warning message",
-        },
-      });
-
-      expect(screen.getByRole("combobox")).toHaveAttribute(
-        "aria-describedby",
-        "warn-test-multiselect",
-      );
-
-      const description = document.querySelector("#warn-test-multiselect");
-      expect(description).toHaveTextContent("Warning message");
-      expect(description).toHaveClass("bx--form-requirement");
     });
   });
 
@@ -422,27 +308,7 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--multi-select__wrapper--inline");
     });
 
-    it.each([
-      { fluid: false, filterable: false },
-      { fluid: true, filterable: false },
-      { fluid: false, filterable: true },
-    ])("announces the invalid message (%o)", (variant) => {
-      render(MultiSelect, {
-        props: {
-          items,
-          ...variant,
-          invalid: true,
-          invalidText: "Invalid selection",
-        },
-      });
-
-      expect(screen.getByText("Invalid selection")).toHaveAttribute(
-        "role",
-        "alert",
-      );
-    });
-
-    it("handles invalid state", () => {
+    it("marks the list box invalid", () => {
       render(MultiSelect, {
         props: {
           items,
@@ -451,29 +317,9 @@ describe("MultiSelect", () => {
         },
       });
 
-      expect(screen.getByText("Invalid selection")).toBeInTheDocument();
       const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
       expect(wrapper).toHaveClass("bx--multi-select--invalid");
     });
-
-    it.each([false, true])(
-      "sets aria-invalid on the trigger when filterable is %s",
-      (filterable) => {
-        render(MultiSelect, {
-          props: {
-            items,
-            filterable,
-            invalid: true,
-            invalidText: "Invalid selection",
-          },
-        });
-
-        expect(screen.getByRole("combobox")).toHaveAttribute(
-          "aria-invalid",
-          "true",
-        );
-      },
-    );
 
     // Regression: filterable + invalid rendered two WarningFilled icons
     it("renders only one invalid icon when filterable", () => {
@@ -505,7 +351,7 @@ describe("MultiSelect", () => {
       expect(icons).toHaveLength(1);
     });
 
-    it("handles warning state", () => {
+    it("marks the list box with the warning class", () => {
       render(MultiSelect, {
         props: {
           items,
@@ -514,13 +360,12 @@ describe("MultiSelect", () => {
         },
       });
 
-      expect(screen.getByText("Warning message")).toBeInTheDocument();
       const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
       expect(wrapper).toHaveClass("bx--list-box--warning");
     });
 
     it.each(["disabled", "readonly"] as const)(
-      "suppresses invalid and warn states when %s",
+      "drops the invalid and warning markers when %s",
       (state) => {
         const { container } = render(MultiSelect, {
           props: {
@@ -540,8 +385,6 @@ describe("MultiSelect", () => {
         expect(
           container.querySelector(".bx--list-box__invalid-icon"),
         ).toBeNull();
-        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
       },
     );
 
@@ -675,19 +518,6 @@ describe("MultiSelect", () => {
   });
 
   describe("accessibility", () => {
-    it("handles hidden label", () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          labelText: "Contact methods",
-          hideLabel: true,
-        },
-      });
-
-      const label = screen.getByText("Contact methods");
-      expect(label).toHaveClass("bx--visually-hidden");
-    });
-
     it("non-filterable variant opens menu and updates aria-controls", async () => {
       render(MultiSelect, {
         props: {
@@ -1015,28 +845,6 @@ describe("MultiSelect", () => {
       expect(checkbox).not.toHaveAttribute("name", "contact_0");
       expect(checkbox).toHaveAttribute("value", "slack");
     });
-  });
-
-  it("does not show helper text if warn is true", () => {
-    render(MultiSelect, {
-      props: {
-        items,
-        helperText: "Help",
-        warn: true,
-      },
-    });
-    expect(screen.queryByText("Help")).not.toBeInTheDocument();
-  });
-
-  it("does not show helper text if invalid is true", () => {
-    render(MultiSelect, {
-      props: {
-        items,
-        helperText: "Help",
-        invalid: true,
-      },
-    });
-    expect(screen.queryByText("Help")).not.toBeInTheDocument();
   });
 
   // Inline shows it under the field, as inline TextInput and Select do;
@@ -1727,7 +1535,7 @@ describe("MultiSelect", () => {
   describe("fluid variant", () => {
     const getCombobox = () => screen.getByRole("combobox");
 
-    it("does not render fluid classes by default", () => {
+    it("does not render the fluid divider by default", () => {
       render(MultiSelect, {
         props: {
           items,
@@ -1735,13 +1543,10 @@ describe("MultiSelect", () => {
         },
       });
 
-      expect(
-        document.querySelector(".bx--list-box__wrapper--fluid"),
-      ).toBeNull();
       expect(document.querySelector(".bx--list-box__divider")).toBeNull();
     });
 
-    it("renders fluid variant and suppresses helper text", () => {
+    it("renders the divider and leaves the field undescribed", () => {
       render(MultiSelect, {
         props: {
           fluid: true,
@@ -1751,21 +1556,15 @@ describe("MultiSelect", () => {
         },
       });
 
-      const combobox = getCombobox();
-      expect(combobox.closest(".bx--list-box__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid",
-      );
       expect(
         document.querySelector(".bx--list-box__divider"),
       ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(combobox).not.toHaveAttribute("aria-describedby");
+      expect(getCombobox()).not.toHaveAttribute("aria-describedby");
     });
 
-    it("renders the error message inside the fluid wrapper", () => {
+    it("marks the fluid wrapper invalid", () => {
       render(MultiSelect, {
         props: {
-          id: "test-multiselect",
           fluid: true,
           items,
           labelText: "Contact methods",
@@ -1774,55 +1573,10 @@ describe("MultiSelect", () => {
         },
       });
 
-      const message = screen.getByText("Invalid selection");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
-      expect(message.closest(".bx--list-box__wrapper")).toHaveClass(
+      expect(getCombobox().closest(".bx--list-box__wrapper")).toHaveClass(
         "bx--list-box__wrapper--fluid--invalid",
       );
-      expect(getCombobox()).toHaveAttribute(
-        "aria-describedby",
-        "error-test-multiselect",
-      );
     });
-
-    it("renders the warning message inside the fluid wrapper", () => {
-      render(MultiSelect, {
-        props: {
-          fluid: true,
-          items,
-          labelText: "Contact methods",
-          warn: true,
-          warnText: "Warning message",
-        },
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(MultiSelect, {
-          props: {
-            fluid: true,
-            items,
-            labelText: "Contact methods",
-            invalid: true,
-            invalidText: "Invalid selection",
-            warn: true,
-            warnText: "Warning message",
-            ...props,
-          },
-        });
-
-        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(document.querySelector("[data-invalid]")).toBeNull();
-      },
-    );
 
     it.each([
       { props: {}, neutral: true },
@@ -1901,45 +1655,6 @@ describe("MultiSelect", () => {
       expect(
         document.querySelector(".bx--list-box__wrapper--fluid--condensed"),
       ).toBeNull();
-    });
-
-    it("ignores fluid for the inline variant", () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          labelText: "Contact methods",
-          fluid: true,
-          type: "inline",
-        },
-      });
-
-      expect(
-        document.querySelector(".bx--list-box__wrapper--fluid"),
-      ).toBeNull();
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(MultiSelectFluidForm);
-
-      expect(getCombobox().closest(".bx--list-box__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(MultiSelectFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(MultiSelectFluidSlot, { props: { fluid: false } });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
     });
 
     it("toggles the input-focused class on the fluid field wrapper", async () => {

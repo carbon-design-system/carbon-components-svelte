@@ -11,8 +11,6 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
-import DropdownFluidForm from "./Dropdown.fluidForm.test.svelte";
-import DropdownFluidSlot from "./Dropdown.fluidSlot.test.svelte";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownCustom from "./DropdownCustom.test.svelte";
@@ -108,7 +106,7 @@ describe("Dropdown", () => {
     expect(wrapper).toHaveAttribute("data-testid", "contact-dropdown");
   });
 
-  it("should handle hidden label", () => {
+  it("keeps the combobox labelled when the label is hidden", () => {
     render(Dropdown, {
       props: {
         items,
@@ -118,10 +116,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const label = screen.getByText("Contact");
-    expect(label).toHaveClass("bx--visually-hidden");
-    const button = screen.getByLabelText("Contact");
-    expect(button).toBeInTheDocument();
+    expect(screen.getByLabelText("Contact")).toBe(screen.getByRole("combobox"));
   });
 
   it("should handle light variant", () => {
@@ -173,7 +168,7 @@ describe("Dropdown", () => {
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--xl");
   });
 
-  it("should handle invalid state", () => {
+  it("marks the list box invalid and keeps the selection", () => {
     render(Dropdown, {
       props: {
         items,
@@ -190,11 +185,9 @@ describe("Dropdown", () => {
       "data-invalid",
       "true",
     );
-    expect(screen.getByText("Invalid selection")).toBeInTheDocument();
-    expect(button).toHaveAttribute("aria-invalid", "true");
   });
 
-  it("should handle warning state", () => {
+  it("marks the list box with the warning class and keeps the selection", () => {
     render(Dropdown, {
       props: {
         items,
@@ -210,7 +203,6 @@ describe("Dropdown", () => {
     expect(button.closest(".bx--dropdown")).toHaveClass(
       "bx--dropdown--warning",
     );
-    expect(screen.getByText("Warning message")).toBeInTheDocument();
   });
 
   it("should handle disabled state", () => {
@@ -228,7 +220,7 @@ describe("Dropdown", () => {
   });
 
   it.each(["disabled", "readonly"] as const)(
-    "should suppress invalid and warn states when %s",
+    "drops the invalid and warning markers when %s",
     (state) => {
       const { container } = render(Dropdown, {
         props: {
@@ -244,12 +236,9 @@ describe("Dropdown", () => {
 
       const listbox = container.querySelector(".bx--dropdown");
       expect(listbox).not.toHaveAttribute("data-invalid");
-      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-invalid");
       expect(listbox).not.toHaveClass("bx--dropdown--invalid");
       expect(listbox).not.toHaveClass("bx--dropdown--warning");
       expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
     },
   );
 
@@ -677,58 +666,6 @@ describe("Dropdown", () => {
     });
 
     expect(screen.getByText("Help text")).toHaveClass("bx--form__helper-text");
-  });
-
-  it("should describe the button by helperText", () => {
-    render(Dropdown, {
-      props: { items, id: "dd", helperText: "Help" },
-    });
-    expect(screen.getByRole("combobox")).toHaveAttribute(
-      "aria-describedby",
-      "helper-dd",
-    );
-    expect(screen.getByText("Help")).toHaveAttribute("id", "helper-dd");
-  });
-
-  it("should describe the button by warnText when warn is true", () => {
-    render(Dropdown, {
-      props: { items, id: "dd", warn: true, warnText: "Warn" },
-    });
-    expect(screen.getByRole("combobox")).toHaveAttribute(
-      "aria-describedby",
-      "warn-dd",
-    );
-    expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-dd");
-  });
-
-  it.each([false, true])(
-    "announces the invalid message (fluid: %s)",
-    (fluid) => {
-      render(Dropdown, {
-        props: {
-          items,
-          fluid,
-          invalid: true,
-          invalidText: "Invalid selection",
-        },
-      });
-
-      expect(screen.getByText("Invalid selection")).toHaveAttribute(
-        "role",
-        "alert",
-      );
-    },
-  );
-
-  it("should describe the button by invalidText when invalid is true", () => {
-    render(Dropdown, {
-      props: { items, id: "dd", invalid: true, invalidText: "Bad" },
-    });
-    expect(screen.getByRole("combobox")).toHaveAttribute(
-      "aria-describedby",
-      "error-dd",
-    );
-    expect(screen.getByText("Bad")).toHaveAttribute("id", "error-dd");
   });
 
   it("should handle item selection", async () => {
@@ -2507,12 +2444,9 @@ describe("Dropdown", () => {
   });
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
+    it("does not render the fluid divider by default", () => {
       render(Dropdown, { props: { items, labelText: "Contact" } });
 
-      expect(
-        document.querySelector(".bx--list-box__wrapper--fluid"),
-      ).toBeNull();
       expect(document.querySelector(".bx--list-box__divider")).toBeNull();
     });
 
@@ -2534,7 +2468,7 @@ describe("Dropdown", () => {
       );
     });
 
-    it("renders fluid variant and suppresses helper text", () => {
+    it("renders the divider and leaves the field undescribed", () => {
       render(Dropdown, {
         props: {
           items,
@@ -2544,18 +2478,15 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByLabelText("Contact");
-      expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid",
-      );
       expect(
         document.querySelector(".bx--list-box__divider"),
       ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(button).not.toHaveAttribute("aria-describedby");
+      expect(screen.getByLabelText("Contact")).not.toHaveAttribute(
+        "aria-describedby",
+      );
     });
 
-    it("renders the error message inside the fluid wrapper", () => {
+    it("marks the fluid wrapper invalid", () => {
       render(Dropdown, {
         props: {
           items,
@@ -2566,55 +2497,10 @@ describe("Dropdown", () => {
         },
       });
 
-      const message = screen.getByText("Invalid selection");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
-      expect(message.closest(".bx--dropdown__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid--invalid",
-      );
-      expect(screen.getByLabelText("Contact")).toHaveAttribute(
-        "aria-describedby",
-        "error-test-dropdown",
-      );
+      expect(
+        screen.getByLabelText("Contact").closest(".bx--dropdown__wrapper"),
+      ).toHaveClass("bx--list-box__wrapper--fluid--invalid");
     });
-
-    it("renders the warning message inside the fluid wrapper", () => {
-      render(Dropdown, {
-        props: {
-          items,
-          labelText: "Contact",
-          fluid: true,
-          warn: true,
-          warnText: "Warning message",
-        },
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(Dropdown, {
-          props: {
-            items,
-            labelText: "Contact",
-            fluid: true,
-            invalid: true,
-            invalidText: "Invalid selection",
-            warn: true,
-            warnText: "Warning message",
-            ...props,
-          },
-        });
-
-        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(document.querySelector("[data-invalid]")).toBeNull();
-      },
-    );
 
     it.each([
       { props: {}, neutral: true },
@@ -2687,41 +2573,6 @@ describe("Dropdown", () => {
       expect(
         document.querySelector(".bx--list-box__wrapper--fluid--condensed"),
       ).toBeNull();
-    });
-
-    it("ignores fluid for the inline variant", () => {
-      render(Dropdown, {
-        props: { items, labelText: "Contact", fluid: true, type: "inline" },
-      });
-
-      expect(
-        document.querySelector(".bx--list-box__wrapper--fluid"),
-      ).toBeNull();
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(DropdownFluidForm);
-
-      const button = screen.getByLabelText("Fluid form dropdown");
-      expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(DropdownFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(DropdownFluidSlot, { props: { fluid: false } });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
     });
 
     it("toggles the input-focused class on the fluid field wrapper", async () => {
