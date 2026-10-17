@@ -33,9 +33,7 @@
   export let form = undefined;
 
   import { createEventDispatcher } from "svelte";
-  import { formReset } from "../utils/form-reset.js";
-  import { submitAttempts } from "../utils/submit-attempt.js";
-  import { handleRequiredInvalid } from "./list-box-utils.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
 
   const dispatch = createEventDispatcher();
 </script>
@@ -51,11 +49,9 @@
   {disabled}
   {readonly}
   {form}
-  use:formReset={() => dispatch("reset")}
-  use:submitAttempts
-  on:invalid={(event) => {
-    if (handleRequiredInvalid(event, { focusTarget, proxy: true })) {
-      dispatch("invalid");
-    }
+  use:requiredInvalid={{
+    onChange: (missing) => dispatch(missing ? "invalid" : "reset"),
+    getFocusTarget: () => focusTarget,
+    proxy: true,
   }}
 >

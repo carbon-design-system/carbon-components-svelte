@@ -1,0 +1,35 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Invalid message below a `TileGroup` whose `required` selection is missing.
+/// Carbon v10 has no invalid tile group, so this mirrors the radio button
+/// group's message: an error icon beside `bx--form-requirement` text.
+/// @access private
+/// @group tile
+@mixin tile-group-invalid {
+  .#{$prefix}--tile-group__validation-msg {
+    display: flex;
+    align-items: flex-start;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tile-group__invalid-icon {
+    margin: to-rem(1px) to-rem(1px) 0 to-rem(3px);
+    fill: $support-error;
+    min-inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--tile-group__validation-msg .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    margin-block-start: 0;
+    margin-inline-start: $carbon--spacing-03;
+    color: $text-error;
+    max-block-size: 100%;
+  }
+}
+
+@include exports("tile-group-invalid") {
+  @include tile-group-invalid;
+}
