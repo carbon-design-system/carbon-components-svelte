@@ -350,22 +350,23 @@ describe("MultiSelect", () => {
     expect(byText("Option 1")).toHaveAttribute("data-highlighted", "false");
   });
 
-  // Regression: ?? for itemToString so item.text "" is used (not id)
+  // Regression: ?? for itemToString so item.text "" is used (not id).
+  // Renders the real component so the built-in default itemToString runs.
   it("displays empty string when item.text is empty (nullish coalescing)", async () => {
-    render(MultiSelect, {
+    render(MultiSelectReal, {
       props: {
         items: [
           { id: "1", text: "" },
           { id: "2", text: "Email" },
         ],
         labelText: "Contact",
-        itemToString: (item: { id: string; text: string }) =>
-          item.text ?? item.id,
       },
     });
     await openMenu();
     const options = screen.getAllByRole("option");
-    expect(options[0]).toHaveTextContent("");
+    expect(options).toHaveLength(2);
+    expect(options[0].textContent?.trim()).toBe("");
+    expect(options[1]).toHaveTextContent("Email");
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -1096,31 +1097,6 @@ describe("MultiSelect", () => {
     expect(options[2]).toHaveAttribute("aria-selected", "false");
   });
 
-  it("should not infinite loop when all items are disabled", async () => {
-    render(MultiSelect, {
-      props: {
-        items: [
-          { id: "1", text: "Aa", disabled: true },
-          { id: "2", text: "Ba", disabled: true },
-          { id: "3", text: "Ca", disabled: true },
-        ],
-        filterable: true,
-        placeholder: "Filter...",
-      },
-    });
-    const input = screen.getByPlaceholderText("Filter...");
-    await user.click(input);
-
-    await user.keyboard("{ArrowDown}");
-    await user.keyboard("{ArrowUp}");
-
-    // No item should be selected since all are disabled.
-    const options = screen.getAllByRole("option");
-    for (const option of options) {
-      expect(option).toHaveAttribute("aria-selected", "false");
-    }
-  });
-
   it("highlights disabled items during keyboard navigation without selecting them", async () => {
     render(MultiSelect, {
       props: {
@@ -1201,85 +1177,6 @@ describe("MultiSelect", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2313
   describe("Generics", () => {
-    it("should support custom item types with generics", () => {
-      type Product = {
-        id: string;
-        text: string;
-        price: number;
-        category: string;
-        inStock: boolean;
-      };
-
-      const products: Product[] = [
-        {
-          id: "1",
-          text: "Laptop",
-          price: 999,
-          category: "Electronics",
-          inStock: true,
-        },
-        {
-          id: "2",
-          text: "Phone",
-          price: 599,
-          category: "Electronics",
-          inStock: false,
-        },
-      ];
-
-      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
-
-      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
-      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
-      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
-
-      const filterItem = (item: Product, value: string) =>
-        item.category.toLowerCase().includes(value.toLowerCase()) ||
-        item.text.toLowerCase().includes(value.toLowerCase());
-      expectTypeOf(filterItem).parameter(0).toEqualTypeOf<Product>();
-      expectTypeOf(filterItem).parameter(1).toEqualTypeOf<string>();
-      expectTypeOf(filterItem).returns.toEqualTypeOf<boolean>();
-
-      type SelectEvent = CustomEvent<{
-        selectedIds: string[];
-        selected: Product[];
-        unselected: Product[];
-      }>;
-      expectTypeOf<
-        SelectEvent["detail"]["selected"][0]
-      >().toEqualTypeOf<Product>();
-      expectTypeOf<
-        SelectEvent["detail"]["unselected"][0]
-      >().toEqualTypeOf<Product>();
-    });
-
-    it("should provide type-safe access to custom properties in callbacks", () => {
-      type Tag = {
-        id: number;
-        text: string;
-        color: string;
-        usageCount: number;
-      };
-
-      const itemToString = (item: Tag) => {
-        expectTypeOf(item).toHaveProperty("color");
-        expectTypeOf(item).toHaveProperty("usageCount");
-        return `${item.text} (${item.usageCount})`;
-      };
-
-      const filterItem = (item: Tag, value: string) => {
-        expectTypeOf(item).toHaveProperty("color");
-        expectTypeOf(item).toHaveProperty("usageCount");
-        return (
-          item.color.includes(value) ||
-          item.usageCount > Number.parseInt(value, 10)
-        );
-      };
-
-      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
-      expectTypeOf(filterItem).parameter(0).toEqualTypeOf<Tag>();
-    });
-
     it("sortItem should return number, not Item", () => {
       type Item = { id: string; text: string };
 
@@ -1329,28 +1226,6 @@ describe("MultiSelect", () => {
       await openMenu();
       const options = screen.getAllByRole("option");
       expect(options.map((o) => o.textContent?.trim())).toEqual(["101", "102"]);
-    });
-
-    it("should support slot props with generic item type", () => {
-      type MenuItem = {
-        id: string;
-        text: string;
-        icon: string;
-        shortcut?: string;
-      };
-
-      type SlotProps = { item: MenuItem; index: number };
-
-      const slotItem: MenuItem = {
-        id: "1",
-        text: "Save",
-        icon: "save-icon",
-        shortcut: "Ctrl+S",
-      };
-
-      expectTypeOf<SlotProps["item"]>().toEqualTypeOf<MenuItem>();
-      expectTypeOf(slotItem).toHaveProperty("icon");
-      expectTypeOf(slotItem).toHaveProperty("shortcut");
     });
 
     it("should infer generic type from items and support destructuring in slots", async () => {

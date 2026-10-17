@@ -174,11 +174,10 @@ describe("MultiSelect", () => {
       });
 
       await toggleOption("Slack");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
-        selectedIds: [],
-        selected: [],
+      expect(consoleLog).toHaveBeenLastCalledWith("select", {
+        selectedIds: ["0"],
+        selected: [{ id: "0", text: "Slack", checked: true }],
         unselected: [
-          { id: "0", text: "Slack", checked: false },
           { id: "1", text: "Email", checked: false },
           { id: "2", text: "Fax", checked: false },
         ],
