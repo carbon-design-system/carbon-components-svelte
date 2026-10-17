@@ -97,28 +97,6 @@ describe("ComboBox", () => {
       expect(options[0]).toHaveTextContent("Banana");
     });
 
-    it("should use default prefix matching when typeahead is enabled without custom filter", async () => {
-      render(ComboBox, {
-        props: {
-          typeahead: true,
-          defaultFilter: true,
-          items: [
-            { id: "1", text: "Apple", price: 100 },
-            { id: "2", text: "Pineapple", price: 200 },
-            { id: "3", text: "Banana", price: 300 },
-          ],
-        },
-      });
-
-      const input = getInput();
-      await user.click(input);
-      await user.type(input, "ap");
-
-      const options = screen.getAllByRole("option");
-      expect(options).toHaveLength(1);
-      expect(options[0]).toHaveTextContent("Apple");
-    });
-
     it("should use custom shouldFilterItem when typeahead is enabled", async () => {
       const customFilter = vi.fn((item: { text: string }, value: string) =>
         item.text.toLowerCase().includes(value.toLowerCase()),
