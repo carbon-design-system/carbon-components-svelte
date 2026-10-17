@@ -1,4 +1,5 @@
 import { createHighlightCursor } from "../../src/ListBox/highlight-cursor.js";
+import { rect } from "../utils/rect";
 
 const HIGHLIGHT = "bx--list-box__menu-item--highlighted";
 
@@ -102,5 +103,60 @@ describe("createHighlightCursor", () => {
     cursor.set("a", { scroll: false });
 
     expect(a).not.toHaveClass(HIGHLIGHT);
+  });
+
+  describe("scrolling", () => {
+    /**
+     * A scrollable listbox holding one option whose inner element sits below
+     * the visible area. Layout is stubbed since the test DOM computes none.
+     */
+    function scrollableOption() {
+      const container = document.createElement("div");
+      container.setAttribute("role", "listbox");
+      Object.defineProperty(container, "clientHeight", { value: 100 });
+      Object.defineProperty(container, "scrollHeight", { value: 300 });
+      container.getBoundingClientRect = () => rect({ top: 0, bottom: 100 });
+      document.body.appendChild(container);
+
+      const node = option("far");
+      container.appendChild(node);
+      const inner = node.querySelector(".bx--list-box__menu-item__option");
+      assert(inner instanceof HTMLElement);
+      inner.getBoundingClientRect = () => rect({ top: 150, bottom: 180 });
+      return { container, node };
+    }
+
+    it("scrolls the highlighted option into view by default", () => {
+      const cursor = createHighlightCursor();
+      const { container, node } = scrollableOption();
+      cursor.register("far", node);
+
+      cursor.set("far");
+
+      expect(container.scrollTop).toBe(80);
+    });
+
+    it("does not scroll when scroll is false", () => {
+      const cursor = createHighlightCursor();
+      const { container, node } = scrollableOption();
+      cursor.register("far", node);
+
+      cursor.set("far", { scroll: false });
+
+      expect(container.scrollTop).toBe(0);
+    });
+
+    it("does not scroll to an option the pointer is over", () => {
+      const cursor = createHighlightCursor();
+      const { container, node } = scrollableOption();
+      cursor.register("far", node);
+      vi.spyOn(node, "matches").mockImplementation(
+        (selector) => selector === ":hover",
+      );
+
+      cursor.set("far");
+
+      expect(container.scrollTop).toBe(0);
+    });
   });
 });
