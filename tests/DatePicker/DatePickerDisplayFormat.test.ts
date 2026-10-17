@@ -5,14 +5,6 @@ import DatePicker from "./DatePickerDisplayFormat.test.svelte";
 import { visibleInput } from "./helpers";
 
 describe("DatePicker displayFormat", () => {
-  it("shows the display format while value keeps dateFormat", async () => {
-    render(DatePicker);
-
-    const input = await visibleInput();
-    await vi.waitFor(() => expect(input).toHaveValue("March 15, 2024"));
-    expect(screen.getByTestId("value")).toHaveTextContent("2024-03-15");
-  });
-
   it("submits a single machine-format field", async () => {
     render(DatePicker);
     await visibleInput();

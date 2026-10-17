@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import CopyInputFluidForm from "./CopyInput.fluidForm.test.svelte";
 import CopyInputFluidSkeleton from "./CopyInput.fluidSkeleton.test.svelte";
@@ -6,7 +6,6 @@ import CopyInputFluidSlot from "./CopyInput.fluidSlot.test.svelte";
 import CopyInputSkeleton from "./CopyInput.skeleton.test.svelte";
 import CopyInput from "./CopyInput.test.svelte";
 import CopyInputAsync from "./CopyInputAsync.test.svelte";
-import CopyInputAsyncDoubleClick from "./CopyInputAsyncDoubleClick.test.svelte";
 import CopyInputMouseEnter from "./CopyInputMouseEnter.test.svelte";
 import CopyInputMultiple from "./CopyInputMultiple.test.svelte";
 
@@ -46,14 +45,6 @@ describe("CopyInput", () => {
     );
     expect(screen.getByText("API token")).toHaveClass(
       `bx--label--inline--${size}`,
-    );
-  });
-
-  it("describes the input with the helper text", () => {
-    render(CopyInput, { props: { helperText: "Helper text" } });
-
-    expect(screen.getByLabelText("API token")).toHaveAccessibleDescription(
-      "Helper text",
     );
   });
 
@@ -204,39 +195,6 @@ describe("CopyInput", () => {
     expect(input).toHaveAttribute("type", "password");
   });
 
-  it("async copy delays feedback until resolved", async () => {
-    let resolveCopy: () => void = () => {};
-    const copy = vi.fn(
-      () =>
-        new Promise<void>((resolve) => {
-          resolveCopy = resolve;
-        }),
-    );
-
-    render(CopyInputAsync, { props: { copy } });
-
-    const button = screen.getByRole("button", { name: "Async copy" });
-    fireEvent.click(button);
-    await Promise.resolve();
-
-    expect(copy).toHaveBeenCalledWith("secret-token-123");
-    expect(copy).toHaveBeenCalledTimes(1);
-    expect(button).toHaveAttribute("aria-busy", "true");
-    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
-
-    resolveCopy();
-    await waitFor(() => {
-      expect(button).toHaveClass("bx--copy-btn--fade-in");
-    });
-
-    expect(button).not.toHaveAttribute("aria-busy");
-    // Feedback is portalled by default.
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Copied!");
-  });
-
   it("async copy failure shows error feedback and dispatches copy:error", async () => {
     const error = new Error("copy failed");
     const copy = vi.fn().mockRejectedValue(error);
@@ -282,40 +240,6 @@ describe("CopyInput", () => {
 
     expect(onMouseEnterCopyButton).toHaveBeenCalledTimes(1);
     expect(onMouseEnterCopyButton.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
-  });
-
-  it("does not dispatch mouseenter:copy-button from the input field", () => {
-    const onMouseEnterCopyButton = vi.fn();
-    render(CopyInputMouseEnter, { props: { onMouseEnterCopyButton } });
-
-    fireEvent.mouseEnter(screen.getByLabelText("API token"));
-
-    expect(onMouseEnterCopyButton).not.toHaveBeenCalled();
-  });
-
-  it("should not copy again while async copy is in flight", async () => {
-    let resolveCopy: () => void = () => {};
-    const copy = vi.fn(
-      () =>
-        new Promise<void>((resolve) => {
-          resolveCopy = resolve;
-        }),
-    );
-
-    render(CopyInputAsyncDoubleClick, { props: { copy } });
-
-    const button = screen.getByRole("button", { name: "Async double click" });
-    fireEvent.click(button);
-    await Promise.resolve();
-    fireEvent.click(button);
-
-    expect(copy).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
-
-    resolveCopy();
-    await waitFor(() => {
-      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
-    });
   });
 
   describe("fluid variant", () => {

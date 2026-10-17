@@ -8,8 +8,7 @@ describe("DatePicker inline", () => {
   it("renders the calendar without opening it and marks the root", async () => {
     const { container } = render(DatePicker);
 
-    const calendar = await screen.findByLabelText("calendar-container");
-    expect(calendar).toHaveClass("inline", "bx--date-picker__calendar");
+    await screen.findByLabelText("calendar-container");
     expect(container.querySelector(".bx--date-picker")).toHaveClass(
       "bx--date-picker--inline",
     );

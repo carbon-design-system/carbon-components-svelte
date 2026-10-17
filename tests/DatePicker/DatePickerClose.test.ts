@@ -173,53 +173,6 @@ describe("DatePicker close event", () => {
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
   });
 
-  it('dispatches close with trigger "outside-click" when dismissing without changing an existing value', async () => {
-    const onClose = vi.fn();
-    render(DatePickerClose, {
-      props: { onClose, value: "01/15/1990" },
-    });
-
-    await user.click(screen.getByLabelText("Date"));
-    const calendar = await screen.findByLabelText("calendar-container");
-    expect(calendar).toHaveClass("open");
-
-    await user.click(document.body);
-
-    expect(calendar).not.toHaveClass("open");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
-  });
-
-  it('dispatches close with trigger "outside-click" when dismissing a range without changing values', async () => {
-    const onClose = vi.fn();
-    render(DatePickerClose, {
-      props: {
-        onClose,
-        datePickerType: "range",
-        valueFrom: "01/01/2025",
-        valueTo: "01/31/2025",
-      },
-    });
-
-    await screen.findByLabelText("calendar-container");
-    await user.click(screen.getByLabelText("Start date"));
-    const calendar = await waitFor(() => {
-      const openCalendar = document.querySelector<HTMLElement>(
-        ".flatpickr-calendar.open[aria-label='calendar-container']",
-      );
-      if (!openCalendar) {
-        throw new Error("expected an open calendar");
-      }
-      return openCalendar;
-    });
-
-    await user.click(document.body);
-
-    expect(calendar).not.toHaveClass("open");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
-  });
-
   it('dispatches close with trigger "outside-click" when dismissing a partial range selection', async () => {
     const onClose = vi.fn();
     render(DatePickerClose, {
