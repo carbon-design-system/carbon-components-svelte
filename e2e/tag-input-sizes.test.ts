@@ -8,11 +8,34 @@ test("an empty TagInput matches TextInput's height at each size", async ({
   page,
 }) => {
   await page.goto("/tag-input-sizes.html");
-  await expect(page.locator(".bx--tag-input")).toHaveCount(4);
+  await expect(page.locator("[data-size] .bx--tag-input")).toHaveCount(4);
 
   const heights = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>("[data-size]")].map((row) => ({
       size: row.dataset.size,
+      tagInput: row.querySelector(".bx--tag-input")?.getBoundingClientRect()
+        .height,
+      textInput: row.querySelector(".bx--text-input")?.getBoundingClientRect()
+        .height,
+    })),
+  );
+
+  for (const { size, tagInput, textInput } of heights)
+    expect(tagInput, size).toBe(textInput);
+});
+
+// A tag and the text input share a row in a narrow column, as in a form
+// row of 12rem fields. The input's 160px basis wrapped it under a single
+// tag, doubling the field's height.
+test("a TagInput with one tag stays one row in a 12rem column", async ({
+  page,
+}) => {
+  await page.goto("/tag-input-sizes.html");
+  await expect(page.locator("[data-narrow] .bx--tag-input")).toHaveCount(4);
+
+  const heights = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>("[data-narrow]")].map((row) => ({
+      size: row.dataset.narrow,
       tagInput: row.querySelector(".bx--tag-input")?.getBoundingClientRect()
         .height,
       textInput: row.querySelector(".bx--text-input")?.getBoundingClientRect()
