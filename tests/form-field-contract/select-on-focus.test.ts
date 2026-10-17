@@ -18,7 +18,7 @@ const renderField = (c: SelectCase, props: Record<string, unknown> = {}) => {
   render(FieldHost, {
     props: {
       component: c.component,
-      props: { ...c.props, value: c.selectOnFocus.value, ...props },
+      fieldProps: { ...c.props, value: c.selectOnFocus.value, ...props },
     },
   });
   const [input] = controls(c);

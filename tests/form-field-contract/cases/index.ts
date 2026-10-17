@@ -25,6 +25,7 @@ export const cases: FieldCase[] = [
     name: "TextInput",
     component: TextInput,
     control: () => screen.getByRole("textbox"),
+    state: {},
     fluid: {
       className: "bx--text-input--fluid",
       wrapper: ".bx--text-input__field-wrapper",
@@ -37,6 +38,7 @@ export const cases: FieldCase[] = [
     name: "PasswordInput",
     component: PasswordInput,
     control: () => screen.getByLabelText("Field", { selector: "input" }),
+    state: {},
     fluid: {
       className: "bx--text-input--fluid",
       wrapper: ".bx--text-input__field-wrapper",
@@ -48,6 +50,7 @@ export const cases: FieldCase[] = [
     name: "TextArea",
     component: TextArea,
     control: () => screen.getByRole("textbox"),
+    state: {},
     fluid: {
       className: "bx--text-area--fluid",
       wrapper: ".bx--text-area__wrapper",
@@ -63,6 +66,7 @@ export const cases: FieldCase[] = [
     name: "NumberInput",
     component: NumberInput,
     control: () => screen.getByRole("spinbutton"),
+    state: {},
     fluid: {
       className: "bx--number-input--fluid",
       wrapper: ".bx--number__input-wrapper",
@@ -77,6 +81,7 @@ export const cases: FieldCase[] = [
     name: "Select",
     component: Select,
     control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
     fluid: {
       className: "bx--select--fluid",
       wrapper: ".bx--select-input__wrapper",
@@ -93,6 +98,7 @@ export const cases: FieldCase[] = [
     name: "Search",
     component: Search,
     control: () => screen.getByRole("searchbox"),
+    state: {},
     fluid: {
       className: "bx--search--fluid",
       wrapper: ".bx--search",
@@ -110,6 +116,7 @@ export const cases: FieldCase[] = [
     name: "TimePicker",
     component: TimePicker,
     control: () => screen.getByRole("textbox"),
+    state: {},
     fluid: {
       className: "bx--time-picker--fluid",
       wrapper: ".bx--time-picker--fluid",
@@ -120,6 +127,10 @@ export const cases: FieldCase[] = [
     name: "PinCodeInput",
     component: PinCodeInput,
     control: () => screen.getAllByRole("textbox"),
+    state: {
+      // The fieldset carries the description for all segments.
+      described: () => screen.getByRole("group"),
+    },
     fluid: {
       className: "bx--pin-code-input--fluid",
       wrapper: ".bx--pin-code-input__fields",
@@ -133,6 +144,8 @@ export const cases: FieldCase[] = [
 ];
 
 const LISTBOX_AUDIT = "covered by its own tests until the listbox family audit";
+const NOT_AUDITED =
+  "covered by its own tests; not audited against the contract yet";
 
 export const exempt: Exemptions = {
   fluid: {
@@ -141,6 +154,20 @@ export const exempt: Exemptions = {
     DatePicker: LISTBOX_AUDIT,
     Dropdown: LISTBOX_AUDIT,
     MultiSelect: LISTBOX_AUDIT,
+  },
+  state: {
+    ComboBox: LISTBOX_AUDIT,
+    DatePickerInput: LISTBOX_AUDIT,
+    Dropdown: LISTBOX_AUDIT,
+    ListBox: LISTBOX_AUDIT,
+    MultiSelect: LISTBOX_AUDIT,
+    Checkbox: NOT_AUDITED,
+    CheckboxGroup: NOT_AUDITED,
+    RadioButtonGroup: NOT_AUDITED,
+    RangeSlider: NOT_AUDITED,
+    Slider: NOT_AUDITED,
+    TagInput: NOT_AUDITED,
+    Toggle: NOT_AUDITED,
   },
   selectOnFocus: {
     ComboBox: LISTBOX_AUDIT,

@@ -29,6 +29,19 @@ export type FieldCase = {
     ignoredWith?: Record<string, unknown>;
     skip?: Partial<Record<FluidBehavior, string>>;
   };
+  /** Takes part in the invalid, warning, and helper text contract. */
+  state?: {
+    /**
+     * Attribute that points the control at the invalid message. Defaults to
+     * `aria-errormessage`.
+     */
+    errorAttribute?: "aria-errormessage" | "aria-describedby";
+    /**
+     * Element that `aria-describedby` points at the helper and warning text.
+     * Defaults to the controls.
+     */
+    described?: () => HTMLElement;
+  };
   /** Value to render with, for the `selectTextOnFocus` contract. */
   selectOnFocus?: { value: string | number };
   fluidSkeleton?: {
@@ -45,7 +58,7 @@ export type FieldCase = {
  * part in it, with the reason. Keyed by contract, then component name.
  */
 export type Exemptions = Record<
-  "fluid" | "selectOnFocus" | "fluidSkeleton",
+  "fluid" | "state" | "selectOnFocus" | "fluidSkeleton",
   Record<string, string>
 >;
 
