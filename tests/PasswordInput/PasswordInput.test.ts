@@ -2,9 +2,11 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { getBoundText } from "../utils/get-bound-text";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
 import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
+import PasswordInputForm from "./PasswordInput.form.test.svelte";
 import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
@@ -121,6 +123,35 @@ describe("PasswordInput", () => {
 
       await user.click(screen.getByText("Hide password"));
       expect(input).toHaveAttribute("type", "password");
+    });
+
+    it("labels the toggle Hide password when mounted with type text", () => {
+      render(PasswordInput, { labelText: "Password", type: "text" });
+
+      expect(
+        screen.getByRole("button", { name: "Hide password" }),
+      ).toBeInTheDocument();
+    });
+
+    it("writes the toggled type back through bind:type", async () => {
+      render(PasswordInput, { labelText: "Password" });
+      expect(screen.getByTestId("bound-type")).toHaveTextContent("password");
+
+      await user.click(screen.getByRole("button", { name: "Show password" }));
+      expect(screen.getByTestId("bound-type")).toHaveTextContent("text");
+
+      await user.click(screen.getByRole("button", { name: "Hide password" }));
+      expect(screen.getByTestId("bound-type")).toHaveTextContent("password");
+    });
+
+    it("does not submit a form when the toggle is clicked", async () => {
+      const onSubmit = vi.fn((event: Event) => event.preventDefault());
+      render(PasswordInputForm);
+      getForm().addEventListener("submit", onSubmit);
+
+      await user.click(screen.getByRole("button", { name: "Show password" }));
+
+      expect(onSubmit).not.toHaveBeenCalled();
     });
 
     it("should handle custom visibility labels", async () => {
@@ -349,6 +380,19 @@ describe("PasswordInput", () => {
       const input = screen.getByLabelText("Password");
       await user.type(input, "test123");
       expect(getBoundText()).toBe("test123");
+    });
+
+    it("fires consumer input and change handlers on typing and blur", async () => {
+      const onInput = vi.fn();
+      const onChange = vi.fn();
+      render(PasswordInput, { labelText: "Password", onInput, onChange });
+
+      await user.type(screen.getByLabelText("Password"), "abc");
+      expect(onInput).toHaveBeenCalledTimes(3);
+      expect(onChange).not.toHaveBeenCalled();
+
+      await user.tab();
+      expect(onChange).toHaveBeenCalledOnce();
     });
 
     it("should handle focus and blur events", async () => {
