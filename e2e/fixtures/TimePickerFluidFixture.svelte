@@ -24,4 +24,27 @@
       </TimePickerSelect>
     </TimePicker>
   </div>
+  {#each [
+    { id: "invalid", invalid: true },
+    { id: "warning", warn: true },
+  ] as status (status.id)}
+    <div data-testid={status.id}>
+      <TimePicker
+        fluid
+        labelText="Time"
+        value="09:30"
+        invalid={status.invalid}
+        invalidText="Invalid time"
+        warn={status.warn}
+        warnText="Check the time"
+      >
+        <TimePickerSelect value="am" labelText="AM or PM">
+          <SelectItem value="am" text="AM" />
+        </TimePickerSelect>
+        <TimePickerSelect value="utc" labelText="Time zone">
+          <SelectItem value="utc" text="UTC" />
+        </TimePickerSelect>
+      </TimePicker>
+    </div>
+  {/each}
 </div>
