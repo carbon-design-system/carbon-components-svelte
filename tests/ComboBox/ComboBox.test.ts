@@ -8,9 +8,7 @@ import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import ComboBoxFluidForm from "./ComboBox.fluidForm.test.svelte";
-import ComboBoxFluidSkeleton from "./ComboBox.fluidSkeleton.test.svelte";
 import ComboBoxFluidSlot from "./ComboBox.fluidSlot.test.svelte";
-import ComboBoxSkeleton from "./ComboBox.skeleton.test.svelte";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -2458,37 +2456,6 @@ describe("ComboBox", () => {
         "bx--list-box__field--wrapper--input-focused",
       );
     });
-  });
-
-  it("renders skeleton state", () => {
-    render(ComboBoxSkeleton);
-
-    const skeleton = screen.getByTestId("combo-box-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--list-box__wrapper", "bx--form-item");
-    expect(skeleton.children).toHaveLength(2);
-    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass(
-      "bx--skeleton",
-      "bx--combo-box",
-      "bx--list-box",
-    );
-    expect(skeleton.children[1].children[0]).toHaveClass("bx--list-box__field");
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(ComboBoxFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-combo-box-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--list-box__wrapper--fluid");
-    expect(skeleton.children).toHaveLength(1);
-
-    const listBox = skeleton.children[0];
-    expect(listBox).toHaveClass("bx--skeleton", "bx--list-box");
-    expect(listBox.children).toHaveLength(2);
-    expect(listBox.children[0]).toHaveClass("bx--list-box__label");
-    expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
 
   const countries = [

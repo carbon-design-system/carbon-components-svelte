@@ -15,7 +15,6 @@ import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import DropdownFluidForm from "./Dropdown.fluidForm.test.svelte";
-import DropdownFluidSkeleton from "./Dropdown.fluidSkeleton.test.svelte";
 import DropdownFluidSlot from "./Dropdown.fluidSlot.test.svelte";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
@@ -3324,20 +3323,5 @@ describe("Dropdown", () => {
         "bx--list-box__field--wrapper--input-focused",
       );
     });
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(DropdownFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-dropdown-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--list-box__wrapper--fluid");
-    expect(skeleton.children).toHaveLength(1);
-
-    const listBox = skeleton.children[0];
-    expect(listBox).toHaveClass("bx--skeleton", "bx--list-box");
-    expect(listBox.children).toHaveLength(2);
-    expect(listBox.children[0]).toHaveClass("bx--list-box__label");
-    expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
 });

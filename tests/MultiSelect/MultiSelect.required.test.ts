@@ -9,17 +9,14 @@ const items = [
   { id: "1", text: "Email" },
 ];
 
+/** Shared `required` behavior is in tests/ListBox/family/required.test.ts. */
 describe("MultiSelect required", () => {
   it.each([false, true])(
-    "blocks form submission until an item is selected (filterable: %s)",
+    "blocks form submission again once the last item is deselected (filterable: %s)",
     async (filterable) => {
       render(MultiSelect, { props: { items, filterable, required: true } });
 
-      const combobox = screen.getByRole("combobox");
-      expect(combobox).toHaveAttribute("aria-required", "true");
-      expect(getForm().checkValidity()).toBe(false);
-
-      await user.click(combobox);
+      await user.click(screen.getByRole("combobox"));
       await user.click(screen.getByRole("option", { name: "Email" }));
       expect(getForm().checkValidity()).toBe(true);
 
@@ -34,12 +31,5 @@ describe("MultiSelect required", () => {
     });
 
     expect(getForm().checkValidity()).toBe(false);
-  });
-
-  it("is not required by default", () => {
-    render(MultiSelect, { props: { items } });
-
-    expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-required");
-    expect(getForm().checkValidity()).toBe(true);
   });
 });
