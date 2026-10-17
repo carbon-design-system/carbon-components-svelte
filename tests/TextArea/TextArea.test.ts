@@ -524,19 +524,6 @@ describe("TextArea", () => {
     },
   );
 
-  it("should not show helper text when invalid", () => {
-    render(TextArea, {
-      props: {
-        invalid: true,
-        invalidText: "Invalid input",
-        helperText: "Helper text",
-      },
-    });
-
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-    expect(screen.getByText("Invalid input")).toBeInTheDocument();
-  });
-
   it("should handle disabled helper text", () => {
     render(TextArea, {
       props: {

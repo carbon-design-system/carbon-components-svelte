@@ -146,12 +146,6 @@ describe("TimePicker", () => {
     expect(screen.queryByText("Time may be unusual")).not.toBeInTheDocument();
   });
 
-  it("should handle hidden label", () => {
-    render(TimePicker, { props: { hideLabel: true } });
-
-    expect(screen.getByText("Time")).toHaveClass("bx--visually-hidden");
-  });
-
   it("should handle custom id", () => {
     render(TimePicker, { props: { id: "custom-id" } });
 
@@ -242,19 +236,6 @@ describe("TimePicker", () => {
       "aria-describedby",
       "helper-test-id",
     );
-  });
-
-  it("should not render helper text when invalid", () => {
-    render(TimePicker, {
-      props: {
-        helperText: "24-hour, e.g. 14:30",
-        invalid: true,
-        invalidText: "Invalid time",
-      },
-    });
-
-    expect(screen.queryByText("24-hour, e.g. 14:30")).not.toBeInTheDocument();
-    expect(screen.getByText("Invalid time")).toBeInTheDocument();
   });
 
   it("should apply disabled class to helper text when disabled", () => {

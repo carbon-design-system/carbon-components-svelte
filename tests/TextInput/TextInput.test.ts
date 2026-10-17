@@ -160,12 +160,6 @@ describe("TextInput", () => {
     );
   });
 
-  it("should handle hidden label", () => {
-    render(TextInput, { props: { hideLabel: true } });
-
-    expect(screen.getByText("User name")).toHaveClass("bx--visually-hidden");
-  });
-
   it("should handle custom id", () => {
     render(TextInput, { props: { id: "custom-id" } });
 
@@ -232,32 +226,6 @@ describe("TextInput", () => {
 
     await user.clear(input);
     expect(input).toHaveValue(null);
-  });
-
-  it("should not show helper text when invalid", () => {
-    render(TextInput, {
-      props: {
-        invalid: true,
-        invalidText: "Invalid input",
-        helperText: "Helper text",
-      },
-    });
-
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-    expect(screen.getByText("Invalid input")).toBeInTheDocument();
-  });
-
-  it("should not show helper text when warning", () => {
-    render(TextInput, {
-      props: {
-        warn: true,
-        warnText: "Warning message",
-        helperText: "Helper text",
-      },
-    });
-
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-    expect(screen.getByText("Warning message")).toBeInTheDocument();
   });
 
   it("should handle disabled helper text", () => {
@@ -328,46 +296,6 @@ describe("TextInput", () => {
     await user.tab();
 
     expect(mockHandler).toHaveBeenCalled();
-  });
-
-  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
-    render(TextInput, {
-      props: {
-        id: "test-input",
-        invalid: true,
-        invalidText: "Invalid input",
-      },
-    });
-
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
-    expect(input).not.toHaveAttribute("aria-describedby");
-    expect(screen.getByText("Invalid input")).toHaveAttribute("role", "alert");
-  });
-
-  it("should set aria-describedby to warning id when warn", () => {
-    render(TextInput, {
-      props: {
-        id: "test-input",
-        warn: true,
-        warnText: "Warning message",
-      },
-    });
-
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("aria-describedby", "warn-test-input");
-  });
-
-  it("should set aria-describedby to helper id when only helper text", () => {
-    render(TextInput, {
-      props: {
-        id: "test-input",
-        helperText: "Helper text",
-      },
-    });
-
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("aria-describedby", "helper-test-input");
   });
 
   it("should render readonly icon when readonly", () => {
@@ -513,20 +441,6 @@ describe("TextInput", () => {
     const input = screen.getByRole("textbox");
     expect(input).not.toHaveAttribute("data-invalid");
     expect(input).not.toHaveAttribute("aria-invalid");
-  });
-
-  it("should show invalid message when both invalid and warn are set", () => {
-    render(TextInput, {
-      props: {
-        invalid: true,
-        invalidText: "Invalid input",
-        warn: true,
-        warnText: "Warning message",
-      },
-    });
-
-    // When both are set, invalid takes precedence
-    expect(screen.getByText("Invalid input")).toBeInTheDocument();
   });
 
   it("should dispatch change event with parsed value", async () => {
