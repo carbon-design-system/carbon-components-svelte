@@ -1108,7 +1108,7 @@ $carbon--theme--g90: map-merge(
     text-01: #f4f4f4,
     text-02: #c6c6c6,
     text-03: #6f6f6f,
-    text-05: #8d8d8d,
+    text-05: map-get($carbon--theme--g80, 'text-02'), // ccs: Gray 30, 4.5:1 on both fields
     text-error: #ffb3b8,
     icon-01: #f4f4f4,
     icon-02: #c6c6c6,
@@ -1240,7 +1240,7 @@ $carbon--theme--g100: map-merge(
     text-01: #f4f4f4,
     text-02: #c6c6c6,
     text-03: #6f6f6f,
-    text-05: #8d8d8d,
+    text-05: map-get($carbon--theme--g80, 'text-05'), // ccs: Gray 40, 4.5:1 on both fields
     text-error: #ff8389,
     icon-01: #f4f4f4,
     icon-02: #c6c6c6,
