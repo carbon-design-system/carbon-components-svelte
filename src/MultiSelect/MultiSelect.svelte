@@ -895,7 +895,16 @@
     );
     if (eligible === null) return false;
 
-    const rangeIds = new Set(eligible.map((item) => item.id));
+    let changed = eligible.filter((item) => item.checked !== checked);
+    if (checked && hasMaxSelectedItems) {
+      // Fill from the anchor toward the target, stopping at the cap.
+      if (anchorIndex > targetIndex) changed.reverse();
+      changed = changed.slice(
+        0,
+        Math.max(0, maxSelectedItems - selectionCount),
+      );
+    }
+    const rangeIds = new Set(changed.map((item) => item.id));
 
     sortedItems = sortedItems.map((sortedItem) =>
       rangeIds.has(sortedItem.id) && sortedItem.checked !== checked

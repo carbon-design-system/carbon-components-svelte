@@ -630,6 +630,39 @@ describe("MultiSelect", () => {
       );
     });
 
+    it.each([
+      ["Alpha", "Delta", ["Alpha", "Bravo"]],
+      ["Delta", "Alpha", ["Charlie", "Delta"]],
+    ])(
+      "fills a shift+click range from %s toward %s up to the cap",
+      async (anchor, target, expected) => {
+        render(MultiSelect, {
+          props: {
+            items: [
+              { id: "0", text: "Alpha" },
+              { id: "1", text: "Bravo" },
+              { id: "2", text: "Charlie" },
+              { id: "3", text: "Delta" },
+            ],
+            maxSelectedItems: 2,
+            labelText: "Preferences",
+          },
+        });
+
+        await openMenu();
+        await toggleOption(anchor);
+        await user.keyboard("{Shift>}");
+        await user.click(screen.getByRole("option", { name: target }));
+        await user.keyboard("{/Shift}");
+
+        const selected = screen
+          .getAllByRole("option")
+          .filter((option) => option.getAttribute("aria-selected") === "true")
+          .map((option) => option.textContent?.trim());
+        expect(selected).toEqual(expected);
+      },
+    );
+
     it("keeps cap-disabled items navigable but refuses selection", async () => {
       render(MultiSelect, {
         props: {
