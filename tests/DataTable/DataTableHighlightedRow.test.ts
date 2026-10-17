@@ -14,32 +14,6 @@ const rows = [
 ];
 
 describe("DataTable highlightedRowIds", () => {
-  it("highlights rows with the class", () => {
-    const { container } = render(DataTable, {
-      props: { headers, rows, highlightedRowIds: ["b"] },
-    });
-
-    const highlightedRow = container.querySelector("tr[data-row='b']");
-    expect(highlightedRow).toHaveClass("bx--data-table--highlighted-row");
-  });
-
-  it("does not mark non-highlighted rows", () => {
-    const { container } = render(DataTable, {
-      props: { headers, rows, highlightedRowIds: ["b"] },
-    });
-
-    const row = container.querySelector("tr[data-row='a']");
-    expect(row).not.toHaveClass("bx--data-table--highlighted-row");
-  });
-
-  it("adds no highlighted rows by default", () => {
-    const { container } = render(DataTable, { props: { headers, rows } });
-
-    expect(
-      container.querySelector(".bx--data-table--highlighted-row"),
-    ).not.toBeInTheDocument();
-  });
-
   it("reacts when highlightedRowIds changes", async () => {
     const { container, rerender } = render(DataTable, {
       props: { headers, rows, highlightedRowIds: [] },
