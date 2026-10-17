@@ -5,6 +5,8 @@
   export let disabled = false;
   export let labelText = "Expandable search";
   export let placeholder = "Search expandable...";
+  export let onExpand: () => void = () => {};
+  export let onCollapse: () => void = () => {};
 
   let expanded = false;
   let value = "";
@@ -18,12 +20,8 @@
   {disabled}
   {labelText}
   {placeholder}
-  on:expand={() => {
-    console.log("expanded");
-  }}
-  on:collapse={() => {
-    console.log("collapsed");
-  }}
+  on:expand={onExpand}
+  on:collapse={onCollapse}
 />
 
 <div>Status: {expanded ? "expanded" : "collapsed"}</div>

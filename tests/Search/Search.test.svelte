@@ -14,6 +14,7 @@
   export let invalidText = "";
   export let warn = false;
   export let warnText = "";
+  export let onClear: () => void = () => {};
 </script>
 
 <Search
@@ -32,9 +33,7 @@
   labelText="Default search"
   placeholder="Search"
   closeButtonLabelText="Clear value"
-  on:clear={() => {
-    console.log("clear");
-  }}
+  on:clear={onClear}
 />
 
 <Search disabled labelText="Disabled search" placeholder="Search disabled..." />
