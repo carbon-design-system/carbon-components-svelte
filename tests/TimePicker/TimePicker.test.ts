@@ -335,6 +335,29 @@ describe("TimePicker", () => {
     },
   );
 
+  it("renders the invalid icon when invalid", () => {
+    const { container } = render(TimePicker, {
+      props: { invalid: true, invalidText: "Invalid time" },
+    });
+
+    expect(
+      container.querySelector(".bx--text-input__invalid-icon"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--text-input__invalid-icon--warning"),
+    ).toBeNull();
+  });
+
+  it("renders the warning icon when warn is set", () => {
+    const { container } = render(TimePicker, {
+      props: { warn: true, warnText: "Warning message" },
+    });
+
+    expect(
+      container.querySelector(".bx--text-input__invalid-icon--warning"),
+    ).toBeInTheDocument();
+  });
+
   it("should handle label text slot", () => {
     render(TimePickerCustom);
 
@@ -372,6 +395,21 @@ describe("TimePicker", () => {
 
     const [select] = selects;
     expect(await fireEvent.keyDown(select, { key: "ArrowDown" })).toBe(false);
+  });
+
+  it("prevents mousedown on a read-only TimePickerSelect", async () => {
+    render(TimePickerCustom, { props: { selectReadonly: true } });
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(await fireEvent.mouseDown(select)).toBe(false);
+    expect(select).toHaveFocus();
+  });
+
+  it("allows mousedown on an editable TimePickerSelect", async () => {
+    render(TimePicker);
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(await fireEvent.mouseDown(select)).toBe(true);
   });
 
   it("describes a read-only TimePickerSelect for screen readers that ignore aria-readonly", () => {
@@ -441,6 +479,34 @@ describe("TimePicker", () => {
 
       const [select] = screen.getAllByRole("combobox");
       expect(await fireEvent.keyDown(select, { key: "ArrowDown" })).toBe(false);
+    });
+
+    it("applies readonly toggled after mount to the selects", async () => {
+      const { rerender } = render(TimePicker, { props: { readonly: false } });
+
+      await rerender({ readonly: true });
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toHaveAttribute("aria-readonly", "true");
+      }
+
+      await rerender({ readonly: false });
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).not.toHaveAttribute("aria-readonly");
+      }
+    });
+
+    it("applies disabled toggled after mount to the selects", async () => {
+      const { rerender } = render(TimePicker, { props: { disabled: false } });
+
+      await rerender({ disabled: true });
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeDisabled();
+      }
+
+      await rerender({ disabled: false });
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeEnabled();
+      }
     });
 
     it("leaves the selects editable and enabled by default", () => {
