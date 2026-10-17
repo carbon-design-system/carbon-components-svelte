@@ -6,6 +6,7 @@ import {
   within,
 } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import TagInput from "./TagInput.test.svelte";
 import TagInputTagSlot from "./TagInputTagSlot.test.svelte";
@@ -326,7 +327,7 @@ describe("TagInput", () => {
       expect(shownValue()).toEqual(["a", "b"]);
 
       (screen.getByTestId("form") as HTMLFormElement).reset();
-      await new Promise((resolve) => setTimeout(resolve));
+      await flushMacrotask();
       await tick();
 
       expect(shownValue()).toEqual(["a"]);

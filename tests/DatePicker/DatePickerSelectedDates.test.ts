@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
 
@@ -181,7 +182,7 @@ describe("DatePicker bind:selectedDates", () => {
 
     (screen.getByTestId("form") as HTMLFormElement).reset();
     // The reset sync runs on the next task.
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     await tick();
 
     expect(getBound()).toBe("||");

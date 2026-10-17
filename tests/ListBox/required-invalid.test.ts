@@ -4,6 +4,7 @@ import ComboBox from "../ComboBox/ComboBox.form.test.svelte";
 import Dropdown from "../Dropdown/Dropdown.form.test.svelte";
 import DropdownFormAttribute from "../Dropdown/DropdownRequiredFormAttribute.test.svelte";
 import MultiSelect from "../MultiSelect/MultiSelect.form.test.svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 
@@ -55,7 +56,7 @@ describe.each(cases)("$name required invalid state", ({ component, text }) => {
 
     expect(getForm().checkValidity()).toBe(false);
     await tick();
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
 
     expect(screen.queryByText(text)).toBeNull();
     expect(outside).toHaveFocus();
