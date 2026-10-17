@@ -936,6 +936,17 @@
     );
   }
 
+  /**
+   * Clear the selection from the keyboard, dispatching `clear` with the
+   * keyboard event like the clear button does.
+   * @param {KeyboardEvent} event
+   */
+  function clearFromKeyboard(event) {
+    if (readonly || selectionCount === 0) return;
+    dispatch("clear", event);
+    clear({ open: openOnClear });
+  }
+
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
   let announcedFilterCount = null;
 
@@ -1589,10 +1600,10 @@
                 if (readonly) event.preventDefault();
                 openMenu("keydown");
               } else if (event.key === "Backspace" && value === "") {
-                clear({ open: openOnClear });
+                clearFromKeyboard(event);
               } else if (event.key === "Delete") {
                 value = "";
-                if (!open) clear({ open: openOnClear });
+                if (!open) clearFromKeyboard(event);
               }
             }}
             on:input
@@ -1752,7 +1763,7 @@
               // menu but never changes the selection.
               if (readonly) return;
               event.preventDefault();
-              clear({ open: openOnClear });
+              clearFromKeyboard(event);
             } else if (
               open &&
               (event.key === "a" || event.key === "A") &&

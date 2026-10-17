@@ -5,6 +5,7 @@
   import type { ComponentProps } from "svelte";
 
   export let items: ComponentProps<MultiSelect>["items"] = [];
+  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
   export let selectedIds: ComponentProps<MultiSelect>["selectedIds"] = [];
   export let value: ComponentProps<MultiSelect>["value"] = "";
   export let filterable = false;
@@ -100,5 +101,6 @@
   }}
   on:clear={(e) => {
     console.log("clear", e.detail);
+    onclear?.(e);
   }}
 />

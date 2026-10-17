@@ -1249,6 +1249,77 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("clear event from the keyboard", () => {
+    it.each(["Delete", "Backspace"])(
+      "%s dispatches clear with the keyboard event",
+      async (key) => {
+        const onclear = vi.fn();
+        render(MultiSelect, {
+          props: { items, labelText: "Contact", selectedIds: ["0"], onclear },
+        });
+
+        screen.getByRole("combobox").focus();
+        await user.keyboard(`{${key}}`);
+
+        expect(onclear).toHaveBeenCalledOnce();
+        expect(onclear.mock.calls[0][0].detail).toBeInstanceOf(KeyboardEvent);
+      },
+    );
+
+    it("dispatches clear when Backspace clears a filterable selection", async () => {
+      const onclear = vi.fn();
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+          onclear,
+        },
+      });
+
+      screen.getByPlaceholderText("Filter...").focus();
+      await user.keyboard("{Backspace}");
+
+      expect(onclear).toHaveBeenCalledOnce();
+    });
+
+    it("does not dispatch clear when Delete only clears the filter text", async () => {
+      const onclear = vi.fn();
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+          onclear,
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      await user.type(input, "Sl");
+      await user.keyboard("{Delete}");
+
+      expect(onclear).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ["nothing is selected", { selectedIds: [] }],
+      ["read-only", { selectedIds: ["0"], readonly: true }],
+    ])("does not dispatch clear when %s", async (_, props) => {
+      const onclear = vi.fn();
+      render(MultiSelect, {
+        props: { items, labelText: "Contact", onclear, ...props },
+      });
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("{Delete}");
+
+      expect(onclear).not.toHaveBeenCalled();
+    });
+  });
+
   describe("non-filterable: Delete/Backspace clears selection (with announcement)", () => {
     it("Delete clears the selection while the menu is closed and announces it", async () => {
       render(MultiSelect, {
