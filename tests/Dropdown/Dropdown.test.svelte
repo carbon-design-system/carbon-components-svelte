@@ -41,6 +41,7 @@
   export let wrapOptions: ComponentProps<Dropdown>["wrapOptions"] = false;
   export let portalMenu: ComponentProps<Dropdown>["portalMenu"] = false;
   export let onselect: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <Dropdown
@@ -81,6 +82,7 @@
   on:select={(e) => onselect?.(e)}
   on:clear={(e) => {
     console.log("clear", e.type);
+    onclear?.(e);
   }}
   {...$$restProps}
 />

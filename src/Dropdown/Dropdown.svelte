@@ -899,9 +899,11 @@
             (event.key === "Delete" || event.key === "Backspace")
           ) {
             // Clear the selection from the keyboard, menu open or closed,
-            // matching the click-to-clear button. Only wired when `clearable`
-            // is set, since that is what makes clearing possible at all.
+            // matching the click-to-clear button, `clear` event included.
+            // Only wired when `clearable` is set, since that is what makes
+            // clearing possible at all.
             event.preventDefault();
+            dispatch("clear", event);
             clear({ open: openOnClear });
           } else if (isTypeaheadKey(event)) {
             // APG select-only combobox: typing on the closed field opens the
