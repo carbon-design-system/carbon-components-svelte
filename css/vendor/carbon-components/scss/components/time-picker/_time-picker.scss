@@ -138,7 +138,7 @@
 
   .#{$prefix}--time-picker--readonly .#{$prefix}--select__arrow,
   .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select__arrow {
-    fill: $icon-disabled;
+    fill: $icon-secondary;
   }
 }
 

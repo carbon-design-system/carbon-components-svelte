@@ -297,7 +297,7 @@
   // `__anchor` in `static` mode, which breaks the `~` sibling combinator from
   // the input to the icon.
   .#{$prefix}--date-picker-input__wrapper--readonly .#{$prefix}--date-picker__icon {
-    fill: $icon-disabled;
+    fill: $icon-secondary;
   }
 }
 
