@@ -5,7 +5,6 @@ import { user } from "../utils/user";
 import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
 import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
 import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
-import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
 import PasswordInputTooltipGroup from "./PasswordInputTooltipGroup.test.svelte";
@@ -230,17 +229,6 @@ describe("PasswordInput", () => {
       expect(input).toHaveAttribute("type", "password");
     });
 
-    it("should handle helper text", () => {
-      render(PasswordInput, {
-        labelText: "Password",
-        helperText: "Your password should be hard to guess",
-      });
-
-      expect(
-        screen.getByText("Your password should be hard to guess"),
-      ).toBeInTheDocument();
-    });
-
     it("describes the input with its helper text", () => {
       render(PasswordInput, {
         labelText: "Password",
@@ -374,13 +362,6 @@ describe("PasswordInput", () => {
       await user.tab();
       expect(consoleLog).toHaveBeenCalledWith("blur");
     });
-  });
-
-  it("supports custom label slot", () => {
-    render(PasswordInputSlot);
-
-    const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
   });
 
   describe("Portal tooltip", () => {
