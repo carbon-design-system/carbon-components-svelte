@@ -6,6 +6,8 @@ export type FluidBehavior = "hidesHelper" | "messagesInWrapper";
 export type FieldCase = {
   /** Component name, as exported from the package. */
   name: string;
+  /** Tells cases apart when a component has more than one. */
+  variant?: string;
   component: ComponentType;
   /** Props every render of this case starts from. */
   props?: Record<string, unknown>;
@@ -48,6 +50,11 @@ export type FieldCase = {
     initial: string;
     /** Keys the user types after clicking the first control. */
     typed: string;
+    /**
+     * Set to `false` when the typed text isn't the submitted value, like a
+     * filter input, so the reset test skips the `FormData` check.
+     */
+    submits?: boolean;
     /** Events the field dispatches while the user types and leaves it. */
     events: ("input" | "change")[];
     /**
@@ -78,3 +85,6 @@ export type Exemptions = Record<
 >;
 
 export const controls = (c: FieldCase) => [c.control()].flat();
+
+export const title = (c: FieldCase) =>
+  c.variant ? `${c.name} (${c.variant})` : c.name;

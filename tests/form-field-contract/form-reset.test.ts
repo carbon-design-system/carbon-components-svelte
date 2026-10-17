@@ -4,14 +4,14 @@ import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import { cases } from "./cases";
-import { controls, type FieldCase } from "./contract";
+import { controls, type FieldCase, title } from "./contract";
 import FormHost from "./fixtures/FormHost.test.svelte";
 
 type ResetCase = FieldCase & { reset: NonNullable<FieldCase["reset"]> };
 
 const resetCases = cases
   .filter((c): c is ResetCase => !!c.reset)
-  .map((c) => [c.name, c] as const);
+  .map((c) => [title(c), c] as const);
 
 const inputs = (c: FieldCase) =>
   controls(c).map((control) => {
@@ -39,7 +39,7 @@ describe.each(resetCases)("%s form reset", (_, c) => {
       props: { component: c.component, fieldProps: c.props, ...props },
     });
 
-  it("clears the typed value, the binding, and the submitted value", async () => {
+  it("clears the typed value and the binding", async () => {
     renderField();
 
     await typeInto(c);
@@ -49,8 +49,19 @@ describe.each(resetCases)("%s form reset", (_, c) => {
 
     expect(shown(c)).toBe("");
     expect(getBoundText()).toBe("");
-    expect(new FormData(getForm()).get("field")).toBe("");
   });
+
+  it.skipIf(c.reset.submits === false)(
+    "clears the submitted value",
+    async () => {
+      renderField();
+
+      await typeInto(c);
+      await resetForm();
+
+      expect(new FormData(getForm()).get("field")).toBe("");
+    },
+  );
 
   it("clears a value set on the client, like the browser does", async () => {
     renderField({ value: c.reset.initial });

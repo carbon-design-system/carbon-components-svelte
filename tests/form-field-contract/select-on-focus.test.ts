@@ -3,7 +3,7 @@ import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { cases } from "./cases";
-import { controls, type FieldCase } from "./contract";
+import { controls, type FieldCase, title } from "./contract";
 import FieldHost from "./fixtures/FieldHost.test.svelte";
 
 type SelectCase = FieldCase & {
@@ -12,7 +12,7 @@ type SelectCase = FieldCase & {
 
 const selectCases = cases
   .filter((c): c is SelectCase => !!c.selectOnFocus)
-  .map((c) => [c.name, c] as const);
+  .map((c) => [title(c), c] as const);
 
 const renderField = (c: SelectCase, props: Record<string, unknown> = {}) => {
   render(FieldHost, {

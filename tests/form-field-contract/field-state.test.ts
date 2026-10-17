@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { cases } from "./cases";
-import { controls, type FieldCase } from "./contract";
+import { controls, type FieldCase, title } from "./contract";
 import FieldHost from "./fixtures/FieldHost.test.svelte";
 
 const stateCases = cases
   .filter((c) => c.state)
-  .map((c) => [c.name, c] as const);
+  .map((c) => [title(c), c] as const);
 
 const renderField = (c: FieldCase, props: Record<string, unknown> = {}) =>
   render(FieldHost, {

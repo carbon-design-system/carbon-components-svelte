@@ -1,5 +1,7 @@
 import { screen } from "@testing-library/svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import FluidPinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/FluidPinCodeInputSkeleton.svelte";
@@ -21,7 +23,49 @@ const textInputSkeleton = {
   field: "bx--text-input",
 };
 
+const listItems = [
+  { id: "0", text: "Ada" },
+  { id: "1", text: "Grace" },
+];
+
 export const cases: FieldCase[] = [
+  {
+    name: "Dropdown",
+    component: Dropdown,
+    props: { items: listItems },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
+    fluid: {
+      className: "bx--list-box__wrapper--fluid",
+      wrapper: ".bx--list-box__wrapper--fluid",
+      errorAttribute: "aria-describedby",
+      ignoredWith: { type: "inline" },
+    },
+  },
+  {
+    name: "MultiSelect",
+    component: MultiSelect,
+    props: { items: listItems },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
+    fluid: {
+      className: "bx--list-box__wrapper--fluid",
+      wrapper: ".bx--list-box__wrapper--fluid",
+      errorAttribute: "aria-describedby",
+      ignoredWith: { type: "inline" },
+    },
+  },
+  {
+    name: "MultiSelect",
+    variant: "filterable",
+    component: MultiSelect,
+    props: { items: listItems, filterable: true },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
+    // The filter text is a query, not the submitted value.
+    reset: { initial: "Ada", typed: "x", events: ["input"], submits: false },
+    selectOnFocus: { value: "Ada" },
+  },
   {
     name: "ComboBox",
     component: ComboBox,
@@ -183,23 +227,18 @@ export const cases: FieldCase[] = [
   },
 ];
 
-const LISTBOX_AUDIT = "covered by its own tests until the listbox family audit";
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
 const NOT_AUDITED =
   "covered by its own tests; not audited against the contract yet";
 
 export const exempt: Exemptions = {
   fluid: {
-    CopyInput: LISTBOX_AUDIT,
-    DatePicker: LISTBOX_AUDIT,
-    Dropdown: LISTBOX_AUDIT,
-    MultiSelect: LISTBOX_AUDIT,
+    CopyInput: NOT_AUDITED,
+    DatePicker: NOT_AUDITED,
   },
   state: {
-    DatePickerInput: LISTBOX_AUDIT,
-    Dropdown: LISTBOX_AUDIT,
-    ListBox: LISTBOX_AUDIT,
-    MultiSelect: LISTBOX_AUDIT,
+    DatePickerInput: NOT_AUDITED,
+    ListBox: "a wrapper with no control of its own",
     Checkbox: NOT_AUDITED,
     CheckboxGroup: NOT_AUDITED,
     RadioButtonGroup: NOT_AUDITED,
@@ -209,8 +248,8 @@ export const exempt: Exemptions = {
     Toggle: NOT_AUDITED,
   },
   reset: {
-    ListBoxRequiredInput: LISTBOX_AUDIT,
-    MultiSelect: LISTBOX_AUDIT,
+    ListBoxRequiredInput:
+      "a hidden validation proxy, covered by tests/ListBox/required-invalid.test.ts",
     NumberInput: "keeps its value on reset unless allowEmpty is set",
     Checkbox: NOT_A_TEXT_FIELD,
     DataTable: NOT_A_TEXT_FIELD,
@@ -225,9 +264,8 @@ export const exempt: Exemptions = {
     Toggle: NOT_A_TEXT_FIELD,
   },
   selectOnFocus: {
-    CopyInput: LISTBOX_AUDIT,
-    DatePickerInput: LISTBOX_AUDIT,
-    MultiSelect: LISTBOX_AUDIT,
+    CopyInput: NOT_AUDITED,
+    DatePickerInput: NOT_AUDITED,
     PinCodeInput: "selects the focused segment, which its own tests cover",
     HeaderSearch: "a UI shell search, not a form field",
     SearchMenu: "forwards the prop to Search",
@@ -238,10 +276,12 @@ export const exempt: Exemptions = {
   fluidSkeleton: {
     ComboBox:
       "nests its field placeholder in a list box shape the contract doesn't model",
-    CopyInput: LISTBOX_AUDIT,
-    DatePicker: LISTBOX_AUDIT,
-    Dropdown: LISTBOX_AUDIT,
-    MultiSelect: LISTBOX_AUDIT,
+    CopyInput: NOT_AUDITED,
+    DatePicker: NOT_AUDITED,
+    Dropdown:
+      "nests its field placeholder in a list box shape the contract doesn't model",
+    MultiSelect:
+      "nests its field placeholder in a list box shape the contract doesn't model",
     TimePicker: "renders select placeholders, which its own tests cover",
   },
 };
