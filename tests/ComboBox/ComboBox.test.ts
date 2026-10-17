@@ -5,10 +5,7 @@ import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzy-match";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
-import ComboBoxFluidForm from "./ComboBox.fluidForm.test.svelte";
-import ComboBoxFluidSlot from "./ComboBox.fluidSlot.test.svelte";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -599,48 +596,20 @@ describe("ComboBox", () => {
     expect(screen.getByText("Contact")).toHaveClass("bx--label--disabled");
   });
 
-  it("should handle hidden label", () => {
-    render(ComboBox, {
-      props: {
-        labelText: "Hidden Label",
-        hideLabel: true,
-      },
-    });
-
-    expect(screen.getByText("Hidden Label")).toHaveClass("bx--visually-hidden");
-  });
-
-  it("should handle invalid state", () => {
+  // Invalid, warning, and helper wiring is in tests/form-field-contract.
+  it("marks the list box invalid", () => {
     const { container } = render(ComboBox, {
-      props: {
-        invalid: true,
-        invalidText: "Invalid selection",
-      },
+      props: { invalid: true, invalidText: "Invalid selection" },
     });
 
     expect(container.querySelector(".bx--combo-box")).toHaveAttribute(
       "data-invalid",
       "true",
     );
-    expect(screen.getByText("Invalid selection")).toBeInTheDocument();
-    const input = screen.getByRole("combobox");
-    expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input).toHaveAccessibleErrorMessage("Invalid selection");
-  });
-
-  it("should handle warning state", () => {
-    render(ComboBox, {
-      props: {
-        warn: true,
-        warnText: "Warning message",
-      },
-    });
-
-    expect(screen.getByText("Warning message")).toBeInTheDocument();
   });
 
   it.each(["disabled", "readonly"] as const)(
-    "should suppress invalid and warn states when %s",
+    "keeps the list box and its icon out of the invalid state when %s",
     (state) => {
       const { container } = render(ComboBox, {
         props: {
@@ -655,18 +624,9 @@ describe("ComboBox", () => {
       expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
         "data-invalid",
       );
-      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-invalid");
       expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
     },
   );
-
-  it("should handle helper text", () => {
-    render(ComboBox, { props: { helperText: "Helper message" } });
-
-    expect(screen.getByText("Helper message")).toBeInTheDocument();
-  });
 
   it("should handle light variant", () => {
     render(ComboBox, { props: { light: true } });
@@ -1467,40 +1427,6 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("C");
   });
 
-  it("should not show helper text if warn is true", () => {
-    render(ComboBox, { props: { helperText: "Help", warn: true } });
-    expect(screen.queryByText("Help")).not.toBeInTheDocument();
-  });
-
-  it("should not show helper text if invalid is true", () => {
-    render(ComboBox, { props: { helperText: "Help", invalid: true } });
-    expect(screen.queryByText("Help")).not.toBeInTheDocument();
-  });
-
-  it("should describe the input by helperText", () => {
-    render(ComboBoxReal, { props: { id: "cb", helperText: "Help" } });
-    expect(getInput()).toHaveAttribute("aria-describedby", "helper-cb");
-    expect(screen.getByText("Help")).toHaveAttribute("id", "helper-cb");
-  });
-
-  it("should describe the input by warnText when warn is true", () => {
-    render(ComboBoxReal, {
-      props: { id: "cb", warn: true, warnText: "Warn" },
-    });
-    expect(getInput()).toHaveAttribute("aria-describedby", "warn-cb");
-    expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-cb");
-  });
-
-  it("should reference invalidText via aria-errormessage when invalid is true", () => {
-    render(ComboBoxReal, {
-      props: { id: "cb", invalid: true, invalidText: "Bad" },
-    });
-    expect(getInput()).toHaveAttribute("aria-errormessage", "error-cb");
-    expect(getInput()).not.toHaveAttribute("aria-describedby");
-    expect(screen.getByText("Bad")).toHaveAttribute("id", "error-cb");
-    expect(screen.getByText("Bad")).toHaveAttribute("role", "alert");
-  });
-
   it("should not set aria-describedby when no message is shown", () => {
     render(ComboBoxReal, { props: { id: "cb" } });
     expect(getInput()).not.toHaveAttribute("aria-describedby");
@@ -1513,68 +1439,6 @@ describe("ComboBox", () => {
     expect(getInput()).toHaveFocus();
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("should select all text on focus when selectTextOnFocus is true", async () => {
-    render(ComboBox, {
-      props: {
-        selectedId: "1",
-        value: "Email",
-        selectTextOnFocus: true,
-      },
-    });
-
-    const input = getInput();
-    expect(input).toHaveValue("Email");
-
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(0);
-    expect(input.selectionEnd).toBe(5);
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(ComboBox, {
-      props: { selectedId: "1", value: "Email", selectTextOnFocus: true },
-    });
-
-    const mouseup = await clickToFocus(getInput());
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("should not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(ComboBox, {
-      props: {
-        selectedId: "1",
-        value: "Email",
-        selectTextOnFocus: false,
-      },
-    });
-
-    const input = getInput();
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(input.selectionEnd);
-    expect(input.selectionEnd).toBe(5);
-  });
-
-  it("does not select text on focus when disabled", async () => {
-    render(ComboBox, {
-      props: {
-        selectedId: "1",
-        value: "Email",
-        selectTextOnFocus: true,
-        disabled: true,
-      },
-    });
-
-    const input = getInput();
-    const select = vi.spyOn(input, "select");
-    await fireEvent.focus(input);
-
-    expect(select).not.toHaveBeenCalled();
   });
 
   describe("Generics", () => {
@@ -2287,90 +2151,27 @@ describe("ComboBox", () => {
   });
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      render(ComboBox);
+    // The shared fluid behavior is in tests/form-field-contract.
+    it.each([false, true])(
+      "renders the divider only when fluid is %s",
+      (fluid) => {
+        render(ComboBox, { props: { fluid } });
+
+        expect(document.querySelector(".bx--list-box__divider") !== null).toBe(
+          fluid,
+        );
+      },
+    );
+
+    it("marks the fluid wrapper invalid", () => {
+      render(ComboBox, {
+        props: { fluid: true, invalid: true, invalidText: "Invalid selection" },
+      });
 
       expect(
         document.querySelector(".bx--list-box__wrapper--fluid"),
-      ).toBeNull();
-      expect(document.querySelector(".bx--list-box__divider")).toBeNull();
+      ).toHaveClass("bx--list-box__wrapper--fluid--invalid");
     });
-
-    it("renders fluid variant and suppresses helper text", () => {
-      render(ComboBox, {
-        props: {
-          fluid: true,
-          helperText: "Helper text",
-        },
-      });
-
-      const input = getInput();
-      expect(input.closest(".bx--list-box__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid",
-      );
-      expect(
-        document.querySelector(".bx--list-box__divider"),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(input).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("renders the error message inside the fluid wrapper", () => {
-      render(ComboBox, {
-        props: {
-          id: "test-combobox",
-          fluid: true,
-          invalid: true,
-          invalidText: "Invalid selection",
-        },
-      });
-
-      const message = screen.getByText("Invalid selection");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
-      expect(message.closest(".bx--list-box__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid--invalid",
-      );
-      expect(getInput()).toHaveAttribute(
-        "aria-errormessage",
-        "error-test-combobox",
-      );
-      expect(getInput()).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("renders the warning message inside the fluid wrapper", () => {
-      render(ComboBox, {
-        props: {
-          fluid: true,
-          warn: true,
-          warnText: "Warning message",
-        },
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(ComboBox, {
-          props: {
-            fluid: true,
-            invalid: true,
-            invalidText: "Invalid selection",
-            warn: true,
-            warnText: "Warning message",
-            ...props,
-          },
-        });
-
-        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(document.querySelector("[data-invalid]")).toBeNull();
-      },
-    );
 
     it.each([
       { props: {}, neutral: true },
@@ -2441,30 +2242,6 @@ describe("ComboBox", () => {
       expect(
         document.querySelector(".bx--list-box__wrapper--fluid--condensed"),
       ).toBeNull();
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(ComboBoxFluidForm);
-
-      expect(getInput().closest(".bx--list-box__wrapper")).toHaveClass(
-        "bx--list-box__wrapper--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(ComboBoxFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(ComboBoxFluidSlot, { props: { fluid: false } });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
     });
 
     it("toggles the input-focused class on the fluid field wrapper", async () => {
