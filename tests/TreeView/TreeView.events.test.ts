@@ -452,23 +452,28 @@ describe("TreeView select:change", () => {
     expect(selected).toEqual([treeItemById(7)]);
   });
 
-  it("selects numeric node ids on Ctrl+Shift+End", async () => {
-    const onSelectChange = vi.fn();
-    render(TreeViewChangeEvents, {
-      multiselect: true,
-      selectedIds: [],
-      onSelectChange,
-    });
+  it.each(["Control", "Meta"])(
+    "selects numeric node ids on %s+Shift+End",
+    async (modifier) => {
+      const onSelectChange = vi.fn();
+      render(TreeViewChangeEvents, {
+        multiselect: true,
+        selectedIds: [],
+        onSelectChange,
+      });
 
-    treeItemById(0).focus();
-    await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
+      treeItemById(0).focus();
+      await user.keyboard(`{${modifier}>}{Shift>}{End}{/Shift}{/${modifier}}`);
 
-    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
-    const detail = lastSelectDetail(onSelectChange);
-    expect([...detail.selectedIds].sort(byNumber)).toEqual([0, 1, 7, 9]);
-    expect(detail.selectedIds.every((id) => typeof id === "number")).toBe(true);
-    expect(treeItemById(7)).toHaveAttribute("aria-selected", "true");
-  });
+      await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+      const detail = lastSelectDetail(onSelectChange);
+      expect([...detail.selectedIds].sort(byNumber)).toEqual([0, 1, 7, 9]);
+      expect(detail.selectedIds.every((id) => typeof id === "number")).toBe(
+        true,
+      );
+      expect(treeItemById(7)).toHaveAttribute("aria-selected", "true");
+    },
+  );
 
   it("selects numeric node ids on Ctrl+Shift+Home", async () => {
     const onSelectChange = vi.fn();

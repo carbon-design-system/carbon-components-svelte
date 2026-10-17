@@ -599,31 +599,36 @@ describe("TreeView Props", () => {
     });
   });
 
-  it("Ctrl+A selects every non-disabled visible row in multiselect mode", async () => {
-    const { component } = render(TreeViewMultiselect, {
-      multiselect: true,
-      selectedIds: [],
-    });
+  it.each(["Control", "Meta"])(
+    "%s+A selects every non-disabled visible row in multiselect mode",
+    async (modifier) => {
+      const { component } = render(TreeViewMultiselect, {
+        multiselect: true,
+        selectedIds: [],
+      });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    aiItem.focus();
+      const aiItem = screen.getByRole("treeitem", {
+        name: /AI \/ Machine learning/,
+      });
+      aiItem.focus();
 
-    await user.keyboard("{Control>}a{/Control}");
+      await user.keyboard(`{${modifier}>}a{/${modifier}}`);
 
-    expect(
-      [...(component.selectedIds ?? [])].sort((a, b) => Number(a) - Number(b)),
-    ).toEqual([0, 1, 7, 9]);
-    const selectedItems = screen.getAllByRole("treeitem", { selected: true });
-    const names = selectedItems.map(treeitemPrimaryLabel).sort();
-    expect(names).toEqual([
-      "AI / Machine learning",
-      "Analytics",
-      "Blockchain",
-      "Databases",
-    ]);
-  });
+      expect(
+        [...(component.selectedIds ?? [])].sort(
+          (a, b) => Number(a) - Number(b),
+        ),
+      ).toEqual([0, 1, 7, 9]);
+      const selectedItems = screen.getAllByRole("treeitem", { selected: true });
+      const names = selectedItems.map(treeitemPrimaryLabel).sort();
+      expect(names).toEqual([
+        "AI / Machine learning",
+        "Analytics",
+        "Blockchain",
+        "Databases",
+      ]);
+    },
+  );
 
   it("handles multiple selectedIds with multiselect", () => {
     render(TreeViewMultiselect, {
