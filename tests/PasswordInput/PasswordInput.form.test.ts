@@ -97,6 +97,9 @@ describe("PasswordInput form reset", () => {
     const input = screen.getByLabelText("Password");
 
     await user.type(input, "e");
+    await user.tab();
+    expect(onInput).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
     onInput.mockClear();
     onChange.mockClear();
 

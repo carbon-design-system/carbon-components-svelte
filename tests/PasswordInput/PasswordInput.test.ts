@@ -464,7 +464,7 @@ describe("PasswordInput", () => {
       expect(screen.getByText("Show password")).toBeInTheDocument();
     });
 
-    it("should not render portal tooltip when disabled", () => {
+    it("should not render portal tooltip when disabled", async () => {
       render(PasswordInput, {
         props: {
           labelText: "Password",
@@ -476,6 +476,8 @@ describe("PasswordInput", () => {
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
       expect(button).toHaveClass("bx--tooltip--portal-active");
+
+      await fireEvent.mouseEnter(button);
       expect(
         document.querySelector("[data-floating-portal]"),
       ).not.toBeInTheDocument();
