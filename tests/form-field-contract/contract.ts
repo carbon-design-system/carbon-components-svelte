@@ -42,6 +42,21 @@ export type FieldCase = {
      */
     described?: () => HTMLElement;
   };
+  /** Takes part in the form reset contract. */
+  reset?: {
+    /** Value to render with, or to restore as the server-rendered default. */
+    initial: string;
+    /** Keys the user types after clicking the first control. */
+    typed: string;
+    /** Events the field dispatches while the user types and leaves it. */
+    events: ("input" | "change")[];
+    /**
+     * Mimics server-rendered markup, which carries the value as the
+     * controls' `value` attribute. Defaults to setting the first control's
+     * `defaultValue`.
+     */
+    serverDefault?: (value: string) => void;
+  };
   /** Value to render with, for the `selectTextOnFocus` contract. */
   selectOnFocus?: { value: string | number };
   fluidSkeleton?: {
@@ -58,7 +73,7 @@ export type FieldCase = {
  * part in it, with the reason. Keyed by contract, then component name.
  */
 export type Exemptions = Record<
-  "fluid" | "state" | "selectOnFocus" | "fluidSkeleton",
+  "fluid" | "state" | "reset" | "selectOnFocus" | "fluidSkeleton",
   Record<string, string>
 >;
 
