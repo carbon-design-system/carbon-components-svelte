@@ -5,7 +5,7 @@
         <g id="slide">
             <rect id="surface" fill="var(--cds-field-01, #f4f4f4)" x="76" y="28" width="168" height="92"></rect>
             <rect id="media" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="40" width="56" height="68"></rect>
-            <rect id="heading" fill="var(--cds-text-placeholder, #a8a8a8)" x="156" y="44" width="64" height="8"></rect>
+            <rect id="heading" fill="var(--cds-text-03, #a8a8a8)" x="156" y="44" width="64" height="8"></rect>
             <rect id="text-1" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="60" width="76" height="6"></rect>
             <rect id="text-2" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="72" width="60" height="6"></rect>
         </g>

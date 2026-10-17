@@ -5,7 +5,7 @@
         <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="56" width="64" height="8"></rect>
         <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="72" width="168" height="32"></rect>
         <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="103" width="168" height="1"></rect>
-        <rect id="value" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="84" width="90" height="8"></rect>
+        <rect id="value" fill="var(--cds-text-03, #a8a8a8)" x="88" y="84" width="90" height="8"></rect>
         <g id="copy-icon" transform="translate(222, 81) scale(0.4375)" fill="var(--cds-border-strong, #8d8d8d)">
             <path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"></path>
             <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"></path>

@@ -3,14 +3,14 @@
     <title>splitter</title>
     <g id="splitter" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="container" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76.5" y="40.5" width="167" height="99"></rect>
-        <rect id="start-row-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="54" width="36" height="6"></rect>
+        <rect id="start-row-1" fill="var(--cds-text-03, #a8a8a8)" x="88" y="54" width="36" height="6"></rect>
         <rect id="start-row-2" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="70" width="28" height="6"></rect>
         <rect id="start-row-3" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="86" width="32" height="6"></rect>
         <rect id="start-row-4" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="102" width="24" height="6"></rect>
         <rect id="end-heading" fill="var(--cds-text-secondary, #525252)" x="148" y="54" width="56" height="8"></rect>
-        <rect id="end-text-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="148" y="72" width="84" height="6"></rect>
-        <rect id="end-text-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="148" y="84" width="72" height="6"></rect>
-        <rect id="end-text-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="148" y="96" width="80" height="6"></rect>
+        <rect id="end-text-1" fill="var(--cds-text-03, #a8a8a8)" x="148" y="72" width="84" height="6"></rect>
+        <rect id="end-text-2" fill="var(--cds-text-03, #a8a8a8)" x="148" y="84" width="72" height="6"></rect>
+        <rect id="end-text-3" fill="var(--cds-text-03, #a8a8a8)" x="148" y="96" width="80" height="6"></rect>
         <rect id="separator" fill="var(--cds-interactive-01, #0f62fe)" x="135" y="41" width="2" height="98"></rect>
     </g>
 </svg>

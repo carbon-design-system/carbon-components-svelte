@@ -9,14 +9,14 @@
         <rect id="row-divider-1" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="90" width="200" height="1"></rect>
         <rect id="row-divider-2" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="110" width="200" height="1"></rect>
         <rect id="row-divider-3" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="130" width="200" height="1"></rect>
-        <rect id="row-1-col-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="68" y="77" width="45" height="6"></rect>
-        <rect id="row-1-col-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="134" y="77" width="30" height="6"></rect>
-        <rect id="row-1-col-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="201" y="77" width="35" height="6"></rect>
-        <rect id="row-2-col-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="68" y="97" width="38" height="6"></rect>
-        <rect id="row-2-col-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="134" y="97" width="35" height="6"></rect>
-        <rect id="row-2-col-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="201" y="97" width="25" height="6"></rect>
-        <rect id="row-3-col-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="68" y="117" width="50" height="6"></rect>
-        <rect id="row-3-col-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="134" y="117" width="25" height="6"></rect>
-        <rect id="row-3-col-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="201" y="117" width="30" height="6"></rect>
+        <rect id="row-1-col-1" fill="var(--cds-text-03, #a8a8a8)" x="68" y="77" width="45" height="6"></rect>
+        <rect id="row-1-col-2" fill="var(--cds-text-03, #a8a8a8)" x="134" y="77" width="30" height="6"></rect>
+        <rect id="row-1-col-3" fill="var(--cds-text-03, #a8a8a8)" x="201" y="77" width="35" height="6"></rect>
+        <rect id="row-2-col-1" fill="var(--cds-text-03, #a8a8a8)" x="68" y="97" width="38" height="6"></rect>
+        <rect id="row-2-col-2" fill="var(--cds-text-03, #a8a8a8)" x="134" y="97" width="35" height="6"></rect>
+        <rect id="row-2-col-3" fill="var(--cds-text-03, #a8a8a8)" x="201" y="97" width="25" height="6"></rect>
+        <rect id="row-3-col-1" fill="var(--cds-text-03, #a8a8a8)" x="68" y="117" width="50" height="6"></rect>
+        <rect id="row-3-col-2" fill="var(--cds-text-03, #a8a8a8)" x="134" y="117" width="25" height="6"></rect>
+        <rect id="row-3-col-3" fill="var(--cds-text-03, #a8a8a8)" x="201" y="117" width="30" height="6"></rect>
     </g>
 </svg>

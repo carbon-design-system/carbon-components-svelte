@@ -4,8 +4,8 @@
     <g id="full-page-error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="label" fill="var(--cds-support-error, #da1e28)" x="76" y="58" width="32" height="6"></rect>
         <rect id="title" fill="var(--cds-text-secondary, #525252)" x="76" y="72" width="92" height="12"></rect>
-        <rect id="description-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="76" y="100" width="84" height="6"></rect>
-        <rect id="description-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="76" y="112" width="60" height="6"></rect>
+        <rect id="description-1" fill="var(--cds-text-03, #a8a8a8)" x="76" y="100" width="84" height="6"></rect>
+        <rect id="description-2" fill="var(--cds-text-03, #a8a8a8)" x="76" y="112" width="60" height="6"></rect>
         <rect id="illustration-frame" fill="var(--cds-field-01, #f4f4f4)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="188" y="40" width="68" height="100"></rect>
     </g>
 </svg>

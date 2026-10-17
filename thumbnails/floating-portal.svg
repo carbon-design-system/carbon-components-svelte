@@ -15,6 +15,6 @@
         <rect id="layer-shadow" fill="black" filter="url(#floating-portal-shadow)" x="116" y="36" width="132" height="60"></rect>
         <rect id="layer" fill="var(--cds-ui-02, #ffffff)" x="116" y="36" width="132" height="60"></rect>
         <rect id="content-1" fill="var(--cds-text-secondary, #525252)" x="130" y="52" width="80" height="8"></rect>
-        <rect id="content-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="130" y="70" width="56" height="8"></rect>
+        <rect id="content-2" fill="var(--cds-text-03, #a8a8a8)" x="130" y="70" width="56" height="8"></rect>
     </g>
 </svg>

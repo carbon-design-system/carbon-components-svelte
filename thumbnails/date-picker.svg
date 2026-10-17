@@ -9,7 +9,7 @@
         </filter>
     </defs>
     <g id="date-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="24" width="56" height="6"></rect>
+        <rect id="label" fill="var(--cds-text-03, #a8a8a8)" x="88" y="24" width="56" height="6"></rect>
         <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="88" y="40" width="144" height="32"></rect>
         <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="88" y="71" width="144" height="1"></rect>
         <rect id="value" fill="var(--cds-text-secondary, #525252)" x="100" y="52" width="56" height="8"></rect>

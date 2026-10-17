@@ -17,7 +17,7 @@
         <rect x="86" y="76" width="148" height="68" fill="black" filter="url(#menu-button-shadow)"></rect>
         <rect x="86" y="76" width="148" height="68" fill="var(--cds-ui-02, #ffffff)"></rect>
         <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="98" y="88" width="70" height="8"></rect>
-        <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="98" y="108" width="90" height="8"></rect>
-        <rect id="item-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="98" y="128" width="50" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="98" y="108" width="90" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-text-03, #a8a8a8)" x="98" y="128" width="50" height="8"></rect>
     </g>
 </svg>

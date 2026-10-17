@@ -3,7 +3,7 @@
     <title>pagination</title>
     <g id="pagination" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="bar" fill="var(--cds-field-01, #f4f4f4)" x="40" y="74" width="240" height="32"></rect>
-        <rect id="left-label" fill="var(--cds-text-placeholder, #a8a8a8)" x="52" y="87" width="40" height="6"></rect>
+        <rect id="left-label" fill="var(--cds-text-03, #a8a8a8)" x="52" y="87" width="40" height="6"></rect>
         <rect id="left-select" fill="var(--cds-text-secondary, #525252)" x="100" y="87" width="20" height="6"></rect>
         <g id="left-chevron" transform="translate(128, 82)" fill="var(--cds-icon-primary, #161616)">
             <g transform="translate(8, 8) scale(0.5) translate(-16, -16)">

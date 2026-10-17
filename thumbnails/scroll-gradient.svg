@@ -16,7 +16,7 @@
     </defs>
     <g id="scroll-gradient" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="surface" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76" y="42" width="168" height="96"></rect>
-        <g id="content" clip-path="url(#scroll-gradient-clip)" fill="var(--cds-text-placeholder, #a8a8a8)">
+        <g id="content" clip-path="url(#scroll-gradient-clip)" fill="var(--cds-text-03, #a8a8a8)">
             <rect x="90" y="38" width="140" height="6"></rect>
             <rect x="90" y="54" width="120" height="6"></rect>
             <rect x="90" y="70" width="132" height="6"></rect>

@@ -10,7 +10,7 @@ export const THUMBNAIL_TOKENS: Record<string, string> = {
   "field-01": "#f4f4f4",
   "border-subtle": "#e0e0e0",
   "text-disabled": "#c6c6c6",
-  "text-placeholder": "#a8a8a8",
+  "text-03": "#a8a8a8",
   "border-strong": "#8d8d8d",
   "text-secondary": "#525252",
   "button-secondary": "#393939",

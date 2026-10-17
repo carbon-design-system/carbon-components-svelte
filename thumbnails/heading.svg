@@ -4,7 +4,7 @@
     <g id="heading" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="h1" fill="var(--cds-icon-primary, #161616)" x="76" y="48" width="140" height="14"></rect>
         <rect id="h2" fill="var(--cds-text-secondary, #525252)" x="76" y="78" width="110" height="10"></rect>
-        <rect id="h3" fill="var(--cds-text-placeholder, #a8a8a8)" x="76" y="102" width="88" height="8"></rect>
+        <rect id="h3" fill="var(--cds-text-03, #a8a8a8)" x="76" y="102" width="88" height="8"></rect>
         <rect id="h4" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="124" width="64" height="6"></rect>
     </g>
 </svg>
