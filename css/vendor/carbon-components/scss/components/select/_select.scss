@@ -326,7 +326,7 @@
   }
 
   .#{$prefix}--select--readonly .#{$prefix}--select__arrow {
-    fill: $icon-disabled;
+    fill: $icon-secondary;
   }
 
   .#{$prefix}--select--readonly.#{$prefix}--select--inline .#{$prefix}--select-input:hover { // ccs: dedupe
