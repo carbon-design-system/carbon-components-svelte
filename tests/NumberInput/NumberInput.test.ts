@@ -475,16 +475,6 @@ describe("NumberInput", () => {
     expect(screen.getByTestId("value").textContent).toBe("0");
   });
 
-  it("should handle empty value when allowEmpty is true", async () => {
-    render(NumberInput, {
-      props: { allowEmpty: true },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    await user.clear(input);
-    expect(input).toHaveValue(null);
-  });
-
   it("should show invalid state when value exceeds max via typing", async () => {
     render(NumberInput, { props: { min: 4, max: 20 } });
 
@@ -581,20 +571,6 @@ describe("NumberInput", () => {
     );
   });
 
-  it("should have paste event listener", () => {
-    render(NumberInput);
-    const input = screen.getByLabelText("Clusters");
-
-    expect(input).toBeInTheDocument();
-  });
-
-  it("should have wrapper element for event handling", () => {
-    const { container } = render(NumberInput);
-
-    const wrapper = container.querySelector(".bx--form-item");
-    expect(wrapper).toBeInTheDocument();
-  });
-
   it("should support custom translateWithId function", () => {
     const props = {
       translateWithId: (id: string) => {
@@ -612,27 +588,6 @@ describe("NumberInput", () => {
     expect(
       screen.getByRole("button", { name: "Custom Decrement" }),
     ).toBeInTheDocument();
-  });
-
-  it("should use translateWithId to customize button labels", () => {
-    render(NumberInput, {
-      props: {
-        translateWithId: (id: string) => {
-          if (id === "increment") return "Plus";
-          if (id === "decrement") return "Minus";
-          return id;
-        },
-      },
-    });
-
-    expect(screen.getByRole("button", { name: "Plus" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Minus" })).toBeInTheDocument();
-  });
-
-  it("should have translationIds constant", () => {
-    render(NumberInput);
-
-    expect(true).toBe(true);
   });
 
   it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
@@ -719,20 +674,6 @@ describe("NumberInput", () => {
 
     const input = screen.getByRole("spinbutton");
     expect(input).toHaveAttribute("inputmode", "decimal");
-  });
-
-  it("should support aria-label override via restProps", () => {
-    render(NumberInput, {
-      props: {
-        labelText: "",
-      },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute(
-      "aria-label",
-      "Numeric input field with increment and decrement buttons",
-    );
   });
 
   it("should render readonly icon when readonly", () => {
@@ -829,20 +770,6 @@ describe("NumberInput", () => {
     );
   });
 
-  it("should show invalid state when invalid prop is true and invalidText is provided", () => {
-    render(NumberInput, {
-      props: { invalid: true, invalidText: "This field is invalid" },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input.closest(".bx--number")).toHaveAttribute(
-      "data-invalid",
-      "true",
-    );
-    expect(screen.getByText("This field is invalid")).toBeInTheDocument();
-  });
-
   it("should show invalid visual state when invalid prop is true but invalidText is empty", () => {
     const { container } = render(NumberInput, {
       props: { invalid: true, invalidText: "" },
@@ -858,15 +785,6 @@ describe("NumberInput", () => {
     expect(
       container.querySelector(".bx--form-requirement"),
     ).not.toBeInTheDocument();
-  });
-
-  it("should bind ref to input element", () => {
-    render(NumberInput, {
-      props: { ref: null },
-    });
-
-    const input = screen.getByLabelText("Clusters");
-    expect(input).toBeInTheDocument();
   });
 
   it("should preserve decimal input with trailing zeros when allowDecimal is true", async () => {
@@ -1082,13 +1000,6 @@ describe("NumberInput", () => {
     expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
   });
 
-  it("should not set error state when value is null and allowEmpty is true", () => {
-    render(NumberInput, { props: { value: null, allowEmpty: true } });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).not.toHaveAttribute("aria-invalid");
-  });
-
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
   it("should default to 0 when allowEmpty is false and input is cleared", async () => {
     render(NumberInput, { props: { allowEmpty: false, value: 5 } });
@@ -1164,22 +1075,6 @@ describe("NumberInput", () => {
       expect(screen.getByTestId("value").textContent).toBe("null");
       expect(input).toHaveValue(null);
     }
-  });
-
-  it("should auto-invalidate when typed value exceeds max", async () => {
-    render(NumberInput, { props: { max: 10 } });
-
-    const input = screen.getByRole("spinbutton");
-    await user.type(input, "15");
-
-    expect(input).toHaveAttribute("aria-invalid", "true");
-  });
-
-  it("should auto-invalidate when initial value is below min", () => {
-    render(NumberInput, { props: { min: 5, value: 3 } });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
   it("should not set error state when readonly and invalid", () => {
@@ -1357,20 +1252,6 @@ describe("NumberInput", () => {
   });
 
   describe("stepStartValue", () => {
-    it("should jump to stepStartValue when incrementing from null", async () => {
-      render(NumberInput, {
-        props: { allowEmpty: true, value: null, stepStartValue: 10 },
-      });
-
-      const incrementButton = screen.getByRole("button", {
-        name: "Increment number",
-      });
-
-      await user.click(incrementButton);
-
-      expect(screen.getByTestId("value").textContent).toBe("10");
-    });
-
     it("should jump to stepStartValue when decrementing from null", async () => {
       render(NumberInput, {
         props: { allowEmpty: true, value: null, stepStartValue: 10 },
@@ -1450,20 +1331,6 @@ describe("NumberInput", () => {
       await user.click(incrementButton);
 
       expect(screen.getByTestId("value").textContent).toBe("10");
-    });
-
-    it("should default to min when stepStartValue is not set", async () => {
-      render(NumberInput, {
-        props: { allowEmpty: false, value: null, min: 5 },
-      });
-
-      const incrementButton = screen.getByRole("button", {
-        name: "Increment number",
-      });
-
-      await user.click(incrementButton);
-
-      expect(screen.getByTestId("value").textContent).toBe("6");
     });
   });
 
@@ -1595,15 +1462,6 @@ describe("NumberInput", () => {
     it("should defer to autoInvalid when validate returns undefined", () => {
       render(NumberInput, {
         props: { value: 15, max: 10, validate: () => undefined },
-      });
-
-      const input = screen.getByRole("spinbutton");
-      expect(input).toHaveAttribute("aria-invalid", "true");
-    });
-
-    it("should defer to autoInvalid when validate is not provided", () => {
-      render(NumberInput, {
-        props: { value: 15, max: 10 },
       });
 
       const input = screen.getByRole("spinbutton");
@@ -1778,13 +1636,6 @@ describe("NumberInput", () => {
 
       const input = screen.getByRole("textbox");
       expect(input).toHaveAttribute("aria-invalid", "true");
-    });
-
-    it("should fall back to standard behavior when locale is undefined", () => {
-      render(NumberInput, { props: { value: 5 } });
-
-      const input = screen.getByRole("spinbutton");
-      expect(input).toHaveAttribute("type", "number");
     });
 
     it("should handle formatOptions for decimal precision", () => {
