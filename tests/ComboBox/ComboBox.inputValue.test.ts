@@ -231,4 +231,25 @@ describe("ComboBox", () => {
 
     expect(input).toHaveValue("");
   });
+
+  it("should show the selected item's text when items arrive after mount", async () => {
+    const onSelect = vi.fn();
+    const { rerender } = render(ComboBox, {
+      props: { items: [], selectedId: "1", onSelect },
+    });
+
+    const input = getInput();
+    expect(input).toHaveValue("");
+
+    await rerender({
+      items: [
+        { id: "0", text: "Slack", price: 100 },
+        { id: "1", text: "Email", price: 200 },
+      ],
+    });
+    await tick();
+
+    expect(input).toHaveValue("Email");
+    expect(onSelect).not.toHaveBeenCalled();
+  });
 });

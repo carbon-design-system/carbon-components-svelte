@@ -1841,6 +1841,17 @@ describe("ComboBox", () => {
       await user.click(document.body);
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
+
+    it("should keep the portaled menu open when clicking inside it", async () => {
+      render(ComboBox, {
+        props: { portalMenu: true },
+      });
+
+      await user.click(getInput());
+      await user.click(screen.getByRole("listbox"));
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
   });
 
   it("should not trap focus when tabbing away from an open menu", async () => {
@@ -1864,6 +1875,41 @@ describe("ComboBox", () => {
     );
 
     expect(focusSpy).not.toHaveBeenCalled();
+  });
+
+  it("should refocus the input when blur moves focus to the open menu", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+
+    const listbox = screen.getByRole("listbox");
+    const focusSpy = vi.spyOn(input, "focus");
+    input.dispatchEvent(
+      new FocusEvent("blur", { relatedTarget: listbox, bubbles: true }),
+    );
+
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not highlight a disabled option on hover", async () => {
+    render(ComboBox, {
+      props: {
+        items: [
+          { id: "0", text: "Slack", price: 100 },
+          { id: "1", text: "Email", price: 200, disabled: true },
+        ],
+      },
+    });
+
+    const input = getInput();
+    await user.click(input);
+
+    await user.hover(screen.getByRole("option", { name: "Email" }));
+    expect(input).toHaveAttribute("aria-activedescendant", "");
+
+    await user.hover(screen.getByRole("option", { name: "Slack" }));
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
   describe("autoHighlight", () => {
