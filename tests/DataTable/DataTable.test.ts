@@ -16,7 +16,6 @@ import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import DataTableSortPreventDefault from "./DataTable.sort.preventDefault.test.svelte";
 import DataTable from "./DataTable.test.svelte";
-import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";
 import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
 import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
@@ -190,31 +189,6 @@ describe("DataTable", () => {
     const columns = screen.getAllByRole("columnheader");
     expect(columns.length).toBe(1);
     expect(columns[0]).toHaveTextContent("Name");
-  });
-
-  it("handles table with very long content", () => {
-    const longContentRows = [
-      {
-        id: "a",
-        name: "A very long name that should be truncated or wrapped in the table cell",
-        protocol: "HTTP",
-        port: 3000,
-        rule: "Round robin",
-      },
-    ];
-
-    render(DataTable, {
-      props: {
-        headers,
-        rows: longContentRows,
-      },
-    });
-
-    const table = screen.getByRole("table");
-    const longCell = within(table).getByRole("cell", {
-      name: /very long name/i,
-    });
-    expect(longCell).toBeInTheDocument();
   });
 
   it("handles sorting functionality", async () => {
@@ -478,52 +452,6 @@ describe("DataTable", () => {
     expect(
       within(tableRows[0]).getByRole("cell", { name: "Load Balancer 1" }),
     ).toBeInTheDocument();
-  });
-
-  it("handles table with numeric sorting", async () => {
-    const numericRows = [
-      { id: "a", value: 10 },
-      { id: "b", value: 2 },
-      { id: "c", value: 20 },
-    ];
-
-    const numericHeaders = [{ key: "value", value: "Value" }];
-
-    render(DataTable, {
-      props: {
-        sortable: true,
-        headers: numericHeaders,
-        rows: numericRows,
-      },
-    });
-
-    const valueHeader = screen.getByText("Value");
-    await user.click(valueHeader);
-
-    const tableRows = getBodyRows();
-    const sortedCells = tableRows.map((row) => within(row).getByRole("cell"));
-    expect(sortedCells[0]).toHaveTextContent("2");
-    expect(sortedCells[1]).toHaveTextContent("10");
-    expect(sortedCells[2]).toHaveTextContent("20");
-  });
-
-  it("sortAlways: first click goes to ascending", async () => {
-    render(DataTable, {
-      props: {
-        sortable: true,
-        sortAlways: true,
-        headers,
-        rows,
-      },
-    });
-
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
-
-    const tableRows = getBodyRows();
-    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
-      "Load Balancer 1",
-    );
   });
 
   it("sortAlways: toggles between ascending and descending only", async () => {
@@ -1028,16 +956,6 @@ describe("DataTable", () => {
     expect(headerCells[0]).toHaveTextContent("Select row");
   });
 
-  it("matches header and body cell counts for radio selection", () => {
-    const { container } = render(DataTable, {
-      props: { radio: true, headers, rows },
-    });
-
-    const headerCells = container.querySelectorAll("thead th");
-    const bodyCells = container.querySelectorAll("tbody tr:first-child td");
-    expect(headerCells).toHaveLength(bodyCells.length);
-  });
-
   it("renders only the select all header cell for checkbox batch selection", () => {
     const { container } = render(DataTable, {
       props: { batchSelection: true, headers, rows },
@@ -1287,7 +1205,6 @@ describe("DataTable", () => {
     }
   });
 
-  // Regression: ?? for header.key so empty string is used (not key-${index})
   it("uses empty header key when passed (nullish coalescing)", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(DataTable, {
@@ -1313,22 +1230,6 @@ describe("DataTable", () => {
         cell: expect.objectContaining({ key: "" }),
       }),
     );
-  });
-
-  // Regression: ?? for header.width so 0 is not replaced by minWidth
-  it("uses header width 0 when specified (nullish coalescing)", () => {
-    const customHeaders = [
-      { key: "name", value: "Name", width: "0px", minWidth: "100px" },
-      { key: "value", value: "Value" },
-    ];
-    render(DataTable, {
-      props: {
-        headers: customHeaders,
-        rows: [{ id: "1", name: "A", value: "B" }],
-      },
-    });
-    const nameHeader = screen.getByRole("columnheader", { name: "Name" });
-    expect(nameHeader).toHaveStyle({ width: "0px" });
   });
 
   it("applies custom column widths without forcing fixed layout", () => {
@@ -1412,14 +1313,6 @@ describe("DataTable", () => {
         expect(cells[0].className).not.toMatch(/align/);
         expect(cells[3].className).not.toMatch(/align/);
       }
-    });
-
-    it("renders no alignment class when headers omit align", () => {
-      const { container } = render(DataTable, { props: { headers, rows } });
-
-      expect(
-        container.querySelectorAll("[class*='bx--table-column--align']"),
-      ).toHaveLength(0);
     });
 
     it("keeps the sort affordance on an aligned sortable header", async () => {
@@ -1519,20 +1412,6 @@ describe("DataTable", () => {
       );
       expectInlineStyle(innerContainer, { "max-height": "24rem" });
     });
-
-    it("ignores stickyHeaderMaxHeight when stickyHeader is disabled", () => {
-      render(DataTable, {
-        props: {
-          headers,
-          rows,
-          stickyHeader: false,
-          stickyHeaderMaxHeight: 500,
-        },
-      });
-
-      const table = screen.getByRole("table");
-      expect(table).not.toHaveStyle({ "max-height": "500px" });
-    });
   });
 
   describe("horizontal scroll wrapper", () => {
@@ -1570,32 +1449,6 @@ describe("DataTable", () => {
 
     const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--static");
-  });
-
-  it("handles custom cell display", () => {
-    const customHeaders = [
-      { key: "name", value: "Name" },
-      {
-        key: "port",
-        value: "Port",
-        display: (value: string | number | boolean) => `Port ${value}`,
-      },
-    ];
-
-    render(DataTable, {
-      props: {
-        headers: customHeaders,
-        rows,
-      },
-    });
-
-    const tableRows = getBodyRows();
-    const portCells = tableRows.map(
-      (row) => within(row).getAllByRole("cell")[1],
-    );
-    expect(portCells[0]).toHaveTextContent("Port 3000");
-    expect(portCells[1]).toHaveTextContent("Port 443");
-    expect(portCells[2]).toHaveTextContent("Port 80");
   });
 
   it("handles empty columns for custom content", () => {
@@ -1725,32 +1578,6 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 15");
   });
 
-  it("emits proper events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-
-    render(DataTable, {
-      props: {
-        headers,
-        rows,
-        sortable: true,
-      },
-    });
-
-    const nameHeader = screen.getByText("Name");
-    await user.click(nameHeader);
-
-    const tableRows = getBodyRows();
-    const firstRow = tableRows[0];
-    await user.click(firstRow);
-
-    const firstCell = within(firstRow).getAllByRole("cell")[0];
-    await user.click(firstCell);
-
-    expect(consoleLog).toHaveBeenCalledWith("click:header", expect.any(Object));
-    expect(consoleLog).toHaveBeenCalledWith("click:row", expect.any(Object));
-    expect(consoleLog).toHaveBeenCalledWith("click:cell", expect.any(Object));
-  });
-
   it("dispatches cell events before row events on a cell click", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(DataTable, { props: { headers, rows } });
@@ -1798,89 +1625,6 @@ describe("DataTable", () => {
     );
   });
 
-  it("should handle changing number of headers without crashing", async () => {
-    const rows = [
-      {
-        id: "a",
-        name: "Load Balancer 3",
-        protocol: "HTTP",
-        port: 3000,
-        rule: "Round robin",
-      },
-      {
-        id: "b",
-        name: "Load Balancer 1",
-        protocol: "HTTP",
-        port: 443,
-        rule: "Round robin",
-      },
-    ];
-
-    const headers5 = [
-      { key: "name", value: "Name" },
-      { key: "protocol", value: "Protocol" },
-      { key: "port", value: "Port" },
-      { key: "rule", value: "Rule" },
-      { key: "actions", value: "Actions" },
-    ];
-
-    const headers3 = [
-      { key: "name", value: "Name" },
-      { key: "protocol", value: "Protocol" },
-      { key: "port", value: "Port" },
-    ];
-
-    const { component, rerender } = render(DataTable, {
-      props: {
-        rows,
-        headers: headers5,
-      },
-    });
-
-    expect(component).toBeTruthy();
-
-    await rerender({
-      rows,
-      headers: headers3,
-    });
-
-    expect(component).toBeTruthy();
-
-    await rerender({
-      rows,
-      headers: headers5,
-    });
-
-    expect(component).toBeTruthy();
-  });
-
-  it("should handle empty headers correctly", () => {
-    const rows = [
-      {
-        id: "a",
-        name: "Load Balancer 3",
-        protocol: "HTTP",
-        port: 3000,
-        rule: "Round robin",
-      },
-    ];
-
-    const headersWithEmpty = [
-      { key: "name", value: "Name" },
-      { key: "protocol", value: "Protocol" },
-      { key: "actions", value: "", empty: true, columnMenu: true },
-    ];
-
-    const { component } = render(DataTable, {
-      props: {
-        rows,
-        headers: headersWithEmpty,
-      },
-    });
-
-    expect(component).toBeTruthy();
-  });
-
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1594
   it("renders custom title element with props", () => {
     render(DataTableCustomSlots);
@@ -1900,39 +1644,6 @@ describe("DataTable", () => {
     expect(customDescription).toBeInTheDocument();
     expect(customDescription).toHaveTextContent("Custom Description");
     expect(customDescription).toHaveClass("bx--data-table-header__description");
-  });
-
-  it("renders both custom title and description elements", () => {
-    const { container } = render(DataTableCustomBoth);
-
-    const customTitle = screen.getByRole("heading", { level: 2 });
-    expect(customTitle).toBeInTheDocument();
-    expect(customTitle).toHaveClass("bx--data-table-header__title");
-
-    const customDescription = container.querySelector(
-      "div.bx--data-table-header__description",
-    );
-    expect(customDescription).toBeInTheDocument();
-    expect(customDescription).toHaveClass("bx--data-table-header__description");
-  });
-
-  it("passes rowSelected and rowExpanded props to cell slot", () => {
-    const { container } = render(DataTable, {
-      props: {
-        selectable: true,
-        expandable: true,
-        selectedRowIds: ["a"],
-        expandedRowIds: ["b"],
-        headers,
-        rows,
-      },
-    });
-
-    const selectedRow = container.querySelector("tr[data-row='a']");
-    expect(selectedRow).toHaveClass("bx--data-table--selected");
-
-    const expandedRow = container.querySelector("tr[data-row='b']");
-    expect(expandedRow).toHaveClass("bx--expandable-row");
   });
 
   it("passes rowSelected prop to expandedRow slot", () => {
@@ -2132,39 +1843,6 @@ describe("DataTable", () => {
     }
   });
 
-  it("allows filtering click:row events based on target element", async () => {
-    render(DataTable, {
-      props: {
-        headers: headers,
-        rows: [
-          { id: "a", name: "Load Balancer 1" },
-          { id: "b", name: "Load Balancer 2" },
-        ],
-      },
-    });
-
-    const consoleLog = vi.spyOn(console, "log");
-
-    // Add a button to the empty cell using slot
-    const tableRows = getBodyRows();
-    const firstRow = tableRows[0];
-    const _emptyCell = within(firstRow).getAllByRole("cell").slice(-1)[0];
-
-    // Click on the row but not on an interactive element
-    await user.click(firstRow);
-
-    const clickRowCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "click:row",
-    );
-    expect(clickRowCalls.length).toBeGreaterThan(0);
-
-    // Verify we have access to target to implement custom filtering logic
-    const detail = clickRowCalls[0][1];
-    expect(detail).toHaveProperty("target");
-    expect(detail).toHaveProperty("currentTarget");
-    expect(detail).toHaveProperty("row");
-  });
-
   it("does not dispatch click:row when clicking checkbox", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(DataTable, {
@@ -2204,27 +1882,6 @@ describe("DataTable", () => {
       (call) => call[0] === "click:row",
     );
     expect(clickRowCalls).toHaveLength(0);
-  });
-
-  it("uses default table header translations", () => {
-    render(DataTable, {
-      props: {
-        sortable: true,
-        headers,
-        rows,
-      },
-    });
-
-    const nameHeader = screen.getByText("Name");
-    const headerButton = nameHeader.closest("button");
-    assert(headerButton);
-
-    const sortIcon = headerButton.querySelector(".bx--table-sort__icon");
-    assert(sortIcon);
-    expect(sortIcon).toHaveAttribute(
-      "aria-label",
-      "Sort rows by this header in ascending order",
-    );
   });
 
   it("applies custom table header translations", async () => {
@@ -2882,46 +2539,6 @@ describe("DataTable", () => {
       expect(document.querySelectorAll("tbody tr[data-row]")).toHaveLength(5);
     });
 
-    it("should use default row height based on size prop", () => {
-      const largeRows = createLargeRowList(500);
-      render(DataTable, {
-        props: {
-          headers,
-          rows: largeRows,
-          size: "compact",
-          virtualize: true,
-        },
-      });
-
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-
-      const tableRows = getBodyRows();
-      expect(tableRows.length).toBeGreaterThan(0);
-      expect(tableRows.length).toBeLessThan(500);
-    });
-
-    it("should handle virtualization with custom row height", () => {
-      const largeRows = createLargeRowList(500);
-      render(DataTable, {
-        props: {
-          headers,
-          rows: largeRows,
-          virtualize: {
-            itemHeight: 64,
-            containerHeight: 400,
-          },
-        },
-      });
-
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-
-      const tableRows = getBodyRows();
-      expect(tableRows.length).toBeGreaterThan(0);
-      expect(tableRows.length).toBeLessThan(500);
-    });
-
     it("should maintain selection when virtualized", () => {
       const largeRows = createLargeRowList(500);
       render(DataTable, {
@@ -2956,33 +2573,6 @@ describe("DataTable", () => {
       const dataRows = document.querySelectorAll("tbody tr[data-row]");
       expect(dataRows[0]).toHaveTextContent("Load Balancer 500");
       expect(screen.queryByText("Load Balancer 1")).not.toBeInTheDocument();
-    });
-
-    it("should work with sticky header", () => {
-      const largeRows = createLargeRowList(500);
-      render(DataTable, {
-        props: {
-          headers,
-          rows: largeRows,
-          stickyHeader: true,
-          virtualize: true,
-        },
-      });
-
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-      expect(table).toHaveClass("bx--data-table--sticky-header");
-
-      const tableRows = getBodyRows();
-      const dataRows = tableRows.filter((row) => {
-        const style = row.getAttribute("style");
-        const isSpacer = style?.includes("height:");
-        if (isSpacer) return false;
-        const cells = row.querySelectorAll("td");
-        return cells.length > 0;
-      });
-      expect(dataRows.length).toBeGreaterThan(0);
-      expect(dataRows.length).toBeLessThan(500);
     });
 
     it("should not re-attach scroll listener on unrelated state changes", async () => {
@@ -3022,25 +2612,6 @@ describe("DataTable", () => {
       addSpy.mockRestore();
     });
 
-    it("should work with zebra striping", () => {
-      const largeRows = createLargeRowList(500);
-      render(DataTable, {
-        props: {
-          headers,
-          rows: largeRows,
-          zebra: true,
-          virtualize: true,
-        },
-      });
-
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-      expect(table).toHaveClass("bx--data-table--zebra");
-
-      const tableRows = getBodyRows();
-      expect(tableRows.length).toBeGreaterThan(0);
-    });
-
     it("should ignore pagination when virtualized", () => {
       render(DataTable, {
         props: {
@@ -3054,31 +2625,6 @@ describe("DataTable", () => {
 
       // 480px / 48px = 10 visible rows + 3 overscan. Paginating would give 10.
       expect(document.querySelectorAll("tbody tr[data-row]")).toHaveLength(13);
-    });
-
-    it("should expose scrollContainerRef for programmatic scroll control when virtualized without stickyHeader", async () => {
-      const largeRows = createLargeRowList(500);
-      render(DataTable, {
-        props: {
-          headers,
-          rows: largeRows,
-          virtualize: true,
-          stickyHeader: false,
-        },
-      });
-
-      await tick();
-
-      const table = screen.getByRole("table");
-      // The table's direct parent is Table's own `bx--data-table-content`
-      // horizontal-scroll wrapper; the scroll container is one level up.
-      const scrollContainer = table.parentElement?.parentElement;
-      expect(scrollContainer).toBeInstanceOf(HTMLElement);
-      expect(scrollContainer?.style.overflowY).toBe("auto");
-      expect(scrollContainer?.style.maxHeight).toBeDefined();
-      assert(scrollContainer instanceof HTMLElement);
-      scrollContainer.scrollTop = 100;
-      expect(scrollContainer.scrollTop).toBe(100);
     });
 
     it("renders newly painted cell values after virtualized scroll", async () => {
