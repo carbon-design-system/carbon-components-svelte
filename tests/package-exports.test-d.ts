@@ -13,6 +13,7 @@ import type {
   preserveFocusSelection,
   queryParam,
   rovingFocus,
+  themeScript,
   trapFocus,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
@@ -60,6 +61,7 @@ type _MultiSelectSkeleton = MultiSelectSkeleton;
 type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
+type _ThemeScript = ReturnType<typeof themeScript>;
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;
 type _Dismiss = ReturnType<typeof dismiss>;
