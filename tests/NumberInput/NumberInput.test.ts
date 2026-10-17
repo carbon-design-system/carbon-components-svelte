@@ -385,6 +385,38 @@ describe("NumberInput", () => {
     expect(getBoundText()).toBe("0");
   });
 
+  it("should step and format the value with ArrowUp and ArrowDown in text mode", async () => {
+    render(NumberInput, { props: { locale: "de-DE", value: 1000 } });
+
+    const input = screen.getByRole("textbox");
+    input.focus();
+
+    await user.keyboard("{ArrowUp}");
+    expect(input).toHaveValue("1.001");
+    expect(getBoundText()).toBe("1001");
+
+    await user.keyboard("{ArrowDown}{ArrowDown}");
+    expect(input).toHaveValue("999");
+    expect(getBoundText()).toBe("999");
+  });
+
+  it.each([
+    ["increment at max", "Increment number", 10, "10"],
+    ["decrement at min", "Decrement number", 0, "0"],
+  ])(
+    "should keep the value when stepping with %s in text mode",
+    async (_, name, value, expected) => {
+      render(NumberInput, {
+        props: { allowDecimal: true, min: 0, max: 10, value },
+      });
+
+      await user.click(screen.getByRole("button", { name }));
+
+      expect(getBoundText()).toBe(expected);
+      expect(screen.getByRole("textbox")).toHaveValue(expected);
+    },
+  );
+
   it("should clamp PageUp/PageDown values to min and max", async () => {
     render(NumberInput, { props: { value: 95, step: 1, min: 0, max: 100 } });
 
@@ -996,6 +1028,23 @@ describe("NumberInput", () => {
     expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
   });
 
+  it.each([
+    ["allowDecimal", { allowDecimal: true }, "0", "0"],
+    ["locale", { locale: "de-DE", min: 1000 }, "1.000", "1000"],
+  ])(
+    "should show the default value when allowEmpty is false and the input is cleared in text mode (%s)",
+    async (_, extra, displayed, bound) => {
+      render(NumberInput, { props: { allowEmpty: false, value: 5, ...extra } });
+
+      const input = screen.getByRole("textbox");
+      await user.clear(input);
+      await user.tab();
+
+      expect(input).toHaveValue(displayed);
+      expect(getBoundText()).toBe(bound);
+    },
+  );
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
   it("should default to 0 when allowEmpty is false and input is cleared", async () => {
     render(NumberInput, { props: { allowEmpty: false, value: 5 } });
@@ -1166,6 +1215,24 @@ describe("NumberInput", () => {
     expect(input.value).toBe("1.5.");
 
     expect(getBoundText()).toBe("1.5");
+  });
+
+  it("should set the value to null when typing a lone minus in text mode", async () => {
+    render(NumberInput, {
+      props: { allowDecimal: true, allowEmpty: true, value: 3 },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "-", {
+      initialSelectionStart: 0,
+      initialSelectionEnd: 1,
+    });
+    expect(input).toHaveValue("-");
+    expect(getBoundText()).toBe("null");
+
+    await user.type(input, "5");
+    expect(input).toHaveValue("-5");
+    expect(getBoundText()).toBe("-5");
   });
 
   it("should normalize invalid input to last valid value on blur in allowDecimal mode", async () => {
