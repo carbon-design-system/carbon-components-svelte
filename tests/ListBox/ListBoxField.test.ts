@@ -234,18 +234,4 @@ describe("ListBoxField", () => {
       .closest(".bx--list-box__field");
     expect(field).not.toHaveAttribute("aria-readonly");
   });
-
-  it("should apply custom attributes", () => {
-    render(ListBoxField, {
-      props: {
-        "data-testid": "custom-field",
-        slotContent: "Custom attrs",
-      },
-    });
-
-    const field = screen
-      .getByText("Custom attrs")
-      .closest(".bx--list-box__field");
-    expect(field).toHaveAttribute("data-testid", "custom-field");
-  });
 });

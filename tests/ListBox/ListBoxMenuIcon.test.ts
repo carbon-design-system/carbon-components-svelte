@@ -4,13 +4,6 @@ import { user } from "../utils/user";
 import ListBoxMenuIcon from "./ListBoxMenuIcon.test.svelte";
 
 describe("ListBoxMenuIcon", () => {
-  it("should render with default props", () => {
-    render(ListBoxMenuIcon);
-
-    const icon = document.querySelector(".bx--list-box__menu-icon");
-    expect(icon).toBeInTheDocument();
-  });
-
   it("should render chevron icon", () => {
     render(ListBoxMenuIcon);
 

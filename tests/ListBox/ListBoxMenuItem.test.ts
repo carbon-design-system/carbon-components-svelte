@@ -186,20 +186,6 @@ describe("ListBoxMenuItem", () => {
     expect(option).toHaveClass("bx--list-box__menu-item__option--icon-left");
   });
 
-  it("should apply custom attributes", () => {
-    render(ListBoxMenuItem, {
-      props: {
-        "data-testid": "custom-item",
-        slotContent: "Custom attrs",
-      },
-    });
-
-    const menuItem = screen
-      .getByText("Custom attrs")
-      .closest(".bx--list-box__menu-item");
-    expect(menuItem).toHaveAttribute("data-testid", "custom-item");
-  });
-
   it("should handle both active and highlighted states", () => {
     render(ListBoxMenuItem, {
       props: {

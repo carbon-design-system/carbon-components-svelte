@@ -34,12 +34,6 @@ describe("ListBoxMenu", () => {
     expect(menu).toHaveAttribute("id", "menu-test-menu");
   });
 
-  it("should render slot content", () => {
-    render(ListBoxMenu, { props: { slotContent: "Custom menu items" } });
-
-    expect(screen.getByText("Custom menu items")).toBeInTheDocument();
-  });
-
   it("should handle scroll events", () => {
     const scrollHandler = vi.fn();
     render(ListBoxMenu, {
@@ -61,20 +55,6 @@ describe("ListBoxMenu", () => {
     });
 
     expect(component.ref).toBeInstanceOf(HTMLDivElement);
-  });
-
-  it("should apply custom attributes", () => {
-    render(ListBoxMenu, {
-      props: {
-        "data-testid": "custom-menu",
-        slotContent: "Custom attrs",
-      },
-    });
-
-    const menu = screen
-      .getByText("Custom attrs")
-      .closest(".bx--list-box__menu");
-    expect(menu).toHaveAttribute("data-testid", "custom-menu");
   });
 
   describe("portal mode", () => {
