@@ -1817,6 +1817,7 @@
         {disabled}
         {readonly}
         focusTarget={filterable ? inputRef : fieldRef}
+        form={$$restProps.form}
         on:invalid={() => (requiredError = true)}
         on:reset={() => (requiredError = false)}
       />
