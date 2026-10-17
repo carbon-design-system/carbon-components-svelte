@@ -2,6 +2,7 @@
 
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import { render } from "svelte/server";
+import { renderSSR } from "../utils/ssr";
 
 /** Server output with only Svelte's hydration comments removed. */
 function renderRaw(props: Record<string, unknown>) {
@@ -61,5 +62,18 @@ describe("DataTable server render", () => {
 
     expect(html).toContain('name="chosen"');
     expect(html).not.toContain('name="people"');
+  });
+
+  // `indeterminate` is a DOM property with no attribute, so the select-all
+  // label carries the mixed state until hydration sets it.
+  it("marks select all as mixed when some rows are selected", () => {
+    const { document } = renderSSR(DataTable, {
+      ...props,
+      selectedRowIds: ["a"],
+    });
+
+    expect(
+      document.querySelector('label[for="people-select-all"]'),
+    ).toHaveAttribute("data-contained-checkbox-state", "mixed");
   });
 });
