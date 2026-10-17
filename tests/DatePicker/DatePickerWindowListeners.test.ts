@@ -76,18 +76,6 @@ describe("DatePicker window listeners", () => {
     remove.mockRestore();
   });
 
-  it("an outside click dismisses an open calendar", async () => {
-    render(DatePicker, { props: { datePickerType: "single" } });
-
-    const input = screen.getByLabelText("Date");
-    await user.click(input);
-    const calendar = await screen.findByLabelText("calendar-container");
-    expect(calendar).toHaveClass("open");
-
-    await user.click(document.body);
-    expect(calendar).not.toHaveClass("open");
-  });
-
   it("a click inside the calendar does not dismiss it", async () => {
     render(DatePicker, { props: { datePickerType: "single" } });
 

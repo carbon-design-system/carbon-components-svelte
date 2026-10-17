@@ -3,7 +3,7 @@ import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
-import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.form.test.svelte";
+import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.test.svelte";
 import { visibleInput } from "./helpers";
 
 const getValue = () => getBoundText("value");

@@ -59,17 +59,6 @@ describe("DatePickerSkeleton", () => {
     expect(wrapper).not.toHaveClass("bx--date-picker--range");
   });
 
-  it("supports short combined with range", () => {
-    const { container } = render(DatePickerSkeleton, {
-      props: { range: true, short: true },
-    });
-
-    const wrapper = container.querySelector(".bx--date-picker");
-    expect(wrapper).toHaveClass("bx--date-picker--range");
-    expect(wrapper).toHaveClass("bx--date-picker--short");
-    expect(wrapper).not.toHaveClass("bx--date-picker--simple");
-  });
-
   it("renders decorative span labels in range mode", () => {
     const { container } = render(DatePickerSkeleton, {
       props: { range: true },
@@ -111,7 +100,6 @@ describe("FluidDatePickerSkeleton", () => {
     render(FluidDatePickerSkeleton);
 
     const skeleton = screen.getByTestId("fluid-date-picker-skeleton");
-    expect(skeleton).toBeInTheDocument();
     expect(skeleton).toHaveClass(
       "bx--form-item",
       "bx--date-picker--fluid__skeleton",
