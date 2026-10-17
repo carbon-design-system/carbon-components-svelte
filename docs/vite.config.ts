@@ -34,6 +34,11 @@ function prismGlobalFix() {
 export default defineConfig({
   resolve: {
     alias: {
+      // The package's `./tokens` export; the bare alias below maps to the root.
+      "carbon-components-svelte/tokens": path.join(
+        carbonRoot,
+        "src/tokens/index.js",
+      ),
       "carbon-components-svelte": carbonRoot,
     },
   },

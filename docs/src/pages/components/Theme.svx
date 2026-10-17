@@ -48,6 +48,34 @@ For example, primary buttons use `interactive-01` for background, with separate 
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
+## Token data
+
+Import token names and values from `carbon-components-svelte/tokens` to list
+tokens, build a palette, or pass a theme color to code that can't read CSS
+custom properties, such as a canvas. The data comes from the same build as
+`all.css` and covers Carbon v10 tokens.
+
+| Export | Contents |
+| :--- | :--- |
+| `colorTokens` | Theme colors, with a value for each theme |
+| `colorTokenDescriptions` | Carbon's description of each theme color |
+| `componentTokens` | Tag and notification colors, with a value for each theme |
+| `typeTokens` | Type styles: font size, weight, line height, and letter spacing |
+| `spacingTokens`, `layoutTokens`, `containerTokens`, `sizeTokens` | Spacing and size scales |
+
+Each token `name` is also a custom property, `--cds-{name}`.
+
+```js
+import { colorTokens, typeTokens } from "carbon-components-svelte/tokens";
+
+colorTokens["ui-background"].g100; // "#161616"
+typeTokens["heading-01"]["font-size"]; // "0.875rem"
+```
+
+The table below lists every theme color. Expand a row for Carbon's description.
+
+<FileSource src="/framed/Theme/ThemeTokenData" />
+
 ## Controls
 
 Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.
