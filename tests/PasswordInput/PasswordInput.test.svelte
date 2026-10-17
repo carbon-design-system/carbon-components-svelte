@@ -31,6 +31,8 @@
     undefined;
   export let onFocus: () => void = () => {};
   export let onBlur: () => void = () => {};
+  export let onInput: (event: Event) => void = () => {};
+  export let onChange: (event: Event) => void = () => {};
 </script>
 
 <PasswordInput
@@ -63,7 +65,8 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:change
+  on:input={onInput}
+  on:change={onChange}
   on:keydown
   on:keyup
   on:focus={onFocus}
@@ -72,3 +75,4 @@
 />
 
 <div data-testid="bound">{value}</div>
+<div data-testid="bound-type">{type}</div>
