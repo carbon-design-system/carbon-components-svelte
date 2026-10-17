@@ -144,11 +144,22 @@
   const focusedIndex = writable(-1);
 
   let buttonWidth = undefined;
-  let onMountAfterUpdate = true;
+  let mounted = false;
+
+  // Whether opening moves focus into the menu: only when it opens after
+  // mounting, or once focus enters it. A menu rendered open leaves focus
+  // where it is.
+  const moveFocus = writable(false);
+  /** @param {boolean} isOpen */
+  function trackOpen(isOpen) {
+    moveFocus.set(isOpen && mounted);
+  }
+  $: trackOpen(open);
 
   const typeahead = createTypeaheadBuffer();
 
   onMount(() => {
+    mounted = true;
     return () => {
       typeahead.clear();
     };
@@ -260,6 +271,7 @@
 
   setContext("carbon:OverflowMenu", {
     focusedId,
+    moveFocus,
     items,
     itemsById,
     add,
@@ -282,7 +294,7 @@
   };
 
   afterUpdate(() => {
-    if (open && !onMountAfterUpdate && $focusedIndex < 0) {
+    if (open && $moveFocus && $focusedIndex < 0) {
       menuRef?.focus({ preventScroll: true });
     }
 
@@ -329,8 +341,6 @@
       currentId.set(undefined);
       focusedIndex.set(0);
     }
-
-    onMountAfterUpdate = false;
   });
 
   $: menuId = `menu-${id}`;
@@ -475,6 +485,7 @@
     style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
     style:max-height={maxHeightStyle}
     on:keydown={handleMenuKeydown}
+    on:focusin={() => moveFocus.set(true)}
   >
     <slot />
   </ul>
@@ -511,6 +522,7 @@
       style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
       style:max-height={maxHeightStyle}
       on:keydown={handleMenuKeydown}
+      on:focusin={() => moveFocus.set(true)}
     >
       <slot />
     </ul>

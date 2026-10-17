@@ -975,3 +975,40 @@ describe("OverflowMenu", () => {
     });
   });
 });
+
+// A menu rendered open hasn't been opened by the user, so it leaves focus
+// (and the page's scroll position) where they are.
+describe("OverflowMenu rendered open", () => {
+  it("does not take focus", async () => {
+    render(OverflowMenuPrimaryFocus, { open: true });
+    await tick();
+    await tick();
+
+    expect(screen.getAllByRole("menuitem")).toHaveLength(3);
+    expect(document.body).toHaveFocus();
+  });
+
+  it("focuses the primary item when opened after rendering", async () => {
+    const { rerender } = render(OverflowMenuPrimaryFocus);
+    await tick();
+
+    await rerender({ open: true });
+    await tick();
+
+    expect(
+      screen.getByRole("menuitem", { name: "API documentation" }),
+    ).toHaveFocus();
+  });
+
+  it("moves focus with the arrow keys once focus is in the menu", async () => {
+    render(OverflowMenuPrimaryFocus, { open: true });
+    await tick();
+
+    screen.getByRole("menuitem", { name: "API documentation" }).focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(
+      screen.getByRole("menuitem", { name: "Delete service" }),
+    ).toHaveFocus();
+  });
+});
