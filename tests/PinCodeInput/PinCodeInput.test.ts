@@ -855,31 +855,6 @@ describe("PinCodeInput", () => {
       expect(getFieldsWrapper(container)).not.toHaveAttribute("data-warn");
     });
 
-    it("hides helper text when invalid or warning", async () => {
-      const { rerender } = render(PinCodeInput, {
-        props: {
-          helperText: "Enter the code sent to your device",
-          invalid: true,
-          invalidText: "Incorrect code",
-        },
-      });
-
-      expect(
-        screen.queryByText("Enter the code sent to your device"),
-      ).not.toBeInTheDocument();
-
-      await rerender({
-        helperText: "Enter the code sent to your device",
-        invalid: false,
-        warn: true,
-        warnText: "Code expiring soon",
-      });
-
-      expect(
-        screen.queryByText("Enter the code sent to your device"),
-      ).not.toBeInTheDocument();
-    });
-
     it("suppresses invalid and warning UI when disabled", () => {
       const { container } = render(PinCodeInput, {
         props: {

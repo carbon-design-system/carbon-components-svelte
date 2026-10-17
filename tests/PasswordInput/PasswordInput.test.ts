@@ -200,17 +200,6 @@ describe("PasswordInput", () => {
       expect(input).toHaveAttribute("type", "password");
     });
 
-    it("describes the input with its helper text", () => {
-      render(PasswordInput, {
-        labelText: "Password",
-        helperText: "Your password should be hard to guess",
-      });
-
-      expect(screen.getByLabelText("Password")).toHaveAccessibleDescription(
-        "Your password should be hard to guess",
-      );
-    });
-
     it("names the visibility toggle when disabled", () => {
       render(PasswordInput, { labelText: "Password", disabled: true });
 
@@ -297,13 +286,6 @@ describe("PasswordInput", () => {
   });
 
   describe("Label handling", () => {
-    it("should handle hidden label", () => {
-      render(PasswordInput, { labelText: "Password", hideLabel: true });
-
-      const label = screen.getByText("Password");
-      expect(label).toHaveClass("bx--visually-hidden");
-    });
-
     it("should handle custom id", () => {
       render(PasswordInput, { labelText: "Password", id: "custom-id" });
 

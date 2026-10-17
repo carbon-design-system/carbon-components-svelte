@@ -104,7 +104,6 @@ export const cases: FieldCase[] = [
       wrapper: ".bx--search",
       ignoredWith: { expandable: true },
       skip: {
-        hidesHelper: "Search keeps its helper text when fluid",
         messagesInWrapper:
           "Search renders its messages below the field in both variants",
       },

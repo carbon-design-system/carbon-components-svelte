@@ -106,12 +106,6 @@ describe("NumberInput", () => {
     expect(screen.getByText("Warning message")).toBeInTheDocument();
   });
 
-  it("should handle hidden label", () => {
-    render(NumberInput, { props: { hideLabel: true } });
-
-    expect(screen.getByText("Clusters")).toHaveClass("bx--visually-hidden");
-  });
-
   describe("fluid variant", () => {
     it.each([
       { props: {}, neutral: true },
@@ -379,32 +373,6 @@ describe("NumberInput", () => {
     );
   });
 
-  it("should not show helper text when invalid", () => {
-    render(NumberInput, {
-      props: {
-        invalid: true,
-        invalidText: "Invalid input",
-        helperText: "Helper text",
-      },
-    });
-
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-    expect(screen.getByText("Invalid input")).toBeInTheDocument();
-  });
-
-  it("should not show helper text when warning", () => {
-    render(NumberInput, {
-      props: {
-        warn: true,
-        warnText: "Warning message",
-        helperText: "Helper text",
-      },
-    });
-
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-    expect(screen.getByText("Warning message")).toBeInTheDocument();
-  });
-
   it("should handle disabled helper text", () => {
     render(NumberInput, {
       props: {
@@ -480,34 +448,6 @@ describe("NumberInput", () => {
     expect(
       screen.getByRole("button", { name: "Custom Decrement" }),
     ).toBeInTheDocument();
-  });
-
-  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
-    render(NumberInput, {
-      props: { id: "test-input", invalid: true, invalidText: "Error" },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
-    expect(input).not.toHaveAttribute("aria-describedby");
-  });
-
-  it("should set aria-describedby to warn id when warn", () => {
-    render(NumberInput, {
-      props: { id: "test-input", warn: true, warnText: "Warning" },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-describedby", "warn-test-input");
-  });
-
-  it("should set aria-describedby to helper id when helperText is provided", () => {
-    render(NumberInput, {
-      props: { id: "test-input", helperText: "Helper" },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-describedby", "helper-test-input");
   });
 
   it("should not describe the input with hidden helper text while invalid", () => {

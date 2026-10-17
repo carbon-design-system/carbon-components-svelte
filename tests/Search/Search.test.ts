@@ -149,56 +149,6 @@ describe("Search", () => {
     expect(search).toBeDisabled();
   });
 
-  it("should handle helper text", () => {
-    render(Search, { props: { helperText: "Search across all catalogs" } });
-
-    const helper = screen.getByText("Search across all catalogs");
-    expect(getSearchInput("Default search")).toHaveAttribute(
-      "aria-describedby",
-      helper.id,
-    );
-  });
-
-  // Like the other fluid fields: the label sits inside the field and
-  // there's no line under it for helper text.
-  it("renders no helper text in a fluid search", () => {
-    render(Search, {
-      props: { fluid: true, helperText: "Search across all catalogs" },
-    });
-
-    expect(
-      screen.queryByText("Search across all catalogs"),
-    ).not.toBeInTheDocument();
-    expect(getSearchInput("Default search")).not.toHaveAttribute(
-      "aria-describedby",
-    );
-  });
-
-  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
-    render(Search, {
-      props: { invalid: true, invalidText: "A search term is required" },
-    });
-
-    const search = getSearchInput("Default search");
-    expect(search).toHaveAttribute("aria-invalid", "true");
-    const message = screen.getByText("A search term is required");
-    expect(message).toHaveClass("bx--form-requirement");
-    expect(message).toHaveAttribute("role", "alert");
-    expect(search).toHaveAttribute("aria-errormessage", message.id);
-    expect(search).not.toHaveAttribute("aria-describedby");
-  });
-
-  it("should handle warning state", () => {
-    render(Search, { props: { warn: true, warnText: "Results may be stale" } });
-
-    const message = screen.getByText("Results may be stale");
-    expect(message).toHaveClass("bx--form-requirement");
-    expect(getSearchInput("Default search")).toHaveAttribute(
-      "aria-describedby",
-      message.id,
-    );
-  });
-
   it("should suppress invalid state when readonly", () => {
     render(Search, {
       props: { readonly: true, invalid: true, invalidText: "Required" },
