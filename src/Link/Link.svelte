@@ -46,63 +46,40 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
-{#if disabled}
-  <a
-    bind:this={ref}
-    role="link"
-    aria-disabled="true"
-    class:bx--link={true}
-    class:bx--link--disabled={disabled}
-    class:bx--link--inline={inline}
-    class:bx--link--visited={visited}
-    class:bx--link--muted={muted}
-    {...$$restProps}
-    on:click={(event) => {
-      event.preventDefault();
-      event.stopPropagation();
-    }}
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-    on:focus
-    on:blur
-    on:keydown
-    on:keyup
-  >
-    <slot />
-    {#if !inline && ($$slots.icon || icon)}
-      <span class:bx--link__icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
-      </span>
-    {/if}
-  </a>
-{:else}
-  <a
-    bind:this={ref}
-    class:bx--link={true}
-    class:bx--link--disabled={disabled}
-    class:bx--link--inline={inline}
-    class:bx--link--visited={visited}
-    class:bx--link--muted={muted}
-    class:bx--link--sm={size === "sm"}
-    class:bx--link--lg={size === "lg"}
-    rel={resolveLinkRel($$restProps.target)}
-    {href}
-    {...$$restProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-    on:focus
-    on:blur
-    on:keydown
-    on:keyup
-  >
-    <slot />
-    {#if !inline && ($$slots.icon || icon)}
-      <span class:bx--link__icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
-      </span>
-    {/if}
-  </a>
-{/if}
+<a
+  bind:this={ref}
+  role={disabled ? "link" : undefined}
+  aria-disabled={disabled ? "true" : undefined}
+  class:bx--link={true}
+  class:bx--link--disabled={disabled}
+  class:bx--link--inline={inline}
+  class:bx--link--visited={visited}
+  class:bx--link--muted={muted}
+  class:bx--link--sm={!disabled && size === "sm"}
+  class:bx--link--lg={!disabled && size === "lg"}
+  rel={disabled ? undefined : resolveLinkRel($$restProps.target)}
+  href={disabled ? undefined : href}
+  {...$$restProps}
+  on:click={(event) => {
+    if (!disabled) return;
+    // Runs before the forwarded `click`, so a disabled link never reaches
+    // a consumer's handler.
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  on:focus
+  on:blur
+  on:keydown
+  on:keyup
+>
+  <slot />
+  {#if !inline && ($$slots.icon || icon)}
+    <span class:bx--link__icon={true}>
+      <slot name="icon"> <svelte:component this={icon} /> </slot>
+    </span>
+  {/if}
+</a>
