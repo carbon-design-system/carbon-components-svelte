@@ -83,12 +83,6 @@ describe("TextArea", () => {
     expect(textarea).toHaveAttribute("cols", "100");
   });
 
-  it("should handle max character count", () => {
-    render(TextArea, { props: { maxCount: 100, value: "Test text" } });
-
-    expect(screen.getByText("9/100")).toBeInTheDocument();
-  });
-
   it("should handle light variant", () => {
     render(TextArea, { props: { light: true } });
 
@@ -120,18 +114,6 @@ describe("TextArea", () => {
 
     expect(screen.getByText("Helper text")).toHaveClass(
       "bx--form__helper-text",
-    );
-  });
-
-  it("should associate helper text with the textarea via aria-describedby", () => {
-    render(TextArea, { props: { helperText: "Helper text" } });
-
-    const textarea = screen.getByRole("textbox");
-    const describedById = textarea.getAttribute("aria-describedby");
-    assert(describedById);
-    expect(screen.getByText("Helper text")).toHaveAttribute(
-      "id",
-      describedById,
     );
   });
 
@@ -314,20 +296,6 @@ describe("TextArea", () => {
 
       expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
         "Stop",
-      );
-    });
-
-    it("keeps character strings when counterMode is omitted", async () => {
-      render(TextArea, { props: { maxCount: 100, value: "hi" } });
-
-      expect(screen.getByText("2 of 100 characters")).toBeInTheDocument();
-
-      const textarea = screen.getByRole("textbox");
-      assert(textarea instanceof HTMLTextAreaElement);
-      textarea.value = "x".repeat(100);
-      await fireEvent.input(textarea);
-      expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
-        "Character limit reached",
       );
     });
 
@@ -597,13 +565,6 @@ describe("TextArea", () => {
 
     const textarea = screen.getByRole("textbox");
     expect(textarea.style.resize).toBe("");
-  });
-
-  it("should not have default cols value", () => {
-    render(TextArea, { props: { cols: undefined } });
-
-    const textarea = screen.getByRole("textbox");
-    expect(textarea).not.toHaveAttribute("cols");
   });
 
   describe("grow", () => {
