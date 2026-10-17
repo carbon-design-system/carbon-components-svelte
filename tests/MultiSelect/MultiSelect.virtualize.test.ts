@@ -150,7 +150,6 @@ describe("MultiSelect", () => {
 
         await waitFor(() => {
           const menu = screen.getByRole("listbox");
-          expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
           expect(menu).toBeVisible();
 
           const selectedOption = within(menu).getByRole("option", {
@@ -189,7 +188,6 @@ describe("MultiSelect", () => {
         await openMenu();
 
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
 
         menu.scrollTop = 0;
@@ -204,7 +202,6 @@ describe("MultiSelect", () => {
         await waitFor(
           () => {
             const menuAfterReopen = screen.getByRole("listbox");
-            expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
 
             const selectedOption = within(menuAfterReopen).getByRole("option", {
               name: "Item 251",
@@ -234,7 +231,6 @@ describe("MultiSelect", () => {
 
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
         expect(menu.scrollTop).toBe(0);
       });
@@ -256,7 +252,6 @@ describe("MultiSelect", () => {
 
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
 
         const selectedOption = within(menu).getByRole("option", {
           name: "Item 500",
@@ -357,7 +352,6 @@ describe("MultiSelect", () => {
       await openMenu();
 
       const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
 
       menu.scrollTop = 800;
@@ -401,7 +395,6 @@ describe("MultiSelect", () => {
       // With auto-scroll, the selected item should be visible without manual scrolling
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         const selectedOption = within(menu).getByRole("option", {
           name: "Item 251",
         });
@@ -427,31 +420,14 @@ describe("MultiSelect", () => {
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{Enter}");
       await tick();
-      // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
-      // The option checkboxes are decorative (hidden from the accessibility
-      // tree), so query the underlying <input> elements directly rather than
-      // via role.
+      // ArrowDown twice highlights index 1, which is "Item 2" (ids are 0-indexed).
       await waitFor(() => {
-        const checkboxes = Array.from(
-          screen
-            .getAllByRole("option")
-            .map((option) => option.querySelector('input[type="checkbox"]')),
+        const options = screen.getAllByRole("option");
+        const selectedOptions = options.filter(
+          (option) => option.getAttribute("aria-selected") === "true",
         );
-        const checkedCheckboxes = checkboxes.filter((cb) => {
-          assert(cb instanceof HTMLInputElement);
-          return cb.checked;
-        });
-        expect(checkedCheckboxes.length).toBeGreaterThan(0);
-
-        // Also verify we can find Item 2 if it's visible
-        const item2Checkbox = checkboxes.find((cb) => {
-          const label = cb?.closest(".bx--checkbox-wrapper")?.textContent;
-          return label?.trim() === "Item 2";
-        });
-        if (item2Checkbox) {
-          assert(item2Checkbox instanceof HTMLInputElement);
-          expect(item2Checkbox.checked).toBe(true);
-        }
+        expect(selectedOptions).toHaveLength(1);
+        expect(selectedOptions[0]).toHaveTextContent("Item 2");
       });
     });
 
@@ -470,7 +446,6 @@ describe("MultiSelect", () => {
       await openMenu();
 
       const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
       expect(menu.style.maxHeight).toBe("400px");
       expect(menu.style.overflowY).toBe("auto");
@@ -517,7 +492,7 @@ describe("MultiSelect", () => {
     });
 
     it("should explicitly disable virtualization when virtualize is false, even with large lists", async () => {
-      const largeItems = createItems(100);
+      const largeItems = createItems(150);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -532,7 +507,7 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      expect(options.length).toBe(100);
+      expect(options.length).toBe(150);
       expect(menu.style.maxHeight).toBeFalsy();
     });
 

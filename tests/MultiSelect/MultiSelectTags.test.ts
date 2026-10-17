@@ -122,15 +122,26 @@ describe("MultiSelect selectionDisplay=tags", () => {
     expect(selected()).toEqual(["a", "b"]);
   });
 
-  it("keeps one row with tagOverflow=collapse", () => {
-    const { container } = render(MultiSelectTags, {
-      config: { tagOverflow: "collapse" },
-    });
+  it.each([
+    { config: {}, hasWrap: true },
+    { config: { tagOverflow: "wrap" as const }, hasWrap: true },
+    { config: { tagOverflow: "collapse" as const }, hasWrap: false },
+  ])(
+    "wraps tags only when tagOverflow wraps ($config)",
+    ({ config, hasWrap }) => {
+      const { container } = render(MultiSelectTags, { config });
 
-    expect(
-      container.querySelector(".bx--multi-select__tags .bx--stack"),
-    ).not.toHaveClass("bx--stack-wrap");
-  });
+      const stack = container.querySelector(
+        ".bx--multi-select__tags .bx--stack",
+      );
+      expect(stack).toBeInTheDocument();
+      if (hasWrap) {
+        expect(stack).toHaveClass("bx--stack-wrap");
+      } else {
+        expect(stack).not.toHaveClass("bx--stack-wrap");
+      }
+    },
+  );
 
   it("collapses hidden tags into a +N popover button", () => {
     const { container } = render(MultiSelectTags, {
