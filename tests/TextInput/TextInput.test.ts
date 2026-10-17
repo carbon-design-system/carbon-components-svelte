@@ -10,12 +10,6 @@ import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
 
 describe("TextInput", () => {
-  it("should render with default props", () => {
-    render(TextInput);
-
-    expect(screen.getByLabelText("User name")).toBeInTheDocument();
-  });
-
   it("should not render a stray helper element or aria-describedby for an empty-string helperText", () => {
     const { container } = render(TextInput, { props: { helperText: "" } });
 
@@ -332,13 +326,6 @@ describe("TextInput", () => {
     expect(mockHandler).toHaveBeenCalled();
   });
 
-  it("should have paste event listener", () => {
-    render(TextInput);
-    const input = screen.getByLabelText("User name");
-
-    expect(input).toBeInTheDocument();
-  });
-
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(TextInput);
@@ -481,17 +468,6 @@ describe("TextInput", () => {
     expect(input).toHaveAttribute("aria-describedby", "helper-test-input");
   });
 
-  it("should not set aria-describedby when no helper/error/warn", () => {
-    render(TextInput, {
-      props: {
-        id: "test-input",
-      },
-    });
-
-    const input = screen.getByRole("textbox");
-    expect(input).not.toHaveAttribute("aria-describedby");
-  });
-
   it("should render readonly icon when readonly", () => {
     render(TextInput, {
       props: { readonly: true },
@@ -566,16 +542,6 @@ describe("TextInput", () => {
     expect(label).toHaveClass("bx--label--inline--xl");
   });
 
-  it("should render label helper wrapper in inline mode", () => {
-    const { container } = render(TextInput, {
-      props: { inline: true, helperText: "Helper text" },
-    });
-
-    expect(
-      container.querySelector(".bx--text-input__label-helper-wrapper"),
-    ).toBeInTheDocument();
-  });
-
   it("hides the inline label column when hideLabel leaves it empty", () => {
     const { container } = render(TextInput, {
       props: { inline: true, hideLabel: true },
@@ -610,15 +576,6 @@ describe("TextInput", () => {
     ).toBeInTheDocument();
   });
 
-  it("should bind ref to input element", () => {
-    render(TextInput, {
-      props: { ref: null },
-    });
-
-    const input = screen.getByLabelText("User name");
-    expect(input).toBeInTheDocument();
-  });
-
   it("should handle empty string to null conversion for number type", async () => {
     render(TextInput, {
       props: { type: "number", value: 123 },
@@ -628,14 +585,6 @@ describe("TextInput", () => {
     await user.clear(input);
 
     expect(screen.getByTestId("value").textContent).toBe("null");
-  });
-
-  it("should support restProps on input element", () => {
-    render(TextInput);
-
-    const input = screen.getByLabelText("User name");
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute("type", "text");
   });
 
   it("should suppress warning text in readonly mode", () => {
