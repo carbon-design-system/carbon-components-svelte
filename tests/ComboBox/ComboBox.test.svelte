@@ -34,6 +34,8 @@
     item,
     value,
   ) => item.text.toLowerCase().includes(value.toLowerCase());
+  /** Leave `shouldFilterItem` unset so ComboBox applies its own default. */
+  export let defaultFilter = false;
   export let translateWithIdSelection: ComponentProps<ComboBox>["translateWithIdSelection"] =
     undefined;
   export let allowCustomValue = false;
@@ -73,7 +75,7 @@
   {value}
   {warn}
   {warnText}
-  {shouldFilterItem}
+  shouldFilterItem={defaultFilter ? undefined : shouldFilterItem}
   {translateWithIdSelection}
   {allowCustomValue}
   {clearFilterOnOpen}

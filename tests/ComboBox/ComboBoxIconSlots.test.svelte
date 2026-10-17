@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
 
   const items: ComboBoxItem[] = [
-    { id: "0", text: "Slack" },
+    { id: "0", text: "Slack", icon: Edit },
     { id: "1", text: "Email" },
   ];
 </script>
