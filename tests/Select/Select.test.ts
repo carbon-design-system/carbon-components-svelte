@@ -321,6 +321,52 @@ describe("Select", () => {
     expect(focus).toHaveBeenCalled();
   });
 
+  it("does not prevent mousedown when not read-only", async () => {
+    render(Select);
+    const selectElement = screen.getByLabelText("Select label");
+
+    expect(await fireEvent.mouseDown(selectElement)).toBe(true);
+  });
+
+  describe("inline variant", () => {
+    it("describes the field as read-only", () => {
+      const { container } = render(Select, { inline: true, readonly: true });
+
+      expect(screen.getByLabelText("Select label")).toHaveAttribute(
+        "aria-describedby",
+        "readonly-test-select",
+      );
+      expect(
+        container.querySelector("#readonly-test-select"),
+      ).toHaveTextContent("Read-only");
+    });
+
+    it("prevents keydown and mousedown when read-only", async () => {
+      render(Select, { inline: true, readonly: true });
+      const selectElement = screen.getByLabelText("Select label");
+
+      expect(await fireEvent.keyDown(selectElement, { key: "ArrowDown" })).toBe(
+        false,
+      );
+      expect(await fireEvent.mouseDown(selectElement)).toBe(false);
+    });
+
+    it("sets aria-invalid when invalid", () => {
+      render(Select, { inline: true, invalid: true, invalidText: "Bad" });
+
+      expect(screen.getByLabelText("Select label")).toHaveAttribute(
+        "aria-invalid",
+        "true",
+      );
+    });
+  });
+
+  it("renders no label when noLabel is set", () => {
+    const { container } = render(Select, { noLabel: true });
+
+    expect(container.querySelector("label")).toBeNull();
+  });
+
   it("renders valid by default", () => {
     render(Select);
     const selectElement = screen.getByLabelText("Select label");
