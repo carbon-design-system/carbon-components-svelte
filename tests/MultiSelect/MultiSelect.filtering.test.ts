@@ -17,9 +17,10 @@ const items = [
 describe("MultiSelect", () => {
   describe("filtering behavior", () => {
     it("filters items based on input", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
         props: {
+          onSelect,
           items,
           filterable: true,
           placeholder: "Filter items...",
@@ -35,7 +36,7 @@ describe("MultiSelect", () => {
       expect(screen.queryByText("Fax")).not.toBeInTheDocument();
 
       await user.keyboard("{ArrowDown}{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["1"],
         selected: [{ id: "1", text: "Email", checked: true }],
         unselected: [
@@ -64,8 +65,9 @@ describe("MultiSelect", () => {
     });
 
     it("uses custom filter function", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       const props = {
+        onSelect,
         items,
         filterable: true,
         filterItem: (item: MultiSelectItem, value: string) => {
@@ -84,7 +86,7 @@ describe("MultiSelect", () => {
       expect(screen.queryByText("Fax")).not.toBeInTheDocument();
 
       await user.keyboard("{ArrowDown}{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["1"],
         selected: [{ id: "1", text: "Email", checked: true }],
         unselected: [

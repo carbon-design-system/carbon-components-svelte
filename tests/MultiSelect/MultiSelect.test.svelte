@@ -5,7 +5,6 @@
   import type { ComponentProps } from "svelte";
 
   export let items: ComponentProps<MultiSelect>["items"] = [];
-  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
   export let selectedIds: ComponentProps<MultiSelect>["selectedIds"] = [];
   export let value: ComponentProps<MultiSelect>["value"] = "";
   export let filterable = false;
@@ -49,6 +48,8 @@
   export let wrapOptions: ComponentProps<MultiSelect>["wrapOptions"] = false;
   export let sortItem: ComponentProps<MultiSelect>["sortItem"] = undefined;
   export let open: ComponentProps<MultiSelect>["open"] = undefined;
+  export let onSelect: (detail: unknown) => void = () => {};
+  export let onClear: (detail: unknown) => void = () => {};
   export let ariaLabel: ComponentProps<MultiSelect>["aria-label"] = undefined;
   export let sortedItems: ComponentProps<MultiSelect>["sortedItems"] = [];
   export let fluid = false;
@@ -96,11 +97,6 @@
   {fluid}
   {condensed}
   bind:sortedItems
-  on:select={(e) => {
-    console.log("select", e.detail);
-  }}
-  on:clear={(e) => {
-    console.log("clear", e.detail);
-    onclear?.(e);
-  }}
+  on:select={(e) => onSelect(e.detail)}
+  on:clear={(e) => onClear(e.detail)}
 />

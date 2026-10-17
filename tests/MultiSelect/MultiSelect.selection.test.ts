@@ -15,19 +15,16 @@ describe("MultiSelect", () => {
   describe("selection behavior", () => {
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
     it("does not fire select event on initial render", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: {
-          items,
-          selectedIds: ["0"],
-        },
+        props: { onSelect, items, selectedIds: ["0"] },
       });
 
-      expect(consoleLog).not.toHaveBeenCalled();
+      expect(onSelect).not.toHaveBeenCalled();
 
       await openMenu();
       await toggleOption("Email");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["0", "1"],
         selected: [
           { id: "0", text: "Slack", checked: true },
@@ -39,21 +36,21 @@ describe("MultiSelect", () => {
 
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
     it("does not fire select event on initial render without selectedIds", () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: { items },
+        props: { onSelect, items },
       });
 
-      expect(consoleLog).not.toHaveBeenCalled();
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("does not fire select event for a programmatic selectedIds change", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = render(MultiSelect, { props: { items } });
+      const onSelect = vi.fn();
+      const { rerender } = render(MultiSelect, { props: { onSelect, items } });
 
       await rerender({ selectedIds: ["1", "2"] });
       await tick();
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
 
       await openMenu();
       const options = screen.getAllByRole("option");
@@ -64,58 +61,57 @@ describe("MultiSelect", () => {
     });
 
     it("does not fire select for a programmatic change with selectionFeedback: top, but does for a toggle", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       const { rerender } = render(MultiSelect, {
-        props: { items, selectionFeedback: "top" },
+        props: { onSelect, items, selectionFeedback: "top" },
       });
 
       await rerender({ selectedIds: ["2"] });
       await tick();
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
 
       await openMenu();
       await toggleOption("Slack");
-      const selectCalls = consoleLog.mock.calls.filter(
-        ([name]) => name === "select",
-      );
-      expect(selectCalls).toHaveLength(1);
-      expect(selectCalls[0][1].selectedIds).toEqual(
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect.mock.calls[0][0].selectedIds).toEqual(
         expect.arrayContaining(["0", "2"]),
       );
     });
 
     it("still fires select when the selection is cleared", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(MultiSelect, { props: { items, selectedIds: ["0", "1"] } });
+      const onSelect = vi.fn();
+      render(MultiSelect, {
+        props: { onSelect, items, selectedIds: ["0", "1"] },
+      });
 
       await user.click(screen.getByRole("button", { name: /clear/i }));
-      expect(consoleLog).toHaveBeenCalledWith(
-        "select",
+      expect(onSelect).toHaveBeenCalledWith(
         expect.objectContaining({ selectedIds: [] }),
       );
     });
 
     it("still fires select when the selection is cleared with Delete", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(MultiSelect, { props: { items, selectedIds: ["0", "1"] } });
+      const onSelect = vi.fn();
+      render(MultiSelect, {
+        props: { onSelect, items, selectedIds: ["0", "1"] },
+      });
 
       screen.getByRole("combobox").focus();
       await user.keyboard("{Delete}");
-      expect(consoleLog).toHaveBeenCalledWith(
-        "select",
+      expect(onSelect).toHaveBeenCalledWith(
         expect.objectContaining({ selectedIds: [] }),
       );
     });
 
     it("handles item selection", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: { items },
+        props: { onSelect, items },
       });
 
       await openMenu();
       await toggleOption("Slack");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["0"],
         selected: [{ id: "0", text: "Slack", checked: true }],
         unselected: [
@@ -126,15 +122,15 @@ describe("MultiSelect", () => {
     });
 
     it("handles multiple selections", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: { items },
+        props: { onSelect, items },
       });
 
       await openMenu();
       await toggleOption("Slack");
       await toggleOption("Email");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["0"],
         selected: [{ id: "0", text: "Slack", checked: true }],
         unselected: [
@@ -142,7 +138,7 @@ describe("MultiSelect", () => {
           { id: "2", text: "Fax", checked: false },
         ],
       });
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["1", "0"],
         selected: [
           { id: "1", text: "Email", checked: true },
@@ -153,17 +149,14 @@ describe("MultiSelect", () => {
     });
 
     it("handles item deselection", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: {
-          items,
-          selectedIds: ["0"],
-        },
+        props: { onSelect, items, selectedIds: ["0"] },
       });
 
       await openMenu();
       await toggleOption("Slack");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: [],
         selected: [],
         unselected: [
@@ -174,7 +167,7 @@ describe("MultiSelect", () => {
       });
 
       await toggleOption("Slack");
-      expect(consoleLog).toHaveBeenLastCalledWith("select", {
+      expect(onSelect).toHaveBeenLastCalledWith({
         selectedIds: ["0"],
         selected: [{ id: "0", text: "Slack", checked: true }],
         unselected: [
@@ -194,9 +187,9 @@ describe("MultiSelect", () => {
     ];
 
     it("selects every item between the anchor and the shift-clicked item", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: { items: rangeItems },
+        props: { onSelect, items: rangeItems },
       });
 
       await openMenu();
@@ -210,10 +203,10 @@ describe("MultiSelect", () => {
       for (const option of screen.getAllByRole("option")) {
         expect(option).toHaveAttribute("aria-selected", "true");
       }
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toEqual(
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toEqual(
         expect.arrayContaining(["0", "1", "2", "3"]),
       );
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(4);
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toHaveLength(4);
     });
 
     it("falls back to a single toggle when shift+click has no prior anchor", async () => {
@@ -284,18 +277,15 @@ describe("MultiSelect", () => {
     });
 
     it("clicking select-all selects all non-disabled items", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: {
-          items: itemsWithSelectAll,
-          labelText: "Roles",
-        },
+        props: { onSelect, items: itemsWithSelectAll, labelText: "Roles" },
       });
 
       await openMenu();
       await toggleOption("All roles");
 
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["editor", "owner", "uploader"],
         selected: expect.arrayContaining([
           expect.objectContaining({
@@ -323,16 +313,17 @@ describe("MultiSelect", () => {
           }),
         ]),
       });
-      expect(consoleLog.mock.calls[0][1].selected).toHaveLength(3);
+      expect(onSelect.mock.calls[0][0].selected).toHaveLength(3);
 
       const readerOption = screen.getByRole("option", { name: "Reader" });
       expect(readerOption).toHaveAttribute("aria-selected", "false");
     });
 
     it("clicking select-all when all selected deselects all non-disabled items", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
         props: {
+          onSelect,
           items: itemsWithSelectAll,
           selectedIds: ["editor", "owner", "uploader"],
           labelText: "Roles",
@@ -342,7 +333,7 @@ describe("MultiSelect", () => {
       await openMenu();
       await toggleOption("All roles");
 
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: [],
         selected: [],
         unselected: expect.arrayContaining([
@@ -369,13 +360,14 @@ describe("MultiSelect", () => {
           }),
         ]),
       });
-      expect(consoleLog.mock.calls[0][1].unselected).toHaveLength(4);
+      expect(onSelect.mock.calls[0][0].unselected).toHaveLength(4);
     });
 
     it("scopes select-all to the currently filtered items, not the whole list", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
         props: {
+          onSelect,
           items: itemsWithSelectAll,
           labelText: "Roles",
           filterable: true,
@@ -388,7 +380,7 @@ describe("MultiSelect", () => {
       await user.type(input, "Ed");
       await toggleOption("All roles");
 
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledWith({
         selectedIds: ["editor"],
         selected: [expect.objectContaining({ id: "editor", checked: true })],
         unselected: expect.arrayContaining([
@@ -397,7 +389,7 @@ describe("MultiSelect", () => {
           expect.objectContaining({ id: "uploader", checked: false }),
         ]),
       });
-      expect(consoleLog.mock.calls[0][1].unselected).toHaveLength(3);
+      expect(onSelect.mock.calls[0][0].unselected).toHaveLength(3);
     });
 
     it("does not indicate select-all as checked when unfiltered items remain unselected", async () => {
@@ -421,18 +413,15 @@ describe("MultiSelect", () => {
     });
 
     it("select event excludes isSelectAll item from selectedIds and selected/unselected", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: {
-          items: itemsWithSelectAll,
-          labelText: "Roles",
-        },
+        props: { onSelect, items: itemsWithSelectAll, labelText: "Roles" },
       });
 
       await openMenu();
       await toggleOption("All roles");
 
-      const detail = consoleLog.mock.calls[0][1];
+      const detail = onSelect.mock.calls[0][0];
       expect(detail.selectedIds).not.toContain("select-all");
       expect(
         detail.selected.every((s: { id: string }) => s.id !== "select-all"),
@@ -559,9 +548,10 @@ describe("MultiSelect", () => {
     ];
 
     it("stops checking items once the cap is reached and still allows unchecking", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
         props: {
+          onSelect,
           items: preferenceItems,
           maxSelectedItems: 2,
           labelText: "Preferences",
@@ -572,27 +562,26 @@ describe("MultiSelect", () => {
       await toggleOption("Email");
       await toggleOption("Slack");
 
-      expect(consoleLog).toHaveBeenLastCalledWith(
-        "select",
+      expect(onSelect).toHaveBeenLastCalledWith(
         expect.objectContaining({
           selectedIds: expect.arrayContaining(["0", "1"]),
         }),
       );
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(2);
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toHaveLength(2);
 
       const smsOption = screen.getByRole("option", { name: "SMS" });
       expect(smsOption).toHaveAttribute("aria-disabled", "true");
 
       await user.click(smsOption);
       expect(smsOption).toHaveAttribute("aria-selected", "false");
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(2);
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toHaveLength(2);
 
       await toggleOption("Email");
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toEqual(["1"]);
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toEqual(["1"]);
 
       expect(smsOption).not.toHaveAttribute("aria-disabled");
       await toggleOption("SMS");
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toEqual(
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toEqual(
         expect.arrayContaining(["1", "2"]),
       );
     });
@@ -689,9 +678,10 @@ describe("MultiSelect", () => {
     });
 
     it("disables select-all when a cap is set", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
         props: {
+          onSelect,
           items: [
             { id: "select-all", text: "All roles", isSelectAll: true },
             { id: "editor", text: "Editor" },
@@ -708,16 +698,13 @@ describe("MultiSelect", () => {
       expect(selectAllOption).toHaveAttribute("aria-disabled", "true");
 
       await user.click(selectAllOption);
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("preserves unlimited selection when maxSelectedItems is omitted", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(MultiSelect, {
-        props: {
-          items: preferenceItems,
-          labelText: "Preferences",
-        },
+        props: { onSelect, items: preferenceItems, labelText: "Preferences" },
       });
 
       await openMenu();
@@ -726,7 +713,7 @@ describe("MultiSelect", () => {
       await toggleOption("SMS");
       await toggleOption("Push");
 
-      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(4);
+      expect(onSelect.mock.calls.at(-1)?.[0].selectedIds).toHaveLength(4);
       for (const name of ["Email", "Slack", "SMS", "Push"]) {
         expect(screen.getByRole("option", { name })).not.toHaveAttribute(
           "aria-disabled",
@@ -959,15 +946,15 @@ describe("MultiSelect", () => {
     });
 
     it("non-filterable: Enter opens the menu when closed without selecting", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(MultiSelect, { props: { items } });
+      const onSelect = vi.fn();
+      render(MultiSelect, { props: { onSelect, items } });
 
       const combobox = screen.getByRole("combobox");
       combobox.focus();
       await user.keyboard("{Enter}");
       expect(combobox).toHaveAttribute("aria-expanded", "true");
       expect(combobox).not.toHaveAttribute("aria-activedescendant");
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
 
       await user.keyboard("{ArrowDown}{Enter}");
       expect(screen.getAllByRole("option")[0]).toHaveAttribute(
@@ -1236,46 +1223,46 @@ describe("MultiSelect", () => {
     it.each(["Delete", "Backspace"])(
       "%s dispatches clear with the keyboard event",
       async (key) => {
-        const onclear = vi.fn();
+        const onClear = vi.fn();
         render(MultiSelect, {
-          props: { items, labelText: "Contact", selectedIds: ["0"], onclear },
+          props: { items, labelText: "Contact", selectedIds: ["0"], onClear },
         });
 
         screen.getByRole("combobox").focus();
         await user.keyboard(`{${key}}`);
 
-        expect(onclear).toHaveBeenCalledOnce();
-        expect(onclear.mock.calls[0][0].detail).toBeInstanceOf(KeyboardEvent);
+        expect(onClear).toHaveBeenCalledOnce();
+        expect(onClear.mock.calls[0][0]).toBeInstanceOf(KeyboardEvent);
       },
     );
 
     it("dispatches clear when Backspace clears a filterable selection", async () => {
-      const onclear = vi.fn();
+      const onClear = vi.fn();
       render(MultiSelect, {
         props: {
           items,
           filterable: true,
           placeholder: "Filter...",
           selectedIds: ["0"],
-          onclear,
+          onClear,
         },
       });
 
       screen.getByPlaceholderText("Filter...").focus();
       await user.keyboard("{Backspace}");
 
-      expect(onclear).toHaveBeenCalledOnce();
+      expect(onClear).toHaveBeenCalledOnce();
     });
 
     it("does not dispatch clear when Delete only clears the filter text", async () => {
-      const onclear = vi.fn();
+      const onClear = vi.fn();
       render(MultiSelect, {
         props: {
           items,
           filterable: true,
           placeholder: "Filter...",
           selectedIds: ["0"],
-          onclear,
+          onClear,
         },
       });
 
@@ -1284,22 +1271,22 @@ describe("MultiSelect", () => {
       await user.type(input, "Sl");
       await user.keyboard("{Delete}");
 
-      expect(onclear).not.toHaveBeenCalled();
+      expect(onClear).not.toHaveBeenCalled();
     });
 
     it.each([
       ["nothing is selected", { selectedIds: [] }],
       ["read-only", { selectedIds: ["0"], readonly: true }],
     ])("does not dispatch clear when %s", async (_, props) => {
-      const onclear = vi.fn();
+      const onClear = vi.fn();
       render(MultiSelect, {
-        props: { items, labelText: "Contact", onclear, ...props },
+        props: { items, labelText: "Contact", onClear, ...props },
       });
 
       screen.getByRole("combobox").focus();
       await user.keyboard("{Delete}");
 
-      expect(onclear).not.toHaveBeenCalled();
+      expect(onClear).not.toHaveBeenCalled();
     });
   });
 

@@ -92,9 +92,10 @@ describe("MultiSelect grouped items", () => {
   });
 
   it("keeps select-all above the groups and toggles items in every group", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
     render(MultiSelect, {
       props: {
+        onSelect,
         items: [
           { id: "all", text: "All regions", isSelectAll: true },
           ...regions,
@@ -106,8 +107,7 @@ describe("MultiSelect grouped items", () => {
     expect(optionTexts()[0]).toBe("All regions");
     await toggleOption("All regions");
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "select",
+    expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({
         selectedIds: expect.arrayContaining(regions.map((item) => item.id)),
       }),

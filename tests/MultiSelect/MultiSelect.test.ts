@@ -563,17 +563,14 @@ describe("MultiSelect", () => {
     it.each(["{Delete}", "{Backspace}"])(
       "does not clear a disabled field's selection on %s",
       async (key) => {
-        const consoleLog = vi.spyOn(console, "log");
+        const onSelect = vi.fn();
         render(MultiSelect, {
-          props: { items, disabled: true, selectedIds: ["1"] },
+          props: { onSelect, items, disabled: true, selectedIds: ["1"] },
         });
 
         await user.click(screen.getByRole("combobox"));
         await user.keyboard(key);
-        expect(consoleLog).not.toHaveBeenCalledWith(
-          "select",
-          expect.anything(),
-        );
+        expect(onSelect).not.toHaveBeenCalled();
       },
     );
 
@@ -1028,11 +1025,14 @@ describe("MultiSelect", () => {
   });
 
   it("passes the click event as the clear event detail", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultiSelect, { props: { items, selectedIds: ["0", "1"] } });
+    const onClear = vi.fn();
+    render(MultiSelect, {
+      props: { items, selectedIds: ["0", "1"], onClear },
+    });
 
     await user.click(screen.getByRole("button", { name: /clear/i }));
-    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(MouseEvent));
+    expect(onClear).toHaveBeenCalledOnce();
+    expect(onClear).toHaveBeenCalledWith(expect.any(MouseEvent));
   });
 
   it("clears all selections when clear button is clicked", async () => {
@@ -1177,8 +1177,8 @@ describe("MultiSelect", () => {
     });
 
     it("should infer generic type from items and support destructuring in slots", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(MultiSelectGenerics);
+      const onSelect = vi.fn();
+      render(MultiSelectGenerics, { props: { onSelect } });
 
       await openMenu();
 
@@ -1191,7 +1191,8 @@ describe("MultiSelect", () => {
 
       await toggleOption("Laptop");
 
-      expect(consoleLog).toHaveBeenCalledWith("selected:", [
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith([
         {
           id: "1",
           text: "Laptop",
