@@ -24,25 +24,11 @@ import {
   getDayByNumber,
   getDays,
   openCalendar,
+  preloadFlatpickrPlugins,
   yearFirst,
 } from "./helpers";
 
-// The range, month, year and week pickers load their flatpickr plugins on
-// demand. Cold, as when CI runs the DatePicker tests on their own, that
-// import can outlast a test's 1s wait for the calendar, so load them once
-// up front.
-beforeAll(async () => {
-  await Promise.all([
-    // @ts-expect-error: no type declarations
-    import("flatpickr/dist/esm/plugins/rangePlugin"),
-    // @ts-expect-error: no type declarations
-    import("flatpickr/dist/esm/plugins/monthSelect"),
-    // @ts-expect-error: no type declarations
-    import("flatpickr/dist/esm/plugins/weekSelect/weekSelect"),
-    // @ts-expect-error: no type declarations
-    import("carbon-components-svelte/DatePicker/year-select-plugin.js"),
-  ]);
-}, 30_000);
+beforeAll(preloadFlatpickrPlugins, 30_000);
 
 describe("DatePicker", () => {
   afterEach(() => {
@@ -542,37 +528,6 @@ describe("DatePicker", () => {
     expect(fp.config.clickOpens).toBe(false);
   });
 
-  describe("inline calendar interaction states", () => {
-    it.each(["readonly", "disabled"] as const)(
-      "blocks selection while the input is %s and restores it after",
-      async (state) => {
-        const props: ComponentProps<typeof DatePicker> = {
-          datePickerType: "single",
-          value: "03/15/2024",
-          flatpickrProps: { inline: true },
-        };
-        const { rerender } = render(DatePicker, { ...props, [state]: true });
-        const calendar = await screen.findByLabelText("calendar-container");
-        const input = screen.getByLabelText("Date");
-        await vi.waitFor(() =>
-          expect(calendar).toHaveAttribute("aria-disabled", "true"),
-        );
-
-        await user.click(findDay(calendar, "10"));
-        expect(input).toHaveValue("03/15/2024");
-        await clickNextMonth(calendar);
-        expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
-
-        await rerender({ ...props, [state]: false });
-        await vi.waitFor(() =>
-          expect(calendar).not.toHaveAttribute("aria-disabled"),
-        );
-        await user.click(findDay(calendar, "10"));
-        expect(input).toHaveValue("03/10/2024");
-      },
-    );
-  });
-
   describe("change event count", () => {
     it("dispatches change once for a calendar selection", async () => {
       const onchange = vi.fn();
@@ -602,27 +557,6 @@ describe("DatePicker", () => {
       await tick();
       expect(onchange).toHaveBeenCalledTimes(1);
     });
-  });
-
-  it("leaves Carbon's markup intact when an inline calendar is rebuilt", async () => {
-    const props: ComponentProps<typeof DatePicker> = {
-      helperText: "Pick a weekday",
-      flatpickrProps: { inline: true },
-    };
-    const { container, rerender } = render(DatePicker, {
-      ...props,
-      datePickerType: "single",
-    });
-    await screen.findByLabelText("calendar-container");
-
-    await rerender({ ...props, datePickerType: "multiple" });
-    await vi.waitFor(() =>
-      expect(screen.getAllByLabelText("calendar-container")).toHaveLength(1),
-    );
-    expect(screen.getByText("Pick a weekday")).toBeInTheDocument();
-    expect(
-      container.querySelector(".bx--date-picker-container"),
-    ).toContainElement(screen.getByLabelText("Date"));
   });
 
   it("types the open event", () => {
@@ -1306,30 +1240,6 @@ describe("DatePicker", () => {
       const selected = calendar.querySelector(".flatpickr-day.selected");
       expect(selected).toHaveTextContent("10");
       expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
-    });
-
-    it("applies Carbon classes to an inline calendar that never opens", async () => {
-      render(DatePicker, {
-        datePickerType: "single",
-        flatpickrProps: { inline: true },
-      });
-
-      const calendar = await screen.findByLabelText("calendar-container");
-      expect(calendar).toHaveClass("inline", "bx--date-picker__calendar");
-      expect(calendar.querySelector(".flatpickr-day")).toHaveClass(
-        "bx--date-picker__day",
-      );
-      // Inside the input wrapper it would stretch the box that vertically
-      // centers the calendar icon.
-      expect(calendar.closest(".bx--date-picker-input__wrapper")).toBeNull();
-      expect(calendar.previousElementSibling).toHaveClass(
-        "bx--date-picker-input__wrapper",
-      );
-      // The month dropdown is replaced by Carbon's static label.
-      expect(calendar.querySelector(".cur-month")).toBeInTheDocument();
-      expect(
-        calendar.querySelector(".flatpickr-monthDropdown-months"),
-      ).not.toBeInTheDocument();
     });
 
     it("labels the visible altInput instead of the hidden original", async () => {

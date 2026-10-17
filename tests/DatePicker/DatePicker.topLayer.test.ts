@@ -1,4 +1,71 @@
+import { render } from "@testing-library/svelte";
 import { positionFlatpickrCalendarFixed } from "../../src/DatePicker/date-picker-top-layer.js";
+import { user } from "../utils/user";
+import DatePickerHost from "./DatePickerHost.test.svelte";
+import { clickNextMonth, openCalendar } from "./helpers";
+
+describe("DatePicker inside a top-layer dialog", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("registers a passive capture scroll listener and repositions once per frame", async () => {
+    const add = vi.spyOn(window, "addEventListener");
+    const frames: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) =>
+      frames.push(callback),
+    );
+
+    render(DatePickerHost);
+    await openCalendar();
+
+    const scrollCall = add.mock.calls.find(([type]) => type === "scroll");
+    expect(scrollCall?.[2]).toEqual({ capture: true, passive: true });
+    // Pooled listeners are shared per `(type, options)`, so scroll and
+    // resize no longer share one function reference.
+    const resizeCall = add.mock.calls.find(
+      ([type, , options]) =>
+        type === "resize" &&
+        typeof options === "object" &&
+        options?.passive === true &&
+        !("capture" in options),
+    );
+    expect(resizeCall?.[2]).toEqual({ passive: true });
+
+    // Several scroll events in one frame schedule a single reposition.
+    frames.length = 0;
+    window.dispatchEvent(new Event("scroll"));
+    window.dispatchEvent(new Event("scroll"));
+    window.dispatchEvent(new Event("scroll"));
+    expect(frames).toHaveLength(1);
+  });
+});
+
+describe("DatePicker inside Popover", () => {
+  it("does not close the popover when a portaled calendar's month-nav arrow is clicked", async () => {
+    const onClose = vi.fn();
+    render(DatePickerHost, { props: { container: "popover", onClose } });
+
+    const calendar = await openCalendar();
+    const popover = document.querySelector(".bx--popover");
+    expect(popover?.contains(calendar)).toBe(false);
+
+    await clickNextMonth(calendar);
+
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("still closes the popover for a genuine outside click", async () => {
+    const onClose = vi.fn();
+    render(DatePickerHost, { props: { container: "popover", onClose } });
+
+    await openCalendar();
+
+    await user.click(document.body);
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
 
 /**
  * Reproduces the scrollbar-gutter regression: `window.innerWidth` includes the
