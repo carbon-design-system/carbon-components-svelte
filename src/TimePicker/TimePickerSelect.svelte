@@ -50,13 +50,12 @@
    */
   export let ref = null;
 
-  import { getContext, onMount, setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
-  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -98,8 +97,6 @@
   }
 
   setContext("carbon:TimePickerSelect", { selectedValue, setDefaultValue });
-
-  onMount(() => timePickerContext?.registerSelect?.() ?? noop);
 
   // An item with the value "" makes "" a real choice, so leave it alone.
   $: if (value === "" && !hasEmptyItem && defaultItemValue !== undefined) {

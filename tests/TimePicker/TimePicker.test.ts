@@ -2,7 +2,6 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
-import TimePickerFluidForm from "./TimePicker.fluidForm.test.svelte";
 import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
 import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
 import TimePickerSkeleton from "./TimePicker.skeleton.test.svelte";
@@ -539,22 +538,6 @@ describe("TimePicker", () => {
       expect(screen.getByText("Custom label content")).toHaveClass(
         "bx--label--slotted",
       );
-    });
-
-    it("applies equal-width layout with one select", () => {
-      render(TimePickerFluidForm);
-
-      expect(
-        document.querySelector(".bx--time-picker--equal-width"),
-      ).toBeInTheDocument();
-    });
-
-    it("does not apply equal-width layout with two selects", () => {
-      render(TimePicker, { fluid: true });
-
-      expect(
-        document.querySelector(".bx--time-picker--equal-width"),
-      ).toBeNull();
     });
   });
 

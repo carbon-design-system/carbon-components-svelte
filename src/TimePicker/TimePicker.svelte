@@ -104,16 +104,6 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
-  const selectCount = writable(0);
-
-  /** @type {() => () => void} */
-  function registerSelect() {
-    selectCount.update((count) => count + 1);
-    return () => {
-      selectCount.update((count) => count - 1);
-    };
-  }
-
   const groupReadonly = writable(readonly);
   const groupDisabled = writable(disabled);
   // Fluid selects show their own labels; hiding the picker's hides theirs.
@@ -121,7 +111,6 @@
 
   const timePickerContext = {
     isFluid: false,
-    registerSelect,
     readonly: readOnly(groupReadonly),
     disabled: readOnly(groupDisabled),
     hideLabel: readOnly(groupHideLabel),
@@ -153,7 +142,6 @@
   $: groupReadonly.set(readonly);
   $: groupDisabled.set(disabled);
   $: groupHideLabel.set(hideLabel);
-  $: equalWidth = $selectCount !== 2;
   $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
 </script>
 
@@ -171,7 +159,6 @@
   {#if isFluid}
     <div
       class:bx--time-picker--fluid={true}
-      class:bx--time-picker--equal-width={equalWidth}
       class:bx--time-picker--fluid--disabled={disabled}
       class:bx--time-picker--fluid--invalid={showInvalid}
       class:bx--time-picker--fluid--warning={showWarn}
