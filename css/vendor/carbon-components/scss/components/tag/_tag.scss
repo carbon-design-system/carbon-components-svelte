@@ -5,25 +5,32 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-@import '../../globals/scss/vars';
-@import '../../globals/scss/helper-mixins';
-@import '../../globals/scss/typography';
-@import '../../globals/scss/component-tokens';
-@import '../../globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
-@import 'mixins';
-@import 'tokens';
+@import "../../globals/scss/vars";
+@import "../../globals/scss/helper-mixins";
+@import "../../globals/scss/typography";
+@import "../../globals/scss/component-tokens";
+@import "../../globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "mixins";
+@import "tokens";
 
 /// Tag styles
 /// @access private
 /// @group tag
 @mixin tags {
   .#{$prefix}--tag {
-    @include button-reset($width: false, $omit: (display, padding, cursor));
-    @include type-style('label-01');
+    @include button-reset(
+      $width: false,
+      $omit: (
+        display,
+        padding,
+        cursor,
+      )
+    );
+    @include type-style("label-01");
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-gray'),
-      get-token-value($tag-colors, 'tag-color-gray'),
-      get-token-value($tag-colors, 'tag-hover-gray'),
+      get-token-value($tag-colors, "tag-background-gray"),
+      get-token-value($tag-colors, "tag-color-gray"),
+      get-token-value($tag-colors, "tag-hover-gray"),
       $emit-hover: false
     );
 
@@ -49,96 +56,101 @@
 
   .#{$prefix}--tag--red {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-red'),
-      get-token-value($tag-colors, 'tag-color-red'),
-      get-token-value($tag-colors, 'tag-hover-red'),
+      get-token-value($tag-colors, "tag-background-red"),
+      get-token-value($tag-colors, "tag-color-red"),
+      get-token-value($tag-colors, "tag-hover-red"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--magenta {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-magenta'),
-      get-token-value($tag-colors, 'tag-color-magenta'),
-      get-token-value($tag-colors, 'tag-hover-magenta'),
+      get-token-value($tag-colors, "tag-background-magenta"),
+      get-token-value($tag-colors, "tag-color-magenta"),
+      get-token-value($tag-colors, "tag-hover-magenta"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--purple {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-purple'),
-      get-token-value($tag-colors, 'tag-color-purple'),
-      get-token-value($tag-colors, 'tag-hover-purple'),
+      get-token-value($tag-colors, "tag-background-purple"),
+      get-token-value($tag-colors, "tag-color-purple"),
+      get-token-value($tag-colors, "tag-hover-purple"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--blue {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-blue'),
-      get-token-value($tag-colors, 'tag-color-blue'),
-      get-token-value($tag-colors, 'tag-hover-blue'),
+      get-token-value($tag-colors, "tag-background-blue"),
+      get-token-value($tag-colors, "tag-color-blue"),
+      get-token-value($tag-colors, "tag-hover-blue"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--cyan {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-cyan'),
-      get-token-value($tag-colors, 'tag-color-cyan'),
-      get-token-value($tag-colors, 'tag-hover-cyan'),
+      get-token-value($tag-colors, "tag-background-cyan"),
+      get-token-value($tag-colors, "tag-color-cyan"),
+      get-token-value($tag-colors, "tag-hover-cyan"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--teal {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-teal'),
-      get-token-value($tag-colors, 'tag-color-teal'),
-      get-token-value($tag-colors, 'tag-hover-teal'),
+      get-token-value($tag-colors, "tag-background-teal"),
+      get-token-value($tag-colors, "tag-color-teal"),
+      get-token-value($tag-colors, "tag-hover-teal"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--green {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-green'),
-      get-token-value($tag-colors, 'tag-color-green'),
-      get-token-value($tag-colors, 'tag-hover-green'),
+      get-token-value($tag-colors, "tag-background-green"),
+      get-token-value($tag-colors, "tag-color-green"),
+      get-token-value($tag-colors, "tag-hover-green"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--gray {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-gray'),
-      get-token-value($tag-colors, 'tag-color-gray'),
-      get-token-value($tag-colors, 'tag-hover-gray'),
+      get-token-value($tag-colors, "tag-background-gray"),
+      get-token-value($tag-colors, "tag-color-gray"),
+      get-token-value($tag-colors, "tag-hover-gray"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--cool-gray {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-cool-gray'),
-      get-token-value($tag-colors, 'tag-color-cool-gray'),
-      get-token-value($tag-colors, 'tag-hover-cool-gray'),
+      get-token-value($tag-colors, "tag-background-cool-gray"),
+      get-token-value($tag-colors, "tag-color-cool-gray"),
+      get-token-value($tag-colors, "tag-hover-cool-gray"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--warm-gray {
     @include tag-theme(
-      get-token-value($tag-colors, 'tag-background-warm-gray'),
-      get-token-value($tag-colors, 'tag-color-warm-gray'),
-      get-token-value($tag-colors, 'tag-hover-warm-gray'),
+      get-token-value($tag-colors, "tag-background-warm-gray"),
+      get-token-value($tag-colors, "tag-color-warm-gray"),
+      get-token-value($tag-colors, "tag-hover-warm-gray"),
       $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--high-contrast {
-    @include tag-theme($inverse-02, $inverse-01, $inverse-hover-ui, $emit-hover: false);
+    @include tag-theme(
+      $inverse-02,
+      $inverse-01,
+      $inverse-hover-ui,
+      $emit-hover: false
+    );
   }
 
   .#{$prefix}--tag--outline {
@@ -268,7 +280,11 @@
 
   .#{$prefix}--tag.#{$prefix}--skeleton {
     @include skeleton;
-    @include tag-theme($bg-color: $skeleton-01, $text-color: $text-01, $emit-hover: false);
+    @include tag-theme(
+      $bg-color: $skeleton-01,
+      $text-color: $text-01,
+      $emit-hover: false
+    );
 
     overflow: hidden;
     width: to-rem(60px);
@@ -289,57 +305,57 @@
   @media (any-hover: hover) {
     .#{$prefix}--tag.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-gray');
+      background-color: get-token-value($tag-colors, "tag-hover-gray");
     }
 
     .#{$prefix}--tag--red.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--red .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-red');
+      background-color: get-token-value($tag-colors, "tag-hover-red");
     }
 
     .#{$prefix}--tag--magenta.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--magenta .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-magenta');
+      background-color: get-token-value($tag-colors, "tag-hover-magenta");
     }
 
     .#{$prefix}--tag--purple.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--purple .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-purple');
+      background-color: get-token-value($tag-colors, "tag-hover-purple");
     }
 
     .#{$prefix}--tag--blue.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--blue .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-blue');
+      background-color: get-token-value($tag-colors, "tag-hover-blue");
     }
 
     .#{$prefix}--tag--cyan.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--cyan .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-cyan');
+      background-color: get-token-value($tag-colors, "tag-hover-cyan");
     }
 
     .#{$prefix}--tag--teal.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--teal .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-teal');
+      background-color: get-token-value($tag-colors, "tag-hover-teal");
     }
 
     .#{$prefix}--tag--green.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--green .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-green');
+      background-color: get-token-value($tag-colors, "tag-hover-green");
     }
 
     .#{$prefix}--tag--gray.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--gray .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-gray');
+      background-color: get-token-value($tag-colors, "tag-hover-gray");
     }
 
     .#{$prefix}--tag--cool-gray.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--cool-gray .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-cool-gray');
+      background-color: get-token-value($tag-colors, "tag-hover-cool-gray");
     }
 
     .#{$prefix}--tag--warm-gray.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--warm-gray .#{$prefix}--tag__close-icon:hover {
-      background-color: get-token-value($tag-colors, 'tag-hover-warm-gray');
+      background-color: get-token-value($tag-colors, "tag-hover-warm-gray");
     }
 
     .#{$prefix}--tag--high-contrast.#{$prefix}--tag--interactive:hover,
@@ -355,9 +371,11 @@
     .#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover,
     .#{$prefix}--tag--filter.#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
-    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover,
+    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled
+      .#{$prefix}--tag__close-icon:hover,
     .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
-    .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover {
+    .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled
+      .#{$prefix}--tag__close-icon:hover {
       background-color: $disabled-01;
     }
 
@@ -377,22 +395,47 @@
   // Windows HCM fix
   /* stylelint-disable */
   .#{$prefix}--tag {
-    @include high-contrast-mode('outline');
+    @include high-contrast-mode("outline");
   }
 
   .#{$prefix}--tag__close-icon svg,
   .#{$prefix}--tag__custom-icon svg {
-    @include high-contrast-mode('icon-fill');
+    @include high-contrast-mode("icon-fill");
   }
 
   .#{$prefix}--tag__close-icon:focus {
-    @include high-contrast-mode('focus');
+    @include high-contrast-mode("focus");
   }
   /* stylelint-enable */
 }
 
-@include exports('tags') {
+@include exports("tags") {
   @include tags;
+}
+
+// ccs: 16px tag for 24px (`xs`) fields, which leave an 18px `sm` tag
+// one pixel inside their 2px focus or invalid outline. The label keeps
+// `label-01`'s 16px line height, and the close icon stays 16px, filling
+// its button.
+@mixin tag-xs {
+  .#{$prefix}--tag--xs {
+    min-height: to-rem(16px);
+    padding: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tag--xs.#{$prefix}--tag--filter {
+    padding-right: 0;
+  }
+
+  .#{$prefix}--tag--xs .#{$prefix}--tag__close-icon {
+    width: to-rem(16px);
+    height: to-rem(16px);
+    margin-left: to-rem(4px);
+  }
+}
+
+@include exports("tag-xs") {
+  @include tag-xs;
 }
 
 // carbon-components-svelte patch (formerly css/_tag.scss)
@@ -451,7 +494,7 @@
 }
 
 // carbon-components-svelte patch (formerly css/_selectable-tag.scss)
-@import '../../globals/scss/helper-mixins';
+@import "../../globals/scss/helper-mixins";
 
 @mixin selectable-tag {
   .#{$prefix}--tag--selectable {
@@ -502,7 +545,9 @@
   // `forced-color-adjust` stays `auto`: unforcing would bring back the real
   // `$focus` ring and hover fill.
   @media (forced-colors: active) {
-    .#{$prefix}--tag--selectable.#{$prefix}--tag--selectable-selected:not(.#{$prefix}--tag--disabled) {
+    .#{$prefix}--tag--selectable.#{$prefix}--tag--selectable-selected:not(
+        .#{$prefix}--tag--disabled
+      ) {
       background-color: Highlight;
       color: HighlightText;
     }
@@ -526,7 +571,7 @@
   }
 }
 
-@include exports('selectable-tag') {
+@include exports("selectable-tag") {
   @include selectable-tag;
 }
 

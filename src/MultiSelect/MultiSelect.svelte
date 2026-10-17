@@ -1316,7 +1316,9 @@
       ? items.filter((item) => !item.isSelectAll && selectedIdsSet.has(item.id))
       : [];
   $: tagSize =
-    effectiveSize === "xs" || effectiveSize === "sm" ? "sm" : "default";
+    effectiveSize === "xs" || effectiveSize === "sm"
+      ? effectiveSize
+      : "default";
   // Scope select-all to the currently visible (filtered) items, so it
   // doesn't check/uncheck items hidden by an active filter.
   $: selectAllScope = filterable && open ? filteredItems : sortedItems;
@@ -1533,7 +1535,7 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
-              class={tagSize === "sm" ? "bx--tag--sm" : undefined}
+              class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
           {/if}
           <input
@@ -1807,7 +1809,7 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
-              class={tagSize === "sm" ? "bx--tag--sm" : undefined}
+              class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
           {/if}
           <span class:bx--list-box__label={true}>{label}</span>

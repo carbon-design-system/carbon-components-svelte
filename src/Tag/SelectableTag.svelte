@@ -20,7 +20,7 @@
   /**
    * Specify the size of the tag.
    * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
-   * @type {"sm" | "default" | "lg"}
+   * @type {"xs" | "sm" | "default" | "lg"}
    */
   export let size = undefined;
 
@@ -90,6 +90,7 @@
   class:bx--tag--selectable={true}
   class:bx--tag--selectable-selected={selected}
   class:bx--tag--disabled={disabled}
+  class:bx--tag--xs={resolvedSize === "xs"}
   class:bx--tag--sm={resolvedSize === "sm"}
   class:bx--tag--lg={resolvedSize === "lg"}
   class:bx--tag--red={type === "red"}
