@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import CheckboxForm from "./Checkbox.form.test.svelte";
 import CheckboxFormGroup from "./Checkbox.formGroup.test.svelte";
@@ -81,8 +81,7 @@ describe("Checkbox form participation", () => {
       expect(getBoundText()).toBe("true");
       onCheck.mockClear();
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(checkbox).not.toBeChecked();
       expect(getBoundText()).toBe("false");
@@ -100,8 +99,7 @@ describe("Checkbox form participation", () => {
       await user.click(checkbox);
       expect(getBoundText()).toBe("false");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(checkbox).toBeChecked();
       expect(getBoundText()).toBe("true");
@@ -111,8 +109,7 @@ describe("Checkbox form participation", () => {
       render(CheckboxForm, { props: { checked: true, readonly: true } });
       const checkbox = screen.getByRole("checkbox", { name: "Agree" });
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(checkbox).toBeChecked();
       expect(getBoundText()).toBe("true");
@@ -124,8 +121,7 @@ describe("Checkbox form participation", () => {
       getForm().addEventListener("reset", (event) => event.preventDefault());
 
       await user.click(checkbox);
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(checkbox).toBeChecked();
       expect(getBoundText()).toBe("true");
@@ -138,8 +134,7 @@ describe("Checkbox form participation", () => {
       await user.click(screen.getByRole("checkbox", { name: "B" }));
       expect(screen.getByTestId("group").textContent).toBe("a,b");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(screen.getByTestId("group").textContent).toBe("");
     });
@@ -153,8 +148,7 @@ describe("Checkbox form participation", () => {
       await user.click(screen.getByRole("checkbox", { name: "B" }));
       expect(screen.getByTestId("group").textContent).toBe("a,b");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(screen.getByTestId("group").textContent).toBe("");
     });

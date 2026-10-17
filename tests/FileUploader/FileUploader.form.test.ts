@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
-import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import FileUploaderForm from "./FileUploader.form.test.svelte";
 import { simulateFileSelection } from "./helpers";
 
@@ -28,8 +27,7 @@ describe("FileUploader form reset", () => {
     expect(screen.getByTestId("button")).toHaveTextContent("receipt.pdf");
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText("bound-button")).toBe("0");
     expect(screen.getByTestId("button")).toHaveTextContent("Add files");
@@ -45,8 +43,7 @@ describe("FileUploader form reset", () => {
     expect(getBoundText("bound-drop")).toBe("1");
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText("bound-drop")).toBe("0");
     expect(onChange).not.toHaveBeenCalled();
@@ -60,8 +57,7 @@ describe("FileUploader form reset", () => {
     expect(getBoundText("bound-uploader")).toBe("1");
     expect(screen.getByTestId("uploader")).toHaveTextContent("receipt.pdf");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText("bound-uploader")).toBe("0");
     expect(screen.getByTestId("uploader")).not.toHaveTextContent("receipt.pdf");

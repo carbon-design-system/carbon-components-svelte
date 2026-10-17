@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import RadioButtonGroupForm from "./RadioButtonGroup.form.test.svelte";
 
@@ -13,8 +13,7 @@ describe("RadioButtonGroup form reset", () => {
     await user.click(screen.getByRole("radio", { name: "B" }));
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
@@ -30,8 +29,7 @@ describe("RadioButtonGroup form reset", () => {
 
     expect(getBoundText()).toBe("a");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(getBoundText()).toBe("undefined");
@@ -49,8 +47,7 @@ describe("RadioButtonGroup form reset", () => {
     await user.click(screen.getByRole("radio", { name: "B" }));
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(radioA).toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
@@ -65,8 +62,7 @@ describe("RadioButtonGroup form reset", () => {
     await user.click(screen.getByRole("radio", { name: "B" }));
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
@@ -79,8 +75,7 @@ describe("RadioButtonGroup form reset", () => {
     render(RadioButtonGroupForm, { props: { selected: "a", onChange } });
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("radio", { name: "A" })).toBeChecked();
     expect(getBoundText()).toBe("a");
@@ -93,8 +88,7 @@ describe("RadioButtonGroup form reset", () => {
       props: { selected: "a", readonly: true, onChange },
     });
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("radio", { name: "A" })).toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TileGroupForm from "./TileGroup.form.test.svelte";
 
@@ -15,8 +15,7 @@ describe("TileGroup form reset", () => {
     await user.click(radioB);
     onSelect.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(radioA).not.toBeChecked();
     expect(radioB).not.toBeChecked();
@@ -33,8 +32,7 @@ describe("TileGroup form reset", () => {
     const [radioA] = getRadios();
     expect(getBoundText()).toBe("a");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(radioA).not.toBeChecked();
     expect(getBoundText()).toBe("undefined");
@@ -53,8 +51,7 @@ describe("TileGroup form reset", () => {
     await user.click(radioB);
     onSelect.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(radioA).toBeChecked();
     expect(radioB).not.toBeChecked();
@@ -70,8 +67,7 @@ describe("TileGroup form reset", () => {
     await user.click(radioB);
     onSelect.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(radioA).not.toBeChecked();
     expect(radioB).not.toBeChecked();
@@ -85,8 +81,7 @@ describe("TileGroup form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     const [radioA] = getRadios();
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(radioA).toBeChecked();
     expect(getBoundText()).toBe("a");

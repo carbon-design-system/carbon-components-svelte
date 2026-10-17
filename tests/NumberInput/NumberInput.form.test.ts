@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import NumberInputForm from "./NumberInput.form.test.svelte";
 
@@ -101,8 +101,7 @@ describe("NumberInput form participation", () => {
       await setField(input, "8");
       expect(getBoundText()).toBe("8");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue(8);
       expect(getBoundText()).toBe("8");
@@ -112,8 +111,7 @@ describe("NumberInput form participation", () => {
       render(NumberInputForm, { props: { locale: "de-DE", value: 1234.5 } });
       const input = screen.getByRole("textbox", { name: "Amount" });
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue("1.234,5");
       expect(getBoundText()).toBe("1234.5");
@@ -125,8 +123,7 @@ describe("NumberInput form participation", () => {
       const input = screen.getByRole("spinbutton", { name: "Amount" });
 
       await setField(input, "8");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue(null);
       expect(getBoundText()).toBe("null");
@@ -138,8 +135,7 @@ describe("NumberInput form participation", () => {
       });
       const input = screen.getByRole("textbox", { name: "Amount" });
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue("");
       expect(getBoundText()).toBe("null");
@@ -152,8 +148,7 @@ describe("NumberInput form participation", () => {
       });
       const input = screen.getByRole("spinbutton", { name: "Amount" });
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue(5);
       expect(getBoundText()).toBe("5");

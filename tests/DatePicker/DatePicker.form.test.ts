@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 
 const getValue = () => getBoundText("value");
@@ -25,8 +25,7 @@ describe("DatePicker form reset", () => {
       const input = screen.getByLabelText("Start date");
 
       await editInput(input, "2024-06-15");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue("");
       expect(getValue()).toBe("");
@@ -37,8 +36,7 @@ describe("DatePicker form reset", () => {
       render(DatePickerForm, { props: { value: "2024-01-01" } });
       const input = screen.getByLabelText("Start date");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue("");
       expect(getValue()).toBe("");
@@ -52,8 +50,7 @@ describe("DatePicker form reset", () => {
       input.defaultValue = "2024-01-01";
 
       await editInput(input, "2024-06-15");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue("2024-01-01");
       expect(getValue()).toBe("2024-01-01");
@@ -64,8 +61,7 @@ describe("DatePicker form reset", () => {
       const input = screen.getByLabelText("Start date");
 
       await editInput(input, "2024-06-15");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(input).toHaveValue("");
       expect(getValue()).toBe("");
@@ -87,8 +83,7 @@ describe("DatePicker form reset", () => {
 
       await editInput(start, "2024-04-01");
       await editInput(end, "2024-04-10");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(start).toHaveValue("");
       expect(end).toHaveValue("");
@@ -110,8 +105,7 @@ describe("DatePicker form reset", () => {
       const end = screen.getByLabelText("End date");
 
       await editInput(end, "2024-04-10");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(start).toHaveValue("");
       expect(end).toHaveValue("");
@@ -128,8 +122,7 @@ describe("DatePicker form reset", () => {
 
       await editInput(start, "2024-04-01");
       await editInput(end, "2024-04-10");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(start).toHaveValue("");
       expect(end).toHaveValue("");
@@ -142,8 +135,7 @@ describe("DatePicker form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     await editInput(input, "2024-06-15");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("2024-06-15");
     expect(getValue()).toBe("2024-06-15");
@@ -157,8 +149,7 @@ describe("DatePicker form reset", () => {
     await editInput(input, "2024-06-15");
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(onChange).not.toHaveBeenCalled();
   });

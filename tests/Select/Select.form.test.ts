@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import SelectForm from "./Select.form.test.svelte";
 
@@ -15,8 +15,7 @@ describe("Select form reset", () => {
     await user.selectOptions(select, "l");
     onUpdate.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(select).toHaveValue("l");
     expect(getBoundText()).toBe("l");
@@ -30,8 +29,7 @@ describe("Select form reset", () => {
 
     await rerender({ selected: "l" });
     await tick();
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(select).toHaveValue("l");
     expect(getBoundText()).toBe("l");
@@ -42,8 +40,7 @@ describe("Select form reset", () => {
     const select = screen.getByRole("combobox", { name: "Size" });
 
     await user.selectOptions(select, "2");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(select).toHaveValue("2");
     expect(getBoundText()).toBe("2");
@@ -54,8 +51,7 @@ describe("Select form reset", () => {
     const select = screen.getByRole("combobox", { name: "Size" });
 
     await user.selectOptions(select, "s");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(select).toHaveValue("s");
     expect(getBoundText()).toBe("s");

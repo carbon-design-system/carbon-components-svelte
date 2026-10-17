@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import PasswordInputForm from "./PasswordInput.form.test.svelte";
 
@@ -13,8 +13,7 @@ describe("PasswordInput form reset", () => {
     await user.type(input, "x");
     expect(input).toHaveValue("s3cretx");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -25,8 +24,7 @@ describe("PasswordInput form reset", () => {
     render(PasswordInputForm, { props: { value: "s3cret" } });
     const input = screen.getByLabelText("Password");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -42,8 +40,7 @@ describe("PasswordInput form reset", () => {
     await user.type(input, "x");
     expect(getBoundText()).toBe("s3cretx");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("s3cret");
     expect(getBoundText()).toBe("s3cret");
@@ -54,8 +51,7 @@ describe("PasswordInput form reset", () => {
     const input = screen.getByLabelText("Password");
 
     await user.type(input, "abc");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -69,8 +65,7 @@ describe("PasswordInput form reset", () => {
     expect(input).toHaveAttribute("type", "text");
 
     await user.type(input, "x");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveAttribute("type", "text");
     expect(input).toHaveValue("");
@@ -83,8 +78,7 @@ describe("PasswordInput form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     await user.type(input, "eric");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("eric");
     expect(getBoundText()).toBe("eric");
@@ -103,8 +97,7 @@ describe("PasswordInput form reset", () => {
     onInput.mockClear();
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(onInput).not.toHaveBeenCalled();
     expect(onChange).not.toHaveBeenCalled();

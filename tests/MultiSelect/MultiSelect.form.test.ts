@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import { openMenu } from "./helpers";
 import MultiSelectForm from "./MultiSelect.form.test.svelte";
@@ -307,8 +307,7 @@ describe("MultiSelect form reset", () => {
     expect(component.value).toBe("Fa");
     expect(screen.getAllByRole("option")).toHaveLength(1);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(component.value).toBe("");
