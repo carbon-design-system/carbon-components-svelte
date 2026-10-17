@@ -42,6 +42,21 @@ describe("MultiSelect keyboard", () => {
       }
     });
 
+    it("stops a Shift+Enter range at maxSelectedItems", async () => {
+      render(MultiSelect, { props: { items, maxSelectedItems: 2 } });
+
+      await openMenu();
+      await user.click(screen.getByRole("option", { name: "Alpha" }));
+      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
+      await user.keyboard("{Shift>}{Enter}{/Shift}");
+
+      const selected = screen
+        .getAllByRole("option")
+        .filter((option) => option.getAttribute("aria-selected") === "true")
+        .map((option) => option.textContent?.trim());
+      expect(selected).toEqual(["Alpha", "Bravo"]);
+    });
+
     it("ignores a pointer (hover) highlight: Shift+Enter only acts on a keyboard highlight", async () => {
       render(MultiSelect, { props: { items } });
 
