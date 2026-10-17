@@ -61,7 +61,10 @@
     cursor: default;
   }
 
-  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon svg,
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon svg {
+    fill: $icon-secondary;
+  }
+
   .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__selection svg {
     fill: $icon-disabled;
   }
