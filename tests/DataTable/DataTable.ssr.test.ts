@@ -3,12 +3,13 @@
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import { render } from "svelte/server";
 import { RANDOM_ID, renderSSR, stripHydrationMarkers } from "../utils/ssr";
-
-function renderRaw(props: Record<string, unknown>) {
-  return stripHydrationMarkers(render(DataTable, { props }).body);
-}
+import TableContainerWithTable from "./TableContainerWithTable.test.svelte";
 
 describe("DataTable server render", () => {
+  function renderRaw(props: Record<string, unknown>) {
+    return stripHydrationMarkers(render(DataTable, { props }).body);
+  }
+
   const props = {
     id: "people",
     title: "People",
@@ -74,5 +75,78 @@ describe("DataTable server render", () => {
     expect(
       document.querySelector('label[for="people-select-all"]'),
     ).toHaveAttribute("data-contained-checkbox-state", "mixed");
+  });
+});
+
+describe("DataTable virtualize server render", () => {
+  const headers = [
+    { key: "name", value: "Name" },
+    { key: "value", value: "Value" },
+  ];
+
+  const rows = Array.from({ length: 500 }, (_, i) => ({
+    id: i,
+    name: `Row ${i}`,
+    value: `Value ${i}`,
+  }));
+
+  it("bounds the scroll container of a virtualized table", () => {
+    const { document } = renderSSR(DataTable, {
+      headers,
+      rows,
+      virtualize: true,
+    });
+
+    const container = document.querySelector(".bx--data-table-container > div");
+    expect(container).toHaveStyle({ maxHeight: "480px", overflowY: "auto" });
+  });
+
+  it("bounds the scrolling table of a virtualized sticky-header table", () => {
+    const { document } = renderSSR(DataTable, {
+      headers,
+      rows,
+      stickyHeader: true,
+      virtualize: true,
+    });
+
+    const table = document.querySelector("section > table");
+    expect(table).toHaveStyle({ maxHeight: "480px", overflowY: "auto" });
+  });
+
+  it("keeps `table-layout` next to the scroll style", () => {
+    const { document } = renderSSR(DataTable, {
+      headers,
+      rows,
+      stickyHeader: true,
+      fixedLayout: true,
+      virtualize: { containerHeight: 200 },
+    });
+
+    const table = document.querySelector("section > table");
+    expect(table).toHaveStyle({
+      tableLayout: "fixed",
+      maxHeight: "200px",
+      overflowY: "auto",
+    });
+  });
+});
+
+describe("TableContainer server render", () => {
+  function renderRaw(props: Record<string, unknown>) {
+    return stripHydrationMarkers(
+      render(TableContainerWithTable, { props }).body,
+    );
+  }
+
+  const props = { id: "sales", title: "Sales", description: "By region" };
+
+  it("derives the title and description ids from the id", () => {
+    const html = renderRaw(props);
+
+    expect(html).toContain('<div id="sales"');
+    expect(html).toContain('<h4 id="sales-title"');
+    expect(html).toContain('<p id="sales-description"');
+    expect(html).toContain('aria-labelledby="sales-title"');
+    expect(html).toContain('aria-describedby="sales-description"');
   });
 });
