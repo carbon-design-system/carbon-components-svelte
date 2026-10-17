@@ -238,6 +238,7 @@ export const exempt: Exemptions = {
   },
   state: {
     DatePickerInput: NOT_AUDITED,
+    InputGroup: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
     Checkbox: NOT_AUDITED,
     CheckboxGroup: NOT_AUDITED,

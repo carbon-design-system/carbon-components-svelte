@@ -175,6 +175,8 @@
   const actionSetSize = getContext("carbon:ActionSet")?.size;
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  // Inside an `InputGroup`, match the height of the group's fields.
+  const inputGroupSize = getContext("carbon:InputGroup")?.buttonSize;
 
   $: hasIconOnly =
     Boolean(icon || $$slots.icon) && (iconOnly ?? !$$slots.default);
@@ -289,7 +291,11 @@
   $: isVisuallyDisabled = isDisabled || loading;
   $: effectiveSize = $$slots.badge
     ? "lg"
-    : (size ?? $actionSetSize ?? formButtonSize($formSize) ?? "default");
+    : (size ??
+      $actionSetSize ??
+      $inputGroupSize ??
+      formButtonSize($formSize) ??
+      "default");
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",

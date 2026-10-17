@@ -1,0 +1,40 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// InputGroup: a label, then a row of fields and buttons that share one
+/// height, then one helper or status message under the whole row, so a
+/// message never pushes a button out of line with its field.
+/// @access private
+/// @group components
+@mixin input-group {
+  // A fieldset's default minimum width is its content's, which would keep
+  // the row from fitting a narrow parent.
+  .#{$prefix}--input-group {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--input-group__fields {
+    display: flex;
+    align-items: flex-start;
+    gap: 1px;
+  }
+
+  // A button, or a wrapper sized for an addon field, keeps its width.
+  .#{$prefix}--input-group__fields > * {
+    flex: none;
+  }
+
+  // Fields share the rest of the row and can shrink.
+  .#{$prefix}--input-group__fields > .#{$prefix}--form-item,
+  .#{$prefix}--input-group__fields > .#{$prefix}--list-box__wrapper {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+}
+
+@include exports("input-group") {
+  @include input-group;
+}
