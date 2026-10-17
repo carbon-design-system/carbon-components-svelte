@@ -4,7 +4,7 @@
 
 /// TagInput: a text field that turns typed or pasted values into dismissible
 /// tags. The field wraps onto new rows as tags accumulate; the text input
-/// never narrows below 160px, so it drops to its own row instead of
+/// never narrows below 64px, so it drops to its own row instead of
 /// shrinking.
 /// @access private
 /// @group components
@@ -90,14 +90,14 @@
   }
 
   // Grows to fill the row, and wraps to a new row rather than narrowing
-  // below 160px. `.bx--tag-set__space > *` pins children at
+  // below 64px. `.bx--tag-set__space > *` pins children at
   // `flex-shrink: 0`; let the input shrink in a field narrower than that.
   .#{$prefix}--tag-input .#{$prefix}--tag-input__input {
     @include type-style("body-compact-01");
 
     min-width: 0;
     height: to-rem(24px);
-    flex: 1 1 to-rem(160px);
+    flex: 1 1 to-rem(64px);
     padding: 0;
     border: 0;
     background-color: transparent;
