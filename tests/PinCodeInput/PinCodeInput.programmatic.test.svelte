@@ -5,6 +5,9 @@
   export let value: ComponentProps<PinCodeInput>["value"] = "018";
   export let selectTextOnFocus: ComponentProps<PinCodeInput>["selectTextOnFocus"] = false;
 
+  export let onChange: (detail: unknown) => void = () => {};
+  export let onClear: () => void = () => {};
+
   let pinCodeInput: PinCodeInput;
 </script>
 
@@ -13,8 +16,8 @@
   bind:value
   {selectTextOnFocus}
   labelText="Verification code"
-  on:change={(e) => console.log("change", e.detail)}
-  on:clear={() => console.log("clear")}
+  on:change={(e) => onChange(e.detail)}
+  on:clear={onClear}
 />
 
 <div data-testid="value">{value}</div>
