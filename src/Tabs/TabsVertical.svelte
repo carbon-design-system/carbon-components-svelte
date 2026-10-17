@@ -51,7 +51,7 @@
     setContext,
     tick,
   } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, readable, writable } from "svelte/store";
   import { breakpoints } from "../Breakpoint/breakpoints.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
@@ -350,6 +350,7 @@
     useFullWidth,
     useDismissible,
     useContainer,
+    secondaryLabelSupported: readable(true),
     hasSecondaryLabel,
     add,
     remove,

@@ -400,6 +400,7 @@
     useFullWidth,
     useDismissible,
     useContainer,
+    secondaryLabelSupported: useContainer,
     hasSecondaryLabel,
     add,
     remove,

@@ -208,8 +208,11 @@
     visibility: hidden;
   }
 
+  // ccs: a floor, not a fixed height, so a tab stretches to a row made
+  // taller by a sibling's secondary label (see `tabs-tall`); one-line
+  // content fills the 48px exactly, as before.
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
-    height: to-rem(48px);
+    min-height: to-rem(48px);
     padding: $spacing-03 $spacing-05;
     border-bottom: none;
     // Height - vertical padding
@@ -677,9 +680,17 @@
 /// @access private
 /// @group components
 @mixin tabs-tall {
+  // ccs: `--tall` is set once the tabs register, so server markup lacks
+  // it. A tab with its own secondary label carries
+  // `__nav-item--secondary-label` from the first render: it takes the tall
+  // height and layout itself, and unsized siblings stretch to the row.
+  // Their one-line labels sit at the top of the stretched link, where the
+  // empty secondary placeholder puts them once `--tall` applies. Sized
+  // siblings keep their fixed height until then.
   @include carbon--breakpoint(md) {
     .#{$prefix}--tabs--tall.#{$prefix}--tabs--container,
-    .#{$prefix}--tabs--tall .#{$prefix}--tabs__nav-item {
+    .#{$prefix}--tabs--tall .#{$prefix}--tabs__nav-item,
+    .#{$prefix}--tabs__nav-item--secondary-label {
       min-height: to-rem(64px);
     }
   }
@@ -687,7 +698,10 @@
   // Unconditional (not gated to `md`), so icon + secondary label tabs stay
   // stacked in two rows below `md` too, instead of falling back to the icon
   // mixin's row layout and squeezing the icon against the secondary label.
-  .#{$prefix}--tabs--tall.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
+  .#{$prefix}--tabs--tall.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link,
+  .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--secondary-label
+    .#{$prefix}--tabs__nav-link {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1428,6 +1442,8 @@ $tabs-sizes: (
         display: flex;
         align-items: center;
         block-size: 100%;
+        // ccs: drop the unsized container link's 48px floor.
+        min-block-size: 0;
         padding-block: 0;
       }
 

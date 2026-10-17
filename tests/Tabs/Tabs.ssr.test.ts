@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
+import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
 
@@ -93,5 +94,46 @@ describe("Tabs server render", () => {
       "tab-c-panel",
     ]);
     expect(tabs[0]).toHaveAttribute("aria-controls", "tab-a-panel");
+  });
+});
+
+describe("Tabs server render with a secondary label", () => {
+  // The tabs learn a tab has a secondary label only once it registers,
+  // after their own markup is written, so the tab draws its own and marks
+  // its item; CSS sizes the row from that.
+  function items(document: Document) {
+    return [...document.querySelectorAll(".bx--tabs__nav-item")];
+  }
+
+  it("draws a container tab's own secondary label", () => {
+    const { document } = renderSSR(TabsSecondaryLabel);
+    const [overview, details] = items(document);
+
+    expect(details).toHaveClass("bx--tabs__nav-item--secondary-label");
+    expect(
+      details.querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toHaveTextContent("(3)");
+    expect(overview).not.toHaveClass("bx--tabs__nav-item--secondary-label");
+  });
+
+  it("draws a vertical tab's own secondary label", () => {
+    const { document } = renderSSR(TabsSecondaryLabel, { type: "vertical" });
+    const [, details] = items(document);
+
+    expect(details).toHaveClass("bx--tabs__nav-item--secondary-label");
+    expect(
+      details.querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toHaveTextContent("(3)");
+  });
+
+  it("leaves secondary labels off line tabs", () => {
+    const { document } = renderSSR(TabsSecondaryLabel, { type: "default" });
+
+    expect(
+      document.querySelector(".bx--tabs__nav-item--secondary-label"),
+    ).toBeNull();
+    expect(
+      document.querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toBeNull();
   });
 });

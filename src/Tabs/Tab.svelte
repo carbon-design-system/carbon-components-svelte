@@ -92,6 +92,7 @@
     useFullWidth,
     useDismissible,
     hasSecondaryLabel,
+    secondaryLabelSupported,
     useContainer,
     add,
     remove,
@@ -134,11 +135,19 @@
 
   // Re-register when these change so `bx--tabs--tall` and the `dismiss`
   // detail follow the current props.
+  $: hasOwnSecondaryLabel = Boolean(
+    secondaryLabel || $$slots.secondaryChildren,
+  );
+  // A tab draws its own secondary label from the first render; its
+  // siblings learn of it, and make room, only once it registers. Until
+  // then (server markup), CSS sizes the row from this tab's own class.
+  $: ownSecondaryLabel = $secondaryLabelSupported && hasOwnSecondaryLabel;
+
   $: add({
     id,
     label,
     disabled,
-    hasSecondaryLabel: Boolean(secondaryLabel || $$slots.secondaryChildren),
+    hasSecondaryLabel: hasOwnSecondaryLabel,
   });
 
   onMount(() => {
@@ -186,6 +195,7 @@
   class:bx--tabs__nav-item--selected={selected}
   class:bx--tabs__nav-item--default={!disabled && !selected}
   class:bx--tabs__nav-item--container={$useContainer}
+  class:bx--tabs__nav-item--secondary-label={ownSecondaryLabel}
   class:bx--tabs__nav-item--container-selected={$useContainer &&
     selected &&
     !disabled}
@@ -263,7 +273,7 @@
       </div>
       <!-- Visible only in the mobile dropdown; hidden in the desktop icon-only row. -->
       <span class:bx--tabs__nav-item-label={true}>{label}</span>
-    {:else if $hasSecondaryLabel}
+    {:else if $hasSecondaryLabel || ownSecondaryLabel}
       <div class:bx--tabs__nav-item-label-wrapper={true}>
         <span
           class:bx--tabs__nav-item-label={true}
