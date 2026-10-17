@@ -29,13 +29,8 @@ describe("TimePicker form reset", () => {
     expect(new FormData(getForm()).get("time")).toBe("");
   });
 
-  // Deviation from the prompt's Test section item 2 ("Equal-value no-op"),
-  // which claimed a client-rendered value survives a no-interaction reset.
-  // `bind:value` never sets a `value` attribute, so `defaultValue` is always
-  // "" (confirmed directly: rendering with value: "10:30" gives
-  // input.defaultValue === ""), the same as every sibling in this batch
-  // (TextArea, PasswordInput, Search) whose prompts explicitly call out
-  // that a client-rendered default is "" regardless of interaction.
+  // `bind:value` never sets a `value` attribute, so a client-rendered
+  // value has an empty `defaultValue` and a reset clears it.
   it("clears a client-rendered value to empty on reset, even with no interaction", async () => {
     render(TimePickerForm, { props: { value: "10:30" } });
     const input = screen.getByLabelText("Time");
@@ -106,10 +101,8 @@ describe("TimePicker form reset", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  // Regression guard: TimePickerSelect's shared SelectItem already keeps
-  // the native <select> on the current choice through a reset, on every
-  // Svelte version. This is not a bug this prompt fixes; it pins the
-  // existing behavior so a later change doesn't silently regress it.
+  // TimePickerSelect's shared SelectItem keeps the native <select> on the
+  // current choice through a reset, on every Svelte version.
   it("leaves TimePickerSelect's selection untouched by a reset", async () => {
     render(TimePickerForm, { props: { ampm: "pm" } });
     const combobox = screen.getByRole("combobox");
