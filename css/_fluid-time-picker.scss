@@ -302,7 +302,7 @@
   .#{$prefix}--time-picker--fluid--warning
     .#{$prefix}--time-picker__icon
     path:first-of-type {
-    fill: $icon-01;
+    fill: $carbon--black-100;
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--form-requirement,
