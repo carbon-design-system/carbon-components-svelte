@@ -33,12 +33,12 @@
    */
   export let ref = null;
 
-  import Link from "../Link/Link.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
 
   // Without `href`, the anchor is neither focusable nor a link, so give it
   // button semantics for the Enter/Space handling below. Spread before
   // `$$restProps` so a consumer's own `role` or `tabindex` wins; omitted
-  // entirely when disabled, where Link renders its own `role="link"`.
+  // entirely when disabled, where the anchor gets `role="link"`.
   $: buttonProps = href || disabled ? {} : { role: "button", tabindex: "0" };
 
   $: linkClass = [
@@ -54,36 +54,62 @@
     .join(" ");
 </script>
 
-<Link
-  bind:ref
-  {...buttonProps}
-  {...$$restProps}
-  {disabled}
-  class={linkClass}
-  {href}
-  on:click
-  on:click={() => {
-    if (disabled) return;
-    clicked = !clicked;
-  }}
-  on:keydown
-  on:keydown={(event) => {
-    if (disabled) return;
-    // A focused <a href> already fires a native click on Enter, and the
-    // on:click handler above picks that up. Space never does, and Enter
-    // does not without href. Dispatch click only in those cases so Enter
-    // with href does not toggle `clicked` twice.
-    if (event.key === " " || (event.key === "Enter" && !href)) {
+<!-- Rendered as a plain anchor with Link's classes, not a Link: a tile
+     grid would otherwise mount two components per tile. -->
+{#if disabled}
+  <a
+    bind:this={ref}
+    role="link"
+    aria-disabled="true"
+    class:bx--link={true}
+    class:bx--link--disabled={true}
+    {...$$restProps}
+    class={linkClass}
+    on:click={(event) => {
       event.preventDefault();
-      ref?.click();
-    }
-  }}
-  on:keyup
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  on:focus
-  on:blur
->
-  <slot />
-</Link>
+      event.stopPropagation();
+    }}
+    on:keydown
+    on:keyup
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    on:focus
+    on:blur
+  >
+    <slot />
+  </a>
+{:else}
+  <a
+    bind:this={ref}
+    class:bx--link={true}
+    rel={resolveLinkRel($$restProps.target)}
+    {href}
+    {...buttonProps}
+    {...$$restProps}
+    class={linkClass}
+    on:click
+    on:click={() => {
+      clicked = !clicked;
+    }}
+    on:keydown
+    on:keydown={(event) => {
+      // A focused <a href> already fires a native click on Enter, and the
+      // on:click handler above picks that up. Space never does, and Enter
+      // does not without href. Dispatch click only in those cases so Enter
+      // with href does not toggle `clicked` twice.
+      if (event.key === " " || (event.key === "Enter" && !href)) {
+        event.preventDefault();
+        ref?.click();
+      }
+    }}
+    on:keyup
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    on:focus
+    on:blur
+  >
+    <slot />
+  </a>
+{/if}
