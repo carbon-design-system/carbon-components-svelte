@@ -1,21 +1,16 @@
 // @vitest-environment node
-import { render } from "svelte/server";
+import { renderRaw } from "../utils/ssr";
 import TagSetSsr from "./TagSetSsr.test.svelte";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(TagSetSsr, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
 
 describe("TagSet server render", () => {
   const props = { id: "tags", firstId: "first", secondId: "second" };
 
   it("renders identical markup for explicit ids", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(TagSetSsr, props)).toBe(renderRaw(TagSetSsr, props));
   });
 
   it("derives the overflow tooltip id from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(TagSetSsr, props);
 
     expect(html).toContain('<div id="tags"');
     expect(html).toContain('aria-describedby="tags-overflow"');

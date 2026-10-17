@@ -1,7 +1,6 @@
 // @vitest-environment node
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
-import { render } from "svelte/server";
-import { renderSSR } from "../utils/ssr";
+import { renderRaw, renderSSR } from "../utils/ssr";
 
 /** Normalize the narrow and no-break spaces some ICU versions print. */
 const normalize = (text: string | null | undefined) =>
@@ -38,11 +37,6 @@ describe("Meter server render", () => {
   });
 });
 
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(Meter, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
-
 describe("Meter server render ids", () => {
   const props = {
     id: "disk",
@@ -54,11 +48,11 @@ describe("Meter server render ids", () => {
   };
 
   it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(Meter, props)).toBe(renderRaw(Meter, props));
   });
 
   it("derives the helper and thresholds ids from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(Meter, props);
 
     expect(html).toContain('id="disk-helper"');
     expect(html).toContain('id="disk-thresholds"');
@@ -66,7 +60,7 @@ describe("Meter server render ids", () => {
   });
 
   it("derives the status id from the id and references it", () => {
-    const html = renderRaw({
+    const html = renderRaw(Meter, {
       ...props,
       valueText: "60 GB of 100 GB",
       status: "warning",

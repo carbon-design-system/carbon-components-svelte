@@ -80,3 +80,19 @@ export function renderSSR(
 
   return { html, document };
 }
+
+/**
+ * Server-renders a component with only the hydration markers removed, so
+ * random ids and whitespace stay as rendered. Use it to check ids that
+ * `normalizeSSR` would rewrite.
+ */
+export function renderRaw<Props extends Record<string, unknown>>(
+  component: ComponentType<SvelteComponent<Props>>,
+  props?: Partial<Props>,
+): string;
+export function renderRaw(
+  component: ComponentType<SvelteComponent>,
+  props?: Record<string, unknown>,
+) {
+  return stripHydrationMarkers(render(component, { props }).body);
+}

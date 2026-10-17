@@ -1,15 +1,10 @@
 // @vitest-environment node
 
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
-import { render } from "svelte/server";
-import { RANDOM_ID, renderSSR, stripHydrationMarkers } from "../utils/ssr";
+import { RANDOM_ID, renderRaw, renderSSR } from "../utils/ssr";
 import TableContainerWithTable from "./TableContainerWithTable.test.svelte";
 
 describe("DataTable server render", () => {
-  function renderRaw(props: Record<string, unknown>) {
-    return stripHydrationMarkers(render(DataTable, { props }).body);
-  }
-
   const props = {
     id: "people",
     title: "People",
@@ -28,11 +23,11 @@ describe("DataTable server render", () => {
   };
 
   it("derives every id from an explicit id, with no random id left over", () => {
-    expect(renderRaw(props).match(RANDOM_ID)).toBeNull();
+    expect(renderRaw(DataTable, props).match(RANDOM_ID)).toBeNull();
   });
 
   it("derives the title, header, cell and selection ids from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(DataTable, props);
 
     expect(html).toContain('<div id="people"');
     expect(html).toContain('<h4 id="people-title"');
@@ -49,7 +44,7 @@ describe("DataTable server render", () => {
   });
 
   it("names the selection inputs after the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(DataTable, props);
 
     expect(html).toContain('id="people-select-all"');
     expect(html).toContain('for="people-select-all"');
@@ -58,7 +53,7 @@ describe("DataTable server render", () => {
   });
 
   it("keeps an explicit inputName", () => {
-    const html = renderRaw({ ...props, inputName: "chosen" });
+    const html = renderRaw(DataTable, { ...props, inputName: "chosen" });
 
     expect(html).toContain('name="chosen"');
     expect(html).not.toContain('name="people"');
@@ -132,16 +127,10 @@ describe("DataTable virtualize server render", () => {
 });
 
 describe("TableContainer server render", () => {
-  function renderRaw(props: Record<string, unknown>) {
-    return stripHydrationMarkers(
-      render(TableContainerWithTable, { props }).body,
-    );
-  }
-
   const props = { id: "sales", title: "Sales", description: "By region" };
 
   it("derives the title and description ids from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(TableContainerWithTable, props);
 
     expect(html).toContain('<div id="sales"');
     expect(html).toContain('<h4 id="sales-title"');

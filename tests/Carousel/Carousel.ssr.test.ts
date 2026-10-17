@@ -1,21 +1,16 @@
 // @vitest-environment node
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
-import { render } from "svelte/server";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(Carousel, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
+import { renderRaw } from "../utils/ssr";
 
 describe("Carousel server render", () => {
   const props = { id: "gallery" };
 
   it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(Carousel, props)).toBe(renderRaw(Carousel, props));
   });
 
   it("derives the viewport id from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(Carousel, props);
 
     expect(html).toContain('id="gallery-viewport"');
     expect(html.match(/aria-controls="gallery-viewport"/g)).toHaveLength(2);

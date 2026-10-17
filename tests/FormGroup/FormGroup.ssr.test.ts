@@ -1,12 +1,7 @@
 // @vitest-environment node
 
 import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
-import { render } from "svelte/server";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(FormGroup, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
+import { renderRaw } from "../utils/ssr";
 
 describe("FormGroup server render", () => {
   const props = {
@@ -17,11 +12,11 @@ describe("FormGroup server render", () => {
   };
 
   it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(FormGroup, props)).toBe(renderRaw(FormGroup, props));
   });
 
   it("derives the message id from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(FormGroup, props);
 
     expect(html).toContain('<fieldset id="group"');
     expect(html).toContain('aria-describedby="group-message"');

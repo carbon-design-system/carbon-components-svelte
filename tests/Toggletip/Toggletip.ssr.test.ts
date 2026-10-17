@@ -1,21 +1,16 @@
 // @vitest-environment node
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
-import { render } from "svelte/server";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(Toggletip, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
+import { renderRaw } from "../utils/ssr";
 
 describe("Toggletip server render", () => {
   const props = { id: "info", open: true };
 
   it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(Toggletip, props)).toBe(renderRaw(Toggletip, props));
   });
 
   it("derives the content id from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(Toggletip, props);
 
     expect(html).toContain('id="info"');
     expect(html).toContain('aria-controls="info-content"');

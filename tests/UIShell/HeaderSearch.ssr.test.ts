@@ -1,11 +1,6 @@
 // @vitest-environment node
 import HeaderSearch from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
-import { render } from "svelte/server";
-
-/** Server output with only Svelte's hydration comments removed. */
-function renderRaw(props: Record<string, unknown>) {
-  return render(HeaderSearch, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
-}
+import { renderRaw } from "../utils/ssr";
 
 describe("HeaderSearch server render", () => {
   const props = {
@@ -18,11 +13,11 @@ describe("HeaderSearch server render", () => {
   };
 
   it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(props)).toBe(renderRaw(props));
+    expect(renderRaw(HeaderSearch, props)).toBe(renderRaw(HeaderSearch, props));
   });
 
   it("derives the input, label, menu, and result ids from the id", () => {
-    const html = renderRaw(props);
+    const html = renderRaw(HeaderSearch, props);
 
     expect(html).toContain('<div id="search"');
     expect(html).toContain('for="search-input"');
