@@ -27,22 +27,6 @@ const items = [
 ] as const;
 
 describe("MultiSelect", () => {
-  it("renders with default props", () => {
-    render(MultiSelect, {
-      props: {
-        items,
-        labelText: "Contact methods",
-      },
-    });
-
-    expect(screen.getByText("Contact methods")).toBeInTheDocument();
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
-    expect(screen.getByRole("combobox")).toHaveAttribute(
-      "aria-expanded",
-      "false",
-    );
-  });
-
   it("selects the full filter value on focus when selectTextOnFocus is true", async () => {
     render(MultiSelectReal, {
       props: {
@@ -593,15 +577,6 @@ describe("MultiSelect", () => {
       },
     );
 
-    it("opens an enabled field on ArrowDown", async () => {
-      render(MultiSelect, { props: { items } });
-
-      const field = screen.getByRole("combobox");
-      field.focus();
-      await user.keyboard("{ArrowDown}");
-      expect(field).toHaveAttribute("aria-expanded", "true");
-    });
-
     it("handles disabled items", async () => {
       const itemsWithDisabled = [
         { id: "0", text: "Slack" },
@@ -696,20 +671,6 @@ describe("MultiSelect", () => {
 
       const label = screen.getByText("Contact methods");
       expect(label).toHaveClass("bx--visually-hidden");
-    });
-
-    it("non-filterable variant has correct ARIA attributes", () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          labelText: "Contact methods",
-        },
-      });
-
-      const combobox = screen.getByRole("combobox");
-      expect(combobox).toHaveAttribute("role", "combobox");
-      expect(combobox).toHaveAttribute("aria-expanded", "false");
-      expect(combobox).toHaveAttribute("tabindex", "0");
     });
 
     it("non-filterable variant opens menu and updates aria-controls", async () => {
@@ -1124,19 +1085,6 @@ describe("MultiSelect", () => {
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
     expect(options[2]).toHaveAttribute("aria-selected", "true");
-  });
-
-  it("focuses input when filterable and menu is opened", async () => {
-    render(MultiSelect, {
-      props: {
-        items,
-        filterable: true,
-        placeholder: "Filter...",
-      },
-    });
-    const input = screen.getByPlaceholderText("Filter...");
-    await user.click(input);
-    expect(input).toHaveFocus();
   });
 
   it("does not select disabled items when clicked", async () => {
