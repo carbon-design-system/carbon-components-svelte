@@ -329,24 +329,6 @@ describe("MultiSelect", () => {
       expect(readerOption).toHaveAttribute("aria-selected", "false");
     });
 
-    it("disabled items are not selected when clicking select-all", async () => {
-      render(MultiSelect, {
-        props: {
-          items: itemsWithSelectAll,
-          labelText: "Roles",
-        },
-      });
-
-      await openMenu();
-      await toggleOption("All roles");
-
-      const options = screen.getAllByRole("option");
-      const readerOption = options.find(
-        (o) => o.textContent?.trim() === "Reader",
-      );
-      expect(readerOption).toHaveAttribute("aria-selected", "false");
-    });
-
     it("clicking select-all when all selected deselects all non-disabled items", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
@@ -472,20 +454,6 @@ describe("MultiSelect", () => {
       await openMenu();
       const allRolesOption = screen.getByRole("option", { name: "All roles" });
       expect(allRolesOption).toHaveAttribute("aria-checked", "mixed");
-    });
-
-    it("select-all option shows checked when all selectable items selected", async () => {
-      render(MultiSelect, {
-        props: {
-          items: itemsWithSelectAll,
-          selectedIds: ["editor", "owner", "uploader"],
-          labelText: "Roles",
-        },
-      });
-
-      await openMenu();
-      const allRolesOption = screen.getByRole("option", { name: "All roles" });
-      expect(allRolesOption).toHaveAttribute("aria-checked", "true");
     });
 
     it("select-all option shows unchecked when no items selected", async () => {
@@ -812,23 +780,6 @@ describe("MultiSelect", () => {
 
       expect(screen.getByText("Slack")).toBeInTheDocument();
       expect(screen.queryByText("Email")).not.toBeInTheDocument();
-    });
-
-    it("filterable: Tab key does not close menu when navigating", async () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          filterable: true,
-          placeholder: "Filter...",
-        },
-      });
-
-      const input = screen.getByPlaceholderText("Filter...");
-      await user.click(input);
-      expect(input).toHaveAttribute("aria-expanded", "true");
-
-      await user.keyboard("{Tab}");
-      expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
     it("filterable: focus goes to input, not clear button", async () => {

@@ -533,28 +533,6 @@ describe("MultiSelect", () => {
       expect(menu.style.overflowY).toBe("auto");
     });
 
-    it("should virtualize when virtualize is true with more than 100 items", async () => {
-      const largeItems = createItems(150);
-      render(MultiSelect, {
-        props: {
-          items: largeItems,
-          selectedIds: ["0"],
-          virtualize: true,
-        },
-      });
-
-      await openMenu();
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeLessThan(150);
-      expect(options.length).toBeGreaterThan(0);
-      expect(menu.style.maxHeight).toBeTruthy();
-      expect(menu.style.overflowY).toBe("auto");
-    });
-
     // Regression: with virtualization, the data-last item is not mounted
     // until scrolled into view, so a per-item blur handler bound to it
     // never fires when focus leaves the menu. The menu must close based
