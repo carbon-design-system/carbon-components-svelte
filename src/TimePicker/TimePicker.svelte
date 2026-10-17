@@ -276,7 +276,8 @@
             <slot name="labelChildren"> {labelText} </slot>
           </label>
         {/if}
-        <Stack orientation="horizontal" gap={0}>
+        <!-- Wraps so the selects move to a second row in a narrow container. -->
+        <Stack orientation="horizontal" gap={0} wrap="wrap">
           <div
             data-invalid={showInvalid || undefined}
             data-warn={showWarn || undefined}
