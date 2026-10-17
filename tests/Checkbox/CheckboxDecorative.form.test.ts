@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
-import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import CheckboxDecorativeForm from "./CheckboxDecorative.form.test.svelte";
 
 const getBoxes = (testId: string) =>
@@ -15,8 +14,7 @@ describe("decorative Checkbox form reset", () => {
     render(CheckboxDecorativeForm);
     expect(getBoxes("tree").map((box) => box.checked)).toEqual([true, false]);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoxes("tree").map((box) => box.checked)).toEqual([true, false]);
   });
@@ -28,8 +26,7 @@ describe("decorative Checkbox form reset", () => {
       false,
     ]);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoxes("multiselect").map((box) => box.checked)).toEqual([
       true,

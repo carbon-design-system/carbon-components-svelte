@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.form.test.svelte";
 import { visibleInput } from "./helpers";
@@ -35,8 +35,7 @@ describe("DatePicker displayFormat form reset", () => {
     await vi.waitFor(() => expect(hidden).toHaveValue("2024-03-20"));
     expect(hidden?.type).toBe("hidden");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     const visible = await visibleInput();
     expect(visible).toHaveValue("");
@@ -50,8 +49,7 @@ describe("DatePicker displayFormat form reset", () => {
     const visible = await visibleInput();
     await vi.waitFor(() => expect(visible).toHaveValue("March 15, 2024"));
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(visible).toHaveValue("");
     expect(getHiddenInput()).toHaveValue("");
@@ -65,8 +63,7 @@ describe("DatePicker displayFormat form reset", () => {
     const hidden = getHiddenInput();
     const hiddenValue = hidden?.value;
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getHiddenInput()).toHaveValue(hiddenValue);
     expect(getValue()).toBe(hiddenValue);

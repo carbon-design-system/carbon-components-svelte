@@ -1,7 +1,7 @@
 import { fireEvent, render } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import RangeSliderForm from "./RangeSlider.form.test.svelte";
 
 describe("RangeSlider form reset", () => {
@@ -18,8 +18,7 @@ describe("RangeSlider form reset", () => {
     await fireEvent.change(upper, { target: { value: "70" } });
     expect(getBoundText()).toBe("30-70");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(lower.value).toBe("30");
     expect(upper.value).toBe("70");
@@ -32,8 +31,7 @@ describe("RangeSlider form reset", () => {
     const { container, rerender } = render(RangeSliderForm);
 
     await rerender({ value: 25, valueUpper: 75 });
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     const lower =
       container.querySelector<HTMLInputElement>('input[name="low"]');

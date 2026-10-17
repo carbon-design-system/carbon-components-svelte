@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TextAreaForm from "./TextArea.form.test.svelte";
 
@@ -14,8 +14,7 @@ describe("TextArea form reset", () => {
     expect(textarea).toHaveValue("hi there");
     expect(screen.getByText("8/20")).toBeInTheDocument();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(textarea).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -27,8 +26,7 @@ describe("TextArea form reset", () => {
     render(TextAreaForm, { props: { value: "hi" } });
     const textarea = screen.getByRole("textbox", { name: "Bio" });
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(textarea).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -46,8 +44,7 @@ describe("TextArea form reset", () => {
     await user.type(textarea, " there");
     expect(getBoundText()).toBe("hi there");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(textarea).toHaveValue("hi");
     expect(getBoundText()).toBe("hi");
@@ -59,8 +56,7 @@ describe("TextArea form reset", () => {
     const textarea = screen.getByRole("textbox", { name: "Bio" });
 
     await user.type(textarea, "x");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(textarea).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -86,8 +82,7 @@ describe("TextArea form reset", () => {
       configurable: true,
       value: 42,
     });
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
     expect(textarea.style.height).toBe("42px");
@@ -100,8 +95,7 @@ describe("TextArea form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     await user.type(textarea, "eric");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(textarea).toHaveValue("eric");
     expect(getBoundText()).toBe("eric");
@@ -117,8 +111,7 @@ describe("TextArea form reset", () => {
     onInput.mockClear();
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(onInput).not.toHaveBeenCalled();
     expect(onChange).not.toHaveBeenCalled();

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TextInputForm from "./TextInput.form.test.svelte";
 
@@ -13,8 +13,7 @@ describe("TextInput form reset", () => {
     await user.type(input, "eric");
     expect(getBoundText()).toBe("eric");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -26,8 +25,7 @@ describe("TextInput form reset", () => {
     const input = screen.getByRole("textbox", { name: "User" });
 
     await user.type(input, "x");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(getBoundText()).toBe("");
@@ -45,8 +43,7 @@ describe("TextInput form reset", () => {
     await user.type(input, "x");
     expect(getBoundText()).toBe("adax");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("ada");
     expect(getBoundText()).toBe("ada");
@@ -63,8 +60,7 @@ describe("TextInput form reset", () => {
     await user.type(input, "7");
     expect(getBoundText()).toBe("57");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue(5);
     expect(getBoundText()).toBe("5");
@@ -75,8 +71,7 @@ describe("TextInput form reset", () => {
     const input = screen.getByRole("spinbutton", { name: "User" });
 
     await user.type(input, "7");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe("null");
   });
@@ -87,8 +82,7 @@ describe("TextInput form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     await user.type(input, "eric");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("eric");
     expect(getBoundText()).toBe("eric");
@@ -103,8 +97,7 @@ describe("TextInput form reset", () => {
     expect(onInput).toHaveBeenCalled();
     onInput.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(onInput).not.toHaveBeenCalled();
   });

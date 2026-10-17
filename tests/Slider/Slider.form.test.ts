@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import SliderForm from "./Slider.form.test.svelte";
 
 describe("Slider form reset", () => {
@@ -20,8 +20,7 @@ describe("Slider form reset", () => {
     await fireEvent.change(input, { target: { value: "77" } });
     expect(getBoundText()).toBe("77");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input.value).toBe("77");
     expect(getBoundText()).toBe("77");
@@ -33,8 +32,7 @@ describe("Slider form reset", () => {
     const { container, rerender } = render(SliderForm);
 
     await rerender({ value: 55 });
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput(container).value).toBe("55");
     expect(getBoundText()).toBe("55");
@@ -45,8 +43,7 @@ describe("Slider form reset", () => {
       props: { hideTextInput: true, value: 30 },
     });
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput(container).value).toBe("30");
     expect(getBoundText()).toBe("30");
@@ -60,8 +57,7 @@ describe("Slider form reset", () => {
     expect(new FormData(getForm()).get("level")).toBe("30");
 
     await rerender({ readonly: true, value: 55 });
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput(container).value).toBe("55");
     expect(getBoundText()).toBe("55");

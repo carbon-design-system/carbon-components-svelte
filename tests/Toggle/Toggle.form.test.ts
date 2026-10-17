@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import ToggleForm from "./Toggle.form.test.svelte";
 
@@ -79,8 +79,7 @@ describe("Toggle form participation", () => {
       await user.click(toggle);
       onToggle.mockClear();
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(toggle).not.toBeChecked();
       expect(getBoundText()).toBe("false");
@@ -95,8 +94,7 @@ describe("Toggle form participation", () => {
 
       expect(getBoundText()).toBe("true");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(toggle).not.toBeChecked();
       expect(getBoundText()).toBe("false");
@@ -115,8 +113,7 @@ describe("Toggle form participation", () => {
       expect(getBoundText()).toBe("false");
       onToggle.mockClear();
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(toggle).toBeChecked();
       expect(getBoundText()).toBe("true");
@@ -130,8 +127,7 @@ describe("Toggle form participation", () => {
       });
       const toggle = screen.getByRole("switch");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(toggle).toBeChecked();
       expect(getBoundText()).toBe("true");
@@ -144,8 +140,7 @@ describe("Toggle form participation", () => {
       const toggle = screen.getByRole("switch");
       getForm().addEventListener("reset", (event) => event.preventDefault());
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(toggle).toBeChecked();
       expect(getBoundText()).toBe("true");

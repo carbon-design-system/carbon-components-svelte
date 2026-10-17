@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import { getPinCodeInputs } from "./helpers";
 import PinCodeInputForm from "./PinCodeInput.form.test.svelte";
@@ -52,8 +52,7 @@ describe("PinCodeInput form participation", () => {
       onComplete.mockClear();
       onChange.mockClear();
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(getSegments()).toEqual(["", "", "", ""]);
       expect(getBoundText()).toBe("");
@@ -68,8 +67,7 @@ describe("PinCodeInput form participation", () => {
 
       await user.click(screen.getAllByRole("textbox")[0]);
       await user.keyboard("1234");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       // user-event tracks what it typed and misses the native reset, so
       // type the next character with a plain input event.
@@ -93,8 +91,7 @@ describe("PinCodeInput form participation", () => {
       await user.keyboard("34");
       expect(getBoundText()).toBe("1234");
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(getSegments()).toEqual(["1", "2", "", ""]);
       expect(getBoundText()).toBe("12");
@@ -107,8 +104,7 @@ describe("PinCodeInput form participation", () => {
 
       await user.click(screen.getAllByRole("textbox")[0]);
       await user.keyboard("12");
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(getSegments()).toEqual(["1", "2", "", ""]);
       expect(getBoundText()).toBe("12");

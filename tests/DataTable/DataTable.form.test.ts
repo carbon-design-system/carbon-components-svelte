@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import DataTableForm from "./DataTable.form.test.svelte";
 
@@ -26,8 +26,7 @@ describe("DataTable form reset", () => {
     expect(getBoundText()).toBe("[1,2]");
     onSelect.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe("[]");
     for (const input of getRowInputs()) expect(input).not.toBeChecked();
@@ -41,8 +40,7 @@ describe("DataTable form reset", () => {
     render(DataTableForm, { props: { radio: true, selectedRowIds: [2] } });
     expect(getRowInputs()[1]).toBeChecked();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe("[]");
     expect(new FormData(getForm()).getAll("user")).toEqual([]);
@@ -57,8 +55,7 @@ describe("DataTable form reset", () => {
     third.defaultChecked = true;
     await user.click(getRowInputs()[1]);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe("[1,3]");
   });

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import SearchForm from "./Search.form.test.svelte";
 
@@ -11,8 +11,7 @@ describe("Search form reset", () => {
   it("clears to empty even with an initial value and zero interaction", async () => {
     render(SearchForm, { props: { value: "ada" } });
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("searchbox", { name: "Search" })).toHaveValue("");
     expect(getBoundValue()).toBe("");
@@ -31,8 +30,7 @@ describe("Search form reset", () => {
     await user.type(input, "x");
     expect(getBoundValue()).toBe("adax");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("ada");
     expect(getBoundValue()).toBe("ada");
@@ -44,8 +42,7 @@ describe("Search form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     await user.type(input, "eric");
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("eric");
     expect(getBoundValue()).toBe("eric");
@@ -71,8 +68,7 @@ describe("Search form reset", () => {
     onExpand.mockClear();
     onCollapse.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("");
     expect(getBoundExpanded()).toBe("true");
@@ -94,8 +90,7 @@ describe("Search form reset", () => {
     onInput.mockClear();
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(onInput).not.toHaveBeenCalled();
     expect(onChange).not.toHaveBeenCalled();

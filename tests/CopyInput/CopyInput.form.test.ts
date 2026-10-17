@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import CopyInputForm from "./CopyInput.form.test.svelte";
 
 describe("CopyInput form reset", () => {
@@ -9,8 +9,7 @@ describe("CopyInput form reset", () => {
     render(CopyInputForm);
     const input = screen.getByRole("textbox");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(input).toHaveValue("a1b2c3d4");
     expect(new FormData(getForm()).get("apiKey")).toBe("a1b2c3d4");
@@ -21,8 +20,7 @@ describe("CopyInput form reset", () => {
 
     component.value = "rotated-key";
     await tick();
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(screen.getByRole("textbox")).toHaveValue("rotated-key");
   });

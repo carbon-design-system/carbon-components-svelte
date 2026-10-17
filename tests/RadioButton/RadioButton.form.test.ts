@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
-import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import RadioButtonForm from "./RadioButton.form.test.svelte";
 import RadioButtonReadonlyForm from "./RadioButtonReadonly.form.test.svelte";
@@ -19,8 +18,7 @@ describe("RadioButton form reset", () => {
     await user.click(getRadio("Large"));
     expect(getBoundText()).toBe("false-true");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getRadio("Large")).not.toBeChecked();
     expect(getBoundText()).toBe("false-false");
@@ -34,8 +32,7 @@ describe("RadioButton form reset", () => {
     await user.click(getRadio("Large"));
     expect(getBoundText()).toBe("false-true");
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getRadio("Small")).toBeChecked();
     expect(getBoundText()).toBe("true-false");
@@ -46,8 +43,7 @@ describe("RadioButton form reset", () => {
 
     expect(getRadio("Readonly")).toBeChecked();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getRadio("Readonly")).toBeChecked();
     expect(getBoundText()).toBe("true");

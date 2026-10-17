@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.form.test.svelte";
 import { getInput } from "./helpers";
@@ -114,8 +114,7 @@ describe("ComboBox form reset", () => {
       props: { items, selectedId: "0", value: "Slack", name: "contact" },
     });
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput()).toHaveValue("");
     expect(getBoundSelectedId()).toBe("undefined");
@@ -148,8 +147,7 @@ describe("ComboBox form reset", () => {
     // calls (there should be none) are counted below.
     const selectCountAfterSelecting = onSelect.mock.calls.length;
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput()).toHaveValue("Fax");
     expect(getBoundSelectedId()).toBe("2");
@@ -172,8 +170,7 @@ describe("ComboBox form reset", () => {
     // `ref.defaultValue`, can win and rewrite `ref.value` back to "Email".
     await user.click(document.body);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput()).toHaveValue("");
     expect(getBoundSelectedId()).toBe("undefined");
@@ -190,8 +187,7 @@ describe("ComboBox form reset", () => {
     await user.click(option);
 
     getForm().addEventListener("reset", (event) => event.preventDefault());
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput()).toHaveValue("Email");
     expect(getBoundSelectedId()).toBe("1");
@@ -215,8 +211,7 @@ describe("ComboBox form reset", () => {
     const option = screen.getByRole("option", { name: "One" });
     await user.click(option);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundSelectedId()).toBe("0");
     expect(getInput()).toHaveValue("zero");
@@ -236,8 +231,7 @@ describe("ComboBox form reset", () => {
     const option = screen.getByRole("option", { name: "Email" });
     await user.click(option);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getInput()).toHaveValue("custom text");
     expect(getBoundSelectedId()).toBe("undefined");

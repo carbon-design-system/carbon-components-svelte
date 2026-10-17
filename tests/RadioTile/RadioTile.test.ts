@@ -2,9 +2,8 @@ import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
 import { type ComponentProps, tick } from "svelte";
 import RadioTileStandalone from "../Tile/RadioTileStandalone.test.svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { flushMacrotask } from "../utils/flush-macrotask";
-import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import RadioTileChecked from "./RadioTile.checked.test.svelte";
 import RadioTileFocus from "./RadioTile.focus.test.svelte";
@@ -399,8 +398,7 @@ describe("RadioTile", () => {
       const radioA = screen.getByRole("radio", { name: "A" });
       expect(radioA).toBeChecked();
 
-      getForm().reset();
-      await flushFormReset();
+      await resetForm();
 
       expect(radioA).not.toBeChecked();
       expect(component.checkedA).toBe(false);

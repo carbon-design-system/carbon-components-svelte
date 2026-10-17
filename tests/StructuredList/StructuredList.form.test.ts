@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
-import { flushFormReset } from "../utils/flush-form-reset";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import StructuredListForm from "./StructuredList.form.test.svelte";
 
@@ -21,8 +21,7 @@ describe("StructuredList form reset", () => {
     expect(getBoundText()).toBe('"mongodb"');
     onChange.mockClear();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe("undefined");
     for (const input of getInputs()) expect(input).not.toBeChecked();
@@ -40,8 +39,7 @@ describe("StructuredList form reset", () => {
     });
     expect(getInputs()[0]).toBeChecked();
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe("[]");
     expect(new FormData(getForm()).getAll("engine")).toEqual([]);
@@ -55,8 +53,7 @@ describe("StructuredList form reset", () => {
     getInputs()[0].defaultChecked = true;
     await user.click(getInputs()[2]);
 
-    getForm().reset();
-    await flushFormReset();
+    await resetForm();
 
     expect(getBoundText()).toBe('"postgresql"');
     expect(getInputs()[0]).toBeChecked();
