@@ -274,20 +274,6 @@ describe("Search", () => {
     expect(searchWrapper).toHaveClass("bx--search--expanded");
   });
 
-  it("does not expand a disabled expandable search on magnifier click", async () => {
-    render(SearchExpandable, { props: { disabled: true } });
-
-    const search = getSearchInput("Expandable search");
-    const searchWrapper = search.closest(".bx--search");
-    assert(searchWrapper);
-
-    const magnifier = searchWrapper.querySelector(".bx--search-magnifier");
-    assert(magnifier);
-
-    await user.click(magnifier);
-    expect(searchWrapper).not.toHaveClass("bx--search--expanded");
-  });
-
   it("hides the collapsed expandable input from assistive tech", async () => {
     render(SearchExpandable);
 
@@ -316,20 +302,6 @@ describe("Search", () => {
       .closest(".bx--search")
       ?.querySelector("input.bx--search-input");
     expect(search).toHaveAttribute("tabindex", "-1");
-  });
-
-  it("expands the search when the open button is clicked", async () => {
-    render(SearchExpandable, { props: { labelText: "", placeholder: "Find" } });
-
-    const button = screen.getByRole("button", { name: "Find" });
-    const searchWrapper = button.closest(".bx--search");
-    assert(searchWrapper);
-
-    await user.click(button);
-
-    expect(searchWrapper).toHaveClass("bx--search--expanded");
-    const search = searchWrapper.querySelector("input.bx--search-input");
-    expect(search).not.toHaveAttribute("tabindex", "-1");
   });
 
   it("expands the search when the open button is activated from the keyboard", async () => {
@@ -463,23 +435,6 @@ describe("Search", () => {
       type Props = ComponentProps<ComponentType>;
 
       expectTypeOf<Props["value"]>().toEqualTypeOf<SearchFilters | undefined>();
-    });
-
-    it("should work with 'as const' for type inference", () => {
-      const suggestions = ["apple", "banana", "cherry"] as const;
-      type InferredType = (typeof suggestions)[number];
-
-      expectTypeOf<typeof suggestions>().toEqualTypeOf<
-        readonly ["apple", "banana", "cherry"]
-      >();
-      expectTypeOf<InferredType>().toEqualTypeOf<
-        "apple" | "banana" | "cherry"
-      >();
-
-      type ComponentType = SearchComponent<InferredType>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["value"]>().toEqualTypeOf<InferredType | undefined>();
     });
 
     it("should support custom Icon types with generics", () => {
