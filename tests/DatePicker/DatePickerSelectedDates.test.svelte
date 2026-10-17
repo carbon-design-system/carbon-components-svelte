@@ -11,6 +11,9 @@
   export let selectedDates: ReadonlyArray<Date> = [];
   export let minDate: ComponentProps<DatePicker>["minDate"] = null;
   export let maxDate: ComponentProps<DatePicker>["maxDate"] = null;
+  export let flatpickrProps: ComponentProps<DatePicker>["flatpickrProps"] = {
+    static: true,
+  };
   export let onchange: (event: CustomEvent) => void = () => {};
   export let ondates: (dates: ReadonlyArray<Date>) => void = () => {};
 
@@ -22,6 +25,7 @@
     {datePickerType}
     {minDate}
     {maxDate}
+    {flatpickrProps}
     bind:value
     bind:valueFrom
     bind:valueTo

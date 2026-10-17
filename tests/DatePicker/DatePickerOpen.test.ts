@@ -1,9 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
 import DatePickerOpen from "./DatePickerOpen.test.svelte";
+import { firstDay, openCalendar } from "./helpers";
 
-const getBoundOpen = () => screen.getByTestId("open").textContent;
+const getBoundOpen = () => getBoundText("open");
 /** `close` is dispatched from a microtask. */
 const settle = async () => {
   await tick();
@@ -58,14 +60,9 @@ describe("DatePicker bind:open", () => {
   it("becomes false after picking a day", async () => {
     const onclose = vi.fn();
     render(DatePickerOpen, { props: { onclose } });
-    await user.click(screen.getByLabelText("Date"));
-    const calendar = await screen.findByLabelText("calendar-container");
-    const day = calendar.querySelector<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
-    );
-    if (!day) throw new Error("expected a selectable day");
+    const calendar = await openCalendar();
 
-    await user.click(day);
+    await user.click(firstDay(calendar));
     await settle();
 
     expect(getBoundOpen()).toBe("false");

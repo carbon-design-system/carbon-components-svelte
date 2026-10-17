@@ -1,18 +1,21 @@
-import { render, screen } from "@testing-library/svelte";
-import { user } from "../utils/user";
-import DatePickerInDialog from "./DatePickerInDialog.test.svelte";
+import { render } from "@testing-library/svelte";
+import DatePickerHost from "./DatePickerHost.test.svelte";
+import { openCalendar } from "./helpers";
 
 describe("DatePicker inside a top-layer dialog", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("registers a passive capture scroll listener and repositions once per frame", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const frames: FrameRequestCallback[] = [];
-    const raf = vi
-      .spyOn(window, "requestAnimationFrame")
-      .mockImplementation((callback) => frames.push(callback));
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) =>
+      frames.push(callback),
+    );
 
-    render(DatePickerInDialog);
-    await user.click(screen.getByLabelText("Date"));
-    await screen.findByLabelText("calendar-container");
+    render(DatePickerHost);
+    await openCalendar();
 
     const scrollCall = add.mock.calls.find(([type]) => type === "scroll");
     expect(scrollCall?.[2]).toEqual({ capture: true, passive: true });
@@ -33,8 +36,5 @@ describe("DatePicker inside a top-layer dialog", () => {
     window.dispatchEvent(new Event("scroll"));
     window.dispatchEvent(new Event("scroll"));
     expect(frames).toHaveLength(1);
-
-    add.mockRestore();
-    raf.mockRestore();
   });
 });

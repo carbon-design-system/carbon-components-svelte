@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import DatePickerSkeletonComponent from "carbon-components-svelte/DatePicker/DatePickerSkeleton.svelte";
+import FluidDatePickerSkeleton from "carbon-components-svelte/DatePicker/FluidDatePickerSkeleton.svelte";
 import { user } from "../utils/user";
-import FluidDatePickerSkeleton from "./DatePicker.fluidSkeleton.test.svelte";
 import DatePickerSkeleton from "./DatePickerSkeleton.test.svelte";
 
 describe("DatePickerSkeleton", () => {
@@ -69,19 +69,23 @@ describe("DatePickerSkeleton", () => {
   });
 
   it("forwards mouse and click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(DatePickerSkeleton);
+    const onclick = vi.fn();
+    const onmouseover = vi.fn();
+    const onmouseleave = vi.fn();
+    render(DatePickerSkeleton, {
+      props: { onclick, onmouseover, onmouseleave },
+    });
 
     const element = screen.getByTestId("date-picker-skeleton");
 
     await user.click(element);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onclick).toHaveBeenCalled();
 
     await user.hover(element);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(onmouseover).toHaveBeenCalled();
 
     await user.unhover(element);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onmouseleave).toHaveBeenCalled();
   });
 
   it("forwards additional attributes to the form item wrapper", () => {
@@ -97,7 +101,9 @@ describe("DatePickerSkeleton", () => {
 
 describe("FluidDatePickerSkeleton", () => {
   it("renders fluid skeleton state", () => {
-    render(FluidDatePickerSkeleton);
+    render(FluidDatePickerSkeleton, {
+      props: { "data-testid": "fluid-date-picker-skeleton" },
+    });
 
     const skeleton = screen.getByTestId("fluid-date-picker-skeleton");
     expect(skeleton).toHaveClass(
@@ -119,7 +125,9 @@ describe("FluidDatePickerSkeleton", () => {
   });
 
   it("renders the range variant with two containers", () => {
-    render(FluidDatePickerSkeleton, { props: { range: true } });
+    render(FluidDatePickerSkeleton, {
+      props: { range: true, "data-testid": "fluid-date-picker-skeleton" },
+    });
 
     const skeleton = screen.getByTestId("fluid-date-picker-skeleton");
     expect(skeleton).toHaveClass("bx--date-picker--fluid__skeleton--range");

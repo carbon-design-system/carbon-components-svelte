@@ -15,6 +15,10 @@
   export let id = "ccs-test";
   export let size: ComponentProps<CopyInput>["size"] = undefined;
   export let copy: ComponentProps<CopyInput>["copy"] = undefined;
+  export let iconDescription = "Copy to clipboard";
+  export let onCopy = () => {};
+  export let onCopyError = (_detail: { error: unknown }) => {};
+  export let onMouseEnterCopyButton = (_event: MouseEvent) => {};
 </script>
 
 <CopyInput
@@ -30,7 +34,8 @@
   {id}
   {size}
   {copy}
-  on:copy={() => {
-    console.log("copied");
-  }}
+  {iconDescription}
+  on:copy={() => onCopy()}
+  on:copy:error={(event) => onCopyError(event.detail)}
+  on:mouseenter:copy-button={(event) => onMouseEnterCopyButton(event.detail)}
 />
