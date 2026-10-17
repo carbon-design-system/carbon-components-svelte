@@ -30,6 +30,7 @@
    * Specify the tabindex of the selected tab.
    * Unselected and disabled tabs use `-1`, so the tab list is a single
    * Tab-key stop and arrow keys move between tabs.
+   * Ignored when `Tabs` sets `navigation`.
    * @type {number | string | undefined}
    */
   export let tabindex = "0";
@@ -93,6 +94,7 @@
     useDismissible,
     hasSecondaryLabel,
     useContainer,
+    navigation,
     add,
     remove,
     claimTab,
@@ -196,7 +198,7 @@
       event.preventDefault();
       return;
     }
-    if (!isLink) event.preventDefault();
+    if (!isLink && !$navigation) event.preventDefault();
     update(id);
   }}
   on:mouseover
@@ -207,7 +209,13 @@
 
     if ($useDismissible && event.key === "Delete") {
       dismiss(id);
-    } else if (event.key === " ") {
+      return;
+    }
+
+    // Links activate natively on Enter, which fires the click above.
+    if ($navigation) return;
+
+    if (event.key === " ") {
       event.preventDefault();
       update(id);
     } else if (event.key === "Enter") {
@@ -218,16 +226,21 @@
 >
   <a
     bind:this={ref}
-    role="tab"
-    tabindex={disabled || (hasSelection && !selected) ? "-1" : tabindex}
-    aria-selected={selected}
+    role={$navigation ? undefined : "tab"}
+    tabindex={$navigation
+      ? undefined
+      : disabled || (hasSelection && !selected)
+        ? "-1"
+        : tabindex}
+    aria-selected={$navigation ? undefined : selected}
+    aria-current={$navigation && selected ? "page" : undefined}
     aria-disabled={disabled}
-    aria-controls={ariaControls ?? panelId}
+    aria-controls={ariaControls ?? ($navigation ? undefined : panelId)}
     aria-label={ariaLabel ?? ($iconOnly ? label : undefined)}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={ariaDescribedBy}
     {id}
-    {href}
+    href={$navigation && disabled ? undefined : href}
     class:bx--tabs__nav-link={true}
     class:bx--tabs__nav-link--selected={selected && !disabled}
     class:bx--tabs__nav-link--container-selected={$useContainer &&

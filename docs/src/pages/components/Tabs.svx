@@ -299,6 +299,45 @@ By default, a tab uses `"#"` as a placeholder href and behaves as an in-page
 selection control. Provide a real href to make a tab act like a link, useful for
 routing each tab to a separate page.
 
+| Tabs | Use when | Semantics |
+| :--- | :--- | :--- |
+| Default | Tabs switch panels on the same page | Tab list, arrow keys move between tabs |
+| `navigation` | Each tab is its own page or URL | Links, the current one has `aria-current="page"` |
+
+### Page navigation
+
+Set `navigation` to render the tabs as page links. The links keep the browser's
+Tab order and arrow keys leave them alone. Label the navigation with
+`aria-label` and set `selected` or `selectedId` from the current route. Render the
+page content below the tabs without `TabContent`. TabsVertical accepts
+`navigation` too (see [Sidebar navigation](#sidebar-navigation)).
+
+<Tabs navigation aria-label="Components" selected={1}>
+  <Tab label="Accordion" href="/components/Accordion" />
+  <Tab label="Breadcrumb" href="/components/Breadcrumb" />
+  <Tab label="Button" href="/components/Button" />
+</Tabs>
+
+```svelte
+<script>
+  // The current route, from your router.
+  export let pathname;
+
+  const links = [
+    { label: "Profile", href: "/settings/profile" },
+    { label: "Security", href: "/settings/security" },
+  ];
+
+  $: selected = links.findIndex((link) => link.href === pathname);
+</script>
+
+<Tabs navigation aria-label="Settings" {selected}>
+  {#each links as link}
+    <Tab label={link.label} href={link.href} />
+  {/each}
+</Tabs>
+```
+
 ### Links
 
 Provide a real href so that activating a tab by mouse or keyboard navigates to the
@@ -777,6 +816,34 @@ The breakpoint follows the viewport, not the container. In a 320px side panel on
     </Box>
   </Stack>
 </Box>
+
+### Sidebar navigation
+
+Set `navigation` for a sidebar of page links, such as the sections of a
+settings page. It works as on [Tabs](#page-navigation): the links get
+`aria-current="page"` instead of tab semantics, and `activation` no longer
+applies. Put the current page in the `content` slot, without `TabContent`, so it
+renders beside the list.
+
+<TabsVertical navigation aria-label="Components" selected={1}>
+  <Tab label="Accordion" href="/components/Accordion" />
+  <Tab label="Breadcrumb" href="/components/Breadcrumb" />
+  <Tab label="Button" href="/components/Button" />
+  <Box slot="content" padding={5}>
+    <Text>The Breadcrumb page renders here.</Text>
+  </Box>
+</TabsVertical>
+
+```svelte
+<TabsVertical navigation aria-label="Settings" {selected}>
+  {#each links as link}
+    <Tab label={link.label} href={link.href} />
+  {/each}
+  <div slot="content">
+    <slot />
+  </div>
+</TabsVertical>
+```
 
 ### Sizes
 
