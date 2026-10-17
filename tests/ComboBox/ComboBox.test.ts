@@ -1577,103 +1577,6 @@ describe("ComboBox", () => {
   });
 
   describe("Generics", () => {
-    it("should support custom item types with generics", () => {
-      type Product = {
-        id: string;
-        text: string;
-        price: number;
-        category: string;
-        inStock: boolean;
-      };
-
-      const products: Product[] = [
-        {
-          id: "1",
-          text: "Laptop",
-          price: 999,
-          category: "Electronics",
-          inStock: true,
-        },
-        {
-          id: "2",
-          text: "Phone",
-          price: 599,
-          category: "Electronics",
-          inStock: false,
-        },
-      ];
-
-      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
-
-      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
-      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
-      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
-
-      const shouldFilterItem = (item: Product, value: string) =>
-        item.category.toLowerCase().includes(value.toLowerCase()) ||
-        item.text.toLowerCase().includes(value.toLowerCase());
-      expectTypeOf(shouldFilterItem).parameter(0).toEqualTypeOf<Product>();
-      expectTypeOf(shouldFilterItem).parameter(1).toEqualTypeOf<string>();
-      expectTypeOf(shouldFilterItem).returns.toEqualTypeOf<boolean>();
-
-      type SelectEvent = CustomEvent<{
-        selectedId: string;
-        selectedItem: Product;
-      }>;
-      expectTypeOf<
-        SelectEvent["detail"]["selectedItem"]
-      >().toEqualTypeOf<Product>();
-    });
-
-    it("should provide type-safe access to custom properties in callbacks", () => {
-      type Tag = {
-        id: number;
-        text: string;
-        color: string;
-        usageCount: number;
-      };
-
-      const itemToString = (item: Tag) => {
-        expectTypeOf(item).toHaveProperty("color");
-        expectTypeOf(item).toHaveProperty("usageCount");
-        return `${item.text} (${item.usageCount})`;
-      };
-
-      const shouldFilterItem = (item: Tag, value: string) => {
-        expectTypeOf(item).toHaveProperty("color");
-        expectTypeOf(item).toHaveProperty("usageCount");
-        return (
-          item.color.includes(value) ||
-          item.usageCount > Number.parseInt(value, 10)
-        );
-      };
-
-      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
-      expectTypeOf(shouldFilterItem).parameter(0).toEqualTypeOf<Tag>();
-    });
-
-    it("should support slot props with generic item type", () => {
-      type MenuItem = {
-        id: string;
-        text: string;
-        icon: string;
-        shortcut?: string;
-      };
-
-      type SlotProps = { item: MenuItem; index: number };
-
-      const slotItem: MenuItem = {
-        id: "1",
-        text: "Save",
-        icon: "save-icon",
-        shortcut: "Ctrl+S",
-      };
-
-      expectTypeOf<SlotProps["item"]>().toEqualTypeOf<MenuItem>();
-      expectTypeOf(slotItem).toHaveProperty("icon");
-      expectTypeOf(slotItem).toHaveProperty("shortcut");
-    });
-
     it("should infer generic type from items and support destructuring in slots", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(ComboBoxGenerics);
@@ -2031,9 +1934,9 @@ describe("ComboBox", () => {
         props: {
           autoHighlight: "first-match",
           items: [
-            { id: "0", text: "Slack", price: 100 },
-            { id: "1", text: "Safari", price: 200, disabled: true },
-            { id: "2", text: "Signal", price: 300 },
+            { id: "0", text: "Safari", price: 200, disabled: true },
+            { id: "1", text: "Signal", price: 300 },
+            { id: "2", text: "Slack", price: 100 },
           ],
         },
       });
@@ -2044,10 +1947,10 @@ describe("ComboBox", () => {
 
       await tick();
 
-      // Safari is disabled, so Signal should not be highlighted — Slack matches first
+      // Safari is the first match but disabled, so the first enabled match wins.
       const highlighted = getHighlightedOption();
       expect(highlighted).not.toBeNull();
-      expect(highlighted?.textContent).toContain("Slack");
+      expect(highlighted?.textContent).toContain("Signal");
     });
 
     it("should reset highlight when no items match", async () => {
@@ -2057,26 +1960,37 @@ describe("ComboBox", () => {
 
       const input = getInput();
       await user.click(input);
-      await user.type(input, "zzz");
-
+      await user.type(input, "s");
       await tick();
 
-      const highlighted = getHighlightedItems();
-      expect(highlighted.length).toBe(0);
+      expect(getHighlightedItems().length).toBe(1);
+
+      await user.type(input, "zz");
+      await tick();
+
+      expect(screen.queryAllByRole("option")).toHaveLength(0);
+      expect(getHighlightedItems().length).toBe(0);
     });
 
     it("should not highlight when input is empty", async () => {
-      render(ComboBox, {
-        props: { autoHighlight: "first-match" },
+      const { rerender } = render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          allowCustomValue: true,
+          open: true,
+          value: "s",
+        },
       });
 
-      const input = getInput();
-      await user.click(input);
+      await tick();
+      expect(getHighlightedItems().length).toBe(1);
 
+      await rerender({ value: "" });
       await tick();
 
-      const highlighted = getHighlightedItems();
-      expect(highlighted.length).toBe(0);
+      expect(getInput()).toHaveValue("");
+      expect(screen.getAllByRole("option")).toHaveLength(3);
+      expect(getHighlightedItems().length).toBe(0);
     });
 
     it("should highlight selected item on re-open, then update on typing", async () => {
@@ -2211,15 +2125,30 @@ describe("ComboBox", () => {
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
+    it.each(["{Enter}", "{ArrowDown}", "{ArrowUp}"])(
+      "should not open the menu on %s when readonly",
+      async (key) => {
+        render(ComboBox, { readonly: true });
+
+        const input = getInput();
+        input.focus();
+        await user.keyboard(key);
+
+        expect(input).toHaveAttribute("aria-expanded", "false");
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      },
+    );
+
     it("should not dispatch select when typing Enter on a highlighted item while readonly", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      render(ComboBox, { readonly: true });
+      render(ComboBox, { readonly: true, open: true });
 
       const input = getInput();
       input.focus();
-      await user.keyboard("{Enter}");
+      await user.keyboard("{ArrowDown}{Enter}");
 
       expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(input).toHaveValue("");
     });
   });
 
@@ -2271,6 +2200,16 @@ describe("ComboBox", () => {
 
       expect(screen.getByTestId("left-0")).toBeInTheDocument();
       expect(screen.getByTestId("left-1")).toBeInTheDocument();
+
+      // Item 0 also has `item.icon`, which the slot replaces.
+      const withItemIcon = screen
+        .getByTestId("left-0")
+        .closest(".bx--list-box__menu-item__icon--left");
+      expect(withItemIcon).toBeInTheDocument();
+      expect(withItemIcon?.querySelector("svg")).toBeNull();
+      expect(
+        document.querySelectorAll(".bx--list-box__menu-item__icon--left"),
+      ).toHaveLength(2);
     });
 
     it("should render iconRight instead of the checkmark", () => {

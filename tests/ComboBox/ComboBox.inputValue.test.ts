@@ -39,10 +39,10 @@ describe("ComboBox", () => {
     await user.clear(input);
     await user.click(document.body);
 
-    const calls = consoleLog.mock.calls.filter(([type]) => type === "select");
-    for (const [, detail] of calls) {
-      expect(detail.selectedId).not.toBe("");
-    }
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({ selectedId: "" }),
+    );
   });
 
   it("should preserve custom value when allowCustomValue is true and menu closes", async () => {

@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import ComboBox from "./ComboBox.test.svelte";
@@ -44,45 +43,50 @@ describe("ComboBox", () => {
     ])(
       "should reset scroll position when menu reopens $description",
       async ({ virtualize }) => {
-        const largeItems = createLargeItemList(500);
-        const { rerender } = render(ComboBox, {
+        render(ComboBox, {
           props: {
-            items: largeItems,
+            items: createLargeItemList(500),
             virtualize,
           },
         });
 
-        await user.click(getInput());
+        const input = getInput();
+        await user.click(input);
 
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-        expect(menu).toBeVisible();
-        expect(menu.style.maxHeight).toBeTruthy();
-        expect(menu.style.overflowY).toBe("auto");
+        expect(screen.getByText("Item 1")).toBeInTheDocument();
 
-        menu.scrollTop = 1000;
-        await flushMacrotask();
-
-        const scrollBeforeClose = menu.scrollTop;
-        expect(scrollBeforeClose).toBeGreaterThan(0);
-
-        rerender({ open: false });
-        await tick();
-        await flushMacrotask();
-
-        rerender({ open: true });
+        menu.scrollTop = 2000;
+        await fireEvent.scroll(menu);
         await tick();
 
-        await waitFor(() => {
-          const menuAfterReopen = screen.getByRole("listbox");
-          expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
-          expect(menuAfterReopen).toBeInTheDocument();
-          return menuAfterReopen;
-        });
+        expect(screen.queryByText("Item 1")).not.toBeInTheDocument();
+        expect(screen.getByText("Item 60")).toBeInTheDocument();
 
-        await waitFor(() => {
-          expect(screen.getByText("Item 1")).toBeInTheDocument();
+        await user.keyboard("{Escape}");
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+        // The reopened menu starts at the top, so it must never render the
+        // window the previous scroll position pointed at, even for a frame.
+        const rendered: string[] = [];
+        const observer = new MutationObserver((records) => {
+          for (const record of records) {
+            for (const node of record.addedNodes) {
+              rendered.push(node.textContent ?? "");
+            }
+          }
         });
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        await user.click(input);
+        await tick();
+        observer.disconnect();
+
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
+        expect(screen.getByText("Item 1")).toBeInTheDocument();
+        expect(screen.queryByText("Item 60")).not.toBeInTheDocument();
+        expect(rendered.some((text) => text.includes("Item 1"))).toBe(true);
+        expect(rendered.some((text) => text.includes("Item 60"))).toBe(false);
       },
     );
 
@@ -189,20 +193,19 @@ describe("ComboBox", () => {
       await user.click(getInput());
 
       const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-      expect(menu).toBeInTheDocument();
+      const spacer = menu.querySelector<HTMLElement>(":scope > div");
+      expect(spacer?.style.height).toBe("40000px");
+      expect(screen.getByText("Item 1")).toBeInTheDocument();
 
       menu.scrollTop = 800;
+      await fireEvent.scroll(menu);
       await tick();
 
-      const optionsAfterScroll = screen.getAllByRole("option");
-      expect(optionsAfterScroll.length).toBeGreaterThan(0);
+      // 800px at 80px per row puts row 10 ("Item 11") at the top.
+      expect(screen.queryByText("Item 1")).not.toBeInTheDocument();
+      await user.click(screen.getByText("Item 11"));
 
-      const firstVisibleOption = optionsAfterScroll[0];
-      await user.click(firstVisibleOption);
-
-      const input = getInput();
-      expect(input.value).toBeTruthy();
+      expect(getInput()).toHaveValue("Item 11");
     });
 
     it("should override default item height when specified in virtualize object", async () => {

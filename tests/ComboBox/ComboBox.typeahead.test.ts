@@ -78,10 +78,12 @@ describe("ComboBox", () => {
       render(ComboBox, {
         props: {
           typeahead: true,
+          defaultFilter: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
             { id: "2", text: "Banana", price: 200 },
             { id: "3", text: "Cherry", price: 300 },
+            { id: "4", text: "Rhubarb", price: 400 },
           ],
         },
       });
@@ -99,20 +101,22 @@ describe("ComboBox", () => {
       render(ComboBox, {
         props: {
           typeahead: true,
+          defaultFilter: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
-            { id: "2", text: "Banana", price: 200 },
+            { id: "2", text: "Pineapple", price: 200 },
+            { id: "3", text: "Banana", price: 300 },
           ],
         },
       });
 
       const input = getInput();
       await user.click(input);
-      await user.type(input, "B");
+      await user.type(input, "ap");
 
       const options = screen.getAllByRole("option");
       expect(options).toHaveLength(1);
-      expect(options[0]).toHaveTextContent("Banana");
+      expect(options[0]).toHaveTextContent("Apple");
     });
 
     it("should use custom shouldFilterItem when typeahead is enabled", async () => {
@@ -144,10 +148,12 @@ describe("ComboBox", () => {
       render(ComboBox, {
         props: {
           typeahead: true,
+          defaultFilter: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
             { id: "2", text: "apricot", price: 200 },
             { id: "3", text: "AVOCADO", price: 300 },
+            { id: "4", text: "Banana", price: 400 },
           ],
         },
       });
