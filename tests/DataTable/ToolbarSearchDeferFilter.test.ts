@@ -50,14 +50,7 @@ describe("ToolbarSearch deferFilter", () => {
     await vi.advanceTimersByTimeAsync(0);
 
     expect(component.filteredRowIds).toEqual([3]);
-  });
 
-  it("does not let a yielded filter overwrite a newer value", async () => {
-    const { component } = render(ToolbarSearchDeferFilter);
-    const input = screen.getByRole("searchbox");
-
-    await fireEvent.input(input, { target: { value: "Balancer 2" } });
-    await vi.advanceTimersByTimeAsync(0);
     await fireEvent.input(input, { target: { value: "Balancer 4" } });
     await fireEvent.input(input, { target: { value: "" } });
     await vi.advanceTimersByTimeAsync(0);

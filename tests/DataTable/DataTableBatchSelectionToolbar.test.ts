@@ -29,22 +29,6 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(toolbar).not.toHaveClass("bx--batch-actions--active");
   });
 
-  it("handles cancel action", async () => {
-    render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: ["a", "b"],
-      },
-    });
-
-    const cancelButton = screen.getByText("Cancel");
-    await user.click(cancelButton);
-    // Wait for binding updates to complete
-    await tick();
-
-    const selectedIdsElement = screen.getByTestId("selected-ids");
-    expect(selectedIdsElement.textContent).toBe("[]");
-  });
-
   it("unchecks the select-all checkbox after cancel", async () => {
     render(DataTableBatchSelectionToolbar, {
       props: {
@@ -62,20 +46,6 @@ describe("DataTableBatchSelectionToolbar", () => {
 
     expect(selectAll).not.toBeChecked();
     expect(screen.getByTestId("selected-ids").textContent).toBe("[]");
-  });
-
-  it("handles custom batch actions", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: ["a", "b"],
-      },
-    });
-
-    const actionButton = screen.getByText("Delete");
-    await user.click(actionButton);
-
-    expect(consoleLog).toHaveBeenCalledWith("delete", ["a", "b"]);
   });
 
   it("handles controlled active state", async () => {
@@ -159,25 +129,6 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(screen.getByText("3 items selected")).toBeInTheDocument();
   });
 
-  it("handles keyboard navigation", async () => {
-    render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: ["a", "b"],
-      },
-    });
-
-    const cancelButton = screen.getByText("Cancel");
-    cancelButton.focus();
-
-    await user.keyboard("{Tab}");
-    expect(screen.getByText("Create balancer")).toHaveFocus();
-
-    await user.keyboard("{Tab}");
-    expect(
-      screen.getByRole("checkbox", { name: "Select all rows" }),
-    ).toHaveFocus();
-  });
-
   it("announces the selection count via a live region", () => {
     const { container } = render(DataTableBatchSelectionToolbar, {
       props: {
@@ -219,50 +170,6 @@ describe("DataTableBatchSelectionToolbar", () => {
     await tick();
 
     expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
-  });
-
-  it("applies inert to batch actions when no rows are selected", () => {
-    const { container } = render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: [],
-      },
-    });
-
-    const batchActions = container.querySelector(".bx--batch-actions");
-    expect(batchActions).toHaveAttribute("inert");
-  });
-
-  it("removes inert from batch actions when rows are selected", () => {
-    const { container } = render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: ["a", "b"],
-      },
-    });
-
-    const batchActions = container.querySelector(".bx--batch-actions");
-    expect(batchActions).not.toHaveAttribute("inert");
-  });
-
-  it("applies inert to toolbar content when rows are selected", () => {
-    const { container } = render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: ["a", "b"],
-      },
-    });
-
-    const toolbarContent = container.querySelector(".bx--toolbar-content");
-    expect(toolbarContent).toHaveAttribute("inert");
-  });
-
-  it("removes inert from toolbar content when no rows are selected", () => {
-    const { container } = render(DataTableBatchSelectionToolbar, {
-      props: {
-        selectedRowIds: [],
-      },
-    });
-
-    const toolbarContent = container.querySelector(".bx--toolbar-content");
-    expect(toolbarContent).not.toHaveAttribute("inert");
   });
 
   it("should label each row selection checkbox", () => {

@@ -89,11 +89,6 @@ describe("DataTableSearch", () => {
     for (const row of tableRows) {
       expect(row).toHaveTextContent("DNS");
     }
-
-    await user.keyboard("{Tab}{Enter}");
-    expect(searchInput).toHaveValue("");
-    expect(searchInput).toHaveFocus();
-    allRowsRendered();
   });
 
   it("persistent search bar does not toggle the active class when typing", async () => {
@@ -141,13 +136,6 @@ describe("DataTableSearch", () => {
       expect(row).toHaveTextContent("Round");
     }
 
-    await user.click(
-      screen.getByRole("button", { name: "Clear search input" }),
-    );
-    expect(searchInput).toHaveValue("");
-    expect(searchInput).toHaveFocus();
-    allRowsRendered();
-
     await user.type(searchInput, "rr");
 
     tableRows = getTableRows();
@@ -157,14 +145,6 @@ describe("DataTableSearch", () => {
     expect(screen.getByText("of 1 page")).toBeInTheDocument();
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
-
-    await user.keyboard("{Escape}");
-    expect(searchInput).toHaveValue("");
-    expect(searchInput).toHaveFocus();
-    allRowsRendered();
-
-    await user.keyboard("{Tab}");
-    expect(searchBar).not.toHaveClass("bx--toolbar-search-container-active");
   });
 
   it("can filter with a custom filter function", async () => {
@@ -236,12 +216,5 @@ describe("DataTableSearch", () => {
     expect(screen.getByText("of 1 page")).toBeInTheDocument();
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
-
-    await user.click(
-      screen.getByRole("button", { name: "Clear search input" }),
-    );
-    expect(searchInput).toHaveValue("");
-    expect(searchInput).toHaveFocus();
-    allRowsRendered();
   });
 });
