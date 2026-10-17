@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
+import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
-import { openMenu } from "./helpers";
+import { closeMenu, openMenu } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
+import MultiSelectHighlightedId from "./MultiSelectHighlightedId.test.svelte";
 
 const items = [
   { id: "0", text: "Alpha" },
@@ -11,6 +13,28 @@ const items = [
 ];
 
 describe("MultiSelect keyboard", () => {
+  describe("bind:highlightedId", () => {
+    const idItems = [
+      { id: "id-alpha", text: "Alpha" },
+      { id: "id-bravo", text: "Bravo" },
+    ];
+
+    it("reflects the id of the keyboard-highlighted item", async () => {
+      render(MultiSelectHighlightedId, { props: { items: idItems } });
+      expect(getBoundText()).toBe("");
+
+      await openMenu();
+      await user.keyboard("{ArrowDown}");
+      expect(getBoundText()).toBe("id-alpha");
+
+      await user.keyboard("{ArrowDown}");
+      expect(getBoundText()).toBe("id-bravo");
+
+      await closeMenu();
+      expect(getBoundText()).toBe("");
+    });
+  });
+
   describe("Shift+Enter / Shift+Space range selection", () => {
     it("selects the range from the anchor to the keyboard-highlighted item on Shift+Enter", async () => {
       render(MultiSelect, { props: { items } });

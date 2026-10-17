@@ -46,6 +46,32 @@ describe("MultiSelect", () => {
       });
     });
 
+    it.each([
+      { closer: "Escape", close: () => user.keyboard("{Escape}") },
+      { closer: "an outside click", close: () => user.click(document.body) },
+    ])(
+      "clears the filter text when the menu closes via $closer",
+      async ({ close }) => {
+        render(MultiSelect, {
+          props: {
+            items,
+            filterable: true,
+            placeholder: "Filter items...",
+          },
+        });
+
+        const input = screen.getByPlaceholderText("Filter items...");
+        await user.click(input);
+        await user.type(input, "em");
+        expect(input).toHaveValue("em");
+
+        await close();
+
+        expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        expect(input).toHaveValue("");
+      },
+    );
+
     it("filters case-insensitively and ignores surrounding whitespace by default", async () => {
       render(MultiSelect, {
         props: {
