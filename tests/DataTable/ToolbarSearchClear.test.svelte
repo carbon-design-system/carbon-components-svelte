@@ -6,6 +6,7 @@
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
 
   export let persistent = false;
+  export let expanded = false;
 
   let search: ToolbarSearch;
   let value = "";
@@ -25,7 +26,7 @@
 <DataTable {headers} {rows}>
   <Toolbar>
     <ToolbarContent>
-      <ToolbarSearch bind:this={search} bind:value {persistent} />
+      <ToolbarSearch bind:this={search} bind:value bind:expanded {persistent} />
     </ToolbarContent>
   </Toolbar>
 </DataTable>

@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../utils/user";
 import DataTableToolbarNoBatch from "./DataTableToolbarNoBatch.test.svelte";
 
 // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2404
@@ -15,31 +14,16 @@ describe("DataTable toolbar without batch actions", () => {
     expect(toolbarContent).not.toHaveAttribute("inert");
   });
 
-  it("toolbar button should be clickable when rows are selected without batch actions", async () => {
-    const clickHandler = vi.fn();
+  it("toolbar controls should not sit inside an inert subtree when rows are selected without batch actions", () => {
     render(DataTableToolbarNoBatch, {
       props: {
         selectedRowIds: ["a"],
       },
     });
 
-    const button = screen.getByText("Action");
-    button.addEventListener("click", clickHandler);
-    await user.click(button);
-
-    expect(clickHandler).toHaveBeenCalled();
-  });
-
-  it("toolbar search should be focusable when rows are selected without batch actions", async () => {
-    render(DataTableToolbarNoBatch, {
-      props: {
-        selectedRowIds: ["a"],
-      },
-    });
-
-    const searchInput = screen.getByRole("searchbox");
-    await user.click(searchInput);
-
-    expect(searchInput).toHaveFocus();
+    // jsdom does not enforce `inert`, so click and focus checks cannot fail.
+    // Check every ancestor of the controls instead.
+    expect(screen.getByText("Action").closest("[inert]")).toBeNull();
+    expect(screen.getByRole("searchbox").closest("[inert]")).toBeNull();
   });
 });

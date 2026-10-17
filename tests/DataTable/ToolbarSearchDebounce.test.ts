@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import ToolbarSearchDebounce from "./ToolbarSearchDebounce.test.svelte";
+import ToolbarSearchDeferFilter from "./ToolbarSearchDeferFilter.test.svelte";
 
 describe("ToolbarSearch debounce", () => {
   beforeEach(() => {
@@ -56,27 +57,33 @@ describe("ToolbarSearch debounce", () => {
 
     const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
-    expect(component.filteredRowIds).toHaveLength(6);
+    await vi.advanceTimersByTimeAsync(300);
+    expect(component.filteredRowIds).toHaveLength(1);
 
     await fireEvent.input(input, { target: { value: "" } });
 
     expect(component.filteredRowIds).toHaveLength(6);
   });
 
-  it("does not throw or update state when unmounted with a pending run", async () => {
-    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { unmount } = render(ToolbarSearchDebounce, {
-      props: { debounce: 300 },
-    });
+  it.each([
+    ["a pending debounced run", ToolbarSearchDebounce, { debounce: 300 }, 300],
+    ["a yielded filter", ToolbarSearchDeferFilter, { deferFilter: true }, 0],
+  ])(
+    "does not filter after unmount with %s",
+    async (_, Fixture, props, wait) => {
+      const onFilterRows = vi.fn();
+      const { unmount } = render(Fixture, {
+        props: { ...props, onFilterRows },
+      });
 
-    const input = screen.getByRole("searchbox");
-    await fireEvent.input(input, { target: { value: "Balancer 1" } });
+      const input = screen.getByRole("searchbox");
+      await fireEvent.input(input, { target: { value: "Balancer 1" } });
+      unmount();
+      const callsAtUnmount = onFilterRows.mock.calls.length;
 
-    unmount();
+      await vi.advanceTimersByTimeAsync(wait + 10);
 
-    await expect(vi.advanceTimersByTimeAsync(300)).resolves.not.toThrow();
-    expect(errorSpy).not.toHaveBeenCalled();
-
-    errorSpy.mockRestore();
-  });
+      expect(onFilterRows).toHaveBeenCalledTimes(callsAtUnmount);
+    },
+  );
 });

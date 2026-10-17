@@ -260,16 +260,17 @@ describe("DataTable Toolbar", () => {
       expect(screen.getByText("Cancel")).toBeInTheDocument();
     });
 
-    it("should render custom cancel button text", () => {
+    it("should render the cancel slot in place of the default text", () => {
       render(Toolbar, {
         props: {
-          testComponent: "ToolbarBatchActions",
+          testComponent: "ToolbarBatchActionsCancelSlot",
           selectedIds: [1, 2],
           slotContent: "Custom cancel",
         },
       });
 
       expect(screen.getByText("Custom cancel")).toBeInTheDocument();
+      expect(screen.queryByText("Cancel")).not.toBeInTheDocument();
     });
 
     it("should dispatch cancel event when cancel button is clicked", () => {

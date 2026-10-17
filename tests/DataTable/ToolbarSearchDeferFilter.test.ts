@@ -107,17 +107,4 @@ describe("ToolbarSearch deferFilter", () => {
 
     expect(component.filteredRowIds).toHaveLength(1);
   });
-
-  it("does not throw or update state when unmounted with a pending filter", async () => {
-    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { unmount } = render(ToolbarSearchDeferFilter);
-    const input = screen.getByRole("searchbox");
-    await fireEvent.input(input, { target: { value: "Balancer 1" } });
-
-    unmount();
-
-    await expect(vi.advanceTimersByTimeAsync(0)).resolves.not.toThrow();
-    expect(errorSpy).not.toHaveBeenCalled();
-    errorSpy.mockRestore();
-  });
 });

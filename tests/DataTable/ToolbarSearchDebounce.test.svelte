@@ -13,6 +13,7 @@
   export let filteredRowIds: ComponentProps<ToolbarSearch>["filteredRowIds"] =
     [];
   export let filterRowsCount = 0;
+  export let onFilterRows: (() => void) | undefined = undefined;
 
   const rows = Array.from({ length: 6 }).map((_, i) => ({
     id: i + 1,
@@ -23,7 +24,7 @@
 <DataTable headers={[{ key: "name", value: "Name" }]} {rows}>
   <Toolbar>
     <ToolbarContent>
-      <FilterRowsSpy bind:count={filterRowsCount}>
+      <FilterRowsSpy bind:count={filterRowsCount} onFilter={onFilterRows}>
         <ToolbarSearch
           shouldFilterRows
           persistent
