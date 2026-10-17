@@ -73,17 +73,21 @@
    */
   export let highlightScroll = true;
 
-  import { setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     createHighlightCursor,
     HIGHLIGHT_CURSOR_KEY,
+    HIGHLIGHT_CURSOR_OWNER_KEY,
   } from "./highlight-cursor.js";
 
   /** @type {ReturnType<typeof import("./highlight-cursor.js").createHighlightCursor>} */
-  const highlightCursor = createHighlightCursor();
+  const highlightCursor =
+    getContext(HIGHLIGHT_CURSOR_OWNER_KEY) ?? createHighlightCursor();
   setContext(HIGHLIGHT_CURSOR_KEY, highlightCursor);
+  // A listbox nested in an option slot owns its own cursor.
+  setContext(HIGHLIGHT_CURSOR_OWNER_KEY, undefined);
 
   $: highlightCursor.set(highlightedId, { scroll: highlightScroll });
 </script>
