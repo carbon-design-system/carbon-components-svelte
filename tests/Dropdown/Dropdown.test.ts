@@ -1173,6 +1173,39 @@ describe("Dropdown", () => {
     expect(menuItem).toHaveAttribute("disabled");
   });
 
+  describe("disabled option pointer interaction", () => {
+    const itemsWithDisabled = [
+      { id: "0", text: "Slack" },
+      { id: "1", text: "Email", disabled: true },
+      { id: "2", text: "Fax" },
+    ];
+
+    it("ignores a click on a disabled option and keeps the menu open", async () => {
+      const onselect = vi.fn();
+      render(Dropdown, {
+        props: { items: itemsWithDisabled, selectedId: "0", onselect },
+      });
+
+      const button = screen.getByRole("combobox");
+      await user.click(button);
+      await fireEvent.click(screen.getByRole("option", { name: "Email" }));
+
+      expect(onselect).not.toHaveBeenCalled();
+      expect(button).toHaveTextContent("Slack");
+      expect(button).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("does not highlight a disabled option on hover", async () => {
+      render(Dropdown, { props: { items: itemsWithDisabled } });
+
+      await user.click(screen.getByRole("combobox"));
+      const option = screen.getByRole("option", { name: "Email" });
+      await fireEvent.mouseEnter(option);
+
+      expect(option).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    });
+  });
+
   it("should pass selected and highlighted to the default slot", async () => {
     render(DropdownSlot, { props: { selectedId: "1" } });
 
@@ -1319,6 +1352,26 @@ describe("Dropdown", () => {
     await user.keyboard("{Enter}");
 
     expect(button).toHaveTextContent("Fax");
+  });
+
+  it("selects the highlighted option with Space and closes the menu", async () => {
+    const onselect = vi.fn();
+    render(Dropdown, { props: { items, selectedId: "0", onselect } });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    await user.keyboard("{ArrowDown}");
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+
+    await user.keyboard(" ");
+
+    expect(button).toHaveTextContent("Email");
+    expect(button).toHaveAttribute("aria-expanded", "false");
+    expect(onselect).toHaveBeenCalledTimes(1);
+    expect(onselect.mock.calls[0][0].detail).toEqual({
+      selectedId: "1",
+      selectedItem: items[1],
+    });
   });
 
   it("should handle keyboard navigation wrapping around", async () => {
@@ -1611,6 +1664,30 @@ describe("Dropdown", () => {
 
     await user.keyboard("{Enter}");
     expect(button).toHaveTextContent("Banana");
+  });
+
+  it("matches typeahead against itemToString instead of item.text", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+        ],
+        itemToString: (item: { text: string }) =>
+          item.text === "Cherry" ? "Zebra" : item.text,
+      },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    // Cherry is labelled "Zebra", so "z" finds it even though its text is "Cherry".
+    await user.keyboard("z");
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+    expect(screen.getByRole("option", { name: "Zebra" })).toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
   });
 
   it("should clear the hover highlight when the cursor leaves the menu", async () => {
@@ -1980,6 +2057,27 @@ describe("Dropdown", () => {
       const options = screen.getAllByRole("option");
       expect(options.length).toBeLessThan(500);
       expect(options.length).toBeGreaterThan(0);
+    });
+
+    it("exposes aria-setsize and aria-posinset on the rendered window", async () => {
+      render(Dropdown, {
+        props: { items: createItems(500), selectedId: "250", virtualize: true },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole("option", { name: "Item 251" }),
+        ).toBeInTheDocument();
+      });
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeLessThan(500);
+      for (const option of options) {
+        const number = Number(option.textContent?.trim().replace("Item ", ""));
+        expect(option).toHaveAttribute("aria-setsize", "500");
+        expect(option).toHaveAttribute("aria-posinset", String(number));
+      }
     });
 
     it.each([
