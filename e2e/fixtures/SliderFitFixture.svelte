@@ -8,7 +8,7 @@
     <Slider labelText="Volume" value={40} />
   </div>
   <div data-testid="range-{width}" style="width: {width}px; margin: 1rem;">
-    <RangeSlider labelText="Price" valueFrom={20} valueTo={60} />
+    <RangeSlider labelText="Price" />
   </div>
 {/each}
 <!-- An invalid slider's number input is wider (it holds the icon). -->

@@ -13,6 +13,7 @@ test("sliders fit their container", async ({ page }) => {
   const fits = [
     "slider-200",
     "invalid-200",
+    "range-200",
     "slider-320",
     "range-320",
     "slider-600",
