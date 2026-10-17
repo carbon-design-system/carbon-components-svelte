@@ -19,6 +19,9 @@
   export let readonly = false;
   export let readonlyText: ComponentProps<Select>["readonlyText"] = undefined;
   export let fluid = false;
+  export let onChange: () => void = () => {};
+  export let onInput: () => void = () => {};
+  export let onUpdate: (detail: unknown) => void = () => {};
 </script>
 
 <Select
@@ -38,9 +41,9 @@
   {readonly}
   {readonlyText}
   {fluid}
-  on:change={() => console.log("change")}
-  on:input={() => console.log("input")}
-  on:update={(e) => console.log("update", e.detail)}
+  on:change={onChange}
+  on:input={onInput}
+  on:update={(e) => onUpdate(e.detail)}
 >
   <SelectItem value="option-1" text="Option 1" />
   <SelectItem value="option-2" text="Option 2" />
