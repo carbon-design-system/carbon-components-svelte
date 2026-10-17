@@ -15,7 +15,6 @@
     { id: "2", text: "Fax", price: 300 },
   ];
   export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
-  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
   export let value = "";
   export let disabled = false;
   export let invalid = false;
@@ -52,6 +51,8 @@
   export let fluid: ComponentProps<ComboBox>["fluid"] = false;
   export let condensed: ComponentProps<ComboBox>["condensed"] = false;
   export let id: ComponentProps<ComboBox>["id"] = undefined;
+  export let onSelect: (detail: unknown) => void = () => {};
+  export let onClear: (event: Event) => void = () => {};
 </script>
 
 <ComboBox
@@ -87,12 +88,9 @@
   {filterMode}
   {portalMenu}
   {wrapOptions}
-  on:select={(e) => {
-    console.log("select", e.detail);
-  }}
+  on:select={(e) => onSelect(e.detail)}
   on:clear={(e) => {
-    console.log("clear", e.type);
-    onclear?.(e);
+    onClear(e);
     value = "";
     selectedId = undefined;
   }}

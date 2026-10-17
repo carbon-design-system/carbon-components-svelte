@@ -16,31 +16,30 @@ describe("ComboBox", () => {
   });
 
   it("should not dispatch select with an empty selectedId on blur when allowCustomValue input is empty", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox, { props: { allowCustomValue: true } });
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect, allowCustomValue: true } });
 
     const input = getInput();
     await user.click(input);
     await user.click(document.body);
 
-    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(onSelect).not.toHaveBeenCalled();
   });
 
   it("should not dispatch select with an empty selectedId after clearing a prior selection then blurring", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboBox, { props: { allowCustomValue: true } });
+    const onSelect = vi.fn();
+    render(ComboBox, { props: { onSelect, allowCustomValue: true } });
 
     const input = getInput();
     await user.click(input);
     await user.click(screen.getByText("Email"));
-    consoleLog.mockClear();
+    onSelect.mockClear();
 
     await user.click(input);
     await user.clear(input);
     await user.click(document.body);
 
-    expect(consoleLog).not.toHaveBeenCalledWith(
-      "select",
+    expect(onSelect).not.toHaveBeenCalledWith(
       expect.objectContaining({ selectedId: "" }),
     );
   });

@@ -30,9 +30,10 @@ describe("ComboBox", () => {
     });
 
     it("should not commit a typeahead selection on Tab after the menu is closed via Escape", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -48,7 +49,7 @@ describe("ComboBox", () => {
 
       await user.keyboard("{Tab}");
 
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("should skip a disabled item when suggesting and completing a typeahead match on Tab", async () => {
@@ -221,9 +222,10 @@ describe("ComboBox", () => {
     });
 
     it("should allow selecting autocompleted item", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -238,7 +240,8 @@ describe("ComboBox", () => {
       expect(input).toHaveValue("Apple");
 
       await user.keyboard("{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "1",
         selectedItem: { id: "1", text: "Apple", price: 100 },
       });
@@ -288,9 +291,10 @@ describe("ComboBox", () => {
     });
 
     it("should accept the suggestion on Tab and normalize casing", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -309,7 +313,8 @@ describe("ComboBox", () => {
 
       // Tab commits the suggestion with the item's casing and closes the menu.
       expect(input).toHaveValue("Apple");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "1",
         selectedItem: { id: "1", text: "Apple", price: 100 },
       });
@@ -317,9 +322,10 @@ describe("ComboBox", () => {
     });
 
     it("should accept the suggestion when clicking away", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -335,7 +341,8 @@ describe("ComboBox", () => {
       await user.click(document.body);
 
       expect(input).toHaveValue("Apple");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "1",
         selectedItem: { id: "1", text: "Apple", price: 100 },
       });
@@ -343,9 +350,10 @@ describe("ComboBox", () => {
     });
 
     it("should accept the inline suggestion in place on ArrowRight", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -371,13 +379,14 @@ describe("ComboBox", () => {
       expect(input.selectionEnd).toBe(5);
       expect(input).toHaveFocus();
       expect(screen.getByRole("listbox")).toBeInTheDocument();
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("should accept the inline suggestion in place on End", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -398,13 +407,14 @@ describe("ComboBox", () => {
       expect(input.selectionEnd).toBe(5);
       expect(input).toHaveFocus();
       expect(screen.getByRole("listbox")).toBeInTheDocument();
-      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("should still commit and normalize after accepting in place", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(ComboBox, {
         props: {
+          onSelect,
           typeahead: true,
           items: [
             { id: "1", text: "Apple", price: 100 },
@@ -422,7 +432,8 @@ describe("ComboBox", () => {
       // Enter still selects the item and normalizes to the item's casing.
       await user.keyboard("{Enter}");
       expect(input).toHaveValue("Apple");
-      expect(consoleLog).toHaveBeenCalledWith("select", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect).toHaveBeenCalledWith({
         selectedId: "1",
         selectedItem: { id: "1", text: "Apple", price: 100 },
       });
