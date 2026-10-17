@@ -683,44 +683,14 @@ describe("PinCodeInput", () => {
     expect(inputs[0]).toHaveFocus();
   });
 
-  it("focuses the first empty segment when the legend is activated with the keyboard", async () => {
-    render(PinCodeInput, { props: { id: "pin-legend" } });
-    const inputs = getInputs();
+  // Tab already lands in the segments; the legend isn't a stop of its own.
+  it("leaves the legend out of the tab order", async () => {
+    render(PinCodeInput);
     const legend = screen.getByText("Verification code");
 
-    legend.focus();
-    await fireEvent.keyDown(legend, { key: "Enter" });
-    expect(inputs[0]).toHaveFocus();
-  });
-
-  describe("legend tab stop", () => {
-    const getLegend = () => screen.getByText("Verification code");
-
-    it("is a tab stop when the label is visible", () => {
-      render(PinCodeInput);
-      expect(getLegend()).toHaveAttribute("tabindex", "0");
-    });
-
-    it("is not a tab stop when the label is hidden", async () => {
-      render(PinCodeInput, { props: { hideLabel: true } });
-      expect(getLegend()).not.toHaveAttribute("tabindex");
-
-      await user.tab();
-      expect(getInputs()[0]).toHaveFocus();
-    });
-
-    it("is not a tab stop when disabled", async () => {
-      render(PinCodeInput, { props: { disabled: true } });
-      expect(getLegend()).not.toHaveAttribute("tabindex");
-
-      await user.tab();
-      expect(getLegend()).not.toHaveFocus();
-    });
-
-    it("is a tab stop when read-only", () => {
-      render(PinCodeInput, { props: { readonly: true } });
-      expect(getLegend()).toHaveAttribute("tabindex", "0");
-    });
+    expect(legend).not.toHaveAttribute("tabindex");
+    await user.tab();
+    expect(getInputs()[0]).toHaveFocus();
   });
 
   it("exposes OTP-friendly input attributes on every segment", () => {

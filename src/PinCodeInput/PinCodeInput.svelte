@@ -447,14 +447,6 @@
     fillFromChars(index, chars);
   }
 
-  /** @type {(event: KeyboardEvent) => void} */
-  function handleLegendKeydown(event) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      focusNextEmptyInput();
-    }
-  }
-
   function handleLegendClick() {
     focusNextEmptyInput();
   }
@@ -558,16 +550,17 @@
     aria-describedby={joinDescribedBy(describedById, ariaDescribedBy)}
   >
     {#if labelText || $$slots.labelChildren}
-      <!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
+      <!-- A legend can't point at a field the way `<label for>` does, so a
+           click focuses the next empty segment, as a label's would. It's not
+           a tab stop: Tab already lands in the segments. -->
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
       <legend
         id={legendId}
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
-        tabindex={hideLabel || disabled ? undefined : "0"}
         on:click={handleLegendClick}
-        on:keydown={handleLegendKeydown}
       >
         <slot name="labelChildren">{labelText}</slot>
       </legend>
