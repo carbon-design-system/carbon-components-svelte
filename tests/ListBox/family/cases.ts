@@ -32,6 +32,12 @@ export type ListBoxCase = {
   selectCloses: boolean;
   /** Window events an open menu listens for. */
   windowEvents: string[];
+  /** Props that preselect the item `id`, keeping it at its index in `items`. */
+  preselect: (id: string) => Record<string, unknown>;
+  /** Home/End move the highlight in an open menu (a filter input keeps them). */
+  homeEndMove: boolean;
+  /** ArrowDown moves on from the selected item, not from the first one. */
+  navigatesFromSelection: boolean;
   /** Fixture that renders this case inside `<form data-testid="form">`. */
   form: ComponentType;
   /** Props the form fixture needs to render this case. */
@@ -44,6 +50,13 @@ export type ListBoxCase = {
   };
 };
 
+/** MultiSelect sorts selected items first unless told to keep their order. */
+const preselectInPlace = (id: string) => ({
+  selectedIds: [id],
+  selectionFeedback: "fixed",
+  sortItem: false,
+});
+
 export const cases: ListBoxCase[] = [
   {
     name: "Dropdown",
@@ -53,6 +66,9 @@ export const cases: ListBoxCase[] = [
     opensOnInput: false,
     selectCloses: true,
     windowEvents: ["click"],
+    preselect: (id) => ({ selectedId: id }),
+    homeEndMove: true,
+    navigatesFromSelection: true,
     form: DropdownForm,
     skeleton: {
       component: DropdownSkeleton,
@@ -68,6 +84,9 @@ export const cases: ListBoxCase[] = [
     opensOnInput: true,
     selectCloses: true,
     windowEvents: ["click"],
+    preselect: (id) => ({ selectedId: id }),
+    homeEndMove: true,
+    navigatesFromSelection: true,
     form: ComboBoxForm,
     skeleton: {
       component: ComboBoxSkeleton,
@@ -83,6 +102,9 @@ export const cases: ListBoxCase[] = [
     opensOnInput: false,
     selectCloses: false,
     windowEvents: ["click", "focusin"],
+    preselect: preselectInPlace,
+    homeEndMove: true,
+    navigatesFromSelection: false,
     form: MultiSelectForm,
     skeleton: {
       component: MultiSelectSkeleton,
@@ -103,6 +125,9 @@ export const cases: ListBoxCase[] = [
     opensOnInput: true,
     selectCloses: false,
     windowEvents: ["click", "focusin"],
+    preselect: preselectInPlace,
+    homeEndMove: false,
+    navigatesFromSelection: false,
     form: MultiSelectForm,
     formProps: { filterable: true },
   },
