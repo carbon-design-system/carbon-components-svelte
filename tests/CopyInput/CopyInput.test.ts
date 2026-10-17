@@ -204,6 +204,65 @@ describe("CopyInput", () => {
     expect(input).toHaveAttribute("type", "password");
   });
 
+  describe("maskedValue", () => {
+    const maskedValue = "secret-••••-123";
+
+    it("shows the masked text and copies the value", async () => {
+      const clipboard = vi.spyOn(navigator.clipboard, "writeText");
+      render(CopyInput, { props: { maskedValue } });
+
+      const input = screen.getByLabelText("API token");
+      expect(input).toHaveValue(maskedValue);
+      expect(input).toHaveAttribute("type", "text");
+
+      await user.click(
+        screen.getByRole("button", { name: "Copy to clipboard" }),
+      );
+      expect(clipboard).toHaveBeenCalledWith("secret-token-123");
+    });
+
+    it("stays masked on focus when revealMode is unset", async () => {
+      render(CopyInput, { props: { maskedValue } });
+
+      const input = screen.getByLabelText("API token");
+      await fireEvent.focus(input);
+
+      expect(input).toHaveValue(maskedValue);
+    });
+
+    it("shows the value on focus when revealMode is focus", async () => {
+      render(CopyInput, { props: { maskedValue, revealMode: "focus" } });
+
+      const input = screen.getByLabelText("API token");
+      await fireEvent.focus(input);
+      expect(input).toHaveValue("secret-token-123");
+
+      await fireEvent.blur(input);
+      expect(input).toHaveValue(maskedValue);
+    });
+
+    it("shows the value on hover when revealMode is hover-focus", async () => {
+      render(CopyInput, { props: { maskedValue, revealMode: "hover-focus" } });
+
+      const input = screen.getByLabelText("API token");
+      await fireEvent.mouseEnter(getFieldWrapper(input));
+      expect(input).toHaveValue("secret-token-123");
+
+      await fireEvent.mouseLeave(getFieldWrapper(input));
+      expect(input).toHaveValue(maskedValue);
+    });
+
+    it("shows the value once maskedValue is cleared", async () => {
+      const { rerender } = render(CopyInput, { props: { maskedValue } });
+
+      await rerender({ maskedValue: undefined });
+
+      expect(screen.getByLabelText("API token")).toHaveValue(
+        "secret-token-123",
+      );
+    });
+  });
+
   it("async copy delays feedback until resolved", async () => {
     let resolveCopy: () => void = () => {};
     const copy = vi.fn(
