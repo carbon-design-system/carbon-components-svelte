@@ -80,6 +80,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TagSet",
       "CodeSnippet",
       "RelativeTime",
+      "ChatLog",
       "Countdown",
     ],
   },
