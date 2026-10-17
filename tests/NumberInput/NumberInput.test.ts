@@ -1,12 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
-import NumberInputFluidForm from "./NumberInput.fluidForm.test.svelte";
-import NumberInputFluidSkeleton from "./NumberInput.fluidSkeleton.test.svelte";
-import NumberInputFluidSlot from "./NumberInput.fluidSlot.test.svelte";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
 
@@ -18,25 +15,6 @@ describe("NumberInput", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(0);
   });
 
-  it("selects the full value on focus when selectTextOnFocus is true", async () => {
-    render(NumberInput, { props: { selectTextOnFocus: true, value: 42 } });
-
-    const input = screen.getByRole("spinbutton");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await user.click(input);
-    await tick();
-
-    expect(select).toHaveBeenCalled();
-  });
-
-  it("keeps the selected value through the click's mouseup", async () => {
-    render(NumberInput, { props: { selectTextOnFocus: true, value: 42 } });
-
-    const mouseup = await clickToFocus(screen.getByRole("spinbutton"));
-    expect(mouseup.defaultPrevented).toBe(true);
-  });
-
   it("keeps the selected value through the click's mouseup in text mode", async () => {
     render(NumberInput, {
       props: { selectTextOnFocus: true, value: 4.2, allowDecimal: true },
@@ -44,31 +22,6 @@ describe("NumberInput", () => {
 
     const mouseup = await clickToFocus(screen.getByRole("textbox"));
     expect(mouseup.defaultPrevented).toBe(true);
-  });
-
-  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(NumberInput, { props: { value: 42 } });
-
-    const input = screen.getByRole("spinbutton");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await user.click(input);
-    await tick();
-
-    expect(select).not.toHaveBeenCalled();
-  });
-
-  it("does not select text on focus when disabled", async () => {
-    render(NumberInput, {
-      props: { selectTextOnFocus: true, disabled: true, value: 42 },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    assert(input instanceof HTMLInputElement);
-    const select = vi.spyOn(input, "select");
-    await fireEvent.focus(input);
-
-    expect(select).not.toHaveBeenCalled();
   });
 
   it("should handle step value", () => {
@@ -160,74 +113,6 @@ describe("NumberInput", () => {
   });
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      render(NumberInput);
-
-      expect(document.querySelector(".bx--number-input--fluid")).toBeNull();
-      expect(document.querySelector(".bx--number-input__divider")).toBeNull();
-    });
-
-    it("renders fluid variant and suppresses helper text", () => {
-      render(NumberInput, { fluid: true, helperText: "Helper text" });
-
-      const input = screen.getByLabelText("Clusters");
-      expect(input.closest(".bx--form-item")).toHaveClass(
-        "bx--number-input--fluid",
-      );
-      expect(
-        document.querySelector(".bx--number-input__divider"),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(input).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("renders the error message inside the input wrapper", () => {
-      render(NumberInput, {
-        fluid: true,
-        id: "test-input",
-        invalid: true,
-        invalidText: "Invalid input",
-      });
-
-      const message = screen.getByText("Invalid input");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message).toHaveAttribute("role", "alert");
-      expect(message.closest(".bx--number__input-wrapper")).not.toBeNull();
-      const input = screen.getByLabelText("Clusters");
-      expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
-      expect(input).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("renders the warning message inside the input wrapper", () => {
-      render(NumberInput, {
-        fluid: true,
-        warn: true,
-        warnText: "Warning message",
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--number__input-wrapper")).not.toBeNull();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(NumberInput, {
-          fluid: true,
-          invalid: true,
-          invalidText: "Invalid input",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        });
-
-        expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(document.querySelector("[data-invalid]")).toBeNull();
-      },
-    );
-
     it.each([
       { props: {}, neutral: true },
       { props: { invalid: true, invalidText: "Invalid" }, neutral: false },
@@ -275,31 +160,6 @@ describe("NumberInput", () => {
       expect(input.closest(".bx--form-item")).toHaveClass(
         "bx--number-input--fluid",
       );
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(NumberInputFluidForm);
-
-      const input = screen.getByLabelText("Fluid form clusters");
-      expect(input.closest(".bx--form-item")).toHaveClass(
-        "bx--number-input--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(NumberInputFluidSlot);
-
-      expect(
-        screen.getByText("Custom label content").closest("label"),
-      ).toHaveClass("bx--label--slotted");
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(NumberInputFluidSlot, { fluid: false });
-
-      expect(
-        screen.getByText("Custom label content").closest("label"),
-      ).not.toHaveClass("bx--label--slotted");
     });
 
     it("toggles the fluid focus modifier on input focus and blur", async () => {
@@ -2018,19 +1878,5 @@ describe("NumberInput", () => {
       const input = screen.getByLabelText("Clusters");
       expect(input).not.toHaveAttribute("pattern");
     });
-  });
-
-  it("renders fluid skeleton state", () => {
-    render(NumberInputFluidSkeleton);
-
-    const skeleton = screen.getByTestId("fluid-number-input-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass(
-      "bx--form-item",
-      "bx--text-input--fluid__skeleton",
-    );
-    expect(skeleton.children).toHaveLength(2);
-    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
-    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });

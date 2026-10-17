@@ -130,7 +130,8 @@ export const cases: FieldCase[] = [
     },
     fluidSkeleton: {
       component: FluidPinCodeInputSkeleton,
-      ...textInputSkeleton,
+      className: "bx--pin-code-input--fluid__skeleton",
+      field: "bx--text-input",
     },
   },
 ];

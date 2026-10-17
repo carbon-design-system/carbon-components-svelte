@@ -1,11 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
-import { clickToFocus } from "../utils/click-to-focus";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
-import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
-import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
 import PasswordInputForm from "./PasswordInput.form.test.svelte";
 import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
@@ -53,63 +49,6 @@ describe("PasswordInput", () => {
       expect(
         screen.getByPlaceholderText("Enter password..."),
       ).toBeInTheDocument();
-    });
-
-    it("selects the full value on focus when selectTextOnFocus is true", async () => {
-      render(PasswordInput, {
-        labelText: "Password",
-        value: "secret123",
-        selectTextOnFocus: true,
-      });
-
-      const input = screen.getByLabelText("Password");
-      assert(input instanceof HTMLInputElement);
-      await user.click(input);
-      await tick();
-
-      expect(input.selectionStart).toBe(0);
-      expect(input.selectionEnd).toBe("secret123".length);
-    });
-
-    it("keeps the selected value through the click's mouseup", async () => {
-      render(PasswordInput, {
-        labelText: "Password",
-        value: "secret123",
-        selectTextOnFocus: true,
-      });
-
-      const mouseup = await clickToFocus(screen.getByLabelText("Password"));
-      expect(mouseup.defaultPrevented).toBe(true);
-    });
-
-    it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-      render(PasswordInput, {
-        labelText: "Password",
-        value: "secret123",
-      });
-
-      const input = screen.getByLabelText("Password");
-      assert(input instanceof HTMLInputElement);
-      await user.click(input);
-      await tick();
-
-      expect(input.selectionStart).toBe(input.selectionEnd);
-    });
-
-    it("does not select text on focus when disabled", async () => {
-      render(PasswordInput, {
-        labelText: "Password",
-        value: "secret123",
-        selectTextOnFocus: true,
-        disabled: true,
-      });
-
-      const input = screen.getByLabelText("Password");
-      assert(input instanceof HTMLInputElement);
-      const select = vi.spyOn(input, "select");
-      await fireEvent.focus(input);
-
-      expect(select).not.toHaveBeenCalled();
     });
 
     it("should toggle password visibility", async () => {
@@ -512,63 +451,6 @@ describe("PasswordInput", () => {
   });
 
   describe("fluid variant", () => {
-    it("does not render fluid classes by default", () => {
-      render(PasswordInput, { labelText: "Password" });
-
-      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
-      expect(document.querySelector(".bx--text-input__divider")).toBeNull();
-    });
-
-    it("renders fluid variant and suppresses helper text", () => {
-      render(PasswordInput, {
-        fluid: true,
-        labelText: "Password",
-        helperText: "Helper text",
-      });
-
-      const input = screen.getByLabelText("Password");
-      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
-        "bx--text-input--fluid",
-      );
-      expect(
-        document.querySelector(".bx--text-input__divider"),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-      expect(input).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("renders the error message inside the input wrapper", () => {
-      render(PasswordInput, {
-        fluid: true,
-        labelText: "Password",
-        id: "test-password",
-        invalid: true,
-        invalidText: "Invalid password",
-      });
-
-      const message = screen.getByText("Invalid password");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message).toHaveAttribute("role", "alert");
-      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
-      expect(screen.getByLabelText("Password")).toHaveAttribute(
-        "aria-errormessage",
-        "error-test-password",
-      );
-    });
-
-    it("renders the warning message inside the input wrapper", () => {
-      render(PasswordInput, {
-        fluid: true,
-        labelText: "Password",
-        warn: true,
-        warnText: "Warning message",
-      });
-
-      const message = screen.getByText("Warning message");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
-    });
-
     it("keeps the visibility toggle when fluid and invalid", () => {
       render(PasswordInput, {
         fluid: true,
@@ -580,60 +462,6 @@ describe("PasswordInput", () => {
       expect(
         document.querySelector(".bx--text-input--password__visibility__toggle"),
       ).toBeInTheDocument();
-    });
-
-    it.each([{ disabled: true }, { readonly: true }])(
-      "suppresses invalid and warn states when %o",
-      (props) => {
-        render(PasswordInput, {
-          fluid: true,
-          labelText: "Password",
-          invalid: true,
-          invalidText: "Invalid password",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        });
-
-        expect(screen.queryByText("Invalid password")).not.toBeInTheDocument();
-        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-        expect(document.querySelector("[data-invalid]")).toBeNull();
-      },
-    );
-
-    it("ignores fluid for the inline variant", () => {
-      render(PasswordInput, {
-        fluid: true,
-        inline: true,
-        labelText: "Password",
-      });
-
-      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
-    });
-
-    it("inherits fluid from the FluidForm context", () => {
-      render(PasswordInputFluidForm);
-
-      const input = screen.getByLabelText("Fluid form password");
-      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
-        "bx--text-input--fluid",
-      );
-    });
-
-    it("marks the label as slotted when fluid", () => {
-      render(PasswordInputFluidSlot);
-
-      expect(screen.getByText("Custom label content")).toHaveClass(
-        "bx--label--slotted",
-      );
-    });
-
-    it("does not mark the label as slotted when not fluid", () => {
-      render(PasswordInputFluidSlot, { fluid: false });
-
-      expect(screen.getByText("Custom label content")).not.toHaveClass(
-        "bx--label--slotted",
-      );
     });
   });
 
