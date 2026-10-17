@@ -14,3 +14,9 @@
 {#if selected}
   <p data-testid="selected-value">Selected: {selected}</p>
 {/if}
+
+<div data-testid="fluid-invalid" style="width: 320px">
+  <Select fluid labelText="Region" invalid invalidText="Fix this value">
+    <SelectItem value="eu" text="EU Germany" />
+  </Select>
+</div>
