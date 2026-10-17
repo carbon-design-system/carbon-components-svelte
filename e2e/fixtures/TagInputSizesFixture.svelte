@@ -10,3 +10,10 @@
     <TextInput {size} labelText="Name" placeholder="Name" />
   </div>
 {/each}
+
+{#each sizes as size (size ?? "md")}
+  <div data-narrow={size ?? "md"} style="width: 12rem">
+    <TagInput {size} labelText="Topics" value={["api"]} />
+    <TextInput {size} labelText="Name" />
+  </div>
+{/each}
