@@ -4,7 +4,7 @@
     <g id="slider" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="56" width="56" height="8"></rect>
         <rect id="value-box" fill="var(--cds-border-subtle, #e0e0e0)" x="212" y="52" width="32" height="16"></rect>
-        <rect id="value-text" fill="var(--cds-text-placeholder, #a8a8a8)" x="220" y="58" width="16" height="4"></rect>
+        <rect id="value-text" fill="var(--cds-text-03, #a8a8a8)" x="220" y="58" width="16" height="4"></rect>
         <rect id="track" fill="var(--cds-border-subtle, #e0e0e0)" rx="2" x="76" y="88" width="168" height="4"></rect>
         <rect id="track-fill" fill="var(--cds-interactive-01, #0f62fe)" rx="2" x="76" y="88" width="90" height="4"></rect>
         <circle id="handle" fill="var(--cds-interactive-01, #0f62fe)" stroke="var(--cds-ui-02, #ffffff)" stroke-width="2" cx="166" cy="90" r="8"></circle>

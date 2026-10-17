@@ -11,6 +11,6 @@
         <circle id="step-3-outer" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" cx="220" cy="90" r="10"></circle>
         <rect id="label-1" fill="var(--cds-text-secondary, #525252)" x="84" y="108" width="32" height="6"></rect>
         <rect id="label-2" fill="var(--cds-text-secondary, #525252)" x="144" y="108" width="32" height="6"></rect>
-        <rect id="label-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="204" y="108" width="32" height="6"></rect>
+        <rect id="label-3" fill="var(--cds-text-03, #a8a8a8)" x="204" y="108" width="32" height="6"></rect>
     </g>
 </svg>

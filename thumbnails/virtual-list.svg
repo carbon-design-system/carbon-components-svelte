@@ -8,9 +8,9 @@
         <rect id="row-divider-1" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="68" width="166" height="1"></rect>
         <rect id="row-divider-2" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="90" width="166" height="1"></rect>
         <rect id="row-divider-3" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="112" width="166" height="1"></rect>
-        <rect id="row-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="54" width="96" height="6"></rect>
-        <rect id="row-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="76" width="120" height="6"></rect>
-        <rect id="row-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="98" width="80" height="6"></rect>
-        <rect id="row-4" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="120" width="108" height="6"></rect>
+        <rect id="row-1" fill="var(--cds-text-03, #a8a8a8)" x="88" y="54" width="96" height="6"></rect>
+        <rect id="row-2" fill="var(--cds-text-03, #a8a8a8)" x="88" y="76" width="120" height="6"></rect>
+        <rect id="row-3" fill="var(--cds-text-03, #a8a8a8)" x="88" y="98" width="80" height="6"></rect>
+        <rect id="row-4" fill="var(--cds-text-03, #a8a8a8)" x="88" y="120" width="108" height="6"></rect>
     </g>
 </svg>

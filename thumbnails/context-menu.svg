@@ -13,10 +13,10 @@
         <rect id="menu" fill="var(--cds-field-01, #f4f4f4)" x="108" y="44" width="112" height="96"></rect>
         <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="120" y="56" width="64" height="6"></rect>
         <path id="check" fill="var(--cds-icon-primary, #161616)" transform="translate(200, 53) scale(0.375)" d="M13 24 4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"></path>
-        <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="120" y="76" width="72" height="6"></rect>
-        <rect id="item-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="120" y="96" width="56" height="6"></rect>
+        <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="120" y="76" width="72" height="6"></rect>
+        <rect id="item-3" fill="var(--cds-text-03, #a8a8a8)" x="120" y="96" width="56" height="6"></rect>
         <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="108" y="111" width="112" height="1"></rect>
-        <rect id="item-4" fill="var(--cds-text-placeholder, #a8a8a8)" x="120" y="122" width="48" height="6"></rect>
+        <rect id="item-4" fill="var(--cds-text-03, #a8a8a8)" x="120" y="122" width="48" height="6"></rect>
         <path id="pointer" fill="var(--cds-icon-primary, #161616)" stroke="var(--cds-ui-02, #ffffff)" stroke-width="1" d="M100 36 L100 52 L104 48 L107 55 L110 54 L107 47 L112 47 Z"></path>
     </g>
 </svg>

@@ -6,8 +6,8 @@
         <rect id="line-1" fill="var(--cds-text-secondary, #525252)" x="68" y="56" width="100" height="6"></rect>
         <rect id="line-2" fill="var(--cds-text-secondary, #525252)" x="68" y="70" width="140" height="6"></rect>
         <rect id="line-3" fill="var(--cds-text-secondary, #525252)" x="68" y="84" width="120" height="6"></rect>
-        <rect id="line-4" fill="var(--cds-text-placeholder, #a8a8a8)" x="68" y="98" width="80" height="6"></rect>
-        <rect id="line-5" fill="var(--cds-text-placeholder, #a8a8a8)" x="68" y="112" width="110" height="6"></rect>
+        <rect id="line-4" fill="var(--cds-text-03, #a8a8a8)" x="68" y="98" width="80" height="6"></rect>
+        <rect id="line-5" fill="var(--cds-text-03, #a8a8a8)" x="68" y="112" width="110" height="6"></rect>
         <g id="copy-icon" transform="translate(236, 48) scale(0.4375)" fill="var(--cds-border-strong, #8d8d8d)">
             <path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"></path>
             <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"></path>

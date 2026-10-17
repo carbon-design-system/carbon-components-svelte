@@ -7,7 +7,7 @@
         <rect id="subtitle" fill="var(--cds-text-disabled, #c6c6c6)" x="64" y="86" width="148" height="6"></rect>
         <g id="tabs">
             <rect id="tab-1" fill="var(--cds-text-secondary, #525252)" x="72" y="114" width="40" height="6"></rect>
-            <rect id="tab-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="136" y="114" width="44" height="6"></rect>
+            <rect id="tab-2" fill="var(--cds-text-03, #a8a8a8)" x="136" y="114" width="44" height="6"></rect>
             <rect id="track" fill="var(--cds-border-subtle, #e0e0e0)" x="64" y="131" width="192" height="1"></rect>
             <rect id="selected" fill="var(--cds-interactive-01, #0f62fe)" x="64" y="130" width="56" height="2"></rect>
         </g>

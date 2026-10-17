@@ -3,14 +3,14 @@
     <title>radio-tile</title>
     <g id="radio-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="tile-1" fill="var(--cds-field-01, #f4f4f4)" x="76" y="40" width="168" height="36"></rect>
-        <rect id="label-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="54" width="72" height="8"></rect>
+        <rect id="label-1" fill="var(--cds-text-03, #a8a8a8)" x="88" y="54" width="72" height="8"></rect>
         <circle id="radio-1" fill="none" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1" cx="228" cy="58" r="6.5"></circle>
         <rect id="tile-2" fill="var(--cds-field-01, #f4f4f4)" x="76" y="80" width="168" height="36"></rect>
         <rect id="tile-2-selected" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="76.5" y="80.5" width="167" height="35"></rect>
         <rect id="label-2" fill="var(--cds-text-secondary, #525252)" x="88" y="94" width="72" height="8"></rect>
         <path id="radio-2" fill="var(--cds-icon-primary, #161616)" transform="translate(220, 90) scale(0.5)" d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z"></path>
         <rect id="tile-3" fill="var(--cds-field-01, #f4f4f4)" x="76" y="120" width="168" height="36"></rect>
-        <rect id="label-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="134" width="72" height="8"></rect>
+        <rect id="label-3" fill="var(--cds-text-03, #a8a8a8)" x="88" y="134" width="72" height="8"></rect>
         <circle id="radio-3" fill="none" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1" cx="228" cy="138" r="6.5"></circle>
     </g>
 </svg>

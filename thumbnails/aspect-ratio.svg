@@ -6,7 +6,7 @@
         <rect id="object" fill="var(--cds-field-01, #f4f4f4)" x="82" y="58" width="156" height="64"></rect>
         <path id="bracket-tl" d="M82 70L82 58L94 58" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" fill="none" stroke-linecap="square"></path>
         <path id="bracket-br" d="M238 110L238 122L226 122" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" fill="none" stroke-linecap="square"></path>
-        <rect id="stub-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="140" y="82" width="40" height="5"></rect>
+        <rect id="stub-1" fill="var(--cds-text-03, #a8a8a8)" x="140" y="82" width="40" height="5"></rect>
         <rect id="stub-2" fill="var(--cds-text-disabled, #c6c6c6)" x="148" y="94" width="24" height="4"></rect>
     </g>
 </svg>

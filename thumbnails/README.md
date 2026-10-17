@@ -202,7 +202,7 @@ GitHub and `rsvg-convert`. Reuse these pairs exactly:
 | `--cds-field-01` | `#f4f4f4` | Fields, tiles, unpressed buttons |
 | `--cds-border-subtle` | `#e0e0e0` | Rules, tracks, pressed or selected fills, media blocks |
 | `--cds-text-disabled` | `#c6c6c6` | Secondary text bars, dashed outlines |
-| `--cds-text-placeholder` | `#a8a8a8` | Primary text bars |
+| `--cds-text-03` | `#a8a8a8` | Primary text bars |
 | `--cds-border-strong` | `#8d8d8d` | Strong borders, emphasized blocks |
 | `--cds-text-secondary` | `#525252` | Headings, terms, labels with weight |
 | `--cds-button-secondary` | `#393939` | Secondary buttons, dark selected segments |
