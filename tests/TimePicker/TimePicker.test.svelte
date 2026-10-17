@@ -25,6 +25,11 @@
   export let ref: ComponentProps<TimePicker>["ref"] = null;
   export let fluid: ComponentProps<TimePicker>["fluid"] = false;
   export let selectTextOnFocus: ComponentProps<TimePicker>["selectTextOnFocus"] = false;
+  export let onChange: () => void = () => {};
+  export let onInput: () => void = () => {};
+  export let onKeydown: () => void = () => {};
+  export let onFocus: () => void = () => {};
+  export let onBlur: () => void = () => {};
 </script>
 
 <TimePicker
@@ -48,24 +53,11 @@
   {ref}
   {fluid}
   {selectTextOnFocus}
-  on:change={() => {
-    console.log("change");
-  }}
-  on:input={() => {
-    console.log("input");
-  }}
-  on:keydown={() => {
-    console.log("keydown");
-  }}
-  on:keyup={() => {
-    console.log("keyup");
-  }}
-  on:focus={() => {
-    console.log("focus");
-  }}
-  on:blur={() => {
-    console.log("blur");
-  }}
+  on:change={onChange}
+  on:input={onInput}
+  on:keydown={onKeydown}
+  on:focus={onFocus}
+  on:blur={onBlur}
 >
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
