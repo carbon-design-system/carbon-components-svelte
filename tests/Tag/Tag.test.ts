@@ -223,6 +223,7 @@ describe("Tag", () => {
 
   it.each([
     ["Small tag", "bx--tag--sm"],
+    ["Extra small tag", "bx--tag--xs"],
     ["Large tag", "bx--tag--lg"],
     ["Large filterable", "bx--tag--lg"],
     ["Large filterable", "bx--tag--filter"],
@@ -231,6 +232,14 @@ describe("Tag", () => {
     render(Tag);
 
     expect(screen.getByText(label).closest(".bx--tag")).toHaveClass(cls);
+  });
+
+  it("gives the extra small size its own class, not the small one", () => {
+    render(Tag);
+
+    const xsTag = screen.getByText("Extra small tag").closest(".bx--tag");
+    expect(xsTag).toHaveClass("bx--tag--xs");
+    expect(xsTag).not.toHaveClass("bx--tag--sm");
   });
 
   it("renders large skeleton tag", () => {

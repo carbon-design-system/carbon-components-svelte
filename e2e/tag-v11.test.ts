@@ -112,7 +112,7 @@ test.describe("Tag (Carbon v11)", () => {
         return `${tag.className}: ${s.marginTop} ${s.marginRight} ${s.marginBottom} ${s.marginLeft}`;
       }),
     );
-    expect(margins).toHaveLength(24);
+    expect(margins).toHaveLength(32);
     expect(
       margins.filter((margin) => !margin.endsWith("0px 0px 0px 0px")),
     ).toEqual([]);

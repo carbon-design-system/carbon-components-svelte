@@ -396,6 +396,31 @@
   @include tags;
 }
 
+// ccs: 16px tag for 24px (`xs`) fields, which leave an 18px `sm` tag
+// one pixel inside their 2px focus or invalid outline. The label keeps
+// `label-01`'s 16px line height, and the close icon stays 16px, filling
+// its button.
+@mixin tag-xs {
+  .#{$prefix}--tag--xs {
+    min-height: to-rem(16px);
+    padding: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tag--xs.#{$prefix}--tag--filter {
+    padding-inline-end: 0;
+  }
+
+  .#{$prefix}--tag--xs .#{$prefix}--tag__close-icon {
+    width: to-rem(16px);
+    height: to-rem(16px);
+    margin-inline-start: to-rem(4px);
+  }
+}
+
+@include exports('tag-xs') {
+  @include tag-xs;
+}
+
 // carbon-components-svelte patch (formerly css/_tag.scss)
 @mixin tag-lg {
   .#{$prefix}--tag--lg {

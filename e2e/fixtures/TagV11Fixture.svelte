@@ -50,7 +50,7 @@
 </div>
 
 <div data-testid="margins">
-  {#each ["sm", "default", "lg"] as size (size)}
+  {#each ["xs", "sm", "default", "lg"] as size (size)}
     <Tag {size}>Static</Tag>
     <Tag {size} filter>Filter</Tag>
     <Tag {size} interactive>Interactive</Tag>
