@@ -421,6 +421,28 @@ describe("Dropdown", () => {
       );
     });
 
+    it.each(["Delete", "Backspace"])(
+      "%s dispatches clear with the keyboard event",
+      async (key) => {
+        const onclear = vi.fn();
+        render(Dropdown, {
+          props: {
+            items,
+            selectedId: "0",
+            labelText: "Contact",
+            clearable: true,
+            onclear,
+          },
+        });
+
+        screen.getByRole("combobox").focus();
+        await user.keyboard(`{${key}}`);
+
+        expect(onclear).toHaveBeenCalledOnce();
+        expect(onclear.mock.calls[0][0].detail).toBeInstanceOf(KeyboardEvent);
+      },
+    );
+
     it("does not clear the selection when clearable is false", async () => {
       render(Dropdown, {
         props: {
@@ -441,6 +463,7 @@ describe("Dropdown", () => {
     });
 
     it("does not clear the selection when read-only", async () => {
+      const onclear = vi.fn();
       render(Dropdown, {
         props: {
           items,
@@ -448,6 +471,7 @@ describe("Dropdown", () => {
           labelText: "Contact",
           clearable: true,
           readonly: true,
+          onclear,
         },
       });
 
@@ -458,6 +482,7 @@ describe("Dropdown", () => {
 
       expect(within(combobox).getByText("Slack")).toBeInTheDocument();
       expect(screen.getByRole("status")).toHaveTextContent("");
+      expect(onclear).not.toHaveBeenCalled();
     });
 
     it("Delete with nothing selected announces nothing", async () => {
