@@ -495,6 +495,156 @@ describe("PinCodeInput", () => {
     );
   });
 
+  it("dispatches complete again after a segment is emptied and refilled", async () => {
+    const onComplete = vi.fn();
+    render(PinCodeInput, { props: { onComplete } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("1234");
+    await tick();
+    expect(onComplete).toHaveBeenCalledOnce();
+
+    await user.keyboard("{Delete}");
+    await tick();
+    expect(onComplete).toHaveBeenCalledOnce();
+
+    await user.keyboard("9");
+    await tick();
+    expect(onComplete).toHaveBeenCalledTimes(2);
+    expect(onComplete).toHaveBeenLastCalledWith(
+      expect.objectContaining({ value: "1239" }),
+    );
+  });
+
+  describe("clear", () => {
+    it.each(["Backspace", "Delete"])(
+      "dispatches once when %s empties the last filled segment",
+      async (key) => {
+        const onClear = vi.fn();
+        render(PinCodeInput, { props: { value: "12", onClear } });
+        const inputs = getInputs();
+
+        inputs[1].focus();
+        await user.keyboard(`{${key}}`);
+        await tick();
+        expect(onClear).not.toHaveBeenCalled();
+
+        inputs[0].focus();
+        await user.keyboard(`{${key}}`);
+        await tick();
+        expect(onClear).toHaveBeenCalledOnce();
+      },
+    );
+
+    it("does not dispatch again on a further empty edit", async () => {
+      const onClear = vi.fn();
+      render(PinCodeInput, { props: { value: "1", onClear } });
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      await user.keyboard("{Delete}");
+      await tick();
+      expect(onClear).toHaveBeenCalledOnce();
+
+      // Backspace on an empty segment re-clears the previous (empty) one.
+      inputs[1].focus();
+      await user.keyboard("{Backspace}");
+      await tick();
+      expect(onClear).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe("paste", () => {
+    it("fills from the focused segment on a partial paste", async () => {
+      const onPaste = vi.fn();
+      const { component } = render(PinCodeInput, {
+        props: { value: "1234", onPaste },
+      });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await fireEvent.paste(inputs[2], {
+        clipboardData: { getData: () => "56" },
+      });
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "5", "6"]);
+      expect(onPaste).toHaveBeenCalledWith(
+        expect.objectContaining({ value: "56" }),
+      );
+    });
+
+    it("truncates an over-length paste at `count`", async () => {
+      const onChange = vi.fn();
+      const { component } = render(PinCodeInput, { props: { onChange } });
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      await fireEvent.paste(inputs[0], {
+        clipboardData: { getData: () => "123456" },
+      });
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4"]);
+      expect(onChange.mock.calls).toEqual([
+        [{ value: "1234", code: ["1", "2", "3", "4"] }],
+      ]);
+    });
+
+    it("does nothing when read-only", async () => {
+      const onPaste = vi.fn();
+      const onChange = vi.fn();
+      const { component } = render(PinCodeInput, {
+        props: { readonly: true, value: "12", onPaste, onChange },
+      });
+      const inputs = getInputs();
+
+      await fireEvent.paste(inputs[2], {
+        clipboardData: { getData: () => "34" },
+      });
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "", ""]);
+      expect(onPaste).not.toHaveBeenCalled();
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("arrow keys", () => {
+    it("moves focus forward with ArrowRight", async () => {
+      render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      await user.keyboard("{ArrowRight}");
+      expect(inputs[1]).toHaveFocus();
+    });
+
+    it("keeps focus on ArrowLeft in the first segment", async () => {
+      render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      // Not prevented, so the caret still moves natively.
+      expect(await fireEvent.keyDown(inputs[0], { key: "ArrowLeft" })).toBe(
+        true,
+      );
+      expect(inputs[0]).toHaveFocus();
+    });
+
+    it("keeps focus on ArrowRight in the last segment", async () => {
+      render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[3].focus();
+      expect(await fireEvent.keyDown(inputs[3], { key: "ArrowRight" })).toBe(
+        true,
+      );
+      expect(inputs[3]).toHaveFocus();
+    });
+  });
+
   it("masks the segments when mask is true", () => {
     render(PinCodeInput, { props: { mask: true } });
     const inputs = getInputs();
@@ -577,11 +727,15 @@ describe("PinCodeInput", () => {
 
   it("exposes OTP-friendly input attributes on every segment", () => {
     render(PinCodeInput);
-    for (const input of getInputs()) {
+    getInputs().forEach((input, index) => {
       expect(input).toHaveAttribute("spellcheck", "false");
       expect(input).toHaveAttribute("autocorrect", "off");
       expect(input).toHaveAttribute("autocapitalize", "off");
-    }
+      expect(input).toHaveAttribute(
+        "autocomplete",
+        index === 0 ? "one-time-code" : "off",
+      );
+    });
   });
 
   it("selects a segment's value on focus when selectTextOnFocus is true", async () => {
