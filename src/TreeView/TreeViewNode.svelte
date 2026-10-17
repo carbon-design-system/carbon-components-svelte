@@ -117,6 +117,7 @@
     clickNode,
     selectNode,
     focusNode,
+    serverTabStopId,
   } = getContext("carbon:TreeView");
 
   function offset() {
@@ -179,7 +180,7 @@
       href={disabled ? undefined : href}
       target={disabled ? undefined : target}
       rel={resolveLinkRel(target)}
-      tabindex={disabled ? undefined : -1}
+      tabindex={disabled ? undefined : id === serverTabStopId ? 0 : -1}
       aria-current={id === $activeNodeId ? "page" : undefined}
       aria-disabled={disabled}
       aria-level={level}
@@ -242,7 +243,7 @@
     data-tree-row-id={id}
     role="treeitem"
     id="{$treeId}-{id}"
-    tabindex={disabled ? undefined : -1}
+    tabindex={disabled ? undefined : id === serverTabStopId ? 0 : -1}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode

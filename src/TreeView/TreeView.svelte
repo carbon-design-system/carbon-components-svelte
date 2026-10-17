@@ -1117,8 +1117,20 @@
 
   let initialRenderComplete = false;
 
+  /**
+   * In server markup, the row that gets the tab stop once the tree mounts
+   * (the first enabled one), so the tree is reachable by keyboard before
+   * scripts run. In the browser the roving tab stop below takes over.
+   * @type {string | number | undefined}
+   */
+  const serverTabStopId =
+    typeof window === "undefined"
+      ? nodes.find((node) => !node.disabled)?.id
+      : undefined;
+
   setContext("carbon:TreeView", {
     treeId,
+    serverTabStopId,
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,

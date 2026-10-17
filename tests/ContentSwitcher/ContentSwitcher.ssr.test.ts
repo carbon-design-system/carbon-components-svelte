@@ -1,24 +1,21 @@
 // @vitest-environment node
 import { renderSSR } from "../utils/ssr";
-import ContentSwitcherSelectedId from "./ContentSwitcher.selectedId.test.svelte";
-import ContentSwitcher from "./ContentSwitcher.test.svelte";
-
-function selectedStates(document: Document) {
-  return [...document.querySelectorAll("[role='tab']")].map((tab) =>
-    tab.getAttribute("aria-selected"),
-  );
-}
+import ContentSwitcherSsr from "./ContentSwitcherSsr.test.svelte";
 
 describe("ContentSwitcher server render", () => {
-  it("renders the first switch as selected by default", () => {
-    const { document } = renderSSR(ContentSwitcher);
-    expect(selectedStates(document)).toEqual(["true", "false", "false"]);
-  });
+  it.each([0, 2])(
+    "makes the selected switch (%i) the tab stop before hydration",
+    (selectedIndex) => {
+      const { document } = renderSSR(ContentSwitcherSsr, { selectedIndex });
+      const switches = [...document.querySelectorAll("[role='tab']")];
 
-  it("renders the `selectedId` switch as selected", () => {
-    const { document } = renderSSR(ContentSwitcherSelectedId, {
-      selectedId: "switch-b",
-    });
-    expect(selectedStates(document)).toEqual(["false", "true", "false"]);
-  });
+      expect(switches).toHaveLength(3);
+      switches.forEach((tab, index) => {
+        expect(tab).toHaveAttribute(
+          "tabindex",
+          index === selectedIndex ? "0" : "-1",
+        );
+      });
+    },
+  );
 });
