@@ -790,3 +790,127 @@ $ai-label-sizes: (
 @include exports("ai-label-tiles") {
   @include ai-label-tiles;
 }
+
+/// `decorator` slots of modals and data tables, and their AI surfaces
+/// @access private
+/// @group components
+@mixin ai-label-overlays {
+  // Modal and ComposedModal: the label sits left of the close button.
+  .#{$prefix}--modal--inner__decorator {
+    position: absolute;
+    z-index: 1;
+    top: $carbon--spacing-03;
+    right: $carbon--spacing-09;
+    display: flex;
+  }
+
+  .#{$prefix}--modal--decorator .#{$prefix}--modal-header {
+    padding-right: to-rem(88px);
+  }
+
+  .#{$prefix}--modal--ai-label {
+    background-color: ai-token("ai-overlay");
+  }
+
+  .#{$prefix}--modal--ai-label .#{$prefix}--modal-container {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(
+          to top,
+          ai-token("ai-aura-start") 0%,
+          15%,
+          ai-token("ai-aura-end") 50%
+        )
+        padding-box,
+      linear-gradient($ui-01, $ui-01) padding-box,
+      linear-gradient(
+          to bottom,
+          ai-token("ai-border-start"),
+          ai-token("ai-border-end")
+        )
+        border-box,
+      linear-gradient($ui-01, $ui-01) border-box;
+    box-shadow:
+      inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px) ai-token("ai-inner-shadow"),
+      0 to-rem(24px) to-rem(40px) to-rem(-24px) ai-token("ai-drop-shadow");
+  }
+
+  // DataTable title
+  .#{$prefix}--data-table-header--decorator {
+    position: relative;
+    padding-right: to-rem(56px);
+  }
+
+  .#{$prefix}--data-table-header__decorator {
+    position: absolute;
+    top: $carbon--spacing-05;
+    right: $carbon--spacing-05;
+    display: flex;
+  }
+
+  // DataTable column headers
+  .#{$prefix}--table-header-label--decorator {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--table-header-label--decorator-inner {
+    display: flex;
+    padding-left: $carbon--spacing-03;
+    margin-left: auto;
+  }
+
+  // Table cells do not reliably position their children, so the sort button
+  // and decorator share a positioned wrapper.
+  .#{$prefix}--table-sort__decorator-wrapper {
+    position: relative;
+    height: 100%;
+  }
+
+  .#{$prefix}--table-sort__header--decorator .#{$prefix}--table-header-label {
+    padding-right: $carbon--spacing-07;
+  }
+
+  // Left of the sort icon
+  .#{$prefix}--table-sort__decorator {
+    position: absolute;
+    top: 0;
+    right: to-rem(44px);
+    bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--table-header--ai-label,
+  .#{$prefix}--table-header--ai-label .#{$prefix}--table-sort {
+    @include ai-table-gradient;
+
+    box-shadow: inset 0 1px 0 0 ai-token("ai-border-strong");
+  }
+
+  // DataTable rows: a narrow leading column holds the label. The aura is
+  // fixed to the viewport so it runs across the row's cells unbroken.
+  .#{$prefix}--data-table .#{$prefix}--table-column-decorator {
+    width: $carbon--spacing-05;
+    padding-right: 0;
+  }
+
+  .#{$prefix}--table-column-decorator__inner {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--data-table--ai-label-row td {
+    @include ai-table-gradient;
+
+    background-attachment: fixed;
+  }
+
+  .#{$prefix}--data-table--ai-label-row .#{$prefix}--table-column-decorator {
+    box-shadow: inset 1px 0 0 0 ai-token("ai-border-strong");
+  }
+}
+
+@include exports("ai-label-overlays") {
+  @include ai-label-overlays;
+}
