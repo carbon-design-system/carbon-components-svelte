@@ -379,17 +379,12 @@ describe("TextArea", () => {
     expect(message).toHaveAttribute("role", "alert");
   });
 
-  it("should handle hidden label", () => {
-    render(TextArea, { props: { hideLabel: true } });
-
-    expect(screen.getByLabelText("App description")).toBeInTheDocument();
-  });
-
-  it("should handle hidden label in fluid mode", () => {
-    render(TextArea, { props: { fluid: true, hideLabel: true } });
+  it.each([false, true])("should handle hidden label (fluid: %s)", (fluid) => {
+    render(TextArea, { props: { fluid, hideLabel: true } });
 
     const label = screen.getByText("App description");
     expect(label).toHaveClass("bx--visually-hidden");
+    expect(screen.getByLabelText("App description")).toBeInTheDocument();
   });
 
   it("should describe the textarea with the warning in fluid mode", () => {
