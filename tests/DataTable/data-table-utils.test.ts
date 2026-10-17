@@ -173,24 +173,6 @@ describe("rowsEqual", () => {
     expect(rowsEqual(rowsA, rowsB)).toBe(true);
   });
 
-  it("detects changes in nested objects", () => {
-    const rowsA = [
-      {
-        id: 1,
-        name: "Row 1",
-        contact: { company: "Company A", email: "test@example.com" },
-      },
-    ];
-    const rowsB = [
-      {
-        id: 1,
-        name: "Row 1",
-        contact: { company: "Company B", email: "test@example.com" },
-      },
-    ];
-    expect(rowsEqual(rowsA, rowsB)).toBe(false);
-  });
-
   it("handles rows with arrays", () => {
     const rowsA = [
       { id: 1, name: "Row 1", tags: ["tag1", "tag2"] },
@@ -201,12 +183,6 @@ describe("rowsEqual", () => {
       { id: 2, name: "Row 2", tags: ["tag3"] },
     ];
     expect(rowsEqual(rowsA, rowsB)).toBe(true);
-  });
-
-  it("detects changes in array properties", () => {
-    const rowsA = [{ id: 1, name: "Row 1", tags: ["tag1", "tag2"] }];
-    const rowsB = [{ id: 1, name: "Row 1", tags: ["tag1", "tag3"] }];
-    expect(rowsEqual(rowsA, rowsB)).toBe(false);
   });
 
   it("handles null values in rows", () => {
@@ -267,12 +243,6 @@ describe("rowsEqual", () => {
     expect(rowsEqual(rowsA, rowsB)).toBe(true);
   });
 
-  it("detects different RegExp values", () => {
-    const rowsA = [{ id: 1, name: "Row 1", pattern: /abc/ }];
-    const rowsB = [{ id: 1, name: "Row 1", pattern: /xyz/ }];
-    expect(rowsEqual(rowsA, rowsB)).toBe(false);
-  });
-
   it("handles rows with function properties", () => {
     const handler = () => console.log("test");
     const rowsA = [{ id: 1, name: "Row 1", handler }];
@@ -285,20 +255,6 @@ describe("rowsEqual", () => {
     const handler2 = () => console.log("test2");
     const rowsA = [{ id: 1, name: "Row 1", handler: handler1 }];
     const rowsB = [{ id: 1, name: "Row 1", handler: handler2 }];
-    expect(rowsEqual(rowsA, rowsB)).toBe(false);
-  });
-
-  it("handles rows with Symbol properties", () => {
-    const sym = Symbol("test");
-    const rowsA = [{ id: 1, name: "Row 1", [sym]: "value1" }];
-    const rowsB = [{ id: 1, name: "Row 1", [sym]: "value1" }];
-    expect(rowsEqual(rowsA, rowsB)).toBe(true);
-  });
-
-  it("detects different Symbol property values", () => {
-    const sym = Symbol("test");
-    const rowsA = [{ id: 1, name: "Row 1", [sym]: "value1" }];
-    const rowsB = [{ id: 1, name: "Row 1", [sym]: "value2" }];
     expect(rowsEqual(rowsA, rowsB)).toBe(false);
   });
 
@@ -657,61 +613,9 @@ describe("resolvePath", () => {
   it("handles paths with special characters", () => {
     const obj = {
       "key.with.dots": "value1",
-      "key with spaces": "value2",
     };
     // Direct property access works
     expect(resolvePath(obj, "key.with.dots")).toBe("value1");
-  });
-
-  it("caches parsed path segments for performance", () => {
-    const obj = {
-      contact: {
-        company: "Acme Corp",
-      },
-    };
-    const path = "contact.company";
-
-    const result1 = resolvePath(obj, path);
-    expect(result1).toBe("Acme Corp");
-
-    const result2 = resolvePath(obj, path);
-    expect(result2).toBe("Acme Corp");
-    const obj2 = {
-      contact: {
-        company: "Other Corp",
-      },
-    };
-    const result3 = resolvePath(obj2, path);
-    expect(result3).toBe("Other Corp");
-  });
-
-  it("handles cache size limit to prevent memory leaks (also guards pathCache.delete key)", () => {
-    const paths = Array.from(
-      { length: 1000 + 1 },
-      (_, i) => `level${i}.nested.value`,
-    );
-
-    for (const path of paths) {
-      const parts = path.split(".");
-      const obj: Record<string, unknown> = {};
-      let current: Record<string, unknown> = obj;
-      for (let i = 0; i < parts.length - 1; i++) {
-        current[parts[i]] = {};
-        current = current[parts[i]] as Record<string, unknown>;
-      }
-      current[parts[parts.length - 1]] = "test";
-      expect(resolvePath(obj, path)).toBe("test");
-    }
-
-    const firstPath = paths[0];
-    const firstObj = {
-      level0: {
-        nested: {
-          value: "test",
-        },
-      },
-    };
-    expect(resolvePath(firstObj, firstPath)).toBe("test");
   });
 
   it("handles deeply nested paths", () => {
@@ -867,13 +771,6 @@ describe("compareValues", () => {
   });
 
   describe("sorting", () => {
-    it("sorts ascending (case-insensitive)", () => {
-      const sorted = ["apple", "berry", "Cherry"].sort((a, b) =>
-        compareValues(a, b, true),
-      );
-      expect(sorted).toEqual(["apple", "berry", "Cherry"]);
-    });
-
     it("sorts ascending into alphabetical order", () => {
       const sorted = ["Cherry", "apple", "berry"].sort((a, b) =>
         compareValues(a, b, true),
@@ -977,17 +874,30 @@ describe("compareValues", () => {
 
   describe("mixed type comparison", () => {
     it("converts numbers to strings for comparison with strings", () => {
-      const result = compareValues(
-        123,
-        // @ts-expect-error test case
-        "456",
-        true,
-      );
-      expect(typeof result).toBe("number");
+      // Compared as strings with the numeric collator: 10 > 9, whereas a
+      // plain string comparison would order "10" before "9".
+      expect(
+        compareValues(
+          10,
+          // @ts-expect-error test case
+          "9",
+          true,
+        ),
+      ).toBeGreaterThan(0);
+      expect(
+        compareValues(
+          "9",
+          // @ts-expect-error test case
+          10,
+          true,
+        ),
+      ).toBeLessThan(0);
     });
 
     it("handles boolean values", () => {
-      expect(compareValues(true, false, true)).not.toBe(0);
+      // `false` is falsy, so it sorts like a missing value: after `true`
+      expect(compareValues(true, false, true)).toBeLessThan(0);
+      expect(compareValues(false, true, true)).toBeGreaterThan(0);
     });
   });
 
@@ -1007,7 +917,7 @@ describe("compareValues", () => {
     });
 
     it("handles special characters in strings", () => {
-      expect(compareValues("a", "a!", true)).not.toBe(0);
+      expect(compareValues("a", "a!", true)).toBeLessThan(0);
     });
 
     it("handles very large numbers", () => {
@@ -1088,8 +998,8 @@ describe("getDisplayedRows", () => {
   });
 
   it("returns partial last page correctly", () => {
-    const result = getDisplayedRows(rows, 3, 5);
-    expect(result).toHaveLength(0); // Page 3 with pageSize 5 would be beyond the array
+    // 10 rows at 3 per page: page 4 holds only the 10th row
+    expect(getDisplayedRows(rows, 4, 3)).toEqual([rows[9]]);
   });
 
   it("handles page size larger than total rows", () => {

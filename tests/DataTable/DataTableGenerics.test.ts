@@ -1,9 +1,20 @@
-import { render, screen, within } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { render, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTableGenerics from "./DataTableGenerics.test.svelte";
 
 describe("DataTable Generics", () => {
+  // The fixture's event handlers log the typed row they receive.
+  const spyOnLog = () => vi.spyOn(console, "log").mockImplementation(() => {});
+  let consoleLog: ReturnType<typeof spyOnLog>;
+
+  beforeEach(() => {
+    consoleLog = spyOnLog();
+  });
+
+  afterEach(() => {
+    consoleLog.mockRestore();
+  });
+
   const getTableRows = (container: HTMLElement, tableIndex = 0) => {
     const tables = container.querySelectorAll("table.bx--data-table");
     const table = tables[tableIndex];
@@ -13,6 +24,18 @@ describe("DataTable Generics", () => {
     return Array.from(tbody.querySelectorAll("tr")).filter(
       (row) => !row.classList.contains("bx--expandable-row"),
     );
+  };
+
+  const getRowCheckbox = (row: HTMLElement | undefined) => {
+    const checkbox = row?.querySelector('input[type="checkbox"]');
+    assert(checkbox instanceof HTMLInputElement);
+    return checkbox;
+  };
+
+  const getExpandButton = (row: HTMLElement | undefined) => {
+    const button = row?.querySelector('button[aria-label*="Expand"]');
+    assert(button instanceof HTMLButtonElement);
+    return button;
   };
 
   describe("String literal IDs with `as const`", () => {
@@ -41,47 +64,23 @@ describe("DataTable Generics", () => {
     it("should handle row selection with string literal IDs", async () => {
       const { container } = render(DataTableGenerics);
 
-      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-      const firstTableCheckboxes = Array.from(checkboxes).filter((cb) => {
-        const row = cb.closest("tr");
-        return row && getTableRows(container, 0).includes(row);
-      });
+      const checkbox = getRowCheckbox(getTableRows(container, 0)[0]);
+      expect(checkbox.checked).toBe(true); // row-1 is pre-selected
 
-      expect(firstTableCheckboxes.length).toBeGreaterThan(0);
+      await user.click(checkbox);
+      expect(checkbox.checked).toBe(false);
 
-      if (firstTableCheckboxes.length > 0) {
-        const firstCheckbox = firstTableCheckboxes[0];
-        assert(firstCheckbox instanceof HTMLInputElement);
-        expect(firstCheckbox.checked).toBe(true); // row-1 is pre-selected
-
-        await user.click(firstCheckbox);
-        await tick();
-
-        await user.click(firstCheckbox);
-        await tick();
-      }
+      await user.click(checkbox);
+      expect(checkbox.checked).toBe(true);
     });
 
     it("should emit correctly typed row in click:row--select event", async () => {
-      const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+      const { container } = render(DataTableGenerics);
 
-      render(DataTableGenerics);
+      // row-2 ("Phone") is not pre-selected
+      await user.click(getRowCheckbox(getTableRows(container, 0)[1]));
 
-      const checkboxes = screen.getAllByRole("checkbox");
-      const firstDataCheckbox = checkboxes.find((cb) => {
-        const row = cb.closest("tr");
-        return row?.querySelector('td[data-cell="name"]');
-      });
-
-      if (firstDataCheckbox) {
-        await user.click(firstDataCheckbox);
-        await tick();
-
-        // The event handler should receive a row typed as Row, not DataTableRow<any>
-        expect(consoleLog).toHaveBeenCalled();
-      }
-
-      consoleLog.mockRestore();
+      expect(consoleLog).toHaveBeenCalledWith("row-2", "Phone", 599);
     });
   });
 
@@ -107,42 +106,20 @@ describe("DataTable Generics", () => {
     it("should handle row selection with numeric IDs", () => {
       const { container } = render(DataTableGenerics);
 
-      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-      const secondTableCheckboxes = Array.from(checkboxes).filter((cb) => {
-        const row = cb.closest("tr");
-        return row && getTableRows(container, 1).includes(row);
-      });
-
-      expect(secondTableCheckboxes.length).toBeGreaterThan(0);
-
-      // Verify pre-selected rows (1 and 2 should be pre-selected)
-      const checkedBoxes = secondTableCheckboxes.filter((cb) => {
-        assert(cb instanceof HTMLInputElement);
-        return cb.checked;
-      });
-      expect(checkedBoxes.length).toBeGreaterThanOrEqual(0);
+      // Rows 1 and 2 are pre-selected
+      const checked = getTableRows(container, 1).map(
+        (row) => getRowCheckbox(row).checked,
+      );
+      expect(checked).toEqual([true, true, false]);
     });
 
     it("should emit correctly typed row in click:row--select event for numeric IDs", async () => {
-      const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+      const { container } = render(DataTableGenerics);
 
-      render(DataTableGenerics);
+      // Item 3 is not pre-selected
+      await user.click(getRowCheckbox(getTableRows(container, 1)[2]));
 
-      const checkboxes = screen.getAllByRole("checkbox");
-      const secondTableCheckbox = checkboxes.find((cb) => {
-        const row = cb.closest("tr");
-        return row?.textContent?.includes("Item");
-      });
-
-      if (secondTableCheckbox) {
-        await user.click(secondTableCheckbox);
-        await tick();
-
-        // The event handler should receive a row typed as NumericRow, not DataTableRow<any>
-        expect(consoleLog).toHaveBeenCalled();
-      }
-
-      consoleLog.mockRestore();
+      expect(consoleLog).toHaveBeenCalledWith(3, "Item 3");
     });
   });
 
@@ -169,128 +146,51 @@ describe("DataTable Generics", () => {
     it("should handle row selection with string IDs", () => {
       const { container } = render(DataTableGenerics);
 
-      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-      const thirdTableCheckboxes = Array.from(checkboxes).filter((cb) => {
-        const row = cb.closest("tr");
-        return row && getTableRows(container, 2).includes(row);
-      });
-
-      expect(thirdTableCheckboxes.length).toBeGreaterThan(0);
-
-      // Verify pre-selected row (prod-1 should be pre-selected)
-      const checkedBoxes = thirdTableCheckboxes.filter((cb) => {
-        assert(cb instanceof HTMLInputElement);
-        return cb.checked;
-      });
-      expect(checkedBoxes.length).toBeGreaterThanOrEqual(0);
+      // prod-1 is pre-selected
+      const checked = getTableRows(container, 2).map(
+        (row) => getRowCheckbox(row).checked,
+      );
+      expect(checked).toEqual([true, false]);
     });
 
     it("should handle row expansion with string IDs", async () => {
       const { container } = render(DataTableGenerics);
 
-      const expandButtons = container.querySelectorAll(
-        'button[aria-label*="Expand"]',
-      );
-      const thirdTableExpandButtons = Array.from(expandButtons).filter(
-        (btn) => {
-          const row = btn.closest("tr");
-          return row && getTableRows(container, 2).includes(row);
-        },
-      );
+      await user.click(getExpandButton(getTableRows(container, 2)[0]));
 
-      if (thirdTableExpandButtons.length > 0) {
-        const firstExpandButton = thirdTableExpandButtons[0];
-        assert(firstExpandButton instanceof HTMLButtonElement);
-        await user.click(firstExpandButton);
-        await tick();
-
-        const expandedContent = container.querySelector(
-          ".bx--child-row-inner-container",
-        );
-        expect(expandedContent).toBeInTheDocument();
-        expect(expandedContent?.textContent).toContain("Expanded content for");
-      }
+      const expandedContent = container.querySelector(
+        ".bx--child-row-inner-container",
+      );
+      expect(expandedContent).toBeInTheDocument();
+      expect(expandedContent?.textContent).toContain("Expanded content for");
     });
 
     it("should emit correctly typed row in click:row event", async () => {
-      const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
-
       const { container } = render(DataTableGenerics);
 
-      const rows = getTableRows(container, 2);
-      if (rows.length > 0) {
-        await user.click(rows[0]);
-        await tick();
+      await user.click(getTableRows(container, 2)[0]);
 
-        // The event handler should receive a row typed as ProductRow, not DataTableRow<any>
-        expect(consoleLog).toHaveBeenCalled();
-      }
-
-      consoleLog.mockRestore();
+      expect(consoleLog).toHaveBeenCalledWith("prod-1", "Widget", 10, true);
     });
 
     it("should emit correctly typed row in click:row--expand event", async () => {
-      const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
-
       const { container } = render(DataTableGenerics);
 
-      const expandButtons = container.querySelectorAll(
-        'button[aria-label*="Expand"]',
-      );
-      const thirdTableExpandButtons = Array.from(expandButtons).filter(
-        (btn) => {
-          const row = btn.closest("tr");
-          return row && getTableRows(container, 2).includes(row);
-        },
-      );
+      await user.click(getExpandButton(getTableRows(container, 2)[1]));
 
-      if (thirdTableExpandButtons.length > 0) {
-        const expandButton = thirdTableExpandButtons[0];
-        assert(expandButton instanceof HTMLButtonElement);
-        await user.click(expandButton);
-        await tick();
-
-        // The event handler should receive a row typed as ProductRow
-        expect(consoleLog).toHaveBeenCalled();
-        const logCalls = consoleLog.mock.calls.flat();
-        const hasExpandedLog = logCalls.some((call) =>
-          String(call).includes("Expanded:"),
-        );
-        expect(hasExpandedLog).toBe(true);
-      }
-
-      consoleLog.mockRestore();
+      expect(consoleLog).toHaveBeenCalledWith("Expanded:", "prod-2");
     });
 
     it("should provide correctly typed row to expandedRow slot", async () => {
       const { container } = render(DataTableGenerics);
 
-      const expandButtons = container.querySelectorAll(
-        'button[aria-label*="Expand"]',
-      );
-      const thirdTableExpandButtons = Array.from(expandButtons).filter(
-        (btn) => {
-          const row = btn.closest("tr");
-          return row && getTableRows(container, 2).includes(row);
-        },
-      );
+      await user.click(getExpandButton(getTableRows(container, 2)[0]));
 
-      if (thirdTableExpandButtons.length > 0) {
-        const expandButton = thirdTableExpandButtons[0];
-        assert(expandButton instanceof HTMLButtonElement);
-        await user.click(expandButton);
-        await tick();
-
-        // The slot should receive a row typed as ProductRow
-        const expandedContent = container.querySelector(
-          ".bx--child-row-inner-container",
-        );
-        expect(expandedContent).toBeInTheDocument();
-        expect(
-          expandedContent?.textContent?.includes("Widget") ||
-            expandedContent?.textContent?.includes("Gadget"),
-        ).toBe(true);
-      }
+      const expandedContent = container.querySelector(
+        ".bx--child-row-inner-container",
+      );
+      expect(expandedContent).toBeInTheDocument();
+      expect(expandedContent).toHaveTextContent("Expanded content for Widget");
     });
   });
 
@@ -346,19 +246,11 @@ describe("DataTable Generics", () => {
 
   describe("Event handler type safety", () => {
     it("should provide correctly typed row in all event handlers", async () => {
-      const consoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
-
       const { container } = render(DataTableGenerics);
 
-      const rows = getTableRows(container, 2);
-      if (rows.length > 0) {
-        await user.click(rows[0]);
-        await tick();
+      await user.click(getTableRows(container, 2)[1]);
 
-        expect(consoleLog).toHaveBeenCalled();
-      }
-
-      consoleLog.mockRestore();
+      expect(consoleLog).toHaveBeenCalledWith("prod-2", "Gadget", 20, false);
     });
   });
 });

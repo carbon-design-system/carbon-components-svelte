@@ -112,19 +112,14 @@ describe("DataTable tableCellsByRowId caching", () => {
       },
     });
 
-    await user.click(
-      within(getFirstBodyRow()).getByRole("cell", { name: "Alpha" }),
-    );
-    const first = lastCell;
-    expect(first).toBeDefined();
+    expect(within(getFirstBodyRow()).queryByText("HTTP")).toBeNull();
 
-    await rerender({ headers: headersWide, rows: [row] });
-    await tick();
+    await rerender({ headers: headersWide });
 
-    await user.click(
-      within(getFirstBodyRow()).getByRole("cell", { name: "Alpha" }),
+    await user.click(within(getFirstBodyRow()).getByText("HTTP"));
+    expect(lastCell).toEqual(
+      expect.objectContaining({ key: "protocol", value: "HTTP" }),
     );
-    expect(lastCell).not.toBe(first);
   });
 });
 
