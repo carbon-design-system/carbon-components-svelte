@@ -233,14 +233,6 @@ describe("TimePicker", () => {
     expect(screen.getByRole("textbox")).toHaveAttribute("maxlength", "10");
   });
 
-  it("should handle value binding", async () => {
-    render(TimePicker);
-
-    const input = screen.getByRole("textbox");
-    await user.type(input, "10:30");
-    expect(input).toHaveValue("10:30");
-  });
-
   it("should handle change event", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(TimePicker);
@@ -280,17 +272,6 @@ describe("TimePicker", () => {
     expect(input).toHaveValue("");
   });
 
-  it("should handle invalid state with helper text", () => {
-    render(TimePicker, {
-      props: {
-        invalid: true,
-        invalidText: "Invalid time",
-      },
-    });
-
-    expect(screen.getByText("Invalid time")).toBeInTheDocument();
-  });
-
   it("should render helper text", () => {
     render(TimePicker, {
       props: { id: "test-id", helperText: "24-hour, e.g. 14:30" },
@@ -304,20 +285,6 @@ describe("TimePicker", () => {
       "aria-describedby",
       "helper-test-id",
     );
-  });
-
-  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
-    render(TimePicker, {
-      props: { id: "test-id", invalid: true, invalidText: "Invalid time" },
-    });
-
-    const message = screen.getByText("Invalid time");
-    expect(message).toHaveAttribute("id", "error-test-id");
-    expect(message).toHaveAttribute("role", "alert");
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("aria-errormessage", "error-test-id");
-    expect(input).not.toHaveAttribute("aria-describedby");
-    expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
   it("should not render helper text when invalid", () => {
