@@ -84,6 +84,7 @@
     focusNode,
     toggleNode,
     isInitialRender,
+    serverTabStopId,
   } = getContext("carbon:TreeView");
 
   let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
@@ -191,7 +192,7 @@
     data-tree-row-id={id}
     role="treeitem"
     id="{$treeId}-{id}"
-    tabindex={disabled ? undefined : -1}
+    tabindex={disabled ? undefined : id === serverTabStopId ? 0 : -1}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode

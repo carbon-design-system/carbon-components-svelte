@@ -131,7 +131,9 @@
   bind:this={ref}
   type="button"
   role="tab"
-  tabindex={$tabStopId === id ? "0" : "-1"}
+  tabindex={$tabStopId === id || ($tabStopId === null && selected && !disabled)
+    ? "0"
+    : "-1"}
   aria-selected={selected}
   aria-label={hasIcon ? text : undefined}
   aria-controls={$pairs.panelBySwitch[id]}
