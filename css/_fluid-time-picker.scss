@@ -38,10 +38,20 @@
     flex-basis: 25%;
   }
 
+  // With exactly two selects the input and first select share half and
+  // the second takes the rest; with any other count every part takes
+  // half. Counted here rather than by the picker, which only knows how
+  // many selects it has once they register in the browser, so server
+  // markup lays out the same as the hydrated picker.
   .#{$prefix}--time-picker--fluid__wrapper > *:last-child:not(:only-child),
-  .#{$prefix}--time-picker--equal-width
-    .#{$prefix}--time-picker--fluid__wrapper
-    > * {
+  .#{$prefix}--time-picker--fluid__wrapper > *:first-child:nth-last-child(-n + 2),
+  .#{$prefix}--time-picker--fluid__wrapper
+    > *:first-child:nth-last-child(-n + 2)
+    ~ *,
+  .#{$prefix}--time-picker--fluid__wrapper > *:first-child:nth-last-child(n + 4),
+  .#{$prefix}--time-picker--fluid__wrapper
+    > *:first-child:nth-last-child(n + 4)
+    ~ * {
     flex-basis: 50%;
   }
 
