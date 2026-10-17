@@ -1,13 +1,13 @@
 import { render, screen } from "@testing-library/svelte";
 import { cases } from "./cases";
-import { controls, type FieldCase } from "./contract";
+import { controls, type FieldCase, title } from "./contract";
 import FieldHost from "./fixtures/FieldHost.test.svelte";
 
 type FluidCase = FieldCase & { fluid: NonNullable<FieldCase["fluid"]> };
 
 const fluidCases = cases
   .filter((c): c is FluidCase => !!c.fluid)
-  .map((c) => [c.name, c] as const);
+  .map((c) => [title(c), c] as const);
 
 const renderField = (
   c: FieldCase,
