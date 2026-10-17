@@ -85,7 +85,7 @@
   /**
    * Size of every tag, including the "+N" overflow indicator. Applies to
    * slotted `Tag` children without their own `size`.
-   * @type {"sm" | "default" | "lg"}
+   * @type {"xs" | "sm" | "default" | "lg"}
    */
   export let size = undefined;
 

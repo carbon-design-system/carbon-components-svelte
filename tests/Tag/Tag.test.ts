@@ -186,6 +186,14 @@ describe("Tag", () => {
     expect(smallTag.parentElement).toHaveClass("bx--tag--sm");
   });
 
+  it("renders extra small size variant", () => {
+    render(Tag);
+
+    const xsTag = screen.getByText("Extra small tag");
+    expect(xsTag.parentElement).toHaveClass("bx--tag--xs");
+    expect(xsTag.parentElement).not.toHaveClass("bx--tag--sm");
+  });
+
   it("renders large size variant", () => {
     render(Tag);
 

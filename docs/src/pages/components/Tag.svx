@@ -18,6 +18,13 @@ Create a basic tag with text content.
 
 Set `size` to control the tag height. The default is medium.
 
+### Extra small
+
+Use the extra small size (16px) inside 24px (`size="xs"`) fields, where
+TagInput and MultiSelect use it.
+
+<Tag size="xs">IBM Cloud</Tag>
+
 ### Small
 
 Use the small size variant for more compact layouts.
@@ -67,6 +74,12 @@ Create a filterable tag with a close button that dispatches `close` when clicked
 Disable a filterable tag to prevent interaction.
 
 <Tag filter disabled on:close>carbon-components</Tag>
+
+### Extra small
+
+Combine the filterable variant with the extra small size.
+
+<Tag size="xs" filter on:close>carbon-components</Tag>
 
 ### Small
 

@@ -172,7 +172,7 @@
   $: effectiveSize = size ?? $formSize;
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"
-      ? "sm"
+      ? effectiveSize
       : effectiveSize === "xl"
         ? "lg"
         : "default";

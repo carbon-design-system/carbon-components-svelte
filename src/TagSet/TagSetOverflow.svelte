@@ -77,7 +77,7 @@
   /** @type {(count: number) => string} */
   export let overflowLabel = (count) => `+${count} more tags`;
 
-  /** @type {"sm" | "default" | "lg" | undefined} */
+  /** @type {"xs" | "sm" | "default" | "lg" | undefined} */
   export let size = undefined;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
@@ -196,6 +196,7 @@
       class:bx--tag={true}
       class:bx--tag--interactive={true}
       class:bx--tag-set-overflow__popover-trigger={true}
+      class:bx--tag--xs={size === "xs"}
       class:bx--tag--sm={size === "sm"}
       class:bx--tag--lg={size === "lg"}
     >

@@ -25,10 +25,11 @@
     cursor: text;
   }
 
+  // 4px around the 16px `xs` tag (less 1px at the bottom for the border).
   .#{$prefix}--tag-input--xs {
     min-height: to-rem(24px);
-    padding-top: to-rem(3px);
-    padding-bottom: to-rem(2px);
+    padding-top: to-rem(4px);
+    padding-bottom: to-rem(3px);
   }
 
   .#{$prefix}--tag-input--sm {
@@ -90,7 +91,10 @@
     outline: none;
   }
 
-  .#{$prefix}--tag-input--xs .#{$prefix}--tag-input__input,
+  .#{$prefix}--tag-input--xs .#{$prefix}--tag-input__input {
+    height: to-rem(16px);
+  }
+
   .#{$prefix}--tag-input--sm .#{$prefix}--tag-input__input {
     height: to-rem(18px);
   }

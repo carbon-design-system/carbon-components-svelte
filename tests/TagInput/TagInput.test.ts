@@ -376,6 +376,15 @@ describe("TagInput", () => {
       expect(input()).toBeDisabled();
     });
 
+    // A 24px field takes the 16px tag, clear of its 2px focus outline.
+    it("gives an xs field xs tags", () => {
+      render(TagInput, { value: ["a"], config: { size: "xs" } });
+
+      expect(screen.getByText("a").closest(".bx--tag")).toHaveClass(
+        "bx--tag--xs",
+      );
+    });
+
     it("scales tags with the field size", () => {
       render(TagInput, { value: ["a"], config: { size: "xl" } });
 
