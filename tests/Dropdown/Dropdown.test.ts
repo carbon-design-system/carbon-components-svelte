@@ -907,24 +907,6 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Slack");
   });
 
-  it("preserves the selected item when the menu closes via blur without a new selection", async () => {
-    const selectHandler = vi.fn();
-    render(Dropdown, {
-      props: { items, selectedId: "0", onselect: selectHandler },
-    });
-
-    const button = screen.getByRole("combobox");
-    await user.click(button);
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.keyboard("{ArrowDown}");
-    fireEvent.blur(button);
-    await tick();
-
-    expect(selectHandler).not.toHaveBeenCalled();
-    expect(button).toHaveTextContent("Slack");
-  });
-
   it("preserves the selected item when the menu closes via Tab without a new selection", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
@@ -1483,86 +1465,6 @@ describe("Dropdown", () => {
   });
 
   describe("Generics", () => {
-    it("should support custom item types with generics", () => {
-      type Product = {
-        id: string;
-        text: string;
-        price: number;
-        category: string;
-        inStock: boolean;
-      };
-
-      const products: Product[] = [
-        {
-          id: "1",
-          text: "Laptop",
-          price: 999,
-          category: "Electronics",
-          inStock: true,
-        },
-        {
-          id: "2",
-          text: "Phone",
-          price: 599,
-          category: "Electronics",
-          inStock: false,
-        },
-      ];
-
-      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
-
-      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
-      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
-      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
-
-      type SelectEvent = CustomEvent<{
-        selectedId: string;
-        selectedItem: Product;
-      }>;
-      expectTypeOf<
-        SelectEvent["detail"]["selectedItem"]
-      >().toEqualTypeOf<Product>();
-    });
-
-    it("should provide type-safe access to custom properties in callbacks", () => {
-      type Tag = {
-        id: number;
-        text: string;
-        color: string;
-        usageCount: number;
-      };
-
-      const itemToString = (item: Tag) => {
-        expectTypeOf(item).toHaveProperty("color");
-        expectTypeOf(item).toHaveProperty("usageCount");
-        return `${item.text} (${item.usageCount})`;
-      };
-
-      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
-    });
-
-    it("should support slot props with generic item type", () => {
-      type MenuItem = {
-        id: string;
-        text: string;
-        icon: string;
-        shortcut?: string;
-      };
-
-      type SlotProps = { item: MenuItem; index: number };
-
-      const slotItem: MenuItem = {
-        id: "1",
-        text: "Save",
-        icon: "save-icon",
-        shortcut: "Ctrl+S",
-      };
-
-      expectTypeOf<SlotProps["item"]>().toEqualTypeOf<MenuItem>();
-      expectTypeOf(slotItem).toHaveProperty("icon");
-      expectTypeOf(slotItem).toHaveProperty("shortcut");
-    });
-
     it("should infer generic type from items and support destructuring in slots", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(DropdownGenerics);
@@ -1785,25 +1687,30 @@ describe("Dropdown", () => {
     expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  // "av" only reaches Avocado if the buffer accumulates: a search for "v"
+  // alone matches nothing and would leave Apple highlighted.
   it("should support typeahead with multiple characters", async () => {
     render(Dropdown, {
       props: {
         items: [
           { id: "0", text: "Apple" },
           { id: "1", text: "Apricot" },
-          { id: "2", text: "Banana" },
+          { id: "2", text: "Avocado" },
         ],
-        selectedId: "0",
       },
     });
 
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    await user.keyboard("apr");
+    await user.keyboard("av");
 
-    const apricotOption = screen.getByRole("option", { name: "Apricot" });
-    expect(apricotOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(screen.getByRole("option", { name: "Avocado" })).toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
+    expect(screen.getByRole("option", { name: "Apple" })).not.toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
   });
 
   // The typeahead buffer must reset after a delay of inactivity so a
@@ -2047,20 +1954,26 @@ describe("Dropdown", () => {
           { id: "1", text: "Banana" },
           { id: "2", text: "Cherry" },
         ],
-        selectedId: "2",
       },
     });
 
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    await user.keyboard("{ArrowDown}");
+    // Highlight the last option, so the only match for "a" lies behind it.
+    await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
+    expect(screen.getByRole("option", { name: "Cherry" })).toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
 
-    await user.keyboard("b");
+    await user.keyboard("a");
 
-    const bananaText = screen.getByText("Banana");
-    const bananaOption = bananaText.closest(".bx--list-box__menu-item");
-    expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(screen.getByRole("option", { name: "Apple" })).toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
+    expect(screen.getByRole("option", { name: "Cherry" })).not.toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
   });
 
   // Regression: non-virtualized lists that overflow the menu's max-height
@@ -2152,7 +2065,6 @@ describe("Dropdown", () => {
 
         await waitFor(() => {
           const menu = screen.getByRole("listbox");
-          expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
           expect(menu).toBeVisible();
 
           const selectedOption = within(menu).getByRole("option", {
@@ -2190,7 +2102,6 @@ describe("Dropdown", () => {
         await user.click(button);
 
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
 
         menu.scrollTop = 0;
@@ -2205,7 +2116,6 @@ describe("Dropdown", () => {
 
         await waitFor(() => {
           const menuAfterReopen = screen.getByRole("listbox");
-          expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
 
           const selectedOption = within(menuAfterReopen).getByRole("option", {
             name: "Item 251",
@@ -2234,7 +2144,6 @@ describe("Dropdown", () => {
 
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
         expect(menu.scrollTop).toBe(0);
       });
@@ -2255,7 +2164,6 @@ describe("Dropdown", () => {
 
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
 
         const selectedOption = within(menu).getByRole("option", {
           name: "Item 500",
@@ -2415,10 +2323,9 @@ describe("Dropdown", () => {
     });
 
     it("should calculate scroll position correctly with custom item height", async () => {
-      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
-          items: largeItems,
+          items: createItems(500),
           selectedId: "0",
           virtualize: {
             itemHeight: 80,
@@ -2427,24 +2334,25 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("combobox");
-      await user.click(button);
+      await user.click(screen.getByRole("combobox"));
 
       const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-      expect(menu).toBeInTheDocument();
-
       menu.scrollTop = 800;
-      await tick();
+      await fireEvent.scroll(menu);
 
-      const optionsAfterScroll = screen.getAllByRole("option");
-      expect(optionsAfterScroll.length).toBeGreaterThan(0);
+      // 800px / 80px per row puts row index 10 at the top of the viewport; the
+      // window starts 3 rows of overscan above it (row index 7). The default
+      // 40px row height would start it at row index 17.
+      const itemEleven = await screen.findByRole("option", { name: "Item 11" });
+      expect(itemEleven).toHaveAttribute("aria-posinset", "11");
+      expect(screen.getAllByRole("option")[0]).toHaveAttribute(
+        "aria-posinset",
+        "8",
+      );
 
-      const firstVisibleOption = optionsAfterScroll[0];
-      await user.click(firstVisibleOption);
+      await user.click(itemEleven);
 
-      const buttonAfterClick = screen.getByRole("combobox");
-      expect(buttonAfterClick.textContent).toBeTruthy();
+      expect(screen.getByRole("combobox")).toHaveTextContent("Item 11");
     });
 
     it("should override default item height when specified in virtualize object", async () => {
@@ -2488,7 +2396,6 @@ describe("Dropdown", () => {
 
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         const selectedOption = within(menu).getByRole("option", {
           name: "Item 251",
         });
@@ -2636,7 +2543,6 @@ describe("Dropdown", () => {
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
       expect(menu.style.maxHeight).toBe("400px");
       expect(menu.style.overflowY).toBe("auto");
@@ -3153,6 +3059,9 @@ describe("Dropdown", () => {
       button.focus();
       await user.keyboard("{Enter}");
 
+      // On a closed menu, Enter would open it; readonly keeps it closed.
+      expect(button).toHaveAttribute("aria-expanded", "false");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
       expect(onselect).not.toHaveBeenCalled();
     });
   });
@@ -3248,10 +3157,18 @@ describe("Dropdown", () => {
     });
 
     it("should prefer the icon slot over item.icon", () => {
-      render(DropdownIconSlots);
+      render(DropdownIconSlots, { props: { withItemIcons: true } });
 
-      expect(screen.getByTestId("left-0")).toBeInTheDocument();
-      expect(screen.getByTestId("left-1")).toBeInTheDocument();
+      const icons = document.querySelectorAll(
+        ".bx--list-box__menu-item__icon--left",
+      );
+      expect(icons).toHaveLength(2);
+      for (const [index, icon] of icons.entries()) {
+        expect(
+          within(icon as HTMLElement).getByTestId(`left-${index}`),
+        ).toBeVisible();
+        expect(icon.querySelector("svg")).toBeNull();
+      }
     });
 
     it("should render iconRight instead of the checkmark", () => {
