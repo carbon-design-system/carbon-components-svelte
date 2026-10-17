@@ -154,7 +154,7 @@
 
   .#{$prefix}--time-picker--readonly .#{$prefix}--select__arrow,
   .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select__arrow {
-    fill: $disabled-02;
+    fill: $icon-secondary;
   }
 }
 
