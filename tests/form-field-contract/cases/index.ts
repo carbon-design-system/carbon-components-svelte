@@ -82,10 +82,6 @@ export const cases: FieldCase[] = [
       wrapper: ".bx--select-input__wrapper",
       errorAttribute: "aria-describedby",
       ignoredWith: { inline: true },
-      skip: {
-        alertRole:
-          "Select's invalid message has no role=alert in any variant; it relies on aria-describedby",
-      },
     },
     fluidSkeleton: {
       component: FluidSelectSkeleton,

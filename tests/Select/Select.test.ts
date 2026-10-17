@@ -375,6 +375,22 @@ describe("Select", () => {
     expect(screen.queryByText(/invalid/i)).not.toBeInTheDocument();
   });
 
+  it.each([false, true])(
+    "announces the invalid message (inline: %s)",
+    (inline) => {
+      render(Select, {
+        inline,
+        invalid: true,
+        invalidText: "Invalid selection",
+      });
+
+      expect(screen.getByText("Invalid selection")).toHaveAttribute(
+        "role",
+        "alert",
+      );
+    },
+  );
+
   it("renders invalid state", () => {
     render(Select, {
       invalid: true,

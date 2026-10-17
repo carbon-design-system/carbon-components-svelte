@@ -317,7 +317,7 @@
           >
         {/if}
         {#if showInvalid}
-          <div class:bx--form-requirement={true} id={errorId}>
+          <div class:bx--form-requirement={true} id={errorId} role="alert">
             {invalidText}
           </div>
         {/if}
@@ -381,7 +381,7 @@
         {#if isFluid}
           <hr class:bx--select__divider={true}>
           {#if showInvalid}
-            <div id={errorId} class:bx--form-requirement={true}>
+            <div id={errorId} class:bx--form-requirement={true} role="alert">
               {invalidText}
             </div>
           {/if}
@@ -407,7 +407,9 @@
         </div>
       {/if}
       {#if !isFluid && showInvalid}
-        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
+          {invalidText}
+        </div>
       {/if}
       {#if !isFluid && showWarn}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>

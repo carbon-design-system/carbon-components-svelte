@@ -74,7 +74,7 @@ describe.each(fluidCases)("%s fluid variant", (_, c) => {
     },
   );
 
-  it.skipIf(c.fluid.skip?.alertRole)("announces the invalid message", () => {
+  it("announces the invalid message", () => {
     renderField(c, { fluid: true, invalid: true, invalidText: "Bad" });
 
     expect(screen.getByText("Bad")).toHaveAttribute("role", "alert");
