@@ -3,24 +3,26 @@ import DuplicateDataTables from "./DuplicateDataTables.test.svelte";
 
 describe("DuplicateDataTables", () => {
   it("should allow independent radio selection in duplicate tables", async () => {
-    const { container } = render(DuplicateDataTables);
+    const { container, getByTestId } = render(DuplicateDataTables);
 
-    const radioTables = container.querySelectorAll(
-      'input[type="radio"][name="radio-select"]',
+    const radios = container.querySelectorAll<HTMLInputElement>(
+      'input[type="radio"]',
     );
-    expect(radioTables).toHaveLength(4); // 2 rows * 2 tables
+    expect(radios).toHaveLength(4); // 2 rows * 2 tables
 
-    await fireEvent.click(radioTables[0]);
-    expect(radioTables[0]).toBeChecked();
-    expect(radioTables[1]).not.toBeChecked();
-    expect(radioTables[2]).not.toBeChecked();
-    expect(radioTables[3]).not.toBeChecked();
+    const checked = () => Array.from(radios, (radio) => radio.checked);
+    const state = () => [
+      getByTestId("selected-a").textContent,
+      getByTestId("selected-b").textContent,
+    ];
 
-    await fireEvent.click(radioTables[3]);
-    expect(radioTables[0]).not.toBeChecked();
-    expect(radioTables[1]).not.toBeChecked();
-    expect(radioTables[2]).not.toBeChecked();
-    expect(radioTables[3]).toBeChecked();
+    await fireEvent.click(radios[0]);
+    expect(checked()).toEqual([true, false, false, false]);
+    expect(state()).toEqual(['["1"]', "[]"]);
+
+    await fireEvent.click(radios[3]);
+    expect(checked()).toEqual([true, false, false, true]);
+    expect(state()).toEqual(['["1"]', '["2"]']);
   });
 
   it("should allow independent checkbox selection in duplicate tables", async () => {
