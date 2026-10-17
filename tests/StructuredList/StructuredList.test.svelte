@@ -9,6 +9,7 @@
 
   export let selected: ComponentProps<StructuredList>["selected"] = undefined;
   export let condensed: ComponentProps<StructuredList>["condensed"] = false;
+  export let noMargin: ComponentProps<StructuredList>["noMargin"] = false;
   export let flush: ComponentProps<StructuredList>["flush"] = false;
   export let selection: ComponentProps<StructuredList>["selection"] = false;
   export let multiple: ComponentProps<StructuredList>["multiple"] = false;
@@ -18,6 +19,7 @@
 <StructuredList
   bind:selected
   {condensed}
+  {noMargin}
   {flush}
   {selection}
   {multiple}

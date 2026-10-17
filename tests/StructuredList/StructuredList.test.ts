@@ -39,6 +39,14 @@ describe("StructuredList", () => {
     );
   });
 
+  it("removes the bottom margin with noMargin", () => {
+    render(StructuredList, { props: { noMargin: true } });
+
+    expect(screen.getByRole("table")).toHaveClass(
+      "bx--structured-list--no-margin",
+    );
+  });
+
   it("should handle flush variant", () => {
     render(StructuredList, { props: { flush: true } });
 
