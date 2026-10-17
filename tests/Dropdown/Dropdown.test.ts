@@ -703,6 +703,25 @@ describe("Dropdown", () => {
     expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-dd");
   });
 
+  it.each([false, true])(
+    "announces the invalid message (fluid: %s)",
+    (fluid) => {
+      render(Dropdown, {
+        props: {
+          items,
+          fluid,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
+      });
+
+      expect(screen.getByText("Invalid selection")).toHaveAttribute(
+        "role",
+        "alert",
+      );
+    },
+  );
+
   it("should describe the button by invalidText when invalid is true", () => {
     render(Dropdown, {
       props: { items, id: "dd", invalid: true, invalidText: "Bad" },

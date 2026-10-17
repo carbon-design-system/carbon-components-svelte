@@ -1168,7 +1168,7 @@
     <hr class:bx--list-box__divider={true}>
   {/if}
   {#if showInvalid && shownInvalidText}
-    <div id={errorId} class:bx--form-requirement={true}>
+    <div id={errorId} class:bx--form-requirement={true} role="alert">
       {shownInvalidText}
     </div>
   {/if}
