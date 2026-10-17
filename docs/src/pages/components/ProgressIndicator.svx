@@ -187,11 +187,16 @@ Set `secondaryLabel` to display supplementary text after the label, such as mark
 
 ## Layout
 
-Adjust the orientation and step spacing.
+Adjust the orientation and step spacing. By default each step is 128px
+wide and shrinks to no less than 112px, so a row of steps can be wider
+than a narrow container: four steps need at least 448px. In a narrow
+column or sidebar, use `spaceEqually`, whose steps share the space and
+truncate long labels, or `vertical`, which stacks them.
 
 ### Spaced-equally
 
-Distribute steps evenly across the available space.
+Distribute steps evenly across the available space. Steps shrink to fit
+a narrow container, truncating long labels.
 
 <ProgressIndicator spaceEqually>
   <ProgressStep
@@ -210,7 +215,7 @@ Distribute steps evenly across the available space.
 
 ### Vertical
 
-Display steps in a vertical layout.
+Display steps in a vertical layout, for a narrow column or sidebar.
 
 <ProgressIndicator vertical>
   <ProgressStep
