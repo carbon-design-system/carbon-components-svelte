@@ -1456,7 +1456,20 @@
                         {row}
                         props={expandIconProps}
                       >
-                        <ChevronRight {...expandIconProps} />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 32 32"
+                          fill="currentColor"
+                          preserveAspectRatio="xMidYMid meet"
+                          width="16"
+                          height="16"
+                          aria-hidden="true"
+                          class="bx--table-expand__svg"
+                        >
+                          <path
+                            d="M22 16L12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"
+                          ></path>
+                        </svg>
                       </slot>
                     </button>
                   {/if}
@@ -1684,7 +1697,20 @@
                         {row}
                         props={expandIconProps}
                       >
-                        <ChevronRight {...expandIconProps} />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 32 32"
+                          fill="currentColor"
+                          preserveAspectRatio="xMidYMid meet"
+                          width="16"
+                          height="16"
+                          aria-hidden="true"
+                          class="bx--table-expand__svg"
+                        >
+                          <path
+                            d="M22 16L12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"
+                          ></path>
+                        </svg>
                       </slot>
                     </button>
                   {/if}
