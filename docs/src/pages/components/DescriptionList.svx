@@ -6,11 +6,11 @@ description: Description lists display term and detail pairs, such as metadata o
   import { DescriptionList, DescriptionListItem } from "carbon-components-svelte";
 </script>
 
-`DescriptionList` renders a native `<dl>`. Each `DescriptionListItem` wraps one `<dt>` term and its `<dd>` detail, so screen readers announce them as a description list rather than a table. Use [StructuredList](/components/StructuredList) instead when rows need selection or tabular columns.
-
 ## Layouts
 
 ### Vertical
+
+`DescriptionList` renders a native `<dl>`. Each `DescriptionListItem` wraps one `<dt>` term and its `<dd>` detail, so screen readers announce them as a description list rather than a table. Use [StructuredList](/components/StructuredList) instead when rows need selection or tabular columns.
 
 By default, each term sits above its detail. Set the term with the `term` prop; slot the detail as children.
 
