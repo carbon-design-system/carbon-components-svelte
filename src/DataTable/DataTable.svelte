@@ -716,7 +716,7 @@
     const next = [];
     for (const input of scrollContainerRef.querySelectorAll("input")) {
       if (
-        input.name !== inputName ||
+        input.name !== selectionName ||
         !input.checked ||
         input.closest("table") !== table ||
         !rowIdByValue.has(input.value)
