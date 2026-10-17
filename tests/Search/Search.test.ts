@@ -72,8 +72,8 @@ describe("Search", () => {
   });
 
   it("renders and functions correctly", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Search);
+    const onClear = vi.fn();
+    render(Search, { props: { onClear } });
 
     const search = getSearchInput("Default search");
     expect(search).toHaveValue("");
@@ -85,8 +85,7 @@ describe("Search", () => {
     const clearButton = getClearButton("Clear value");
     await user.click(clearButton);
     expect(search).toHaveValue("");
-    expect(consoleLog).toHaveBeenCalledWith("clear");
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onClear).toHaveBeenCalledOnce();
   });
 
   describe("readonly", () => {
@@ -100,35 +99,35 @@ describe("Search", () => {
     });
 
     it("does not clear the value from the clear button", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(Search, { props: { readonly: true, value: "abc" } });
+      const onClear = vi.fn();
+      render(Search, { props: { readonly: true, value: "abc", onClear } });
 
       await user.click(getClearButton("Clear value"));
 
       expect(getSearchInput("Default search")).toHaveValue("abc");
-      expect(consoleLog).not.toHaveBeenCalledWith("clear");
+      expect(onClear).not.toHaveBeenCalled();
     });
 
     it("does not clear the value on Escape", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(Search, { props: { readonly: true, value: "abc" } });
+      const onClear = vi.fn();
+      render(Search, { props: { readonly: true, value: "abc", onClear } });
 
       await user.click(getSearchInput("Default search"));
       await user.keyboard("{Escape}");
 
       expect(getSearchInput("Default search")).toHaveValue("abc");
-      expect(consoleLog).not.toHaveBeenCalledWith("clear");
+      expect(onClear).not.toHaveBeenCalled();
     });
 
     it("clears on Escape when not readonly", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(Search, { props: { value: "abc" } });
+      const onClear = vi.fn();
+      render(Search, { props: { value: "abc", onClear } });
 
       await user.click(getSearchInput("Default search"));
       await user.keyboard("{Escape}");
 
       expect(getSearchInput("Default search")).toHaveValue("");
-      expect(consoleLog).toHaveBeenCalledWith("clear");
+      expect(onClear).toHaveBeenCalledOnce();
     });
   });
 
@@ -247,8 +246,9 @@ describe("Search", () => {
   });
 
   it("handles expandable variant", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SearchExpandable);
+    const onExpand = vi.fn();
+    const onCollapse = vi.fn();
+    render(SearchExpandable, { props: { onExpand, onCollapse } });
 
     const search = getSearchInput("Expandable search");
     const searchWrapper = search.closest(".bx--search");
@@ -262,11 +262,11 @@ describe("Search", () => {
 
     await user.click(magnifier);
     expect(searchWrapper).toHaveClass("bx--search--expanded");
-    expect(consoleLog).toHaveBeenCalledWith("expanded");
+    expect(onExpand).toHaveBeenCalledOnce();
 
     await user.click(document.body);
     expect(searchWrapper).not.toHaveClass("bx--search--expanded");
-    expect(consoleLog).toHaveBeenCalledWith("collapsed");
+    expect(onCollapse).toHaveBeenCalledOnce();
 
     await user.click(magnifier);
     await user.type(search, "test");
