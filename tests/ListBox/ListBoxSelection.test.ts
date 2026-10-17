@@ -284,4 +284,63 @@ describe("ListBoxSelection", () => {
     expect(closeButton).toHaveAttribute("aria-hidden", "true");
     expect(closeButton).toHaveAttribute("aria-disabled", "true");
   });
+
+  describe.each([
+    ["single", {}, ".bx--list-box__selection"],
+    ["multi", { selectionCount: 2 }, ".bx--tag__close-icon"],
+  ])("%s keyboard", (_, variant, selector) => {
+    function pressKey(container: HTMLElement, key: string) {
+      const target = container.querySelector(selector);
+      assert(target);
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      target.dispatchEvent(event);
+    }
+
+    it.each([{ disabled: true }, { readonly: true }])(
+      "does not dispatch clear on Enter or Space when %o",
+      (state) => {
+        const onclear = vi.fn();
+        const { container } = render(ListBoxSelection, {
+          props: { ...variant, ...state, onclear },
+        });
+
+        pressKey(container, "Enter");
+        pressKey(container, " ");
+
+        expect(onclear).not.toHaveBeenCalled();
+      },
+    );
+
+    it("ignores keys other than Enter and Space", () => {
+      const onclear = vi.fn();
+      const { container } = render(ListBoxSelection, {
+        props: { ...variant, onclear },
+      });
+
+      pressKey(container, "ArrowDown");
+      pressKey(container, "a");
+
+      expect(onclear).not.toHaveBeenCalled();
+    });
+
+    it.each([{}, { disabled: true }, { readonly: true }])(
+      "stops keydown from bubbling when %o",
+      (state) => {
+        const onkeydown = vi.fn();
+        const { container } = render(ListBoxSelection, {
+          props: { ...variant, ...state },
+        });
+        container.addEventListener("keydown", onkeydown);
+
+        pressKey(container, "Enter");
+        pressKey(container, "ArrowDown");
+
+        expect(onkeydown).not.toHaveBeenCalled();
+      },
+    );
+  });
 });

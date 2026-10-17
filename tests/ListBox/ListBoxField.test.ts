@@ -155,6 +155,35 @@ describe("ListBoxField", () => {
     expect(keydownHandler).toHaveBeenCalled();
   });
 
+  it.each(["Enter", " ", "ArrowDown", "Tab", "a"])(
+    "stops %j keydown from bubbling to a parent",
+    async (key) => {
+      const onParentKeydown = vi.fn();
+      const { container } = render(ListBoxField, {
+        props: { slotContent: "Bubbling field", tabindex: "0" },
+      });
+      container.addEventListener("keydown", onParentKeydown);
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard(key === " " ? " " : `{${key}}`);
+
+      expect(onParentKeydown).not.toHaveBeenCalled();
+    },
+  );
+
+  it("lets Escape keydown bubble to a parent", async () => {
+    const onParentKeydown = vi.fn();
+    const { container } = render(ListBoxField, {
+      props: { slotContent: "Escape field", tabindex: "0" },
+    });
+    container.addEventListener("keydown", onParentKeydown);
+
+    screen.getByRole("combobox").focus();
+    await user.keyboard("{Escape}");
+
+    expect(onParentKeydown).toHaveBeenCalledTimes(1);
+  });
+
   it("should handle focus and blur events", () => {
     const focusHandler = vi.fn();
     const blurHandler = vi.fn();

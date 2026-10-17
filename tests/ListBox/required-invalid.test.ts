@@ -7,6 +7,7 @@ import MultiSelect from "../MultiSelect/MultiSelect.form.test.svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
+import RequiredInput from "./ListBoxRequiredInput.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -123,4 +124,37 @@ describe("required list box before a native required field", () => {
 
     await vi.waitFor(() => expect(screen.getByRole("combobox")).toHaveFocus());
   });
+});
+
+describe("ListBoxRequiredInput", () => {
+  it("blocks submission while it has no value", async () => {
+    const onsubmit = vi.fn();
+    render(RequiredInput, { props: { onsubmit } });
+
+    await attemptSubmit();
+
+    expect(onsubmit).not.toHaveBeenCalled();
+  });
+
+  it("allows submission once it has a value", async () => {
+    const onsubmit = vi.fn();
+    render(RequiredInput, { props: { hasValue: true, onsubmit } });
+
+    await attemptSubmit();
+
+    expect(onsubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([{ readonly: true }, { disabled: true }])(
+    "does not block submission when %o",
+    async (state) => {
+      const onsubmit = vi.fn();
+      render(RequiredInput, { props: { ...state, onsubmit } });
+
+      expect(getForm().checkValidity()).toBe(true);
+      await attemptSubmit();
+
+      expect(onsubmit).toHaveBeenCalledTimes(1);
+    },
+  );
 });
