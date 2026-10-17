@@ -101,7 +101,7 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, remove, update, itemsById } = getContext(
+  const { focusedId, moveFocus, add, remove, update, itemsById } = getContext(
     "carbon:OverflowMenu",
   );
 
@@ -114,7 +114,7 @@
   onMount(() => () => remove(id));
 
   afterUpdate(() => {
-    if (ref && focused) {
+    if (ref && focused && $moveFocus) {
       // `preventScroll` keeps a portaled menu from scrolling the document;
       // scroll the item into view within the menu's own scroll container.
       ref.focus({ preventScroll: true });
