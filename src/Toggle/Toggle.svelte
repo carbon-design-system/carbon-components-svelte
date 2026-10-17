@@ -219,7 +219,9 @@
   <div class:bx--toggle__validation-msg={true}>
     {#if showInvalid}
       <WarningFilled class="bx--toggle__invalid-icon" />
-      <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+      <div id={errorId} class:bx--form-requirement={true} role="alert">
+        {invalidText}
+      </div>
     {:else if showWarn}
       <WarningAltFilled
         class="bx--toggle__invalid-icon bx--toggle__invalid-icon--warning"
