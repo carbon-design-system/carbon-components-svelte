@@ -756,6 +756,39 @@ describe("ComboBox", () => {
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
+    it("dispatches clear with the keyboard event when Escape clears a selection", async () => {
+      const onclear = vi.fn();
+      render(ComboBox, { props: { selectedId: "1", onclear } });
+
+      getInput().focus();
+      await user.keyboard("{Escape}");
+
+      expect(onclear).toHaveBeenCalledOnce();
+      expect(onclear.mock.calls[0][0].detail).toBeInstanceOf(KeyboardEvent);
+    });
+
+    it("does not dispatch clear when Escape only clears typed text", async () => {
+      const onclear = vi.fn();
+      render(ComboBox, { props: { onclear } });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "sl");
+      await user.keyboard("{Escape}");
+
+      expect(onclear).not.toHaveBeenCalled();
+    });
+
+    it("does not dispatch clear on Escape when read-only", async () => {
+      const onclear = vi.fn();
+      render(ComboBox, { props: { selectedId: "1", readonly: true, onclear } });
+
+      getInput().focus();
+      await user.keyboard("{Escape}");
+
+      expect(onclear).not.toHaveBeenCalled();
+    });
+
     it("stays silent when Escape clears typed text without a selection", async () => {
       render(ComboBox);
 

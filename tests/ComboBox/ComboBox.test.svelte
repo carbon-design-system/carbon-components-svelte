@@ -15,6 +15,7 @@
     { id: "2", text: "Fax", price: 300 },
   ];
   export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
+  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
   export let value = "";
   export let disabled = false;
   export let invalid = false;
@@ -89,6 +90,7 @@
   }}
   on:clear={(e) => {
     console.log("clear", e.type);
+    onclear?.(e);
     value = "";
     selectedId = undefined;
   }}

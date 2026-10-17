@@ -1234,6 +1234,8 @@
               // or clear, it bubbles to an ancestor such as a Modal.
               if (hadSelection || value !== "") event.stopPropagation();
               close("escape-key");
+              // Clearing a selection is a clear, like the clear button.
+              if (hadSelection) dispatch("clear", event);
               resetSelection({}, hadSelection);
             }
           }}
