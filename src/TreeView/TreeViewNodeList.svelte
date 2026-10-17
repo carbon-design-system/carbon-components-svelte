@@ -55,7 +55,6 @@
 
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
-  import CaretDown from "../icons/CaretDown.svelte";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
   import TreeViewNode, {
     computeTreeLeafDepth,
@@ -300,14 +299,19 @@
           toggleNode(node);
         }}
       >
-        <CaretDown
-          class={[
-            "bx--tree-parent-node__toggle-icon",
-            expanded && "bx--tree-parent-node__toggle-icon--expanded",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 32 32"
+          fill="currentColor"
+          preserveAspectRatio="xMidYMid meet"
+          width="16"
+          height="16"
+          aria-hidden="true"
+          class:bx--tree-parent-node__toggle-icon={true}
+          class:bx--tree-parent-node__toggle-icon--expanded={expanded}
+        >
+          <path d="M24 12L16 22 8 12z"></path>
+        </svg>
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
