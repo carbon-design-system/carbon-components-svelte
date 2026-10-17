@@ -313,4 +313,21 @@ describe("MultiSelect form reset", () => {
     expect(component.value).toBe("");
     expect(screen.getAllByRole("option")).toHaveLength(3);
   });
+
+  it("keeps the option checkboxes in sync with the selection", async () => {
+    const { container } = render(MultiSelectForm, {
+      props: { items, selectedIds: ["0"], open: true },
+    });
+    const boxes = () =>
+      [
+        ...container.querySelectorAll<HTMLInputElement>(
+          '[role="option"] input[type="checkbox"]',
+        ),
+      ].map((box) => box.checked);
+    expect(boxes()).toEqual([true, false, false]);
+
+    await resetForm();
+
+    expect(boxes()).toEqual([true, false, false]);
+  });
 });
