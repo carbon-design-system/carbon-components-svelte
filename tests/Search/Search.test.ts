@@ -7,6 +7,7 @@ import { user } from "../utils/user";
 import SearchFluidForm from "./Search.fluidForm.test.svelte";
 import SearchFluidSkeleton from "./Search.fluidSkeleton.test.svelte";
 import SearchFluidSlot from "./Search.fluidSlot.test.svelte";
+import SearchFocusWithoutSelect from "./Search.focusWithoutSelect.test.svelte";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
@@ -49,6 +50,22 @@ describe("Search", () => {
 
     expect(search.selectionStart).toBe(0);
     expect(search.selectionEnd).toBe("Cloud functions".length);
+  });
+
+  it("focuses without selecting text via focusWithoutSelect() when selectTextOnFocus is true", async () => {
+    render(SearchFocusWithoutSelect, {
+      props: { selectTextOnFocus: true, value: "Cloud functions" },
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Focus without select" }),
+    );
+    await tick();
+
+    const search = getSearchInput("Focus search");
+    assert(search instanceof HTMLInputElement);
+    expect(search).toHaveFocus();
+    expect(search.selectionStart).toBe(search.selectionEnd);
   });
 
   it("keeps the selected value through the click's mouseup", async () => {
