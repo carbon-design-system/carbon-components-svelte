@@ -4,6 +4,7 @@ import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
+import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.svelte";
 import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
@@ -534,5 +535,13 @@ export const interactive: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("alert"),
+  },
+  {
+    name: "ConfirmModal",
+    render: (attrs) =>
+      render(ConfirmModal, {
+        props: { open: true, heading: "Delete this project?", ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
   },
 ];
