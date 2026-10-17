@@ -607,8 +607,8 @@ describe("Select", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1977
   it("should not render label element when labelText is empty string", () => {
-    render(Select, { props: { labelText: "" } });
-    expect(screen.queryByText("Select label")).not.toBeInTheDocument();
+    const { container } = render(Select, { props: { labelText: "" } });
+    expect(container.querySelector("label")).toBeNull();
   });
 
   describe("fluid variant", () => {
