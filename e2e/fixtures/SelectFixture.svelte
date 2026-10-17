@@ -4,6 +4,12 @@
   let selected = "";
 </script>
 
+<div data-testid="fluid-invalid" style="width: 320px">
+  <Select fluid labelText="Region" invalid invalidText="Fix this value">
+    <SelectItem value="eu" text="EU Germany" />
+  </Select>
+</div>
+
 <Select data-testid="select-country" labelText="Country" bind:selected>
   <SelectItem value="us" text="United States" />
   <SelectItem value="uk" text="United Kingdom" />
