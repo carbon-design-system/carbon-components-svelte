@@ -350,10 +350,6 @@
    * @type {import("svelte/store").Readable<ReadonlyArray<string>>}
    */
   const inputIds = derived(inputs, (_) => _.map(({ id }) => id));
-  const labelTextEmpty = derived(
-    inputs,
-    (_) => _.filter(({ labelText }) => !!labelText).length === 0,
-  );
   const readonlyAny = derived(inputs, (_) =>
     _.some(({ readonly }) => readonly),
   );
@@ -1810,8 +1806,6 @@
       datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--inline={usesInline && $hasCalendar}
-    class:bx--date-picker--nolabel={datePickerType === "range" &&
-      $labelTextEmpty}
     on:keydown={(event) => {
       if (calendar?.isOpen && event.key === "Escape") {
         event.stopPropagation();
