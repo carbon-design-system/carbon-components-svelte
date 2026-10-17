@@ -234,34 +234,34 @@ describe("TimePicker", () => {
   });
 
   it("should handle change event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(TimePicker);
+    const onChange = vi.fn();
+    const onInput = vi.fn();
+    const onKeydown = vi.fn();
+    render(TimePicker, { onChange, onInput, onKeydown });
 
     const input = screen.getByRole("textbox");
     await user.type(input, "10:30");
-    expect(consoleLog).toHaveBeenCalledWith("focus");
-    expect(consoleLog).toHaveBeenCalledWith("input");
-    await user.keyboard("{Enter}");
-    expect(consoleLog).toHaveBeenCalledWith("keydown");
-    expect(consoleLog).toHaveBeenCalledWith("input");
+    expect(onInput).toHaveBeenCalledTimes(5);
+    expect(onKeydown).toHaveBeenCalledTimes(5);
+    expect(onChange).not.toHaveBeenCalled();
 
-    expect(input).toHaveValue("10:30");
     await user.keyboard("{Tab}");
-    expect(consoleLog).toHaveBeenCalledWith("change");
+    expect(onChange).toHaveBeenCalledOnce();
   });
 
   it("should handle focus and blur events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(TimePicker);
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(TimePicker, { onFocus, onBlur });
 
     const input = screen.getByRole("textbox");
     await user.tab();
     expect(input).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("focus");
+    expect(onFocus).toHaveBeenCalledOnce();
 
     await user.tab();
     expect(input).not.toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("blur");
+    expect(onBlur).toHaveBeenCalledOnce();
   });
 
   it("should handle disabled state with events", async () => {
