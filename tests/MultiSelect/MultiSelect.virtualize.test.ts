@@ -35,6 +35,44 @@ describe("MultiSelect", () => {
       expect(options.length).toBeGreaterThan(0);
     });
 
+    it("reopens at the top without rendering the old window first", async () => {
+      render(MultiSelect, {
+        props: { items: createItems(500), virtualize: true },
+      });
+
+      await openMenu();
+      const firstText = screen.getAllByRole("option")[0].textContent?.trim();
+      const menu = screen.getByRole("listbox");
+      menu.scrollTop = 2000;
+      await fireEvent.scroll(menu);
+      await tick();
+      const staleText = screen.getAllByRole("option")[0].textContent?.trim();
+      expect(staleText).not.toBe(firstText);
+
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("listbox")).toBeNull();
+
+      const rendered: string[] = [];
+      const observer = new MutationObserver((records) => {
+        for (const record of records) {
+          for (const node of record.addedNodes) {
+            rendered.push(node.textContent ?? "");
+          }
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+      await openMenu();
+      await tick();
+      observer.disconnect();
+
+      expect(screen.getAllByRole("option")[0]).toHaveTextContent(
+        firstText ?? "",
+      );
+      expect(rendered.some((text) => text.includes(staleText ?? ""))).toBe(
+        false,
+      );
+    });
+
     it("should default itemHeight to the size row height", async () => {
       const largeItems = createItems(500);
       render(MultiSelect, {

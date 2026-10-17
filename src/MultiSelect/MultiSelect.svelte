@@ -1037,12 +1037,14 @@
         );
       });
     }
+    // Read before `prevOpen` catches up with `open` below.
+    const justClosed = !open && prevOpen;
     prevOpen = open;
 
     menuWindow.sync();
 
     // Reset scroll position when menu closes
-    if (!open && prevOpen && shouldVirtualize) {
+    if (justClosed && shouldVirtualize) {
       listScrollTop = resetVirtualScrollOnClose();
       if (listRef) {
         listRef.scrollTop = listScrollTop;
