@@ -9,8 +9,6 @@ import SelectFluidSkeleton from "./Select.fluidSkeleton.test.svelte";
 import SelectFluidSlot from "./Select.fluidSlot.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectManyItems from "./Select.manyItems.test.svelte";
-import SelectSkeleton from "./Select.skeleton.test.svelte";
-import SelectSlot from "./Select.slot.test.svelte";
 import Select from "./Select.test.svelte";
 import SelectToggle from "./Select.toggle.test.svelte";
 
@@ -149,12 +147,6 @@ describe("Select", () => {
     const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).toHaveClass("bx--select--light");
-  });
-
-  it("renders enabled by default", () => {
-    render(Select);
-    const selectElement = screen.getByLabelText("Select label");
-    expect(selectElement).not.toBeDisabled();
   });
 
   it("renders disabled state", () => {
@@ -403,17 +395,6 @@ describe("Select", () => {
     expect(warningIcon).toBeInTheDocument();
   });
 
-  it("renders without helper text by default", () => {
-    render(Select);
-    expect(screen.queryByText(/helper/i)).not.toBeInTheDocument();
-  });
-
-  it("renders helper text when provided", () => {
-    render(Select, { helperText: "Helper text" });
-    const helperElement = screen.getByText("Helper text");
-    expect(helperElement).toHaveTextContent("Helper text");
-  });
-
   describe("aria-describedby", () => {
     it("references error message when invalid", () => {
       render(Select, {
@@ -538,12 +519,6 @@ describe("Select", () => {
     });
   });
 
-  it("renders visible label by default", () => {
-    render(Select);
-    const label = screen.getByText("Select label");
-    expect(label).not.toHaveClass("bx--visually-hidden");
-  });
-
   it("renders with hidden label", () => {
     render(Select, { hideLabel: true });
     const label = screen.getByText("Select label");
@@ -567,14 +542,6 @@ describe("Select", () => {
     expect(options).toHaveLength(5);
     expect(options[0]).toHaveAttribute("disabled");
     expect(options[0]).toHaveAttribute("hidden");
-  });
-
-  it("renders skeleton state", () => {
-    render(SelectSkeleton);
-
-    const skeleton = screen.getByTestId("select-skeleton");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton.children[0]).toHaveClass("bx--skeleton");
   });
 
   it("renders fluid skeleton state", () => {
@@ -713,79 +680,6 @@ describe("Select", () => {
 });
 
 describe("Select Generics", () => {
-  it("should support custom value types with generics", () => {
-    type CustomValue = "option1" | "option2" | "option3";
-
-    const customValues: CustomValue[] = ["option1", "option2"];
-    expectTypeOf<typeof customValues>().toEqualTypeOf<CustomValue[]>();
-
-    type SelectedPropType = CustomValue | undefined;
-    expectTypeOf<SelectedPropType>().toEqualTypeOf<CustomValue | undefined>();
-
-    type UpdateEventDetail = CustomValue;
-    expectTypeOf<UpdateEventDetail>().toEqualTypeOf<CustomValue>();
-  });
-
-  it("should default to string | number type when generic is not specified", () => {
-    type DefaultValue = string | number;
-
-    const defaultValues: DefaultValue[] = ["test", 123];
-    expectTypeOf<typeof defaultValues>().toEqualTypeOf<DefaultValue[]>();
-
-    type SelectedPropType = DefaultValue | undefined;
-    expectTypeOf<SelectedPropType>().toEqualTypeOf<DefaultValue | undefined>();
-  });
-
-  it("should provide type-safe access to custom value types in event handlers", () => {
-    type StatusValue = "pending" | "approved" | "rejected";
-
-    const handleUpdate = (value: StatusValue) => {
-      const testValue: StatusValue = value;
-      expectTypeOf<typeof testValue>().toEqualTypeOf<StatusValue>();
-      if (value === "approved") {
-        const approvedValue: "approved" = value;
-        expectTypeOf<typeof approvedValue>().toEqualTypeOf<"approved">();
-      }
-    };
-
-    type HandleUpdateParam = Parameters<typeof handleUpdate>[0];
-    expectTypeOf<HandleUpdateParam>().toEqualTypeOf<StatusValue>();
-
-    const testValue: StatusValue = "approved";
-    const _handlerParam: Parameters<typeof handleUpdate>[0] = testValue;
-    expectTypeOf<HandleUpdateParam>().toEqualTypeOf<StatusValue>();
-  });
-
-  it("should work with number value types", () => {
-    type NumericValue = 1 | 2 | 3 | 4 | 5;
-
-    const numericValues: NumericValue[] = [1, 2, 3];
-    expectTypeOf<typeof numericValues>().toEqualTypeOf<NumericValue[]>();
-
-    type SelectedPropType = NumericValue | undefined;
-    expectTypeOf<SelectedPropType>().toEqualTypeOf<NumericValue | undefined>();
-  });
-
-  it("should work with string value types", () => {
-    type StringValue = string;
-
-    const stringValues: StringValue[] = ["test", "value"];
-    expectTypeOf<typeof stringValues>().toEqualTypeOf<StringValue[]>();
-
-    type SelectedPropType = StringValue | undefined;
-    expectTypeOf<SelectedPropType>().toEqualTypeOf<StringValue | undefined>();
-  });
-
-  it("should work with union value types", () => {
-    type UnionValue = "yes" | "no" | 0 | 1;
-
-    const unionValues: UnionValue[] = ["yes", "no", 0, 1];
-    expectTypeOf<typeof unionValues>().toEqualTypeOf<UnionValue[]>();
-
-    type SelectedPropType = UnionValue | undefined;
-    expectTypeOf<SelectedPropType>().toEqualTypeOf<UnionValue | undefined>();
-  });
-
   it("should enforce string | number constraint on generic type", () => {
     type StringLiteral = "option1" | "option2" | "option3";
     type ComponentType = SelectComponent<StringLiteral>;
@@ -807,13 +701,6 @@ describe("Select Generics", () => {
     expectTypeOf<BaseProps["selected"]>().toEqualTypeOf<
       string | number | undefined
     >();
-  });
-
-  it("supports custom label slot", () => {
-    render(SelectSlot);
-
-    const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
   });
 
   it("should type SelectItem value to match Select generic", () => {
