@@ -242,6 +242,7 @@
 {:else}
   <div
     class:bx--form-item={true}
+    class:bx--form-item--fit={true}
     class:bx--checkbox-wrapper={true}
     class:bx--checkbox-wrapper--readonly={effectiveReadonly}
     class:bx--checkbox-wrapper--invalid={showInvalid}

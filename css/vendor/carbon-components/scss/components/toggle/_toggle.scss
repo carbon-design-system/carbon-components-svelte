@@ -171,10 +171,13 @@
       cursor: pointer;
     }
 
+    // ccs: a grid that also holds the state text (v10 positioned it outside
+    // the box), so the toggle's width includes it, as in v11. The track and
+    // handle are absolutely positioned and keep their 48px.
     .#{$prefix}--toggle__switch {
       position: relative;
-      display: flex;
-      width: to-rem(48px);
+      display: grid;
+      min-width: to-rem(48px);
       height: to-rem(24px);
       align-items: center;
       cursor: pointer;
@@ -218,15 +221,14 @@
       }
     }
 
+    // ccs: in flow, both texts in one cell, so the box fits the longer one
+    // and does not change width when the state flips.
     .#{$prefix}--toggle__text--off,
     .#{$prefix}--toggle__text--on {
       @include type-style('body-short-01');
 
-      position: absolute;
-      // top offset needed to vertically center absolutely positioned flex child in IE11
-      top: 50%;
+      grid-area: 1 / 1;
       margin-left: to-rem(56px);
-      transform: translateY(-50%);
       user-select: none;
       white-space: nowrap;
     }
@@ -303,7 +305,7 @@
 
     .#{$prefix}--toggle-input--small + .#{$prefix}--toggle-input__label {
       > .#{$prefix}--toggle__switch {
-        width: to-rem(32px);
+        min-width: to-rem(32px); // ccs: was `width`, see `.toggle__switch`
         height: to-rem(16px);
 
         &::before {

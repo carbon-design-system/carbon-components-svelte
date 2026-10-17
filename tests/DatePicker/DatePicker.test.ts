@@ -129,11 +129,14 @@ describe("DatePicker", () => {
     );
   });
 
-  it("renders short variant", () => {
-    const { container } = render(DatePicker, { short: true });
+  it.each([
+    ["short", "bx--date-picker--short"],
+    ["fullWidth", "bx--date-picker--full-width"],
+  ] as const)("renders the %s variant", (prop, className) => {
+    const { container } = render(DatePicker, { [prop]: true });
 
     const wrapper = container.querySelector(".bx--date-picker");
-    expect(wrapper).toHaveClass("bx--date-picker--short");
+    expect(wrapper).toHaveClass(className);
   });
 
   it("renders single mode", async () => {

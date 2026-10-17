@@ -131,6 +131,7 @@
 
 <div
   class:bx--form-item={true}
+  class:bx--form-item--fit={true}
   class:bx--toggle--readonly={readonly}
   class:bx--toggle--invalid={showInvalid}
   class:bx--toggle--warning={showWarn}
@@ -205,12 +206,16 @@
       class:bx--toggle__switch={true}
       style:margin-top={hideLabel ? 0 : undefined}
     >
-      <span aria-hidden="true" class:bx--toggle__text--off={true}>
-        <slot name="labelA"> {labelA} </slot>
-      </span>
-      <span aria-hidden="true" class:bx--toggle__text--on={true}>
-        <slot name="labelB"> {labelB} </slot>
-      </span>
+      <!-- The state text is in flow: with none, render no spans, or their
+        margin would widen an otherwise bare switch. -->
+      {#if labelA || labelB || $$slots.labelA || $$slots.labelB}
+        <span aria-hidden="true" class:bx--toggle__text--off={true}>
+          <slot name="labelA"> {labelA} </slot>
+        </span>
+        <span aria-hidden="true" class:bx--toggle__text--on={true}>
+          <slot name="labelB"> {labelB} </slot>
+        </span>
+      {/if}
     </span>
   </label>
   {#if readonly}
