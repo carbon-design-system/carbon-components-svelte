@@ -17,6 +17,7 @@ describe("ListBoxField", () => {
     render(ListBoxField, {
       props: {
         disabled: true,
+        tabindex: "0",
         slotContent: "Disabled field",
       },
     });

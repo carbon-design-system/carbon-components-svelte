@@ -70,7 +70,7 @@ describe("scheduleHighlightScroll", () => {
     expect(menuWindow.scrollIntoView).not.toHaveBeenCalled();
   });
 
-  it("does nothing when not virtualized", () => {
+  it("does nothing when not virtualized", async () => {
     const menuWindow = buildMenuWindow();
     const next = scheduleHighlightScroll({
       ...baseOptions,
@@ -78,11 +78,14 @@ describe("scheduleHighlightScroll", () => {
       menuWindow,
     });
 
+    await Promise.resolve();
+    await Promise.resolve();
+
     expect(next).toBe(1);
     expect(menuWindow.scrollIntoView).not.toHaveBeenCalled();
   });
 
-  it("does nothing when the index did not change", () => {
+  it("does nothing when the index did not change", async () => {
     const menuWindow = buildMenuWindow();
     const next = scheduleHighlightScroll({
       ...baseOptions,
@@ -91,11 +94,14 @@ describe("scheduleHighlightScroll", () => {
       menuWindow,
     });
 
+    await Promise.resolve();
+    await Promise.resolve();
+
     expect(next).toBe(1);
     expect(menuWindow.scrollIntoView).not.toHaveBeenCalled();
   });
 
-  it("does nothing when highlightedIndex is negative", () => {
+  it("does nothing when highlightedIndex is negative", async () => {
     const menuWindow = buildMenuWindow();
     const next = scheduleHighlightScroll({
       ...baseOptions,
@@ -103,17 +109,23 @@ describe("scheduleHighlightScroll", () => {
       menuWindow,
     });
 
+    await Promise.resolve();
+    await Promise.resolve();
+
     expect(next).toBe(1);
     expect(menuWindow.scrollIntoView).not.toHaveBeenCalled();
   });
 
-  it("does nothing when there is no list ref", () => {
+  it("does nothing when there is no list ref", async () => {
     const menuWindow = buildMenuWindow();
     const next = scheduleHighlightScroll({
       ...baseOptions,
       listRef: null,
       menuWindow,
     });
+
+    await Promise.resolve();
+    await Promise.resolve();
 
     expect(next).toBe(1);
     expect(menuWindow.scrollIntoView).not.toHaveBeenCalled();
