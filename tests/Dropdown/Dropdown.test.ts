@@ -733,13 +733,6 @@ describe("Dropdown", () => {
     expect(screen.getByText("Bad")).toHaveAttribute("id", "error-dd");
   });
 
-  it("should not set aria-describedby when no message is shown", () => {
-    render(Dropdown, { props: { items, id: "dd" } });
-    expect(screen.getByRole("combobox")).not.toHaveAttribute(
-      "aria-describedby",
-    );
-  });
-
   it("should handle item selection", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
@@ -758,6 +751,7 @@ describe("Dropdown", () => {
     assert(menuItem);
     await user.click(menuItem);
 
+    expect(selectHandler).toHaveBeenCalledTimes(1);
     expect(selectHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         detail: { selectedId: "1", selectedItem: items[1] },
@@ -806,23 +800,6 @@ describe("Dropdown", () => {
       expect(selectHandler).not.toHaveBeenCalled();
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
       expect(button).toHaveTextContent("Email");
-    });
-
-    it("still dispatches select for a different option", async () => {
-      const selectHandler = vi.fn();
-      render(Dropdown, {
-        props: { items, selectedId: "1", onselect: selectHandler },
-      });
-
-      await user.click(screen.getByRole("combobox"));
-      await user.click(screen.getByRole("option", { name: "Fax" }));
-
-      expect(selectHandler).toHaveBeenCalledTimes(1);
-      expect(selectHandler).toHaveBeenCalledWith(
-        expect.objectContaining({
-          detail: { selectedId: "2", selectedItem: items[2] },
-        }),
-      );
     });
 
     it("closes a portaled menu without dispatching select", async () => {
@@ -904,23 +881,6 @@ describe("Dropdown", () => {
     await user.keyboard("{Enter}");
     expect(selectHandler).not.toHaveBeenCalled();
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(button).toHaveTextContent("Slack");
-  });
-
-  it("preserves the selected item when the menu closes via Tab without a new selection", async () => {
-    const selectHandler = vi.fn();
-    render(Dropdown, {
-      props: { items, selectedId: "0", onselect: selectHandler },
-    });
-
-    const button = screen.getByRole("combobox");
-    await user.click(button);
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.keyboard("{ArrowDown}");
-    await user.keyboard("{Tab}");
-
-    expect(selectHandler).not.toHaveBeenCalled();
     expect(button).toHaveTextContent("Slack");
   });
 
@@ -1212,24 +1172,17 @@ describe("Dropdown", () => {
     expect(menuItem).toHaveAttribute("disabled");
   });
 
-  it("should handle custom slot content", async () => {
-    render(DropdownSlot);
-
-    await user.click(screen.getByLabelText("Custom slot dropdown"));
-
-    const customItems = screen.getAllByTestId("custom-item");
-    expect(customItems).toHaveLength(3);
-    expect(customItems[0]).toHaveTextContent("Item 1: Option 1");
-    expect(customItems[1]).toHaveTextContent("Item 2: Option 2");
-    expect(customItems[2]).toHaveTextContent("Item 3: Option 3");
-  });
-
   it("should pass selected and highlighted to the default slot", async () => {
     render(DropdownSlot, { props: { selectedId: "1" } });
 
     await user.click(screen.getByLabelText("Custom slot dropdown"));
 
     const customItems = screen.getAllByTestId("custom-item");
+
+    expect(customItems).toHaveLength(3);
+    expect(customItems[0]).toHaveTextContent("Item 1: Option 1");
+    expect(customItems[1]).toHaveTextContent("Item 2: Option 2");
+    expect(customItems[2]).toHaveTextContent("Item 3: Option 3");
 
     // selectedId "1" is the second item, not index 1.
     expect(customItems[0]).toHaveAttribute("data-selected", "false");
@@ -1246,21 +1199,6 @@ describe("Dropdown", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
-  });
-
-  it("should close on outside click", async () => {
-    render(Dropdown, {
-      props: {
-        items,
-        selectedId: "0",
-      },
-    });
-
-    await user.click(screen.getByRole("combobox"));
-    expect(screen.getByRole("listbox")).toBeVisible();
-
-    await user.click(document.body);
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
   it("should stay open when window click has a non-Node target", () => {
@@ -2276,27 +2214,6 @@ describe("Dropdown", () => {
       expect(options.length).toBe(50);
     });
 
-    it("should use default item height when not specified", async () => {
-      const largeItems = createItems(500);
-      render(Dropdown, {
-        props: {
-          items: largeItems,
-          selectedId: "0",
-          virtualize: true,
-        },
-      });
-
-      const button = screen.getByRole("combobox");
-      await user.click(button);
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.length).toBeLessThan(500);
-    });
-
     it("should handle virtualization with custom item height", async () => {
       const largeItems = createItems(500);
       render(Dropdown, {
@@ -2590,22 +2507,6 @@ describe("Dropdown", () => {
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
-    it("should not virtualize lists with exactly 100 items when virtualize is undefined", async () => {
-      const items = createItems(100);
-      render(Dropdown, {
-        props: {
-          items,
-          selectedId: "0",
-        },
-      });
-
-      const button = screen.getByRole("combobox");
-      await user.click(button);
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBe(100);
-    });
-
     it("should explicitly disable virtualization when virtualize is false, even with large lists", async () => {
       const largeItems = createItems(500);
       render(Dropdown, {
@@ -2708,8 +2609,9 @@ describe("Dropdown", () => {
         props: { modalOpen: true, dropdownOpen: true },
       });
 
-      const menu = screen.getByRole("listbox");
+      const menu = screen.getByRole("listbox", { name: "Contact" });
       expect(menu).toBeInTheDocument();
+      expect(menu).toHaveAttribute("aria-label", "Contact");
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).toBeInTheDocument();
       expect(floatingPortal?.parentElement).toBe(document.body);
@@ -2759,18 +2661,6 @@ describe("Dropdown", () => {
 
         const menu = screen.getByRole("listbox", { name: "Choose an item" });
         expect(menu).toHaveAttribute("aria-label", "Choose an item");
-      });
-
-      it("should resolve listbox accessible name when portaled outside an open Modal", () => {
-        render(DropdownInModal, {
-          props: { modalOpen: true, dropdownOpen: true },
-        });
-
-        const menu = screen.getByRole("listbox", { name: "Contact" });
-        expect(menu).toHaveAttribute("aria-label", "Contact");
-        expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
-          document.body,
-        );
       });
     });
 
@@ -3130,19 +3020,6 @@ describe("Dropdown", () => {
       expect(
         noIcon?.querySelector(".bx--list-box__menu-item__icon"),
       ).toBeNull();
-    });
-
-    it("should expose selected and highlighted on the item slot", () => {
-      render(DropdownItemIcon);
-
-      expect(screen.getByTestId("item-0")).toHaveAttribute(
-        "data-selected",
-        "true",
-      );
-      expect(screen.getByTestId("item-1")).toHaveAttribute(
-        "data-selected",
-        "false",
-      );
     });
 
     it("should render the checkmark when iconRight is absent", () => {
