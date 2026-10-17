@@ -205,22 +205,24 @@ describe("TextArea", () => {
     expect(liveRegion).toHaveTextContent("No more room");
   });
 
-  describe("counterMode", () => {
-    function beforeInput(
-      textarea: HTMLTextAreaElement,
-      data: string,
-      inputType = "insertText",
-    ) {
-      const event = new InputEvent("beforeinput", {
-        inputType,
-        data,
-        bubbles: true,
-        cancelable: true,
-      });
-      textarea.dispatchEvent(event);
-      return event;
-    }
+  function beforeInput(
+    textarea: HTMLTextAreaElement,
+    data: string | null,
+    inputType = "insertText",
+    init: InputEventInit = {},
+  ) {
+    const event = new InputEvent("beforeinput", {
+      inputType,
+      data,
+      bubbles: true,
+      cancelable: true,
+      ...init,
+    });
+    textarea.dispatchEvent(event);
+    return event;
+  }
 
+  describe("counterMode", () => {
     function setup(value: string, maxCount: number, caret = value.length) {
       render(TextArea, { props: { counterMode: "word", maxCount, value } });
       const textarea = screen.getByRole("textbox");
@@ -440,6 +442,47 @@ describe("TextArea", () => {
     expect(textarea.value).toBe("😀😀😀😀");
   });
 
+  it("blocks a line break at the character limit", () => {
+    render(TextArea, { props: { maxCount: 3, value: "abc" } });
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
+    textarea.focus();
+    textarea.setSelectionRange(3, 3);
+
+    expect(
+      beforeInput(textarea, null, "insertLineBreak").defaultPrevented,
+    ).toBe(true);
+  });
+
+  it("does not block composition input at the character limit", () => {
+    render(TextArea, { props: { maxCount: 3, value: "abc" } });
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
+    textarea.focus();
+    textarea.setSelectionRange(3, 3);
+
+    expect(
+      beforeInput(textarea, "d", "insertCompositionText", { isComposing: true })
+        .defaultPrevented,
+    ).toBe(false);
+  });
+
+  it("truncates a paste that replaces a selection at the limit", async () => {
+    render(TextArea, { props: { maxCount: 5, value: "abcde" } });
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
+    textarea.focus();
+    textarea.setSelectionRange(1, 3);
+
+    const event = beforeInput(textarea, "XYZ", "insertFromPaste");
+    await tick();
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(textarea.value).toBe("aXYde");
+    expect(getBoundText()).toBe("aXYde");
+    expect(screen.getByText("5/5")).toBeInTheDocument();
+  });
+
   it("still allows deleting from a value already over maxCount", async () => {
     render(TextArea, { props: { maxCount: 5, value: "abcdef" } });
 
@@ -521,13 +564,16 @@ describe("TextArea", () => {
     expect(screen.getByText("Required")).toBeInTheDocument();
   });
 
-  it("does not mark aria-invalid for an over-limit value when disabled", () => {
-    render(TextArea, {
-      props: { disabled: true, maxCount: 2, value: "abcd" },
-    });
+  it.each([{ disabled: true }, { readonly: true }])(
+    "does not mark aria-invalid for an over-limit value when %o",
+    (state) => {
+      render(TextArea, {
+        props: { ...state, maxCount: 2, value: "abcd" },
+      });
 
-    expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-invalid");
-  });
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-invalid");
+    },
+  );
 
   it("should not show helper text when invalid", () => {
     render(TextArea, {
@@ -593,6 +639,27 @@ describe("TextArea", () => {
       await nextFrame();
 
       expect(textarea.style.height).toBe("120px");
+    });
+
+    it("clears the inline height when grow is turned off", async () => {
+      const { rerender } = render(TextArea, { props: { grow: true } });
+
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
+      Object.defineProperty(textarea, "scrollHeight", {
+        configurable: true,
+        value: 120,
+      });
+      await rerender({ grow: true, value: "line 1\nline 2\nline 3" });
+      await tick();
+      await nextFrame();
+      expect(textarea.style.height).toBe("120px");
+
+      await rerender({ grow: false });
+      await tick();
+
+      expect(textarea.style.height).toBe("");
+      expect(textarea.style.overflowY).toBe("");
     });
 
     it("measures every growing field before any field is given its final height", async () => {
