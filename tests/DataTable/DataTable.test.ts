@@ -19,6 +19,7 @@ import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte
 import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
 import DataTableFooter from "./DataTableFooter.test.svelte";
+import DataTableSlotProps from "./DataTableSlotProps.test.svelte";
 import {
   clickHeader,
   eventDetails,
@@ -27,7 +28,9 @@ import {
   getCell,
   getCells,
   getColumnHeaderText,
+  getColumnTexts,
   getRenderedRowIds,
+  getRowInputs,
   getRowTexts,
   getSelectAll,
 } from "./helpers";
@@ -652,6 +655,26 @@ describe("DataTable", () => {
     expect(getCell(2, 2)).toHaveTextContent("3000");
   });
 
+  it("negates the top-level sort result for descending sortDirection", () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows,
+        sortKey: "name",
+        sortDirection: "descending",
+        sort: (a: DataTableValue, b: DataTableValue) =>
+          String(a).localeCompare(String(b)),
+      },
+    });
+
+    expect(getColumnTexts(0)).toEqual([
+      "Load Balancer 3",
+      "Load Balancer 2",
+      "Load Balancer 1",
+    ]);
+  });
+
   it("per-header sort overrides the top-level sort prop", async () => {
     const customHeaders = [
       { key: "name", value: "Name" },
@@ -1126,6 +1149,33 @@ describe("DataTable", () => {
     expect(table).toHaveClass("bx--data-table--zebra");
   });
 
+  it("stripes visible rows with data-zebra-even when filterMode is hide", async () => {
+    const zebraRows = [
+      { id: "a", name: "Row A", rule: "Round robin" },
+      { id: "b", name: "Row B", rule: "DNS delegation" },
+      { id: "c", name: "Row C", rule: "Round robin" },
+      { id: "d", name: "Row D", rule: "Round robin" },
+    ];
+    render(DataTable, {
+      props: {
+        zebra: true,
+        filterMode: "hide",
+        search: true,
+        headers,
+        rows: zebraRows,
+      },
+    });
+
+    await user.type(screen.getByRole("searchbox"), "round");
+
+    expect(screen.getByRole("table")).not.toHaveClass("bx--data-table--zebra");
+    expect(
+      [...document.querySelectorAll("tr[data-zebra-even]")].map((tr) =>
+        tr.getAttribute("data-row"),
+      ),
+    ).toEqual(["c"]);
+  });
+
   it("applies different size variants", () => {
     type Size = "compact" | "short" | "medium" | "tall";
     const sizeMappings: Record<Size, string> = {
@@ -1521,6 +1571,30 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 15");
   });
 
+  it("sorts all rows before slicing the page", () => {
+    const sortedPortRows = Array.from({ length: 15 }, (_, i) => ({
+      id: String(i),
+      name: `Load Balancer ${i + 1}`,
+      protocol: "HTTP",
+      port: (15 - i) * 10,
+      rule: "Round robin",
+    }));
+
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows: sortedPortRows,
+        sortKey: "port",
+        sortDirection: "ascending",
+        pageSize: 5,
+        page: 1,
+      },
+    });
+
+    expect(getColumnTexts(2)).toEqual(["10", "20", "30", "40", "50"]);
+  });
+
   it("dispatches cell events before row events on a cell click", async () => {
     const onevent = vi.fn();
     render(DataTable, { props: { headers, rows, onevent } });
@@ -1580,6 +1654,25 @@ describe("DataTable", () => {
     expect(customDescription).toBeInTheDocument();
     expect(customDescription).toHaveTextContent("Custom Description");
     expect(customDescription).toHaveClass("bx--data-table-header__description");
+  });
+
+  it("passes row, cell and header to the cell, cellHeader and expandedRow slots", () => {
+    render(DataTableSlotProps);
+
+    expect(
+      screen.getAllByTestId("header-slot").map((el) => el.textContent),
+    ).toEqual(["name=Name", "port=Port"]);
+    expect(
+      screen.getAllByTestId("cell-slot").map((el) => el.textContent),
+    ).toEqual([
+      "a.name=Load Balancer 1",
+      "a.port=3000",
+      "b.name=Load Balancer 2",
+      "b.port=443",
+    ]);
+    expect(screen.getByTestId("expanded-slot")).toHaveTextContent(
+      "b=Load Balancer 2",
+    );
   });
 
   it("passes rowSelected prop to expandedRow slot", () => {
@@ -1746,6 +1839,87 @@ describe("DataTable", () => {
         currentTarget: expect.any(HTMLElement),
       },
     ]);
+  });
+
+  describe("selection and expansion event payloads", () => {
+    it("click:row--select reports the row and its new selected state", async () => {
+      const onevent = vi.fn();
+      render(DataTable, {
+        props: { selectable: true, headers, rows, onevent },
+      });
+
+      await user.click(getRowInputs()[1]);
+      await user.click(getRowInputs()[1]);
+
+      expect(eventDetails(onevent, "click:row--select")).toEqual([
+        { row: rows[1], selected: true },
+        { row: rows[1], selected: false },
+      ]);
+    });
+
+    it("click:row--expand reports the row and its new expanded state", async () => {
+      const onevent = vi.fn();
+      render(DataTable, {
+        props: { expandable: true, headers, rows, onevent },
+      });
+
+      await user.click(
+        screen.getAllByRole("button", { name: /expand current row/i })[2],
+      );
+      await user.click(
+        screen.getAllByRole("button", { name: /collapse current row/i })[0],
+      );
+
+      expect(eventDetails(onevent, "click:row--expand")).toEqual([
+        { row: rows[2], expanded: true },
+        { row: rows[2], expanded: false },
+      ]);
+    });
+
+    it("click:header--expand reports the new expanded state", async () => {
+      const onevent = vi.fn();
+      render(DataTable, {
+        props: {
+          expandable: true,
+          batchExpansion: true,
+          headers,
+          rows,
+          onevent,
+        },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Expand all rows" }));
+      await user.click(
+        screen.getByRole("button", { name: "Collapse all rows" }),
+      );
+
+      expect(eventDetails(onevent, "click:header--expand")).toEqual([
+        { expanded: true },
+        { expanded: false },
+      ]);
+    });
+
+    it("click:header--select reports indeterminate and selected", async () => {
+      const onevent = vi.fn();
+      render(DataTable, {
+        props: {
+          selectable: true,
+          batchSelection: true,
+          selectedRowIds: ["a"],
+          headers,
+          rows,
+          onevent,
+        },
+      });
+
+      await user.click(getSelectAll());
+      await user.click(getSelectAll());
+
+      expect(eventDetails(onevent, "click:header--select")).toEqual([
+        { indeterminate: true, selected: false },
+        { indeterminate: false, selected: true },
+      ]);
+    });
   });
 
   it("does not dispatch click:row when clicking checkbox", async () => {
@@ -2945,11 +3119,16 @@ describe("DataTable header width", () => {
 
   const rows = [{ id: "a", name: "payments-api", status: "Active" }];
 
-  it("emits a col with the matching width for a sized header", () => {
-    const { container } = render(DataTable, { headers, rows });
+  it.each([
+    [{}, 0],
+    [{ expandable: true }, 1],
+    [{ selectable: true }, 1],
+    [{ expandable: true, selectable: true }, 2],
+  ])("lines a sized header's col up with its column (%o)", (props, leading) => {
+    const { container } = render(DataTable, { headers, rows, ...props });
 
     const cols = container.querySelectorAll("colgroup col");
-    expect(cols).toHaveLength(headers.length);
-    expectInlineStyle(cols[0], { width: "200px" });
+    expect(cols).toHaveLength(leading + headers.length);
+    expectInlineStyle(cols[leading], { width: "200px" });
   });
 });

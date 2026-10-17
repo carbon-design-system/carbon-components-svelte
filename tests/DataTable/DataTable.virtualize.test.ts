@@ -1,7 +1,16 @@
-import { fireEvent, render, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { setMenuMetrics } from "../utils/set-menu-metrics";
+import { user } from "../utils/user";
 import DataTable from "./DataTable.test.svelte";
-import { eventDetails, getRenderedRowIds, makeRows } from "./helpers";
+import {
+  eventDetails,
+  getBodyRows,
+  getRenderedRowIds,
+  getRowInput,
+  getRowInputs,
+  makeRows,
+} from "./helpers";
 
 describe("DataTable virtualize + stickyHeader", () => {
   const renderVirtualSticky = (
@@ -139,5 +148,75 @@ describe("DataTable scrollend", () => {
     });
     await fireEvent.scroll(containerAfter);
     expect(eventDetails(onevent, "scrollend")).toHaveLength(2);
+  });
+});
+
+describe("DataTable virtualized rows", () => {
+  const headers = [{ key: "name", value: "Name" }];
+  const rows = makeRows(500);
+
+  const renderVirtual = (
+    props: Partial<ComponentProps<typeof DataTable>> = {},
+  ) =>
+    render(DataTable, { props: { headers, rows, virtualize: true, ...props } });
+
+  it("highlights the rows named by highlightedRowIds", () => {
+    renderVirtual({ highlightedRowIds: ["1"] });
+
+    expect(getBodyRows()[1]).toHaveClass("bx--data-table--highlighted-row");
+  });
+
+  it("dispatches click:row with the clicked row", async () => {
+    const onevent = vi.fn();
+    renderVirtual({ onevent });
+
+    await user.click(screen.getByText("Row 2"));
+
+    expect(eventDetails(onevent, "click:row")).toEqual([
+      expect.objectContaining({ row: rows[1] }),
+    ]);
+  });
+
+  it("selects one row at a time with radio", async () => {
+    const onselectedrowids = vi.fn();
+    renderVirtual({ radio: true, onselectedrowids });
+
+    await user.click(getRowInput("1"));
+    await user.click(getRowInput("3"));
+
+    expect(onselectedrowids).toHaveBeenLastCalledWith(["3"]);
+    expect(
+      getRowInputs()
+        .filter((input) => input.checked)
+        .map((input) => input.value),
+    ).toEqual(["3"]);
+  });
+
+  it("selects the range between the anchor and a shift+clicked row", async () => {
+    renderVirtual({ selectable: true });
+
+    await user.click(getRowInput("1"));
+    await user.keyboard("{Shift>}");
+    await user.click(getRowInput("4"));
+    await user.keyboard("{/Shift}");
+
+    expect(
+      getRowInputs()
+        .filter((input) => input.checked)
+        .map((input) => input.value),
+    ).toEqual(["1", "2", "3", "4"]);
+  });
+
+  it.each([
+    ["radio", { radio: true }],
+    ["checkbox", { selectable: true }],
+  ])("sets the form attribute on %s inputs from inputForm", (_, props) => {
+    renderVirtual({ ...props, inputForm: "outer-form" });
+
+    const inputs = getRowInputs();
+    expect(inputs.length).toBeGreaterThan(0);
+    for (const input of inputs) {
+      expect(input).toHaveAttribute("form", "outer-form");
+    }
   });
 });

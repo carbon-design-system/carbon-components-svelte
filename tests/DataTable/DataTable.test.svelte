@@ -2,6 +2,9 @@
   import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
+  import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
+  import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
+  import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
   import type { ComponentEvents, ComponentProps } from "svelte";
 
   type BaseRow = {
@@ -81,6 +84,9 @@
     [];
   export let selectedRowIds: ComponentProps<DataTable>["selectedRowIds"] = [];
   export let expandedRowIds: ComponentProps<DataTable>["expandedRowIds"] = [];
+  export let highlightedRowIds: ComponentProps<DataTable>["highlightedRowIds"] =
+    [];
+  export let inputForm: ComponentProps<DataTable>["inputForm"] = undefined;
   export let pageSize = 0;
   export let page = 0;
   export let sortKey: ComponentProps<DataTable>["sortKey"] = undefined;
@@ -97,8 +103,17 @@
   /** When true, `on:sort` calls preventDefault() so the table does not apply client-side sort. */
   export let preventSortDefault = false;
   /** Receives every forwarded click, hover, and scrollend event in dispatch order. */
+  export let filterMode: ComponentProps<DataTable>["filterMode"] = "remove";
+  /** When true, renders a row-filtering ToolbarSearch inside the table. */
+  export let search = false;
+  /** Receives `selectedRowIds` whenever it changes, including internal updates. */
+  export let onselectedrowids:
+    | ((selectedRowIds: ComponentProps<DataTable>["selectedRowIds"]) => void)
+    | undefined = undefined;
   export let onevent: ((name: string, detail: unknown) => void) | undefined =
     undefined;
+
+  $: onselectedrowids?.(selectedRowIds);
 </script>
 
 <DataTable
@@ -123,20 +138,27 @@
   {batchSelection}
   {nonSelectableRowIds}
   {nonExpandableRowIds}
-  {selectedRowIds}
+  bind:selectedRowIds
   {expandedRowIds}
+  {highlightedRowIds}
+  {inputForm}
   {pageSize}
   {page}
   {rowClass}
   {sortKey}
   {sortDirection}
   {virtualize}
+  {filterMode}
   bind:scrollContainerRef
   {tableHeaderTranslateWithId}
   on:click={(e) => onevent?.("click", e.detail)}
   on:click:header={(e) => onevent?.("click:header", e.detail)}
   on:click:row={(e) => onevent?.("click:row", e.detail)}
   on:click:cell={(e) => onevent?.("click:cell", e.detail)}
+  on:click:header--expand={(e) => onevent?.("click:header--expand", e.detail)}
+  on:click:header--select={(e) => onevent?.("click:header--select", e.detail)}
+  on:click:row--expand={(e) => onevent?.("click:row--expand", e.detail)}
+  on:click:row--select={(e) => onevent?.("click:row--select", e.detail)}
   on:mouseenter:row={(e) => onevent?.("mouseenter:row", e.detail)}
   on:mouseleave:row={(e) => onevent?.("mouseleave:row", e.detail)}
   on:scrollend={(e) => onevent?.("scrollend", e.detail)}
@@ -145,5 +167,12 @@
     if (preventSortDefault) e.preventDefault();
   }}
 >
+  {#if search}
+    <Toolbar>
+      <ToolbarContent>
+        <ToolbarSearch persistent shouldFilterRows />
+      </ToolbarContent>
+    </Toolbar>
+  {/if}
   <slot />
 </DataTable>
