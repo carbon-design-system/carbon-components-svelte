@@ -1533,6 +1533,7 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
+              class={tagSize === "sm" ? "bx--tag--sm" : undefined}
             />
           {/if}
           <input
@@ -1806,6 +1807,7 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
+              class={tagSize === "sm" ? "bx--tag--sm" : undefined}
             />
           {/if}
           <span class:bx--list-box__label={true}>{label}</span>
