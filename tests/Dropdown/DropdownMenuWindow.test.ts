@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import { createItems } from "../utils/create-items";
 import { user } from "../utils/user";
 import Dropdown from "./Dropdown.test.svelte";
-import { createItems } from "./helpers";
 
 /**
  * What is left of this component's measured-menu coverage once the behaviour

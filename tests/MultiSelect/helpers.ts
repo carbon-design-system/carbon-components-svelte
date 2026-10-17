@@ -12,14 +12,6 @@ export async function openMenu() {
   await user.click(await screen.findByRole("combobox", { expanded: false }));
 }
 
-/** Sequential items numbered "Item 1", "Item 2", ... by a 0-based id. */
-export function createItems(count: number): MultiSelectItem[] {
-  return Array.from({ length: count }, (_, index) => ({
-    id: String(index),
-    text: `Item ${index + 1}`,
-  }));
-}
-
 /** A small fixed set of contact-style items shared by the sort/reuse tests. */
 export function buildItems(): MultiSelectItem[] {
   return [

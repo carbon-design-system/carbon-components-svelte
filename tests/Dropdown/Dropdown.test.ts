@@ -9,6 +9,7 @@ import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.s
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { createItems } from "../utils/create-items";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
@@ -25,7 +26,6 @@ import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
-import { createItems } from "./helpers";
 
 const items = [
   { id: "0", text: "Slack" },

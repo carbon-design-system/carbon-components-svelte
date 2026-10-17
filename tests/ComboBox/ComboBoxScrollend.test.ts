@@ -1,15 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { createItems } from "../utils/create-items";
 import { setMenuMetrics } from "../utils/set-menu-metrics";
 import { user } from "../utils/user";
 import ComboBoxScrollend from "./ComboBoxScrollend.test.svelte";
-
-function createItems(count: number) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: String(i),
-    text: `Item ${i + 1}`,
-  }));
-}
 
 describe("ComboBox scrollend", () => {
   it("dispatches scrollend when scrolled near the bottom", async () => {

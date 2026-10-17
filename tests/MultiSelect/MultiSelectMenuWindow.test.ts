@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { createItems } from "../utils/create-items";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { user } from "../utils/user";
-import { createItems } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MeasuredMultiSelect from "./MultiSelectMeasured.test.svelte";
 

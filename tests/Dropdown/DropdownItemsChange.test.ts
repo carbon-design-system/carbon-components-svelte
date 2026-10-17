@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { createItems } from "../utils/create-items";
 import DropdownItemsChange from "./DropdownItemsChange.test.svelte";
-import { createItems } from "./helpers";
 
 describe("Dropdown items change while open", () => {
   it("does not throw and leaves selection unchanged when Enter is pressed after items shrink past the highlighted index", async () => {

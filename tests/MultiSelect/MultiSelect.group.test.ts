@@ -1,8 +1,9 @@
 import { render, screen, waitFor, within } from "@testing-library/svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import { createItems } from "../utils/create-items";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
-import { createItems, optionTexts, toggleOption } from "./helpers";
+import { optionTexts, toggleOption } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectGroupSlot from "./MultiSelectGroupSlot.test.svelte";
 
