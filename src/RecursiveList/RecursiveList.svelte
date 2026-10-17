@@ -32,7 +32,7 @@
 
   import OrderedList from "../OrderedList/OrderedList.svelte";
   import UnorderedList from "../UnorderedList/UnorderedList.svelte";
-  import RecursiveListItem from "./RecursiveListItem.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 <svelte:component
@@ -43,24 +43,26 @@
   {...$$restProps}
 >
   {#each nodes as child, index (child.id ?? index)}
-    {#if Array.isArray(child.nodes)}
-      <RecursiveListItem
-        text={child.text}
-        href={child.href}
-        html={child.html}
-        target={child.target}
-        rel={child.rel}
-      >
+    <li class:bx--list__item={true}>
+      {#if child.text && !child.href}
+        {child.text}
+      {/if}
+      {#if child.href}
+        <a
+          class:bx--link={true}
+          href={child.href}
+          target={child.target}
+          rel={resolveLinkRel(child.target, child.rel)}
+        >
+          {child.text || child.href}
+        </a>
+      {/if}
+      {#if !child.text && child.html}
+        {@html child.html}
+      {/if}
+      {#if Array.isArray(child.nodes)}
         <svelte:self nodes={child.nodes} {type} {expressive} nested />
-      </RecursiveListItem>
-    {:else}
-      <RecursiveListItem
-        text={child.text}
-        href={child.href}
-        html={child.html}
-        target={child.target}
-        rel={child.rel}
-      />
-    {/if}
+      {/if}
+    </li>
   {/each}
 </svelte:component>
