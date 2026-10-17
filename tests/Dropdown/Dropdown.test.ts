@@ -332,7 +332,7 @@ describe("Dropdown", () => {
   });
 
   it("should clear the selection and dispatch clear when clicking the clear button", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onclear = vi.fn();
     render(Dropdown, {
       props: {
         items,
@@ -340,6 +340,7 @@ describe("Dropdown", () => {
         labelText: "Contact",
         label: "Choose a contact method",
         clearable: true,
+        onclear,
       },
     });
 
@@ -348,7 +349,8 @@ describe("Dropdown", () => {
     });
     await user.click(clearButton);
 
-    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    expect(onclear).toHaveBeenCalledOnce();
+    expect(onclear.mock.calls[0][0].type).toEqual(expect.any(String));
     expect(
       screen.queryByRole("button", { name: "Clear selected item" }),
     ).not.toBeInTheDocument();
@@ -1404,8 +1406,8 @@ describe("Dropdown", () => {
 
   describe("Generics", () => {
     it("should infer generic type from items and support destructuring in slots", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(DropdownGenerics);
+      const onSelect = vi.fn();
+      render(DropdownGenerics, { props: { onSelect } });
 
       const button = screen.getByLabelText("Products");
       await user.click(button);
@@ -1419,7 +1421,8 @@ describe("Dropdown", () => {
       // Laptop is already selected, so pick Phone to trigger `select`.
       await user.click(options[1]);
 
-      expect(consoleLog).toHaveBeenCalledWith("selected:", {
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect.mock.calls[0][0].selectedItem).toEqual({
         id: "2",
         text: "Phone",
         price: 599,
