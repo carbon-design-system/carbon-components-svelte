@@ -23,6 +23,23 @@ import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
 import { getFlatpickrInstance } from "./flatpickr-instance";
 import { findDay, getDayByNumber } from "./helpers";
 
+// The range, month, year and week pickers load their flatpickr plugins on
+// demand. Cold, as when CI runs the DatePicker tests on their own, that
+// import can outlast a test's 1s wait for the calendar, so load them once
+// up front.
+beforeAll(async () => {
+  await Promise.all([
+    // @ts-expect-error: no type declarations
+    import("flatpickr/dist/esm/plugins/rangePlugin"),
+    // @ts-expect-error: no type declarations
+    import("flatpickr/dist/esm/plugins/monthSelect"),
+    // @ts-expect-error: no type declarations
+    import("flatpickr/dist/esm/plugins/weekSelect/weekSelect"),
+    // @ts-expect-error: no type declarations
+    import("carbon-components-svelte/DatePicker/year-select-plugin.js"),
+  ]);
+}, 30_000);
+
 describe("DatePicker", () => {
   it("renders with default props", async () => {
     render(DatePicker);
