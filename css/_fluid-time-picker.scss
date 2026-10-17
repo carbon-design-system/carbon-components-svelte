@@ -86,12 +86,6 @@
 
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
-    .#{$prefix}--label::-webkit-scrollbar {
-    display: none;
-  }
-
-  .#{$prefix}--time-picker--fluid
-    .#{$prefix}--time-picker__input
     .#{$prefix}--label.#{$prefix}--label--slotted {
     @include fluid-label-slotted;
   }

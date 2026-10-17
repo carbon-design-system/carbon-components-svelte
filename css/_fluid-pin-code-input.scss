@@ -19,12 +19,6 @@
     @include fluid-label;
   }
 
-  .#{$prefix}--pin-code-input--fluid
-    .#{$prefix}--pin-code-input__fieldset
-    > legend.#{$prefix}--label::-webkit-scrollbar {
-    display: none;
-  }
-
   // Labels with slotted content (e.g., a tooltip icon) must not clip
   // overflow, or the tooltip popover would be cut off.
   .#{$prefix}--pin-code-input--fluid
