@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import ToolbarSearchDebounce from "./ToolbarSearchDebounce.test.svelte";
-import ToolbarSearchDeferFilter from "./ToolbarSearchDeferFilter.test.svelte";
+import ToolbarSearchTiming from "./ToolbarSearchTiming.test.svelte";
 
 describe("ToolbarSearch debounce", () => {
   beforeEach(() => {
@@ -12,7 +11,7 @@ describe("ToolbarSearch debounce", () => {
   });
 
   it("delays filtering until typing pauses", async () => {
-    const { component } = render(ToolbarSearchDebounce, {
+    const { component } = render(ToolbarSearchTiming, {
       props: { debounce: 300 },
     });
 
@@ -27,7 +26,7 @@ describe("ToolbarSearch debounce", () => {
   });
 
   it("filters a starting value right away", () => {
-    const { component } = render(ToolbarSearchDebounce, {
+    const { component } = render(ToolbarSearchTiming, {
       props: { debounce: 300, value: "Balancer 1" },
     });
 
@@ -35,10 +34,11 @@ describe("ToolbarSearch debounce", () => {
   });
 
   it("runs the filter once after the last of several rapid inputs", async () => {
-    const { component } = render(ToolbarSearchDebounce, {
-      props: { debounce: 300 },
+    const onFilterRows = vi.fn();
+    const { component } = render(ToolbarSearchTiming, {
+      props: { debounce: 300, onFilterRows },
     });
-    const baseline = component.filterRowsCount;
+    onFilterRows.mockClear();
 
     const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "B" } });
@@ -46,12 +46,12 @@ describe("ToolbarSearch debounce", () => {
     await fireEvent.input(input, { target: { value: "Ba" } });
     await vi.advanceTimersByTimeAsync(300);
 
-    expect(component.filterRowsCount).toBe(baseline + 1);
+    expect(onFilterRows).toHaveBeenCalledTimes(1);
     expect(component.filteredRowIds).toHaveLength(6);
   });
 
   it("restores rows immediately on clear without advancing timers", async () => {
-    const { component } = render(ToolbarSearchDebounce, {
+    const { component } = render(ToolbarSearchTiming, {
       props: { debounce: 300 },
     });
 
@@ -66,24 +66,21 @@ describe("ToolbarSearch debounce", () => {
   });
 
   it.each([
-    ["a pending debounced run", ToolbarSearchDebounce, { debounce: 300 }, 300],
-    ["a yielded filter", ToolbarSearchDeferFilter, { deferFilter: true }, 0],
-  ])(
-    "does not filter after unmount with %s",
-    async (_, Fixture, props, wait) => {
-      const onFilterRows = vi.fn();
-      const { unmount } = render(Fixture, {
-        props: { ...props, onFilterRows },
-      });
+    ["a pending debounced run", { debounce: 300 }, 300],
+    ["a yielded filter", { deferFilter: true }, 0],
+  ])("does not filter after unmount with %s", async (_, props, wait) => {
+    const onFilterRows = vi.fn();
+    const { unmount } = render(ToolbarSearchTiming, {
+      props: { ...props, onFilterRows },
+    });
 
-      const input = screen.getByRole("searchbox");
-      await fireEvent.input(input, { target: { value: "Balancer 1" } });
-      unmount();
-      const callsAtUnmount = onFilterRows.mock.calls.length;
+    const input = screen.getByRole("searchbox");
+    await fireEvent.input(input, { target: { value: "Balancer 1" } });
+    unmount();
+    const callsAtUnmount = onFilterRows.mock.calls.length;
 
-      await vi.advanceTimersByTimeAsync(wait + 10);
+    await vi.advanceTimersByTimeAsync(wait + 10);
 
-      expect(onFilterRows).toHaveBeenCalledTimes(callsAtUnmount);
-    },
-  );
+    expect(onFilterRows).toHaveBeenCalledTimes(callsAtUnmount);
+  });
 });

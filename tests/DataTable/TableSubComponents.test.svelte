@@ -28,6 +28,7 @@
   export let description: ComponentProps<TableContainer>["description"] = "";
 
   export let slotContent = "";
+  export let onevent: ((name: string) => void) | undefined = undefined;
 </script>
 
 {#if testComponent === "Table"}
@@ -54,10 +55,10 @@
   </TableBody>
 {:else if testComponent === "TableCell"}
   <TableCell
-    on:click={() => console.log("click")}
-    on:mouseover={() => console.log("mouseover")}
-    on:mouseenter={() => console.log("mouseenter")}
-    on:mouseleave={() => console.log("mouseleave")}
+    on:click={() => onevent?.("click")}
+    on:mouseover={() => onevent?.("mouseover")}
+    on:mouseenter={() => onevent?.("mouseenter")}
+    on:mouseleave={() => onevent?.("mouseleave")}
     {...$$restProps}
   >
     {#if slotContent}
@@ -67,10 +68,10 @@
   </TableCell>
 {:else if testComponent === "TableRow"}
   <TableRow
-    on:click={() => console.log("click")}
-    on:mouseover={() => console.log("mouseover")}
-    on:mouseenter={() => console.log("mouseenter")}
-    on:mouseleave={() => console.log("mouseleave")}
+    on:click={() => onevent?.("click")}
+    on:mouseover={() => onevent?.("mouseover")}
+    on:mouseenter={() => onevent?.("mouseenter")}
+    on:mouseleave={() => onevent?.("mouseleave")}
     {...$$restProps}
   >
     {#if slotContent}
@@ -80,10 +81,10 @@
   </TableRow>
 {:else if testComponent === "TableHead"}
   <TableHead
-    on:click={() => console.log("click")}
-    on:mouseover={() => console.log("mouseover")}
-    on:mouseenter={() => console.log("mouseenter")}
-    on:mouseleave={() => console.log("mouseleave")}
+    on:click={() => onevent?.("click")}
+    on:mouseover={() => onevent?.("mouseover")}
+    on:mouseenter={() => onevent?.("mouseenter")}
+    on:mouseleave={() => onevent?.("mouseleave")}
     {...$$restProps}
   >
     {#if slotContent}
@@ -92,13 +93,7 @@
     <slot />
   </TableHead>
 {:else if testComponent === "TableFoot"}
-  <TableFoot
-    on:click={() => console.log("click")}
-    on:mouseover={() => console.log("mouseover")}
-    on:mouseenter={() => console.log("mouseenter")}
-    on:mouseleave={() => console.log("mouseleave")}
-    {...$$restProps}
-  >
+  <TableFoot {...$$restProps}>
     {#if slotContent}
       {slotContent}
     {/if}

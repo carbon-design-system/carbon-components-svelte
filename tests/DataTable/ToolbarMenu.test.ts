@@ -69,11 +69,12 @@ describe("DataTable Toolbar Menu", () => {
     });
 
     it("should handle click events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(ToolbarMenuTest, {
         props: {
           testComponent: "ToolbarMenuItem",
           slotContent: "Clickable item",
+          onevent,
         },
       });
 
@@ -87,15 +88,16 @@ describe("DataTable Toolbar Menu", () => {
       assert(menuButton);
       await user.click(menuButton);
 
-      expect(consoleLog).toHaveBeenCalledWith("click");
+      expect(onevent).toHaveBeenCalledWith("click");
     });
 
     it("should handle keydown events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onevent = vi.fn();
       const { container } = render(ToolbarMenuTest, {
         props: {
           testComponent: "ToolbarMenuItem",
           slotContent: "Keyboard item",
+          onevent,
         },
       });
 
@@ -111,7 +113,7 @@ describe("DataTable Toolbar Menu", () => {
       menuItem.focus();
       await user.keyboard("{Enter}");
 
-      expect(consoleLog).toHaveBeenCalledWith("keydown");
+      expect(onevent).toHaveBeenCalledWith("keydown");
     });
 
     it("should apply custom attributes", async () => {

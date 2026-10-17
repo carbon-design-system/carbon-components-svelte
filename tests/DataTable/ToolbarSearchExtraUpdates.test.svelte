@@ -1,14 +1,12 @@
-<svelte:options accessors />
-
 <script lang="ts">
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
-  import FilterRowsSpy from "./FilterRowsSpy.svelte";
+  import ContextSpy from "./ContextSpy.svelte";
 
-  export let filterRowsCount = 0;
+  export let onFilterRows: (() => void) | undefined = undefined;
 
   const rows = Array.from({ length: 10 }).map((_, i) => ({
     id: i,
@@ -31,9 +29,9 @@
 >
   <Toolbar>
     <ToolbarContent>
-      <FilterRowsSpy bind:count={filterRowsCount}>
+      <ContextSpy onfilterrows={onFilterRows}>
         <ToolbarSearch shouldFilterRows value="round" tabindex={unrelated} />
-      </FilterRowsSpy>
+      </ContextSpy>
     </ToolbarContent>
   </Toolbar>
 </DataTable>

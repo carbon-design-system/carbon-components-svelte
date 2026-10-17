@@ -1,14 +1,12 @@
-<svelte:options accessors />
-
 <script lang="ts">
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
-  import TableRowsSubscribeSpy from "./TableRowsSubscribeSpy.svelte";
+  import ContextSpy from "./ContextSpy.svelte";
 
-  export let subscribeCount = 0;
+  export let onTableRows: (() => void) | undefined = undefined;
 
   let rows = Array.from({ length: 5 }).map((_, i) => ({
     id: i,
@@ -32,9 +30,9 @@
 <DataTable headers={[{ key: "name", value: "Name" }]} {rows}>
   <Toolbar>
     <ToolbarContent>
-      <TableRowsSubscribeSpy bind:count={subscribeCount}>
+      <ContextSpy ontablerows={onTableRows}>
         <ToolbarSearch {shouldFilterRows} />
-      </TableRowsSubscribeSpy>
+      </ContextSpy>
     </ToolbarContent>
   </Toolbar>
 </DataTable>

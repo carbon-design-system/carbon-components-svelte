@@ -2,11 +2,10 @@
 
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import { render } from "svelte/server";
-import { RANDOM_ID, renderSSR } from "../utils/ssr";
+import { RANDOM_ID, renderSSR, stripHydrationMarkers } from "../utils/ssr";
 
-/** Server output with only Svelte's hydration comments removed. */
 function renderRaw(props: Record<string, unknown>) {
-  return render(DataTable, { props }).body.replace(/<!--[\s\S]*?-->/g, "");
+  return stripHydrationMarkers(render(DataTable, { props }).body);
 }
 
 describe("DataTable server render", () => {

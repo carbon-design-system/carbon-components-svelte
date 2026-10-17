@@ -94,6 +94,11 @@
     | ((e: ComponentEvents<DataTableComponent>["sort"]) => void)
     | undefined = undefined;
   export let rowClass: ComponentProps<DataTable>["rowClass"] = undefined;
+  /** When true, `on:sort` calls preventDefault() so the table does not apply client-side sort. */
+  export let preventSortDefault = false;
+  /** Receives every forwarded click, hover, and scrollend event in dispatch order. */
+  export let onevent: ((name: string, detail: unknown) => void) | undefined =
+    undefined;
 </script>
 
 <DataTable
@@ -128,25 +133,17 @@
   {virtualize}
   bind:scrollContainerRef
   {tableHeaderTranslateWithId}
-  on:click={(e) => {
-    console.log("click", e.detail);
+  on:click={(e) => onevent?.("click", e.detail)}
+  on:click:header={(e) => onevent?.("click:header", e.detail)}
+  on:click:row={(e) => onevent?.("click:row", e.detail)}
+  on:click:cell={(e) => onevent?.("click:cell", e.detail)}
+  on:mouseenter:row={(e) => onevent?.("mouseenter:row", e.detail)}
+  on:mouseleave:row={(e) => onevent?.("mouseleave:row", e.detail)}
+  on:scrollend={(e) => onevent?.("scrollend", e.detail)}
+  on:sort={(e) => {
+    onsort?.(e);
+    if (preventSortDefault) e.preventDefault();
   }}
-  on:click:header={(e) => {
-    console.log("click:header", e.detail);
-  }}
-  on:click:row={(e) => {
-    console.log("click:row", e.detail);
-  }}
-  on:click:cell={(e) => {
-    console.log("click:cell", e.detail);
-  }}
-  on:mouseenter:row={(e) => {
-    console.log("mouseenter:row", e.detail);
-  }}
-  on:mouseleave:row={(e) => {
-    console.log("mouseleave:row", e.detail);
-  }}
-  on:sort={(e) => onsort?.(e)}
 >
   <slot />
 </DataTable>

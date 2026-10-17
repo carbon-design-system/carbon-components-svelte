@@ -94,6 +94,13 @@
   }
   void readSortDetail;
 
+  export let onRowSelect: ((row: Row) => void) | undefined = undefined;
+  export let onNumericRowSelect: ((row: NumericRow) => void) | undefined =
+    undefined;
+  export let onProductRowClick: ((row: ProductRow) => void) | undefined =
+    undefined;
+  export let onProductRowExpand: ((row: ProductRow) => void) | undefined =
+    undefined;
   export let onProductSort:
     | ((e: CustomEvent<ProductSortDetail>) => void)
     | undefined = undefined;
@@ -105,10 +112,7 @@
   selectable
   batchSelection
   bind:selectedRowIds
-  on:click:row--select={(e) => {
-    const row = e.detail.row;
-    console.log(row.id, row.name, row.price);
-  }}
+  on:click:row--select={(e) => onRowSelect?.(e.detail.row)}
 />
 
 <DataTable
@@ -117,10 +121,7 @@
   selectable
   batchSelection
   bind:selectedRowIds={numericSelectedRowIds}
-  on:click:row--select={(e) => {
-    const row = e.detail.row;
-    console.log(row.id, row.name);
-  }}
+  on:click:row--select={(e) => onNumericRowSelect?.(e.detail.row)}
 />
 
 <DataTable
@@ -133,25 +134,11 @@
   batchExpansion
   bind:selectedRowIds={productSelectedRowIds}
   bind:expandedRowIds={productExpandedRowIds}
-  on:click:row={(e) => {
-    const row = e.detail.row;
-    console.log(row.id, row.name, row.price, row.inStock);
-  }}
-  on:click:row--expand={(e) => {
-    const row = e.detail.row;
-    console.log("Expanded:", row.id);
-  }}
+  on:click:row={(e) => onProductRowClick?.(e.detail.row)}
+  on:click:row--expand={(e) => onProductRowExpand?.(e.detail.row)}
   on:sort={(e) => {
     readSortDetail(e.detail);
     onProductSort?.(e);
-    const detail = e.detail;
-
-    if (detail.direction === "none") {
-      console.log("Clear sort", detail.key);
-      return;
-    }
-
-    console.log("Sort:", detail.key, detail.direction);
   }}
 >
   <svelte:fragment slot="expandedRow" let:row>

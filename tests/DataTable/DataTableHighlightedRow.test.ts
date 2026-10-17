@@ -1,6 +1,5 @@
 import { render } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
-import { tick } from "svelte";
 
 const headers = [
   { key: "name", value: "Name" },
@@ -23,8 +22,7 @@ describe("DataTable highlightedRowIds", () => {
       container.querySelector(".bx--data-table--highlighted-row"),
     ).not.toBeInTheDocument();
 
-    rerender({ headers, rows, highlightedRowIds: ["c"] });
-    await tick();
+    await rerender({ headers, rows, highlightedRowIds: ["c"] });
 
     const highlightedRow = container.querySelector("tr[data-row='c']");
     expect(highlightedRow).toHaveClass("bx--data-table--highlighted-row");

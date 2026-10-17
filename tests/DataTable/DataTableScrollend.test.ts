@@ -1,13 +1,10 @@
 import { fireEvent, render } from "@testing-library/svelte";
 import { setMenuMetrics } from "../utils/set-menu-metrics";
-import DataTableScrollend from "./DataTableScrollend.test.svelte";
+import DataTable from "./DataTable.test.svelte";
+import { eventDetails, makeRows } from "./helpers";
 
-function createRows(count: number) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: String(i),
-    name: `Row ${i + 1}`,
-  }));
-}
+const headers = [{ key: "name", value: "Name" }];
+const virtualize = { containerHeight: 200, threshold: 1 };
 
 function getScrollContainer(stickyHeader: boolean) {
   const table = document.querySelector("table");
@@ -29,46 +26,51 @@ describe("DataTable scrollend", () => {
   ])(
     "dispatches scrollend when the %s scrolls near the bottom",
     async (_, stickyHeader) => {
-      const onScrollend = vi.fn();
-      render(DataTableScrollend, {
-        props: { rows: createRows(200), stickyHeader, onScrollend },
+      const onevent = vi.fn();
+      render(DataTable, {
+        props: {
+          headers,
+          rows: makeRows(200),
+          virtualize,
+          stickyHeader,
+          onevent,
+        },
       });
 
       const container = getScrollContainer(stickyHeader);
       setMenuMetrics(container, nearBottom);
       await fireEvent.scroll(container);
 
-      expect(onScrollend).toHaveBeenCalledTimes(1);
-      expect(onScrollend.mock.calls[0][0].detail).toEqual(nearBottom);
+      expect(eventDetails(onevent, "scrollend")).toEqual([nearBottom]);
     },
   );
 
   it("does not dispatch scrollend when virtualize is disabled", async () => {
-    const onScrollend = vi.fn();
-    render(DataTableScrollend, {
-      props: { rows: createRows(200), virtualize: false, onScrollend },
+    const onevent = vi.fn();
+    render(DataTable, {
+      props: { headers, rows: makeRows(200), virtualize: false, onevent },
     });
 
     const container = getScrollContainer(false);
     setMenuMetrics(container, nearBottom);
     await fireEvent.scroll(container);
 
-    expect(onScrollend).not.toHaveBeenCalled();
+    expect(eventDetails(onevent, "scrollend")).toEqual([]);
   });
 
   it("re-arms when rows grow", async () => {
-    const onScrollend = vi.fn();
-    const { rerender } = render(DataTableScrollend, {
-      props: { rows: createRows(200), onScrollend },
+    const onevent = vi.fn();
+    const { rerender } = render(DataTable, {
+      props: { headers, rows: makeRows(200), virtualize, onevent },
     });
 
     const container = getScrollContainer(false);
     setMenuMetrics(container, nearBottom);
     await fireEvent.scroll(container);
     await fireEvent.scroll(container);
-    expect(onScrollend).toHaveBeenCalledTimes(1);
+    expect(eventDetails(onevent, "scrollend")).toHaveLength(1);
 
-    await rerender({ rows: createRows(220), onScrollend });
+    await rerender({ rows: makeRows(220) });
 
     const containerAfter = getScrollContainer(false);
     setMenuMetrics(containerAfter, {
@@ -77,6 +79,6 @@ describe("DataTable scrollend", () => {
       clientHeight: 200,
     });
     await fireEvent.scroll(containerAfter);
-    expect(onScrollend).toHaveBeenCalledTimes(2);
+    expect(eventDetails(onevent, "scrollend")).toHaveLength(2);
   });
 });

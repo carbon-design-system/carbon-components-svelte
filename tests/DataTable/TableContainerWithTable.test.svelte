@@ -6,11 +6,12 @@
   import TableRow from "carbon-components-svelte/DataTable/TableRow.svelte";
   import type { ComponentProps } from "svelte";
 
+  export let id: string | undefined = undefined;
   export let title: ComponentProps<TableContainer>["title"] = "";
   export let description: ComponentProps<TableContainer>["description"] = "";
 </script>
 
-<TableContainer {title} {description}>
+<TableContainer {id} {title} {description}>
   <Table>
     <TableBody>
       <TableRow>

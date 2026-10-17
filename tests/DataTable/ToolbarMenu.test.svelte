@@ -7,23 +7,27 @@
   export let testComponent: "ToolbarMenu" | "ToolbarMenuItem" = "ToolbarMenu";
   export let menuProps: ComponentProps<ToolbarMenu> = {};
   export let slotContent = "";
+  export let showMenu = true;
+  export let onevent: ((name: string) => void) | undefined = undefined;
 </script>
 
 {#if testComponent === "ToolbarMenu"}
   <Toolbar>
-    <ToolbarMenu {...menuProps} {...$$restProps}>
-      {#if slotContent}
-        {slotContent}
-      {/if}
-      <slot />
-    </ToolbarMenu>
+    {#if showMenu}
+      <ToolbarMenu {...menuProps} {...$$restProps}>
+        {#if slotContent}
+          {slotContent}
+        {/if}
+        <slot />
+      </ToolbarMenu>
+    {/if}
   </Toolbar>
 {:else if testComponent === "ToolbarMenuItem"}
   <Toolbar>
     <ToolbarMenu>
       <ToolbarMenuItem
-        on:click={() => console.log("click")}
-        on:keydown={() => console.log("keydown")}
+        on:click={() => onevent?.("click")}
+        on:keydown={() => onevent?.("keydown")}
         {...$$restProps}
       >
         {#if slotContent}

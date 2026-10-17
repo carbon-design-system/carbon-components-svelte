@@ -1,14 +1,11 @@
 // @vitest-environment node
 
 import { render } from "svelte/server";
-import TableContainerSsr from "./TableContainerSsr.test.svelte";
+import { stripHydrationMarkers } from "../utils/ssr";
+import TableContainerWithTable from "./TableContainerWithTable.test.svelte";
 
-/** Server output with only Svelte's hydration comments removed. */
 function renderRaw(props: Record<string, unknown>) {
-  return render(TableContainerSsr, { props }).body.replace(
-    /<!--[\s\S]*?-->/g,
-    "",
-  );
+  return stripHydrationMarkers(render(TableContainerWithTable, { props }).body);
 }
 
 describe("TableContainer server render", () => {

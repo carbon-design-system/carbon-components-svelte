@@ -1,19 +1,10 @@
-import { render, screen } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import DataTableForm from "./DataTable.form.test.svelte";
-
-const getRowInputs = () => {
-  const tbody = screen.getByRole("table").querySelector("tbody");
-  assert(tbody);
-  return Array.from(
-    tbody.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"], input[type="radio"]',
-    ),
-  );
-};
+import { getRowInputs, getSelectAll } from "./helpers";
 
 describe("DataTable form reset", () => {
   it("clears a checkbox selection without firing events", async () => {
@@ -30,9 +21,7 @@ describe("DataTable form reset", () => {
 
     expect(getBoundText()).toBe("[]");
     for (const input of getRowInputs()) expect(input).not.toBeChecked();
-    expect(
-      screen.getByRole("checkbox", { name: "Select all rows" }),
-    ).not.toBeChecked();
+    expect(getSelectAll()).not.toBeChecked();
     expect(onSelect).not.toHaveBeenCalled();
   });
 

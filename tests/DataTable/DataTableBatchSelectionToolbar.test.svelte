@@ -26,6 +26,12 @@
   export let active: ComponentProps<ToolbarBatchActions>["active"] = undefined;
   export let controlled = false;
   export let moveFocusOnDelete = false;
+  export let ondelete:
+    | ((ids: ComponentProps<DataTable>["selectedRowIds"]) => void)
+    | undefined = undefined;
+  export let onrestart:
+    | ((ids: ComponentProps<DataTable>["selectedRowIds"]) => void)
+    | undefined = undefined;
 
   let elsewhere: HTMLInputElement;
 </script>
@@ -43,7 +49,7 @@
       <Button
         kind="danger"
         on:click={async () => {
-          console.log("delete", selectedRowIds);
+          ondelete?.(selectedRowIds);
           if (moveFocusOnDelete) {
             selectedRowIds = [];
             await tick();
@@ -53,13 +59,7 @@
       >
         Delete
       </Button>
-      <Button
-        on:click={() => {
-          console.log("restart", selectedRowIds);
-        }}
-      >
-        Restart
-      </Button>
+      <Button on:click={() => onrestart?.(selectedRowIds)}> Restart </Button>
     </ToolbarBatchActions>
     <ToolbarContent> <Button>Create balancer</Button> </ToolbarContent>
   </Toolbar>

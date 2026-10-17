@@ -3,19 +3,7 @@ import { user } from "../utils/user";
 import DataTableGenerics from "./DataTableGenerics.test.svelte";
 
 describe("DataTable Generics", () => {
-  // The fixture's event handlers log the typed row they receive.
-  const spyOnLog = () => vi.spyOn(console, "log").mockImplementation(() => {});
-  let consoleLog: ReturnType<typeof spyOnLog>;
-
-  beforeEach(() => {
-    consoleLog = spyOnLog();
-  });
-
-  afterEach(() => {
-    consoleLog.mockRestore();
-  });
-
-  const getTableRows = (container: HTMLElement, tableIndex = 0) => {
+  const getTableBodyRows = (container: HTMLElement, tableIndex = 0) => {
     const tables = container.querySelectorAll("table.bx--data-table");
     const table = tables[tableIndex];
     if (!table) return [];
@@ -42,7 +30,7 @@ describe("DataTable Generics", () => {
     it("should handle row selection with string literal IDs", async () => {
       const { container } = render(DataTableGenerics);
 
-      const checkbox = getRowCheckbox(getTableRows(container, 0)[0]);
+      const checkbox = getRowCheckbox(getTableBodyRows(container, 0)[0]);
       expect(checkbox.checked).toBe(true); // row-1 is pre-selected
 
       await user.click(checkbox);
@@ -53,12 +41,17 @@ describe("DataTable Generics", () => {
     });
 
     it("should emit correctly typed row in click:row--select event", async () => {
-      const { container } = render(DataTableGenerics);
+      const onRowSelect = vi.fn();
+      const { container } = render(DataTableGenerics, {
+        props: { onRowSelect },
+      });
 
       // row-2 ("Phone") is not pre-selected
-      await user.click(getRowCheckbox(getTableRows(container, 0)[1]));
+      await user.click(getRowCheckbox(getTableBodyRows(container, 0)[1]));
 
-      expect(consoleLog).toHaveBeenCalledWith("row-2", "Phone", 599);
+      expect(onRowSelect).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ id: "row-2", name: "Phone", price: 599 }),
+      );
     });
   });
 
@@ -67,19 +60,24 @@ describe("DataTable Generics", () => {
       const { container } = render(DataTableGenerics);
 
       // Rows 1 and 2 are pre-selected
-      const checked = getTableRows(container, 1).map(
+      const checked = getTableBodyRows(container, 1).map(
         (row) => getRowCheckbox(row).checked,
       );
       expect(checked).toEqual([true, true, false]);
     });
 
     it("should emit correctly typed row in click:row--select event for numeric IDs", async () => {
-      const { container } = render(DataTableGenerics);
+      const onNumericRowSelect = vi.fn();
+      const { container } = render(DataTableGenerics, {
+        props: { onNumericRowSelect },
+      });
 
       // Item 3 is not pre-selected
-      await user.click(getRowCheckbox(getTableRows(container, 1)[2]));
+      await user.click(getRowCheckbox(getTableBodyRows(container, 1)[2]));
 
-      expect(consoleLog).toHaveBeenCalledWith(3, "Item 3");
+      expect(onNumericRowSelect).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ id: 3, name: "Item 3" }),
+      );
     });
   });
 
@@ -88,32 +86,47 @@ describe("DataTable Generics", () => {
       const { container } = render(DataTableGenerics);
 
       // prod-1 is pre-selected
-      const checked = getTableRows(container, 2).map(
+      const checked = getTableBodyRows(container, 2).map(
         (row) => getRowCheckbox(row).checked,
       );
       expect(checked).toEqual([true, false]);
     });
 
     it("should emit correctly typed row in click:row event", async () => {
-      const { container } = render(DataTableGenerics);
+      const onProductRowClick = vi.fn();
+      const { container } = render(DataTableGenerics, {
+        props: { onProductRowClick },
+      });
 
-      await user.click(getTableRows(container, 2)[0]);
+      await user.click(getTableBodyRows(container, 2)[0]);
 
-      expect(consoleLog).toHaveBeenCalledWith("prod-1", "Widget", 10, true);
+      expect(onProductRowClick).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+          id: "prod-1",
+          name: "Widget",
+          price: 10,
+          inStock: true,
+        }),
+      );
     });
 
     it("should emit correctly typed row in click:row--expand event", async () => {
-      const { container } = render(DataTableGenerics);
+      const onProductRowExpand = vi.fn();
+      const { container } = render(DataTableGenerics, {
+        props: { onProductRowExpand },
+      });
 
-      await user.click(getExpandButton(getTableRows(container, 2)[1]));
+      await user.click(getExpandButton(getTableBodyRows(container, 2)[1]));
 
-      expect(consoleLog).toHaveBeenCalledWith("Expanded:", "prod-2");
+      expect(onProductRowExpand).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ id: "prod-2" }),
+      );
     });
 
     it("should provide correctly typed row to expandedRow slot", async () => {
       const { container } = render(DataTableGenerics);
 
-      await user.click(getExpandButton(getTableRows(container, 2)[0]));
+      await user.click(getExpandButton(getTableBodyRows(container, 2)[0]));
 
       const expandedContent = container.querySelector(
         ".bx--child-row-inner-container",

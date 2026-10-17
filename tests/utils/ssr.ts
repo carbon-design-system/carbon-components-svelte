@@ -12,6 +12,21 @@ const HYDRATION_MARKER = /<!--[\s\S]*?-->|<!>/g;
 const WHITESPACE_BETWEEN_TAGS = />\s+</g;
 
 /**
+ * Removes hydration markers and nothing else, so ids and whitespace stay as
+ * rendered. Repeats until stable: one pass over `<!-<!---->--->` leaves
+ * `<!---->`.
+ */
+export function stripHydrationMarkers(html: string) {
+  let stripped = html;
+  let previous: string;
+  do {
+    previous = stripped;
+    stripped = stripped.replace(HYDRATION_MARKER, "");
+  } while (stripped !== previous);
+  return stripped;
+}
+
+/**
  * The random part of `uniqueId()` ids, one alternative per prefix `src/`
  * passes it. Matches inside derived ids too (`helper-ccs-…`, `ccs-…-label`).
  * The lookbehind skips custom properties (`--ccs-separator`) and classes
@@ -28,8 +43,7 @@ export const RANDOM_ID =
 export function normalizeSSR(html: string) {
   const ids = new Map<string, string>();
 
-  return html
-    .replace(HYDRATION_MARKER, "")
+  return stripHydrationMarkers(html)
     .replace(RANDOM_ID, (id) => {
       let stable = ids.get(id);
       if (stable === undefined) {

@@ -1,10 +1,10 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import ToolbarSearchClear from "./ToolbarSearchClear.test.svelte";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("ToolbarSearch clear()", () => {
   it("resets value and collapses the search", async () => {
-    render(ToolbarSearchClear);
+    render(ToolbarSearchHost);
 
     const input = screen.getByRole("searchbox");
     await user.type(input, "Alpha");
@@ -29,8 +29,8 @@ describe("ToolbarSearch clear()", () => {
   });
 
   it("keeps a persistent search expanded", async () => {
-    render(ToolbarSearchClear, {
-      props: { persistent: true, expanded: true },
+    render(ToolbarSearchHost, {
+      props: { searchProps: { persistent: true }, expanded: true },
     });
 
     const input = screen.getByRole("searchbox");

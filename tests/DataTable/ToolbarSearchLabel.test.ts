@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
-import ToolbarSearchLabel from "./ToolbarSearchLabel.test.svelte";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("ToolbarSearch label", () => {
   it("names the search field and landmark by default", () => {
-    render(ToolbarSearchLabel);
+    render(ToolbarSearchHost);
 
     expect(
       screen.getByRole("searchbox", { name: "Search" }),
@@ -12,7 +12,9 @@ describe("ToolbarSearch label", () => {
   });
 
   it("uses a custom labelText", () => {
-    render(ToolbarSearchLabel, { props: { labelText: "Filter servers" } });
+    render(ToolbarSearchHost, {
+      props: { searchProps: { labelText: "Filter servers" } },
+    });
 
     expect(
       screen.getByRole("searchbox", { name: "Filter servers" }),

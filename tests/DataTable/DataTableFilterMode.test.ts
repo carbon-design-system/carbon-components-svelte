@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTableFilterMode from "./DataTableFilterMode.test.svelte";
+import { getSelectAll } from "./helpers";
 
 describe("DataTable filterMode", () => {
   const getSearch = () => screen.getByRole("searchbox");
@@ -46,19 +47,16 @@ describe("DataTable filterMode", () => {
     await user.type(getSearch(), "round");
     expect(screen.getAllByText(/Round robin/)).toHaveLength(3);
 
-    await user.click(screen.getByRole("checkbox", { name: "Select all rows" }));
+    await user.click(getSelectAll());
     expect(selectedCount()).toBe(3);
   });
 
   it('"select all" covers every row when no filter is active', async () => {
     render(DataTableFilterMode, { props: { batchSelection: true } });
 
-    await user.click(screen.getByRole("checkbox", { name: "Select all rows" }));
+    await user.click(getSelectAll());
     expect(selectedCount()).toBe(6);
   });
-
-  const getSelectAll = () =>
-    screen.getByRole("checkbox", { name: "Select all rows" });
 
   it.each(["hide", "remove"] as const)(
     '"select all" ignores and keeps hidden selections with filterMode="%s"',

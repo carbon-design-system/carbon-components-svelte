@@ -1,11 +1,24 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import DataTableSearchNested from "./DataTableSearchNested.test.svelte";
 import { getTableRows } from "./helpers";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("DataTableSearch with nested keys", () => {
+  const props = {
+    headers: [
+      { key: "id", value: "ID" },
+      { key: "contact.company", value: "Company name" },
+    ],
+    rows: [
+      { id: "1", contact: { company: "Super Wheels" } },
+      { id: "2", contact: { company: "Mini Wheels" } },
+      { id: "3", contact: { company: "Mega Corp" } },
+    ],
+    searchProps: { persistent: true, shouldFilterRows: true },
+  };
+
   it("filters rows by nested property values", async () => {
-    render(DataTableSearchNested);
+    render(ToolbarSearchHost, { props });
 
     const searchInput = screen.getByRole("searchbox");
     expect(searchInput).toHaveValue("");
@@ -46,7 +59,7 @@ describe("DataTableSearch with nested keys", () => {
   });
 
   it("can still search by non-nested id field", async () => {
-    render(DataTableSearchNested);
+    render(ToolbarSearchHost, { props });
 
     const searchInput = screen.getByRole("searchbox");
 

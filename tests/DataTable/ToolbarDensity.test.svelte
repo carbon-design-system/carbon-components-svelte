@@ -11,14 +11,18 @@
     undefined;
   export let icon: ComponentProps<ToolbarDensity>["icon"] = undefined;
   export let tableSize: ComponentProps<DataTable>["size"] = undefined;
+  export let toolbarSize: ComponentProps<Toolbar>["size"] = undefined;
   export let standalone = false;
   export let triggerClass: string | undefined = undefined;
+  export let onchange:
+    | ((detail: { size: ComponentProps<ToolbarDensity>["size"] }) => void)
+    | undefined = undefined;
 </script>
 
 <p>Size: {size}</p>
 
 {#if standalone}
-  <Toolbar>
+  <Toolbar size={toolbarSize}>
     <ToolbarContent>
       <ToolbarDensity
         bind:size
@@ -26,7 +30,7 @@
         {formatLabel}
         {icon}
         class={triggerClass}
-        on:change={({ detail }) => console.log("change", detail)}
+        on:change={({ detail }) => onchange?.(detail)}
       />
     </ToolbarContent>
   </Toolbar>
@@ -36,7 +40,7 @@
     headers={[{ key: "name", value: "Name" }]}
     rows={[{ id: "a", name: "Row A" }]}
   >
-    <Toolbar>
+    <Toolbar size={toolbarSize}>
       <ToolbarContent>
         <ToolbarDensity
           bind:size
@@ -44,7 +48,7 @@
           {formatLabel}
           {icon}
           class={triggerClass}
-          on:change={({ detail }) => console.log("change", detail)}
+          on:change={({ detail }) => onchange?.(detail)}
         />
       </ToolbarContent>
     </Toolbar>
