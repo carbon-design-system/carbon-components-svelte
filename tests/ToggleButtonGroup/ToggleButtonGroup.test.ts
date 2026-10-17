@@ -9,6 +9,24 @@ import ToggleButtonGroupFixture from "./ToggleButtonGroup.test.svelte";
 
 /** Open tooltips currently rendered in the portal. */
 describe("ToggleButtonGroup", () => {
+  it("lays the buttons out as a wrapping grid with wrap", () => {
+    render(ToggleButtonGroupFixture, { props: { wrap: true } });
+
+    expect(screen.getByRole("toolbar")).toHaveClass(
+      "bx--toggle-button-group--wrap",
+    );
+  });
+
+  it("ignores wrap when vertical", () => {
+    render(ToggleButtonGroupFixture, {
+      props: { wrap: true, orientation: "vertical" },
+    });
+
+    expect(screen.getByRole("toolbar")).not.toHaveClass(
+      "bx--toggle-button-group--wrap",
+    );
+  });
+
   it("renders a toolbar with the accessible name from labelText", () => {
     render(ToggleButtonGroupFixture);
 
