@@ -6,7 +6,7 @@ description: Search provides a flexible search input, with support for expandabl
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
-  import { Search, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Search, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -200,9 +200,3 @@ Show a loading state for the small search variant.
 Show a loading state for the extra-small search variant.
 
 <Search size="xs" skeleton />
-
-### Without label
-
-Show a loading state without a label by setting `hideLabel` to `true`.
-
-<SearchSkeleton hideLabel />
