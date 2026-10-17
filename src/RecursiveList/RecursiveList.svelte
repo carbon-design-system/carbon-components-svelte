@@ -51,7 +51,7 @@
         target={child.target}
         rel={child.rel}
       >
-        <svelte:self {...child} {type} {expressive} nested />
+        <svelte:self nodes={child.nodes} {type} {expressive} nested />
       </RecursiveListItem>
     {:else}
       <RecursiveListItem

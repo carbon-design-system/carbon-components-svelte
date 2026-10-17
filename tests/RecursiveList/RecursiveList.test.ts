@@ -75,6 +75,14 @@ describe("RecursiveList id field", () => {
     expect(screen.getByText("Item C")).toBeInTheDocument();
     expect(screen.getByText("Item C1")).toBeInTheDocument();
   });
+
+  it("keeps node fields off the nested list element", () => {
+    render(RecursiveListIdTest);
+
+    const nested = screen.getAllByRole("list")[1];
+    expect(nested).not.toHaveAttribute("id");
+    expect(nested).not.toHaveAttribute("text");
+  });
 });
 
 describe("RecursiveList props", () => {
