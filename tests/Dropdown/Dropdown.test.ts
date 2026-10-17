@@ -3092,6 +3092,17 @@ describe("Dropdown", () => {
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
+    it("should not open menu on Space when readonly", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard(" ");
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
     it("should not select on Enter when readonly", async () => {
       const onselect = vi.fn();
       render(Dropdown, {
