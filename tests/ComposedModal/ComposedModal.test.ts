@@ -97,13 +97,7 @@ describe("ComposedModal", () => {
       "Title only",
     );
     expect(screen.getByTestId("modal-root")).not.toHaveAttribute("aria-label");
-  });
-
-  it("drops the heading id reference once the header has registered", () => {
-    render(ComposedModalTest, {
-      props: { open: true, headerTitle: "Title only" },
-    });
-
+    // The heading id reference is dropped once the header has registered.
     expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-labelledby");
   });
 
@@ -159,12 +153,12 @@ describe("ComposedModal", () => {
       },
     });
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(openHandler).toHaveBeenCalledTimes(1);
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
@@ -239,33 +233,40 @@ describe("ComposedModal", () => {
   });
 
   it("should not close on inside click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComposedModalTest, {
+    const onclose = vi.fn();
+    const { container } = render(ComposedModalTest, {
       props: {
         open: true,
         headerTitle: "Test Modal",
+        onclose,
       },
     });
 
-    const modal = screen.getByRole("dialog");
-    await user.click(modal);
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    await user.click(screen.getByRole("dialog"));
+    await tick();
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(container.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 
   it("should prevent close on outside click when configured", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onclose = vi.fn();
     const { container } = render(ComposedModalTest, {
       props: {
         open: true,
         preventCloseOnClickOutside: true,
         headerTitle: "Test Modal",
+        onclose,
       },
     });
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
     await user.click(modalWrapper);
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    await tick();
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(modalWrapper).toHaveClass("is-visible");
   });
 
   it("should render header with title and label", () => {
@@ -419,42 +420,67 @@ describe("ComposedModal", () => {
       },
     });
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
     await tick();
 
     expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
     expect(openHandler).toHaveBeenCalledTimes(1);
 
-    rerender({ open: true, headerTitle: "Post-mount Focus Test Updated" });
+    await rerender({
+      open: true,
+      headerTitle: "Post-mount Focus Test Updated",
+    });
     await tick();
     await tick();
 
     expect(openHandler).toHaveBeenCalledTimes(1);
   });
 
-  it("does not move focus when a descendant transition ends", async () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Descendant Transition",
-        footerPrimaryButtonText: "Save",
-        footerSecondaryButtonText: "Cancel",
-      },
-    });
-    await tick();
+  it("restores focus only when the modal's own transform transition ends", async () => {
+    // jsdom has no transitions, so report one on the dialog; otherwise focus
+    // is restored right after close and `transitionend` is never needed.
+    const getComputedStyle = window.getComputedStyle.bind(window);
+    const spy = vi
+      .spyOn(window, "getComputedStyle")
+      .mockImplementation((element, pseudo) =>
+        element instanceof HTMLElement &&
+        element.getAttribute("role") === "dialog"
+          ? ({ transitionDuration: "0.24s" } as CSSStyleDeclaration)
+          : getComputedStyle(element, pseudo),
+      );
 
-    const cancel = screen.getByRole("button", { name: "Cancel" });
-    cancel.focus();
-    cancel.dispatchEvent(
-      new TransitionEvent("transitionend", {
-        propertyName: "background-color",
-        bubbles: true,
-      }),
-    );
-    await tick();
+    try {
+      const { container } = render(ComposedModalFocusReturnTest);
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+      await tick();
+      expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
 
-    expect(cancel).toHaveFocus();
+      await user.click(screen.getByLabelText("Close"));
+      await flushProgrammaticClose();
+      expect(trigger).not.toHaveFocus();
+
+      const modalWrapper = container.querySelector(".bx--modal");
+      assert(modalWrapper);
+      modalWrapper.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          propertyName: "background-color",
+          bubbles: true,
+        }),
+      );
+      await tick();
+      expect(trigger).not.toHaveFocus();
+
+      modalWrapper.dispatchEvent(
+        new TransitionEvent("transitionend", { propertyName: "transform" }),
+      );
+      await tick();
+      expect(trigger).toHaveFocus();
+    } finally {
+      spy.mockRestore();
+    }
   });
 
   it("does not focus into a modal mounted closed", async () => {
@@ -819,7 +845,7 @@ describe("ComposedModal", () => {
       },
     });
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
@@ -865,7 +891,7 @@ describe("ComposedModal", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
     await trap.wait;
     trap.dispose();
@@ -890,7 +916,7 @@ describe("ComposedModal", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -909,11 +935,11 @@ describe("ComposedModal", () => {
     assert(modalOverlay);
     expect(modalOverlay).toHaveAttribute("inert");
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
 
     expect(modalOverlay).not.toHaveAttribute("inert");
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     expect(modalOverlay).toHaveAttribute("inert");

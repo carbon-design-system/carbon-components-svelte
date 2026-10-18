@@ -475,22 +475,14 @@ describe("RangeSlider", () => {
     expect(screen.getAllByRole("spinbutton")[0]).toHaveValue(11);
   });
 
-  it("should not respond to keyboard when disabled", () => {
-    render(RangeSlider, {
-      props: { value: 10, valueUpper: 90, disabled: true },
-    });
-
-    const [lowerThumb] = screen.getAllByRole("slider");
-    expect(lowerThumb).not.toHaveAttribute("tabindex");
-  });
-
-  it("announces both thumbs as disabled", () => {
+  it("announces both thumbs as disabled and leaves them out of the tab order", () => {
     render(RangeSlider, {
       props: { value: 10, valueUpper: 90, disabled: true },
     });
 
     for (const thumb of screen.getAllByRole("slider")) {
       expect(thumb).toHaveAttribute("aria-disabled", "true");
+      expect(thumb).not.toHaveAttribute("tabindex");
     }
   });
 
@@ -759,9 +751,7 @@ describe("RangeSlider", () => {
         props: { value: 10, valueUpper: 50, minGap: 10 },
       });
 
-      const slider = container.querySelector(".bx--slider");
       const track = container.querySelector(".bx--slider__track");
-      assert(slider instanceof HTMLElement);
       assert(track instanceof HTMLElement);
       vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
         left: 0,
@@ -775,7 +765,7 @@ describe("RangeSlider", () => {
         toJSON: () => ({}),
       });
 
-      // jsdom thumb rects are all zero, so pickHandle ties to the lower handle.
+      // Pressing the thumb itself grabs it, so no nearest-handle pick is made.
       const [lowerThumb] = screen.getAllByRole("slider");
       await fireEvent.mouseDown(lowerThumb, { clientX: 20 });
       await flushDismiss();
@@ -915,6 +905,7 @@ describe("RangeSlider", () => {
 
       await fireEvent.mouseDown(slider, { clientX: 1, clientY: 20 });
       await tick();
+      await flushDismiss();
       await fireEvent.mouseUp(window);
 
       expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
