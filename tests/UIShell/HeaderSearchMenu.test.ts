@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchMenu from "./HeaderSearchMenu.test.svelte";
 
@@ -83,6 +84,120 @@ describe("HeaderSearch (menu slot)", () => {
       "bx--header__search--active",
     );
     expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("moves the highlight up with ArrowUp", async () => {
+    render(HeaderSearchMenu, { props: { active: true } });
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.keyboard("{ArrowDown}{ArrowDown}{ArrowUp}");
+
+    const first = screen.getAllByRole("option")[0];
+    expect(input).toHaveAttribute("aria-activedescendant", first.id);
+  });
+
+  it.each([
+    ["Home", 0],
+    ["End", 4],
+  ])("jumps the highlight with %s", async (key, index) => {
+    render(HeaderSearchMenu, { props: { active: true } });
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.keyboard("{ArrowDown}{ArrowDown}");
+    await user.keyboard(`{${key}}`);
+
+    const option = screen.getAllByRole("option")[index];
+    expect(input).toHaveAttribute("aria-activedescendant", option.id);
+  });
+
+  it("closes the search and returns focus when Escape is pressed on an empty value", async () => {
+    const onClose = vi.fn();
+    render(HeaderSearchMenu, { props: { active: true, onClose } });
+    await user.click(screen.getByRole("combobox"));
+
+    // The first Escape only dismisses the open menu.
+    await user.keyboard("{Escape}");
+    expect(onClose).not.toHaveBeenCalled();
+    await user.keyboard("{Escape}");
+    await flushMacrotask();
+
+    expect(onClose).toHaveBeenCalledWith({ trigger: "escape-key" });
+    expect(screen.getByRole("search")).not.toHaveClass(
+      "bx--header__search--active",
+    );
+    expect(screen.getByRole("button", { name: "Search" })).toHaveFocus();
+  });
+
+  it.each([
+    ["ArrowDown", "{ArrowDown}"],
+    ["typing", "x"],
+  ])("reopens the menu after Escape when %s", async (_, keys) => {
+    render(HeaderSearchMenu, { props: { active: true } });
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.keyboard("{Escape}");
+    expect(input).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard(keys);
+
+    expect(input).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("shows a busy skeleton menu while loading", async () => {
+    const { container } = render(HeaderSearchMenu, {
+      props: { active: true, loading: true },
+    });
+
+    expect(await screen.findByRole("listbox")).toHaveAttribute(
+      "aria-busy",
+      "true",
+    );
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
+    expect(
+      container.querySelectorAll(".bx--search-menu-item--skeleton"),
+    ).toHaveLength(4);
+  });
+
+  it("renders skeletonCount skeleton rows while loading", async () => {
+    const { container } = render(HeaderSearchMenu, {
+      props: { active: true, loading: true, skeletonCount: 2 },
+    });
+    await screen.findByRole("listbox");
+
+    expect(
+      container.querySelectorAll(".bx--search-menu-item--skeleton"),
+    ).toHaveLength(2);
+  });
+
+  it("renders the noResults slot when nothing matches", async () => {
+    render(HeaderSearchMenu, { props: { active: true, footer: false } });
+    await user.type(screen.getByRole("combobox"), "zzzznomatch");
+
+    expect(screen.getByText("No results")).toBeVisible();
+  });
+
+  it("keeps non-matching items when shouldFilter is false", async () => {
+    render(HeaderSearchMenu, { props: { active: true, shouldFilter: false } });
+    await user.type(screen.getByRole("combobox"), "zzzznomatch");
+
+    expect(screen.getAllByRole("option")).toHaveLength(5);
+  });
+
+  it("filters with a custom match function", async () => {
+    const match = (text: string, query: string) => ({
+      matched: text.startsWith(query),
+    });
+    render(HeaderSearchMenu, { props: { active: true, match } });
+    await user.type(screen.getByRole("combobox"), "Data");
+
+    // Fuzzy matching would also keep "AT&T IoT Data Plans" and the API row.
+    expect(
+      screen.getAllByRole("option").map((option) => option.textContent?.trim()),
+    ).toEqual([
+      "Databases for TestSQL",
+      "Data Store for Memcache",
+      "Search everywhere",
+    ]);
   });
 
   it("sets aria-expanded and aria-controls on the input", async () => {

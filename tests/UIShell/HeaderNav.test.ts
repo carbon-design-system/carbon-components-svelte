@@ -41,6 +41,19 @@ describe("HeaderNav keyboard navigation", () => {
       },
     );
 
+    it("opens the menu and focuses the first item when Enter is pressed", async () => {
+      render(Fixture, { props: { items } });
+
+      const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
+      menuTrigger.focus();
+
+      await user.keyboard("{Enter}");
+      expect(menuTrigger).toHaveAttribute("aria-expanded", "true");
+      expect(
+        screen.getByRole("menuitem", { name: "Menu Item 1" }),
+      ).toHaveFocus();
+    });
+
     it("should toggle menu when Space is pressed on trigger", async () => {
       render(Fixture, { props: { items } });
 
@@ -110,6 +123,20 @@ describe("HeaderNav menubar", () => {
       expect(link1()).toHaveAttribute("tabindex", "-1");
     });
 
+    it("falls back to the first item when the focused item is removed", async () => {
+      const entries = [{ text: "Link 1" }, { text: "Link 2" }];
+      const { rerender } = render(Fixture, { props: { items: entries } });
+      await tick();
+
+      link2().focus();
+      await tick();
+      expect(link2()).toHaveAttribute("tabindex", "0");
+
+      await rerender({ items: [entries[0]] });
+      await tick(); // the unmount updates the bar's store after the render
+      expect(link1()).toHaveAttribute("tabindex", "0");
+    });
+
     it("leaves items outside a HeaderNav tabbable", () => {
       render(Fixture, { props: { after: "item" } });
 
@@ -143,6 +170,21 @@ describe("HeaderNav menubar", () => {
       expect(link2()).toHaveFocus();
       await user.keyboard("{ArrowLeft}");
       expect(trigger()).toHaveFocus();
+    });
+
+    it("follows DOM order for an item added after mount", async () => {
+      const entries = [{ text: "Link 1" }, { text: "Link 2" }];
+      const { rerender } = render(Fixture, { props: { items: entries } });
+
+      await rerender({
+        items: [entries[0], { text: "Added" }, entries[1]],
+      });
+
+      link1().focus();
+      await user.keyboard("{ArrowRight}");
+      expect(item("Added")).toHaveFocus();
+      await user.keyboard("{ArrowRight}");
+      expect(link2()).toHaveFocus();
     });
 
     it("jumps to the first and last item with Home and End", async () => {
@@ -357,6 +399,20 @@ describe("HeaderNav expansion breakpoint", () => {
     setViewportWidth(1024);
   });
 
+  const navs = () => {
+    const sideNavItems = document.querySelector(
+      "ul.bx--side-nav__header-navigation",
+    );
+    expect(sideNavItems).not.toBeNull();
+    return [
+      [
+        screen.getByRole("navigation", { name: "Header links" }),
+        "bx--header__nav",
+      ],
+      [sideNavItems, "bx--side-nav__header-navigation"],
+    ] as const;
+  };
+
   it.each([
     { width: 1200, breakpoint: 1400, modifier: "collapsed" },
     { width: 1500, breakpoint: 1400, modifier: "expanded" },
@@ -370,18 +426,7 @@ describe("HeaderNav expansion breakpoint", () => {
       });
       await tick();
 
-      const headerNav = screen.getByRole("navigation", {
-        name: "Header links",
-      });
-      const sideNavItems = document.querySelector(
-        "ul.bx--side-nav__header-navigation",
-      );
-      expect(sideNavItems).not.toBeNull();
-
-      for (const [el, base] of [
-        [headerNav, "bx--header__nav"],
-        [sideNavItems, "bx--side-nav__header-navigation"],
-      ] as const) {
+      for (const [el, base] of navs()) {
         expect(el).toHaveClass(base);
         for (const name of ["expanded", "collapsed"]) {
           if (name === modifier) {
@@ -393,6 +438,22 @@ describe("HeaderNav expansion breakpoint", () => {
       }
     },
   );
+
+  it("switches modifiers when the viewport crosses the breakpoint after mount", async () => {
+    setViewportWidth(1200);
+    render(HeaderNavBreakpoint, { props: { expansionBreakpoint: 1400 } });
+    await tick();
+    for (const [el, base] of navs()) {
+      expect(el).toHaveClass(`${base}--collapsed`);
+    }
+
+    setViewportWidth(1500);
+    await tick();
+    for (const [el, base] of navs()) {
+      expect(el).toHaveClass(`${base}--expanded`);
+      expect(el).not.toHaveClass(`${base}--collapsed`);
+    }
+  });
 
   it("renders HeaderNav without a Header and adds no modifier", () => {
     render(HeaderNavBreakpoint, { props: { standalone: true } });

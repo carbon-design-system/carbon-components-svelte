@@ -3,6 +3,8 @@ import type HamburgerMenuComponent from "carbon-components-svelte/UIShell/Hambur
 import type HeaderComponent from "carbon-components-svelte/UIShell/Header.svelte";
 import Header from "carbon-components-svelte/UIShell/Header.svelte";
 import type { ComponentProps } from "svelte";
+import { get } from "svelte/store";
+import { hamburgerMenuRef } from "../../src/UIShell/nav-store.js";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import { setViewportWidth } from "../utils/viewport";
@@ -137,6 +139,30 @@ describe("UIShell", () => {
 
       await user.click(hamburgerButton);
       expect(hamburgerButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("does not auto-expand on desktop when expandedByDefault is false", async () => {
+      setViewportWidth(1200);
+
+      const { component } = render(UiShell, {
+        props: { isSideNavOpen: false, expandedByDefault: false },
+      });
+      await flushMacrotask();
+
+      expect(component.isSideNavOpen).toBe(false);
+    });
+
+    it("clears the stored hamburger ref when the header unmounts", () => {
+      const { container, unmount } = render(UiShell, {
+        props: { persistentHamburgerMenu: true },
+      });
+      expect(get(hamburgerMenuRef)).toBe(
+        container.querySelector(".bx--header__menu-trigger"),
+      );
+
+      unmount();
+
+      expect(get(hamburgerMenuRef)).toBeNull();
     });
 
     describe("user interaction preservation", () => {
@@ -357,21 +383,29 @@ describe("Header landmark label", () => {
   });
 });
 
-const brand = () => screen.getByRole("link", { name: /IBM/ });
-const menuItem = () => screen.getByRole("link", { name: "API reference" });
+const links = {
+  Header: () => screen.getByRole("link", { name: /IBM/ }),
+  HeaderActionLink: () => screen.getByRole("link", { name: "Status" }),
+  ProfileMenuHeader: () => screen.getByRole("link", { name: /Ada/ }),
+  ProfileMenuItem: () => screen.getByRole("link", { name: "Settings" }),
+  SideNavMenuItem: () => screen.getByRole("link", { name: "API reference" }),
+};
 
 describe("UI Shell links opening a new tab", () => {
-  it("default rel to noopener noreferrer", () => {
-    render(UIShellLinkRel);
+  it.each(Object.entries(links))(
+    "%s defaults rel to noopener noreferrer",
+    (_name, getLink) => {
+      render(UIShellLinkRel);
 
-    expect(brand()).toHaveAttribute("rel", "noopener noreferrer");
-    expect(menuItem()).toHaveAttribute("rel", "noopener noreferrer");
-  });
+      expect(getLink()).toHaveAttribute("rel", "noopener noreferrer");
+    },
+  );
 
   it("keep an explicit rel", () => {
     render(UIShellLinkRel, { props: { rel: "external" } });
 
-    expect(brand()).toHaveAttribute("rel", "external");
-    expect(menuItem()).toHaveAttribute("rel", "external");
+    for (const getLink of Object.values(links)) {
+      expect(getLink()).toHaveAttribute("rel", "external");
+    }
   });
 });

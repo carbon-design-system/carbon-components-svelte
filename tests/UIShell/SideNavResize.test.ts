@@ -86,6 +86,25 @@ describe("SideNav resize", () => {
     );
   });
 
+  it.each([{ resizable: false }, { rail: true }])(
+    "stops offsetting Content when %o is set after mount",
+    async (change) => {
+      const { container, component } = render(SideNavResizeTest, {
+        props: { resizable: true, width: 320 },
+      });
+      const content = container.querySelector<HTMLElement>(".bx--content");
+      assert(content);
+      expect(content.style.getPropertyValue("--ccs-side-nav-width")).toBe(
+        "320px",
+      );
+
+      Object.assign(component, change);
+      await tick();
+
+      expect(content.style.getPropertyValue("--ccs-side-nav-width")).toBe("");
+    },
+  );
+
   it("does not offset Content when not resizable", () => {
     const { container } = render(SideNavResizeTest, {
       props: { resizable: false, width: 320 },
@@ -93,6 +112,22 @@ describe("SideNav resize", () => {
     const content = container.querySelector<HTMLElement>(".bx--content");
     assert(content);
     expect(content.style.getPropertyValue("--ccs-side-nav-width")).toBe("");
+  });
+
+  it.each([
+    ["ArrowLeft", true],
+    ["ArrowRight", true],
+    ["Home", true],
+    ["End", true],
+    ["Tab", false],
+  ])("handles %s keydown with preventDefault: %s", async (key, prevented) => {
+    render(SideNavResizeTest, { props: { resizable: true } });
+    const handle = getHandle();
+    handle.focus();
+
+    const notCancelled = await fireEvent.keyDown(handle, { key });
+
+    expect(notCancelled).toBe(!prevented);
   });
 
   it("ArrowRight/ArrowLeft adjust width by a fixed step, clamped to bounds", async () => {

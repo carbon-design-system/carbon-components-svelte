@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushDismiss } from "../utils/flush-dismiss";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import HeaderMenuKeyboardOpen from "./HeaderMenuKeyboardOpen.test.svelte";
 import HeaderPanelExclusive from "./HeaderPanelExclusive.test.svelte";
@@ -53,6 +55,24 @@ describe.each(hosts)(
       expect(trigger()).toHaveFocus();
       expect(onClose).toHaveBeenCalledTimes(1);
       expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "select" });
+    });
+
+    it('closes with trigger "escape-key" on Escape and refocuses the trigger', async () => {
+      const onClose = vi.fn();
+      render(HeaderPanelHost, { props: { variant, onClose } });
+
+      await user.click(trigger());
+      await flushDismiss();
+      // Focus outside the panel, so only an explicit refocus can restore it.
+      trigger().blur();
+      await user.keyboard("{Escape}");
+
+      expect(trigger()).toHaveAttribute("aria-expanded", "false");
+      expect(trigger()).toHaveFocus();
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onClose.mock.calls[0][0].detail).toEqual({
+        trigger: "escape-key",
+      });
     });
 
     it("closes when an anchor is activated", async () => {
@@ -120,6 +140,61 @@ describe.each(hosts)(
     });
   },
 );
+
+describe.each(hosts.filter(({ variant }) => variant !== "action"))(
+  "$host trigger arrow keys",
+  ({ variant, triggerName }) => {
+    it('dispatches open once with trigger "toggle" on ArrowDown', async () => {
+      const onOpen = vi.fn();
+      render(HeaderPanelHost, { props: { variant, onOpen } });
+
+      const button = screen.getByRole("button", { name: triggerName });
+      button.focus();
+      await user.keyboard("{ArrowDown}");
+      // The first press moves focus into the menu; return it to the trigger.
+      button.focus();
+      await user.keyboard("{ArrowDown}");
+
+      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onOpen.mock.calls[0][0].detail).toEqual({ trigger: "toggle" });
+    });
+  },
+);
+
+describe("HeaderSwitcher", () => {
+  it("limits the text width with maxWidth", () => {
+    render(HeaderPanelHost, { props: { variant: "switcher", maxWidth: 120 } });
+
+    expectInlineStyle(screen.getByText("Acme"), { maxWidth: "120px" });
+  });
+
+  it('closes with trigger "outside-click" on an outside click', async () => {
+    const onClose = vi.fn();
+    render(HeaderPanelHost, { props: { variant: "switcher", onClose } });
+    const trigger = screen.getByRole("button", { name: "Acme" });
+
+    await user.click(trigger);
+    await user.click(document.body);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({
+      trigger: "outside-click",
+    });
+  });
+
+  it("does not close on outside click when preventCloseOnClickOutside is set", async () => {
+    render(HeaderPanelHost, {
+      props: { variant: "switcher", preventCloseOnClickOutside: true },
+    });
+    const trigger = screen.getByRole("button", { name: "Acme" });
+
+    await user.click(trigger);
+    await user.click(document.body);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+  });
+});
 
 describe("Header panels", () => {
   const trigger = (name: string) => screen.getByRole("button", { name });

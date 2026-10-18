@@ -10,6 +10,9 @@
 
   export let variant: "action" | "profile" | "switcher" = "action";
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
+  export let onOpen: (e: CustomEvent<{ trigger: string }>) => void = () => {};
+  export let maxWidth: string | number = "10rem";
+  export let preventCloseOnClickOutside = false;
 
   const keepOpen = (e: MouseEvent) => {
     e.preventDefault();
@@ -22,6 +25,7 @@
       <HeaderAction
         transition={false}
         iconDescription="Switcher"
+        on:open={onOpen}
         on:close={onClose}
       >
         <HeaderPanelLinks>
@@ -31,7 +35,7 @@
         </HeaderPanelLinks>
       </HeaderAction>
     {:else if variant === "profile"}
-      <ProfileMenu on:close={onClose}>
+      <ProfileMenu on:open={onOpen} on:close={onClose}>
         <ProfileMenuItem href="#anchor">Anchor</ProfileMenuItem>
         <ProfileMenuItem>Button</ProfileMenuItem>
         <ProfileMenuItem on:click={keepOpen}>Stay open</ProfileMenuItem>
@@ -40,6 +44,9 @@
       <HeaderSwitcher
         text="Acme"
         iconDescription="Switch account"
+        {maxWidth}
+        {preventCloseOnClickOutside}
+        on:open={onOpen}
         on:close={onClose}
       >
         <ProfileMenuItem href="#anchor">Anchor</ProfileMenuItem>

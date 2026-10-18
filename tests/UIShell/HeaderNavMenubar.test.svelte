@@ -6,7 +6,12 @@
   import SideNav from "carbon-components-svelte/UIShell/SideNav.svelte";
   import SideNavItems from "carbon-components-svelte/UIShell/SideNavItems.svelte";
 
-  type Entry = { text: string; items?: ReadonlyArray<{ text: string }> };
+  type Entry = {
+    text: string;
+    /** Consumer `id` forwarded to the `HeaderNavMenu` trigger. */
+    id?: string;
+    items?: ReadonlyArray<{ text: string }>;
+  };
 
   export let items: ReadonlyArray<Entry> = [
     { text: "Link 1" },
@@ -33,6 +38,7 @@
           {#if entry.items}
             <HeaderNavMenu
               text={entry.text}
+              {...entry.id ? { id: entry.id } : {}}
               on:close={(e) => onClose(entry.text, e.detail.trigger)}
             >
               {#each entry.items as child (child.text)}
@@ -60,6 +66,7 @@
       {#if entry.items}
         <HeaderNavMenu
           text={entry.text}
+          {...entry.id ? { id: entry.id } : {}}
           on:close={(e) => onClose(entry.text, e.detail.trigger)}
         >
           {#each entry.items as child (child.text)}

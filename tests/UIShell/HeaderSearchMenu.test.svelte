@@ -11,6 +11,7 @@
   export let size: ComponentProps<HeaderSearch>["size"] = undefined;
 
   export let debounce: ComponentProps<HeaderSearch>["debounce"] = 0;
+  export let footer = true;
   export let onSelect: (detail: { value: string }) => void = () => {};
   export let onSubmit: (detail: { value: string }) => void = () => {};
   export let onClose: (detail: { trigger: string }) => void = () => {};
@@ -29,6 +30,7 @@
   bind:value
   {size}
   {debounce}
+  {...$$restProps}
   on:select={(e) => onSelect(e.detail)}
   on:submit={(e) => onSubmit(e.detail)}
   on:close={(e) => onClose(e.detail)}
@@ -41,9 +43,11 @@
       {/each}
     </SearchMenuGroup>
 
-    <SearchMenuGroup divider>
-      <SearchMenuItem persistent value="__all__" text="Search everywhere" />
-    </SearchMenuGroup>
+    {#if footer}
+      <SearchMenuGroup divider>
+        <SearchMenuItem persistent value="__all__" text="Search everywhere" />
+      </SearchMenuGroup>
+    {/if}
   </svelte:fragment>
 
   <svelte:fragment slot="noResults">No results</svelte:fragment>

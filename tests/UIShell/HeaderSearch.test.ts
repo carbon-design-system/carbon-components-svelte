@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
-import type { ComponentProps } from "svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { flushMacrotask } from "../utils/flush-macrotask";
@@ -276,6 +276,25 @@ describe("HeaderSearch", () => {
         selectedResult: { href: "/1", text: "Result 1" },
       });
     });
+
+    it("selects the clicked result rather than the highlighted one", async () => {
+      const results = [
+        { href: "/1", text: "Result 1" },
+        { href: "/2", text: "Result 2" },
+      ];
+      const onSelect = vi.fn();
+      render(HeaderSearchTest, {
+        props: { active: true, results, value: "test", onSelect },
+      });
+
+      await user.click(screen.getByRole("menuitem", { name: "Result 2" }));
+
+      expect(onSelect).toHaveBeenCalledWith({
+        value: "test",
+        selectedResultIndex: 1,
+        selectedResult: results[1],
+      });
+    });
   });
 
   describe("Keyboard Navigation", () => {
@@ -444,6 +463,18 @@ describe("HeaderSearch Generics", () => {
     expectTypeOf(withStringId.id).toEqualTypeOf<string | number | undefined>();
     expectTypeOf(withNumberId.id).toEqualTypeOf<string | number | undefined>();
     expectTypeOf(withoutId.id).toEqualTypeOf<string | number | undefined>();
+  });
+
+  it("keeps the generic on the select event and the result slot", () => {
+    type CustomResult = HeaderSearchResult & { category: "document" | "user" };
+    type Component = HeaderSearchComponent<CustomResult>;
+
+    expectTypeOf<
+      ComponentEvents<Component>["select"]["detail"]["selectedResult"]
+    >().toEqualTypeOf<CustomResult>();
+    expectTypeOf<
+      Component["$$slot_def"]["default"]["result"]
+    >().toEqualTypeOf<CustomResult>();
   });
 
   it("should enforce HeaderSearchResult constraint on generic type", () => {

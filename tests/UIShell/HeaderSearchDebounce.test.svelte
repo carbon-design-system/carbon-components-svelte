@@ -7,7 +7,7 @@
   export let value = "";
   export let onSearch: (value: string) => void = () => {};
 
-  const results = [
+  export let results: ComponentProps<HeaderSearch>["results"] = [
     { id: "1", href: "#", text: "Result 1" },
     { id: "2", href: "#", text: "Result 2" },
   ];
