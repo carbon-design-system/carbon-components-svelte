@@ -2,9 +2,11 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import type OverflowMenuComponent from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { closeDetails, openMenu } from "./helpers";
+import OverflowMenuCustomTrigger from "./OverflowMenu.customTrigger.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
@@ -690,5 +692,41 @@ describe("OverflowMenu rendered open", () => {
     expect(
       screen.getByRole("menuitem", { name: "Delete service" }),
     ).toHaveFocus();
+  });
+});
+
+describe("OverflowMenu custom trigger", () => {
+  it("marks the trigger only when the `menu` slot is filled", () => {
+    render(OverflowMenuCustomTrigger);
+
+    expect(screen.getByTestId("custom")).toHaveClass(
+      "bx--overflow-menu--custom-trigger",
+    );
+    expect(screen.getByTestId("default")).not.toHaveClass(
+      "bx--overflow-menu--custom-trigger",
+    );
+  });
+});
+
+describe("OverflowMenu window listeners", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("opening adds one window click listener, closing removes it", async () => {
+    const addSpy = vi.spyOn(window, "addEventListener");
+    const removeSpy = vi.spyOn(window, "removeEventListener");
+
+    for (let i = 0; i < 5; i++) {
+      render(OverflowMenu, { props: { id: `menu-${i}` } });
+    }
+    expect(netListenerCalls(addSpy, removeSpy, "click")).toBe(0);
+
+    const buttons = screen.getAllByRole("button");
+    await user.click(buttons[0]);
+    expect(netListenerCalls(addSpy, removeSpy, "click")).toBe(1);
+
+    await user.keyboard("{Escape}");
+    expect(netListenerCalls(addSpy, removeSpy, "click")).toBe(0);
   });
 });
