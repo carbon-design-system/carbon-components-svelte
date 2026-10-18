@@ -243,17 +243,22 @@
     const vertical = orientation === "vertical";
     const point = getPointerPosition(event, orientation);
     if (point == null) return activeHandle;
+    // Pointer offset from a thumb's center, positive toward `max`.
     /** @type {(rect: DOMRect | undefined) => number} */
-    const distance = (rect) => {
+    const offset = (rect) => {
       if (!rect) return Number.POSITIVE_INFINITY;
-      const center = vertical
-        ? rect.top + rect.height / 2
-        : rect.left + rect.width / 2;
-      return Math.abs(center - point);
+      return vertical
+        ? rect.top + rect.height / 2 - point
+        : point - (rect.left + rect.width / 2);
     };
-    const dLower = distance(lowerThumbRef?.getBoundingClientRect());
-    const dUpper = distance(upperThumbRef?.getBoundingClientRect());
-    return dLower <= dUpper ? "lower" : "upper";
+    const toLower = offset(lowerThumbRef?.getBoundingClientRect());
+    const toUpper = offset(upperThumbRef?.getBoundingClientRect());
+    const dLower = Math.abs(toLower);
+    const dUpper = Math.abs(toUpper);
+    if (dLower !== dUpper) return dLower < dUpper ? "lower" : "upper";
+    // Stacked thumbs tie. The upper one takes presses past them toward
+    // `max`; the lower one could not move there.
+    return toUpper > 0 ? "upper" : "lower";
   }
 
   function handleLowerInputFocus() {
