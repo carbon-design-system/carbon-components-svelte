@@ -11,6 +11,13 @@
   /** Specify the width of the text (% or px) */
   export let width = "100%";
 
+  /**
+   * Set to `true` to remove the bottom margin, such as for a placeholder
+   * in a flex or grid row that sets its own spacing. In a paragraph, only
+   * the last line loses its margin, so the lines keep their gaps.
+   */
+  export let noMargin = false;
+
   const RANDOM = [0.973, 0.153, 0.567];
 
   $: widthNum = Number.parseInt(width, 10);
@@ -36,6 +43,7 @@
       <p
         class:bx--skeleton__text={true}
         class:bx--skeleton__heading={heading}
+        class:bx--skeleton__text--no-margin={noMargin && i === lines - 1}
         style:width
       ></p>
     {/each}
@@ -45,6 +53,7 @@
     aria-hidden="true"
     class:bx--skeleton__text={true}
     class:bx--skeleton__heading={heading}
+    class:bx--skeleton__text--no-margin={noMargin}
     style:width
     {...$$restProps}
     on:click
