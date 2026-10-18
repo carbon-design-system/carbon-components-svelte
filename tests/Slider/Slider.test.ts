@@ -6,6 +6,46 @@ import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
 
+const HORIZONTAL_TRACK = {
+  left: 0,
+  right: 200,
+  width: 200,
+  top: 0,
+  bottom: 2,
+  height: 2,
+};
+
+/** Returns the text input labelled by `label`, skipping the thumb that shares the label. */
+const getInputByLabel = (label: string) => {
+  const input = screen
+    .getAllByLabelText(label)
+    .find((el) => el.tagName === "INPUT");
+  assert(input);
+  return input;
+};
+
+/** Stubs the slider track's `getBoundingClientRect` with the given edges. */
+const mockTrackRect = (
+  container: HTMLElement,
+  edges: Parameters<typeof rect>[0],
+) => {
+  const track = container.querySelector(".bx--slider__track");
+  assert(track instanceof HTMLElement);
+  vi.spyOn(track, "getBoundingClientRect").mockReturnValue(rect(edges));
+};
+
+/** Presses the slider at the given pointer coordinates, then releases the window. */
+const pressTrack = async (
+  container: HTMLElement,
+  coords: { clientX?: number; clientY?: number },
+) => {
+  const slider = container.querySelector(".bx--slider");
+  assert(slider instanceof HTMLElement);
+  await fireEvent.mouseDown(slider, coords);
+  await tick();
+  await fireEvent.mouseUp(window);
+};
+
 describe("Slider", () => {
   it("should render with default props", () => {
     render(Slider);
@@ -19,43 +59,40 @@ describe("Slider", () => {
     render(Slider);
 
     const label = screen.getByText("Test Slider").closest("label");
-    const inputs = screen.getAllByLabelText("Test Slider");
-    const input = inputs.find((el) => el.tagName === "INPUT");
+    const input = getInputByLabel("Test Slider");
 
     assert(label);
-    assert(input);
     await user.click(label);
 
     expect(input).toHaveFocus();
   });
 
   it("should handle value changes through input", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
+    const onchange = vi.fn();
+    render(Slider, { props: { onchange } });
 
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
     await user.type(input, "50");
     await user.keyboard("{Tab}");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", 50);
+    expect(onchange).toHaveBeenCalledWith(50);
   });
 
-  it("prevents arrow/Home/End default actions (page scroll) while dragging the thumb", () => {
-    render(Slider);
+  it.each(["ArrowRight", "Home", "End", "PageUp", "PageDown"])(
+    "prevents the %s default action (page scroll)",
+    (key) => {
+      render(Slider);
 
-    const slider = screen.getByRole("slider");
-
-    for (const key of ["ArrowRight", "Home", "End"]) {
       const event = new KeyboardEvent("keydown", {
         key,
         bubbles: true,
         cancelable: true,
       });
-      slider.dispatchEvent(event);
+      screen.getByRole("slider").dispatchEvent(event);
       expect(event.defaultPrevented).toBe(true);
-    }
-  });
+    },
+  );
 
   it("should jump to min and max with Home and End", async () => {
     render(Slider, { props: { value: 50, min: 0, max: 100 } });
@@ -201,12 +238,10 @@ describe("Slider", () => {
     const slider = screen.getByRole("slider");
     const sliderElement = slider.parentElement;
     const container = sliderElement?.parentElement;
-    const inputs = screen.getAllByLabelText("Test Slider");
-    const input = inputs.find((el) => el.tagName === "INPUT");
+    const input = getInputByLabel("Test Slider");
 
     assert(sliderElement);
     assert(container);
-    assert(input);
     expect(sliderElement).toHaveClass("bx--slider--readonly");
     expect(container).toHaveClass("bx--slider-container--readonly");
     expect(input).toHaveAttribute("type", "hidden");
@@ -324,24 +359,6 @@ describe("Slider", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
-  it("should associate invalid text with slider via aria-describedby", () => {
-    render(Slider, {
-      props: { invalid: true, invalidText: "Error message" },
-    });
-
-    const slider = screen.getByRole("slider");
-    const input = screen.getByRole("spinbutton");
-    const invalidText = screen.getByText("Error message");
-
-    const errorId = invalidText.getAttribute("id");
-    expect(errorId).toBeTruthy();
-
-    expect(slider).toHaveAttribute("aria-describedby", errorId);
-    expect(input).toHaveAttribute("aria-describedby", errorId);
-    expect(slider).toHaveAttribute("aria-invalid", "true");
-    expect(input).toHaveAttribute("aria-invalid", "true");
-  });
-
   it("should handle warn state", () => {
     render(Slider, {
       props: { warn: true },
@@ -389,21 +406,26 @@ describe("Slider", () => {
     expect(screen.queryByText("Drag to adjust")).not.toBeInTheDocument();
   });
 
-  it("should associate warn text with slider via aria-describedby", () => {
-    render(Slider, {
-      props: { warn: true, warnText: "Warning message" },
-    });
+  it.each([
+    ["invalid", "invalidText", "Error message", "true"],
+    ["warn", "warnText", "Warning message", null],
+  ] as const)(
+    "should associate %s text with slider via aria-describedby",
+    (flag, textProp, message, ariaInvalid) => {
+      render(Slider, { props: { [flag]: true, [textProp]: message } });
 
-    const slider = screen.getByRole("slider");
-    const input = screen.getByRole("spinbutton");
-    const warnText = screen.getByText("Warning message");
+      const slider = screen.getByRole("slider");
+      const input = screen.getByRole("spinbutton");
 
-    const warnId = warnText.getAttribute("id");
-    expect(warnId).toBeTruthy();
+      const messageId = screen.getByText(message).getAttribute("id");
+      expect(messageId).toBeTruthy();
 
-    expect(slider).toHaveAttribute("aria-describedby", warnId);
-    expect(input).toHaveAttribute("aria-describedby", warnId);
-  });
+      expect(slider).toHaveAttribute("aria-describedby", messageId);
+      expect(input).toHaveAttribute("aria-describedby", messageId);
+      expect(slider.getAttribute("aria-invalid")).toBe(ariaInvalid);
+      expect(input.getAttribute("aria-invalid")).toBe(ariaInvalid);
+    },
+  );
 
   it("should prioritize invalid over warn state", () => {
     render(Slider, {
@@ -510,10 +532,11 @@ describe("Slider", () => {
   });
 
   it("should keep value numeric when formatValue is set", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onchange = vi.fn();
     render(Slider, {
       props: {
         value: 10,
+        onchange,
         formatValue: (v) => `${v}%`,
       },
     });
@@ -525,95 +548,36 @@ describe("Slider", () => {
     expect(slider).toHaveFocus();
     await user.keyboard("{ArrowRight}");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", 11);
+    expect(onchange).toHaveBeenCalledWith(11);
     expect(slider).toHaveAttribute("aria-valuenow", "11");
     expect(slider).toHaveAttribute("aria-valuetext", "11%");
     expect(screen.getByRole("spinbutton")).toHaveValue(11);
   });
 
-  it("should handle step multiplier with shift key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 25);
-  });
-
-  it("should move by the large step on PageUp and PageDown", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{PageUp}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 25);
-
-    await user.keyboard("{PageDown}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 0);
-  });
-
-  it("should clamp PageUp/PageDown values to min and max", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider, { props: { min: 0, max: 100, value: 90 } });
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{PageUp}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 100);
-  });
-
-  it("prevents PageUp/PageDown default actions (page scroll)", () => {
-    render(Slider);
-
-    const slider = screen.getByRole("slider");
-
-    for (const key of ["PageUp", "PageDown"]) {
-      const event = new KeyboardEvent("keydown", {
-        key,
-        bubbles: true,
-        cancelable: true,
-      });
-      slider.dispatchEvent(event);
-      expect(event.defaultPrevented).toBe(true);
-    }
-  });
-
   it("should clamp values to min and max", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onchange = vi.fn();
     render(Slider, {
-      props: { min: 10, max: 990 },
+      props: { min: 10, max: 990, onchange },
     });
 
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
     await user.type(input, "5");
     await user.keyboard("{Tab}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 10);
+    expect(onchange).toHaveBeenCalledWith(10);
 
     await user.clear(input);
     await user.type(input, "1000{Tab}");
     await user.keyboard("{Tab}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 990);
+    expect(onchange).toHaveBeenCalledWith(990);
   });
 
   it("moves the value with the pointer and dispatches change once on release", async () => {
     const onchange = vi.fn();
     const { container } = render(Slider, { props: { onchange } });
     const slider = container.querySelector(".bx--slider");
-    const track = container.querySelector(".bx--slider__track");
     assert(slider instanceof HTMLElement);
-    assert(track instanceof HTMLElement);
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
-      rect({ left: 0, right: 200, width: 200, top: 0, bottom: 2, height: 2 }),
-    );
+    mockTrackRect(container, HORIZONTAL_TRACK);
     const thumb = screen.getByRole("slider");
 
     await fireEvent.mouseDown(slider, { clientX: 50 });
@@ -636,9 +600,10 @@ describe("Slider", () => {
   });
 
   it("should not respond to dragging when disabled", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onchange = vi.fn();
+    const oninput = vi.fn();
     render(Slider, {
-      props: { disabled: true },
+      props: { disabled: true, onchange, oninput },
     });
 
     const slider = screen.getByRole("slider");
@@ -652,7 +617,8 @@ describe("Slider", () => {
 
     await user.pointer({ target: container, keys: "[/MouseLeft]" });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onchange).not.toHaveBeenCalled();
+    expect(oninput).not.toHaveBeenCalled();
   });
 
   it("should render label slot", () => {
@@ -661,9 +627,7 @@ describe("Slider", () => {
     });
 
     expect(screen.getByText("Slot Label")).toBeInTheDocument();
-    const inputs = screen.getAllByLabelText("Slot Label");
-    const input = inputs.find((el) => el.tagName === "INPUT");
-    expect(input).toBeDefined();
+    getInputByLabel("Slot Label");
   });
 
   it("should maintain label association with custom id", () => {
@@ -672,124 +636,66 @@ describe("Slider", () => {
     });
 
     const label = screen.getByText("Test Slider").closest("label");
-    const inputs = screen.getAllByLabelText("Test Slider");
-    const input = inputs.find((el) => el.tagName === "INPUT");
+    const input = getInputByLabel("Test Slider");
 
     assert(label);
-    assert(input);
     expect(label).toHaveAttribute("for", "input-custom-slider-id");
     expect(input).toHaveAttribute("id", "input-custom-slider-id");
-  });
-
-  it("should handle arrow up key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{ArrowUp}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 1);
-  });
-
-  it("should handle arrow down key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider, {
-      props: { min: 0, max: 100 },
-    });
-
-    const slider = screen.getByRole("slider");
-    const input = screen.getByRole("spinbutton");
-    await user.clear(input);
-    await user.type(input, "50");
-    await user.keyboard("{Tab}");
-
-    vi.clearAllMocks();
-
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{ArrowDown}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 49);
   });
 
   // Regression: a stationary click on the track should move the thumb,
   // not only a click followed by a mousemove.
   it("should update value on a click without dragging", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const oninput = vi.fn();
     const { container } = render(Slider, {
-      props: { value: 0, min: 0, max: 100 },
+      props: { value: 0, min: 0, max: 100, oninput },
     });
+    mockTrackRect(container, HORIZONTAL_TRACK);
 
-    const slider = container.querySelector(".bx--slider");
-    const track = container.querySelector(".bx--slider__track");
-    assert(slider instanceof HTMLElement);
-    assert(track instanceof HTMLElement);
+    await pressTrack(container, { clientX: 100 });
 
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-      left: 0,
-      right: 200,
-      width: 200,
-      top: 0,
-      bottom: 0,
-      height: 2,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
-    });
-
-    await fireEvent.mouseDown(slider, { clientX: 100 });
-    await tick();
-    await fireEvent.mouseUp(window);
-
-    expect(consoleLog).toHaveBeenCalledWith("input", 50);
+    expect(oninput).toHaveBeenCalledWith(50);
     expect(screen.getByRole("spinbutton")).toHaveValue(50);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1980
-  it("should fire input event when using arrow keys", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
+  it.each([
+    ["ArrowUp", {}, "{ArrowUp}", [1]],
+    ["ArrowRight then ArrowLeft", {}, "{ArrowRight}{ArrowLeft}", [1, 0]],
+    ["ArrowDown", { value: 50 }, "{ArrowDown}", [49]],
+    ["Shift+ArrowRight", {}, "{Shift>}{ArrowRight}{/Shift}", [25]],
+    ["PageUp then PageDown", {}, "{PageUp}{PageDown}", [25, 0]],
+    ["PageUp clamped to max", { value: 90 }, "{PageUp}", [100]],
+    ["ArrowRight clamped to max", { value: 100 }, "{ArrowRight}", [100]],
+    [
+      "Shift+ArrowRight clamped to max",
+      { value: 100 },
+      "{Shift>}{ArrowRight}{/Shift}",
+      [100],
+    ],
+  ] as const)(
+    "fires input and change for %s",
+    async (_, props, keys, expected) => {
+      const onchange = vi.fn();
+      const oninput = vi.fn();
+      render(Slider, { props: { ...props, onchange, oninput } });
 
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
+      await user.tab();
+      expect(screen.getByRole("slider")).toHaveFocus();
 
-    await user.keyboard("{ArrowRight}");
-    expect(consoleLog).toHaveBeenCalledWith("input", 1);
-    expect(consoleLog).toHaveBeenCalledWith("change", 1);
-
-    await user.keyboard("{ArrowLeft}");
-    expect(consoleLog).toHaveBeenCalledWith("input", 0);
-    expect(consoleLog).toHaveBeenCalledWith("change", 0);
-  });
-
-  it("should clamp keyboard arrow values to min and max", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider, { props: { min: 0, max: 100, value: 100 } });
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{ArrowRight}");
-    expect(consoleLog).toHaveBeenCalledWith("input", 100);
-    expect(consoleLog).toHaveBeenCalledWith("change", 100);
-
-    vi.clearAllMocks();
-    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
-    expect(consoleLog).toHaveBeenCalledWith("input", 100);
-    expect(consoleLog).toHaveBeenCalledWith("change", 100);
-  });
+      await user.keyboard(keys);
+      expect(oninput.mock.calls.map(([value]) => value)).toEqual(expected);
+      expect(onchange.mock.calls.map(([value]) => value)).toEqual(expected);
+    },
+  );
 
   it("should not dispatch change on programmatic value updates", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { rerender } = render(Slider, { props: { value: 10 } });
+    const onchange = vi.fn();
+    const { rerender } = render(Slider, { props: { value: 10, onchange } });
 
-    await rerender({ value: 20 });
+    await rerender({ value: 20, onchange });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onchange).not.toHaveBeenCalled();
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -809,8 +715,8 @@ describe("Slider", () => {
   // role="presentation" parent (which strips ARIA semantics from the
   // keyboard-handling element).
   it("attaches keyboard handling to the thumb with role=slider", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
+    const oninput = vi.fn();
+    render(Slider, { props: { oninput } });
 
     const slider = screen.getByRole("slider");
 
@@ -825,7 +731,7 @@ describe("Slider", () => {
     slider.dispatchEvent(
       new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
     );
-    expect(consoleLog).toHaveBeenCalledWith("input", 1);
+    expect(oninput).toHaveBeenCalledWith(1);
   });
 
   it("should not accumulate floating-point drift with decimal steps", async () => {
@@ -845,12 +751,13 @@ describe("Slider", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
   it("should round shift+arrow values to valid steps", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onchange = vi.fn();
     render(Slider, {
       props: {
         min: 0,
         max: 10,
         step: 1,
+        onchange,
       },
     });
 
@@ -859,28 +766,14 @@ describe("Slider", () => {
     expect(slider).toHaveFocus();
 
     await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
-    const firstCall = consoleLog.mock.calls.find(
-      (call) => call[0] === "change",
-    );
-    expect(firstCall).toBeDefined();
-    assert(firstCall);
-    const firstValue = firstCall[1];
+    expect(onchange).toHaveBeenCalledTimes(1);
+    expect(Number.isInteger(onchange.mock.calls[0][0])).toBe(true);
 
-    expect(Number.isInteger(firstValue)).toBe(true);
-    expect(firstValue % 1).toBe(0);
-
-    vi.clearAllMocks();
+    onchange.mockClear();
 
     await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
-    const secondCall = consoleLog.mock.calls.find(
-      (call) => call[0] === "change",
-    );
-    expect(secondCall).toBeDefined();
-    assert(secondCall);
-    const secondValue = secondCall[1];
-
-    expect(Number.isInteger(secondValue)).toBe(true);
-    expect(secondValue % 1).toBe(0);
+    expect(onchange).toHaveBeenCalledTimes(1);
+    expect(Number.isInteger(onchange.mock.calls[0][0])).toBe(true);
   });
 
   it("should render labeled marks at the given values", () => {
@@ -930,32 +823,8 @@ describe("Slider", () => {
   });
 
   describe("snapToMarks", () => {
-    const mockTrackRect = (container: HTMLElement) => {
-      const track = container.querySelector(".bx--slider__track");
-      assert(track instanceof HTMLElement);
-      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-        left: 0,
-        right: 200,
-        width: 200,
-        top: 0,
-        bottom: 0,
-        height: 2,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      });
-    };
-
-    const clickTrack = async (container: HTMLElement, clientX: number) => {
-      const slider = container.querySelector(".bx--slider");
-      assert(slider instanceof HTMLElement);
-      await fireEvent.mouseDown(slider, { clientX });
-      await tick();
-      await fireEvent.mouseUp(window);
-    };
-
     it("should snap a click to the nearest mark", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const oninput = vi.fn();
       const { container } = render(Slider, {
         props: {
           value: 0,
@@ -964,13 +833,14 @@ describe("Slider", () => {
           step: 1,
           marks: [{ value: 0 }, { value: 25 }, { value: 100 }],
           snapToMarks: true,
+          oninput,
         },
       });
-      mockTrackRect(container);
+      mockTrackRect(container, HORIZONTAL_TRACK);
 
-      await clickTrack(container, 55);
+      await pressTrack(container, { clientX: 55 });
 
-      expect(consoleLog).toHaveBeenCalledWith("input", 25);
+      expect(oninput).toHaveBeenCalledWith(25);
       expect(screen.getByRole("spinbutton")).toHaveValue(25);
     });
 
@@ -984,9 +854,9 @@ describe("Slider", () => {
           marks: [{ value: 0 }, { value: 25 }, { value: 100 }],
         },
       });
-      mockTrackRect(container);
+      mockTrackRect(container, HORIZONTAL_TRACK);
 
-      await clickTrack(container, 55);
+      await pressTrack(container, { clientX: 55 });
 
       expect(screen.getByRole("spinbutton")).toHaveValue(28);
     });
@@ -995,15 +865,15 @@ describe("Slider", () => {
       const { container } = render(Slider, {
         props: { value: 0, min: 0, max: 100, step: 1, snapToMarks: true },
       });
-      mockTrackRect(container);
+      mockTrackRect(container, HORIZONTAL_TRACK);
 
-      await clickTrack(container, 55);
+      await pressTrack(container, { clientX: 55 });
 
       expect(screen.getByRole("spinbutton")).toHaveValue(28);
     });
 
     it("should move to the adjacent mark with arrow keys", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onchange = vi.fn();
       render(Slider, {
         props: {
           value: 0,
@@ -1012,6 +882,7 @@ describe("Slider", () => {
           step: 1,
           marks: [{ value: 0 }, { value: 10 }, { value: 50 }],
           snapToMarks: true,
+          onchange,
         },
       });
 
@@ -1019,36 +890,37 @@ describe("Slider", () => {
       expect(screen.getByRole("slider")).toHaveFocus();
 
       await user.keyboard("{ArrowRight}");
-      expect(consoleLog).toHaveBeenCalledWith("change", 10);
-      expect(consoleLog).not.toHaveBeenCalledWith("change", 1);
+      expect(onchange).toHaveBeenCalledWith(10);
+      expect(onchange).not.toHaveBeenCalledWith(1);
 
       await user.keyboard("{ArrowRight}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 50);
+      expect(onchange).toHaveBeenLastCalledWith(50);
 
       await user.keyboard("{ArrowRight}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 50);
+      expect(onchange).toHaveBeenLastCalledWith(50);
 
       await user.keyboard("{ArrowLeft}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+      expect(onchange).toHaveBeenLastCalledWith(10);
     });
 
     it("should walk unsorted marks in value order", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onchange = vi.fn();
       render(Slider, {
         props: {
           value: 0,
           marks: [{ value: 50 }, { value: 0 }, { value: 10 }],
           snapToMarks: true,
+          onchange,
         },
       });
 
       await user.tab();
       await user.keyboard("{ArrowRight}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+      expect(onchange).toHaveBeenLastCalledWith(10);
     });
 
     it("should jump by stepMultiplier marks with Shift+Arrow", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onchange = vi.fn();
       render(Slider, {
         props: {
           value: 0,
@@ -1061,12 +933,13 @@ describe("Slider", () => {
           ],
           stepMultiplier: 2,
           snapToMarks: true,
+          onchange,
         },
       });
 
       await user.tab();
       await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+      expect(onchange).toHaveBeenLastCalledWith(10);
     });
 
     it("should not snap a programmatic value that sits between marks", () => {
@@ -1082,7 +955,7 @@ describe("Slider", () => {
     });
 
     it("should keep Home and End jumping to min and max", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onchange = vi.fn();
       render(Slider, {
         props: {
           value: 10,
@@ -1090,46 +963,19 @@ describe("Slider", () => {
           max: 100,
           marks: [{ value: 10 }, { value: 50 }],
           snapToMarks: true,
+          onchange,
         },
       });
 
       await user.tab();
       await user.keyboard("{End}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 100);
+      expect(onchange).toHaveBeenLastCalledWith(100);
       await user.keyboard("{Home}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 0);
+      expect(onchange).toHaveBeenLastCalledWith(0);
     });
   });
 
   describe("orientation", () => {
-    const mockTrackRect = (container: HTMLElement, rect: Partial<DOMRect>) => {
-      const track = container.querySelector(".bx--slider__track");
-      assert(track instanceof HTMLElement);
-      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-        top: 0,
-        bottom: 0,
-        height: 0,
-        left: 0,
-        right: 0,
-        width: 0,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-        ...rect,
-      });
-    };
-
-    const pressTrack = async (
-      container: HTMLElement,
-      coords: { clientX?: number; clientY?: number },
-    ) => {
-      const slider = container.querySelector(".bx--slider");
-      assert(slider instanceof HTMLElement);
-      await fireEvent.mouseDown(slider, coords);
-      await tick();
-      await fireEvent.mouseUp(window);
-    };
-
     it("should set aria-orientation and the vertical classes only when vertical", () => {
       const { container, unmount } = render(Slider);
       expect(screen.getByRole("slider")).toHaveAttribute(
@@ -1164,9 +1010,9 @@ describe("Slider", () => {
     });
 
     it("should read clientY on a vertical track, increasing toward the top", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const oninput = vi.fn();
       const { container } = render(Slider, {
-        props: { orientation: "vertical", value: 0, min: 0, max: 100 },
+        props: { orientation: "vertical", value: 0, min: 0, max: 100, oninput },
       });
       mockTrackRect(container, {
         top: 0,
@@ -1178,7 +1024,7 @@ describe("Slider", () => {
 
       await pressTrack(container, { clientX: 1, clientY: 50 });
 
-      expect(consoleLog).toHaveBeenCalledWith("input", 75);
+      expect(oninput).toHaveBeenCalledWith(75);
       expect(screen.getByRole("spinbutton")).toHaveValue(75);
     });
 
@@ -1186,12 +1032,7 @@ describe("Slider", () => {
       const { container } = render(Slider, {
         props: { value: 0, min: 0, max: 100 },
       });
-      mockTrackRect(container, {
-        right: 200,
-        width: 200,
-        bottom: 2,
-        height: 2,
-      });
+      mockTrackRect(container, HORIZONTAL_TRACK);
 
       await pressTrack(container, { clientX: 50, clientY: 1 });
 
@@ -1221,15 +1062,17 @@ describe("Slider", () => {
     });
 
     it("should increase with ArrowUp and decrease with ArrowDown when vertical", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(Slider, { props: { orientation: "vertical", value: 10 } });
+      const onchange = vi.fn();
+      render(Slider, {
+        props: { orientation: "vertical", value: 10, onchange },
+      });
 
       await user.tab();
       await user.keyboard("{ArrowUp}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 11);
+      expect(onchange).toHaveBeenLastCalledWith(11);
 
       await user.keyboard("{ArrowDown}{ArrowDown}");
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 9);
+      expect(onchange).toHaveBeenLastCalledWith(9);
     });
 
     it("should snap to marks on a vertical track", async () => {

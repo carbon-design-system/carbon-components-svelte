@@ -1,14 +1,7 @@
 import { fireEvent, render } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import Slider from "./Slider.test.svelte";
-
-const net = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-  type: string,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === type).length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("Slider window listeners", () => {
   it("a drag adds exactly one shared listener per type; releasing removes it", async () => {
@@ -20,7 +13,7 @@ describe("Slider window listeners", () => {
       () => render(Slider).container,
     );
     for (const type of ["mousemove", "mouseup"]) {
-      expect(net(add, remove, type)).toBe(0);
+      expect(netListenerCalls(add, remove, type)).toBe(0);
     }
 
     const sliderA = containers[0].querySelector(".bx--slider");
@@ -28,22 +21,22 @@ describe("Slider window listeners", () => {
     await fireEvent.mouseDown(sliderA);
     await flushDismiss();
 
-    expect(net(add, remove, "mousemove")).toBe(1);
-    expect(net(add, remove, "touchmove")).toBe(1);
-    expect(net(add, remove, "mouseup")).toBe(1);
+    expect(netListenerCalls(add, remove, "mousemove")).toBe(1);
+    expect(netListenerCalls(add, remove, "touchmove")).toBe(1);
+    expect(netListenerCalls(add, remove, "mouseup")).toBe(1);
 
     // A second concurrent drag still shares the single pooled listener.
     const sliderB = containers[1].querySelector(".bx--slider");
     assert(sliderB instanceof HTMLElement);
     await fireEvent.mouseDown(sliderB);
     await flushDismiss();
-    expect(net(add, remove, "mousemove")).toBe(1);
+    expect(netListenerCalls(add, remove, "mousemove")).toBe(1);
 
     // Releasing both ends the drag and tears the shared listeners down.
     await fireEvent.mouseUp(window);
     await flushDismiss();
     for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
-      expect(net(add, remove, type)).toBe(0);
+      expect(netListenerCalls(add, remove, type)).toBe(0);
     }
 
     add.mockRestore();

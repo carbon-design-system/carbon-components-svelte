@@ -3,8 +3,13 @@ import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.sv
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
+
+/** Matches a `change`/`input` event whose detail is the given bounds. */
+const bounds = (value: number, valueUpper: number) =>
+  expect.objectContaining({ detail: { value, valueUpper } });
 
 describe("RangeSlider", () => {
   it("names each thumb and text input by the label and its bound", () => {
@@ -167,57 +172,88 @@ describe("RangeSlider", () => {
     expect(container.querySelector(".bx--slider__range-label")).toBeNull();
   });
 
-  it("should clamp lower value to not exceed upper value", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RangeSlider, { props: { value: 10, valueUpper: 50 } });
-
-    const lowerInput = screen.getAllByRole("spinbutton")[0];
-    await user.clear(lowerInput);
-    await user.type(lowerInput, "80");
-    await user.keyboard("{Tab}");
-
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 50,
+  it.each([
+    {
+      handle: "lower",
+      minGap: 0,
+      value: 10,
       valueUpper: 50,
-    });
-  });
-
-  it("should clamp upper value to not go below lower value", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RangeSlider, { props: { value: 40, valueUpper: 80 } });
-
-    const upperInput = screen.getAllByRole("spinbutton")[1];
-    await user.clear(upperInput);
-    await user.type(upperInput, "20");
-    await user.keyboard("{Tab}");
-
-    expect(consoleLog).toHaveBeenCalledWith("change", {
+      typed: "80",
+      limit: ["max", "50"],
+      expected: [50, 50],
+    },
+    {
+      handle: "upper",
+      minGap: 0,
       value: 40,
-      valueUpper: 40,
-    });
-  });
+      valueUpper: 80,
+      typed: "20",
+      limit: ["min", "40"],
+      expected: [40, 40],
+    },
+    {
+      handle: "lower",
+      minGap: 10,
+      value: 10,
+      valueUpper: 50,
+      typed: "45",
+      limit: ["max", "40"],
+      expected: [40, 50],
+    },
+    {
+      handle: "upper",
+      minGap: 10,
+      value: 40,
+      valueUpper: 80,
+      typed: "45",
+      limit: ["min", "50"],
+      expected: [40, 50],
+    },
+  ])(
+    "should clamp a typed $handle value to the other handle (minGap $minGap)",
+    async ({ handle, minGap, value, valueUpper, typed, limit, expected }) => {
+      const onchange = vi.fn();
+      render(RangeSlider, { props: { value, valueUpper, minGap, onchange } });
 
-  it("should not push lower handle past upper bound via arrow keys", async () => {
-    render(RangeSlider, { props: { value: 49, valueUpper: 50 } });
+      const input =
+        screen.getAllByRole("spinbutton")[handle === "lower" ? 0 : 1];
+      expect(input).toHaveAttribute(limit[0], limit[1]);
+      await user.clear(input);
+      await user.type(input, typed);
+      await user.keyboard("{Tab}");
 
-    const [lowerThumb] = screen.getAllByRole("slider");
-    lowerThumb.focus();
-    await user.keyboard("{ArrowRight}");
-    await user.keyboard("{ArrowRight}");
+      expect(onchange).toHaveBeenCalledWith(bounds(expected[0], expected[1]));
+    },
+  );
 
-    expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
-  });
+  it.each([
+    {
+      handle: "lower",
+      value: 49,
+      valueUpper: 50,
+      key: "{ArrowRight}",
+      expected: "50",
+    },
+    {
+      handle: "upper",
+      value: 50,
+      valueUpper: 51,
+      key: "{ArrowLeft}",
+      expected: "50",
+    },
+  ])(
+    "should not push the $handle handle past the other via arrow keys",
+    async ({ handle, value, valueUpper, key, expected }) => {
+      render(RangeSlider, { props: { value, valueUpper } });
 
-  it("should not push upper handle below lower bound via arrow keys", async () => {
-    render(RangeSlider, { props: { value: 50, valueUpper: 51 } });
+      const thumb = screen.getAllByRole("slider")[handle === "lower" ? 0 : 1];
+      thumb.focus();
+      await user.keyboard(key);
+      await user.keyboard(key);
 
-    const [, upperThumb] = screen.getAllByRole("slider");
-    upperThumb.focus();
-    await user.keyboard("{ArrowLeft}");
-    await user.keyboard("{ArrowLeft}");
-
-    expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
-  });
+      expect(thumb).toHaveAttribute("aria-valuenow", expected);
+    },
+  );
 
   it("prevents arrow/Home/End default actions (page scroll) while dragging a thumb", () => {
     render(RangeSlider);
@@ -235,104 +271,83 @@ describe("RangeSlider", () => {
     }
   });
 
-  it("should jump the lower thumb to min/End clamped to upper via Home and End", async () => {
-    render(RangeSlider, {
-      props: { value: 40, valueUpper: 60, min: 0, max: 100 },
-    });
+  it.each([
+    {
+      handle: "lower",
+      first: ["{End}", "60"],
+      second: ["{Home}", "0"],
+    },
+    {
+      handle: "upper",
+      first: ["{Home}", "40"],
+      second: ["{End}", "100"],
+    },
+  ])(
+    "should jump the $handle thumb via Home and End, clamped to the other handle",
+    async ({ handle, first, second }) => {
+      render(RangeSlider, {
+        props: { value: 40, valueUpper: 60, min: 0, max: 100 },
+      });
 
-    const [lowerThumb] = screen.getAllByRole("slider");
-    lowerThumb.focus();
-
-    await user.keyboard("{End}");
-    expect(lowerThumb).toHaveAttribute("aria-valuenow", "60");
-
-    await user.keyboard("{Home}");
-    expect(lowerThumb).toHaveAttribute("aria-valuenow", "0");
-  });
-
-  it("should jump the upper thumb to max/Home clamped to lower via Home and End", async () => {
-    render(RangeSlider, {
-      props: { value: 40, valueUpper: 60, min: 0, max: 100 },
-    });
-
-    const [, upperThumb] = screen.getAllByRole("slider");
-    upperThumb.focus();
-
-    await user.keyboard("{Home}");
-    expect(upperThumb).toHaveAttribute("aria-valuenow", "40");
-
-    await user.keyboard("{End}");
-    expect(upperThumb).toHaveAttribute("aria-valuenow", "100");
-  });
+      const thumb = screen.getAllByRole("slider")[handle === "lower" ? 0 : 1];
+      thumb.focus();
+      await user.keyboard(first[0]);
+      expect(thumb).toHaveAttribute("aria-valuenow", first[1]);
+      await user.keyboard(second[0]);
+      expect(thumb).toHaveAttribute("aria-valuenow", second[1]);
+    },
+  );
 
   it("should dispatch change event with { value, valueUpper } detail", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RangeSlider, { props: { value: 0, valueUpper: 100 } });
+    const onchange = vi.fn();
+    const oninput = vi.fn();
+    render(RangeSlider, {
+      props: { value: 0, valueUpper: 100, onchange, oninput },
+    });
 
     const [lowerThumb] = screen.getAllByRole("slider");
     lowerThumb.focus();
     await user.keyboard("{ArrowRight}");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 1,
-      valueUpper: 100,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("input", {
-      value: 1,
-      valueUpper: 100,
-    });
+    expect(onchange).toHaveBeenLastCalledWith(bounds(1, 100));
+    expect(oninput).toHaveBeenLastCalledWith(bounds(1, 100));
   });
 
   it("should clamp keyboard arrow values to min and max", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RangeSlider, { props: { value: 0, valueUpper: 100 } });
+    const onchange = vi.fn();
+    const oninput = vi.fn();
+    render(RangeSlider, {
+      props: { value: 0, valueUpper: 100, onchange, oninput },
+    });
 
     const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
 
     upperThumb.focus();
     await user.keyboard("{ArrowRight}");
-    expect(consoleLog).toHaveBeenCalledWith("input", {
-      value: 0,
-      valueUpper: 100,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 0,
-      valueUpper: 100,
-    });
+    expect(oninput).toHaveBeenLastCalledWith(bounds(0, 100));
+    expect(onchange).toHaveBeenLastCalledWith(bounds(0, 100));
 
-    vi.clearAllMocks();
+    onchange.mockClear();
+    oninput.mockClear();
     lowerThumb.focus();
     await user.keyboard("{Shift>}{ArrowLeft}{/Shift}");
-    expect(consoleLog).toHaveBeenCalledWith("input", {
-      value: 0,
-      valueUpper: 100,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 0,
-      valueUpper: 100,
-    });
+    expect(oninput).toHaveBeenLastCalledWith(bounds(0, 100));
+    expect(onchange).toHaveBeenLastCalledWith(bounds(0, 100));
   });
 
   it("should move the focused thumb by the large step on PageUp and PageDown", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RangeSlider, { props: { value: 0, valueUpper: 100 } });
+    const onchange = vi.fn();
+    render(RangeSlider, { props: { value: 0, valueUpper: 100, onchange } });
 
     const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
 
     lowerThumb.focus();
     await user.keyboard("{PageUp}");
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 25,
-      valueUpper: 100,
-    });
+    expect(onchange).toHaveBeenLastCalledWith(bounds(25, 100));
 
-    vi.clearAllMocks();
     upperThumb.focus();
     await user.keyboard("{PageDown}");
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 25,
-      valueUpper: 75,
-    });
+    expect(onchange).toHaveBeenLastCalledWith(bounds(25, 75));
   });
 
   it("prevents PageUp/PageDown default actions (page scroll)", () => {
@@ -364,22 +379,23 @@ describe("RangeSlider", () => {
   });
 
   it("should not dispatch change on programmatic value updates", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onchange = vi.fn();
     const { rerender } = render(RangeSlider, {
-      props: { value: 10, valueUpper: 90 },
+      props: { value: 10, valueUpper: 90, onchange },
     });
 
     await rerender({ value: 20, valueUpper: 80 });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onchange).not.toHaveBeenCalled();
   });
 
   it("should format aria-valuetext on both thumbs without changing numeric values", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onchange = vi.fn();
     render(RangeSlider, {
       props: {
         value: 20,
         valueUpper: 80,
+        onchange,
         formatValue: (v) => `$${v}`,
       },
     });
@@ -399,10 +415,7 @@ describe("RangeSlider", () => {
     lowerThumb.focus();
     await user.keyboard("{ArrowRight}");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      value: 21,
-      valueUpper: 80,
-    });
+    expect(onchange).toHaveBeenLastCalledWith(bounds(21, 80));
     expect(lowerThumb).toHaveAttribute("aria-valuenow", "21");
     expect(lowerThumb).toHaveAttribute("aria-valuetext", "$21");
   });
@@ -524,42 +537,6 @@ describe("RangeSlider", () => {
       expect(upperThumb).toHaveAttribute("aria-valuemin", "50");
     });
 
-    it("should clamp a typed lower value to valueUpper - minGap", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(RangeSlider, {
-        props: { value: 10, valueUpper: 50, minGap: 10 },
-      });
-
-      const [lowerInput] = screen.getAllByRole("spinbutton");
-      expect(lowerInput).toHaveAttribute("max", "40");
-      await user.clear(lowerInput);
-      await user.type(lowerInput, "45");
-      await user.keyboard("{Tab}");
-
-      expect(consoleLog).toHaveBeenCalledWith("change", {
-        value: 40,
-        valueUpper: 50,
-      });
-    });
-
-    it("should clamp a typed upper value to value + minGap", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(RangeSlider, {
-        props: { value: 40, valueUpper: 80, minGap: 10 },
-      });
-
-      const [, upperInput] = screen.getAllByRole("spinbutton");
-      expect(upperInput).toHaveAttribute("min", "50");
-      await user.clear(upperInput);
-      await user.type(upperInput, "45");
-      await user.keyboard("{Tab}");
-
-      expect(consoleLog).toHaveBeenCalledWith("change", {
-        value: 40,
-        valueUpper: 50,
-      });
-    });
-
     it("should keep both values in bounds when minGap exceeds the range", async () => {
       render(RangeSlider, {
         props: { min: 0, max: 100, value: 40, valueUpper: 60, minGap: 200 },
@@ -605,17 +582,9 @@ describe("RangeSlider", () => {
 
       const track = container.querySelector(".bx--slider__track");
       assert(track instanceof HTMLElement);
-      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
-        left: 0,
-        right: 200,
-        width: 200,
-        top: 0,
-        bottom: 0,
-        height: 2,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      });
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+        rect({ right: 200, height: 2 }),
+      );
 
       // Pressing the thumb itself grabs it, so no nearest-handle pick is made.
       const [lowerThumb] = screen.getAllByRole("slider");
@@ -642,19 +611,6 @@ describe("RangeSlider", () => {
   });
 
   describe("orientation", () => {
-    const rect = (overrides: Partial<DOMRect>): DOMRect => ({
-      top: 0,
-      bottom: 0,
-      height: 0,
-      left: 0,
-      right: 0,
-      width: 0,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
-      ...overrides,
-    });
-
     it("should set aria-orientation on both thumbs", () => {
       const { unmount } = render(RangeSlider);
       for (const thumb of screen.getAllByRole("slider")) {
@@ -709,7 +665,7 @@ describe("RangeSlider", () => {
       assert(track instanceof HTMLElement);
       const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
       vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
-        rect({ bottom: 200, height: 200, right: 2, width: 2 }),
+        rect({ bottom: 200, right: 2 }),
       );
       // Same x for both handles, so only the y distance can tell them apart.
       vi.spyOn(lowerThumb, "getBoundingClientRect").mockReturnValue(
@@ -743,30 +699,17 @@ describe("RangeSlider", () => {
   });
 
   describe("grabbing a handle", () => {
-    const rect = (overrides: Partial<DOMRect>): DOMRect => ({
-      top: 0,
-      bottom: 0,
-      height: 0,
-      left: 0,
-      right: 0,
-      width: 0,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
-      ...overrides,
-    });
-
     it.each([
       {
         orientation: "horizontal" as const,
-        track: rect({ right: 200, width: 200, height: 2 }),
+        track: rect({ right: 200, height: 2 }),
         // Value point of 20 is x=40; the lower handle hangs left of it.
         press: { clientX: 32 },
         move: { clientX: 52 },
       },
       {
         orientation: "vertical" as const,
-        track: rect({ bottom: 200, height: 200, width: 2 }),
+        track: rect({ bottom: 200, width: 2 }),
         // Value point of 20 is y=160; the lower handle hangs below it.
         press: { clientY: 168 },
         move: { clientY: 148 },

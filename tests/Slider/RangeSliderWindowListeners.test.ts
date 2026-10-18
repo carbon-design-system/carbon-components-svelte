@@ -1,14 +1,7 @@
 import { fireEvent, render } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import RangeSlider from "./RangeSlider.test.svelte";
-
-const net = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-  type: string,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === type).length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("RangeSlider window listeners", () => {
   it("idle range sliders register no drag listeners", () => {
@@ -18,7 +11,7 @@ describe("RangeSlider window listeners", () => {
     for (let i = 0; i < 5; i++) render(RangeSlider);
 
     for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
-      expect(net(add, remove, type)).toBe(0);
+      expect(netListenerCalls(add, remove, type)).toBe(0);
     }
 
     add.mockRestore();
@@ -30,21 +23,21 @@ describe("RangeSlider window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     const { container } = render(RangeSlider);
-    expect(net(add, remove, "mousemove")).toBe(0);
+    expect(netListenerCalls(add, remove, "mousemove")).toBe(0);
 
     const slider = container.querySelector(".bx--slider");
     assert(slider instanceof HTMLElement);
     await fireEvent.mouseDown(slider);
     await flushDismiss();
 
-    expect(net(add, remove, "mousemove")).toBe(1);
-    expect(net(add, remove, "touchmove")).toBe(1);
-    expect(net(add, remove, "mouseup")).toBe(1);
+    expect(netListenerCalls(add, remove, "mousemove")).toBe(1);
+    expect(netListenerCalls(add, remove, "touchmove")).toBe(1);
+    expect(netListenerCalls(add, remove, "mouseup")).toBe(1);
 
     await fireEvent.mouseUp(window);
     await flushDismiss();
     for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
-      expect(net(add, remove, type)).toBe(0);
+      expect(netListenerCalls(add, remove, type)).toBe(0);
     }
 
     add.mockRestore();

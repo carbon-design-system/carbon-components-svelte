@@ -15,9 +15,10 @@
     "Close";
   export let hideCloseButton = false;
   export let slotContent = "";
+  export let onclick: (() => void) | undefined = undefined;
 </script>
 
-<ComposedModal bind:open on:close={() => console.log("close")}>
+<ComposedModal bind:open>
   <ModalHeader
     {title}
     {label}
@@ -27,7 +28,7 @@
     {closeIconClass}
     {iconDescription}
     {hideCloseButton}
-    on:click={() => console.log("click")}
+    on:click={() => onclick?.()}
     {...$$restProps}
   >
     {#if slotContent}

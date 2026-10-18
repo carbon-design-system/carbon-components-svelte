@@ -5,20 +5,21 @@ import { tick } from "svelte";
 import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
+import { setViewportWidth } from "../utils/viewport";
+import {
+  closeVia,
+  finishClose,
+  flushProgrammaticClose,
+  reportClosingTransition,
+} from "./helpers";
 import ModalTest from "./Modal.test.svelte";
+import ModalEnterTargetTest from "./ModalEnterTarget.test.svelte";
 import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
-import ModalLinkEnterTest from "./ModalLinkEnter.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
-import ModalTextareaEnterTest from "./ModalTextareaEnter.test.svelte";
 import ModalUnmountOnCloseTest from "./ModalUnmountOnClose.test.svelte";
-
-async function flushProgrammaticClose() {
-  await tick();
-  await tick();
-}
 
 describe("Modal", () => {
   it("renders with default props", () => {
@@ -119,20 +120,24 @@ describe("Modal", () => {
   });
 
   it("handles button clicks", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onclickbuttonprimary = vi.fn();
+    const onclickbuttonsecondary = vi.fn();
     render(ModalTest, {
       props: {
         open: true,
         primaryButtonText: "Save",
         secondaryButtonText: "Cancel",
+        onclickbuttonprimary,
+        onclickbuttonsecondary,
       },
     });
 
     await user.click(screen.getByText("Save"));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
+    expect(onclickbuttonprimary).toHaveBeenCalledTimes(1);
 
     await user.click(screen.getByText("Cancel"));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+    expect(onclickbuttonsecondary).toHaveBeenCalledTimes(1);
+    expect(onclickbuttonsecondary.mock.calls[0][0].detail).toEqual({
       text: "Cancel",
     });
   });
@@ -174,61 +179,49 @@ describe("Modal", () => {
   });
 
   it("dispatches click:button--secondary for secondaryButtons entries", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onclickbuttonsecondary = vi.fn();
     render(ModalTest, {
       props: {
         open: true,
         primaryButtonText: "Save",
         secondaryButtons: [{ text: "Cancel" }, { text: "Reset" }],
+        onclickbuttonsecondary,
       },
     });
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+    expect(onclickbuttonsecondary).toHaveBeenCalledTimes(1);
+    expect(onclickbuttonsecondary.mock.calls[0][0].detail).toEqual({
       text: "Cancel",
     });
 
     await user.click(screen.getByRole("button", { name: "Reset" }));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+    expect(onclickbuttonsecondary).toHaveBeenCalledTimes(2);
+    expect(onclickbuttonsecondary.mock.calls[1][0].detail).toEqual({
       text: "Reset",
     });
   });
 
-  it("supports different modal sizes", () => {
-    type Size = "xs" | "sm" | "lg";
-    const sizeMappings = {
-      xs: "bx--modal-container--xs",
-      sm: "bx--modal-container--sm",
-      lg: "bx--modal-container--lg",
-    } as const;
-
-    for (const size of Object.keys(sizeMappings) as Size[]) {
-      const { unmount } = render(ModalTest, {
-        props: {
-          open: true,
-          size,
-          modalHeading: `${size} Modal`,
-        },
-      });
-
-      const modal = screen.getByRole("dialog");
-      expect(modal).toHaveClass(sizeMappings[size]);
-      unmount();
-    }
-
-    const { unmount } = render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Medium Modal",
-      },
+  it.each([
+    ["xs", "bx--modal-container--xs"],
+    ["sm", "bx--modal-container--sm"],
+    ["lg", "bx--modal-container--lg"],
+    [undefined, undefined],
+  ] as const)("renders size %s", (size, sizeClass) => {
+    render(ModalTest, {
+      props: { open: true, size, modalHeading: "Size Modal" },
     });
 
     const modal = screen.getByRole("dialog");
     expect(modal).toHaveClass("bx--modal-container");
-    expect(modal).not.toHaveClass("bx--modal-container--xs");
-    expect(modal).not.toHaveClass("bx--modal-container--sm");
-    expect(modal).not.toHaveClass("bx--modal-container--lg");
-    unmount();
+    for (const cls of [
+      "bx--modal-container--xs",
+      "bx--modal-container--sm",
+      "bx--modal-container--lg",
+    ]) {
+      if (cls === sizeClass) expect(modal).toHaveClass(cls);
+      else expect(modal).not.toHaveClass(cls);
+    }
   });
 
   it("supports danger and alert variants", () => {
@@ -316,33 +309,8 @@ describe("Modal", () => {
     expect(closeButton).toHaveFocus();
   });
 
-  it("returns focus to trigger when closed via close button", async () => {
-    const { container } = render(ModalFocusReturnTest, {
-      props: {},
-    });
-
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-
-    const closeButton = screen.getByLabelText("Close the modal");
-    await user.click(closeButton);
-    await tick();
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    expect(trigger).toHaveFocus();
-  });
-
   it("leaves focus where a close handler moved it", async () => {
-    const { container } = render(ModalFocusReturnTest, {
+    render(ModalFocusReturnTest, {
       props: { moveFocusOnClose: true },
     });
 
@@ -350,13 +318,7 @@ describe("Modal", () => {
     await tick();
     await user.click(screen.getByLabelText("Close the modal"));
     await tick();
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await finishClose();
 
     expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
   });
@@ -374,53 +336,31 @@ describe("Modal", () => {
     expect(trigger).toHaveFocus();
   });
 
-  it("returns focus to trigger when closed via Escape key", async () => {
-    const { container } = render(ModalFocusReturnTest, {
-      props: {},
-    });
+  // With a closing transition reported, `transitionend` is the only path that
+  // restores focus.
+  it.each(["close-button", "escape-key", "outside-click"] as const)(
+    "returns focus to the trigger when closed via %s",
+    async (via) => {
+      const spy = reportClosingTransition();
 
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
+      try {
+        render(ModalFocusReturnTest);
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+        const trigger = screen.getByRole("button", { name: "Open Modal" });
+        await user.click(trigger);
+        await tick();
 
-    await user.keyboard("{Escape}");
-    await tick();
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+        await closeVia[via]();
+        await finishClose();
 
-    expect(trigger).toHaveFocus();
-  });
-
-  it("returns focus to trigger when closed via outside click", async () => {
-    const { container } = render(ModalFocusReturnTest, {
-      props: {},
-    });
-
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    await user.click(modalWrapper);
-    await tick();
-
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    expect(trigger).toHaveFocus();
-  });
+        expect(trigger).toHaveFocus();
+      } finally {
+        spy.mockRestore();
+      }
+    },
+  );
 
   it("skips initial focus when selectorPrimaryFocus is null", () => {
     render(ModalTest, {
@@ -576,72 +516,25 @@ describe("Modal", () => {
     ).toBeInTheDocument();
   });
 
-  it("dispatches close event with escape-key trigger", async () => {
-    render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Escape Key Test",
-      },
-    });
-
+  it.each([
+    "close-button",
+    "escape-key",
+    "outside-click",
+    "programmatic",
+  ] as const)("dispatches close event with %s trigger", async (trigger) => {
     const closeHandler = vi.fn();
-    render(ModalTest, {
+    const { rerender } = render(ModalTest, {
       props: {
         open: true,
-        preventCloseOnClickOutside: true,
-        modalHeading: "Prevent Close Test",
+        modalHeading: "Close Trigger Test",
         onclose: closeHandler,
       },
     });
 
-    await user.keyboard("{Escape}");
-    await tick();
+    await closeVia[trigger](rerender);
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({
-      trigger: "escape-key",
-    });
-  });
-
-  it("dispatches close event with outside-click trigger", async () => {
-    const closeHandler = vi.fn();
-    const { container } = render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Outside Click Test",
-        onclose: closeHandler,
-      },
-    });
-
-    const modalOverlay = container.querySelector(".bx--modal");
-    assert(modalOverlay);
-    await user.click(modalOverlay);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({
-      trigger: "outside-click",
-    });
-  });
-
-  it("dispatches close event with close-button trigger", async () => {
-    const closeHandler = vi.fn();
-    render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Close Button Test",
-        onclose: closeHandler,
-      },
-    });
-
-    const closeButton = screen.getByLabelText("Close the modal");
-    await user.click(closeButton);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({
-      trigger: "close-button",
-    });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ trigger });
   });
 
   it("hides the close button when hideCloseButton is true", () => {
@@ -726,25 +619,6 @@ describe("Modal", () => {
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(closeHandler).not.toHaveBeenCalled();
-  });
-
-  it("dispatches close event with programmatic trigger", async () => {
-    const closeHandler = vi.fn();
-    const { rerender } = render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Programmatic Close Test",
-        onclose: closeHandler,
-      },
-    });
-
-    await rerender({ open: false });
-    await flushProgrammaticClose();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({
-      trigger: "programmatic",
-    });
   });
 
   it("prevents closing when preventDefault is called on close event", async () => {
@@ -948,28 +822,6 @@ describe("Modal", () => {
     });
   });
 
-  it("should NOT dispatch submit when pressing Enter inside a textarea", async () => {
-    const submitHandler = vi.fn();
-    const clickPrimaryHandler = vi.fn();
-    render(ModalTextareaEnterTest, {
-      props: {
-        open: true,
-        shouldSubmitOnEnter: true,
-        onsubmit: submitHandler,
-        onclickbuttonprimary: clickPrimaryHandler,
-      },
-    });
-
-    const textarea = screen.getByTestId("modal-textarea");
-    assert(textarea instanceof HTMLTextAreaElement);
-    textarea.focus();
-    await user.keyboard("{Enter}");
-    await tick();
-
-    expect(submitHandler).not.toHaveBeenCalled();
-    expect(clickPrimaryHandler).not.toHaveBeenCalled();
-  });
-
   describe("Enter during IME composition", () => {
     function renderWithInput() {
       const submitHandler = vi.fn();
@@ -1014,37 +866,32 @@ describe("Modal", () => {
     });
   });
 
-  it("should NOT dispatch submit when pressing Enter on a link", async () => {
-    const submitHandler = vi.fn();
-    const clickPrimaryHandler = vi.fn();
-    render(ModalLinkEnterTest, {
-      props: {
-        open: true,
-        onsubmit: submitHandler,
-        onclickbuttonprimary: clickPrimaryHandler,
-      },
-    });
+  it.each([
+    ["a textarea", "modal-textarea", 0],
+    ["a link", "modal-link", 0],
+    ["a text input next to a link", "modal-input", 1],
+  ])(
+    "pressing Enter in %s dispatches submit %i time(s)",
+    async (_name, testId, calls) => {
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      render(ModalEnterTargetTest, {
+        props: {
+          open: true,
+          shouldSubmitOnEnter: true,
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
 
-    screen.getByTestId("modal-link").focus();
-    await user.keyboard("{Enter}");
-    await tick();
+      screen.getByTestId(testId).focus();
+      await user.keyboard("{Enter}");
+      await tick();
 
-    expect(submitHandler).not.toHaveBeenCalled();
-    expect(clickPrimaryHandler).not.toHaveBeenCalled();
-  });
-
-  it("still dispatches submit when pressing Enter in a text input next to a link", async () => {
-    const submitHandler = vi.fn();
-    render(ModalLinkEnterTest, {
-      props: { open: true, onsubmit: submitHandler },
-    });
-
-    screen.getByTestId("modal-input").focus();
-    await user.keyboard("{Enter}");
-    await tick();
-
-    expect(submitHandler).toHaveBeenCalledTimes(1);
-  });
+      expect(submitHandler).toHaveBeenCalledTimes(calls);
+      expect(clickPrimaryHandler).toHaveBeenCalledTimes(calls);
+    },
+  );
 
   describe("primaryButtonLoading", () => {
     it("shows InlineLoading and does not dispatch submit on click", async () => {
@@ -1190,15 +1037,6 @@ describe("Modal", () => {
   // Regression: Modal and SideNav must coordinate on the body scroll lock
   // class via a shared ref counter, so neither component clobbers the other.
   describe("body scroll lock coordination with SideNav", () => {
-    const setViewportWidth = (width: number) => {
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: width,
-      });
-      window.dispatchEvent(new Event("resize"));
-    };
-
     afterEach(() => {
       setViewportWidth(1024);
       document.body.classList.remove("bx--body--with-modal-open");

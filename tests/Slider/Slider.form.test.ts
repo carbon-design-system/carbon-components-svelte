@@ -63,4 +63,12 @@ describe("Slider form reset", () => {
     expect(getBoundText()).toBe("55");
     expect(new FormData(getForm()).get("level")).toBe("55");
   });
+
+  it("associates the control with the form named by `form`", () => {
+    render(SliderForm, {
+      props: { form: "outer-form", name: "volume", value: 40 },
+    });
+
+    expect(new FormData(getForm()).get("volume")).toBe("40");
+  });
 });

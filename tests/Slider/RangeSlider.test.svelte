@@ -25,6 +25,12 @@
   export let ariaLabelInput: string | undefined = undefined;
   export let ariaLabelInputUpper: string | undefined = undefined;
   export let selectTextOnFocus = false;
+  export let onchange:
+    | ((event: CustomEvent<{ value: number; valueUpper: number }>) => void)
+    | undefined = undefined;
+  export let oninput:
+    | ((event: CustomEvent<{ value: number; valueUpper: number }>) => void)
+    | undefined = undefined;
   export let onfocus:
     | ((
         event: CustomEvent<{
@@ -65,12 +71,8 @@
   ariaLabelInput={ariaLabelInput ?? "Lower bound"}
   ariaLabelInputUpper={ariaLabelInputUpper ?? "Upper bound"}
   {selectTextOnFocus}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
-  on:input={(e) => {
-    console.log("input", e.detail);
-  }}
+  on:change={(e) => onchange?.(e)}
+  on:input={(e) => oninput?.(e)}
   on:focus={(e) => onfocus?.(e)}
   on:blur={(e) => onblur?.(e)}
 />

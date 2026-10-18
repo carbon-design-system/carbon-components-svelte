@@ -26,6 +26,7 @@
   export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
   export let includeInput = true;
   export let closeOnSubmit = false;
+  export let includeBody = true;
 </script>
 
 <ComposedModal
@@ -38,33 +39,30 @@
   on:open={(e) => onopen?.(e)}
   on:close={(e) => onclose?.(e)}
   on:submit={() => {
-    console.log("submit");
     if (closeOnSubmit) open = false;
   }}
-  on:click:button--primary={() => console.log("click:button--primary")}
-  on:transitionend={(e) => console.log("transitionend", e.detail)}
   {...$$restProps}
 >
   {#if headerTitle || headerLabel}
     <ModalHeader title={headerTitle} label={headerLabel} />
   {/if}
-  <ModalBody
-    hasForm={bodyHasForm}
-    hasScrollingContent={bodyHasScrollingContent}
-  >
-    <slot />
-    {#if includeInput}
-      <input id="test-focus" data-testid="test-focus">
-    {/if}
-  </ModalBody>
+  {#if includeBody}
+    <ModalBody
+      hasForm={bodyHasForm}
+      hasScrollingContent={bodyHasScrollingContent}
+    >
+      <slot />
+      {#if includeInput}
+        <input id="test-focus" data-testid="test-focus">
+      {/if}
+    </ModalBody>
+  {/if}
   {#if footerPrimaryButtonText || footerSecondaryButtonText}
     <ModalFooter
       primaryButtonText={footerPrimaryButtonText}
       primaryButtonDisabled={footerPrimaryButtonDisabled}
       secondaryButtonText={footerSecondaryButtonText}
       danger={footerDanger}
-      on:click:button--secondary={(e) =>
-        console.log("click:button--secondary", e.detail)}
     />
   {/if}
 </ComposedModal>

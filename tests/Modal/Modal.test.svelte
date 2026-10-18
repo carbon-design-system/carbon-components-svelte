@@ -69,18 +69,12 @@
   {passiveModal}
   on:open={(e) => onopen?.(e)}
   on:close={(e) => onclose?.(e)}
-  on:submit={onsubmit || (() => console.log("submit"))}
-  on:click:button--primary={onclickbuttonprimary ||
-    (() => console.log("click:button--primary"))}
+  on:submit={(e) => onsubmit?.(e)}
+  on:click:button--primary={(e) => onclickbuttonprimary?.(e)}
   on:click:button--secondary={(e) => {
     if (closeOnSecondary) open = false;
-    if (onclickbuttonsecondary) {
-      onclickbuttonsecondary(e);
-    } else {
-      console.log("click:button--secondary", e.detail);
-    }
+    onclickbuttonsecondary?.(e);
   }}
-  on:transitionend={(e) => console.log("transitionend", e.detail)}
 >
   <slot />
   {#if includeInput}
