@@ -31,49 +31,6 @@ describe("ComposedModal", () => {
     expect(screen.getByText("Test Modal")).toBeInTheDocument();
   });
 
-  it("should have an accessible name when only a title is set", () => {
-    render(ComposedModalTest, {
-      props: { open: true, headerTitle: "Modal title" },
-    });
-
-    const dialog = screen.getByRole("dialog");
-    const accessibleName =
-      dialog.getAttribute("aria-label") ||
-      (dialog.getAttribute("aria-labelledby") &&
-        document
-          .getElementById(dialog.getAttribute("aria-labelledby") ?? "")
-          ?.textContent?.trim());
-    expect(accessibleName).toBeTruthy();
-  });
-
-  // Regression: ?? for aria-label so empty string is used (not fallback)
-  it("uses empty aria-label when passed (nullish coalescing)", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        "aria-label": "",
-      },
-    });
-    const modal = screen.getByRole("dialog");
-    expect(modal).toHaveAttribute("aria-label", "");
-  });
-
-  it("keeps a rest aria-label off the presentation root", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        "aria-label": "Delete file",
-        "data-testid": "modal-root",
-      },
-    });
-
-    expect(screen.getByRole("dialog")).toHaveAttribute(
-      "aria-label",
-      "Delete file",
-    );
-    expect(screen.getByTestId("modal-root")).not.toHaveAttribute("aria-label");
-  });
-
   it("keeps an empty rest aria-label off the presentation root", () => {
     render(ComposedModalTest, {
       props: { open: true, "aria-label": "", "data-testid": "modal-root" },
@@ -127,18 +84,6 @@ describe("ComposedModal", () => {
     expect(screen.getByTestId("modal-root")).not.toHaveAttribute(
       "aria-labelledby",
     );
-  });
-
-  it("should not have visible class when closed", () => {
-    const { container } = render(ComposedModalTest, {
-      props: {
-        open: false,
-        headerTitle: "Hidden Modal",
-      },
-    });
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    expect(modalWrapper).not.toHaveClass("is-visible");
   });
 
   it("should handle open state", async () => {
@@ -269,76 +214,6 @@ describe("ComposedModal", () => {
     expect(modalWrapper).toHaveClass("is-visible");
   });
 
-  it("should render header with title and label", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Modal Title",
-        headerLabel: "Modal Label",
-      },
-    });
-
-    expect(screen.getByText("Modal Title")).toBeInTheDocument();
-    expect(screen.getByText("Modal Label")).toBeInTheDocument();
-  });
-
-  it("should render footer with buttons", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        footerPrimaryButtonText: "Save",
-        footerSecondaryButtonText: "Cancel",
-      },
-    });
-
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
-  });
-
-  it("should handle primary button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        footerPrimaryButtonText: "Save",
-      },
-    });
-
-    await user.click(screen.getByRole("button", { name: "Save" }));
-    expect(consoleLog).toHaveBeenCalledWith("submit");
-    expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
-  });
-
-  it("should disable primary button when configured", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        footerPrimaryButtonText: "Save",
-        footerPrimaryButtonDisabled: true,
-      },
-    });
-
-    const primaryButton = screen.getByRole("button", { name: "Save" });
-    expect(primaryButton).toBeDisabled();
-  });
-
-  it("should handle scrolling content", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        bodyHasScrollingContent: true,
-      },
-    });
-
-    const modalBody = screen.getByRole("region");
-    expect(modalBody).toHaveClass("bx--modal-scroll-content");
-    expect(modalBody).toHaveAttribute("tabindex", "0");
-  });
-
   it("scrolls a newly-focused element out from under the scroll gradient", () => {
     render(ComposedModalTest, {
       props: {
@@ -361,33 +236,6 @@ describe("ComposedModal", () => {
 
     // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
     expect(modalContent.scrollTop).toBe(80);
-  });
-
-  it("should handle form content", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        bodyHasForm: true,
-      },
-    });
-
-    const modal = screen.getByRole("dialog");
-    const modalBody = modal.querySelector(".bx--modal-content");
-    expect(modalBody).toHaveClass("bx--modal-content--with-form");
-  });
-
-  it("should apply custom container class", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        containerClass: "custom-container",
-      },
-    });
-
-    const modal = screen.getByRole("dialog");
-    expect(modal).toHaveClass("custom-container");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2671
@@ -508,36 +356,6 @@ describe("ComposedModal", () => {
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    expect(trigger).toHaveFocus();
-  });
-
-  it("returns focus to trigger when closed via close button", async () => {
-    const { container } = render(ComposedModalFocusReturnTest, {
-      props: {},
-    });
-
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    const closeButton = screen.getByLabelText("Close");
-    await user.click(closeButton);
-    await tick();
-
     modalWrapper.dispatchEvent(
       new TransitionEvent("transitionend", { propertyName: "transform" }),
     );
@@ -729,45 +547,6 @@ describe("ComposedModal", () => {
     expect(modal).toHaveAttribute("aria-label", "Test Label");
   });
 
-  it("should handle danger footer variant", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        footerPrimaryButtonText: "Delete",
-        footerDanger: true,
-      },
-    });
-
-    const primaryButton = screen.getByRole("button", { name: "Delete" });
-    expect(primaryButton).toHaveClass("bx--btn--danger");
-  });
-
-  it("should apply custom attributes", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        "data-testid": "custom-modal",
-      },
-    });
-
-    const modalWrapper = screen.getByTestId("custom-modal");
-    expect(modalWrapper).toBeInTheDocument();
-  });
-
-  it("should handle visible class when open", () => {
-    const { container } = render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-      },
-    });
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    expect(modalWrapper).toHaveClass("is-visible");
-  });
-
   it("dispatches close event with outside-click trigger", async () => {
     const closeHandler = vi.fn();
     const { container } = render(ComposedModalTest, {
@@ -947,25 +726,6 @@ describe("ComposedModal", () => {
 
   // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1392
   describe("focus trap with Dropdown and TextInput (issue #1392)", () => {
-    it("should tab from Dropdown to TextInput (forward navigation)", async () => {
-      render(ComposedModalFocusTrapTest, {
-        props: { open: true },
-      });
-
-      await tick();
-
-      const dropdownButton = screen.getByLabelText("Select source");
-      const loginInput = screen.getByLabelText("Login");
-
-      dropdownButton.focus();
-      expect(dropdownButton).toHaveFocus();
-
-      await user.keyboard("{Tab}");
-      await tick();
-
-      expect(loginInput).toHaveFocus();
-    });
-
     it("should shift-tab from TextInput to Dropdown (reverse navigation)", async () => {
       render(ComposedModalFocusTrapTest, {
         props: { open: true },

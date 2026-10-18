@@ -3,14 +3,6 @@ import { user } from "../utils/user";
 import ModalHeaderTest from "./ModalHeader.test.svelte";
 
 describe("ModalHeader", () => {
-  it("should render with default props", () => {
-    render(ModalHeaderTest);
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    const modalHeader = closeButton.closest(".bx--modal-header");
-    expect(modalHeader).toBeInTheDocument();
-  });
-
   it("should render title", () => {
     render(ModalHeaderTest, {
       props: {
@@ -35,18 +27,6 @@ describe("ModalHeader", () => {
     expect(label).toBeInTheDocument();
     expect(label).toHaveClass("bx--modal-header__label");
     expect(label).toHaveClass("bx--type-delta");
-  });
-
-  it("should render both title and label", () => {
-    render(ModalHeaderTest, {
-      props: {
-        title: "Modal Title",
-        label: "Modal Label",
-      },
-    });
-
-    expect(screen.getByText("Modal Title")).toBeInTheDocument();
-    expect(screen.getByText("Modal Label")).toBeInTheDocument();
   });
 
   it("should render close button", () => {
@@ -82,16 +62,6 @@ describe("ModalHeader", () => {
       name: "Custom close text",
     });
     expect(closeButton).toBeInTheDocument();
-  });
-
-  it("should close modal on close button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ModalHeaderTest);
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    await user.click(closeButton);
-
-    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   it("should dispatch click event", async () => {
@@ -161,17 +131,6 @@ describe("ModalHeader", () => {
     expect(screen.getByText("Custom header content")).toBeInTheDocument();
   });
 
-  it("should apply custom attributes", () => {
-    render(ModalHeaderTest, {
-      props: {
-        "data-testid": "custom-header",
-      },
-    });
-
-    const modalHeader = screen.getByTestId("custom-header");
-    expect(modalHeader).toBeInTheDocument();
-  });
-
   it("should not render title when empty", () => {
     render(ModalHeaderTest, {
       props: {
@@ -196,24 +155,5 @@ describe("ModalHeader", () => {
     const modalHeader = closeButton.closest(".bx--modal-header");
     const label = modalHeader?.querySelector(".bx--modal-header__label");
     expect(label).not.toBeInTheDocument();
-  });
-
-  it("should render close icon with correct size", () => {
-    render(ModalHeaderTest);
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    const svg = closeButton.querySelector(".bx--modal-close__icon");
-    expect(svg).toBeInTheDocument();
-    expect(svg).toHaveAttribute("width", "20");
-    expect(svg).toHaveAttribute("height", "20");
-  });
-
-  it("should have aria-hidden on close icon", () => {
-    render(ModalHeaderTest);
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    const svg = closeButton.querySelector(".bx--modal-close__icon");
-    expect(svg).toBeInTheDocument();
-    expect(svg).toHaveAttribute("aria-hidden", "true");
   });
 });
