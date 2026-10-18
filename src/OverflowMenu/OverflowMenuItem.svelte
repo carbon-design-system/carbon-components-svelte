@@ -101,13 +101,15 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, moveFocus, add, remove, update, itemsById } = getContext(
-    "carbon:OverflowMenu",
-  );
+  const { focusedId, moveFocus, add, remove, patch, update, itemsById } =
+    getContext("carbon:OverflowMenu");
 
   $: item = $itemsById[id];
 
   add({ id, text, primaryFocus, disabled });
+  // Arrow keys, typeahead and the `close` detail read the registry, so keep
+  // it current while the menu is open.
+  $: patch(id, { text, disabled });
 
   $: focused = $focusedId === id;
 
