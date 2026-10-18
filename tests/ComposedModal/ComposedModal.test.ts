@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
 import { user } from "../utils/user";
@@ -169,6 +169,20 @@ describe("ComposedModal", () => {
     await tick();
 
     expect(modalWrapper).not.toHaveClass("is-visible");
+  });
+
+  it("does not close on an Escape that cancels IME composition", async () => {
+    const onclose = vi.fn();
+    render(ComposedModalTest, {
+      props: { open: true, headerTitle: "IME", onclose },
+    });
+
+    await fireEvent.keyDown(screen.getByTestId("test-focus"), {
+      key: "Escape",
+      isComposing: true,
+    });
+
+    expect(onclose).not.toHaveBeenCalled();
   });
 
   it("should not close on inside click", async () => {

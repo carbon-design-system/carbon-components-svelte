@@ -976,6 +976,33 @@ describe("Modal", () => {
     });
   });
 
+  it("does not close on an Escape that cancels IME composition", async () => {
+    const onclose = vi.fn();
+    render(ModalTest, {
+      props: { open: true, modalHeading: "IME", onclose },
+    });
+
+    await fireEvent.keyDown(screen.getByTestId("test-focus"), {
+      key: "Escape",
+      isComposing: true,
+    });
+
+    expect(onclose).not.toHaveBeenCalled();
+  });
+
+  it("leaves focus alone when a child already handled Tab", async () => {
+    render(ModalTest, {
+      props: { open: true, modalHeading: "Editor", primaryButtonText: "Save" },
+    });
+    const input = screen.getByTestId("test-focus");
+    input.addEventListener("keydown", (event) => event.preventDefault());
+    input.focus();
+
+    await user.keyboard("{Tab}");
+
+    expect(input).toHaveFocus();
+  });
+
   it.each([
     ["a textarea", "modal-textarea", 0],
     ["a link", "modal-link", 0],
