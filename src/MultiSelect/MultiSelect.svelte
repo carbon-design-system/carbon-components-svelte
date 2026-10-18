@@ -1981,8 +1981,9 @@
                             type="checkbox"
                             class:bx--checkbox={true}
                             id="checkbox-{id}-{item.id}"
-                            value={optionInput.value === ""
-                              ? undefined
+                            value={optionInput.value === "" ||
+                            optionInput.value == null
+                              ? "on"
                               : optionInput.value}
                             tabindex="-1"
                             style="display: none;"
@@ -2111,8 +2112,9 @@
                           type="checkbox"
                           class:bx--checkbox={true}
                           id="checkbox-{id}-{item.id}"
-                          value={optionInput.value === ""
-                            ? undefined
+                          value={optionInput.value === "" ||
+                          optionInput.value == null
+                            ? "on"
                             : optionInput.value}
                           tabindex="-1"
                           style="display: none;"
