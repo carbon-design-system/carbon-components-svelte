@@ -401,7 +401,9 @@
       dispatch("change", selectedIndex);
     }
 
-    prevIndex = selectedIndex;
+    // Seed only once tabs register: until then, a `selectedId` past the
+    // first tab can't resolve, and its resolution would look like a change.
+    if ($tabs.length > 0) prevIndex = selectedIndex;
   });
 
   onMount(() => {
