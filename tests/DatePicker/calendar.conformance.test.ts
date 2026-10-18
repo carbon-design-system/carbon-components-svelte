@@ -14,6 +14,7 @@ type Instance = {
   parseDate(value: unknown, format?: string): Date | undefined;
   isEnabled(date: Date): boolean;
   setDate(date: unknown, triggerChange?: boolean): void;
+  jumpToDate(date: Date): void;
   open(): void;
   destroy(): void;
   calendarContainer: HTMLElement;
@@ -289,5 +290,72 @@ describe("rendered day cells match flatpickr", () => {
 
     expect(cells(reference).length).toBeGreaterThanOrEqual(35);
     expect(cells(engine)).toEqual(cells(reference));
+  });
+});
+
+// CI also runs this file in time zones where a daylight-saving switch skips
+// midnight (America/Santiago, America/Havana, Asia/Tehran) and where a whole
+// day was skipped (Pacific/Apia, December 2011). Two decades of months reach
+// every switch in each.
+// 252 months in two calendars: about a second, more on a busy machine.
+describe("every month from 2010 to 2030 matches flatpickr", {
+  timeout: 20_000,
+}, () => {
+  const months = Array.from(
+    { length: 21 * 12 },
+    (_, i) => new Date(2010, i, 1),
+  );
+  const view = (instance: Instance) =>
+    [
+      ...instance.calendarContainer.querySelectorAll(
+        ".dayContainer .flatpickr-day, .flatpickr-weeks .flatpickr-day",
+      ),
+    ]
+      .map((cell) =>
+        [
+          cell.textContent,
+          [...cell.classList].filter((name) => !name.startsWith("bx--")).sort(),
+        ].join(" "),
+      )
+      .join(",");
+
+  it("renders each month with week numbers", () => {
+    const { reference, engine } = both({
+      weekNumbers: true,
+      now: new Date(2020, 0, 1),
+    });
+    reference.open();
+    engine.open();
+    const mismatches: string[] = [];
+    for (const month of months) {
+      reference.jumpToDate(month);
+      engine.jumpToDate(month);
+      if (view(engine) !== view(reference))
+        mismatches.push(month.toDateString());
+    }
+    expect(mismatches.slice(0, 5)).toEqual([]);
+  });
+
+  it("highlights a range spanning each month", () => {
+    const { reference, engine } = both({
+      mode: "range",
+      now: new Date(2020, 0, 1),
+    });
+    reference.open();
+    engine.open();
+    const mismatches: string[] = [];
+    for (const month of months) {
+      const range = [
+        new Date(month.getFullYear(), month.getMonth(), 1),
+        new Date(month.getFullYear(), month.getMonth() + 1, 0),
+      ];
+      reference.setDate(range);
+      engine.setDate(range);
+      reference.jumpToDate(month);
+      engine.jumpToDate(month);
+      if (view(engine) !== view(reference))
+        mismatches.push(month.toDateString());
+    }
+    expect(mismatches.slice(0, 5)).toEqual([]);
   });
 });
