@@ -1,12 +1,17 @@
 import { readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
 // Opens every DatePicker docs example and checks the calendar's layout:
 // nothing spills past the calendar, each day grid has seven columns under
-// its weekday headings, and month/year grids span the calendar.
+// its weekday headings, and month/year grids span the calendar. Then scans
+// the whole page, calendar included (popups attach to <body>), with axe.
+
+/** Rules about the test page itself, which has no landmarks or heading. */
+const PAGE_RULES = ["landmark-one-main", "page-has-heading-one", "region"];
 
 // @depends-on docs/src/pages/framed/DatePicker/*.svelte
 const EXAMPLES = readdirSync(
@@ -132,6 +137,13 @@ test.describe("DatePicker docs examples", () => {
       await expect(page.locator(CALENDAR).first()).toBeVisible();
 
       expect(await page.evaluate(layoutProblems)).toEqual([]);
+
+      const { violations } = await new AxeBuilder({ page })
+        .disableRules(PAGE_RULES)
+        .analyze();
+      expect(
+        violations.map(({ id, nodes }) => `${id} (${nodes.length})`),
+      ).toEqual([]);
     });
   }
 });
