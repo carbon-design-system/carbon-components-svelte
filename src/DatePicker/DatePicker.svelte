@@ -92,7 +92,7 @@
    * `"week"` selects a whole week: a picked day becomes the first day of its
    * week, so `value` is that date in `dateFormat`. A `value` set from outside
    * is kept as given.
-   * @type {"simple" | "single" | "range" | "month" | "year" | "week" | "multiple"}
+   * @type {"simple" | "single" | "range" | "month" | "quarter" | "year" | "week" | "multiple"}
    */
   export let datePickerType = "simple";
 
@@ -420,6 +420,7 @@
       _ === "single" ||
       _ === "range" ||
       _ === "month" ||
+      _ === "quarter" ||
       _ === "year" ||
       _ === "week" ||
       _ === "multiple",
@@ -1136,7 +1137,7 @@
    */
   function applyInitialMonth() {
     if (!calendar || calendar.selectedDates.length > 0) return;
-    if ($mode === "month" || $mode === "year") return;
+    if ($mode === "month" || $mode === "quarter" || $mode === "year") return;
     const target = resolveInitialMonth();
     if (!target) return;
     calendar.jumpToDate(target, false);
@@ -1725,6 +1726,7 @@
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||
       datePickerType === "month" ||
+      datePickerType === "quarter" ||
       datePickerType === "year" ||
       datePickerType === "week" ||
       datePickerType === "multiple"}

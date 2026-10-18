@@ -6,6 +6,7 @@ export type CalendarMode =
   | "range"
   | "week"
   | "month"
+  | "quarter"
   | "year";
 
 export type CalendarHook = (

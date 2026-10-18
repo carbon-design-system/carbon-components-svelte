@@ -244,7 +244,7 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
       const first = year - (year % 10) - 1;
       start = new Date(first, 0, 1);
       end = new Date(first + 11, 11, 31);
-    } else if (pickerMode === "month") {
+    } else if (pickerMode === "month" || pickerMode === "quarter") {
       start = new Date(year, 0, 1);
       end = new Date(year, 11, 31);
     } else {

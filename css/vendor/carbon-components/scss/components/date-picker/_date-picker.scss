@@ -428,6 +428,23 @@
   @include date-picker-month-select-height;
 }
 
+// carbon-components-svelte patch
+// `datePickerType="quarter"` reuses the month grid's cells, two to a row,
+// in a shorter calendar.
+@mixin date-picker-quarter-select {
+  .flatpickr-monthSelect-months.flatpickr-quarterSelect-quarters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flatpickr-calendar.open.#{$prefix}--date-picker__calendar--quarter {
+    height: to-rem(148px);
+  }
+}
+
+@include exports("datepicker-quarter-select") {
+  @include date-picker-quarter-select;
+}
+
 // Year picker (`datePickerType="year"`) uses a local yearSelect plugin with
 // the same 3-column grid layout as monthSelect. Style its cells to match.
 @mixin date-picker-year-select {
