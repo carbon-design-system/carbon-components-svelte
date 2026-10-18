@@ -223,6 +223,7 @@ const FORMATTERS = {
   M: (date, l10n) => l10n.months.shorthand[date.getMonth()],
   U: (date) => date.getTime() / 1000,
   W: (date, _, context) => (context.getWeek ?? isoWeek)(date),
+  Q: (date) => Math.floor(date.getMonth() / 3) + 1,
   Y: (date) => pad(date.getFullYear(), 4),
   d: (date) => pad(date.getDate()),
   j: (date) => date.getDate(),
@@ -275,6 +276,7 @@ const TOKEN_PATTERNS = {
   M: (l10n) => `(${l10n.months.shorthand.join("|")})`,
   U: () => "(.+)",
   W: () => NUMBER,
+  Q: () => "([1-4])",
   Y: () => "(\\d{4})",
   Z: () => "(.+)",
   d: () => NUMBER,
@@ -325,6 +327,9 @@ const REVERSE = {
     );
     week.setDate(week.getDate() - week.getDay() + l10n.firstDayOfWeek);
     return week;
+  },
+  Q: (date, value) => {
+    date.setMonth((Number.parseFloat(value) - 1) * 3, 1);
   },
   Y: (date, value) => {
     date.setFullYear(Number.parseFloat(value));

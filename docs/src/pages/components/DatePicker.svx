@@ -10,7 +10,7 @@ description: Date pickers collect dates through simple typed fields, single cale
 
 ## Calendar types
 
-DatePicker supports seven `datePickerType` values: `"simple"` (default, no calendar), `"single"`, `"multiple"`, `"range"`, `"month"`, `"year"`, and `"week"`.
+DatePicker supports eight `datePickerType` values: `"simple"` (default, no calendar), `"single"`, `"multiple"`, `"range"`, `"month"`, `"quarter"`, `"year"`, and `"week"`.
 
 ### Simple
 
@@ -53,6 +53,12 @@ Set `datePickerType` to `"month"` to select a month instead of a day. The calend
 Pass a numeric `dateFormat`, such as `"Y-m"`, along with a matching `placeholder` for a compact "yyyy-mm" input.
 
 <FileSource src="/framed/DatePicker/DatePickerMonthCustomFormat" />
+
+### Quarter
+
+Set `datePickerType` to `"quarter"` to pick a quarter of a year. The value is the quarter's first day in `dateFormat`; the `Q` token prints the quarter number, so `"\\QQ Y"` shows "Q2 2026".
+
+<FileSource src="/framed/DatePicker/DatePickerQuarter" />
 
 ### Year
 

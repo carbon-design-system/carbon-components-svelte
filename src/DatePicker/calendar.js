@@ -421,7 +421,10 @@ export function createCalendarEngine(element, userConfig = {}) {
     };
   }
   // The week picker selects a single date and highlights its week.
-  const isGridMode = pickerMode === "month" || pickerMode === "year";
+  const isQuarter = pickerMode === "quarter";
+  // The month and quarter grids both show one year.
+  const isYearView = pickerMode === "month" || isQuarter;
+  const isGridMode = isYearView || pickerMode === "year";
   const isRange = pickerMode === "range";
   const isMultiple = pickerMode === "multiple";
   config.pickerMode = pickerMode;
@@ -795,7 +798,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       const start = decadeStart() - 1;
       hidePrev = !!min && start <= min.getFullYear();
       hideNext = !!max && start + 11 >= max.getFullYear();
-    } else if (pickerMode === "month") {
+    } else if (isYearView) {
       hidePrev = !!min && self.currentYear <= min.getFullYear();
       hideNext = !!max && self.currentYear >= max.getFullYear();
     } else {
@@ -824,7 +827,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (pickerMode === "year") {
       const start = decadeStart() - 1;
       text = `${start} - ${start + 11}`;
-    } else if (pickerMode === "month") {
+    } else if (isYearView) {
       text = String(self.currentYear);
     } else {
       const monthFirst = isMonthFirst(config.locale);
@@ -1021,14 +1024,18 @@ export function createCalendarEngine(element, userConfig = {}) {
       "div",
       isYear ? "flatpickr-yearSelect-years" : "flatpickr-monthSelect-months",
     );
+    // Quarters reuse the month grid's cells, two to a row.
+    if (isQuarter) container.classList.add("flatpickr-quarterSelect-quarters");
     container.tabIndex = -1;
     const start = decadeStart() - 1;
     const now = self.now;
+    /** @param {Date} date */
+    const quarterOf = (date) => Math.floor(date.getMonth() / 3);
     const fragment = document.createDocumentFragment();
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < (isQuarter ? 4 : 12); i++) {
       const date = isYear
         ? new Date(start + i, 0, 1)
-        : new Date(self.currentYear, i);
+        : new Date(self.currentYear, isQuarter ? i * 3 : i);
       const cell = createDay(className, date, i);
       cell.classList.remove("flatpickr-disabled", "selected", "today");
       cell.removeAttribute("aria-current");
@@ -1038,7 +1045,10 @@ export function createCalendarEngine(element, userConfig = {}) {
         (config._minDate &&
           (isYear
             ? year < config._minDate.getFullYear()
-            : compareMonths(date, config._minDate) < 0)) ||
+            : compareMonths(
+                isQuarter ? new Date(year, i * 3 + 2) : date,
+                config._minDate,
+              ) < 0)) ||
         (config._maxDate &&
           (isYear
             ? year > config._maxDate.getFullYear()
@@ -1051,14 +1061,18 @@ export function createCalendarEngine(element, userConfig = {}) {
       if (
         target &&
         target.getFullYear() === year &&
-        (isYear || target.getMonth() === i)
+        (isYear ||
+          (isQuarter ? quarterOf(target) === i : target.getMonth() === i))
       ) {
         cell.classList.add("selected");
         self.selectedDateElem = cell;
       }
       if (
         year === now.getFullYear() &&
-        (isYear || date.getMonth() === now.getMonth())
+        (isYear ||
+          (isQuarter
+            ? quarterOf(now) === i
+            : date.getMonth() === now.getMonth()))
       ) {
         cell.classList.add("today");
         cell.setAttribute("aria-current", "date");
@@ -1067,6 +1081,9 @@ export function createCalendarEngine(element, userConfig = {}) {
       if (isYear) {
         cell.textContent = String(year);
         cell.setAttribute("data-year", String(year));
+      } else if (isQuarter) {
+        cell.textContent = `Q${i + 1}`;
+        cell.setAttribute("aria-label", `Q${i + 1} ${year}`);
       } else {
         cell.textContent = self.l10n.months.shorthand[i];
       }
@@ -1278,13 +1295,16 @@ export function createCalendarEngine(element, userConfig = {}) {
       "bx--date-picker__calendar--month",
       pickerMode === "month",
     );
+    toggleClass(container, "bx--date-picker__calendar--quarter", isQuarter);
     toggleClass(
       container,
       "bx--date-picker__calendar--year",
       pickerMode === "year",
     );
     if (isGridMode) {
-      container.classList.add(`flatpickr-${pickerMode}Select-theme-light`);
+      container.classList.add(
+        `flatpickr-${isQuarter ? "month" : pickerMode}Select-theme-light`,
+      );
     }
     if (!config.lazy || config.inline || userConfig.plugins?.length) {
       fillContents();
@@ -1518,7 +1538,7 @@ export function createCalendarEngine(element, userConfig = {}) {
         ? new Date(date.getFullYear(), 0, 1)
         : new Date(self.currentYear, date.getMonth(), date.getDate());
     self.setDate(next, true);
-    if (pickerMode === "month") buildDays();
+    if (isYearView) buildDays();
   }
 
   /** @param {boolean} [notify] @param {boolean} [toInitial] */
@@ -2078,7 +2098,11 @@ export function createCalendarEngine(element, userConfig = {}) {
       cells = self.days?.children;
       cells?.[index]?.focus();
     } else if (shift !== undefined) {
-      cells[(12 + index + shift) % 12].focus();
+      // Up and down move a row: three cells, or two for quarters.
+      const step =
+        isQuarter && Math.abs(shift) === 3 ? Math.sign(shift) * 2 : shift;
+      const count = cells.length;
+      cells[(count + index + step) % count].focus();
     } else if (cells[0].parentNode.contains(document.activeElement)) {
       const active = /** @type {any} */ (document.activeElement);
       if (
@@ -2141,7 +2165,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     const prev = direction < 0;
     if (pickerMode === "year") {
       changeYear(decadeStart() + direction * 10);
-    } else if (pickerMode === "month") {
+    } else if (isYearView) {
       const wanted = self.currentYear + direction;
       if (!(prev ? self._hidePrevMonthArrow : self._hideNextMonthArrow)) {
         changeYear(wanted);
