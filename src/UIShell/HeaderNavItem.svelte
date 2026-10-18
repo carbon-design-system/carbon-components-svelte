@@ -43,11 +43,12 @@
   const menubar = ctx ? undefined : getContext("carbon:HeaderNav");
   const tabStop = menubar?.tabStop ?? readable(undefined);
 
+  $: ctx?.updateSelectedItems({ id, isSelected });
+  // Before `tabindex`, so the tab stop it moves is read in the same update.
+  $: if (ref) menubar?.setCurrent(ref, isSelected);
+
   // Everything is tabbable until the bar knows its items (and without a bar).
   $: tabindex = $tabStop === undefined || $tabStop === ref ? 0 : -1;
-
-  $: ctx?.updateSelectedItems({ id, isSelected });
-  $: if (ref) menubar?.setCurrent(ref, isSelected);
 
   // True when focus leaves the menu past its last item in DOM order. The item
   // list is read on demand since only blur needs it.
