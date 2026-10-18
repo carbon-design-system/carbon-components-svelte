@@ -355,11 +355,23 @@ export function createCalendarEngine(element, userConfig = {}) {
   });
   config.disable = [];
 
+  /** The locale's strings, with `firstDayOfWeek` overriding its own. */
+  function resolveL10n() {
+    const l10n = getCalendarLocale(config.locale);
+    const first = config.firstDayOfWeek;
+    return Number.isInteger(first) && first >= 0 && first <= 6
+      ? { ...l10n, firstDayOfWeek: first }
+      : l10n;
+  }
+
   /** @param {Record<string, any>} options */
   function applyConfig(options) {
     // The locale must be in place before date rules and bounds are parsed.
     if (options.locale !== undefined) config.locale = options.locale;
-    self.l10n = getCalendarLocale(config.locale);
+    if (options.firstDayOfWeek !== undefined) {
+      config.firstDayOfWeek = options.firstDayOfWeek;
+    }
+    self.l10n = resolveL10n();
     // Rules and bounds are parsed with `dateFormat`, so they go last.
     const parsedLast = ["minDate", "maxDate", "enable", "disable"];
     for (const [key, value] of Object.entries(options)) {
@@ -1494,14 +1506,15 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   // --- Options ----------------------------------------------------------
 
+  function applyL10n() {
+    self.l10n = resolveL10n();
+    if (self.weekdayContainer) buildWeekdays();
+  }
+
   /** @type {Record<string, Array<() => void>>} */
   const CALLBACKS = {
-    locale: [
-      () => {
-        self.l10n = getCalendarLocale(config.locale);
-        if (self.weekdayContainer) buildWeekdays();
-      },
-    ],
+    locale: [applyL10n],
+    firstDayOfWeek: [applyL10n],
     showMonths: [buildMonths, buildWeekdays],
     minDate: [() => jumpToDate()],
     maxDate: [() => jumpToDate()],

@@ -15,6 +15,9 @@
   export let enabledDates: ComponentProps<DatePicker>["enabledDates"] = [];
   export let initialMonth: ComponentProps<DatePicker>["initialMonth"] = null;
   export let locale: ComponentProps<DatePicker>["locale"] = "en";
+  export let firstDayOfWeek: ComponentProps<DatePicker>["firstDayOfWeek"] =
+    undefined;
+  export let weekNumbers = false;
   export let short = false;
   export let fullWidth = false;
   export let fluid = false;
@@ -54,6 +57,8 @@
   {enabledDates}
   {initialMonth}
   {locale}
+  {firstDayOfWeek}
+  {weekNumbers}
   {short}
   {fullWidth}
   {fluid}
