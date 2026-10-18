@@ -70,6 +70,16 @@
    */
 
   /**
+   * Fires when the calendar is created and whenever it moves to another
+   * month, year, or decade, with the first and last dates on show. Use it
+   * to load data for the visible dates, such as `disabledDates`.
+   * @event view
+   * @type {object}
+   * @property {Date} start
+   * @property {Date} end
+   */
+
+  /**
    * @event error
    * @type {object}
    * @property {Error} error
@@ -1225,7 +1235,7 @@
         input: inputRefTo,
         isDayBlocked: isOutsideRangeWindow,
         dispatch: (event, eventDetail) => {
-          if (event === "error") {
+          if (event === "error" || event === "view") {
             return dispatch(event, eventDetail);
           }
           // An inline calendar is always visible. flatpickr still reports a

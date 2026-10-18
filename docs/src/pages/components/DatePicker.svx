@@ -157,6 +157,12 @@ Set `minRangeDays` and `maxRangeDays` on a range picker to limit how many days a
   <DatePickerInput labelText="Check-out" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+### Load availability for the shown month
+
+The `view` event fires when the calendar is created and whenever it moves to another month, with the first and last dates on show in `event.detail.start` and `event.detail.end`. Use it to fetch the dates to block for that range, and pass them to `disabledDates`.
+
+<FileSource src="/framed/DatePicker/DatePickerAvailability" />
+
 ### Keep out-of-range initial values
 
 By default, an initial `value` outside of `minDate` and `maxDate` (or matching `disable`) is cleared. Pass `allowInvalidPreload: true` via `flatpickrProps` to keep it, for example to display legacy data that predates a new constraint.
