@@ -18,10 +18,17 @@
    * above, with a larger detail. Use it in a `layout="summary"` list.
    */
   export let total = false;
+
+  /**
+   * Set to `true` to rule the item off from the items above without
+   * enlarging it, such as to start a "Taxes and fees" section.
+   */
+  export let divider = false;
 </script>
 
 <div
   class:bx--description-list-item={true}
+  class:bx--description-list-item--divider={divider}
   class:bx--description-list-item--total={total}
   {...$$restProps}
 >
