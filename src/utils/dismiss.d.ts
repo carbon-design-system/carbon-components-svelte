@@ -8,6 +8,12 @@ export interface DismissListener {
 /** Params for `dismiss`. Use `listeners` or the `type` + `handler` shorthand. */
 export interface DismissParams {
   enabled: boolean;
+  /**
+   * Register every listener as soon as `enabled` turns on, instead of
+   * deferring pointer listeners a task. For drags, where the release can
+   * arrive right after the press that enabled them.
+   */
+  immediate?: boolean;
   listeners?: DismissListener[];
   type?: string | string[];
   handler?: (event: Event) => void;

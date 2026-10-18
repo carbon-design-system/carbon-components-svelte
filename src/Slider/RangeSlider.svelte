@@ -467,6 +467,8 @@
   class:bx--slider-form-item--vertical={orientation === "vertical"}
   use:dismiss={{
     enabled: holding,
+    // A fast press and release must still end the drag.
+    immediate: true,
     listeners: [
       { type: "mousemove", handler: move, options: { passive: true } },
       { type: "touchmove", handler: move, options: { passive: true } },

@@ -679,6 +679,26 @@ describe("Slider", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(50);
   });
 
+  it("ends the drag on a release right after the press", async () => {
+    const onchange = vi.fn();
+    const { container } = render(Slider, { props: { onchange } });
+    const slider = container.querySelector(".bx--slider");
+    const track = container.querySelector(".bx--slider__track");
+    assert(slider instanceof HTMLElement && track instanceof HTMLElement);
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+      rect({ right: 200, height: 2 }),
+    );
+
+    await fireEvent.mouseDown(slider, { clientX: 100 });
+    await fireEvent.mouseUp(window);
+    expect(onchange).toHaveBeenCalledExactlyOnceWith(50);
+
+    // With no button held, a later move must not drag the thumb.
+    await flushDismiss();
+    await fireEvent.mouseMove(window, { clientX: 180 });
+    expect(screen.getByRole("slider")).toHaveAttribute("aria-valuenow", "50");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1980
   it.each([
     ["ArrowUp", {}, "{ArrowUp}", [1]],
