@@ -382,9 +382,13 @@
 
   let skipSelectOnFocus = false;
 
-  // Clicks on group headers or padding blur the input; refocus so only item
-  // selection closes the menu.
-  function handleMenuPointerDown() {
+  // A press on a group header or padding would focus the listbox (it has
+  // tabindex="-1"), so keys stop reaching the input. Cancel that focus move
+  // so only item selection closes the menu.
+  /** @param {MouseEvent} event */
+  function handleMenuPointerDown(event) {
+    event.preventDefault();
+    if (document.activeElement === ref) return;
     skipSelectOnFocus = true;
     ref?.focus();
   }

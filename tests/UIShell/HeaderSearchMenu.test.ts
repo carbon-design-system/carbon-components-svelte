@@ -36,6 +36,17 @@ describe("HeaderSearch (menu slot)", () => {
     expect(options[0]).toHaveTextContent("Search everywhere");
   });
 
+  it("keeps focus in the input when a group header is pressed", async () => {
+    render(HeaderSearchMenu, { props: { active: true } });
+    const input = screen.getByRole("combobox");
+    input.focus();
+
+    await user.click(screen.getByText("Results"));
+
+    expect(input).toHaveFocus();
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+  });
+
   it("navigates with the arrow keys and selects with Enter", async () => {
     const onSelect = vi.fn();
     const onSubmit = vi.fn();
