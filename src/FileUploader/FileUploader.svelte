@@ -262,6 +262,10 @@
 
   let prevFiles = [];
 
+  // Set by a row's remove button, so the removal also reports the new
+  // list in `change`, as a pick does.
+  let rowRemoved = false;
+
   // Per-file stable id: assigned once on first sight and carried with the
   // File reference, so reorders and removals don't shift other files' ids.
   // Two files with the same name/size/lastModified get distinct ids via a
@@ -312,9 +316,13 @@
     const currentSet = new Set(files);
     const added = files.filter((f) => !prevSet.has(f));
     const removed = prevFiles.filter((f) => !currentSet.has(f));
+    const byRow = rowRemoved;
+    rowRemoved = false;
 
     if (added.length > 0 || removed.length > 0) {
       const cleared = prevFiles.length > 0 && files.length === 0;
+      const changed = cleared || byRow;
+      const next = files;
 
       // Update prevFiles before dispatching. Defer notification events with
       // tick() so a throwing handler can't abort the file-list render.
@@ -322,11 +330,8 @@
       tick().then(() => {
         if (added.length > 0) dispatch("add", added);
         if (removed.length > 0) dispatch("remove", removed);
-
-        if (cleared) {
-          dispatch("change", []);
-          dispatch("clear");
-        }
+        if (changed) dispatch("change", next);
+        if (cleared) dispatch("clear");
       });
     }
   }
@@ -457,6 +462,7 @@
               }
             }}
             on:click={() => {
+              rowRemoved = true;
               files = files.filter((f) => f !== file);
             }}
           />
