@@ -81,6 +81,7 @@
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
@@ -211,7 +212,7 @@
 
     if (hasSubmenu) {
       if (
-        event.key === "ArrowRight" ||
+        (event.key === "ArrowRight" && !hasModifierKey(event)) ||
         event.key === " " ||
         event.key === "Enter"
       ) {
@@ -297,7 +298,7 @@
       bind:open={submenuOpen}
       {labelText}
       on:keydown={(event) => {
-        if (event.key === "ArrowLeft") {
+        if (event.key === "ArrowLeft" && !hasModifierKey(event)) {
           event.preventDefault();
           event.stopPropagation();
           submenuOpen = false;

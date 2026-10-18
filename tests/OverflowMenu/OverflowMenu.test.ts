@@ -228,6 +228,28 @@ describe("OverflowMenu", () => {
     );
   });
 
+  it.each([
+    { key: "ArrowLeft", mod: { altKey: true }, on: "item" },
+    { key: "ArrowDown", mod: { metaKey: true }, on: "item" },
+    { key: "End", mod: { ctrlKey: true }, on: "trigger" },
+  ])(
+    "leaves $key with $mod on the $on to the browser",
+    async ({ key, mod, on }) => {
+      render(OverflowMenu);
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+      const first = screen.getAllByRole("menuitem")[0];
+      expect(first).toHaveFocus();
+
+      const target = on === "item" ? first : menuButton;
+      const notPrevented = await fireEvent.keyDown(target, { key, ...mod });
+
+      expect(notPrevented).toBe(true);
+      expect(first).toHaveFocus();
+    },
+  );
+
   it("Home and End skip disabled items", async () => {
     render(OverflowMenuDisabled);
 

@@ -86,6 +86,7 @@
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
@@ -242,7 +243,9 @@
       subOptions &&
       // Keys from the flyout's own items bubble here; only the trigger opens it.
       event.target === ref &&
-      (event.key === "ArrowRight" || event.key === " " || event.key === "Enter")
+      ((event.key === "ArrowRight" && !hasModifierKey(event)) ||
+        event.key === " " ||
+        event.key === "Enter")
     ) {
       if (disabled) return;
       submenuOpen = true;
@@ -252,7 +255,7 @@
       return;
     }
 
-    if (submenuOpen) {
+    if (submenuOpen && !hasModifierKey(event)) {
       if (event.key === "ArrowLeft") {
         event.stopPropagation();
         submenuOpen = false;

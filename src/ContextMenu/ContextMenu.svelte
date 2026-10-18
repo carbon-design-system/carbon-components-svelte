@@ -58,6 +58,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -257,8 +258,8 @@
     wrap: false,
     skipDisabled: true,
     getActiveIndex: () => focusIndex,
-    onMove: (index) => {
-      if ($hasPopup) return;
+    onMove: (index, event) => {
+      if ($hasPopup || hasModifierKey(event)) return;
       focusIndex = index;
     },
   }}
@@ -290,14 +291,15 @@
       return;
     }
     if (
-      event.key === "ArrowUp" ||
-      event.key === "ArrowDown" ||
-      event.key === "ArrowLeft" ||
-      event.key === "ArrowRight" ||
-      event.key === "Home" ||
-      event.key === "End" ||
-      event.key === "PageUp" ||
-      event.key === "PageDown" ||
+      ((event.key === "ArrowUp" ||
+        event.key === "ArrowDown" ||
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        event.key === "Home" ||
+        event.key === "End" ||
+        event.key === "PageUp" ||
+        event.key === "PageDown") &&
+        !hasModifierKey(event)) ||
       event.key === " " ||
       event.key === "Enter"
     ) {

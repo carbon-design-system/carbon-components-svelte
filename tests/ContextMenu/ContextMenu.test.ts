@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -235,6 +235,32 @@ describe("ContextMenu", () => {
 
     expect(submenuTrigger).toHaveFocus();
   });
+
+  it.each([
+    { key: "ArrowLeft", mod: { altKey: true }, inSubmenu: true },
+    { key: "ArrowRight", mod: { metaKey: true }, inSubmenu: false },
+    { key: "ArrowUp", mod: { metaKey: true }, inSubmenu: false },
+  ])(
+    "leaves $key with $mod to the browser",
+    async ({ key, mod, inSubmenu }) => {
+      render(ContextMenu, {
+        props: { open: true, withSubmenu: true, x: 100, y: 100 },
+      });
+
+      const parent = screen.getByRole("menuitem", {
+        name: "Option with submenu",
+      });
+      parent.focus();
+      if (inSubmenu) await user.keyboard("{ArrowRight}");
+      const focused = document.activeElement as HTMLElement;
+
+      const notPrevented = await fireEvent.keyDown(focused, { key, ...mod });
+
+      expect(notPrevented).toBe(true);
+      expect(focused).toHaveFocus();
+      expect(parent).toHaveAttribute("aria-expanded", String(inSubmenu));
+    },
+  );
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1848
   it("should not close parent menu when clicking submenu trigger", async () => {

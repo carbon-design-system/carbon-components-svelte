@@ -111,6 +111,7 @@
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -322,7 +323,8 @@
       wrap: false,
       focusOnMove: false,
       getActiveIndex: () => focusIndex,
-      onMove: (index) => {
+      onMove: (index, event) => {
+        if (hasModifierKey(event)) return;
         focusIndex = index;
         const item = getEnabledItems()[index];
         if (item) focusMenuItem(item);
@@ -352,7 +354,10 @@
     aria-label={menuAriaLabel}
     on:keydown
     on:keydown={(event) => {
-      if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      if (
+        ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key) &&
+        !hasModifierKey(event)
+      ) {
         event.preventDefault();
       } else if (isTypeaheadKey(event)) {
         event.preventDefault();
