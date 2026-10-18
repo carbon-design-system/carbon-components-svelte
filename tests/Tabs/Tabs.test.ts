@@ -871,6 +871,18 @@ describe("Container tabs with secondary label", () => {
     expect(tabsContainer).toHaveClass("bx--tabs--tall");
   });
 
+  it("updates the tall class when type changes after mount", async () => {
+    const { rerender } = render(TabSecondaryLabel);
+    await tick();
+    const nav = screen.getByRole("navigation");
+
+    await rerender({ type: "default" });
+    expect(nav).not.toHaveClass("bx--tabs--tall");
+
+    await rerender({ type: "container" });
+    expect(nav).toHaveClass("bx--tabs--tall");
+  });
+
   it("should have label wrapper and secondary label element for tab with prop", async () => {
     const { container } = render(TabSecondaryLabel);
     await tick();

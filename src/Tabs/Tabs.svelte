@@ -195,8 +195,8 @@
   let needsDomSync = false;
 
   const hasSecondaryLabel = derived(
-    tabs,
-    (_) => type === "container" && _.some((tab) => tab.hasSecondaryLabel),
+    [tabs, useContainer],
+    ([_, container]) => container && _.some((tab) => tab.hasSecondaryLabel),
   );
 
   /**
