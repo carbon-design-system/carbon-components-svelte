@@ -4,6 +4,7 @@ description: A table of contents lists the sections of a page as links and highl
 
 <script>
   import {
+    Box,
     Column,
     Grid,
     RadioButton,
@@ -80,8 +81,8 @@ By default a section becomes active when its top reaches the top of the scroller
       </Stack>
     </Column>
     <Column sm={4} md={5} lg={12}>
-      <div style="position: relative">
-        <div bind:this={lineContainer} style="height: 16rem; overflow-y: auto">
+      <Box position="relative">
+        <Box bind:ref={lineContainer} height="16rem" overflowY="auto">
           <Stack gap={9}>
             <Stack tag="section" id="toc-line-overview" gap={3}>
               <Text tag="h4" type="productive-heading-03">Overview</Text>
@@ -113,12 +114,12 @@ By default a section becomes active when its top reaches the top of the scroller
               </Stack>
             </Stack>
           </Stack>
-        </div>
+        </Box>
         <div
           aria-hidden="true"
           style="position: absolute; left: 0; right: 0; top: min({Number(activationLine) * 100}%, calc(100% - 1px)); border-top: 1px dashed var(--cds-border-strong); pointer-events: none"
         ></div>
-      </div>
+      </Box>
     </Column>
   </Row>
 </Grid>
@@ -139,7 +140,7 @@ When the sections scroll inside an element rather than the window, pass that ele
     </Column>
     <Column sm={4} md={5} lg={12}>
       <Stack gap={5}>
-        <div bind:this={container} style="height: 16rem; overflow-y: auto">
+        <Box bind:ref={container} height="16rem" overflowY="auto">
           <Stack gap={9}>
             <Stack tag="section" id="toc-container-profile" gap={3}>
               <Text tag="h4" type="productive-heading-03">Profile</Text>
@@ -171,7 +172,7 @@ When the sections scroll inside an element rather than the window, pass that ele
               </Stack>
             </Stack>
           </Stack>
-        </div>
+        </Box>
         <Text>Selected: <strong>{selectedId}</strong></Text>
       </Stack>
     </Column>
@@ -226,7 +227,7 @@ Set `level` to list a subsection under its section, such as an `h3` under an `h2
       </TableOfContents>
     </Column>
     <Column sm={4} md={5} lg={12}>
-      <div bind:this={nestedContainer} style="height: 16rem; overflow-y: auto">
+      <Box bind:ref={nestedContainer} height="16rem" overflowY="auto">
         <Stack gap={9}>
           <Stack tag="section" id="toc-nested-overview" gap={3}>
             <Text tag="h4" type="productive-heading-03">Overview</Text>
@@ -282,7 +283,7 @@ Set `level` to list a subsection under its section, such as an `h3` under an `h2
             </Stack>
           </Stack>
         </Stack>
-      </div>
+      </Box>
     </Column>
   </Row>
 </Grid>
@@ -301,7 +302,7 @@ For rendered Markdown or other content you don't write item by item, read the he
       </TableOfContents>
     </Column>
     <Column sm={4} md={5} lg={12}>
-      <div bind:this={article} style="height: 16rem; overflow-y: auto">
+      <Box bind:ref={article} height="16rem" overflowY="auto">
         <Stack gap={9}>
           <Stack gap={3}>
             <Text tag="h4" type="productive-heading-03" id="toc-generated-install">Install</Text>
@@ -343,7 +344,7 @@ For rendered Markdown or other content you don't write item by item, read the he
             </Stack>
           </Stack>
         </Stack>
-      </div>
+      </Box>
     </Column>
   </Row>
 </Grid>
