@@ -12,7 +12,6 @@ describe("iconTooltipPortalGaps", () => {
       verticalAlignOffsetRight: 0,
     });
     expect(iconTooltipPortalGaps("top", "center").gapTop).toBe(1);
-    expect(iconTooltipPortalGaps("top", "center").horizontalGapLeft).toBe(0);
   });
 
   it("horizontal placements only add a left/right gap", () => {

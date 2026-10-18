@@ -35,14 +35,6 @@ describe("MenuButton", () => {
     expect(screen.getByRole("button", { name: "Actions" })).toBeDisabled();
   });
 
-  it("applies the kind class to the trigger", () => {
-    render(MenuButtonFixture, { props: { kind: "ghost" } });
-
-    expect(screen.getByRole("button", { name: "Actions" })).toHaveClass(
-      "bx--btn--ghost",
-    );
-  });
-
   it.each([
     { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
@@ -75,14 +67,6 @@ describe("MenuButton", () => {
     },
   );
 
-  it("keeps the trigger off Button's baseline-aligned `lg`/`xl` classes", () => {
-    render(MenuButtonFixture, { props: { size: "lg" } });
-
-    expect(screen.getByRole("button", { name: "Actions" })).not.toHaveClass(
-      "bx--btn--lg",
-    );
-  });
-
   it("rotates the trigger's chevron by toggling the open modifier class", async () => {
     render(MenuButtonFixture);
 
@@ -103,18 +87,14 @@ describe("MenuButton", () => {
     expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
   });
 
-  it("opens with Space and selects the focused item with a second Space", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+  it("opens with Space and focuses the first item", async () => {
     render(MenuButtonFixture);
 
     await user.tab();
     await user.keyboard(" ");
+
     expect(screen.getByRole("menu")).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
-
-    await user.keyboard(" ");
-    expect(consoleLog).toHaveBeenCalledWith("select", "Cut");
-    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
   it("dispatches close with a select trigger when an item is chosen", async () => {

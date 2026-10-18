@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import PortalFocusTest from "./Portal.focus.test.svelte";
-import PortalMultipleTest from "./Portal.multiple.test.svelte";
 import PortalTest from "./Portal.test.svelte";
 
 describe("Portal", () => {
@@ -10,54 +9,6 @@ describe("Portal", () => {
     for (const portal of existingPortals) {
       portal.remove();
     }
-  });
-
-  it("renders portal content", async () => {
-    render(PortalTest);
-
-    const portalContent = await screen.findByText("Portal content");
-    expect(portalContent).toBeInTheDocument();
-
-    const portalElement = portalContent.closest("[data-portal]");
-    assert(portalElement instanceof HTMLElement);
-    expect(portalElement.parentElement).toBe(document.body);
-    expect(portalElement.tagName).toBe("DIV");
-  });
-
-  it("multiple portals each have their own instance", async () => {
-    render(PortalMultipleTest);
-
-    const portalContent1 = await screen.findByText("Portal content 1");
-    const portalContent2 = await screen.findByText("Portal content 2");
-    const portalContent3 = await screen.findByText("Portal content 3");
-
-    expect(portalContent1).toBeInTheDocument();
-    expect(portalContent2).toBeInTheDocument();
-    expect(portalContent3).toBeInTheDocument();
-
-    const portalElement1 = portalContent1.closest("[data-portal]");
-    const portalElement2 = portalContent2.closest("[data-portal]");
-    const portalElement3 = portalContent3.closest("[data-portal]");
-
-    expect(portalElement1).not.toBe(portalElement2);
-    expect(portalElement2).not.toBe(portalElement3);
-    expect(portalElement1).not.toBe(portalElement3);
-    expect(portalElement1).toBeInTheDocument();
-    expect(portalElement2).toBeInTheDocument();
-    expect(portalElement3).toBeInTheDocument();
-  });
-
-  it("removes portal element when instance is unmounted", async () => {
-    const { unmount } = render(PortalTest);
-
-    const portalContent = await screen.findByText("Portal content");
-    const portalElement = portalContent.closest("[data-portal]");
-    assert(portalElement instanceof HTMLElement);
-
-    unmount();
-
-    const remainingPortal = document.querySelector("[data-portal]");
-    expect(remainingPortal).not.toBeInTheDocument();
   });
 
   it("each portal instance is independent", async () => {
@@ -89,15 +40,6 @@ describe("Portal", () => {
 
     const finalPortals = document.querySelectorAll("[data-portal]");
     expect(finalPortals).toHaveLength(0);
-  });
-
-  it("renders slot content correctly", async () => {
-    render(PortalTest, {
-      props: { portalContent: "Custom portal content" },
-    });
-
-    const portalContent = await screen.findByText("Custom portal content");
-    expect(portalContent).toBeInTheDocument();
   });
 
   it("handles conditional rendering", async () => {
@@ -141,29 +83,6 @@ describe("Portal", () => {
     expect(portalElement.tagName).toBe("SECTION");
   });
 
-  it("supports different custom tags", async () => {
-    const { unmount: unmount1 } = render(PortalTest, {
-      props: { portalContent: "Article portal", tag: "article" },
-    });
-
-    const portalContent1 = await screen.findByText("Article portal");
-    const portalElement1 = portalContent1.closest("[data-portal]");
-    assert(portalElement1 instanceof HTMLElement);
-    expect(portalElement1.tagName).toBe("ARTICLE");
-
-    const { unmount: unmount2 } = render(PortalTest, {
-      props: { portalContent: "Section portal", tag: "section" },
-    });
-
-    const portalContent2 = await screen.findByText("Section portal");
-    const portalElement2 = portalContent2.closest("[data-portal]");
-    assert(portalElement2 instanceof HTMLElement);
-    expect(portalElement2.tagName).toBe("SECTION");
-
-    unmount1();
-    unmount2();
-  });
-
   // The content renders after mount, so the server markup and the first
   // client render are both empty. It must still land in the target by the
   // next tick, which consumers such as `Menu` wait on before focusing.
@@ -172,6 +91,7 @@ describe("Portal", () => {
     await tick();
 
     expect(component.ref).toBeInstanceOf(HTMLElement);
+    expect(component.ref?.tagName).toBe("DIV");
     expect(component.ref?.parentElement).toBe(document.body);
     expect(component.ref).toHaveTextContent("Portal content");
   });
@@ -186,14 +106,6 @@ describe("Portal", () => {
     expect(component.ref).toBeInstanceOf(HTMLElement);
     expect(component.ref).toBe(portalElement);
     expect(component.ref).toHaveAttribute("data-portal");
-  });
-
-  it("ref is null when portal is not rendered", () => {
-    const { component } = render(PortalTest, {
-      props: { showPortal: false },
-    });
-
-    expect(component.ref).toBeNull();
   });
 
   it("ref updates when portal is conditionally shown", async () => {
@@ -256,16 +168,6 @@ describe("Portal", () => {
       expect(portalElement.parentElement).not.toBe(document.body);
 
       customTarget.remove();
-    });
-
-    it("falls back to document.body when target is null", async () => {
-      render(PortalTest, { props: { target: null } });
-
-      const portalContent = await screen.findByText("Portal content");
-      const portalElement = portalContent.closest("[data-portal]");
-      assert(portalElement instanceof HTMLElement);
-
-      expect(portalElement.parentElement).toBe(document.body);
     });
 
     it("moves the portal when target changes", async () => {

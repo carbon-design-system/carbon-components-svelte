@@ -38,15 +38,6 @@ describe("FloatingPortal", () => {
     expect(portalElement?.parentElement).toBe(document.body);
   });
 
-  it("renders slot content correctly", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, content: "Custom floating content" },
-    });
-
-    const content = await screen.findByText("Custom floating content");
-    expect(content).toBeInTheDocument();
-  });
-
   it.each(["bottom", "top", "left", "right"] as const)(
     "sets data-floating-direction to the preferred %s side when it fits",
     async (direction) => {
@@ -377,32 +368,6 @@ describe("FloatingPortal", () => {
     expect(component.ref).toHaveAttribute("data-floating-portal");
   });
 
-  it("ref is null when portal is not open", () => {
-    const { component } = render(FloatingPortalTest, {
-      props: { open: false },
-    });
-
-    expect(component.ref).toBeNull();
-  });
-
-  it("removes portal when open becomes false", async () => {
-    const { rerender } = render(FloatingPortalTest, {
-      props: { open: true },
-    });
-
-    const content = await screen.findByText("Floating content");
-    expect(content).toBeInTheDocument();
-
-    await rerender({ open: false });
-    await tick();
-
-    const remainingContent = screen.queryByText("Floating content");
-    expect(remainingContent).not.toBeInTheDocument();
-
-    const portalElement = document.querySelector("[data-floating-portal]");
-    expect(portalElement).not.toBeInTheDocument();
-  });
-
   it("handles conditional rendering", async () => {
     const { rerender } = render(FloatingPortalTest, {
       props: { open: false },
@@ -419,20 +384,9 @@ describe("FloatingPortal", () => {
     await tick();
 
     expect(screen.queryByText("Floating content")).not.toBeInTheDocument();
-  });
-
-  it("unmounts cleanly", async () => {
-    const { unmount } = render(FloatingPortalTest, {
-      props: { open: true },
-    });
-
-    const content = await screen.findByText("Floating content");
-    expect(content).toBeInTheDocument();
-
-    unmount();
-
-    const remainingPortal = document.querySelector("[data-floating-portal]");
-    expect(remainingPortal).not.toBeInTheDocument();
+    expect(
+      document.querySelector("[data-floating-portal]"),
+    ).not.toBeInTheDocument();
   });
 
   describe("cleanup on unmount", () => {

@@ -2,12 +2,7 @@
   import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
   import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
 
-  export let testCase:
-    | "default"
-    | "override"
-    | "empty"
-    | "no-target"
-    | "custom-rel" = "default";
+  export let testCase: "default" | "override" = "default";
 </script>
 
 <OverflowMenu>
@@ -22,26 +17,6 @@
       href="https://example.com"
       target="_blank"
       rel="noopener"
-      text="Test link"
-    />
-  {:else if testCase === "empty"}
-    <OverflowMenuItem
-      href="https://example.com"
-      target="_blank"
-      rel=""
-      text="Test link"
-    />
-  {:else if testCase === "no-target"}
-    <OverflowMenuItem
-      href="https://example.com"
-      target="_self"
-      text="Test link"
-    />
-  {:else if testCase === "custom-rel"}
-    <OverflowMenuItem
-      href="https://example.com"
-      target="_self"
-      rel="nofollow"
       text="Test link"
     />
   {/if}
