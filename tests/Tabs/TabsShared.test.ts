@@ -264,6 +264,20 @@ describe.each(variants)(
       );
     });
 
+    it("does not dispatch change on mount with a selectedId past the first tab", async () => {
+      const onChange = vi.fn();
+      render(TabsSelectedId, {
+        props: { vertical, selectedId: "tab-b", onChange },
+      });
+      await tick();
+
+      expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
     it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
       render(TabsSelectedId, {
         props: { vertical, selectedId: "tab-b", showTabA: true },
