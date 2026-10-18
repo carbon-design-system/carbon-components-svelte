@@ -42,7 +42,7 @@
     "test:src-js": "bun check --project tsconfig.js-check.json",
     "test:src-svelte": "svelte-check --workspace src --no-tsconfig --diagnostic-sources svelte --fail-on-warnings",
     "test:package-exports": "bun check --project tsconfig.package-exports.json",
-    "test:types": "svelte-check --workspace tests --tsgo --fail-on-warnings",
+    "test:types": "rm -rf tests/.svelte-check && svelte-check --workspace tests --tsgo --fail-on-warnings",
     "test:svelte3": "cd tests-svelte3 && bunx vitest",
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
     "test:svelte4": "cd tests-svelte4 && bunx vitest",
