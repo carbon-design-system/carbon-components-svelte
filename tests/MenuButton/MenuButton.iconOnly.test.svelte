@@ -11,6 +11,6 @@
 
 <MenuButton iconOnly labelText="Row actions" {size} {disabled}>
   {#each items as text}
-    <MenuItem on:click={() => console.log("select", text)}>{text}</MenuItem>
+    <MenuItem>{text}</MenuItem>
   {/each}
 </MenuButton>

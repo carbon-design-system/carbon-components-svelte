@@ -3,6 +3,8 @@
   import ContextMenuOption from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
   import { onMount } from "svelte";
 
+  export let onopen: (detail: unknown) => void = () => {};
+
   let targetA: HTMLElement | null = null;
   let targetB: HTMLElement | null = null;
   let target: ReadonlyArray<HTMLElement | null> | null = null;
@@ -20,12 +22,7 @@
 <div data-testid="target-b" bind:this={targetB}>B</div>
 <button type="button" data-testid="swap" on:click={swap}>swap</button>
 
-<ContextMenu
-  {target}
-  on:open={(e) => {
-    console.log("open", e.detail);
-  }}
->
+<ContextMenu {target} on:open={(e) => onopen(e.detail)}>
   <ContextMenuOption labelText="Option 1" />
   <ContextMenuOption labelText="Option 2" />
 </ContextMenu>

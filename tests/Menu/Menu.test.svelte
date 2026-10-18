@@ -8,6 +8,9 @@
   export let maxHeight: ComponentProps<Menu>["maxHeight"] = undefined;
   export let disabledIndex: number | undefined = undefined;
   export let moveFocusOnClick = false;
+  export let onOpen: ((detail: unknown) => void) | undefined = undefined;
+  export let onClose: ((detail: unknown) => void) | undefined = undefined;
+  export let onItemClick: ((text: string) => void) | undefined = undefined;
 
   let anchor: HTMLButtonElement;
   let elsewhere: HTMLInputElement;
@@ -27,14 +30,14 @@
   {maxHeight}
   bind:open
   labelText="Example menu"
-  on:open={(e) => console.log("open", e.detail)}
-  on:close={(e) => console.log("close", e.detail)}
+  on:open={(e) => onOpen?.(e.detail)}
+  on:close={(e) => onClose?.(e.detail)}
 >
   {#each items as text, index}
     <MenuItem
       disabled={index === disabledIndex}
       on:click={() => {
-        console.log("click", text);
+        onItemClick?.(text);
         if (moveFocusOnClick) elsewhere.focus();
       }}
     >

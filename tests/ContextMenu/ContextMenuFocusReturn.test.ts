@@ -1,17 +1,14 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ContextMenuFocusReturn from "./ContextMenuFocusReturn.test.svelte";
+import { rightClick } from "./helpers";
 
 describe("ContextMenu focus return", () => {
   it("should return focus to the opener when closed via Escape", async () => {
     render(ContextMenuFocusReturn);
 
     const host = screen.getByRole("button", { name: "Host" });
-    await user.pointer({
-      target: host,
-      coords: { x: 100, y: 100 },
-      keys: "[MouseRight]",
-    });
+    await rightClick(host);
     await user.keyboard("{ArrowDown}");
     expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
 
@@ -23,11 +20,7 @@ describe("ContextMenu focus return", () => {
     render(ContextMenuFocusReturn);
 
     const host = screen.getByRole("button", { name: "Host" });
-    await user.pointer({
-      target: host,
-      coords: { x: 100, y: 100 },
-      keys: "[MouseRight]",
-    });
+    await rightClick(host);
 
     await user.click(screen.getByText("Option 1"));
     expect(host).toHaveFocus();
@@ -37,11 +30,7 @@ describe("ContextMenu focus return", () => {
     render(ContextMenuFocusReturn);
 
     const nonFocusable = screen.getByText("Non-focusable target");
-    await user.pointer({
-      target: nonFocusable,
-      coords: { x: 100, y: 100 },
-      keys: "[MouseRight]",
-    });
+    await rightClick(nonFocusable);
     await user.keyboard("{ArrowDown}");
     expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
 
@@ -58,11 +47,7 @@ describe("ContextMenu focus return", () => {
     assert(iconHost);
     const icon = container.querySelector<SVGElement>("#icon");
     assert(icon);
-    await user.pointer({
-      target: icon,
-      coords: { x: 100, y: 100 },
-      keys: "[MouseRight]",
-    });
+    await rightClick(icon);
     await user.keyboard("{ArrowDown}");
     expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
 
@@ -76,11 +61,7 @@ describe("ContextMenu focus return", () => {
     // Open and close once via right click on the host, so `openDetail`
     // holds a stale reference to it.
     const host = screen.getByRole("button", { name: "Host" });
-    await user.pointer({
-      target: host,
-      coords: { x: 100, y: 100 },
-      keys: "[MouseRight]",
-    });
+    await rightClick(host);
     await user.keyboard("{Escape}");
     expect(host).toHaveFocus();
 

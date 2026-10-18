@@ -3,56 +3,56 @@
   import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import type { ComponentProps } from "svelte";
 
-  export let size: ComponentProps<OverflowMenu>["size"] = undefined;
-  export let light: ComponentProps<OverflowMenu>["light"] = false;
   export let disabled: ComponentProps<OverflowMenu>["disabled"] = false;
-  export let flipped: ComponentProps<OverflowMenu>["flipped"] = false;
   export let direction: ComponentProps<OverflowMenu>["direction"] = "bottom";
-  export let menuOptionsClass: ComponentProps<OverflowMenu>["menuOptionsClass"] =
-    undefined;
-  export let iconClass: ComponentProps<OverflowMenu>["iconClass"] = undefined;
-  export let iconDescription: ComponentProps<OverflowMenu>["iconDescription"] =
-    "Open and close list of options";
   export let id: ComponentProps<OverflowMenu>["id"] = `ccs-${Math.random().toString(36)}`;
   export let portalMenu: ComponentProps<OverflowMenu>["portalMenu"] = false;
+  export let maxHeight: ComponentProps<OverflowMenu>["maxHeight"] = undefined;
   export let ariaLabel: ComponentProps<OverflowMenu>["aria-label"] = undefined;
+  export let open = false;
+
+  /** Called with each `close` event and the fixture's `open` at dispatch time. */
+  export let onClose: (e: CustomEvent, open: boolean) => void = () => {};
+  /** Called with the text of each clicked item. */
+  export let onItemClick: (text: string) => void = () => {};
+  /** Cancels every `close` event. */
+  export let cancelClose = false;
+  /** Cancels the "Manage credentials" item click, which keeps the menu open. */
+  export let preventItemClick = false;
+  /** Disables the "API documentation" link item. */
+  export let disabledLink = false;
 </script>
 
 <OverflowMenu
+  bind:open
   aria-label={ariaLabel}
-  {size}
-  {light}
   {disabled}
-  {flipped}
   {direction}
-  {menuOptionsClass}
-  {iconClass}
-  {iconDescription}
   {id}
   {portalMenu}
+  {maxHeight}
   on:close={(e) => {
-    console.log("close", e.detail); // { trigger: string; index?: number; text?: string; }
+    if (cancelClose) e.preventDefault();
+    onClose(e, open);
   }}
 >
   <OverflowMenuItem
     text="Manage credentials"
-    on:click={() => {
-      console.log("click", "Manage credentials");
+    on:click={(e) => {
+      onItemClick("Manage credentials");
+      if (preventItemClick) e.preventDefault();
     }}
   />
   <OverflowMenuItem
+    disabled={disabledLink}
     href="https://cloud.ibm.com/docs/api-gateway/"
     target="_blank"
     text="API documentation"
-    on:click={() => {
-      console.log("click", "API documentation");
-    }}
+    on:click={() => onItemClick("API documentation")}
   />
   <OverflowMenuItem
     danger
     text="Delete service"
-    on:click={() => {
-      console.log("click", "Delete service");
-    }}
+    on:click={() => onItemClick("Delete service")}
   />
 </OverflowMenu>

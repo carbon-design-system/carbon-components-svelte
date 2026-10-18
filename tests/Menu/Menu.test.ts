@@ -45,27 +45,31 @@ describe("Menu", () => {
   });
 
   it("focuses the first item on open and dispatches the open event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuFixture);
+    const onOpen = vi.fn();
+    render(MenuFixture, { props: { onOpen } });
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
 
     const items = screen.getAllByRole("menuitem");
     expect(items[0]).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("open", expect.any(HTMLElement));
+    expect(onOpen).toHaveBeenCalledWith(expect.any(HTMLElement));
   });
 
   it("focuses the first item without scrolling the page into view", async () => {
     const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
-    render(MenuFixture);
+    try {
+      render(MenuFixture);
 
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
 
-    const items = screen.getAllByRole("menuitem");
-    const itemFocusCall = focusSpy.mock.calls.find(
-      (_, index) => focusSpy.mock.instances[index] === items[0],
-    );
-    expect(itemFocusCall?.[0]).toEqual({ preventScroll: true });
+      const items = screen.getAllByRole("menuitem");
+      const itemFocusCall = focusSpy.mock.calls.find(
+        (_, index) => focusSpy.mock.instances[index] === items[0],
+      );
+      expect(itemFocusCall?.[0]).toEqual({ preventScroll: true });
+    } finally {
+      focusSpy.mockRestore();
+    }
   });
 
   it("does not steal focus back from an outside element on an unrelated rerender while open", async () => {
@@ -178,16 +182,17 @@ describe("Menu", () => {
   });
 
   it("dispatches click and closes the menu when an item is selected", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuFixture);
+    const onItemClick = vi.fn();
+    const onClose = vi.fn();
+    render(MenuFixture, { props: { onItemClick, onClose } });
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
     const items = screen.getAllByRole("menuitem");
 
     await user.click(items[0]);
 
-    expect(consoleLog).toHaveBeenCalledWith("click", "First");
-    expect(consoleLog).toHaveBeenCalledWith("close", { trigger: "select" });
+    expect(onItemClick).toHaveBeenCalledWith("First");
+    expect(onClose).toHaveBeenCalledWith({ trigger: "select" });
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
@@ -215,15 +220,15 @@ describe("Menu", () => {
   });
 
   it("does not select or close when clicking a disabled item", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuFixture, { props: { disabledIndex: 0 } });
+    const onItemClick = vi.fn();
+    render(MenuFixture, { props: { disabledIndex: 0, onItemClick } });
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
     const items = screen.getAllByRole("menuitem");
 
     await user.click(items[0]);
 
-    expect(consoleLog).not.toHaveBeenCalledWith("click", "First");
+    expect(onItemClick).not.toHaveBeenCalledWith("First");
     expect(screen.getByRole("menu")).toBeInTheDocument();
   });
 
@@ -240,41 +245,26 @@ describe("Menu", () => {
     expect(items[1]).not.toHaveFocus();
   });
 
-  it("closes and returns focus to the anchor on Escape", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuFixture);
+  it.each(["{Escape}", "{Tab}"])(
+    "closes and returns focus to the anchor on %s",
+    async (key) => {
+      const onClose = vi.fn();
+      render(MenuFixture, { props: { onClose } });
 
-    const trigger = screen.getByRole("button", { name: "Trigger" });
-    await user.click(trigger);
+      const trigger = screen.getByRole("button", { name: "Trigger" });
+      await user.click(trigger);
 
-    await user.keyboard("{Escape}");
+      await user.keyboard(key);
 
-    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
-    expect(trigger).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("close", {
-      trigger: "escape-key",
-    });
-  });
-
-  it("closes and returns focus to the anchor on Tab", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuFixture);
-
-    const trigger = screen.getByRole("button", { name: "Trigger" });
-    await user.click(trigger);
-
-    await user.keyboard("{Tab}");
-
-    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
-    expect(trigger).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("close", {
-      trigger: "escape-key",
-    });
-  });
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+      expect(onClose).toHaveBeenCalledWith({ trigger: "escape-key" });
+    },
+  );
 
   it("closes on outside click without returning focus", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuFixture);
+    const onClose = vi.fn();
+    render(MenuFixture, { props: { onClose } });
 
     const trigger = screen.getByRole("button", { name: "Trigger" });
     await user.click(trigger);
@@ -282,30 +272,22 @@ describe("Menu", () => {
 
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     expect(trigger).not.toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("close", {
-      trigger: "outside-click",
-    });
+    expect(onClose).toHaveBeenCalledWith({ trigger: "outside-click" });
   });
 
-  describe("maxHeight", () => {
-    it("caps the menu height in pixels when given a number", async () => {
-      render(MenuFixture, { props: { maxHeight: 240 } });
+  it.each([
+    { maxHeight: 240, expected: "240px" },
+    { maxHeight: "20rem", expected: "20rem" },
+  ])(
+    "caps the menu height at maxHeight $maxHeight",
+    async ({ maxHeight, expected }) => {
+      render(MenuFixture, { props: { maxHeight } });
 
       await user.click(screen.getByRole("button", { name: "Trigger" }));
 
       const menu = screen.getByRole("menu");
       expect(menu).toHaveClass("bx--menu--scrollable");
-      expect(menu).toHaveStyle("max-height: 240px");
-    });
-
-    it("passes a string maxHeight through verbatim", async () => {
-      render(MenuFixture, { props: { maxHeight: "20rem" } });
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-      const menu = screen.getByRole("menu");
-      expect(menu).toHaveClass("bx--menu--scrollable");
-      expect(menu.style.maxHeight).toBe("20rem");
-    });
-  });
+      expect(menu.style.maxHeight).toBe(expected);
+    },
+  );
 });

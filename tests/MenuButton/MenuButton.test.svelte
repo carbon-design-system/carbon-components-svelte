@@ -7,6 +7,9 @@
   export let size: ComponentProps<MenuButton>["size"] = "md";
   export let disabled = false;
   export let open = false;
+  export let onMouseenter: (() => void) | undefined = undefined;
+  export let onClose: ((detail: unknown) => void) | undefined = undefined;
+  export let onSelect: ((text: string) => void) | undefined = undefined;
 
   const items = ["Cut", "Copy", "Paste"];
 </script>
@@ -17,11 +20,10 @@
   {size}
   {disabled}
   bind:open
-  on:click={() => console.log("click")}
-  on:mouseenter={() => console.log("mouseenter")}
-  on:close={(e) => console.log("close", e.detail)}
+  on:mouseenter={() => onMouseenter?.()}
+  on:close={(e) => onClose?.(e.detail)}
 >
   {#each items as text}
-    <MenuItem on:click={() => console.log("select", text)}>{text}</MenuItem>
+    <MenuItem on:click={() => onSelect?.(text)}>{text}</MenuItem>
   {/each}
 </MenuButton>
