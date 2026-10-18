@@ -8,9 +8,10 @@
   export let hasForm: ComponentProps<ModalBody>["hasForm"] = false;
   export let hasScrollingContent: ComponentProps<ModalBody>["hasScrollingContent"] = false;
   export let slotContent = "";
+  export let alert = false;
 </script>
 
-<ComposedModal bind:open>
+<ComposedModal bind:open {alert}>
   <ModalHeader title="Test Modal" />
   <ModalBody {hasForm} {hasScrollingContent} {...$$restProps}>
     {#if slotContent}

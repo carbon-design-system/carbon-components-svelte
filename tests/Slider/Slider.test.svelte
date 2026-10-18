@@ -41,6 +41,7 @@
   export let selectTextOnFocus = false;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
   export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onchange: ((value: number) => void) | undefined = undefined;
 </script>
 
 {#if useSlot}
@@ -120,6 +121,7 @@
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
+      onchange?.(e.detail);
     }}
     on:input={(e) => {
       console.log("input", e.detail);

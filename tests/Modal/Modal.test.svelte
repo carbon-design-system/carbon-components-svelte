@@ -39,6 +39,7 @@
     | undefined = undefined;
   export let closeOnSecondary = false;
   export let includeInput = true;
+  export let includeSecondInput = false;
 </script>
 
 <Modal
@@ -84,5 +85,8 @@
   <slot />
   {#if includeInput}
     <input id="test-focus" data-testid="test-focus">
+  {/if}
+  {#if includeSecondInput}
+    <input id="test-focus-last" data-testid="test-focus-last">
   {/if}
 </Modal>

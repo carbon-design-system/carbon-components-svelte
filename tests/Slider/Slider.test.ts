@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
-import { flushMacrotask } from "../utils/flush-macrotask";
+import { flushDismiss } from "../utils/flush-dismiss";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
 
@@ -791,23 +792,35 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 990);
   });
 
-  it("should handle mouse dragging without errors", async () => {
-    render(Slider);
+  it("moves the value with the pointer and dispatches change once on release", async () => {
+    const onchange = vi.fn();
+    const { container } = render(Slider, { props: { onchange } });
+    const slider = container.querySelector(".bx--slider");
+    const track = container.querySelector(".bx--slider__track");
+    assert(slider instanceof HTMLElement);
+    assert(track instanceof HTMLElement);
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+      rect({ left: 0, right: 200, width: 200, top: 0, bottom: 2, height: 2 }),
+    );
+    const thumb = screen.getByRole("slider");
 
-    const container = screen.getByRole("slider").parentElement;
-    assert(container);
-    const { left, width } = container.getBoundingClientRect();
+    await fireEvent.mouseDown(slider, { clientX: 50 });
+    await flushDismiss();
+    expect(thumb).toHaveAttribute("aria-valuenow", "25");
+    expect(onchange).not.toHaveBeenCalled();
 
-    await user.pointer({ target: container, keys: "[MouseLeft]" });
-    await user.pointer({
-      target: container,
-      coords: { x: left + width / 2 },
-    });
+    await fireEvent.mouseMove(window, { clientX: 150 });
+    await tick();
+    expect(thumb).toHaveAttribute("aria-valuenow", "75");
+    expect(onchange).not.toHaveBeenCalled();
 
-    await user.pointer({ target: container, keys: "[/MouseLeft]" });
-    await flushMacrotask();
+    await fireEvent.mouseUp(window);
+    expect(onchange).toHaveBeenCalledTimes(1);
+    expect(onchange).toHaveBeenLastCalledWith(75);
 
-    expect(container).toBeInTheDocument();
+    await fireEvent.mouseMove(window, { clientX: 20 });
+    await tick();
+    expect(thumb).toHaveAttribute("aria-valuenow", "75");
   });
 
   it("should not respond to dragging when disabled", async () => {
@@ -1033,7 +1046,6 @@ describe("Slider", () => {
     render(Slider);
 
     const slider = screen.getByRole("slider");
-    expect(slider).toHaveAttribute("role", "slider");
 
     // No presentation-role wrapper should swallow the thumb's semantics.
     expect(screen.queryByRole("presentation")).not.toBeInTheDocument();

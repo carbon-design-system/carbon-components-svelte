@@ -120,12 +120,12 @@ describe("Modal", () => {
       },
     });
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(openHandler).toHaveBeenCalledTimes(1);
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
@@ -147,7 +147,7 @@ describe("Modal", () => {
       },
     });
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
     await tick();
 
@@ -155,7 +155,10 @@ describe("Modal", () => {
     expect(openHandler).toHaveBeenCalledTimes(1);
 
     // An unrelated re-render (open stays true) must not re-fire "open".
-    rerender({ open: true, modalHeading: "Post-mount Focus Test Updated" });
+    await rerender({
+      open: true,
+      modalHeading: "Post-mount Focus Test Updated",
+    });
     await tick();
     await tick();
 
@@ -509,7 +512,7 @@ describe("Modal", () => {
       },
     });
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
     await tick();
 
@@ -523,11 +526,13 @@ describe("Modal", () => {
       props: {
         open: true,
         modalHeading: "Focus Test",
-        selectorPrimaryFocus: "#test-focus",
+        primaryButtonText: "Save",
+        includeSecondInput: true,
+        selectorPrimaryFocus: "#test-focus-last",
       },
     });
 
-    expect(screen.getByTestId("test-focus")).toHaveFocus();
+    expect(screen.getByTestId("test-focus-last")).toHaveFocus();
   });
 
   it("focuses the first input when selectorPrimaryFocus is default and modal has form fields", () => {
@@ -589,16 +594,8 @@ describe("Modal", () => {
   });
 
   it("prevents closing when clicking outside if configured", async () => {
-    render(ModalTest, {
-      props: {
-        open: true,
-        preventCloseOnClickOutside: true,
-        modalHeading: "Prevent Close Test",
-      },
-    });
-
     const closeHandler = vi.fn();
-    render(ModalTest, {
+    const { container } = render(ModalTest, {
       props: {
         open: true,
         preventCloseOnClickOutside: true,
@@ -607,8 +604,13 @@ describe("Modal", () => {
       },
     });
 
-    await user.click(document.body);
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+    await user.click(modalOverlay);
+    await tick();
+
     expect(closeHandler).not.toHaveBeenCalled();
+    expect(modalOverlay).toHaveClass("is-visible");
   });
 
   it("supports passive modal variant", () => {
@@ -769,7 +771,7 @@ describe("Modal", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
     await trap.wait;
     trap.dispose();
@@ -794,7 +796,7 @@ describe("Modal", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -811,7 +813,7 @@ describe("Modal", () => {
       },
     });
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await flushProgrammaticClose();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
@@ -832,23 +834,27 @@ describe("Modal", () => {
       },
     });
 
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+
     await user.keyboard("{Escape}");
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(modalOverlay).toHaveClass("is-visible");
+    expect(modalOverlay).not.toHaveAttribute("inert");
 
-    const modalOverlay = container.querySelector(".bx--modal");
-    assert(modalOverlay);
     await user.click(modalOverlay);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(2);
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(modalOverlay).toHaveClass("is-visible");
+    expect(modalOverlay).not.toHaveAttribute("inert");
 
     const closeButton = screen.getByLabelText("Close the modal");
     await user.click(closeButton);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(3);
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(modalOverlay).toHaveClass("is-visible");
+    expect(modalOverlay).not.toHaveAttribute("inert");
   });
 
   it("is inert when closed", async () => {
@@ -863,11 +869,11 @@ describe("Modal", () => {
     assert(modalOverlay);
     expect(modalOverlay).toHaveAttribute("inert");
 
-    rerender({ open: true });
+    await rerender({ open: true });
     await tick();
 
     expect(modalOverlay).not.toHaveAttribute("inert");
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     expect(modalOverlay).toHaveAttribute("inert");
@@ -875,75 +881,40 @@ describe("Modal", () => {
 
   // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1392
   describe("focus trap with Dropdown and TextInput (issue #1392)", () => {
-    it("should tab from Dropdown to TextInput (forward navigation)", async () => {
-      render(ModalFocusTrapTest, {
-        props: { open: true },
-      });
+    // Tabbable buttons outside the modal make a missing trap observable: with
+    // no trap, native Tab from the last element lands on the trailing button
+    // and Shift+Tab from the first lands on the leading one, instead of wrapping.
+    it.each([
+      ["Select source", "Tab", "Login"],
+      ["Login", "Tab", "Password"],
+      ["Password", "Tab", "Cancel"],
+      ["Cancel", "Tab", "OK"],
+      ["Login", "Shift+Tab", "Select source"],
+      ["OK", "Tab", "Close the modal"],
+      ["Close the modal", "Shift+Tab", "OK"],
+    ])("moves focus from %s on %s to %s", async (start, key, expected) => {
+      const before = document.createElement("button");
+      const after = document.createElement("button");
+      document.body.prepend(before);
+      document.body.append(after);
 
-      await tick();
+      try {
+        render(ModalFocusTrapTest, { props: { open: true } });
+        await tick();
 
-      const dropdownButton = screen.getByLabelText("Select source");
-      const loginInput = screen.getByLabelText("Login");
+        const find = (name: string) =>
+          screen.queryByLabelText(name) ?? screen.getByRole("button", { name });
+        find(start).focus();
+        expect(find(start)).toHaveFocus();
 
-      dropdownButton.focus();
-      expect(dropdownButton).toHaveFocus();
+        await user.keyboard(key === "Tab" ? "{Tab}" : "{Shift>}{Tab}{/Shift}");
+        await tick();
 
-      await user.keyboard("{Tab}");
-      await tick();
-
-      expect(loginInput).toHaveFocus();
-    });
-
-    it("should shift-tab from TextInput to Dropdown (reverse navigation)", async () => {
-      render(ModalFocusTrapTest, {
-        props: { open: true },
-      });
-
-      await tick();
-
-      const dropdownButton = screen.getByLabelText("Select source");
-      const loginInput = screen.getByLabelText("Login");
-
-      loginInput.focus();
-      expect(loginInput).toHaveFocus();
-
-      await user.keyboard("{Shift>}{Tab}{/Shift}");
-      await tick();
-
-      expect(dropdownButton).toHaveFocus();
-    });
-
-    it("should tab through all inputs in order", async () => {
-      render(ModalFocusTrapTest, {
-        props: { open: true },
-      });
-
-      await tick();
-
-      const dropdownButton = screen.getByLabelText("Select source");
-      const loginInput = screen.getByLabelText("Login");
-      const passwordInput = screen.getByLabelText("Password");
-      const cancelButton = screen.getByRole("button", { name: "Cancel" });
-      const okButton = screen.getByRole("button", { name: "OK" });
-
-      dropdownButton.focus();
-      expect(dropdownButton).toHaveFocus();
-
-      await user.keyboard("{Tab}");
-      await tick();
-      expect(loginInput).toHaveFocus();
-
-      await user.keyboard("{Tab}");
-      await tick();
-      expect(passwordInput).toHaveFocus();
-
-      await user.keyboard("{Tab}");
-      await tick();
-      expect(cancelButton).toHaveFocus();
-
-      await user.keyboard("{Tab}");
-      await tick();
-      expect(okButton).toHaveFocus();
+        expect(find(expected)).toHaveFocus();
+      } finally {
+        before.remove();
+        after.remove();
+      }
     });
   });
 

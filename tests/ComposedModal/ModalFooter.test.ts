@@ -356,31 +356,31 @@ describe("ModalFooter", () => {
   });
 
   it("should not render primary button when text is empty", () => {
-    render(ModalFooterTest, {
+    const { container } = render(ModalFooterTest, {
       props: {
         primaryButtonText: "",
         secondaryButtonText: "Cancel",
       },
     });
 
-    expect(
-      screen.queryByRole("button", { name: "Save" }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    const buttons = container.querySelectorAll(".bx--modal-footer .bx--btn");
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toHaveTextContent("Cancel");
+    expect(container.querySelector(".bx--btn--primary")).toBeNull();
   });
 
   it("should not render secondary button when text is empty", () => {
-    render(ModalFooterTest, {
+    const { container } = render(ModalFooterTest, {
       props: {
         primaryButtonText: "Save",
         secondaryButtonText: "",
       },
     });
 
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Cancel" }),
-    ).not.toBeInTheDocument();
+    const buttons = container.querySelectorAll(".bx--modal-footer .bx--btn");
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toHaveTextContent("Save");
+    expect(container.querySelector(".bx--btn--secondary")).toBeNull();
   });
 
   it("should prioritize secondaryButtons over secondaryButtonText", () => {
