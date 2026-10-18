@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import type OverflowMenuComponent from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -201,6 +201,31 @@ describe("OverflowMenu", () => {
 
     await user.keyboard("{Home}");
     expect(menuItems[0]).toHaveFocus();
+  });
+
+  it("Home and End on the trigger move focus into the menu", async () => {
+    render(OverflowMenu);
+
+    const { menuButton, items: menuItems } = await openMenu();
+    menuButton.focus();
+
+    await user.keyboard("{End}");
+    expect(menuItems[2]).toHaveFocus();
+
+    menuButton.focus();
+    await user.keyboard("{Home}");
+    expect(menuItems[0]).toHaveFocus();
+  });
+
+  it("prevents the default arrow key action on the open trigger", async () => {
+    render(OverflowMenu);
+
+    const { menuButton } = await openMenu();
+    menuButton.focus();
+
+    expect(await fireEvent.keyDown(menuButton, { key: "ArrowDown" })).toBe(
+      false,
+    );
   });
 
   it("Home and End skip disabled items", async () => {

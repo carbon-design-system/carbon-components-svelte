@@ -51,3 +51,28 @@ export function makeVisibleModal() {
   document.body.appendChild(modal);
   return { modal, element };
 }
+
+/**
+ * Stubs layout so tests choose where the anchor and any open floating portal
+ * sit. Assign to `layout.anchor` or `layout.floating` to move them; the stubs
+ * apply to later opens and survive the portal remounting. Call after the
+ * anchor is in the document (render closed, then open).
+ */
+export function stubLayout({
+  anchor,
+  floating,
+}: {
+  anchor: DOMRect;
+  floating: DOMRect;
+}) {
+  const layout = { anchor, floating };
+  const original = Element.prototype.getBoundingClientRect;
+  vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+    function (this: Element) {
+      if (this.matches("[data-testid=anchor]")) return layout.anchor;
+      if (this.matches("[data-floating-portal]")) return layout.floating;
+      return original.call(this);
+    },
+  );
+  return layout;
+}

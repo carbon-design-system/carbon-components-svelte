@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import FloatingPortalTest from "./FloatingPortal.test.svelte";
-import { countCalls, createTarget, renderOpen } from "./helpers";
+import { countCalls, createTarget, renderOpen, stubLayout } from "./helpers";
 
 describe("FloatingPortal", () => {
   it("does not render when open is false", () => {
@@ -69,6 +69,55 @@ describe("FloatingPortal", () => {
         expect(portal).toHaveAttribute("data-floating-direction", expected);
       },
     );
+    describe("lockDirection with a layout that moves", () => {
+      const nearBottom = rect({ top: 750, bottom: 790, width: 100 });
+      const roomy = rect({ top: 300, bottom: 340, width: 100 });
+      const floating = rect({ width: 100, height: 200 });
+      const side = () =>
+        document
+          .querySelector("[data-floating-portal]")
+          ?.getAttribute("data-floating-direction");
+
+      // Opens with the anchor near the viewport bottom, so "bottom" flips to "top".
+      async function openFlipped(
+        props: Partial<ComponentProps<FloatingPortalTest>>,
+      ) {
+        const { rerender } = render(FloatingPortalTest, {
+          props: { direction: "bottom", ...props },
+        });
+        const layout = stubLayout({ anchor: nearBottom, floating });
+        await rerender({ open: true });
+        await screen.findByText("Floating content");
+        await nextFrame();
+        expect(side()).toBe("top");
+        return { rerender, layout };
+      }
+
+      it('keeps the flipped side when the preferred side fits again with lockDirection "after-flip"', async () => {
+        const { layout } = await openFlipped({ lockDirection: "after-flip" });
+
+        layout.anchor = roomy;
+        window.dispatchEvent(new Event("scroll"));
+        await nextFrame();
+
+        expect(side()).toBe("top");
+      });
+
+      it.each(["after-flip", "always"] as const)(
+        'recomputes the side on the next open with lockDirection "%s"',
+        async (lockDirection) => {
+          const { rerender, layout } = await openFlipped({ lockDirection });
+
+          await rerender({ open: false });
+          layout.anchor = roomy;
+          await rerender({ open: true });
+          await screen.findByText("Floating content");
+          await nextFrame();
+
+          expect(side()).toBe("bottom");
+        },
+      );
+    });
   });
 
   it("applies z-index from zIndex prop", async () => {
@@ -155,6 +204,62 @@ describe("FloatingPortal", () => {
     );
   });
 
+  describe("caret nudge and layout passes", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it.each(["start", "end"] as const)(
+      "emits the anchor half-width as --ccs-tooltip-caret-nudge for intrinsicAlign %s",
+      async (intrinsicAlign) => {
+        const { rerender } = render(FloatingPortalTest, {
+          props: { intrinsicWidth: true, intrinsicAlign },
+        });
+        stubLayout({
+          anchor: rect({ top: 100, left: 300, width: 80, height: 40 }),
+          floating: rect({ width: 60, height: 30 }),
+        });
+        await rerender({ open: true });
+        await screen.findByText("Floating content");
+        await nextFrame();
+
+        expectInlineStyle(document.querySelector("[data-floating-portal]"), {
+          "--ccs-tooltip-caret-nudge": "40px",
+        });
+      },
+    );
+
+    it("measures the floating box again after layout and flips a side placement that no longer fits", async () => {
+      const { rerender } = render(FloatingPortalTest, {
+        props: { direction: "right" },
+      });
+      const layout = stubLayout({
+        anchor: rect({ top: 100, left: 900, width: 100, height: 40 }),
+        floating: rect({ height: 30 }),
+      });
+      // The floating box has no width until the frame after it is first read.
+      let laidOut: boolean | undefined;
+      Object.defineProperty(layout, "floating", {
+        get: () => {
+          if (laidOut === undefined) {
+            laidOut = false;
+            requestAnimationFrame(() => {
+              laidOut = true;
+            });
+          }
+          return rect({ width: laidOut ? 200 : 0, height: 30 });
+        },
+      });
+      await rerender({ open: true });
+      const content = await screen.findByText("Floating content");
+      const portal = content.closest("[data-floating-portal]");
+
+      await vi.waitFor(() =>
+        expect(portal).toHaveAttribute("data-floating-direction", "left"),
+      );
+    });
+  });
+
   it("applies position styles", async () => {
     const { portal } = await renderOpen();
 
@@ -193,6 +298,12 @@ describe("FloatingPortal", () => {
 
     expect(portal.parentElement).toBe(getParent());
     expectInlineStyle(portal, { position: "fixed" });
+  });
+
+  it("stays position: absolute when the explicit target is document.body", async () => {
+    const { portal } = await renderOpen({ target: document.body });
+
+    expectInlineStyle(portal, { position: "absolute" });
   });
 
   it("explicit target overrides the auto-detected <dialog> ancestor", async () => {
@@ -308,6 +419,20 @@ describe("FloatingPortal", () => {
       expect(countCalls(addSpy, "scroll")).toBe(0);
       expect(countCalls(addSpy, "resize")).toBe(0);
     });
+
+    it.each(["scroll", "resize"])(
+      "ignores window %s once the portal closes",
+      async (type) => {
+        const rafSpy = vi.spyOn(window, "requestAnimationFrame");
+        const { rerender } = await renderOpen();
+        await rerender({ open: false });
+        const rafCountBefore = rafSpy.mock.calls.length;
+
+        window.dispatchEvent(new Event(type));
+
+        expect(rafSpy.mock.calls.length).toBe(rafCountBefore);
+      },
+    );
 
     it("removes the pooled window listener once the last open instance unmounts", async () => {
       const removeSpy = vi.spyOn(window, "removeEventListener");

@@ -74,6 +74,17 @@ describe("ComboButton", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("returns focus to the trigger button when Escape closes the menu", async () => {
+    render(ComboButtonFixture);
+
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+    await user.click(trigger);
+    await user.keyboard("{Escape}");
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it("opens and focuses the first item from the trigger", async () => {
     render(ComboButtonFixture);
 

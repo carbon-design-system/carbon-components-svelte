@@ -316,6 +316,20 @@ describe("MenuItem", () => {
       expect(getSelectedIds()).toEqual(["size"]);
     });
 
+    it("keeps a pre-set selection and ignores a selected item", async () => {
+      render(MenuItemSelectableFixture, { props: { selectedIds: ["name"] } });
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Size" }),
+      ).toHaveAttribute("aria-checked", "false");
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Name" }),
+      ).toHaveAttribute("aria-checked", "true");
+      expect(getSelectedIds()).toEqual(["name"]);
+    });
+
     it("renders a checked item's own icon alongside its checkmark, in separate columns", async () => {
       render(MenuItemSelectableFixture);
 
