@@ -54,8 +54,6 @@
       ],
     },
   ];
-
-  $: console.log("expandedIds", expandedIds);
 </script>
 
 <TreeView
@@ -66,8 +64,6 @@
   bind:activeId
   bind:selectedIds
   bind:expandedIds
-  on:select={({ detail }) => console.log("select", detail)}
-  on:toggle={({ detail }) => console.log("toggle", detail)}
   let:node
 >
   {node.text}

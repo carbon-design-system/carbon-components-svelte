@@ -1,5 +1,6 @@
 import { render, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { findRowById } from "../utils/tree-item-by-id";
 import TreeViewShowNode from "./TreeView.deepReveal.test.svelte";
 
 describe("TreeView deep reveal", () => {
@@ -14,9 +15,7 @@ describe("TreeView deep reveal", () => {
 
     await waitFor(
       () => {
-        expect(
-          document.querySelector(`[data-tree-row-id="${DEPTH - 1}"]`),
-        ).toBeInstanceOf(HTMLElement);
+        expect(findRowById(DEPTH - 1)).toBeInstanceOf(HTMLElement);
       },
       { timeout: 15_000 },
     );

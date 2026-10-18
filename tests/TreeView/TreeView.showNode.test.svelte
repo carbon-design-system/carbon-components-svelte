@@ -5,28 +5,13 @@
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
+  import { levelNodes } from "./fixtures";
 
   let treeview: TreeView;
   export let activeId: TreeNode["id"] | undefined = undefined;
   export let selectedIds: TreeNode["id"][] = [];
   export let expandedIds: TreeNode["id"][] = [];
-  let nodes: ComponentProps<TreeView>["nodes"] = [
-    { id: 0, text: "Level 0" },
-    {
-      id: 1,
-      text: "Level 1",
-      nodes: [
-        {
-          id: 2,
-          text: "Level 2",
-          nodes: [
-            { id: 3, text: "Level 3 - Target" },
-            { id: 4, text: "Level 3 - Other" },
-          ],
-        },
-      ],
-    },
-  ];
+  const nodes: ComponentProps<TreeView>["nodes"] = levelNodes();
 </script>
 
 <TreeView

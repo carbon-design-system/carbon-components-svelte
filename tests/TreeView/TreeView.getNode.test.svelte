@@ -3,26 +3,15 @@
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
+  import { levelNodes } from "./fixtures";
+
+  /** Spies for the values `getNode` and `getNodes` return. */
+  export let onGetNode: (node: unknown) => void = () => {};
+  export let onGetNodes: (nodes: unknown) => void = () => {};
 
   let treeview: TreeView;
   let selectedIds: TreeNode["id"][] = [];
-  let nodes: ComponentProps<TreeView>["nodes"] = [
-    { id: 0, text: "Level 0" },
-    {
-      id: 1,
-      text: "Level 1",
-      nodes: [
-        {
-          id: 2,
-          text: "Level 2",
-          nodes: [
-            { id: 3, text: "Level 3 - Target" },
-            { id: 4, text: "Level 3 - Other" },
-          ],
-        },
-      ],
-    },
-  ];
+  const nodes: ComponentProps<TreeView>["nodes"] = levelNodes();
 </script>
 
 <TreeView
@@ -35,21 +24,18 @@
   {node.text}
 </TreeView>
 
-<Button
-  data-testid="get-node"
-  on:click={() => console.log("getNode", treeview.getNode(3))}
->
+<Button data-testid="get-node" on:click={() => onGetNode(treeview.getNode(3))}>
   Get node
 </Button>
 <Button
   data-testid="get-missing-node"
-  on:click={() => console.log("getNode", treeview.getNode(999))}
+  on:click={() => onGetNode(treeview.getNode(999))}
 >
   Get missing node
 </Button>
 <Button
   data-testid="get-nodes"
-  on:click={() => console.log("getNodes", treeview.getNodes([3, 999, 0]))}
+  on:click={() => onGetNodes(treeview.getNodes([3, 999, 0]))}
 >
   Get nodes
 </Button>

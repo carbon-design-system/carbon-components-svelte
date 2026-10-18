@@ -31,8 +31,6 @@
     ],
     (node) => node.pid,
   );
-
-  $: console.log("selectedIds", selectedIds);
 </script>
 
 <TreeView
@@ -43,9 +41,6 @@
   bind:activeId
   bind:selectedIds
   bind:expandedIds
-  on:select={({ detail }) => console.log("select", detail)}
-  on:toggle={({ detail }) => console.log("toggle", detail)}
-  on:focus={({ detail }) => console.log("focus", detail)}
   let:node
 >
   {node.text}

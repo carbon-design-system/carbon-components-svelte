@@ -1,17 +1,12 @@
 import { render } from "@testing-library/svelte";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
+import { checkboxFor } from "./helpers";
 import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
 
 // Collapsed subtrees stay mounted, so accessible-name computation in jsdom
 // picks up descendant text. Look rows up by id instead, matching the
 // convention documented in TreeView.lazyLoad.test.ts.
-// Click the checkbox wrapper; row clicks outside it do not toggle.
-function checkboxFor(id: string): HTMLElement {
-  const el = treeItemById(id).querySelector(".bx--checkbox-wrapper");
-  assert(el instanceof HTMLElement);
-  return el;
-}
 
 // The checkbox label contributes empty text nodes, so compare the words the
 // tree renders rather than the exact whitespace. Type-ahead trims before it
@@ -19,6 +14,32 @@ function checkboxFor(id: string): HTMLElement {
 function normalizeText(text: string | null): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
 }
+
+describe.each([
+  ["plain", {}],
+  ["virtual", { virtualize: { maxVisibleRows: 10 }, padding: 80 }],
+])("TreeView selectionMode=checkbox (%s)", (_variant, variantProps) => {
+  it("flips the branch to mixed when one child is unchecked", async () => {
+    render(TreeViewCheckbox, variantProps);
+
+    await user.click(checkboxFor("analytics"));
+    await user.click(checkboxFor("spark"));
+
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "false");
+    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
+  });
+
+  it('leaves ancestors untouched with checkMode="node"', async () => {
+    render(TreeViewCheckbox, { ...variantProps, checkMode: "node" });
+
+    await user.click(checkboxFor("spark"));
+
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "false");
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "false");
+  });
+});
 
 describe("TreeView selectionMode=checkbox", () => {
   it("checks every descendant when a branch is checked", async () => {
@@ -32,17 +53,6 @@ describe("TreeView selectionMode=checkbox", () => {
     expect(treeItemById("analytics")).not.toHaveAttribute("aria-selected");
   });
 
-  it("flips the branch to mixed when one child is unchecked", async () => {
-    render(TreeViewCheckbox);
-
-    await user.click(checkboxFor("analytics"));
-    await user.click(checkboxFor("spark"));
-
-    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
-    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "false");
-    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
-  });
-
   it("skips disabled descendants without blocking the branch", async () => {
     render(TreeViewCheckbox);
 
@@ -50,16 +60,6 @@ describe("TreeView selectionMode=checkbox", () => {
 
     expect(treeItemById("legacy")).toHaveAttribute("aria-checked", "false");
     expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "true");
-  });
-
-  it('leaves ancestors untouched with checkMode="node"', async () => {
-    render(TreeViewCheckbox, { checkMode: "node" });
-
-    await user.click(checkboxFor("spark"));
-
-    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
-    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "false");
-    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "false");
   });
 
   it("renders no checkbox on a link node", () => {

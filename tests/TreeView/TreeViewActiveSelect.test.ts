@@ -1,5 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewActiveSelect from "./TreeViewActiveSelect.test.svelte";
 
@@ -34,9 +35,7 @@ describe("TreeView auto-select on active node", () => {
     const { component } = render(TreeViewActiveSelect);
     await tick();
 
-    const first = document.querySelector('[data-tree-row-id="1"]');
-    if (!first) throw new Error("expected node 1");
-    await user.click(first);
+    await user.click(treeItemById(1));
     expect(component.selectedIds).toEqual([1]);
 
     component.activeId = 2;

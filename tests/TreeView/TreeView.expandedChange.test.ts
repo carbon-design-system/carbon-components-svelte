@@ -4,17 +4,23 @@ import type {
   TreeViewExpandedChange as ExpandedChangeDetail,
   TreeNode,
 } from "carbon-components-svelte/TreeView/TreeView.svelte";
-import type { ComponentEvents } from "svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { flushMacrotask } from "../utils/flush-macrotask";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import TreeViewExpandedChange from "./TreeView.expandedChange.test.svelte";
+import { cloudProductsSubset } from "./fixtures";
+import { expectOneUnhandledRejection, getAllExpandedItems } from "./helpers";
+import TreeViewChangeEvents from "./TreeView.changeEvents.test.svelte";
 
 type ToggleChangeDetail = {
   expandedIds: ReadonlyArray<string | number>;
   added: Array<string | number>;
   removed: Array<string | number>;
 };
+
+const renderExpandedChange = (
+  props: Partial<ComponentProps<TreeViewChangeEvents>> = {},
+) => render(TreeViewChangeEvents, { nodes: cloudProductsSubset(), ...props });
 
 function lastDetail(spy: ReturnType<typeof vi.fn>): ToggleChangeDetail {
   return spy.mock.calls.at(-1)?.[0] as ToggleChangeDetail;
@@ -24,11 +30,11 @@ describe("TreeView toggle:change", () => {
   it("fires on caret-click expand and collapse with single-id delta", async () => {
     const onToggleChange = vi.fn();
     const onToggle = vi.fn();
-    render(TreeViewExpandedChange, { onToggleChange, onToggle });
+    renderExpandedChange({ onToggleChange, onToggle });
 
-    const analytics = document.querySelector('[data-tree-row-id="1"]');
-    assert(analytics instanceof HTMLElement);
-    const toggle = analytics.querySelector(".bx--tree-parent-node__toggle");
+    const toggle = treeItemById(1).querySelector(
+      ".bx--tree-parent-node__toggle",
+    );
     assert(toggle instanceof HTMLElement);
 
     await user.click(toggle);
@@ -53,7 +59,7 @@ describe("TreeView toggle:change", () => {
 
   it("expandAll() emits exactly once with expandable ids added", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, { onToggleChange });
+    renderExpandedChange({ onToggleChange });
 
     await user.click(screen.getByTestId("expand-all"));
     await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));
@@ -73,7 +79,7 @@ describe("TreeView toggle:change", () => {
 
   it("collapseAll() emits once with all ids removed", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, {
+    renderExpandedChange({
       onToggleChange,
       expandedIds: [1, 2, 7, 9],
     });
@@ -89,7 +95,7 @@ describe("TreeView toggle:change", () => {
 
   it("expandNodes(filter) emits the matched added ids", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, { onToggleChange });
+    renderExpandedChange({ onToggleChange });
 
     await user.click(screen.getByTestId("expand-nodes"));
     await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));
@@ -102,7 +108,7 @@ describe("TreeView toggle:change", () => {
 
   it("collapseNodes(filter) emits the matched removed ids", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, {
+    renderExpandedChange({
       onToggleChange,
       expandedIds: [1, 7],
     });
@@ -118,7 +124,7 @@ describe("TreeView toggle:change", () => {
 
   it("showNode(id, { expand: true }) emits the ancestor ids added", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, { onToggleChange });
+    renderExpandedChange({ onToggleChange });
 
     await user.click(screen.getByTestId("show-node"));
     await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));
@@ -132,7 +138,7 @@ describe("TreeView toggle:change", () => {
 
   it("autoCollapse sibling collapse includes the sibling in removed", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, {
+    renderExpandedChange({
       onToggleChange,
       autoCollapse: true,
       expandedIds: [1, 7],
@@ -149,7 +155,7 @@ describe("TreeView toggle:change", () => {
 
   it("external prop change emits once", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, { onToggleChange });
+    renderExpandedChange({ onToggleChange });
 
     await user.click(screen.getByTestId("set-prop"));
     await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));
@@ -163,7 +169,7 @@ describe("TreeView toggle:change", () => {
 
   it("does not fire on a no-op set", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, {
+    renderExpandedChange({
       onToggleChange,
       expandedIds: [1],
     });
@@ -177,7 +183,7 @@ describe("TreeView toggle:change", () => {
 
   it("does not fire for selection-only changes", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, { onToggleChange });
+    renderExpandedChange({ onToggleChange });
 
     await user.click(screen.getByTestId("select-only"));
     await tick();
@@ -188,7 +194,7 @@ describe("TreeView toggle:change", () => {
 
   it("does not fire on initial mount", async () => {
     const onToggleChange = vi.fn();
-    render(TreeViewExpandedChange, {
+    renderExpandedChange({
       onToggleChange,
       expandedIds: [1, 2],
     });
@@ -200,41 +206,20 @@ describe("TreeView toggle:change", () => {
   });
 
   it("a throwing consumer neither wedges the flush nor surfaces a tracked unhandled rejection", async () => {
-    // Deferred dispatch turns a consumer throw into an unhandled rejection.
-    // Swap out the `process` listeners so vitest's collector does not fail the
-    // run, capture it ourselves, then assert the tree still updated.
-    const priorListeners = process.listeners("unhandledRejection");
-    process.removeAllListeners("unhandledRejection");
-
-    const rejections: unknown[] = [];
-    const capture = (reason: unknown) => rejections.push(reason);
-    process.on("unhandledRejection", capture);
-
-    try {
+    // Deferred dispatch turns a consumer throw into an unhandled rejection,
+    // so assert it ourselves and that the tree still updated.
+    await expectOneUnhandledRejection("consumer boom", async () => {
       const onToggleChange = vi.fn(() => {
         throw new Error("consumer boom");
       });
-      render(TreeViewExpandedChange, { onToggleChange });
+      renderExpandedChange({ onToggleChange });
 
       await user.click(screen.getByTestId("expand-all"));
       await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));
 
       // The expansion still committed despite the throw.
-      expect(screen.getAllByRole("treeitem", { expanded: true }).length).toBe(
-        4,
-      );
-
-      // Let Node emit the rejection from the deferred microtask.
-      await flushMacrotask();
-      expect(rejections).toHaveLength(1);
-      assert(rejections[0] instanceof Error);
-      expect(rejections[0].message).toBe("consumer boom");
-    } finally {
-      process.removeListener("unhandledRejection", capture);
-      for (const listener of priorListeners) {
-        process.on("unhandledRejection", listener);
-      }
-    }
+      expect(getAllExpandedItems()).toHaveLength(4);
+    });
   });
 });
 

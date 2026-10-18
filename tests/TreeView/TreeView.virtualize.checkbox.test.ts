@@ -1,18 +1,15 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { treeItemById } from "../utils/tree-item-by-id";
+import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import TreeViewVirtualizeCheckbox from "./TreeView.virtualize.checkbox.test.svelte";
+import { checkboxFor } from "./helpers";
+import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
 
-function checkboxFor(id: string): HTMLElement {
-  const el = treeItemById(id).querySelector(".bx--checkbox-wrapper");
-  assert(el instanceof HTMLElement);
-  return el;
-}
+const virtualProps = { virtualize: { maxVisibleRows: 10 }, padding: 80 };
 
 describe("TreeView virtualize + selectionMode=checkbox", () => {
   it("renders checkboxes on windowed rows with correct ARIA", () => {
-    render(TreeViewVirtualizeCheckbox);
+    render(TreeViewCheckbox, virtualProps);
 
     expect(
       treeItemById("analytics").querySelector(".bx--checkbox"),
@@ -25,7 +22,7 @@ describe("TreeView virtualize + selectionMode=checkbox", () => {
   });
 
   it("checks every descendant when a branch checkbox is clicked", async () => {
-    render(TreeViewVirtualizeCheckbox);
+    render(TreeViewCheckbox, virtualProps);
 
     await user.click(checkboxFor("analytics"));
 
@@ -36,36 +33,15 @@ describe("TreeView virtualize + selectionMode=checkbox", () => {
   });
 
   it("does not toggle when the row body is clicked", async () => {
-    render(TreeViewVirtualizeCheckbox);
+    render(TreeViewCheckbox, virtualProps);
 
     await user.click(treeItemById("spark"));
 
     expect(treeItemById("spark")).toHaveAttribute("aria-checked", "false");
   });
 
-  it("flips the branch to mixed when one child is unchecked", async () => {
-    render(TreeViewVirtualizeCheckbox);
-
-    await user.click(checkboxFor("analytics"));
-    await user.click(checkboxFor("spark"));
-
-    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
-    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "false");
-    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
-  });
-
-  it('leaves ancestors untouched with checkMode="node"', async () => {
-    render(TreeViewVirtualizeCheckbox, { checkMode: "node" });
-
-    await user.click(checkboxFor("spark"));
-
-    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
-    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "false");
-    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "false");
-  });
-
   it("toggles with Space without expanding, and Enter expands parents", async () => {
-    render(TreeViewVirtualizeCheckbox);
+    render(TreeViewCheckbox, virtualProps);
 
     const analytics = treeItemById("analytics");
     analytics.focus();
@@ -81,7 +57,7 @@ describe("TreeView virtualize + selectionMode=checkbox", () => {
   });
 
   it("preserves checked state when the row scrolls out and back in", async () => {
-    render(TreeViewVirtualizeCheckbox);
+    render(TreeViewCheckbox, virtualProps);
 
     await user.click(checkboxFor("spark"));
     expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
@@ -92,7 +68,7 @@ describe("TreeView virtualize + selectionMode=checkbox", () => {
     tree.dispatchEvent(new Event("scroll"));
     await tick();
 
-    expect(document.querySelector('[data-tree-row-id="spark"]')).toBeNull();
+    expect(findRowById("spark")).toBeNull();
 
     tree.scrollTop = 0;
     tree.dispatchEvent(new Event("scroll"));

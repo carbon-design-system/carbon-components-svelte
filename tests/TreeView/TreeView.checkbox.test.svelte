@@ -11,6 +11,9 @@
   export let multiselect: ComponentProps<TreeView>["multiselect"] = false;
   export let checkedIds: Id[] = [];
   export let indeterminateIds: ReadonlyArray<Id> = [];
+  export let virtualize: ComponentProps<TreeView>["virtualize"] = undefined;
+  /** Collapsed roots appended after `nodes`, so windowing is active. */
+  export let padding = 0;
   /** Spy for the aggregate `check:change` event. */
   export let onCheckChange: (detail: {
     checkedIds: ReadonlyArray<Id>;
@@ -19,7 +22,7 @@
     indeterminateIds: ReadonlyArray<Id>;
   }) => void = () => {};
 
-  export let nodes: ComponentProps<TreeView>["nodes"] = [
+  export let nodes: NonNullable<ComponentProps<TreeView>["nodes"]> = [
     {
       id: "analytics",
       text: "Analytics",
@@ -36,15 +39,27 @@
     },
     { id: "docs", text: "Documentation", href: "/docs" },
   ];
+
+  // Pad with collapsed roots so windowing is active while the interactive
+  // subtree stays near the top of the viewport.
+  $: allNodes = [
+    ...nodes,
+    ...Array.from({ length: padding }, (_, i) => ({
+      id: `pad-${i}`,
+      text: `Padding ${i}`,
+      nodes: [{ id: `pad-${i}-child`, text: `Padding ${i} child` }],
+    })),
+  ];
 </script>
 
 <TreeView
   labelText="Permissions"
-  {nodes}
+  nodes={allNodes}
   {selectionMode}
   {checkMode}
   {multiselect}
   expandedIds={["analytics", "blockchain"]}
+  {virtualize}
   bind:checkedIds
   bind:indeterminateIds
   on:check:change={({ detail }) => onCheckChange(detail)}
