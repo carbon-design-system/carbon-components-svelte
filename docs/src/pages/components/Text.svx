@@ -368,4 +368,4 @@ Apply Carbon type utilities directly when you do not need the component. Classes
 
 <p class="bx--type-heading-02">Styled with bx--type-heading-02</p>
 <p class="bx--type-body-long-01 bx--type-semibold">Semibold body text</p>
-<p class="bx--type-body-long-01" style="max-width: 38ch">Constrained with inline max-width</p>
+<p class="bx--type-body-long-01 bx--type-nowrap">Kept on one line with bx--type-nowrap</p>

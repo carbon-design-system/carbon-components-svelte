@@ -3,7 +3,7 @@ description: Truncate handles single-line and multiline text overflow, as a comp
 ---
 
 <script>
-  import { Truncate, Text, truncate } from "carbon-components-svelte";
+  import { Box, Text, Truncate, truncate } from "carbon-components-svelte";
 </script>
 
 Truncate offers two ways to clip overflowing text: the `Truncate` component, which wraps content in a `<p>`, and the `truncate` action, which applies the same clipping to any element. For truncating text that also needs a specific Carbon type style, see [Text](/components/Text#truncate).
@@ -14,43 +14,51 @@ Truncate offers two ways to clip overflowing text: the `Truncate` component, whi
 
 The default component wraps text in a paragraph and truncates at the end of the line.
 
-<Truncate style="max-width: 20rem">
-  Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
-</Truncate>
+<Box maxWidth="20rem">
+  <Truncate>
+    Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
+  </Truncate>
+</Box>
 
 ### Clamp front
 
 Set `clamp` to `"front"` to keep the end of the text visible. `clamp` only takes effect when `lines` is `1`.
 
-<Truncate clamp="front" style="max-width: 20rem">
-  /var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log
-</Truncate>
+<Box maxWidth="20rem">
+  <Truncate clamp="front">
+    /var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log
+  </Truncate>
+</Box>
 
 ### Multiline
 
 Set `lines` above 1 to limit how many lines show. Multiline mode always clamps from the end, regardless of `clamp`.
 
-<Truncate lines={3} style="max-width: 20rem">
-  The nightly reconciliation job failed after three retries because the upstream billing service returned inconsistent invoice totals for 42 accounts. Support has been notified and a manual review is in progress.
-</Truncate>
+<Box maxWidth="20rem">
+  <Truncate lines={3}>
+    The nightly reconciliation job failed after three retries because the upstream billing service returned inconsistent invoice totals for 42 accounts. Support has been notified and a manual review is in progress.
+  </Truncate>
+</Box>
 
 ### Inline test
 
 Truncating a span mid-sentence needs a normal block ancestor so the truncated text keeps the surrounding line height, otherwise descenders get clipped.
 
-<p style="max-width: 20rem">
+<Box tag="p" maxWidth="20rem">
   Deploy failed for image <Truncate tag="span" style="display: inline-block; max-width: 9rem; vertical-align: bottom">ghcr.io/acme-corp/payments-api:2.4.1-rc3</Truncate> during rollout.
-</p>
+</Box>
 
 ### Nested text
 
 Set `tag` when the content is itself a block element such as Text, since paragraphs cannot nest.
 
-<Truncate tag="div" style="max-width: 20rem">
-  <Text tag="span">
-    Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
-  </Text>
-</Truncate>
+<Box maxWidth="20rem">
+  <Truncate tag="div">
+    <Text tag="span">
+      Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
+    </Text>
+  </Truncate>
+</Box>
 
 ## Action
 
@@ -58,22 +66,28 @@ Use the `truncate` action on any element for the same behavior without the `Trun
 
 ### Basic
 
-<h4 use:truncate style="max-width: 20rem">
-  Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
-</h4>
+<Box maxWidth="20rem">
+  <h4 use:truncate>
+    Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
+  </h4>
+</Box>
 
 ### Clamp front
 
 Pass `clamp: "front"` to keep the end of the text visible.
 
-<h4 use:truncate={{ clamp: "front" }} style="max-width: 20rem">
-  /var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log
-</h4>
+<Box maxWidth="20rem">
+  <h4 use:truncate={{ clamp: "front" }}>
+    /var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log
+  </h4>
+</Box>
 
 ### Multiline
 
 Pass `lines` for multiline truncation.
 
-<p use:truncate={{ lines: 3 }} style="max-width: 20rem">
-  The nightly reconciliation job failed after three retries because the upstream billing service returned inconsistent invoice totals for 42 accounts. Support has been notified and a manual review is in progress.
-</p>
+<Box maxWidth="20rem">
+  <p use:truncate={{ lines: 3 }}>
+    The nightly reconciliation job failed after three retries because the upstream billing service returned inconsistent invoice totals for 42 accounts. Support has been notified and a manual review is in progress.
+  </p>
+</Box>

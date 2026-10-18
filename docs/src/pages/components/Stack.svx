@@ -3,7 +3,7 @@ description: Stacks arrange elements vertically or horizontally with a consisten
 ---
 
 <script>
-  import { Divider, Stack, Tile } from "carbon-components-svelte";
+  import { Box, Divider, Stack, Text, Tile } from "carbon-components-svelte";
 </script>
 
 ## Gap
@@ -63,30 +63,30 @@ Set `align` to position items along the cross-axis. For horizontal stacks, the c
 
 Aligns items to the top.
 
-<Stack orientation="horizontal" align="start" gap={2} style="height: 120px">
-  <div style="height: 40px">Short</div>
-  <div style="height: 80px">Taller item</div>
-  <div style="height: 50px">Short</div>
+<Stack orientation="horizontal" align="start" gap={2}>
+  <Box height="40px">Short</Box>
+  <Box height="80px">Taller item</Box>
+  <Box height="50px">Short</Box>
 </Stack>
 
 ### Center (horizontal)
 
 Centers items vertically.
 
-<Stack orientation="horizontal" align="center" gap={2} style="height: 120px">
-  <div style="height: 40px; min-width: 60px">Short</div>
-  <div style="height: 80px; min-width: 80px">Taller item</div>
-  <div style="height: 50px; min-width: 60px">Short</div>
+<Stack orientation="horizontal" align="center" gap={2}>
+  <Box height="40px" minWidth={60}>Short</Box>
+  <Box height="80px" minWidth={80}>Taller item</Box>
+  <Box height="50px" minWidth={60}>Short</Box>
 </Stack>
 
 ### End (horizontal)
 
 Aligns items to the bottom.
 
-<Stack orientation="horizontal" align="end" gap={2} style="height: 120px">
-  <div style="height: 40px">Short</div>
-  <div style="height: 80px">Taller item</div>
-  <div style="height: 50px">Short</div>
+<Stack orientation="horizontal" align="end" gap={2}>
+  <Box height="40px">Short</Box>
+  <Box height="80px">Taller item</Box>
+  <Box height="50px">Short</Box>
 </Stack>
 
 ### Baseline (horizontal)
@@ -94,9 +94,9 @@ Aligns items to the bottom.
 Aligns items along their text baseline.
 
 <Stack orientation="horizontal" align="baseline" gap={2}>
-  <div style="font-size: 2rem; line-height: 1">Large</div>
-  <div style="font-size: 1rem; line-height: 1">Medium</div>
-  <div style="font-size: 0.75rem; line-height: 1">Small</div>
+  <Text tag="div" type="productive-heading-05">Large</Text>
+  <Text tag="div" type="body-short-02">Medium</Text>
+  <Text tag="div" type="label-01">Small</Text>
 </Stack>
 
 ### Start (vertical)
@@ -104,9 +104,9 @@ Aligns items along their text baseline.
 Aligns items to the left.
 
 <Stack orientation="vertical" align="start" gap={2}>
-  <div style="width: 80px">Narrow</div>
-  <div style="width: 150px">Wider item</div>
-  <div style="width: 100px">Medium</div>
+  <Box width={80}>Narrow</Box>
+  <Box width={150}>Wider item</Box>
+  <Box width={100}>Medium</Box>
 </Stack>
 
 ### Center (vertical)
@@ -114,9 +114,9 @@ Aligns items to the left.
 Centers items horizontally.
 
 <Stack orientation="vertical" align="center" gap={2}>
-  <div style="width: 80px">Narrow</div>
-  <div style="width: 150px">Wider item</div>
-  <div style="width: 100px">Medium</div>
+  <Box width={80}>Narrow</Box>
+  <Box width={150}>Wider item</Box>
+  <Box width={100}>Medium</Box>
 </Stack>
 
 ### End (vertical)
@@ -124,9 +124,9 @@ Centers items horizontally.
 Aligns items to the right.
 
 <Stack orientation="vertical" align="end" gap={2}>
-  <div style="width: 80px">Narrow</div>
-  <div style="width: 150px">Wider item</div>
-  <div style="width: 100px">Medium</div>
+  <Box width={80}>Narrow</Box>
+  <Box width={150}>Wider item</Box>
+  <Box width={100}>Medium</Box>
 </Stack>
 
 ## Justify
@@ -200,27 +200,31 @@ Horizontal stacks do not wrap by default. When wrapping is enabled, `gap` applie
 
 Set `wrap` to `"wrap"` to let items flow onto multiple lines when they overflow the container width.
 
-<Stack orientation="horizontal" wrap="wrap" gap={3} style="max-width: 240px">
-  <div>Item 1</div>
-  <div>Item 2</div>
-  <div>Item 3</div>
-  <div>Item 4</div>
-  <div>Item 5</div>
-  <div>Item 6</div>
-</Stack>
+<Box maxWidth={240}>
+  <Stack orientation="horizontal" wrap="wrap" gap={3}>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    <div>Item 5</div>
+    <div>Item 6</div>
+  </Stack>
+</Box>
 
 ### Wrap-reverse
 
 Set `wrap` to `"wrap-reverse"` to wrap items in the reverse cross-axis direction.
 
-<Stack orientation="horizontal" wrap="wrap-reverse" gap={3} style="max-width: 240px">
-  <div>Item 1</div>
-  <div>Item 2</div>
-  <div>Item 3</div>
-  <div>Item 4</div>
-  <div>Item 5</div>
-  <div>Item 6</div>
-</Stack>
+<Box maxWidth={240}>
+  <Stack orientation="horizontal" wrap="wrap-reverse" gap={3}>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    <div>Item 5</div>
+    <div>Item 6</div>
+  </Stack>
+</Box>
 
 ## Inline
 

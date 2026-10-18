@@ -43,8 +43,8 @@ Wrap scrollable content in `ScrollGradient`. Set `height` so the content overflo
 
 Gradients appear independently for each axis. Set a width to overflow horizontally.
 
-<ScrollGradient height="6rem" style="width: 100%">
-  <Stack orientation="horizontal" gap={5} style="width: max-content">
+<ScrollGradient height="6rem">
+  <Stack orientation="horizontal" gap={5}>
     {#each Array(20) as _, i}
       <Box display="flex" align="center" justify="center" width="6rem" height="4rem" fill="layer-accent">
         {i + 1}
@@ -62,7 +62,7 @@ Set `color` to retint the gradient and `background` to repaint the content area.
 Set either to a [Box fill](/components/Box#fill) token name, such as `"background"` or `"layer-02"`, so the fade matches the surface it sits on in every theme.
 
 <Box fill="layer-02" padding={3}>
-  <ScrollGradient color="layer-02" background="layer-02" style="height: 12rem">
+  <ScrollGradient color="layer-02" background="layer-02" height="12rem">
     {#each auditLogEntries as entry}
       <p>{entry}</p>
     {/each}
