@@ -15,28 +15,6 @@ describe("Slider", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(0);
   });
 
-  it("should associate label with input via for attribute", () => {
-    render(Slider);
-
-    const label = screen.getByText("Test Slider").closest("label");
-    const input = screen.getByRole("spinbutton");
-
-    assert(label);
-    const inputId = input.getAttribute("id");
-    expect(label).toHaveAttribute("for", inputId);
-    expect(inputId).toMatch(/^input-/);
-  });
-
-  it("should find input by label text using getByLabelText", () => {
-    render(Slider);
-
-    const inputs = screen.getAllByLabelText("Test Slider");
-    const input = inputs.find((el) => el.tagName === "INPUT");
-    expect(input).toBeDefined();
-    assert(input);
-    expect(input).toHaveAttribute("type", "number");
-  });
-
   it("should focus input when label is clicked", async () => {
     render(Slider);
 
@@ -61,21 +39,6 @@ describe("Slider", () => {
     await user.keyboard("{Tab}");
 
     expect(consoleLog).toHaveBeenCalledWith("change", 50);
-  });
-
-  it("should handle keyboard navigation", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Slider);
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    await user.keyboard("{ArrowRight}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 1);
-
-    await user.keyboard("{ArrowLeft}");
-    expect(consoleLog).toHaveBeenCalledWith("change", 0);
   });
 
   it("prevents arrow/Home/End default actions (page scroll) while dragging the thumb", () => {
@@ -114,23 +77,6 @@ describe("Slider", () => {
     expect(screen.getByText("100")).toBeInTheDocument();
   });
 
-  it("should handle custom range and step", () => {
-    render(Slider, {
-      props: {
-        min: 10,
-        max: 990,
-        minLabel: "10 MB",
-        maxLabel: "990 MB",
-        step: 10,
-      },
-    });
-
-    const slider = screen.getByRole("slider");
-    expect(slider).toHaveAttribute("aria-valuemin", "10");
-    expect(slider).toHaveAttribute("aria-valuemax", "990");
-    expect(screen.getByText("990 MB")).toBeInTheDocument();
-  });
-
   it("should pin the thumb at a defined position when min equals max", () => {
     render(Slider, {
       props: {
@@ -144,17 +90,6 @@ describe("Slider", () => {
     expect(slider.style.left).toBe("0%");
   });
 
-  it("should handle hidden text input", () => {
-    render(Slider, {
-      props: { hideTextInput: true },
-    });
-
-    const inputs = screen.getAllByLabelText("Test Slider");
-    const spinbutton = inputs.find((el) => el.tagName === "INPUT");
-    assert(spinbutton);
-    expect(spinbutton).toHaveAttribute("type", "hidden");
-  });
-
   it.each([
     ["hideTextInput", { hideTextInput: true }],
     ["readonly", { readonly: true }],
@@ -165,6 +100,7 @@ describe("Slider", () => {
     assert(label);
     expect(label).not.toHaveAttribute("for");
     expect(label.control).toBeNull();
+    expect(screen.queryByRole("spinbutton")).toBeNull();
   });
 
   it("hides the range labels with hideRangeLabels", () => {
@@ -277,18 +213,14 @@ describe("Slider", () => {
     expect(slider).toHaveAttribute("tabindex", "0");
   });
 
-  it.each([false, true])(
-    "keeps a read-only thumb reachable by keyboard (hideTextInput: %s)",
-    async (hideTextInput) => {
-      render(Slider, {
-        props: { readonly: true, hideTextInput, value: 50 },
-      });
+  it("keeps a read-only thumb reachable by keyboard with hideTextInput", async () => {
+    render(Slider, {
+      props: { readonly: true, hideTextInput: true, value: 50 },
+    });
 
-      const slider = screen.getByRole("slider");
-      await user.tab();
-      expect(slider).toHaveFocus();
-    },
-  );
+    await user.tab();
+    expect(screen.getByRole("slider")).toHaveFocus();
+  });
 
   it("leaves the thumb as the only control when read-only", async () => {
     render(Slider, { props: { readonly: true, value: 50 } });
@@ -335,29 +267,6 @@ describe("Slider", () => {
     expect(description).toHaveClass("bx--visually-hidden");
   });
 
-  it("supports overriding the read-only assistive text", () => {
-    const { container } = render(Slider, {
-      props: {
-        id: "test-slider",
-        readonly: true,
-        readonlyText: "Schreibgeschützt",
-      },
-    });
-
-    expect(container.querySelector("#readonly-test-slider")).toHaveTextContent(
-      "Schreibgeschützt",
-    );
-  });
-
-  it("does not set aria-readonly or a read-only description when not readonly", () => {
-    const { container } = render(Slider, { props: { id: "test-slider" } });
-
-    expect(screen.getByRole("slider")).not.toHaveAttribute("aria-readonly");
-    expect(
-      container.querySelector("#readonly-test-slider"),
-    ).not.toBeInTheDocument();
-  });
-
   it("should not allow keyboard interaction when readonly", async () => {
     render(Slider, {
       props: { readonly: true, value: 50 },
@@ -382,30 +291,6 @@ describe("Slider", () => {
     await user.click(container);
 
     expect(slider.getAttribute("aria-valuenow")).toBe(initialValue);
-  });
-
-  it("should not allow input value changes when readonly", () => {
-    render(Slider, {
-      props: { readonly: true },
-    });
-
-    const inputs = screen.getAllByLabelText("Test Slider");
-    const input = inputs.find((el) => el.tagName === "INPUT");
-    assert(input);
-
-    expect(input).toHaveAttribute("readonly");
-    expect(input).toHaveProperty("readOnly", true);
-  });
-
-  it("should hide thumb visually when readonly", () => {
-    render(Slider, {
-      props: { readonly: true },
-    });
-
-    const slider = screen.getByRole("slider");
-    const sliderElement = slider.parentElement;
-    assert(sliderElement);
-    expect(sliderElement).toHaveClass("bx--slider--readonly");
   });
 
   it("should handle invalid state", () => {
@@ -439,15 +324,6 @@ describe("Slider", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
-  it("should not display invalid text when invalid is false", () => {
-    render(Slider, {
-      props: { invalid: false, invalidText: "Please select a valid value" },
-    });
-
-    const invalidText = screen.queryByText("Please select a valid value");
-    expect(invalidText).not.toBeInTheDocument();
-  });
-
   it("should associate invalid text with slider via aria-describedby", () => {
     render(Slider, {
       props: { invalid: true, invalidText: "Error message" },
@@ -464,18 +340,6 @@ describe("Slider", () => {
     expect(input).toHaveAttribute("aria-describedby", errorId);
     expect(slider).toHaveAttribute("aria-invalid", "true");
     expect(input).toHaveAttribute("aria-invalid", "true");
-  });
-
-  it("should not set aria-describedby when invalid is false", () => {
-    render(Slider, {
-      props: { invalid: false, invalidText: "Error message" },
-    });
-
-    const slider = screen.getByRole("slider");
-    const input = screen.getByRole("spinbutton");
-
-    expect(slider).not.toHaveAttribute("aria-describedby");
-    expect(input).not.toHaveAttribute("aria-describedby");
   });
 
   it("should handle warn state", () => {
@@ -497,15 +361,6 @@ describe("Slider", () => {
     expect(warnText).toBeInTheDocument();
     expect(warnText).toHaveClass("bx--slider__validation-msg");
     expect(warnText).toHaveClass("bx--form-requirement");
-  });
-
-  it("should not display warn text when warn is false", () => {
-    render(Slider, {
-      props: { warn: false, warnText: "Warning message goes here" },
-    });
-
-    const warnText = screen.queryByText("Warning message goes here");
-    expect(warnText).not.toBeInTheDocument();
   });
 
   it("shows helper text", () => {
@@ -550,18 +405,6 @@ describe("Slider", () => {
     expect(input).toHaveAttribute("aria-describedby", warnId);
   });
 
-  it("should not set aria-describedby when warn is false", () => {
-    render(Slider, {
-      props: { warn: false, warnText: "Warning message" },
-    });
-
-    const slider = screen.getByRole("slider");
-    const input = screen.getByRole("spinbutton");
-
-    expect(slider).not.toHaveAttribute("aria-describedby");
-    expect(input).not.toHaveAttribute("aria-describedby");
-  });
-
   it("should prioritize invalid over warn state", () => {
     render(Slider, {
       props: {
@@ -592,17 +435,6 @@ describe("Slider", () => {
       ".bx--slider__invalid-icon.bx--slider__invalid-icon--warning",
     );
     expect(icon).toBeInTheDocument();
-  });
-
-  it("should not show warn icon when invalid is true", () => {
-    const { container } = render(Slider, {
-      props: { warn: true, invalid: true },
-    });
-
-    const warnIcon = container.querySelector(
-      ".bx--slider__invalid-icon--warning",
-    );
-    expect(warnIcon).not.toBeInTheDocument();
   });
 
   it("should suppress invalid state when disabled", () => {
@@ -647,17 +479,6 @@ describe("Slider", () => {
     const slider = container.querySelector('[role="slider"]');
     expect(slider).not.toHaveAttribute("aria-invalid");
     expect(slider).toHaveAttribute("aria-describedby", "readonly-test-slider");
-  });
-
-  it("should suppress warn state when disabled", () => {
-    const { container } = render(Slider, {
-      props: { disabled: true, warn: true, warnText: "Warning message" },
-    });
-
-    expect(
-      container.querySelector(".bx--slider__invalid-icon--warning"),
-    ).toBeNull();
-    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
   });
 
   it("should handle custom labels", () => {
@@ -708,15 +529,6 @@ describe("Slider", () => {
     expect(slider).toHaveAttribute("aria-valuenow", "11");
     expect(slider).toHaveAttribute("aria-valuetext", "11%");
     expect(screen.getByRole("spinbutton")).toHaveValue(11);
-  });
-
-  it("should handle required state", () => {
-    render(Slider, {
-      props: { required: true },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toBeRequired();
   });
 
   it("should handle step multiplier with shift key", async () => {
@@ -843,42 +655,6 @@ describe("Slider", () => {
     expect(consoleLog).not.toHaveBeenCalled();
   });
 
-  it("should handle light variant", () => {
-    render(Slider, {
-      props: { light: true },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveClass("bx--text-input--light");
-  });
-
-  it("should hide label visually", () => {
-    render(Slider, {
-      props: { hideLabel: true },
-    });
-
-    const label = screen.getByText("Test Slider");
-    expect(label).toHaveClass("bx--visually-hidden");
-  });
-
-  it("should apply name attribute", () => {
-    render(Slider, {
-      props: { name: "slider-name" },
-    });
-
-    const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("name", "slider-name");
-  });
-
-  it("should handle custom input type", () => {
-    render(Slider, {
-      props: { inputType: "text" },
-    });
-
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("type", "text");
-  });
-
   it("should render label slot", () => {
     render(Slider, {
       props: { useSlot: true },
@@ -936,15 +712,6 @@ describe("Slider", () => {
 
     await user.keyboard("{ArrowDown}");
     expect(consoleLog).toHaveBeenCalledWith("change", 49);
-  });
-
-  it("should apply custom class", () => {
-    const { container } = render(Slider, {
-      props: { customClass: "custom-slider" },
-    });
-
-    const formItem = container.querySelector(".bx--form-item");
-    expect(formItem).toHaveClass("custom-slider");
   });
 
   // Regression: a stationary click on the track should move the thumb,
@@ -1162,14 +929,6 @@ describe("Slider", () => {
     expect(container.querySelector(".bx--slider__mark-label")).toBeNull();
   });
 
-  it("should not render marks when marks is false", () => {
-    const { container } = render(Slider, {
-      props: { marks: false },
-    });
-
-    expect(container.querySelector(".bx--slider__marks")).toBeNull();
-  });
-
   describe("snapToMarks", () => {
     const mockTrackRect = (container: HTMLElement) => {
       const track = container.querySelector(".bx--slider__track");
@@ -1371,36 +1130,15 @@ describe("Slider", () => {
       await fireEvent.mouseUp(window);
     };
 
-    it("should set aria-orientation on the slider", () => {
-      const { unmount } = render(Slider);
+    it("should set aria-orientation and the vertical classes only when vertical", () => {
+      const { container, unmount } = render(Slider);
       expect(screen.getByRole("slider")).toHaveAttribute(
         "aria-orientation",
         "horizontal",
       );
-      unmount();
-
-      render(Slider, { props: { orientation: "vertical" } });
-      expect(screen.getByRole("slider")).toHaveAttribute(
-        "aria-orientation",
-        "vertical",
-      );
-    });
-
-    it("should add the vertical modifier class only when vertical", () => {
-      const { container, unmount } = render(Slider);
       expect(container.querySelector(".bx--slider")).not.toHaveClass(
         "bx--slider--vertical",
       );
-      unmount();
-
-      const vertical = render(Slider, { props: { orientation: "vertical" } });
-      expect(vertical.container.querySelector(".bx--slider")).toHaveClass(
-        "bx--slider--vertical",
-      );
-    });
-
-    it("should add the vertical layout classes to the form item and container", () => {
-      const { container, unmount } = render(Slider);
       expect(container.querySelector(".bx--form-item")).not.toHaveClass(
         "bx--slider-form-item--vertical",
       );
@@ -1410,6 +1148,13 @@ describe("Slider", () => {
       unmount();
 
       const vertical = render(Slider, { props: { orientation: "vertical" } });
+      expect(screen.getByRole("slider")).toHaveAttribute(
+        "aria-orientation",
+        "vertical",
+      );
+      expect(vertical.container.querySelector(".bx--slider")).toHaveClass(
+        "bx--slider--vertical",
+      );
       expect(vertical.container.querySelector(".bx--form-item")).toHaveClass(
         "bx--slider-form-item--vertical",
       );

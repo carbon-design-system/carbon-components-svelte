@@ -72,7 +72,7 @@ describe("ModalBody", () => {
     expect(modalBody).not.toHaveAttribute("aria-labelledby");
   });
 
-  it("should not set aria-labelledby when hasScrollingContent is false", () => {
+  it("should not render the scrolling region when hasScrollingContent is false", () => {
     render(ModalBodyTest, {
       props: {
         hasScrollingContent: false,
@@ -83,6 +83,13 @@ describe("ModalBody", () => {
     const content = screen.getByText("Content");
     const modalBody = content.closest(".bx--modal-content");
     expect(modalBody).not.toHaveAttribute("aria-labelledby");
+    expect(modalBody).not.toHaveAttribute("tabindex");
+    expect(screen.queryByRole("region")).not.toBeInTheDocument();
+    expect(
+      modalBody?.parentElement?.querySelector(
+        ".bx--modal-content--overflow-indicator",
+      ),
+    ).not.toBeInTheDocument();
   });
 
   it("should render overflow indicator when hasScrollingContent is true", () => {
@@ -100,68 +107,6 @@ describe("ModalBody", () => {
     expect(indicator).toBeInTheDocument();
   });
 
-  it("should not render overflow indicator when hasScrollingContent is false", () => {
-    render(ModalBodyTest, {
-      props: {
-        hasScrollingContent: false,
-        slotContent: "Content",
-      },
-    });
-
-    const content = screen.getByText("Content");
-    const modalBody = content.closest(".bx--modal-content");
-    const indicator = modalBody?.parentElement?.querySelector(
-      ".bx--modal-content--overflow-indicator",
-    );
-    expect(indicator).not.toBeInTheDocument();
-  });
-
-  it("should not have region role when hasScrollingContent is false", () => {
-    render(ModalBodyTest, {
-      props: {
-        hasScrollingContent: false,
-        slotContent: "Regular content",
-      },
-    });
-
-    expect(screen.queryByRole("region")).not.toBeInTheDocument();
-  });
-
-  it("should not have tabindex when hasScrollingContent is false", () => {
-    render(ModalBodyTest, {
-      props: {
-        hasScrollingContent: false,
-        slotContent: "Content",
-      },
-    });
-
-    const content = screen.getByText("Content");
-    const modalBody = content.closest(".bx--modal-content");
-    expect(modalBody).not.toHaveAttribute("tabindex");
-  });
-
-  it("should render slot content", () => {
-    render(ModalBodyTest, {
-      props: {
-        slotContent: "Custom slot content",
-      },
-    });
-
-    expect(screen.getByText("Custom slot content")).toBeInTheDocument();
-  });
-
-  it("should apply custom attributes", () => {
-    render(ModalBodyTest, {
-      props: {
-        "data-testid": "custom-body",
-        slotContent: "Content",
-      },
-    });
-
-    const modalBody = screen.getByTestId("custom-body");
-    expect(modalBody).toBeInTheDocument();
-  });
-
   it("uses a consumer id and reports it to ComposedModal", () => {
     render(ModalBodyTest, {
       props: { id: "custom-body", alert: true, slotContent: "Content" },
@@ -173,19 +118,5 @@ describe("ModalBody", () => {
       "id",
       "custom-body",
     );
-  });
-
-  it("should handle both hasForm and hasScrollingContent", () => {
-    render(ModalBodyTest, {
-      props: {
-        hasForm: true,
-        hasScrollingContent: true,
-        slotContent: "Content",
-      },
-    });
-
-    const modalBody = screen.getByRole("region");
-    expect(modalBody).toHaveClass("bx--modal-content--with-form");
-    expect(modalBody).toHaveClass("bx--modal-scroll-content");
   });
 });

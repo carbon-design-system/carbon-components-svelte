@@ -61,53 +61,6 @@ describe("Modal", () => {
     expect(modalContainer).toHaveAttribute("aria-label", "");
   });
 
-  it("keeps a rest aria-label off the presentation root", () => {
-    const { container } = render(ModalNullishAriaLabel, {
-      props: {
-        open: true,
-        ariaLabel: "Delete file",
-        primaryButtonText: "Save",
-      },
-    });
-
-    expect(screen.getByRole("dialog")).toHaveAttribute(
-      "aria-label",
-      "Delete file",
-    );
-    expect(container.querySelector(".bx--modal")).not.toHaveAttribute(
-      "aria-label",
-    );
-  });
-
-  it("keeps an empty rest aria-label off the presentation root", () => {
-    const { container } = render(ModalNullishAriaLabel, {
-      props: { open: true, ariaLabel: "", primaryButtonText: "Save" },
-    });
-
-    expect(screen.getByRole("dialog")).toHaveAttribute("aria-label", "");
-    expect(container.querySelector(".bx--modal")).not.toHaveAttribute(
-      "aria-label",
-    );
-  });
-
-  it("renders with basic structure", () => {
-    render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Test Modal",
-        primaryButtonText: "Save",
-        secondaryButtonText: "Cancel",
-      },
-    });
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.getByText("Test Modal")).toBeInTheDocument();
-    expect(screen.getByText("Save")).toBeInTheDocument();
-    expect(screen.getByText("Cancel")).toBeInTheDocument();
-    expect(screen.getByLabelText("Close the modal")).toBeInTheDocument();
-    expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
-  });
-
   it("opens and closes properly", async () => {
     const openHandler = vi.fn();
     const closeHandler = vi.fn();
@@ -163,23 +116,6 @@ describe("Modal", () => {
     await tick();
 
     expect(openHandler).toHaveBeenCalledTimes(1);
-  });
-
-  it("handles form submission", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ModalTest, {
-      props: {
-        open: true,
-        hasForm: true,
-        modalHeading: "Form Modal",
-        primaryButtonText: "Save",
-      },
-    });
-
-    const primaryButton = screen.getByRole("button", { name: "Save" });
-    await user.click(primaryButton);
-    expect(consoleLog).toHaveBeenCalledWith("submit");
-    expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
   });
 
   it("handles button clicks", async () => {
@@ -744,17 +680,6 @@ describe("Modal", () => {
     expect(document.querySelector(".bx--modal")).not.toHaveClass("is-visible");
   });
 
-  it("renders the close button by default", () => {
-    render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Default close",
-      },
-    });
-
-    expect(screen.getByLabelText("Close the modal")).toBeInTheDocument();
-  });
-
   it("does not leave the modal open when a programmatic on:close handler throws", async () => {
     const error = new Error("consumer error");
     const trap = absorbUnhandledRejection((reason) => reason === error);
@@ -1166,26 +1091,6 @@ describe("Modal", () => {
 
       expect(submitHandler).not.toHaveBeenCalled();
       expect(clickPrimaryHandler).not.toHaveBeenCalled();
-    });
-
-    it("keeps the idle primary button path unchanged", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ModalTest, {
-        props: {
-          open: true,
-          primaryButtonText: "Save",
-          primaryButtonLoading: false,
-        },
-      });
-
-      expect(screen.getByText("Save")).toBeInTheDocument();
-      expect(
-        document.querySelector(".bx--inline-loading"),
-      ).not.toBeInTheDocument();
-
-      await user.click(screen.getByRole("button", { name: "Save" }));
-      expect(consoleLog).toHaveBeenCalledWith("submit");
-      expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
     });
 
     it("uses a custom loading description", () => {

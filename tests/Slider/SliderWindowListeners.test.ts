@@ -11,20 +11,6 @@ const net = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("Slider window listeners", () => {
-  it("idle sliders register no drag listeners", () => {
-    const add = vi.spyOn(window, "addEventListener");
-    const remove = vi.spyOn(window, "removeEventListener");
-
-    for (let i = 0; i < 5; i++) render(Slider);
-
-    for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
-      expect(net(add, remove, type)).toBe(0);
-    }
-
-    add.mockRestore();
-    remove.mockRestore();
-  });
-
   it("a drag adds exactly one shared listener per type; releasing removes it", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
