@@ -200,7 +200,9 @@
       const next = insertByDomOrder(_, item);
       const index = next.lastIndexOf(item);
 
-      if (item.primaryFocus) {
+      // The first enabled item takes focus on open, unless one sets
+      // `primaryFocus`.
+      if (item.primaryFocus || (!item.disabled && $focusedIndex < 0)) {
         focusedIndex.set(index);
       } else if (index < _.length && index <= $focusedIndex) {
         // Inserted above the focused item; keep focus on it.
@@ -368,7 +370,7 @@
     if (!open) {
       measuredPositionKey = null;
       currentId.set(undefined);
-      focusedIndex.set(0);
+      focusedIndex.set(-1);
     }
   });
 
