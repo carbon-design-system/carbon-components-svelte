@@ -72,24 +72,22 @@ describe("ContextMenu", () => {
     expect(consoleLog).toHaveBeenCalledWith("open", expect.any(HTMLElement));
   });
 
-  it("should dispatch open only when open transitions to true", () => {
+  it("should dispatch open only when open transitions to true", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { rerender } = render(ContextMenu, {
       props: { open: true, x: 100, y: 100 },
     });
 
-    const openCallsAfterMount = consoleLog.mock.calls.filter(
-      (call) => call[0] === "open",
-    ).length;
+    const openCalls = () =>
+      consoleLog.mock.calls.filter((call) => call[0] === "open").length;
 
-    rerender({ open: true, x: 150, y: 150 });
-    rerender({ open: true, x: 200, y: 200 });
+    // Mounting already open fires `open` once.
+    expect(openCalls()).toBe(1);
 
-    const openCallsAfterRerender = consoleLog.mock.calls.filter(
-      (call) => call[0] === "open",
-    ).length;
+    await rerender({ open: true, x: 150, y: 150 });
+    await rerender({ open: true, x: 200, y: 200 });
 
-    expect(openCallsAfterRerender).toBe(openCallsAfterMount);
+    expect(openCalls()).toBe(1);
   });
 
   it("should dispatch close only when open transitions to false", async () => {
@@ -98,6 +96,9 @@ describe("ContextMenu", () => {
 
     await user.keyboard("{Escape}");
     await user.click(document.body);
+    // The options are always in the DOM, and selecting one calls `close`
+    // directly, which must still be a no-op while the menu is closed.
+    await user.click(screen.getByText("Option 1"));
 
     const closeCalls = consoleLog.mock.calls.filter(
       (call) => call[0] === "close",
@@ -181,7 +182,13 @@ describe("ContextMenu", () => {
 
   it("should scope typeahead search to the open submenu's own options", async () => {
     render(ContextMenu, {
-      props: { open: true, withSubmenu: true, x: 100, y: 100 },
+      props: {
+        open: true,
+        withSubmenu: true,
+        withRootSettings: true,
+        x: 100,
+        y: 100,
+      },
     });
 
     const submenuTrigger = screen.getByRole("menuitem", {
@@ -197,13 +204,18 @@ describe("ContextMenu", () => {
 
     // Both submenu options start with "s", so typing "s" again cycles
     // forward to "Submenu option 2". Only the open submenu's items are
-    // searched, not the root level's options.
+    // searched, not the root level's "Settings" option.
     await user.keyboard("s");
 
     const submenuOption2 = screen.getByRole("menuitem", {
       name: "Submenu option 2",
     });
     expect(submenuOption2).toHaveFocus();
+
+    // The root level must not have searched too: if it had, focus would
+    // jump to "Settings" once the submenu closes.
+    await user.keyboard("{ArrowLeft}");
+    expect(submenuTrigger).toHaveFocus();
   });
 
   it("should handle custom target", async () => {
@@ -233,6 +245,11 @@ describe("ContextMenu", () => {
       ([label]) => label === "open",
     );
     expect(openCalls).toHaveLength(0);
+
+    // The new target still opens the menu.
+    const targetB = screen.getByTestId("target-b");
+    await user.pointer({ target: targetB, keys: "[MouseRight]" });
+    expect(consoleLog).toHaveBeenCalledWith("open", targetB);
   });
 
   it("should handle custom position", () => {
@@ -327,15 +344,15 @@ describe("ContextMenu", () => {
       },
     });
 
-    const submenuTrigger = screen.getByText("Option with submenu");
-    expect(submenuTrigger).toBeInTheDocument();
+    const submenuTrigger = screen.getByRole("menuitem", {
+      name: "Option with submenu",
+    });
+    expect(submenuTrigger).toHaveAttribute("aria-expanded", "false");
 
     await user.click(submenuTrigger);
 
     expect(consoleLog).not.toHaveBeenCalledWith("close");
-
-    const submenuOptions = screen.getByText("Submenu option 1");
-    expect(submenuOptions).toBeInTheDocument();
+    expect(submenuTrigger).toHaveAttribute("aria-expanded", "true");
   });
 
   it("should close menu when clicking regular option", async () => {
@@ -380,109 +397,82 @@ describe("ContextMenu", () => {
     expect(consoleLog).not.toHaveBeenCalledWith("close");
   });
 
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
-  it("should position submenu to the left when it would overflow right viewport edge", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: 400,
+  // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
+  // jsdom reports zero-sized rects, so the trigger and the submenu get mocked
+  // widths. The submenu opens after the 150ms hover-intent delay.
+  describe("submenu viewport positioning", () => {
+    const originalInnerWidth = window.innerWidth;
+
+    afterEach(() => {
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: originalInnerWidth,
+      });
     });
 
-    render(ContextMenu, {
-      props: {
-        open: true,
-        withSubmenu: true,
-        x: 300,
-        y: 100,
-      },
-    });
+    const openSubmenu = async (innerWidth: number, rootX: number) => {
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: innerWidth,
+      });
 
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
+      render(ContextMenu, {
+        props: { open: true, withSubmenu: true, x: rootX, y: 100 },
+      });
 
-    const submenu = screen
-      .getAllByRole("menu")
-      .find((menu) => menu.getAttribute("data-level") === "2");
-    assert(submenu);
-
-    const submenuX = Number.parseInt(submenu.style.left, 10);
-    const submenuWidth = submenu.getBoundingClientRect().width;
-
-    expect(submenuX + submenuWidth).toBeLessThanOrEqual(400);
-  });
-
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
-  it("should position submenu to the right when there is sufficient space", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: 1024,
-    });
-
-    render(ContextMenu, {
-      props: {
-        open: true,
-        withSubmenu: true,
-        x: 100,
-        y: 100,
-      },
-    });
-
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
-
-    // The submenu opens after a 150ms hover-intent delay.
-    const submenu = await waitFor(() => {
-      const menu = screen
+      const triggerText = screen.getByText("Option with submenu");
+      const trigger = triggerText.closest("li");
+      assert(trigger);
+      const submenu = screen
         .getAllByRole("menu")
         .find((menu) => menu.getAttribute("data-level") === "2");
-      assert(menu);
-      return menu;
-    });
+      assert(submenu);
 
-    const rootMenu = screen
-      .getAllByRole("menu")
-      .find((menu) => menu.getAttribute("data-level") === "1");
-    assert(rootMenu);
-
-    const rootX = Number.parseInt(rootMenu.style.left, 10);
-    const rootWidth = rootMenu.getBoundingClientRect().width;
-
-    // Submenu should be positioned to the right of the parent menu once it
-    // has measured itself, a moment after it mounts.
-    await waitFor(() => {
-      const submenuX = Number.parseInt(submenu.style.left, 10);
-      expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
-    });
-  });
-
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
-  it("should constrain submenu to viewport when it would overflow both sides", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: 200,
-    });
-
-    render(ContextMenu, {
-      props: {
-        open: true,
-        withSubmenu: true,
-        x: 100,
+      const rect = (width: number) => ({
+        left: 0,
+        right: width,
+        top: 100,
+        bottom: 140,
+        width,
+        height: 40,
+        x: 0,
         y: 100,
-      },
+        toJSON() {},
+      });
+      vi.spyOn(trigger, "getBoundingClientRect").mockReturnValue(rect(150));
+      vi.spyOn(submenu, "getBoundingClientRect").mockReturnValue(rect(150));
+
+      await user.hover(triggerText);
+      await waitFor(() =>
+        expect(trigger).toHaveAttribute("aria-expanded", "true"),
+      );
+      return submenu;
+    };
+
+    it("should position submenu to the left when it would overflow right viewport edge", async () => {
+      // Right of the trigger would be 300 + 150 = 450 .. 600, past 400.
+      const submenu = await openSubmenu(400, 300);
+
+      // Flipped to the left of the root menu: 300 - 150.
+      expect(submenu.style.left).toBe("150px");
     });
 
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
+    it("should position submenu to the right when there is sufficient space", async () => {
+      const submenu = await openSubmenu(1024, 100);
 
-    const submenu = screen
-      .getAllByRole("menu")
-      .find((menu) => menu.getAttribute("data-level") === "2");
-    assert(submenu);
+      // Flush with the trigger's right edge: 100 + 150.
+      expect(submenu.style.left).toBe("250px");
+    });
 
-    const submenuX = Number.parseInt(submenu.style.left, 10);
-    expect(submenuX).toBeGreaterThanOrEqual(0);
+    it("should constrain submenu to viewport when it would overflow both sides", async () => {
+      // Right would end at 400 and left would start at 100 - 150 = -50, so
+      // it is pinned to the viewport's right edge: 200 - 150.
+      const submenu = await openSubmenu(200, 100);
+
+      expect(submenu.style.left).toBe("50px");
+    });
   });
 
   // Regression test: a disabled submenu trigger should expose
@@ -617,8 +607,7 @@ describe("ContextMenu", () => {
     expect(consoleLog).toHaveBeenCalledWith("click", "Stay open");
     expect(consoleLog).not.toHaveBeenCalledWith("close");
 
-    const menu = screen.queryByRole("menu");
-    expect(menu).toBeInTheDocument();
+    expect(screen.getAllByRole("menu")[0]).toHaveClass("bx--menu--open");
   });
 
   it("closes menu normally when preventDefault is not called on click", async () => {

@@ -3,16 +3,19 @@ import { user } from "../utils/user";
 import OverflowMenuClose from "./OverflowMenuClose.test.svelte";
 
 describe("OverflowMenu close event trigger", () => {
-  it('dispatches close with trigger "escape-key" from the trigger button', async () => {
+  it('dispatches close with trigger "escape-key" when Escape is pressed on the trigger', async () => {
     const onClose = vi.fn();
-    render(OverflowMenuClose, { props: { onClose } });
+    render(OverflowMenuClose, { props: { onClose, open: true } });
 
     const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+    menuButton.focus();
+    expect(menuButton).toHaveFocus();
 
     await user.keyboard("{Escape}");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(menuButton).toHaveFocus();
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
   });

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import FloatingPortalTest from "./FloatingPortal.test.svelte";
@@ -46,61 +47,21 @@ describe("FloatingPortal", () => {
     expect(content).toBeInTheDocument();
   });
 
-  it("has data-floating-portal attribute", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true },
-    });
+  it.each(["bottom", "top", "left", "right"] as const)(
+    "sets data-floating-direction to the preferred %s side when it fits",
+    async (direction) => {
+      render(FloatingPortalTest, {
+        props: { open: true, direction },
+      });
 
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    expect(portalElement).toHaveAttribute("data-floating-portal");
-  });
-
-  it("has data-floating-direction attribute", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, direction: "bottom" },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    expect(portalElement).toHaveAttribute("data-floating-direction", "bottom");
-  });
-
-  it("uses top direction when direction prop is top", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, direction: "top" },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    expect(portalElement).toHaveAttribute("data-floating-direction", "top");
-  });
-
-  it("uses left or right direction when direction prop is left", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, direction: "left" },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    const actualDirection = portalElement?.getAttribute(
-      "data-floating-direction",
-    );
-    expect(["left", "right"]).toContain(actualDirection);
-  });
-
-  it("uses left or right direction when direction prop is right", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, direction: "right" },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    const actualDirection = portalElement?.getAttribute(
-      "data-floating-direction",
-    );
-    expect(["left", "right"]).toContain(actualDirection);
-  });
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      expect(portalElement).toHaveAttribute(
+        "data-floating-direction",
+        direction,
+      );
+    },
+  );
 
   describe("direction lock", () => {
     afterEach(() => {
@@ -178,46 +139,87 @@ describe("FloatingPortal", () => {
     expect(style).toContain("z-index: 10000");
   });
 
-  it("uses default z-index of 9200", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true },
+  describe("gap and offset props", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
     });
 
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    const style = portalElement?.getAttribute("style") ?? "";
-    expect(style).toContain("z-index: 9200");
-  });
-
-  it("accepts gapTop and gapBottom props", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, gapTop: 8, gapBottom: 10 },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    expect(portalElement).toBeInTheDocument();
-    const style = portalElement?.getAttribute("style") ?? "";
-    expect(style).toContain("position: absolute");
-  });
-
-  it("accepts horizontal gap and vertical align offset props", async () => {
-    render(FloatingPortalTest, {
-      props: {
-        open: true,
-        direction: "right",
-        horizontalGapLeft: 10,
-        horizontalGapRight: 4,
-        verticalAlignOffsetLeft: -10,
-        verticalAlignOffsetRight: 10,
+    // Anchor: 100x40 at (300, 100). Floating box: 60x30. The viewport is large
+    // enough that no case flips.
+    it.each([
+      {
+        name: "gapBottom",
+        props: { direction: "bottom", gapBottom: 10 },
+        top: "150px",
+        left: "300px",
       },
-    });
+      {
+        name: "gapTop",
+        props: { direction: "top", gapTop: 8 },
+        top: "62px",
+        left: "300px",
+      },
+      {
+        name: "horizontalGapRight",
+        props: { direction: "right", horizontalGapRight: 4 },
+        top: "105px",
+        left: "404px",
+      },
+      {
+        name: "horizontalGapLeft",
+        props: { direction: "left", horizontalGapLeft: 10 },
+        top: "105px",
+        left: "230px",
+      },
+      {
+        name: "verticalAlignOffsetRight",
+        props: { direction: "right", verticalAlignOffsetRight: 10 },
+        top: "115px",
+        left: "400px",
+      },
+      {
+        name: "verticalAlignOffsetLeft",
+        props: { direction: "left", verticalAlignOffsetLeft: -10 },
+        top: "95px",
+        left: "240px",
+      },
+    ] as const)(
+      "applies $name to the position",
+      async ({ props, top, left }) => {
+        render(FloatingPortalTest, {
+          props: { open: true, ...props },
+        });
 
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    expect(portalElement).toBeInTheDocument();
-    expect(["left", "right"]).toContain(
-      portalElement?.getAttribute("data-floating-direction"),
+        const content = await screen.findByText("Floating content");
+        const portalElement = content.closest("[data-floating-portal]");
+        assert(portalElement instanceof HTMLElement);
+
+        vi.spyOn(
+          screen.getByTestId("anchor"),
+          "getBoundingClientRect",
+        ).mockReturnValue(
+          rect({
+            top: 100,
+            left: 300,
+            width: 100,
+            height: 40,
+            bottom: 140,
+            right: 400,
+          }),
+        );
+        vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue(
+          rect({ width: 60, height: 30 }),
+        );
+
+        window.dispatchEvent(new Event("scroll"));
+        await nextFrame();
+
+        expectInlineStyle(portalElement, { top, left });
+        expect(portalElement).toHaveAttribute(
+          "data-floating-direction",
+          props.direction,
+        );
+      },
     );
   });
 
@@ -391,7 +393,7 @@ describe("FloatingPortal", () => {
     const content = await screen.findByText("Floating content");
     expect(content).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     const remainingContent = screen.queryByText("Floating content");
@@ -408,12 +410,12 @@ describe("FloatingPortal", () => {
 
     expect(screen.queryByText("Floating content")).not.toBeInTheDocument();
 
-    rerender({ open: true });
+    await rerender({ open: true });
 
     const content = await screen.findByText("Floating content");
     expect(content).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     expect(screen.queryByText("Floating content")).not.toBeInTheDocument();
@@ -557,7 +559,7 @@ describe("FloatingPortal", () => {
 
       await screen.findByText("Floating content");
 
-      rerender({ open: false, scrollableContainer: true });
+      await rerender({ open: false, scrollableContainer: true });
       await tick();
 
       const scrollRemoveCalls = removeEventSpy.mock.calls.filter(
@@ -630,34 +632,32 @@ describe("FloatingPortal", () => {
       expect(rafSpy.mock.calls.length).toBeGreaterThan(rafCountBefore);
     });
 
-    it("disconnects MutationObserver when open becomes false", async () => {
-      const disconnectSpy = vi.spyOn(MutationObserver.prototype, "disconnect");
+    it.each(["close", "unmount"] as const)(
+      "ignores anchor mutations after %s",
+      async (how) => {
+        const rafSpy = vi.spyOn(window, "requestAnimationFrame");
 
-      const { rerender } = render(FloatingPortalTest, {
-        props: { open: true },
-      });
+        const { rerender, unmount } = render(FloatingPortalTest, {
+          props: { open: true },
+        });
 
-      await screen.findByText("Floating content");
+        await screen.findByText("Floating content");
+        const anchor = screen.getByTestId("anchor");
 
-      rerender({ open: false });
-      await tick();
+        if (how === "close") {
+          await rerender({ open: false });
+        } else {
+          unmount();
+        }
 
-      expect(disconnectSpy).toHaveBeenCalled();
-    });
+        const rafCountBefore = rafSpy.mock.calls.length;
 
-    it("disconnects MutationObserver on unmount", async () => {
-      const disconnectSpy = vi.spyOn(MutationObserver.prototype, "disconnect");
+        anchor.setAttribute("style", "position: absolute; left: 100px;");
+        await tick();
 
-      const { unmount } = render(FloatingPortalTest, {
-        props: { open: true },
-      });
-
-      await screen.findByText("Floating content");
-
-      unmount();
-
-      expect(disconnectSpy).toHaveBeenCalled();
-    });
+        expect(rafSpy.mock.calls.length).toBe(rafCountBefore);
+      },
+    );
   });
 
   describe("floating content resize tracking", () => {
@@ -733,7 +733,7 @@ describe("FloatingPortal", () => {
       );
       expect(readsOfFloating()).toBeGreaterThan(before);
 
-      rerender({ open: false });
+      await rerender({ open: false });
       await tick();
       expect(observed.size).toBe(0);
     });

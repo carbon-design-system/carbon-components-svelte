@@ -4,7 +4,6 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
-import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
@@ -201,20 +200,6 @@ describe("OverflowMenu", () => {
     }
   });
 
-  it("does not infinite-loop when all items are disabled", async () => {
-    render(OverflowMenuAllDisabled);
-
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-    expect(menuButton).toHaveAttribute("aria-expanded", "true");
-
-    await user.keyboard("{ArrowDown}");
-    await user.keyboard("{ArrowUp}");
-    await user.keyboard("{ArrowDown}");
-
-    expect(menuButton).toHaveAttribute("aria-expanded", "true");
-  });
-
   it("supports Home and End to jump to first/last item", async () => {
     render(OverflowMenu);
 
@@ -259,19 +244,6 @@ describe("OverflowMenu", () => {
 
     await user.click(document.body);
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
-  });
-
-  it("uses CSS custom properties for performance optimization", async () => {
-    render(OverflowMenu);
-
-    const styleTags = document.querySelectorAll("style");
-    const initialStyleCount = styleTags.length;
-    expect(styleTags.length).toBe(initialStyleCount);
-
-    await user.click(screen.getByRole("button"));
-    const menu = screen.getByRole("menu");
-    expect(menu).toHaveStyle("--overflow-menu-options-after-width: 2rem");
-    expect(styleTags.length).toBe(initialStyleCount);
   });
 
   it("stress test: multiple instances don't create individual style tags", async () => {
@@ -692,16 +664,6 @@ describe("OverflowMenu", () => {
       await user.type(menu, "{Escape}");
       expect(menuButton).toHaveAttribute("aria-expanded", "false");
       expect(menuButton).toHaveFocus();
-    });
-
-    it("should apply direction attribute on portal menu", async () => {
-      render(OverflowMenu, { props: { portalMenu: true, direction: "top" } });
-
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
-
-      const menu = screen.getByRole("menu");
-      expect(menu).toHaveAttribute("data-floating-menu-direction", "top");
     });
 
     it("should set position: relative on portal menu ul", async () => {

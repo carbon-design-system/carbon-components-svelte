@@ -253,20 +253,20 @@ describe("ComboButton", () => {
     render(ComboButtonFixture);
 
     const trigger = screen.getByRole("button", { name: "Additional actions" });
+    const onFocus = vi.fn();
+    trigger.addEventListener("focus", onFocus);
 
-    // Open: mousedown's default focus behavior is suppressed, so focus goes
-    // straight to the first menu item instead of landing on the trigger.
+    // mousedown's default would focus the trigger. The menu opens by
+    // moving focus to its first item, so assert on the focus event itself,
+    // not just the focus state after the fact.
     await user.click(trigger);
-    expect(trigger).not.toHaveFocus();
-
-    // Close: same story - the trigger was never focused, so there's nothing
-    // to show a lingering focus ring.
     await user.click(trigger);
-    expect(trigger).not.toHaveFocus();
+    expect(onFocus).not.toHaveBeenCalled();
 
     // Keyboard users still get normal focus via Tab.
     await user.tab();
     await user.tab();
+    expect(onFocus).toHaveBeenCalledTimes(1);
     expect(trigger).toHaveFocus();
   });
 

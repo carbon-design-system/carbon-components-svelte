@@ -312,10 +312,12 @@ describe("Menu", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MenuFixture);
 
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const trigger = screen.getByRole("button", { name: "Trigger" });
+    await user.click(trigger);
     await user.click(document.body);
 
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).not.toHaveFocus();
     expect(consoleLog).toHaveBeenCalledWith("close", {
       trigger: "outside-click",
     });
