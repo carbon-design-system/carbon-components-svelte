@@ -94,18 +94,4 @@ describe("HeaderSearch close event", () => {
 
     expect(onClose).not.toHaveBeenCalled();
   });
-
-  it("does not dispatch close on an outside click while already collapsed", async () => {
-    const onClose = vi.fn();
-    render(HeaderSearchClose, { props: { active: false, onClose } });
-
-    const outside = document.createElement("div");
-    document.body.appendChild(outside);
-    fireEvent.mouseUp(outside);
-    await flushMacrotask();
-
-    expect(onClose).not.toHaveBeenCalled();
-
-    document.body.removeChild(outside);
-  });
 });

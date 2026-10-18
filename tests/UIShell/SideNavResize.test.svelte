@@ -9,10 +9,10 @@
   export let resizable = false;
   export let rail = false;
   export let width: number | undefined = undefined;
-  export let minWidth = 200;
-  export let maxWidth = 480;
+  export let minWidth: number | undefined = undefined;
+  export let maxWidth: number | undefined = undefined;
   export let resizeHandleLabel: string | undefined = undefined;
-  export let resizeEnterDelayMs = 150;
+  export let resizeEnterDelayMs: number | undefined = undefined;
   export let onResize: ((detail: { width: number }) => void) | undefined =
     undefined;
 </script>

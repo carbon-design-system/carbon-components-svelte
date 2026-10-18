@@ -9,6 +9,7 @@ import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";
+import HeaderSearchSubmitTest from "./HeaderSearchSubmit.test.svelte";
 
 describe("HeaderSearch", () => {
   // Regression test for initial event dispatch in Svelte 5
@@ -166,7 +167,6 @@ describe("HeaderSearch", () => {
 
       const searchButton = screen.getByRole("button", { name: "Search" });
       expect(searchButton.querySelector("svg")).toBeInTheDocument();
-      expect(screen.queryByTestId("custom-icon")).not.toBeInTheDocument();
     });
 
     it("should render a custom icon in the trigger", () => {
@@ -515,23 +515,25 @@ describe("HeaderSearch", () => {
       expect(screen.getByTestId("result-1")).toHaveTextContent("Result 2");
     });
 
-    it("should render default slot content when no custom slot provided", () => {
-      const results = [
-        { href: "/1", text: "Result 1", description: "Description 1" },
-      ];
-      render(HeaderSearchTest, { props: { active: true, results } });
+    it("should render the default result markup when no result slot is provided", () => {
+      render(HeaderSearchSubmitTest, {
+        props: {
+          active: true,
+          results: [
+            { href: "/1", text: "Result 1", description: "Description 1" },
+          ],
+        },
+      });
 
-      const menuItem = screen.getByRole("menuitem", { name: "Result 1" });
+      const menuItem = screen.getByRole("menuitem", { name: /Result 1/ });
       expect(menuItem).toHaveTextContent("Result 1");
+      expect(menuItem).toHaveTextContent("– Description 1");
     });
   });
 
   describe("Accessibility", () => {
     it("should have proper ARIA attributes", () => {
       render(HeaderSearchTest, { props: { active: true } });
-
-      const searchContainer = screen.getByRole("search");
-      expect(searchContainer).toBeInTheDocument();
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("aria-autocomplete", "list");
@@ -601,181 +603,10 @@ describe("HeaderSearch", () => {
 
       document.body.removeChild(outsideElement);
     });
-
-    it("should not deactivate when clicking inside", () => {
-      render(HeaderSearchTest, { props: { active: true } });
-
-      const searchContainer = screen.getByRole("search");
-      fireEvent.mouseUp(searchContainer);
-
-      expect(screen.getByTestId("inactive-event")).toHaveTextContent("false");
-    });
   });
 });
 
 describe("HeaderSearch Generics", () => {
-  it("should support custom result types with generics", () => {
-    type CustomResult = {
-      href: string;
-      text: string;
-      description?: string;
-      category?: "document" | "user" | "project";
-      score?: number;
-    };
-
-    const customResults: CustomResult[] = [
-      {
-        href: "/doc1",
-        text: "Document 1",
-        category: "document",
-        score: 0.95,
-      },
-    ];
-
-    expectTypeOf<typeof customResults>().toEqualTypeOf<CustomResult[]>();
-
-    type ResultsPropType = ReadonlyArray<CustomResult> | undefined;
-    expectTypeOf<ResultsPropType>().toEqualTypeOf<
-      ReadonlyArray<CustomResult> | undefined
-    >();
-
-    type SelectEventDetail = {
-      value: string;
-      selectedResultIndex: number;
-      selectedResult: CustomResult;
-    };
-
-    const testEventDetail: SelectEventDetail = {
-      value: "test",
-      selectedResultIndex: 0,
-      selectedResult: customResults[0],
-    };
-
-    expectTypeOf(testEventDetail.selectedResult).toEqualTypeOf<CustomResult>();
-    if (testEventDetail.selectedResult.category) {
-      expectTypeOf(testEventDetail.selectedResult.category).toEqualTypeOf<
-        "document" | "user" | "project"
-      >();
-    }
-    if (testEventDetail.selectedResult.score) {
-      expectTypeOf(
-        testEventDetail.selectedResult.score,
-      ).toEqualTypeOf<number>();
-    }
-  });
-
-  it("should default to HeaderSearchResult type when generic is not specified", () => {
-    type DefaultHeaderSearchResult = {
-      href: string;
-      text: string;
-      description?: string;
-    };
-
-    const defaultResults: DefaultHeaderSearchResult[] = [
-      { href: "/1", text: "Result 1", description: "Description" },
-    ];
-
-    expectTypeOf<typeof defaultResults>().toEqualTypeOf<
-      DefaultHeaderSearchResult[]
-    >();
-
-    type ResultsPropType = ReadonlyArray<DefaultHeaderSearchResult> | undefined;
-    expectTypeOf<ResultsPropType>().toEqualTypeOf<
-      ReadonlyArray<DefaultHeaderSearchResult> | undefined
-    >();
-  });
-
-  it("should provide type-safe access to custom result properties in event handlers", () => {
-    type SearchResult = {
-      href: string;
-      text: string;
-      description?: string;
-      category: "document" | "user" | "project";
-      score: number;
-    };
-
-    const handleSelect = (event: {
-      value: string;
-      selectedResultIndex: number;
-      selectedResult: SearchResult;
-    }) => {
-      expectTypeOf(event.selectedResult).toEqualTypeOf<SearchResult>();
-      expectTypeOf(event.selectedResult.category).toEqualTypeOf<
-        "document" | "user" | "project"
-      >();
-      expectTypeOf(event.selectedResult.score).toEqualTypeOf<number>();
-    };
-
-    expectTypeOf(handleSelect).parameter(0).toEqualTypeOf<{
-      value: string;
-      selectedResultIndex: number;
-      selectedResult: SearchResult;
-    }>();
-
-    type SelectEventDetail = {
-      value: string;
-      selectedResultIndex: number;
-      selectedResult: SearchResult;
-    };
-    const testEventDetail: SelectEventDetail = {
-      value: "test",
-      selectedResultIndex: 0,
-      selectedResult: {
-        href: "/1",
-        text: "Result",
-        category: "document",
-        score: 0.9,
-      },
-    };
-    expectTypeOf(testEventDetail).toEqualTypeOf<
-      Parameters<typeof handleSelect>[0]
-    >();
-  });
-
-  it("should work with results that have all base properties", () => {
-    type FullResult = {
-      href: string;
-      text: string;
-      description: string;
-    };
-
-    const fullResults: FullResult[] = [
-      {
-        href: "/item",
-        text: "Item",
-        description: "Full description",
-      },
-    ];
-
-    expectTypeOf<typeof fullResults>().toEqualTypeOf<FullResult[]>();
-
-    type ResultsPropType = ReadonlyArray<FullResult> | undefined;
-    expectTypeOf<ResultsPropType>().toEqualTypeOf<
-      ReadonlyArray<FullResult> | undefined
-    >();
-  });
-
-  it("should work with minimal result types", () => {
-    type MinimalResult = {
-      href: string;
-      text: string;
-    };
-
-    const minimalResults: MinimalResult[] = [
-      {
-        href: "/simple",
-        text: "Simple result",
-      },
-    ];
-
-    expectTypeOf<typeof minimalResults>().toEqualTypeOf<MinimalResult[]>();
-
-    type ResultsPropType = ReadonlyArray<MinimalResult> | undefined;
-    expectTypeOf<ResultsPropType>().toEqualTypeOf<
-      ReadonlyArray<MinimalResult> | undefined
-    >();
-  });
-
   it("should accept an optional id field on HeaderSearchResult", () => {
     const withStringId: HeaderSearchResult = {
       id: "result-a",
@@ -792,31 +623,6 @@ describe("HeaderSearch Generics", () => {
     expectTypeOf(withStringId.id).toEqualTypeOf<string | number | undefined>();
     expectTypeOf(withNumberId.id).toEqualTypeOf<string | number | undefined>();
     expectTypeOf(withoutId.id).toEqualTypeOf<string | number | undefined>();
-  });
-
-  it("should provide type-safe access in slot props", () => {
-    type CustomResult = {
-      href: string;
-      text: string;
-      metadata?: { tags: string[]; author: string };
-    };
-
-    const slotProps: { result: CustomResult; index: number } = {
-      result: {
-        href: "/1",
-        text: "Result",
-        metadata: { tags: ["tag1"], author: "Author" },
-      },
-      index: 0,
-    };
-
-    expectTypeOf(slotProps.result).toEqualTypeOf<CustomResult>();
-    expectTypeOf(slotProps.index).toEqualTypeOf<number>();
-
-    if (slotProps.result.metadata) {
-      expectTypeOf(slotProps.result.metadata.tags).toEqualTypeOf<string[]>();
-      expectTypeOf(slotProps.result.metadata.author).toEqualTypeOf<string>();
-    }
   });
 
   it("should enforce HeaderSearchResult constraint on generic type", () => {

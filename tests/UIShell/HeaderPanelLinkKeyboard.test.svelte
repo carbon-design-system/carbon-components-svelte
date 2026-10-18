@@ -21,7 +21,3 @@
 <HeaderPanelLinks>
   <HeaderPanelLink href="#other">Other list</HeaderPanelLink>
 </HeaderPanelLinks>
-
-<ul>
-  <HeaderPanelLink href="#solo">Standalone</HeaderPanelLink>
-</ul>

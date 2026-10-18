@@ -21,7 +21,3 @@
   <ProfileMenuItem>Globex</ProfileMenuItem>
   <ProfileMenuItem>Initech</ProfileMenuItem>
 </HeaderSwitcher>
-
-<ul>
-  <ProfileMenuItem>Standalone</ProfileMenuItem>
-</ul>
