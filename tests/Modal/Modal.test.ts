@@ -422,6 +422,21 @@ describe("Modal", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("focuses the dialog when it has nothing else to focus", async () => {
+    render(ModalFocusReturnTest, {
+      props: { passiveModal: true, hideCloseButton: true },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Open Modal" }));
+    await tick();
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+
+    expect(dialog.parentElement).not.toHaveClass("is-visible");
+  });
+
   // With a closing transition reported, `transitionend` is the only path that
   // restores focus.
   it.each(["close-button", "escape-key", "outside-click"] as const)(

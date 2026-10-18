@@ -371,6 +371,21 @@ describe("ComposedModal", () => {
     },
   );
 
+  it("focuses the dialog when it has nothing else to focus", async () => {
+    render(ComposedModalFocusReturnTest, {
+      props: { hideCloseButton: true, showFooter: false },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Open Modal" }));
+    await tick();
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+
+    expect(dialog.parentElement).not.toHaveClass("is-visible");
+  });
+
   it("should respect selectorPrimaryFocus", async () => {
     render(ComposedModalTest, {
       props: {

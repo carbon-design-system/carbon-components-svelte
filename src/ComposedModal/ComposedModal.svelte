@@ -180,6 +180,9 @@
           ? container?.querySelector(".bx--btn--secondary")
           : container?.querySelector(".bx--btn--primary"),
         container?.querySelector(".bx--modal-close"),
+        // With nothing else to focus, focus the dialog itself so Escape
+        // and Tab reach the root's keydown handler.
+        container,
       ],
     });
     target?.focus();
