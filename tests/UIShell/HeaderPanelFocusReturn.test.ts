@@ -4,18 +4,16 @@ import { user } from "../utils/user";
 import HeaderPanelFocusReturn from "./HeaderPanelFocusReturn.test.svelte";
 
 describe("header panels return focus when an item closes them", () => {
-  it.each([
-    ["ProfileMenu", { profileOpen: true }, "Profile", "Log out"],
-    ["HeaderSwitcher", { switcherOpen: true }, "Switch account", "Globex"],
-    ["HeaderAction", { actionOpen: true }, "Notifications", "Dismiss all"],
-  ])("%s", async (_, props, triggerName, itemName) => {
-    render(HeaderPanelFocusReturn, { props });
+  // ProfileMenu and HeaderSwitcher close through `select()`, which
+  // HeaderPanelHost.test.ts covers. Only HeaderAction closes by consumer.
+  it("returns focus to the HeaderAction trigger when a consumer closes it", async () => {
+    render(HeaderPanelFocusReturn, { props: { actionOpen: true } });
 
-    screen.getByRole("button", { name: itemName }).focus();
+    screen.getByRole("button", { name: "Dismiss all" }).focus();
     await user.keyboard("{Enter}");
     await tick();
 
-    const trigger = screen.getByRole("button", { name: triggerName });
+    const trigger = screen.getByRole("button", { name: "Notifications" });
     expect(trigger).toHaveAttribute("aria-expanded", "false");
     expect(trigger).toHaveFocus();
   });

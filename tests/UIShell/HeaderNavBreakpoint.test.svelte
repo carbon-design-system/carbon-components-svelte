@@ -8,6 +8,7 @@
 
   export let expansionBreakpoint: number | undefined = undefined;
   export let standalone = false;
+  export let hasDivider = false;
 </script>
 
 {#if standalone}
@@ -23,7 +24,11 @@
   </Header>
   <SideNav isOpen={false} {expansionBreakpoint}>
     <SideNavItems>
-      <HeaderSideNavItems aria-label="Side links">
+      <HeaderSideNavItems
+        aria-label="Side links"
+        {hasDivider}
+        data-testid="header-side-nav-items"
+      >
         <HeaderNavItem href="/a" text="Deployments" />
         <HeaderNavItem href="/b" text="Incidents" />
       </HeaderSideNavItems>

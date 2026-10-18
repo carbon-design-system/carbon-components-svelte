@@ -10,27 +10,12 @@
   export let results: ComponentProps<HeaderSearch>["results"] = [];
 
   export let ref: ComponentProps<HeaderSearch>["ref"] = null;
-  let activeEvent = false;
-  let inactiveEvent = false;
-  let clearEvent = false;
-  let selectEvent: ComponentEvents<HeaderSearch>["select"]["detail"] | null =
-    null;
-
-  function handleActive() {
-    activeEvent = true;
-  }
-
-  function handleInactive() {
-    inactiveEvent = true;
-  }
-
-  function handleClear() {
-    clearEvent = true;
-  }
-
-  function handleSelect(event: ComponentEvents<HeaderSearch>["select"]) {
-    selectEvent = event.detail;
-  }
+  export let onActive: () => void = () => {};
+  export let onInactive: () => void = () => {};
+  export let onClear: () => void = () => {};
+  export let onSelect: (
+    detail: ComponentEvents<HeaderSearch>["select"]["detail"],
+  ) => void = () => {};
 </script>
 
 <HeaderSearch
@@ -40,18 +25,13 @@
   bind:selectedResultIndex
   {results}
   {...$$restProps}
-  on:active={handleActive}
-  on:inactive={handleInactive}
-  on:clear={handleClear}
-  on:select={handleSelect}
+  on:active={() => onActive()}
+  on:inactive={() => onInactive()}
+  on:clear={() => onClear()}
+  on:select={(e) => onSelect(e.detail)}
   let:result
   let:index
   let:selected
 >
   <div data-testid="result-{index}" data-selected={selected}>{result.text}</div>
 </HeaderSearch>
-
-<div data-testid="active-event">{activeEvent}</div>
-<div data-testid="inactive-event">{inactiveEvent}</div>
-<div data-testid="clear-event">{clearEvent}</div>
-<div data-testid="select-event">{JSON.stringify(selectEvent)}</div>

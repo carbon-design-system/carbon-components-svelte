@@ -20,7 +20,7 @@ describe("HeaderNav menubar", () => {
     });
 
     it("prefers the current page item", async () => {
-      render(Fixture, { props: { currentLink2: true } });
+      render(Fixture, { props: { current: "Link 2" } });
       await tick();
 
       expect(link1()).toHaveAttribute("tabindex", "-1");
@@ -40,7 +40,7 @@ describe("HeaderNav menubar", () => {
     });
 
     it("leaves items outside a HeaderNav tabbable", () => {
-      render(Fixture);
+      render(Fixture, { props: { after: "item" } });
 
       expect(
         screen.getByRole("menuitem", { name: "Standalone" }),

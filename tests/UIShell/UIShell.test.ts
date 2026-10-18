@@ -9,11 +9,18 @@ import type SideNavMenuComponent from "carbon-components-svelte/UIShell/SideNavM
 import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
-import HeaderSwitcher from "./HeaderSwitcher.test.svelte";
+import { setViewportWidth } from "../utils/viewport";
+import HeaderActionPanelLinks from "./HeaderActionPanelLinks.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 
 describe("UIShell", () => {
+  afterEach(() => {
+    setViewportWidth(1024);
+    document.body.classList.remove("bx--body--with-modal-open");
+  });
+
   describe("Header", () => {
     it("should apply classic UI Shell class when theme is classic", () => {
       render(UiShell, { props: { headerTheme: "classic" } });
@@ -61,14 +68,16 @@ describe("UIShell", () => {
     });
 
     it("should handle click events", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(UiShell, { props: { headerHref: "#", platformName: "Platform" } });
+      const onHeaderClick = vi.fn();
+      render(UiShell, {
+        props: { headerHref: "#", platformName: "Platform", onHeaderClick },
+      });
 
       const link = screen.getByText("Platform").closest("a");
       assert(link);
       await user.click(link);
 
-      expect(consoleLog).toHaveBeenCalledWith("header-click");
+      expect(onHeaderClick).toHaveBeenCalledTimes(1);
     });
 
     it("should bind ref to anchor element", () => {
@@ -136,20 +145,6 @@ describe("UIShell", () => {
     });
 
     describe("user interaction preservation", () => {
-      const setViewportWidth = (width: number) => {
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value: width,
-        });
-        window.dispatchEvent(new Event("resize"));
-      };
-
-      afterEach(() => {
-        setViewportWidth(1024);
-        document.body.classList.remove("bx--body--with-modal-open");
-      });
-
       it("should preserve user-opened state after minor width changes on mobile", async () => {
         setViewportWidth(500); // Mobile viewport
 
@@ -282,7 +277,7 @@ describe("UIShell", () => {
   describe("Header panels", () => {
     // A bare <hr> cannot be a direct child of <ul>.
     it("wraps a contentless HeaderPanelDivider's hr in an li", async () => {
-      const { container } = render(HeaderSwitcher);
+      const { container } = render(HeaderActionPanelLinks);
 
       const trigger = container.querySelector(
         "button.bx--header__action:not(.bx--header__menu-toggle)",
@@ -299,27 +294,19 @@ describe("UIShell", () => {
   describe("SideNav", () => {
     // Regression test for initial event dispatch in Svelte 5
     // https://github.com/carbon-design-system/carbon-components-svelte/issues/2533
-    it("does not fire open/close event on initial render", () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(UiShell, {
-        props: { sideNavIsOpen: false },
-      });
+    it.each([false, true])(
+      "does not fire open/close event on initial render when isOpen is %s",
+      (sideNavIsOpen) => {
+        const onSideNavOpen = vi.fn();
+        const onSideNavClose = vi.fn();
+        render(UiShell, {
+          props: { sideNavIsOpen, onSideNavOpen, onSideNavClose },
+        });
 
-      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-open");
-      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-close");
-    });
-
-    // Regression test for initial event dispatch in Svelte 5
-    // https://github.com/carbon-design-system/carbon-components-svelte/issues/2533
-    it("does not fire open/close event on initial render when isOpen is true", () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(UiShell, {
-        props: { sideNavIsOpen: true },
-      });
-
-      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-open");
-      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-close");
-    });
+        expect(onSideNavOpen).not.toHaveBeenCalled();
+        expect(onSideNavClose).not.toHaveBeenCalled();
+      },
+    );
 
     it("should apply classic UI Shell class when theme is classic", () => {
       const { container } = render(UiShell, {
@@ -332,19 +319,6 @@ describe("UIShell", () => {
     });
 
     describe("Escape key (overlay mode)", () => {
-      const setViewportWidth = (width: number) => {
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value: width,
-        });
-        window.dispatchEvent(new Event("resize"));
-      };
-
-      afterEach(() => {
-        setViewportWidth(1024);
-      });
-
       it("closes the overlay side nav and refocuses the hamburger trigger", async () => {
         setViewportWidth(500); // Mobile viewport
 
@@ -389,20 +363,6 @@ describe("UIShell", () => {
     });
 
     describe("body scroll lock", () => {
-      const setViewportWidth = (width: number) => {
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value: width,
-        });
-        window.dispatchEvent(new Event("resize"));
-      };
-
-      afterEach(() => {
-        setViewportWidth(1024);
-        document.body.classList.remove("bx--body--with-modal-open");
-      });
-
       it("should add scroll lock class when open on mobile viewport", async () => {
         setViewportWidth(500); // Mobile viewport
 
@@ -446,29 +406,23 @@ describe("UIShell", () => {
         expect(document.body).not.toHaveClass("bx--body--with-modal-open");
       });
 
-      it("should not add scroll lock class for fixed variant", async () => {
-        setViewportWidth(500); // Mobile viewport
+      it.each([
+        ["fixed", { sideNavFixed: true }],
+        ["rail", { sideNavRail: true }],
+      ])(
+        "should not add scroll lock class for %s variant",
+        async (_, variantProps) => {
+          setViewportWidth(500); // Mobile viewport
 
-        render(UiShell, {
-          props: { sideNavIsOpen: true, sideNavFixed: true },
-        });
+          render(UiShell, {
+            props: { sideNavIsOpen: true, ...variantProps },
+          });
 
-        await flushMacrotask();
+          await flushMacrotask();
 
-        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
-      });
-
-      it("should not add scroll lock class for rail variant", async () => {
-        setViewportWidth(500); // Mobile viewport
-
-        render(UiShell, {
-          props: { sideNavIsOpen: true, sideNavRail: true },
-        });
-
-        await flushMacrotask();
-
-        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
-      });
+          expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+        },
+      );
     });
 
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2701
@@ -520,31 +474,31 @@ describe("UIShell", () => {
     });
 
     it("should dispatch open event", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const { component } = render(UiShell);
+      const onSideNavOpen = vi.fn();
+      const { component } = render(UiShell, { props: { onSideNavOpen } });
 
       component.sideNavIsOpen = true;
       await flushMacrotask();
 
-      expect(consoleLog).toHaveBeenCalledWith("sidenav-open");
+      expect(onSideNavOpen).toHaveBeenCalledTimes(1);
     });
 
     it("should dispatch close event", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSideNavClose = vi.fn();
       const { component } = render(UiShell, {
-        props: { sideNavIsOpen: true },
+        props: { sideNavIsOpen: true, onSideNavClose },
       });
 
       component.sideNavIsOpen = false;
       await flushMacrotask();
 
-      expect(consoleLog).toHaveBeenCalledWith("sidenav-close");
+      expect(onSideNavClose).toHaveBeenCalledTimes(1);
     });
 
     it("should handle overlay click", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSideNavOverlayClick = vi.fn();
       const { container } = render(UiShell, {
-        props: { sideNavIsOpen: true },
+        props: { sideNavIsOpen: true, onSideNavOverlayClick },
       });
 
       const overlay = container.querySelector(".bx--side-nav__overlay");
@@ -553,24 +507,10 @@ describe("UIShell", () => {
 
       await user.click(overlay);
 
-      expect(consoleLog).toHaveBeenCalledWith("sidenav-overlay-click");
+      expect(onSideNavOverlayClick).toHaveBeenCalledTimes(1);
     });
 
     describe("custom expansion breakpoint (HeaderNavCustomBreakpoint-style)", () => {
-      const setViewportWidth = (width: number) => {
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value: width,
-        });
-        window.dispatchEvent(new Event("resize"));
-      };
-
-      afterEach(() => {
-        setViewportWidth(1024);
-        document.body.classList.remove("bx--body--with-modal-open");
-      });
-
       it("with expansionBreakpoint Infinity, overlay has --mobile and -active when open at desktop width", async () => {
         setViewportWidth(1200);
 
@@ -592,13 +532,14 @@ describe("UIShell", () => {
 
       it("with expansionBreakpoint Infinity, clicking overlay at desktop width closes side nav", async () => {
         setViewportWidth(1200);
-        const consoleLog = vi.spyOn(console, "log");
+        const onSideNavOverlayClick = vi.fn();
 
         const { container, component } = render(UiShell, {
           props: {
             expansionBreakpoint: Number.POSITIVE_INFINITY,
             isSideNavOpen: true,
             sideNavIsOpen: true,
+            onSideNavOverlayClick,
           },
         });
 
@@ -609,7 +550,7 @@ describe("UIShell", () => {
         await user.click(overlay);
 
         expect(component.sideNavIsOpen).toBe(false);
-        expect(consoleLog).toHaveBeenCalledWith("sidenav-overlay-click");
+        expect(onSideNavOverlayClick).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -626,21 +567,8 @@ describe("UIShell", () => {
 
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1383
     describe("pre-hydration flicker prevention", () => {
-      const setInnerWidth = (value: number | undefined) => {
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value,
-        });
-      };
-
-      afterEach(() => {
-        setInnerWidth(1024);
-        window.dispatchEvent(new Event("resize"));
-      });
-
       it("should apply collapsed state after viewport width becomes known", async () => {
-        setInnerWidth(undefined as unknown as number);
+        setViewportWidth(undefined as unknown as number);
 
         const { container } = render(UiShell, {
           props: { sideNavIsOpen: false },
@@ -651,8 +579,7 @@ describe("UIShell", () => {
         expect(nav).not.toHaveStyle({ visibility: "hidden" });
 
         // Simulate hydration: viewport width becomes known.
-        setInnerWidth(500);
-        window.dispatchEvent(new Event("resize"));
+        setViewportWidth(500);
         await flushMacrotask();
 
         expect(nav).toHaveClass("bx--side-nav--collapsed");
@@ -663,60 +590,50 @@ describe("UIShell", () => {
 
   describe("Content", () => {
     describe("mobile margin behavior", () => {
-      const setViewportWidth = (width: number) => {
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value: width,
-        });
-        window.dispatchEvent(new Event("resize"));
-      };
-
-      afterEach(() => {
-        setViewportWidth(1024);
-      });
-
-      it("should unset left margin on mobile viewport", async () => {
-        setViewportWidth(500); // Mobile viewport
-
-        const { container } = render(UiShell, {
+      it.each([
+        {
+          name: "is unset on a mobile viewport",
+          width: 500,
           props: { sideNavIsOpen: true },
-        });
-
-        await flushMacrotask();
-
-        const content = container.querySelector(".bx--content");
-        expect(content).toHaveStyle({ marginLeft: "0px" });
-      });
-
-      it("should not force margin on desktop viewport when SideNav is open", async () => {
-        setViewportWidth(1200); // Desktop viewport
-
-        const { container } = render(UiShell, {
+          marginLeft: "0px",
+        },
+        {
+          name: "is not forced on desktop when SideNav is open",
+          width: 1200,
           props: { sideNavIsOpen: true },
-        });
-
-        await flushMacrotask();
-
-        const content = container.querySelector(".bx--content");
-        // On desktop with SideNav open, margin should not be explicitly set to 0
-        // (CSS will handle the margin via .bx--side-nav ~ .bx--content)
-        expect(content).not.toHaveStyle({ marginLeft: "0px" });
-      });
-
-      // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2701
-      it("should not unset left margin on mobile when SideNav is fixed", async () => {
-        setViewportWidth(500); // Mobile viewport
-
-        const { container } = render(UiShell, {
+          // CSS handles the margin via `.bx--side-nav ~ .bx--content`.
+          marginLeft: "",
+        },
+        {
+          name: "is not unset on mobile when SideNav is fixed",
+          width: 500,
           props: { sideNavIsOpen: true, sideNavFixed: true },
-        });
+          // Regression: https://github.com/carbon-design-system/carbon-components-svelte/issues/2701
+          // A fixed SideNav is always visible, so Content keeps its CSS margin.
+          marginLeft: "",
+        },
+        {
+          name: "is not set for a rail on desktop",
+          width: 1200,
+          props: { sideNavRail: true, sideNavIsOpen: false },
+          marginLeft: "",
+        },
+        {
+          name: "is unset when SideNav is collapsed on desktop",
+          width: 1200,
+          props: { sideNavIsOpen: false },
+          marginLeft: "0px",
+        },
+      ])("left margin $name", async ({ width, props, marginLeft }) => {
+        setViewportWidth(width);
+
+        const { container } = render(UiShell, { props });
 
         await flushMacrotask();
 
-        const content = container.querySelector(".bx--content");
-        // Fixed SideNav is always visible, so Content should keep its CSS margin
-        expect(content).not.toHaveStyle({ marginLeft: "0px" });
+        expectInlineStyle(container.querySelector(".bx--content"), {
+          marginLeft,
+        });
       });
 
       it("should keep the rail margin on mobile when SideNav is an expanded rail", async () => {
@@ -732,34 +649,9 @@ describe("UIShell", () => {
         expect(container.querySelector(".bx--side-nav")).toHaveClass(
           "bx--side-nav--expanded",
         );
-        const content = container.querySelector<HTMLElement>(".bx--content");
-        expect(content?.style.marginLeft).toBe("3rem");
-      });
-
-      it("should not set an inline margin for a rail on desktop", async () => {
-        setViewportWidth(1200);
-
-        const { container } = render(UiShell, {
-          props: { sideNavRail: true, sideNavIsOpen: false },
+        expectInlineStyle(container.querySelector(".bx--content"), {
+          marginLeft: "3rem",
         });
-
-        await flushMacrotask();
-
-        const content = container.querySelector<HTMLElement>(".bx--content");
-        expect(content?.style.marginLeft).toBe("");
-      });
-
-      it("should unset left margin when SideNav is collapsed on desktop", async () => {
-        setViewportWidth(1200); // Desktop viewport
-
-        const { container } = render(UiShell, {
-          props: { sideNavIsOpen: false },
-        });
-
-        await flushMacrotask();
-
-        const content = container.querySelector(".bx--content");
-        expect(content).toHaveStyle({ marginLeft: "0px" });
       });
     });
   });

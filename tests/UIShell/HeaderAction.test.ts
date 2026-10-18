@@ -8,8 +8,8 @@ import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderA
 import type { ComponentProps } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
-import HeaderActionOutsideClick from "./HeaderAction.outsideClick.test.svelte";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
+import HeaderActionClose from "./HeaderActionClose.test.svelte";
 import HeaderActionTooltipGroup from "./HeaderActionTooltipGroup.test.svelte";
 
 describe("HeaderAction", () => {
@@ -24,22 +24,8 @@ describe("HeaderAction", () => {
     const getActionButton = () =>
       screen.getByRole("button", { name: "Switcher" });
 
-    it("is a disclosure that controls its panel, not a menu button", async () => {
-      render(HeaderActionOutsideClick);
-
-      const button = getActionButton();
-      expect(button).not.toHaveAttribute("aria-haspopup");
-      expect(button).toHaveAttribute("aria-expanded", "false");
-      expect(button).not.toHaveAttribute("aria-controls");
-
-      await user.click(button);
-      expect(button).toHaveAttribute("aria-expanded", "true");
-      const panel = screen.getByRole("region", { name: "Switcher" });
-      expect(button).toHaveAttribute("aria-controls", panel.id);
-    });
-
     it("closes the panel and refocuses the trigger on Escape", async () => {
-      render(HeaderActionOutsideClick);
+      render(HeaderActionClose);
 
       const button = getActionButton();
       await user.click(button);

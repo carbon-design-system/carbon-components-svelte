@@ -36,7 +36,9 @@ describe("HeaderSearch (menu slot)", () => {
   });
 
   it("navigates with the arrow keys and selects with Enter", async () => {
-    render(HeaderSearchMenu, { props: { active: true } });
+    const onSelect = vi.fn();
+    const onSubmit = vi.fn();
+    render(HeaderSearchMenu, { props: { active: true, onSelect, onSubmit } });
     const input = screen.getByRole("combobox");
     await user.click(input);
     await user.keyboard("{ArrowDown}");
@@ -47,23 +49,28 @@ describe("HeaderSearch (menu slot)", () => {
 
     await user.keyboard("{Enter}");
 
-    expect(screen.getByTestId("result")).toHaveTextContent(
-      "Databases for TestSQL",
+    expect(onSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "Databases for TestSQL" }),
     );
+    expect(onSubmit).not.toHaveBeenCalled();
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
   it("dispatches submit when Enter is pressed with no active item", async () => {
-    render(HeaderSearchMenu, { props: { active: true } });
+    const onSubmit = vi.fn();
+    render(HeaderSearchMenu, { props: { active: true, onSubmit } });
     const input = screen.getByRole("combobox");
     await user.type(input, "free text");
     await user.keyboard("{Enter}");
 
-    expect(screen.getByTestId("result")).toHaveTextContent("submit:free text");
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "free text" }),
+    );
   });
 
   it("closes the menu on Escape but preserves the value and active state", async () => {
-    render(HeaderSearchMenu, { props: { active: true } });
+    const onClose = vi.fn();
+    render(HeaderSearchMenu, { props: { active: true, onClose } });
     const input = screen.getByRole("combobox");
     await user.type(input, "Data");
     expect(await screen.findByRole("listbox")).toBeInTheDocument();
@@ -75,7 +82,7 @@ describe("HeaderSearch (menu slot)", () => {
     expect(screen.getByRole("search")).toHaveClass(
       "bx--header__search--active",
     );
-    expect(screen.getByTestId("close")).toHaveTextContent("");
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("sets aria-expanded and aria-controls on the input", async () => {
@@ -87,21 +94,20 @@ describe("HeaderSearch (menu slot)", () => {
     expect(input).toHaveAttribute("aria-controls", listbox.id);
   });
 
-  it("defaults to the small (compact) size", async () => {
-    const { container } = render(HeaderSearchMenu, { props: { active: true } });
-    await screen.findByRole("listbox");
+  it.each([
+    [undefined, "sm"],
+    ["lg", "lg"],
+    ["xl", "xl"],
+  ] as const)(
+    "renders the %s size with the %s modifier",
+    async (size, modifier) => {
+      const { container } = render(HeaderSearchMenu, {
+        props: { active: true, size },
+      });
+      await screen.findByRole("listbox");
 
-    const menu = container.querySelector(".bx--header__search-menu-rich");
-    expect(menu).toHaveClass("bx--header__search-menu-rich--sm");
-  });
-
-  it("applies the requested size", async () => {
-    const { container } = render(HeaderSearchMenu, {
-      props: { active: true, size: "xl" },
-    });
-    await screen.findByRole("listbox");
-
-    const menu = container.querySelector(".bx--header__search-menu-rich");
-    expect(menu).toHaveClass("bx--header__search-menu-rich--xl");
-  });
+      const menu = container.querySelector(".bx--header__search-menu-rich");
+      expect(menu).toHaveClass(`bx--header__search-menu-rich--${modifier}`);
+    },
+  );
 });

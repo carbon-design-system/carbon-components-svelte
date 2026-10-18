@@ -1,8 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import HeaderNavMenuViewportEdge from "./HeaderNavMenuViewportEdge.test.svelte";
+import HeaderNavMenuViewportEdge from "./HeaderNavMenubar.test.svelte";
 
 const VIEWPORT_WIDTH = 1000;
+const props = {
+  items: [{ text: "More", items: [{ text: "Access (IAM)" }] }],
+};
 
 /** Places the left-aligned menu so its right edge lands at `right`. */
 function mockMenuRight(right: number) {
@@ -38,7 +41,7 @@ describe("HeaderNavMenu viewport edge", () => {
 
   it("aligns the menu to the trigger's right edge when it would overflow", async () => {
     mockMenuRight(VIEWPORT_WIDTH + 30);
-    render(HeaderNavMenuViewportEdge);
+    render(HeaderNavMenuViewportEdge, { props });
 
     await user.click(screen.getByRole("menuitem", { name: "More" }));
 
@@ -47,7 +50,7 @@ describe("HeaderNavMenu viewport edge", () => {
 
   it("keeps the default alignment when the menu fits", async () => {
     mockMenuRight(VIEWPORT_WIDTH - 30);
-    render(HeaderNavMenuViewportEdge);
+    render(HeaderNavMenuViewportEdge, { props });
 
     await user.click(screen.getByRole("menuitem", { name: "More" }));
 
@@ -56,7 +59,7 @@ describe("HeaderNavMenu viewport edge", () => {
 
   it("measures again from the default alignment on the next open", async () => {
     mockMenuRight(VIEWPORT_WIDTH - 30);
-    render(HeaderNavMenuViewportEdge);
+    render(HeaderNavMenuViewportEdge, { props });
     const trigger = screen.getByRole("menuitem", { name: "More" });
 
     await user.click(trigger);

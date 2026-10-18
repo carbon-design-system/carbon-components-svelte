@@ -10,12 +10,11 @@
   export let value = "";
   export let size: ComponentProps<HeaderSearch>["size"] = undefined;
 
-  export let selected: { value: string; submitted: boolean } = {
-    value: "",
-    submitted: false,
-  };
-  export let closeTrigger = "";
-  export let onSelect: () => void = () => {};
+  export let debounce: ComponentProps<HeaderSearch>["debounce"] = 0;
+  export let onSelect: (detail: { value: string }) => void = () => {};
+  export let onSubmit: (detail: { value: string }) => void = () => {};
+  export let onClose: (detail: { trigger: string }) => void = () => {};
+  export let onSearch: (value: string) => void = () => {};
 
   const items = [
     "Databases for TestSQL",
@@ -29,12 +28,11 @@
   bind:active
   bind:value
   {size}
-  on:select={(e) => {
-    selected = { value: e.detail.value, submitted: false };
-    onSelect();
-  }}
-  on:submit={(e) => (selected = { value: e.detail.value, submitted: true })}
-  on:close={(e) => (closeTrigger = e.detail.trigger)}
+  {debounce}
+  on:select={(e) => onSelect(e.detail)}
+  on:submit={(e) => onSubmit(e.detail)}
+  on:close={(e) => onClose(e.detail)}
+  on:search={(e) => onSearch(e.detail)}
 >
   <svelte:fragment slot="menu">
     <SearchMenuGroup label="Results">
@@ -50,8 +48,3 @@
 
   <svelte:fragment slot="noResults">No results</svelte:fragment>
 </HeaderSearch>
-
-<div data-testid="result">
-  {selected.submitted ? "submit:" : ""}{selected.value}
-</div>
-<div data-testid="close">{closeTrigger}</div>

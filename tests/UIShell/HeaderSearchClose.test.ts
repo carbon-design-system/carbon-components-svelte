@@ -3,6 +3,7 @@ import { flushDismiss } from "../utils/flush-dismiss";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchClose from "./HeaderSearchClose.test.svelte";
+import { withOutsideElement } from "./header-search-helpers";
 
 describe("HeaderSearch close event", () => {
   it('dispatches close with trigger "escape-key" when Escape collapses an empty search', async () => {
@@ -25,17 +26,15 @@ describe("HeaderSearch close event", () => {
 
     await flushDismiss();
 
-    const outside = document.createElement("div");
-    document.body.appendChild(outside);
-    fireEvent.mouseUp(outside);
-    await flushMacrotask();
+    await withOutsideElement("div", async (outside) => {
+      fireEvent.mouseUp(outside);
+      await flushMacrotask();
+    });
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail).toEqual({
       trigger: "outside-click",
     });
-
-    document.body.removeChild(outside);
   });
 
   it("does not dispatch close on Escape while a query is present (stays active)", async () => {

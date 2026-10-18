@@ -1,15 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { setViewportWidth } from "../utils/viewport";
 import HeaderNavBreakpoint from "./HeaderNavBreakpoint.test.svelte";
-
-function setViewportWidth(width: number) {
-  Object.defineProperty(window, "innerWidth", {
-    writable: true,
-    configurable: true,
-    value: width,
-  });
-  window.dispatchEvent(new Event("resize"));
-}
 
 describe("HeaderNav expansion breakpoint", () => {
   afterEach(() => {

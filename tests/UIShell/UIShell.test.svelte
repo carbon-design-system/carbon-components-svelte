@@ -33,6 +33,11 @@
 
   export let headerTheme: ComponentProps<Header>["theme"] = undefined;
   export let sideNavTheme: ComponentProps<SideNav>["theme"] = undefined;
+
+  export let onHeaderClick: () => void = () => {};
+  export let onSideNavOpen: () => void = () => {};
+  export let onSideNavClose: () => void = () => {};
+  export let onSideNavOverlayClick: () => void = () => {};
 </script>
 
 {#if useSlots}
@@ -45,9 +50,7 @@
     theme={headerTheme}
     bind:ref={headerRef}
     class={headerClass}
-    on:click={() => {
-      console.log("header-click");
-    }}
+    on:click={onHeaderClick}
   >
     <span slot="company">Custom Company</span>
     <span slot="platform">Custom Platform</span>
@@ -69,9 +72,7 @@
     theme={headerTheme}
     bind:ref={headerRef}
     class={headerClass}
-    on:click={() => {
-      console.log("header-click");
-    }}
+    on:click={onHeaderClick}
   >
     <HeaderNav class={headerNavClass} aria-label="Navigation">
       <HeaderNavItem href="#" text="Link 1" />
@@ -88,15 +89,9 @@
   {expansionBreakpoint}
   theme={sideNavTheme}
   class={sideNavClass}
-  on:open={() => {
-    console.log("sidenav-open");
-  }}
-  on:close={() => {
-    console.log("sidenav-close");
-  }}
-  on:click:overlay={() => {
-    console.log("sidenav-overlay-click");
-  }}
+  on:open={onSideNavOpen}
+  on:close={onSideNavClose}
+  on:click:overlay={onSideNavOverlayClick}
 >
   <SideNavItems>
     <SideNavLink href="#" text="Link 1" />
