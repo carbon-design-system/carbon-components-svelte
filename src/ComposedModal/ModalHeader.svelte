@@ -26,15 +26,18 @@
    */
   export let hideCloseButton = false;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import Close from "../icons/Close.svelte";
 
-  const { closeModal, updateLabel, updateTitle, ids } = getContext(
-    "carbon:ComposedModal",
-  );
+  const { closeModal, updateLabel, updateTitle, ids, registerHeader } =
+    getContext("carbon:ComposedModal");
 
   $: updateLabel(label);
   $: updateTitle(title);
+  // Register during init, not on mount: Svelte 5 unmounts a swapped-out
+  // header before its replacement mounts, which would clear the new values.
+  const unregisterHeader = registerHeader();
+  onMount(() => unregisterHeader);
 </script>
 
 <div class:bx--modal-header={true} {...$$restProps}>

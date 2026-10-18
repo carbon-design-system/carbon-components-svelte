@@ -64,6 +64,22 @@ describe("ComposedModal", () => {
     expect(dialog).not.toHaveAttribute("aria-label");
   });
 
+  it("clears the dialog name and region reference when the header unmounts", async () => {
+    const { rerender } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerLabel: "Step 1",
+        headerTitle: "Settings",
+        bodyHasScrollingContent: true,
+      },
+    });
+
+    await rerender({ headerLabel: "", headerTitle: "" });
+
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("region")).not.toHaveAttribute("aria-labelledby");
+  });
+
   it("keeps a consumer aria-labelledby on the dialog, not the root", () => {
     render(ComposedModalTest, {
       props: {
