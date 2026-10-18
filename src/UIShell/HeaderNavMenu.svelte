@@ -273,9 +273,12 @@
           $menuItems[0]?.focus();
         }
       } else if (
-        vertical
-          ? event.key === "ArrowRight"
-          : event.key === "ArrowDown" || event.key === "ArrowUp"
+        // Leave modified keys to the browser: Alt/Cmd+ArrowRight is Forward,
+        // Ctrl/Cmd+ArrowDown scrolls. Alt+ArrowDown still opens the menu.
+        !(event.ctrlKey || event.metaKey) &&
+        (vertical
+          ? event.key === "ArrowRight" && !event.altKey
+          : event.key === "ArrowDown" || event.key === "ArrowUp")
       ) {
         event.preventDefault();
         if (!expanded) {
