@@ -1,6 +1,99 @@
 import { render, screen } from "@testing-library/svelte";
+import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import ContextMenu from "./ContextMenu.test.svelte";
+import ContextMenuGroup from "./ContextMenuGroup.test.svelte";
+import ContextMenuOptionKeepOpenFixture from "./ContextMenuOption.keepOpen.test.svelte";
+import ContextMenuOptionSelectableIconBind from "./ContextMenuOptionSelectableIconBind.test.svelte";
+import { getSelectedIds } from "./helpers";
+
+describe("ContextMenuGroup", () => {
+  it("should toggle option when clicking option that is already selected", async () => {
+    render(ContextMenuGroup, {
+      props: { selectedIds: ["option1", "option2"] },
+    });
+
+    const option1 = screen.getByText("Option 1");
+    await user.click(option1);
+
+    const selectedIds = getSelectedIds();
+    expect(selectedIds).not.toContain("option1");
+    expect(selectedIds).toContain("option2");
+    expect(selectedIds).toHaveLength(1);
+  });
+
+  it("should add multiple options when clicking different options", async () => {
+    render(ContextMenuGroup, { props: { selectedIds: [] } });
+
+    const option1 = screen.getByText("Option 1");
+    const option2 = screen.getByText("Option 2");
+    const option3 = screen.getByText("Option 3");
+
+    await user.click(option1);
+    await user.click(option2);
+    await user.click(option3);
+
+    const selectedIds = getSelectedIds();
+    expect(selectedIds).toContain("option1");
+    expect(selectedIds).toContain("option2");
+    expect(selectedIds).toContain("option3");
+    expect(selectedIds).toHaveLength(3);
+  });
+});
+
+// Regression test: a selectable/radio ContextMenuOption used to write
+// `icon = Checkmark` / `indented = true` back into the exported props,
+// clobbering a consumer's `bind:icon` / `bind:indented`.
+describe("ContextMenuOption does not clobber bound icon and indented props in a selectable group", () => {
+  it("keeps the consumer's bound icon and indented unchanged while rendering the checkmark", async () => {
+    const { component } = render(ContextMenuOptionSelectableIconBind, {
+      props: { indented: false },
+    });
+
+    await tick();
+
+    expect(component.icon).toBe(CopyFile);
+    expect(component.indented).toBe(false);
+
+    const option = screen.getByRole("menuitemcheckbox", { name: "Option 1" });
+    expect(option.querySelector(".bx--menu-option__icon")).toBeInTheDocument();
+  });
+});
+
+describe("ContextMenuOption keep open on selection", () => {
+  const getSelectedId = () => screen.getByTestId("selected-id").textContent;
+
+  it("keeps the menu open when click is prevented and still toggles selection", async () => {
+    render(ContextMenuOptionKeepOpenFixture, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    await user.click(screen.getByRole("menuitemcheckbox", { name: "Date" }));
+
+    expect(screen.getAllByRole("menu")[0]).toHaveClass("bx--menu--open");
+    expect(getSelectedIds()).toEqual(["date"]);
+  });
+
+  it("keeps nested and root menus open when a radio click is prevented", async () => {
+    render(ContextMenuOptionKeepOpenFixture, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    await user.hover(screen.getByRole("menuitem", { name: "View as" }));
+    const gridOption = await screen.findByRole("menuitemradio", {
+      name: "Grid",
+    });
+    await user.click(gridOption);
+
+    expect(getSelectedId()).toBe("grid");
+
+    const menus = screen.getAllByRole("menu");
+    for (const menu of menus) {
+      expect(menu).toHaveClass("bx--menu--open");
+    }
+  });
+});
 
 /**
  * Regression coverage for the safe-triangle hover-transfer check that used
