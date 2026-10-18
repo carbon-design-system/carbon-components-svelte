@@ -144,6 +144,17 @@ describe("HeaderSideNavItems menubar", () => {
       expect(menuItem("Menu Item 1")).toHaveFocus();
     });
 
+    it.each(["Alt", "Meta"])(
+      "leaves %s+Right to the browser",
+      async (modifier) => {
+        render(Fixture, { props });
+
+        trigger().focus();
+        await user.keyboard(`{${modifier}>}{ArrowRight}{/${modifier}}`);
+        expect(trigger()).toHaveAttribute("aria-expanded", "false");
+      },
+    );
+
     it("moves between submenu items with Up and Down", async () => {
       render(Fixture, { props });
 
