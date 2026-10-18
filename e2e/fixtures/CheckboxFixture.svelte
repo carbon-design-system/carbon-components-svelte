@@ -22,3 +22,13 @@
   checked
   indeterminate
 />
+
+<div
+  data-testid="checkbox-row"
+  style:display="flex"
+  style:align-items="center"
+  style:gap="16px"
+>
+  <Checkbox noMargin labelText="Mark reviewed" />
+  <span>3 files</span>
+</div>
