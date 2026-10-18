@@ -225,11 +225,45 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
    *
    * @type {Record<string, Function[]>}
    */
+  /** Last range sent with `view`, so a month and year change send one. */
+  let lastView = "";
+  /**
+   * Sends the dates on show: whole months in the day grid, the year in the
+   * month grid, or the twelve years in the year grid.
+   *
+   * @param {Date[]} _s
+   * @param {string} _d
+   * @param {CalendarInstance} instance
+   */
+  function emitView(_s, _d, instance) {
+    const { pickerMode, showMonths = 1 } = /** @type {any} */ (instance.config);
+    const year = instance.currentYear;
+    let start;
+    let end;
+    if (pickerMode === "year") {
+      const first = year - (year % 10) - 1;
+      start = new Date(first, 0, 1);
+      end = new Date(first + 11, 11, 31);
+    } else if (pickerMode === "month") {
+      start = new Date(year, 0, 1);
+      end = new Date(year, 11, 31);
+    } else {
+      start = new Date(year, instance.currentMonth, 1);
+      end = new Date(year, instance.currentMonth + showMonths, 0);
+    }
+    const key = `${start.getTime()}-${end.getTime()}`;
+    if (key === lastView) return;
+    lastView = key;
+    dispatch("view", { start, end });
+  }
+
   const carbonHooks = {
     onChange: [() => dispatch("change")],
     onClose: [() => dispatch("close")],
     onOpen: [() => dispatch("open")],
-    onReady: [prepareOnReady],
+    onMonthChange: [emitView],
+    onYearChange: [emitView],
+    onReady: [prepareOnReady, emitView],
     onDestroy: [disconnectAltInputObserver],
   };
 

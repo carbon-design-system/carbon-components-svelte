@@ -70,11 +70,11 @@ describe("createCalendar", () => {
     instance?.setDate(new Date(2024, 0, 2), true);
     instance?.close();
 
-    expect(dispatch.mock.calls.map(([event]) => event)).toEqual([
-      "open",
-      "change",
-      "close",
-    ]);
+    expect(
+      dispatch.mock.calls
+        .map(([event]) => event)
+        .filter((event) => event !== "view"),
+    ).toEqual(["open", "change", "close"]);
     instance?.destroy();
   });
 
