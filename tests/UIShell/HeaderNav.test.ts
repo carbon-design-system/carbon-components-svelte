@@ -112,6 +112,16 @@ describe("HeaderNav menubar", () => {
       expect(link2()).toHaveAttribute("tabindex", "0");
     });
 
+    it("moves the Tab stop when the current page changes after mount", async () => {
+      const { rerender } = render(Fixture, { props: { current: "Link 1" } });
+      await tick();
+
+      await rerender({ current: "Link 2" });
+
+      expect(link1()).toHaveAttribute("tabindex", "-1");
+      expect(link2()).toHaveAttribute("tabindex", "0");
+    });
+
     it("moves the Tab stop with focus", async () => {
       render(Fixture);
 
