@@ -2,9 +2,15 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
+import { checkboxFor } from "./helpers";
+import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
+import TreeViewHref from "./TreeView.href.test.svelte";
+import TreeViewVirtualizeLazy from "./TreeView.virtualize.lazy.test.svelte";
 import TreeViewVirtualize from "./TreeView.virtualize.test.svelte";
 
 const countRows = () => screen.queryAllByRole("treeitem").length;
+
+const virtualProps = { virtualize: { maxVisibleRows: 10 }, padding: 80 };
 
 describe("TreeView (virtualize)", () => {
   it("windows the DOM to the overscan-bounded slice of a large tree", () => {
@@ -490,5 +496,152 @@ describe("TreeView (virtualize)", () => {
     await waitFor(() => {
       expect(treeItemById(1201)).toHaveFocus();
     });
+  });
+});
+
+describe("TreeView virtualize + selectionMode=checkbox", () => {
+  it("renders checkboxes on windowed rows with correct ARIA", () => {
+    render(TreeViewCheckbox, virtualProps);
+
+    expect(
+      treeItemById("analytics").querySelector(".bx--checkbox"),
+    ).not.toBeNull();
+    expect(treeItemById("spark").querySelector(".bx--checkbox")).not.toBeNull();
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "false");
+    expect(treeItemById("analytics")).not.toHaveAttribute("aria-selected");
+    // Link rows still skip the checkbox in the virtual path.
+    expect(treeItemById("docs").querySelector(".bx--checkbox")).toBeNull();
+  });
+
+  it("checks every descendant when a branch checkbox is clicked", async () => {
+    render(TreeViewCheckbox, virtualProps);
+
+    await user.click(checkboxFor("analytics"));
+
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("legacy")).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("does not toggle when the row body is clicked", async () => {
+    render(TreeViewCheckbox, virtualProps);
+
+    await user.click(treeItemById("spark"));
+
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("toggles with Space without expanding, and Enter expands parents", async () => {
+    render(TreeViewCheckbox, virtualProps);
+
+    const analytics = treeItemById("analytics");
+    analytics.focus();
+    expect(analytics).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard(" ");
+    expect(analytics).toHaveAttribute("aria-checked", "true");
+    expect(analytics).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Enter}");
+    expect(analytics).toHaveAttribute("aria-expanded", "false");
+    expect(analytics).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("preserves checked state when the row scrolls out and back in", async () => {
+    render(TreeViewCheckbox, virtualProps);
+
+    await user.click(checkboxFor("spark"));
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+
+    const tree = screen.getByRole("tree");
+    // Scroll far enough that the interactive subtree leaves the window.
+    tree.scrollTop = 2000;
+    tree.dispatchEvent(new Event("scroll"));
+    await tick();
+
+    expect(findRowById("spark")).toBeNull();
+
+    tree.scrollTop = 0;
+    tree.dispatchEvent(new Event("scroll"));
+    await tick();
+
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
+  });
+});
+
+describe("TreeView virtualize + href", () => {
+  it("renders an anchor with role=treeitem inside a role=none li when href is set", () => {
+    render(TreeViewHref, virtualProps);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode.tagName).toBe("A");
+    expect(linkNode).toHaveAttribute("href", "/page-1");
+    expect(linkNode).toHaveAttribute("data-tree-row-id", "link-1");
+    expect(linkNode.closest("li")).toHaveAttribute("role", "none");
+  });
+
+  it("does not set href or target on disabled link nodes", () => {
+    render(TreeViewHref, virtualProps);
+
+    const disabledLink = screen.getByRole("treeitem", {
+      name: /Disabled Link/,
+    });
+    expect(disabledLink.tagName).toBe("A");
+    expect(disabledLink).not.toHaveAttribute("href");
+    expect(disabledLink).not.toHaveAttribute("target");
+  });
+
+  it("sets target and rel=noopener noreferrer for _blank", () => {
+    render(TreeViewHref, virtualProps);
+
+    const blankLink = screen.getByRole("treeitem", { name: /Blank Target/ });
+    expect(blankLink).toHaveAttribute("target", "_blank");
+    expect(blankLink).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("does not add rel when target is not _blank", () => {
+    render(TreeViewHref, virtualProps);
+
+    const selfLink = screen.getByRole("treeitem", { name: /Self Target/ });
+    expect(selfLink).toHaveAttribute("target", "_self");
+    expect(selfLink).not.toHaveAttribute("rel");
+  });
+
+  it("keeps aria-selected on plain rows", () => {
+    render(TreeViewHref, { ...virtualProps, selectedIds: ["plain-1"] });
+
+    const plainNode = screen.getByRole("treeitem", { name: /Plain Node/ });
+    expect(plainNode).toHaveAttribute("aria-selected", "true");
+  });
+});
+
+describe("TreeView virtualize + hasChildren lazy load", () => {
+  it("mounts fetched children as virtual rows after expand resolves", async () => {
+    const { component } = render(TreeViewVirtualizeLazy);
+
+    const root = treeItemById("root-a");
+    const caret = root.querySelector<HTMLElement>(
+      ".bx--tree-parent-node__toggle",
+    );
+    assert(caret instanceof HTMLElement);
+    expect(root).toHaveAttribute("aria-expanded", "false");
+    expect(findRowById("root-a-child-1")).toBeNull();
+    await user.click(caret);
+    await tick();
+
+    expect(treeItemById("root-a__loading")).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+
+    component.resolveLoad();
+    await waitFor(() => {
+      expect(findRowById("root-a__loading")).toBeNull();
+      expect(findRowById("root-a-child-1")).not.toBeNull();
+      expect(findRowById("root-a-child-2")).not.toBeNull();
+    });
+    expect(treeItemById("root-a-child-1")).toHaveAttribute("aria-level", "2");
   });
 });

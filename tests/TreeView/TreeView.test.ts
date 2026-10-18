@@ -5,6 +5,7 @@ import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeVi
 import { findParentTreeNode } from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
 import type TreeViewNodeListComponent from "carbon-components-svelte/TreeView/TreeViewNodeList.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import { getAllExpandedItems } from "./helpers";
@@ -12,6 +13,7 @@ import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
 import TreeViewHref from "./TreeView.href.test.svelte";
 import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
+import TreeViewPerformance from "./TreeView.performance.test.svelte";
 import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
@@ -468,6 +470,30 @@ describe("TreeView", () => {
         text: "AI / Machine learning",
       }),
     );
+  });
+});
+
+describe("TreeView Performance Optimizations", () => {
+  it("maintains TreeWalker functionality after prop changes", async () => {
+    const { rerender } = render(TreeViewPerformance);
+
+    const firstItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    firstItem.focus();
+
+    await rerender({ selectedIds: [0] });
+    await tick();
+    await rerender({ expandedIds: [1] });
+    await tick();
+
+    await user.keyboard("{ArrowDown}");
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const secondItem = analyticsItems[0];
+    expect(secondItem).toHaveFocus();
   });
 });
 
