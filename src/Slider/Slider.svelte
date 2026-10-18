@@ -165,7 +165,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
-  import { clamp } from "../utils/numeric-format.js";
+  import { clamp, parse } from "../utils/numeric-format.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
@@ -507,13 +507,16 @@
         {max}
         {step}
         on:change={(event) => {
-          if (!readonly) {
-            let next = Number(event.target.value);
-            if (next < min) next = min;
-            else if (next > max) next = max;
-            value = next;
+          if (readonly) return;
+          // An empty or unparsable entry keeps the current value.
+          const next = parse(event.target.value.trim(), true);
+          if (next !== null) {
+            value = clamp(next, min, max);
             dispatch("change", value);
           }
+          // Show the value the slider holds. Svelte skips the update when a
+          // clamped or rejected entry leaves `value` unchanged.
+          event.target.value = String(value);
         }}
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}

@@ -22,6 +22,7 @@
   export let labelText = "Range";
   export let name = "";
   export let nameUpper = "";
+  export let inputType = "number";
   export let formatValue: ((value: number) => string) | undefined = undefined;
   export let ariaLabelInput: string | undefined = undefined;
   export let ariaLabelInputUpper: string | undefined = undefined;
@@ -69,6 +70,7 @@
   {hideRangeLabels}
   {name}
   {nameUpper}
+  {inputType}
   {formatValue}
   ariaLabelInput={ariaLabelInput ?? "Lower bound"}
   ariaLabelInputUpper={ariaLabelInputUpper ?? "Upper bound"}

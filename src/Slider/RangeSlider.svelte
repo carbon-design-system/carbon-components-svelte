@@ -180,7 +180,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
-  import { clamp } from "../utils/numeric-format.js";
+  import { clamp, parse } from "../utils/numeric-format.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
@@ -541,10 +541,15 @@
         on:change={(event) => {
           if (readonly) return;
           const target = /** @type {HTMLInputElement} */ (event.currentTarget);
-          const next = Number(target.value);
-          if (Number.isNaN(next)) return;
-          value = clampLower(next);
-          dispatch("change", { value, valueUpper });
+          // An empty or unparsable entry keeps the current value.
+          const next = parse(target.value.trim(), true);
+          if (next !== null) {
+            value = clampLower(next);
+            dispatch("change", { value, valueUpper });
+          }
+          // Show the value the handle holds. Svelte skips the update when a
+          // clamped or rejected entry leaves `value` unchanged.
+          target.value = String(value);
         }}
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
@@ -814,10 +819,15 @@
         on:change={(event) => {
           if (readonly) return;
           const target = /** @type {HTMLInputElement} */ (event.currentTarget);
-          const next = Number(target.value);
-          if (Number.isNaN(next)) return;
-          valueUpper = clampUpper(next);
-          dispatch("change", { value, valueUpper });
+          // An empty or unparsable entry keeps the current value.
+          const next = parse(target.value.trim(), true);
+          if (next !== null) {
+            valueUpper = clampUpper(next);
+            dispatch("change", { value, valueUpper });
+          }
+          // Show the value the handle holds. Svelte skips the update when a
+          // clamped or rejected entry leaves `valueUpper` unchanged.
+          target.value = String(valueUpper);
         }}
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
