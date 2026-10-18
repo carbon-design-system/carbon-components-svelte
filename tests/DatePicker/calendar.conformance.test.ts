@@ -114,6 +114,29 @@ describe("formatDate matches flatpickr", () => {
       expect(mismatches.slice(0, 10)).toEqual([]);
     });
   }
+
+  it("formats time tokens as midnight, like a date-only flatpickr", () => {
+    const { reference, engine } = both();
+    const date = new Date(2024, 2, 5);
+    for (const format of ["Y-m-d H:i", "h:i K", "G:i:S", "Y-m-d H:i:s"]) {
+      expect(engine.formatDate(date, format)).toBe(
+        reference.formatDate(date, format),
+      );
+    }
+  });
+
+  it("parses time tokens the same way", () => {
+    const { reference, engine } = both();
+    for (const [text, format] of [
+      ["2024-03-05 14:30", "Y-m-d H:i"],
+      ["2024-03-05 2:30:15", "Y-m-d h:i:S"],
+      ["2024-03-05 00:00", "Y-m-d H:i"],
+    ]) {
+      expect(engine.parseDate(text, format)?.getTime()).toBe(
+        reference.parseDate(text, format)?.getTime(),
+      );
+    }
+  });
 });
 
 describe("parseDate matches flatpickr", () => {

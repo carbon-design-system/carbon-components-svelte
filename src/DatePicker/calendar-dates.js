@@ -11,6 +11,7 @@ import { resolveWeekInfo } from "./week-info.js";
  *   ordinal?: (day: number) => string;
  *   weekAbbreviation?: string;
  *   yearAriaLabel?: string;
+ *   amPM?: [string, string];
  * }} CalendarLocale
  */
 
@@ -186,6 +187,15 @@ function pad(value, length = 2) {
 /** @type {Record<string, (date: Date, l10n: CalendarLocale, context: FormatContext) => string | number>} */
 const FORMATTERS = {
   Z: (date) => date.toISOString(),
+  // Time tokens: the calendar picks dates only, so these read midnight unless
+  // a value carries a time, as with flatpickr when its time picker is off.
+  G: (date) => pad(date.getHours() % 12 || 12),
+  H: (date) => pad(date.getHours()),
+  K: (date, l10n) => (l10n.amPM ?? ["AM", "PM"])[date.getHours() > 11 ? 1 : 0],
+  S: (date) => pad(date.getSeconds()),
+  h: (date) => date.getHours() % 12 || 12,
+  i: (date) => pad(date.getMinutes()),
+  s: (date) => date.getSeconds(),
   D: (date, l10n) => l10n.weekdays.shorthand[date.getDay()],
   F: (date, l10n) => l10n.months.longhand[date.getMonth()],
   J: (date, l10n) =>
@@ -237,6 +247,12 @@ const NUMBER = "(\\d\\d|\\d)";
 const TOKEN_PATTERNS = {
   D: (l10n) => `(${l10n.weekdays.shorthand.join("|")})`,
   F: (l10n) => `(${l10n.months.longhand.join("|")})`,
+  G: () => NUMBER,
+  H: () => NUMBER,
+  S: () => NUMBER,
+  h: () => NUMBER,
+  i: () => NUMBER,
+  s: () => NUMBER,
   J: () => `${NUMBER}\\w+`,
   M: (l10n) => `(${l10n.months.shorthand.join("|")})`,
   U: () => "(.+)",
@@ -255,6 +271,24 @@ const TOKEN_PATTERNS = {
 
 /** @type {Record<string, (date: Date, value: string, l10n: CalendarLocale) => Date | void>} */
 const REVERSE = {
+  G: (date, value) => {
+    date.setHours((date.getHours() >= 12 ? 12 : 0) + Number.parseFloat(value));
+  },
+  H: (date, value) => {
+    date.setHours(Number.parseFloat(value));
+  },
+  S: (date, value) => {
+    date.setSeconds(Number.parseFloat(value));
+  },
+  h: (date, value) => {
+    date.setHours((date.getHours() >= 12 ? 12 : 0) + Number.parseFloat(value));
+  },
+  i: (date, value) => {
+    date.setMinutes(Number.parseFloat(value));
+  },
+  s: (date, value) => {
+    date.setSeconds(Number.parseFloat(value));
+  },
   F: (date, value, l10n) => {
     date.setMonth(l10n.months.longhand.indexOf(value));
   },

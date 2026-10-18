@@ -8,6 +8,8 @@ export interface CalendarLocale {
   weekAbbreviation?: string;
   /** Label of the year input. Defaults to `"Year"`. */
   yearAriaLabel?: string;
+  /** Labels for the `K` format token. Defaults to `["AM", "PM"]`. */
+  amPM?: [string, string];
 }
 
 export interface FormatContext {
