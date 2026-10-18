@@ -24,3 +24,10 @@
 <DescriptionList data-testid="empty-term">
   <DescriptionListItem>No term</DescriptionListItem>
 </DescriptionList>
+
+<DescriptionList data-testid="term-slot">
+  <DescriptionListItem term="Ignored">
+    <a slot="term" href="#plan">Plan</a>
+    Pro
+  </DescriptionListItem>
+</DescriptionList>
