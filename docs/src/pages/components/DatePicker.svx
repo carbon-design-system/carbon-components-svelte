@@ -181,7 +181,7 @@ Pass an `onDayCreate` callback via `flatpickrProps` to customize individual day 
 
 ### Week numbers
 
-Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks. The column is only filled when a single month is shown, so avoid combining it with `showMonths`.
+Set `weekNumbers` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` in `flatpickrProps` to compute them differently, such as for fiscal weeks. The column is only filled when a single month is shown, so avoid combining it with `showMonths`.
 
 <FileSource src="/framed/DatePicker/DatePickerWeekNumbers" />
 
@@ -284,6 +284,14 @@ The `locale` prop accepts either a [BCP 47 language tag](https://en.wikipedia.or
 To customize the weekday labels (for example, to use `Sun, Mon, Tue, ...` shorthands), pass a locale object. It may set `weekdays`, `months`, `firstDayOfWeek`, `rangeSeparator`, `weekAbbreviation`, and `yearAriaLabel`. A flatpickr locale module, such as `German` from `flatpickr/dist/l10n/de`, has this shape and can be passed as is.
 
 <FileSource src="/framed/DatePicker/DatePickerLocale" />
+
+### First day of the week
+
+The week starts on the locale's first day: Sunday for `"en"`, Monday for `"de"`. Set `firstDayOfWeek` from 0 (Sunday) to 6 (Saturday) to start it elsewhere without changing the locale.
+
+<DatePicker datePickerType="single" firstDayOfWeek={1}>
+  <DatePickerInput labelText="Shift start" placeholder="mm/dd/yyyy" />
+</DatePicker>
 
 ### Non-English locale
 
