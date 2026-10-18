@@ -228,6 +228,27 @@ describe("RangeSlider", () => {
   );
 
   it.each([
+    { typed: "", expected: "50" },
+    { typed: "abc", expected: "50" },
+    { typed: "٣٠", expected: "30" },
+    { typed: "80", expected: "50" },
+  ])(
+    "shows $expected after typing '$typed' into the lower input",
+    async ({ typed, expected }) => {
+      render(RangeSlider, {
+        props: { value: 50, valueUpper: 50, inputType: "text" },
+      });
+      const [lowerInput] = screen.getAllByRole("textbox");
+
+      await fireEvent.change(lowerInput, { target: { value: typed } });
+
+      const [lowerThumb] = screen.getAllByRole("slider");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", expected);
+      expect(lowerInput).toHaveValue(expected);
+    },
+  );
+
+  it.each([
     {
       handle: "lower",
       value: 49,

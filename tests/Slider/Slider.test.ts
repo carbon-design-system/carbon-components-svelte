@@ -573,6 +573,24 @@ describe("Slider", () => {
   });
 
   it.each([
+    { typed: "", expected: "100" },
+    { typed: "abc", expected: "100" },
+    { typed: "٥٠", expected: "50" },
+    { typed: "150", expected: "100" },
+  ])("shows $expected after typing '$typed'", async ({ typed, expected }) => {
+    render(Slider, { props: { value: 100, inputType: "text" } });
+    const input = screen.getByRole("textbox");
+
+    await fireEvent.change(input, { target: { value: typed } });
+
+    expect(screen.getByRole("slider")).toHaveAttribute(
+      "aria-valuenow",
+      expected,
+    );
+    expect(input).toHaveValue(expected);
+  });
+
+  it.each([
     [150, "100"],
     [-20, "0"],
   ])("clamps an initial value of %i into range", (value, expected) => {
