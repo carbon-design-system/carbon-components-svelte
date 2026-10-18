@@ -7,6 +7,7 @@
   export let size: ComponentProps<Menu>["size"] = "sm";
   export let maxHeight: ComponentProps<Menu>["maxHeight"] = undefined;
   export let disabledIndex: number | undefined = undefined;
+  export let allDisabled = false;
   export let moveFocusOnClick = false;
   export let onOpen: ((detail: unknown) => void) | undefined = undefined;
   export let onClose: ((detail: unknown) => void) | undefined = undefined;
@@ -35,7 +36,7 @@
 >
   {#each items as text, index}
     <MenuItem
-      disabled={index === disabledIndex}
+      disabled={allDisabled || index === disabledIndex}
       on:click={() => {
         onItemClick?.(text);
         if (moveFocusOnClick) elsewhere.focus();

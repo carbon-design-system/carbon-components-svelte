@@ -5,7 +5,9 @@ import { user } from "../utils/user";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuGroup from "./ContextMenuGroup.test.svelte";
 import ContextMenuOptionKeepOpenFixture from "./ContextMenuOption.keepOpen.test.svelte";
+import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
 import ContextMenuOptionSelectableIconBind from "./ContextMenuOptionSelectableIconBind.test.svelte";
+import ContextMenuSelection from "./ContextMenuSelection.test.svelte";
 import { getSelectedIds } from "./helpers";
 
 describe("ContextMenuGroup", () => {
@@ -39,6 +41,75 @@ describe("ContextMenuGroup", () => {
     expect(selectedIds).toContain("option2");
     expect(selectedIds).toContain("option3");
     expect(selectedIds).toHaveLength(3);
+  });
+});
+
+describe("ContextMenuOption selection state", () => {
+  const getSelectedId = () => screen.getByTestId("selected-id").textContent;
+
+  it("registers an initially selected group option into selectedIds", () => {
+    render(ContextMenuSelection);
+
+    expect(getSelectedIds()).toEqual(["date"]);
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: "Date" }),
+    ).toHaveAttribute("aria-checked", "true");
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: "Name" }),
+    ).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("selects an initially selected radio option", () => {
+    render(ContextMenuSelection);
+
+    expect(getSelectedId()).toBe("grid");
+    expect(screen.getByRole("menuitemradio", { name: "Grid" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    expect(screen.getByRole("menuitemradio", { name: "List" })).toHaveAttribute(
+      "aria-checked",
+      "false",
+    );
+  });
+
+  it("toggles a group checkbox with Space", async () => {
+    render(ContextMenuSelection);
+
+    screen.getByRole("menuitemcheckbox", { name: "Name" }).focus();
+    await user.keyboard(" ");
+
+    expect(getSelectedIds()).toEqual(["date", "name"]);
+  });
+
+  it("selects a radio option with Enter", async () => {
+    render(ContextMenuSelection);
+
+    screen.getByRole("menuitemradio", { name: "List" }).focus();
+    await user.keyboard("{Enter}");
+
+    expect(getSelectedId()).toBe("list");
+    expect(screen.getByRole("menuitemradio", { name: "List" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    expect(screen.getByRole("menuitemradio", { name: "Grid" })).toHaveAttribute(
+      "aria-checked",
+      "false",
+    );
+  });
+
+  it("toggles aria-checked on a plain selectable option", async () => {
+    render(ContextMenuOptionRole, { props: { selectable: true } });
+
+    const option = screen.getByRole("menuitemcheckbox");
+    expect(option).toHaveAttribute("aria-checked", "false");
+
+    await user.click(option);
+    expect(option).toHaveAttribute("aria-checked", "true");
+
+    await user.click(option);
+    expect(option).toHaveAttribute("aria-checked", "false");
   });
 });
 

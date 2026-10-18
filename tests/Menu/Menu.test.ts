@@ -55,6 +55,16 @@ describe("Menu", () => {
     expect(onOpen).toHaveBeenCalledWith(expect.any(HTMLElement));
   });
 
+  it("focuses the menu itself and still dispatches open when every item is disabled", async () => {
+    const onOpen = vi.fn();
+    render(MenuFixture, { props: { allDisabled: true, onOpen } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    expect(screen.getByRole("menu")).toHaveFocus();
+    expect(onOpen).toHaveBeenCalledTimes(1);
+  });
+
   it("focuses the first item without scrolling the page into view", async () => {
     const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
     try {

@@ -125,6 +125,29 @@ describe("MenuButton", () => {
       },
     );
 
+    it("toggles, closes on Escape to the trigger, and never takes mouse focus", async () => {
+      render(MenuButtonIconOnly);
+
+      const trigger = screen.getByRole("button", { name: "Row actions" });
+      const onFocus = vi.fn();
+      trigger.addEventListener("focus", onFocus);
+
+      await user.click(trigger);
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(trigger).toHaveClass("bx--overflow-menu--open");
+      expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
+      expect(onFocus).not.toHaveBeenCalled();
+
+      await user.click(trigger);
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+      await user.click(trigger);
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(trigger).toHaveFocus();
+    });
+
     it("renders the disabled state on the trigger", () => {
       render(MenuButtonIconOnly, { props: { disabled: true } });
 

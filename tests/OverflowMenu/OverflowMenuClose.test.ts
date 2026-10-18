@@ -56,4 +56,38 @@ describe("OverflowMenu close event trigger", () => {
     // Close was canceled: the menu stays open.
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
   });
+
+  it.each([
+    ["toggle", async (button: HTMLElement) => user.click(button)],
+    ["outside-click", async () => user.click(document.body)],
+    ["item-select", async () => user.click(screen.getAllByRole("menuitem")[0])],
+  ] as const)(
+    "keeps the menu open when the %s close is canceled",
+    async (trigger, act) => {
+      const onClose = vi.fn();
+      render(OverflowMenu, { props: { onClose, cancelClose: true } });
+
+      const { menuButton } = await openMenu();
+      await act(menuButton);
+
+      expect(closeDetails(onClose)).toEqual([
+        expect.objectContaining({ trigger }),
+      ]);
+      expect(menuButton).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+    },
+  );
+
+  it("leaves focus where an item click handler moved it", async () => {
+    const onItemClick = vi.fn(() => elsewhere.focus());
+    const { container } = render(OverflowMenu, { props: { onItemClick } });
+    const menuButton = screen.getByRole("button");
+    const elsewhere = container.appendChild(document.createElement("button"));
+
+    const { items } = await openMenu(menuButton);
+    await user.click(items[0]);
+
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(elsewhere).toHaveFocus();
+  });
 });

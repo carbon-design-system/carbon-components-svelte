@@ -263,6 +263,40 @@ describe("ContextMenu", () => {
     expect(onclose).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ["Enter", "{Enter}"],
+    ["Space", " "],
+  ])("activates an enabled option with %s", async (_, key) => {
+    const onclose = vi.fn();
+    const onoptionclick = vi.fn();
+    render(ContextMenu, {
+      props: { open: true, x: 100, y: 100, onclose, onoptionclick },
+    });
+
+    screen.getByRole("menuitem", { name: "Option 1" }).focus();
+    await user.keyboard(key);
+
+    expect(onoptionclick).toHaveBeenCalledWith("Option 1");
+    expect(onclose).toHaveBeenCalledWith("select");
+  });
+
+  it.each([
+    ["ArrowDown", "{ArrowDown}", "Submenu option 2"],
+    ["ArrowUp", "{ArrowDown}{ArrowUp}", "Submenu option 1"],
+    ["End", "{End}", "Submenu option 2"],
+    ["Home", "{End}{Home}", "Submenu option 1"],
+  ])("moves focus in the submenu with %s", async (_, keys, expected) => {
+    render(ContextMenu, {
+      props: { open: true, withSubmenu: true, x: 100, y: 100 },
+    });
+
+    screen.getByRole("menuitem", { name: "Option with submenu" }).focus();
+    await user.keyboard("{ArrowRight}");
+    await user.keyboard(keys);
+
+    expect(screen.getByRole("menuitem", { name: expected })).toHaveFocus();
+  });
+
   // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
   // jsdom reports zero-sized rects, so the trigger and the submenu get mocked
   // widths. The submenu opens after the 150ms hover-intent delay.
@@ -330,6 +364,76 @@ describe("ContextMenu", () => {
       const submenu = await openSubmenu(200, 100);
 
       expect(submenu.style.left).toBe("50px");
+    });
+  });
+
+  describe("positioning", () => {
+    const originalInnerWidth = window.innerWidth;
+    const originalInnerHeight = window.innerHeight;
+
+    afterEach(() => {
+      setViewportWidth(originalInnerWidth);
+      window.innerHeight = originalInnerHeight;
+    });
+
+    // Mocks a 150x100 menu in a 400x300 viewport.
+    const renderClosedMenu = () => {
+      setViewportWidth(400);
+      window.innerHeight = 300;
+
+      render(ContextMenu);
+
+      const menu = screen.getAllByRole("menu")[0];
+      vi.spyOn(menu, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 150,
+        top: 0,
+        bottom: 100,
+        width: 150,
+        height: 100,
+        x: 0,
+        y: 0,
+        toJSON() {},
+      });
+      return menu;
+    };
+
+    const rightClickAt = (x: number, y: number) =>
+      user.pointer({
+        target: document.body,
+        coords: { x, y },
+        keys: "[MouseRight]",
+      });
+
+    it("flips to the left and above the pointer near the viewport edge", async () => {
+      const menu = renderClosedMenu();
+
+      await rightClickAt(350, 250);
+
+      // 350 - 150 wide, 250 - 100 tall.
+      expect(menu.style.left).toBe("200px");
+      expect(menu.style.top).toBe("150px");
+    });
+
+    it("moves to the pointer on a right click while open", async () => {
+      const menu = renderClosedMenu();
+
+      await rightClickAt(100, 80);
+      await rightClickAt(120, 90);
+
+      expect(menu.style.left).toBe("120px");
+      expect(menu.style.top).toBe("90px");
+    });
+
+    it("reopens at the pointer after closing", async () => {
+      const menu = renderClosedMenu();
+
+      await rightClickAt(100, 80);
+      await user.keyboard("{Escape}");
+      await rightClickAt(120, 90);
+
+      expect(menu.style.left).toBe("120px");
+      expect(menu.style.top).toBe("90px");
     });
   });
 
