@@ -160,6 +160,8 @@
         showInvalid,
         showWarn,
         helperText,
+        invalidText,
+        warnText,
         errorId,
         warnId,
         helperId,
@@ -224,14 +226,18 @@
   <div class:bx--toggle__validation-msg={true}>
     {#if showInvalid}
       <WarningFilled class="bx--toggle__invalid-icon" />
-      <div id={errorId} class:bx--form-requirement={true} role="alert">
-        {invalidText}
-      </div>
+      {#if invalidText}
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
+          {invalidText}
+        </div>
+      {/if}
     {:else if showWarn}
       <WarningAltFilled
         class="bx--toggle__invalid-icon bx--toggle__invalid-icon--warning"
       />
-      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {#if warnText}
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
     {/if}
   </div>
   {#if helperText && !showInvalid && !showWarn}

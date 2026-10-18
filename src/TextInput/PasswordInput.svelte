@@ -287,7 +287,7 @@
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
-        aria-errormessage={showInvalid ? errorId : undefined}
+        aria-errormessage={showInvalid && invalidText ? errorId : undefined}
         {id}
         {name}
         {placeholder}
@@ -308,6 +308,8 @@
           resolveStatusDescribedBy({
             showInvalid,
             showWarn,
+            invalidText,
+            warnText,
             helperText,
             isFluid,
             errorId,
@@ -332,12 +334,12 @@
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
       {/if}
-      {#if isFluid && showInvalid}
+      {#if isFluid && showInvalid && invalidText}
         <div class:bx--form-requirement={true} id={errorId} role="alert">
           {invalidText}
         </div>
       {/if}
-      {#if isFluid && showWarn}
+      {#if isFluid && showWarn && warnText}
         <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
       {/if}
       <button
@@ -382,7 +384,7 @@
         {/if}
       </button>
     </div>
-    {#if !isFluid && showInvalid}
+    {#if !isFluid && showInvalid && invalidText}
       <div class:bx--form-requirement={true} id={errorId} role="alert">
         {invalidText}
       </div>
@@ -397,7 +399,7 @@
         {helperText}
       </div>
     {/if}
-    {#if !isFluid && showWarn}
+    {#if !isFluid && showWarn && warnText}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
     {/if}
   </div>

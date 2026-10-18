@@ -270,6 +270,8 @@
   $: $helperId = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
+    invalidText,
+    warnText,
     helperText,
     errorId,
     warnId,
@@ -319,12 +321,18 @@
     <div class:bx--radio-button-group__validation-msg={true}>
       {#if showInvalid}
         <WarningFilled class="bx--radio-button-group__invalid-icon" />
-        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+        {#if invalidText}
+          <div id={errorId} class:bx--form-requirement={true}>
+            {invalidText}
+          </div>
+        {/if}
       {:else if showWarn}
         <WarningAltFilled
           class="bx--radio-button-group__invalid-icon bx--radio-button-group__invalid-icon--warning"
         />
-        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+        {#if warnText}
+          <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+        {/if}
       {/if}
     </div>
     {#if readonly}
