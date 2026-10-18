@@ -17,6 +17,7 @@
   export let disabled = false;
   export let readonly = false;
   export let hideTextInput = false;
+  export let hideRangeLabels = false;
   export let labelText = "Range";
   export let name = "";
   export let nameUpper = "";
@@ -57,6 +58,7 @@
   {disabled}
   {readonly}
   {hideTextInput}
+  {hideRangeLabels}
   {name}
   {nameUpper}
   {formatValue}

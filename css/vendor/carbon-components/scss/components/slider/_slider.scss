@@ -43,6 +43,20 @@
     flex-grow: 1;
   }
 
+  // ccs: `hideRangeLabels`. The track's side margins space it from the range
+  // labels; where nothing sits beside it, inset it by the thumb's radius
+  // instead, so the thumb at either end lines up with the label above.
+  .#{$prefix}--slider-container--no-range-labels:not(.#{$prefix}--slider-container--two-handles):not(.#{$prefix}--slider-container--vertical)
+    > .#{$prefix}--slider {
+    margin-left: to-rem(7px);
+  }
+
+  .#{$prefix}--slider-container--no-range-labels.#{$prefix}--slider-container--no-text-input:not(.#{$prefix}--slider-container--vertical)
+    > .#{$prefix}--slider {
+    margin-right: to-rem(7px);
+    margin-left: to-rem(7px);
+  }
+
   .#{$prefix}--slider__range-label {
     // ccs: match v11 (`body-compact-01`) instead of v10's mono `code-02`.
     @include type-style('body-short-01');

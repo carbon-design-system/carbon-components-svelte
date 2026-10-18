@@ -84,6 +84,12 @@
   export let hideTextInput = false;
 
   /**
+   * Set to `true` to hide the min and max labels beside the track,
+   * as when a readout elsewhere already shows the range.
+   */
+  export let hideRangeLabels = false;
+
+  /**
    * Set to `true` for the slider to span
    * the full width of its containing element.
    */
@@ -316,13 +322,17 @@
   <div
     class:bx--slider-container={true}
     class:bx--slider-container--full-width={fullWidth}
+    class:bx--slider-container--no-range-labels={hideRangeLabels}
+    class:bx--slider-container--no-text-input={hideTextInput}
     class:bx--slider-container--readonly={readonly}
     class:bx--slider-container--vertical={orientation === "vertical"}
     style:width={fullWidth ? "100%" : undefined}
   >
-    <span class:bx--slider__range-label={true}
-      >{formatRangeLabel(minLabel, min)}</span
-    >
+    {#if !hideRangeLabels}
+      <span class:bx--slider__range-label={true}
+        >{formatRangeLabel(minLabel, min)}</span
+      >
+    {/if}
     <div
       bind:this={ref}
       class:bx--slider={true}
@@ -454,9 +464,11 @@
         </div>
       {/if}
     </div>
-    <span class:bx--slider__range-label={true}
-      >{formatRangeLabel(maxLabel, max)}</span
-    >
+    {#if !hideRangeLabels}
+      <span class:bx--slider__range-label={true}
+        >{formatRangeLabel(maxLabel, max)}</span
+      >
+    {/if}
     <div class:bx--slider-text-input-wrapper={true}>
       {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
