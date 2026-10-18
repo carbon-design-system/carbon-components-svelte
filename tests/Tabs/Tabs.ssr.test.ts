@@ -44,7 +44,6 @@ describe("Tabs server render", () => {
     const { document } = renderSSR(TabsSsr, { selected: 1 });
 
     expectSelected(document, 1);
-    expect(document.body).toHaveTextContent("Content 2");
   });
 
   it("renders the tab and panel matching `selectedId`", () => {

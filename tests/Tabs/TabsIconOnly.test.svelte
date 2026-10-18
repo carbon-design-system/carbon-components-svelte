@@ -12,9 +12,11 @@
   export let tooltipAlignment: ComponentProps<Tab>["tooltipAlignment"] =
     "center";
   export let disabledFirst = false;
+  export let autoWidth = false;
+  export let fullWidth = false;
 </script>
 
-<Tabs {iconOnly} {iconSize}>
+<Tabs {iconOnly} {iconSize} {autoWidth} {fullWidth}>
   <Tab label="Calendar" icon={Calendar} disabled={disabledFirst} />
   <Tab label="Settings" icon={Settings} {tooltipAlignment} />
   <Tab label="Information" icon={Information} />

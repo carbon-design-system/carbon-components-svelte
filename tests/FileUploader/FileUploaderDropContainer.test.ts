@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
@@ -205,6 +206,8 @@ describe("FileUploaderDropContainer", () => {
     });
 
     dropDiv.dispatchEvent(createDragEvent("dragleave", [], dropContainer));
+    // Let the dragleave flush. A synchronous check would pass before it.
+    await tick();
 
     expect(dropContainer).toHaveClass("bx--file__drop-container--drag-over");
 
@@ -467,7 +470,7 @@ describe("FileUploaderDropContainer", () => {
     });
   });
 
-  it("should not handle drag events when disabled", () => {
+  it("should not handle drag events when disabled", async () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },
     });
@@ -482,6 +485,8 @@ describe("FileUploaderDropContainer", () => {
     const dragOverEvent = createDragEvent("dragover", [file]);
 
     dropDiv.dispatchEvent(dragOverEvent);
+    await tick();
+
     expect(dropContainer).not.toHaveClass(
       "bx--file__drop-container--drag-over",
     );
@@ -818,12 +823,12 @@ describe("FileUploaderDropContainer", () => {
 
   it("should handle role prop", () => {
     const { container } = render(FileUploaderDropContainer, {
-      props: { role: "button" },
+      props: { role: "group" },
     });
 
     const target = container.querySelector(".bx--file-browse-btn");
     assert(target instanceof HTMLElement);
-    expect(target).toHaveAttribute("role", "button");
+    expect(target).toHaveAttribute("role", "group");
   });
 
   it("should handle tabindex prop", () => {

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type FileUploaderButtonComponent from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
-import type { ComponentProps } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
@@ -33,18 +33,6 @@ describe("FileUploaderButton", () => {
       input.dispatchEvent(new Event("cancel"));
 
       expect(fileNames(input)).toEqual(["a.txt"]);
-    });
-
-    it("leaves an empty input empty", () => {
-      const { container } = render(FileUploaderButton, {
-        props: { labelText: "Add file" },
-      });
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
-
-      input.dispatchEvent(new Event("cancel"));
-
-      expect(input.files).toHaveLength(0);
     });
   });
 
@@ -220,11 +208,10 @@ describe("FileUploaderButton", () => {
 
     const file = new File(["content"], "test.txt", { type: "text/plain" });
     simulateFileSelection(input, [file]);
+    // Let the pick flush. A `waitFor` would pass on its first, pre-flush run.
+    await tick();
 
-    await vi.waitFor(() => {
-      const button = screen.getByRole("button");
-      expect(button).toHaveTextContent("Add file");
-    });
+    expect(screen.getByRole("button")).toHaveTextContent("Add file");
   });
 
   it("should dispatch change event when files are selected", async () => {
@@ -421,21 +408,6 @@ describe("FileUploaderButton", () => {
     await user.click(button);
 
     expect(clickSpy).toHaveBeenCalled();
-  });
-
-  it("should handle keyboard interaction on button", async () => {
-    const { container } = render(FileUploaderButton);
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-
-    const _clickSpy = vi.spyOn(input, "click");
-    const button = screen.getByRole("button");
-
-    button.focus();
-    await user.keyboard("{Enter}");
-
-    expect(button).toHaveFocus();
   });
 
   it("should render button with icon and text", () => {

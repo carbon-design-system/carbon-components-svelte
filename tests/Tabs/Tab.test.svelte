@@ -8,9 +8,15 @@
   export let tabindex = "0";
   export let id = "test-tab";
   export let useSlot = false;
+  /** Adds a preselected tab ahead of the tab under test. */
+  export let withSibling = false;
+  export let activation: "automatic" | "manual" = "automatic";
 </script>
 
-<Tabs>
+<Tabs {activation}>
+  {#if withSibling}
+    <Tab label="Sibling" />
+  {/if}
   {#if useSlot}
     <Tab {href} {disabled} {tabindex} {id}> <span>Slot content</span> </Tab>
   {:else}

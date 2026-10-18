@@ -15,53 +15,52 @@ describe("FileUploaderItem", () => {
     expect(item).toBeInTheDocument();
   });
 
-  it("should render with different status values", () => {
-    const { container: container1 } = render(FileUploaderItem, {
-      props: { name: "test.txt", status: "uploading" },
+  it.each([
+    ["uploading", ".bx--loading"],
+    ["edit", "button.bx--file-close"],
+    ["complete", ".bx--file-complete"],
+  ])("should render the %s status icon", (status, selector) => {
+    const statusIcons = [
+      ".bx--loading",
+      "button.bx--file-close",
+      ".bx--file-complete",
+    ];
+    const { container } = render(FileUploaderItem, {
+      props: { name: "test.txt", status },
     });
 
-    const { container: container2 } = render(FileUploaderItem, {
-      props: { name: "test.txt", status: "edit" },
-    });
-
-    const { container: container3 } = render(FileUploaderItem, {
-      props: { name: "test.txt", status: "complete" },
-    });
-
-    expect(
-      container1.querySelector(".bx--file__selected-file"),
-    ).toBeInTheDocument();
-    expect(
-      container2.querySelector(".bx--file__selected-file"),
-    ).toBeInTheDocument();
-    expect(
-      container3.querySelector(".bx--file__selected-file"),
-    ).toBeInTheDocument();
+    const stateContainer = container.querySelector(
+      ".bx--file__state-container",
+    );
+    assert(stateContainer);
+    for (const icon of statusIcons) {
+      if (icon === selector) {
+        expect(stateContainer.querySelector(icon)).toBeInTheDocument();
+      } else {
+        expect(stateContainer.querySelector(icon)).toBeNull();
+      }
+    }
   });
 
-  it("should render with different size values", () => {
-    const { container: container1 } = render(FileUploaderItem, {
-      props: { name: "test.txt", size: "default" },
+  it.each([
+    ["default", []],
+    ["field", ["md"]],
+    ["small", ["sm"]],
+    ["xs", ["xs"]],
+  ])("should apply the size modifier for size %s", (size, modifiers) => {
+    const { container } = render(FileUploaderItem, {
+      props: { name: "test.txt", size },
     });
 
-    const { container: container2 } = render(FileUploaderItem, {
-      props: { name: "test.txt", size: "field" },
-    });
-
-    const { container: container3 } = render(FileUploaderItem, {
-      props: { name: "test.txt", size: "small" },
-    });
-
-    const item1 = container1.querySelector(".bx--file__selected-file");
-    const item2 = container2.querySelector(".bx--file__selected-file");
-    const item3 = container3.querySelector(".bx--file__selected-file");
-
-    assert(item1);
-    assert(item2);
-    assert(item3);
-
-    expect(item2).toHaveClass("bx--file__selected-file--md");
-    expect(item3).toHaveClass("bx--file__selected-file--sm");
+    const item = container.querySelector(".bx--file__selected-file");
+    assert(item);
+    for (const modifier of ["md", "sm", "xs"]) {
+      if (modifiers.includes(modifier)) {
+        expect(item).toHaveClass(`bx--file__selected-file--${modifier}`);
+      } else {
+        expect(item).not.toHaveClass(`bx--file__selected-file--${modifier}`);
+      }
+    }
   });
 
   it("should render invalid state", () => {
@@ -202,7 +201,7 @@ describe("FileUploaderItem", () => {
       props: {
         name: "test.txt",
         status: "edit",
-        iconDescription: "Remove file",
+        iconDescription: "Discard report",
       },
     });
 
@@ -210,7 +209,7 @@ describe("FileUploaderItem", () => {
       ".bx--file__state-container button",
     );
     assert(closeButton instanceof HTMLElement);
-    expect(closeButton).toHaveAttribute("aria-label", "Remove file");
+    expect(closeButton).toHaveAttribute("aria-label", "Discard report");
   });
 
   it("should pass fileName to iconDescription function with file undefined", () => {
@@ -288,25 +287,24 @@ describe("FileUploaderItem", () => {
     expect(container.querySelector(".bx--file-size")).not.toBeInTheDocument();
   });
 
-  it("should handle mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+  it("should forward mouse events", async () => {
+    const onmouseover = vi.fn();
+    const onmouseenter = vi.fn();
+    const onmouseleave = vi.fn();
     const { container } = render(FileUploaderItem, {
-      props: {
-        name: "test.txt",
-        onmouseover: () => console.log("mouseover"),
-        onmouseenter: () => console.log("mouseenter"),
-        onmouseleave: () => console.log("mouseleave"),
-      },
+      props: { name: "test.txt", onmouseover, onmouseenter, onmouseleave },
     });
 
     const item = container.querySelector(".bx--file__selected-file");
     assert(item instanceof HTMLElement);
 
     await user.hover(item);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(onmouseover).toHaveBeenCalledTimes(1);
+    expect(onmouseenter).toHaveBeenCalledTimes(1);
+    expect(onmouseleave).not.toHaveBeenCalled();
 
     await user.unhover(item);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onmouseleave).toHaveBeenCalledTimes(1);
   });
 
   it("should set a title on a truncated name", async () => {
