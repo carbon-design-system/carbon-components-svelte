@@ -638,6 +638,27 @@ describe("FileUploader", () => {
     expect(clearHandler).not.toHaveBeenCalled();
   });
 
+  it("should dispatch remove then change with the remaining files via row close", async () => {
+    const events: string[] = [];
+    const log = (type: string) => (e: CustomEvent<ReadonlyArray<File>>) =>
+      events.push(`${type}:${e.detail.map((f) => f.name).join(",")}`);
+    const { component } = render(FileUploader, {
+      props: { onRemove: log("remove"), onChange: log("change") },
+    });
+
+    await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+    ]);
+    events.length = 0;
+
+    await user.click(removeButtons()[0]);
+
+    await vi.waitFor(() => {
+      expect(events).toEqual(["remove:file1.txt", "change:file2.txt"]);
+    });
+  });
+
   it("should dispatch change and clear when the last file is removed via row close", async () => {
     const changeHandler = vi.fn();
     const clearHandler = vi.fn();
