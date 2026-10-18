@@ -89,6 +89,24 @@ function names(locale, options, dateAt, length) {
   return Array.from({ length }, (_, i) => formatter.format(dateAt(i)));
 }
 
+const TRAILING_PERIOD = /\.$/;
+
+/**
+ * Weekday headings: one letter when that tells the days apart (日 月 火),
+ * else the short name without a trailing period, since German "M D M D"
+ * names two days each.
+ *
+ * @param {string} locale
+ * @param {(index: number) => Date} dateAt
+ */
+function weekdayShorthand(locale, dateAt) {
+  const narrow = names(locale, { weekday: "narrow" }, dateAt, 7);
+  if (new Set(narrow).size === 7) return narrow;
+  return names(locale, { weekday: "short" }, dateAt, 7).map((name) =>
+    name.replace(TRAILING_PERIOD, ""),
+  );
+}
+
 /**
  * @param {string} locale BCP 47 language tag
  * @returns {CalendarLocale}
@@ -117,7 +135,7 @@ function buildIntlLocale(locale) {
   const weekday = (i) => new Date(2000, 0, 2 + i);
   const built = {
     weekdays: {
-      shorthand: names(gregorian, { weekday: "narrow" }, weekday, 7),
+      shorthand: weekdayShorthand(gregorian, weekday),
       longhand: names(gregorian, { weekday: "long" }, weekday, 7),
     },
     months: {
@@ -450,7 +468,12 @@ export function isMonthFirst(locale) {
   // its cold-start cost (a few ms) out of the first mount.
   if (typeof locale !== "string" || ENGLISH.test(locale)) return true;
   try {
-    const parts = getDateTimeFormatter(locale, {
+    // Gregorian, like the grid: Persian dates put the year first, but the
+    // Gregorian dates `fa` shows put the month first.
+    const gregorian = new Intl.Locale(locale, {
+      calendar: "gregory",
+    }).toString();
+    const parts = getDateTimeFormatter(gregorian, {
       year: "numeric",
       month: "long",
     }).formatToParts(new Date(2000, 0, 1));
