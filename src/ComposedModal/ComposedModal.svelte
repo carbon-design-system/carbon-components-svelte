@@ -130,6 +130,25 @@
     title.set(value);
   }
 
+  // Live ModalHeaders. The last one to unmount clears the label and
+  // title. Svelte 5 unmounts a swapped-out header after its replacement
+  // has set them, so a header can't simply clear them itself.
+  let headerCount = 0;
+
+  /**
+   * @type {() => () => void}
+   */
+  function registerHeader() {
+    headerCount += 1;
+    return () => {
+      headerCount -= 1;
+      if (headerCount === 0) {
+        label.set(undefined);
+        title.set(undefined);
+      }
+    };
+  }
+
   /**
    * @type {(value: string | undefined) => void}
    */
@@ -143,6 +162,7 @@
     submit,
     updateLabel,
     updateTitle,
+    registerHeader,
     ids,
     label,
     title,
