@@ -53,6 +53,47 @@ function style(page: Page, selector: string, pseudo?: string) {
   );
 }
 
+// Share of the most common color in a screenshot of an element's first line
+// of text: 1 when the text doesn't show. Forced text sits on a `Canvas`
+// backplate, which getComputedStyle doesn't report.
+async function flatness(page: Page, selector: string) {
+  const clip = await page.evaluate((selector) => {
+    const el = document.querySelector(selector);
+    if (!el) throw new Error(`no ${selector}`);
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) =>
+        node.textContent?.trim()
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_SKIP,
+    });
+    const text = walker.nextNode();
+    if (!text) throw new Error(`no text in ${selector}`);
+    const range = document.createRange();
+    range.selectNodeContents(text);
+    const { x, y, width, height } = range.getBoundingClientRect();
+    return { x, y, width, height };
+  }, selector);
+  const png = (await page.screenshot({ clip })).toString("base64");
+  return page.evaluate(async (png) => {
+    const img = new Image();
+    img.src = `data:image/png;base64,${png}`;
+    await img.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("no 2d context");
+    ctx.drawImage(img, 0, 0);
+    const { data } = ctx.getImageData(0, 0, img.width, img.height);
+    const counts = new Map<string, number>();
+    for (let i = 0; i < data.length; i += 4) {
+      const key = `${data[i]},${data[i + 1]},${data[i + 2]}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return Math.max(...counts.values()) / (data.length / 4);
+  }, png);
+}
+
 test.describe("forced colors", () => {
   let system: Record<SystemColor, string>;
 
@@ -126,6 +167,16 @@ test.describe("forced colors", () => {
     expect
       .soft((await style(page, toggle)).color, toggle)
       .toBe(system.LinkText);
+  });
+
+  // A selected label is `HighlightText` on `Highlight`. Left forced, its text
+  // gets a `Canvas` backplate the same color as `HighlightText` in both
+  // contrast schemes, so the label vanished into a solid block.
+  test("selected and pressed labels show on their fill", async ({ page }) => {
+    for (const [on] of selected) {
+      // biome-ignore lint/performance/noAwaitInLoops: one screenshot at a time
+      expect.soft(await flatness(page, on), on).toBeLessThan(0.95);
+    }
   });
 
   test("disabled items read GrayText, also on hover", async ({ page }) => {

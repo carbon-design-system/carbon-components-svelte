@@ -141,15 +141,21 @@
   }
 
   // Forced-colors mode repaints the pressed background and drops the inset
-  // box-shadow, which left pressed and unpressed buttons identical. Only system
-  // colors are used, so `forced-color-adjust` stays `auto`: unforcing would
-  // bring back the inset bar and the real `$focus` ring on top of `Highlight`.
-  // The doubled `.bx--toggle-button` outranks the hover/active fills (a
-  // non-system fill would be forced to `Canvas` under `HighlightText`).
+  // box-shadow, which left pressed and unpressed buttons identical. The
+  // pressed segment fills with `Highlight` and opts out of forcing: forced
+  // text gets a `Canvas` backplate, which hid `HighlightText` labels. So it
+  // drops the inset bar and divider that unforcing brings back. The doubled
+  // `.bx--toggle-button` outranks the hover/active fills.
   @media (forced-colors: active) {
     .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled) {
+      forced-color-adjust: none;
       background-color: Highlight;
+      box-shadow: none;
       color: HighlightText;
+    }
+
+    .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled)::before {
+      background-color: Highlight;
     }
 
     .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled)

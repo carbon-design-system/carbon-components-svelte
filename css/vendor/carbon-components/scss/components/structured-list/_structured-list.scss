@@ -468,9 +468,11 @@
 // carbon-components-svelte patch (structured-list-forced-colors)
 // The selected row is a `$layer-selected` fill, which forced-colors mode
 // repaints as Canvas, so only the icon told it apart. Author system colors
-// survive forcing, so fill it with Highlight, as TreeView does. The hover
-// rule for cell text outranks the plain selected rule, so its `:hover`
-// twin re-asserts HighlightText.
+// survive forcing, so fill it with Highlight, as TreeView does. The row
+// opts out of forcing: forced text gets a `Canvas` backplate, which hid
+// the `HighlightText` cells. Its border, which unforcing brings back, uses
+// a system color too. The hover rule for cell text outranks the plain
+// selected rule, so its `:hover` twin re-asserts HighlightText.
 
 /// Selected structured list row in forced-colors mode.
 /// @access private
@@ -479,6 +481,8 @@
   @media (forced-colors: active) {
     .#{$prefix}--structured-list--selection
       .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected {
+      forced-color-adjust: none;
+      border-color: Highlight;
       background-color: Highlight;
       color: HighlightText;
     }

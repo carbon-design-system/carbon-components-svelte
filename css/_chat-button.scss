@@ -94,8 +94,10 @@
 
   // Forced colors drop the fills, so selected and unselected chips looked
   // the same. Selected takes the system highlight, disabled or not, and
-  // after the hover block so hovering doesn't take it away. Only system
-  // colors, so `forced-color-adjust` stays `auto`.
+  // after the hover block so hovering doesn't take it away. It opts out of
+  // forcing: forced text gets a `Canvas` backplate, which hid the
+  // `HighlightText` label. So it drops the focus ring's inset shadow,
+  // which unforcing brings back.
   @media (forced-colors: active) {
     .#{$prefix}--chat-btn--quick-action[disabled],
     .#{$prefix}--chat-btn--quick-action[disabled]:hover {
@@ -110,8 +112,10 @@
         [disabled]
       ):hover,
     .#{$prefix}--chat-btn--quick-action.#{$prefix}--chat-btn--quick-action--selected[disabled] {
+      forced-color-adjust: none;
       border-color: Highlight;
       background-color: Highlight;
+      box-shadow: none;
       color: HighlightText;
     }
   }
