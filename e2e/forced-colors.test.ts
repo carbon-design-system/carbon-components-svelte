@@ -136,6 +136,14 @@ test.describe("forced colors", () => {
       ".bx--structured-list-row--selected",
       ".bx--structured-list-row:not(.bx--structured-list-row--selected)",
     ],
+    [
+      ".bx--tabs__nav-link--selected",
+      ".bx--tabs__nav-item--default .bx--tabs__nav-link",
+    ],
+    [
+      ".bx--btn--icon-only.bx--btn--selected",
+      ".bx--btn--icon-only:not(.bx--btn--selected)",
+    ],
   ] as const;
 
   test("selected and pressed items fill with Highlight, also on hover", async ({
@@ -176,7 +184,8 @@ test.describe("forced colors", () => {
   // gets a `Canvas` backplate the same color as `HighlightText` in both
   // contrast schemes, so the label vanished into a solid block.
   test("selected and pressed labels show on their fill", async ({ page }) => {
-    for (const [on] of selected) {
+    // An icon-only button has no visible label.
+    for (const [on] of selected.filter(([on]) => !on.includes("bx--btn"))) {
       // biome-ignore lint/performance/noAwaitInLoops: one screenshot at a time
       expect.soft(await flatness(page, on), on).toBeLessThan(0.95);
     }
@@ -187,6 +196,10 @@ test.describe("forced colors", () => {
       ".bx--tree-node--disabled > .bx--tree-node__label",
       ".bx--toggle-button:disabled",
       ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected)[disabled]",
+      ".bx--tabs__nav-item--disabled .bx--tabs__nav-link",
+      ".bx--tag--disabled",
+      ".bx--tile--clickable.bx--link--disabled",
+      ".bx--tile--selectable.bx--tile--disabled",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });

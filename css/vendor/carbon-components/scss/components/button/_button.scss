@@ -507,3 +507,35 @@
 @include exports('button-full-width') {
   @include button-full-width;
 }
+
+// carbon-components-svelte patch (button-forced-colors)
+// A selected icon-only button is a background fill, which forced-colors mode
+// repaints, so it looked like an unselected one. It fills with `Highlight`
+// and opts out of forcing (forced content sits on a `Canvas` backplate). The
+// focus styling that unforcing brings back is replaced: the HCM focus rule's
+// `Highlight` text would vanish on the fill.
+
+/// Selected icon-only button in forced-colors mode.
+/// @access private
+/// @group button
+@mixin button-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected,
+    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected:hover,
+    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected:focus {
+      forced-color-adjust: none;
+      border-color: Highlight;
+      background-color: Highlight;
+      box-shadow: none;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected .#{$prefix}--btn__icon {
+      fill: HighlightText;
+    }
+  }
+}
+
+@include exports("button-forced-colors") {
+  @include button-forced-colors;
+}

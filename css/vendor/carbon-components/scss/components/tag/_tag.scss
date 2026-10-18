@@ -593,3 +593,28 @@
 @include exports("tag-operational") {
   @include tag-operational;
 }
+
+// carbon-components-svelte patch (tag-forced-colors)
+// Forced-colors mode paints a disabled tag like an enabled one. It reads
+// `GrayText`, as a disabled selectable tag already does.
+
+/// Disabled tag in forced-colors mode.
+/// @access private
+/// @group tag
+@mixin tag-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--tag.#{$prefix}--tag--disabled {
+      color: GrayText;
+      outline-color: GrayText;
+    }
+
+    .#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon svg,
+    .#{$prefix}--tag--disabled .#{$prefix}--tag__custom-icon svg {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("tag-forced-colors") {
+  @include tag-forced-colors;
+}

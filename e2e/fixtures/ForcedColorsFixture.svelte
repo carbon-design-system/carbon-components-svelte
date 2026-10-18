@@ -1,5 +1,6 @@
 <script>
   import {
+    Button,
     ChatButton,
     ClickableTile,
     ContentSwitcher,
@@ -18,6 +19,7 @@
     OverflowMenuItem,
     Popover,
     ProgressBar,
+    RadioTile,
     SelectableTag,
     SelectableTile,
     ShapeIndicator,
@@ -27,12 +29,16 @@
     StructuredListInput,
     StructuredListRow,
     Switch,
+    Tab,
+    Tabs,
+    Tag,
     Toggle,
     ToggleButton,
     ToggleButtonGroup,
     TreeView,
     Truncate,
   } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
   import ForcedColorsMoreFixture from "./ForcedColorsMoreFixture.svelte";
@@ -109,6 +115,18 @@
     exceeded the memory limit configured for the production namespace.
   </Truncate>
 
+  <Tabs selected={1}>
+    <Tab label="Tab" />
+    <Tab label="Selected tab" />
+    <Tab label="Disabled tab" disabled />
+  </Tabs>
+
+  <Tag>Tag</Tag>
+  <Tag disabled>Disabled tag</Tag>
+
+  <Button kind="ghost" icon={Add} iconDescription="Add" />
+  <Button kind="ghost" icon={Add} iconDescription="Add" isSelected />
+
   <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
   <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>
 
@@ -116,6 +134,7 @@
   <SelectableTile selected>Selected tile</SelectableTile>
   <SelectableTile disabled>Disabled selectable tile</SelectableTile>
   <SelectableTile selected disabled>Disabled selected tile</SelectableTile>
+  <RadioTile value="a" disabled>Disabled radio tile</RadioTile>
 
   <ProgressBar labelText="Progress" value={50} />
   <ProgressBar labelText="Indeterminate" />

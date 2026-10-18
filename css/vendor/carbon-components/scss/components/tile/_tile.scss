@@ -438,3 +438,36 @@
 @include exports("tile-clickable-icon") {
   @include tile-clickable-icon;
 }
+
+// carbon-components-svelte patch (tile-forced-colors)
+// Forced-colors mode paints a disabled SelectableTile, RadioTile or
+// ClickableTile like an enabled one. It reads `GrayText`, checkmark included.
+// A disabled ClickableTile is a disabled link, whose own patch the tile's
+// color rules outrank.
+
+/// Disabled tiles in forced-colors mode.
+/// @access private
+/// @group tile
+@mixin tile-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable {
+      border-color: GrayText;
+      color: GrayText;
+      outline-color: GrayText;
+    }
+
+    .#{$prefix}--tile--disabled .#{$prefix}--tile__checkmark svg {
+      fill: GrayText;
+    }
+
+    .#{$prefix}--tile--clickable.#{$prefix}--link--disabled,
+    .#{$prefix}--tile--clickable.#{$prefix}--link--disabled:hover {
+      color: GrayText;
+      outline-color: GrayText;
+    }
+  }
+}
+
+@include exports("tile-forced-colors") {
+  @include tile-forced-colors;
+}
