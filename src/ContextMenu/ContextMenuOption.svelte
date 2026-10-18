@@ -240,6 +240,8 @@
   on:keydown={async (event) => {
     if (
       subOptions &&
+      // Keys from the flyout's own items bubble here; only the trigger opens it.
+      event.target === ref &&
       (event.key === "ArrowRight" || event.key === " " || event.key === "Enter")
     ) {
       if (disabled) return;
@@ -307,7 +309,7 @@
   on:click={(event) => {
     if (subOptions) {
       event.stopPropagation();
-      if (disabled) return;
+      if (disabled || submenuRef?.contains(event.target)) return;
       submenuOpen = true;
       return;
     }
@@ -339,6 +341,11 @@
       open={submenuOpen}
       x={submenuPosition[0]}
       y={submenuPosition[1]}
+      on:close={() => {
+        // The flyout closes itself on select, Escape or an outside click.
+        submenuOpen = false;
+        focusIndex = 0;
+      }}
     >
       <slot />
     </ContextMenu>
