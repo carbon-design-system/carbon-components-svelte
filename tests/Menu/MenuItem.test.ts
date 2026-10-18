@@ -396,6 +396,31 @@ describe("MenuItem", () => {
       ).toHaveFocus();
     });
 
+    it.each([{ nested: false }, { nested: true }])(
+      "keeps an unchecked initial item unchecked on reopen (nested: $nested)",
+      async ({ nested }) => {
+        render(MenuItemSelectableFixture, { nested });
+        const trigger = screen.getByRole("button", { name: "Trigger" });
+        const open = async () => {
+          await user.click(trigger);
+          if (nested)
+            await user.click(screen.getByRole("menuitem", { name: "View" }));
+        };
+        await open();
+        await user.click(
+          screen.getByRole("menuitemcheckbox", { name: "Size" }),
+        );
+        expect(getSelectedIds()).toEqual([]);
+
+        await open();
+
+        expect(
+          screen.getByRole("menuitemcheckbox", { name: "Size" }),
+        ).toHaveAttribute("aria-checked", "false");
+        expect(getSelectedIds()).toEqual([]);
+      },
+    );
+
     it("keeps the menu open when click is prevented and still toggles selection", async () => {
       render(MenuItemSelectableFixture);
 

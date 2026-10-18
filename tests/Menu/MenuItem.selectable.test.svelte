@@ -6,6 +6,7 @@
   import type { ComponentProps } from "svelte";
 
   export let selectedIds: ComponentProps<MenuItemGroup>["selectedIds"] = [];
+  export let nested = false;
 
   let anchor: HTMLButtonElement;
   let open = false;
@@ -17,11 +18,23 @@
 
 <Menu {anchor} bind:open labelText="Example menu">
   <MenuItem>Plain</MenuItem>
-  <MenuItemGroup labelText="Columns" bind:selectedIds>
-    <MenuItem id="name" labelText="Name" />
-    <MenuItem id="size" labelText="Size" icon={Add} selected />
-    <MenuItem id="date" labelText="Date" on:click={(e) => e.preventDefault()} />
-  </MenuItemGroup>
+  {#if nested}
+    <MenuItem labelText="View">
+      <MenuItemGroup labelText="Columns" bind:selectedIds>
+        <MenuItem id="size" labelText="Size" selected />
+      </MenuItemGroup>
+    </MenuItem>
+  {:else}
+    <MenuItemGroup labelText="Columns" bind:selectedIds>
+      <MenuItem id="name" labelText="Name" />
+      <MenuItem id="size" labelText="Size" icon={Add} selected />
+      <MenuItem
+        id="date"
+        labelText="Date"
+        on:click={(e) => e.preventDefault()}
+      />
+    </MenuItemGroup>
+  {/if}
 </Menu>
 
 <div data-testid="selected-ids">{JSON.stringify(selectedIds)}</div>

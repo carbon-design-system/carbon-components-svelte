@@ -9,7 +9,7 @@
   /** Specify the label text */
   export let labelText = "";
 
-  import { setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
   import {
     addUniqueArrayItem,
@@ -21,15 +21,19 @@
    */
   const currentIds = writable([]);
 
+  const seededIds = getContext("carbon:Menu")?.seededIds ?? new Set();
+
   // A menu unmounts its items when it closes, so items re-seed on every open.
-  // Only honor a `selected` item when the group opens without a selection,
-  // otherwise reopening the menu would restore the initial selection.
+  // Only honor a `selected` item once, and only when the group opens without
+  // a selection, otherwise reopening the menu would restore it.
   const isSeedable = selectedIds.length === 0;
 
   /**
    * @type {(data: { id: string }) => void}
    */
   function addOption({ id }) {
+    if (seededIds.has(id)) return;
+    seededIds.add(id);
     if (!isSeedable) return;
     selectedIds = addUniqueArrayItem(selectedIds, id);
   }
