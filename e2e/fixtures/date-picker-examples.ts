@@ -1,11 +1,14 @@
 import { mount } from "./mount";
 
 // Mounts one DatePicker docs example, named by `?example=`, so the layout
-// checks run against exactly what the docs render.
+// checks run against exactly what the docs render. `?dir=rtl` mounts it in a
+// right-to-left page.
 const examples = import.meta.glob(
   "../../docs/src/pages/framed/DatePicker/*.svelte",
 );
-const name = new URLSearchParams(location.search).get("example");
+const params = new URLSearchParams(location.search);
+const name = params.get("example");
+if (params.get("dir") === "rtl") document.documentElement.dir = "rtl";
 // A Map lookup, so a crafted `?example=` (`constructor`, say) finds nothing
 // instead of an inherited method.
 const load = new Map(Object.entries(examples)).get(

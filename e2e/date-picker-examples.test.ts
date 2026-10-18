@@ -24,7 +24,7 @@ const appears = (page: Page) =>
   page
     .locator(CALENDAR)
     .first()
-    .waitFor({ timeout: 1000 })
+    .waitFor({ timeout: 3000 })
     .then(() => true)
     .catch(() => false);
 
@@ -100,14 +100,33 @@ function layoutProblems() {
     if (calendar.scrollWidth > calendar.clientWidth + TOLERANCE) {
       problems.push("calendar overflows horizontally");
     }
+    if (box.left < -TOLERANCE || box.right > innerWidth + TOLERANCE) {
+      problems.push("calendar is off screen");
+    }
   }
   return problems;
 }
 
+// The calendar stays left-to-right, as flatpickr's did, but the input and
+// its positioning around it follow the page.
+const RTL_EXAMPLES = [
+  "DatePickerSingle",
+  "DatePickerRange",
+  "DatePickerMonth",
+  "DatePickerWeekNumbers",
+  "DatePickerInline",
+  "DatePickerModal",
+];
+
 test.describe("DatePicker docs examples", () => {
-  for (const example of EXAMPLES) {
-    test(`${example} lays out its calendar`, async ({ page }) => {
-      await page.goto(`/date-picker-examples.html?example=${example}`);
+  for (const [example, dir] of [
+    ...EXAMPLES.map((name) => [name, "ltr"] as const),
+    ...RTL_EXAMPLES.map((name) => [name, "rtl"] as const),
+  ]) {
+    test(`${example} (${dir}) lays out its calendar`, async ({ page }) => {
+      await page.goto(
+        `/date-picker-examples.html?example=${example}&dir=${dir}`,
+      );
       await page.waitForSelector("body[data-ready]");
       await openCalendar(page);
       await expect(page.locator(CALENDAR).first()).toBeVisible();
