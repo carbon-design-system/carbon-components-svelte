@@ -4,14 +4,11 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
+import { closeDetails, openMenu } from "./helpers";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
-import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
-import OverflowMenuMaxHeight from "./OverflowMenu.maxHeight.test.svelte";
-import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
-import OverflowMenuTriggerClose from "./OverflowMenu.triggerClose.test.svelte";
 import OverflowMenuInBreadcrumb from "./OverflowMenuInBreadcrumb.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
 import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
@@ -37,7 +34,7 @@ describe("OverflowMenu", () => {
     const menuButton = screen.getByRole("button");
     expect(menuButton).not.toHaveAttribute("aria-controls");
 
-    await user.click(menuButton);
+    await openMenu(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
     expect(menuButton).toHaveAttribute("aria-controls", "menu-test-id");
     expect(screen.getByRole("menu")).toHaveAttribute("id", "menu-test-id");
@@ -50,9 +47,8 @@ describe("OverflowMenu", () => {
   it("returns focus to the trigger after selecting an item with the keyboard", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-    expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
+    const { menuButton, items } = await openMenu();
+    expect(items[0]).toHaveFocus();
 
     await user.keyboard("{Enter}");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
@@ -62,8 +58,9 @@ describe("OverflowMenu", () => {
   it("returns focus to the trigger after selecting a portalled item in a Modal", async () => {
     render(OverflowMenuInModal, { props: { modalOpen: true } });
 
-    const menuButton = screen.getByRole("button", { name: "menu" });
-    await user.click(menuButton);
+    const { menuButton } = await openMenu(
+      screen.getByRole("button", { name: "menu" }),
+    );
     await user.click(screen.getByRole("menuitem", { name: "Option 2" }));
 
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
@@ -71,16 +68,17 @@ describe("OverflowMenu", () => {
   });
 
   it("renders and functions correctly", async () => {
-    render(OverflowMenu);
+    const onClose = vi.fn();
+    const onItemClick = vi.fn();
+    render(OverflowMenu, { props: { onClose, onItemClick } });
 
     const menuButton = screen.getByRole("button");
     expect(menuButton).toHaveAttribute("aria-haspopup", "menu");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
 
-    await user.click(menuButton);
+    const { items: menuItems } = await openMenu(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
-    const menuItems = screen.getAllByRole("menuitem");
     expect(menuItems).toHaveLength(3);
     expect(menuItems[0]).toHaveFocus();
 
@@ -97,12 +95,11 @@ describe("OverflowMenu", () => {
       "bx--overflow-menu-options__option--danger",
     );
 
-    const spy = vi.spyOn(console, "log");
     await user.click(menuItems[0]);
-    expect(spy).toHaveBeenCalledWith("click", "Manage credentials");
+    expect(onItemClick).toHaveBeenCalledWith("Manage credentials");
 
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
-    expect(spy).toHaveBeenCalledWith("close", {
+    expect(closeDetails(onClose)).toContainEqual({
       trigger: "item-select",
       index: 0,
       text: "Manage credentials",
@@ -112,10 +109,7 @@ describe("OverflowMenu", () => {
   it("moves focus to the item matching a typed character", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const menuItems = screen.getAllByRole("menuitem");
+    const { items: menuItems } = await openMenu();
     // "Manage credentials" is already focused on open.
     expect(menuItems[0]).toHaveFocus();
 
@@ -127,8 +121,7 @@ describe("OverflowMenu", () => {
   it("renders the menu as a sibling of the button, not nested inside it", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    const { menuButton } = await openMenu();
 
     const menu = screen.getByRole("menu");
     expect(menu).toBeInTheDocument();
@@ -136,25 +129,21 @@ describe("OverflowMenu", () => {
   });
 
   it("handles keyboard navigation", async () => {
-    render(OverflowMenu);
+    const onClose = vi.fn();
+    const onItemClick = vi.fn();
+    render(OverflowMenu, { props: { onClose, onItemClick } });
 
-    const spy = vi.spyOn(console, "log");
-
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    const { menuButton, items: firstItems } = await openMenu();
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
-
-    let menuItems = screen.getAllByRole("menuitem");
-    expect(menuItems[0]).toHaveFocus();
+    expect(firstItems[0]).toHaveFocus();
 
     await user.keyboard("{ArrowDown}");
-    expect(menuItems[1]).toHaveFocus();
+    expect(firstItems[1]).toHaveFocus();
 
     await user.keyboard("{Enter}");
-    expect(spy).toHaveBeenCalledWith("click", "API documentation");
+    expect(onItemClick).toHaveBeenCalledWith("API documentation");
 
-    await user.click(menuButton);
-    menuItems = screen.getAllByRole("menuitem");
+    const { items: menuItems } = await openMenu(menuButton);
     expect(menuItems[0]).toHaveFocus();
 
     await user.keyboard("{ArrowUp}");
@@ -162,7 +151,7 @@ describe("OverflowMenu", () => {
 
     await user.keyboard("{Escape}");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
-    expect(spy).toHaveBeenCalledWith("close", { trigger: "escape-key" });
+    expect(closeDetails(onClose)).toContainEqual({ trigger: "escape-key" });
   });
 
   it("measures the trigger when opening, not on every keypress", async () => {
@@ -182,8 +171,7 @@ describe("OverflowMenu", () => {
 
     try {
       render(OverflowMenu);
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
+      await openMenu();
       await tick();
       const afterOpen = reads;
       expect(afterOpen).toBeGreaterThan(0);
@@ -203,10 +191,7 @@ describe("OverflowMenu", () => {
   it("supports Home and End to jump to first/last item", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const menuItems = screen.getAllByRole("menuitem");
+    const { items: menuItems } = await openMenu();
     expect(menuItems[0]).toHaveFocus();
 
     await user.keyboard("{End}");
@@ -219,10 +204,7 @@ describe("OverflowMenu", () => {
   it("Home and End skip disabled items", async () => {
     render(OverflowMenuDisabled);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const menuItems = screen.getAllByRole("menuitem");
+    const { items: menuItems } = await openMenu();
     expect(menuItems).toHaveLength(4);
     expect(menuItems[0]).toHaveFocus();
 
@@ -268,8 +250,7 @@ describe("OverflowMenu", () => {
     async (size, expectedClass) => {
       render(OverflowMenuInBreadcrumb, { props: { size } });
 
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
+      await openMenu();
 
       const menu = screen.getByRole("menu");
       // Keep the size class for compact menu items. The triangle caret is fixed
@@ -293,8 +274,7 @@ describe("OverflowMenu", () => {
   it("applies direction attribute", async () => {
     render(OverflowMenu, { props: { direction: "top" } });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    await openMenu();
 
     const menu = screen.getByRole("menu");
     expect(menu).toHaveAttribute("data-floating-menu-direction", "top");
@@ -303,8 +283,7 @@ describe("OverflowMenu", () => {
   it("gives button items type='button' and link items no type", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    await openMenu();
 
     const buttonItem = screen.getByRole("menuitem", {
       name: "Manage credentials",
@@ -318,36 +297,26 @@ describe("OverflowMenu", () => {
     expect(linkItem).not.toHaveAttribute("type");
   });
 
-  it("sets noopener noreferrer by default when target is _blank", async () => {
-    render(OverflowMenuRel, { props: { testCase: "default" } });
+  it.each([
+    ["default", "noopener noreferrer"],
+    ["override", "noopener"],
+  ] as const)(
+    "resolves rel for a _blank link item (%s)",
+    async (testCase, expectedRel) => {
+      render(OverflowMenuRel, { props: { testCase } });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const linkItem = screen.getByRole("menuitem");
-    expect(linkItem).toHaveAttribute("target", "_blank");
-    expect(linkItem).toHaveAttribute("rel", "noopener noreferrer");
-  });
-
-  it("allows rel prop to override default noopener noreferrer", async () => {
-    render(OverflowMenuRel, { props: { testCase: "override" } });
-
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const linkItem = screen.getByRole("menuitem");
-    expect(linkItem).toHaveAttribute("target", "_blank");
-    expect(linkItem).toHaveAttribute("rel", "noopener");
-    expect(linkItem).not.toHaveAttribute("rel", "noopener noreferrer");
-  });
+      const {
+        items: [linkItem],
+      } = await openMenu();
+      expect(linkItem).toHaveAttribute("target", "_blank");
+      expect(linkItem).toHaveAttribute("rel", expectedRel);
+    },
+  );
 
   it("returns focus to button after menu closes", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const menuItems = screen.getAllByRole("menuitem");
+    const { menuButton, items: menuItems } = await openMenu();
     expect(menuItems[0]).toHaveFocus();
 
     await user.keyboard("{Escape}");
@@ -355,33 +324,35 @@ describe("OverflowMenu", () => {
   });
 
   it("supports preventDefault on item to prevent menu from closing", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(OverflowMenuPreventDefault);
+    const onClose = vi.fn();
+    const onItemClick = vi.fn();
+    render(OverflowMenu, {
+      props: { onClose, onItemClick, preventItemClick: true },
+    });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    const {
+      menuButton,
+      items: [firstItem],
+    } = await openMenu();
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
-    const menuItems = screen.getAllByRole("menuitem");
-    await user.click(menuItems[0]);
+    await user.click(firstItem);
 
-    expect(consoleLog).toHaveBeenCalledWith("click", "Manage credentials");
-    expect(consoleLog).not.toHaveBeenCalledWith("close", {
-      trigger: "item-select",
-      index: 0,
-      text: "Manage credentials",
-    });
+    expect(onItemClick).toHaveBeenCalledWith("Manage credentials");
+    expect(onClose).not.toHaveBeenCalled();
 
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
     expect(screen.queryByRole("menu")).toBeInTheDocument();
   });
 
   it("does not navigate, dispatch click, or close menu for disabled link item", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(OverflowMenuDisabledLink);
+    const onClose = vi.fn();
+    const onItemClick = vi.fn();
+    render(OverflowMenu, {
+      props: { onClose, onItemClick, disabledLink: true },
+    });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    const { menuButton } = await openMenu();
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
     const disabledLink = screen.getByRole("menuitem", {
@@ -401,42 +372,38 @@ describe("OverflowMenu", () => {
     disabledLink.dispatchEvent(clickEvent);
 
     expect(clickEvent.defaultPrevented).toBe(true);
-    expect(consoleLog).not.toHaveBeenCalledWith("click", "API documentation");
-    expect(consoleLog).not.toHaveBeenCalledWith("close", {
-      trigger: "item-select",
-      index: 0,
-      text: "API documentation",
-    });
+    expect(onItemClick).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
   });
 
   it("dispatches close before flipping `open` when trigger click closes the menu", async () => {
-    const spy = vi.spyOn(console, "log");
-    render(OverflowMenuTriggerClose);
+    const onClose = vi.fn();
+    render(OverflowMenu, { props: { onClose } });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    const { menuButton } = await openMenu();
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
-    spy.mockClear();
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
 
     // The `close` event must be dispatched while `open` is still `true`
     // so listeners can preventDefault before any subscriber observes the
     // transition.
-    expect(spy).toHaveBeenCalledWith("close:open-at-dispatch", true);
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][1]).toBe(true);
   });
 
   it("closes menu normally when preventDefault is not called", async () => {
     render(OverflowMenu);
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+    const {
+      menuButton,
+      items: [firstItem],
+    } = await openMenu();
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
-    const menuItems = screen.getAllByRole("menuitem");
-    await user.click(menuItems[0]);
+    await user.click(firstItem);
 
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
@@ -447,18 +414,15 @@ describe("OverflowMenu", () => {
       props: { showMiddle: true },
     });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    let menuItems = screen.getAllByRole("menuitem");
-    expect(menuItems).toHaveLength(3);
-    expect(menuItems[0]).toHaveTextContent("First");
-    expect(menuItems[0]).toHaveFocus();
+    const { items: initialItems } = await openMenu();
+    expect(initialItems).toHaveLength(3);
+    expect(initialItems[0]).toHaveTextContent("First");
+    expect(initialItems[0]).toHaveFocus();
 
     await rerender({ showMiddle: false });
     await tick();
 
-    menuItems = screen.getAllByRole("menuitem");
+    const menuItems = screen.getAllByRole("menuitem");
     expect(menuItems).toHaveLength(2);
     expect(menuItems[0]).toHaveTextContent("First");
     expect(menuItems[1]).toHaveTextContent("Last");
@@ -473,8 +437,7 @@ describe("OverflowMenu", () => {
     it("should render menu in FloatingPortal when portalMenu is true", async () => {
       render(OverflowMenu, { props: { portalMenu: true } });
 
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
+      await openMenu();
 
       const menu = screen.getByRole("menu");
       expect(menu).toBeInTheDocument();
@@ -483,22 +446,10 @@ describe("OverflowMenu", () => {
       expect(floatingPortal?.parentElement).toBe(document.body);
     });
 
-    it("should close portal menu when clicking outside", async () => {
-      render(OverflowMenu, { props: { portalMenu: true } });
-
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
-      expect(menuButton).toHaveAttribute("aria-expanded", "true");
-
-      await user.click(document.body);
-      expect(menuButton).toHaveAttribute("aria-expanded", "false");
-    });
-
     it("should set position: relative on portal menu ul", async () => {
       render(OverflowMenu, { props: { portalMenu: true } });
 
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
+      await openMenu();
 
       const menu = screen.getByRole("menu");
       expect(menu.style.position).toBe("relative");
@@ -507,8 +458,7 @@ describe("OverflowMenu", () => {
     it("should render menu in FloatingPortal when inside Modal (portalMenu not passed)", async () => {
       render(OverflowMenuInModal, { props: { modalOpen: true } });
 
-      const menuButton = screen.getByRole("button", { name: "menu" });
-      await user.click(menuButton);
+      await openMenu(screen.getByRole("button", { name: "menu" }));
 
       const menu = screen.getByRole("menu");
       expect(menu).toBeInTheDocument();
@@ -522,51 +472,12 @@ describe("OverflowMenu", () => {
         props: { modalOpen: true, portalMenu: false },
       });
 
-      const menuButton = screen.getByRole("button", { name: "menu" });
-      await user.click(menuButton);
+      await openMenu(screen.getByRole("button", { name: "menu" }));
 
       const menu = screen.getByRole("menu");
       expect(menu).toBeInTheDocument();
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
-    });
-
-    it("should handle keyboard navigation", async () => {
-      render(OverflowMenu, { props: { portalMenu: true } });
-
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
-
-      const menuItems = screen.getAllByRole("menuitem");
-      expect(menuItems[0]).toHaveFocus();
-
-      await user.keyboard("{ArrowDown}");
-      expect(menuItems[1]).toHaveFocus();
-
-      await user.keyboard("{ArrowDown}");
-      expect(menuItems[2]).toHaveFocus();
-
-      await user.keyboard("{ArrowUp}");
-      expect(menuItems[1]).toHaveFocus();
-    });
-
-    it("should handle keyboard navigation with wrap-around", async () => {
-      render(OverflowMenu, { props: { portalMenu: true } });
-
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
-
-      const menuItems = screen.getAllByRole("menuitem");
-      expect(menuItems[0]).toHaveFocus();
-
-      await user.keyboard("{ArrowUp}");
-      expect(menuItems[2]).toHaveFocus();
-
-      await user.keyboard("{ArrowDown}");
-      expect(menuItems[0]).toHaveFocus();
-
-      await user.keyboard("{Escape}");
-      expect(menuButton).toHaveFocus();
     });
 
     it("focuses items and trigger with preventScroll so the page does not jump", async () => {
@@ -576,11 +487,9 @@ describe("OverflowMenu", () => {
       const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
       render(OverflowMenu, { props: { portalMenu: true } });
 
-      const menuButton = screen.getByRole("button");
-      await user.click(menuButton);
+      const { menuButton, items: menuItems } = await openMenu();
 
       // First item is focused programmatically on open.
-      const menuItems = screen.getAllByRole("menuitem");
       expect(menuItems[0]).toHaveFocus();
       expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
 
@@ -612,8 +521,7 @@ describe("OverflowMenu", () => {
           props: { portalMenu: true, direction: "top" },
         });
 
-        const menuButton = screen.getByRole("button");
-        await user.click(menuButton);
+        await openMenu();
         await tick();
 
         const menu = screen.getByRole("menu");
@@ -632,6 +540,64 @@ describe("OverflowMenu", () => {
       } finally {
         Element.prototype.getBoundingClientRect = original;
       }
+    });
+  });
+
+  describe.each([
+    ["non-portalled", false],
+    ["portalled", true],
+  ] as const)("%s menu", (_, portalMenu) => {
+    it("moves focus with the arrow keys", async () => {
+      render(OverflowMenu, { props: { portalMenu } });
+
+      const { items: menuItems } = await openMenu();
+      expect(menuItems[0]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuItems[1]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuItems[2]).toHaveFocus();
+
+      await user.keyboard("{ArrowUp}");
+      expect(menuItems[1]).toHaveFocus();
+    });
+
+    it("wraps arrow navigation around both ends, then Escape returns focus to the trigger", async () => {
+      render(OverflowMenu, { props: { portalMenu } });
+
+      const { menuButton, items: menuItems } = await openMenu();
+      expect(menuItems[0]).toHaveFocus();
+
+      await user.keyboard("{ArrowUp}");
+      expect(menuItems[2]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuItems[0]).toHaveFocus();
+
+      await user.keyboard("{Escape}");
+      expect(menuButton).toHaveFocus();
+    });
+
+    it("closes when clicking outside", async () => {
+      render(OverflowMenu, { props: { portalMenu } });
+
+      const { menuButton } = await openMenu();
+      expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+      await user.click(document.body);
+      expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("caps the menu height in pixels when maxHeight is a number", async () => {
+      render(OverflowMenu, { props: { portalMenu, maxHeight: 240 } });
+
+      await openMenu();
+
+      const menu = screen.getByRole("menu");
+      expect(menu.closest("[data-floating-portal]") !== null).toBe(portalMenu);
+      expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
+      expect(menu).toHaveStyle("max-height: 240px");
     });
   });
 
@@ -662,37 +628,10 @@ describe("OverflowMenu", () => {
     });
   });
 
-  describe("maxHeight", () => {
-    it("caps the menu height in pixels when given a number", async () => {
-      render(OverflowMenuMaxHeight, { props: { maxHeight: 240 } });
-
-      await user.click(screen.getByRole("button"));
-
-      const menu = screen.getByRole("menu");
-      expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
-      expect(menu).toHaveStyle("max-height: 240px");
-    });
-
-    it("caps the height of a portalled menu", async () => {
-      render(OverflowMenuMaxHeight, {
-        props: { maxHeight: 240, portalMenu: true },
-      });
-
-      await user.click(screen.getByRole("button"));
-
-      const menu = screen.getByRole("menu");
-      expect(menu.closest("[data-floating-portal]")).toBeInTheDocument();
-      expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
-      expect(menu).toHaveStyle("max-height: 240px");
-    });
-  });
-
   it("focuses the primaryFocus item, not the first item, when opened", async () => {
     render(OverflowMenuPrimaryFocus);
 
-    await user.click(screen.getByRole("button"));
-
-    const menuItems = screen.getAllByRole("menuitem");
+    const { items: menuItems } = await openMenu();
     expect(menuItems[1]).toHaveTextContent("API documentation");
     expect(menuItems[1]).toHaveFocus();
   });

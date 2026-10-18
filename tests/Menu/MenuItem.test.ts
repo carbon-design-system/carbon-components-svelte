@@ -110,26 +110,28 @@ describe("MenuItem", () => {
       // not exist until this click creates it) a realistic width. jsdom
       // otherwise reports 0x0 for unmocked elements, so the flip check's
       // "does the floating content fit" math is always trivially true.
-      vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
-        function (this: Element) {
-          if (this === parent) {
-            return rect({
-              top: 100,
-              height: 30,
-              left: window.innerWidth - 10,
-              width: 10,
-            });
-          }
-          return rect({ bottom: 200, right: 200 });
-        },
-      );
+      try {
+        vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+          function (this: Element) {
+            if (this === parent) {
+              return rect({
+                top: 100,
+                height: 30,
+                left: window.innerWidth - 10,
+                width: 10,
+              });
+            }
+            return rect({ bottom: 200, right: 200 });
+          },
+        );
 
-      await user.click(parent);
+        await user.click(parent);
 
-      const submenu = screen.getByRole("menu", { name: "Export as" });
-      expect(submenu).toHaveAttribute("data-floating-menu-direction", "left");
-
-      vi.restoreAllMocks();
+        const submenu = screen.getByRole("menu", { name: "Export as" });
+        expect(submenu).toHaveAttribute("data-floating-menu-direction", "left");
+      } finally {
+        vi.restoreAllMocks();
+      }
     });
 
     it("opens the submenu with ArrowRight and focuses the first item", async () => {
@@ -207,9 +209,16 @@ describe("MenuItem", () => {
       expect(event.defaultPrevented).toBe(true);
     });
 
-    it("opens the submenu on hover after a delay", async () => {
-      vi.useFakeTimers();
-      try {
+    describe("hover", () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it("opens the submenu on hover after a delay", async () => {
         render(MenuItemFixture);
 
         await fireEvent.click(screen.getByRole("button", { name: "Trigger" }));
@@ -224,14 +233,9 @@ describe("MenuItem", () => {
         expect(
           screen.getByRole("menuitem", { name: "PDF" }),
         ).toBeInTheDocument();
-      } finally {
-        vi.useRealTimers();
-      }
-    });
+      });
 
-    it("does not close the submenu when the pointer moves into it before the close delay elapses", async () => {
-      vi.useFakeTimers();
-      try {
+      it("does not close the submenu when the pointer moves into it before the close delay elapses", async () => {
         render(MenuItemFixture);
 
         await fireEvent.click(screen.getByRole("button", { name: "Trigger" }));
@@ -250,14 +254,9 @@ describe("MenuItem", () => {
         expect(
           screen.getByRole("menuitem", { name: "PDF" }),
         ).toBeInTheDocument();
-      } finally {
-        vi.useRealTimers();
-      }
-    });
+      });
 
-    it("closes only the submenu, keeping the root menu open, when the submenu is left", async () => {
-      vi.useFakeTimers();
-      try {
+      it("closes only the submenu, keeping the root menu open, when the submenu is left", async () => {
         render(MenuItemFixture);
 
         await fireEvent.click(screen.getByRole("button", { name: "Trigger" }));
@@ -277,9 +276,7 @@ describe("MenuItem", () => {
         expect(
           screen.getByRole("menuitem", { name: "Add item" }),
         ).toBeInTheDocument();
-      } finally {
-        vi.useRealTimers();
-      }
+      });
     });
 
     it("renders the labelChildren slot instead of labelText, using labelText as the title", async () => {
@@ -317,17 +314,6 @@ describe("MenuItem", () => {
         screen.getByRole("menuitemcheckbox", { name: "Size" }),
       ).toHaveAttribute("aria-checked", "true");
       expect(getSelectedIds()).toEqual(["size"]);
-    });
-
-    it("reserves a checkmark column for checkbox items", async () => {
-      render(MenuItemSelectableFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-      const item = screen.getByRole("menuitemcheckbox", { name: "Name" });
-      expect(
-        item.querySelector(".bx--menu-option__selection-icon"),
-      ).toBeInTheDocument();
     });
 
     it("renders a checked item's own icon alongside its checkmark, in separate columns", async () => {
@@ -383,23 +369,6 @@ describe("MenuItem", () => {
       expect(getSelectedIds()).toEqual(["size", "name"]);
     });
 
-    it("moves focus onto checkbox items with arrow keys", async () => {
-      render(MenuItemSelectableFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-      expect(screen.getByRole("menuitem", { name: "Plain" })).toHaveFocus();
-
-      await user.keyboard("{ArrowDown}");
-      expect(
-        screen.getByRole("menuitemcheckbox", { name: "Name" }),
-      ).toHaveFocus();
-
-      await user.keyboard("{ArrowDown}");
-      expect(
-        screen.getByRole("menuitemcheckbox", { name: "Size" }),
-      ).toHaveFocus();
-    });
-
     it("keeps the menu open when click is prevented and still toggles selection", async () => {
       render(MenuItemSelectableFixture);
 
@@ -431,17 +400,6 @@ describe("MenuItem", () => {
       expect(getSelectedId()).toBe("comfortable");
     });
 
-    it("reserves a checkmark column for radio items", async () => {
-      render(MenuItemRadioGroupFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-      const item = screen.getByRole("menuitemradio", { name: "Compact" });
-      expect(
-        item.querySelector(".bx--menu-option__selection-icon"),
-      ).toBeInTheDocument();
-    });
-
     it("unchecks the previous item when another one is selected", async () => {
       render(MenuItemRadioGroupFixture);
 
@@ -469,17 +427,6 @@ describe("MenuItem", () => {
       expect(getSelectedId()).toBe("compact");
     });
 
-    it("moves focus onto radio items with arrow keys", async () => {
-      render(MenuItemRadioGroupFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-      await user.keyboard("{ArrowDown}");
-
-      expect(
-        screen.getByRole("menuitemradio", { name: "Compact" }),
-      ).toHaveFocus();
-    });
-
     it("keeps nested and root menus open when a radio click is prevented", async () => {
       render(MenuItemRadioGroupFixture);
 
@@ -496,6 +443,49 @@ describe("MenuItem", () => {
       expect(
         screen.getByRole("menuitem", { name: "Plain" }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe.each([
+    {
+      kind: "checkbox",
+      Fixture: MenuItemSelectableFixture,
+      role: "menuitemcheckbox",
+      // Each ArrowDown from the focused "Plain" item lands on the next name.
+      arrowTargets: ["Name", "Size"],
+    },
+    {
+      kind: "radio",
+      Fixture: MenuItemRadioGroupFixture,
+      role: "menuitemradio",
+      arrowTargets: ["Compact", undefined],
+    },
+  ] as const)("$kind items", ({ Fixture, role, arrowTargets }) => {
+    it("reserves a checkmark column", async () => {
+      render(Fixture as typeof MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const item = screen.getByRole(role, { name: arrowTargets[0] });
+      expect(
+        item.querySelector(".bx--menu-option__selection-icon"),
+      ).toBeInTheDocument();
+    });
+
+    it("moves focus onto them with arrow keys", async () => {
+      render(Fixture as typeof MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      expect(screen.getByRole("menuitem", { name: "Plain" })).toHaveFocus();
+
+      const [first, second] = arrowTargets;
+      await user.keyboard("{ArrowDown}");
+      expect(screen.getByRole(role, { name: first })).toHaveFocus();
+
+      if (second) {
+        await user.keyboard("{ArrowDown}");
+        expect(screen.getByRole(role, { name: second })).toHaveFocus();
+      }
     });
   });
 });

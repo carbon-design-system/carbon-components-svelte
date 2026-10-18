@@ -1,42 +1,43 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import ContextMenuClose from "./ContextMenuClose.test.svelte";
+import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuFocusReturn from "./ContextMenuFocusReturn.test.svelte";
+import { rightClick } from "./helpers";
 
 describe("ContextMenu close trigger", () => {
   it("should surface 'escape-key' when closed via Escape", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
+    const onclose = vi.fn();
+    render(ContextMenu, { props: { open: true, x: 100, y: 100, onclose } });
 
     await user.keyboard("{Escape}");
-    expect(consoleLog).toHaveBeenCalledWith("close", "escape-key");
+    expect(onclose).toHaveBeenCalledWith("escape-key");
   });
 
   it("should surface 'outside-click' when closed via clicking outside", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
+    const onclose = vi.fn();
+    render(ContextMenu, { props: { open: true, x: 100, y: 100, onclose } });
 
     await user.click(document.body);
-    expect(consoleLog).toHaveBeenCalledWith("close", "outside-click");
+    expect(onclose).toHaveBeenCalledWith("outside-click");
   });
 
   it("should surface 'select' when closed by selecting an option", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
+    const onclose = vi.fn();
+    render(ContextMenu, { props: { open: true, x: 100, y: 100, onclose } });
 
     await user.click(screen.getByText("Option 1"));
-    expect(consoleLog).toHaveBeenCalledWith("close", "select");
+    expect(onclose).toHaveBeenCalledWith("select");
   });
 
   it("should surface 'tab' and close the menu when Tab is pressed", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
+    const onclose = vi.fn();
+    render(ContextMenu, { props: { open: true, x: 100, y: 100, onclose } });
 
     const menu = screen.getAllByRole("menu")[0];
     menu.focus();
 
     await user.keyboard("{Tab}");
-    expect(consoleLog).toHaveBeenCalledWith("close", "escape-key");
+    expect(onclose).toHaveBeenCalledWith("escape-key");
     expect(menu).not.toHaveClass("bx--menu--open");
   });
 
@@ -44,11 +45,7 @@ describe("ContextMenu close trigger", () => {
     render(ContextMenuFocusReturn);
 
     const host = screen.getByRole("button", { name: "Host" });
-    await user.pointer({
-      target: host,
-      coords: { x: 100, y: 100 },
-      keys: "[MouseRight]",
-    });
+    await rightClick(host);
     await user.keyboard("{ArrowDown}");
     expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
 
@@ -57,7 +54,7 @@ describe("ContextMenu close trigger", () => {
   });
 
   it("should block scroll keys and letter keys used for typeahead", async () => {
-    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
+    render(ContextMenu, { props: { open: true, x: 100, y: 100 } });
 
     const menu = screen.getAllByRole("menu")[0];
 

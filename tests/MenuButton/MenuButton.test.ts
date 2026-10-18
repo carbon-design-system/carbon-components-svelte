@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import ComboButtonFixture from "../ComboButton/ComboButton.test.svelte";
 import { user } from "../utils/user";
 import MenuButtonIconOnly from "./MenuButton.iconOnly.test.svelte";
 import MenuButtonSlot from "./MenuButton.slot.test.svelte";
@@ -21,12 +22,12 @@ describe("MenuButton", () => {
   });
 
   it("forwards mouseenter from the trigger", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuButtonFixture);
+    const onMouseenter = vi.fn();
+    render(MenuButtonFixture, { props: { onMouseenter } });
 
     await fireEvent.mouseEnter(screen.getByRole("button", { name: "Actions" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+    expect(onMouseenter).toHaveBeenCalledTimes(1);
   });
 
   it("renders the disabled state on the trigger", () => {
@@ -34,38 +35,6 @@ describe("MenuButton", () => {
 
     expect(screen.getByRole("button", { name: "Actions" })).toBeDisabled();
   });
-
-  it.each([
-    { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
-    { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
-    { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
-    { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
-  ] as const)(
-    "propagates size $size to the trigger and the menu row height",
-    async ({ size, buttonClass, menuClass }) => {
-      render(MenuButtonFixture, { props: { size } });
-
-      const trigger = screen.getByRole("button", { name: "Actions" });
-
-      for (const unwanted of [
-        "bx--btn--sm",
-        "bx--btn--field",
-        "bx--btn--lg",
-        "bx--btn--xl",
-      ]) {
-        if (unwanted !== buttonClass) expect(trigger).not.toHaveClass(unwanted);
-      }
-      if (buttonClass) expect(trigger).toHaveClass(buttonClass);
-
-      await user.click(trigger);
-
-      const menu = screen.getByRole("menu");
-      for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
-        if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
-      }
-      if (menuClass) expect(menu).toHaveClass(menuClass);
-    },
-  );
 
   it("rotates the trigger's chevron by toggling the open modifier class", async () => {
     render(MenuButtonFixture);
@@ -97,21 +66,9 @@ describe("MenuButton", () => {
     expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
   });
 
-  it("dispatches close with a select trigger when an item is chosen", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuButtonFixture);
-
-    await user.click(screen.getByRole("button", { name: "Actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Copy" }));
-
-    expect(consoleLog).toHaveBeenCalledWith("select", "Copy");
-    expect(consoleLog).toHaveBeenCalledWith("close", { trigger: "select" });
-    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
-  });
-
   it("dispatches close with an escape-key trigger and returns focus to the trigger", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MenuButtonFixture);
+    const onClose = vi.fn();
+    render(MenuButtonFixture, { props: { onClose } });
 
     const trigger = screen.getByRole("button", { name: "Actions" });
     await user.click(trigger);
@@ -120,9 +77,7 @@ describe("MenuButton", () => {
 
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("close", {
-      trigger: "escape-key",
-    });
+    expect(onClose).toHaveBeenCalledWith({ trigger: "escape-key" });
   });
 
   it("renders the labelChildren slot instead of labelText, using labelText as the accessible name", () => {
@@ -130,44 +85,6 @@ describe("MenuButton", () => {
 
     expect(screen.getByText("Custom trigger content")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Actions" })).toBeInTheDocument();
-  });
-
-  it("never focuses the trigger via a real mouse click, only via keyboard", async () => {
-    render(MenuButtonFixture);
-
-    const trigger = screen.getByRole("button", { name: "Actions" });
-    const onFocus = vi.fn();
-    trigger.addEventListener("focus", onFocus);
-
-    // mousedown's default would focus the trigger. The menu opens by
-    // moving focus to its first item, so assert on the focus event itself,
-    // not just the focus state after the fact.
-    await user.click(trigger);
-    await user.click(trigger);
-    expect(onFocus).not.toHaveBeenCalled();
-
-    // Keyboard users still get normal focus via Tab.
-    await user.tab();
-    expect(onFocus).toHaveBeenCalledTimes(1);
-    expect(trigger).toHaveFocus();
-  });
-
-  it("blurs the trigger after a mouse-driven close, but not a keyboard-driven one", async () => {
-    // A real click reports event.detail 1+; a keyboard-activated (Enter/
-    // Space) one reports 0. Start each case already open so the closing
-    // click is what's under test, independent of how it was opened.
-    const { unmount } = render(MenuButtonFixture, { props: { open: true } });
-    let trigger = screen.getByRole("button", { name: "Actions" });
-    trigger.focus();
-    await fireEvent.click(trigger, { detail: 1 });
-    expect(trigger).not.toHaveFocus();
-    unmount();
-
-    render(MenuButtonFixture, { props: { open: true } });
-    trigger = screen.getByRole("button", { name: "Actions" });
-    trigger.focus();
-    await fireEvent.click(trigger, { detail: 0 });
-    expect(trigger).toHaveFocus();
   });
 
   describe("icon-only", () => {
@@ -217,3 +134,119 @@ describe("MenuButton", () => {
     });
   });
 });
+
+// MenuButton and ComboButton share a trigger that opens the same Menu, so
+// their size, select and mouse-focus behavior is asserted once for both.
+describe.each([
+  {
+    name: "MenuButton",
+    Fixture: MenuButtonFixture,
+    buttonNames: ["Actions"],
+    triggerName: "Actions",
+    itemName: "Copy",
+    tabKeys: "{Tab}",
+  },
+  {
+    name: "ComboButton",
+    Fixture: ComboButtonFixture,
+    buttonNames: ["Save", "Additional actions"],
+    triggerName: "Additional actions",
+    itemName: "Save as",
+    tabKeys: "{Tab}{Tab}",
+  },
+] as const)(
+  "$name trigger and menu",
+  ({ Fixture, buttonNames, triggerName, itemName, tabKeys }) => {
+    it.each([
+      { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
+      { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
+      { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
+      { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
+    ] as const)(
+      "propagates size $size to the buttons and the menu row height",
+      async ({ size, buttonClass, menuClass }) => {
+        render(Fixture, { props: { size } });
+
+        const buttons = buttonNames.map((name) =>
+          screen.getByRole("button", { name }),
+        );
+
+        for (const button of buttons) {
+          for (const unwanted of [
+            "bx--btn--sm",
+            "bx--btn--field",
+            "bx--btn--lg",
+            "bx--btn--xl",
+          ]) {
+            if (unwanted !== buttonClass)
+              expect(button).not.toHaveClass(unwanted);
+          }
+          if (buttonClass) expect(button).toHaveClass(buttonClass);
+        }
+
+        await user.click(screen.getByRole("button", { name: triggerName }));
+
+        const menu = screen.getByRole("menu");
+        for (const unwanted of [
+          "bx--menu--xs",
+          "bx--menu--md",
+          "bx--menu--lg",
+        ]) {
+          if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
+        }
+        if (menuClass) expect(menu).toHaveClass(menuClass);
+      },
+    );
+
+    it("dispatches close with a select trigger when an item is chosen", async () => {
+      const onSelect = vi.fn();
+      const onClose = vi.fn();
+      render(Fixture, { props: { onSelect, onClose } });
+
+      await user.click(screen.getByRole("button", { name: triggerName }));
+      await user.click(screen.getByRole("menuitem", { name: itemName }));
+
+      expect(onSelect).toHaveBeenCalledWith(itemName);
+      expect(onClose).toHaveBeenCalledWith({ trigger: "select" });
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+
+    it("never focuses the trigger via a real mouse click, only via keyboard", async () => {
+      render(Fixture);
+
+      const trigger = screen.getByRole("button", { name: triggerName });
+      const onFocus = vi.fn();
+      trigger.addEventListener("focus", onFocus);
+
+      // mousedown's default would focus the trigger. The menu opens by
+      // moving focus to its first item, so assert on the focus event itself,
+      // not just the focus state after the fact.
+      await user.click(trigger);
+      await user.click(trigger);
+      expect(onFocus).not.toHaveBeenCalled();
+
+      // Keyboard users still get normal focus via Tab.
+      await user.keyboard(tabKeys);
+      expect(onFocus).toHaveBeenCalledTimes(1);
+      expect(trigger).toHaveFocus();
+    });
+
+    it("blurs the trigger after a mouse-driven close, but not a keyboard-driven one", async () => {
+      // A real click reports event.detail 1+; a keyboard-activated (Enter/
+      // Space) one reports 0. Start each case already open so the closing
+      // click is what's under test, independent of how it was opened.
+      const { unmount } = render(Fixture, { props: { open: true } });
+      let trigger = screen.getByRole("button", { name: triggerName });
+      trigger.focus();
+      await fireEvent.click(trigger, { detail: 1 });
+      expect(trigger).not.toHaveFocus();
+      unmount();
+
+      render(Fixture, { props: { open: true } });
+      trigger = screen.getByRole("button", { name: triggerName });
+      trigger.focus();
+      await fireEvent.click(trigger, { detail: 0 });
+      expect(trigger).toHaveFocus();
+    });
+  },
+);

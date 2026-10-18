@@ -17,6 +17,10 @@
     undefined;
 
   export let open = false;
+  /** Called with the name of each forwarded event, e.g. `click` or `click:trigger`. */
+  export let onEvent: ((name: string) => void) | undefined = undefined;
+  export let onClose: ((detail: unknown) => void) | undefined = undefined;
+  export let onSelect: ((text: string) => void) | undefined = undefined;
 
   const items = ["Save as", "Save a copy"];
 </script>
@@ -32,13 +36,23 @@
   {tooltipAlignment}
   {iconDescription}
   bind:open
-  on:click={() => console.log("click")}
-  on:click:trigger={() => console.log("click:trigger")}
-  on:mouseenter={() => console.log("mouseenter")}
-  on:mouseenter:trigger={() => console.log("mouseenter:trigger")}
-  on:close={(e) => console.log("close", e.detail)}
+  on:click={() => onEvent?.("click")}
+  on:click:trigger={() => onEvent?.("click:trigger")}
+  on:mousedown={() => onEvent?.("mousedown")}
+  on:mousedown:trigger={() => onEvent?.("mousedown:trigger")}
+  on:focus={() => onEvent?.("focus")}
+  on:focus:trigger={() => onEvent?.("focus:trigger")}
+  on:blur={() => onEvent?.("blur")}
+  on:blur:trigger={() => onEvent?.("blur:trigger")}
+  on:mouseover={() => onEvent?.("mouseover")}
+  on:mouseover:trigger={() => onEvent?.("mouseover:trigger")}
+  on:mouseenter={() => onEvent?.("mouseenter")}
+  on:mouseenter:trigger={() => onEvent?.("mouseenter:trigger")}
+  on:mouseleave={() => onEvent?.("mouseleave")}
+  on:mouseleave:trigger={() => onEvent?.("mouseleave:trigger")}
+  on:close={(e) => onClose?.(e.detail)}
 >
   {#each items as text}
-    <MenuItem on:click={() => console.log("select", text)}>{text}</MenuItem>
+    <MenuItem on:click={() => onSelect?.(text)}>{text}</MenuItem>
   {/each}
 </ComboButton>

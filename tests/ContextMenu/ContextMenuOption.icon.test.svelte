@@ -10,14 +10,7 @@
   export let y = 0;
 </script>
 
-<ContextMenu
-  bind:open
-  {x}
-  {y}
-  on:close={() => {
-    console.log("close");
-  }}
->
+<ContextMenu bind:open {x} {y}>
   <ContextMenuOption labelText="Copy" icon={CopyFile} />
   <ContextMenuOption labelText="Plain" />
   <ContextMenuDivider />

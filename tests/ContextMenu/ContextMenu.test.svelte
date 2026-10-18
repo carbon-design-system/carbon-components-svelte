@@ -15,6 +15,10 @@
   export let optionDisabled = false;
   export let labelText: ComponentProps<ContextMenu>["labelText"] = undefined;
   export let ariaLabel: string | undefined = undefined;
+  export let preventFirst = false;
+  export let onopen: (detail: unknown) => void = () => {};
+  export let onclose: (trigger?: string) => void = () => {};
+  export let onoptionclick: (labelText: string) => void = () => {};
 </script>
 
 <div data-testid="target">Right click me</div>
@@ -27,14 +31,16 @@
   {labelText}
   aria-label={ariaLabel}
   bind:ref
-  on:open={(e) => {
-    console.log("open", e.detail);
-  }}
-  on:close={() => {
-    console.log("close");
-  }}
+  on:open={(e) => onopen(e.detail)}
+  on:close={(e) => onclose(e.detail.trigger)}
 >
-  <ContextMenuOption labelText="Option 1" />
+  <ContextMenuOption
+    labelText="Option 1"
+    on:click={(e) => {
+      onoptionclick("Option 1");
+      if (preventFirst) e.preventDefault();
+    }}
+  />
   {#if withSubmenu}
     <ContextMenuOption
       labelText="Option with submenu"

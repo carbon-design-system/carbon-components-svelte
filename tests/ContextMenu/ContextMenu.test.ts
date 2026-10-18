@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
-import ContextMenuPreventDefault from "./ContextMenu.preventDefault.test.svelte";
+import { setViewportWidth } from "../utils/viewport";
 import ContextMenuTarget from "./ContextMenu.target.test.svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuOptionIcon from "./ContextMenuOption.icon.test.svelte";
@@ -33,26 +33,23 @@ describe("ContextMenu", () => {
   });
 
   it("should dispatch open only when open transitions to true", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onopen = vi.fn();
     const { rerender } = render(ContextMenu, {
-      props: { open: true, x: 100, y: 100 },
+      props: { open: true, x: 100, y: 100, onopen },
     });
 
-    const openCalls = () =>
-      consoleLog.mock.calls.filter((call) => call[0] === "open").length;
-
     // Mounting already open fires `open` once.
-    expect(openCalls()).toBe(1);
+    expect(onopen).toHaveBeenCalledTimes(1);
 
     await rerender({ open: true, x: 150, y: 150 });
     await rerender({ open: true, x: 200, y: 200 });
 
-    expect(openCalls()).toBe(1);
+    expect(onopen).toHaveBeenCalledTimes(1);
   });
 
   it("should dispatch close only when open transitions to false", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenu, { props: { open: false } });
+    const onclose = vi.fn();
+    render(ContextMenu, { props: { open: false, onclose } });
 
     await user.keyboard("{Escape}");
     await user.click(document.body);
@@ -60,11 +57,7 @@ describe("ContextMenu", () => {
     // directly, which must still be a no-op while the menu is closed.
     await user.click(screen.getByText("Option 1"));
 
-    const closeCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "close",
-    ).length;
-
-    expect(closeCalls).toBe(0);
+    expect(onclose).not.toHaveBeenCalled();
   });
 
   it("should handle keyboard navigation", async () => {
@@ -163,12 +156,12 @@ describe("ContextMenu", () => {
   });
 
   it("should handle custom target", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenu);
+    const onopen = vi.fn();
+    render(ContextMenu, { props: { onopen } });
 
     const target = screen.getByTestId("target");
     await user.pointer({ target, keys: "[MouseRight]" });
-    expect(consoleLog).toHaveBeenCalledWith("open", target);
+    expect(onopen).toHaveBeenCalledWith(target);
   });
 
   // Regression test: when `target` is updated to a new set of nodes,
@@ -176,8 +169,8 @@ describe("ContextMenu", () => {
   // listener removed. Otherwise, right-clicking a node that is no
   // longer in `target` still triggers `openMenu`.
   it("should remove contextmenu listener from nodes no longer in target", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuTarget);
+    const onopen = vi.fn();
+    render(ContextMenuTarget, { props: { onopen } });
 
     // Initial target is [A]. Swap to [B].
     await user.click(screen.getByTestId("swap"));
@@ -185,15 +178,12 @@ describe("ContextMenu", () => {
     const targetA = screen.getByTestId("target-a");
     await user.pointer({ target: targetA, keys: "[MouseRight]" });
 
-    const openCalls = consoleLog.mock.calls.filter(
-      ([label]) => label === "open",
-    );
-    expect(openCalls).toHaveLength(0);
+    expect(onopen).not.toHaveBeenCalled();
 
     // The new target still opens the menu.
     const targetB = screen.getByTestId("target-b");
     await user.pointer({ target: targetB, keys: "[MouseRight]" });
-    expect(consoleLog).toHaveBeenCalledWith("open", targetB);
+    expect(onopen).toHaveBeenCalledWith(targetB);
   });
 
   it("should restore focus to the parent option when the submenu closes with ArrowLeft", async () => {
@@ -224,13 +214,14 @@ describe("ContextMenu", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1848
   it("should not close parent menu when clicking submenu trigger", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onclose = vi.fn();
     render(ContextMenu, {
       props: {
         open: true,
         withSubmenu: true,
         x: 100,
         y: 100,
+        onclose,
       },
     });
 
@@ -241,34 +232,35 @@ describe("ContextMenu", () => {
 
     await user.click(submenuTrigger);
 
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onclose).not.toHaveBeenCalled();
     expect(submenuTrigger).toHaveAttribute("aria-expanded", "true");
   });
 
   it("should not close menu when activating disabled regular option", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onclose = vi.fn();
     render(ContextMenu, {
       props: {
         open: true,
         optionDisabled: true,
         x: 100,
         y: 100,
+        onclose,
       },
     });
 
     const disabledOption = screen.getByText("Option 2");
     await user.click(disabledOption);
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onclose).not.toHaveBeenCalled();
 
     const trigger = disabledOption.closest("li");
     assert(trigger);
     trigger.focus();
 
     await user.keyboard("{Enter}");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onclose).not.toHaveBeenCalled();
 
     await user.keyboard(" ");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onclose).not.toHaveBeenCalled();
   });
 
   // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
@@ -278,19 +270,11 @@ describe("ContextMenu", () => {
     const originalInnerWidth = window.innerWidth;
 
     afterEach(() => {
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: originalInnerWidth,
-      });
+      setViewportWidth(originalInnerWidth);
     });
 
     const openSubmenu = async (innerWidth: number, rootX: number) => {
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: innerWidth,
-      });
+      setViewportWidth(innerWidth);
 
       render(ContextMenu, {
         props: { open: true, withSubmenu: true, x: rootX, y: 100 },
@@ -370,7 +354,28 @@ describe("ContextMenu", () => {
       expect(trigger).toHaveAttribute("aria-expanded", "false");
     });
 
-    it("should not open submenu via Enter/Space when disabled", async () => {
+    it.each<[string, (trigger: HTMLElement) => Promise<void>]>([
+      [
+        "Enter/Space",
+        async (trigger) => {
+          trigger.focus();
+
+          await user.keyboard("{Enter}");
+          expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+          await user.keyboard(" ");
+        },
+      ],
+      [
+        "hover",
+        async (trigger) => {
+          await user.hover(trigger);
+          // Outlast the 150ms hover-intent delay before asserting it never opened.
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        },
+      ],
+      ["click", (trigger) => user.click(trigger)],
+    ])("should not open submenu via %s when disabled", async (_, activate) => {
       render(ContextMenu, {
         props: {
           open: true,
@@ -381,70 +386,12 @@ describe("ContextMenu", () => {
         },
       });
 
-      const trigger = screen.getByText("Option with submenu").closest("li");
-      assert(trigger);
-      trigger.focus();
-
-      await user.keyboard("{Enter}");
-      expect(trigger).toHaveAttribute("aria-expanded", "false");
-
-      await user.keyboard(" ");
-      expect(trigger).toHaveAttribute("aria-expanded", "false");
-
-      const submenu = screen
-        .getAllByRole("menu")
-        .find((menu) => menu.getAttribute("data-level") === "2");
-      expect(submenu).not.toHaveClass("bx--menu--open");
-    });
-
-    it("should not open submenu on hover when disabled", async () => {
-      render(ContextMenu, {
-        props: {
-          open: true,
-          withSubmenu: true,
-          submenuDisabled: true,
-          x: 100,
-          y: 100,
-        },
+      const trigger = screen.getByRole("menuitem", {
+        name: "Option with submenu",
       });
+      await activate(trigger);
 
-      const submenuTrigger = screen.getByText("Option with submenu");
-      await user.hover(submenuTrigger);
-      // Outlast the 150ms hover-intent delay before asserting it never opened.
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
-      const trigger = submenuTrigger.closest("li");
-      assert(trigger);
       expect(trigger).toHaveAttribute("aria-expanded", "false");
-
-      const submenu = screen
-        .getAllByRole("menu")
-        .find((menu) => menu.getAttribute("data-level") === "2");
-      expect(submenu).not.toHaveClass("bx--menu--open");
-    });
-
-    it("should not open submenu on click when disabled", async () => {
-      render(ContextMenu, {
-        props: {
-          open: true,
-          withSubmenu: true,
-          submenuDisabled: true,
-          x: 100,
-          y: 100,
-        },
-      });
-
-      const submenuTrigger = screen.getByText("Option with submenu");
-      await user.click(submenuTrigger);
-
-      const trigger = submenuTrigger.closest("li");
-      assert(trigger);
-      expect(trigger).toHaveAttribute("aria-expanded", "false");
-
-      const submenu = screen
-        .getAllByRole("menu")
-        .find((menu) => menu.getAttribute("data-level") === "2");
-      expect(submenu).not.toHaveClass("bx--menu--open");
     });
   });
 
@@ -462,16 +409,24 @@ describe("ContextMenu", () => {
   });
 
   it("supports preventDefault on click to prevent menu from closing", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuPreventDefault, {
-      props: { open: true, x: 100, y: 100 },
+    const onclose = vi.fn();
+    const onoptionclick = vi.fn();
+    render(ContextMenu, {
+      props: {
+        open: true,
+        x: 100,
+        y: 100,
+        preventFirst: true,
+        onclose,
+        onoptionclick,
+      },
     });
 
     const options = screen.getAllByRole("menuitem");
     await user.click(options[0]);
 
-    expect(consoleLog).toHaveBeenCalledWith("click", "Stay open");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onoptionclick).toHaveBeenCalledWith("Option 1");
+    expect(onclose).not.toHaveBeenCalled();
 
     expect(screen.getAllByRole("menu")[0]).toHaveClass("bx--menu--open");
   });
@@ -482,9 +437,7 @@ describe("ContextMenu", () => {
         props: { open: true, x: 100, y: 100 },
       });
 
-      const options = screen.getAllByRole("menuitem");
-      const copyOption = options.find((o) => o.textContent?.includes("Copy"));
-      assert(copyOption);
+      const copyOption = screen.getByRole("menuitem", { name: /Copy/ });
 
       const iconEl = copyOption.querySelector(".bx--menu-option__icon");
       expect(iconEl).toBeInTheDocument();
@@ -497,11 +450,7 @@ describe("ContextMenu", () => {
         props: { open: true, x: 100, y: 100 },
       });
 
-      const options = screen.getAllByRole("menuitem");
-      const deleteOption = options.find((o) =>
-        o.textContent?.includes("Delete"),
-      );
-      assert(deleteOption);
+      const deleteOption = screen.getByRole("menuitem", { name: /Delete/ });
 
       expect(deleteOption).toHaveClass("bx--menu-option--danger");
     });
@@ -513,15 +462,10 @@ describe("ContextMenu", () => {
         props: { open: true, x: 100, y: 100, withDisabled: true },
       });
 
-      const options = screen.getAllByRole("menuitem");
-      const enabledOption = options.find((o) =>
-        o.textContent?.includes("Option 1"),
-      );
-      const disabledOption = options.find((o) =>
-        o.textContent?.includes("Disabled option"),
-      );
-      assert(enabledOption);
-      assert(disabledOption);
+      const enabledOption = screen.getByRole("menuitem", { name: /Option 1/ });
+      const disabledOption = screen.getByRole("menuitem", {
+        name: /Disabled option/,
+      });
 
       expect(enabledOption).not.toHaveClass("bx--menu-option--disabled");
       expect(disabledOption).toHaveClass("bx--menu-option--disabled");

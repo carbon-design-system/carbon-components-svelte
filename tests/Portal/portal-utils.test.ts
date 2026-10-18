@@ -1,5 +1,6 @@
 import { observeModalClose } from "../../src/Portal/portal-utils.js";
 import { flushMacrotask } from "../utils/flush-macrotask";
+import { makeVisibleModal } from "./helpers";
 
 describe("observeModalClose", () => {
   it("returns no-op when element has no modal ancestor", () => {
@@ -17,11 +18,7 @@ describe("observeModalClose", () => {
   });
 
   it("calls onClose when modal loses is-visible class", async () => {
-    const modal = document.createElement("div");
-    modal.classList.add("bx--modal", "is-visible");
-    const element = document.createElement("div");
-    modal.appendChild(element);
-    document.body.appendChild(modal);
+    const { modal, element } = makeVisibleModal();
 
     const onClose = vi.fn();
     const disconnect = observeModalClose(element, onClose);
@@ -35,11 +32,7 @@ describe("observeModalClose", () => {
   });
 
   it("does not call onClose when modal retains is-visible", async () => {
-    const modal = document.createElement("div");
-    modal.classList.add("bx--modal", "is-visible");
-    const element = document.createElement("div");
-    modal.appendChild(element);
-    document.body.appendChild(modal);
+    const { modal, element } = makeVisibleModal();
 
     const onClose = vi.fn();
     const disconnect = observeModalClose(element, onClose);
@@ -53,11 +46,7 @@ describe("observeModalClose", () => {
   });
 
   it("stops observing after disconnect", async () => {
-    const modal = document.createElement("div");
-    modal.classList.add("bx--modal", "is-visible");
-    const element = document.createElement("div");
-    modal.appendChild(element);
-    document.body.appendChild(modal);
+    const { modal, element } = makeVisibleModal();
 
     const onClose = vi.fn();
     const disconnect = observeModalClose(element, onClose);

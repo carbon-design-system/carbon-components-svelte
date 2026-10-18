@@ -18,8 +18,8 @@
   <MenuItem labelText="Standalone label" />
   <MenuItem shortcutText="⌘S">Save</MenuItem>
   <MenuItem labelText="Export as">
-    <MenuItem on:click={() => console.log("select", "PDF")}>PDF</MenuItem>
-    <MenuItem on:click={() => console.log("select", "JPG")}>JPG</MenuItem>
+    <MenuItem>PDF</MenuItem>
+    <MenuItem>JPG</MenuItem>
     <MenuItem disabled>PNG</MenuItem>
   </MenuItem>
   <MenuDivider />

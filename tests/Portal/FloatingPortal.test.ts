@@ -4,15 +4,9 @@ import { expectInlineStyle } from "../utils/inline-style";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import FloatingPortalTest from "./FloatingPortal.test.svelte";
+import { countCalls, createTarget, renderOpen } from "./helpers";
 
 describe("FloatingPortal", () => {
-  afterEach(() => {
-    const existingPortals = document.querySelectorAll("[data-floating-portal]");
-    for (const portal of existingPortals) {
-      portal.remove();
-    }
-  });
-
   it("does not render when open is false", () => {
     render(FloatingPortalTest, {
       props: { open: false },
@@ -26,31 +20,18 @@ describe("FloatingPortal", () => {
   });
 
   it("renders floating content when open is true", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true },
-    });
+    const { content, portal } = await renderOpen();
 
-    const content = await screen.findByText("Floating content");
     expect(content).toBeInTheDocument();
-
-    const portalElement = content.closest("[data-floating-portal]");
-    expect(portalElement).toBeInTheDocument();
-    expect(portalElement?.parentElement).toBe(document.body);
+    expect(portal.parentElement).toBe(document.body);
   });
 
   it.each(["bottom", "top", "left", "right"] as const)(
     "sets data-floating-direction to the preferred %s side when it fits",
     async (direction) => {
-      render(FloatingPortalTest, {
-        props: { open: true, direction },
-      });
+      const { portal } = await renderOpen({ direction });
 
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      expect(portalElement).toHaveAttribute(
-        "data-floating-direction",
-        direction,
-      );
+      expect(portal).toHaveAttribute("data-floating-direction", direction);
     },
   );
 
@@ -59,75 +40,41 @@ describe("FloatingPortal", () => {
       vi.restoreAllMocks();
     });
 
-    it("re-flips on a scroll-driven reposition by default", async () => {
-      render(FloatingPortalTest, {
-        props: { open: true, direction: "bottom" },
-      });
+    // Anchor now sits near the bottom of the viewport (insufficient room
+    // below), as if the page scrolled. Without a lock this flips to "top".
+    it.each([
+      { name: "re-flips by default", props: {}, expected: "top" },
+      {
+        name: 'does not re-flip within the same open session when lockDirection is "always"',
+        props: { lockDirection: "always" },
+        expected: "bottom",
+      },
+    ] as const)(
+      "$name on a scroll-driven reposition",
+      async ({ props, expected }) => {
+        const { portal } = await renderOpen({ direction: "bottom", ...props });
+        expect(portal).toHaveAttribute("data-floating-direction", "bottom");
 
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      assert(portalElement instanceof HTMLElement);
-      const anchor = screen.getByTestId("anchor");
-      expect(portalElement).toHaveAttribute(
-        "data-floating-direction",
-        "bottom",
-      );
+        vi.spyOn(
+          screen.getByTestId("anchor"),
+          "getBoundingClientRect",
+        ).mockReturnValue(rect({ top: 750, bottom: 790, width: 100 }));
+        vi.spyOn(portal, "getBoundingClientRect").mockReturnValue(
+          rect({ top: 0, bottom: 200, width: 100 }),
+        );
 
-      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue(
-        rect({ top: 750, bottom: 790, width: 100 }),
-      );
-      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue(
-        rect({ top: 0, bottom: 200, width: 100 }),
-      );
+        window.dispatchEvent(new Event("scroll"));
+        await nextFrame();
 
-      window.dispatchEvent(new Event("scroll"));
-      await nextFrame();
-
-      expect(portalElement).toHaveAttribute("data-floating-direction", "top");
-    });
-
-    it('does not re-flip on a scroll-driven reposition within the same open session when lockDirection is "always"', async () => {
-      render(FloatingPortalTest, {
-        props: { open: true, direction: "bottom", lockDirection: "always" },
-      });
-
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      assert(portalElement instanceof HTMLElement);
-      const anchor = screen.getByTestId("anchor");
-      expect(portalElement).toHaveAttribute(
-        "data-floating-direction",
-        "bottom",
-      );
-
-      // Anchor now sits near the bottom of the viewport (insufficient room
-      // below), as if the page scrolled. Without the lock this flips to "top".
-      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue(
-        rect({ top: 750, bottom: 790, width: 100 }),
-      );
-      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue(
-        rect({ top: 0, bottom: 200, width: 100 }),
-      );
-
-      window.dispatchEvent(new Event("scroll"));
-      await nextFrame();
-
-      expect(portalElement).toHaveAttribute(
-        "data-floating-direction",
-        "bottom",
-      );
-    });
+        expect(portal).toHaveAttribute("data-floating-direction", expected);
+      },
+    );
   });
 
   it("applies z-index from zIndex prop", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, zIndex: 10000 },
-    });
+    const { portal } = await renderOpen({ zIndex: 10000 });
 
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    const style = portalElement?.getAttribute("style") ?? "";
-    expect(style).toContain("z-index: 10000");
+    expectInlineStyle(portal, { zIndex: "10000" });
   });
 
   describe("gap and offset props", () => {
@@ -177,13 +124,7 @@ describe("FloatingPortal", () => {
     ] as const)(
       "applies $name to the position",
       async ({ props, top, left }) => {
-        render(FloatingPortalTest, {
-          props: { open: true, ...props },
-        });
-
-        const content = await screen.findByText("Floating content");
-        const portalElement = content.closest("[data-floating-portal]");
-        assert(portalElement instanceof HTMLElement);
+        const { portal } = await renderOpen(props);
 
         vi.spyOn(
           screen.getByTestId("anchor"),
@@ -198,15 +139,15 @@ describe("FloatingPortal", () => {
             right: 400,
           }),
         );
-        vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue(
+        vi.spyOn(portal, "getBoundingClientRect").mockReturnValue(
           rect({ width: 60, height: 30 }),
         );
 
         window.dispatchEvent(new Event("scroll"));
         await nextFrame();
 
-        expectInlineStyle(portalElement, { top, left });
-        expect(portalElement).toHaveAttribute(
+        expectInlineStyle(portal, { top, left });
+        expect(portal).toHaveAttribute(
           "data-floating-direction",
           props.direction,
         );
@@ -215,156 +156,86 @@ describe("FloatingPortal", () => {
   });
 
   it("applies position styles", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true },
-    });
+    const { portal } = await renderOpen();
 
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    const style = portalElement?.getAttribute("style") ?? "";
-    expect(style).toContain("position: absolute");
+    expectInlineStyle(portal, { position: "absolute" });
+    const style = portal.getAttribute("style") ?? "";
     expect(style).toMatch(/top:\s*\d+px/);
     expect(style).toMatch(/left:\s*\d+px/);
     expect(style).toMatch(/width:\s*\d+px/);
   });
 
-  it("uses position: fixed when mounted into a non-body target", async () => {
-    const customTarget = document.createElement("div");
-    document.body.appendChild(customTarget);
+  it.each([
+    {
+      name: "a non-body explicit target",
+      setup: () => {
+        const target = createTarget();
+        return { props: { target }, getParent: () => target };
+      },
+    },
+    {
+      name: "the anchor's nearest <dialog> ancestor",
+      setup: () => ({
+        props: { dialogAncestor: true },
+        getParent: () => screen.getByTestId("dialog-ancestor"),
+      }),
+    },
+    {
+      name: "the anchor's nearest [popover] ancestor",
+      setup: () => ({
+        props: { popoverAncestor: true },
+        getParent: () => screen.getByTestId("popover-ancestor"),
+      }),
+    },
+  ])("mounts into $name with position: fixed", async ({ setup }) => {
+    const { props, getParent } = setup();
+    const { portal } = await renderOpen(props);
 
-    render(FloatingPortalTest, {
-      props: { open: true, target: customTarget },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    assert(portalElement instanceof HTMLElement);
-
-    expect(portalElement.parentElement).toBe(customTarget);
-    const style = portalElement.getAttribute("style") ?? "";
-    expect(style).toContain("position: fixed");
-    expect(style).not.toContain("position: absolute");
-
-    customTarget.remove();
-  });
-
-  it("auto-mounts into the anchor's nearest <dialog> ancestor", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, dialogAncestor: true },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    assert(portalElement instanceof HTMLElement);
-
-    const dialog = screen.getByTestId("dialog-ancestor");
-    expect(portalElement.parentElement).toBe(dialog);
-    expect(portalElement.getAttribute("style") ?? "").toContain(
-      "position: fixed",
-    );
+    expect(portal.parentElement).toBe(getParent());
+    expectInlineStyle(portal, { position: "fixed" });
   });
 
   it("explicit target overrides the auto-detected <dialog> ancestor", async () => {
-    const customTarget = document.createElement("div");
-    document.body.appendChild(customTarget);
-
-    render(FloatingPortalTest, {
-      props: { open: true, dialogAncestor: true, target: customTarget },
+    const customTarget = createTarget();
+    const { portal } = await renderOpen({
+      dialogAncestor: true,
+      target: customTarget,
     });
 
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    assert(portalElement instanceof HTMLElement);
-
-    expect(portalElement.parentElement).toBe(customTarget);
-
-    customTarget.remove();
-  });
-
-  it("auto-mounts into the anchor's nearest [popover] ancestor", async () => {
-    render(FloatingPortalTest, {
-      props: { open: true, popoverAncestor: true },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
-    assert(portalElement instanceof HTMLElement);
-
-    const popover = screen.getByTestId("popover-ancestor");
-    expect(portalElement.parentElement).toBe(popover);
-    expect(portalElement.getAttribute("style") ?? "").toContain(
-      "position: fixed",
-    );
+    expect(portal.parentElement).toBe(customTarget);
   });
 
   describe("intrinsicWidth", () => {
     it("applies width and no translateX when intrinsicWidth is false (default)", async () => {
-      render(FloatingPortalTest, {
-        props: { open: true, intrinsicWidth: false },
-      });
+      const { portal } = await renderOpen({ intrinsicWidth: false });
 
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      const style = portalElement?.getAttribute("style") ?? "";
+      const style = portal.getAttribute("style") ?? "";
       expect(style).toMatch(/width:\s*\d+px/);
       expect(style).not.toContain("translateX(-50%)");
     });
 
-    it("applies translateX(-50%) and no width when intrinsicWidth is true", async () => {
-      render(FloatingPortalTest, {
-        props: { open: true, intrinsicWidth: true },
-      });
-
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      const style = portalElement?.getAttribute("style") ?? "";
-      expect(style).toContain("transform: translateX(-50%)");
-      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
-    });
-
-    it("applies no horizontal transform for intrinsicAlign start", async () => {
-      render(FloatingPortalTest, {
-        props: {
-          open: true,
+    it.each([
+      { align: "center", transform: "translateX(-50%)" },
+      { align: "end", transform: "translateX(-100%)" },
+      { align: "start", transform: "" },
+    ] as const)(
+      "applies no width and transform '$transform' for intrinsicAlign $align",
+      async ({ align, transform }) => {
+        const { portal } = await renderOpen({
           intrinsicWidth: true,
-          intrinsicAlign: "start",
-        },
-      });
+          intrinsicAlign: align,
+        });
 
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      const style = portalElement?.getAttribute("style") ?? "";
-      expect(style).not.toContain("translateX");
-      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
-    });
-
-    it("applies translateX(-100%) for intrinsicAlign end", async () => {
-      render(FloatingPortalTest, {
-        props: {
-          open: true,
-          intrinsicWidth: true,
-          intrinsicAlign: "end",
-        },
-      });
-
-      const content = await screen.findByText("Floating content");
-      const portalElement = content.closest("[data-floating-portal]");
-      const style = portalElement?.getAttribute("style") ?? "";
-      expect(style).toContain("transform: translateX(-100%)");
-      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
-    });
+        expectInlineStyle(portal, { transform, width: "" });
+      },
+    );
   });
 
   it("binds ref to the floating portal element", async () => {
-    const { component } = render(FloatingPortalTest, {
-      props: { open: true },
-    });
-
-    const content = await screen.findByText("Floating content");
-    const portalElement = content.closest("[data-floating-portal]");
+    const { component, portal } = await renderOpen();
 
     expect(component.ref).toBeInstanceOf(HTMLElement);
-    expect(component.ref).toBe(portalElement);
+    expect(component.ref).toBe(portal);
     expect(component.ref).toHaveAttribute("data-floating-portal");
   });
 
@@ -402,11 +273,7 @@ describe("FloatingPortal", () => {
     it("cancels pending requestAnimationFrame on unmount", async () => {
       const cancelSpy = vi.spyOn(window, "cancelAnimationFrame");
 
-      const { unmount } = render(FloatingPortalTest, {
-        props: { open: true },
-      });
-
-      await screen.findByText("Floating content");
+      const { unmount } = await renderOpen();
 
       window.dispatchEvent(new Event("scroll"));
       unmount();
@@ -428,14 +295,8 @@ describe("FloatingPortal", () => {
       render(FloatingPortalTest, { props: { open: true } });
       await screen.findAllByText("Floating content");
 
-      const scrollAdds = addSpy.mock.calls.filter(
-        ([event]) => event === "scroll",
-      ).length;
-      const resizeAdds = addSpy.mock.calls.filter(
-        ([event]) => event === "resize",
-      ).length;
-      expect(scrollAdds).toBe(1);
-      expect(resizeAdds).toBe(1);
+      expect(countCalls(addSpy, "scroll")).toBe(1);
+      expect(countCalls(addSpy, "resize")).toBe(1);
     });
 
     it("does not hold a window scroll/resize listener while closed", async () => {
@@ -444,34 +305,19 @@ describe("FloatingPortal", () => {
       render(FloatingPortalTest, { props: { open: false } });
       await tick();
 
-      const scrollAdds = addSpy.mock.calls.filter(
-        ([event]) => event === "scroll",
-      ).length;
-      const resizeAdds = addSpy.mock.calls.filter(
-        ([event]) => event === "resize",
-      ).length;
-      expect(scrollAdds).toBe(0);
-      expect(resizeAdds).toBe(0);
+      expect(countCalls(addSpy, "scroll")).toBe(0);
+      expect(countCalls(addSpy, "resize")).toBe(0);
     });
 
     it("removes the pooled window listener once the last open instance unmounts", async () => {
       const removeSpy = vi.spyOn(window, "removeEventListener");
 
-      const { unmount } = render(FloatingPortalTest, {
-        props: { open: true },
-      });
-      await screen.findByText("Floating content");
+      const { unmount } = await renderOpen();
 
       unmount();
 
-      const scrollRemoves = removeSpy.mock.calls.filter(
-        ([event]) => event === "scroll",
-      ).length;
-      const resizeRemoves = removeSpy.mock.calls.filter(
-        ([event]) => event === "resize",
-      ).length;
-      expect(scrollRemoves).toBe(1);
-      expect(resizeRemoves).toBe(1);
+      expect(countCalls(removeSpy, "scroll")).toBe(1);
+      expect(countCalls(removeSpy, "resize")).toBe(1);
     });
   });
 
@@ -483,11 +329,7 @@ describe("FloatingPortal", () => {
     it("listens for scroll events on scrollable ancestors", async () => {
       const addEventSpy = vi.spyOn(HTMLElement.prototype, "addEventListener");
 
-      render(FloatingPortalTest, {
-        props: { open: true, scrollableContainer: true },
-      });
-
-      await screen.findByText("Floating content");
+      await renderOpen({ scrollableContainer: true });
 
       const scrollCalls = addEventSpy.mock.calls.filter(
         ([event]) => event === "scroll",
@@ -507,19 +349,12 @@ describe("FloatingPortal", () => {
         "removeEventListener",
       );
 
-      const { rerender } = render(FloatingPortalTest, {
-        props: { open: true, scrollableContainer: true },
-      });
-
-      await screen.findByText("Floating content");
+      const { rerender } = await renderOpen({ scrollableContainer: true });
 
       await rerender({ open: false, scrollableContainer: true });
       await tick();
 
-      const scrollRemoveCalls = removeEventSpy.mock.calls.filter(
-        ([event]) => event === "scroll",
-      );
-      expect(scrollRemoveCalls.length).toBeGreaterThan(0);
+      expect(countCalls(removeEventSpy, "scroll")).toBeGreaterThan(0);
     });
 
     it("removes scroll listeners on unmount", async () => {
@@ -528,28 +363,17 @@ describe("FloatingPortal", () => {
         "removeEventListener",
       );
 
-      const { unmount } = render(FloatingPortalTest, {
-        props: { open: true, scrollableContainer: true },
-      });
-
-      await screen.findByText("Floating content");
+      const { unmount } = await renderOpen({ scrollableContainer: true });
 
       unmount();
 
-      const scrollRemoveCalls = removeEventSpy.mock.calls.filter(
-        ([event]) => event === "scroll",
-      );
-      expect(scrollRemoveCalls.length).toBeGreaterThan(0);
+      expect(countCalls(removeEventSpy, "scroll")).toBeGreaterThan(0);
     });
 
     it("schedules position update when a scrollable ancestor scrolls", async () => {
       const rafSpy = vi.spyOn(window, "requestAnimationFrame");
 
-      render(FloatingPortalTest, {
-        props: { open: true, scrollableContainer: true },
-      });
-
-      await screen.findByText("Floating content");
+      await renderOpen({ scrollableContainer: true });
 
       const rafCountBefore = rafSpy.mock.calls.length;
 
@@ -568,11 +392,7 @@ describe("FloatingPortal", () => {
     it("schedules position update when anchor style changes", async () => {
       const rafSpy = vi.spyOn(window, "requestAnimationFrame");
 
-      render(FloatingPortalTest, {
-        props: { open: true },
-      });
-
-      await screen.findByText("Floating content");
+      await renderOpen();
 
       const anchor = screen.getByTestId("anchor");
       const rafCountBefore = rafSpy.mock.calls.length;
@@ -591,11 +411,7 @@ describe("FloatingPortal", () => {
       async (how) => {
         const rafSpy = vi.spyOn(window, "requestAnimationFrame");
 
-        const { rerender, unmount } = render(FloatingPortalTest, {
-          props: { open: true },
-        });
-
-        await screen.findByText("Floating content");
+        const { rerender, unmount } = await renderOpen();
         const anchor = screen.getByTestId("anchor");
 
         if (how === "close") {

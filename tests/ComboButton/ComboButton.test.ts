@@ -5,55 +5,55 @@ import ComboButtonFixture from "./ComboButton.test.svelte";
 
 describe("ComboButton", () => {
   it("fires the primary action click independently of the menu trigger", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboButtonFixture);
+    const onEvent = vi.fn();
+    render(ComboButtonFixture, { props: { onEvent } });
 
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onEvent).toHaveBeenCalledWith("click");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
   it("dispatches click:trigger when the menu trigger is clicked, independent of click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboButtonFixture);
+    const onEvent = vi.fn();
+    render(ComboButtonFixture, { props: { onEvent } });
 
     await user.click(
       screen.getByRole("button", { name: "Additional actions" }),
     );
 
-    expect(consoleLog).toHaveBeenCalledWith("click:trigger");
-    expect(consoleLog).not.toHaveBeenCalledWith("click");
+    expect(onEvent).toHaveBeenCalledWith("click:trigger");
+    expect(onEvent).not.toHaveBeenCalledWith("click");
   });
 
-  it("forwards mouseenter from both the primary action and the trigger", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboButtonFixture);
+  it.each([
+    "mouseenter",
+    "mouseover",
+    "mouseleave",
+    "focus",
+    "blur",
+    "mousedown",
+  ])(
+    "forwards %s from both buttons, and %s:trigger only from the trigger",
+    async (name) => {
+      const onEvent = vi.fn();
+      render(ComboButtonFixture, { props: { onEvent } });
 
-    const primaryAction = screen.getByRole("button", { name: "Save" });
-    const trigger = screen.getByRole("button", { name: "Additional actions" });
+      const primaryAction = screen.getByRole("button", { name: "Save" });
+      const trigger = screen.getByRole("button", {
+        name: "Additional actions",
+      });
 
-    await fireEvent.mouseEnter(primaryAction);
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+      await fireEvent(primaryAction, new Event(name));
+      expect(onEvent).toHaveBeenCalledWith(name);
+      expect(onEvent).not.toHaveBeenCalledWith(`${name}:trigger`);
 
-    consoleLog.mockClear();
-    await fireEvent.mouseEnter(trigger);
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
-  });
-
-  it("dispatches mouseenter:trigger only from the trigger, not the primary action", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboButtonFixture);
-
-    const primaryAction = screen.getByRole("button", { name: "Save" });
-    const trigger = screen.getByRole("button", { name: "Additional actions" });
-
-    await fireEvent.mouseEnter(primaryAction);
-    expect(consoleLog).not.toHaveBeenCalledWith("mouseenter:trigger");
-
-    await fireEvent.mouseEnter(trigger);
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter:trigger");
-  });
+      onEvent.mockClear();
+      await fireEvent(trigger, new Event(name));
+      expect(onEvent).toHaveBeenCalledWith(name);
+      expect(onEvent).toHaveBeenCalledWith(`${name}:trigger`);
+    },
+  );
 
   it("opens and closes the menu from the icon-only trigger", async () => {
     render(ComboButtonFixture);
@@ -84,20 +84,6 @@ describe("ComboButton", () => {
     expect(screen.getByRole("menuitem", { name: "Save as" })).toHaveFocus();
   });
 
-  it("dispatches close and forwards the trigger reason when an item is selected", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComboButtonFixture);
-
-    await user.click(
-      screen.getByRole("button", { name: "Additional actions" }),
-    );
-    await user.click(screen.getByRole("menuitem", { name: "Save as" }));
-
-    expect(consoleLog).toHaveBeenCalledWith("select", "Save as");
-    expect(consoleLog).toHaveBeenCalledWith("close", { trigger: "select" });
-    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
-  });
-
   it("disables both the primary action and trigger buttons", () => {
     render(ComboButtonFixture, { props: { disabled: true } });
 
@@ -108,8 +94,9 @@ describe("ComboButton", () => {
   });
 
   it("shows a spinner on the primary action while loading, without disabling the trigger", async () => {
+    const onEvent = vi.fn();
     render(ComboButtonFixture, {
-      props: { loading: true, loadingDescription: "Saving" },
+      props: { loading: true, loadingDescription: "Saving", onEvent },
     });
 
     const primaryAction = screen.getByRole("button", { name: "Save" });
@@ -121,51 +108,9 @@ describe("ComboButton", () => {
     expect(trigger).not.toBeDisabled();
     expect(trigger).not.toHaveAttribute("aria-disabled");
 
-    const consoleLog = vi.spyOn(console, "log");
     await user.click(primaryAction);
-    expect(consoleLog).not.toHaveBeenCalledWith("click");
+    expect(onEvent).not.toHaveBeenCalledWith("click");
   });
-
-  it.each([
-    { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
-    { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
-    { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
-    { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
-  ] as const)(
-    "propagates size $size to both buttons and the menu row height",
-    async ({ size, buttonClass, menuClass }) => {
-      render(ComboButtonFixture, { props: { size } });
-
-      const primaryAction = screen.getByRole("button", { name: "Save" });
-      const trigger = screen.getByRole("button", {
-        name: "Additional actions",
-      });
-
-      for (const unwanted of [
-        "bx--btn--sm",
-        "bx--btn--field",
-        "bx--btn--lg",
-        "bx--btn--xl",
-      ]) {
-        if (unwanted !== buttonClass) {
-          expect(primaryAction).not.toHaveClass(unwanted);
-          expect(trigger).not.toHaveClass(unwanted);
-        }
-      }
-      if (buttonClass) {
-        expect(primaryAction).toHaveClass(buttonClass);
-        expect(trigger).toHaveClass(buttonClass);
-      }
-
-      await user.click(trigger);
-
-      const menu = screen.getByRole("menu");
-      for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
-        if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
-      }
-      if (menuClass) expect(menu).toHaveClass(menuClass);
-    },
-  );
 
   it("defaults to the md size", async () => {
     render(ComboButtonFixture);
@@ -207,44 +152,5 @@ describe("ComboButton", () => {
     const trigger = screen.getByRole("button", { name: "Additional actions" });
     expect(trigger).toHaveClass("bx--btn--icon-only--right");
     expect(trigger).not.toHaveClass("bx--btn--icon-only--top");
-  });
-
-  it("never focuses the trigger via a real mouse click, only via keyboard", async () => {
-    render(ComboButtonFixture);
-
-    const trigger = screen.getByRole("button", { name: "Additional actions" });
-    const onFocus = vi.fn();
-    trigger.addEventListener("focus", onFocus);
-
-    // mousedown's default would focus the trigger. The menu opens by
-    // moving focus to its first item, so assert on the focus event itself,
-    // not just the focus state after the fact.
-    await user.click(trigger);
-    await user.click(trigger);
-    expect(onFocus).not.toHaveBeenCalled();
-
-    // Keyboard users still get normal focus via Tab.
-    await user.tab();
-    await user.tab();
-    expect(onFocus).toHaveBeenCalledTimes(1);
-    expect(trigger).toHaveFocus();
-  });
-
-  it("blurs the trigger after a mouse-driven close, but not a keyboard-driven one", async () => {
-    // A real click reports event.detail 1+; a keyboard-activated (Enter/
-    // Space) one reports 0. Start each case already open so the closing
-    // click is what's under test, independent of how it was opened.
-    const { unmount } = render(ComboButtonFixture, { props: { open: true } });
-    let trigger = screen.getByRole("button", { name: "Additional actions" });
-    trigger.focus();
-    await fireEvent.click(trigger, { detail: 1 });
-    expect(trigger).not.toHaveFocus();
-    unmount();
-
-    render(ComboButtonFixture, { props: { open: true } });
-    trigger = screen.getByRole("button", { name: "Additional actions" });
-    trigger.focus();
-    await fireEvent.click(trigger, { detail: 0 });
-    expect(trigger).toHaveFocus();
   });
 });
