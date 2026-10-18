@@ -459,6 +459,111 @@ describe("ComposedModal", () => {
     });
   });
 
+  it("clears aria-describedby when the ModalBody unmounts", async () => {
+    const { rerender } = render(ComposedModalTest, {
+      props: { open: true, alert: true, headerTitle: "Title" },
+    });
+    expect(screen.getByRole("alertdialog")).toHaveAttribute("aria-describedby");
+
+    await rerender({ includeBody: false });
+
+    expect(screen.getByRole("alertdialog")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
+  describe("body scroll lock", () => {
+    const LOCK_CLASS = "bx--body--with-modal-open";
+
+    it("locks body scroll while open", async () => {
+      const { rerender } = render(ComposedModalTest, {
+        props: { open: false, headerTitle: "Lock" },
+      });
+      expect(document.body).not.toHaveClass(LOCK_CLASS);
+
+      await rerender({ open: true });
+      await tick();
+      expect(document.body).toHaveClass(LOCK_CLASS);
+
+      await rerender({ open: false });
+      await flushProgrammaticClose();
+      expect(document.body).not.toHaveClass(LOCK_CLASS);
+    });
+
+    it("releases the lock when unmounted while open", () => {
+      const { unmount } = render(ComposedModalTest, {
+        props: { open: true, headerTitle: "Lock" },
+      });
+      expect(document.body).toHaveClass(LOCK_CLASS);
+
+      unmount();
+
+      expect(document.body).not.toHaveClass(LOCK_CLASS);
+    });
+  });
+
+  describe("Escape", () => {
+    it("dispatches close with the escape-key trigger", async () => {
+      const onclose = vi.fn();
+      render(ComposedModalTest, {
+        props: { open: true, headerTitle: "Escape", onclose },
+      });
+      await tick();
+      await tick();
+
+      await user.keyboard("{Escape}");
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        trigger: "escape-key",
+      });
+    });
+
+    it("stays open when the close event is canceled", async () => {
+      const onclose = vi.fn((e: CustomEvent) => e.preventDefault());
+      const { container } = render(ComposedModalTest, {
+        props: { open: true, headerTitle: "Escape", onclose },
+      });
+      await tick();
+      await tick();
+
+      await user.keyboard("{Escape}");
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(container.querySelector(".bx--modal")).toHaveClass("is-visible");
+    });
+  });
+
+  it.each([true, false])(
+    "dispatches transitionend with open=%s when the root's transform transition ends",
+    async (open) => {
+      const ontransitionend = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: { open, headerTitle: "Transition", ontransitionend },
+      });
+      const root = container.querySelector(".bx--modal");
+      assert(root);
+
+      root.dispatchEvent(
+        new TransitionEvent("transitionend", { propertyName: "transform" }),
+      );
+      await tick();
+
+      expect(ontransitionend).toHaveBeenCalledTimes(1);
+      expect(ontransitionend.mock.calls[0][0].detail).toEqual({ open });
+    },
+  );
+
+  it("applies the full-width class to the dialog", () => {
+    render(ComposedModalTest, {
+      props: { open: true, fullWidth: true, headerTitle: "Wide" },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveClass(
+      "bx--modal-container--full-width",
+    );
+  });
+
   it("should have correct ARIA attributes", () => {
     render(ComposedModalTest, {
       props: {

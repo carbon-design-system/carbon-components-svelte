@@ -34,7 +34,7 @@ describe("Slider xs size", () => {
   ] as const)("follows a form size of %s", (formSize, xs) => {
     const { container } = render(SliderXs, { props: { formSize } });
 
-    expect(inputs(container)).toHaveLength(3);
+    expect(inputs(container)).toHaveLength(4);
     for (const input of inputs(container)) {
       expect(input.classList.contains("bx--slider-text-input--xs")).toBe(xs);
     }

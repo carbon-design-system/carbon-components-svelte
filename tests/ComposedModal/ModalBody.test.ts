@@ -58,6 +58,22 @@ describe("ModalBody", () => {
     );
   });
 
+  it("names the region with the label heading when both label and title are set", () => {
+    render(ModalBodyTest, {
+      props: {
+        hasScrollingContent: true,
+        headerLabel: "Step 1",
+        slotContent: "Scrolling content",
+      },
+    });
+
+    const labelledbyId = screen
+      .getByRole("region")
+      .getAttribute("aria-labelledby");
+    assert(labelledbyId);
+    expect(document.getElementById(labelledbyId)).toHaveTextContent("Step 1");
+  });
+
   it("should not set aria-labelledby when a consumer supplies aria-label", () => {
     render(ModalBodyTest, {
       props: {
