@@ -364,6 +364,30 @@ describe("RangeSlider", () => {
     expect(lowerThumb).toHaveAttribute("aria-valuenow", "30");
   });
 
+  it("moves the upper thumb for a click above stacked thumbs", async () => {
+    const { container } = render(RangeSlider, {
+      props: { value: 50, valueUpper: 50 },
+    });
+    const slider = container.querySelector(".bx--slider");
+    const track = container.querySelector(".bx--slider__track");
+    assert(slider instanceof HTMLElement && track instanceof HTMLElement);
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+      rect({ right: 200, height: 2 }),
+    );
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    for (const thumb of [lowerThumb, upperThumb]) {
+      vi.spyOn(thumb, "getBoundingClientRect").mockReturnValue(
+        rect({ left: 92, width: 16, height: 16 }),
+      );
+    }
+
+    await fireEvent.mouseDown(slider, { clientX: 160 });
+    await fireEvent.mouseUp(window);
+
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "80");
+  });
+
   it("should clamp keyboard arrow values to min and max", async () => {
     const onchange = vi.fn();
     const oninput = vi.fn();
