@@ -1,5 +1,5 @@
 ---
-components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
+components: ["Accordion", "AccordionItem", "AccordionSearch", "AccordionSkeleton"]
 description: Accordions stack expandable sections vertically to show or hide content, with custom titles, multiple sizes, and disabled and skeleton states.
 ---
 
@@ -20,6 +20,12 @@ Use the accordion and accordion item components to compose a collapsible list of
 items.
 
 By default, the chevron icon is on the right side of the accordion item.
+
+Every enabled header stays in the <DocKbd label="Tab" /> order. With focus on a
+header, <DocKbd label="Up" /> and <DocKbd label="Down" /> move to the previous
+or next enabled header, wrapping at the ends. <DocKbd label="Home" /> and
+<DocKbd label="End" /> jump to the first and last enabled header. Moving focus
+never expands or collapses an item.
 
 <Accordion>
   <AccordionItem title="Billing and invoices">
@@ -181,6 +187,36 @@ The event's `detail.open` is the item's next open state, so a parent can
 track which item was toggled and to what state without binding to `open`.
 
 <FileSource src="/framed/Accordion/ToggleAccordion" />
+
+### Counting open items
+
+Listen for `toggle:change` on the accordion to react to the aggregate state
+instead of wiring `toggle` to every item. The event's `detail.openCount` is the
+number of items open once a change settles. It does not fire for items that
+start open, and removing an open item counts as a change. In `"single"` mode it
+reports the settled count, never an intermediate one.
+
+<FileSource src="/framed/Accordion/ToggleChangeAccordion" />
+
+## Search
+
+Use `AccordionSearch` to filter a long list of sections by title. Pass a data-driven
+`items` array; each item takes an `id`, `title`, and `description`, plus optional
+`open` and `disabled`. Matching is fuzzy, an empty query shows every item, and
+`emptyText` renders when nothing matches. Bind `filterText` to read or set the
+query. `align`, `size`, `flush`, `type`, and `disabled` are forwarded to the
+underlying `Accordion`.
+
+<FileSource src="/framed/Accordion/SearchAccordion" />
+
+Use the default slot to render custom panel content. The slot receives the `item`.
+
+```svelte
+<AccordionSearch {items} let:item>
+  <strong>{item.title}</strong>
+  <p>{item.description}</p>
+</AccordionSearch>
+```
 
 ## Nested
 
