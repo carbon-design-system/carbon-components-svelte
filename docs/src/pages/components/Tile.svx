@@ -37,6 +37,12 @@ tallest column by default but the tile inside does not.
   </Row>
 </Grid>
 
+## Small size
+
+Set `size="sm"` for a compact tile with less padding and no minimum height.
+
+<Tile size="sm">Compact tile</Tile>
+
 ## No padding
 
 Set `noPadding` to `true` to remove the tile's padding, so media or a chart can bleed to its edge.
