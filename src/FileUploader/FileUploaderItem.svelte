@@ -4,6 +4,12 @@
    */
 
   /**
+   * Set to `true` to remove the bottom margin, such as for an item in a
+   * flex or grid layout that sets its own spacing.
+   */
+  export let noMargin = false;
+
+  /**
    * Specify the file uploader status.
    * @type {"uploading" | "edit" | "complete"}
    */
@@ -66,6 +72,7 @@
 <span
   {id}
   class:bx--file__selected-file={true}
+  class:bx--file__selected-file--no-margin={noMargin}
   class:bx--file__selected-file--invalid={invalid}
   class:bx--file__selected-file--disabled={disabled}
   class:bx--file__selected-file--md={size === "field"}

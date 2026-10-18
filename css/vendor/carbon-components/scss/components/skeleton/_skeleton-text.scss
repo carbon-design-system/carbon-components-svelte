@@ -21,4 +21,10 @@
   .#{$prefix}--skeleton__heading {
     height: 1.5rem;
   }
+
+  // ccs: `noMargin` drops the bottom margin for a placeholder in a flex or
+  // grid layout that sets its own gap.
+  .#{$prefix}--skeleton__text.#{$prefix}--skeleton__text--no-margin {
+    margin-bottom: 0;
+  }
 }
