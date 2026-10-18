@@ -185,6 +185,9 @@
         danger ? container.querySelector(".bx--btn--secondary") : null,
         primaryButtonRef,
         buttonRef,
+        // With nothing else to focus, focus the dialog itself so Escape
+        // and Tab reach the root's keydown handler.
+        container,
       ],
     });
     target?.focus();

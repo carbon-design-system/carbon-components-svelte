@@ -2,6 +2,8 @@
   import Modal from "carbon-components-svelte/Modal/Modal.svelte";
 
   export let moveFocusOnClose = false;
+  export let passiveModal = false;
+  export let hideCloseButton = false;
 
   let open = false;
   let elsewhere: HTMLInputElement;
@@ -13,6 +15,8 @@
   modalHeading="Focus Return Test"
   primaryButtonText="Save"
   secondaryButtonText="Cancel"
+  {passiveModal}
+  {hideCloseButton}
   on:close={() => {
     if (moveFocusOnClose) elsewhere.focus();
   }}
