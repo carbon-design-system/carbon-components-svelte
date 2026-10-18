@@ -9,13 +9,7 @@
   export let showTabA = true;
 </script>
 
-<TabsVertical
-  bind:selected
-  bind:selectedId
-  on:change={({ detail }) => {
-    console.log("change event", detail);
-  }}
->
+<TabsVertical bind:selected bind:selectedId>
   {#if showTabA}
     <Tab id="tab-a" label="Tab A" />
   {/if}

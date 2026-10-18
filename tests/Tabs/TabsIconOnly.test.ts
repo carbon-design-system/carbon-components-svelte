@@ -36,6 +36,24 @@ describe("Tabs (icon-only)", () => {
     expect(settings.querySelector("svg")).toBeInTheDocument();
   });
 
+  it("ignores autoWidth and fullWidth so icon tabs stay square", async () => {
+    const { rerender } = render(TabsIconOnly, {
+      props: { autoWidth: true, fullWidth: true },
+    });
+    await tick();
+    await tick();
+
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab.style.width).toBe("");
+    }
+
+    // The width applies again once the tabs are no longer icon-only.
+    await rerender({ iconOnly: false });
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab.style.width).toBe("100%");
+    }
+  });
+
   it("opens a tooltip on focus and closes on blur", async () => {
     render(TabsIconOnly);
     await tick();

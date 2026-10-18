@@ -549,15 +549,23 @@ describe("Tabs", () => {
     }
   });
 
-  it("should support auto width", () => {
-    render(Tabs, {
-      props: { autoWidth: true },
-    });
+  it.each([
+    [{ autoWidth: true }, "auto"],
+    [{ fullWidth: true }, "100%"],
+    [{}, ""],
+  ])("sets the tab link width for %o", async (props, width) => {
+    const { rerender } = render(Tabs, { props });
 
     const tabs = screen.getAllByRole("tab");
+    expect(tabs).toHaveLength(3);
     for (const tab of tabs) {
-      const navItem = tab.closest(".bx--tabs__nav-item");
-      expect(navItem).not.toHaveStyle({ width: "10rem" });
+      expect(tab.style.width).toBe(width);
+    }
+
+    // Reacts to the prop changing after mount.
+    await rerender({ autoWidth: false, fullWidth: false });
+    for (const tab of tabs) {
+      expect(tab.style.width).toBe("");
     }
   });
 
@@ -656,6 +664,7 @@ describe("Tabs", () => {
 
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).toHaveClass("custom-tabs");
+    expect(tabsContainer).toHaveClass("bx--tabs");
   });
 
   it("should apply custom aria-label", () => {
@@ -687,11 +696,15 @@ describe("Tabs", () => {
 
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
 
+    // Tab 1 is back at index 0; selecting around it must update the bound index.
+    const selectedIndex = screen.getByTestId("selected-index");
+    await user.click(screen.getByRole("tab", { name: "Tab 3" }));
+    expect(selectedIndex).toHaveTextContent("2");
+
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     await user.click(tab1);
-
-    const selectedIndex = screen.getByTestId("selected-index");
     expect(selectedIndex).toHaveTextContent("0");
+    expect(tab1).toHaveAttribute("aria-selected", "true");
   });
 
   it("should update selected index when active tab is removed", async () => {
@@ -709,8 +722,18 @@ describe("Tabs", () => {
       screen.queryByRole("tab", { name: "Tab 2" }),
     ).not.toBeInTheDocument();
 
-    expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
+    // The index stays put, so the tab that took its place becomes selected.
+    expect(selectedIndex).toHaveTextContent("1");
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
+    expect(screen.getByText("Content 3")).toBeVisible();
+    expect(screen.getByText("Content 1")).not.toBeVisible();
   });
 
   it("should handle multiple tabs being toggled in sequence", async () => {
@@ -739,9 +762,16 @@ describe("Tabs", () => {
     await user.click(toggleTab1);
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
 
+    // Tab 3 moved to index 1 behind the restored Tab 1.
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    await user.click(tab3);
+    expect(selectedIndex).toHaveTextContent("1");
+    expect(tab3).toHaveAttribute("aria-selected", "true");
+
     await user.click(tab1);
     expect(selectedIndex).toHaveTextContent("0");
+    expect(tab1).toHaveAttribute("aria-selected", "true");
+    expect(tab3).toHaveAttribute("aria-selected", "false");
   });
 
   it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
@@ -1018,7 +1048,6 @@ describe("Tab", () => {
     const tab = screen.getByRole("tab");
     expect(await fireEvent.click(tab)).toBe(true);
     expect(await fireEvent.keyDown(tab, { key: "Enter" })).toBe(true);
-    expect(tab).toHaveAttribute("aria-selected", "true");
   });
 
   // The default "#" href is a placeholder: tabs act as selection controls, so
@@ -1029,7 +1058,6 @@ describe("Tab", () => {
     const tab = screen.getByRole("tab");
     expect(await fireEvent.click(tab)).toBe(false);
     expect(await fireEvent.keyDown(tab, { key: "Enter" })).toBe(false);
-    expect(tab).toHaveAttribute("aria-selected", "true");
   });
 
   it("should handle disabled state", () => {
@@ -1055,45 +1083,50 @@ describe("Tab", () => {
   });
 
   it("should be clickable when enabled", async () => {
-    render(Tab);
+    render(Tab, { props: { withSibling: true } });
 
-    const tab = screen.getByRole("tab");
+    const tab = screen.getByRole("tab", { name: "Test Tab" });
+    const sibling = screen.getByRole("tab", { name: "Sibling" });
+    expect(sibling).toHaveAttribute("aria-selected", "true");
+    expect(tab).toHaveAttribute("aria-selected", "false");
+
     await user.click(tab);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+    expect(sibling).toHaveAttribute("aria-selected", "false");
   });
 
   it("should handle keyboard navigation with arrow keys", async () => {
-    render(Tab);
+    render(Tab, { props: { withSibling: true } });
 
-    const tab = screen.getByRole("tab");
-    await user.click(tab);
+    const tab = screen.getByRole("tab", { name: "Test Tab" });
+    await user.click(screen.getByRole("tab", { name: "Sibling" }));
     await user.keyboard("{ArrowRight}");
 
     expect(tab).toHaveFocus();
-  });
-
-  it("should handle space key activation", async () => {
-    render(Tab);
-
-    const tab = screen.getByRole("tab");
-    await user.click(tab);
-    await user.keyboard(" ");
-
     expect(tab).toHaveAttribute("aria-selected", "true");
   });
 
-  it("should handle enter key activation", async () => {
-    render(Tab);
+  it.each([
+    ["space", " "],
+    ["enter", "{Enter}"],
+  ])("should handle %s key activation", async (_, key) => {
+    render(Tab, { props: { withSibling: true, activation: "manual" } });
 
-    const tab = screen.getByRole("tab");
-    await user.click(tab);
-    await user.keyboard("{Enter}");
+    const tab = screen.getByRole("tab", { name: "Test Tab" });
+    const sibling = screen.getByRole("tab", { name: "Sibling" });
+    await user.click(sibling);
+    await user.keyboard("{ArrowRight}");
+    expect(tab).toHaveFocus();
+    expect(tab).toHaveAttribute("aria-selected", "false");
+
+    await user.keyboard(key);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+    expect(sibling).toHaveAttribute("aria-selected", "false");
   });
 
-  it("should render slot content when no label provided", () => {
+  it("should render no label text when label is empty", () => {
     render(Tab, { props: { label: "" } });
 
     const tab = screen.getByRole("tab");
@@ -1191,9 +1224,13 @@ describe("Tab icon", () => {
     render(TabIcon, { props: { icon: Calendar } });
 
     const tab = screen.getByRole("tab", { name: /Test Tab/ });
+    await user.click(screen.getByRole("tab", { name: "No Icon" }));
+    expect(tab).toHaveAttribute("aria-selected", "false");
+
     await user.click(tab);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Icon content")).toBeVisible();
   });
 });
 
@@ -1266,9 +1303,13 @@ describe("Container tabs with icon", () => {
     render(TabIconContainer, { props: { icon: Calendar } });
 
     const tab = screen.getByRole("tab", { name: /Test Tab/ });
+    await user.click(screen.getByRole("tab", { name: "No Icon" }));
+    expect(tab).toHaveAttribute("aria-selected", "false");
+
     await user.click(tab);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Icon content")).toBeVisible();
   });
 });
 
@@ -1424,10 +1465,14 @@ describe("Container tabs with secondary label", () => {
     render(TabSecondaryLabel);
 
     const engageTab = screen.getByRole("tab", { name: /Engage/ });
+    await user.click(screen.getByRole("tab", { name: /Plain/ }));
+    expect(engageTab).toHaveAttribute("aria-selected", "false");
+
     await user.click(engageTab);
 
     expect(engageTab).toHaveAttribute("aria-selected", "true");
     expect(screen.getByText("Engage content")).toBeVisible();
+    expect(screen.getByText("Plain content")).not.toBeVisible();
   });
 
   it("should switch content when clicking tab with slot secondary label", async () => {

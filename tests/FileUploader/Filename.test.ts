@@ -82,12 +82,12 @@ describe("Filename", () => {
 
   it("should handle iconDescription prop for edit status", () => {
     const { container } = render(Filename, {
-      props: { status: "edit", iconDescription: "Remove file" },
+      props: { status: "edit", iconDescription: "Discard report" },
     });
 
     const closeButton = container.querySelector(".bx--file-close");
     assert(closeButton);
-    expect(closeButton).toHaveAttribute("aria-label", "Remove file");
+    expect(closeButton).toHaveAttribute("aria-label", "Discard report");
   });
 
   it("should resolve iconDescription function with context for edit status", () => {
@@ -144,14 +144,15 @@ describe("Filename", () => {
 
   it("should handle iconDescription prop for complete status", () => {
     const { container } = render(Filename, {
-      props: { status: "complete", iconDescription: "Upload complete" },
+      props: { status: "complete", iconDescription: "Report received" },
     });
 
     const checkmark = container.querySelector(".bx--file-complete");
     assert(checkmark);
-    const ariaLabel = checkmark.getAttribute("aria-label");
-    const title = checkmark.getAttribute("title");
-    expect(ariaLabel || title).toBe("Upload complete");
+    expect(checkmark.getAttribute("aria-label")).toBe("Report received");
+    expect(checkmark.querySelector("title")).toHaveTextContent(
+      "Report received",
+    );
   });
 
   it("should handle click event on close button", async () => {

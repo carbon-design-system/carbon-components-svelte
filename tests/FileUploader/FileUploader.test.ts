@@ -7,7 +7,7 @@ import FileUploaderPerFileStatusDemo from "./FileUploader.perFileStatus.test.sve
 import FileUploader from "./FileUploader.test.svelte";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
-import { simulateFileSelection } from "./helpers";
+import { fileNames, simulateFileSelection } from "./helpers";
 
 describe("FileUploader", () => {
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1785
@@ -382,24 +382,34 @@ describe("FileUploader", () => {
     expect(input).toHaveAttribute("accept", ".jpg,.png");
   });
 
-  it("should handle single file selection when multiple is false", async () => {
+  it("should replace the selection when multiple is false", async () => {
     const { component } = render(FileUploader, {
       props: { multiple: false },
     });
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
 
     assert(component.ref instanceof HTMLInputElement);
     const input = component.ref;
     expect(input).not.toHaveAttribute("multiple");
 
-    simulateFileSelection(input, [file1, file2]);
-
+    // A native single-file picker hands over one file per pick and replaces
+    // the previous selection.
+    simulateFileSelection(input, [
+      new File(["content1"], "file1.txt", { type: "text/plain" }),
+    ]);
     await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames.length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText(/file\d\.txt/)).toHaveLength(1);
     });
+    expect(screen.getByText("file1.txt")).toBeInTheDocument();
+
+    simulateFileSelection(input, [
+      new File(["content2"], "file2.txt", { type: "text/plain" }),
+    ]);
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
+    });
+    expect(screen.getAllByText(/file\d\.txt/)).toHaveLength(1);
+    expect(screen.getByText("file2.txt")).toBeInTheDocument();
+    expect(fileNames(input)).toEqual(["file2.txt"]);
   });
 
   it("should handle multiple file selection when multiple is true", async () => {
@@ -497,26 +507,35 @@ describe("FileUploader", () => {
     expect(screen.getByText("Select files to upload")).toBeInTheDocument();
   });
 
-  it("should render different status values", () => {
-    const { container: container1 } = render(FileUploader, {
-      props: {
-        status: "uploading",
-        files: [new File(["content"], "test.txt")],
-      },
-    });
+  it.each([
+    ["uploading", ".bx--loading"],
+    ["edit", "button.bx--file-close"],
+    ["complete", ".bx--file-complete"],
+  ] as const)(
+    "should render the %s status icon on each row",
+    (status, selector) => {
+      const statusIcons = [
+        ".bx--loading",
+        "button.bx--file-close",
+        ".bx--file-complete",
+      ];
+      const { container } = render(FileUploader, {
+        props: { status, files: [new File(["content"], "test.txt")] },
+      });
 
-    const { container: container2 } = render(FileUploader, {
-      props: { status: "edit", files: [new File(["content"], "test.txt")] },
-    });
-
-    const { container: container3 } = render(FileUploader, {
-      props: { status: "complete", files: [new File(["content"], "test.txt")] },
-    });
-
-    expect(container1.querySelector(".bx--file-container")).toBeInTheDocument();
-    expect(container2.querySelector(".bx--file-container")).toBeInTheDocument();
-    expect(container3.querySelector(".bx--file-container")).toBeInTheDocument();
-  });
+      const stateContainer = container.querySelector(
+        ".bx--file__selected-file .bx--file__state-container",
+      );
+      assert(stateContainer);
+      for (const icon of statusIcons) {
+        if (icon === selector) {
+          expect(stateContainer.querySelector(icon)).toBeInTheDocument();
+        } else {
+          expect(stateContainer.querySelector(icon)).toBeNull();
+        }
+      }
+    },
+  );
 
   it("should handle buttonLabel prop", () => {
     render(FileUploader, {

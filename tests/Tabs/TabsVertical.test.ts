@@ -110,7 +110,7 @@ describe("TabsVertical", () => {
         "horizontal",
       );
       // No vertical-then-horizontal flip after mount.
-      expect(mutations.takeRecords()).toEqual([]);
+      expect(mutations.takeRecords().length).toBe(0);
       mutations.disconnect();
     });
 
