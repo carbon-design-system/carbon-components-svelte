@@ -19,6 +19,7 @@
     | undefined = undefined;
   export let onClear: ((e: CustomEvent<void>) => void) | undefined = undefined;
   export let onClick: ((e: MouseEvent) => void) | undefined = undefined;
+  export let onKeydown: ((e: KeyboardEvent) => void) | undefined = undefined;
   export let onRejected:
     | ((e: CustomEvent<Array<{ file: File; reason: string }>>) => void)
     | undefined = undefined;
@@ -82,5 +83,6 @@
     on:clear={(e) => onClear?.(e)}
     on:rejected={(e) => onRejected?.(e)}
     on:click={(e) => onClick?.(e)}
+    on:keydown={(e) => onKeydown?.(e)}
   />
 </form>
