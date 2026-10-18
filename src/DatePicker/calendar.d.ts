@@ -75,6 +75,8 @@ export interface CalendarOptions
   minDate?: string | number | Date;
   mode?: CalendarMode;
   nextArrow?: string;
+  /** The date the calendar treats as today. Defaults to the current date. */
+  now?: string | number | Date;
   parseDate?: (value: string, format: string) => Date | undefined;
   plugins?: CalendarPlugin[];
   position?:
@@ -150,6 +152,28 @@ export interface CalendarInstance {
     index: number,
   ): HTMLElement;
   onMouseOver(element?: HTMLElement): void;
+  now: Date;
+  /** Always `false`: the calendar never swaps in a native date input. */
+  isMobile: false;
+  /** flatpickr plugin compatibility: plugins register their names here. */
+  loadedPlugins: string[];
+  /** flatpickr plugin compatibility: focusable controls plugins add. */
+  pluginElements: Node[];
+  utils: { getDaysInMonth(month?: number, year?: number): number };
+  pad(value: string | number): string;
+  updateValue(triggerChange?: boolean): void;
+  _bind(
+    target: EventTarget | EventTarget[],
+    type: string | string[],
+    handler: EventListener,
+    options?: AddEventListenerOptions,
+  ): void;
+  _createElement<E extends HTMLElement = HTMLElement>(
+    tag: string,
+    className?: string,
+    content?: string,
+  ): E;
+  _positionCalendar(customPositionElement?: HTMLElement): void;
 }
 
 /**

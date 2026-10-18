@@ -1048,16 +1048,11 @@ describe("DatePicker", () => {
     ] as const)(
       "is ignored in %s mode",
       async (datePickerType, dateFormat, initialMonth, selector, expected) => {
-        vi.useFakeTimers({ toFake: ["Date"] });
-        vi.setSystemTime(new Date(2020, 0, 10));
-        onTestFinished(() => {
-          vi.useRealTimers();
-        });
         render(DatePicker, {
           datePickerType,
           dateFormat,
           initialMonth,
-          flatpickrProps: { static: true },
+          flatpickrProps: { static: true, now: new Date(2020, 0, 10) },
         });
 
         const calendar = await openCalendar();
@@ -1071,16 +1066,13 @@ describe("DatePicker", () => {
     );
 
     it("shows the initial month when there is no selection", async () => {
-      // The calendar marks today's date. Pin it outside the shown month so
-      // the assertion cannot depend on the real date.
-      vi.useFakeTimers({ toFake: ["Date"] });
-      vi.setSystemTime(new Date(2020, 0, 10));
-      onTestFinished(() => {
-        vi.useRealTimers();
-      });
       render(DatePicker, {
         datePickerType: "single",
         initialMonth: "04/01/2027",
+        // The calendar marks `now` (the current date by default) as today.
+        // Pin it outside the shown month so the assertion cannot depend on
+        // the real date.
+        flatpickrProps: { now: new Date(2020, 0, 10) },
       });
 
       const input = screen.getByLabelText("Date");
