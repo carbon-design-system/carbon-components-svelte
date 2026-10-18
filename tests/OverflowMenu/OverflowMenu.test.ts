@@ -244,6 +244,16 @@ describe("OverflowMenu", () => {
     expect(menuItems[0]).toHaveFocus();
   });
 
+  it("opens with focus on the first enabled item", async () => {
+    render(OverflowMenuDisabled, { firstDisabled: true });
+
+    await user.click(screen.getByRole("button"));
+
+    // jsdom would focus the disabled First; a browser leaves focus on the
+    // trigger, where the arrow keys do nothing.
+    expect(screen.getByRole("menuitem", { name: "Third" })).toHaveFocus();
+  });
+
   it("stress test: multiple instances don't create individual style tags", async () => {
     render(OverflowMenu);
     render(OverflowMenu);
