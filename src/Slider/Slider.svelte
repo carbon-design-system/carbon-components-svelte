@@ -176,6 +176,7 @@
     formatRangeLabel as formatSliderRangeLabel,
     getValueText as getSliderValueText,
     getTextInputWidth,
+    snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -429,7 +430,7 @@
                 step *
                 (isLargeStep ? range / step / stepMultiplier : 1) *
                 keys[event.key];
-              let next = Math.round((value + delta) / step) * step;
+              let next = snapToStep(value + delta, min, step);
               if (next < min) next = min;
               else if (next > max) next = max;
               value = next;

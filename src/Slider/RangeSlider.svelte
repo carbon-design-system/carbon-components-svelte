@@ -190,6 +190,7 @@
     getValueText as getSliderValueText,
     getTextInputWidth,
     getTrackAxis,
+    snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -394,9 +395,9 @@
     const delta =
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
     if (activeHandle === "lower") {
-      value = clampLower(Math.round((value + delta) / step) * step);
+      value = clampLower(snapToStep(value + delta, min, step));
     } else {
-      valueUpper = clampUpper(Math.round((valueUpper + delta) / step) * step);
+      valueUpper = clampUpper(snapToStep(valueUpper + delta, min, step));
     }
     dispatch("input", { value, valueUpper });
     dispatch("change", { value, valueUpper });

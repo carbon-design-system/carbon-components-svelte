@@ -1,6 +1,8 @@
 // @ts-check
 // Shared value/label logic for Slider and RangeSlider.
 
+import { roundToStep } from "./numeric-format.js";
+
 /**
  * Resolve the `aria-valuetext` for a numeric slider value.
  *
@@ -53,6 +55,19 @@ export function getClientY(event) {
 }
 
 /**
+ * Snap `value` to the `step` grid counted from `min` (min 3, step 5:
+ * 3, 8, 13), rounded to the decimals in `step` so 0.1 steps don't drift.
+ *
+ * @param {number} value
+ * @param {number} min
+ * @param {number} step
+ * @returns {number}
+ */
+export function snapToStep(value, min, step) {
+  return roundToStep(min + Math.round((value - min) / step) * step, step);
+}
+
+/**
  * Compute the slider value for a horizontal client position within a
  * track, snapped to `step` and clamped to `[min, max]`.
  *
@@ -73,8 +88,10 @@ export function valueFromTrackPosition({
   max,
   step,
 }) {
-  let nextValue =
-    min + Math.round(((max - min) * ((clientX - left) / width)) / step) * step;
+  let nextValue = roundToStep(
+    min + Math.round(((max - min) * ((clientX - left) / width)) / step) * step,
+    step,
+  );
 
   if (nextValue <= min) {
     nextValue = min;

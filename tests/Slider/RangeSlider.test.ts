@@ -424,6 +424,27 @@ describe("RangeSlider", () => {
     expect(upperThumb).toHaveAttribute("aria-valuenow", "435");
   });
 
+  it.each([
+    {
+      name: "0.1 steps",
+      props: { max: 1, step: 0.1, value: 0, valueUpper: 0.5 },
+      keys: "{ArrowRight}{ArrowRight}{ArrowRight}",
+      expected: "0.3",
+    },
+    {
+      name: "a grid counted from min",
+      props: { min: 3, max: 103, step: 5, value: 3, valueUpper: 103 },
+      keys: "{ArrowRight}",
+      expected: "8",
+    },
+  ])("keys land on the step grid: $name", async ({ props, keys, expected }) => {
+    render(RangeSlider, { props });
+    const [lowerThumb] = screen.getAllByRole("slider");
+    lowerThumb.focus();
+    await user.keyboard(keys);
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", expected);
+  });
+
   it("should not dispatch change on programmatic value updates", async () => {
     const onchange = vi.fn();
     const { rerender } = render(RangeSlider, {
