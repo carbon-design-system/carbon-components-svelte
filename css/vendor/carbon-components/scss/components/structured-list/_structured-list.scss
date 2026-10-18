@@ -31,9 +31,8 @@
 
     display: table;
     width: 100%;
-    @if not feature-flag-enabled('enable-v11-release') {
-      margin-bottom: 5rem;
-    }
+    // ccs: no bottom margin, as in v11. v10's 5rem pushed apart a list in a
+    // card or panel and whatever followed it; the layout sets that spacing.
 
     background-color: transparent;
     border-collapse: collapse;
