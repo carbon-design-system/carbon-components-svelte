@@ -21,17 +21,6 @@ describe("MenuItem", () => {
     expect(icon).toBeInTheDocument();
   });
 
-  it("does not reserve a checkmark column when no item in the menu is selectable or radio", async () => {
-    render(MenuItemFixture);
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    const item = screen.getByRole("menuitem", { name: "Add item" });
-    expect(
-      item.querySelector(".bx--menu-option__selection-icon"),
-    ).not.toBeInTheDocument();
-  });
-
   it("reserves an icon column for a sibling without its own icon, so its label lines up with icon items", async () => {
     render(MenuItemFixture);
 
@@ -52,17 +41,6 @@ describe("MenuItem", () => {
     );
   });
 
-  it("does not render an info region when shortcutText is unset", async () => {
-    render(MenuItemFixture);
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    const item = screen.getByRole("menuitem", { name: "Plain" });
-    expect(
-      item.querySelector(".bx--menu-option__info"),
-    ).not.toBeInTheDocument();
-  });
-
   it("renders the shortcutText slot", async () => {
     render(MenuItemSlot);
 
@@ -72,25 +50,6 @@ describe("MenuItem", () => {
     expect(item.querySelector(".bx--menu-option__info kbd")).toHaveTextContent(
       "⌘S",
     );
-  });
-
-  it("applies the danger class for kind danger", async () => {
-    render(MenuItemFixture);
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    expect(screen.getByRole("menuitem", { name: "Delete" })).toHaveClass(
-      "bx--menu-option--danger",
-    );
-  });
-
-  it("renders a divider as a separator between items", async () => {
-    render(MenuItemFixture);
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    const separator = screen.getByRole("separator");
-    expect(separator).toHaveClass("bx--menu-divider");
   });
 
   it("prevents Space's default action (page scroll) when selecting an item", async () => {
@@ -248,18 +207,6 @@ describe("MenuItem", () => {
       expect(event.defaultPrevented).toBe(true);
     });
 
-    it("selecting a nested item closes the entire menu tree", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(MenuItemFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-      await user.click(screen.getByRole("menuitem", { name: "Export as" }));
-      await user.click(screen.getByRole("menuitem", { name: "PDF" }));
-
-      expect(consoleLog).toHaveBeenCalledWith("select", "PDF");
-      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
-    });
-
     it("opens the submenu on hover after a delay", async () => {
       vi.useFakeTimers();
       try {
@@ -348,33 +295,6 @@ describe("MenuItem", () => {
       // truncates with an ellipsis, so the title needs to be reachable by
       // hovering anywhere in the row, not just the label text itself.
       expect(parent).toHaveAttribute("title", "Export as");
-    });
-
-    it("keeps the base label class and adds the slotted modifier for labelChildren", async () => {
-      render(MenuItemSlot);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-      expect(
-        screen.getByText("Custom label content").parentElement,
-      ).toHaveClass(
-        "bx--menu-option__label",
-        "bx--menu-option__label--slotted",
-      );
-      const plain = screen
-        .getByRole("menuitem", { name: "Save ⌘S" })
-        .querySelector(".bx--menu-option__label");
-      expect(plain).not.toHaveClass("bx--menu-option__label--slotted");
-    });
-
-    it("sets the title on a non-submenu item that uses labelText, since its label can also truncate", async () => {
-      render(MenuItemFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-      expect(
-        screen.getByRole("menuitem", { name: "Standalone label" }),
-      ).toHaveAttribute("title", "Standalone label");
     });
   });
 

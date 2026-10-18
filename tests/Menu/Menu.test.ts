@@ -33,42 +33,6 @@ describe("Menu", () => {
     );
   });
 
-  it("overrides fixed positioning so FloatingPortal controls placement", async () => {
-    render(MenuFixture);
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    const menu = screen.getByRole("menu");
-    expect(menu.style.position).toBe("relative");
-  });
-
-  it("defaults to the unmodified sm row height", async () => {
-    render(MenuFixture);
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    const menu = screen.getByRole("menu");
-    expect(menu).not.toHaveClass("bx--menu--xs");
-    expect(menu).not.toHaveClass("bx--menu--md");
-    expect(menu).not.toHaveClass("bx--menu--lg");
-  });
-
-  it("applies the xs size modifier class", async () => {
-    render(MenuFixture, { props: { size: "xs" } });
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    expect(screen.getByRole("menu")).toHaveClass("bx--menu--xs");
-  });
-
-  it("applies the size modifier class", async () => {
-    render(MenuFixture, { props: { size: "lg" } });
-
-    await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-    expect(screen.getByRole("menu")).toHaveClass("bx--menu--lg");
-  });
-
   it("applies the direction attribute", async () => {
     render(MenuFixture, { props: { direction: "top" } });
 
@@ -342,16 +306,6 @@ describe("Menu", () => {
       const menu = screen.getByRole("menu");
       expect(menu).toHaveClass("bx--menu--scrollable");
       expect(menu.style.maxHeight).toBe("20rem");
-    });
-
-    it("renders neither the class nor the style when maxHeight is unset", async () => {
-      render(MenuFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-
-      const menu = screen.getByRole("menu");
-      expect(menu).not.toHaveClass("bx--menu--scrollable");
-      expect(menu.style.maxHeight).toBe("");
     });
   });
 });

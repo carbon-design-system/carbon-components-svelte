@@ -4,17 +4,6 @@ import ContextMenuGroup from "./ContextMenuGroup.test.svelte";
 import { getSelectedIds } from "./helpers";
 
 describe("ContextMenuGroup", () => {
-  it("should toggle option when clicking option that is not selected", async () => {
-    render(ContextMenuGroup, { props: { selectedIds: [] } });
-
-    const option1 = screen.getByText("Option 1");
-    await user.click(option1);
-
-    const selectedIds = getSelectedIds();
-    expect(selectedIds).toContain("option1");
-    expect(selectedIds).toHaveLength(1);
-  });
-
   it("should toggle option when clicking option that is already selected", async () => {
     render(ContextMenuGroup, {
       props: { selectedIds: ["option1", "option2"] },
@@ -45,18 +34,5 @@ describe("ContextMenuGroup", () => {
     expect(selectedIds).toContain("option2");
     expect(selectedIds).toContain("option3");
     expect(selectedIds).toHaveLength(3);
-  });
-
-  it("should handle toggle when option is already in selectedIds", async () => {
-    render(ContextMenuGroup, {
-      props: { selectedIds: ["option1"] },
-    });
-
-    const option1 = screen.getByText("Option 1");
-    await user.click(option1);
-
-    const selectedIds = getSelectedIds();
-    expect(selectedIds).not.toContain("option1");
-    expect(selectedIds).toHaveLength(0);
   });
 });

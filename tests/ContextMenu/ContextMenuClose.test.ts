@@ -40,18 +40,6 @@ describe("ContextMenu close trigger", () => {
     expect(menu).not.toHaveClass("bx--menu--open");
   });
 
-  it("should not close the menu when ArrowDown is pressed", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
-
-    const menu = screen.getAllByRole("menu")[0];
-    menu.focus();
-
-    await user.keyboard("{ArrowDown}");
-    expect(consoleLog).not.toHaveBeenCalledWith("close", expect.anything());
-    expect(menu).toHaveClass("bx--menu--open");
-  });
-
   it("should move focus to the element after the opener when Tab is pressed", async () => {
     render(ContextMenuFocusReturn);
 

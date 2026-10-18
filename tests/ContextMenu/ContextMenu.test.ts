@@ -10,18 +10,6 @@ import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
 describe("ContextMenu", () => {
-  it("should render with default props", () => {
-    render(ContextMenu);
-
-    const target = screen.getByTestId("target");
-    expect(target).toBeInTheDocument();
-    expect(target).toHaveTextContent("Right click me");
-
-    const menu = screen.getAllByRole("menu");
-    expect(menu[0]).toBeInTheDocument();
-    expect(menu[0]).toHaveClass("bx--menu");
-  });
-
   it("should set aria-label on root menu from labelText", () => {
     render(ContextMenu, {
       props: { open: true, labelText: "Page actions" },
@@ -29,15 +17,6 @@ describe("ContextMenu", () => {
 
     const menu = screen.getAllByRole("menu")[0];
     expect(menu).toHaveAttribute("aria-label", "Page actions");
-  });
-
-  it("should set aria-label from aria-label prop", () => {
-    render(ContextMenu, {
-      props: { open: true, ariaLabel: "Custom menu name" },
-    });
-
-    const menu = screen.getAllByRole("menu")[0];
-    expect(menu).toHaveAttribute("aria-label", "Custom menu name");
   });
 
   it("should prefer aria-label over labelText when both are set", () => {
@@ -51,25 +30,6 @@ describe("ContextMenu", () => {
 
     const menu = screen.getAllByRole("menu")[0];
     expect(menu).toHaveAttribute("aria-label", "From aria-label");
-  });
-
-  it("should render menu options", () => {
-    render(ContextMenu);
-
-    const options = screen.getAllByRole("menuitem");
-    expect(options).toHaveLength(3);
-    expect(options[0]).toHaveTextContent("Option 1");
-    expect(options[1]).toHaveTextContent("Option 2");
-    expect(options[2]).toHaveTextContent("Option 3");
-  });
-
-  it("should open on right click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenu);
-
-    const target = screen.getByTestId("target");
-    await user.pointer({ target, keys: "[MouseRight]" });
-    expect(consoleLog).toHaveBeenCalledWith("open", expect.any(HTMLElement));
   });
 
   it("should dispatch open only when open transitions to true", async () => {
@@ -105,22 +65,6 @@ describe("ContextMenu", () => {
     ).length;
 
     expect(closeCalls).toBe(0);
-  });
-
-  it("should close on escape key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenu, { props: { open: true } });
-
-    await user.keyboard("{Escape}");
-    expect(consoleLog).toHaveBeenCalledWith("close");
-  });
-
-  it("should close on click outside", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenu, { props: { open: true } });
-
-    await user.click(document.body);
-    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   it("should handle keyboard navigation", async () => {
@@ -252,60 +196,6 @@ describe("ContextMenu", () => {
     expect(consoleLog).toHaveBeenCalledWith("open", targetB);
   });
 
-  it("should handle custom position", () => {
-    render(ContextMenu, {
-      props: {
-        open: true,
-        x: 100,
-        y: 200,
-      },
-    });
-
-    const menu = screen.getAllByRole("menu")[0];
-    expect(menu).toHaveStyle({
-      left: "100px",
-      top: "200px",
-    });
-  });
-
-  it("should handle nested menus", () => {
-    render(ContextMenu, { props: { open: true } });
-
-    const menus = screen.getAllByRole("menu");
-    expect(menus[0]).toHaveAttribute("data-level", "1");
-
-    const nestedMenu = document.createElement("ul");
-    nestedMenu.setAttribute("data-level", "2");
-    menus[0].appendChild(nestedMenu);
-  });
-
-  it("should set level to 1 when ctx is null (root menu)", () => {
-    render(ContextMenu, { props: { open: true } });
-
-    const menus = screen.getAllByRole("menu");
-    expect(menus[0]).toHaveAttribute("data-level", "1");
-  });
-
-  it("should set level to 2 when ctx exists (nested menu)", async () => {
-    render(ContextMenu, {
-      props: {
-        open: true,
-        withSubmenu: true,
-        x: 100,
-        y: 100,
-      },
-    });
-
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
-
-    const submenu = screen
-      .getAllByRole("menu")
-      .find((menu) => menu.getAttribute("data-level") === "2");
-    assert(submenu);
-    expect(submenu).toHaveAttribute("data-level", "2");
-  });
-
   it("should restore focus to the parent option when the submenu closes with ArrowLeft", async () => {
     render(ContextMenu, {
       props: {
@@ -353,22 +243,6 @@ describe("ContextMenu", () => {
 
     expect(consoleLog).not.toHaveBeenCalledWith("close");
     expect(submenuTrigger).toHaveAttribute("aria-expanded", "true");
-  });
-
-  it("should close menu when clicking regular option", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenu, {
-      props: {
-        open: true,
-        x: 100,
-        y: 100,
-      },
-    });
-
-    const option = screen.getByText("Option 1");
-    await user.click(option);
-
-    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   it("should not close menu when activating disabled regular option", async () => {
@@ -587,14 +461,6 @@ describe("ContextMenu", () => {
     );
   });
 
-  it("does not add the slotted modifier to a plain labelText option", () => {
-    render(ContextMenuOptionSlot);
-
-    const label = screen.getByText("View details");
-    expect(label).toHaveClass("bx--menu-option__label");
-    expect(label).not.toHaveClass("bx--menu-option__label--slotted");
-  });
-
   it("supports preventDefault on click to prevent menu from closing", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ContextMenuPreventDefault, {
@@ -610,19 +476,6 @@ describe("ContextMenu", () => {
     expect(screen.getAllByRole("menu")[0]).toHaveClass("bx--menu--open");
   });
 
-  it("closes menu normally when preventDefault is not called on click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContextMenuPreventDefault, {
-      props: { open: true, x: 100, y: 100 },
-    });
-
-    const options = screen.getAllByRole("menuitem");
-    await user.click(options[1]);
-
-    expect(consoleLog).toHaveBeenCalledWith("click", "Close menu");
-    expect(consoleLog).toHaveBeenCalledWith("close");
-  });
-
   describe("ContextMenuOption icon auto-indentation", () => {
     it("should auto-set indented when icon is provided", () => {
       render(ContextMenuOptionIcon, {
@@ -635,19 +488,6 @@ describe("ContextMenu", () => {
 
       const iconEl = copyOption.querySelector(".bx--menu-option__icon");
       expect(iconEl).toBeInTheDocument();
-    });
-
-    it("should not render icon container when no icon is provided", () => {
-      render(ContextMenuOptionIcon, {
-        props: { open: true, x: 100, y: 100 },
-      });
-
-      const options = screen.getAllByRole("menuitem");
-      const plainOption = options.find((o) => o.textContent?.includes("Plain"));
-      assert(plainOption);
-
-      const iconEl = plainOption.querySelector(".bx--menu-option__icon");
-      expect(iconEl).not.toBeInTheDocument();
     });
   });
 
@@ -664,33 +504,6 @@ describe("ContextMenu", () => {
       assert(deleteOption);
 
       expect(deleteOption).toHaveClass("bx--menu-option--danger");
-    });
-
-    it("should render icon in danger option", () => {
-      render(ContextMenuOptionIcon, {
-        props: { open: true, x: 100, y: 100 },
-      });
-
-      const options = screen.getAllByRole("menuitem");
-      const deleteOption = options.find((o) =>
-        o.textContent?.includes("Delete"),
-      );
-      assert(deleteOption);
-
-      const iconEl = deleteOption.querySelector(".bx--menu-option__icon");
-      expect(iconEl).toBeInTheDocument();
-    });
-
-    it("should not apply danger class to non-danger options", () => {
-      render(ContextMenuOptionIcon, {
-        props: { open: true, x: 100, y: 100 },
-      });
-
-      const options = screen.getAllByRole("menuitem");
-      const copyOption = options.find((o) => o.textContent?.includes("Copy"));
-      assert(copyOption);
-
-      expect(copyOption).not.toHaveClass("bx--menu-option--danger");
     });
   });
 

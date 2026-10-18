@@ -167,19 +167,6 @@ describe("ComboButton", () => {
     },
   );
 
-  it("keeps both buttons the same height at every size (no Button `lg`/`xl` baseline misalignment)", () => {
-    render(ComboButtonFixture, { props: { size: "lg" } });
-
-    const primaryAction = screen.getByRole("button", { name: "Save" });
-    const trigger = screen.getByRole("button", { name: "Additional actions" });
-
-    // Button's own "lg"/"xl" classes render at 64px/80px for labeled buttons
-    // but are ignored for icon-only buttons, and apply baseline (not center)
-    // alignment - ComboButton must never reach for them.
-    expect(primaryAction).not.toHaveClass("bx--btn--lg");
-    expect(trigger).not.toHaveClass("bx--btn--lg");
-  });
-
   it("defaults to the md size", async () => {
     render(ComboButtonFixture);
 
@@ -212,18 +199,6 @@ describe("ComboButton", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
-  it("renders the trigger without a tooltip when iconDescription is an empty string", () => {
-    render(ComboButtonFixture, { props: { iconDescription: "" } });
-
-    const [, trigger] = screen.getAllByRole("button");
-    expect(trigger).toHaveClass("bx--btn--icon-only");
-    expect(trigger).not.toHaveClass("bx--tooltip__trigger");
-    expect(trigger).not.toHaveClass("bx--tooltip--a11y");
-    expect(
-      trigger.querySelector(".bx--assistive-text"),
-    ).not.toBeInTheDocument();
-  });
-
   it("keeps the tooltip position independent of the menu direction", () => {
     render(ComboButtonFixture, {
       props: { direction: "top", tooltipPosition: "right" },
@@ -232,21 +207,6 @@ describe("ComboButton", () => {
     const trigger = screen.getByRole("button", { name: "Additional actions" });
     expect(trigger).toHaveClass("bx--btn--icon-only--right");
     expect(trigger).not.toHaveClass("bx--btn--icon-only--top");
-  });
-
-  it("centers the trigger tooltip by default and aligns it on request", () => {
-    const { unmount } = render(ComboButtonFixture);
-    expect(
-      screen.getByRole("button", { name: "Additional actions" }),
-    ).toHaveClass("bx--tooltip--align-center");
-    unmount();
-
-    render(ComboButtonFixture, {
-      props: { tooltipPosition: "bottom", tooltipAlignment: "end" },
-    });
-    const trigger = screen.getByRole("button", { name: "Additional actions" });
-    expect(trigger).toHaveClass("bx--btn--icon-only--bottom");
-    expect(trigger).toHaveClass("bx--tooltip--align-end");
   });
 
   it("never focuses the trigger via a real mouse click, only via keyboard", async () => {

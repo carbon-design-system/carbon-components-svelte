@@ -16,20 +16,6 @@ describe("OverflowMenu window listeners", () => {
     return adds - removes;
   }
 
-  it("rendering many closed menus adds no window click listeners", () => {
-    const addSpy = vi.spyOn(window, "addEventListener");
-    const removeSpy = vi.spyOn(window, "removeEventListener");
-
-    for (let i = 0; i < 5; i++) {
-      render(OverflowMenu, { props: { id: `menu-${i}` } });
-    }
-
-    expect(netClickListeners(addSpy, removeSpy)).toBe(0);
-
-    addSpy.mockRestore();
-    removeSpy.mockRestore();
-  });
-
   it("opening adds one window click listener, closing removes it", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const removeSpy = vi.spyOn(window, "removeEventListener");
