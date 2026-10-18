@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { rect } from "../utils/rect";
 import ModalBodyTest from "./ModalBody.test.svelte";
 
 describe("ModalBody", () => {
@@ -118,5 +119,25 @@ describe("ModalBody", () => {
       "id",
       "custom-body",
     );
+  });
+
+  it("scrolls a newly-focused element out from under the scroll gradient", () => {
+    render(ModalBodyTest, {
+      props: { hasScrollingContent: true, includeInput: true },
+    });
+
+    const modalContent = screen.getByRole("region");
+    Object.defineProperty(modalContent, "clientHeight", { value: 100 });
+    Object.defineProperty(modalContent, "scrollHeight", { value: 300 });
+    modalContent.scrollTop = 50;
+    modalContent.getBoundingClientRect = () => rect({ top: 0, bottom: 100 });
+
+    const input = screen.getByTestId("test-focus");
+    input.getBoundingClientRect = () => rect({ top: 110, bottom: 130 });
+
+    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+    // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
+    expect(modalContent.scrollTop).toBe(80);
   });
 });

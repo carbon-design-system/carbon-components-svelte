@@ -42,6 +42,7 @@
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
   export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
   export let onchange: ((value: number) => void) | undefined = undefined;
+  export let oninput: ((value: number) => void) | undefined = undefined;
 </script>
 
 {#if useSlot}
@@ -76,12 +77,8 @@
     {name}
     {inputType}
     class={customClass}
-    on:change={(e) => {
-      console.log("change", e.detail);
-    }}
-    on:input={(e) => {
-      console.log("input", e.detail);
-    }}
+    on:change={(e) => onchange?.(e.detail)}
+    on:input={(e) => oninput?.(e.detail)}
   >
     <span slot="labelChildren">Slot Label</span>
   </Slider>
@@ -119,13 +116,8 @@
     {inputType}
     {selectTextOnFocus}
     class={customClass}
-    on:change={(e) => {
-      console.log("change", e.detail);
-      onchange?.(e.detail);
-    }}
-    on:input={(e) => {
-      console.log("input", e.detail);
-    }}
+    on:change={(e) => onchange?.(e.detail)}
+    on:input={(e) => oninput?.(e.detail)}
     on:focus={(e) => onfocus?.(e)}
     on:blur={(e) => onblur?.(e)}
   />

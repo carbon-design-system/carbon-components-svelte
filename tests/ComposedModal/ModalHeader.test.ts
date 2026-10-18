@@ -65,60 +65,47 @@ describe("ModalHeader", () => {
   });
 
   it("should dispatch click event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ModalHeaderTest);
+    const onclick = vi.fn();
+    render(ModalHeaderTest, { props: { onclick } });
 
     const closeButton = screen.getByRole("button", { name: "Close" });
     await user.click(closeButton);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onclick).toHaveBeenCalledTimes(1);
   });
 
-  it("should apply custom label class", () => {
-    render(ModalHeaderTest, {
-      props: {
-        label: "Test Label",
-        labelClass: "custom-label-class",
-      },
-    });
+  it.each([
+    [
+      "labelClass",
+      { label: "Test Label" },
+      () => screen.getByText("Test Label"),
+      "custom-label-class",
+    ],
+    [
+      "titleClass",
+      { title: "Test Title" },
+      () => screen.getByText("Test Title"),
+      "custom-title-class",
+    ],
+    [
+      "closeClass",
+      {},
+      () => screen.getByRole("button", { name: "Close" }),
+      "custom-close-class",
+    ],
+    [
+      "closeIconClass",
+      {},
+      () =>
+        screen
+          .getByRole("button", { name: "Close" })
+          .querySelector(".bx--modal-close__icon"),
+      "custom-icon-class",
+    ],
+  ])("applies %s", (prop, props, getElement, className) => {
+    render(ModalHeaderTest, { props: { ...props, [prop]: className } });
 
-    const label = screen.getByText("Test Label");
-    expect(label).toHaveClass("custom-label-class");
-  });
-
-  it("should apply custom title class", () => {
-    render(ModalHeaderTest, {
-      props: {
-        title: "Test Title",
-        titleClass: "custom-title-class",
-      },
-    });
-
-    const title = screen.getByText("Test Title");
-    expect(title).toHaveClass("custom-title-class");
-  });
-
-  it("should apply custom close class", () => {
-    render(ModalHeaderTest, {
-      props: {
-        closeClass: "custom-close-class",
-      },
-    });
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    expect(closeButton).toHaveClass("custom-close-class");
-  });
-
-  it("should apply custom close icon class", () => {
-    render(ModalHeaderTest, {
-      props: {
-        closeIconClass: "custom-icon-class",
-      },
-    });
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    const closeIcon = closeButton.querySelector(".bx--modal-close__icon");
-    expect(closeIcon).toHaveClass("custom-icon-class");
+    expect(getElement()).toHaveClass(className);
   });
 
   it("should render slot content", () => {
@@ -131,29 +118,14 @@ describe("ModalHeader", () => {
     expect(screen.getByText("Custom header content")).toBeInTheDocument();
   });
 
-  it("should not render title when empty", () => {
-    render(ModalHeaderTest, {
-      props: {
-        title: "",
-      },
-    });
+  it.each([
+    ["title", ".bx--modal-header__heading"],
+    ["label", ".bx--modal-header__label"],
+  ])("should not render %s when empty", (prop, selector) => {
+    render(ModalHeaderTest, { props: { [prop]: "" } });
 
     const closeButton = screen.getByRole("button", { name: "Close" });
     const modalHeader = closeButton.closest(".bx--modal-header");
-    const title = modalHeader?.querySelector(".bx--modal-header__heading");
-    expect(title).not.toBeInTheDocument();
-  });
-
-  it("should not render label when empty", () => {
-    render(ModalHeaderTest, {
-      props: {
-        label: "",
-      },
-    });
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    const modalHeader = closeButton.closest(".bx--modal-header");
-    const label = modalHeader?.querySelector(".bx--modal-header__label");
-    expect(label).not.toBeInTheDocument();
+    expect(modalHeader?.querySelector(selector)).not.toBeInTheDocument();
   });
 });

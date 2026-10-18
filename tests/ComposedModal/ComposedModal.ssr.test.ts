@@ -1,4 +1,5 @@
 // @vitest-environment node
+import ComposedModal from "carbon-components-svelte/ComposedModal/ComposedModal.svelte";
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
 import ComposedModalSsr from "./ComposedModalSsr.test.svelte";
@@ -49,5 +50,11 @@ describe("ComposedModal server render", () => {
     expect(document.getElementById("confirm-label")).toHaveTextContent("Label");
     expect(document.getElementById("confirm-title")).toHaveTextContent("Title");
     expect(document.getElementById("confirm-body")).toHaveTextContent("Body");
+  });
+
+  it("renders an open ComposedModal as visible", () => {
+    const { document } = renderSSR(ComposedModal, { open: true });
+
+    expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 });

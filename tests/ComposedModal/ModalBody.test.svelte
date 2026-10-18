@@ -9,6 +9,7 @@
   export let hasScrollingContent: ComponentProps<ModalBody>["hasScrollingContent"] = false;
   export let slotContent = "";
   export let alert = false;
+  export let includeInput = false;
 </script>
 
 <ComposedModal bind:open {alert}>
@@ -18,5 +19,8 @@
       {slotContent}
     {/if}
     <slot />
+    {#if includeInput}
+      <input data-testid="test-focus">
+    {/if}
   </ModalBody>
 </ComposedModal>

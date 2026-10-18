@@ -3,6 +3,7 @@ import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import RangeSliderForm from "./RangeSlider.form.test.svelte";
+import RangeSliderFormAttribute from "./RangeSlider.formAttribute.test.svelte";
 
 describe("RangeSlider form reset", () => {
   it("keeps both current bounds", async () => {
@@ -60,5 +61,15 @@ describe("RangeSlider form reset", () => {
     expect(lower.value).toBe("25");
     expect(getBoundText()).toBe("25-75");
     expect(data()).toEqual(["25", "75"]);
+  });
+});
+
+describe("RangeSlider form attribute", () => {
+  it("associates the control with the form named by `form`", () => {
+    render(RangeSliderFormAttribute);
+
+    const formData = new FormData(getForm());
+    expect(formData.get("min")).toBe("20");
+    expect(formData.get("max")).toBe("80");
   });
 });

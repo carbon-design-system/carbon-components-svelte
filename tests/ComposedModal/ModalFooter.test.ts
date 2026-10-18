@@ -30,51 +30,58 @@ describe("ModalFooter", () => {
   });
 
   it("should handle primary button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onsubmit = vi.fn();
+    const onprimary = vi.fn();
     render(ModalFooterTest, {
       props: {
         primaryButtonText: "Save",
+        onsubmit,
+        onprimary,
       },
     });
 
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("submit");
-    expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
+    expect(onsubmit).toHaveBeenCalledTimes(1);
+    expect(onprimary).toHaveBeenCalledTimes(1);
   });
 
   it("should handle secondary button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onsecondary = vi.fn();
+    const onclose = vi.fn();
     const { container } = render(ModalFooterTest, {
       props: {
         secondaryButtonText: "Cancel",
+        onsecondary,
+        onclose,
       },
     });
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
-      text: "Cancel",
-    });
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onsecondary).toHaveBeenCalledTimes(1);
+    expect(onsecondary.mock.calls[0][0].detail).toEqual({ text: "Cancel" });
+    expect(onclose).toHaveBeenCalledTimes(1);
     expect(container.querySelector(".bx--modal")).not.toHaveClass("is-visible");
   });
 
   it("keeps modal open when preventDefault is called on secondary click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onsecondary = vi.fn();
+    const onclose = vi.fn();
     const { container } = render(ModalFooterTest, {
       props: {
         secondaryButtonText: "Cancel",
         preventSecondaryDefault: true,
+        onsecondary,
+        onclose,
       },
     });
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
-      text: "Cancel",
-    });
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onsecondary).toHaveBeenCalledTimes(1);
+    expect(onsecondary.mock.calls[0][0].detail).toEqual({ text: "Cancel" });
+    expect(onclose).not.toHaveBeenCalled();
     expect(container.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 
@@ -90,13 +97,41 @@ describe("ModalFooter", () => {
     expect(primaryButton).toBeDisabled();
   });
 
+  it.each([
+    [
+      "primary",
+      {
+        primaryButtonText: "Save",
+        primaryButtonLoading: true,
+        primaryButtonLoadingDescription: "Saving...",
+      },
+      "Saving...",
+    ],
+    [
+      "secondary",
+      {
+        secondaryButtonText: "Cancel",
+        secondaryButtonLoading: true,
+        secondaryButtonLoadingDescription: "Cancelling...",
+      },
+      "Cancelling...",
+    ],
+  ])("uses a custom %s loading description", (_button, props, description) => {
+    render(ModalFooterTest, { props });
+
+    expect(screen.getByText(description)).toBeInTheDocument();
+  });
+
   describe("primaryButtonLoading", () => {
     it("shows InlineLoading and does not dispatch submit on click", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onsubmit = vi.fn();
+      const onprimary = vi.fn();
       render(ModalFooterTest, {
         props: {
           primaryButtonText: "Save",
           primaryButtonLoading: true,
+          onsubmit,
+          onprimary,
         },
       });
 
@@ -107,30 +142,19 @@ describe("ModalFooter", () => {
       expect(primaryButton).toBeDisabled();
       await user.click(primaryButton);
 
-      expect(consoleLog).not.toHaveBeenCalledWith("submit");
-      expect(consoleLog).not.toHaveBeenCalledWith("click:button--primary");
-    });
-
-    it("uses a custom loading description", () => {
-      render(ModalFooterTest, {
-        props: {
-          primaryButtonText: "Save",
-          primaryButtonLoading: true,
-          primaryButtonLoadingDescription: "Saving...",
-        },
-      });
-
-      expect(screen.getByText("Saving...")).toBeInTheDocument();
+      expect(onsubmit).not.toHaveBeenCalled();
+      expect(onprimary).not.toHaveBeenCalled();
     });
   });
 
   describe("secondaryButtonLoading", () => {
     it("shows InlineLoading and does not dispatch click on click", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onsecondary = vi.fn();
       render(ModalFooterTest, {
         props: {
           secondaryButtonText: "Cancel",
           secondaryButtonLoading: true,
+          onsecondary,
         },
       });
 
@@ -139,34 +163,20 @@ describe("ModalFooter", () => {
       expect(secondaryButton).toBeDisabled();
       await user.click(secondaryButton);
 
-      expect(consoleLog).not.toHaveBeenCalledWith(
-        "click:button--secondary",
-        expect.anything(),
-      );
-    });
-
-    it("uses a custom loading description", () => {
-      render(ModalFooterTest, {
-        props: {
-          secondaryButtonText: "Cancel",
-          secondaryButtonLoading: true,
-          secondaryButtonLoadingDescription: "Cancelling...",
-        },
-      });
-
-      expect(screen.getByText("Cancelling...")).toBeInTheDocument();
+      expect(onsecondary).not.toHaveBeenCalled();
     });
   });
 
   describe("secondaryButtons loading", () => {
     it("shows InlineLoading for a loading entry and disables it", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onsecondary = vi.fn();
       render(ModalFooterTest, {
         props: {
           secondaryButtons: [
             { text: "Draft", loading: true, loadingDescription: "Saving..." },
             { text: "Discard" },
           ],
+          onsecondary,
         },
       });
 
@@ -174,10 +184,7 @@ describe("ModalFooter", () => {
       const loadingButton = screen.getByRole("button", { name: /Saving/i });
       expect(loadingButton).toBeDisabled();
       await user.click(loadingButton);
-      expect(consoleLog).not.toHaveBeenCalledWith(
-        "click:button--secondary",
-        expect.anything(),
-      );
+      expect(onsecondary).not.toHaveBeenCalled();
 
       const idleButton = screen.getByRole("button", { name: "Discard" });
       expect(idleButton).not.toBeDisabled();
@@ -241,47 +248,43 @@ describe("ModalFooter", () => {
   });
 
   it("should handle secondary button clicks with secondaryButtons array", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onsecondary = vi.fn();
+    const onclose = vi.fn();
     render(ModalFooterTest, {
       props: {
         secondaryButtons: [{ text: "Cancel" }, { text: "Reset" }],
+        onsecondary,
+        onclose,
       },
     });
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
-      text: "Cancel",
-    });
+    expect(onsecondary).toHaveBeenCalledTimes(1);
+    expect(onsecondary.mock.calls[0][0].detail).toEqual({ text: "Cancel" });
 
     await user.click(screen.getByRole("button", { name: "Reset" }));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
-      text: "Reset",
-    });
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(onsecondary).toHaveBeenCalledTimes(2);
+    expect(onsecondary.mock.calls[1][0].detail).toEqual({ text: "Reset" });
+    expect(onclose).not.toHaveBeenCalled();
   });
 
-  it("should apply custom primary class", () => {
-    render(ModalFooterTest, {
-      props: {
-        primaryButtonText: "Save",
-        primaryClass: "custom-primary-class",
-      },
-    });
+  it.each([
+    [
+      "primaryClass",
+      { primaryButtonText: "Save" },
+      "Save",
+      "custom-primary-class",
+    ],
+    [
+      "secondaryClass",
+      { secondaryButtonText: "Cancel" },
+      "Cancel",
+      "custom-secondary-class",
+    ],
+  ])("applies %s to its button", (prop, props, name, className) => {
+    render(ModalFooterTest, { props: { ...props, [prop]: className } });
 
-    const primaryButton = screen.getByRole("button", { name: "Save" });
-    expect(primaryButton).toHaveClass("custom-primary-class");
-  });
-
-  it("should apply custom secondary class", () => {
-    render(ModalFooterTest, {
-      props: {
-        secondaryButtonText: "Cancel",
-        secondaryClass: "custom-secondary-class",
-      },
-    });
-
-    const secondaryButton = screen.getByRole("button", { name: "Cancel" });
-    expect(secondaryButton).toHaveClass("custom-secondary-class");
+    expect(screen.getByRole("button", { name })).toHaveClass(className);
   });
 
   it("should render slot content", () => {
@@ -305,33 +308,30 @@ describe("ModalFooter", () => {
     expect(modalFooter).toBeInTheDocument();
   });
 
-  it("should not render primary button when text is empty", () => {
-    const { container } = render(ModalFooterTest, {
-      props: {
-        primaryButtonText: "",
-        secondaryButtonText: "Cancel",
-      },
-    });
+  it.each([
+    [
+      "primary",
+      { primaryButtonText: "", secondaryButtonText: "Cancel" },
+      "Cancel",
+      ".bx--btn--primary",
+    ],
+    [
+      "secondary",
+      { primaryButtonText: "Save", secondaryButtonText: "" },
+      "Save",
+      ".bx--btn--secondary",
+    ],
+  ])(
+    "should not render %s button when text is empty",
+    (_button, props, remaining, absentSelector) => {
+      const { container } = render(ModalFooterTest, { props });
 
-    const buttons = container.querySelectorAll(".bx--modal-footer .bx--btn");
-    expect(buttons).toHaveLength(1);
-    expect(buttons[0]).toHaveTextContent("Cancel");
-    expect(container.querySelector(".bx--btn--primary")).toBeNull();
-  });
-
-  it("should not render secondary button when text is empty", () => {
-    const { container } = render(ModalFooterTest, {
-      props: {
-        primaryButtonText: "Save",
-        secondaryButtonText: "",
-      },
-    });
-
-    const buttons = container.querySelectorAll(".bx--modal-footer .bx--btn");
-    expect(buttons).toHaveLength(1);
-    expect(buttons[0]).toHaveTextContent("Save");
-    expect(container.querySelector(".bx--btn--secondary")).toBeNull();
-  });
+      const buttons = container.querySelectorAll(".bx--modal-footer .bx--btn");
+      expect(buttons).toHaveLength(1);
+      expect(buttons[0]).toHaveTextContent(remaining);
+      expect(container.querySelector(absentSelector)).toBeNull();
+    },
+  );
 
   it("should prioritize secondaryButtons over secondaryButtonText", () => {
     render(ModalFooterTest, {

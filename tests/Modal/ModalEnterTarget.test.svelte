@@ -10,7 +10,7 @@
 
 <Modal
   bind:open
-  modalHeading="Textarea Modal"
+  modalHeading="Enter Target Modal"
   primaryButtonText="Save"
   secondaryButtonText="Cancel"
   {shouldSubmitOnEnter}
@@ -18,4 +18,6 @@
   on:click:button--primary={(e) => onclickbuttonprimary?.(e)}
 >
   <textarea data-testid="modal-textarea"></textarea>
+  <a href="#details" data-testid="modal-link">Learn more</a>
+  <input data-testid="modal-input">
 </Modal>

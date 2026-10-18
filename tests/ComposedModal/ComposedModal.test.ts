@@ -1,10 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
-import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import ComposedModalTest from "./ComposedModal.test.svelte";
-import ComposedModalAlertNoBodyTest from "./ComposedModalAlertNoBody.test.svelte";
 import ComposedModalFocusReturnTest from "./ComposedModalFocusReturn.test.svelte";
 import ComposedModalFocusTrapTest from "./ComposedModalFocusTrap.test.svelte";
 import ComposedModalUnmountOnCloseTest from "./ComposedModalUnmountOnClose.test.svelte";
@@ -125,22 +123,18 @@ describe("ComposedModal", () => {
     expect(closeHandler).not.toHaveBeenCalled();
   });
 
-  it("should handle size variants", () => {
-    const sizes = ["xs", "sm", "lg"] as const;
+  it.each(["xs", "sm", "lg"] as const)("should handle size %s", (size) => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        size,
+        headerTitle: `${size} Modal`,
+      },
+    });
 
-    for (const size of sizes) {
-      const { unmount } = render(ComposedModalTest, {
-        props: {
-          open: true,
-          size,
-          headerTitle: `${size} Modal`,
-        },
-      });
-
-      const modal = screen.getByRole("dialog");
-      expect(modal).toHaveClass(`bx--modal-container--${size}`);
-      unmount();
-    }
+    expect(screen.getByRole("dialog")).toHaveClass(
+      `bx--modal-container--${size}`,
+    );
   });
 
   it("should handle danger variant", () => {
@@ -212,30 +206,6 @@ describe("ComposedModal", () => {
 
     expect(onclose).not.toHaveBeenCalled();
     expect(modalWrapper).toHaveClass("is-visible");
-  });
-
-  it("scrolls a newly-focused element out from under the scroll gradient", () => {
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        bodyHasScrollingContent: true,
-      },
-    });
-
-    const modalContent = screen.getByRole("region");
-    Object.defineProperty(modalContent, "clientHeight", { value: 100 });
-    Object.defineProperty(modalContent, "scrollHeight", { value: 300 });
-    modalContent.scrollTop = 50;
-    modalContent.getBoundingClientRect = () => rect({ top: 0, bottom: 100 });
-
-    const input = screen.getByTestId("test-focus");
-    input.getBoundingClientRect = () => rect({ top: 110, bottom: 130 });
-
-    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
-
-    // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
-    expect(modalContent.scrollTop).toBe(80);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2671
@@ -341,86 +311,35 @@ describe("ComposedModal", () => {
     expect(screen.getByTestId("test-focus")).not.toHaveFocus();
   });
 
-  it("returns focus to trigger without waiting for an open transition", async () => {
-    const { container } = render(ComposedModalFocusReturnTest);
+  it.each([
+    ["the close button", () => user.click(screen.getByLabelText("Close"))],
+    ["Escape", () => user.keyboard("{Escape}")],
+    ["an outside click", (modalRoot: Element) => user.click(modalRoot)],
+  ])(
+    "returns focus to the trigger when closed via %s",
+    async (_label, close) => {
+      const { container } = render(ComposedModalFocusReturnTest);
+      const modalRoot = container.querySelector(".bx--modal");
+      assert(modalRoot);
 
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
-    await tick();
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+      await tick();
 
-    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
+      expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
 
-    await user.click(screen.getByLabelText("Close"));
-    await tick();
+      await close(modalRoot);
+      await tick();
 
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+      modalRoot.dispatchEvent(
+        new TransitionEvent("transitionend", { propertyName: "transform" }),
+      );
+      await tick();
 
-    expect(trigger).toHaveFocus();
-  });
-
-  it("returns focus to trigger when closed via Escape key", async () => {
-    const { container } = render(ComposedModalFocusReturnTest, {
-      props: {},
-    });
-
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    await user.keyboard("{Escape}");
-    await tick();
-
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    expect(trigger).toHaveFocus();
-  });
-
-  it("returns focus to trigger when closed via outside click", async () => {
-    const { container } = render(ComposedModalFocusReturnTest, {
-      props: {},
-    });
-
-    const trigger = screen.getByRole("button", { name: "Open Modal" });
-    await user.click(trigger);
-    await tick();
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    await user.click(modalWrapper);
-    await tick();
-
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
-
-    expect(trigger).toHaveFocus();
-  });
+      expect(trigger).toHaveFocus();
+    },
+  );
 
   it("should respect selectorPrimaryFocus", async () => {
     render(ComposedModalTest, {
@@ -525,7 +444,14 @@ describe("ComposedModal", () => {
     });
 
     it("omits aria-describedby when there is no ModalBody", () => {
-      render(ComposedModalAlertNoBodyTest);
+      render(ComposedModalTest, {
+        props: {
+          open: true,
+          alert: true,
+          headerTitle: "No body",
+          includeBody: false,
+        },
+      });
 
       expect(screen.getByRole("alertdialog")).not.toHaveAttribute(
         "aria-describedby",

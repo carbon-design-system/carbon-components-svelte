@@ -29,13 +29,18 @@
   export let slotContent = "";
   /** When true, `on:click:button--secondary` calls preventDefault() so the modal stays open. */
   export let preventSecondaryDefault = false;
+  export let onsubmit: (() => void) | undefined = undefined;
+  export let onprimary: (() => void) | undefined = undefined;
+  export let onsecondary: ((event: CustomEvent) => void) | undefined =
+    undefined;
+  export let onclose: (() => void) | undefined = undefined;
 </script>
 
 <ComposedModal
   bind:open
-  on:submit={() => console.log("submit")}
-  on:click:button--primary={() => console.log("click:button--primary")}
-  on:close={() => console.log("close")}
+  on:submit={() => onsubmit?.()}
+  on:click:button--primary={() => onprimary?.()}
+  on:close={() => onclose?.()}
 >
   <ModalHeader title="Test Modal" />
   <ModalBody>Content</ModalBody>
@@ -53,7 +58,7 @@
     {secondaryClass}
     {danger}
     on:click:button--secondary={(e) => {
-      console.log("click:button--secondary", e.detail);
+      onsecondary?.(e);
       if (preventSecondaryDefault) e.preventDefault();
     }}
     {...$$restProps}
