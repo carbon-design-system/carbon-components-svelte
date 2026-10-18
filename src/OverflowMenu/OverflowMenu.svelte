@@ -207,6 +207,13 @@
     batchedItemsUpdate((_) => _.filter((item) => item.id !== id));
   }
 
+  /** @type {(id: string, data: { text: string; disabled: boolean }) => void} */
+  function patch(id, data) {
+    batchedItemsUpdate((_) =>
+      _.map((item) => (item.id === id ? { ...item, ...data } : item)),
+    );
+  }
+
   /**
    * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
    */
@@ -276,6 +283,7 @@
     itemsById,
     add,
     remove,
+    patch,
     update,
     first,
     last,

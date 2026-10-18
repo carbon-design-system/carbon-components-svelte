@@ -460,6 +460,27 @@ describe("OverflowMenu", () => {
     expect(menuItems[1]).toHaveFocus();
   });
 
+  it("tracks an item's text and disabled changes while open", async () => {
+    const onClose = vi.fn();
+    const { rerender } = render(OverflowMenuDynamicItems, {
+      props: { middleDisabled: true, onClose },
+    });
+
+    await user.click(screen.getByRole("button"));
+    await rerender({ middleDisabled: false, middleText: "Zebra" });
+
+    await user.keyboard("{ArrowDown}");
+    const middle = screen.getByRole("menuitem", { name: "Zebra" });
+    expect(middle).toHaveFocus();
+
+    await user.click(middle);
+    expect(onClose).toHaveBeenCalledWith({
+      trigger: "item-select",
+      index: 1,
+      text: "Zebra",
+    });
+  });
+
   describe("portalMenu", () => {
     it("should render menu in FloatingPortal when portalMenu is true", async () => {
       render(OverflowMenu, { props: { portalMenu: true } });
