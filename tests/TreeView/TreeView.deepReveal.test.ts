@@ -2,9 +2,11 @@ import { render, waitFor } from "@testing-library/svelte";
 import TreeViewShowNode from "./TreeView.deepReveal.test.svelte";
 
 describe("TreeView deep reveal", () => {
-  const DEPTH = 200;
+  // Past two stagger boundaries (every 16 levels) so showNode must wait
+  // through the deferred reveal before it can focus the target.
+  const DEPTH = 50;
 
-  it("showNode reveals and focuses a node 200 levels deep without overflowing the stack", async () => {
+  it("showNode waits through the staggered reveal to focus a node 50 levels deep", async () => {
     const { component } = render(TreeViewShowNode, { props: { depth: DEPTH } });
 
     component.showDeepest();

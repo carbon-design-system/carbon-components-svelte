@@ -3,9 +3,11 @@ import { tick } from "svelte";
 import TreeViewShowNode from "./TreeView.deepReveal.test.svelte";
 
 describe("TreeView deep reveal", () => {
-  const DEPTH = 200;
+  // Past two stagger boundaries (every 16 levels) so the deferred reveal
+  // must resume at each one.
+  const DEPTH = 50;
 
-  it("expandAll mounts a 200-level chain without overflowing the stack", async () => {
+  it("expandAll resumes the staggered reveal until a 50-level chain is mounted", async () => {
     const { component } = render(TreeViewShowNode, { props: { depth: DEPTH } });
 
     component.expandAll();

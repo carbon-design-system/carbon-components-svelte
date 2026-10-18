@@ -30,16 +30,12 @@ describe("TreeView.getNode / getNodes", () => {
     const consoleLog = vi.spyOn(console, "log");
     await user.click(getButton("get-nodes"));
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "getNodes",
-      expect.arrayContaining([
-        expect.objectContaining({ id: 3 }),
-        expect.objectContaining({ id: 0 }),
-      ]),
-    );
     const nodes = consoleLog.mock.calls.find(
       (call) => call[0] === "getNodes",
     )?.[1];
-    expect(nodes).toHaveLength(2);
+    expect(nodes).toEqual([
+      expect.objectContaining({ id: 3 }),
+      expect.objectContaining({ id: 0 }),
+    ]);
   });
 });
