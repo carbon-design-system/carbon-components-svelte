@@ -1373,7 +1373,10 @@
    */
   function handleCalendarKeydown(event) {
     if (event.key === "Escape") handleCalendarEscape(event);
-    else if (event.key === "Enter") keepFocusAfterEnter(event);
+    // Space selects a day too, so it needs the same focus restore.
+    else if (event.key === "Enter" || event.key === " ") {
+      keepFocusAfterEnter(event);
+    }
   }
 
   /**
