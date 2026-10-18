@@ -88,8 +88,6 @@ export function joinDescribedBy(...ids) {
  * @param {boolean} [options.includeErrorId=true] - `false` when the
  *   invalid message is instead surfaced via `aria-errormessage`; the
  *   resolver then skips straight past the invalid tier.
- * @param {boolean} [options.requireInvalidText=false]
- * @param {boolean} [options.requireWarnText=false]
  * @returns {string | undefined}
  */
 export function resolveStatusDescribedBy({
@@ -103,13 +101,13 @@ export function resolveStatusDescribedBy({
   warnId,
   helperId,
   includeErrorId = true,
-  requireInvalidText = false,
-  requireWarnText = false,
 }) {
-  if (showInvalid && includeErrorId && (!requireInvalidText || invalidText)) {
+  // A message renders only when it has text, so only then is it an id
+  // worth pointing at.
+  if (showInvalid && includeErrorId && invalidText) {
     return errorId;
   }
-  if (showWarn && (!requireWarnText || warnText)) {
+  if (showWarn && warnText) {
     return warnId;
   }
   if (!showInvalid && !showWarn && !isFluid && helperText) {

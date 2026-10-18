@@ -101,7 +101,13 @@ describe("joinDescribedBy", () => {
 });
 
 describe("resolveStatusDescribedBy", () => {
-  const base = { errorId: "error-x", warnId: "warn-x", helperId: "helper-x" };
+  const base = {
+    errorId: "error-x",
+    warnId: "warn-x",
+    helperId: "helper-x",
+    invalidText: "Required",
+    warnText: "Careful",
+  };
 
   it("prioritizes invalid over warn over helper", () => {
     expect(
@@ -192,7 +198,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  it("requireWarnText fall-through still reaches helper once warn is false", () => {
+  it("reaches helper once warn is false", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -200,12 +206,11 @@ describe("resolveStatusDescribedBy", () => {
         showWarn: false,
         warnText: "",
         helperText: "help",
-        requireWarnText: true,
       }),
     ).toBe("helper-x");
   });
 
-  it("requireInvalidText fall-through does not reach helper while showInvalid is true", () => {
+  it("skips a message without text, without falling back to helper", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -213,7 +218,6 @@ describe("resolveStatusDescribedBy", () => {
         showWarn: false,
         invalidText: "",
         helperText: "help",
-        requireInvalidText: true,
       }),
     ).toBeUndefined();
     expect(
@@ -223,19 +227,17 @@ describe("resolveStatusDescribedBy", () => {
         showWarn: true,
         warnText: "",
         helperText: "help",
-        requireWarnText: true,
       }),
     ).toBeUndefined();
   });
 
-  it("requireInvalidText/requireWarnText pass through when text is present", () => {
+  it("points at a message with text", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
         showInvalid: true,
         showWarn: false,
         invalidText: "Required",
-        requireInvalidText: true,
       }),
     ).toBe("error-x");
     expect(
@@ -244,7 +246,6 @@ describe("resolveStatusDescribedBy", () => {
         showInvalid: false,
         showWarn: true,
         warnText: "Careful",
-        requireWarnText: true,
       }),
     ).toBe("warn-x");
   });
