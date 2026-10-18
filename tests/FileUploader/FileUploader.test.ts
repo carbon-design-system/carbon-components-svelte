@@ -425,6 +425,16 @@ describe("FileUploader", () => {
     expect(getFileInput(container)).toHaveAttribute("id", "docs-input");
   });
 
+  it("should dispatch click once per row removal", async () => {
+    const onClick = vi.fn();
+    const { component } = render(FileUploader, { props: { onClick } });
+
+    await selectFiles(component, [makeFile("file1.txt")]);
+    await user.click(removeButtons()[0]);
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it("should remove file on keyboard interaction", async () => {
     const { component } = render(FileUploader);
 
