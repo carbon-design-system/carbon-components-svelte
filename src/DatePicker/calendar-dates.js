@@ -458,30 +458,62 @@ export function daysInMonth(year, month) {
 export { DAY_MS };
 
 /**
+ * A year and month formatted by `locale` in the Gregorian calendar, like the
+ * grid: Persian dates put the year first, but the Gregorian dates `fa`
+ * shows put the month first. `undefined` for English, which every caller
+ * handles without `Intl` (its cold start costs a few ms on first mount).
+ *
+ * @param {unknown} locale
+ * @returns {Intl.DateTimeFormatPart[] | undefined}
+ */
+function yearMonthParts(locale) {
+  if (typeof locale !== "string" || ENGLISH.test(locale)) return undefined;
+  try {
+    const gregorian = new Intl.Locale(locale, {
+      calendar: "gregory",
+    }).toString();
+    return getDateTimeFormatter(gregorian, {
+      year: "numeric",
+      month: "long",
+    }).formatToParts(new Date(2000, 0, 1));
+  } catch {
+    return undefined;
+  }
+}
+
+/** @param {Intl.DateTimeFormatPart[]} parts */
+const yearAndMonth = (parts) => [
+  parts.findIndex((part) => part.type === "year"),
+  parts.findIndex((part) => part.type === "month"),
+];
+
+/**
  * Whether `locale` orders the month before the year ("January 2000") as
  * opposed to year before month ("2000年1月").
  *
  * @param {unknown} locale
  */
 export function isMonthFirst(locale) {
-  // Every English locale puts the month first. Skipping `Intl` here keeps
-  // its cold-start cost (a few ms) out of the first mount.
-  if (typeof locale !== "string" || ENGLISH.test(locale)) return true;
-  try {
-    // Gregorian, like the grid: Persian dates put the year first, but the
-    // Gregorian dates `fa` shows put the month first.
-    const gregorian = new Intl.Locale(locale, {
-      calendar: "gregory",
-    }).toString();
-    const parts = getDateTimeFormatter(gregorian, {
-      year: "numeric",
-      month: "long",
-    }).formatToParts(new Date(2000, 0, 1));
-    return (
-      parts.findIndex((part) => part.type === "month") <
-      parts.findIndex((part) => part.type === "year")
-    );
-  } catch {
-    return true;
-  }
+  const parts = yearMonthParts(locale);
+  if (!parts) return true;
+  const [year, month] = yearAndMonth(parts);
+  return month < year;
+}
+
+/**
+ * What a year-first locale writes between the year and the month: "年" in
+ * "2000年1月", "년" in Korean. Empty for month-first locales.
+ *
+ * @param {unknown} locale
+ */
+export function yearSuffix(locale) {
+  const parts = yearMonthParts(locale);
+  if (!parts) return "";
+  const [year, month] = yearAndMonth(parts);
+  if (year === -1 || month < year) return "";
+  return parts
+    .slice(year + 1, month)
+    .map((part) => part.value)
+    .join("")
+    .trim();
 }

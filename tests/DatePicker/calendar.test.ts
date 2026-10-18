@@ -410,6 +410,20 @@ describe("keyboard", () => {
 });
 
 describe("flatpickr compatibility", () => {
+  it("puts a year-first locale's year, its word, then the month", () => {
+    const { instance } = create({ locale: "ja", defaultDate: "2024-03-15" });
+    const header = instance.calendarContainer.querySelector(
+      ".flatpickr-current-month",
+    );
+    const parts = [...(header?.children ?? [])].map((el) =>
+      el.classList.contains("numInputWrapper")
+        ? (el.querySelector("input") as HTMLInputElement).value
+        : el.textContent,
+    );
+
+    expect(parts).toEqual(["2024", "年", "3月"]);
+  });
+
   it("treats the `now` option as today", () => {
     const { instance } = create({ now: "2020-01-10" });
 

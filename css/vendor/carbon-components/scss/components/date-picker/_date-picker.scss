@@ -517,6 +517,30 @@
 }
 
 // carbon-components-svelte patch
+// A year-first locale writes a word after the year ("2000年1月"). Size the
+// year input to its four digits so the word follows it, and drop the
+// hover-only spin arrows that would otherwise sit on top of the word.
+@mixin date-picker-year-suffix {
+  .numInputWrapper.#{$prefix}--date-picker__year--suffixed {
+    // 2px of slack: WebKit measures four digits a little wider than 4ch.
+    width: calc(4ch + #{$carbon--spacing-02} + #{to-rem(2px)});
+  }
+
+  .#{$prefix}--date-picker__year--suffixed .numInput {
+    padding-right: 0;
+  }
+
+  .#{$prefix}--date-picker__year--suffixed .arrowUp,
+  .#{$prefix}--date-picker__year--suffixed .arrowDown {
+    display: none;
+  }
+}
+
+@include exports("date-picker-year-suffix") {
+  @include date-picker-year-suffix;
+}
+
+// carbon-components-svelte patch
 // `clearable`: a clear button, styled like Search's close button. It takes
 // the calendar icon's place, or sits before the invalid/warn icon.
 @mixin date-picker-clear {

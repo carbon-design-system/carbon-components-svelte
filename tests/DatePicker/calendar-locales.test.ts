@@ -1,6 +1,7 @@
 import {
   getCalendarLocale,
   isMonthFirst,
+  yearSuffix,
 } from "../../src/DatePicker/calendar-dates.js";
 
 // Each language tag's calendar strings, checked against the runtime's own
@@ -82,6 +83,24 @@ describe.each(TAGS)("%s", (tag) => {
       parts.findIndex((part) => part.type === "year");
     expect(isMonthFirst(tag)).toBe(monthFirst);
   });
+
+  it("writes the locale's word after a leading year", () => {
+    const parts = gregorian(tag, {
+      year: "numeric",
+      month: "long",
+    }).formatToParts(new Date(2000, 0, 1));
+    const year = parts.findIndex((part) => part.type === "year");
+    const month = parts.findIndex((part) => part.type === "month");
+    const between =
+      year < month
+        ? parts
+            .slice(year + 1, month)
+            .map((part) => part.value)
+            .join("")
+            .trim()
+        : "";
+    expect(yearSuffix(tag)).toBe(between);
+  });
 });
 
 it("shows German weekdays as two-letter names", () => {
@@ -94,4 +113,13 @@ it("shows German weekdays as two-letter names", () => {
     "Fr",
     "Sa",
   ]);
+});
+
+it.each([
+  ["ja", "年"],
+  ["ko", "년"],
+  ["de", ""],
+  ["en", ""],
+])("writes %s years with the suffix %j", (tag, suffix) => {
+  expect(yearSuffix(tag)).toBe(suffix);
 });
