@@ -8,20 +8,11 @@ import TreeViewLazyLoad from "./TreeView.lazyLoad.test.svelte";
 // (no real stylesheet applies `.bx--tree-node--hidden`). Look it up by id
 // instead, matching this suite's existing convention for parent rows.
 describe("TreeView lazy loading (hasChildren + children slot)", () => {
-  it("renders an expander for a hasChildren node with no nodes yet", () => {
-    render(TreeViewLazyLoad);
-
-    const root = treeItemById("root");
-    expect(root).toHaveAttribute("aria-expanded", "false");
-    expect(
-      root.querySelector(".bx--tree-parent-node__toggle"),
-    ).toBeInTheDocument();
-  });
-
   it("renders the children slot while unresolved, then swaps in loaded children", async () => {
     const { component } = render(TreeViewLazyLoad);
 
     const root = treeItemById("root");
+    expect(root).toHaveAttribute("aria-expanded", "false");
     const toggle = root.querySelector(".bx--tree-parent-node__toggle");
     assert(toggle instanceof HTMLElement);
 

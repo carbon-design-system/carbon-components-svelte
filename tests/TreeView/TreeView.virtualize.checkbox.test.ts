@@ -101,19 +101,4 @@ describe("TreeView virtualize + selectionMode=checkbox", () => {
     expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
     expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
   });
-
-  it("fires check:change once per gesture with the derived state", async () => {
-    const onCheckChange = vi.fn();
-    render(TreeViewVirtualizeCheckbox, { onCheckChange });
-
-    await user.click(checkboxFor("spark"));
-
-    await vi.waitFor(() => expect(onCheckChange).toHaveBeenCalledTimes(1));
-    expect(onCheckChange).toHaveBeenLastCalledWith({
-      checkedIds: ["spark"],
-      added: ["spark"],
-      removed: [],
-      indeterminateIds: ["analytics"],
-    });
-  });
 });

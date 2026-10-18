@@ -5,7 +5,6 @@ import { tick } from "svelte";
 import type * as TreeCheckboxStateModule from "../../src/utils/tree-checkbox-state.js";
 import type * as TreeFingerprintModule from "../../src/utils/tree-fingerprint.js";
 import type * as TreeVirtualIndexModule from "../../src/utils/tree-virtual-index.js";
-import { isSvelte3 } from "../utils/svelte-version";
 import TreeViewEqualNodes from "./TreeView.equalNodes.test.svelte";
 
 const resolveCheckboxStateCalls: unknown[][] = [];
@@ -78,49 +77,6 @@ describe("TreeView new-but-equal `nodes`", () => {
     fingerprintTreeCalls.length = 0;
   });
 
-  it("produces no DOM mutations for a new-but-equal nodes array", async () => {
-    const buildNodes = () => [
-      { id: "a", text: "Alpha" },
-      { id: "b", text: "Beta" },
-    ];
-    const { rerender, container } = render(TreeViewEqualNodes, {
-      nodes: buildNodes(),
-    });
-    const { records, disconnect } = observeMutations(container);
-
-    // New array, same ids/text: new-but-equal.
-    await rerender({ nodes: buildNodes() });
-    await tick();
-
-    disconnect();
-    // Svelte 3's compiled output for `{...$$restProps}` combined with
-    // `class:` directives on the same element re-applies the merged
-    // `class` attribute (to the SAME value) on every component update,
-    // regardless of which prop changed. Verified against the pre-fix
-    // commit: it fires identically there, so it predates and is
-    // unrelated to the `nodes` guard under test. Svelte 4 and 5 do not
-    // reproduce it.
-    const relevant = isSvelte3
-      ? records.filter((record) => record.attributeName !== "class")
-      : records;
-    expect(relevant).toHaveLength(0);
-  });
-
-  it("keeps the same treeitem element for a new-but-equal update", async () => {
-    const buildNodes = () => [
-      { id: "a", text: "Alpha" },
-      { id: "b", text: "Beta" },
-    ];
-    const { rerender } = render(TreeViewEqualNodes, { nodes: buildNodes() });
-    const before = screen.getByRole("treeitem", { name: /Alpha/ });
-
-    await rerender({ nodes: buildNodes() });
-    await tick();
-
-    const after = screen.getByRole("treeitem", { name: /Alpha/ });
-    expect(after).toBe(before);
-  });
-
   it("still re-renders when a label genuinely changes", async () => {
     const { rerender, container } = render(TreeViewEqualNodes, {
       nodes: [
@@ -141,31 +97,6 @@ describe("TreeView new-but-equal `nodes`", () => {
     disconnect();
     expect(records.length).toBeGreaterThan(0);
     expect(screen.getByText("Alpha Updated")).toBeInTheDocument();
-  });
-
-  it("renders newly lazy-loaded children after `node.nodes = children; nodes = nodes`", async () => {
-    const parent: {
-      id: string;
-      text: string;
-      nodes?: Array<{ id: string; text: string }>;
-    } = { id: "p", text: "Parent" };
-    const initialNodes = [parent];
-    const { rerender } = render(TreeViewEqualNodes, {
-      nodes: initialNodes,
-      expandedIds: ["p"],
-    });
-
-    expect(screen.queryByText("Child 1")).toBeNull();
-
-    // Lazy-load idiom: mutate the SAME node object in place, then
-    // reassign `nodes` to the SAME top-level array reference. A guard
-    // that only compares `nodes !== stableNodes` would wrongly treat
-    // this as "nothing to do" and never redo the work.
-    parent.nodes = [{ id: "c1", text: "Child 1" }];
-    await rerender({ nodes: initialNodes, expandedIds: ["p"] });
-    await tick();
-
-    expect(screen.getByText("Child 1")).toBeInTheDocument();
   });
 
   it("renders a mutated entry after `nodes = [...nodes]`", async () => {

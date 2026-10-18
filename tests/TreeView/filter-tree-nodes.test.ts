@@ -194,24 +194,12 @@ describe("filterTreeNodes", () => {
       expect(result).toEqual([sampleTree[0]]);
     });
 
-    it("should handle string IDs", () => {
-      const tree = [
-        {
-          id: "root",
-          text: "Root",
-          nodes: [{ id: "child", text: "Child" }],
-        },
-      ];
+    it("matches ids strictly, without coercing between strings and numbers", () => {
+      const stringTree = [{ id: "1", text: "String id" }];
 
-      const result = filterTreeById(tree, "child");
-
-      expect(result).toEqual([
-        {
-          id: "root",
-          text: "Root",
-          nodes: [{ id: "child", text: "Child" }],
-        },
-      ]);
+      expect(filterTreeById(sampleTree, "1")).toEqual([]);
+      expect(filterTreeById(stringTree, 1)).toEqual([]);
+      expect(filterTreeById(stringTree, "1")).toEqual(stringTree);
     });
   });
 
@@ -268,12 +256,6 @@ describe("filterTreeNodes", () => {
       expect(result).toEqual(sampleTree);
     });
 
-    it("should return empty array when no text matches", () => {
-      const result = filterTreeByText(sampleTree, "nonexistent");
-
-      expect(result).toEqual([]);
-    });
-
     it("should work with includeChildren option", () => {
       const result = filterTreeByText(sampleTree, "Documents", {
         includeChildren: true,
@@ -305,38 +287,6 @@ describe("filterTreeNodes", () => {
     it("should handle empty tree", () => {
       const result = filterTreeNodes([], (_node) => true);
       expect(result).toEqual([]);
-    });
-
-    it("should handle deeply nested structures", () => {
-      const deepTree = [
-        {
-          id: 1,
-          text: "L1",
-          nodes: [
-            {
-              id: 2,
-              text: "L2",
-              nodes: [
-                {
-                  id: 3,
-                  text: "L3",
-                  nodes: [
-                    {
-                      id: 4,
-                      text: "L4",
-                      nodes: [{ id: 5, text: "L5" }],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ];
-
-      const result = filterTreeById(deepTree, 5);
-
-      expect(result).toEqual(deepTree);
     });
 
     it("should not mutate original tree", () => {

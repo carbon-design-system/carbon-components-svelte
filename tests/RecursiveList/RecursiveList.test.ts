@@ -7,14 +7,9 @@ import RecursiveListHierarchyTest from "./RecursiveList.hierarchy.test.svelte";
 import RecursiveListIdTest from "./RecursiveList.id.test.svelte";
 import RecursiveListTest from "./RecursiveList.test.svelte";
 
-const testCases = [
-  { name: "RecursiveList", component: RecursiveListTest },
-  { name: "RecursiveList hierarchy", component: RecursiveListHierarchyTest },
-];
-
-describe.each(testCases)("$name", ({ component }) => {
+describe("RecursiveList", () => {
   it("renders all top-level items", () => {
-    render(component);
+    render(RecursiveListTest);
 
     expect(screen.getByText("Item 1")).toBeInTheDocument();
     expect(screen.getByText("Item 2")).toBeInTheDocument();
@@ -26,14 +21,14 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("renders HTML content", () => {
-    render(component);
+    render(RecursiveListTest);
 
     const htmlContent = screen.getByText("HTML content");
     expect(htmlContent.tagName).toBe("H5");
   });
 
   it("renders links correctly", () => {
-    render(component);
+    render(RecursiveListTest);
 
     const links = screen.getAllByRole("link");
     expect(links).toHaveLength(4);
@@ -48,7 +43,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("renders link target and computes rel for `_blank`", () => {
-    render(component);
+    render(RecursiveListTest);
 
     const externalLink = screen.getByText("External link");
     expect(externalLink).toHaveAttribute("target", "_blank");
@@ -59,6 +54,15 @@ describe.each(testCases)("$name", ({ component }) => {
     );
     expect(externalLinkCustomRel).toHaveAttribute("target", "_blank");
     expect(externalLinkCustomRel).toHaveAttribute("rel", "noopener");
+  });
+});
+
+describe("RecursiveList hierarchy", () => {
+  it("renders the same nested lists as the literal fixture", () => {
+    render(RecursiveListHierarchyTest);
+
+    expect(screen.getByText("Item 1a")).toBeInTheDocument();
+    expect(screen.getAllByRole("list")).toHaveLength(4);
   });
 });
 

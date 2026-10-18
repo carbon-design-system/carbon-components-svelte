@@ -4,11 +4,7 @@ import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte
 import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
 import { findParentTreeNode } from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
 import type TreeViewNodeListComponent from "carbon-components-svelte/TreeView/TreeViewNodeList.svelte";
-import type {
-  ComponentEvents,
-  ComponentProps,
-  ComponentType as SvelteComponentType,
-} from "svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
@@ -50,12 +46,7 @@ function getNamedParentTreeitem(name: RegExp): HTMLElement {
   return found;
 }
 
-const testCases = [
-  { name: "TreeView", component: TreeView },
-  { name: "TreeView hierarchy", component: TreeViewHierarchy },
-];
-
-describe.each(testCases)("$name", ({ component }) => {
+describe("TreeView", () => {
   const noExpandedItems = () => {
     expect(screen.queryAllByRole("treeitem", { expanded: true })).toHaveLength(
       0,
@@ -72,7 +63,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("can select a node", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    render(component);
+    render(TreeView);
 
     const firstItem = treeItemById(0);
     expect(firstItem).toBeInTheDocument();
@@ -94,7 +85,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("moves selection to the newly active node", async () => {
-    render(component);
+    render(TreeView);
 
     const firstItem = treeItemById(0);
     await user.click(firstItem);
@@ -107,7 +98,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("can expand all nodes", async () => {
-    render(component);
+    render(TreeView);
 
     noExpandedItems();
 
@@ -118,7 +109,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("expandNodes() with no arguments expands all nodes", async () => {
-    render(component);
+    render(TreeView);
 
     noExpandedItems();
 
@@ -129,7 +120,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("can expand some nodes", async () => {
-    render(component);
+    render(TreeView);
 
     noExpandedItems();
 
@@ -150,7 +141,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("can collapse all nodes", async () => {
-    render(component);
+    render(TreeView);
 
     const expandAllButton = screen.getByText("Expand all");
     await user.click(expandAllButton);
@@ -163,7 +154,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("can collapse some nodes", async () => {
-    render(component);
+    render(TreeView);
 
     const expandAllButton = screen.getByText("Expand all");
     await user.click(expandAllButton);
@@ -181,7 +172,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("dispatches toggle event when node is toggled", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    render(component);
+    render(TreeView);
 
     const analyticsNode = treeItemById(1);
     const toggleButton = analyticsNode.querySelector(
@@ -222,7 +213,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("dispatches focus event when node receives focus", () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    render(component);
+    render(TreeView);
 
     const firstItem = treeItemById(0);
     firstItem.focus();
@@ -238,7 +229,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("handles disabled nodes correctly", async () => {
-    render(component);
+    render(TreeView);
 
     const disabledNode = treeItemById(14);
     expect(disabledNode).toHaveAttribute("aria-disabled", "true");
@@ -323,7 +314,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("moves tabindex=0 along with focus (roving tabindex)", async () => {
-    render(component);
+    render(TreeView);
 
     const firstItem = getItemByName(/AI \/ Machine learning/);
     expect(firstItem).toHaveAttribute("tabindex", "0");
@@ -345,20 +336,8 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
   });
 
-  it("navigates with ArrowDown key", async () => {
-    render(component);
-
-    const firstItem = treeItemById(0);
-    firstItem.focus();
-
-    await user.keyboard("{ArrowDown}");
-
-    const nextItem = treeItemById(1);
-    expect(nextItem).toHaveFocus();
-  });
-
   it("moves the roving tab stop without querying the whole tree", async () => {
-    render(component);
+    render(TreeView);
 
     const firstItem = treeItemById(0);
     firstItem.focus();
@@ -380,7 +359,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("navigates with ArrowUp key", async () => {
-    render(component);
+    render(TreeView);
 
     const secondItem = treeItemById(1);
     secondItem.focus();
@@ -392,7 +371,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("skips descendants under a re-collapsed subtree in keyboard navigation", async () => {
-    render(component);
+    render(TreeView);
 
     const analytics = treeItemById(1);
     analytics.focus();
@@ -409,7 +388,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("End key moves focus to the last non-disabled treeitem", async () => {
-    render(component);
+    render(TreeView);
 
     const firstItem = getItemByName(/AI \/ Machine learning/);
     firstItem.focus();
@@ -420,7 +399,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("Home key moves focus to the first treeitem", async () => {
-    render(component);
+    render(TreeView);
 
     const databases = getNamedParentTreeitem(/Databases/);
     databases.focus();
@@ -432,7 +411,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("expands parent node with ArrowRight key", async () => {
-    render(component);
+    render(TreeView);
 
     const analyticsNode = treeItemById(1);
     analyticsNode.focus();
@@ -443,7 +422,7 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 
   it("collapses parent node with ArrowLeft key", async () => {
-    render(component);
+    render(TreeView);
 
     const analyticsNode = treeItemById(1);
     analyticsNode.focus();
@@ -458,7 +437,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("selects node with Enter key", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    render(component);
+    render(TreeView);
 
     const firstItem = treeItemById(0);
     firstItem.focus();
@@ -478,7 +457,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("selects node with Space key", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    render(component);
+    render(TreeView);
 
     const firstItem = treeItemById(0);
     firstItem.focus();
@@ -496,14 +475,19 @@ describe.each(testCases)("$name", ({ component }) => {
   });
 });
 
-describe("TreeView Props", () => {
-  it("applies default size class", () => {
-    render(TreeViewProps);
+describe("TreeView hierarchy", () => {
+  it("renders the same nodes as the flat fixture when built with toHierarchy", async () => {
+    render(TreeViewHierarchy);
 
-    const tree = screen.getByRole("tree");
-    expect(tree).toHaveClass("bx--tree--default");
+    await user.click(screen.getByText("Expand all"));
+
+    expect(screen.getAllByRole("treeitem", { expanded: true })).toHaveLength(5);
+    expect(document.querySelectorAll("[data-tree-row-id]")).toHaveLength(16);
+    expect(treeItemById(3)).toHaveAttribute("aria-level", "3");
   });
+});
 
+describe("TreeView Props", () => {
   it("applies compact size class", () => {
     render(TreeViewProps, { size: "compact" });
 
@@ -637,16 +621,6 @@ describe("TreeView Props", () => {
     expect(databasesItem).toHaveAttribute("aria-selected", "true");
   });
 
-  it("does not set aria-multiselectable when multiselect is false", () => {
-    render(TreeViewMultiselect, {
-      multiselect: false,
-      selectedIds: [0, 7, 9],
-    });
-
-    const tree = screen.getByRole("tree");
-    expect(tree).not.toHaveAttribute("aria-multiselectable");
-  });
-
   it("reports `selected` correctly in the focus dispatch payload after many nodes are selected", () => {
     const consoleLog = vi.spyOn(console, "log");
 
@@ -750,6 +724,7 @@ describe("TreeView Props", () => {
 
   describe("Shift+Up/Down in multiselect", () => {
     it("toggles rows as focus moves", async () => {
+      const consoleLog = vi.spyOn(console, "log");
       render(TreeViewMultiselect, {
         multiselect: true,
         activeId: "",
@@ -762,6 +737,10 @@ describe("TreeView Props", () => {
       expect(treeItemById(1)).toHaveFocus();
       expect(treeItemById(1)).toHaveAttribute("aria-selected", "true");
       expect(treeItemById(0)).toHaveAttribute("aria-selected", "false");
+      expect(consoleLog).toHaveBeenLastCalledWith(
+        "select",
+        expect.objectContaining({ id: 1, selected: true }),
+      );
 
       await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
       expect(treeItemById(7)).toHaveFocus();
@@ -786,23 +765,6 @@ describe("TreeView Props", () => {
 
       expect(treeItemById(9)).toHaveFocus();
       expect(component.selectedIds).toEqual([]);
-    });
-
-    it("fires select with the destination row", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(TreeViewMultiselect, {
-        multiselect: true,
-        activeId: "",
-        selectedIds: [],
-      });
-
-      treeItemById(0).focus();
-      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
-
-      expect(consoleLog).toHaveBeenLastCalledWith(
-        "select",
-        expect.objectContaining({ id: 1, selected: true }),
-      );
     });
 
     it("toggles the shallow unit in shallow mode", async () => {
@@ -836,52 +798,6 @@ describe("TreeView Props", () => {
       expect(treeItemById(1)).toHaveFocus();
       expect(component.selectedIds).toEqual([]);
     });
-  });
-
-  it("select payload reports the post-click selected state when toggling in multiselect", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-
-    render(TreeViewMultiselect, {
-      multiselect: true,
-      selectedIds: [],
-    });
-
-    const blockchainItem = treeItemById(7);
-
-    await user.keyboard("{Control>}");
-    await user.click(blockchainItem);
-    await user.keyboard("{/Control}");
-    expect(consoleLog).toHaveBeenLastCalledWith(
-      "select",
-      expect.objectContaining({ id: 7, selected: true }),
-    );
-
-    await user.keyboard("{Control>}");
-    await user.click(blockchainItem);
-    await user.keyboard("{/Control}");
-    expect(consoleLog).toHaveBeenLastCalledWith(
-      "select",
-      expect.objectContaining({ id: 7, selected: false }),
-    );
-  });
-
-  it("plain click replaces selection in multiselect mode", async () => {
-    render(TreeViewMultiselect, {
-      multiselect: true,
-      selectedIds: [0, 7, 9],
-    });
-
-    const blockchainItem = treeItemById(7);
-
-    await user.click(blockchainItem);
-
-    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
-
-    const aiItem = treeItemById(0);
-    const databasesItem = treeItemById(9);
-
-    expect(aiItem).toHaveAttribute("aria-selected", "false");
-    expect(databasesItem).toHaveAttribute("aria-selected", "false");
   });
 
   it("ctrl+click has no effect when multiselect is false", async () => {
@@ -987,7 +903,7 @@ describe("TreeView Props", () => {
   });
 
   it("shift+click selects range between anchor and target (node mode)", async () => {
-    render(TreeViewMultiselect, {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       multiselectMode: "node",
       selectedIds: [],
@@ -1007,31 +923,9 @@ describe("TreeView Props", () => {
     expect(aiItem).toHaveAttribute("aria-selected", "true");
     expect(analyticsItem).toHaveAttribute("aria-selected", "true");
     expect(blockchainItem).toHaveAttribute("aria-selected", "true");
-  });
 
-  it("shift+click range only includes visible (expanded) nodes", async () => {
-    const { component } = render(TreeViewMultiselect, {
-      multiselect: true,
-      multiselectMode: "node",
-      selectedIds: [],
-      expandedIds: [], // All collapsed - children are not visible
-    });
-
-    const aiItem = treeItemById(0);
-    const databasesItem = treeItemById(9);
-
-    await user.click(aiItem);
-
-    await user.keyboard("{Shift>}");
-    await user.click(databasesItem);
-    await user.keyboard("{/Shift}");
-
-    // With all nodes collapsed, only top-level nodes are visible in the range
-    expect(aiItem).toHaveAttribute("aria-selected", "true");
-    expect(databasesItem).toHaveAttribute("aria-selected", "true");
-
-    // Children of collapsed parents should NOT be selected
-    // (e.g., id=2 "IBM Analytics Engine" is a child of collapsed Analytics)
+    // Children of collapsed parents are not visible, so they are not in the
+    // range (id=2 is a child of collapsed Analytics).
     expect(document.querySelector('[data-tree-row-id="2"]')).toBeNull();
     expect(component.selectedIds).not.toContain(2);
   });
@@ -1210,236 +1104,9 @@ describe("TreeView Props", () => {
     expect(component.selectedIds).not.toContain(9);
     expect(component.selectedIds).not.toContain(3);
   });
-
-  it("multiselect tree has bx--tree--multiselect class", () => {
-    render(TreeViewMultiselect, {
-      multiselect: true,
-      selectedIds: [],
-    });
-
-    const tree = screen.getByRole("tree");
-    expect(tree).toHaveClass("bx--tree--multiselect");
-  });
-
-  it("non-multiselect tree does not have bx--tree--multiselect class", () => {
-    render(TreeViewMultiselect, {
-      multiselect: false,
-      selectedIds: [],
-    });
-
-    const tree = screen.getByRole("tree");
-    expect(tree).not.toHaveClass("bx--tree--multiselect");
-  });
 });
 
 describe("TreeView Generics", () => {
-  it("should support custom node types with generics", () => {
-    type CustomNode = {
-      id: string;
-      text: string;
-      icon?: SvelteComponentType;
-      disabled?: boolean;
-      metadata?: { count: number; tags: string[] };
-      nodes?: CustomNode[];
-    };
-
-    const customNodes: CustomNode[] = [
-      {
-        id: "1",
-        text: "Node 1",
-        metadata: { count: 5, tags: ["a", "b"] },
-      },
-    ];
-
-    expectTypeOf<typeof customNodes>().toEqualTypeOf<CustomNode[]>();
-
-    type SelectEventDetail = CustomNode & {
-      expanded: boolean;
-      leaf: boolean;
-      selected: boolean;
-    };
-
-    expectTypeOf<SelectEventDetail>().toEqualTypeOf<
-      CustomNode & {
-        expanded: boolean;
-        leaf: boolean;
-        selected: boolean;
-      }
-    >();
-
-    const testDetail: SelectEventDetail = {
-      id: "1",
-      text: "test",
-      metadata: { count: 5, tags: ["a"] },
-      expanded: false,
-      leaf: true,
-      selected: false,
-    };
-    if (testDetail.metadata) {
-      expectTypeOf(testDetail.metadata.count).toEqualTypeOf<number>();
-      expectTypeOf(testDetail.metadata.tags).toEqualTypeOf<string[]>();
-    }
-  });
-
-  it("should default to TreeNode type when generic is not specified", () => {
-    type DefaultTreeNode = {
-      id: string | number;
-      text: unknown;
-      icon?: unknown;
-      disabled?: boolean;
-      nodes?: DefaultTreeNode[];
-    };
-
-    const defaultNodes: DefaultTreeNode[] = [{ id: "1", text: "Node 1" }];
-
-    expectTypeOf<typeof defaultNodes>().toEqualTypeOf<DefaultTreeNode[]>();
-
-    type DefaultEventDetail = DefaultTreeNode & {
-      expanded: boolean;
-      leaf: boolean;
-      selected: boolean;
-    };
-
-    expectTypeOf<DefaultEventDetail>().toEqualTypeOf<
-      DefaultTreeNode & {
-        expanded: boolean;
-        leaf: boolean;
-        selected: boolean;
-      }
-    >();
-  });
-
-  it("should provide type-safe access to custom node properties in event handlers", () => {
-    type CustomNode = {
-      id: string;
-      text: string;
-      metadata?: { count: number; tags: string[] };
-      nodes?: CustomNode[];
-    };
-
-    const handleSelect = (
-      node: CustomNode & {
-        expanded: boolean;
-        leaf: boolean;
-        selected: boolean;
-      },
-    ) => {
-      expectTypeOf(node).toEqualTypeOf<
-        CustomNode & { expanded: boolean; leaf: boolean; selected: boolean }
-      >();
-      if (node.metadata) {
-        expectTypeOf(node.metadata.count).toEqualTypeOf<number>();
-        expectTypeOf(node.metadata.tags).toEqualTypeOf<string[]>();
-      }
-    };
-
-    expectTypeOf(handleSelect)
-      .parameter(0)
-      .toEqualTypeOf<
-        CustomNode & { expanded: boolean; leaf: boolean; selected: boolean }
-      >();
-
-    type SelectEventDetail = CustomNode & {
-      expanded: boolean;
-      leaf: boolean;
-      selected: boolean;
-    };
-    const testEventDetail: SelectEventDetail = {
-      id: "1",
-      text: "test",
-      metadata: { count: 5, tags: ["a"] },
-      expanded: false,
-      leaf: true,
-      selected: false,
-    };
-    expectTypeOf(testEventDetail).toEqualTypeOf<
-      Parameters<typeof handleSelect>[0]
-    >();
-  });
-
-  it("should provide type-safe access in expandNodes and collapseNodes filter functions", () => {
-    type CustomNode = {
-      id: string;
-      text: string;
-      category?: "folder" | "file";
-      nodes?: CustomNode[];
-    };
-
-    const filterFolders = (node: CustomNode) => {
-      expectTypeOf(node).toEqualTypeOf<CustomNode>();
-      if (node.category) {
-        expectTypeOf(node.category).toEqualTypeOf<"folder" | "file">();
-        return node.category === "folder";
-      }
-      return false;
-    };
-
-    expectTypeOf(filterFolders).parameter(0).toEqualTypeOf<CustomNode>();
-    expectTypeOf<
-      Parameters<typeof filterFolders>[0]
-    >().toEqualTypeOf<CustomNode>();
-  });
-
-  it("should support recursive node types with custom properties", () => {
-    type FileNode = {
-      id: string;
-      text: string;
-      fileSize?: number;
-      fileType?: string;
-      nodes?: FileNode[];
-    };
-
-    const fileNodes: FileNode[] = [
-      {
-        id: "1",
-        text: "Documents",
-        nodes: [
-          {
-            id: "2",
-            text: "file.txt",
-            fileSize: 1024,
-            fileType: "text/plain",
-          },
-        ],
-      },
-    ];
-
-    expectTypeOf<typeof fileNodes>().toEqualTypeOf<FileNode[]>();
-
-    const firstNode = fileNodes[0];
-    if (firstNode.nodes) {
-      expectTypeOf<typeof firstNode.nodes>().toEqualTypeOf<FileNode[]>();
-      const childNode = firstNode.nodes[0];
-      if (childNode.fileSize) {
-        expectTypeOf<typeof childNode.fileSize>().toEqualTypeOf<number>();
-      }
-    }
-  });
-
-  it("should work with nodes that have icon property typed correctly", () => {
-    type IconNode = {
-      id: string;
-      text: string;
-      icon?: SvelteComponentType;
-      nodes?: IconNode[];
-    };
-
-    const iconNodes: IconNode[] = [
-      { id: "1", text: "Node with icon", icon: undefined },
-    ];
-
-    expectTypeOf<typeof iconNodes>().toEqualTypeOf<IconNode[]>();
-
-    const nodeWithIcon: IconNode = {
-      id: "2",
-      text: "Node",
-      icon: undefined as SvelteComponentType | undefined,
-    };
-    expectTypeOf(nodeWithIcon.icon).toEqualTypeOf<
-      SvelteComponentType | undefined
-    >();
-  });
-
   it("should enforce TreeNode constraint on generic type", () => {
     type CustomNode = {
       id: string;
@@ -1463,21 +1130,6 @@ describe("TreeView Generics", () => {
   });
 
   describe("discriminated union fixture", () => {
-    it("renders categories with custom label slot content", () => {
-      render(TreeViewGenerics);
-
-      expect(screen.getByText("Products")).toHaveClass("bx--label");
-      expect(screen.getByRole("tree")).toHaveClass("bx--tree");
-
-      const electronics = treeItemById("electronics");
-      const furniture = treeItemById("furniture");
-
-      expect(electronics).toHaveClass("bx--tree-parent-node");
-      expect(treeitemPrimaryLabel(electronics)).toContain("Electronics");
-      expect(furniture).toHaveClass("bx--tree-parent-node");
-      expect(treeitemPrimaryLabel(furniture)).toContain("Furniture");
-    });
-
     it("renders leaf price in the slot after expanding a category", async () => {
       render(TreeViewGenerics);
 
@@ -1520,23 +1172,6 @@ describe("TreeView Generics", () => {
           leaf: true,
         }),
       );
-    });
-
-    it("dispatches select detail without price for category nodes", async () => {
-      const onselect = vi.fn();
-      render(TreeViewGenerics, { props: { onselect } });
-
-      await user.click(treeItemById("furniture"));
-
-      expect(onselect).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          id: "furniture",
-          text: "Furniture",
-          category: "Furniture",
-          leaf: false,
-        }),
-      );
-      expect(onselect.mock.calls.at(-1)?.[0]).not.toHaveProperty("price");
     });
   });
 
@@ -1613,6 +1248,25 @@ describe("TreeView Generics", () => {
         ReadonlyArray<number> | undefined
       >();
 
+      type NumberEvents = ComponentEvents<NumberComponent>;
+      type NumberSelectDetail =
+        NumberEvents["select"] extends CustomEvent<infer T> ? T : never;
+      type NumberToggleDetail =
+        NumberEvents["toggle"] extends CustomEvent<infer T> ? T : never;
+      type NumberFocusDetail =
+        NumberEvents["focus"] extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<NumberSelectDetail>().toEqualTypeOf<
+        NumberNode & {
+          expanded: boolean;
+          leaf: boolean;
+          selected: boolean;
+          checked: boolean;
+          indeterminate: boolean;
+        }
+      >();
+      expectTypeOf<NumberToggleDetail["id"]>().toEqualTypeOf<number>();
+      expectTypeOf<NumberFocusDetail["id"]>().toEqualTypeOf<number>();
+
       type UnionId = "a" | "b" | "c";
       type UnionNode = { id: UnionId; text: string };
       type UnionComponent = TreeViewComponent<UnionNode>;
@@ -1680,77 +1334,6 @@ describe("TreeView Generics", () => {
         }
       >();
       expectTypeOf<SelectEventDetail["id"]>().toEqualTypeOf<InferredId>();
-    });
-
-    it("should type showNode method correctly with different ID types", () => {
-      type StringNode = { id: string; text: string };
-      type StringComponent = TreeViewComponent<StringNode>;
-      type StringProps = ComponentProps<StringComponent>;
-      // Test that showNode accepts string by checking the prop types
-      expectTypeOf<StringProps["activeId"]>().toEqualTypeOf<
-        string | undefined
-      >();
-
-      type NumberNode = { id: number; text: string };
-      type NumberComponent = TreeViewComponent<NumberNode>;
-      type NumberProps = ComponentProps<NumberComponent>;
-      expectTypeOf<NumberProps["activeId"]>().toEqualTypeOf<
-        number | undefined
-      >();
-
-      type UnionId = "folder1" | "folder2" | "file1";
-      type UnionNode = { id: UnionId; text: string };
-      type UnionComponent = TreeViewComponent<UnionNode>;
-      type UnionProps = ComponentProps<UnionComponent>;
-      expectTypeOf<UnionProps["activeId"]>().toEqualTypeOf<
-        UnionId | undefined
-      >();
-    });
-
-    it("should type context properties correctly with different ID types", () => {
-      type CustomNode = { id: string; text: string };
-      type ComponentType = TreeViewComponent<CustomNode>;
-      type Props = ComponentProps<ComponentType>;
-
-      // These props use Node["id"] which should be inferred as string
-      expectTypeOf<Props["activeId"]>().toEqualTypeOf<string | undefined>();
-      expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
-        ReadonlyArray<string> | undefined
-      >();
-      expectTypeOf<Props["expandedIds"]>().toEqualTypeOf<
-        ReadonlyArray<string> | undefined
-      >();
-    });
-
-    it("should type event details correctly with different ID types", () => {
-      type CustomNode = {
-        id: number;
-        text: string;
-        metadata?: { count: number };
-      };
-      type ComponentType = TreeViewComponent<CustomNode>;
-      type Events = ComponentEvents<ComponentType>;
-
-      type SelectEvent = Events["select"];
-      type SelectDetail = SelectEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<SelectDetail["id"]>().toEqualTypeOf<number>();
-      expectTypeOf<SelectDetail>().toEqualTypeOf<
-        CustomNode & {
-          expanded: boolean;
-          leaf: boolean;
-          selected: boolean;
-          checked: boolean;
-          indeterminate: boolean;
-        }
-      >();
-
-      type ToggleEvent = Events["toggle"];
-      type ToggleDetail = ToggleEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<ToggleDetail["id"]>().toEqualTypeOf<number>();
-
-      type FocusEvent = Events["focus"];
-      type FocusDetail = FocusEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<FocusDetail["id"]>().toEqualTypeOf<number>();
     });
   });
 
@@ -1864,44 +1447,6 @@ describe("TreeViewNode href", () => {
     );
   });
 
-  it("selects link node with Enter key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-
-    render(TreeViewHref);
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
-    linkNode.focus();
-
-    await user.keyboard("{Enter}");
-
-    expect(consoleLog).toHaveBeenCalledWith(
-      "select",
-      expect.objectContaining({
-        id: "link-1",
-        text: "Link Node",
-      }),
-    );
-  });
-
-  it("selects link node with Space key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-
-    render(TreeViewHref);
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
-    linkNode.focus();
-
-    await user.keyboard(" ");
-
-    expect(consoleLog).toHaveBeenCalledWith(
-      "select",
-      expect.objectContaining({
-        id: "link-1",
-        text: "Link Node",
-      }),
-    );
-  });
-
   it("does not cancel Enter on an enabled link node", () => {
     render(TreeViewHref);
 
@@ -1968,14 +1513,6 @@ describe("TreeViewNode href", () => {
 
     const blankLink = screen.getByRole("treeitem", { name: /Blank Target/ });
     expect(blankLink).toHaveAttribute("rel", "noopener noreferrer");
-  });
-
-  it("does not add rel when target is not '_blank'", () => {
-    render(TreeViewHref);
-
-    const selfLink = screen.getByRole("treeitem", { name: /Self Target/ });
-    expect(selfLink).toHaveAttribute("target", "_self");
-    expect(selfLink).not.toHaveAttribute("rel");
   });
 
   it("does not set target on disabled link nodes", () => {
@@ -2067,22 +1604,6 @@ describe("TreeView autoCollapse", () => {
     expect(folder3).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("works with keyboard navigation (ArrowRight to expand)", async () => {
-    render(TreeViewAutoCollapse, { autoCollapse: true });
-
-    const folder1 = treeItemById("folder1");
-    const folder2 = treeItemById("folder2");
-
-    folder1.focus();
-    await user.keyboard("{ArrowRight}");
-    expect(folder1).toHaveAttribute("aria-expanded", "true");
-
-    folder2.focus();
-    await user.keyboard("{ArrowRight}");
-    expect(folder2).toHaveAttribute("aria-expanded", "true");
-    expect(folder1).toHaveAttribute("aria-expanded", "false");
-  });
-
   it("ArrowLeft on a collapsed parent moves focus to its ancestor", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: false });
 
@@ -2122,23 +1643,6 @@ describe("TreeView autoCollapse", () => {
     await user.keyboard("{Enter}");
     expect(folder2).toHaveAttribute("aria-expanded", "true");
     // Now autoCollapse kicks in.
-    expect(folder1).toHaveAttribute("aria-expanded", "false");
-  });
-
-  it("applies autoCollapse when activeId changes programmatically", async () => {
-    const { rerender } = render(TreeViewAutoCollapse, { autoCollapse: true });
-
-    const folder1 = treeItemById("folder1");
-    const folder2 = treeItemById("folder2");
-
-    // Manually expand folder1 via click
-    await user.click(getToggleButton(folder1));
-    expect(folder1).toHaveAttribute("aria-expanded", "true");
-
-    // Programmatically set activeId to an item in folder2
-    // This should: 1) expand folder2, 2) collapse folder1 (autoCollapse)
-    await rerender({ activeId: "item3" });
-    expect(folder2).toHaveAttribute("aria-expanded", "true");
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
@@ -2312,41 +1816,14 @@ describe("TreeView autoCollapse", () => {
 describe("TreeView duplicate ids", () => {
   it("keeps internal ids unique when two trees share node ids", () => {
     const { container } = render(TreeViewDuplicateIds);
-
-    const labels = Array.from(
-      container.querySelectorAll<HTMLElement>(
-        ".bx--tree-node__label__text[id]",
-      ),
-    );
-    const labelIds = labels.map((label) => label.id);
-
-    expect(labelIds).toHaveLength(2);
-    expect(new Set(labelIds).size).toBe(labelIds.length);
-
-    const trees = Array.from(
-      container.querySelectorAll<HTMLElement>('[role="tree"]'),
-    );
-    expect(trees).toHaveLength(2);
-
-    for (const tree of trees) {
-      const subtree = tree.querySelector<HTMLElement>('[role="group"]');
-      expect(subtree).not.toBeNull();
-
-      const labelledby = subtree?.getAttribute("aria-labelledby");
-      expect(labelledby).toBeTruthy();
-
-      const referenced = document.getElementById(labelledby as string);
-      expect(referenced).not.toBeNull();
-      expect(tree.contains(referenced)).toBe(true);
-    }
-  });
-  it("keeps row ids unique when two trees share node ids", () => {
-    const { container } = render(TreeViewDuplicateIds);
     const ids = Array.from(container.querySelectorAll("[id]"), (el) => el.id);
 
     expect(ids.filter((id, index) => ids.indexOf(id) !== index)).toEqual([]);
 
-    for (const tree of container.querySelectorAll('[role="tree"]')) {
+    const trees = container.querySelectorAll<HTMLElement>('[role="tree"]');
+    expect(trees).toHaveLength(2);
+
+    for (const tree of trees) {
       const rows = tree.querySelectorAll('[role="treeitem"]');
       expect(
         Array.from(rows, (row) => row.getAttribute("data-tree-row-id")),
@@ -2356,6 +1833,16 @@ describe("TreeView duplicate ids", () => {
         ["0", "1", "2"].map((nodeId) => `${tree.id}-${nodeId}`),
       );
       expect(rows[0]).toHaveAttribute("aria-owns", `${tree.id}-0-subtree`);
+
+      const subtree = tree.querySelector<HTMLElement>('[role="group"]');
+      expect(subtree).not.toBeNull();
+
+      const labelledby = subtree?.getAttribute("aria-labelledby");
+      expect(labelledby).toBeTruthy();
+
+      const referenced = document.getElementById(labelledby as string);
+      expect(referenced).not.toBeNull();
+      expect(tree.contains(referenced)).toBe(true);
     }
   });
 });

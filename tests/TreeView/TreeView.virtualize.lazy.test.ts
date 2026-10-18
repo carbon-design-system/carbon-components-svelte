@@ -5,16 +5,6 @@ import { findRowById } from "./helpers";
 import TreeViewVirtualizeLazy from "./TreeView.virtualize.lazy.test.svelte";
 
 describe("TreeView virtualize + hasChildren lazy load", () => {
-  it("renders an expander for unloaded hasChildren parents", () => {
-    render(TreeViewVirtualizeLazy);
-
-    const root = findRowById("root-a");
-    expect(root).not.toBeNull();
-    expect(root).toHaveAttribute("aria-expanded", "false");
-    expect(root?.querySelector(".bx--tree-parent-node__toggle")).not.toBeNull();
-    expect(findRowById("root-a-child-1")).toBeNull();
-  });
-
   it("mounts fetched children as virtual rows after expand resolves", async () => {
     const { component } = render(TreeViewVirtualizeLazy);
 
@@ -24,6 +14,8 @@ describe("TreeView virtualize + hasChildren lazy load", () => {
       ".bx--tree-parent-node__toggle",
     );
     assert(caret instanceof HTMLElement);
+    expect(root).toHaveAttribute("aria-expanded", "false");
+    expect(findRowById("root-a-child-1")).toBeNull();
     await user.click(caret);
     await tick();
 
