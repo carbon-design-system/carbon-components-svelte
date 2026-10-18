@@ -107,6 +107,7 @@
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
@@ -321,7 +322,9 @@
     getItems: () => $items,
     isDisabled: (item) => item.disabled,
     getActiveIndex: () => $focusedIndex,
-    onMove: (index) => focusedIndex.set(index),
+    onMove: (index, event) => {
+      if (!hasModifierKey(event)) focusedIndex.set(index);
+    },
   };
 
   afterUpdate(() => {
@@ -400,7 +403,7 @@
 
   /** @param {KeyboardEvent} event */
   function handleMenuKeydown(event) {
-    if (ARROW_KEYS.includes(event.key)) {
+    if (ARROW_KEYS.includes(event.key) && !hasModifierKey(event)) {
       event.preventDefault();
     } else if (isTypeaheadKey(event)) {
       event.preventDefault();
@@ -470,6 +473,7 @@
   on:keydown
   on:keydown={(event) => {
     if (open) {
+      if (hasModifierKey(event) && event.key !== "Escape") return;
       if (ARROW_KEYS.includes(event.key)) {
         event.preventDefault();
       } else if (event.key === "Home") {

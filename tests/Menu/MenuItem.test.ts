@@ -209,6 +209,29 @@ describe("MenuItem", () => {
       expect(event.defaultPrevented).toBe(true);
     });
 
+    it.each([
+      { key: "ArrowLeft", mod: { altKey: true }, inSubmenu: true },
+      { key: "ArrowRight", mod: { metaKey: true }, inSubmenu: false },
+      { key: "ArrowDown", mod: { metaKey: true }, inSubmenu: false },
+    ])(
+      "leaves $key with $mod to the browser",
+      async ({ key, mod, inSubmenu }) => {
+        render(MenuItemFixture);
+
+        await user.click(screen.getByRole("button", { name: "Trigger" }));
+        const parent = screen.getByRole("menuitem", { name: "Export as" });
+        parent.focus();
+        if (inSubmenu) await user.keyboard("{ArrowRight}");
+        const focused = document.activeElement as HTMLElement;
+
+        const notPrevented = await fireEvent.keyDown(focused, { key, ...mod });
+
+        expect(notPrevented).toBe(true);
+        expect(focused).toHaveFocus();
+        expect(parent).toHaveAttribute("aria-expanded", String(inSubmenu));
+      },
+    );
+
     describe("hover", () => {
       beforeEach(() => {
         vi.useFakeTimers();
