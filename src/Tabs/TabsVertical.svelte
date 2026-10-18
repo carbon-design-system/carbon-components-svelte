@@ -55,6 +55,7 @@
   import { breakpoints } from "../Breakpoint/breakpoints.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
@@ -502,6 +503,8 @@
         skipDisabled: true,
         getActiveIndex,
         onMove: (index, event) => {
+          // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
+          if (hasModifierKey(event)) return;
           // Prevent the arrow keys from also scrolling the page.
           event.preventDefault();
           if (activation === "manual") {
