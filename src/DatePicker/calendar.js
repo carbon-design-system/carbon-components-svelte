@@ -121,6 +121,58 @@ function createListenerGroup() {
 }
 
 /**
+ * flatpickr instance members the engine does not implement. A plugin that
+ * reads one gets a warning instead of failing silently. Time picker and
+ * mobile input members are left out: flatpickr leaves them unset too
+ * unless those (unsupported) features are on.
+ */
+const UNIMPLEMENTED_MEMBERS = new Set([
+  "monthsDropdownContainer",
+  "currentMonthElement",
+  "revFormat",
+  "formats",
+  "tokenRegex",
+  "minRangeDate",
+  "maxRangeDate",
+  "_selectedDateObj",
+  "minDateHasTime",
+  "maxDateHasTime",
+  "_setHoursFromDate",
+  "_debouncedChange",
+  "_handlers",
+  "__hideNextMonthArrow",
+  "__hidePrevMonthArrow",
+]);
+
+/** @type {Set<string>} */
+const warnedMembers = new Set();
+
+/**
+ * The instance as a plugin sees it: reading a flatpickr member the engine
+ * does not implement warns once per member.
+ *
+ * @param {any} self
+ */
+function pluginView(self) {
+  return new Proxy(self, {
+    get(target, key, receiver) {
+      if (
+        typeof key === "string" &&
+        UNIMPLEMENTED_MEMBERS.has(key) &&
+        !(key in target) &&
+        !warnedMembers.has(key)
+      ) {
+        warnedMembers.add(key);
+        console.warn(
+          `[carbon-components-svelte] DatePicker: a calendar plugin read \`${key}\`, which the built-in calendar does not implement.`,
+        );
+      }
+      return Reflect.get(target, key, receiver);
+    },
+  });
+}
+
+/**
  * Compact calendar engine that drives Carbon's date picker. Produces the
  * same DOM, hooks, and instance surface that flatpickr did (class names and
  * all), so Carbon's styles and `bind:calendar` consumers keep working, but
@@ -173,6 +225,16 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.isOpen = false;
   self.selectedDates = [];
   self.now = new Date();
+  self.isMobile = false;
+  // flatpickr plugins push their name and their controls into these.
+  self.loadedPlugins = [];
+  self.pluginElements = [];
+  self.utils = {
+    getDaysInMonth: (month = self.currentMonth, year = self.currentYear) =>
+      daysInMonth(year, month),
+  };
+  self.pad = (/** @type {string | number} */ value) => `0${value}`.slice(-2);
+  self._createElement = createElement;
 
   // --- Config -----------------------------------------------------------
 
@@ -296,6 +358,9 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   applyConfig(userConfig);
+  if (config.now !== undefined) {
+    self.now = self.parseDate(config.now) ?? self.now;
+  }
   for (const option of [
     "allowInput",
     "allowInvalidPreload",
@@ -342,7 +407,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
   }
   for (const plugin of userConfig.plugins ?? []) {
-    const pluginConfig = plugin(self) || {};
+    const pluginConfig = plugin(pluginView(self)) || {};
     for (const key of Object.keys(pluginConfig)) {
       if (HOOKS.includes(key)) {
         config[key] = arrayify(pluginConfig[key])
@@ -623,7 +688,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       const year = createElement("input", "numInput cur-year");
       year.type = "number";
       year.tabIndex = -1;
-      year.setAttribute("aria-label", "Year");
+      year.setAttribute("aria-label", self.l10n.yearAriaLabel ?? "Year");
       wrapper.append(
         year,
         createElement("span", "arrowUp"),
@@ -885,7 +950,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     );
     container.tabIndex = -1;
     const start = decadeStart() - 1;
-    const now = new Date();
+    const now = self.now;
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < 12; i++) {
       const date = isYear
@@ -1074,7 +1139,13 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.innerContainer = createElement("div", "flatpickr-innerContainer");
     if (config.weekNumbers) {
       const wrapper = createElement("div", "flatpickr-weekwrapper");
-      wrapper.appendChild(createElement("span", "flatpickr-weekday", "Wk"));
+      wrapper.appendChild(
+        createElement(
+          "span",
+          "flatpickr-weekday",
+          self.l10n.weekAbbreviation ?? "Wk",
+        ),
+      );
       self.weekNumbers = createElement("div", "flatpickr-weeks");
       wrapper.appendChild(self.weekNumbers);
       self.innerContainer.appendChild(wrapper);
@@ -2016,6 +2087,21 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
   }
   self.destroy = destroy;
+  self.updateValue = updateValue;
+  self._positionCalendar = positionCalendar;
+  /**
+   * flatpickr's listener helper for plugins: removed on destroy.
+   *
+   * @param {EventTarget | EventTarget[]} target
+   * @param {string | string[]} type
+   * @param {EventListener} handler
+   * @param {AddEventListenerOptions} [options]
+   */
+  self._bind = (target, type, handler, options) => {
+    for (const t of arrayify(target)) {
+      for (const ty of arrayify(type)) listeners.add(t, ty, handler, options);
+    }
+  };
 
   // --- Init -------------------------------------------------------------
 

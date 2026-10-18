@@ -408,3 +408,121 @@ describe("keyboard", () => {
     expect(instance.currentMonth).toBe(3);
   });
 });
+
+describe("flatpickr compatibility", () => {
+  it("treats the `now` option as today", () => {
+    const { instance } = create({ now: "2020-01-10" });
+
+    expect(instance.currentYear).toBe(2020);
+    expect(instance.currentMonth).toBe(0);
+    expect(day(instance, 10)).toHaveClass("today");
+  });
+
+  it("renders a flatpickr l10n module", () => {
+    // flatpickr/dist/l10n/de, verbatim.
+    const German = {
+      weekdays: {
+        shorthand: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+        longhand: [
+          "Sonntag",
+          "Montag",
+          "Dienstag",
+          "Mittwoch",
+          "Donnerstag",
+          "Freitag",
+          "Samstag",
+        ],
+      },
+      months: {
+        shorthand: [
+          "Jan",
+          "Feb",
+          "Mär",
+          "Apr",
+          "Mai",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Okt",
+          "Nov",
+          "Dez",
+        ],
+        longhand: [
+          "Januar",
+          "Februar",
+          "März",
+          "April",
+          "Mai",
+          "Juni",
+          "Juli",
+          "August",
+          "September",
+          "Oktober",
+          "November",
+          "Dezember",
+        ],
+      },
+      firstDayOfWeek: 1,
+      weekAbbreviation: "KW",
+      rangeSeparator: " bis ",
+      scrollTitle: "Zum Ändern scrollen",
+      toggleTitle: "Zum Umschalten klicken",
+      time_24hr: true,
+    };
+    const { instance } = create({
+      locale: German,
+      defaultDate: "2024-03-15",
+      weekNumbers: true,
+    });
+    const { calendarContainer } = instance;
+    const text = (selector: string) =>
+      [...calendarContainer.querySelectorAll(selector)].map(
+        (el) => el.textContent,
+      );
+
+    expect(text(".cur-month")).toEqual(["März"]);
+    expect(text(".flatpickr-weekday")).toEqual([
+      "KW",
+      "Mo",
+      "Di",
+      "Mi",
+      "Do",
+      "Fr",
+      "Sa",
+      "So",
+    ]);
+    expect(day(instance, 15)).toHaveAttribute("aria-label", "März 15, 2024");
+  });
+
+  it("runs a plugin written against flatpickr's instance", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const onButtonClick = vi.fn();
+    // The shape of flatpickr's bundled plugins (confirmDate, labelPlugin).
+    const plugin = (fp: CalendarInstance) => {
+      fp.loadedPlugins.push("example");
+      return {
+        onReady() {
+          const button = fp._createElement("button", "example-button", "OK");
+          fp._bind(button, "click", onButtonClick);
+          fp.pluginElements.push(button);
+          fp.calendarContainer.appendChild(button);
+          void (fp as unknown as { _setHoursFromDate: unknown })
+            ._setHoursFromDate;
+        },
+      };
+    };
+    const { instance } = create({ plugins: [plugin] });
+
+    instance.calendarContainer
+      .querySelector<HTMLButtonElement>(".example-button")
+      ?.click();
+
+    expect(instance.loadedPlugins).toEqual(["example"]);
+    expect(onButtonClick).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("`_setHoursFromDate`"),
+    );
+    warn.mockRestore();
+  });
+});

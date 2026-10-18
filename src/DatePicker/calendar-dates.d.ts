@@ -4,6 +4,10 @@ export interface CalendarLocale {
   firstDayOfWeek: number;
   rangeSeparator: string;
   ordinal?: (day: number) => string;
+  /** Week number column heading. Defaults to `"Wk"`. */
+  weekAbbreviation?: string;
+  /** Label of the year input. Defaults to `"Year"`. */
+  yearAriaLabel?: string;
 }
 
 export interface FormatContext {
