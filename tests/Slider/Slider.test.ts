@@ -775,20 +775,46 @@ describe("Slider", () => {
     expect(oninput).toHaveBeenCalledWith(1);
   });
 
-  it("should not accumulate floating-point drift with decimal steps", async () => {
-    render(Slider, { props: { min: 0, max: 1, step: 0.1, value: 0 } });
-
-    const slider = screen.getByRole("slider");
-    await user.tab();
-    expect(slider).toHaveFocus();
-
-    for (let i = 0; i < 4; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential execution is intentional
-      await user.keyboard("{ArrowRight}");
-    }
-
-    expect(slider).toHaveAttribute("aria-valuenow", "0.4");
-  });
+  it.each([
+    {
+      name: "0.1 steps by key",
+      props: { max: 1, step: 0.1 },
+      keys: "{ArrowRight}{ArrowRight}{ArrowRight}",
+      expected: "0.3",
+    },
+    {
+      name: "0.1 steps by click",
+      props: { max: 1, step: 0.1 },
+      clientX: 60,
+      expected: "0.3",
+    },
+    {
+      name: "a grid counted from min by key",
+      props: { min: 3, max: 103, step: 5, value: 3 },
+      keys: "{ArrowRight}",
+      expected: "8",
+    },
+  ])(
+    "lands on the step grid: $name",
+    async ({ props, keys, clientX, expected }) => {
+      const { container } = render(Slider, { props });
+      const thumb = screen.getByRole("slider");
+      if (keys) {
+        thumb.focus();
+        await user.keyboard(keys);
+      } else {
+        const slider = container.querySelector(".bx--slider");
+        const track = container.querySelector(".bx--slider__track");
+        assert(slider instanceof HTMLElement && track instanceof HTMLElement);
+        vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+          rect({ right: 200, height: 2 }),
+        );
+        await fireEvent.mouseDown(slider, { clientX });
+        await fireEvent.mouseUp(window);
+      }
+      expect(thumb).toHaveAttribute("aria-valuenow", expected);
+    },
+  );
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
   it("should round shift+arrow values to valid steps", async () => {

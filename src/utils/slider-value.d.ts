@@ -29,6 +29,12 @@ export function getClientX(event: MouseEvent | TouchEvent): number | null;
 export function getClientY(event: MouseEvent | TouchEvent): number | null;
 
 /**
+ * Snap `value` to the `step` grid counted from `min`, rounded to the
+ * decimals in `step`.
+ */
+export function snapToStep(value: number, min: number, step: number): number;
+
+/**
  * Compute the slider value for a horizontal client position within a
  * track, snapped to `step` and clamped to `[min, max]`.
  */
