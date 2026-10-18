@@ -407,15 +407,24 @@
       typeaheadSearch(event.key);
     } else if (event.key === "Escape") {
       event.stopPropagation();
-      const shouldContinue = dispatch(
-        "close",
-        { trigger: "escape-key" },
-        { cancelable: true },
-      );
-      if (shouldContinue) {
-        open = false;
-        buttonRef.focus({ preventScroll: true });
-      }
+      closeFromKeyboard();
+    } else if (event.key === "Tab") {
+      // Close like Escape, then let Tab move on from the trigger. Tabbing
+      // from the menu itself would leave it open, and from a portalled menu
+      // at the end of <body> focus would fall to <body>.
+      closeFromKeyboard();
+    }
+  }
+
+  function closeFromKeyboard() {
+    const shouldContinue = dispatch(
+      "close",
+      { trigger: "escape-key" },
+      { cancelable: true },
+    );
+    if (shouldContinue) {
+      open = false;
+      buttonRef.focus({ preventScroll: true });
     }
   }
 </script>
@@ -471,15 +480,7 @@
         last();
       } else if (event.key === "Escape") {
         event.stopPropagation();
-        const shouldContinue = dispatch(
-          "close",
-          { trigger: "escape-key" },
-          { cancelable: true },
-        );
-        if (shouldContinue) {
-          open = false;
-          buttonRef.focus({ preventScroll: true });
-        }
+        closeFromKeyboard();
       }
     }
   }}

@@ -21,6 +21,7 @@
   export let preventItemClick = false;
   /** Disables the "API documentation" link item. */
   export let disabledLink = false;
+  export let withNextField = false;
 </script>
 
 <OverflowMenu
@@ -56,3 +57,6 @@
     on:click={() => onItemClick("Delete service")}
   />
 </OverflowMenu>
+{#if withNextField}
+  <input aria-label="Next field">
+{/if}

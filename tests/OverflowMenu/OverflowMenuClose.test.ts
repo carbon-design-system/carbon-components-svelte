@@ -20,6 +20,24 @@ describe("OverflowMenu close event trigger", () => {
     expect(closeDetails(onClose)).toEqual([{ trigger: "escape-key" }]);
   });
 
+  it.each([false, true])(
+    'closes with trigger "escape-key" when Tab leaves the menu (portalMenu=%s)',
+    async (portalMenu) => {
+      const onClose = vi.fn();
+      render(OverflowMenu, {
+        props: { onClose, portalMenu, withNextField: true },
+      });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+      await user.tab();
+
+      expect(menuButton).toHaveAttribute("aria-expanded", "false");
+      expect(closeDetails(onClose)).toEqual([{ trigger: "escape-key" }]);
+      expect(screen.getByRole("textbox", { name: "Next field" })).toHaveFocus();
+    },
+  );
+
   it('dispatches close with trigger "outside-click" when clicking outside', async () => {
     const onClose = vi.fn();
     render(OverflowMenu, { props: { onClose } });
