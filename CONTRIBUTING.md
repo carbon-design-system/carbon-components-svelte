@@ -1120,6 +1120,17 @@ function register(item) {
 - Matching `register()` code can still measure differently. If the consumer runs behind `tick()`, a synchronous `render()` never waits for that work. `TagSet` and `UserAvatarGroup` share an `insertByDomOrder` register shape. Only the avatar group's `$:` block runs synchronously, so only that one showed the cost.
 - A Svelte child per option is still registration cost. Pagination's page list uses native `<option>` elements; page sizes still use `SelectItem` because that set is small. See [`Pagination.svelte`](src/Pagination/Pagination.svelte).
 
+#### Per-item children
+
+A component that renders a library component once per row or option pays for every instance, even in production builds. Svelte compiles each file on its own, so a child still costs a context lookup, rest-props proxies, its `$:` blocks, and a listener per forwarded event. `DataTable` renders its row selection inputs, and `MultiSelect` its option checkboxes, as plain markup for this reason.
+
+| Do | Why |
+| --- | --- |
+| Fold a child into plain markup only when it renders per item in an unbounded, non-virtualized loop and the parent already owns its state. | A child that builds stores or context fallbacks (`Checkbox`, `RadioButton`) cost 90 to 200 µs per instance. A thin wrapper or an icon cost 15 to 30 µs, which nobody feels below hundreds of instances. |
+| Keep icon components. Don't inline their SVG markup. | The saving is small, and every copy of the path data has to be kept in sync. |
+| Before folding, list everything the child does besides markup: form reset, click workarounds, `overflowTitle`, context. | Plain markup silently drops it. `MultiSelect` needed its own reset hook, and `DataTable` its own Firefox shift-click workaround ([`forward-shift-click.js`](src/utils/forward-shift-click.js)). |
+| Compare normalized markup (sorted attributes and classes, plus `checked` and `indeterminate`) before and after, on Svelte 3, 4, and 5. | Dropping a `{...$$restProps}` spread changes how attributes are written. Svelte 5 writes `disabled` on a `div` as a property, so the attribute disappears. Svelte 3 and 4 write `value={undefined}` on an input as `"undefined"`. |
+
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
