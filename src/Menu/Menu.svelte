@@ -194,10 +194,17 @@
   // A submenu leaves Escape/Tab to the root menu, which closes the whole tree
   // and focuses its anchor. Handling it here too would focus the parent item
   // just as the root unmounts it, dropping focus to <body>.
-  const isSubmenu = !!getContext("carbon:Menu");
+  const parentCtx = getContext("carbon:Menu");
+  const isSubmenu = !!parentCtx;
+
+  // Ids of `selected` items a `MenuItemGroup` has already seeded. Items and
+  // submenus remount on every open, so this lives on the root menu.
+  /** @type {Set<string>} */
+  const seededIds = parentCtx?.seededIds ?? new Set();
 
   setContext("carbon:Menu", {
     close,
+    seededIds,
     registerIndented: indentedColumn.register,
     unregisterIndented: indentedColumn.unregister,
     hasIndentedItems: indentedColumn.hasAny,
