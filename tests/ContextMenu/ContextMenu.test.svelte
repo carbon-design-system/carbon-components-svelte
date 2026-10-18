@@ -9,6 +9,7 @@
   export let y = 0;
   export let ref: ComponentProps<ContextMenu>["ref"] = null;
   export let withSubmenu = false;
+  export let withRootSettings = false;
   export let withDisabled = false;
   export let submenuDisabled = false;
   export let optionDisabled = false;
@@ -42,6 +43,9 @@
       <ContextMenuOption labelText="Submenu option 1" />
       <ContextMenuOption labelText="Submenu option 2" />
     </ContextMenuOption>
+    {#if withRootSettings}
+      <ContextMenuOption labelText="Settings" />
+    {/if}
   {:else if withDisabled}
     <ContextMenuOption labelText="Disabled option" disabled />
   {:else}

@@ -111,7 +111,7 @@ describe("Portal", () => {
     let portalElement = document.querySelector("[data-portal]");
     expect(portalElement).not.toBeInTheDocument();
 
-    rerender({ showPortal: true });
+    await rerender({ showPortal: true });
 
     portalContent = await screen.findByText("Portal content");
     expect(portalContent).toBeInTheDocument();
@@ -119,7 +119,7 @@ describe("Portal", () => {
     portalElement = portalContent.closest("[data-portal]");
     expect(portalElement).toBeInTheDocument();
 
-    rerender({ showPortal: false });
+    await rerender({ showPortal: false });
     await tick();
 
     portalContent = screen.queryByText("Portal content");
@@ -203,7 +203,7 @@ describe("Portal", () => {
 
     expect(component.ref).toBeNull();
 
-    rerender({ showPortal: true });
+    await rerender({ showPortal: true });
 
     const portalContent = await screen.findByText("Portal content");
     const portalElement = portalContent.closest("[data-portal]");
@@ -212,7 +212,7 @@ describe("Portal", () => {
     expect(component.ref).toBeInstanceOf(HTMLElement);
     expect(component.ref).toBe(portalElement);
 
-    rerender({ showPortal: false });
+    await rerender({ showPortal: false });
     await tick();
 
     expect(component.ref).toBeNull();
@@ -284,7 +284,7 @@ describe("Portal", () => {
 
       expect(portalElement.parentElement).toBe(firstTarget);
 
-      rerender({ target: secondTarget });
+      await rerender({ target: secondTarget });
       await tick();
 
       expect(portalElement.parentElement).toBe(secondTarget);

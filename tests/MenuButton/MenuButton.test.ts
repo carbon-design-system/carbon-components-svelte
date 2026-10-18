@@ -156,14 +156,19 @@ describe("MenuButton", () => {
     render(MenuButtonFixture);
 
     const trigger = screen.getByRole("button", { name: "Actions" });
+    const onFocus = vi.fn();
+    trigger.addEventListener("focus", onFocus);
 
+    // mousedown's default would focus the trigger. The menu opens by
+    // moving focus to its first item, so assert on the focus event itself,
+    // not just the focus state after the fact.
     await user.click(trigger);
-    expect(trigger).not.toHaveFocus();
-
     await user.click(trigger);
-    expect(trigger).not.toHaveFocus();
+    expect(onFocus).not.toHaveBeenCalled();
 
+    // Keyboard users still get normal focus via Tab.
     await user.tab();
+    expect(onFocus).toHaveBeenCalledTimes(1);
     expect(trigger).toHaveFocus();
   });
 

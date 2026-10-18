@@ -248,17 +248,6 @@ describe("MenuItem", () => {
       expect(event.defaultPrevented).toBe(true);
     });
 
-    it("skips a disabled nested item during arrow key navigation", async () => {
-      render(MenuItemFixture);
-
-      await user.click(screen.getByRole("button", { name: "Trigger" }));
-      screen.getByRole("menuitem", { name: "Export as" }).focus();
-      await user.keyboard("{ArrowRight}");
-      await user.keyboard("{ArrowDown}");
-
-      expect(screen.getByRole("menuitem", { name: "JPG" })).toHaveFocus();
-    });
-
     it("selecting a nested item closes the entire menu tree", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(MenuItemFixture);

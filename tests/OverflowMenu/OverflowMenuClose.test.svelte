@@ -4,9 +4,11 @@
 
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
   export let cancelClose = false;
+  export let open = false;
 </script>
 
 <OverflowMenu
+  bind:open
   on:close={(e) => {
     if (cancelClose) e.preventDefault();
     onClose(e);
