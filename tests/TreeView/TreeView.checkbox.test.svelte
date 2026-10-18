@@ -1,9 +1,16 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   type Id = TreeNode["id"];
+
+  let treeview: TreeView;
+  export function showNode(...args: Parameters<TreeView["showNode"]>) {
+    treeview.showNode(...args);
+  }
 
   export let selectionMode: ComponentProps<TreeView>["selectionMode"] =
     "checkbox";
@@ -14,6 +21,10 @@
   export let virtualize: ComponentProps<TreeView>["virtualize"] = undefined;
   /** Collapsed roots appended after `nodes`, so windowing is active. */
   export let padding = 0;
+  /** Spy for the per-node `check` event. */
+  export let onCheck: (detail: unknown) => void = () => {};
+  /** Spy for the per-node `select` event, fired by link rows. */
+  export let onSelect: (detail: unknown) => void = () => {};
   /** Spy for the aggregate `check:change` event. */
   export let onCheckChange: (detail: {
     checkedIds: ReadonlyArray<Id>;
@@ -53,6 +64,7 @@
 </script>
 
 <TreeView
+  bind:this={treeview}
   labelText="Permissions"
   nodes={allNodes}
   {selectionMode}
@@ -62,5 +74,7 @@
   {virtualize}
   bind:checkedIds
   bind:indeterminateIds
+  on:check={({ detail }) => onCheck(detail)}
+  on:select={({ detail }) => onSelect(detail)}
   on:check:change={({ detail }) => onCheckChange(detail)}
 />

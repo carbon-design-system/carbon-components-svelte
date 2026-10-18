@@ -53,6 +53,28 @@ describe("toHierarchy", () => {
         { id: 2, name: "Root 2", nodes: [{ id: 4, name: "Child 2", pid: 2 }] },
       ],
     ],
+    [
+      "nests children and grandchildren listed before their parents",
+      [
+        { id: 3, name: "Grandchild", pid: 2 },
+        { id: 2, name: "Child", pid: 1 },
+        { id: 1, name: "Parent" },
+      ],
+      [
+        {
+          id: 1,
+          name: "Parent",
+          nodes: [
+            {
+              id: 2,
+              name: "Child",
+              pid: 1,
+              nodes: [{ id: 3, name: "Grandchild", pid: 2 }],
+            },
+          ],
+        },
+      ],
+    ],
     ["returns an empty array for empty input", [], []],
     [
       "treats a non-existent parent id as a root",

@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import { findRowById } from "../utils/tree-item-by-id";
+import { flushMacrotask } from "../utils/flush-macrotask";
+import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
+import { levelNodes } from "./fixtures";
 import TreeViewGetNode from "./TreeView.getNode.test.svelte";
 import TreeViewShowNodeIdEscape from "./TreeView.showNode.idEscape.test.svelte";
 import TreeViewShowNode from "./TreeView.showNode.test.svelte";
@@ -24,6 +26,20 @@ describe("TreeView.getNode / getNodes", () => {
     await user.click(getButton("get-missing-node"));
 
     expect(onGetNode).toHaveBeenCalledWith(null);
+  });
+
+  it("finds a node that only exists after nodes is replaced", async () => {
+    const onGetNode = vi.fn();
+    const { rerender } = render(TreeViewGetNode, { onGetNode });
+
+    await rerender({
+      nodes: [...levelNodes(), { id: "late", text: "Loaded later" }],
+    });
+    await user.click(getButton("get-late-node"));
+
+    expect(onGetNode).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "late", text: "Loaded later" }),
+    );
   });
 
   it("resolves multiple ids and omits ids with no matching node", async () => {
@@ -75,6 +91,14 @@ describe("TreeView.showNode with options", () => {
     expect(getSelectedItem()).not.toBeInTheDocument();
     expect(component.activeId).toBe("");
     expect(component.selectedIds).toEqual([]);
+  });
+
+  it("leaves focus where it was with focus: false", async () => {
+    await user.click(getButton("expand-only"));
+    await flushMacrotask();
+
+    expect(getButton("expand-only")).toHaveFocus();
+    expect(treeItemById(3)).not.toHaveFocus();
   });
 
   it("selects node without expanding or focusing (expand: false, select: true, focus: false)", async () => {

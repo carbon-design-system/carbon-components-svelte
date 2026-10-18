@@ -11,7 +11,7 @@
 
   let treeview: TreeView;
   let selectedIds: TreeNode["id"][] = [];
-  const nodes: ComponentProps<TreeView>["nodes"] = levelNodes();
+  export let nodes: ComponentProps<TreeView>["nodes"] = levelNodes();
 </script>
 
 <TreeView
@@ -32,6 +32,12 @@
   on:click={() => onGetNode(treeview.getNode(999))}
 >
   Get missing node
+</Button>
+<Button
+  data-testid="get-late-node"
+  on:click={() => onGetNode(treeview.getNode("late"))}
+>
+  Get late node
 </Button>
 <Button
   data-testid="get-nodes"

@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
+import { TYPEAHEAD_RESET_MS } from "../../src/constants/timing.js";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeView from "./TreeView.test.svelte";
@@ -98,6 +99,30 @@ describe("TreeView type-ahead", () => {
     expect(treeItemById(1)).toHaveFocus();
   });
 
+  it("starts a new query after the buffer reset delay", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      render(TreeViewTypeahead, {
+        nodes: [
+          { id: 0, text: "Apple" },
+          { id: 1, text: "Banana" },
+          { id: 2, text: "Orange" },
+        ],
+      });
+      treeItemById(0).focus();
+
+      await fireEvent.keyDown(treeItemById(0), { key: "b" });
+      expect(treeItemById(1)).toHaveFocus();
+
+      vi.advanceTimersByTime(TYPEAHEAD_RESET_MS);
+      await fireEvent.keyDown(treeItemById(1), { key: "o" });
+
+      expect(treeItemById(2)).toHaveFocus();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("ignores modifier+letter combinations", async () => {
     render(TreeViewTypeahead);
 
@@ -115,5 +140,28 @@ describe("TreeView consumer labelling", () => {
     render(TreeViewComponent, { props: { labelText: "Files", nodes: [] } });
 
     expect(screen.getByRole("tree")).toHaveAccessibleName("Files");
+  });
+
+  describe("virtualized", () => {
+    const virtualProps = {
+      nodes: [{ id: 0, text: "Readme" }],
+      virtualize: { maxVisibleRows: 10 },
+    };
+
+    it("is named by the visible label through aria-labelledby", () => {
+      render(TreeViewComponent, {
+        props: { ...virtualProps, labelText: "Files" },
+      });
+
+      expect(screen.getByRole("tree")).toHaveAccessibleName("Files");
+    });
+
+    it("sets aria-label from labelText when hideLabel is true", () => {
+      render(TreeViewComponent, {
+        props: { ...virtualProps, labelText: "Files", hideLabel: true },
+      });
+
+      expect(screen.getByRole("tree")).toHaveAttribute("aria-label", "Files");
+    });
   });
 });
