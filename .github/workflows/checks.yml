@@ -166,6 +166,24 @@ jobs:
             *) read -ra files <<< "$TESTS" && bunx vitest run --shard="$SHARD" --passWithNoTests "${files[@]}" ;;
           esac
 
+      # The DatePicker calendar does its own date math. Run its tests where a
+      # daylight-saving switch skips midnight, and where a whole day was
+      # skipped (Pacific/Apia, December 2011).
+      - name: Test calendar date math across time zones
+        if: matrix.shard == 2
+        env:
+          TESTS: ${{ needs.changes.outputs.unit-tests }}
+        run: |
+          case "$TESTS" in
+            none) exit 0 ;;
+            "" | all) ;;
+            *) [[ " $TESTS " == *" tests/DatePicker/calendar"* ]] || exit 0 ;;
+          esac
+          for zone in America/Santiago America/Havana Asia/Tehran Pacific/Apia; do
+            echo "TZ=$zone"
+            TZ="$zone" bunx vitest run tests/DatePicker/calendar
+          done
+
   # Starts as soon as the test selection is known, alongside the unit tests,
   # rather than after them: waiting put both suites on the critical path.
   test-e2e:
