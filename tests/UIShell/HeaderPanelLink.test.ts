@@ -118,6 +118,18 @@ describe("HeaderPanelLink keyboard navigation", () => {
   });
 });
 
+describe("HeaderPanelLinks with a disabled link", () => {
+  it("skips the disabled link when moving with ArrowDown and ArrowUp", async () => {
+    render(HeaderPanelLinkKeyboard, { props: { disableBeta: true } });
+
+    item("Alpha").focus();
+    await user.keyboard("{ArrowDown}");
+    expect(item("Gamma")).toHaveFocus();
+    await user.keyboard("{ArrowUp}");
+    expect(item("Alpha")).toHaveFocus();
+  });
+});
+
 describe("HeaderPanelLink when href is toggled", () => {
   it("keeps arrow navigation pointing at the rendered element", async () => {
     const { component } = render(HeaderPanelLinkToggle);

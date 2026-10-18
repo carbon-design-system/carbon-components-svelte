@@ -198,6 +198,16 @@ describe("HeaderNavMenu current marker", () => {
   const submenu = () =>
     screen.getByRole("menuitem", { name: "Products" }).closest("li");
 
+  it("adds the current marker when an item becomes selected after mount", async () => {
+    const { rerender } = render(Menubar, {
+      props: { items: entry(compute, quantum) },
+    });
+    expect(submenu()).not.toHaveClass("bx--header__submenu--current");
+
+    await rerender({ current: quantum.text });
+    expect(submenu()).toHaveClass("bx--header__submenu--current");
+  });
+
   it("drops the current marker when the selected item unmounts", async () => {
     const { rerender } = render(Menubar, {
       props: { items: entry(compute, quantum), current: quantum.text },
@@ -253,6 +263,18 @@ describe("HeaderNavMenu accessible names", () => {
     expect(trigger.id).not.toBe("");
     expect(menu).toHaveAttribute("aria-labelledby", trigger.id);
     expect(menu).not.toHaveAttribute("aria-label");
+  });
+
+  it("keeps the menu named by the trigger when the consumer sets an id", () => {
+    render(Menubar, {
+      props: {
+        items: [{ text: "Products", id: "products", items: [{ text: "A" }] }],
+      },
+    });
+
+    expect(
+      screen.getByRole("menu", { name: "Products", hidden: true }),
+    ).toBeInTheDocument();
   });
 
   it("follows slotted trigger content", () => {

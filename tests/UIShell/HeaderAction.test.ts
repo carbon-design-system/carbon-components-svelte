@@ -3,8 +3,10 @@ import {
   render,
   screen,
   waitForElementToBeRemoved,
+  within,
 } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
+import Help from "carbon-icons-svelte/lib/Help.svelte";
 import type { ComponentProps } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
@@ -19,6 +21,18 @@ describe("HeaderAction", () => {
 
     expect(screen.getByText("Custom text content")).toBeInTheDocument();
     expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
+  });
+
+  it("renders the closeIcon while open", async () => {
+    const { container: reference } = render(Help, { props: { size: 20 } });
+    render(HeaderActionClose, { props: { customCloseIcon: true } });
+    const button = screen.getByRole("button", { name: "Switcher" });
+
+    await user.click(button);
+
+    expect(button.querySelector("svg")?.innerHTML).toBe(
+      reference.querySelector("svg")?.innerHTML,
+    );
   });
 
   describe("accessibility", () => {
@@ -153,6 +167,19 @@ describe("HeaderAction close event", () => {
 });
 
 describe("HeaderGlobalAction", () => {
+  it("forwards click from the button with and without a badge", async () => {
+    const onClick = vi.fn();
+    render(HeaderGlobalActionBadge, { props: { onClick } });
+
+    await user.click(
+      within(screen.getByTestId("no-badge")).getByRole("button"),
+    );
+    expect(onClick).toHaveBeenCalledTimes(1);
+
+    await user.click(within(screen.getByTestId("dot")).getByRole("button"));
+    expect(onClick).toHaveBeenCalledTimes(2);
+  });
+
   it("renders a dot badge when count is 0, and no badge when omitted", () => {
     render(HeaderGlobalActionBadge);
     const none = screen.getByTestId("no-badge");

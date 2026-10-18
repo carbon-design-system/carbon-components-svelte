@@ -14,6 +14,7 @@
   export let companyName: ComponentProps<Header>["companyName"] = undefined;
   export let platformName: ComponentProps<Header>["platformName"] = "";
   export let isSideNavOpen: ComponentProps<Header>["isSideNavOpen"] = false;
+  export let expandedByDefault: ComponentProps<Header>["expandedByDefault"] = true;
   export let persistentHamburgerMenu: ComponentProps<Header>["persistentHamburgerMenu"] = false;
   export let ariaLabelMenu: ComponentProps<Header>["ariaLabelMenu"] = undefined;
   export let headerRef: ComponentProps<Header>["ref"] = null;
@@ -44,6 +45,7 @@
   <Header
     aria-label={ariaLabel}
     bind:isSideNavOpen
+    {expandedByDefault}
     {expansionBreakpoint}
     {persistentHamburgerMenu}
     {ariaLabelMenu}
@@ -66,6 +68,7 @@
     {companyName}
     {platformName}
     bind:isSideNavOpen
+    {expandedByDefault}
     {expansionBreakpoint}
     {persistentHamburgerMenu}
     {ariaLabelMenu}

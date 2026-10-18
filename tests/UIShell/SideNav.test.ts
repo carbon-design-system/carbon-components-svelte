@@ -1,12 +1,20 @@
 import { render, screen } from "@testing-library/svelte";
 import axe from "axe-core";
 import { tick } from "svelte";
+import { get } from "svelte/store";
+import {
+  hamburgerMenuRef,
+  isSideNavMobile,
+  shouldRenderHamburgerMenu,
+  sideNavWidth,
+} from "../../src/UIShell/nav-store.js";
 import SideNav from "../../src/UIShell/SideNav.svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import { setViewportWidth } from "../utils/viewport";
 import SideNavDividerTest from "./SideNavDivider.test.svelte";
 import SideNavMobileFocusTrapTest from "./SideNavMobileFocusTrap.test.svelte";
+import SideNavUnmountTest from "./SideNavUnmount.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 
 describe("SideNav mobile focus trap", () => {
@@ -59,6 +67,62 @@ describe("SideNav mobile focus trap", () => {
       expect(first).not.toHaveFocus();
     },
   );
+});
+
+describe("SideNav unmount", () => {
+  afterEach(() => {
+    setViewportWidth(1024);
+  });
+
+  it("resets the shared hamburger, mobile and width state", async () => {
+    setViewportWidth(320);
+    const { component } = render(SideNavUnmountTest, {
+      props: { resizable: true },
+    });
+    await tick();
+    expect(get(shouldRenderHamburgerMenu)).toBe(true);
+    expect(get(isSideNavMobile)).toBe(true);
+    expect(get(sideNavWidth)).toBe(256);
+
+    component.showSideNav = false;
+    await flushMacrotask();
+
+    expect(get(shouldRenderHamburgerMenu)).toBe(false);
+    expect(get(isSideNavMobile)).toBe(false);
+    expect(get(sideNavWidth)).toBeUndefined();
+  });
+
+  it("releases the body scroll lock", async () => {
+    setViewportWidth(320);
+    const { component } = render(SideNavUnmountTest, {
+      props: { isOpen: true },
+    });
+    await tick();
+    expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+    component.showSideNav = false;
+    await flushMacrotask();
+
+    expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+  });
+
+  it("keeps a newer hamburger ref when an older one unmounts", async () => {
+    const { component } = render(SideNavUnmountTest, {
+      props: {
+        showSideNav: false,
+        showOldHamburger: true,
+        showNewHamburger: true,
+      },
+    });
+    await tick();
+    const newer = screen.getByRole("button", { name: "New menu" });
+    expect(get(hamburgerMenuRef)).toBe(newer);
+
+    component.showOldHamburger = false;
+    await tick();
+
+    expect(get(hamburgerMenuRef)).toBe(newer);
+  });
 });
 
 describe("SideNav overlay click", () => {

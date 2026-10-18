@@ -58,6 +58,52 @@ describe("HeaderSearch debounce", () => {
     });
   });
 
+  describe("results mode lifecycle", () => {
+    it("cancels a pending search on unmount", async () => {
+      const onSearch = vi.fn();
+      const { unmount } = render(HeaderSearchDebounce, {
+        props: { debounce: 200, onSearch },
+      });
+      await fireEvent.input(screen.getByRole("textbox"), {
+        target: { value: "res" },
+      });
+
+      unmount();
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(onSearch).not.toHaveBeenCalled();
+    });
+
+    it("cancels a pending search when debounce changes", async () => {
+      const onSearch = vi.fn();
+      const { rerender } = render(HeaderSearchDebounce, {
+        props: { debounce: 200, onSearch },
+      });
+      await fireEvent.input(screen.getByRole("textbox"), {
+        target: { value: "res" },
+      });
+
+      await rerender({ debounce: 300 });
+      await vi.advanceTimersByTimeAsync(300);
+
+      expect(onSearch).not.toHaveBeenCalled();
+    });
+
+    it("cancels a pending search when Enter submits with no results", async () => {
+      const onSearch = vi.fn();
+      render(HeaderSearchDebounce, {
+        props: { debounce: 200, onSearch, results: [] },
+      });
+      const input = screen.getByRole("textbox");
+      await fireEvent.input(input, { target: { value: "res" } });
+
+      await fireEvent.keyDown(input, { key: "Enter" });
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(onSearch).not.toHaveBeenCalled();
+    });
+  });
+
   describe("cancels a pending debounce", () => {
     const cases: {
       name: string;
@@ -125,7 +171,9 @@ describe("HeaderSearch debounce", () => {
       "on $name",
       async ({ Fixture, role, typed, act, clearsValue }) => {
         const onSearch = vi.fn();
-        render(Fixture, { props: { debounce: 200, onSearch } });
+        render(Fixture as typeof HeaderSearchMenu, {
+          props: { debounce: 200, onSearch },
+        });
 
         const input = screen.getByRole(role);
         await fireEvent.input(input, { target: { value: typed } });
