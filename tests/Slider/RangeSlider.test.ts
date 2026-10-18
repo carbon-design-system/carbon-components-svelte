@@ -293,6 +293,25 @@ describe("RangeSlider", () => {
     }
   });
 
+  it.each(["altKey", "metaKey"])(
+    "leaves %s+Arrow to the browser",
+    (modifier) => {
+      render(RangeSlider, { props: { value: 50, valueUpper: 80 } });
+      const [lowerThumb] = screen.getAllByRole("slider");
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowLeft",
+        bubbles: true,
+        cancelable: true,
+        [modifier]: true,
+      });
+
+      lowerThumb.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+    },
+  );
+
   it.each([
     {
       handle: "lower",

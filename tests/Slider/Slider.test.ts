@@ -94,6 +94,25 @@ describe("Slider", () => {
     },
   );
 
+  it.each(["altKey", "metaKey"])(
+    "leaves %s+Arrow to the browser",
+    (modifier) => {
+      render(Slider, { props: { value: 50 } });
+      const thumb = screen.getByRole("slider");
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowLeft",
+        bubbles: true,
+        cancelable: true,
+        [modifier]: true,
+      });
+
+      thumb.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(thumb).toHaveAttribute("aria-valuenow", "50");
+    },
+  );
+
   it("should jump to min and max with Home and End", async () => {
     render(Slider, { props: { value: 50, min: 0, max: 100 } });
 
