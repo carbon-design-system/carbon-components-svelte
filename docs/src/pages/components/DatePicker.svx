@@ -664,3 +664,18 @@ Set `datePickerType` to the type of the picker the skeleton stands in for. `"ran
 Set `short` to `true` to render a skeleton for the short variant.
 
 <DatePickerSkeleton short />
+
+## Migrating from flatpickr
+
+The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built in: it renders the same markup and class names and keeps `flatpickrProps`, flatpickr's hooks, and `bind:calendar`, so most apps need no changes.
+
+| Do | Why |
+| --- | --- |
+| Add `flatpickr` to your own dependencies if you import its locale modules or plugins. | It is no longer installed with this package. The imported objects still work: `locale={German}` and `flatpickrProps={{ plugins: [confirmDatePlugin()] }}` behave as before. |
+| Prefer a language tag such as `locale="de"` to an imported locale module. | Tags need no import; month and weekday names come from the browser's `Intl` data. Pass a locale object instead when you need exact strings. |
+| Replace flatpickr's range, monthSelect, and weekSelect plugins with `datePickerType`. | Those modes are built in, and the console warns when one of the plugins is passed. |
+| Pair the DatePicker with a [TimePicker](/components/TimePicker) to collect a time. | The time picker options (`enableTime`, `noCalendar`, `minTime`, and related) warn once and are ignored. |
+| Pass options through `flatpickrProps` and `locale`, not `flatpickr.setDefaults` or `flatpickr.localize`. | flatpickr's global defaults never reach the built-in calendar. |
+| Type a bound calendar as `ComponentProps<DatePicker>["calendar"]`. | `bind:calendar` is a `CalendarInstance`: the methods and fields apps use are the same, but a few of flatpickr's internal members are absent. |
+
+The native mobile date input (`disableMobile: false`) and the month dropdown (`monthSelectorType: "dropdown"`) are not available; both options warn once and are ignored.
