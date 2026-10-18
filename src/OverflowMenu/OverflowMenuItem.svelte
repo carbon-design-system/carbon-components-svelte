@@ -106,14 +106,16 @@
 
   $: item = $itemsById[id];
 
-  add({ id, text, primaryFocus, disabled });
   // Arrow keys, typeahead and the `close` detail read the registry, so keep
   // it current while the menu is open.
   $: patch(id, { text, disabled });
 
   $: focused = $focusedId === id;
 
-  onMount(() => () => remove(id));
+  onMount(() => {
+    add({ id, text, primaryFocus, disabled, node: ref });
+    return () => remove(id);
+  });
 
   afterUpdate(() => {
     if (ref && focused && $moveFocus) {

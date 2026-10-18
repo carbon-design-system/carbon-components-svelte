@@ -460,6 +460,26 @@ describe("OverflowMenu", () => {
     expect(menuItems[1]).toHaveFocus();
   });
 
+  it("keeps an item added while open in DOM order", async () => {
+    const onClose = vi.fn();
+    const { rerender } = render(OverflowMenuDynamicItems, {
+      props: { showMiddle: false, onClose },
+    });
+
+    await user.click(screen.getByRole("button"));
+    await rerender({ showMiddle: true });
+
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("menuitem", { name: "Middle" })).toHaveFocus();
+
+    await user.click(screen.getByRole("menuitem", { name: "Last" }));
+    expect(onClose).toHaveBeenCalledWith({
+      trigger: "item-select",
+      index: 2,
+      text: "Last",
+    });
+  });
+
   it("tracks an item's text and disabled changes while open", async () => {
     const onClose = vi.fn();
     const { rerender } = render(OverflowMenuDynamicItems, {

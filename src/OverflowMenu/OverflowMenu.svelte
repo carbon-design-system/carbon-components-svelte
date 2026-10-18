@@ -111,6 +111,7 @@
   import { keyBy } from "../utils/key-by.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -129,11 +130,11 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }>>}
    */
   const items = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }>>}
    */
   const itemsById = derived(items, (_) => keyBy(_));
   const currentId = writable(undefined);
@@ -186,25 +187,41 @@
     icon = OverflowMenuHorizontal;
   }
 
-  // Items mount only while open, so they re-register on every open.
+  // Items mount only while open, so they re-register on every open. The
+  // registry stays in DOM order: an item rendered while the menu is open
+  // mounts after its siblings but may sit above them.
   const batchedItemsUpdate = batchStoreUpdates(items);
 
   /**
-   * @type {(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void}
+   * @type {(item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }) => void}
    */
-  function add({ id, text, primaryFocus, disabled }) {
+  function add(item) {
     batchedItemsUpdate((_) => {
-      if (primaryFocus) {
-        focusedIndex.set(_.length);
+      const next = insertByDomOrder(_, item);
+      const index = next.lastIndexOf(item);
+
+      if (item.primaryFocus) {
+        focusedIndex.set(index);
+      } else if (index < _.length && index <= $focusedIndex) {
+        // Inserted above the focused item; keep focus on it.
+        focusedIndex.update((i) => i + 1);
       }
 
-      return [..._, { id, text, primaryFocus, disabled, index: _.length }];
+      return next;
     });
   }
 
   /** @type {(id: string) => void} */
   function remove(id) {
-    batchedItemsUpdate((_) => _.filter((item) => item.id !== id));
+    batchedItemsUpdate((_) => {
+      const index = _.findIndex((item) => item.id === id);
+      // Removed above the focused item; keep focus on it.
+      if (index > -1 && index < $focusedIndex) {
+        focusedIndex.update((i) => i - 1);
+      }
+
+      return _.filter((item) => item.id !== id);
+    });
   }
 
   /** @type {(id: string, data: { text: string; disabled: boolean }) => void} */
@@ -215,14 +232,18 @@
   }
 
   /**
-   * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
+   * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }) => void}
    */
   function update(id, item) {
     currentId.set(id);
 
     const shouldContinue = dispatch(
       "close",
-      { trigger: "item-select", index: item.index, text: item.text },
+      {
+        trigger: "item-select",
+        index: $items.findIndex((_) => _.id === id),
+        text: item.text,
+      },
       { cancelable: true },
     );
     if (shouldContinue) {
