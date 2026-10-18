@@ -69,3 +69,9 @@ export function daysInMonth(year: number, month: number): number;
  * opposed to year before month ("2000年1月").
  */
 export function isMonthFirst(locale: unknown): boolean;
+
+/**
+ * What a year-first locale writes between the year and the month: "年" in
+ * "2000年1月", "년" in Korean. Empty for month-first locales.
+ */
+export function yearSuffix(locale: unknown): string;

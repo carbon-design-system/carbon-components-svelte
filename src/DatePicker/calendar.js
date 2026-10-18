@@ -8,6 +8,7 @@ import {
   isMonthFirst,
   isoWeek,
   parseDate,
+  yearSuffix,
 } from "./calendar-dates.js";
 
 const PREV_ARROW =
@@ -742,12 +743,30 @@ export function createCalendarEngine(element, userConfig = {}) {
         year.value = String(date.getFullYear());
         const label = self.monthElements[i];
         const wrapper = /** @type {any} */ (year.parentNode);
+        // Some locales put the year first, after which some write a word
+        // the year input can't hold ("2000年1月").
+        const suffix = yearSuffix(config.locale);
+        let suffixElement = wrapper?.nextElementSibling?.classList.contains(
+          "cur-year-suffix",
+        )
+          ? wrapper.nextElementSibling
+          : null;
+        if (suffix && !suffixElement) {
+          suffixElement = createElement("span", "cur-year-suffix");
+          suffixElement.setAttribute("aria-hidden", "true");
+          wrapper?.after(suffixElement);
+        } else if (!suffix && suffixElement) {
+          suffixElement.remove();
+          suffixElement = null;
+        }
+        if (suffixElement) suffixElement.textContent = suffix;
+        wrapper?.classList.toggle("bx--date-picker__year--suffixed", !!suffix);
         if (label && wrapper) {
-          // Some locales put the year first ("2000年1月").
+          const yearEnd = suffixElement ?? wrapper;
           if (isMonthFirst(config.locale)) {
             if (label.nextSibling !== wrapper) wrapper.before(label);
-          } else if (wrapper.nextSibling !== label) {
-            wrapper.after(label);
+          } else if (yearEnd.nextSibling !== label) {
+            yearEnd.after(label);
           }
         }
       },
