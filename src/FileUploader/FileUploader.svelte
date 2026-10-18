@@ -236,6 +236,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { returnFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
@@ -265,6 +266,42 @@
   // Set by a row's remove button, so the removal also reports the new
   // list in `change`, as a pick does.
   let rowRemoved = false;
+
+  /** @type {null | HTMLDivElement} */
+  let root = null;
+
+  /**
+   * @param {File} file
+   * @param {number} index
+   */
+  function removeFile(file, index) {
+    // Removing the row unmounts its focused remove button. Hand focus to the
+    // next row's remove button, else the previous row's, else the add
+    // button, instead of letting it fall to <body>.
+    const rows = root
+      ? [...root.querySelectorAll(".bx--file__selected-file")]
+      : [];
+    const row = rows[index];
+    const hadFocus = row?.contains(document.activeElement);
+    const neighbours = hadFocus
+      ? [...rows.slice(index + 1), ...rows.slice(0, index).reverse()].map(
+          (other) => other.querySelector(".bx--file-close"),
+        )
+      : [];
+
+    rowRemoved = true;
+    files = files.filter((f) => f !== file);
+
+    if (!hadFocus) return;
+    tick().then(() => {
+      if (row.isConnected) return;
+      returnFocus(
+        [...neighbours, root?.querySelector(":scope > .bx--btn")].find(
+          (el) => el?.isConnected,
+        ),
+      );
+    });
+  }
 
   // Per-file stable id: assigned once on first sight and carried with the
   // File reference, so reorders and removals don't shift other files' ids.
@@ -338,6 +375,7 @@
 </script>
 
 <div
+  bind:this={root}
   {id}
   class:bx--form-item={true}
   {...wrapperRestProps}
@@ -456,15 +494,7 @@
             invalid={rowInvalid}
             {disabled}
             on:keydown
-            on:keydown={(event) => {
-              if (event.key === " " || event.key === "Enter") {
-                files = files.filter((f) => f !== file);
-              }
-            }}
-            on:click={() => {
-              rowRemoved = true;
-              files = files.filter((f) => f !== file);
-            }}
+            on:click={() => removeFile(file, index)}
           />
         </span>
         {#if rowInvalid && rowErrorSubject}

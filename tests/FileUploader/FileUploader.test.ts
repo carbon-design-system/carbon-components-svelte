@@ -448,6 +448,49 @@ describe("FileUploader", () => {
     });
   });
 
+  it.each(["{Enter}", " "])(
+    "should keep the row when a keydown handler prevents %s",
+    async (key) => {
+      const { component } = render(FileUploader, {
+        props: { onKeydown: (e: KeyboardEvent) => e.preventDefault() },
+      });
+
+      await selectFiles(component, [makeFile("file1.txt")]);
+      removeButtons()[0].focus();
+      await user.keyboard(key);
+      await tick();
+
+      expect(screen.getByText("file1.txt")).toBeInTheDocument();
+    },
+  );
+
+  // `target` indexes the remove buttons, then the add button.
+  it.each([
+    { row: "middle", count: 3, remove: 1, target: 2 },
+    { row: "last", count: 3, remove: 2, target: 1 },
+    { row: "only", count: 1, remove: 0, target: 1 },
+  ])(
+    "should move focus after removing the $row row with the keyboard",
+    async ({ count, remove, target }) => {
+      const { component } = render(FileUploader);
+
+      await selectFiles(
+        component,
+        Array.from({ length: count }, (_, i) => makeFile(`file${i}.txt`)),
+      );
+      const targets = [
+        ...removeButtons(),
+        screen.getByRole("button", { name: "Add files" }),
+      ];
+      targets[remove].focus();
+      await user.keyboard("{Enter}");
+
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(targets[target]);
+      });
+    },
+  );
+
   it.each<RejectionRow>([
     {
       title: "rejects files under minFileSize",
