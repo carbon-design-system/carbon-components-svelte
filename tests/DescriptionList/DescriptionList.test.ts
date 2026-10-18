@@ -14,6 +14,16 @@ describe("DescriptionList", () => {
     expect(within(list).getByText("PostgreSQL").tagName).toBe("DD");
   });
 
+  it("renders the term slot in place of the term prop", () => {
+    render(DescriptionList);
+
+    const list = screen.getByTestId("term-slot");
+    expect(list.querySelector("dt")).toContainElement(
+      within(list).getByRole("link", { name: "Plan" }),
+    );
+    expect(within(list).queryByText("Ignored")).not.toBeInTheDocument();
+  });
+
   it("applies the horizontal layout class", () => {
     render(DescriptionList);
 
