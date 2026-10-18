@@ -180,6 +180,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { clamp, parse } from "../utils/numeric-format.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
@@ -365,7 +366,8 @@
 
   /** @type {(e: KeyboardEvent) => void} */
   function handleKeydown(event) {
-    if (disabled || readonly) return;
+    // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
+    if (disabled || readonly || hasModifierKey(event)) return;
 
     if (event.key === "Home" || event.key === "End") {
       // Prevent the browser from also scrolling to the top/bottom of the page.
