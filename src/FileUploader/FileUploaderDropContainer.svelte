@@ -80,6 +80,12 @@
    */
   export let capture = undefined;
 
+  /**
+   * Set to `true` for the drop area to fill the container instead of
+   * stopping at 20rem.
+   */
+  export let fullWidth = false;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -215,6 +221,7 @@
     tabindex={disabled ? -1 : tabindex}
     aria-disabled={disabled || undefined}
     class:bx--file-browse-btn={true}
+    class:bx--file-browse-btn--full-width={fullWidth}
     class:bx--file-browse-btn--disabled={disabled}
     on:click={() => {
       if (!disabled) ref.click();

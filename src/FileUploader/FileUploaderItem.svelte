@@ -4,6 +4,12 @@
    */
 
   /**
+   * Set to `true` for the item to fill the container instead of
+   * stopping at 20rem.
+   */
+  export let fullWidth = false;
+
+  /**
    * Set to `true` to remove the bottom margin, such as for an item in a
    * flex or grid layout that sets its own spacing.
    */
@@ -72,6 +78,7 @@
 <span
   {id}
   class:bx--file__selected-file={true}
+  class:bx--file__selected-file--full-width={fullWidth}
   class:bx--file__selected-file--no-margin={noMargin}
   class:bx--file__selected-file--invalid={invalid}
   class:bx--file__selected-file--disabled={disabled}
