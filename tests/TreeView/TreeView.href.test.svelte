@@ -34,6 +34,7 @@
   ];
   export let activeId: ComponentProps<TreeView>["activeId"] = "";
   export let selectedIds: ComponentProps<TreeView>["selectedIds"] = [];
+  export let expandedIds: ComponentProps<TreeView>["expandedIds"] = [];
 
   $: allNodes = [
     ...nodes,
@@ -48,6 +49,7 @@
   nodes={allNodes}
   bind:activeId
   bind:selectedIds
+  bind:expandedIds
   labelText="Link Tree"
   {virtualize}
   on:select={({ detail }) => onSelect(detail)}

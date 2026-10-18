@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import { checkboxFor } from "./helpers";
@@ -28,6 +29,34 @@ describe.each([
     expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
     expect(treeItemById("spark")).toHaveAttribute("aria-checked", "false");
     expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
+  });
+
+  it("marks the parent mixed and binds indeterminateIds for initial checkedIds", () => {
+    const { component } = render(TreeViewCheckbox, {
+      ...variantProps,
+      checkedIds: ["spark"],
+    });
+
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
+    expect(component.indeterminateIds).toEqual(["analytics"]);
+  });
+
+  it("checks the enabled descendants of an initially checked branch", () => {
+    render(TreeViewCheckbox, { ...variantProps, checkedIds: ["analytics"] });
+
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
+  });
+
+  it("checks the node and its parent state when showNode runs", async () => {
+    const { component } = render(TreeViewCheckbox, variantProps);
+
+    component.showNode("spark", { focus: false });
+    await tick();
+
+    expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
+    expect(treeItemById("analytics")).toHaveAttribute("aria-checked", "mixed");
   });
 
   it('leaves ancestors untouched with checkMode="node"', async () => {
@@ -91,6 +120,39 @@ describe("TreeView selectionMode=checkbox", () => {
 
     expect(treeItemById("spark")).toHaveAttribute("aria-checked", "true");
     expect(treeItemById("hadoop")).toHaveAttribute("aria-checked", "true");
+  });
+
+  it("fires check with the live checked state of the clicked node", async () => {
+    const onCheck = vi.fn();
+    render(TreeViewCheckbox, { onCheck });
+
+    await user.click(checkboxFor("spark"));
+    expect(onCheck).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: "spark", checked: true }),
+    );
+
+    await user.click(checkboxFor("spark"));
+    expect(onCheck).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: "spark", checked: false }),
+    );
+  });
+
+  it("fires select for a link row and leaves checkedIds unchanged", async () => {
+    const onSelect = vi.fn();
+    const { component } = render(TreeViewCheckbox, {
+      onSelect,
+      checkedIds: ["spark"],
+    });
+
+    const docs = treeItemById("docs");
+    docs.addEventListener("click", (event) => event.preventDefault());
+    await user.click(docs);
+
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "docs" }),
+    );
+    expect(component.checkedIds).toEqual(["spark"]);
   });
 
   it("fires check:change once per gesture with the derived state", async () => {

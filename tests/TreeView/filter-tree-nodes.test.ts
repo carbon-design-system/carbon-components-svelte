@@ -97,6 +97,42 @@ describe("filterTreeNodes", () => {
       [],
     ],
     [
+      "keeps a matching child under a matching parent when includeAncestors is false",
+      () =>
+        filterTreeNodes(sampleTree, (node) => node.id === 1 || node.id === 2, {
+          includeAncestors: false,
+        }),
+      [
+        {
+          id: 1,
+          text: "Documents",
+          nodes: [{ id: 2, text: "Work" }],
+        },
+      ],
+    ],
+    [
+      "includes all children of a match when includeChildren is true and includeAncestors is false",
+      () =>
+        filterTreeNodes(sampleTree, (node) => node.id === 1, {
+          includeChildren: true,
+          includeAncestors: false,
+        }),
+      [sampleTree[0]],
+    ],
+    [
+      "passes the original node, with its children, to the predicate",
+      () =>
+        filterTreeNodes(
+          [
+            { id: 1, text: "Folder", nodes: [{ id: 2, text: "File" }] },
+            { id: 3, text: "Loose file" },
+          ],
+          (node) => !node.nodes || node.nodes.length === 0,
+          { includeAncestors: false },
+        ),
+      [{ id: 3, text: "Loose file" }],
+    ],
+    [
       "matches root nodes",
       () => filterTreeNodes(sampleTree, (node) => node.id === 1),
       [{ id: 1, text: "Documents" }],
@@ -232,6 +268,21 @@ describe("filterTreeNodes", () => {
     expect(filterTreeById(sampleTree, "1")).toEqual([]);
     expect(filterTreeById(stringTree, 1)).toEqual([]);
     expect(filterTreeById(stringTree, "1")).toEqual(stringTree);
+  });
+
+  it("returns copies of the children when includeChildren is true", () => {
+    type Node = { text: string; nodes?: Node[] };
+    const tree: Node[] = sampleTree;
+    const result: Node[] = filterTreeNodes(
+      sampleTree,
+      (node) => node.id === 2,
+      { includeChildren: true },
+    );
+    const copiedLeaf = result[0].nodes?.[0].nodes?.[0];
+    assert(copiedLeaf);
+    copiedLeaf.text = "Changed";
+
+    expect(tree[0].nodes?.[0].nodes?.[0].text).toBe("Report.docx");
   });
 
   it("does not mutate the original tree", () => {

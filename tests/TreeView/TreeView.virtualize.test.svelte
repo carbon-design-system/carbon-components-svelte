@@ -9,20 +9,35 @@
   export let childrenPerRoot = 3;
 
   // Large enough that windowing matters: totalRoots visible rows when collapsed.
-  function buildTree(roots: number, perRoot: number): TreeNode[] {
+  function buildTree(
+    roots: number,
+    perRoot: number,
+    disabled: TreeNode["id"][],
+  ): TreeNode[] {
     const out: TreeNode[] = [];
     let next = 0;
     for (let r = 0; r < roots; r++) {
       const rootId = next++;
       const children: TreeNode[] = [];
       for (let c = 0; c < perRoot; c++) {
-        children.push({ id: next++, text: `root-${rootId}-child-${c}` });
+        const id = next++;
+        children.push({
+          id,
+          text: `root-${rootId}-child-${c}`,
+          disabled: disabled.includes(id),
+        });
       }
-      out.push({ id: rootId, text: `root-${rootId}`, nodes: children });
+      out.push({
+        id: rootId,
+        text: `root-${rootId}`,
+        disabled: disabled.includes(rootId),
+        nodes: children,
+      });
     }
     return out;
   }
 
+  export let disabledIds: TreeNode["id"][] = [];
   export let showNodeId: TreeNode["id"] = 0;
   export let expandBeforeShowId: TreeNode["id"] = 0;
   export let virtualize: ComponentProps<TreeView>["virtualize"] = {
@@ -35,7 +50,7 @@
   export let selectedIds: TreeNode["id"][] = [];
   let expandedIds: TreeNode["id"][] = [];
   let scrollContainerRef: ComponentProps<TreeView>["scrollContainerRef"] = null;
-  $: nodes = buildTree(totalRoots, childrenPerRoot);
+  $: nodes = buildTree(totalRoots, childrenPerRoot, disabledIds);
 </script>
 
 <TreeView

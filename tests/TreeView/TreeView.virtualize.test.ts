@@ -119,6 +119,38 @@ describe("TreeView (virtualize)", () => {
     expect(component.activeId).toBe("");
   });
 
+  it("ArrowLeft on a nested row moves focus to its parent", async () => {
+    render(TreeViewVirtualize, { totalRoots: 500, childrenPerRoot: 3 });
+
+    const caret = treeItemById(0).querySelector<HTMLElement>(
+      ".bx--tree-parent-node__toggle",
+    );
+    assert(caret instanceof HTMLElement);
+    await user.click(caret);
+    await tick();
+
+    treeItemById(2).focus();
+    await user.keyboard("{ArrowLeft}");
+
+    await waitFor(() => expect(treeItemById(0)).toHaveFocus());
+  });
+
+  it.each([
+    ["End", 38],
+    ["Home", 1],
+  ])("%s skips a disabled boundary row", async (key, expectedId) => {
+    render(TreeViewVirtualize, {
+      totalRoots: 40,
+      childrenPerRoot: 0,
+      disabledIds: [0, 39],
+    });
+
+    treeItemById(5).focus();
+    await user.keyboard(`{${key}}`);
+
+    await waitFor(() => expect(treeItemById(expectedId)).toHaveFocus());
+  });
+
   it("setting activeId externally selects the matching virtual row", async () => {
     render(TreeViewVirtualize, {
       totalRoots: 500,
@@ -607,6 +639,26 @@ describe("TreeView virtualize + href", () => {
     const selfLink = screen.getByRole("treeitem", { name: /Self Target/ });
     expect(selfLink).toHaveAttribute("target", "_self");
     expect(selfLink).not.toHaveAttribute("rel");
+  });
+
+  it("does not select a disabled link row on click", async () => {
+    const onSelect = vi.fn();
+    render(TreeViewHref, { ...virtualProps, onSelect });
+
+    await user.click(screen.getByRole("treeitem", { name: /Disabled Link/ }));
+
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it("dispatches focus when a link row receives focus", () => {
+    const onFocus = vi.fn();
+    render(TreeViewHref, { ...virtualProps, onFocus });
+
+    treeItemById("link-1").focus();
+
+    expect(onFocus).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "link-1", href: "/page-1" }),
+    );
   });
 
   it("keeps aria-selected on plain rows", () => {

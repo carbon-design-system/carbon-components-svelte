@@ -700,6 +700,20 @@ describe("TreeView Props", () => {
     expect(blockchainItem).toHaveAttribute("aria-selected", "false");
   });
 
+  it("cmd+click toggles selection in multiselect mode", async () => {
+    const { component } = render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    await user.click(treeItemById(0));
+    await user.keyboard("{Meta>}");
+    await user.click(treeItemById(7));
+    await user.keyboard("{/Meta}");
+
+    expect(component.selectedIds).toEqual([0, 7]);
+  });
+
   it("ctrl+click deselects a selected row that is not active", async () => {
     const onSelect = vi.fn();
     const { component } = render(TreeViewMultiselect, {
@@ -941,6 +955,24 @@ describe("TreeView Props", () => {
     // range (id=2 is a child of collapsed Analytics).
     expect(findRowById(2)).toBeNull();
     expect(component.selectedIds).not.toContain(2);
+  });
+
+  it("shift+click falls back to a single selection when the anchor is no longer visible", async () => {
+    const { component, rerender } = render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+      expandedIds: [1],
+    });
+
+    await user.click(treeItemById(2));
+    await rerender({ expandedIds: [] });
+
+    await user.keyboard("{Shift>}");
+    await user.click(treeItemById(7));
+    await user.keyboard("{/Shift}");
+
+    expect(component.selectedIds).toEqual([7]);
   });
 
   it("shift+click range includes children when parent is expanded", async () => {
@@ -1436,6 +1468,24 @@ describe("TreeViewNode href", () => {
     expect(disabledLink.tagName).toBe("A");
     expect(disabledLink).not.toHaveAttribute("href");
     expect(disabledLink).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("ArrowLeft on a nested link leaf moves focus to its parent", async () => {
+    render(TreeViewHref, {
+      expandedIds: ["folder"],
+      nodes: [
+        {
+          id: "folder",
+          text: "Folder",
+          nodes: [{ id: "nested-link", text: "Nested Link", href: "/nested" }],
+        },
+      ],
+    });
+
+    treeItemById("nested-link").focus();
+    await user.keyboard("{ArrowLeft}");
+
+    expect(treeItemById("folder")).toHaveFocus();
   });
 
   it("can select a link node via click", async () => {
