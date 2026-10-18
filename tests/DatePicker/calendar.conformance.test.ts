@@ -1,4 +1,15 @@
 import flatpickr from "flatpickr";
+// The plugins' ESM builds, which ship no type declarations. The UMD
+// scrollPlugin shadows `CustomEvent` with a hoisted `var` and throws on the
+// wheel in any browser.
+// @ts-expect-error: no type declarations
+import confirmDatePlugin from "flatpickr/dist/esm/plugins/confirmDate/confirmDate";
+// @ts-expect-error: no type declarations
+import labelPlugin from "flatpickr/dist/esm/plugins/labelPlugin/labelPlugin";
+// @ts-expect-error: no type declarations
+import monthSelectPlugin from "flatpickr/dist/esm/plugins/monthSelect";
+// @ts-expect-error: no type declarations
+import scrollPlugin from "flatpickr/dist/esm/plugins/scrollPlugin";
 import { German } from "flatpickr/dist/l10n/de";
 import { english } from "flatpickr/dist/l10n/default";
 import {
@@ -357,5 +368,74 @@ describe("every month from 2010 to 2030 matches flatpickr", {
         mismatches.push(month.toDateString());
     }
     expect(mismatches.slice(0, 5)).toEqual([]);
+  });
+});
+
+describe("flatpickr's own plugins", () => {
+  const engine = (options: CalendarOptions, id?: string) => {
+    const input = document.createElement("input");
+    if (id) input.id = id;
+    document.body.append(input);
+    const instance = createCalendarEngine(input, options);
+    assert(instance);
+    created.push(instance as unknown as Instance);
+    return { instance, input };
+  };
+
+  it("runs confirmDate: its button closes the calendar", () => {
+    const { instance } = engine({
+      mode: "multiple",
+      plugins: [confirmDatePlugin({}) as never],
+    });
+    instance.open();
+    instance.setDate([new Date(2024, 2, 4)], true);
+
+    const confirm =
+      instance.calendarContainer.querySelector<HTMLElement>(
+        ".flatpickr-confirm",
+      );
+    expect(confirm).toHaveClass("visible");
+    confirm?.click();
+    expect(instance.isOpen).toBe(false);
+  });
+
+  it("runs labelPlugin: the visible input takes the id", () => {
+    const { instance, input } = engine(
+      { altInput: true, plugins: [labelPlugin() as never] },
+      "due-date",
+    );
+
+    expect(input).not.toHaveAttribute("id");
+    expect(instance.altInput).toHaveAttribute("id", "due-date");
+  });
+
+  it("runs scrollPlugin: the wheel changes the month and year", () => {
+    const { instance } = engine({
+      defaultDate: new Date(2024, 2, 15),
+      plugins: [scrollPlugin() as never],
+    });
+    const wheel = (target: Element) =>
+      target.dispatchEvent(
+        new WheelEvent("wheel", {
+          deltaY: -100,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+
+    wheel(instance.monthElements[0]);
+    expect(instance.currentMonth).toBe(3);
+    wheel(instance.currentYearElement);
+    expect(instance.currentYear).toBe(2025);
+  });
+
+  it("warns when a plugin duplicates a built-in mode", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    engine({ plugins: [monthSelectPlugin({}) as never] });
+
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('Use datePickerType="month" instead'),
+    );
+    warn.mockRestore();
   });
 });

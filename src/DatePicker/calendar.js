@@ -145,7 +145,21 @@ const UNIMPLEMENTED_MEMBERS = new Set([
 ]);
 
 /** @type {Set<string>} */
-const warnedMembers = new Set();
+const warned = new Set();
+
+/** flatpickr plugins whose job the calendar does itself, by `datePickerType`. */
+const BUILT_IN_PLUGINS = /** @type {Record<string, string>} */ ({
+  range: "range",
+  monthSelect: "month",
+  weekSelect: "week",
+});
+
+/** @param {string} message */
+function warnOnce(message) {
+  if (warned.has(message)) return;
+  warned.add(message);
+  console.warn(`[carbon-components-svelte] DatePicker: ${message}`);
+}
 
 /**
  * The instance as a plugin sees it: reading a flatpickr member the engine
@@ -159,12 +173,10 @@ function pluginView(self) {
       if (
         typeof key === "string" &&
         UNIMPLEMENTED_MEMBERS.has(key) &&
-        !(key in target) &&
-        !warnedMembers.has(key)
+        !(key in target)
       ) {
-        warnedMembers.add(key);
-        console.warn(
-          `[carbon-components-svelte] DatePicker: a calendar plugin read \`${key}\`, which the built-in calendar does not implement.`,
+        warnOnce(
+          `a calendar plugin read \`${key}\`, which the built-in calendar does not implement.`,
         );
       }
       return Reflect.get(target, key, receiver);
@@ -399,12 +411,12 @@ export function createCalendarEngine(element, userConfig = {}) {
   if (config.showMonths < 1 || isGridMode) config.showMonths = 1;
   config.showMonths = Math.floor(config.showMonths);
 
+  // Every hook is an array, even unused, as in flatpickr: plugins push onto
+  // them (monthSelect adds an `onClose`).
   for (const hook of HOOKS) {
-    if (config[hook] !== undefined) {
-      config[hook] = arrayify(config[hook] || []).map(
-        (/** @type {Function} */ fn) => fn.bind(self),
-      );
-    }
+    config[hook] = arrayify(config[hook] || []).map(
+      (/** @type {Function} */ fn) => fn.bind(self),
+    );
   }
   for (const plugin of userConfig.plugins ?? []) {
     const pluginConfig = plugin(pluginView(self)) || {};
@@ -1994,10 +2006,16 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   /** @param {Event} event */
+  /**
+   * A typed year, or flatpickr's `increment` event, which carries a `delta`
+   * (its scroll plugin sends one on wheel).
+   *
+   * @param {KeyboardEvent & { delta?: number }} event
+   */
   function onYearInput(event) {
     const target = eventTarget(event);
-    const year = Number.parseInt(target.value, 10);
-    if (!Number.isNaN(year) && target.value.length >= 4) {
+    const year = Number.parseInt(target.value, 10) + (event.delta || 0);
+    if (!Number.isNaN(year) && (event.delta || target.value.length >= 4)) {
       changeYear(year);
     }
   }
@@ -2025,6 +2043,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     on(self.monthNav, "click", onNavClick);
     on(self.monthNav, "keyup", onYearInput);
+    on(self.monthNav, "increment", onYearInput);
     on(self.monthNav, "input", onYearInput);
     on(self.daysContainer, "click", isGridMode ? selectGridCell : selectDate);
     if (isRange) {
@@ -2112,5 +2131,12 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.input._flatpickr = self;
   if (secondInput) /** @type {any} */ (secondInput)._flatpickr = self;
   triggerEvent("onReady");
+  for (const name of self.loadedPlugins) {
+    if (BUILT_IN_PLUGINS[name]) {
+      warnOnce(
+        `flatpickr's ${name} plugin is built in. Use datePickerType="${BUILT_IN_PLUGINS[name]}" instead.`,
+      );
+    }
+  }
   return self;
 }
