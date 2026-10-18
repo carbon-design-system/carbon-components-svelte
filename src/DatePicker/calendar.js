@@ -36,6 +36,11 @@ const KEY_CODES = {
   Tab: 9,
   Enter: 13,
   Escape: 27,
+  " ": 32,
+  PageUp: 33,
+  PageDown: 34,
+  End: 35,
+  Home: 36,
   ArrowLeft: 37,
   ArrowUp: 38,
   ArrowRight: 39,
@@ -809,6 +814,31 @@ export function createCalendarEngine(element, userConfig = {}) {
     self._hideNextMonthArrow = hideNext;
     toggleClass(self.prevMonthNav, "flatpickr-disabled", hidePrev);
     toggleClass(self.nextMonthNav, "flatpickr-disabled", hideNext);
+    announceView();
+  }
+
+  /** Puts the shown month(s), year, or decade into the live region. */
+  function announceView() {
+    if (!self.viewAnnouncer) return;
+    let text;
+    if (pickerMode === "year") {
+      const start = decadeStart() - 1;
+      text = `${start} - ${start + 11}`;
+    } else if (pickerMode === "month") {
+      text = String(self.currentYear);
+    } else {
+      const monthFirst = isMonthFirst(config.locale);
+      const suffix = yearSuffix(config.locale);
+      text = Array.from({ length: config.showMonths }, (_, i) => {
+        const date = new Date(self.currentYear, self.currentMonth + i, 1);
+        const month = self.l10n.months.longhand[date.getMonth()];
+        const year = date.getFullYear();
+        return monthFirst ? `${month} ${year}` : `${year}${suffix} ${month}`;
+      }).join(" – ");
+    }
+    if (self.viewAnnouncer.textContent !== text) {
+      self.viewAnnouncer.textContent = text;
+    }
   }
 
   function buildWeekdays() {
@@ -1235,6 +1265,10 @@ export function createCalendarEngine(element, userConfig = {}) {
       container.classList.add(`flatpickr-${pickerMode}Select-theme-light`);
     }
     container.appendChild(fragment);
+    // Announces the month (or year, or decade) the arrows and keys move to.
+    self.viewAnnouncer = createElement("span", "bx--assistive-text");
+    self.viewAnnouncer.setAttribute("aria-live", "polite");
+    container.appendChild(self.viewAnnouncer);
     buildDays();
     updateNavigation();
 
@@ -1877,6 +1911,20 @@ export function createCalendarEngine(element, userConfig = {}) {
           if (isGridMode) break;
           selectDate(event);
           break;
+        case 32:
+          // Space selects a focused day, as Enter does.
+          if (isGridMode || isInput || !isDayFocused(target)) break;
+          event.preventDefault();
+          selectDate(event);
+          break;
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+          if (isGridMode || isInput || !isDayFocused(target)) break;
+          event.preventDefault();
+          focusByKey(target, code, event.shiftKey);
+          break;
         case 27:
           event.preventDefault();
           focusAndClose();
@@ -1944,12 +1992,55 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (isInput || inCalendar) triggerEvent("onKeyDown", event);
   }
 
+  /**
+   * PageUp/PageDown move to the same day a month (with Shift, a year) away,
+   * or the month's last day when it is shorter. Home/End move to the
+   * first/last day of the week. A closed day steps on, as the arrows do.
+   *
+   * @param {any} day
+   * @param {number} code
+   * @param {boolean} shiftKey
+   */
+  function focusByKey(day, code, shiftKey) {
+    const from = day.dateObj;
+    let target;
+    if (code === 33 || code === 34) {
+      const months = (code === 34 ? 1 : -1) * (shiftKey ? 12 : 1);
+      const month = new Date(from.getFullYear(), from.getMonth() + months, 1);
+      target = new Date(
+        month.getFullYear(),
+        month.getMonth(),
+        Math.min(
+          from.getDate(),
+          daysInMonth(month.getFullYear(), month.getMonth()),
+        ),
+      );
+    } else {
+      const offset = (from.getDay() - self.l10n.firstDayOfWeek + 7) % 7;
+      target = new Date(
+        from.getFullYear(),
+        from.getMonth(),
+        from.getDate() + (code === 36 ? -offset : 6 - offset),
+      );
+    }
+    const delta = Math.round(
+      (Date.UTC(target.getFullYear(), target.getMonth(), target.getDate()) -
+        Date.UTC(from.getFullYear(), from.getMonth(), from.getDate())) /
+        DAY_MS,
+    );
+    if (delta !== 0) nextAvailableDay(day, delta);
+  }
+
   /** @param {KeyboardEvent} event */
   function onGridKeyDown(event) {
-    const code = keyCodeOf(event);
+    let code = keyCodeOf(event);
+    // Space picks like Enter; PageUp/PageDown step the year (or decade).
+    if (code === 32) code = 13;
+    const page = code === 33 ? -1 : code === 34 ? 1 : 0;
     const shift = /** @type {Record<number, number>} */ (GRID_SHIFTS)[code];
-    if (shift === undefined && code !== 13) return;
-    const cells = self.days?.children;
+    if (shift === undefined && code !== 13 && !page) return;
+    if (code !== keyCodeOf(event) || page) event.preventDefault();
+    let cells = self.days?.children;
     if (!cells) return;
     let index = Array.prototype.indexOf.call(cells, document.activeElement);
     if (index === -1) {
@@ -1957,7 +2048,11 @@ export function createCalendarEngine(element, userConfig = {}) {
       target.focus();
       index = target.$i;
     }
-    if (shift !== undefined) {
+    if (page) {
+      stepView(/** @type {-1 | 1} */ (page));
+      cells = self.days?.children;
+      cells?.[index]?.focus();
+    } else if (shift !== undefined) {
       cells[(12 + index + shift) % 12].focus();
     } else if (cells[0].parentNode.contains(document.activeElement)) {
       const active = /** @type {any} */ (document.activeElement);
@@ -2011,23 +2106,34 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
   }
 
+  /**
+   * What the previous and next arrows do: a month, a year in the month
+   * grid, or a decade in the year grid.
+   *
+   * @param {-1 | 1} direction
+   */
+  function stepView(direction) {
+    const prev = direction < 0;
+    if (pickerMode === "year") {
+      changeYear(decadeStart() + direction * 10);
+    } else if (pickerMode === "month") {
+      const wanted = self.currentYear + direction;
+      if (!(prev ? self._hidePrevMonthArrow : self._hideNextMonthArrow)) {
+        changeYear(wanted);
+        if (self.currentYear === wanted) buildDays();
+      }
+    } else {
+      changeMonth(direction);
+    }
+  }
+
   /** @param {MouseEvent} event */
   function onNavClick(event) {
     const target = eventTarget(event);
     const prev = self.prevMonthNav.contains(target);
     const next = self.nextMonthNav.contains(target);
     if (prev || next) {
-      if (pickerMode === "year") {
-        changeYear(decadeStart() + (prev ? -10 : 10));
-      } else if (pickerMode === "month") {
-        const wanted = self.currentYear + (prev ? -1 : 1);
-        if (!(prev ? self._hidePrevMonthArrow : self._hideNextMonthArrow)) {
-          changeYear(wanted);
-          if (self.currentYear === wanted) buildDays();
-        }
-      } else {
-        changeMonth(prev ? -1 : 1);
-      }
+      stepView(prev ? -1 : 1);
     } else if (self.yearElements.includes(target)) {
       target.select();
     } else if (target.classList.contains("arrowUp")) {

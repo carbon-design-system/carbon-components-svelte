@@ -105,6 +105,29 @@ test.describe("DatePicker", () => {
     await expect(input).not.toHaveValue("");
   });
 
+  test("PageDown, Home and Space work in the calendar", async ({ page }) => {
+    const input = page.getByLabel("Blackout dates");
+    await input.click();
+    const calendar = page
+      .getByTestId("date-picker-multiple")
+      .getByLabel("calendar-container");
+    await expect(calendar).toBeVisible();
+    const focused = () =>
+      page.evaluate(() => document.activeElement?.getAttribute("aria-label"));
+
+    await page.keyboard.press("ArrowDown");
+    await expect.poll(focused).toMatch(/September/);
+    await page.keyboard.press("PageDown");
+    await expect.poll(focused).toMatch(/October/);
+    await page.keyboard.press("Home");
+    await expect.poll(focused).toMatch(/^Sunday, October/);
+
+    // Space picks the day; the multiple calendar stays open and keeps focus.
+    await page.keyboard.press("Space");
+    await expect(input).toHaveValue(/10\/\d\d\/2026/);
+    await expect.poll(focused).toMatch(/^Sunday, October/);
+  });
+
   test("arrow key navigation inside the calendar does not scroll the page", async ({
     page,
   }) => {

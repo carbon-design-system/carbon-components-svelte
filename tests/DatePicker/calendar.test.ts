@@ -394,6 +394,83 @@ describe("keyboard", () => {
     expect(input.value).toBe("2024-03-18");
   });
 
+  const press = (key: string, keyCode: number, init: KeyboardEventInit = {}) =>
+    fireEvent.keyDown(document.activeElement as HTMLElement, {
+      key,
+      keyCode,
+      ...init,
+    });
+  const focusedDate = () =>
+    (
+      document.activeElement as HTMLElement & { dateObj?: Date }
+    ).dateObj?.toDateString();
+
+  it("moves a month with PageUp/PageDown and a year with Shift", () => {
+    const { instance } = create({ defaultDate: "2024-01-31" });
+    instance.open();
+    day(instance, 31).focus();
+
+    press("PageDown", 34);
+    // February 2024 has 29 days.
+    expect(focusedDate()).toBe(new Date(2024, 1, 29).toDateString());
+    press("PageDown", 34, { shiftKey: true });
+    expect(focusedDate()).toBe(new Date(2025, 1, 28).toDateString());
+    press("PageUp", 33);
+    expect(focusedDate()).toBe(new Date(2025, 0, 28).toDateString());
+  });
+
+  it("moves to the first and last day of the week with Home/End", () => {
+    const { instance } = create({
+      defaultDate: "2024-03-13",
+      locale: { firstDayOfWeek: 1 },
+    });
+    instance.open();
+    day(instance, 13).focus();
+
+    press("Home", 36);
+    expect(focusedDate()).toBe(new Date(2024, 2, 11).toDateString());
+    press("End", 35);
+    expect(focusedDate()).toBe(new Date(2024, 2, 17).toDateString());
+  });
+
+  it("selects the focused day with Space", () => {
+    const { instance, input } = create({ defaultDate: "2024-03-01" });
+    instance.open();
+    day(instance, 12).focus();
+
+    press(" ", 32);
+
+    expect(input.value).toBe("2024-03-12");
+  });
+
+  it("steps the year with PageDown in the month grid", () => {
+    const { instance } = create({
+      mode: "month",
+      defaultDate: "2024-03-01",
+    });
+    instance.open();
+    const cells = () =>
+      instance.calendarContainer.querySelectorAll<HTMLElement>(
+        ".flatpickr-monthSelect-month",
+      );
+    cells()[4].focus();
+
+    press("PageDown", 34);
+
+    expect(instance.currentYear).toBe(2025);
+    expect(document.activeElement).toBe(cells()[4]);
+  });
+
+  it("announces the month the view moves to", () => {
+    const { instance } = create({ defaultDate: "2024-03-15" });
+    const live = instance.calendarContainer.querySelector("[aria-live]");
+
+    instance.changeMonth(1);
+
+    expect(live).toHaveAttribute("aria-live", "polite");
+    expect(live).toHaveTextContent("April 2024");
+  });
+
   it("changes month with ctrl+arrow", () => {
     const { instance } = create({ defaultDate: "2024-03-10" });
     instance.open();
