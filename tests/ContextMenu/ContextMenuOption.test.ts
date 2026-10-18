@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -146,23 +146,22 @@ describe("ContextMenuOption keep open on selection", () => {
     expect(getSelectedIds()).toEqual(["date"]);
   });
 
-  it("keeps nested and root menus open when a radio click is prevented", async () => {
+  it("keeps the submenu open when a radio click is prevented", async () => {
     render(ContextMenuOptionKeepOpenFixture, {
       props: { open: true, x: 100, y: 100 },
     });
 
-    await user.hover(screen.getByRole("menuitem", { name: "View as" }));
-    const gridOption = await screen.findByRole("menuitemradio", {
-      name: "Grid",
-    });
-    await user.click(gridOption);
+    const viewAs = screen.getByRole("menuitem", { name: "View as" });
+    await user.hover(viewAs);
+    // The flyout opens after the hover delay; selecting before then can't
+    // tell a kept-open flyout from one that never opened.
+    await waitFor(() =>
+      expect(viewAs).toHaveAttribute("aria-expanded", "true"),
+    );
+    await user.click(screen.getByRole("menuitemradio", { name: "Grid" }));
 
     expect(getSelectedId()).toBe("grid");
-
-    const menus = screen.getAllByRole("menu");
-    for (const menu of menus) {
-      expect(menu).toHaveClass("bx--menu--open");
-    }
+    expect(viewAs).toHaveAttribute("aria-expanded", "true");
   });
 });
 

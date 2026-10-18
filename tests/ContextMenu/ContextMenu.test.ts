@@ -236,6 +236,29 @@ describe("ContextMenu", () => {
     expect(submenuTrigger).toHaveAttribute("aria-expanded", "true");
   });
 
+  it.each([
+    ["click", (option: HTMLElement) => user.click(option)],
+    ["Enter", () => user.keyboard("{Enter}")],
+  ])(
+    "should reopen a submenu after selecting a submenu option by %s",
+    async (_, select) => {
+      render(ContextMenu, {
+        props: { open: true, withSubmenu: true, x: 100, y: 100 },
+      });
+
+      const submenuTrigger = screen.getByRole("menuitem", {
+        name: "Option with submenu",
+      });
+      submenuTrigger.focus();
+      await user.keyboard("{ArrowRight}");
+      await select(screen.getByRole("menuitem", { name: "Submenu option 1" }));
+      expect(submenuTrigger).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(submenuTrigger);
+      expect(submenuTrigger).toHaveAttribute("aria-expanded", "true");
+    },
+  );
+
   it("should not close menu when activating disabled regular option", async () => {
     const onclose = vi.fn();
     render(ContextMenu, {
