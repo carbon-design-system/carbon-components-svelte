@@ -24,7 +24,7 @@ The default `datePickerType` renders a text field without a dropdown calendar.
 
 Set `datePickerType` to `"single"` for one date with a dropdown calendar. Use a single DatePickerInput; clicking the field or calendar icon opens the calendar to pick one day. Bind `value` to read or set the formatted date string.
 
-From the keyboard, <DocKbd label="Down" /> in the field moves focus into the calendar, the arrow keys move by day and week, and <DocKbd label="Enter" /> picks the focused day and closes the calendar. <DocKbd label="Escape" /> closes it and returns focus to the field. To type a date instead, enter it and press <DocKbd label="Enter" />.
+From the keyboard, <DocKbd label="Down" /> in the field moves focus into the calendar, the arrow keys move by day and week, <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> move by month (by year with <DocKbd label="Shift" />), and <DocKbd label="Home" /> and <DocKbd label="End" /> go to the start and end of the week. <DocKbd label="Enter" /> or <DocKbd label="Space" /> picks the focused day and closes the calendar. <DocKbd label="Escape" /> closes it and returns focus to the field. To type a date instead, enter it and press <DocKbd label="Enter" />.
 
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
