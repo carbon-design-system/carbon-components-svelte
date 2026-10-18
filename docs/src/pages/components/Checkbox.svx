@@ -47,6 +47,15 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
   </svelte:fragment>
 </Checkbox>
 
+## No margin
+
+By default, a checkbox renders with outer margin to space it within a stack of checkboxes. Set `noMargin` to `true` to omit the margin when the checkbox sits in a table cell or a row that spaces its own content.
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Checkbox noMargin labelText="Mark as reviewed" />
+  <span>3 files changed</span>
+</Stack>
+
 ## Helper text
 
 Use `helperText` to provide additional context or instructions below the checkbox.
