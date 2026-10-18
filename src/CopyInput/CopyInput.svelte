@@ -24,8 +24,17 @@
   export let type = "text";
 
   /**
-   * Control when a `type="password"` value is revealed.
-   * Has no effect unless `type` is `"password"`.
+   * Specify the text to show in place of `value`, such as an API key
+   * masked to `sk_live_••••4f2a`. The copy button still copies `value`,
+   * and `revealMode` shows `value` on interaction.
+   * Unlike `type="password"`, browsers don't offer to save it.
+   * @type {string}
+   */
+  export let maskedValue = undefined;
+
+  /**
+   * Control when a `type="password"` value or a `maskedValue` is revealed.
+   * Has no effect unless `type` is `"password"` or `maskedValue` is set.
    * - `"focus"`: reveal while the input is focused.
    * - `"hover-focus"`: reveal while the input is hovered or focused.
    * When unset, the value stays obscured; the copy button still copies the full value.
@@ -137,7 +146,7 @@
    */
   export let tooltipAlignment = "end";
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, tick } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import {
     FORM_CONTEXT_KEY,
@@ -166,6 +175,8 @@
         ? focused
         : false);
   $: inputType = type === "password" && !revealed ? "password" : "text";
+  $: masked = maskedValue != null;
+  $: shownValue = masked && !revealed ? maskedValue : value;
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: ({ helperId } = buildFieldIds(id));
   $: hasLabel = !!(labelText || $$slots.labelChildren);
@@ -175,6 +186,9 @@
     focused = true;
     if (selectTextOnFocus && !disabled) {
       ref?.select();
+      // Revealing a mask swaps the input's text, which clears that
+      // selection, so select again once the value is shown.
+      if (masked && revealMode) tick().then(() => ref?.select());
     }
   }
 
@@ -255,13 +269,13 @@
       <input
         bind:this={ref}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
-        use:reflectDefaultValue={value}
+        use:reflectDefaultValue={shownValue}
         readonly
         type={inputType}
-        {value}
+        value={shownValue}
         {disabled}
         {id}
-        {name}
+        name={masked ? undefined : name}
         class:bx--text-input={true}
         class:bx--text-input--light={light}
         class:bx--text-input--xs={effectiveSize === "xs"}
@@ -277,6 +291,10 @@
         on:blur
         on:blur={handleBlur}
       >
+      {#if masked && name}
+        <!-- The form submits the value, not the mask. -->
+        <input type="hidden" {name} {value} {disabled} form={$$restProps.form}>
+      {/if}
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
       {/if}
