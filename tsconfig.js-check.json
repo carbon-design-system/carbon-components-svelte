@@ -1,6 +1,13 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": { "allowJs": true, "checkJs": true, "noEmit": true },
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    // The Svelte 5 browser baseline (Firefox 83, Safari 14) has ES2021.
+    // `Intl.Segmenter` (ES2022) is always feature-detected before use.
+    "lib": ["ES2021", "ES2022.Intl", "DOM", "DOM.Iterable"]
+  },
   "include": ["src/**/*.js"],
   "exclude": ["node_modules", "src/node_modules", "src/**/index.js"]
 }
