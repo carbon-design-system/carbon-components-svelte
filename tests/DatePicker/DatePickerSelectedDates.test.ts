@@ -137,6 +137,7 @@ describe("DatePicker bind:selectedDates", () => {
       expect(getDates()).toBe(new Date(2024, 0, 15).toDateString()),
     );
     const instance = getCalendarInstance(input);
+    instance.open();
     const cell = calendar.querySelector(".flatpickr-day.selected");
 
     await rerender({ selectedDates: [new Date(2024, 0, 15)] });

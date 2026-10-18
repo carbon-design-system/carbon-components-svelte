@@ -286,6 +286,7 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
       animate: false,
       clickOpens: true,
       ariaDateFormat: "l, F j, Y",
+      lazy: true,
       ...options,
       ...mergedHooks,
       // The range calendar pushes its second input into
