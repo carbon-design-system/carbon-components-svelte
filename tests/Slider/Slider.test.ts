@@ -166,6 +166,12 @@ describe("Slider", () => {
     expect(label.control).toBeNull();
   });
 
+  it("hides the range labels with hideRangeLabels", () => {
+    const { container } = render(Slider, { props: { hideRangeLabels: true } });
+
+    expect(container.querySelector(".bx--slider__range-label")).toBeNull();
+  });
+
   it("forwards focus and blur events from the number input", async () => {
     const onfocus = vi.fn();
     const onblur = vi.fn();
