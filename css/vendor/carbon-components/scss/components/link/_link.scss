@@ -206,3 +206,27 @@ $link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
 @include exports("link-visited") {
   @include link-visited;
 }
+
+// carbon-components-svelte patch (link-forced-colors)
+// Forced-colors mode paints a disabled link (and a disabled ClickableTile,
+// which renders as one) like plain text. It reads `GrayText`.
+
+/// Disabled link in forced-colors mode.
+/// @access private
+/// @group link
+@mixin link-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--link.#{$prefix}--link--disabled {
+      color: GrayText;
+      outline-color: GrayText;
+    }
+
+    .#{$prefix}--link.#{$prefix}--link--disabled svg {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("link-forced-colors") {
+  @include link-forced-colors;
+}

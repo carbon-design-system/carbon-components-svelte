@@ -1527,3 +1527,49 @@ $tabs-sizes: (
 @include exports('tabs-size') {
   @include tabs-size;
 }
+
+// carbon-components-svelte patch (tabs-forced-colors)
+// Forced-colors mode paints every tab's text and underline in the link
+// color, so selected, plain and disabled tabs looked identical. The selected
+// tab fills with `Highlight`, as a selected ContentSwitcher switch does, and
+// opts out of forcing: forced text sits on a `Canvas` backplate that would
+// hide `HighlightText`. Its focus ring is a system color for the same
+// reason. A disabled tab reads `GrayText`.
+
+/// Tabs selected and disabled states in forced-colors mode.
+/// @access private
+/// @group tabs
+@mixin tabs-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected {
+      forced-color-adjust: none;
+      border-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+      outline-color: HighlightText;
+    }
+
+    .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected svg {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected
+      .#{$prefix}--tabs__nav-item-secondary-label {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item-secondary-label {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link svg {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("tabs-forced-colors") {
+  @include tabs-forced-colors;
+}
