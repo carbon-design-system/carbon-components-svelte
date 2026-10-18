@@ -3,7 +3,7 @@ description: Skeleton text provides a loading placeholder for text content, with
 ---
 
 <script>
-  import { SkeletonText } from "carbon-components-svelte";
+  import { SkeletonText, Stack } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -47,7 +47,7 @@ In paragraph mode, each line's width varies around the `width` value instead of 
 Set `noMargin` to `true` to remove the bottom margin, for placeholders in a
 flex or grid layout that sets its own gap.
 
-<div style="display: flex; gap: var(--cds-spacing-05)">
+<Stack orientation="horizontal" gap={5}>
   <SkeletonText noMargin width="40%" />
   <SkeletonText noMargin width="20%" />
-</div>
+</Stack>
