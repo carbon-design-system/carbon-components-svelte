@@ -39,7 +39,9 @@ describe("HeaderSideNavItems roles", () => {
     const list = screen.getByTestId("header-side-nav-items");
     expect(list).toHaveAttribute("role", "menubar");
     expect(list).toHaveAttribute("aria-orientation", "vertical");
-    for (const item of list.querySelectorAll('[role="menuitem"]')) {
+    const items = list.querySelectorAll('[role="menuitem"]');
+    expect(items).toHaveLength(2);
+    for (const item of items) {
       expect(item.parentElement).toHaveAttribute("role", "none");
       expect(item.parentElement?.parentElement).toBe(list);
     }

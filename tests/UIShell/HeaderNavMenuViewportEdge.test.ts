@@ -55,18 +55,19 @@ describe("HeaderNavMenu viewport edge", () => {
   });
 
   it("measures again from the default alignment on the next open", async () => {
-    mockMenuRight(VIEWPORT_WIDTH + 30);
+    mockMenuRight(VIEWPORT_WIDTH - 30);
     render(HeaderNavMenuViewportEdge);
     const trigger = screen.getByRole("menuitem", { name: "More" });
 
     await user.click(trigger);
-    expect(menu()).toHaveClass("bx--header__menu--align-end");
-
-    await user.click(trigger);
     expect(menu()).not.toHaveClass("bx--header__menu--align-end");
+    await user.click(trigger);
 
     vi.mocked(HTMLElement.prototype.getBoundingClientRect).mockRestore();
-    mockMenuRight(VIEWPORT_WIDTH - 30);
+    mockMenuRight(VIEWPORT_WIDTH + 30);
+    await user.click(trigger);
+    expect(menu()).toHaveClass("bx--header__menu--align-end");
+
     await user.click(trigger);
     expect(menu()).not.toHaveClass("bx--header__menu--align-end");
   });

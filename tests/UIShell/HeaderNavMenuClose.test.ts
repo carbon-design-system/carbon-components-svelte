@@ -9,9 +9,9 @@ describe("HeaderNavMenu close event", () => {
     render(HeaderNavMenuClose, { props: { onClose } });
 
     const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
-    menuTrigger.focus();
-    await user.keyboard(" ");
+    await user.click(menuTrigger);
     expect(menuTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(menuTrigger).toHaveFocus();
 
     await user.keyboard("{Escape}");
     expect(menuTrigger).toHaveAttribute("aria-expanded", "false");

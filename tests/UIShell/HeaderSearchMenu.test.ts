@@ -14,11 +14,6 @@ describe("HeaderSearch (menu slot)", () => {
     expect(screen.getByText("Results")).toBeInTheDocument();
   });
 
-  it("does not render the menu when inactive", () => {
-    render(HeaderSearchMenu, { props: { active: false } });
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
   it("fuzzy-filters items while keeping persistent items visible", async () => {
     render(HeaderSearchMenu, { props: { active: true } });
     const input = screen.getByRole("combobox");

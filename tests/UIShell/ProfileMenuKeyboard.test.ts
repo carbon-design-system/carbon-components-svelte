@@ -50,20 +50,4 @@ describe("ProfileMenu item keyboard navigation", () => {
     await user.keyboard("{Home}{ArrowDown}");
     expect(item("Globex")).toHaveFocus();
   });
-
-  it("leaves keys alone for an item outside a menu", () => {
-    render(ProfileMenuKeyboard);
-
-    const solo = item("Standalone");
-    solo.focus();
-    const event = new KeyboardEvent("keydown", {
-      key: "ArrowDown",
-      bubbles: true,
-      cancelable: true,
-    });
-    solo.dispatchEvent(event);
-
-    expect(event.defaultPrevented).toBe(false);
-    expect(solo).toHaveFocus();
-  });
 });

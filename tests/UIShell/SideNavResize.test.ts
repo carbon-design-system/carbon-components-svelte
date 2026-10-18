@@ -152,9 +152,7 @@ describe("SideNav resize", () => {
   });
 
   it("Home/End jump to the bounds", async () => {
-    render(SideNavResizeTest, {
-      props: { resizable: true, width: 300, minWidth: 200, maxWidth: 480 },
-    });
+    render(SideNavResizeTest, { props: { resizable: true, width: 300 } });
 
     const handle = getHandle();
     await fireEvent.keyDown(handle, { key: "End" });
@@ -237,11 +235,15 @@ describe("SideNav resize", () => {
   });
 
   it("ends the drag on an immediate pointerup", async () => {
-    render(SideNavResizeTest, { props: { resizable: true, width: 320 } });
+    const { container } = render(SideNavResizeTest, {
+      props: { resizable: true, width: 320 },
+    });
 
     const handle = getHandle();
     await fireEvent.pointerDown(handle, { clientX: 300, pointerId: 1 });
     await fireEvent.pointerUp(handle, { pointerId: 1 });
+    expect(getNav(container)).not.toHaveClass("bx--side-nav--resizing");
+    expect(document.body).not.toHaveClass("bx--side-nav-resizing");
     await fireEvent.pointerMove(handle, { clientX: 400, pointerId: 1 });
 
     expect(handle).toHaveAttribute("aria-valuenow", "320");

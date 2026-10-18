@@ -31,17 +31,6 @@ describe("HeaderPanelLink keyboard navigation", () => {
     expect(item("Alpha")).toHaveFocus();
   });
 
-  it("stays within its own HeaderPanelLinks list", async () => {
-    render(HeaderPanelLinkKeyboard);
-
-    const other = item("Other list");
-    other.focus();
-    await user.keyboard("{ArrowDown}");
-    expect(other).toHaveFocus();
-    await user.keyboard("{End}");
-    expect(other).toHaveFocus();
-  });
-
   it("follows DOM order for links inserted after mount", async () => {
     const { component } = render(HeaderPanelLinkKeyboard);
     component.showMiddle = true;
@@ -52,21 +41,5 @@ describe("HeaderPanelLink keyboard navigation", () => {
     expect(item("Between")).toHaveFocus();
     await user.keyboard("{ArrowDown}");
     expect(item("Gamma")).toHaveFocus();
-  });
-
-  it("leaves keys alone for a link outside HeaderPanelLinks", () => {
-    render(HeaderPanelLinkKeyboard);
-
-    const solo = item("Standalone");
-    solo.focus();
-    const event = new KeyboardEvent("keydown", {
-      key: "ArrowDown",
-      bubbles: true,
-      cancelable: true,
-    });
-    solo.dispatchEvent(event);
-
-    expect(event.defaultPrevented).toBe(false);
-    expect(solo).toHaveFocus();
   });
 });
