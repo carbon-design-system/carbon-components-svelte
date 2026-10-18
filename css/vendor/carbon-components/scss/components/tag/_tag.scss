@@ -509,11 +509,14 @@
   }
 
   // Forced-colors mode repaints the selected background, which left
-  // selected and unselected tags identical. Only system colors are used, so
-  // `forced-color-adjust` stays `auto`: unforcing would bring back the real
-  // `$focus` ring and hover fill.
+  // selected and unselected tags identical. The selected tag fills with
+  // `Highlight` and opts out of forcing: forced text gets a `Canvas`
+  // backplate, which hid the `HighlightText` label. Its border and focus
+  // ring, which unforcing brings back, use system colors too.
   @media (forced-colors: active) {
     .#{$prefix}--tag--selectable.#{$prefix}--tag--selectable-selected:not(.#{$prefix}--tag--disabled) {
+      forced-color-adjust: none;
+      border-color: Highlight;
       background-color: Highlight;
       color: HighlightText;
     }

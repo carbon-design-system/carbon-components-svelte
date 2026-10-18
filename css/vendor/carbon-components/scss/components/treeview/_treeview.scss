@@ -355,9 +355,9 @@
 // disabled node a lighter text colour. Forced-colors mode repaints both, so
 // selected, disabled and plain nodes looked identical.
 //
-// Author-specified system colors survive forcing, so these rules only use
-// system colors and leave `forced-color-adjust` alone: unforcing would bring
-// back the base hover tint and the real `$focus` ring on top of `Highlight`.
+// These rules use system colors only. The selected label also opts out of
+// forcing: forced text gets a `Canvas` backplate, which hid its
+// `HighlightText` name. Its hover fill and focus ring are system colors too.
 // Every state is re-asserted because the base hover rules (up to 0,5,0)
 // outrank the plain state rules, and a non-system hover value would be forced
 // to `Canvas` under `HighlightText`. Disabled wins over selected, so the
@@ -374,6 +374,7 @@
         > .#{$prefix}--tree-node__label,
       .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
         > .#{$prefix}--tree-node__label:hover {
+        forced-color-adjust: none;
         background-color: Highlight;
         color: HighlightText;
       }
