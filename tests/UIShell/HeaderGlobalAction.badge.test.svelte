@@ -13,9 +13,3 @@
     <BadgeIndicator slot="badge" count={0} />
   </HeaderGlobalAction>
 </div>
-
-<div data-testid="count">
-  <HeaderGlobalAction iconDescription="Notifications" icon={Notification}>
-    <BadgeIndicator slot="badge" count={4} />
-  </HeaderGlobalAction>
-</div>

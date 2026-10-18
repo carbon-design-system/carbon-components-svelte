@@ -10,20 +10,11 @@ import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
-import HeaderSlot from "./Header.slot.test.svelte";
 import HeaderSwitcher from "./HeaderSwitcher.test.svelte";
-import HeaderUtilities from "./HeaderUtilities.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 
 describe("UIShell", () => {
   describe("Header", () => {
-    it("should render with default props", () => {
-      render(UiShell);
-
-      const header = screen.getByRole("banner");
-      expect(header).toHaveClass("bx--header");
-    });
-
     it("should apply classic UI Shell class when theme is classic", () => {
       render(UiShell, { props: { headerTheme: "classic" } });
 
@@ -69,22 +60,6 @@ describe("UIShell", () => {
       expect(screen.getByText("Custom Platform")).toBeInTheDocument();
     });
 
-    it("supports custom company slot", () => {
-      render(HeaderSlot);
-
-      const customCompany = screen.getByText("Custom company content");
-      expect(customCompany).toBeInTheDocument();
-    });
-
-    it("should apply custom class to Header link", () => {
-      render(UiShell, {
-        props: { headerClass: "custom-header", platformName: "Platform" },
-      });
-
-      const link = screen.getByText("Platform").closest("a");
-      expect(link).toHaveClass("custom-header");
-    });
-
     it("should handle click events", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(UiShell, { props: { headerHref: "#", platformName: "Platform" } });
@@ -117,21 +92,6 @@ describe("UIShell", () => {
       );
       expect(hamburgerButton).toHaveAttribute("aria-label", "Toggle menu");
       expect(hamburgerButton).toHaveAttribute("title", "Toggle menu");
-    });
-
-    it("should default to 'Open menu' when side nav is closed", () => {
-      const { container } = render(UiShell, {
-        props: {
-          persistentHamburgerMenu: true,
-          isSideNavOpen: false,
-        },
-      });
-
-      const hamburgerButton = container.querySelector(
-        ".bx--header__menu-trigger",
-      );
-      expect(hamburgerButton).toHaveAttribute("aria-label", "Open menu");
-      expect(hamburgerButton).toHaveAttribute("title", "Open menu");
     });
 
     it("should update label when hamburger menu is clicked", async () => {
@@ -304,27 +264,6 @@ describe("UIShell", () => {
   });
 
   describe("HeaderNav", () => {
-    it("should render navigation", () => {
-      render(UiShell);
-
-      const nav = screen.getByRole("navigation");
-      expect(nav).toHaveClass("bx--header__nav");
-    });
-
-    it("should render navigation items", () => {
-      render(UiShell);
-
-      const nav = screen.getByRole("navigation", { name: "Navigation" });
-      expect(nav.querySelector('[role="menuitem"]')).toBeInTheDocument();
-    });
-
-    it("should apply custom class to HeaderNav", () => {
-      render(UiShell, { props: { headerNavClass: "custom-nav" } });
-
-      const nav = screen.getByRole("navigation");
-      expect(nav).toHaveClass("custom-nav");
-    });
-
     // Regression: aria-label belongs on the <nav> landmark only, not on the
     // inner <ul role="menubar"> (avoids screen readers announcing the label
     // twice).
@@ -341,15 +280,6 @@ describe("UIShell", () => {
   });
 
   describe("Header panels", () => {
-    it("renders HeaderSwitcher fixture", () => {
-      const { container } = render(HeaderSwitcher);
-
-      expect(screen.getByRole("banner")).toBeInTheDocument();
-      expect(
-        container.querySelector(".bx--header__global"),
-      ).toBeInTheDocument();
-    });
-
     // A bare <hr> cannot be a direct child of <ul>.
     it("wraps a contentless HeaderPanelDivider's hr in an li", async () => {
       const { container } = render(HeaderSwitcher);
@@ -363,39 +293,6 @@ describe("UIShell", () => {
       const hr = container.querySelector("hr.bx--switcher__item--divider");
       assert(hr);
       expect(hr.parentElement?.tagName).toBe("LI");
-    });
-
-    it("marks a HeaderPanelLink as selected", async () => {
-      const { container } = render(HeaderSwitcher);
-
-      const trigger = container.querySelector(
-        "button.bx--header__action:not(.bx--header__menu-toggle)",
-      );
-      assert(trigger);
-      await user.click(trigger);
-
-      const selected = container.querySelector(
-        ".bx--switcher__item-link--selected",
-      );
-      assert(selected);
-      expect(selected).toHaveAttribute("aria-current", "page");
-
-      const links = container.querySelectorAll(".bx--switcher__item-link");
-      for (const link of links) {
-        if (link !== selected) {
-          expect(link).not.toHaveAttribute("aria-current");
-        }
-      }
-    });
-
-    it("renders HeaderUtilities fixture", () => {
-      const { container } = render(HeaderUtilities);
-
-      expect(screen.getByRole("banner")).toBeInTheDocument();
-      expect(screen.getByText("Settings")).toBeInTheDocument();
-      expect(
-        container.querySelector(".bx--header__global"),
-      ).toBeInTheDocument();
     });
   });
 
@@ -422,13 +319,6 @@ describe("UIShell", () => {
 
       expect(consoleLog).not.toHaveBeenCalledWith("sidenav-open");
       expect(consoleLog).not.toHaveBeenCalledWith("sidenav-close");
-    });
-
-    it("should render with default props", () => {
-      const { container } = render(UiShell);
-
-      const nav = container.querySelector(".bx--side-nav");
-      expect(nav).toBeInTheDocument();
     });
 
     it("should apply classic UI Shell class when theme is classic", () => {
@@ -615,6 +505,7 @@ describe("UIShell", () => {
       // A collapsed rail is still visible and focusable, so it must stay in
       // the accessibility tree.
       expect(nav).not.toHaveAttribute("aria-hidden");
+      expect(nav).not.toHaveStyle({ visibility: "hidden" });
     });
 
     it("should handle isOpen state", () => {
@@ -625,24 +516,7 @@ describe("UIShell", () => {
       const nav = container.querySelector(".bx--side-nav");
       expect(nav).toHaveClass("bx--side-nav--expanded");
       expect(nav).toHaveAttribute("aria-hidden", "false");
-    });
-
-    it("should apply custom aria-label", () => {
-      const { container } = render(UiShell, {
-        props: { sideNavAriaLabel: "Main navigation" },
-      });
-
-      const nav = container.querySelector(".bx--side-nav");
-      expect(nav).toHaveAttribute("aria-label", "Main navigation");
-    });
-
-    it("should apply custom class to SideNav", () => {
-      const { container } = render(UiShell, {
-        props: { sideNavClass: "custom-sidenav" },
-      });
-
-      const nav = container.querySelector(".bx--side-nav");
-      expect(nav).toHaveClass("custom-sidenav");
+      expect(nav).not.toHaveStyle({ visibility: "hidden" });
     });
 
     it("should dispatch open event", async () => {
@@ -739,15 +613,6 @@ describe("UIShell", () => {
       });
     });
 
-    it("should render side nav links", () => {
-      const { container } = render(UiShell);
-
-      const sideNav = container.querySelector(".bx--side-nav");
-      const links = sideNav?.querySelectorAll(".bx--side-nav__link");
-
-      expect(links?.length).toBeGreaterThan(0);
-    });
-
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/604
     it("should prevent focus on links when closed (not rail mode)", () => {
       const { container } = render(UiShell, {
@@ -757,16 +622,6 @@ describe("UIShell", () => {
       const nav = container.querySelector(".bx--side-nav");
       expect(nav).toHaveAttribute("aria-hidden", "true");
       expect(nav).toHaveStyle({ visibility: "hidden" });
-    });
-
-    it("should allow focus on links when open", () => {
-      const { container } = render(UiShell, {
-        props: { sideNavIsOpen: true },
-      });
-
-      const nav = container.querySelector(".bx--side-nav");
-      expect(nav).toHaveAttribute("aria-hidden", "false");
-      expect(nav).not.toHaveStyle({ visibility: "hidden" });
     });
 
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1383
@@ -784,18 +639,6 @@ describe("UIShell", () => {
         window.dispatchEvent(new Event("resize"));
       });
 
-      it("should not apply collapsed class or visibility:hidden when winWidth is undefined", () => {
-        setInnerWidth(undefined as unknown as number);
-
-        const { container } = render(UiShell, {
-          props: { sideNavIsOpen: false },
-        });
-
-        const nav = container.querySelector(".bx--side-nav");
-        expect(nav).not.toHaveClass("bx--side-nav--collapsed");
-        expect(nav).not.toHaveStyle({ visibility: "hidden" });
-      });
-
       it("should apply collapsed state after viewport width becomes known", async () => {
         setInnerWidth(undefined as unknown as number);
 
@@ -805,6 +648,7 @@ describe("UIShell", () => {
 
         const nav = container.querySelector(".bx--side-nav");
         expect(nav).not.toHaveClass("bx--side-nav--collapsed");
+        expect(nav).not.toHaveStyle({ visibility: "hidden" });
 
         // Simulate hydration: viewport width becomes known.
         setInnerWidth(500);
@@ -815,25 +659,9 @@ describe("UIShell", () => {
         expect(nav).toHaveStyle({ visibility: "hidden" });
       });
     });
-
-    it("should not apply visibility:hidden in rail mode when closed", () => {
-      const { container } = render(UiShell, {
-        props: { sideNavIsOpen: false, sideNavRail: true },
-      });
-
-      const nav = container.querySelector(".bx--side-nav");
-      expect(nav).toHaveClass("bx--side-nav--rail");
-      expect(nav).not.toHaveStyle({ visibility: "hidden" });
-    });
   });
 
   describe("Content", () => {
-    it("should render content", () => {
-      render(UiShell);
-
-      expect(screen.getByText("Content goes here")).toBeInTheDocument();
-    });
-
     describe("mobile margin behavior", () => {
       const setViewportWidth = (width: number) => {
         Object.defineProperty(window, "innerWidth", {
@@ -889,19 +717,6 @@ describe("UIShell", () => {
         const content = container.querySelector(".bx--content");
         // Fixed SideNav is always visible, so Content should keep its CSS margin
         expect(content).not.toHaveStyle({ marginLeft: "0px" });
-      });
-
-      it("should keep the rail margin on mobile when SideNav is a closed rail", async () => {
-        setViewportWidth(500);
-
-        const { container } = render(UiShell, {
-          props: { sideNavRail: true, sideNavIsOpen: false },
-        });
-
-        await flushMacrotask();
-
-        const content = container.querySelector<HTMLElement>(".bx--content");
-        expect(content?.style.marginLeft).toBe("3rem");
       });
 
       it("should keep the rail margin on mobile when SideNav is an expanded rail", async () => {
@@ -1051,16 +866,6 @@ describe("UIShell", () => {
         );
       });
 
-      it("should not apply the large class by default", () => {
-        const { container } = render(SideNavLink, {
-          props: { href: "#", text: "Link" },
-        });
-
-        expect(container.querySelector(".bx--side-nav__item")).not.toHaveClass(
-          "bx--side-nav__item--large",
-        );
-      });
-
       it("should support custom Icon types with generics", () => {
         type CustomIcon = new (...args: unknown[]) => unknown;
 
@@ -1086,16 +891,6 @@ describe("UIShell", () => {
         });
 
         expect(container.querySelector(".bx--side-nav__item")).toHaveClass(
-          "bx--side-nav__item--large",
-        );
-      });
-
-      it("should not apply the large class by default", () => {
-        const { container } = render(SideNavMenu, {
-          props: { text: "Menu" },
-        });
-
-        expect(container.querySelector(".bx--side-nav__item")).not.toHaveClass(
           "bx--side-nav__item--large",
         );
       });

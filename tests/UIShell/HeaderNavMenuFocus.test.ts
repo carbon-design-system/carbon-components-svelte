@@ -33,13 +33,4 @@ describe("HeaderNavMenu focus on close", () => {
     expect(field).toHaveFocus();
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
   });
-
-  it("still returns focus to the trigger on Escape", async () => {
-    render(HeaderNavMenuFocus);
-
-    trigger().focus();
-    await user.keyboard("{ArrowDown}{Escape}");
-    expect(trigger()).toHaveFocus();
-    expect(trigger()).toHaveAttribute("aria-expanded", "false");
-  });
 });

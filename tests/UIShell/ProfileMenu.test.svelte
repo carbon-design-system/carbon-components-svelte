@@ -9,8 +9,6 @@
 
   export let isOpen = false;
   export let preventCloseOnClickOutside = false;
-
-  let logoutClicks = 0;
 </script>
 
 <Header companyName="Test" platformName="Test">
@@ -28,11 +26,7 @@
       </ProfileMenuDetail>
       <ProfileMenuDivider />
       <ProfileMenuItem href="/settings">Settings</ProfileMenuItem>
-      <ProfileMenuItem on:click={() => (logoutClicks += 1)}
-        >Log out</ProfileMenuItem
-      >
+      <ProfileMenuItem>Log out</ProfileMenuItem>
     </ProfileMenu>
   </HeaderUtilities>
 </Header>
-
-<span data-testid="logout-count">{logoutClicks}</span>

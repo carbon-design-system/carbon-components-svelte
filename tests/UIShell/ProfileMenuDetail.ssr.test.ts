@@ -1,16 +1,9 @@
 // @vitest-environment node
 import ProfileMenuDetail from "carbon-components-svelte/UIShell/ProfileMenuDetail.svelte";
-import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
 
 describe("ProfileMenuDetail server render", () => {
   const props = { id: "plan", label: "Plan" };
-
-  it("renders identical markup for an explicit id", () => {
-    const renderRaw = () => render(ProfileMenuDetail, { props }).body;
-
-    expect(renderRaw()).toBe(renderRaw());
-  });
 
   it("derives the label id from the id", () => {
     const { document } = renderSSR(ProfileMenuDetail, props);

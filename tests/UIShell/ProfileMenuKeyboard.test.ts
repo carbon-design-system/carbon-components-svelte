@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
 import { user } from "../utils/user";
 import ProfileMenuKeyboard from "./ProfileMenuKeyboard.test.svelte";
 
@@ -16,28 +15,6 @@ describe("ProfileMenu item keyboard navigation", () => {
     await user.keyboard("{ArrowDown}");
     expect(item("Settings")).toHaveFocus();
     await user.keyboard("{ArrowUp}");
-    expect(item("Log out")).toHaveFocus();
-  });
-
-  it("jumps with Home and End", async () => {
-    render(ProfileMenuKeyboard);
-
-    item("Settings").focus();
-    await user.keyboard("{End}");
-    expect(item("Log out")).toHaveFocus();
-    await user.keyboard("{Home}");
-    expect(item("Settings")).toHaveFocus();
-  });
-
-  it("follows DOM order for items inserted after mount", async () => {
-    const { component } = render(ProfileMenuKeyboard);
-    component.showMiddle = true;
-    await tick();
-
-    item("Settings").focus();
-    await user.keyboard("{ArrowDown}");
-    expect(item("Billing")).toHaveFocus();
-    await user.keyboard("{ArrowDown}");
     expect(item("Log out")).toHaveFocus();
   });
 

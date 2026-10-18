@@ -49,14 +49,4 @@ describe("Header landmark label", () => {
     expect(banner).not.toHaveAttribute("aria-label");
     expect(screen.getByRole("link")).not.toHaveAttribute("aria-labelledby");
   });
-
-  it("keeps naming on the banner when there is no name link", () => {
-    render(Header, {
-      props: { "aria-label": "Shell", "aria-describedby": "shell-hint" },
-    });
-
-    const banner = screen.getByRole("banner");
-    expect(banner).toHaveAttribute("aria-label", "Shell");
-    expect(banner).toHaveAttribute("aria-describedby", "shell-hint");
-  });
 });

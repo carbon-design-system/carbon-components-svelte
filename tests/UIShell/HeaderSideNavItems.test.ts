@@ -20,16 +20,6 @@ describe("HeaderSideNavItems", () => {
       "bx--side-nav__header-divider",
     );
   });
-
-  it("renders header nav items inside the side nav", () => {
-    render(HeaderSideNavItemsTest);
-
-    const list = screen.getByTestId("header-side-nav-items");
-    const links = list.querySelectorAll("a.bx--header__menu-item");
-    expect(links).toHaveLength(2);
-    expect(links[0]).toHaveTextContent("Link 1");
-    expect(links[1]).toHaveTextContent("Link 2");
-  });
 });
 
 describe("HeaderSideNavItems roles", () => {

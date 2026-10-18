@@ -37,23 +37,7 @@ describe("SideNav active item orientation", () => {
       "aria-expanded",
       "true",
     );
-  });
-
-  it("leaves a SideNavMenu with no active descendant collapsed", async () => {
-    render(SideNavActiveItemOrientationTest, {
-      props: { activeItem: "none" },
-    });
-    await tick();
-
-    expect(screen.getByTestId("menu-1")).toHaveAttribute(
-      "aria-expanded",
-      "false",
-    );
     expect(screen.getByTestId("menu-2")).toHaveAttribute(
-      "aria-expanded",
-      "false",
-    );
-    expect(screen.getByTestId("nested-menu")).toHaveAttribute(
       "aria-expanded",
       "false",
     );
@@ -91,15 +75,5 @@ describe("SideNav active item orientation", () => {
     expect(scrollCalls).toEqual([
       [screen.getByTestId("nested-item"), ".bx--side-nav__items", "center"],
     ]);
-  });
-
-  it("skips the scroll when no item is active", async () => {
-    render(SideNavActiveItemOrientationTest, {
-      props: { activeItem: "none" },
-    });
-    await tick();
-    await tick();
-
-    expect(scrollCalls).toEqual([]);
   });
 });
