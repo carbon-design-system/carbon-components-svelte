@@ -100,6 +100,26 @@ describe.each(variants)(
       expect(await fireEvent.keyDown(tab1, { key: prev })).toBe(false);
     });
 
+    it.each(["altKey", "ctrlKey", "metaKey"])(
+      `leaves ${next} with %s held to the browser`,
+      async (modifier) => {
+        render(Tabs, { props: { vertical } });
+        const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+
+        const event = new KeyboardEvent("keydown", {
+          key: next,
+          bubbles: true,
+          cancelable: true,
+          [modifier]: true,
+        });
+        tab1.dispatchEvent(event);
+        await tick();
+
+        expect(event.defaultPrevented).toBe(false);
+        expect(tab1).toHaveAttribute("aria-selected", "true");
+      },
+    );
+
     it("jumps to the last and first enabled tab with End and Home", async () => {
       const onChange = vi.fn();
       render(Tabs, { props: { vertical, onChange } });
