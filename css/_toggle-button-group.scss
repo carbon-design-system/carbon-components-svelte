@@ -221,6 +221,24 @@
     .#{$prefix}--toggle-button--icon-only {
     width: to-rem(48px);
   }
+
+  // `grid`: an even grid of buttons that wraps onto new rows, with a 2px
+  // gap in place of the dividers between neighbours.
+  .#{$prefix}--toggle-button-group--grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(to-rem(80px), 1fr));
+    gap: to-rem(2px);
+  }
+
+  .#{$prefix}--toggle-button-group--grid
+    .#{$prefix}--toggle-button:not(.#{$prefix}--toggle-button--icon-only) {
+    padding-right: $carbon--spacing-03;
+    padding-left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--toggle-button-group--grid .#{$prefix}--toggle-button::before {
+    display: none;
+  }
 }
 
 @include exports("toggle-button-group") {

@@ -48,4 +48,42 @@ test.describe("ToggleButtonGroup", () => {
       Math.round(underlineBox.y + underlineBox.height),
     );
   });
+
+  for (const [testId, columns] of [
+    ["grid-wide", 5],
+    ["grid-narrow", 3],
+  ] as const) {
+    test(`wraps into ${columns} even columns (${testId})`, async ({ page }) => {
+      const layout = await page.getByTestId(testId).evaluate((node) => {
+        const buttons = [...node.querySelectorAll(".bx--toggle-button")];
+        const lefts = new Set(
+          buttons.map((b) => Math.round(b.getBoundingClientRect().left)),
+        );
+        const widths = new Set(
+          buttons.map((b) => Math.round(b.getBoundingClientRect().width)),
+        );
+        const right = node.getBoundingClientRect().right;
+        const overflow = Math.max(
+          ...buttons.map((b) => b.getBoundingClientRect().right - right),
+        );
+        return { columns: lefts.size, widths: widths.size, overflow };
+      });
+
+      expect(layout.columns).toBe(columns);
+      expect(layout.widths).toBe(1);
+      expect(layout.overflow).toBeLessThanOrEqual(0.5);
+    });
+  }
+
+  test("moves between grid rows with Up and Down", async ({ page }) => {
+    // Five columns, so the sixth button sits below the first.
+    const grid = page.getByTestId("grid-wide");
+    await grid.getByRole("button", { name: "9:00 AM" }).focus();
+
+    await page.keyboard.press("ArrowDown");
+    await expect(grid.getByRole("button", { name: "2:00 PM" })).toBeFocused();
+
+    await page.keyboard.press("ArrowUp");
+    await expect(grid.getByRole("button", { name: "9:00 AM" })).toBeFocused();
+  });
 });

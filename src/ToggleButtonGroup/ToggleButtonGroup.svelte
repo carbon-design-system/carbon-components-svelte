@@ -34,6 +34,14 @@
    */
   export let orientation = "horizontal";
 
+  /**
+   * Set to `true` to lay the buttons out as an even grid that wraps onto
+   * as many rows as it needs, such as for time slots. Columns are at
+   * least 5rem wide, so the count follows the width of the container.
+   * Up and Down move between rows. Has no effect on a vertical group.
+   */
+  export let grid = false;
+
   /** Set to `true` to disable all buttons in the group */
   export let disabled = false;
 
@@ -180,6 +188,36 @@
     tabStopElement.set(findDefaultTabStop());
   });
 
+  $: isGrid = grid && orientation !== "vertical";
+
+  /**
+   * In a grid, Up and Down move to the button in the same column of the
+   * row above or below, skipping disabled ones. Left and Right still move
+   * through the buttons in order.
+   * @param {KeyboardEvent} event
+   */
+  function handleGridKeydown(event) {
+    if (!isGrid || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) {
+      return;
+    }
+    const items = /** @type {HTMLButtonElement[]} */ (
+      Array.from(ref?.querySelectorAll(TOGGLE_BUTTON_SELECTOR) ?? [])
+    );
+    let index = items.indexOf(/** @type {HTMLButtonElement} */ (event.target));
+    if (index === -1) return;
+    const firstTop = items[0].offsetTop;
+    const columns = items.filter((item) => item.offsetTop === firstTop).length;
+    const step = event.key === "ArrowDown" ? columns : -columns;
+    event.preventDefault();
+    for (index += step; index >= 0 && index < items.length; index += step) {
+      if (!items[index].disabled) {
+        tabStopElement.set(items[index]);
+        items[index].focus();
+        return;
+      }
+    }
+  }
+
   /** @param {FocusEvent} event */
   function handleFocusIn(event) {
     const target = event.target;
@@ -219,10 +257,12 @@
     },
   }}
   on:focusin={handleFocusIn}
+  on:keydown={handleGridKeydown}
   class:bx--toggle-button-group={true}
   class:bx--toggle-button-group--sm={size === "sm"}
   class:bx--toggle-button-group--lg={size === "lg"}
   class:bx--toggle-button-group--vertical={orientation === "vertical"}
+  class:bx--toggle-button-group--grid={isGrid}
   {...$$restProps}
   aria-label={groupAriaLabel}
   on:click
