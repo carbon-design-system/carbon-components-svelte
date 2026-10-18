@@ -100,6 +100,30 @@ describe("ContextMenu", () => {
     expect(options[0]).toHaveFocus();
   });
 
+  it("should skip disabled submenu options with the arrow keys", async () => {
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        submenuOptionDisabled: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    screen.getByRole("menuitem", { name: "Option with submenu" }).focus();
+    await user.keyboard("{ArrowRight}");
+    await user.keyboard("{ArrowDown}");
+    expect(
+      screen.getByRole("menuitem", { name: "Submenu option 3" }),
+    ).toHaveFocus();
+
+    await user.keyboard("{ArrowUp}");
+    expect(
+      screen.getByRole("menuitem", { name: "Submenu option 1" }),
+    ).toHaveFocus();
+  });
+
   it("should move focus to the option matching a typed character", async () => {
     render(ContextMenu, { props: { open: true } });
 
@@ -306,7 +330,7 @@ describe("ContextMenu", () => {
   it.each([
     ["ArrowDown", "{ArrowDown}", "Submenu option 2"],
     ["ArrowUp", "{ArrowDown}{ArrowUp}", "Submenu option 1"],
-    ["End", "{End}", "Submenu option 2"],
+    ["End", "{End}", "Submenu option 3"],
     ["Home", "{End}{Home}", "Submenu option 1"],
   ])("moves focus in the submenu with %s", async (_, keys, expected) => {
     render(ContextMenu, {

@@ -13,6 +13,7 @@
   export let withDisabled = false;
   export let submenuDisabled = false;
   export let optionDisabled = false;
+  export let submenuOptionDisabled = false;
   export let labelText: ComponentProps<ContextMenu>["labelText"] = undefined;
   export let ariaLabel: string | undefined = undefined;
   export let preventFirst = false;
@@ -47,7 +48,11 @@
       disabled={submenuDisabled}
     >
       <ContextMenuOption labelText="Submenu option 1" />
-      <ContextMenuOption labelText="Submenu option 2" />
+      <ContextMenuOption
+        labelText="Submenu option 2"
+        disabled={submenuOptionDisabled}
+      />
+      <ContextMenuOption labelText="Submenu option 3" />
     </ContextMenuOption>
     {#if withRootSettings}
       <ContextMenuOption labelText="Settings" />

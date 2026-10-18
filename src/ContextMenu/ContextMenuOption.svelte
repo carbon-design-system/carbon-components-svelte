@@ -86,8 +86,8 @@
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
-  import { clampIndex } from "../utils/clamp-index.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
+  import { nextEnabledIndex } from "../utils/move-index.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -261,10 +261,14 @@
         return;
       }
 
-      if (event.key === "ArrowDown") {
-        focusIndex = clampIndex(focusIndex, 1, options.length);
-      } else if (event.key === "ArrowUp") {
-        focusIndex = clampIndex(focusIndex, -1, options.length);
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        focusIndex = nextEnabledIndex({
+          items: options,
+          index: focusIndex,
+          step: event.key === "ArrowDown" ? 1 : -1,
+          wrap: false,
+          isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
+        });
       } else if (event.key === "Home") {
         if (options.length > 0) focusIndex = 0;
       } else if (event.key === "End" && options.length > 0) {
