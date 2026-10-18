@@ -468,3 +468,72 @@ describe("HeaderSearch Generics", () => {
     >();
   });
 });
+
+describe("HeaderSearch Enter without results", () => {
+  it("submits the query instead of selecting a missing result", async () => {
+    const onSelect = vi.fn();
+    const onSubmit = vi.fn();
+    const { component } = render(HeaderSearchSubmitTest, {
+      props: { onSelect, onSubmit },
+    });
+
+    await user.type(screen.getByRole("textbox"), "quota");
+    await user.keyboard("{Enter}");
+
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(onSubmit).toHaveBeenCalledWith({ value: "quota" });
+    expect(component.value).toBe("quota");
+    expect(component.active).toBe(true);
+  });
+
+  it("still selects the highlighted result when there is one", async () => {
+    const onSelect = vi.fn();
+    const onSubmit = vi.fn();
+    render(HeaderSearchSubmitTest, {
+      props: {
+        onSelect,
+        onSubmit,
+        results: [{ href: "/quotas", text: "Quotas" }],
+      },
+    });
+
+    await user.type(screen.getByRole("textbox"), "quota");
+    await user.keyboard("{Enter}");
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(onSelect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        value: "quota",
+        selectedResult: { href: "/quotas", text: "Quotas" },
+      }),
+    );
+  });
+});
+
+const results = [
+  { href: "/quotas", text: "Quotas" },
+  { href: "/quota-alerts", text: "Quota alerts" },
+  { href: "/quota-history", text: "Quota history" },
+];
+
+describe("HeaderSearch results shrinking", () => {
+  it("moves the selection back into range", async () => {
+    const onSelect = vi.fn();
+    const { component } = render(HeaderSearchSubmitTest, {
+      props: { onSelect, results },
+    });
+
+    screen.getByRole("textbox").focus();
+    await user.keyboard("{ArrowDown}{ArrowDown}");
+    expect(component.selectedResultIndex).toBe(2);
+
+    component.results = results.slice(0, 1);
+    await tick();
+    expect(component.selectedResultIndex).toBe(0);
+
+    await user.keyboard("{Enter}");
+    expect(onSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ selectedResult: results[0] }),
+    );
+  });
+});

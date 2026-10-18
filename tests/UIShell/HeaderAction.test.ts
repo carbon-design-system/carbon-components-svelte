@@ -11,6 +11,7 @@ import { user } from "../utils/user";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
 import HeaderActionClose from "./HeaderActionClose.test.svelte";
 import HeaderActionTooltipGroup from "./HeaderActionTooltipGroup.test.svelte";
+import HeaderGlobalActionBadge from "./HeaderGlobalAction.badge.test.svelte";
 
 describe("HeaderAction", () => {
   it("supports custom textChildren and icon slots", () => {
@@ -98,5 +99,77 @@ describe("HeaderAction", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["closeIcon"]>().toEqualTypeOf<any>();
     });
+  });
+});
+
+describe("HeaderAction close event", () => {
+  const getActionButton = () =>
+    screen.getByRole("button", { name: "Switcher" });
+
+  it('dispatches close with trigger "toggle" when the button closes the panel', async () => {
+    const onOpen = vi.fn();
+    const onClose = vi.fn();
+    render(HeaderActionClose, { props: { onOpen, onClose } });
+
+    await user.click(getActionButton());
+    expect(getActionButton()).toHaveClass("bx--header__action--active");
+    expect(onOpen).toHaveBeenCalledTimes(1);
+    expect(onOpen.mock.calls[0][0].detail).toEqual({ trigger: "toggle" });
+
+    await user.click(getActionButton());
+    expect(getActionButton()).not.toHaveClass("bx--header__action--active");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "toggle" });
+  });
+
+  it('dispatches close with trigger "outside-click" when clicking outside', async () => {
+    const onClose = vi.fn();
+    render(HeaderActionClose, { props: { onClose } });
+
+    await user.click(getActionButton());
+    expect(getActionButton()).toHaveClass("bx--header__action--active");
+
+    await user.click(screen.getByTestId("outside"));
+    expect(getActionButton()).not.toHaveClass("bx--header__action--active");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({
+      trigger: "outside-click",
+    });
+  });
+
+  it("does not dispatch close on outside click when preventCloseOnClickOutside is set", async () => {
+    const onClose = vi.fn();
+    render(HeaderActionClose, {
+      props: { onClose, preventCloseOnClickOutside: true },
+    });
+
+    await user.click(getActionButton());
+    expect(getActionButton()).toHaveClass("bx--header__action--active");
+
+    await user.click(screen.getByTestId("outside"));
+    expect(getActionButton()).toHaveClass("bx--header__action--active");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+});
+
+describe("HeaderGlobalAction", () => {
+  it("renders a dot badge when count is 0, and no badge when omitted", () => {
+    render(HeaderGlobalActionBadge);
+    const none = screen.getByTestId("no-badge");
+    expect(
+      none.querySelector(".bx--btn__badge-wrapper"),
+    ).not.toBeInTheDocument();
+    expect(none.querySelector(".bx--badge-indicator")).not.toBeInTheDocument();
+
+    const container = screen.getByTestId("dot");
+    const badge = container.querySelector(".bx--badge-indicator");
+    const button = container.querySelector("button");
+
+    expect(
+      container.querySelector(".bx--btn__badge-wrapper"),
+    ).toBeInTheDocument();
+    expect(button).toHaveClass("bx--btn--lg");
+    expect(badge).not.toHaveClass("bx--badge-indicator--count");
+    expect(badge?.textContent?.trim()).toBe("");
   });
 });
