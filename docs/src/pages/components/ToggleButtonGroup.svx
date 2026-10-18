@@ -122,6 +122,21 @@ Set `icon` alongside default slot content to render both.
   <ToggleButton value="italic" icon={TextItalic}>Italic</ToggleButton>
 </ToggleButtonGroup>
 
+## Grid
+
+Set `grid` to `true` to lay the buttons out as an even grid that wraps onto as many rows as it needs, such as for time slots. Columns are at least 5rem wide, so their number follows the width of the container. <DocKbd label="↑" /> and <DocKbd label="↓" /> move between rows.
+
+<ToggleButtonGroup labelText="Appointment time" size="sm" selectionMode="single" grid>
+  <ToggleButton value="0900">9:00 AM</ToggleButton>
+  <ToggleButton value="0930">9:30 AM</ToggleButton>
+  <ToggleButton value="1000" disabled>10:00 AM</ToggleButton>
+  <ToggleButton value="1030">10:30 AM</ToggleButton>
+  <ToggleButton value="1100">11:00 AM</ToggleButton>
+  <ToggleButton value="1400">2:00 PM</ToggleButton>
+  <ToggleButton value="1430">2:30 PM</ToggleButton>
+  <ToggleButton value="1500">3:00 PM</ToggleButton>
+</ToggleButtonGroup>
+
 ## Sizes
 
 Set `size` to `"sm"`, `"md"` (default), or `"lg"`.
