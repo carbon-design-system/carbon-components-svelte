@@ -11,6 +11,7 @@
   const nodes: ComponentProps<TreeView>["nodes"] = [
     { id: 1, text: "Node 1" },
     { id: 2, text: "Node 2" },
+    { id: 3, text: "Parent 3", nodes: [{ id: 4, text: "Node 4" }] },
   ];
 </script>
 

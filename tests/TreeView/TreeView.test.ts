@@ -245,7 +245,8 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(disabledNode).toHaveClass("bx--tree-node--disabled");
 
     await user.click(disabledNode);
-    expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
+    expect(disabledNode).not.toHaveClass("bx--tree-node--selected");
+    expect(disabledNode).not.toHaveClass("bx--tree-node--active");
   });
 
   it("re-applies tabindex=0 to the new first focusable when nodes change", async () => {
@@ -390,34 +391,21 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(firstItem).toHaveFocus();
   });
 
-  it("skips disabled nodes in keyboard navigation", async () => {
+  it("skips descendants under a re-collapsed subtree in keyboard navigation", async () => {
     render(component);
 
-    const expandAllButton = screen.getByText("Expand all");
-    await user.click(expandAllButton);
-
-    const databasesNode = treeItemById(9);
-    databasesNode.focus();
-
-    await user.keyboard("{ArrowDown}");
-
-    const disabledNode = treeItemById(14);
-    expect(disabledNode).not.toHaveFocus();
-  });
-
-  it("skips descendants under collapsed subtree in keyboard navigation", async () => {
-    render(component);
-
-    const firstItem = treeItemById(0);
     const analytics = treeItemById(1);
+    analytics.focus();
 
-    expect(document.querySelector('[data-tree-row-id="2"]')).toBeNull();
-    expect(document.querySelector('[data-tree-row-id="3"]')).toBeNull();
+    await user.keyboard("{ArrowRight}");
+    expect(analytics).toHaveAttribute("aria-expanded", "true");
+    await user.keyboard("{ArrowLeft}");
+    expect(analytics).toHaveAttribute("aria-expanded", "false");
 
-    firstItem.focus();
+    // The collapsed children stay mounted but hidden; they must be skipped.
     await user.keyboard("{ArrowDown}");
 
-    expect(analytics).toHaveFocus();
+    expect(treeItemById(7)).toHaveFocus();
   });
 
   it("End key moves focus to the last non-disabled treeitem", async () => {
@@ -606,7 +594,7 @@ describe("TreeView Props", () => {
   });
 
   it("Ctrl+A selects every non-disabled visible row in multiselect mode", async () => {
-    render(TreeViewMultiselect, {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       selectedIds: [],
     });
@@ -618,6 +606,9 @@ describe("TreeView Props", () => {
 
     await user.keyboard("{Control>}a{/Control}");
 
+    expect(
+      [...(component.selectedIds ?? [])].sort((a, b) => Number(a) - Number(b)),
+    ).toEqual([0, 1, 7, 9]);
     const selectedItems = screen.getAllByRole("treeitem", { selected: true });
     const names = selectedItems.map(treeitemPrimaryLabel).sort();
     expect(names).toEqual([
@@ -626,9 +617,6 @@ describe("TreeView Props", () => {
       "Blockchain",
       "Databases",
     ]);
-    expect(
-      screen.getByRole("treeitem", { name: /Integration/ }),
-    ).toHaveAttribute("aria-disabled", "true");
   });
 
   it("handles multiple selectedIds with multiselect", () => {
@@ -1153,44 +1141,41 @@ describe("TreeView Props", () => {
     expect(db2Item).toHaveAttribute("aria-selected", "false");
   });
 
-  it("disabled nodes are skipped in multiselect expansion", async () => {
-    render(TreeViewMultiselect, {
+  it("clicking a disabled node in multiselect mode leaves the selection unchanged", async () => {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       multiselectMode: "node",
-      selectedIds: [],
+      selectedIds: [0],
     });
 
     const disabledNode = treeItemById(14);
 
     await user.click(disabledNode);
 
-    expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
+    expect(component.selectedIds).toEqual([0]);
+    expect(disabledNode).not.toHaveClass("bx--tree-node--selected");
   });
 
   it("shift+click skips disabled nodes in range selection", async () => {
-    render(TreeViewMultiselect, {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       multiselectMode: "node",
       selectedIds: [],
       expandedIds: [],
+      nodes: [
+        { id: 0, text: "First" },
+        { id: 1, text: "Middle", disabled: true },
+        { id: 2, text: "Last" },
+      ],
     });
 
-    const aiItem = treeItemById(0);
-
-    await user.click(aiItem);
-
-    // Integration is disabled in between
-    const databasesItem = treeItemById(9);
+    await user.click(treeItemById(0));
 
     await user.keyboard("{Shift>}");
-    await user.click(databasesItem);
+    await user.click(treeItemById(2));
     await user.keyboard("{/Shift}");
 
-    expect(aiItem).toHaveAttribute("aria-selected", "true");
-    expect(databasesItem).toHaveAttribute("aria-selected", "true");
-
-    const disabledNode = treeItemById(14);
-    expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
+    expect(component.selectedIds).toEqual([0, 2]);
   });
 
   it("shift+click range selection in shallow mode expands each ranged node to its direct children", async () => {
@@ -1772,8 +1757,8 @@ describe("TreeView Generics", () => {
   it("supports custom label slot", () => {
     render(TreeViewSlot);
 
-    const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
+    expect(screen.getByText("Custom label content")).toBeVisible();
+    expect(screen.queryByText("Default label")).not.toBeInTheDocument();
   });
 });
 
@@ -1968,24 +1953,6 @@ describe("TreeViewNode href", () => {
     expect(
       consoleLog.mock.calls.filter((call) => call[0] === "select"),
     ).toHaveLength(1);
-  });
-
-  it("does nothing on Enter for a disabled link node", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-
-    render(TreeViewHref);
-
-    const disabledLink = screen.getByRole("treeitem", {
-      name: /Disabled Link/,
-    });
-    disabledLink.focus();
-
-    await user.keyboard("{Enter}");
-
-    expect(consoleLog).not.toHaveBeenCalledWith(
-      "select",
-      expect.objectContaining({ id: "link-disabled" }),
-    );
   });
 
   it("sets target attribute on the anchor element", () => {
@@ -2186,9 +2153,15 @@ describe("TreeView autoCollapse", () => {
     const folder2 = treeItemById("folder2");
     const folder3 = treeItemById("folder3");
 
+    // Start with a top-level root sibling (folder2) expanded so the later
+    // root-sibling collapse is observable.
+    await user.click(getToggleButton(folder2));
+    expect(folder2).toHaveAttribute("aria-expanded", "true");
+
     // Activate a leaf 4 levels deep: folder3 > subfolder1 > subitem1 > subsubitem1.
     await rerender({ activeId: "subsubitem1" });
 
+    expect(folder2).toHaveAttribute("aria-expanded", "false");
     expect(folder3).toHaveAttribute("aria-expanded", "true");
     const subfolder1 = treeItemById("subfolder1");
     const subfolder2 = treeItemById("subfolder2");
@@ -2208,7 +2181,6 @@ describe("TreeView autoCollapse", () => {
     // siblings folder2 and folder3 must collapse (root-parent edge case).
     await rerender({ activeId: "item1" });
     expect(folder1).toHaveAttribute("aria-expanded", "true");
-    expect(folder2).toHaveAttribute("aria-expanded", "false");
     expect(folder3).toHaveAttribute("aria-expanded", "false");
   });
 

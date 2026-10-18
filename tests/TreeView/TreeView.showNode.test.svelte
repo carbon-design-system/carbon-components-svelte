@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
@@ -5,9 +7,9 @@
   import type { ComponentProps } from "svelte";
 
   let treeview: TreeView;
-  let activeId: TreeNode["id"] | undefined = undefined;
-  let selectedIds: TreeNode["id"][] = [];
-  let expandedIds: TreeNode["id"][] = [];
+  export let activeId: TreeNode["id"] | undefined = undefined;
+  export let selectedIds: TreeNode["id"][] = [];
+  export let expandedIds: TreeNode["id"][] = [];
   let nodes: ComponentProps<TreeView>["nodes"] = [
     { id: 0, text: "Level 0" },
     {
@@ -25,10 +27,6 @@
       ],
     },
   ];
-
-  $: console.log("activeId", activeId);
-  $: console.log("selectedIds", selectedIds);
-  $: console.log("expandedIds", expandedIds);
 </script>
 
 <TreeView
@@ -63,14 +61,4 @@
   on:click={() => treeview.showNode(3, { expand: false, select: false })}
 >
   Focus only
-</Button>
-<Button
-  data-testid="reset"
-  on:click={() => {
-    expandedIds = [];
-    selectedIds = [];
-    activeId = undefined;
-  }}
->
-  Reset
 </Button>

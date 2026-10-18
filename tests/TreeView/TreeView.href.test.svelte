@@ -10,6 +10,7 @@
       id: "link-disabled",
       text: "Disabled Link",
       href: "/disabled",
+      target: "_blank",
       disabled: true,
     },
     {

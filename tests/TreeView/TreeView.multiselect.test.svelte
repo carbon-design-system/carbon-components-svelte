@@ -10,7 +10,7 @@
   export let activeId: ComponentProps<TreeView>["activeId"] = 0;
   export let selectedIds: ComponentProps<TreeView>["selectedIds"] = [0, 7, 9];
   export let expandedIds: ComponentProps<TreeView>["expandedIds"] = [];
-  export let nodes = [
+  export let nodes: NonNullable<ComponentProps<TreeView>["nodes"]> = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

@@ -4,17 +4,17 @@ import { user } from "../utils/user";
 import TreeViewActiveSelect from "./TreeViewActiveSelect.test.svelte";
 
 describe("TreeView auto-select on active node", () => {
-  it("auto-selects a node when it becomes active, exactly once", async () => {
+  it("does not re-select a parent node the consumer has deselected while it stays active", async () => {
     const { component } = render(TreeViewActiveSelect);
     await tick();
 
-    component.activeId = 1;
+    component.activeId = 3;
     await tick();
-    expect(component.selectedIds).toEqual([1]);
+    expect(component.selectedIds).toEqual([3]);
 
-    component.size = "default";
+    component.selectedIds = [];
     await tick();
-    expect(component.selectedIds).toEqual([1]);
+    expect(component.selectedIds).toEqual([]);
   });
 
   it("does not re-select a node the consumer has deselected while it stays active", async () => {

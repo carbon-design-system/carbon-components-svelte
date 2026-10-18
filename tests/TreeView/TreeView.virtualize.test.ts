@@ -30,7 +30,8 @@ describe("TreeView (virtualize)", () => {
     const trailing = spacers[0];
     assert(trailing instanceof HTMLElement);
     const trailingHeight = Number.parseFloat(trailing.style.height);
-    expect(trailingHeight).toBeGreaterThan(0);
+    // (500 roots - 13 rendered) rows x 32px.
+    expect(trailingHeight).toBe(15_584);
   });
 
   it("renders rows with the expected ARIA tree metadata", () => {
@@ -154,7 +155,8 @@ describe("TreeView (virtualize)", () => {
 
     await user.keyboard("{ArrowDown}");
     const focused = document.activeElement;
-    expect(focused?.getAttribute("data-tree-row-id")).toBeTruthy();
+    // Focus was on row 0 (id 0), so ArrowDown lands on row 1 (id 4).
+    expect(focused?.getAttribute("data-tree-row-id")).toBe("4");
   });
 
   it("does not steal focus when scrolling a never-focused virtualized tree", async () => {
