@@ -8,7 +8,8 @@ import type { ComponentEvents } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import TreeViewSelectionChange from "./TreeViewSelectionChange.test.svelte";
+import { expectOneUnhandledRejection } from "./helpers";
+import TreeViewSelectionChange from "./TreeView.changeEvents.test.svelte";
 
 type Id = string | number;
 type SelectChangeDetail = {
@@ -283,17 +284,9 @@ describe("TreeView select:change", () => {
   });
 
   it("a throwing consumer neither wedges the flush nor surfaces a tracked unhandled rejection", async () => {
-    // Deferred dispatch turns a consumer throw into an unhandled rejection.
-    // Swap out the `process` listeners so vitest's collector does not fail the
-    // run, capture it ourselves, then assert the selection still committed.
-    const priorListeners = process.listeners("unhandledRejection");
-    process.removeAllListeners("unhandledRejection");
-
-    const rejections: unknown[] = [];
-    const capture = (reason: unknown) => rejections.push(reason);
-    process.on("unhandledRejection", capture);
-
-    try {
+    // Deferred dispatch turns a consumer throw into an unhandled rejection,
+    // so assert it ourselves and that the selection still committed.
+    await expectOneUnhandledRejection("consumer boom", async () => {
       const onSelectChange = vi.fn(() => {
         throw new Error("consumer boom");
       });
@@ -304,18 +297,7 @@ describe("TreeView select:change", () => {
 
       // The selection still committed despite the throw.
       expect(treeItemById(0)).toHaveAttribute("aria-selected", "true");
-
-      // Let Node emit the rejection from the deferred microtask.
-      await flushMacrotask();
-      expect(rejections).toHaveLength(1);
-      assert(rejections[0] instanceof Error);
-      expect(rejections[0].message).toBe("consumer boom");
-    } finally {
-      process.removeListener("unhandledRejection", capture);
-      for (const listener of priorListeners) {
-        process.on("unhandledRejection", listener);
-      }
-    }
+    });
   });
 });
 

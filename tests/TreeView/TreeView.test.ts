@@ -5,8 +5,9 @@ import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeVi
 import { findParentTreeNode } from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
 import type TreeViewNodeListComponent from "carbon-components-svelte/TreeView/TreeViewNodeList.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { treeItemById } from "../utils/tree-item-by-id";
+import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
+import { getAllExpandedItems } from "./helpers";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
 import TreeViewHref from "./TreeView.href.test.svelte";
@@ -53,25 +54,22 @@ describe("TreeView", () => {
     );
   };
 
-  const getAllExpandedItems = () => {
-    return screen.getAllByRole("treeitem", { expanded: true });
-  };
-
   const getItemByName = (name: string | RegExp) =>
     screen.getByRole("treeitem", { name });
 
   it("can select a node", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
+    const onSelectedIds = vi.fn();
 
-    render(TreeView);
+    render(TreeView, { onSelect, onSelectedIds });
 
     const firstItem = treeItemById(0);
     expect(firstItem).toBeInTheDocument();
 
     await user.click(firstItem);
     expect(firstItem).toHaveAttribute("aria-selected", "true");
-    expect(consoleLog).toBeCalledWith("selectedIds", [0]);
-    expect(consoleLog).toBeCalledWith("select", {
+    expect(onSelectedIds).toBeCalledWith([0]);
+    expect(onSelect).toBeCalledWith({
       checked: false,
       disabled: false,
       expanded: false,
@@ -170,9 +168,9 @@ describe("TreeView", () => {
   });
 
   it("dispatches toggle event when node is toggled", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onToggle = vi.fn();
 
-    render(TreeView);
+    render(TreeView, { onToggle });
 
     const analyticsNode = treeItemById(1);
     const toggleButton = analyticsNode.querySelector(
@@ -183,8 +181,7 @@ describe("TreeView", () => {
 
     assert(toggleButton instanceof HTMLElement);
 
-    const lastToggleDetail = () =>
-      consoleLog.mock.calls.filter((call) => call[0] === "toggle").at(-1)?.[1];
+    const lastToggleDetail = () => onToggle.mock.lastCall?.[0];
 
     await user.click(toggleButton);
 
@@ -211,15 +208,14 @@ describe("TreeView", () => {
   });
 
   it("dispatches focus event when node receives focus", () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onFocus = vi.fn();
 
-    render(TreeView);
+    render(TreeView, { onFocus });
 
     const firstItem = treeItemById(0);
     firstItem.focus();
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "focus",
+    expect(onFocus).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 0,
         text: "AI / Machine learning",
@@ -435,18 +431,18 @@ describe("TreeView", () => {
   });
 
   it("selects node with Enter key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
+    const onSelectedIds = vi.fn();
 
-    render(TreeView);
+    render(TreeView, { onSelect, onSelectedIds });
 
     const firstItem = treeItemById(0);
     firstItem.focus();
 
     await user.keyboard("{Enter}");
 
-    expect(consoleLog).toHaveBeenCalledWith("selectedIds", [0]);
-    expect(consoleLog).toHaveBeenCalledWith(
-      "select",
+    expect(onSelectedIds).toHaveBeenCalledWith([0]);
+    expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 0,
         text: "AI / Machine learning",
@@ -455,18 +451,18 @@ describe("TreeView", () => {
   });
 
   it("selects node with Space key", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
+    const onSelectedIds = vi.fn();
 
-    render(TreeView);
+    render(TreeView, { onSelect, onSelectedIds });
 
     const firstItem = treeItemById(0);
     firstItem.focus();
 
     await user.keyboard(" ");
 
-    expect(consoleLog).toHaveBeenCalledWith("selectedIds", [0]);
-    expect(consoleLog).toHaveBeenCalledWith(
-      "select",
+    expect(onSelectedIds).toHaveBeenCalledWith([0]);
+    expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 0,
         text: "AI / Machine learning",
@@ -481,7 +477,7 @@ describe("TreeView hierarchy", () => {
 
     await user.click(screen.getByText("Expand all"));
 
-    expect(screen.getAllByRole("treeitem", { expanded: true })).toHaveLength(5);
+    expect(getAllExpandedItems()).toHaveLength(5);
     expect(document.querySelectorAll("[data-tree-row-id]")).toHaveLength(16);
     expect(treeItemById(3)).toHaveAttribute("aria-level", "3");
   });
@@ -622,7 +618,7 @@ describe("TreeView Props", () => {
   });
 
   it("reports `selected` correctly in the focus dispatch payload after many nodes are selected", () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onFocus = vi.fn();
 
     // A broad initial `selectedIds` set exercises the Set-based lookup
     // `withLiveState` uses to compute `selected` for the dispatch payload
@@ -633,10 +629,10 @@ describe("TreeView Props", () => {
     render(TreeViewMultiselect, {
       multiselect: true,
       selectedIds: [0, 1, 9],
+      onFocus,
     });
 
-    const lastFocusDetail = () =>
-      consoleLog.mock.calls.filter((call) => call[0] === "focus").at(-1)?.[1];
+    const lastFocusDetail = () => onFocus.mock.lastCall?.[0];
 
     const selectedItem = treeItemById(9);
     selectedItem.focus();
@@ -679,11 +675,12 @@ describe("TreeView Props", () => {
   });
 
   it("ctrl+click deselects a selected row that is not active", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
     const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       activeId: 0,
       selectedIds: [0, 7, 9],
+      onSelect,
     });
 
     await user.keyboard("{Control>}");
@@ -696,8 +693,7 @@ describe("TreeView Props", () => {
     expect(
       [...(component.selectedIds ?? [])].sort((a, b) => Number(a) - Number(b)),
     ).toEqual([0, 9]);
-    expect(consoleLog).toHaveBeenLastCalledWith(
-      "select",
+    expect(onSelect).toHaveBeenLastCalledWith(
       expect.objectContaining({ id: 7, selected: false }),
     );
 
@@ -724,11 +720,12 @@ describe("TreeView Props", () => {
 
   describe("Shift+Up/Down in multiselect", () => {
     it("toggles rows as focus moves", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onSelect = vi.fn();
       render(TreeViewMultiselect, {
         multiselect: true,
         activeId: "",
         selectedIds: [],
+        onSelect,
       });
 
       treeItemById(0).focus();
@@ -737,8 +734,7 @@ describe("TreeView Props", () => {
       expect(treeItemById(1)).toHaveFocus();
       expect(treeItemById(1)).toHaveAttribute("aria-selected", "true");
       expect(treeItemById(0)).toHaveAttribute("aria-selected", "false");
-      expect(consoleLog).toHaveBeenLastCalledWith(
-        "select",
+      expect(onSelect).toHaveBeenLastCalledWith(
         expect.objectContaining({ id: 1, selected: true }),
       );
 
@@ -828,14 +824,10 @@ describe("TreeView Props", () => {
       expandedIds: [1],
     });
 
-    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
-    const engineItem = document.querySelector('[data-tree-row-id="2"]');
-    const sqlItem = document.querySelector('[data-tree-row-id="5"]');
-    const db2Item = document.querySelector('[data-tree-row-id="6"]');
-    assert(analyticsItem instanceof HTMLElement);
-    assert(engineItem instanceof HTMLElement);
-    assert(sqlItem instanceof HTMLElement);
-    assert(db2Item instanceof HTMLElement);
+    const analyticsItem = treeItemById(1);
+    const engineItem = treeItemById(2);
+    const sqlItem = treeItemById(5);
+    const db2Item = treeItemById(6);
 
     await user.click(analyticsItem);
 
@@ -844,7 +836,7 @@ describe("TreeView Props", () => {
     expect(sqlItem).toHaveAttribute("aria-selected", "true");
     expect(db2Item).toHaveAttribute("aria-selected", "true");
 
-    expect(document.querySelector('[data-tree-row-id="3"]')).toBeNull();
+    expect(findRowById(3)).toBeNull();
     expect(component.selectedIds).not.toContain(3);
   });
 
@@ -856,12 +848,9 @@ describe("TreeView Props", () => {
       expandedIds: [1, 2],
     });
 
-    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
-    const sparkItem = document.querySelector('[data-tree-row-id="3"]');
-    const hadoopItem = document.querySelector('[data-tree-row-id="4"]');
-    assert(analyticsItem instanceof HTMLElement);
-    assert(sparkItem instanceof HTMLElement);
-    assert(hadoopItem instanceof HTMLElement);
+    const analyticsItem = treeItemById(1);
+    const sparkItem = treeItemById(3);
+    const hadoopItem = treeItemById(4);
 
     await user.click(analyticsItem);
 
@@ -878,10 +867,8 @@ describe("TreeView Props", () => {
       expandedIds: [1, 2],
     });
 
-    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
-    const sparkItem = document.querySelector('[data-tree-row-id="3"]');
-    assert(analyticsItem instanceof HTMLElement);
-    assert(sparkItem instanceof HTMLElement);
+    const analyticsItem = treeItemById(1);
+    const sparkItem = treeItemById(3);
 
     await user.click(analyticsItem);
     expect(sparkItem).toHaveAttribute("aria-selected", "true");
@@ -926,7 +913,7 @@ describe("TreeView Props", () => {
 
     // Children of collapsed parents are not visible, so they are not in the
     // range (id=2 is a child of collapsed Analytics).
-    expect(document.querySelector('[data-tree-row-id="2"]')).toBeNull();
+    expect(findRowById(2)).toBeNull();
     expect(component.selectedIds).not.toContain(2);
   });
 
@@ -948,12 +935,9 @@ describe("TreeView Props", () => {
     await user.keyboard("{/Shift}");
 
     // Analytics' children are visible, so they should be in the range
-    const engineItem = document.querySelector('[data-tree-row-id="2"]');
-    const sqlItem = document.querySelector('[data-tree-row-id="5"]');
-    const db2Item = document.querySelector('[data-tree-row-id="6"]');
-    assert(engineItem instanceof HTMLElement);
-    assert(sqlItem instanceof HTMLElement);
-    assert(db2Item instanceof HTMLElement);
+    const engineItem = treeItemById(2);
+    const sqlItem = treeItemById(5);
+    const db2Item = treeItemById(6);
 
     expect(engineItem).toHaveAttribute("aria-selected", "true");
     expect(sqlItem).toHaveAttribute("aria-selected", "true");
@@ -1000,14 +984,10 @@ describe("TreeView Props", () => {
     });
 
     const aiItem = treeItemById(0);
-    const analyticsItem = document.querySelector('[data-tree-row-id="1"]');
-    const engineItem = document.querySelector('[data-tree-row-id="2"]');
-    const sqlItem = document.querySelector('[data-tree-row-id="5"]');
-    const db2Item = document.querySelector('[data-tree-row-id="6"]');
-    assert(analyticsItem instanceof HTMLElement);
-    assert(engineItem instanceof HTMLElement);
-    assert(sqlItem instanceof HTMLElement);
-    assert(db2Item instanceof HTMLElement);
+    const analyticsItem = treeItemById(1);
+    const engineItem = treeItemById(2);
+    const sqlItem = treeItemById(5);
+    const db2Item = treeItemById(6);
 
     await user.click(aiItem);
     expect(aiItem).toHaveAttribute("aria-selected", "true");
@@ -1345,6 +1325,65 @@ describe("TreeView Generics", () => {
   });
 });
 
+describe.each([
+  ["plain", {}],
+  ["virtual", { virtualize: { maxVisibleRows: 10 }, padding: 80 }],
+])("TreeViewNode href (%s)", (_variant, variantProps) => {
+  it("renders a regular li when href is not set", () => {
+    render(TreeViewHref, variantProps);
+
+    const plainNode = screen.getByRole("treeitem", { name: /Plain Node/ });
+    expect(plainNode.tagName).toBe("LI");
+    expect(plainNode).not.toHaveAttribute("href");
+  });
+
+  it("uses aria-current='page' instead of 'true' for active link nodes", () => {
+    render(TreeViewHref, { ...variantProps, activeId: "link-1" });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode).toHaveAttribute("aria-current", "page");
+  });
+
+  it("does not set aria-selected on link nodes", () => {
+    render(TreeViewHref, { ...variantProps, selectedIds: ["link-1"] });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode).not.toHaveAttribute("aria-selected");
+  });
+
+  it("does not cancel Enter on an enabled link node", () => {
+    render(TreeViewHref, variantProps);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    const event = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    linkNode.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("selects a link node exactly once on Enter", async () => {
+    const onSelect = vi.fn();
+
+    render(TreeViewHref, { ...variantProps, onSelect });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    await user.keyboard("{Enter}");
+
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "link-1" }),
+    );
+  });
+});
+
 describe("TreeViewNode href", () => {
   it("renders an anchor element with role='treeitem' when href is set", () => {
     render(TreeViewHref);
@@ -1362,14 +1401,6 @@ describe("TreeViewNode href", () => {
     expect(parentLi).toHaveAttribute("role", "none");
   });
 
-  it("renders a regular li when href is not set", () => {
-    render(TreeViewHref);
-
-    const plainNode = screen.getByRole("treeitem", { name: /Plain Node/ });
-    expect(plainNode.tagName).toBe("LI");
-    expect(plainNode).not.toHaveAttribute("href");
-  });
-
   it("does not set href on disabled link nodes", () => {
     render(TreeViewHref);
 
@@ -1381,30 +1412,15 @@ describe("TreeViewNode href", () => {
     expect(disabledLink).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("uses aria-current='page' instead of 'true' for active link nodes", () => {
-    render(TreeViewHref, { activeId: "link-1" });
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
-    expect(linkNode).toHaveAttribute("aria-current", "page");
-  });
-
-  it("does not set aria-selected on link nodes", () => {
-    render(TreeViewHref, { selectedIds: ["link-1"] });
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
-    expect(linkNode).not.toHaveAttribute("aria-selected");
-  });
-
   it("can select a link node via click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
 
-    render(TreeViewHref);
+    render(TreeViewHref, { onSelect });
 
     const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
     await user.click(linkNode);
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "select",
+    expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({
         id: "link-1",
         text: "Link Node",
@@ -1414,31 +1430,29 @@ describe("TreeViewNode href", () => {
   });
 
   it("does not select a disabled link node via click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
 
-    render(TreeViewHref);
+    render(TreeViewHref, { onSelect });
 
     const disabledLink = screen.getByRole("treeitem", {
       name: /Disabled Link/,
     });
     await user.click(disabledLink);
 
-    expect(consoleLog).not.toHaveBeenCalledWith(
-      "select",
+    expect(onSelect).not.toHaveBeenCalledWith(
       expect.objectContaining({ id: "link-disabled" }),
     );
   });
 
   it("dispatches focus event for link nodes", () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onFocus = vi.fn();
 
-    render(TreeViewHref);
+    render(TreeViewHref, { onFocus });
 
     const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
     linkNode.focus();
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "focus",
+    expect(onFocus).toHaveBeenCalledWith(
       expect.objectContaining({
         id: "link-1",
         text: "Link Node",
@@ -1447,45 +1461,10 @@ describe("TreeViewNode href", () => {
     );
   });
 
-  it("does not cancel Enter on an enabled link node", () => {
-    render(TreeViewHref);
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
-    linkNode.focus();
-
-    const event = new KeyboardEvent("keydown", {
-      key: "Enter",
-      bubbles: true,
-      cancelable: true,
-    });
-    linkNode.dispatchEvent(event);
-
-    expect(event.defaultPrevented).toBe(false);
-  });
-
-  it("selects a link node exactly once on Enter", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-
-    render(TreeViewHref);
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
-    linkNode.focus();
-
-    await user.keyboard("{Enter}");
-
-    const selectCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "select",
-    );
-    expect(selectCalls).toHaveLength(1);
-    expect(selectCalls[0][1]).toEqual(
-      expect.objectContaining({ id: "link-1" }),
-    );
-  });
-
   it("does not click a link node on Space", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSelect = vi.fn();
 
-    render(TreeViewHref);
+    render(TreeViewHref, { onSelect });
 
     const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
     let clicks = 0;
@@ -1495,9 +1474,7 @@ describe("TreeViewNode href", () => {
     await user.keyboard(" ");
 
     expect(clicks).toBe(0);
-    expect(
-      consoleLog.mock.calls.filter((call) => call[0] === "select"),
-    ).toHaveLength(1);
+    expect(onSelect).toHaveBeenCalledTimes(1);
   });
 
   it("sets target attribute on the anchor element", () => {
@@ -1546,10 +1523,6 @@ describe("TreeView autoCollapse", () => {
     const button = node.querySelector(".bx--tree-parent-node__toggle");
     assert(button instanceof HTMLElement);
     return button;
-  };
-
-  const getAllExpandedItems = () => {
-    return screen.queryAllByRole("treeitem", { expanded: true });
   };
 
   it("collapses sibling nodes when autoCollapse is true", async () => {
@@ -1721,8 +1694,7 @@ describe("TreeView autoCollapse", () => {
 
     const treeId = container.querySelector('[role="tree"]')?.id;
     expect(treeId).toBeTruthy();
-    const parent = container.querySelector('[data-tree-row-id="parent"]');
-    const subtreeId = parent?.getAttribute("aria-owns");
+    const subtreeId = treeItemById("parent").getAttribute("aria-owns");
     expect(subtreeId).toBe(`${treeId}-parent-subtree`);
 
     const subtree = document.getElementById(subtreeId as string);
@@ -1736,7 +1708,7 @@ describe("TreeView autoCollapse", () => {
   });
 
   it("ArrowRight on an expanded parent focuses link-first-child treeitem", async () => {
-    const { container } = render(TreeViewProps, {
+    render(TreeViewProps, {
       expandedIds: ["p"],
       nodes: [
         {
@@ -1750,16 +1722,12 @@ describe("TreeView autoCollapse", () => {
       ],
     });
 
-    const parent = container.querySelector('[data-tree-row-id="p"]');
-    assert(parent instanceof HTMLElement);
-    parent.focus();
+    treeItemById("p").focus();
 
     await user.keyboard("{ArrowRight}");
 
-    const linkChild = container.querySelector(
-      '[data-tree-row-id="child-link"]',
-    );
-    expect(linkChild?.tagName).toBe("A");
+    const linkChild = treeItemById("child-link");
+    expect(linkChild.tagName).toBe("A");
     expect(linkChild).toHaveFocus();
   });
 

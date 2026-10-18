@@ -1,15 +1,14 @@
 import { render, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { findRowById } from "./helpers";
 import TreeViewVirtualizeLazy from "./TreeView.virtualize.lazy.test.svelte";
 
 describe("TreeView virtualize + hasChildren lazy load", () => {
   it("mounts fetched children as virtual rows after expand resolves", async () => {
     const { component } = render(TreeViewVirtualizeLazy);
 
-    const root = findRowById("root-a");
-    assert(root instanceof HTMLElement);
+    const root = treeItemById("root-a");
     const caret = root.querySelector<HTMLElement>(
       ".bx--tree-parent-node__toggle",
     );
@@ -19,8 +18,7 @@ describe("TreeView virtualize + hasChildren lazy load", () => {
     await user.click(caret);
     await tick();
 
-    expect(findRowById("root-a__loading")).not.toBeNull();
-    expect(findRowById("root-a__loading")).toHaveAttribute(
+    expect(treeItemById("root-a__loading")).toHaveAttribute(
       "aria-disabled",
       "true",
     );
@@ -31,6 +29,6 @@ describe("TreeView virtualize + hasChildren lazy load", () => {
       expect(findRowById("root-a-child-1")).not.toBeNull();
       expect(findRowById("root-a-child-2")).not.toBeNull();
     });
-    expect(findRowById("root-a-child-1")).toHaveAttribute("aria-level", "2");
+    expect(treeItemById("root-a-child-1")).toHaveAttribute("aria-level", "2");
   });
 });

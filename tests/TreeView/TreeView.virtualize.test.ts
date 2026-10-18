@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { findRowById } from "./helpers";
 import TreeViewVirtualize from "./TreeView.virtualize.test.svelte";
 
 const countRows = () => screen.queryAllByRole("treeitem").length;
@@ -37,9 +37,7 @@ describe("TreeView (virtualize)", () => {
   it("renders rows with the expected ARIA tree metadata", () => {
     render(TreeViewVirtualize, { totalRoots: 500, childrenPerRoot: 3 });
 
-    const firstRow = findRowById(0);
-    expect(firstRow).not.toBeNull();
-    if (!firstRow) throw new Error("expected first row");
+    const firstRow = treeItemById(0);
     expect(firstRow).toHaveAttribute("aria-level", "1");
     expect(firstRow).toHaveAttribute("aria-posinset", "1");
     expect(firstRow).toHaveAttribute("aria-setsize", "500");
@@ -76,8 +74,7 @@ describe("TreeView (virtualize)", () => {
 
     // Click the caret on the root row to toggle expansion (matches the
     // non-virtualized behavior where row-body click only selects).
-    const root = findRowById(0);
-    if (!root) throw new Error("expected root row");
+    const root = treeItemById(0);
     const caret = root.querySelector<HTMLElement>(
       ".bx--tree-parent-node__toggle",
     );
@@ -85,12 +82,12 @@ describe("TreeView (virtualize)", () => {
     await user.click(caret);
     await tick();
 
-    expect(findRowById(0)).toHaveAttribute("aria-expanded", "true");
+    expect(treeItemById(0)).toHaveAttribute("aria-expanded", "true");
     expect(findRowById(1)).not.toBeNull();
     expect(findRowById(2)).not.toBeNull();
     expect(findRowById(3)).not.toBeNull();
 
-    expect(findRowById(1)).toHaveAttribute("aria-level", "2");
+    expect(treeItemById(1)).toHaveAttribute("aria-level", "2");
   });
 
   it("ArrowDown moves focus across the window without mutating activeId", async () => {
@@ -99,8 +96,7 @@ describe("TreeView (virtualize)", () => {
       childrenPerRoot: 3,
     });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
     expect(first).toHaveFocus();
     expect(component.activeId).toBe("");
@@ -112,9 +108,7 @@ describe("TreeView (virtualize)", () => {
     }
 
     // Active row should now be id of root #20 = 20 * 4 = 80.
-    const expected = findRowById(80);
-    expect(expected).not.toBeNull();
-    expect(expected).toHaveFocus();
+    expect(treeItemById(80)).toHaveFocus();
     // Non-virtual arrows do not mutate activeId; virtual matches that.
     expect(component.activeId).toBe("");
   });
@@ -129,8 +123,7 @@ describe("TreeView (virtualize)", () => {
     await user.click(screen.getByTestId("set-active"));
     await tick();
 
-    const row = findRowById(4);
-    expect(row).not.toBeNull();
+    const row = treeItemById(4);
     expect(row).toHaveAttribute("aria-selected", "true");
     expect(row).toHaveClass("bx--tree-node--selected");
   });
@@ -138,8 +131,7 @@ describe("TreeView (virtualize)", () => {
   it("keeps keyboard navigation after the focused row scrolls out of the window", async () => {
     render(TreeViewVirtualize, { totalRoots: 500, childrenPerRoot: 3 });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
     expect(first).toHaveFocus();
 
@@ -177,13 +169,12 @@ describe("TreeView (virtualize)", () => {
     // Flat roots: id N has text `root-N`. Id 100 is past the initial window.
     render(TreeViewVirtualize, { totalRoots: 500, childrenPerRoot: 0 });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
 
     await user.keyboard("root-100");
     await waitFor(() => {
-      expect(findRowById(100)).toHaveFocus();
+      expect(treeItemById(100)).toHaveFocus();
     });
   });
 
@@ -195,8 +186,7 @@ describe("TreeView (virtualize)", () => {
       selectedIds: [],
     });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
 
     await user.keyboard("{Control>}a{/Control}");
@@ -216,8 +206,7 @@ describe("TreeView (virtualize)", () => {
       selectedIds: [0, 1, 2],
     });
 
-    const row = findRowById(1);
-    if (!row) throw new Error("expected row 1");
+    const row = treeItemById(1);
 
     await user.keyboard("{Control>}");
     await user.click(row);
@@ -237,8 +226,7 @@ describe("TreeView (virtualize)", () => {
       selectedIds: [],
     });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
 
     await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
@@ -256,8 +244,7 @@ describe("TreeView (virtualize)", () => {
       selectedIds: [],
     });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
 
     await user.keyboard("{Control>}a{/Control}");
@@ -274,8 +261,7 @@ describe("TreeView (virtualize)", () => {
       selectedIds: [],
     });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
 
     await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
@@ -292,8 +278,7 @@ describe("TreeView (virtualize)", () => {
       childrenPerRoot: 0,
     });
 
-    const first = findRowById(0);
-    if (!first) throw new Error("expected first row");
+    const first = treeItemById(0);
     first.focus();
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{ArrowDown}");
@@ -310,7 +295,7 @@ describe("TreeView (virtualize)", () => {
 
     const tree = screen.getByRole("tree");
     expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
-    expect(findRowById(focusedRowId ?? "")).toHaveAttribute("tabindex", "0");
+    expect(treeItemById(focusedRowId ?? "")).toHaveAttribute("tabindex", "0");
   });
 
   it("stops observing the container when virtualize is turned off", async () => {
@@ -451,8 +436,7 @@ describe("TreeView (virtualize)", () => {
     await user.click(screen.getByTestId("show-node"));
 
     await waitFor(() => {
-      expect(findRowById(1999)).not.toBeNull();
-      expect(findRowById(1999)).toHaveFocus();
+      expect(treeItemById(1999)).toHaveFocus();
     });
 
     // 503 visible rows * 32px - 320px container = 15776px max scroll.
@@ -476,8 +460,7 @@ describe("TreeView (virtualize)", () => {
     await user.click(screen.getByTestId("expand-and-show-node"));
 
     await waitFor(() => {
-      expect(findRowById(1999)).not.toBeNull();
-      expect(findRowById(1999)).toHaveFocus();
+      expect(treeItemById(1999)).toHaveFocus();
     });
   });
 
@@ -490,7 +473,7 @@ describe("TreeView (virtualize)", () => {
 
     await user.click(screen.getByTestId("show-node"));
 
-    await waitFor(() => expect(findRowById(4)).toHaveFocus());
+    await waitFor(() => expect(treeItemById(4)).toHaveFocus());
     expect(screen.getByRole("tree").scrollTop).toBe(0);
   });
 
@@ -505,8 +488,7 @@ describe("TreeView (virtualize)", () => {
     await user.click(screen.getByTestId("show-node"));
 
     await waitFor(() => {
-      expect(findRowById(1201)).not.toBeNull();
-      expect(findRowById(1201)).toHaveFocus();
+      expect(treeItemById(1201)).toHaveFocus();
     });
   });
 });

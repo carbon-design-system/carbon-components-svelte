@@ -1,71 +1,53 @@
 <script lang="ts">
   import Button from "carbon-components-svelte/Button/Button.svelte";
+  import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
+  import { cloudProducts } from "./fixtures";
+
+  type Id = TreeNode["id"];
 
   export let autoCollapse = false;
-  export let expandedIds: ComponentProps<TreeView>["expandedIds"] = [];
+  export let multiselect: ComponentProps<TreeView>["multiselect"] = false;
+  export let multiselectMode: ComponentProps<TreeView>["multiselectMode"] =
+    "node";
+  export let selectedIds: Id[] = [];
+  export let expandedIds: Id[] = [];
+  export let nodes: ComponentProps<TreeView>["nodes"] = cloudProducts();
 
+  /** Spy for the aggregate `select:change` event. */
+  export let onSelectChange: (detail: {
+    selectedIds: ReadonlyArray<Id>;
+    added: Id[];
+    removed: Id[];
+  }) => void = () => {};
   /** Spy for the aggregate `toggle:change` event. */
   export let onToggleChange: (detail: {
-    expandedIds: ReadonlyArray<string | number>;
-    added: Array<string | number>;
-    removed: Array<string | number>;
+    expandedIds: ReadonlyArray<Id>;
+    added: Id[];
+    removed: Id[];
   }) => void = () => {};
   /** Spy for the per-node `toggle` event. */
   export let onToggle: (detail: unknown) => void = () => {};
 
   let treeview: TreeView;
   let activeId: ComponentProps<TreeView>["activeId"] = "";
-  let selectedIds: ComponentProps<TreeView>["selectedIds"] = [];
-  let nodes: ComponentProps<TreeView>["nodes"] = [
-    { id: 0, text: "AI / Machine learning" },
-    {
-      id: 1,
-      text: "Analytics",
-      nodes: [
-        {
-          id: 2,
-          text: "IBM Analytics Engine",
-          nodes: [
-            { id: 3, text: "Apache Spark" },
-            { id: 4, text: "Hadoop" },
-          ],
-        },
-        { id: 5, text: "IBM Cloud SQL Query" },
-        { id: 6, text: "IBM Db2 Warehouse on Cloud" },
-      ],
-    },
-    {
-      id: 7,
-      text: "Blockchain",
-      nodes: [{ id: 8, text: "IBM Blockchain Platform" }],
-    },
-    {
-      id: 9,
-      text: "Databases",
-      nodes: [
-        { id: 10, text: "IBM Cloud Databases for Elasticsearch" },
-        { id: 11, text: "IBM Cloud Databases for Enterprise DB" },
-      ],
-    },
-  ];
 </script>
 
 <TreeView
   bind:this={treeview}
   {autoCollapse}
-  labelText="Expanded change"
+  labelText="Change events"
+  {multiselect}
+  {multiselectMode}
   {nodes}
   bind:activeId
   bind:selectedIds
   bind:expandedIds
   on:toggle={({ detail }) => onToggle(detail)}
+  on:select:change={({ detail }) => onSelectChange(detail)}
   on:toggle:change={({ detail }) => onToggleChange(detail)}
-  let:node
->
-  {node.text}
-</TreeView>
+/>
 
 <Button data-testid="expand-all" on:click={() => treeview.expandAll()}>
   Expand all
@@ -91,6 +73,12 @@
 >
   Show Apache Spark
 </Button>
+<Button
+  data-testid="show-node-select"
+  on:click={() => treeview.showNode(8, { select: true })}
+>
+  Show node select
+</Button>
 <Button data-testid="set-prop" on:click={() => (expandedIds = [1])}>
   Set expanded via prop
 </Button>
@@ -105,4 +93,13 @@
 </Button>
 <Button data-testid="auto-collapse" on:click={() => (activeId = 2)}>
   Activate nested node
+</Button>
+<Button data-testid="set-selected" on:click={() => (selectedIds = [0, 7])}>
+  Set selected
+</Button>
+<Button
+  data-testid="set-same"
+  on:click={() => (selectedIds = [...selectedIds])}
+>
+  Set same
 </Button>

@@ -1,4 +1,5 @@
 import { render, waitFor } from "@testing-library/svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import TreeViewShowNode from "./TreeView.deepReveal.test.svelte";
 
 describe("TreeView deep reveal", () => {
@@ -13,9 +14,7 @@ describe("TreeView deep reveal", () => {
 
     await waitFor(
       () => {
-        const el = document.querySelector(`[data-tree-row-id="${DEPTH - 1}"]`);
-        expect(el).toBeInstanceOf(HTMLElement);
-        expect(el).toHaveFocus();
+        expect(treeItemById(DEPTH - 1)).toHaveFocus();
       },
       { timeout: 15_000 },
     );

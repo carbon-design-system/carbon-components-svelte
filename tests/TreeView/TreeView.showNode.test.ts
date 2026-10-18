@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { findRowById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewShowNodeIdEscape from "./TreeView.showNode.idEscape.test.svelte";
 import TreeViewShowNode from "./TreeView.showNode.test.svelte";
@@ -46,7 +47,7 @@ describe("TreeView.showNode with options", () => {
     await user.click(getButton("select-only"));
 
     expect(getExpandedCount()).toBe(0);
-    expect(document.querySelector('[data-tree-row-id="3"]')).toBeNull();
+    expect(findRowById(3)).toBeNull();
     expect(screen.queryByRole("treeitem", { selected: true })).toBeNull();
     expect(component.activeId).toBe(3);
     expect(component.selectedIds).toEqual([3]);
