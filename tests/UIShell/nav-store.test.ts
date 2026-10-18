@@ -6,7 +6,7 @@ import {
   isSideNavCollapsed,
   isSideNavRail,
 } from "../../src/UIShell/nav-store.js";
-import NavStoreUnmount from "./NavStoreUnmount.test.svelte";
+import NavStoreUnmount from "./nav-store.test.svelte";
 
 describe("UI Shell shared state on unmount", () => {
   it("reports a header until the last one unmounts", async () => {

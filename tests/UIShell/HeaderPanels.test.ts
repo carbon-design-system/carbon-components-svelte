@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import HeaderMenuKeyboardOpen from "./HeaderMenuKeyboardOpen.test.svelte";
+import HeaderPanelExclusive from "./HeaderPanelExclusive.test.svelte";
+import HeaderPanelFocusReturn from "./HeaderPanelFocusReturn.test.svelte";
 import HeaderPanelHost from "./HeaderPanelHost.test.svelte";
 
 const hosts = [
@@ -117,3 +120,84 @@ describe.each(hosts)(
     });
   },
 );
+
+describe("Header panels", () => {
+  const trigger = (name: string) => screen.getByRole("button", { name });
+
+  it.each([
+    ["Help", "Acme Corp"],
+    ["Acme Corp", "Profile"],
+    ["Profile", "Notifications"],
+  ])(
+    "opening %s then %s leaves only the second open",
+    async (first, second) => {
+      render(HeaderPanelExclusive);
+
+      await user.click(trigger(first));
+      expect(trigger(first)).toHaveAttribute("aria-expanded", "true");
+
+      await user.click(trigger(second));
+      expect(trigger(second)).toHaveAttribute("aria-expanded", "true");
+      expect(trigger(first)).toHaveAttribute("aria-expanded", "false");
+    },
+  );
+});
+
+describe("header panels return focus when an item closes them", () => {
+  // ProfileMenu and HeaderSwitcher close through `select()`, which
+  // HeaderPanelHost.test.ts covers. Only HeaderAction closes by consumer.
+  it("returns focus to the HeaderAction trigger when a consumer closes it", async () => {
+    render(HeaderPanelFocusReturn, { props: { actionOpen: true } });
+
+    screen.getByRole("button", { name: "Dismiss all" }).focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    const trigger = screen.getByRole("button", { name: "Notifications" });
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(trigger).toHaveFocus();
+  });
+
+  it("does not move focus to the trigger on an outside click", async () => {
+    render(HeaderPanelFocusReturn, { props: { profileOpen: true } });
+
+    screen.getByRole("button", { name: "Log out" }).focus();
+    await user.click(screen.getByText("Not focusable"));
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Profile" })).not.toHaveFocus();
+  });
+});
+
+describe.each([
+  { trigger: "Acme Corp", first: "Acme Corp", last: "Globex" },
+  { trigger: "Profile", first: "Settings", last: "Log out" },
+])("$trigger opened from the keyboard", ({ trigger, first, last }) => {
+  const button = () => screen.getByRole("button", { name: trigger });
+  const item = (name: string) =>
+    screen
+      .getAllByText(name)
+      .find((node) => node.closest(".bx--profile-menu"))
+      ?.closest("a, button");
+
+  it("focuses the first item on Enter", async () => {
+    render(HeaderMenuKeyboardOpen);
+    button().focus();
+    await user.keyboard("{Enter}");
+    expect(item(first)).toHaveFocus();
+  });
+
+  it("focuses the first item on ArrowDown", async () => {
+    render(HeaderMenuKeyboardOpen);
+    button().focus();
+    await user.keyboard("{ArrowDown}");
+    expect(item(first)).toHaveFocus();
+  });
+
+  it("focuses the last item on ArrowUp", async () => {
+    render(HeaderMenuKeyboardOpen);
+    button().focus();
+    await user.keyboard("{ArrowUp}");
+    expect(item(last)).toHaveFocus();
+  });
+});
