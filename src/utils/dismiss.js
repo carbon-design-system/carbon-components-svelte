@@ -30,6 +30,7 @@ const IMMEDIATE_TYPES = new Set(["keydown", "keyup"]);
 export function dismiss(_node, options) {
   let specs = normalize(options);
   let enabled = !!options.enabled;
+  let immediate = !!options.immediate;
   let destroyed = false;
   let addScheduled = false;
 
@@ -43,7 +44,9 @@ export function dismiss(_node, options) {
   function add() {
     if (typeof window === "undefined") return;
     registered = specs.map((spec) =>
-      IMMEDIATE_TYPES.has(spec.type) ? registerConsumer(spec) : null,
+      immediate || IMMEDIATE_TYPES.has(spec.type)
+        ? registerConsumer(spec)
+        : null,
     );
     if (addScheduled || registered.every(Boolean)) return;
     addScheduled = true;
@@ -96,6 +99,7 @@ export function dismiss(_node, options) {
       remove();
       specs = nextSpecs;
       enabled = nextEnabled;
+      immediate = !!next.immediate;
       if (enabled) add();
     },
     destroy() {

@@ -314,6 +314,35 @@ describe("RangeSlider", () => {
     expect(oninput).toHaveBeenLastCalledWith(bounds(1, 100));
   });
 
+  it("ends the drag on a release right after the press", async () => {
+    const onchange = vi.fn();
+    const { container } = render(RangeSlider, {
+      props: { value: 20, valueUpper: 80, onchange },
+    });
+    const slider = container.querySelector(".bx--slider");
+    const track = container.querySelector(".bx--slider__track");
+    assert(slider instanceof HTMLElement && track instanceof HTMLElement);
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+      rect({ right: 200, height: 2 }),
+    );
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    vi.spyOn(lowerThumb, "getBoundingClientRect").mockReturnValue(
+      rect({ left: 32, width: 16, height: 16 }),
+    );
+    vi.spyOn(upperThumb, "getBoundingClientRect").mockReturnValue(
+      rect({ left: 152, width: 16, height: 16 }),
+    );
+
+    await fireEvent.mouseDown(slider, { clientX: 60 });
+    await fireEvent.mouseUp(window);
+    expect(onchange).toHaveBeenCalledExactlyOnceWith(bounds(30, 80));
+
+    // With no button held, a later move must not drag the thumb.
+    await flushDismiss();
+    await fireEvent.mouseMove(window, { clientX: 100 });
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "30");
+  });
+
   it("should clamp keyboard arrow values to min and max", async () => {
     const onchange = vi.fn();
     const oninput = vi.fn();
