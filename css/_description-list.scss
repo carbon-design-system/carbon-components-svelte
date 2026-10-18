@@ -71,6 +71,7 @@
     text-align: end;
   }
 
+  .#{$prefix}--description-list-item--divider,
   .#{$prefix}--description-list-item--total {
     padding-top: $carbon--spacing-04;
     border-top: 1px solid $ui-03;
