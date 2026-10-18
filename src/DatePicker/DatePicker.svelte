@@ -212,6 +212,21 @@
   export let locale = "en";
 
   /**
+   * Specify the first day of the week, from 0 (Sunday) to 6 (Saturday).
+   * Overrides the locale's own first day, which is used when unset.
+   * @type {undefined | 0 | 1 | 2 | 3 | 4 | 5 | 6}
+   */
+  export let firstDayOfWeek = undefined;
+
+  /**
+   * Set to `true` to show each week's number beside it in the calendar.
+   * Weeks are numbered per ISO 8601; pass `getWeek` in `flatpickrProps` to
+   * number them differently, such as for fiscal weeks. The column is only
+   * shown with a single month.
+   */
+  export let weekNumbers = false;
+
+  /**
    * Set to `true` to render the calendar permanently below the input
    * instead of in a popup. `open` and `close` events are not dispatched,
    * `portalMenu` is ignored, and the calendar stops accepting input while
@@ -339,6 +354,7 @@
   const formContext = getContext(FORM_CONTEXT_KEY);
 
   $: usesInline = inline || !!flatpickrProps.inline;
+  $: usesWeekNumbers = weekNumbers || !!flatpickrProps.weekNumbers;
   // An inline calendar lives in the layout, so there is nothing to portal.
   $: effectivePortalMenu =
     !usesInline && (portalMenu === undefined ? !!insideModal : portalMenu);
@@ -419,6 +435,7 @@
   const reportedWarnings = new Set();
   let prevDatePickerType = datePickerType;
   let prevUsesInline = inline || !!flatpickrProps.inline;
+  let prevUsesWeekNumbers = weekNumbers || !!flatpickrProps.weekNumbers;
   let prevDisplayFormat = displayFormat;
   let prevUsesDisplayFormat = !!displayFormat && datePickerType !== "range";
   let calendarUsesFixedPositioning = false;
@@ -1128,6 +1145,7 @@
         syncSelectedDatesFromCalendar();
       }
       applyOptionIfChanged("locale", locale);
+      applyOptionIfChanged("firstDayOfWeek", firstDayOfWeek);
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
@@ -1150,7 +1168,7 @@
         if (option === "enable" && enabledDates.length > 0) continue;
         if (option === "errorHandler") continue;
         // Creation-only, handled by `recreateCalendar()`.
-        if (option === "inline") continue;
+        if (option === "inline" || option === "weekNumbers") continue;
         // `displayFormat` owns these two.
         if (
           usesDisplayFormat &&
@@ -1271,6 +1289,7 @@
       minDate: options.minDate,
       maxDate: options.maxDate,
       locale: options.locale,
+      firstDayOfWeek: options.firstDayOfWeek,
       dateFormat: options.dateFormat,
       ...flatpickrPropsAtCreation,
       clickOpens: options.clickOpens,
@@ -1565,9 +1584,13 @@
       console.warn(message);
     }
   }
-  // flatpickr mounts an inline calendar differently, at creation only.
+  // An inline calendar and the week number column are built at creation only.
   $: if (usesInline !== prevUsesInline) {
     prevUsesInline = usesInline;
+    recreateCalendar();
+  }
+  $: if (usesWeekNumbers !== prevUsesWeekNumbers) {
+    prevUsesWeekNumbers = usesWeekNumbers;
     recreateCalendar();
   }
   $: if (datePickerType !== prevDatePickerType) {
@@ -1592,6 +1615,8 @@
       ...(enabledDates.length > 0 && { enable: enabledDates }),
       ...(usesDisplayFormat && { altInput: true, altFormat: displayFormat }),
       ...(usesInline && { inline: true }),
+      ...(weekNumbers && { weekNumbers: true }),
+      ...(firstDayOfWeek !== undefined && { firstDayOfWeek }),
     })
       .then(() => {})
       .catch((error) => {

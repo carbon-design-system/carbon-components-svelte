@@ -61,6 +61,11 @@ export interface CalendarOptions
   enable?: DateRule[];
   errorHandler?: (error: Error) => void;
   formatDate?: (date: Date, format: string, locale: CalendarLocale) => string;
+  /**
+   * First day of the week, 0 (Sunday) to 6 (Saturday). Overrides the
+   * locale's own.
+   */
+  firstDayOfWeek?: number;
   getWeek?: (date: Date) => number;
   ignoredFocusElements?: HTMLElement[];
   inline?: boolean;

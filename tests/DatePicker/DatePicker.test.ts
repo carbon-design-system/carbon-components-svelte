@@ -96,6 +96,45 @@ describe("DatePicker", () => {
     expect(weekdays).toEqual(["S", "M", "T", "W", "Th", "F", "S"]);
   });
 
+  it("starts the week on `firstDayOfWeek`, and follows it when it changes", async () => {
+    const { container, rerender } = render(DatePicker, {
+      datePickerType: "single",
+      firstDayOfWeek: 1,
+    });
+    const weekdays = () =>
+      Array.from(container.querySelectorAll(".flatpickr-weekday")).map((node) =>
+        node.textContent?.trim(),
+      );
+
+    await openCalendar();
+    expect(weekdays()).toEqual(["M", "T", "W", "Th", "F", "S", "S"]);
+
+    await rerender({ datePickerType: "single", firstDayOfWeek: 6 });
+    expect(weekdays()).toEqual(["S", "S", "M", "T", "W", "Th", "F"]);
+  });
+
+  it("shows week numbers with `weekNumbers`, and removes them when unset", async () => {
+    const { container, rerender } = render(DatePicker, {
+      datePickerType: "single",
+      value: "01/15/2026",
+      weekNumbers: true,
+    });
+
+    await openCalendar();
+    const weeks = () =>
+      Array.from(
+        container.querySelectorAll(".flatpickr-weeks .flatpickr-day"),
+      ).map((node) => node.textContent);
+    expect(weeks().slice(0, 3)).toEqual(["1", "2", "3"]);
+
+    await rerender({
+      datePickerType: "single",
+      value: "01/15/2026",
+      weekNumbers: false,
+    });
+    await vi.waitFor(() => expect(weeks()).toEqual([]));
+  });
+
   it("renders month before year in the calendar header for locale='en'", async () => {
     const { container } = render(DatePicker, {
       datePickerType: "single",
