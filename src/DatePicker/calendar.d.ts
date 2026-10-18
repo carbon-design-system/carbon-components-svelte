@@ -74,6 +74,11 @@ export interface CalendarOptions
    * disabling it as a value, so typed and programmatic dates are not
    * checked against it.
    */
+  /**
+   * Build the header and grid on first open instead of at creation, unless
+   * the calendar is inline or has plugins.
+   */
+  lazy?: boolean;
   isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
   locale?: string | Partial<CalendarLocale>;
   maxDate?: string | number | Date;

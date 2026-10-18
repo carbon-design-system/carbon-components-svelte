@@ -1200,13 +1200,18 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   // --- Build ------------------------------------------------------------
 
-  function build() {
-    const container = createElement(
-      "div",
-      "flatpickr-calendar bx--date-picker__calendar",
-    );
-    self.calendarContainer = container;
-    container.tabIndex = -1;
+  /**
+   * Whether the header and grid exist yet. With `lazy`, a popup calendar
+   * builds them on first open, so closed pickers cost one empty element
+   * each. Inline calendars, and any with plugins (which expect the full
+   * markup on ready), still build them up front.
+   */
+  let filled = false;
+
+  function fillContents() {
+    if (filled) return;
+    filled = true;
+    const container = self.calendarContainer;
     const fragment = document.createDocumentFragment();
     fragment.appendChild(buildMonthNav());
     self.innerContainer = createElement("div", "flatpickr-innerContainer");
@@ -1246,6 +1251,23 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.rContainer.appendChild(self.daysContainer);
     self.innerContainer.appendChild(self.rContainer);
     fragment.appendChild(self.innerContainer);
+    container.prepend(fragment);
+    // Announces the month (or year, or decade) the arrows and keys move to.
+    self.viewAnnouncer = createElement("span", "bx--assistive-text");
+    self.viewAnnouncer.setAttribute("aria-live", "polite");
+    self.innerContainer.after(self.viewAnnouncer);
+    buildDays();
+    updateNavigation();
+    bindContentEvents();
+  }
+
+  function build() {
+    const container = createElement(
+      "div",
+      "flatpickr-calendar bx--date-picker__calendar",
+    );
+    self.calendarContainer = container;
+    container.tabIndex = -1;
     toggleClass(container, "rangeMode", isRange);
     toggleClass(container, "animate", config.animate === true);
     toggleClass(container, "multiMonth", config.showMonths > 1);
@@ -1264,13 +1286,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (isGridMode) {
       container.classList.add(`flatpickr-${pickerMode}Select-theme-light`);
     }
-    container.appendChild(fragment);
-    // Announces the month (or year, or decade) the arrows and keys move to.
-    self.viewAnnouncer = createElement("span", "bx--assistive-text");
-    self.viewAnnouncer.setAttribute("aria-live", "polite");
-    container.appendChild(self.viewAnnouncer);
-    buildDays();
-    updateNavigation();
+    if (!config.lazy || config.inline || userConfig.plugins?.length) {
+      fillContents();
+    }
 
     const custom = config.appendTo?.nodeType !== undefined;
     if (config.inline || config.static) {
@@ -1549,7 +1567,13 @@ export function createCalendarEngine(element, userConfig = {}) {
   const CALLBACKS = {
     locale: [applyL10n],
     firstDayOfWeek: [applyL10n],
-    showMonths: [buildMonths, buildWeekdays],
+    showMonths: [
+      () => {
+        if (!filled) return;
+        buildMonths();
+        buildWeekdays();
+      },
+    ],
     minDate: [() => jumpToDate()],
     maxDate: [() => jumpToDate()],
     positionElement: [
@@ -1619,6 +1643,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function open(_event, positionElement = self._positionElement) {
     if (self._input.disabled || config.inline) return;
     const wasOpen = self.isOpen;
+    fillContents();
     self.isOpen = true;
     if (!wasOpen) {
       self.calendarContainer.classList.add("open");
@@ -2179,6 +2204,18 @@ export function createCalendarEngine(element, userConfig = {}) {
         if (self.selectedDates[0]) jumpToDate(self.selectedDates[0]);
       });
     }
+  }
+
+  /** Listeners on the header and grid, bound once they are built. */
+  function bindContentEvents() {
+    /**
+     * @param {EventTarget | undefined} target
+     * @param {string} type
+     * @param {(event: any) => void} handler
+     */
+    const on = (target, type, handler) => {
+      if (target) listeners.add(target, type, handler);
+    };
     on(self.monthNav, "click", onNavClick);
     on(self.monthNav, "keyup", onYearInput);
     on(self.monthNav, "increment", onYearInput);
