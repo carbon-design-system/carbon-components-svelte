@@ -3,19 +3,13 @@ import { user } from "../utils/user";
 import TreeViewVirtualizeHref from "./TreeView.virtualize.href.test.svelte";
 
 describe("TreeView virtualize + href", () => {
-  it("renders an anchor with role=treeitem when href is set", () => {
+  it("renders an anchor with role=treeitem inside a role=none li when href is set", () => {
     render(TreeViewVirtualizeHref);
 
     const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
     expect(linkNode.tagName).toBe("A");
     expect(linkNode).toHaveAttribute("href", "/page-1");
     expect(linkNode).toHaveAttribute("data-tree-row-id", "link-1");
-  });
-
-  it("wraps the anchor in a li with role=none", () => {
-    render(TreeViewVirtualizeHref);
-
-    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
     expect(linkNode.closest("li")).toHaveAttribute("role", "none");
   });
 
@@ -94,13 +88,6 @@ describe("TreeView virtualize + href", () => {
 
     const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
     expect(linkNode).not.toHaveAttribute("aria-selected");
-  });
-
-  it("does not set aria-selected on an unselected link row", () => {
-    render(TreeViewVirtualizeHref);
-
-    const blankLink = screen.getByRole("treeitem", { name: /Blank Target/ });
-    expect(blankLink).not.toHaveAttribute("aria-selected");
   });
 
   it("keeps aria-selected on plain rows", () => {

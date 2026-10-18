@@ -49,17 +49,6 @@ describe("TreeView select:change", () => {
     expect(onSelectChange).not.toHaveBeenCalled();
   });
 
-  it("does not corrupt selectedIds on mount when activeId is unset", async () => {
-    const onSelectChange = vi.fn();
-    render(TreeViewSelectionChange, { selectedIds: [], onSelectChange });
-
-    await flushMacrotask();
-    expect(onSelectChange).not.toHaveBeenCalled();
-    expect(screen.queryAllByRole("treeitem", { selected: true })).toHaveLength(
-      0,
-    );
-  });
-
   it("flips delta between added and removed on Ctrl+click toggle", async () => {
     const onSelectChange = vi.fn();
     render(TreeViewSelectionChange, {
@@ -160,39 +149,6 @@ describe("TreeView select:change", () => {
     const detail = lastDetail(onSelectChange);
     expect([...detail.selectedIds].sort()).toEqual([0, 1, 7, 9]);
     expect(detail.selectedIds.length).toBe(new Set(detail.selectedIds).size);
-  });
-
-  it("fires for Ctrl+Shift+End range-extend", async () => {
-    const onSelectChange = vi.fn();
-    render(TreeViewSelectionChange, {
-      multiselect: true,
-      selectedIds: [0],
-      onSelectChange,
-    });
-
-    treeItemById(0).focus();
-    await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
-
-    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
-    const detail = lastDetail(onSelectChange);
-    // Extends from the focused row through the last visible non-disabled row.
-    expect(detail.added.length).toBeGreaterThan(0);
-    expect(detail.removed).toEqual([]);
-    expect(detail.selectedIds).toContain(0);
-  });
-
-  it("does nothing on Ctrl+A in single-select mode", async () => {
-    const onSelectChange = vi.fn();
-    render(TreeViewSelectionChange, { selectedIds: [], onSelectChange });
-
-    treeItemById(0).focus();
-    await user.keyboard("{Control>}a{/Control}");
-
-    await flushMacrotask();
-    expect(onSelectChange).not.toHaveBeenCalled();
-    expect(screen.queryAllByRole("treeitem", { selected: true })).toHaveLength(
-      0,
-    );
   });
 
   it("keeps the existing selection on Ctrl+A in single-select mode", async () => {

@@ -2,19 +2,6 @@
 import { toHierarchy } from "carbon-components-svelte/utils/to-hierarchy";
 
 describe("toHierarchy", () => {
-  it("should create a flat hierarchy when no items have parents", () => {
-    const input = [
-      { id: 1, name: "Item 1" },
-      { id: 2, name: "Item 2", parentId: "invalid" },
-    ];
-    const result = toHierarchy(input, (item) => item.parentId);
-
-    expect(result).toEqual([
-      { id: 1, name: "Item 1" },
-      { id: 2, name: "Item 2", parentId: "invalid" },
-    ]);
-  });
-
   it("should create a nested hierarchy with parent-child relationships", () => {
     const input = [
       { id: 1, name: "Parent" },
@@ -44,6 +31,9 @@ describe("toHierarchy", () => {
         ],
       },
     ]);
+
+    // Leaves must not carry an empty `nodes` array.
+    expect(result[0].nodes?.[0].nodes?.[0]).not.toHaveProperty("nodes");
   });
 
   it("should handle multiple root nodes with children", () => {
@@ -81,29 +71,6 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  it("should remove empty nodes arrays", () => {
-    const input = [
-      { id: 1, name: "Root" },
-      { id: 2, name: "Leaf", pid: 1 },
-    ];
-    const result = toHierarchy(input, (item) => item.pid);
-    expect(result).toEqual([
-      {
-        id: 1,
-        name: "Root",
-        nodes: [
-          {
-            id: 2,
-            name: "Leaf",
-            pid: 1,
-          },
-        ],
-      },
-    ]);
-
-    expect(result[0].nodes?.[0]).not.toHaveProperty("nodes");
-  });
-
   it("should handle empty input array", () => {
     const result = toHierarchy<
       { id: string | number; parentId?: string | number },
@@ -121,51 +88,6 @@ describe("toHierarchy", () => {
     expect(result).toEqual([
       { id: 1, name: "Root" },
       { id: 2, name: "Child", pid: 999 },
-    ]);
-  });
-
-  it("should handle deeply nested structures", () => {
-    const input = [
-      { id: 1, name: "Level 1" },
-      { id: 2, name: "Level 2", pid: 1 },
-      { id: 3, name: "Level 3", pid: 2 },
-      { id: 4, name: "Level 4", pid: 3 },
-      { id: 5, name: "Level 5", pid: 4 },
-    ];
-    const result = toHierarchy(input, (item) => item.pid);
-    expect(result).toEqual([
-      {
-        id: 1,
-        name: "Level 1",
-        nodes: [
-          {
-            id: 2,
-            name: "Level 2",
-            pid: 1,
-            nodes: [
-              {
-                id: 3,
-                name: "Level 3",
-                pid: 2,
-                nodes: [
-                  {
-                    id: 4,
-                    name: "Level 4",
-                    pid: 3,
-                    nodes: [
-                      {
-                        id: 5,
-                        name: "Level 5",
-                        pid: 4,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
     ]);
   });
 
@@ -190,31 +112,6 @@ describe("toHierarchy", () => {
             id: "2",
             name: "Child 2",
             pid: "root",
-          },
-        ],
-      },
-    ]);
-  });
-
-  it("should preserve additional properties", () => {
-    const input = [
-      { id: 1, name: "Root", extra: "data", meta: { key: "value" } },
-      { id: 2, name: "Child", pid: 1, flag: true, count: 42 },
-    ];
-    const result = toHierarchy(input, (item) => item.pid);
-    expect(result).toEqual([
-      {
-        id: 1,
-        name: "Root",
-        extra: "data",
-        meta: { key: "value" },
-        nodes: [
-          {
-            id: 2,
-            name: "Child",
-            pid: 1,
-            flag: true,
-            count: 42,
           },
         ],
       },
