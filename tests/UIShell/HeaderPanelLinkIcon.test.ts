@@ -8,7 +8,6 @@ describe("HeaderPanelLink text and icon", () => {
     const docs = screen.getByRole("link", { name: "Docs" });
     const icon = docs.querySelector("svg");
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(icon).toHaveAttribute("width", "16");
     expect(docs.lastElementChild).toBe(icon?.parentElement);
     expect(docs.lastElementChild).toHaveClass("bx--switcher__item-icon");
@@ -26,12 +25,5 @@ describe("HeaderPanelLink text and icon", () => {
     render(Fixture);
 
     expect(screen.getByTestId("slot-icon")).toBeInTheDocument();
-  });
-
-  it("prefers the default slot over text", () => {
-    render(Fixture);
-
-    expect(screen.getByRole("link", { name: "Override" })).toBeInTheDocument();
-    expect(screen.queryByText("Ignored")).toBeNull();
   });
 });

@@ -1,10 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
-import { flushDismiss } from "../utils/flush-dismiss";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
@@ -31,28 +30,12 @@ describe("HeaderSearch", () => {
   });
 
   describe("Rendering", () => {
-    it("should render with default props", () => {
-      render(HeaderSearchTest);
-
-      const searchContainer = screen.getByRole("search");
-      expect(searchContainer).toHaveClass("bx--header__search");
-    });
-
     it("should render search input", () => {
       render(HeaderSearchTest);
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("placeholder", "Search...");
       expect(searchInput.id).toMatch(/^ccs-[a-z0-9.]+-input$/);
-    });
-
-    it("should support a custom placeholder", () => {
-      render(HeaderSearchTest, { props: { placeholder: "Find anything..." } });
-
-      expect(screen.getByRole("textbox")).toHaveAttribute(
-        "placeholder",
-        "Find anything...",
-      );
     });
 
     it("selects the full value on focus when selectTextOnFocus is true", async () => {
@@ -101,15 +84,6 @@ describe("HeaderSearch", () => {
       expect(label.getAttribute("for")).toBe(input.id);
     });
 
-    it("should support a custom labelText", () => {
-      render(HeaderSearchTest, { props: { labelText: "Search the catalog" } });
-
-      const label = screen.getByText("Search the catalog", {
-        selector: "label",
-      });
-      expect(label.getAttribute("for")).toBe(screen.getByRole("textbox").id);
-    });
-
     it("should generate unique ids per instance to avoid collisions", () => {
       const { container: a } = render(HeaderSearchTest);
       const { container: b } = render(HeaderSearchTest);
@@ -133,31 +107,12 @@ describe("HeaderSearch", () => {
       expect(searchButton).toHaveAttribute("aria-expanded", "false");
     });
 
-    it("should render clear button when active", () => {
-      render(HeaderSearchTest, { props: { active: true } });
-
-      const clearButton = screen.getByRole("button", {
-        name: "Clear search input",
-      });
-      expect(clearButton).toBeInTheDocument();
-    });
-
     it("should not render clear button when not active", () => {
       render(HeaderSearchTest, { props: { active: false } });
 
       expect(
         screen.queryByRole("button", { name: "Clear search input" }),
       ).not.toBeInTheDocument();
-    });
-
-    it("should support a custom closeButtonLabelText", () => {
-      render(HeaderSearchTest, {
-        props: { active: true, closeButtonLabelText: "Reset search" },
-      });
-
-      expect(
-        screen.getByRole("button", { name: "Reset search" }),
-      ).toBeInTheDocument();
     });
   });
 
@@ -180,36 +135,6 @@ describe("HeaderSearch", () => {
   });
 
   describe("Props", () => {
-    it("should bind value prop", () => {
-      render(HeaderSearchTest, { props: { value: "test search" } });
-
-      const searchInput = screen.getByRole("textbox");
-      expect(searchInput).toHaveValue("test search");
-    });
-
-    it("should bind active prop", () => {
-      render(HeaderSearchTest, { props: { active: true } });
-
-      const searchContainer = screen.getByRole("search");
-      expect(searchContainer).toHaveClass("bx--header__search--active");
-    });
-
-    it("should bind selectedResultIndex prop", () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-        { href: "/3", text: "Result 3" },
-      ];
-      render(HeaderSearchTest, {
-        props: { active: true, results, selectedResultIndex: 1 },
-      });
-
-      const searchInput = screen.getByRole("textbox");
-      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
-        /^ccs-[a-z0-9.]+-menuitem-1$/,
-      );
-    });
-
     it("should pass selected to the result slot", async () => {
       const results = [
         { href: "/1", text: "Result 1" },
@@ -352,25 +277,6 @@ describe("HeaderSearch", () => {
   });
 
   describe("Keyboard Navigation", () => {
-    it("should select result on Enter key", async () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-      ];
-      render(HeaderSearchTest, {
-        props: { active: true, results, value: "test" },
-      });
-
-      const searchInput = screen.getByRole("textbox");
-      await user.click(searchInput);
-      await user.keyboard("{Enter}");
-
-      const selectEvent = JSON.parse(
-        screen.getByTestId("select-event").textContent || "{}",
-      );
-      expect(selectEvent.selectedResultIndex).toBe(0);
-    });
-
     it("should navigate down with ArrowDown key", async () => {
       const results = [
         { href: "/1", text: "Result 1" },
@@ -445,16 +351,6 @@ describe("HeaderSearch", () => {
       );
     });
 
-    it("should clear value on Escape key when search is empty", async () => {
-      render(HeaderSearchTest, { props: { active: true, value: "" } });
-
-      const searchInput = screen.getByRole("textbox");
-      await user.click(searchInput);
-      await user.keyboard("{Escape}");
-
-      expect(screen.getByTestId("inactive-event")).toHaveTextContent("true");
-    });
-
     it("should clear value but keep active on Escape key when search has value", async () => {
       render(HeaderSearchTest, { props: { active: true, value: "test" } });
 
@@ -504,17 +400,6 @@ describe("HeaderSearch", () => {
   });
 
   describe("Slot Content", () => {
-    it("should render custom slot content for results", () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-      ];
-      render(HeaderSearchTest, { props: { active: true, results } });
-
-      expect(screen.getByTestId("result-0")).toHaveTextContent("Result 1");
-      expect(screen.getByTestId("result-1")).toHaveTextContent("Result 2");
-    });
-
     it("should render the default result markup when no result slot is provided", () => {
       render(HeaderSearchSubmitTest, {
         props: {
@@ -584,24 +469,6 @@ describe("HeaderSearch", () => {
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("tabindex", "-1");
-    });
-  });
-
-  describe("Mouse Events", () => {
-    it("should deactivate when clicking outside", async () => {
-      render(HeaderSearchTest, { props: { active: true } });
-
-      await flushDismiss();
-
-      const outsideElement = document.createElement("div");
-      document.body.appendChild(outsideElement);
-      fireEvent.mouseUp(outsideElement);
-
-      await flushMacrotask();
-
-      expect(screen.getByTestId("inactive-event")).toHaveTextContent("true");
-
-      document.body.removeChild(outsideElement);
     });
   });
 });

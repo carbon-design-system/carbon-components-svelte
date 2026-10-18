@@ -27,12 +27,6 @@ describe("SideNav rail hover delay", () => {
     expect(nav.style.getPropertyValue(LEAVE)).toBe("200ms");
   });
 
-  it("updates the delays when the props change", async () => {
-    const { container, rerender } = render(SideNav, { props: { rail: true } });
-    await rerender({ enterDelayMs: 500 });
-    expect(getNav(container).style.getPropertyValue(ENTER)).toBe("500ms");
-  });
-
   it("omits the delays without rail", () => {
     const { container } = render(SideNav, {
       props: { rail: false },

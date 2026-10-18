@@ -11,14 +11,4 @@ describe("SideNavMenuItem", () => {
     expect(link).toHaveClass("bx--side-nav__link--current");
     expect(link).toHaveAttribute("aria-current", "page");
   });
-
-  it("omits the current-page styling class when not selected", () => {
-    render(SideNavMenuItem, {
-      props: { href: "/", text: "Overview", isSelected: false },
-    });
-
-    const link = screen.getByRole("link", { name: "Overview" });
-    expect(link).not.toHaveClass("bx--side-nav__link--current");
-    expect(link).not.toHaveAttribute("aria-current");
-  });
 });

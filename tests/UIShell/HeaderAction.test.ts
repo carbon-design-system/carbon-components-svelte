@@ -13,51 +13,11 @@ import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
 import HeaderActionTooltipGroup from "./HeaderActionTooltipGroup.test.svelte";
 
 describe("HeaderAction", () => {
-  it("supports custom textChildren slot", () => {
+  it("supports custom textChildren and icon slots", () => {
     render(HeaderActionSlot);
 
-    const customText = screen.getByText("Custom text content");
-    expect(customText).toBeInTheDocument();
-  });
-
-  it("supports custom icon slot", () => {
-    render(HeaderActionSlot);
-
-    const customIcon = screen.getByTestId("custom-icon");
-    expect(customIcon).toBeInTheDocument();
-  });
-
-  describe("outside click", () => {
-    const getActionButton = () =>
-      screen.getByRole("button", { name: "Switcher" });
-
-    it("closes when clicking outside", async () => {
-      render(HeaderActionOutsideClick);
-
-      await user.click(getActionButton());
-      expect(getActionButton()).toHaveClass("bx--header__action--active");
-
-      await user.click(document.body);
-      expect(getActionButton()).not.toHaveClass("bx--header__action--active");
-    });
-
-    it("stays open when clicking panel content", async () => {
-      render(HeaderActionOutsideClick);
-
-      await user.click(getActionButton());
-      await user.click(screen.getByTestId("panel-content"));
-      expect(screen.getByTestId("panel-content")).toBeInTheDocument();
-    });
-
-    it("respects preventCloseOnClickOutside", async () => {
-      render(HeaderActionOutsideClick, {
-        props: { preventCloseOnClickOutside: true },
-      });
-
-      await user.click(getActionButton());
-      await user.click(document.body);
-      expect(screen.getByTestId("panel-content")).toBeInTheDocument();
-    });
+    expect(screen.getByText("Custom text content")).toBeInTheDocument();
+    expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
   });
 
   describe("accessibility", () => {

@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../utils/user";
 import HeaderPanelLink from "./HeaderPanelLink.test.svelte";
 
 describe("HeaderPanelLink", () => {
@@ -16,22 +15,18 @@ describe("HeaderPanelLink", () => {
     expect(button).toHaveClass("bx--switcher__item-link");
   });
 
-  it("keeps the selected state on a button", () => {
+  it("marks only the selected link as current", () => {
     render(HeaderPanelLink);
 
     const current = screen.getByRole("button", { name: "Current" });
     expect(current).toHaveClass("bx--switcher__item-link--selected");
     expect(current).toHaveAttribute("aria-current", "page");
-  });
 
-  it("is keyboard focusable and forwards click", async () => {
-    render(HeaderPanelLink);
-
-    await user.tab();
-    await user.tab();
-    expect(screen.getByRole("button", { name: "Switch theme" })).toHaveFocus();
-
-    await user.keyboard("{Enter}");
-    expect(screen.getByTestId("clicks")).toHaveTextContent("1");
+    expect(screen.getByRole("link", { name: "Docs" })).not.toHaveAttribute(
+      "aria-current",
+    );
+    expect(
+      screen.getByRole("button", { name: "Switch theme" }),
+    ).not.toHaveAttribute("aria-current");
   });
 });

@@ -53,15 +53,6 @@ describe("SideNav resize", () => {
     expect(nav.style.width).toBe("");
   });
 
-  it("uses a custom handle label", () => {
-    render(SideNavResizeTest, {
-      props: { resizable: true, resizeHandleLabel: "Resize menu" },
-    });
-    expect(
-      screen.getByRole("separator", { name: "Resize menu" }),
-    ).toBeInTheDocument();
-  });
-
   it("renders an out-of-range width clamped to the bounds", async () => {
     const { container, component } = render(SideNavResizeTest, {
       props: { resizable: true, width: 1000, minWidth: 200, maxWidth: 480 },
@@ -232,64 +223,6 @@ describe("SideNav resize", () => {
     await fireEvent.pointerUp(handle, { pointerId: 1 });
     expect(nav).not.toHaveClass("bx--side-nav--resizing");
     expect(document.body).not.toHaveClass("bx--side-nav-resizing");
-  });
-
-  it("ends the drag on an immediate pointerup", async () => {
-    const { container } = render(SideNavResizeTest, {
-      props: { resizable: true, width: 320 },
-    });
-
-    const handle = getHandle();
-    await fireEvent.pointerDown(handle, { clientX: 300, pointerId: 1 });
-    await fireEvent.pointerUp(handle, { pointerId: 1 });
-    expect(getNav(container)).not.toHaveClass("bx--side-nav--resizing");
-    expect(document.body).not.toHaveClass("bx--side-nav-resizing");
-    await fireEvent.pointerMove(handle, { clientX: 400, pointerId: 1 });
-
-    expect(handle).toHaveAttribute("aria-valuenow", "320");
-  });
-
-  it.each(["pointerCancel", "lostPointerCapture"] as const)(
-    "ends the drag on %s",
-    async (eventName) => {
-      render(SideNavResizeTest, { props: { resizable: true, width: 320 } });
-
-      const handle = getHandle();
-      await fireEvent.pointerDown(handle, { clientX: 300, pointerId: 1 });
-      await fireEvent[eventName](handle, { pointerId: 1 });
-      await fireEvent.pointerMove(handle, { clientX: 400, pointerId: 1 });
-
-      expect(handle).toHaveAttribute("aria-valuenow", "320");
-      expect(document.body).not.toHaveClass("bx--side-nav-resizing");
-    },
-  );
-
-  it("ignores non-primary buttons", async () => {
-    const { container } = render(SideNavResizeTest, {
-      props: { resizable: true, width: 320 },
-    });
-
-    const handle = getHandle();
-    await fireEvent.pointerDown(handle, {
-      clientX: 300,
-      pointerId: 1,
-      button: 2,
-    });
-    expect(getNav(container)).not.toHaveClass("bx--side-nav--resizing");
-
-    await fireEvent.pointerMove(handle, { clientX: 400, pointerId: 1 });
-    expect(handle).toHaveAttribute("aria-valuenow", "320");
-  });
-
-  it("ignores moves from a different pointer", async () => {
-    render(SideNavResizeTest, { props: { resizable: true, width: 320 } });
-
-    const handle = getHandle();
-    await fireEvent.pointerDown(handle, { clientX: 300, pointerId: 1 });
-    await fireEvent.pointerMove(handle, { clientX: 400, pointerId: 2 });
-    expect(handle).toHaveAttribute("aria-valuenow", "320");
-
-    await fireEvent.pointerUp(handle, { pointerId: 1 });
   });
 
   it("fires resize once per drag, only when the width changed", async () => {

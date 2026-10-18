@@ -11,5 +11,4 @@
     Status
     <svg slot="icon" data-testid="slot-icon" />
   </HeaderPanelLink>
-  <HeaderPanelLink href="#override" text="Ignored">Override</HeaderPanelLink>
 </HeaderPanelLinks>

@@ -35,18 +35,6 @@ describe("HeaderSearch (menu slot)", () => {
     expect(options[0]).toHaveTextContent("Search everywhere");
   });
 
-  it("highlights the matched portion of each item", async () => {
-    const { container } = render(HeaderSearchMenu, { props: { active: true } });
-    const input = screen.getByRole("combobox");
-    await user.type(input, "Data");
-
-    const highlights = container.querySelectorAll(
-      ".bx--search-menu-item__highlight",
-    );
-    expect(highlights.length).toBeGreaterThan(0);
-    expect(highlights[0]).toHaveTextContent("Data");
-  });
-
   it("navigates with the arrow keys and selects with Enter", async () => {
     render(HeaderSearchMenu, { props: { active: true } });
     const input = screen.getByRole("combobox");

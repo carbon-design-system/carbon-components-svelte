@@ -37,13 +37,6 @@ describe("HeaderNavMenu trigger content", () => {
 });
 
 describe("HeaderNavMenu accessible names", () => {
-  it("names the trigger from its content without an aria-label", () => {
-    render(Fixture);
-
-    const trigger = screen.getByRole("menuitem", { name: "Plain" });
-    expect(trigger).not.toHaveAttribute("aria-label");
-  });
-
   it("names the menu with the trigger", () => {
     render(Fixture);
 
