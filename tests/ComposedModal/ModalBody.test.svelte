@@ -10,10 +10,11 @@
   export let slotContent = "";
   export let alert = false;
   export let includeInput = false;
+  export let headerLabel = "";
 </script>
 
 <ComposedModal bind:open {alert}>
-  <ModalHeader title="Test Modal" />
+  <ModalHeader title="Test Modal" label={headerLabel} />
   <ModalBody {hasForm} {hasScrollingContent} {...$$restProps}>
     {#if slotContent}
       {slotContent}

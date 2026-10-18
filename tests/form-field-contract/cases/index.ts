@@ -12,6 +12,8 @@ import FluidSearchSkeleton from "carbon-components-svelte/Search/FluidSearchSkel
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import FluidSelectSkeleton from "carbon-components-svelte/Select/FluidSelectSkeleton.svelte";
 import Select from "carbon-components-svelte/Select/Select.svelte";
+import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
+import Slider from "carbon-components-svelte/Slider/Slider.svelte";
 import FluidTextAreaSkeleton from "carbon-components-svelte/TextArea/FluidTextAreaSkeleton.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import FluidTextInputSkeleton from "carbon-components-svelte/TextInput/FluidTextInputSkeleton.svelte";
@@ -242,6 +244,26 @@ export const cases: FieldCase[] = [
     fluidSkeleton: { component: FluidCopyInputSkeleton, ...textInputSkeleton },
   },
   {
+    name: "Slider",
+    component: Slider,
+    // The thumb and the number input both carry the state. A read-only slider
+    // swaps the input for text.
+    control: () => [
+      screen.getByRole("slider"),
+      ...screen.queryAllByRole("spinbutton"),
+    ],
+    state: { errorAttribute: "aria-describedby" },
+  },
+  {
+    name: "RangeSlider",
+    component: RangeSlider,
+    control: () => [
+      ...screen.getAllByRole("slider"),
+      ...screen.queryAllByRole("spinbutton"),
+    ],
+    state: { errorAttribute: "aria-describedby" },
+  },
+  {
     name: "DatePicker",
     component: DatePickerField,
     props: { datePickerType: "single" },
@@ -272,8 +294,6 @@ export const exempt: Exemptions = {
     Checkbox: NOT_AUDITED,
     CheckboxGroup: NOT_AUDITED,
     RadioButtonGroup: NOT_AUDITED,
-    RangeSlider: NOT_AUDITED,
-    Slider: NOT_AUDITED,
     TagInput: NOT_AUDITED,
     Toggle: NOT_AUDITED,
   },

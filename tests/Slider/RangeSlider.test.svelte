@@ -8,6 +8,7 @@
   export let max = 100;
   export let step = 1;
   export let minGap = 0;
+  export let stepMultiplier = 4;
   export let orientation: ComponentProps<RangeSlider>["orientation"] =
     "horizontal";
   export let marks:
@@ -59,6 +60,7 @@
   {max}
   {step}
   {minGap}
+  {stepMultiplier}
   {orientation}
   {marks}
   {disabled}

@@ -3,6 +3,7 @@ import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.sv
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
@@ -350,6 +351,22 @@ describe("RangeSlider", () => {
     expect(onchange).toHaveBeenLastCalledWith(bounds(25, 75));
   });
 
+  it.each([
+    ["Shift+ArrowRight", "{Shift>}{ArrowRight}{/Shift}"],
+    ["PageUp", "{PageUp}"],
+  ])("moves by range / stepMultiplier on %s", async (_name, keys) => {
+    const onchange = vi.fn();
+    render(RangeSlider, {
+      props: { value: 0, valueUpper: 100, stepMultiplier: 10, onchange },
+    });
+
+    const [lowerThumb] = screen.getAllByRole("slider");
+    lowerThumb.focus();
+    await user.keyboard(keys);
+
+    expect(onchange).toHaveBeenLastCalledWith(bounds(10, 100));
+  });
+
   it("prevents PageUp/PageDown default actions (page scroll)", () => {
     render(RangeSlider);
 
@@ -430,6 +447,31 @@ describe("RangeSlider", () => {
       expect(thumb).not.toHaveAttribute("tabindex");
     }
   });
+
+  it.each(["Home", "End", "PageUp", "ArrowRight"])(
+    "ignores %s on a disabled thumb",
+    async (key) => {
+      const oninput = vi.fn();
+      const onchange = vi.fn();
+      render(RangeSlider, {
+        props: {
+          value: 50,
+          valueUpper: 80,
+          disabled: true,
+          oninput,
+          onchange,
+        },
+      });
+
+      // Disabled thumbs can't take focus, so dispatch the key directly.
+      const [lowerThumb] = screen.getAllByRole("slider");
+      await fireEvent.keyDown(lowerThumb, { key });
+
+      expect(oninput).not.toHaveBeenCalled();
+      expect(onchange).not.toHaveBeenCalled();
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+    },
+  );
 
   it("should render labeled marks at the given values", () => {
     const { container } = render(RangeSlider, {
@@ -699,6 +741,29 @@ describe("RangeSlider", () => {
   });
 
   describe("grabbing a handle", () => {
+    it.each([
+      ["disabled", { disabled: true }],
+      ["readonly", { readonly: true }],
+    ])("does not start a drag when pressed while %s", async (_name, state) => {
+      const add = vi.spyOn(window, "addEventListener");
+      const remove = vi.spyOn(window, "removeEventListener");
+      const { container } = render(RangeSlider, {
+        props: { value: 20, valueUpper: 70, ...state },
+      });
+
+      const slider = container.querySelector(".bx--slider");
+      assert(slider instanceof HTMLElement);
+      await fireEvent.mouseDown(slider, { clientX: 100 });
+      await flushDismiss();
+
+      for (const type of ["mousemove", "mouseup"]) {
+        expect(netListenerCalls(add, remove, type)).toBe(0);
+      }
+
+      add.mockRestore();
+      remove.mockRestore();
+    });
+
     it.each([
       {
         orientation: "horizontal" as const,

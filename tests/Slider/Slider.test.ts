@@ -572,6 +572,27 @@ describe("Slider", () => {
     expect(onchange).toHaveBeenCalledWith(990);
   });
 
+  it.each([
+    [150, "100"],
+    [-20, "0"],
+  ])("clamps an initial value of %i into range", (value, expected) => {
+    render(Slider, { props: { value } });
+
+    expect(screen.getByRole("slider")).toHaveAttribute(
+      "aria-valuenow",
+      expected,
+    );
+    expect(screen.getByRole("spinbutton")).toHaveValue(Number(expected));
+  });
+
+  it("clamps the value when max drops below it", async () => {
+    const { rerender } = render(Slider, { props: { value: 80 } });
+
+    await rerender({ max: 50 });
+
+    expect(screen.getByRole("slider")).toHaveAttribute("aria-valuenow", "50");
+  });
+
   it("moves the value with the pointer and dispatches change once on release", async () => {
     const onchange = vi.fn();
     const { container } = render(Slider, { props: { onchange } });

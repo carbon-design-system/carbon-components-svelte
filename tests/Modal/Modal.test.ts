@@ -10,6 +10,7 @@ import {
   closeVia,
   finishClose,
   flushProgrammaticClose,
+  getOverlay,
   reportClosingTransition,
 } from "./helpers";
 import ModalTest from "./Modal.test.svelte";
@@ -19,6 +20,7 @@ import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
+import ModalTwoBodyLockTest from "./ModalTwoBodyLock.test.svelte";
 import ModalUnmountOnCloseTest from "./ModalUnmountOnClose.test.svelte";
 
 describe("Modal", () => {
@@ -242,6 +244,90 @@ describe("Modal", () => {
     expect(modal).toHaveAttribute("aria-label", "Danger Alert Modal");
   });
 
+  describe("alert and labelling", () => {
+    it("uses the alert role without a body description for a passive alert", () => {
+      render(ModalTest, {
+        props: {
+          open: true,
+          alert: true,
+          passiveModal: true,
+          modalHeading: "Heads up",
+        },
+      });
+
+      expect(screen.getByRole("alert")).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("describes an alertdialog by its body", () => {
+      const { container } = render(ModalTest, {
+        props: { open: true, alert: true, modalHeading: "Alert" },
+      });
+
+      const body = container.querySelector(".bx--modal-content");
+      assert(body);
+      expect(screen.getByRole("alertdialog")).toHaveAttribute(
+        "aria-describedby",
+        body.id,
+      );
+    });
+
+    it("does not describe a plain dialog by its body", () => {
+      render(ModalTest, { props: { open: true, modalHeading: "Plain" } });
+
+      expect(screen.getByRole("dialog")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+    });
+
+    it.each([
+      ["the heading", { modalHeading: "Heading" }, "Heading"],
+      [
+        "the label over the heading",
+        { modalLabel: "Label", modalHeading: "Heading" },
+        "Label",
+      ],
+      [
+        "modalAriaLabel over the heading",
+        { modalAriaLabel: "Aria", modalHeading: "Heading" },
+        "Aria",
+      ],
+      [
+        "the label over modalAriaLabel",
+        {
+          modalLabel: "Label",
+          modalAriaLabel: "Aria",
+          modalHeading: "Heading",
+        },
+        "Label",
+      ],
+    ])("names the dialog from %s", (_name, props, expected) => {
+      render(ModalTest, { props: { open: true, ...props } });
+
+      expect(screen.getByRole("dialog")).toHaveAttribute(
+        "aria-label",
+        expected,
+      );
+    });
+
+    it.each([
+      ["the heading", { modalHeading: "Heading" }, "Heading"],
+      [
+        "the label when present",
+        { modalLabel: "Label", modalHeading: "Heading" },
+        "Label",
+      ],
+    ])("labels the body by %s", (_name, props, expected) => {
+      const { container } = render(ModalTest, {
+        props: { open: true, ...props },
+      });
+
+      const body = container.querySelector(".bx--modal-content");
+      const labelledBy = body?.getAttribute("aria-labelledby");
+      assert(labelledBy);
+      expect(document.getElementById(labelledBy)).toHaveTextContent(expected);
+    });
+  });
+
   it("handles scrolling content", () => {
     render(ModalTest, {
       props: {
@@ -361,6 +447,30 @@ describe("Modal", () => {
       }
     },
   );
+
+  it("restores focus only when the dialog's own transform transition ends", async () => {
+    const spy = reportClosingTransition();
+
+    try {
+      render(ModalFocusReturnTest);
+
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+      await closeVia["close-button"]();
+
+      getOverlay().dispatchEvent(
+        new TransitionEvent("transitionend", { propertyName: "opacity" }),
+      );
+      await tick();
+      expect(trigger).not.toHaveFocus();
+
+      await finishClose();
+      expect(trigger).toHaveFocus();
+    } finally {
+      spy.mockRestore();
+    }
+  });
 
   it("skips initial focus when selectorPrimaryFocus is null", () => {
     render(ModalTest, {
@@ -869,6 +979,7 @@ describe("Modal", () => {
   it.each([
     ["a textarea", "modal-textarea", 0],
     ["a link", "modal-link", 0],
+    ["a select", "modal-select", 0],
     ["a text input next to a link", "modal-input", 1],
   ])(
     "pressing Enter in %s dispatches submit %i time(s)",
@@ -892,6 +1003,43 @@ describe("Modal", () => {
       expect(clickPrimaryHandler).toHaveBeenCalledTimes(calls);
     },
   );
+
+  it("does not submit on Enter in a contenteditable element", async () => {
+    const submitHandler = vi.fn();
+    render(ModalEnterTargetTest, {
+      props: { open: true, onsubmit: submitHandler },
+    });
+
+    const editable = screen.getByTestId("modal-editable");
+    // The test DOM does not implement `isContentEditable`.
+    Object.defineProperty(editable, "isContentEditable", { value: true });
+    await fireEvent.keyDown(editable, { key: "Enter" });
+
+    expect(submitHandler).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ["primaryButtonDisabled is set", { primaryButtonDisabled: true }],
+    ["shouldSubmitOnEnter is false", { shouldSubmitOnEnter: false }],
+  ])("does not submit on Enter when %s", async (_name, props) => {
+    const submitHandler = vi.fn();
+    const clickPrimaryHandler = vi.fn();
+    render(ModalEnterTargetTest, {
+      props: {
+        open: true,
+        ...props,
+        onsubmit: submitHandler,
+        onclickbuttonprimary: clickPrimaryHandler,
+      },
+    });
+
+    screen.getByTestId("modal-input").focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(submitHandler).not.toHaveBeenCalled();
+    expect(clickPrimaryHandler).not.toHaveBeenCalled();
+  });
 
   describe("primaryButtonLoading", () => {
     it("shows InlineLoading and does not dispatch submit on click", async () => {
@@ -1081,6 +1229,36 @@ describe("Modal", () => {
       expect(document.body).toHaveClass("bx--body--with-modal-open");
 
       component.sideNavOpen = false;
+      await tick();
+      expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+    });
+  });
+
+  describe("body scroll lock from Modal alone", () => {
+    it("keeps the body lock class until the last of two open modals closes", async () => {
+      const { rerender } = render(ModalTwoBodyLockTest, {
+        props: { firstOpen: true, secondOpen: true },
+      });
+      await tick();
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      await rerender({ firstOpen: false });
+      await tick();
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      await rerender({ secondOpen: false });
+      await tick();
+      expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+    });
+
+    it("releases the body lock class when an open modal unmounts", async () => {
+      const { rerender } = render(ModalUnmountOnCloseTest, {
+        props: { open: true },
+      });
+      await tick();
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      await rerender({ open: false });
       await tick();
       expect(document.body).not.toHaveClass("bx--body--with-modal-open");
     });
