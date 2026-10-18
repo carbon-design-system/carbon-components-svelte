@@ -256,12 +256,16 @@
   on:keydown={(event) => {
     if (open) {
       if (event.key === "Escape") {
+        // Escape that cancels an IME composition is not a close.
+        if (event.isComposing || event.keyCode === 229) return;
         // Stop stacked (DOM-nested) modals from also closing: this
         // handler is on each modal's own root and Escape bubbles from
         // the focused (innermost, topmost) modal up through ancestors.
         event.stopPropagation();
         close("escape-key");
-      } else if (event.key === "Tab") {
+      } else if (event.key === "Tab" && !event.defaultPrevented) {
+        // A nested modal or a child that uses Tab itself (an editor that
+        // indents) already handled this Tab; trapping again moves focus twice.
         trapFocus({ container: ref, event });
       } else if (
         shouldSubmitOnEnter &&
