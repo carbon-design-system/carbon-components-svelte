@@ -1,25 +1,20 @@
 import { render, screen } from "@testing-library/svelte";
-import HeaderSideNavItemsTest from "./HeaderSideNavItems.test.svelte";
+import HeaderSideNavItemsTest from "./HeaderNavBreakpoint.test.svelte";
 
 describe("HeaderSideNavItems", () => {
-  it("renders a list with the header navigation class", () => {
-    render(HeaderSideNavItemsTest);
+  it.each([false, true])(
+    "adds the divider class only when hasDivider is %s",
+    (hasDivider) => {
+      render(HeaderSideNavItemsTest, { props: { hasDivider } });
 
-    const list = screen.getByTestId("header-side-nav-items");
-    expect(list.tagName).toBe("UL");
-    expect(list).toHaveClass("bx--side-nav__header-navigation");
-    expect(list).not.toHaveClass("bx--side-nav__header-divider");
-  });
-
-  it("adds the divider class when hasDivider is true", () => {
-    render(HeaderSideNavItemsTest, { props: { hasDivider: true } });
-
-    const list = screen.getByTestId("header-side-nav-items");
-    expect(list).toHaveClass(
-      "bx--side-nav__header-navigation",
-      "bx--side-nav__header-divider",
-    );
-  });
+      const list = screen.getByTestId("header-side-nav-items");
+      expect(list.tagName).toBe("UL");
+      expect(list).toHaveClass("bx--side-nav__header-navigation");
+      expect(list.classList.contains("bx--side-nav__header-divider")).toBe(
+        hasDivider,
+      );
+    },
+  );
 });
 
 describe("HeaderSideNavItems roles", () => {

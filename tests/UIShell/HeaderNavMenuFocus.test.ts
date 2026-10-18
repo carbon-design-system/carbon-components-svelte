@@ -1,13 +1,24 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import HeaderNavMenuFocus from "./HeaderNavMenuFocus.test.svelte";
+import HeaderNavMenuFocus from "./HeaderNavMenubar.test.svelte";
+
+const props = {
+  items: [
+    {
+      text: "Products",
+      items: [{ text: "Compute" }, { text: "Storage" }],
+    },
+    { text: "Pricing" },
+  ],
+  after: "input",
+} as const;
 
 const trigger = () => screen.getByRole("menuitem", { name: "Products" });
 const item = (name: string) => screen.getByRole("menuitem", { name });
 
 describe("HeaderNavMenu focus on close", () => {
   it("lets Tab move past the last item instead of pulling focus back", async () => {
-    render(HeaderNavMenuFocus);
+    render(HeaderNavMenuFocus, { props });
 
     trigger().focus();
     await user.keyboard("{ArrowDown}");
@@ -22,7 +33,7 @@ describe("HeaderNavMenu focus on close", () => {
   });
 
   it("keeps focus on a field clicked while the last item is focused", async () => {
-    render(HeaderNavMenuFocus);
+    render(HeaderNavMenuFocus, { props });
 
     trigger().focus();
     await user.keyboard("{ArrowUp}");

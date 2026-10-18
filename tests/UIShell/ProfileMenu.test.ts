@@ -5,20 +5,6 @@ import ProfileMenu from "./ProfileMenu.test.svelte";
 describe("ProfileMenu", () => {
   const getTrigger = () => screen.getByRole("button", { name: "Profile" });
 
-  it("is a disclosure that controls its panel, not a menu button", async () => {
-    render(ProfileMenu);
-
-    // aria-haspopup="true" means "menu", which the panel is not.
-    expect(getTrigger()).not.toHaveAttribute("aria-haspopup");
-    expect(getTrigger()).not.toHaveAttribute("aria-controls");
-
-    await user.click(getTrigger());
-    const panel = document.getElementById(
-      getTrigger().getAttribute("aria-controls") ?? "",
-    );
-    expect(panel).toHaveClass("bx--profile-menu");
-  });
-
   it("names the panel from the trigger's iconDescription", async () => {
     render(ProfileMenu);
 

@@ -7,27 +7,26 @@ import { clickToFocus } from "../utils/click-to-focus";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
-import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";
+import CustomIcon from "./HeaderSearchCustomIcon.test.svelte";
 import HeaderSearchSubmitTest from "./HeaderSearchSubmit.test.svelte";
 
 describe("HeaderSearch", () => {
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2532
-  it("does not fire active/inactive event on initial render", () => {
-    render(HeaderSearchTest);
+  it.each([
+    ["inactive", {}],
+    ["active", { active: true }],
+  ])(
+    "does not fire active/inactive event on initial render when %s",
+    (_, props) => {
+      const onActive = vi.fn();
+      const onInactive = vi.fn();
+      render(HeaderSearchTest, { props: { ...props, onActive, onInactive } });
 
-    expect(screen.getByTestId("active-event")).toHaveTextContent("false");
-    expect(screen.getByTestId("inactive-event")).toHaveTextContent("false");
-  });
-
-  // Regression test for initial event dispatch in Svelte 5
-  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2532
-  it("does not fire active/inactive event on initial render when active is true", () => {
-    render(HeaderSearchTest, { props: { active: true } });
-
-    expect(screen.getByTestId("active-event")).toHaveTextContent("false");
-    expect(screen.getByTestId("inactive-event")).toHaveTextContent("false");
-  });
+      expect(onActive).not.toHaveBeenCalled();
+      expect(onInactive).not.toHaveBeenCalled();
+    },
+  );
 
   describe("Rendering", () => {
     it("should render search input", () => {
@@ -125,7 +124,7 @@ describe("HeaderSearch", () => {
     });
 
     it("should render a custom icon in the trigger", () => {
-      render(HeaderSearchIconTest);
+      render(HeaderSearchTest, { props: { icon: CustomIcon } });
 
       const searchButton = screen.getByRole("button", { name: "Search" });
       expect(
@@ -224,33 +223,38 @@ describe("HeaderSearch", () => {
 
   describe("Events", () => {
     it("should dispatch active event when activated", async () => {
-      render(HeaderSearchTest);
+      const onActive = vi.fn();
+      render(HeaderSearchTest, { props: { onActive } });
 
       const searchButton = screen.getByRole("button", { name: "Search" });
       await user.click(searchButton);
 
-      expect(screen.getByTestId("active-event")).toHaveTextContent("true");
+      expect(onActive).toHaveBeenCalledTimes(1);
     });
 
     it("should dispatch inactive event when deactivated", async () => {
-      render(HeaderSearchTest, { props: { active: true } });
+      const onInactive = vi.fn();
+      render(HeaderSearchTest, { props: { active: true, onInactive } });
 
       const searchInput = screen.getByRole("textbox");
       await user.click(searchInput);
       await user.keyboard("{Escape}");
 
-      expect(screen.getByTestId("inactive-event")).toHaveTextContent("true");
+      expect(onInactive).toHaveBeenCalledTimes(1);
     });
 
     it("should dispatch clear event when clear button is clicked", async () => {
-      render(HeaderSearchTest, { props: { active: true, value: "test" } });
+      const onClear = vi.fn();
+      render(HeaderSearchTest, {
+        props: { active: true, value: "test", onClear },
+      });
 
       const clearButton = screen.getByRole("button", {
         name: "Clear search input",
       });
       await user.click(clearButton);
 
-      expect(screen.getByTestId("clear-event")).toHaveTextContent("true");
+      expect(onClear).toHaveBeenCalledTimes(1);
     });
 
     it("should dispatch select event when result is selected", async () => {
@@ -258,17 +262,15 @@ describe("HeaderSearch", () => {
         { href: "/1", text: "Result 1" },
         { href: "/2", text: "Result 2" },
       ];
+      const onSelect = vi.fn();
       render(HeaderSearchTest, {
-        props: { active: true, results, value: "test" },
+        props: { active: true, results, value: "test", onSelect },
       });
 
       const firstMenuItem = screen.getByRole("menuitem", { name: "Result 1" });
       await user.click(firstMenuItem);
 
-      const selectEvent = JSON.parse(
-        screen.getByTestId("select-event").textContent || "{}",
-      );
-      expect(selectEvent).toEqual({
+      expect(onSelect).toHaveBeenCalledWith({
         value: "test",
         selectedResultIndex: 0,
         selectedResult: { href: "/1", text: "Result 1" },
@@ -277,79 +279,31 @@ describe("HeaderSearch", () => {
   });
 
   describe("Keyboard Navigation", () => {
-    it("should navigate down with ArrowDown key", async () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-        { href: "/3", text: "Result 3" },
-      ];
-      render(HeaderSearchTest, {
-        props: { active: true, results, selectedResultIndex: 0 },
-      });
+    it.each([
+      [3, 0, "ArrowDown", 1],
+      [3, 1, "ArrowUp", 0],
+      [2, 1, "ArrowDown", 0],
+      [2, 0, "ArrowUp", 1],
+    ] as const)(
+      "with %s results at index %s, %s moves to index %s",
+      async (count, start, key, expected) => {
+        const results = Array.from({ length: count }, (_, i) => ({
+          href: `/${i + 1}`,
+          text: `Result ${i + 1}`,
+        }));
+        render(HeaderSearchTest, {
+          props: { active: true, results, selectedResultIndex: start },
+        });
 
-      const searchInput = screen.getByRole("textbox");
-      await user.click(searchInput);
-      await user.keyboard("{ArrowDown}");
+        const searchInput = screen.getByRole("textbox");
+        await user.click(searchInput);
+        await user.keyboard(`{${key}}`);
 
-      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
-        /^ccs-[a-z0-9.]+-menuitem-1$/,
-      );
-    });
-
-    it("should navigate up with ArrowUp key", async () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-        { href: "/3", text: "Result 3" },
-      ];
-      render(HeaderSearchTest, {
-        props: { active: true, results, selectedResultIndex: 1 },
-      });
-
-      const searchInput = screen.getByRole("textbox");
-      await user.click(searchInput);
-      await user.keyboard("{ArrowUp}");
-
-      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
-        /^ccs-[a-z0-9.]+-menuitem-0$/,
-      );
-    });
-
-    it("should wrap to first item when navigating down from last item", async () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-      ];
-      render(HeaderSearchTest, {
-        props: { active: true, results, selectedResultIndex: 1 },
-      });
-
-      const searchInput = screen.getByRole("textbox");
-      await user.click(searchInput);
-      await user.keyboard("{ArrowDown}");
-
-      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
-        /^ccs-[a-z0-9.]+-menuitem-0$/,
-      );
-    });
-
-    it("should wrap to last item when navigating up from first item", async () => {
-      const results = [
-        { href: "/1", text: "Result 1" },
-        { href: "/2", text: "Result 2" },
-      ];
-      render(HeaderSearchTest, {
-        props: { active: true, results, selectedResultIndex: 0 },
-      });
-
-      const searchInput = screen.getByRole("textbox");
-      await user.click(searchInput);
-      await user.keyboard("{ArrowUp}");
-
-      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
-        /^ccs-[a-z0-9.]+-menuitem-1$/,
-      );
-    });
+        expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+          new RegExp(`^ccs-[a-z0-9.]+-menuitem-${expected}$`),
+        );
+      },
+    );
 
     it("should clear value but keep active on Escape key when search has value", async () => {
       render(HeaderSearchTest, { props: { active: true, value: "test" } });

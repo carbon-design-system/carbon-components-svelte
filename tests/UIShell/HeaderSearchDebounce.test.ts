@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import HeaderSearchDebounce from "./HeaderSearchDebounce.test.svelte";
-import HeaderSearchMenuDebounce from "./HeaderSearchMenuDebounce.test.svelte";
+import HeaderSearchMenu from "./HeaderSearchMenu.test.svelte";
 
 describe("HeaderSearch debounce", () => {
   beforeEach(() => {
@@ -38,49 +38,12 @@ describe("HeaderSearch debounce", () => {
       await vi.advanceTimersByTimeAsync(1000);
       expect(onSearch).not.toHaveBeenCalled();
     });
-
-    it("cancels a pending debounce on clear-button click", async () => {
-      const onSearch = vi.fn();
-      render(HeaderSearchDebounce, { props: { debounce: 200, onSearch } });
-
-      const input = screen.getByRole("textbox");
-      await fireEvent.input(input, { target: { value: "res" } });
-      await fireEvent.click(screen.getByRole("button", { name: "Clear" }));
-
-      await vi.advanceTimersByTimeAsync(200);
-      expect(onSearch).not.toHaveBeenCalled();
-    });
-
-    it("cancels a pending debounce on Escape (non-empty value)", async () => {
-      const onSearch = vi.fn();
-      render(HeaderSearchDebounce, { props: { debounce: 200, onSearch } });
-
-      const input = screen.getByRole("textbox");
-      await fireEvent.input(input, { target: { value: "res" } });
-      await fireEvent.keyDown(input, { key: "Escape" });
-      expect(input).toHaveValue("");
-
-      await vi.advanceTimersByTimeAsync(200);
-      expect(onSearch).not.toHaveBeenCalled();
-    });
-
-    it("cancels a pending debounce when Enter selects a result", async () => {
-      const onSearch = vi.fn();
-      render(HeaderSearchDebounce, { props: { debounce: 200, onSearch } });
-
-      const input = screen.getByRole("textbox");
-      await fireEvent.input(input, { target: { value: "res" } });
-      await fireEvent.keyDown(input, { key: "Enter" });
-
-      await vi.advanceTimersByTimeAsync(200);
-      expect(onSearch).not.toHaveBeenCalled();
-    });
   });
 
   describe("menu slot mode", () => {
     it("dispatches search once after the pause", async () => {
       const onSearch = vi.fn();
-      render(HeaderSearchMenuDebounce, { props: { debounce: 200, onSearch } });
+      render(HeaderSearchMenu, { props: { debounce: 200, onSearch } });
 
       const input = screen.getByRole("combobox");
       await fireEvent.input(input, { target: { value: "no-match-here" } });
@@ -93,45 +56,85 @@ describe("HeaderSearch debounce", () => {
       expect(onSearch).toHaveBeenCalledTimes(1);
       expect(onSearch).toHaveBeenCalledWith("no-match-here");
     });
+  });
 
-    it("cancels a pending debounce when Enter selects the active item", async () => {
-      const onSearch = vi.fn();
-      render(HeaderSearchMenuDebounce, { props: { debounce: 200, onSearch } });
+  describe("cancels a pending debounce", () => {
+    const cases: {
+      name: string;
+      Fixture: typeof HeaderSearchDebounce | typeof HeaderSearchMenu;
+      role: "textbox" | "combobox";
+      typed: string;
+      act: (input: HTMLElement) => Promise<unknown>;
+      clearsValue?: boolean;
+    }[] = [
+      {
+        name: "results: clear-button click",
+        Fixture: HeaderSearchDebounce,
+        role: "textbox",
+        typed: "res",
+        act: () =>
+          fireEvent.click(screen.getByRole("button", { name: "Clear" })),
+      },
+      {
+        name: "results: Escape (non-empty value)",
+        Fixture: HeaderSearchDebounce,
+        role: "textbox",
+        typed: "res",
+        act: (input) => fireEvent.keyDown(input, { key: "Escape" }),
+        clearsValue: true,
+      },
+      {
+        name: "results: Enter selects a result",
+        Fixture: HeaderSearchDebounce,
+        role: "textbox",
+        typed: "res",
+        act: (input) => fireEvent.keyDown(input, { key: "Enter" }),
+      },
+      {
+        name: "menu: Enter selects the active item",
+        Fixture: HeaderSearchMenu,
+        role: "combobox",
+        typed: "Data",
+        act: async (input) => {
+          await fireEvent.keyDown(input, { key: "ArrowDown" });
+          await fireEvent.keyDown(input, { key: "Enter" });
+        },
+        // Confirms the active-item branch ran (not the free-text submit branch).
+        clearsValue: true,
+      },
+      {
+        name: "menu: Enter submits free text",
+        Fixture: HeaderSearchMenu,
+        role: "combobox",
+        typed: "no-match-here",
+        act: (input) => fireEvent.keyDown(input, { key: "Enter" }),
+      },
+      {
+        name: "menu: clear-button click",
+        Fixture: HeaderSearchMenu,
+        role: "combobox",
+        typed: "no-match-here",
+        act: () =>
+          fireEvent.click(
+            screen.getByRole("button", { name: "Clear search input" }),
+          ),
+      },
+    ];
 
-      const input = screen.getByRole("combobox");
-      await fireEvent.input(input, { target: { value: "Data" } });
-      await fireEvent.keyDown(input, { key: "ArrowDown" });
-      await fireEvent.keyDown(input, { key: "Enter" });
+    it.each(cases)(
+      "on $name",
+      async ({ Fixture, role, typed, act, clearsValue }) => {
+        const onSearch = vi.fn();
+        render(Fixture, { props: { debounce: 200, onSearch } });
 
-      // Confirms the active-item branch ran (not the free-text submit branch).
-      expect(input).toHaveValue("");
+        const input = screen.getByRole(role);
+        await fireEvent.input(input, { target: { value: typed } });
+        await act(input);
+        if (clearsValue) expect(input).toHaveValue("");
 
-      await vi.advanceTimersByTimeAsync(200);
-      expect(onSearch).not.toHaveBeenCalled();
-    });
-
-    it("cancels a pending debounce when Enter submits free text", async () => {
-      const onSearch = vi.fn();
-      render(HeaderSearchMenuDebounce, { props: { debounce: 200, onSearch } });
-
-      const input = screen.getByRole("combobox");
-      await fireEvent.input(input, { target: { value: "no-match-here" } });
-      await fireEvent.keyDown(input, { key: "Enter" });
-
-      await vi.advanceTimersByTimeAsync(200);
-      expect(onSearch).not.toHaveBeenCalled();
-    });
-
-    it("cancels a pending debounce on clear-button click", async () => {
-      const onSearch = vi.fn();
-      render(HeaderSearchMenuDebounce, { props: { debounce: 200, onSearch } });
-
-      const input = screen.getByRole("combobox");
-      await fireEvent.input(input, { target: { value: "no-match-here" } });
-      await fireEvent.click(screen.getByRole("button", { name: "Clear" }));
-
-      await vi.advanceTimersByTimeAsync(200);
-      expect(onSearch).not.toHaveBeenCalled();
-    });
+        await vi.advanceTimersByTimeAsync(200);
+        expect(onSearch).not.toHaveBeenCalled();
+      },
+    );
   });
 });

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import Fixture from "./HeaderNavMenuTrigger.test.svelte";
+import Fixture from "./HeaderNavContent.test.svelte";
 
 describe("HeaderNavMenu trigger content", () => {
   it("renders only the text and chevron by default", () => {
@@ -27,7 +27,7 @@ describe("HeaderNavMenu trigger content", () => {
     render(Fixture);
 
     const text = screen.getByTestId("custom-text");
-    const icon = screen.getByTestId("slot-icon");
+    const icon = screen.getByTestId("menu-slot-icon");
     const trigger = text.closest("a");
     expect(trigger).toHaveTextContent("Custom label");
     expect(trigger).not.toHaveTextContent("Ignored");

@@ -1,16 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
+import { setViewportWidth } from "../utils/viewport";
 import UiShell from "./UIShell.test.svelte";
-
-function setViewportWidth(width: number) {
-  Object.defineProperty(window, "innerWidth", {
-    writable: true,
-    configurable: true,
-    value: width,
-  });
-  window.dispatchEvent(new Event("resize"));
-}
 
 describe("SideNav overlay click", () => {
   afterEach(() => {

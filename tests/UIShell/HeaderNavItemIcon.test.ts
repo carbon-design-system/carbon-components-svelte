@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import Fixture from "./HeaderNavItemIcon.test.svelte";
+import Fixture from "./HeaderNavContent.test.svelte";
 
 describe("HeaderNavItem icon", () => {
   it("renders the icon prop after the text with the icon marker class", () => {

@@ -1,89 +1,57 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { setViewportWidth } from "../utils/viewport";
 import SideNavMobileFocusTrapTest from "./SideNavMobileFocusTrap.test.svelte";
-
-function setViewportWidth(width: number) {
-  Object.defineProperty(window, "innerWidth", {
-    writable: true,
-    configurable: true,
-    value: width,
-  });
-  window.dispatchEvent(new Event("resize"));
-}
 
 describe("SideNav mobile focus trap", () => {
   afterEach(() => {
     setViewportWidth(1024);
   });
 
-  it("wraps Tab from the last item back to the first when open on mobile", async () => {
-    setViewportWidth(320);
+  it.each([
+    { start: "Third", keys: "{Tab}", end: "First" },
+    { start: "First", keys: "{Shift>}{Tab}{/Shift}", end: "Third" },
+  ])(
+    "wraps $keys from $start to $end when open on mobile",
+    async ({ start, keys, end }) => {
+      setViewportWidth(320);
 
-    render(SideNavMobileFocusTrapTest, { props: { isOpen: true } });
-    await tick();
+      render(SideNavMobileFocusTrapTest, { props: { isOpen: true } });
+      await tick();
 
-    const first = screen.getByRole("link", { name: "First" });
-    const last = screen.getByRole("link", { name: "Third" });
+      const from = screen.getByRole("link", { name: start });
+      const to = screen.getByRole("link", { name: end });
 
-    last.focus();
-    expect(last).toHaveFocus();
+      from.focus();
+      expect(from).toHaveFocus();
 
-    await user.keyboard("{Tab}");
+      await user.keyboard(keys);
 
-    expect(first).toHaveFocus();
-  });
+      expect(to).toHaveFocus();
+    },
+  );
 
-  it("wraps Shift+Tab from the first item back to the last when open on mobile", async () => {
-    setViewportWidth(320);
+  it.each([
+    { width: 320, fixed: true },
+    { width: 1280, fixed: false },
+  ])(
+    "does not trap focus at width $width with fixed $fixed",
+    async ({ width, fixed }) => {
+      setViewportWidth(width);
 
-    render(SideNavMobileFocusTrapTest, { props: { isOpen: true } });
-    await tick();
+      render(SideNavMobileFocusTrapTest, { props: { isOpen: true, fixed } });
+      await tick();
 
-    const first = screen.getByRole("link", { name: "First" });
-    const last = screen.getByRole("link", { name: "Third" });
+      const first = screen.getByRole("link", { name: "First" });
+      const last = screen.getByRole("link", { name: "Third" });
 
-    first.focus();
-    expect(first).toHaveFocus();
+      last.focus();
+      expect(last).toHaveFocus();
 
-    await user.keyboard("{Shift>}{Tab}{/Shift}");
+      await user.keyboard("{Tab}");
 
-    expect(last).toHaveFocus();
-  });
-
-  it("does not trap focus when fixed is true, even on mobile", async () => {
-    setViewportWidth(320);
-
-    render(SideNavMobileFocusTrapTest, {
-      props: { isOpen: true, fixed: true },
-    });
-    await tick();
-
-    const first = screen.getByRole("link", { name: "First" });
-    const last = screen.getByRole("link", { name: "Third" });
-
-    last.focus();
-    expect(last).toHaveFocus();
-
-    await user.keyboard("{Tab}");
-
-    expect(first).not.toHaveFocus();
-  });
-
-  it("does not trap focus at desktop widths", async () => {
-    setViewportWidth(1280);
-
-    render(SideNavMobileFocusTrapTest, { props: { isOpen: true } });
-    await tick();
-
-    const first = screen.getByRole("link", { name: "First" });
-    const last = screen.getByRole("link", { name: "Third" });
-
-    last.focus();
-    expect(last).toHaveFocus();
-
-    await user.keyboard("{Tab}");
-
-    expect(first).not.toHaveFocus();
-  });
+      expect(first).not.toHaveFocus();
+    },
+  );
 });
