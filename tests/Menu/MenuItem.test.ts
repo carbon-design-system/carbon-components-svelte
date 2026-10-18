@@ -383,6 +383,19 @@ describe("MenuItem", () => {
       expect(getSelectedIds()).toEqual(["size", "name"]);
     });
 
+    it("moves focus from an item that took focus by mouse", async () => {
+      render(MenuItemSelectableFixture);
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      // Date prevents its click, so the menu stays open with Date focused.
+      await user.click(screen.getByRole("menuitemcheckbox", { name: "Date" }));
+
+      await user.keyboard("{ArrowUp}");
+
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Size" }),
+      ).toHaveFocus();
+    });
+
     it("keeps the menu open when click is prevented and still toggles selection", async () => {
       render(MenuItemSelectableFixture);
 
