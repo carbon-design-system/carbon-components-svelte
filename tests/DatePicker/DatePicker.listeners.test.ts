@@ -23,6 +23,65 @@ describe("DatePicker window listeners", () => {
     vi.restoreAllMocks();
   });
 
+  it("leaves no window or document listeners behind after 30 pickers", async () => {
+    /** Live registrations on window and document, by event type and handler. */
+    const live = new Map<string, Map<unknown, number>>();
+    for (const target of [window, document]) {
+      const { addEventListener, removeEventListener } = target;
+      vi.spyOn(target, "addEventListener").mockImplementation(function (
+        this: EventTarget,
+        ...args: Parameters<EventTarget["addEventListener"]>
+      ) {
+        const byHandler = live.get(args[0]) ?? new Map();
+        byHandler.set(args[1], (byHandler.get(args[1]) ?? 0) + 1);
+        live.set(args[0], byHandler);
+        return Reflect.apply(addEventListener, this, args);
+      });
+      vi.spyOn(target, "removeEventListener").mockImplementation(function (
+        this: EventTarget,
+        ...args: Parameters<EventTarget["removeEventListener"]>
+      ) {
+        // Removing a listener that was never added is a no-op.
+        const byHandler = live.get(args[0]);
+        const count = byHandler?.get(args[1]) ?? 0;
+        if (count > 0) byHandler?.set(args[1], count - 1);
+        return Reflect.apply(removeEventListener, this, args);
+      });
+    }
+    const outstanding = () =>
+      Object.fromEntries(
+        [...live]
+          .map(([type, byHandler]) => [
+            type,
+            [...byHandler.values()].reduce((sum, count) => sum + count, 0),
+          ])
+          .filter(([, count]) => count),
+      );
+    const cycle = async (index: number) => {
+      const { instance, unmount } = await renderCalendar({
+        datePickerType: ["single", "range", "multiple"][index % 3] as
+          | "single"
+          | "range"
+          | "multiple",
+      });
+      instance.open();
+      await tick();
+      instance.close();
+      unmount();
+      await tick();
+    };
+
+    // The first picker may set up shared listeners Svelte keeps for the page.
+    await cycle(0);
+    const baseline = outstanding();
+    for (let index = 1; index <= 30; index++) {
+      // biome-ignore lint/performance/noAwaitInLoops: each picker mounts, opens, closes, and unmounts before the next
+      await cycle(index);
+    }
+
+    expect(outstanding()).toEqual(baseline);
+  }, 30_000);
+
   it("closed date pickers register no click listeners", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
