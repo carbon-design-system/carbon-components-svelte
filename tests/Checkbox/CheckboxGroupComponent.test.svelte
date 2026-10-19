@@ -22,7 +22,6 @@
     undefined;
   export let customClass = "";
   export let useSlot = false;
-  export let checkboxInvalid = false;
 </script>
 
 {#if useSlot}
@@ -72,12 +71,7 @@
     }}
   >
     <Checkbox value="1" labelText="Option 1" />
-    <Checkbox
-      value="2"
-      labelText="Option 2"
-      invalid={checkboxInvalid}
-      invalidText="Individual error"
-    />
+    <Checkbox value="2" labelText="Option 2" />
     <Checkbox value="3" labelText="Option 3" />
   </CheckboxGroup>
 {/if}

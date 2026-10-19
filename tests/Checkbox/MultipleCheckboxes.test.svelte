@@ -8,13 +8,8 @@
   $: console.log("group changed:", group);
 </script>
 
-{#each values as value, index}
-  <Checkbox
-    bind:group
-    labelText={value}
-    {value}
-    data-testid={`checkbox-${index}`}
-  />
+{#each values as value}
+  <Checkbox bind:group labelText={value} {value} />
 {/each}
 
 <Button

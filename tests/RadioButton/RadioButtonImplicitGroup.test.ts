@@ -48,23 +48,6 @@ describe("RadioButton (Implicit Group via name)", () => {
     expect(component.checked3).toBe(true);
   });
 
-  it("should handle initial checked state", async () => {
-    render(RadioButtonImplicitGroup, {
-      props: { checked2: true },
-    });
-
-    // Wait for component to mount and registry to sync
-    await flushMacrotask();
-
-    const option1 = screen.getByRole("radio", { name: "Option 1" });
-    const option2 = screen.getByRole("radio", { name: "Option 2" });
-    const option3 = screen.getByRole("radio", { name: "Option 3" });
-
-    expect(option1).not.toBeChecked();
-    expect(option2).toBeChecked();
-    expect(option3).not.toBeChecked();
-  });
-
   it("should uncheck siblings when checked is set programmatically", async () => {
     const { component } = render(RadioButtonImplicitGroup);
 

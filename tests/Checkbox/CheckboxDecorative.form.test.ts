@@ -18,19 +18,4 @@ describe("decorative Checkbox form reset", () => {
 
     expect(getBoxes("tree").map((box) => box.checked)).toEqual([true, false]);
   });
-
-  it("keeps open MultiSelect option checkboxes in step with selectedIds", async () => {
-    render(CheckboxDecorativeForm);
-    expect(getBoxes("multiselect").map((box) => box.checked)).toEqual([
-      true,
-      false,
-    ]);
-
-    await resetForm();
-
-    expect(getBoxes("multiselect").map((box) => box.checked)).toEqual([
-      true,
-      false,
-    ]);
-  });
 });

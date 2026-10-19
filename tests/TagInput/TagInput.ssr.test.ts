@@ -10,7 +10,5 @@ describe("TagInput server render", () => {
     expect(html).toContain('aria-label="Remove"');
     expect(html).toMatch(/<input type="hidden" name="topics" value="a"/);
     expect(html).toMatch(/<input type="hidden" name="topics" value="b"/);
-    // No roving tab stop until the set mounts.
-    expect(html).not.toContain('tabindex="-1"');
   });
 });

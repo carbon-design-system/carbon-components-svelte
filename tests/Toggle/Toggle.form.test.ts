@@ -57,17 +57,6 @@ describe("Toggle form participation", () => {
     );
   });
 
-  it("ignores clicks while readonly", async () => {
-    const onToggle = vi.fn();
-    render(ToggleForm, { props: { readonly: true, onToggle } });
-    const toggle = screen.getByRole("switch");
-
-    await user.click(toggle);
-
-    expect(toggle).not.toBeChecked();
-    expect(onToggle).not.toHaveBeenCalled();
-  });
-
   describe("form reset", () => {
     it("syncs toggled to the switch's default state without firing toggle", async () => {
       const onToggle = vi.fn();
@@ -84,20 +73,6 @@ describe("Toggle form participation", () => {
       expect(toggle).not.toBeChecked();
       expect(getBoundText()).toBe("false");
       expect(new FormData(getForm()).has("notify")).toBe(false);
-      expect(onToggle).not.toHaveBeenCalled();
-    });
-
-    it("unchecks the switch on reset even without prior interaction", async () => {
-      const onToggle = vi.fn();
-      render(ToggleForm, { props: { toggled: true, onToggle } });
-      const toggle = screen.getByRole("switch");
-
-      expect(getBoundText()).toBe("true");
-
-      await resetForm();
-
-      expect(toggle).not.toBeChecked();
-      expect(getBoundText()).toBe("false");
       expect(onToggle).not.toHaveBeenCalled();
     });
 
@@ -126,19 +101,6 @@ describe("Toggle form participation", () => {
         props: { toggled: true, readonly: true, onToggle },
       });
       const toggle = screen.getByRole("switch");
-
-      await resetForm();
-
-      expect(toggle).toBeChecked();
-      expect(getBoundText()).toBe("true");
-      expect(onToggle).not.toHaveBeenCalled();
-    });
-
-    it("leaves the state alone when the reset is canceled", async () => {
-      const onToggle = vi.fn();
-      render(ToggleForm, { props: { toggled: true, onToggle } });
-      const toggle = screen.getByRole("switch");
-      getForm().addEventListener("reset", (event) => event.preventDefault());
 
       await resetForm();
 

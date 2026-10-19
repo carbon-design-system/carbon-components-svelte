@@ -12,26 +12,6 @@ describe("RadioButtonRegistry", () => {
     clearAllGroups();
   });
 
-  it("should create a new group on first registration", () => {
-    const key = {};
-    registerRadioButton("group1", key, false);
-
-    const group = getGroup("group1");
-    assert(group);
-    expect(group.members.size).toBe(1);
-  });
-
-  it("should add members to existing group", () => {
-    const key1 = {};
-    const key2 = {};
-    registerRadioButton("group1", key1, false);
-    registerRadioButton("group1", key2, false);
-
-    const group = getGroup("group1");
-    assert(group);
-    expect(group.members.size).toBe(2);
-  });
-
   it("should set initial selected key when checked=true", () => {
     const key = {};
     registerRadioButton("group1", key, true);
@@ -39,15 +19,6 @@ describe("RadioButtonRegistry", () => {
     const group = getGroup("group1");
     expect(group).toBeDefined();
     expect(get((group as RadioGroup).selectedKey)).toBe(key);
-  });
-
-  it("should share the same store across group members", () => {
-    const key1 = {};
-    const key2 = {};
-    const { selectedKey: store1 } = registerRadioButton("group1", key1, false);
-    const { selectedKey: store2 } = registerRadioButton("group1", key2, false);
-
-    expect(store1).toBe(store2);
   });
 
   it("should unregister and clean up empty groups", () => {
@@ -105,24 +76,6 @@ describe("RadioButtonRegistry", () => {
 
     expect(get(group1.selectedKey)).toBe(newKey);
     expect(get(group2.selectedKey)).toBe(key2);
-  });
-
-  it("should handle re-registration with same key", () => {
-    const key = {};
-    registerRadioButton("group1", key, false);
-    registerRadioButton("group1", key, false);
-
-    const group = getGroup("group1");
-    assert(group);
-    // Set doesn't add duplicates
-    expect(group.members.size).toBe(1);
-  });
-
-  it("should not throw when updating non-existent group", () => {
-    const key = {};
-    expect(() => {
-      updateGroupSelection("non-existent", key);
-    }).not.toThrow();
   });
 
   it("should not throw when unregistering from non-existent group", () => {

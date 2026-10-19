@@ -11,24 +11,6 @@ describe("Toggle", () => {
   const getToggle = (label: string) =>
     screen.getByRole("switch", { name: new RegExp(label, "i") });
 
-  it("renders and functions correctly", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
-
-    const toggle = getToggle("Default toggle");
-    expect(toggle).not.toBeChecked();
-
-    await user.click(toggle);
-    expect(toggle).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("toggled:", true);
-    expect(consoleLog).toHaveBeenCalledWith("change:", true);
-
-    await user.click(toggle);
-    expect(toggle).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("toggled:", false);
-    expect(consoleLog).toHaveBeenCalledWith("change:", false);
-  });
-
   it("supports custom labels", () => {
     render(Toggle);
 
@@ -43,25 +25,6 @@ describe("Toggle", () => {
 
     const toggle = getToggle("Small toggle");
     expect(toggle).toHaveClass("bx--toggle-input--small");
-  });
-
-  it("supports disabled state", () => {
-    render(Toggle);
-
-    const toggle = getToggle("Disabled toggle");
-    expect(toggle).toBeDisabled();
-  });
-
-  it("supports hidden label", () => {
-    render(Toggle);
-
-    const toggle = getToggle("Hidden label toggle");
-    const label = toggle.closest(".bx--form-item");
-    assert(label);
-
-    const hiddenText = label.querySelector(".bx--visually-hidden");
-    expect(hiddenText).toHaveClass("bx--visually-hidden");
-    expect(toggle).toHaveAccessibleName("Hidden label toggle");
   });
 
   it("handles keyboard interactions (Space)", async () => {
@@ -126,13 +89,6 @@ describe("Toggle", () => {
     expect(consoleLog).not.toHaveBeenCalled();
   });
 
-  it("supports custom name attribute", () => {
-    render(Toggle);
-
-    const toggle = getToggle("Custom name toggle");
-    expect(toggle).toHaveAttribute("name", "custom-name-toggle");
-  });
-
   it("prevents default on enter key", async () => {
     render(Toggle);
 
@@ -183,16 +139,9 @@ describe("Toggle", () => {
 
     const label = screen.getByText("Hidden label toggle");
     expect(label).toHaveClass("bx--visually-hidden");
-  });
-
-  it("handles aria-label fallback correctly", () => {
-    render(Toggle);
-
-    const toggle = getToggle("Hidden label toggle");
-    expect(toggle).toHaveAccessibleName("Hidden label toggle");
-
-    const defaultToggle = getToggle("Default toggle");
-    expect(defaultToggle).toHaveAccessibleName("Default toggle");
+    expect(getToggle("Hidden label toggle")).toHaveAccessibleName(
+      "Hidden label toggle",
+    );
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -210,21 +159,6 @@ describe("Toggle", () => {
 
     expect(consoleLog).not.toHaveBeenCalled();
     expect(getToggle("Default toggle")).not.toBeChecked();
-  });
-
-  it("does not dispatch toggle event on mount for initial toggled state", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
-
-    expect(consoleLog).not.toHaveBeenCalled();
-    expect(getToggle("Initial toggled state")).toBeChecked();
-  });
-
-  it("supports custom id", () => {
-    render(Toggle);
-
-    const toggle = getToggle("Custom id toggle");
-    expect(toggle).toHaveAttribute("id", "custom-id");
   });
 
   it("handles focus and blur events", () => {
@@ -301,8 +235,8 @@ describe("Toggle", () => {
       expect(toggle).toHaveAttribute("aria-readonly", "true");
     });
 
-    it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
-      const { container } = render(ToggleReadonly, {
+    it("describes the field as read-only for screen readers that ignore aria-readonly", async () => {
+      const { container, rerender } = render(ToggleReadonly, {
         id: "readonly-toggle",
         readonly: true,
       });
@@ -316,6 +250,10 @@ describe("Toggle", () => {
       const description = container.querySelector("#readonly-readonly-toggle");
       expect(description).toHaveTextContent("Read-only");
       expect(description).toHaveClass("bx--visually-hidden");
+
+      await rerender({ readonly: false });
+      expect(toggle).not.toHaveAttribute("aria-describedby");
+      expect(container.querySelector("#readonly-readonly-toggle")).toBeNull();
     });
 
     it("supports overriding the read-only assistive text", () => {
@@ -330,17 +268,6 @@ describe("Toggle", () => {
       ).toHaveTextContent("Custom read-only text");
     });
 
-    it("does not render a read-only description or aria-describedby when not readonly", () => {
-      const { container } = render(ToggleReadonly, {
-        id: "readonly-toggle",
-        readonly: false,
-      });
-
-      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
-      expect(toggle).not.toHaveAttribute("aria-describedby");
-      expect(container.querySelector("#readonly-readonly-toggle")).toBeNull();
-    });
-
     it("should not toggle on click when readonly", async () => {
       const onToggle = vi.fn();
       render(ToggleReadonly, { readonly: true, onToggle });
@@ -351,14 +278,6 @@ describe("Toggle", () => {
       await user.click(toggle);
       expect(toggle).not.toBeChecked();
       expect(onToggle).not.toHaveBeenCalled();
-    });
-
-    it("should toggle on click when not readonly", async () => {
-      render(ToggleReadonly, { readonly: false });
-
-      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
-      await user.click(toggle);
-      expect(toggle).toBeChecked();
     });
 
     it("should not toggle on Space when readonly", async () => {

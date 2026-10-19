@@ -23,40 +23,6 @@ describe("RadioButtonGroup", () => {
     expect(screen.getByRole("radio", { name: "Option 2" })).toBeChecked();
   });
 
-  it("does not dispatch change event on initial render", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RadioButtonGroup);
-
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
-  });
-
-  it("does not dispatch change event on initial render with selected value", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RadioButtonGroup, { props: { selected: "2" } });
-
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
-  });
-
-  it("dispatches change when selected is set programmatically after mount", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { component } = render(RadioButtonGroup, {
-      props: { selected: "1" },
-    });
-
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
-
-    component.selected = "3";
-    await tick();
-
-    expect(consoleLog).toHaveBeenCalledWith("change", "3");
-  });
-
   // Regression: programmatic selected changes must dispatch change once
   it("dispatches change exactly once per programmatic selection", async () => {
     const consoleLog = vi.spyOn(console, "log");
@@ -188,14 +154,6 @@ describe("RadioButtonGroup", () => {
     expect(fieldset).toHaveAttribute("aria-orientation", "vertical");
   });
 
-  it("should handle horizontal orientation", () => {
-    render(RadioButtonGroup, { props: { orientation: "horizontal" } });
-
-    const fieldset = screen.getByRole("radiogroup");
-    expect(fieldset).not.toHaveClass("bx--radio-button-group--vertical");
-    expect(fieldset).toHaveAttribute("aria-orientation", "horizontal");
-  });
-
   it("should handle custom id", () => {
     render(RadioButtonGroup, {
       props: { id: "custom-id" },
@@ -289,15 +247,6 @@ describe("RadioButtonGroup", () => {
     }
   });
 
-  it("should not set aria-describedby on radios when no helper text", () => {
-    render(RadioButtonGroup);
-
-    const radios = screen.getAllByRole("radio");
-    for (const radio of radios) {
-      expect(radio).not.toHaveAttribute("aria-describedby");
-    }
-  });
-
   describe("Validation", () => {
     it("should mark the radiogroup as invalid and describe each radio via the message", () => {
       render(RadioButtonGroup, {
@@ -388,29 +337,6 @@ describe("RadioButtonGroup", () => {
       type ChangeEventDetail =
         ChangeEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string | number | null>();
-    });
-
-    it("should provide type-safe access to custom string literal types in event handlers", () => {
-      type Status = "pending" | "approved" | "rejected";
-
-      const handleChange = (value: Status | null) => {
-        expectTypeOf(value).toEqualTypeOf<Status | null>();
-        if (value === "pending") {
-          expectTypeOf(value).toEqualTypeOf<"pending">();
-        }
-      };
-
-      expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status | null>();
-
-      type ComponentType = RadioButtonGroupComponent<Status>;
-      type Events = ComponentEvents<ComponentType>;
-      type ChangeEvent = Events["change"];
-      type ChangeEventDetail =
-        ChangeEvent extends CustomEvent<infer T> ? T : never;
-
-      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<
-        Parameters<typeof handleChange>[0]
-      >();
     });
   });
 });

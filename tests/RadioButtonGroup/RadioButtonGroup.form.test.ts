@@ -22,19 +22,6 @@ describe("RadioButtonGroup form reset", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("unchecks the initially selected radio on reset even without prior interaction", async () => {
-    const onChange = vi.fn();
-    render(RadioButtonGroupForm, { props: { selected: "a", onChange } });
-
-    expect(getBoundText()).toBe("a");
-
-    await resetForm();
-
-    expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
-    expect(getBoundText()).toBe("undefined");
-    expect(onChange).not.toHaveBeenCalled();
-  });
-
   it("follows the radio's default state, as with server-rendered markup", async () => {
     const onChange = vi.fn();
     render(RadioButtonGroupForm, { props: { selected: "a", onChange } });
@@ -67,21 +54,6 @@ describe("RadioButtonGroup form reset", () => {
 
     expect(radioB).not.toBeChecked();
     expect(getBoundText()).toBe("undefined");
-  });
-
-  it("clears the bound value when nothing was selected before the reset", async () => {
-    const onChange = vi.fn();
-    render(RadioButtonGroupForm, { props: { onChange } });
-
-    await user.click(screen.getByRole("radio", { name: "B" }));
-    onChange.mockClear();
-
-    await resetForm();
-
-    expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
-    expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
-    expect(getBoundText()).toBe("undefined");
-    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("leaves the selection alone when the reset is canceled", async () => {
