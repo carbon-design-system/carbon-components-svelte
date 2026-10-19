@@ -5,12 +5,7 @@
 </script>
 
 <Box bind:ref={anchor} border="strong" padding={5} width="28rem">
-  <DatePicker
-    datePickerType="single"
-    portalMenu
-    flatpickrProps={{ positionElement: anchor, position: "auto right" }}
-    on:change
-  >
+  <DatePicker datePickerType="single" portalMenu {anchor} align="end" on:change>
     <DatePickerInput
       labelText="Meeting date"
       helperText="The calendar aligns to the bordered container, not the input."

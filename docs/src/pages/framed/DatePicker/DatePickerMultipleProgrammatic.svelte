@@ -6,8 +6,7 @@
     Stack,
   } from "carbon-components-svelte";
 
-  let calendar = null;
-  let selectedCount = 0;
+  let selectedDates = [];
 
   function selectManyDates(count) {
     const now = new Date();
@@ -16,24 +15,20 @@
       date.setDate(date.getDate() + i * 2);
       return date;
     });
-    calendar?.setDate(dates, true);
+    selectedDates = dates;
   }
 
   function clearAll() {
-    calendar?.clear(true);
-  }
-
-  function handleChange(event) {
-    selectedCount = event.detail.selectedDates.length;
+    selectedDates = [];
   }
 </script>
 
 <Stack gap={4}>
-  <DatePicker datePickerType="multiple" bind:calendar on:change={handleChange}>
+  <DatePicker datePickerType="multiple" bind:selectedDates>
     <DatePickerInput
       labelText="Stress test dates"
       placeholder="mm/dd/yyyy"
-      helperText={`${selectedCount} date${selectedCount === 1 ? "" : "s"} selected`}
+      helperText={`${selectedDates.length} date${selectedDates.length === 1 ? "" : "s"} selected`}
     />
   </DatePicker>
   <Stack gap={3} orientation="horizontal">

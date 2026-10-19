@@ -14,7 +14,8 @@
   }
 
   function viewNextDecade() {
-    calendar?.changeYear(calendar.currentYear + 10);
+    if (calendar)
+      calendar.showMonth(new Date(calendar.view.getFullYear() + 10, 0, 1));
   }
 </script>
 

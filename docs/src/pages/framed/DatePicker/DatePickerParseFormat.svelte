@@ -8,13 +8,11 @@
     year: "numeric",
   });
 
-  const flatpickrProps = {
-    formatDate: (date) => formatter.format(date),
-    // Must accept whatever `formatDate` returns.
-    parseDate: (dateStr) => new Date(dateStr),
-  };
+  const formatDate = (date) => formatter.format(date);
+  // Must accept whatever `formatDate` returns.
+  const parseDate = (text) => new Date(text);
 </script>
 
-<DatePicker datePickerType="single" {flatpickrProps} on:change>
+<DatePicker datePickerType="single" {formatDate} {parseDate} on:change>
   <DatePickerInput labelText="Meeting date" placeholder="Select a date" />
 </DatePicker>

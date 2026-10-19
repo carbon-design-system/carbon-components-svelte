@@ -6,7 +6,7 @@
     Stack,
   } from "carbon-components-svelte";
 
-  let calendar = null;
+  let selectedDates = [];
   let todayButton = null;
 </script>
 
@@ -14,17 +14,15 @@
   <Button
     kind="tertiary"
     bind:ref={todayButton}
-    on:click={() => calendar?.setDate(new Date(), true)}
+    on:click={() => (selectedDates = [new Date()])}
   >
     Jump to today
   </Button>
   <DatePicker
     datePickerType="single"
-    bind:calendar
-    flatpickrProps={{
-      closeOnSelect: false,
-      ignoredFocusElements: todayButton ? [todayButton] : [],
-    }}
+    bind:selectedDates
+    closeOnSelect={false}
+    keepOpenFor={todayButton ? [todayButton] : []}
     on:change
   >
     <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />

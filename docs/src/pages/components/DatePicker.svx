@@ -90,7 +90,7 @@ Use `bind:open` to open or close the calendar from outside the component. It als
 
 ### Programmatic access
 
-For everything else, use `bind:calendar` to access the underlying calendar instance for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
+For everything else, use `bind:calendar`: it has `open()`, `close()`, `showMonth(date)`, `focusDate(date)`, `isOpen`, `view` (the month on show), and `selectedDates`. Set dates through `bind:selectedDates` instead.
 
 <FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
 
@@ -146,7 +146,7 @@ Set `disabledDates` to restrict which individual dates are selectable, in additi
 
 <FileSource src="/framed/DatePicker/DatePickerDisabledDates" />
 
-`disabledDates` is reactive: reassigning the array updates an open calendar, so most rule changes no longer need imperative control. Keep the array reference stable when the rules have not changed. A constant written in the markup is only evaluated once, but an array rebuilt in a `$:` statement, or built from an object that gets reassigned, is a new value each time. Equal dates and ranges are detected and skipped; a predicate function created inline is not, since functions can only be compared by identity, and each new one redraws the calendar. For the cases that still need imperative control, call `calendar.set("disable", ...)` via `bind:calendar`—see [Programmatic access](#programmatic-access).
+`disabledDates` is reactive: reassigning the array updates an open calendar, so most rule changes no longer need imperative control. Keep the array reference stable when the rules have not changed. A constant written in the markup is only evaluated once, but an array rebuilt in a `$:` statement, or built from an object that gets reassigned, is a new value each time. Equal dates and ranges are detected and skipped; a predicate function created inline is not, since functions can only be compared by identity, and each new one redraws the calendar. 
 
 ### Enable only specific dates
 
@@ -171,13 +171,13 @@ The `view` event fires when the calendar is created and whenever it moves to ano
 
 ### Keep out-of-range initial values
 
-By default, an initial `value` outside of `minDate` and `maxDate` (or matching `disable`) is cleared. Pass `allowInvalidPreload: true` via `flatpickrProps` to keep it, for example to display legacy data that predates a new constraint.
+By default, an initial `value` outside of `minDate` and `maxDate` (or matching `disabledDates`) is cleared. Set `keepOutOfRangeValue` to keep it, for example to display legacy data that predates the current bounds.
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInvalidPreload" />
 
 ## Calendar options
 
-Use `flatpickrProps` to pass additional calendar options. The names and behavior follow [flatpickr's options](https://flatpickr.js.org/options/), for the subset the calendar implements: the time picker (`enableTime`, `noCalendar`, `minTime`, and related), the native mobile picker (`disableMobile`), `wrap`, and `monthSelectorType` are not supported, and the console warns once when one is passed. These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals. Hooks such as `onOpen`, `onReady`, and `onDayCreate` run after Carbon's own handlers instead of replacing them. Carbon sets `mode` from `datePickerType` and does not support `wrap`. flatpickr plugins passed in `plugins` still run; its range, monthSelect, and weekSelect plugins are built in, so use `datePickerType` instead (the console warns if one is passed). `positionElement` and `appendTo` only apply with `portalMenu`, and `altInput`, `disable`, and `enable` give way to `displayFormat`, `disabledDates`, and `enabledDates` when those are set. The console warns once when an option is passed that will not take effect.
+Every calendar option is a prop: `allowInput`, `closeOnSelect`, `months`, `conjunction`, `monthLabel`, `parseDate` and `formatDate`, `align`, `direction` and `anchor`, `keepOutOfRangeValue`, `keepOpenFor`, `dayDescription` and `dayClass`, `weekNumbers`, `firstDayOfWeek`, and `animate`. `flatpickrProps` still passes options through for one release; each key that has a prop warns once in the console. The example below shows two months side by side.
 
 ### Multiple months
 
@@ -187,25 +187,25 @@ The example below sets `showMonths` so two months appear side by side in the cal
 
 ### Day content
 
-Pass an `onDayCreate` callback via `flatpickrProps` to customize individual day cells, such as marking dates that have events. The callback receives `(dObj, dStr, fp, dayElem)`, matching [flatpickr's onDayCreate hook](https://flatpickr.js.org/events/#hooks); `dayElem` is the day's DOM element, styled here by appending a plain DOM node with inline styles, since the calendar renders it outside Svelte's scoped-style boundary.
+Set `dayDescription` to annotate days, such as dates with events. Return a short description for a date, or `undefined`: the text is added to the day's label for screen readers, and the day gets a marker. Set `dayClass` to add your own class to a day instead.
 
 <FileSource src="/framed/DatePicker/DatePickerDayContent" />
 
 ### Week numbers
 
-Set `weekNumbers` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` in `flatpickrProps` to compute them differently, such as for fiscal weeks. The column is only filled when a single month is shown, so avoid combining it with `showMonths`.
+Set `weekNumbers` to show a week number column beside the day grid. Weeks are numbered per ISO 8601. The column is only shown with a single month.
 
 <FileSource src="/framed/DatePicker/DatePickerWeekNumbers" />
 
 ### Abbreviated month label
 
-Pass `shorthandCurrentMonth: true` via `flatpickrProps` to show the abbreviated month name from the active `locale` in the calendar header, such as "Sep" instead of "September".
+Set `monthLabel="short"` to show the abbreviated month name from the active `locale` in the calendar header, such as "Sep" instead of "September".
 
 <FileSource src="/framed/DatePicker/DatePickerShorthandMonth" />
 
 ### Enable open animation
 
-By default, the calendar appears instantly with no animation. Pass `flatpickrProps={{ animate: true }}` to animate the calendar as it opens and closes.
+By default, the calendar appears instantly with no animation. Set `animate` to animate the calendar as it opens and closes.
 
 <FileSource src="/framed/DatePicker/DatePickerEnableAnimation" />
 
@@ -217,7 +217,7 @@ Control how users interact with the open calendar.
 
 By default, Carbon enables `allowInput` so typed dates work like an editable field.
 
-Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only selection: the field still receives the chosen date and remains focusable for accessibility, but users cannot free-type into the input—they must pick a date from the calendar. That reduces invalid or ambiguous typed values when you need strict control.
+Set `allowInput={false}` when you want calendar-only selection: the field still receives the chosen date and remains focusable for accessibility, but users cannot type into it; they must pick a date from the calendar. That reduces invalid or ambiguous typed values when you need strict control.
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInput" />
 
@@ -229,19 +229,19 @@ By default, the calendar logs a warning and clears the field when it cannot pars
 
 ### Keep open on select
 
-By default, the calendar closes when a date is selected. Pass `closeOnSelect: false` via `flatpickrProps` to keep it open.
+By default, the calendar closes when a date is selected. Set `closeOnSelect={false}` to keep it open.
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
 
 ### Keep open for outside controls
 
-By default, clicking anywhere outside the calendar closes it. Pass the elements that should not dismiss it as `ignoredFocusElements` via `flatpickrProps`, such as a preset button that updates the open calendar through `bind:calendar`.
+By default, clicking anywhere outside the calendar closes it. Pass the elements that should not dismiss it as `keepOpenFor`, such as a preset button that updates the open calendar through `bind:selectedDates`.
 
 <FileSource src="/framed/DatePicker/DatePickerIgnoredFocusElements" />
 
 ### Position relative to another element
 
-When `portalMenu` is enabled, pass `positionElement` via `flatpickrProps` to anchor the calendar to an element other than the input. It has no effect with the default static positioning, where the calendar is placed by CSS.
+When `portalMenu` is enabled, set `anchor` to position the calendar against an element other than the input, and `align` (`"start"`, `"center"`, `"end"`) and `direction` (`"auto"`, `"bottom"`, `"top"`) to place it. They have no effect with the default static positioning, where the calendar is placed below the input by CSS.
 
 <FileSource src="/framed/DatePicker/DatePickerPositionElement" />
 
@@ -251,7 +251,7 @@ Preselect a date or starting month without controlling `value`.
 
 ### Default date
 
-Pass `defaultDate` via `flatpickrProps` to preselect a date when `value` is empty. Unlike `value`, it accepts a `Date` or the `"today"` shorthand, and the formatted result is written back to `value`. A non-empty `value` always takes precedence.
+Set `selectedDates` to preselect dates as `Date` objects when `value` is empty; the formatted result is written back to `value`. A non-empty `value` takes precedence.
 
 <FileSource src="/framed/DatePicker/DatePickerDefaultDate" />
 
@@ -279,13 +279,13 @@ Set `displayFormat` to show a friendly date in the input while `value` and the s
 
 ### Custom parsing and formatting
 
-Use `formatDate` and `parseDate` via `flatpickrProps` when `dateFormat` tokens are not expressive enough, for example to format with `Intl.DateTimeFormat`. Always provide both: the calendar re-parses the input text it just formatted, so `parseDate` must understand the output of `formatDate`.
+Set `formatDate` and `parseDate` when `dateFormat` tokens are not expressive enough, for example to format with `Intl.DateTimeFormat`. Always set both: the calendar re-parses the input text it wrote.
 
 <FileSource src="/framed/DatePicker/DatePickerParseFormat" />
 
 ### Multiple date separator
 
-With `datePickerType="multiple"`, dates in `value` are joined with `", "` by default. Pass `conjunction` via `flatpickrProps` to use a different separator; the same separator is used to parse typed input. It has no effect on range pickers, which use two separate inputs.
+With `datePickerType="multiple"`, dates in `value` are joined with `", "` by default. Set `conjunction` to use a different separator; the same separator is used to parse typed input. It has no effect on other types.
 
 <FileSource src="/framed/DatePicker/DatePickerConjunction" />
 
@@ -695,7 +695,9 @@ The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built 
 | Prefer a language tag such as `locale="de"` to an imported locale module. | Tags need no import; month and weekday names come from the browser's `Intl` data. Pass a locale object instead when you need exact strings. |
 | Replace flatpickr's range, monthSelect, and weekSelect plugins with `datePickerType`. | Those modes are built in, and the console warns when one of the plugins is passed. |
 | Pair the DatePicker with a [TimePicker](/components/TimePicker) to collect a time. | The time picker options (`enableTime`, `noCalendar`, `minTime`, and related) warn once and are ignored. |
-| Pass options through `flatpickrProps` and `locale`, not `flatpickr.setDefaults` or `flatpickr.localize`. | flatpickr's global defaults never reach the built-in calendar. |
+| Pass options as props, not through `flatpickr.setDefaults` or `flatpickr.localize`. | flatpickr's global defaults never reach the built-in calendar. |
+| Move each `flatpickrProps` key to its prop: `allowInput`, `closeOnSelect`, `showMonths` → `months`, `conjunction`, `shorthandCurrentMonth` → `monthLabel="short"`, `positionElement` → `anchor`, `position` → `align` and `direction`, `allowInvalidPreload` → `keepOutOfRangeValue`, `ignoredFocusElements` → `keepOpenFor`, `onDayCreate` → `dayDescription` or `dayClass`, `defaultDate` → `selectedDates`. | `flatpickrProps` is deprecated and warns once per key. |
+| Use `bind:calendar`'s `open()`, `close()`, `showMonth()`, `focusDate()`, `view`, and `selectedDates`; set dates with `bind:selectedDates`. | `bind:calendar` no longer hands out the engine; `calendar.engine` keeps it reachable for one release. |
 | Type a bound calendar as `ComponentProps<DatePicker>["calendar"]`. | `bind:calendar` is a `CalendarInstance`: the methods and fields apps use are the same, but a few of flatpickr's internal members are absent. |
 
 The native mobile date input (`disableMobile: false`) and the month dropdown (`monthSelectorType: "dropdown"`) are not available; both options warn once and are ignored.
