@@ -383,6 +383,32 @@ describe("Pagination", () => {
     ).toBeDisabled();
   });
 
+  it.each([
+    {
+      name: "Previous page",
+      props: { totalItems: 100, page: 1, backButtonDisabled: false },
+      text: "1–10 of 100 items",
+    },
+    {
+      name: "Next page",
+      props: { totalItems: 20, page: 2, forwardButtonDisabled: false },
+      text: "11–20 of 20 items",
+    },
+  ])(
+    "keeps a force-enabled $name within the page bounds",
+    async ({ name, props, text }) => {
+      const onChange = vi.fn();
+      render(Pagination, { props: { ...props, onChange } });
+
+      const button = screen.getByRole("button", { name });
+      expect(button).toBeEnabled();
+      await user.click(button);
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(screen.getByText(text)).toBeInTheDocument();
+    },
+  );
+
   it("should update when page or pageSize changes", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Pagination, {

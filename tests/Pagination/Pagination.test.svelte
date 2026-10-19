@@ -34,6 +34,8 @@
     undefined;
   export let backButtonDisabled: ComponentProps<Pagination>["backButtonDisabled"] =
     undefined;
+  export let onChange: (detail: { page?: number; pageSize?: number }) => void =
+    () => {};
 </script>
 
 <Pagination
@@ -64,6 +66,7 @@
   class={customClass}
   on:change={(e) => {
     console.log("change", e.detail);
+    onChange(e.detail);
   }}
   on:click:button--previous={(e) => {
     console.log("previous", e.detail);
