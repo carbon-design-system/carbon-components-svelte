@@ -31,8 +31,11 @@
   .#{$prefix}--breadcrumb-item {
     position: relative;
     display: flex;
-    align-items: center;
+    min-width: 0; // ccs: an item wider than the trail wraps inside it
+    max-width: 100%; // ccs: an item wider than the trail wraps inside it
+    align-items: flex-end; // ccs: a wrapped item's separator ends its last line
     margin-right: $carbon--spacing-03;
+    word-break: break-word; // ccs: so does a word longer than the trail
   }
 
   // `inline-flex` (matching `.#{$prefix}--link__icon`) so the surrounding
@@ -77,7 +80,7 @@
   }
 
   .#{$prefix}--breadcrumb .#{$prefix}--link {
-    white-space: nowrap;
+    min-width: 0; // ccs: wraps only when the item can't fit the trail
   }
 
   .#{$prefix}--breadcrumb-item [aria-current='page'],
