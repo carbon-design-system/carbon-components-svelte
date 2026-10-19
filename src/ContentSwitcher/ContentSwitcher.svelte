@@ -60,6 +60,7 @@
   import { derived, get, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { createInitOrder } from "../utils/init-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -424,6 +425,7 @@
       return committedIndex;
     },
     onMove: (index, event) => {
+      if (hasModifierKey(event)) return;
       // Prevent the arrow keys from also scrolling the page.
       event.preventDefault();
       if (selectionMode === "manual") {

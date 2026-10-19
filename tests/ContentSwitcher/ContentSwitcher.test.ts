@@ -224,6 +224,26 @@ describe("ContentSwitcher", () => {
     expect(event.defaultPrevented).toBe(true);
   });
 
+  it.each(["altKey", "ctrlKey", "metaKey"])(
+    "leaves ArrowRight with %s held to the browser",
+    async (modifier) => {
+      await renderAndFlush(ContentSwitcher);
+      const tabs = screen.getAllByRole("tab");
+
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true,
+        cancelable: true,
+        [modifier]: true,
+      });
+      tabs[0].dispatchEvent(event);
+      await tick();
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(tabs[0]).toHaveAttribute("aria-selected", "true");
+    },
+  );
+
   it("handles keyboard navigation", async () => {
     await renderAndFlush(ContentSwitcher);
 
