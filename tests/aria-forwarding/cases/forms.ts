@@ -3,6 +3,7 @@ import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
+import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import Filename from "carbon-components-svelte/FileUploader/Filename.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
@@ -85,6 +86,11 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "DateCalendar",
+    render: (attrs) => render(DateCalendar, { props: attrs }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "DatePicker",
