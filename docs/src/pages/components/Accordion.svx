@@ -229,6 +229,11 @@ item first opens. Use it for panels with heavy content, such as API-fetched
 data or charts, so they mount only when needed. The content stays mounted
 after the item collapses.
 
+| Do | Why |
+| --- | --- |
+| Set `lazy` on items with heavy content, or in long accordions most visitors only skim. | A collapsed item still builds all its content; `lazy` waits until the item first opens. |
+| Leave it off when the content must be in server-rendered markup. | Deferred content isn't in the page until its item opens. |
+
 <Accordion>
   <AccordionItem lazy title="Billing and invoices">
    <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.

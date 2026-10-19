@@ -201,6 +201,12 @@ If the current selected tab is removed, the next tab is selected.
 
 By default, every `TabContent` panel stays mounted and toggles visibility with the `hidden` attribute. Set `lazy` on a panel to defer mounting its slot until that tab is first selected. Set `unmountOnHide` to remove the slot when the tab is deselected — useful for heavy panels such as a DataTable.
 
+| Do | Why |
+| --- | --- |
+| Set `lazy` on panels with heavy content: tables, charts, forms. | A hidden panel still builds all its markup; `lazy` waits until the tab is first selected. |
+| Add `unmountOnHide` when a panel is large and rarely revisited. | It frees the panel's markup again, at the cost of rebuilding it on the next visit. |
+| Leave both off when the panel's content must be in server-rendered markup. | Deferred content isn't in the page until its tab is selected. |
+
 <Tabs>
   <Tab label="Overview" />
   <Tab label="Load balancers" />
