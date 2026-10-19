@@ -11,6 +11,9 @@
   export let legendText: ComponentProps<SelectableTileGroup>["legendText"] = "";
   export let hideLegend: ComponentProps<SelectableTileGroup>["hideLegend"] = false;
   export let customClass = "";
+  export let onSelect: (detail: string) => void = () => {};
+  export let onDeselect: (detail: string) => void = () => {};
+  export let onChange: (detail: string[]) => void = () => {};
 </script>
 
 <SelectableTileGroup
@@ -20,15 +23,9 @@
   {legendText}
   {hideLegend}
   class={customClass}
-  on:select={(e) => {
-    console.log("select", e.detail);
-  }}
-  on:deselect={(e) => {
-    console.log("deselect", e.detail);
-  }}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
+  on:select={(e) => onSelect(e.detail)}
+  on:deselect={(e) => onDeselect(e.detail)}
+  on:change={(e) => onChange(e.detail)}
 >
   <SelectableTile value="option1">Option 1</SelectableTile>
   <SelectableTile value="option2">Option 2</SelectableTile>

@@ -3,6 +3,7 @@
   import Switch from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
   import type { ComponentProps } from "svelte";
 
+  export let onChange: (detail: number) => void = () => {};
   export let disabledFirst = true;
   export let allDisabled = false;
   export let selectionMode: ComponentProps<ContentSwitcher>["selectionMode"] =
@@ -10,10 +11,7 @@
 </script>
 
 <button type="button">before</button>
-<ContentSwitcher
-  {selectionMode}
-  on:change={(e) => console.log("change", e.detail)}
->
+<ContentSwitcher {selectionMode} on:change={(e) => onChange(e.detail)}>
   <Switch text="A" disabled={disabledFirst || allDisabled} />
   <Switch text="B" disabled={allDisabled} />
   <Switch text="C" disabled={allDisabled} />

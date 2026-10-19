@@ -3,6 +3,7 @@ import type SelectableTileGroupComponent from "carbon-components-svelte/Tile/Sel
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
+import { recordGroupEvents } from "./helpers";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
 import SelectableTileGroupDuplicate from "./SelectableTileGroupDuplicate.test.svelte";
@@ -13,14 +14,13 @@ import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svel
 
 describe("SelectableTileGroup", () => {
   it("should render with default props", () => {
-    const { container } = render(SelectableTileGroup);
+    render(SelectableTileGroup);
 
     const fieldset = screen.getByRole("group");
     expect(fieldset).toHaveClass("bx--tile-group");
     expect(fieldset).not.toBeDisabled();
 
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    expect(checkboxes).toHaveLength(3);
+    expect(screen.getAllByRole("checkbox")).toHaveLength(3);
   });
 
   it("should render with legend", () => {
@@ -55,8 +55,7 @@ describe("SelectableTileGroup", () => {
 
     // Native `<fieldset disabled>` propagates to nested inputs; individual
     // tiles should not carry their own `disabled` attribute.
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    for (const checkbox of checkboxes) {
+    for (const checkbox of screen.getAllByRole("checkbox")) {
       expect(checkbox).toBeDisabled();
       expect(checkbox).not.toHaveAttribute("disabled");
       expect(checkbox).not.toHaveAttribute("tabindex");
@@ -84,75 +83,78 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should handle custom name", () => {
-    const { container } = render(SelectableTileGroup, {
+    render(SelectableTileGroup, {
       props: { name: "custom-group" },
     });
 
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    for (const checkbox of checkboxes) {
+    for (const checkbox of screen.getAllByRole("checkbox")) {
       expect(checkbox).toHaveAttribute("name", "custom-group");
     }
   });
 
   it("should handle initial selected values", () => {
-    const { container } = render(SelectableTileGroup, {
+    render(SelectableTileGroup, {
       props: { selected: ["option1", "option3"] },
     });
 
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes[0]).toBeChecked();
     expect(checkboxes[1]).not.toBeChecked();
     expect(checkboxes[2]).toBeChecked();
   });
 
   it("should handle select event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectableTileGroup);
+    const onSelect = vi.fn();
+    render(SelectableTileGroup, { props: { onSelect } });
 
     const tiles = screen.getAllByText(/Option/);
     await user.click(tiles[1]);
 
-    expect(consoleLog).toHaveBeenCalledWith("select", "option2");
+    expect(onSelect).toHaveBeenCalledWith("option2");
   });
 
   it("should handle deselect event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectableTileGroup, { props: { selected: ["option2"] } });
+    const onDeselect = vi.fn();
+    render(SelectableTileGroup, {
+      props: { selected: ["option2"], onDeselect },
+    });
 
     const tiles = screen.getAllByText(/Option/);
     await user.click(tiles[1]);
 
-    expect(consoleLog).toHaveBeenCalledWith("deselect", "option2");
+    expect(onDeselect).toHaveBeenCalledWith("option2");
   });
 
   describe("change event", () => {
     it("fires after select and deselect with every selected value", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileGroup, { props: { selected: ["option1"] } });
+      const { log, props } = recordGroupEvents();
+      render(SelectableTileGroup, {
+        props: { selected: ["option1"], ...props },
+      });
       const checkboxes = screen.getAllByRole("checkbox");
 
       await user.click(checkboxes[2]);
-      expect(consoleLog.mock.calls).toEqual([
+      expect(log.mock.calls).toEqual([
         ["select", "option3"],
         ["change", ["option1", "option3"]],
       ]);
-      consoleLog.mockClear();
+      log.mockClear();
 
       await user.click(checkboxes[0]);
-      expect(consoleLog.mock.calls).toEqual([
+      expect(log.mock.calls).toEqual([
         ["deselect", "option1"],
         ["change", ["option3"]],
       ]);
     });
 
     it("does not fire when selected is set programmatically", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const { component } = render(SelectableTileGroup);
+      const { log, props } = recordGroupEvents();
+      const { component } = render(SelectableTileGroup, { props });
 
       component.selected = ["option2"];
       await flushMacrotask();
 
-      expect(consoleLog).not.toHaveBeenCalled();
+      expect(log).not.toHaveBeenCalled();
     });
   });
 
@@ -174,12 +176,12 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should handle programmatic selected value changes", async () => {
-    const { component, container } = render(SelectableTileGroup);
+    const { component } = render(SelectableTileGroup);
 
     component.selected = ["option2"];
     await flushMacrotask();
 
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes[0]).not.toBeChecked();
     expect(checkboxes[1]).toBeChecked();
     expect(checkboxes[2]).not.toBeChecked();
@@ -193,28 +195,28 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should not dispatch events on initial render", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectableTileGroup, { props: { selected: ["option1"] } });
+    const { log, props } = recordGroupEvents();
+    render(SelectableTileGroup, { props: { selected: ["option1"], ...props } });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(log).not.toHaveBeenCalled();
   });
 
   it("should handle keyboard selection with Enter", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectableTileGroup);
+    const onSelect = vi.fn();
+    render(SelectableTileGroup, { props: { onSelect } });
 
     await user.keyboard("{Tab}");
     await user.keyboard("{Enter}");
-    expect(consoleLog).toHaveBeenCalledWith("select", "option1");
+    expect(onSelect).toHaveBeenCalledWith("option1");
   });
 
   it("should handle keyboard selection with Space", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SelectableTileGroup);
+    const onSelect = vi.fn();
+    render(SelectableTileGroup, { props: { onSelect } });
 
     await user.keyboard("{Tab}");
     await user.keyboard(" ");
-    expect(consoleLog).toHaveBeenCalledWith("select", "option1");
+    expect(onSelect).toHaveBeenCalledWith("option1");
   });
 
   it("should render without legend when not provided", () => {
@@ -336,32 +338,32 @@ describe("SelectableTileGroup", () => {
     });
 
     it("dispatches select and deselect for every tile the range changes", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileGroup);
+      const { log, props } = recordGroupEvents();
+      render(SelectableTileGroup, { props });
       const checkboxes = screen.getAllByRole("checkbox");
 
       await user.click(checkboxes[0]);
-      consoleLog.mockClear();
+      log.mockClear();
 
       await user.keyboard("{Shift>}");
       await user.click(checkboxes[2]);
       await user.keyboard("{/Shift}");
 
       // option1 was already selected, so only the newly selected tiles fire.
-      expect(consoleLog.mock.calls).toEqual([
+      expect(log.mock.calls).toEqual([
         ["select", "option2"],
         ["select", "option3"],
         ["change", ["option1", "option2", "option3"]],
       ]);
-      consoleLog.mockClear();
+      log.mockClear();
 
       await user.click(checkboxes[0]);
-      consoleLog.mockClear();
+      log.mockClear();
       await user.keyboard("{Shift>}");
       await user.click(checkboxes[2]);
       await user.keyboard("{/Shift}");
 
-      expect(consoleLog.mock.calls).toEqual([
+      expect(log.mock.calls).toEqual([
         ["deselect", "option2"],
         ["deselect", "option3"],
         ["change", []],

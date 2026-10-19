@@ -2,14 +2,12 @@
   import ContentSwitcher from "carbon-components-svelte/ContentSwitcher/ContentSwitcher.svelte";
   import Switch from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
 
+  export let onChange: (detail: number) => void = () => {};
   export let selectedIndex = 0;
   export let showLast = true;
 </script>
 
-<ContentSwitcher
-  bind:selectedIndex
-  on:change={(e) => console.log("change", e.detail)}
->
+<ContentSwitcher bind:selectedIndex on:change={(e) => onChange(e.detail)}>
   <Switch text="First" />
   <Switch text="Middle" />
   {#if showLast}

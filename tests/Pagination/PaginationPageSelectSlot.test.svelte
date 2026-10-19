@@ -5,18 +5,18 @@
   export let page: ComponentProps<Pagination>["page"] = 1;
   export let totalItems: ComponentProps<Pagination>["totalItems"] = 0;
   export let pageSizes: ComponentProps<Pagination>["pageSizes"] = [10];
+  export let onChange: (detail: { page?: number; pageSize?: number }) => void =
+    () => {};
+  export let onUpdate: (detail: { page: number; pageSize: number }) => void =
+    () => {};
 </script>
 
 <Pagination
   bind:page
   {totalItems}
   {pageSizes}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
-  on:update={(e) => {
-    console.log("update", e.detail);
-  }}
+  on:change={(e) => onChange(e.detail)}
+  on:update={(e) => onUpdate(e.detail)}
 >
   <svelte:fragment
     slot="pageSelect"

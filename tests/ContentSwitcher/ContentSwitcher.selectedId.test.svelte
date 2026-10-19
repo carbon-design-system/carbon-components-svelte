@@ -8,11 +8,7 @@
   export let showSwitchB = true;
 </script>
 
-<ContentSwitcher
-  bind:selectedIndex
-  bind:selectedId
-  on:change={({ detail }) => console.log("change event", detail)}
->
+<ContentSwitcher bind:selectedIndex bind:selectedId>
   {#if showSwitchA}
     <Switch id="switch-a" text="Switch A" />
   {/if}

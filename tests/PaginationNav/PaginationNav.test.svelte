@@ -10,6 +10,9 @@
   export let backwardText = "Previous page";
   export let tooltipPosition: ComponentProps<PaginationNav>["tooltipPosition"] =
     "bottom";
+  export let onChange: (detail: { page: number }) => void = () => {};
+  export let onPrevious: (detail: { page: number }) => void = () => {};
+  export let onNext: (detail: { page: number }) => void = () => {};
 </script>
 
 <PaginationNav
@@ -20,13 +23,7 @@
   {forwardText}
   {backwardText}
   {tooltipPosition}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
-  on:click:button--previous={(e) => {
-    console.log("previous", e.detail);
-  }}
-  on:click:button--next={(e) => {
-    console.log("next", e.detail);
-  }}
+  on:change={(e) => onChange(e.detail)}
+  on:click:button--previous={(e) => onPrevious(e.detail)}
+  on:click:button--next={(e) => onNext(e.detail)}
 />

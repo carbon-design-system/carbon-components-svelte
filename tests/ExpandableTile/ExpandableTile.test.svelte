@@ -3,7 +3,6 @@
   import type { ComponentProps } from "svelte";
 
   export let expanded: ComponentProps<ExpandableTile>["expanded"] = false;
-  export let light: ComponentProps<ExpandableTile>["light"] = false;
   export let tileMaxHeight: ComponentProps<ExpandableTile>["tileMaxHeight"] = 0;
   export let tilePadding: ComponentProps<ExpandableTile>["tilePadding"] = 0;
   export let tileCollapsedIconText: ComponentProps<ExpandableTile>["tileCollapsedIconText"] =
@@ -27,7 +26,6 @@
 
 <ExpandableTile
   bind:expanded
-  {light}
   {tileMaxHeight}
   {tilePadding}
   {tileCollapsedIconText}

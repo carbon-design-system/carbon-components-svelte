@@ -142,13 +142,13 @@ describe("TileGroup", () => {
   });
 
   it("should handle select event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(TileGroup);
+    const onSelect = vi.fn();
+    render(TileGroup, { props: { onSelect } });
 
     const radios = screen.getAllByRole("radio");
     await user.click(radios[1]);
 
-    expect(consoleLog).toHaveBeenCalledWith("select", "option2");
+    expect(onSelect).toHaveBeenCalledWith("option2");
     expect(radios[1]).toBeChecked();
   });
 
@@ -180,10 +180,10 @@ describe("TileGroup", () => {
   });
 
   it("should not dispatch select event on initial render", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(TileGroup, { props: { selected: "option1" } });
+    const onSelect = vi.fn();
+    render(TileGroup, { props: { selected: "option1", onSelect } });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onSelect).not.toHaveBeenCalled();
   });
 
   it("should handle keyboard navigation", async () => {

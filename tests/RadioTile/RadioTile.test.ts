@@ -16,6 +16,9 @@ import RadioTileStandaloneGroup from "./RadioTile.standalone.test.svelte";
 import RadioTileStandaloneEach from "./RadioTile.standalone-each.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
 
+const isSelected = (radio: HTMLElement) =>
+  radio.nextElementSibling?.classList.contains("bx--tile--is-selected");
+
 const flushMicrotasks = () => new Promise<void>(queueMicrotask);
 
 describe("RadioTile", () => {
@@ -128,16 +131,6 @@ describe("RadioTile", () => {
     );
   });
 
-  it("should handle light variant", () => {
-    render(RadioTile, {
-      props: { light: true },
-    });
-
-    expect(screen.getByText("Test content").closest(".bx--tile")).toHaveClass(
-      "bx--tile--light",
-    );
-  });
-
   it("should handle disabled state", () => {
     render(RadioTile, {
       props: { disabled: true },
@@ -195,14 +188,14 @@ describe("RadioTile", () => {
   });
 
   it("should handle change event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RadioTile);
+    const onChange = vi.fn();
+    render(RadioTile, { props: { onChange } });
 
     const input = screen.getByRole("radio");
     await user.click(input);
 
     expect(input).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("change");
+    expect(onChange).toHaveBeenCalled();
   });
 
   describe("keyboard selection", () => {
@@ -275,9 +268,6 @@ describe("RadioTile", () => {
   });
 
   describe("standalone", () => {
-    const isSelected = (radio: HTMLElement) =>
-      radio.nextElementSibling?.classList.contains("bx--tile--is-selected");
-
     it("checks and styles a tile when clicked", async () => {
       const { component } = render(RadioTileStandaloneGroup);
       const solo = screen.getByRole("radio", { name: "Solo" });
@@ -347,9 +337,6 @@ describe("RadioTile", () => {
   });
 
   describe("checked inside TileGroup", () => {
-    const isSelected = (radio: HTMLElement) =>
-      radio.nextElementSibling?.classList.contains("bx--tile--is-selected");
-
     it("selects the tile in the group when checked is set", async () => {
       const onSelect = vi.fn();
       const { component } = render(RadioTileChecked, { props: { onSelect } });

@@ -4,7 +4,6 @@
   import type { ComponentProps } from "svelte";
 
   export let checked: ComponentProps<RadioTile>["checked"] = false;
-  export let light: ComponentProps<RadioTile>["light"] = false;
   export let disabled: ComponentProps<RadioTile>["disabled"] = false;
   export let required: ComponentProps<RadioTile>["required"] = false;
   export let value: ComponentProps<RadioTile>["value"] = "test";
@@ -13,6 +12,7 @@
     "Tile checkmark";
   export let id: ComponentProps<RadioTile>["id"] = "ccs-test";
   export let name: ComponentProps<RadioTile>["name"] = "test-group";
+  export let onChange: (e: Event) => void = () => {};
   export let onMouseover: (e: MouseEvent) => void = () => {};
   export let onMouseenter: (e: MouseEvent) => void = () => {};
   export let onMouseleave: (e: MouseEvent) => void = () => {};
@@ -25,7 +25,6 @@
 >
   <RadioTile
     {checked}
-    {light}
     {disabled}
     {required}
     {value}
@@ -33,9 +32,7 @@
     {iconDescription}
     {id}
     {name}
-    on:change={() => {
-      console.log("change");
-    }}
+    on:change={onChange}
     on:keydown
     on:click
     on:mouseover={onMouseover}

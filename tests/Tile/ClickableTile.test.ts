@@ -19,11 +19,10 @@ describe("ClickableTile", () => {
     expect(tile.className).not.toMatch(/\bfalse\b/);
   });
 
-  it("should render light variant with other attributes", () => {
+  it("should render with other attributes", () => {
     render(ClickableTile);
 
-    const tile = screen.getByText("Link with light variant");
-    expect(tile).toHaveClass("bx--tile--light");
+    const tile = screen.getByText("Link with other attributes");
     expect(tile).toHaveAttribute("target", "_blank");
     expect(tile).toHaveAttribute("title", "");
   });
@@ -54,34 +53,18 @@ describe("ClickableTile", () => {
     expect(tile).not.toHaveClass("bx--tile--is-clicked");
   });
 
-  it("should fire the click handler on Space, not just toggle clicked state", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ClickableTile);
+  it.each([
+    ["Space", " "],
+    ["Enter", "{Enter}"],
+  ])("should fire the click handler on %s", async (_name, key) => {
+    const onClick = vi.fn();
+    render(ClickableTile, { props: { onClick } });
 
     const tile = screen.getByTestId("click-test");
     tile.focus();
-    await user.keyboard(" ");
+    await user.keyboard(key);
 
-    expect(consoleLog).toHaveBeenCalledWith("clicked");
-  });
-
-  it("should fire the click handler on Enter", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ClickableTile);
-
-    const tile = screen.getByTestId("click-test");
-    tile.focus();
-    await user.keyboard("{Enter}");
-
-    expect(consoleLog).toHaveBeenCalledWith("clicked");
-  });
-
-  it("should respect disabled state", () => {
-    render(ClickableTile);
-
-    const disabledTile = screen.getByTestId("disabled-test");
-    expect(disabledTile).toHaveAttribute("aria-disabled", "true");
-    expect(disabledTile).toHaveClass("bx--tile--clickable");
+    expect(onClick).toHaveBeenCalled();
   });
 
   it("should not toggle clicked state when disabled", async () => {
@@ -148,6 +131,7 @@ describe("ClickableTile", () => {
       render(ClickableTileButton);
 
       const tile = screen.getByTestId("disabled");
+      expect(tile).toHaveClass("bx--tile--clickable");
       expect(tile).toHaveAttribute("role", "link");
       expect(tile).toHaveAttribute("aria-disabled", "true");
       expect(tile).not.toHaveAttribute("tabindex");
