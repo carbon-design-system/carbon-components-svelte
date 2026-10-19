@@ -38,6 +38,17 @@
     display: block;
   }
 
+  // A portalled popover is placed by its portal; its align class only
+  // places the caret.
+  .#{$prefix}--popover.#{$prefix}--popover--portal {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    transform: none;
+  }
+
   .#{$prefix}--popover-contents {
     // The shadow is the only edge; forced colors drop it.
     @include high-contrast-mode("outline");

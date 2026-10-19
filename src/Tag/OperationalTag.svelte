@@ -292,7 +292,8 @@
     enabled={truncated && !disabled && !open}
   />
   {#if hasContent && !effectivePortal}
-    <Popover {open} align={popoverAlign} id={contentId}>
+    <!-- `portalTooltip` decides the portal, not Popover. -->
+    <Popover {open} align={popoverAlign} id={contentId} portalPopover={false}>
       <div bind:this={contentRef} class:bx--operational-tag__content={true}>
         <slot name="content" />
       </div>
