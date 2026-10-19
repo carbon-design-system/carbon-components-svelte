@@ -20,6 +20,8 @@ describe("TagSet overflowMode=popover", () => {
     const { container } = await renderPopover({ onOverflowClick });
 
     expect(indicator(3)).toHaveAttribute("aria-expanded", "false");
+    // The hidden tags are built on the first open.
+    expect(popoverOf(container).querySelectorAll("li")).toHaveLength(0);
     await user.click(indicator(3));
 
     expect(indicator(3)).toHaveAttribute("aria-expanded", "true");

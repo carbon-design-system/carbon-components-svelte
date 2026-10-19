@@ -153,6 +153,11 @@
     if (tabindex === undefined) buttonRef.removeAttribute("tabindex");
     else buttonRef.setAttribute("tabindex", tabindex);
   }
+
+  // The popover's content (a Tag with a close button per hidden tag, and
+  // "View all") is built the first time it opens, then kept.
+  let openedOnce = open;
+  $: if (open) openedOnce = true;
 </script>
 
 {#if mode === "popover"}
@@ -176,48 +181,50 @@
       <span aria-hidden="true" dir="ltr">+{count}</span>
       <span class:bx--visually-hidden={true}>{overflowLabel(count)}</span>
       <svelte:fragment slot="content">
-        {#if customContent}
-          <slot name="tooltip" {tags} {count} />
-        {:else if type === "tag"}
-          <ul class:bx--tag-set-overflow__list={true}>
-            {#each tags as tag, index (tag.id)}
-              {#if index < listLimit}
-                <li>
-                  <Tag
-                    type={tag.type}
-                    filter={tag.filter}
-                    disabled={tag.disabled}
-                    value={tag.value}
-                    {size}
-                    on:close={() => handleTagClose(tag)}
-                  >
-                    {tag.label}
-                  </Tag>
-                </li>
-              {/if}
-            {/each}
-          </ul>
-        {:else}
-          <ul
-            class:bx--tag-set-overflow__list={true}
-            class:bx--tag-set-overflow__list--text={true}
-          >
-            {#each tags as tag, index (tag.id)}
-              {#if index < listLimit}
-                <li>{tag.label}</li>
-              {/if}
-            {/each}
-          </ul>
-        {/if}
-        {#if hasViewAll}
-          <button
-            type="button"
-            class:bx--link={true}
-            class:bx--tag-set-overflow__view-all={true}
-            on:click={() => dispatch("viewall")}
-          >
-            {viewAllText}
-          </button>
+        {#if openedOnce}
+          {#if customContent}
+            <slot name="tooltip" {tags} {count} />
+          {:else if type === "tag"}
+            <ul class:bx--tag-set-overflow__list={true}>
+              {#each tags as tag, index (tag.id)}
+                {#if index < listLimit}
+                  <li>
+                    <Tag
+                      type={tag.type}
+                      filter={tag.filter}
+                      disabled={tag.disabled}
+                      value={tag.value}
+                      {size}
+                      on:close={() => handleTagClose(tag)}
+                    >
+                      {tag.label}
+                    </Tag>
+                  </li>
+                {/if}
+              {/each}
+            </ul>
+          {:else}
+            <ul
+              class:bx--tag-set-overflow__list={true}
+              class:bx--tag-set-overflow__list--text={true}
+            >
+              {#each tags as tag, index (tag.id)}
+                {#if index < listLimit}
+                  <li>{tag.label}</li>
+                {/if}
+              {/each}
+            </ul>
+          {/if}
+          {#if hasViewAll}
+            <button
+              type="button"
+              class:bx--link={true}
+              class:bx--tag-set-overflow__view-all={true}
+              on:click={() => dispatch("viewall")}
+            >
+              {viewAllText}
+            </button>
+          {/if}
         {/if}
       </svelte:fragment>
     </OperationalTag>

@@ -655,7 +655,9 @@ test.describe("forced colors", () => {
   });
 
   // A button would read as ButtonText; "View all" looks and acts as a link.
+  // The popover builds it on the first open.
   test("TagSet's View all reads as a link", async ({ page }) => {
+    await page.click(".bx--tag-set-overflow__popover-trigger");
     expect
       .soft((await style(page, ".bx--tag-set-overflow__view-all")).color)
       .toBe(system.LinkText);
