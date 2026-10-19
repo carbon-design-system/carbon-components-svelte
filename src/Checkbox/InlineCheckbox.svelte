@@ -30,7 +30,6 @@
     bind:indeterminate
     {id}
     {...$$restProps}
-    aria-checked={indeterminate ? undefined : checked}
     on:click
     on:change
     on:focus
