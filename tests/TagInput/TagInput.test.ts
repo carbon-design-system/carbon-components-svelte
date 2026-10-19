@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushMacrotask } from "../utils/flush-macrotask";
 import { getForm } from "../utils/get-form";
+import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import TagInput from "./TagInput.test.svelte";
 import TagInputTagSlot from "./TagInputTagSlot.test.svelte";
@@ -372,7 +372,7 @@ describe("TagInput", () => {
     it("submits each tag as a hidden input under name", () => {
       render(TagInput, { value: ["a", "b"], config: { name: "topics" } });
 
-      const data = new FormData(screen.getByTestId("form") as HTMLFormElement);
+      const data = new FormData(getForm());
       expect(data.getAll("topics")).toEqual(["a", "b"]);
       expect(input()).not.toHaveAttribute("name");
     });
@@ -383,9 +383,7 @@ describe("TagInput", () => {
       await user.type(input(), "b{Enter}c");
       expect(shownValue()).toEqual(["a", "b"]);
 
-      (screen.getByTestId("form") as HTMLFormElement).reset();
-      await flushMacrotask();
-      await tick();
+      await resetForm();
 
       expect(shownValue()).toEqual(["a"]);
       expect(input()).toHaveValue("");

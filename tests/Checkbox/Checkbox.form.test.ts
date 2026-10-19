@@ -42,32 +42,22 @@ describe("Checkbox form participation", () => {
       );
     });
 
-    it("bind:group: keeps the value after a form reset and a re-check", async () => {
-      render(CheckboxFormGroup, { props: { group: ["a"] } });
+    describe.each([
+      ["bind:group", "bind-group"],
+      ["CheckboxGroup", "checkbox-group"],
+    ] as const)("%s", (_, mode) => {
+      it("keeps the value after a form reset and a re-check", async () => {
+        render(CheckboxFormGroup, { props: { mode, group: ["a"] } });
 
-      const checkbox = screen.getByRole("checkbox", { name: "A" });
-      getForm().reset();
-      expect(checkbox).not.toBeChecked();
+        const checkbox = screen.getByRole("checkbox", { name: "A" });
+        getForm().reset();
+        expect(checkbox).not.toBeChecked();
 
-      await user.click(checkbox);
+        await user.click(checkbox);
 
-      expect(checkbox).toBeChecked();
-      expect(screen.getByTestId("group")).toHaveTextContent("a");
-    });
-
-    it("CheckboxGroup: keeps the value after a form reset and a re-check", async () => {
-      render(CheckboxFormGroup, {
-        props: { mode: "checkbox-group", group: ["a"] },
+        expect(checkbox).toBeChecked();
+        expect(screen.getByTestId("group")).toHaveTextContent("a");
       });
-
-      const checkbox = screen.getByRole("checkbox", { name: "A" });
-      getForm().reset();
-      expect(checkbox).not.toBeChecked();
-
-      await user.click(checkbox);
-
-      expect(checkbox).toBeChecked();
-      expect(screen.getByTestId("group")).toHaveTextContent("a");
     });
   });
 
@@ -115,30 +105,21 @@ describe("Checkbox form participation", () => {
       expect(getBoundText()).toBe("true");
     });
 
-    it("bind:group: removes the values of cleared boxes", async () => {
-      render(CheckboxFormGroup, { props: { group: [] } });
+    describe.each([
+      ["bind:group", "bind-group"],
+      ["CheckboxGroup", "checkbox-group"],
+    ] as const)("%s", (_, mode) => {
+      it("removes the values of cleared boxes", async () => {
+        render(CheckboxFormGroup, { props: { mode, group: [] } });
 
-      await user.click(screen.getByRole("checkbox", { name: "A" }));
-      await user.click(screen.getByRole("checkbox", { name: "B" }));
-      expect(screen.getByTestId("group").textContent).toBe("a,b");
+        await user.click(screen.getByRole("checkbox", { name: "A" }));
+        await user.click(screen.getByRole("checkbox", { name: "B" }));
+        expect(screen.getByTestId("group").textContent).toBe("a,b");
 
-      await resetForm();
+        await resetForm();
 
-      expect(screen.getByTestId("group").textContent).toBe("");
-    });
-
-    it("CheckboxGroup: removes the values of cleared boxes", async () => {
-      render(CheckboxFormGroup, {
-        props: { mode: "checkbox-group", group: [] },
+        expect(screen.getByTestId("group").textContent).toBe("");
       });
-
-      await user.click(screen.getByRole("checkbox", { name: "A" }));
-      await user.click(screen.getByRole("checkbox", { name: "B" }));
-      expect(screen.getByTestId("group").textContent).toBe("a,b");
-
-      await resetForm();
-
-      expect(screen.getByTestId("group").textContent).toBe("");
     });
 
     it.each(["bind-group", "checkbox-group"] as const)(

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type RadioButtonGroupComponent from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { getForm } from "../utils/get-form";
@@ -25,9 +25,9 @@ describe("RadioButtonGroup", () => {
 
   // Regression: programmatic selected changes must dispatch change once
   it("dispatches change exactly once per programmatic selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     const { component } = render(RadioButtonGroup, {
-      props: { selected: "1" },
+      props: { selected: "1", onChange },
     });
 
     component.selected = "2";
@@ -35,13 +35,7 @@ describe("RadioButtonGroup", () => {
     component.selected = "3";
     await tick();
 
-    const changeCalls = consoleLog.mock.calls.filter(
-      ([event]) => event === "change",
-    );
-    expect(changeCalls).toEqual([
-      ["change", "2"],
-      ["change", "3"],
-    ]);
+    expect(onChange.mock.calls).toEqual([["2"], ["3"]]);
   });
 
   it("should handle disabled state", () => {
@@ -132,18 +126,13 @@ describe("RadioButtonGroup", () => {
     expect(legend).toHaveClass("bx--visually-hidden");
   });
 
-  it("should handle label position left", () => {
-    render(RadioButtonGroup, { props: { labelPosition: "left" } });
+  it.each([
+    ["left", "bx--radio-button-group--label-left"],
+    ["right", "bx--radio-button-group--label-right"],
+  ] as const)("should handle label position %s", (labelPosition, className) => {
+    render(RadioButtonGroup, { props: { labelPosition } });
 
-    const fieldset = screen.getByRole("radiogroup");
-    expect(fieldset).toHaveClass("bx--radio-button-group--label-left");
-  });
-
-  it("should handle label position right", () => {
-    render(RadioButtonGroup, { props: { labelPosition: "right" } });
-
-    const fieldset = screen.getByRole("radiogroup");
-    expect(fieldset).toHaveClass("bx--radio-button-group--label-right");
+    expect(screen.getByRole("radiogroup")).toHaveClass(className);
   });
 
   it("should handle vertical orientation", () => {
@@ -161,17 +150,6 @@ describe("RadioButtonGroup", () => {
 
     const formItem = document.getElementById("custom-id");
     expect(formItem).toBeInTheDocument();
-  });
-
-  it("should handle change event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(RadioButtonGroup);
-
-    const radio2 = screen.getByRole("radio", { name: "Option 2" });
-    await user.click(radio2);
-
-    expect(radio2).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("change", "2");
   });
 
   it("should handle legend slot", () => {
@@ -205,16 +183,18 @@ describe("RadioButtonGroup", () => {
     expect(screen.getByRole("radio", { name: "Option 1" })).not.toBeChecked();
   });
 
-  it("should update selected value on radio change", async () => {
-    const { component } = render(RadioButtonGroup);
+  it("should check the clicked radio, dispatch change and update selected", async () => {
+    const onChange = vi.fn();
+    const { component } = render(RadioButtonGroup, { props: { onChange } });
 
-    const radio1 = screen.getByRole("radio", { name: "Option 1" });
-    await user.click(radio1);
+    const radio2 = screen.getByRole("radio", { name: "Option 2" });
+    await user.click(radio2);
 
-    expect(component.selected).toBe("1");
+    expect(radio2).toBeChecked();
+    expect(onChange).toHaveBeenCalledWith("2");
+    expect(component.selected).toBe("2");
 
-    const radio3 = screen.getByRole("radio", { name: "Option 3" });
-    await user.click(radio3);
+    await user.click(screen.getByRole("radio", { name: "Option 3" }));
 
     expect(component.selected).toBe("3");
   });
@@ -303,6 +283,135 @@ describe("RadioButtonGroup", () => {
       });
 
       expect(screen.queryByText("Pick one")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("readonly", () => {
+    it("should apply readonly class on the fieldset", () => {
+      const { container } = render(RadioButtonGroup, {
+        props: { readonly: true },
+      });
+
+      expect(
+        container.querySelector(".bx--radio-button-group--readonly"),
+      ).toBeTruthy();
+    });
+
+    it("describes the group as read-only for screen readers that ignore aria-readonly", async () => {
+      const { rerender } = render(RadioButtonGroup, {
+        props: { id: "readonly-group", readonly: true },
+      });
+
+      const radiogroup = screen.getByRole("radiogroup");
+      expect(radiogroup).toHaveAttribute(
+        "aria-describedby",
+        "readonly-readonly-group",
+      );
+
+      const description = document.getElementById("readonly-readonly-group");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+
+      // ARIA does not support aria-readonly on role "radio"; only the fieldset carries it.
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-readonly");
+      }
+
+      await rerender({ readonlyText: "Custom read-only text" });
+
+      expect(description).toHaveTextContent("Custom read-only text");
+    });
+
+    it("leaves the read-only description to the fieldset, not the radios", () => {
+      render(RadioButtonGroup, { props: { readonly: true } });
+
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-describedby");
+        expect(radio.closest(".bx--radio-button-wrapper")).toHaveClass(
+          "bx--radio-button-wrapper--readonly",
+        );
+      }
+    });
+
+    it("should not change selection when clicking another radio", async () => {
+      render(RadioButtonGroup, { props: { selected: "1", readonly: true } });
+
+      const radio2 = screen.getByRole("radio", { name: "Option 2" });
+      await user.click(radio2);
+
+      // jsdom doesn't restore the previously checked radio in a group after
+      // a cancelled click the way real browsers do; covered by the e2e test.
+      expect(radio2).not.toBeChecked();
+    });
+
+    it("should set aria-readonly on the radiogroup when readonly, and not on the radios", () => {
+      render(RadioButtonGroup, { props: { selected: "1", readonly: true } });
+
+      expect(screen.getByRole("radiogroup")).toHaveAttribute(
+        "aria-readonly",
+        "true",
+      );
+
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-readonly");
+      }
+    });
+
+    it("should update aria-readonly on the radiogroup when readonly flips after mount", async () => {
+      const { rerender } = render(RadioButtonGroup, {
+        props: { selected: "1", readonly: false },
+      });
+
+      expect(screen.getByRole("radiogroup")).not.toHaveAttribute(
+        "aria-readonly",
+      );
+
+      await rerender({ selected: "1", readonly: true });
+
+      expect(screen.getByRole("radiogroup")).toHaveAttribute(
+        "aria-readonly",
+        "true",
+      );
+    });
+
+    it("should not forward a child RadioButton's on:change when the group is readonly", async () => {
+      const onRadioChange = vi.fn();
+      render(RadioButtonGroup, {
+        props: { selected: "1", readonly: true, onRadioChange },
+      });
+
+      await fireEvent.change(screen.getByRole("radio", { name: "Option 2" }));
+
+      expect(onRadioChange).not.toHaveBeenCalled();
+    });
+
+    it("should not change selection when readonly flips to true after mount", async () => {
+      const { rerender } = render(RadioButtonGroup, {
+        props: { selected: "1", readonly: false },
+      });
+
+      await rerender({ selected: "1", readonly: true });
+
+      const radio2 = screen.getByRole("radio", { name: "Option 2" });
+      await user.click(radio2);
+
+      // jsdom doesn't restore the previously checked radio in a group after
+      // a cancelled click the way real browsers do; covered by the e2e test.
+      expect(radio2).not.toBeChecked();
+    });
+
+    it("should not propagate external selected updates to children when readonly", async () => {
+      const { component } = render(RadioButtonGroup, {
+        props: { selected: "1", readonly: true },
+      });
+
+      expect(screen.getByRole("radio", { name: "Option 1" })).toBeChecked();
+
+      component.selected = "2";
+      await tick();
+
+      expect(screen.getByRole("radio", { name: "Option 1" })).toBeChecked();
+      expect(screen.getByRole("radio", { name: "Option 2" })).not.toBeChecked();
     });
   });
 

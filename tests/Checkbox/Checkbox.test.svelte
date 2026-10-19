@@ -7,6 +7,8 @@
   export let hideLabel = false;
   export let labelText = "Checkbox label";
   export let helperText = "";
+  export let onCheck: (event: CustomEvent<boolean>) => void = () => {};
+  export let onClick: (event: MouseEvent) => void = () => {};
 </script>
 
 <Checkbox
@@ -17,6 +19,6 @@
   {labelText}
   {helperText}
   data-testid="checkbox"
-  on:check={() => console.log("check")}
-  on:click={() => console.log("click")}
+  on:check={onCheck}
+  on:click={onClick}
 />

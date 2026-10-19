@@ -18,25 +18,20 @@ describe("CheckboxGroup", () => {
   });
 
   it("does not dispatch change event on initial render with a static selected array", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupStaticSelected);
+    const onChange = vi.fn();
+    render(CheckboxGroupStaticSelected, { onChange });
 
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("dispatches one change event after interacting with a static selected array", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupStaticSelected);
+    const onChange = vi.fn();
+    render(CheckboxGroupStaticSelected, { onChange });
 
     const smsCheckbox = screen.getByRole("checkbox", { name: "SMS" });
     await user.click(smsCheckbox);
 
-    const changeCalls = consoleLog.mock.calls.filter(
-      ([event]) => event === "change",
-    );
-    expect(changeCalls).toEqual([["change", ["email", "sms"]]]);
+    expect(onChange.mock.calls).toEqual([[["email", "sms"]]]);
   });
 
   it("should handle disabled state", () => {
@@ -53,21 +48,23 @@ describe("CheckboxGroup", () => {
     }
   });
 
-  it("should handle required state", () => {
-    render(CheckboxGroupComponent, { props: { required: true } });
+  it.each([
+    [
+      "required",
+      { required: true },
+      (checkbox: HTMLElement) => expect(checkbox).toBeRequired(),
+    ],
+    [
+      "custom name",
+      { name: "custom-group" },
+      (checkbox: HTMLElement) =>
+        expect(checkbox).toHaveAttribute("name", "custom-group"),
+    ],
+  ])("should handle %s", (_, props, expectChild) => {
+    render(CheckboxGroupComponent, { props });
 
-    const checkboxes = screen.getAllByRole("checkbox");
-    for (const checkbox of checkboxes) {
-      expect(checkbox).toBeRequired();
-    }
-  });
-
-  it("should handle custom name", () => {
-    render(CheckboxGroupComponent, { props: { name: "custom-group" } });
-
-    const checkboxes = screen.getAllByRole("checkbox");
-    for (const checkbox of checkboxes) {
-      expect(checkbox).toHaveAttribute("name", "custom-group");
+    for (const checkbox of screen.getAllByRole("checkbox")) {
+      expectChild(checkbox);
     }
   });
 
@@ -90,14 +87,14 @@ describe("CheckboxGroup", () => {
   });
 
   it("should handle change event on selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupComponent);
+    const onChange = vi.fn();
+    render(CheckboxGroupComponent, { onChange });
 
     const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
     await user.click(checkbox2);
 
     expect(checkbox2).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("change", ["2"]);
+    expect(onChange).toHaveBeenCalledWith(["2"]);
   });
 
   it("should handle legend slot", () => {
@@ -240,28 +237,31 @@ describe("CheckboxGroup", () => {
     expect(screen.queryByText("Helper text message")).not.toBeInTheDocument();
   });
 
-  it("propagates group invalid state to child checkboxes that don't set their own", () => {
-    render(CheckboxGroupComponent, {
-      props: { invalid: true, invalidText: "Select at least one option" },
-    });
-
-    const option1 = screen.getByRole("checkbox", { name: "Option 1" });
-    expect(option1.closest(".bx--checkbox-wrapper")).toHaveClass(
+  it.each([
+    [
+      "invalid",
+      { invalid: true, invalidText: "Select at least one option" },
       "bx--checkbox-wrapper--invalid",
-    );
-    expect(option1).toHaveAttribute("aria-invalid", "true");
-  });
-
-  it("propagates group warn state to child checkboxes that don't set their own", () => {
-    render(CheckboxGroupComponent, {
-      props: { warn: true, warnText: "Heads up" },
-    });
-
-    const option1 = screen.getByRole("checkbox", { name: "Option 1" });
-    expect(option1.closest(".bx--checkbox-wrapper")).toHaveClass(
+    ],
+    [
+      "warn",
+      { warn: true, warnText: "Heads up" },
       "bx--checkbox-wrapper--warning",
-    );
-  });
+    ],
+  ])(
+    "propagates group %s state to child checkboxes that don't set their own",
+    (state, props, wrapperClass) => {
+      render(CheckboxGroupComponent, { props });
+
+      const option1 = screen.getByRole("checkbox", { name: "Option 1" });
+      expect(option1.closest(".bx--checkbox-wrapper")).toHaveClass(
+        wrapperClass,
+      );
+      if (state === "invalid") {
+        expect(option1).toHaveAttribute("aria-invalid", "true");
+      }
+    },
+  );
 
   it("keeps a disabled group's invalid state off its child checkboxes", () => {
     render(CheckboxGroupComponent, {
@@ -325,32 +325,37 @@ describe("CheckboxGroup", () => {
     });
 
     it("should not change selection when clicking another checkbox", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(CheckboxGroupReadonly, { selected: ["1"], readonly: true });
+      const onChange = vi.fn();
+      render(CheckboxGroupReadonly, {
+        selected: ["1"],
+        readonly: true,
+        onChange,
+      });
 
       const option2 = screen.getByRole("checkbox", { name: "Option 2" });
       await user.click(option2);
 
       expect(option2).not.toBeChecked();
       expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("change", ["1", "2"]);
+      expect(onChange).not.toHaveBeenCalledWith(["1", "2"]);
     });
 
     it("should not forward a child Checkbox's on:change when the group is readonly", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(CheckboxReadonlyChange);
+      const onChange = vi.fn();
+      render(CheckboxReadonlyChange, { onChange });
 
       const option2 = screen.getByRole("checkbox", { name: "Option 2" });
       await fireEvent.change(option2);
 
-      expect(consoleLog).not.toHaveBeenCalledWith("checkbox-change", "2");
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     it("should not change selection when readonly flips to true after mount", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onChange = vi.fn();
       const { rerender } = render(CheckboxGroupReadonly, {
         selected: ["1"],
         readonly: false,
+        onChange,
       });
 
       await rerender({ selected: ["1"], readonly: true });
@@ -361,7 +366,7 @@ describe("CheckboxGroup", () => {
 
       expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
       expect(option2).not.toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("change", ["1", "2"]);
+      expect(onChange).not.toHaveBeenCalledWith(["1", "2"]);
     });
 
     it("should not propagate external selected updates to children when readonly", async () => {

@@ -7,6 +7,7 @@
   export let decorative = false;
   export let id: ComponentProps<Checkbox>["id"] = undefined;
   export let readonlyText: ComponentProps<Checkbox>["readonlyText"] = undefined;
+  export let onChange: (event: Event) => void = () => {};
 </script>
 
 <Checkbox
@@ -17,5 +18,5 @@
   {readonlyText}
   labelText="Readonly checkbox test"
   data-testid="checkbox"
-  on:change={() => console.log("change")}
+  on:change={onChange}
 />

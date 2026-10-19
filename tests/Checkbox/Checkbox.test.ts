@@ -37,61 +37,45 @@ describe("Checkbox", () => {
   });
 
   it("emits events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Checkbox);
+    const onCheck = vi.fn();
+    const onClick = vi.fn();
+    render(Checkbox, { onCheck, onClick });
 
     const input = screen.getByRole("checkbox");
     await user.click(input);
-    expect(consoleLog).toHaveBeenCalledWith("check");
-    expect(consoleLog).toHaveBeenCalledWith("click");
-    expect(consoleLog).toHaveBeenCalledTimes(2);
+    expect(onCheck).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
   it("emits exactly one check event per click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Checkbox);
+    const onCheck = vi.fn();
+    render(Checkbox, { onCheck });
 
     const input = screen.getByRole("checkbox");
 
-    consoleLog.mockClear();
-    await user.click(input);
-    const checkCalls1 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check",
-    );
-    expect(checkCalls1).toHaveLength(1);
-
-    consoleLog.mockClear();
-    await user.click(input);
-    const checkCalls2 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check",
-    );
-    expect(checkCalls2).toHaveLength(1);
-
-    consoleLog.mockClear();
-    await user.click(input);
-    const checkCalls3 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check",
-    );
-    expect(checkCalls3).toHaveLength(1);
+    for (let i = 0; i < 3; i++) {
+      onCheck.mockClear();
+      // biome-ignore lint/performance/noAwaitInLoops: each click must settle before the next
+      await user.click(input);
+      expect(onCheck).toHaveBeenCalledTimes(1);
+    }
   });
 
   it("emits exactly one check event when checked is changed externally via bind", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { component } = render(CheckboxReactiveBind);
+    const onCheck = vi.fn();
+    const { component } = render(CheckboxReactiveBind, { onCheck });
 
-    consoleLog.mockClear();
+    onCheck.mockClear();
     component.checked = true;
     await tick();
 
-    expect(consoleLog).toHaveBeenCalledWith("check");
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onCheck).toHaveBeenCalledTimes(1);
 
-    consoleLog.mockClear();
+    onCheck.mockClear();
     component.checked = false;
     await tick();
 
-    expect(consoleLog).toHaveBeenCalledWith("check");
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onCheck).toHaveBeenCalledTimes(1);
   });
 
   it("drops the label's mixed state once a click settles the checkbox", async () => {
@@ -137,8 +121,8 @@ describe("Checkbox", () => {
   });
 
   it("works with checkbox groups", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroup);
+    const onChange = vi.fn();
+    render(CheckboxGroup, { onChange });
 
     const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
     const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
@@ -147,51 +131,45 @@ describe("Checkbox", () => {
     expect(checkbox1).not.toBeChecked();
     expect(checkbox2).toBeChecked();
     expect(checkbox3).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith(["option-2"]);
+    expect(onChange).toHaveBeenCalledWith(["option-2"]);
 
     await user.click(checkbox1);
     expect(checkbox1).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith(["option-2", "option-1"]);
+    expect(onChange).toHaveBeenCalledWith(["option-2", "option-1"]);
 
     await user.click(checkbox2);
     expect(checkbox2).not.toBeChecked();
-    expect(consoleLog).toHaveBeenLastCalledWith(["option-1"]);
+    expect(onChange).toHaveBeenLastCalledWith(["option-1"]);
 
     await user.click(checkbox3);
     expect(checkbox3).toBeChecked();
-    expect(consoleLog).toHaveBeenLastCalledWith(["option-1", "option-3"]);
+    expect(onChange).toHaveBeenLastCalledWith(["option-1", "option-3"]);
   });
 
   it("emits exactly one check event per click in checkbox groups", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupEvents);
+    const onCheck = vi.fn();
+    render(CheckboxGroupEvents, { onCheck });
 
     const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
     const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
     const checkbox3 = screen.getByRole("checkbox", { name: "Option 3" });
 
-    consoleLog.mockClear();
+    const callsFor = (value: string) =>
+      onCheck.mock.calls.filter(([v]) => v === value);
+
+    onCheck.mockClear();
     await user.click(checkbox1);
-    const checkCalls1 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check" && call[1] === "option-1",
-    );
-    expect(checkCalls1).toHaveLength(1);
-    expect(checkCalls1[0][3]).toBe(1);
+    expect(callsFor("option-1")).toHaveLength(1);
+    expect(callsFor("option-1")[0][2]).toBe(1);
 
-    consoleLog.mockClear();
+    onCheck.mockClear();
     await user.click(checkbox2);
-    const checkCalls2 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check" && call[1] === "option-2",
-    );
-    expect(checkCalls2).toHaveLength(1);
+    expect(callsFor("option-2")).toHaveLength(1);
 
-    consoleLog.mockClear();
+    onCheck.mockClear();
     await user.click(checkbox3);
-    const checkCalls3 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check" && call[1] === "option-3",
-    );
-    expect(checkCalls3).toHaveLength(1);
-    expect(checkCalls3[0][3]).toBe(1);
+    expect(callsFor("option-3")).toHaveLength(1);
+    expect(callsFor("option-3")[0][2]).toBe(1);
   });
 
   it("emits check event when group is updated externally", async () => {
@@ -220,32 +198,29 @@ describe("Checkbox", () => {
   });
 
   it("handles checkbox selection changes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultipleCheckboxes);
+    const onChange = vi.fn();
+    render(MultipleCheckboxes, { onChange });
 
     const coconutCheckbox = screen.getByRole("checkbox", { name: "Coconut" });
 
     await user.click(coconutCheckbox);
 
     expect(coconutCheckbox).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("group changed:", [
-      "Apple",
-      "Banana",
-      "Coconut",
-    ]);
+    expect(onChange).toHaveBeenCalledWith(["Apple", "Banana", "Coconut"]);
     expect(screen.getByTestId("selected-values")).toHaveTextContent(
       '["Apple","Banana","Coconut"]',
     );
   });
 
   it("handles button click to set specific value", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultipleCheckboxes);
+    const onChange = vi.fn();
+    const onSet = vi.fn();
+    render(MultipleCheckboxes, { onChange, onSet });
 
     await user.click(screen.getByText(/Set to/));
 
-    expect(consoleLog).toHaveBeenCalledWith("set to banana");
-    expect(consoleLog).toHaveBeenCalledWith("group changed:", ["Banana"]);
+    expect(onSet).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith(["Banana"]);
 
     const appleCheckbox = screen.getByRole("checkbox", { name: "Apple" });
     const bananaCheckbox = screen.getByRole("checkbox", { name: "Banana" });
@@ -261,25 +236,19 @@ describe("Checkbox", () => {
   });
 
   it("handles multiple checkbox selections with object binding", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultipleCheckboxesObject);
+    const onChange = vi.fn();
+    render(MultipleCheckboxesObject, { onChange });
 
     const checkboxA = screen.getByRole("checkbox", { name: "A" });
     const checkboxB = screen.getByRole("checkbox", { name: "B" });
 
     await user.click(checkboxA);
     expect(checkboxA).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
-      a: true,
-      b: false,
-    });
+    expect(onChange).toHaveBeenCalledWith({ a: true, b: false });
 
     await user.click(checkboxB);
     expect(checkboxB).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
-      a: true,
-      b: true,
-    });
+    expect(onChange).toHaveBeenCalledWith({ a: true, b: true });
 
     expect(screen.getByTestId("object-values")).toHaveTextContent(
       '{"a":true,"b":true}',
@@ -338,18 +307,15 @@ describe("Checkbox", () => {
   });
 
   it("does not forward change event when readonly", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxReadonly, { checked: false, readonly: true });
+    const onChange = vi.fn();
+    render(CheckboxReadonly, { checked: false, readonly: true, onChange });
 
     const input = screen.getByRole("checkbox");
-    consoleLog.mockClear();
+    onChange.mockClear();
 
     await fireEvent.change(input);
 
-    const changeCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "change",
-    );
-    expect(changeCalls).toHaveLength(0);
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("renders the invalid state with an error message and aria wiring", () => {

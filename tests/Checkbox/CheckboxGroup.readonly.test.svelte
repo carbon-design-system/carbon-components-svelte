@@ -10,6 +10,8 @@
   export let id: ComponentProps<CheckboxGroup>["id"] = undefined;
   export let readonlyText: ComponentProps<CheckboxGroup>["readonlyText"] =
     undefined;
+  export let onChange: (selected: ReadonlyArray<string | number>) => void =
+    () => {};
 </script>
 
 <CheckboxGroup
@@ -18,7 +20,7 @@
   {id}
   {readonlyText}
   bind:selected
-  on:change={(e) => console.log("change", e.detail)}
+  on:change={(e) => onChange(e.detail)}
 >
   <Checkbox labelText="Option 1" value="1" />
   <Checkbox labelText="Option 2" value="2" />
