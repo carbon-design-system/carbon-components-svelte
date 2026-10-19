@@ -54,6 +54,16 @@ By default, the cancel button receives focus instead of the critical button to p
 
 Customize the header content and body layout. Set `hasForm` on `ModalBody` when it directly contains form elements (see the [Basic](#basic) example above). It adjusts the body padding to match Carbon's form spacing.
 
+### Build the content on first open
+
+Set `lazy` to build the header, body, and footer the first time the modal opens, then keep them. A closed modal is invisible but still laid out, so this matters on pages with several modals or heavy content.
+
+| Do | Why |
+| --- | --- |
+| Set `lazy` on modals most visitors never open. | Their content costs nothing until it's needed. |
+| Leave it off when you bind to or read the content before the first open. | That content doesn't exist yet. |
+| Leave it off when the content must be in server-rendered markup. | It isn't rendered until the modal opens. |
+
 ### Custom heading
 
 Use `ModalHeader`'s default slot to add extra content, such as a status tag, below the title. This is in addition to (or instead of) the plain-text `title` and `label` props.
