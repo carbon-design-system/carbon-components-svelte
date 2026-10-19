@@ -13,11 +13,10 @@
   maxHeight="120px"
 >
   <div>
-    This container has hidden overflow. Without <code>portalMenu</code>, the
-    dropdown would be clipped.
+    This container has hidden overflow. The menu would not fit, so it opens in a
+    portal.
   </div>
   <Dropdown
-    portalMenu
     labelText="Preferred channel"
     selectedId="0"
     items={[

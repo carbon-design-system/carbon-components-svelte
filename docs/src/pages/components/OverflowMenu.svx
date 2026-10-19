@@ -36,9 +36,9 @@ Control where and how the menu opens.
 
 ### Portal
 
-Set `portalMenu` to `true` to render the menu in a floating portal, so it is not clipped by `overflow: hidden` parents or z-index stacking. Without portalling, the menu below would be clipped.
+A menu that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a floating portal. The container in the example below hides its overflow, so the menu moves to a portal when it opens. Inside a [Modal](/components/Modal#modal-with-dropdowns), the menu always opens in a portal.
 
-Inside a [Modal](/components/Modal), portalling is on by default unless you set `portalMenu` to `false`.
+Set `portalMenu` to `true` to always render the menu in a portal, for example to escape a z-index stacking context. Set it to `false` to keep the menu in place. A portalled menu leaves its container in the DOM, so CSS that targets the menu as a descendant of the container does not match it.
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuPortalMenu" />
 
