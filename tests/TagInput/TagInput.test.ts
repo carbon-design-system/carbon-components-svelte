@@ -187,6 +187,17 @@ describe("TagInput", () => {
       expect(shownValue()).toEqual(["a@b.co"]);
     });
 
+    it("shows invalidTagText when validate returns false", async () => {
+      render(TagInput, { config: { validate: () => false } });
+
+      await user.type(input(), "nope{Enter}");
+
+      expect(input()).toHaveAttribute("aria-invalid", "true");
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "This tag isn't valid",
+      );
+    });
+
     it("keeps rejected pasted pieces in the field", async () => {
       render(TagInput, { value: ["red"] });
 

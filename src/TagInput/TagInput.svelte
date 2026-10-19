@@ -95,7 +95,7 @@
 
   /**
    * Check a tag before it's added. Return `true` to accept it, or a message
-   * (or `false`) to reject it.
+   * to reject it. Returning `false` rejects it with `invalidTagText`.
    * @type {(tag: string) => boolean | string}
    */
   export let validate = () => true;
@@ -117,6 +117,9 @@
    * that has text in the field but no tags yet.
    */
   export let requiredText = "Add at least one tag";
+
+  /** Specify the message shown when `validate` rejects a tag without one */
+  export let invalidTagText = "This tag isn't valid";
 
   /** Specify the message shown when a tag is rejected at `max` */
   export let maxText = "You've reached the maximum number of tags";
@@ -286,7 +289,11 @@
 
       const result = validate(tag);
       if (result !== true) {
-        reject("validate", tag, typeof result === "string" ? result : "");
+        reject(
+          "validate",
+          tag,
+          (typeof result === "string" && result) || invalidTagText,
+        );
         rejected.push(raw);
         continue;
       }
