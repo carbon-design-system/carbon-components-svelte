@@ -77,6 +77,19 @@ describe("FileUploaderButton", () => {
     });
   });
 
+  it("should restore a changed labelText when files are cleared", async () => {
+    const { container, rerender } = render(FileUploaderButton, {
+      props: { labelText: "Add file" },
+    });
+    await rerender({ labelText: "Ajouter" });
+
+    simulateFileSelection(getFileInput(container), [makeFile("test.txt")]);
+    await tick();
+    await rerender({ files: [] });
+
+    expect(screen.getByRole("button")).toHaveTextContent("Ajouter");
+  });
+
   it("should not change label when disableLabelChanges is true", async () => {
     const { container } = render(FileUploaderButton, {
       props: { labelText: "Add file", disableLabelChanges: true },
