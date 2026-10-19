@@ -295,6 +295,8 @@ The `locale` prop accepts either a [BCP 47 language tag](https://en.wikipedia.or
 
 To customize the weekday labels (for example, to use `Sun, Mon, Tue, ...` shorthands), pass a locale object. It may set `weekdays`, `months`, `firstDayOfWeek`, `rangeSeparator`, `weekAbbreviation`, and `yearAriaLabel`. A flatpickr locale module, such as `German` from `flatpickr/dist/l10n/de`, has this shape and can be passed as is.
 
+The calendar's own labels are props: `calendarLabelText` names the calendar ("Choose a date"), and `previousLabelText` and `nextLabelText` name the arrows ("Previous month", "Next month"). Set them to translate the calendar for screen readers.
+
 <FileSource src="/framed/DatePicker/DatePickerLocale" />
 
 ### First day of the week
@@ -687,7 +689,7 @@ Set `short` to `true` to render a skeleton for the short variant.
 
 ## Migrating from flatpickr
 
-The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built in, and each flatpickr option it supports is a prop. The calendar keeps flatpickr's class names, so custom styles still apply.
+The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built in, each flatpickr option it supports is a prop, and its markup uses Carbon's class names.
 
 | Do | Why |
 | --- | --- |
@@ -697,5 +699,17 @@ The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built 
 | Prefer a language tag such as `locale="de"` to an imported locale module. | Tags need no import; month and weekday names come from the browser's `Intl` data. A locale object still works when you need exact strings, so `locale={German}` behaves as before. |
 | Pair the DatePicker with a [TimePicker](/components/TimePicker) to collect a time. | The calendar has no time picker. |
 | Use `bind:calendar`'s `open()`, `close()`, `showMonth()`, `focusDate()`, `view`, and `selectedDates`; set dates with `bind:selectedDates`. | `bind:calendar` no longer hands out the engine. |
+| Rename flatpickr classes in app CSS and tests (table below). | The calendar's markup uses `bx--date-picker__*` classes, with a modifier for each state. |
+| Find the calendar by role in tests: `getByRole("dialog", { name: "Choose a date" })`, then `grid`, `row`, and `gridcell`. | The calendar is a dialog of month grids, not a `role="application"` labelled `calendar-container`. |
+
+| flatpickr class | Carbon class |
+| --- | --- |
+| `flatpickr-calendar`, with `open`, `inline`, `static` | `bx--date-picker__calendar`, with `--open`, `--inline`, `--static` |
+| `flatpickr-prev-month`, `flatpickr-next-month` | `bx--date-picker__nav-button--previous`, `--next` |
+| `cur-month`, `cur-year` | `bx--date-picker__month-label`, `bx--date-picker__year-input` |
+| `dayContainer` | `bx--date-picker__month-days`, with a `bx--date-picker__week` per row |
+| `flatpickr-day`, with `selected`, `today`, `inRange`, `startRange`, `endRange`, `flatpickr-disabled` | `bx--date-picker__day`, with `--selected`, `--today`, `--in-range`, `--range-start`, `--range-end`, `--disabled` |
+| `prevMonthDay`, `nextMonthDay` | `bx--date-picker__day--outside-month` |
+| `flatpickr-monthSelect-month`, `flatpickr-yearSelect-year` | `bx--date-picker__grid-cell` |
 
 The native mobile date input and the month dropdown are not available.
