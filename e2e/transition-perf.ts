@@ -9,7 +9,7 @@
  * from run-to-run noise.
  *
  * Usage:
- *   BUILD_CSS_MINIFY=1 bun scripts/build-css
+ *   bun scripts/build-css
  *   bun e2e/transition-perf.ts <scenario> [--runs 15]
  *
  * Run once before a CSS edit and once after, then compare the two reports.

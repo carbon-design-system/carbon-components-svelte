@@ -34,7 +34,7 @@
  * matching element in the page).
  *
  * Usage:
- *   BUILD_CSS_MINIFY=1 bun scripts/build-css
+ *   bun scripts/build-css
  *   bun e2e/selector-stats.ts <scenario|all> [--runs 15] [--recalc-runs 40]
  *     [--inner 5] [--top 25] [--scale N] [--trigger var|theme] [--json out.json]
  *     [--url <base>]

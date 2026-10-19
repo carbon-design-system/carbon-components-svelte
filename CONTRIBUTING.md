@@ -666,7 +666,7 @@ The default build compiles only `css/all.scss` (docs, e2e, and `Theme` switching
 
 The compiled `css/*.css` are **not** committed (they are gitignored) — but they are still required at runtime, so without this step your local docs site and e2e tests will use stale (or missing) styles. `bun setup` runs `build:css` once on a fresh clone, and CI/release run it on demand; neither helps an in-progress local edit.
 
-This compiles Sass (compressed) and writes `css/*.css` plus `css/css.d.ts`. Local builds skip Lightning CSS minify/prefixing; CI and `BUILD_CSS_MINIFY=1` still run that pass. Commit only the `.scss` source — never the generated `*.css`. The small `css/css.d.ts` (module declarations) **is** committed, so type-checks resolve the CSS imports without a build; commit it too if adding or removing a theme entry changes it.
+This compiles Sass (compressed) and writes `css/*.css` plus `css/css.d.ts`. Lightning CSS then adds vendor prefixes for the supported browsers and minifies, locally as in CI, so local pages and e2e runs get the CSS that ships. Set `BUILD_CSS_MINIFY=0` for readable output. Commit only the `.scss` source — never the generated `*.css`. The small `css/css.d.ts` (module declarations) **is** committed, so type-checks resolve the CSS imports without a build; commit it too if adding or removing a theme entry changes it.
 
 The prebundled CSS targets the [Svelte 5 browser support](https://svelte.dev/docs/svelte/browser-support) baseline (Firefox 83/Safari 14), not older browsers. Matching that baseline lets Lightning CSS drop legacy fallbacks. Author SCSS to that baseline; see the `:has()` note in [Conventions](#conventions).
 
