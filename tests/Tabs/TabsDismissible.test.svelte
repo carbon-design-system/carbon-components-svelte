@@ -2,13 +2,18 @@
   import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
   import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
   import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
+  import Calendar from "../../src/icons/Calendar.svelte";
 
   export let removeOnDismiss = true;
+  /** Gives the first tab an empty label. */
+  export let emptyLabel = false;
+  /** Gives every tab an icon. */
+  export let withIcon = false;
   export let onDismiss: (detail: { id: string }) => void = () => {};
 
   let selectedId = "one";
   let tabs = [
-    { id: "one", label: "One" },
+    { id: "one", label: emptyLabel ? "" : "One" },
     { id: "two", label: "Two" },
     { id: "three", label: "Three" },
   ];
@@ -23,7 +28,7 @@
   }}
 >
   {#each tabs as tab (tab.id)}
-    <Tab id={tab.id} label={tab.label} />
+    <Tab id={tab.id} label={tab.label} icon={withIcon ? Calendar : undefined} />
   {/each}
   <svelte:fragment slot="content">
     {#each tabs as tab (tab.id)}

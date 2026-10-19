@@ -260,6 +260,31 @@ describe("FileUploader", () => {
     expect(fileNames(input)).toEqual(["file2.txt"]);
   });
 
+  it("emits remove for the old file and add for the new one when replacing", async () => {
+    const onAdd = vi.fn();
+    const onRemove = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { multiple: false, onAdd, onRemove },
+    });
+    const first = makeFile("file1.txt");
+    const second = makeFile("file2.txt");
+
+    const input = await selectFiles(component, [first]);
+    await vi.waitFor(() => {
+      expect(onAdd).toHaveBeenCalledTimes(1);
+    });
+    expect(onRemove).not.toHaveBeenCalled();
+
+    simulateFileSelection(input, [second]);
+    await vi.waitFor(() => {
+      expect(onRemove).toHaveBeenCalledTimes(1);
+    });
+
+    expect(onRemove.mock.calls[0][0].detail).toEqual([first]);
+    expect(onAdd).toHaveBeenCalledTimes(2);
+    expect(onAdd.mock.calls[1][0].detail).toEqual([second]);
+  });
+
   it("should handle multiple file selection when multiple is true", async () => {
     const { component } = render(FileUploader, {
       props: { multiple: true },
@@ -802,6 +827,21 @@ describe("FileUploader", () => {
     expect(screen.getByText("Upload failed")).toBeInTheDocument();
     expect(screen.getByText("Please try again.")).toBeInTheDocument();
     expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
+  });
+
+  it("hides the error copy for a row that is not invalid", () => {
+    render(FileUploader, {
+      props: {
+        files: [makeFile("ok.txt")],
+        fileInvalid: () => false,
+        fileErrorSubject: () => "Upload failed",
+        fileErrorBody: () => "Please try again.",
+      },
+    });
+
+    expect(screen.getByText("ok.txt")).toBeInTheDocument();
+    expect(screen.queryByText("Upload failed")).not.toBeInTheDocument();
+    expect(screen.queryByText("Please try again.")).not.toBeInTheDocument();
   });
 
   it("should not render file sizes by default", () => {

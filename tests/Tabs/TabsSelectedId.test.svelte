@@ -12,12 +12,18 @@
   export let showTabC = true;
   /** Renders `TabsVertical` instead of `Tabs`. */
   export let vertical = false;
+  export let activation: "automatic" | "manual" = "automatic";
+  export let onChange: (index: number) => void = () => {};
+
+  $: Component = (vertical ? TabsVertical : Tabs) as typeof Tabs;
 </script>
 
 <svelte:component
-  this={vertical ? TabsVertical : Tabs}
+  this={Component}
   bind:selected
   bind:selectedId
+  {activation}
+  on:change={({ detail }) => onChange(detail)}
 >
   {#if showTabA}
     <Tab id="tab-a" label="Tab A" />

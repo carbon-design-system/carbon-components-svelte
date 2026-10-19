@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { expectClass } from "./helpers";
+import { expectClass, mockScrollMetrics } from "./helpers";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
 import TabsVerticalOrientationToggle from "./TabsVerticalOrientationToggle.test.svelte";
@@ -172,6 +172,57 @@ describe("TabsVertical", () => {
         "aria-selected",
         "true",
       );
+    });
+  });
+
+  describe("column orientation", () => {
+    it("leaves ArrowRight to the browser", async () => {
+      render(TabsVertical, { props: { orientation: "vertical" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      expect(await fireEvent.keyDown(tab1, { key: "ArrowRight" })).toBe(true);
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("shows no overflow buttons for an overflowing list", async () => {
+      const { container } = render(TabsVertical, {
+        props: { orientation: "vertical" },
+      });
+
+      const nav = screen.getByRole("tablist");
+      mockScrollMetrics(nav, {
+        scrollWidth: 600,
+        clientWidth: 200,
+        scrollLeft: 0,
+      });
+      await fireEvent.scroll(nav);
+
+      expect(
+        container.querySelector(".bx--tab--overflow-nav-button"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it("pairs each tab with its panel after a tab is inserted mid-list", async () => {
+    render(TabsSelectedId, { props: { vertical: true } });
+    await tick();
+
+    await user.click(screen.getByTestId("toggle-tab-b"));
+    await user.click(screen.getByTestId("toggle-tab-b"));
+    await tick();
+
+    // Tab B re-registered last but sits between A and C in the DOM.
+    const tabs = screen.getAllByRole("tab");
+    const panels = screen.getAllByRole("tabpanel", { hidden: true });
+    expect(tabs.map((tab) => tab.id)).toEqual(["tab-a", "tab-b", "tab-c"]);
+    expect(panels.map((panel) => panel.id)).toEqual([
+      "panel-a",
+      "panel-b",
+      "panel-c",
+    ]);
+    tabs.forEach((tab, index) => {
+      expect(tab).toHaveAttribute("aria-controls", panels[index].id);
+      expect(panels[index]).toHaveAttribute("aria-labelledby", tab.id);
     });
   });
 

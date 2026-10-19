@@ -10,12 +10,13 @@
   export let type: ComponentProps<Tabs>["type"] = "default";
   export let autoWidth = false;
   export let fullWidth = false;
+  export let dismissible = false;
   export let size: ComponentProps<Tabs>["size"] = undefined;
   export let customClass = "";
   export let ariaLabel = "";
   /** Applies `flush` to the first panel only. */
   export let flush = false;
-  /** Renders `TabsVertical` instead of `Tabs`; `type`, `autoWidth`, `fullWidth`, `customClass` and `ariaLabel` are `Tabs`-only. */
+  /** Renders `TabsVertical` instead of `Tabs`; `type`, `autoWidth`, `fullWidth`, `dismissible`, `customClass` and `ariaLabel` are `Tabs`-only. */
   export let vertical = false;
   /** Only read by `TabsVertical`. */
   export let orientation: ComponentProps<TabsVertical>["orientation"] =
@@ -38,6 +39,7 @@
         type,
         autoWidth,
         fullWidth,
+        dismissible,
         class: customClass,
         "aria-label": ariaLabel === undefined ? undefined : ariaLabel,
       }}

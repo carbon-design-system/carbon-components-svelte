@@ -4,6 +4,9 @@
   import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
 
   export let onChange: (event: CustomEvent) => void = () => {};
+  export let onUploaderRemove: (event: CustomEvent) => void = () => {};
+  export let onUploaderChange: (event: CustomEvent) => void = () => {};
+  export let onUploaderClear: (event: CustomEvent) => void = () => {};
 
   let buttonFiles: File[] = [];
   let dropFiles: File[] = [];
@@ -36,6 +39,9 @@
       buttonLabel="Add receipts"
       status="edit"
       bind:files={uploaderFiles}
+      on:remove={onUploaderRemove}
+      on:change={onUploaderChange}
+      on:clear={onUploaderClear}
     />
   </div>
 </form>

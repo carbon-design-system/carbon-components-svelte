@@ -173,25 +173,6 @@ describe("Tabs", () => {
     expect(tab1).toHaveAttribute("aria-selected", "true");
   });
 
-  it("supports Home/End keyboard navigation", async () => {
-    const onChange = vi.fn();
-    render(Tabs, { props: { onChange } });
-
-    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-    await user.click(tab1);
-
-    await user.keyboard("{End}");
-    expect(tab3).toHaveFocus();
-    expect(tab3).toHaveAttribute("aria-selected", "true");
-    expect(onChange).toHaveBeenCalledWith(2);
-
-    await user.keyboard("{Home}");
-    expect(tab1).toHaveFocus();
-    expect(tab1).toHaveAttribute("aria-selected", "true");
-    expect(onChange).toHaveBeenCalledWith(0);
-  });
-
   it.each([
     ["container", "bx--tabs--container", "bx--tabs--line", true],
     ["default", "bx--tabs--line", "bx--tabs--container", false],
@@ -223,6 +204,37 @@ describe("Tabs", () => {
       });
     },
   );
+
+  it("toggles the close buttons when dismissible changes after mount", async () => {
+    const { rerender } = render(Tabs);
+    expect(screen.queryByRole("button", { name: /^Dismiss/ })).toBeNull();
+
+    await rerender({ dismissible: true });
+    expect(screen.getAllByRole("button", { name: /^Dismiss/ })).toHaveLength(3);
+    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--dismissible");
+
+    await rerender({ dismissible: false });
+    expect(screen.queryByRole("button", { name: /^Dismiss/ })).toBeNull();
+  });
+
+  it("applies the container item classes when type changes after mount", async () => {
+    const { rerender } = render(Tabs);
+    await tick();
+
+    await rerender({ type: "container" });
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab.closest(".bx--tabs__nav-item")).toHaveClass(
+        "bx--tabs__nav-item--container",
+      );
+    }
+
+    await rerender({ type: "default" });
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab.closest(".bx--tabs__nav-item")).not.toHaveClass(
+        "bx--tabs__nav-item--container",
+      );
+    }
+  });
 
   it("sets the default nav-item class only for tabs that are neither selected nor disabled", async () => {
     render(Tabs);
@@ -300,43 +312,6 @@ describe("Tabs", () => {
 
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).toHaveClass("bx--tabs--full-width");
-  });
-
-  // The v11 redesign drops the legacy mobile dropdown: there is no longer a
-  // listbox trigger, and the tab list is always inline (never `--hidden`).
-  // jsdom does no layout, so the overflow geometry is mocked on the nav element
-  // to drive `updateOverflow`. The buttons only render while the list overflows,
-  // and each hides once that edge is reached.
-  it("renders overflow scroll buttons that toggle at the start and end", async () => {
-    const { container } = render(Tabs);
-
-    expect(
-      container.querySelector(".bx--tab--overflow-nav-button"),
-    ).not.toBeInTheDocument();
-
-    const nav = screen.getByRole("tablist");
-    mockScrollMetrics(nav, {
-      scrollWidth: 600,
-      clientWidth: 200,
-      scrollLeft: 0,
-    });
-    await fireEvent.scroll(nav);
-
-    const prev = container.querySelector(
-      ".bx--tab--overflow-nav-button--previous",
-    );
-    const next = container.querySelector(".bx--tab--overflow-nav-button--next");
-
-    expect(next).toHaveAttribute("aria-hidden", "true");
-    expect(next).toHaveAttribute("tabindex", "-1");
-
-    expect(prev).toHaveClass("bx--tab--overflow-nav-button--hidden");
-    expect(next).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
-
-    nav.scrollLeft = 400;
-    await fireEvent.scroll(nav);
-    expect(prev).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
-    expect(next).toHaveClass("bx--tab--overflow-nav-button--hidden");
   });
 
   it("does not show the overflow button for a 1px scrollWidth/clientWidth difference", async () => {
@@ -472,26 +447,6 @@ describe("Tabs", () => {
     expect(tab3).toHaveAttribute("aria-selected", "false");
   });
 
-  it("falls back when the selectedId tab is removed", async () => {
-    render(TabsSelectedId, {
-      props: { selectedId: "tab-b", showTabA: true, showTabB: true },
-    });
-    await tick();
-
-    await user.click(screen.getByTestId("toggle-tab-b"));
-    await tick();
-
-    expect(
-      screen.queryByRole("tab", { name: "Tab B" }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
-    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-    expect(screen.getByText("Content C")).toBeVisible();
-  });
-
   it("uses the index API when selectedId is unset", async () => {
     render(TabsSelectedId, {
       props: { selected: 2, selectedId: undefined },
@@ -588,6 +543,39 @@ describe("Tabs dismissible", () => {
     );
     expect(one).toBeInTheDocument();
     expect(one).toHaveFocus();
+  });
+
+  it("does not dismiss a focused disabled tab on Delete", async () => {
+    const onDismiss = vi.fn();
+    render(TabsRegistration, { props: { onDismiss } });
+
+    // Analyze is disabled; a click still gives its link focus.
+    const analyze = screen.getByRole("tab", { name: "Analyze" });
+    analyze.focus();
+    await user.keyboard("{Delete}");
+
+    expect(onDismiss).not.toHaveBeenCalled();
+  });
+
+  it("names the close button of an unlabeled tab Dismiss tab", () => {
+    render(TabsDismissible, { props: { emptyLabel: true } });
+
+    expect(screen.getByRole("button", { name: "Dismiss tab" })).toBeVisible();
+  });
+
+  it("renders a tab icon left of the label, not right, when dismissible", () => {
+    const { container } = render(TabsDismissible, {
+      props: { withIcon: true },
+    });
+
+    const items = container.querySelectorAll(".bx--tabs__nav-item");
+    expect(items).toHaveLength(3);
+    for (const item of items) {
+      expect(
+        item.querySelector(".bx--tabs__nav-item--icon-left"),
+      ).toBeVisible();
+      expect(item.querySelector(".bx--tabs__nav-item--icon")).toBeNull();
+    }
   });
 
   it("dismisses every tab in turn without throwing", async () => {

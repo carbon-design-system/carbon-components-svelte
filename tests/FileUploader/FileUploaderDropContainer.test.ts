@@ -245,6 +245,23 @@ describe("FileUploaderDropContainer", () => {
     );
   });
 
+  it("ignores a drop when disabled", async () => {
+    const addHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { component, container } = render(FileUploaderDropContainer, {
+      props: { disabled: true, onadd: addHandler, onchange: changeHandler },
+    });
+
+    const event = dropFiles(container, [makeFile("test.txt")]);
+    await tick();
+
+    expect(addHandler).not.toHaveBeenCalled();
+    expect(changeHandler).not.toHaveBeenCalled();
+    expect(component.files).toEqual([]);
+    // The browser would otherwise navigate to the dropped file.
+    expect(event.defaultPrevented).toBe(true);
+  });
+
   it("should dispatch rejected event on drop when validateFiles filters files", async () => {
     const validateFiles = vi.fn((files: File[]) =>
       files.filter((f: File) => f.size < 1000),
@@ -359,6 +376,23 @@ describe("FileUploaderDropContainer", () => {
 
     expect(clickSpy).toHaveBeenCalled();
   });
+
+  it.each(["{Enter}", " "])(
+    "does not open the file picker on %j when disabled",
+    async (key) => {
+      const { container } = render(FileUploaderDropContainer, {
+        props: { disabled: true },
+      });
+      const clickSpy = vi.spyOn(getFileInput(container), "click");
+      const target = container.querySelector(".bx--file-browse-btn");
+      assert(target instanceof HTMLElement);
+
+      target.focus();
+      await user.keyboard(key);
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    },
+  );
 
   it("should place focusable role on a single element (no duplicated button semantics)", () => {
     const { container } = render(FileUploaderDropContainer);
