@@ -239,6 +239,19 @@
   }
 
   /**
+   * @type {(id: string, icon: boolean) => void}
+   */
+  function setIcon(id, icon) {
+    batchedSwitchesUpdate((current) => {
+      const index = current.findIndex((s) => s.id === id);
+      if (index === -1 || current[index].icon === icon) return current;
+      const next = [...current];
+      next[index] = { ...current[index], icon };
+      return next;
+    });
+  }
+
+  /**
    * @type {(id: string) => void}
    */
   function addPanel(id) {
@@ -333,6 +346,7 @@
     remove,
     update,
     setDisabled,
+    setIcon,
     tabStopId,
     pairs,
     addPanel,
