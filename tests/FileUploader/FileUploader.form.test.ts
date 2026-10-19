@@ -59,4 +59,32 @@ describe("FileUploader form reset", () => {
     expect(getBoundText("bound-uploader")).toBe("0");
     expect(screen.getByTestId("uploader")).not.toHaveTextContent("receipt.pdf");
   });
+
+  it("emits remove, change and clear when it clears the FileUploader file list", async () => {
+    const onUploaderRemove = vi.fn();
+    const onUploaderChange = vi.fn();
+    const onUploaderClear = vi.fn();
+    render(FileUploaderForm, {
+      props: { onUploaderRemove, onUploaderChange, onUploaderClear },
+    });
+    const file = receipt();
+
+    simulateFileSelection(getFileInput(screen.getByTestId("uploader")), [file]);
+    await tick();
+    await vi.waitFor(() => {
+      expect(onUploaderChange).toHaveBeenCalledTimes(1);
+    });
+    expect(onUploaderRemove).not.toHaveBeenCalled();
+    expect(onUploaderClear).not.toHaveBeenCalled();
+
+    await resetForm();
+
+    await vi.waitFor(() => {
+      expect(onUploaderClear).toHaveBeenCalledTimes(1);
+    });
+    expect(onUploaderRemove).toHaveBeenCalledTimes(1);
+    expect(onUploaderRemove.mock.calls[0][0].detail).toEqual([file]);
+    expect(onUploaderChange).toHaveBeenCalledTimes(2);
+    expect(onUploaderChange.mock.calls[1][0].detail).toEqual([]);
+  });
 });

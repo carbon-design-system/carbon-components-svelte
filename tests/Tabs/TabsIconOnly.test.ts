@@ -62,6 +62,59 @@ describe("Tabs (icon-only)", () => {
     expect(openTooltips()).toHaveLength(0);
   });
 
+  describe("hover", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("opens a tooltip after the enter delay and closes on mouse leave", async () => {
+      await renderIconOnly();
+
+      const settings = screen.getByRole("tab", { name: "Settings" });
+      await fireEvent.mouseEnter(settings);
+      expect(openTooltips()).toHaveLength(0);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(openTooltips()).toHaveLength(1);
+      expect(openTooltips()[0]).toHaveTextContent("Settings");
+
+      await fireEvent.mouseLeave(settings);
+      await vi.advanceTimersByTimeAsync(300);
+      expect(openTooltips()).toHaveLength(0);
+    });
+
+    it("hands the tooltip off to a hovered neighbor", async () => {
+      await renderIconOnly();
+
+      await fireEvent.mouseEnter(screen.getByRole("tab", { name: "Settings" }));
+      await vi.advanceTimersByTimeAsync(100);
+      expect(openTooltips()).toHaveLength(1);
+
+      await fireEvent.mouseEnter(
+        screen.getByRole("tab", { name: "Information" }),
+      );
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(openTooltips()).toHaveLength(1);
+      expect(openTooltips()[0]).toHaveTextContent("Information");
+    });
+
+    it("places the tooltip per `tooltipDirection`", async () => {
+      await renderIconOnly({ tooltipDirection: "top" });
+
+      await fireEvent.mouseEnter(screen.getByRole("tab", { name: "Settings" }));
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(document.querySelector(".bx--tooltip-portal")).toHaveAttribute(
+        "data-direction",
+        "top",
+      );
+    });
+  });
+
   it("does not open a tooltip for a disabled icon tab", async () => {
     await renderIconOnly({ disabledFirst: true });
 

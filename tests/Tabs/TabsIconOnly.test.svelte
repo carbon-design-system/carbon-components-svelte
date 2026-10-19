@@ -11,6 +11,8 @@
   export let iconSize: ComponentProps<Tabs>["iconSize"] = "default";
   export let tooltipAlignment: ComponentProps<Tab>["tooltipAlignment"] =
     "center";
+  export let tooltipDirection: ComponentProps<Tab>["tooltipDirection"] =
+    "bottom";
   export let disabledFirst = false;
   export let autoWidth = false;
   export let fullWidth = false;
@@ -18,7 +20,7 @@
 
 <Tabs {iconOnly} {iconSize} {autoWidth} {fullWidth}>
   <Tab label="Calendar" icon={Calendar} disabled={disabledFirst} />
-  <Tab label="Settings" icon={Settings} {tooltipAlignment} />
+  <Tab label="Settings" icon={Settings} {tooltipAlignment} {tooltipDirection} />
   <Tab label="Information" icon={Information} />
   <svelte:fragment slot="content">
     <TabContent>Calendar content</TabContent>

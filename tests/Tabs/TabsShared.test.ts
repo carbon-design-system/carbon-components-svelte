@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { mockScrollMetrics, renderManual } from "./helpers";
 import Tabs from "./Tabs.test.svelte";
@@ -97,6 +98,42 @@ describe.each(variants)(
       const tab1 = screen.getByRole("tab", { name: "Tab 1" });
       expect(await fireEvent.keyDown(tab1, { key: next })).toBe(false);
       expect(await fireEvent.keyDown(tab1, { key: prev })).toBe(false);
+    });
+
+    it("jumps to the last and first enabled tab with End and Home", async () => {
+      const onChange = vi.fn();
+      render(Tabs, { props: { vertical, onChange } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      expect(await fireEvent.keyDown(tab1, { key: "End" })).toBe(false);
+      await tick();
+      expect(tab3).toHaveFocus();
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(onChange).toHaveBeenCalledWith(2);
+
+      expect(await fireEvent.keyDown(tab3, { key: "Home" })).toBe(false);
+      await tick();
+      expect(tab1).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+      expect(onChange).toHaveBeenCalledWith(0);
+    });
+
+    it("selects the tab after a selected prop update", async () => {
+      const onChange = vi.fn();
+      const { rerender } = render(Tabs, { props: { vertical, onChange } });
+      await tick();
+
+      await rerender({ selected: 2 });
+
+      expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByText("Content 3")).toBeVisible();
+      expect(onChange).toHaveBeenCalledWith(2);
     });
 
     it(`moves ${prev} from the focused tab, not the selected one`, async () => {
@@ -234,6 +271,140 @@ describe.each(variants)(
       expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
       expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
       expect(screen.getByText("Content B")).toBeVisible();
+    });
+
+    it("falls back to the next tab when the selectedId tab is removed", async () => {
+      render(TabsSelectedId, {
+        props: { vertical, selectedId: "tab-b", showTabA: true },
+      });
+      await tick();
+
+      await user.click(screen.getByTestId("toggle-tab-b"));
+      await tick();
+
+      expect(
+        screen.queryByRole("tab", { name: "Tab B" }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+      expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByText("Content C")).toBeVisible();
+    });
+
+    describe("bound selectedId", () => {
+      it("follows a click on a tab", async () => {
+        const onChange = vi.fn();
+        render(TabsSelectedId, {
+          props: { vertical, selectedId: "tab-a", onChange },
+        });
+        await tick();
+
+        await user.click(screen.getByRole("tab", { name: "Tab C" }));
+
+        expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+        expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+          "aria-selected",
+          "true",
+        );
+        expect(onChange.mock.calls).toEqual([[2]]);
+      });
+
+      it(`follows ${next}`, async () => {
+        const onChange = vi.fn();
+        render(TabsSelectedId, {
+          props: { vertical, selectedId: "tab-a", onChange },
+        });
+        await tick();
+
+        screen.getByRole("tab", { name: "Tab A" }).focus();
+        await user.keyboard(`{${next}}`);
+
+        expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+        expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+          "aria-selected",
+          "true",
+        );
+        expect(onChange.mock.calls).toEqual([[1]]);
+      });
+    });
+
+    describe("overflow buttons", () => {
+      const renderOverflowing = async () => {
+        const result = render(Tabs, { props: { vertical, ...overflowProps } });
+        const nav = screen.getByRole("tablist");
+        mockScrollMetrics(nav, {
+          scrollWidth: 600,
+          clientWidth: 200,
+          scrollLeft: 0,
+        });
+        await fireEvent.scroll(nav);
+        const previous = result.container.querySelector(
+          ".bx--tab--overflow-nav-button--previous",
+        );
+        const nextButton = result.container.querySelector(
+          ".bx--tab--overflow-nav-button--next",
+        );
+        assert(previous && nextButton);
+        return { nav, previous, nextButton };
+      };
+
+      it("toggle at the start and end of the list", async () => {
+        const { nav, previous, nextButton } = await renderOverflowing();
+
+        expect(nextButton).toHaveAttribute("aria-hidden", "true");
+        expect(nextButton).toHaveAttribute("tabindex", "-1");
+        expect(previous).toHaveClass("bx--tab--overflow-nav-button--hidden");
+        expect(nextButton).not.toHaveClass(
+          "bx--tab--overflow-nav-button--hidden",
+        );
+
+        nav.scrollLeft = 400;
+        await fireEvent.scroll(nav);
+        expect(previous).not.toHaveClass(
+          "bx--tab--overflow-nav-button--hidden",
+        );
+        expect(nextButton).toHaveClass("bx--tab--overflow-nav-button--hidden");
+      });
+
+      it("scroll the list by 75% of its width on click", async () => {
+        const { nav, previous, nextButton } = await renderOverflowing();
+        const scrollBy = vi.fn();
+        nav.scrollBy = scrollBy;
+
+        await user.click(nextButton);
+        expect(scrollBy).toHaveBeenLastCalledWith({
+          left: 150,
+          behavior: "smooth",
+        });
+
+        await user.click(previous);
+        expect(scrollBy).toHaveBeenLastCalledWith({
+          left: -150,
+          behavior: "smooth",
+        });
+      });
+
+      it("scrolls an arrowed-to tab into view without the native focus scroll", async () => {
+        const { nav } = await renderOverflowing();
+        const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+        const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+        nav.getBoundingClientRect = () => rect({ left: 0, right: 200 });
+        tab3.getBoundingClientRect = () => rect({ left: 300, right: 400 });
+        const focus = vi.spyOn(tab3, "focus");
+
+        await user.click(tab1);
+        // Tab 2 is disabled, so the next tab is Tab 3. A vertical list only
+        // scrolls horizontally in the row layout, which arrows with Left/Right.
+        await user.keyboard("{ArrowRight}");
+        await tick();
+
+        expect(tab3).toHaveFocus();
+        expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+        // Tab 3 ends 248px (400 - (200 - 48px margin)) past the visible edge.
+        expect(nav.scrollLeft).toBe(248);
+      });
     });
 
     describe("shared ResizeObserver", () => {
