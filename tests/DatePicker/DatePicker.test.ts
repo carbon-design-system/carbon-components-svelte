@@ -1525,7 +1525,7 @@ describe("DatePicker", () => {
       let calendar: Instance | null = null;
       const { rerender } = render(DatePickerInlineOptions, {
         oncalendar: (cal) => {
-          calendar = cal ?? null;
+          calendar = cal?.engine ?? null;
         },
       });
       await vi.waitFor(() => expect(calendar).not.toBeNull());

@@ -27,8 +27,9 @@ export async function renderCalendar(
   const result = render(DatePickerCalendar, {
     props: {
       ...props,
-      oncalendar: (cal: Instance | null | undefined) => {
-        captured = cal;
+      // `bind:calendar` is the documented API; tests reach the engine.
+      oncalendar: (cal: { engine: Instance } | null | undefined) => {
+        captured = cal?.engine;
       },
     },
   });
