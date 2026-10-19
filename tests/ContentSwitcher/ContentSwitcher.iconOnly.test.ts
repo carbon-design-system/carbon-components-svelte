@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type SwitchComponent from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
+import List from "carbon-icons-svelte/lib/List.svelte";
 import { type ComponentProps, tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import IconOnly from "./ContentSwitcher.iconOnly.test.svelte";
@@ -22,6 +23,23 @@ describe("ContentSwitcher (icon-only)", () => {
     await tick();
 
     expect(screen.getByRole("tablist")).not.toHaveClass(
+      "bx--content-switcher--icon-only",
+    );
+  });
+
+  it("renders an icon set after mount", async () => {
+    const { rerender } = render(IconOnlyMixed);
+    await tick();
+    await tick();
+
+    await rerender({ plainIcon: List });
+    await tick();
+
+    const plain = screen.getByRole("tab", { name: "Plain" });
+    expect(plain).toHaveAttribute("aria-label", "Plain");
+    expect(plain).toHaveClass("bx--content-switcher-btn--icon");
+    expect(plain.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByRole("tablist")).toHaveClass(
       "bx--content-switcher--icon-only",
     );
   });

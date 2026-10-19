@@ -62,7 +62,7 @@
   const tabStopId = ctx.tabStopId;
   const pairs = ctx.pairs;
 
-  const hasIcon = icon !== undefined;
+  let hasIcon = icon !== undefined;
 
   // Last `selected` value seen here, so the block below reacts to caller writes
   // and not to the currentId echo.
@@ -89,6 +89,12 @@
   $: if (disabled !== prevDisabled) {
     prevDisabled = disabled;
     ctx.setDisabled(id, disabled);
+  }
+
+  // Same for `icon`, so the switcher re-infers its icon-only variant.
+  $: if ((icon !== undefined) !== hasIcon) {
+    hasIcon = icon !== undefined;
+    ctx.setIcon(id, hasIcon);
   }
 
   // Icon-only switches show `text` as a portalled tooltip on hover/focus.
