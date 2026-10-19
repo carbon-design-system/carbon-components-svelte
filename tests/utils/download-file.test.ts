@@ -32,7 +32,8 @@ describe("downloadFile", () => {
     const blob = new Blob(["custom"], { type: "application/json" });
     downloadFile(blob, "data.json");
 
-    expect(createObjectURL).toHaveBeenCalledWith(blob);
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(createObjectURL.mock.calls[0][0]).toBe(blob);
   });
 
   it("clicks a temporary anchor with the object URL and filename, then revokes it", () => {

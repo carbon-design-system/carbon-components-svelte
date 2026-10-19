@@ -41,7 +41,8 @@ describe("getInitials", () => {
   });
 
   it("normalizes a decomposed combining mark before taking the initial", () => {
-    expect(getInitials("émile zola")).toBe("ÉZ");
+    // "e" + U+0301 (decomposed) must come back as the precomposed U+00C9.
+    expect(getInitials("e\u0301mile zola")).toBe("\u00c9Z");
   });
 
   it("upper cases using locale-specific casing rules", () => {

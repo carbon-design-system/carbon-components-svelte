@@ -29,6 +29,11 @@ describe("rafThrottle", () => {
   }
 
   it("runs fn once per frame when called repeatedly", () => {
+    // Queue every request instead of keeping only the latest, so a second
+    // request for the same frame is visible (it would run `fn` twice).
+    const frames: Array<() => void> = [];
+    const raf = vi.fn((cb: () => void) => frames.push(cb));
+    vi.stubGlobal("requestAnimationFrame", raf);
     const fn = vi.fn();
     const throttled = rafThrottle(fn);
 
@@ -36,8 +41,9 @@ describe("rafThrottle", () => {
     throttled();
     throttled();
 
+    expect(raf).toHaveBeenCalledTimes(1);
     expect(fn).not.toHaveBeenCalled();
-    flushFrame();
+    for (const cb of frames) cb();
     expect(fn).toHaveBeenCalledTimes(1);
   });
 

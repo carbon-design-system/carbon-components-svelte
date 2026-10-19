@@ -91,6 +91,8 @@ describe("virtualize", () => {
 
     // (300px / 40px = 7.5, so ~8 items) + overscan above and below
     expect(result.visibleItems.length).toBeGreaterThan(8);
+    // ceil(300 / 40) = 8 visible + 5 overscan; the default of 3 would give 11
+    expect(result.endIndex).toBe(13);
     expect(result.startIndex).toBe(0); // With overscan, startIndex can go negative but is clamped to 0
     expect(result.isVirtualized).toBe(true);
   });

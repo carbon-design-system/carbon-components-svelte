@@ -21,7 +21,7 @@ describe("getValueText", () => {
 
 describe("formatRangeLabel", () => {
   it("prefers an explicit label", () => {
-    expect(formatRangeLabel("10 MB", 10, undefined)).toBe("10 MB");
+    expect(formatRangeLabel("10 MB", 10, (value) => `${value}!`)).toBe("10 MB");
   });
 
   it("falls back to formatValue when label is empty", () => {

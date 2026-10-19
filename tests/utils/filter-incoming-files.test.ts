@@ -122,7 +122,7 @@ describe("matchesAccept", () => {
 
   it("accepts every file for an empty list", () => {
     expect(matchesAccept(file("a.bin", ""), [])).toBe(true);
-    expect(matchesAccept(file("a.bin", ""), "")).toBe(true);
+    expect(matchesAccept(file("a.bin", "text/plain"), "")).toBe(true);
   });
 
   it("matches extensions case-insensitively", () => {

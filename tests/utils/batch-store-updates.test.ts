@@ -34,8 +34,9 @@ describe("batchStoreUpdates", () => {
     const store = writable<string[]>(["a"]);
     const batchedUpdate = batchStoreUpdates(store);
 
+    // These do not commute: reversed they give ["a!", "b"].
     batchedUpdate((value) => [...value, "b"]);
-    batchedUpdate((value) => value.filter((item) => item !== "a"));
+    batchedUpdate((value) => value.map((item) => `${item}!`));
 
     await Promise.resolve();
     await Promise.resolve();
@@ -44,7 +45,7 @@ describe("batchStoreUpdates", () => {
     store.subscribe((value) => {
       current = value;
     })();
-    expect(current).toEqual(["b"]);
+    expect(current).toEqual(["a!", "b!"]);
   });
 
   it("a later batch flushes independently of an earlier one", async () => {
