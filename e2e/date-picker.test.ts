@@ -185,6 +185,20 @@ test.describe("DatePicker", () => {
     await expect(input).toHaveValue(initialValue);
   });
 
+  test("calendar-only input keeps the field's look, not read-only's", async ({
+    page,
+  }) => {
+    const input = page.getByTestId("date-picker-calendar-only-input");
+    await expect(input).toHaveAttribute("readonly");
+
+    const style = await input.evaluate((el) => {
+      const { backgroundColor, cursor } = getComputedStyle(el);
+      return { backgroundColor, cursor };
+    });
+    expect(style.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+    expect(style.cursor).toBe("pointer");
+  });
+
   test("range: renders two inputs", async ({ page }) => {
     const startInput = page.getByLabel("Start date");
     const endInput = page.getByLabel("End date");

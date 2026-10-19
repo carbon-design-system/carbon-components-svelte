@@ -90,6 +90,19 @@
   </DatePicker>
 </div>
 
+<div data-testid="date-picker-calendar-only">
+  <DatePicker
+    datePickerType="single"
+    flatpickrProps={{ static: true, allowInput: false }}
+  >
+    <DatePickerInput
+      data-testid="date-picker-calendar-only-input"
+      labelText="Ship date"
+      placeholder="mm/dd/yyyy"
+    />
+  </DatePicker>
+</div>
+
 <div data-testid="date-picker-month">
   <DatePicker
     datePickerType="month"
