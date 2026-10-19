@@ -299,10 +299,11 @@
   export let flatpickrProps = { static: true };
 
   /**
-   * Bind to the calendar instance for programmatic control.
+   * Bind to the calendar for programmatic control: `open()`, `close()`,
+   * `showMonth(date)`, `focusDate(date)`, `isOpen`, and `selectedDates`.
    * Available for every `datePickerType` except `"simple"`, where it stays
    * `null`.
-   * @type {import("./calendar.js").CalendarInstance | null}
+   * @type {import("./calendar-api.js").DatePickerCalendar | null}
    * @bindable readonly
    */
   export let calendar = null;
@@ -344,6 +345,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
+  import { createCalendarApi } from "./calendar-api.js";
   import {
     createCalendar,
     resolveOptionValue,
@@ -442,6 +444,9 @@
   // Bumped by `recreateCalendar()`. Named in the init block so it re-runs.
   let calendarEpoch = 0;
   let pendingOptions = null;
+  /** @type {import("./calendar.js").CalendarInstance | null} */
+  let engine = null;
+  $: calendar = engine ? createCalendarApi(engine) : null;
   /** @type {Set<string>} */
   const reportedWarnings = new Set();
   let prevDatePickerType = datePickerType;
@@ -483,9 +488,9 @@
 
   /** The string flatpickr writes to the input for its current selection. */
   function formatSelectedDates() {
-    const { dateFormat, conjunction } = calendar.config;
-    return calendar.selectedDates
-      .map((date) => calendar.formatDate(date, dateFormat))
+    const { dateFormat, conjunction } = engine.config;
+    return engine.selectedDates
+      .map((date) => engine.formatDate(date, dateFormat))
       .join(conjunction);
   }
 
@@ -505,14 +510,14 @@
 
   function snapshotCloseBaseline() {
     dateStrAtOpen = currentDateStr();
-    selectedDatesAtOpen = (calendar?.selectedDates || []).map((date) =>
+    selectedDatesAtOpen = (engine?.selectedDates || []).map((date) =>
       date.getTime(),
     );
   }
 
   function refreshCloseBaselineOnOpen() {
     if (
-      selectedDatesChanged(selectedDatesAtOpen, calendar?.selectedDates || [])
+      selectedDatesChanged(selectedDatesAtOpen, engine?.selectedDates || [])
     ) {
       dateStrAtOpen = currentDateStr();
     } else {
@@ -524,7 +529,7 @@
    * @param {{ copySelectedDates?: boolean }} [options]
    */
   function buildCalendarDetail({ copySelectedDates = false } = {}) {
-    const dates = calendar?.selectedDates || [];
+    const dates = engine?.selectedDates || [];
     return {
       selectedDates: copySelectedDates ? [...dates] : dates,
       dateStr: currentDateStr(),
@@ -532,7 +537,7 @@
   }
 
   function dispatchDeferredClose() {
-    if (!calendar) return;
+    if (!engine) return;
 
     const detail = buildCalendarDetail({ copySelectedDates: true });
     syncRangeValues();
@@ -547,12 +552,12 @@
   }
 
   function attachFixedRepositionListeners() {
-    if (!calendar || onCalendarReposition) return;
+    if (!engine || onCalendarReposition) return;
     // Repositioning reads the calendar's children and the input's rect, so
     // coalesce to one pass per frame. Capture catches scroll on any ancestor;
     // passive tells the browser the handler never blocks scrolling.
     const reposition = rafThrottle(() => {
-      if (calendar) positionFlatpickrCalendarFixed(calendar);
+      if (engine) positionFlatpickrCalendarFixed(engine);
     });
     onCalendarReposition = reposition;
     unlistenReposition = addPooledListener(
@@ -637,7 +642,7 @@
    * @type {(data: { type: "input" | "change"; value: string }) => void}
    */
   function updateValue({ type, value }) {
-    if ((!calendar && type === "input") || type === "change") {
+    if ((!engine && type === "input") || type === "change") {
       inputValue.set(value);
     }
 
@@ -649,7 +654,7 @@
     }
 
     if (type === "change") {
-      if (calendar) {
+      if (engine) {
         dispatch("change", buildCalendarDetail());
       } else {
         dispatch("change", value);
@@ -698,8 +703,8 @@
    * would change the selection without a redraw.
    */
   function syncSelectedDatesFromCalendar() {
-    if (!calendar) return;
-    const next = calendar.selectedDates.map((date) => new Date(date));
+    if (!engine) return;
+    const next = engine.selectedDates.map((date) => new Date(date));
     if (!deepEqual(next, selectedDates)) selectedDates = next;
     prevSelectedDates = selectedDates;
   }
@@ -710,7 +715,7 @@
    */
   function applySelectedDates() {
     prevSelectedDates = selectedDates;
-    calendar.setDate([...selectedDates], false);
+    engine.setDate([...selectedDates], false);
     writeSelectionToValue();
   }
 
@@ -723,8 +728,8 @@
    */
   function writeSelectionToValue() {
     if ($range) {
-      const [from = "", to = ""] = calendar.selectedDates.map((date) =>
-        calendar.formatDate(date, calendar.config.dateFormat),
+      const [from = "", to = ""] = engine.selectedDates.map((date) =>
+        engine.formatDate(date, engine.config.dateFormat),
       );
       prevValueFrom = from;
       prevValueTo = to;
@@ -744,13 +749,13 @@
    * the prop reports the `"programmatic"` trigger, like Modal's.
    */
   function applyOpenProp() {
-    if (!calendar || usesInline || open === calendarOpen) return;
+    if (!engine || usesInline || open === calendarOpen) return;
     if (open) {
       if ($readonlyAny || $disabledAny) return;
-      calendar.open();
+      engine.open();
     } else {
       closeTrigger = "programmatic";
-      calendar.close();
+      engine.close();
     }
   }
 
@@ -760,12 +765,12 @@
    */
   function clear() {
     if ($readonlyAny || $disabledAny) return;
-    if (calendar) {
+    if (engine) {
       // The range plugin empties the end input on a timer, after `onChange`,
       // so the `change` detail would still carry the old end date.
       if ($range && inputRefTo) inputRefTo.value = "";
       // Fires `onChange`, which dispatches `change` like clearing by hand.
-      calendar.clear();
+      engine.clear();
       if ($range) {
         inputValueFrom.set("");
         inputValueTo.set("");
@@ -777,7 +782,7 @@
       dispatch("change", "");
     }
     dispatch("clear");
-    (calendar?.altInput ?? inputRef)?.focus();
+    (engine?.altInput ?? inputRef)?.focus();
   }
 
   // A form reset restores each input's DOM value without firing any event,
@@ -798,7 +803,7 @@
       // calendar.setDate right after this one.
       prevValueFrom = nextFrom;
       prevValueTo = nextTo;
-      if (calendar) calendar.setDate([nextFrom, nextTo]);
+      if (engine) engine.setDate([nextFrom, nextTo]);
       // calendar.setDate(["", ""]) only clears the FIRST input (a range
       // plugin quirk) — write both back explicitly and unconditionally,
       // even when the target is "".
@@ -815,8 +820,8 @@
     // turns `type="hidden"`, is never touched by a native reset at all —
     // browsers skip hidden inputs entirely — so reading `inputRef.value`
     // here would read the stale, pre-reset text back in instead.
-    const next = calendar?.altInput
-      ? calendar.altInput.value
+    const next = engine?.altInput
+      ? engine.altInput.value
       : (inputRef?.value ?? "");
     inputValue.set(next);
     prevValue = next;
@@ -824,7 +829,7 @@
     // (== inputRef, including the hidden named input in displayFormat mode)
     // and self.altInput.value, so — unlike the range branch above — no
     // extra manual DOM write is needed here.
-    if (calendar) calendar.setDate(next);
+    if (engine) engine.setDate(next);
     syncSelectedDatesFromCalendar();
   }
 
@@ -835,7 +840,7 @@
    * @param {EventTarget | null} target
    */
   function isIgnoredFocusElement(target) {
-    return (calendar?.config.ignoredFocusElements ?? []).some((element) =>
+    return (engine?.config.ignoredFocusElements ?? []).some((element) =>
       element.contains(/** @type {Node} */ (target)),
     );
   }
@@ -843,23 +848,21 @@
   function dismissCalendar(trigger) {
     if (!calendarOpen) return;
     closeTrigger = trigger;
-    if (calendar?.isOpen) calendar.close();
+    if (engine?.isOpen) engine.close();
   }
 
   /**
    * @type {(relatedTarget: EventTarget | null) => void}
    */
   function blurInput(relatedTarget) {
-    if (!calendar) return;
+    if (!engine) return;
     // No relatedTarget means focus left the document (e.g. switching browser
     // tabs); refocusing would replay the open animation.
     if (relatedTarget == null) return;
     // In range mode, focus moves between the two inputs while the calendar
     // stays open; closing here would replay the open animation on every switch.
     if (datePickerRef?.contains(/** @type {Node} */ (relatedTarget))) return;
-    if (
-      calendar.calendarContainer.contains(/** @type {Node} */ (relatedTarget))
-    )
+    if (engine.calendarContainer.contains(/** @type {Node} */ (relatedTarget)))
       return;
     if (isIgnoredFocusElement(relatedTarget)) return;
     dismissCalendar("outside-click");
@@ -869,7 +872,7 @@
    * @type {() => void}
    */
   function openCalendar() {
-    calendar.open();
+    engine.open();
   }
 
   /**
@@ -883,7 +886,7 @@
   function isFocusableDay(elem) {
     return (
       !!elem &&
-      calendar.calendarContainer.contains(elem) &&
+      engine.calendarContainer.contains(elem) &&
       !elem.classList.contains("hidden") &&
       !elem.classList.contains("flatpickr-disabled")
     );
@@ -895,19 +898,17 @@
    * @type {() => boolean}
    */
   function focusCalendar() {
-    if (!calendar) return false;
+    if (!engine) return false;
     // Escape (or programmatic close) leaves the calendar in the DOM but
     // hidden via CSS, so focusing its elements is a no-op unless it's
     // reopened first.
-    if (!calendar.isOpen) {
-      calendar.open();
+    if (!engine.isOpen) {
+      engine.open();
     }
     (
-      [calendar.selectedDateElem, calendar.todayDateElem].find(
-        isFocusableDay,
-      ) ||
-      calendar.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
-      calendar.calendarContainer
+      [engine.selectedDateElem, engine.todayDateElem].find(isFocusableDay) ||
+      engine.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
+      engine.calendarContainer
     ).focus();
     return true;
   }
@@ -946,18 +947,18 @@
     const rangeDates = [];
     const cursor = new Date(start);
     while (cursor.getTime() <= end.getTime()) {
-      if (calendar.isEnabled(cursor)) rangeDates.push(new Date(cursor));
+      if (engine.isEnabled(cursor)) rangeDates.push(new Date(cursor));
       cursor.setDate(cursor.getDate() + 1);
     }
 
     const existingTimes = new Set(
-      calendar.selectedDates.map((date) => date.getTime()),
+      engine.selectedDates.map((date) => date.getTime()),
     );
     const merged = [
-      ...calendar.selectedDates,
+      ...engine.selectedDates,
       ...rangeDates.filter((date) => !existingTimes.has(date.getTime())),
     ];
-    calendar.setDate(merged, true);
+    engine.setDate(merged, true);
   }
 
   /** @type {HTMLElement[]} */
@@ -977,7 +978,7 @@
    * @type {(event: MouseEvent) => void}
    */
   function updateRangePreview(event) {
-    if (!event.shiftKey || !multipleSelectAnchor || !calendar) {
+    if (!event.shiftKey || !multipleSelectAnchor || !engine) {
       clearRangePreview();
       return;
     }
@@ -997,7 +998,7 @@
         ? [multipleSelectAnchor, hoveredDate]
         : [hoveredDate, multipleSelectAnchor];
 
-    for (const el of calendar.calendarContainer.querySelectorAll(
+    for (const el of engine.calendarContainer.querySelectorAll(
       ".flatpickr-day",
     )) {
       const date = /** @type {any} */ (el).dateObj;
@@ -1046,7 +1047,7 @@
 
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
     if (optionChanged(prevAppliedOptions[optionKey], value)) {
-      calendar.set(optionKey, appliedValue);
+      engine.set(optionKey, appliedValue);
       prevAppliedOptions[optionKey] = value;
     }
   }
@@ -1061,8 +1062,8 @@
    * field directly and redraw.
    */
   function clearCalendarEnable() {
-    calendar.config._enable = undefined;
-    calendar.redraw();
+    engine.config._enable = undefined;
+    engine.redraw();
   }
 
   /** `disabledDates`/`enabledDates` win over the same key in `flatpickrProps`
@@ -1076,9 +1077,9 @@
     const hadOverride = prevDisabledDates.length > 0;
     prevDisabledDates = disabledDates;
     if (disabledDates.length > 0) {
-      calendar.set("disable", disabledDates);
+      engine.set("disable", disabledDates);
     } else if (hadOverride) {
-      calendar.set("disable", flatpickrProps.disable ?? []);
+      engine.set("disable", flatpickrProps.disable ?? []);
     }
   }
 
@@ -1087,10 +1088,10 @@
     const hadOverride = prevEnabledDates.length > 0;
     prevEnabledDates = enabledDates;
     if (enabledDates.length > 0) {
-      calendar.set("enable", enabledDates);
+      engine.set("enable", enabledDates);
     } else if (hadOverride) {
       if (flatpickrProps.enable) {
-        calendar.set("enable", flatpickrProps.enable);
+        engine.set("enable", flatpickrProps.enable);
       } else {
         clearCalendarEnable();
       }
@@ -1105,13 +1106,13 @@
    */
   function resolveInitialMonth() {
     if (initialMonth == null) return null;
-    const parsed = calendar.parseDate(initialMonth, dateFormat);
+    const parsed = engine.parseDate(initialMonth, dateFormat);
     if (!parsed) return null;
 
     let year = parsed.getFullYear();
     let month = parsed.getMonth();
     const { minDate: resolvedMinDate, maxDate: resolvedMaxDate } =
-      calendar.config;
+      engine.config;
     if (
       resolvedMaxDate &&
       monthValue(year, month) >
@@ -1136,22 +1137,22 @@
    * selection.
    */
   function applyInitialMonth() {
-    if (!calendar || calendar.selectedDates.length > 0) return;
+    if (!engine || engine.selectedDates.length > 0) return;
     if ($mode === "month" || $mode === "quarter" || $mode === "year") return;
     const target = resolveInitialMonth();
     if (!target) return;
-    calendar.jumpToDate(target, false);
+    engine.jumpToDate(target, false);
   }
 
   async function initCalendar(options) {
-    if (calendar) {
-      const selectionCount = calendar.selectedDates.length;
+    if (engine) {
+      const selectionCount = engine.selectedDates.length;
       applyOptionIfChanged("minDate", minDate);
       applyOptionIfChanged("maxDate", maxDate);
       // New bounds make flatpickr drop the selected dates they exclude and
       // rewrite the input, without an event. A prop write is not a user
       // change, so mirror the result without dispatching `change`.
-      if (calendar.selectedDates.length !== selectionCount) {
+      if (engine.selectedDates.length !== selectionCount) {
         writeSelectionToValue();
         syncSelectedDatesFromCalendar();
       }
@@ -1163,7 +1164,7 @@
       // `calendar.set("errorHandler", fn)` would replace Carbon's own
       // wrapper (see create-calendar.js), so the live handler is threaded
       // through separately instead of going through the generic loop below.
-      setErrorHandler(calendar, flatpickrProps.errorHandler);
+      setErrorHandler(engine, flatpickrProps.errorHandler);
       for (const [option, value] of Object.entries(flatpickrProps)) {
         // `static` is decided by `effectivePortalMenu` at creation time
         // (see below); re-applying the default `flatpickrProps.static`
@@ -1189,7 +1190,7 @@
         applyOptionIfChanged(
           option,
           value,
-          resolveOptionValue(calendar, option, value),
+          resolveOptionValue(engine, option, value),
         );
       }
       return;
@@ -1286,9 +1287,9 @@
       return;
     }
     pendingOptions = null;
-    calendar = created;
-    creationFailed = !calendar;
-    if (!calendar) return;
+    engine = created;
+    creationFailed = !engine;
+    if (!engine) return;
     // Record what the calendar was created with, then apply only what
     // changed in the meantime. Seeding this (rather than leaving it empty)
     // also keeps the first post-creation reactive run from treating
@@ -1310,7 +1311,7 @@
 
     // flatpickr fills the input from `flatpickrProps.defaultDate` without
     // firing events, so mirror it into `value` here.
-    if (calendar && !$range && $inputValue === "" && inputRef.value !== "") {
+    if (engine && !$range && $inputValue === "" && inputRef.value !== "") {
       prevValue = inputRef.value;
       inputValue.set(inputRef.value);
     }
@@ -1325,19 +1326,16 @@
     snapshotCloseBaseline();
     applyInitialMonth();
     if (open) applyOpenProp();
-    calendar?.calendarContainer?.setAttribute("role", "application");
-    calendar?.calendarContainer?.setAttribute(
-      "aria-label",
-      "calendar-container",
-    );
-    calendar.calendarContainer?.addEventListener(
+    engine?.calendarContainer?.setAttribute("role", "application");
+    engine?.calendarContainer?.setAttribute("aria-label", "calendar-container");
+    engine.calendarContainer?.addEventListener(
       "keydown",
       handleCalendarKeydown,
       { capture: true },
     );
-    if (calendar.config.inline) {
+    if (engine.config.inline) {
       for (const type of BLOCKED_EVENTS) {
-        calendar.calendarContainer?.addEventListener(
+        engine.calendarContainer?.addEventListener(
           type,
           handleBlockedInteraction,
           { capture: true },
@@ -1345,16 +1343,16 @@
       }
     }
     if ($mode === "multiple") {
-      calendar?.calendarContainer?.addEventListener(
+      engine?.calendarContainer?.addEventListener(
         "click",
         handleMultipleDayClick,
         { capture: true },
       );
-      calendar?.calendarContainer?.addEventListener(
+      engine?.calendarContainer?.addEventListener(
         "mouseover",
         updateRangePreview,
       );
-      calendar?.calendarContainer?.addEventListener(
+      engine?.calendarContainer?.addEventListener(
         "mouseleave",
         clearRangePreview,
       );
@@ -1401,14 +1399,14 @@
    * @param {KeyboardEvent} event
    */
   function keepFocusAfterEnter(event) {
-    if (!calendar?.isOpen) return;
+    if (!engine?.isOpen) return;
     const time = /** @type {any} */ (event.target)?.dateObj?.getTime();
     if (time === undefined) return;
     setTimeout(() => {
-      if (!calendar?.isOpen) return;
-      if (calendar.calendarContainer.contains(document.activeElement)) return;
+      if (!engine?.isOpen) return;
+      if (engine.calendarContainer.contains(document.activeElement)) return;
       const day = [
-        ...calendar.calendarContainer.querySelectorAll(".flatpickr-day"),
+        ...engine.calendarContainer.querySelectorAll(".flatpickr-day"),
       ].find(
         (el) =>
           /** @type {any} */ (el).dateObj?.getTime() === time &&
@@ -1426,48 +1424,48 @@
    * @param {KeyboardEvent} event
    */
   function handleCalendarEscape(event) {
-    if (!calendar?.isOpen) return;
+    if (!engine?.isOpen) return;
     // Also keeps flatpickr's own handler from closing (and firing `onClose`)
     // a second time, and keeps the key from reaching an enclosing Modal.
     event.stopImmediatePropagation();
     event.preventDefault();
     // Focus first, as flatpickr does: focusing the input after closing would
     // reopen it through `clickOpens`.
-    calendar._input.focus();
+    engine._input.focus();
     dismissCalendar("escape-key");
   }
 
   function destroyCalendar() {
     detachFixedRepositionListeners();
-    if (!calendar) return;
-    calendar.calendarContainer?.removeEventListener(
+    if (!engine) return;
+    engine.calendarContainer?.removeEventListener(
       "click",
       handleMultipleDayClick,
       { capture: true },
     );
-    calendar.calendarContainer?.removeEventListener(
+    engine.calendarContainer?.removeEventListener(
       "mouseover",
       updateRangePreview,
     );
-    calendar.calendarContainer?.removeEventListener(
+    engine.calendarContainer?.removeEventListener(
       "mouseleave",
       clearRangePreview,
     );
     window.removeEventListener("keyup", handleShiftKeyUp);
-    calendar.calendarContainer?.removeEventListener(
+    engine.calendarContainer?.removeEventListener(
       "keydown",
       handleCalendarKeydown,
       { capture: true },
     );
     for (const type of BLOCKED_EVENTS) {
-      calendar.calendarContainer?.removeEventListener(
+      engine.calendarContainer?.removeEventListener(
         type,
         handleBlockedInteraction,
         { capture: true },
       );
     }
-    calendar.destroy();
-    calendar = null;
+    engine.destroy();
+    engine = null;
     calendarOpen = false;
   }
 
@@ -1485,13 +1483,13 @@
   onMount(() => destroyCalendar);
 
   afterUpdate(() => {
-    if (calendar) {
+    if (engine) {
       if ($range) {
         if (
           $inputValueFrom !== prevValueFrom ||
           $inputValueTo !== prevValueTo
         ) {
-          calendar.setDate([$inputValueFrom, $inputValueTo]);
+          engine.setDate([$inputValueFrom, $inputValueTo]);
           prevValueFrom = $inputValueFrom;
           prevValueTo = $inputValueTo;
 
@@ -1509,7 +1507,7 @@
         // Re-parsing it would wipe the selection when a custom
         // `formatDate` emits text that `dateFormat` cannot parse.
         if ($inputValue !== formatSelectedDates()) {
-          calendar.setDate($inputValue);
+          engine.setDate($inputValue);
           syncSelectedDatesFromCalendar();
         }
         prevValue = $inputValue;
@@ -1525,10 +1523,10 @@
   ) {
     prevMinRangeDays = minRangeDays;
     prevMaxRangeDays = maxRangeDays;
-    if (calendar?.selectedDates.length === 1) calendar.redraw();
+    if (engine?.selectedDates.length === 1) engine.redraw();
   }
-  $: if (calendar && selectedDates !== prevSelectedDates) {
-    if (deepEqual(selectedDates, calendar.selectedDates)) {
+  $: if (engine && selectedDates !== prevSelectedDates) {
+    if (deepEqual(selectedDates, engine.selectedDates)) {
       prevSelectedDates = selectedDates;
     } else {
       applySelectedDates();
@@ -1548,16 +1546,16 @@
   $: valueFrom = $inputValueFrom;
   $: inputValueTo.set(valueTo);
   $: valueTo = $inputValueTo;
-  $: if (calendar && initialMonthChanged(initialMonth, prevInitialMonth)) {
+  $: if (engine && initialMonthChanged(initialMonth, prevInitialMonth)) {
     prevInitialMonth = initialMonth;
     applyInitialMonth();
   }
   $: interactionBlocked = $readonlyAny || $disabledAny;
-  $: if (calendar?.config.inline) {
+  $: if (engine?.config.inline) {
     if (interactionBlocked) {
-      calendar.calendarContainer.setAttribute("aria-disabled", "true");
+      engine.calendarContainer.setAttribute("aria-disabled", "true");
     } else {
-      calendar.calendarContainer.removeAttribute("aria-disabled");
+      engine.calendarContainer.removeAttribute("aria-disabled");
     }
   }
   // The range plugin writes to two inputs and has no alt input for the second.
@@ -1570,9 +1568,9 @@
     recreateCalendar();
   } else if (usesDisplayFormat && displayFormat !== prevDisplayFormat) {
     prevDisplayFormat = displayFormat;
-    if (calendar) {
-      calendar.set("altFormat", displayFormat);
-      calendar.setDate(calendar.selectedDates, false);
+    if (engine) {
+      engine.set("altFormat", displayFormat);
+      engine.setDate(engine.selectedDates, false);
     }
   }
   // This re-runs whenever `flatpickrProps` is handed over again, even with
@@ -1647,10 +1645,10 @@
   };
   // Each `calendar.set` rebuilds the day grid, so only apply a real change.
   // The calendar is created with these values already.
-  $: if (calendar) {
+  $: if (engine) {
     applyOptionIfChanged("clickOpens", interactive.clickOpens);
     applyOptionIfChanged("allowInput", interactive.allowInput);
-    if ($readonlyAny && calendar.isOpen) calendar.close();
+    if ($readonlyAny && engine.isOpen) engine.close();
   }
 
   /**
@@ -1660,11 +1658,11 @@
    * @param {Event} event
    */
   function isOutsideCalendarTarget(event) {
-    if (!calendarOpen || !calendar) return false;
+    if (!calendarOpen || !engine) return false;
     if (isIgnoredFocusElement(event.target)) return false;
     return !isEventTargetInsidePortaledCalendar(
       datePickerRef,
-      calendar.calendarContainer,
+      engine.calendarContainer,
       event.target,
       topLayerAncestor,
     );
@@ -1733,7 +1731,7 @@
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--inline={usesInline && $hasCalendar}
     on:keydown={(event) => {
-      if (calendar?.isOpen && event.key === "Escape") {
+      if (engine?.isOpen && event.key === "Escape") {
         event.stopPropagation();
         dismissCalendar("escape-key");
       }
