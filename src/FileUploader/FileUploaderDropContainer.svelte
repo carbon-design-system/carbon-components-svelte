@@ -147,7 +147,8 @@
         .map((file) => ({ file, reason: /** @type {const} */ ("invalid") })),
     ];
     if (rejected.length > 0) dispatch("rejected", rejected);
-    files = multiple ? [...files, ...validated] : validated;
+    // Cap single mode after validation, so it keeps the first valid file.
+    files = multiple ? [...files, ...validated] : validated.slice(0, 1);
     dispatch("add", files);
     dispatch("change", files);
   }

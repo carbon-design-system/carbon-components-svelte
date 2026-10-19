@@ -154,6 +154,24 @@ describe("FileUploaderDropContainer", () => {
     expect(fileNames(input)).toEqual(["small.txt"]);
   });
 
+  it("should keep only the first valid dropped file when multiple is false", async () => {
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: { maxFileSize: 10, onchange: changeHandler },
+    });
+
+    dropFiles(container, [
+      makeFile("large.txt", 20),
+      makeFile("a.txt", 1),
+      makeFile("b.txt", 1),
+    ]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+    expect(fileNames(getFileInput(container))).toEqual(["a.txt"]);
+  });
+
   describe("native input sync", () => {
     it("leaves files rejected from a browse pick out of the native input", async () => {
       const changeHandler = vi.fn();
