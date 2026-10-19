@@ -102,6 +102,18 @@ describe("SwitchPanel", () => {
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Content 1");
   });
 
+  it("re-pairs the remaining panels when a panel unmounts", async () => {
+    const { rerender } = await renderAndFlush(ContentSwitcherPanels);
+
+    await rerender({ showFirstPanel: false });
+    await tick();
+    await tick();
+
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs[0]).toHaveAttribute("aria-controls", "two-panel");
+    expect(tabs[1]).toHaveAttribute("aria-controls", "three-panel");
+  });
+
   it("mounts every panel's content by default", async () => {
     await renderAndFlush(ContentSwitcherPanels);
 

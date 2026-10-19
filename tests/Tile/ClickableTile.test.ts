@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ClickableTile from "./ClickableTile.test.svelte";
 import ClickableTileButton from "./ClickableTileButton.test.svelte";
@@ -25,6 +25,16 @@ describe("ClickableTile", () => {
     const tile = screen.getByText("Link with other attributes");
     expect(tile).toHaveAttribute("target", "_blank");
     expect(tile).toHaveAttribute("title", "");
+  });
+
+  it("adds rel for target=_blank only", () => {
+    render(ClickableTile);
+
+    expect(screen.getByText("Link with other attributes")).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(screen.getByText("Link only")).not.toHaveAttribute("rel");
   });
 
   it("should toggle clicked state on click", async () => {
@@ -65,6 +75,17 @@ describe("ClickableTile", () => {
     await user.keyboard(key);
 
     expect(onClick).toHaveBeenCalled();
+  });
+
+  it("cancels the default action of Space so the page does not scroll", async () => {
+    render(ClickableTile);
+
+    const notCanceled = await fireEvent.keyDown(
+      screen.getByTestId("click-test"),
+      { key: " " },
+    );
+
+    expect(notCanceled).toBe(false);
   });
 
   it("should not toggle clicked state when disabled", async () => {

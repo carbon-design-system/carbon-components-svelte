@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import { optionTexts } from "./helpers";
 import Pagination from "./Pagination.test.svelte";
@@ -27,6 +28,21 @@ describe("Pagination", () => {
     await user.click(screen.getByRole("button", { name: "Previous page" }));
     expect(onUpdate).toHaveBeenCalledTimes(1);
     expect(onUpdate).toHaveBeenCalledWith({ pageSize: 10, page: 1 });
+  });
+
+  it("clamps the page and reports it once when totalItems shrinks below it", async () => {
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
+    const { rerender } = render(Pagination, {
+      props: { totalItems: 100, page: 8, pageSize: 10, onChange, onUpdate },
+    });
+
+    await rerender({ totalItems: 15 });
+
+    expect(screen.getByText("11–15 of 15 items")).toBeInTheDocument();
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 10, page: 2 });
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -176,6 +192,24 @@ describe("Pagination", () => {
 
     expect(nextButton).toBeDisabled();
     expect(prevButton).toHaveFocus();
+  });
+
+  it("leaves focus on the body when a disabled button was clicked without focus", async () => {
+    render(Pagination, {
+      props: { page: 1, totalItems: 20, pageSize: 10 },
+    });
+
+    const prevButton = screen.getByRole("button", { name: "Previous page" });
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+
+    // A click that never focused the button, as in Safari.
+    (document.activeElement as HTMLElement | null)?.blur();
+    await fireEvent.click(nextButton);
+    await flushMacrotask();
+
+    expect(nextButton).toBeDisabled();
+    expect(prevButton).not.toHaveFocus();
+    expect(document.body).toHaveFocus();
   });
 
   it("should handle custom button text", () => {
@@ -472,6 +506,21 @@ describe("Pagination", () => {
 
     const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
     expect(pageNumbers).toHaveLength(length);
+  });
+
+  it.each([
+    { page: 1, first: "1", last: "100" },
+    { page: 5000, first: "4950", last: "5049" },
+    { page: 9990, first: "9901", last: "10000" },
+  ])("windows the page options around page $page", ({ page, first, last }) => {
+    render(Pagination, {
+      props: { totalItems: 100_000, pageWindow: 100, page },
+    });
+
+    const select = screen.getByLabelText(/Page number, of 10000 pages/);
+    const options = optionTexts(select);
+    expect([options[0], options[options.length - 1]]).toEqual([first, last]);
+    expect(select).toHaveValue(String(page));
   });
 
   it("formats larger numbers using `toLocaleString`", () => {

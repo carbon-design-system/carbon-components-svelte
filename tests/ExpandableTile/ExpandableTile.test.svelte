@@ -18,6 +18,7 @@
   export let ref: ComponentProps<ExpandableTile>["ref"] = null;
   export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
     () => {};
+  export let onClick: (e: MouseEvent) => void = () => {};
   export let onKeydown: (e: KeyboardEvent) => void = () => {};
   export let onMouseover: (e: MouseEvent) => void = () => {};
   export let onMouseenter: (e: MouseEvent) => void = () => {};
@@ -37,7 +38,7 @@
   bind:ref
   on:toggle={onToggle}
   on:keydown={onKeydown}
-  on:click
+  on:click={onClick}
   on:keypress
   on:mouseover={onMouseover}
   on:mouseenter={onMouseenter}

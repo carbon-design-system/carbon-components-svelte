@@ -121,6 +121,36 @@ describe("TileGroup", () => {
     }
   });
 
+  it("applies a group name set after mount to every tile", async () => {
+    const { rerender } = render(TileGroup, { props: { name: "tier" } });
+
+    await rerender({ name: "plan" });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "plan");
+    }
+  });
+
+  it("associates every tile with a form set after mount", async () => {
+    const { rerender } = render(TileGroup);
+
+    await rerender({ form: "outer-form" });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("form", "outer-form");
+    }
+  });
+
+  it("requires every tile once required is set after mount", async () => {
+    const { rerender } = render(TileGroup);
+
+    await rerender({ required: true });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toBeRequired();
+    }
+  });
+
   it("generates a different name per group", () => {
     render(TileGroupTwoGroups);
 

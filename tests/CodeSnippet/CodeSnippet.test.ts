@@ -397,6 +397,53 @@ describe("CodeSnippet", () => {
     expect(screen.getByText("Show more")).toBeInTheDocument();
   });
 
+  it.each([
+    { props: { maxCollapsedNumberOfRows: 0 }, canExpand: false },
+    {
+      props: { maxCollapsedNumberOfRows: 5, maxExpandedNumberOfRows: 5 },
+      canExpand: false,
+    },
+    {
+      props: { maxCollapsedNumberOfRows: 5, maxExpandedNumberOfRows: 3 },
+      canExpand: false,
+    },
+    {
+      props: { maxCollapsedNumberOfRows: 5, maxExpandedNumberOfRows: 6 },
+      canExpand: true,
+    },
+    {
+      props: { maxCollapsedNumberOfRows: 5, maxExpandedNumberOfRows: 0 },
+      canExpand: true,
+    },
+  ])(
+    "shows Show more only when expanding reveals more rows ($props)",
+    async ({ props, canExpand }) => {
+      mockSnippetOverflowHeight(1000);
+      render(CodeSnippet, {
+        props: { type: "multi", code: longCode, ...props },
+      });
+      await waitForSnippetMeasurement();
+
+      if (canExpand) {
+        expect(await screen.findByText("Show more")).toBeInTheDocument();
+      } else {
+        expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+      }
+    },
+  );
+
+  it("disables the Show more button when disabled", async () => {
+    mockSnippetOverflowHeight();
+    render(CodeSnippet, {
+      props: { type: "multi", disabled: true, code: longCode },
+    });
+    await waitForSnippetMeasurement();
+
+    expect(
+      await screen.findByRole("button", { name: /Show more/ }),
+    ).toBeDisabled();
+  });
+
   // Regression: an emptied <pre> still has its padding box, so it must clear
   // the expand control; only a hidden snippet (no box) keeps its state.
   it("drops show more when the code is cleared, but not while hidden", async () => {
@@ -625,6 +672,38 @@ describe("CodeSnippet", () => {
     });
   });
 
+  it.each([
+    {
+      name: "minExpandedNumberOfRows 0 sets no min-height",
+      props: { expanded: true, minExpandedNumberOfRows: 0 },
+      expected: { "min-height": "", "max-height": "none" },
+    },
+    {
+      name: "maxExpandedNumberOfRows 0 sets max-height none",
+      props: { expanded: true, maxExpandedNumberOfRows: 0 },
+      expected: { "min-height": "256px", "max-height": "none" },
+    },
+    {
+      name: "collapsed rows of 0 set neither",
+      props: { minCollapsedNumberOfRows: 0, maxCollapsedNumberOfRows: 0 },
+      expected: { "min-height": "", "max-height": "" },
+    },
+  ])(
+    "treats zero row counts as no constraint ($name)",
+    async ({ props, expected }) => {
+      mockSnippetOverflowHeight(1000);
+      const { container } = render(CodeSnippet, {
+        props: { type: "multi", code: longCode, ...props },
+      });
+      await waitForSnippetMeasurement();
+
+      expectInlineStyle(
+        container.querySelector(".bx--snippet-container"),
+        expected,
+      );
+    },
+  );
+
   it("scrolls overflowing content when showMoreLess is false", async () => {
     mockSnippetOverflowHeight();
     const { container } = render(CodeSnippet, {
@@ -669,6 +748,78 @@ describe("CodeSnippet", () => {
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
     expect(screen.getByRole("status")).toHaveTextContent("Custom copied text!");
+  });
+
+  it("shows custom feedback on the inline variant", async () => {
+    mockClipboard();
+    render(CodeSnippet, {
+      props: { ...inlineProps, feedback: "Inline done!" },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Copy code" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent("Inline done!");
+  });
+
+  it.each(snippetVariants)(
+    "shows custom errorFeedback when copying fails ($type)",
+    async ({ type, label }) => {
+      render(CodeSnippet, {
+        props: {
+          type,
+          code: singleCode,
+          copy: () => Promise.reject(new Error("nope")),
+          errorFeedback: "Custom failure",
+        },
+      });
+
+      await user.click(screen.getByLabelText(label));
+
+      expect(screen.getByRole("status")).toHaveTextContent("Custom failure");
+    },
+  );
+
+  describe("inline feedback animation", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("fades out after the timeout and re-enables copy on animationend", async () => {
+      const copy = vi.fn();
+      render(CodeSnippet, {
+        props: {
+          ...inlineProps,
+          copy,
+          portalTooltip: false,
+          feedbackTimeout: 100,
+        },
+      });
+      const button = screen.getByRole("button", { name: "Copy code" });
+
+      await fireEvent.click(button);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(button).toHaveClass("bx--copy-btn--fade-out");
+
+      // Blocked while the fade-out animation is still running.
+      await fireEvent.click(button);
+      expect(copy).toHaveBeenCalledTimes(1);
+
+      // jsdom-like environments may lack AnimationEvent, so set the name directly.
+      await fireEvent(
+        button,
+        Object.assign(new Event("animationend", { bubbles: true }), {
+          animationName: "hide-feedback",
+        }),
+      );
+      expect(button).not.toHaveClass("bx--copy-btn--animating");
+
+      await fireEvent.click(button);
+      expect(copy).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe("copying without code", () => {
@@ -781,6 +932,31 @@ describe("CodeSnippet", () => {
       expect(snippet).toHaveAttribute("aria-readonly", "true");
       expect(snippet?.getAttribute("aria-multiline")).toBe(multiline);
       expect(snippet?.getAttribute("tabindex")).toBe(tabindex);
+    },
+  );
+
+  it.each(["single", "multi"] as const)(
+    "removes the copy button when hideCopyButton is true ($type)",
+    (type) => {
+      const { container } = render(CodeSnippet, {
+        props: { type, hideCopyButton: true, code: singleCode },
+      });
+
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+      expect(container.querySelector(".bx--snippet")).toHaveClass(
+        "bx--snippet--no-copy",
+      );
+    },
+  );
+
+  it.each(["single", "multi"] as const)(
+    "disables the copy button when disabled ($type)",
+    (type) => {
+      render(CodeSnippet, {
+        props: { type, disabled: true, code: singleCode },
+      });
+
+      expect(screen.getByLabelText("Copy to clipboard")).toBeDisabled();
     },
   );
 

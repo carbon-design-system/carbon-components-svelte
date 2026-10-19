@@ -9,6 +9,7 @@
   export let disabled: ComponentProps<TileGroup>["disabled"] = false;
   export let required: ComponentProps<TileGroup>["required"] = undefined;
   export let name: ComponentProps<TileGroup>["name"] = undefined;
+  export let form: ComponentProps<TileGroup>["form"] = undefined;
   export let legendText: ComponentProps<TileGroup>["legendText"] = "";
   export let hideLegend: ComponentProps<TileGroup>["hideLegend"] = false;
   export let customClass = "";
@@ -20,6 +21,7 @@
   {disabled}
   {required}
   {name}
+  {form}
   {legendText}
   {hideLegend}
   class={customClass}

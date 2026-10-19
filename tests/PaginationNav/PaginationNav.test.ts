@@ -2,6 +2,23 @@ import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
 
+/** Page numbers of the rendered page buttons, in DOM order. */
+function renderedPages(container: HTMLElement) {
+  return Array.from(container.querySelectorAll("button[data-page]")).map(
+    (button) => Number(button.getAttribute("data-page")),
+  );
+}
+
+/** "first-last" of each overflow select's options, in DOM order. */
+function overflowRanges(container: HTMLElement) {
+  return Array.from(container.querySelectorAll("select")).map((select) => {
+    const pages = Array.from(select.querySelectorAll("option[data-page]")).map(
+      (option) => option.getAttribute("data-page"),
+    );
+    return `${pages[0]}-${pages[pages.length - 1]}`;
+  });
+}
+
 describe("PaginationNav", () => {
   it("should render with default props", () => {
     render(PaginationNav);
@@ -171,6 +188,76 @@ describe("PaginationNav", () => {
     // First page, the window around the current page (bounded by
     // `shown`), and the last page — with overflow selects in between.
     expect(pages).toEqual([1, 48, 49, 50, 51, 52, 53, 100]);
+  });
+
+  it("wraps from the first page to the last and back when looping", async () => {
+    const onChange = vi.fn();
+    const onPrevious = vi.fn();
+    const onNext = vi.fn();
+    render(PaginationNav, {
+      props: { loop: true, page: 1, total: 5, onChange, onPrevious, onNext },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Previous page" }));
+    expect(onPrevious).toHaveBeenCalledWith({ page: 5 });
+    expect(onChange).toHaveBeenLastCalledWith({ page: 5 });
+    expect(screen.getByText("Page 5 of 5")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Next page" }));
+    expect(onNext).toHaveBeenCalledWith({ page: 1 });
+    expect(onChange).toHaveBeenLastCalledWith({ page: 1 });
+    expect(screen.getByText("Page 1 of 5")).toBeInTheDocument();
+  });
+
+  it.each([
+    { shown: 4, page: 10, pages: [10, 20], overflows: ["1-9", "11-19"] },
+    { shown: 4, page: 19, pages: [18, 19, 20], overflows: ["1-17"] },
+    { shown: 3, page: 10, pages: [10, 20], overflows: ["1-9", "11-19"] },
+    { shown: 5, page: 19, pages: [1, 18, 19, 20], overflows: ["2-17"] },
+  ])(
+    "lists pages $pages and overflows $overflows for page $page shown $shown",
+    ({ shown, page, pages, overflows }) => {
+      const { container } = render(PaginationNav, {
+        props: { total: 20, shown, page },
+      });
+
+      expect(renderedPages(container)).toEqual(pages);
+      expect(overflowRanges(container)).toEqual(overflows);
+    },
+  );
+
+  it("reaches every page and marks exactly one active at every window size", () => {
+    for (let total = 1; total <= 12; total++) {
+      for (let shown = 1; shown <= 8; shown++) {
+        for (let page = 1; page <= total; page++) {
+          const { container, unmount } = render(PaginationNav, {
+            props: { total, shown, page },
+          });
+
+          const pages = renderedPages(container);
+          const overflow = Array.from(
+            container.querySelectorAll("select option[data-page]"),
+          ).map((option) => Number(option.getAttribute("data-page")));
+          const where = `total ${total}, shown ${shown}, page ${page}`;
+
+          expect([where, pages]).toEqual([
+            where,
+            [...new Set(pages)].sort((a, b) => a - b),
+          ]);
+          expect([
+            where,
+            [...pages, ...overflow].sort((a, b) => a - b),
+          ]).toEqual([where, Array.from({ length: total }, (_, i) => i + 1)]);
+          expect(container.querySelectorAll("[aria-current]")).toHaveLength(1);
+          expect(
+            container
+              .querySelector("[aria-current]")
+              ?.getAttribute("data-page"),
+          ).toBe(String(page));
+          unmount();
+        }
+      }
+    }
   });
 
   it("should handle overflow selection", async () => {

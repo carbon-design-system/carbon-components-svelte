@@ -8,6 +8,7 @@
   export let selected: ComponentProps<SelectableTileGroup>["selected"] = [];
   export let disabled: ComponentProps<SelectableTileGroup>["disabled"] = false;
   export let name: ComponentProps<SelectableTileGroup>["name"] = undefined;
+  export let form: ComponentProps<SelectableTileGroup>["form"] = undefined;
   export let legendText: ComponentProps<SelectableTileGroup>["legendText"] = "";
   export let hideLegend: ComponentProps<SelectableTileGroup>["hideLegend"] = false;
   export let customClass = "";
@@ -20,6 +21,7 @@
   bind:selected
   {disabled}
   {name}
+  {form}
   {legendText}
   {hideLegend}
   class={customClass}

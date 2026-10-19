@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type SelectableTileComponent from "carbon-components-svelte/Tile/SelectableTile.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
+import SelectableTileKeyboard from "./SelectableTile.keyboard.test.svelte";
 import SelectableTileTest from "./SelectableTile.test.svelte";
 import SelectableTileChange from "./SelectableTileChange.test.svelte";
 import SelectableTileStandalone from "./SelectableTileStandalone.test.svelte";
@@ -133,6 +134,17 @@ describe("SelectableTile", () => {
 
       await user.click(screen.getByRole("checkbox"));
       expect(onChange).toHaveBeenLastCalledWith(false, false);
+    });
+
+    it("selects with Enter without submitting the form", async () => {
+      const onSubmit = vi.fn();
+      render(SelectableTileKeyboard, { props: { onSubmit } });
+
+      screen.getByRole("checkbox").focus();
+      await user.keyboard("{Enter}");
+
+      expect(screen.getByRole("checkbox")).toBeChecked();
+      expect(onSubmit).not.toHaveBeenCalled();
     });
 
     it("toggles once when Enter is held down", async () => {
