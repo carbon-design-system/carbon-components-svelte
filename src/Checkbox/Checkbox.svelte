@@ -176,7 +176,13 @@
   $: if (useGroup) checked = group.includes(value);
 
   $: effectiveName = ctx ? ($groupName ?? name) : name;
-  $: effectiveRequired = ctx ? ($groupRequired ?? required) : required;
+  // Native validation requires every `required` checkbox. A required group
+  // needs only one, so require every box until one is checked.
+  $: effectiveRequired = ctx
+    ? $groupRequired
+      ? $selectedValues.length === 0
+      : ($groupRequired ?? required)
+    : required;
   $: effectiveReadonly = $groupReadonly || readonly;
   $: effectiveInvalid = $groupInvalid || invalid;
   $: effectiveWarn = $groupWarn || warn;
