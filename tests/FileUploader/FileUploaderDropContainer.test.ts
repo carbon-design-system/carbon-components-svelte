@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
 import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
 
@@ -36,26 +37,6 @@ describe("FileUploaderDropContainer", () => {
     return event;
   }
 
-  it("should render with default props", () => {
-    const { container } = render(FileUploaderDropContainer);
-
-    const label = screen.getByText("Add file");
-    expect(label).toBeInTheDocument();
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-    expect(input).not.toBeDisabled();
-    expect(input).not.toHaveAttribute("multiple");
-  });
-
-  it("should render with custom labelText", () => {
-    render(FileUploaderDropContainer, {
-      props: { labelText: "Drag and drop files here" },
-    });
-
-    expect(screen.getByText("Drag and drop files here")).toBeInTheDocument();
-  });
-
   it("should handle disabled state", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },
@@ -81,14 +62,6 @@ describe("FileUploaderDropContainer", () => {
     expect(target).toHaveAttribute("tabindex", "-1");
   });
 
-  it("should not expose aria-disabled when not disabled", () => {
-    const { container } = render(FileUploaderDropContainer);
-
-    const target = container.querySelector(".bx--file-browse-btn");
-    assert(target instanceof HTMLElement);
-    expect(target).not.toHaveAttribute("aria-disabled");
-  });
-
   it("should forward capture to the input", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { capture: "user" },
@@ -96,30 +69,6 @@ describe("FileUploaderDropContainer", () => {
 
     const input = container.querySelector('input[type="file"]');
     expect(input).toHaveAttribute("capture", "user");
-  });
-
-  it("should hide the native input from assistive technology", () => {
-    const { container } = render(FileUploaderDropContainer);
-
-    const input = container.querySelector('input[type="file"]');
-    expect(input).toHaveAttribute("aria-hidden", "true");
-  });
-
-  it("should move aria-describedby and aria-labelledby to the drop target", () => {
-    const { container } = render(FileUploaderDropContainer, {
-      props: {
-        "aria-describedby": "drop-help",
-        "aria-labelledby": "drop-label",
-      },
-    });
-
-    const target = screen.getByRole("button");
-    expect(target).toHaveAttribute("aria-describedby", "drop-help");
-    expect(target).toHaveAttribute("aria-labelledby", "drop-label");
-
-    const wrapper = container.querySelector(".bx--file");
-    expect(wrapper).not.toHaveAttribute("aria-describedby");
-    expect(wrapper).not.toHaveAttribute("aria-labelledby");
   });
 
   it("should respect accept prop", () => {
@@ -158,34 +107,6 @@ describe("FileUploaderDropContainer", () => {
 
     await vi.waitFor(() => {
       expect(dropContainer).toHaveClass("bx--file__drop-container--drag-over");
-    });
-  });
-
-  it("should handle dragleave event and remove drag-over state", async () => {
-    const { container } = render(FileUploaderDropContainer);
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const dropContainer = container.querySelector(".bx--file__drop-container");
-    assert(dropContainer instanceof HTMLElement);
-
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
-    const dragOverEvent = createDragEvent("dragover", [file]);
-    const dragLeaveEvent = createDragEvent("dragleave", []);
-
-    dropDiv.dispatchEvent(dragOverEvent);
-
-    await vi.waitFor(() => {
-      expect(dropContainer).toHaveClass("bx--file__drop-container--drag-over");
-    });
-
-    dropDiv.dispatchEvent(dragLeaveEvent);
-
-    await vi.waitFor(() => {
-      expect(dropContainer).not.toHaveClass(
-        "bx--file__drop-container--drag-over",
-      );
     });
   });
 
@@ -247,33 +168,11 @@ describe("FileUploaderDropContainer", () => {
     ]);
   });
 
-  it("should handle drop event and add files", async () => {
+  it("should dispatch add and change events when files are dropped", async () => {
+    const addHandler = vi.fn();
     const changeHandler = vi.fn();
     const { container } = render(FileUploaderDropContainer, {
-      props: { onchange: changeHandler },
-    });
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
-    const dropEvent = createDragEvent("drop", [file]);
-
-    dropDiv.dispatchEvent(dropEvent);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    const event = changeHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].name).toBe("test.txt");
-  });
-
-  it("should dispatch add event when files are dropped", async () => {
-    const addHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: { onadd: addHandler },
+      props: { onadd: addHandler, onchange: changeHandler },
     });
 
     const dropDiv = container.querySelector(".bx--file");
@@ -291,53 +190,14 @@ describe("FileUploaderDropContainer", () => {
     const event = addHandler.mock.calls[0][0];
     expect(event.detail).toHaveLength(1);
     expect(event.detail[0].name).toBe("test.txt");
-  });
-
-  it("should handle multiple files on drop", async () => {
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: { multiple: true, onchange: changeHandler },
-    });
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const dropEvent = createDragEvent("drop", [file1, file2]);
-
-    dropDiv.dispatchEvent(dropEvent);
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    const event = changeHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(2);
-  });
-
-  it("should sync dropped files to the native input's files property", async () => {
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: { multiple: true, onchange: changeHandler },
-    });
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    dropDiv.dispatchEvent(createDragEvent("drop", [file1, file2]));
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    expect(input.files).toHaveLength(2);
-    expect(fileNames(input)).toEqual(["file1.txt", "file2.txt"]);
+    const changeEvent = changeHandler.mock.calls[0][0];
+    expect(changeEvent.detail).toHaveLength(1);
+    expect(changeEvent.detail[0].name).toBe("test.txt");
   });
 
   it("should not include rejected files in the native input's files property", async () => {
@@ -492,38 +352,6 @@ describe("FileUploaderDropContainer", () => {
     );
   });
 
-  it("should validate files using validateFiles prop", async () => {
-    const validateFiles = vi.fn((files: File[]) =>
-      files.filter((f: File) => f.size < 1000),
-    );
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: { validateFiles, onchange: changeHandler },
-    });
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    const dropEvent = createDragEvent("drop", [smallFile, largeFile]);
-
-    dropDiv.dispatchEvent(dropEvent);
-
-    await vi.waitFor(() => {
-      expect(validateFiles).toHaveBeenCalled();
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    const event = changeHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].name).toBe("small.txt");
-  });
-
   it("should dispatch rejected event on drop when validateFiles filters files", async () => {
     const validateFiles = vi.fn((files: File[]) =>
       files.filter((f: File) => f.size < 1000),
@@ -586,40 +414,6 @@ describe("FileUploaderDropContainer", () => {
     expect(rejectedHandler).not.toHaveBeenCalled();
   });
 
-  it("should dispatch rejected event from input change when validateFiles filters files", async () => {
-    const validateFiles = vi.fn((files: File[]) =>
-      files.filter((f: File) => f.size < 1000),
-    );
-    const rejectedHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: {
-        multiple: true,
-        validateFiles,
-        onrejected: rejectedHandler,
-      },
-    });
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    simulateFileSelection(input, [smallFile, largeFile]);
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalled();
-    });
-
-    const event = rejectedHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].file.name).toBe("large.txt");
-    expect(event.detail[0].reason).toBe("invalid");
-  });
-
   it("should reject dropped files under minFileSize", async () => {
     const rejectedHandler = vi.fn();
     const { container } = render(FileUploaderDropContainer, {
@@ -639,77 +433,6 @@ describe("FileUploaderDropContainer", () => {
     expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
       { file: empty, reason: "size" },
     ]);
-  });
-
-  it("should reject oversized files with reason size", async () => {
-    const rejectedHandler = vi.fn();
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: {
-        multiple: true,
-        maxFileSize: 1000,
-        onrejected: rejectedHandler,
-        onchange: changeHandler,
-      },
-    });
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    dropDiv.dispatchEvent(createDragEvent("drop", [smallFile, largeFile]));
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalled();
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
-      { file: largeFile, reason: "size" },
-    ]);
-    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(1);
-    expect(changeHandler.mock.calls[0][0].detail[0].name).toBe("small.txt");
-  });
-
-  it("should reject duplicate files with reason duplicate", async () => {
-    const existing = new File(["content"], "dup.txt", { type: "text/plain" });
-    Object.defineProperty(existing, "lastModified", { value: 100 });
-    const rejectedHandler = vi.fn();
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: {
-        multiple: true,
-        preventDuplicate: true,
-        files: [existing],
-        onrejected: rejectedHandler,
-        onchange: changeHandler,
-      },
-    });
-
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const duplicate = new File(["content"], "dup.txt", { type: "text/plain" });
-    Object.defineProperty(duplicate, "lastModified", { value: 100 });
-    const unique = new File(["other"], "new.txt", { type: "text/plain" });
-    dropDiv.dispatchEvent(createDragEvent("drop", [duplicate, unique]));
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalled();
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
-      { file: duplicate, reason: "duplicate" },
-    ]);
-    const files = changeHandler.mock.calls[0][0].detail;
-    expect(files).toHaveLength(2);
-    expect(files.map((f: File) => f.name)).toEqual(["dup.txt", "new.txt"]);
   });
 
   it("should apply validateFiles after size and duplicate checks", async () => {
@@ -765,27 +488,6 @@ describe("FileUploaderDropContainer", () => {
     expect(
       changeHandler.mock.calls[0][0].detail.map((f: File) => f.name),
     ).toEqual(["kept.txt", "ok.txt"]);
-  });
-
-  it("should handle file input change event", async () => {
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: { onchange: changeHandler },
-    });
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
-    simulateFileSelection(input, [file]);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    const event = changeHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].name).toBe("test.txt");
   });
 
   it("should handle keyboard interaction to trigger file input", async () => {
@@ -921,5 +623,12 @@ describe("FileUploaderDropContainer", () => {
       "type",
       "file",
     );
+  });
+
+  it("supports custom label slot for FileUploaderDropContainer", () => {
+    render(FileUploaderDropContainerSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

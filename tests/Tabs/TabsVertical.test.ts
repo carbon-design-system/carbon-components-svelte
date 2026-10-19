@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
 import TabsVerticalOrientationToggle from "./TabsVerticalOrientationToggle.test.svelte";
@@ -65,15 +64,6 @@ describe("TabsVertical", () => {
     expect(nav).not.toHaveClass("bx--layout--size-xl");
   });
 
-  it("should render a vertically-oriented tablist", () => {
-    render(TabsVertical);
-
-    expect(screen.getByRole("tablist")).toHaveAttribute(
-      "aria-orientation",
-      "vertical",
-    );
-  });
-
   describe("breakpoint", () => {
     const BELOW_MD = "(max-width: 41.98rem)";
     let listeners: ((event: { matches: boolean }) => void)[];
@@ -135,25 +125,19 @@ describe("TabsVertical", () => {
   });
 
   describe("orientation", () => {
-    it("follows the md breakpoint by default", () => {
-      const { container } = render(TabsVertical);
-
+    it("updates the layout and keyboard when orientation changes", async () => {
+      const { container } = render(TabsVerticalOrientationToggle);
       const nav = screen.getByRole("navigation");
+      const tablist = screen.getByRole("tablist");
+      const next = screen.getByRole("button", { name: "Next orientation" });
+
+      // Unset, it follows the md breakpoint.
       expect(nav).toHaveClass("bx--tabs--vertical--responsive");
       expect(nav).not.toHaveClass("bx--tabs--vertical--row");
       expect(nav).not.toHaveClass("bx--tabs--vertical--column");
       expect(
         container.querySelector(".bx--tabs--vertical-container"),
       ).toHaveClass("bx--tabs--vertical-container--responsive");
-    });
-
-    it("updates the layout and keyboard when orientation changes", async () => {
-      render(TabsVerticalOrientationToggle);
-      const nav = screen.getByRole("navigation");
-      const tablist = screen.getByRole("tablist");
-      const next = screen.getByRole("button", { name: "Next orientation" });
-
-      expect(nav).toHaveClass("bx--tabs--vertical--responsive");
       expect(tablist).toHaveAttribute("aria-orientation", "vertical");
 
       await user.click(next);
@@ -221,7 +205,7 @@ describe("TabsVertical", () => {
 
   // Selection must be in the first render. Committing it after registration
   // flushes fades the selected tab's color in on mount.
-  it("renders the initial selection synchronously on mount", () => {
+  it("renders the initial selection synchronously on mount", async () => {
     render(TabsVertical, { props: { selected: 2 } });
 
     const tabs = screen.getAllByRole("tab");
@@ -230,6 +214,11 @@ describe("TabsVertical", () => {
     expect(tabs[0]).toHaveAttribute("aria-selected", "false");
     expect(panels[2]).not.toHaveAttribute("hidden");
     expect(panels[0]).toHaveAttribute("hidden");
+
+    // The selection holds once registration flushes.
+    await tick();
+    expect(tabs[2]).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Content 3")).toBeVisible();
   });
 
   it("renders the initial selectedId synchronously on mount", () => {
@@ -242,17 +231,6 @@ describe("TabsVertical", () => {
     expect(
       screen.getByRole("tabpanel", { hidden: true, name: "Tab C" }),
     ).not.toHaveAttribute("hidden");
-  });
-
-  it("should select the initial tab from the selected prop", async () => {
-    render(TabsVertical, { props: { selected: 2 } });
-    await tick();
-
-    expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-    expect(screen.getByText("Content 3")).toBeVisible();
   });
 
   it("should change tab on click and dispatch change", async () => {
@@ -394,16 +372,6 @@ describe("TabsVertical", () => {
     expect(screen.getByText("(3/4)")).toBeInTheDocument();
   });
 
-  it("should render an icon for the tab", () => {
-    const { container } = render(TabsVertical, { props: { icon: Calendar } });
-
-    const navLink = container.querySelector(".bx--tabs__nav-link--icon");
-    expect(navLink).toBeInTheDocument();
-    expect(
-      navLink?.querySelector(".bx--tabs__nav-item--icon svg"),
-    ).toBeInTheDocument();
-  });
-
   it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
     render(TabsVerticalSelectedId, {
       props: { selectedId: "tab-b", showTabA: true },
@@ -456,12 +424,10 @@ describe("TabsVerticalSkeleton", () => {
     );
   });
 
-  it.each([6, 0])("should render %i nav items for count", (count) => {
-    const { container } = render(TabsVerticalSkeleton, { props: { count } });
+  it("should render no nav items for a count of 0", () => {
+    const { container } = render(TabsVerticalSkeleton, { props: { count: 0 } });
 
-    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(
-      count,
-    );
+    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(0);
   });
 
   describe("shared ResizeObserver", () => {

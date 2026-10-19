@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { renderSSR } from "../utils/ssr";
+import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
 import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
 
@@ -33,5 +34,15 @@ describe("TabsVertical server render", () => {
       tabs: ["false", "false", "true"],
       panels: [false, false, true],
     });
+  });
+
+  it("draws a tab's own secondary label", () => {
+    const { document } = renderSSR(TabsSecondaryLabel, { type: "vertical" });
+    const [, details] = [...document.querySelectorAll(".bx--tabs__nav-item")];
+
+    expect(details).toHaveClass("bx--tabs__nav-item--secondary-label");
+    expect(
+      details.querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toHaveTextContent("(3)");
   });
 });

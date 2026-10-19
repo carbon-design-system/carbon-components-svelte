@@ -8,8 +8,6 @@
   export let tabProps: Record<string, unknown> = {};
 </script>
 
-<span id="extra-help">Extra help</span>
-<span id="external-name">External name</span>
 <div id="external-panel">External panel</div>
 <Tabs {iconOnly}>
   <Tab label="Calendar" icon={Calendar} data-testid="tab-item" {...tabProps} />

@@ -5,12 +5,10 @@
   import Calendar from "../../src/icons/Calendar.svelte";
 
   export let icon = Calendar;
-  export let disabled = false;
-  export let label = "Test Tab";
 </script>
 
 <Tabs>
-  <Tab {label} {icon} {disabled} />
+  <Tab label="Test Tab" {icon} />
   <Tab label="No Icon" />
   <svelte:fragment slot="content">
     <TabContent>Icon content</TabContent>
