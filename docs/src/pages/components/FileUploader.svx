@@ -75,6 +75,9 @@ By default, the button label updates to show the selected file name (or file
 count, when `multiple`) after a file is chosen. Set `disableLabelChanges` to
 `true` to keep the original `labelText` instead.
 
+The label follows user picks only. Setting `files` programmatically doesn't
+change it, except that an empty list restores `labelText`.
+
 <FileUploaderButton disableLabelChanges labelText="Add file" />
 
 ### Icon-only
@@ -348,12 +351,18 @@ each row's remove button are disabled.
 
 ### Events
 
-Respond to file list changes. `add` and `remove` fire whenever `files` gains or
-loses entries (including via two-way binding), `change` fires with the full
-list, `clear` fires when the list becomes empty (see [Clear
-files](#clear-files)), and `rejected` fires per file that fails validation
-(see [Maximum file size](#maximum-file-size) and [Duplicate
-detection](#duplicate-detection)).
+Respond to file list changes.
+
+| Event | Fires when | `detail` |
+| --- | --- | --- |
+| `add` | `files` gains entries, including via two-way binding | The added files |
+| `remove` | `files` loses entries, including via two-way binding | The removed files |
+| `change` | A pick, a row's remove button (after its `remove`), or clearing the list changes `files` | The full list |
+| `clear` | The list becomes empty (see [Clear files](#clear-files)) | None |
+| `rejected` | Picked files fail validation (see [Maximum file size](#maximum-file-size) and [Duplicate detection](#duplicate-detection)) | `{ file, reason }` per rejected file |
+
+Removing a row that has focus moves focus to the next row's remove button,
+else the previous row's, else the add button.
 
 <FileUploader
   multiple
@@ -519,8 +528,9 @@ multiple file selection, size and duplicate checks, and custom validation.
 Set `minFileSize`, `maxFileSize`, and `preventDuplicate` for the same rejection
 reasons as `FileUploader` (`size`, `duplicate`). Use `validateFiles` for additional
 filtering; files it removes are reported with `reason: "invalid"`. Dispatches
-the same `add`, `change`, and `rejected` events described in
-[Events](#events).
+`change` and `rejected` as described in [Events](#events). Unlike
+`FileUploader`, its `add` carries the whole list after each drop or pick, not
+only the added files, and fires even when every file is rejected.
 
 This example rejects files over 1 kB and duplicates of already-selected files.
 
