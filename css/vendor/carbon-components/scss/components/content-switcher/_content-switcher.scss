@@ -183,6 +183,17 @@
     white-space: nowrap;
   }
 
+  // ccs: an icon before the text in a Switch's slot (`<Switch><Icon /> Text
+  // </Switch>`). An inline svg sits on the text baseline, about 3px above
+  // the text's center. Top-aligning it in the 18px line box and pushing it
+  // down 1px centers the 16px icon. The label stays inline, so the text
+  // keeps its ellipsis; the slot's space plus the margin make an 8px gap.
+  .#{$prefix}--content-switcher__label > svg:first-child {
+    margin-top: to-rem(1px);
+    margin-inline-end: $carbon--spacing-02;
+    vertical-align: top;
+  }
+
   .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
     z-index: 3;
     background-color: $layer-selected-inverse;
