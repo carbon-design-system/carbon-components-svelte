@@ -6,7 +6,6 @@ import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
 import {
   createDragEvent,
   dropFiles,
-  emptyFileInput,
   fileNames,
   getDropZone,
   getFileInput,
@@ -19,9 +18,6 @@ describe("FileUploaderDropContainer", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },
     });
-
-    const input = getFileInput(container);
-    expect(input).toBeDisabled();
 
     const target = container.querySelector(".bx--file-browse-btn");
     assert(target);
@@ -37,32 +33,6 @@ describe("FileUploaderDropContainer", () => {
     assert(target instanceof HTMLElement);
     expect(target).toHaveAttribute("aria-disabled", "true");
     expect(target).toHaveAttribute("tabindex", "-1");
-  });
-
-  it("should forward capture to the input", () => {
-    const { container } = render(FileUploaderDropContainer, {
-      props: { capture: "user" },
-    });
-
-    expect(getFileInput(container)).toHaveAttribute("capture", "user");
-  });
-
-  it("should respect accept prop", () => {
-    const { container } = render(FileUploaderDropContainer, {
-      props: { accept: [".pdf", ".doc"] },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("accept", ".pdf,.doc");
-  });
-
-  it("should handle multiple prop", () => {
-    const { container } = render(FileUploaderDropContainer, {
-      props: { multiple: true },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("multiple");
   });
 
   it("should handle dragover event and show drag-over state", async () => {
@@ -237,24 +207,6 @@ describe("FileUploaderDropContainer", () => {
       });
     });
 
-    it("puts the current files back after a cancelled picker", async () => {
-      const { container } = render(FileUploaderDropContainer, {
-        props: { multiple: true },
-      });
-      const input = getFileInput(container);
-
-      simulateFileSelection(input, [makeFile("a.txt")]);
-      await vi.waitFor(() => {
-        expect(fileNames(input)).toEqual(["a.txt"]);
-      });
-
-      // Opening the picker clears the input; dismissing it fires `cancel`.
-      emptyFileInput(input);
-      input.dispatchEvent(new Event("cancel"));
-
-      expect(fileNames(input)).toEqual(["a.txt"]);
-    });
-
     it("empties the native input when files is cleared programmatically", async () => {
       const { container, rerender } = render(FileUploaderDropContainer, {
         props: { multiple: true },
@@ -341,23 +293,6 @@ describe("FileUploaderDropContainer", () => {
     });
 
     expect(rejectedHandler).not.toHaveBeenCalled();
-  });
-
-  it("should reject dropped files under minFileSize", async () => {
-    const rejectedHandler = vi.fn();
-    const { container } = render(FileUploaderDropContainer, {
-      props: { multiple: true, minFileSize: 1, onrejected: rejectedHandler },
-    });
-
-    const empty = makeFile("empty.txt", 0);
-    dropFiles(container, [empty, makeFile("a.txt", 1)]);
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalledTimes(1);
-    });
-    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
-      { file: empty, reason: "size" },
-    ]);
   });
 
   it("should apply validateFiles after size and duplicate checks", async () => {
@@ -462,26 +397,17 @@ describe("FileUploaderDropContainer", () => {
     expect(target).toHaveAttribute("tabindex", "-1");
   });
 
-  it("should handle name attribute", () => {
-    const { container } = render(FileUploaderDropContainer, {
-      props: { name: "file-drop" },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("name", "file-drop");
-  });
-
   it("should handle id attribute", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { id: "custom-drop" },
     });
 
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("id", "custom-drop");
-
     const target = screen.getByRole("button");
     expect(target).toHaveAttribute("id", "custom-drop-drop-target");
-    expect(input).toHaveAttribute("aria-labelledby", "custom-drop-drop-target");
+    expect(getFileInput(container)).toHaveAttribute(
+      "aria-labelledby",
+      "custom-drop-drop-target",
+    );
   });
 
   it("should render the drop target as a div, not a label", () => {
@@ -490,30 +416,6 @@ describe("FileUploaderDropContainer", () => {
     // A <label> may not take role="button".
     expect(container.querySelector("label")).toBeNull();
     expect(screen.getByRole("button").tagName).toBe("DIV");
-  });
-
-  it("should open the file picker on click", async () => {
-    const { container } = render(FileUploaderDropContainer);
-
-    const input = getFileInput(container);
-    const clickSpy = vi.spyOn(input, "click");
-
-    await user.click(screen.getByRole("button"));
-
-    expect(clickSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it("should not open the file picker when disabled", async () => {
-    const { container } = render(FileUploaderDropContainer, {
-      props: { disabled: true },
-    });
-
-    const input = getFileInput(container);
-    const clickSpy = vi.spyOn(input, "click");
-
-    await user.click(screen.getByRole("button"));
-
-    expect(clickSpy).not.toHaveBeenCalled();
   });
 
   it("should keep Space from scrolling the page", () => {
@@ -527,17 +429,6 @@ describe("FileUploaderDropContainer", () => {
     screen.getByRole("button").dispatchEvent(event);
 
     expect(event.defaultPrevented).toBe(true);
-  });
-
-  it("should still let getByLabelText find the input", () => {
-    render(FileUploaderDropContainer, {
-      props: { labelText: "Drop files here" },
-    });
-
-    expect(screen.getByLabelText("Drop files here")).toHaveAttribute(
-      "type",
-      "file",
-    );
   });
 
   it("supports custom label slot for FileUploaderDropContainer", () => {

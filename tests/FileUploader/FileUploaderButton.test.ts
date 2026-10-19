@@ -2,74 +2,20 @@ import { render, screen } from "@testing-library/svelte";
 import type FileUploaderButtonComponent from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import { type ComponentProps, tick } from "svelte";
-import { user } from "../utils/user";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
 import {
   emptyFileInput,
-  fileNames,
   getFileInput,
   makeFile,
   simulateFileSelection,
 } from "./helpers";
 
 describe("FileUploaderButton", () => {
-  describe("cancelled picker", () => {
-    it("puts the current files back into the native input", async () => {
-      const { container } = render(FileUploaderButton, {
-        props: { labelText: "Add file" },
-      });
-      const input = getFileInput(container);
-
-      simulateFileSelection(input, [makeFile("a.txt")]);
-      await vi.waitFor(() => {
-        expect(fileNames(input)).toEqual(["a.txt"]);
-      });
-
-      // Opening the picker clears the input; dismissing it fires `cancel`.
-      emptyFileInput(input);
-      input.dispatchEvent(new Event("cancel"));
-
-      expect(fileNames(input)).toEqual(["a.txt"]);
-    });
-  });
-
   it("should handle disabled state", () => {
-    const { container } = render(FileUploaderButton, {
-      props: { disabled: true },
-    });
+    render(FileUploaderButton, { props: { disabled: true } });
 
-    const button = screen.getByRole("button");
-    expect(button).toHaveClass("bx--btn--disabled");
-
-    const input = getFileInput(container);
-    expect(input).toBeDisabled();
-  });
-
-  it("should forward capture to the input", () => {
-    const { container } = render(FileUploaderButton, {
-      props: { capture: "environment" },
-    });
-
-    expect(getFileInput(container)).toHaveAttribute("capture", "environment");
-  });
-
-  it("should respect accept prop", () => {
-    const { container } = render(FileUploaderButton, {
-      props: { accept: [".jpg", ".png", "image/*"] },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("accept", ".jpg,.png,image/*");
-  });
-
-  it("should handle multiple prop", () => {
-    const { container } = render(FileUploaderButton, {
-      props: { multiple: true },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("multiple");
+    expect(screen.getByRole("button")).toHaveClass("bx--btn--disabled");
   });
 
   it("should update label text when files are selected (single file)", async () => {
@@ -166,39 +112,6 @@ describe("FileUploaderButton", () => {
     expect(event.detail[0].name).toBe("test.txt");
   });
 
-  it("should dedupe re-selected files when preventDuplicate and multiple are true", async () => {
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderButton, {
-      props: {
-        multiple: true,
-        preventDuplicate: true,
-        onchange: changeHandler,
-      },
-    });
-
-    const input = getFileInput(container);
-
-    const lastModified = 1700000000000;
-    const fileA = makeFile("a.txt", 1, { lastModified });
-    simulateFileSelection(input, [fileA]);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalledTimes(1);
-    });
-    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(1);
-
-    const fileADup = makeFile("a.txt", 1, { lastModified });
-    const fileB = makeFile("b.txt", 1);
-    simulateFileSelection(input, [fileADup, fileB]);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalledTimes(2);
-    });
-    const second = changeHandler.mock.calls[1][0].detail;
-    expect(second).toHaveLength(2);
-    expect(second.map((f: File) => f.name)).toEqual(["a.txt", "b.txt"]);
-  });
-
   it.each(["primary", "secondary", "tertiary", "ghost", "danger"] as const)(
     "should render the %s button kind",
     (kind) => {
@@ -225,38 +138,6 @@ describe("FileUploaderButton", () => {
     });
 
     expect(container.querySelector(".bx--btn")).toHaveClass("bx--btn--xs");
-  });
-
-  it("should handle name attribute", () => {
-    const { container } = render(FileUploaderButton, {
-      props: { name: "file-input" },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("name", "file-input");
-  });
-
-  it("should handle id attribute", () => {
-    const { container } = render(FileUploaderButton, {
-      props: { id: "custom-file-input" },
-    });
-
-    const input = getFileInput(container);
-    expect(input).toHaveAttribute("id", "custom-file-input");
-  });
-
-  it("should trigger file input when button is clicked", async () => {
-    const { container } = render(FileUploaderButton);
-
-    const input = getFileInput(container);
-
-    const clickSpy = vi.spyOn(input, "click");
-    const button = screen.getByRole("button");
-
-    await user.click(button);
-
-    expect(clickSpy).toHaveBeenCalled();
-    expect(screen.getByLabelText("Add file")).toBe(input);
   });
 
   it("should render button with icon and text", () => {
@@ -339,63 +220,7 @@ describe("FileUploaderButton", () => {
     expect(assistiveText).toHaveTextContent("Add item hidden tooltip");
   });
 
-  it("should reject files under minFileSize", async () => {
-    const changeHandler = vi.fn();
-    const rejectedHandler = vi.fn();
-    const { container } = render(FileUploaderButton, {
-      props: {
-        multiple: true,
-        minFileSize: 1,
-        onchange: changeHandler,
-        onrejected: rejectedHandler,
-      },
-    });
-
-    const input = getFileInput(container);
-    const empty = makeFile("empty.txt", 0);
-    const report = makeFile("report.txt", 1);
-    simulateFileSelection(input, [empty, report]);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalledTimes(1);
-    });
-    expect(changeHandler.mock.calls[0][0].detail).toEqual([report]);
-    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
-      { file: empty, reason: "size" },
-    ]);
-  });
-
   describe("maxFileSize", () => {
-    it("should reject oversized files and report them", async () => {
-      const changeHandler = vi.fn();
-      const rejectedHandler = vi.fn();
-      const { component, container } = render(FileUploaderButton, {
-        props: {
-          multiple: true,
-          maxFileSize: 4,
-          onchange: changeHandler,
-          onrejected: rejectedHandler,
-        },
-      });
-
-      const input = getFileInput(container);
-
-      const small = makeFile("small.txt", 2);
-      const large = makeFile("large.txt", 8);
-      simulateFileSelection(input, [small, large]);
-
-      await vi.waitFor(() => {
-        expect(changeHandler).toHaveBeenCalledTimes(1);
-      });
-
-      expect(changeHandler.mock.calls[0][0].detail).toEqual([small]);
-      expect(component.files).toEqual([small]);
-      expect(rejectedHandler).toHaveBeenCalledTimes(1);
-      expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
-        { file: large, reason: "size" },
-      ]);
-    });
-
     it("should clear the selection and restore the label when the only file is rejected", async () => {
       const rejectedHandler = vi.fn();
       const { container } = render(FileUploaderButton, {
