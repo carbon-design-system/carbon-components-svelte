@@ -281,10 +281,13 @@
 
 // Readonly date picker (v11 backport). The modal companion rule that keeps
 // the input transparent on a `$field-02` modal lives in modal/_modal.scss.
-// Keyed on the `readonly` prop's wrapper class, not `[readonly]`:
-// flatpickr's `allowInput: false` also sets the attribute, on a field that
-// still opens the calendar.
+// The `readonly` prop marks the wrapper. `allowInput={false}` also makes the
+// input `[readonly]`, but the field is still active: it opens on click.
 @mixin date-picker-readonly {
+  .#{$prefix}--date-picker__input[readonly] {
+    cursor: pointer;
+  }
+
   .#{$prefix}--date-picker-input__wrapper--readonly .#{$prefix}--date-picker__input {
     background: transparent;
     border-bottom-color: $icon-disabled;
