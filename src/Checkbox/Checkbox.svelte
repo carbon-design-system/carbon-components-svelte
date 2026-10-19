@@ -359,7 +359,7 @@
       {#if showInvalid}
         <WarningFilled class="bx--checkbox__invalid-icon" />
         {#if invalidText}
-          <div id={errorId} class:bx--form-requirement={true}>
+          <div id={errorId} class:bx--form-requirement={true} role="alert">
             {invalidText}
           </div>
         {/if}
