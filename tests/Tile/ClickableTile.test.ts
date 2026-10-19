@@ -122,6 +122,16 @@ describe("ClickableTile", () => {
       expect(tile).not.toHaveClass("bx--tile--is-clicked");
     });
 
+    it("activates once while Space is held", async () => {
+      const onClick = vi.fn();
+      render(ClickableTileButton, { props: { onClick } });
+
+      screen.getByRole("button", { name: "Acknowledge incident" }).focus();
+      await user.keyboard("[Space>3/]");
+
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
     it("keeps a consumer's tabindex", () => {
       render(ClickableTileButton);
 
