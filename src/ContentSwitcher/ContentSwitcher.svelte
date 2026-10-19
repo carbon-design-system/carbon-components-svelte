@@ -79,6 +79,12 @@
   let prevIndex = -1;
 
   let committedIndex = -1;
+  /**
+   * Id of the switch rendered as selected, as of the last update. A removal
+   * shifts `switches[committedIndex]` before afterUpdate can re-anchor.
+   * @type {string | undefined}
+   */
+  let committedId = undefined;
   let focusedIndex = -1;
   /**
    * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }>>}
@@ -351,7 +357,7 @@
       // past a removed switch.
       const preservedId =
         selectedIndex === committedIndex
-          ? get(currentId)
+          ? committedId
           : switches[selectedIndex]?.id;
       let next = switches;
       sharedSwitches.update((current) => {
@@ -393,6 +399,7 @@
       committedIndex = selectedIndex;
       focusedIndex = -1;
     }
+    committedId = switches[committedIndex]?.id;
   });
 </script>
 
