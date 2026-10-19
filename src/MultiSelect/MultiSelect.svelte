@@ -441,9 +441,10 @@
   export let wrapOptions = false;
 
   /**
-   * Set to `true` to render the dropdown menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to always render the menu in a portal, or `false` to
+   * keep it in place. Left unset, the menu moves to a portal inside a
+   * Modal, or when a box around it (`overflow` other than `visible`)
+   * would cut it off.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -517,6 +518,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -550,24 +552,42 @@
   const aiLabelState = writable($$slots.decorator ? "active" : undefined);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
+  // Set for one open when the in-place menu turns out to be cut off by a
+  // box around it (a scrolling panel, an `overflow: hidden` card): the menu
+  // moves to a portal instead. Only when `portalMenu` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
 
   // In place, the menu opens on `direction`'s side unless it doesn't fit
   // there and the other side has more room; a portalled menu flips itself.
-  // Measured once per open, after the menu renders.
+  // Measured once per open, after the menu renders and before it paints.
   /** @type {"top" | "bottom" | null} */
   let measuredSide = null;
   $: placement = measuredSide ?? direction;
   $: if (open && !effectivePortalMenu) {
     void direction;
-    tick().then(() => {
-      if (open && listRef && fieldRef) {
-        measuredSide = menuSide(fieldRef, listRef, direction);
-      }
-    });
+    tick().then(placeMenu);
   } else {
     measuredSide = null;
+  }
+
+  async function placeMenu() {
+    if (!(open && listRef && fieldRef)) return;
+    const mayPortal = portalMenu === undefined;
+    if (mayPortal && clippedBy(listRef)) {
+      portalWhenClipped = true;
+      return;
+    }
+    const side = menuSide(fieldRef, listRef, direction);
+    if (side === placement) return;
+    measuredSide = side;
+    await tick();
+    if (mayPortal && open && listRef && clippedBy(listRef)) {
+      portalWhenClipped = true;
+    }
   }
 
   let sortCollatorLocale;

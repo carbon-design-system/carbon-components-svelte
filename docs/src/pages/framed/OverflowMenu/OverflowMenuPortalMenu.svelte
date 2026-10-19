@@ -17,10 +17,10 @@
   maxHeight="120px"
 >
   <div>
-    This container has hidden overflow. Without <code>portalMenu</code>, the
-    menu would be clipped.
+    This container has hidden overflow. The menu would not fit, so it opens in a
+    portal.
   </div>
-  <OverflowMenu portalMenu>
+  <OverflowMenu>
     <OverflowMenuItem text="Edit" />
     <OverflowMenuItem text="Duplicate" />
     <OverflowMenuItem danger text="Delete" />

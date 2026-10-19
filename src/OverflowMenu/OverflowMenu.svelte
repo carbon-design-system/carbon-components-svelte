@@ -104,9 +104,10 @@
   export let menuRef = null;
 
   /**
-   * Set to `true` to render the menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to always render the menu in a portal, or `false` to
+   * keep it in place. Left unset, the menu moves to a portal inside a
+   * Modal, or when a box around it (`overflow` other than `visible`)
+   * would cut it off.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -129,6 +130,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { clippedBy } from "../utils/fit-align.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -162,8 +164,14 @@
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
 
+  // Set for one open when the in-place menu turns out to be cut off by a
+  // box around it (a scrolling panel, an `overflow: hidden` card): the menu
+  // moves to a portal instead. Only when `portalMenu` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
 
   const dispatch = createEventDispatcher();
   /**
@@ -432,6 +440,10 @@
             resolveLayoutDirection($layoutDirection, buttonRef) === "rtl"
               ? `${offsetLeft + width + 11 - menuWidth}px`
               : `${offsetLeft - 11}px`;
+        }
+
+        if (portalMenu === undefined && clippedBy(menuRef)) {
+          portalWhenClipped = true;
         }
       }
     }

@@ -1,6 +1,7 @@
 /**
- * Fits a popover or tooltip horizontally: the start or end alignment that
- * fits its container better, or a slide back into the window.
+ * Fits a popover, tooltip or menu to the boxes around it: the start or end
+ * alignment that fits its container better, a slide back into the window,
+ * or the box that cuts it off, so it can move to a portal.
  */
 
 /**
@@ -34,3 +35,11 @@ export function windowShift(
   applied: number,
   margin?: number,
 ): number;
+
+/**
+ * The first box that cuts `el` off: an ancestor whose overflow isn't
+ * `visible` on an axis where `el` reaches past its edge, counting only
+ * boxes that position `el`. `null` when nothing clips it or `el` has no
+ * layout (zero size).
+ */
+export function clippedBy(el: HTMLElement): HTMLElement | null;

@@ -1,4 +1,8 @@
-import { shouldFlipAlign, windowShift } from "../../src/utils/fit-align.js";
+import {
+  clippedBy,
+  shouldFlipAlign,
+  windowShift,
+} from "../../src/utils/fit-align.js";
 import { rect } from "./rect";
 
 describe("shouldFlipAlign", () => {
@@ -52,5 +56,108 @@ describe("windowShift", () => {
     // jsdom: the window itself has no width.
     windowWidth(0);
     expect(windowShift(box({ left: 300, width: 100 }), 12)).toBe(12);
+  });
+});
+
+describe("clippedBy", () => {
+  afterEach(() => document.body.replaceChildren());
+
+  // A box at `edges` whose padding box is the same size: no borders or
+  // scrollbars. jsdom doesn't expand the `overflow` shorthand, so styles
+  // set each axis.
+  function place(
+    el: HTMLElement,
+    edges: Parameters<typeof rect>[0],
+    style: Partial<CSSStyleDeclaration> = {},
+  ) {
+    const r = rect(edges);
+    el.getBoundingClientRect = () => r;
+    Object.defineProperty(el, "clientWidth", {
+      value: r.width,
+      configurable: true,
+    });
+    Object.defineProperty(el, "clientHeight", {
+      value: r.height,
+      configurable: true,
+    });
+    Object.assign(el.style, style);
+    return el;
+  }
+
+  function tree() {
+    const outer = document.createElement("div");
+    const inner = document.createElement("div");
+    const menu = document.createElement("div");
+    inner.append(menu);
+    outer.append(inner);
+    document.body.append(outer);
+    return { outer, inner, menu };
+  }
+
+  it("finds the box a menu runs past", () => {
+    const { outer, inner, menu } = tree();
+    place(
+      outer,
+      { top: 0, left: 0, width: 400, height: 120 },
+      { overflowX: "hidden", overflowY: "hidden" },
+    );
+    place(inner, { top: 0, left: 0, width: 400, height: 40 });
+    place(menu, { top: 40, left: 0, width: 200, height: 160 });
+    expect(clippedBy(menu)).toBe(outer);
+  });
+
+  it("returns null for a menu that fits, or one with no layout", () => {
+    const { outer, menu } = tree();
+    place(
+      outer,
+      { top: 0, left: 0, width: 400, height: 400 },
+      { overflowX: "auto", overflowY: "auto" },
+    );
+    place(menu, { top: 40, left: 0, width: 200, height: 160 });
+    expect(clippedBy(menu)).toBe(null);
+
+    place(menu, { top: 300, left: 0, width: 0, height: 0 });
+    expect(clippedBy(menu)).toBe(null);
+  });
+
+  it("only counts the axis a box clips", () => {
+    const { outer, menu } = tree();
+    place(
+      outer,
+      { top: 0, left: 0, width: 400, height: 120 },
+      {
+        overflowX: "hidden",
+        overflowY: "visible",
+      },
+    );
+    place(menu, { top: 40, left: 0, width: 200, height: 160 });
+    expect(clippedBy(menu)).toBe(null);
+  });
+
+  it("skips boxes a fixed or absolute menu escapes", () => {
+    const { outer, inner, menu } = tree();
+    place(outer, { top: 0, left: 0, width: 400, height: 400 });
+    place(
+      inner,
+      { top: 0, left: 0, width: 400, height: 40 },
+      { overflowX: "hidden", overflowY: "hidden" },
+    );
+    place(
+      menu,
+      { top: 40, left: 0, width: 200, height: 160 },
+      {
+        position: "fixed",
+      },
+    );
+    expect(clippedBy(menu)).toBe(null);
+
+    // Positioned against `outer`, so `inner`'s overflow doesn't reach it.
+    menu.style.position = "absolute";
+    Object.defineProperty(menu, "offsetParent", { value: outer });
+    expect(clippedBy(menu)).toBe(null);
+
+    Object.assign(outer.style, { overflowX: "hidden", overflowY: "hidden" });
+    place(menu, { top: 300, left: 0, width: 200, height: 160 });
+    expect(clippedBy(menu)).toBe(outer);
   });
 });

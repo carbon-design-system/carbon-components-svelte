@@ -1,6 +1,24 @@
 // @ts-check
-// Fits a popover or tooltip horizontally: the start or end alignment that
-// fits its container better, or a slide back into the window.
+// Fits a popover, tooltip or menu to the boxes around it: the start or end
+// alignment that fits its container better, a slide back into the window,
+// or the box that cuts it off, so it can move to a portal.
+
+/**
+ * The edges of the area `box` clips its content to: its padding box, inside
+ * the borders and scrollbars.
+ * @param {Element} box
+ */
+function clipRect(box) {
+  const outer = box.getBoundingClientRect();
+  const left = outer.left + box.clientLeft;
+  const top = outer.top + box.clientTop;
+  return {
+    left,
+    top,
+    right: left + box.clientWidth,
+    bottom: top + box.clientHeight,
+  };
+}
 
 /**
  * The horizontal room a popover has: the nearest ancestor that clips or
@@ -15,9 +33,9 @@ export function horizontalBounds(node) {
   let right = document.documentElement.clientWidth;
   for (let el = node.parentElement; el; el = el.parentElement) {
     if (getComputedStyle(el).overflowX !== "visible") {
-      const rect = el.getBoundingClientRect();
-      left = Math.max(left, rect.left + el.clientLeft);
-      right = Math.min(right, rect.left + el.clientLeft + el.clientWidth);
+      const clip = clipRect(el);
+      left = Math.max(left, clip.left);
+      right = Math.min(right, clip.right);
       break;
     }
   }
@@ -68,4 +86,41 @@ export function windowShift(el, applied, margin = 8) {
   }
   if (left < margin) return margin - left;
   return 0;
+}
+
+/**
+ * The first box that cuts `el` off: an ancestor whose overflow isn't
+ * `visible` on an axis where `el` reaches past its edge. Only boxes that
+ * position `el` count: an absolutely positioned `el` escapes the boxes
+ * inside its positioning parent, and a fixed one escapes them all. `null`
+ * when nothing clips it, or when `el` has no layout (zero size).
+ * @param {HTMLElement} el
+ * @returns {HTMLElement | null}
+ */
+export function clippedBy(el) {
+  const rect = el.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return null;
+  const position = getComputedStyle(el).position;
+  if (position === "fixed") return null;
+  const anchor = position === "absolute" ? el.offsetParent : null;
+  for (
+    let box = el.parentElement;
+    box && box !== document.body && box !== document.documentElement;
+    box = box.parentElement
+  ) {
+    if (anchor && !box.contains(anchor)) continue;
+    const style = getComputedStyle(box);
+    const clipsX = style.overflowX !== "visible";
+    const clipsY = style.overflowY !== "visible";
+    if (!clipsX && !clipsY) continue;
+    const clip = clipRect(box);
+    // 1px of slack absorbs subpixel rounding at the edges.
+    if (clipsX && (rect.left < clip.left - 1 || rect.right > clip.right + 1)) {
+      return box;
+    }
+    if (clipsY && (rect.top < clip.top - 1 || rect.bottom > clip.bottom + 1)) {
+      return box;
+    }
+  }
+  return null;
 }
