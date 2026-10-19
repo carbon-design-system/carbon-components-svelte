@@ -415,6 +415,12 @@
         .map((s) => document.getElementById(s.id))
         .filter((node) => node instanceof HTMLElement),
     getActiveIndex: () => {
+      // Move from the switch that holds focus. Fall back to the manual-mode
+      // focus index, then the selection, when focus is elsewhere.
+      const active = switches.findIndex(
+        (s) => s.id === document.activeElement?.id,
+      );
+      if (active >= 0) return active;
       if (focusedIndex >= 0) return focusedIndex;
       // Start from the fallback tab stop when the selected switch is disabled,
       // so the first arrow press moves off it instead of re-selecting it.
