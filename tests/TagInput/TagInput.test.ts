@@ -7,6 +7,7 @@ import {
 } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TagInput from "./TagInput.test.svelte";
 import TagInputTagSlot from "./TagInputTagSlot.test.svelte";
@@ -340,6 +341,18 @@ describe("TagInput", () => {
 
       await user.type(input(), "a{Enter}");
       expect(input()).not.toBeRequired();
+    });
+
+    it("isn't satisfied by text that isn't a tag yet", async () => {
+      render(TagInput, { config: { required: true } });
+
+      await user.type(input(), "draft");
+
+      expect(getForm().checkValidity()).toBe(false);
+      expect(input()).toHaveProperty(
+        "validationMessage",
+        "Add at least one tag",
+      );
     });
   });
 
