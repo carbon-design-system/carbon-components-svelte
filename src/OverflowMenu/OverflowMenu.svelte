@@ -130,6 +130,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
+  import { menuSide } from "../utils/menu-side.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -212,6 +213,11 @@
    * written here.
    */
   let measuredPositionKey = null;
+
+  // The side an in-place menu opens on: `direction`, unless it doesn't fit
+  // there and the other side has more room. A portalled menu flips itself.
+  /** @type {"top" | "bottom"} */
+  let menuPlacement = direction;
 
   $: if (ctxBreadcrumbItem) {
     icon = OverflowMenuHorizontal;
@@ -378,8 +384,11 @@
         // one triggered by the reads above.
         const menuHeight = menuRef.offsetHeight;
         const menuWidth = menuRef.offsetWidth;
+        menuPlacement = ctxBreadcrumbItem
+          ? direction
+          : menuSide(buttonRef, menuRef, direction);
 
-        if (direction === "top") {
+        if (menuPlacement === "top") {
           menuRef.style.top = `${offsetTop - menuHeight}px`;
         } else {
           menuRef.style.top = `${offsetTop + height}px`;
@@ -644,7 +653,7 @@
     id={menuId}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabel === undefined ? id : undefined}
-    data-floating-menu-direction={direction}
+    data-floating-menu-direction={menuPlacement}
     class:bx--overflow-menu-options={true}
     class:bx--overflow-menu--flip={flipped}
     class:bx--overflow-menu-options--open={open}
