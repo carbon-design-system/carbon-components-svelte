@@ -90,7 +90,13 @@ describe("TagInput", () => {
       input().focus();
       // Not canceled: the browser's own paste goes ahead.
       expect(await paste("red, green")).toBe(true);
+      await fireEvent.input(input(), {
+        target: { value: "red, green" },
+        inputType: "insertFromPaste",
+      });
+
       expect(shownValue()).toEqual([]);
+      expect(input()).toHaveValue("red, green");
     });
 
     it("adds the text on blur with addOnBlur", async () => {

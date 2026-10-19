@@ -418,11 +418,13 @@
     }
   }
 
-  /** @param {Event & { currentTarget: HTMLInputElement }} event */
+  /** @param {InputEvent & { currentTarget: HTMLInputElement }} event */
   function handleInput(event) {
     draft = event.currentTarget.value;
     rejectionText = "";
     if (!interactive) return;
+    // `handlePaste` let the browser paste as-is; don't split it here.
+    if (!addOnPaste && event.inputType === "insertFromPaste") return;
     const parts = split(draft);
     if (parts.length < 2) return;
     // Everything before the last delimiter is complete; the rest is still
