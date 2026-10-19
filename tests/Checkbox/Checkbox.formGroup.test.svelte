@@ -4,6 +4,7 @@
 
   export let mode: "bind-group" | "checkbox-group" = "bind-group";
   export let group: string[] = [];
+  export let required = false;
 </script>
 
 <form data-testid="form">
@@ -11,7 +12,12 @@
     <Checkbox bind:group name="channel" value="a" labelText="A" />
     <Checkbox bind:group name="channel" value="b" labelText="B" />
   {:else}
-    <CheckboxGroup bind:selected={group} name="channel" legendText="Channel">
+    <CheckboxGroup
+      bind:selected={group}
+      {required}
+      name="channel"
+      legendText="Channel"
+    >
       <Checkbox value="a" labelText="A" />
       <Checkbox value="b" labelText="B" />
     </CheckboxGroup>

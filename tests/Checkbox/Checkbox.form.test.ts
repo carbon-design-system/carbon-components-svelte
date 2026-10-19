@@ -186,6 +186,19 @@ describe("Checkbox form participation", () => {
     });
   });
 
+  it("CheckboxGroup: one checked box satisfies required", async () => {
+    render(CheckboxFormGroup, {
+      props: { mode: "checkbox-group", required: true },
+    });
+    const checkbox = screen.getByRole("checkbox", { name: "A" });
+
+    await user.click(checkbox);
+    expect(getForm().checkValidity()).toBe(true);
+
+    await user.click(checkbox);
+    expect(getForm().checkValidity()).toBe(false);
+  });
+
   it("ignores clicks while readonly", async () => {
     const onCheck = vi.fn();
     render(CheckboxForm, { props: { readonly: true, onCheck } });
