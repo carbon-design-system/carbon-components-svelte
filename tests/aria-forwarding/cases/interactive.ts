@@ -12,6 +12,7 @@ import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
+import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
@@ -465,6 +466,14 @@ export const interactive: AriaEntry[] = [
     name: "ChatMessage",
     exempt:
       "message list item; its Retry button is named by retryText and its typing status by typingText",
+  },
+  {
+    name: "FileDownloadItem",
+    render: (attrs) =>
+      render(FileDownloadItem, {
+        props: { href: "/files/report.pdf", name: "report.pdf", ...attrs },
+      }),
+    target: () => screen.getByRole("link"),
   },
   {
     name: "FileUploaderItem",

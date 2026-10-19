@@ -1,3 +1,4 @@
+export { default as FileDownloadItem } from "./FileDownloadItem.svelte";
 export { default as Filename } from "./Filename.svelte";
 export { default as FileUploader } from "./FileUploader.svelte";
 export { default as FileUploaderButton } from "./FileUploaderButton.svelte";

@@ -1,0 +1,71 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// FileDownloadItem: a file row from FileUploaderItem that is a link or
+/// button for downloading the file.
+/// @access private
+/// @group components
+@mixin file-download-item {
+  .#{$prefix}--file-download-item {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    color: $text-primary;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    transition: background-color $duration--fast-02 motion(standard, productive);
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--file-download-item:not(.#{$prefix}--file-download-item--disabled):hover {
+      background-color: $field-hover;
+    }
+  }
+
+  // The icon sits as close to the name as ContainedList's icons do.
+  .#{$prefix}--file-download-item--with-icon {
+    column-gap: $carbon--spacing-04;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .#{$prefix}--file-download-item--with-icon .#{$prefix}--file-filename-group {
+    margin-left: 0;
+  }
+
+  .#{$prefix}--file-download-item__icon {
+    margin-left: $carbon--spacing-05;
+    fill: $icon-secondary;
+  }
+
+  // With the size on its own line under the name, the file type icon lines
+  // up with the name, the first line, as icons beside wrapped text do in
+  // Carbon. Small rows put the size beside the name, on one line.
+  .#{$prefix}--file-download-item--with-size:not(.#{$prefix}--file__selected-file--sm):not(.#{$prefix}--file__selected-file--xs)
+    .#{$prefix}--file-download-item__icon {
+    transform: translateY(-0.5rem);
+  }
+
+  .#{$prefix}--file-download-item__download {
+    fill: $icon-primary;
+  }
+
+  .#{$prefix}--file-download-item--disabled {
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--file-download-item--disabled .#{$prefix}--file-download-item__icon,
+  .#{$prefix}--file-download-item--disabled .#{$prefix}--file-download-item__download {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports("file-download-item") {
+  @include file-download-item;
+}
