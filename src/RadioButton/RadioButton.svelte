@@ -179,6 +179,16 @@
     initRegistry(name);
   }
 
+  // Push only a false → true change: Svelte 5 re-runs this block for every
+  // radio when a parent mutates an array bound with `bind:checked={a[i]}`,
+  // and a radio that was already checked must not reclaim the selection.
+  let registeredChecked = checked;
+
+  $: if (registry) {
+    if (checked && !registeredChecked) updateGroupSelection(name, instanceKey);
+    registeredChecked = checked;
+  }
+
   if (add) {
     add({ checked, value });
   }
