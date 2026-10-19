@@ -1,8 +1,10 @@
 import {
   clippedBy,
+  fitPopoverAlign,
   shouldFlipAlign,
   windowShift,
 } from "../../src/utils/fit-align.js";
+import { popoverPlacement } from "../../src/utils/inline-align.js";
 import { rect } from "./rect";
 
 describe("shouldFlipAlign", () => {
@@ -160,4 +162,125 @@ describe("clippedBy", () => {
     place(menu, { top: 300, left: 0, width: 200, height: 160 });
     expect(clippedBy(menu)).toBe(outer);
   });
+});
+
+describe("fitPopoverAlign", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.body.replaceChildren();
+  });
+
+  // A 1000 x 600 window with a 40 x 20 anchor at `anchorAt`, and an open
+  // popover at `popover`.
+  function setup(
+    anchorAt: { left: number; top: number },
+    popover: Parameters<typeof rect>[0],
+  ) {
+    vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+      1000,
+    );
+    vi.spyOn(document.documentElement, "clientHeight", "get").mockReturnValue(
+      600,
+    );
+    const anchor = document.createElement("div");
+    const el = document.createElement("div");
+    anchor.append(el);
+    document.body.append(anchor);
+    anchor.getBoundingClientRect = () =>
+      rect({ ...anchorAt, width: 40, height: 20 });
+    el.getBoundingClientRect = () => rect(popover);
+    return { anchor, el };
+  }
+
+  it("keeps a placement that fits", () => {
+    const { el, anchor } = setup(
+      { left: 100, top: 100 },
+      { left: 100, top: 120, width: 300, height: 100 },
+    );
+    expect(fitPopoverAlign(el, anchor, "bottom-left")).toBe("bottom-left");
+  });
+
+  it("takes the other edge at the window's right edge", () => {
+    // Start-aligned at 900, it runs to 1200; end-aligned, 640 to 940.
+    const { el, anchor } = setup(
+      { left: 900, top: 100 },
+      { left: 900, top: 120, width: 300, height: 100 },
+    );
+    expect(fitPopoverAlign(el, anchor, "bottom-left")).toBe("bottom-right");
+  });
+
+  it("moves a centered popover to the edge with room", () => {
+    const { el, anchor } = setup(
+      { left: 10, top: 100 },
+      { left: -120, top: 120, width: 300, height: 100 },
+    );
+    expect(fitPopoverAlign(el, anchor, "bottom")).toBe("bottom-left");
+  });
+
+  it("opens above at the bottom of the window", () => {
+    const { el, anchor } = setup(
+      { left: 100, top: 560 },
+      { left: 100, top: 580, width: 300, height: 100 },
+    );
+    expect(fitPopoverAlign(el, anchor, "bottom-left")).toBe("top-left");
+  });
+
+  it("takes the other side beside the anchor, and the other edge", () => {
+    // Right of an anchor near the window's right and bottom edges.
+    const { el, anchor } = setup(
+      { left: 900, top: 560 },
+      { left: 940, top: 560, width: 200, height: 100 },
+    );
+    expect(fitPopoverAlign(el, anchor, "right-top")).toBe("left-bottom");
+  });
+
+  it("fits within the box that clips it across the page", () => {
+    // The box ends at 500; the window has room.
+    const { el, anchor } = setup(
+      { left: 400, top: 100 },
+      { left: 400, top: 120, width: 300, height: 100 },
+    );
+    const box = document.createElement("div");
+    box.style.overflowX = "auto";
+    box.append(anchor);
+    document.body.append(box);
+    box.getBoundingClientRect = () => rect({ width: 500, height: 400 });
+    Object.defineProperty(box, "clientWidth", { value: 500 });
+    expect(fitPopoverAlign(el, anchor, "bottom-left")).toBe("bottom-right");
+  });
+
+  it("keeps the placement with no layout, or an anchor out of view", () => {
+    const hidden = setup({ left: 900, top: 100 }, { left: 900, top: 120 });
+    expect(fitPopoverAlign(hidden.el, hidden.anchor, "bottom-left")).toBe(
+      "bottom-left",
+    );
+    const away = setup(
+      { left: 900, top: 700 },
+      { left: 900, top: 720, width: 300, height: 100 },
+    );
+    expect(fitPopoverAlign(away.el, away.anchor, "bottom-left")).toBe(
+      "bottom-left",
+    );
+  });
+
+  // Popover passes the physical placement of its `align`, so in RTL a
+  // `bottom-start` popover fits from `bottom-right`.
+  it.each([
+    [false, 900, "bottom-right"],
+    [true, 900, "bottom-right"],
+    [false, 10, "bottom-left"],
+    [true, 10, "bottom-left"],
+  ] as const)(
+    "fits bottom-start in %s RTL at %spx to %s",
+    (rtl, left, expected) => {
+      const placement = popoverPlacement("bottom-start", rtl);
+      // Start-aligned (left edge on the anchor's left) or end-aligned.
+      const start = placement === "bottom-left" ? left : left + 40 - 300;
+      const { el, anchor } = setup(
+        { left, top: 100 },
+        { left: start, top: 120, width: 300, height: 100 },
+      );
+      expect(fitPopoverAlign(el, anchor, placement)).toBe(expected);
+    },
+  );
 });

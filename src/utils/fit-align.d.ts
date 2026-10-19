@@ -1,7 +1,7 @@
 /**
- * Fits a popover, tooltip or menu to the boxes around it: the start or end
- * alignment that fits its container better, a slide back into the window,
- * or the box that cuts it off, so it can move to a portal.
+ * Fits a popover, tooltip or menu to the boxes around it: the side and the
+ * start or end alignment that fit better, a slide back into the window, or
+ * the box that cuts it off, so it can move to a portal.
  */
 
 /**
@@ -24,6 +24,20 @@ export function shouldFlipAlign(
   center: number,
   bounds: { left: number; right: number },
 ): boolean;
+
+/**
+ * A Popover placement that keeps `el` in view: the other side when `el`
+ * runs past it and the anchor has more room there, and the edge alignment
+ * along that side that overflows least. Across the page, the room is
+ * `horizontalBounds`; up and down, the window. Placements are physical
+ * (`bottom-left`, `left-top`). Keeps `align` when `el` has no layout (zero
+ * size) or its anchor is out of the window.
+ */
+export function fitPopoverAlign(
+  el: Element,
+  anchor: Element,
+  align: string,
+): string;
 
 /**
  * How far to slide `el` sideways so it sits at least `margin` px (8 by

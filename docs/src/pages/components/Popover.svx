@@ -129,6 +129,21 @@ By default, the caret aligns to top. See [Alignment](#alignment) for all valid v
     </Popover>
 </div>
 
+### Stay in view
+
+An open popover that would run past the window takes the other side, or the other start or end alignment, when it fits better there. One that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a portal for that open.
+
+Set `portalPopover` to `true` to always render the popover in a portal, or to `false` to keep it in place. A portalled popover leaves its container in the DOM, so CSS that targets it as a descendant of the container does not match it.
+
+<Box padding={5} border="subtle" maxWidth="12rem" overflow="hidden">
+  <Box position="relative">
+    Parent
+    <Popover open caret align="bottom-start">
+      Content that the box would cut off
+    </Popover>
+  </Box>
+</Box>
+
 ## Variants
 
 Appearance variants for different backgrounds.

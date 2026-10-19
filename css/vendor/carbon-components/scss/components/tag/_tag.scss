@@ -578,8 +578,8 @@
     border-color: $border-disabled;
   }
 
-  // Clear the trigger's 2px focus outline.
-  .#{$prefix}--operational-tag .#{$prefix}--popover {
+  // Clear the trigger's 2px focus outline, in place and in a portal.
+  .#{$prefix}--popover.#{$prefix}--operational-tag__popover {
     --cds-popover-offset: #{$carbon--spacing-02};
   }
 

@@ -47,8 +47,27 @@
   /** Set to `true` to use a relative position */
   export let relative = false;
 
-  import { createEventDispatcher } from "svelte";
+  /**
+   * Set to `true` to always render the popover in a portal, or `false` to
+   * keep it in place. Left unset, it renders in place and moves to a portal
+   * for an open when a box around it (`overflow` other than `visible`) would
+   * cut it off. A `relative` popover stays in place.
+   * @type {boolean | undefined}
+   */
+  export let portalPopover = undefined;
+
+  /**
+   * Obtain a reference to the popover element.
+   * In a portal, this is the portalled element.
+   * @bindable readonly
+   * @type {null | HTMLDivElement}
+   */
+  export let ref = null;
+
+  import { createEventDispatcher, tick } from "svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { clippedBy, fitPopoverAlign } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isInlineAlign, popoverPlacement } from "../utils/inline-align.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -60,28 +79,133 @@
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
 
-  let popoverRef = null;
+  // Marks the popover's place while it's portalled. Its parent is the
+  // anchor, as it is for the popover in place.
+  let markerRef = null;
 
   // Read when the popover opens: nothing reports a `dir` change. A
   // `bind:this` ref in `$:` would re-run it on every update, so a function
-  // reads `popoverRef`.
+  // reads `ref`.
   $: rtl = open && isInlineAlign(align) && readRtl($layoutDirection);
 
   /** @param {"ltr" | "rtl" | undefined} contextDirection */
   function readRtl(contextDirection) {
-    return resolveLayoutDirection(contextDirection, popoverRef) === "rtl";
+    return resolveLayoutDirection(contextDirection, markerRef ?? ref) === "rtl";
   }
+  // The physical placement `align` names (`bottom-left`, `left-top`).
   $: alignClass = popoverPlacement(align, rtl);
 
+  // The placement an open popover settles on: `alignClass`, unless it runs
+  // past the window or its container there and fits better on the other
+  // side or edge. Physical, like `alignClass`.
+  /** @type {null | string} */
+  let fittedAlign = null;
+  $: placement = fittedAlign ?? alignClass;
+  // A new `align` starts over.
+  $: resetFit(alignClass);
+
+  /** @param {string} _align */
+  function resetFit(_align) {
+    fittedAlign = null;
+  }
+
+  // Set for one open when the popover in place turns out to be cut off by a
+  // box around it: it moves to a portal instead. Only when `portalPopover`
+  // is left unset.
+  let portalWhenClipped = false;
+  $: portalled =
+    !relative &&
+    (portalPopover === undefined ? portalWhenClipped : portalPopover);
+
+  $: if (!open) {
+    resetFit(alignClass);
+    portalWhenClipped = false;
+  }
+
+  // Fit on open, when the align changes, and once more after a move to a
+  // portal. `ref` binds only in the browser, so this never fits during SSR.
+  $: if (open && !relative) {
+    void alignClass;
+    void portalled;
+    tick().then(fit);
+  }
+
+  // The anchor's size, for styles that place the popover from its center
+  // (Toggletip's caret). In place, 100% of the anchor does that.
+  let anchorWidth = 0;
+  let anchorHeight = 0;
+
+  async function fit() {
+    if (!(open && ref)) return;
+    if (portalled) {
+      const anchor = markerRef?.parentElement;
+      if (!anchor) return;
+      ({ width: anchorWidth, height: anchorHeight } =
+        anchor.getBoundingClientRect());
+      // The portal places its content on the next frame, and once more on
+      // the frame after that.
+      await twoFrames();
+      if (!(open && portalled && ref)) return;
+      // The portal picks the side. The edge alignment along it is ours.
+      const [, fittedEdge] = fitPopoverAlign(ref, anchor, placement).split("-");
+      const next = fittedEdge ? `${side}-${fittedEdge}` : side;
+      if (next !== placement) fittedAlign = next;
+      return;
+    }
+    const anchor = ref.parentElement;
+    if (!anchor) return;
+    const next = fitPopoverAlign(ref, anchor, alignClass);
+    if (next !== placement) {
+      fittedAlign = next;
+      await tick();
+    }
+    if (portalPopover === undefined && open && ref && clippedBy(ref)) {
+      portalWhenClipped = true;
+    }
+  }
+
+  // Two animation frames, or a timeout where there are none (tests).
+  function twoFrames() {
+    return new Promise((resolve) => {
+      if (typeof requestAnimationFrame === "function")
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+      else setTimeout(resolve);
+    });
+  }
+
+  // `FloatingPortal` places by side, and by start, center or end along it.
+  $: [side, edge = ""] = placement.split("-");
+  $: intrinsicAlign =
+    edge === "left" || edge === "top"
+      ? "start"
+      : edge === "right" || edge === "bottom"
+        ? "end"
+        : "center";
+
+  /**
+   * The class list of a portalled popover. A consumer `class` is kept: in
+   * Svelte 3 and 4, a `class` in `$$restProps` would replace a static one.
+   * @param {string} portalSide The side the portal settled on.
+   */
+  function portalClass(portalSide) {
+    return [
+      "bx--popover bx--popover--portal bx--popover--open",
+      `bx--popover--${edge ? `${portalSide}-${edge}` : portalSide}`,
+      $$restProps.class,
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
+
   // A DatePicker nested in this popover may portal its flatpickr calendar to
-  // `document.body` (outside `popoverRef`), so a click on it looks like an outside
+  // `document.body` (outside `ref`), so a click on it looks like an outside
   // click. Flatpickr stamps the input with `_flatpickr`; walk the popover's
   // own inputs to check whether the clicked calendar belongs to one of them.
   function isDatePickerCalendarClick(target) {
-    if (!popoverRef || !(target instanceof Element)) return false;
+    if (!ref || !(target instanceof Element)) return false;
     const calendar = target.closest(".bx--date-picker__calendar");
     if (!calendar) return false;
-    for (const input of popoverRef.querySelectorAll("input")) {
+    for (const input of ref.querySelectorAll("input")) {
       if (
         /** @type {any} */ (input)._flatpickr?.calendarContainer === calendar
       ) {
@@ -94,7 +218,7 @@
   function handleOutsideClick(event) {
     if (
       open &&
-      isOutsideClick(event, popoverRef) &&
+      isOutsideClick(event, ref) &&
       !isDatePickerCalendarClick(event.target)
     ) {
       dispatch("click:outside", { target: event.target });
@@ -119,36 +243,71 @@
   }
 </script>
 
-<div
-  bind:this={popoverRef}
-  use:dismiss={{
-    enabled: open,
-    listeners: [
-      { type: "click", handler: handleOutsideClick },
-      { type: "keydown", handler: handleEscape },
-    ],
-  }}
-  class:bx--popover={true}
-  class:bx--popover--caret={caret}
-  class:bx--popover--high-contrast={highContrast}
-  class:bx--popover--drop-shadow={dropShadow}
-  class:bx--popover--border={border}
-  class:bx--popover--top={alignClass === "top"}
-  class:bx--popover--top-left={alignClass === "top-left"}
-  class:bx--popover--top-right={alignClass === "top-right"}
-  class:bx--popover--bottom={alignClass === "bottom"}
-  class:bx--popover--bottom-left={alignClass === "bottom-left"}
-  class:bx--popover--bottom-right={alignClass === "bottom-right"}
-  class:bx--popover--left={alignClass === "left"}
-  class:bx--popover--left-bottom={alignClass === "left-bottom"}
-  class:bx--popover--left-top={alignClass === "left-top"}
-  class:bx--popover--right={alignClass === "right"}
-  class:bx--popover--right-bottom={alignClass === "right-bottom"}
-  class:bx--popover--right-top={alignClass === "right-top"}
-  class:bx--popover--open={open}
-  class:bx--popover--relative={relative}
-  style:position={relative ? "relative" : undefined}
-  {...$$restProps}
->
-  <div class:bx--popover-contents={true}><slot /></div>
-</div>
+{#if portalled}
+  <span bind:this={markerRef} hidden></span>
+  {#if open && markerRef?.parentElement}
+    <FloatingPortal
+      anchor={markerRef.parentElement}
+      direction={side}
+      {open}
+      intrinsicWidth
+      {intrinsicAlign}
+      let:direction={portalSide}
+    >
+      <div
+        bind:this={ref}
+        use:dismiss={{
+          enabled: open,
+          listeners: [
+            { type: "click", handler: handleOutsideClick },
+            { type: "keydown", handler: handleEscape },
+          ],
+        }}
+        {...$$restProps}
+        class={portalClass(portalSide ?? side)}
+        class:bx--popover--caret={caret}
+        class:bx--popover--high-contrast={highContrast}
+        class:bx--popover--drop-shadow={dropShadow}
+        class:bx--popover--border={border}
+        style:--ccs-popover-anchor-width="{anchorWidth}px"
+        style:--ccs-popover-anchor-height="{anchorHeight}px"
+      >
+        <div class:bx--popover-contents={true}><slot /></div>
+      </div>
+    </FloatingPortal>
+  {/if}
+{:else}
+  <div
+    bind:this={ref}
+    use:dismiss={{
+      enabled: open,
+      listeners: [
+        { type: "click", handler: handleOutsideClick },
+        { type: "keydown", handler: handleEscape },
+      ],
+    }}
+    class:bx--popover={true}
+    class:bx--popover--caret={caret}
+    class:bx--popover--high-contrast={highContrast}
+    class:bx--popover--drop-shadow={dropShadow}
+    class:bx--popover--border={border}
+    class:bx--popover--top={placement === "top"}
+    class:bx--popover--top-left={placement === "top-left"}
+    class:bx--popover--top-right={placement === "top-right"}
+    class:bx--popover--bottom={placement === "bottom"}
+    class:bx--popover--bottom-left={placement === "bottom-left"}
+    class:bx--popover--bottom-right={placement === "bottom-right"}
+    class:bx--popover--left={placement === "left"}
+    class:bx--popover--left-bottom={placement === "left-bottom"}
+    class:bx--popover--left-top={placement === "left-top"}
+    class:bx--popover--right={placement === "right"}
+    class:bx--popover--right-bottom={placement === "right-bottom"}
+    class:bx--popover--right-top={placement === "right-top"}
+    class:bx--popover--open={open}
+    class:bx--popover--relative={relative}
+    style:position={relative ? "relative" : undefined}
+    {...$$restProps}
+  >
+    <div class:bx--popover-contents={true}><slot /></div>
+  </div>
+{/if}

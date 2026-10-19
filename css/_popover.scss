@@ -38,6 +38,23 @@
     display: block;
   }
 
+  // A popover in a portal: the portal places it, so its side class only
+  // draws the caret. A margin on the side facing the anchor keeps the gap
+  // that `--cds-popover-offset` gives in place. The classes are physical.
+  .#{$prefix}--popover.#{$prefix}--popover--portal {
+    position: relative;
+    inset: auto;
+    transform: none;
+  }
+
+  @each $side, $facing, $edges in (top bottom (left, right), bottom top (left, right), left right (top, bottom), right left (top, bottom)) {
+    .#{$prefix}--popover--portal.#{$prefix}--popover--#{$side},
+    .#{$prefix}--popover--portal.#{$prefix}--popover--#{$side}-#{nth($edges, 1)},
+    .#{$prefix}--popover--portal.#{$prefix}--popover--#{$side}-#{nth($edges, 2)} {
+      margin-#{$facing}: var(--cds-popover-offset);
+    }
+  }
+
   .#{$prefix}--popover-contents {
     // The shadow is the only edge; forced colors drop it.
     @include high-contrast-mode("outline");

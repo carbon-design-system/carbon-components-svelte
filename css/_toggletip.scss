@@ -50,13 +50,26 @@
   }
 
   // Start and end alignment point the caret at the button's center for any
-  // button size, as v11 does: the component places the popover edge
+  // button size, as v11 does: the rules below place the popover edge
   // `--ccs-toggletip-caret` (from its corner to the caret's center: the 8px
   // offset plus half the 8px caret) before that center. For the 16px info
   // button that is 4px past the button's edge.
   .#{$prefix}--popover.#{$prefix}--toggletip-popover {
     --cds-popover-caret-offset: #{to-rem(8px)};
     --ccs-toggletip-caret: #{to-rem(12px)};
+    // The button's size. In a portal, Popover sets it inline in px.
+    --ccs-popover-anchor-width: 100%;
+    --ccs-popover-anchor-height: 100%;
+  }
+
+  // In place, the offset is from the button's wrapper. In a portal, it moves
+  // the popover from the button's edge, where the portal put it.
+  @each $edge, $size, $sides in (left width (top, bottom), right width (top, bottom), top height (left, right), bottom height (left, right)) {
+    @each $side in $sides {
+      .#{$prefix}--popover.#{$prefix}--toggletip-popover.#{$prefix}--popover--#{$side}-#{$edge} {
+        #{$edge}: calc(var(--ccs-popover-anchor-#{$size}) / 2 - var(--ccs-toggletip-caret));
+      }
+    }
   }
 
   // A bare paragraph keeps the content's type style. A page's `p` rule, or

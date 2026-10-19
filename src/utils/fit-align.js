@@ -1,7 +1,7 @@
 // @ts-check
-// Fits a popover, tooltip or menu to the boxes around it: the start or end
-// alignment that fits its container better, a slide back into the window,
-// or the box that cuts it off, so it can move to a portal.
+// Fits a popover, tooltip or menu to the boxes around it: the side and the
+// start or end alignment that fit better, a slide back into the window, or
+// the box that cuts it off, so it can move to a portal.
 
 /**
  * The edges of the area `box` clips its content to: its padding box, inside
@@ -61,6 +61,81 @@ export function shouldFlipAlign(popover, center, bounds) {
   return (
     overflow(2 * center - popover.right, 2 * center - popover.left) < current
   );
+}
+
+/**
+ * The edge alignment along one axis that overflows `bounds` least: `edge`
+ * itself, the other edge (mirrored around the anchor's center, as in
+ * `shouldFlipAlign`), or, from center, the edge on the side with room.
+ * @param {{ left: number, right: number }} box The popover, on this axis.
+ * @param {{ left: number, right: number }} anchor
+ * @param {{ left: number, right: number }} bounds
+ * @param {string} edge `""` for center.
+ * @param {[string, string]} names The start and end edge names.
+ * @returns {string}
+ */
+function fitEdge(box, anchor, bounds, edge, [start, end]) {
+  /** @param {number} left @param {number} right */
+  const overflow = (left, right) =>
+    Math.max(0, bounds.left - left) + Math.max(0, right - bounds.right);
+  const current = overflow(box.left, box.right);
+  if (current === 0) return edge;
+  if (edge) {
+    const center = (anchor.left + anchor.right) / 2;
+    if (!shouldFlipAlign(box, center, bounds)) return edge;
+    return edge === start ? end : start;
+  }
+  const size = box.right - box.left;
+  const atStart = overflow(anchor.left, anchor.left + size);
+  const atEnd = overflow(anchor.right - size, anchor.right);
+  if (Math.min(atStart, atEnd) >= current) return edge;
+  return atStart <= atEnd ? start : end;
+}
+
+/**
+ * A Popover placement that keeps `el` in view. It takes the other side when
+ * `el` runs past it and the anchor has more room on the other side. Along
+ * that side, it takes the edge alignment that overflows least. Across the
+ * page, the room is `horizontalBounds`; up and down, it is the window.
+ * Placements are physical (`bottom-left`, `left-top`). Keeps `align` when
+ * `el` has no layout (zero size) or its anchor is out of the window.
+ * @param {Element} el The open popover.
+ * @param {Element} anchor What the popover is placed against.
+ * @param {string} align
+ * @returns {string}
+ */
+export function fitPopoverAlign(el, anchor, align) {
+  const r = el.getBoundingClientRect();
+  if (r.width === 0 || r.height === 0) return align;
+  const a = anchor.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
+  if (a.bottom < 0 || a.top > vh || a.right < 0 || a.left > vw) return align;
+  const x = horizontalBounds(el);
+  let [side, edge = ""] = align.split("-");
+
+  if (side === "top" || side === "bottom") {
+    const above = a.top;
+    const below = vh - a.bottom;
+    if (side === "bottom" && r.bottom > vh && above > below) side = "top";
+    else if (side === "top" && r.top < 0 && below > above) side = "bottom";
+    edge = fitEdge(r, a, x, edge, ["left", "right"]);
+  } else {
+    const before = a.left - x.left;
+    const after = x.right - a.right;
+    if (side === "right" && r.right > x.right && before > after) side = "left";
+    else if (side === "left" && r.left < x.left && after > before) {
+      side = "right";
+    }
+    edge = fitEdge(
+      { left: r.top, right: r.bottom },
+      { left: a.top, right: a.bottom },
+      { left: 0, right: vh },
+      edge,
+      ["top", "bottom"],
+    );
+  }
+  return edge ? `${side}-${edge}` : side;
 }
 
 /**
