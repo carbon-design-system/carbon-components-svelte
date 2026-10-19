@@ -144,6 +144,9 @@
   } = splitAriaNaming($$restProps));
 
   let initialLabelText = labelText;
+  // The label a pick last wrote. Any other `labelText` came from the
+  // consumer (e.g. a locale change), so clearing restores that instead.
+  let fileLabel = undefined;
 
   // Determine if this is icon-only (has icon but no label content)
   $: hasIconOnly =
@@ -156,7 +159,10 @@
   };
 
   $: if (ref && files !== undefined) {
-    if (files.length === 0) labelText = initialLabelText;
+    if (files.length === 0) {
+      if (labelText !== fileLabel) initialLabelText = labelText;
+      labelText = initialLabelText;
+    }
     syncInputFiles(ref, files);
   }
   /** @param {ReadonlyArray<File>} incoming */
@@ -174,7 +180,9 @@
 
     // An icon-only button has no label to replace.
     if (files.length > 0 && !disableLabelChanges && !hasIconOnly) {
-      labelText = files.length > 1 ? `${files.length} files` : files[0].name;
+      if (labelText !== fileLabel) initialLabelText = labelText;
+      labelText = fileLabel =
+        files.length > 1 ? `${files.length} files` : files[0].name;
     }
 
     dispatch("change", files);
