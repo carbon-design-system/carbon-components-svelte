@@ -288,6 +288,7 @@ describe("Toggle", () => {
     render(ToggleSlotOnly);
 
     expect(screen.getByText("Slot only label")).toBeVisible();
+    expect(screen.getByRole("switch")).toHaveAccessibleName("Slot only label");
   });
 
   it("falls back to the name Toggle without a label or aria-label", () => {

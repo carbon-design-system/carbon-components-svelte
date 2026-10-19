@@ -196,7 +196,9 @@
     {value}
   >
   <label
-    aria-label={labelText || ariaLabel !== undefined ? undefined : "Toggle"}
+    aria-label={labelText || $$slots.labelChildren || ariaLabel !== undefined
+      ? undefined
+      : "Toggle"}
     for={id}
     class:bx--toggle-input__label={true}
   >
