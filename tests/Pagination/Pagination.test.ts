@@ -16,6 +16,18 @@ describe("Pagination", () => {
     expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
   });
 
+  it("does not fire update when clamping an out-of-range initial page", async () => {
+    const onUpdate = vi.fn();
+    render(Pagination, {
+      props: { totalItems: 20, page: 5, pageSize: 10, onUpdate },
+    });
+
+    expect(screen.getByText("11–20 of 20 items")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Previous page" }));
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 10, page: 1 });
+  });
+
   it("should render with default props", () => {
     render(Pagination);
 
