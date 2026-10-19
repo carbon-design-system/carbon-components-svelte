@@ -67,6 +67,17 @@ describe("TagInput", () => {
       expect(shownValue()).toEqual(["a", "b"]);
     });
 
+    it.each([
+      ["keeps its flags", /x/i, "aXbX"],
+      ["drops what it captures", /([,;])/, "a,b;"],
+    ])("splits on a RegExp delimiter that %s", async (_, delimiter, text) => {
+      render(TagInput, { config: { delimiter } });
+
+      await user.type(input(), text);
+
+      expect(shownValue()).toEqual(["a", "b"]);
+    });
+
     it("splits pasted text on delimiters and line breaks, announcing once", async () => {
       const onAdd = vi.fn();
       render(TagInput, { onAdd });

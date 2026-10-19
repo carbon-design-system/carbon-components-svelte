@@ -217,7 +217,8 @@
 
   $: delimiterPattern =
     delimiter instanceof RegExp
-      ? delimiter
+      ? // `g` and `y` would make the paste check depend on `lastIndex`.
+        new RegExp(delimiter.source, delimiter.flags.replace(/[gy]/g, ""))
       : new RegExp(
           (Array.isArray(delimiter) ? delimiter : [delimiter])
             .filter(Boolean)
@@ -235,7 +236,11 @@
 
   /** @type {(text: string, pattern?: RegExp) => string[]} */
   function split(text, pattern = delimiterPattern) {
-    return text.split(new RegExp(pattern.source, "g"));
+    // `split` puts each capture group's text between the pieces; drop it.
+    // An empty match has one entry per group, plus the match itself.
+    const stride =
+      new RegExp(`${pattern.source}|`, pattern.flags).exec("")?.length ?? 1;
+    return text.split(pattern).filter((_, i) => i % stride === 0);
   }
 
   /**
@@ -455,7 +460,10 @@
   function handlePaste(event) {
     if (!addOnPaste || !interactive || !ref) return;
     const text = event.clipboardData?.getData("text") ?? "";
-    const pattern = new RegExp(`${delimiterPattern.source}|\\r?\\n`);
+    const pattern = new RegExp(
+      `${delimiterPattern.source}|\\r?\\n`,
+      delimiterPattern.flags,
+    );
     if (!pattern.test(text)) return;
 
     event.preventDefault();
