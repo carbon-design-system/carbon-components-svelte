@@ -49,5 +49,56 @@ export function menuSide(anchor, menu, direction) {
   return direction;
 }
 
+/** @typedef {"start" | "center" | "end"} IntrinsicAlign */
+
+/**
+ * Align a menu above or below its anchor so it stays `margin` px inside the
+ * viewport's sides. A menu that fits keeps `align`. One that runs past a
+ * side takes the alignment that runs past least: `align`, then the anchor's
+ * other edge, then its center. A menu with no width keeps `align`.
+ *
+ * The names are physical, as `physicalAlign` returns them: `start` lines
+ * the menu up with the anchor's left edge and `end` with its right edge.
+ *
+ * @param {Object} options
+ * @param {number} options.before - The anchor's left edge.
+ * @param {number} options.after - The anchor's right edge.
+ * @param {number} options.size - The menu's width.
+ * @param {number} options.max - The viewport's width.
+ * @param {IntrinsicAlign} options.align - The preferred alignment.
+ * @param {number} [options.margin=8]
+ * @returns {IntrinsicAlign}
+ */
+export function fitIntrinsicAlign({
+  before,
+  after,
+  size,
+  max,
+  align,
+  margin = 8,
+}) {
+  if (size <= 0) return align;
+  /** @type {Record<IntrinsicAlign, number>} */
+  const lefts = {
+    start: before,
+    center: (before + after - size) / 2,
+    end: after - size,
+  };
+  /** @param {IntrinsicAlign} option */
+  const overflow = (option) =>
+    Math.max(0, margin - lefts[option]) +
+    Math.max(0, lefts[option] + size - (max - margin));
+  /** @type {IntrinsicAlign[]} */
+  const others =
+    align === "center"
+      ? ["start", "end"]
+      : [align === "start" ? "end" : "start", "center"];
+  let best = align;
+  for (const option of others) {
+    if (overflow(option) < overflow(best)) best = option;
+  }
+  return best;
+}
+
 // One helper for menus, tooltips and popovers.
 export { physicalAlign } from "./inline-align.js";

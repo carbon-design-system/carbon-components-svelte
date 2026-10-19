@@ -68,6 +68,8 @@
    * Align the menu to the trigger button's intrinsic width.
    * `start` and `end` are the trigger's inline start and end, which swap
    * under `dir="rtl"`.
+   * A menu that would run past a side of the window takes another
+   * alignment for that open.
    * @type {"start" | "center" | "end"}
    */
   export let intrinsicAlign = "end";
