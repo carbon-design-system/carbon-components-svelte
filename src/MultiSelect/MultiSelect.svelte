@@ -508,6 +508,7 @@
   import Tag from "../Tag/Tag.svelte";
   import TagSet from "../TagSet/TagSet.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { clippedBy } from "../utils/clipped-by.js";
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -550,24 +551,42 @@
   const aiLabelState = writable($$slots.decorator ? "active" : undefined);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
+  // Set for one open when the in-place menu turns out to be cut off by a
+  // box around it (a scrolling panel, an `overflow: hidden` card): the menu
+  // moves to a portal instead. Only when `portalMenu` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
 
   // In place, the menu opens on `direction`'s side unless it doesn't fit
   // there and the other side has more room; a portalled menu flips itself.
-  // Measured once per open, after the menu renders.
+  // Measured once per open, after the menu renders and before it paints.
   /** @type {"top" | "bottom" | null} */
   let measuredSide = null;
   $: placement = measuredSide ?? direction;
   $: if (open && !effectivePortalMenu) {
     void direction;
-    tick().then(() => {
-      if (open && listRef && fieldRef) {
-        measuredSide = menuSide(fieldRef, listRef, direction);
-      }
-    });
+    tick().then(placeMenu);
   } else {
     measuredSide = null;
+  }
+
+  async function placeMenu() {
+    if (!(open && listRef && fieldRef)) return;
+    const mayPortal = portalMenu === undefined;
+    if (mayPortal && clippedBy(listRef)) {
+      portalWhenClipped = true;
+      return;
+    }
+    const side = menuSide(fieldRef, listRef, direction);
+    if (side === placement) return;
+    measuredSide = side;
+    await tick();
+    if (mayPortal && open && listRef && clippedBy(listRef)) {
+      portalWhenClipped = true;
+    }
   }
 
   let sortCollatorLocale;
