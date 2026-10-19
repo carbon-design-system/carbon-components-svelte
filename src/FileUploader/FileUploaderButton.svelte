@@ -172,7 +172,8 @@
 
     files = multiple ? [...files, ...accepted] : accepted;
 
-    if (files.length > 0 && !disableLabelChanges) {
+    // An icon-only button has no label to replace.
+    if (files.length > 0 && !disableLabelChanges && !hasIconOnly) {
       labelText = files.length > 1 ? `${files.length} files` : files[0].name;
     }
 

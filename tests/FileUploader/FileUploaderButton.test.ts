@@ -170,6 +170,19 @@ describe("FileUploaderButton", () => {
     expect(iconButton.querySelector("svg")).toBeInTheDocument();
   });
 
+  it("should keep an icon-only button icon-only after a pick", async () => {
+    const { container } = render(FileUploaderButton, {
+      props: { icon: Add, iconDescription: "Add file", labelText: "" },
+    });
+
+    simulateFileSelection(getFileInput(container), [makeFile("test.txt")]);
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Add file" })).toHaveClass(
+      "bx--btn--icon-only",
+    );
+  });
+
   it.each([
     ["bottom", "center"],
     ["right", "end"],
