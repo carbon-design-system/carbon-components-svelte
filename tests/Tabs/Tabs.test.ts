@@ -529,6 +529,27 @@ describe("Tabs dismissible", () => {
     );
   });
 
+  it.each([
+    { name: "Enter", key: "{Enter}" },
+    { name: "Space", key: " " },
+  ])("dismisses with $name on a focused dismiss button", async ({ key }) => {
+    const onDismiss = vi.fn();
+    render(TabsDismissible, { props: { onDismiss } });
+    await tick();
+
+    screen.getByRole("button", { name: "Dismiss Two" }).focus();
+    await user.keyboard(key);
+    await tick();
+
+    expect(onDismiss).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "two" }),
+    );
+    expect(screen.getByRole("tab", { name: "One" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
   it("leaves focus on the tab when the handler keeps it", async () => {
     const onDismiss = vi.fn();
     render(TabsDismissible, { props: { removeOnDismiss: false, onDismiss } });

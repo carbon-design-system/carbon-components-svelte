@@ -217,7 +217,13 @@
 
     if ($useDismissible && event.key === "Delete") {
       dismiss(id);
-    } else if (event.key === " ") {
+      return;
+    }
+
+    // Enter and Space on the dismiss button click it, not the tab.
+    if (event.target !== ref) return;
+
+    if (event.key === " ") {
       event.preventDefault();
       update(id);
     } else if (event.key === "Enter") {
