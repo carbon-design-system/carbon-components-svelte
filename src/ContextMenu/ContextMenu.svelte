@@ -192,8 +192,21 @@
     }
   }
 
+  /** @param {MouseEvent} event */
+  function handleWindowContextMenu(event) {
+    if (target != null) return;
+    if (!ref) return;
+    openMenu(event);
+  }
+
   onMount(() => {
+    // Only the root menu opens on the page's context menu. Nested menus
+    // (one per option with sub-options) skip the window listener.
+    if (level === 1) {
+      window.addEventListener("contextmenu", handleWindowContextMenu);
+    }
     return () => {
+      window.removeEventListener("contextmenu", handleWindowContextMenu);
       for (const node of boundTargets) {
         node?.removeEventListener("contextmenu", openMenu);
       }
@@ -257,15 +270,6 @@
     }
   }
 </script>
-
-<svelte:window
-  on:contextmenu={(event) => {
-    if (target != null) return;
-    if (level > 1) return;
-    if (!ref) return;
-    openMenu(event);
-  }}
-/>
 
 <ul
   bind:this={ref}
