@@ -2,7 +2,7 @@
   /**
    * @restProps {div}
    * @template {string | number} [Value=string | number]
-   * @event {Value} change
+   * @event {Value | null} change - Dispatched with the selected value, or `null` when the selection is cleared.
    */
 
   /**

@@ -378,7 +378,7 @@ describe("RadioButtonGroup", () => {
       type ChangeEvent = Events["change"];
       type ChangeEventDetail =
         ChangeEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue>();
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue | null>();
     });
 
     it("should default to string | number when generic is not specified", () => {
@@ -393,20 +393,20 @@ describe("RadioButtonGroup", () => {
       type ChangeEvent = Events["change"];
       type ChangeEventDetail =
         ChangeEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string | number>();
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string | number | null>();
     });
 
     it("should provide type-safe access to custom string literal types in event handlers", () => {
       type Status = "pending" | "approved" | "rejected";
 
-      const handleChange = (value: Status) => {
-        expectTypeOf(value).toEqualTypeOf<Status>();
+      const handleChange = (value: Status | null) => {
+        expectTypeOf(value).toEqualTypeOf<Status | null>();
         if (value === "pending") {
           expectTypeOf(value).toEqualTypeOf<"pending">();
         }
       };
 
-      expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status>();
+      expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status | null>();
 
       type ComponentType = RadioButtonGroupComponent<Status>;
       type Events = ComponentEvents<ComponentType>;
