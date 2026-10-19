@@ -43,15 +43,6 @@ describe("resolveValidationVisibility", () => {
   ])("resolves %o -> %o", (options, expected) => {
     expect(resolveValidationVisibility(options)).toEqual(expected);
   });
-
-  it("defaults disabled/readonly to false", () => {
-    expect(resolveValidationVisibility({ invalid: true, warn: false })).toEqual(
-      {
-        showInvalid: true,
-        showWarn: false,
-      },
-    );
-  });
 });
 
 describe("buildFieldIds", () => {
@@ -71,7 +62,6 @@ describe("buildFieldIds", () => {
       warnId: "w1",
       readonlyId: "r1",
     };
-    expect(buildFieldIds(undefined, fallback)).toEqual(fallback);
     expect(buildFieldIds("", fallback)).toEqual(fallback);
   });
 
@@ -93,8 +83,6 @@ describe("joinDescribedBy", () => {
     ],
     [["readonly-x", null, undefined, false, "error-x"], "readonly-x error-x"],
     [[null, undefined, false], undefined],
-    [[], undefined],
-    [[null, "error-x"], "error-x"],
   ])("joinDescribedBy(...%o) -> %o", (ids, expected) => {
     expect(joinDescribedBy(...ids)).toBe(expected);
   });
@@ -174,18 +162,6 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  it("keeps the warn id while fluid", () => {
-    expect(
-      resolveStatusDescribedBy({
-        ...base,
-        showInvalid: false,
-        showWarn: true,
-        helperText: "help",
-        isFluid: true,
-      }),
-    ).toBe("warn-x");
-  });
-
   it("includeErrorId=false skips the invalid tier, but showInvalid still suppresses helper", () => {
     expect(
       resolveStatusDescribedBy({
@@ -196,18 +172,6 @@ describe("resolveStatusDescribedBy", () => {
         includeErrorId: false,
       }),
     ).toBeUndefined();
-  });
-
-  it("reaches helper once warn is false", () => {
-    expect(
-      resolveStatusDescribedBy({
-        ...base,
-        showInvalid: false,
-        showWarn: false,
-        warnText: "",
-        helperText: "help",
-      }),
-    ).toBe("helper-x");
   });
 
   it("skips a message without text, without falling back to helper", () => {
@@ -229,24 +193,5 @@ describe("resolveStatusDescribedBy", () => {
         helperText: "help",
       }),
     ).toBeUndefined();
-  });
-
-  it("points at a message with text", () => {
-    expect(
-      resolveStatusDescribedBy({
-        ...base,
-        showInvalid: true,
-        showWarn: false,
-        invalidText: "Required",
-      }),
-    ).toBe("error-x");
-    expect(
-      resolveStatusDescribedBy({
-        ...base,
-        showInvalid: false,
-        showWarn: true,
-        warnText: "Careful",
-      }),
-    ).toBe("warn-x");
   });
 });

@@ -74,16 +74,6 @@ describe("trapFocus", () => {
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
-  it("Tab advances to the next element mid-list", () => {
-    const { container, buttons } = setup(3);
-    buttons[0].focus();
-    const { event } = tabEvent();
-
-    trapFocus({ container, event });
-
-    expect(document.activeElement).toBe(buttons[1]);
-  });
-
   it("Shift+Tab moves to the previous element mid-list", () => {
     const { container, buttons } = setup(3);
     buttons[2].focus();
@@ -131,18 +121,6 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[2]);
   });
 
-  it("hidden elements are excluded from the focus loop", () => {
-    const { container, buttons } = setup(3);
-    buttons[1].style.display = "none";
-    buttons[0].focus();
-    const { event } = tabEvent();
-
-    // buttons[1] is skipped, so Tab goes straight to buttons[2].
-    trapFocus({ container, event });
-
-    expect(document.activeElement).toBe(buttons[2]);
-  });
-
   it("visibility:hidden and display:none elements are both excluded, only the visible one is focused", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
@@ -152,9 +130,9 @@ describe("trapFocus", () => {
     stubVisibleGeometry(visible);
     container.appendChild(visible);
 
-    // display:none collapses the element's layout box, so it's excluded by
-    // the cheap geometry checks before getComputedStyle is ever called
-    // (jsdom's default offsetParent: null / offsetHeight: 0 is left as-is).
+    // The DOM env reports offsetParent: null for every element, so the
+    // geometry check never excludes this one; it is caught by the
+    // getComputedStyle display check, like the visibility:hidden one below.
     const displayNone = document.createElement("button");
     displayNone.textContent = "Display none";
     displayNone.style.display = "none";

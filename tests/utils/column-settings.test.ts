@@ -32,6 +32,11 @@ describe("applyColumnSettings", () => {
     expect(result.map((header) => [header.key, !!header.columnHidden])).toEqual(
       headers.map((header) => [header.key, !!header.columnHidden]),
     );
+    // Function-valued fields survive the round trip.
+    expect(result.find((header) => header.key === "protocol")?.display).toBe(
+      display,
+    );
+    expect(result.find((header) => header.key === "port")?.sort).toBe(sort);
   });
 
   it("ignores unknown keys in settings.order", () => {
@@ -60,16 +65,6 @@ describe("applyColumnSettings", () => {
       "protocol",
       "actions",
     ]);
-  });
-
-  it("keeps functions on headers", () => {
-    const settings = toColumnSettings(headers);
-    const result = applyColumnSettings(headers, settings);
-
-    expect(result.find((header) => header.key === "protocol")?.display).toBe(
-      display,
-    );
-    expect(result.find((header) => header.key === "port")?.sort).toBe(sort);
   });
 
   it("sets an explicit false on headers not in settings.hidden", () => {

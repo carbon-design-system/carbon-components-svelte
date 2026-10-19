@@ -70,28 +70,19 @@ describe("createOptionListNavigator", () => {
     expect(get(highlightedId)).toBeNull();
   });
 
-  it("moveActive steps forward and wraps at the end", () => {
+  it.each([
+    [1, "c", "a"],
+    [-1, "a", "c"],
+  ] as const)("moveActive(%i) from %s wraps to %s", (step, from, to) => {
     const menu = buildMenu([{ id: "a" }, { id: "b" }, { id: "c" }]);
-    const highlightedId = writable<string | null>("c");
+    const highlightedId = writable<string | null>(from);
     const navigator = createOptionListNavigator({
       getMenuRef: () => menu,
       highlightedId,
     });
 
-    navigator.moveActive(1);
-    expect(get(highlightedId)).toBe("a");
-  });
-
-  it("moveActive steps backward and wraps at the start", () => {
-    const menu = buildMenu([{ id: "a" }, { id: "b" }, { id: "c" }]);
-    const highlightedId = writable<string | null>("a");
-    const navigator = createOptionListNavigator({
-      getMenuRef: () => menu,
-      highlightedId,
-    });
-
-    navigator.moveActive(-1);
-    expect(get(highlightedId)).toBe("c");
+    navigator.moveActive(step);
+    expect(get(highlightedId)).toBe(to);
   });
 
   it("moveActive from an id no longer in the list starts at the first option", () => {

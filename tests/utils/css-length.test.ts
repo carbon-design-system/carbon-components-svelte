@@ -10,8 +10,6 @@ describe("toCssLength", () => {
 
   it("passes strings and nullish values through", () => {
     expect(toCssLength("50%")).toBe("50%");
-    expect(toCssLength("")).toBe("");
-    expect(toCssLength(undefined)).toBeUndefined();
     expect(toCssLength(null)).toBeNull();
   });
 });

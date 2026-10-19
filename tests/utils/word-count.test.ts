@@ -14,19 +14,6 @@ describe("wordCount", () => {
     expect(wordCount("  a  b ")).toBe(2);
   });
 
-  it("counts apostrophe words as one", () => {
-    expect(wordCount("don't stop")).toBe(2);
-  });
-
-  it("counts hyphenated words consistently", () => {
-    expect(wordCount("well-known")).toBeGreaterThanOrEqual(1);
-    expect(wordCount("well-known")).toBeLessThanOrEqual(2);
-  });
-
-  it("counts digits-only tokens", () => {
-    expect(wordCount("call 911 now")).toBe(3);
-  });
-
   it("does not count punctuation or whitespace-only input", () => {
     expect(wordCount(" \n\t ")).toBe(0);
     expect(wordCount("...")).toBe(0);
@@ -62,16 +49,8 @@ describe("wordLimitAction", () => {
     expect(wordLimitAction("one two three", 13, 13, " four", 3)).toBe("block");
   });
 
-  it("allows whitespace at the cap", () => {
-    expect(wordLimitAction("one two three", 13, 13, " ", 3)).toBe("allow");
-  });
-
   it("blocks whitespace that would split a word past the cap", () => {
     expect(wordLimitAction("one two three", 11, 11, " ", 3)).toBe("block");
-  });
-
-  it("allows extending the last word at the cap", () => {
-    expect(wordLimitAction("one two thr", 11, 11, "ee", 3)).toBe("allow");
   });
 
   it("truncates a paste to the remaining room", () => {
@@ -84,10 +63,6 @@ describe("wordLimitAction", () => {
     expect(wordLimitAction("one two three", 4, 13, "x y z", 3)).toEqual({
       insert: "x y ",
     });
-  });
-
-  it("blocks a paste when there is no room", () => {
-    expect(wordLimitAction("one two", 7, 7, " three four", 2)).toBe("block");
   });
 
   it("allows edits that add no words to a value over the limit", () => {

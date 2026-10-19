@@ -1,8 +1,9 @@
 import { addPooledListener } from "../../src/utils/window-listener-pool.js";
 
 describe("addPooledListener", () => {
-  it("registers immediately and shares one listener across consumers", () => {
+  it("shares one real listener across consumers until the last unregisters", () => {
     const addSpy = vi.spyOn(window, "addEventListener");
+    const removeSpy = vi.spyOn(window, "removeEventListener");
     const a = vi.fn();
     const b = vi.fn();
 
@@ -16,27 +17,16 @@ describe("addPooledListener", () => {
     expect(b).toHaveBeenCalledTimes(1);
 
     unlistenA();
-    unlistenB();
-    addSpy.mockRestore();
-  });
-
-  it("removes the real listener only after the last consumer unregisters", () => {
-    const removeSpy = vi.spyOn(window, "removeEventListener");
-    const handler = vi.fn();
-
-    const unlistenA = addPooledListener("resize", handler);
-    const unlistenB = addPooledListener("resize", handler);
-
-    unlistenA();
-    expect(removeSpy.mock.calls.filter((c) => c[0] === "resize").length).toBe(
+    expect(removeSpy.mock.calls.filter((c) => c[0] === "scroll").length).toBe(
       0,
     );
 
     unlistenB();
-    expect(removeSpy.mock.calls.filter((c) => c[0] === "resize").length).toBe(
+    expect(removeSpy.mock.calls.filter((c) => c[0] === "scroll").length).toBe(
       1,
     );
 
+    addSpy.mockRestore();
     removeSpy.mockRestore();
   });
 
@@ -55,5 +45,52 @@ describe("addPooledListener", () => {
     unlistenBubble();
     unlistenCapture();
     addSpy.mockRestore();
+  });
+
+  it("calls consumers in registration order", () => {
+    const order: number[] = [];
+    const unlisten = [1, 2, 3].map((n) =>
+      addPooledListener("click", () => order.push(n)),
+    );
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(order).toEqual([1, 2, 3]);
+
+    for (const u of unlisten) u();
+  });
+
+  it("unregister during dispatch skips the removed consumer", () => {
+    const calls: string[] = [];
+    let unlistenInner: () => void = () => {};
+    const unlistenOuter = addPooledListener("click", () => {
+      calls.push("outer");
+      unlistenInner();
+    });
+    unlistenInner = addPooledListener("click", () => calls.push("inner"));
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(calls).toEqual(["outer"]);
+
+    unlistenOuter();
+  });
+
+  it("consumer added mid-dispatch waits for the next event", () => {
+    const calls: string[] = [];
+    let unlistenAdded: (() => void) | undefined;
+
+    const unlistenFirst = addPooledListener("click", () => {
+      calls.push("first");
+      if (unlistenAdded) return;
+      unlistenAdded = addPooledListener("click", () => calls.push("added"));
+    });
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(calls).toEqual(["first"]);
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(calls).toEqual(["first", "first", "added"]);
+
+    unlistenFirst();
+    unlistenAdded?.();
   });
 });

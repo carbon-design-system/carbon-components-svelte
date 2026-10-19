@@ -60,13 +60,6 @@ describe("rovingFocus", () => {
     expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
   });
 
-  it("ArrowRight wraps from the last item to the first", () => {
-    const { items, onMove, setActive } = setup(3);
-    setActive(2);
-    keydown(items[2], "ArrowRight");
-    expect(onMove).toHaveBeenCalledWith(0, expect.any(KeyboardEvent));
-  });
-
   it("horizontal orientation ignores ArrowUp/ArrowDown", () => {
     const { items, onMove } = setup(3);
     keydown(items[0], "ArrowDown");
@@ -91,18 +84,14 @@ describe("rovingFocus", () => {
     expect(onMove).toHaveBeenCalledTimes(2);
   });
 
-  it("Home jumps to the first item and calls preventDefault", () => {
+  it.each([
+    ["Home", 2, 0],
+    ["End", 0, 2],
+  ])("%s from %i lands on %i and calls preventDefault", (key, from, to) => {
     const { items, onMove, setActive } = setup(3);
-    setActive(2);
-    const { preventDefault } = keydown(items[2], "Home");
-    expect(onMove).toHaveBeenCalledWith(0, expect.any(KeyboardEvent));
-    expect(preventDefault).toHaveBeenCalledOnce();
-  });
-
-  it("End jumps to the last item and calls preventDefault", () => {
-    const { items, onMove } = setup(3);
-    const { preventDefault } = keydown(items[0], "End");
-    expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
+    setActive(from);
+    const { preventDefault } = keydown(items[from], key);
+    expect(onMove).toHaveBeenCalledWith(to, expect.any(KeyboardEvent));
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 

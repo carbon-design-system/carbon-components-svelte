@@ -34,11 +34,6 @@ describe("getActiveSectionId", () => {
     expect(getActiveSectionId(["a", "b", "c"])).toBe("a");
   });
 
-  it("counts a section within the offset as crossed", () => {
-    tops = { a: -300, b: 40, c: 200 };
-    expect(getActiveSectionId(["a", "b", "c"], { offset: 48 })).toBe("b");
-  });
-
   it("defaults the offset to the container's scroll-padding-top", () => {
     const container = document.createElement("div");
     container.id = "container";

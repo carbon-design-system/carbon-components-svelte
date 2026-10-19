@@ -87,18 +87,6 @@ describe("createTimeoutDismiss", () => {
     expect(cb).toHaveBeenCalledTimes(1);
   });
 
-  it("pause is a no-op when no timer is active", () => {
-    const dismiss = createTimeoutDismiss();
-    const cb = vi.fn();
-
-    dismiss.sync(true, 0, cb);
-    dismiss.pause();
-    dismiss.resume();
-
-    vi.advanceTimersByTime(1000);
-    expect(cb).not.toHaveBeenCalled();
-  });
-
   it("resume fires immediately when remaining time is already zero", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();

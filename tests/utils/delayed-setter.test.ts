@@ -10,17 +10,10 @@ describe("createDelayedSetter", () => {
     vi.useRealTimers();
   });
 
-  it("runs fn synchronously when delay is 0", () => {
+  it.each([0, -1])("runs fn synchronously when delay is %d", (delay) => {
     const schedule = createDelayedSetter();
     const fn = vi.fn();
-    schedule(0, fn);
-    expect(fn).toHaveBeenCalledTimes(1);
-  });
-
-  it("runs fn synchronously when delay is negative", () => {
-    const schedule = createDelayedSetter();
-    const fn = vi.fn();
-    schedule(-1, fn);
+    schedule(delay, fn);
     expect(fn).toHaveBeenCalledTimes(1);
   });
 

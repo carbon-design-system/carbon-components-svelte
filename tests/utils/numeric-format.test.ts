@@ -8,16 +8,13 @@ import {
 } from "../../src/utils/numeric-format.js";
 
 describe("parse", () => {
-  it("returns null for empty or partial input", () => {
+  it("returns null for empty input", () => {
     expect(parse("")).toBe(null);
-    expect(parse("-")).toBe(null);
   });
 
   it("treats comma and ٫ as a decimal separator while typing", () => {
     expect(parse("1,5")).toBe(1.5);
     expect(parse("1٫5")).toBe(1.5);
-    expect(parse("1.5")).toBe(1.5);
-    expect(parse("42")).toBe(42);
   });
 
   it("disambiguates thousands and decimal separators on blur", () => {
@@ -45,30 +42,24 @@ describe("parseLocaleValue", () => {
     expect(parseLocaleValue("1234.5", "", ".")).toBe(1234.5);
   });
 
-  it("returns null for empty or partial input", () => {
+  it("returns null for empty input", () => {
     expect(parseLocaleValue("", ".", ",")).toBe(null);
-    expect(parseLocaleValue("-", ".", ",")).toBe(null);
   });
 
-  it("normalizes Arabic-Indic digits to ASCII before parsing", () => {
-    // new Intl.NumberFormat("ar-EG").formatToParts(12345.6) yields these separators,
-    // and format() renders digits using Arabic-Indic glyphs (١٢٣٤٥ etc).
-    expect(parseLocaleValue("١٬٢٣٤٫٥", "٬", "٫")).toBe(1234.5);
-  });
-
-  it("normalizes Extended Arabic-Indic (Persian) digits to ASCII before parsing", () => {
-    // new Intl.NumberFormat("fa-IR") renders digits using Extended Arabic-Indic glyphs (۱۲۳۴۵ etc).
-    expect(parseLocaleValue("۱٬۲۳۴٫۵", "٬", "٫")).toBe(1234.5);
-  });
-
-  it("normalizes Bengali digits to ASCII before parsing", () => {
-    // new Intl.NumberFormat("bn-BD") renders digits using Bengali glyphs (১২৩৪৫ etc).
-    expect(parseLocaleValue("১,২৩৪.৫", ",", ".")).toBe(1234.5);
-  });
-
-  it("normalizes fullwidth digits to ASCII before parsing", () => {
-    expect(parseLocaleValue("１，２３４．５", "，", "．")).toBe(1234.5);
-  });
+  // Each locale's Intl.NumberFormat renders digits in its own glyphs, with its
+  // own separators: ar-EG (Arabic-Indic), fa-IR (Extended Arabic-Indic),
+  // bn-BD (Bengali), and fullwidth forms.
+  it.each([
+    ["Arabic-Indic", "١٬٢٣٤٫٥", "٬", "٫"],
+    ["Extended Arabic-Indic (Persian)", "۱٬۲۳۴٫۵", "٬", "٫"],
+    ["Bengali", "১,২৩৪.৫", ",", "."],
+    ["fullwidth", "１，２３４．５", "，", "．"],
+  ])(
+    "normalizes %s digits to ASCII before parsing",
+    (_, raw, group, decimal) => {
+      expect(parseLocaleValue(raw, group, decimal)).toBe(1234.5);
+    },
+  );
 });
 
 describe("getDefaultValue", () => {

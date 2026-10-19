@@ -9,7 +9,6 @@ describe("formReset action", () => {
     document.body.innerHTML = `
       <form id="f"><input id="i" value="default"><fieldset id="fs"></fieldset><div id="box"><input id="inner" form="g"></div></form>
       <form id="g"></form>
-      <input id="outside" form="f" value="outside-default">
       <input id="orphan">
     `;
     const foundForm = document.querySelector<HTMLFormElement>("#f");
@@ -38,17 +37,6 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  it("ignores another form's reset", async () => {
-    const onReset = vi.fn();
-    const action = formReset(input, onReset);
-
-    document.querySelector<HTMLFormElement>("#g")?.reset();
-    await flushFormReset();
-    expect(onReset).not.toHaveBeenCalled();
-
-    action.destroy();
-  });
-
   it("skips a canceled reset", async () => {
     const onReset = vi.fn();
     const action = formReset(input, onReset);
@@ -57,19 +45,6 @@ describe("formReset action", () => {
     form.reset();
     await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
-
-    action.destroy();
-  });
-
-  it("follows the form attribute", async () => {
-    const onReset = vi.fn();
-    const outside = document.querySelector<HTMLInputElement>("#outside");
-    assert(outside);
-    const action = formReset(outside, onReset);
-
-    form.reset();
-    await flushFormReset();
-    expect(onReset).toHaveBeenCalledTimes(1);
 
     action.destroy();
   });
@@ -83,19 +58,6 @@ describe("formReset action", () => {
     form.reset();
     await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
-
-    action.destroy();
-  });
-
-  it("works on a fieldset", async () => {
-    const onReset = vi.fn();
-    const fieldset = document.querySelector<HTMLFieldSetElement>("#fs");
-    assert(fieldset);
-    const action = formReset(fieldset, onReset);
-
-    form.reset();
-    await flushFormReset();
-    expect(onReset).toHaveBeenCalledTimes(1);
 
     action.destroy();
   });

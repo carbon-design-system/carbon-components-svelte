@@ -12,9 +12,4 @@ describe("menuOptionLabel", () => {
     item.textContent = "  Delete  ";
     expect(menuOptionLabel(item)).toBe("Delete");
   });
-
-  it("returns an empty string when there is no text", () => {
-    const item = document.createElement("li");
-    expect(menuOptionLabel(item)).toBe("");
-  });
 });

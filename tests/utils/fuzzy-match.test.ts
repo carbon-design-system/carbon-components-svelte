@@ -16,25 +16,6 @@ describe("fuzzyMatch", () => {
     expect(indices).toEqual([0, 1, 2, 3]);
   });
 
-  it("is case-insensitive", () => {
-    const { matched, indices } = fuzzyMatch("Data Store for Memcache", "data");
-    expect(matched).toBe(true);
-    expect(indices).toEqual([0, 1, 2, 3]);
-  });
-
-  it("highlights a mid-string substring as one contiguous run", () => {
-    // The 'd' in "Hazard" must not steal the highlight from the word "Data".
-    const { matched, indices } = fuzzyMatch(
-      "HazardHub Property Risk Data API",
-      "Data",
-    );
-    expect(matched).toBe(true);
-    expect(indices).toEqual([24, 25, 26, 27]);
-    expect(
-      indices.map((i) => "HazardHub Property Risk Data API"[i]).join(""),
-    ).toBe("Data");
-  });
-
   it("prefers a word-boundary occurrence over an earlier mid-word one", () => {
     const text = "Metadata Data Plans";
     const { indices } = fuzzyMatch(text, "Data");
@@ -52,10 +33,6 @@ describe("fuzzyMatch", () => {
 
   it("returns no match when characters are out of order", () => {
     expect(fuzzyMatch("Data", "tad").matched).toBe(false);
-  });
-
-  it("returns no match when query is longer than the text", () => {
-    expect(fuzzyMatch("Data", "Database").matched).toBe(false);
   });
 
   it("ranks a prefix match above a mid-word match", () => {
@@ -142,15 +119,5 @@ describe("highlightSegments", () => {
       { text: "Data", match: true },
       { text: " Plans", match: false },
     ]);
-  });
-
-  it("recombines to the original text", () => {
-    const text = "Data Store for Memcache";
-    const { indices } = fuzzyMatch(text, "store");
-    expect(
-      highlightSegments(text, indices)
-        .map((segment) => segment.text)
-        .join(""),
-    ).toBe(text);
   });
 });

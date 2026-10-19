@@ -2,12 +2,11 @@
 import { uniqueId } from "../../src/utils/unique-id.js";
 
 describe("uniqueId", () => {
-  it("defaults to a 'ccs-' prefix", () => {
-    expect(uniqueId()).toMatch(/^ccs-[a-z0-9]+$/);
-  });
-
-  it("supports a custom prefix", () => {
-    expect(uniqueId("cua")).toMatch(/^cua-[a-z0-9]+$/);
+  it.each([
+    [undefined, "ccs"],
+    ["cua", "cua"],
+  ])("prefix %s", (arg, prefix) => {
+    expect(uniqueId(arg)).toMatch(new RegExp(`^${prefix}-[a-z0-9]+$`));
   });
 
   it("generates distinct ids across calls", () => {

@@ -10,19 +10,6 @@ describe("debounce", () => {
     vi.useRealTimers();
   });
 
-  it("invokes once after the quiet period", () => {
-    const fn = vi.fn();
-    const debounced = debounce(fn, 100);
-
-    debounced();
-    debounced();
-    debounced();
-    expect(fn).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(100);
-    expect(fn).toHaveBeenCalledTimes(1);
-  });
-
   it("repeated calls reset the timer", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);

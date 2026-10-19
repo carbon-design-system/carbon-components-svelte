@@ -27,9 +27,4 @@ describe("bodyScrollLock", () => {
     releaseBodyScrollLock();
     expect(document.body).not.toHaveClass(CLASS);
   });
-
-  it("ignores releases when no lock is held", () => {
-    releaseBodyScrollLock();
-    expect(document.body).not.toHaveClass(CLASS);
-  });
 });

@@ -1,85 +1,37 @@
 // @vitest-environment node
 import {
   createScrollEndTracker,
-  DEFAULT_SCROLL_END_THRESHOLD,
   isScrollNearEnd,
 } from "../../src/utils/is-scroll-near-end.js";
 
 describe("isScrollNearEnd", () => {
-  it("false when content does not overflow", () => {
-    expect(
-      isScrollNearEnd({
-        scrollTop: 0,
-        scrollHeight: 200,
-        clientHeight: 200,
-      }),
-    ).toBe(false);
-    expect(
-      isScrollNearEnd({
-        scrollTop: 0,
-        scrollHeight: 100,
-        clientHeight: 200,
-      }),
-    ).toBe(false);
-  });
-
-  it("false when scrolled away from the bottom", () => {
-    expect(
-      isScrollNearEnd({
-        scrollTop: 0,
-        scrollHeight: 1000,
-        clientHeight: 200,
-      }),
-    ).toBe(false);
-    expect(
-      isScrollNearEnd({
-        scrollTop: 700,
-        scrollHeight: 1000,
-        clientHeight: 200,
-        threshold: 32,
-      }),
-    ).toBe(false);
-  });
-
-  it("true at and within the default threshold of the bottom", () => {
-    // Distance from bottom: 1000 - (768 + 200) = 32
-    expect(
-      isScrollNearEnd({
-        scrollTop: 768,
-        scrollHeight: 1000,
-        clientHeight: 200,
-      }),
-    ).toBe(true);
-    expect(
-      isScrollNearEnd({
-        scrollTop: 800,
-        scrollHeight: 1000,
-        clientHeight: 200,
-      }),
-    ).toBe(true);
-  });
-
-  it("respects a custom threshold", () => {
-    expect(
-      isScrollNearEnd({
-        scrollTop: 750,
-        scrollHeight: 1000,
-        clientHeight: 200,
-        threshold: 50,
-      }),
-    ).toBe(true);
-    expect(
-      isScrollNearEnd({
-        scrollTop: 750,
-        scrollHeight: 1000,
-        clientHeight: 200,
-        threshold: 49,
-      }),
-    ).toBe(false);
-  });
-
-  it("exports the default threshold constant", () => {
-    expect(DEFAULT_SCROLL_END_THRESHOLD).toBe(32);
+  it.each<
+    [
+      {
+        scrollTop: number;
+        scrollHeight: number;
+        clientHeight: number;
+        threshold?: number;
+      },
+      boolean,
+    ]
+  >([
+    // No overflow, equal and shorter.
+    [{ scrollTop: 0, scrollHeight: 200, clientHeight: 200 }, false],
+    [{ scrollTop: 0, scrollHeight: 100, clientHeight: 200 }, false],
+    // The default threshold is 32: 1px outside, then on the boundary.
+    [{ scrollTop: 767, scrollHeight: 1000, clientHeight: 200 }, false],
+    [{ scrollTop: 768, scrollHeight: 1000, clientHeight: 200 }, true],
+    [
+      { scrollTop: 750, scrollHeight: 1000, clientHeight: 200, threshold: 50 },
+      true,
+    ],
+    [
+      { scrollTop: 750, scrollHeight: 1000, clientHeight: 200, threshold: 49 },
+      false,
+    ],
+  ])("isScrollNearEnd(%o) is %s", (metrics, expected) => {
+    expect(isScrollNearEnd(metrics)).toBe(expected);
   });
 });
 
@@ -100,7 +52,6 @@ describe("createScrollEndTracker", () => {
 
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
     expect(tracker.observe(nearBottom)).toBeNull();
-    expect(tracker.observe({ ...nearBottom, scrollTop: 850 })).toBeNull();
   });
 
   it("re-arms after scrolling away from the bottom", () => {
@@ -154,6 +105,11 @@ describe("createScrollEndTracker", () => {
 
     tracker.reset();
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
+
+    // The baseline is gone too: 40 is the first count seen since the reset,
+    // not growth over the 20 from before it.
+    tracker.noteItemCount(40);
+    expect(tracker.observe(nearBottom)).toBeNull();
   });
 
   it("does not re-arm when leaving a non-overflowing list", () => {

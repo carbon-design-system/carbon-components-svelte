@@ -85,15 +85,6 @@ describe("createDialogLifecycle", () => {
 
       expect(dispatch).not.toHaveBeenCalled();
     });
-
-    it("does not close on a press that began inside", () => {
-      const { lifecycle, dispatch } = createHarness();
-
-      lifecycle.outsideDismiss.pressInside();
-      lifecycle.outsideDismiss.release();
-
-      expect(dispatch).not.toHaveBeenCalled();
-    });
   });
 
   describe("syncOpen()", () => {

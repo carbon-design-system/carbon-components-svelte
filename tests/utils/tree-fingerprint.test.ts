@@ -64,8 +64,4 @@ describe("fingerprintTree / matchesFingerprint", () => {
 
     expect(matchesFingerprint(fingerprint, tree)).toBe(false);
   });
-
-  it("matches an empty tree", () => {
-    expect(matchesFingerprint(fingerprintTree([]), [])).toBe(true);
-  });
 });

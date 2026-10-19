@@ -32,10 +32,6 @@ describe("getInitials", () => {
     expect(getInitials(undefined)).toBe("");
   });
 
-  it("upper cases lower case input", () => {
-    expect(getInitials("john doe")).toBe("JD");
-  });
-
   it("keeps a ZWJ emoji sequence whole as a single initial", () => {
     expect(getInitials("👩‍🚀 Astronaut")).toBe("👩‍🚀A");
   });

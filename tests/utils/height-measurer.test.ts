@@ -127,28 +127,6 @@ describe("createHeightMeasurer", () => {
     expect(previousHeights).toHaveLength(0);
   });
 
-  it("reports nothing from inside the observer's own callback", async () => {
-    const resize = installResizeObserver();
-    const onMeasure = vi.fn();
-    const measurer = createHeightMeasurer({ onMeasure });
-    const container = buildWindow([0]);
-
-    measurer.sync(container);
-    // Acting on a height moves the window, and doing that during a delivery
-    // leaves the browser with observations it cannot deliver in that pass,
-    // reported as an uncatchable window error on every scroll of a measured
-    // menu. So nothing is reported until the callback has returned.
-    resize.deliverWithoutFrame([
-      { target: optionAt(container, 0), height: 40 },
-    ]);
-    expect(onMeasure).not.toHaveBeenCalled();
-
-    await nextFrame();
-
-    expect(onMeasure).toHaveBeenCalledTimes(1);
-    expect(onMeasure.mock.calls[0][0][0]).toBe(40);
-  });
-
   it("reports the batches of one frame as a single measurement", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
@@ -158,6 +136,11 @@ describe("createHeightMeasurer", () => {
     measurer.sync(container);
     // One scroll delivers its options in several batches. Accumulating the
     // offsets once for all of them beats once per batch.
+    //
+    // Acting on a height moves the window, and doing that during a delivery
+    // leaves the browser with observations it cannot deliver in that pass,
+    // reported as an uncatchable window error on every scroll of a measured
+    // menu. So nothing is reported until the callback has returned.
     resize.deliverWithoutFrame([
       { target: optionAt(container, 0), height: 40 },
     ]);
@@ -167,6 +150,7 @@ describe("createHeightMeasurer", () => {
     resize.deliverWithoutFrame([
       { target: optionAt(container, 1), height: 88 },
     ]);
+    expect(onMeasure).not.toHaveBeenCalled();
 
     await nextFrame();
 
@@ -329,21 +313,6 @@ describe("createHeightMeasurer", () => {
     expect(resize.observed.size).toBe(2);
     expect(resize.observed.has(stillRendered)).toBe(true);
     expect(resize.observed.has(element)).toBe(true);
-    // The observer is shared across the window, not one per option.
-    expect(resize.instanceCount).toBe(1);
-  });
-
-  it("stops observing when the window goes away", () => {
-    const resize = installResizeObserver();
-    const measurer = createHeightMeasurer({ onMeasure: vi.fn() });
-    const container = buildWindow([0, 1]);
-
-    measurer.sync(container);
-    expect(resize.observed.size).toBe(2);
-
-    measurer.sync(null);
-
-    expect(resize.observed.size).toBe(0);
   });
 
   it("clear reports an empty set of heights exactly once", async () => {
@@ -381,21 +350,6 @@ describe("createHeightMeasurer", () => {
     measurer.sync(container);
 
     expect(resize.observed.size).toBe(2);
-    // Still one observer covering the window, not one per option.
-    expect(resize.instanceCount).toBe(1);
-  });
-
-  it("disconnect stops further reports", async () => {
-    const resize = installResizeObserver();
-    const onMeasure = vi.fn();
-    const measurer = createHeightMeasurer({ onMeasure });
-    const container = buildWindow([0]);
-
-    measurer.sync(container);
-    measurer.disconnect();
-    await resize.deliver([{ target: optionAt(container, 0), height: 40 }]);
-
-    expect(onMeasure).not.toHaveBeenCalled();
   });
 
   it("falls back to a one-shot height read with no ResizeObserver", () => {

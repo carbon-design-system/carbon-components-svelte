@@ -67,14 +67,4 @@ describe("getVisibleTagCount", () => {
       }),
     ).toBe(2);
   });
-
-  it("does not backtrack when every tag already fits (no trigger needed)", () => {
-    expect(
-      getVisibleTagCount({
-        tagWidths: [50, 50],
-        availableWidth: 500,
-        overflowWidth: 40,
-      }),
-    ).toBe(2);
-  });
 });

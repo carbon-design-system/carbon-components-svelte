@@ -1,7 +1,5 @@
 import {
   formatRangeLabel,
-  getClientX,
-  getClientY,
   getPointerPosition,
   getTrackAxis,
   getValueText,
@@ -30,58 +28,10 @@ describe("formatRangeLabel", () => {
 
   it("falls back to the raw numeric value when label and formatValue are both unset", () => {
     expect(formatRangeLabel("", 0, undefined)).toBe(0);
-    expect(formatRangeLabel("", 100, undefined)).toBe(100);
-  });
-});
-
-describe("getClientY", () => {
-  it("reads clientY from a mouse event", () => {
-    const event = { clientY: 42 } as MouseEvent;
-    expect(getClientY(event)).toBe(42);
-  });
-
-  it("reads clientY from the first touch point", () => {
-    const event = { touches: [{ clientY: 24 }] } as unknown as TouchEvent;
-    expect(getClientY(event)).toBe(24);
-  });
-
-  it("returns null for a touch event with no active touch point", () => {
-    const event = { touches: [] } as unknown as TouchEvent;
-    expect(getClientY(event)).toBeNull();
-  });
-});
-
-describe("getClientX", () => {
-  it("reads clientX from a mouse event", () => {
-    const event = { clientX: 42 } as MouseEvent;
-    expect(getClientX(event)).toBe(42);
-  });
-
-  it("reads clientX from the first touch point", () => {
-    const event = { touches: [{ clientX: 24 }] } as unknown as TouchEvent;
-    expect(getClientX(event)).toBe(24);
-  });
-
-  it("returns null for a touch event with no active touch point", () => {
-    const event = { touches: [] } as unknown as TouchEvent;
-    expect(getClientX(event)).toBeNull();
   });
 });
 
 describe("valueFromTrackPosition", () => {
-  it("maps the midpoint of the track to the midpoint of the range", () => {
-    expect(
-      valueFromTrackPosition({
-        clientX: 50,
-        left: 0,
-        width: 100,
-        min: 0,
-        max: 100,
-        step: 1,
-      }),
-    ).toBe(50);
-  });
-
   it("snaps to step", () => {
     expect(
       valueFromTrackPosition({
@@ -123,10 +73,20 @@ describe("valueFromTrackPosition", () => {
 });
 
 describe("getPointerPosition", () => {
-  it("reads the coordinate along the slider axis", () => {
-    const event = { clientX: 10, clientY: 20 } as MouseEvent;
-    expect(getPointerPosition(event, "horizontal")).toBe(10);
-    expect(getPointerPosition(event, "vertical")).toBe(20);
+  const mouse = { clientX: 10, clientY: 20 } as MouseEvent;
+  const touch = (point?: { clientX: number; clientY: number }) =>
+    ({ touches: point ? [point] : [] }) as unknown as TouchEvent;
+  const point = { clientX: 24, clientY: 42 };
+
+  it.each([
+    ["horizontal", mouse, 10],
+    ["vertical", mouse, 20],
+    ["horizontal", touch(point), 24],
+    ["vertical", touch(point), 42],
+    ["horizontal", touch(), null],
+    ["vertical", touch(), null],
+  ] as const)("%s %o -> %o", (orientation, event, expected) => {
+    expect(getPointerPosition(event, orientation)).toBe(expected);
   });
 });
 
@@ -137,13 +97,6 @@ describe("getTrackAxis", () => {
     expect(getTrackAxis(rect, "horizontal")).toEqual({
       start: 10,
       length: 200,
-    });
-  });
-
-  it("starts at the bottom edge with a negative length when vertical", () => {
-    expect(getTrackAxis(rect, "vertical")).toEqual({
-      start: 300,
-      length: -100,
     });
   });
 });

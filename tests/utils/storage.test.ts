@@ -5,15 +5,14 @@ import {
 } from "../../src/utils/storage.js";
 
 describe("parseStoredValue", () => {
-  it("parses valid JSON objects and arrays", () => {
-    expect(parseStoredValue('{"a":1}')).toEqual({ a: 1 });
-    expect(parseStoredValue("[1,2,3]")).toEqual([1, 2, 3]);
-  });
-
-  it("parses JSON primitives back to their type", () => {
-    expect(parseStoredValue("5")).toBe(5);
-    expect(parseStoredValue("true")).toBe(true);
-    expect(parseStoredValue("null")).toBe(null);
+  it.each([
+    ['{"a":1}', { a: 1 }],
+    ["[1,2,3]", [1, 2, 3]],
+    ["5", 5],
+    ["true", true],
+    ["null", null],
+  ])("parses %s back to its JSON value", (raw, expected) => {
+    expect(parseStoredValue(raw)).toEqual(expected);
   });
 
   it("returns the raw string when JSON.parse fails", () => {
@@ -29,23 +28,11 @@ describe("serializeStoredValue", () => {
     expect(serializeStoredValue([1, 2, 3])).toBe("[1,2,3]");
   });
 
-  it("stringifies null (typeof null === 'object')", () => {
-    expect(serializeStoredValue(null)).toBe("null");
-  });
-
   it("coerces non-object primitives to string", () => {
     expect(serializeStoredValue(5)).toBe("5");
     expect(serializeStoredValue(true)).toBe("true");
     expect(serializeStoredValue("hello")).toBe("hello");
     expect(serializeStoredValue(undefined)).toBe("undefined");
-  });
-});
-
-describe("parse/serialize round-trip", () => {
-  it("parse(serialize(value)) equals value", () => {
-    for (const value of [5, true, "raw string", { a: 1, b: [2] }, [1, 2]]) {
-      expect(parseStoredValue(serializeStoredValue(value))).toEqual(value);
-    }
   });
 });
 

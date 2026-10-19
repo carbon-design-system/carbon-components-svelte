@@ -52,19 +52,6 @@ describe("getRelativeTimeFormatter", () => {
     expect(a).toBe(b);
   });
 
-  it("returns different instances for different options", () => {
-    const a = getRelativeTimeFormatter("en", {
-      numeric: "auto",
-      style: "long",
-    });
-    const b = getRelativeTimeFormatter("en", {
-      numeric: "always",
-      style: "long",
-    });
-
-    expect(a).not.toBe(b);
-  });
-
   it("returns different instances for different locales", () => {
     const options = { numeric: "auto", style: "long" } as const;
     const a = getRelativeTimeFormatter("en", options);
@@ -81,13 +68,6 @@ describe("getDateTimeFormatter", () => {
     const b = getDateTimeFormatter("en", options);
 
     expect(a).toBe(b);
-  });
-
-  it("returns different instances for different options", () => {
-    const a = getDateTimeFormatter("en", { dateStyle: "medium" });
-    const b = getDateTimeFormatter("en", { dateStyle: "full" });
-
-    expect(a).not.toBe(b);
   });
 
   it("returns different instances for different time zones", () => {

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { batchStoreUpdates } from "../../src/utils/batch-store-updates.js";
 
 describe("batchStoreUpdates", () => {
@@ -69,21 +69,6 @@ describe("batchStoreUpdates", () => {
 });
 
 describe("batchStoreUpdates flush", () => {
-  it("applies pending updates synchronously", () => {
-    const store = writable<number[]>([]);
-    const batchedUpdate = batchStoreUpdates(store);
-
-    batchedUpdate((value) => [...value, 1]);
-    batchedUpdate((value) => [...value, 2]);
-    batchedUpdate.flush();
-
-    let current: number[] = [];
-    store.subscribe((value) => {
-      current = value;
-    })();
-    expect(current).toEqual([1, 2]);
-  });
-
   it("skips the scheduled flush once nothing is pending", async () => {
     const store = writable<number[]>([]);
     let notifications = 0;
@@ -96,6 +81,7 @@ describe("batchStoreUpdates flush", () => {
     batchedUpdate((value) => [...value, 1]);
     batchedUpdate.flush();
     expect(notifications).toBe(1);
+    expect(get(store)).toEqual([1]);
 
     await Promise.resolve();
     await Promise.resolve();
