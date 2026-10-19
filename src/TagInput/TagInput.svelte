@@ -368,7 +368,9 @@
 
   /** @param {KeyboardEvent} event */
   function handleInputKeydown(event) {
-    if (event.isComposing || !interactive) return;
+    // Enter that commits an IME composition is not an add. Safari reports
+    // the committing keydown with isComposing false but keyCode 229.
+    if (event.isComposing || event.keyCode === 229 || !interactive) return;
 
     if (event.key === "Enter") {
       if (!draft.trim()) return;
@@ -422,9 +424,23 @@
   function handleInput(event) {
     draft = event.currentTarget.value;
     rejectionText = "";
-    if (!interactive) return;
+    // An IME's text isn't final until the composition ends, which
+    // `handleCompositionEnd` splits.
+    if (event.isComposing) return;
     // `handlePaste` let the browser paste as-is; don't split it here.
     if (!addOnPaste && event.inputType === "insertFromPaste") return;
+    splitDraft();
+  }
+
+  /** @param {CompositionEvent & { currentTarget: HTMLInputElement }} event */
+  function handleCompositionEnd(event) {
+    draft = event.currentTarget.value;
+    splitDraft();
+  }
+
+  /** Add the text before the last delimiter as tags. */
+  function splitDraft() {
+    if (!interactive) return;
     const parts = split(draft);
     if (parts.length < 2) return;
     // Everything before the last delimiter is complete; the rest is still
@@ -583,6 +599,7 @@
           $$restProps["aria-describedby"],
         )}
         on:input={handleInput}
+        on:compositionend={handleCompositionEnd}
         on:keydown={handleInputKeydown}
         on:keydown
         on:paste={handlePaste}
