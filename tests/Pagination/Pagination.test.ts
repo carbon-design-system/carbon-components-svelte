@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
@@ -527,6 +528,8 @@ describe("Pagination", () => {
     expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 1 });
 
     const pageSelect = screen.getAllByRole("combobox");
+    // The page options are built when the pointer reaches the select.
+    await user.hover(pageSelect[1]);
     await user.selectOptions(pageSelect[1], "2");
     expect(onChange).toHaveBeenCalledWith({ page: 2 });
     expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 2 });
@@ -623,6 +626,31 @@ describe("Pagination", () => {
     expect(screen.getByText("custom")).toBeInTheDocument();
   });
 
+  it("holds only the current and last page options until the select is reached", async () => {
+    render(Pagination, {
+      props: { totalItems: 100_000 },
+    });
+
+    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
+    // The current page, and the widest page number to hold the width.
+    expect(pageNumbers).toHaveLength(2);
+    expect(pageNumbers).toHaveValue("1");
+
+    await user.hover(pageNumbers);
+    expect(pageNumbers).toHaveLength(1_000);
+  });
+
+  it("builds the page options on keyboard focus too", async () => {
+    render(Pagination, {
+      props: { totalItems: 100_000, pageWindow: 100 },
+    });
+
+    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
+    pageNumbers.focus();
+    await tick();
+    expect(pageNumbers).toHaveLength(100);
+  });
+
   it.each([
     ["by default", {}, 1_000],
     ["to a custom pageWindow", { pageWindow: 100 }, 100],
@@ -631,10 +659,11 @@ describe("Pagination", () => {
       { pageWindow: 100, page: 5000 },
       100,
     ],
-  ])("caps rendered page numbers %s", (_name, props, length) => {
+  ])("caps rendered page numbers %s", async (_name, props, length) => {
     render(Pagination, { props: { totalItems: 100_000, ...props } });
 
     const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
+    await user.hover(pageNumbers);
     expect(pageNumbers).toHaveLength(length);
   });
 
@@ -642,16 +671,20 @@ describe("Pagination", () => {
     { page: 1, first: "1", last: "100" },
     { page: 5000, first: "4950", last: "5049" },
     { page: 9990, first: "9901", last: "10000" },
-  ])("windows the page options around page $page", ({ page, first, last }) => {
-    render(Pagination, {
-      props: { totalItems: 100_000, pageWindow: 100, page },
-    });
+  ])(
+    "windows the page options around page $page",
+    async ({ page, first, last }) => {
+      render(Pagination, {
+        props: { totalItems: 100_000, pageWindow: 100, page },
+      });
 
-    const select = screen.getByLabelText(/Page number, of 10000 pages/);
-    const options = optionTexts(select);
-    expect([options[0], options[options.length - 1]]).toEqual([first, last]);
-    expect(select).toHaveValue(String(page));
-  });
+      const select = screen.getByLabelText(/Page number, of 10000 pages/);
+      await user.hover(select);
+      const options = optionTexts(select);
+      expect([options[0], options[options.length - 1]]).toEqual([first, last]);
+      expect(select).toHaveValue(String(page));
+    },
+  );
 
   it("formats larger numbers using `toLocaleString`", () => {
     render(Pagination, {

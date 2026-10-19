@@ -310,10 +310,31 @@
     prevPage = page;
     prevPageSize = pageSize;
   }
-  $: selectItems =
+  /**
+   * The page select holds up to `pageWindow` options (1000 by default) on
+   * every paginated table. Until someone reaches for it, render only the
+   * current page and the window's last page: a native select is as wide as
+   * its widest option, and the last page has the most digits, so the width
+   * doesn't jump when the rest arrive. Pointing at or focusing the select
+   * builds the full list before it can open, and it stays built.
+   */
+  let pageOptionsWanted = false;
+  /** @param {Event} event */
+  function wantPageOptions(event) {
+    if (pageOptionsWanted) return;
+    const target = /** @type {Element | null} */ (event.target);
+    if (target?.closest?.(".bx--select__page-number")) {
+      pageOptionsWanted = true;
+    }
+  }
+  $: windowedPages =
     pageInputType === "input"
       ? []
       : getWindowedPages(page, totalPages, pageWindow);
+  $: selectItems =
+    pageOptionsWanted || windowedPages.length === 0
+      ? windowedPages
+      : [...new Set([page, windowedPages[windowedPages.length - 1]])];
   // Digit count of the widest page number; the page input's CSS sizes
   // to it so the width holds steady while the user types.
   $: pageInputDigits = Number.isFinite(totalPages)
@@ -342,6 +363,8 @@
   class:bx--pagination--md={size === "md"}
   class:bx--pagination--lg={size === "lg"}
   {...$$restProps}
+  on:pointerover={wantPageOptions}
+  on:focusin={wantPageOptions}
 >
   {#if !simple}
     <div class:bx--pagination__left={true}>
