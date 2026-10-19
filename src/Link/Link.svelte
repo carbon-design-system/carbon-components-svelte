@@ -46,6 +46,9 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
+<!-- No whitespace after the slot: a link that flows inline, such as in a
+     sentence, would otherwise underline a trailing space. -->
+<!-- biome-ignore format: whitespace after the slot renders as text -->
 <a
   bind:this={ref}
   role={disabled ? "link" : undefined}
@@ -76,10 +79,8 @@
   on:keydown
   on:keyup
 >
-  <slot />
-  {#if !inline && ($$slots.icon || icon)}
-    <span class:bx--link__icon={true}>
-      <slot name="icon"> <svelte:component this={icon} /> </slot>
-    </span>
-  {/if}
-</a>
+  <slot />{#if !inline && ($$slots.icon || icon)}<span
+      class:bx--link__icon={true}
+      ><slot name="icon"><svelte:component this={icon} /></slot></span
+    >{/if}</a
+>

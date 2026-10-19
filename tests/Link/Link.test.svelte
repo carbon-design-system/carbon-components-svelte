@@ -96,3 +96,5 @@
     Carbon Design System
   </Link>
 </div>
+
+<p data-testid="text-link">Read <Link href="#docs">the docs</Link>.</p>

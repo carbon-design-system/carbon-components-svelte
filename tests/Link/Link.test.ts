@@ -214,4 +214,11 @@ describe("Link", () => {
       >();
     });
   });
+
+  it("adds no whitespace after its text, for a link that flows inline", () => {
+    render(Link);
+
+    const link = screen.getByRole("link", { name: "the docs" });
+    expect(link.textContent).toBe("the docs");
+  });
 });
