@@ -101,6 +101,11 @@
   const groupSize = ctx?.groupSize ?? readable(undefined);
   $: effectiveSize = size ?? $groupSize;
 
+  // A disabled group disables the input natively through its fieldset;
+  // mirror that in the tile's styling and tab order. The `disabled`
+  // attribute stays the tile's own.
+  $: effectiveDisabled = disabled || $groupDisabled;
+
   add({ value, selected });
 
   let unregister = register(value);
@@ -150,7 +155,7 @@
   bind:this={ref}
   use:formReset={handleFormReset}
   type="checkbox"
-  tabindex={disabled ? undefined : tabindex}
+  tabindex={effectiveDisabled ? undefined : tabindex}
   class:bx--tile-input={true}
   checked={selected}
   {id}
@@ -210,7 +215,7 @@
   class:bx--tile--is-selected={selected}
   class:bx--tile--light={light}
   class:bx--tile--sm={effectiveSize === "sm"}
-  class:bx--tile--disabled={disabled || $groupDisabled}
+  class:bx--tile--disabled={effectiveDisabled}
   class:bx--tile--full-height={fullHeight}
   {...labelProps}
   on:click
