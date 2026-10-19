@@ -8,12 +8,7 @@
   export let showTab2 = true;
 </script>
 
-<Tabs
-  bind:selected
-  on:change={({ detail }) => {
-    console.log("change event", detail);
-  }}
->
+<Tabs bind:selected>
   {#if showTab1}
     <Tab label="Tab 1" />
   {/if}

@@ -3,25 +3,18 @@ import { tick } from "svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { resetForm } from "../utils/reset-form";
 import FileUploaderForm from "./FileUploader.form.test.svelte";
-import { simulateFileSelection } from "./helpers";
+import { getFileInput, makeFile, simulateFileSelection } from "./helpers";
 
-const getFileInput = (testId: string) => {
-  const input = screen
-    .getByTestId(testId)
-    .querySelector<HTMLInputElement>('input[type="file"]');
-  assert(input);
-  return input;
-};
-
-const receipt = () =>
-  new File(["x"], "receipt.pdf", { type: "application/pdf" });
+const receipt = () => makeFile("receipt.pdf", 1, { type: "application/pdf" });
 
 describe("FileUploader form reset", () => {
   it("clears files and restores the label for FileUploaderButton, without change", async () => {
     const onChange = vi.fn();
     render(FileUploaderForm, { props: { onChange } });
 
-    simulateFileSelection(getFileInput("button"), [receipt()]);
+    simulateFileSelection(getFileInput(screen.getByTestId("button")), [
+      receipt(),
+    ]);
     await tick();
     expect(getBoundText("bound-button")).toBe("1");
     expect(screen.getByTestId("button")).toHaveTextContent("receipt.pdf");
@@ -38,7 +31,9 @@ describe("FileUploader form reset", () => {
     const onChange = vi.fn();
     render(FileUploaderForm, { props: { onChange } });
 
-    simulateFileSelection(getFileInput("drop"), [receipt()]);
+    simulateFileSelection(getFileInput(screen.getByTestId("drop")), [
+      receipt(),
+    ]);
     await tick();
     expect(getBoundText("bound-drop")).toBe("1");
     onChange.mockClear();
@@ -52,7 +47,9 @@ describe("FileUploader form reset", () => {
   it("clears the FileUploader file list", async () => {
     render(FileUploaderForm);
 
-    simulateFileSelection(getFileInput("uploader"), [receipt()]);
+    simulateFileSelection(getFileInput(screen.getByTestId("uploader")), [
+      receipt(),
+    ]);
     await tick();
     expect(getBoundText("bound-uploader")).toBe("1");
     expect(screen.getByTestId("uploader")).toHaveTextContent("receipt.pdf");

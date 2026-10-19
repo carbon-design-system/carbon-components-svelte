@@ -1,39 +1,24 @@
 // @vitest-environment node
 import { renderSSR } from "../utils/ssr";
+import { expectSelected } from "./ssr-helpers";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
+import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
-import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
-
-function selectedStates(document: Document) {
-  return {
-    tabs: [...document.querySelectorAll("[role='tab']")].map((tab) =>
-      tab.getAttribute("aria-selected"),
-    ),
-    panels: [...document.querySelectorAll("[role='tabpanel']")].map(
-      (panel) => !panel.hasAttribute("hidden"),
-    ),
-  };
-}
 
 describe("TabsVertical server render", () => {
   it("renders the `selected` tab and panel as selected", () => {
     const { document } = renderSSR(TabsVertical, { selected: 2 });
 
-    expect(selectedStates(document)).toEqual({
-      tabs: ["false", "false", "true", "false"],
-      panels: [false, false, true, false],
-    });
+    expectSelected(document, 2, 4);
   });
 
   it("renders the `selectedId` tab and panel as selected", () => {
-    const { document } = renderSSR(TabsVerticalSelectedId, {
+    const { document } = renderSSR(TabsSelectedId, {
       selectedId: "tab-c",
+      vertical: true,
     });
 
-    expect(selectedStates(document)).toEqual({
-      tabs: ["false", "false", "true"],
-      panels: [false, false, true],
-    });
+    expectSelected(document, 2);
   });
 
   it("draws a tab's own secondary label", () => {

@@ -1,23 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { expectClass, mockScrollMetrics, renderManual } from "./helpers";
+import TabsRegistration from "./TabsRegistration.test.svelte";
+import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
 import TabsVerticalOrientationToggle from "./TabsVerticalOrientationToggle.test.svelte";
-import TabsVerticalRegistration from "./TabsVerticalRegistration.test.svelte";
-import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
 
 describe("TabsVertical", () => {
-  let consoleLog: Console["log"];
-
-  beforeEach(() => {
-    consoleLog = vi.spyOn(console, "log");
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("should render with default props", async () => {
     render(TabsVertical);
     await tick();
@@ -165,33 +156,33 @@ describe("TabsVertical", () => {
       );
     });
 
-    it('pins the column with orientation="vertical"', () => {
-      const { container } = render(TabsVertical, {
-        props: { orientation: "vertical" },
-      });
+    it.each([
+      ["vertical", "column", "vertical"],
+      ["horizontal", "row", "horizontal"],
+    ] as const)(
+      "pins the %s orientation as the %s layout",
+      (orientation, modifier, ariaOrientation) => {
+        const { container } = render(TabsVertical, {
+          props: { orientation },
+        });
 
-      const nav = screen.getByRole("navigation");
-      expect(nav).toHaveClass("bx--tabs--vertical--column");
-      expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
-      expect(
-        container.querySelector(".bx--tabs--vertical-container"),
-      ).toHaveClass("bx--tabs--vertical-container--column");
-      expect(screen.getByRole("tablist")).toHaveAttribute(
-        "aria-orientation",
-        "vertical",
-      );
-    });
+        const nav = screen.getByRole("navigation");
+        expect(nav).toHaveClass(`bx--tabs--vertical--${modifier}`);
+        expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
+        expectClass(
+          container.querySelector(".bx--tabs--vertical-container"),
+          "bx--tabs--vertical-container--column",
+          orientation === "vertical",
+        );
+        expect(screen.getByRole("tablist")).toHaveAttribute(
+          "aria-orientation",
+          ariaOrientation,
+        );
+      },
+    );
 
-    it('pins the row with orientation="horizontal"', async () => {
+    it('moves with ArrowRight, skipping the disabled tab, for orientation="horizontal"', async () => {
       render(TabsVertical, { props: { orientation: "horizontal" } });
-
-      const nav = screen.getByRole("navigation");
-      expect(nav).toHaveClass("bx--tabs--vertical--row");
-      expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
-      expect(screen.getByRole("tablist")).toHaveAttribute(
-        "aria-orientation",
-        "horizontal",
-      );
 
       await user.click(screen.getByRole("tab", { name: "Tab 1" }));
       await user.keyboard("{ArrowRight}");
@@ -222,7 +213,9 @@ describe("TabsVertical", () => {
   });
 
   it("renders the initial selectedId synchronously on mount", () => {
-    render(TabsVerticalSelectedId, { props: { selectedId: "tab-c" } });
+    render(TabsSelectedId, {
+      props: { selectedId: "tab-c", vertical: true },
+    });
 
     expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
       "aria-selected",
@@ -234,14 +227,15 @@ describe("TabsVertical", () => {
   });
 
   it("should change tab on click and dispatch change", async () => {
-    render(TabsVertical);
+    const onChange = vi.fn();
+    render(TabsVertical, { props: { onChange } });
 
     const tab3 = screen.getByRole("tab", { name: "Tab 3" });
     await user.click(tab3);
 
     expect(tab3).toHaveAttribute("aria-selected", "true");
     expect(screen.getByText("Content 3")).toBeVisible();
-    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    expect(onChange).toHaveBeenCalledWith(2);
   });
 
   it("should not select disabled tabs", async () => {
@@ -256,7 +250,8 @@ describe("TabsVertical", () => {
   });
 
   it("should navigate with arrow up/down keys, skipping disabled tabs", async () => {
-    render(TabsVertical);
+    const onChange = vi.fn();
+    render(TabsVertical, { props: { onChange } });
 
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     await user.click(tab1);
@@ -264,15 +259,16 @@ describe("TabsVertical", () => {
     // Tab 2 is disabled, so ArrowDown moves to Tab 3.
     await user.keyboard("{ArrowDown}");
     expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    expect(onChange).toHaveBeenCalledWith(2);
 
     await user.keyboard("{ArrowUp}");
     expect(tab1).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("change event", 0);
+    expect(onChange).toHaveBeenCalledWith(0);
   });
 
   it("moves ArrowUp from the focused tab, not the selected one", async () => {
-    render(TabsVertical);
+    const onChange = vi.fn();
+    render(TabsVertical, { props: { onChange } });
     await tick();
 
     const tab3 = screen.getByRole("tab", { name: "Tab 3" });
@@ -282,8 +278,8 @@ describe("TabsVertical", () => {
     await user.keyboard("{ArrowUp}");
     expect(tab3).toHaveFocus();
     expect(tab3).toHaveAttribute("aria-selected", "true");
-    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
-    expect(consoleLog).not.toHaveBeenCalledWith("change event", 3);
+    expect(onChange).toHaveBeenCalledWith(2);
+    expect(onChange).not.toHaveBeenCalledWith(3);
   });
 
   it("focuses the selected tab when arrowing onto it from another tab", async () => {
@@ -301,11 +297,7 @@ describe("TabsVertical", () => {
 
   describe('activation="manual"', () => {
     it("moves from the focused tab after focus returns to another tab", async () => {
-      render(TabsVertical, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
+      const { tab1, tab3 } = await renderManual(TabsVertical);
 
       await user.keyboard("{ArrowDown}");
       expect(tab3).toHaveFocus();
@@ -317,26 +309,20 @@ describe("TabsVertical", () => {
     });
 
     it("ArrowDown moves focus without changing selection", async () => {
-      render(TabsVertical, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
+      const onChange = vi.fn();
+      const { tab1, tab3 } = await renderManual(TabsVertical, { onChange });
 
       await user.keyboard("{ArrowDown}");
       expect(tab3).toHaveFocus();
       expect(tab1).toHaveAttribute("aria-selected", "true");
       expect(tab3).toHaveAttribute("aria-selected", "false");
       expect(screen.getByText("Content 1")).toBeVisible();
-      expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+      expect(onChange).not.toHaveBeenCalledWith(2);
     });
 
     it("Enter selects the focused tab", async () => {
-      render(TabsVertical, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
+      const onChange = vi.fn();
+      const { tab1, tab3 } = await renderManual(TabsVertical, { onChange });
 
       await user.keyboard("{ArrowDown}");
       expect(tab3).toHaveFocus();
@@ -345,7 +331,7 @@ describe("TabsVertical", () => {
       expect(tab3).toHaveAttribute("aria-selected", "true");
       expect(tab1).toHaveAttribute("aria-selected", "false");
       expect(screen.getByText("Content 3")).toBeVisible();
-      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+      expect(onChange).toHaveBeenCalledWith(2);
     });
   });
 
@@ -358,7 +344,9 @@ describe("TabsVertical", () => {
   });
 
   it("applies the tall layout for a secondary label set after mount", async () => {
-    const { container } = render(TabsVerticalRegistration);
+    const { container } = render(TabsRegistration, {
+      props: { vertical: true },
+    });
     await tick();
 
     const tabs = container.querySelector(".bx--tabs--vertical");
@@ -373,8 +361,8 @@ describe("TabsVertical", () => {
   });
 
   it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
-    render(TabsVerticalSelectedId, {
-      props: { selectedId: "tab-b", showTabA: true },
+    render(TabsSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true, vertical: true },
     });
     await tick();
 
@@ -401,34 +389,23 @@ describe("TabsVertical", () => {
 });
 
 describe("TabsVerticalSkeleton", () => {
-  it("should render the vertical skeleton with the default count", () => {
-    const { container } = render(TabsVerticalSkeleton);
-
-    const skeleton = container.querySelector(".bx--tabs--vertical");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--skeleton");
-    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(4);
-  });
-
   it.each([
-    [undefined, "bx--tabs--vertical--responsive"],
-    ["vertical", "bx--tabs--vertical--column"],
-    ["horizontal", "bx--tabs--vertical--row"],
-  ] as const)("renders orientation %s with %s", (orientation, className) => {
-    const { container } = render(TabsVerticalSkeleton, {
-      props: { orientation },
-    });
+    [{}, "bx--tabs--vertical--responsive", 4],
+    [{ orientation: "vertical" }, "bx--tabs--vertical--column", 4],
+    [{ orientation: "horizontal" }, "bx--tabs--vertical--row", 4],
+    [{ count: 0 }, "bx--tabs--vertical--responsive", 0],
+  ] as const)(
+    "renders %o with %s and %i nav items",
+    (props, className, items) => {
+      const { container } = render(TabsVerticalSkeleton, { props });
 
-    expect(container.querySelector(".bx--tabs--vertical")).toHaveClass(
-      className,
-    );
-  });
-
-  it("should render no nav items for a count of 0", () => {
-    const { container } = render(TabsVerticalSkeleton, { props: { count: 0 } });
-
-    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(0);
-  });
+      const skeleton = container.querySelector(".bx--tabs--vertical");
+      expect(skeleton).toHaveClass("bx--skeleton", className);
+      expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(
+        items,
+      );
+    },
+  );
 
   describe("shared ResizeObserver", () => {
     afterEach(() => {
@@ -485,14 +462,7 @@ describe("TabsVerticalSkeleton", () => {
         container.querySelector(".bx--tab--overflow-nav-button"),
       ).not.toBeInTheDocument();
 
-      Object.defineProperty(nav, "scrollWidth", {
-        configurable: true,
-        value: 600,
-      });
-      Object.defineProperty(nav, "clientWidth", {
-        configurable: true,
-        value: 200,
-      });
+      mockScrollMetrics(nav, { scrollWidth: 600, clientWidth: 200 });
       deliver(
         [{ target: nav }] as unknown as ResizeObserverEntry[],
         {} as ResizeObserver,

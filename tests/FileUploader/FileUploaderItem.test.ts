@@ -3,6 +3,10 @@ import { user } from "../utils/user";
 import FileUploaderItem from "./FileUploaderItem.test.svelte";
 
 describe("FileUploaderItem", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each([
     ["uploading", ".bx--loading"],
     ["edit", "button.bx--file-close"],
@@ -228,6 +232,5 @@ describe("FileUploaderItem", () => {
     await vi.waitFor(() => {
       expect(name).toHaveAttribute("title", "quarterly-report-final.pdf");
     });
-    vi.restoreAllMocks();
   });
 });

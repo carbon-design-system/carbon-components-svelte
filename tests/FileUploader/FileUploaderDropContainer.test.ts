@@ -3,47 +3,24 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
 import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
-import { fileNames, simulateFileSelection } from "./helpers";
+import {
+  createDragEvent,
+  dropFiles,
+  emptyFileInput,
+  fileNames,
+  getDropZone,
+  getFileInput,
+  makeFile,
+  simulateFileSelection,
+} from "./helpers";
 
 describe("FileUploaderDropContainer", () => {
-  function createDragEvent(
-    type: "dragover" | "dragleave" | "drop",
-    files: File[] = [],
-    relatedTarget: EventTarget | null = null,
-  ) {
-    const dataTransfer = new DataTransfer();
-    for (const file of files) {
-      dataTransfer.items.add(file);
-    }
-
-    // Create a mock DragEvent since it may not be available in test environment
-    const event = new Event(type, {
-      bubbles: true,
-      cancelable: true,
-    }) as DragEvent;
-
-    Object.defineProperty(event, "dataTransfer", {
-      value: dataTransfer,
-      writable: false,
-      configurable: true,
-    });
-
-    Object.defineProperty(event, "relatedTarget", {
-      value: relatedTarget,
-      writable: false,
-      configurable: true,
-    });
-
-    return event;
-  }
-
   it("should handle disabled state", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toBeDisabled();
 
     const target = container.querySelector(".bx--file-browse-btn");
@@ -67,8 +44,7 @@ describe("FileUploaderDropContainer", () => {
       props: { capture: "user" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    expect(input).toHaveAttribute("capture", "user");
+    expect(getFileInput(container)).toHaveAttribute("capture", "user");
   });
 
   it("should respect accept prop", () => {
@@ -76,8 +52,7 @@ describe("FileUploaderDropContainer", () => {
       props: { accept: [".pdf", ".doc"] },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("accept", ".pdf,.doc");
   });
 
@@ -86,21 +61,19 @@ describe("FileUploaderDropContainer", () => {
       props: { multiple: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("multiple");
   });
 
   it("should handle dragover event and show drag-over state", async () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
+    const dropDiv = getDropZone(container);
 
     const dropContainer = container.querySelector(".bx--file__drop-container");
     assert(dropContainer instanceof HTMLElement);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     const dragOverEvent = createDragEvent("dragover", [file]);
 
     dropDiv.dispatchEvent(dragOverEvent);
@@ -113,13 +86,12 @@ describe("FileUploaderDropContainer", () => {
   it("should keep drag-over state when dragleave moves onto a child element", async () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
+    const dropDiv = getDropZone(container);
 
     const dropContainer = container.querySelector(".bx--file__drop-container");
     assert(dropContainer instanceof HTMLElement);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     dropDiv.dispatchEvent(createDragEvent("dragover", [file]));
 
     await vi.waitFor(() => {
@@ -153,13 +125,10 @@ describe("FileUploaderDropContainer", () => {
       },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
     const png = new File(["a"], "logo.PNG", { type: "image/png" });
     const jpeg = new File(["b"], "photo", { type: "image/jpeg" });
     const text = new File(["c"], "notes.txt", { type: "text/plain" });
-    dropDiv.dispatchEvent(createDragEvent("drop", [png, jpeg, text]));
+    dropFiles(container, [png, jpeg, text]);
 
     await vi.waitFor(() => expect(changeHandler).toHaveBeenCalled());
     expect(changeHandler.mock.calls[0][0].detail).toEqual([png, jpeg]);
@@ -175,13 +144,8 @@ describe("FileUploaderDropContainer", () => {
       props: { onadd: addHandler, onchange: changeHandler },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
-    const dropEvent = createDragEvent("drop", [file]);
-
-    dropDiv.dispatchEvent(dropEvent);
+    const file = makeFile("test.txt");
+    dropFiles(container, [file]);
 
     await vi.waitFor(() => {
       expect(addHandler).toHaveBeenCalled();
@@ -206,19 +170,11 @@ describe("FileUploaderDropContainer", () => {
       props: { multiple: true, maxFileSize: 1000, onchange: changeHandler },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
+    const input = getFileInput(container);
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    dropDiv.dispatchEvent(createDragEvent("drop", [smallFile, largeFile]));
+    const smallFile = makeFile("small.txt", 500);
+    const largeFile = makeFile("large.txt", 2000);
+    dropFiles(container, [smallFile, largeFile]);
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
@@ -229,24 +185,16 @@ describe("FileUploaderDropContainer", () => {
   });
 
   describe("native input sync", () => {
-    const getInput = (container: HTMLElement) => {
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
-      return input;
-    };
-    const textFile = (name: string, size = 10) =>
-      new File(["x".repeat(size)], name, { type: "text/plain" });
-
     it("leaves files rejected from a browse pick out of the native input", async () => {
       const changeHandler = vi.fn();
       const { container } = render(FileUploaderDropContainer, {
         props: { multiple: true, maxFileSize: 1000, onchange: changeHandler },
       });
-      const input = getInput(container);
+      const input = getFileInput(container);
 
       simulateFileSelection(input, [
-        textFile("small.txt", 500),
-        textFile("large.txt", 2000),
+        makeFile("small.txt", 500),
+        makeFile("large.txt", 2000),
       ]);
 
       await vi.waitFor(() => {
@@ -259,14 +207,14 @@ describe("FileUploaderDropContainer", () => {
       const { container } = render(FileUploaderDropContainer, {
         props: { multiple: true },
       });
-      const input = getInput(container);
+      const input = getFileInput(container);
 
-      simulateFileSelection(input, [textFile("a.txt")]);
+      simulateFileSelection(input, [makeFile("a.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
-      simulateFileSelection(input, [textFile("b.txt")]);
+      simulateFileSelection(input, [makeFile("b.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt", "b.txt"]);
       });
@@ -276,16 +224,14 @@ describe("FileUploaderDropContainer", () => {
       const { container } = render(FileUploaderDropContainer, {
         props: { multiple: true },
       });
-      const dropDiv = container.querySelector(".bx--file");
-      assert(dropDiv instanceof HTMLElement);
-      const input = getInput(container);
+      const input = getFileInput(container);
 
-      dropDiv.dispatchEvent(createDragEvent("drop", [textFile("a.txt")]));
+      dropFiles(container, [makeFile("a.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
-      simulateFileSelection(input, [textFile("b.txt")]);
+      simulateFileSelection(input, [makeFile("b.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt", "b.txt"]);
       });
@@ -295,19 +241,15 @@ describe("FileUploaderDropContainer", () => {
       const { container } = render(FileUploaderDropContainer, {
         props: { multiple: true },
       });
-      const input = getInput(container);
+      const input = getFileInput(container);
 
-      simulateFileSelection(input, [textFile("a.txt")]);
+      simulateFileSelection(input, [makeFile("a.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       // Opening the picker clears the input; dismissing it fires `cancel`.
-      Object.defineProperty(input, "files", {
-        value: new DataTransfer().files,
-        writable: true,
-        configurable: true,
-      });
+      emptyFileInput(input);
       input.dispatchEvent(new Event("cancel"));
 
       expect(fileNames(input)).toEqual(["a.txt"]);
@@ -317,9 +259,9 @@ describe("FileUploaderDropContainer", () => {
       const { container, rerender } = render(FileUploaderDropContainer, {
         props: { multiple: true },
       });
-      const input = getInput(container);
+      const input = getFileInput(container);
 
-      simulateFileSelection(input, [textFile("a.txt")]);
+      simulateFileSelection(input, [makeFile("a.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt"]);
       });
@@ -335,13 +277,12 @@ describe("FileUploaderDropContainer", () => {
       props: { disabled: true },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
+    const dropDiv = getDropZone(container);
 
     const dropContainer = container.querySelector(".bx--file__drop-container");
     assert(dropContainer instanceof HTMLElement);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     const dragOverEvent = createDragEvent("dragover", [file]);
 
     dropDiv.dispatchEvent(dragOverEvent);
@@ -366,18 +307,9 @@ describe("FileUploaderDropContainer", () => {
       },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    const dropEvent = createDragEvent("drop", [smallFile, largeFile]);
-
-    dropDiv.dispatchEvent(dropEvent);
+    const smallFile = makeFile("small.txt", 500);
+    const largeFile = makeFile("large.txt", 2000);
+    dropFiles(container, [smallFile, largeFile]);
 
     await vi.waitFor(() => {
       expect(rejectedHandler).toHaveBeenCalled();
@@ -401,11 +333,8 @@ describe("FileUploaderDropContainer", () => {
       },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
-    const file = new File(["content"], "ok.txt", { type: "text/plain" });
-    dropDiv.dispatchEvent(createDragEvent("drop", [file]));
+    const file = makeFile("ok.txt");
+    dropFiles(container, [file]);
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
@@ -420,12 +349,8 @@ describe("FileUploaderDropContainer", () => {
       props: { multiple: true, minFileSize: 1, onrejected: rejectedHandler },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-    const empty = new File([], "empty.txt");
-    dropDiv.dispatchEvent(
-      createDragEvent("drop", [empty, new File(["a"], "a.txt")]),
-    );
+    const empty = makeFile("empty.txt", 0);
+    dropFiles(container, [empty, makeFile("a.txt", 1)]);
 
     await vi.waitFor(() => {
       expect(rejectedHandler).toHaveBeenCalledTimes(1);
@@ -455,9 +380,6 @@ describe("FileUploaderDropContainer", () => {
       },
     });
 
-    const dropDiv = container.querySelector(".bx--file");
-    assert(dropDiv instanceof HTMLElement);
-
     const oversized = new File(["x".repeat(2000)], "big.txt", {
       type: "text/plain",
     });
@@ -468,9 +390,7 @@ describe("FileUploaderDropContainer", () => {
     });
     const ok = new File(["x".repeat(10)], "ok.txt", { type: "text/plain" });
 
-    dropDiv.dispatchEvent(
-      createDragEvent("drop", [oversized, duplicate, skipped, ok]),
-    );
+    dropFiles(container, [oversized, duplicate, skipped, ok]);
 
     await vi.waitFor(() => {
       expect(rejectedHandler).toHaveBeenCalled();
@@ -493,8 +413,7 @@ describe("FileUploaderDropContainer", () => {
   it("should handle keyboard interaction to trigger file input", async () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
     const clickSpy = vi.spyOn(input, "click");
     const target = container.querySelector(".bx--file-browse-btn");
@@ -548,8 +467,7 @@ describe("FileUploaderDropContainer", () => {
       props: { name: "file-drop" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("name", "file-drop");
   });
 
@@ -558,8 +476,7 @@ describe("FileUploaderDropContainer", () => {
       props: { id: "custom-drop" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("id", "custom-drop");
 
     const target = screen.getByRole("button");
@@ -578,8 +495,7 @@ describe("FileUploaderDropContainer", () => {
   it("should open the file picker on click", async () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     const clickSpy = vi.spyOn(input, "click");
 
     await user.click(screen.getByRole("button"));
@@ -592,8 +508,7 @@ describe("FileUploaderDropContainer", () => {
       props: { disabled: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     const clickSpy = vi.spyOn(input, "click");
 
     await user.click(screen.getByRole("button"));

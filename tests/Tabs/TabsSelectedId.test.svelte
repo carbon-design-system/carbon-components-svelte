@@ -2,6 +2,7 @@
   import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
   import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
   import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
+  import TabsVertical from "carbon-components-svelte/Tabs/TabsVertical.svelte";
 
   export let selected = 0;
   /** `undefined` keeps the index API; set a string to exercise `selectedId`. */
@@ -9,14 +10,14 @@
   export let showTabA = true;
   export let showTabB = true;
   export let showTabC = true;
+  /** Renders `TabsVertical` instead of `Tabs`. */
+  export let vertical = false;
 </script>
 
-<Tabs
+<svelte:component
+  this={vertical ? TabsVertical : Tabs}
   bind:selected
   bind:selectedId
-  on:change={({ detail }) => {
-    console.log("change event", detail);
-  }}
 >
   {#if showTabA}
     <Tab id="tab-a" label="Tab A" />
@@ -38,7 +39,7 @@
       <TabContent id="panel-c">Content C</TabContent>
     {/if}
   </svelte:fragment>
-</Tabs>
+</svelte:component>
 
 <button
   type="button"

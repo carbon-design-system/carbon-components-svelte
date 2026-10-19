@@ -1,37 +1,10 @@
 // @vitest-environment node
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
+import { expectSelected, getParts } from "./ssr-helpers";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
-
-function getParts(document: Document) {
-  return {
-    tabs: [...document.querySelectorAll("[role='tab']")],
-    panels: [...document.querySelectorAll("[role='tabpanel']")],
-  };
-}
-
-function expectSelected(document: Document, selectedIndex: number) {
-  const { tabs, panels } = getParts(document);
-
-  expect(tabs).toHaveLength(3);
-  expect(panels).toHaveLength(3);
-
-  tabs.forEach((tab, index) => {
-    const selected = index === selectedIndex;
-    expect(tab).toHaveAttribute("aria-selected", String(selected));
-    expect(tab).toHaveAttribute("tabindex", selected ? "0" : "-1");
-  });
-
-  panels.forEach((panel, index) => {
-    if (index === selectedIndex) {
-      expect(panel).not.toHaveAttribute("hidden");
-    } else {
-      expect(panel).toHaveAttribute("hidden");
-    }
-  });
-}
 
 describe("Tabs server render", () => {
   it("renders the first tab and panel as selected by default", () => {

@@ -160,7 +160,10 @@ describe("Filename", () => {
     expect(clickHandler).toHaveBeenCalled();
   });
 
-  it("should handle keyboard interaction on close button", async () => {
+  it.each([
+    ["Enter", "{Enter}"],
+    ["Space", " "],
+  ])("should handle %s key on close button", async (_, key) => {
     const keydownHandler = vi.fn();
     const { container } = render(Filename, {
       props: { status: "edit", onkeydown: keydownHandler },
@@ -170,22 +173,7 @@ describe("Filename", () => {
     assert(closeButton instanceof HTMLElement);
 
     closeButton.focus();
-    await user.keyboard("{Enter}");
-
-    expect(keydownHandler).toHaveBeenCalled();
-  });
-
-  it("should handle Space key on close button", async () => {
-    const keydownHandler = vi.fn();
-    const { container } = render(Filename, {
-      props: { status: "edit", onkeydown: keydownHandler },
-    });
-
-    const closeButton = container.querySelector(".bx--file-close");
-    assert(closeButton instanceof HTMLElement);
-
-    closeButton.focus();
-    await user.keyboard(" ");
+    await user.keyboard(key);
 
     expect(keydownHandler).toHaveBeenCalled();
   });
