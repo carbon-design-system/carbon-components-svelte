@@ -44,6 +44,10 @@ describe("TagSet overflowType", () => {
 describe("TagSet View all", () => {
   it("lists the first ten hidden tags, then a View all button", async () => {
     const { container } = await renderSet();
+    // Built on the first open, with the tags.
+    expect(
+      popoverOf(container).querySelector(".bx--tag-set-overflow__view-all"),
+    ).toBeNull();
 
     await user.click(indicator(13));
     const popover = popoverOf(container);
