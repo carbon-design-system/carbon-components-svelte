@@ -8,6 +8,7 @@ import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelt
 import ContentSwitcherDisabledSelected from "./ContentSwitcher.disabledSelected.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherDynamicBound from "./ContentSwitcher.dynamicBound.test.svelte";
+import ContentSwitcherKeyed from "./ContentSwitcher.keyed.test.svelte";
 import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
 import ContentSwitcherLowContrastIconOnly from "./ContentSwitcher.lowContrastIconOnly.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
@@ -568,6 +569,22 @@ describe("ContentSwitcher", () => {
     await user.keyboard("{ArrowRight}");
     expect(document.activeElement).toBe(tabs[2]);
     expect(tabs[2]).toHaveTextContent("Last");
+  });
+
+  it("follows a keyed reorder with selectedIndex, panels and arrow keys", async () => {
+    const { rerender } = await renderAndFlush(ContentSwitcherKeyed);
+
+    await rerender({ items: ["c", "b", "a"] });
+    await tick();
+
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    const a = screen.getByRole("tab", { name: "A" });
+    expect(a).toHaveAttribute("aria-selected", "true");
+    expect(a).toHaveAttribute("aria-controls", "a-panel");
+
+    a.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(screen.getByRole("tab", { name: "C" })).toHaveFocus();
   });
 
   it("should bind ref to the tablist element", () => {

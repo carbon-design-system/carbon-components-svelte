@@ -4,6 +4,7 @@ import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { mockScrollMetrics, renderManual } from "./helpers";
 import Tabs from "./Tabs.test.svelte";
+import TabsKeyed from "./TabsKeyed.test.svelte";
 import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 
@@ -342,6 +343,20 @@ describe.each(variants)(
         "true",
       );
       expect(screen.getByText("Content C")).toBeVisible();
+    });
+
+    it("keeps the bound index on the selected tab after a keyed reorder", async () => {
+      const { rerender } = render(TabsKeyed, { props: { vertical } });
+      await tick();
+
+      await rerender({ items: ["c", "b", "a"] });
+      await tick();
+
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(screen.getByRole("tab", { name: "A" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
     });
 
     describe("bound selectedId", () => {

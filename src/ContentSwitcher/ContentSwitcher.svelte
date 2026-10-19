@@ -62,6 +62,7 @@
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { createInitOrder } from "../utils/init-order.js";
+  import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
@@ -355,11 +356,21 @@
 
   onMount(() => {
     initialSwitches.close();
+    // A keyed reorder moves switches without re-registering them. Resync in
+    // afterUpdate, which keeps the selected switch selected.
+    return observeDomOrder(ref, {
+      selector: "[role='tab']",
+      getItems: () => switches,
+      onReorder: () => {
+        needsDomSync = needsPanelSync = true;
+        sharedSwitches.update((current) => [...current]);
+      },
+    });
   });
 
   afterUpdate(() => {
     // Sync the switches array with DOM order only when switches are
-    // added/removed. The flag avoids infinite loops in Svelte 5 by not
+    // added, removed or reordered. The flag avoids infinite loops in Svelte 5 by not
     // running on every update. The selected switch is preserved by id so
     // selection survives reordering. Nested [role='tab'] elements inside
     // switch slots are dropped because their ids are not in the registry.
