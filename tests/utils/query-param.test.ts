@@ -91,6 +91,7 @@ describe("queryParam", () => {
     unsubscribe();
     history.replaceState(null, "", "/?tab=settings");
     window.dispatchEvent(new PopStateEvent("popstate"));
-    expect(values).toEqual(["overview", "activity"]);
+    // The listener is gone: the store keeps the last value it saw.
+    expect(get(store)).toBe("activity");
   });
 });

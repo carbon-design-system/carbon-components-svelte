@@ -26,14 +26,14 @@ describe("computeScrollOverflow", () => {
     ).toEqual({ canScrollBackward: true, canScrollForward: true });
   });
 
-  it("can scroll forward when content overflows past the viewport", () => {
+  it("cannot scroll forward once scrolled to the end", () => {
     expect(
       computeScrollOverflow({
-        scrollLeft: 0,
+        scrollLeft: 100,
         scrollWidth: 300,
         clientWidth: 200,
       }).canScrollForward,
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("forwardEpsilon absorbs a sub-pixel rounding gap", () => {
