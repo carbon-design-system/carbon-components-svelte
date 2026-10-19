@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
 import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
@@ -122,6 +123,24 @@ describe.each(components)("%s (shared)", (_, Component) => {
     expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
       { file: duplicate, reason: "duplicate" },
     ]);
+  });
+
+  it("keeps a re-picked file with preventDuplicate when multiple is false", async () => {
+    const { container } = render(Component, {
+      props: { preventDuplicate: true },
+    });
+    const input = getFileInput(container);
+    const lastModified = 1700000000000;
+
+    simulateFileSelection(input, [makeFile("dup.txt", 1, { lastModified })]);
+    await vi.waitFor(() => {
+      expect(fileNames(input)).toEqual(["dup.txt"]);
+    });
+
+    simulateFileSelection(input, [makeFile("dup.txt", 1, { lastModified })]);
+    await tick();
+
+    expect(fileNames(input)).toEqual(["dup.txt"]);
   });
 
   it("opens the file picker on click", async () => {

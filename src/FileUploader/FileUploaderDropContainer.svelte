@@ -133,7 +133,7 @@
         accept,
         minFileSize,
         maxFileSize,
-        preventDuplicate,
+        preventDuplicate: preventDuplicate && multiple,
         existingFiles: files,
       },
     );
