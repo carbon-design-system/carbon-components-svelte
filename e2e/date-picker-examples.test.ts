@@ -97,8 +97,14 @@ function layoutProblems() {
       if (container && rect(grid).width < rect(container).width - 3) {
         problems.push(`${grid.className} does not span the calendar`);
       }
-      if (columns([...grid.children]) !== 3) {
-        problems.push(`${grid.className} is not three columns`);
+      // Months and years sit three to a row, quarters two.
+      const expected = grid.classList.contains(
+        "flatpickr-quarterSelect-quarters",
+      )
+        ? 2
+        : 3;
+      if (columns([...grid.children]) !== expected) {
+        problems.push(`${grid.className} is not ${expected} columns`);
       }
     }
 
