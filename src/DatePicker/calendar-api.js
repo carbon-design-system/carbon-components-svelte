@@ -7,6 +7,7 @@
  *   showMonth: (date: Date) => void;
  *   focusDate: (date: Date) => void;
  *   readonly isOpen: boolean;
+ *   readonly view: Date;
  *   readonly selectedDates: ReadonlyArray<Date>;
  *   readonly engine: import("./calendar.js").CalendarInstance;
  * }} DatePickerCalendar
@@ -39,6 +40,9 @@ export function createCalendarApi(engine) {
     },
     get isOpen() {
       return engine.isOpen;
+    },
+    get view() {
+      return new Date(engine.currentYear, engine.currentMonth, 1);
     },
     get selectedDates() {
       return engine.selectedDates.map((date) => new Date(date.getTime()));
