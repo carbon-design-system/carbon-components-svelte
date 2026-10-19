@@ -775,6 +775,23 @@ describe("ContentSwitcher", () => {
       expect(consoleLog).toHaveBeenCalledWith("change", 1);
     });
 
+    it("keeps a middle switch selected when an earlier switch is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
+        props: { selectedIndex: 1 },
+      });
+
+      await rerender({ showFirst: false });
+      await tick();
+
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+      expect(screen.getByRole("tab", { name: "Middle" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(consoleLog).toHaveBeenCalledWith("change", 0);
+    });
+
     it("does not dispatch change when clicking the re-anchored switch", async () => {
       const consoleLog = vi.spyOn(console, "log");
       const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
