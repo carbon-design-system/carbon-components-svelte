@@ -62,6 +62,10 @@ export interface CalendarOptions
   enable?: DateRule[];
   errorHandler?: (error: Error) => void;
   formatDate?: (date: Date, format: string, locale: CalendarLocale) => string;
+  /** Text added to a day's label for screen readers; marks the day. */
+  dayDescription?: (date: Date) => string | undefined;
+  /** Extra class(es) for a day cell. */
+  dayClass?: (date: Date) => string | undefined;
   /**
    * First day of the week, 0 (Sunday) to 6 (Saturday). Overrides the
    * locale's own.

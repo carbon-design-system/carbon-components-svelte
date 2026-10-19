@@ -48,6 +48,24 @@ const KEY_CODES = {
   Delete: 46,
 };
 
+const WHITESPACE = /\s+/;
+
+/** Options that change behaviour only: `set` doesn't redraw for them. */
+const QUIET_OPTIONS = new Set([
+  "allowInput",
+  "animate",
+  "clickOpens",
+  "closeOnSelect",
+  "errorHandler",
+  "ignoredFocusElements",
+  "parseDate",
+  "position",
+  "positionElement",
+]);
+
+/** Options that change only the field's text: `set` rewrites the value. */
+const TEXT_OPTIONS = new Set(["altFormat", "conjunction", "formatDate"]);
+
 /** Months and years are picked in a 3-wide grid of 12 cells. */
 const GRID_SHIFTS = { 37: -1, 39: 1, 40: 3, 38: -3 };
 
@@ -481,14 +499,16 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.altInput = alt;
     self._input = alt;
   }
-  if (!config.allowInput) self._input.setAttribute("readonly", "readonly");
-  if (secondInput) {
-    if (config.allowInput) {
-      self._input.removeAttribute("readonly");
-      secondInput.removeAttribute("readonly");
-    } else {
-      secondInput.setAttribute("readonly", "readonly");
+  /** `allowInput` decides whether the fields can be typed into. */
+  function syncReadonly() {
+    for (const input of [self._input, secondInput]) {
+      if (!input) continue;
+      if (config.allowInput) input.removeAttribute("readonly");
+      else input.setAttribute("readonly", "readonly");
     }
+  }
+  if (!config.allowInput || secondInput) syncReadonly();
+  if (secondInput) {
     secondInput.setAttribute("data-fp-omit", "");
     config.ignoredFocusElements.push(secondInput);
   }
@@ -884,10 +904,16 @@ export function createCalendarEngine(element, userConfig = {}) {
     );
     day.dateObj = date;
     day.$i = index;
+    const label = self.formatDate(date, config.ariaDateFormat);
+    const description = config.dayDescription?.(date);
     day.setAttribute(
       "aria-label",
-      self.formatDate(date, config.ariaDateFormat),
+      description ? `${label}, ${description}` : label,
     );
+    if (description) day.classList.add("bx--date-picker__day--described");
+    const extraClass = config.dayClass?.(date);
+    if (extraClass)
+      day.classList.add(...extraClass.split(WHITESPACE).filter(Boolean));
     if (!className.includes("hidden") && compareDays(date, self.now) === 0) {
       self.todayDateElem = day;
       day.classList.add("today");
@@ -1587,6 +1613,20 @@ export function createCalendarEngine(element, userConfig = {}) {
   const CALLBACKS = {
     locale: [applyL10n],
     firstDayOfWeek: [applyL10n],
+    allowInput: [syncReadonly],
+    animate: [
+      () => toggleClass(self.calendarContainer, "animate", config.animate),
+    ],
+    // A replaced array would drop the range's second input, which then
+    // closed the calendar when it took focus.
+    ignoredFocusElements: [
+      () => {
+        config.ignoredFocusElements = [...(config.ignoredFocusElements ?? [])];
+        if (secondInput && !config.ignoredFocusElements.includes(secondInput)) {
+          config.ignoredFocusElements.push(secondInput);
+        }
+      },
+    ],
     showMonths: [
       () => {
         if (!filled) return;
@@ -1609,9 +1649,13 @@ export function createCalendarEngine(element, userConfig = {}) {
    * @param {unknown} [value]
    */
   function set(option, value) {
+    const keys =
+      option !== null && typeof option === "object"
+        ? Object.keys(option)
+        : [option];
     if (option !== null && typeof option === "object") {
       Object.assign(config, option);
-      for (const key of Object.keys(option)) {
+      for (const key of keys) {
         for (const callback of CALLBACKS[key] ?? []) callback();
       }
     } else {
@@ -1621,6 +1665,15 @@ export function createCalendarEngine(element, userConfig = {}) {
       } else if (HOOKS.includes(option)) {
         config[option] = arrayify(value);
       }
+    }
+    // Only options that change the grid redraw it; the rest change how the
+    // calendar behaves, or only the field's text.
+    if (keys.every((key) => QUIET_OPTIONS.has(key) || HOOKS.includes(key))) {
+      return;
+    }
+    if (keys.every((key) => QUIET_OPTIONS.has(key) || TEXT_OPTIONS.has(key))) {
+      updateValue(true);
+      return;
     }
     redraw();
     updateValue(true);
