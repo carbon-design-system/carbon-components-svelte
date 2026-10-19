@@ -319,6 +319,17 @@ describe("Pagination", () => {
     expect(screen.getByText("page 1")).toBeInTheDocument();
   });
 
+  it("shows the page text without a page select when pagesUnknown is true", () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 4 },
+    });
+
+    expect(screen.getByText("page 4")).toBeInTheDocument();
+    expect(screen.getByRole("combobox")).toHaveAccessibleName(
+      "Items per page:",
+    );
+  });
+
   // When `pagesUnknown` is true, the total number of pages is unknown, so the
   // forward button should remain enabled at page 1 — otherwise the user can
   // never advance past the first page.
