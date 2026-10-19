@@ -154,6 +154,7 @@
     groupForm,
     groupRequired,
     readonly: groupReadonly,
+    disabled: groupDisabled,
     invalid: groupInvalid,
     warn: groupWarn,
     update: ctxUpdate,
@@ -163,6 +164,7 @@
     groupForm: readable(undefined),
     groupRequired: readable(undefined),
     readonly: readable(false),
+    disabled: readable(false),
     invalid: readable(false),
     warn: readable(false),
   };
@@ -189,7 +191,9 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: effectiveInvalid,
     warn: effectiveWarn,
-    disabled,
+    // A disabled group disables its boxes natively, through `<fieldset
+    // disabled>`, so its state is read here only to hide the invalid state.
+    disabled: disabled || $groupDisabled,
     readonly: effectiveReadonly,
   }));
 

@@ -318,6 +318,22 @@ describe("CheckboxGroup", () => {
     );
   });
 
+  it("keeps a disabled group's invalid state off its child checkboxes", () => {
+    render(CheckboxGroupComponent, {
+      props: {
+        disabled: true,
+        invalid: true,
+        invalidText: "Select at least one option",
+      },
+    });
+
+    const option1 = screen.getByRole("checkbox", { name: "Option 1" });
+    expect(option1).not.toHaveAttribute("aria-invalid");
+    expect(option1.closest(".bx--checkbox-wrapper")).not.toHaveClass(
+      "bx--checkbox-wrapper--invalid",
+    );
+  });
+
   it("lays out vertically by default", () => {
     render(CheckboxGroupComponent);
 
