@@ -92,6 +92,14 @@ describe.each(variants)(
       expect(onChange).toHaveBeenCalledWith(0);
     });
 
+    it("keeps the tab stop on a selected disabled tab", async () => {
+      render(Tabs, { props: { vertical, selected: 1 } });
+      await tick();
+
+      await user.tab();
+      expect(screen.getByRole("tab", { name: "Tab 2" })).toHaveFocus();
+    });
+
     it("should prevent the default scroll on arrow navigation", async () => {
       render(Tabs, { props: { vertical } });
 
