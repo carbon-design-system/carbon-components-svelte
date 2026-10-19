@@ -423,6 +423,9 @@
           ? "bx--pagination__button--no-index"
           : ""}"
         on:click={() => {
+          // `backButtonDisabled={false}` force-enables the button, but pages
+          // still start at 1.
+          if (page <= 1) return;
           page--;
           dispatch("click:button--previous", { page });
           dispatch("change", { page });
@@ -443,6 +446,9 @@
           ? "bx--pagination__button--no-index"
           : ""}"
         on:click={() => {
+          // `forwardButtonDisabled={false}` force-enables the button; only
+          // unknown pages may go past the last one.
+          if (!pagesUnknown && page >= totalPages) return;
           page++;
           dispatch("click:button--next", { page });
           dispatch("change", { page });
