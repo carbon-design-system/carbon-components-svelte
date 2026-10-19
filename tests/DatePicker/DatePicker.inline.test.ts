@@ -10,7 +10,7 @@ describe("DatePicker inline", () => {
   it("renders the calendar without opening it and marks the root", async () => {
     const { container } = render(DatePickerInline);
 
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
     expect(container.querySelector(".bx--date-picker")).toHaveClass(
       "bx--date-picker--inline",
     );
@@ -19,7 +19,7 @@ describe("DatePicker inline", () => {
   it("dispatches change but never open or close", async () => {
     const onevent = vi.fn();
     render(DatePickerInline, { onevent });
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
 
     await user.click(screen.getByLabelText("Date"));
     await user.click(findDay(calendar, "10"));
@@ -36,7 +36,7 @@ describe("DatePicker inline", () => {
   it("ignores portalMenu", async () => {
     const { container } = render(DatePickerInline, { portalMenu: true });
 
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
     expect(container.querySelector(".bx--date-picker")).toContainElement(
       calendar,
     );
@@ -44,11 +44,11 @@ describe("DatePicker inline", () => {
 
   it("switches between inline and popup after mount, keeping the value", async () => {
     const { rerender } = render(DatePickerInline);
-    const inlineCalendar = await screen.findByLabelText("calendar-container");
+    const inlineCalendar = await screen.findByLabelText(/^Choose a /);
 
     await rerender({ inline: false });
     await vi.waitFor(() => {
-      const calendar = screen.getByLabelText("calendar-container");
+      const calendar = screen.getByLabelText(/^Choose a /);
       expect(calendar).not.toBe(inlineCalendar);
       expect(calendar).not.toHaveClass("bx--date-picker__calendar--inline");
     });
@@ -56,7 +56,7 @@ describe("DatePicker inline", () => {
 
     await rerender({ inline: true });
     await vi.waitFor(() =>
-      expect(screen.getByLabelText("calendar-container")).toHaveClass(
+      expect(screen.getByLabelText(/^Choose a /)).toHaveClass(
         "bx--date-picker__calendar--inline",
       ),
     );
@@ -73,7 +73,7 @@ describe("DatePicker inline", () => {
           inline: true,
         };
         const { rerender } = render(DatePicker, { ...props, [state]: true });
-        const calendar = await screen.findByLabelText("calendar-container");
+        const calendar = await screen.findByLabelText(/^Choose a /);
         const input = screen.getByLabelText("Date");
         await vi.waitFor(() =>
           expect(calendar).toHaveAttribute("aria-disabled", "true"),
@@ -105,11 +105,11 @@ describe("DatePicker inline", () => {
       ...props,
       datePickerType: "single",
     });
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
 
     await rerender({ ...props, datePickerType: "multiple" });
     await vi.waitFor(() =>
-      expect(screen.getAllByLabelText("calendar-container")).toHaveLength(1),
+      expect(screen.getAllByLabelText(/^Choose a /)).toHaveLength(1),
     );
     expect(screen.getByText("Pick a weekday")).toBeInTheDocument();
     expect(
@@ -123,7 +123,7 @@ describe("DatePicker inline", () => {
       inline: true,
     });
 
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
     expect(calendar).toHaveClass(
       "bx--date-picker__calendar--inline",
       "bx--date-picker__calendar",

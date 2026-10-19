@@ -28,7 +28,7 @@ const getHiddenInput = () =>
 async function pickDay20() {
   const input = await visibleInput();
   await user.click(input);
-  const calendar = await screen.findByLabelText("calendar-container");
+  const calendar = await screen.findByLabelText(/^Choose a /);
   const day = within(calendar)
     .getAllByText("20")
     .find(

@@ -61,6 +61,8 @@ const QUIET_OPTIONS = new Set([
   "parseDate",
   "position",
   "positionElement",
+  "prevLabel",
+  "nextLabel",
 ]);
 
 /** Options that change only the field's text: `set` rewrites the value. */
@@ -86,6 +88,16 @@ function keyCodeOf(event) {
     KEY_CODES[/** @type {keyof typeof KEY_CODES} */ (event.key)] ||
     0
   );
+}
+
+/**
+ * The first day cell of a month grid.
+ *
+ * @param {Element} grid
+ * @returns {any}
+ */
+function firstDay(grid) {
+  return grid.querySelector(".bx--date-picker__day");
 }
 
 /**
@@ -624,18 +636,40 @@ export function createCalendarEngine(element, userConfig = {}) {
   function buildMonthNav() {
     const nav = createElement("div", "bx--date-picker__month-nav");
     self.monthNav = nav;
+    // Out of the tab order, like the year input: Tab leaves the field and
+    // PageUp/PageDown change the month from the grid. Screen readers still
+    // find them as labelled buttons.
     self.prevMonthNav = createElement(
-      "span",
+      "button",
       "bx--date-picker__nav-button bx--date-picker__nav-button--previous",
     );
     self.prevMonthNav.innerHTML = config.prevArrow;
     self.nextMonthNav = createElement(
-      "span",
+      "button",
       "bx--date-picker__nav-button bx--date-picker__nav-button--next",
     );
     self.nextMonthNav.innerHTML = config.nextArrow;
+    for (const button of [self.prevMonthNav, self.nextMonthNav]) {
+      button.type = "button";
+      button.tabIndex = -1;
+    }
+    labelNavButtons();
     buildMonths();
     return nav;
+  }
+
+  function labelNavButtons() {
+    if (!self.prevMonthNav) return;
+    const unit =
+      pickerMode === "year" ? "decade" : isYearView ? "year" : "month";
+    self.prevMonthNav.setAttribute(
+      "aria-label",
+      config.prevLabel ?? `Previous ${unit}`,
+    );
+    self.nextMonthNav.setAttribute(
+      "aria-label",
+      config.nextLabel ?? `Next ${unit}`,
+    );
   }
 
   function buildMonths() {
@@ -754,16 +788,14 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     self._hidePrevMonthArrow = hidePrev;
     self._hideNextMonthArrow = hideNext;
-    toggleClass(
-      self.prevMonthNav,
-      "bx--date-picker__nav-button--disabled",
-      hidePrev,
-    );
-    toggleClass(
-      self.nextMonthNav,
-      "bx--date-picker__nav-button--disabled",
-      hideNext,
-    );
+    for (const [button, hidden] of [
+      [self.prevMonthNav, hidePrev],
+      [self.nextMonthNav, hideNext],
+    ]) {
+      toggleClass(button, "bx--date-picker__nav-button--disabled", hidden);
+      if (hidden) button.setAttribute("aria-disabled", "true");
+      else button.removeAttribute("aria-disabled");
+    }
     announceView();
   }
 
@@ -793,6 +825,8 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   function buildWeekdays() {
     self.weekdayContainer ??= createElement("div", "bx--date-picker__weekdays");
+    // Each day's label already names its weekday.
+    self.weekdayContainer.setAttribute("aria-hidden", "true");
     const { shorthand } = self.l10n.weekdays;
     const first = self.l10n.firstDayOfWeek;
     const labels = [...shorthand.slice(first), ...shorthand.slice(0, first)];
@@ -826,6 +860,10 @@ export function createCalendarEngine(element, userConfig = {}) {
     const enabled = isEnabled(date, true);
     const blocked = enabled && config.isDayBlocked?.(date, self);
     const day = createElement("span", base, String(date.getDate()));
+    day.setAttribute(
+      "role",
+      base === "bx--date-picker__day" ? "gridcell" : "option",
+    );
     if (outside) day.classList.add("bx--date-picker__day--outside-month");
     if (hidden) day.classList.add("bx--date-picker__day--hidden");
     day.dateObj = date;
@@ -848,6 +886,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (enabled) {
       day.tabIndex = -1;
       if (selectedIndex(date) !== -1) {
+        day.setAttribute("aria-selected", "true");
         day.classList.add("bx--date-picker__day--selected");
         self.selectedDateElem = day;
         if (isRange) {
@@ -931,7 +970,21 @@ export function createCalendarEngine(element, userConfig = {}) {
       );
     }
     const container = createElement("div", "bx--date-picker__month-days");
-    container.appendChild(fragment);
+    container.setAttribute("role", "grid");
+    container.setAttribute(
+      "aria-label",
+      `${self.l10n.months.longhand[month]} ${year}`,
+    );
+    if (isMultiple || isRange) {
+      container.setAttribute("aria-multiselectable", "true");
+    }
+    const cells = [...fragment.childNodes];
+    for (let i = 0; i < cells.length; i += 7) {
+      const row = createElement("div", "bx--date-picker__week");
+      row.setAttribute("role", "row");
+      row.append(...cells.slice(i, i + 7));
+      container.appendChild(row);
+    }
     return container;
   }
 
@@ -971,6 +1024,11 @@ export function createCalendarEngine(element, userConfig = {}) {
           : "bx--date-picker__grid bx--date-picker__grid--months",
     );
     container.tabIndex = -1;
+    container.setAttribute("role", "listbox");
+    container.setAttribute(
+      "aria-label",
+      isYear ? "Years" : isQuarter ? "Quarters" : "Months",
+    );
     const start = decadeStart() - 1;
     const now = self.now;
     /** @param {Date} date */
@@ -990,6 +1048,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       // not because its first day is.
       cell.removeAttribute("aria-current");
       cell.removeAttribute("aria-disabled");
+      cell.removeAttribute("aria-selected");
       cell.tabIndex = -1;
       const year = date.getFullYear();
       const outOfRange =
@@ -1016,6 +1075,7 @@ export function createCalendarEngine(element, userConfig = {}) {
           (isQuarter ? quarterOf(target) === i : target.getMonth() === i))
       ) {
         cell.classList.add("bx--date-picker__grid-cell--selected");
+        cell.setAttribute("aria-selected", "true");
         self.selectedDateElem = cell;
       }
       if (
@@ -1129,7 +1189,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     const anchor = self.selectedDates[0].getTime();
     const hover = hovered
       ? /** @type {any} */ (hovered).dateObj.getTime()
-      : self.days.firstElementChild.dateObj.getTime();
+      : firstDay(self.days).dateObj.getTime();
     const from = Math.min(hover, anchor);
     const to = Math.max(hover, anchor);
     let containsDisabled = false;
@@ -1143,7 +1203,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       }
     }
     const cells = self.daysContainer.querySelectorAll(
-      `*:nth-child(-n+${config.showMonths}) > .${"bx--date-picker__day"}`,
+      `.bx--date-picker__month-days:nth-child(-n+${config.showMonths}) .bx--date-picker__day`,
     );
     for (const cell of cells) {
       const time = cell.dateObj.getTime();
@@ -1548,6 +1608,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     locale: [applyL10n],
     firstDayOfWeek: [applyL10n],
     allowInput: [syncReadonly],
+    prevLabel: [labelNavButtons],
+    nextLabel: [labelNavButtons],
     animate: [
       () =>
         toggleClass(
@@ -1824,11 +1886,13 @@ export function createCalendarEngine(element, userConfig = {}) {
     const from = delta > 0 ? 0 : config.showMonths - 1;
     const to = delta > 0 ? config.showMonths : -1;
     for (let m = from; m !== to; m += delta) {
-      const month = self.daysContainer.children[m];
-      const start = delta > 0 ? 0 : month.children.length - 1;
-      const end = delta > 0 ? month.children.length : -1;
+      const cells = self.daysContainer.children[m].querySelectorAll(
+        ".bx--date-picker__day",
+      );
+      const start = delta > 0 ? 0 : cells.length - 1;
+      const end = delta > 0 ? cells.length : -1;
       for (let i = start; i !== end; i += delta) {
-        const cell = month.children[i];
+        const cell = cells[i];
         if (
           !cell.classList.contains("bx--date-picker__day--hidden") &&
           isOpenDay(cell.dateObj)
@@ -1877,7 +1941,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       );
     let cell = find();
     const direction =
-      date.getTime() < self.days.firstElementChild.dateObj.getTime() ? -1 : 1;
+      date.getTime() < firstDay(self.days).dateObj.getTime() ? -1 : 1;
     for (let i = 0; !cell && i < 13; i++) {
       changeMonth(direction);
       cell = find();
@@ -2177,6 +2241,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     const prev = self.prevMonthNav.contains(target);
     const next = self.nextMonthNav.contains(target);
     if (prev || next) {
+      const button = prev ? self.prevMonthNav : self.nextMonthNav;
+      if (button.hasAttribute("aria-disabled")) return;
       stepView(prev ? -1 : 1);
     } else if (self.yearElements.includes(target)) {
       target.select();

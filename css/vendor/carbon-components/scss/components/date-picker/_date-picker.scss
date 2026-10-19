@@ -551,10 +551,11 @@
 // carbon-components-svelte patch
 // `datePickerType="week"`: the calendar marks all seven days `--week` and
 // `--selected`. Keep the row's ends selected and give the days between
-// them the in-range look, so the week reads as one span like a range. Rows
-// start on the locale's first day, so `7n + 1` and `7n` are the week's ends.
+// them the in-range look, so the week reads as one span like a range. Each
+// row starts on the locale's first day, so its first and last days are the
+// week's ends.
 @mixin date-picker-week-select {
-  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--week.#{$prefix}--date-picker__day--selected:not(:nth-child(7n + 1)):not(:nth-child(7n)) {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--week.#{$prefix}--date-picker__day--selected:not(:first-child):not(:last-child) {
     color: $text-primary;
     background-color: $highlight;
   }

@@ -35,7 +35,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
   });
 
@@ -46,7 +46,7 @@ test.describe("DatePicker", () => {
     await calendarIcon.click({ force: true });
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
   });
 
@@ -62,7 +62,7 @@ test.describe("DatePicker", () => {
 
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
 
     // Fixture uses defaultDate "03/15/2024" so March 2024 is shown.
@@ -81,7 +81,7 @@ test.describe("DatePicker", () => {
 
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
 
     const day15 = calendar
@@ -97,7 +97,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("ArrowRight");
@@ -110,7 +110,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-multiple")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
     const focused = () =>
       page.evaluate(() => document.activeElement?.getAttribute("aria-label"));
@@ -144,7 +144,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
 
     await page.keyboard.press("ArrowDown");
@@ -161,7 +161,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
     await input.focus();
     await page.keyboard.press("Escape");
@@ -173,7 +173,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
     await page.getByTestId("outside-date-picker").click();
     await expect(calendar).not.toHaveClass(/open/);
@@ -184,7 +184,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
     // Month nav doesn't pick a date; the calendar should stay open.
     await calendar.locator(".bx--date-picker__month-nav").click();
@@ -196,7 +196,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
     // With min 03/01 and max 03/31, days outside March get --disabled
     const disabledDay = calendar
@@ -204,7 +204,9 @@ test.describe("DatePicker", () => {
       .first();
     await expect(disabledDay).toBeVisible();
     const initialValue = await input.inputValue();
-    await disabledDay.click();
+    // An aria-disabled gridcell fails Playwright's enabled check; click it
+    // anyway, as a mouse would.
+    await disabledDay.click({ force: true });
     await expect(input).toHaveValue(initialValue);
   });
 
@@ -235,7 +237,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
   });
 
@@ -243,7 +245,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-end").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
   });
 
@@ -251,7 +253,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toBeVisible();
 
     const day10 = calendar
@@ -280,7 +282,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
 
     // Wait for the initial open animation to finish before instrumenting so we
@@ -322,7 +324,7 @@ test.describe("DatePicker", () => {
     await input.click();
     const calendar = page
       .getByTestId("date-picker-single")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
 
     // Wait for the initial open animation to finish before instrumenting.
@@ -360,7 +362,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
     await page.getByTestId("date-picker-range-start").focus();
     await page.keyboard.press("Escape");
@@ -371,7 +373,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
     await page.getByTestId("outside-date-picker").click();
     await expect(calendar).not.toHaveClass(/open/);
@@ -381,7 +383,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await expect(calendar).toHaveClass(/open/);
     // Month nav doesn't pick a date; the calendar should stay open.
     await calendar.locator(".bx--date-picker__month-nav").click();
@@ -393,7 +395,7 @@ test.describe("DatePicker", () => {
   }) => {
     const calendar = page
       .getByTestId("date-picker-range")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
 
     // Open from start, close with outside click, reopen from end. calendarOpen
     // should flip correctly for both inputs.
@@ -414,7 +416,7 @@ test.describe("DatePicker", () => {
     await page.getByTestId("date-picker-range-limited-start").click();
     const calendar = page
       .getByTestId("date-picker-range-limited")
-      .getByLabel("calendar-container");
+      .getByLabel(/^Choose a /);
     await calendar.getByLabel("March 10, 2024").click();
 
     await calendar.getByLabel("March 10, 2024").focus();
@@ -436,7 +438,7 @@ test.describe("DatePicker", () => {
       await input.click();
       const calendar = page
         .getByTestId("date-picker-single")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       await page.getByTestId("outside-date-picker").click();
@@ -454,7 +456,7 @@ test.describe("DatePicker", () => {
       await input.click();
       const calendar = page
         .getByTestId("date-picker-single")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       const viewport = page.viewportSize();
@@ -476,7 +478,7 @@ test.describe("DatePicker", () => {
       await calendarIcon.click({ force: true });
       const calendar = page
         .getByTestId("date-picker-single")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       await page.getByTestId("outside-date-picker").click();
@@ -492,7 +494,7 @@ test.describe("DatePicker", () => {
       await input.click();
       const calendar = page
         .getByTestId("date-picker-single")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       const day20 = calendar
@@ -511,7 +513,7 @@ test.describe("DatePicker", () => {
       await input.click();
       const calendar = page
         .getByTestId("date-picker-single")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       await input.focus();
@@ -527,7 +529,7 @@ test.describe("DatePicker", () => {
       await page.getByTestId("date-picker-range-start").click();
       const calendar = page
         .getByTestId("date-picker-range")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       const day10 = calendar
@@ -546,7 +548,7 @@ test.describe("DatePicker", () => {
       await page.getByTestId("date-picker-range-start").click();
       const calendar = page
         .getByTestId("date-picker-range")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toHaveClass(/open/);
 
       const day10 = calendar
@@ -572,7 +574,7 @@ test.describe("DatePicker", () => {
 
       const calendar = page
         .getByTestId("date-picker-month")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toBeVisible();
       await expect(calendar.locator(".bx--date-picker__grid-cell")).toHaveCount(
         12,
@@ -586,7 +588,7 @@ test.describe("DatePicker", () => {
 
       const calendar = page
         .getByTestId("date-picker-month")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await calendar.getByText("Sep", { exact: true }).click();
 
       await expect(input).toHaveValue("September 2024");
@@ -601,7 +603,7 @@ test.describe("DatePicker", () => {
 
       const calendar = page
         .getByTestId("date-picker-month")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       const yearInput = calendar.locator("input.bx--date-picker__year-input");
       await expect(yearInput).toHaveValue("2024");
 
@@ -643,7 +645,7 @@ test.describe("DatePicker", () => {
 
       const calendar = page
         .getByTestId("date-picker-multiple")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toBeVisible();
 
       const day = (n: number) =>
@@ -680,7 +682,7 @@ test.describe("DatePicker", () => {
 
       const calendar = page
         .getByTestId("date-picker-multiple")
-        .getByLabel("calendar-container");
+        .getByLabel(/^Choose a /);
       await expect(calendar).toBeVisible();
 
       const day = (n: number) =>

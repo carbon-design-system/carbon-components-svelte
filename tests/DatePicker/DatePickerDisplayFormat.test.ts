@@ -67,7 +67,7 @@ describe("DatePicker displayFormat", () => {
     render(DatePicker, { datePickerType: "range" });
 
     const input = screen.getByLabelText("Date");
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
     expect(input).toHaveAttribute("type", "text");
     expect(document.querySelectorAll("input[type='hidden']")).toHaveLength(0);
   });
