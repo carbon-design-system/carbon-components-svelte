@@ -132,6 +132,11 @@
     if (tabindex === undefined) buttonRef.removeAttribute("tabindex");
     else buttonRef.setAttribute("tabindex", tabindex);
   }
+
+  // The popover's tags (each a Tag with its own close button) are built the
+  // first time it opens, then kept.
+  let openedOnce = open;
+  $: if (open) openedOnce = true;
 </script>
 
 {#if mode === "popover"}
@@ -154,7 +159,9 @@
       <span aria-hidden="true">+{count}</span>
       <span class:bx--visually-hidden={true}>{overflowLabel(count)}</span>
       <svelte:fragment slot="content">
-        {#if customContent}
+        {#if !openedOnce}
+          <!-- Built on the first open, then kept. -->
+        {:else if customContent}
           <slot name="tooltip" {tags} {count} />
         {:else}
           <ul class:bx--tag-set-overflow__list={true}>
