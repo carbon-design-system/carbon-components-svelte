@@ -2384,9 +2384,16 @@ export function createCalendarEngine(element, userConfig = {}) {
   // --- Init -------------------------------------------------------------
 
   built = true;
-  build();
-  bindEvents();
-  if (self.selectedDates.length || secondInput) updateValue(false);
+  try {
+    build();
+    bindEvents();
+    if (self.selectedDates.length || secondInput) updateValue(false);
+  } catch (error) {
+    // A consumer callback (`formatDate`, `onDayCreate`) can throw mid-build.
+    // Take down what was built so the input is left as it was.
+    destroy();
+    throw error;
+  }
   self.input._flatpickr = self;
   if (secondInput) /** @type {any} */ (secondInput)._flatpickr = self;
   triggerEvent("onReady");
