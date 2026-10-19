@@ -114,19 +114,11 @@ Switches can be conditionally rendered using Svelte's `{#if}` blocks. The compon
 
 ## Custom switch slot
 
-Override the default slot in the switch to customize how each option displays.
+Override the default slot in the switch to customize how each option displays. An icon placed before the text is centered on it, and long text still truncates with an ellipsis.
 
 <ContentSwitcher>
-  <Switch>
-    <Stack orientation="horizontal" gap={3}>
-      <Bullhorn /> Latest news
-    </Stack>
-  </Switch>
-  <Switch>
-    <Stack orientation="horizontal" gap={3}>
-      <Analytics /> Trending
-    </Stack>
-  </Switch>
+  <Switch><Bullhorn /> Latest news</Switch>
+  <Switch><Analytics /> Trending</Switch>
 </ContentSwitcher>
 
 ### Selected state
@@ -135,14 +127,10 @@ The default slot exposes `selected`, so custom content can change with the selec
 
 <ContentSwitcher>
   <Switch text="Latest news" let:selected>
-    <Stack orientation="horizontal" gap={3}>
-      {#if selected}<Checkmark />{/if} Latest news
-    </Stack>
+    {#if selected}<Checkmark />{/if} Latest news
   </Switch>
   <Switch text="Trending" let:selected>
-    <Stack orientation="horizontal" gap={3}>
-      {#if selected}<Checkmark />{/if} Trending
-    </Stack>
+    {#if selected}<Checkmark />{/if} Trending
   </Switch>
 </ContentSwitcher>
 
