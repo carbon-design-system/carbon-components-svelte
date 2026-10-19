@@ -62,17 +62,15 @@ describe("RadioButton (Implicit Group via name)", () => {
     expect(option3).not.toBeChecked();
   });
 
-  it("should handle programmatic checked updates", async () => {
+  it("should uncheck siblings when checked is set programmatically", async () => {
     const { component } = render(RadioButtonImplicitGroup);
 
-    const option2 = screen.getByRole("radio", { name: "Option 2" });
-
+    await user.click(screen.getByRole("radio", { name: "Option 1" }));
     component.checked2 = true;
     await flushMacrotask();
 
-    // Note: programmatic updates to `checked` don't automatically uncheck siblings
-    // because the binding goes RadioButton -> component, not component -> registry
-    expect(option2).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Option 2" })).toBeChecked();
+    expect(component.checked1).toBe(false);
   });
 
   it("should clean up registry on unmount", async () => {
