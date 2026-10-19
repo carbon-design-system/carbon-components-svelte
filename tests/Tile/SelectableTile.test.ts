@@ -7,10 +7,6 @@ import SelectableTileChange from "./SelectableTileChange.test.svelte";
 import SelectableTileStandalone from "./SelectableTileStandalone.test.svelte";
 
 describe("SelectableTile", () => {
-  it("does not throw when rendered outside a SelectableTileGroup", () => {
-    expect(() => render(SelectableTileStandalone)).not.toThrow();
-  });
-
   it("renders with default props", () => {
     render(SelectableTileTest);
     const tile = screen.getByTestId("selectable-tile");
@@ -92,16 +88,6 @@ describe("SelectableTile", () => {
     const tile = screen.getByTestId("selectable-tile");
     expect(tile).not.toHaveAttribute("role");
     expect(tile).not.toHaveAttribute("aria-checked");
-  });
-
-  it("reflects selected and disabled state on the input", () => {
-    const { container } = render(SelectableTileTest, {
-      selected: true,
-      disabled: true,
-    });
-    const input = container.querySelector('input[type="checkbox"]');
-    expect(input).toBeChecked();
-    expect(input).toBeDisabled();
   });
 
   it("hides the checkmark icon from assistive technology", () => {

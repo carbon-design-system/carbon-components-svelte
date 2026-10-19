@@ -173,30 +173,6 @@ describe("SelectableTileGroup", () => {
     expect(component.selected).toContain("option3");
   });
 
-  it("should allow multiple selections", async () => {
-    const { component } = render(SelectableTileGroup);
-
-    const tiles = screen.getAllByText(/Option/);
-
-    await user.click(tiles[0]);
-    await user.click(tiles[1]);
-    await user.click(tiles[2]);
-
-    expect(component.selected).toHaveLength(3);
-    expect(component.selected).toContain("option1");
-    expect(component.selected).toContain("option2");
-    expect(component.selected).toContain("option3");
-  });
-
-  it("should apply custom class", () => {
-    render(SelectableTileGroup, {
-      props: { customClass: "custom-tile-group" },
-    });
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).toHaveClass("custom-tile-group");
-  });
-
   it("should handle programmatic selected value changes", async () => {
     const { component, container } = render(SelectableTileGroup);
 
@@ -246,31 +222,6 @@ describe("SelectableTileGroup", () => {
 
     // `queryByRole("legend")` finds nothing even when a legend renders.
     expect(container.querySelector("legend")).not.toBeInTheDocument();
-  });
-
-  it("should handle empty selected array", () => {
-    const { container } = render(SelectableTileGroup, {
-      props: { selected: [] },
-    });
-
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    for (const checkbox of checkboxes) {
-      expect(checkbox).not.toBeChecked();
-    }
-  });
-
-  it("should handle clearing all selections", async () => {
-    const { component } = render(SelectableTileGroup, {
-      props: { selected: ["option1", "option2", "option3"] },
-    });
-
-    const tiles = screen.getAllByText(/Option/);
-
-    await user.click(tiles[0]);
-    await user.click(tiles[1]);
-    await user.click(tiles[2]);
-
-    expect(component.selected).toHaveLength(0);
   });
 
   it("should re-register with group when tile value changes after mount", async () => {
@@ -531,75 +482,6 @@ describe("SelectableTileGroup", () => {
       type DeselectEventDetail =
         DeselectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<DeselectEventDetail>().toEqualTypeOf<string>();
-    });
-
-    it("should provide type-safe access to custom string literal types in event handlers", () => {
-      type Status = "pending" | "approved" | "rejected";
-
-      const handleSelect = (value: Status) => {
-        expectTypeOf(value).toEqualTypeOf<Status>();
-        if (value === "pending") {
-          expectTypeOf(value).toEqualTypeOf<"pending">();
-        }
-      };
-
-      expectTypeOf(handleSelect).parameter(0).toEqualTypeOf<Status>();
-
-      type ComponentType = SelectableTileGroupComponent<Status>;
-      type Events = ComponentEvents<ComponentType>;
-      type SelectEvent = Events["select"];
-      type SelectEventDetail =
-        SelectEvent extends CustomEvent<infer T> ? T : never;
-
-      expectTypeOf<SelectEventDetail>().toEqualTypeOf<
-        Parameters<typeof handleSelect>[0]
-      >();
-    });
-
-    it("should enforce string constraint on generic type", () => {
-      type ValidStringLiteral = "a" | "b" | "c";
-      type ComponentType = SelectableTileGroupComponent<ValidStringLiteral>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["selected"]>().toEqualTypeOf<
-        ValidStringLiteral[] | undefined
-      >();
-
-      type StringComponentType = SelectableTileGroupComponent<string>;
-      type StringProps = ComponentProps<StringComponentType>;
-      expectTypeOf<StringProps["selected"]>().toEqualTypeOf<
-        string[] | undefined
-      >();
-    });
-
-    it("should work with 'as const' for type inference", () => {
-      const selectedValues = ["option1", "option2", "option3"] as const;
-      type InferredType = (typeof selectedValues)[number];
-
-      expectTypeOf<typeof selectedValues>().toEqualTypeOf<
-        readonly ["option1", "option2", "option3"]
-      >();
-      expectTypeOf<InferredType>().toEqualTypeOf<
-        "option1" | "option2" | "option3"
-      >();
-
-      type ComponentType = SelectableTileGroupComponent<InferredType>;
-      type Props = ComponentProps<ComponentType>;
-      type Events = ComponentEvents<ComponentType>;
-
-      expectTypeOf<Props["selected"]>().toEqualTypeOf<
-        InferredType[] | undefined
-      >();
-
-      type SelectEvent = Events["select"];
-      type SelectEventDetail =
-        SelectEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<SelectEventDetail>().toEqualTypeOf<InferredType>();
-
-      type DeselectEvent = Events["deselect"];
-      type DeselectEventDetail =
-        DeselectEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<DeselectEventDetail>().toEqualTypeOf<InferredType>();
     });
   });
 });

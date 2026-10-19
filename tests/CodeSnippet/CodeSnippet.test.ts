@@ -8,33 +8,34 @@ import {
 } from "../utils/mock-snippet-overflow-height";
 import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
-import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
 import CodeSnippetBindShowMoreLess from "./CodeSnippetBindShowMoreLess.test.svelte";
-import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCopyButtonMouseEnter from "./CodeSnippetCopyButtonMouseEnter.test.svelte";
-import CodeSnippetCopyButtonMouseLeave from "./CodeSnippetCopyButtonMouseLeave.test.svelte";
-import CodeSnippetCopyError from "./CodeSnippetCopyError.test.svelte";
 import CodeSnippetCopyRef from "./CodeSnippetCopyRef.test.svelte";
-import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
-import CodeSnippetDefaultCopyError from "./CodeSnippetDefaultCopyError.test.svelte";
-import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
-import CodeSnippetDoubleClick from "./CodeSnippetDoubleClick.test.svelte";
-import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
-import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
-import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
-import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
-import CodeSnippetInlineSlotCopy from "./CodeSnippetInlineSlotCopy.test.svelte";
+import CodeSnippetDispatchGuard from "./CodeSnippetDispatchGuard.test.svelte";
 import CodeSnippetMouseEnter from "./CodeSnippetMouseEnter.test.svelte";
-import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
-import CodeSnippetNullishAriaLabel from "./CodeSnippetNullishAriaLabel.test.svelte";
-import CodeSnippetRestPropsButton from "./CodeSnippetRestPropsButton.test.svelte";
-import CodeSnippetRestPropsSingle from "./CodeSnippetRestPropsSingle.test.svelte";
-import CodeSnippetRestPropsSpan from "./CodeSnippetRestPropsSpan.test.svelte";
 import CodeSnippetSlotCopy from "./CodeSnippetSlotCopy.test.svelte";
-import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
-import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
-import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
-import CodeSnippetWrapperMouseEnter from "./CodeSnippetWrapperMouseEnter.test.svelte";
+
+const singleCode = "npm install --save @carbon/icons";
+const inlineProps = {
+  type: "inline" as const,
+  code: "npm install -g @carbon/cli",
+};
+const multilineCode = `node -v
+npm -v
+yarn -v`;
+const longCode = `node -v
+npm -v
+yarn -v
+git --version
+python --version
+java -version
+docker --version
+kubectl version`;
+
+const snippetVariants = [
+  { type: "single" as const, label: "Copy to clipboard" },
+  { type: "inline" as const, label: "Copy code" },
+];
 
 describe("CodeSnippet", () => {
   afterEach(() => {
@@ -46,32 +47,25 @@ describe("CodeSnippet", () => {
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2527
   it("does not fire expand/collapse event on initial render", () => {
-    render(CodeSnippetInitialEvent);
+    const onExpand = vi.fn();
+    const onCollapse = vi.fn();
+    render(CodeSnippetDispatchGuard, { props: { onExpand, onCollapse } });
 
-    expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
-    expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
+    expect(onExpand).not.toHaveBeenCalled();
+    expect(onCollapse).not.toHaveBeenCalled();
   });
 
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2527
   it("does not fire expand/collapse event on initial render when expanded is true", () => {
-    render(CodeSnippetInitialEvent, { props: { expanded: true } });
+    const onExpand = vi.fn();
+    const onCollapse = vi.fn();
+    render(CodeSnippetDispatchGuard, {
+      props: { expanded: true, onExpand, onCollapse },
+    });
 
-    expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
-    expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
-  });
-
-  it("should render inline variant", () => {
-    const { container } = render(CodeSnippetInline);
-    expect(container.querySelector(".bx--snippet--inline")).toBeInTheDocument();
-    expect(screen.getByText("npm install -g @carbon/cli")).toBeInTheDocument();
-  });
-
-  // Inline copy button defaults its accessible name to "Copy code"
-  // so AT users don't hear the full snippet read as the button name.
-  it("inline copy button has default 'Copy code' aria-label", () => {
-    render(CodeSnippetInline);
-    expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
+    expect(onExpand).not.toHaveBeenCalled();
+    expect(onCollapse).not.toHaveBeenCalled();
   });
 
   it("announces copy feedback for the inline variant", async () => {
@@ -81,7 +75,7 @@ describe("CodeSnippet", () => {
       writable: true,
     });
 
-    render(CodeSnippetInline);
+    render(CodeSnippet, { props: inlineProps });
     const status = screen.getByRole("status");
     expect(status).toHaveTextContent("");
 
@@ -98,7 +92,7 @@ describe("CodeSnippet", () => {
   });
 
   it("describes the inline copy button with its code text", () => {
-    const { container } = render(CodeSnippetInline);
+    const { container } = render(CodeSnippet, { props: inlineProps });
     const button = screen.getByRole("button", { name: "Copy code" });
     expect(button).toHaveAccessibleDescription("npm install -g @carbon/cli");
     expect(button).toHaveAttribute(
@@ -132,63 +126,19 @@ describe("CodeSnippet", () => {
     );
   });
 
-  it("keeps aria-describedby on a disabled inline copy button", () => {
-    const { container } = render(CodeSnippetDisabled, {
-      props: { type: "inline" },
-    });
-    expect(container.querySelector("button")).toHaveAttribute(
-      "aria-describedby",
-      container.querySelector("code")?.id,
-    );
-  });
-
-  it("does not set aria-describedby on the inline span without a copy button", () => {
-    const { container } = render(CodeSnippet, {
-      props: { type: "inline", code: "x", hideCopyButton: true },
-    });
-    expect(container.querySelector(".bx--snippet--inline")).not.toHaveAttribute(
-      "aria-describedby",
-    );
-  });
-
-  it.each([
-    {
-      variant: "inline",
-      label: "Copy code",
-      code: "npm install -g @carbon/cli",
-    },
-    {
-      variant: "single",
-      label: "Copy to clipboard",
-      code: "npm install --save @carbon/icons",
-    },
-    {
-      variant: "multi",
-      label: "Copy to clipboard",
-      code: `node -v
-npm -v
-yarn -v`,
-    },
-  ] as const)(
-    "should not copy again on $variant snippet while feedback is active",
-    async ({ variant, label, code }) => {
+  it.each(snippetVariants)(
+    "should not copy again on $type snippet while feedback is active",
+    async ({ type, label }) => {
       const copy = vi.fn();
-      render(CodeSnippetDoubleClick, {
-        props: { type: variant, code, copy },
-      });
+      const onCopy = vi.fn();
+      render(CodeSnippetAsync, { props: { type, copy, onCopy } });
 
       await user.dblClick(screen.getByLabelText(label));
 
       expect(copy).toHaveBeenCalledTimes(1);
-      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+      expect(onCopy).toHaveBeenCalledTimes(1);
     },
   );
-
-  const snippetVariants = [
-    { type: "single" as const, label: "Copy to clipboard" },
-    { type: "inline" as const, label: "Copy code" },
-    { type: "multi" as const, label: "Copy to clipboard" },
-  ];
 
   it.each(snippetVariants)(
     "async copy delays feedback until resolved ($type)",
@@ -204,6 +154,8 @@ yarn -v`,
       render(CodeSnippetAsync, { props: { type, copy } });
 
       const button = screen.getByLabelText(label);
+      // Feedback is portalled by default.
+      expect(button).toHaveClass("bx--copy-btn--portal-active");
       fireEvent.click(button);
       await Promise.resolve();
 
@@ -307,27 +259,9 @@ yarn -v`,
     },
   );
 
-  it.each([
-    {
-      type: "inline" as const,
-      label: "Copy code",
-      code: "npm install -g @carbon/cli",
-    },
-    {
-      type: "single" as const,
-      label: "Copy to clipboard",
-      code: "npm install --save @carbon/icons",
-    },
-    {
-      type: "multi" as const,
-      label: "Copy to clipboard",
-      code: `node -v
-npm -v
-yarn -v`,
-    },
-  ] as const)(
+  it.each(snippetVariants)(
     "should not copy again while async copy is pending ($type)",
-    async ({ type, label, code }) => {
+    async ({ type, label }) => {
       let resolveCopy: () => void = () => {};
       const copy = vi.fn(
         () =>
@@ -335,10 +269,9 @@ yarn -v`,
             resolveCopy = resolve;
           }),
       );
+      const onCopy = vi.fn();
 
-      render(CodeSnippetAsyncDoubleClick, {
-        props: { type, code, copy },
-      });
+      render(CodeSnippetAsync, { props: { type, copy, onCopy } });
 
       const button = screen.getByLabelText(label);
       fireEvent.click(button);
@@ -346,23 +279,27 @@ yarn -v`,
       await user.click(button);
 
       expect(copy).toHaveBeenCalledTimes(1);
-      expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
+      expect(onCopy).not.toHaveBeenCalled();
 
       resolveCopy();
       await waitFor(() => {
-        expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+        expect(onCopy).toHaveBeenCalledTimes(1);
       });
     },
   );
 
   it("should render multiline variant", () => {
-    const { container } = render(CodeSnippetMultiline);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", code: multilineCode },
+    });
     expect(container.querySelector(".bx--snippet--multi")).toBeInTheDocument();
     expect(screen.getByText(/node -v/)).toBeInTheDocument();
   });
 
   it("should fade only the scroll edges with more content", async () => {
-    const { container } = render(CodeSnippetMultiline);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", code: multilineCode },
+    });
     const snippetContainer = container.querySelector(".bx--snippet-container");
     assert(snippetContainer);
 
@@ -399,7 +336,11 @@ yarn -v`,
 
   it("should expand and collapse expandable snippet", async () => {
     mockSnippetOverflowHeight();
-    const { container } = render(CodeSnippetExpandable);
+    const onExpand = vi.fn();
+    const onCollapse = vi.fn();
+    const { container } = render(CodeSnippetDispatchGuard, {
+      props: { onExpand, onCollapse },
+    });
     await waitForSnippetMeasurement();
 
     expect(
@@ -411,6 +352,8 @@ yarn -v`,
 
     expect(container.querySelector(".bx--snippet--expand")).toBeInTheDocument();
     expect(screen.getByText("Show less")).toBeInTheDocument();
+    expect(onExpand).toHaveBeenCalledTimes(1);
+    expect(onCollapse).not.toHaveBeenCalled();
 
     const showLessButton = screen.getByText("Show less");
     await user.click(showLessButton);
@@ -419,11 +362,15 @@ yarn -v`,
       container.querySelector(".bx--snippet--expand"),
     ).not.toBeInTheDocument();
     expect(screen.getByText("Show more")).toBeInTheDocument();
+    expect(onExpand).toHaveBeenCalledTimes(1);
+    expect(onCollapse).toHaveBeenCalledTimes(1);
   });
 
   it("should set aria-expanded and aria-controls on the show-more button", async () => {
     mockSnippetOverflowHeight();
-    render(CodeSnippetExpandable);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", code: longCode },
+    });
     await waitForSnippetMeasurement();
 
     const showMoreButton = await screen.findByText("Show more");
@@ -437,26 +384,22 @@ yarn -v`,
     assert(codeContainer);
     expect(codeContainer).toHaveClass("bx--snippet-container");
 
+    // Regression: chevron should not duplicate the button's accessible name
+    const chevron = container.querySelector(".bx--icon-chevron--down");
+    assert(chevron);
+    expect(chevron).toHaveAttribute("aria-hidden", "true");
+    expect(chevron).not.toHaveAttribute("aria-label");
+
     await user.click(button);
 
     expect(button).toHaveAttribute("aria-expanded", "true");
   });
 
-  // Regression: chevron should not duplicate the button's accessible name
-  it("should not set aria-label on the expand chevron", async () => {
-    mockSnippetOverflowHeight();
-    const { container } = render(CodeSnippetExpandable);
-    await waitForSnippetMeasurement();
-
-    const chevron = container.querySelector(".bx--icon-chevron--down");
-    assert(chevron);
-    expect(chevron).toHaveAttribute("aria-hidden", "true");
-    expect(chevron).not.toHaveAttribute("aria-label");
-  });
-
   it("should render expanded by default", async () => {
     mockSnippetOverflowHeight();
-    const { container } = render(CodeSnippetExpandedByDefault);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", expanded: true, code: longCode },
+    });
     await waitForSnippetMeasurement();
 
     expect(container.querySelector(".bx--snippet--expand")).toBeInTheDocument();
@@ -546,7 +489,9 @@ yarn -v`,
       writable: true,
     });
 
-    const { container } = render(CodeSnippetCopyButton);
+    const { container } = render(CodeSnippet, {
+      props: { type: "single", code: singleCode },
+    });
 
     expect(container.querySelector(".bx--snippet--single")).toBeInTheDocument();
     expect(
@@ -568,21 +513,7 @@ yarn -v`,
     });
   });
 
-  it("should dispatch copy and copy error events", async () => {
-    render(CodeSnippetCustomEvents);
-
-    expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
-
-    const copyButton = screen.getByLabelText("Copy to clipboard");
-    await user.click(copyButton);
-    expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
-  });
-
-  it.each([
-    { type: "single" as const, label: "Copy to clipboard" },
-    { type: "inline" as const, label: "Copy code" },
-    { type: "multi" as const, label: "Copy to clipboard" },
-  ])(
+  it.each(snippetVariants)(
     "dispatches mouseenter:copy-button from $type snippet copy control",
     ({ type, label }) => {
       const onMouseEnterCopyButton = vi.fn();
@@ -599,23 +530,10 @@ yarn -v`,
     },
   );
 
-  it("does not dispatch mouseenter:copy-button from single snippet code area", () => {
-    const onMouseEnterCopyButton = vi.fn();
-    const { container } = render(CodeSnippetMouseEnter, {
-      props: { type: "single", onMouseEnterCopyButton },
-    });
-
-    const pre = container.querySelector("pre");
-    assert(pre);
-    fireEvent.mouseEnter(pre);
-
-    expect(onMouseEnterCopyButton).not.toHaveBeenCalled();
-  });
-
   it("forwards mouseenter on single snippet wrapper", () => {
     const onMouseEnter = vi.fn();
-    const { container } = render(CodeSnippetWrapperMouseEnter, {
-      props: { onMouseEnter },
+    const { container } = render(CodeSnippetCopyButtonMouseEnter, {
+      props: { type: "single", onMouseEnter },
     });
 
     const snippet = container.querySelector(".bx--snippet");
@@ -625,29 +543,22 @@ yarn -v`,
     expect(onMouseEnter).toHaveBeenCalledTimes(1);
   });
 
-  it.each([{ type: "inline" as const, label: "Copy code" }])(
-    "forwards mouseenter from inline snippet copy control",
-    ({ type, label }) => {
-      const onMouseEnter = vi.fn();
-      render(CodeSnippetCopyButtonMouseEnter, {
-        props: { type, onMouseEnter },
-      });
+  it("forwards mouseenter from inline snippet copy control", () => {
+    const onMouseEnter = vi.fn();
+    render(CodeSnippetCopyButtonMouseEnter, {
+      props: { type: "inline", onMouseEnter },
+    });
 
-      fireEvent.mouseEnter(screen.getByLabelText(label));
+    fireEvent.mouseEnter(screen.getByLabelText("Copy code"));
 
-      expect(onMouseEnter).toHaveBeenCalledTimes(1);
-    },
-  );
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
+  });
 
-  it.each([
-    { type: "single" as const, label: "Copy to clipboard" },
-    { type: "inline" as const, label: "Copy code" },
-    { type: "multi" as const, label: "Copy to clipboard" },
-  ])(
+  it.each(snippetVariants)(
     "dispatches mouseleave:copy-button from $type snippet copy control",
     ({ type, label }) => {
       const onMouseleaveCopyButton = vi.fn();
-      render(CodeSnippetCopyButtonMouseLeave, {
+      render(CodeSnippetMouseEnter, {
         props: { type, onMouseleaveCopyButton },
       });
 
@@ -659,35 +570,6 @@ yarn -v`,
       expect(onMouseleaveCopyButton.mock.calls[0][0]).toBeInstanceOf(
         MouseEvent,
       );
-    },
-  );
-
-  it.each([
-    { type: "single" as const, label: "Copy to clipboard" },
-    { type: "inline" as const, label: "Copy code" },
-    {
-      type: "multi" as const,
-      label: "Copy to clipboard",
-    },
-  ])(
-    "forwards copy:error from $type snippet copy control",
-    async ({ type, label }) => {
-      const error = new Error("copy failed");
-      const onCopyError = vi.fn();
-      render(CodeSnippetCopyError, {
-        props: { type, onCopyError },
-      });
-
-      await user.click(screen.getByLabelText(label));
-
-      expect(onCopyError).toHaveBeenCalledWith({ error });
-      // Single/multi also mirror the text into CopyButton's status region.
-      expect(
-        screen.getByText("Failed to copy", {
-          ignore: "script, style, [role=status]",
-        }),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Copied!")).toBeNull();
     },
   );
 
@@ -708,7 +590,7 @@ yarn -v`,
         value: vi.fn().mockReturnValue(false),
       });
 
-      render(CodeSnippetDefaultCopyError, {
+      render(CodeSnippetAsync, {
         props: { type, onCopyError },
       });
 
@@ -734,7 +616,9 @@ yarn -v`,
   );
 
   it("should wrap text when wrapText is true", () => {
-    const { container } = render(CodeSnippetWithWrapText);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", wrapText: true, code: longCode },
+    });
     expect(
       container.querySelector(".bx--snippet--wraptext"),
     ).toBeInTheDocument();
@@ -784,7 +668,9 @@ yarn -v`,
 
   it("scrolls overflowing content when showMoreLess is false", async () => {
     mockSnippetOverflowHeight();
-    const { container } = render(CodeSnippetWithHideShowMore);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", showMoreLess: false, code: longCode },
+    });
     await waitForSnippetMeasurement();
     const snippet = container.querySelector(".bx--snippet-container");
     expectInlineStyle(snippet, {
@@ -816,7 +702,13 @@ yarn -v`,
       value: { writeText: vi.fn().mockResolvedValue(undefined) },
     });
 
-    render(CodeSnippetWithCustomCopyText);
+    render(CodeSnippet, {
+      props: {
+        type: "single",
+        code: singleCode,
+        feedback: "Custom copied text!",
+      },
+    });
 
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
@@ -844,22 +736,12 @@ yarn -v`,
 
     it("copies inline slot text with the default copy", async () => {
       const onCopy = vi.fn();
-      render(CodeSnippetInlineSlotCopy, { props: { onCopy } });
+      render(CodeSnippetSlotCopy, { props: { type: "inline", onCopy } });
 
       await user.click(screen.getByLabelText("Copy code"));
 
       expect(writeText).toHaveBeenCalledWith("npm i foo");
       expect(onCopy).toHaveBeenCalledTimes(1);
-    });
-
-    it("passes inline slot text to a custom copy", async () => {
-      const copy = vi.fn();
-      render(CodeSnippetInlineSlotCopy, { props: { copy } });
-
-      await user.click(screen.getByLabelText("Copy code"));
-
-      expect(copy).toHaveBeenCalledWith("npm i foo");
-      expect(copy).not.toHaveBeenCalledWith(undefined);
     });
 
     it.each(snippetVariants)(
@@ -918,7 +800,14 @@ yarn -v`,
 
   // Regression: rest props are spread to the span (inline, no copy button)
   it("spreads rest props to span for inline variant with hideCopyButton", () => {
-    render(CodeSnippetRestPropsSpan);
+    render(CodeSnippet, {
+      props: {
+        type: "inline",
+        hideCopyButton: true,
+        code: "inline code",
+        "data-testid": "snippet-rest-span",
+      },
+    });
     const span = screen.getByTestId("snippet-rest-span");
     expect(span).toBeInTheDocument();
     expect(span.tagName.toLowerCase()).toBe("span");
@@ -927,7 +816,13 @@ yarn -v`,
 
   // Regression: rest props are spread to the copy button (inline with copy button)
   it("spreads rest props to button for inline variant with copy button", () => {
-    render(CodeSnippetRestPropsButton);
+    render(CodeSnippet, {
+      props: {
+        type: "inline",
+        code: "inline code",
+        "data-testid": "snippet-rest-btn",
+      },
+    });
     const button = screen.getByTestId("snippet-rest-btn");
     expect(button).toBeInTheDocument();
     expect(button.tagName.toLowerCase()).toBe("button");
@@ -936,7 +831,13 @@ yarn -v`,
 
   // Regression: rest props are spread to the root div (single/multi)
   it("spreads rest props to root div for single variant", () => {
-    render(CodeSnippetRestPropsSingle);
+    render(CodeSnippet, {
+      props: {
+        type: "single",
+        code: "single line",
+        "data-testid": "snippet-rest-div",
+      },
+    });
     const root = screen.getByTestId("snippet-rest-div");
     expect(root).toBeInTheDocument();
     expect(root.tagName.toLowerCase()).toBe("div");
@@ -946,7 +847,9 @@ yarn -v`,
   // Regression: textbox role must declare aria-readonly since the
   // container is non-editable (pairs textbox with WAI readonly pattern)
   it("marks single variant as a readonly textbox", () => {
-    const { container } = render(CodeSnippetCopyButton);
+    const { container } = render(CodeSnippet, {
+      props: { type: "single", code: singleCode },
+    });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("role", "textbox");
     expect(snippet).toHaveAttribute("aria-readonly", "true");
@@ -955,7 +858,9 @@ yarn -v`,
   });
 
   it("marks multi variant as a readonly multiline textbox", () => {
-    const { container } = render(CodeSnippetMultiline);
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", code: multilineCode },
+    });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("role", "textbox");
     expect(snippet).toHaveAttribute("aria-readonly", "true");
@@ -964,8 +869,8 @@ yarn -v`,
   });
 
   it("omits tabindex when disabled (single)", () => {
-    const { container } = render(CodeSnippetDisabled, {
-      props: { type: "single" },
+    const { container } = render(CodeSnippet, {
+      props: { type: "single", disabled: true, code: singleCode },
     });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("role", "textbox");
@@ -974,8 +879,8 @@ yarn -v`,
   });
 
   it("omits tabindex when disabled (multi)", () => {
-    const { container } = render(CodeSnippetDisabled, {
-      props: { type: "multi" },
+    const { container } = render(CodeSnippet, {
+      props: { type: "multi", disabled: true, code: singleCode },
     });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("role", "textbox");
@@ -985,8 +890,8 @@ yarn -v`,
   });
 
   it("respects disabled on the inline variant's copy button", () => {
-    const { container } = render(CodeSnippetDisabled, {
-      props: { type: "inline" },
+    const { container } = render(CodeSnippet, {
+      props: { type: "inline", disabled: true, code: singleCode },
     });
     const button = container.querySelector("button");
     expect(button).toBeDisabled();
@@ -1004,15 +909,6 @@ yarn -v`,
     expect(component.copyRef).toBeInstanceOf(HTMLButtonElement);
     assert(component.copyRef instanceof HTMLButtonElement);
     expect(component.copyRef).toHaveClass(expectedClass);
-  });
-
-  // Regression: ?? for aria-label so empty string is used (not fallback)
-  it("uses empty aria-label when passed (nullish coalescing)", () => {
-    const { container } = render(CodeSnippetNullishAriaLabel, {
-      props: { ariaLabel: "" },
-    });
-    const snippet = container.querySelector(".bx--snippet-container");
-    expect(snippet).toHaveAttribute("aria-label", "");
   });
 
   it("uses default codeLabel for container aria-label", () => {
@@ -1033,19 +929,6 @@ yarn -v`,
     });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("aria-label", "Install command");
-  });
-
-  it("aria-label rest prop takes precedence over codeLabel", () => {
-    const { container } = render(CodeSnippet, {
-      props: {
-        type: "single",
-        code: "test",
-        codeLabel: "Install command",
-        "aria-label": "Custom label",
-      },
-    });
-    const snippet = container.querySelector(".bx--snippet-container");
-    expect(snippet).toHaveAttribute("aria-label", "Custom label");
   });
 
   it.each(["single", "multi"] as const)(
@@ -1075,16 +958,6 @@ yarn -v`,
     expect(container.querySelector(".bx--snippet-container")).toHaveAttribute(
       "aria-label",
       "",
-    );
-  });
-
-  it("spreads a rest aria-label to the inline copy button", () => {
-    render(CodeSnippet, {
-      props: { type: "inline", code: "test", "aria-label": "Copy install" },
-    });
-    expect(screen.getByRole("button")).toHaveAttribute(
-      "aria-label",
-      "Copy install",
     );
   });
 

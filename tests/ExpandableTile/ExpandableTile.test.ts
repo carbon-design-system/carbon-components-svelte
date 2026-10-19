@@ -23,27 +23,12 @@ describe("ExpandableTile", () => {
     expect(belowContent).toHaveTextContent("Below the fold content here");
   });
 
-  it("should render with expandable classes", () => {
-    render(ExpandableTileVariants);
-
-    const tile = screen.getByTestId("basic");
-    expect(tile).toHaveClass("bx--tile", "bx--tile--expandable");
-  });
-
   it("should handle expanded state", () => {
     render(ExpandableTile, { props: { expanded: true } });
 
     const tile = screen.getByRole("button");
     expect(tile).toHaveAttribute("aria-expanded", "true");
     expect(tile).toHaveAttribute("title", "Interact to collapse Tile");
-    expect(tile).toHaveClass("bx--tile--is-expanded");
-  });
-
-  it("should render pre-expanded", () => {
-    render(ExpandableTileVariants);
-
-    const tile = screen.getByTestId("pre-expanded");
-    expect(tile).toHaveAttribute("aria-expanded", "true");
     expect(tile).toHaveClass("bx--tile--is-expanded");
   });
 

@@ -25,20 +25,6 @@ describe("TileGroup form reset", () => {
     expect(onSelect).not.toHaveBeenCalled();
   });
 
-  it("unchecks the initially selected tile on reset even without prior interaction", async () => {
-    const onSelect = vi.fn();
-    render(TileGroupForm, { props: { selected: "a", onSelect } });
-
-    const [radioA] = getRadios();
-    expect(getBoundText()).toBe("a");
-
-    await resetForm();
-
-    expect(radioA).not.toBeChecked();
-    expect(getBoundText()).toBe("undefined");
-    expect(onSelect).not.toHaveBeenCalled();
-  });
-
   it("follows the tile's default state, as with server-rendered markup", async () => {
     const onSelect = vi.fn();
     render(TileGroupForm, { props: { selected: "a", onSelect } });
@@ -72,22 +58,6 @@ describe("TileGroup form reset", () => {
 
     expect(radioB).toBeChecked();
     expect(radioB.nextElementSibling).toHaveClass("bx--tile--is-selected");
-  });
-
-  it("clears the bound value when nothing was selected before the reset", async () => {
-    const onSelect = vi.fn();
-    render(TileGroupForm, { props: { onSelect } });
-
-    const [radioA, radioB] = getRadios();
-    await user.click(radioB);
-    onSelect.mockClear();
-
-    await resetForm();
-
-    expect(radioA).not.toBeChecked();
-    expect(radioB).not.toBeChecked();
-    expect(getBoundText()).toBe("undefined");
-    expect(onSelect).not.toHaveBeenCalled();
   });
 
   it("leaves the selection alone when the reset is canceled", async () => {

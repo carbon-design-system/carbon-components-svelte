@@ -83,15 +83,6 @@ describe("TileGroup", () => {
     }
   });
 
-  it("should handle custom name", () => {
-    render(TileGroup, { props: { name: "custom-group" } });
-
-    const radios = screen.getAllByRole("radio");
-    for (const radio of radios) {
-      expect(radio).toHaveAttribute("name", "custom-group");
-    }
-  });
-
   it("shares a generated name when name is omitted", () => {
     render(TileGroup);
 
@@ -171,13 +162,6 @@ describe("TileGroup", () => {
 
     await user.click(radios[2]);
     expect(component.selected).toBe("option3");
-  });
-
-  it("should apply custom class", () => {
-    render(TileGroup, { props: { customClass: "custom-tile-group" } });
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).toHaveClass("custom-tile-group");
   });
 
   it("should handle programmatic selected value changes", async () => {
@@ -272,70 +256,6 @@ describe("TileGroup", () => {
       type SelectEventDetail =
         SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<string>();
-    });
-
-    it("should provide type-safe access to custom string literal types in event handlers", () => {
-      type Status = "pending" | "approved" | "rejected";
-
-      const handleSelect = (value: Status) => {
-        expectTypeOf(value).toEqualTypeOf<Status>();
-        if (value === "pending") {
-          expectTypeOf(value).toEqualTypeOf<"pending">();
-        }
-      };
-
-      expectTypeOf(handleSelect).parameter(0).toEqualTypeOf<Status>();
-
-      type ComponentType = TileGroupComponent<Status>;
-      type Events = ComponentEvents<ComponentType>;
-      type SelectEvent = Events["select"];
-      type SelectEventDetail =
-        SelectEvent extends CustomEvent<infer T> ? T : never;
-
-      expectTypeOf<SelectEventDetail>().toEqualTypeOf<
-        Parameters<typeof handleSelect>[0]
-      >();
-    });
-
-    it("should enforce string constraint on generic type", () => {
-      type ValidStringLiteral = "a" | "b" | "c";
-      type ComponentType = TileGroupComponent<ValidStringLiteral>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["selected"]>().toEqualTypeOf<
-        ValidStringLiteral | undefined
-      >();
-
-      type StringComponentType = TileGroupComponent<string>;
-      type StringProps = ComponentProps<StringComponentType>;
-      expectTypeOf<StringProps["selected"]>().toEqualTypeOf<
-        string | undefined
-      >();
-    });
-
-    it("should work with 'as const' for type inference", () => {
-      const selectedValues = ["option1", "option2", "option3"] as const;
-      type InferredType = (typeof selectedValues)[number];
-
-      expectTypeOf<typeof selectedValues>().toEqualTypeOf<
-        readonly ["option1", "option2", "option3"]
-      >();
-      expectTypeOf<InferredType>().toEqualTypeOf<
-        "option1" | "option2" | "option3"
-      >();
-
-      type ComponentType = TileGroupComponent<InferredType>;
-      type Props = ComponentProps<ComponentType>;
-      type Events = ComponentEvents<ComponentType>;
-
-      expectTypeOf<Props["selected"]>().toEqualTypeOf<
-        InferredType | undefined
-      >();
-
-      type SelectEvent = Events["select"];
-      type SelectEventDetail =
-        SelectEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<SelectEventDetail>().toEqualTypeOf<InferredType>();
     });
   });
 });

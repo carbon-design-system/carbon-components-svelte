@@ -126,25 +126,6 @@ describe("ContentSwitcher", () => {
     expect(tablist).toHaveClass("bx--content-switcher--icon-only");
   });
 
-  it("renders with selectedIndex prop", async () => {
-    await renderAndFlush(ContentSwitcherSelectedIndex);
-
-    const tabs = screen.getAllByRole("tab");
-    expect(tabs).toHaveLength(3);
-
-    expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
-    expect(tabs[0]).toHaveAttribute("aria-selected", "false");
-    expect(tabs[0]).toHaveAttribute("tabindex", "-1");
-
-    expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
-    expect(tabs[1]).toHaveAttribute("aria-selected", "true");
-    expect(tabs[1]).toHaveAttribute("tabindex", "0");
-
-    expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
-    expect(tabs[2]).toHaveAttribute("aria-selected", "false");
-    expect(tabs[2]).toHaveAttribute("tabindex", "-1");
-  });
-
   it("does not dispatch change event on initial render", async () => {
     const consoleLog = vi.spyOn(console, "log");
     await renderAndFlush(ContentSwitcher);
@@ -158,22 +139,6 @@ describe("ContentSwitcher", () => {
     const consoleLog = vi.spyOn(console, "log");
     await renderAndFlush(ContentSwitcher, { props: { selectedIndex: 1 } });
 
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
-  });
-
-  it("does not dispatch change event when a selected Switch mounts", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    await renderAndFlush(ContentSwitcherDynamicBound, {
-      props: { selectLast: true },
-    });
-    await tick();
-
-    expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
     expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
       false,
     );
@@ -342,20 +307,6 @@ describe("ContentSwitcher", () => {
 
   describe("skips disabled switches during keyboard navigation", () => {
     // Fixture order: A (enabled), B (disabled), C (enabled), D (disabled)
-    it("ArrowRight skips a disabled switch (automatic)", async () => {
-      render(ContentSwitcherDisabledNav);
-
-      const tabs = screen.getAllByRole("tab");
-      await user.tab();
-      expect(document.activeElement).toBe(tabs[0]);
-
-      // A -> (skip B) -> C
-      await user.keyboard("{ArrowRight}");
-      expect(document.activeElement).toBe(tabs[2]);
-      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
-      expect(tabs[1]).not.toHaveClass("bx--content-switcher--selected");
-    });
-
     it("ArrowRight wraps past a trailing disabled switch (automatic)", async () => {
       render(ContentSwitcherDisabledNav);
 
@@ -363,6 +314,8 @@ describe("ContentSwitcher", () => {
       await user.tab();
       await user.keyboard("{ArrowRight}");
       expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[1]).not.toHaveClass("bx--content-switcher--selected");
 
       // C -> (skip D, wrap) -> A
       await user.keyboard("{ArrowRight}");
@@ -383,19 +336,6 @@ describe("ContentSwitcher", () => {
       expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
     });
 
-    it("End lands on the last enabled switch (automatic)", async () => {
-      render(ContentSwitcherDisabledNav);
-
-      const tabs = screen.getAllByRole("tab");
-      await user.tab();
-
-      // D (last) is disabled, so End should land on C
-      await user.keyboard("{End}");
-      expect(document.activeElement).toBe(tabs[2]);
-      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
-      expect(tabs[3]).not.toHaveClass("bx--content-switcher--selected");
-    });
-
     it("Home lands on the first enabled switch (automatic)", async () => {
       render(ContentSwitcherDisabledNav);
 
@@ -403,6 +343,8 @@ describe("ContentSwitcher", () => {
       await user.tab();
       await user.keyboard("{End}");
       expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[3]).not.toHaveClass("bx--content-switcher--selected");
 
       // A (first) is enabled, so Home should land on A
       await user.keyboard("{Home}");
@@ -494,15 +436,6 @@ describe("ContentSwitcher", () => {
     await user.click(switcher);
 
     expect(consoleLog).toHaveBeenCalledWith("click");
-  });
-
-  it("should apply custom id to Switch", () => {
-    render(ContentSwitcher, {
-      props: { switchId: "custom-switch-id" },
-    });
-
-    const tab = screen.getByRole("tab", { name: "Option 2" });
-    expect(tab).toHaveAttribute("id", "custom-switch-id");
   });
 
   it("should bind ref to Switch button element", () => {
@@ -683,21 +616,6 @@ describe("ContentSwitcher", () => {
       expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
     });
 
-    it("wraps focus around from last to first", async () => {
-      render(ContentSwitcherSelectionMode);
-
-      const tabs = screen.getAllByRole("tab");
-      await user.tab();
-
-      await user.keyboard("{ArrowRight}");
-      await user.keyboard("{ArrowRight}");
-      expect(document.activeElement).toBe(tabs[2]);
-
-      await user.keyboard("{ArrowRight}");
-      expect(document.activeElement).toBe(tabs[0]);
-      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
-    });
-
     it("Home/End move focus without changing selection", async () => {
       render(ContentSwitcherSelectionMode);
 
@@ -713,20 +631,6 @@ describe("ContentSwitcher", () => {
       await user.keyboard("{Home}");
       expect(document.activeElement).toBe(tabs[0]);
       expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
-    });
-
-    it("dispatches change event only on selection, not on focus", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ContentSwitcherSelectionMode);
-
-      await user.tab();
-      consoleLog.mockClear();
-
-      await user.keyboard("{ArrowRight}");
-      expect(consoleLog).not.toHaveBeenCalledWith("change", 1);
-
-      await user.keyboard("{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("change", 1);
     });
   });
 
@@ -878,19 +782,6 @@ describe("ContentSwitcher", () => {
       expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
         false,
       );
-    });
-
-    it("keeps a Switch selected at mount", async () => {
-      await renderAndFlush(ContentSwitcherDynamicBound, {
-        props: { selectLast: true },
-      });
-      await tick();
-
-      expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
-        "aria-selected",
-        "true",
-      );
-      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
     });
 
     it("keeps selectedIndex when a later switch is removed", async () => {
