@@ -991,8 +991,9 @@
     return (
       !!elem &&
       engine.calendarContainer.contains(elem) &&
-      !elem.classList.contains("hidden") &&
-      !elem.classList.contains("flatpickr-disabled")
+      !elem.classList.contains("bx--date-picker__day--hidden") &&
+      !elem.classList.contains("bx--date-picker__day--disabled") &&
+      !elem.classList.contains("bx--date-picker__grid-cell--disabled")
     );
   }
 
@@ -1011,7 +1012,9 @@
     }
     (
       [engine.selectedDateElem, engine.todayDateElem].find(isFocusableDay) ||
-      engine.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
+      engine.calendarContainer.querySelector(
+        ".bx--date-picker__day[tabindex], .bx--date-picker__grid-cell[tabindex]",
+      ) ||
       engine.calendarContainer
     ).focus();
     return true;
@@ -1028,9 +1031,13 @@
    */
   function handleMultipleDayClick(event) {
     const dayElem = /** @type {HTMLElement} */ (event.target).closest(
-      ".flatpickr-day",
+      ".bx--date-picker__day",
     );
-    if (!dayElem || dayElem.classList.contains("flatpickr-disabled")) return;
+    if (
+      !dayElem ||
+      dayElem.classList.contains("bx--date-picker__day--disabled")
+    )
+      return;
 
     const clickedDate = /** @type {any} */ (dayElem).dateObj;
     if (!clickedDate) return;
@@ -1070,15 +1077,15 @@
 
   function clearRangePreview() {
     for (const el of previewedDayElems) {
-      el.classList.remove("inRange");
+      el.classList.remove("bx--date-picker__day--in-range");
     }
     previewedDayElems = [];
   }
 
   /**
    * Previews a pending shift-click range by marking the days between the
-   * anchor and the hovered day with flatpickr's own `inRange` class — the
-   * same one "range" mode already uses, so no new CSS is needed.
+   * anchor and the hovered day with the `--in-range` modifier, the same one
+   * "range" mode already uses, so no new CSS is needed.
    * @type {(event: MouseEvent) => void}
    */
   function updateRangePreview(event) {
@@ -1088,7 +1095,7 @@
     }
 
     const dayElem = /** @type {HTMLElement} */ (event.target).closest(
-      ".flatpickr-day",
+      ".bx--date-picker__day",
     );
     if (!dayElem) return;
 
@@ -1103,7 +1110,7 @@
         : [hoveredDate, multipleSelectAnchor];
 
     for (const el of engine.calendarContainer.querySelectorAll(
-      ".flatpickr-day",
+      ".bx--date-picker__day",
     )) {
       const date = /** @type {any} */ (el).dateObj;
       if (
@@ -1111,7 +1118,7 @@
         date.getTime() >= start.getTime() &&
         date.getTime() <= end.getTime()
       ) {
-        el.classList.add("inRange");
+        el.classList.add("bx--date-picker__day--in-range");
         previewedDayElems.push(/** @type {HTMLElement} */ (el));
       }
     }
@@ -1465,7 +1472,9 @@
       if (!engine?.isOpen) return;
       if (engine.calendarContainer.contains(document.activeElement)) return;
       const day = [
-        ...engine.calendarContainer.querySelectorAll(".flatpickr-day"),
+        ...engine.calendarContainer.querySelectorAll(
+          ".bx--date-picker__day, .bx--date-picker__grid-cell",
+        ),
       ].find(
         (el) =>
           /** @type {any} */ (el).dateObj?.getTime() === time &&

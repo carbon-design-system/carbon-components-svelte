@@ -93,7 +93,7 @@ function describeCombination(fluid: boolean, props: Record<string, unknown>) {
 function controlsIn(container: HTMLElement) {
   return [...container.querySelectorAll(CONTROLS)].filter(
     (element) =>
-      !element.closest(".bx--list-box__menu, .flatpickr-calendar") &&
+      !element.closest(".bx--list-box__menu, .bx--date-picker__calendar") &&
       !element.matches("button:not([role=combobox])"),
   );
 }

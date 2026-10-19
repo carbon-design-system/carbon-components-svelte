@@ -28,7 +28,7 @@ export function getDayByNumber(calendar: HTMLElement, day: number) {
 export function getDays(calendar: HTMLElement) {
   return Array.from(
     calendar.querySelectorAll<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+      ".bx--date-picker__day:not(.bx--date-picker__day--outside-month):not(.bx--date-picker__day--outside-month)",
     ),
   );
 }
@@ -66,8 +66,8 @@ export async function openCalendar(label = "Date") {
 
 /** Whether the calendar header renders the year before the month. */
 export function yearFirst(root: ParentNode) {
-  const month = root.querySelector(".cur-month");
-  const year = root.querySelector(".numInputWrapper");
+  const month = root.querySelector(".bx--date-picker__month-label");
+  const year = root.querySelector(".bx--date-picker__year");
   assert(month);
   assert(year);
   return (
@@ -77,7 +77,9 @@ export function yearFirst(root: ParentNode) {
 
 /** Clicks the calendar's next-month arrow. */
 export async function clickNextMonth(calendar: HTMLElement) {
-  const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+  const next = calendar.querySelector<HTMLElement>(
+    ".bx--date-picker__nav-button--next",
+  );
   assert(next, "expected a next-month arrow");
   await user.click(next);
 }

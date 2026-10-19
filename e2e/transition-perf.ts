@@ -123,10 +123,10 @@ const scenarios: Record<string, Scenario> = {
     scale: 0, // uses whatever the open calendar renders, no cloning
     mode: "pseudo",
     setup: () => `
-      const input = document.querySelector(".flatpickr-input") || document.querySelector("input[data-ccs-datepicker], .bx--date-picker__input");
+      const input = document.querySelector("input[data-ccs-datepicker], .bx--date-picker__input");
       (input || document.querySelector("input")).click();
       await new Promise((r) => setTimeout(r, 100));
-      const els = document.querySelectorAll(".flatpickr-day");
+      const els = document.querySelectorAll(".bx--date-picker__day");
       els.forEach((el, i) => el.setAttribute("${MARK}", String(i)));
       return els.length;
     `,

@@ -98,7 +98,7 @@ describe("DatePicker", () => {
     await openCalendar();
 
     const weekdays = Array.from(
-      container.querySelectorAll(".flatpickr-weekday"),
+      container.querySelectorAll(".bx--date-picker__weekday"),
     ).map((node) => node.textContent?.trim());
 
     expect(weekdays).toEqual(["S", "M", "T", "W", "Th", "F", "S"]);
@@ -110,8 +110,8 @@ describe("DatePicker", () => {
       firstDayOfWeek: 1,
     });
     const weekdays = () =>
-      Array.from(container.querySelectorAll(".flatpickr-weekday")).map((node) =>
-        node.textContent?.trim(),
+      Array.from(container.querySelectorAll(".bx--date-picker__weekday")).map(
+        (node) => node.textContent?.trim(),
       );
 
     await openCalendar();
@@ -131,7 +131,7 @@ describe("DatePicker", () => {
     await openCalendar();
     const weeks = () =>
       Array.from(
-        container.querySelectorAll(".flatpickr-weeks .flatpickr-day"),
+        container.querySelectorAll(".bx--date-picker__week-number"),
       ).map((node) => node.textContent);
     expect(weeks().slice(0, 3)).toEqual(["1", "2", "3"]);
 
@@ -193,7 +193,7 @@ describe("DatePicker", () => {
         locale: locale as never,
       });
       await tick();
-      const month = calendar.querySelector(".cur-month");
+      const month = calendar.querySelector(".bx--date-picker__month-label");
       assert(month);
       return { calendar, month };
     }
@@ -275,17 +275,19 @@ describe("DatePicker", () => {
     it("does not open the calendar on click in single mode when readonly", async () => {
       render(DatePicker, { datePickerType: "single", readonly: true });
       const calendar = await openCalendar();
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     });
 
     it("closes an open calendar when it becomes readonly", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
       const calendar = await openCalendar();
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       await rerender({ readonly: true });
 
-      await vi.waitFor(() => expect(calendar).not.toHaveClass("open"));
+      await vi.waitFor(() =>
+        expect(calendar).not.toHaveClass("bx--date-picker__calendar--open"),
+      );
     });
 
     it("does not open the calendar on ArrowDown when readonly", async () => {
@@ -294,7 +296,7 @@ describe("DatePicker", () => {
       input.focus();
       await user.keyboard("{ArrowDown}");
       const calendar = await screen.findByLabelText("calendar-container");
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     });
 
     it("forwards the readonly attribute to both inputs in range mode", async () => {
@@ -364,9 +366,11 @@ describe("DatePicker", () => {
 
       await fireEvent.keyDown(input, { key: "ArrowDown" });
 
-      expect(calendar).toHaveClass("open");
-      expect(document.activeElement).toHaveClass("flatpickr-day");
-      expect(document.activeElement).not.toHaveClass("flatpickr-disabled");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+      expect(document.activeElement).toHaveClass("bx--date-picker__day");
+      expect(document.activeElement).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
     });
 
     it("focuses a day in the displayed month after navigating away from today", async () => {
@@ -374,16 +378,18 @@ describe("DatePicker", () => {
       const input = screen.getByLabelText("Date");
       const calendar = await openCalendar();
       await clickNextMonth(calendar);
-      const shownMonth = calendar.querySelector(".cur-month")?.textContent;
+      const shownMonth = calendar.querySelector(
+        ".bx--date-picker__month-label",
+      )?.textContent;
       input.focus();
 
       await fireEvent.keyDown(input, { key: "ArrowDown" });
 
       expect(calendar.contains(document.activeElement)).toBe(true);
-      expect(document.activeElement).toHaveClass("flatpickr-day");
-      expect(calendar.querySelector(".cur-month")?.textContent).toBe(
-        shownMonth,
-      );
+      expect(document.activeElement).toHaveClass("bx--date-picker__day");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label")?.textContent,
+      ).toBe(shownMonth);
     });
 
     it("opens the calendar and moves focus into it", async () => {
@@ -395,8 +401,8 @@ describe("DatePicker", () => {
       const notPrevented = await fireEvent.keyDown(input, { key: "ArrowDown" });
 
       expect(notPrevented).toBe(false);
-      expect(calendar).toHaveClass("open");
-      expect(document.activeElement).toHaveClass("flatpickr-day");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+      expect(document.activeElement).toHaveClass("bx--date-picker__day");
     });
   });
 
@@ -422,9 +428,11 @@ describe("DatePicker", () => {
 
       const label = await pressEnterOnFocusedDay();
 
-      expect(calendar).toHaveClass("open");
-      expect(document.activeElement).toHaveClass("flatpickr-day");
-      expect(document.activeElement).toHaveClass("selected");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+      expect(document.activeElement).toHaveClass("bx--date-picker__day");
+      expect(document.activeElement).toHaveClass(
+        "bx--date-picker__day--selected",
+      );
       expect(document.activeElement).toHaveAttribute("aria-label", label);
 
       // The next day can be added from the keyboard as well.
@@ -434,9 +442,11 @@ describe("DatePicker", () => {
         keyCode: 39,
       });
       await pressEnterOnFocusedDay();
-      expect(calendar.querySelectorAll(".flatpickr-day.selected")).toHaveLength(
-        2,
-      );
+      expect(
+        calendar.querySelectorAll(
+          ".bx--date-picker__day.bx--date-picker__day--selected",
+        ),
+      ).toHaveLength(2);
     });
 
     it("keeps focus on the start day in range mode", async () => {
@@ -448,8 +458,8 @@ describe("DatePicker", () => {
 
       const label = await pressEnterOnFocusedDay();
 
-      expect(calendar).toHaveClass("open");
-      expect(document.activeElement).toHaveClass("flatpickr-day");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+      expect(document.activeElement).toHaveClass("bx--date-picker__day");
       expect(document.activeElement).toHaveAttribute("aria-label", label);
     });
 
@@ -462,7 +472,7 @@ describe("DatePicker", () => {
 
       await pressEnterOnFocusedDay();
 
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
       expect(input).toHaveFocus();
     });
   });
@@ -500,8 +510,12 @@ describe("DatePicker", () => {
       expect(onchange.mock.calls[0][0].detail.selectedDates).toEqual([]);
       expect(onclear).toHaveBeenCalledTimes(1);
       expect(input).toHaveFocus();
-      expect(calendar).toHaveClass("open");
-      expect(calendar.querySelector(".flatpickr-day.selected")).toBeNull();
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+      expect(
+        calendar.querySelector(
+          ".bx--date-picker__day.bx--date-picker__day--selected",
+        ),
+      ).toBeNull();
       expect(queryClear()).not.toBeInTheDocument();
     });
 
@@ -646,7 +660,7 @@ describe("DatePicker", () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
       const dayCalendar = await openCalendar();
       expect(
-        dayCalendar.querySelector(".flatpickr-monthSelect-months"),
+        dayCalendar.querySelector(".bx--date-picker__grid"),
       ).not.toBeInTheDocument();
 
       await rerender({ datePickerType: "month", dateFormat: "F Y" });
@@ -654,7 +668,7 @@ describe("DatePicker", () => {
         const calendars = screen.getAllByLabelText("calendar-container");
         expect(calendars).toHaveLength(1);
         expect(
-          calendars[0].querySelector(".flatpickr-monthSelect-months"),
+          calendars[0].querySelector(".bx--date-picker__grid"),
         ).toBeInTheDocument();
       });
       expect(dayCalendar).not.toBeInTheDocument();
@@ -1042,8 +1056,12 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("June");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2021);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("June");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2021);
     });
 
     it("applies again when the calendar reopens after the selection is cleared", async () => {
@@ -1055,19 +1073,25 @@ describe("DatePicker", () => {
       });
 
       const calendar = await openCalendar();
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("January");
 
       await user.click(screen.getByRole("button", { name: "Clear date" }));
       await user.keyboard("{Escape}");
       await user.click(screen.getByLabelText("Date"));
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("April");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2027);
     });
 
     it.each([
-      ["month", "F Y", "April 2027", ".cur-year", "2020"],
-      ["year", "Y", "2027", ".flatpickr-yearSelect-range", "2019 - 2030"],
+      ["month", "F Y", "April 2027", ".bx--date-picker__year-input", "2020"],
+      ["year", "Y", "2027", ".bx--date-picker__decade", "2019 - 2030"],
     ] as const)(
       "is ignored in %s mode",
       async (datePickerType, dateFormat, initialMonth, selector, expected) => {
@@ -1098,11 +1122,23 @@ describe("DatePicker", () => {
       const input = screen.getByLabelText("Date");
       const calendar = await openCalendar();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("April");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2027);
       expect(input).toHaveValue("");
-      expect(calendar.querySelector(".flatpickr-day.selected")).toBeNull();
-      expect(calendar.querySelector(".flatpickr-day.today")).toBeNull();
+      expect(
+        calendar.querySelector(
+          ".bx--date-picker__day.bx--date-picker__day--selected",
+        ),
+      ).toBeNull();
+      expect(
+        calendar.querySelector(
+          ".bx--date-picker__day.bx--date-picker__day--today",
+        ),
+      ).toBeNull();
     });
 
     it("is ignored once a value is selected", async () => {
@@ -1114,8 +1150,12 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2024);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("January");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2024);
     });
 
     it("clamps into maxDate when it falls outside", async () => {
@@ -1127,8 +1167,12 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("March");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2027);
     });
 
     it("updates the header when the prop changes with no selection", async () => {
@@ -1138,15 +1182,19 @@ describe("DatePicker", () => {
       });
 
       const calendar = await openCalendar();
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("April");
 
       await rerender({ datePickerType: "single", initialMonth: "09/01/2028" });
       await tick();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent(
-        "September",
-      );
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2028);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("September");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2028);
     });
 
     it("does not update the header when the prop changes with a selection", async () => {
@@ -1157,7 +1205,9 @@ describe("DatePicker", () => {
       });
 
       const calendar = await openCalendar();
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("January");
 
       await rerender({
         datePickerType: "single",
@@ -1166,7 +1216,9 @@ describe("DatePicker", () => {
       });
       await tick();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("January");
     });
 
     it("ignores an unparseable value without throwing or logging an error", async () => {
@@ -1183,9 +1235,9 @@ describe("DatePicker", () => {
       const currentMonthName = new Date().toLocaleString("en-US", {
         month: "long",
       });
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent(
-        currentMonthName,
-      );
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent(currentMonthName);
       expect(consoleError).not.toHaveBeenCalled();
     });
 
@@ -1196,11 +1248,17 @@ describe("DatePicker", () => {
       });
 
       const calendar = await openCalendar();
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("April");
 
       await clickNextMonth(calendar);
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("May");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("May");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2027);
 
       // Unrelated re-render: same `initialMonth`, but `short` changes,
       // which re-triggers the `initCalendar` reactive statement.
@@ -1211,8 +1269,12 @@ describe("DatePicker", () => {
       });
       await tick();
 
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("May");
-      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("May");
+      expect(
+        calendar.querySelector(".bx--date-picker__year-input"),
+      ).toHaveValue(2027);
     });
   });
 
@@ -1222,7 +1284,9 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
+      expect(calendar.querySelectorAll(".bx--date-picker__month").length).toBe(
+        2,
+      );
     });
 
     it("stays usable as a plain input when the calendar fails to initialize", async () => {
@@ -1263,9 +1327,13 @@ describe("DatePicker", () => {
 
       expect(input).toHaveValue("Day 10");
       await user.click(input);
-      const selected = calendar.querySelector(".flatpickr-day.selected");
+      const selected = calendar.querySelector(
+        ".bx--date-picker__day.bx--date-picker__day--selected",
+      );
       expect(selected).toHaveTextContent("10");
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent("March");
     });
 
     it("labels the visible input when displayFormat is set", async () => {
@@ -1322,7 +1390,6 @@ describe("DatePicker", () => {
         expect(visible).toHaveClass("bx--date-picker__input--invalid");
       });
       expect(visible).toHaveClass("bx--date-picker__input");
-      expect(visible).not.toHaveClass("flatpickr-input");
     });
 
     it("creates one calendar when props settle during init", async () => {
@@ -1334,9 +1401,8 @@ describe("DatePicker", () => {
 
       const calendar = await screen.findByLabelText("calendar-container");
       await tick();
-      const hidden = container.querySelector<HTMLInputElement>(
-        "input.flatpickr-input",
-      );
+      const hidden =
+        container.querySelector<HTMLInputElement>("input[type=hidden]");
       assert(hidden);
       expect(screen.getAllByLabelText("calendar-container")).toHaveLength(1);
       expect(getCalendarInstance(hidden).calendarContainer).toBe(calendar);
@@ -1451,13 +1517,13 @@ describe("DatePicker", () => {
 
       await user.click(await screen.findByLabelText("Date"));
       const calendar = await screen.findByLabelText("calendar-container");
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       await user.click(screen.getByRole("button", { name: "Preset" }));
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       await user.click(screen.getByRole("button", { name: "Elsewhere" }));
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     });
 
     it('abbreviates the month label when monthLabel is "short"', async () => {
@@ -1468,12 +1534,14 @@ describe("DatePicker", () => {
       });
 
       const calendar = await openCalendar();
-      const month = calendar.querySelector(".cur-month");
+      const month = calendar.querySelector(".bx--date-picker__month-label");
       expect(month).toHaveTextContent(/^Sep$/);
 
       // The label is rewritten on month change as well as on open.
       await clickNextMonth(calendar);
-      expect(calendar.querySelector(".cur-month")).toHaveTextContent(/^Oct$/);
+      expect(
+        calendar.querySelector(".bx--date-picker__month-label"),
+      ).toHaveTextContent(/^Oct$/);
     });
 
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
@@ -1482,12 +1550,12 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
       const day = firstDay(calendar);
 
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
       expect(day).toBeInTheDocument();
 
       await user.click(day);
 
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     });
 
     it("disables the open/close animation by default", async () => {
@@ -1521,13 +1589,15 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
 
       const disabledDays = container.querySelectorAll(
-        ".flatpickr-day.flatpickr-disabled",
+        ".bx--date-picker__day.bx--date-picker__day--disabled",
       );
       expect(disabledDays.length).toBeGreaterThan(1);
       for (const day of disabledDays) {
         expect(day).toHaveAttribute("aria-disabled", "true");
       }
-      expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 15)).toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
     });
   });
 
@@ -1549,7 +1619,7 @@ describe("DatePicker", () => {
 
       for (const day of [9, 10, 12, 13, 14, 20]) {
         const dayElem = getDayByNumber(calendar, day);
-        expect(dayElem).toHaveClass("flatpickr-disabled");
+        expect(dayElem).toHaveClass("bx--date-picker__day--disabled");
         expect(dayElem).toHaveAttribute("aria-disabled", "true");
       }
 
@@ -1572,9 +1642,11 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
 
       expect(getDayByNumber(calendar, 15)).not.toHaveClass(
-        "flatpickr-disabled",
+        "bx--date-picker__day--disabled",
       );
-      expect(getDayByNumber(calendar, 16)).toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 16)).toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
     });
 
     it("reassigning disabledDates updates an open calendar", async () => {
@@ -1585,13 +1657,15 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      expect(getDayByNumber(calendar, 9)).not.toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 9)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
 
       await rerender({ disabledDates: ["03/09/2024"] });
       await tick();
 
       const day9 = getDayByNumber(calendar, 9);
-      expect(day9).toHaveClass("flatpickr-disabled");
+      expect(day9).toHaveClass("bx--date-picker__day--disabled");
       // Days are rebuilt on redraw, so aria-disabled must still be applied.
       expect(day9).toHaveAttribute("aria-disabled", "true");
     });
@@ -1638,16 +1712,18 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
       expect(getDayByNumber(calendar, 16)).not.toHaveClass(
-        "flatpickr-disabled",
+        "bx--date-picker__day--disabled",
       );
 
       await rerender({ enabledDates: ["03/15/2024"] });
       await tick();
 
       expect(getDayByNumber(calendar, 15)).not.toHaveClass(
-        "flatpickr-disabled",
+        "bx--date-picker__day--disabled",
       );
-      expect(getDayByNumber(calendar, 16)).toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 16)).toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
 
       // Lifting the rule goes around flatpickr's `set("enable", undefined)`,
       // which throws.
@@ -1655,7 +1731,7 @@ describe("DatePicker", () => {
       await tick();
 
       expect(getDayByNumber(calendar, 16)).not.toHaveClass(
-        "flatpickr-disabled",
+        "bx--date-picker__day--disabled",
       );
     });
   });
@@ -1736,12 +1812,12 @@ describe("DatePicker", () => {
       await tick();
       expect(instance.isOpen).toBe(true);
       const calendar = await screen.findByLabelText("calendar-container");
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       instance.close();
       await tick();
       expect(instance.isOpen).toBe(false);
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     });
 
     it("exposes the flatpickr instance in multiple mode", async () => {
@@ -1778,7 +1854,9 @@ describe("DatePicker", () => {
   describe("portalMenu", () => {
     afterEach(() => {
       // Clean up any flatpickr calendars appended to document.body.
-      for (const el of document.body.querySelectorAll(".flatpickr-calendar")) {
+      for (const el of document.body.querySelectorAll(
+        ".bx--date-picker__calendar",
+      )) {
         el.remove();
       }
     });
@@ -1818,7 +1896,9 @@ describe("DatePicker", () => {
         const wrapper = container.querySelector(".bx--date-picker");
         expect(wrapper?.contains(calendar)).toBe(insideWrapper);
         expect(document.body.contains(calendar)).toBe(true);
-        expect(calendar.classList.contains("static")).toBe(insideWrapper);
+        expect(
+          calendar.classList.contains("bx--date-picker__calendar--static"),
+        ).toBe(insideWrapper);
       },
     );
 
@@ -1870,10 +1950,10 @@ describe("DatePicker", () => {
       const getDay = () => firstDay(calendar);
 
       await user.click(getDay());
-      expect(getDay()).toHaveClass("selected");
+      expect(getDay()).toHaveClass("bx--date-picker__day--selected");
 
       await user.click(getDay());
-      expect(getDay()).not.toHaveClass("selected");
+      expect(getDay()).not.toHaveClass("bx--date-picker__day--selected");
     });
 
     it("does not close the calendar after selecting a date", async () => {
@@ -1881,7 +1961,7 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
       await user.click(firstDay(calendar));
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     });
 
     it("dispatches change with all selected dates joined by a comma", async () => {
@@ -1952,7 +2032,9 @@ describe("DatePicker", () => {
     describe("shift-click range selection", () => {
       function getSelectedDayNumbers(calendar: HTMLElement) {
         return Array.from(
-          calendar.querySelectorAll<HTMLElement>(".flatpickr-day.selected"),
+          calendar.querySelectorAll<HTMLElement>(
+            ".bx--date-picker__day.bx--date-picker__day--selected",
+          ),
         )
           .map((el) => Number(el.textContent?.trim()))
           .sort((a, b) => a - b);
@@ -2048,9 +2130,11 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
 
       expect(
-        calendar.querySelectorAll(".flatpickr-monthSelect-month"),
+        calendar.querySelectorAll(".bx--date-picker__grid-cell"),
       ).toHaveLength(12);
-      expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
+      expect(calendar.querySelectorAll(".bx--date-picker__day")).toHaveLength(
+        0,
+      );
     });
 
     it("marks the current month with the today class and aria-current", async () => {
@@ -2058,9 +2142,9 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      const months = calendar.querySelectorAll(".flatpickr-monthSelect-month");
+      const months = calendar.querySelectorAll(".bx--date-picker__grid-cell");
       const currentMonth = months[new Date().getMonth()];
-      expect(currentMonth).toHaveClass("today");
+      expect(currentMonth).toHaveClass("bx--date-picker__grid-cell--today");
       expect(currentMonth).toHaveAttribute("aria-current", "date");
     });
   });
@@ -2076,10 +2160,16 @@ describe("DatePicker", () => {
     it("disables days beyond maxRangeDays while the start is pending", async () => {
       const { calendar } = await pickStart({ maxRangeDays: 7 });
 
-      expect(dayByLabel(calendar, 16)).not.toHaveClass("flatpickr-disabled");
-      expect(dayByLabel(calendar, 4)).not.toHaveClass("flatpickr-disabled");
+      expect(dayByLabel(calendar, 16)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
+      expect(dayByLabel(calendar, 4)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
       for (const n of [17, 3]) {
-        expect(dayByLabel(calendar, n)).toHaveClass("flatpickr-disabled");
+        expect(dayByLabel(calendar, n)).toHaveClass(
+          "bx--date-picker__day--disabled",
+        );
         expect(dayByLabel(calendar, n)).toHaveAttribute(
           "aria-disabled",
           "true",
@@ -2092,7 +2182,7 @@ describe("DatePicker", () => {
 
       await user.click(dayByLabel(calendar, 17));
       expect(screen.getByLabelText("End date")).toHaveValue("");
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       await user.click(dayByLabel(calendar, 16));
       expect(screen.getByLabelText("End date")).not.toHaveValue("");
@@ -2101,10 +2191,18 @@ describe("DatePicker", () => {
     it("disables days closer than minRangeDays, including the start", async () => {
       const { calendar } = await pickStart({ minRangeDays: 3 });
 
-      expect(dayByLabel(calendar, 10)).toHaveClass("flatpickr-disabled");
-      expect(dayByLabel(calendar, 10)).toHaveClass("selected");
-      expect(dayByLabel(calendar, 11)).toHaveClass("flatpickr-disabled");
-      expect(dayByLabel(calendar, 12)).not.toHaveClass("flatpickr-disabled");
+      expect(dayByLabel(calendar, 10)).toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
+      expect(dayByLabel(calendar, 10)).toHaveClass(
+        "bx--date-picker__day--selected",
+      );
+      expect(dayByLabel(calendar, 11)).toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
+      expect(dayByLabel(calendar, 12)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
     });
 
     it("drops the window once the range is complete", async () => {
@@ -2113,8 +2211,12 @@ describe("DatePicker", () => {
 
       await user.click(screen.getByLabelText("Start date"));
 
-      expect(dayByLabel(calendar, 17)).not.toHaveClass("flatpickr-disabled");
-      expect(dayByLabel(calendar, 3)).not.toHaveClass("flatpickr-disabled");
+      expect(dayByLabel(calendar, 17)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
+      expect(dayByLabel(calendar, 3)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
     });
 
     it("repaints a pending window when the limit changes", async () => {
@@ -2122,8 +2224,12 @@ describe("DatePicker", () => {
 
       await rerender({ maxRangeDays: 3 });
 
-      expect(dayByLabel(calendar, 12)).not.toHaveClass("flatpickr-disabled");
-      expect(dayByLabel(calendar, 13)).toHaveClass("flatpickr-disabled");
+      expect(dayByLabel(calendar, 12)).not.toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
+      expect(dayByLabel(calendar, 13)).toHaveClass(
+        "bx--date-picker__day--disabled",
+      );
     });
 
     describe("arrow keys while the start is pending", () => {
@@ -2194,22 +2300,26 @@ describe("DatePicker", () => {
           dateObj?: Date;
         };
         expect(focused.dateObj?.getTime()).toBe(expected.getTime());
-        expect(calendar.querySelector(".cur-month")).toHaveTextContent(
+        expect(
+          calendar.querySelector(".bx--date-picker__month-label"),
+        ).toHaveTextContent(
           expected.toLocaleDateString("en-US", { month: "long" }),
         );
       });
 
       it("stays put on Ctrl+arrow when the next month has no open day", async () => {
         const { calendar } = await pickStart({ maxRangeDays: 3 });
-        const month = calendar.querySelector(".cur-month")?.textContent;
+        const month = calendar.querySelector(
+          ".bx--date-picker__month-label",
+        )?.textContent;
         dayByLabel(calendar, 10).focus();
 
         await press("ArrowRight", { ctrlKey: true });
 
         expect(document.activeElement).toBe(dayByLabel(calendar, 10));
-        expect(calendar.querySelector(".cur-month")).toHaveTextContent(
-          month ?? "",
-        );
+        expect(
+          calendar.querySelector(".bx--date-picker__month-label"),
+        ).toHaveTextContent(month ?? "");
       });
 
       it("follows a limit changed while the start is pending", async () => {
@@ -2238,7 +2348,9 @@ describe("DatePicker", () => {
       await user.click(dayByLabel(calendar, 10));
       await user.click(screen.getByLabelText("Start date"));
 
-      expect(calendar.querySelectorAll(".flatpickr-disabled")).toHaveLength(0);
+      expect(
+        calendar.querySelectorAll(".bx--date-picker__day--disabled"),
+      ).toHaveLength(0);
     });
 
     it("does not check a range set from outside", async () => {
@@ -2312,7 +2424,9 @@ describe("DatePicker", () => {
       await user.click(input);
 
       expect(
-        calendar.querySelectorAll(".flatpickr-day.week.selected"),
+        calendar.querySelectorAll(
+          ".bx--date-picker__day.bx--date-picker__day--week.bx--date-picker__day--selected",
+        ),
       ).toHaveLength(7);
     });
 
@@ -2352,9 +2466,11 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
 
       expect(
-        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+        calendar.querySelectorAll(".bx--date-picker__grid-cell"),
       ).toHaveLength(12);
-      expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
+      expect(calendar.querySelectorAll(".bx--date-picker__day")).toHaveLength(
+        0,
+      );
     });
 
     it("marks the current year with the today class and aria-current", async () => {
@@ -2363,9 +2479,9 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
 
       const currentYear = calendar.querySelector(
-        `.flatpickr-yearSelect-year[data-year="${new Date().getFullYear()}"]`,
+        `.bx--date-picker__grid-cell[data-year="${new Date().getFullYear()}"]`,
       );
-      expect(currentYear).toHaveClass("today");
+      expect(currentYear).toHaveClass("bx--date-picker__grid-cell--today");
       expect(currentYear).toHaveAttribute("aria-current", "date");
     });
 
@@ -2385,7 +2501,7 @@ describe("DatePicker", () => {
         const calendar = await openCalendar();
 
         for (const cell of calendar.querySelectorAll(
-          ".flatpickr-yearSelect-year",
+          ".bx--date-picker__grid-cell",
         )) {
           const year = Number(cell.getAttribute("data-year"));
           if (isOutside(year, current)) {
@@ -2402,12 +2518,12 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      const years = calendar.querySelectorAll(".flatpickr-yearSelect-year");
+      const years = calendar.querySelectorAll(".bx--date-picker__grid-cell");
       const firstYear = years[0].textContent;
       const lastYear = years[years.length - 1].textContent;
 
       expect(
-        calendar.querySelector(".flatpickr-yearSelect-range"),
+        calendar.querySelector(".bx--date-picker__decade"),
       ).toHaveTextContent(`${firstYear} - ${lastYear}`);
     });
 
@@ -2416,8 +2532,8 @@ describe("DatePicker", () => {
 
       const calendar = await openCalendar();
 
-      const currentMonth = calendar.querySelector(".flatpickr-current-month");
-      expect(currentMonth?.querySelector(".numInputWrapper")).toBeNull();
+      const currentMonth = calendar.querySelector(".bx--date-picker__heading");
+      expect(currentMonth?.querySelector(".bx--date-picker__year")).toBeNull();
       expect(currentMonth?.children).toHaveLength(1);
     });
 
@@ -2431,18 +2547,18 @@ describe("DatePicker", () => {
       await tick();
       const calendar = await screen.findByLabelText("calendar-container");
       const yearsBefore = Array.from(
-        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+        calendar.querySelectorAll(".bx--date-picker__grid-cell"),
       ).map((el) => el.textContent);
 
       instance.changeYear(instance.currentYear + 10);
       await tick();
 
       const yearsAfter = Array.from(
-        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+        calendar.querySelectorAll(".bx--date-picker__grid-cell"),
       ).map((el) => el.textContent);
       expect(yearsAfter).not.toEqual(yearsBefore);
       expect(
-        calendar.querySelector(".flatpickr-yearSelect-range"),
+        calendar.querySelector(".bx--date-picker__decade"),
       ).toHaveTextContent(
         `${yearsAfter[0]} - ${yearsAfter[yearsAfter.length - 1]}`,
       );
@@ -2519,7 +2635,9 @@ describe("DatePicker", () => {
         expect(screen.getByLabelText("Date")).toHaveValue("2027");
         expect(onchange).toHaveBeenCalledTimes(1);
         expect(
-          calendar.querySelector(".flatpickr-yearSelect-year.selected"),
+          calendar.querySelector(
+            ".bx--date-picker__grid-cell.bx--date-picker__grid-cell--selected",
+          ),
         ).toHaveTextContent("2027");
       });
     });
@@ -2534,7 +2652,9 @@ describe("DatePicker", () => {
       const calendar = await openCalendar();
 
       expect(
-        calendar.querySelector(".flatpickr-yearSelect-year.selected"),
+        calendar.querySelector(
+          ".bx--date-picker__grid-cell.bx--date-picker__grid-cell--selected",
+        ),
       ).toHaveTextContent("2024");
     });
 
@@ -2548,20 +2668,22 @@ describe("DatePicker", () => {
       });
       const calendar = await openCalendar();
       const range = () =>
-        calendar.querySelector(".flatpickr-yearSelect-range")?.textContent;
-      const prev = calendar.querySelector(".flatpickr-prev-month");
-      const next = calendar.querySelector(".flatpickr-next-month");
+        calendar.querySelector(".bx--date-picker__decade")?.textContent;
+      const prev = calendar.querySelector(
+        ".bx--date-picker__nav-button--previous",
+      );
+      const next = calendar.querySelector(".bx--date-picker__nav-button--next");
       assert(prev && next);
 
       expect(range()).toBe("2019 - 2030");
-      expect(prev).toHaveClass("flatpickr-disabled");
-      expect(next).not.toHaveClass("flatpickr-disabled");
+      expect(prev).toHaveClass("bx--date-picker__nav-button--disabled");
+      expect(next).not.toHaveClass("bx--date-picker__nav-button--disabled");
 
       await user.click(next);
 
       expect(range()).toBe("2029 - 2040");
-      expect(prev).not.toHaveClass("flatpickr-disabled");
-      expect(next).toHaveClass("flatpickr-disabled");
+      expect(prev).not.toHaveClass("bx--date-picker__nav-button--disabled");
+      expect(next).toHaveClass("bx--date-picker__nav-button--disabled");
 
       await user.click(prev);
 
@@ -2583,7 +2705,7 @@ describe("DatePicker", () => {
 
       expect(screen.getByLabelText("Date")).toHaveValue("2024");
       expect(onchange).not.toHaveBeenCalled();
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     });
   });
 
@@ -2625,7 +2747,7 @@ describe("DatePicker", () => {
       });
 
       const calendar = await openCalendar();
-      expect(calendar).toHaveClass("open");
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       await user.click(within(calendar).getByText(cellText));
 
@@ -2636,7 +2758,7 @@ describe("DatePicker", () => {
       expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
         dateStr: input.value,
       });
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     },
   );
 

@@ -15,7 +15,7 @@
 /// @group components
 @mixin fluid-date-picker {
   // `--fluid` on the outer form-item wrapper. Default width matches the 288px
-  // flatpickr calendar, narrowing to fit a smaller container; stretches to
+  // calendar, narrowing to fit a smaller container; stretches to
   // 100% inside `.bx--form--fluid`. The skeleton takes the same width.
   .#{$prefix}--date-picker--fluid {
     display: inline-flex;
@@ -61,7 +61,7 @@
 
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker-input__wrapper
-    > .flatpickr-wrapper {
+    > .#{$prefix}--date-picker__anchor {
     display: block;
     width: 100%;
   }
@@ -172,7 +172,7 @@
   // The container's own `border-block-end` (above) sits 1px below the input:
   // the container is a content-box flex column around the (border-box, no
   // border of its own) input, so its rendered height is the input's height
-  // plus that 1px border. flatpickr positions the calendar flush against the
+  // plus that 1px border. The calendar is positioned flush against the
   // input (its offsetParent), which is 1px short of the container's true
   // bottom, so a flush seam lets the calendar overlap and paint over the
   // border on the non-focused field. This is scoped to fluid range only —
@@ -180,7 +180,7 @@
   // its own box, so the base flush seam already covers it correctly.
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--range
-    .flatpickr-calendar.open {
+    .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open {
     margin-top: to-rem(-1px);
   }
 

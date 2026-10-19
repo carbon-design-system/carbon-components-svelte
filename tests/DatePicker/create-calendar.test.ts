@@ -53,7 +53,9 @@ describe("createCalendar", () => {
 
     expect(instance?.config.ariaDateFormat).toBe("l, F j, Y");
     instance?.open();
-    const day = instance?.calendarContainer.querySelector(".selected");
+    const day = instance?.calendarContainer.querySelector(
+      ".bx--date-picker__day--selected",
+    );
     expect(day?.getAttribute("aria-label")).toBe("Friday, March 15, 2024");
     instance?.destroy();
   });

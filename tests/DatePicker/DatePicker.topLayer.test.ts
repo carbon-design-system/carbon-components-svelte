@@ -58,7 +58,7 @@ describe("DatePicker in a dialog", () => {
     // picker's own click handler is what spares the rest of the dialog.
     await fireEvent.click(screen.getByText("Dialog text"));
 
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
   });
 });
 

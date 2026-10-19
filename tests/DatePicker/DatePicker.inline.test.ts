@@ -50,13 +50,15 @@ describe("DatePicker inline", () => {
     await vi.waitFor(() => {
       const calendar = screen.getByLabelText("calendar-container");
       expect(calendar).not.toBe(inlineCalendar);
-      expect(calendar).not.toHaveClass("inline");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--inline");
     });
     expect(screen.getByLabelText("Date")).toHaveValue("03/15/2024");
 
     await rerender({ inline: true });
     await vi.waitFor(() =>
-      expect(screen.getByLabelText("calendar-container")).toHaveClass("inline"),
+      expect(screen.getByLabelText("calendar-container")).toHaveClass(
+        "bx--date-picker__calendar--inline",
+      ),
     );
     expect(screen.getByTestId("value")).toHaveTextContent("03/15/2024");
   });
@@ -80,7 +82,9 @@ describe("DatePicker inline", () => {
         await user.click(findDay(calendar, "10"));
         expect(input).toHaveValue("03/15/2024");
         await clickNextMonth(calendar);
-        expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
+        expect(
+          calendar.querySelector(".bx--date-picker__month-label"),
+        ).toHaveTextContent("March");
 
         await rerender({ ...props, [state]: false });
         await vi.waitFor(() =>
@@ -120,8 +124,11 @@ describe("DatePicker inline", () => {
     });
 
     const calendar = await screen.findByLabelText("calendar-container");
-    expect(calendar).toHaveClass("inline", "bx--date-picker__calendar");
-    expect(calendar.querySelector(".flatpickr-day")).toHaveClass(
+    expect(calendar).toHaveClass(
+      "bx--date-picker__calendar--inline",
+      "bx--date-picker__calendar",
+    );
+    expect(calendar.querySelector(".bx--date-picker__day")).toHaveClass(
       "bx--date-picker__day",
     );
     // Inside the input wrapper it would stretch the box that vertically
@@ -130,10 +137,8 @@ describe("DatePicker inline", () => {
     expect(calendar.previousElementSibling).toHaveClass(
       "bx--date-picker-input__wrapper",
     );
-    // The month dropdown is replaced by Carbon's static label.
-    expect(calendar.querySelector(".cur-month")).toBeInTheDocument();
     expect(
-      calendar.querySelector(".flatpickr-monthDropdown-months"),
-    ).not.toBeInTheDocument();
+      calendar.querySelector(".bx--date-picker__month-label"),
+    ).toBeInTheDocument();
   });
 });

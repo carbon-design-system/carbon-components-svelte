@@ -37,6 +37,10 @@ describe("any-hover media query grouping", () => {
     // hover (_chat.scss).
     // Raised again from 69 to 70 for FileDownloadItem's one hover block
     // (_file-download-item.scss).
+    // Held at 70 when the calendar replaced flatpickr: the DatePicker month,
+    // quarter, and year grids gained one hover block (date-picker-grid in
+    // components/date-picker/_date-picker.scss, replacing four unguarded
+    // hover rules), and _calendar.scss has one fewer than _flatpickr.scss.
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];

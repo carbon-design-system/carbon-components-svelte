@@ -14,7 +14,7 @@ test.describe("DatePicker inside native dialog", () => {
 
     const calendar = page
       .getByTestId("native-dialog")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     const parentTag = await calendar.evaluate(
@@ -30,7 +30,7 @@ test.describe("DatePicker inside native dialog", () => {
 
     const calendar = page
       .getByTestId("native-dialog")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     const position = await calendar.evaluate(
@@ -47,7 +47,7 @@ test.describe("DatePicker inside native dialog", () => {
 
     const calendar = page
       .getByTestId("native-dialog")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     const inputBox = await input.boundingBox();
@@ -75,12 +75,12 @@ test.describe("DatePicker inside native dialog", () => {
 
     const calendar = page
       .getByTestId("native-dialog")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     // Calendar is portaled outside the input tree. Month nav click should not
     // close it. Modal dialogs have no outside-click target; Escape closes.
-    await calendar.locator(".flatpickr-months").click();
+    await calendar.locator(".bx--date-picker__month-nav").click();
     await expect(calendar).toHaveClass(/open/);
   });
 });
@@ -97,7 +97,7 @@ test.describe("DatePicker inside native [popover]", () => {
 
     const calendar = page
       .getByTestId("native-popover")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     const parentTestId = await calendar.evaluate(
@@ -112,7 +112,7 @@ test.describe("DatePicker inside native [popover]", () => {
     await page.getByTestId("popover-date-picker-portal-input").focus();
     const calendar = page
       .getByTestId("native-popover")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     const position = await calendar.evaluate(
@@ -129,7 +129,7 @@ test.describe("DatePicker inside native [popover]", () => {
 
     const calendar = page
       .getByTestId("native-popover")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
     const inputBox = await input.boundingBox();
@@ -155,10 +155,10 @@ test.describe("DatePicker inside native [popover]", () => {
 
     const calendar = page
       .getByTestId("native-popover")
-      .locator(".flatpickr-calendar.open");
+      .locator(".bx--date-picker__calendar.bx--date-picker__calendar--open");
     await expect(calendar).toBeVisible();
 
-    await calendar.locator(".flatpickr-months").click();
+    await calendar.locator(".bx--date-picker__month-nav").click();
     await expect(calendar).toHaveClass(/open/);
   });
 
@@ -170,7 +170,7 @@ test.describe("DatePicker inside native [popover]", () => {
     // No `.open` filter: locator must still resolve after the calendar closes.
     const calendar = page
       .getByTestId("native-popover")
-      .locator(".flatpickr-calendar");
+      .locator(".bx--date-picker__calendar");
     await expect(calendar).toHaveClass(/open/);
 
     // Non-modal popover: click a viewport corner, away from the popover and

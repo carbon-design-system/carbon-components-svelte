@@ -51,7 +51,7 @@
   // own inputs to check whether the clicked calendar belongs to one of them.
   function isDatePickerCalendarClick(target) {
     if (!popoverRef || !(target instanceof Element)) return false;
-    const calendar = target.closest(".flatpickr-calendar");
+    const calendar = target.closest(".bx--date-picker__calendar");
     if (!calendar) return false;
     for (const input of popoverRef.querySelectorAll("input")) {
       if (

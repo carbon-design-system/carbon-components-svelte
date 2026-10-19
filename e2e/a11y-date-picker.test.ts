@@ -12,7 +12,11 @@ test.describe("DatePicker a11y", () => {
     expect(staticResults.violations).toEqual([]);
 
     await page.getByTestId("date-picker-meeting").click();
-    await expect(page.locator(".flatpickr-calendar.open")).toBeVisible();
+    await expect(
+      page.locator(
+        ".bx--date-picker__calendar.bx--date-picker__calendar--open",
+      ),
+    ).toBeVisible();
 
     const openResults = await new AxeBuilder({ page })
       .include("#app")

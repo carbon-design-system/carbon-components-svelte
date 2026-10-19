@@ -76,9 +76,12 @@ export const recipes: Record<string, Recipe> = {
   "date-picker": {
     async act(view) {
       await view.click("input");
-      await waitFor(view, ".flatpickr-calendar.open");
+      await waitFor(
+        view,
+        ".bx--date-picker__calendar.bx--date-picker__calendar--open",
+      );
       const day =
-        ".flatpickr-calendar.open .flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)";
+        ".bx--date-picker__calendar.bx--date-picker__calendar--open .bx--date-picker__day:not(.bx--date-picker__day--outside-month):not(.bx--date-picker__day--outside-month)";
       await view.click(await tag(view, day, ANY, 8));
       await view.click(await tag(view, day, ANY, 10), {
         modifiers: ["Shift"],

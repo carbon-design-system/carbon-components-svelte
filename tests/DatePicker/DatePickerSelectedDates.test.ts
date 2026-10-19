@@ -138,7 +138,9 @@ describe("DatePicker bind:selectedDates", () => {
     );
     const instance = getCalendarInstance(input);
     instance.open();
-    const cell = calendar.querySelector(".flatpickr-day.selected");
+    const cell = calendar.querySelector(
+      ".bx--date-picker__day.bx--date-picker__day--selected",
+    );
 
     await rerender({ selectedDates: [new Date(2024, 0, 15)] });
     await tick();

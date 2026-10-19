@@ -68,7 +68,7 @@ test.describe("DatePicker", () => {
     // Fixture uses defaultDate "03/15/2024" so March 2024 is shown.
     // Click day 20 (current month only, exclude prev/next month days).
     const day20 = calendar
-      .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+      .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
       .filter({ hasText: /^20$/ });
     await day20.click();
 
@@ -85,7 +85,7 @@ test.describe("DatePicker", () => {
     await expect(calendar).toBeVisible();
 
     const day15 = calendar
-      .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+      .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
       .filter({ hasText: /^15$/ });
     await day15.click();
 
@@ -187,7 +187,7 @@ test.describe("DatePicker", () => {
       .getByLabel("calendar-container");
     await expect(calendar).toHaveClass(/open/);
     // Month nav doesn't pick a date; the calendar should stay open.
-    await calendar.locator(".flatpickr-months").click();
+    await calendar.locator(".bx--date-picker__month-nav").click();
     await expect(calendar).toHaveClass(/open/);
   });
 
@@ -198,9 +198,9 @@ test.describe("DatePicker", () => {
       .getByTestId("date-picker-single")
       .getByLabel("calendar-container");
     await expect(calendar).toBeVisible();
-    // With min 03/01 and max 03/31, days outside March get .flatpickr-disabled
+    // With min 03/01 and max 03/31, days outside March get --disabled
     const disabledDay = calendar
-      .locator(".flatpickr-day.flatpickr-disabled")
+      .locator(".bx--date-picker__day.bx--date-picker__day--disabled")
       .first();
     await expect(disabledDay).toBeVisible();
     const initialValue = await input.inputValue();
@@ -255,10 +255,10 @@ test.describe("DatePicker", () => {
     await expect(calendar).toBeVisible();
 
     const day10 = calendar
-      .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+      .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
       .filter({ hasText: /^10$/ });
     const day20 = calendar
-      .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+      .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
       .filter({ hasText: /^20$/ });
     await day10.click();
     await day20.click();
@@ -288,7 +288,7 @@ test.describe("DatePicker", () => {
     // must not replay the slide-in animation.
     await page.waitForTimeout(300);
     await page.evaluate(() => {
-      const cals = document.querySelectorAll(".flatpickr-calendar");
+      const cals = document.querySelectorAll(".bx--date-picker__calendar");
       const cal = cals[cals.length - 1] as HTMLElement;
       const w = window as unknown as { __fpAnimStarts: number };
       w.__fpAnimStarts = 0;
@@ -328,7 +328,7 @@ test.describe("DatePicker", () => {
     // Wait for the initial open animation to finish before instrumenting.
     await page.waitForTimeout(300);
     await page.evaluate(() => {
-      const cals = document.querySelectorAll(".flatpickr-calendar");
+      const cals = document.querySelectorAll(".bx--date-picker__calendar");
       const cal = cals[0] as HTMLElement;
       const w = window as unknown as { __fpAnimStarts: number };
       w.__fpAnimStarts = 0;
@@ -384,7 +384,7 @@ test.describe("DatePicker", () => {
       .getByLabel("calendar-container");
     await expect(calendar).toHaveClass(/open/);
     // Month nav doesn't pick a date; the calendar should stay open.
-    await calendar.locator(".flatpickr-months").click();
+    await calendar.locator(".bx--date-picker__month-nav").click();
     await expect(calendar).toHaveClass(/open/);
   });
 
@@ -423,9 +423,9 @@ test.describe("DatePicker", () => {
       await page.keyboard.press("ArrowRight");
     }
 
-    const focused = calendar.locator(".flatpickr-day:focus");
+    const focused = calendar.locator(".bx--date-picker__day:focus");
     await expect(focused).toHaveAttribute("aria-label", /March 12, 2024/);
-    await expect(focused).not.toHaveClass(/flatpickr-disabled/);
+    await expect(focused).not.toHaveClass(/bx--date-picker__day--disabled/);
   });
 
   test.describe("close event trigger", () => {
@@ -496,7 +496,7 @@ test.describe("DatePicker", () => {
       await expect(calendar).toHaveClass(/open/);
 
       const day20 = calendar
-        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
         .filter({ hasText: /^20$/ });
       await day20.click();
 
@@ -531,7 +531,7 @@ test.describe("DatePicker", () => {
       await expect(calendar).toHaveClass(/open/);
 
       const day10 = calendar
-        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
         .filter({ hasText: /^10$/ });
       await day10.click();
       await page.getByTestId("outside-date-picker").click();
@@ -550,10 +550,10 @@ test.describe("DatePicker", () => {
       await expect(calendar).toHaveClass(/open/);
 
       const day10 = calendar
-        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
         .filter({ hasText: /^10$/ });
       const day20 = calendar
-        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .locator(".bx--date-picker__day:not(.prev-month):not(.next-month)")
         .filter({ hasText: /^20$/ });
       await day10.click();
       await day20.click();
@@ -574,10 +574,10 @@ test.describe("DatePicker", () => {
         .getByTestId("date-picker-month")
         .getByLabel("calendar-container");
       await expect(calendar).toBeVisible();
-      await expect(
-        calendar.locator(".flatpickr-monthSelect-month"),
-      ).toHaveCount(12);
-      await expect(calendar.locator(".flatpickr-day")).toHaveCount(0);
+      await expect(calendar.locator(".bx--date-picker__grid-cell")).toHaveCount(
+        12,
+      );
+      await expect(calendar.locator(".bx--date-picker__day")).toHaveCount(0);
     });
 
     test("selects a month and updates the input", async ({ page }) => {
@@ -602,10 +602,10 @@ test.describe("DatePicker", () => {
       const calendar = page
         .getByTestId("date-picker-month")
         .getByLabel("calendar-container");
-      const yearInput = calendar.locator("input.cur-year");
+      const yearInput = calendar.locator("input.bx--date-picker__year-input");
       await expect(yearInput).toHaveValue("2024");
 
-      await calendar.locator(".flatpickr-next-month").click();
+      await calendar.locator(".bx--date-picker__nav-button--next").click();
       await expect(yearInput).toHaveValue("2025");
       await expect(calendar).toHaveClass(/open/);
     });
@@ -648,7 +648,9 @@ test.describe("DatePicker", () => {
 
       const day = (n: number) =>
         calendar
-          .locator(".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)")
+          .locator(
+            ".bx--date-picker__day:not(.bx--date-picker__day--outside-month):not(.bx--date-picker__day--outside-month)",
+          )
           .filter({ hasText: new RegExp(`^${n}$`) });
 
       await day(20).click();
@@ -669,7 +671,7 @@ test.describe("DatePicker", () => {
     // Regression test: nothing prevented the browser's native drag-to-select
     // text behavior on the day cells, so a shift-click (or any click-drag)
     // spanning multiple days highlighted their text instead of only
-    // selecting the range. `user-select: none` on `.flatpickr-day` stops it.
+    // selecting the range. `user-select: none` on `.bx--date-picker__day` stops it.
     test("dragging across days while shift is held does not select their text", async ({
       page,
     }) => {
@@ -683,7 +685,9 @@ test.describe("DatePicker", () => {
 
       const day = (n: number) =>
         calendar
-          .locator(".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)")
+          .locator(
+            ".bx--date-picker__day:not(.bx--date-picker__day--outside-month):not(.bx--date-picker__day--outside-month)",
+          )
           .filter({ hasText: new RegExp(`^${n}$`) });
 
       const startBox = await day(9).boundingBox();

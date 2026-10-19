@@ -27,7 +27,9 @@ describe("DatePicker bind:open", () => {
     render(DatePickerOpen, { props: { open: true, onopen } });
     const calendar = await screen.findByLabelText("calendar-container");
 
-    await waitFor(() => expect(calendar).toHaveClass("open"));
+    await waitFor(() =>
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open"),
+    );
     expect(onopen).toHaveBeenCalledTimes(1);
   });
 
@@ -38,12 +40,12 @@ describe("DatePicker bind:open", () => {
     const calendar = await screen.findByLabelText("calendar-container");
 
     await rerender({ open: true });
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     expect(onopen).toHaveBeenCalledTimes(1);
 
     await rerender({ open: false });
     await settle();
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onclose).toHaveBeenCalledTimes(1);
     expect(onclose.mock.calls[0][0].detail.trigger).toBe("programmatic");
   });
@@ -100,7 +102,7 @@ describe("DatePicker bind:open", () => {
     render(DatePickerOpen, { props: { open: true, readonly: true } });
     const calendar = await screen.findByLabelText("calendar-container");
     await settle();
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
   });
 });
 
@@ -110,7 +112,7 @@ async function openRangeCalendar() {
   await user.click(screen.getByLabelText("Start date"));
   return waitFor(() => {
     const calendar = document.querySelector<HTMLElement>(
-      ".flatpickr-calendar.open[aria-label='calendar-container']",
+      ".bx--date-picker__calendar.bx--date-picker__calendar--open[aria-label='calendar-container']",
     );
     assert(calendar, "expected an open calendar");
     return calendar;
@@ -125,7 +127,7 @@ describe("DatePicker close event", () => {
     const calendar = await openCalendar();
     await user.click(firstDay(calendar));
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("select");
   });
@@ -136,13 +138,13 @@ describe("DatePicker close event", () => {
 
     const input = screen.getByLabelText("Date");
     const calendar = await openCalendar();
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
     input.focus();
     await user.keyboard("{Escape}");
     await tick();
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
   });
@@ -153,14 +155,14 @@ describe("DatePicker close event", () => {
 
     const input = screen.getByLabelText("Date");
     const calendar = await openCalendar();
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     expect(document.body.contains(calendar)).toBe(true);
 
     input.focus();
     await user.keyboard("{Escape}");
     await tick();
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
   });
@@ -194,7 +196,7 @@ describe("DatePicker close event", () => {
 
       await pressEscapeInGrid();
 
-      expect(calendar).not.toHaveClass("open");
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
       expect(onClose).toHaveBeenCalledTimes(1);
       expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
       expect(input).toHaveFocus();
@@ -212,7 +214,9 @@ describe("DatePicker close event", () => {
 
     await user.click(document.body);
     await user.click(input);
-    await waitFor(() => expect(calendar).toHaveClass("open"));
+    await waitFor(() =>
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open"),
+    );
     await user.click(firstDay(calendar));
 
     expect(onClose).toHaveBeenCalledTimes(2);
@@ -225,18 +229,18 @@ describe("DatePicker close event", () => {
 
     const input = screen.getByLabelText("Date");
     const calendar = await openCalendar();
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
     input.focus();
     await user.keyboard("{Escape}");
     await tick();
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
 
     input.focus();
     await user.keyboard("{ArrowDown}");
     await tick();
 
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
   });
 
   it('dispatches close with trigger "outside-click" when clicking outside', async () => {
@@ -244,11 +248,11 @@ describe("DatePicker close event", () => {
     render(DatePickerClose, { props: { onClose } });
 
     const calendar = await openCalendar();
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
     await user.click(document.body);
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
   });
@@ -265,7 +269,7 @@ describe("DatePicker close event", () => {
     });
     await settle();
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
   });
@@ -281,7 +285,7 @@ describe("DatePicker close event", () => {
     expect(screen.getByLabelText("End date")).toHaveFocus();
     await settle();
 
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).not.toHaveBeenCalled();
   });
 
@@ -294,7 +298,7 @@ describe("DatePicker close event", () => {
     await fireEvent.blur(screen.getByLabelText("Date"));
     await settle();
 
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).not.toHaveBeenCalled();
   });
 
@@ -313,7 +317,7 @@ describe("DatePicker close event", () => {
     await user.click(document.body);
     await tick();
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
   });
@@ -334,7 +338,9 @@ describe("DatePicker close event", () => {
 
     await user.click(dayByLabel(calendar, 15));
 
-    await waitFor(() => expect(calendar).not.toHaveClass("open"));
+    await waitFor(() =>
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open"),
+    );
     await tick();
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.selectedDates).toHaveLength(2);
@@ -362,13 +368,13 @@ describe("DatePicker close event", () => {
 
     const calendar = await openCalendar();
     const day = getDays(calendar).find(
-      (node) => !node.classList.contains("selected"),
+      (node) => !node.classList.contains("bx--date-picker__day--selected"),
     );
     assert(day);
 
     await user.click(day);
 
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("select");
   });
@@ -379,12 +385,13 @@ describe("DatePicker click inside the calendar", () => {
     render(DatePicker, { props: { datePickerType: "single" } });
 
     const calendar = await openCalendar();
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
     // Month nav doesn't pick a date; it shouldn't close the calendar.
     const inside =
-      calendar.querySelector<HTMLElement>(".flatpickr-months") ?? calendar;
+      calendar.querySelector<HTMLElement>(".bx--date-picker__month-nav") ??
+      calendar;
     await user.click(inside);
-    expect(calendar).toHaveClass("open");
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
   });
 });

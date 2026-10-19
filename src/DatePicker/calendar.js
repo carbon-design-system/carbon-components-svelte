@@ -66,6 +66,11 @@ const QUIET_OPTIONS = new Set([
 /** Options that change only the field's text: `set` rewrites the value. */
 const TEXT_OPTIONS = new Set(["altFormat", "conjunction", "formatDate"]);
 
+// Class names stay literal, so the CSS pruning can find them.
+const IN_RANGE = "bx--date-picker__day--in-range";
+const RANGE_START = "bx--date-picker__day--range-start";
+const RANGE_END = "bx--date-picker__day--range-end";
+
 /** Months and years are picked in a 3-wide grid of 12 cells. */
 const GRID_SHIFTS = { 37: -1, 39: 1, 40: 3, 38: -3 };
 
@@ -169,7 +174,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     allowInvalidPreload: false,
     altFormat: "F j, Y",
     altInput: false,
-    altInputClass: "form-control input",
     animate: true,
     ariaDateFormat: "F j, Y",
     clickOpens: true,
@@ -379,16 +383,12 @@ export function createCalendarEngine(element, userConfig = {}) {
       (/** @type {Function} */ fn) => fn.bind(self),
     );
   }
-  if (!userConfig.altInputClass) {
-    config.altInputClass = `${element.className} ${config.altInputClass}`;
-  }
   triggerEvent("onParseConfig");
 
   // --- Inputs -----------------------------------------------------------
 
   /** @type {any} */ (element)._type = element.type;
   element.type = "text";
-  element.classList.add("flatpickr-input");
   self._input = element;
   /** The second input of a range, when the consumer renders one. */
   /** @type {HTMLInputElement | undefined} */
@@ -396,7 +396,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.secondInput = secondInput;
 
   if (config.altInput) {
-    const alt = createElement(element.nodeName, config.altInputClass);
+    const alt = createElement(element.nodeName, element.className);
     alt.placeholder = element.placeholder;
     alt.disabled = element.disabled;
     alt.required = element.required;
@@ -622,11 +622,17 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function buildMonthNav() {
-    const nav = createElement("div", "flatpickr-months");
+    const nav = createElement("div", "bx--date-picker__month-nav");
     self.monthNav = nav;
-    self.prevMonthNav = createElement("span", "flatpickr-prev-month");
+    self.prevMonthNav = createElement(
+      "span",
+      "bx--date-picker__nav-button bx--date-picker__nav-button--previous",
+    );
     self.prevMonthNav.innerHTML = config.prevArrow;
-    self.nextMonthNav = createElement("span", "flatpickr-next-month");
+    self.nextMonthNav = createElement(
+      "span",
+      "bx--date-picker__nav-button bx--date-picker__nav-button--next",
+    );
     self.nextMonthNav.innerHTML = config.nextArrow;
     buildMonths();
     return nav;
@@ -637,25 +643,28 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.yearElements = [];
     self.monthElements = [];
     for (let i = 0; i < config.showMonths; i++) {
-      const month = createElement(
-        "div",
-        "flatpickr-month bx--date-picker__month",
-      );
-      const current = createElement("div", "flatpickr-current-month");
+      const month = createElement("div", "bx--date-picker__month");
+      const current = createElement("div", "bx--date-picker__heading");
       if (!isGridMode) {
-        const label = createElement("span", "cur-month");
+        const label = createElement("span", "bx--date-picker__month-label");
         current.appendChild(label);
         self.monthElements.push(label);
       }
-      const wrapper = createElement("div", "numInputWrapper");
-      const year = createElement("input", "numInput cur-year");
+      const wrapper = createElement("div", "bx--date-picker__year");
+      const year = createElement("input", "bx--date-picker__year-input");
       year.type = "number";
       year.tabIndex = -1;
       year.setAttribute("aria-label", self.l10n.yearAriaLabel ?? "Year");
       wrapper.append(
         year,
-        createElement("span", "arrowUp"),
-        createElement("span", "arrowDown"),
+        createElement(
+          "span",
+          "bx--date-picker__year-step bx--date-picker__year-step--up",
+        ),
+        createElement(
+          "span",
+          "bx--date-picker__year-step bx--date-picker__year-step--down",
+        ),
       );
       current.appendChild(wrapper);
       month.appendChild(current);
@@ -697,12 +706,12 @@ export function createCalendarEngine(element, userConfig = {}) {
         // the year input can't hold ("2000年1月").
         const suffix = yearSuffix(config.locale);
         let suffixElement = wrapper?.nextElementSibling?.classList.contains(
-          "cur-year-suffix",
+          "bx--date-picker__year-suffix",
         )
           ? wrapper.nextElementSibling
           : null;
         if (suffix && !suffixElement) {
-          suffixElement = createElement("span", "cur-year-suffix");
+          suffixElement = createElement("span", "bx--date-picker__year-suffix");
           suffixElement.setAttribute("aria-hidden", "true");
           wrapper?.after(suffixElement);
         } else if (!suffix && suffixElement) {
@@ -745,8 +754,16 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     self._hidePrevMonthArrow = hidePrev;
     self._hideNextMonthArrow = hideNext;
-    toggleClass(self.prevMonthNav, "flatpickr-disabled", hidePrev);
-    toggleClass(self.nextMonthNav, "flatpickr-disabled", hideNext);
+    toggleClass(
+      self.prevMonthNav,
+      "bx--date-picker__nav-button--disabled",
+      hidePrev,
+    );
+    toggleClass(
+      self.nextMonthNav,
+      "bx--date-picker__nav-button--disabled",
+      hideNext,
+    );
     announceView();
   }
 
@@ -775,23 +792,16 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function buildWeekdays() {
-    self.weekdayContainer ??= createElement(
-      "div",
-      "flatpickr-weekdays bx--date-picker__weekdays",
-    );
+    self.weekdayContainer ??= createElement("div", "bx--date-picker__weekdays");
     const { shorthand } = self.l10n.weekdays;
     const first = self.l10n.firstDayOfWeek;
     const labels = [...shorthand.slice(first), ...shorthand.slice(0, first)];
     self.weekdayContainer.replaceChildren();
     for (let m = 0; m < config.showMonths; m++) {
-      const group = createElement("div", "flatpickr-weekdaycontainer");
+      const group = createElement("div", "bx--date-picker__weekday-row");
       for (const label of labels) {
         group.appendChild(
-          createElement(
-            "span",
-            "flatpickr-weekday bx--date-picker__weekday",
-            label,
-          ),
+          createElement("span", "bx--date-picker__weekday", label),
         );
       }
       self.weekdayContainer.appendChild(group);
@@ -800,18 +810,24 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   /**
-   * @param {string} className
+   * A day cell. Days of the neighbouring months are `outside`; with two or
+   * more months on show they are also `hidden`, since the next grid shows
+   * them.
+   *
    * @param {Date} date
    * @param {number} index
+   * @param {{ outside?: "previous" | "next"; hidden?: boolean; base?: string }} [kind]
    */
-  function createDay(className, date, index) {
+  function createDay(
+    date,
+    index,
+    { outside, hidden, base = "bx--date-picker__day" } = {},
+  ) {
     const enabled = isEnabled(date, true);
     const blocked = enabled && config.isDayBlocked?.(date, self);
-    const day = createElement(
-      "span",
-      `${className} bx--date-picker__day`,
-      String(date.getDate()),
-    );
+    const day = createElement("span", base, String(date.getDate()));
+    if (outside) day.classList.add("bx--date-picker__day--outside-month");
+    if (hidden) day.classList.add("bx--date-picker__day--hidden");
     day.dateObj = date;
     day.$i = index;
     const label = self.formatDate(date, config.ariaDateFormat);
@@ -824,61 +840,60 @@ export function createCalendarEngine(element, userConfig = {}) {
     const extraClass = config.dayClass?.(date);
     if (extraClass)
       day.classList.add(...extraClass.split(WHITESPACE).filter(Boolean));
-    if (!className.includes("hidden") && compareDays(date, self.now) === 0) {
+    if (!hidden && compareDays(date, self.now) === 0) {
       self.todayDateElem = day;
-      day.classList.add("today");
+      day.classList.add("bx--date-picker__day--today");
       day.setAttribute("aria-current", "date");
     }
     if (enabled) {
       day.tabIndex = -1;
       if (selectedIndex(date) !== -1) {
-        day.classList.add("selected");
+        day.classList.add("bx--date-picker__day--selected");
         self.selectedDateElem = day;
         if (isRange) {
           toggleClass(
             day,
-            "startRange",
+            "bx--date-picker__day--range-start",
             self.selectedDates[0] &&
               compareDays(date, self.selectedDates[0]) === 0,
           );
           toggleClass(
             day,
-            "endRange",
+            "bx--date-picker__day--range-end",
             self.selectedDates[1] &&
               compareDays(date, self.selectedDates[1]) === 0,
           );
-          if (className === "nextMonthDay") day.classList.add("inRange");
+          if (outside === "next")
+            day.classList.add("bx--date-picker__day--in-range");
         }
       }
     }
     if (!enabled || blocked) {
       // axe only exempts inactive text from the contrast check when it is
       // marked `aria-disabled`, not by a CSS class.
-      day.classList.add("flatpickr-disabled");
+      day.classList.add("bx--date-picker__day--disabled");
       day.setAttribute("aria-disabled", "true");
     }
     if (isDateInRange(date) && selectedIndex(date) === -1) {
-      day.classList.add("inRange");
+      day.classList.add("bx--date-picker__day--in-range");
     }
     if (
       self.weekNumbers &&
       config.showMonths === 1 &&
-      className !== "prevMonthDay" &&
+      outside !== "previous" &&
       index % 7 === 6
     ) {
       self.weekNumbers.appendChild(
-        createElement("span", "flatpickr-day", String(config.getWeek(date))),
+        createElement(
+          "span",
+          "bx--date-picker__week-number",
+          String(config.getWeek(date)),
+        ),
       );
     }
     triggerEvent("onDayCreate", day);
     return day;
   }
-  self.createDay = (
-    /** @type {string} */ className,
-    /** @type {Date} */ date,
-    /** @type {number} */ _number,
-    /** @type {number} */ index,
-  ) => createDay(className, date, index);
 
   /**
    * @param {number} year
@@ -889,24 +904,19 @@ export function createCalendarEngine(element, userConfig = {}) {
       (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
     const prevDays = daysInMonth(year, month - 1);
     const days = daysInMonth(year, month);
-    const multi = config.showMonths > 1;
-    const prevClass = multi ? "prevMonthDay hidden" : "prevMonthDay";
-    const nextClass = multi ? "nextMonthDay hidden" : "nextMonthDay";
+    const hidden = config.showMonths > 1;
     const fragment = document.createDocumentFragment();
     let index = 0;
     for (let n = prevDays + 1 - offset; n <= prevDays; n++, index++) {
       fragment.appendChild(
-        createDay(
-          `flatpickr-day ${prevClass}`,
-          new Date(year, month - 1, n),
-          index,
-        ),
+        createDay(new Date(year, month - 1, n), index, {
+          outside: "previous",
+          hidden,
+        }),
       );
     }
     for (let n = 1; n <= days; n++, index++) {
-      fragment.appendChild(
-        createDay("flatpickr-day", new Date(year, month, n), index),
-      );
+      fragment.appendChild(createDay(new Date(year, month, n), index));
     }
     for (
       let n = days + 1;
@@ -914,14 +924,13 @@ export function createCalendarEngine(element, userConfig = {}) {
       n++, index++
     ) {
       fragment.appendChild(
-        createDay(
-          `flatpickr-day ${nextClass}`,
-          new Date(year, month + 1, n % days),
-          index,
-        ),
+        createDay(new Date(year, month + 1, n % days), index, {
+          outside: "next",
+          hidden,
+        }),
       );
     }
-    const container = createElement("div", "dayContainer");
+    const container = createElement("div", "bx--date-picker__month-days");
     container.appendChild(fragment);
     return container;
   }
@@ -953,15 +962,14 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   function buildGrid() {
     const isYear = pickerMode === "year";
-    const className = isYear
-      ? "flatpickr-yearSelect-year"
-      : "flatpickr-monthSelect-month";
     const container = createElement(
       "div",
-      isYear ? "flatpickr-yearSelect-years" : "flatpickr-monthSelect-months",
+      isYear
+        ? "bx--date-picker__grid bx--date-picker__grid--years"
+        : isQuarter
+          ? "bx--date-picker__grid bx--date-picker__grid--quarters"
+          : "bx--date-picker__grid bx--date-picker__grid--months",
     );
-    // Quarters reuse the month grid's cells, two to a row.
-    if (isQuarter) container.classList.add("flatpickr-quarterSelect-quarters");
     container.tabIndex = -1;
     const start = decadeStart() - 1;
     const now = self.now;
@@ -972,8 +980,12 @@ export function createCalendarEngine(element, userConfig = {}) {
       const date = isYear
         ? new Date(start + i, 0, 1)
         : new Date(self.currentYear, isQuarter ? i * 3 : i);
-      const cell = createDay(className, date, i);
-      cell.classList.remove("flatpickr-disabled", "selected", "today");
+      const cell = createDay(date, i, { base: "bx--date-picker__grid-cell" });
+      cell.classList.remove(
+        "bx--date-picker__day--disabled",
+        "bx--date-picker__day--selected",
+        "bx--date-picker__day--today",
+      );
       cell.removeAttribute("aria-current");
       cell.tabIndex = -1;
       const year = date.getFullYear();
@@ -990,7 +1002,7 @@ export function createCalendarEngine(element, userConfig = {}) {
             ? year > config._maxDate.getFullYear()
             : compareMonths(date, config._maxDate) > 0));
       if (outOfRange) {
-        cell.classList.add(isYear ? "disabled" : "flatpickr-disabled");
+        cell.classList.add("bx--date-picker__grid-cell--disabled");
         cell.setAttribute("aria-disabled", "true");
       }
       const target = self.selectedDates[0];
@@ -1000,7 +1012,7 @@ export function createCalendarEngine(element, userConfig = {}) {
         (isYear ||
           (isQuarter ? quarterOf(target) === i : target.getMonth() === i))
       ) {
-        cell.classList.add("selected");
+        cell.classList.add("bx--date-picker__grid-cell--selected");
         self.selectedDateElem = cell;
       }
       if (
@@ -1010,7 +1022,7 @@ export function createCalendarEngine(element, userConfig = {}) {
             ? quarterOf(now) === i
             : date.getMonth() === now.getMonth()))
       ) {
-        cell.classList.add("today");
+        cell.classList.add("bx--date-picker__grid-cell--today");
         cell.setAttribute("aria-current", "date");
         self.todayDateElem = cell;
       }
@@ -1060,33 +1072,42 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (!selected) return;
     const start = weekStartOf(selected).getTime();
     const end = start + 7 * DAY_MS;
-    for (const day of self.daysContainer.querySelectorAll(".flatpickr-day")) {
+    for (const day of self.daysContainer.querySelectorAll(
+      ".bx--date-picker__day",
+    )) {
       const time = day.dateObj.getTime();
       // Compare by day so a daylight-saving hour cannot drop an edge day.
       if (time >= start - DAY_MS / 2 && time < end - DAY_MS / 2) {
-        day.classList.add("week", "selected");
+        day.classList.add(
+          "bx--date-picker__day--week",
+          "bx--date-picker__day--selected",
+        );
       }
     }
   }
 
   /** @param {Event} event */
   function hoverWeek(event) {
-    const day = eventTarget(event).closest?.(".flatpickr-day");
+    const day = eventTarget(event).closest?.(".bx--date-picker__day");
     if (!day?.dateObj) return;
     const start = weekStartOf(day.dateObj).getTime();
-    for (const cell of self.daysContainer.querySelectorAll(".flatpickr-day")) {
+    for (const cell of self.daysContainer.querySelectorAll(
+      ".bx--date-picker__day",
+    )) {
       const time = cell.dateObj.getTime();
       toggleClass(
         cell,
-        "inRange",
+        "bx--date-picker__day--in-range",
         time >= start - DAY_MS / 2 && time < start + 7 * DAY_MS - DAY_MS / 2,
       );
     }
   }
 
   function clearWeekHover() {
-    for (const day of self.daysContainer?.querySelectorAll(".inRange") ?? []) {
-      day.classList.remove("inRange");
+    for (const day of self.daysContainer?.querySelectorAll(
+      ".bx--date-picker__day--in-range",
+    ) ?? []) {
+      day.classList.remove("bx--date-picker__day--in-range");
     }
   }
 
@@ -1097,8 +1118,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (
       self.selectedDates.length !== 1 ||
       (hovered &&
-        (!hovered.classList.contains("flatpickr-day") ||
-          hovered.classList.contains("flatpickr-disabled")))
+        (!hovered.classList.contains("bx--date-picker__day") ||
+          hovered.classList.contains("bx--date-picker__day--disabled")))
     ) {
       return;
     }
@@ -1119,7 +1140,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       }
     }
     const cells = self.daysContainer.querySelectorAll(
-      `*:nth-child(-n+${config.showMonths}) > .flatpickr-day`,
+      `*:nth-child(-n+${config.showMonths}) > .${"bx--date-picker__day"}`,
     );
     for (const cell of cells) {
       const time = cell.dateObj.getTime();
@@ -1127,24 +1148,29 @@ export function createCalendarEngine(element, userConfig = {}) {
         (minAllowed > 0 && time < minAllowed) ||
         (maxAllowed > 0 && time > maxAllowed);
       if (blocked) {
-        cell.classList.add("notAllowed");
-        cell.classList.remove("inRange", "startRange", "endRange");
+        cell.classList.add("bx--date-picker__day--blocked");
+        cell.classList.remove(RANGE_START, IN_RANGE, RANGE_END);
         continue;
       }
       if (containsDisabled) continue;
-      cell.classList.remove("startRange", "inRange", "endRange", "notAllowed");
+      cell.classList.remove(
+        RANGE_START,
+        IN_RANGE,
+        RANGE_END,
+        "bx--date-picker__day--blocked",
+      );
       if (hovered) {
-        hovered.classList.add(hover <= anchor ? "startRange" : "endRange");
-        if (anchor < hover && time === anchor) cell.classList.add("startRange");
+        hovered.classList.add(hover <= anchor ? RANGE_START : RANGE_END);
+        if (anchor < hover && time === anchor) cell.classList.add(RANGE_START);
         else if (anchor > hover && time === anchor)
-          cell.classList.add("endRange");
+          cell.classList.add(RANGE_END);
         if (
           time >= minAllowed &&
           (maxAllowed === 0 || time <= maxAllowed) &&
           time > Math.min(anchor, hover) &&
           time < Math.max(anchor, hover)
         ) {
-          cell.classList.add("inRange");
+          cell.classList.add(IN_RANGE);
         }
       }
     }
@@ -1166,39 +1192,36 @@ export function createCalendarEngine(element, userConfig = {}) {
     const container = self.calendarContainer;
     const fragment = document.createDocumentFragment();
     fragment.appendChild(buildMonthNav());
-    self.innerContainer = createElement("div", "flatpickr-innerContainer");
+    self.innerContainer = createElement("div", "bx--date-picker__body");
     if (config.weekNumbers) {
-      const wrapper = createElement("div", "flatpickr-weekwrapper");
+      const wrapper = createElement("div", "bx--date-picker__week-numbers");
       wrapper.appendChild(
         createElement(
           "span",
-          "flatpickr-weekday",
+          "bx--date-picker__weekday",
           self.l10n.weekAbbreviation ?? "Wk",
         ),
       );
-      self.weekNumbers = createElement("div", "flatpickr-weeks");
+      self.weekNumbers = createElement(
+        "div",
+        "bx--date-picker__week-number-list",
+      );
       wrapper.appendChild(self.weekNumbers);
       self.innerContainer.appendChild(wrapper);
       self.weekWrapper = wrapper;
     }
-    self.rContainer = createElement("div", "flatpickr-rContainer");
+    self.rContainer = createElement("div", "bx--date-picker__main");
     if (pickerMode === "year") {
       // The decade label stands in for the month and year inputs.
-      self.yearRangeElement = createElement(
-        "span",
-        "flatpickr-yearSelect-range",
-      );
+      self.yearRangeElement = createElement("span", "bx--date-picker__decade");
       self.monthNav
-        .querySelector(".flatpickr-current-month")
+        .querySelector(".bx--date-picker__heading")
         .replaceChildren(self.yearRangeElement);
       self.yearElements = [];
     } else if (!isGridMode) {
       self.rContainer.appendChild(buildWeekdays());
     }
-    self.daysContainer = createElement(
-      "div",
-      "flatpickr-days bx--date-picker__days",
-    );
+    self.daysContainer = createElement("div", "bx--date-picker__days");
     self.daysContainer.tabIndex = -1;
     self.rContainer.appendChild(self.daysContainer);
     self.innerContainer.appendChild(self.rContainer);
@@ -1214,31 +1237,33 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function build() {
-    const container = createElement(
-      "div",
-      "flatpickr-calendar bx--date-picker__calendar",
-    );
+    const container = createElement("div", "bx--date-picker__calendar");
     self.calendarContainer = container;
     container.tabIndex = -1;
-    toggleClass(container, "rangeMode", isRange);
-    toggleClass(container, "animate", config.animate === true);
-    toggleClass(container, "multiMonth", config.showMonths > 1);
-    toggleClass(container, "hasWeeks", config.weekNumbers);
-    // Marker classes so CSS can target the shorter month/year grids.
+    toggleClass(container, "bx--date-picker__calendar--range", isRange);
     toggleClass(
       container,
-      "bx--date-picker__calendar--month",
-      pickerMode === "month",
+      "bx--date-picker__calendar--animate",
+      config.animate === true,
     );
-    toggleClass(container, "bx--date-picker__calendar--quarter", isQuarter);
     toggleClass(
       container,
-      "bx--date-picker__calendar--year",
-      pickerMode === "year",
+      "bx--date-picker__calendar--multi-month",
+      config.showMonths > 1,
     );
+    toggleClass(
+      container,
+      "bx--date-picker__calendar--week-numbers",
+      config.weekNumbers,
+    );
+    // The month, quarter, and year grids are shorter than the day grid.
     if (isGridMode) {
       container.classList.add(
-        `flatpickr-${isQuarter ? "month" : pickerMode}Select-theme-light`,
+        isQuarter
+          ? "bx--date-picker__calendar--quarter"
+          : pickerMode === "year"
+            ? "bx--date-picker__calendar--year"
+            : "bx--date-picker__calendar--month",
       );
     }
     if (!config.lazy || config.inline) {
@@ -1247,7 +1272,11 @@ export function createCalendarEngine(element, userConfig = {}) {
 
     const custom = config.appendTo?.nodeType !== undefined;
     if (config.inline || config.static) {
-      container.classList.add(config.inline ? "inline" : "static");
+      container.classList.add(
+        config.inline
+          ? "bx--date-picker__calendar--inline"
+          : "bx--date-picker__calendar--static",
+      );
       if (config.inline) {
         if (!custom && element.parentNode) {
           element.parentNode.insertBefore(container, self._input.nextSibling);
@@ -1256,7 +1285,7 @@ export function createCalendarEngine(element, userConfig = {}) {
         }
       }
       if (config.static) {
-        const wrapper = createElement("div", "flatpickr-wrapper");
+        const wrapper = createElement("div", "bx--date-picker__anchor");
         element.parentNode?.insertBefore(wrapper, element);
         wrapper.appendChild(element);
         if (self.altInput) wrapper.appendChild(self.altInput);
@@ -1411,9 +1440,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     while (
       target &&
       !(
-        target.classList?.contains("flatpickr-day") &&
-        !target.classList.contains("flatpickr-disabled") &&
-        !target.classList.contains("notAllowed")
+        target.classList?.contains("bx--date-picker__day") &&
+        !target.classList.contains("bx--date-picker__day--disabled") &&
+        !target.classList.contains("bx--date-picker__day--blocked")
       )
     ) {
       target = target.parentNode;
@@ -1450,18 +1479,11 @@ export function createCalendarEngine(element, userConfig = {}) {
   /** Clicks on the month or year grids. */
   /** @param {Event} event */
   function selectGridCell(event) {
-    const cell = eventTarget(event).closest?.(
-      ".flatpickr-monthSelect-month, .flatpickr-yearSelect-year",
-    );
+    const cell = eventTarget(event).closest?.(".bx--date-picker__grid-cell");
     if (!cell) return;
     event.preventDefault();
     event.stopPropagation();
-    if (
-      cell.classList.contains("flatpickr-disabled") ||
-      cell.classList.contains("disabled")
-    ) {
-      return;
-    }
+    if (cell.classList.contains("bx--date-picker__grid-cell--disabled")) return;
     setGridDate(cell.dateObj);
     if (config.closeOnSelect) self.close();
   }
@@ -1524,7 +1546,12 @@ export function createCalendarEngine(element, userConfig = {}) {
     firstDayOfWeek: [applyL10n],
     allowInput: [syncReadonly],
     animate: [
-      () => toggleClass(self.calendarContainer, "animate", config.animate),
+      () =>
+        toggleClass(
+          self.calendarContainer,
+          "bx--date-picker__calendar--animate",
+          config.animate,
+        ),
     ],
     // A replaced array would drop the range's second input, which then
     // closed the calendar when it took focus.
@@ -1628,7 +1655,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     fillContents();
     self.isOpen = true;
     if (!wasOpen) {
-      self.calendarContainer.classList.add("open");
+      self.calendarContainer.classList.add("bx--date-picker__calendar--open");
       self._input.classList.add("active");
       bindOpenListeners();
       triggerEvent("onOpen");
@@ -1639,7 +1666,7 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   function close() {
     self.isOpen = false;
-    if (self.calendarContainer) self.calendarContainer.classList.remove("open");
+    self.calendarContainer?.classList.remove("bx--date-picker__calendar--open");
     if (self._input) self._input.classList.remove("active");
     openListeners.clear();
     triggerEvent("onClose");
@@ -1768,7 +1795,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function isDayFocused(node) {
     return (
       self.daysContainer !== undefined &&
-      !node.className.includes("hidden") &&
+      !node.classList.contains("bx--date-picker__day--hidden") &&
       self.daysContainer.contains(node)
     );
   }
@@ -1777,8 +1804,8 @@ export function createCalendarEngine(element, userConfig = {}) {
   function isInView(node) {
     return (
       self.daysContainer !== undefined &&
-      node.className.includes("hidden") === false &&
-      node.className.includes("flatpickr-disabled") === false &&
+      !node.classList.contains("bx--date-picker__day--hidden") &&
+      !node.classList.contains("bx--date-picker__day--disabled") &&
       self.daysContainer.contains(node)
     );
   }
@@ -1799,7 +1826,10 @@ export function createCalendarEngine(element, userConfig = {}) {
       const end = delta > 0 ? month.children.length : -1;
       for (let i = start; i !== end; i += delta) {
         const cell = month.children[i];
-        if (!cell.className.includes("hidden") && isOpenDay(cell.dateObj)) {
+        if (
+          !cell.classList.contains("bx--date-picker__day--hidden") &&
+          isOpenDay(cell.dateObj)
+        ) {
           return cell;
         }
       }
@@ -1836,11 +1866,11 @@ export function createCalendarEngine(element, userConfig = {}) {
   function focusDate(date) {
     const find = () =>
       /** @type {HTMLElement[]} */ ([
-        ...self.daysContainer.querySelectorAll(".flatpickr-day"),
+        ...self.daysContainer.querySelectorAll(".bx--date-picker__day"),
       ]).find(
         (cell) =>
           /** @type {any} */ (cell).dateObj.getTime() === date.getTime() &&
-          !cell.classList.contains("hidden"),
+          !cell.classList.contains("bx--date-picker__day--hidden"),
       );
     let cell = find();
     const direction =
@@ -2051,7 +2081,10 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (!cells) return;
     let index = Array.prototype.indexOf.call(cells, document.activeElement);
     if (index === -1) {
-      const target = self.daysContainer.querySelector(".selected") ?? cells[0];
+      const target =
+        self.daysContainer.querySelector(
+          ".bx--date-picker__grid-cell--selected",
+        ) ?? cells[0];
       target.focus();
       index = target.$i;
     }
@@ -2067,10 +2100,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       cells[(count + index + step) % count].focus();
     } else if (cells[0].parentNode.contains(document.activeElement)) {
       const active = /** @type {any} */ (document.activeElement);
-      if (
-        !active.classList.contains("disabled") &&
-        !active.classList.contains("flatpickr-disabled")
-      ) {
+      if (!active.classList.contains("bx--date-picker__grid-cell--disabled")) {
         setGridDate(active.dateObj);
         if (config.closeOnSelect) self.close();
       }
@@ -2147,9 +2177,9 @@ export function createCalendarEngine(element, userConfig = {}) {
       stepView(prev ? -1 : 1);
     } else if (self.yearElements.includes(target)) {
       target.select();
-    } else if (target.classList.contains("arrowUp")) {
+    } else if (target.classList.contains("bx--date-picker__year-step--up")) {
       changeYear(self.currentYear + 1);
-    } else if (target.classList.contains("arrowDown")) {
+    } else if (target.classList.contains("bx--date-picker__year-step--down")) {
       changeYear(self.currentYear - 1);
     }
   }
@@ -2254,7 +2284,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     if (secondInput) /** @type {any} */ (secondInput)._flatpickr = undefined;
     self.input.type = self.input._type;
-    self.input.classList.remove("flatpickr-input");
     self.input.removeAttribute("readonly");
     self.input._flatpickr = undefined;
     for (const key of [
