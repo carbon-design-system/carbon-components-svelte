@@ -351,6 +351,21 @@ describe("month mode", () => {
     expect(input.value).toBe("June 2024");
   });
 
+  it("marks only months outside the bounds aria-disabled", () => {
+    const { instance } = create({
+      mode: "month",
+      defaultDate: "2024-03-20",
+      minDate: "2024-03-15",
+    });
+
+    const months = instance.calendarContainer.querySelectorAll<HTMLElement>(
+      ".bx--date-picker__grid-cell",
+    );
+    // March 1 is before minDate, but March itself can still be picked.
+    expect(months[2]).not.toHaveAttribute("aria-disabled");
+    expect(months[1]).toHaveAttribute("aria-disabled", "true");
+  });
+
   it("steps the year", () => {
     const { instance } = create({ mode: "month", defaultDate: "2024-03-01" });
 

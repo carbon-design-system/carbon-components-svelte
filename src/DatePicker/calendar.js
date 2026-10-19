@@ -986,7 +986,10 @@ export function createCalendarEngine(element, userConfig = {}) {
         "bx--date-picker__day--selected",
         "bx--date-picker__day--today",
       );
+      // A month or year is disabled only when it is out of bounds (below),
+      // not because its first day is.
       cell.removeAttribute("aria-current");
+      cell.removeAttribute("aria-disabled");
       cell.tabIndex = -1;
       const year = date.getFullYear();
       const outOfRange =
