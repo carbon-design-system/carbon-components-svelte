@@ -17,6 +17,24 @@
   </Tooltip>
 </div>
 
+<div
+  data-testid="scroll"
+  style="overflow: auto; height: 4rem; margin: 2rem; padding: 0.5rem; border: 1px solid #c6c6c6"
+>
+  <Tooltip iconDescription="In a panel">
+    <p>{text}</p>
+  </Tooltip>
+</div>
+
+<div
+  data-testid="card"
+  style="overflow: hidden; margin: 2rem; padding: 0.5rem; border: 1px solid #c6c6c6"
+>
+  <Tooltip iconDescription="In a card">
+    <p>{text}</p>
+  </Tooltip>
+</div>
+
 <div style="height: 120vh"></div>
 
 <div data-testid="bottom" style="padding: 0 0 0.5rem 4rem">

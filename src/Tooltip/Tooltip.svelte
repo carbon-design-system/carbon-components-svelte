@@ -117,6 +117,7 @@
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { clippedBy } from "../utils/clipped-by.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
@@ -143,8 +144,16 @@
 
   let focusByMouse = false;
 
+  // Set for one open when the in-place tooltip turns out to be cut off by
+  // a box around it (a scrolling panel, an `overflow: hidden` card): it
+  // moves to a portal instead. Only when `portalTooltip` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined
+      ? !!insideModal || portalWhenClipped
+      : portalTooltip;
 
   // The side the tooltip opens on: `direction`, unless it doesn't fit there
   // and fits on the other side (in place; a portalled tooltip flips itself).
@@ -337,6 +346,10 @@
         ? windowShift(refTooltip, 0)
         : 0;
     refTooltip.style.left = `${offsetX + shift}px`;
+
+    if (portalTooltip === undefined && clippedBy(refTooltip)) {
+      portalWhenClipped = true;
+    }
   }
 
   // A portalled tooltip is placed by `FloatingPortal`, which rewrites the

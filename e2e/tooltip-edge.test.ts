@@ -78,3 +78,38 @@ test("a tooltip open while off-screen keeps its direction", async ({
   );
   await expect(tooltip).toHaveClass(/bx--tooltip--bottom/);
 });
+// A box around an in-place tooltip that would cut it off: the tooltip
+// opens in a portal, whole, and the box doesn't grow a scrollbar.
+for (const [box, name] of [
+  ["scroll", "In a panel"],
+  ["card", "In a card"],
+] as const)
+  test(`a tooltip ${box === "scroll" ? "in a scrolling panel" : "in a clipping card"} shows whole`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
+    await page.goto("/tooltip-edge.html");
+    await page.locator(`[aria-label="${name}"]`).focus();
+    const tooltip = page.locator(SHOWN).last();
+    await expect(tooltip).toBeVisible();
+    await page.evaluate(
+      () =>
+        new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r)),
+        ),
+    );
+    const hidden = await tooltip.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return [
+        [r.left + 6, r.top + 10],
+        [r.right - 6, r.top + 10],
+        [r.left + 6, r.bottom - 6],
+        [r.right - 6, r.bottom - 6],
+      ].filter(([x, y]) => !el.contains(document.elementFromPoint(x, y)));
+    });
+    expect(hidden).toEqual([]);
+    const scroll = await page
+      .getByTestId(box)
+      .evaluate((el) => el.scrollHeight - el.clientHeight);
+    expect(scroll).toBeLessThanOrEqual(1);
+  });
