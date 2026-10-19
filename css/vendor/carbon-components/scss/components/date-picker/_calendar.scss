@@ -108,6 +108,13 @@
     outline: 0;
   }
 
+  // One row per week, seven days wide.
+  .#{$prefix}--date-picker__week {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+  }
+
   .#{$prefix}--date-picker__calendar:focus {
     outline: 0;
   }
@@ -141,11 +148,17 @@
     padding: 0;
     line-height: 16px;
     text-decoration: none;
+    background: none;
+    border: 0;
     transform: scale(1, 1) #{'/*rtl: scale(-1,1)*/'};
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive);
     fill: $icon-primary;
     user-select: none;
+
+    &:focus {
+      @include focus-outline('outline');
+    }
   }
 
   .#{$prefix}--date-picker__heading {

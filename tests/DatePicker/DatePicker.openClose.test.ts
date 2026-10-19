@@ -25,7 +25,7 @@ describe("DatePicker bind:open", () => {
   it("opens once the calendar exists when rendered with open", async () => {
     const onopen = vi.fn();
     render(DatePickerOpen, { props: { open: true, onopen } });
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
 
     await waitFor(() =>
       expect(calendar).toHaveClass("bx--date-picker__calendar--open"),
@@ -37,7 +37,7 @@ describe("DatePicker bind:open", () => {
     const onopen = vi.fn();
     const onclose = vi.fn();
     const { rerender } = render(DatePickerOpen, { props: { onopen, onclose } });
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
 
     await rerender({ open: true });
     expect(calendar).toHaveClass("bx--date-picker__calendar--open");
@@ -54,7 +54,7 @@ describe("DatePicker bind:open", () => {
     const onclose = vi.fn();
     render(DatePickerOpen, { props: { onclose } });
     const input = screen.getByLabelText("Date");
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
 
     await user.click(input);
     expect(getBoundOpen()).toBe("true");
@@ -95,12 +95,12 @@ describe("DatePicker bind:open", () => {
       props: { datePickerType: "simple" },
     });
     await rerender({ open: true });
-    expect(screen.queryByLabelText("calendar-container")).toBeNull();
+    expect(screen.queryByLabelText(/^Choose a /)).toBeNull();
   });
 
   it("does not open a read-only picker", async () => {
     render(DatePickerOpen, { props: { open: true, readonly: true } });
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
     await settle();
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
   });
@@ -108,11 +108,11 @@ describe("DatePicker bind:open", () => {
 
 /** Opens the range picker's start input and returns the open calendar. */
 async function openRangeCalendar() {
-  await screen.findByLabelText("calendar-container");
+  await screen.findByLabelText(/^Choose a /);
   await user.click(screen.getByLabelText("Start date"));
   return waitFor(() => {
     const calendar = document.querySelector<HTMLElement>(
-      ".bx--date-picker__calendar.bx--date-picker__calendar--open[aria-label='calendar-container']",
+      ".bx--date-picker__calendar.bx--date-picker__calendar--open[role=dialog]",
     );
     assert(calendar, "expected an open calendar");
     return calendar;

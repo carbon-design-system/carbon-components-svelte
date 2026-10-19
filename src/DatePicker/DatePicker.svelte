@@ -350,6 +350,27 @@
   export let keepOpenFor = [];
 
   /**
+   * Accessible name of the calendar. Defaults to "Choose a date" (or a
+   * month, quarter, or year, by `datePickerType`).
+   * @type {string | undefined}
+   */
+  export let calendarLabelText = undefined;
+
+  /**
+   * Label of the button that shows the previous month. Defaults to
+   * "Previous month" (or year, or decade, by `datePickerType`).
+   * @type {string | undefined}
+   */
+  export let previousLabelText = undefined;
+
+  /**
+   * Label of the button that shows the next month. Defaults to "Next month"
+   * (or year, or decade, by `datePickerType`).
+   * @type {string | undefined}
+   */
+  export let nextLabelText = undefined;
+
+  /**
    * Set to `true` to render the calendar permanently below the input
    * instead of in a popup. `open` and `close` events are not dispatched,
    * `portalMenu` is ignored, and the calendar stops accepting input while
@@ -1392,8 +1413,10 @@
     snapshotCloseBaseline();
     applyInitialMonth();
     if (open) applyOpenProp();
-    engine?.calendarContainer?.setAttribute("role", "application");
-    engine?.calendarContainer?.setAttribute("aria-label", "calendar-container");
+    engine?.calendarContainer?.setAttribute(
+      "role",
+      usesInline ? "group" : "dialog",
+    );
     engine.calendarContainer?.addEventListener(
       "keydown",
       handleCalendarKeydown,
@@ -1719,7 +1742,18 @@
     ignoredFocusElements: keepOpenFor.length ? keepOpenFor : undefined,
     dayDescription,
     dayClass,
+    prevLabel: previousLabelText,
+    nextLabel: nextLabelText,
   };
+  const CALENDAR_NOUN = {
+    month: "month",
+    quarter: "quarter",
+    year: "year",
+  };
+  $: calendarLabel =
+    calendarLabelText ?? `Choose a ${CALENDAR_NOUN[datePickerType] ?? "date"}`;
+  $: engine?.calendarContainer.setAttribute("aria-label", calendarLabel);
+
   /** @type {Record<string, unknown>} */
   let appliedPropOptions = {};
   $: if (engine) {

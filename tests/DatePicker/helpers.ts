@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 
+/** The calendar's default accessible name, whatever it picks. */
+const CALENDAR_NAME = /^Choose a /;
+
 /**
  * Waits for the labeled "Date" input to become visible (`type="text"`, as
  * opposed to the hidden machine-format input) and returns it.
@@ -58,10 +61,10 @@ export function dayByLabel(calendar: HTMLElement, day: number) {
   return cell;
 }
 
-/** Clicks the labeled input and returns the awaited `calendar-container`. */
+/** Clicks the labeled input and returns the awaited calendar. */
 export async function openCalendar(label = "Date") {
   await user.click(screen.getByLabelText(label));
-  return screen.findByLabelText("calendar-container");
+  return screen.findByLabelText(CALENDAR_NAME);
 }
 
 /** Whether the calendar header renders the year before the month. */

@@ -72,9 +72,7 @@ describe("DatePicker", () => {
     const wrapper = container.querySelector(".bx--date-picker");
     expect(wrapper).toHaveClass("bx--date-picker--single");
 
-    expect(
-      screen.queryByLabelText("calendar-container"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/^Choose a /)).not.toBeInTheDocument();
     const calendar = await openCalendar();
     expect(calendar).toBeInTheDocument();
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--month");
@@ -231,13 +229,9 @@ describe("DatePicker", () => {
     const wrapper = container.querySelector(".bx--date-picker");
     expect(wrapper).toHaveClass("bx--date-picker--range");
 
-    expect(
-      screen.queryByLabelText("calendar-container"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/^Choose a /)).not.toBeInTheDocument();
     await user.click(inputStart);
-    expect(
-      await screen.findByLabelText("calendar-container"),
-    ).toBeInTheDocument();
+    expect(await screen.findByLabelText(/^Choose a /)).toBeInTheDocument();
   });
 
   // Regression test: the invalid/warn/calendar icons all render after the
@@ -295,14 +289,14 @@ describe("DatePicker", () => {
       const input = screen.getByLabelText("Date");
       input.focus();
       await user.keyboard("{ArrowDown}");
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     });
 
     it("forwards the readonly attribute to both inputs in range mode", async () => {
       render(DatePickerRange, { readonly: true });
       // Wait for flatpickr (including the range plugin's onReady) to finish.
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       const start = screen.getByLabelText("Start date");
       const end = screen.getByLabelText("End date");
       expect(start).toHaveAttribute("readonly");
@@ -360,7 +354,7 @@ describe("DatePicker", () => {
           new Date(now.getFullYear(), now.getMonth(), now.getDate()),
         ],
       });
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       const input = screen.getByLabelText("Date");
       input.focus();
 
@@ -394,7 +388,7 @@ describe("DatePicker", () => {
 
     it("opens the calendar and moves focus into it", async () => {
       render(DatePicker, { datePickerType: "single" });
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       const input = screen.getByLabelText("Date");
       input.focus();
 
@@ -422,7 +416,7 @@ describe("DatePicker", () => {
     it("keeps focus on the day after adding it in multiple mode", async () => {
       render(DatePicker, { datePickerType: "multiple" });
       const input = screen.getByLabelText("Date");
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       input.focus();
       await fireEvent.keyDown(input, { key: "ArrowDown" });
 
@@ -452,7 +446,7 @@ describe("DatePicker", () => {
     it("keeps focus on the start day in range mode", async () => {
       render(DatePickerRange);
       const input = screen.getByLabelText("Start date");
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       input.focus();
       await fireEvent.keyDown(input, { key: "ArrowDown" });
 
@@ -466,7 +460,7 @@ describe("DatePicker", () => {
     it("still returns focus to the input when a single pick closes", async () => {
       render(DatePicker, { datePickerType: "single" });
       const input = screen.getByLabelText("Date");
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       input.focus();
       await fireEvent.keyDown(input, { key: "ArrowDown" });
 
@@ -500,7 +494,7 @@ describe("DatePicker", () => {
         onchange,
         onclear,
       });
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       const input = screen.getByLabelText("Date");
 
       await user.click(queryClear() as HTMLElement);
@@ -543,7 +537,7 @@ describe("DatePicker", () => {
         valueTo: "01/20/2024",
         onchange,
       });
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       const buttons = screen.getAllByRole("button", { name: "Clear date" });
       expect(buttons).toHaveLength(1);
       const endWrapper = screen
@@ -615,7 +609,7 @@ describe("DatePicker", () => {
       const onchange = vi.fn();
       render(DatePicker, { datePickerType: "single", onchange });
       const input = screen.getByLabelText("Date");
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       onchange.mockClear();
 
       input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -665,7 +659,7 @@ describe("DatePicker", () => {
 
       await rerender({ datePickerType: "month", dateFormat: "F Y" });
       await vi.waitFor(() => {
-        const calendars = screen.getAllByLabelText("calendar-container");
+        const calendars = screen.getAllByLabelText(/^Choose a /);
         expect(calendars).toHaveLength(1);
         expect(
           calendars[0].querySelector(".bx--date-picker__grid"),
@@ -676,19 +670,15 @@ describe("DatePicker", () => {
 
     it("drops the calendar for simple and creates one when leaving it", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
 
       await rerender({ datePickerType: "simple" });
       await vi.waitFor(() =>
-        expect(
-          screen.queryByLabelText("calendar-container"),
-        ).not.toBeInTheDocument(),
+        expect(screen.queryByLabelText(/^Choose a /)).not.toBeInTheDocument(),
       );
 
       await rerender({ datePickerType: "single" });
-      expect(
-        await screen.findByLabelText("calendar-container"),
-      ).toBeInTheDocument();
+      expect(await screen.findByLabelText(/^Choose a /)).toBeInTheDocument();
     });
 
     it("keeps the selected date across a type change with the same format", async () => {
@@ -696,7 +686,7 @@ describe("DatePicker", () => {
         datePickerType: "single",
         value: "03/15/2024",
       });
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
 
       await rerender({ datePickerType: "multiple", value: "03/15/2024" });
       const input = screen.getByLabelText("Date");
@@ -840,9 +830,7 @@ describe("DatePicker", () => {
     const inputEnd = screen.getByLabelText("End date");
 
     await user.click(inputStart);
-    expect(
-      await screen.findByLabelText("calendar-container"),
-    ).toBeInTheDocument();
+    expect(await screen.findByLabelText(/^Choose a /)).toBeInTheDocument();
     expect(inputStart).toHaveValue("01/15/2024");
     expect(inputEnd).toHaveValue("01/20/2024");
 
@@ -866,9 +854,7 @@ describe("DatePicker", () => {
     const inputEnd = screen.getByLabelText("End date");
 
     await user.click(inputStart);
-    expect(
-      await screen.findByLabelText("calendar-container"),
-    ).toBeInTheDocument();
+    expect(await screen.findByLabelText(/^Choose a /)).toBeInTheDocument();
     expect(inputStart).toHaveValue("01/01/2024");
     expect(inputEnd).toHaveValue("12/31/2024");
 
@@ -978,7 +964,7 @@ describe("DatePicker", () => {
           value: "03/15/2024",
           onchange,
         });
-        await screen.findByLabelText("calendar-container");
+        await screen.findByLabelText(/^Choose a /);
 
         await rerender({ minDate: "04/01/2024" });
         await tick();
@@ -994,7 +980,7 @@ describe("DatePicker", () => {
           datePickerType: "multiple",
           value: "03/10/2024, 03/20/2024",
         });
-        await screen.findByLabelText("calendar-container");
+        await screen.findByLabelText(/^Choose a /);
 
         await rerender({ maxDate: "03/15/2024" });
         await tick();
@@ -1013,7 +999,7 @@ describe("DatePicker", () => {
           valueTo: "03/20/2024",
           onchange,
         });
-        await screen.findByLabelText("calendar-container");
+        await screen.findByLabelText(/^Choose a /);
 
         await rerender({ minDate: "04/01/2024" });
         await tick();
@@ -1033,7 +1019,7 @@ describe("DatePicker", () => {
           valueFrom: "03/10/2024",
           valueTo: "03/20/2024",
         });
-        await screen.findByLabelText("calendar-container");
+        await screen.findByLabelText(/^Choose a /);
 
         await rerender({ maxDate: "03/15/2024" });
         await tick();
@@ -1278,6 +1264,24 @@ describe("DatePicker", () => {
     });
   });
 
+  it("exposes the calendar as a labelled dialog with a grid of weeks", async () => {
+    render(DatePicker, { datePickerType: "single", value: "03/15/2024" });
+
+    await openCalendar();
+
+    const dialog = screen.getByRole("dialog", { name: "Choose a date" });
+    const grid = within(dialog).getByRole("grid", { name: "March 2024" });
+    for (const row of within(grid).getAllByRole("row")) {
+      expect(within(row).getAllByRole("gridcell")).toHaveLength(7);
+    }
+    expect(
+      within(grid).getByRole("gridcell", { selected: true }),
+    ).toHaveAccessibleName("Friday, March 15, 2024");
+    expect(
+      within(dialog).getByRole("button", { name: "Next month" }),
+    ).toBeInTheDocument();
+  });
+
   describe("calendar option props", () => {
     it("shows two months with months={2}", async () => {
       render(DatePicker, { datePickerType: "single", months: 2 });
@@ -1399,12 +1403,12 @@ describe("DatePicker", () => {
         displayFormat: "F j, Y",
       });
 
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       await tick();
       const hidden =
         container.querySelector<HTMLInputElement>("input[type=hidden]");
       assert(hidden);
-      expect(screen.getAllByLabelText("calendar-container")).toHaveLength(1);
+      expect(screen.getAllByLabelText(/^Choose a /)).toHaveLength(1);
       expect(getCalendarInstance(hidden).calendarContainer).toBe(calendar);
     });
 
@@ -1438,7 +1442,7 @@ describe("DatePicker", () => {
       }
       const { rerender } = render(DatePicker, props());
       const input = screen.getByLabelText("Date");
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
@@ -1462,7 +1466,7 @@ describe("DatePicker", () => {
         props: { ...props, anchor: first },
       });
       const input = screen.getByLabelText("Date");
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
@@ -1481,7 +1485,7 @@ describe("DatePicker", () => {
       }
       const { rerender } = render(DatePicker, props());
       const input = screen.getByLabelText("Date");
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
@@ -1516,7 +1520,7 @@ describe("DatePicker", () => {
       render(DatePickerIgnoredFocus);
 
       await user.click(await screen.findByLabelText("Date"));
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       await user.click(screen.getByRole("button", { name: "Preset" }));
@@ -1563,7 +1567,7 @@ describe("DatePicker", () => {
 
       let input = screen.getByLabelText("Date");
       await user.click(input);
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       expect(getCalendarInstance(input).config.animate).toBe(false);
 
       unmount();
@@ -1571,7 +1575,7 @@ describe("DatePicker", () => {
       render(DatePicker, { datePickerType: "single", animate: true });
       input = screen.getByLabelText("Date");
       await user.click(input);
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
       expect(getCalendarInstance(input).config.animate).toBe(true);
     });
 
@@ -1811,7 +1815,7 @@ describe("DatePicker", () => {
       instance.open();
       await tick();
       expect(instance.isOpen).toBe(true);
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       expect(calendar).toHaveClass("bx--date-picker__calendar--open");
 
       instance.close();
@@ -2359,7 +2363,7 @@ describe("DatePicker", () => {
         valueFrom: "01/01/2024",
         valueTo: "03/01/2024",
       });
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
 
       expect(screen.getByLabelText("Start date")).toHaveValue("01/01/2024");
       expect(screen.getByLabelText("End date")).toHaveValue("03/01/2024");
@@ -2437,7 +2441,7 @@ describe("DatePicker", () => {
         displayFormat: "\\W\\e\\e\\k W, Y",
         value: "2026-09-16",
       });
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       await user.click(screen.getByLabelText("Date"));
       const day = calendar.querySelector<HTMLElement>(
         '[aria-label="Wednesday, September 16, 2026"]',
@@ -2451,7 +2455,7 @@ describe("DatePicker", () => {
 
     it("keeps a value set from outside as given", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "week" });
-      await screen.findByLabelText("calendar-container");
+      await screen.findByLabelText(/^Choose a /);
 
       await rerender({ value: "01/18/2024" });
 
@@ -2545,7 +2549,7 @@ describe("DatePicker", () => {
 
       instance.open();
       await tick();
-      const calendar = await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText(/^Choose a /);
       const yearsBefore = Array.from(
         calendar.querySelectorAll(".bx--date-picker__grid-cell"),
       ).map((el) => el.textContent);

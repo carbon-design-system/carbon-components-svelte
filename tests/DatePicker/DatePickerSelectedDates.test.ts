@@ -11,7 +11,7 @@ const getDates = () => screen.getByTestId("dates").textContent?.trim();
 
 async function clickDay(day: number) {
   const now = new Date();
-  const calendar = await screen.findByLabelText("calendar-container");
+  const calendar = await screen.findByLabelText(/^Choose a /);
   await user.click(dayByLabel(calendar, day));
   return new Date(now.getFullYear(), now.getMonth(), day);
 }
@@ -30,7 +30,7 @@ describe("DatePicker bind:selectedDates", () => {
     const { rerender } = render(DatePickerSelectedDates, {
       props: { onchange },
     });
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
 
     await rerender({ selectedDates: [new Date(2024, 0, 15)] });
     await tick();
@@ -42,7 +42,7 @@ describe("DatePicker bind:selectedDates", () => {
 
   it("follows value", async () => {
     const { rerender } = render(DatePickerSelectedDates);
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
 
     await rerender({ value: "02/01/2024" });
 
@@ -55,7 +55,7 @@ describe("DatePicker bind:selectedDates", () => {
     const { rerender } = render(DatePickerSelectedDates, {
       props: { datePickerType: "range" },
     });
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
 
     await rerender({
       selectedDates: [new Date(2024, 0, 10), new Date(2024, 0, 20)],
@@ -131,7 +131,7 @@ describe("DatePicker bind:selectedDates", () => {
     const { rerender } = render(DatePickerSelectedDates, {
       props: { value: "01/15/2024" },
     });
-    const calendar = await screen.findByLabelText("calendar-container");
+    const calendar = await screen.findByLabelText(/^Choose a /);
     const input = screen.getByLabelText("Date");
     await waitFor(() =>
       expect(getDates()).toBe(new Date(2024, 0, 15).toDateString()),

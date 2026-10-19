@@ -34,7 +34,7 @@ describe("DatePicker redundant calendar updates", () => {
 
   it("does not re-apply the options the calendar was created with", async () => {
     render(DatePicker, { datePickerType: "single" });
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
     await tick();
 
     expect(setCalls).toEqual([]);
@@ -42,7 +42,7 @@ describe("DatePicker redundant calendar updates", () => {
 
   it("still applies clickOpens and allowInput when readonly changes", async () => {
     const { rerender } = render(DatePicker, { datePickerType: "single" });
-    await screen.findByLabelText("calendar-container");
+    await screen.findByLabelText(/^Choose a /);
     await tick();
 
     await rerender({ datePickerType: "single", readonly: true });

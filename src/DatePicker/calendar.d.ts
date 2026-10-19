@@ -91,6 +91,10 @@ export interface CalendarOptions
     | ((instance: CalendarInstance, customElement?: HTMLElement) => void);
   positionElement?: HTMLElement;
   prevArrow?: string;
+  /** Label of the previous month (year, decade) button. */
+  prevLabel?: string;
+  /** Label of the next month (year, decade) button. */
+  nextLabel?: string;
   secondInput?: HTMLInputElement;
   shorthandCurrentMonth?: boolean;
   showMonths?: number;
