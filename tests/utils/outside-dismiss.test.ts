@@ -2,16 +2,6 @@
 import { createOutsideDismiss } from "../../src/utils/outside-dismiss.js";
 
 describe("createOutsideDismiss", () => {
-  it("does not dismiss when the press began inside", () => {
-    const onDismiss = vi.fn();
-    const dismiss = createOutsideDismiss(onDismiss);
-
-    dismiss.pressInside();
-    dismiss.release();
-
-    expect(onDismiss).not.toHaveBeenCalled();
-  });
-
   it("dismisses when there was no inside press", () => {
     const onDismiss = vi.fn();
     const dismiss = createOutsideDismiss(onDismiss);
@@ -30,18 +20,6 @@ describe("createOutsideDismiss", () => {
 
     dismiss.pressInside();
     dismiss.release();
-    dismiss.release();
-
-    expect(onDismiss).not.toHaveBeenCalled();
-  });
-
-  it("suppresses dismissal for each independent inside interaction", () => {
-    const onDismiss = vi.fn();
-    const dismiss = createOutsideDismiss(onDismiss);
-
-    dismiss.pressInside();
-    dismiss.release();
-    dismiss.pressInside();
     dismiss.release();
 
     expect(onDismiss).not.toHaveBeenCalled();

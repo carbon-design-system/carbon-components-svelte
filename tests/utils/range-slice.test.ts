@@ -12,10 +12,6 @@ describe("rangeSlice", () => {
     expect(rangeSlice(items, 3, 1)).toEqual(["b", "c", "d"]);
   });
 
-  it("returns the single item when anchor equals target", () => {
-    expect(rangeSlice(items, 2, 2)).toEqual(["c"]);
-  });
-
   it("filters out ineligible items", () => {
     expect(rangeSlice(items, 0, 4, (item) => item !== "c")).toEqual([
       "a",

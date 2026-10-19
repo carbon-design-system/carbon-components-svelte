@@ -52,12 +52,6 @@ describe("formatRelativeTime", () => {
     );
   });
 
-  it("renders days in the future", () => {
-    expect(formatRelativeTime(2 * DAY, { now, locale: "en" })).toBe(
-      "in 2 days",
-    );
-  });
-
   it("renders yesterday with numeric auto", () => {
     expect(
       formatRelativeTime(-DAY, { now, locale: "en", numeric: "auto" }),

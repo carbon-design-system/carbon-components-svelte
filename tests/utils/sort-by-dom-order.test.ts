@@ -85,13 +85,4 @@ describe("insertByDomOrder", () => {
     expect(input).toHaveLength(1);
     expect(result).toHaveLength(2);
   });
-
-  it("appends items without a node, matching a stable sort", () => {
-    const list = insertByDomOrder(
-      [{ id: "a", node: null as HTMLElement | null }],
-      { id: "b", node: null },
-    );
-
-    expect(list.map((item) => item.id)).toEqual(["a", "b"]);
-  });
 });

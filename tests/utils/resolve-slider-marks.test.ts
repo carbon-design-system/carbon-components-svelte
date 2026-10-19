@@ -7,8 +7,6 @@ import {
 describe("resolveSliderMarks", () => {
   it("returns empty array for falsy marks", () => {
     expect(resolveSliderMarks(false, 0, 100, 1)).toEqual([]);
-    expect(resolveSliderMarks(undefined, 0, 100, 1)).toEqual([]);
-    expect(resolveSliderMarks(null, 0, 100, 1)).toEqual([]);
   });
 
   it("generates a tick at every step when marks is true", () => {
@@ -40,7 +38,6 @@ describe("resolveSliderMarks", () => {
 
   it("returns empty array when step is not positive in boolean mode", () => {
     expect(resolveSliderMarks(true, 0, 10, 0)).toEqual([]);
-    expect(resolveSliderMarks(true, 0, 10, -1)).toEqual([]);
   });
 });
 

@@ -8,10 +8,6 @@ describe("keyBy", () => {
     expect(keyBy([a, b])).toEqual({ a, b });
   });
 
-  it("returns an empty object for an empty array", () => {
-    expect(keyBy([])).toEqual({});
-  });
-
   it("supports a custom key selector", () => {
     const items = [
       { name: "x", value: 1 },

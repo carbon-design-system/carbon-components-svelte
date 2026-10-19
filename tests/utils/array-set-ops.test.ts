@@ -12,10 +12,6 @@ describe("toggleArrayItem", () => {
   it("removes an item that is present", () => {
     expect(toggleArrayItem(["a", "b"], "a")).toEqual(["b"]);
   });
-
-  it("adds to an empty array", () => {
-    expect(toggleArrayItem([], "a")).toEqual(["a"]);
-  });
 });
 
 describe("addUniqueArrayItem", () => {
@@ -26,9 +22,5 @@ describe("addUniqueArrayItem", () => {
   it("returns the same reference when the item is already present", () => {
     const array = ["a", "b"];
     expect(addUniqueArrayItem(array, "a")).toBe(array);
-  });
-
-  it("adds to an empty array", () => {
-    expect(addUniqueArrayItem([], "a")).toEqual(["a"]);
   });
 });

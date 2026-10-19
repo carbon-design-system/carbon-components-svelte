@@ -29,7 +29,7 @@ describe("virtualWindow", () => {
     expect(layer.hasAttribute(PINNED_WINDOW_ATTRIBUTE)).toBe(false);
   });
 
-  it("makes a pinned window a zero-height sticky layer", () => {
+  it("makes a pinned window a zero-height sticky layer, translated back by the scroll position", () => {
     const { layer } = buildLayer();
 
     virtualWindow(layer, { offsetY: 400, scrollTop: 520, pinned: true });
@@ -38,13 +38,6 @@ describe("virtualWindow", () => {
     expect(layer.style.top).toBe("0px");
     expect(layer.style.height).toBe("0px");
     expect(layer.getAttribute(PINNED_WINDOW_ATTRIBUTE)).toBe("400");
-  });
-
-  it("translates a pinned window back by the scroll position", () => {
-    const { layer } = buildLayer();
-
-    virtualWindow(layer, { offsetY: 400, scrollTop: 520, pinned: true });
-
     // Sticky moves the layer down 520px; the rows land at their 400px offset.
     expect(layer.style.transform).toBe("translateY(-120px)");
   });

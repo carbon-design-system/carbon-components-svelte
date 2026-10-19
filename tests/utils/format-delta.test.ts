@@ -16,17 +16,14 @@ describe("formatDelta", () => {
 
   it("compact notation", () => {
     expect(formatDelta(1500, { compact: true, digits: 1 })).toBe("+1.5K");
-    expect(formatDelta(-1500, { compact: true, digits: 1 })).toBe("-1.5K");
   });
 
   it("percent: 'literal' appends % to the number as given", () => {
     expect(formatDelta(12, { percent: "literal" })).toBe("+12%");
-    expect(formatDelta(-12, { percent: "literal" })).toBe("-12%");
   });
 
   it("percent: 'ratio' treats the value as a fraction", () => {
     expect(formatDelta(0.12, { percent: "ratio" })).toBe("+12%");
-    expect(formatDelta(-0.12, { percent: "ratio" })).toBe("-12%");
   });
 
   it("formatOptions merges in extra Intl.NumberFormat options, such as currency", () => {

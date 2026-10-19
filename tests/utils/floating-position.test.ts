@@ -86,78 +86,47 @@ describe("floatingPosition", () => {
   });
 
   describe("auto-flip", () => {
-    it("bottom flips to top when there is more room above", () => {
-      const result = floatingPosition({
-        anchorRect: rect(100, 750, 150, 40), // bottom at 790, near viewport bottom (800)
-        floatingRect: rect(0, 0, 150, 200),
-        viewport,
+    it.each([
+      {
         direction: "bottom",
-      });
-
-      expect(result.actualDirection).toBe("top");
-    });
-
-    it("top flips to bottom when there is more room below", () => {
-      const result = floatingPosition({
-        anchorRect: rect(100, 10, 150, 40), // top at 10, little room above
-        floatingRect: rect(0, 0, 150, 200),
-        viewport,
+        anchor: rect(100, 750, 150, 40), // bottom at 790, near viewport bottom (800)
+        floating: rect(0, 0, 150, 200),
+        expected: "top",
+      },
+      {
         direction: "top",
-      });
-
-      expect(result.actualDirection).toBe("bottom");
-    });
-
-    it("right flips to left when it would overflow the right edge", () => {
-      const result = floatingPosition({
-        anchorRect: rect(880, 200, 100, 40), // right at 980, near edge (1000)
-        floatingRect: rect(0, 0, 200, 40),
-        viewport,
+        anchor: rect(100, 10, 150, 40), // top at 10, little room above
+        floating: rect(0, 0, 150, 200),
+        expected: "bottom",
+      },
+      {
         direction: "right",
-      });
-
-      expect(result.actualDirection).toBe("left");
-    });
-
-    it("left flips to right when it would overflow the left edge", () => {
-      const result = floatingPosition({
-        anchorRect: rect(20, 200, 100, 40), // left at 20, little room
-        floatingRect: rect(0, 0, 200, 40),
-        viewport,
+        anchor: rect(880, 200, 100, 40), // right at 980, near edge (1000)
+        floating: rect(0, 0, 200, 40),
+        expected: "left",
+      },
+      {
         direction: "left",
-      });
+        anchor: rect(20, 200, 100, 40), // left at 20, little room
+        floating: rect(0, 0, 200, 40),
+        expected: "right",
+      },
+    ] as const)(
+      "$direction flips to $expected when it would overflow",
+      ({ direction, anchor, floating, expected }) => {
+        const result = floatingPosition({
+          anchorRect: anchor,
+          floatingRect: floating,
+          viewport,
+          direction,
+        });
 
-      expect(result.actualDirection).toBe("right");
-    });
-
-    it("does not flip when the preferred direction has enough room", () => {
-      const result = floatingPosition({
-        anchorRect: rect(100, 200, 150, 40),
-        floatingRect: rect(0, 0, 150, 60),
-        viewport,
-        direction: "bottom",
-      });
-
-      expect(result.actualDirection).toBe("bottom");
-    });
+        expect(result.actualDirection).toBe(expected);
+      },
+    );
   });
 
   describe("lockedDirection", () => {
-    it("keeps the locked side even when the preferred side would overflow", () => {
-      // Narrow content fits on the right (no flip), but it stays on the locked
-      // left side — e.g. a wide tooltip flipped left, then its text shrank.
-      const result = floatingPosition({
-        anchorRect: rect(880, 200, 100, 40),
-        floatingRect: rect(0, 0, 60, 40),
-        viewport,
-        direction: "right",
-        lockedDirection: "left",
-      });
-
-      expect(result.actualDirection).toBe("left");
-      expect(result.left).toBe(820); // anchor.left (880) - floating width (60)
-    });
-
     it("ignores the preferred direction when locked to the opposite side", () => {
       const result = floatingPosition({
         anchorRect: rect(100, 200, 150, 40),

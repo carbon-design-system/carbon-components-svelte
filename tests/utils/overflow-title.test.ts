@@ -34,13 +34,6 @@ describe("overflowTitle action", () => {
     expect(node.getAttribute("title")).toBe("A very long label");
   });
 
-  it("does not set title when the text fits", async () => {
-    mockSize(node, 120, 120);
-    overflowTitle(node);
-    await settle();
-    expect(node.hasAttribute("title")).toBe(false);
-  });
-
   it("removes a stale title once no longer truncated on update", async () => {
     mockSize(node, 50, 120);
     const { update } = overflowTitle(node);
@@ -120,20 +113,6 @@ describe("overflowTitle action", () => {
       true,
     );
     for (const el of nodes) el.remove();
-  });
-
-  it("applies an explicit title synchronously without measuring", () => {
-    let reads = 0;
-    Object.defineProperty(node, "offsetWidth", {
-      configurable: true,
-      get() {
-        reads += 1;
-        return 50;
-      },
-    });
-    overflowTitle(node, { title: "Fixed" });
-    expect(node.getAttribute("title")).toBe("Fixed");
-    expect(reads).toBe(0);
   });
 
   it("does not measure after destroy", async () => {

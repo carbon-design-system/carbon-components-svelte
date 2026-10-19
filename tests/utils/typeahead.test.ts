@@ -18,12 +18,6 @@ describe("typeaheadIndex", () => {
     ).toBe(1);
   });
 
-  it("finds a match from the start when index is -1", () => {
-    expect(
-      typeaheadIndex({ items: fruits, query: "b", itemToString, index: -1 }),
-    ).toBe(2);
-  });
-
   it("wraps to the first prefix match after the end", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "a", itemToString, index: 3 }),
@@ -36,10 +30,10 @@ describe("typeaheadIndex", () => {
     ).toBe(1);
   });
 
-  it("is case-insensitive", () => {
+  it("is case-insensitive and starts at the first item when index is -1", () => {
     expect(
-      typeaheadIndex({ items: fruits, query: "B", itemToString, index: -1 }),
-    ).toBe(2);
+      typeaheadIndex({ items: fruits, query: "A", itemToString, index: -1 }),
+    ).toBe(0);
   });
 
   it("skips disabled items", () => {

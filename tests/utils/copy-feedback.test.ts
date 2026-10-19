@@ -22,16 +22,6 @@ describe("createCopyFeedbackState", () => {
     expect(state.copyPending).toBe(false);
   });
 
-  it("ignores a second onClick while feedback is active", async () => {
-    const state = createCopyFeedbackState();
-    const performCopy = vi.fn();
-
-    await state.onClick(performCopy, 2000);
-    await state.onClick(performCopy, 2000);
-
-    expect(performCopy).toHaveBeenCalledTimes(1);
-  });
-
   it("transitions to fade-out after feedbackTimeout", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();

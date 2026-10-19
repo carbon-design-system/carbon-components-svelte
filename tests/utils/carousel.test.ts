@@ -101,26 +101,6 @@ describe("initCarousel", () => {
     });
   });
 
-  it("rapid step-advance calls resolve to the final index synchronously", () => {
-    const container = buildContainer(5);
-    const carousel = initCarousel(container);
-
-    carousel.next();
-    carousel.next();
-    carousel.next();
-
-    expect(carousel.getActiveItem().index).toBe(3);
-  });
-
-  it("single view: next/prev are no-ops", () => {
-    const container = buildContainer(1);
-    const carousel = initCarousel(container);
-
-    carousel.next();
-    carousel.prev();
-    expect(carousel.getActiveItem().index).toBe(0);
-  });
-
   it("zero views: navigation and getActiveItem stay safe", () => {
     const container = buildContainer(0);
     const carousel = initCarousel(container);

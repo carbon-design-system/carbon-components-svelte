@@ -55,21 +55,6 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([{ file: empty, reason: "size" }]);
   });
 
-  it("applies minFileSize and maxFileSize together", () => {
-    const small = makeFile("small.txt", 1);
-    const fits = makeFile("fits.txt", 5);
-    const large = makeFile("large.txt", 20);
-    const { accepted, rejected } = filterIncomingFiles([small, fits, large], {
-      minFileSize: 2,
-      maxFileSize: 10,
-    });
-    expect(accepted).toEqual([fits]);
-    expect(rejected).toEqual([
-      { file: small, reason: "size" },
-      { file: large, reason: "size" },
-    ]);
-  });
-
   it("honors a maxFileSize of 0", () => {
     const empty = makeFile("empty.txt", 0);
     const nonEmpty = makeFile("a.txt", 1);

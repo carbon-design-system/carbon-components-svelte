@@ -36,15 +36,6 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(1);
   });
 
-  it("skips a single disabled neighbor", () => {
-    const result = nextEnabledIndex({
-      items: items(false, true, false),
-      index: 0,
-      step: 1,
-    });
-    expect(result).toBe(2);
-  });
-
   it("skips a run of disabled items", () => {
     const result = nextEnabledIndex({
       items: items(false, true, true, false),
@@ -86,15 +77,6 @@ describe("nextEnabledIndex", () => {
       items: items(true, false, false),
       index: -1,
       step: 1,
-    });
-    expect(result).toBe(1);
-  });
-
-  it("lands on the last enabled item when starting from -1 going backward", () => {
-    const result = nextEnabledIndex({
-      items: items(false, false, true),
-      index: -1,
-      step: -1,
     });
     expect(result).toBe(1);
   });

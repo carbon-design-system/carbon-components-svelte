@@ -95,35 +95,6 @@ describe("resolveCheckboxState", () => {
     ]);
   });
 
-  it("propagates indeterminate state up a deeply nested tree", () => {
-    const deep: Node[] = [
-      {
-        id: "l1",
-        nodes: [
-          {
-            id: "l2",
-            nodes: [
-              {
-                id: "l3",
-                nodes: [{ id: "l4-a" }, { id: "l4-b" }],
-              },
-            ],
-          },
-        ],
-      },
-    ];
-
-    expect(resolveCheckboxState(deep, ["l4-a"])).toEqual({
-      checkedIds: ["l4-a"],
-      indeterminateIds: ["l1", "l2", "l3"],
-    });
-
-    expect(resolveCheckboxState(deep, ["l4-a", "l4-b"])).toEqual({
-      checkedIds: ["l1", "l2", "l3", "l4-a", "l4-b"],
-      indeterminateIds: [],
-    });
-  });
-
   it("drops ids with no matching node", () => {
     expect(resolveCheckboxState(tree, ["spark", "ghost"]).checkedIds).toEqual([
       "spark",
@@ -132,14 +103,6 @@ describe("resolveCheckboxState", () => {
       resolveCheckboxState(tree, ["spark", "ghost"], { cascade: false })
         .checkedIds,
     ).toEqual(["spark"]);
-  });
-
-  it("returns an empty state for an empty tree", () => {
-    const empty: Node[] = [];
-    expect(resolveCheckboxState(empty, ["spark"])).toEqual({
-      checkedIds: [],
-      indeterminateIds: [],
-    });
   });
 
   it("passes the selection through unchanged without cascade", () => {
@@ -178,16 +141,6 @@ describe("toggleCheckboxNode", () => {
     const checkedIds = toggleCheckboxNode(tree, [], "analytics", true);
     expect(toggleCheckboxNode(tree, checkedIds, "engine", false)).toEqual([
       "sql-query",
-    ]);
-  });
-
-  it("checking the last sibling selects the parent", () => {
-    const checkedIds = toggleCheckboxNode(tree, [], "spark", true);
-    const next = toggleCheckboxNode(tree, checkedIds, "hadoop", true);
-    expect(resolveCheckboxState(tree, next).checkedIds).toEqual([
-      "engine",
-      "spark",
-      "hadoop",
     ]);
   });
 

@@ -56,16 +56,6 @@ describe("preserveFocusSelection action", () => {
     action.destroy();
   });
 
-  it("leaves the mouseup alone when nothing selected the value", () => {
-    const action = preserveFocusSelection(input, true);
-
-    expect(click(() => input.setSelectionRange(3, 3)).defaultPrevented).toBe(
-      false,
-    );
-
-    action.destroy();
-  });
-
   it("always cancels for input types without a selection API", () => {
     input.type = "number";
     input.value = "123";

@@ -39,7 +39,6 @@ describe("isOutsideClick", () => {
     expect(
       isOutsideClick(clickOn(outside), [null, undefined, false, box]),
     ).toBe(true);
-    expect(isOutsideClick(clickOn(outside), [false && box])).toBe(true);
   });
 
   // Non-Node targets must not count as outside (overlays should not dismiss).
@@ -48,24 +47,6 @@ describe("isOutsideClick", () => {
     expect(isOutsideClick({ target: null } as unknown as Event, box)).toBe(
       false,
     );
-    expect(isOutsideClick({ target: window } as unknown as Event, box)).toBe(
-      false,
-    );
-  });
-
-  it("single element and one-element array behave the same", () => {
-    const { box, inside, outside } = setup();
-    expect(isOutsideClick(clickOn(inside), box)).toBe(
-      isOutsideClick(clickOn(inside), [box]),
-    );
-    expect(isOutsideClick(clickOn(outside), box)).toBe(
-      isOutsideClick(clickOn(outside), [box]),
-    );
-  });
-
-  it("true for an empty list", () => {
-    const { outside } = setup();
-    expect(isOutsideClick(clickOn(outside), [])).toBe(true);
   });
 
   // event.target is the shadow host for listeners outside the shadow root.

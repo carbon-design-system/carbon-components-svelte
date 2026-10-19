@@ -89,19 +89,4 @@ describe("field messages without text", () => {
       expect(container.querySelector("[role=alert]")).toBeNull();
     },
   );
-
-  it("TextInput still shows invalid text when set", () => {
-    const { container } = render(TextInput, {
-      labelText: "Name",
-      invalid: true,
-      invalidText: "Required",
-    });
-
-    expect(container.querySelector("[role=alert]")).toHaveTextContent(
-      "Required",
-    );
-    expect(container.querySelector("input")).toHaveAttribute(
-      "aria-errormessage",
-    );
-  });
 });

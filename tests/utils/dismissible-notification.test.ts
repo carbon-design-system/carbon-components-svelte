@@ -126,8 +126,6 @@ describe("createDismissibleNotification", () => {
     vi.advanceTimersByTime(50);
 
     const root = document.createElement("div");
-    const enterEvent = new MouseEvent("mouseenter");
-    Object.defineProperty(enterEvent, "currentTarget", { value: root });
     notification.handleMouseenter();
 
     vi.advanceTimersByTime(1000);
