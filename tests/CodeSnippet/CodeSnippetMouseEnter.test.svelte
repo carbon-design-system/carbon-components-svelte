@@ -4,10 +4,12 @@
 
   export let type: ComponentProps<CodeSnippet>["type"];
   export let onMouseEnterCopyButton = (_event: MouseEvent) => {};
+  export let onMouseleaveCopyButton = (_event: MouseEvent) => {};
 </script>
 
 <CodeSnippet
   {type}
   code="npm install --save @carbon/icons"
   on:mouseenter:copy-button={(event) => onMouseEnterCopyButton(event.detail)}
+  on:mouseleave:copy-button={(event) => onMouseleaveCopyButton(event.detail)}
 />

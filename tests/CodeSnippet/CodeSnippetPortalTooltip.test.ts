@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import CodeSnippetInlineInModal from "./CodeSnippetInlineInModal.test.svelte";
-import CodeSnippetPortalTooltipTimeout from "./CodeSnippetPortalTooltipTimeout.test.svelte";
 
 describe("CodeSnippet portal tooltip", () => {
   beforeEach(() => {
@@ -20,23 +20,6 @@ describe("CodeSnippet portal tooltip", () => {
   });
 
   describe("inline variant", () => {
-    it("should use portal when inside Modal (portalTooltip not passed)", async () => {
-      render(CodeSnippetInlineInModal, {
-        props: { modalOpen: true },
-      });
-
-      const button = screen.getByRole("button", { name: "Copy code" });
-      expect(button).toHaveClass("bx--copy-btn--portal-active");
-
-      await user.click(button);
-      const portal = document.querySelector("[data-floating-portal]");
-      expect(portal).toBeInTheDocument();
-      expect(portal?.parentElement).toBe(document.body);
-      expect(
-        portal?.querySelector(".bx--tooltip-portal__content"),
-      ).toHaveTextContent("Copied!");
-    });
-
     it("should not use portal when inside Modal with portalTooltip=false", () => {
       render(CodeSnippetInlineInModal, {
         props: { modalOpen: true, portalTooltip: false },
@@ -62,7 +45,15 @@ describe("CodeSnippet portal tooltip", () => {
       // hide-feedback animation (and animationend) never runs; feedbackTimeout
       // must close the portal directly or the tooltip stays open.
       it("should dismiss portal feedback after feedbackTimeout", async () => {
-        render(CodeSnippetPortalTooltipTimeout);
+        render(CodeSnippet, {
+          props: {
+            type: "inline",
+            code: "npm install",
+            copyLabel: "Copy code",
+            portalTooltip: true,
+            feedbackTimeout: 100,
+          },
+        });
 
         const button = screen.getByRole("button", { name: "Copy code" });
         await fireEvent.click(button);

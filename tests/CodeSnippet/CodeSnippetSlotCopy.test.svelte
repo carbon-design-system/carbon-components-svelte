@@ -6,6 +6,7 @@
   export let copy: ((code: string) => void | Promise<void>) | undefined =
     undefined;
   export let code: string | undefined = undefined;
+  export let onCopy = () => {};
 
   // Rendered through {@html} so formatting can't insert template whitespace,
   // which Svelte 3/4 keep and Svelte 5 collapses.
@@ -16,5 +17,6 @@
   {type}
   {...copy ? { copy } : {}}
   {...code === undefined ? {} : { code }}
+  on:copy={onCopy}
   >{@html slotHtml}</CodeSnippet
 >

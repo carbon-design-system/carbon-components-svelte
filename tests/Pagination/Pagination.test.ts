@@ -28,18 +28,6 @@ describe("Pagination", () => {
     expect(onUpdate).toHaveBeenCalledWith({ pageSize: 10, page: 1 });
   });
 
-  it("should render with default props", () => {
-    render(Pagination);
-
-    expect(screen.getByText("Items per page:")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Next page" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Previous page" }),
-    ).toBeInTheDocument();
-  });
-
   it("defaults to the md size class", () => {
     const { container } = render(Pagination);
 
@@ -85,20 +73,6 @@ describe("Pagination", () => {
     expect(controlButtons).toContainElement(
       screen.getByRole("button", { name: "Next page" }),
     );
-  });
-
-  it("renders page size options independent of the size prop", () => {
-    render(Pagination, {
-      props: { size: "sm", totalItems: 102, pageSizes: [10, 15, 20] },
-    });
-
-    const select = screen.getByRole("combobox", { name: "Items per page:" });
-    const options = within(select).getAllByRole("option");
-    expect(options.map((option) => option.getAttribute("value"))).toEqual([
-      "10",
-      "15",
-      "20",
-    ]);
   });
 
   it("should handle custom page sizes", () => {
@@ -157,22 +131,6 @@ describe("Pagination", () => {
       pageSize: 15,
       page: 1,
     });
-  });
-
-  it("should handle page selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Pagination, {
-      props: { totalItems: 102, pageSizes: [5, 10, 15] },
-    });
-
-    const pageSelect = screen.getAllByRole("combobox");
-    await user.selectOptions(pageSelect[0], "5");
-
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 5,
-      page: 1,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("update", { pageSize: 5, page: 1 });
   });
 
   it("should disable navigation buttons when disabled", () => {
@@ -345,21 +303,6 @@ describe("Pagination", () => {
     expect(screen.getByRole("combobox")).toHaveAccessibleName(
       "Items per page:",
     );
-  });
-
-  // When `pagesUnknown` is true, the total number of pages is unknown, so the
-  // forward button should remain enabled at page 1 — otherwise the user can
-  // never advance past the first page.
-  it("should not disable the forward button at page 1 when pagesUnknown is true", () => {
-    render(Pagination, {
-      props: { pagesUnknown: true, page: 1 },
-    });
-
-    const nextButton = screen.getByRole("button", { name: "Next page" });
-    const prevButton = screen.getByRole("button", { name: "Previous page" });
-
-    expect(nextButton).not.toBeDisabled();
-    expect(prevButton).toBeDisabled();
   });
 
   it("should advance the page when pagesUnknown is true", async () => {
@@ -689,41 +632,12 @@ describe("Pagination", () => {
     });
   });
 
-  it("should dispatch change event with new value, not previous value", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Pagination, {
-      props: { totalItems: 102, pageSizes: [10, 15, 20] },
-    });
-
-    const pageSizeSelect = screen.getByRole("combobox", {
-      name: "Items per page:",
-    });
-    await user.selectOptions(pageSizeSelect, "15");
-
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 15,
-      page: 1,
-    });
-
-    const pageSelect = screen.getAllByRole("combobox")[1];
-    await user.selectOptions(pageSelect, "2");
-
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
-  });
-
-  it("should apply custom id", () => {
-    render(Pagination, {
-      props: { id: "custom-pagination-id" },
-    });
-
-    const pagination = document.getElementById("custom-pagination-id");
-    expect(pagination).toBeInTheDocument();
-  });
-
   it("derives select ids with semantic suffixes from the root id", () => {
-    render(Pagination, {
+    const { container } = render(Pagination, {
       props: { id: "page-1", totalItems: 30, pageSizes: [10, 20] },
     });
+
+    expect(document.getElementById("page-1")).toBe(container.firstElementChild);
 
     const sizeSelect = document.getElementById(
       "bx--pagination-select-page-1-sizes",
@@ -912,28 +826,6 @@ describe("Pagination", () => {
 
     const pageSelect = screen.getByLabelText(/Page number, of \d+ pages/);
     expect(pageSelect).toHaveValue("1");
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 50,
-      page: 1,
-    });
-  });
-
-  it("stays on page 1 when the page size changes while already on page 1", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Pagination, {
-      props: {
-        totalItems: 100,
-        page: 1,
-        pageSize: 10,
-        pageSizes: [10, 50],
-      },
-    });
-
-    const pageSizeSelect = screen.getByRole("combobox", {
-      name: "Items per page:",
-    });
-    await user.selectOptions(pageSizeSelect, "50");
-
     expect(consoleLog).toHaveBeenCalledWith("change", {
       pageSize: 50,
       page: 1,

@@ -7,7 +7,6 @@
 
   export let selectedIndex: ComponentProps<ContentSwitcher>["selectedIndex"] = 0;
   export let customClass = "";
-  export let switchId: ComponentProps<Switch>["id"] = undefined;
   export let switchRef: ComponentProps<Switch>["ref"] = null;
   export let ref: ComponentProps<ContentSwitcher>["ref"] = null;
 </script>
@@ -33,6 +32,6 @@
   }}
 >
   <Switch text="Option 1" />
-  <Switch text="Option 2" id={switchId} bind:ref={switchRef} />
+  <Switch text="Option 2" bind:ref={switchRef} />
   <Switch text="Option 3" />
 </ContentSwitcher>

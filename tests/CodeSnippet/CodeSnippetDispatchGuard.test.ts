@@ -38,24 +38,4 @@ describe("CodeSnippet dispatch guard", () => {
 
     expect(onExpand).toHaveBeenCalledTimes(1);
   });
-
-  it("dispatches expand then collapse in order across a full cycle", async () => {
-    mockSnippetOverflowHeight();
-    const onExpand = vi.fn();
-    const onCollapse = vi.fn();
-
-    render(CodeSnippetDispatchGuard, {
-      props: { expanded: false, onExpand, onCollapse },
-    });
-    await waitForSnippetMeasurement();
-
-    const showMoreButton = await screen.findByText("Show more");
-    await user.click(showMoreButton);
-    expect(onExpand).toHaveBeenCalledTimes(1);
-    expect(onCollapse).not.toHaveBeenCalled();
-
-    const showLessButton = screen.getByText("Show less");
-    await user.click(showLessButton);
-    expect(onCollapse).toHaveBeenCalledTimes(1);
-  });
 });

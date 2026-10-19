@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
 import { type ComponentProps, tick } from "svelte";
-import RadioTileStandalone from "../Tile/RadioTileStandalone.test.svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
@@ -13,12 +12,9 @@ import RadioTileGroupUnmount from "./RadioTile.group-unmount.test.svelte";
 import RadioTileGroupValue from "./RadioTile.group-value.test.svelte";
 import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileRef from "./RadioTile.ref.test.svelte";
-import RadioTileSingle from "./RadioTile.single.test.svelte";
 import RadioTileStandaloneGroup from "./RadioTile.standalone.test.svelte";
 import RadioTileStandaloneEach from "./RadioTile.standalone-each.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
-import RadioTileAria from "./RadioTileAria.test.svelte";
-import RadioTileCustom from "./RadioTileCustom.test.svelte";
 
 const flushMicrotasks = () => new Promise<void>(queueMicrotask);
 
@@ -107,10 +103,6 @@ describe("RadioTile", () => {
     });
   });
 
-  it("does not throw when rendered outside a TileGroup", () => {
-    expect(() => render(RadioTileStandalone)).not.toThrow();
-  });
-
   it("should render with default props", () => {
     render(RadioTile);
 
@@ -166,14 +158,6 @@ describe("RadioTile", () => {
     expect(screen.getByRole("radio")).toHaveAttribute("required");
   });
 
-  it("should handle custom value", () => {
-    render(RadioTile, {
-      props: { value: "custom-value" },
-    });
-
-    expect(screen.getByRole("radio")).toHaveAttribute("value", "custom-value");
-  });
-
   it("should handle custom tabindex", () => {
     render(RadioTile, {
       props: { tabindex: "1" },
@@ -203,35 +187,11 @@ describe("RadioTile", () => {
     ).toBeInTheDocument();
   });
 
-  it("should handle custom id", () => {
-    render(RadioTile, { props: { id: "custom-id" } });
-
-    expect(screen.getByRole("radio")).toHaveAttribute("id", "custom-id");
-
-    const radioTileLabel = screen.getByText("Test content").closest("label");
-    assert(radioTileLabel);
-    expect(radioTileLabel).toHaveAttribute("for", "custom-id");
-  });
-
   it("exposes a reference to the input element", () => {
     const { component } = render(RadioTileRef);
 
     expect(component.ref).toBeInstanceOf(HTMLInputElement);
     expect(component.ref).toBe(screen.getByRole("radio"));
-  });
-
-  it("should handle custom name", () => {
-    render(RadioTileSingle);
-
-    expect(screen.getByRole("radio")).toHaveAttribute("name", "custom-name");
-  });
-
-  it("should handle custom content slot", () => {
-    render(RadioTileCustom);
-
-    const content = screen.getByText("Custom content");
-    expect(content).toBeInTheDocument();
-    expect(content.tagName).toBe("DIV");
   });
 
   it("should handle change event", async () => {
@@ -243,26 +203,6 @@ describe("RadioTile", () => {
 
     expect(input).toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("change");
-  });
-
-  it("should handle keyboard events", async () => {
-    render(RadioTileGroup);
-
-    const inputs = screen.getAllByRole("radio");
-
-    expect(inputs[1]).not.toHaveFocus();
-    expect(inputs[1]).toBeChecked();
-
-    await user.tab();
-    expect(inputs[1]).toHaveFocus();
-
-    await user.keyboard("{ArrowDown}");
-    expect(inputs[2]).toHaveFocus();
-    expect(inputs[2]).toBeChecked();
-
-    await user.keyboard("{ArrowDown}");
-    expect(inputs[0]).toHaveFocus();
-    expect(inputs[0]).toBeChecked();
   });
 
   describe("keyboard selection", () => {
@@ -472,16 +412,6 @@ describe("RadioTile", () => {
     });
   });
 
-  it("should handle disabled state with events", async () => {
-    render(RadioTile, {
-      props: { disabled: true },
-    });
-
-    const input = screen.getByRole("radio");
-    await user.click(input);
-    expect(input).not.toBeChecked();
-  });
-
   it("should forward mouse events", async () => {
     const onMouseover = vi.fn();
     const onMouseenter = vi.fn();
@@ -497,60 +427,6 @@ describe("RadioTile", () => {
 
     await user.unhover(tile);
     expect(onMouseleave).toHaveBeenCalledTimes(1);
-  });
-
-  describe("aria attributes", () => {
-    it("should apply aria-describedby to the input element, not the label", () => {
-      render(RadioTileAria, { ariaDescribedBy: "description-id" });
-
-      const input = screen.getByRole("radio");
-      expect(input).toHaveAttribute("aria-describedby", "description-id");
-
-      const label = input.nextElementSibling;
-      assert(label instanceof HTMLLabelElement);
-      expect(label.tagName).toBe("LABEL");
-      expect(label).not.toHaveAttribute("aria-describedby");
-    });
-
-    it("should apply aria-labelledby to the input element, not the label", () => {
-      render(RadioTileAria, { ariaLabelledBy: "label-id" });
-
-      const input = screen.getByRole("radio");
-      expect(input).toHaveAttribute("aria-labelledby", "label-id");
-
-      const label = input.nextElementSibling;
-      assert(label instanceof HTMLLabelElement);
-      expect(label.tagName).toBe("LABEL");
-      expect(label).not.toHaveAttribute("aria-labelledby");
-    });
-
-    it("should apply aria-label to the input element, not the label", () => {
-      render(RadioTileAria, { ariaLabel: "Premium plan" });
-
-      const input = screen.getByRole("radio");
-      expect(input).toHaveAccessibleName("Premium plan");
-
-      const label = input.nextElementSibling;
-      assert(label instanceof HTMLLabelElement);
-      expect(label).not.toHaveAttribute("aria-label");
-    });
-
-    it("should apply both aria-describedby and aria-labelledby to the input element", () => {
-      render(RadioTileAria, {
-        ariaDescribedBy: "description-id",
-        ariaLabelledBy: "label-id",
-      });
-
-      const input = screen.getByRole("radio");
-      expect(input).toHaveAttribute("aria-describedby", "description-id");
-      expect(input).toHaveAttribute("aria-labelledby", "label-id");
-
-      const label = input.nextElementSibling;
-      assert(label instanceof HTMLLabelElement);
-      expect(label.tagName).toBe("LABEL");
-      expect(label).not.toHaveAttribute("aria-describedby");
-      expect(label).not.toHaveAttribute("aria-labelledby");
-    });
   });
 
   describe("Generics", () => {

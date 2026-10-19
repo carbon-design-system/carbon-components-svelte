@@ -3,7 +3,8 @@
   import type { ComponentProps } from "svelte";
 
   export let type: ComponentProps<CodeSnippet>["type"];
-  export let copy: (code: string) => void | Promise<void> = async () => {};
+  export let copy: ((code: string) => void | Promise<void>) | undefined =
+    undefined;
   export let onCopy = () => {};
   export let onCopyError = (_detail: { error: unknown }) => {};
   export let tooltipPosition: ComponentProps<CodeSnippet>["tooltipPosition"] =
@@ -13,7 +14,7 @@
 <CodeSnippet
   {type}
   code="npm install --save @carbon/icons"
-  {copy}
+  {...copy ? { copy } : {}}
   {tooltipPosition}
   on:copy={onCopy}
   on:copy:error={(event) => onCopyError(event.detail)}

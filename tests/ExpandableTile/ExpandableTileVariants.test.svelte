@@ -29,8 +29,3 @@
   </div>
   <div slot="below">Below the fold</div>
 </ExpandableTile>
-
-<ExpandableTile data-testid="pre-expanded" expanded>
-  <div slot="above">Above expanded</div>
-  <div slot="below">Below expanded</div>
-</ExpandableTile>

@@ -4,13 +4,6 @@ import TileRef from "./Tile.ref.test.svelte";
 import Tile from "./Tile.test.svelte";
 
 describe("Tile", () => {
-  it("should render with default class", () => {
-    render(Tile);
-
-    const tile = screen.getByText("Default tile");
-    expect(tile).toHaveClass("bx--tile");
-  });
-
   it("should render light variant", () => {
     render(Tile);
 

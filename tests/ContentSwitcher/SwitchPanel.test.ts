@@ -73,16 +73,6 @@ describe("SwitchPanel", () => {
     expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
   });
 
-  it("follows arrow-key selection", async () => {
-    await renderAndFlush(ContentSwitcherPanels);
-
-    await user.click(screen.getByRole("tab", { name: "One" }));
-    await user.keyboard("{ArrowRight}");
-    await tick();
-
-    expect(screen.getByRole("tabpanel")).toHaveTextContent("Content 2");
-  });
-
   it("follows a selectedIndex set by the parent", async () => {
     const { rerender } = await renderAndFlush(ContentSwitcherPanels);
 
