@@ -33,9 +33,9 @@ async function pickDay20() {
     .getAllByText("20")
     .find(
       (el) =>
-        el.classList.contains("flatpickr-day") &&
-        !el.classList.contains("prevMonthDay") &&
-        !el.classList.contains("nextMonthDay"),
+        el.classList.contains("bx--date-picker__day") &&
+        !el.classList.contains("bx--date-picker__day--outside-month") &&
+        !el.classList.contains("bx--date-picker__day--outside-month"),
     );
   assert(day);
   await user.click(day);

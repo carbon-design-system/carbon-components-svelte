@@ -8,6 +8,9 @@
 @import '../../globals/scss/typography';
 @import '../../globals/scss/helper-mixins';
 
+// The calendar popup. Carbon v10 styled flatpickr's markup; these are the
+// same rules on the built-in calendar's own classes.
+
 @keyframes fpFadeInDown {
   from {
     transform: translate3d(0, -20px, 0);
@@ -17,62 +20,8 @@
   }
 } // ccs: opacity fade blended selected-day text/bg against the page during the transition, sampling below 4.5:1 mid-animation; transform-only keeps colors solid throughout
 
-@keyframes fpSlideLeft {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-100%, 0, 0);
-  }
-}
-
-@keyframes fpSlideLeftNew {
-  from {
-    transform: translate3d(100%, 0, 0);
-  }
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes fpSlideRight {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(100%, 0, 0);
-  }
-}
-
-@keyframes fpSlideRightNew {
-  from {
-    transform: translate3d(-100%, 0, 0);
-  }
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes fpFadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fpFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@mixin flatpickr {
-  .flatpickr-calendar {
+@mixin date-picker-calendar {
+  .#{$prefix}--date-picker__calendar {
     position: absolute;
     box-sizing: border-box;
     width: to-rem(315px);
@@ -89,15 +38,15 @@
     touch-action: manipulation;
   }
 
-  .flatpickr-calendar.open,
-  .flatpickr-calendar.inline {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open,
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--inline {
     max-height: to-rem(640px);
     overflow: visible;
     visibility: inherit;
     opacity: 1;
   }
 
-  .flatpickr-calendar.open {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open {
     // ccs: `top: calc(100% + 2px)` (below, on `.static`) and `margin-top`
     // net to a flush, zero-gap seam against the input above. The shared
     // `box-shadow` mixin's blur (blur 6px, offset 2px down) still bleeds
@@ -125,11 +74,11 @@
     }
   }
 
-  .flatpickr-calendar.animate.open {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--animate.#{$prefix}--date-picker__calendar--open {
     animation: fpFadeInDown $duration--fast-02 motion(entrance, productive);
   }
 
-  .flatpickr-calendar.inline {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--inline {
     position: relative;
     display: block;
     width: to-rem(288px);
@@ -138,17 +87,17 @@
     background-color: $layer;
   }
 
-  .flatpickr-calendar.static {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--static {
     position: absolute;
     top: calc(100% + 2px);
   }
 
-  .flatpickr-calendar.static.open {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--static.#{$prefix}--date-picker__calendar--open {
     z-index: 999;
     display: block;
   }
 
-  .dayContainer {
+  .#{$prefix}--date-picker__month-days {
     display: flex;
     flex: none;
     flex-wrap: wrap;
@@ -159,17 +108,17 @@
     outline: 0;
   }
 
-  .flatpickr-calendar:focus {
+  .#{$prefix}--date-picker__calendar:focus {
     outline: 0;
   }
 
-  .flatpickr-months {
+  .#{$prefix}--date-picker__month-nav {
     display: flex;
     justify-content: space-between;
     width: 100%;
   }
 
-  .flatpickr-month {
+  .#{$prefix}--date-picker__month {
     @include type-style('heading-compact-01', $omit: (line-height));
 
     display: flex;
@@ -181,8 +130,8 @@
     background-color: transparent;
   }
 
-  .flatpickr-prev-month,
-  .flatpickr-next-month {
+  .#{$prefix}--date-picker__nav-button--previous,
+  .#{$prefix}--date-picker__nav-button--next {
     z-index: 3;
     display: flex;
     align-items: center;
@@ -199,13 +148,7 @@
     user-select: none;
   }
 
-  .flatpickr-next-month.disabled svg,
-  .flatpickr-prev-month.disabled svg {
-    cursor: not-allowed;
-    fill: $layer-selected-inverse;
-  }
-
-  .flatpickr-current-month {
+  .#{$prefix}--date-picker__heading {
     @include type-style('heading-compact-01');
 
     display: flex;
@@ -215,17 +158,17 @@
     text-align: center;
   }
 
-  .flatpickr-current-month .cur-month {
+  .#{$prefix}--date-picker__heading .#{$prefix}--date-picker__month-label {
     margin-right: $carbon--spacing-02;
     margin-left: $carbon--spacing-02;
   }
 
-  .numInputWrapper {
+  .#{$prefix}--date-picker__year {
     position: relative;
     width: to-rem(60px);
   }
 
-  .numInputWrapper .numInput {
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-input {
     display: inline-block;
     width: 100%;
     margin: 0;
@@ -262,32 +205,27 @@
   // (order-safe: no equal-specificity rule between the originals touched
   // the same property on the same element)
   @media (any-hover: hover) {
-    .flatpickr-prev-month:hover,
-    .flatpickr-next-month:hover {
+    .#{$prefix}--date-picker__nav-button--previous:hover,
+    .#{$prefix}--date-picker__nav-button--next:hover {
       background-color: $layer-hover;
     }
 
-    .flatpickr-next-month.disabled:hover svg,
-    .flatpickr-prev-month.disabled:hover svg {
-      fill: $layer-selected-inverse;
-    }
-
-    .flatpickr-current-month .cur-month:hover {
+    .#{$prefix}--date-picker__heading .#{$prefix}--date-picker__month-label:hover {
       background-color: $layer-hover;
     }
 
-    .numInputWrapper:hover {
+    .#{$prefix}--date-picker__year:hover {
       background-color: $layer-hover;
     }
 
-    .numInputWrapper .numInput[disabled]:hover {
+    .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-input[disabled]:hover {
       color: $text-disabled;
       background-color: $layer;
       pointer-events: none;
     }
   }
 
-  .numInputWrapper .arrowUp {
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up {
     top: to-rem(4px);
 
     &::after {
@@ -295,7 +233,7 @@
     }
   }
 
-  .numInputWrapper .arrowDown {
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--down {
     top: to-rem(11px);
 
     &::after {
@@ -303,8 +241,8 @@
     }
   }
 
-  .numInputWrapper .arrowUp,
-  .numInputWrapper .arrowDown {
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up,
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--down {
     position: absolute;
     left: 2.6rem;
     width: to-rem(12px);
@@ -329,49 +267,49 @@
   // (order-safe: kept ahead of the :active::after rule below, which shares
   // its specificity and property and must keep winning that tie)
   @media (any-hover: hover) {
-    .numInputWrapper .arrowUp:hover::after,
-    .numInputWrapper .arrowDown:hover::after {
+    .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up:hover::after,
+    .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--down:hover::after {
       border-top-color: $background-brand;
       border-bottom-color: $background-brand;
     }
 
-    .numInputWrapper:hover .arrowUp,
-    .numInputWrapper:hover .arrowDown {
+    .#{$prefix}--date-picker__year:hover .#{$prefix}--date-picker__year-step--up,
+    .#{$prefix}--date-picker__year:hover .#{$prefix}--date-picker__year-step--down {
       opacity: 1;
     }
 
-    .numInputWrapper:hover .numInput[disabled] ~ .arrowUp,
-    .numInputWrapper:hover .numInput[disabled] ~ .arrowDown {
+    .#{$prefix}--date-picker__year:hover .#{$prefix}--date-picker__year-input[disabled] ~ .#{$prefix}--date-picker__year-step--up,
+    .#{$prefix}--date-picker__year:hover .#{$prefix}--date-picker__year-input[disabled] ~ .#{$prefix}--date-picker__year-step--down {
       opacity: 0;
     }
   }
 
-  .numInputWrapper .arrowUp:active::after,
-  .numInputWrapper .arrowDown:active::after {
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up:active::after,
+  .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--down:active::after {
     border-top-color: $interactive;
     border-bottom-color: $interactive;
   }
 
-  .numInput[disabled] ~ .arrowUp::after {
+  .#{$prefix}--date-picker__year-input[disabled] ~ .#{$prefix}--date-picker__year-step--up::after {
     border-bottom-color: $icon-disabled;
   }
 
-  .numInput[disabled] ~ .arrowDown::after {
+  .#{$prefix}--date-picker__year-input[disabled] ~ .#{$prefix}--date-picker__year-step--down::after {
     border-top-color: $icon-disabled;
   }
 
-  .flatpickr-weekdays {
+  .#{$prefix}--date-picker__weekdays {
     display: flex;
     align-items: center;
     height: to-rem(40px);
   }
 
-  .flatpickr-weekdaycontainer {
+  .#{$prefix}--date-picker__weekday-row {
     display: flex;
     width: 100%;
   }
 
-  .flatpickr-weekday {
+  .#{$prefix}--date-picker__weekday {
     @include type-style('body-compact-01');
 
     flex: 1;
@@ -379,37 +317,11 @@
     cursor: default;
   }
 
-  .flatpickr-days:focus {
+  .#{$prefix}--date-picker__days:focus {
     outline: 0;
   }
 
-  .flatpickr-calendar.animate .dayContainer.slideLeft {
-    animation: fpFadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1),
-      fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .flatpickr-calendar.animate .dayContainer.slideLeft,
-  .flatpickr-calendar.animate .dayContainer.slideLeftNew {
-    transform: translate3d(-100%, 0, 0);
-  }
-
-  .flatpickr-calendar.animate .dayContainer.slideLeftNew {
-    animation: fpFadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1),
-      fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .flatpickr-calendar.animate .dayContainer.slideRight {
-    transform: translate3d(100%, 0, 0);
-    animation: fpFadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1),
-      fpSlideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .flatpickr-calendar.animate .dayContainer.slideRightNew {
-    animation: fpFadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1),
-      fpSlideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .flatpickr-day {
+  .#{$prefix}--date-picker__day {
     @include type-style('body-compact-01');
 
     display: flex;
@@ -435,44 +347,43 @@
     }
   }
 
-  .nextMonthDay,
-  .prevMonthDay {
+  .#{$prefix}--date-picker__day--outside-month {
     color: $text-helper;
   }
 
   // Week numbers (`weekNumbers`): a 40px column beside the grid. With week
   // numbers or `showMonths`, the calendar grows to fit every month grid plus
   // the week column, with the padding outside that content width.
-  .flatpickr-calendar.hasWeeks,
-  .flatpickr-calendar.multiMonth {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--week-numbers,
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--multi-month {
     box-sizing: content-box;
     width: max-content;
   }
 
-  .flatpickr-calendar.hasWeeks.open,
-  .flatpickr-calendar.multiMonth.open {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--week-numbers.#{$prefix}--date-picker__calendar--open,
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--multi-month.#{$prefix}--date-picker__calendar--open {
     height: to-rem(324px);
   }
 
-  .flatpickr-days {
+  .#{$prefix}--date-picker__days {
     display: flex;
   }
 
   // Multi-month grids only render the weeks a month needs, and flag the
   // neighbouring months' days `hidden` since the next grid shows them.
-  .flatpickr-calendar.multiMonth .dayContainer {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--multi-month .#{$prefix}--date-picker__month-days {
     align-content: flex-start;
   }
 
-  .flatpickr-day.hidden {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--hidden {
     visibility: hidden;
   }
 
-  .flatpickr-innerContainer {
+  .#{$prefix}--date-picker__body {
     display: flex;
   }
 
-  .flatpickr-weekwrapper .flatpickr-weekday {
+  .#{$prefix}--date-picker__week-numbers .#{$prefix}--date-picker__weekday {
     @include type-style('body-compact-01');
 
     display: flex;
@@ -483,35 +394,37 @@
     color: $text-secondary;
   }
 
-  .flatpickr-rContainer {
+  .#{$prefix}--date-picker__main {
     flex: 1;
     min-width: 0;
   }
 
-  .flatpickr-weekwrapper {
+  .#{$prefix}--date-picker__week-numbers {
     flex: none;
   }
 
-  // Same wrapping box as `.dayContainer` so the rows line up.
-  .flatpickr-weekwrapper .flatpickr-weeks {
+  // Same wrapping box as the month days so the rows line up.
+  .#{$prefix}--date-picker__week-numbers .#{$prefix}--date-picker__week-number-list {
     display: flex;
     flex-wrap: wrap;
     width: to-rem(40px);
     height: to-rem(246px);
   }
 
-  .flatpickr-weekwrapper .flatpickr-day {
+  // Sized like a day, so each number lines up with its week.
+  .#{$prefix}--date-picker__week-numbers .#{$prefix}--date-picker__week-number {
+    @include type-style('body-compact-01');
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: to-rem(40px);
+    height: to-rem(40px);
     color: $text-secondary;
     cursor: default;
-
-    @media (any-hover: hover) {
-      &:hover {
-        background: transparent;
-      }
-    }
   }
 
-  .flatpickr-day.today {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today {
     position: relative;
     color: $link-primary;
     font-weight: 600;
@@ -529,7 +442,7 @@
     }
   }
 
-  .flatpickr-day.today.selected {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today.#{$prefix}--date-picker__day--selected {
     @include focus-outline('outline');
 
     &::after {
@@ -537,12 +450,12 @@
     }
   }
 
-  .flatpickr-day.inRange {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--in-range {
     color: $text-primary;
     background-color: $highlight;
   }
 
-  .flatpickr-day.selected {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--selected {
     color: $text-on-color;
     background-color: $background-brand;
 
@@ -552,13 +465,13 @@
     }
   }
 
-  .flatpickr-day.startRange.selected {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-start.#{$prefix}--date-picker__day--selected {
     z-index: 2;
     box-shadow: none;
   }
 
-  .flatpickr-day.startRange.inRange:not(.selected),
-  .flatpickr-day.endRange.inRange {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-start.#{$prefix}--date-picker__day--in-range:not(.#{$prefix}--date-picker__day--selected),
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-end.#{$prefix}--date-picker__day--in-range {
     @include focus-outline('outline');
 
     z-index: 3;
@@ -566,7 +479,7 @@
   }
 
   @media (any-hover: hover) {
-    .flatpickr-day.endRange:hover {
+    .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-end:hover {
       @include focus-outline('outline');
 
       color: $text-primary;
@@ -574,12 +487,12 @@
     }
   }
 
-  .flatpickr-day.endRange.inRange.selected {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-end.#{$prefix}--date-picker__day--in-range.#{$prefix}--date-picker__day--selected {
     color: $text-on-color;
     background: $background-brand;
   }
 
-  .flatpickr-day.flatpickr-disabled {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--disabled {
     color: $text-disabled;
     cursor: not-allowed;
 
@@ -590,30 +503,26 @@
     }
   }
 
-  .flatpickr-input[readonly] {
-    cursor: pointer;
-  }
-
   // Windows HCM fix
-  .flatpickr-prev-month,
-  .flatpickr-next-month {
+  .#{$prefix}--date-picker__nav-button--previous,
+  .#{$prefix}--date-picker__nav-button--next {
     @include high-contrast-mode('icon-fill');
   }
 
-  .flatpickr-day.selected {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--selected {
     @include high-contrast-mode('focus') {
       outline-style: dotted;
     }
   }
 
-  .flatpickr-day.today,
-  .flatpickr-day.inRange {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today,
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--in-range {
     @include high-contrast-mode {
       color: Highlight;
     }
   }
 
-  .flatpickr-calendar {
+  .#{$prefix}--date-picker__calendar {
     @include high-contrast-mode('outline');
   }
 }

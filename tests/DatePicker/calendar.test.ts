@@ -24,7 +24,7 @@ function create(options: CalendarOptions = {}) {
 const day = (instance: CalendarInstance, n: number) => {
   const cell = [
     ...instance.calendarContainer.querySelectorAll<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+      ".bx--date-picker__day:not(.bx--date-picker__day--outside-month):not(.bx--date-picker__day--outside-month)",
     ),
   ].find((el) => el.textContent === String(n));
   assert(cell);
@@ -42,10 +42,13 @@ describe("createCalendarEngine", () => {
     const { calendarContainer } = instance;
 
     expect(calendarContainer).toHaveClass("bx--date-picker__calendar");
-    expect(calendarContainer.querySelector(".flatpickr-month")).toHaveClass(
-      "bx--date-picker__month",
+    expect(
+      calendarContainer.querySelector(".bx--date-picker__month"),
+    ).toHaveClass("bx--date-picker__month");
+    expect(day(instance, 15)).toHaveClass(
+      "bx--date-picker__day",
+      "bx--date-picker__day--selected",
     );
-    expect(day(instance, 15)).toHaveClass("bx--date-picker__day", "selected");
   });
 
   it("selects a day on click and writes the value", () => {
@@ -70,7 +73,7 @@ describe("createCalendarEngine", () => {
 
     day(instance, 15).click();
 
-    expect(day(instance, 15)).toHaveClass("flatpickr-disabled");
+    expect(day(instance, 15)).toHaveClass("bx--date-picker__day--disabled");
     expect(day(instance, 15)).toHaveAttribute("aria-disabled", "true");
     expect(input.value).toBe("2024-03-01");
   });
@@ -92,12 +95,18 @@ describe("createCalendarEngine", () => {
       maxDate: "2024-04-30",
     });
 
-    expect(instance.prevMonthNav).toHaveClass("flatpickr-disabled");
-    expect(instance.nextMonthNav).not.toHaveClass("flatpickr-disabled");
+    expect(instance.prevMonthNav).toHaveClass(
+      "bx--date-picker__nav-button--disabled",
+    );
+    expect(instance.nextMonthNav).not.toHaveClass(
+      "bx--date-picker__nav-button--disabled",
+    );
 
     instance.changeMonth(1);
 
-    expect(instance.nextMonthNav).toHaveClass("flatpickr-disabled");
+    expect(instance.nextMonthNav).toHaveClass(
+      "bx--date-picker__nav-button--disabled",
+    );
   });
 
   it("only listens on the document while open", () => {
@@ -143,13 +152,12 @@ describe("createCalendarEngine", () => {
 
   it("restores the input and removes the calendar on destroy", () => {
     const { instance, input, host } = create({ static: true });
-    expect(host.querySelector(".flatpickr-wrapper")).not.toBeNull();
+    expect(host.querySelector(".bx--date-picker__anchor")).not.toBeNull();
 
     instance.destroy();
 
-    expect(host.querySelector(".flatpickr-wrapper")).toBeNull();
-    expect(host.querySelector(".flatpickr-calendar")).toBeNull();
-    expect(input).not.toHaveClass("flatpickr-input");
+    expect(host.querySelector(".bx--date-picker__anchor")).toBeNull();
+    expect(host.querySelector(".bx--date-picker__calendar")).toBeNull();
     expect(input.parentElement).toBe(host);
   });
 
@@ -171,8 +179,7 @@ describe("createCalendarEngine", () => {
       }),
     ).toThrow("format failed");
 
-    expect(host.querySelector(".flatpickr-calendar")).toBeNull();
-    expect(input).not.toHaveClass("flatpickr-input");
+    expect(host.querySelector(".bx--date-picker__calendar")).toBeNull();
     expect(input.parentElement).toBe(host);
     expect(remove).toHaveBeenCalledTimes(add.mock.calls.length);
   });
@@ -280,9 +287,9 @@ describe("range mode", () => {
     day(instance, 4).click();
     day(instance, 8).click();
 
-    expect(day(instance, 4)).toHaveClass("startRange");
-    expect(day(instance, 6)).toHaveClass("inRange");
-    expect(day(instance, 8)).toHaveClass("endRange");
+    expect(day(instance, 4)).toHaveClass("bx--date-picker__day--range-start");
+    expect(day(instance, 6)).toHaveClass("bx--date-picker__day--in-range");
+    expect(day(instance, 8)).toHaveClass("bx--date-picker__day--range-end");
   });
 });
 
@@ -299,9 +306,12 @@ describe("week mode", () => {
 
     expect(input.value).toBe("2024-03-11");
     for (const n of [11, 12, 13, 14, 15, 16, 17]) {
-      expect(day(instance, n)).toHaveClass("week", "selected");
+      expect(day(instance, n)).toHaveClass(
+        "bx--date-picker__day--week",
+        "bx--date-picker__day--selected",
+      );
     }
-    expect(day(instance, 18)).not.toHaveClass("week");
+    expect(day(instance, 18)).not.toHaveClass("bx--date-picker__day--week");
   });
 
   it("numbers a week by its middle day", () => {
@@ -314,7 +324,7 @@ describe("week mode", () => {
 
     const weeks = [
       ...instance.calendarContainer.querySelectorAll(
-        ".flatpickr-weeks .flatpickr-day",
+        ".bx--date-picker__week-number",
       ),
     ].map((el) => el.textContent);
 
@@ -331,10 +341,10 @@ describe("month mode", () => {
     });
 
     const months = instance.calendarContainer.querySelectorAll<HTMLElement>(
-      ".flatpickr-monthSelect-month",
+      ".bx--date-picker__grid-cell",
     );
     expect(months).toHaveLength(12);
-    expect(months[2]).toHaveClass("selected");
+    expect(months[2]).toHaveClass("bx--date-picker__grid-cell--selected");
 
     months[5].click();
 
@@ -353,7 +363,7 @@ describe("month mode", () => {
     const { instance } = create({ mode: "month", defaultDate: "2024-03-01" });
     instance.open();
     const months = instance.calendarContainer.querySelectorAll<HTMLElement>(
-      ".flatpickr-monthSelect-month",
+      ".bx--date-picker__grid-cell",
     );
     months[2].focus();
 
@@ -372,7 +382,7 @@ describe("year mode", () => {
     });
 
     expect(
-      instance.calendarContainer.querySelector(".flatpickr-yearSelect-range"),
+      instance.calendarContainer.querySelector(".bx--date-picker__decade"),
     ).toHaveTextContent("2019 - 2030");
 
     instance.calendarContainer
@@ -392,7 +402,7 @@ describe("year mode", () => {
     instance.nextMonthNav.click();
 
     expect(
-      instance.calendarContainer.querySelector(".flatpickr-yearSelect-range"),
+      instance.calendarContainer.querySelector(".bx--date-picker__decade"),
     ).toHaveTextContent("2029 - 2040");
   });
 });
@@ -479,7 +489,7 @@ describe("keyboard", () => {
     instance.open();
     const cells = () =>
       instance.calendarContainer.querySelectorAll<HTMLElement>(
-        ".flatpickr-monthSelect-month",
+        ".bx--date-picker__grid-cell",
       );
     cells()[4].focus();
 
@@ -518,10 +528,10 @@ describe("flatpickr compatibility", () => {
   it("puts a year-first locale's year, its word, then the month", () => {
     const { instance } = create({ locale: "ja", defaultDate: "2024-03-15" });
     const header = instance.calendarContainer.querySelector(
-      ".flatpickr-current-month",
+      ".bx--date-picker__heading",
     );
     const parts = [...(header?.children ?? [])].map((el) =>
-      el.classList.contains("numInputWrapper")
+      el.classList.contains("bx--date-picker__year")
         ? (el.querySelector("input") as HTMLInputElement).value
         : el.textContent,
     );
@@ -534,7 +544,7 @@ describe("flatpickr compatibility", () => {
 
     expect(instance.currentYear).toBe(2020);
     expect(instance.currentMonth).toBe(0);
-    expect(day(instance, 10)).toHaveClass("today");
+    expect(day(instance, 10)).toHaveClass("bx--date-picker__day--today");
   });
 
   it("renders a flatpickr l10n module", () => {
@@ -600,8 +610,8 @@ describe("flatpickr compatibility", () => {
         (el) => el.textContent,
       );
 
-    expect(text(".cur-month")).toEqual(["März"]);
-    expect(text(".flatpickr-weekday")).toEqual([
+    expect(text(".bx--date-picker__month-label")).toEqual(["März"]);
+    expect(text(".bx--date-picker__weekday")).toEqual([
       "KW",
       "Mo",
       "Di",

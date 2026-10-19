@@ -28,10 +28,10 @@ export function createCalendarApi(engine) {
       if (!engine.isOpen) engine.open();
       engine.jumpToDate(date);
       const target = /** @type {HTMLElement[]} */ ([
-        ...engine.calendarContainer.querySelectorAll(".flatpickr-day"),
+        ...engine.calendarContainer.querySelectorAll(".bx--date-picker__day"),
       ]).find(
         (cell) =>
-          !cell.classList.contains("hidden") &&
+          !cell.classList.contains("bx--date-picker__day--hidden") &&
           /** @type {any} */ (cell).dateObj?.toDateString() ===
             date.toDateString(),
       );

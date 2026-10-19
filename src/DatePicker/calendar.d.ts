@@ -43,7 +43,6 @@ export interface CalendarOptions
   allowInvalidPreload?: boolean;
   altFormat?: string;
   altInput?: boolean;
-  altInputClass?: string;
   animate?: boolean;
   appendTo?: HTMLElement;
   ariaDateFormat?: string;
@@ -153,12 +152,6 @@ export interface CalendarInstance {
     timeless?: boolean,
   ): Date | undefined;
   formatDate(date: Date, format: string): string;
-  createDay(
-    className: string,
-    date: Date,
-    dayNumber: number,
-    index: number,
-  ): HTMLElement;
   onMouseOver(element?: HTMLElement): void;
   now: Date;
 }

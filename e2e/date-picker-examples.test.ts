@@ -23,7 +23,8 @@ const EXAMPLES = readdirSync(
   .filter((file) => file.endsWith(".svelte"))
   .map((file) => file.slice(0, -".svelte".length));
 
-const CALENDAR = ".flatpickr-calendar.open, .flatpickr-calendar.inline";
+const CALENDAR =
+  ".bx--date-picker__calendar.bx--date-picker__calendar--open, .bx--date-picker__calendar.bx--date-picker__calendar--inline";
 
 const appears = (page: Page) =>
   page
@@ -58,11 +59,11 @@ function layoutProblems() {
     new Set(cells.map((cell) => Math.round(rect(cell).left))).size;
 
   for (const calendar of document.querySelectorAll(
-    ".flatpickr-calendar.open, .flatpickr-calendar.inline",
+    ".bx--date-picker__calendar.bx--date-picker__calendar--open, .bx--date-picker__calendar.bx--date-picker__calendar--inline",
   )) {
     const box = rect(calendar);
     for (const part of calendar.querySelectorAll(
-      ".dayContainer, .flatpickr-weekwrapper, .flatpickr-weekdaycontainer, .flatpickr-monthSelect-months, .flatpickr-yearSelect-years, .flatpickr-prev-month, .flatpickr-next-month",
+      ".bx--date-picker__month-days, .bx--date-picker__week-numbers, .bx--date-picker__weekday-row, .bx--date-picker__grid, .bx--date-picker__grid--years, .bx--date-picker__nav-button--previous, .bx--date-picker__nav-button--next",
     )) {
       const partBox = rect(part);
       if (
@@ -73,25 +74,31 @@ function layoutProblems() {
       }
     }
 
-    const weekdays = calendar.querySelectorAll(".flatpickr-weekdaycontainer");
-    calendar.querySelectorAll(".dayContainer").forEach((grid, index) => {
-      const days = [...grid.querySelectorAll(".flatpickr-day")];
-      if (columns(days) !== 7) {
-        problems.push(`day grid ${index} has ${columns(days)} columns`);
-      }
-      const headings = [
-        ...(weekdays[index]?.querySelectorAll(".flatpickr-weekday") ?? []),
-      ];
-      headings.forEach((heading, column) => {
-        const center = (el: Element) => rect(el).left + rect(el).width / 2;
-        if (Math.abs(center(heading) - center(days[column])) > TOLERANCE + 1) {
-          problems.push(`weekday ${column} of grid ${index} is misaligned`);
+    const weekdays = calendar.querySelectorAll(".bx--date-picker__weekday-row");
+    calendar
+      .querySelectorAll(".bx--date-picker__month-days")
+      .forEach((grid, index) => {
+        const days = [...grid.querySelectorAll(".bx--date-picker__day")];
+        if (columns(days) !== 7) {
+          problems.push(`day grid ${index} has ${columns(days)} columns`);
         }
+        const headings = [
+          ...(weekdays[index]?.querySelectorAll(".bx--date-picker__weekday") ??
+            []),
+        ];
+        headings.forEach((heading, column) => {
+          const center = (el: Element) => rect(el).left + rect(el).width / 2;
+          if (
+            Math.abs(center(heading) - center(days[column])) >
+            TOLERANCE + 1
+          ) {
+            problems.push(`weekday ${column} of grid ${index} is misaligned`);
+          }
+        });
       });
-    });
 
     for (const grid of calendar.querySelectorAll(
-      ".flatpickr-monthSelect-months, .flatpickr-yearSelect-years",
+      ".bx--date-picker__grid, .bx--date-picker__grid--years",
     )) {
       const container = grid.parentElement;
       if (container && rect(grid).width < rect(container).width - 3) {
@@ -99,7 +106,7 @@ function layoutProblems() {
       }
       // Months and years sit three to a row, quarters two.
       const expected = grid.classList.contains(
-        "flatpickr-quarterSelect-quarters",
+        "bx--date-picker__grid--quarters",
       )
         ? 2
         : 3;

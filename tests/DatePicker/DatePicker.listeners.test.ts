@@ -151,7 +151,7 @@ describe("DatePicker fixed-position reposition listeners", () => {
     expect(open.resize).toBeGreaterThan(before.resize);
 
     await user.click(document.body);
-    expect(calendar).not.toHaveClass("open");
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
 
     const closed = netCounts(add, remove);
     expect(closed.scroll).toBe(before.scroll);

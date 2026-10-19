@@ -43,6 +43,46 @@ function both(options: Record<string, unknown> = {}) {
   return { reference, engine };
 }
 
+/** flatpickr's day classes, by the engine's name for them. */
+const FLATPICKR_NAMES: Record<string, string> = {
+  "flatpickr-day": "day",
+  "flatpickr-disabled": "disabled",
+  inRange: "in-range",
+  startRange: "range-start",
+  endRange: "range-end",
+  prevMonthDay: "outside-month",
+  nextMonthDay: "outside-month",
+  notAllowed: "blocked",
+};
+
+/**
+ * Day cells (and week numbers) in render order, each as its text and its
+ * classes under one set of names, so the two calendars compare.
+ */
+function dayCells(instance: Instance) {
+  const isEngine = instance.calendarContainer.classList.contains(
+    "bx--date-picker__calendar",
+  );
+  const selector = isEngine
+    ? ".bx--date-picker__month-days .bx--date-picker__day, .bx--date-picker__week-number"
+    : ".dayContainer .flatpickr-day, .flatpickr-weeks .flatpickr-day";
+  return [
+    ...instance.calendarContainer.querySelectorAll<HTMLElement>(selector),
+  ].map((cell) => {
+    const names = [...cell.classList].map((name) =>
+      isEngine
+        ? // flatpickr renders a week number as a day.
+          name.replace(/^bx--date-picker__(day--|week-number$)?/, "") || "day"
+        : (FLATPICKR_NAMES[name] ?? name),
+    );
+    return {
+      text: cell.textContent,
+      classes: [...new Set(names)].sort().join("."),
+      label: cell.getAttribute("aria-label"),
+    };
+  });
+}
+
 /** Deterministic dates at local midnight, so a failure always reproduces. */
 function sampleDates(count: number, seed = 1) {
   let state = seed;
@@ -241,21 +281,9 @@ describe("isEnabled matches flatpickr", () => {
 });
 
 describe("rendered day cells match flatpickr", () => {
-  /** Day cells as text, flatpickr classes (Carbon's are the engine's own), and label. */
   const cells = (instance: Instance) =>
-    [
-      ...instance.calendarContainer.querySelectorAll<HTMLElement>(
-        ".dayContainer .flatpickr-day",
-      ),
-    ].map((cell) =>
-      [
-        cell.textContent,
-        [...cell.classList]
-          .filter((name) => !name.startsWith("bx--"))
-          .sort()
-          .join("."),
-        cell.getAttribute("aria-label"),
-      ].join(" | "),
+    dayCells(instance).map(({ text, classes, label }) =>
+      [text, classes, label].join(" | "),
     );
 
   const configs: Array<[string, Record<string, unknown>, unknown?]> = [
@@ -306,17 +334,8 @@ describe("every month from 2010 to 2030 matches flatpickr", {
     (_, i) => new Date(2010, i, 1),
   );
   const view = (instance: Instance) =>
-    [
-      ...instance.calendarContainer.querySelectorAll(
-        ".dayContainer .flatpickr-day, .flatpickr-weeks .flatpickr-day",
-      ),
-    ]
-      .map((cell) =>
-        [
-          cell.textContent,
-          [...cell.classList].filter((name) => !name.startsWith("bx--")).sort(),
-        ].join(" "),
-      )
+    dayCells(instance)
+      .map(({ text, classes }) => `${text} ${classes}`)
       .join(",");
 
   it("renders each month with week numbers", () => {
