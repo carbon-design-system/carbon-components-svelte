@@ -160,6 +160,30 @@ describe("createCalendarEngine", () => {
     expect(onReady).toHaveBeenCalledTimes(1);
   });
 
+  it("takes down a calendar whose build throws", () => {
+    const host = document.createElement("div");
+    const input = document.createElement("input");
+    host.appendChild(input);
+    document.body.appendChild(host);
+    const add = vi.spyOn(input, "addEventListener");
+    const remove = vi.spyOn(input, "removeEventListener");
+
+    expect(() =>
+      createCalendarEngine(input, {
+        static: true,
+        defaultDate: "2024-03-15",
+        formatDate: () => {
+          throw new Error("format failed");
+        },
+      }),
+    ).toThrow("format failed");
+
+    expect(host.querySelector(".flatpickr-calendar")).toBeNull();
+    expect(input).not.toHaveClass("flatpickr-input");
+    expect(input.parentElement).toBe(host);
+    expect(remove).toHaveBeenCalledTimes(add.mock.calls.length);
+  });
+
   it("fires onOpen and onClose", () => {
     const onOpen = vi.fn();
     const onClose = vi.fn();
