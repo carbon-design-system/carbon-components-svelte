@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import ComboButtonFixture from "../ComboButton/ComboButton.test.svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import MenuButtonIconOnly from "./MenuButton.iconOnly.test.svelte";
 import MenuButtonSlot from "./MenuButton.slot.test.svelte";
@@ -274,21 +275,21 @@ describe.each([
   },
 );
 
+// `data-carbon-align` and the portal's alignment are physical: `start` is
+// the left edge, `end` the right.
+const alignments = () => {
+  const menu = screen.getByRole("menu");
+  const portal = menu.closest("[data-floating-portal]");
+  return [
+    menu.getAttribute("data-carbon-align"),
+    portal?.getAttribute("data-floating-intrinsic-align"),
+  ];
+};
+
 describe("MenuButton and ComboButton in RTL", () => {
   afterEach(() => {
     document.documentElement.style.removeProperty("direction");
   });
-
-  // `data-carbon-align` and the portal's alignment are physical: `start` is
-  // the left edge, `end` the right.
-  const alignments = () => {
-    const menu = screen.getByRole("menu");
-    const portal = menu.closest("[data-floating-portal]");
-    return [
-      menu.getAttribute("data-carbon-align"),
-      portal?.getAttribute("data-floating-intrinsic-align"),
-    ];
-  };
 
   it.each([
     ["MenuButton", "Row actions", "start", "end"],
@@ -308,4 +309,40 @@ describe("MenuButton and ComboButton in RTL", () => {
       expect(alignments()).toEqual([rtl, rtl]);
     },
   );
+});
+
+describe("MenuButton near a side of the window", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.documentElement.style.removeProperty("direction");
+  });
+
+  // A 100px trigger at `left` and a 200px menu in a 1000px window.
+  const layout = (left: number) => {
+    vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+      1000,
+    );
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: Element) {
+        if (this.matches("[role='menu']")) return rect({ width: 200 });
+        if (this.matches("button")) return rect({ left, width: 100 });
+        return rect();
+      },
+    );
+  };
+
+  it.each([
+    ["LTR", "ltr", 400, "start"],
+    ["LTR, at the right edge", "ltr", 880, "end"],
+    ["RTL", "rtl", 400, "end"],
+    ["RTL, at the left edge", "rtl", 20, "start"],
+  ])("keeps the menu in the window (%s)", async (_, dir, left, expected) => {
+    document.documentElement.style.direction = dir;
+    layout(left);
+    render(MenuButtonFixture);
+
+    await user.click(screen.getByRole("button", { name: "Actions" }));
+
+    await vi.waitFor(() => expect(alignments()).toEqual([expected, expected]));
+  });
 });

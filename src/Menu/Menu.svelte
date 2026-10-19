@@ -80,6 +80,8 @@
    * When `intrinsicWidth` is true, align the menu to the anchor.
    * With `direction` set to `"top"` or `"bottom"`, `start` and `end` are the
    * anchor's inline start and end, which swap under `dir="rtl"`.
+   * A menu that would run past a side of the window takes another
+   * alignment for that open.
    * @type {"start" | "center" | "end"}
    */
   export let intrinsicAlign = "center";
@@ -113,6 +115,7 @@
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
+  import { createFrameJob } from "../utils/frame-batch.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -121,7 +124,7 @@
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
-  import { physicalAlign } from "../utils/menu-placement.js";
+  import { fitIntrinsicAlign, physicalAlign } from "../utils/menu-placement.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -147,11 +150,33 @@
   let rtl = false;
   let prevOpen = false;
 
+  // The physical alignment that keeps this open's menu inside the window,
+  // when `portalAlign` would run past a side.
+  /** @type {null | "start" | "center" | "end"} */
+  let fittedAlign = null;
+
+  // Reads layout only, so it runs with the other frame jobs' reads.
+  const fitJob = createFrameJob([
+    () => {
+      if (!(open && ref && anchor)) return;
+      const { left, right } = anchor.getBoundingClientRect();
+      const fitted = fitIntrinsicAlign({
+        before: left,
+        after: right,
+        size: ref.getBoundingClientRect().width,
+        max: document.documentElement.clientWidth,
+        align: portalAlign,
+      });
+      fittedAlign = fitted === portalAlign ? null : fitted;
+    },
+  ]);
+
   const typeahead = createTypeaheadBuffer();
 
   onMount(() => {
     return () => {
       typeahead.clear();
+      fitJob.cancel();
     };
   });
 
@@ -253,6 +278,18 @@
     direction === "top" || direction === "bottom"
       ? physicalAlign(intrinsicAlign, rtl)
       : intrinsicAlign;
+  $: fitsAlign =
+    open && intrinsicWidth && (direction === "top" || direction === "bottom");
+  $: if (!fitsAlign) {
+    fittedAlign = null;
+    fitJob.cancel();
+  }
+  // Fit once the menu has its width, and again when the alignment changes.
+  $: if (fitsAlign) {
+    void portalAlign;
+    tick().then(fitJob.schedule);
+  }
+  $: placementAlign = fittedAlign ?? portalAlign;
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
   $: maxHeightStyle = toCssLength(maxHeight);
 
@@ -332,7 +369,7 @@
   {verticalAlignOffsetRight}
   {zIndex}
   {intrinsicWidth}
-  intrinsicAlign={portalAlign}
+  intrinsicAlign={placementAlign}
   {target}
   lockDirection="always"
   let:direction={portalDirection}
@@ -362,7 +399,7 @@
     role="menu"
     tabindex="-1"
     data-floating-menu-direction={portalDirection}
-    data-carbon-align={intrinsicWidth ? portalAlign : undefined}
+    data-carbon-align={intrinsicWidth ? placementAlign : undefined}
     style:position="relative"
     style:top="auto"
     style:left="auto"

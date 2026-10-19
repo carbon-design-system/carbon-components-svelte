@@ -27,4 +27,25 @@ export function menuSide(
   direction: "top" | "bottom",
 ): "top" | "bottom";
 
+/**
+ * Align a menu above or below its anchor so it stays `margin` px (8 by
+ * default) inside the viewport's sides. A menu that fits keeps `align`;
+ * one that runs past a side takes the alignment that runs past least.
+ * Physical names: `start` is the anchor's left edge, `end` its right edge.
+ */
+export function fitIntrinsicAlign(options: {
+  /** The anchor's left edge. */
+  before: number;
+  /** The anchor's right edge. */
+  after: number;
+  /** The menu's width. */
+  size: number;
+  /** The viewport's width. */
+  max: number;
+  /** The preferred alignment. */
+  align: "start" | "center" | "end";
+  /** @default 8 */
+  margin?: number;
+}): "start" | "center" | "end";
+
 export { physicalAlign } from "./inline-align";

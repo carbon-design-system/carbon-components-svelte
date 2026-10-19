@@ -1,5 +1,6 @@
 // @vitest-environment node
 import {
+  fitIntrinsicAlign,
   fitMenuAxis,
   menuSide,
   physicalAlign,
@@ -40,6 +41,51 @@ describe("fitMenuAxis", () => {
   it("fits a menu that exactly fills the space on its side", () => {
     expect(place(250, 250)).toBe(250);
     expect(place(150, 150, true)).toBe(0);
+  });
+});
+
+describe("fitIntrinsicAlign", () => {
+  // A 200px menu under a 100px anchor in a 1000px viewport, 8px margin.
+  const fitAt = (before: number, align: "start" | "center" | "end") =>
+    fitIntrinsicAlign({
+      before,
+      after: before + 100,
+      size: 200,
+      max: 1000,
+      align,
+    });
+
+  it.each([
+    ["keeps start with room", 400, "start", "start"],
+    ["keeps end with room", 400, "end", "end"],
+    ["keeps center with room", 400, "center", "center"],
+    ["takes end at the right edge", 880, "start", "end"],
+    ["takes start at the left edge", 20, "end", "start"],
+    ["takes start from center at the left edge", 0, "center", "start"],
+    ["takes end from center at the right edge", 900, "center", "end"],
+  ] as const)("%s", (_, before, align, expected) => {
+    expect(fitAt(before, align)).toBe(expected);
+  });
+
+  it("takes center when only center fits", () => {
+    // A 300px menu under a 100px anchor in a 320px viewport.
+    const options = { before: 110, after: 210, size: 300, max: 320 };
+    expect(fitIntrinsicAlign({ ...options, align: "start" })).toBe("center");
+    expect(fitIntrinsicAlign({ ...options, align: "end" })).toBe("center");
+  });
+
+  it("keeps align for a menu with no width", () => {
+    const options = { before: 950, after: 1050, size: 0, max: 1000 };
+    expect(fitIntrinsicAlign({ ...options, align: "start" })).toBe("start");
+  });
+
+  it("fits an RTL menu from its physical alignment", () => {
+    // In RTL a menu at its anchor's inline start lines up with the right
+    // edge. Near the window's left edge, it moves to the left edge.
+    const align = physicalAlign("start", true);
+    expect(align).toBe("end");
+    expect(fitAt(20, align)).toBe("start");
+    expect(fitAt(400, align)).toBe("end");
   });
 });
 
