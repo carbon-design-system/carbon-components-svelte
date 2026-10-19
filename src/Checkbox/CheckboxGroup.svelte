@@ -121,18 +121,24 @@
   const groupInvalid = writable(invalid);
   const groupWarn = writable(warn);
   let initialRender = true;
+  // Suppresses the store's own "change" dispatch (below) while a form reset
+  // rewrites `selectedValues`: a reset fires no events, like the other form
+  // controls.
+  let resettingFromForm = false;
 
   /**
-   * @type {(value: string | number, checked: boolean) => void}
+   * @type {(value: string | number, checked: boolean, fromReset?: boolean) => void}
    */
-  function update(value, checked) {
+  function update(value, checked, fromReset = false) {
     if (readonly) return;
+    resettingFromForm = fromReset;
     selectedValues.update((prev) => {
       if (checked) {
         return prev.includes(value) ? prev : [...prev, value];
       }
       return prev.filter((v) => v !== value);
     });
+    resettingFromForm = false;
   }
 
   setContext("carbon:CheckboxGroup", {
@@ -152,7 +158,7 @@
   const unsubscribe = selectedValues.subscribe((value) => {
     if (readonly) return;
     selected = value;
-    if (!initialRender) {
+    if (!initialRender && !resettingFromForm) {
       dispatch("change", value);
     }
   });
