@@ -407,6 +407,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { submitAttempts } from "../utils/submit-attempt.js";
@@ -431,6 +432,23 @@
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
+
+  // In place, the menu opens on `direction`'s side unless it doesn't fit
+  // there and the other side has more room; a portalled menu flips itself.
+  // Measured once per open, after the menu renders.
+  /** @type {"top" | "bottom" | null} */
+  let measuredSide = null;
+  $: placement = measuredSide ?? direction;
+  $: if (open && !effectivePortalMenu) {
+    void direction;
+    tick().then(() => {
+      if (open && listRef && fieldRef) {
+        measuredSide = menuSide(fieldRef, listRef, direction);
+      }
+    });
+  } else {
+    measuredSide = null;
+  }
 
   let fieldFocused = false;
   /** Set when a required, empty combo box blocked form submission. */
@@ -959,7 +977,7 @@
     $aiLabelState === "active" && "bx--list-box--ai-label",
     // A clear button shows by the chevron.
     value && "bx--list-box--clearable",
-    direction === "top" && "bx--list-box--up",
+    placement === "top" && "bx--list-box--up",
     showWarn && "bx--combo-box--warning",
     readonly && "bx--combo-box--readonly",
     // Thins the input's focus ring while an option holds the highlight.
