@@ -65,7 +65,7 @@ Set `max` to cap the number of tags. Set `maxText` to change the message.
 
 ### Custom validation
 
-Set `validate` to check each value. Return `true` to accept it, or a message to reject it.
+Set `validate` to check each value. Return `true` to accept it, or a message to reject it. Returning `false` rejects it with `invalidTagText`.
 
 <TagInput
   labelText="Recipients"
@@ -140,7 +140,7 @@ An empty tag input is a labelled field the height of a text input, so `TextInput
 
 ## Forms
 
-Set `name` to submit each tag as its own form value under that name. The text still being typed is not submitted. A form reset restores the tags the field started with. Set `required` to require at least one tag.
+Set `name` to submit each tag as its own form value under that name. The text still being typed is not submitted. A form reset restores the tags the field started with. Set `required` to require at least one tag; text that isn't a tag yet doesn't count. Set `requiredText` to change the message.
 
 <FileSource src="/framed/TagInput/TagInputForm" />
 
