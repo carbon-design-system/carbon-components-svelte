@@ -18,8 +18,7 @@ describe("RadioButtonGroup form reset", () => {
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
     expect(getBoundText()).toBe("undefined");
-    expect(new FormData(getForm()).has("a")).toBe(false);
-    expect(new FormData(getForm()).has("b")).toBe(false);
+    expect([...new FormData(getForm())]).toEqual([]);
     expect(onChange).not.toHaveBeenCalled();
   });
 

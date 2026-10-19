@@ -1,5 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
-import { clearAllGroups } from "../../src/RadioButton/radio-button-registry";
+import {
+  clearAllGroups,
+  getGroup,
+} from "../../src/RadioButton/radio-button-registry";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import RadioButtonImplicitGroup from "./RadioButtonImplicitGroup.test.svelte";
@@ -73,35 +76,40 @@ describe("RadioButton (Implicit Group via name)", () => {
     expect(component.checked1).toBe(false);
   });
 
-  it("should clean up registry on unmount", async () => {
+  it("should clean up registry on unmount", () => {
     const { unmount } = render(RadioButtonImplicitGroup);
 
-    const option1 = screen.getByRole("radio", { name: "Option 1" });
-    await user.click(option1);
+    expect(getGroup("implicit-group")?.members.size).toBe(3);
 
     unmount();
 
-    // Re-render should start fresh (no stale state)
-    const { component } = render(RadioButtonImplicitGroup);
-    await flushMacrotask();
-
-    expect(component.checked1).toBe(false);
-    expect(component.checked2).toBe(false);
-    expect(component.checked3).toBe(false);
+    expect(getGroup("implicit-group")).toBeUndefined();
   });
 
-  it("should handle multiple independent groups", async () => {
-    const { component: group1 } = render(RadioButtonImplicitGroup, {
-      props: { groupName: "group-a" },
+  it("should keep independent groups separate", async () => {
+    const { component } = render(RadioButtonImplicitGroup, {
+      props: { secondGroupName: "second-group" },
     });
 
-    // Get the radios before rendering the second group
-    const group1Option1 = screen.getByRole("radio", { name: "Option 1" });
-    await user.click(group1Option1);
+    const option1 = screen.getByRole("radio", { name: "Option 1" });
+    const option4 = screen.getByRole("radio", { name: "Option 4" });
+    const option5 = screen.getByRole("radio", { name: "Option 5" });
 
-    expect(group1.checked1).toBe(true);
+    await user.click(option1);
+    await user.click(option4);
 
-    // Clean up first group
-    // (in a real app, different groups would be in separate DOM trees)
+    expect(option1).toBeChecked();
+    expect(option4).toBeChecked();
+    expect(component.checked1).toBe(true);
+    expect(component.checked4).toBe(true);
+
+    await user.click(option5);
+
+    expect(option4).not.toBeChecked();
+    expect(option5).toBeChecked();
+    expect(option1).toBeChecked();
+    expect(component.checked1).toBe(true);
+    expect(component.checked4).toBe(false);
+    expect(component.checked5).toBe(true);
   });
 });

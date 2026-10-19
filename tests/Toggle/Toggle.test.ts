@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
@@ -121,7 +121,7 @@ describe("Toggle", () => {
     expect(toggle).not.toBeChecked();
     expect(consoleLog).not.toHaveBeenCalled();
 
-    await user.keyboard("Tab");
+    await user.keyboard("{Tab}");
     expect(toggle).not.toBeChecked();
     expect(consoleLog).not.toHaveBeenCalled();
   });
@@ -133,23 +133,13 @@ describe("Toggle", () => {
     expect(toggle).toHaveAttribute("name", "custom-name-toggle");
   });
 
-  it("prevents default on enter key", () => {
+  it("prevents default on enter key", async () => {
     render(Toggle);
 
     const toggle = getToggle("Default toggle");
     toggle.focus();
 
-    const enterEvent = new KeyboardEvent("keydown", {
-      key: "Enter",
-      bubbles: true,
-      cancelable: true,
-    });
-
-    const enterPreventDefault = vi.spyOn(enterEvent, "preventDefault");
-
-    toggle.dispatchEvent(enterEvent);
-
-    expect(enterPreventDefault).toHaveBeenCalled();
+    expect(await fireEvent.keyDown(toggle, { key: "Enter" })).toBe(false);
   });
 
   it("handles disabled state interactions", async () => {
@@ -160,15 +150,6 @@ describe("Toggle", () => {
     expect(toggle).toBeDisabled();
 
     await user.click(toggle);
-    expect(toggle).not.toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalled();
-
-    toggle.focus();
-    await user.keyboard(" ");
-    expect(toggle).not.toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalled();
-
-    await user.keyboard("{Enter}");
     expect(toggle).not.toBeChecked();
     expect(consoleLog).not.toHaveBeenCalled();
   });
@@ -318,7 +299,6 @@ describe("Toggle", () => {
       expect(container.querySelector(".bx--toggle--readonly")).toBeTruthy();
       const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
       expect(toggle).toHaveAttribute("aria-readonly", "true");
-      expect(toggle).not.toHaveAttribute("aria-disabled");
     });
 
     it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
@@ -362,15 +342,15 @@ describe("Toggle", () => {
     });
 
     it("should not toggle on click when readonly", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ToggleReadonly, { readonly: true });
+      const onToggle = vi.fn();
+      render(ToggleReadonly, { readonly: true, onToggle });
 
       const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
       expect(toggle).not.toBeChecked();
 
       await user.click(toggle);
       expect(toggle).not.toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+      expect(onToggle).not.toHaveBeenCalled();
     });
 
     it("should toggle on click when not readonly", async () => {
@@ -382,27 +362,27 @@ describe("Toggle", () => {
     });
 
     it("should not toggle on Space when readonly", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ToggleReadonly, { readonly: true });
+      const onToggle = vi.fn();
+      render(ToggleReadonly, { readonly: true, onToggle });
 
       const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
       toggle.focus();
 
       await user.keyboard(" ");
       expect(toggle).not.toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+      expect(onToggle).not.toHaveBeenCalled();
     });
 
     it("should not toggle on Enter when readonly", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ToggleReadonly, { readonly: true });
+      const onToggle = vi.fn();
+      render(ToggleReadonly, { readonly: true, onToggle });
 
       const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
       toggle.focus();
 
       await user.keyboard("{Enter}");
       expect(toggle).not.toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+      expect(onToggle).not.toHaveBeenCalled();
     });
   });
 

@@ -203,9 +203,8 @@ describe("CheckboxGroup", () => {
   });
 
   it("should not render helper text by default", () => {
-    render(CheckboxGroupComponent);
-    const helperElement = screen.queryByText("Helper text message");
-    expect(helperElement).not.toBeInTheDocument();
+    const { container } = render(CheckboxGroupComponent);
+    expect(container.querySelector(".bx--form__helper-text")).toBeNull();
   });
 
   it("associates helper text with the fieldset via aria-describedby", () => {
