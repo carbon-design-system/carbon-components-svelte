@@ -52,6 +52,15 @@ describe.each(variants)(
       });
     });
 
+    it("moves focus from the tab list to the selected panel with Tab", async () => {
+      render(Tabs, { props: { vertical } });
+      await tick();
+
+      await user.tab();
+      await user.tab();
+      expect(screen.getByRole("tabpanel")).toHaveFocus();
+    });
+
     it("should change tab on click and dispatch change", async () => {
       const onChange = vi.fn();
       render(Tabs, { props: { vertical, onChange } });
