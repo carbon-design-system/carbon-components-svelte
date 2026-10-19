@@ -10,12 +10,6 @@ export type RelativeTimeUnit =
 /** Convert a `Date`, epoch number, or date string to epoch milliseconds. */
 export function toTimestamp(input: Date | number | string): number;
 
-/** Select the `Intl.RelativeTimeFormat` unit and value for a time difference. */
-export function getRelativeTimeParts(diffMs: number): {
-  value: number;
-  unit: RelativeTimeUnit;
-};
-
 /** Format `target` relative to `now`; `""` when `target` is invalid. */
 export function formatRelativeTime(
   target: Date | number | string,

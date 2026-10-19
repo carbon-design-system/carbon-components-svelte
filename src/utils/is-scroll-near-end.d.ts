@@ -1,6 +1,3 @@
-/** Default distance from the bottom (px) that counts as near end. */
-export const DEFAULT_SCROLL_END_THRESHOLD: 32;
-
 export type ScrollEndDetail = {
   scrollTop: number;
   scrollHeight: number;
@@ -8,8 +5,8 @@ export type ScrollEndDetail = {
 };
 
 /**
- * True when the scroll position is within `threshold` px of the bottom.
- * Returns false when the content does not overflow.
+ * True when the scroll position is within `threshold` px (default 32) of
+ * the bottom. Returns false when the content does not overflow.
  */
 export function isScrollNearEnd(options: {
   scrollTop: number;

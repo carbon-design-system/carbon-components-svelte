@@ -1,9 +1,11 @@
 // @ts-check
 
 /**
- * Create a tracker that dispatches "open"/"close" whenever `open` differs
- * from its previous call, skipping the very first call (the initial value
- * isn't a "change" — it's the component mounting).
+ * Create a tracker that dispatches "open" or "close" for the current `open`
+ * on every call after the first, even when `open` repeats its previous
+ * value. The first call is skipped: the initial value isn't a change, it's
+ * the component mounting. Callers run it from a `$:` block that depends
+ * only on `open`, so it runs once per change.
  * @param {(name: "open" | "close") => void} dispatch
  * @returns {(open: boolean) => void}
  */

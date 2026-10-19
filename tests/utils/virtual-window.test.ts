@@ -1,8 +1,9 @@
 import {
-  PINNED_WINDOW_ATTRIBUTE,
   syncPinnedWindow,
   virtualWindow,
 } from "../../src/utils/virtual-window.js";
+
+const PINNED_WINDOW_ATTRIBUTE = "data-virtual-window-pinned";
 
 function buildLayer() {
   const container = document.createElement("div");

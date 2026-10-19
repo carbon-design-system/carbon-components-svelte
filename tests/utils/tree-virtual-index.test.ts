@@ -1,11 +1,50 @@
 import {
   createTreeVirtualIndex,
-  flattenVisibleRows,
   isExpandableNode,
 } from "../../src/utils/tree-virtual-index.js";
 
+type Node = {
+  id: number;
+  text: string;
+  nodes?: Node[];
+  hasChildren?: boolean;
+};
+
+/**
+ * Reference walk the index is compared against: every visible row in
+ * order, descending only into expanded parents with loaded children.
+ */
+function flattenVisibleRows(nodes: Node[], expandedIds: Set<number>) {
+  const rows: Array<{
+    node: Node;
+    depth: number;
+    parentId: number | null;
+    posInSet: number;
+    setSize: number;
+    hasChildren: boolean;
+  }> = [];
+  const walk = (list: Node[], depth: number, parentId: number | null) => {
+    list.forEach((node, i) => {
+      const loaded = Array.isArray(node.nodes) && node.nodes.length > 0;
+      rows.push({
+        node,
+        depth,
+        parentId,
+        posInSet: i + 1,
+        setSize: list.length,
+        hasChildren: loaded || node.hasChildren === true,
+      });
+      if (loaded && expandedIds.has(node.id)) {
+        walk(node.nodes as Node[], depth + 1, node.id);
+      }
+    });
+  };
+  walk(nodes, 0, null);
+  return rows;
+}
+
 describe("treeVirtualIndex", () => {
-  const nodes = [
+  const nodes: Node[] = [
     { id: 0, text: "leaf-root" },
     {
       id: 1,
@@ -37,16 +76,18 @@ describe("treeVirtualIndex", () => {
     expect(isExpandableNode({ id: 9, nodes: [] })).toBe(false);
   });
 
-  it("flattenVisibleRows with empty expand is only roots", () => {
-    const rows = flattenVisibleRows(nodes, new Set());
+  it("lists only the roots when nothing is expanded", () => {
+    const index = createTreeVirtualIndex(nodes, new Set());
+    const rows = index.collectRows(0, index.totalCount);
     expect(rows.map((r) => r.node.id)).toEqual([0, 1, 6]);
     expect(rows.map((r) => r.depth)).toEqual([0, 0, 0]);
     expect(rows[1].hasChildren).toBe(true);
     expect(rows[2].hasChildren).toBe(true);
   });
 
-  it("flattenVisibleRows expands only loaded children when id is expanded", () => {
-    const rows = flattenVisibleRows(nodes, new Set([1, 2]));
+  it("expands only loaded children when an id is expanded", () => {
+    const index = createTreeVirtualIndex(nodes, new Set([1, 2]));
+    const rows = index.collectRows(0, index.totalCount);
     expect(rows.map((r) => r.node.id)).toEqual([0, 1, 2, 3, 4, 5, 6]);
     expect(rows.find((r) => r.node.id === 3)).toMatchObject({
       depth: 2,
@@ -55,11 +96,6 @@ describe("treeVirtualIndex", () => {
       setSize: 2,
       hasChildren: false,
     });
-  });
-
-  it("lazy hasChildren parents stay leaves in flatten until nodes load", () => {
-    const rows = flattenVisibleRows(nodes, new Set([6]));
-    expect(rows.map((r) => r.node.id)).toEqual([0, 1, 6]);
   });
 
   it("getRowAt matches flattenVisibleRows for every index", () => {

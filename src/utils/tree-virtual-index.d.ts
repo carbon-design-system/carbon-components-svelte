@@ -27,15 +27,6 @@ export type TreeVirtualIndex<T extends TreeNodeLike = TreeNodeLike> = {
 export { isExpandableNode };
 
 /**
- * Flatten visible (expanded-only) nodes into annotated rows.
- * Iterative — one output array, no recursive spread.
- */
-export function flattenVisibleRows<T extends TreeNodeLike>(
-  nodes: readonly T[],
-  expandedIdsSet: Set<string | number>,
-): VisibleTreeRow<T>[];
-
-/**
  * Size cache + row lookup for virtualized trees.
  * Allocates one number per node, not a row object per visible line.
  * `getRowAt` is O(siblings on path); `collectRows` is one cursor walk

@@ -60,22 +60,20 @@ export function normalizeSSR(html: string) {
  * Server-renders a component and returns its normalized HTML plus a parsed
  * `document` for attribute and role queries. Only works in a file that starts
  * with `// @vitest-environment node`, where `.svelte` files compile for the
- * server. Pass `context` for a child that reads a parent's `getContext`, or
- * render a fixture that composes the parent instead.
+ * server. To render a child that reads a parent's `getContext`, render a
+ * fixture that composes the parent.
  */
 export function renderSSR<Props extends Record<string, unknown>>(
   component: ComponentType<SvelteComponent<Props>>,
   props?: Partial<Props>,
-  options?: { context?: Map<unknown, unknown> },
 ): { html: string; document: Document };
 // The overload checks props per component. `render` cannot forward a generic
 // `Props`, because its options tuple is a conditional type on `Props`.
 export function renderSSR(
   component: ComponentType<SvelteComponent>,
   props?: Record<string, unknown>,
-  options: { context?: Map<unknown, unknown> } = {},
 ) {
-  const html = normalizeSSR(render(component, { ...options, props }).body);
+  const html = normalizeSSR(render(component, { props }).body);
   const { document } = new JSDOM(html).window;
 
   return { html, document };

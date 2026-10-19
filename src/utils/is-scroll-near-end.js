@@ -1,7 +1,7 @@
 // @ts-check
 
 /** Default distance from the bottom (px) that counts as near end. */
-export const DEFAULT_SCROLL_END_THRESHOLD = 32;
+const DEFAULT_SCROLL_END_THRESHOLD = 32;
 
 /**
  * True when the scroll position is within `threshold` px of the bottom.

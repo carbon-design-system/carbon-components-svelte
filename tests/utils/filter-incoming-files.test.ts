@@ -1,5 +1,4 @@
 import {
-  fileIdentityKey,
   filterIncomingFiles,
   matchesAccept,
 } from "../../src/utils/filter-incoming-files.js";
@@ -9,13 +8,6 @@ function makeFile(name: string, size: number, lastModified = 1) {
   Object.defineProperty(file, "lastModified", { value: lastModified });
   return file;
 }
-
-describe("fileIdentityKey", () => {
-  it("joins name, size, and lastModified", () => {
-    const file = makeFile("a.txt", 3, 42);
-    expect(fileIdentityKey(file)).toBe("a.txt\u00003\u000042");
-  });
-});
 
 describe("filterIncomingFiles", () => {
   it("accepts all files when no options are set", () => {
@@ -75,6 +67,17 @@ describe("filterIncomingFiles", () => {
     });
     expect(accepted).toEqual([unique]);
     expect(rejected).toEqual([{ file: duplicate, reason: "duplicate" }]);
+  });
+
+  it.each([
+    ["different size", makeFile("a.txt", 4, 5)],
+    ["different lastModified", makeFile("a.txt", 3, 6)],
+  ])("does not treat a file with a %s as a duplicate", (_, file) => {
+    const { accepted } = filterIncomingFiles([file], {
+      preventDuplicate: true,
+      existingFiles: [makeFile("a.txt", 3, 5)],
+    });
+    expect(accepted).toEqual([file]);
   });
 
   it("does not reject same-reference files in carryRefs", () => {

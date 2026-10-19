@@ -23,7 +23,7 @@ export function typeaheadIndex({
   index,
   isDisabled,
 }) {
-  if (items.length === 0 || query === "") return index;
+  if (query === "") return index;
   const disabled =
     isDisabled ??
     ((/** @type {T} */ item) =>

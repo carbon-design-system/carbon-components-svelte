@@ -1,6 +1,3 @@
-/** Tabs size scale, in ascending order. */
-export const TABS_SIZE_SCALE: ReadonlyArray<"sm" | "md" | "lg" | "xl">;
-
 /**
  * Clamp `size` to the largest size the current tab type supports. Line
  * tabs (`type="default"`) support up to `"lg"` (`maxSizeIndex` 2);

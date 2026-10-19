@@ -5,9 +5,6 @@ export type FileRejection = {
   reason: FileRejectionReason;
 };
 
-/** Stable identity key for duplicate detection (name, size, lastModified). */
-export function fileIdentityKey(file: File): string;
-
 /**
  * Whether a file matches an `accept` list, using the same rules as a file
  * input. An empty list accepts every file.

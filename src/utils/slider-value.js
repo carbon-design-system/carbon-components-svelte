@@ -37,7 +37,7 @@ export function formatRangeLabel(label, numericValue, formatValue) {
  * @param {MouseEvent | TouchEvent} event
  * @returns {number | null}
  */
-export function getClientX(event) {
+function getClientX(event) {
   if ("touches" in event) return event.touches[0]?.clientX ?? null;
   return event.clientX;
 }
@@ -49,7 +49,7 @@ export function getClientX(event) {
  * @param {MouseEvent | TouchEvent} event
  * @returns {number | null}
  */
-export function getClientY(event) {
+function getClientY(event) {
   if ("touches" in event) return event.touches[0]?.clientY ?? null;
   return event.clientY;
 }
@@ -80,14 +80,7 @@ export function snapToStep(value, min, step) {
  * @param {number} options.step
  * @returns {number}
  */
-export function valueFromTrackPosition({
-  clientX,
-  left,
-  width,
-  min,
-  max,
-  step,
-}) {
+function valueFromTrackPosition({ clientX, left, width, min, max, step }) {
   let nextValue = roundToStep(
     min + Math.round(((max - min) * ((clientX - left) / width)) / step) * step,
     step,

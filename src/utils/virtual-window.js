@@ -14,7 +14,7 @@
 // needs to know the viewport's height.
 
 /** Marks a pinned layer and holds the offset it was last placed at. */
-export const PINNED_WINDOW_ATTRIBUTE = "data-virtual-window-pinned";
+const PINNED_WINDOW_ATTRIBUTE = "data-virtual-window-pinned";
 
 /**
  * The distance sticky positioning moves a zero-height layer, which is the
