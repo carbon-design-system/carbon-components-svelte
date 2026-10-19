@@ -112,6 +112,12 @@
   /** Specify the message shown when a duplicate tag is rejected */
   export let duplicateText = "This tag has already been added";
 
+  /**
+   * Specify the validation message shown when `required` blocks a form
+   * that has text in the field but no tags yet.
+   */
+  export let requiredText = "Add at least one tag";
+
   /** Specify the message shown when a tag is rejected at `max` */
   export let maxText = "You've reached the maximum number of tags";
 
@@ -199,6 +205,12 @@
   $: errorText = invalid ? invalidText : rejectionText;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: instructionsId = `instructions-${id}`;
+
+  // `required` alone is satisfied by text that isn't a tag yet, and that
+  // text isn't submitted.
+  $: ref?.setCustomValidity(
+    required && value.length === 0 && draft !== "" ? requiredText : "",
+  );
 
   $: delimiterPattern =
     delimiter instanceof RegExp
