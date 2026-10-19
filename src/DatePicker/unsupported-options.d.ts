@@ -1,23 +1,12 @@
-export interface UnsupportedOptionContext {
+/** Prop combinations that have no effect, so they don't fail silently. */
+export function getPropWarnings(props: {
   datePickerType?: string;
+  months: number;
+  anchor: HTMLElement | undefined;
   portalled: boolean;
-  displayFormat: string | undefined;
-  disabledDates: ReadonlyArray<unknown>;
-  enabledDates: ReadonlyArray<unknown>;
-}
+}): string[];
 
-/**
- * Messages for `flatpickrProps` options that Carbon overrides or ignores.
- */
-export function getUnsupportedOptionWarnings(
-  flatpickrProps: Record<string, unknown> | undefined,
-  context: UnsupportedOptionContext,
-): string[];
-
-/**
- * The message for `short` on a type it has no effect on, or `undefined`
- * for a `"simple"` picker.
- */
+/** `short` only narrows the field of a `"simple"` picker. */
 export function getShortWarning(
   datePickerType: string | undefined,
 ): string | undefined;

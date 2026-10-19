@@ -1,5 +1,49 @@
 <script context="module">
-  import { deepEqual } from "../utils/deep-equal.js";
+  /** @param {any} value */
+  function isRangeRule(value) {
+    return value?.constructor === Object && "from" in value && "to" in value;
+  }
+
+  /** @param {any} a @param {any} b */
+  function sameItem(a, b) {
+    if (a === b) return true;
+    if (a instanceof Date && b instanceof Date) {
+      return a.getTime() === b.getTime();
+    }
+    return (
+      isRangeRule(a) &&
+      isRangeRule(b) &&
+      sameItem(a.from, b.from) &&
+      sameItem(a.to, b.to)
+    );
+  }
+
+  /**
+   * Option props are primitives, functions, elements, `Date`s, or flat
+   * arrays and objects of those. One rebuilt each render
+   * (`minDate={new Date(...)}`, `disabledDates={[isWeekend]}`) arrives new
+   * but equal, so compare one level deep: `Date`s by time, `{ from, to }`
+   * rules by their ends, other items by identity.
+   *
+   * @param {any} a
+   * @param {any} b
+   */
+  function sameValue(a, b) {
+    if (sameItem(a, b)) return true;
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return (
+        a.length === b.length && a.every((item, i) => sameItem(item, b[i]))
+      );
+    }
+    if (
+      a?.constructor === Object &&
+      b?.constructor === Object &&
+      Object.keys(a).length === Object.keys(b).length
+    ) {
+      return Object.keys(a).every((key) => sameItem(a[key], b[key]));
+    }
+    return false;
+  }
 
   /**
    * @param {string | { from: string; to: string }} atOpen
@@ -25,48 +69,11 @@
   }
 
   /**
-   * A value rebuilt in a `$:` statement, forwarded through a wrapper, or
-   * built from a reassigned object arrives new but equal. Comparing contents
-   * avoids a `calendar.set` (a full day grid redraw) when nothing changed.
-   */
-  function optionChanged(prev, next) {
-    return !deepEqual(prev, next);
-  }
-
-  /**
-   * `flatpickrProps` keys that are props now, with each prop's default. A
-   * prop left at its default defers to the old key, so existing code keeps
-   * working through the deprecation release.
-   */
-  const PROP_FOR_OPTION = {
-    allowInput: ["allowInput", true],
-    closeOnSelect: ["closeOnSelect", true],
-    parseDate: ["parseDate", undefined],
-    formatDate: ["formatDate", undefined],
-    showMonths: ["months", 1],
-    conjunction: ["conjunction", ", "],
-    shorthandCurrentMonth: ["monthLabel", false],
-    position: ["direction", "auto"],
-    positionElement: ["anchor", undefined],
-    allowInvalidPreload: ["keepOutOfRangeValue", false],
-    animate: ["animate", false],
-    ignoredFocusElements: ["keepOpenFor", undefined],
-  };
-
-  /**
    * @param {number} year
    * @param {number} month
    */
   function monthValue(year, month) {
     return year * 12 + month;
-  }
-
-  /**
-   * @param {null | string | Date} a
-   * @param {null | string | Date} b
-   */
-  function initialMonthChanged(a, b) {
-    return !deepEqual(a, b);
   }
 </script>
 
@@ -250,9 +257,8 @@
 
   /**
    * Set to `true` to show each week's number beside it in the calendar.
-   * Weeks are numbered per ISO 8601; pass `getWeek` in `flatpickrProps` to
-   * number them differently, such as for fiscal weeks. The column is only
-   * shown with a single month.
+   * Weeks are numbered per ISO 8601. The column is only shown with a
+   * single month.
    */
   export let weekNumbers = false;
 
@@ -398,17 +404,6 @@
   export let id = uniqueId();
 
   /**
-   * Override the options passed to the calendar. `mode` is set by
-   * `datePickerType`. The names and behavior follow flatpickr's options,
-   * for the subset the calendar implements.
-   * Deprecated: each documented option is now a prop (`allowInput`,
-   * `closeOnSelect`, `months`, and so on), and the console warns once for
-   * each key used here.
-   * @type {Omit<import("./calendar.js").CalendarOptions, "mode" | "secondInput">}
-   */
-  export let flatpickrProps = { static: true };
-
-  /**
    * Bind to the calendar for programmatic control: `open()`, `close()`,
    * `showMonth(date)`, `focusDate(date)`, `isOpen`, and `selectedDates`.
    * Available for every `datePickerType` except `"simple"`, where it stays
@@ -456,27 +451,20 @@
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import { createCalendarApi } from "./calendar-api.js";
-  import {
-    createCalendar,
-    resolveOptionValue,
-    setErrorHandler,
-  } from "./create-calendar.js";
+  import { createCalendar } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
   } from "./date-picker-top-layer.js";
-  import {
-    getShortWarning,
-    getUnsupportedOptionWarnings,
-  } from "./unsupported-options.js";
+  import { getPropWarnings, getShortWarning } from "./unsupported-options.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const formContext = getContext(FORM_CONTEXT_KEY);
 
-  $: usesInline = inline || !!flatpickrProps.inline;
-  $: usesWeekNumbers = weekNumbers || !!flatpickrProps.weekNumbers;
+  $: usesInline = inline;
+  $: usesWeekNumbers = weekNumbers;
   // An inline calendar lives in the layout, so there is nothing to portal.
   $: effectivePortalMenu =
     !usesInline && (portalMenu === undefined ? !!insideModal : portalMenu);
@@ -566,8 +554,8 @@
     console.warn(message);
   }
   let prevDatePickerType = datePickerType;
-  let prevUsesInline = inline || !!flatpickrProps.inline;
-  let prevUsesWeekNumbers = weekNumbers || !!flatpickrProps.weekNumbers;
+  let prevUsesInline = inline;
+  let prevUsesWeekNumbers = weekNumbers;
   let prevDisplayFormat = displayFormat;
   let prevUsesDisplayFormat = !!displayFormat && datePickerType !== "range";
   let calendarUsesFixedPositioning = false;
@@ -821,7 +809,7 @@
   function syncSelectedDatesFromCalendar() {
     if (!engine) return;
     const next = engine.selectedDates.map((date) => new Date(date));
-    if (!deepEqual(next, selectedDates)) selectedDates = next;
+    if (!sameValue(next, selectedDates)) selectedDates = next;
     prevSelectedDates = selectedDates;
   }
 
@@ -1162,7 +1150,7 @@
   });
 
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
-    if (optionChanged(prevAppliedOptions[optionKey], value)) {
+    if (!sameValue(prevAppliedOptions[optionKey], value)) {
       engine.set(optionKey, appliedValue);
       prevAppliedOptions[optionKey] = value;
     }
@@ -1182,35 +1170,27 @@
     engine.redraw();
   }
 
-  /** `disabledDates`/`enabledDates` win over the same key in `flatpickrProps`
-   * while non-empty; the `flatpickrProps` loop in `initCalendar` skips those
-   * keys in that case. Track each prop with its own `prev*` reference so
-   * clearing one back to `[]` restores `flatpickrProps` (or the natural "no
-   * rule" state) exactly once, instead of fighting the loop's own tracking
-   * of the same option key. */
+  /** Track each prop with its own `prev*` reference, so clearing one back
+   * to `[]` restores the "no rule" state exactly once. */
   function applyDisabledDates() {
-    if (disabledDates === prevDisabledDates) return;
+    if (sameValue(disabledDates, prevDisabledDates)) return;
     const hadOverride = prevDisabledDates.length > 0;
     prevDisabledDates = disabledDates;
     if (disabledDates.length > 0) {
       engine.set("disable", disabledDates);
     } else if (hadOverride) {
-      engine.set("disable", flatpickrProps.disable ?? []);
+      engine.set("disable", []);
     }
   }
 
   function applyEnabledDates() {
-    if (enabledDates === prevEnabledDates) return;
+    if (sameValue(enabledDates, prevEnabledDates)) return;
     const hadOverride = prevEnabledDates.length > 0;
     prevEnabledDates = enabledDates;
     if (enabledDates.length > 0) {
       engine.set("enable", enabledDates);
     } else if (hadOverride) {
-      if (flatpickrProps.enable) {
-        engine.set("enable", flatpickrProps.enable);
-      } else {
-        clearCalendarEnable();
-      }
+      clearCalendarEnable();
     }
   }
 
@@ -1277,40 +1257,6 @@
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
-      // `calendar.set("errorHandler", fn)` would replace Carbon's own
-      // wrapper (see create-calendar.js), so the live handler is threaded
-      // through separately instead of going through the generic loop below.
-      setErrorHandler(engine, flatpickrProps.errorHandler);
-      for (const [option, value] of Object.entries(flatpickrProps)) {
-        // `static` is decided by `effectivePortalMenu` at creation time
-        // (see below); re-applying the default `flatpickrProps.static`
-        // here would clobber that on every reactive re-run.
-        if (option === "static" && effectivePortalMenu) continue;
-        // Unsupported: see `wrap` in create-calendar.js.
-        if (option === "wrap") continue;
-        // Owned by the read-only block below, which combines them with
-        // `$readonlyAny`.
-        if (option === "clickOpens" || option === "allowInput") continue;
-        // `disabledDates`/`enabledDates` already applied above and won.
-        if (option === "disable" && disabledDates.length > 0) continue;
-        if (option === "enable" && enabledDates.length > 0) continue;
-        if (option === "errorHandler") continue;
-        // Creation-only, handled by `recreateCalendar()`.
-        if (option === "inline" || option === "weekNumbers") continue;
-        // Applied from props (see `propOptions`).
-        if (option in PROP_FOR_OPTION) continue;
-        // `displayFormat` owns these two.
-        if (
-          usesDisplayFormat &&
-          (option === "altInput" || option === "altFormat")
-        )
-          continue;
-        applyOptionIfChanged(
-          option,
-          value,
-          resolveOptionValue(engine, option, value),
-        );
-      }
       return;
     }
 
@@ -1325,7 +1271,6 @@
     if (creationFailed) return;
     creating = true;
     const epoch = calendarEpoch;
-    const flatpickrPropsAtCreation = flatpickrProps;
 
     // Auto-detect a top-layer ancestor (native dialog or open popover) so the
     // calendar can participate in its top layer instead of being clipped behind
@@ -1347,7 +1292,7 @@
                 }),
               }
             : { appendTo: datePickerRef }),
-          // An empty `value` must not clobber `flatpickrProps.defaultDate`.
+          // An empty `value` leaves the calendar without a selection.
           ...($inputValue !== "" && { defaultDate: $inputValue }),
           mode: $mode,
         },
@@ -1421,7 +1366,6 @@
       locale: options.locale,
       firstDayOfWeek: options.firstDayOfWeek,
       dateFormat: options.dateFormat,
-      ...flatpickrPropsAtCreation,
       clickOpens: options.clickOpens,
       allowInput: options.allowInput,
     };
@@ -1430,12 +1374,6 @@
     );
     initCalendar(options);
 
-    // flatpickr fills the input from `flatpickrProps.defaultDate` without
-    // firing events, so mirror it into `value` here.
-    if (engine && !$range && $inputValue === "" && inputRef.value !== "") {
-      prevValue = inputRef.value;
-      inputValue.set(inputRef.value);
-    }
     const stringValueEmpty = $range
       ? $inputValueFrom === "" && $inputValueTo === ""
       : $inputValue === "";
@@ -1647,7 +1585,7 @@
     if (engine?.selectedDates.length === 1) engine.redraw();
   }
   $: if (engine && selectedDates !== prevSelectedDates) {
-    if (deepEqual(selectedDates, engine.selectedDates)) {
+    if (sameValue(selectedDates, engine.selectedDates)) {
       prevSelectedDates = selectedDates;
     } else {
       applySelectedDates();
@@ -1667,7 +1605,7 @@
   $: valueFrom = $inputValueFrom;
   $: inputValueTo.set(valueTo);
   $: valueTo = $inputValueTo;
-  $: if (engine && initialMonthChanged(initialMonth, prevInitialMonth)) {
+  $: if (engine && !sameValue(initialMonth, prevInitialMonth)) {
     prevInitialMonth = initialMonth;
     applyInitialMonth();
   }
@@ -1694,20 +1632,14 @@
       engine.setDate(engine.selectedDates, false);
     }
   }
-  // This re-runs whenever `flatpickrProps` is handed over again, even with
-  // equal contents, so each message is only reported once per instance.
   $: if ($hasCalendar) {
-    for (const message of getUnsupportedOptionWarnings(flatpickrProps, {
+    for (const message of getPropWarnings({
       datePickerType,
+      months,
+      anchor,
       portalled: effectivePortalMenu,
-      displayFormat,
-      disabledDates,
-      enabledDates,
     })) {
-      if (!reportedWarnings.has(message)) {
-        reportedWarnings.add(message);
-        console.warn(message);
-      }
+      reportOnce(message);
     }
   }
   $: if (short) {
@@ -1740,10 +1672,9 @@
       // default to static: true so the
       // date picker works inside a modal
       static: true,
-      ...flatpickrProps,
       ...propOptions,
-      // The flatpickr range plugin strips the `readonly` attribute when
-      // `allowInput` is true, so read-only wins over `flatpickrProps`.
+      // The range calendar strips the `readonly` attribute when
+      // `allowInput` is true, so read-only wins over `allowInput`.
       ...interactive,
       ...(disabledDates.length > 0 && { disable: disabledDates }),
       ...(enabledDates.length > 0 && { enable: enabledDates }),
@@ -1754,118 +1685,47 @@
     })
       .then(() => {})
       .catch((error) => {
-        // Only a failed plugin import lands here. Surface it like flatpickr
-        // surfaces its own init errors instead of failing silently.
         console.error(error);
       });
   }
-  /**
-   * `legacy` is `flatpickrProps`, passed in so `$:` blocks that call this
-   * re-run when it changes.
-   *
-   * @param {Record<string, unknown>} legacy
-   * @param {string} option
-   * @param {unknown} propValue
-   * @param {unknown} propDefault
-   */
-  function fromPropOrLegacy(legacy, option, propValue, propDefault) {
-    if (propValue !== propDefault) return propValue;
-    return option in legacy ? legacy[option] : propDefault;
-  }
-
   const POSITION_DIRECTION = { auto: "auto", bottom: "below", top: "above" };
   const POSITION_ALIGN = { start: "left", center: "center", end: "right" };
 
-  // Engine options that come from props. Each is a primitive, a function, or
-  // an element, so a change is a `!==` away; no deep comparison.
+  // Engine options that come from props: primitives, functions, elements,
+  // and one flat array (`keepOpenFor`), so `sameValue` never recurses.
   $: propOptions = {
-    closeOnSelect: fromPropOrLegacy(
-      flatpickrProps,
-      "closeOnSelect",
-      closeOnSelect,
-      true,
-    ),
-    parseDate: fromPropOrLegacy(
-      flatpickrProps,
-      "parseDate",
-      parseDate,
-      undefined,
-    ),
-    formatDate: fromPropOrLegacy(
-      flatpickrProps,
-      "formatDate",
-      formatDate,
-      undefined,
-    ),
-    showMonths: fromPropOrLegacy(flatpickrProps, "showMonths", months, 1),
-    conjunction: fromPropOrLegacy(
-      flatpickrProps,
-      "conjunction",
-      conjunction,
-      ", ",
-    ),
-    shorthandCurrentMonth: fromPropOrLegacy(
-      flatpickrProps,
-      "shorthandCurrentMonth",
-      monthLabel === "short",
-      false,
-    ),
-    position: fromPropOrLegacy(
-      flatpickrProps,
-      "position",
+    closeOnSelect,
+    parseDate,
+    formatDate,
+    showMonths: months,
+    conjunction,
+    shorthandCurrentMonth: monthLabel === "short",
+    position:
       direction === "auto" && align === "start"
         ? "auto"
         : `${POSITION_DIRECTION[direction]} ${POSITION_ALIGN[align]}`,
-      "auto",
-    ),
-    positionElement: fromPropOrLegacy(
-      flatpickrProps,
-      "positionElement",
-      anchor,
-      undefined,
-    ),
-    allowInvalidPreload: fromPropOrLegacy(
-      flatpickrProps,
-      "allowInvalidPreload",
-      keepOutOfRangeValue,
-      false,
-    ),
-    animate: fromPropOrLegacy(flatpickrProps, "animate", animate, false),
-    ignoredFocusElements: fromPropOrLegacy(
-      flatpickrProps,
-      "ignoredFocusElements",
-      keepOpenFor.length ? keepOpenFor : undefined,
-      undefined,
-    ),
+    positionElement: anchor,
+    allowInvalidPreload: keepOutOfRangeValue,
+    animate,
+    ignoredFocusElements: keepOpenFor.length ? keepOpenFor : undefined,
     dayDescription,
     dayClass,
   };
-  $: for (const option of Object.keys(flatpickrProps)) {
-    const prop = PROP_FOR_OPTION[option]?.[0];
-    if (!prop) continue;
-    reportOnce(
-      `[carbon-components-svelte] DatePicker: \`flatpickrProps.${option}\` is deprecated; use the \`${prop}\` prop.`,
-    );
-  }
   /** @type {Record<string, unknown>} */
   let appliedPropOptions = {};
   $: if (engine) {
     for (const [option, value] of Object.entries(propOptions)) {
-      if (appliedPropOptions[option] === value) continue;
+      if (sameValue(appliedPropOptions[option], value)) continue;
       appliedPropOptions[option] = value;
       engine.set(option, value);
     }
   }
 
-  // Read-only turns both off. Otherwise the `allowInput` prop (or the
-  // deprecated `flatpickrProps` key) decides, so calendar-only selection
-  // survives.
+  // Read-only turns both off. Otherwise `allowInput` decides, so
+  // calendar-only selection survives.
   $: interactive = {
-    clickOpens: !$readonlyAny && flatpickrProps.clickOpens !== false,
-    allowInput:
-      !$readonlyAny &&
-      fromPropOrLegacy(flatpickrProps, "allowInput", allowInput, true) !==
-        false,
+    clickOpens: !$readonlyAny,
+    allowInput: !$readonlyAny && allowInput,
   };
   // Each `calendar.set` rebuilds the day grid, so only apply a real change.
   // The calendar is created with these values already.

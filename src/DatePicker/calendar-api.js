@@ -9,13 +9,12 @@
  *   readonly isOpen: boolean;
  *   readonly view: Date;
  *   readonly selectedDates: ReadonlyArray<Date>;
- *   readonly engine: import("./calendar.js").CalendarInstance;
  * }} DatePickerCalendar
  */
 
 /**
  * The documented surface `bind:calendar` hands out, over the engine
- * instance. `engine` keeps the raw instance reachable for one release.
+ * instance.
  *
  * @param {import("./calendar.js").CalendarInstance} engine
  * @returns {DatePickerCalendar}
@@ -46,9 +45,6 @@ export function createCalendarApi(engine) {
     },
     get selectedDates() {
       return engine.selectedDates.map((date) => new Date(date.getTime()));
-    },
-    get engine() {
-      return engine;
     },
   };
 }

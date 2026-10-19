@@ -16,11 +16,11 @@
   $: oncalendar(calendar);
 </script>
 
-<!-- A new object and array every render, with equal contents. -->
+<!-- A new array every render, with equal contents. -->
 <DatePicker
   datePickerType="single"
   bind:calendar
-  flatpickrProps={{ disable: [isSunday, `03/1${renders % 1}/2024`] }}
+  disabledDates={[isSunday, `03/1${renders % 1}/2024`]}
 >
   <DatePickerInput labelText="Date" helperText="Render {renders}" />
 </DatePicker>

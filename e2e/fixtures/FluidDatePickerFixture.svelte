@@ -3,23 +3,13 @@
 </script>
 
 <div data-testid="fluid-date-picker-single-neutral">
-  <DatePicker
-    fluid
-    datePickerType="single"
-    value="03/15/2024"
-    flatpickrProps={{ static: true }}
-  >
+  <DatePicker fluid datePickerType="single" value="03/15/2024">
     <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
   </DatePicker>
 </div>
 
 <div data-testid="fluid-date-picker-single-readonly">
-  <DatePicker
-    fluid
-    datePickerType="single"
-    value="03/15/2024"
-    flatpickrProps={{ static: true }}
-  >
+  <DatePicker fluid datePickerType="single" value="03/15/2024">
     <DatePickerInput
       labelText="Meeting date"
       placeholder="mm/dd/yyyy"
@@ -29,12 +19,7 @@
 </div>
 
 <div data-testid="fluid-date-picker-single-invalid">
-  <DatePicker
-    fluid
-    datePickerType="single"
-    value="03/15/2024"
-    flatpickrProps={{ static: true }}
-  >
+  <DatePicker fluid datePickerType="single" value="03/15/2024">
     <DatePickerInput
       labelText="Meeting date"
       placeholder="mm/dd/yyyy"
@@ -45,21 +30,21 @@
 </div>
 
 <div data-testid="fluid-date-picker-range-neutral">
-  <DatePicker fluid datePickerType="range" flatpickrProps={{ static: true }}>
+  <DatePicker fluid datePickerType="range">
     <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
     <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
   </DatePicker>
 </div>
 
 <div data-testid="fluid-date-picker-range-readonly">
-  <DatePicker fluid datePickerType="range" flatpickrProps={{ static: true }}>
+  <DatePicker fluid datePickerType="range">
     <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" readonly />
     <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" readonly />
   </DatePicker>
 </div>
 
 <div data-testid="fluid-date-picker-range-invalid">
-  <DatePicker fluid datePickerType="range" flatpickrProps={{ static: true }}>
+  <DatePicker fluid datePickerType="range">
     <DatePickerInput
       labelText="Start date"
       placeholder="mm/dd/yyyy"
@@ -71,7 +56,7 @@
 </div>
 
 <div data-testid="fluid-date-picker-range-warn">
-  <DatePicker fluid datePickerType="range" flatpickrProps={{ static: true }}>
+  <DatePicker fluid datePickerType="range">
     <DatePickerInput
       labelText="Start date"
       placeholder="mm/dd/yyyy"

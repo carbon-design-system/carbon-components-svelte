@@ -40,23 +40,6 @@ describe("DatePicker props for calendar options", () => {
     expect(redraw).not.toHaveBeenCalled();
   });
 
-  it("maps a deprecated flatpickrProps key to its prop, and warns once", async () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    render(DatePickerProps, {
-      flatpickrProps: { static: true, showMonths: 2 },
-    });
-    const input = screen.getByLabelText("Date");
-    await vi.waitFor(() => expect(engineOf(input)).toBeTruthy());
-
-    expect(engineOf(input).config.showMonths).toBe(2);
-    expect(
-      warn.mock.calls.filter(([message]) =>
-        String(message).includes("`months` prop"),
-      ),
-    ).toHaveLength(1);
-    warn.mockRestore();
-  });
-
   it("makes the field read-only when allowInput turns off after mount", async () => {
     const { rerender } = render(DatePickerProps, {});
     const input = screen.getByLabelText("Date");

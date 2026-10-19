@@ -6,9 +6,6 @@
   export let datePickerType: ComponentProps<DatePicker>["datePickerType"] =
     "single";
   export let dateFormat: ComponentProps<DatePicker>["dateFormat"] = "m/d/Y";
-  export let flatpickrProps: ComponentProps<DatePicker>["flatpickrProps"] = {
-    static: true,
-  };
   export let oncalendar: (cal: ComponentProps<DatePicker>["calendar"]) => void =
     () => {};
   export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
@@ -22,7 +19,6 @@
   <DatePicker
     {datePickerType}
     {dateFormat}
-    {flatpickrProps}
     bind:calendar
     on:error={(e) => onerror?.(e)}
   >
@@ -33,7 +29,6 @@
   <DatePicker
     {datePickerType}
     {dateFormat}
-    {flatpickrProps}
     bind:calendar
     on:error={(e) => onerror?.(e)}
   >

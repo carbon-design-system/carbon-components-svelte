@@ -21,9 +21,16 @@
   export let short = false;
   export let fullWidth = false;
   export let fluid = false;
-  export let flatpickrProps: ComponentProps<DatePicker>["flatpickrProps"] = {
-    static: true,
-  };
+  export let displayFormat: ComponentProps<DatePicker>["displayFormat"] =
+    undefined;
+  export let inline = false;
+  export let months: ComponentProps<DatePicker>["months"] = 1;
+  export let closeOnSelect = true;
+  export let monthLabel: ComponentProps<DatePicker>["monthLabel"] = "long";
+  export let animate = false;
+  export let allowInput = true;
+  export let formatDate: ComponentProps<DatePicker>["formatDate"] = undefined;
+  export let anchor: ComponentProps<DatePicker>["anchor"] = undefined;
   export let disabled = false;
   export let readonly = false;
   export let invalid = false;
@@ -62,7 +69,15 @@
   {short}
   {fullWidth}
   {fluid}
-  {flatpickrProps}
+  {displayFormat}
+  {inline}
+  {months}
+  {closeOnSelect}
+  {monthLabel}
+  {animate}
+  {allowInput}
+  {formatDate}
+  {anchor}
   {portalMenu}
   {clearable}
   {...clearButtonLabelText === undefined ? {} : { clearButtonLabelText }}
