@@ -600,6 +600,19 @@ describe("ContentSwitcher", () => {
       expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
     });
 
+    it("moves from the focused switch after the selected switch is clicked", async () => {
+      await renderAndFlush(ContentSwitcherSelectionMode);
+      const tabs = screen.getAllByRole("tab");
+
+      await user.click(tabs[0]);
+      await user.keyboard("{ArrowRight}{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[2]);
+
+      await user.click(tabs[0]);
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[1]);
+    });
+
     it("arrow left moves focus without changing selection", async () => {
       render(ContentSwitcherSelectionMode);
 
