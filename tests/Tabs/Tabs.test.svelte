@@ -12,6 +12,8 @@
   export let size: ComponentProps<Tabs>["size"] = undefined;
   export let customClass = "";
   export let ariaLabel = "";
+  /** Applies `flush` to the first panel only. */
+  export let flush = false;
 </script>
 
 <Tabs
@@ -31,7 +33,7 @@
   <Tab label="Tab 2" disabled />
   <Tab label="Tab 3" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
+    <TabContent {flush}>Content 1</TabContent>
     <TabContent>Content 2</TabContent>
     <TabContent>Content 3</TabContent>
   </svelte:fragment>

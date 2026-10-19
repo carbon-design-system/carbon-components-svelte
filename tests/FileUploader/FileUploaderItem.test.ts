@@ -3,18 +3,6 @@ import { user } from "../utils/user";
 import FileUploaderItem from "./FileUploaderItem.test.svelte";
 
 describe("FileUploaderItem", () => {
-  it("should render with default props", () => {
-    const { container } = render(FileUploaderItem, {
-      props: { name: "test.txt" },
-    });
-
-    expect(screen.getByText("test.txt")).toBeInTheDocument();
-
-    const item = container.querySelector(".bx--file__selected-file");
-    assert(item);
-    expect(item).toBeInTheDocument();
-  });
-
   it.each([
     ["uploading", ".bx--loading"],
     ["edit", "button.bx--file-close"],
@@ -63,38 +51,20 @@ describe("FileUploaderItem", () => {
     }
   });
 
-  it("should render invalid state", () => {
+  it("should render invalid state with its error copy", () => {
     const { container } = render(FileUploaderItem, {
-      props: { name: "test.txt", invalid: true },
+      props: {
+        name: "test.txt",
+        invalid: true,
+        errorSubject: "File size exceeds limit",
+        errorBody: "Please select a smaller file",
+      },
     });
 
     const item = container.querySelector(".bx--file__selected-file");
     assert(item);
     expect(item).toHaveClass("bx--file__selected-file--invalid");
-  });
-
-  it("should render error subject when invalid", () => {
-    render(FileUploaderItem, {
-      props: {
-        name: "test.txt",
-        invalid: true,
-        errorSubject: "File size exceeds limit",
-      },
-    });
-
     expect(screen.getByText("File size exceeds limit")).toBeInTheDocument();
-  });
-
-  it("should render error body when invalid", () => {
-    render(FileUploaderItem, {
-      props: {
-        name: "test.txt",
-        invalid: true,
-        errorSubject: "Error",
-        errorBody: "Please select a smaller file",
-      },
-    });
-
     expect(
       screen.getByText("Please select a smaller file"),
     ).toBeInTheDocument();
@@ -112,59 +82,6 @@ describe("FileUploaderItem", () => {
 
     expect(screen.queryByText("Error")).not.toBeInTheDocument();
     expect(screen.queryByText("Error message")).not.toBeInTheDocument();
-  });
-
-  it("should dispatch delete event on click when status is edit", async () => {
-    const deleteHandler = vi.fn();
-    const { container } = render(FileUploaderItem, {
-      props: {
-        name: "test.txt",
-        status: "edit",
-        id: "file-1",
-        ondelete: deleteHandler,
-      },
-    });
-
-    const closeButton = container.querySelector(
-      ".bx--file__state-container button",
-    );
-    assert(closeButton instanceof HTMLElement);
-
-    await user.click(closeButton);
-
-    await vi.waitFor(() => {
-      expect(deleteHandler).toHaveBeenCalled();
-    });
-
-    const event = deleteHandler.mock.calls[0][0];
-    expect(event.detail).toBe("file-1");
-  });
-
-  it("should dispatch delete event on keyboard interaction when status is edit", async () => {
-    const deleteHandler = vi.fn();
-    const { container } = render(FileUploaderItem, {
-      props: {
-        name: "test.txt",
-        status: "edit",
-        id: "file-1",
-        ondelete: deleteHandler,
-      },
-    });
-
-    const closeButton = container.querySelector(
-      ".bx--file__state-container button",
-    );
-    assert(closeButton instanceof HTMLElement);
-
-    closeButton.focus();
-    await user.keyboard("{Enter}");
-
-    await vi.waitFor(() => {
-      expect(deleteHandler).toHaveBeenCalled();
-    });
-
-    const event = deleteHandler.mock.calls[0][0];
-    expect(event.detail).toBe("file-1");
   });
 
   it.each(["click", "{Enter}", " "])(
@@ -193,6 +110,7 @@ describe("FileUploaderItem", () => {
       }
 
       expect(deleteHandler).toHaveBeenCalledTimes(1);
+      expect(deleteHandler.mock.calls[0][0].detail).toBe("file-1");
     },
   );
 
@@ -245,14 +163,6 @@ describe("FileUploaderItem", () => {
     const item = container.querySelector(".bx--file__selected-file");
     assert(item);
     expect(item).toHaveAttribute("id", "custom-file-id");
-  });
-
-  it("should handle name prop", () => {
-    render(FileUploaderItem, {
-      props: { name: "custom-filename.txt" },
-    });
-
-    expect(screen.getByText("custom-filename.txt")).toBeInTheDocument();
   });
 
   it("should render the file size when provided", () => {

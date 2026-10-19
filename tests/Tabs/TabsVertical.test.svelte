@@ -7,7 +7,6 @@
   export let selected = 0;
   export let activation: ComponentProps<TabsVertical>["activation"] =
     "automatic";
-  export let icon: ComponentProps<Tab>["icon"] = undefined;
   export let size: ComponentProps<TabsVertical>["size"] = undefined;
   export let orientation: ComponentProps<TabsVertical>["orientation"] =
     undefined;
@@ -22,7 +21,7 @@
     console.log("change event", detail);
   }}
 >
-  <Tab label="Tab 1" {icon} />
+  <Tab label="Tab 1" />
   <Tab label="Tab 2" disabled />
   <Tab label="Tab 3" />
   <Tab label="Tab 4" />

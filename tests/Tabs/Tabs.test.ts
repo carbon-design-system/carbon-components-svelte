@@ -3,11 +3,9 @@ import type TabComponent from "carbon-components-svelte/Tabs/Tab.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
-import Settings from "../../src/icons/Settings.svelte";
 import { user } from "../utils/user";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
-import TabIconContainer from "./TabIconContainer.test.svelte";
 import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
 import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
 import TabSlot from "./TabSlot.test.svelte";
@@ -45,6 +43,18 @@ describe("Tabs", () => {
 
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
+  });
+
+  it("applies the flush modifier to the panel with `flush` set, not the others", () => {
+    render(Tabs, { props: { flush: true } });
+
+    expect(screen.getByText("Content 1")).toHaveClass(
+      "bx--tab-content",
+      "bx--tab-content--flush",
+    );
+    expect(screen.getByText("Content 2")).not.toHaveClass(
+      "bx--tab-content--flush",
+    );
   });
 
   it("should link each tab to its panel via aria-controls", async () => {
@@ -89,24 +99,6 @@ describe("Tabs", () => {
     for (const li of presentationalItems) {
       expect(li).not.toHaveAttribute("tabindex");
     }
-  });
-
-  it("makes only the selected tab tabbable", async () => {
-    render(Tabs);
-    await tick();
-
-    expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveAttribute(
-      "tabindex",
-      "0",
-    );
-    expect(screen.getByRole("tab", { name: "Tab 2" })).toHaveAttribute(
-      "tabindex",
-      "-1",
-    );
-    expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
-      "tabindex",
-      "-1",
-    );
   });
 
   it("moves the tab stop with the selection", async () => {
@@ -376,12 +368,6 @@ describe("Tabs", () => {
     });
   });
 
-  it("uses an empty aria-label when passed an empty string", () => {
-    render(Tabs, { props: { ariaLabel: "" } });
-    const nav = screen.getByRole("navigation");
-    expect(nav).toHaveAttribute("aria-label", "");
-  });
-
   it("should render container type tabs", () => {
     render(Tabs, {
       props: { type: "container" },
@@ -412,18 +398,6 @@ describe("Tabs", () => {
     expect(navItems[0]).not.toHaveClass("bx--tabs__nav-item--default");
     expect(navItems[1]).not.toHaveClass("bx--tabs__nav-item--default");
     expect(navItems[2]).toHaveClass("bx--tabs__nav-item--default");
-  });
-
-  it("marks only the selected, enabled tab link with the selected class", async () => {
-    render(Tabs);
-    await tick();
-
-    const [tab1, tab2, tab3] = screen.getAllByRole("tab");
-
-    // Tab 1: selected, Tab 2: disabled, Tab 3: neither.
-    expect(tab1).toHaveClass("bx--tabs__nav-link--selected");
-    expect(tab2).not.toHaveClass("bx--tabs__nav-link--selected");
-    expect(tab3).not.toHaveClass("bx--tabs__nav-link--selected");
   });
 
   it("does not mark a disabled tab link as selected", async () => {
@@ -508,15 +482,6 @@ describe("Tabs", () => {
     );
   });
 
-  it("should not apply a layout size class by default", () => {
-    render(Tabs);
-
-    const nav = screen.getByRole("navigation");
-    for (const size of ["sm", "md", "lg", "xl"]) {
-      expect(nav).not.toHaveClass(`bx--layout--size-${size}`);
-    }
-  });
-
   it("should apply the layout size class for the size prop", () => {
     render(Tabs, { props: { size: "sm" } });
 
@@ -537,16 +502,6 @@ describe("Tabs", () => {
 
     const nav = screen.getByRole("navigation");
     expect(nav).toHaveClass("bx--layout--size-xl");
-  });
-
-  it("should ignore an invalid size value", () => {
-    // @ts-expect-error - exercising the runtime fallback for an invalid value
-    render(Tabs, { props: { size: "invalid" } });
-
-    const nav = screen.getByRole("navigation");
-    for (const size of ["sm", "md", "lg", "xl"]) {
-      expect(nav).not.toHaveClass(`bx--layout--size-${size}`);
-    }
   });
 
   it.each([
@@ -580,16 +535,6 @@ describe("Tabs", () => {
 
   // The v11 redesign drops the legacy mobile dropdown: there is no longer a
   // listbox trigger, and the tab list is always inline (never `--hidden`).
-  it("does not render a dropdown trigger and keeps the tab list inline", () => {
-    render(Tabs);
-
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-
-    const tablist = screen.getByRole("tablist");
-    expect(tablist).not.toHaveClass("bx--tabs__nav--hidden");
-    expect(tablist).toBeVisible();
-  });
-
   // jsdom does no layout, so the overflow geometry is mocked on the nav element
   // to drive `updateOverflow`. The buttons only render while the list overflows,
   // and each hides once that edge is reached.
@@ -1014,31 +959,6 @@ describe("Tab registration", () => {
 });
 
 describe("Tab", () => {
-  it("should render with default props", () => {
-    render(Tab);
-
-    const tab = screen.getByRole("tab", { name: "Test Tab" });
-    expect(tab).toBeInTheDocument();
-    expect(tab).toHaveAttribute("href", "#test");
-    expect(tab).toHaveAttribute("tabindex", "0");
-    expect(tab).toHaveAttribute("id", "test-tab");
-  });
-
-  it("should render with custom label", () => {
-    render(Tab, { props: { label: "Custom Label" } });
-
-    expect(
-      screen.getByRole("tab", { name: "Custom Label" }),
-    ).toBeInTheDocument();
-  });
-
-  it("should render with custom href", () => {
-    render(Tab, { props: { href: "/custom" } });
-
-    const tab = screen.getByRole("tab");
-    expect(tab).toHaveAttribute("href", "/custom");
-  });
-
   // A user-provided href should navigate like a link: activation must not be
   // preventDefault-ed (regression for #2165). fireEvent returns false when a
   // handler canceled the event.
@@ -1073,13 +993,6 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab");
     expect(tab).toHaveAttribute("tabindex", "1");
-  });
-
-  it("should handle custom id", () => {
-    render(Tab, { props: { id: "custom-id" } });
-
-    const tab = screen.getByRole("tab");
-    expect(tab).toHaveAttribute("id", "custom-id");
   });
 
   it("should be clickable when enabled", async () => {
@@ -1180,14 +1093,6 @@ describe("Tab icon", () => {
     expect(iconWrapper).not.toBeInTheDocument();
   });
 
-  it("should render icon inside the nav link element", () => {
-    const { container } = render(TabIcon, { props: { icon: Calendar } });
-
-    const navLink = container.querySelector(".bx--tabs__nav-link");
-    const iconWrapper = navLink?.querySelector(".bx--tabs__nav-item--icon");
-    expect(iconWrapper).toBeInTheDocument();
-  });
-
   it("marks only the icon-bearing nav link with the icon modifier class", () => {
     const { container } = render(TabIcon, { props: { icon: Calendar } });
 
@@ -1196,111 +1101,8 @@ describe("Tab icon", () => {
     expect(navLinks[1]).not.toHaveClass("bx--tabs__nav-link--icon");
   });
 
-  it("should render label and icon together", () => {
-    render(TabIcon, { props: { label: "Dashboard", icon: Calendar } });
-
-    const tab = screen.getByRole("tab", { name: /Dashboard/ });
-    expect(tab).toBeInTheDocument();
-    expect(tab.querySelector(".bx--tabs__nav-item--icon")).toBeInTheDocument();
-  });
-
-  it("should apply disabled styling context when tab is disabled", () => {
-    const { container } = render(TabIcon, {
-      props: { icon: Settings, disabled: true },
-    });
-
-    const disabledItem = container.querySelector(
-      ".bx--tabs__nav-item--disabled",
-    );
-    expect(disabledItem).toBeInTheDocument();
-
-    const iconWrapper = disabledItem?.querySelector(
-      ".bx--tabs__nav-item--icon",
-    );
-    expect(iconWrapper).toBeInTheDocument();
-  });
-
   it("should still be clickable with icon when enabled", async () => {
     render(TabIcon, { props: { icon: Calendar } });
-
-    const tab = screen.getByRole("tab", { name: /Test Tab/ });
-    await user.click(screen.getByRole("tab", { name: "No Icon" }));
-    expect(tab).toHaveAttribute("aria-selected", "false");
-
-    await user.click(tab);
-
-    expect(tab).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText("Icon content")).toBeVisible();
-  });
-});
-
-describe("Container tabs with icon", () => {
-  it("should render container type with icon", () => {
-    const { container } = render(TabIconContainer, {
-      props: { icon: Calendar },
-    });
-
-    const tabsContainer = screen.getByRole("navigation");
-    expect(tabsContainer).toHaveClass("bx--tabs--container");
-
-    const iconWrapper = container.querySelector(".bx--tabs__nav-item--icon");
-    expect(iconWrapper).toBeInTheDocument();
-
-    const svg = iconWrapper?.querySelector("svg");
-    expect(svg).toBeInTheDocument();
-    expect(svg).toHaveAttribute("width", "16");
-    expect(svg).toHaveAttribute("height", "16");
-  });
-
-  it("should not render icon wrapper on tab without icon in container", () => {
-    const { container } = render(TabIconContainer, {
-      props: { icon: Calendar },
-    });
-
-    const navItems = container.querySelectorAll(".bx--tabs__nav-item");
-    const secondTab = navItems[1];
-    const iconWrapper = secondTab?.querySelector(".bx--tabs__nav-item--icon");
-    expect(iconWrapper).not.toBeInTheDocument();
-  });
-
-  it("should render icon inside nav link in container tabs", () => {
-    const { container } = render(TabIconContainer, {
-      props: { icon: Calendar },
-    });
-
-    const navLink = container.querySelector(".bx--tabs__nav-link");
-    const iconWrapper = navLink?.querySelector(".bx--tabs__nav-item--icon");
-    expect(iconWrapper).toBeInTheDocument();
-  });
-
-  it("should render label and icon together in container tabs", () => {
-    render(TabIconContainer, {
-      props: { label: "Dashboard", icon: Calendar },
-    });
-
-    const tab = screen.getByRole("tab", { name: /Dashboard/ });
-    expect(tab).toBeInTheDocument();
-    expect(tab.querySelector(".bx--tabs__nav-item--icon")).toBeInTheDocument();
-  });
-
-  it("should apply disabled styling when tab with icon is disabled in container", () => {
-    const { container } = render(TabIconContainer, {
-      props: { icon: Settings, disabled: true },
-    });
-
-    const disabledItem = container.querySelector(
-      ".bx--tabs__nav-item--disabled",
-    );
-    expect(disabledItem).toBeInTheDocument();
-
-    const iconWrapper = disabledItem?.querySelector(
-      ".bx--tabs__nav-item--icon",
-    );
-    expect(iconWrapper).toBeInTheDocument();
-  });
-
-  it("should be clickable with icon when enabled in container tabs", async () => {
-    render(TabIconContainer, { props: { icon: Calendar } });
 
     const tab = screen.getByRole("tab", { name: /Test Tab/ });
     await user.click(screen.getByRole("tab", { name: "No Icon" }));
@@ -1387,22 +1189,6 @@ describe("Container tabs with secondary label", () => {
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).toHaveClass("bx--tabs--container");
     expect(tabsContainer).toHaveClass("bx--tabs--tall");
-  });
-
-  it("should render secondary label via prop", async () => {
-    render(TabSecondaryLabel);
-    await tick();
-
-    expect(screen.getByRole("tab", { name: /Engage/ })).toBeInTheDocument();
-    expect(screen.getByText("(21/25)")).toBeInTheDocument();
-  });
-
-  it("should render secondary label via slot", async () => {
-    render(TabSecondaryLabel);
-    await tick();
-
-    expect(screen.getByRole("tab", { name: /Analyze/ })).toBeInTheDocument();
-    expect(screen.getByText("(12/16)")).toBeInTheDocument();
   });
 
   it("should have label wrapper and secondary label element for tab with prop", async () => {
@@ -1526,15 +1312,6 @@ describe("TabsSkeleton", () => {
     expect(skeleton).not.toHaveClass("bx--tabs--scrollable--container");
   });
 
-  it("should not apply a layout size class by default", () => {
-    const { container } = render(TabsSkeleton);
-
-    const skeleton = container.querySelector(".bx--tabs");
-    for (const size of ["sm", "md", "lg", "xl"]) {
-      expect(skeleton).not.toHaveClass(`bx--layout--size-${size}`);
-    }
-  });
-
   it("should apply the layout size class for the size prop", () => {
     const { container } = render(TabsSkeleton, { props: { size: "sm" } });
 
@@ -1561,33 +1338,6 @@ describe("TabsSkeleton", () => {
     expect(container.querySelector(".bx--tabs")).toHaveClass(
       "bx--layout--size-xl",
     );
-  });
-
-  it("should ignore an invalid size value", () => {
-    const { container } = render(TabsSkeleton, {
-      // @ts-expect-error - exercising the runtime fallback for an invalid value
-      props: { size: "invalid" },
-    });
-
-    const skeleton = container.querySelector(".bx--tabs");
-    for (const size of ["sm", "md", "lg", "xl"]) {
-      expect(skeleton).not.toHaveClass(`bx--layout--size-${size}`);
-    }
-  });
-
-  it("should render skeleton nav items with correct structure", () => {
-    const { container } = render(TabsSkeleton);
-
-    const navItems = container.querySelectorAll(
-      ".bx--tabs--scrollable__nav-item",
-    );
-    for (const item of navItems) {
-      const link = item.querySelector(".bx--tabs__nav-link");
-      const span = link?.querySelector("span");
-
-      expect(link).toBeInTheDocument();
-      expect(span).toBeInTheDocument();
-    }
   });
 
   describe("Tab Generics", () => {

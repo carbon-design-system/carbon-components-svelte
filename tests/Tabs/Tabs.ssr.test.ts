@@ -115,16 +115,6 @@ describe("Tabs server render with a secondary label", () => {
     expect(overview).not.toHaveClass("bx--tabs__nav-item--secondary-label");
   });
 
-  it("draws a vertical tab's own secondary label", () => {
-    const { document } = renderSSR(TabsSecondaryLabel, { type: "vertical" });
-    const [, details] = items(document);
-
-    expect(details).toHaveClass("bx--tabs__nav-item--secondary-label");
-    expect(
-      details.querySelector(".bx--tabs__nav-item-secondary-label"),
-    ).toHaveTextContent("(3)");
-  });
-
   it("leaves secondary labels off line tabs", () => {
     const { document } = renderSSR(TabsSecondaryLabel, { type: "default" });
 

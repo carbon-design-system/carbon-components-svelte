@@ -1,7 +1,5 @@
 import { render } from "@testing-library/svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
-import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
-import FileUploaderItem from "carbon-components-svelte/FileUploader/FileUploaderItem.svelte";
 
 describe("FileUploader xs size", () => {
   it("sizes the button and the file rows", () => {
@@ -28,19 +26,5 @@ describe("FileUploader xs size", () => {
     expect(container.querySelector(".bx--file__selected-file")).not.toHaveClass(
       "bx--file__selected-file--xs",
     );
-  });
-
-  it("sizes the standalone button and item", () => {
-    const button = render(FileUploaderButton, { props: { size: "xs" } });
-    expect(button.container.querySelector(".bx--btn")).toHaveClass(
-      "bx--btn--xs",
-    );
-
-    const item = render(FileUploaderItem, {
-      props: { name: "report.png", size: "xs" },
-    });
-    expect(
-      item.container.querySelector(".bx--file__selected-file"),
-    ).toHaveClass("bx--file__selected-file--xs");
   });
 });

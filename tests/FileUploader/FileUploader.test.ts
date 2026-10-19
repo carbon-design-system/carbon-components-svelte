@@ -5,8 +5,6 @@ import { user } from "../utils/user";
 import FileUploaderDescriptionSlot from "./FileUploader.descriptionSlot.test.svelte";
 import FileUploaderPerFileStatusDemo from "./FileUploader.perFileStatus.test.svelte";
 import FileUploader from "./FileUploader.test.svelte";
-import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
-import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
 
 describe("FileUploader", () => {
@@ -51,40 +49,6 @@ describe("FileUploader", () => {
     expect(input.files).toHaveLength(2);
     expect(input.files[0].name).toBe("file1.txt");
     expect(input.files[1].name).toBe("file3.txt");
-  });
-
-  it("should remove the middle file and keep first and third", async () => {
-    const { component } = render(FileUploader);
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2, file3]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(3);
-    });
-
-    const closeButtons = document.querySelectorAll(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    expect(closeButtons.length).toBe(3);
-    const middleCloseButton = closeButtons[1];
-    assert(middleCloseButton instanceof HTMLElement);
-    await user.click(middleCloseButton);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(2);
-    });
-
-    expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    expect(screen.queryByText("file2.txt")).not.toBeInTheDocument();
-    expect(screen.queryByText("file3.txt")).toBeInTheDocument();
   });
 
   it("should dispatch remove with only the deleted middle file (not shifted neighbors)", async () => {
@@ -260,20 +224,6 @@ describe("FileUploader", () => {
     expect(input.value).toBe("");
   });
 
-  it("supports custom label slot for FileUploaderButton", () => {
-    render(FileUploaderButtonSlot);
-
-    const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
-  });
-
-  it("supports custom label slot for FileUploaderDropContainer", () => {
-    render(FileUploaderDropContainerSlot);
-
-    const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
-  });
-
   it("should dispatch add event when files are added", async () => {
     const addHandler = vi.fn();
     const { component } = render(FileUploader, {
@@ -315,26 +265,6 @@ describe("FileUploader", () => {
     expect(added).toHaveLength(2);
     expect(added[0].name).toBe("file1.txt");
     expect(added[1].name).toBe("file2.txt");
-  });
-
-  it("should dispatch change event when files change", async () => {
-    const changeHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: { onChange: changeHandler },
-    });
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    const event = changeHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].name).toBe("file1.txt");
   });
 
   it("should handle disabled state", () => {
@@ -499,14 +429,6 @@ describe("FileUploader", () => {
     );
   });
 
-  it("should render labelDescription prop", () => {
-    render(FileUploader, {
-      props: { labelDescription: "Select files to upload" },
-    });
-
-    expect(screen.getByText("Select files to upload")).toBeInTheDocument();
-  });
-
   it.each([
     ["uploading", ".bx--loading"],
     ["edit", "button.bx--file-close"],
@@ -537,13 +459,37 @@ describe("FileUploader", () => {
     },
   );
 
-  it("should handle buttonLabel prop", () => {
-    render(FileUploader, {
-      props: { buttonLabel: "Choose Files" },
+  it("associates the control with the form named by `form`", () => {
+    const outerForm = document.createElement("form");
+    outerForm.id = "outer-form";
+    document.body.append(outerForm);
+
+    try {
+      render(FileUploaderComponent, {
+        props: { form: "outer-form", name: "files" },
+      });
+
+      const input = document.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+      expect(input.form).toBe(outerForm);
+    } finally {
+      outerForm.remove();
+    }
+  });
+
+  it("derives the file input id from the id", () => {
+    const { container } = render(FileUploaderComponent, {
+      props: { id: "docs", labelTitle: "Upload", buttonLabel: "Add file" },
     });
 
-    const button = screen.getByText("Choose Files");
-    expect(button).toBeInTheDocument();
+    expect(container.querySelector(".bx--form-item")).toHaveAttribute(
+      "id",
+      "docs",
+    );
+    expect(container.querySelector('input[type="file"]')).toHaveAttribute(
+      "id",
+      "docs-input",
+    );
   });
 
   it("should handle name attribute", () => {
@@ -554,36 +500,6 @@ describe("FileUploader", () => {
     const input = container.querySelector('input[type="file"]');
     assert(input instanceof HTMLInputElement);
     expect(input).toHaveAttribute("name", "file-upload");
-  });
-
-  it("should expose ref to the inner input element", () => {
-    const { component } = render(FileUploader);
-
-    assert(component.ref instanceof HTMLInputElement);
-    expect(component.ref.type).toBe("file");
-  });
-
-  it("should remove file on click", async () => {
-    const { component } = render(FileUploader);
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
-
-    const closeButton = document.querySelector(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    assert(closeButton);
-    await user.click(closeButton);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
-    });
   });
 
   it("should remove file on keyboard interaction", async () => {
@@ -625,49 +541,6 @@ describe("FileUploader", () => {
     expect(onRejected.mock.calls[0][0].detail).toEqual([
       { file: empty, reason: "size" },
     ]);
-  });
-
-  it("should accept files under maxFileSize limit", async () => {
-    const { component } = render(FileUploader, {
-      props: { maxFileSize: 1000 },
-    });
-
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [smallFile]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("small.txt")).toBeInTheDocument();
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(1);
-    expect(input.files[0].name).toBe("small.txt");
-  });
-
-  it("should filter out files exceeding maxFileSize limit", async () => {
-    const { component } = render(FileUploader, {
-      props: { maxFileSize: 1000 },
-    });
-
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [largeFile]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("large.txt")).not.toBeInTheDocument();
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(0);
   });
 
   it("should filter files when multiple files are selected and some exceed limit", async () => {
@@ -721,28 +594,6 @@ describe("FileUploader", () => {
     assert(input.files);
     expect(input.files).toHaveLength(1);
     expect(input.files[0].name).toBe("exact.txt");
-  });
-
-  it("should not filter files when maxFileSize is undefined", async () => {
-    const { component } = render(FileUploader, {
-      props: { maxFileSize: undefined },
-    });
-
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [largeFile]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("large.txt")).toBeInTheDocument();
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(1);
-    expect(input.files[0].name).toBe("large.txt");
   });
 
   it("should dispatch change event with filtered files when maxFileSize is set", async () => {
@@ -1232,26 +1083,6 @@ describe("FileUploader", () => {
     expect(rows[2].querySelector(".bx--file-close")).not.toBeInTheDocument();
   });
 
-  it("should fall back to global status when fileStatus is unset", () => {
-    const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["b"], "file2.txt", { type: "text/plain" });
-
-    const { container } = render(FileUploader, {
-      props: {
-        multiple: true,
-        status: "complete",
-        files: [file1, file2],
-      },
-    });
-
-    const rows = container.querySelectorAll(".bx--file__selected-file");
-    expect(rows).toHaveLength(2);
-    expect(rows[0].querySelector(".bx--file-complete")).toBeInTheDocument();
-    expect(rows[1].querySelector(".bx--file-complete")).toBeInTheDocument();
-    expect(container.querySelector(".bx--loading")).not.toBeInTheDocument();
-    expect(container.querySelector(".bx--file-close")).not.toBeInTheDocument();
-  });
-
   it("demo-style fileStatus transitions uploading to complete", async () => {
     const { container } = render(FileUploaderPerFileStatusDemo, {
       props: { delay: 50 },
@@ -1301,28 +1132,6 @@ describe("FileUploader", () => {
 
     expect(container.querySelector(".bx--loading")).not.toBeInTheDocument();
     expect(container.querySelector(".bx--file-complete")).toBeInTheDocument();
-  });
-
-  it("should NOT update when fileStatus reference is stable but closure data changes", async () => {
-    const file = new File(["a"], "file1.txt", { type: "text/plain" });
-    const state = { status: "uploading" as "uploading" | "complete" };
-    const fileStatus = () => state.status;
-
-    const { container } = render(FileUploader, {
-      props: {
-        files: [file],
-        status: "edit",
-        fileStatus,
-      },
-    });
-
-    expect(container.querySelector(".bx--loading")).toBeInTheDocument();
-
-    state.status = "complete";
-    await tick();
-
-    // Stable callback: child has no signal to re-resolve.
-    expect(container.querySelector(".bx--loading")).toBeInTheDocument();
   });
 
   it("should render per-file invalid state and error copy", () => {

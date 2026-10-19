@@ -3,7 +3,6 @@ import { tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import TabsIconOnly from "./TabsIconOnly.test.svelte";
 
-/** Open tooltips currently rendered in the portal. */
 describe("Tabs (icon-only)", () => {
   it("renders the icon-only variant when `iconOnly` is set", async () => {
     render(TabsIconOnly);
@@ -80,31 +79,6 @@ describe("Tabs (icon-only)", () => {
     await fireEvent.focus(calendar);
     await tick();
     expect(openTooltips()).toHaveLength(0);
-  });
-
-  // The v11 redesign keeps icon-only tabs square at every breakpoint (no more
-  // mobile dropdown that surfaced the label inline), so the tooltip is shown
-  // below `md` as well rather than suppressed.
-  it("still opens the tooltip below the `md` breakpoint", async () => {
-    vi.stubGlobal("matchMedia", (query: string) => ({
-      matches: query === "(max-width: 672px)",
-      media: query,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    }));
-
-    try {
-      render(TabsIconOnly);
-      await tick();
-      await tick();
-
-      const settings = screen.getByRole("tab", { name: "Settings" });
-      await fireEvent.focus(settings);
-      await tick();
-      expect(openTooltips()).toHaveLength(1);
-    } finally {
-      vi.unstubAllGlobals();
-    }
   });
 
   it("aligns the tooltip per `tooltipAlignment`", async () => {

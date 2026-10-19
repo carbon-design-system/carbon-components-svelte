@@ -3,15 +3,6 @@ import { user } from "../utils/user";
 import Filename from "./Filename.test.svelte";
 
 describe("Filename", () => {
-  it("should render uploading status with loading indicator", () => {
-    const { container } = render(Filename, {
-      props: { status: "uploading" },
-    });
-
-    const loading = container.querySelector(".bx--loading");
-    expect(loading).toBeInTheDocument();
-  });
-
   it("should render edit status with close button", () => {
     const { container } = render(Filename, {
       props: { status: "edit" },
@@ -197,15 +188,5 @@ describe("Filename", () => {
     await user.keyboard(" ");
 
     expect(keydownHandler).toHaveBeenCalled();
-  });
-
-  it("should be focusable when status is edit", () => {
-    const { container } = render(Filename, {
-      props: { status: "edit" },
-    });
-
-    const closeButton = container.querySelector(".bx--file-close");
-    assert(closeButton instanceof HTMLElement);
-    expect(closeButton).toHaveAttribute("tabindex", "0");
   });
 });

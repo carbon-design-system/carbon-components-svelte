@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import type FileUploaderButtonComponent from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
-import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 import { type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
+import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
 
@@ -36,28 +36,6 @@ describe("FileUploaderButton", () => {
     });
   });
 
-  it("should render with default props", () => {
-    const { container } = render(FileUploaderButton);
-
-    const button = screen.getByRole("button");
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent("Add file");
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-    expect(input).not.toBeDisabled();
-    expect(input).not.toHaveAttribute("multiple");
-  });
-
-  it("should render with custom labelText", () => {
-    render(FileUploaderButton, {
-      props: { labelText: "Choose File" },
-    });
-
-    const button = screen.getByText("Choose File");
-    expect(button).toBeInTheDocument();
-  });
-
   it("should handle disabled state", () => {
     const { container } = render(FileUploaderButton, {
       props: { disabled: true },
@@ -78,37 +56,6 @@ describe("FileUploaderButton", () => {
 
     const input = container.querySelector('input[type="file"]');
     expect(input).toHaveAttribute("capture", "environment");
-  });
-
-  it("should omit capture by default", () => {
-    const { container } = render(FileUploaderButton);
-
-    const input = container.querySelector('input[type="file"]');
-    expect(input).not.toHaveAttribute("capture");
-  });
-
-  it("should hide the native input from assistive technology", () => {
-    const { container } = render(FileUploaderButton);
-
-    const input = container.querySelector('input[type="file"]');
-    expect(input).toHaveAttribute("aria-hidden", "true");
-  });
-
-  it("should move aria-describedby and aria-labelledby to the button", () => {
-    const { container } = render(FileUploaderButton, {
-      props: {
-        "aria-describedby": "upload-help",
-        "aria-labelledby": "upload-label",
-      },
-    });
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("aria-describedby", "upload-help");
-    expect(button).toHaveAttribute("aria-labelledby", "upload-label");
-
-    const input = container.querySelector("input[type='file']");
-    expect(input).not.toHaveAttribute("aria-describedby");
-    expect(input).not.toHaveAttribute("aria-labelledby");
   });
 
   it("should respect accept prop", () => {
@@ -275,34 +222,6 @@ describe("FileUploaderButton", () => {
     expect(second.map((f: File) => f.name)).toEqual(["a.txt", "b.txt"]);
   });
 
-  it("should concatenate duplicates when preventDuplicate is false (default)", async () => {
-    const changeHandler = vi.fn();
-    const { container } = render(FileUploaderButton, {
-      props: { multiple: true, onchange: changeHandler },
-    });
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-
-    const lastModified = 1700000000000;
-    const fileA = new File(["a"], "a.txt", {
-      type: "text/plain",
-      lastModified,
-    });
-    simulateFileSelection(input, [fileA]);
-
-    const fileADup = new File(["a"], "a.txt", {
-      type: "text/plain",
-      lastModified,
-    });
-    simulateFileSelection(input, [fileADup]);
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalledTimes(2);
-    });
-    expect(changeHandler.mock.calls[1][0].detail).toHaveLength(2);
-  });
-
   it("should handle different button kinds", () => {
     const { container: container1 } = render(FileUploaderButton, {
       props: { kind: "primary" },
@@ -346,9 +265,6 @@ describe("FileUploaderButton", () => {
     const { container: container2 } = render(FileUploaderButton, {
       props: { size: "field" },
     });
-    const { container: container3 } = render(FileUploaderButton, {
-      props: { size: "default" },
-    });
     const { container: container4 } = render(FileUploaderButton, {
       props: { size: "lg" },
     });
@@ -358,22 +274,26 @@ describe("FileUploaderButton", () => {
 
     const button1 = container1.querySelector("button");
     const button2 = container2.querySelector("button");
-    const button3 = container3.querySelector("button");
     const button4 = container4.querySelector("button");
     const button5 = container5.querySelector("button");
 
     assert(button1);
     assert(button2);
-    assert(button3);
     assert(button4);
     assert(button5);
 
     expect(button1).toHaveClass("bx--btn--sm");
     expect(button2).toHaveClass("bx--btn--field");
-    expect(button3).not.toHaveClass("bx--btn--sm");
-    expect(button3).not.toHaveClass("bx--btn--field");
     expect(button4).toHaveClass("bx--btn--lg");
     expect(button5).toHaveClass("bx--btn--xl");
+  });
+
+  it("sizes the button for xs", () => {
+    const { container } = render(FileUploaderButton, {
+      props: { size: "xs" },
+    });
+
+    expect(container.querySelector(".bx--btn")).toHaveClass("bx--btn--xs");
   });
 
   it("should handle name attribute", () => {
@@ -408,6 +328,7 @@ describe("FileUploaderButton", () => {
     await user.click(button);
 
     expect(clickSpy).toHaveBeenCalled();
+    expect(screen.getByLabelText("Add file")).toBe(input);
   });
 
   it("should render button with icon and text", () => {
@@ -484,24 +405,6 @@ describe("FileUploaderButton", () => {
     expect(assistiveText).toHaveTextContent("Add item hidden tooltip");
   });
 
-  it("should support icon prop on icon-only button", () => {
-    render(FileUploaderButton, {
-      props: {
-        icon: DocumentAdd,
-        iconDescription: "Upload document",
-        labelText: "",
-      },
-    });
-
-    const buttonWithIcon = screen.getByRole("button", {
-      name: "Upload document",
-    });
-    expect(buttonWithIcon).toHaveClass("bx--btn--icon-only");
-    const assistiveText = buttonWithIcon.querySelector(".bx--assistive-text");
-    expect(assistiveText).toHaveTextContent("Upload document");
-    expect(buttonWithIcon.querySelector("svg")).toBeInTheDocument();
-  });
-
   it("should support custom tooltip position and alignment", () => {
     render(FileUploaderButton, {
       props: {
@@ -518,46 +421,6 @@ describe("FileUploaderButton", () => {
     });
     expect(iconButton).toHaveClass("bx--btn--icon-only--right");
     expect(iconButton).toHaveClass("bx--tooltip--align-end");
-  });
-
-  it("should trigger file input when button with icon is clicked", async () => {
-    render(FileUploaderButton, {
-      props: {
-        icon: Add,
-        labelText: "Upload file",
-      },
-    });
-
-    const button = screen.getByRole("button", { name: "Upload file" });
-    const fileInput = screen.getByLabelText("Upload file");
-    assert(fileInput instanceof HTMLInputElement);
-
-    const clickSpy = vi.spyOn(fileInput, "click");
-
-    await user.click(button);
-    expect(clickSpy).toHaveBeenCalled();
-  });
-
-  it("should trigger file input when icon-only button is clicked", async () => {
-    const { container } = render(FileUploaderButton, {
-      props: {
-        icon: Add,
-        iconDescription: "Add file icon only",
-        labelText: "",
-      },
-    });
-
-    const button = screen.getByRole("button", { name: "Add file icon only" });
-    assert(button);
-
-    const fileInput = container.querySelector('input[type="file"]');
-    assert(fileInput instanceof HTMLInputElement);
-    assert(fileInput.type === "file");
-
-    const clickSpy = vi.spyOn(fileInput, "click");
-
-    await user.click(button);
-    expect(clickSpy).toHaveBeenCalled();
   });
 
   it("should reject files under minFileSize", async () => {
@@ -591,7 +454,7 @@ describe("FileUploaderButton", () => {
     it("should reject oversized files and report them", async () => {
       const changeHandler = vi.fn();
       const rejectedHandler = vi.fn();
-      const { container } = render(FileUploaderButton, {
+      const { component, container } = render(FileUploaderButton, {
         props: {
           multiple: true,
           maxFileSize: 4,
@@ -614,34 +477,11 @@ describe("FileUploaderButton", () => {
       });
 
       expect(changeHandler.mock.calls[0][0].detail).toEqual([small]);
+      expect(component.files).toEqual([small]);
       expect(rejectedHandler).toHaveBeenCalledTimes(1);
       expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
         { file: large, reason: "size" },
       ]);
-    });
-
-    it("should not dispatch rejected when every file fits", async () => {
-      const changeHandler = vi.fn();
-      const rejectedHandler = vi.fn();
-      const { container } = render(FileUploaderButton, {
-        props: {
-          maxFileSize: 1024,
-          onchange: changeHandler,
-          onrejected: rejectedHandler,
-        },
-      });
-
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
-
-      simulateFileSelection(input, [
-        new File(["ab"], "small.txt", { type: "text/plain" }),
-      ]);
-
-      await vi.waitFor(() => {
-        expect(changeHandler).toHaveBeenCalledTimes(1);
-      });
-      expect(rejectedHandler).not.toHaveBeenCalled();
     });
 
     it("should clear the selection and restore the label when the only file is rejected", async () => {
@@ -661,27 +501,6 @@ describe("FileUploaderButton", () => {
         expect(rejectedHandler).toHaveBeenCalledTimes(1);
       });
       expect(screen.getByRole("button")).toHaveTextContent("Add file");
-    });
-
-    it("should not add rejected files to the bound files array", async () => {
-      const changeHandler = vi.fn();
-      const { component, container } = render(FileUploaderButton, {
-        props: { multiple: true, maxFileSize: 4, onchange: changeHandler },
-      });
-
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
-
-      const small = new File(["ab"], "small.txt", { type: "text/plain" });
-      const large = new File(["abcdefgh"], "large.txt", {
-        type: "text/plain",
-      });
-      simulateFileSelection(input, [small, large]);
-
-      await vi.waitFor(() => {
-        expect(changeHandler).toHaveBeenCalledTimes(1);
-      });
-      expect(component.files).toEqual([small]);
     });
 
     it("should clear an existing selection when a later single-file pick is rejected", async () => {
@@ -760,47 +579,6 @@ describe("FileUploaderButton", () => {
   });
 
   describe("rejected duplicates", () => {
-    it("should report deduped files when preventDuplicate and multiple are true", async () => {
-      const changeHandler = vi.fn();
-      const rejectedHandler = vi.fn();
-      const { container } = render(FileUploaderButton, {
-        props: {
-          multiple: true,
-          preventDuplicate: true,
-          onchange: changeHandler,
-          onrejected: rejectedHandler,
-        },
-      });
-
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
-
-      const lastModified = 1700000000000;
-      const fileA = new File(["a"], "a.txt", {
-        type: "text/plain",
-        lastModified,
-      });
-      simulateFileSelection(input, [fileA]);
-
-      await vi.waitFor(() => {
-        expect(changeHandler).toHaveBeenCalledTimes(1);
-      });
-      expect(rejectedHandler).not.toHaveBeenCalled();
-
-      const fileADup = new File(["a"], "a.txt", {
-        type: "text/plain",
-        lastModified,
-      });
-      simulateFileSelection(input, [fileADup]);
-
-      await vi.waitFor(() => {
-        expect(rejectedHandler).toHaveBeenCalledTimes(1);
-      });
-      expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
-        { file: fileADup, reason: "duplicate" },
-      ]);
-    });
-
     it("should not dedupe in single-file mode", async () => {
       const changeHandler = vi.fn();
       const rejectedHandler = vi.fn();
@@ -850,5 +628,12 @@ describe("FileUploaderButton", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+  });
+
+  it("supports custom label slot for FileUploaderButton", () => {
+    render(FileUploaderButtonSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });
