@@ -69,6 +69,18 @@ describe("RadioButtonGroup", () => {
     }
   });
 
+  it("should rename the radios when name changes after mount", async () => {
+    const { rerender } = render(RadioButtonGroup, {
+      props: { name: "first" },
+    });
+
+    await rerender({ name: "second" });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "second");
+    }
+  });
+
   it("should share a generated name when name is omitted", () => {
     render(RadioButtonGroup);
 

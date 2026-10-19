@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import ToggleComponent from "carbon-components-svelte/Toggle/Toggle.svelte";
 import { user } from "../utils/user";
 import ToggleReadonly from "./Toggle.readonly.test.svelte";
+import ToggleSlotOnly from "./Toggle.slotOnly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
 
@@ -281,6 +282,27 @@ describe("Toggle", () => {
     const directSpans = label?.querySelectorAll(":scope > span") ?? [];
     expect(directSpans).toHaveLength(1);
     expect(directSpans[0]).toHaveClass("bx--toggle__switch");
+  });
+
+  it("renders the labelChildren slot when labelText is empty", () => {
+    render(ToggleSlotOnly);
+
+    expect(screen.getByText("Slot only label")).toBeVisible();
+  });
+
+  it("falls back to the name Toggle without a label or aria-label", () => {
+    render(ToggleComponent);
+
+    expect(screen.getByRole("switch")).toHaveAccessibleName("Toggle");
+  });
+
+  it("renders no state text when labelA and labelB are empty", () => {
+    const { container } = render(ToggleComponent, {
+      props: { labelText: "Alerts", labelA: "", labelB: "" },
+    });
+
+    expect(container.querySelector(".bx--toggle__text--off")).toBeNull();
+    expect(container.querySelector(".bx--toggle__text--on")).toBeNull();
   });
 
   // The contract in tests/form-field-contract covers the messages and their

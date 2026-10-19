@@ -8,6 +8,10 @@
   export let helperText = "";
   export let onCheck: (event: CustomEvent<boolean>) => void = () => {};
   export let onClick: (event: MouseEvent) => void = () => {};
+  export let onChange: (event: Event) => void = () => {};
+  export let onFocus: (event: FocusEvent) => void = () => {};
+  export let onBlur: (event: FocusEvent) => void = () => {};
+  export let tabindex: number | undefined = undefined;
 </script>
 
 <Checkbox
@@ -16,7 +20,11 @@
   {disabled}
   {labelText}
   {helperText}
+  {tabindex}
   data-testid="checkbox"
   on:check={onCheck}
   on:click={onClick}
+  on:change={onChange}
+  on:focus={onFocus}
+  on:blur={onBlur}
 />

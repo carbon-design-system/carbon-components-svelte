@@ -7,6 +7,7 @@
   export let checked2 = false;
   export let checked3 = false;
   export let groupName = "implicit-group";
+  export let name3: string | undefined = undefined;
   export let secondGroupName: string | undefined = undefined;
   export let checked4 = false;
   export let checked5 = false;
@@ -36,7 +37,7 @@
     bind:checked={checked3}
     value="option3"
     labelText="Option 3"
-    name={groupName}
+    name={name3 ?? groupName}
   />
 </div>
 

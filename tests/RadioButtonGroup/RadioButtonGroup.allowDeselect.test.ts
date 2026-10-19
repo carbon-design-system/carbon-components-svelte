@@ -26,6 +26,28 @@ describe("RadioButtonGroup allowDeselect", () => {
     expect(component.selected).toBeUndefined();
   });
 
+  it("dispatches change with a null detail when the selection clears", async () => {
+    const onChange = vi.fn();
+    render(RadioButtonGroup, {
+      props: { selected: "1", allowDeselect: true, onChange },
+    });
+
+    await user.click(screen.getByRole("radio", { name: "Option 1" }));
+
+    expect(onChange.mock.calls).toEqual([[null]]);
+  });
+
+  it("starts clearing the selection when allowDeselect is set after mount", async () => {
+    const { component, rerender } = render(RadioButtonGroup, {
+      props: { selected: "1" },
+    });
+
+    await rerender({ allowDeselect: true });
+    await user.click(screen.getByRole("radio", { name: "Option 1" }));
+
+    expect(component.selected).toBeUndefined();
+  });
+
   it("still selects a different radio when allowDeselect is set", async () => {
     render(RadioButtonGroup, {
       props: { selected: "1", allowDeselect: true },

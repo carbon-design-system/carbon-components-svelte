@@ -23,6 +23,7 @@
   export let useSlot = false;
   export let onChange: (selected: ReadonlyArray<string | number>) => void =
     () => {};
+  export let onCheck: (value: string, checked: boolean) => void = () => {};
 </script>
 
 {#if useSlot}
@@ -43,9 +44,21 @@
     on:change={(e) => onChange(e.detail)}
   >
     <span slot="legendChildren">Custom Legend</span>
-    <Checkbox value="1" labelText="Option 1" />
-    <Checkbox value="2" labelText="Option 2" />
-    <Checkbox value="3" labelText="Option 3" />
+    <Checkbox
+      value="1"
+      labelText="Option 1"
+      on:check={(e) => onCheck("1", e.detail)}
+    />
+    <Checkbox
+      value="2"
+      labelText="Option 2"
+      on:check={(e) => onCheck("2", e.detail)}
+    />
+    <Checkbox
+      value="3"
+      labelText="Option 3"
+      on:check={(e) => onCheck("3", e.detail)}
+    />
   </CheckboxGroup>
 {:else}
   <CheckboxGroup
@@ -65,8 +78,20 @@
     class={customClass}
     on:change={(e) => onChange(e.detail)}
   >
-    <Checkbox value="1" labelText="Option 1" />
-    <Checkbox value="2" labelText="Option 2" />
-    <Checkbox value="3" labelText="Option 3" />
+    <Checkbox
+      value="1"
+      labelText="Option 1"
+      on:check={(e) => onCheck("1", e.detail)}
+    />
+    <Checkbox
+      value="2"
+      labelText="Option 2"
+      on:check={(e) => onCheck("2", e.detail)}
+    />
+    <Checkbox
+      value="3"
+      labelText="Option 3"
+      on:check={(e) => onCheck("3", e.detail)}
+    />
   </CheckboxGroup>
 {/if}
