@@ -98,7 +98,7 @@ Listen for content switcher selection changes.
 
 ### Change
 
-Listen for `on:change` to know when the selected switch index changes, whether from a click, keyboard navigation, or a `selectedIndex`/`selectedId` update. `event.detail` is the new selected index.
+Listen for `on:change` to know when the selected switch index changes, whether from a click, keyboard navigation, or a `selectedIndex`/`selectedId` update. `event.detail` is the new selected index. The index and the selected switch can change independently when switches are added, removed, or reordered, so use `bind:selectedId` to track which switch is selected.
 
 <ContentSwitcher on:change={(e) => console.log(e.detail)}>
   <Switch text="Latest news" />

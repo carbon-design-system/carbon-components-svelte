@@ -128,7 +128,7 @@ Listen for tab selection changes.
 
 ### Change
 
-Listen for `on:change` to know when the selected tab index changes, whether from a click, keyboard navigation, or a `selected`/`selectedId` update. `event.detail` is the new selected index. For the dismiss event, see [Dismissible](#dismissible).
+Listen for `on:change` to know when the selected tab index changes, whether from a click, keyboard navigation, or a `selected`/`selectedId` update. `event.detail` is the new selected index. The index and the selected tab can change independently when tabs are added, removed, or reordered, so use `bind:selectedId` to track which tab is selected. For the dismiss event, see [Dismissible](#dismissible).
 
 <Tabs on:change={(e) => console.log(e.detail)}>
   <Tab label="Dashboard" />
