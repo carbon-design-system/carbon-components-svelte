@@ -205,6 +205,17 @@ describe("multiple mode", () => {
 });
 
 describe("range mode", () => {
+  it("keeps the second input ignored when ignoredFocusElements is replaced", () => {
+    const second = document.createElement("input");
+    document.body.appendChild(second);
+    const { instance } = create({ mode: "range", secondInput: second });
+    const other = document.createElement("button");
+
+    instance.set("ignoredFocusElements", [other]);
+
+    expect(instance.config.ignoredFocusElements).toEqual([other, second]);
+  });
+
   const rangeInputs = () => {
     const second = document.createElement("input");
     document.body.appendChild(second);
