@@ -1,39 +1,19 @@
 <script>
   import { DatePicker, DatePickerInput } from "carbon-components-svelte";
 
-  function formatDate(date) {
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    return `${mm}/${dd}/${date.getFullYear()}`;
-  }
-
   const now = new Date();
-  const eventDates = [5, 12, 20].map((day) =>
-    formatDate(new Date(now.getFullYear(), now.getMonth(), day)),
-  );
+  const events = new Map([
+    [5, "Design review"],
+    [12, "Sprint planning"],
+    [20, "Release"],
+  ]);
 
-  function markEventDays(_dObj, _dStr, fp, dayElem) {
-    if (!eventDates.includes(fp.formatDate(dayElem.dateObj, "m/d/Y"))) return;
-
-    dayElem.style.position = "relative";
-
-    const dot = document.createElement("span");
-    dot.style.position = "absolute";
-    dot.style.bottom = "4px";
-    dot.style.left = "50%";
-    dot.style.transform = "translateX(-50%)";
-    dot.style.width = "4px";
-    dot.style.height = "4px";
-    dot.style.borderRadius = "50%";
-    dot.style.background = "var(--cds-support-info, #0f62fe)";
-    dayElem.appendChild(dot);
+  function dayDescription(date) {
+    if (date.getMonth() !== now.getMonth()) return undefined;
+    return events.get(date.getDate());
   }
 </script>
 
-<DatePicker
-  datePickerType="single"
-  flatpickrProps={{ onDayCreate: markEventDays }}
-  on:change
->
+<DatePicker datePickerType="single" {dayDescription} on:change>
   <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
 </DatePicker>

@@ -4,11 +4,7 @@
   let value = "";
 </script>
 
-<DatePicker
-  datePickerType="single"
-  bind:value
-  flatpickrProps={{ defaultDate: "today" }}
->
+<DatePicker datePickerType="single" bind:value selectedDates={[new Date()]}>
   <DatePickerInput
     labelText="Start date"
     placeholder="mm/dd/yyyy"

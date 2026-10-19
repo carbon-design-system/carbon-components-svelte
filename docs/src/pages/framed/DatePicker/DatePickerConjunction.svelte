@@ -4,11 +4,7 @@
   let value = "";
 </script>
 
-<DatePicker
-  datePickerType="multiple"
-  bind:value
-  flatpickrProps={{ conjunction: "; " }}
->
+<DatePicker datePickerType="multiple" bind:value conjunction="; ">
   <DatePickerInput
     labelText="Blackout dates"
     placeholder="mm/dd/yyyy"

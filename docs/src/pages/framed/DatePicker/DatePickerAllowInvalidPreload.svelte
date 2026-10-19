@@ -12,7 +12,7 @@
     datePickerType="single"
     value="12/15/2024"
     {minDate}
-    flatpickrProps={{ allowInvalidPreload: true }}
+    keepOutOfRangeValue
   >
     <DatePickerInput
       labelText="allowInvalidPreload (kept)"
