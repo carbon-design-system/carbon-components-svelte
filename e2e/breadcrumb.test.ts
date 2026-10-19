@@ -28,3 +28,22 @@ test.describe("Breadcrumb", () => {
     await expect(nav.getByRole("link", { name: "Dashboard" })).toBeVisible();
   });
 });
+
+// An item longer than the trail wraps inside it rather than running past
+// the trail's edge, and short items still don't wrap.
+test("wraps an item too long for a narrow trail", async ({ page }) => {
+  await page.goto("/breadcrumb.html");
+  const trail = page.getByTestId("narrow");
+  const edge = await trail.evaluate((el) => el.getBoundingClientRect().right);
+  for (const link of await trail.getByRole("link").all()) {
+    // biome-ignore lint/performance/noAwaitInLoops: one box at a time
+    const box = await link.boundingBox();
+    expect(box && box.x + box.width).toBeLessThanOrEqual(edge + 1);
+  }
+  const [projects, sentence] = await Promise.all([
+    trail.getByRole("link", { name: "Projects" }).boundingBox(),
+    trail.getByRole("link", { name: /^Replicate/ }).boundingBox(),
+  ]);
+  expect(projects?.height).toBeLessThan(24);
+  expect(sentence?.height).toBeGreaterThan(24);
+});
