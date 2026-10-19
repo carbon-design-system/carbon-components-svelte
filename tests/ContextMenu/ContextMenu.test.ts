@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";
 import { setViewportWidth } from "../utils/viewport";
 import ContextMenuTarget from "./ContextMenu.target.test.svelte";
@@ -10,6 +11,16 @@ import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
 describe("ContextMenu", () => {
+  it("listens for the page's context menu once, not once per submenu", () => {
+    const add = vi.spyOn(window, "addEventListener");
+    const remove = vi.spyOn(window, "removeEventListener");
+    render(ContextMenu, { props: { withSubmenu: true } });
+
+    expect(netListenerCalls(add, remove, "contextmenu")).toBe(1);
+    add.mockRestore();
+    remove.mockRestore();
+  });
+
   it("should set aria-label on root menu from labelText", () => {
     render(ContextMenu, {
       props: { open: true, labelText: "Page actions" },
