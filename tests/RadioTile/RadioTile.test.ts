@@ -1,6 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
 import { type ComponentProps, tick } from "svelte";
+import {
+  clearAllGroups,
+  getGroup,
+} from "../../src/RadioButton/radio-button-registry";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
@@ -14,6 +18,7 @@ import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileRef from "./RadioTile.ref.test.svelte";
 import RadioTileStandaloneGroup from "./RadioTile.standalone.test.svelte";
 import RadioTileStandaloneEach from "./RadioTile.standalone-each.test.svelte";
+import RadioTileStandaloneName from "./RadioTile.standalone-name.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
 
 const isSelected = (radio: HTMLElement) =>
@@ -307,6 +312,48 @@ describe("RadioTile", () => {
       expect(isSelected(radioA)).toBe(false);
       expect(radioB).toBeChecked();
       expect(isSelected(radioB)).toBe(true);
+    });
+
+    describe("name group", () => {
+      beforeEach(() => {
+        clearAllGroups();
+      });
+
+      it("leaves its name group when its name changes", async () => {
+        const { rerender } = render(RadioTileStandaloneName, {
+          props: { checkedB: true },
+        });
+        const radioA = screen.getByRole("radio", { name: "A" });
+        const radioB = screen.getByRole("radio", { name: "B" });
+
+        await rerender({ nameB: "other" });
+        await user.click(radioA);
+
+        expect(isSelected(radioA)).toBe(true);
+        expect(isSelected(radioB)).toBe(true);
+      });
+
+      it("joins the name group it is renamed into", async () => {
+        const { rerender } = render(RadioTileStandaloneName, {
+          props: { checkedA: true, checkedB: true, nameB: "other" },
+        });
+        const radioA = screen.getByRole("radio", { name: "A" });
+        const radioB = screen.getByRole("radio", { name: "B" });
+
+        await rerender({ nameB: "plan" });
+
+        expect(isSelected(radioA)).toBe(false);
+        expect(isSelected(radioB)).toBe(true);
+      });
+
+      it("leaves its name group when it unmounts", async () => {
+        const { rerender } = render(RadioTileStandaloneName);
+        expect(getGroup("plan")?.members.size).toBe(2);
+
+        await rerender({ showB: false });
+
+        expect(getGroup("plan")?.members.size).toBe(1);
+      });
     });
 
     it("keeps checked in sync when bound to array items", async () => {

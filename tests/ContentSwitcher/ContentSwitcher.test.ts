@@ -642,6 +642,48 @@ describe("ContentSwitcher", () => {
       expect(screen.getByTestId("selected-id")).toHaveTextContent("");
     });
 
+    it("updates selectedId and selectedIndex when a switch is clicked", async () => {
+      await renderAndFlush(ContentSwitcherSelectedId, {
+        props: { selectedId: "switch-a" },
+      });
+
+      await user.click(screen.getByRole("tab", { name: "Switch C" }));
+
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-c");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(screen.getByRole("tab", { name: "Switch C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+    });
+
+    it("updates selectedId when an arrow key moves the selection", async () => {
+      await renderAndFlush(ContentSwitcherSelectedId, {
+        props: { selectedId: "switch-a" },
+      });
+
+      screen.getByRole("tab", { name: "Switch A" }).focus();
+      await user.keyboard("{ArrowRight}");
+
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-b");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+    });
+
+    it("follows a selectedId set by the parent", async () => {
+      const { rerender } = await renderAndFlush(ContentSwitcherSelectedId, {
+        props: { selectedId: "switch-a" },
+      });
+
+      await rerender({ selectedId: "switch-c" });
+      await tick();
+
+      expect(screen.getByRole("tab", { name: "Switch C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    });
+
     it("lets selectedId win over selectedIndex", async () => {
       await renderAndFlush(ContentSwitcherSelectedId, {
         props: { selectedIndex: 0, selectedId: "switch-c" },
@@ -721,6 +763,24 @@ describe("ContentSwitcher", () => {
         "true",
       );
       expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("keeps the selected switch selected when a switch is inserted before it", async () => {
+      const onChange = vi.fn();
+      const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
+        props: { selectedIndex: 1, show: false, onChange },
+      });
+      onChange.mockClear();
+
+      await rerender({ show: true });
+      await tick();
+
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(onChange).toHaveBeenCalledWith(2);
     });
 
     it("keeps selectedIndex when a later switch is removed", async () => {

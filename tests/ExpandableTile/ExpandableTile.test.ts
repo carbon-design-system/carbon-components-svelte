@@ -100,6 +100,15 @@ describe("ExpandableTile", () => {
     expect(tile).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("forwards click", async () => {
+    const onClick = vi.fn();
+    render(ExpandableTile, { props: { onClick } });
+
+    await user.click(screen.getByRole("button"));
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it("should forward keydown", async () => {
     const onKeydown = vi.fn();
     render(ExpandableTile, { props: { onKeydown } });

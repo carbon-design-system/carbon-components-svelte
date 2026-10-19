@@ -6,6 +6,7 @@ import { user } from "../utils/user";
 import { recordGroupEvents } from "./helpers";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
+import SelectableTileGroupAnchor from "./SelectableTileGroupAnchor.test.svelte";
 import SelectableTileGroupDuplicate from "./SelectableTileGroupDuplicate.test.svelte";
 import SelectableTileGroupNested from "./SelectableTileGroupNested.test.svelte";
 import SelectableTileGroupNotify from "./SelectableTileGroupNotify.test.svelte";
@@ -89,6 +90,28 @@ describe("SelectableTileGroup", () => {
 
     for (const checkbox of screen.getAllByRole("checkbox")) {
       expect(checkbox).toHaveAttribute("name", "custom-group");
+    }
+  });
+
+  it("applies a group name set after mount to every tile", async () => {
+    const { rerender } = render(SelectableTileGroup, {
+      props: { name: "regions" },
+    });
+
+    await rerender({ name: "zones" });
+
+    for (const checkbox of screen.getAllByRole("checkbox")) {
+      expect(checkbox).toHaveAttribute("name", "zones");
+    }
+  });
+
+  it("associates every tile with a form set after mount", async () => {
+    const { rerender } = render(SelectableTileGroup);
+
+    await rerender({ form: "outer-form" });
+
+    for (const checkbox of screen.getAllByRole("checkbox")) {
+      expect(checkbox).toHaveAttribute("form", "outer-form");
     }
   });
 
@@ -395,6 +418,21 @@ describe("SelectableTileGroup", () => {
       expect(checkboxes[0]).not.toBeChecked();
       expect(checkboxes[1]).not.toBeChecked();
       expect(checkboxes[2]).toBeChecked();
+    });
+
+    it("falls back to a single toggle when the anchor tile is gone", async () => {
+      const { rerender } = render(SelectableTileGroupAnchor);
+
+      await user.click(screen.getByRole("checkbox", { name: "A" }));
+      await rerender({ showFirst: false });
+
+      await user.keyboard("{Shift>}");
+      await user.click(screen.getByRole("checkbox", { name: "D" }));
+      await user.keyboard("{/Shift}");
+
+      expect(screen.getByRole("checkbox", { name: "B" })).not.toBeChecked();
+      expect(screen.getByRole("checkbox", { name: "C" })).not.toBeChecked();
+      expect(screen.getByRole("checkbox", { name: "D" })).toBeChecked();
     });
 
     it("skips disabled tiles within the range", async () => {
