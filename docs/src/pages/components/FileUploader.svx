@@ -1,12 +1,13 @@
 ---
-components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", "FileUploaderItem", "FileUploaderSkeleton"]
+components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", "FileUploaderItem", "FileDownloadItem", "FileUploaderSkeleton"]
 description: File uploaders handle file uploads with a button trigger, drag-and-drop container, and file list, with validation and various states.
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, Form, Stack, formatFileSize } from "carbon-components-svelte";
+  import { FileDownloadItem, FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, Form, Stack, formatFileSize } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
+  import DocumentPdf from "carbon-icons-svelte/lib/DocumentPdf.svelte";
 </script>
 
 ## Button
@@ -518,6 +519,62 @@ or grid layout that sets its own gap.
 <Stack gap={3}>
   <FileUploaderItem noMargin name="invoice.pdf" status="complete" />
   <FileUploaderItem noMargin name="receipt.png" status="complete" />
+</Stack>
+
+## Download item
+
+Show a file someone can download, such as one shared in a chat message or
+attached to a ticket, with `FileDownloadItem`. It is a `FileUploaderItem` row
+that is a link: the same name, `fileSize`, sizes and `noMargin`, with a download
+icon at the end. Screen readers hear `iconDescription` ("Download") before the
+name and size.
+
+| Use | For |
+| --- | --- |
+| `FileUploaderItem` | A file you are adding or sending: uploading, complete, or invalid, with a remove button. |
+| `FileDownloadItem` | A file you can save: a link, or a button for a download your app starts. |
+
+### Link
+
+Set `href` to the file's URL. `download` makes the browser save the file instead
+of opening it; pass a string to suggest a file name, or `false` to open the file,
+such as a PDF in a new tab. Browsers apply `download` only to same-origin and
+`blob:` or `data:` URLs.
+
+<Stack gap={3}>
+  <FileDownloadItem noMargin href="/files/Q3-financial-report.pdf" name="Q3-financial-report.pdf" fileSize={2_400_000} />
+  <FileDownloadItem noMargin href="/files/8f2a91" download="Q3-financial-report.pdf" name="Q3-financial-report.pdf" fileSize={2_400_000} />
+</Stack>
+
+### File type icon
+
+Set `icon` to show the file type before the name, and pass `fileSize` a string
+to add the type after the size.
+
+<FileDownloadItem href="/files/Q3-financial-report.pdf" icon={DocumentPdf} name="Q3-financial-report.pdf" fileSize="2.4 MB · PDF" />
+
+### Download in code
+
+Omit `href` to render a button and start the download in `on:click`, such as
+after requesting a signed URL or fetching the file with an authorization header.
+
+<FileSource src="/framed/FileUploader/FileDownloadItemButton" />
+
+### Disabled
+
+Set `disabled` for a file that can no longer be downloaded, such as an expired
+link. Say why in `fileSize`.
+
+<FileDownloadItem disabled href="/files/Q3-financial-report.pdf" icon={DocumentPdf} name="Q3-financial-report.pdf" fileSize="Expired" />
+
+### Sizes
+
+Set `size` to `"field"`, `"small"` or `"xs"`, as on `FileUploaderItem`.
+
+<Stack gap={3}>
+  <FileDownloadItem noMargin href="/files/Q3-financial-report.pdf" name="Q3-financial-report.pdf" fileSize={2_400_000} />
+  <FileDownloadItem noMargin size="field" href="/files/Q3-financial-report.pdf" name="Q3-financial-report.pdf" fileSize={2_400_000} />
+  <FileDownloadItem noMargin size="small" href="/files/Q3-financial-report.pdf" name="Q3-financial-report.pdf" fileSize={2_400_000} />
 </Stack>
 
 ## Drop container
