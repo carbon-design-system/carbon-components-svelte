@@ -187,6 +187,15 @@
    */
   export let hideCloseButton = false;
 
+  /**
+   * Set to `true` to build the modal's content the first time it opens
+   * instead of at mount, and keep it afterwards. A closed modal is still
+   * laid out (it is only made invisible), so this saves its nodes on pages
+   * that hold modals most visitors never open. Content is not in the DOM,
+   * or in server-rendered markup, until then.
+   */
+  export let lazy = false;
+
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
@@ -281,6 +290,11 @@
   });
 
   $: lifecycle.syncOpen(open);
+
+  // `lazy`: the body and footer mount on the first open and then stay.
+  let openedOnce = open;
+  $: if (open) openedOnce = true;
+  $: renderContent = !lazy || openedOnce;
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
@@ -488,12 +502,14 @@
         }
       }}
     >
-      <slot />
+      {#if renderContent}
+        <slot />
+      {/if}
     </div>
     {#if hasScrollingContent}
       <div class:bx--modal-content--overflow-indicator={true}></div>
     {/if}
-    {#if !passiveModal}
+    {#if !passiveModal && renderContent}
       <div
         class:bx--modal-footer={true}
         class:bx--modal-footer--three-button={secondaryButtons.length === 2}
