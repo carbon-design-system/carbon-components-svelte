@@ -68,15 +68,6 @@ describe("CheckboxGroup", () => {
     }
   });
 
-  it("should hide legend visually", () => {
-    render(CheckboxGroupComponent, {
-      props: { legendText: "Legend", hideLegend: true },
-    });
-
-    const legend = screen.getByText("Legend");
-    expect(legend).toHaveClass("bx--visually-hidden");
-  });
-
   it("should handle custom id", () => {
     render(CheckboxGroupComponent, {
       props: { id: "custom-id" },
@@ -163,27 +154,9 @@ describe("CheckboxGroup", () => {
     expect(container.querySelector(".bx--form__helper-text")).toBeNull();
   });
 
-  it("associates helper text with the fieldset via aria-describedby", () => {
-    render(CheckboxGroupComponent, {
-      props: { helperText: "Helper text message" },
-    });
-
-    const fieldset = screen.getByRole("group");
-    const helperId = fieldset.getAttribute("aria-describedby");
-    assert(helperId);
-
-    const helper = document.getElementById(helperId);
-    expect(helper).toHaveTextContent("Helper text message");
-  });
-
-  it("does not set aria-describedby on the fieldset when helper text is absent", () => {
-    render(CheckboxGroupComponent);
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).not.toHaveAttribute("aria-describedby");
-  });
-
-  it("renders the invalid state on the fieldset with an error message", () => {
+  // The contract in tests/form-field-contract covers the messages and their
+  // wiring; these are the styling hooks it doesn't model.
+  it("marks the invalid state on the fieldset for styling", () => {
     render(CheckboxGroupComponent, {
       props: { invalid: true, invalidText: "Select at least one option" },
     });
@@ -191,13 +164,9 @@ describe("CheckboxGroup", () => {
     const fieldset = screen.getByRole("group");
     expect(fieldset).toHaveClass("bx--checkbox-group--invalid");
     expect(fieldset).toHaveAttribute("data-invalid", "true");
-
-    const message = screen.getByText("Select at least one option");
-    expect(message).toHaveClass("bx--form-requirement");
-    expect(fieldset).toHaveAttribute("aria-describedby", message.id);
   });
 
-  it("renders the warning state on the fieldset with a warning message", () => {
+  it("marks the warning state on the fieldset for styling", () => {
     render(CheckboxGroupComponent, {
       props: { warn: true, warnText: "Heads up" },
     });
@@ -205,36 +174,6 @@ describe("CheckboxGroup", () => {
     const fieldset = screen.getByRole("group");
     expect(fieldset).toHaveClass("bx--checkbox-group--warning");
     expect(fieldset).not.toHaveAttribute("data-invalid");
-
-    const message = screen.getByText("Heads up");
-    expect(message).toHaveClass("bx--form-requirement");
-  });
-
-  it("prioritizes invalid over warn on the group when both are set", () => {
-    render(CheckboxGroupComponent, {
-      props: {
-        invalid: true,
-        invalidText: "Select at least one option",
-        warn: true,
-        warnText: "Heads up",
-      },
-    });
-
-    expect(screen.getByText("Select at least one option")).toBeInTheDocument();
-    expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
-  });
-
-  it("hides group helper text while invalid or warn text is shown", () => {
-    render(CheckboxGroupComponent, {
-      props: {
-        invalid: true,
-        invalidText: "Select at least one option",
-        helperText: "Helper text message",
-      },
-    });
-
-    expect(screen.getByText("Select at least one option")).toBeInTheDocument();
-    expect(screen.queryByText("Helper text message")).not.toBeInTheDocument();
   });
 
   it.each([

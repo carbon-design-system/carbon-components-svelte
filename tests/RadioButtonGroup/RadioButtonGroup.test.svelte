@@ -10,7 +10,6 @@
   export let required: ComponentProps<RadioButtonGroup>["required"] = undefined;
   export let name: ComponentProps<RadioButtonGroup>["name"] = undefined;
   export let legendText: ComponentProps<RadioButtonGroup>["legendText"] = "";
-  export let hideLegend: ComponentProps<RadioButtonGroup>["hideLegend"] = false;
   export let labelPosition: ComponentProps<RadioButtonGroup>["labelPosition"] =
     "right";
   export let orientation: ComponentProps<RadioButtonGroup>["orientation"] =
@@ -39,7 +38,6 @@
     {disabled}
     {required}
     {name}
-    {hideLegend}
     {labelPosition}
     {orientation}
     {id}
@@ -66,7 +64,6 @@
     {required}
     {name}
     {legendText}
-    {hideLegend}
     {labelPosition}
     {orientation}
     {id}

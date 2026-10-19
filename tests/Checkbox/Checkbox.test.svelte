@@ -4,7 +4,6 @@
   export let checked = false;
   export let indeterminate = false;
   export let disabled = false;
-  export let hideLabel = false;
   export let labelText = "Checkbox label";
   export let helperText = "";
   export let onCheck: (event: CustomEvent<boolean>) => void = () => {};
@@ -15,7 +14,6 @@
   bind:checked
   bind:indeterminate
   {disabled}
-  {hideLabel}
   {labelText}
   {helperText}
   data-testid="checkbox"

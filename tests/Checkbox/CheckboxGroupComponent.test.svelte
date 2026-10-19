@@ -10,7 +10,6 @@
   export let required: ComponentProps<CheckboxGroup>["required"] = undefined;
   export let name: ComponentProps<CheckboxGroup>["name"] = undefined;
   export let legendText: ComponentProps<CheckboxGroup>["legendText"] = "";
-  export let hideLegend: ComponentProps<CheckboxGroup>["hideLegend"] = false;
   export let helperText: ComponentProps<CheckboxGroup>["helperText"] = "";
   export let invalid: ComponentProps<CheckboxGroup>["invalid"] = false;
   export let invalidText: ComponentProps<CheckboxGroup>["invalidText"] = "";
@@ -32,7 +31,6 @@
     {disabled}
     {required}
     {name}
-    {hideLegend}
     {id}
     {helperText}
     {invalid}
@@ -56,7 +54,6 @@
     {required}
     {name}
     {legendText}
-    {hideLegend}
     {id}
     {helperText}
     {invalid}

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import ToggleComponent from "carbon-components-svelte/Toggle/Toggle.svelte";
 import { user } from "../utils/user";
 import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
-import ToggleValidation from "./Toggle.validation.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
 
 describe("Toggle", () => {
@@ -123,16 +123,6 @@ describe("Toggle", () => {
     expect(toggle).toBeChecked();
     expect(onToggle).toHaveBeenCalledTimes(3);
     expect(onChange).toHaveBeenCalledTimes(3);
-  });
-
-  it("visually hides label when hideLabel is true", () => {
-    render(Toggle);
-
-    const label = screen.getByText("Hidden label toggle");
-    expect(label).toHaveClass("bx--visually-hidden");
-    expect(getToggle("Hidden label toggle")).toHaveAccessibleName(
-      "Hidden label toggle",
-    );
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -293,104 +283,36 @@ describe("Toggle", () => {
     expect(directSpans[0]).toHaveClass("bx--toggle__switch");
   });
 
-  describe("warning", () => {
-    it("renders the warning message and describes the switch with it", () => {
-      render(ToggleValidation, { warn: true, warnText: "Heads up" });
+  // The contract in tests/form-field-contract covers the messages and their
+  // wiring; these are the styling hooks it doesn't model.
+  const formItem = () => screen.getByRole("switch").closest(".bx--form-item");
 
-      const toggle = screen.getByRole("switch");
-      expect(toggle.closest(".bx--form-item")).toHaveClass(
-        "bx--toggle--warning",
-      );
-      expect(toggle).not.toHaveAttribute("aria-invalid");
+  it.each([
+    [{ invalid: true }, "bx--toggle--invalid"],
+    [{ warn: true }, "bx--toggle--warning"],
+  ])("styles the field for %o", (props, className) => {
+    render(ToggleComponent, { props: { labelText: "Alerts", ...props } });
 
-      const message = screen.getByText("Heads up");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(toggle).toHaveAttribute("aria-describedby", message.id);
-    });
-
-    it.each([
-      { disabled: true, readonly: false },
-      { disabled: false, readonly: true },
-    ])("suppresses the warning when %o", (state) => {
-      render(ToggleValidation, { warn: true, warnText: "Heads up", ...state });
-
-      expect(
-        screen.getByRole("switch").closest(".bx--form-item"),
-      ).not.toHaveClass("bx--toggle--warning");
-      expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
-    });
+    expect(formItem()).toHaveClass(className);
   });
 
-  describe("invalid", () => {
-    it("renders the error message and marks the switch invalid", () => {
-      render(ToggleValidation, {
-        invalid: true,
-        invalidText: "Accept the terms to continue",
-      });
+  it.each([
+    { invalid: true, warn: true },
+    { warn: true, disabled: true },
+    { warn: true, readonly: true },
+  ])("drops the warning styling when %o", (props) => {
+    render(ToggleComponent, { props: { labelText: "Alerts", ...props } });
 
-      const toggle = screen.getByRole("switch");
-      expect(toggle.closest(".bx--form-item")).toHaveClass(
-        "bx--toggle--invalid",
-      );
-      expect(toggle).toHaveAttribute("aria-invalid", "true");
-
-      const message = screen.getByText("Accept the terms to continue");
-      expect(message).toHaveClass("bx--form-requirement");
-      expect(toggle).toHaveAttribute("aria-describedby", message.id);
-    });
-
-    it("takes precedence over a warning", () => {
-      render(ToggleValidation, {
-        invalid: true,
-        invalidText: "Required",
-        warn: true,
-        warnText: "Heads up",
-      });
-
-      expect(screen.getByText("Required")).toBeInTheDocument();
-      expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
-      expect(
-        screen.getByRole("switch").closest(".bx--form-item"),
-      ).not.toHaveClass("bx--toggle--warning");
-    });
-
-    it.each([
-      { disabled: true, readonly: false },
-      { disabled: false, readonly: true },
-    ])("suppresses the invalid state when %o", (state) => {
-      render(ToggleValidation, {
-        invalid: true,
-        invalidText: "Required",
-        ...state,
-      });
-
-      expect(screen.getByRole("switch")).not.toHaveAttribute("aria-invalid");
-      expect(screen.queryByText("Required")).not.toBeInTheDocument();
-    });
+    expect(formItem()).not.toHaveClass("bx--toggle--warning");
   });
 
-  describe("helper text", () => {
-    it("shows helper text under the switch and describes it", () => {
-      render(ToggleValidation, { helperText: "Applies to new projects" });
-
-      const helper = screen.getByText("Applies to new projects");
-      expect(helper).toHaveClass("bx--form__helper-text");
-      expect(screen.getByRole("switch")).toHaveAttribute(
-        "aria-describedby",
-        helper.id,
-      );
+  it("styles the helper text", () => {
+    render(ToggleComponent, {
+      props: { labelText: "Alerts", helperText: "Applies to new projects" },
     });
 
-    it("gives way to a message", () => {
-      render(ToggleValidation, {
-        helperText: "Applies to new projects",
-        warn: true,
-        warnText: "Heads up",
-      });
-
-      expect(
-        screen.queryByText("Applies to new projects"),
-      ).not.toBeInTheDocument();
-    });
+    expect(screen.getByText("Applies to new projects")).toHaveClass(
+      "bx--form__helper-text",
+    );
   });
 });

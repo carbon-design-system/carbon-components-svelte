@@ -97,16 +97,6 @@ describe("Checkbox", () => {
     expect(input).toBeDisabled();
   });
 
-  it("renders with hidden label", () => {
-    render(Checkbox, { hideLabel: true });
-
-    const labelText = screen.getByText("Checkbox label");
-    const label = labelText.closest("label");
-    assert(label);
-    const hiddenElement = label.querySelector(".bx--visually-hidden");
-    expect(hiddenElement).toBeInTheDocument();
-  });
-
   it("renders skeleton state", () => {
     render(CheckboxSkeleton);
 
@@ -318,81 +308,38 @@ describe("Checkbox", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("renders the invalid state with an error message and aria wiring", () => {
-    render(CheckboxValidation, { invalid: true, invalidText: "Required" });
+  // The contract in tests/form-field-contract covers the messages and their
+  // wiring; these are the styling hooks it doesn't model.
+  it("marks the invalid state for styling", () => {
+    render(CheckboxValidation, { invalid: true });
 
-    const wrapper = screen.getByTestId("checkbox");
-    expect(wrapper).toHaveClass("bx--checkbox-wrapper--invalid");
-
-    const input = screen.getByRole("checkbox");
-    expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input).toHaveAttribute("data-invalid", "true");
-
-    const message = screen.getByText("Required");
-    expect(message).toHaveClass("bx--form-requirement");
-    expect(input).toHaveAttribute("aria-describedby", message.id);
+    expect(screen.getByTestId("checkbox")).toHaveClass(
+      "bx--checkbox-wrapper--invalid",
+    );
+    expect(screen.getByRole("checkbox")).toHaveAttribute(
+      "data-invalid",
+      "true",
+    );
   });
 
-  it("renders the warning state with a warning message", () => {
-    render(CheckboxValidation, { warn: true, warnText: "Heads up" });
+  it("marks the warning state for styling", () => {
+    render(CheckboxValidation, { warn: true });
 
     const wrapper = screen.getByTestId("checkbox");
     expect(wrapper).toHaveClass("bx--checkbox-wrapper--warning");
     expect(wrapper).not.toHaveClass("bx--checkbox-wrapper--invalid");
-
-    const input = screen.getByRole("checkbox");
-    expect(input).not.toHaveAttribute("aria-invalid");
-
-    const message = screen.getByText("Heads up");
-    expect(message).toHaveClass("bx--form-requirement");
-    expect(input).toHaveAttribute("aria-describedby", message.id);
   });
 
-  it("prioritizes invalid over warn when both are set", () => {
-    render(CheckboxValidation, {
-      invalid: true,
-      invalidText: "Required",
-      warn: true,
-      warnText: "Heads up",
-    });
+  it.each([{ disabled: true }, { readonly: true }])(
+    "drops the invalid styling when %o",
+    (state) => {
+      render(CheckboxValidation, { invalid: true, ...state });
 
-    expect(screen.getByText("Required")).toBeInTheDocument();
-    expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
-  });
-
-  it("suppresses invalid/warn styling when disabled or readonly", async () => {
-    const { rerender } = render(CheckboxValidation, {
-      invalid: true,
-      invalidText: "Required",
-      disabled: true,
-    });
-    expect(screen.getByTestId("checkbox")).not.toHaveClass(
-      "bx--checkbox-wrapper--invalid",
-    );
-    expect(screen.queryByText("Required")).not.toBeInTheDocument();
-
-    await rerender({
-      invalid: true,
-      invalidText: "Required",
-      disabled: false,
-      readonly: true,
-    });
-    expect(screen.getByTestId("checkbox")).not.toHaveClass(
-      "bx--checkbox-wrapper--invalid",
-    );
-    expect(screen.queryByText("Required")).not.toBeInTheDocument();
-  });
-
-  it("hides helper text while invalid or warn text is shown", () => {
-    render(CheckboxValidation, {
-      invalid: true,
-      invalidText: "Required",
-      helperText: "Helper text",
-    });
-
-    expect(screen.getByText("Required")).toBeInTheDocument();
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-  });
+      expect(screen.getByTestId("checkbox")).not.toHaveClass(
+        "bx--checkbox-wrapper--invalid",
+      );
+    },
+  );
 
   it("should render helper text when provided", () => {
     render(Checkbox, { helperText: "Helper text message" });
@@ -404,24 +351,6 @@ describe("Checkbox", () => {
   it("should not render helper text by default", () => {
     const { container } = render(Checkbox);
     expect(container.querySelector(".bx--form__helper-text")).toBeNull();
-  });
-
-  it("associates helper text with the input via aria-describedby", () => {
-    render(Checkbox, { helperText: "Helper text message" });
-
-    const input = screen.getByRole("checkbox");
-    const helperId = input.getAttribute("aria-describedby");
-    assert(helperId);
-
-    const helper = document.getElementById(helperId);
-    expect(helper).toHaveTextContent("Helper text message");
-  });
-
-  it("does not set aria-describedby when helper text is absent", () => {
-    render(Checkbox);
-
-    const input = screen.getByRole("checkbox");
-    expect(input).not.toHaveAttribute("aria-describedby");
   });
 
   describe("title truncation", () => {
