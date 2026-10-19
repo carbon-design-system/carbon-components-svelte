@@ -71,6 +71,16 @@ Create a non-interactive modal for displaying information. This variant lacks ac
 
 Customize the modal's heading, label, and body content.
 
+### Build the content on first open
+
+Set `lazy` to build the body and footer the first time the modal opens, then keep them. A closed modal is invisible but still laid out, so this matters on pages with several modals or heavy content: a closed modal holding a 20-field form drops from 131 nodes to 8. ComposedModal takes the same prop.
+
+| Do | Why |
+| --- | --- |
+| Set `lazy` on modals most visitors never open. | Their content costs nothing until it's needed. |
+| Leave it off when you bind to or read the content before the first open. | That content doesn't exist yet. |
+| Leave it off when the content must be in server-rendered markup. | It isn't rendered until the modal opens. |
+
 ### Custom heading and label
 
 Override the plain-text `modalHeading` and `modalLabel` with the `heading` and `label` slots when you need richer markup, such as a status tag next to the title.
