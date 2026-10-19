@@ -100,6 +100,16 @@ describe("Toggle", () => {
     expect(consoleLog).toHaveBeenCalledWith("change:", false);
   });
 
+  it("toggles once while Enter is held down", async () => {
+    render(Toggle);
+
+    const toggle = getToggle("Default toggle");
+    toggle.focus();
+
+    await user.keyboard("{Enter>2/}");
+    expect(toggle).toBeChecked();
+  });
+
   it("ignores other key presses", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Toggle);
