@@ -106,6 +106,7 @@
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   let ref = null;
@@ -249,7 +250,9 @@
         style:padding-inline-start="{inset}rem"
       >
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot {node}>{text}</slot>
+        <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
+          ><slot {node}>{text}</slot></span
+        >
       </div>
     </a>
   </li>
@@ -336,7 +339,9 @@
         />
       {/if}
       <svelte:component this={icon} class="bx--tree-node__icon" />
-      <slot {node}>{text}</slot>
+      <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
+        ><slot {node}>{text}</slot></span
+      >
     </div>
   </li>
 {/if}

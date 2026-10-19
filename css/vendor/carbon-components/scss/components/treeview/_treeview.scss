@@ -458,3 +458,29 @@
 @include exports("treeview-forced-colors") {
   @include treeview-forced-colors;
 }
+
+// carbon-components-svelte patch (treeview-long-names)
+// A node's name too long for its row ran under the tree's edge, cut off
+// with no ellipsis. It ends in an ellipsis instead; TreeView titles it with
+// the full name on hover while it's cut off.
+
+/// Tree node names that truncate.
+/// @access private
+/// @group treeview
+@mixin treeview-long-names {
+  .#{$prefix}--tree .#{$prefix}--tree-node__label,
+  .#{$prefix}--tree .#{$prefix}--tree-node__label__details {
+    min-width: 0;
+  }
+
+  .#{$prefix}--tree .#{$prefix}--tree-node__label__text {
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@include exports("treeview-long-names") {
+  @include treeview-long-names;
+}
