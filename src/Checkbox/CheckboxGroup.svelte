@@ -130,7 +130,6 @@
    * @type {(value: string | number, checked: boolean, fromReset?: boolean) => void}
    */
   function update(value, checked, fromReset = false) {
-    if (readonly) return;
     resettingFromForm = fromReset;
     selectedValues.update((prev) => {
       if (checked) {
@@ -156,7 +155,6 @@
   $: if (!readonly && selected !== $selectedValues) $selectedValues = selected;
 
   const unsubscribe = selectedValues.subscribe((value) => {
-    if (readonly) return;
     selected = value;
     if (!initialRender && !resettingFromForm) {
       dispatch("change", value);
