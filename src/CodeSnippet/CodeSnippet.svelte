@@ -321,8 +321,11 @@
     const padding =
       Number.parseFloat(style.paddingTop) +
       Number.parseFloat(style.paddingBottom);
-    const height = ref.getBoundingClientRect().height - padding;
-    if (height <= 0) return;
+    const boxHeight = ref.getBoundingClientRect().height;
+    // A hidden snippet has no box; keep its state. Empty content still has
+    // its padding box, so it falls through and clears the expand control.
+    if (boxHeight <= 0) return;
+    const height = boxHeight - padding;
     const collapsedMaxHeight = maxCollapsedNumberOfRows * rowHeightInPixels;
     // Mirror Carbon React: the expand control is only useful when collapsed
     // content is capped and expanding can reveal more rows than that cap.

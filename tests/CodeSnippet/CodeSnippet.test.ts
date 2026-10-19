@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
+import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import {
   mockSnippetOverflowHeight,
@@ -467,6 +468,72 @@ yarn -v`,
       container.querySelector(".bx--snippet--expand"),
     ).not.toBeInTheDocument();
     expect(screen.getByText("Show more")).toBeInTheDocument();
+  });
+
+  // Regression: an emptied <pre> still has its padding box, so it must clear
+  // the expand control; only a hidden snippet (no box) keeps its state.
+  it("drops show more when the code is cleared, but not while hidden", async () => {
+    let deliver: ResizeObserverCallback = () => {};
+    const observed = new Set<Element>();
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          deliver = callback;
+        }
+        observe(element: Element) {
+          observed.add(element);
+        }
+        unobserve(element: Element) {
+          observed.delete(element);
+        }
+        disconnect() {}
+      },
+    );
+    const resize = () =>
+      deliver(
+        [...observed].map((target) => ({ target }) as ResizeObserverEntry),
+        {} as ResizeObserver,
+      );
+    const nativeGetComputedStyle = window.getComputedStyle;
+    const style = vi
+      .spyOn(window, "getComputedStyle")
+      .mockImplementation((element) =>
+        element.tagName === "PRE"
+          ? ({
+              paddingTop: "0px",
+              paddingBottom: "24px",
+            } as CSSStyleDeclaration)
+          : nativeGetComputedStyle(element),
+      );
+    const rect = mockSnippetOverflowHeight(24 + 16 * 20);
+    try {
+      const code = Array.from({ length: 20 }, (_, i) => `line ${i}`).join("\n");
+      const { container, rerender } = render(CodeSnippet, {
+        props: { type: "multi", code },
+      });
+      await waitFor(() => expect(observed.size).toBe(2));
+      resize();
+      await user.click(await screen.findByText("Show more"));
+
+      mockSnippetOverflowHeight(0);
+      resize();
+      await tick();
+      expect(screen.getByText("Show less")).toBeInTheDocument();
+
+      await rerender({ code: "" });
+      mockSnippetOverflowHeight(24);
+      resize();
+      await tick();
+      expect(screen.queryByText(/Show (more|less)/)).not.toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--snippet--expand"),
+      ).not.toBeInTheDocument();
+    } finally {
+      rect.mockRestore();
+      style.mockRestore();
+      vi.unstubAllGlobals();
+    }
   });
 
   it("should copy text when copy button is clicked", async () => {
