@@ -10,6 +10,7 @@
   export let size: ComponentProps<TabsVertical>["size"] = undefined;
   export let orientation: ComponentProps<TabsVertical>["orientation"] =
     undefined;
+  export let onChange: (index: number) => void = () => {};
 </script>
 
 <TabsVertical
@@ -17,9 +18,7 @@
   {activation}
   {size}
   {orientation}
-  on:change={({ detail }) => {
-    console.log("change event", detail);
-  }}
+  on:change={({ detail }) => onChange(detail)}
 >
   <Tab label="Tab 1" />
   <Tab label="Tab 2" disabled />

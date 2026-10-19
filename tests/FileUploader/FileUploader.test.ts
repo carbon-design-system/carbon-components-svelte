@@ -5,50 +5,68 @@ import { user } from "../utils/user";
 import FileUploaderDescriptionSlot from "./FileUploader.descriptionSlot.test.svelte";
 import FileUploaderPerFileStatusDemo from "./FileUploader.perFileStatus.test.svelte";
 import FileUploader from "./FileUploader.test.svelte";
-import { fileNames, simulateFileSelection } from "./helpers";
+import {
+  fileNames,
+  getFileInput,
+  getRefInput,
+  makeFile,
+  removeButtons,
+  selectFiles,
+  simulateFileSelection,
+} from "./helpers";
+
+type RejectionRow = {
+  title: string;
+  props: Record<string, unknown>;
+  /** Picked (and accepted) before `files`, as `[name, size]`. */
+  first?: Array<[string, number]>;
+  /** Picked last, as `[name, size]`. */
+  files: Array<[string, number]>;
+  /** Names of the rows left on screen, in order. */
+  rows: string[];
+  rejected: Array<{ name: string; reason: string }>;
+};
+
+type Uploader = {
+  files: ReadonlyArray<File> | undefined;
+  fileUploader: { clearFiles(): void } | undefined;
+};
+
+const clearMethods = [
+  [
+    "files = []",
+    (component: Uploader) => {
+      component.files = [];
+    },
+  ],
+  [
+    "clearFiles()",
+    (component: Uploader) => {
+      assert(component.fileUploader);
+      component.fileUploader.clearFiles();
+    },
+  ],
+] as const;
 
 describe("FileUploader", () => {
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1785
   it("should synchronize input.files when files are removed programmatically", async () => {
     const { component } = render(FileUploader);
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
+    const input = await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+      makeFile("file3.txt"),
+    ]);
+    expect(fileNames(input)).toEqual(["file1.txt", "file2.txt", "file3.txt"]);
 
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2, file3]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(3);
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(3);
-    expect(input.files[0].name).toBe("file1.txt");
-    expect(input.files[1].name).toBe("file2.txt");
-    expect(input.files[2].name).toBe("file3.txt");
-
-    const closeButtons = document.querySelectorAll(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-
-    if (closeButtons.length >= 2) {
-      const closeButton = closeButtons[1];
-      assert(closeButton instanceof HTMLElement);
-      await user.click(closeButton);
-    }
+    await user.click(removeButtons()[1]);
 
     await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(2);
+      expect(screen.queryAllByText(/file\d\.txt/)).toHaveLength(2);
     });
 
-    expect(input.files).toHaveLength(2);
-    expect(input.files[0].name).toBe("file1.txt");
-    expect(input.files[1].name).toBe("file3.txt");
+    expect(fileNames(input)).toEqual(["file1.txt", "file3.txt"]);
   });
 
   it("should dispatch remove with only the deleted middle file (not shifted neighbors)", async () => {
@@ -58,29 +76,17 @@ describe("FileUploader", () => {
       props: { onAdd: addHandler, onRemove: removeHandler, multiple: true },
     });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2, file3]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(3);
-    });
+    await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+      makeFile("file3.txt"),
+    ]);
 
     addHandler.mockClear();
     removeHandler.mockClear();
 
-    const closeButtons = document.querySelectorAll(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    expect(closeButtons.length).toBe(3);
-    const middleCloseButton = closeButtons[1];
-    assert(middleCloseButton instanceof HTMLElement);
-    await user.click(middleCloseButton);
+    expect(removeButtons()).toHaveLength(3);
+    await user.click(removeButtons()[1]);
 
     await vi.waitFor(() => {
       expect(screen.queryByText("file2.txt")).not.toBeInTheDocument();
@@ -105,24 +111,12 @@ describe("FileUploader", () => {
       },
     });
 
-    const fileA = new File(["a"], "a.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [fileA]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("a.txt")).toBeInTheDocument();
-    });
+    await selectFiles(component, [makeFile("a.txt")]);
 
     addHandler.mockClear();
     removeHandler.mockClear();
 
-    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
-    simulateFileSelection(input, [fileB]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("b.txt")).toBeInTheDocument();
-    });
+    await selectFiles(component, [makeFile("b.txt")]);
 
     expect(removeHandler).not.toHaveBeenCalled();
     expect(addHandler).toHaveBeenCalledTimes(1);
@@ -134,93 +128,35 @@ describe("FileUploader", () => {
   it("should clear input.files when all files are removed", async () => {
     const { component } = render(FileUploader);
 
-    const file1 = new File(["content1"], "test-file.txt", {
-      type: "text/plain",
-    });
+    const input = await selectFiles(component, [makeFile("test-file.txt")]);
+    expect(fileNames(input)).toEqual(["test-file.txt"]);
 
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("test-file.txt")).toBeInTheDocument();
-    });
-
-    assert(input.files, "input.files should exist");
-    expect(input.files).toHaveLength(1);
-    expect(input.files[0].name).toBe("test-file.txt");
-
-    const closeButton = document.querySelector(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    assert(closeButton);
-    await user.click(closeButton);
+    await user.click(removeButtons()[0]);
 
     await vi.waitFor(() => {
       expect(screen.queryByText("test-file.txt")).not.toBeInTheDocument();
     });
 
-    assert(input.files);
-    expect(input.files).toHaveLength(0);
+    expect(fileNames(input)).toEqual([]);
     expect(input.value).toBe("");
   });
 
-  it("should clear all files using clearFiles() method", async () => {
+  it.each(clearMethods)("should clear all files using %s", async (_, clear) => {
     const { component } = render(FileUploader);
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const input = await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+    ]);
+    expect(fileNames(input)).toHaveLength(2);
 
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(2);
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(2);
-
-    assert(component.fileUploader);
-    component.fileUploader.clearFiles();
+    clear(component);
 
     await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(0);
+      expect(screen.queryAllByText(/file\d\.txt/)).toHaveLength(0);
     });
 
-    expect(input.files).toHaveLength(0);
-    expect(input.value).toBe("");
-  });
-
-  it("should clear all files using two-way binding (files = [])", async () => {
-    const { component } = render(FileUploader);
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(2);
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(2);
-
-    component.files = [];
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(0);
-    });
-
-    expect(input.files).toHaveLength(0);
+    expect(fileNames(input)).toEqual([]);
     expect(input.value).toBe("");
   });
 
@@ -230,12 +166,10 @@ describe("FileUploader", () => {
       props: { onAdd: addHandler },
     });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
+    simulateFileSelection(getRefInput(component), [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+    ]);
 
     await vi.waitFor(() => {
       expect(addHandler).toHaveBeenCalled();
@@ -253,9 +187,7 @@ describe("FileUploader", () => {
       props: { onAdd: addHandler, multiple: true },
     });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    component.files = [file1, file2];
+    component.files = [makeFile("file1.txt"), makeFile("file2.txt")];
 
     await vi.waitFor(() => {
       expect(addHandler).toHaveBeenCalled();
@@ -272,27 +204,28 @@ describe("FileUploader", () => {
       props: { disabled: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-    expect(input).toBeDisabled();
+    expect(getFileInput(container)).toBeDisabled();
 
     const button = container.querySelector("button");
     assert(button);
     expect(button).toHaveClass("bx--btn--disabled");
   });
 
-  it("should forward capture to the input", () => {
+  it.each([
+    ["capture", "environment", "capture", "environment"],
+    ["accept", [".jpg", ".png"], "accept", ".jpg,.png"],
+    ["name", "file-upload", "name", "file-upload"],
+  ])("should forward %s to the input", (prop, value, attr, expected) => {
     const { container } = render(FileUploader, {
-      props: { capture: "environment" },
+      props: { [prop]: value },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    expect(input).toHaveAttribute("capture", "environment");
+    expect(getFileInput(container)).toHaveAttribute(attr, expected);
   });
 
   it("should disable each row's remove button when disabled", async () => {
     const { container } = render(FileUploader, {
-      props: { disabled: true, files: [new File(["a"], "a.txt")] },
+      props: { disabled: true, files: [makeFile("a.txt")] },
     });
 
     const remove = await screen.findByRole("button", { name: /remove file/i });
@@ -302,38 +235,23 @@ describe("FileUploader", () => {
     );
   });
 
-  it("should respect accept prop", () => {
-    const { container } = render(FileUploader, {
-      props: { accept: [".jpg", ".png"] },
-    });
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-    expect(input).toHaveAttribute("accept", ".jpg,.png");
-  });
-
   it("should replace the selection when multiple is false", async () => {
     const { component } = render(FileUploader, {
       props: { multiple: false },
     });
 
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
+    const input = getRefInput(component);
     expect(input).not.toHaveAttribute("multiple");
 
     // A native single-file picker hands over one file per pick and replaces
     // the previous selection.
-    simulateFileSelection(input, [
-      new File(["content1"], "file1.txt", { type: "text/plain" }),
-    ]);
+    simulateFileSelection(input, [makeFile("file1.txt")]);
     await vi.waitFor(() => {
       expect(screen.getAllByText(/file\d\.txt/)).toHaveLength(1);
     });
     expect(screen.getByText("file1.txt")).toBeInTheDocument();
 
-    simulateFileSelection(input, [
-      new File(["content2"], "file2.txt", { type: "text/plain" }),
-    ]);
+    simulateFileSelection(input, [makeFile("file2.txt")]);
     await vi.waitFor(() => {
       expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
     });
@@ -347,19 +265,14 @@ describe("FileUploader", () => {
       props: { multiple: true },
     });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    expect(getRefInput(component)).toHaveAttribute("multiple");
 
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    expect(input).toHaveAttribute("multiple");
+    await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+    ]);
 
-    simulateFileSelection(input, [file1, file2]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(2);
-    });
+    expect(screen.queryAllByText(/file\d\.txt/)).toHaveLength(2);
   });
 
   it("should render labelTitle prop", () => {
@@ -442,7 +355,7 @@ describe("FileUploader", () => {
         ".bx--file-complete",
       ];
       const { container } = render(FileUploader, {
-        props: { status, files: [new File(["content"], "test.txt")] },
+        props: { status, files: [makeFile("test.txt")] },
       });
 
       const stateContainer = container.querySelector(
@@ -469,9 +382,7 @@ describe("FileUploader", () => {
         props: { form: "outer-form", name: "files" },
       });
 
-      const input = document.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
-      expect(input.form).toBe(outerForm);
+      expect(getFileInput(document).form).toBe(outerForm);
     } finally {
       outerForm.remove();
     }
@@ -486,39 +397,15 @@ describe("FileUploader", () => {
       "id",
       "docs",
     );
-    expect(container.querySelector('input[type="file"]')).toHaveAttribute(
-      "id",
-      "docs-input",
-    );
-  });
-
-  it("should handle name attribute", () => {
-    const { container } = render(FileUploader, {
-      props: { name: "file-upload" },
-    });
-
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-    expect(input).toHaveAttribute("name", "file-upload");
+    expect(getFileInput(container)).toHaveAttribute("id", "docs-input");
   });
 
   it("should remove file on keyboard interaction", async () => {
     const { component } = render(FileUploader);
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
+    await selectFiles(component, [makeFile("file1.txt")]);
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
-
-    const closeButton = document.querySelector(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    assert(closeButton instanceof HTMLElement);
-    closeButton.focus();
+    removeButtons()[0].focus();
     await user.keyboard("{Enter}");
 
     await vi.waitFor(() => {
@@ -526,74 +413,107 @@ describe("FileUploader", () => {
     });
   });
 
-  it("should reject empty files with minFileSize", async () => {
-    const onRejected = vi.fn();
-    const { component } = render(FileUploader, {
-      props: { minFileSize: 1, onRejected },
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const empty = new File([], "empty.txt");
-    simulateFileSelection(component.ref, [empty, new File(["a"], "a.txt")]);
-
-    expect(await screen.findByText("a.txt")).toBeInTheDocument();
-    expect(screen.queryByText("empty.txt")).not.toBeInTheDocument();
-    expect(onRejected.mock.calls[0][0].detail).toEqual([
-      { file: empty, reason: "size" },
-    ]);
-  });
-
-  it("should filter files when multiple files are selected and some exceed limit", async () => {
-    const { component } = render(FileUploader, {
-      props: { maxFileSize: 1000, multiple: true },
-    });
-
-    const smallFile1 = new File(["x".repeat(500)], "small1.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    const smallFile2 = new File(["x".repeat(300)], "small2.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [smallFile1, largeFile, smallFile2]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("small1.txt")).toBeInTheDocument();
-      expect(screen.queryByText("small2.txt")).toBeInTheDocument();
-      expect(screen.queryByText("large.txt")).not.toBeInTheDocument();
-    });
-
-    assert(input.files);
-    expect(input.files).toHaveLength(2);
-    expect(input.files[0].name).toBe("small1.txt");
-    expect(input.files[1].name).toBe("small2.txt");
-  });
-
-  it("should accept files at exactly maxFileSize limit", async () => {
-    const { component } = render(FileUploader, {
+  it.each<RejectionRow>([
+    {
+      title: "rejects files under minFileSize",
+      props: { minFileSize: 1 },
+      files: [
+        ["empty.txt", 0],
+        ["a.txt", 1],
+      ],
+      rows: ["a.txt"],
+      rejected: [{ name: "empty.txt", reason: "size" }],
+    },
+    {
+      title: "rejects only the oversized files of a mixed pick",
       props: { maxFileSize: 1000 },
+      files: [
+        ["small1.txt", 500],
+        ["large.txt", 2000],
+        ["small2.txt", 300],
+      ],
+      rows: ["small1.txt", "small2.txt"],
+      rejected: [{ name: "large.txt", reason: "size" }],
+    },
+    {
+      title: "rejects a lone oversized file",
+      props: { maxFileSize: 1000 },
+      files: [["large.txt", 2000]],
+      rows: [],
+      rejected: [{ name: "large.txt", reason: "size" }],
+    },
+    {
+      title: "accepts a file at exactly maxFileSize",
+      props: { maxFileSize: 1000 },
+      files: [["exact.txt", 1000]],
+      rows: ["exact.txt"],
+      rejected: [],
+    },
+    {
+      title: "rejects a duplicate when preventDuplicate is true",
+      props: { preventDuplicate: true },
+      first: [["file1.txt", 8]],
+      files: [["file1.txt", 8]],
+      rows: ["file1.txt"],
+      rejected: [{ name: "file1.txt", reason: "duplicate" }],
+    },
+    {
+      title: "keeps a duplicate when preventDuplicate is false (default)",
+      props: {},
+      first: [["file1.txt", 8]],
+      files: [["file1.txt", 8]],
+      rows: ["file1.txt", "file1.txt"],
+      rejected: [],
+    },
+  ])("$title", async ({ props, first, files, rows, rejected }) => {
+    const onRejected = vi.fn();
+    const onChange = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { multiple: true, onRejected, onChange, ...props },
     });
+    const input = getRefInput(component);
+    const pick = (specs: Array<[string, number]>) =>
+      simulateFileSelection(
+        input,
+        specs.map(([name, size]) =>
+          makeFile(name, size, { lastModified: 1000 }),
+        ),
+      );
 
-    const exactSizeFile = new File(["x".repeat(1000)], "exact.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [exactSizeFile]);
+    if (first) {
+      pick(first);
+      await vi.waitFor(() => {
+        expect(screen.queryByText(first[0][0])).toBeInTheDocument();
+      });
+      onChange.mockClear();
+    }
+    pick(files);
 
     await vi.waitFor(() => {
-      expect(screen.queryByText("exact.txt")).toBeInTheDocument();
+      expect(rejected.length > 0 ? onRejected : onChange).toHaveBeenCalled();
+    });
+    await vi.waitFor(() => {
+      expect(
+        screen.queryAllByText(/\.txt$/).map((el) => el.textContent),
+      ).toEqual(rows);
     });
 
-    assert(input.files);
-    expect(input.files).toHaveLength(1);
-    expect(input.files[0].name).toBe("exact.txt");
+    expect(fileNames(input)).toEqual(rows);
+    expect(
+      onChange.mock.calls[0][0].detail.map((file: File) => file.name),
+    ).toEqual(rows);
+    if (rejected.length > 0) {
+      expect(
+        onRejected.mock.calls[0][0].detail.map(
+          ({ file, reason }: { file: File; reason: string }) => ({
+            name: file.name,
+            reason,
+          }),
+        ),
+      ).toEqual(rejected);
+    } else {
+      expect(onRejected).not.toHaveBeenCalled();
+    }
   });
 
   it("should dispatch change event with filtered files when maxFileSize is set", async () => {
@@ -602,16 +522,8 @@ describe("FileUploader", () => {
       props: { maxFileSize: 1000, multiple: false, onChange: changeHandler },
     });
 
-    const smallFile = new File(["x".repeat(500)], "small.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [smallFile]);
+    const input = getRefInput(component);
+    simulateFileSelection(input, [makeFile("small.txt", 500)]);
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
@@ -623,7 +535,7 @@ describe("FileUploader", () => {
 
     changeHandler.mockClear();
 
-    simulateFileSelection(input, [largeFile]);
+    simulateFileSelection(input, [makeFile("large.txt", 2000)]);
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
@@ -633,86 +545,43 @@ describe("FileUploader", () => {
     expect(event2.detail).toHaveLength(0);
   });
 
-  it("should dispatch remove, change, and clear when files are cleared via two-way binding", async () => {
-    const changeHandler = vi.fn();
-    const clearHandler = vi.fn();
-    const removeHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: {
-        onChange: changeHandler,
-        onClear: clearHandler,
-        onRemove: removeHandler,
-        multiple: true,
-      },
-    });
+  it.each(clearMethods)(
+    "should dispatch remove, change, and clear when %s empties multiple files",
+    async (_, clear) => {
+      const changeHandler = vi.fn();
+      const clearHandler = vi.fn();
+      const removeHandler = vi.fn();
+      const { component } = render(FileUploader, {
+        props: {
+          onChange: changeHandler,
+          onClear: clearHandler,
+          onRemove: removeHandler,
+          multiple: true,
+        },
+      });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
+      await selectFiles(component, [
+        makeFile("file1.txt"),
+        makeFile("file2.txt"),
+      ]);
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
+      changeHandler.mockClear();
+      clearHandler.mockClear();
+      removeHandler.mockClear();
+      clear(component);
 
-    changeHandler.mockClear();
-    clearHandler.mockClear();
-    removeHandler.mockClear();
-    component.files = [];
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalled();
+        expect(clearHandler).toHaveBeenCalled();
+        expect(removeHandler).toHaveBeenCalled();
+      });
 
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalled();
-      expect(clearHandler).toHaveBeenCalled();
-      expect(removeHandler).toHaveBeenCalled();
-    });
-
-    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
-    expect(removeHandler.mock.calls[0][0].detail).toHaveLength(2);
-    expect(removeHandler.mock.calls[0][0].detail[0].name).toBe("file1.txt");
-    expect(removeHandler.mock.calls[0][0].detail[1].name).toBe("file2.txt");
-  });
-
-  it("should dispatch remove, change, and clear when clearFiles() empties multiple files", async () => {
-    const changeHandler = vi.fn();
-    const clearHandler = vi.fn();
-    const removeHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: {
-        onChange: changeHandler,
-        onClear: clearHandler,
-        onRemove: removeHandler,
-        multiple: true,
-      },
-    });
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
-
-    changeHandler.mockClear();
-    clearHandler.mockClear();
-    removeHandler.mockClear();
-    assert(component.fileUploader);
-    component.fileUploader.clearFiles();
-
-    await vi.waitFor(() => {
-      expect(changeHandler).toHaveBeenCalled();
-      expect(clearHandler).toHaveBeenCalled();
-      expect(removeHandler).toHaveBeenCalled();
-    });
-
-    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
-    expect(removeHandler.mock.calls[0][0].detail).toHaveLength(2);
-    expect(removeHandler.mock.calls[0][0].detail[0].name).toBe("file1.txt");
-    expect(removeHandler.mock.calls[0][0].detail[1].name).toBe("file2.txt");
-  });
+      expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
+      expect(removeHandler.mock.calls[0][0].detail).toHaveLength(2);
+      expect(removeHandler.mock.calls[0][0].detail[0].name).toBe("file1.txt");
+      expect(removeHandler.mock.calls[0][0].detail[1].name).toBe("file2.txt");
+    },
+  );
 
   it("should not dispatch clear when only some files are removed via row close", async () => {
     const clearHandler = vi.fn();
@@ -720,21 +589,12 @@ describe("FileUploader", () => {
       props: { onClear: clearHandler, multiple: true },
     });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
+    await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+    ]);
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
-
-    const closeButtons = document.querySelectorAll(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    assert(closeButtons[0] instanceof HTMLElement);
-    await user.click(closeButtons[0]);
+    await user.click(removeButtons()[0]);
 
     await vi.waitFor(() => {
       expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
@@ -750,21 +610,10 @@ describe("FileUploader", () => {
       props: { onChange: changeHandler, onClear: clearHandler },
     });
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
+    await selectFiles(component, [makeFile("file1.txt")]);
 
     changeHandler.mockClear();
-    const closeButton = document.querySelector(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
-    assert(closeButton instanceof HTMLElement);
-    await user.click(closeButton);
+    await user.click(removeButtons()[0]);
 
     await vi.waitFor(() => {
       expect(clearHandler).toHaveBeenCalled();
@@ -774,175 +623,16 @@ describe("FileUploader", () => {
     expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
   });
 
-  it("should dispatch rejected event when files exceed maxFileSize", async () => {
-    const rejectedHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: { maxFileSize: 1000, onRejected: rejectedHandler },
-    });
-
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [largeFile]);
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalled();
-    });
-
-    const event = rejectedHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].file.name).toBe("large.txt");
-    expect(event.detail[0].reason).toBe("size");
-  });
-
-  it("should dispatch rejected with only oversized files when some exceed maxFileSize", async () => {
-    const rejectedHandler = vi.fn();
-    const changeHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: {
-        maxFileSize: 1000,
-        multiple: true,
-        onRejected: rejectedHandler,
-        onChange: changeHandler,
-      },
-    });
-
-    const smallFile1 = new File(["x".repeat(500)], "small1.txt", {
-      type: "text/plain",
-    });
-    const largeFile = new File(["x".repeat(2000)], "large.txt", {
-      type: "text/plain",
-    });
-    const smallFile2 = new File(["x".repeat(300)], "small2.txt", {
-      type: "text/plain",
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [smallFile1, largeFile, smallFile2]);
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalled();
-      expect(changeHandler).toHaveBeenCalled();
-    });
-
-    const rejectedEvent = rejectedHandler.mock.calls[0][0];
-    expect(rejectedEvent.detail).toHaveLength(1);
-    expect(rejectedEvent.detail[0].file.name).toBe("large.txt");
-    expect(rejectedEvent.detail[0].reason).toBe("size");
-
-    const changeEvent = changeHandler.mock.calls[0][0];
-    expect(changeEvent.detail).toHaveLength(2);
-    expect(changeEvent.detail[0].name).toBe("small1.txt");
-    expect(changeEvent.detail[1].name).toBe("small2.txt");
-  });
-
-  it("should reject duplicate files when preventDuplicate is true", async () => {
-    const rejectedHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: {
-        preventDuplicate: true,
-        multiple: true,
-        onRejected: rejectedHandler,
-      },
-    });
-
-    const file1 = new File(["content1"], "file1.txt", {
-      type: "text/plain",
-      lastModified: 1000,
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
-
-    const duplicate = new File(["content1"], "file1.txt", {
-      type: "text/plain",
-      lastModified: 1000,
-    });
-    simulateFileSelection(input, [duplicate]);
-
-    await vi.waitFor(() => {
-      expect(rejectedHandler).toHaveBeenCalled();
-    });
-
-    const event = rejectedHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(1);
-    expect(event.detail[0].file.name).toBe("file1.txt");
-    expect(event.detail[0].reason).toBe("duplicate");
-
-    const fileNames = screen.queryAllByText("file1.txt");
-    expect(fileNames).toHaveLength(1);
-  });
-
-  it("should allow duplicate files when preventDuplicate is false (default)", async () => {
-    const rejectedHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: {
-        multiple: true,
-        onRejected: rejectedHandler,
-      },
-    });
-
-    const file1 = new File(["content1"], "file1.txt", {
-      type: "text/plain",
-      lastModified: 1000,
-    });
-
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
-    });
-
-    const duplicate = new File(["content1"], "file1.txt", {
-      type: "text/plain",
-      lastModified: 1000,
-    });
-    simulateFileSelection(input, [duplicate]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText("file1.txt");
-      expect(fileNames).toHaveLength(2);
-    });
-
-    expect(rejectedHandler).not.toHaveBeenCalled();
-  });
-
   it("should prepend new files when orderFiles is 'prepend'", async () => {
     const { component } = render(FileUploader, {
       props: { multiple: true, orderFiles: "prepend" },
     });
 
-    const fileA = new File(["a"], "a.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [fileA]);
+    await selectFiles(component, [makeFile("a.txt")]);
+    await selectFiles(component, [makeFile("b.txt")]);
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("a.txt")).toBeInTheDocument();
-    });
-
-    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
-    simulateFileSelection(input, [fileB]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("b.txt")).toBeInTheDocument();
-    });
-
-    const fileNames = screen
-      .queryAllByText(/\.txt$/)
-      .map((el) => el.textContent);
-    expect(fileNames).toEqual(["b.txt", "a.txt"]);
+    const names = screen.queryAllByText(/\.txt$/).map((el) => el.textContent);
+    expect(names).toEqual(["b.txt", "a.txt"]);
   });
 
   it("should append new files by default (orderFiles='append')", async () => {
@@ -950,26 +640,11 @@ describe("FileUploader", () => {
       props: { multiple: true },
     });
 
-    const fileA = new File(["a"], "a.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [fileA]);
+    await selectFiles(component, [makeFile("a.txt")]);
+    await selectFiles(component, [makeFile("b.txt")]);
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("a.txt")).toBeInTheDocument();
-    });
-
-    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
-    simulateFileSelection(input, [fileB]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("b.txt")).toBeInTheDocument();
-    });
-
-    const fileNames = screen
-      .queryAllByText(/\.txt$/)
-      .map((el) => el.textContent);
-    expect(fileNames).toEqual(["a.txt", "b.txt"]);
+    const names = screen.queryAllByText(/\.txt$/).map((el) => el.textContent);
+    expect(names).toEqual(["a.txt", "b.txt"]);
   });
 
   it("should support a custom orderFiles function", async () => {
@@ -982,31 +657,14 @@ describe("FileUploader", () => {
       props: { multiple: true, orderFiles },
     });
 
-    const fileB = new File(["b"], "banana.txt", { type: "text/plain" });
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [fileB]);
+    await selectFiles(component, [makeFile("banana.txt", 1)]);
+    await selectFiles(component, [makeFile("apple.txt", 1)]);
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("banana.txt")).toBeInTheDocument();
-    });
-
-    const fileA = new File(["a"], "apple.txt", { type: "text/plain" });
-    simulateFileSelection(input, [fileA]);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText("apple.txt")).toBeInTheDocument();
-    });
-
-    const fileNames = screen
-      .queryAllByText(/\.txt$/)
-      .map((el) => el.textContent);
-    expect(fileNames).toEqual(["apple.txt", "banana.txt"]);
+    const names = screen.queryAllByText(/\.txt$/).map((el) => el.textContent);
+    expect(names).toEqual(["apple.txt", "banana.txt"]);
   });
 
   it("should use per-file labels when iconDescription is a function", async () => {
-    const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["b"], "file2.txt", { type: "text/plain" });
     const iconDescription = vi.fn(
       (ctx: {
         file?: File;
@@ -1024,21 +682,13 @@ describe("FileUploader", () => {
       },
     });
 
-    assert(component.ref instanceof HTMLInputElement);
-    const input = component.ref;
-    simulateFileSelection(input, [file1, file2]);
+    await selectFiles(component, [
+      makeFile("file1.txt"),
+      makeFile("file2.txt"),
+    ]);
 
-    await vi.waitFor(() => {
-      expect(screen.getByText("file1.txt")).toBeInTheDocument();
-      expect(screen.getByText("file2.txt")).toBeInTheDocument();
-    });
-
-    const closeButtons = document.querySelectorAll(
-      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
-    );
+    const closeButtons = removeButtons();
     expect(closeButtons).toHaveLength(2);
-    assert(closeButtons[0] instanceof HTMLElement);
-    assert(closeButtons[1] instanceof HTMLElement);
     expect(closeButtons[0]).toHaveAttribute("aria-label", "Remove file1.txt");
     expect(closeButtons[1]).toHaveAttribute("aria-label", "Remove file2.txt");
 
@@ -1053,15 +703,15 @@ describe("FileUploader", () => {
   });
 
   it("should apply per-file status via fileStatus, overriding global status", () => {
-    const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["b"], "file2.txt", { type: "text/plain" });
-    const file3 = new File(["c"], "file3.txt", { type: "text/plain" });
-
     const { container } = render(FileUploader, {
       props: {
         multiple: true,
         status: "edit",
-        files: [file1, file2, file3],
+        files: [
+          makeFile("file1.txt"),
+          makeFile("file2.txt"),
+          makeFile("file3.txt"),
+        ],
         fileStatus: (_file: File, index: number) =>
           (["uploading", "edit", "complete"] as const)[index],
       },
@@ -1088,10 +738,7 @@ describe("FileUploader", () => {
       props: { delay: 50 },
     });
 
-    const input = container.querySelector<HTMLInputElement>("input[type=file]");
-    assert(input);
-    const file = new File(["a"], "a.txt", { type: "text/plain" });
-    simulateFileSelection(input, [file]);
+    simulateFileSelection(getFileInput(container), [makeFile("a.txt")]);
 
     await vi.waitFor(() => {
       expect(container.querySelector(".bx--loading")).toBeInTheDocument();
@@ -1109,7 +756,7 @@ describe("FileUploader", () => {
   });
 
   it("should update row status when fileStatus callback identity changes", async () => {
-    const file = new File(["a"], "file1.txt", { type: "text/plain" });
+    const file = makeFile("file1.txt");
     let current: "uploading" | "complete" = "uploading";
 
     const { rerender, container } = render(FileUploader, {
@@ -1135,14 +782,11 @@ describe("FileUploader", () => {
   });
 
   it("should render per-file invalid state and error copy", () => {
-    const file1 = new File(["a"], "ok.txt", { type: "text/plain" });
-    const file2 = new File(["b"], "bad.txt", { type: "text/plain" });
-
     const { container } = render(FileUploader, {
       props: {
         multiple: true,
         status: "edit",
-        files: [file1, file2],
+        files: [makeFile("ok.txt"), makeFile("bad.txt")],
         fileInvalid: (file: File) => file.name === "bad.txt",
         fileErrorSubject: (file: File) =>
           file.name === "bad.txt" ? "Upload failed" : "",
@@ -1216,7 +860,7 @@ describe("FileUploader", () => {
         100,
       );
       render(FileUploader, {
-        props: { files: [new File(["a"], "quarterly-report-final.pdf")] },
+        props: { files: [makeFile("quarterly-report-final.pdf")] },
       });
 
       const name = await screen.findByText("quarterly-report-final.pdf");
@@ -1226,7 +870,7 @@ describe("FileUploader", () => {
     });
 
     it("should not set a title on a file name that fits", async () => {
-      render(FileUploader, { props: { files: [new File(["a"], "a.txt")] } });
+      render(FileUploader, { props: { files: [makeFile("a.txt")] } });
 
       const name = await screen.findByText("a.txt");
       await tick();

@@ -5,31 +5,29 @@ import { type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
-import { fileNames, simulateFileSelection } from "./helpers";
+import {
+  emptyFileInput,
+  fileNames,
+  getFileInput,
+  makeFile,
+  simulateFileSelection,
+} from "./helpers";
 
 describe("FileUploaderButton", () => {
   describe("cancelled picker", () => {
-    const emptyInput = (input: HTMLInputElement) =>
-      Object.defineProperty(input, "files", {
-        value: new DataTransfer().files,
-        writable: true,
-        configurable: true,
-      });
-
     it("puts the current files back into the native input", async () => {
       const { container } = render(FileUploaderButton, {
         props: { labelText: "Add file" },
       });
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
+      const input = getFileInput(container);
 
-      simulateFileSelection(input, [new File(["x"], "a.txt")]);
+      simulateFileSelection(input, [makeFile("a.txt")]);
       await vi.waitFor(() => {
         expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       // Opening the picker clears the input; dismissing it fires `cancel`.
-      emptyInput(input);
+      emptyFileInput(input);
       input.dispatchEvent(new Event("cancel"));
 
       expect(fileNames(input)).toEqual(["a.txt"]);
@@ -44,8 +42,7 @@ describe("FileUploaderButton", () => {
     const button = screen.getByRole("button");
     expect(button).toHaveClass("bx--btn--disabled");
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toBeDisabled();
   });
 
@@ -54,8 +51,7 @@ describe("FileUploaderButton", () => {
       props: { capture: "environment" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    expect(input).toHaveAttribute("capture", "environment");
+    expect(getFileInput(container)).toHaveAttribute("capture", "environment");
   });
 
   it("should respect accept prop", () => {
@@ -63,8 +59,7 @@ describe("FileUploaderButton", () => {
       props: { accept: [".jpg", ".png", "image/*"] },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("accept", ".jpg,.png,image/*");
   });
 
@@ -73,8 +68,7 @@ describe("FileUploaderButton", () => {
       props: { multiple: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("multiple");
   });
 
@@ -83,10 +77,9 @@ describe("FileUploaderButton", () => {
       props: { labelText: "Add file" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     simulateFileSelection(input, [file]);
 
     await vi.waitFor(() => {
@@ -100,11 +93,10 @@ describe("FileUploaderButton", () => {
       props: { labelText: "Add file", multiple: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const file1 = makeFile("file1.txt");
+    const file2 = makeFile("file2.txt");
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -119,10 +111,9 @@ describe("FileUploaderButton", () => {
       props: { labelText: "Add file" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     simulateFileSelection(input, [file]);
 
     await vi.waitFor(() => {
@@ -131,12 +122,7 @@ describe("FileUploaderButton", () => {
     });
 
     // Clear files by resetting the input element
-    const emptyDataTransfer = new DataTransfer();
-    Object.defineProperty(input, "files", {
-      value: emptyDataTransfer.files,
-      writable: true,
-      configurable: true,
-    });
+    emptyFileInput(input);
     input.dispatchEvent(new Event("change", { bubbles: true }));
 
     await vi.waitFor(() => {
@@ -150,10 +136,9 @@ describe("FileUploaderButton", () => {
       props: { labelText: "Add file", disableLabelChanges: true },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     simulateFileSelection(input, [file]);
     // Let the pick flush. A `waitFor` would pass on its first, pre-flush run.
     await tick();
@@ -167,10 +152,9 @@ describe("FileUploaderButton", () => {
       props: { onchange: changeHandler },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
-    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    const file = makeFile("test.txt");
     simulateFileSelection(input, [file]);
 
     await vi.waitFor(() => {
@@ -192,14 +176,10 @@ describe("FileUploaderButton", () => {
       },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
     const lastModified = 1700000000000;
-    const fileA = new File(["a"], "a.txt", {
-      type: "text/plain",
-      lastModified,
-    });
+    const fileA = makeFile("a.txt", 1, { lastModified });
     simulateFileSelection(input, [fileA]);
 
     await vi.waitFor(() => {
@@ -207,11 +187,8 @@ describe("FileUploaderButton", () => {
     });
     expect(changeHandler.mock.calls[0][0].detail).toHaveLength(1);
 
-    const fileADup = new File(["a"], "a.txt", {
-      type: "text/plain",
-      lastModified,
-    });
-    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
+    const fileADup = makeFile("a.txt", 1, { lastModified });
+    const fileB = makeFile("b.txt", 1);
     simulateFileSelection(input, [fileADup, fileB]);
 
     await vi.waitFor(() => {
@@ -222,70 +199,24 @@ describe("FileUploaderButton", () => {
     expect(second.map((f: File) => f.name)).toEqual(["a.txt", "b.txt"]);
   });
 
-  it("should handle different button kinds", () => {
-    const { container: container1 } = render(FileUploaderButton, {
-      props: { kind: "primary" },
-    });
-    const { container: container2 } = render(FileUploaderButton, {
-      props: { kind: "secondary" },
-    });
-    const { container: container3 } = render(FileUploaderButton, {
-      props: { kind: "tertiary" },
-    });
-    const { container: container4 } = render(FileUploaderButton, {
-      props: { kind: "ghost" },
-    });
-    const { container: container5 } = render(FileUploaderButton, {
-      props: { kind: "danger" },
-    });
+  it.each(["primary", "secondary", "tertiary", "ghost", "danger"] as const)(
+    "should render the %s button kind",
+    (kind) => {
+      render(FileUploaderButton, { props: { kind } });
 
-    const button1 = container1.querySelector("button");
-    const button2 = container2.querySelector("button");
-    const button3 = container3.querySelector("button");
-    const button4 = container4.querySelector("button");
-    const button5 = container5.querySelector("button");
+      expect(screen.getByRole("button")).toHaveClass(`bx--btn--${kind}`);
+    },
+  );
 
-    assert(button1);
-    assert(button2);
-    assert(button3);
-    assert(button4);
-    assert(button5);
+  it.each([
+    ["small", "bx--btn--sm"],
+    ["field", "bx--btn--field"],
+    ["lg", "bx--btn--lg"],
+    ["xl", "bx--btn--xl"],
+  ] as const)("should render the %s button size", (size, className) => {
+    render(FileUploaderButton, { props: { size } });
 
-    expect(button1).toHaveClass("bx--btn--primary");
-    expect(button2).toHaveClass("bx--btn--secondary");
-    expect(button3).toHaveClass("bx--btn--tertiary");
-    expect(button4).toHaveClass("bx--btn--ghost");
-    expect(button5).toHaveClass("bx--btn--danger");
-  });
-
-  it("should handle different button sizes", () => {
-    const { container: container1 } = render(FileUploaderButton, {
-      props: { size: "small" },
-    });
-    const { container: container2 } = render(FileUploaderButton, {
-      props: { size: "field" },
-    });
-    const { container: container4 } = render(FileUploaderButton, {
-      props: { size: "lg" },
-    });
-    const { container: container5 } = render(FileUploaderButton, {
-      props: { size: "xl" },
-    });
-
-    const button1 = container1.querySelector("button");
-    const button2 = container2.querySelector("button");
-    const button4 = container4.querySelector("button");
-    const button5 = container5.querySelector("button");
-
-    assert(button1);
-    assert(button2);
-    assert(button4);
-    assert(button5);
-
-    expect(button1).toHaveClass("bx--btn--sm");
-    expect(button2).toHaveClass("bx--btn--field");
-    expect(button4).toHaveClass("bx--btn--lg");
-    expect(button5).toHaveClass("bx--btn--xl");
+    expect(screen.getByRole("button")).toHaveClass(className);
   });
 
   it("sizes the button for xs", () => {
@@ -301,8 +232,7 @@ describe("FileUploaderButton", () => {
       props: { name: "file-input" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("name", "file-input");
   });
 
@@ -311,16 +241,14 @@ describe("FileUploaderButton", () => {
       props: { id: "custom-file-input" },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
     expect(input).toHaveAttribute("id", "custom-file-input");
   });
 
   it("should trigger file input when button is clicked", async () => {
     const { container } = render(FileUploaderButton);
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = getFileInput(container);
 
     const clickSpy = vi.spyOn(input, "click");
     const button = screen.getByRole("button");
@@ -361,24 +289,30 @@ describe("FileUploaderButton", () => {
     expect(iconButton.querySelector("svg")).toBeInTheDocument();
   });
 
-  it("should render icon-only button with tooltip", () => {
-    render(FileUploaderButton, {
-      props: {
-        icon: Add,
-        iconDescription: "Tooltip text",
-        tooltipPosition: "bottom",
-        tooltipAlignment: "center",
-        labelText: "",
-      },
-    });
+  it.each([
+    ["bottom", "center"],
+    ["right", "end"],
+  ] as const)(
+    "should render icon-only button with tooltip at %s, aligned %s",
+    (tooltipPosition, tooltipAlignment) => {
+      render(FileUploaderButton, {
+        props: {
+          icon: Add,
+          iconDescription: "Tooltip text",
+          tooltipPosition,
+          tooltipAlignment,
+          labelText: "",
+        },
+      });
 
-    const iconButton = screen.getByRole("button", { name: "Tooltip text" });
-    expect(iconButton).toHaveClass("bx--btn--icon-only");
-    expect(iconButton).toHaveClass("bx--tooltip__trigger");
-    expect(iconButton).toHaveClass("bx--tooltip--a11y");
-    expect(iconButton).toHaveClass("bx--btn--icon-only--bottom");
-    expect(iconButton).toHaveClass("bx--tooltip--align-center");
-  });
+      const iconButton = screen.getByRole("button", { name: "Tooltip text" });
+      expect(iconButton).toHaveClass("bx--btn--icon-only");
+      expect(iconButton).toHaveClass("bx--tooltip__trigger");
+      expect(iconButton).toHaveClass("bx--tooltip--a11y");
+      expect(iconButton).toHaveClass(`bx--btn--icon-only--${tooltipPosition}`);
+      expect(iconButton).toHaveClass(`bx--tooltip--align-${tooltipAlignment}`);
+    },
+  );
 
   it("should hide tooltip but keep accessibility when hideTooltip is true", () => {
     render(FileUploaderButton, {
@@ -405,24 +339,6 @@ describe("FileUploaderButton", () => {
     expect(assistiveText).toHaveTextContent("Add item hidden tooltip");
   });
 
-  it("should support custom tooltip position and alignment", () => {
-    render(FileUploaderButton, {
-      props: {
-        icon: Add,
-        iconDescription: "Add file tooltip right",
-        tooltipPosition: "right",
-        tooltipAlignment: "end",
-        labelText: "",
-      },
-    });
-
-    const iconButton = screen.getByRole("button", {
-      name: "Add file tooltip right",
-    });
-    expect(iconButton).toHaveClass("bx--btn--icon-only--right");
-    expect(iconButton).toHaveClass("bx--tooltip--align-end");
-  });
-
   it("should reject files under minFileSize", async () => {
     const changeHandler = vi.fn();
     const rejectedHandler = vi.fn();
@@ -435,10 +351,9 @@ describe("FileUploaderButton", () => {
       },
     });
 
-    const input = container.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
-    const empty = new File([], "empty.txt");
-    const report = new File(["a"], "report.txt");
+    const input = getFileInput(container);
+    const empty = makeFile("empty.txt", 0);
+    const report = makeFile("report.txt", 1);
     simulateFileSelection(input, [empty, report]);
 
     await vi.waitFor(() => {
@@ -463,13 +378,10 @@ describe("FileUploaderButton", () => {
         },
       });
 
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
+      const input = getFileInput(container);
 
-      const small = new File(["ab"], "small.txt", { type: "text/plain" });
-      const large = new File(["abcdefgh"], "large.txt", {
-        type: "text/plain",
-      });
+      const small = makeFile("small.txt", 2);
+      const large = makeFile("large.txt", 8);
       simulateFileSelection(input, [small, large]);
 
       await vi.waitFor(() => {
@@ -490,12 +402,9 @@ describe("FileUploaderButton", () => {
         props: { maxFileSize: 4, onrejected: rejectedHandler },
       });
 
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
+      const input = getFileInput(container);
 
-      simulateFileSelection(input, [
-        new File(["abcdefgh"], "large.txt", { type: "text/plain" }),
-      ]);
+      simulateFileSelection(input, [makeFile("large.txt", 8)]);
 
       await vi.waitFor(() => {
         expect(rejectedHandler).toHaveBeenCalledTimes(1);
@@ -509,10 +418,9 @@ describe("FileUploaderButton", () => {
         props: { maxFileSize: 4, onchange: changeHandler },
       });
 
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
+      const input = getFileInput(container);
 
-      const small = new File(["ab"], "small.txt", { type: "text/plain" });
+      const small = makeFile("small.txt", 2);
       simulateFileSelection(input, [small]);
 
       await vi.waitFor(() => {
@@ -522,9 +430,7 @@ describe("FileUploaderButton", () => {
 
       // A single-file input replaces its selection, so a rejected pick leaves
       // nothing behind. This matches `FileUploaderDropContainer`.
-      simulateFileSelection(input, [
-        new File(["abcdefgh"], "large.txt", { type: "text/plain" }),
-      ]);
+      simulateFileSelection(input, [makeFile("large.txt", 8)]);
 
       await vi.waitFor(() => {
         expect(changeHandler).toHaveBeenCalledTimes(2);
@@ -549,12 +455,11 @@ describe("FileUploaderButton", () => {
         },
       });
 
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
+      const input = getFileInput(container);
 
       const lastModified = 1700000000000;
-      const props = { type: "text/plain", lastModified };
-      const fileA = new File(["a"], "a.txt", props);
+      const props = { lastModified };
+      const fileA = makeFile("a.txt", 1, props);
       simulateFileSelection(input, [fileA]);
 
       await vi.waitFor(() => {
@@ -562,9 +467,9 @@ describe("FileUploaderButton", () => {
       });
       expect(rejectedHandler).not.toHaveBeenCalled();
 
-      const fileADup = new File(["a"], "a.txt", props);
-      const large = new File(["abcdefgh"], "large.txt", props);
-      const fileB = new File(["b"], "b.txt", props);
+      const fileADup = makeFile("a.txt", 1, props);
+      const large = makeFile("large.txt", 8, props);
+      const fileB = makeFile("b.txt", 1, props);
       simulateFileSelection(input, [fileADup, large, fileB]);
 
       await vi.waitFor(() => {
@@ -590,17 +495,16 @@ describe("FileUploaderButton", () => {
         },
       });
 
-      const input = container.querySelector('input[type="file"]');
-      assert(input instanceof HTMLInputElement);
+      const input = getFileInput(container);
 
       const lastModified = 1700000000000;
-      const props = { type: "text/plain", lastModified };
-      simulateFileSelection(input, [new File(["a"], "a.txt", props)]);
+      const props = { lastModified };
+      simulateFileSelection(input, [makeFile("a.txt", 1, props)]);
       await vi.waitFor(() => {
         expect(changeHandler).toHaveBeenCalledTimes(1);
       });
 
-      const reselected = new File(["a"], "a.txt", props);
+      const reselected = makeFile("a.txt", 1, props);
       simulateFileSelection(input, [reselected]);
 
       await vi.waitFor(() => {

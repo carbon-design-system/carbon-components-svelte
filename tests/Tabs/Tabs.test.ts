@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
+import { expectClass, mockScrollMetrics, renderManual } from "./helpers";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
 import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
@@ -20,16 +21,6 @@ import TabsSkeleton from "./TabsSkeleton.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
 
 describe("Tabs", () => {
-  let consoleLog: Console["log"];
-
-  beforeEach(() => {
-    consoleLog = vi.spyOn(console, "log");
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("should render with default props", async () => {
     render(Tabs);
     await tick();
@@ -187,14 +178,15 @@ describe("Tabs", () => {
   });
 
   it("should change tab on click", async () => {
-    render(Tabs);
+    const onChange = vi.fn();
+    render(Tabs, { props: { onChange } });
 
     const tab3 = screen.getByRole("tab", { name: "Tab 3" });
     await user.click(tab3);
 
     expect(tab3.getAttribute("aria-selected")).toBe("true");
     expect(screen.getByText("Content 3")).toBeVisible();
-    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    expect(onChange).toHaveBeenCalledWith(2);
   });
 
   it("should not select disabled tabs", async () => {
@@ -224,18 +216,19 @@ describe("Tabs", () => {
   });
 
   it("should support keyboard navigation", async () => {
-    render(Tabs);
+    const onChange = vi.fn();
+    render(Tabs, { props: { onChange } });
 
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     await user.click(tab1);
 
     await user.keyboard("{ArrowRight}");
     expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    expect(onChange).toHaveBeenCalledWith(2);
 
     await user.keyboard("{ArrowLeft}");
     expect(tab1).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("change event", 0);
+    expect(onChange).toHaveBeenCalledWith(0);
   });
 
   it("prevents ArrowRight's default action (page scroll) when moving focus", async () => {
@@ -255,7 +248,8 @@ describe("Tabs", () => {
   });
 
   it("supports Home/End keyboard navigation", async () => {
-    render(Tabs);
+    const onChange = vi.fn();
+    render(Tabs, { props: { onChange } });
 
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     const tab3 = screen.getByRole("tab", { name: "Tab 3" });
@@ -264,16 +258,17 @@ describe("Tabs", () => {
     await user.keyboard("{End}");
     expect(tab3).toHaveFocus();
     expect(tab3).toHaveAttribute("aria-selected", "true");
-    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    expect(onChange).toHaveBeenCalledWith(2);
 
     await user.keyboard("{Home}");
     expect(tab1).toHaveFocus();
     expect(tab1).toHaveAttribute("aria-selected", "true");
-    expect(consoleLog).toHaveBeenCalledWith("change event", 0);
+    expect(onChange).toHaveBeenCalledWith(0);
   });
 
   it("moves ArrowLeft from the focused tab, not the selected one", async () => {
-    render(Tabs);
+    const onChange = vi.fn();
+    render(Tabs, { props: { onChange } });
     await tick();
 
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
@@ -284,7 +279,7 @@ describe("Tabs", () => {
     expect(tab1).toHaveFocus();
     expect(tab1).toHaveAttribute("aria-selected", "true");
     expect(tab3).toHaveAttribute("aria-selected", "false");
-    expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+    expect(onChange).not.toHaveBeenCalledWith(2);
   });
 
   it("wraps ArrowRight from the focused tab, not the selected one", async () => {
@@ -303,11 +298,7 @@ describe("Tabs", () => {
 
   describe('activation="manual"', () => {
     it("moves from the focused tab after focus returns to another tab", async () => {
-      render(Tabs, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
+      const { tab1, tab3 } = await renderManual(Tabs);
 
       await user.keyboard("{ArrowRight}");
       expect(tab3).toHaveFocus();
@@ -319,73 +310,67 @@ describe("Tabs", () => {
     });
 
     it("ArrowRight moves focus without changing selection", async () => {
-      render(Tabs, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
+      const onChange = vi.fn();
+      const { tab1, tab3 } = await renderManual(Tabs, { onChange });
 
       await user.keyboard("{ArrowRight}");
       expect(tab3).toHaveFocus();
       expect(tab1).toHaveAttribute("aria-selected", "true");
       expect(tab3).toHaveAttribute("aria-selected", "false");
       expect(screen.getByText("Content 1")).toBeVisible();
-      expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+      expect(onChange).not.toHaveBeenCalledWith(2);
     });
 
-    it("Enter selects the focused tab", async () => {
-      render(Tabs, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
+    it.each([
+      ["Enter", "{Enter}"],
+      ["Space", " "],
+    ])("%s selects the focused tab", async (_, key) => {
+      const onChange = vi.fn();
+      const { tab1, tab3 } = await renderManual(Tabs, { onChange });
 
       await user.keyboard("{ArrowRight}");
       expect(tab3).toHaveFocus();
       expect(tab1).toHaveAttribute("aria-selected", "true");
 
-      await user.keyboard("{Enter}");
+      await user.keyboard(key);
       expect(tab3).toHaveAttribute("aria-selected", "true");
       expect(tab1).toHaveAttribute("aria-selected", "false");
       expect(screen.getByText("Content 3")).toBeVisible();
-      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
-    });
-
-    it("Space selects the focused tab", async () => {
-      render(Tabs, { props: { activation: "manual" } });
-
-      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
-      await user.click(tab1);
-
-      await user.keyboard("{ArrowRight}");
-      expect(tab3).toHaveFocus();
-
-      await user.keyboard(" ");
-      expect(tab3).toHaveAttribute("aria-selected", "true");
-      expect(tab1).toHaveAttribute("aria-selected", "false");
-      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+      expect(onChange).toHaveBeenCalledWith(2);
     });
   });
 
-  it("should render container type tabs", () => {
-    render(Tabs, {
-      props: { type: "container" },
-    });
+  it.each([
+    ["container", "bx--tabs--container", "bx--tabs--line", true],
+    ["default", "bx--tabs--line", "bx--tabs--container", false],
+  ] as const)(
+    "applies the %s type classes to the nav, links and items",
+    async (type, navClass, otherNavClass, container) => {
+      render(Tabs, { props: { type } });
+      await tick();
 
-    const tabsContainer = screen.getByRole("navigation");
-    expect(tabsContainer).toHaveClass("bx--tabs--container");
-  });
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass(navClass);
+      expect(nav).not.toHaveClass(otherNavClass);
 
-  it("sets the line class for the default (non-container) type only", () => {
-    render(Tabs, { props: { type: "default" } });
-    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--line");
-  });
-
-  it("does not set the line class for the container type", () => {
-    render(Tabs, { props: { type: "container" } });
-    expect(screen.getByRole("navigation")).not.toHaveClass("bx--tabs--line");
-  });
+      // Tab 1 is selected, Tab 2 is disabled and Tab 3 is neither.
+      const tabs = screen.getAllByRole("tab");
+      tabs.forEach((tab, index) => {
+        const item = tab.closest(".bx--tabs__nav-item");
+        expectClass(
+          tab,
+          "bx--tabs__nav-link--container-selected",
+          container && index === 0,
+        );
+        expectClass(item, "bx--tabs__nav-item--container", container);
+        expectClass(
+          item,
+          "bx--tabs__nav-item--container-selected",
+          container && index === 0,
+        );
+      });
+    },
+  );
 
   it("sets the default nav-item class only for tabs that are neither selected nor disabled", async () => {
     render(Tabs);
@@ -421,52 +406,6 @@ describe("Tabs", () => {
     expect(tab3).toHaveClass("bx--tabs__nav-link--selected");
   });
 
-  it("marks the selected link as container-selected for container tabs only", async () => {
-    const { unmount } = render(Tabs, { props: { type: "container" } });
-    await tick();
-
-    let [tab1, tab2, tab3] = screen.getAllByRole("tab");
-    expect(tab1).toHaveClass("bx--tabs__nav-link--container-selected");
-    expect(tab2).not.toHaveClass("bx--tabs__nav-link--container-selected");
-    expect(tab3).not.toHaveClass("bx--tabs__nav-link--container-selected");
-
-    unmount();
-    render(Tabs, { props: { type: "default" } });
-    await tick();
-
-    [tab1, tab2, tab3] = screen.getAllByRole("tab");
-    expect(tab1).not.toHaveClass("bx--tabs__nav-link--container-selected");
-  });
-
-  it("marks container tab items with the container classes only for container tabs", async () => {
-    const { unmount } = render(Tabs, { props: { type: "container" } });
-    await tick();
-
-    let items = screen
-      .getAllByRole("tab")
-      .map((tab) => tab.closest(".bx--tabs__nav-item"));
-
-    // Tab 1: selected, Tab 2: disabled, Tab 3: neither.
-    for (const item of items) {
-      expect(item).toHaveClass("bx--tabs__nav-item--container");
-    }
-    expect(items[0]).toHaveClass("bx--tabs__nav-item--container-selected");
-    expect(items[1]).not.toHaveClass("bx--tabs__nav-item--container-selected");
-    expect(items[2]).not.toHaveClass("bx--tabs__nav-item--container-selected");
-
-    unmount();
-    render(Tabs, { props: { type: "default" } });
-    await tick();
-
-    items = screen
-      .getAllByRole("tab")
-      .map((tab) => tab.closest(".bx--tabs__nav-item"));
-    for (const item of items) {
-      expect(item).not.toHaveClass("bx--tabs__nav-item--container");
-      expect(item).not.toHaveClass("bx--tabs__nav-item--container-selected");
-    }
-  });
-
   it("moves the container-selected item class when the selection changes", async () => {
     render(Tabs, { props: { type: "container" } });
     await tick();
@@ -480,28 +419,6 @@ describe("Tabs", () => {
     expect(tab3.closest(".bx--tabs__nav-item")).toHaveClass(
       "bx--tabs__nav-item--container-selected",
     );
-  });
-
-  it("should apply the layout size class for the size prop", () => {
-    render(Tabs, { props: { size: "sm" } });
-
-    const nav = screen.getByRole("navigation");
-    expect(nav).toHaveClass("bx--layout--size-sm");
-  });
-
-  it("should clamp an out-of-range size to the max for line tabs", () => {
-    render(Tabs, { props: { type: "default", size: "xl" } });
-
-    const nav = screen.getByRole("navigation");
-    expect(nav).toHaveClass("bx--layout--size-lg");
-    expect(nav).not.toHaveClass("bx--layout--size-xl");
-  });
-
-  it("should allow the full size range for container tabs", () => {
-    render(Tabs, { props: { type: "container", size: "xl" } });
-
-    const nav = screen.getByRole("navigation");
-    expect(nav).toHaveClass("bx--layout--size-xl");
   });
 
   it.each([
@@ -546,18 +463,10 @@ describe("Tabs", () => {
     ).not.toBeInTheDocument();
 
     const nav = screen.getByRole("tablist");
-    Object.defineProperty(nav, "scrollWidth", {
-      configurable: true,
-      value: 600,
-    });
-    Object.defineProperty(nav, "clientWidth", {
-      configurable: true,
-      value: 200,
-    });
-    Object.defineProperty(nav, "scrollLeft", {
-      configurable: true,
-      writable: true,
-      value: 0,
+    mockScrollMetrics(nav, {
+      scrollWidth: 600,
+      clientWidth: 200,
+      scrollLeft: 0,
     });
     await fireEvent.scroll(nav);
 
@@ -582,18 +491,10 @@ describe("Tabs", () => {
     const { container } = render(Tabs);
 
     const nav = screen.getByRole("tablist");
-    Object.defineProperty(nav, "scrollWidth", {
-      configurable: true,
-      value: 101,
-    });
-    Object.defineProperty(nav, "clientWidth", {
-      configurable: true,
-      value: 100,
-    });
-    Object.defineProperty(nav, "scrollLeft", {
-      configurable: true,
-      writable: true,
-      value: 0,
+    mockScrollMetrics(nav, {
+      scrollWidth: 101,
+      clientWidth: 100,
+      scrollLeft: 0,
     });
     await fireEvent.scroll(nav);
 
@@ -809,24 +710,17 @@ describe("Tabs", () => {
 });
 
 describe("Tabs dismissible", () => {
-  let consoleLog: Console["log"];
-
-  beforeEach(() => {
-    consoleLog = vi.spyOn(console, "log");
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("moves focus to the next tab after Delete on the selected tab", async () => {
-    render(TabsDismissible);
+    const onDismiss = vi.fn();
+    render(TabsDismissible, { props: { onDismiss } });
 
     await user.click(screen.getByRole("tab", { name: "One" }));
     await user.keyboard("{Delete}");
     await tick();
 
-    expect(consoleLog).toHaveBeenCalledWith("dismiss", "one");
+    expect(onDismiss).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "one" }),
+    );
     expect(screen.queryByRole("tab", { name: "One" })).not.toBeInTheDocument();
     const two = screen.getByRole("tab", { name: "Two" });
     expect(two).toHaveFocus();
@@ -858,14 +752,17 @@ describe("Tabs dismissible", () => {
   });
 
   it("leaves focus on the tab when the handler keeps it", async () => {
-    render(TabsDismissible, { props: { removeOnDismiss: false } });
+    const onDismiss = vi.fn();
+    render(TabsDismissible, { props: { removeOnDismiss: false, onDismiss } });
 
     const one = screen.getByRole("tab", { name: "One" });
     await user.click(one);
     await user.keyboard("{Delete}");
     await tick();
 
-    expect(consoleLog).toHaveBeenCalledWith("dismiss", "one");
+    expect(onDismiss).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "one" }),
+    );
     expect(one).toBeInTheDocument();
     expect(one).toHaveFocus();
   });
@@ -889,16 +786,6 @@ describe("Tabs dismissible", () => {
 });
 
 describe("Tab registration", () => {
-  let consoleLog: Console["log"];
-
-  beforeEach(() => {
-    consoleLog = vi.spyOn(console, "log");
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("renders a secondary label set after mount", async () => {
     render(TabsRegistration);
     await tick();
@@ -930,29 +817,29 @@ describe("Tab registration", () => {
   });
 
   it("reports the current label in the dismiss detail", async () => {
-    render(TabsRegistration);
+    const onDismiss = vi.fn();
+    render(TabsRegistration, { props: { onDismiss } });
 
     await user.click(screen.getByRole("button", { name: "Rename" }));
     await tick();
     await user.click(screen.getByRole("tab", { name: "Renamed" }));
     await user.keyboard("{Delete}");
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "dismiss",
+    expect(onDismiss).toHaveBeenCalledWith(
       expect.objectContaining({ label: "Renamed", index: 0 }),
     );
   });
 
   it("reports the current disabled state in the dismiss detail", async () => {
-    render(TabsRegistration);
+    const onDismiss = vi.fn();
+    render(TabsRegistration, { props: { onDismiss } });
 
     await user.click(screen.getByRole("button", { name: "Enable" }));
     await tick();
     await user.click(screen.getByRole("tab", { name: "Analyze" }));
     await user.keyboard("{Delete}");
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "dismiss",
+    expect(onDismiss).toHaveBeenCalledWith(
       expect.objectContaining({ label: "Analyze", disabled: false, index: 1 }),
     );
   });
@@ -1272,6 +1159,25 @@ describe("Container tabs with secondary label", () => {
   });
 });
 
+describe.each([
+  ["Tabs", Tabs, () => screen.getByRole("navigation")],
+  ["TabsSkeleton", TabsSkeleton, () => document.querySelector(".bx--tabs")],
+])("%s layout size", (_, Component, getNav) => {
+  it.each([
+    [undefined, "sm", "sm"],
+    ["default", "xl", "lg"],
+    ["container", "xl", "xl"],
+  ] as const)("type %s with size %s uses size-%s", (type, size, expected) => {
+    render(Component, { props: { ...(type && { type }), size } });
+
+    const nav = getNav();
+    expect(nav).toHaveClass(`bx--layout--size-${expected}`);
+    if (size !== expected) {
+      expect(nav).not.toHaveClass(`bx--layout--size-${size}`);
+    }
+  });
+});
+
 describe("TabsSkeleton", () => {
   it("should render with default props", () => {
     const { container } = render(TabsSkeleton);
@@ -1296,47 +1202,16 @@ describe("TabsSkeleton", () => {
     expect(navItems).toHaveLength(count);
   });
 
-  it("should render with container type", () => {
-    const { container } = render(TabsSkeleton, {
-      props: { type: "container" },
-    });
+  it.each([
+    ["container", true],
+    ["default", false],
+  ] as const)("sets the container class for the %s type", (type, expected) => {
+    const { container } = render(TabsSkeleton, { props: { type } });
 
-    const skeleton = container.querySelector(".bx--tabs");
-    expect(skeleton).toHaveClass("bx--tabs--scrollable--container");
-  });
-
-  it("should render with default type", () => {
-    const { container } = render(TabsSkeleton, { props: { type: "default" } });
-
-    const skeleton = container.querySelector(".bx--tabs");
-    expect(skeleton).not.toHaveClass("bx--tabs--scrollable--container");
-  });
-
-  it("should apply the layout size class for the size prop", () => {
-    const { container } = render(TabsSkeleton, { props: { size: "sm" } });
-
-    expect(container.querySelector(".bx--tabs")).toHaveClass(
-      "bx--layout--size-sm",
-    );
-  });
-
-  it("should clamp an out-of-range size to the max for line tabs", () => {
-    const { container } = render(TabsSkeleton, {
-      props: { type: "default", size: "xl" },
-    });
-
-    const skeleton = container.querySelector(".bx--tabs");
-    expect(skeleton).toHaveClass("bx--layout--size-lg");
-    expect(skeleton).not.toHaveClass("bx--layout--size-xl");
-  });
-
-  it("should allow the full size range for container tabs", () => {
-    const { container } = render(TabsSkeleton, {
-      props: { type: "container", size: "xl" },
-    });
-
-    expect(container.querySelector(".bx--tabs")).toHaveClass(
-      "bx--layout--size-xl",
+    expectClass(
+      container.querySelector(".bx--tabs"),
+      "bx--tabs--scrollable--container",
+      expected,
     );
   });
 
@@ -1471,14 +1346,7 @@ describe("TabsSkeleton", () => {
         container.querySelector(".bx--tab--overflow-nav-button"),
       ).not.toBeInTheDocument();
 
-      Object.defineProperty(nav, "scrollWidth", {
-        configurable: true,
-        value: 600,
-      });
-      Object.defineProperty(nav, "clientWidth", {
-        configurable: true,
-        value: 200,
-      });
+      mockScrollMetrics(nav, { scrollWidth: 600, clientWidth: 200 });
       deliver(
         [{ target: nav }] as unknown as ResizeObserverEntry[],
         {} as ResizeObserver,

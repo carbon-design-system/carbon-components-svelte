@@ -14,6 +14,7 @@
   export let ariaLabel = "";
   /** Applies `flush` to the first panel only. */
   export let flush = false;
+  export let onChange: (index: number) => void = () => {};
 </script>
 
 <Tabs
@@ -25,9 +26,7 @@
   {size}
   class={customClass}
   aria-label={ariaLabel === undefined ? undefined : ariaLabel}
-  on:change={({ detail }) => {
-    console.log("change event", detail);
-  }}
+  on:change={({ detail }) => onChange(detail)}
 >
   <Tab label="Tab 1" />
   <Tab label="Tab 2" disabled />

@@ -1,21 +1,17 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
-import TabsIconOnly from "./TabsIconOnly.test.svelte";
+import { renderIconOnly } from "./helpers";
 
 describe("Tabs (icon-only)", () => {
   it("renders the icon-only variant when `iconOnly` is set", async () => {
-    render(TabsIconOnly);
-    await tick();
-    await tick();
+    await renderIconOnly();
 
     expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--icon-only");
   });
 
   it("renders icons beside labels (not icon-only) by default", async () => {
-    render(TabsIconOnly, { props: { iconOnly: false } });
-    await tick();
-    await tick();
+    await renderIconOnly({ iconOnly: false });
 
     expect(screen.getByRole("navigation")).not.toHaveClass(
       "bx--tabs--icon-only",
@@ -26,9 +22,7 @@ describe("Tabs (icon-only)", () => {
   });
 
   it("labels each icon tab with `label` and renders the icon, not visible text", async () => {
-    render(TabsIconOnly);
-    await tick();
-    await tick();
+    await renderIconOnly();
 
     const settings = screen.getByRole("tab", { name: "Settings" });
     expect(settings).toHaveAttribute("aria-label", "Settings");
@@ -36,11 +30,11 @@ describe("Tabs (icon-only)", () => {
   });
 
   it("ignores autoWidth and fullWidth so icon tabs stay square", async () => {
-    const { rerender } = render(TabsIconOnly, {
-      props: { autoWidth: true, fullWidth: true },
-    });
-    await tick();
-    await tick();
+    const { rerender } = await renderIconOnly(
+      {
+        props: { autoWidth: true, fullWidth: true },
+      }.props,
+    );
 
     for (const tab of screen.getAllByRole("tab")) {
       expect(tab.style.width).toBe("");
@@ -54,9 +48,7 @@ describe("Tabs (icon-only)", () => {
   });
 
   it("opens a tooltip on focus and closes on blur", async () => {
-    render(TabsIconOnly);
-    await tick();
-    await tick();
+    await renderIconOnly();
 
     const settings = screen.getByRole("tab", { name: "Settings" });
 
@@ -71,9 +63,7 @@ describe("Tabs (icon-only)", () => {
   });
 
   it("does not open a tooltip for a disabled icon tab", async () => {
-    render(TabsIconOnly, { props: { disabledFirst: true } });
-    await tick();
-    await tick();
+    await renderIconOnly({ disabledFirst: true });
 
     const calendar = screen.getByRole("tab", { name: "Calendar" });
     await fireEvent.focus(calendar);
@@ -82,9 +72,7 @@ describe("Tabs (icon-only)", () => {
   });
 
   it("aligns the tooltip per `tooltipAlignment`", async () => {
-    render(TabsIconOnly, { props: { tooltipAlignment: "start" } });
-    await tick();
-    await tick();
+    await renderIconOnly({ tooltipAlignment: "start" });
 
     const settings = screen.getByRole("tab", { name: "Settings" });
     await fireEvent.focus(settings);
@@ -95,9 +83,7 @@ describe("Tabs (icon-only)", () => {
   });
 
   it("applies the large icon scale via `iconSize`", async () => {
-    render(TabsIconOnly, { props: { iconSize: "lg" } });
-    await tick();
-    await tick();
+    await renderIconOnly({ iconSize: "lg" });
 
     expect(screen.getByRole("navigation")).toHaveClass("bx--tabs__icon--lg");
   });

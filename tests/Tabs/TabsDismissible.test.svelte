@@ -4,6 +4,7 @@
   import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
 
   export let removeOnDismiss = true;
+  export let onDismiss: (detail: { id: string }) => void = () => {};
 
   let selectedId = "one";
   let tabs = [
@@ -17,7 +18,7 @@
   bind:selectedId
   dismissible
   on:dismiss={({ detail }) => {
-    console.log("dismiss", detail.id);
+    onDismiss(detail);
     if (removeOnDismiss) tabs = tabs.filter((tab) => tab.id !== detail.id);
   }}
 >

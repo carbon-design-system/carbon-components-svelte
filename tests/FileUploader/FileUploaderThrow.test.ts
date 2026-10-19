@@ -6,6 +6,7 @@ import {
   isConsumerBoom,
 } from "../utils/absorb-unhandled-rejection";
 import FileUploaderThrow from "./FileUploaderThrow.test.svelte";
+import { makeFile } from "./helpers";
 
 describe("FileUploader on:add when handler throws", () => {
   it("renders the file row even when on:add throws", async () => {
@@ -15,16 +16,19 @@ describe("FileUploader on:add when handler throws", () => {
     const { component } = render(FileUploaderThrow, { props: { onAdd } });
     const trap = absorbUnhandledRejection(isConsumerBoom);
 
-    component.files = [new File(["a"], "a.txt", { type: "text/plain" })];
+    try {
+      component.files = [makeFile("a.txt")];
 
-    await vi.waitFor(() => {
-      expect(screen.queryByText("a.txt")).toBeInTheDocument();
-    });
-    await vi.waitFor(() => {
-      expect(onAdd).toHaveBeenCalled();
-    });
-    await trap.wait;
-    await tick();
-    trap.dispose();
+      await vi.waitFor(() => {
+        expect(screen.queryByText("a.txt")).toBeInTheDocument();
+      });
+      await vi.waitFor(() => {
+        expect(onAdd).toHaveBeenCalled();
+      });
+      await trap.wait;
+      await tick();
+    } finally {
+      trap.dispose();
+    }
   });
 });
