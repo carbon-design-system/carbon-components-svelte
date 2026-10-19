@@ -687,6 +687,18 @@ Set `short` to `true` to render a skeleton for the short variant.
 
 <DatePickerSkeleton short />
 
+## Standalone calendar (experimental)
+
+`DateCalendar` is the calendar on its own, rendered by Svelte rather than built by script: it renders on the server, and its `day` slot puts any content in a day. It picks a single date with `bind:value`, takes `minDate`, `maxDate`, `isDateDisabled`, `locale`, `firstDayOfWeek`, and `weekNumbers`, and moves with the arrow keys, Home, End, PageUp, and PageDown. Set `today` when rendering on the server, so the server and the browser mark the same day.
+
+<FileSource src="/framed/DatePicker/DateCalendar" />
+
+### Day content
+
+The `day` slot receives `date`, `selected`, `today`, `disabled`, and `outside` (a day of the next or previous month).
+
+<FileSource src="/framed/DatePicker/DateCalendarDayContent" />
+
 ## Migrating from flatpickr
 
 The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built in, each flatpickr option it supports is a prop, and its markup uses Carbon's class names.
