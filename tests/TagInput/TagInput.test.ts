@@ -59,6 +59,22 @@ describe("TagInput", () => {
       expect(input()).toHaveValue("js");
     });
 
+    it("keeps the caret in place after a delimiter typed mid-text", async () => {
+      render(TagInput);
+
+      const field = input();
+      assert(field instanceof HTMLInputElement);
+      // Unfocused, so user-event doesn't track the caret: it moves its own
+      // to the end when Svelte 5 rewrites the same value; browsers don't.
+      field.value = "ab,cd";
+      field.setSelectionRange(3, 3);
+      await fireEvent.input(field);
+
+      expect(shownValue()).toEqual(["ab"]);
+      expect(field).toHaveValue("cd");
+      expect(field.selectionStart).toBe(0);
+    });
+
     it("accepts several delimiters", async () => {
       render(TagInput, { config: { delimiter: [",", ";"] } });
 

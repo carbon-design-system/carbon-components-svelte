@@ -452,8 +452,14 @@
     // being typed. Rejected text goes back without the delimiter after it,
     // so the next keystroke doesn't split and reject it again.
     const rest = parts.pop() ?? "";
+    // Writing the value moves the caret to the end; keep it as far from the
+    // end as it was, for a delimiter typed mid-text.
+    const fromEnd = draft.length - (ref?.selectionEnd ?? draft.length);
     const rejected = addTags(parts, "delimiter");
-    setDraft(rejected.join(joiner) + rest);
+    const next = rejected.join(joiner) + rest;
+    setDraft(next);
+    const caret = Math.max(0, next.length - fromEnd);
+    ref?.setSelectionRange(caret, caret);
   }
 
   /** @param {ClipboardEvent} event */
