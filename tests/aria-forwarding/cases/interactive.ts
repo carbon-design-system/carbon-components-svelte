@@ -24,6 +24,7 @@ import InlineNotification from "carbon-components-svelte/Notification/InlineNoti
 import NotificationButton from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
+import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
@@ -382,6 +383,23 @@ export const interactive: AriaEntry[] = [
     name: "OverflowMenuItem",
     render: (attrs) => render(OverflowMenuItem, { props: attrs }),
     target: () => screen.getByRole("menuitem"),
+  },
+  {
+    // Popover has no role of its own; a consumer role and naming land on
+    // the popover, in place or in a portal.
+    name: "Popover",
+    render: (attrs) =>
+      render(Popover, { props: { open: true, role: "dialog", ...attrs } }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "Popover",
+    variant: "in a portal",
+    render: (attrs) =>
+      render(Popover, {
+        props: { open: true, portalPopover: true, role: "dialog", ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "ProgressBar",

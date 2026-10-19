@@ -202,23 +202,25 @@ describe("Toggletip", () => {
     });
 
     const cases = [
-      ["bottom", "start", "bottom-left", "left"],
-      ["bottom", "center", "bottom", null],
-      ["bottom", "end", "bottom-right", "right"],
-      ["top", "start", "top-left", "left"],
-      ["top", "center", "top", null],
-      ["top", "end", "top-right", "right"],
-      ["left", "start", "left-top", "top"],
-      ["left", "center", "left", null],
-      ["left", "end", "left-bottom", "bottom"],
-      ["right", "start", "right-top", "top"],
-      ["right", "center", "right", null],
-      ["right", "end", "right-bottom", "bottom"],
+      ["bottom", "start", "bottom-left"],
+      ["bottom", "center", "bottom"],
+      ["bottom", "end", "bottom-right"],
+      ["top", "start", "top-left"],
+      ["top", "center", "top"],
+      ["top", "end", "top-right"],
+      ["left", "start", "left-top"],
+      ["left", "center", "left"],
+      ["left", "end", "left-bottom"],
+      ["right", "start", "right-top"],
+      ["right", "center", "right"],
+      ["right", "end", "right-bottom"],
     ] as const;
 
+    // The placement class also points the caret at the button's center
+    // (see _toggletip.scss); e2e/rtl.test.ts measures it.
     it.each(cases)(
       "maps direction %s and align %s to %s",
-      (direction, align, popoverAlign, edge) => {
+      (direction, align, popoverAlign) => {
         const { container } = render(Toggletip, {
           props: { direction, align },
         });
@@ -226,27 +228,18 @@ describe("Toggletip", () => {
         const popover = container.querySelector<HTMLElement>(".bx--popover");
         expect(popover).toHaveClass(`bx--popover--${popoverAlign}`);
         expect(popover).toHaveClass("bx--toggletip-popover");
-        // Start and end place the popover edge so the caret points at the
-        // button's center.
-        const style = popover?.getAttribute("style") ?? "";
-        if (edge) {
-          expect(style).toContain(
-            `${edge}: calc(50% - var(--ccs-toggletip-caret))`,
-          );
-        } else {
-          expect(style).not.toMatch(/calc/);
-        }
+        expect(popover).not.toHaveAttribute("style");
       },
     );
 
     it.each([
-      ["bottom", "start", "bottom-right", "right"],
-      ["top", "end", "top-left", "left"],
+      ["bottom", "start", "bottom-right"],
+      ["top", "end", "top-left"],
       // Beside the button, `start` and `end` are on the block axis.
-      ["left", "start", "left-top", "top"],
+      ["left", "start", "left-top"],
     ] as const)(
       "maps direction %s and align %s to %s in RTL",
-      (direction, align, popoverAlign, edge) => {
+      (direction, align, popoverAlign) => {
         document.documentElement.style.direction = "rtl";
         const { container } = render(Toggletip, {
           props: { direction, align, open: true },
@@ -254,9 +247,6 @@ describe("Toggletip", () => {
 
         const popover = container.querySelector<HTMLElement>(".bx--popover");
         expect(popover).toHaveClass(`bx--popover--${popoverAlign}`);
-        expect(popover?.getAttribute("style")).toContain(
-          `${edge}: calc(50% - var(--ccs-toggletip-caret))`,
-        );
       },
     );
   });

@@ -111,7 +111,9 @@ With `align` set to `"start"` or `"end"`, the caret points at the button's cente
 
 ## Portal
 
-Set `portalTooltip` to render the content in a portal so it is not clipped by `overflow: hidden` containers.
+Content that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a portal. Inside a Modal, the content always opens in a portal.
+
+Set `portalTooltip` to `true` to always render the content in a portal, or to `false` to keep it in place. Portalled content leaves its container in the DOM, so CSS that targets it as a descendant of the container does not match it.
 
 <Box padding={5} border="subtle" maxWidth="8rem" overflow="hidden">
   <Toggletip portalTooltip>

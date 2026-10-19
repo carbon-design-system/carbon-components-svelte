@@ -1,9 +1,4 @@
 <script context="module">
-  // Space (px) between the tag and the portalled content.
-  const PORTAL_GAP = 4;
-  // Neutralizes the popover alignment transforms so the portal places it.
-  const PORTAL_NEUTRALIZE_STYLE = "inset: auto; transform: none;";
-
   // "bottom" + "start" -> "bottom-left", and so on.
   function toPopoverAlign(dir, intrinsic) {
     if (intrinsic === "center") return dir;
@@ -70,9 +65,10 @@
   export let direction = "bottom";
 
   /**
-   * Set to `true` to render the popover in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the popover is portalled when inside a `Modal`.
+   * Set to `true` to always render the popover in a portal, or `false` to
+   * keep it in place. Left unset, the popover moves to a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`) would
+   * cut it off.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -101,7 +97,6 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Popover from "../Popover/Popover.svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -133,7 +128,8 @@
   } = group;
 
   let wrapperRef = null;
-  let portalRef = null;
+  // The popover, in place or in a portal.
+  let popoverRef = null;
   let labelRef = null;
   let truncated = false;
   let stopObservingLabel = noop;
@@ -152,8 +148,10 @@
   $: contentId = `${id}-content`;
   $: effectivePortal =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
+  // Left unset outside a `Modal`, Popover moves to a portal when clipped.
+  $: portalPopover = portalTooltip ?? (insideModal ? true : undefined);
   $: popoverAlign = toPopoverAlign(direction, align);
-  $: insideElements = [wrapperRef, portalRef];
+  $: insideElements = [wrapperRef, popoverRef];
   $: if (disabled || !hasContent) open = false;
   $: hasIcon = Boolean(icon || $$slots.icon);
 
@@ -292,34 +290,16 @@
     text={truncationLabel}
     enabled={truncated && !disabled && !open}
   />
-  {#if hasContent && !effectivePortal}
-    <Popover {open} align={popoverAlign} id={contentId}>
-      <div bind:this={contentRef} class:bx--operational-tag__content={true}>
-        <slot name="content" />
-      </div>
-    </Popover>
-  {/if}
-</span>
-
-{#if hasContent && effectivePortal}
-  <FloatingPortal
-    anchor={ref}
-    {direction}
-    {open}
-    intrinsicWidth
-    intrinsicAlign={align}
-    gapTop={PORTAL_GAP}
-    gapBottom={PORTAL_GAP}
-    bind:ref={portalRef}
-    let:direction={actualDirection}
-  >
+  {#if hasContent}
     <Popover
-      open
-      relative
-      align={toPopoverAlign(actualDirection ?? direction, align)}
+      bind:ref={popoverRef}
+      {open}
+      align={popoverAlign}
+      {portalPopover}
       id={contentId}
-      style={PORTAL_NEUTRALIZE_STYLE}
+      class="bx--operational-tag__popover"
     >
+      <!-- In a portal, the content is outside the wrapper's listeners. -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         bind:this={contentRef}
@@ -329,5 +309,5 @@
         <slot name="content" />
       </div>
     </Popover>
-  </FloatingPortal>
-{/if}
+  {/if}
+</span>

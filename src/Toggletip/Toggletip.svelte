@@ -1,50 +1,3 @@
-<script context="module">
-  // Space (px) reserved for the caret between the anchor and the content.
-  const PORTAL_GAP = 10;
-  // Neutralizes the popover alignment transforms so the portal places it. The
-  // popover is rendered `relative` (in-flow) so the portal sizes to it.
-  const PORTAL_NEUTRALIZE_STYLE = "inset: auto; transform: none;";
-
-  const ALIGN_EDGE = /-(left|right|top|bottom)$/;
-
-  /**
-   * A portalled popover sits at the button's edge. For start and end
-   * alignment, move it so the caret, `--ccs-toggletip-caret` in from its
-   * corner, lands on the button's center.
-   * @param {string} pAlign
-   * @param {number} anchorHalf Half the button's width, in px
-   */
-  function portalNudgeStyle(pAlign, anchorHalf) {
-    const edge = pAlign.match(ALIGN_EDGE)?.[1];
-    return edge
-      ? `margin-${edge}: calc(${anchorHalf}px - var(--ccs-toggletip-caret));`
-      : "";
-  }
-
-  /**
-   * An in-place popover's start or end edge sits `--ccs-toggletip-caret`
-   * before the button's center, so the caret lands there at any button size.
-   * @param {string} pAlign
-   */
-  function edgeStyle(pAlign) {
-    const edge = pAlign.match(ALIGN_EDGE)?.[1];
-    return edge
-      ? `${edge}: calc(50% - var(--ccs-toggletip-caret));`
-      : undefined;
-  }
-
-  // Translate the Carbon `direction` + `align` pair into the underlying
-  // popover's combined alignment modifier (e.g. "bottom" + "start" -> "bottom-left").
-  // On the top and bottom, `intrinsic` is the physical side (see `physicalAlign`).
-  function toPopoverAlign(dir, intrinsic) {
-    if (intrinsic === "center") return dir;
-    if (dir === "top" || dir === "bottom") {
-      return `${dir}-${intrinsic === "start" ? "left" : "right"}`;
-    }
-    return `${dir}-${intrinsic === "start" ? "top" : "bottom"}`;
-  }
-</script>
-
 <script>
   /**
    * @template [Icon=any]
@@ -107,9 +60,10 @@
   export let ref = null;
 
   /**
-   * Set to `true` to render the content in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the content is portalled when inside a `Modal`.
+   * Set to `true` to always render the content in a portal, or `false` to
+   * keep it in place. Left unset, the content moves to a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`) would
+   * cut it off.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -127,34 +81,27 @@
    */
   export let id = uniqueId();
 
-  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import Popover from "../Popover/Popover.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { horizontalBounds, shouldFlipAlign } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { physicalAlign } from "../utils/inline-align.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
-  import {
-    getLayoutDirection,
-    resolveLayoutDirection,
-  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
-  const layoutDirection = getLayoutDirection();
 
   let toggletipRef = null;
-  let portalRef = null;
+  // The popover, in place or in a portal.
+  let popoverRef = null;
   let disconnectModalObserver = noop;
 
   $: contentId = `${id}-content`;
@@ -169,68 +116,14 @@
   } = splitAriaNaming($$restProps));
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
+  // Left unset outside a `Modal`, Popover moves to a portal when clipped.
+  $: portalPopover = portalTooltip ?? (insideModal ? true : undefined);
 
-  // A start- or end-aligned popover that would overflow its container, such
-  // as a table's scroll area, opens on the other side when it fits better
-  // there. It starts from `align` again each time it opens.
-  let flippedAlign;
-  $: if (!open) flippedAlign = undefined;
-  $: effectiveAlign = flippedAlign ?? align;
-  // `toggletipRef` binds only in the browser, so this never runs during SSR.
-  $: if (
-    open &&
-    toggletipRef &&
-    align !== "center" &&
-    (direction === "top" || direction === "bottom")
-  )
-    fitAlign();
+  // The v11 placement: above and below the button, `start` and `end` are
+  // inline sides, so Popover swaps them in RTL. Popover also fits it to the
+  // window and the button's container, and places the caret.
+  $: popoverAlign = align === "center" ? direction : `${direction}-${align}`;
 
-  async function fitAlign() {
-    await tick();
-    // The portal places its content on the next frame.
-    await new Promise((resolve) =>
-      typeof requestAnimationFrame === "function"
-        ? requestAnimationFrame(resolve)
-        : setTimeout(resolve),
-    );
-    const popover = (portalRef ?? toggletipRef)?.querySelector(".bx--popover");
-    if (!open || flippedAlign || !popover || !ref) return;
-    const button = ref.getBoundingClientRect();
-    const rect = popover.getBoundingClientRect();
-    if (
-      shouldFlipAlign(
-        rect,
-        button.left + button.width / 2,
-        horizontalBounds(popover),
-      )
-    ) {
-      flippedAlign = align === "start" ? "end" : "start";
-    }
-  }
-
-  // Above and below the button, `start` and `end` are inline sides. Read the
-  // direction when the toggletip opens: nothing reports a `dir` change. A
-  // `bind:this` ref in `$:` would re-run it on every update, so a function
-  // reads `ref`.
-  $: inlineAxis = direction === "top" || direction === "bottom";
-  $: rtl =
-    open &&
-    inlineAxis &&
-    effectiveAlign !== "center" &&
-    readRtl($layoutDirection);
-
-  /** @param {"ltr" | "rtl" | undefined} contextDirection */
-  function readRtl(contextDirection) {
-    return resolveLayoutDirection(contextDirection, ref) === "rtl";
-  }
-  // The side the popover aligns to: physical above and below the button.
-  $: sideAlign = inlineAxis
-    ? physicalAlign(effectiveAlign, rtl)
-    : effectiveAlign;
-  $: popoverAlign = toPopoverAlign(direction, sideAlign);
-  // Start and end alignment point the caret at the button's center (see
-  // _toggletip.scss). A portalled popover can't measure the button in CSS.
-  $: anchorHalf = open && ref ? ref.offsetWidth / 2 : 8;
   // Window listeners are enabled on the animation frame after opening. Svelte
   // flushes the open state synchronously while the triggering click is still
   // propagating, so enabling them immediately would let the click that opened
@@ -258,9 +151,9 @@
     }
   }
 
-  // The portalled content lives outside `toggletipRef`, so treat it as "inside"
-  // for focus and outside-click handling.
-  $: insideElements = [toggletipRef, portalRef];
+  // Portalled content lives outside `toggletipRef`, so treat the popover as
+  // "inside" for focus and outside-click handling.
+  $: insideElements = [toggletipRef, popoverRef];
 
   function containsTarget(target) {
     return insideElements.some((node) => node?.contains(target));
@@ -346,57 +239,17 @@ whitespace gap; the label's end margin is then the only spacing. -->
         <svelte:component this={icon} name={iconName} />
       </slot>
     </button>
-    {#if !effectivePortalTooltip}
-      <Popover
-        {open}
-        align={popoverAlign}
-        id={contentId}
-        caret
-        highContrast
-        class={["bx--toggletip-popover", popoverClass]
-          .filter(Boolean)
-          .join(" ")}
-        style={edgeStyle(popoverAlign)}
-      >
-        <div class:bx--toggletip-content={true}>
-          <slot />
-        </div>
-      </Popover>
-    {/if}
-  </span>
-</span>
-
-{#if effectivePortalTooltip}
-  <FloatingPortal
-    anchor={ref}
-    {direction}
-    {open}
-    intrinsicWidth
-    intrinsicAlign={sideAlign}
-    gapTop={PORTAL_GAP}
-    gapBottom={PORTAL_GAP}
-    horizontalGapLeft={PORTAL_GAP}
-    horizontalGapRight={PORTAL_GAP}
-    bind:ref={portalRef}
-    let:direction={actualDirection}
-  >
-    {@const popoverAlign = toPopoverAlign(
-      actualDirection ?? direction,
-      sideAlign,
-    )}
     <Popover
-      open
-      relative
+      bind:ref={popoverRef}
+      {open}
       align={popoverAlign}
+      {portalPopover}
       id={contentId}
       caret
       highContrast
       class={["bx--toggletip-popover", popoverClass].filter(Boolean).join(" ")}
-      style="{PORTAL_NEUTRALIZE_STYLE} {portalNudgeStyle(
-        popoverAlign,
-        anchorHalf,
-      )}"
     >
+      <!-- In a portal, the content is outside the wrapper's listeners. -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class:bx--toggletip-content={true}
@@ -406,5 +259,5 @@ whitespace gap; the label's end margin is then the only spacing. -->
         <slot />
       </div>
     </Popover>
-  </FloatingPortal>
-{/if}
+  </span>
+</span>
