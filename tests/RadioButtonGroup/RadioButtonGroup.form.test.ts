@@ -55,6 +55,21 @@ describe("RadioButtonGroup form reset", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it("restores a numeric value that allowDeselect can then clear", async () => {
+    render(RadioButtonGroupForm, {
+      props: { values: [1, 2], allowDeselect: true },
+    });
+    const radioB = screen.getByRole("radio", { name: "B" });
+    assert(radioB instanceof HTMLInputElement);
+    radioB.defaultChecked = true;
+
+    await resetForm();
+    await user.click(radioB);
+
+    expect(radioB).not.toBeChecked();
+    expect(getBoundText()).toBe("undefined");
+  });
+
   it("clears the bound value when nothing was selected before the reset", async () => {
     const onChange = vi.fn();
     render(RadioButtonGroupForm, { props: { onChange } });

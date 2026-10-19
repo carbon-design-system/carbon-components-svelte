@@ -156,11 +156,16 @@
   // rewriting `selectedValue` — a reset fires no events, like the other
   // form controls.
   let resettingFromForm = false;
+  // The DOM only ever carries strings; maps each radio's `value` attribute
+  // back to its real value, so a reset can restore a number as a number.
+  /** @type {Map<string, Value>} */
+  const registeredValues = new Map();
 
   /**
    * @type {(data: { checked: boolean; value: Value }) => void}
    */
   function add({ checked, value }) {
+    registeredValues.set(String(value), value);
     if (checked) {
       selectedValue.set(value);
     }
@@ -197,15 +202,8 @@
     const checkedInput = /** @type {HTMLInputElement | null} */ (
       fieldsetRef.querySelector('input[type="radio"]:checked')
     );
-    // The DOM only ever carries strings. `Value` is uniform across one
-    // group's RadioButtons, so coerce back to a number when the group was
-    // already using numeric values; otherwise (including "nothing was
-    // selected before this reset", where the type can't be known) keep the
-    // native string.
     const nextSelected = checkedInput
-      ? typeof selected === "number"
-        ? Number(checkedInput.value)
-        : checkedInput.value
+      ? (registeredValues.get(checkedInput.value) ?? checkedInput.value)
       : undefined;
     resettingFromForm = true;
     selectedValue.set(nextSelected);
