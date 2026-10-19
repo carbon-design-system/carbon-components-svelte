@@ -36,6 +36,8 @@
     undefined;
   export let onChange: (detail: { page?: number; pageSize?: number }) => void =
     () => {};
+  export let onUpdate: (detail: { page: number; pageSize: number }) => void =
+    () => {};
 </script>
 
 <Pagination
@@ -76,5 +78,6 @@
   }}
   on:update={(e) => {
     console.log("update", e.detail);
+    onUpdate(e.detail);
   }}
 />

@@ -248,8 +248,11 @@
 
   const dispatch = createEventDispatcher();
 
-  let prevPage = page;
-  let prevPageSize = pageSize;
+  // Seeded by the first run of the `update` block below, after the initial
+  // clamp, so clamping an out-of-range initial page isn't reported as an
+  // update on mount (#2528).
+  let prevPage;
+  let prevPageSize;
   let prevPageSizesKey;
   let backBtnRef = null;
   let forwardBtnRef = null;
@@ -276,7 +279,7 @@
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: if (!pagesUnknown && page > totalPages) page = totalPages;
   $: if (prevPage !== page || prevPageSize !== pageSize) {
-    dispatch("update", { pageSize, page });
+    if (prevPage !== undefined) dispatch("update", { pageSize, page });
     prevPage = page;
     prevPageSize = pageSize;
   }
