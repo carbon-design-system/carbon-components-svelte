@@ -122,6 +122,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { windowShift } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -153,6 +154,24 @@
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
+
+  // The side the tooltip opens on: `direction`, unless it doesn't fit there
+  // and fits on the other side (in place; a portalled tooltip flips itself).
+  /** @type {"top" | "bottom" | null} */
+  let flip = null;
+  $: placement = flip ?? direction;
+
+  // How far an above or below tooltip slides to stay inside the window; the
+  // caret slides back by as much, so it still points at the trigger.
+  let shift = 0;
+
+  /** @type {null | HTMLElement} */
+  let refPortalTooltip = null;
+
+  $: if (!open) {
+    flip = null;
+    shift = 0;
+  }
 
   setContext("carbon:Tooltip", { tooltipOpen, openedByHover });
 
@@ -249,6 +268,7 @@
 
   function position() {
     if (!(open && !effectivePortalTooltip && ref && refTooltip)) return;
+    const direction = placement;
 
     const button = ref.getBoundingClientRect();
     const tooltip = refTooltip.getBoundingClientRect();
@@ -318,6 +338,58 @@
 
     refTooltip.style.left = `${offsetX}px`;
     refTooltip.style.marginTop = `${offsetY}px`;
+
+    const rect = refTooltip.getBoundingClientRect();
+    const height = document.documentElement.clientHeight;
+    if (flip === null && direction === "bottom" && rect.bottom > height) {
+      if (button.top - rect.height - iconHeight > 0) {
+        flip = "top";
+        return;
+      }
+    } else if (
+      flip === null &&
+      direction === "top" &&
+      rect.top < 0 &&
+      button.bottom + rect.height + iconHeight < height
+    ) {
+      flip = "bottom";
+      return;
+    }
+
+    shift =
+      direction === "top" || direction === "bottom"
+        ? windowShift(refTooltip, 0)
+        : 0;
+    refTooltip.style.left = `${offsetX + shift}px`;
+  }
+
+  // A portalled tooltip is placed by `FloatingPortal`, which rewrites the
+  // portal's style on every placement (open, scroll, resize); slide the
+  // tooltip within it after each.
+  function slidePortalTooltip() {
+    if (!refPortalTooltip || !refTooltip) return;
+    const side = refTooltip.dataset.floatingDirection;
+    const next =
+      side === "top" || side === "bottom"
+        ? windowShift(refPortalTooltip, shift)
+        : 0;
+    // Each slide restyles the tooltip, not the portal, so this settles; skip
+    // sub-pixel changes so a re-placement doesn't re-render for nothing.
+    if (Math.abs(next - shift) >= 0.5) shift = next;
+  }
+
+  /** @param {HTMLElement} node */
+  function watchPortal(node) {
+    const observer = new MutationObserver(slidePortalTooltip);
+    const portal = node.closest("[data-floating-portal]");
+    if (portal) {
+      observer.observe(portal, {
+        attributes: true,
+        attributeFilter: ["style"],
+      });
+    }
+    requestAnimationFrame(slidePortalTooltip);
+    return { destroy: () => observer.disconnect() };
   }
 
   /**
@@ -347,7 +419,7 @@
   // element identity actually changed, which would make this block refire
   // on every unrelated re-render. `position()` already null-checks them.
   $: if (open && !effectivePortalTooltip) {
-    void direction;
+    void placement;
     void hideIcon;
     void rtl;
     void sideAlign;
@@ -437,13 +509,13 @@
     <div
       bind:this={refTooltip}
       id={tooltipId}
-      data-floating-menu-direction={direction}
+      data-floating-menu-direction={placement}
       class:bx--tooltip={true}
       class:bx--tooltip--shown={open}
-      class:bx--tooltip--top={direction === "top"}
-      class:bx--tooltip--right={direction === "right"}
-      class:bx--tooltip--bottom={direction === "bottom"}
-      class:bx--tooltip--left={direction === "left"}
+      class:bx--tooltip--top={placement === "top"}
+      class:bx--tooltip--right={placement === "right"}
+      class:bx--tooltip--bottom={placement === "bottom"}
+      class:bx--tooltip--left={placement === "left"}
       class:bx--tooltip--align-center={sideAlign === "center"}
       class:bx--tooltip--align-start={sideAlign === "start"}
       class:bx--tooltip--align-end={sideAlign === "end"}
@@ -452,7 +524,11 @@
       on:focusout={handleFocusout}
       on:keydown={handleKeydown}
     >
-      <span class:bx--tooltip__caret={true}></span>
+      <span
+        class:bx--tooltip__caret={true}
+        style:left={shift ? `${-shift}px` : undefined}
+        style:right={shift ? `${shift}px` : undefined}
+      ></span>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <div
@@ -483,9 +559,13 @@
     bind:ref={refTooltip}
     let:direction={actualDirection}
   >
-    <div style="display: flex; justify-content: center; align-items: center;">
+    <div
+      style="display: flex; justify-content: center; align-items: center;"
+      use:watchPortal
+    >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
+        bind:this={refPortalTooltip}
         id={tooltipId}
         data-floating-menu-direction={actualDirection}
         class:bx--tooltip={true}
@@ -497,12 +577,17 @@
         class:bx--tooltip--align-center={sideAlign === "center"}
         class:bx--tooltip--align-start={sideAlign === "start"}
         class:bx--tooltip--align-end={sideAlign === "end"}
-        style="position: relative; transform: none; display: block; left: auto; margin-top: 0;"
+        style="position: relative; transform: none; display: block; margin-top: 0;"
+        style:left="{shift}px"
         on:mouseenter={handleMouseenter}
         on:focusout={handleFocusout}
         on:keydown={handleKeydown}
       >
-        <span class:bx--tooltip__caret={true}></span>
+        <span
+          class:bx--tooltip__caret={true}
+          style:left={shift ? `${-shift}px` : undefined}
+          style:right={shift ? `${shift}px` : undefined}
+        ></span>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <div
