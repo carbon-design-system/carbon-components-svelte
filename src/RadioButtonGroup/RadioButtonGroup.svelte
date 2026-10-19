@@ -320,7 +320,7 @@
       {#if showInvalid}
         <WarningFilled class="bx--radio-button-group__invalid-icon" />
         {#if invalidText}
-          <div id={errorId} class:bx--form-requirement={true}>
+          <div id={errorId} role="alert" class:bx--form-requirement={true}>
             {invalidText}
           </div>
         {/if}
