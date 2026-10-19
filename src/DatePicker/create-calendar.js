@@ -13,7 +13,6 @@ import { createCalendarEngine } from "./calendar.js";
  *     mode?: import("./calendar.js").CalendarMode;
  *     dateFormat?: string;
  *     altFormat?: string;
- *     errorHandler?: (error: Error) => void;
  *     ignoredFocusElements?: HTMLElement[];
  *     [option: string]: unknown;
  *   };
@@ -96,38 +95,6 @@ function forwardInputEvents(source, target) {
   }
 }
 
-/** @type {WeakMap<object, Record<string, Function[]>>} */
-const hooksByInstance = new WeakMap();
-
-/**
- * flatpickr accepts a hook as a single function or an array of them.
- *
- * @param {unknown} hook
- * @returns {Function[]}
- */
-function toHookArray(hook) {
-  if (Array.isArray(hook)) return hook;
-  return hook ? [/** @type {Function} */ (hook)] : [];
-}
-
-/**
- * Carries the current `errorHandler` for a running calendar. flatpickr's own
- * `calendar.set("errorHandler", fn)` replaces `config.errorHandler` outright,
- * which would drop Carbon's wrapper (and the `error` event it dispatches), so
- * reactive updates go through `setErrorHandler` and this map instead.
- * @type {WeakMap<CalendarInstance, { current: ((error: Error) => void) | undefined }>}
- */
-const errorHandlerBoxes = new WeakMap();
-
-/**
- * @param {CalendarInstance} instance
- * @param {((error: Error) => void) | undefined} handler
- */
-export function setErrorHandler(instance, handler) {
-  const box = errorHandlerBoxes.get(instance);
-  if (box) box.current = handler;
-}
-
 /**
  * Builds the calendar synchronously, as soon as the input is mounted: moving
  * the input into the calendar's wrapper would otherwise blur it if the user,
@@ -172,25 +139,16 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
     }
   }
 
-  const errorHandlerBox = { current: options.errorHandler };
-
   /**
-   * `errorHandler` is a single function, not a hook array, and it never says
-   * which input produced the bad text. The focused range input (if any) is
-   * assumed to be the source, since that is the field the engine just tried
-   * to parse; `base` is the only candidate otherwise.
+   * Reports unparseable text as the `error` event. The engine doesn't say
+   * which input the text came from; the focused range input (if any) is
+   * the field it just tried to parse, `base` otherwise.
    * @param {Error} error
    */
   function handleParseError(error) {
     const value =
       input && document.activeElement === input ? input.value : base.value;
     dispatch("error", { error, value });
-    const userErrorHandler = errorHandlerBox.current;
-    if (userErrorHandler) {
-      userErrorHandler(error);
-    } else {
-      console.warn(error);
-    }
   }
 
   /**
@@ -218,13 +176,6 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
       ?.after(instance.calendarContainer);
   }
 
-  /**
-   * Carbon's own hooks. They are merged with the consumer's rather than
-   * spread under `...options`, where a `flatpickrProps.onOpen` or an inline
-   * `onDayCreate` would silently replace them.
-   *
-   * @type {Record<string, Function[]>}
-   */
   /** Last range sent with `view`, so a month and year change send one. */
   let lastView = "";
   /**
@@ -267,17 +218,6 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
     onDestroy: [disconnectAltInputObserver],
   };
 
-  /** @type {Record<string, Function[]>} */
-  const mergedHooks = {};
-  for (const [name, hooks] of Object.entries(carbonHooks)) {
-    mergedHooks[name] = [...hooks, ...toHookArray(options[name])];
-  }
-  for (const name of Object.keys(options)) {
-    if (name.startsWith("on") && !(name in mergedHooks)) {
-      mergedHooks[name] = toHookArray(options[name]);
-    }
-  }
-
   /** @type {CalendarInstance | null} */
   let instance = null;
   try {
@@ -288,16 +228,13 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
       ariaDateFormat: "l, F j, Y",
       lazy: true,
       ...options,
-      ...mergedHooks,
+      ...carbonHooks,
       // The range calendar pushes its second input into
-      // `ignoredFocusElements`. Copy a consumer's array so that push never
-      // mutates (and keeps alive) an array shared across pickers.
+      // `ignoredFocusElements`. Copy `keepOpenFor` so that push never
+      // mutates (and keeps alive) the consumer's array.
       ignoredFocusElements: [...(options.ignoredFocusElements ?? [])],
       ...(options.mode === "range" && input && { secondInput: input }),
       ...(isDayBlocked && { isDayBlocked }),
-      // Placed after `...options` so a consumer's own `errorHandler` (from
-      // `flatpickrProps`) can never replace this wrapper; it is still
-      // called, via `errorHandlerBox`, from inside `handleParseError`.
       errorHandler: handleParseError,
     });
   } catch (error) {
@@ -307,21 +244,5 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
     return null;
   }
   if (!instance) return null;
-  hooksByInstance.set(instance, carbonHooks);
-  errorHandlerBoxes.set(instance, errorHandlerBox);
   return instance;
-}
-
-/**
- * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
- * Carbon's hooks in front of a consumer hook instead of replacing them.
- *
- * @param {object} instance
- * @param {string} name
- * @param {unknown} value
- * @returns {unknown}
- */
-export function resolveOptionValue(instance, name, value) {
-  const carbonHooks = hooksByInstance.get(instance)?.[name];
-  return carbonHooks ? [...carbonHooks, ...toHookArray(value)] : value;
 }

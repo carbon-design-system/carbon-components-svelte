@@ -8,10 +8,7 @@
 <button type="button" bind:this={preset}>Preset</button>
 <button type="button">Elsewhere</button>
 
-<!-- `preset` binds after the first render, so the option arrives late. -->
-<DatePicker
-  datePickerType="single"
-  flatpickrProps={{ ignoredFocusElements: preset ? [preset] : [] }}
->
+<!-- `preset` binds after the first render, so the prop arrives late. -->
+<DatePicker datePickerType="single" keepOpenFor={preset ? [preset] : []}>
   <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
 </DatePicker>

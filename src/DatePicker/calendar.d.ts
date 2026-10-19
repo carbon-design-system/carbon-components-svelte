@@ -16,12 +16,6 @@ export type CalendarHook = (
   data?: unknown,
 ) => void;
 
-export type CalendarPlugin = (
-  instance: CalendarInstance,
-) =>
-  | Partial<Record<CalendarHookName, CalendarHook | CalendarHook[]>>
-  | undefined;
-
 export type CalendarHookName =
   | "onChange"
   | "onClose"
@@ -81,7 +75,7 @@ export interface CalendarOptions
    */
   /**
    * Build the header and grid on first open instead of at creation, unless
-   * the calendar is inline or has plugins.
+   * the calendar is inline.
    */
   lazy?: boolean;
   isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
@@ -93,7 +87,6 @@ export interface CalendarOptions
   /** The date the calendar treats as today. Defaults to the current date. */
   now?: string | number | Date;
   parseDate?: (value: string, format: string) => Date | undefined;
-  plugins?: CalendarPlugin[];
   position?:
     | string
     | ((instance: CalendarInstance, customElement?: HTMLElement) => void);
@@ -168,27 +161,6 @@ export interface CalendarInstance {
   ): HTMLElement;
   onMouseOver(element?: HTMLElement): void;
   now: Date;
-  /** Always `false`: the calendar never swaps in a native date input. */
-  isMobile: false;
-  /** flatpickr plugin compatibility: plugins register their names here. */
-  loadedPlugins: string[];
-  /** flatpickr plugin compatibility: focusable controls plugins add. */
-  pluginElements: Node[];
-  utils: { getDaysInMonth(month?: number, year?: number): number };
-  pad(value: string | number): string;
-  updateValue(triggerChange?: boolean): void;
-  _bind(
-    target: EventTarget | EventTarget[],
-    type: string | string[],
-    handler: EventListener,
-    options?: AddEventListenerOptions,
-  ): void;
-  _createElement<E extends HTMLElement = HTMLElement>(
-    tag: string,
-    className?: string,
-    content?: string,
-  ): E;
-  _positionCalendar(customPositionElement?: HTMLElement): void;
 }
 
 /**

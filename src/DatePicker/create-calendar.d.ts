@@ -6,7 +6,6 @@ export interface CreateCalendarArgs {
     mode?: CalendarMode;
     dateFormat?: string;
     altFormat?: string;
-    errorHandler?: (error: Error) => void;
     ignoredFocusElements?: HTMLElement[];
     [option: string]: unknown;
   };
@@ -26,22 +25,3 @@ export interface CreateCalendarArgs {
 export function createCalendar(
   args: CreateCalendarArgs,
 ): Promise<CalendarInstance | null>;
-
-/**
- * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
- * Carbon's hooks in front of a consumer hook instead of replacing them.
- */
-export function resolveOptionValue(
-  instance: object,
-  name: string,
-  value: unknown,
-): unknown;
-
-/**
- * Updates the handler Carbon's `errorHandler` wrapper calls, without
- * replacing the wrapper (and the `error` event it dispatches).
- */
-export function setErrorHandler(
-  instance: CalendarInstance,
-  handler: ((error: Error) => void) | undefined,
-): void;

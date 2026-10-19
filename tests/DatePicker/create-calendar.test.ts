@@ -87,11 +87,10 @@ describe("createCalendar", () => {
     const instance = await createCalendar({
       options: {
         mode: "single",
-        plugins: [
-          () => {
-            throw new Error("plugin failed");
-          },
-        ],
+        defaultDate: "2024-03-15",
+        formatDate: () => {
+          throw new Error("format failed");
+        },
       },
       base,
       input,
@@ -100,7 +99,7 @@ describe("createCalendar", () => {
 
     expect(instance).toBeNull();
     expect(consoleError).toHaveBeenCalledWith(
-      expect.objectContaining({ message: "plugin failed" }),
+      expect.objectContaining({ message: "format failed" }),
     );
     consoleError.mockRestore();
   });

@@ -2,7 +2,6 @@ import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type DatePickerComponent from "carbon-components-svelte/DatePicker/DatePicker.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
@@ -26,9 +25,18 @@ import {
   yearFirst,
 } from "./helpers";
 
+/**
+ * The calendar marks the current date as today. Pin it so assertions about
+ * the shown month cannot depend on the real date.
+ */
+function pinToday(date: Date) {
+  vi.useFakeTimers({ toFake: ["Date"], now: date });
+}
+
 describe("DatePicker", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   it("does not select text in multiple mode when selectTextOnFocus is true", async () => {
@@ -315,24 +323,21 @@ describe("DatePicker", () => {
       };
     }
 
-    it("is ignored when flatpickr failed to initialize", async () => {
+    it("is ignored when the calendar failed to initialize", async () => {
       const consoleError = vi
         .spyOn(console, "error")
         .mockImplementation(() => {});
       const capture = captureListenerErrors();
       render(DatePicker, {
         datePickerType: "single",
-        flatpickrProps: {
-          plugins: [
-            () => {
-              throw new Error("plugin failed");
-            },
-          ],
+        value: "03/15/2024",
+        formatDate: () => {
+          throw new Error("format failed");
         },
       });
       await vi.waitFor(() =>
         expect(consoleError).toHaveBeenCalledWith(
-          expect.objectContaining({ message: "plugin failed" }),
+          expect.objectContaining({ message: "format failed" }),
         ),
       );
       const input = screen.getByLabelText("Date");
@@ -551,10 +556,10 @@ describe("DatePicker", () => {
     });
   });
 
-  it("keeps a consumer allowInput: false across mount and readonly toggles", async () => {
+  it("keeps allowInput={false} across mount and readonly toggles", async () => {
     const props: ComponentProps<typeof DatePicker> = {
       datePickerType: "single",
-      flatpickrProps: { allowInput: false, clickOpens: false },
+      allowInput: false,
     };
     const { rerender } = render(DatePicker, props);
 
@@ -563,14 +568,15 @@ describe("DatePicker", () => {
     await tick();
     const fp = getCalendarInstance(input);
     expect(fp.config.allowInput).toBe(false);
-    expect(fp.config.clickOpens).toBe(false);
+    expect(fp.config.clickOpens).toBe(true);
 
     await rerender({ ...props, readonly: true });
     await tick();
+    expect(fp.config.clickOpens).toBe(false);
     await rerender({ ...props, readonly: false });
     await tick();
     expect(fp.config.allowInput).toBe(false);
-    expect(fp.config.clickOpens).toBe(false);
+    expect(fp.config.clickOpens).toBe(true);
   });
 
   describe("change event count", () => {
@@ -632,28 +638,6 @@ describe("DatePicker", () => {
       const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
       render(DatePicker, { datePickerType: "simple", short: true });
       expect(warn).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("unsupported flatpickrProps warnings", () => {
-    it("warns once per option, not on every update", async () => {
-      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-      function props(): ComponentProps<typeof DatePicker> {
-        return {
-          datePickerType: "single",
-          // @ts-expect-error `mode` is omitted from the type; JS callers can still pass it.
-          flatpickrProps: { mode: "multiple" },
-        };
-      }
-      const { rerender } = render(DatePicker, props());
-      await screen.findByLabelText("calendar-container");
-      await rerender(props());
-      await rerender(props());
-
-      expect(warn).toHaveBeenCalledTimes(1);
-      expect(warn).toHaveBeenCalledWith(
-        "[carbon-components-svelte] DatePicker: flatpickrProps.mode is ignored. Use datePickerType instead.",
-      );
     });
   });
 
@@ -1087,11 +1071,11 @@ describe("DatePicker", () => {
     ] as const)(
       "is ignored in %s mode",
       async (datePickerType, dateFormat, initialMonth, selector, expected) => {
+        pinToday(new Date(2020, 0, 10));
         render(DatePicker, {
           datePickerType,
           dateFormat,
           initialMonth,
-          flatpickrProps: { static: true, now: new Date(2020, 0, 10) },
         });
 
         const calendar = await openCalendar();
@@ -1105,13 +1089,10 @@ describe("DatePicker", () => {
     );
 
     it("shows the initial month when there is no selection", async () => {
+      pinToday(new Date(2020, 0, 10));
       render(DatePicker, {
         datePickerType: "single",
         initialMonth: "04/01/2027",
-        // The calendar marks `now` (the current date by default) as today.
-        // Pin it outside the shown month so the assertion cannot depend on
-        // the real date.
-        flatpickrProps: { now: new Date(2020, 0, 10) },
       });
 
       const input = screen.getByLabelText("Date");
@@ -1235,98 +1216,43 @@ describe("DatePicker", () => {
     });
   });
 
-  describe("flatpickrProps", () => {
-    it("merges showMonths into the calendar", async () => {
-      render(DatePicker, {
-        datePickerType: "single",
-        flatpickrProps: { showMonths: 2 },
-      });
+  describe("calendar option props", () => {
+    it("shows two months with months={2}", async () => {
+      render(DatePicker, { datePickerType: "single", months: 2 });
 
       const calendar = await openCalendar();
 
       expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
     });
 
-    it("ignores the unsupported wrap option instead of crashing", async () => {
-      const consoleError = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-      render(DatePicker, {
-        datePickerType: "single",
-        // @ts-expect-error `wrap` is omitted from the type; JS callers can still pass it.
-        flatpickrProps: { wrap: true },
-      });
-
-      expect(await openCalendar()).toBeInTheDocument();
-      expect(consoleError).not.toHaveBeenCalled();
-    });
-
-    it("stays usable as a plain input when flatpickr fails to initialize", async () => {
+    it("stays usable as a plain input when the calendar fails to initialize", async () => {
       const consoleError = vi
         .spyOn(console, "error")
         .mockImplementation(() => {});
       const { unmount } = render(DatePicker, {
         datePickerType: "single",
-        flatpickrProps: {
-          plugins: [
-            () => {
-              throw new Error("plugin failed");
-            },
-          ],
+        value: "03/15/2024",
+        formatDate: () => {
+          throw new Error("format failed");
         },
       });
 
       const input = screen.getByLabelText("Date");
+      await user.clear(input);
       await user.type(input, "01/01/2023");
       expect(input).toHaveValue("01/01/2023");
-      // flatpickr reports the failure itself; it must not be silent.
+      // The failure is reported, not swallowed.
       expect(consoleError).toHaveBeenCalledWith(
-        expect.objectContaining({ message: "plugin failed" }),
+        expect.objectContaining({ message: "format failed" }),
       );
       expect(() => unmount()).not.toThrow();
-    });
-
-    it("preselects flatpickrProps.defaultDate when value is empty", async () => {
-      render(DatePicker, {
-        datePickerType: "single",
-        flatpickrProps: { defaultDate: "03/12/2024" },
-      });
-
-      const input = screen.getByLabelText("Date");
-      await vi.waitFor(() => expect(input).toHaveValue("03/12/2024"));
-    });
-
-    it("syncs flatpickrProps.defaultDate to the bound value", async () => {
-      render(DatePickerSelectedDates, {
-        flatpickrProps: { defaultDate: "03/12/2024" },
-      });
-
-      await vi.waitFor(() => expect(getBoundText()).toBe("03/12/2024||"));
-    });
-
-    it("prefers value over flatpickrProps.defaultDate", async () => {
-      render(DatePicker, {
-        datePickerType: "single",
-        value: "01/05/2024",
-        flatpickrProps: { defaultDate: "03/12/2024" },
-      });
-
-      const input = screen.getByLabelText("Date");
-      const calendar = await openCalendar();
-      expect(input).toHaveValue("01/05/2024");
-      expect(calendar.querySelector(".flatpickr-day.selected")).toHaveAttribute(
-        "aria-label",
-        "Friday, January 5, 2024",
-      );
     });
 
     it("keeps the picked date when formatDate output is not parseable", async () => {
       render(DatePicker, {
         datePickerType: "single",
         value: "03/15/2024",
-        flatpickrProps: {
-          formatDate: (date: Date) => `Day ${date.getDate()}`,
-        },
+        formatDate: (date: Date) => `Day ${date.getDate()}`,
       });
 
       const input = screen.getByLabelText("Date");
@@ -1342,12 +1268,12 @@ describe("DatePicker", () => {
       expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
     });
 
-    it("labels the visible altInput instead of the hidden original", async () => {
+    it("labels the visible input when displayFormat is set", async () => {
       render(DatePicker, {
         datePickerType: "single",
         dateFormat: "Y-m-d",
         value: "2024-03-15",
-        flatpickrProps: { altInput: true, altFormat: "F j, Y" },
+        displayFormat: "F j, Y",
       });
 
       await vi.waitFor(() => {
@@ -1361,11 +1287,11 @@ describe("DatePicker", () => {
       );
     });
 
-    it("mirrors later state changes onto the visible altInput", async () => {
+    it("mirrors later state changes onto the displayFormat input", async () => {
       const props = {
         datePickerType: "single",
         helperText: "Pick a weekday",
-        flatpickrProps: { altInput: true, altFormat: "F j, Y" },
+        displayFormat: "F j, Y",
       } as const;
       const { rerender } = render(DatePicker, props);
 
@@ -1395,68 +1321,53 @@ describe("DatePicker", () => {
         expect(visible).not.toHaveAttribute("readonly");
         expect(visible).toHaveClass("bx--date-picker__input--invalid");
       });
-      // flatpickr's own classes on the visible input survive the sync.
       expect(visible).toHaveClass("bx--date-picker__input");
       expect(visible).not.toHaveClass("flatpickr-input");
     });
 
-    it("creates one flatpickr instance when props settle during init", async () => {
-      const onReady = vi.fn();
-      const onDestroy = vi.fn();
-      render(DatePicker, {
+    it("creates one calendar when props settle during init", async () => {
+      const { container } = render(DatePicker, {
         datePickerType: "single",
         helperText: "Pick a weekday",
-        flatpickrProps: {
-          altInput: true,
-          altFormat: "F j, Y",
-          onReady,
-          onDestroy,
-        },
+        displayFormat: "F j, Y",
       });
 
-      await screen.findByLabelText("calendar-container");
+      const calendar = await screen.findByLabelText("calendar-container");
       await tick();
-      expect(onReady).toHaveBeenCalledTimes(1);
-      expect(onDestroy).not.toHaveBeenCalled();
+      const hidden = container.querySelector<HTMLInputElement>(
+        "input.flatpickr-input",
+      );
+      assert(hidden);
+      expect(screen.getAllByLabelText("calendar-container")).toHaveLength(1);
+      expect(getCalendarInstance(hidden).calendarContainer).toBe(calendar);
     });
 
-    it("does not retry a failed flatpickr init on every update", async () => {
+    it("does not retry a failed init on every update", async () => {
       vi.spyOn(console, "error").mockImplementation(() => {});
-      const plugin = vi.fn(() => {
-        throw new Error("plugin failed");
+      const formatDate = vi.fn((): string => {
+        throw new Error("format failed");
       });
       const props: ComponentProps<typeof DatePicker> = {
         datePickerType: "single",
-        flatpickrProps: { plugins: [plugin] },
+        value: "03/15/2024",
+        formatDate,
       };
       const { rerender } = render(DatePicker, props);
       await tick();
-      const attempts = plugin.mock.calls.length;
+      const attempts = formatDate.mock.calls.length;
       expect(attempts).toBeGreaterThan(0);
 
       await rerender({ ...props, helperText: "Changed" });
       await rerender({ ...props, invalid: true });
       await tick();
-      expect(plugin).toHaveBeenCalledTimes(attempts);
-    });
-
-    it("omits the options Carbon overrides from the prop type", () => {
-      type FlatpickrProps = NonNullable<
-        ComponentProps<DatePickerComponent>["flatpickrProps"]
-      >;
-
-      expectTypeOf<FlatpickrProps>().toHaveProperty("showMonths");
-      expectTypeOf<FlatpickrProps>().not.toHaveProperty("wrap");
-      expectTypeOf<FlatpickrProps>().not.toHaveProperty("mode");
+      expect(formatDate).toHaveBeenCalledTimes(attempts);
     });
 
     it("does not re-apply a range rule that is rebuilt with equal contents", async () => {
-      function props(): ComponentProps<typeof DatePicker> {
+      function props(to = 14): ComponentProps<typeof DatePicker> {
         return {
           datePickerType: "single",
-          flatpickrProps: {
-            disable: [{ from: "03/10/2024", to: new Date(2024, 2, 14) }],
-          },
+          disabledDates: [{ from: "03/10/2024", to: new Date(2024, 2, to) }],
         };
       }
       const { rerender } = render(DatePicker, props());
@@ -1469,32 +1380,27 @@ describe("DatePicker", () => {
       await rerender(props());
       expect(set).not.toHaveBeenCalled();
 
-      await rerender({
-        ...props(),
-        flatpickrProps: {
-          disable: [{ from: "03/10/2024", to: new Date(2024, 2, 20) }],
-        },
-      });
+      await rerender(props(20));
       expect(set).toHaveBeenCalledWith("disable", expect.anything());
     });
 
-    it("re-applies positionElement when it points at another element", async () => {
+    it("re-applies anchor when it points at another element", async () => {
       const first = document.createElement("div");
       const second = document.createElement("div");
       const props: ComponentProps<typeof DatePicker> = {
         datePickerType: "single",
         portalMenu: true,
       };
+      // `anchor` is also a mount option, so pass the props explicitly.
       const { rerender } = render(DatePicker, {
-        ...props,
-        flatpickrProps: { positionElement: first },
+        props: { ...props, anchor: first },
       });
       const input = screen.getByLabelText("Date");
       await screen.findByLabelText("calendar-container");
       const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
-      await rerender({ ...props, flatpickrProps: { positionElement: second } });
+      await rerender({ ...props, anchor: second });
       expect(set).toHaveBeenCalledWith("positionElement", second);
     });
 
@@ -1504,7 +1410,7 @@ describe("DatePicker", () => {
           datePickerType: "single",
           minDate: new Date(2024, 0, 1),
           maxDate: new Date(2024, 11, 31),
-          flatpickrProps: { disable: [new Date(2024, 5, 15)] },
+          disabledDates: [new Date(2024, 5, 15)],
         };
       }
       const { rerender } = render(DatePicker, props());
@@ -1521,16 +1427,18 @@ describe("DatePicker", () => {
       expect(set).toHaveBeenCalledWith("minDate", new Date(2024, 1, 1));
     });
 
-    it("does not re-apply an inline option whose contents are unchanged", async () => {
-      let calendar: Instance | null = null;
+    it("does not re-apply an inline disabledDates array with equal items", async () => {
+      let ready = false;
       const { rerender } = render(DatePickerInlineOptions, {
         oncalendar: (cal) => {
-          calendar = cal?.engine ?? null;
+          ready = Boolean(cal);
         },
       });
-      await vi.waitFor(() => expect(calendar).not.toBeNull());
-      assert(calendar);
-      const set = vi.spyOn(calendar as Instance, "set");
+      await vi.waitFor(() => expect(ready).toBe(true));
+      const set = vi.spyOn(
+        getCalendarInstance(screen.getByLabelText("Date")),
+        "set",
+      );
 
       await rerender({ renders: 1 });
       await rerender({ renders: 2 });
@@ -1538,50 +1446,7 @@ describe("DatePicker", () => {
       expect(set).not.toHaveBeenCalledWith("disable", expect.anything());
     });
 
-    it("keeps Carbon's hooks when a consumer hook changes after mount", async () => {
-      const props: ComponentProps<typeof DatePicker> = {
-        datePickerType: "single",
-        value: "03/15/2024",
-        minDate: "03/10/2024",
-      };
-      const { rerender } = render(DatePicker, {
-        ...props,
-        flatpickrProps: { onDayCreate: () => {} },
-      });
-      const calendar = await openCalendar();
-
-      const onDayCreate = vi.fn();
-      await rerender({ ...props, flatpickrProps: { onDayCreate } });
-      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
-      const prev = calendar.querySelector<HTMLElement>(".flatpickr-prev-month");
-      assert(next && prev);
-      await user.click(next);
-      await user.click(prev);
-
-      expect(onDayCreate).toHaveBeenCalled();
-      expect(
-        calendar.querySelectorAll(".flatpickr-day[aria-disabled='true']")
-          .length,
-      ).toBeGreaterThan(0);
-      expect(calendar.querySelector(".flatpickr-day")).toHaveClass(
-        "bx--date-picker__day",
-      );
-    });
-
-    it("runs Carbon's open handling alongside flatpickrProps.onOpen", async () => {
-      const onOpen = vi.fn();
-      render(DatePicker, {
-        datePickerType: "single",
-        flatpickrProps: { onOpen },
-      });
-      const calendar = await openCalendar();
-
-      expect(onOpen).toHaveBeenCalled();
-      expect(calendar).toHaveClass("bx--date-picker__calendar");
-      expect(calendar.querySelector(".cur-month")).toBeInTheDocument();
-    });
-
-    it("stays open when an ignoredFocusElements element is clicked", async () => {
+    it("stays open when a keepOpenFor element is clicked", async () => {
       render(DatePickerIgnoredFocus);
 
       await user.click(await screen.findByLabelText("Date"));
@@ -1595,11 +1460,11 @@ describe("DatePicker", () => {
       expect(calendar).not.toHaveClass("open");
     });
 
-    it("abbreviates the month label when shorthandCurrentMonth is set", async () => {
+    it('abbreviates the month label when monthLabel is "short"', async () => {
       render(DatePicker, {
         datePickerType: "single",
         value: "09/15/2024",
-        flatpickrProps: { shorthandCurrentMonth: true },
+        monthLabel: "short",
       });
 
       const calendar = await openCalendar();
@@ -1612,10 +1477,7 @@ describe("DatePicker", () => {
     });
 
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
-      render(DatePicker, {
-        datePickerType: "single",
-        flatpickrProps: { closeOnSelect: false },
-      });
+      render(DatePicker, { datePickerType: "single", closeOnSelect: false });
 
       const calendar = await openCalendar();
       const day = firstDay(calendar);
@@ -1628,38 +1490,8 @@ describe("DatePicker", () => {
       expect(calendar).toHaveClass("open");
     });
 
-    // Regression test: axe-core flags out-of-range calendar days for
-    // insufficient color contrast because they carry no ARIA signal that
-    // they are disabled (only the meaningless flatpickr-disabled CSS class).
-    // WCAG 1.4.3 exempts text belonging to an inactive UI component, and
-    // axe-core's color-contrast check specifically skips aria-disabled="true"
-    // elements, so marking these days closes the gap correctly.
-    it("composes a consumer-supplied onDayCreate with the default aria-disabled hook", async () => {
-      const onDayCreate = vi.fn();
-      const { container } = render(DatePicker, {
-        datePickerType: "single",
-        value: "03/01/2024",
-        minDate: new Date(2024, 2, 1),
-        maxDate: new Date(2024, 2, 31),
-        flatpickrProps: { onDayCreate },
-      });
-
-      await openCalendar();
-
-      expect(onDayCreate).toHaveBeenCalled();
-      const disabledDays = container.querySelectorAll(
-        ".flatpickr-day.flatpickr-disabled",
-      );
-      expect(disabledDays.length).toBeGreaterThan(0);
-      for (const day of disabledDays) {
-        expect(day).toHaveAttribute("aria-disabled", "true");
-      }
-    });
-
-    it("disables the open/close animation by default, overridable via flatpickrProps", async () => {
-      const { unmount } = render(DatePicker, {
-        datePickerType: "single",
-      });
+    it("disables the open/close animation by default", async () => {
+      const { unmount } = render(DatePicker, { datePickerType: "single" });
 
       let input = screen.getByLabelText("Date");
       await user.click(input);
@@ -1668,41 +1500,34 @@ describe("DatePicker", () => {
 
       unmount();
 
-      render(DatePicker, {
-        datePickerType: "single",
-        flatpickrProps: { animate: true },
-      });
+      render(DatePicker, { datePickerType: "single", animate: true });
       input = screen.getByLabelText("Date");
       await user.click(input);
       await screen.findByLabelText("calendar-container");
       expect(getCalendarInstance(input).config.animate).toBe(true);
     });
 
-    it("marks explicitly disabled dates from flatpickrProps.disable as aria-disabled", async () => {
+    // axe-core flags out-of-range days for contrast unless they carry
+    // aria-disabled, which WCAG 1.4.3 exempts as an inactive component.
+    it("marks out-of-range and disabledDates days aria-disabled", async () => {
       const { container } = render(DatePicker, {
         datePickerType: "single",
         value: "03/01/2024",
-        flatpickrProps: { disable: ["03/15/2024"] },
+        minDate: new Date(2024, 2, 1),
+        maxDate: new Date(2024, 2, 31),
+        disabledDates: ["03/15/2024"],
       });
 
-      await openCalendar();
-
-      const days = Array.from(
-        container.querySelectorAll<HTMLElement>(".flatpickr-day"),
-      );
-      const day15 = days.find(
-        (day) =>
-          day.textContent?.trim() === "15" &&
-          !day.classList.contains("prevMonthDay") &&
-          !day.classList.contains("nextMonthDay"),
-      );
-      expect(day15).toHaveClass("flatpickr-disabled");
-      expect(day15).toHaveAttribute("aria-disabled", "true");
+      const calendar = await openCalendar();
 
       const disabledDays = container.querySelectorAll(
         ".flatpickr-day.flatpickr-disabled",
       );
-      expect(disabledDays.length).toBe(1);
+      expect(disabledDays.length).toBeGreaterThan(1);
+      for (const day of disabledDays) {
+        expect(day).toHaveAttribute("aria-disabled", "true");
+      }
+      expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
     });
   });
 
@@ -1805,31 +1630,6 @@ describe("DatePicker", () => {
       expect(setSpy).not.toHaveBeenCalledWith("disable", expect.anything());
     });
 
-    it("wins over flatpickrProps.disable; flatpickrProps.disable still applies once the prop is empty", async () => {
-      const { rerender } = render(DatePicker, {
-        datePickerType: "single",
-        value: "03/01/2024",
-        disabledDates: ["03/09/2024"],
-        flatpickrProps: { disable: ["03/15/2024"] },
-      });
-
-      const calendar = await openCalendar();
-
-      expect(getDayByNumber(calendar, 9)).toHaveClass("flatpickr-disabled");
-      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
-        "flatpickr-disabled",
-      );
-
-      await rerender({
-        disabledDates: [],
-        flatpickrProps: { disable: ["03/15/2024"] },
-      });
-      await tick();
-
-      expect(getDayByNumber(calendar, 9)).not.toHaveClass("flatpickr-disabled");
-      expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
-    });
-
     it("applies enabledDates set after mount and lifts the restriction when emptied", async () => {
       const { rerender } = render(DatePicker, {
         datePickerType: "single",
@@ -1855,45 +1655,6 @@ describe("DatePicker", () => {
       await tick();
 
       expect(getDayByNumber(calendar, 16)).not.toHaveClass(
-        "flatpickr-disabled",
-      );
-    });
-
-    it("wins over flatpickrProps.enable; flatpickrProps.enable still applies once the prop is empty", async () => {
-      const { rerender } = render(DatePicker, {
-        datePickerType: "single",
-        value: "03/15/2024",
-        enabledDates: ["03/15/2024"],
-        flatpickrProps: { static: true, enable: ["03/20/2024"] },
-      });
-
-      const calendar = await openCalendar();
-
-      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
-        "flatpickr-disabled",
-      );
-      expect(getDayByNumber(calendar, 20)).toHaveClass("flatpickr-disabled");
-
-      // A changed flatpickrProps.enable must not override enabledDates.
-      await rerender({
-        enabledDates: ["03/15/2024"],
-        flatpickrProps: { static: true, enable: ["03/21/2024"] },
-      });
-      await tick();
-
-      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
-        "flatpickr-disabled",
-      );
-      expect(getDayByNumber(calendar, 21)).toHaveClass("flatpickr-disabled");
-
-      await rerender({
-        enabledDates: [],
-        flatpickrProps: { static: true, enable: ["03/21/2024"] },
-      });
-      await tick();
-
-      expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
-      expect(getDayByNumber(calendar, 21)).not.toHaveClass(
         "flatpickr-disabled",
       );
     });
@@ -1937,21 +1698,6 @@ describe("DatePicker", () => {
       expect(detail.value).toBe("not-a-date");
     });
 
-    it("calls a consumer flatpickrProps.errorHandler in addition to dispatching", async () => {
-      const errorHandler = vi.fn();
-      const userErrorHandler = vi.fn();
-      render(DatePicker, {
-        datePickerType: "single",
-        value: "not-a-date",
-        flatpickrProps: { errorHandler: userErrorHandler },
-        onerror: errorHandler,
-      });
-
-      await vi.waitFor(() => expect(errorHandler).toHaveBeenCalledTimes(1));
-      expect(userErrorHandler).toHaveBeenCalledTimes(1);
-      expect(userErrorHandler.mock.lastCall?.[0]).toBeInstanceOf(Error);
-    });
-
     it("dispatches once for an unparseable initial valueFrom in range mode", async () => {
       const errorHandler = vi.fn();
       render(DatePickerRange, {
@@ -1964,26 +1710,6 @@ describe("DatePicker", () => {
       expect(errorHandler.mock.lastCall?.[0]?.detail).toMatchObject({
         value: "not-a-date",
       });
-    });
-
-    it("uses the latest flatpickrProps.errorHandler after it changes", async () => {
-      const handlerA = vi.fn();
-      const handlerB = vi.fn();
-      const { instance, rerender } = await renderCalendar({
-        datePickerType: "single",
-        flatpickrProps: { errorHandler: handlerA },
-      });
-
-      await rerender({
-        datePickerType: "single",
-        flatpickrProps: { errorHandler: handlerB },
-      });
-      await tick();
-
-      instance.setDate("not-a-date", true);
-
-      expect(handlerA).not.toHaveBeenCalled();
-      expect(handlerB).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -2122,7 +1848,7 @@ describe("DatePicker", () => {
       expect(fp.config.static).toBe(false);
 
       // Trigger the `initCalendar` reactive statement to re-run (e.g. a
-      // minDate update) without touching `portalMenu` or `flatpickrProps`.
+      // minDate update) without touching `portalMenu`.
       await rerender({
         datePickerType: "single",
         portalMenu: true,
@@ -2269,7 +1995,7 @@ describe("DatePicker", () => {
         render(DatePicker, {
           datePickerType: "multiple",
           value: "03/10/2024",
-          flatpickrProps: { disable: ["03/07/2024"] },
+          disabledDates: ["03/07/2024"],
         });
 
         const calendar = await openCalendar();

@@ -11,12 +11,9 @@
   <DatePicker
     datePickerType="single"
     value="03/15/2024"
-    flatpickrProps={{
-      static: true,
-      animate: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    animate
+    minDate="03/01/2024"
+    maxDate="03/31/2024"
     on:change
     on:close={(e) =>
       (singleCloseTriggers = [
@@ -42,12 +39,9 @@
 <div data-testid="date-picker-range">
   <DatePicker
     datePickerType="range"
-    flatpickrProps={{
-      static: true,
-      animate: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    animate
+    minDate="03/01/2024"
+    maxDate="03/31/2024"
     on:change
     on:close={(e) =>
       (rangeCloseTriggers = [
@@ -75,11 +69,8 @@
   <DatePicker
     datePickerType="range"
     maxRangeDays={3}
-    flatpickrProps={{
-      static: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    minDate="03/01/2024"
+    maxDate="03/31/2024"
   >
     <DatePickerInput
       data-testid="date-picker-range-limited-start"
@@ -91,10 +82,7 @@
 </div>
 
 <div data-testid="date-picker-calendar-only">
-  <DatePicker
-    datePickerType="single"
-    flatpickrProps={{ static: true, allowInput: false }}
-  >
+  <DatePicker datePickerType="single" allowInput={false}>
     <DatePickerInput
       data-testid="date-picker-calendar-only-input"
       labelText="Ship date"
@@ -108,7 +96,6 @@
     datePickerType="month"
     dateFormat="F Y"
     value="March 2024"
-    flatpickrProps={{ static: true }}
     on:change
   >
     <DatePickerInput
@@ -123,7 +110,6 @@
   <DatePicker
     datePickerType="multiple"
     value="09/09/2026, 09/10/2026, 09/11/2026, 09/12/2026, 09/13/2026"
-    flatpickrProps={{ static: true }}
     on:change
   >
     <DatePickerInput
@@ -139,11 +125,8 @@
     fluid
     datePickerType="single"
     value="03/15/2024"
-    flatpickrProps={{
-      static: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    minDate="03/01/2024"
+    maxDate="03/31/2024"
   >
     <DatePickerInput
       data-testid="date-picker-fluid-readonly-single-input"
@@ -158,11 +141,8 @@
   <DatePicker
     fluid
     datePickerType="range"
-    flatpickrProps={{
-      static: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    minDate="03/01/2024"
+    maxDate="03/31/2024"
   >
     <DatePickerInput
       data-testid="date-picker-fluid-readonly-range-start"
@@ -183,11 +163,8 @@
   <DatePicker
     fluid
     datePickerType="range"
-    flatpickrProps={{
-      static: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    minDate="03/01/2024"
+    maxDate="03/31/2024"
   >
     <DatePickerInput
       data-testid="date-picker-fluid-invalid-range-start"

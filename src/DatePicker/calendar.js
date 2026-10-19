@@ -145,75 +145,10 @@ function createListenerGroup() {
 }
 
 /**
- * flatpickr instance members the engine does not implement. A plugin that
- * reads one gets a warning instead of failing silently. Time picker and
- * mobile input members are left out: flatpickr leaves them unset too
- * unless those (unsupported) features are on.
- */
-const UNIMPLEMENTED_MEMBERS = new Set([
-  "monthsDropdownContainer",
-  "currentMonthElement",
-  "revFormat",
-  "formats",
-  "tokenRegex",
-  "minRangeDate",
-  "maxRangeDate",
-  "_selectedDateObj",
-  "minDateHasTime",
-  "maxDateHasTime",
-  "_setHoursFromDate",
-  "_debouncedChange",
-  "_handlers",
-  "__hideNextMonthArrow",
-  "__hidePrevMonthArrow",
-]);
-
-/** @type {Set<string>} */
-const warned = new Set();
-
-/** flatpickr plugins whose job the calendar does itself, by `datePickerType`. */
-const BUILT_IN_PLUGINS = /** @type {Record<string, string>} */ ({
-  range: "range",
-  monthSelect: "month",
-  weekSelect: "week",
-});
-
-/** @param {string} message */
-function warnOnce(message) {
-  if (warned.has(message)) return;
-  warned.add(message);
-  console.warn(`[carbon-components-svelte] DatePicker: ${message}`);
-}
-
-/**
- * The instance as a plugin sees it: reading a flatpickr member the engine
- * does not implement warns once per member.
- *
- * @param {any} self
- */
-function pluginView(self) {
-  return new Proxy(self, {
-    get(target, key, receiver) {
-      if (
-        typeof key === "string" &&
-        UNIMPLEMENTED_MEMBERS.has(key) &&
-        !(key in target)
-      ) {
-        warnOnce(
-          `a calendar plugin read \`${key}\`, which the built-in calendar does not implement.`,
-        );
-      }
-      return Reflect.get(target, key, receiver);
-    },
-  });
-}
-
-/**
  * Compact calendar engine that drives Carbon's date picker. Produces the
  * same DOM, hooks, and instance surface that flatpickr did (class names and
  * all), so Carbon's styles and `bind:calendar` consumers keep working, but
- * with the single/multiple/range/week/month/year modes built in rather than
- * layered on as plugins.
+ * with the single/multiple/range/week/month/year modes built in.
  *
  * @param {HTMLInputElement} element
  * @param {Record<string, any>} [userConfig]
@@ -248,7 +183,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     locale: "en",
     mode: "single",
     nextArrow: NEXT_ARROW,
-    plugins: [],
     position: "auto",
     prevArrow: PREV_ARROW,
     shorthandCurrentMonth: false,
@@ -261,16 +195,6 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.isOpen = false;
   self.selectedDates = [];
   self.now = new Date();
-  self.isMobile = false;
-  // flatpickr plugins push their name and their controls into these.
-  self.loadedPlugins = [];
-  self.pluginElements = [];
-  self.utils = {
-    getDaysInMonth: (month = self.currentMonth, year = self.currentYear) =>
-      daysInMonth(year, month),
-  };
-  self.pad = (/** @type {string | number} */ value) => `0${value}`.slice(-2);
-  self._createElement = createElement;
 
   // --- Config -----------------------------------------------------------
 
@@ -398,7 +322,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     // Rules and bounds are parsed with `dateFormat`, so they go last.
     const parsedLast = ["minDate", "maxDate", "enable", "disable"];
     for (const [key, value] of Object.entries(options)) {
-      if (key !== "plugins" && !parsedLast.includes(key)) config[key] = value;
+      if (!parsedLast.includes(key)) config[key] = value;
     }
     for (const key of parsedLast) {
       if (options[key] !== undefined) config[key] = options[key];
@@ -450,24 +374,10 @@ export function createCalendarEngine(element, userConfig = {}) {
   if (config.showMonths < 1 || isGridMode) config.showMonths = 1;
   config.showMonths = Math.floor(config.showMonths);
 
-  // Every hook is an array, even unused, as in flatpickr: plugins push onto
-  // them (monthSelect adds an `onClose`).
   for (const hook of HOOKS) {
     config[hook] = arrayify(config[hook] || []).map(
       (/** @type {Function} */ fn) => fn.bind(self),
     );
-  }
-  for (const plugin of userConfig.plugins ?? []) {
-    const pluginConfig = plugin(pluginView(self)) || {};
-    for (const key of Object.keys(pluginConfig)) {
-      if (HOOKS.includes(key)) {
-        config[key] = arrayify(pluginConfig[key])
-          .map((/** @type {Function} */ fn) => fn.bind(self))
-          .concat(config[key] ?? []);
-      } else if (userConfig[key] === undefined) {
-        config[key] = pluginConfig[key];
-      }
-    }
   }
   if (!userConfig.altInputClass) {
     config.altInputClass = `${element.className} ${config.altInputClass}`;
@@ -1246,8 +1156,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   /**
    * Whether the header and grid exist yet. With `lazy`, a popup calendar
    * builds them on first open, so closed pickers cost one empty element
-   * each. Inline calendars, and any with plugins (which expect the full
-   * markup on ready), still build them up front.
+   * each. Inline calendars still build them up front.
    */
   let filled = false;
 
@@ -1332,7 +1241,7 @@ export function createCalendarEngine(element, userConfig = {}) {
         `flatpickr-${isQuarter ? "month" : pickerMode}Select-theme-light`,
       );
     }
-    if (!config.lazy || config.inline || userConfig.plugins?.length) {
+    if (!config.lazy || config.inline) {
       fillContents();
     }
 
@@ -2365,21 +2274,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
   }
   self.destroy = destroy;
-  self.updateValue = updateValue;
-  self._positionCalendar = positionCalendar;
-  /**
-   * flatpickr's listener helper for plugins: removed on destroy.
-   *
-   * @param {EventTarget | EventTarget[]} target
-   * @param {string | string[]} type
-   * @param {EventListener} handler
-   * @param {AddEventListenerOptions} [options]
-   */
-  self._bind = (target, type, handler, options) => {
-    for (const t of arrayify(target)) {
-      for (const ty of arrayify(type)) listeners.add(t, ty, handler, options);
-    }
-  };
 
   // --- Init -------------------------------------------------------------
 
@@ -2397,12 +2291,5 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.input._flatpickr = self;
   if (secondInput) /** @type {any} */ (secondInput)._flatpickr = self;
   triggerEvent("onReady");
-  for (const name of self.loadedPlugins) {
-    if (BUILT_IN_PLUGINS[name]) {
-      warnOnce(
-        `flatpickr's ${name} plugin is built in. Use datePickerType="${BUILT_IN_PLUGINS[name]}" instead.`,
-      );
-    }
-  }
   return self;
 }

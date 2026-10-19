@@ -68,7 +68,7 @@ describe("DatePicker inline", () => {
         const props: ComponentProps<typeof DatePicker> = {
           datePickerType: "single",
           value: "03/15/2024",
-          flatpickrProps: { inline: true },
+          inline: true,
         };
         const { rerender } = render(DatePicker, { ...props, [state]: true });
         const calendar = await screen.findByLabelText("calendar-container");
@@ -95,7 +95,7 @@ describe("DatePicker inline", () => {
   it("leaves Carbon's markup intact when an inline calendar is rebuilt", async () => {
     const props: ComponentProps<typeof DatePicker> = {
       helperText: "Pick a weekday",
-      flatpickrProps: { inline: true },
+      inline: true,
     };
     const { container, rerender } = render(DatePicker, {
       ...props,
@@ -116,7 +116,7 @@ describe("DatePicker inline", () => {
   it("applies Carbon classes to an inline calendar that never opens", async () => {
     render(DatePicker, {
       datePickerType: "single",
-      flatpickrProps: { inline: true },
+      inline: true,
     });
 
     const calendar = await screen.findByLabelText("calendar-container");

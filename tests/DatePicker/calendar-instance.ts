@@ -23,19 +23,24 @@ export function getCalendarInstance(input: Element): Instance {
 export async function renderCalendar(
   props: Omit<ComponentProps<DatePickerCalendar>, "oncalendar"> = {},
 ) {
-  let captured: Instance | null | undefined = null;
+  let ready = false;
   const result = render(DatePickerCalendar, {
     props: {
       ...props,
-      // `bind:calendar` is the documented API; tests reach the engine.
-      oncalendar: (cal: { engine: Instance } | null | undefined) => {
-        captured = cal?.engine;
+      oncalendar: (cal: unknown) => {
+        ready = Boolean(cal);
       },
     },
   });
+  // `bind:calendar` is the documented API; tests reach the engine through
+  // the input it is attached to.
   const instance = await vi.waitFor(() => {
-    assert(captured, "calendar not set");
-    return captured;
+    assert(ready, "calendar not set");
+    const input = [...result.container.querySelectorAll("input")].find(
+      (element) => "_flatpickr" in element && element._flatpickr,
+    );
+    assert(input, "no input with a calendar");
+    return getCalendarInstance(input);
   });
   return { ...result, instance };
 }

@@ -153,13 +153,6 @@ describe("createCalendarEngine", () => {
     expect(input.parentElement).toBe(host);
   });
 
-  it("runs plugins and merges their hooks", () => {
-    const onReady = vi.fn();
-    create({ plugins: [() => ({ onReady })] });
-
-    expect(onReady).toHaveBeenCalledTimes(1);
-  });
-
   it("takes down a calendar whose build throws", () => {
     const host = document.createElement("div");
     const input = document.createElement("input");
@@ -619,36 +612,5 @@ describe("flatpickr compatibility", () => {
       "So",
     ]);
     expect(day(instance, 15)).toHaveAttribute("aria-label", "März 15, 2024");
-  });
-
-  it("runs a plugin written against flatpickr's instance", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const onButtonClick = vi.fn();
-    // The shape of flatpickr's bundled plugins (confirmDate, labelPlugin).
-    const plugin = (fp: CalendarInstance) => {
-      fp.loadedPlugins.push("example");
-      return {
-        onReady() {
-          const button = fp._createElement("button", "example-button", "OK");
-          fp._bind(button, "click", onButtonClick);
-          fp.pluginElements.push(button);
-          fp.calendarContainer.appendChild(button);
-          void (fp as unknown as { _setHoursFromDate: unknown })
-            ._setHoursFromDate;
-        },
-      };
-    };
-    const { instance } = create({ plugins: [plugin] });
-
-    instance.calendarContainer
-      .querySelector<HTMLButtonElement>(".example-button")
-      ?.click();
-
-    expect(instance.loadedPlugins).toEqual(["example"]);
-    expect(onButtonClick).toHaveBeenCalledTimes(1);
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("`_setHoursFromDate`"),
-    );
-    warn.mockRestore();
   });
 });

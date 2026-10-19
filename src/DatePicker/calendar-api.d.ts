@@ -13,11 +13,6 @@ export interface DatePickerCalendar {
   readonly view: Date;
   /** Copies, in selection order (range: start, then end). */
   readonly selectedDates: ReadonlyArray<Date>;
-  /**
-   * The raw calendar engine.
-   * @deprecated Use the methods above; `engine` will be removed.
-   */
-  readonly engine: CalendarInstance;
 }
 
 export function createCalendarApi(engine: CalendarInstance): DatePickerCalendar;
