@@ -39,10 +39,12 @@ export type FieldCase = {
      */
     errorAttribute?: "aria-errormessage" | "aria-describedby";
     /**
-     * Element that `aria-describedby` points at the helper and warning text.
-     * Defaults to the controls.
+     * Elements whose `aria-describedby` points at the helper and warning
+     * text, and at the invalid message when `errorAttribute` is
+     * `aria-describedby`. Defaults to the controls. `aria-errormessage`
+     * always sits on the controls, next to `aria-invalid`.
      */
-    described?: () => HTMLElement;
+    described?: () => HTMLElement | HTMLElement[];
   };
   /** Takes part in the form reset contract. */
   reset?: {

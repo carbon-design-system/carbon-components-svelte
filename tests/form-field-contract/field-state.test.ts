@@ -18,7 +18,11 @@ const tokens = (el: HTMLElement, attr: string) =>
 describe.each(stateCases)("%s field state", (_, c) => {
   const errorAttribute = c.state?.errorAttribute ?? "aria-errormessage";
   const described = () =>
-    c.state?.described ? [c.state.described()] : controls(c);
+    c.state?.described ? [c.state.described()].flat() : controls(c);
+  // ARIA only exposes `aria-errormessage` next to `aria-invalid`, so it stays
+  // on the controls; a described-by pointer goes where the descriptions go.
+  const errorTargets = () =>
+    errorAttribute === "aria-describedby" ? described() : controls(c);
 
   it("marks the control invalid and points it at an announced message", () => {
     renderField(c, { invalid: true, invalidText: "Bad" });
@@ -28,10 +32,12 @@ describe.each(stateCases)("%s field state", (_, c) => {
     expect(message).toHaveAttribute("role", "alert");
     for (const control of controls(c)) {
       expect(control).toHaveAttribute("aria-invalid", "true");
-      expect(tokens(control, errorAttribute)).toContain(message.id);
       if (errorAttribute === "aria-errormessage") {
         expect(tokens(control, "aria-describedby")).not.toContain(message.id);
       }
+    }
+    for (const element of errorTargets()) {
+      expect(tokens(element, errorAttribute)).toContain(message.id);
     }
   });
 
@@ -108,6 +114,9 @@ describe.each(stateCases)("%s field state", (_, c) => {
     for (const control of controls(c)) {
       expect(control).not.toHaveAttribute("aria-invalid");
       expect(control).not.toHaveAttribute(errorAttribute);
+    }
+    for (const element of errorTargets()) {
+      expect(element).not.toHaveAttribute(errorAttribute);
     }
   });
 

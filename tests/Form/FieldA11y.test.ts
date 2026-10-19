@@ -39,7 +39,7 @@ type Field = (typeof FIELDS)[number];
 const GROUPS = new Set<Field>(["CheckboxGroup", "RadioButtonGroup"]);
 
 /** Fields without an `invalid` prop. */
-const NO_INVALID = new Set<Field>(["CopyInput", "Toggle"]);
+const NO_INVALID = new Set<Field>(["CopyInput"]);
 
 /**
  * Known gaps, keyed `Field check`, with what fixes them. A gap that

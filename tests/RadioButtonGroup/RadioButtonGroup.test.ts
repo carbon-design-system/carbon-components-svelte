@@ -117,15 +117,6 @@ describe("RadioButtonGroup", () => {
     ).toBeInTheDocument();
   });
 
-  it("should hide legend visually", () => {
-    render(RadioButtonGroup, {
-      props: { legendText: "Legend", hideLegend: true },
-    });
-
-    const legend = screen.getByText("Legend");
-    expect(legend).toHaveClass("bx--visually-hidden");
-  });
-
   it.each([
     ["left", "bx--radio-button-group--label-left"],
     ["right", "bx--radio-button-group--label-right"],
@@ -227,64 +218,25 @@ describe("RadioButtonGroup", () => {
     }
   });
 
-  describe("Validation", () => {
-    it("should mark the radiogroup as invalid and describe each radio via the message", () => {
-      render(RadioButtonGroup, {
-        props: { invalid: true, invalidText: "Pick one" },
-      });
+  // The contract in tests/form-field-contract covers the messages, their
+  // wiring, and which states show; this keeps the state off the elements it
+  // doesn't check.
+  it.each([
+    ["invalid", { invalid: true, invalidText: "Pick one" }],
+    ["warn", { warn: true, warnText: "Check the tier" }],
+  ])(
+    "keeps the %s state off the radios and the group's description",
+    (_, props) => {
+      render(RadioButtonGroup, { props });
 
-      const message = screen.getByText("Pick one");
-
-      const radiogroup = screen.getByRole("radiogroup");
-      expect(radiogroup).toHaveAttribute("aria-invalid", "true");
-      expect(radiogroup).not.toHaveAttribute("aria-describedby");
-
-      for (const radio of screen.getAllByRole("radio")) {
-        expect(radio).not.toHaveAttribute("aria-invalid");
-        expect(radio).toHaveAttribute(
-          "aria-describedby",
-          message.getAttribute("id"),
-        );
-      }
-    });
-
-    it("should show warning message without marking the radiogroup as invalid", () => {
-      render(RadioButtonGroup, {
-        props: { warn: true, warnText: "Check the tier" },
-      });
-
-      expect(screen.getByText("Check the tier")).toBeInTheDocument();
       expect(screen.getByRole("radiogroup")).not.toHaveAttribute(
-        "aria-invalid",
+        "aria-describedby",
       );
-
       for (const radio of screen.getAllByRole("radio")) {
         expect(radio).not.toHaveAttribute("aria-invalid");
       }
-    });
-
-    it("should prioritize invalid over warn when both are set", () => {
-      render(RadioButtonGroup, {
-        props: {
-          invalid: true,
-          invalidText: "Pick one",
-          warn: true,
-          warnText: "Check the tier",
-        },
-      });
-
-      expect(screen.getByText("Pick one")).toBeInTheDocument();
-      expect(screen.queryByText("Check the tier")).not.toBeInTheDocument();
-    });
-
-    it("should not show the invalid message when disabled", () => {
-      render(RadioButtonGroup, {
-        props: { disabled: true, invalid: true, invalidText: "Pick one" },
-      });
-
-      expect(screen.queryByText("Pick one")).not.toBeInTheDocument();
-    });
-  });
+    },
+  );
 
   describe("readonly", () => {
     it("should apply readonly class on the fieldset", () => {

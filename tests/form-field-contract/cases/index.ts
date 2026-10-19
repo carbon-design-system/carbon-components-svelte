@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/svelte";
+import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
@@ -14,14 +15,18 @@ import FluidSelectSkeleton from "carbon-components-svelte/Select/FluidSelectSkel
 import Select from "carbon-components-svelte/Select/Select.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
+import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import FluidTextAreaSkeleton from "carbon-components-svelte/TextArea/FluidTextAreaSkeleton.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import FluidTextInputSkeleton from "carbon-components-svelte/TextInput/FluidTextInputSkeleton.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
+import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { Exemptions, FieldCase } from "../contract";
+import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
+import RadioButtonGroupField from "../fixtures/RadioButtonGroupField.test.svelte";
 
 const textInputSkeleton = {
   className: "bx--text-input--fluid__skeleton",
@@ -281,21 +286,52 @@ export const cases: FieldCase[] = [
     selectOnFocus: { value: "01/01/2023" },
     reset: { initial: "01/01/2023", typed: "x", events: ["input", "change"] },
   },
+  {
+    name: "TagInput",
+    component: TagInput,
+    control: () => screen.getByRole("textbox"),
+    state: {},
+  },
+  {
+    name: "Toggle",
+    component: Toggle,
+    control: () => screen.getByRole("switch"),
+    state: { errorAttribute: "aria-describedby" },
+  },
+  {
+    name: "Checkbox",
+    component: Checkbox,
+    control: () => screen.getByRole("checkbox"),
+    state: { errorAttribute: "aria-describedby" },
+  },
+  {
+    name: "CheckboxGroup",
+    component: CheckboxGroupField,
+    // Each checkbox is marked invalid; the fieldset carries the messages.
+    control: () => screen.getAllByRole("checkbox"),
+    state: {
+      errorAttribute: "aria-describedby",
+      described: () => screen.getByRole("group"),
+    },
+  },
+  {
+    name: "RadioButtonGroup",
+    component: RadioButtonGroupField,
+    // The radiogroup is marked invalid; each radio carries the messages.
+    control: () => screen.getByRole("radiogroup"),
+    state: {
+      errorAttribute: "aria-describedby",
+      described: () => screen.getAllByRole("radio"),
+    },
+  },
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
-const NOT_AUDITED =
-  "covered by its own tests; not audited against the contract yet";
 
 export const exempt: Exemptions = {
   fluid: {},
   state: {
     ListBox: "a wrapper with no control of its own",
-    Checkbox: NOT_AUDITED,
-    CheckboxGroup: NOT_AUDITED,
-    RadioButtonGroup: NOT_AUDITED,
-    TagInput: NOT_AUDITED,
-    Toggle: NOT_AUDITED,
   },
   reset: {
     ListBoxRequiredInput:

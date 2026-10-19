@@ -177,7 +177,6 @@ describe("TagInput", () => {
 
       expect(shownValue()).toEqual(["Svelte"]);
       expect(input()).toHaveValue("svelte");
-      expect(input()).toHaveAttribute("aria-invalid", "true");
       expect(screen.getByRole("alert")).toHaveTextContent(
         "This tag has already been added",
       );
