@@ -892,6 +892,18 @@ describe("DataTable", () => {
     expect(selectAll).not.toBeChecked();
   });
 
+  it("leaves the select all state to the native checkbox", async () => {
+    render(DataTable, { props: { batchSelection: true, headers, rows: [] } });
+
+    // With no rows to select, the click checks the box but never changes
+    // the `checked` prop, so an `aria-checked` copy of it would go stale.
+    const selectAll = getSelectAll();
+    await user.click(selectAll);
+
+    expect(selectAll).toBeChecked();
+    expect(selectAll).not.toHaveAttribute("aria-checked");
+  });
+
   it("handles radio selection", async () => {
     const { container } = render(DataTable, {
       props: {
