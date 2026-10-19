@@ -160,3 +160,19 @@ test.describe("DatePicker docs examples", () => {
     });
   }
 });
+
+test("allowInput={false} keeps the field's look, not read-only's", async ({
+  page,
+}) => {
+  await page.goto("/date-picker-examples.html?example=DatePickerAllowInput");
+  await page.waitForSelector("body[data-ready]");
+  const input = page.locator("#app input").first();
+
+  await expect(input).toHaveAttribute("readonly");
+  const style = await input.evaluate((el) => {
+    const { backgroundColor, cursor } = getComputedStyle(el);
+    return { backgroundColor, cursor };
+  });
+  expect(style.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+  expect(style.cursor).toBe("pointer");
+});
