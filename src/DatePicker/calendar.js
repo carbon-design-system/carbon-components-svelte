@@ -2194,6 +2194,13 @@ export function createCalendarEngine(element, userConfig = {}) {
     };
     on(self._input, "keydown", onKeyDown);
     on(secondInput, "keydown", onKeyDown);
+    if (!filled) {
+      // Pre-warm: build the calendar as the pointer reaches an input, so a
+      // click opens one that already exists. Keyboard focus opens it, and
+      // `open()` builds it first anyway.
+      on(self._input, "pointerenter", fillContents);
+      on(secondInput, "pointerenter", fillContents);
+    }
     on(self.calendarContainer, "keydown", onKeyDown);
     if (config.allowInput) on(self._input, "blur", onBlur);
     bindOpenTriggers();
