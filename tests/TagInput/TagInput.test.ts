@@ -153,6 +153,16 @@ describe("TagInput", () => {
       expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     });
 
+    it("rejects a typed piece once, not again on every later keystroke", async () => {
+      const onInvalid = vi.fn();
+      render(TagInput, { value: ["a"], onInvalid });
+
+      await user.type(input(), "a,bcd");
+
+      expect(onInvalid).toHaveBeenCalledOnce();
+      expect(input()).toHaveValue("abcd");
+    });
+
     it("allows duplicates with allowDuplicates", async () => {
       render(TagInput, { value: ["a"], config: { allowDuplicates: true } });
 

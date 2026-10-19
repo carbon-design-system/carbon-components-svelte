@@ -428,10 +428,11 @@
     const parts = split(draft);
     if (parts.length < 2) return;
     // Everything before the last delimiter is complete; the rest is still
-    // being typed.
+    // being typed. Rejected text goes back without the delimiter after it,
+    // so the next keystroke doesn't split and reject it again.
     const rest = parts.pop() ?? "";
     const rejected = addTags(parts, "delimiter");
-    setDraft([...rejected, rest].join(joiner));
+    setDraft(rejected.join(joiner) + rest);
   }
 
   /** @param {ClipboardEvent} event */
