@@ -482,13 +482,21 @@ describe("RadioTile", () => {
     expect(input).not.toBeChecked();
   });
 
-  it("should handle mouse events", async () => {
-    render(RadioTile);
+  it("should forward mouse events", async () => {
+    const onMouseover = vi.fn();
+    const onMouseenter = vi.fn();
+    const onMouseleave = vi.fn();
+    render(RadioTile, { props: { onMouseover, onMouseenter, onMouseleave } });
 
     const tile = screen.getByText("Test content").closest(".bx--tile");
     assert(tile);
     await user.hover(tile);
+    expect(onMouseover).toHaveBeenCalled();
+    expect(onMouseenter).toHaveBeenCalledTimes(1);
+    expect(onMouseleave).not.toHaveBeenCalled();
+
     await user.unhover(tile);
+    expect(onMouseleave).toHaveBeenCalledTimes(1);
   });
 
   describe("aria attributes", () => {

@@ -13,6 +13,9 @@
     "Tile checkmark";
   export let id: ComponentProps<RadioTile>["id"] = "ccs-test";
   export let name: ComponentProps<RadioTile>["name"] = "test-group";
+  export let onMouseover: (e: MouseEvent) => void = () => {};
+  export let onMouseenter: (e: MouseEvent) => void = () => {};
+  export let onMouseleave: (e: MouseEvent) => void = () => {};
 </script>
 
 <TileGroup
@@ -35,9 +38,9 @@
     }}
     on:keydown
     on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
+    on:mouseover={onMouseover}
+    on:mouseenter={onMouseenter}
+    on:mouseleave={onMouseleave}
   >
     Test content
   </RadioTile>

@@ -20,6 +20,9 @@
   export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
     () => {};
   export let onKeydown: (e: KeyboardEvent) => void = () => {};
+  export let onMouseover: (e: MouseEvent) => void = () => {};
+  export let onMouseenter: (e: MouseEvent) => void = () => {};
+  export let onMouseleave: (e: MouseEvent) => void = () => {};
 </script>
 
 <ExpandableTile
@@ -38,9 +41,9 @@
   on:keydown={onKeydown}
   on:click
   on:keypress
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
+  on:mouseover={onMouseover}
+  on:mouseenter={onMouseenter}
+  on:mouseleave={onMouseleave}
 >
   <div slot="above" data-testid="above-content">
     Above the fold content here

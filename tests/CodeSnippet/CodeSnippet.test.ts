@@ -740,11 +740,6 @@ yarn -v`,
     ).toBeInTheDocument();
   });
 
-  it("should hide show more button when hideShowMore is true", () => {
-    render(CodeSnippetWithHideShowMore);
-    expect(screen.queryByText("Show more")).not.toBeInTheDocument();
-  });
-
   it("defaults to a 15-row collapsed max-height for multi snippets", () => {
     const { container } = render(CodeSnippet, {
       props: {
@@ -787,8 +782,10 @@ yarn -v`,
     });
   });
 
-  it("scrolls overflowing content when showMoreLess is false", () => {
+  it("scrolls overflowing content when showMoreLess is false", async () => {
+    mockSnippetOverflowHeight();
     const { container } = render(CodeSnippetWithHideShowMore);
+    await waitForSnippetMeasurement();
     const snippet = container.querySelector(".bx--snippet-container");
     expectInlineStyle(snippet, {
       "max-height": "240px",
@@ -1096,7 +1093,7 @@ yarn -v`,
       props: {
         type: "single",
         code: "test",
-        copyLabel: "Copy code",
+        copyLabel: "Duplicate snippet",
       },
     });
     const snippet = container.querySelector(".bx--snippet-container");

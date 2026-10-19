@@ -51,9 +51,8 @@ describe("SelectableTile", () => {
     render(SelectableTileTest);
     const tile = screen.getByTestId("selectable-tile");
 
-    if (tile.tagName === "LABEL") {
-      expect(tile).not.toHaveAttribute("role", "checkbox");
-    }
+    expect(tile.tagName).toBe("LABEL");
+    expect(tile).not.toHaveAttribute("role", "checkbox");
   });
 
   it("does not render a title attribute by default", () => {

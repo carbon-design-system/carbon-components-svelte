@@ -237,10 +237,10 @@ describe("TileGroup", () => {
   });
 
   it("should render without legend when not provided", () => {
-    render(TileGroup);
+    const { container } = render(TileGroup);
 
-    const legend = screen.queryByRole("legend");
-    expect(legend).not.toBeInTheDocument();
+    // `queryByRole("legend")` finds nothing even when a legend renders.
+    expect(container.querySelector("legend")).not.toBeInTheDocument();
   });
 
   describe("Generics", () => {

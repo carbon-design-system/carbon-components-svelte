@@ -272,13 +272,18 @@ describe("Pagination", () => {
     expect(screen.getByText("Show:")).toBeInTheDocument();
   });
 
-  it("should handle disabled page input", () => {
-    render(Pagination, {
-      props: { pageInputDisabled: true },
-    });
+  it("should handle disabled page input", async () => {
+    const { rerender } = render(Pagination);
+
+    // The accessible name is "Page number, of 1 page", so match by prefix.
+    expect(
+      screen.getByRole("combobox", { name: /Page number/ }),
+    ).toBeInTheDocument();
+
+    await rerender({ pageInputDisabled: true });
 
     expect(
-      screen.queryByRole("combobox", { name: "Page number" }),
+      screen.queryByRole("combobox", { name: /Page number/ }),
     ).not.toBeInTheDocument();
   });
 

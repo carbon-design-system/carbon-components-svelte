@@ -242,10 +242,10 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should render without legend when not provided", () => {
-    render(SelectableTileGroup);
+    const { container } = render(SelectableTileGroup);
 
-    const legend = screen.queryByRole("legend");
-    expect(legend).not.toBeInTheDocument();
+    // `queryByRole("legend")` finds nothing even when a legend renders.
+    expect(container.querySelector("legend")).not.toBeInTheDocument();
   });
 
   it("should handle empty selected array", () => {
