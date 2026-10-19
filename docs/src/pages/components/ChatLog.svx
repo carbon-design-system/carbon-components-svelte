@@ -4,8 +4,9 @@ description: Chat logs show a conversation, with messages aligned by author, gro
 ---
 
 <script>
-  import { ChatDivider, ChatLog, ChatMessage, ClickableTile, CodeSnippet, Link, linkSegments, Stack, Text, UserAvatar } from "carbon-components-svelte";
+  import { ChatDivider, ChatLog, ChatMessage, ClickableTile, CodeSnippet, FileDownloadItem, FileUploaderItem, Link, linkSegments, Stack, Text, UserAvatar } from "carbon-components-svelte";
   import Bot from "carbon-icons-svelte/lib/Bot.svelte";
+  import DocumentPdf from "carbon-icons-svelte/lib/DocumentPdf.svelte";
 
   const tracking = "Track it at https://shipping.example.com/track/1Z999AA1. The link javascript://example stays text.";
 </script>
@@ -103,6 +104,26 @@ Put cards, files, images and code blocks in the `attachments` slot. They sit und
           <Text type="body-compact-01" color="secondary">List, filter and page through invoices.</Text>
         </Stack>
       </ClickableTile>
+    </svelte:fragment>
+  </ChatMessage>
+</ChatLog>
+
+### Files
+
+Show a file someone sent with FileDownloadItem, a link that downloads it, and a file you are sending with FileUploaderItem, whose `status` follows the upload. Both are the same row, so a thread reads the same either way.
+
+<ChatLog labelText="Conversation with Jordan">
+  <ChatMessage author="Jordan">
+    <UserAvatar slot="avatar" size="sm" name="Jordan Kim" />
+    Notes from today's review.
+    <svelte:fragment slot="attachments">
+      <FileDownloadItem noMargin href="#files" icon={DocumentPdf} name="Q3-roadmap.pdf" fileSize="2.4 MB · PDF" />
+    </svelte:fragment>
+  </ChatMessage>
+  <ChatMessage from="me" author="You" status="sending">
+    Here are my comments.
+    <svelte:fragment slot="attachments">
+      <FileUploaderItem noMargin status="uploading" name="Q3-roadmap-comments.pdf" fileSize={310_000} />
     </svelte:fragment>
   </ChatMessage>
 </ChatLog>
