@@ -120,6 +120,18 @@ describe("TagInput", () => {
       expect(input()).toHaveValue("red, green");
     });
 
+    it("pastes at the caret, replacing the selection", async () => {
+      render(TagInput);
+
+      const field = input();
+      assert(field instanceof HTMLInputElement);
+      await fireEvent.input(field, { target: { value: "abc" } });
+      field.setSelectionRange(1, 2);
+      await paste("x,y");
+
+      expect(shownValue()).toEqual(["ax", "yc"]);
+    });
+
     it("adds the text on blur with addOnBlur", async () => {
       render(TagInput, { config: { addOnBlur: true } });
 
@@ -155,6 +167,35 @@ describe("TagInput", () => {
       await fireEvent.keyDown(input(), { key: "Enter", keyCode: 229 });
       expect(shownValue()).toEqual(["日本"]);
       expect(input()).toHaveValue("語");
+    });
+
+    describe.each(["readonly", "disabled"] as const)("while %s", (state) => {
+      const field = () => {
+        const el = input();
+        assert(el instanceof HTMLInputElement);
+        return el;
+      };
+      const typeDraft = (text: string) =>
+        fireEvent.input(field(), { target: { value: text } });
+
+      it.each([
+        ["Enter", () => fireEvent.keyDown(field(), { key: "Enter" })],
+        ["a delimiter", () => typeDraft("a,b")],
+        ["paste", () => paste("a,b")],
+        ["blur", () => fireEvent.blur(field())],
+      ])("adds nothing on %s", async (_, act) => {
+        const onAdd = vi.fn();
+        render(TagInput, {
+          config: { [state]: true, addOnBlur: true },
+          onAdd,
+        });
+
+        await typeDraft("draft");
+        await act();
+
+        expect(shownValue()).toEqual([]);
+        expect(onAdd).not.toHaveBeenCalled();
+      });
     });
 
     it("applies normalize before checking and adding", async () => {
@@ -262,6 +303,22 @@ describe("TagInput", () => {
       expect(input()).toHaveValue("red");
     });
 
+    it("adds the pieces that fit under max and keeps the rest from a paste", async () => {
+      const onInvalid = vi.fn();
+      render(TagInput, { config: { max: 2 }, onInvalid });
+
+      input().focus();
+      await paste("a,b,c");
+
+      expect(shownValue()).toEqual(["a", "b"]);
+      expect(input()).toHaveValue("c");
+      expect(onInvalid).toHaveBeenCalledExactlyOnceWith({
+        value: "c",
+        reason: "max",
+        message: undefined,
+      });
+    });
+
     it("keeps a tag out when add is canceled", async () => {
       render(TagInput, { cancelAdd: true });
 
@@ -354,6 +411,15 @@ describe("TagInput", () => {
       expect(input()).toHaveFocus();
     });
 
+    it("moves to the first tag with Home from an empty field", async () => {
+      render(TagInput, { value: ["a", "b"] });
+
+      input().focus();
+      await user.keyboard("{Home}");
+
+      expect(removeButton("a")).toHaveFocus();
+    });
+
     it("focuses the field after deleting the only tag", async () => {
       render(TagInput, { value: ["a"] });
 
@@ -374,6 +440,18 @@ describe("TagInput", () => {
       const data = new FormData(getForm());
       expect(data.getAll("topics")).toEqual(["a", "b"]);
       expect(input()).not.toHaveAttribute("name");
+    });
+
+    it.each([
+      ["submits the tags while readonly", { readonly: true }, ["a", "b"]],
+      ["leaves the tags out while disabled", { disabled: true }, []],
+    ])("%s", (_, state, expected) => {
+      render(TagInput, {
+        value: ["a", "b"],
+        config: { name: "topics", ...state },
+      });
+
+      expect(new FormData(getForm()).getAll("topics")).toEqual(expected);
     });
 
     it("restores the initial tags when the form resets", async () => {

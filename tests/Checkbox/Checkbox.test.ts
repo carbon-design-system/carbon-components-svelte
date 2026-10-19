@@ -9,6 +9,7 @@ import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
 import CheckboxValidation from "./Checkbox.validation.test.svelte";
+import CheckboxGroupComponent from "./CheckboxGroupComponent.test.svelte";
 import CheckboxGroupEvents from "./CheckboxGroupEvents.test.svelte";
 import CheckboxGroupReactive from "./CheckboxGroupReactive.test.svelte";
 import CheckboxReactiveBind from "./CheckboxReactiveBind.test.svelte";
@@ -45,6 +46,26 @@ describe("Checkbox", () => {
     await user.click(input);
     expect(onCheck).toHaveBeenCalledTimes(1);
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("forwards the native change, focus and blur events", async () => {
+    const onChange = vi.fn();
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(Checkbox, { onChange, onFocus, onBlur });
+
+    await user.click(screen.getByRole("checkbox"));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onFocus).toHaveBeenCalledTimes(1);
+
+    await user.tab();
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
+  it("sets the tabindex on the input", () => {
+    render(Checkbox, { tabindex: -1 });
+
+    expect(screen.getByRole("checkbox")).toHaveAttribute("tabindex", "-1");
   });
 
   it("emits exactly one check event per click", async () => {
@@ -84,9 +105,11 @@ describe("Checkbox", () => {
       indeterminate: true,
     });
     const label = container.querySelector(".bx--checkbox-label");
+    const input = screen.getByRole("checkbox") as HTMLInputElement;
+    expect(input.indeterminate).toBe(true);
     expect(label).toHaveAttribute("data-contained-checkbox-state", "mixed");
 
-    await user.click(screen.getByRole("checkbox"));
+    await user.click(input);
     expect(label).not.toHaveAttribute("data-contained-checkbox-state");
   });
 
@@ -160,6 +183,17 @@ describe("Checkbox", () => {
     await user.click(checkbox3);
     expect(callsFor("option-3")).toHaveLength(1);
     expect(callsFor("option-3")[0][2]).toBe(1);
+  });
+
+  it("emits a check event with the new state for a checkbox in a CheckboxGroup", async () => {
+    const onCheck = vi.fn();
+    render(CheckboxGroupComponent, { onCheck });
+
+    await user.click(screen.getByRole("checkbox", { name: "Option 2" }));
+    expect(onCheck.mock.calls).toEqual([["2", true]]);
+
+    await user.click(screen.getByRole("checkbox", { name: "Option 2" }));
+    expect(onCheck).toHaveBeenLastCalledWith("2", false);
   });
 
   it("emits check event when group is updated externally", async () => {
@@ -250,6 +284,14 @@ describe("Checkbox", () => {
 
     const input = screen.getByRole("checkbox");
     expect(input).toHaveAttribute("aria-readonly", "true");
+  });
+
+  it("marks the read-only wrapper for styling", () => {
+    render(CheckboxReadonly, { readonly: true });
+
+    expect(screen.getByTestId("checkbox")).toHaveClass(
+      "bx--checkbox-wrapper--readonly",
+    );
   });
 
   it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
@@ -388,6 +430,28 @@ describe("Checkbox", () => {
       await tick();
 
       expect(getLabel().getAttribute("title")).toBe("");
+    });
+
+    it("measures the label text, not the label, to decide on a title", async () => {
+      // Only the text span overflows; the label itself fits.
+      const isText = (el: HTMLElement) =>
+        el.classList.contains("bx--checkbox-label-text");
+      offsetWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+        .mockImplementation(function (this: HTMLElement) {
+          return isText(this) ? 10 : 100;
+        });
+      scrollWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+        .mockReturnValue(100);
+      render(CheckboxTitleTruncation, {
+        labelText: "A very long label that should be truncated",
+      });
+      await tick();
+
+      expect(getLabel().getAttribute("title")).toBe(
+        "A very long label that should be truncated",
+      );
     });
 
     it("keeps a provided title when truncated", async () => {

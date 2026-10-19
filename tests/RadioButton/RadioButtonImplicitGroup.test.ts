@@ -59,6 +59,38 @@ describe("RadioButton (Implicit Group via name)", () => {
     expect(component.checked1).toBe(false);
   });
 
+  it("keeps only the last radio checked when several start checked", async () => {
+    const { component } = render(RadioButtonImplicitGroup, {
+      props: { checked1: true, checked2: true },
+    });
+    await flushMacrotask();
+
+    expect(screen.getByRole("radio", { name: "Option 1" })).not.toBeChecked();
+    expect(screen.getByRole("radio", { name: "Option 2" })).toBeChecked();
+    expect(component.checked1).toBe(false);
+    expect(component.checked2).toBe(true);
+  });
+
+  it("leaves the old group when name changes after mount", async () => {
+    const { rerender } = render(RadioButtonImplicitGroup);
+
+    const option1 = screen.getByRole("radio", { name: "Option 1" });
+    const option2 = screen.getByRole("radio", { name: "Option 2" });
+    const option3 = screen.getByRole("radio", { name: "Option 3" });
+
+    await rerender({ name3: "elsewhere" });
+    await user.click(option1);
+    await user.click(option3);
+
+    expect(option1).toBeChecked();
+    expect(option3).toBeChecked();
+
+    await user.click(option2);
+
+    expect(option1).not.toBeChecked();
+    expect(option3).toBeChecked();
+  });
+
   it("should clean up registry on unmount", () => {
     const { unmount } = render(RadioButtonImplicitGroup);
 
