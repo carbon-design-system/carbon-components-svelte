@@ -59,6 +59,7 @@ describe("SelectableTileGroup", () => {
     for (const checkbox of checkboxes) {
       expect(checkbox).toBeDisabled();
       expect(checkbox).not.toHaveAttribute("disabled");
+      expect(checkbox).not.toHaveAttribute("tabindex");
     }
 
     for (const tile of container.querySelectorAll(".bx--tile")) {
@@ -76,6 +77,9 @@ describe("SelectableTileGroup", () => {
 
     for (const tile of container.querySelectorAll(".bx--tile")) {
       expect(tile).not.toHaveClass("bx--tile--disabled");
+    }
+    for (const checkbox of container.querySelectorAll(".bx--tile-input")) {
+      expect(checkbox).toHaveAttribute("tabindex", "0");
     }
   });
 
