@@ -65,6 +65,7 @@
 
 <div
   role="tabpanel"
+  tabindex="0"
   aria-labelledby={$$restProps["aria-label"] ? undefined : tabId}
   aria-hidden={!selected}
   {hidden}
