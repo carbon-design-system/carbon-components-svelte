@@ -6,7 +6,7 @@
  * Each entry is a valid `UserAvatar` `backgroundColor` value.
  * @type {ReadonlyArray<"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green">}
  */
-export const AVATAR_BACKGROUND_COLORS = [
+const AVATAR_BACKGROUND_COLORS = [
   "red",
   "magenta",
   "purple",
@@ -22,10 +22,10 @@ export const AVATAR_BACKGROUND_COLORS = [
  * @param {string} value
  * @returns {number}
  */
-export function hashString(value) {
+function hashString(value) {
   let hash = 5381;
   for (let i = 0; i < value.length; i++) {
-    // hash * 33 + charCode, kept within 32-bit range via `| 0`.
+    // djb2, xor variant: `^` also truncates the hash to a signed 32-bit integer.
     hash = (hash * 33) ^ value.charCodeAt(i);
   }
   // Coerce to an unsigned 32-bit integer.

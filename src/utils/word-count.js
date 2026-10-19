@@ -51,17 +51,12 @@ export function wordCount(value) {
 /**
  * Return the prefix of `value` that contains at most `max` words.
  * Keeps the whitespace that follows the last kept word.
- * Returns `value` unchanged if `max` is not a finite, non-negative number.
  *
  * @param {string} value
- * @param {number} max
+ * @param {number} max - Greater than 0.
  * @returns {string}
  */
-export function truncateWords(value, max) {
-  if (typeof max !== "number" || !Number.isFinite(max) || max < 0) {
-    return value;
-  }
-
+function truncateWords(value, max) {
   let count = 0;
   let result = "";
   for (const { segment, isWordLike } of segmentWords(value)) {

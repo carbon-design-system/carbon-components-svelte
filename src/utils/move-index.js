@@ -5,7 +5,7 @@ import { clampIndex } from "./clamp-index.js";
 /**
  * Move `index` by `step` and wrap once at either end. Returns -1 for an empty
  * range. For single-step moves (`step` ±1), stepping from -1 lands on the
- * last item (step +1) or first item (step -1).
+ * first item (step +1) or last item (step -1).
  *
  * @param {number} index - Current index (may be -1 when nothing is selected).
  * @param {number} step - Amount/direction to move (e.g. 1 or -1).

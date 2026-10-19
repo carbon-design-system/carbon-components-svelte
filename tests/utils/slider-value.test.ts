@@ -4,7 +4,6 @@ import {
   getTrackAxis,
   getValueText,
   valueFromPointer,
-  valueFromTrackPosition,
 } from "../../src/utils/slider-value.js";
 
 describe("getValueText", () => {
@@ -28,47 +27,6 @@ describe("formatRangeLabel", () => {
 
   it("falls back to the raw numeric value when label and formatValue are both unset", () => {
     expect(formatRangeLabel("", 0, undefined)).toBe(0);
-  });
-});
-
-describe("valueFromTrackPosition", () => {
-  it("snaps to step", () => {
-    expect(
-      valueFromTrackPosition({
-        clientX: 24,
-        left: 0,
-        width: 100,
-        min: 0,
-        max: 100,
-        step: 10,
-      }),
-    ).toBe(20);
-  });
-
-  it("clamps below min", () => {
-    expect(
-      valueFromTrackPosition({
-        clientX: -50,
-        left: 0,
-        width: 100,
-        min: 0,
-        max: 100,
-        step: 1,
-      }),
-    ).toBe(0);
-  });
-
-  it("clamps above max", () => {
-    expect(
-      valueFromTrackPosition({
-        clientX: 500,
-        left: 0,
-        width: 100,
-        min: 0,
-        max: 100,
-        step: 1,
-      }),
-    ).toBe(100);
   });
 });
 
@@ -128,6 +86,22 @@ describe("valueFromPointer", () => {
         offset: 8,
       }),
     ).toBe(25);
+  });
+
+  it.each([
+    [
+      "snaps to step from a nonzero min",
+      48,
+      { min: 10, max: 110, step: 10 },
+      30,
+    ],
+    ["clamps below min", -50, options, 0],
+    ["clamps above max", 500, options, 100],
+  ])("%s", (_, clientX, range, expected) => {
+    const event = { clientX, clientY: 0 } as MouseEvent;
+    expect(
+      valueFromPointer(event, rect, { ...range, orientation: "horizontal" }),
+    ).toBe(expected);
   });
 
   it("returns null for a touch event with no active touch point", () => {

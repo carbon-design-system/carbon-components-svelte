@@ -5,7 +5,7 @@
  * @param {File} file
  * @returns {string}
  */
-export function fileIdentityKey(file) {
+function fileIdentityKey(file) {
   return `${file.name}\0${file.size}\0${file.lastModified}`;
 }
 

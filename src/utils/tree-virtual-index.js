@@ -1,8 +1,7 @@
 // @ts-check
 /**
- * Virtualization helpers for TreeView: iterative visible flatten (oracle /
- * small trees), and a size-cache index that avoids materializing a full
- * visible row array.
+ * Virtualization helper for TreeView: a size-cache index that avoids
+ * materializing a full visible row array.
  *
  * Complexity (after build):
  * - build: O(n) time and one size entry per node
@@ -24,54 +23,6 @@ export { isExpandableNode } from "./is-expandable-node.js";
  */
 function hasLoadedChildren(node) {
   return Array.isArray(node.nodes) && node.nodes.length > 0;
-}
-
-/**
- * Flatten visible (expanded-only) nodes into annotated rows.
- * Iterative walk — one output array, no recursive `push(...spread)`.
- *
- * @template {{ id: string | number; nodes?: T[]; disabled?: boolean; hasChildren?: boolean }} T
- * @param {ReadonlyArray<T>} nodes
- * @param {Set<string | number>} expandedIdsSet
- * @returns {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>}
- */
-export function flattenVisibleRows(nodes, expandedIdsSet) {
-  /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
-  const out = [];
-  /** @type {Array<{ list: ReadonlyArray<T>; depth: number; parentId: string | number | null; index: number }>} */
-  const stack = [{ list: nodes, depth: 0, parentId: null, index: 0 }];
-
-  while (stack.length > 0) {
-    const frame = stack[stack.length - 1];
-    if (frame.index >= frame.list.length) {
-      stack.pop();
-      continue;
-    }
-
-    const i = frame.index++;
-    const node = frame.list[i];
-    const loaded = hasLoadedChildren(node);
-    const hasChildren = loaded || node.hasChildren === true;
-    out.push({
-      node,
-      depth: frame.depth,
-      parentId: frame.parentId,
-      posInSet: i + 1,
-      setSize: frame.list.length,
-      hasChildren,
-    });
-
-    if (loaded && expandedIdsSet.has(node.id)) {
-      stack.push({
-        list: node.nodes,
-        depth: frame.depth + 1,
-        parentId: node.id,
-        index: 0,
-      });
-    }
-  }
-
-  return out;
 }
 
 /**

@@ -30,7 +30,7 @@ export function toTimestamp(input) {
  * @param {number} diffMs - `target - now`; negative for the past.
  * @returns {{ value: number; unit: RelativeTimeUnit }}
  */
-export function getRelativeTimeParts(diffMs) {
+function getRelativeTimeParts(diffMs) {
   const abs = Math.abs(diffMs);
 
   if (abs < MINUTE)

@@ -4,7 +4,7 @@
  * Tabs size scale, in ascending order.
  * @type {ReadonlyArray<"sm" | "md" | "lg" | "xl">}
  */
-export const TABS_SIZE_SCALE = ["sm", "md", "lg", "xl"];
+const TABS_SIZE_SCALE = ["sm", "md", "lg", "xl"];
 
 /**
  * Clamp `size` to the largest size the current tab type supports. Line

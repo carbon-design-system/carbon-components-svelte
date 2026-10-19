@@ -1,6 +1,3 @@
-/** Marks a pinned layer and holds the offset it was last placed at. */
-export const PINNED_WINDOW_ATTRIBUTE: "data-virtual-window-pinned";
-
 export type VirtualWindowParams = {
   /** Where the first rendered row sits in the list. */
   offsetY: number;

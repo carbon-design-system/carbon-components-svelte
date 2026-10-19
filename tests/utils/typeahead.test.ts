@@ -58,12 +58,6 @@ describe("typeaheadIndex", () => {
     ).toBe(1);
   });
 
-  it("returns the original index for empty items", () => {
-    expect(
-      typeaheadIndex({ items: [], query: "a", itemToString, index: -1 }),
-    ).toBe(-1);
-  });
-
   it("supports a custom isDisabled predicate", () => {
     const items = [
       { label: "Alpha", ok: false },

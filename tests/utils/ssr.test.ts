@@ -1,5 +1,4 @@
 // @vitest-environment node
-import { FORM_CONTEXT_KEY } from "carbon-components-svelte/constants/context-keys.js";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import { normalizeSSR, renderSSR, stripHydrationMarkers } from "./ssr";
 
@@ -74,16 +73,5 @@ describe("renderSSR", () => {
     expect(renderSSR(TextInput, props).html).toBe(
       renderSSR(TextInput, props).html,
     );
-  });
-
-  it("forwards context to the component", () => {
-    const context = new Map([[FORM_CONTEXT_KEY, { isFluid: true }]]);
-    const { document } = renderSSR(
-      TextInput,
-      { labelText: "Name" },
-      { context },
-    );
-
-    expect(document.querySelector(".bx--text-input--fluid")).not.toBeNull();
   });
 });

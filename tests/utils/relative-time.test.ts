@@ -1,7 +1,6 @@
 // @vitest-environment node
 import {
   formatRelativeTime,
-  getRelativeTimeParts,
   getRelativeTimeRefreshMs,
 } from "../../src/utils/relative-time.js";
 
@@ -10,41 +9,23 @@ const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-describe("getRelativeTimeParts", () => {
-  it("stays in seconds just under the minute boundary", () => {
-    expect(getRelativeTimeParts(59_999).unit).toBe("second");
-    expect(getRelativeTimeParts(-59_999).unit).toBe("second");
-  });
-
-  it("crosses into minutes at 60 000 ms", () => {
-    expect(getRelativeTimeParts(MINUTE).unit).toBe("minute");
-    expect(getRelativeTimeParts(-MINUTE).unit).toBe("minute");
-  });
-
-  it("crosses into hours at 24 h", () => {
-    expect(getRelativeTimeParts(DAY).unit).toBe("day");
-    expect(getRelativeTimeParts(HOUR).unit).toBe("hour");
-    expect(getRelativeTimeParts(-DAY).unit).toBe("day");
-  });
-
-  it("crosses into weeks at 7 d", () => {
-    expect(getRelativeTimeParts(7 * DAY).unit).toBe("week");
-    expect(getRelativeTimeParts(-7 * DAY).unit).toBe("week");
-  });
-
-  it("crosses into months at 30 d", () => {
-    expect(getRelativeTimeParts(30 * DAY).unit).toBe("month");
-    expect(getRelativeTimeParts(-30 * DAY).unit).toBe("month");
-  });
-
-  it("crosses into years at 365 d", () => {
-    expect(getRelativeTimeParts(365 * DAY).unit).toBe("year");
-    expect(getRelativeTimeParts(-365 * DAY).unit).toBe("year");
-  });
-});
-
 describe("formatRelativeTime", () => {
   const now = 0;
+
+  it.each([
+    [59_999, "in 60 seconds"],
+    [MINUTE, "in 1 minute"],
+    [HOUR, "in 1 hour"],
+    [DAY, "in 1 day"],
+    [7 * DAY, "in 1 week"],
+    [30 * DAY, "in 1 month"],
+    [365 * DAY, "in 1 year"],
+    [-365 * DAY, "1 year ago"],
+  ])("formats %d ms as %s", (diff, expected) => {
+    expect(
+      formatRelativeTime(diff, { now, locale: "en", numeric: "always" }),
+    ).toBe(expected);
+  });
 
   it("renders minutes in the past", () => {
     expect(formatRelativeTime(-5 * MINUTE, { now, locale: "en" })).toBe(

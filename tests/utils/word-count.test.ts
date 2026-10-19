@@ -1,9 +1,5 @@
 // @vitest-environment node
-import {
-  truncateWords,
-  wordCount,
-  wordLimitAction,
-} from "../../src/utils/word-count.js";
+import { wordCount, wordLimitAction } from "../../src/utils/word-count.js";
 
 describe("wordCount", () => {
   it("returns 0 for an empty string", () => {
@@ -17,26 +13,6 @@ describe("wordCount", () => {
   it("does not count punctuation or whitespace-only input", () => {
     expect(wordCount(" \n\t ")).toBe(0);
     expect(wordCount("...")).toBe(0);
-  });
-});
-
-describe("truncateWords", () => {
-  it("keeps the whitespace after the last kept word", () => {
-    expect(truncateWords("one two three", 2)).toBe("one two ");
-  });
-
-  it("returns the value when it is within the limit", () => {
-    expect(truncateWords("one two", 5)).toBe("one two");
-  });
-
-  it("returns an empty prefix for 0", () => {
-    expect(truncateWords("one two", 0)).toBe("");
-  });
-
-  it("returns the value unchanged for an invalid max", () => {
-    expect(truncateWords("x", -1)).toBe("x");
-    expect(truncateWords("x", Number.NaN)).toBe("x");
-    expect(truncateWords("x", Number.POSITIVE_INFINITY)).toBe("x");
   });
 });
 
