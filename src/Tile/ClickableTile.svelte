@@ -108,6 +108,9 @@
       // with href does not toggle `clicked` twice.
       if (event.key === " " || (event.key === "Enter" && !href)) {
         event.preventDefault();
+        // A held Space would click on every auto-repeat; a native button
+        // activates once per press.
+        if (event.repeat && event.key === " ") return;
         ref?.click();
       }
     }}
