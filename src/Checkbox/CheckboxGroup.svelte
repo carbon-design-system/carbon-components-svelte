@@ -117,6 +117,7 @@
   const groupForm = writable(form);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
+  const groupDisabled = writable(disabled);
   const groupInvalid = writable(invalid);
   const groupWarn = writable(warn);
   let initialRender = true;
@@ -140,6 +141,7 @@
     groupForm: readOnly(groupForm),
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
+    disabled: readOnly(groupDisabled),
     invalid: readOnly(groupInvalid),
     warn: readOnly(groupWarn),
     update,
@@ -166,6 +168,7 @@
   $: $groupForm = form;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
+  $: $groupDisabled = disabled;
   $: $groupInvalid = invalid;
   $: $groupWarn = warn;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
