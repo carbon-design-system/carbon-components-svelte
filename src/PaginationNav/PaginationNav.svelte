@@ -79,6 +79,9 @@
   // number of overflow pages near the end of the nav
   let back = 0;
 
+  // Keep the page in range when `total` shrinks, as Pagination does.
+  $: if (page > total) page = Math.max(total, 1);
+
   // number of nav overflow or items that may appear
   $: fit = shown >= MIN ? shown : MIN;
   $: startOffset = fit <= MIN && page > 1 ? 0 : 1;

@@ -157,6 +157,21 @@ describe("PaginationNav", () => {
     expect(within(activeButton).getByText("Active, Page")).toBeInTheDocument();
   });
 
+  it("clamps the page when total shrinks below it", async () => {
+    const { rerender } = render(PaginationNav, {
+      props: { page: 15, total: 20 },
+    });
+
+    await rerender({ total: 5 });
+
+    expect(screen.getByText("Page 5 of 5")).toBeInTheDocument();
+    expect(screen.getByRole("button", { current: "page" })).toHaveAttribute(
+      "data-page",
+      "5",
+    );
+    expect(screen.getByRole("button", { name: "Next page" })).toBeDisabled();
+  });
+
   it("should render the correct page window when both front and back overflow", () => {
     const { container } = render(PaginationNav, {
       props: { total: 100, shown: 10, page: 50 },
