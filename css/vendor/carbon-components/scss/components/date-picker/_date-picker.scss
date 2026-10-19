@@ -558,6 +558,38 @@
 }
 
 // carbon-components-svelte patch
+// `dayDescription`: a day with a description gets a marker at the top,
+// clear of the "today" mark at the bottom.
+@mixin date-picker-day-described {
+  .flatpickr-day.#{$prefix}--date-picker__day--described {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: to-rem(5px);
+      left: 50%;
+      display: block;
+      width: to-rem(4px);
+      height: to-rem(4px);
+      border-radius: 50%;
+      background-color: $interactive;
+      transform: translateX(-50%);
+      content: "";
+    }
+  }
+
+  .flatpickr-day.selected.#{$prefix}--date-picker__day--described::before,
+  .flatpickr-day.startRange.#{$prefix}--date-picker__day--described::before,
+  .flatpickr-day.endRange.#{$prefix}--date-picker__day--described::before {
+    background-color: $text-on-color;
+  }
+}
+
+@include exports("date-picker-day-described") {
+  @include date-picker-day-described;
+}
+
+// carbon-components-svelte patch
 // `clearable`: a clear button, styled like Search's close button. It takes
 // the calendar icon's place, or sits before the invalid/warn icon.
 @mixin date-picker-clear {

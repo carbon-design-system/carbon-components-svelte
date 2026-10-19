@@ -9,6 +9,8 @@ export interface DatePickerCalendar {
   /** Opens the calendar if needed and focuses the day for `date`. */
   focusDate(date: Date): void;
   readonly isOpen: boolean;
+  /** The first day of the month on show (the first, with two months). */
+  readonly view: Date;
   /** Copies, in selection order (range: start, then end). */
   readonly selectedDates: ReadonlyArray<Date>;
   /**

@@ -34,6 +34,26 @@
   }
 
   /**
+   * `flatpickrProps` keys that are props now, with each prop's default. A
+   * prop left at its default defers to the old key, so existing code keeps
+   * working through the deprecation release.
+   */
+  const PROP_FOR_OPTION = {
+    allowInput: ["allowInput", true],
+    closeOnSelect: ["closeOnSelect", true],
+    parseDate: ["parseDate", undefined],
+    formatDate: ["formatDate", undefined],
+    showMonths: ["months", 1],
+    conjunction: ["conjunction", ", "],
+    shorthandCurrentMonth: ["monthLabel", false],
+    position: ["direction", "auto"],
+    positionElement: ["anchor", undefined],
+    allowInvalidPreload: ["keepOutOfRangeValue", false],
+    animate: ["animate", false],
+    ignoredFocusElements: ["keepOpenFor", undefined],
+  };
+
+  /**
    * @param {number} year
    * @param {number} month
    */
@@ -237,6 +257,93 @@
   export let weekNumbers = false;
 
   /**
+   * Set to `false` to allow picking from the calendar only: the field
+   * stays focusable but can't be typed into.
+   */
+  export let allowInput = true;
+
+  /** Set to `false` to keep the calendar open after a date is picked. */
+  export let closeOnSelect = true;
+
+  /**
+   * Parse typed text into a date. Receives the text and `dateFormat`;
+   * return `undefined` for text that isn't a date.
+   * @type {undefined | ((text: string, format: string) => Date | undefined)}
+   */
+  export let parseDate = undefined;
+
+  /**
+   * Format a date for the field. Receives the date and the format in use.
+   * @type {undefined | ((date: Date, format: string) => string)}
+   */
+  export let formatDate = undefined;
+
+  /**
+   * Number of months the calendar shows side by side.
+   * Not supported with the "week", "month", "quarter", and "year" types.
+   * @type {1 | 2}
+   */
+  export let months = 1;
+
+  /** Separator between dates in the field, with `datePickerType="multiple"`. */
+  export let conjunction = ", ";
+
+  /**
+   * Show the month in the calendar header in full ("September") or short
+   * ("Sep"), from the active `locale`.
+   * @type {"long" | "short"}
+   */
+  export let monthLabel = "long";
+
+  /**
+   * Where a portalled calendar opens relative to its field: below, above,
+   * or whichever fits.
+   * @type {"auto" | "bottom" | "top"}
+   */
+  export let direction = "auto";
+
+  /**
+   * How a portalled calendar lines up with its field.
+   * @type {"start" | "center" | "end"}
+   */
+  export let align = "start";
+
+  /**
+   * Position a portalled calendar against this element instead of the field.
+   * @type {undefined | HTMLElement}
+   */
+  export let anchor = undefined;
+
+  /**
+   * Set to `true` to keep an initial value outside `minDate`/`maxDate` or
+   * the enabled dates, instead of clearing it.
+   */
+  export let keepOutOfRangeValue = false;
+
+  /**
+   * Describe a day for screen readers, such as "2 events". The text is added
+   * to the day's label, and the day gets a marker.
+   * @type {undefined | ((date: Date) => string | undefined)}
+   */
+  export let dayDescription = undefined;
+
+  /**
+   * Add a class to a day, such as for holidays.
+   * @type {undefined | ((date: Date) => string | undefined)}
+   */
+  export let dayClass = undefined;
+
+  /** Set to `true` to animate the calendar as it opens. */
+  export let animate = false;
+
+  /**
+   * Elements that count as part of the calendar: focusing or clicking them
+   * doesn't close it, such as a "Today" button beside the field.
+   * @type {ReadonlyArray<HTMLElement>}
+   */
+  export let keepOpenFor = [];
+
+  /**
    * Set to `true` to render the calendar permanently below the input
    * instead of in a popup. `open` and `close` events are not dispatched,
    * `portalMenu` is ignored, and the calendar stops accepting input while
@@ -294,6 +401,9 @@
    * Override the options passed to the calendar. `mode` is set by
    * `datePickerType`. The names and behavior follow flatpickr's options,
    * for the subset the calendar implements.
+   * Deprecated: each documented option is now a prop (`allowInput`,
+   * `closeOnSelect`, `months`, and so on), and the console warns once for
+   * each key used here.
    * @type {Omit<import("./calendar.js").CalendarOptions, "mode" | "secondInput">}
    */
   export let flatpickrProps = { static: true };
@@ -449,6 +559,12 @@
   $: calendar = engine ? createCalendarApi(engine) : null;
   /** @type {Set<string>} */
   const reportedWarnings = new Set();
+  /** @param {string} message */
+  function reportOnce(message) {
+    if (reportedWarnings.has(message)) return;
+    reportedWarnings.add(message);
+    console.warn(message);
+  }
   let prevDatePickerType = datePickerType;
   let prevUsesInline = inline || !!flatpickrProps.inline;
   let prevUsesWeekNumbers = weekNumbers || !!flatpickrProps.weekNumbers;
@@ -1181,6 +1297,8 @@
         if (option === "errorHandler") continue;
         // Creation-only, handled by `recreateCalendar()`.
         if (option === "inline" || option === "weekNumbers") continue;
+        // Applied from props (see `propOptions`).
+        if (option in PROP_FOR_OPTION) continue;
         // `displayFormat` owns these two.
         if (
           usesDisplayFormat &&
@@ -1307,6 +1425,9 @@
       clickOpens: options.clickOpens,
       allowInput: options.allowInput,
     };
+    appliedPropOptions = Object.fromEntries(
+      Object.keys(propOptions).map((option) => [option, options[option]]),
+    );
     initCalendar(options);
 
     // flatpickr fills the input from `flatpickrProps.defaultDate` without
@@ -1620,6 +1741,7 @@
       // date picker works inside a modal
       static: true,
       ...flatpickrProps,
+      ...propOptions,
       // The flatpickr range plugin strips the `readonly` attribute when
       // `allowInput` is true, so read-only wins over `flatpickrProps`.
       ...interactive,
@@ -1637,11 +1759,113 @@
         console.error(error);
       });
   }
-  // Read-only turns both off. Otherwise the consumer's `flatpickrProps`
-  // decide, so `allowInput: false` (calendar-only selection) survives.
+  /**
+   * `legacy` is `flatpickrProps`, passed in so `$:` blocks that call this
+   * re-run when it changes.
+   *
+   * @param {Record<string, unknown>} legacy
+   * @param {string} option
+   * @param {unknown} propValue
+   * @param {unknown} propDefault
+   */
+  function fromPropOrLegacy(legacy, option, propValue, propDefault) {
+    if (propValue !== propDefault) return propValue;
+    return option in legacy ? legacy[option] : propDefault;
+  }
+
+  const POSITION_DIRECTION = { auto: "auto", bottom: "below", top: "above" };
+  const POSITION_ALIGN = { start: "left", center: "center", end: "right" };
+
+  // Engine options that come from props. Each is a primitive, a function, or
+  // an element, so a change is a `!==` away; no deep comparison.
+  $: propOptions = {
+    closeOnSelect: fromPropOrLegacy(
+      flatpickrProps,
+      "closeOnSelect",
+      closeOnSelect,
+      true,
+    ),
+    parseDate: fromPropOrLegacy(
+      flatpickrProps,
+      "parseDate",
+      parseDate,
+      undefined,
+    ),
+    formatDate: fromPropOrLegacy(
+      flatpickrProps,
+      "formatDate",
+      formatDate,
+      undefined,
+    ),
+    showMonths: fromPropOrLegacy(flatpickrProps, "showMonths", months, 1),
+    conjunction: fromPropOrLegacy(
+      flatpickrProps,
+      "conjunction",
+      conjunction,
+      ", ",
+    ),
+    shorthandCurrentMonth: fromPropOrLegacy(
+      flatpickrProps,
+      "shorthandCurrentMonth",
+      monthLabel === "short",
+      false,
+    ),
+    position: fromPropOrLegacy(
+      flatpickrProps,
+      "position",
+      direction === "auto" && align === "start"
+        ? "auto"
+        : `${POSITION_DIRECTION[direction]} ${POSITION_ALIGN[align]}`,
+      "auto",
+    ),
+    positionElement: fromPropOrLegacy(
+      flatpickrProps,
+      "positionElement",
+      anchor,
+      undefined,
+    ),
+    allowInvalidPreload: fromPropOrLegacy(
+      flatpickrProps,
+      "allowInvalidPreload",
+      keepOutOfRangeValue,
+      false,
+    ),
+    animate: fromPropOrLegacy(flatpickrProps, "animate", animate, false),
+    ignoredFocusElements: fromPropOrLegacy(
+      flatpickrProps,
+      "ignoredFocusElements",
+      keepOpenFor.length ? keepOpenFor : undefined,
+      undefined,
+    ),
+    dayDescription,
+    dayClass,
+  };
+  $: for (const option of Object.keys(flatpickrProps)) {
+    const prop = PROP_FOR_OPTION[option]?.[0];
+    if (!prop) continue;
+    reportOnce(
+      `[carbon-components-svelte] DatePicker: \`flatpickrProps.${option}\` is deprecated; use the \`${prop}\` prop.`,
+    );
+  }
+  /** @type {Record<string, unknown>} */
+  let appliedPropOptions = {};
+  $: if (engine) {
+    for (const [option, value] of Object.entries(propOptions)) {
+      if (appliedPropOptions[option] === value) continue;
+      appliedPropOptions[option] = value;
+      engine.set(option, value);
+    }
+  }
+
+  // Read-only turns both off. Otherwise the `allowInput` prop (or the
+  // deprecated `flatpickrProps` key) decides, so calendar-only selection
+  // survives.
   $: interactive = {
     clickOpens: !$readonlyAny && flatpickrProps.clickOpens !== false,
-    allowInput: !$readonlyAny && flatpickrProps.allowInput !== false,
+    allowInput:
+      !$readonlyAny &&
+      fromPropOrLegacy(flatpickrProps, "allowInput", allowInput, true) !==
+        false,
   };
   // Each `calendar.set` rebuilds the day grid, so only apply a real change.
   // The calendar is created with these values already.
