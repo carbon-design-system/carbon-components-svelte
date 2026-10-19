@@ -44,10 +44,6 @@
   }}
 />
 
-<Toggle labelText="Custom name toggle" name="custom-name-toggle" />
-
-<Toggle id="custom-id" labelText="Custom id toggle" />
-
 <Toggle
   labelText="Events toggle"
   on:focus={() => {

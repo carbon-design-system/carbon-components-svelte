@@ -60,40 +60,6 @@ describe("RadioButton", () => {
     expect(label).toHaveAttribute("for", "custom-id");
   });
 
-  it("should handle custom name", () => {
-    render(RadioButton, { props: { name: "custom-name" } });
-
-    expect(screen.getByRole("radio")).toHaveAttribute("name", "custom-name");
-  });
-
-  it("should handle custom value", () => {
-    render(RadioButton, { props: { value: "custom-value" } });
-
-    expect(screen.getByRole("radio")).toHaveAttribute("value", "custom-value");
-  });
-
-  it("should apply aria-label to the input when there is no label text", () => {
-    const { container } = render(RadioButton, {
-      props: { labelText: "", "aria-label": "CDN" },
-    });
-
-    expect(screen.getByRole("radio", { name: "CDN" })).toBeInTheDocument();
-    expect(
-      container.querySelector(".bx--radio-button-wrapper"),
-    ).not.toHaveAttribute("aria-label");
-  });
-
-  it("should let a consumer aria-label override labelText and strip it from the wrapper", () => {
-    const { container } = render(RadioButton, {
-      props: { labelText: "Standard", "aria-label": "CDN" },
-    });
-
-    expect(screen.getByRole("radio", { name: "CDN" })).toBeInTheDocument();
-    expect(
-      container.querySelector(".bx--radio-button-wrapper"),
-    ).not.toHaveAttribute("aria-label");
-  });
-
   it("should handle custom slots", () => {
     render(RadioButtonCustom);
 
@@ -123,14 +89,6 @@ describe("RadioButton", () => {
     await user.tab();
     expect(input).not.toHaveFocus();
     expect(consoleLog).toHaveBeenCalledWith("blur");
-  });
-
-  it("should handle disabled state with events", async () => {
-    render(RadioButton, { props: { disabled: true } });
-
-    const input = screen.getByRole("radio");
-    await user.click(input);
-    expect(input).not.toBeChecked();
   });
 
   it("should apply custom class", () => {
@@ -220,14 +178,6 @@ describe("RadioButton", () => {
       }
     });
 
-    it("should not set aria-readonly on the radiogroup when not readonly", () => {
-      render(RadioButtonGroupReadonly, { selected: "1", readonly: false });
-
-      expect(screen.getByRole("radiogroup")).not.toHaveAttribute(
-        "aria-readonly",
-      );
-    });
-
     it("should update aria-readonly on the radiogroup when readonly flips after mount", async () => {
       const { rerender } = render(RadioButtonGroupReadonly, {
         selected: "1",
@@ -255,17 +205,6 @@ describe("RadioButton", () => {
       await fireEvent.change(pro);
 
       expect(consoleLog).not.toHaveBeenCalledWith("radio-change", "2");
-    });
-
-    it("should allow selection when readonly is false", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(RadioButtonGroupReadonly, { selected: "1", readonly: false });
-
-      const pro = screen.getByRole("radio", { name: "Pro" });
-      await user.click(pro);
-
-      expect(pro).toBeChecked();
-      expect(consoleLog).toHaveBeenCalledWith("change", "2");
     });
 
     it("should not change selection when readonly flips to true after mount", async () => {

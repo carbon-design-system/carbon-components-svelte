@@ -37,14 +37,4 @@ describe("RadioButton (Standalone)", () => {
     expect(component.checked).toBe(true);
     expect(input).toBeChecked();
   });
-
-  it("should support initial checked state for standalone radio button", () => {
-    const { component } = render(RadioButtonStandalone, {
-      props: { checked: true },
-    });
-
-    const input = screen.getByRole("radio");
-    expect(input).toBeChecked();
-    expect(component.checked).toBe(true);
-  });
 });

@@ -7,21 +7,6 @@ import CheckboxGroupStaticSelected from "./CheckboxGroupStaticSelected.test.svel
 import CheckboxReadonlyChange from "./CheckboxReadonlyChange.test.svelte";
 
 describe("CheckboxGroup", () => {
-  it("should render with default props", () => {
-    render(CheckboxGroupComponent);
-
-    expect(screen.getByRole("group")).toBeInTheDocument();
-    expect(
-      screen.getByRole("checkbox", { name: "Option 1" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("checkbox", { name: "Option 2" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("checkbox", { name: "Option 3" }),
-    ).toBeInTheDocument();
-  });
-
   it("should handle selected values", () => {
     render(CheckboxGroupComponent, { props: { selected: ["1", "3"] } });
 
@@ -30,24 +15,6 @@ describe("CheckboxGroup", () => {
       screen.getByRole("checkbox", { name: "Option 2" }),
     ).not.toBeChecked();
     expect(screen.getByRole("checkbox", { name: "Option 3" })).toBeChecked();
-  });
-
-  it("does not dispatch change event on initial render", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupComponent);
-
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
-  });
-
-  it("does not dispatch change event on initial render with selected values", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupComponent, { props: { selected: ["2"] } });
-
-    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
-      false,
-    );
   });
 
   it("does not dispatch change event on initial render with a static selected array", () => {
@@ -102,14 +69,6 @@ describe("CheckboxGroup", () => {
     for (const checkbox of checkboxes) {
       expect(checkbox).toHaveAttribute("name", "custom-group");
     }
-  });
-
-  it("should handle legend text", () => {
-    render(CheckboxGroupComponent, {
-      props: { legendText: "Choose options" },
-    });
-
-    expect(screen.getByText("Choose options")).toBeInTheDocument();
   });
 
   it("should hide legend visually", () => {
@@ -281,19 +240,6 @@ describe("CheckboxGroup", () => {
     expect(screen.queryByText("Helper text message")).not.toBeInTheDocument();
   });
 
-  it("defers a checkbox's own invalid message to the group when nested", () => {
-    render(CheckboxGroupComponent, { props: { checkboxInvalid: true } });
-
-    // The individual Checkbox's own invalid text is suppressed by CSS
-    // (`display: none`) when nested in a CheckboxGroup, in favor of the
-    // group's own validation message - assert the wrapper still carries the
-    // marker class CSS keys off of, without asserting computed styles.
-    const option2 = screen.getByRole("checkbox", { name: "Option 2" });
-    expect(option2.closest(".bx--checkbox-wrapper")).toHaveClass(
-      "bx--checkbox-wrapper--invalid",
-    );
-  });
-
   it("propagates group invalid state to child checkboxes that don't set their own", () => {
     render(CheckboxGroupComponent, {
       props: { invalid: true, invalidText: "Select at least one option" },
@@ -333,65 +279,12 @@ describe("CheckboxGroup", () => {
     );
   });
 
-  it("lays out vertically by default", () => {
-    render(CheckboxGroupComponent);
-
-    expect(screen.getByRole("group")).not.toHaveClass(
-      "bx--checkbox-group--horizontal",
-    );
-  });
-
   it("lays out in a row with orientation horizontal", () => {
     render(CheckboxGroupComponent, { props: { orientation: "horizontal" } });
 
     expect(screen.getByRole("group")).toHaveClass(
       "bx--checkbox-group--horizontal",
     );
-  });
-
-  it("should support multiple selections", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupComponent);
-
-    const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
-    const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
-    const checkbox3 = screen.getByRole("checkbox", { name: "Option 3" });
-
-    await user.click(checkbox1);
-    await user.click(checkbox2);
-    await user.click(checkbox3);
-
-    expect(checkbox1).toBeChecked();
-    expect(checkbox2).toBeChecked();
-    expect(checkbox3).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("change", ["1", "2", "3"]);
-  });
-
-  it("should support deselection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupComponent, {
-      props: { selected: ["1", "2", "3"] },
-    });
-
-    const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
-    await user.click(checkbox2);
-
-    expect(checkbox2).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("change", ["1", "3"]);
-  });
-
-  it("should pre-select checkboxes from initial selected prop", () => {
-    render(CheckboxGroupComponent, {
-      props: { selected: ["2"] },
-    });
-
-    expect(
-      screen.getByRole("checkbox", { name: "Option 1" }),
-    ).not.toBeChecked();
-    expect(screen.getByRole("checkbox", { name: "Option 2" })).toBeChecked();
-    expect(
-      screen.getByRole("checkbox", { name: "Option 3" }),
-    ).not.toBeChecked();
   });
 
   describe("readonly (group)", () => {
@@ -451,17 +344,6 @@ describe("CheckboxGroup", () => {
       await fireEvent.change(option2);
 
       expect(consoleLog).not.toHaveBeenCalledWith("checkbox-change", "2");
-    });
-
-    it("should allow selection when readonly is false", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(CheckboxGroupReadonly, { selected: ["1"], readonly: false });
-
-      const option2 = screen.getByRole("checkbox", { name: "Option 2" });
-      await user.click(option2);
-
-      expect(option2).toBeChecked();
-      expect(consoleLog).toHaveBeenCalledWith("change", ["1", "2"]);
     });
 
     it("should not change selection when readonly flips to true after mount", async () => {

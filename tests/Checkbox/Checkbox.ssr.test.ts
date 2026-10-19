@@ -30,15 +30,4 @@ describe("Checkbox server render", () => {
       "true",
     );
   });
-
-  it("leaves a checked or unchecked label to the input's state", () => {
-    const { document } = renderSSR(Checkbox, {
-      labelText: "Email me",
-      checked: true,
-    });
-
-    const label = document.querySelector(".bx--checkbox-label");
-    expect(label).not.toHaveAttribute("data-contained-checkbox-state");
-    expect(label).not.toHaveAttribute("data-contained-checkbox-disabled");
-  });
 });

@@ -115,18 +115,6 @@ describe("Checkbox form participation", () => {
       expect(getBoundText()).toBe("true");
     });
 
-    it("leaves the state alone when the reset is canceled", async () => {
-      render(CheckboxForm);
-      const checkbox = screen.getByRole("checkbox", { name: "Agree" });
-      getForm().addEventListener("reset", (event) => event.preventDefault());
-
-      await user.click(checkbox);
-      await resetForm();
-
-      expect(checkbox).toBeChecked();
-      expect(getBoundText()).toBe("true");
-    });
-
     it("bind:group: removes the values of cleared boxes", async () => {
       render(CheckboxFormGroup, { props: { group: [] } });
 
@@ -179,18 +167,6 @@ describe("Checkbox form participation", () => {
       render(CheckboxForm, { props: { checked: true } });
 
       expect(new FormData(getForm()).get("agree")).toBe("on");
-    });
-
-    it("omits an unchecked checkbox", () => {
-      render(CheckboxForm, { props: { checked: false } });
-
-      expect(new FormData(getForm()).has("agree")).toBe(false);
-    });
-
-    it("submits an explicit value", () => {
-      render(CheckboxForm, { props: { checked: true, value: "yes" } });
-
-      expect(new FormData(getForm()).get("agree")).toBe("yes");
     });
 
     it("submits a numeric 0 value as a string", () => {

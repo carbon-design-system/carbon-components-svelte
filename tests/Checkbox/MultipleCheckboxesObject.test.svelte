@@ -9,7 +9,7 @@
   $: console.log("object changed:", obj);
 </script>
 
-<Checkbox bind:checked={obj.a} labelText="A" data-testid="checkbox-a" />
-<Checkbox bind:checked={obj.b} labelText="B" data-testid="checkbox-b" />
+<Checkbox bind:checked={obj.a} labelText="A" />
+<Checkbox bind:checked={obj.b} labelText="B" />
 
 <span data-testid="object-values">{JSON.stringify(obj)}</span>

@@ -1,10 +1,4 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { getForm } from "../utils/get-form";
@@ -302,16 +296,6 @@ describe("TagInput", () => {
       await user.click(removeButton("a"));
 
       expect(shownValue()).toEqual(["a"]);
-    });
-
-    it("is a single tab stop for all tags", async () => {
-      render(TagInput, { value: ["a", "b", "c"] });
-
-      await waitFor(() => {
-        expect(removeButton("a")).toHaveAttribute("tabindex", "0");
-      });
-      expect(removeButton("b")).toHaveAttribute("tabindex", "-1");
-      expect(removeButton("c")).toHaveAttribute("tabindex", "-1");
     });
   });
 

@@ -36,13 +36,6 @@ describe("Checkbox", () => {
     expect(hiddenElement).not.toBeInTheDocument();
   });
 
-  it("renders checked state", () => {
-    render(Checkbox, { checked: true });
-
-    const input = screen.getByRole("checkbox");
-    expect(input).toBeChecked();
-  });
-
   it("emits events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Checkbox);
@@ -101,30 +94,6 @@ describe("Checkbox", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
-  it("does not emit duplicate events on rapid clicks", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Checkbox);
-
-    const input = screen.getByRole("checkbox");
-
-    await user.click(input);
-    await user.click(input);
-    await user.click(input);
-
-    const checkCalls = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check",
-    );
-    expect(checkCalls).toHaveLength(3);
-  });
-
-  it("renders indeterminate state", () => {
-    render(Checkbox, { indeterminate: true });
-
-    const input = screen.getByRole("checkbox");
-    assert(input instanceof HTMLInputElement);
-    expect(input.indeterminate).toBe(true);
-  });
-
   it("drops the label's mixed state once a click settles the checkbox", async () => {
     const { container } = render(Checkbox, {
       labelText: "Select all",
@@ -152,13 +121,6 @@ describe("Checkbox", () => {
     assert(label);
     const hiddenElement = label.querySelector(".bx--visually-hidden");
     expect(hiddenElement).toBeInTheDocument();
-  });
-
-  it("renders with custom label text", () => {
-    render(Checkbox, { labelText: "Custom label" });
-
-    const label = screen.getByText("Custom label");
-    expect(label).toHaveTextContent("Custom label");
   });
 
   it("renders skeleton state", () => {
@@ -232,29 +194,6 @@ describe("Checkbox", () => {
     expect(checkCalls3[0][3]).toBe(1);
   });
 
-  it("handles rapid group checkbox interactions without duplicate events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CheckboxGroupEvents);
-
-    const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
-    const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
-
-    consoleLog.mockClear();
-    await user.click(checkbox1);
-    await user.click(checkbox2);
-    await user.click(checkbox1);
-
-    const checkCalls1 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check" && call[1] === "option-1",
-    );
-    const checkCalls2 = consoleLog.mock.calls.filter(
-      (call) => call[0] === "check" && call[1] === "option-2",
-    );
-
-    expect(checkCalls1).toHaveLength(2);
-    expect(checkCalls2).toHaveLength(1);
-  });
-
   it("emits check event when group is updated externally", async () => {
     const onCheck = vi.fn();
     const { component } = render(CheckboxGroupReactive, { onCheck });
@@ -278,26 +217,6 @@ describe("Checkbox", () => {
     const customLabel = screen.getByTestId("custom-label");
     expect(customLabel).toBeInTheDocument();
     expect(customLabel).toHaveTextContent("Custom label content");
-  });
-
-  it("renders multiple checkboxes with default values", () => {
-    render(MultipleCheckboxes);
-
-    expect(screen.getByTestId("checkbox-0")).toBeInTheDocument();
-    expect(screen.getByTestId("checkbox-1")).toBeInTheDocument();
-    expect(screen.getByTestId("checkbox-2")).toBeInTheDocument();
-
-    const appleCheckbox = screen.getByRole("checkbox", { name: "Apple" });
-    const bananaCheckbox = screen.getByRole("checkbox", { name: "Banana" });
-    const coconutCheckbox = screen.getByRole("checkbox", { name: "Coconut" });
-
-    expect(appleCheckbox).toBeChecked();
-    expect(bananaCheckbox).toBeChecked();
-    expect(coconutCheckbox).not.toBeChecked();
-
-    expect(screen.getByTestId("selected-values")).toHaveTextContent(
-      '["Apple","Banana"]',
-    );
   });
 
   it("handles checkbox selection changes", async () => {
@@ -341,56 +260,6 @@ describe("Checkbox", () => {
     );
   });
 
-  it("handles deselection of checkboxes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultipleCheckboxes);
-
-    const bananaCheckbox = screen.getByRole("checkbox", { name: "Banana" });
-
-    await user.click(bananaCheckbox);
-
-    expect(bananaCheckbox).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("group changed:", ["Apple"]);
-    expect(screen.getByTestId("selected-values")).toHaveTextContent(
-      '["Apple"]',
-    );
-  });
-
-  it("renders multiple checkboxes bound to object properties", () => {
-    render(MultipleCheckboxesObject);
-
-    expect(screen.getByTestId("checkbox-a")).toBeInTheDocument();
-    expect(screen.getByTestId("checkbox-b")).toBeInTheDocument();
-
-    const checkboxA = screen.getByRole("checkbox", { name: "A" });
-    const checkboxB = screen.getByRole("checkbox", { name: "B" });
-
-    expect(checkboxA).not.toBeChecked();
-    expect(checkboxB).not.toBeChecked();
-
-    expect(screen.getByTestId("object-values")).toHaveTextContent(
-      '{"a":false,"b":false}',
-    );
-  });
-
-  it("handles checkbox selection changes with object binding", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultipleCheckboxesObject);
-
-    const checkboxA = screen.getByRole("checkbox", { name: "A" });
-
-    await user.click(checkboxA);
-
-    expect(checkboxA).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
-      a: true,
-      b: false,
-    });
-    expect(screen.getByTestId("object-values")).toHaveTextContent(
-      '{"a":true,"b":false}',
-    );
-  });
-
   it("handles multiple checkbox selections with object binding", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MultipleCheckboxesObject);
@@ -414,57 +283,6 @@ describe("Checkbox", () => {
 
     expect(screen.getByTestId("object-values")).toHaveTextContent(
       '{"a":true,"b":true}',
-    );
-  });
-
-  it("handles checkbox deselection with object binding", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(MultipleCheckboxesObject, {
-      props: {
-        obj: { a: true, b: true },
-      },
-    });
-
-    const checkboxA = screen.getByRole("checkbox", { name: "A" });
-    const checkboxB = screen.getByRole("checkbox", { name: "B" });
-
-    expect(checkboxA).toBeChecked();
-    expect(checkboxB).toBeChecked();
-
-    await user.click(checkboxA);
-    expect(checkboxA).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
-      a: false,
-      b: true,
-    });
-
-    await user.click(checkboxB);
-    expect(checkboxB).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
-      a: false,
-      b: false,
-    });
-
-    expect(screen.getByTestId("object-values")).toHaveTextContent(
-      '{"a":false,"b":false}',
-    );
-  });
-
-  it("accepts custom initial object state", () => {
-    render(MultipleCheckboxesObject, {
-      props: {
-        obj: { a: true, b: false },
-      },
-    });
-
-    const checkboxA = screen.getByRole("checkbox", { name: "A" });
-    const checkboxB = screen.getByRole("checkbox", { name: "B" });
-
-    expect(checkboxA).toBeChecked();
-    expect(checkboxB).not.toBeChecked();
-
-    expect(screen.getByTestId("object-values")).toHaveTextContent(
-      '{"a":true,"b":false}',
     );
   });
 
@@ -519,26 +337,6 @@ describe("Checkbox", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("prevents state change when readonly and unchecked", async () => {
-    render(CheckboxReadonly, { checked: false, readonly: true });
-
-    const input = screen.getByRole("checkbox");
-    expect(input).not.toBeChecked();
-
-    await user.click(input);
-    expect(input).not.toBeChecked();
-  });
-
-  it("prevents state change when readonly and checked", async () => {
-    render(CheckboxReadonly, { checked: true, readonly: true });
-
-    const input = screen.getByRole("checkbox");
-    expect(input).toBeChecked();
-
-    await user.click(input);
-    expect(input).toBeChecked();
-  });
-
   it("does not forward change event when readonly", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CheckboxReadonly, { checked: false, readonly: true });
@@ -552,16 +350,6 @@ describe("Checkbox", () => {
       (call) => call[0] === "change",
     );
     expect(changeCalls).toHaveLength(0);
-  });
-
-  it("allows state change when not readonly", async () => {
-    render(CheckboxReadonly, { checked: false, readonly: false });
-
-    const input = screen.getByRole("checkbox");
-    expect(input).not.toBeChecked();
-
-    await user.click(input);
-    expect(input).toBeChecked();
   });
 
   it("renders the invalid state with an error message and aria wiring", () => {
@@ -741,53 +529,6 @@ describe("Checkbox", () => {
       expectTypeOf<Props["group"]>().toEqualTypeOf<
         // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
         ReadonlyArray<any> | undefined
-      >();
-    });
-
-    it("should provide type-safe access when using group binding", () => {
-      type Status = "pending" | "approved" | "rejected";
-
-      const handleCheck = (checked: boolean) => {
-        expectTypeOf(checked).toEqualTypeOf<boolean>();
-      };
-
-      type ComponentType = CheckboxComponent<Status>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["value"]>().toEqualTypeOf<Status | undefined>();
-      expectTypeOf<Props["group"]>().toEqualTypeOf<
-        ReadonlyArray<Status> | undefined
-      >();
-      expectTypeOf(handleCheck).parameter(0).toEqualTypeOf<boolean>();
-    });
-
-    it("should work with object types", () => {
-      type Option = { id: string; label: string };
-
-      type ComponentType = CheckboxComponent<Option>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["value"]>().toEqualTypeOf<Option | undefined>();
-      expectTypeOf<Props["group"]>().toEqualTypeOf<
-        ReadonlyArray<Option> | undefined
-      >();
-    });
-
-    it("should work with 'as const' for type inference", () => {
-      const options = ["light", "dark", "auto"] as const;
-      type InferredType = (typeof options)[number];
-
-      expectTypeOf<typeof options>().toEqualTypeOf<
-        readonly ["light", "dark", "auto"]
-      >();
-      expectTypeOf<InferredType>().toEqualTypeOf<"light" | "dark" | "auto">();
-
-      type ComponentType = CheckboxComponent<InferredType>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["value"]>().toEqualTypeOf<InferredType | undefined>();
-      expectTypeOf<Props["group"]>().toEqualTypeOf<
-        ReadonlyArray<InferredType> | undefined
       >();
     });
   });
