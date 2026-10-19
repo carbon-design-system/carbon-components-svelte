@@ -171,7 +171,6 @@
     pendingShiftKey = event.shiftKey;
   }}
   on:change={() => {
-    if (disabled) return;
     if (!ref) return;
     const newSelected = ref.checked;
     selected = newSelected;
@@ -189,7 +188,6 @@
   on:change
   on:keydown
   on:keydown={(event) => {
-    if (disabled) return;
     if (event.key === "Enter") {
       event.preventDefault();
       // Toggle once per press, like Space; a held key would otherwise
