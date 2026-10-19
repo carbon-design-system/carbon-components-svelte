@@ -360,6 +360,11 @@
           {pageText(page)} {pageRangeText(page, totalPages)}
         {/if}
       </span>
+    {:else if pagesUnknown && !pageInputDisabled}
+      <!-- With unknown pages there is no page list to pick from. -->
+      <span class:bx--pagination__text={true}>
+        {pageText(page)}
+      </span>
     {:else if !pageInputDisabled}
       <slot
         name="pageSelect"
@@ -400,11 +405,7 @@
         </Select>
       </slot>
       <span class:bx--pagination__text={true}>
-        {#if pagesUnknown}
-          {pageText(page)}
-        {:else}
-          {pageRangeText(page, totalPages)}
-        {/if}
+        {pageRangeText(page, totalPages)}
       </span>
     {/if}
     <div class:bx--pagination__control-buttons={true}>
