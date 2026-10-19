@@ -686,7 +686,8 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab");
     expect(tab).toHaveAttribute("aria-disabled", "true");
-    expect(tab).toHaveAttribute("tabindex", "-1");
+    // The lone tab is selected, so it keeps the tab stop.
+    expect(tab).toHaveAttribute("tabindex", "0");
   });
 
   it("should handle custom tabindex", () => {
