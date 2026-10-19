@@ -521,6 +521,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -551,6 +552,23 @@
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
+
+  // In place, the menu opens on `direction`'s side unless it doesn't fit
+  // there and the other side has more room; a portalled menu flips itself.
+  // Measured once per open, after the menu renders.
+  /** @type {"top" | "bottom" | null} */
+  let measuredSide = null;
+  $: placement = measuredSide ?? direction;
+  $: if (open && !effectivePortalMenu) {
+    void direction;
+    tick().then(() => {
+      if (open && listRef && fieldRef) {
+        measuredSide = menuSide(fieldRef, listRef, direction);
+      }
+    });
+  } else {
+    measuredSide = null;
+  }
 
   let sortCollatorLocale;
   let sortCollator;
@@ -1463,7 +1481,7 @@
     "bx--multi-select",
     $$slots.decorator && !isFluid && "bx--list-box--decorator",
     $aiLabelState === "active" && "bx--list-box--ai-label",
-    direction === "top" && "bx--list-box--up",
+    placement === "top" && "bx--list-box--up",
     filterable && "bx--combo-box",
     filterable && "bx--multi-select--filterable",
     // A clear button for the filter text shows by the chevron.
