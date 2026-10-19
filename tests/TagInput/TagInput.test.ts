@@ -118,6 +118,24 @@ describe("TagInput", () => {
       expect(input()).toHaveValue("日本");
     });
 
+    it("holds IME text until the composition ends", async () => {
+      render(TagInput);
+
+      await fireEvent.input(input(), {
+        target: { value: "日本,語" },
+        isComposing: true,
+      });
+      expect(shownValue()).toEqual([]);
+
+      await fireEvent.compositionEnd(input());
+      expect(shownValue()).toEqual(["日本"]);
+
+      // Safari's Enter that commits a composition: keyCode 229.
+      await fireEvent.keyDown(input(), { key: "Enter", keyCode: 229 });
+      expect(shownValue()).toEqual(["日本"]);
+      expect(input()).toHaveValue("語");
+    });
+
     it("applies normalize before checking and adding", async () => {
       render(TagInput, {
         config: { normalize: (raw: string) => raw.trim().toLowerCase() },
