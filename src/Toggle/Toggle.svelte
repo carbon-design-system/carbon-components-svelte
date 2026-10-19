@@ -182,7 +182,8 @@
     on:keydown={(event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        if (!readonly) ref?.click();
+        // A held key repeats keydown; toggle once per press.
+        if (!readonly && !event.repeat) ref?.click();
       }
     }}
     on:keyup
