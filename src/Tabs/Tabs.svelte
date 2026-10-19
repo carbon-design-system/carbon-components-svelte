@@ -87,6 +87,7 @@
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
   import { noop } from "../utils/noop.js";
+  import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -422,44 +423,51 @@
 
   $: pageHeader?.setType(type);
 
+  /**
+   * Sort the tab and panel registries into DOM order.
+   * @type {() => void}
+   */
+  function syncOrder() {
+    tabs.update((currentTabs) =>
+      syncDomOrder({
+        root: refTabList,
+        selector: "[role='tab']",
+        items: currentTabs,
+      }),
+    );
+
+    const pageHeaderBody = pageHeader?.getBody();
+
+    if (pageHeaderBody) {
+      content.update((currentContent) =>
+        syncDomOrder({
+          root: pageHeaderBody,
+          selector: ":scope > [role='tabpanel']",
+          items: currentContent,
+        }),
+      );
+    } else if (refRoot?.parentElement) {
+      content.update((currentContent) =>
+        syncDomOrder({
+          root: refRoot.parentElement,
+          selector: "[role='tabpanel']",
+          items: currentContent,
+        }),
+      );
+    }
+
+    // Re-resolve after reorder so `selectedId` keeps the same logical tab.
+    if (selectedId !== undefined) {
+      syncSelection();
+    }
+  }
+
   afterUpdate(() => {
     // Sync DOM order with stores only when tabs are added/removed.
     // This avoids infinite loops in Svelte 5 by not running on every update.
     if (needsDomSync && refTabList) {
       needsDomSync = false;
-
-      tabs.update((currentTabs) =>
-        syncDomOrder({
-          root: refTabList,
-          selector: "[role='tab']",
-          items: currentTabs,
-        }),
-      );
-
-      const pageHeaderBody = pageHeader?.getBody();
-
-      if (pageHeaderBody) {
-        content.update((currentContent) =>
-          syncDomOrder({
-            root: pageHeaderBody,
-            selector: ":scope > [role='tabpanel']",
-            items: currentContent,
-          }),
-        );
-      } else if (refRoot?.parentElement) {
-        content.update((currentContent) =>
-          syncDomOrder({
-            root: refRoot.parentElement,
-            selector: "[role='tabpanel']",
-            items: currentContent,
-          }),
-        );
-      }
-
-      // Re-resolve after reorder so `selectedId` keeps the same logical tab.
-      if (selectedId !== undefined) {
-        syncSelection();
-      }
+      syncOrder();
     }
 
     if (selected !== selectedIndex) {
@@ -479,9 +487,24 @@
     initialClaims.close();
     mounted = true;
     observeOverflow();
+    // A keyed reorder moves tabs without re-registering them. Keep the
+    // selected tab selected at its new index. An insert or removal syncs in
+    // afterUpdate instead, which keeps the index.
+    const stopObservingOrder = observeDomOrder(refTabList, {
+      selector: "[role='tab']",
+      getItems: () => get(tabs),
+      onReorder: () => {
+        if (needsDomSync) return;
+        const id = get(selectedTab);
+        syncOrder();
+        const tab = id === undefined ? undefined : get(tabsById)[id];
+        if (selectedId === undefined && tab) selected = tab.index;
+      },
+    });
     return () => {
       mounted = false;
       stopObserving();
+      stopObservingOrder();
     };
   });
 
