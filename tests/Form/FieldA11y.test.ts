@@ -46,10 +46,7 @@ const NO_INVALID = new Set<Field>(["CopyInput", "Toggle"]);
  * disappears doesn't fail the test, so fixes can merge in any order;
  * remove its entry when it does.
  */
-const KNOWN: Record<string, string> = {
-  "Checkbox invalid-not-alert": "role=alert follow-up after #4272",
-  "CheckboxGroup invalid-not-alert": "role=alert follow-up after #4272",
-};
+const KNOWN: Record<string, string> = {};
 
 const IDREF_ATTRIBUTES = [
   "aria-describedby",
