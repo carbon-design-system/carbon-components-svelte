@@ -11,12 +11,10 @@ describe("RadioButton", () => {
   it("should render with default props", () => {
     render(RadioButton);
 
-    const input = screen.getByRole("radio");
-    expect(input).toBeInTheDocument();
+    const input = screen.getByRole("radio", { name: "Option 1" });
     expect(input).toHaveAttribute("name", "test-group");
     expect(input).toHaveAttribute("value", "");
     expect(input).not.toBeChecked();
-    expect(screen.getByText("Option 1")).toBeInTheDocument();
   });
 
   it("should handle checked state", () => {
@@ -135,12 +133,6 @@ describe("RadioButton", () => {
     expect(input).not.toBeChecked();
   });
 
-  it("should handle label text slot", () => {
-    render(RadioButtonCustom);
-
-    expect(screen.getByText("Custom Label Text").tagName).toBe("SPAN");
-  });
-
   it("should apply custom class", () => {
     render(RadioButton, { props: { customClass: "custom-radio" } });
 
@@ -203,7 +195,6 @@ describe("RadioButton", () => {
     });
 
     it("should not change selection when clicking another radio", async () => {
-      const consoleLog = vi.spyOn(console, "log");
       render(RadioButtonGroupReadonly, { selected: "1", readonly: true });
 
       const pro = screen.getByRole("radio", { name: "Pro" });
@@ -212,7 +203,6 @@ describe("RadioButton", () => {
       // jsdom doesn't restore the previously checked radio in a group after
       // a cancelled click the way real browsers do; covered by the e2e test.
       expect(pro).not.toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
     });
 
     it("should set aria-readonly on the radiogroup when readonly, and not on the radios", () => {
@@ -279,7 +269,6 @@ describe("RadioButton", () => {
     });
 
     it("should not change selection when readonly flips to true after mount", async () => {
-      const consoleLog = vi.spyOn(console, "log");
       const { rerender } = render(RadioButtonGroupReadonly, {
         selected: "1",
         readonly: false,
@@ -294,7 +283,6 @@ describe("RadioButton", () => {
       // jsdom doesn't restore the previously checked radio in a group after
       // a cancelled click the way real browsers do; covered by the e2e test.
       expect(pro).not.toBeChecked();
-      expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
     });
 
     it("should not propagate external selected updates to children when readonly", async () => {

@@ -10,14 +10,11 @@ describe("RadioButtonGroup", () => {
   it("should render with default props", () => {
     render(RadioButtonGroup);
 
-    expect(screen.getByRole("radiogroup")).toBeInTheDocument();
     expect(screen.getByRole("radiogroup")).toHaveAttribute(
       "aria-orientation",
       "horizontal",
     );
-    expect(screen.getByRole("radio", { name: "Option 1" })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: "Option 2" })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: "Option 3" })).toBeInTheDocument();
+    expect(screen.getAllByRole("radio")).toHaveLength(3);
   });
 
   it("should handle selected value", () => {
@@ -155,7 +152,6 @@ describe("RadioButtonGroup", () => {
   it("should handle legend text", () => {
     render(RadioButtonGroup, { props: { legendText: "Choose an option" } });
 
-    expect(screen.getByText("Choose an option")).toBeInTheDocument();
     expect(
       screen.getByRole("radiogroup", { name: "Choose an option" }),
     ).toBeInTheDocument();
@@ -268,14 +264,13 @@ describe("RadioButtonGroup", () => {
   it("should render helper text when provided", () => {
     render(RadioButtonGroup, { props: { helperText: "Helper text message" } });
     const helperElement = screen.getByText("Helper text message");
-    expect(helperElement).toHaveTextContent("Helper text message");
     expect(helperElement).toHaveClass("bx--form__helper-text");
   });
 
   it("should not render helper text by default", () => {
-    render(RadioButtonGroup);
-    const helperElement = screen.queryByText("Helper text message");
-    expect(helperElement).not.toBeInTheDocument();
+    const { container } = render(RadioButtonGroup);
+
+    expect(container.querySelector(".bx--form__helper-text")).toBeNull();
   });
 
   it("should associate helper text with each radio via aria-describedby", () => {
@@ -310,7 +305,6 @@ describe("RadioButtonGroup", () => {
       });
 
       const message = screen.getByText("Pick one");
-      expect(message).toBeInTheDocument();
 
       const radiogroup = screen.getByRole("radiogroup");
       expect(radiogroup).toHaveAttribute("aria-invalid", "true");

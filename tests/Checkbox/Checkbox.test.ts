@@ -26,7 +26,7 @@ describe("Checkbox", () => {
     const input = screen.getByRole("checkbox");
     expect(input).not.toBeChecked();
     expect(input).not.toBeDisabled();
-    expect(input).not.toHaveAttribute("indeterminate");
+    expect(input).not.toBePartiallyChecked();
 
     const labelText = screen.getByText("Checkbox label");
     const label = labelText.closest("label");
@@ -193,11 +193,11 @@ describe("Checkbox", () => {
 
     await user.click(checkbox2);
     expect(checkbox2).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith(["option-2"]);
+    expect(consoleLog).toHaveBeenLastCalledWith(["option-1"]);
 
     await user.click(checkbox3);
     expect(checkbox3).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith(["option-1", "option-3"]);
+    expect(consoleLog).toHaveBeenLastCalledWith(["option-1", "option-3"]);
   });
 
   it("emits exactly one check event per click in checkbox groups", async () => {
@@ -256,16 +256,18 @@ describe("Checkbox", () => {
   });
 
   it("emits check event when group is updated externally", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { component } = render(CheckboxGroupReactive);
+    const onCheck = vi.fn();
+    const { component } = render(CheckboxGroupReactive, { onCheck });
 
     const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
 
-    consoleLog.mockClear();
+    onCheck.mockClear();
     component.group = ["option-2", "option-1"];
     await tick();
 
     expect(checkbox1).toBeChecked();
+    expect(onCheck).toHaveBeenCalledTimes(1);
+    expect(onCheck).toHaveBeenCalledWith("option-1", true);
     const groupValue = screen.getByTestId("group-value");
     expect(groupValue.textContent).toContain("option-1");
   });
@@ -604,7 +606,7 @@ describe("Checkbox", () => {
     expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
   });
 
-  it("suppresses invalid/warn styling when disabled or readonly", () => {
+  it("suppresses invalid/warn styling when disabled or readonly", async () => {
     const { rerender } = render(CheckboxValidation, {
       invalid: true,
       invalidText: "Required",
@@ -615,7 +617,7 @@ describe("Checkbox", () => {
     );
     expect(screen.queryByText("Required")).not.toBeInTheDocument();
 
-    rerender({
+    await rerender({
       invalid: true,
       invalidText: "Required",
       disabled: false,
@@ -646,9 +648,8 @@ describe("Checkbox", () => {
   });
 
   it("should not render helper text by default", () => {
-    render(Checkbox);
-    const helperElement = screen.queryByText("Helper text message");
-    expect(helperElement).not.toBeInTheDocument();
+    const { container } = render(Checkbox);
+    expect(container.querySelector(".bx--form__helper-text")).toBeNull();
   });
 
   it("associates helper text with the input via aria-describedby", () => {

@@ -44,8 +44,8 @@ describe("TagInput", () => {
       const onAdd = vi.fn();
       render(TagInput, { onAdd });
 
-      input().focus();
-      await user.keyboard("{Enter}");
+      // Not canceled, so the form can still submit on Enter.
+      expect(await fireEvent.keyDown(input(), { key: "Enter" })).toBe(true);
 
       expect(onAdd).not.toHaveBeenCalled();
     });
