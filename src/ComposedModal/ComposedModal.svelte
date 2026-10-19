@@ -53,6 +53,15 @@
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /**
+   * Set to `true` to build the modal's content the first time it opens
+   * instead of at mount, and keep it afterwards. A closed modal is still
+   * laid out (it is only made invisible), so this saves its nodes on pages
+   * that hold modals most visitors never open. Content is not in the DOM,
+   * or in server-rendered markup, until then.
+   */
+  export let lazy = false;
+
+  /**
    * Obtain a reference to the top-level HTML element.
    * @bindable readonly
    * @type {null | HTMLDivElement}
@@ -187,6 +196,10 @@
   function setBodyId(value) {
     bodyId.set(value);
   }
+
+  // `lazy`: the content mounts on the first open and then stays.
+  let openedOnce = open;
+  $: if (open) openedOnce = true;
 
   setContext(MODAL_CONTEXT_KEY, {});
   // As in v11, the modal starts a layer at level 0 wherever it renders.
@@ -343,7 +356,9 @@
     class={containerClass}
     on:mousedown={outsideDismiss.pressInside}
   >
-    <slot />
+    {#if !lazy || openedOnce}
+      <slot />
+    {/if}
     {#if $$slots.decorator}
       <Decorator
         class="bx--modal--inner__decorator"
