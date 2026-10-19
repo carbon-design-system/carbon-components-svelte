@@ -8,9 +8,19 @@ description: Recursive lists render hierarchical data as nested ordered or unord
 
 ## Basic
 
-Create a hierarchical list using the `nodes` prop. Each node can contain text, links, nested children, and HTML content via the html prop (which is not sanitized).
+Create a hierarchical list using the `nodes` prop. Each node can contain text, links, nested children, and HTML content via `html`.
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
+
+## Trusted content
+
+A node's `html` renders with `{@html}`, unsanitized, and its `href` goes straight to the link. Both run as written, so keep them to content you control.
+
+| Do | Why |
+| --- | --- |
+| Use `text` for anything a user or a third party wrote | Text is escaped, so markup in it shows as written |
+| Sanitize `html` that isn't yours, such as with DOMPurify, before passing it | `{@html}` runs event handlers and scripts in the markup |
+| Check that an `href` from outside starts with `https:`, `http:` or `mailto:` | A `javascript:` URL runs when the link is followed |
 
 ## Link attributes
 
