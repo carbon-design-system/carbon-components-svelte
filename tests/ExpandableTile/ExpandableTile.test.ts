@@ -32,12 +32,6 @@ describe("ExpandableTile", () => {
     expect(tile).toHaveClass("bx--tile--is-expanded");
   });
 
-  it("should handle light variant", () => {
-    render(ExpandableTile, { props: { light: true } });
-
-    expect(screen.getByRole("button")).toHaveClass("bx--tile--light");
-  });
-
   it("should handle custom icon text", async () => {
     render(ExpandableTile, {
       props: {

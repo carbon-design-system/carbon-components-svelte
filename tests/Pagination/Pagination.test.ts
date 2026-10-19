@@ -1,6 +1,7 @@
-import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
+import { optionTexts } from "./helpers";
 import Pagination from "./Pagination.test.svelte";
 import PaginationPageSelectSlot from "./PaginationPageSelectSlot.test.svelte";
 
@@ -8,12 +9,12 @@ describe("Pagination", () => {
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2528
   it("does not fire update event on initial render", () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onUpdate = vi.fn();
     render(Pagination, {
-      props: { totalItems: 100, page: 1, pageSize: 10 },
+      props: { totalItems: 100, page: 1, pageSize: 10, onUpdate },
     });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("does not fire update when clamping an out-of-range initial page", async () => {
@@ -28,22 +29,18 @@ describe("Pagination", () => {
     expect(onUpdate).toHaveBeenCalledWith({ pageSize: 10, page: 1 });
   });
 
-  it("defaults to the md size class", () => {
-    const { container } = render(Pagination);
+  it.each([
+    [undefined, "md"],
+    ["xs", "xs"],
+    ["sm", "sm"],
+    ["md", "md"],
+    ["lg", "lg"],
+  ] as const)("size %s applies the %s size class", (size, expected) => {
+    const { container } = render(Pagination, { props: { size } });
 
     const pagination = container.querySelector(".bx--pagination");
-    expect(pagination).toHaveClass("bx--pagination--md");
+    expect(pagination).toHaveClass(`bx--pagination--${expected}`);
   });
-
-  it.each(["xs", "sm", "md", "lg"] as const)(
-    "applies the %s size class",
-    (size) => {
-      const { container } = render(Pagination, { props: { size } });
-
-      const pagination = container.querySelector(".bx--pagination");
-      expect(pagination).toHaveClass(`bx--pagination--${size}`);
-    },
-  );
 
   it("should render with custom total items", () => {
     render(Pagination, {
@@ -87,93 +84,68 @@ describe("Pagination", () => {
     const select = screen.getByRole("combobox", { name: "Items per page:" });
     expect(select).toHaveValue("15");
 
-    const options = within(select).getAllByRole("option");
-    expect(options).toHaveLength(3);
-    expect(options[0]).toHaveTextContent("10");
-    expect(options[1]).toHaveTextContent("15");
-    expect(options[2]).toHaveTextContent("20");
+    expect(optionTexts(select)).toEqual(["10", "15", "20"]);
   });
 
   it("should handle page navigation", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onNext = vi.fn();
+    const onPrevious = vi.fn();
+    const onChange = vi.fn();
     render(Pagination, {
-      props: { totalItems: 102, page: 1 },
+      props: { totalItems: 102, page: 1, onNext, onPrevious, onChange },
     });
 
     const nextButton = screen.getByRole("button", { name: "Next page" });
     await user.click(nextButton);
-    expect(consoleLog).toHaveBeenCalledWith("next", { page: 2 });
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    expect(onNext).toHaveBeenCalledWith({ page: 2 });
+    expect(onChange).toHaveBeenCalledWith({ page: 2 });
 
     const prevButton = screen.getByRole("button", { name: "Previous page" });
     await user.click(prevButton);
-    expect(consoleLog).toHaveBeenCalledWith("previous", { page: 1 });
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 1 });
+    expect(onPrevious).toHaveBeenCalledWith({ page: 1 });
+    expect(onChange).toHaveBeenCalledWith({ page: 1 });
   });
 
   it("should handle page size changes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
     render(Pagination, {
       props: {
         totalItems: 102,
         pageSizes: [10, 15, 20],
+        onChange,
+        onUpdate,
       },
     });
 
     const select = screen.getByRole("combobox", { name: "Items per page:" });
     await user.selectOptions(select, "15");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 15,
-      page: 1,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("update", {
-      pageSize: 15,
-      page: 1,
-    });
+    expect(onChange).toHaveBeenCalledWith({ pageSize: 15, page: 1 });
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 1 });
   });
 
-  it("should disable navigation buttons when disabled", () => {
-    render(Pagination, {
-      props: { disabled: true },
-    });
-
-    const prevButton = screen.getByRole("button", { name: "Previous page" });
-    const nextButton = screen.getByRole("button", { name: "Next page" });
-
-    expect(prevButton).toBeDisabled();
-    expect(nextButton).toBeDisabled();
-  });
-
-  it("should disable the items-per-page select when disabled", () => {
+  it("disables the navigation buttons and both selects when disabled", () => {
     render(Pagination, {
       props: { disabled: true, totalItems: 102, pageSizes: [10, 20] },
     });
 
-    const select = screen.getByRole("combobox", { name: "Items per page:" });
-    expect(select).toBeDisabled();
-  });
-
-  it("should disable the page-number select when disabled", () => {
-    render(Pagination, {
-      props: { disabled: true, totalItems: 102 },
-    });
-
-    const select = screen.getByLabelText(/Page number, of \d+ pages/);
-    expect(select).toBeDisabled();
-  });
-
-  it("uses the singular label when there is one page", () => {
-    render(Pagination, { props: { totalItems: 10, pageSize: 10 } });
-    expect(screen.getByLabelText("Page number, of 1 page")).toBeInTheDocument();
-    expect(screen.queryByLabelText(/of 1 pages/)).not.toBeInTheDocument();
-  });
-
-  it("uses the plural label when there are several pages", () => {
-    render(Pagination, { props: { totalItems: 25, pageSize: 10 } });
     expect(
-      screen.getByLabelText("Page number, of 3 pages"),
-    ).toBeInTheDocument();
+      screen.getByRole("button", { name: "Previous page" }),
+    ).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Next page" })).toBeDisabled();
+    expect(
+      screen.getByRole("combobox", { name: "Items per page:" }),
+    ).toBeDisabled();
+    expect(screen.getByLabelText(/Page number, of \d+ pages/)).toBeDisabled();
+  });
+
+  it.each([
+    [10, "Page number, of 1 page"],
+    [25, "Page number, of 3 pages"],
+  ])("labels the page select for %i items as '%s'", (totalItems, label) => {
+    render(Pagination, { props: { totalItems, pageSize: 10 } });
+    expect(screen.getByLabelText(label)).toBeInTheDocument();
   });
 
   it("moves focus to the forward button when the backward button becomes disabled", async () => {
@@ -268,20 +240,29 @@ describe("Pagination", () => {
   });
 
   it("navigates pages in simple mode", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onNext = vi.fn();
+    const onPrevious = vi.fn();
+    const onChange = vi.fn();
     render(Pagination, {
-      props: { simple: true, totalItems: 102, page: 1 },
+      props: {
+        simple: true,
+        totalItems: 102,
+        page: 1,
+        onNext,
+        onPrevious,
+        onChange,
+      },
     });
 
     await user.click(screen.getByRole("button", { name: "Next page" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("next", { page: 2 });
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    expect(onNext).toHaveBeenCalledWith({ page: 2 });
+    expect(onChange).toHaveBeenCalledWith({ page: 2 });
     expect(screen.getByText("page 2 of 11 pages")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Previous page" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("previous", { page: 1 });
+    expect(onPrevious).toHaveBeenCalledWith({ page: 1 });
     expect(screen.getByText("page 1 of 11 pages")).toBeInTheDocument();
   });
 
@@ -306,14 +287,14 @@ describe("Pagination", () => {
   });
 
   it("should advance the page when pagesUnknown is true", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onNext = vi.fn();
     render(Pagination, {
-      props: { pagesUnknown: true, page: 1 },
+      props: { pagesUnknown: true, page: 1, onNext },
     });
 
     await user.click(screen.getByRole("button", { name: "Next page" }));
 
-    expect(consoleLog).toHaveBeenCalledWith("next", { page: 2 });
+    expect(onNext).toHaveBeenCalledWith({ page: 2 });
     expect(screen.getByText("page 2")).toBeInTheDocument();
   });
 
@@ -370,70 +351,64 @@ describe("Pagination", () => {
   );
 
   it("should update when page or pageSize changes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
     render(Pagination, {
-      props: { totalItems: 102, pageSizes: [5, 10, 15] },
+      props: { totalItems: 102, pageSizes: [5, 10, 15], onChange, onUpdate },
     });
 
     const pageSizeSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSizeSelect[0], "15");
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 15,
-      page: 1,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("update", {
-      pageSize: 15,
-      page: 1,
-    });
+    expect(onChange).toHaveBeenCalledWith({ pageSize: 15, page: 1 });
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 1 });
 
     const pageSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSelect[1], "2");
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
-    expect(consoleLog).toHaveBeenCalledWith("update", {
-      pageSize: 15,
-      page: 2,
-    });
+    expect(onChange).toHaveBeenCalledWith({ page: 2 });
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 2 });
   });
 
   it("resets pageSize and page when an updated pageSizes array drops the current pageSize", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onUpdate = vi.fn();
     const { rerender } = render(Pagination, {
       props: {
         page: 2,
         totalItems: 6,
         pageSize: 2,
         pageSizes: [2, 4],
+        onUpdate,
       },
     });
 
     expect(screen.getByText("3–4 of 6 items")).toBeInTheDocument();
-    consoleLog.mockClear();
+    onUpdate.mockClear();
 
     await rerender({ pageSizes: [3] });
 
     const select = screen.getByRole("combobox", { name: "Items per page:" });
     expect(select).toHaveValue("3");
     expect(screen.getByText("1–3 of 6 items")).toBeInTheDocument();
-    expect(consoleLog).toHaveBeenCalledWith("update", { pageSize: 3, page: 1 });
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 3, page: 1 });
   });
 
   it("keeps pageSize as-is when it remains valid in an updated pageSizes array", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onUpdate = vi.fn();
     const { rerender } = render(Pagination, {
       props: {
         totalItems: 102,
         pageSize: 15,
         pageSizes: [10, 15, 20],
+        onUpdate,
       },
     });
 
-    consoleLog.mockClear();
+    onUpdate.mockClear();
 
     await rerender({ pageSizes: [10, 15] });
 
     const select = screen.getByRole("combobox", { name: "Items per page:" });
     expect(select).toHaveValue("15");
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("keeps an initial pageSize that is not in pageSizes", () => {
@@ -484,31 +459,19 @@ describe("Pagination", () => {
     expect(screen.getByText("custom")).toBeInTheDocument();
   });
 
-  it("renders a cap of 1000 page numbers by default", () => {
-    render(Pagination, {
-      props: { totalItems: 100_000 },
-    });
+  it.each([
+    ["by default", {}, 1_000],
+    ["to a custom pageWindow", { pageWindow: 100 }, 100],
+    [
+      "to pageWindow when the current page is in the middle",
+      { pageWindow: 100, page: 5000 },
+      100,
+    ],
+  ])("caps rendered page numbers %s", (_name, props, length) => {
+    render(Pagination, { props: { totalItems: 100_000, ...props } });
 
     const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
-    expect(pageNumbers).toHaveLength(1_000);
-  });
-
-  it("renders a custom page window", () => {
-    render(Pagination, {
-      props: { totalItems: 100_000, pageWindow: 100 },
-    });
-
-    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
-    expect(pageNumbers).toHaveLength(100);
-  });
-
-  it("caps total rendered page options at pageWindow when current page is in the middle", () => {
-    render(Pagination, {
-      props: { totalItems: 100_000, pageWindow: 100, page: 5000 },
-    });
-
-    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
-    expect(pageNumbers).toHaveLength(100);
+    expect(pageNumbers).toHaveLength(length);
   });
 
   it("formats larger numbers using `toLocaleString`", () => {
@@ -671,117 +634,73 @@ describe("Pagination", () => {
     expect(pagination).toHaveClass("custom-pagination");
   });
 
-  describe("dynamicPageSizes", () => {
-    it("should show all page sizes when dynamicPageSizes is false (default)", () => {
+  it.each([
+    {
+      name: "shows all page sizes when dynamicPageSizes is false (default)",
+      totalItems: 9,
+      dynamicPageSizes: false,
+      expected: ["5", "10", "15"],
+    },
+    {
+      name: "filters out redundant page sizes",
+      totalItems: 9,
+      dynamicPageSizes: true,
+      expected: ["5", "10"],
+    },
+    {
+      name: "keeps only the first page size when totalItems is 0",
+      totalItems: 0,
+      dynamicPageSizes: true,
+      expected: ["5"],
+    },
+    {
+      name: "shows all page sizes when all are smaller than totalItems",
+      totalItems: 100,
+      dynamicPageSizes: true,
+      expected: ["5", "10", "15"],
+    },
+    {
+      name: "shows only the first page size when all are larger than totalItems",
+      totalItems: 3,
+      dynamicPageSizes: true,
+      expected: ["5"],
+    },
+    {
+      name: "includes the exact matching page size",
+      totalItems: 10,
+      pageSizes: [5, 10, 15, 20],
+      dynamicPageSizes: true,
+      expected: ["5", "10"],
+    },
+  ])(
+    "dynamicPageSizes: $name",
+    ({ totalItems, pageSizes = [5, 10, 15], dynamicPageSizes, expected }) => {
       render(Pagination, {
-        props: {
-          totalItems: 9,
-          pageSizes: [5, 10, 15],
-          dynamicPageSizes: false,
-        },
+        props: { totalItems, pageSizes, dynamicPageSizes },
       });
 
       const select = screen.getByRole("combobox", { name: "Items per page:" });
-      const options = within(select).getAllByRole("option");
-      expect(options).toHaveLength(3);
-      expect(options[0]).toHaveTextContent("5");
-      expect(options[1]).toHaveTextContent("10");
-      expect(options[2]).toHaveTextContent("15");
-    });
-
-    it("should filter out redundant page sizes when dynamicPageSizes is true", () => {
-      render(Pagination, {
-        props: {
-          totalItems: 9,
-          pageSizes: [5, 10, 15],
-          dynamicPageSizes: true,
-        },
-      });
-
-      const select = screen.getByRole("combobox", { name: "Items per page:" });
-      const options = within(select).getAllByRole("option");
-      expect(options).toHaveLength(2);
-      expect(options[0]).toHaveTextContent("5");
-      expect(options[1]).toHaveTextContent("10");
-    });
-
-    it("should keep only the first page size when totalItems is 0", () => {
-      render(Pagination, {
-        props: {
-          totalItems: 0,
-          pageSizes: [5, 10, 15],
-          dynamicPageSizes: true,
-        },
-      });
-
-      const select = screen.getByRole("combobox", { name: "Items per page:" });
-      const options = within(select).getAllByRole("option");
-      expect(options).toHaveLength(1);
-      expect(options[0]).toHaveTextContent("5");
-    });
-
-    it("should show all page sizes when all are smaller than totalItems", () => {
-      render(Pagination, {
-        props: {
-          totalItems: 100,
-          pageSizes: [5, 10, 15],
-          dynamicPageSizes: true,
-        },
-      });
-
-      const select = screen.getByRole("combobox", { name: "Items per page:" });
-      const options = within(select).getAllByRole("option");
-      expect(options).toHaveLength(3);
-      expect(options[0]).toHaveTextContent("5");
-      expect(options[1]).toHaveTextContent("10");
-      expect(options[2]).toHaveTextContent("15");
-    });
-
-    it("should show only first page size when all are larger than totalItems", () => {
-      render(Pagination, {
-        props: {
-          totalItems: 3,
-          pageSizes: [5, 10, 15],
-          dynamicPageSizes: true,
-        },
-      });
-
-      const select = screen.getByRole("combobox", { name: "Items per page:" });
-      const options = within(select).getAllByRole("option");
-      expect(options).toHaveLength(1);
-      expect(options[0]).toHaveTextContent("5");
-    });
-
-    it("should include the exact matching page size", () => {
-      render(Pagination, {
-        props: {
-          totalItems: 10,
-          pageSizes: [5, 10, 15, 20],
-          dynamicPageSizes: true,
-        },
-      });
-
-      const select = screen.getByRole("combobox", { name: "Items per page:" });
-      const options = within(select).getAllByRole("option");
-      expect(options).toHaveLength(2);
-      expect(options[0]).toHaveTextContent("5");
-      expect(options[1]).toHaveTextContent("10");
-    });
-  });
+      expect(optionTexts(select)).toEqual(expected);
+    },
+  );
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1634
   it("should not trigger multiple updates when pageSize changes on last page", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
     render(Pagination, {
       props: {
         totalItems: 35,
         page: 4,
         pageSize: 10,
         pageSizes: [10, 15, 20],
+        onChange,
+        onUpdate,
       },
     });
 
-    consoleLog.mockClear();
+    onChange.mockClear();
+    onUpdate.mockClear();
 
     // Change page size from 10 to 15 while on page 4 (items 31-40).
     // The anchor computation keeps item 31 in view, landing on page 3
@@ -791,30 +710,24 @@ describe("Pagination", () => {
     });
     await user.selectOptions(pageSizeSelect, "15");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 15,
-      page: 3,
-    });
-    expect(consoleLog).toHaveBeenCalledWith("update", {
-      pageSize: 15,
-      page: 3,
-    });
+    expect(onChange).toHaveBeenCalledWith({ pageSize: 15, page: 3 });
+    expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 3 });
 
-    const updateCalls = consoleLog.mock.calls.filter(
-      (call) =>
-        call[0] === "update" && call[1].pageSize === 15 && call[1].page === 3,
+    const updateCalls = onUpdate.mock.calls.filter(
+      ([detail]) => detail.pageSize === 15 && detail.page === 3,
     );
     expect(updateCalls.length).toBe(1);
   });
 
   it("keeps the first visible item on screen when the page size changes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     render(Pagination, {
       props: {
         totalItems: 100,
         page: 5,
         pageSize: 10,
         pageSizes: [10, 50],
+        onChange,
       },
     });
 
@@ -826,20 +739,18 @@ describe("Pagination", () => {
 
     const pageSelect = screen.getByLabelText(/Page number, of \d+ pages/);
     expect(pageSelect).toHaveValue("1");
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 50,
-      page: 1,
-    });
+    expect(onChange).toHaveBeenCalledWith({ pageSize: 50, page: 1 });
   });
 
   it("keeps the current page when pagesUnknown and the page size changes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     render(Pagination, {
       props: {
         pagesUnknown: true,
         page: 4,
         pageSize: 10,
         pageSizes: [10, 50],
+        onChange,
       },
     });
 
@@ -849,10 +760,7 @@ describe("Pagination", () => {
     await user.selectOptions(pageSizeSelect, "50");
 
     expect(screen.getByText("page 4")).toBeInTheDocument();
-    expect(consoleLog).toHaveBeenCalledWith("change", {
-      pageSize: 50,
-      page: 4,
-    });
+    expect(onChange).toHaveBeenCalledWith({ pageSize: 50, page: 4 });
   });
 
   describe("pageSelect slot", () => {
@@ -873,22 +781,20 @@ describe("Pagination", () => {
     });
 
     it("navigates when the slot sets the bound page prop", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onChange = vi.fn();
+      const onUpdate = vi.fn();
       render(PaginationPageSelectSlot, {
-        props: { totalItems: 40, pageSizes: [10] },
+        props: { totalItems: 40, pageSizes: [10], onChange, onUpdate },
       });
 
       await user.click(screen.getByText("Go to 3"));
 
       expect(screen.getByTestId("current-page")).toHaveTextContent("3");
-      expect(consoleLog).toHaveBeenCalledWith("update", {
-        pageSize: 10,
-        page: 3,
-      });
+      expect(onUpdate).toHaveBeenCalledWith({ pageSize: 10, page: 3 });
       // The pageSelect slot owns its own control, so Pagination has no
       // interaction handler to fire "change" from; only "update" reflects
       // the bound page prop changing.
-      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+      expect(onChange).not.toHaveBeenCalled();
     });
   });
 });

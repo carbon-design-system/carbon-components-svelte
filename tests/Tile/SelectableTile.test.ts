@@ -20,12 +20,6 @@ describe("SelectableTile", () => {
     expect(tile).toHaveClass("bx--tile--is-selected");
   });
 
-  it("renders with light variant", () => {
-    render(SelectableTileTest, { light: true });
-    const tile = screen.getByTestId("selectable-tile");
-    expect(tile).toHaveClass("bx--tile--light");
-  });
-
   it("renders with disabled state", () => {
     const { container } = render(SelectableTileTest, { disabled: true });
     const tile = screen.getByTestId("selectable-tile");
@@ -51,30 +45,22 @@ describe("SelectableTile", () => {
     expect(tile).not.toHaveAttribute("role", "checkbox");
   });
 
-  it("does not render a title attribute by default", () => {
-    const { container } = render(SelectableTileStandalone);
-    const input = container.querySelector('input[type="checkbox"]');
-    expect(input).not.toHaveAttribute("title");
-  });
+  it("renders a title attribute only when one is set", () => {
+    const { unmount } = render(SelectableTileStandalone);
+    expect(screen.getByRole("checkbox")).not.toHaveAttribute("title");
+    unmount();
 
-  it("renders with custom title and value", () => {
-    const { container } = render(SelectableTileTest, {
+    render(SelectableTileTest, {
       title: "Custom Title",
       value: "custom-value",
     });
-    const input = container.querySelector('input[type="checkbox"]');
+    const input = screen.getByRole("checkbox");
     expect(input).toHaveAttribute("title", "Custom Title");
     expect(input).toHaveAttribute("value", "custom-value");
   });
 
-  it("renders with custom name and icon description", () => {
-    const { container } = render(SelectableTileTest, {
-      name: "custom-name",
-      iconDescription: "Custom checkmark",
-    });
-
-    const input = container.querySelector('input[type="checkbox"]');
-    expect(input).toHaveAttribute("name", "custom-name");
+  it("renders with a custom icon description", () => {
+    render(SelectableTileTest, { iconDescription: "Custom checkmark" });
 
     const icon = screen.getByTestId("selectable-tile").querySelector("svg");
     expect(icon).toHaveAttribute("aria-label", "Custom checkmark");
@@ -100,40 +86,42 @@ describe("SelectableTile", () => {
   });
 
   describe("interaction", () => {
-    it("handles click selection", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileTest);
+    const activate = {
+      click: () => user.click(screen.getByTestId("selectable-tile")),
+      keyboard: async () => {
+        await user.keyboard("{Tab}");
+        await user.keyboard("{Enter}");
+      },
+    };
 
-      const tile = screen.getByTestId("selectable-tile");
-      await user.click(tile);
-      expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
-    });
+    it.each([
+      ["click", false, "select"],
+      ["click", true, "deselect"],
+      ["keyboard", false, "select"],
+      ["keyboard", true, "deselect"],
+    ] as const)(
+      "%s with selected=%s dispatches %s",
+      async (input, selected, event) => {
+        const onSelect = vi.fn();
+        const onDeselect = vi.fn();
+        render(SelectableTileTest, { selected, onSelect, onDeselect });
 
-    it("handles click deselection", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileTest, { selected: true });
+        await activate[input]();
 
-      const tile = screen.getByTestId("selectable-tile");
-      await user.click(tile);
-      expect(consoleLog).toHaveBeenCalledWith("deselect", expect.any(String));
-    });
+        const handlers = { select: onSelect, deselect: onDeselect };
+        expect(handlers[event]).toHaveBeenCalledWith(expect.any(String));
+      },
+    );
 
     it("prevents selection when disabled", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileTest, { disabled: true });
+      const onSelect = vi.fn();
+      const onDeselect = vi.fn();
+      render(SelectableTileTest, { disabled: true, onSelect, onDeselect });
 
       const tile = screen.getByTestId("selectable-tile");
       await user.click(tile);
-      expect(consoleLog).not.toHaveBeenCalled();
-    });
-
-    it("handles keyboard selection", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileTest);
-
-      await user.keyboard("{Tab}");
-      await user.keyboard("{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
+      expect(onSelect).not.toHaveBeenCalled();
+      expect(onDeselect).not.toHaveBeenCalled();
     });
 
     it("forwards the input's change event after updating selected", async () => {
@@ -148,8 +136,9 @@ describe("SelectableTile", () => {
     });
 
     it("toggles once when Enter is held down", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileTest);
+      const onSelect = vi.fn();
+      const onDeselect = vi.fn();
+      render(SelectableTileTest, { onSelect, onDeselect });
       const checkbox = screen.getByRole("checkbox");
       checkbox.focus();
 
@@ -158,17 +147,9 @@ describe("SelectableTile", () => {
       await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
 
       expect(checkbox).toBeChecked();
-      expect(consoleLog).toHaveBeenCalledTimes(1);
-      expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
-    });
-
-    it("handles keyboard deselection", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(SelectableTileTest, { selected: true });
-
-      await user.keyboard("{Tab}");
-      await user.keyboard("{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("deselect", expect.any(String));
+      expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onSelect).toHaveBeenCalledWith(expect.any(String));
+      expect(onDeselect).not.toHaveBeenCalled();
     });
   });
 

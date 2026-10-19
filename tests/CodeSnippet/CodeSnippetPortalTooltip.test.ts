@@ -3,21 +3,14 @@ import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import CodeSnippetInlineInModal from "./CodeSnippetInlineInModal.test.svelte";
+import { mockClipboard, removeFloatingPortals } from "./helpers";
 
 describe("CodeSnippet portal tooltip", () => {
   beforeEach(() => {
-    Object.defineProperty(navigator, "clipboard", {
-      value: { writeText: () => Promise.resolve() },
-      writable: true,
-    });
+    mockClipboard();
   });
 
-  afterEach(() => {
-    const existingPortals = document.querySelectorAll("[data-floating-portal]");
-    for (const portal of existingPortals) {
-      portal.remove();
-    }
-  });
+  afterEach(removeFloatingPortals);
 
   describe("inline variant", () => {
     it("should not use portal when inside Modal with portalTooltip=false", () => {

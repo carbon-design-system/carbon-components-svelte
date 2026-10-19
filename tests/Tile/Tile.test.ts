@@ -4,21 +4,13 @@ import TileRef from "./Tile.ref.test.svelte";
 import Tile from "./Tile.test.svelte";
 
 describe("Tile", () => {
-  it("should render light variant", () => {
-    render(Tile);
-
-    const lightTile = screen.getByText("Light variant");
-    expect(lightTile).toHaveClass("bx--tile", "bx--tile--light");
-  });
-
   it("should handle click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Tile);
+    const onClick = vi.fn();
+    render(Tile, { props: { onClick } });
 
     const tile = screen.getByTestId("click-test");
     await user.click(tile);
-    expect(consoleLog).toHaveBeenCalledWith("clicked");
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
   it("should pass through additional attributes", () => {

@@ -38,6 +38,8 @@
     () => {};
   export let onUpdate: (detail: { page: number; pageSize: number }) => void =
     () => {};
+  export let onPrevious: (detail: { page: number }) => void = () => {};
+  export let onNext: (detail: { page: number }) => void = () => {};
 </script>
 
 <Pagination
@@ -66,18 +68,8 @@
   {forwardButtonDisabled}
   {backButtonDisabled}
   class={customClass}
-  on:change={(e) => {
-    console.log("change", e.detail);
-    onChange(e.detail);
-  }}
-  on:click:button--previous={(e) => {
-    console.log("previous", e.detail);
-  }}
-  on:click:button--next={(e) => {
-    console.log("next", e.detail);
-  }}
-  on:update={(e) => {
-    console.log("update", e.detail);
-    onUpdate(e.detail);
-  }}
+  on:change={(e) => onChange(e.detail)}
+  on:click:button--previous={(e) => onPrevious(e.detail)}
+  on:click:button--next={(e) => onNext(e.detail)}
+  on:update={(e) => onUpdate(e.detail)}
 />

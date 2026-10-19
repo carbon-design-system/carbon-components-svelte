@@ -12,6 +12,7 @@
   export let legendText: ComponentProps<TileGroup>["legendText"] = "";
   export let hideLegend: ComponentProps<TileGroup>["hideLegend"] = false;
   export let customClass = "";
+  export let onSelect: (detail: string) => void = () => {};
 </script>
 
 <TileGroup
@@ -22,9 +23,7 @@
   {legendText}
   {hideLegend}
   class={customClass}
-  on:select={(e) => {
-    console.log("select", e.detail);
-  }}
+  on:select={(e) => onSelect(e.detail)}
 >
   <RadioTile value="option1">Option 1</RadioTile>
   <RadioTile value="option2">Option 2</RadioTile>

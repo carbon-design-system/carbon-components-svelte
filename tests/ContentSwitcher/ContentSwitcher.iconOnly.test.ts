@@ -1,26 +1,22 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, screen } from "@testing-library/svelte";
 import type SwitchComponent from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
 import List from "carbon-icons-svelte/lib/List.svelte";
 import { type ComponentProps, tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import IconOnly from "./ContentSwitcher.iconOnly.test.svelte";
 import IconOnlyMixed from "./ContentSwitcher.iconOnlyMixed.test.svelte";
+import { renderAndFlush } from "./helpers";
 
-/** Open tooltips currently rendered in the portal. */
 describe("ContentSwitcher (icon-only)", () => {
   it("infers the icon-only variant when every Switch sets `icon`", async () => {
-    render(IconOnly);
-    await tick();
-    await tick();
+    await renderAndFlush(IconOnly);
 
     const tablist = screen.getByRole("tablist");
     expect(tablist).toHaveClass("bx--content-switcher--icon-only");
   });
 
   it("does not infer icon-only when a Switch has no `icon`", async () => {
-    render(IconOnlyMixed);
-    await tick();
-    await tick();
+    await renderAndFlush(IconOnlyMixed);
 
     expect(screen.getByRole("tablist")).not.toHaveClass(
       "bx--content-switcher--icon-only",
@@ -28,9 +24,7 @@ describe("ContentSwitcher (icon-only)", () => {
   });
 
   it("renders an icon set after mount", async () => {
-    const { rerender } = render(IconOnlyMixed);
-    await tick();
-    await tick();
+    const { rerender } = await renderAndFlush(IconOnlyMixed);
 
     await rerender({ plainIcon: List });
     await tick();
@@ -45,9 +39,7 @@ describe("ContentSwitcher (icon-only)", () => {
   });
 
   it("labels each icon switch with `text` and renders the icon, not a text label", async () => {
-    const { container } = render(IconOnly);
-    await tick();
-    await tick();
+    const { container } = await renderAndFlush(IconOnly);
 
     const dashboard = screen.getByRole("tab", { name: "Dashboard" });
     expect(dashboard).toHaveAttribute("aria-label", "Dashboard");
@@ -62,9 +54,7 @@ describe("ContentSwitcher (icon-only)", () => {
   it("opens a tooltip on hover after the enter delay and closes after the leave delay", async () => {
     vi.useFakeTimers();
     try {
-      render(IconOnly);
-      await tick();
-      await tick();
+      await renderAndFlush(IconOnly);
 
       const dashboard = screen.getByRole("tab", { name: "Dashboard" });
 
@@ -85,9 +75,7 @@ describe("ContentSwitcher (icon-only)", () => {
   });
 
   it("opens a tooltip on focus and closes on blur", async () => {
-    render(IconOnly);
-    await tick();
-    await tick();
+    await renderAndFlush(IconOnly);
 
     const dashboard = screen.getByRole("tab", { name: "Dashboard" });
 
@@ -104,9 +92,7 @@ describe("ContentSwitcher (icon-only)", () => {
   it("shows only one tooltip at a time (warm handoff between neighbors)", async () => {
     vi.useFakeTimers();
     try {
-      render(IconOnly);
-      await tick();
-      await tick();
+      await renderAndFlush(IconOnly);
 
       const toc = screen.getByRole("tab", { name: "Table of contents" });
       const dashboard = screen.getByRole("tab", { name: "Dashboard" });
@@ -130,9 +116,7 @@ describe("ContentSwitcher (icon-only)", () => {
   it("does not open a tooltip for a disabled switch", async () => {
     vi.useFakeTimers();
     try {
-      render(IconOnly, { props: { disabledLast: true } });
-      await tick();
-      await tick();
+      await renderAndFlush(IconOnly, { props: { disabledLast: true } });
 
       const list = screen.getByRole("tab", { name: "List" });
       expect(list).toBeDisabled();
@@ -146,9 +130,7 @@ describe("ContentSwitcher (icon-only)", () => {
   });
 
   it("aligns the tooltip per `tooltipAlignment`", async () => {
-    render(IconOnly, { props: { tooltipAlignment: "start" } });
-    await tick();
-    await tick();
+    await renderAndFlush(IconOnly, { props: { tooltipAlignment: "start" } });
 
     const dashboard = screen.getByRole("tab", { name: "Dashboard" });
     await fireEvent.focus(dashboard);

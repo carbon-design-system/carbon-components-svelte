@@ -7,12 +7,7 @@
     "manual";
 </script>
 
-<ContentSwitcher
-  {selectionMode}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
->
+<ContentSwitcher {selectionMode}>
   <Switch text="Option 1" />
   <Switch text="Option 2" />
   <Switch text="Option 3" />

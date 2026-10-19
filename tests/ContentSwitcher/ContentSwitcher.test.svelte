@@ -9,27 +9,22 @@
   export let customClass = "";
   export let switchRef: ComponentProps<Switch>["ref"] = null;
   export let ref: ComponentProps<ContentSwitcher>["ref"] = null;
+  export let onChange: (detail: number) => void = () => {};
+  export let onClick: () => void = () => {};
+  export let onMouseover: () => void = () => {};
+  export let onMouseenter: () => void = () => {};
+  export let onMouseleave: () => void = () => {};
 </script>
 
 <ContentSwitcher
   bind:ref
   {selectedIndex}
   class={customClass}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
-  on:click={() => {
-    console.log("click");
-  }}
-  on:mouseover={() => {
-    console.log("mouseover");
-  }}
-  on:mouseenter={() => {
-    console.log("mouseenter");
-  }}
-  on:mouseleave={() => {
-    console.log("mouseleave");
-  }}
+  on:change={(e) => onChange(e.detail)}
+  on:click={onClick}
+  on:mouseover={onMouseover}
+  on:mouseenter={onMouseenter}
+  on:mouseleave={onMouseleave}
 >
   <Switch text="Option 1" />
   <Switch text="Option 2" bind:ref={switchRef} />

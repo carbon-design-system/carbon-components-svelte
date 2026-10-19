@@ -104,20 +104,20 @@ describe("PaginationNav", () => {
   });
 
   it("should emit change event when clicking a page", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(PaginationNav);
+    const onChange = vi.fn();
+    render(PaginationNav, { props: { onChange } });
 
     const pageButton = screen.getByRole("button", { name: /2/ });
     await user.click(pageButton);
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    expect(onChange).toHaveBeenCalledWith({ page: 2 });
 
     const nextButton = screen.getByRole("button", { name: "Next page" });
     await user.click(nextButton);
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 3 });
+    expect(onChange).toHaveBeenCalledWith({ page: 3 });
 
     const prevButton = screen.getByRole("button", { name: "Previous page" });
     await user.click(prevButton);
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    expect(onChange).toHaveBeenCalledWith({ page: 2 });
   });
 
   it("should announce current 1-based page in the live region", async () => {
@@ -174,20 +174,20 @@ describe("PaginationNav", () => {
   });
 
   it("should handle overflow selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     render(PaginationNav, {
-      props: { total: 100, shown: 5 },
+      props: { total: 100, shown: 5, onChange },
     });
 
     const overflowIndicator = screen.getByLabelText("Select Page number");
 
     await user.selectOptions(overflowIndicator, "4");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 4 });
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith({ page: 4 });
+    expect(onChange).toHaveBeenCalledTimes(1);
 
     await user.selectOptions(overflowIndicator, "50");
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 50 });
-    expect(consoleLog).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenCalledWith({ page: 50 });
+    expect(onChange).toHaveBeenCalledTimes(2);
   });
 });
