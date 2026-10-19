@@ -59,6 +59,21 @@ describe("TileGroup form reset", () => {
     expect(onSelect).not.toHaveBeenCalled();
   });
 
+  it("restores a numeric value as the tile's own value", async () => {
+    // Numbers are outside the typed `string` contract, but work elsewhere.
+    render(TileGroupForm, {
+      props: { values: [1, 2] as unknown as string[] },
+    });
+    const [, radioB] = getRadios();
+    assert(radioB instanceof HTMLInputElement);
+    radioB.defaultChecked = true;
+
+    await resetForm();
+
+    expect(radioB).toBeChecked();
+    expect(radioB.nextElementSibling).toHaveClass("bx--tile--is-selected");
+  });
+
   it("clears the bound value when nothing was selected before the reset", async () => {
     const onSelect = vi.fn();
     render(TileGroupForm, { props: { onSelect } });
