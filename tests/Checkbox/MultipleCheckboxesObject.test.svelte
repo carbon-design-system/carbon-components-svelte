@@ -6,7 +6,9 @@
     b: false,
   };
 
-  $: console.log("object changed:", obj);
+  export let onChange: (obj: { a: boolean; b: boolean }) => void = () => {};
+
+  $: onChange(obj);
 </script>
 
 <Checkbox bind:checked={obj.a} labelText="A" />

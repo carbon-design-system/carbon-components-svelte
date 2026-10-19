@@ -19,6 +19,9 @@
   export let readonlyText: ComponentProps<RadioButton>["readonlyText"] =
     undefined;
   export let customClass = "";
+  export let onFocus: () => void = () => {};
+  export let onBlur: () => void = () => {};
+  export let onChange: () => void = () => {};
 </script>
 
 <RadioButton
@@ -36,13 +39,7 @@
   bind:ref
   class={customClass}
   {...$$restProps}
-  on:focus={() => {
-    console.log("focus");
-  }}
-  on:blur={() => {
-    console.log("blur");
-  }}
-  on:change={() => {
-    console.log("change");
-  }}
+  on:focus={onFocus}
+  on:blur={onBlur}
+  on:change={onChange}
 />

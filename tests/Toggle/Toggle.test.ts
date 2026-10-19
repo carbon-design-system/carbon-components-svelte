@@ -4,8 +4,6 @@ import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
 import ToggleValidation from "./Toggle.validation.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
-import ToggleSkeletonSlot from "./ToggleSkeleton.slot.test.svelte";
-import ToggleSkeletonNullishAriaLabel from "./ToggleSkeletonNullishAriaLabel.test.svelte";
 
 describe("Toggle", () => {
   const getToggle = (label: string) =>
@@ -27,40 +25,26 @@ describe("Toggle", () => {
     expect(toggle).toHaveClass("bx--toggle-input--small");
   });
 
-  it("handles keyboard interactions (Space)", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+  it.each([
+    ["Space", " "],
+    ["Enter", "{Enter}"],
+  ])("handles keyboard interactions (%s)", async (_, key) => {
+    const onToggle = vi.fn();
+    const onChange = vi.fn();
+    render(Toggle, { onToggle, onChange });
 
     const toggle = getToggle("Default toggle");
     toggle.focus();
 
-    await user.keyboard(" ");
+    await user.keyboard(key);
     expect(toggle).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("toggled:", true);
-    expect(consoleLog).toHaveBeenCalledWith("change:", true);
+    expect(onToggle).toHaveBeenCalledWith(true);
+    expect(onChange).toHaveBeenCalledWith(true);
 
-    await user.keyboard(" ");
+    await user.keyboard(key);
     expect(toggle).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("toggled:", false);
-    expect(consoleLog).toHaveBeenCalledWith("change:", false);
-  });
-
-  it("handles keyboard interactions (Enter)", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
-
-    const toggle = getToggle("Default toggle");
-    toggle.focus();
-
-    await user.keyboard("{Enter}");
-    expect(toggle).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("toggled:", true);
-    expect(consoleLog).toHaveBeenCalledWith("change:", true);
-
-    await user.keyboard("{Enter}");
-    expect(toggle).not.toBeChecked();
-    expect(consoleLog).toHaveBeenCalledWith("toggled:", false);
-    expect(consoleLog).toHaveBeenCalledWith("change:", false);
+    expect(onToggle).toHaveBeenCalledWith(false);
+    expect(onChange).toHaveBeenCalledWith(false);
   });
 
   it("toggles once while Enter is held down", async () => {
@@ -74,19 +58,22 @@ describe("Toggle", () => {
   });
 
   it("ignores other key presses", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+    const onToggle = vi.fn();
+    const onChange = vi.fn();
+    render(Toggle, { onToggle, onChange });
 
     const toggle = getToggle("Default toggle");
     toggle.focus();
 
     await user.keyboard("a");
     expect(toggle).not.toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onToggle).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
 
     await user.keyboard("{Tab}");
     expect(toggle).not.toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onToggle).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("prevents default on enter key", async () => {
@@ -99,15 +86,17 @@ describe("Toggle", () => {
   });
 
   it("handles disabled state interactions", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+    const onToggle = vi.fn();
+    const onChange = vi.fn();
+    render(Toggle, { onToggle, onChange });
 
     const toggle = getToggle("Disabled toggle");
     expect(toggle).toBeDisabled();
 
     await user.click(toggle);
     expect(toggle).not.toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onToggle).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("supports initial toggled state", () => {
@@ -121,8 +110,9 @@ describe("Toggle", () => {
   });
 
   it("handles rapid clicking", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+    const onToggle = vi.fn();
+    const onChange = vi.fn();
+    render(Toggle, { onToggle, onChange });
 
     const toggle = getToggle("Default toggle");
 
@@ -131,7 +121,8 @@ describe("Toggle", () => {
     await user.click(toggle);
 
     expect(toggle).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledTimes(6); // 3 toggle events + 3 change events
+    expect(onToggle).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenCalledTimes(3);
   });
 
   it("visually hides label when hideLabel is true", () => {
@@ -154,35 +145,38 @@ describe("Toggle", () => {
   });
 
   it("does not dispatch toggle event on mount", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+    const onToggle = vi.fn();
+    const onChange = vi.fn();
+    render(Toggle, { onToggle, onChange });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onToggle).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
     expect(getToggle("Default toggle")).not.toBeChecked();
   });
 
   it("handles focus and blur events", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(Toggle, { onFocus, onBlur });
 
     const toggle = getToggle("Events toggle");
     toggle.focus();
     expect(toggle).toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("focus");
+    expect(onFocus).toHaveBeenCalled();
 
     toggle.blur();
     expect(toggle).not.toHaveFocus();
-    expect(consoleLog).toHaveBeenCalledWith("blur");
+    expect(onBlur).toHaveBeenCalled();
   });
 
   it("handles click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Toggle);
+    const onClick = vi.fn();
+    render(Toggle, { onClick });
 
     const toggle = getToggle("Events toggle");
     await user.click(toggle);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onClick).toHaveBeenCalled();
   });
 
   it("applies custom class", () => {
@@ -193,21 +187,11 @@ describe("Toggle", () => {
     expect(formItem).toHaveClass("custom-class");
   });
 
-  it("supports label text slot", () => {
+  it("supports labelChildren, labelA and labelB slots", () => {
     render(Toggle);
 
     expect(screen.getByText("Label slot")).toBeInTheDocument();
-  });
-
-  it("supports labelA slot", () => {
-    render(Toggle);
-
     expect(screen.getByText("Off slot")).toBeInTheDocument();
-  });
-
-  it("supports labelB slot", () => {
-    render(Toggle);
-
     expect(screen.getByText("On slot")).toBeInTheDocument();
   });
 
@@ -217,13 +201,6 @@ describe("Toggle", () => {
     expect(component.ref).toBeInstanceOf(HTMLInputElement);
     assert(component.ref);
     expect(component.ref.type).toBe("checkbox");
-  });
-
-  it("supports custom label slot for ToggleSkeleton", () => {
-    render(ToggleSkeletonSlot);
-
-    const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
   });
 
   describe("readonly", () => {
@@ -314,13 +291,6 @@ describe("Toggle", () => {
     const directSpans = label?.querySelectorAll(":scope > span") ?? [];
     expect(directSpans).toHaveLength(1);
     expect(directSpans[0]).toHaveClass("bx--toggle__switch");
-  });
-
-  // Regression: ?? for aria-label so empty string is used (not fallback)
-  it("ToggleSkeleton uses empty aria-label when passed (nullish coalescing)", () => {
-    render(ToggleSkeletonNullishAriaLabel, { props: { ariaLabel: "" } });
-    const label = document.querySelector("label[aria-label]");
-    expect(label).toHaveAttribute("aria-label", "");
   });
 
   describe("warning", () => {

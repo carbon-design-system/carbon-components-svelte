@@ -4,8 +4,10 @@
 
   export let values = ["Apple", "Banana", "Coconut"];
   export let group = values.slice(0, 2);
+  export let onChange: (group: string[]) => void = () => {};
+  export let onSet: () => void = () => {};
 
-  $: console.log("group changed:", group);
+  $: onChange(group);
 </script>
 
 {#each values as value}
@@ -15,7 +17,7 @@
 <Button
   on:click={() => {
     group = ["Banana"];
-    console.log("set to banana");
+    onSet();
   }}
 >
   Set to ["Banana"]

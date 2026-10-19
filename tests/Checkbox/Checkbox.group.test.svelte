@@ -3,7 +3,9 @@
 
   export let group = ["option-2"];
 
-  $: console.log(group);
+  export let onChange: (group: string[]) => void = () => {};
+
+  $: onChange(group);
 </script>
 
 <Checkbox

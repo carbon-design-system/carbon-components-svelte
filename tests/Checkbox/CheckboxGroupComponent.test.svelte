@@ -22,6 +22,8 @@
     undefined;
   export let customClass = "";
   export let useSlot = false;
+  export let onChange: (selected: ReadonlyArray<string | number>) => void =
+    () => {};
 </script>
 
 {#if useSlot}
@@ -40,9 +42,7 @@
     {readonly}
     {orientation}
     class={customClass}
-    on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    on:change={(e) => onChange(e.detail)}
   >
     <span slot="legendChildren">Custom Legend</span>
     <Checkbox value="1" labelText="Option 1" />
@@ -66,9 +66,7 @@
     {readonly}
     {orientation}
     class={customClass}
-    on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    on:change={(e) => onChange(e.detail)}
   >
     <Checkbox value="1" labelText="Option 1" />
     <Checkbox value="2" labelText="Option 2" />

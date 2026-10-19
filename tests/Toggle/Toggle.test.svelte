@@ -7,19 +7,20 @@
   let toggled = false;
   let initialToggled = true;
   export let ref: ComponentProps<Toggle>["ref"] = null;
+  export let onToggle: (toggled: boolean) => void = () => {};
+  export let onChange: (checked: boolean) => void = () => {};
+  export let onFocus: () => void = () => {};
+  export let onBlur: () => void = () => {};
+  export let onClick: () => void = () => {};
 </script>
 
 <Toggle
   bind:toggled
   bind:ref
   labelText="Default toggle"
-  on:toggle={(e) => {
-    console.log("toggled:", e.detail.toggled);
-  }}
+  on:toggle={(e) => onToggle(e.detail.toggled)}
   on:change={(e) => {
-    if (e.target instanceof HTMLInputElement) {
-      console.log("change:", e.target.checked);
-    }
+    if (e.target instanceof HTMLInputElement) onChange(e.target.checked);
   }}
 />
 
@@ -39,22 +40,13 @@
   bind:toggled={initialToggled}
   labelText="Initial toggled state"
   name="test-toggle"
-  on:toggle={(e) => {
-    console.log("initial toggled:", e.detail.toggled);
-  }}
 />
 
 <Toggle
   labelText="Events toggle"
-  on:focus={() => {
-    console.log("focus");
-  }}
-  on:blur={() => {
-    console.log("blur");
-  }}
-  on:click={() => {
-    console.log("click");
-  }}
+  on:focus={onFocus}
+  on:blur={onBlur}
+  on:click={onClick}
 />
 
 <Toggle class="custom-class" labelText="Custom class toggle" />
