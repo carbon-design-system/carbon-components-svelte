@@ -364,6 +364,16 @@ describe("Checkbox", () => {
     );
   });
 
+  it("builds the validation message box only while invalid or warning", async () => {
+    const { rerender } = render(CheckboxValidation, {});
+    const wrapper = screen.getByTestId("checkbox");
+    const box = () => wrapper.querySelector(".bx--checkbox__validation-msg");
+    expect(box()).toBeNull();
+
+    await rerender({ warn: true, warnText: "Check this" });
+    expect(box()).toHaveTextContent("Check this");
+  });
+
   it("marks the warning state for styling", () => {
     render(CheckboxValidation, { warn: true });
 
