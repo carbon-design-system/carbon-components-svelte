@@ -92,7 +92,7 @@ describe("CodeSnippet portal tooltip", () => {
         props: { modalOpen: true, portalTooltip: false },
       });
 
-      rerender({ modalOpen: true, portalTooltip: true });
+      await rerender({ modalOpen: true, portalTooltip: true });
 
       const button = screen.getByRole("button", { name: "Copy code" });
       await user.click(button);
@@ -100,7 +100,7 @@ describe("CodeSnippet portal tooltip", () => {
         document.querySelector("[data-floating-portal]"),
       ).toBeInTheDocument();
 
-      rerender({ modalOpen: false, portalTooltip: true });
+      await rerender({ modalOpen: false, portalTooltip: true });
       await flushMacrotask();
 
       expect(

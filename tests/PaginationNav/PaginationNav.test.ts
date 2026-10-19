@@ -42,13 +42,20 @@ describe("PaginationNav", () => {
   });
 
   it("should handle custom shown pages", () => {
-    render(PaginationNav, {
+    const { container } = render(PaginationNav, {
       props: { total: 20, shown: 5 },
     });
 
-    const pageItems = screen.getAllByRole("listitem");
-    // Should show 5 pages + 2 navigation buttons
-    expect(pageItems.length).toBe(7);
+    const pages = Array.from(
+      container.querySelectorAll("button[data-page]"),
+    ).map((button) => Number(button.getAttribute("data-page")));
+
+    // `shown` counts the overflow too: 1, 2, 3, overflow, 20.
+    expect(pages).toEqual([1, 2, 3, 20]);
+    // Only the back overflow exists at page 1.
+    expect(screen.getAllByLabelText("Select Page number")).toHaveLength(1);
+    // Previous, Next, the four page items and the overflow.
+    expect(screen.getAllByRole("listitem")).toHaveLength(7);
   });
 
   it("should disable previous button on first page", () => {
@@ -194,7 +201,6 @@ describe("PaginationNav", () => {
     });
 
     const overflowIndicator = screen.getByLabelText("Select Page number");
-    expect(overflowIndicator).toBeInTheDocument();
 
     await user.selectOptions(overflowIndicator, "4");
 

@@ -444,11 +444,12 @@ describe("ContentSwitcher", () => {
     render(ContentSwitcherCustom);
 
     const customContent = screen.getByTestId("custom-content");
-    expect(customContent).toBeInTheDocument();
     expect(customContent).toHaveTextContent("Custom Content");
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs).toHaveLength(2);
+    expect(tabs[0]).toContainElement(customContent);
+    expect(tabs[0]).not.toHaveTextContent("Provide text");
     expect(tabs[1]).toHaveTextContent("Regular Text");
   });
 

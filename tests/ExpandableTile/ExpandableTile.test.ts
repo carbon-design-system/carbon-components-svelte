@@ -269,7 +269,9 @@ describe("ExpandableTile", () => {
     });
 
     it("should not toggle when clicking interactive button or link", async () => {
-      render(ExpandableTileCustom);
+      // Let the clicks bubble to the tile, so only the tile ignoring them
+      // keeps it collapsed.
+      render(ExpandableTileCustom, { props: { stopClicks: false } });
 
       const tile = document.querySelector(".bx--tile--expandable");
       const chevronButton = tile?.querySelector("button.bx--tile__chevron");
@@ -312,12 +314,22 @@ describe("ExpandableTile", () => {
     });
   });
 
-  it("should handle mouse events", async () => {
-    render(ExpandableTile);
+  it("should forward mouse events", async () => {
+    const onMouseover = vi.fn();
+    const onMouseenter = vi.fn();
+    const onMouseleave = vi.fn();
+    render(ExpandableTile, {
+      props: { onMouseover, onMouseenter, onMouseleave },
+    });
 
     const tile = screen.getByRole("button");
     await user.hover(tile);
+    expect(onMouseover).toHaveBeenCalledTimes(1);
+    expect(onMouseenter).toHaveBeenCalledTimes(1);
+    expect(onMouseleave).not.toHaveBeenCalled();
+
     await user.unhover(tile);
+    expect(onMouseleave).toHaveBeenCalledTimes(1);
   });
 
   it("does not recompute padding on every re-render", async () => {

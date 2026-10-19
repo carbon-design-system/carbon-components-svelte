@@ -47,7 +47,10 @@ describe("ClickableTile", () => {
     const tile = screen.getByText("Clicked");
     expect(tile).toHaveClass("bx--tile--is-clicked");
 
-    await user.type(tile, "{Space}");
+    // `user.type` clicks the element first, so it cannot tell Space from a
+    // click. Focus the tile and press the key alone.
+    tile.focus();
+    await user.keyboard(" ");
     expect(tile).not.toHaveClass("bx--tile--is-clicked");
   });
 

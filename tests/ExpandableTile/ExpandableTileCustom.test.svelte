@@ -5,6 +5,8 @@
 
   export let buttonClicked = false;
   export let linkClicked = false;
+  /** Set to `false` to let child clicks bubble up to the tile. */
+  export let stopClicks = true;
   export let tabindex: ComponentProps<ExpandableTile>["tabindex"] = "0";
   export let onFocus: (e: FocusEvent) => void = () => {};
   export let onBlur: (e: FocusEvent) => void = () => {};
@@ -25,7 +27,8 @@
     <a
       href="/"
       data-testid="test-link"
-      on:click|preventDefault|stopPropagation={() => {
+      on:click|preventDefault={(e) => {
+        if (stopClicks) e.stopPropagation();
         linkClicked = true;
       }}
     >
@@ -35,7 +38,7 @@
     <Button
       data-testid="test-button"
       on:click={(e) => {
-        e.stopPropagation();
+        if (stopClicks) e.stopPropagation();
         buttonClicked = true;
       }}
     >

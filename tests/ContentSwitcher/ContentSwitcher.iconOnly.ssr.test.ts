@@ -22,12 +22,20 @@ describe("ContentSwitcher icon switches, server-rendered", () => {
 
   it("marks only the switches with an icon", () => {
     const { document } = renderSSR(IconOnlyMixed, {});
-    const marked = document.querySelectorAll(
-      ".bx--content-switcher-btn.bx--content-switcher-btn--icon",
-    );
-    const all = document.querySelectorAll(".bx--content-switcher-btn");
+    const byLabel = (label: string) =>
+      document.querySelector(
+        `.bx--content-switcher-btn[aria-label="${label}"]`,
+      );
 
-    expect(marked.length).toBeGreaterThan(0);
-    expect(marked.length).toBeLessThan(all.length);
+    expect(byLabel("Table of contents")).toHaveClass(
+      "bx--content-switcher-btn--icon",
+    );
+    expect(byLabel("Dashboard")).toHaveClass("bx--content-switcher-btn--icon");
+    // No icon, so no aria-label: found by its text instead.
+    const plain = [
+      ...document.querySelectorAll(".bx--content-switcher-btn"),
+    ].find((button) => button.textContent?.includes("Plain"));
+    expect(plain).toBeDefined();
+    expect(plain).not.toHaveClass("bx--content-switcher-btn--icon");
   });
 });
