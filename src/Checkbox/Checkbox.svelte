@@ -232,12 +232,12 @@
       return;
     }
     const nextChecked = ref.checked;
+    prevChecked = nextChecked;
     if (ctxUpdate) {
-      ctxUpdate(value, nextChecked);
+      ctxUpdate(value, nextChecked, true);
     } else if (useGroup) {
       setGroupMembership(nextChecked);
     } else {
-      prevChecked = nextChecked;
       checked = nextChecked;
     }
   }

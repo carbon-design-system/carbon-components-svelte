@@ -152,6 +152,26 @@ describe("Checkbox form participation", () => {
 
       expect(screen.getByTestId("group").textContent).toBe("");
     });
+
+    it.each(["bind-group", "checkbox-group"] as const)(
+      "%s: fires no events on a form reset",
+      async (mode) => {
+        const onCheck = vi.fn();
+        const onChange = vi.fn();
+        render(CheckboxFormGroup, { props: { mode, onCheck, onChange } });
+
+        await user.click(screen.getByRole("checkbox", { name: "A" }));
+        await user.click(screen.getByRole("checkbox", { name: "B" }));
+        onCheck.mockClear();
+        onChange.mockClear();
+
+        await resetForm();
+
+        expect(screen.getByTestId("group").textContent).toBe("");
+        expect(onCheck).not.toHaveBeenCalled();
+        expect(onChange).not.toHaveBeenCalled();
+      },
+    );
   });
 
   describe("submitted value", () => {
