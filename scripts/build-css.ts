@@ -15,20 +15,21 @@ const FULL_THEMES = process.argv.includes("--themes");
 // Built by default alongside `all`: small, and the docs site loads them.
 const DEFAULT_ENTRIES = ["all", "syntax", "syntax-tokens"];
 
-function minifyEnabled(): boolean {
-  if (process.env.BUILD_CSS_MINIFY === "0") return false;
-  if (process.env.BUILD_CSS_MINIFY === "1") return true;
-  return process.env.CI === "true";
-}
+// `BUILD_CSS_MINIFY=0` keeps the output readable for debugging.
+const MINIFY = process.env.BUILD_CSS_MINIFY !== "0";
 
-const MINIFY = minifyEnabled();
-
+/**
+ * Lowers the CSS to the browser targets (vendor prefixes such as
+ * `-webkit-user-select`) and minifies it. It runs locally as in CI, so
+ * local and e2e builds style pages the way the published CSS does; it
+ * costs ~15ms against the Sass compile's seconds.
+ */
 function postprocessCss(css: string, outFile: string): Uint8Array {
   const { code } = transform({
     filename: outFile,
     code: Buffer.from(css, "utf8"),
     targets,
-    minify: true,
+    minify: MINIFY,
   });
   return code;
 }
@@ -100,7 +101,7 @@ async function sharedInputs(): Promise<string> {
     packageJson.devDependencies?.lightningcss ?? "",
     packageJson.devDependencies?.browserslist ?? "",
     BROWSERSLIST.join(","),
-    MINIFY ? "lightningcss-single-pass" : "sass-compressed",
+    MINIFY ? "lightningcss-minify" : "lightningcss-targets",
     "stat-cache-v1",
   ].join("\0");
 }
@@ -168,7 +169,7 @@ async function build(compiler: Compiler): Promise<void> {
       compiled += 1;
 
       const { css } = await compiler.compileAsync(file, SASS_OPTIONS);
-      const code = MINIFY ? postprocessCss(css, outFile) : css;
+      const code = postprocessCss(css, outFile);
 
       await Bun.write(outFile, code);
       await writeFile(`${CACHE_DIR}/${name}.hash`, `${hash}\n`);
