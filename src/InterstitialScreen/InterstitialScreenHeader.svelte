@@ -11,6 +11,18 @@
   /** Specify the ARIA label for the close icon */
   export let iconDescription = "Close";
 
+  /**
+   * Specify the text announced when the step changes.
+   * @type {(step: number, total: number) => string}
+   */
+  export let stepText = (step, total) => `Step ${step} of ${total}`;
+
+  /**
+   * Specify the assistive text appended to a complete step's name.
+   * @type {(status: "complete" | "invalid") => string}
+   */
+  export let statusText = (status) => status;
+
   import { getContext } from "svelte";
   import ModalHeader from "../ComposedModal/ModalHeader.svelte";
   import Close from "../icons/Close.svelte";
@@ -63,6 +75,7 @@
       currentIndex={$progStep}
       preventChangeOnClick
       spaceEqually
+      {statusText}
     >
       {#each $views as view, index (view.id)}
         <ProgressStep
@@ -72,7 +85,7 @@
       {/each}
     </ProgressIndicator>
     <div aria-live="polite" aria-atomic="true" class:bx--visually-hidden={true}>
-      Step {$progStep + 1} of {$views.length}
+      {stepText($progStep + 1, $views.length)}
     </div>
   </div>
 {/if}
