@@ -7,7 +7,7 @@ description: Session storage provides a reactive wrapper around the sessionStora
 
 See how the component maintains state within a session. Toggle the switch and refresh the page to see the persisted state. State is cleared when the tab is closed. Unlike [LocalStorage](/components/LocalStorage), data is isolated per tab.
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Other SessionStorage components with the same key on the same page stay in sync as well. Session storage is isolated per tab, so this event does not propagate across tabs or windows. When the key is removed or storage is cleared from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Other SessionStorage components with the same key on the same page stay in sync as well. Session storage is isolated per tab, so this event does not propagate across tabs or windows; set `sync="tabs"` to share the value across tabs (see [Sync modes](#sync-modes)). When the key is removed or storage is cleared from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
 
 This example logs the `save` and `update` events as they fire — see [Events](#events) for what each one means and its payload shape.
 
@@ -34,15 +34,27 @@ Switching keys only hydrates the bound value from storage; it does not dispatch 
 
 <FileSource src="/framed/SessionStorage/SessionStorageReactiveKey" />
 
-## Disabling sync
+## Sync modes
 
-With sync enabled by default, the component listens for storage events and updates the bound value when another same-origin document in this tab, such as an iframe, or another SessionStorage on the page writes the same key. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
+The `sync` prop sets which external changes update the bound value. In every mode the component loads storage on mount and saves your own changes. Sync is reactive, so you can change it at runtime.
 
-Session storage is already per tab, so this matters mainly when an iframe shares the session. Turn sync off when the host page should not follow iframe writes, or when the app handles conflicts itself. Sync is reactive, so you can change it at runtime.
+| Value | Updates the value on writes from | Use when |
+| ----- | -------------------------------- | -------- |
+| `"on"` (default) | Other SessionStorage components on the page and same-origin documents in this tab, such as an iframe | Each tab keeps its own state |
+| `"off"` | None | The host page should not follow iframe writes, or the app handles conflicts itself |
+| `"tabs"` | The `"on"` sources, plus SessionStorage components using `sync="tabs"` in other tabs on the same origin | State should be shared while tabs are open, but cleared when they close |
 
 ```svelte
 <SessionStorage key="draft-form-data" bind:value sync="off" />
 ```
+
+### Sync across tabs
+
+With `sync="tabs"`, writes, `clearItem` and `clearAll` reach other open tabs through a [BroadcastChannel](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel), and each tab stores the value in its own session storage. A new tab that has no stored value for the key takes it from an open tab, so a filter or wizard step carries over when you open another tab. When every tab closes, the value is gone, as with any session storage.
+
+Open this page in a second tab and change the step in either one. Where BroadcastChannel is not available, `"tabs"` behaves like `"on"`.
+
+<FileSource src="/framed/SessionStorage/SessionStorageTabs" />
 
 ## Clear item, clear all
 
@@ -53,7 +65,7 @@ The component provides methods to manage stored data:
 | `clearItem` | Remove a specific key-value pair. |
 | `clearAll`  | Remove all stored data.           |
 
-Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again. Other SessionStorage components on the page reset their bound value for the cleared keys.
+Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again. Other SessionStorage components on the page reset their bound value for the cleared keys, and with `sync="tabs"` so do other tabs (see [Sync across tabs](#sync-across-tabs)).
 
 In this example, toggle the switch and refresh the page to confirm the value persists, then try either button to clear storage.
 
@@ -71,7 +83,7 @@ This fires the first time a key is used in the current session, and again after 
 
 ### Update
 
-Dispatched whenever the stored value changes: after a local bound-value write, after `clearItem` or `clearAll`, or after `sync` picks up a matching write from another component on the page or another same-origin document in this tab (see [Disabling sync](#disabling-sync)). The payload is `{ prevValue, value }`; `prevValue` is a snapshot taken before the change, not a live reference to the current value.
+Dispatched whenever the stored value changes: after a local bound-value write, after `clearItem` or `clearAll`, or after `sync` picks up a matching write from another component on the page, another same-origin document in this tab, or, with `sync="tabs"`, another tab (see [Sync modes](#sync-modes)). The payload is `{ prevValue, value }`; `prevValue` is a snapshot taken before the change, not a live reference to the current value.
 
 Switching `key` hydrates the bound value from storage but does not dispatch this event (see [Reactive key](#reactive-key)).
 
