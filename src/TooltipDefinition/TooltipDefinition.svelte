@@ -81,7 +81,8 @@
     portalTooltip === undefined ? !!insideModal : portalTooltip;
 
   // Naming and description belong on the trigger button, not the wrapper.
-  // A consumer `aria-describedby` joins the tooltip id.
+  // A consumer `aria-describedby` joins the tooltip id, which in portal mode
+  // exists only while the tooltip is shown.
   $: ({
     ariaLabel,
     ariaLabelledBy,
@@ -184,7 +185,10 @@
     type="button"
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
-    aria-describedby={joinDescribedBy(id, ariaDescribedBy)}
+    aria-describedby={joinDescribedBy(
+      effectivePortalTooltip && !shown ? undefined : id,
+      ariaDescribedBy,
+    )}
     class:bx--tooltip--portal-active={effectivePortalTooltip}
     class:bx--tooltip--a11y={!effectivePortalTooltip}
     class:bx--tooltip__trigger={true}

@@ -338,6 +338,19 @@ describe("TooltipDefinition", () => {
       );
     });
 
+    it("references the portal tooltip with aria-describedby only while shown", async () => {
+      render(TooltipDefinition, { props: { portalTooltip: true } });
+
+      const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+      expect(trigger).not.toHaveAttribute("aria-describedby");
+
+      await user.tab();
+      expect(trigger).toHaveAttribute(
+        "aria-describedby",
+        screen.getByRole("tooltip").id,
+      );
+    });
+
     it("hides a focused portal tooltip on Escape without bubbling", async () => {
       const onParentKeydown = vi.fn();
       render(TooltipDefinition, {
