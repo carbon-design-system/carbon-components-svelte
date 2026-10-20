@@ -119,19 +119,30 @@
     }
   }
 
+  // Reset `value` together with prevSerialized, as a remote removal does, so
+  // the write block does not re-persist the key that was just cleared.
+  function resetValue() {
+    const prevValue = parseStoredValue(prevSerialized);
+    value = undefined;
+    prevSerialized = serializeStoredValue(value);
+    dispatch("update", { prevValue, value });
+  }
+
   /**
-   * Remove `key` from storage.
+   * Remove `key` from storage and reset `value`.
    * @returns {void}
    */
   export function clearItem() {
     storage.removeItem(key);
+    resetValue();
   }
 
   /**
-   * Clear every key in storage.
+   * Clear every key in storage and reset `value`.
    * @returns {void}
    */
   export function clearAll() {
     storage.clear();
+    resetValue();
   }
 </script>

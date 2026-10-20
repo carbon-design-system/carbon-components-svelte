@@ -29,14 +29,12 @@
 
   /**
    * Remove the persisted key value from the browser's local storage.
-   * Note: this only clears storage; the bound `value` is left untouched.
-   * If `value` mutates afterwards, it will be re-persisted. Reset `value`
-   * yourself if you want it cleared as well.
+   * Also resets the bound `value` to `undefined` and dispatches `update`.
    * @type {() => void}
    * @example
    * ```svelte
    * <LocalStorage bind:this={storage} key="my-key" bind:value={data} />
-   * <button on:click={() => { storage.clearItem(); data = ""; }}>Clear Item</button>
+   * <button on:click={() => storage.clearItem()}>Clear Item</button>
    * ```
    */
   export function clearItem() {
@@ -45,14 +43,12 @@
 
   /**
    * Clear all key values from the browser's local storage.
-   * Note: this only clears storage; the bound `value` is left untouched.
-   * If `value` mutates afterwards, it will be re-persisted. Reset `value`
-   * yourself if you want it cleared as well.
+   * Also resets the bound `value` to `undefined` and dispatches `update`.
    * @type {() => void}
    * @example
    * ```svelte
    * <LocalStorage bind:this={storage} key="my-key" bind:value={data} />
-   * <button on:click={() => { storage.clearAll(); data = ""; }}>Clear All Storage</button>
+   * <button on:click={() => storage.clearAll()}>Clear All Storage</button>
    * ```
    */
   export function clearAll() {
