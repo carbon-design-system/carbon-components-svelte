@@ -18,7 +18,7 @@ The example below logs both `on:save` and `on:update` as they fire; see [Events]
 
 ## Persisting objects and arrays
 
-The bound value can be any JSON-serializable data; objects and arrays are serialized with JSON.stringify. The component compares the serialized form to decide when to write, which has two consequences:
+The bound value can be any JSON-serializable data; objects and arrays are serialized with JSON.stringify. Strings are stored as is, except strings that look like JSON (such as `"123"` or `"true"`), which are JSON-encoded so they read back as strings rather than numbers or booleans. The component compares the serialized form to decide when to write, which has two consequences:
 
 - Reassigning to a new object or array with **identical contents** does not trigger a redundant write.
 - **In-place mutations** (for example, changing a nested theme property) persist only when you signal the change to Svelte. Reassign the value (`value = { ...value, theme: "light" }`) or use the self-assignment idiom (`value = value`); a bare mutation alone will not re-render and therefore will not persist.
@@ -56,7 +56,7 @@ The component provides methods to manage stored data:
 | `clearItem`  | Remove a specific key-value pair.   |
 | `clearAll`   | Remove all stored data.             |
 
-Use `bind:this` to access these methods. They only clear browser storage in the current tab; they do not reset the bound value. Other tabs with the same key will reset their bound value when they receive the storage event. To clear both storage and the bound value in the current tab, reset the value yourself after calling clearItem or clearAll — if you don't, the next mutation to `value` persists as normal and silently rewrites the key you just cleared, since clearing storage doesn't change the component's own record of what `value` currently is.
+Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again. Other tabs with the same key reset their bound value when they receive the storage event.
 
 In this example, try toggling the switch, refreshing the page, then clearing the storage.
 
@@ -68,7 +68,7 @@ The component dispatches three events: `save`, `update`, and `error`.
 
 ### Update
 
-Fires whenever the persisted value changes — after your own `bind:value` write, or when another tab or window writes the same key while `sync` is `"on"` (the default). The payload is `{ prevValue, value }`.
+Fires whenever the persisted value changes — after your own `bind:value` write, after `clearItem` or `clearAll`, or when another tab or window writes the same key while `sync` is `"on"` (the default). The payload is `{ prevValue, value }`.
 
 ```svelte
 <LocalStorage

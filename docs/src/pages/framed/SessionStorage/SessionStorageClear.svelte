@@ -28,7 +28,7 @@
     Toggle the switch, then refresh the page to confirm the value persists.
     <code>clearItem</code>
     removes just this key; <code>clearAll</code> removes every key in session
-    storage. Either way, the toggle itself is left untouched until you refresh.
+    storage. Either way, the toggle resets.
   </div>
 
   <Stack gap={3} orientation="horizontal">
