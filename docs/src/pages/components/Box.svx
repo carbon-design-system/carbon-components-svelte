@@ -39,7 +39,7 @@ Set `fill` to a Carbon background token. Tokens resolve through the active theme
 | `layer-01`     | First layer surface                                                 |
 | `layer-02`     | Second layer surface                                                |
 | `layer-03`     | Third layer surface                                                 |
-| `layer-accent` | Accent surface, such as a placeholder tile. Matches `layer-03` in v10 themes |
+| `layer-accent` | Accent surface, such as a placeholder tile                          |
 | `field`        | Form field background                                               |
 | `inverse`      | Inverse surface background                                          |
 | `brand`        | Brand-colored surface. Pair with on-color text                      |

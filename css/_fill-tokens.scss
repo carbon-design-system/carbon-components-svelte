@@ -2,8 +2,7 @@
 
 @import "carbon-components/scss/globals/scss/vars";
 
-/// Token names follow Carbon v11; values resolve through the v10 theme
-/// variables of the compiled theme.
+/// Each fill name is the Carbon v11 token it paints with.
 /// @access private
 /// @group components
 /// @return {Map} fill token name to theme color
@@ -12,7 +11,7 @@
     background: $background,
     layer-01: $layer-01,
     layer-02: $layer-02,
-    layer-03: $border-subtle-01,
+    layer-03: $layer-03,
     layer-accent: $layer-accent,
     field: $field-01,
     inverse: $background-inverse,
