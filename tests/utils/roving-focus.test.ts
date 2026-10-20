@@ -36,8 +36,8 @@ function setup(count: number, options: Partial<Options> = {}) {
   };
 }
 
-function keydown(target: Element, key: string) {
-  const event = new KeyboardEvent("keydown", { key, bubbles: true });
+function keydown(target: Element, key: string, init: KeyboardEventInit = {}) {
+  const event = new KeyboardEvent("keydown", { key, bubbles: true, ...init });
   const preventDefault = vi.spyOn(event, "preventDefault");
   target.dispatchEvent(event);
   return { event, preventDefault };
@@ -94,6 +94,21 @@ describe("rovingFocus", () => {
     expect(onMove).toHaveBeenCalledWith(to, expect.any(KeyboardEvent));
     expect(preventDefault).toHaveBeenCalledOnce();
   });
+
+  it.each(["altKey", "ctrlKey", "metaKey"])(
+    "leaves Home and End with %s held to the browser",
+    (modifier) => {
+      const { items, onMove, setActive } = setup(3);
+      setActive(1);
+      for (const key of ["Home", "End"]) {
+        const { preventDefault } = keydown(items[1], key, {
+          [modifier]: true,
+        });
+        expect(preventDefault).not.toHaveBeenCalled();
+      }
+      expect(onMove).not.toHaveBeenCalled();
+    },
+  );
 
   it("arrow keys do not call preventDefault", () => {
     const { items } = setup(3);

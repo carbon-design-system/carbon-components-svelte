@@ -1,6 +1,7 @@
 // @ts-check
 
 import { clampIndex } from "./clamp-index.js";
+import { hasModifierKey } from "./has-modifier-key.js";
 import { moveIndex, nextEnabledIndex } from "./move-index.js";
 
 /**
@@ -27,7 +28,8 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
  * Svelte action for arrow-key roving focus inside `node`.
  * Listens for keydown on matching items and on `node` when the list holds focus.
  * Calls `onMove(index, event)`. Index math uses moveIndex, clampIndex, and
- * nextEnabledIndex. Only Home/End call `preventDefault`.
+ * nextEnabledIndex. Only Home/End without Alt, Ctrl or Meta call
+ * `preventDefault`.
  *
  * @param {HTMLElement} node
  * @param {RovingFocusOptions} options
@@ -115,6 +117,9 @@ export function rovingFocus(node, options) {
       (vertical && event.key === "ArrowUp")
     ) {
       index = moveBy(items, -1);
+    } else if (hasModifierKey(event)) {
+      // Leave Ctrl/Cmd+Home/End (scroll to the top or bottom) to the browser.
+      return;
     } else if (currentOptions.home !== false && event.key === "Home") {
       event.preventDefault();
       index = edge(items, 1);
