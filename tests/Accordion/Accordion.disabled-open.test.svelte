@@ -5,11 +5,12 @@
 
   export let open = false;
   export let disabled = false;
+  export let accordionDisabled = false;
 </script>
 
 <Button on:click={() => (disabled = !disabled)}>Toggle disabled</Button>
 
-<Accordion>
+<Accordion disabled={accordionDisabled}>
   <AccordionItem title="Natural Language Classifier" {open} {disabled}>
     <p>Natural Language Classifier content</p>
   </AccordionItem>
