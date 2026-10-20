@@ -219,7 +219,7 @@
     match: sharedMatch,
     highlightedId,
     setActiveId(next) {
-      highlightedId.set(next);
+      setPointerActive(next);
     },
     selectItem(detail) {
       value = detail.value ?? value;
@@ -249,12 +249,16 @@
     },
   });
 
-  const { getOptionElements, moveActive, setActiveEdge } =
-    createOptionListNavigator({
-      getMenuRef: () => menuRef,
-      highlightedId,
-      includeHidden: true,
-    });
+  const {
+    moveActive,
+    setActiveEdge,
+    setPointerActive,
+    getKeyboardActiveOption,
+  } = createOptionListNavigator({
+    getMenuRef: () => menuRef,
+    highlightedId,
+    includeHidden: true,
+  });
 
   /** Keyboard navigation for the `menu` slot (`role="option"`). */
   function handleRichKeydown(event) {
@@ -280,12 +284,10 @@
         setActiveEdge("last");
         break;
       case "Enter": {
-        const active = $highlightedId
-          ? getOptionElements().find((option) => option.id === $highlightedId)
-          : null;
-        if (richMenuVisible && active) {
+        const option = getKeyboardActiveOption();
+        if (richMenuVisible && option) {
           event.preventDefault();
-          active.click();
+          option.click();
         } else {
           dispatchSearch?.cancel();
           dispatch("submit", { value });

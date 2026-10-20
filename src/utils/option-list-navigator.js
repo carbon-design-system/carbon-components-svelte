@@ -17,6 +17,8 @@ import { moveIndex } from "./move-index.js";
  *   getOptionElements: () => HTMLElement[],
  *   moveActive: (step: 1 | -1) => void,
  *   setActiveEdge: (edge: "first" | "last") => void,
+ *   setPointerActive: (id: string | null) => void,
+ *   getKeyboardActiveOption: () => HTMLElement | null,
  * }}
  */
 export function createOptionListNavigator({
@@ -27,6 +29,10 @@ export function createOptionListNavigator({
   const selector = includeHidden
     ? '[role="option"]'
     : '[role="option"]:not([hidden])';
+
+  // Enter commits only an option reached with the keyboard, so a hover
+  // highlight under a resting pointer can't take over a typed submit.
+  let keyboardActive = false;
 
   function getOptionElements() {
     const menuRef = getMenuRef();
@@ -48,6 +54,7 @@ export function createOptionListNavigator({
     }
     const current = els.findIndex((option) => option.id === get(highlightedId));
     highlightedId.set(els[moveIndex(current, step, els.length)].id);
+    keyboardActive = true;
   }
 
   /** @param {"first" | "last"} edge */
@@ -55,7 +62,26 @@ export function createOptionListNavigator({
     const els = getOptionElements();
     if (els.length === 0) return;
     highlightedId.set(els[edge === "first" ? 0 : els.length - 1].id);
+    keyboardActive = true;
   }
 
-  return { getOptionElements, moveActive, setActiveEdge };
+  /** @param {string | null} id */
+  function setPointerActive(id) {
+    highlightedId.set(id);
+    keyboardActive = false;
+  }
+
+  function getKeyboardActiveOption() {
+    const id = get(highlightedId);
+    if (!keyboardActive || !id) return null;
+    return getOptionElements().find((option) => option.id === id) ?? null;
+  }
+
+  return {
+    getOptionElements,
+    moveActive,
+    setActiveEdge,
+    setPointerActive,
+    getKeyboardActiveOption,
+  };
 }
