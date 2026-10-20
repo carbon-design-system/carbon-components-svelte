@@ -216,7 +216,7 @@
 {/if}
 
 {#if render === "toggle"}
-  {@const { themes: toggleThemes, ...toggleProps } = toggle}
+  {@const { themes: toggleThemes = ["white", "g100"], ...toggleProps } = toggle}
   <Toggle
     {...toggleProps}
     toggled={theme === toggleThemes[1]}
@@ -225,14 +225,14 @@
     }}
   />
 {:else if render === "select"}
-  {@const { themes: selectThemes, ...selectProps } = select}
+  {@const { themes: selectThemes = themeKeys, ...selectProps } = select}
   <Select {...selectProps} bind:selected={theme}>
     {#each selectThemes as theme (theme)}
       <SelectItem value={theme} text={themes[theme]} />
     {/each}
   </Select>
 {:else if render === "dropdown"}
-  {@const { themes: dropdownThemes, ...dropdownProps } = dropdown}
+  {@const { themes: dropdownThemes = themeKeys, ...dropdownProps } = dropdown}
   <Dropdown
     {...dropdownProps}
     items={dropdownThemes.map((t) => ({ id: t, text: themes[t] }))}
