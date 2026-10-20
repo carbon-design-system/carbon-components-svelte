@@ -50,14 +50,20 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
-  $: stateSuffix = invalid ? ", invalid" : complete ? ", complete" : "";
+  /** @param {"complete" | "invalid"} status */
+  function defaultStatusText(status) {
+    return status;
+  }
 
   const ctx = getContext("carbon:ProgressIndicator");
+  const statusText = ctx?.statusText ?? writable(defaultStatusText);
   const stepsById = ctx?.stepsById ?? writable({});
   const add = ctx?.add ?? noop;
   const remove = ctx?.remove ?? noop;
   const change = ctx?.change ?? noop;
   const preventChangeOnClick = ctx?.preventChangeOnClick ?? writable(false);
+
+  $: status = invalid ? "invalid" : complete ? "complete" : undefined;
 
   // Current before the batched registration reports, so a server render
   // marks it (see `initial` in ProgressIndicator).
@@ -139,8 +145,8 @@
         <span class:bx--progress-optional={true}>{secondaryLabel}</span>
       {/if}
     </div>
-    {#if stateSuffix}
-      <span class:bx--visually-hidden={true}>{stateSuffix}</span>
+    {#if status}
+      <span class:bx--visually-hidden={true}>, {$statusText(status)}</span>
     {/if}
     <span class:bx--progress-line={true}></span>
   </button>

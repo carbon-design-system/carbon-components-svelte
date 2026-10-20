@@ -29,6 +29,14 @@
   /** Set to `true` to prevent `currentIndex` from updating */
   export let preventChangeOnClick = false;
 
+  /**
+   * Specify the assistive text appended to a complete or invalid step's name.
+   * @type {(status: "complete" | "invalid") => string}
+   */
+  export let statusText = function statusText(status) {
+    return status;
+  };
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -192,10 +200,14 @@
     selectedId,
   };
 
+  const statusTextStore = writable(statusText);
+  $: statusTextStore.set(statusText);
+
   setContext("carbon:ProgressIndicator", {
     steps,
     stepsById,
     preventChangeOnClick: preventChangeOnClickReadable,
+    statusText: statusTextStore,
     add,
     remove,
     change,
