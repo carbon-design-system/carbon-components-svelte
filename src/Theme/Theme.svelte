@@ -16,11 +16,8 @@
    */
 
   /**
-   * @template [Tokens=Record<string, any>]
-   */
-
-  /**
    * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
+   * @typedef {import("./carbon-tokens").CarbonToken} CarbonToken
    * @event update
    * @type {object}
    * @property {CarbonTheme} theme
@@ -35,11 +32,12 @@
   export let theme = "white";
 
   /**
-   * Customize a theme with your own tokens.
+   * Customize a theme with your own tokens. Keys are Carbon v11 token names
+   * (`"button-primary"`, `"layer-01"`), set as `--cds-{token}`.
    * @see https://carbondesignsystem.com/elements/themes/overview/#customizing-a-theme
-   * @type {Tokens}
+   * @type {Partial<Record<CarbonToken, string>>}
    */
-  export let tokens = /** @type {Tokens} */ ({});
+  export let tokens = {};
 
   /** Set to `true` to persist the theme using window.localStorage */
   export let persist = false;
