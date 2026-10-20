@@ -67,7 +67,7 @@
   Test button
 </Button>
 
-<Button skeleton />
+<Button data-testid="btn-skeleton" skeleton style="width: 200px" />
 <Button skeleton size="field" />
 <Button skeleton size="small" />
 

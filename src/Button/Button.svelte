@@ -352,7 +352,9 @@
     {href}
     size={effectiveSize}
     {...$$restProps}
-    style={hasIconOnly && "width: 3rem;"}
+    style={[hasIconOnly && "width: 3rem;", $$restProps.style]
+      .filter(Boolean)
+      .join(" ") || undefined}
     on:click
     on:focus
     on:blur
