@@ -305,6 +305,15 @@
     "To clear the selection, press Delete or Backspace";
 
   /**
+   * Specify the assistive text for how many items are selected. Part of the
+   * field's visually-hidden description, and of `readonlyText` when read-only.
+   * @type {(count: number) => string}
+   */
+  export let selectionCountText = function selectionCountText(count) {
+    return `${count} selected`;
+  };
+
+  /**
    * Specify the assistive text announced through the status live region when
    * the selection is cleared via the keyboard or the clear button.
    */
@@ -1312,7 +1321,7 @@
   // collapsed field still announces how much there is to review.
   $: readonlyDescription =
     selectionCount > 0
-      ? `${readonlyText}, ${selectionCount} selected`
+      ? `${readonlyText}, ${selectionCountText(selectionCount)}`
       : readonlyText;
   $: inline = type === "inline";
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
@@ -2352,8 +2361,7 @@
   {/if}
   {#if hasSelectionDescription}
     <span id={selectionId} class:bx--visually-hidden={true}
-      >{selectionCount}
-      selected. {clearSelectionText}</span
+      >{selectionCountText(selectionCount)}. {clearSelectionText}</span
     >
   {/if}
   <!-- Live region for selection announcements. Always rendered (even while
