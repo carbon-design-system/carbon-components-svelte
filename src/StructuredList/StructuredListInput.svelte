@@ -83,6 +83,9 @@
     on:keydown={(event) => {
       if (event.key === "Enter") {
         event.preventDefault();
+        // Toggle once per press, like Space; a held key would otherwise
+        // toggle on every auto-repeat.
+        if (event.repeat) return;
         ref.click();
       }
     }}
