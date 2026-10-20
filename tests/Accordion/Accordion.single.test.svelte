@@ -2,6 +2,9 @@
   import Accordion from "carbon-components-svelte/Accordion/Accordion.svelte";
   import AccordionItem from "carbon-components-svelte/Accordion/AccordionItem.svelte";
 
+  export let count = 3;
+  export let showLate = false;
+
   const items = [
     {
       title: "Natural Language Classifier",
@@ -22,9 +25,14 @@
 </script>
 
 <Accordion type="single">
-  {#each items as item}
+  {#each items.slice(0, count) as item}
     <AccordionItem title={item.title}>
       <p>{item.description}</p>
     </AccordionItem>
   {/each}
+  {#if showLate}
+    <AccordionItem title="Late" open>
+      <p>Late content</p>
+    </AccordionItem>
+  {/if}
 </Accordion>
