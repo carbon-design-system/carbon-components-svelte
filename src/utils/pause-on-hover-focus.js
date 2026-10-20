@@ -6,11 +6,15 @@
  * `InlineNotification`, whose `pauseOnHover` mouse/focus handling was
  * previously duplicated verbatim.
  *
- * `focusout`/`mouseleave` only resume the timer once focus has actually left
- * the root: a `relatedTarget` still inside the root (tabbing, or the pointer
- * moving between two focusables) and the root still containing
- * `document.activeElement` (pointer leaving while a child keeps focus) both
- * block the resume.
+ * Hover and focus are tracked separately, so the timer stays paused until
+ * both the pointer and focus have left the root. A `relatedTarget` still
+ * inside the root (tabbing, or the pointer moving between two focusables)
+ * keeps focus inside, as does the root still containing
+ * `document.activeElement` when the pointer leaves.
+ *
+ * `refresh()` re-applies the current state, e.g. after `dismiss.sync()`
+ * restarted the timer unpaused. `reset()` forgets it when the root unmounts,
+ * which fires no `mouseleave`/`focusout`.
  *
  * @param {{ pause: () => void, resume: () => void }} dismiss
  * @param {() => boolean} getPauseOnHover
@@ -19,9 +23,14 @@
  *   handleMouseleave: (event: MouseEvent) => void,
  *   handleFocusIn: () => void,
  *   handleFocusOut: (event: FocusEvent) => void,
+ *   refresh: () => void,
+ *   reset: () => void,
  * }}
  */
 export function createHoverFocusPause(dismiss, getPauseOnHover) {
+  let hovered = false;
+  let focused = false;
+
   /**
    * @param {MouseEvent | FocusEvent} event
    */
@@ -33,28 +42,39 @@ export function createHoverFocusPause(dismiss, getPauseOnHover) {
     );
   }
 
-  /**
-   * @param {MouseEvent | FocusEvent} event
-   */
-  function resumeUnlessStillInside(event) {
-    if (!getPauseOnHover() || pointerInside(event)) return;
-    if (
-      event.currentTarget instanceof Node &&
-      event.currentTarget.contains(document.activeElement)
-    ) {
-      return;
-    }
-    dismiss.resume();
+  // Also resumes when `pauseOnHover` was turned off while paused.
+  function apply() {
+    if (getPauseOnHover() && (hovered || focused)) dismiss.pause();
+    else dismiss.resume();
   }
 
   return {
     handleMouseenter() {
-      if (getPauseOnHover()) dismiss.pause();
+      hovered = true;
+      apply();
     },
-    handleMouseleave: resumeUnlessStillInside,
+    handleMouseleave(event) {
+      hovered = false;
+      if (
+        event.currentTarget instanceof Node &&
+        event.currentTarget.contains(document.activeElement)
+      ) {
+        focused = true;
+      }
+      apply();
+    },
     handleFocusIn() {
-      if (getPauseOnHover()) dismiss.pause();
+      focused = true;
+      apply();
     },
-    handleFocusOut: resumeUnlessStillInside,
+    handleFocusOut(event) {
+      focused = pointerInside(event);
+      apply();
+    },
+    refresh: apply,
+    reset() {
+      hovered = false;
+      focused = false;
+    },
   };
 }

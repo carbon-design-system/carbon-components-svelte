@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type NotificationButtonComponent from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import type { ComponentProps } from "svelte";
@@ -502,6 +502,25 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.queryByText("Test notification")).not.toBeInTheDocument();
+  });
+
+  it("should stay paused when the timeout is updated while hovered", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const id = getQueue(component.queue).add({
+      title: "Uploading",
+      timeout: 1000,
+      pauseOnHover: true,
+    });
+    await tick();
+
+    await fireEvent.mouseEnter(screen.getByRole("alert"));
+    getQueue(component.queue).update(id, { timeout: 2000 });
+    await tick();
+    vi.advanceTimersByTime(3000);
+    await tick();
+
+    expect(screen.getByText("Uploading")).toBeInTheDocument();
   });
 
   it("should handle persistent notifications without timeout", async () => {

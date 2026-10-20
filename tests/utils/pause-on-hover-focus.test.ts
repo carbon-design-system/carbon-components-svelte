@@ -56,6 +56,41 @@ describe("createHoverFocusPause", () => {
     expect(dismiss.resume).not.toHaveBeenCalled();
   });
 
+  it("resumes on mouseleave after pauseOnHover is turned off while paused", () => {
+    const dismiss = fakeDismiss();
+    let pauseOnHover = true;
+    const { handleMouseenter, handleMouseleave } = createHoverFocusPause(
+      dismiss,
+      () => pauseOnHover,
+    );
+    const root = document.createElement("div");
+
+    handleMouseenter();
+    pauseOnHover = false;
+    const event = new MouseEvent("mouseleave", {
+      relatedTarget: document.body,
+    });
+    Object.defineProperty(event, "currentTarget", { value: root });
+    handleMouseleave(event);
+
+    expect(dismiss.resume).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not resume when focus leaves while the pointer is still over the root", () => {
+    const dismiss = fakeDismiss();
+    const { handleMouseenter, handleFocusIn, handleFocusOut } =
+      createHoverFocusPause(dismiss, () => true);
+    const root = document.createElement("div");
+
+    handleMouseenter();
+    handleFocusIn();
+    const event = new FocusEvent("focusout", { relatedTarget: document.body });
+    Object.defineProperty(event, "currentTarget", { value: root });
+    handleFocusOut(event);
+
+    expect(dismiss.resume).not.toHaveBeenCalled();
+  });
+
   it("does not resume when the root still contains document.activeElement", () => {
     const dismiss = fakeDismiss();
     const { handleMouseleave } = createHoverFocusPause(dismiss, () => true);
