@@ -157,6 +157,20 @@ describe.each(storageCases)("$name sync", ({ Component, area, other }) => {
     });
   });
 
+  it("stops listening for storage events after unmount", async () => {
+    const onUpdate = vi.fn();
+    const { unmount } = render(StorageHarness, {
+      props: { Component, key: "k", value: "initial", onUpdate },
+    });
+    await tick();
+
+    unmount();
+    fire({ key: "k", newValue: "after-unmount" });
+    await tick();
+
+    expect(onUpdate).not.toHaveBeenCalled();
+  });
+
   describe("sync opt-out", () => {
     it("ignores external storage events when sync is off", async () => {
       const onUpdate = vi.fn();

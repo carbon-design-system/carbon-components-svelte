@@ -6,10 +6,12 @@ import { user } from "../utils/user";
 import { openMenu } from "./helpers";
 import SearchMenu from "./SearchMenu.test.svelte";
 import SearchMenuBar from "./SearchMenuBar.test.svelte";
+import SearchMenuDisabledItem from "./SearchMenuDisabledItem.test.svelte";
 import SearchMenuFooterDivider from "./SearchMenuFooterDivider.test.svelte";
 import SearchMenuGroups from "./SearchMenuGroups.test.svelte";
 import SearchMenuHighlight from "./SearchMenuHighlight.test.svelte";
 import SearchMenuMatch from "./SearchMenuMatch.test.svelte";
+import SearchMenuNoResults from "./SearchMenuNoResults.test.svelte";
 import SearchMenuSkeleton from "./SearchMenuSkeleton.test.svelte";
 
 describe("SearchMenu", () => {
@@ -183,6 +185,47 @@ describe("SearchMenu", () => {
     await user.hover(screen.getByRole("option", { name: /Memcache/ }));
     await user.keyboard("{Enter}");
     expect(screen.getByTestId("result")).toHaveTextContent("submit:Data");
+  });
+
+  it.each([
+    ["{ArrowDown}{ArrowUp}", "HazardHub Property Risk Data API"],
+    ["{End}", "HazardHub Property Risk Data API"],
+    ["{ArrowDown}{ArrowDown}{Home}", "Databases for TestSQL"],
+  ])("moves the highlight with %s", async (keys, label) => {
+    const input = await openMenu();
+    await user.keyboard(keys);
+
+    const active = screen.getByRole("option", { name: label });
+    expect(active).toHaveAttribute("aria-selected", "true");
+    expect(input).toHaveAttribute("aria-activedescendant", active.id);
+  });
+
+  it("shows the noResults slot and keeps the menu open when nothing matches", async () => {
+    render(SearchMenuNoResults);
+    const input = screen.getByRole("combobox");
+    await user.type(input, "zzz");
+
+    expect(screen.getByText("Nothing matches")).toBeVisible();
+    expect(input).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("does not select a disabled item on click", async () => {
+    const onSelect = vi.fn();
+    await openMenu(SearchMenuDisabledItem, { onSelect });
+
+    await user.click(screen.getByRole("option", { name: "Disabled item" }));
+
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+  });
+
+  it("does not highlight a disabled item on hover", async () => {
+    await openMenu(SearchMenuDisabledItem);
+    const option = screen.getByRole("option", { name: "Disabled item" });
+
+    await user.hover(option);
+
+    expect(option).toHaveAttribute("aria-selected", "false");
   });
 
   it("closes on Escape and preserves the value", async () => {

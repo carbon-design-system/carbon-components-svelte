@@ -118,6 +118,61 @@ describe("TagSet", () => {
     expect(await screen.findByRole("button", { name })).toBeInTheDocument();
   });
 
+  it("caps a multiline set at maxVisible and collapses the rest", async () => {
+    const { container } = render(TagSetFixture, {
+      multiline: true,
+      maxVisible: 2,
+    });
+
+    expect(await screen.findByText("+2")).toBeInTheDocument();
+    expect(visibleTagLabels(container)).toEqual(["Tag 1", "Tag 2"]);
+  });
+
+  it("subtracts measurementOffset from the available width", async () => {
+    const { container } = render(TagSetFixture, { measurementOffset: 100 });
+
+    stubMeasurements(container, 210, 50);
+
+    // 210 - 100 = 110 fits one 50px tag plus the 40px indicator.
+    expect(await screen.findByText("+3")).toBeInTheDocument();
+    expect(visibleTagLabels(container)).toEqual(["Tag 1"]);
+  });
+
+  it("measures containingElement instead of its own wrapper", async () => {
+    const { container } = render(TagSetFixture, { measureOuter: true });
+
+    stubMeasurements(container, 1000, 50);
+    stubWidth(screen.getByTestId("outer"), 110);
+
+    expect(await screen.findByText("+3")).toBeInTheDocument();
+    expect(visibleTagLabels(container)).toEqual(["Tag 1"]);
+  });
+
+  it.each(["start", "center", "end"] as const)(
+    "aligns the tag row to %s",
+    (align) => {
+      const { container } = render(TagSetFixture, { align });
+
+      expect(container.querySelector(".bx--tag-set__space")).toHaveClass(
+        `bx--stack-justify-${align}`,
+      );
+    },
+  );
+
+  it("lists a tag added mid-list in DOM order in the overflow tooltip", async () => {
+    const { container, rerender } = render(TagSetFixture, {
+      labels: ["Tag 1", "Tag 2", "Tag 3"],
+      maxVisible: 1,
+    });
+    stubMeasurements(container, 1000, 50);
+    await screen.findByText("+2");
+
+    await rerender({ labels: ["Tag 1", "Tag 2", "New", "Tag 3"] });
+    await user.hover(await screen.findByText("+3"));
+
+    expect(await screen.findByText("Tag 2, New, Tag 3")).toBeInTheDocument();
+  });
+
   it("shows the hidden labels as a plain-text tooltip, not more tags", async () => {
     const { container } = render(TagSetFixture);
 

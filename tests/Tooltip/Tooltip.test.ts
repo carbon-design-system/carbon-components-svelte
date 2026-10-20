@@ -391,6 +391,75 @@ describe("Tooltip", () => {
     },
   );
 
+  describe("portal content", () => {
+    it("closes on Escape from the portalled content", async () => {
+      render(TooltipOpen, { props: { portalTooltip: true } });
+      await vi.advanceTimersByTimeAsync(0);
+
+      await fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+
+    it("closes when focus leaves the portalled content", async () => {
+      render(TooltipOpen, { props: { portalTooltip: true } });
+      await vi.advanceTimersByTimeAsync(0);
+
+      await fireEvent.focusOut(screen.getByRole("dialog"), {
+        relatedTarget: document.body,
+      });
+
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("position offsets", () => {
+    // Distinct box sizes so each term of the offset math shows in the result.
+    const sizes = {
+      "bx--tooltip__label": rect({ width: 40, height: 20 }),
+      "bx--tooltip__trigger": rect({ width: 12, height: 10 }),
+      "bx--tooltip": rect({ width: 100, height: 50 }),
+    } as const;
+
+    function mockSizes() {
+      vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+        function (this: Element) {
+          for (const [className, box] of Object.entries(sizes)) {
+            if (this.classList.contains(className)) return box;
+          }
+          return rect();
+        },
+      );
+    }
+
+    it.each([
+      ["bottom", false, "-16px", "5px"],
+      ["right", false, "46px", "-28px"],
+      ["left", false, "-80px", "-47px"],
+      ["top", false, "-17px", "-75px"],
+      // Without an icon, the icon box falls back to 16 x 16.
+      ["bottom", true, "-30px", "8px"],
+      ["left", true, "-107px", "-47px"],
+      ["top", true, "-30px", "-77px"],
+    ] as const)(
+      "offsets a %s tooltip (hideIcon: %s) to left %s and margin-top %s",
+      async (direction, hideIcon, left, marginTop) => {
+        mockSizes();
+        render(Tooltip, {
+          props: { open: true, direction, hideIcon, iconDescription: "Info" },
+        });
+        await tick();
+        await tick();
+
+        const tooltip = screen
+          .getByRole("dialog")
+          .closest<HTMLElement>(".bx--tooltip");
+        expect(tooltip?.style.left).toBe(left);
+        expect(tooltip?.style.marginTop).toBe(marginTop);
+      },
+    );
+  });
+
   describe("reposition performance", () => {
     afterEach(() => {
       vi.restoreAllMocks();
