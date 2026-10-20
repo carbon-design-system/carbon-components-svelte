@@ -2209,6 +2209,38 @@ Combine `batchExpansion` and `radio` for expandable tables with single-row selec
 
 <FileSource src="/framed/DataTable/DataTableExpandableRadioSelectable" />
 
+## Translations
+
+Replace the names of the expand and select controls with `translateWithId`. Sort button names use `tableHeaderTranslateWithId`.
+
+<DataTable
+  expandable
+  batchExpansion
+  selectable
+  batchSelection
+  translateWithId={(id) => ({
+    expandAll: "Expandir todas las filas",
+    collapseAll: "Contraer todas las filas",
+    expandRow: "Expandir fila",
+    collapseRow: "Contraer fila",
+    expandColumn: "Expandir filas",
+    selectAll: "Seleccionar todas las filas",
+    selectRow: "Seleccionar fila",
+  })[id]}
+  headers="{[
+    { key: "name", value: "Nombre" },
+    { key: "port", value: "Puerto" }
+  ]}"
+  rows="{[
+    { id: "a", name: "Balanceador 3", port: 3000 },
+    { id: "b", name: "Balanceador 1", port: 443 }
+  ]}"
+>
+  <svelte:fragment slot="expandedRow" let:row>
+    Puerto {row.port}
+  </svelte:fragment>
+</DataTable>
+
 ## Events
 
 Listen for clicks and hovers on headers, rows, and cells—for example, to open a detail view when a row is clicked. For the sortable header's cancelable `sort` event, see [Sorting](#sortable-columns).

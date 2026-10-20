@@ -76,6 +76,7 @@
 
   /**
    * @typedef {any} DataTableValue
+   * @typedef {"expandAll" | "collapseAll" | "expandRow" | "collapseRow" | "expandColumn" | "selectAll" | "selectRow"} DataTableTranslationId
    * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
    * @typedef {(
    *   [keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row>] extends [never]
@@ -433,6 +434,38 @@
    * @type {(id: import("./TableHeader.svelte").TableHeaderTranslationId) => string}
    */
   export let tableHeaderTranslateWithId = undefined;
+
+  /**
+   * Override the default translation ids for the expand and select controls.
+   * @type {(id: DataTableTranslationId) => string}
+   */
+  export let translateWithId = function translateWithId(id) {
+    return defaultTranslations[id];
+  };
+
+  /**
+   * Default translation ids.
+   * @type {{ expandAll: "expandAll"; collapseAll: "collapseAll"; expandRow: "expandRow"; collapseRow: "collapseRow"; expandColumn: "expandColumn"; selectAll: "selectAll"; selectRow: "selectRow" }}
+   */
+  export const translationIds = {
+    expandAll: "expandAll",
+    collapseAll: "collapseAll",
+    expandRow: "expandRow",
+    collapseRow: "collapseRow",
+    expandColumn: "expandColumn",
+    selectAll: "selectAll",
+    selectRow: "selectRow",
+  };
+
+  const defaultTranslations = {
+    [translationIds.expandAll]: "Expand all rows",
+    [translationIds.collapseAll]: "Collapse all rows",
+    [translationIds.expandRow]: "Expand current row",
+    [translationIds.collapseRow]: "Collapse current row",
+    [translationIds.expandColumn]: "Expand rows",
+    [translationIds.selectAll]: "Select all rows",
+    [translationIds.selectRow]: "Select row",
+  };
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
@@ -1313,9 +1346,9 @@
                 <button
                   type="button"
                   class:bx--table-expand__button={true}
-                  aria-label={expanded
-                    ? "Collapse all rows"
-                    : "Expand all rows"}
+                  aria-label={translateWithId(
+                    expanded ? "collapseAll" : "expandAll",
+                  )}
                   aria-expanded={expanded}
                   aria-controls={expandableRowIds
                     .map((rid) => `${id}-expandable-row-${rid}`)
@@ -1346,20 +1379,24 @@
                   </slot>
                 </button>
               {:else}
-                <span class:bx--visually-hidden={true}>Expand rows</span>
+                <span class:bx--visually-hidden={true}
+                  >{translateWithId("expandColumn")}</span
+                >
               {/if}
             </th>
           {/if}
           {#if isSelectionEnabled && (radio || !batchSelection)}
             <th scope="col">
-              <span class:bx--visually-hidden={true}>Select row</span>
+              <span class:bx--visually-hidden={true}
+                >{translateWithId("selectRow")}</span
+              >
             </th>
           {/if}
           {#if batchSelection && !radio}
             <th scope="col" class:bx--table-column-checkbox={true}>
               <InlineCheckbox
                 id="{id}-select-all"
-                aria-label="Select all rows"
+                aria-label={translateWithId("selectAll")}
                 name="{id}-select-all"
                 value="all"
                 checked={selectAll}
@@ -1530,8 +1567,8 @@
                       class:bx--table-expand__button={true}
                       aria-controls="{id}-expandable-row-{row.id}"
                       aria-label={expandedRowIdsSet.has(row.id)
-                        ? "Collapse current row"
-                        : "Expand current row"}
+                        ? translateWithId("collapseRow")
+                        : translateWithId("expandRow")}
                       aria-expanded={expandedRowIdsSet.has(row.id)}
                       on:click|stopPropagation={() => {
                         const rowExpanded = expandedRowIdsSet.has(row.id);
@@ -1594,7 +1631,7 @@
                           <span
                             class:bx--radio-button__label-text={true}
                             class:bx--visually-hidden={true}
-                            >Select row</span
+                            >{translateWithId("selectRow")}</span
                           >
                         </label>
                       </div>
@@ -1605,7 +1642,7 @@
                           id={inputId}
                           name={selectionName}
                           form={inputForm}
-                          aria-label="Select row"
+                          aria-label={translateWithId("selectRow")}
                           value={row.id}
                           checked={selectedRowIdsSet.has(row.id)}
                           aria-checked={selectedRowIdsSet.has(row.id)}
@@ -1803,8 +1840,8 @@
                       class:bx--table-expand__button={true}
                       aria-controls="{id}-expandable-row-{row.id}"
                       aria-label={isExpanded
-                        ? "Collapse current row"
-                        : "Expand current row"}
+                        ? translateWithId("collapseRow")
+                        : translateWithId("expandRow")}
                       aria-expanded={isExpanded}
                       on:click|stopPropagation={() => {
                         const next = new Set(expandedRowIds);
@@ -1866,7 +1903,7 @@
                           <span
                             class:bx--radio-button__label-text={true}
                             class:bx--visually-hidden={true}
-                            >Select row</span
+                            >{translateWithId("selectRow")}</span
                           >
                         </label>
                       </div>
@@ -1877,7 +1914,7 @@
                           id={inputId}
                           name={selectionName}
                           form={inputForm}
-                          aria-label="Select row"
+                          aria-label={translateWithId("selectRow")}
                           value={row.id}
                           checked={isSelected}
                           aria-checked={isSelected}
