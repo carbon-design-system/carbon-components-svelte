@@ -80,6 +80,21 @@ describe("HeaderSearch (menu slot)", () => {
     );
   });
 
+  it("submits the typed value when Enter follows a hover highlight", async () => {
+    const onSelect = vi.fn();
+    const onSubmit = vi.fn();
+    render(HeaderSearchMenu, { props: { active: true, onSelect, onSubmit } });
+    const input = screen.getByRole("combobox");
+    await user.type(input, "Data");
+    await user.hover(screen.getByRole("option", { name: /Memcache/ }));
+    await user.keyboard("{Enter}");
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "Data" }),
+    );
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
   it("closes the menu on Escape but preserves the value and active state", async () => {
     const onClose = vi.fn();
     render(HeaderSearchMenu, { props: { active: true, onClose } });

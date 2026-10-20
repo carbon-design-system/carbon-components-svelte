@@ -14,4 +14,6 @@ export function createOptionListNavigator(options: {
   getOptionElements: () => HTMLElement[];
   moveActive: (step: 1 | -1) => void;
   setActiveEdge: (edge: "first" | "last") => void;
+  setPointerActive: (id: string | null) => void;
+  getKeyboardActiveOption: () => HTMLElement | null;
 };

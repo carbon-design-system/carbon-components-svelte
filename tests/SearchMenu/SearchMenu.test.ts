@@ -187,6 +187,16 @@ describe("SearchMenu", () => {
     );
   });
 
+  it("submits the typed value when Enter follows a hover highlight", async () => {
+    render(SearchMenu);
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.type(input, "Data");
+    await user.hover(screen.getByRole("option", { name: /Memcache/ }));
+    await user.keyboard("{Enter}");
+    expect(screen.getByTestId("result")).toHaveTextContent("submit:Data");
+  });
+
   it("closes on Escape and preserves the value", async () => {
     render(SearchMenu);
     const input = screen.getByRole("combobox");

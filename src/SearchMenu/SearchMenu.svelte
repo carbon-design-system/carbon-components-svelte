@@ -264,7 +264,7 @@
     match: sharedMatch,
     highlightedId,
     setActiveId(next) {
-      highlightedId.set(next);
+      setPointerActive(next);
     },
     selectItem(detail) {
       dispatchSearch?.cancel();
@@ -306,11 +306,15 @@
     if (isMenuOpen()) dispatch("close", { trigger });
   }
 
-  const { getOptionElements, moveActive, setActiveEdge } =
-    createOptionListNavigator({
-      getMenuRef: () => menuRef,
-      highlightedId,
-    });
+  const {
+    moveActive,
+    setActiveEdge,
+    setPointerActive,
+    getKeyboardActiveOption,
+  } = createOptionListNavigator({
+    getMenuRef: () => menuRef,
+    highlightedId,
+  });
 
   function handleKeydown(event) {
     if (disabled || readonly) return;
@@ -336,12 +340,10 @@
         setActiveEdge("last");
         break;
       case "Enter": {
-        const active = $highlightedId
-          ? getOptionElements().find((option) => option.id === $highlightedId)
-          : null;
-        if (menuVisible && active) {
+        const option = getKeyboardActiveOption();
+        if (menuVisible && option) {
           event.preventDefault();
-          active.click();
+          option.click();
         } else {
           dispatchSearch?.cancel();
           dispatch("submit", { value });
