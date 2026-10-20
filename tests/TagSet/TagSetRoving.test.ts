@@ -62,6 +62,26 @@ describe("TagSet navigation=roving", () => {
     expect(closeButtonOf("Tag 1")).toHaveFocus();
   });
 
+  it.each(["altKey", "ctrlKey", "metaKey"])(
+    "leaves ArrowRight with %s held to the browser",
+    async (modifier) => {
+      await renderRoving();
+      closeButtonOf("Tag 1").focus();
+
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true,
+        cancelable: true,
+        [modifier]: true,
+      });
+      closeButtonOf("Tag 1").dispatchEvent(event);
+      await tick();
+
+      expect(closeButtonOf("Tag 1")).toHaveFocus();
+      expect(closeButtonOf("Tag 1")).toHaveAttribute("tabindex", "0");
+    },
+  );
+
   it("closes a focused dismissible tag with Delete or Backspace", async () => {
     const onTagClose = vi.fn();
     const onClose = vi.fn();
