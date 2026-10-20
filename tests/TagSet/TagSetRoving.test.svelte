@@ -7,6 +7,7 @@
   export let navigation: ComponentProps<TagSet>["navigation"] = "roving";
   export let maxVisible: ComponentProps<TagSet>["maxVisible"] = undefined;
   export let labels = ["Tag 1", "Tag 2", "Tag 3"];
+  export let leadingFilter = false;
   export let onTagClose: (detail: {
     index: number;
     tag: { value?: string | number };
@@ -24,7 +25,7 @@
     labels = labels.filter((label) => label !== detail.tag.value);
   }}
 >
-  <Tag>Read only</Tag>
+  <Tag filter={leadingFilter}>Read only</Tag>
   {#each labels as label (label)}
     <Tag filter value={label} on:close={() => onClose(label)}>{label}</Tag>
   {/each}

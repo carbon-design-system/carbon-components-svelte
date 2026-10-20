@@ -68,6 +68,15 @@ describe("TagSet navigation=roving", () => {
     expect(closeButtonOf("Tag 1")).toHaveFocus();
   });
 
+  it("reaches a tag that became dismissible after mount", async () => {
+    const { rerender } = await renderRoving();
+    await rerender({ leadingFilter: true });
+
+    closeButtonOf("Tag 1").focus();
+    await user.keyboard("{ArrowLeft}");
+    expect(closeButtonOf("Read only")).toHaveFocus();
+  });
+
   it.each(["altKey", "ctrlKey", "metaKey"])(
     "leaves ArrowRight with %s held to the browser",
     async (modifier) => {
