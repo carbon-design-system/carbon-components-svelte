@@ -23,10 +23,7 @@
    */
   export let open = false;
 
-  /**
-   * Set to `true` to disable the accordion item.
-   * @bindable writable
-   */
+  /** Set to `true` to disable the accordion item */
   export let disabled = false;
 
   /**
@@ -63,13 +60,8 @@
 
   const dispatch = createEventDispatcher();
 
-  let initialDisabled = disabled;
-
   const ctx = getContext("carbon:Accordion");
-  const unsubscribeDisableItems = ctx.disableItems.subscribe((value) => {
-    if (!value && initialDisabled) return;
-    disabled = value;
-  });
+  const { disableItems } = ctx;
 
   const itemKey = {};
 
@@ -88,7 +80,11 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
-  $: if (disabled && open) open = false;
+  // Derived, not written back to `disabled`, so the item's own value
+  // survives the Accordion's `disabled` toggling on and off.
+  $: isDisabled = disabled || $disableItems;
+
+  $: if (isDisabled && open) open = false;
 
   $: if (open) {
     ctx.notifyOpen(itemKey);
@@ -115,7 +111,6 @@
 
   onMount(() => {
     return () => {
-      unsubscribeDisableItems();
       unsubscribeOpenId();
       unsubscribeType();
     };
@@ -126,7 +121,7 @@
   {id}
   class:bx--accordion__item={true}
   class:bx--accordion__item--active={open}
-  class:bx--accordion__item--disabled={disabled}
+  class:bx--accordion__item--disabled={isDisabled}
   class:bx--accordion__item--expanding={animation === "expanding"}
   class:bx--accordion__item--collapsing={animation === "collapsing"}
   {...wrapperProps}
@@ -145,7 +140,7 @@
     aria-describedby={ariaDescribedBy}
     aria-expanded={open}
     aria-controls="{id}-content"
-    {disabled}
+    disabled={isDisabled}
     on:click
     on:click={() => {
       open = !open;

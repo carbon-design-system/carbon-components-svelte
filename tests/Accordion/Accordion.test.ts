@@ -581,6 +581,16 @@ describe("Accordion", () => {
     itemIsCollapsed(/Natural Language Classifier/);
   });
 
+  it("keeps an item disabled after the Accordion is disabled and re-enabled", async () => {
+    const { rerender } = render(AccordionDisabledOpen);
+
+    await rerender({ disabled: true });
+    await rerender({ accordionDisabled: true });
+    await rerender({ accordionDisabled: false });
+
+    itemIsDisabled(/Natural Language Classifier/);
+  });
+
   it("keeps a disabled, closed item closed on click", async () => {
     render(AccordionDisabledOpen, { props: { open: false, disabled: true } });
 
