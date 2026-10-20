@@ -47,6 +47,12 @@
    */
   export let forceShowTotal = false;
 
+  /**
+   * Specify the assistive text read in place of the slash before `total`.
+   * Screen readers don't reliably read the slash itself.
+   */
+  export let totalSeparatorText = "of";
+
   /** Specify the number of fraction digits used when formatting `value` and `total`. */
   export let fractionDigits = 1;
 
@@ -273,9 +279,9 @@
         <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
       {/if}
       {#if showDenominator}
-        <!-- "of" is only meaningful to screen readers; sighted users read the slash. -->
+        <!-- The separator text is only for screen readers; sighted users read the slash. -->
         <span class:bx--big-number__denominator={true}>
-          <span class:bx--visually-hidden={true}>of</span>
+          <span class:bx--visually-hidden={true}>{totalSeparatorText}</span>
           <span aria-hidden="true">/</span>
           <bdi dir={numberDir}>{formattedTotal}</bdi>
         </span>
