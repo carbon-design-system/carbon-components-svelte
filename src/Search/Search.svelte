@@ -30,9 +30,6 @@
   /** Set to `true` to display the skeleton state  */
   export let skeleton = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Set to `true` to disable the search input */
   export let disabled = false;
 
@@ -243,7 +240,6 @@
     data-invalid={showInvalid || undefined}
     data-warn={showWarn || undefined}
     class:bx--search={true}
-    class:bx--search--light={light}
     class:bx--search--disabled={disabled}
     class:bx--search--xs={effectiveSize === "xs"}
     class:bx--search--sm={effectiveSize === "sm"}

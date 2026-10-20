@@ -48,9 +48,6 @@
       background-color: $field;
     }
 
-    .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open:hover {
-      background-color: $field-02;
-    }
   }
 
   .#{$prefix}--overflow-menu--sm {
@@ -94,10 +91,6 @@
     transition: none;
   }
 
-  .#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open {
-    background-color: $field-02;
-  }
-
   .#{$prefix}--overflow-menu__icon {
     width: to-rem(16px);
     height: to-rem(16px);
@@ -131,11 +124,6 @@
         transition: none;
       }
     }
-  }
-
-  .#{$prefix}--overflow-menu-options--light,
-  .#{$prefix}--overflow-menu-options--light::after { // ccs: dedupe
-    background-color: $field-02;
   }
 
   .#{$prefix}--overflow-menu-options[data-floating-menu-direction='bottom']::after {
@@ -230,10 +218,6 @@
 
   .#{$prefix}--overflow-menu--divider {
     border-top: 1px solid $border-subtle;
-  }
-
-  .#{$prefix}--overflow-menu--light .#{$prefix}--overflow-menu--divider {
-    border-top: 1px solid $border-subtle-02;
   }
 
   // `a.`: OverflowMenuItem renders a `<button>` or, with `href`, an `<a>`.

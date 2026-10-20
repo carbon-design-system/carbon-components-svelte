@@ -5,7 +5,6 @@
   export let value: ComponentProps<TextInput>["value"] = "";
   export let placeholder = "";
   export let size: ComponentProps<TextInput>["size"] = undefined;
-  export let light = false;
   export let disabled = false;
   export let helperText = "";
   export let labelText = "User name";
@@ -38,7 +37,6 @@
   bind:value
   {placeholder}
   {size}
-  {light}
   {disabled}
   {helperText}
   {labelText}

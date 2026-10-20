@@ -7,7 +7,6 @@
   export let min: ComponentProps<NumberInput>["min"] = undefined;
   export let max: ComponentProps<NumberInput>["max"] = undefined;
   export let size: ComponentProps<NumberInput>["size"] = undefined;
-  export let light = false;
   export let readonly = false;
   export let fluid = false;
   export let allowEmpty = false;
@@ -55,7 +54,6 @@
   {min}
   {max}
   {size}
-  {light}
   {readonly}
   {fluid}
   {allowEmpty}

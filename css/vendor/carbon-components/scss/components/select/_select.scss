@@ -108,21 +108,6 @@
     fill: $icon-disabled;
   }
 
-  .#{$prefix}--select--light .#{$prefix}--select-input {
-    background-color: $field-02;
-
-    &:hover {
-      background-color: $layer-hover;
-    }
-
-    &:disabled,
-    &:hover:disabled {
-      background-color: $field-02;
-      color: $text-disabled;
-      cursor: not-allowed;
-    }
-  }
-
   .#{$prefix}--select__arrow {
     position: absolute;
     top: 0;
@@ -316,10 +301,7 @@
     fill: $icon-disabled;
   }
 
-  .#{$prefix}--select--readonly.#{$prefix}--select--inline
-    .#{$prefix}--select-input:hover,
-  .#{$prefix}--select--readonly.#{$prefix}--select--light
-    .#{$prefix}--select-input:hover { // ccs: dedupe
+  .#{$prefix}--select--readonly.#{$prefix}--select--inline .#{$prefix}--select-input:hover { // ccs: dedupe
     background-color: transparent;
   }
 }

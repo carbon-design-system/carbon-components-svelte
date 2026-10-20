@@ -448,7 +448,7 @@ const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "unguarded :hover: components/date-picker/_date-picker.scss": 4,
   "unguarded :hover: components/link/_link.scss": 1,
   "unguarded :hover: components/multi-select/_multi-select.scss": 1,
-  "unguarded :hover: components/select/_select.scss": 3,
+  "unguarded :hover: components/select/_select.scss": 2,
   "unguarded :hover: components/slider/_slider.scss": 2,
   "unguarded :hover: components/structured-list/_structured-list.scss": 2,
   "unguarded :hover: components/time-picker/_time-picker.scss": 1,

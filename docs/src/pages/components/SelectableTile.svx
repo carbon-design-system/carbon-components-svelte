@@ -4,7 +4,7 @@ description: Selectable tiles provide a tile-based interface for choosing multip
 ---
 
 <script>
-  import { SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
+  import { Layer, SelectableTile, SelectableTileGroup } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -110,21 +110,23 @@ Set `size="sm"` on the SelectableTileGroup for compact tiles, such as rows in a 
   <SelectableTile value="late-checkout">Late checkout</SelectableTile>
 </SelectableTileGroup>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<SelectableTileGroup legendText="Deployment regions" name="options-light" selected={["us-east-1", "us-west-2"]}>
-  <SelectableTile light value="us-east-1">
-    US East (N. Virginia)
-  </SelectableTile>
-  <SelectableTile light value="us-west-2">
-    US West (Oregon)
-  </SelectableTile>
-  <SelectableTile light value="eu-central-1">
-    EU Central (Frankfurt)
-  </SelectableTile>
-</SelectableTileGroup>
+<Layer withBackground style="padding: 1rem">
+  <SelectableTileGroup legendText="Deployment regions" name="options-layer" selected={["us-east-1", "us-west-2"]}>
+    <SelectableTile value="us-east-1">
+      US East (N. Virginia)
+    </SelectableTile>
+    <SelectableTile value="us-west-2">
+      US West (Oregon)
+    </SelectableTile>
+    <SelectableTile value="eu-central-1">
+      EU Central (Frankfurt)
+    </SelectableTile>
+  </SelectableTileGroup>
+</Layer>
 
 ## Disabled
 

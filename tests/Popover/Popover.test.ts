@@ -82,16 +82,6 @@ describe("Popover", () => {
     );
   });
 
-  it("should handle light variant", () => {
-    render(Popover, {
-      props: { open: true, light: true },
-    });
-
-    expect(screen.getByTestId("parent").firstElementChild).toHaveClass(
-      "bx--popover--light",
-    );
-  });
-
   it("should handle high contrast variant", () => {
     render(Popover, {
       props: { open: true, highContrast: true },
@@ -137,14 +127,12 @@ describe("Popover", () => {
       props: {
         open: true,
         caret: true,
-        light: true,
         align: "bottom-right",
       },
     });
 
     const popover = screen.getByTestId("parent").firstElementChild;
     expect(popover).toHaveClass("bx--popover--caret");
-    expect(popover).toHaveClass("bx--popover--light");
     expect(popover).toHaveClass("bx--popover--bottom-right");
   });
 });

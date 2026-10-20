@@ -4,7 +4,7 @@ description: Code snippets display and copy code examples, with single-line, mul
 ---
 
 <script>
-  import { CodeSnippet, CodeSnippetSkeleton } from "carbon-components-svelte";
+  import { CodeSnippet, CodeSnippetSkeleton, Layer } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
@@ -14,11 +14,13 @@ Display a single-line code snippet by default. By default, the copy button uses 
 
 <CodeSnippet code="npm i carbon-components-svelte" />
 
-## Light
+## On a layer
 
-Set `light` to `true` for the light variant, for use on white or light-gray backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<CodeSnippet light code="npm i carbon-components-svelte" />
+<Layer withBackground style="padding: 1rem">
+  <CodeSnippet code="npm i carbon-components-svelte" />
+</Layer>
 
 ## Inline
 

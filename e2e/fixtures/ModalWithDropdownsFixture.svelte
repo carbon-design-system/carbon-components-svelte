@@ -38,7 +38,6 @@
 >
   <Stack gap={4}>
     <ComboBox
-      light
       labelText="Contact method"
       placeholder="Select contact method"
       items={contactItems}

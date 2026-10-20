@@ -64,11 +64,6 @@
     }
   }
 
-  .#{$prefix}--search--light .#{$prefix}--search-input,
-  .#{$prefix}--search--light .#{$prefix}--search-close::before { // ccs: dedupe
-    background: $field-02;
-  }
-
   .#{$prefix}--search--sm .#{$prefix}--search-input,
   .#{$prefix}--search--sm.#{$prefix}--search--expandable.#{$prefix}--search--expanded
     .#{$prefix}--search-input {

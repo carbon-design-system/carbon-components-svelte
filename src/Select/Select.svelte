@@ -21,9 +21,6 @@
   /** Set to `true` to use the inline variant */
   export let inline = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Set to `true` to disable the select element */
   export let disabled = false;
 
@@ -253,7 +250,6 @@
   <div
     class:bx--select={true}
     class:bx--select--inline={inline}
-    class:bx--select--light={light}
     class:bx--select--invalid={showInvalid}
     class:bx--select--disabled={disabled}
     class:bx--select--warning={showWarn}

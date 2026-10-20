@@ -5,7 +5,6 @@
   export let open = false;
   export let align: ComponentProps<Popover>["align"] = "top";
   export let caret = false;
-  export let light = false;
   export let highContrast = false;
   export let relative = false;
   export let closeOnOutsideClick = false;
@@ -18,7 +17,6 @@
     {closeOnOutsideClick}
     {align}
     {caret}
-    {light}
     {highContrast}
     {relative}
     on:click:outside={(e) => {

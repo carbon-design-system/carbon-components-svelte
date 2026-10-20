@@ -23,9 +23,6 @@
   /** Specify the `maxlength` input attribute */
   export let maxlength = 5;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -257,14 +254,12 @@
   {:else}
     <div
       class:bx--time-picker={true}
-      class:bx--time-picker--light={light}
       class:bx--time-picker--invalid={showInvalid}
       class:bx--time-picker--warn={showWarn}
       class:bx--time-picker--readonly={readonly}
       class:bx--time-picker--xs={effectiveSize === "xs"}
       class:bx--time-picker--sm={effectiveSize === "sm"}
       class:bx--time-picker--xl={effectiveSize === "xl"}
-      class:bx--select--light={light}
     >
       <div class:bx--time-picker__input={true}>
         {#if labelText || $$slots.labelChildren}
@@ -328,7 +323,6 @@
               )}
               class:bx--time-picker__input-field={true}
               class:bx--text-input={true}
-              class:bx--text-input--light={light}
               class:bx--text-input--invalid={showInvalid}
               class:bx--text-input--warning={showWarn}
               on:change

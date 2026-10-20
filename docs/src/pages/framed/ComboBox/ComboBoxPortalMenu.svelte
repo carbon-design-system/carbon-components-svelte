@@ -18,7 +18,6 @@
   </div>
   <ComboBox
     portalMenu
-    light
     labelText="Alert channel"
     placeholder="Select alert channel"
     items={[

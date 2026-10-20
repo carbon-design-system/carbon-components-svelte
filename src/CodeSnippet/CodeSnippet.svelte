@@ -69,9 +69,6 @@
    */
   export let fullWidth = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
@@ -479,7 +476,6 @@
     <span
       class:bx--snippet={true}
       class:bx--snippet--expand={expanded}
-      class:bx--snippet--light={light}
       class:bx--snippet--no-copy={hideCopyButton}
       class:bx--snippet--wraptext={wrapText}
       class:bx--snippet--single={type === "single"}
@@ -504,7 +500,6 @@
       class:bx--snippet={true}
       class:bx--snippet--inline={type === "inline"}
       class:bx--snippet--expand={expanded}
-      class:bx--snippet--light={light}
       class:bx--snippet--wraptext={wrapText}
       aria-label={copyLabel}
       {...$$restProps}
@@ -570,7 +565,6 @@
   <div
     class:bx--snippet={true}
     class:bx--snippet--expand={expanded}
-    class:bx--snippet--light={light}
     class:bx--snippet--no-copy={hideCopyButton}
     class:bx--snippet--wraptext={wrapText}
     class:bx--snippet--single={type === "single"}

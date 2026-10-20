@@ -4,7 +4,7 @@ description: Dropdowns provide a select input with a dropdown menu, with multipl
 ---
 
 <script>
-  import { Box, Dropdown, DropdownSkeleton, FluidDropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, Dropdown, DropdownSkeleton, FluidDropdownSkeleton, Layer, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
@@ -434,13 +434,15 @@ Set `readonly` to `true` to display a non-editable value. The field stays focusa
   ]}
 />
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Dropdown light labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
+<Layer withBackground style="padding: 1rem">
+  <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}" />
+</Layer>
 
 ## Inline
 

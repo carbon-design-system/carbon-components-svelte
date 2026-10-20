@@ -10,7 +10,6 @@
   export let align: ComponentProps<Dropdown>["align"] = "start";
   export let size: ComponentProps<Dropdown>["size"] = undefined;
   export let open: ComponentProps<Dropdown>["open"] = false;
-  export let light: ComponentProps<Dropdown>["light"] = false;
   export let disabled: ComponentProps<Dropdown>["disabled"] = false;
   export let readonly: ComponentProps<Dropdown>["readonly"] = false;
   export let readonlyText: ComponentProps<Dropdown>["readonlyText"] = undefined;
@@ -53,7 +52,6 @@
   {align}
   {size}
   bind:open
-  {light}
   {disabled}
   {readonly}
   {readonlyText}

@@ -14,22 +14,26 @@ const clickable = [
 const selectable = ["SelectableTile", SelectableTile, {}] as const;
 const radio = ["RadioTile", RadioTile, { value: "a", name: "tiles" }] as const;
 const expandable = ["ExpandableTile", ExpandableTile, {}] as const;
+type TileCase =
+  | typeof tile
+  | typeof clickable
+  | typeof selectable
+  | typeof radio
+  | typeof expandable;
 
 describe.each([
-  [
-    "light",
-    "bx--tile--light",
-    [tile, clickable, selectable, radio, expandable],
-  ],
   ["fullHeight", "bx--tile--full-height", [tile, radio]],
   // SelectableTile and RadioTile have no `noPadding`.
   ["noPadding", "bx--tile--no-padding", [tile, clickable]],
 ] as const)("%s", (prop, className, tiles) => {
-  it.each(tiles)("applies the class to %s", (_name, Component, props) => {
-    const { container } = render(Component as typeof Tile, {
-      props: { ...props, [prop]: true },
-    });
+  it.each(tiles as readonly TileCase[])(
+    "applies the class to %s",
+    (_name, Component, props) => {
+      const { container } = render(Component as typeof Tile, {
+        props: { ...props, [prop]: true },
+      });
 
-    expect(container.querySelector(".bx--tile")).toHaveClass(className);
-  });
+      expect(container.querySelector(".bx--tile")).toHaveClass(className);
+    },
+  );
 });

@@ -130,9 +130,6 @@
   /** Specify the warning state text */
   export let warnText = "";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /**
    * Set to `true` to open the combobox menu dropdown.
    * @bindable writable
@@ -1047,7 +1044,6 @@
     {disabled}
     invalid={showInvalid}
     {open}
-    {light}
     size={effectiveSize}
     warn={showWarn}
   >
@@ -1091,7 +1087,6 @@
             $$restProps["aria-describedby"],
           )}
           class:bx--text-input={true}
-          class:bx--text-input--light={light}
           class:bx--text-input--empty={value === ""}
           on:click={() => {
             if (disabled || readonly) return;

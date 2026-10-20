@@ -67,22 +67,6 @@
     width: to-rem(85px);
   }
 
-  .#{$prefix}--time-picker--light .#{$prefix}--select-input {
-    background-color: $field-02;
-
-    &:hover {
-      background-color: $layer-hover;
-    }
-
-    &:disabled,
-    &:hover:disabled {
-      border-bottom: 1px solid transparent;
-      background-color: transparent;
-      color: $text-disabled;
-      cursor: not-allowed;
-    }
-  }
-
   .#{$prefix}--time-picker--sm .#{$prefix}--select-input,
   .#{$prefix}--time-picker--sm .#{$prefix}--time-picker__input-field {
     height: to-rem(32px);
