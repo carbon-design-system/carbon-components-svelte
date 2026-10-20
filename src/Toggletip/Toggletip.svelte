@@ -112,7 +112,7 @@
    */
   export let id = uniqueId();
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, setContext } from "svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import Popover from "../Popover/Popover.svelte";
@@ -129,6 +129,11 @@
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+  // AILabel renders a Toggletip with the AI callout instead of the
+  // high-contrast popover.
+  const inAILabel = !!getContext("carbon:AILabel");
+  // A Toggletip inside the callout is a plain toggletip again.
+  setContext("carbon:AILabel", undefined);
 
   let toggletipRef = null;
   let portalRef = null;
@@ -268,7 +273,8 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
         align={popoverAlign}
         id={contentId}
         caret
-        highContrast
+        highContrast={!inAILabel}
+        class={inAILabel ? "bx--ai-label-popover" : undefined}
         style={popoverStyle}
       >
         <div class:bx--toggletip-content={true}>
@@ -300,7 +306,8 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       align={popoverAlign}
       id={contentId}
       caret
-      highContrast
+      highContrast={!inAILabel}
+      class={inAILabel ? "bx--ai-label-popover" : undefined}
       style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(popoverAlign)}"
     >
       <!-- svelte-ignore a11y-no-static-element-interactions -->

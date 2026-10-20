@@ -1,0 +1,292 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AILabel, ported from @carbon/styles scss/components/slug/_slug.scss onto
+/// this library's Toggletip and Popover markup. The callout is the
+/// Toggletip's popover with `bx--ai-label-popover`, so its styles also apply
+/// when the popover is portalled out of the label.
+/// @access private
+/// @group components
+@mixin ai-label {
+  $label-sizes: (
+    mini: (16px, 9px, 12px),
+    2xs: (20px, 12px, 16px),
+    xs: (24px, 12px, 16px),
+    sm: (32px, 16px, 21px),
+    md: (40px, 16px, 21px),
+    lg: (48px, 16px, 21px),
+    xl: (64px, 20px, 26px),
+  );
+
+  .#{$prefix}--ai-label {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--ai-label .#{$prefix}--toggletip-button {
+    position: relative;
+    justify-content: center;
+    border: 1px solid $border-inverse;
+    color: $text-primary;
+    font-weight: 600;
+    outline: none;
+    transition:
+      color $duration--fast-01 motion(entrance, productive),
+      border-color $duration--fast-01 motion(entrance, productive),
+      box-shadow $duration--fast-01 motion(entrance, productive),
+      background $duration--fast-01 motion(entrance, productive);
+  }
+
+  @each $size, $values in $label-sizes {
+    .#{$prefix}--ai-label--#{$size} .#{$prefix}--toggletip-button {
+      width: to-rem(nth($values, 1));
+      height: to-rem(nth($values, 1));
+      font-size: to-rem(nth($values, 2));
+      line-height: to-rem(nth($values, 3));
+    }
+  }
+
+  // 24px click target for the two smallest sizes
+  .#{$prefix}--ai-label--mini .#{$prefix}--toggletip-button::after,
+  .#{$prefix}--ai-label--2xs .#{$prefix}--toggletip-button::after {
+    position: absolute;
+    display: block;
+    width: 24px;
+    height: 24px;
+    content: "";
+  }
+
+  .#{$prefix}--ai-label .#{$prefix}--toggletip-button:focus {
+    border-color: $focus;
+    box-shadow: inset 0 0 0 1px $focus;
+    outline: none;
+  }
+
+
+  .#{$prefix}--ai-label__text {
+    position: relative;
+  }
+
+  // Inline: the AI text without a box, with a dot before it
+  .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button {
+    width: auto;
+    height: auto;
+    padding: 0 to-rem(4px);
+    border-color: transparent;
+    border-radius: to-rem(1px);
+    font-size: to-rem(12px);
+    line-height: inherit;
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--md
+    .#{$prefix}--toggletip-button {
+    font-size: to-rem(14px);
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--lg
+    .#{$prefix}--toggletip-button,
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--xl
+    .#{$prefix}--toggletip-button {
+    font-size: to-rem(16px);
+  }
+
+  .#{$prefix}--ai-label--inline .#{$prefix}--ai-label__text {
+    padding-left: to-rem(8px);
+  }
+
+  .#{$prefix}--ai-label--inline .#{$prefix}--ai-label__text::before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: inline-block;
+    width: to-rem(4px);
+    height: to-rem(4px);
+    background: $icon-primary;
+    content: "";
+    transform: translateY(-50%);
+    transition: background $duration--fast-01 motion(entrance, productive);
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--lg
+    .#{$prefix}--ai-label__text,
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--xl
+    .#{$prefix}--ai-label__text {
+    padding-left: to-rem(12px);
+  }
+
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--lg
+    .#{$prefix}--ai-label__text::before,
+  .#{$prefix}--ai-label--inline.#{$prefix}--ai-label--xl
+    .#{$prefix}--ai-label__text::before {
+    width: to-rem(8px);
+    height: to-rem(8px);
+  }
+
+  .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button:focus {
+    border-color: $focus;
+    box-shadow: none;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--ai-label:not(.#{$prefix}--ai-label--inline)
+      .#{$prefix}--toggletip-button:hover {
+      background: $border-inverse;
+      color: $text-inverse;
+    }
+
+    .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button:hover {
+      border-color: $icon-secondary;
+      color: $text-secondary;
+    }
+
+    .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button:focus:hover {
+      border-color: $focus;
+    }
+
+    .#{$prefix}--ai-label--inline
+      .#{$prefix}--toggletip-button:hover
+      .#{$prefix}--ai-label__text::before {
+      background: $icon-secondary;
+    }
+  }
+
+  // Inline with text after the AI text
+  .#{$prefix}--ai-label--inline-with-content .#{$prefix}--toggletip-button {
+    padding: to-rem(2px) to-rem(8px);
+    border-color: $border-inverse;
+  }
+
+  .#{$prefix}--ai-label--inline-with-content
+    .#{$prefix}--toggletip-button:focus {
+    box-shadow: inset 0 0 0 1px $focus;
+  }
+
+  .#{$prefix}--ai-label__additional-text {
+    padding-left: to-rem(4px);
+    font-weight: 400;
+  }
+
+  // Callout: the AI gradient under a gradient border
+  .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents {
+    min-width: to-rem(280px);
+    border: 1px solid transparent;
+    background:
+      linear-gradient(to top, ccs-token('ai-aura-start') 0%, 15%, ccs-token('ai-aura-end') 50%)
+        padding-box,
+      linear-gradient(to top, $background, $background) padding-box,
+      linear-gradient(to bottom, ccs-token('ai-border-start'), ccs-token('ai-border-end')) border-box,
+      linear-gradient(to top, $background, $background) border-box;
+    border-radius: to-rem(8px);
+    box-shadow:
+      inset 0 -80px 70px -65px ccs-token('ai-inner-shadow'),
+      -40px 44px 60px -24px ccs-token('ai-popover-shadow-outer-01'),
+      -56px 64px 64px -24px ccs-token('ai-popover-shadow-outer-02');
+    color: $text-primary;
+  }
+
+  // The caret's visible square sits on the callout's top (or side) surface,
+  // with the border on the two edges that face the button.
+  .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents::after {
+    background-color: $background;
+  }
+
+  .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents::before {
+    box-shadow: none;
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom-left .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom-right .#{$prefix}--popover-contents::after {
+    box-shadow: -1px -1px 0 0 ccs-token('ai-border-start');
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--top .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--top-left .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--top-right .#{$prefix}--popover-contents::after {
+    background-color: ccs-token('ai-popover-caret-bottom-background');
+    box-shadow: 1px 1px 0 0 ccs-token('ai-popover-caret-bottom');
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--left .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--left-top .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--left-bottom .#{$prefix}--popover-contents::after {
+    box-shadow: 1px -1px 0 0 ccs-token('ai-popover-caret-center');
+  }
+
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--right .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--right-top .#{$prefix}--popover-contents::after,
+  .#{$prefix}--ai-label-popover.#{$prefix}--popover--right-bottom .#{$prefix}--popover-contents::after {
+    box-shadow: -1px 1px 0 0 ccs-token('ai-popover-caret-center');
+  }
+
+  .#{$prefix}--ai-label-popover .#{$prefix}--toggletip-content {
+    max-width: to-rem(320px);
+    padding: to-rem(24px);
+  }
+
+  // Links on the callout's light surface use the regular link colors, not
+  // the inverse ones a toggletip uses on its dark popover.
+  .#{$prefix}--ai-label-popover .#{$prefix}--toggletip-content .#{$prefix}--link,
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:visited {
+    color: $link-primary;
+  }
+
+  .#{$prefix}--ai-label-content {
+    display: grid;
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--ai-label-content--with-actions {
+    // Room for the action bar pinned to the callout's bottom edge
+    padding-bottom: to-rem(56px);
+  }
+
+  .#{$prefix}--ai-label-actions {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    border-bottom-left-radius: to-rem(7px);
+    border-bottom-right-radius: to-rem(7px);
+    backdrop-filter: blur(85px);
+    background: rgba(0, 0, 0, 0.01);
+  }
+
+  .#{$prefix}--ai-label-actions .#{$prefix}--btn--primary {
+    order: 1;
+    border-bottom-right-radius: to-rem(7px);
+  }
+
+  .#{$prefix}--ai-label-actions .#{$prefix}--btn:focus {
+    border-color: $focus;
+    box-shadow:
+      inset 0 0 0 1px $focus,
+      inset 0 0 0 2px $background;
+  }
+
+  // Revert: a ghost icon button in place of the label
+  .#{$prefix}--ai-label--revert .#{$prefix}--btn--icon-only {
+    align-items: center;
+    padding-top: 0;
+  }
+
+  .#{$prefix}--ai-label--revert .#{$prefix}--btn--icon-only svg {
+    margin: 0;
+  }
+
+  // Forced colors drop the gradient, which would leave the callout
+  // transparent over the page.
+  @include high-contrast-mode {
+    .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents {
+      background: Canvas;
+    }
+  }
+}
+
+@include exports("ai-label") {
+  @include ai-label;
+}

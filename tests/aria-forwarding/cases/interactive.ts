@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
 import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
@@ -53,6 +54,11 @@ import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
 const nodes = [{ id: "docs", text: "Docs" }];
 
 export const interactive: AriaEntry[] = [
+  {
+    name: "AILabel",
+    render: (attrs) => render(AILabel, { props: { open: true, ...attrs } }),
+    target: () => screen.getByRole("button"),
+  },
   {
     name: "AccordionItem",
     render: (attrs) => render(AccordionItem, { props: attrs }),

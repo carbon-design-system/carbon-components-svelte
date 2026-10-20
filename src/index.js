@@ -1,3 +1,4 @@
+export { default as AILabel } from "./AILabel/AILabel.svelte";
 export { default as Accordion } from "./Accordion/Accordion.svelte";
 export { default as AccordionItem } from "./Accordion/AccordionItem.svelte";
 export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svelte";
