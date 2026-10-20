@@ -317,6 +317,9 @@
   });
 
   function handleKeydown(event) {
+    // Keys during an IME composition belong to the IME. Safari reports the
+    // committing keydown with isComposing false but keyCode 229.
+    if (event.isComposing || event.keyCode === 229) return;
     if (disabled || readonly) return;
     switch (event.key) {
       case "ArrowDown":
