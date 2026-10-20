@@ -411,6 +411,8 @@
 
   function handleInput() {
     dismissed = false;
+    // The new query can hide the highlighted option.
+    highlightedId.set(null);
     dispatchSearch?.(value);
   }
 
