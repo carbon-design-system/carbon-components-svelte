@@ -1,0 +1,315 @@
+// ccs: Carbon v11 numbered layer tokens (layer-01, border-subtle-01, ...).
+// Tokens with a v10 source copy that token from each theme, so renaming a v10
+// reference to its v11 name changes no pixels. Net-new tokens take their
+// @carbon/themes v11 values. v11 has no g80 theme, so g80 values are derived:
+// each takes its g80 sibling (layer-03 <- layer-02) plus the step g90 has
+// between the same two siblings.
+
+$ccs-v11-derived-tokens: (
+  layer-01: 'ui-01',
+  layer-02: 'ui-02',
+  layer-active-01: 'active-ui',
+  layer-active-02: 'active-light-ui',
+  layer-hover-01: 'hover-ui',
+  layer-hover-02: 'hover-light-ui',
+  layer-selected-01: 'selected-ui',
+  layer-selected-02: 'selected-light-ui',
+  layer-selected-hover-01: 'hover-selected-ui',
+  layer-accent-01: 'ui-03',
+  layer-accent-active-01: 'active-ui',
+  layer-accent-hover-01: 'hover-selected-ui',
+  field-hover-01: 'hover-ui',
+  field-hover-02: 'hover-ui',
+  border-subtle-01: 'ui-03',
+  border-subtle-02: 'decorative-01',
+  border-strong-01: 'ui-04',
+  border-subtle-selected-01: 'active-ui',
+);
+
+$ccs-v11-new-tokens: (
+  white: (
+    layer-03: #f4f4f4,
+    layer-active-03: #c6c6c6,
+    layer-hover-03: #e8e8e8,
+    layer-selected-03: #e0e0e0,
+    layer-selected-hover-02: #d1d1d1,
+    layer-selected-hover-03: #d1d1d1,
+    layer-accent-02: #e0e0e0,
+    layer-accent-03: #e0e0e0,
+    layer-accent-active-02: #a8a8a8,
+    layer-accent-active-03: #a8a8a8,
+    layer-accent-hover-02: #d1d1d1,
+    layer-accent-hover-03: #d1d1d1,
+    field-03: #f4f4f4,
+    field-hover-03: #e8e8e8,
+    border-subtle-00: #e0e0e0,
+    border-subtle-03: #c6c6c6,
+    border-strong-02: #8d8d8d,
+    border-strong-03: #8d8d8d,
+    border-subtle-selected-02: #c6c6c6,
+    border-subtle-selected-03: #c6c6c6,
+  ),
+  g10: (
+    layer-03: #ffffff,
+    layer-active-03: #c6c6c6,
+    layer-hover-03: #e8e8e8,
+    layer-selected-03: #e0e0e0,
+    layer-selected-hover-02: #d1d1d1,
+    layer-selected-hover-03: #d1d1d1,
+    layer-accent-02: #e0e0e0,
+    layer-accent-03: #e0e0e0,
+    layer-accent-active-02: #a8a8a8,
+    layer-accent-active-03: #a8a8a8,
+    layer-accent-hover-02: #d1d1d1,
+    layer-accent-hover-03: #d1d1d1,
+    field-03: #ffffff,
+    field-hover-03: #e8e8e8,
+    border-subtle-00: #c6c6c6,
+    border-subtle-03: #e0e0e0,
+    border-strong-02: #8d8d8d,
+    border-strong-03: #8d8d8d,
+    border-subtle-selected-02: #c6c6c6,
+    border-subtle-selected-03: #c6c6c6,
+  ),
+  g80: (
+    layer-03: #6f6f6f,
+    layer-active-03: #525252,
+    layer-hover-03: #7a7a7a,
+    layer-selected-03: #6f6f6f,
+    layer-selected-hover-02: #7a7a7a,
+    layer-selected-hover-03: #5e5e5e,
+    layer-accent-02: #8d8d8d,
+    layer-accent-03: #a8a8a8,
+    layer-accent-active-02: #525252,
+    layer-accent-active-03: #6f6f6f,
+    layer-accent-hover-02: #7a7a7a,
+    layer-accent-hover-03: #999999,
+    field-03: #8d8d8d,
+    field-hover-03: #636363,
+    border-subtle-00: #525252,
+    border-subtle-03: #6f6f6f,
+    border-strong-02: #c6c6c6,
+    border-strong-03: #e0e0e0,
+    border-subtle-selected-02: #6f6f6f,
+    border-subtle-selected-03: #6f6f6f,
+  ),
+  g90: (
+    layer-03: #6f6f6f,
+    layer-active-03: #393939,
+    layer-hover-03: #5e5e5e,
+    layer-selected-03: #525252,
+    layer-selected-hover-02: #5e5e5e,
+    layer-selected-hover-03: #636363,
+    layer-accent-02: #6f6f6f,
+    layer-accent-03: #8d8d8d,
+    layer-accent-active-02: #393939,
+    layer-accent-active-03: #525252,
+    layer-accent-hover-02: #5e5e5e,
+    layer-accent-hover-03: #7a7a7a,
+    field-03: #6f6f6f,
+    field-hover-03: #5e5e5e,
+    border-subtle-00: #525252,
+    border-subtle-03: #8d8d8d,
+    border-strong-02: #a8a8a8,
+    border-strong-03: #c6c6c6,
+    border-subtle-selected-02: #a8a8a8,
+    border-subtle-selected-03: #a8a8a8,
+  ),
+  g100: (
+    layer-03: #525252,
+    layer-active-03: #8d8d8d,
+    layer-hover-03: #636363,
+    layer-selected-03: #6f6f6f,
+    layer-selected-hover-02: #636363,
+    layer-selected-hover-03: #5e5e5e,
+    layer-accent-02: #525252,
+    layer-accent-03: #6f6f6f,
+    layer-accent-active-02: #8d8d8d,
+    layer-accent-active-03: #393939,
+    layer-accent-hover-02: #636363,
+    layer-accent-hover-03: #5e5e5e,
+    field-03: #525252,
+    field-hover-03: #636363,
+    border-subtle-00: #393939,
+    border-subtle-03: #6f6f6f,
+    border-strong-02: #8d8d8d,
+    border-strong-03: #a8a8a8,
+    border-subtle-selected-02: #8d8d8d,
+    border-subtle-selected-03: #8d8d8d,
+  ),
+  v9: (
+    layer-03: #f4f4f4,
+    layer-active-03: #c6c6c6,
+    layer-hover-03: #e8e8e8,
+    layer-selected-03: #e0e0e0,
+    layer-selected-hover-02: #d1d1d1,
+    layer-selected-hover-03: #d1d1d1,
+    layer-accent-02: #e0e0e0,
+    layer-accent-03: #e0e0e0,
+    layer-accent-active-02: #a8a8a8,
+    layer-accent-active-03: #a8a8a8,
+    layer-accent-hover-02: #d1d1d1,
+    layer-accent-hover-03: #d1d1d1,
+    field-03: #f4f4f4,
+    field-hover-03: #e8e8e8,
+    border-subtle-00: #e0e0e0,
+    border-subtle-03: #c6c6c6,
+    border-strong-02: #8d8d8d,
+    border-strong-03: #8d8d8d,
+    border-subtle-selected-02: #c6c6c6,
+    border-subtle-selected-03: #c6c6c6,
+  ),
+);
+
+// Idempotent: this partial can be imported more than once, and keys already
+// present (from an earlier import or a theme override) win.
+@function ccs-v11-extend($theme, $name) {
+  @each $token, $source in $ccs-v11-derived-tokens {
+    @if not map-has-key($theme, $token) {
+      $theme: map-merge($theme, ($token: map-get($theme, $source)));
+    }
+  }
+  @return map-merge(map-get($ccs-v11-new-tokens, $name), $theme);
+}
+
+$carbon--theme--white: ccs-v11-extend($carbon--theme--white, white);
+$carbon--theme--g10: ccs-v11-extend($carbon--theme--g10, g10);
+$carbon--theme--g80: ccs-v11-extend($carbon--theme--g80, g80);
+$carbon--theme--g90: ccs-v11-extend($carbon--theme--g90, g90);
+$carbon--theme--g100: ccs-v11-extend($carbon--theme--g100, g100);
+$carbon--theme--v9: ccs-v11-extend($carbon--theme--v9, v9);
+$carbon--theme: ccs-v11-extend($carbon--theme, white);
+
+$layer-01: map-get($carbon--theme, 'layer-01') !default;
+$layer-02: map-get($carbon--theme, 'layer-02') !default;
+$layer-active-01: map-get($carbon--theme, 'layer-active-01') !default;
+$layer-active-02: map-get($carbon--theme, 'layer-active-02') !default;
+$layer-hover-01: map-get($carbon--theme, 'layer-hover-01') !default;
+$layer-hover-02: map-get($carbon--theme, 'layer-hover-02') !default;
+$layer-selected-01: map-get($carbon--theme, 'layer-selected-01') !default;
+$layer-selected-02: map-get($carbon--theme, 'layer-selected-02') !default;
+$layer-selected-hover-01: map-get($carbon--theme, 'layer-selected-hover-01') !default;
+$layer-accent-01: map-get($carbon--theme, 'layer-accent-01') !default;
+$layer-accent-active-01: map-get($carbon--theme, 'layer-accent-active-01') !default;
+$layer-accent-hover-01: map-get($carbon--theme, 'layer-accent-hover-01') !default;
+$field-hover-01: map-get($carbon--theme, 'field-hover-01') !default;
+$field-hover-02: map-get($carbon--theme, 'field-hover-02') !default;
+$border-subtle-01: map-get($carbon--theme, 'border-subtle-01') !default;
+$border-subtle-02: map-get($carbon--theme, 'border-subtle-02') !default;
+$border-strong-01: map-get($carbon--theme, 'border-strong-01') !default;
+$border-subtle-selected-01: map-get($carbon--theme, 'border-subtle-selected-01') !default;
+$layer-03: map-get($carbon--theme, 'layer-03') !default;
+$layer-active-03: map-get($carbon--theme, 'layer-active-03') !default;
+$layer-hover-03: map-get($carbon--theme, 'layer-hover-03') !default;
+$layer-selected-03: map-get($carbon--theme, 'layer-selected-03') !default;
+$layer-selected-hover-02: map-get($carbon--theme, 'layer-selected-hover-02') !default;
+$layer-selected-hover-03: map-get($carbon--theme, 'layer-selected-hover-03') !default;
+$layer-accent-02: map-get($carbon--theme, 'layer-accent-02') !default;
+$layer-accent-03: map-get($carbon--theme, 'layer-accent-03') !default;
+$layer-accent-active-02: map-get($carbon--theme, 'layer-accent-active-02') !default;
+$layer-accent-active-03: map-get($carbon--theme, 'layer-accent-active-03') !default;
+$layer-accent-hover-02: map-get($carbon--theme, 'layer-accent-hover-02') !default;
+$layer-accent-hover-03: map-get($carbon--theme, 'layer-accent-hover-03') !default;
+$field-03: map-get($carbon--theme, 'field-03') !default;
+$field-hover-03: map-get($carbon--theme, 'field-hover-03') !default;
+$border-subtle-00: map-get($carbon--theme, 'border-subtle-00') !default;
+$border-subtle-03: map-get($carbon--theme, 'border-subtle-03') !default;
+$border-strong-02: map-get($carbon--theme, 'border-strong-02') !default;
+$border-strong-03: map-get($carbon--theme, 'border-strong-03') !default;
+$border-subtle-selected-02: map-get($carbon--theme, 'border-subtle-selected-02') !default;
+$border-subtle-selected-03: map-get($carbon--theme, 'border-subtle-selected-03') !default;
+
+$ccs-v11-token-names: (layer-01, layer-02, layer-active-01, layer-active-02, layer-hover-01, layer-hover-02, layer-selected-01, layer-selected-02, layer-selected-hover-01, layer-accent-01, layer-accent-active-01, layer-accent-hover-01, field-hover-01, field-hover-02, border-subtle-01, border-subtle-02, border-strong-01, border-subtle-selected-01, layer-03, layer-active-03, layer-hover-03, layer-selected-03, layer-selected-hover-02, layer-selected-hover-03, layer-accent-02, layer-accent-03, layer-accent-active-02, layer-accent-active-03, layer-accent-hover-02, layer-accent-hover-03, field-03, field-hover-03, border-subtle-00, border-subtle-03, border-strong-02, border-strong-03, border-subtle-selected-02, border-subtle-selected-03);
+
+@mixin ccs-v11-token-globals($theme) {
+  @if global-variable-exists('feature-flags') and
+    map-get($feature-flags, 'enable-css-custom-properties')
+  {
+    $layer-01: custom-property-var('layer-01', map-get($theme, 'layer-01')) !global;
+    $layer-02: custom-property-var('layer-02', map-get($theme, 'layer-02')) !global;
+    $layer-active-01: custom-property-var('layer-active-01', map-get($theme, 'layer-active-01')) !global;
+    $layer-active-02: custom-property-var('layer-active-02', map-get($theme, 'layer-active-02')) !global;
+    $layer-hover-01: custom-property-var('layer-hover-01', map-get($theme, 'layer-hover-01')) !global;
+    $layer-hover-02: custom-property-var('layer-hover-02', map-get($theme, 'layer-hover-02')) !global;
+    $layer-selected-01: custom-property-var('layer-selected-01', map-get($theme, 'layer-selected-01')) !global;
+    $layer-selected-02: custom-property-var('layer-selected-02', map-get($theme, 'layer-selected-02')) !global;
+    $layer-selected-hover-01: custom-property-var('layer-selected-hover-01', map-get($theme, 'layer-selected-hover-01')) !global;
+    $layer-accent-01: custom-property-var('layer-accent-01', map-get($theme, 'layer-accent-01')) !global;
+    $layer-accent-active-01: custom-property-var('layer-accent-active-01', map-get($theme, 'layer-accent-active-01')) !global;
+    $layer-accent-hover-01: custom-property-var('layer-accent-hover-01', map-get($theme, 'layer-accent-hover-01')) !global;
+    $field-hover-01: custom-property-var('field-hover-01', map-get($theme, 'field-hover-01')) !global;
+    $field-hover-02: custom-property-var('field-hover-02', map-get($theme, 'field-hover-02')) !global;
+    $border-subtle-01: custom-property-var('border-subtle-01', map-get($theme, 'border-subtle-01')) !global;
+    $border-subtle-02: custom-property-var('border-subtle-02', map-get($theme, 'border-subtle-02')) !global;
+    $border-strong-01: custom-property-var('border-strong-01', map-get($theme, 'border-strong-01')) !global;
+    $border-subtle-selected-01: custom-property-var('border-subtle-selected-01', map-get($theme, 'border-subtle-selected-01')) !global;
+    $layer-03: custom-property-var('layer-03', map-get($theme, 'layer-03')) !global;
+    $layer-active-03: custom-property-var('layer-active-03', map-get($theme, 'layer-active-03')) !global;
+    $layer-hover-03: custom-property-var('layer-hover-03', map-get($theme, 'layer-hover-03')) !global;
+    $layer-selected-03: custom-property-var('layer-selected-03', map-get($theme, 'layer-selected-03')) !global;
+    $layer-selected-hover-02: custom-property-var('layer-selected-hover-02', map-get($theme, 'layer-selected-hover-02')) !global;
+    $layer-selected-hover-03: custom-property-var('layer-selected-hover-03', map-get($theme, 'layer-selected-hover-03')) !global;
+    $layer-accent-02: custom-property-var('layer-accent-02', map-get($theme, 'layer-accent-02')) !global;
+    $layer-accent-03: custom-property-var('layer-accent-03', map-get($theme, 'layer-accent-03')) !global;
+    $layer-accent-active-02: custom-property-var('layer-accent-active-02', map-get($theme, 'layer-accent-active-02')) !global;
+    $layer-accent-active-03: custom-property-var('layer-accent-active-03', map-get($theme, 'layer-accent-active-03')) !global;
+    $layer-accent-hover-02: custom-property-var('layer-accent-hover-02', map-get($theme, 'layer-accent-hover-02')) !global;
+    $layer-accent-hover-03: custom-property-var('layer-accent-hover-03', map-get($theme, 'layer-accent-hover-03')) !global;
+    $field-03: custom-property-var('field-03', map-get($theme, 'field-03')) !global;
+    $field-hover-03: custom-property-var('field-hover-03', map-get($theme, 'field-hover-03')) !global;
+    $border-subtle-00: custom-property-var('border-subtle-00', map-get($theme, 'border-subtle-00')) !global;
+    $border-subtle-03: custom-property-var('border-subtle-03', map-get($theme, 'border-subtle-03')) !global;
+    $border-strong-02: custom-property-var('border-strong-02', map-get($theme, 'border-strong-02')) !global;
+    $border-strong-03: custom-property-var('border-strong-03', map-get($theme, 'border-strong-03')) !global;
+    $border-subtle-selected-02: custom-property-var('border-subtle-selected-02', map-get($theme, 'border-subtle-selected-02')) !global;
+    $border-subtle-selected-03: custom-property-var('border-subtle-selected-03', map-get($theme, 'border-subtle-selected-03')) !global;
+  } @else {
+    $layer-01: map-get($theme, 'layer-01') !global;
+    $layer-02: map-get($theme, 'layer-02') !global;
+    $layer-active-01: map-get($theme, 'layer-active-01') !global;
+    $layer-active-02: map-get($theme, 'layer-active-02') !global;
+    $layer-hover-01: map-get($theme, 'layer-hover-01') !global;
+    $layer-hover-02: map-get($theme, 'layer-hover-02') !global;
+    $layer-selected-01: map-get($theme, 'layer-selected-01') !global;
+    $layer-selected-02: map-get($theme, 'layer-selected-02') !global;
+    $layer-selected-hover-01: map-get($theme, 'layer-selected-hover-01') !global;
+    $layer-accent-01: map-get($theme, 'layer-accent-01') !global;
+    $layer-accent-active-01: map-get($theme, 'layer-accent-active-01') !global;
+    $layer-accent-hover-01: map-get($theme, 'layer-accent-hover-01') !global;
+    $field-hover-01: map-get($theme, 'field-hover-01') !global;
+    $field-hover-02: map-get($theme, 'field-hover-02') !global;
+    $border-subtle-01: map-get($theme, 'border-subtle-01') !global;
+    $border-subtle-02: map-get($theme, 'border-subtle-02') !global;
+    $border-strong-01: map-get($theme, 'border-strong-01') !global;
+    $border-subtle-selected-01: map-get($theme, 'border-subtle-selected-01') !global;
+    $layer-03: map-get($theme, 'layer-03') !global;
+    $layer-active-03: map-get($theme, 'layer-active-03') !global;
+    $layer-hover-03: map-get($theme, 'layer-hover-03') !global;
+    $layer-selected-03: map-get($theme, 'layer-selected-03') !global;
+    $layer-selected-hover-02: map-get($theme, 'layer-selected-hover-02') !global;
+    $layer-selected-hover-03: map-get($theme, 'layer-selected-hover-03') !global;
+    $layer-accent-02: map-get($theme, 'layer-accent-02') !global;
+    $layer-accent-03: map-get($theme, 'layer-accent-03') !global;
+    $layer-accent-active-02: map-get($theme, 'layer-accent-active-02') !global;
+    $layer-accent-active-03: map-get($theme, 'layer-accent-active-03') !global;
+    $layer-accent-hover-02: map-get($theme, 'layer-accent-hover-02') !global;
+    $layer-accent-hover-03: map-get($theme, 'layer-accent-hover-03') !global;
+    $field-03: map-get($theme, 'field-03') !global;
+    $field-hover-03: map-get($theme, 'field-hover-03') !global;
+    $border-subtle-00: map-get($theme, 'border-subtle-00') !global;
+    $border-subtle-03: map-get($theme, 'border-subtle-03') !global;
+    $border-strong-02: map-get($theme, 'border-strong-02') !global;
+    $border-strong-03: map-get($theme, 'border-strong-03') !global;
+    $border-subtle-selected-02: map-get($theme, 'border-subtle-selected-02') !global;
+    $border-subtle-selected-03: map-get($theme, 'border-subtle-selected-03') !global;
+  }
+}
+
+@mixin ccs-v11-token-emit($theme, $parent-theme, $emit-difference) {
+  @each $token in $ccs-v11-token-names {
+    @if should-emit($theme, $parent-theme, $token, $emit-difference) {
+      @include custom-property($token, map-get($theme, $token));
+    }
+  }
+}
+
