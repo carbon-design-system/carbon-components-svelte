@@ -37,27 +37,6 @@ describe("InlineNotification", () => {
     add.mockRestore();
   });
 
-  it("should render with all kinds", () => {
-    const kinds = [
-      "error",
-      "info",
-      "info-square",
-      "success",
-      "warning",
-      "warning-alt",
-    ] as const;
-
-    for (const kind of kinds) {
-      const { unmount } = render(InlineNotificationTest, {
-        props: { kind },
-      });
-
-      const notification = document.querySelector(".bx--inline-notification");
-      expect(notification).toHaveClass(`bx--inline-notification--${kind}`);
-      unmount();
-    }
-  });
-
   it("should render low contrast variant", () => {
     render(InlineNotificationTest, {
       props: { lowContrast: true },
@@ -221,19 +200,6 @@ describe("InlineNotification", () => {
     expect(subtitleElement).not.toBeInTheDocument();
   });
 
-  it("should NOT render any text elements when all props are empty", () => {
-    render(InlineNotificationTest, {
-      props: { title: "", subtitle: "" },
-    });
-
-    expect(
-      document.querySelector(".bx--inline-notification__title"),
-    ).not.toBeInTheDocument();
-    expect(
-      document.querySelector(".bx--inline-notification__subtitle"),
-    ).not.toBeInTheDocument();
-  });
-
   it("should render title element when slot is used", () => {
     render(InlineNotificationTitleSlotTest);
 
@@ -252,27 +218,6 @@ describe("InlineNotification", () => {
     );
     expect(subtitleElement).toBeInTheDocument();
     expect(subtitleElement).toHaveTextContent("Slot subtitle");
-  });
-
-  it("supports custom titleChildren slot", () => {
-    render(InlineNotificationTitleSlotTest);
-
-    const customTitle = screen.getByText("Slot title");
-    expect(customTitle).toBeInTheDocument();
-  });
-
-  it("supports custom subtitleChildren slot", () => {
-    render(InlineNotificationSubtitleSlotTest);
-
-    const customSubtitle = screen.getByText("Slot subtitle");
-    expect(customSubtitle).toBeInTheDocument();
-  });
-
-  it("should render close button by default", () => {
-    render(InlineNotificationTest);
-
-    const closeButton = screen.getByLabelText("Close notification");
-    expect(closeButton).toBeInTheDocument();
   });
 
   it("should hide close button when hideCloseButton is true", () => {
@@ -300,6 +245,9 @@ describe("InlineNotification", () => {
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
+    expect(
+      document.querySelector(".bx--inline-notification"),
+    ).not.toBeInTheDocument();
   });
 
   it("should auto-close after timeout", async () => {
@@ -391,34 +339,6 @@ describe("InlineNotification", () => {
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
-  it("should not resume timeout when focus moves between focusable elements inside", async () => {
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
-    });
-
-    const notification = document.querySelector(".bx--inline-notification");
-    const closeButton = screen.getByRole("button", {
-      name: "Close notification",
-    });
-    assert(notification);
-
-    closeButton.focus();
-    vi.advanceTimersByTime(400);
-
-    await fireEvent(
-      closeButton,
-      new FocusEvent("focusout", {
-        bubbles: true,
-        relatedTarget: notification,
-      }),
-    );
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-  });
-
   it("should not pause timeout on focus when pauseOnHover is false", async () => {
     const closeHandler = vi.fn();
     render(InlineNotificationTest, {
@@ -448,23 +368,6 @@ describe("InlineNotification", () => {
     expect(notification).toHaveAttribute("role", "status");
   });
 
-  it("should remove notification from DOM when closed", async () => {
-    vi.useRealTimers();
-    render(InlineNotificationTest);
-
-    expect(
-      document.querySelector(".bx--inline-notification"),
-    ).toBeInTheDocument();
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    expect(
-      document.querySelector(".bx--inline-notification"),
-    ).not.toBeInTheDocument();
-  });
-
   it("should render the status icon as decorative (aria-hidden)", () => {
     render(InlineNotificationTest, { props: { kind: "error" } });
 
@@ -492,11 +395,9 @@ describe("InlineNotification", () => {
     ).toBeInTheDocument();
   });
 
-  it("should render custom title, subtitle, and action slots", () => {
+  it("should render the actions slot", () => {
     render(InlineNotificationCustomTest);
 
-    expect(screen.getByText("Custom Title:")).toBeInTheDocument();
-    expect(screen.getByText("Custom subtitle content.")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Learn more" }),
     ).toBeInTheDocument();

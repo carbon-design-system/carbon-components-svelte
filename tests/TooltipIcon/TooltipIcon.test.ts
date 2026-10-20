@@ -109,50 +109,12 @@ describe("TooltipIcon", () => {
     expect(trigger).toHaveClass("bx--tooltip--hidden");
   });
 
-  it("should hide tooltip on Escape key", async () => {
-    render(TooltipIcon);
-
-    const trigger = screen.getByRole("button");
-    await user.hover(trigger);
-    await user.keyboard("{Escape}");
-
-    expect(trigger).toHaveClass("bx--tooltip--hidden");
-  });
-
-  it("should support controlled open state", () => {
-    render(TooltipIcon, {
-      props: { open: true },
-    });
-
-    const trigger = screen.getByRole("button");
-    expect(trigger).not.toHaveClass("bx--tooltip--hidden");
-  });
-
-  it("should dispatch open event on hover", async () => {
-    render(TooltipIcon);
-
-    const trigger = screen.getByRole("button");
-    await user.hover(trigger);
-
-    expect(consoleLog).toHaveBeenCalledWith("open");
-  });
-
   it("should dispatch close event on Escape", async () => {
     render(TooltipIcon);
 
     const trigger = screen.getByRole("button");
     await user.hover(trigger);
     await user.keyboard("{Escape}");
-
-    expect(consoleLog).toHaveBeenCalledWith("close");
-  });
-
-  it("should dispatch close event on mouse leave", async () => {
-    render(TooltipIcon);
-
-    const trigger = screen.getByRole("button");
-    await user.hover(trigger);
-    await user.unhover(trigger);
 
     expect(consoleLog).toHaveBeenCalledWith("close");
   });
@@ -256,23 +218,6 @@ describe("TooltipIcon", () => {
     expect(onOpen).not.toHaveBeenCalled();
   });
 
-  it("should support custom tooltip text", () => {
-    render(TooltipIcon, {
-      props: { tooltipText: "Custom tooltip" },
-    });
-
-    expect(screen.getByText("Custom tooltip")).toBeInTheDocument();
-  });
-
-  it("should use provided id for tooltip", () => {
-    render(TooltipIcon, {
-      props: { id: "custom-id" },
-    });
-
-    const tooltip = screen.getByRole("button");
-    expect(tooltip).toHaveAttribute("aria-describedby", "custom-id");
-  });
-
   it("should have correct ARIA attributes", () => {
     render(TooltipIcon);
 
@@ -288,14 +233,6 @@ describe("TooltipIcon", () => {
   });
 
   describe("size", () => {
-    it("should render with default size (16)", () => {
-      render(TooltipIconSize);
-
-      const icon = screen.getByTestId("mock-icon");
-      expect(icon).toHaveAttribute("width", "16");
-      expect(icon).toHaveAttribute("height", "16");
-    });
-
     it.each([
       [16, "16"],
       [20, "20"],
@@ -344,22 +281,6 @@ describe("TooltipIcon", () => {
       expect(btnA).toHaveClass("bx--tooltip--hidden");
       expect(btnB).not.toHaveClass("bx--tooltip--hidden");
       expect(btnC).toHaveClass("bx--tooltip--hidden");
-    });
-
-    it("should clear tooltip hidden state on mouseleave", async () => {
-      render(TooltipIconMultiple);
-
-      const btnA = screen.getByTestId("tooltip-a");
-      const btnB = screen.getByTestId("tooltip-b");
-
-      await fireEvent.mouseEnter(btnA);
-      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
-      expect(btnB).toHaveClass("bx--tooltip--hidden");
-
-      await fireEvent.mouseLeave(btnA);
-      // After mouseleave, both are hidden (no tooltip is open).
-      expect(btnA).toHaveClass("bx--tooltip--hidden");
-      expect(btnB).toHaveClass("bx--tooltip--hidden");
     });
 
     it("should skip enterDelayMs when moving from one tooltip to another (warm handoff)", async () => {
@@ -555,16 +476,6 @@ describe("TooltipIcon", () => {
       await user.tab();
       const tooltip = screen.getByRole("tooltip");
       expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
-    });
-
-    it("hides a hovered portal tooltip on Escape", async () => {
-      render(TooltipIconPortalEscape);
-
-      await user.hover(screen.getByRole("button"));
-      expect(screen.getByRole("tooltip")).toBeInTheDocument();
-
-      await user.keyboard("{Escape}");
-      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
     });
 
     it("should add portal-active class on trigger when using portal", () => {

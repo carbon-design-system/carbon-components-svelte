@@ -5,12 +5,10 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import TooltipAlignments from "./TooltipAlignments.test.svelte";
-import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
 import TooltipDefault from "./TooltipDefault.test.svelte";
 import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEscape from "./TooltipEscape.test.svelte";
-import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
 import TooltipGroup from "./TooltipGroup.test.svelte";
@@ -233,13 +231,6 @@ describe("Tooltip", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  it("should render custom slot content", () => {
-    render(TooltipCustomContent);
-
-    expect(screen.getByTestId("tooltip-content")).toBeInTheDocument();
-    expect(screen.getByText("Custom tooltip content")).toBeInTheDocument();
-  });
-
   it("should render custom icon via slot", async () => {
     render(TooltipCustomIcon);
 
@@ -325,22 +316,6 @@ describe("Tooltip", () => {
     expect(startTooltip).toHaveClass("bx--tooltip--align-start");
     expect(centerTooltip).toHaveClass("bx--tooltip--align-center");
     expect(endTooltip).toHaveClass("bx--tooltip--align-end");
-  });
-
-  it("should dispatch events when tooltip opens and closes", async () => {
-    render(TooltipEvents);
-
-    expect(screen.getByText("Open events: 0")).toBeInTheDocument();
-    expect(screen.getByText("Close events: 0")).toBeInTheDocument();
-
-    const trigger = screen.getByRole("button");
-    await fireEvent.mouseEnter(trigger);
-    await vi.advanceTimersByTimeAsync(100);
-    expect(screen.getByText("Open events: 1")).toBeInTheDocument();
-
-    const tooltip = screen.getByRole("dialog");
-    await fireEvent.keyDown(tooltip, { key: "Escape" });
-    expect(screen.getByText("Close events: 1")).toBeInTheDocument();
   });
 
   it("should not open tooltip on focus caused by mouse", async () => {

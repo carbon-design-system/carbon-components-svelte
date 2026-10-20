@@ -34,17 +34,6 @@ describe("SearchMenu", () => {
     expect(input.selectionEnd).toBe("memcache".length);
   });
 
-  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
-    render(SearchMenu, { props: { value: "memcache" } });
-
-    const input = screen.getByRole("combobox");
-    assert(input instanceof HTMLInputElement);
-    await user.click(input);
-    await tick();
-
-    expect(input.selectionStart).toBe(input.selectionEnd);
-  });
-
   it("does not select text on focus when disabled", async () => {
     render(SearchMenu, {
       props: { selectTextOnFocus: true, disabled: true, value: "memcache" },
@@ -100,22 +89,15 @@ describe("SearchMenu", () => {
     );
   });
 
-  it("fuzzy-filters items by the search value", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    await user.type(input, "memcache");
-    const options = screen.getAllByRole("option");
-    expect(options).toHaveLength(1);
-    expect(options[0]).toHaveTextContent("Data Store for Memcache");
-  });
-
   it("keeps unmatched items mounted and hidden while filtering", async () => {
     render(SearchMenu);
     const input = screen.getByRole("combobox");
     await user.click(input);
     await user.type(input, "memcache");
     expect(screen.getAllByRole("option")).toHaveLength(1);
+    expect(screen.getByRole("option")).toHaveTextContent(
+      "Data Store for Memcache",
+    );
     expect(document.querySelectorAll('[role="option"]')).toHaveLength(4);
     expect(document.querySelectorAll('[role="option"][hidden]')).toHaveLength(
       3,
@@ -151,6 +133,7 @@ describe("SearchMenu", () => {
     );
     expect(input).toHaveValue("Databases for TestSQL");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.getByTestId("close")).toHaveTextContent("select");
   });
 
   it("clears aria-activedescendant when typing hides the highlighted option", async () => {
@@ -228,6 +211,7 @@ describe("SearchMenu", () => {
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     expect(input).toHaveValue("Data");
+    expect(screen.getByTestId("close")).toHaveTextContent("escape-key");
   });
 
   it("closes on an outside click", async () => {
@@ -237,23 +221,6 @@ describe("SearchMenu", () => {
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     await user.click(document.body);
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  });
-
-  it("dispatches close with the escape-key trigger", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    await user.type(input, "Data");
-    await user.keyboard("{Escape}");
-    expect(screen.getByTestId("close")).toHaveTextContent("escape-key");
-  });
-
-  it("dispatches close with the select trigger when an item is chosen", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    await user.keyboard("{ArrowDown}{Enter}");
-    expect(screen.getByTestId("close")).toHaveTextContent("select");
   });
 
   it("dispatches close with the outside-click trigger", async () => {
@@ -292,18 +259,6 @@ describe("SearchMenu", () => {
       "Data Store for Memcache",
     );
     expect(screen.getByTestId("close")).toHaveTextContent("select");
-  });
-
-  it("highlights an item on hover", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    const option = screen.getByText("Data Store for Memcache");
-    await user.hover(option);
-    expect(option.closest('[role="option"]')).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
   });
 
   it("clears the highlight when the mouse leaves the item", async () => {

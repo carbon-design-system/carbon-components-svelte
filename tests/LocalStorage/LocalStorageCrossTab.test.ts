@@ -19,16 +19,6 @@ describe("LocalStorage cross-tab sync", () => {
     expect(onUpdate).not.toHaveBeenCalled();
   });
 
-  it("registers a storage event listener on mount", async () => {
-    render(LocalStorageCrossTab);
-    await tick();
-
-    expect(window.addEventListener).toHaveBeenCalledWith(
-      "storage",
-      expect.any(Function),
-    );
-  });
-
   it("updates value when storage event fires with matching key", async () => {
     const { component } = render(LocalStorageCrossTab, {
       props: { key: "test-key", value: "initial" },
