@@ -158,7 +158,16 @@
     truncationLabel = "";
   }
 
-  $: group.update({ value, type, size: resolvedSize, disabled, filter });
+  // Toggling `filter`, `interactive` or `href` swaps the root element, so the
+  // set must be told about the new node too.
+  $: group.update({
+    node: ref,
+    value,
+    type,
+    size: resolvedSize,
+    disabled,
+    filter,
+  });
 
   function handleClose() {
     dispatch("close");
