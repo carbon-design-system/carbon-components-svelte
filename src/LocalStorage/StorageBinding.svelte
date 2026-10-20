@@ -46,22 +46,33 @@
     // `storage` fires for both areas; skip writes to the other one.
     if (event.storageArea && event.storageArea !== window[storageType]) return;
     // A null key means another document called clear().
-    if (event.key !== null && event.key !== key) return;
+    if (event.key === null || event.key === key) applyChange(event.newValue);
+  }
+
+  /** @param {string | null} changedKey null after clear() */
+  function handlePeerChange(changedKey) {
+    // Re-read storage rather than trusting the order of notifications, so
+    // interleaved writes from two instances settle on what was stored last.
+    if (changedKey === null || changedKey === key) {
+      applyChange(storage.getItem(key));
+    }
+  }
+
+  /** @param {string | null} newValue */
+  function applyChange(newValue) {
+    // A null value means the key was removed or storage cleared. Reset so
+    // the next local mutation does not re-persist stale state.
+    const nextValue =
+      newValue === null ? undefined : parseStoredValue(newValue);
+    // Not `newValue`: non-canonical JSON (e.g. `{ "a": 1 }`) would differ
+    // from the re-serialized value and get written back.
+    const serialized = serializeStoredValue(nextValue);
+
+    if (serialized === prevSerialized) return;
 
     const prevValue = parseStoredValue(prevSerialized);
-
-    if (event.newValue === null) {
-      // Another tab/document removed the key (or called clear()).
-      // Reset so the next local mutation does not re-persist stale state.
-      value = undefined;
-      prevSerialized = serializeStoredValue(value);
-    } else {
-      value = parseStoredValue(event.newValue);
-      // Not `event.newValue`: non-canonical JSON (e.g. `{ "a": 1 }`) would
-      // differ from the re-serialized value and get written back.
-      prevSerialized = serializeStoredValue(value);
-    }
-
+    value = nextValue;
+    prevSerialized = serialized;
     dispatch("update", { prevValue, value });
   }
 
@@ -80,15 +91,23 @@
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      stopPeerChange?.();
     };
   });
 
-  // Attach storage listener when sync is on. Re-run when sync changes.
+  /** @type {null | (() => void)} */
+  let stopPeerChange = null;
+
+  // Attach listeners for other tabs (storage event) and other instances on
+  // this page when sync is on. Re-run when sync changes.
   $: if (mounted) {
     window.removeEventListener("storage", handleStorageChange);
+    stopPeerChange?.();
+    stopPeerChange = null;
 
     if (sync === "on") {
       window.addEventListener("storage", handleStorageChange);
+      stopPeerChange = storage.onPeerChange(handlePeerChange);
     }
   }
 
@@ -119,22 +138,15 @@
     }
   }
 
-  // Reset `value` together with prevSerialized, as a remote removal does, so
-  // the write block does not re-persist the key that was just cleared.
-  function resetValue() {
-    const prevValue = parseStoredValue(prevSerialized);
-    value = undefined;
-    prevSerialized = serializeStoredValue(value);
-    dispatch("update", { prevValue, value });
-  }
-
   /**
    * Remove `key` from storage and reset `value`.
    * @returns {void}
    */
   export function clearItem() {
     storage.removeItem(key);
-    resetValue();
+    // Reset as a remote removal does, so the write block does not re-persist
+    // the key that was just cleared.
+    applyChange(null);
   }
 
   /**
@@ -143,6 +155,6 @@
    */
   export function clearAll() {
     storage.clear();
-    resetValue();
+    applyChange(null);
   }
 </script>
