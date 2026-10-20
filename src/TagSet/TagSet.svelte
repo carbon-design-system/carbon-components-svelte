@@ -280,6 +280,8 @@
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (event.key !== "Delete" && event.key !== "Backspace") return;
+    // A held key would close tag after tag as focus moves to the next one.
+    if (event.repeat || event.defaultPrevented || hasModifierKey(event)) return;
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (!target.matches(".bx--tag__close-icon")) return;

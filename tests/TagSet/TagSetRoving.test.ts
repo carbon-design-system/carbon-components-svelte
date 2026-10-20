@@ -1,4 +1,10 @@
-import { render, screen, waitFor, within } from "@testing-library/svelte";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import TagSetRoving from "./TagSetRoving.test.svelte";
@@ -105,6 +111,26 @@ describe("TagSet navigation=roving", () => {
     await tick();
     expect(onClose).toHaveBeenLastCalledWith("Tag 3");
     expect(screen.queryByText("Tag 3")).not.toBeInTheDocument();
+  });
+
+  it.each([
+    { repeat: true },
+    { altKey: true },
+    { ctrlKey: true },
+    { metaKey: true },
+  ])("ignores Backspace with %o", async (init) => {
+    const onClose = vi.fn();
+    await renderRoving({ onClose });
+
+    closeButtonOf("Tag 2").focus();
+    await fireEvent.keyDown(closeButtonOf("Tag 2"), {
+      key: "Backspace",
+      ...init,
+    });
+    await tick();
+
+    expect(onClose).not.toHaveBeenCalled();
+    expect(screen.getByText("Tag 2")).toBeInTheDocument();
   });
 
   it("announces the delete shortcut on close buttons", async () => {
