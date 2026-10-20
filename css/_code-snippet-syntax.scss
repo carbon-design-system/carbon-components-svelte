@@ -1,0 +1,81 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Syntax highlighting for CodeSnippet. CodeSnippet ships no highlighter:
+/// highlighted HTML goes in its default slot. These rules color the class
+/// names Prism (`.token.keyword`) and highlight.js (`.hljs-keyword`) emit
+/// with Carbon's v11 syntax tokens, so highlighted code follows the theme.
+/// @access private
+/// @group components
+@mixin code-snippet-syntax {
+  // Selectors per syntax token: Prism first, then highlight.js.
+  $syntax: (
+    comment: (".token.comment", ".token.prolog", ".token.cdata", ".hljs-comment"),
+    doc-comment: (".hljs-doctag"),
+    document-meta: (".token.doctype", ".hljs-meta"),
+    keyword: (".token.keyword", ".token.atrule", ".token.important", ".hljs-keyword", ".hljs-selector-tag"),
+    control-keyword: (".token.keyword.control-flow"),
+    operator: (".token.operator", ".hljs-operator"),
+    punctuation: (".token.punctuation", ".hljs-punctuation"),
+    string: (".token.string", ".token.template-string", ".hljs-string"),
+    character: (".token.char"),
+    escape: (".token.entity", ".hljs-char.escape_"),
+    regexp: (".token.regex", ".hljs-regexp"),
+    number: (".token.number", ".hljs-number"),
+    bool: (".token.boolean"),
+    "null": (".token.nil"),
+    constant: (".token.constant", ".hljs-literal", ".hljs-variable.constant_"),
+    atom: (".token.symbol", ".hljs-symbol", ".hljs-bullet"),
+    variable-name: (".token.variable", ".hljs-variable", ".hljs-template-variable"),
+    self: (".hljs-variable.language_"),
+    function: (".token.function", ".hljs-title.function_"),
+    class-name: (".token.class-name", ".token.selector", ".hljs-title.class_", ".hljs-selector-class", ".hljs-selector-id"),
+    type: (".hljs-type"),
+    standard: (".token.builtin", ".hljs-built_in"),
+    namespace: (".token.namespace"),
+    property-name: (".token.property", ".hljs-property", ".hljs-attr"),
+    tag-name: (".token.tag", ".hljs-tag", ".hljs-name"),
+    attribute-name: (".token.attr-name", ".hljs-attribute", ".hljs-selector-attr", ".hljs-selector-pseudo"),
+    attribute-value: (".token.attr-value"),
+    url: (".token.url", ".hljs-link"),
+    heading: (".hljs-section", ".hljs-title"),
+    quote: (".hljs-quote"),
+    annotation: (".hljs-meta .hljs-keyword"),
+  );
+
+  .#{$prefix}--snippet {
+    @each $token, $selectors in $syntax {
+      #{$selectors} {
+        color: ccs-syntax($token);
+      }
+    }
+
+    .token.inserted,
+    .hljs-addition {
+      background-color: ccs-syntax(inserted);
+      color: ccs-syntax(content);
+    }
+
+    .token.deleted,
+    .hljs-deletion {
+      background-color: ccs-syntax(deleted);
+      color: ccs-syntax(content);
+    }
+
+    .token.bold,
+    .hljs-strong {
+      color: ccs-syntax(strong);
+      font-weight: 600;
+    }
+
+    .token.italic,
+    .hljs-emphasis {
+      color: ccs-syntax(emphasis);
+      font-style: italic;
+    }
+  }
+}
+
+@include exports("code-snippet-syntax") {
+  @include code-snippet-syntax;
+}

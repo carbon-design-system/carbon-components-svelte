@@ -207,7 +207,9 @@ Set `disabled` to `true` to disable interaction.
 
 ## Syntax highlighting
 
-CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and render highlighted HTML from Prism, Shiki, or another highlighter in the default slot with `{@html}`. Load language grammars and token theme CSS in your app.
+CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and render highlighted HTML from a highlighter in the default slot with `{@html}`.
+
+CodeSnippet colors the class names that [Prism](https://prismjs.com) (`.token.keyword`) and [highlight.js](https://highlightjs.org) (`.hljs-keyword`) emit with Carbon's `syntax-*` tokens, so highlighted code follows the theme without a separate token theme. Load only the language grammars you need.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxHighlight" />
 
