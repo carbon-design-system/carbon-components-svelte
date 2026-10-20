@@ -32,6 +32,7 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { keyBy } from "../utils/key-by.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -188,7 +189,7 @@
     selector: ".bx--progress-step-button",
     orientation: vertical ? "vertical" : "horizontal",
     skipDisabled: true,
-    focusOnMove: true,
+    focusOnMove: false,
     getActiveIndex: () => {
       if (!listRef) return -1;
       const items = Array.from(
@@ -197,8 +198,11 @@
       return items.indexOf(document.activeElement);
     },
     onMove: (index, event) => {
+      // Leave Alt/Ctrl/Meta+Arrow (Back, scroll) to the browser.
+      if (hasModifierKey(event)) return;
       // Arrow keys would otherwise also scroll the page.
       event.preventDefault();
+      listRef?.querySelectorAll(".bx--progress-step-button")[index]?.focus();
     },
   }}
   on:click
