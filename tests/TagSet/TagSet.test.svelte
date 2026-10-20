@@ -10,6 +10,14 @@
   export let size: ComponentProps<TagSet>["size"] = undefined;
   export let gap: ComponentProps<TagSet>["gap"] = undefined;
   export let overflowLabel: ComponentProps<TagSet>["overflowLabel"] = undefined;
+  export let multiline: ComponentProps<TagSet>["multiline"] = undefined;
+  export let align: ComponentProps<TagSet>["align"] = undefined;
+  export let measurementOffset: ComponentProps<TagSet>["measurementOffset"] =
+    undefined;
+  /** Measure the outer div instead of the set's own wrapper. */
+  export let measureOuter = false;
+
+  let outer: HTMLElement | undefined;
 
   export let onTagClose: (detail: { tag: unknown; index: number }) => void =
     () => {};
@@ -17,16 +25,22 @@
   export let onOverflowChange: (detail: { count: number }) => void = () => {};
 </script>
 
-<TagSet
-  {maxVisible}
-  {size}
-  {gap}
-  {overflowLabel}
-  on:close:tag={({ detail }) => onTagClose(detail)}
-  on:click:overflow={onOverflowClick}
-  on:overflow:change={({ detail }) => onOverflowChange(detail)}
->
-  {#each labels as label, i}
-    <Tag filter={dismissible} value={values?.[i]}>{label}</Tag>
-  {/each}
-</TagSet>
+<div bind:this={outer} data-testid="outer">
+  <TagSet
+    {maxVisible}
+    {size}
+    {gap}
+    {overflowLabel}
+    {multiline}
+    {align}
+    {measurementOffset}
+    containingElement={measureOuter ? outer : undefined}
+    on:close:tag={({ detail }) => onTagClose(detail)}
+    on:click:overflow={onOverflowClick}
+    on:overflow:change={({ detail }) => onOverflowChange(detail)}
+  >
+    {#each labels as label, i (label)}
+      <Tag filter={dismissible} value={values?.[i]}>{label}</Tag>
+    {/each}
+  </TagSet>
+</div>

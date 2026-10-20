@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import SelectableTag from "./SelectableTag.test.svelte";
 
@@ -23,5 +23,28 @@ describe("SelectableTag", () => {
 
     const tag = screen.getByRole("button", { name: "Preselected" });
     expect(tag).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("dispatches change with the new selected state", async () => {
+    const onChange = vi.fn();
+    render(SelectableTag, { props: { onChange } });
+
+    const tag = screen.getByRole("button", { name: "Default" });
+    await user.click(tag);
+    expect(onChange).toHaveBeenLastCalledWith({ selected: true });
+
+    await user.click(tag);
+    expect(onChange).toHaveBeenLastCalledWith({ selected: false });
+  });
+
+  it("does not toggle or dispatch change when disabled", async () => {
+    const onChange = vi.fn();
+    render(SelectableTag, { props: { onChange } });
+
+    const tag = screen.getByRole("button", { name: "Disabled" });
+    await fireEvent.click(tag);
+
+    expect(tag).toHaveAttribute("aria-pressed", "false");
+    expect(onChange).not.toHaveBeenCalled();
   });
 });

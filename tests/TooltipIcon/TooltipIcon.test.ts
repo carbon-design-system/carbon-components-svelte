@@ -472,6 +472,26 @@ describe("TooltipIcon", () => {
       expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
     });
 
+    it("delays a portal tooltip by enterDelayMs and leaveDelayMs", async () => {
+      vi.useFakeTimers();
+      render(TooltipIcon, {
+        props: { portalTooltip: true, enterDelayMs: 200, leaveDelayMs: 200 },
+      });
+      const trigger = screen.getByRole("button");
+
+      await fireEvent.mouseEnter(trigger);
+      await vi.advanceTimersByTimeAsync(199);
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(1);
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      await fireEvent.mouseLeave(trigger);
+      await vi.advanceTimersByTimeAsync(199);
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(1);
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
     it("should add portal-active class on trigger when using portal", () => {
       render(TooltipIcon, {
         props: { portalTooltip: true },

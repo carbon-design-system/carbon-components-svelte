@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
@@ -196,6 +196,37 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Subtitle")).toBeInTheDocument();
     expect(screen.getByText("Subtitle")).toBeInTheDocument();
+  });
+
+  it("should keep the same toast element when updating it", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const id = getQueue(component.queue).add({ title: "Uploading" });
+    await tick();
+    const toast = screen.getByRole("alert");
+
+    getQueue(component.queue).update(id, { title: "Done" });
+    await tick();
+
+    expect(screen.getByRole("alert")).toBe(toast);
+  });
+
+  it("should not restart the timeout when updating a toast", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const id = getQueue(component.queue).add({
+      title: "Uploading",
+      timeout: 1000,
+    });
+    await tick();
+
+    vi.advanceTimersByTime(400);
+    getQueue(component.queue).update(id, { title: "Done" });
+    await tick();
+    vi.advanceTimersByTime(600);
+    await tick();
+
+    expect(screen.queryByText("Done")).not.toBeInTheDocument();
   });
 
   it("should ignore id changes on update", async () => {
@@ -445,6 +476,27 @@ describe("NotificationQueue", () => {
     expect(
       document.querySelector('[style*="position: fixed"]'),
     ).not.toBeInTheDocument();
+  });
+
+  it("should only remove the toast whose close button is clicked", async () => {
+    vi.useRealTimers();
+    const { component } = render(NotificationQueueTest, {
+      props: { position: "bottom-right" },
+    });
+
+    getQueue(component.queue).add({ title: "First" });
+    getQueue(component.queue).add({ title: "Second" });
+    await tick();
+
+    const secondToast = screen.getAllByRole("alert")[1];
+    expect(secondToast).toHaveTextContent("Second");
+    await user.click(
+      within(secondToast).getByRole("button", { name: "Close notification" }),
+    );
+    await tick();
+
+    expect(screen.queryByText("Second")).not.toBeInTheDocument();
+    expect(screen.getByText("First")).toBeInTheDocument();
   });
 
   it("should remove notification after timeout", async () => {

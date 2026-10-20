@@ -376,6 +376,23 @@ describe("TooltipDefinition", () => {
     });
   });
 
+  it("keeps a clickToOpen portal tooltip open when the pointer leaves it", async () => {
+    vi.useFakeTimers();
+    render(TooltipDefinition, {
+      props: { portalTooltip: true, clickToOpen: true },
+    });
+
+    await fireEvent.click(screen.getByRole("button"));
+    await vi.advanceTimersByTimeAsync(0);
+    const portal = document.querySelector(".bx--tooltip-portal");
+    assert(portal instanceof HTMLElement);
+
+    await fireEvent.mouseLeave(portal);
+    await vi.advanceTimersByTimeAsync(300);
+
+    expect(screen.getByRole("tooltip")).toBeInTheDocument();
+  });
+
   it("forwards blur from the trigger", async () => {
     render(TooltipDefinitionBlur);
 
