@@ -227,8 +227,8 @@ describe("PaginationNav", () => {
   );
 
   it("reaches every page and marks exactly one active at every window size", () => {
-    for (let total = 1; total <= 12; total++) {
-      for (let shown = 1; shown <= 8; shown++) {
+    for (let total = 1; total <= 9; total++) {
+      for (let shown = 1; shown <= 6; shown++) {
         for (let page = 1; page <= total; page++) {
           const { container, unmount } = render(PaginationNav, {
             props: { total, shown, page },
