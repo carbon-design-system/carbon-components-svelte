@@ -44,4 +44,25 @@ describe("StorageBinding", () => {
       expect(component.value).toBe("mine");
     },
   );
+
+  it.each(cases)(
+    "$name resets value when another document clears storage",
+    async ({ Component, area }) => {
+      const { component } = render(StorageBinding, {
+        props: { Component, key: "k", value: "mine" },
+      });
+      await tick();
+
+      // Storage.clear() fires a single event with a null key.
+      window[area].clear();
+      fireStorageEvent({
+        key: null,
+        newValue: null,
+        storageArea: window[area],
+      });
+      await tick();
+
+      expect(component.value).toBeUndefined();
+    },
+  );
 });
