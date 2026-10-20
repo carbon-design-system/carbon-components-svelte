@@ -428,15 +428,22 @@ describe("Tooltip", () => {
     expect(trigger.getAttribute("aria-label")).toBeTruthy();
   });
 
-  it("should label the interactive dialog with its trigger", () => {
-    render(TooltipOpen);
+  it.each([
+    ["inline", false],
+    ["in a portal", true],
+  ])(
+    "should label the interactive dialog with its trigger %s",
+    async (_, portalTooltip) => {
+      render(TooltipOpen, { props: { portalTooltip } });
+      await vi.advanceTimersByTimeAsync(0);
 
-    const labelledby = screen
-      .getByRole("dialog")
-      .getAttribute("aria-labelledby");
-    expect(labelledby).toBeTruthy();
-    expect(document.getElementById(labelledby ?? "")).toBeInTheDocument();
-  });
+      const labelledby = screen
+        .getByRole("dialog")
+        .getAttribute("aria-labelledby");
+      expect(labelledby).toBeTruthy();
+      expect(document.getElementById(labelledby ?? "")).toBeInTheDocument();
+    },
+  );
 
   describe("reposition performance", () => {
     afterEach(() => {
