@@ -467,6 +467,22 @@ describe("StructuredList", () => {
     expect(checkboxes[0]).not.toBeChecked();
   });
 
+  it("should wrap a single `selected` value in an array in `multiple` mode", async () => {
+    const { rerender } = render(StructuredListMultiple, {
+      props: { selected: "row-1-value" },
+    });
+    const checkboxes = screen.getAllByRole("checkbox");
+
+    expect(checkboxes[0]).toBeChecked();
+    expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
+
+    await rerender({ selected: "row-2-value" });
+
+    expect(checkboxes[0]).not.toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+    expect(screen.getByTestId("value").textContent).toBe('["row-2-value"]');
+  });
+
   it("should toggle a checkbox once when Enter is held down", async () => {
     render(StructuredListMultiple);
     const checkbox = screen.getAllByRole("checkbox")[0];

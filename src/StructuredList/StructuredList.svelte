@@ -50,12 +50,23 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  /**
+   * Coerce a selection to the mode: an array in `multiple` mode, else a
+   * single value.
+   * @type {(value: Value | Value[] | undefined, isMultiple: boolean) => Value | Value[] | undefined}
+   */
+  function toMode(value, isMultiple) {
+    if (isMultiple) {
+      return Array.isArray(value) ? value : value === undefined ? [] : [value];
+    }
+    return Array.isArray(value) ? value[0] : value;
+  }
+
   /**
    * @type {import("svelte/store").Writable<Value | Value[] | undefined>}
    */
-  const selectedValue = writable(
-    multiple ? (Array.isArray(selected) ? selected : []) : selected,
-  );
+  const selectedValue = writable(toMode(selected, multiple));
 
   // Radios need a shared name to move on the arrow keys.
   const fallbackName = uniqueId("structured-list");
@@ -130,19 +141,11 @@
   $: $multipleValue = multiple;
   $: $selectionValue = selection;
   $: $iconValue = icon;
-  $: if (multiple !== prevMultiple) {
+  $: if (multiple !== prevMultiple || selected !== $selectedValue) {
     prevMultiple = multiple;
-    // Coerce the value to the new mode. This is a parent write, not a
-    // user selection, so it must not dispatch `change`.
-    const next = multiple
-      ? Array.isArray(selected)
-        ? selected
-        : selected === undefined
-          ? []
-          : [selected]
-      : Array.isArray(selected)
-        ? selected[0]
-        : selected;
+    // Coerce the value to the mode. This is a parent write, not a user
+    // selection, so it must not dispatch `change`.
+    const next = toMode(selected, multiple);
     // Assign here too. On Svelte 3/4, `selected = $selectedValue` has
     // already run this pass and would not see the store write.
     selected = next;
@@ -150,11 +153,6 @@
       fromProp = true;
       selectedValue.set(next);
     }
-  } else if (selected !== $selectedValue) {
-    fromProp = true;
-    selectedValue.set(
-      multiple ? (Array.isArray(selected) ? selected : []) : selected,
-    );
   }
   $: {
     if (!initialRender && prevSelectedValue !== $selectedValue) {
