@@ -113,6 +113,39 @@
     selectedValue.set(multiple ? [...list, value] : value);
   }
 
+  /**
+   * How many mounted inputs carry each value.
+   * @type {Map<Value, number>}
+   */
+  const mountedValues = new Map();
+
+  /**
+   * Count an input's value. Returns a function that releases it.
+   * @type {(value: Value) => () => void}
+   */
+  function register(value) {
+    mountedValues.set(value, (mountedValues.get(value) ?? 0) + 1);
+    return () => {
+      const count = (mountedValues.get(value) ?? 0) - 1;
+      if (count > 0) mountedValues.set(value, count);
+      else mountedValues.delete(value);
+      // An `{#if}` swap or re-render destroys an input before mounting its
+      // replacement, so wait for the flush before deciding the value is
+      // gone. Then drop a selection no input carries anymore, as the browser
+      // does. Like a prop update, this fires no `change`.
+      queueMicrotask(() => {
+        const current = get(selectedValue);
+        const list = Array.isArray(current) ? current : [];
+        if (mountedValues.has(value)) return;
+        if (!(multiple ? list.includes(value) : current === value)) return;
+        if (!initialRender) fromProp = true;
+        selectedValue.set(
+          multiple ? list.filter((v) => v !== value) : undefined,
+        );
+      });
+    };
+  }
+
   /** @type {HTMLDivElement | null} */
   let listRef = null;
 
@@ -142,6 +175,7 @@
     selectedValue,
     add,
     update,
+    register,
     multiple: readonly(multipleValue),
     selection: readonly(selectionValue),
     icon: readonly(iconValue),

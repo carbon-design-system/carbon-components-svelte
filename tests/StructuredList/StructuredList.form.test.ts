@@ -1,9 +1,12 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
 import StructuredListForm from "./StructuredList.form.test.svelte";
+
+const flushMicrotasks = () => new Promise<void>(queueMicrotask);
 
 const getInputs = () =>
   Array.from(
@@ -60,7 +63,7 @@ describe("StructuredList form reset", () => {
   });
 });
 
-describe("StructuredList rows mounted after the list", () => {
+describe("StructuredList rows mounted or removed after the list", () => {
   it("selects a row mounted `checked` without firing change", async () => {
     const onChange = vi.fn();
     const { rerender } = render(StructuredListForm, {
@@ -76,6 +79,26 @@ describe("StructuredList rows mounted after the list", () => {
     await rerender({ engines: ["postgresql", "mongodb", "redis", "sqlite"] });
 
     expect(getBoundText()).toBe('["postgresql","sqlite"]');
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("clears the selection when its row unmounts", async () => {
+    const onChange = vi.fn();
+    const { rerender } = render(StructuredListForm, {
+      props: { selected: "redis", onChange },
+    });
+
+    // The unkeyed `{#each}` moves "redis" to another row's input.
+    await rerender({ engines: ["mongodb", "redis"] });
+    await flushMicrotasks();
+    await tick();
+    expect(getBoundText()).toBe('"redis"');
+
+    await rerender({ engines: ["mongodb"] });
+    await flushMicrotasks();
+    await tick();
+
+    expect(getBoundText()).toBe("undefined");
     expect(onChange).not.toHaveBeenCalled();
   });
 });
