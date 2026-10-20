@@ -224,6 +224,12 @@
       color: $text-primary;
     }
 
+    // The title is omitted when empty; keep its top spacing.
+    .#{$prefix}--toast-notification__subtitle:first-child,
+    .#{$prefix}--toast-notification__caption:first-child {
+      margin-top: $carbon--spacing-05;
+    }
+
     .#{$prefix}--toast-notification__caption {
       @include type-style('body-short-01');
 
