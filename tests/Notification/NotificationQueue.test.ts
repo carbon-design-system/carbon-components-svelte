@@ -300,6 +300,32 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("Second notification")).not.toBeInTheDocument();
   });
 
+  it.each([
+    [
+      "remove",
+      (queue: NotificationQueueComponent, id: string) => queue.remove(id),
+    ],
+    ["clear", (queue: NotificationQueueComponent) => queue.clear()],
+  ] as const)(
+    "should return focus when %s unmounts a focused toast",
+    async (_, dismiss) => {
+      const { component } = render(NotificationQueueTest);
+      const before = document.createElement("button");
+      document.body.append(before);
+      onTestFinished(() => before.remove());
+
+      const id = getQueue(component.queue).add({ title: "Saved" });
+      await tick();
+      before.focus();
+      screen.getByRole("button", { name: "Close notification" }).focus();
+
+      dismiss(getQueue(component.queue), id);
+      await tick();
+
+      expect(before).toHaveFocus();
+    },
+  );
+
   it("should limit notifications to maxNotifications (top-right)", async () => {
     const { component } = render(NotificationQueueTest, {
       props: { maxNotifications: 2 },

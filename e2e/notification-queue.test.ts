@@ -43,4 +43,13 @@ test.describe("NotificationQueue", () => {
     await toast.getByRole("button", { name: "Close notification" }).click();
     await expect(toast).toHaveCount(0);
   });
+
+  test("clear returns focus from a focused toast", async ({ page }) => {
+    const add = page.getByTestId("nq-add");
+    await add.click();
+    await page.getByRole("button", { name: "Close notification" }).focus();
+    await page.keyboard.press("Delete");
+    await expect(page.locator(".bx--toast-notification")).toHaveCount(0);
+    await expect(add).toBeFocused();
+  });
 });
