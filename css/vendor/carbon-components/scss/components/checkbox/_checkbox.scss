@@ -106,7 +106,7 @@
     // different checkbox states.
     width: to-rem(16px);
     height: to-rem(16px);
-    border: 1px solid $icon-01;
+    border: 1px solid $icon-primary;
     // increase left margin for #6480
     margin: to-rem(2px) to-rem(2px) to-rem(2px) to-rem(3px);
 
@@ -123,8 +123,8 @@
     left: to-rem(7px);
     width: to-rem(9px);
     height: to-rem(5px);
-    border-bottom: 2px solid $inverse-01;
-    border-left: 2px solid $inverse-01;
+    border-bottom: 2px solid $focus-inset;
+    border-left: 2px solid $focus-inset;
     margin-top: to-rem(-3px) #{'/*rtl:0rem*/'};
     background: none;
     content: '';
@@ -137,8 +137,8 @@
   .#{$prefix}--checkbox-label[data-contained-checkbox-state='true']::before,
   .#{$prefix}--checkbox-label[data-contained-checkbox-state='mixed']::before {
     border-width: 1px;
-    border-color: $icon-01;
-    background-color: $icon-01;
+    border-color: $icon-primary;
+    background-color: $icon-primary;
   }
 
   .#{$prefix}--checkbox:checked + .#{$prefix}--checkbox-label::after,
@@ -150,8 +150,8 @@
   .#{$prefix}--checkbox-label[data-contained-checkbox-state='mixed']::after {
     top: to-rem(11px);
     width: to-rem(8px);
-    border-bottom: 2px solid $inverse-01;
-    border-left: 0 solid $inverse-01;
+    border-bottom: 2px solid $focus-inset;
+    border-left: 0 solid $focus-inset;
     transform: scale(1) rotate(0deg);
   }
 
@@ -172,13 +172,13 @@
 
   .#{$prefix}--checkbox:disabled + .#{$prefix}--checkbox-label,
   .#{$prefix}--checkbox-label[data-contained-checkbox-disabled='true'] {
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
   .#{$prefix}--checkbox:disabled + .#{$prefix}--checkbox-label::before,
   .#{$prefix}--checkbox-label[data-contained-checkbox-disabled='true']::before {
-    border-color: $disabled-02;
+    border-color: $icon-disabled;
   }
 
   .#{$prefix}--checkbox:checked:disabled + .#{$prefix}--checkbox-label::before,
@@ -186,7 +186,7 @@
     + .#{$prefix}--checkbox-label::before,
   .#{$prefix}--checkbox-label[data-contained-checkbox-state='true'][data-contained-checkbox-disabled='true']::before,
   .#{$prefix}--checkbox-label[data-contained-checkbox-state='mixed'][data-contained-checkbox-disabled='true']::before {
-    background-color: $disabled-02;
+    background-color: $button-disabled;
   }
 
 
@@ -225,20 +225,20 @@
   .#{$prefix}--checkbox-wrapper--readonly
     .#{$prefix}--checkbox
     + .#{$prefix}--checkbox-label::before {
-    border-color: $disabled-02;
+    border-color: $icon-disabled;
   }
 
   .#{$prefix}--checkbox-wrapper--readonly
     .#{$prefix}--checkbox:checked
     + .#{$prefix}--checkbox-label::before {
-    border: 1px solid $disabled-02;
+    border: 1px solid $icon-disabled;
     background: transparent;
   }
 
   .#{$prefix}--checkbox-wrapper--readonly
     .#{$prefix}--checkbox:checked
     + .#{$prefix}--checkbox-label::after {
-    border-color: $text-01;
+    border-color: $text-primary;
   }
 }
 
@@ -253,8 +253,8 @@
 // `_checkbox.scss`, translated to this repo's `to-rem()`/`$carbon--spacing-*`
 // conventions. `$icon-primary`, `$support-error`, `$support-warning`, and
 // `$text-error` are v11 token names that the v10 theme mixin already
-// globally aliases to their v10 equivalents (`$icon-01`, `$support-01`,
-// `$support-03`, `$text-error`), so they resolve correctly under this
+// globally aliases to their v10 equivalents (`$icon-primary`, `$support-error`,
+// `$support-warning`, `$text-error`), so they resolve correctly under this
 // repo's v10 pin.
 
 @import "carbon-components/scss/globals/scss/vars";

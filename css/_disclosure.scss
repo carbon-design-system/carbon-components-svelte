@@ -21,7 +21,7 @@
     justify-content: $accordion-justify-content;
     padding: to-rem(10px) 0;
     margin: 0;
-    color: $text-01;
+    color: $text-primary;
     transition: background-color motion(standard, productive) $duration--fast-02;
 
     &:focus::before {
@@ -54,7 +54,7 @@
     }
 
     .#{$prefix}--disclosure__control:hover::before {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
   }
 
@@ -65,7 +65,7 @@
     height: to-rem(16px);
     flex: 0 0 to-rem(16px);
     margin: $accordion-arrow-margin;
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
     transform: rotate(-270deg) #{"/*rtl:ignore*/"};
     transition: transform $duration--fast-02 motion(standard, productive);
   }
@@ -128,7 +128,7 @@
     }
 
     .#{$prefix}--disclosure__arrow {
-      fill: $ui-05;
+      fill: $layer-selected-inverse;
       transform: rotate(-90deg) #{"/*rtl:ignore*/"};
     }
   }

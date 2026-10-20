@@ -61,7 +61,7 @@
     // ccs: match v11 (`body-compact-01`) instead of v10's mono `code-02`.
     @include type-style('body-short-01');
 
-    color: $text-01;
+    color: $text-primary;
     white-space: nowrap;
 
     &:last-of-type {
@@ -73,7 +73,7 @@
     position: absolute;
     width: 100%;
     height: to-rem(2px);
-    background: $ui-03;
+    background: $layer-accent-01;
     transform: translate(0%, -50%);
   }
 
@@ -84,7 +84,7 @@
     display: inline-block;
     width: to-rem(2px);
     height: to-rem(4px);
-    background: $ui-03;
+    background: $layer-accent-01;
     content: '';
     transform: translate(-50%, 0);
   }
@@ -93,7 +93,7 @@
     position: absolute;
     width: 100%;
     height: to-rem(2px);
-    background: $ui-05;
+    background: $layer-selected-inverse;
     pointer-events: none;
     transform: translate(0%, -50%);
     transform-origin: left;
@@ -105,7 +105,7 @@
     z-index: 3;
     width: to-rem(14px);
     height: to-rem(14px);
-    background: $ui-05;
+    background: $layer-selected-inverse;
     border-radius: 50%;
     box-shadow: inset 0 0 0 1px transparent, inset 0 0 0 2px transparent;
     outline: none;
@@ -114,14 +114,14 @@
       background $duration--fast-02 motion(standard, productive);
 
     &:focus {
-      background-color: $interactive-04;
-      box-shadow: inset 0 0 0 2px $interactive-04, inset 0 0 0 3px $ui-01;
+      background-color: $interactive;
+      box-shadow: inset 0 0 0 2px $interactive, inset 0 0 0 3px $layer-01;
       // 20px / 14px = 1.4286
       transform: translate(-50%, -50%) scale(1.4286);
     }
 
     &:active {
-      box-shadow: inset 0 0 0 2px $interactive-04;
+      box-shadow: inset 0 0 0 2px $interactive;
       transform: translate(-50%, -50%) scale(1.4286);
     }
   }
@@ -144,13 +144,13 @@
   }
 
   .#{$prefix}--slider__thumb:focus ~ .#{$prefix}--slider__filled-track {
-    background-color: $interactive-04;
+    background-color: $interactive;
   }
 
   .#{$prefix}--label--disabled
     ~ .#{$prefix}--slider-container
     > .#{$prefix}--slider__range-label {
-    color: $disabled-02;
+    color: $text-disabled;
   }
 
   .#{$prefix}--slider--disabled.#{$prefix}--slider {
@@ -158,19 +158,19 @@
   }
 
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb {
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
 
     &:focus {
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
       box-shadow: none;
       outline: none;
       transform: translate(-50%, -50%);
     }
 
     // ccs: also drop the base `:active` ring, or pressing a disabled thumb
-    // draws the blue $interactive-04 ring.
+    // draws the blue $interactive ring.
     &:active {
-      background: $ui-03;
+      background: $layer-accent-01;
       box-shadow: none;
       transform: translate(-50%, -50%);
     }
@@ -193,7 +193,7 @@
     }
 
     // RangeSlider handles (`slider-two-handle` below). Only recolor the
-    // non-focus icon; the focus-state icon must keep its $interactive-01
+    // non-focus icon; the focus-state icon must keep its $background-brand
     // fill even when the focused thumb is hovered. Disabled handles keep
     // their muted fill.
     .#{$prefix}--slider:not(.#{$prefix}--slider--disabled)
@@ -202,7 +202,7 @@
     .#{$prefix}--slider:not(.#{$prefix}--slider--disabled)
       .#{$prefix}--slider__thumb--upper:hover
       .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
-      fill: $text-02;
+      fill: $text-secondary;
     }
   }
 
@@ -211,7 +211,7 @@
   .#{$prefix}--slider--disabled
     .#{$prefix}--slider__thumb:focus
     ~ .#{$prefix}--slider__filled-track {
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
   }
 
   .#{$prefix}--slider-container.#{$prefix}--skeleton
@@ -303,7 +303,7 @@
   }
 
   .#{$prefix}--slider__invalid-icon--warning path[data-icon-path="inner-path"] {
-    fill: $inverse-01;
+    fill: $icon-inverse;
     opacity: 1;
   }
 
@@ -420,7 +420,7 @@
       position: absolute;
       z-index: -1;
       display: block;
-      background: $ui-background;
+      background: $background;
       height: 2px;
       content: "";
       width: 6px;
@@ -474,20 +474,20 @@
     left: 0;
     height: 100%;
     width: 100%;
-    // $ui-05 is the highest-contrast UI color in v10 (dark on light themes,
+    // $border-inverse is the highest-contrast UI color in v10 (dark on light themes,
     // light on dark themes); equivalent to v11's $layer-selected-inverse used
     // by Carbon React for the range-slider arrow handles.
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
   }
 
   .#{$prefix}--slider__thumb-icon--focus {
     display: none;
-    fill: $interactive-01;
+    fill: $background-brand;
   }
 
   .#{$prefix}--slider__thumb-wrapper:focus-within
     ~ .#{$prefix}--slider__filled-track {
-    background-color: $interactive-04;
+    background-color: $interactive;
   }
 
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--lower,
@@ -502,7 +502,7 @@
     }
 
     .#{$prefix}--slider__thumb-icon {
-      fill: $disabled-02;
+      fill: $icon-disabled;
     }
   }
 }
@@ -533,7 +533,7 @@
     top: 0;
     width: to-rem(2px);
     height: to-rem(8px);
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
     transform: translate(-50%, -50%);
   }
 
@@ -543,7 +543,7 @@
     position: absolute;
     top: to-rem(12px);
     left: 50%;
-    color: $text-02;
+    color: $text-secondary;
     white-space: nowrap;
     transform: translateX(-50%);
   }
@@ -553,17 +553,17 @@
   }
 
   .#{$prefix}--slider--disabled .#{$prefix}--slider__mark {
-    background-color: $disabled-02;
+    background-color: $button-disabled;
   }
 
   .#{$prefix}--slider--disabled .#{$prefix}--slider__mark-label {
-    color: $disabled-02;
+    color: $text-disabled;
   }
 
   .#{$prefix}--label--disabled
     ~ .#{$prefix}--slider-container
     .#{$prefix}--slider__mark-label {
-    color: $disabled-02;
+    color: $text-disabled;
   }
 }
 

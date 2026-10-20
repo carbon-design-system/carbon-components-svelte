@@ -28,9 +28,9 @@
     min-height: to-rem(40px);
     padding: to-rem(11px) $carbon--spacing-05;
     border: none;
-    border-bottom: 1px solid $ui-04;
+    border-bottom: 1px solid $border-strong-01;
     background-color: $field-01;
-    color: $text-01;
+    color: $text-primary;
     resize: vertical;
     transition: background-color $duration--fast-01 motion(standard, productive);
   }
@@ -63,19 +63,19 @@
     position: absolute;
     top: $carbon--spacing-04;
     right: $carbon--spacing-05;
-    fill: $support-01;
+    fill: $support-error;
   }
 
   .#{$prefix}--text-area:disabled {
     border-bottom: 1px solid transparent;
-    background-color: $disabled-01;
-    color: $disabled-02;
+    background-color: $field-01;
+    color: $text-disabled;
     cursor: not-allowed;
     outline: none;
   }
 
   .#{$prefix}--text-area:disabled::placeholder {
-    color: $disabled-02;
+    color: $text-disabled;
   }
 
   .#{$prefix}--text-area.#{$prefix}--text-area--light:disabled {
@@ -143,7 +143,7 @@
   }
 
   .#{$prefix}--text-area__invalid-icon--warning path[fill] {
-    fill: $inverse-01;
+    fill: $icon-inverse;
     opacity: 1;
   }
 

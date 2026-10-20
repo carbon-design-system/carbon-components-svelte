@@ -67,7 +67,7 @@
     flex-shrink: 0;
     margin: to-rem(10px) $carbon--spacing-03 0 0;
     border-radius: 50%;
-    fill: $interactive-04;
+    fill: $interactive;
   }
 
   .#{$prefix}--progress-label {
@@ -76,7 +76,7 @@
     overflow: hidden;
     max-width: to-rem(88px);
     margin: $carbon--spacing-03 0 0 0;
-    color: $text-01;
+    color: $text-primary;
     line-height: 1.45;
     text-overflow: ellipsis;
     transition: color $duration--fast-02 motion(standard, productive);
@@ -89,14 +89,14 @@
   }
 
   .#{$prefix}--progress-label:hover {
-    box-shadow: 0 to-rem(1px) $link-01;
-    color: $link-01;
+    box-shadow: 0 to-rem(1px) $link-primary;
+    color: $link-primary;
     cursor: pointer;
   }
 
   .#{$prefix}--progress-label:focus {
-    box-shadow: 0 to-rem(3px) 0 0 $link-01;
-    color: $link-01;
+    box-shadow: 0 to-rem(3px) 0 0 $link-primary;
+    color: $link-primary;
     outline: none;
   }
 
@@ -118,29 +118,29 @@
     left: 0;
     margin-top: to-rem(28px);
     margin-left: $carbon--spacing-06;
-    color: $text-02;
+    color: $text-secondary;
     text-align: start;
   }
 
   .#{$prefix}--progress-step--current {
     .#{$prefix}--progress-line {
-      background-color: $interactive-04;
+      background-color: $interactive;
     }
   }
 
   .#{$prefix}--progress-step--incomplete {
     svg {
-      fill: $ui-05;
+      fill: $layer-selected-inverse;
     }
 
     .#{$prefix}--progress-line {
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
     }
   }
 
   .#{$prefix}--progress-step--complete {
     .#{$prefix}--progress-line {
-      background-color: $interactive-04;
+      background-color: $interactive;
     }
   }
 
@@ -170,7 +170,7 @@
   .#{$prefix}--progress-step-button--unclickable
     .#{$prefix}--progress-label:hover {
     box-shadow: none;
-    color: $text-01;
+    color: $text-primary;
     cursor: default;
   }
 
@@ -202,7 +202,7 @@
   }
 
   .#{$prefix}--progress__warning > * {
-    fill: $support-01;
+    fill: $support-error;
   }
 
   // ccs: the 14px bar centered in the line a step's label takes (its

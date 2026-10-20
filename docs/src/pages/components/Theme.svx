@@ -42,9 +42,9 @@ With `persist` also set, the system preference wins when the page loads and the 
 
 Override default Carbon theme tokens using the `tokens` prop.
 
-`Theme` sets CSS custom properties as `--cds-{token}`. Not every token name maps directly to component styles. Components often use semantic tokens (like `interactive-01`) rather than component-specific ones.
+`Theme` sets CSS custom properties as `--cds-{token}`. Not every token name maps directly to component styles. Components often use semantic tokens (like `layer-01`) rather than component-specific ones.
 
-For example, primary buttons use `interactive-01` for background, with separate hover and active tokens. Check component CSS or Carbon docs to see which tokens affect a given component.
+For example, primary buttons use `button-primary` for background, with separate `button-primary-hover` and `button-primary-active` tokens. Check component CSS or Carbon docs to see which tokens affect a given component.
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 

@@ -40,7 +40,7 @@
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--search-magnifier-icon {
-    fill: $icon-01;
+    fill: $icon-primary;
     inset: auto to-rem(16px) to-rem(13px) auto;
     transform: none;
   }
@@ -74,7 +74,7 @@
   .#{$prefix}--search--fluid
     .#{$prefix}--search-input:not(:focus)
     ~ .#{$prefix}--search-close:not([disabled])::after {
-    background: $ui-04;
+    background: $border-strong-01;
     block-size: to-rem(1px);
   }
 
@@ -93,18 +93,18 @@
     .#{$prefix}--search--fluid
       .#{$prefix}--search-input:disabled
       ~ .#{$prefix}--search-close:hover::before {
-      background: $ui-03;
+      background: $layer-accent-01;
     }
   }
 
   .#{$prefix}--search--fluid.#{$prefix}--search--disabled .#{$prefix}--label {
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
   .#{$prefix}--search--fluid.#{$prefix}--search--disabled
     .#{$prefix}--search-input[disabled] {
-    border-block-end: 1px solid $ui-03;
+    border-block-end: 1px solid $border-subtle-01;
   }
 
   // Invalid and warning: the field grows to hold its message, inside and
@@ -119,7 +119,7 @@
   }
 
   .#{$prefix}--search--fluid[data-warn] {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--search--fluid[data-invalid]:not(:focus-within) {

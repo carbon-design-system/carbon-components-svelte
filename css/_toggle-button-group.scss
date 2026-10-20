@@ -35,7 +35,7 @@
     column-gap: $carbon--spacing-03;
     padding: $carbon--spacing-02 $carbon--spacing-05;
     background-color: $field-01;
-    color: $text-02;
+    color: $text-secondary;
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive),
       color $duration--fast-01 motion(standard, productive);
@@ -43,7 +43,7 @@
 
   .#{$prefix}--toggle-button svg {
     flex-shrink: 0;
-    fill: $icon-02;
+    fill: $icon-secondary;
   }
 
   // Divider between adjacent segments, suppressed next to a focused segment
@@ -60,7 +60,7 @@
     left: 0;
     width: to-rem(1px);
     height: 100%;
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
     content: "";
   }
 
@@ -93,51 +93,51 @@
   // stuck in its hover state.
   @media (any-hover: hover) {
     .#{$prefix}--toggle-button:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .#{$prefix}--toggle-button--pressed:hover {
-      background-color: $hover-selected-ui;
+      background-color: $layer-selected-hover-01;
     }
   }
 
   .#{$prefix}--toggle-button:active {
-    background-color: $active-ui;
+    background-color: $layer-active-01;
   }
 
   .#{$prefix}--toggle-button--pressed {
-    background-color: $selected-ui;
-    color: $text-01;
+    background-color: $layer-selected-01;
+    color: $text-primary;
     // Non-color pressed cue (WCAG 1.4.11 fails on color alone against
     // `$field-01` in some themes).
-    box-shadow: inset 0 to-rem(-2px) 0 0 $interactive-04;
+    box-shadow: inset 0 to-rem(-2px) 0 0 $interactive;
   }
 
   .#{$prefix}--toggle-button--pressed svg {
-    fill: $icon-01;
+    fill: $icon-primary;
   }
 
   .#{$prefix}--toggle-button-group--vertical .#{$prefix}--toggle-button--pressed {
-    box-shadow: inset to-rem(-2px) 0 0 0 $interactive-04;
+    box-shadow: inset to-rem(-2px) 0 0 0 $interactive;
   }
 
   .#{$prefix}--toggle-button:disabled {
-    background-color: $disabled-01;
-    color: $disabled-02;
+    background-color: $field-01;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
   .#{$prefix}--toggle-button:disabled svg {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
   .#{$prefix}--toggle-button--pressed:disabled {
-    box-shadow: inset 0 to-rem(-2px) 0 0 $disabled-02;
+    box-shadow: inset 0 to-rem(-2px) 0 0 $icon-disabled;
   }
 
   .#{$prefix}--toggle-button-group--vertical
     .#{$prefix}--toggle-button--pressed:disabled {
-    box-shadow: inset to-rem(-2px) 0 0 0 $disabled-02;
+    box-shadow: inset to-rem(-2px) 0 0 0 $icon-disabled;
   }
 
   // Forced-colors mode repaints the pressed background and drops the inset

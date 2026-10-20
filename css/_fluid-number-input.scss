@@ -175,7 +175,7 @@
       input[type="text"]:not(:focus)
       ~ .#{$prefix}--number__controls
       .#{$prefix}--number__control-btn:last-of-type:hover {
-      box-shadow: inset -2px 0 $support-01;
+      box-shadow: inset -2px 0 $support-error;
     }
 
     .#{$prefix}--number-input--fluid
@@ -325,7 +325,7 @@
     border: none;
     margin: 0 to-rem(16px);
     block-size: to-rem(1px);
-    border-block-end: 1px solid $ui-03;
+    border-block-end: 1px solid $border-subtle-01;
     inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(63px);
   }
@@ -380,7 +380,7 @@
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number--readonly
     input[type="text"] {
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--number-input--fluid

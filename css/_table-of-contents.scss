@@ -16,7 +16,7 @@
 
   .#{$prefix}--toc__list {
     padding: 0;
-    border-inline-start: $carbon--spacing-02 solid $ui-03;
+    border-inline-start: $carbon--spacing-02 solid $border-subtle-01;
     margin: 0;
     list-style: none;
   }
@@ -28,7 +28,7 @@
     position: absolute;
     top: 0;
     width: $carbon--spacing-02;
-    background-color: $interactive-04;
+    background-color: $interactive;
     pointer-events: none;
 
     &--animated {
@@ -53,7 +53,7 @@
     bottom: 0;
     width: $carbon--spacing-02;
     margin-inline-start: -$carbon--spacing-02;
-    background-color: $interactive-04;
+    background-color: $interactive;
     content: "";
   }
 
@@ -67,7 +67,7 @@
     // Each level below the first indents by one more step.
     padding-inline: calc(#{$carbon--spacing-05} * var(--ccs-toc-level, 1))
       $carbon--spacing-05;
-    color: $text-02;
+    color: $text-secondary;
     text-decoration: none;
     transition: color $duration--fast-01 motion(standard, productive);
 
@@ -92,13 +92,13 @@
   }
 
   .#{$prefix}--toc__item--active .#{$prefix}--toc__link {
-    color: $text-01;
+    color: $text-primary;
     font-weight: 600;
   }
 
   @media (any-hover: hover) {
     .#{$prefix}--toc__link:hover {
-      color: $text-01;
+      color: $text-primary;
     }
   }
 }

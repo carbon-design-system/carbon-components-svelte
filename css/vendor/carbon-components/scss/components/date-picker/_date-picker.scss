@@ -288,7 +288,7 @@
 @mixin date-picker-readonly {
   .#{$prefix}--date-picker__input[readonly] {
     background: transparent;
-    border-bottom-color: $disabled-02;
+    border-bottom-color: $icon-disabled;
     cursor: text;
   }
 
@@ -296,7 +296,7 @@
   // around the first input in `static` mode, which breaks the `~` sibling
   // combinator from the input to the icon.
   .#{$prefix}--date-picker-input__wrapper--readonly .#{$prefix}--date-picker__icon {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 }
 
@@ -357,13 +357,13 @@
     border: 0;
     border-radius: 0;
     background: none;
-    color: $text-01;
+    color: $text-primary;
     cursor: pointer;
     font-weight: 400;
     text-align: center;
 
     &:hover {
-      background: $hover-ui;
+      background: $layer-hover-01;
     }
 
     &:focus {
@@ -372,13 +372,13 @@
     }
 
     &.selected {
-      background-color: $interactive-01;
-      color: $text-04;
+      background-color: $background-brand;
+      color: $text-on-color;
     }
 
     &.today:not(.selected) {
       position: relative;
-      color: $link-01;
+      color: $link-primary;
       font-weight: 600;
 
       &::after {
@@ -389,14 +389,14 @@
         display: block;
         width: to-rem(4px);
         height: to-rem(4px);
-        background-color: $link-01;
+        background-color: $link-primary;
         transform: translateX(-50%);
       }
     }
 
     // flatpickr's monthSelect plugin marks out-of-range months with this.
     &.flatpickr-disabled {
-      color: $disabled-02;
+      color: $text-disabled;
       cursor: not-allowed;
 
       &:hover {
@@ -433,7 +433,7 @@
   .flatpickr-yearSelect-range {
     display: inline-block;
     font-weight: 600;
-    color: $text-01;
+    color: $text-primary;
   }
 
   .flatpickr-yearSelect-years {
@@ -451,13 +451,13 @@
     border: 0;
     border-radius: 0;
     background: none;
-    color: $text-01;
+    color: $text-primary;
     cursor: pointer;
     font-weight: 400;
     text-align: center;
 
     &:hover {
-      background: $hover-ui;
+      background: $layer-hover-01;
     }
 
     &:focus {
@@ -466,13 +466,13 @@
     }
 
     &.selected {
-      background-color: $interactive-01;
-      color: $text-04;
+      background-color: $background-brand;
+      color: $text-on-color;
     }
 
     &.today:not(.selected) {
       position: relative;
-      color: $link-01;
+      color: $link-primary;
       font-weight: 600;
 
       &::after {
@@ -483,13 +483,13 @@
         display: block;
         width: to-rem(4px);
         height: to-rem(4px);
-        background-color: $link-01;
+        background-color: $link-primary;
         transform: translateX(-50%);
       }
     }
 
     &.disabled {
-      color: $disabled-02;
+      color: $text-disabled;
       cursor: not-allowed;
 
       &:hover {
@@ -532,12 +532,12 @@
     border: 0;
     background: none;
     cursor: pointer;
-    fill: $icon-01;
+    fill: $icon-primary;
     transform: translateY(-50%);
 
     @media (any-hover: hover) {
       &:hover {
-        background-color: $hover-field;
+        background-color: $field-hover-01;
       }
     }
 
@@ -580,7 +580,7 @@
 // start on the locale's first day, so `7n + 1` and `7n` are the week's ends.
 @mixin date-picker-week-select {
   .flatpickr-day.week.selected:not(:nth-child(7n + 1)):not(:nth-child(7n)) {
-    color: $text-01;
+    color: $text-primary;
     background-color: $highlight;
   }
 }
@@ -595,8 +595,8 @@
 // selected look.
 @mixin date-picker-range-length {
   .flatpickr-day.selected.flatpickr-disabled {
-    background-color: $interactive-01;
-    color: $text-04;
+    background-color: $background-brand;
+    color: $text-on-color;
   }
 }
 

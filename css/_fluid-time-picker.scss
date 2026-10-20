@@ -135,7 +135,7 @@
     .#{$prefix}--select-input__wrapper::before {
     position: absolute;
     display: block;
-    background-color: $ui-04;
+    background-color: $border-strong-01;
     block-size: calc(100% - 1px);
     content: "";
     inline-size: 1px;
@@ -148,7 +148,7 @@
     .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select--readonly
     .#{$prefix}--select-input__wrapper::before {
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
   }
 
   .#{$prefix}--time-picker--fluid__wrapper
@@ -169,7 +169,7 @@
     .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select--disabled
     .#{$prefix}--select-input__wrapper::before {
-    background: $disabled-02;
+    background: $button-disabled;
   }
 
   .#{$prefix}--time-picker--fluid .#{$prefix}--form-requirement {
@@ -258,17 +258,17 @@
 
     .#{$prefix}--time-picker--fluid--invalid
       .#{$prefix}--select-input:hover:not([disabled]) {
-      background: $hover-ui;
+      background: $layer-hover-01;
     }
 
     .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--select-input:hover {
-      border-block-start: 2px solid $support-01;
+      border-block-start: 2px solid $support-error;
     }
 
     .#{$prefix}--time-picker--fluid--invalid
       .#{$prefix}--select--fluid:last-of-type
       .#{$prefix}--select-input:hover {
-      border-inline-end: 2px solid $support-01;
+      border-inline-end: 2px solid $support-error;
     }
   }
 
@@ -292,17 +292,17 @@
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon {
-    fill: $support-01;
+    fill: $support-error;
   }
 
   .#{$prefix}--time-picker--fluid--warning .#{$prefix}--time-picker__icon {
-    fill: $support-03;
+    fill: $support-warning;
   }
 
   .#{$prefix}--time-picker--fluid--warning
     .#{$prefix}--time-picker__icon
     path:first-of-type {
-    fill: $icon-01;
+    fill: $icon-primary;
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--form-requirement,

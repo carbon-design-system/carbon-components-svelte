@@ -167,7 +167,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      color: $text-02;
+      color: $text-secondary;
       cursor: pointer;
     }
 
@@ -189,9 +189,9 @@
         width: to-rem(48px);
         height: to-rem(24px);
         box-sizing: border-box;
-        background-color: $ui-04;
+        background-color: $border-strong-01;
         border-radius: to-rem(15px);
-        // Corresponds to the double-border for focused state (`0 0 0 1px $ui-02, 0 0 0 3px $focus`)
+        // Corresponds to the double-border for focused state (`0 0 0 1px $layer-02, 0 0 0 3px $focus`)
         box-shadow: 0 0 0 1px transparent, 0 0 0 3px transparent;
         content: '';
         // ccs: no `box-shadow`, which draws the focus ring, so the ring snaps
@@ -210,7 +210,7 @@
         width: to-rem(18px);
         height: to-rem(18px);
         box-sizing: border-box;
-        background-color: $icon-03;
+        background-color: $icon-on-color;
         border-radius: 50%;
         content: '';
         transition: transform $duration--fast-01 motion(exit, productive);
@@ -248,11 +248,11 @@
       + .#{$prefix}--toggle-input__label
       > .#{$prefix}--toggle__switch {
       &::before {
-        background-color: $support-02;
+        background-color: $support-success;
       }
 
       &::after {
-        background-color: $icon-03;
+        background-color: $icon-on-color;
         transform: translateX(to-rem(24px));
       }
     }
@@ -263,7 +263,7 @@
     .#{$prefix}--toggle-input:active
       + .#{$prefix}--toggle-input__label
       > .#{$prefix}--toggle__switch::before {
-      box-shadow: 0 0 0 1px $ui-02, 0 0 0 3px $focus;
+      box-shadow: 0 0 0 1px $layer-02, 0 0 0 3px $focus;
     }
 
     .#{$prefix}--toggle-input:disabled + .#{$prefix}--toggle-input__label {
@@ -277,11 +277,11 @@
       cursor: not-allowed;
 
       &::before {
-        background-color: $disabled-02;
+        background-color: $button-disabled;
       }
 
       &::after {
-        background-color: $disabled-03;
+        background-color: $layer-selected-disabled;
       }
 
       &::before,

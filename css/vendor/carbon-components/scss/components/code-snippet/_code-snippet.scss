@@ -26,14 +26,14 @@
   .#{$prefix}--snippet--disabled,
   .#{$prefix}--snippet--disabled
     .#{$prefix}--btn.#{$prefix}--snippet-btn--expand {
-    background-color: $disabled-01;
-    color: $disabled-02;
+    background-color: $field-01;
+    color: $text-disabled;
   }
 
   .#{$prefix}--snippet--disabled .#{$prefix}--snippet-btn--expand:hover,
   .#{$prefix}--snippet--disabled .#{$prefix}--copy-btn:hover {
-    background-color: $disabled-01;
-    color: $disabled-02;
+    background-color: $field-01;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
@@ -41,7 +41,7 @@
   .#{$prefix}--snippet--disabled
     .#{$prefix}--snippet-btn--expand
     .#{$prefix}--icon-chevron--down {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
   .#{$prefix}--snippet code {
@@ -57,11 +57,11 @@
     border: 2px solid transparent;
     background-color: $field-01;
     border-radius: 4px;
-    color: $text-01;
+    color: $text-primary;
     cursor: pointer;
 
     &:hover {
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
     }
 
     &:active {
@@ -221,7 +221,7 @@
   .#{$prefix}--snippet__icon {
     width: to-rem(16px);
     height: to-rem(16px);
-    fill: $icon-01;
+    fill: $icon-primary;
     // ccs: only fill differs (disabled, ghost copy button); the expand
     // chevron's rotation has its own transition. Avoid `all` so the browser
     // doesn't interpolate the rest of the animatable property set.
@@ -250,7 +250,7 @@
     padding: $spacing-03 $spacing-05;
     border: 0;
     background-color: $field-01;
-    color: $text-01;
+    color: $text-primary;
   }
 
   .#{$prefix}--snippet-btn--expand .#{$prefix}--snippet-btn--text {
@@ -268,8 +268,8 @@
   }
 
   .#{$prefix}--snippet-btn--expand:hover {
-    background: $hover-ui;
-    color: $text-01;
+    background: $layer-hover-01;
+    color: $text-primary;
   }
 
   .#{$prefix}--snippet-btn--expand:active {
@@ -299,14 +299,14 @@
   .#{$prefix}--snippet--light
     .#{$prefix}--btn.#{$prefix}--snippet-btn--expand:hover,
   .#{$prefix}--snippet--light .#{$prefix}--copy-btn:hover {
-    background-color: $hover-light-ui;
+    background-color: $layer-hover-02;
   }
 
   .#{$prefix}--snippet--light.#{$prefix}--snippet--inline:active,
   .#{$prefix}--snippet--light
     .#{$prefix}--btn.#{$prefix}--snippet-btn--expand:active,
   .#{$prefix}--snippet--light .#{$prefix}--copy-btn:active {
-    background-color: $active-light-ui;
+    background-color: $layer-active-02;
   }
 
   .#{$prefix}--snippet--light.#{$prefix}--snippet--single::after,

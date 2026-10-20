@@ -35,7 +35,7 @@
     width: 100%;
     height: auto;
     min-height: to-rem(40px);
-    color: $text-01;
+    color: $text-primary;
     background: none;
   }
 
@@ -88,18 +88,18 @@
   // The container backgrounds are keyed on markers `Tab` emits, so a single
   // consumer class on the tab can restyle them.
   .#{$prefix}--tabs__nav-item--container { // ccs: flatten
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
   }
 
   .#{$prefix}--tabs__nav-item--container-selected { // ccs: flatten
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item {
     + .#{$prefix}--tabs__nav-item {
       margin-left: 0;
       // Draws the border without affecting the inner-content
-      box-shadow: -1px 0 0 0 $ui-04;
+      box-shadow: -1px 0 0 0 $border-strong-01;
     }
 
     + .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--selected,
@@ -119,14 +119,14 @@
   }
 
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled {
-    background-color: $disabled-02;
+    background-color: $button-disabled;
   }
 
   .#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-item--disabled
     .#{$prefix}--tabs__nav-link {
     border-bottom: none;
-    color: $disabled-03;
+    color: $text-on-color-disabled;
   }
 
   .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
@@ -155,7 +155,7 @@
     padding: $spacing-04 $spacing-05 $spacing-03;
     border-bottom: $tab-underline-color;
     margin: 0;
-    color: $text-02;
+    color: $text-secondary;
     font-weight: 400;
     line-height: inherit;
     text-decoration: none;
@@ -177,14 +177,14 @@
   a.#{$prefix}--tabs__nav-link--selected:active { // ccs: flatten
     @include type-style('productive-heading-01');
 
-    border-bottom: 2px solid $interactive-04;
-    color: $text-01;
+    border-bottom: 2px solid $interactive;
+    color: $text-primary;
   }
 
   // Container tabs draw the selected indicator on the link's top edge.
   a.#{$prefix}--tabs__nav-link--container-selected { // ccs: flatten
     // Draws the border without affecting the inner-content
-    box-shadow: inset 0 2px 0 0 $interactive-04;
+    box-shadow: inset 0 2px 0 0 $interactive;
   }
 
   a.#{$prefix}--tabs__nav-link--container-selected:focus,
@@ -235,7 +235,7 @@
     .#{$prefix}--tabs__nav-link:focus,
   .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
     .#{$prefix}--tabs__nav-link:active {
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--tab-content {
@@ -258,7 +258,7 @@
 
   .#{$prefix}--skeleton.#{$prefix}--tabs--scrollable:not(.#{$prefix}--tabs--scrollable--container)
     .#{$prefix}--tabs--scrollable__nav-item {
-    border-bottom: 2px solid $skeleton-02;
+    border-bottom: 2px solid $skeleton-element;
   }
 
   .#{$prefix}--tabs.#{$prefix}--skeleton .#{$prefix}--tabs__nav-link {
@@ -285,7 +285,7 @@
     width: 100%;
     height: auto;
     min-height: to-rem(40px);
-    color: $text-01;
+    color: $text-primary;
 
     &.#{$prefix}--tabs--scrollable--container {
       min-height: to-rem(48px);
@@ -319,22 +319,22 @@
 
     .#{$prefix}--tabs__overflow-indicator--left {
       margin-right: -$carbon--spacing-03;
-      background-image: linear-gradient(to left, transparent, $ui-background);
+      background-image: linear-gradient(to left, transparent, $background);
     }
 
     .#{$prefix}--tabs__overflow-indicator--right {
       margin-left: -$carbon--spacing-03;
-      background-image: linear-gradient(to right, transparent, $ui-background);
+      background-image: linear-gradient(to right, transparent, $background);
     }
 
     &.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs__overflow-indicator--left {
-      background-image: linear-gradient(to left, transparent, $ui-03);
+      background-image: linear-gradient(to left, transparent, $layer-accent-01);
     }
 
     &.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs__overflow-indicator--right {
-      background-image: linear-gradient(to right, transparent, $ui-03);
+      background-image: linear-gradient(to right, transparent, $layer-accent-01);
     }
 
     // Safari-only media query
@@ -345,27 +345,27 @@
         .#{$prefix}--tabs__overflow-indicator--left {
           background-image: linear-gradient(
             to left,
-            rgba($ui-background, 0),
-            $ui-background
+            rgba($background, 0),
+            $background
           );
         }
 
         .#{$prefix}--tabs__overflow-indicator--right {
           background-image: linear-gradient(
             to right,
-            rgba($ui-background, 0),
-            $ui-background
+            rgba($background, 0),
+            $background
           );
         }
 
         &.#{$prefix}--tabs--scrollable--container
           .#{$prefix}--tabs__overflow-indicator--left {
-          background-image: linear-gradient(to left, rgba($ui-03, 0), $ui-03);
+          background-image: linear-gradient(to left, rgba($layer-accent-01, 0), $layer-accent-01);
         }
 
         &.#{$prefix}--tabs--scrollable--container
           .#{$prefix}--tabs__overflow-indicator--right {
-          background-image: linear-gradient(to right, rgba($ui-03, 0), $ui-03);
+          background-image: linear-gradient(to right, rgba($layer-accent-01, 0), $layer-accent-01);
         }
       }
     }
@@ -392,11 +392,11 @@
       .#{$prefix}--tab--overflow-nav-button {
       width: $carbon--spacing-09;
       margin: 0;
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
     }
 
     .#{$prefix}--tab--overflow-nav-button svg {
-      fill: $icon-01;
+      fill: $icon-primary;
     }
 
     .#{$prefix}--tabs--scrollable__nav-item {
@@ -416,7 +416,7 @@
 
     &.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs--scrollable__nav-item {
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
     }
 
     &.#{$prefix}--tabs--scrollable--container
@@ -424,7 +424,7 @@
       + .#{$prefix}--tabs--scrollable__nav-item {
       margin-left: 0;
       // Draws the border without affecting the inner-content
-      box-shadow: to-rem(-1px) 0 0 0 $ui-04;
+      box-shadow: to-rem(-1px) 0 0 0 $border-strong-01;
     }
 
     .#{$prefix}--tab-content {
@@ -448,7 +448,7 @@
 
     .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
       background-color: transparent;
-      box-shadow: 0 -1px 0 $hover-ui;
+      box-shadow: 0 -1px 0 $layer-hover-01;
 
       + .#{$prefix}--tabs__nav-item {
         box-shadow: none;
@@ -457,7 +457,7 @@
 
     .#{$prefix}--tabs--container
       .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
-      background-color: $hover-selected-ui;
+      background-color: $layer-selected-hover-01;
     }
 
     .#{$prefix}--tabs__nav-item--disabled:hover {
@@ -466,17 +466,17 @@
     }
 
     .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled:hover {
-      background-color: $disabled-02;
+      background-color: $button-disabled;
     }
 
     .#{$prefix}--tabs--container
       .#{$prefix}--tabs__nav-item--selected:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
-      background-color: $ui-01;
+      background-color: $layer-01;
 
       .#{$prefix}--tabs__nav-link {
         padding: $spacing-03 $spacing-05;
         border-bottom: none;
-        box-shadow: inset 0 2px 0 0 $interactive-04;
+        box-shadow: inset 0 2px 0 0 $interactive;
         // height - vertical padding
         // Draws the border without affecting the inner-content
         line-height: calc(#{to-rem(48px)} - (#{$spacing-03} * 2));
@@ -491,7 +491,7 @@
     .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
       .#{$prefix}--tabs__nav-link {
       border-bottom: $tab-underline-color-hover;
-      color: $text-01;
+      color: $text-primary;
     }
 
     .#{$prefix}--tabs--container
@@ -507,7 +507,7 @@
 
     .#{$prefix}--tabs--scrollable.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs--scrollable__nav-item:hover {
-      background-color: $hover-selected-ui;
+      background-color: $layer-selected-hover-01;
     }
   }
 }
@@ -536,7 +536,7 @@
   }
 
   .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item--icon svg {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
   .#{$prefix}--tabs--container
@@ -730,7 +730,7 @@
 /// @group components
 @mixin tabs-container-panel {
   .#{$prefix}--tabs--container ~ .#{$prefix}--tab-content {
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 }
 
@@ -859,17 +859,17 @@
   // Default variant: move the bottom underline from the link to the item.
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
     .#{$prefix}--tabs__nav-item {
-    border-block-end: 2px solid $ui-03;
+    border-block-end: 2px solid $border-subtle-01;
   }
 
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-    border-block-end-color: $interactive-04;
+    border-block-end-color: $interactive;
   }
 
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
     .#{$prefix}--tabs__nav-item--disabled {
-    border-block-end-color: $disabled-01;
+    border-block-end-color: $field-01;
   }
 
   // Remove the link border in every state so only the item border shows;
@@ -895,7 +895,7 @@
   // Container variant: move the inset top indicator from the link to the item.
   .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-    box-shadow: inset 0 2px 0 0 $interactive-04;
+    box-shadow: inset 0 2px 0 0 $interactive;
   }
 
   .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
@@ -922,11 +922,11 @@
   }
 
   .#{$prefix}--tabs__nav-item--close-icon svg {
-    fill: $text-02;
+    fill: $text-secondary;
   }
 
   .#{$prefix}--tabs__nav-item--close-icon:focus svg {
-    fill: $text-01;
+    fill: $text-primary;
   }
 
   .#{$prefix}--tabs__nav-item--close-icon--disabled {
@@ -937,10 +937,10 @@
   .#{$prefix}--tabs__nav-item--disabled
     .#{$prefix}--tabs__nav-item--icon-left
     svg {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
-  // Container disabled tabs sit on a $disabled-02 background, so the close icon
+  // Container disabled tabs sit on a $text-disabled background, so the close icon
   // and left icon need a contrasting disabled token to stay visible.
   .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-item--close-icon--disabled
@@ -959,7 +959,7 @@
   @media (any-hover: hover) {
     .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
       .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-      border-block-end-color: $ui-04;
+      border-block-end-color: $border-strong-01;
     }
 
     .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
@@ -971,12 +971,12 @@
     // Guard hover styling against the disabled marker so a disabled close
     // button keeps its disabled treatment on hover instead of lighting up.
     .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover
       svg {
-      fill: $text-01;
+      fill: $text-primary;
     }
   }
 }
@@ -1014,25 +1014,25 @@
     block-size: $carbon--spacing-09;
     inline-size: auto;
     margin: 0;
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
   }
 
   #{$root}
     .#{$prefix}--tabs__nav-item
     + .#{$prefix}--tabs__nav-item {
-    box-shadow: inset 1px 0 0 0 $ui-04;
+    box-shadow: inset 1px 0 0 0 $border-strong-01;
   }
 
   // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
   // so hovering the preceding tab doesn't strip the selected indicator.
   #{$root}
     .#{$prefix}--tabs__nav-item--selected.#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) { // ccs: specificity
-    background-color: $ui-01;
-    box-shadow: inset 0 2px 0 0 $interactive-04;
+    background-color: $layer-01;
+    box-shadow: inset 0 2px 0 0 $interactive;
   }
 
   #{$root} .#{$prefix}--tabs__nav-item--disabled {
-    background-color: $disabled-02;
+    background-color: $button-disabled;
   }
 
   // ccs: hover rules for this breakpoint, guarded together, same relative
@@ -1040,11 +1040,11 @@
   @media (any-hover: hover) {
     #{$root}
       .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-      background-color: $hover-selected-ui;
+      background-color: $layer-selected-hover-01;
     }
 
     #{$root} .#{$prefix}--tabs__nav-item--disabled:hover {
-      background-color: $disabled-02;
+      background-color: $button-disabled;
     }
 
     // Remove the base hover-link bottom border, which would shift the label.
@@ -1059,7 +1059,7 @@
   #{$root}
     .#{$prefix}--tabs__nav-item--disabled
     .#{$prefix}--tabs__nav-link {
-    color: $disabled-03;
+    color: $text-on-color-disabled;
   }
 
   #{$root} .#{$prefix}--tabs__nav-link,
@@ -1081,7 +1081,7 @@
     @include carbon--type-style("productive-heading-01");
 
     border: none;
-    color: $text-01;
+    color: $text-primary;
   }
 
   // The row scrolls horizontally, so size each item to its label instead
@@ -1091,7 +1091,7 @@
   }
 
   #{$root} ~ .#{$prefix}--tab-content {
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 }
 
@@ -1107,7 +1107,7 @@
     // so it neither starves narrow layouts nor balloons on ultra-wide ones.
     inline-size: clamp(#{to-rem(200px)}, 20%, #{to-rem(320px)});
     min-height: 0;
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 
   #{$root} .#{$prefix}--tabs__nav {
@@ -1122,9 +1122,9 @@
     block-size: $carbon--spacing-10;
     inline-size: 100%;
     margin: 0;
-    background-color: $ui-01;
-    border-block-end: 1px solid $ui-03;
-    border-inline-end: 1px solid $ui-03;
+    background-color: $layer-01;
+    border-block-end: 1px solid $border-subtle-01;
+    border-inline-end: 1px solid $border-subtle-01;
   }
 
   #{$root}
@@ -1137,22 +1137,22 @@
   // so the indicator is not stripped.
   #{$root}
     .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-    box-shadow: inset 3px 0 0 0 $ui-03;
+    box-shadow: inset 3px 0 0 0 $border-subtle-01;
   }
 
   // Re-assert the bottom separator that the base `--selected { border: none }`
   // strips. The right divider is transparent so the tab merges into the panel.
   #{$root}
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-    border-block-end: 1px solid $ui-03;
+    border-block-end: 1px solid $border-subtle-01;
     border-inline-end: 1px solid transparent;
-    box-shadow: inset 3px 0 0 0 $interactive-04;
+    box-shadow: inset 3px 0 0 0 $interactive;
   }
 
   #{$root}
     .#{$prefix}--tabs__nav-item--disabled {
-    background-color: $ui-01;
-    box-shadow: inset 3px 0 0 0 $ui-03;
+    background-color: $layer-01;
+    box-shadow: inset 3px 0 0 0 $border-subtle-01;
   }
 
   // ccs: hover rules for this breakpoint, guarded together, same relative
@@ -1160,14 +1160,14 @@
   @media (any-hover: hover) {
     #{$root}
       .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-      background-color: $hover-ui;
-      box-shadow: inset 3px 0 0 0 $ui-04;
+      background-color: $layer-hover-01;
+      box-shadow: inset 3px 0 0 0 $border-strong-01;
     }
 
     #{$root}
       .#{$prefix}--tabs__nav-item--disabled:hover {
-      background-color: $ui-01;
-      box-shadow: inset 3px 0 0 0 $ui-03;
+      background-color: $layer-01;
+      box-shadow: inset 3px 0 0 0 $border-subtle-01;
     }
 
     // Remove the base hover-link bottom border, which would shift the label.
@@ -1219,7 +1219,7 @@
     @include carbon--type-style("productive-heading-01");
 
     border: none;
-    color: $text-01;
+    color: $text-primary;
   }
 
   #{$root} .#{$prefix}--tabs__nav-item-label {
@@ -1238,7 +1238,7 @@
 
   #{$root} ~ .#{$prefix}--tab-content {
     flex: 1 1 auto;
-    background-color: $ui-01;
+    background-color: $layer-01;
     overflow-y: auto;
   }
 }
@@ -1474,7 +1474,7 @@ $tabs-sizes: (
           // actual click.
           transition: box-shadow $duration--fast-01
             motion(standard, productive);
-          box-shadow: inset 0 -2px 0 0 $ui-03;
+          box-shadow: inset 0 -2px 0 0 $border-subtle-01;
         }
 
         // ccs: `--default` (not selected, not disabled) replaces the
@@ -1483,7 +1483,7 @@ $tabs-sizes: (
         @media (any-hover: hover) {
           .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--default.#{$prefix}--tabs__nav-item--default:hover
             .#{$prefix}--tabs__nav-link {
-            box-shadow: inset 0 -2px 0 0 $ui-04;
+            box-shadow: inset 0 -2px 0 0 $border-strong-01;
           }
         }
 
@@ -1491,12 +1491,12 @@ $tabs-sizes: (
           .#{$prefix}--tabs__nav-link,
           .#{$prefix}--tabs__nav-link:focus,
           .#{$prefix}--tabs__nav-link:active {
-            box-shadow: inset 0 -2px 0 0 $interactive-04;
+            box-shadow: inset 0 -2px 0 0 $interactive;
           }
         }
 
         .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link {
-          box-shadow: inset 0 -2px 0 0 $disabled-01;
+          box-shadow: inset 0 -2px 0 0 $field-01;
         }
 
         // Focused/active (not selected, not disabled): Carbon shows the

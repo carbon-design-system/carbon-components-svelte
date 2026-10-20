@@ -31,7 +31,7 @@
 /// @example @include placeholder-colors;
 /// @group global-helpers
 @mixin placeholder-colors {
-  color: $text-05;
+  color: $text-helper;
   opacity: 1;
 }
 
@@ -92,7 +92,7 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
   }
 
   @if ($type == 'invalid') {
-    outline: 2px $focus-outline-style $support-01;
+    outline: 2px $focus-outline-style $support-error;
     outline-offset: -2px;
   }
 
@@ -177,7 +177,7 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
     padding: 0;
   }
   border: none;
-  background: $skeleton-01;
+  background: $skeleton-background;
   box-shadow: none;
   pointer-events: none;
 
@@ -196,7 +196,7 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
     width: 100%;
     height: 100%;
     animation: 3000ms ease-in-out skeleton infinite;
-    background: $skeleton-02;
+    background: $skeleton-element;
     content: '';
 
     @media (prefers-reduced-motion: reduce) {

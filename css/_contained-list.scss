@@ -62,8 +62,8 @@
   }
 
   .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-input {
-    background-color: $ui-background;
-    border-bottom: 1px solid $ui-03;
+    background-color: $background;
+    border-bottom: 1px solid $border-subtle-01;
   }
 
   .#{$prefix}--contained-list
@@ -88,10 +88,10 @@
   .#{$prefix}--contained-list--on-page .#{$prefix}--contained-list__header {
     @include type-style("heading-01");
 
-    background-color: $ui-background;
+    background-color: $background;
     height: to-rem(48px);
-    border-bottom: 1px solid $ui-03;
-    color: $text-01;
+    border-bottom: 1px solid $border-subtle-01;
+    color: $text-primary;
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--sm
@@ -112,9 +112,9 @@
   .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__header {
     @include type-style("label-01");
 
-    background-color: $ui-01;
+    background-color: $layer-01;
     height: to-rem(32px);
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--contained-list-item {
@@ -147,7 +147,7 @@
 
     // Vertical padding centers body-short-01 in the row height
     padding: to-rem(14px) $carbon--spacing-05;
-    color: $text-01;
+    color: $text-primary;
     min-height: to-rem(48px); // md size default
   }
 
@@ -183,7 +183,7 @@
 
   .#{$prefix}--contained-list-item:not(:last-of-type)::before {
     position: absolute;
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
     height: 1px;
     content: "";
     bottom: 0;
@@ -217,12 +217,12 @@
 
     .#{$prefix}--contained-list-item--clickable
       .#{$prefix}--contained-list-item__content:not(:disabled):hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .#{$prefix}--contained-list-item--selected
       .#{$prefix}--contained-list-item__content:not(:disabled):hover {
-      background-color: $hover-selected-ui;
+      background-color: $layer-selected-hover-01;
     }
 
     @media (forced-colors: active) {
@@ -239,8 +239,8 @@
   // selected fill and a bar on its leading edge.
   .#{$prefix}--contained-list-item--selected
     .#{$prefix}--contained-list-item__content {
-    background-color: $selected-ui;
-    box-shadow: inset 3px 0 0 $interactive-04;
+    background-color: $layer-selected-01;
+    box-shadow: inset 3px 0 0 $interactive;
   }
 
   // Forced colors drop the fill and the bar, so mark the item with the
@@ -258,12 +258,12 @@
 
   .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content:not(:disabled):active {
-    background-color: $active-ui;
+    background-color: $layer-active-01;
   }
 
   .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content:disabled {
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 

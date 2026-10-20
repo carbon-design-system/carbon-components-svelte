@@ -32,11 +32,11 @@
   }
 
   .#{$prefix}--description-list-item dt {
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--description-list-item dd {
-    color: $text-01;
+    color: $text-primary;
   }
 
   .#{$prefix}--description-list--horizontal .#{$prefix}--description-list-item {
@@ -74,11 +74,11 @@
   .#{$prefix}--description-list-item--divider,
   .#{$prefix}--description-list-item--total {
     padding-top: $carbon--spacing-04;
-    border-top: 1px solid $ui-03;
+    border-top: 1px solid $border-subtle-01;
   }
 
   .#{$prefix}--description-list-item--total dt {
-    color: $text-01;
+    color: $text-primary;
   }
 
   .#{$prefix}--description-list-item.#{$prefix}--description-list-item--total dd {

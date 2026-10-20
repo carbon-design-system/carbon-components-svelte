@@ -99,12 +99,12 @@
     content: "";
     pointer-events: none;
     inset: 0;
-    box-shadow: inset 0 0 0 2px $support-01;
+    box-shadow: inset 0 0 0 2px $support-error;
     transition: box-shadow $duration--fast-01 motion(standard, productive);
 
     @media screen and (prefers-contrast) {
       box-shadow: none;
-      outline: 2px dotted $support-01;
+      outline: 2px dotted $support-error;
       outline-offset: -2px;
     }
   }
@@ -168,7 +168,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box--warning
     ~ .#{$prefix}--form-requirement {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid
@@ -225,7 +225,7 @@
     // the wrapper's own base background above, which is lower specificity
     // and earlier in the file either way.
     .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--neutral:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     // Invalid/warn fluid (matches fluid-select): hover tint only the input
@@ -253,7 +253,7 @@
       .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
         .#{$prefix}--combo-box
       ) {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .#{$prefix}--list-box__wrapper--fluid
@@ -295,8 +295,8 @@
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--skeleton {
-    background: $skeleton-01;
-    border-block-end: 1px solid $skeleton-02;
+    background: $skeleton-background;
+    border-block-end: 1px solid $skeleton-element;
   }
 
   .#{$prefix}--list-box__wrapper--fluid

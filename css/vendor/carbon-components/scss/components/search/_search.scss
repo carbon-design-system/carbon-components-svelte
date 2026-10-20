@@ -36,10 +36,10 @@
     order: 1;
     padding: 0 $carbon--spacing-08;
     border: none;
-    border-bottom: 1px solid $ui-04;
+    border-bottom: 1px solid $border-strong-01;
     appearance: none;
     background-color: $field-01;
-    color: $text-01;
+    color: $text-primary;
     text-overflow: ellipsis;
     transition: background-color $duration--fast-02 motion(standard, productive);
 
@@ -111,7 +111,7 @@
     left: $spacing-05;
     width: to-rem(16px);
     height: to-rem(16px);
-    fill: $icon-02;
+    fill: $icon-secondary;
     pointer-events: none;
     transform: translateY(-50%);
   }
@@ -142,10 +142,10 @@
     }
 
     &:hover {
-      border-bottom: 1px solid $ui-04;
+      border-bottom: 1px solid $border-strong-01;
 
       &::before {
-        background-color: $hover-field;
+        background-color: $field-hover-01;
       }
     }
   }
@@ -163,7 +163,7 @@
     border-width: 1px 0;
     border-style: solid;
     border-color: transparent;
-    fill: $icon-01;
+    fill: $icon-primary;
     opacity: 1;
     transition: opacity $duration--fast-02 motion(standard, productive),
       background-color $duration--fast-02 motion(standard, productive),
@@ -171,7 +171,7 @@
     visibility: inherit;
 
     &:hover {
-      background-color: $hover-field;
+      background-color: $field-hover-01;
     }
 
     &:focus {
@@ -181,7 +181,7 @@
     &:active {
       @include focus-outline('outline');
 
-      background-color: $selected-ui;
+      background-color: $layer-selected-01;
     }
   }
 
@@ -319,7 +319,7 @@
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:hover {
-    background-color: $hover-ui;
+    background-color: $layer-hover-01;
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:focus {
@@ -332,12 +332,12 @@
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier-icon {
-    fill: $icon-01;
+    fill: $icon-primary;
   }
 
   .#{$prefix}--search--expandable.#{$prefix}--search--expanded
     .#{$prefix}--search-magnifier-icon {
-    fill: $icon-02;
+    fill: $icon-secondary;
   }
 
   // Windows HCM fix
@@ -435,12 +435,12 @@
     z-index: 2;
     top: 50%;
     right: to-rem(40px);
-    fill: $support-01;
+    fill: $support-error;
     transform: translateY(-50%);
   }
 
   .#{$prefix}--search__invalid-icon--warning {
-    fill: $support-03;
+    fill: $support-warning;
   }
 
   .#{$prefix}--search__invalid-icon--warning path:first-of-type {

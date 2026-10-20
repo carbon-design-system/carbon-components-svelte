@@ -79,7 +79,7 @@
     .#{$prefix}--tabs__nav-item--selected:not(
       .#{$prefix}--tabs__nav-item--disabled
     ) {
-    background-color: $ui-background;
+    background-color: $background;
   }
 
   .#{$prefix}--page-header__breadcrumb-row {
@@ -187,7 +187,7 @@
   .#{$prefix}--page-header--container-tabs
     + .#{$prefix}--page-header__body
     > .#{$prefix}--tab-content {
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 
   .#{$prefix}--page-header--container-tabs:not(
@@ -195,7 +195,7 @@
     )
     + .#{$prefix}--page-header__body
     > .#{$prefix}--tab-content {
-    background-color: $ui-background;
+    background-color: $background;
   }
 
   // Controls sit side by side with no gap, like a ButtonSet, so a ButtonSet

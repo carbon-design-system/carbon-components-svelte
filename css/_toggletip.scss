@@ -24,7 +24,7 @@
     @include type-style("label-01");
 
     margin-right: $carbon--spacing-03;
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--toggletip-button {
@@ -38,11 +38,11 @@
   }
 
   .#{$prefix}--toggletip-button svg {
-    fill: $icon-02;
+    fill: $icon-secondary;
   }
 
   .#{$prefix}--toggletip--open .#{$prefix}--toggletip-button svg {
-    fill: $icon-01;
+    fill: $icon-primary;
   }
 
   .#{$prefix}--toggletip-button:focus {
@@ -63,32 +63,32 @@
   // link treatment Carbon applies inside `.bx--tooltip`.
   .#{$prefix}--toggletip-content .#{$prefix}--link,
   .#{$prefix}--toggletip-content .#{$prefix}--link:visited {
-    color: $inverse-link;
+    color: $link-inverse;
   }
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
     .#{$prefix}--toggletip-button:hover svg {
-      fill: $icon-01;
+      fill: $icon-primary;
     }
 
     .#{$prefix}--toggletip-content .#{$prefix}--link:hover,
     .#{$prefix}--toggletip-content .#{$prefix}--link:visited:hover {
-      color: $inverse-link;
+      color: $link-inverse;
     }
 
     .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
-      color: $inverse-01;
+      color: $text-inverse;
     }
   }
 
   .#{$prefix}--toggletip-content .#{$prefix}--link:active,
   .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited {
-    color: $inverse-01;
+    color: $text-inverse;
   }
 
   .#{$prefix}--toggletip-content .#{$prefix}--link:focus {
-    outline: 1px solid $inverse-focus-ui;
+    outline: 1px solid $focus-inverse;
     outline-offset: 2px;
   }
 

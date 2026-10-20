@@ -41,7 +41,7 @@
   // strictly, so precedence here is spec-, not order-, determined)
   @media (any-hover: hover) {
     .#{$prefix}--overflow-menu:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open:hover {
@@ -101,7 +101,7 @@
   .#{$prefix}--overflow-menu__icon {
     width: to-rem(16px);
     height: to-rem(16px);
-    fill: $icon-01;
+    fill: $icon-primary;
   }
 
   .#{$prefix}--overflow-menu-options {
@@ -229,11 +229,11 @@
   }
 
   .#{$prefix}--overflow-menu--divider {
-    border-top: 1px solid $ui-03;
+    border-top: 1px solid $border-subtle-01;
   }
 
   .#{$prefix}--overflow-menu--light .#{$prefix}--overflow-menu--divider {
-    border-top: 1px solid $decorative-01;
+    border-top: 1px solid $border-subtle-02;
   }
 
   // `a.`: OverflowMenuItem renders a `<button>` or, with `href`, an `<a>`.
@@ -257,7 +257,7 @@
     padding: 0 $carbon--spacing-05;
     border: none;
     background-color: transparent;
-    color: $text-02;
+    color: $text-secondary;
     cursor: pointer;
     font-weight: 400;
     text-align: left;
@@ -274,7 +274,7 @@
   }
 
   .#{$prefix}--overflow-menu-options__btn svg {
-    fill: $icon-02;
+    fill: $icon-secondary;
   }
 
   .#{$prefix}--overflow-menu-options__option-content {
@@ -290,22 +290,22 @@
   // winning the tie against .option:hover)
   @media (any-hover: hover) {
     .#{$prefix}--overflow-menu-options__btn:hover {
-      color: $text-01;
+      color: $text-primary;
     }
 
     .#{$prefix}--overflow-menu-options__btn:hover svg {
-      fill: $icon-01;
+      fill: $icon-primary;
     }
 
     .#{$prefix}--overflow-menu-options__option:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
   }
 
   .#{$prefix}--overflow-menu-options__option--danger
     .#{$prefix}--overflow-menu-options__btn:focus {
-    background-color: $danger-01;
-    color: $text-04;
+    background-color: $button-danger-primary;
+    color: $text-on-color;
 
     svg {
       fill: currentColor;
@@ -320,8 +320,8 @@
   @media (any-hover: hover) {
     .#{$prefix}--overflow-menu-options__option--danger
       .#{$prefix}--overflow-menu-options__btn:hover {
-      background-color: $danger-01;
-      color: $text-04;
+      background-color: $button-danger-primary;
+      color: $text-on-color;
 
       svg {
         fill: currentColor;
@@ -329,7 +329,7 @@
     }
 
     .#{$prefix}--overflow-menu-options__option--disabled:hover {
-      background-color: $ui-01;
+      background-color: $layer-01;
       cursor: not-allowed;
     }
 
@@ -337,27 +337,27 @@
       .#{$prefix}--overflow-menu-options__btn:hover {
       @include focus-outline('reset');
 
-      background-color: $ui-01;
+      background-color: $layer-01;
     }
   }
 
   .#{$prefix}--overflow-menu-options__option--disabled
     .#{$prefix}--overflow-menu-options__btn {
-    color: $disabled-02;
+    color: $text-disabled;
     pointer-events: none;
 
     &:active,
     &:focus {
       @include focus-outline('reset');
 
-      background-color: $ui-01;
+      background-color: $layer-01;
     }
   }
 
   .#{$prefix}--overflow-menu-options__option--disabled
     .#{$prefix}--overflow-menu-options__btn
     svg {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
   .#{$prefix}--overflow-menu--flip {
@@ -395,7 +395,7 @@
 
   .#{$prefix}--overflow-menu:disabled .#{$prefix}--overflow-menu__icon,
   .#{$prefix}--overflow-menu:disabled:hover .#{$prefix}--overflow-menu__icon {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
   .#{$prefix}--overflow-menu:disabled::after,

@@ -42,14 +42,14 @@ $ccs-themes: (
 // page's values on the root element, before the header re-declares the
 // tokens. (`html` rather than `:root`, which names the theme blocks.)
 html {
-  --ccs-page-inverse-01: var(--cds-inverse-01);
-  --ccs-page-inverse-02: var(--cds-inverse-02);
+  --ccs-page-text-inverse: var(--cds-text-inverse);
+  --ccs-page-background-inverse: var(--cds-background-inverse);
 }
 
 .#{$prefix}--header.#{$prefix}--header--ui-shell-classic
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y {
-  --cds-inverse-01: var(--ccs-page-inverse-01);
-  --cds-inverse-02: var(--ccs-page-inverse-02);
+  --cds-text-inverse: var(--ccs-page-text-inverse);
+  --cds-background-inverse: var(--ccs-page-background-inverse);
 }
 
 .#{$prefix}--side-nav.#{$prefix}--side-nav--ui-shell-classic {
