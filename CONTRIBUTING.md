@@ -253,6 +253,8 @@ bun test:types   # svelte-check on tests/
 
 `bun setup` already runs `build:docs` once. Repeat `build:docs` only when the component API changes.
 
+When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/framed/` for the old name. Nothing type-checks the e2e fixtures, and the docs examples are type-checked only on PRs that change `docs/`. Svelte ignores an unknown prop, so a stale one passes until an E2E assertion fails or the next docs PR does.
+
 ### Creating a component
 
 [File an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) first.
@@ -532,6 +534,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 5. Add the page to a category in `docs/src/component-categories.ts` and its first version to `docs/src/component-since-versions.ts`
 6. Preview with `cd docs && bun dev`
 7. Add a catalog thumbnail at `thumbnails/{component-name}.svg`. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
+8. Add an aria-forwarding case in `tests/aria-forwarding/cases/`, or an exemption with the reason. `tests/aria-forwarding/coverage.test.ts` fails for an interactive component that has neither
 
 ### Custom styles (patching Carbon v10)
 
@@ -662,6 +665,8 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 | `media-query-grouping.test.ts` | Number of `(any-hover: hover)` blocks. |
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
 | `conventions.test.ts` | Source rules, with exact baselines for what predates them. |
+
+These numbers are counts, so two branches that each raise 67 to 68 merge cleanly to a wrong 68. After a rebase over a branch that changed one, rebuild and set it to the measured count. Don't add your change on top.
 
 Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets two jobs. `css-size` runs `check:css:size` and fails over the limit in [Size growth](#size-growth). `css-cascade` shows the rule delta against the base branch in its summary and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
 
@@ -798,6 +803,7 @@ Other runs that pass in CI but fail locally are stale local state too:
 | CSS tests time out at exactly 30 s or 60 s | A killed run left a lock. With no test running, remove `node_modules/.cache/ccs-css-tests/*.lock` |
 | Local E2E runs another checkout's code, or can't find a fixture | Another checkout's server holds port 4173, and Playwright reuses it. Check `lsof -iTCP:4173 -sTCP:LISTEN` |
 | Svelte 3/4 tests run against Svelte 5 | Install each harness: `cd tests-svelte3 && bun install`, and the same in `tests-svelte4` |
+| A test that globs `src/**/*.svelte`, such as `ssr-smoke`, misses a component you just added | Vitest's cache is stale. Delete `node_modules/.vitest-cache` |
 
 ## Testing
 
