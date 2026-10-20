@@ -49,6 +49,7 @@ export function createDismissibleNotification({
   /** @type {Element | null} */
   let root = null;
   let wasOpen = false;
+  let focusInside = false;
 
   /**
    * Remember where focus came from when it enters from outside, so closing
@@ -57,6 +58,7 @@ export function createDismissibleNotification({
    */
   function trackFocusIn(event) {
     handleFocusIn();
+    focusInside = true;
     const current = event.currentTarget;
     if (!(current instanceof Element)) return;
     root = current;
@@ -64,6 +66,20 @@ export function createDismissibleNotification({
     if (!(from instanceof Node && current.contains(from))) {
       prevFocus = from instanceof HTMLElement ? from : null;
     }
+  }
+
+  /**
+   * @param {FocusEvent} event
+   */
+  function trackFocusOut(event) {
+    handleFocusOut(event);
+    const next = event.relatedTarget;
+    if (next instanceof Node && root?.contains(next)) return;
+    // Chrome also fires `focusout` while removing the focused node, before
+    // `dispose()` runs, so only settle the flag once the unmount is done.
+    queueMicrotask(() => {
+      focusInside = !!root?.contains(document.activeElement);
+    });
   }
 
   function restoreFocus() {
@@ -115,7 +131,13 @@ export function createDismissibleNotification({
     handleMouseenter,
     handleMouseleave,
     handleFocusIn: trackFocusIn,
-    handleFocusOut,
-    dispose: dismiss.clear,
+    handleFocusOut: trackFocusOut,
+    // Unmounting while focused (e.g. a queue `remove()`/`clear()`) drops
+    // focus to `<body>`; by now the root may already be detached, so rely on
+    // the tracked flag rather than `root.contains(document.activeElement)`.
+    dispose() {
+      dismiss.clear();
+      if (focusInside) restoreFocus();
+    },
   };
 }

@@ -4,6 +4,12 @@
   let queue;
 </script>
 
+<svelte:window
+  on:keydown={(e) => {
+    if (e.key === "Delete") queue?.clear();
+  }}
+/>
+
 <div data-testid="notification-queue-root">
   <NotificationQueue bind:this={queue} maxNotifications={2} />
   <Button
