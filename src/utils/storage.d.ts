@@ -22,12 +22,20 @@ interface SafeStorage {
   removeItem(key: string): void;
   /** Swallows errors when storage is unavailable. */
   clear(): void;
+  /**
+   * Call `fn` after another instance of this type on the page sets or removes
+   * a key (`fn(key)`) or clears storage (`fn(null)`). Replaces any previous
+   * listener. Returns a function that removes it.
+   */
+  onPeerChange(fn: (key: string | null) => void): () => void;
 }
 
 /**
  * Use localStorage or sessionStorage without throwing. getItem is null when
  * there is no window, storage is blocked, or the read throws. setItem is
  * false when the write throws. removeItem and clear ignore errors.
+ * Successful changes are reported to listeners on other instances of the
+ * same type (see `onPeerChange`).
  */
 export function safeBrowserStorage(
   type: "localStorage" | "sessionStorage",
