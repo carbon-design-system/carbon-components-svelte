@@ -43,6 +43,8 @@
   }
 
   function handleStorageChange(event) {
+    // `storage` fires for both areas; skip writes to the other one.
+    if (event.storageArea && event.storageArea !== window[storageType]) return;
     if (event.key !== key) return;
 
     const prevValue = parseStoredValue(prevSerialized);
