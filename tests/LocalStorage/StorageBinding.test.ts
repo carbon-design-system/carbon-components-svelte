@@ -104,4 +104,30 @@ describe("StorageBinding", () => {
       expect(component.value).toBe("123");
     },
   );
+
+  it.each(
+    cases.flatMap((c) => [
+      { ...c, method: "clearItem" as const },
+      { ...c, method: "clearAll" as const },
+    ]),
+  )(
+    "$name $method resets the bound value",
+    async ({ Component, area, method }) => {
+      const onUpdate = vi.fn();
+      const { component } = render(StorageBinding, {
+        props: { Component, key: "k", value: "on", onUpdate },
+      });
+      await tick();
+
+      component.ref?.[method]();
+      await tick();
+
+      expect(component.value).toBeUndefined();
+      expect(window[area].getItem("k")).toBeNull();
+      expect(onUpdate).toHaveBeenCalledWith({
+        prevValue: "on",
+        value: undefined,
+      });
+    },
+  );
 });
