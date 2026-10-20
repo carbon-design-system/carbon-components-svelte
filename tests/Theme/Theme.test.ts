@@ -146,6 +146,20 @@ describe("Theme", () => {
     );
   });
 
+  it("removes a token dropped from tokens", async () => {
+    const { rerender } = render(Theme, {
+      props: { tokens: { "button-primary": "#ff0000", background: "#fff" } },
+    });
+    await tick();
+
+    await rerender({ tokens: { background: "#fff" } });
+    await tick();
+
+    const { style } = document.documentElement;
+    expect(style.getPropertyValue("--cds-button-primary")).toBe("");
+    expect(style.getPropertyValue("--cds-background")).toBe("#fff");
+  });
+
   it("should persist theme in localStorage when persist is true", async () => {
     render(Theme, { props: { persist: true } });
     await tick();
