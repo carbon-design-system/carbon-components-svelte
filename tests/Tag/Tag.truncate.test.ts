@@ -91,6 +91,44 @@ describe("Tag truncation", () => {
     ).toBe(label);
   });
 
+  it("applies the truncate class and max-width style to a filter tag", async () => {
+    mockOverflow(false);
+    render(TagMaxWidth, {
+      props: { maxWidth: "8rem", label: "Short", filter: true },
+    });
+    await tick();
+
+    const tag = screen.getByText("Short").closest(".bx--tag");
+    expect(tag).toHaveClass("bx--tag--truncate");
+    expectInlineStyle(tag, { maxWidth: "8rem" });
+  });
+
+  it("does not render a tooltip when the filter label is not truncated", async () => {
+    mockOverflow(false);
+    render(TagMaxWidth, {
+      props: { maxWidth: "8rem", label: "Short", filter: true },
+    });
+    await tick();
+
+    expect(
+      document.querySelector(".bx--tooltip--definition"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders a tooltip when the filter label overflows", async () => {
+    mockOverflow(true);
+    render(TagMaxWidth, { props: { maxWidth: "8rem", label, filter: true } });
+    await tick();
+    // Wrapping the label remounts it; wait for the post-measure update.
+    await tick();
+
+    const tooltip = document.querySelector(".bx--tooltip--definition");
+    expect(tooltip).toBeInTheDocument();
+    expect(
+      tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
+    ).toBe(label);
+  });
+
   it("uses a native title, not a focusable tooltip, inside a roving TagSet", async () => {
     mockOverflow(true);
     render(TagMaxWidth, { props: { label, filter: true, roving: true } });

@@ -1,0 +1,29 @@
+<svelte:options accessors />
+
+<script lang="ts">
+  import type LocalStorage from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
+  import type SessionStorage from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
+
+  export let Component: typeof LocalStorage | typeof SessionStorage;
+  export let key = "k";
+  export let value: unknown = "initial";
+  export let sync: "on" | "off" = "on";
+  export let ref: LocalStorage | SessionStorage | undefined = undefined;
+  export let onUpdate: (detail: {
+    prevValue: unknown;
+    value: unknown;
+  }) => void = () => {};
+  export let onSave: () => void = () => {};
+  export let onError: (detail: { error: unknown }) => void = () => {};
+</script>
+
+<svelte:component
+  this={Component}
+  bind:this={ref}
+  {key}
+  {sync}
+  bind:value
+  on:update={({ detail }) => onUpdate(detail)}
+  on:save={() => onSave()}
+  on:error={({ detail }) => onError(detail)}
+/>

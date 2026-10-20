@@ -7,6 +7,10 @@ import {
 import TooltipDispatchGuard from "./TooltipDispatchGuard.test.svelte";
 
 describe("Tooltip dispatch guard", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
   afterEach(() => {
     vi.useRealTimers();
   });
@@ -18,7 +22,6 @@ describe("Tooltip dispatch guard", () => {
     const onClose = vi.fn();
     const trap = absorbUnhandledRejection(isConsumerBoom);
 
-    vi.useFakeTimers();
     render(TooltipDispatchGuard, {
       props: { open: false, onOpen, onClose },
     });
@@ -42,7 +45,6 @@ describe("Tooltip dispatch guard", () => {
   });
 
   it("dispatches open then close in order across a full cycle", async () => {
-    vi.useFakeTimers();
     const onOpen = vi.fn();
     const onClose = vi.fn();
 

@@ -3,6 +3,7 @@ import SearchMenuSkeletonMenu from "carbon-components-svelte/SearchMenu/SearchMe
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
+import { openMenu } from "./helpers";
 import SearchMenu from "./SearchMenu.test.svelte";
 import SearchMenuBar from "./SearchMenuBar.test.svelte";
 import SearchMenuFooterDivider from "./SearchMenuFooterDivider.test.svelte";
@@ -78,9 +79,7 @@ describe("SearchMenu", () => {
   });
 
   it("opens the menu on focus and renders all items for an empty value", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     expect(input).toHaveAttribute("aria-expanded", "true");
     expect(screen.getAllByRole("option")).toHaveLength(4);
@@ -90,9 +89,7 @@ describe("SearchMenu", () => {
   });
 
   it("keeps unmatched items mounted and hidden while filtering", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.type(input, "memcache");
     expect(screen.getAllByRole("option")).toHaveLength(1);
     expect(screen.getByRole("option")).toHaveTextContent(
@@ -105,9 +102,7 @@ describe("SearchMenu", () => {
   });
 
   it("highlights the matched portion of each item", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.type(input, "Data");
     // The menu is portaled to document.body, so query the whole document.
     const highlights = document.querySelectorAll(
@@ -118,9 +113,7 @@ describe("SearchMenu", () => {
   });
 
   it("navigates with the arrow keys and selects with Enter", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.keyboard("{ArrowDown}");
 
     const firstOption = screen.getAllByRole("option")[0];
@@ -137,9 +130,7 @@ describe("SearchMenu", () => {
   });
 
   it("clears aria-activedescendant when typing hides the highlighted option", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.keyboard("{ArrowDown}");
     expect(input).toHaveAttribute("aria-activedescendant");
     await user.type(input, "memcache");
@@ -147,9 +138,7 @@ describe("SearchMenu", () => {
   });
 
   it("scrolls the highlighted option within the menu, not the page", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu();
     const listbox = screen.getByRole("listbox");
     Object.defineProperty(listbox, "scrollHeight", { value: 400 });
     Object.defineProperty(listbox, "clientHeight", { value: 100 });
@@ -170,9 +159,7 @@ describe("SearchMenu", () => {
   });
 
   it("dispatches submit when Enter is pressed with no active item", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.type(input, "no-match-here");
     await user.keyboard("{Enter}");
     expect(screen.getByTestId("result")).toHaveTextContent(
@@ -183,9 +170,7 @@ describe("SearchMenu", () => {
   it.each([{ isComposing: true }, { keyCode: 229 }])(
     "ignores Enter while an IME composition is active (%o)",
     async (init) => {
-      render(SearchMenu);
-      const input = screen.getByRole("combobox");
-      await user.click(input);
+      const input = await openMenu();
       await user.type(input, "ni");
       await fireEvent.keyDown(input, { key: "Enter", ...init });
       expect(screen.getByTestId("result")).not.toHaveTextContent("submit:");
@@ -193,9 +178,7 @@ describe("SearchMenu", () => {
   );
 
   it("submits the typed value when Enter follows a hover highlight", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.type(input, "Data");
     await user.hover(screen.getByRole("option", { name: /Memcache/ }));
     await user.keyboard("{Enter}");
@@ -203,9 +186,7 @@ describe("SearchMenu", () => {
   });
 
   it("closes on Escape and preserves the value", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     await user.type(input, "Data");
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     await user.keyboard("{Escape}");
@@ -215,18 +196,14 @@ describe("SearchMenu", () => {
   });
 
   it("closes on an outside click", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu();
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     await user.click(document.body);
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
   it("dispatches close with the outside-click trigger", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu();
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     // fireEvent does not move focus, so the dismiss handler (not blur) closes.
     await fireEvent.click(document.body);
@@ -234,26 +211,20 @@ describe("SearchMenu", () => {
   });
 
   it("dispatches close with the blur trigger when focus leaves", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu();
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     await fireEvent.blur(input);
     expect(screen.getByTestId("close")).toHaveTextContent("blur");
   });
 
   it("forwards the keyup input event", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu();
     await user.keyboard("a");
     expect(screen.getByTestId("events")).toHaveTextContent("keyup");
   });
 
   it("dispatches select when an item is clicked", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu();
     await user.click(screen.getByText("Data Store for Memcache"));
     expect(screen.getByTestId("result")).toHaveTextContent(
       "Data Store for Memcache",
@@ -262,9 +233,7 @@ describe("SearchMenu", () => {
   });
 
   it("clears the highlight when the mouse leaves the item", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu();
     const option = screen.getByText("Data Store for Memcache");
     await user.hover(option);
     expect(option.closest('[role="option"]')).toHaveAttribute(
@@ -279,16 +248,12 @@ describe("SearchMenu", () => {
   });
 
   it("does not open when disabled", async () => {
-    render(SearchMenu, { props: { disabled: true } });
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu(SearchMenu, { disabled: true });
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
   it("uses a custom match function for filtering and highlighting", async () => {
-    render(SearchMenuMatch);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu(SearchMenuMatch);
     // Case-sensitive matcher: "Data" matches only "Data Store".
     await user.type(input, "Data");
     const options = screen.getAllByRole("option");
@@ -302,11 +267,9 @@ describe("SearchMenu", () => {
   });
 
   it("renders every item with a no-op matcher and no highlights", async () => {
-    render(SearchMenuMatch, {
-      props: { match: () => ({ matched: true }) },
+    const input = await openMenu(SearchMenuMatch, {
+      match: () => ({ matched: true }),
     });
-    const input = screen.getByRole("combobox");
-    await user.click(input);
     await user.type(input, "zzz");
     expect(screen.getAllByRole("option")).toHaveLength(3);
     expect(
@@ -315,9 +278,7 @@ describe("SearchMenu", () => {
   });
 
   it("renders a skeleton menu while loading", async () => {
-    render(SearchMenu, { props: { loading: true } });
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu(SearchMenu, { loading: true });
     const listbox = screen.getByRole("listbox");
     expect(listbox).toHaveAttribute("aria-busy", "true");
     // Default skeleton rows render, and the slot items do not.
@@ -353,9 +314,7 @@ describe("SearchMenu", () => {
   });
 
   it("renders all items but still highlights when shouldFilter is false", async () => {
-    render(SearchMenu, { props: { shouldFilter: false } });
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu(SearchMenu, { shouldFilter: false });
     await user.type(input, "Data");
     // No client-side filtering: every server-provided item is rendered.
     expect(screen.getAllByRole("option")).toHaveLength(4);
@@ -368,9 +327,7 @@ describe("SearchMenu", () => {
   });
 
   it("exposes segments to the slot for custom highlighting without corrupting text", async () => {
-    render(SearchMenuHighlight);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu(SearchMenuHighlight);
     await user.type(input, "Data");
     // The slot renders matched runs as <mark> with no @html and no stray
     // whitespace splitting the words.
@@ -389,43 +346,37 @@ describe("SearchMenu", () => {
 });
 
 describe("SearchMenu sizes", () => {
-  it("defaults the input and menu to the xl size", async () => {
-    render(SearchMenu);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    expect(document.querySelector(".bx--search--xl")).toBeInTheDocument();
-    expect(screen.getByRole("listbox")).toHaveClass(
-      "bx--search-menu__menu--xl",
-    );
-  });
+  it.each([
+    ["defaults the input and menu to xl", {}, "xl", "xl", "sm"],
+    [
+      "sizes the menu to match the input size",
+      { size: "sm" },
+      "sm",
+      "sm",
+      "xl",
+    ],
+    [
+      "decouples the menu size from the input size with menuSize",
+      { size: "sm", menuSize: "xl" },
+      "sm",
+      "xl",
+      "sm",
+    ],
+  ])("%s", async (_, props, inputSize, menuSize, otherMenuSize) => {
+    await openMenu(SearchMenu, props);
 
-  it("sizes the menu to match the input size by default", async () => {
-    render(SearchMenu, { props: { size: "sm" } });
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    expect(document.querySelector(".bx--search--sm")).toBeInTheDocument();
+    expect(
+      document.querySelector(`.bx--search--${inputSize}`),
+    ).toBeInTheDocument();
     const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveClass("bx--search-menu__menu--sm");
-    expect(listbox).not.toHaveClass("bx--search-menu__menu--xl");
-  });
-
-  it("decouples the menu size from the input size with menuSize", async () => {
-    render(SearchMenu, { props: { size: "sm", menuSize: "xl" } });
-    const input = screen.getByRole("combobox");
-    await user.click(input);
-    // The input keeps its own size; only the menu follows menuSize.
-    expect(document.querySelector(".bx--search--sm")).toBeInTheDocument();
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveClass("bx--search-menu__menu--xl");
-    expect(listbox).not.toHaveClass("bx--search-menu__menu--sm");
+    expect(listbox).toHaveClass(`bx--search-menu__menu--${menuSize}`);
+    expect(listbox).not.toHaveClass(`bx--search-menu__menu--${otherMenuSize}`);
   });
 });
 
 describe("SearchMenu groups", () => {
   it("renders group headers, a view-all link, and link items", async () => {
-    render(SearchMenuGroups);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu(SearchMenuGroups);
 
     expect(screen.getByText("Recent searches")).toBeInTheDocument();
     expect(screen.getByText("Catalog results")).toBeInTheDocument();
@@ -438,9 +389,7 @@ describe("SearchMenu groups", () => {
   });
 
   it("closes the menu when the before slot receives focus", async () => {
-    render(SearchMenuBar);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu(SearchMenuBar);
     expect(screen.getByRole("listbox")).toBeInTheDocument();
 
     await user.click(screen.getByTestId("scope"));
@@ -479,9 +428,7 @@ describe("SearchMenu groups", () => {
   });
 
   it("keeps a filter:false group unfiltered and hides empty group headers", async () => {
-    render(SearchMenuGroups);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu(SearchMenuGroups);
     await user.type(input, "vpc");
 
     // Recent searches group opts out of filtering, so both items remain.
@@ -498,9 +445,7 @@ describe("SearchMenu groups", () => {
   });
 
   it("omits the footer divider when only footer items are visible", async () => {
-    render(SearchMenuFooterDivider);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    await openMenu(SearchMenuFooterDivider);
 
     expect(screen.getAllByRole("option")).toHaveLength(1);
     expect(
@@ -509,9 +454,7 @@ describe("SearchMenu groups", () => {
   });
 
   it("renders the footer divider when primary results are visible", async () => {
-    render(SearchMenuGroups);
-    const input = screen.getByRole("combobox");
-    await user.click(input);
+    const input = await openMenu(SearchMenuGroups);
     await user.type(input, "vpc");
 
     expect(

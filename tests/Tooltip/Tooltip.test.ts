@@ -4,10 +4,8 @@ import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
-import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
 import TooltipDefault from "./TooltipDefault.test.svelte";
-import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEscape from "./TooltipEscape.test.svelte";
 import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
@@ -244,30 +242,26 @@ describe("Tooltip", () => {
     expect(screen.getByText("Custom icon tooltip")).toBeInTheDocument();
   });
 
-  it("should apply correct direction classes", () => {
-    render(TooltipDirections);
+  it.each([
+    ["direction", "top", "bx--tooltip--top"],
+    ["direction", "right", "bx--tooltip--right"],
+    ["direction", "bottom", "bx--tooltip--bottom"],
+    ["direction", "left", "bx--tooltip--left"],
+    ["align", "start", "bx--tooltip--align-start"],
+    ["align", "center", "bx--tooltip--align-center"],
+    ["align", "end", "bx--tooltip--align-end"],
+  ] as const)(
+    "applies %s=%s as %s on the tooltip",
+    (prop, value, className) => {
+      render(Tooltip, {
+        props: { open: true, iconDescription: "Information", [prop]: value },
+      });
 
-    const tooltips = screen.getAllByRole("dialog");
-    expect(tooltips.length).toBe(4);
-
-    const topTooltip = screen
-      .getByText("Tooltip with top direction")
-      .closest(".bx--tooltip");
-    const rightTooltip = screen
-      .getByText("Tooltip with right direction")
-      .closest(".bx--tooltip");
-    const bottomTooltip = screen
-      .getByText("Tooltip with bottom direction")
-      .closest(".bx--tooltip");
-    const leftTooltip = screen
-      .getByText("Tooltip with left direction")
-      .closest(".bx--tooltip");
-
-    expect(topTooltip).toHaveClass("bx--tooltip--top");
-    expect(rightTooltip).toHaveClass("bx--tooltip--right");
-    expect(bottomTooltip).toHaveClass("bx--tooltip--bottom");
-    expect(leftTooltip).toHaveClass("bx--tooltip--left");
-  });
+      expect(screen.getByRole("dialog").closest(".bx--tooltip")).toHaveClass(
+        className,
+      );
+    },
+  );
 
   it("should apply correct direction classes when using portal tooltip", async () => {
     // jsdom lays everything out at 0,0, where no side has room and the portal
@@ -295,27 +289,6 @@ describe("Tooltip", () => {
     expect(bottomTooltip).toHaveClass("bx--tooltip--bottom");
     expect(rightTooltip).toHaveClass("bx--tooltip--right");
     expect(leftTooltip).toHaveClass("bx--tooltip--left");
-  });
-
-  it("should apply correct alignment classes", () => {
-    render(TooltipAlignments);
-
-    const tooltips = screen.getAllByRole("dialog");
-    expect(tooltips.length).toBe(3);
-
-    const startTooltip = screen
-      .getByText("Tooltip with start alignment")
-      .closest(".bx--tooltip");
-    const centerTooltip = screen
-      .getByText("Tooltip with center alignment")
-      .closest(".bx--tooltip");
-    const endTooltip = screen
-      .getByText("Tooltip with end alignment")
-      .closest(".bx--tooltip");
-
-    expect(startTooltip).toHaveClass("bx--tooltip--align-start");
-    expect(centerTooltip).toHaveClass("bx--tooltip--align-center");
-    expect(endTooltip).toHaveClass("bx--tooltip--align-end");
   });
 
   it("should not open tooltip on focus caused by mouse", async () => {

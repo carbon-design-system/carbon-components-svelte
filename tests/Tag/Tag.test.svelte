@@ -1,6 +1,15 @@
 <script lang="ts">
   import Tag from "carbon-components-svelte/Tag/Tag.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
+
+  export let onFilterClick: () => void = () => {};
+  export let onFilterClose: () => void = () => {};
+  export let onInteractiveClick: () => void = () => {};
+  export let onBodyClick: () => void = () => {};
+  export let onBodyClose: () => void = () => {};
+  export let onMouseover: () => void = () => {};
+  export let onMouseenter: () => void = () => {};
+  export let onMouseleave: () => void = () => {};
 </script>
 
 <Tag class="my-class" style="margin: 1rem;">IBM Cloud</Tag>
@@ -29,28 +38,13 @@
 
 <Tag type="outline">outline</Tag>
 
-<Tag
-  filter
-  on:click={() => {
-    console.log("click");
-  }}
-  on:close={() => {
-    console.log("close");
-  }}
->
+<Tag filter on:click={() => onFilterClick()} on:close={() => onFilterClose()}>
   Filterable
 </Tag>
 
 <Tag icon={Add}>Custom icon</Tag>
 
-<Tag
-  interactive
-  on:click={() => {
-    console.log("click");
-  }}
->
-  Text
-</Tag>
+<Tag interactive on:click={() => onInteractiveClick()}> Text </Tag>
 
 <Tag skeleton />
 
@@ -69,15 +63,9 @@
 <Tag inline>Inline tag</Tag>
 
 <Tag
-  on:mouseover={() => {
-    console.log("mouseover");
-  }}
-  on:mouseenter={() => {
-    console.log("mouseenter");
-  }}
-  on:mouseleave={() => {
-    console.log("mouseleave");
-  }}
+  on:mouseover={() => onMouseover()}
+  on:mouseenter={() => onMouseenter()}
+  on:mouseleave={() => onMouseleave()}
 >
   Mouse events
 </Tag>
@@ -87,15 +75,7 @@
   Icon slot
 </Tag>
 
-<Tag
-  filter
-  on:click={() => {
-    console.log("filter-body-click");
-  }}
-  on:close={() => {
-    console.log("filter-close");
-  }}
->
+<Tag filter on:click={() => onBodyClick()} on:close={() => onBodyClose()}>
   Filter click and close
 </Tag>
 

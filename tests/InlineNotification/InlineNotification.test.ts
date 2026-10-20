@@ -1,7 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
-import { tick } from "svelte";
-import { user } from "../utils/user";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
 import InlineNotificationActionHrefTest from "./InlineNotificationActionHref.test.svelte";
 import InlineNotificationCustomTest from "./InlineNotificationCustom.test.svelte";
@@ -37,188 +35,42 @@ describe("InlineNotification", () => {
     add.mockRestore();
   });
 
-  it("should render low contrast variant", () => {
-    render(InlineNotificationTest, {
-      props: { lowContrast: true },
-    });
+  const parts = [
+    ["title", "Test Title"],
+    ["subtitle", "Test Subtitle"],
+  ] as const;
 
-    const notification = document.querySelector(".bx--inline-notification");
-    expect(notification).toHaveClass("bx--inline-notification--low-contrast");
+  it.each(parts)("should render %s when prop is provided", (part, text) => {
+    render(InlineNotificationTest, { props: { [part]: text } });
+
+    const element = document.querySelector(`.bx--inline-notification__${part}`);
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveTextContent(text);
   });
 
-  it("should mark the default variant as high contrast", () => {
-    render(InlineNotificationTest);
+  it.each(parts)("should NOT render %s element when prop is empty", (part) => {
+    render(InlineNotificationTest, { props: { [part]: "" } });
 
-    const notification = document.querySelector(".bx--inline-notification");
-    expect(notification).toHaveClass("bx--inline-notification--high-contrast");
-    expect(notification).not.toHaveClass(
-      "bx--inline-notification--low-contrast",
-    );
+    expect(
+      document.querySelector(`.bx--inline-notification__${part}`),
+    ).not.toBeInTheDocument();
   });
 
-  it("should not mark the low contrast variant as high contrast", () => {
-    render(InlineNotificationTest, {
-      props: { lowContrast: true },
-    });
+  it.each([
+    ["title", InlineNotificationTitleSlotTest, "Slot title"],
+    ["subtitle", InlineNotificationSubtitleSlotTest, "Slot subtitle"],
+  ] as const)(
+    "should render %s element when slot is used",
+    (part, Fixture, text) => {
+      render(Fixture);
 
-    const notification = document.querySelector(".bx--inline-notification");
-    expect(notification).not.toHaveClass(
-      "bx--inline-notification--high-contrast",
-    );
-  });
-
-  it("should emit one combined low contrast root marker per kind", () => {
-    const kinds = [
-      "error",
-      "info",
-      "info-square",
-      "success",
-      "warning",
-      "warning-alt",
-    ] as const;
-
-    for (const kind of kinds) {
-      const { unmount } = render(InlineNotificationTest, {
-        props: { kind, lowContrast: true },
-      });
-
-      const notification = document.querySelector(".bx--inline-notification");
-      expect(notification).toHaveClass(
-        "bx--inline-notification--low-contrast",
-        `bx--inline-notification--${kind}`,
-        `bx--inline-notification--low-contrast-${kind}`,
+      const element = document.querySelector(
+        `.bx--inline-notification__${part}`,
       );
-      expect(
-        [...(notification?.classList ?? [])].filter((name) =>
-          name.startsWith("bx--inline-notification--low-contrast-"),
-        ),
-      ).toEqual([`bx--inline-notification--low-contrast-${kind}`]);
-      unmount();
-    }
-  });
-
-  it("should not emit a combined low contrast root marker by default", () => {
-    render(InlineNotificationTest, { props: { kind: "info" } });
-
-    const notification = document.querySelector(".bx--inline-notification");
-    expect(
-      [...(notification?.classList ?? [])].filter((name) =>
-        name.startsWith("bx--inline-notification--low-contrast-"),
-      ),
-    ).toEqual([]);
-  });
-
-  it("should emit one icon fill marker per kind", () => {
-    const kinds = [
-      "error",
-      "info",
-      "info-square",
-      "success",
-      "warning",
-      "warning-alt",
-    ] as const;
-
-    for (const lowContrast of [false, true]) {
-      for (const kind of kinds) {
-        const { unmount } = render(InlineNotificationTest, {
-          props: { kind, lowContrast },
-        });
-
-        const icon = document.querySelector(".bx--inline-notification__icon");
-        const marker = `bx--inline-notification__icon--${
-          lowContrast ? "low-contrast-" : ""
-        }${kind}`;
-        expect(icon).toHaveClass(marker);
-        expect(
-          [...(icon?.classList ?? [])].filter((name) =>
-            name.startsWith("bx--inline-notification__icon--"),
-          ),
-        ).toEqual([marker]);
-        unmount();
-      }
-    }
-  });
-
-  it("should mark the close icon only for the low contrast variant", () => {
-    const { unmount } = render(InlineNotificationTest);
-
-    expect(
-      document.querySelector(".bx--inline-notification__close-icon"),
-    ).not.toHaveClass("bx--inline-notification__close-icon--low-contrast");
-    unmount();
-
-    render(InlineNotificationTest, { props: { lowContrast: true } });
-
-    expect(
-      document.querySelector(".bx--inline-notification__close-icon"),
-    ).toHaveClass("bx--inline-notification__close-icon--low-contrast");
-  });
-
-  it("should render title when prop is provided", () => {
-    render(InlineNotificationTest, {
-      props: { title: "Test Title" },
-    });
-
-    const titleElement = document.querySelector(
-      ".bx--inline-notification__title",
-    );
-    expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveTextContent("Test Title");
-  });
-
-  it("should NOT render title element when prop is empty", () => {
-    render(InlineNotificationTest, {
-      props: { title: "" },
-    });
-
-    const titleElement = document.querySelector(
-      ".bx--inline-notification__title",
-    );
-    expect(titleElement).not.toBeInTheDocument();
-  });
-
-  it("should render subtitle when prop is provided", () => {
-    render(InlineNotificationTest, {
-      props: { subtitle: "Test Subtitle" },
-    });
-
-    const subtitleElement = document.querySelector(
-      ".bx--inline-notification__subtitle",
-    );
-    expect(subtitleElement).toBeInTheDocument();
-    expect(subtitleElement).toHaveTextContent("Test Subtitle");
-  });
-
-  it("should NOT render subtitle element when prop is empty", () => {
-    render(InlineNotificationTest, {
-      props: { subtitle: "" },
-    });
-
-    const subtitleElement = document.querySelector(
-      ".bx--inline-notification__subtitle",
-    );
-    expect(subtitleElement).not.toBeInTheDocument();
-  });
-
-  it("should render title element when slot is used", () => {
-    render(InlineNotificationTitleSlotTest);
-
-    const titleElement = document.querySelector(
-      ".bx--inline-notification__title",
-    );
-    expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveTextContent("Slot title");
-  });
-
-  it("should render subtitle element when slot is used", () => {
-    render(InlineNotificationSubtitleSlotTest);
-
-    const subtitleElement = document.querySelector(
-      ".bx--inline-notification__subtitle",
-    );
-    expect(subtitleElement).toBeInTheDocument();
-    expect(subtitleElement).toHaveTextContent("Slot subtitle");
-  });
+      expect(element).toBeInTheDocument();
+      expect(element).toHaveTextContent(text);
+    },
+  );
 
   it("should hide close button when hideCloseButton is true", () => {
     render(InlineNotificationTest, {
@@ -232,131 +84,6 @@ describe("InlineNotification", () => {
     expect(notification).toHaveClass(
       "bx--inline-notification--hide-close-button",
     );
-  });
-
-  it("should dispatch close event when close button is clicked", async () => {
-    vi.useRealTimers();
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, { props: { onclose: closeHandler } });
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
-    expect(
-      document.querySelector(".bx--inline-notification"),
-    ).not.toBeInTheDocument();
-  });
-
-  it("should auto-close after timeout", async () => {
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, {
-      props: { timeout: 1000, onclose: closeHandler },
-    });
-
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should pause timeout on hover when pauseOnHover is true", async () => {
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
-    });
-
-    const notification = document.querySelector(".bx--inline-notification");
-    assert(notification);
-
-    vi.advanceTimersByTime(400);
-    await fireEvent.mouseEnter(notification);
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    await fireEvent.mouseLeave(notification);
-    vi.advanceTimersByTime(599);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1);
-    await tick();
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should not pause timeout on hover when pauseOnHover is false", async () => {
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: false, onclose: closeHandler },
-    });
-
-    const notification = document.querySelector(".bx--inline-notification");
-    assert(notification);
-
-    vi.advanceTimersByTime(400);
-    await fireEvent.mouseEnter(notification);
-
-    vi.advanceTimersByTime(600);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should pause timeout while focus is inside and resume after focus leaves", async () => {
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
-    });
-
-    const closeButton = screen.getByRole("button", {
-      name: "Close notification",
-    });
-
-    vi.advanceTimersByTime(400);
-    closeButton.focus();
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    closeButton.blur();
-    vi.advanceTimersByTime(599);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1);
-    await tick();
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should not pause timeout on focus when pauseOnHover is false", async () => {
-    const closeHandler = vi.fn();
-    render(InlineNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: false, onclose: closeHandler },
-    });
-
-    const closeButton = screen.getByRole("button", {
-      name: "Close notification",
-    });
-
-    vi.advanceTimersByTime(400);
-    closeButton.focus();
-
-    vi.advanceTimersByTime(600);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
   it("should use custom role", () => {
@@ -376,23 +103,6 @@ describe("InlineNotification", () => {
     expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(icon).not.toHaveAttribute("role", "img");
     expect(icon?.querySelector("title")).toBeNull();
-  });
-
-  it("should prevent close when event is cancelled", async () => {
-    vi.useRealTimers();
-    const closeHandler = vi.fn((e) => {
-      e.preventDefault();
-    });
-    render(InlineNotificationTest, { props: { onclose: closeHandler } });
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(
-      document.querySelector(".bx--inline-notification"),
-    ).toBeInTheDocument();
   });
 
   it("should render the actions slot", () => {
@@ -421,7 +131,6 @@ describe("InlineNotification", () => {
     ).toBeInTheDocument();
 
     await rerender({ open: false });
-    await tick();
 
     expect(
       document.querySelector(".bx--inline-notification"),

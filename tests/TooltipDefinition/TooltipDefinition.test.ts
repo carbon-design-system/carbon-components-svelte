@@ -41,12 +41,6 @@ describe("TooltipDefinition", () => {
     });
   });
 
-  let consoleLog: Console["log"];
-
-  beforeEach(() => {
-    consoleLog = vi.spyOn(console, "log");
-  });
-
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
@@ -54,21 +48,17 @@ describe("TooltipDefinition", () => {
 
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2531
-  it("does not fire open/close event on initial render", () => {
-    render(TooltipDefinition);
+  it.each([{ open: false }, { open: true }])(
+    "does not fire open/close event on initial render with open: $open",
+    ({ open }) => {
+      const onOpen = vi.fn();
+      const onClose = vi.fn();
+      render(TooltipDefinition, { props: { open, onOpen, onClose } });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("open");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
-  });
-
-  // Regression test for initial event dispatch in Svelte 5
-  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2531
-  it("does not fire open/close event on initial render when open is true", () => {
-    render(TooltipDefinition, { props: { open: true } });
-
-    expect(consoleLog).not.toHaveBeenCalledWith("open");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
-  });
+      expect(onOpen).not.toHaveBeenCalled();
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
 
   it("should render with default props", () => {
     render(TooltipDefinition);
@@ -97,80 +87,50 @@ describe("TooltipDefinition", () => {
   });
 
   it("should show tooltip on focus", async () => {
-    render(TooltipDefinition);
+    const onOpen = vi.fn();
+    render(TooltipDefinition, { props: { onOpen } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.tab();
 
     expect(trigger).toHaveClass("bx--tooltip--visible");
-    expect(consoleLog).toHaveBeenCalledWith("open");
+    expect(onOpen).toHaveBeenCalled();
   });
 
   it("should hide tooltip on blur", async () => {
-    render(TooltipDefinition);
+    const onClose = vi.fn();
+    render(TooltipDefinition, { props: { onClose } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.tab();
     await user.tab();
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onClose).toHaveBeenCalled();
   });
 
   it("should hide tooltip on Escape key", async () => {
-    render(TooltipDefinition);
+    const onClose = vi.fn();
+    render(TooltipDefinition, { props: { onClose } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.hover(trigger);
     await user.keyboard("{Escape}");
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onClose).toHaveBeenCalled();
   });
 
-  it("should support top direction", () => {
-    render(TooltipDefinition, {
-      props: { direction: "top" },
-    });
+  it.each([
+    ["direction", "top", "bx--tooltip--top"],
+    ["direction", "bottom", "bx--tooltip--bottom"],
+    ["align", "start", "bx--tooltip--align-start"],
+    ["align", "center", "bx--tooltip--align-center"],
+    ["align", "end", "bx--tooltip--align-end"],
+  ] as const)("should support %s %s", (prop, value, className) => {
+    render(TooltipDefinition, { props: { [prop]: value } });
 
-    const trigger = screen.getByText("Tooltip trigger");
-    expect(trigger).toHaveClass("bx--tooltip--top");
-  });
-
-  it("should support bottom direction", () => {
-    render(TooltipDefinition, {
-      props: { direction: "bottom" },
-    });
-
-    const trigger = screen.getByText("Tooltip trigger");
-    expect(trigger).toHaveClass("bx--tooltip--bottom");
-  });
-
-  it("should support start alignment", () => {
-    render(TooltipDefinition, {
-      props: { align: "start" },
-    });
-
-    const trigger = screen.getByText("Tooltip trigger");
-    expect(trigger).toHaveClass("bx--tooltip--align-start");
-  });
-
-  it("should support center alignment", () => {
-    render(TooltipDefinition, {
-      props: { align: "center" },
-    });
-
-    const trigger = screen.getByText("Tooltip trigger");
-    expect(trigger).toHaveClass("bx--tooltip--align-center");
-  });
-
-  it("should support end alignment", () => {
-    render(TooltipDefinition, {
-      props: { align: "end" },
-    });
-
-    const trigger = screen.getByText("Tooltip trigger");
-    expect(trigger).toHaveClass("bx--tooltip--align-end");
+    expect(screen.getByText("Tooltip trigger")).toHaveClass(className);
   });
 
   it("should support controlled open state", () => {
@@ -192,45 +152,49 @@ describe("TooltipDefinition", () => {
   });
 
   it("should not open on hover when clickToOpen is true", async () => {
-    render(TooltipDefinition, { props: { clickToOpen: true } });
+    const onOpen = vi.fn();
+    render(TooltipDefinition, { props: { clickToOpen: true, onOpen } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.hover(trigger);
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
-    expect(consoleLog).not.toHaveBeenCalledWith("open");
+    expect(onOpen).not.toHaveBeenCalled();
   });
 
   it("should open on click when clickToOpen is true", async () => {
-    render(TooltipDefinition, { props: { clickToOpen: true } });
+    const onOpen = vi.fn();
+    render(TooltipDefinition, { props: { clickToOpen: true, onOpen } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.click(trigger);
 
     expect(trigger).toHaveClass("bx--tooltip--visible");
-    expect(consoleLog).toHaveBeenCalledWith("open");
+    expect(onOpen).toHaveBeenCalled();
   });
 
   it("should close on second click when clickToOpen is true", async () => {
-    render(TooltipDefinition, { props: { clickToOpen: true } });
+    const onClose = vi.fn();
+    render(TooltipDefinition, { props: { clickToOpen: true, onClose } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.click(trigger);
     await user.click(trigger);
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onClose).toHaveBeenCalled();
   });
 
   it("should close on Escape when clickToOpen is true", async () => {
-    render(TooltipDefinition, { props: { clickToOpen: true } });
+    const onClose = vi.fn();
+    render(TooltipDefinition, { props: { clickToOpen: true, onClose } });
 
     const trigger = screen.getByText("Tooltip trigger");
     await user.click(trigger);
     await user.keyboard("{Escape}");
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onClose).toHaveBeenCalled();
   });
 
   describe("enterDelayMs / leaveDelayMs", () => {
