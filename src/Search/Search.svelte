@@ -117,6 +117,9 @@
    */
   export let loading = false;
 
+  /** Specify the assistive text for the spinner shown while `loading` */
+  export let loadingDescription = "Searching";
+
   /**
    * Milliseconds to wait after the last input before dispatching `search`.
    * 0 (default) does not dispatch on input; Enter still dispatches
@@ -265,7 +268,11 @@
       >
         {#if loading}
           <span class:bx--search-magnifier-icon={true}>
-            <Loading small withOverlay={false} description="Searching" />
+            <Loading
+              small
+              withOverlay={false}
+              description={loadingDescription}
+            />
           </span>
         {:else}
           <svelte:component this={icon} class="bx--search-magnifier-icon" />
@@ -283,7 +290,11 @@
       >
         {#if loading}
           <span class:bx--search-magnifier-icon={true}>
-            <Loading small withOverlay={false} description="Searching" />
+            <Loading
+              small
+              withOverlay={false}
+              description={loadingDescription}
+            />
           </span>
         {:else}
           <svelte:component this={icon} class="bx--search-magnifier-icon" />
