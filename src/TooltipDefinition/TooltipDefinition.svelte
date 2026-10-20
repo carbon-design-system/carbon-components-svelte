@@ -153,14 +153,26 @@
       tooltipHandoff.release();
     };
   });
+
+  // Runs in the capture phase so a visible tooltip is dismissed before any
+  // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
+  // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
   function handleKeydown(event) {
-    if (event.key === "Escape") hide();
+    if (event.key !== "Escape") return;
+    const visible = shown;
+    hide();
+    if (visible) event.stopPropagation();
   }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
-  use:dismiss={{ enabled: open, type: "keydown", handler: handleKeydown }}
+  use:dismiss={{
+    enabled: open,
+    type: "keydown",
+    handler: handleKeydown,
+    options: { capture: true },
+  }}
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...wrapperProps}

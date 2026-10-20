@@ -14,24 +14,28 @@
     undefined;
   export let enterDelayMs = 0;
   export let leaveDelayMs = 0;
+  export let onParentKeydown: (event: KeyboardEvent) => void = () => {};
 </script>
 
-<TooltipDefinition
-  {tooltipText}
-  {open}
-  {align}
-  {direction}
-  {id}
-  {clickToOpen}
-  {portalTooltip}
-  {enterDelayMs}
-  {leaveDelayMs}
-  on:open={() => {
-    console.log("open");
-  }}
-  on:close={() => {
-    console.log("close");
-  }}
->
-  {triggerContent}
-</TooltipDefinition>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div on:keydown={onParentKeydown}>
+  <TooltipDefinition
+    {tooltipText}
+    {open}
+    {align}
+    {direction}
+    {id}
+    {clickToOpen}
+    {portalTooltip}
+    {enterDelayMs}
+    {leaveDelayMs}
+    on:open={() => {
+      console.log("open");
+    }}
+    on:close={() => {
+      console.log("close");
+    }}
+  >
+    {triggerContent}
+  </TooltipDefinition>
+</div>
