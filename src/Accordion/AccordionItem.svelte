@@ -111,6 +111,8 @@
 
   onMount(() => {
     return () => {
+      // A stale owner would force-close the next item mounted with `open`.
+      if (get(ctx.openId) === itemKey) ctx.openId.set(null);
       unsubscribeOpenId();
       unsubscribeType();
     };

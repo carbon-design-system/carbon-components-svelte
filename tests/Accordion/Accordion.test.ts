@@ -474,6 +474,16 @@ describe("Accordion", () => {
     itemIsCollapsed(/Language Translator/);
   });
 
+  it('opens an item inserted with open after the open item unmounts when type is "single"', async () => {
+    const { rerender } = render(AccordionSingle);
+
+    await user.click(screen.getByText("Language Translator"));
+    await rerender({ count: 2 });
+    await rerender({ showLate: true });
+
+    itemIsExpanded(/Late/);
+  });
+
   it('closes the extra open panel when type changes from "multiple" to "single"', async () => {
     const { rerender } = render(AccordionTypeToggle, {
       props: { type: "multiple" },
