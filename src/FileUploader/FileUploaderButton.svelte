@@ -57,6 +57,12 @@
   export let disableLabelChanges = false;
 
   /**
+   * Specify the button label after more than one file is picked.
+   * @type {(count: number) => string}
+   */
+  export let fileCountText = (count) => `${count} files`;
+
+  /**
    * Specify the kind of file uploader button.
    * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
    */
@@ -182,7 +188,7 @@
     if (files.length > 0 && !disableLabelChanges && !hasIconOnly) {
       if (labelText !== fileLabel) initialLabelText = labelText;
       labelText = fileLabel =
-        files.length > 1 ? `${files.length} files` : files[0].name;
+        files.length > 1 ? fileCountText(files.length) : files[0].name;
     }
 
     dispatch("change", files);
