@@ -51,6 +51,15 @@
   /** Set to `true` to render a dismiss button for each tab */
   export let dismissible = false;
 
+  /**
+   * Specify the accessible name of each tab's dismiss button.
+   * Receives the tab's `label`, which is empty when the tab has none.
+   * @type {(label: string) => string}
+   */
+  export let dismissText = function dismissText(label) {
+    return label ? `Dismiss ${label}` : "Dismiss tab";
+  };
+
   /** Set to `true` for tabs to span the full width of the container */
   export let fullWidth = false;
 
@@ -133,6 +142,10 @@
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useDismissible = writable(dismissible);
+  /**
+   * @type {import("svelte/store").Writable<(label: string) => string>}
+   */
+  const useDismissText = writable(dismissText);
   /**
    * @type {import("svelte/store").Writable<boolean>}
    */
@@ -441,6 +454,7 @@
     useAutoWidth,
     useFullWidth,
     useDismissible,
+    useDismissText,
     useContainer,
     navigation: useNavigation,
     secondaryLabelSupported: useContainer,
@@ -580,6 +594,7 @@
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
+  $: useDismissText.set(dismissText);
   $: useContainer.set(type === "container");
   $: useNavigation.set(navigation);
   $: useIconOnly.set(iconOnly);
