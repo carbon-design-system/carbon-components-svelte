@@ -13,7 +13,11 @@ describe("UserAvatar server render", () => {
   });
 
   it("derives the tooltip id from the id", () => {
-    const { document } = renderSSR(UserAvatar, props);
+    // A closed portal tooltip isn't rendered, so describe by the inline one.
+    const { document } = renderSSR(UserAvatar, {
+      ...props,
+      portalTooltip: false,
+    });
 
     expect(document.getElementById("ada")).toHaveClass("bx--user-avatar");
     expect(document.querySelector("[aria-describedby]")).toHaveAttribute(
