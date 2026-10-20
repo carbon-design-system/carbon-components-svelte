@@ -57,7 +57,9 @@
       prevSerialized = serializeStoredValue(value);
     } else {
       value = parseStoredValue(event.newValue);
-      prevSerialized = event.newValue;
+      // Not `event.newValue`: non-canonical JSON (e.g. `{ "a": 1 }`) would
+      // differ from the re-serialized value and get written back.
+      prevSerialized = serializeStoredValue(value);
     }
 
     dispatch("update", { prevValue, value });
