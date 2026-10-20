@@ -67,6 +67,21 @@ Set tooltip position relative to the navigation buttons with `tooltipPosition`.
 
 <PaginationNav tooltipPosition="outside" total={3} loop />
 
+## Translations
+
+Replace the page names, the overflow select's name, and the page change announcement with `translateWithId`. It receives the current page and the total.
+
+<PaginationNav
+  total={20}
+  forwardText="Página siguiente"
+  backwardText="Página anterior"
+  translateWithId={(id, { page, total }) => ({
+    page: `Página ${page}`,
+    pageRange: `Página ${page} de ${total}`,
+    selectPage: "Seleccionar página",
+  })[id]}
+/>
+
 ## Events
 
 Respond to page changes and button clicks.

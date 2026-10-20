@@ -9,8 +9,7 @@ describe("PaginationOverflow", () => {
       props: { fromIndex: 4, count: 1, onSelect },
     });
 
-    const item = screen.getByRole("button");
-    expect(item).toHaveTextContent("5");
+    const item = screen.getByRole("button", { name: "Page 5" });
 
     await user.click(item);
 
