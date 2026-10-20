@@ -341,12 +341,20 @@
 
     const rect = refTooltip.getBoundingClientRect();
     const height = document.documentElement.clientHeight;
-    if (flip === null && direction === "bottom" && rect.bottom > height) {
+    // A tooltip open while scrolled out of view has no window to fit.
+    const inView = button.bottom >= 0 && button.top <= height;
+    if (
+      inView &&
+      flip === null &&
+      direction === "bottom" &&
+      rect.bottom > height
+    ) {
       if (button.top - rect.height - iconHeight > 0) {
         flip = "top";
         return;
       }
     } else if (
+      inView &&
       flip === null &&
       direction === "top" &&
       rect.top < 0 &&
