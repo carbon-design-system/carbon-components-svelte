@@ -26,7 +26,7 @@
       console.log("change", e.detail);
     })}
 >
-  {#each steps as step}
+  {#each steps as step (step.label)}
     <ProgressStep
       label={step.label}
       description={step.description}

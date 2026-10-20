@@ -29,13 +29,20 @@
   /** Set to `true` to prevent `currentIndex` from updating */
   export let preventChangeOnClick = false;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+  } from "svelte";
   import { derived, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { keyBy } from "../utils/key-by.js";
+  import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { syncDomOrder } from "../utils/sync-dom-order.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -62,6 +69,11 @@
   // value, so a same-batch id looks unregistered if you check it there.
   const batchedStepsUpdate = batchStoreUpdates(steps);
 
+  // A step added after mount (e.g. by an `{#if}`) registers last, wherever
+  // it renders. Set inside the batched update so afterUpdate sorts it into
+  // DOM order once it has flushed.
+  let needsDomSync = false;
+
   /**
    * @type {(step: { id: string; complete: boolean; disabled: boolean }) => void}
    */
@@ -74,6 +86,7 @@
         );
       }
 
+      needsDomSync = true;
       return [
         ..._,
         {
@@ -134,6 +147,32 @@
     currentIndex = resolved.index;
     selectedId = resolved.id;
   }
+
+  /**
+   * Sort the registry into DOM order, so a step's index is its position.
+   * @type {() => void}
+   */
+  function syncOrder() {
+    steps.update((_) =>
+      syncDomOrder({ root: listRef, selector: ".bx--progress-step", items: _ }),
+    );
+  }
+
+  onMount(() =>
+    // A keyed reorder moves steps without re-registering them.
+    observeDomOrder(listRef, {
+      selector: ".bx--progress-step",
+      getItems: () => $steps,
+      onReorder: syncOrder,
+    }),
+  );
+
+  afterUpdate(() => {
+    if (needsDomSync && listRef) {
+      needsDomSync = false;
+      syncOrder();
+    }
+  });
 
   // Steps register through a batched store update, which a server render
   // finishes before. These let a step work out whether it's current as it

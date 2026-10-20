@@ -478,6 +478,40 @@ describe("ProgressIndicator", () => {
       expect(consoleLog).toHaveBeenLastCalledWith("change", 1);
     });
 
+    it.each([
+      [
+        "a step is inserted mid-list",
+        ["Step 1", "Step 3"],
+        ["Step 1", "Step 2", "Step 3"],
+      ],
+      [
+        "keyed steps are reordered",
+        ["Step 1", "Step 2", "Step 3"],
+        ["Step 3", "Step 2", "Step 1"],
+      ],
+    ])("indexes steps by DOM position after %s", async (_, before, after) => {
+      const onchange = vi.fn();
+      const toSteps = (labels: string[]) =>
+        labels.map((label) => ({ label, description: "", complete: true }));
+      const { rerender } = render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: toSteps(before),
+        onchange,
+      });
+      await tick();
+
+      await rerender({ currentIndex: 1, steps: toSteps(after), onchange });
+      await tick();
+
+      expect(screen.getAllByRole("listitem")[1]).toHaveClass(
+        "bx--progress-step--current",
+      );
+      await user.click(screen.getAllByRole("button")[2]);
+      expect(onchange).toHaveBeenLastCalledWith(
+        expect.objectContaining({ detail: 2 }),
+      );
+    });
+
     it("does not track the logical step across removal when selectedId is unset (documents existing index-based behavior)", async () => {
       const { rerender } = render(ProgressIndicatorConditional, {
         showOptional: true,
