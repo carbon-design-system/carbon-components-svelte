@@ -23,6 +23,22 @@
   /** Specify the ARIA label for the close icon */
   export let iconDescription = "Close";
 
+  /**
+   * Specify the text announced when the step changes.
+   * @type {(step: number, total: number) => string}
+   */
+  export let stepText = function stepText(step, total) {
+    return `Step ${step} of ${total}`;
+  };
+
+  /**
+   * Specify the assistive text appended to a complete step's name.
+   * @type {(status: "complete" | "invalid") => string}
+   */
+  export let statusText = function statusText(status) {
+    return status;
+  };
+
   import { getContext } from "svelte";
   import Button from "../Button/Button.svelte";
   import ModalHeader from "../ComposedModal/ModalHeader.svelte";
@@ -55,6 +71,8 @@
       {subTitle}
       {headingTag}
       {hideProgressIndicator}
+      {stepText}
+      {statusText}
     >
       <slot />
     </InterstitialScreenHeaderContent>
@@ -84,6 +102,8 @@
       {subTitle}
       {headingTag}
       {hideProgressIndicator}
+      {stepText}
+      {statusText}
     >
       <slot />
     </InterstitialScreenHeaderContent>

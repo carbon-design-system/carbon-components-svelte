@@ -17,6 +17,12 @@
   /** @type {boolean} */
   export let hideProgressIndicator;
 
+  /** @type {(step: number, total: number) => string} */
+  export let stepText;
+
+  /** @type {(status: "complete" | "invalid") => string} */
+  export let statusText;
+
   import { getContext } from "svelte";
   import ProgressIndicator from "../ProgressIndicator/ProgressIndicator.svelte";
   import ProgressStep from "../ProgressIndicator/ProgressStep.svelte";
@@ -45,6 +51,7 @@
       currentIndex={$progStep}
       preventChangeOnClick
       spaceEqually
+      {statusText}
     >
       {#each $views as view, index (view.id)}
         <ProgressStep
@@ -54,7 +61,7 @@
       {/each}
     </ProgressIndicator>
     <div aria-live="polite" aria-atomic="true" class:bx--visually-hidden={true}>
-      Step {$progStep + 1} of {$views.length}
+      {stepText($progStep + 1, $views.length)}
     </div>
   </div>
 {/if}
