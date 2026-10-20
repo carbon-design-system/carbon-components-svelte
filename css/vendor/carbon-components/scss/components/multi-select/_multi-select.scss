@@ -104,7 +104,7 @@
 
   .#{$prefix}--multi-select--filterable.#{$prefix}--list-box--disabled:hover
     .#{$prefix}--text-input {
-    background-color: $field-01;
+    background-color: $field;
   }
 
   .#{$prefix}--multi-select--filterable
@@ -140,7 +140,7 @@
   .#{$prefix}--multi-select.#{$prefix}--multi-select--selectall
     .#{$prefix}--list-box__menu-item:first-child
     .#{$prefix}--list-box__menu-item__option {
-    border-block-end: 1px solid $border-subtle-01;
+    border-block-end: 1px solid $border-subtle;
     margin-left: 0;
     padding-left: $carbon--spacing-05;
     margin-right: 0;

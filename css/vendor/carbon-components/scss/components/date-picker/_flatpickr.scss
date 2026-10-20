@@ -117,7 +117,7 @@
     padding: $carbon--spacing-02 $carbon--spacing-02 $carbon--spacing-03
       $carbon--spacing-02;
     overflow: hidden;
-    background-color: $layer-01;
+    background-color: $layer;
     border: none;
 
     &:focus {
@@ -135,7 +135,7 @@
     width: to-rem(288px);
     padding: $carbon--spacing-02 $carbon--spacing-02 $carbon--spacing-03
       $carbon--spacing-02;
-    background-color: $layer-01;
+    background-color: $layer;
   }
 
   .flatpickr-calendar.static {
@@ -234,7 +234,7 @@
     font-weight: 600;
     font-size: inherit;
     font-family: inherit;
-    background-color: $field-01;
+    background-color: $field;
     border: none;
     cursor: default;
     // Added in when upgraded to Flatpickr 4.5.5 (#1977)
@@ -253,7 +253,7 @@
 
     &[disabled] {
       color: $text-disabled;
-      background-color: $layer-01;
+      background-color: $layer;
       pointer-events: none;
     }
   }
@@ -264,7 +264,7 @@
   @media (any-hover: hover) {
     .flatpickr-prev-month:hover,
     .flatpickr-next-month:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .flatpickr-next-month.disabled:hover svg,
@@ -273,16 +273,16 @@
     }
 
     .flatpickr-current-month .cur-month:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .numInputWrapper:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .numInputWrapper .numInput[disabled]:hover {
       color: $text-disabled;
-      background-color: $layer-01;
+      background-color: $layer;
       pointer-events: none;
     }
   }
@@ -424,7 +424,7 @@
 
     @media (any-hover: hover) {
       &:hover {
-        background: $layer-hover-01;
+        background: $layer-hover;
       }
     }
 
@@ -563,7 +563,7 @@
     @include focus-outline('outline');
 
     z-index: 3;
-    background: $layer-01;
+    background: $layer;
   }
 
   @media (any-hover: hover) {
@@ -571,7 +571,7 @@
       @include focus-outline('outline');
 
       color: $text-primary;
-      background: $layer-01;
+      background: $layer;
     }
   }
 

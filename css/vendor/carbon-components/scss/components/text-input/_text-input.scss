@@ -26,8 +26,8 @@
     height: to-rem(40px);
     padding: 0 $carbon--spacing-05;
     border: none;
-    border-bottom: 1px solid $border-strong-01;
-    background-color: $field-01;
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
     color: $text-primary;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
@@ -215,7 +215,7 @@
 
   .#{$prefix}--form--fluid .#{$prefix}--text-input-wrapper {
     position: relative;
-    background: $field-01;
+    background: $field;
     transition: background-color $duration--fast-01 motion(standard, productive),
       outline $duration--fast-01 motion(standard, productive);
   }
@@ -251,7 +251,7 @@
     + .#{$prefix}--text-input__divider {
     display: block;
     border-style: solid;
-    border-color: $border-subtle-01;
+    border-color: $border-subtle;
     border-bottom: none;
     margin: 0 1rem;
   }

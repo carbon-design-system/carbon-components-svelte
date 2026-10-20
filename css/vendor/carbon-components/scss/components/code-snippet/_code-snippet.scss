@@ -26,13 +26,13 @@
   .#{$prefix}--snippet--disabled,
   .#{$prefix}--snippet--disabled
     .#{$prefix}--btn.#{$prefix}--snippet-btn--expand {
-    background-color: $field-01;
+    background-color: $field;
     color: $text-disabled;
   }
 
   .#{$prefix}--snippet--disabled .#{$prefix}--snippet-btn--expand:hover,
   .#{$prefix}--snippet--disabled .#{$prefix}--copy-btn:hover {
-    background-color: $field-01;
+    background-color: $field;
     color: $text-disabled;
     cursor: not-allowed;
   }
@@ -55,13 +55,13 @@
     display: inline;
     padding: 0;
     border: 2px solid transparent;
-    background-color: $field-01;
+    background-color: $field;
     border-radius: 4px;
     color: $text-primary;
     cursor: pointer;
 
     &:hover {
-      background-color: $layer-accent-01;
+      background-color: $layer-accent;
     }
 
     &:active {
@@ -118,7 +118,7 @@
     display: inline-block;
 
     &:hover {
-      background-color: $field-01;
+      background-color: $field;
       cursor: auto;
     }
   }
@@ -249,7 +249,7 @@
     align-items: center;
     padding: $spacing-03 $spacing-05;
     border: 0;
-    background-color: $field-01;
+    background-color: $field;
     color: $text-primary;
   }
 
@@ -268,7 +268,7 @@
   }
 
   .#{$prefix}--snippet-btn--expand:hover {
-    background: $layer-hover-01;
+    background: $layer-hover;
     color: $text-primary;
   }
 

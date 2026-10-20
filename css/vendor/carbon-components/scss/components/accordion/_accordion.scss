@@ -38,13 +38,13 @@
 
   .#{$prefix}--accordion__item {
     overflow: visible;
-    border-top: 1px solid $border-subtle-01;
+    border-top: 1px solid $border-subtle;
     // ccs: only border colors differ (disabled, flush); avoid `all` so the
     // browser doesn't interpolate the rest of the animatable property set.
     transition: border-color $duration--fast-02 motion(standard, productive);
 
     &:last-child {
-      border-bottom: 1px solid $border-subtle-01;
+      border-bottom: 1px solid $border-subtle;
     }
   }
 
@@ -73,7 +73,7 @@
     }
 
     &:hover::before {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     &:focus {
@@ -109,12 +109,12 @@
 
   .#{$prefix}--accordion__item--disabled,
   .#{$prefix}--accordion__item--disabled + .#{$prefix}--accordion__item {
-    border-top: 1px solid $field-01;
+    border-top: 1px solid $field;
   }
 
   // After `.bx--accordion__item:last-child`; wins by order.
   .#{$prefix}--accordion__item--disabled:last-of-type { // ccs: flatten
-    border-bottom: 1px solid $field-01;
+    border-bottom: 1px solid $field;
   }
 
   .#{$prefix}--accordion__arrow {
@@ -352,12 +352,12 @@
 
     &::before {
       inset-block-start: -1px;
-      background-color: $layer-accent-01;
+      background-color: $layer-accent;
     }
 
     &:last-child::after {
       inset-block-end: -1px;
-      background-color: $layer-accent-01;
+      background-color: $layer-accent;
     }
   }
 
@@ -378,7 +378,7 @@
       + .#{$prefix}--accordion__item::before,
     .#{$prefix}--accordion--flush
       .#{$prefix}--accordion__item:last-child:hover::after {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
   }
 

@@ -19,7 +19,7 @@
   // 100% inside `.bx--form--fluid`. The skeleton takes the same width.
   .#{$prefix}--date-picker--fluid {
     display: inline-flex;
-    background: $field-01;
+    background: $field;
     inline-size: to-rem(288px);
     max-inline-size: 100%;
     min-inline-size: to-rem(144px);
@@ -111,7 +111,7 @@
     .#{$prefix}--date-picker__input:not(
       .#{$prefix}--date-picker__input--invalid
     ) {
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
   }
 
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__icon {
@@ -123,7 +123,7 @@
     .#{$prefix}--date-picker__input:not(
       .#{$prefix}--date-picker__input--invalid
     ) {
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
   }
 
   // Width/style stay unconditional across every state this rule already
@@ -149,7 +149,7 @@
     .#{$prefix}--date-picker-container:not(
       .#{$prefix}--date-picker--fluid--invalid
     ):not(.#{$prefix}--date-picker--fluid--readonly) {
-    border-block-end-color: $border-strong-01;
+    border-block-end-color: $border-strong;
   }
 
   .#{$prefix}--date-picker--fluid
@@ -199,7 +199,7 @@
     .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container:last-child
     .#{$prefix}--date-picker__input {
-    border-inline-start: 1px solid $border-strong-01;
+    border-inline-start: 1px solid $border-strong;
   }
 
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid,
@@ -286,7 +286,7 @@
     ):not(.#{$prefix}--date-picker--fluid--warn)
     .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly
     .#{$prefix}--date-picker__input {
-    border-block-end-color: $border-subtle-01;
+    border-block-end-color: $border-subtle;
   }
 
   .#{$prefix}--date-picker--fluid:not(
@@ -295,7 +295,7 @@
     .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly:last-child
     .#{$prefix}--date-picker__input {
-    border-inline-start-color: $border-subtle-01;
+    border-inline-start-color: $border-subtle;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton {

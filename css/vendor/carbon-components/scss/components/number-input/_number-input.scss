@@ -44,12 +44,12 @@
     padding-right: to-rem(128px);
     padding-left: $carbon--spacing-05;
     border: 0;
-    border-bottom: to-rem(1px) solid $border-strong-01;
+    border-bottom: to-rem(1px) solid $border-strong;
 
     // Firefox: Hide spinner (up and down buttons)
     -moz-appearance: textfield;
     appearance: textfield;
-    background-color: $field-01;
+    background-color: $field;
     border-radius: 0;
     color: $text-primary;
     font-family: carbon--font-family('sans');
@@ -121,7 +121,7 @@
   .#{$prefix}--number input[type='number']:disabled,
   .#{$prefix}--number input[type='text']:disabled {
     border-bottom-color: transparent;
-    background-color: $field-01;
+    background-color: $field;
     color: $disabled;
     cursor: not-allowed;
   }
@@ -156,7 +156,7 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-    border-bottom: to-rem(1px) solid $border-strong-01;
+    border-bottom: to-rem(1px) solid $border-strong;
     color: $icon-primary;
 
     &::before,
@@ -167,7 +167,7 @@
       width: to-rem(2px);
       // height: calc(100% - 4px) is calculated differently in Safari
       height: to-rem(36px);
-      background-color: $field-01;
+      background-color: $field;
       content: '';
     }
 
@@ -192,13 +192,13 @@
     }
 
     &:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
       color: $icon-primary;
       cursor: pointer;
 
       &::before,
       &::after {
-        background-color: $layer-hover-01;
+        background-color: $layer-hover;
       }
     }
 
@@ -312,7 +312,7 @@
     z-index: z('overlay');
     width: to-rem(1px);
     height: to-rem(16px);
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
 
     &:first-of-type {
       order: 0;
@@ -328,7 +328,7 @@
   .#{$prefix}--number__invalid
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
   }
 
   .#{$prefix}--number--light .#{$prefix}--number__rule-divider,

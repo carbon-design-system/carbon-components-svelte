@@ -28,8 +28,8 @@
     min-height: to-rem(40px);
     padding: to-rem(11px) $carbon--spacing-05;
     border: none;
-    border-bottom: 1px solid $border-strong-01;
-    background-color: $field-01;
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
     color: $text-primary;
     resize: vertical;
     transition: background-color $duration--fast-01 motion(standard, productive);
@@ -68,7 +68,7 @@
 
   .#{$prefix}--text-area:disabled {
     border-bottom: 1px solid transparent;
-    background-color: $field-01;
+    background-color: $field;
     color: $text-disabled;
     cursor: not-allowed;
     outline: none;

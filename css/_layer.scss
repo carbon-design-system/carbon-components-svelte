@@ -1,0 +1,26 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Layer: re-points the contextual tokens (layer, field, border-subtle, ...)
+/// to a nesting level, so the components inside sit on the right surface.
+/// Matches @carbon/styles scss/_layer.scss. Works in every build: the
+/// single-theme files read contextual tokens through `var()` too.
+/// @access private
+/// @group components
+@mixin layer {
+  @each $level, $name in (1: one, 2: two, 3: three) {
+    .#{$prefix}--layer-#{$name} {
+      @each $token, $set in $ccs-layer-sets {
+        --#{$custom-property-prefix}-#{$token}: #{ccs-token(nth($set, $level))};
+      }
+    }
+
+    .#{$prefix}--layer-#{$name}.#{$prefix}--layer__with-background {
+      background-color: $layer-background;
+    }
+  }
+}
+
+@include exports("layer") {
+  @include layer;
+}

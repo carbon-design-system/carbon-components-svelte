@@ -555,6 +555,7 @@
     $icon-size-02: custom-property-var('icon-size-02', map-get($theme, 'icon-size-02')) !global;
   }
   @include ccs-v11-token-globals($theme); // ccs
+  @include ccs-v11-layer-globals($theme); // ccs
 
   @if $emit-custom-properties == true {
     @if should-emit(

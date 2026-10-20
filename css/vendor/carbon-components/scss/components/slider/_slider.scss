@@ -73,7 +73,7 @@
     position: absolute;
     width: 100%;
     height: to-rem(2px);
-    background: $layer-accent-01;
+    background: $layer-accent;
     transform: translate(0%, -50%);
   }
 
@@ -84,7 +84,7 @@
     display: inline-block;
     width: to-rem(2px);
     height: to-rem(4px);
-    background: $layer-accent-01;
+    background: $layer-accent;
     content: '';
     transform: translate(-50%, 0);
   }
@@ -115,7 +115,7 @@
 
     &:focus {
       background-color: $interactive;
-      box-shadow: inset 0 0 0 2px $interactive, inset 0 0 0 3px $layer-01;
+      box-shadow: inset 0 0 0 2px $interactive, inset 0 0 0 3px $layer;
       // 20px / 14px = 1.4286
       transform: translate(-50%, -50%) scale(1.4286);
     }
@@ -158,10 +158,10 @@
   }
 
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb {
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
 
     &:focus {
-      background-color: $layer-accent-01;
+      background-color: $layer-accent;
       box-shadow: none;
       outline: none;
       transform: translate(-50%, -50%);
@@ -170,7 +170,7 @@
     // ccs: also drop the base `:active` ring, or pressing a disabled thumb
     // draws the blue $interactive ring.
     &:active {
-      background: $layer-accent-01;
+      background: $layer-accent;
       box-shadow: none;
       transform: translate(-50%, -50%);
     }
@@ -211,7 +211,7 @@
   .#{$prefix}--slider--disabled
     .#{$prefix}--slider__thumb:focus
     ~ .#{$prefix}--slider__filled-track {
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
   }
 
   .#{$prefix}--slider-container.#{$prefix}--skeleton
@@ -533,7 +533,7 @@
     top: 0;
     width: to-rem(2px);
     height: to-rem(8px);
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
     transform: translate(-50%, -50%);
   }
 

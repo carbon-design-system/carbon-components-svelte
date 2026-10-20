@@ -20,8 +20,8 @@
     // 1px over it.
     padding: $carbon--spacing-03 $carbon--spacing-05
       calc(#{$carbon--spacing-03} - 1px);
-    border-bottom: 1px solid $border-strong-01;
-    background-color: $field-01;
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
     cursor: text;
   }
 
@@ -79,7 +79,7 @@
   }
 
   .#{$prefix}--tag-input--readonly {
-    border-bottom-color: $border-subtle-01;
+    border-bottom-color: $border-subtle;
     background-color: transparent;
     cursor: default;
   }

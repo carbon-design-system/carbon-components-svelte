@@ -13,7 +13,7 @@
 @mixin fluid-list-box {
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper {
     position: relative;
-    background: $field-01;
+    background: $field;
     block-size: 100%;
     transition:
       background-color $duration--fast-01 motion(standard, productive),
@@ -168,7 +168,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box--warning
     ~ .#{$prefix}--form-requirement {
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
   }
 
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid
@@ -225,7 +225,7 @@
     // the wrapper's own base background above, which is lower specificity
     // and earlier in the file either way.
     .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--neutral:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     // Invalid/warn fluid (matches fluid-select): hover tint only the input
@@ -253,7 +253,7 @@
       .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
         .#{$prefix}--combo-box
       ) {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .#{$prefix}--list-box__wrapper--fluid

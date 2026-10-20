@@ -36,7 +36,7 @@ $disabled: $text-disabled !default;
 /// @access public
 /// @group global-themes
 /// @deprecated
-$disabled-background-color: $field-01 !default;
+$disabled-background-color: $field !default;
 
 /// @type Color
 /// @access public
@@ -179,12 +179,12 @@ $checkbox-border-width: 2px !default;
 /// @access public
 /// @group code-snippet
 /// @deprecated
-$snippet-background-color: $field-01 !default;
+$snippet-background-color: $field !default;
 
 /// @type Color
 /// @access public
 /// @group code-snippet
-$snippet-border-color: $border-subtle-01 !default;
+$snippet-border-color: $border-subtle !default;
 
 /// @type Number
 /// @access public
@@ -199,7 +199,7 @@ $content-switcher-option-border: 1px solid $brand-01 !default;
 /// @type Color
 /// @access public
 /// @group content-switcher
-$content-switcher-divider: $border-subtle-01 !default;
+$content-switcher-divider: $border-subtle !default;
 
 /// @type Value
 /// @access public
@@ -224,7 +224,7 @@ $data-table-zebra-color: $layer-02 !default;
 /// @type Color
 /// @access public
 /// @group data-table
-$data-table-column-hover: $layer-selected-hover-01 !default;
+$data-table-column-hover: $layer-selected-hover !default;
 
 /// @type Color
 /// @access public
@@ -241,7 +241,7 @@ $modal-border-top: $brand-01 4px solid !default;
 /// @access public
 /// @group modal
 /// @deprecated
-$modal-footer-background-color: $border-subtle-01 !default;
+$modal-footer-background-color: $border-subtle !default;
 
 /// @type Color
 /// @access public
@@ -289,7 +289,7 @@ $progress-indicator-line-offset: 0.625rem !default;
 /// @type Color
 /// @access public
 /// @group copy-button
-$copy-active: $layer-active-01 !default;
+$copy-active: $layer-active !default;
 
 /// @type Color
 /// @access public
@@ -314,12 +314,12 @@ $structured-list-text-transform: none !default;
 /// @type Value
 /// @access public
 /// @group tabs
-$tab-underline-color: 2px solid $border-subtle-01 !default;
+$tab-underline-color: 2px solid $border-subtle !default;
 
 /// @type Value
 /// @access public
 /// @group tabs
-$tab-underline-color-hover: 2px solid $border-strong-01 !default;
+$tab-underline-color-hover: 2px solid $border-strong !default;
 
 /// @type Color
 /// @access public
@@ -329,7 +329,7 @@ $tab-text-disabled: $text-disabled !default;
 /// @type Value
 /// @access public
 /// @group tabs
-$tab-underline-disabled: 2px solid $field-01 !default;
+$tab-underline-disabled: 2px solid $field !default;
 
 /// @type Color
 /// @access public

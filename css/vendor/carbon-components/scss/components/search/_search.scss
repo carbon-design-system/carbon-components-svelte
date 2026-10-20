@@ -36,9 +36,9 @@
     order: 1;
     padding: 0 $carbon--spacing-08;
     border: none;
-    border-bottom: 1px solid $border-strong-01;
+    border-bottom: 1px solid $border-strong;
     appearance: none;
-    background-color: $field-01;
+    background-color: $field;
     color: $text-primary;
     text-overflow: ellipsis;
     transition: background-color $duration--fast-02 motion(standard, productive);
@@ -131,7 +131,7 @@
       display: block;
       width: 2px;
       height: calc(100% - 2px);
-      background-color: $field-01;
+      background-color: $field;
       content: '';
       transition: background-color $duration--fast-02
         motion(standard, productive);
@@ -142,10 +142,10 @@
     }
 
     &:hover {
-      border-bottom: 1px solid $border-strong-01;
+      border-bottom: 1px solid $border-strong;
 
       &::before {
-        background-color: $field-hover-01;
+        background-color: $field-hover;
       }
     }
   }
@@ -171,7 +171,7 @@
     visibility: inherit;
 
     &:hover {
-      background-color: $field-hover-01;
+      background-color: $field-hover;
     }
 
     &:focus {
@@ -181,7 +181,7 @@
     &:active {
       @include focus-outline('outline');
 
-      background-color: $layer-selected-01;
+      background-color: $layer-selected;
     }
   }
 
@@ -319,7 +319,7 @@
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:hover {
-    background-color: $layer-hover-01;
+    background-color: $layer-hover;
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:focus {

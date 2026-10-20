@@ -105,8 +105,8 @@
       transparent,
       transparent,
       $link-primary,
-      $layer-hover-01,
-      $layer-active-01
+      $layer-hover,
+      $layer-active
     );
 
     padding: $button-padding-ghost;
@@ -221,7 +221,7 @@
   }
 
   .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected {
-    background: $layer-selected-01;
+    background: $layer-selected;
   }
 
   .#{$prefix}--btn path[data-icon-path='inner-path'] {

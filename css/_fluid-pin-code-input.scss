@@ -38,7 +38,7 @@
   .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__fields {
     display: block;
     position: relative;
-    background: $field-01;
+    background: $field;
     transition:
       background-color $duration--fast-01 motion(standard, productive),
       outline $duration--fast-01 motion(standard, productive);
@@ -57,7 +57,7 @@
     padding-block-start: to-rem(32px);
     padding-inline: $carbon--spacing-05;
     padding-block-end: to-rem(13px);
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
   }
 
   // One row border (or full-width divider when invalid/warn), not per-segment underlines.
@@ -122,7 +122,7 @@
     border: none;
     margin: 0 $carbon--spacing-05;
     block-size: to-rem(1px);
-    border-block-end: 1px solid $border-subtle-01;
+    border-block-end: 1px solid $border-subtle;
     transition: border-color $duration--fast-01 motion(standard, productive);
   }
 
@@ -148,7 +148,7 @@
 
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fields--warning {
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
   }
 
   .#{$prefix}--pin-code-input--fluid
