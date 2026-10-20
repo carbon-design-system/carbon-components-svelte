@@ -39,8 +39,9 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const initialChecked = checked;
@@ -51,9 +52,20 @@
     ctx?.selectedValue ?? writable(initialChecked ? value : undefined);
   const update = ctx?.update ?? ((v) => selectedValue.set(v));
   const inputName = ctx?.inputName ?? writable("");
+  const register = ctx?.register ?? (() => noop);
 
   if (initialChecked && ctx) {
     ctx.add(value);
+  }
+
+  let unregister = register(value);
+  let prevValue = value;
+  onMount(() => () => unregister());
+
+  $: if (value !== prevValue) {
+    unregister();
+    unregister = register(value);
+    prevValue = value;
   }
 
   $: checked = $multiple
