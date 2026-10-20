@@ -356,10 +356,10 @@
     // Match the end switches' 4px corners so the gray fill doesn't show
     // outside a selected end card's rounded ring.
     border-radius: to-rem(4px);
-    background-color: if($is-light-theme, $layer-accent-01, transparent);
+    background-color: if($is-light-theme, $layer-accent, transparent);
 
     .#{$prefix}--content-switcher-btn {
-      border-color: $border-strong-01;
+      border-color: $border-strong;
       color: $text-secondary;
 
       &::before {
@@ -374,7 +374,7 @@
 
       &:hover,
       &:active {
-        background-color: $layer-selected-hover-01;
+        background-color: $layer-selected-hover;
         color: $text-primary;
       }
 
@@ -399,7 +399,7 @@
     }
 
     // The selected button keeps its 1px border slot (transparent) so the label
-    // doesn't shift, and the resting `border-color: $border-strong-01` above outranks
+    // doesn't shift, and the resting `border-color: $border-strong` above outranks
     // Carbon's selected reset, so re-assert it here. The card ring is an
     // outline inset over that slot rather than an `::after` shadow: `::after`
     // fills only the padding box, so a ring there sat 1px inside the

@@ -146,7 +146,7 @@
     min-height: $carbon--spacing-09;
     align-items: center;
     margin-bottom: $carbon--spacing-03;
-    background-color: $field-01;
+    background-color: $field;
     gap: to-rem(12px) $carbon--spacing-05;
     grid-auto-rows: auto;
     grid-template-columns: 1fr auto;
@@ -212,7 +212,7 @@
 
   .#{$prefix}--file__selected-file--invalid .#{$prefix}--form-requirement {
     padding-top: $carbon--spacing-05;
-    border-top: 1px solid $border-subtle-01;
+    border-top: 1px solid $border-subtle;
   }
 
   .#{$prefix}--file__selected-file--invalid.#{$prefix}--file__selected-file--sm
@@ -331,7 +331,7 @@
     align-items: flex-start;
     justify-content: space-between;
     padding: $carbon--spacing-05;
-    border: 1px dashed $border-strong-01;
+    border: 1px dashed $border-strong;
   }
 
   .#{$prefix}--file__drop-container--drag-over {

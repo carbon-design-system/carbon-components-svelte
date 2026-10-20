@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>layer</title>
+    <g id="layer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="layer-1" fill="var(--cds-field-01, #f4f4f4)" x="56" y="30" width="208" height="120"></rect>
+        <rect id="field-1" fill="var(--cds-layer-02, #ffffff)" x="72" y="44" width="176" height="16"></rect>
+        <rect id="layer-2" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="72" y="72" width="176" height="64"></rect>
+        <rect id="field-2" fill="var(--cds-field-01, #f4f4f4)" x="88" y="86" width="144" height="16"></rect>
+        <rect id="field-2-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="88" y="101" width="144" height="1"></rect>
+        <rect id="text-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="114" width="72" height="6"></rect>
+    </g>
+</svg>

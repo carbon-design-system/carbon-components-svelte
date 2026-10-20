@@ -13,7 +13,7 @@
 @mixin fluid-number-input {
   .#{$prefix}--number-input--fluid {
     position: relative;
-    background: $field-01;
+    background: $field;
   }
 
   .#{$prefix}--number-input--fluid .#{$prefix}--number {
@@ -325,7 +325,7 @@
     border: none;
     margin: 0 to-rem(16px);
     block-size: to-rem(1px);
-    border-block-end: 1px solid $border-subtle-01;
+    border-block-end: 1px solid $border-subtle;
     inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(63px);
   }

@@ -43,9 +43,9 @@
     height: to-rem(40px);
     padding: 0 $spacing-09 0 $spacing-05;
     border: none;
-    border-bottom: 1px solid $border-strong-01;
+    border-bottom: 1px solid $border-strong;
     appearance: none;
-    background-color: $field-01;
+    background-color: $field;
     border-radius: 0;
     color: $text-primary;
     cursor: pointer;
@@ -54,7 +54,7 @@
     opacity: 1;
 
     &:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
 
@@ -77,8 +77,8 @@
 
     &:disabled,
     &:hover:disabled {
-      border-bottom-color: $field-01;
-      background-color: $field-01;
+      border-bottom-color: $field;
+      background-color: $field;
       color: $text-disabled;
       cursor: not-allowed;
     }
@@ -112,7 +112,7 @@
     background-color: $field-02;
 
     &:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     &:disabled,
@@ -212,7 +212,7 @@
 
   .#{$prefix}--select--inline .#{$prefix}--select-input[disabled],
   .#{$prefix}--select--inline .#{$prefix}--select-input[disabled]:hover {
-    background-color: $field-01;
+    background-color: $field;
   }
 
   .#{$prefix}--select--inline .#{$prefix}--select__arrow {

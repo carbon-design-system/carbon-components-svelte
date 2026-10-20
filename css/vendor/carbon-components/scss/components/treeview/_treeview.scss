@@ -31,7 +31,7 @@
 
     .#{$prefix}--tree-node {
       padding-left: $spacing-05;
-      background-color: $layer-01;
+      background-color: $layer;
       color: $text-secondary;
 
       &:focus {
@@ -48,7 +48,7 @@
     }
 
     .#{$prefix}--tree-node--disabled {
-      background-color: $field-01;
+      background-color: $field;
       color: $text-disabled;
     }
 
@@ -137,7 +137,7 @@
     }
 
     .#{$prefix}--tree-node--selected > .#{$prefix}--tree-node__label {
-      background-color: $layer-selected-01;
+      background-color: $layer-selected;
       color: $text-primary;
     }
 
@@ -159,7 +159,7 @@
       .#{$prefix}--tree-node--disabled
         .#{$prefix}--tree-node__label:hover
         .#{$prefix}--tree-node__label__details {
-        background-color: $field-01;
+        background-color: $field;
         color: $text-disabled;
       }
 
@@ -178,7 +178,7 @@
       }
 
       .#{$prefix}--tree-node__label:hover {
-        background-color: $layer-hover-01;
+        background-color: $layer-hover;
         color: $text-primary;
       }
 
@@ -197,7 +197,7 @@
       }
 
       .#{$prefix}--tree-node--selected > .#{$prefix}--tree-node__label:hover {
-        background-color: $layer-selected-hover-01;
+        background-color: $layer-selected-hover;
       }
     }
 

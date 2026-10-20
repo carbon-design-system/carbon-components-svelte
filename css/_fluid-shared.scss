@@ -67,7 +67,7 @@
   display: block;
   border: none;
   margin: 0 to-rem(16px);
-  border-block-end: 1px solid $border-subtle-01;
+  border-block-end: 1px solid $border-subtle;
   inline-size: calc(100% - to-rem(32px));
 }
 
@@ -78,7 +78,7 @@
 @mixin fluid-divider-frame {
   display: block;
   border-style: solid;
-  border-color: $border-subtle-01;
+  border-color: $border-subtle;
   margin: 0 to-rem(16px);
   border-block-end: none;
 }

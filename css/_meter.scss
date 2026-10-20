@@ -33,7 +33,7 @@
     position: relative;
     width: 100%;
     height: to-rem(8px);
-    background: $layer-accent-01;
+    background: $layer-accent;
     overflow: hidden;
   }
 
@@ -67,7 +67,7 @@
     height: 100%;
     width: to-rem(2px);
     transform: translateX(-50%);
-    background: $border-strong-01;
+    background: $border-strong;
   }
 
   .#{$prefix}--meter__threshold--warning {

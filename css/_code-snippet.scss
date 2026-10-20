@@ -11,13 +11,13 @@
 /// @group components
 @mixin code-snippet-inline-disabled {
   .#{$prefix}--snippet--inline:disabled {
-    background-color: $field-01;
+    background-color: $field;
     color: $text-disabled;
     cursor: not-allowed;
 
     &:active,
     &:focus {
-      background-color: $field-01;
+      background-color: $field;
       border-color: transparent;
       cursor: not-allowed;
     }
@@ -26,7 +26,7 @@
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
     .#{$prefix}--snippet--inline:disabled:hover {
-      background-color: $field-01;
+      background-color: $field;
       border-color: transparent;
       cursor: not-allowed;
     }

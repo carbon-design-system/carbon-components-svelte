@@ -363,7 +363,7 @@
     text-align: center;
 
     &:hover {
-      background: $layer-hover-01;
+      background: $layer-hover;
     }
 
     &:focus {
@@ -457,7 +457,7 @@
     text-align: center;
 
     &:hover {
-      background: $layer-hover-01;
+      background: $layer-hover;
     }
 
     &:focus {
@@ -537,7 +537,7 @@
 
     @media (any-hover: hover) {
       &:hover {
-        background-color: $field-hover-01;
+        background-color: $field-hover;
       }
     }
 
