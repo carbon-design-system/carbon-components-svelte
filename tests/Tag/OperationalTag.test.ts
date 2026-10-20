@@ -50,11 +50,21 @@ describe("OperationalTag", () => {
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("can't open while disabled", () => {
-    render(OperationalTag, { disabled: true });
+  it("can't open while disabled", async () => {
+    const onOpen = vi.fn();
+    const { container } = render(OperationalTag, {
+      open: true,
+      disabled: true,
+      onOpen,
+    });
 
     expect(trigger()).toBeDisabled();
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
+    expect(popover(container)).not.toHaveClass("bx--popover--open");
+
+    await user.click(trigger());
+    expect(trigger()).toHaveAttribute("aria-expanded", "false");
+    expect(onOpen).not.toHaveBeenCalled();
   });
 
   it("is a plain action button without content", async () => {

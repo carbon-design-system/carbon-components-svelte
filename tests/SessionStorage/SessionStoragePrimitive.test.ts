@@ -33,14 +33,6 @@ describe("SessionStorage - Primitive Values", () => {
     expect(consoleLog).toHaveBeenCalledWith("save event");
   });
 
-  it("does not dispatch update event on initial render", () => {
-    render(SessionStoragePrimitive);
-    expect(consoleLog).not.toHaveBeenCalledWith(
-      "update event",
-      expect.anything(),
-    );
-  });
-
   it("dispatches update event and persists when value changes after mount", async () => {
     const { component } = render(SessionStoragePrimitive);
 

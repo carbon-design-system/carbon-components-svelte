@@ -15,6 +15,8 @@
     undefined;
   export let enterDelayMs = 0;
   export let leaveDelayMs = 0;
+  export let onOpen: () => void = () => {};
+  export let onClose: () => void = () => {};
 </script>
 
 <TooltipIcon
@@ -36,9 +38,11 @@
   on:focus
   on:open={() => {
     console.log("open");
+    onOpen();
   }}
   on:close={() => {
     console.log("close");
+    onClose();
   }}
 >
   <slot name="tooltipText" />

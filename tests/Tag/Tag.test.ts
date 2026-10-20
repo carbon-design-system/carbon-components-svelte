@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import type TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
+import TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
@@ -64,12 +64,15 @@ describe("Tag", () => {
     ).toBeInTheDocument();
   });
 
-  it("does not put aria-label on the role-less filter tag wrapper", () => {
-    render(Tag);
+  it("moves aria-label from the role-less filter tag wrapper to the close button", () => {
+    render(TagComponent, {
+      props: { filter: true, "aria-label": "Region" },
+    });
 
-    expect(
-      screen.getByText("Filterable").closest(".bx--tag"),
-    ).not.toHaveAttribute("aria-label");
+    expect(document.querySelector(".bx--tag")).not.toHaveAttribute(
+      "aria-label",
+    );
+    expect(screen.getByRole("button", { name: "Region" })).toBeInTheDocument();
   });
 
   it("fires click event when clicking filterable tag body", async () => {

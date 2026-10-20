@@ -3,6 +3,7 @@ import type TooltipComponent from "carbon-components-svelte/Tooltip/Tooltip.svel
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
@@ -66,6 +67,7 @@ describe("Tooltip", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("should render with default props", () => {
@@ -277,6 +279,11 @@ describe("Tooltip", () => {
   });
 
   it("should apply correct direction classes when using portal tooltip", async () => {
+    // jsdom lays everything out at 0,0, where no side has room and the portal
+    // flips left to right. Center every box so each direction fits unflipped.
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue(
+      rect({ left: 400, top: 300, width: 20, height: 20 }),
+    );
     render(TooltipPortalDirections);
     await vi.advanceTimersByTimeAsync(0);
 
@@ -295,17 +302,8 @@ describe("Tooltip", () => {
 
     expect(topTooltip).toHaveClass("bx--tooltip--top");
     expect(bottomTooltip).toHaveClass("bx--tooltip--bottom");
-    // Portal may flip horizontal direction when space is limited (e.g. in test env)
-    expect(
-      ["bx--tooltip--left", "bx--tooltip--right"].some((c) =>
-        leftTooltip?.classList.contains(c),
-      ),
-    ).toBe(true);
-    expect(
-      ["bx--tooltip--left", "bx--tooltip--right"].some((c) =>
-        rightTooltip?.classList.contains(c),
-      ),
-    ).toBe(true);
+    expect(rightTooltip).toHaveClass("bx--tooltip--right");
+    expect(leftTooltip).toHaveClass("bx--tooltip--left");
   });
 
   it("should apply correct alignment classes", () => {

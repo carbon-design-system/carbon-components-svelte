@@ -8,6 +8,7 @@
   export let key = "hardening-key";
   export let onUpdate: (e: CustomEvent) => void = () => {};
   export let onSave: () => void = () => {};
+  export let onError: (e: CustomEvent) => void = () => {};
 
   export let storageRef: LocalStorageComponent | undefined = undefined;
 </script>
@@ -18,4 +19,5 @@
   bind:value
   on:update={onUpdate}
   on:save={onSave}
+  on:error={onError}
 />

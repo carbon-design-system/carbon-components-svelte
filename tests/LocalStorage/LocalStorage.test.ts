@@ -1,30 +1,41 @@
 import { render } from "@testing-library/svelte";
 import type LocalStorageComponent from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStorage from "./LocalStorage.test.svelte";
 
 describe("LocalStorage", () => {
-  setupLocalStorageMock();
+  const storageMock = setupLocalStorageMock();
 
-  it("clears specific item from localStorage", () => {
+  it("clearItem removes the key from storage and resets the bound value", async () => {
+    const { setMockItem, getMockItem } = storageMock;
     const { component } = render(LocalStorage);
-    const storage = component.storage;
+    await tick();
+    setMockItem("other-key", "kept");
 
-    if (storage) {
-      storage.clearItem();
-      expect(localStorage.removeItem).toHaveBeenCalledWith("programmatic-key");
-    }
+    component.storage?.clearItem();
+    await tick();
+
+    expect(localStorage.removeItem).toHaveBeenCalledWith("programmatic-key");
+    expect(getMockItem("programmatic-key")).toBeUndefined();
+    expect(getMockItem("other-key")).toBe("kept");
+    expect(component.programmaticValue).toBeUndefined();
   });
 
-  it("clears all items from localStorage", () => {
+  it("clearAll empties storage and resets the bound value", async () => {
+    const { setMockItem, getMockItem } = storageMock;
     const { component } = render(LocalStorage);
-    const storage = component.storage;
+    await tick();
+    setMockItem("other-key", "gone");
 
-    if (storage) {
-      storage.clearAll();
-      expect(localStorage.clear).toHaveBeenCalled();
-    }
+    component.storage?.clearAll();
+    await tick();
+
+    expect(localStorage.clear).toHaveBeenCalled();
+    expect(getMockItem("programmatic-key")).toBeUndefined();
+    expect(getMockItem("other-key")).toBeUndefined();
+    expect(component.programmaticValue).toBeUndefined();
   });
 
   it("uses default key if none provided", () => {
