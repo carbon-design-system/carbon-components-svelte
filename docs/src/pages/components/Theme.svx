@@ -54,6 +54,30 @@ Tokens use Carbon v11 names, matching the v11 Figma kit: `layer-01`, `text-prima
 
 Where a v10 token split into several v11 tokens, pick the one for the role. For example, `ui-03` became `border-subtle-01` for borders and `layer-accent-01` for fills.
 
+## Token data
+
+Import token names and values from `carbon-components-svelte/tokens` to list tokens, build a palette, or pass a theme color to code that can't read CSS custom properties, such as a canvas. The data comes from the same build as `all.css`, so it has the same Carbon v11 names and values.
+
+| Export | Contents |
+| :--- | :--- |
+| `colorTokens` | Theme colors, with a value for each theme |
+| `componentTokens` | Button, tag, and notification colors, with a value for each theme |
+| `typeTokens` | Type styles: font size, weight, line height, and letter spacing |
+| `spacingTokens`, `layoutTokens`, `containerTokens`, `sizeTokens` | Spacing and size scales |
+
+Each token name is also a custom property, `--cds-{name}`. Contextual tokens such as `layer` and `field` hold their value on the first layer; inside a `Layer`, read the numbered token for that level.
+
+```js
+import { colorTokens, typeTokens } from "carbon-components-svelte/tokens";
+
+colorTokens["background"].g100; // "#161616"
+typeTokens["heading-compact-01"]["font-size"]; // "0.875rem"
+```
+
+The table below lists every theme color.
+
+<FileSource src="/framed/Theme/ThemeTokenData" />
+
 ## Controls
 
 Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.

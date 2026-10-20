@@ -31,12 +31,16 @@ function prismGlobalFix() {
 
 export default defineConfig({
   resolve: {
-    // An alias bypasses `package.json#exports`, so the `/syntax` subpath
+    // An alias bypasses `package.json#exports`, so each subpath export
     // needs its own entry. Array form: the first match wins.
     alias: [
       {
         find: /^carbon-components-svelte\/syntax$/,
         replacement: path.join(carbonRoot, "src/syntax/index.js"),
+      },
+      {
+        find: /^carbon-components-svelte\/tokens$/,
+        replacement: path.join(carbonRoot, "src/tokens/index.js"),
       },
       { find: "carbon-components-svelte", replacement: carbonRoot },
     ],

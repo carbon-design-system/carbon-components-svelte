@@ -4,6 +4,7 @@
     "allowImportingTsExtensions": true,
     "paths": {
       "carbon-components-svelte": ["../src"],
+      "carbon-components-svelte/tokens": ["../src/tokens/index.js"],
       "carbon-components-svelte/*": ["../*"],
       "*": ["./*"]
     }
