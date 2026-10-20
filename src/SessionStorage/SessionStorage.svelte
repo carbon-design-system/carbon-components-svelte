@@ -2,7 +2,7 @@
   /**
    * @template [T=any]
    * @event {null} save
-   * @event update - Fires when the stored value changes, either from a bound value update or when sessionStorage is modified by another same origin document in this tab (e.g. an iframe), or by another SessionStorage on this page. Set `sync` to `"off"` to ignore those external updates.
+   * @event update - Fires when the stored value changes, either from a bound value update or when sessionStorage is modified by another same origin document in this tab (e.g. an iframe), or by another SessionStorage on this page. With `sync="tabs"`, also fires for changes from other tabs. Set `sync` to `"off"` to ignore those external updates.
    * @property {T} prevValue
    * @property {T} value
    * @event {{ error: unknown }} error - Fires when a write to sessionStorage fails (e.g. quota exceeded or access denied).
@@ -23,8 +23,10 @@
   /**
    * `"off"` ignores changes from other documents in this tab (e.g. an iframe)
    * and from other SessionStorage components on this page. `"on"` (default)
-   * keeps the previous behavior.
-   * @type {"on" | "off"}
+   * keeps the previous behavior. `"tabs"` also shares the value with
+   * SessionStorage components using `sync="tabs"` in other tabs on the same
+   * origin; a new tab takes the value from an open tab.
+   * @type {"on" | "off" | "tabs"}
    */
   export let sync = "on";
 
