@@ -25,7 +25,7 @@
     grid-template: auto auto / auto min-content;
 
     .#{$prefix}--label {
-      @include type-style('body-short-01');
+      @include type-style('body-compact-01');
     }
 
     .#{$prefix}--label,

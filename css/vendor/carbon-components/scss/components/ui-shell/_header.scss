@@ -87,7 +87,7 @@
 
   .#{$prefix}--header__name { // ccs: flatten
     @include type-style(
-      'body-short-01',
+      'body-compact-01',
       $omit: (font-weight, letter-spacing, line-height)
     );
 

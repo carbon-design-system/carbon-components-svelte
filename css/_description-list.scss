@@ -82,7 +82,7 @@
   }
 
   .#{$prefix}--description-list-item.#{$prefix}--description-list-item--total dd {
-    @include type-style("productive-heading-03");
+    @include type-style("heading-03");
   }
 }
 

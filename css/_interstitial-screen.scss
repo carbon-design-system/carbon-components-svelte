@@ -38,7 +38,7 @@
   }
 
   .#{$prefix}--interstitial-screen__subtitle {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     margin-top: $carbon--spacing-03;
     color: $text-secondary;

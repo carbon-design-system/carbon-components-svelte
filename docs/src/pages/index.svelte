@@ -117,7 +117,7 @@
     <svelte:fragment slot="title">
       <Text
         tag="h1"
-        type="expressive-heading-06"
+        type="fluid-heading-06"
         color="primary"
         balance
         maxWidth="55rem"
@@ -165,7 +165,7 @@
     <Grid>
       <DocSectionHeader
         title="The full design system"
-        titleType="productive-heading-06"
+        titleType="heading-06"
         gap={6}
         maxWidth="62ch"
         wide
@@ -187,7 +187,7 @@
     <Grid>
       <DocSectionHeader
         title="Engineered for Svelte"
-        titleType="productive-heading-06"
+        titleType="heading-06"
         gap={6}
         maxWidth="62ch"
         wide
@@ -199,7 +199,7 @@
         <Row class="principle-row">
           <Column>
             <Stack gap={6}>
-              <Text tag="h3" type="productive-heading-03" color="primary">
+              <Text tag="h3" type="heading-03" color="primary">
                 {section.heading}
               </Text>
               <DocBenefitGrid items={section.items} />
@@ -214,7 +214,7 @@
     <Grid>
       <Row>
         <Column>
-          <Text tag="div" type="caption-02" color="secondary">GitHub repositories</Text>
+          <Text tag="div" type="label-02" color="secondary">GitHub repositories</Text>
         </Column>
       </Row>
       <Row class="ecosystem-row">

@@ -10,11 +10,11 @@
     </defs>
     <g id="floating-portal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="clipping-container" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="72.5" y="72.5" width="111" height="71"></rect>
-        <rect id="anchor" fill="var(--cds-interactive-01, #0f62fe)" x="88" y="112" width="56" height="20"></rect>
-        <rect id="anchor-label" fill="var(--cds-text-04, #ffffff)" x="100" y="119" width="32" height="6"></rect>
+        <rect id="anchor" fill="var(--cds-background-brand, #0f62fe)" x="88" y="112" width="56" height="20"></rect>
+        <rect id="anchor-label" fill="var(--cds-text-on-color, #ffffff)" x="100" y="119" width="32" height="6"></rect>
         <rect id="layer-shadow" fill="black" filter="url(#floating-portal-shadow)" x="116" y="36" width="132" height="60"></rect>
-        <rect id="layer" fill="var(--cds-ui-02, #ffffff)" x="116" y="36" width="132" height="60"></rect>
+        <rect id="layer" fill="var(--cds-layer-02, #ffffff)" x="116" y="36" width="132" height="60"></rect>
         <rect id="content-1" fill="var(--cds-text-secondary, #525252)" x="130" y="52" width="80" height="8"></rect>
-        <rect id="content-2" fill="var(--cds-text-03, #a8a8a8)" x="130" y="70" width="56" height="8"></rect>
+        <rect id="content-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="130" y="70" width="56" height="8"></rect>
     </g>
 </svg>

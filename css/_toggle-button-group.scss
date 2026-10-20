@@ -19,7 +19,7 @@
 
   .#{$prefix}--toggle-button {
     @include button-reset($omit: (display, padding, width, cursor));
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
     @include focus-outline("reset");
 
     position: relative;

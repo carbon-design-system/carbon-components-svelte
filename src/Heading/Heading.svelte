@@ -32,7 +32,7 @@
   /**
    * Set the visual size using a Carbon type token. The semantic heading level
    * stays driven by `Section` context; this only changes how the heading looks.
-   * @type {"heading-01" | "heading-02" | "productive-heading-01" | "productive-heading-02" | "productive-heading-03" | "productive-heading-04" | "productive-heading-05" | "productive-heading-06" | "productive-heading-07" | "expressive-heading-01" | "expressive-heading-02" | "expressive-heading-03" | "expressive-heading-04" | "expressive-heading-05" | "expressive-heading-06" | "display-01" | "display-02" | "display-03" | "display-04" | undefined}
+   * @type {"heading-compact-01" | "heading-compact-02" | "heading-01" | "heading-02" | "heading-03" | "heading-04" | "heading-05" | "heading-06" | "heading-07" | "fluid-heading-03" | "fluid-heading-04" | "fluid-heading-05" | "fluid-heading-06" | "fluid-display-01" | "fluid-display-02" | "fluid-display-03" | "fluid-display-04" | undefined}
    */
   export let type = undefined;
 

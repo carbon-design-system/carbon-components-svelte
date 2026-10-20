@@ -41,7 +41,7 @@
 
   .#{$prefix}--full-page-error__label,
   .#{$prefix}--full-page-error__title {
-    @include type-style("expressive-heading-05", true);
+    @include type-style("fluid-heading-05", true);
   }
 
   .#{$prefix}--full-page-error__label {
@@ -54,13 +54,13 @@
   }
 
   .#{$prefix}--full-page-error__description {
-    @include type-style("body-long-02");
+    @include type-style("body-02");
 
     margin-block-end: $carbon--spacing-07;
   }
 
   .#{$prefix}--full-page-error__body {
-    @include type-style("body-long-02");
+    @include type-style("body-02");
   }
 
   // safari rendering fix

@@ -14,7 +14,7 @@ describe("all.scss theme tokens", () => {
       );
     };
     const root = tokens(":root");
-    expect(root.size).toBeGreaterThan(400);
+    expect(root.size).toBeGreaterThan(300);
 
     for (const theme of ["g10", "g80", "g90", "g100"]) {
       const declared = tokens(`:root[theme=${theme}]`);

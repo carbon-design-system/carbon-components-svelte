@@ -4,7 +4,7 @@
     <g id="progress-bar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="72" width="90" height="8"></rect>
         <rect id="track" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="92" width="168" height="8"></rect>
-        <rect id="fill" fill="var(--cds-interactive-01, #0f62fe)" x="76" y="92" width="108" height="8"></rect>
+        <rect id="fill" fill="var(--cds-background-brand, #0f62fe)" x="76" y="92" width="108" height="8"></rect>
         <rect id="helper-text" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="112" width="56" height="6"></rect>
     </g>
 </svg>

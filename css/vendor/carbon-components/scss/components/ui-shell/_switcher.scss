@@ -38,7 +38,7 @@
   }
 
   .#{$prefix}--switcher__item-link {
-    @include carbon--type-style('productive-heading-01');
+    @include carbon--type-style('heading-compact-01');
 
     // ccs: flex centres the label exactly; the fixed padding drifted a few
     // px against the type style's line-height. The 7px block padding leaves

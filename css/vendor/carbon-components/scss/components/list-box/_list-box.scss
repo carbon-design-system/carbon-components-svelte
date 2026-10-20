@@ -45,7 +45,7 @@ $list-box-menu-width: to-rem(300px);
     grid-template: auto auto / auto auto;
 
     .#{$prefix}--label {
-      @include type-style('body-short-01');
+      @include type-style('body-compact-01');
     }
 
     .#{$prefix}--label,
@@ -360,7 +360,7 @@ $list-box-menu-width: to-rem(300px);
   }
 
   .#{$prefix}--list-box__label {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     overflow: hidden;
     color: $text-primary;
@@ -521,7 +521,7 @@ $list-box-menu-width: to-rem(300px);
   }
 
   .#{$prefix}--list-box__menu-item {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     position: relative;
     height: to-rem(40px);

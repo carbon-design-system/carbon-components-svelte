@@ -21,7 +21,7 @@
     margin-block-end: $carbon--spacing-02;
     color: $text-secondary;
 
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
   }
 
   .#{$prefix}--big-number__value-row {
@@ -30,15 +30,15 @@
     gap: $carbon--spacing-02;
     color: $text-primary;
 
-    @include type-style("productive-heading-05");
+    @include type-style("heading-05");
   }
 
   .#{$prefix}--big-number--lg .#{$prefix}--big-number__value-row {
-    @include type-style("productive-heading-06");
+    @include type-style("heading-06");
   }
 
   .#{$prefix}--big-number--xl .#{$prefix}--big-number__value-row {
-    @include type-style("productive-heading-07");
+    @include type-style("heading-07");
   }
 
   // The tooltip icon has no trigger text next to it, so the vendor
@@ -63,7 +63,7 @@
   .#{$prefix}--big-number__denominator {
     color: $text-secondary;
 
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
   }
 
   .#{$prefix}--big-number__trend-icon {
@@ -87,7 +87,7 @@
     gap: $carbon--spacing-02;
     margin-block-start: $carbon--spacing-02;
 
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
   }
 
   .#{$prefix}--big-number__delta-value--success {

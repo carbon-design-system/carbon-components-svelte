@@ -6,17 +6,17 @@
             <rect x="76" y="42" width="168" height="96"></rect>
         </clipPath>
         <linearGradient id="scroll-gradient-fade-top" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="var(--cds-ui-02, #ffffff)" stop-opacity="1"></stop>
-            <stop offset="1" stop-color="var(--cds-ui-02, #ffffff)" stop-opacity="0"></stop>
+            <stop offset="0" stop-color="var(--cds-layer-02, #ffffff)" stop-opacity="1"></stop>
+            <stop offset="1" stop-color="var(--cds-layer-02, #ffffff)" stop-opacity="0"></stop>
         </linearGradient>
         <linearGradient id="scroll-gradient-fade-bottom" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="var(--cds-ui-02, #ffffff)" stop-opacity="0"></stop>
-            <stop offset="1" stop-color="var(--cds-ui-02, #ffffff)" stop-opacity="1"></stop>
+            <stop offset="0" stop-color="var(--cds-layer-02, #ffffff)" stop-opacity="0"></stop>
+            <stop offset="1" stop-color="var(--cds-layer-02, #ffffff)" stop-opacity="1"></stop>
         </linearGradient>
     </defs>
     <g id="scroll-gradient" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="surface" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76" y="42" width="168" height="96"></rect>
-        <g id="content" clip-path="url(#scroll-gradient-clip)" fill="var(--cds-text-03, #a8a8a8)">
+        <rect id="surface" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76" y="42" width="168" height="96"></rect>
+        <g id="content" clip-path="url(#scroll-gradient-clip)" fill="var(--cds-layer-accent-active, #a8a8a8)">
             <rect x="90" y="38" width="140" height="6"></rect>
             <rect x="90" y="54" width="120" height="6"></rect>
             <rect x="90" y="70" width="132" height="6"></rect>

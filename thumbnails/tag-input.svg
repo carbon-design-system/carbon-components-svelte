@@ -15,7 +15,7 @@
             <rect fill="var(--cds-text-secondary, #525252)" x="144" y="86" width="28" height="4"></rect>
             <rect fill="var(--cds-text-secondary, #525252)" x="178" y="86" width="4" height="4"></rect>
         </g>
-        <rect id="placeholder" fill="var(--cds-text-03, #a8a8a8)" x="198" y="84" width="36" height="8"></rect>
+        <rect id="placeholder" fill="var(--cds-layer-accent-active, #a8a8a8)" x="198" y="84" width="36" height="8"></rect>
         <rect id="helper-text" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="116" width="80" height="6"></rect>
     </g>
 </svg>

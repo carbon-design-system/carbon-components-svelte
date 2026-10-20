@@ -48,6 +48,12 @@ For example, primary buttons use `button-primary` for background, with separate 
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
+### Token names
+
+Tokens use Carbon v11 names, matching the v11 Figma kit: `layer-01`, `text-primary`, `border-subtle-01`, `body-compact-01`. v10 names such as `ui-01`, `text-01`, `interactive-01`, and `body-short-01` are not declared, so overriding one has no effect. Carbon's [v10 to v11 token table](https://github.com/carbon-design-system/carbon/blob/main/docs/migration/v11.md#design-tokens) lists each rename.
+
+Where a v10 token split into several v11 tokens, pick the one for the role. For example, `ui-03` became `border-subtle-01` for borders and `layer-accent-01` for fills.
+
 ## Controls
 
 Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.

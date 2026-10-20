@@ -2,15 +2,15 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>form</title>
     <g id="form" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label-1" fill="var(--cds-text-03, #a8a8a8)" x="92" y="36" width="48" height="6"></rect>
+        <rect id="label-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="36" width="48" height="6"></rect>
         <rect id="field-1" fill="var(--cds-field-01, #f4f4f4)" x="92" y="48" width="136" height="28"></rect>
         <rect id="border-1" fill="var(--cds-border-strong, #8d8d8d)" x="92" y="75" width="136" height="1"></rect>
         <rect id="value-1" fill="var(--cds-text-secondary, #525252)" x="104" y="58" width="56" height="8"></rect>
-        <rect id="label-2" fill="var(--cds-text-03, #a8a8a8)" x="92" y="80" width="48" height="6"></rect>
+        <rect id="label-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="80" width="48" height="6"></rect>
         <rect id="field-2" fill="var(--cds-field-01, #f4f4f4)" x="92" y="92" width="136" height="28"></rect>
         <rect id="border-2" fill="var(--cds-border-strong, #8d8d8d)" x="92" y="119" width="136" height="1"></rect>
         <rect id="value-2" fill="var(--cds-text-secondary, #525252)" x="104" y="102" width="56" height="8"></rect>
-        <rect id="submit" fill="var(--cds-interactive-01, #0f62fe)" x="92" y="128" width="64" height="24"></rect>
-        <rect id="submit-label" fill="var(--cds-text-04, #ffffff)" x="104" y="137" width="32" height="6"></rect>
+        <rect id="submit" fill="var(--cds-background-brand, #0f62fe)" x="92" y="128" width="64" height="24"></rect>
+        <rect id="submit-label" fill="var(--cds-text-on-color, #ffffff)" x="104" y="137" width="32" height="6"></rect>
     </g>
 </svg>

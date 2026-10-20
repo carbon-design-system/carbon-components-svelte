@@ -28,7 +28,7 @@ $css--helpers: true;
 
   .#{$prefix}--pagination {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: flex;
     width: calc(100% - 1px);
@@ -85,7 +85,7 @@ $css--helpers: true;
   }
 
   .#{$prefix}--pagination .#{$prefix}--select-input {
-    @include type-style('body-short-01', $omit: (line-height));
+    @include type-style('body-compact-01', $omit: (line-height));
 
     width: auto;
     min-width: auto;

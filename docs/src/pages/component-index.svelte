@@ -263,12 +263,12 @@
                         </Stack>
                       </StructuredListCell>
                       <StructuredListCell>
-                        <Text type="body-short-01" color="secondary"
+                        <Text type="body-compact-01" color="secondary"
                           >{entry.category}</Text
                         >
                       </StructuredListCell>
                       <StructuredListCell>
-                        <Text type="body-short-01" color="secondary">
+                        <Text type="body-compact-01" color="secondary">
                           {entry.sinceVersion ?? "—"}
                         </Text>
                       </StructuredListCell>
@@ -320,15 +320,10 @@
 
           {#if visible.length === 0}
             <Box display="flex" direction="column" gap={3} paddingY={4}>
-              <Text tag="p" type="productive-heading-03" color="primary">
+              <Text tag="p" type="heading-03" color="primary">
                 No results
               </Text>
-              <Text
-                type="body-long-01"
-                color="secondary"
-                balance
-                maxWidth="52ch"
-              >
+              <Text type="body-01" color="secondary" balance maxWidth="52ch">
                 No components match your search or category filters. Try a
                 different query or broaden the category selection.
               </Text>

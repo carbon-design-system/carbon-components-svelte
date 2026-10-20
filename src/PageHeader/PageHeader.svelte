@@ -195,9 +195,7 @@
             {/if}
             {#if title || $$slots.titleChildren}
               <Heading
-                type={size === "sm"
-                  ? "productive-heading-03"
-                  : "productive-heading-04"}
+                type={size === "sm" ? "heading-03" : "heading-04"}
                 class="bx--page-header__title"
               >
                 <slot name="titleChildren">{title}</slot>
@@ -212,7 +210,7 @@
         {/if}
         {#if subtitle}
           <Text
-            type="body-short-01"
+            type="body-compact-01"
             color="secondary"
             class="bx--page-header__subtitle"
           >
@@ -220,11 +218,7 @@
           </Text>
         {/if}
         {#if $$slots.description}
-          <Text
-            tag="div"
-            type="body-long-01"
-            class="bx--page-header__description"
-          >
+          <Text tag="div" type="body-01" class="bx--page-header__description">
             <slot name="description" />
           </Text>
         {/if}

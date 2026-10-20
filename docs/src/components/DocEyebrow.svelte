@@ -15,12 +15,12 @@
       aria-hidden="true"
     />
   {/if}
-  <Text type="caption-02" color="secondary">{eyebrow}</Text>
+  <Text type="label-02" color="secondary">{eyebrow}</Text>
 </Stack>
 
 <style>
   :global(.eyebrow-icon) {
-    fill: var(--cds-text-secondary, var(--cds-text-02));
+    fill: var(--cds-text-secondary, var(--cds-text-secondary));
     flex-shrink: 0;
   }
 </style>

@@ -58,7 +58,7 @@
             gap={3}
             style="min-height: 24rem"
           >
-            <Text tag="h2" type="productive-heading-04">{section.title}</Text>
+            <Text tag="h2" type="heading-04">{section.title}</Text>
             <Text>{section.body}</Text>
           </Stack>
         {/each}

@@ -327,7 +327,7 @@ function plugin() {
     // root-level case.
     if (NO_PREVIEW_HTML_RE.test(node.value)) {
       if (isWholeParagraph) {
-        node.value = `<p class="bx--type-body-long-02">${node.value}</p>`;
+        node.value = `<p class="bx--type-body-02">${node.value}</p>`;
       }
       return;
     }
@@ -586,8 +586,8 @@ function carbonify() {
           return;
         case "paragraph": {
           const className = isH2SectionIntro(parent, index)
-            ? "bx--type-productive-heading-03 prose-section-intro"
-            : "bx--type-body-long-02";
+            ? "bx--type-heading-03 prose-section-intro"
+            : "bx--type-body-02";
           node.data = { hProperties: { class: className } };
           return;
         }
@@ -595,11 +595,11 @@ function carbonify() {
           const heading = node as { depth?: number };
           if (heading.depth === 2) {
             node.data = {
-              hProperties: { class: "bx--type-productive-heading-04" },
+              hProperties: { class: "bx--type-heading-04" },
             };
           } else if (heading.depth === 3) {
             node.data = {
-              hProperties: { class: "bx--type-productive-heading-03" },
+              hProperties: { class: "bx--type-heading-03" },
             };
           }
           return;
@@ -610,7 +610,7 @@ function carbonify() {
         case "table": {
           const table = node as Table;
           const headerClass = "bx--type-label-01";
-          const bodyClass = "bx--type-caption-01 bx--type-text-secondary";
+          const bodyClass = "bx--type-label-01 bx--type-text-secondary";
           for (let rowIndex = 0; rowIndex < table.children.length; rowIndex++) {
             const row = table.children[rowIndex];
             if (row.type !== "tableRow") continue;

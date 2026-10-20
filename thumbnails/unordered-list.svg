@@ -3,12 +3,12 @@
     <title>unordered-list</title>
     <g id="unordered-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path id="marker-1" fill="var(--cds-text-secondary, #525252)" d="M105.38 54.81V53.9H111.57V54.81Z"></path>
-        <rect id="item-1" fill="var(--cds-text-03, #a8a8a8)" x="120" y="50" width="88" height="8"></rect>
+        <rect id="item-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="50" width="88" height="8"></rect>
         <path id="marker-2" fill="var(--cds-text-secondary, #525252)" d="M105.38 78.81V77.9H111.57V78.81Z"></path>
-        <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="120" y="74" width="72" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="74" width="72" height="8"></rect>
         <path id="marker-3" fill="var(--cds-text-secondary, #525252)" d="M105.38 102.81V101.9H111.57V102.81Z"></path>
-        <rect id="item-3" fill="var(--cds-text-03, #a8a8a8)" x="120" y="98" width="96" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="98" width="96" height="8"></rect>
         <path id="marker-4" fill="var(--cds-text-secondary, #525252)" d="M105.38 126.81V125.9H111.57V126.81Z"></path>
-        <rect id="item-4" fill="var(--cds-text-03, #a8a8a8)" x="120" y="122" width="64" height="8"></rect>
+        <rect id="item-4" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="122" width="64" height="8"></rect>
     </g>
 </svg>

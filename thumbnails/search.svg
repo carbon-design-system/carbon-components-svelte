@@ -6,6 +6,6 @@
         <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="105" width="168" height="1"></rect>
         <circle id="magnifier-lens" cx="90" cy="88" r="4" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.25" fill="none"></circle>
         <path id="magnifier-handle" d="M93 91L96.5 94.5" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.25" stroke-linecap="round"></path>
-        <rect id="placeholder" fill="var(--cds-text-03, #a8a8a8)" x="104" y="86" width="80" height="8"></rect>
+        <rect id="placeholder" fill="var(--cds-layer-accent-active, #a8a8a8)" x="104" y="86" width="80" height="8"></rect>
     </g>
 </svg>

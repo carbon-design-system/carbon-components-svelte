@@ -69,15 +69,15 @@
              in each line. -->
         <div
           class:bx--page-header__skeleton-line={true}
-          class:bx--type-productive-heading-04={size !== "sm"}
-          class:bx--type-productive-heading-03={size === "sm"}
+          class:bx--type-heading-04={size !== "sm"}
+          class:bx--type-heading-03={size === "sm"}
         >
           <span class:bx--page-header__skeleton-bar={true}></span>&nbsp;
         </div>
         {#if subtitle}
           <p
             class:bx--page-header__skeleton-line={true}
-            class:bx--type-body-short-01={true}
+            class:bx--type-body-compact-01={true}
           >
             <span
               class:bx--page-header__skeleton-bar={true}

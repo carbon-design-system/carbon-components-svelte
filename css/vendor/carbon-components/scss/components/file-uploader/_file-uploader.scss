@@ -24,7 +24,7 @@
 
   .#{$prefix}--file--label {
     @include reset;
-    @include type-style('productive-heading-01');
+    @include type-style('heading-compact-01');
 
     margin-bottom: $carbon--spacing-03;
     color: $text-primary;
@@ -100,7 +100,7 @@
 
   .#{$prefix}--label-description {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     margin-bottom: $carbon--spacing-05;
     color: $text-secondary;
@@ -169,7 +169,7 @@
     }
 
     .#{$prefix}--file-filename {
-      @include type-style('body-short-01');
+      @include type-style('body-compact-01');
 
       overflow: hidden;
       // ccs: `margin-left` moved to `.bx--file-filename-group` (file size patch)
@@ -246,7 +246,7 @@
   }
 
   .#{$prefix}--file__selected-file--invalid + .#{$prefix}--form-requirement {
-    @include type-style('caption-01', $omit: (font-weight));
+    @include type-style('label-01', $omit: (font-weight));
 
     display: block;
     overflow: visible;
@@ -323,7 +323,7 @@
 
   .#{$prefix}--file__drop-container {
     @include button-reset($omit: (display, padding, border));
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: flex;
     overflow: hidden;

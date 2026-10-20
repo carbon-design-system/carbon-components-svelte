@@ -193,13 +193,13 @@ Nested items keep their own open state, independent of the parent.
       <Accordion>
         <AccordionItem open title="Authentication service">
           <Stack gap={5}>
-            <Text type="body-long-01" color="secondary">
+            <Text type="body-01" color="secondary">
               Handles user login, session tokens, and single sign-on across
               all connected applications.
             </Text>
             <Stack gap={2}>
               <Text type="label-01" color="secondary">Region</Text>
-              <Text type="body-short-01">us-east-1</Text>
+              <Text type="body-compact-01">us-east-1</Text>
             </Stack>
           </Stack>
         </AccordionItem>
@@ -207,13 +207,13 @@ Nested items keep their own open state, independent of the parent.
       <Accordion>
         <AccordionItem open title="Notification service">
           <Stack gap={5}>
-            <Text type="body-long-01" color="secondary">
+            <Text type="body-01" color="secondary">
               Delivers email, SMS, and in-app alerts triggered by workflow
               events.
             </Text>
             <Stack gap={2}>
               <Text type="label-01" color="secondary">Region</Text>
-              <Text type="body-short-01">eu-west-1</Text>
+              <Text type="body-compact-01">eu-west-1</Text>
             </Stack>
           </Stack>
         </AccordionItem>

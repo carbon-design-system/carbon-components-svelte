@@ -60,15 +60,11 @@ describe("PageHeader", () => {
 
     const small = screen.getByTestId("small");
     expect(small).toHaveClass("bx--page-header--sm");
-    expect(small.querySelector("h1")).toHaveClass(
-      "bx--type-productive-heading-03",
-    );
+    expect(small.querySelector("h1")).toHaveClass("bx--type-heading-03");
 
     const basic = screen.getByTestId("basic");
     expect(basic).not.toHaveClass("bx--page-header--sm");
-    expect(basic.querySelector("h1")).toHaveClass(
-      "bx--type-productive-heading-04",
-    );
+    expect(basic.querySelector("h1")).toHaveClass("bx--type-heading-04");
   });
 
   it("defaults to the background fill with a divider", () => {

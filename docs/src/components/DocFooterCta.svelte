@@ -12,11 +12,11 @@
       <Column lg={10} xlg={8}>
         <Stack gap={7}>
           <Stack gap={2}>
-            <Text tag="h2" type="productive-heading-04" color="primary">
+            <Text tag="h2" type="heading-04" color="primary">
               {title}
             </Text>
             <Text
-              type="body-long-01"
+              type="body-01"
               color="secondary"
               maxWidth={descriptionMaxWidth}
             >

@@ -137,7 +137,7 @@
   </OutboundLink>
 </Box>
 
-<h2 id="component-api-props" class="bx--type-productive-heading-04">
+<h2 id="component-api-props" class="bx--type-heading-04">
   Props
   <a
     class="heading-anchor"
@@ -279,7 +279,7 @@
   <p class="my-layout-01-03">No props.</p>
 {/if}
 
-<h2 id="component-api-typedefs" class="bx--type-productive-heading-04">
+<h2 id="component-api-typedefs" class="bx--type-heading-04">
   Typedefs
   <a
     class="heading-anchor"
@@ -301,7 +301,7 @@
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
 
-<h2 id="component-api-slots" class="bx--type-productive-heading-04">
+<h2 id="component-api-slots" class="bx--type-heading-04">
   Slots
   <a
     class="heading-anchor"
@@ -343,7 +343,7 @@
   <p class="my-layout-01-03">No slots.</p>
 {/if}
 
-<h2 id="component-api-forwarded-events" class="bx--type-productive-heading-04">
+<h2 id="component-api-forwarded-events" class="bx--type-heading-04">
   Forwarded events
   <a
     class="heading-anchor"
@@ -362,7 +362,7 @@
   <p class="my-layout-01-03">No forwarded events.</p>
 {/if}
 
-<h2 id="component-api-dispatched-events" class="bx--type-productive-heading-04">
+<h2 id="component-api-dispatched-events" class="bx--type-heading-04">
   Dispatched events
   <a
     class="heading-anchor"
@@ -412,7 +412,7 @@
   <p class="my-layout-01-03">No dispatched events.</p>
 {/if}
 
-<h2 id="component-api-rest-props" class="bx--type-productive-heading-04">
+<h2 id="component-api-rest-props" class="bx--type-heading-04">
   $$restProps
   <a
     class="heading-anchor"

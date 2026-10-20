@@ -14,7 +14,7 @@
         <polygon id="caret" fill="var(--cds-background-inverse, #393939)" points="155 98 165 98 160 104"></polygon>
         <rect id="text-1" fill="var(--cds-text-inverse, #ffffff)" x="108" y="52" width="92" height="6"></rect>
         <rect id="text-2" fill="var(--cds-text-inverse, #ffffff)" x="108" y="64" width="64" height="6"></rect>
-        <rect id="link" fill="var(--cds-interactive-01, #0f62fe)" x="108" y="80" width="40" height="6"></rect>
+        <rect id="link" fill="var(--cds-background-brand, #0f62fe)" x="108" y="80" width="40" height="6"></rect>
         <rect id="trigger" fill="var(--cds-border-subtle, #e0e0e0)" x="148" y="108" width="24" height="24"></rect>
         <path id="trigger-icon" fill="var(--cds-icon-primary, #161616)" transform="translate(152, 112) scale(0.5)" d="M17 22 17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16,8a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,16,8ZM16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"></path>
     </g>

@@ -12,13 +12,13 @@
         <g id="shadow">
             <rect fill="black" x="60" y="40" width="200" height="100" filter="url(#modal-shadow)"></rect>
         </g>
-        <rect x="60" y="40" width="200" height="100" id="box" fill="var(--cds-ui-02, #ffffff)"></rect>
+        <rect x="60" y="40" width="200" height="100" id="box" fill="var(--cds-layer-02, #ffffff)"></rect>
         <rect id="close-1" fill="var(--cds-icon-primary, #161616)" x="231.5" y="49" width="9" height="1.5" transform="translate(236, 50) rotate(45) translate(-236, -50)"></rect>
         <rect id="close-2" fill="var(--cds-icon-primary, #161616)" x="231.5" y="49" width="9" height="1.5" transform="translate(236, 50) rotate(-45) translate(-236, -50)"></rect>
         <rect id="title" fill="var(--cds-border-strong, #8d8d8d)" x="70" y="54" width="70" height="8"></rect>
         <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="70" y="76" width="160" height="6"></rect>
         <rect id="body-2" fill="var(--cds-border-subtle, #e0e0e0)" x="70" y="88" width="120" height="6"></rect>
         <rect id="secondary-button" fill="var(--cds-button-secondary, #393939)" x="60" y="114" width="100" height="26"></rect>
-        <rect id="primary-button" fill="var(--cds-interactive-01, #0f62fe)" x="160" y="114" width="100" height="26"></rect>
+        <rect id="primary-button" fill="var(--cds-background-brand, #0f62fe)" x="160" y="114" width="100" height="26"></rect>
     </g>
 </svg>

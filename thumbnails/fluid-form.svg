@@ -3,14 +3,14 @@
     <title>fluid-form</title>
     <g id="fluid-form" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="field-1" fill="var(--cds-field-01, #f4f4f4)" x="92" y="40" width="136" height="44"></rect>
-        <rect id="label-1" fill="var(--cds-text-03, #a8a8a8)" x="104" y="50" width="40" height="6"></rect>
+        <rect id="label-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="104" y="50" width="40" height="6"></rect>
         <rect id="value-1" fill="var(--cds-text-secondary, #525252)" x="104" y="64" width="64" height="8"></rect>
         <rect id="field-2" fill="var(--cds-field-01, #f4f4f4)" x="92" y="84" width="136" height="44"></rect>
-        <rect id="label-2" fill="var(--cds-text-03, #a8a8a8)" x="104" y="94" width="40" height="6"></rect>
+        <rect id="label-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="104" y="94" width="40" height="6"></rect>
         <rect id="value-2" fill="var(--cds-text-secondary, #525252)" x="104" y="108" width="64" height="8"></rect>
         <rect id="divider" fill="var(--cds-border-strong, #8d8d8d)" x="92" y="84" width="136" height="1"></rect>
         <rect id="border" fill="var(--cds-border-strong, #8d8d8d)" x="92" y="127" width="136" height="1"></rect>
-        <rect id="submit" fill="var(--cds-interactive-01, #0f62fe)" x="92" y="128" width="136" height="24"></rect>
-        <rect id="submit-label" fill="var(--cds-text-04, #ffffff)" x="104" y="137" width="40" height="6"></rect>
+        <rect id="submit" fill="var(--cds-background-brand, #0f62fe)" x="92" y="128" width="136" height="24"></rect>
+        <rect id="submit-label" fill="var(--cds-text-on-color, #ffffff)" x="104" y="137" width="40" height="6"></rect>
     </g>
 </svg>

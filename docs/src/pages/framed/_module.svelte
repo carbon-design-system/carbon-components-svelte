@@ -73,7 +73,7 @@
   }
 
   :global(.framed :not(.bx--content) [class^="bx--col"]) {
-    outline: 1px solid var(--cds-interactive-04);
+    outline: 1px solid var(--cds-interactive);
   }
 
   :global(.framed .bx--content [class^="bx--col"]) {
@@ -90,7 +90,7 @@
   }
 
   :global([data-outline]) {
-    outline: 1px solid var(--cds-interactive-01);
+    outline: 1px solid var(--cds-background-brand);
   }
 
   :global([data-centered]) {
@@ -100,6 +100,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cds-text-02);
+    color: var(--cds-text-secondary);
   }
 </style>

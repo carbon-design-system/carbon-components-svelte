@@ -4,6 +4,6 @@
     <g id="breakpoint" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="lg" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="76.5" y="34.5" width="167" height="111"></rect>
         <rect id="sm" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="76.5" y="90.5" width="71" height="55"></rect>
-        <rect id="md" fill="none" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="2" x="77" y="63" width="118" height="82"></rect>
+        <rect id="md" fill="none" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x="77" y="63" width="118" height="82"></rect>
     </g>
 </svg>

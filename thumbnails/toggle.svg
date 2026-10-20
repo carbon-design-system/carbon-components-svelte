@@ -5,12 +5,12 @@
         <g id="off">
             <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="86" y="68" width="60" height="8"></rect>
             <rect id="track" fill="var(--cds-border-strong, #8d8d8d)" x="86" y="88" width="48" height="24" rx="12"></rect>
-            <circle id="knob" fill="var(--cds-ui-02, #ffffff)" cx="98" cy="100" r="9"></circle>
+            <circle id="knob" fill="var(--cds-layer-02, #ffffff)" cx="98" cy="100" r="9"></circle>
         </g>
         <g id="on">
             <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="174" y="68" width="60" height="8"></rect>
-            <rect id="track" fill="var(--cds-interactive-01, #0f62fe)" x="174" y="88" width="48" height="24" rx="12"></rect>
-            <circle id="knob" fill="var(--cds-ui-02, #ffffff)" cx="210" cy="100" r="9"></circle>
+            <rect id="track" fill="var(--cds-background-brand, #0f62fe)" x="174" y="88" width="48" height="24" rx="12"></rect>
+            <circle id="knob" fill="var(--cds-layer-02, #ffffff)" cx="210" cy="100" r="9"></circle>
         </g>
     </g>
 </svg>

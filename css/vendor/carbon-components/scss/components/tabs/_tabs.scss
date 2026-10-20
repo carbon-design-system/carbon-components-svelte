@@ -29,7 +29,7 @@
 @mixin tabs {
   .#{$prefix}--tabs {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     position: relative;
     width: 100%;
@@ -175,7 +175,7 @@
   a.#{$prefix}--tabs__nav-link--selected,
   a.#{$prefix}--tabs__nav-link--selected:focus,
   a.#{$prefix}--tabs__nav-link--selected:active { // ccs: flatten
-    @include type-style('productive-heading-01');
+    @include type-style('heading-compact-01');
 
     border-bottom: 2px solid $interactive;
     color: $text-primary;
@@ -279,7 +279,7 @@
 
   .#{$prefix}--tabs--scrollable {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: flex;
     width: 100%;
@@ -715,7 +715,7 @@
   }
 
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item-secondary-label {
-    @include carbon--type-style("caption-01");
+    @include carbon--type-style("label-01");
 
     min-height: to-rem(16px);
   }
@@ -940,7 +940,7 @@
     fill: $icon-disabled;
   }
 
-  // Container disabled tabs sit on a $text-disabled background, so the close icon
+  // Container disabled tabs sit on a $button-disabled background, so the close icon
   // and left icon need a contrasting disabled token to stay visible.
   .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-item--close-icon--disabled
@@ -1078,7 +1078,7 @@
   #{$root}
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
     .#{$prefix}--tabs__nav-link {
-    @include carbon--type-style("productive-heading-01");
+    @include carbon--type-style("heading-compact-01");
 
     border: none;
     color: $text-primary;
@@ -1216,7 +1216,7 @@
   #{$root}
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
     .#{$prefix}--tabs__nav-link {
-    @include carbon--type-style("productive-heading-01");
+    @include carbon--type-style("heading-compact-01");
 
     border: none;
     color: $text-primary;

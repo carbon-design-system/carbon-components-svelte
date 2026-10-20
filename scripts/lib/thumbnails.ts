@@ -6,18 +6,18 @@
 
 /** Allowed `var(--cds-<token>, <hex>)` pairs; the hex is the white-theme value. */
 export const THUMBNAIL_TOKENS: Record<string, string> = {
-  "ui-02": "#ffffff",
+  "layer-02": "#ffffff",
   "field-01": "#f4f4f4",
   "border-subtle": "#e0e0e0",
   "text-disabled": "#c6c6c6",
-  "text-03": "#a8a8a8",
+  "layer-accent-active": "#a8a8a8",
   "border-strong": "#8d8d8d",
   "text-secondary": "#525252",
   "button-secondary": "#393939",
   "icon-primary": "#161616",
   "icon-inverse": "#ffffff",
-  "text-04": "#ffffff",
-  "interactive-01": "#0f62fe",
+  "text-on-color": "#ffffff",
+  "background-brand": "#0f62fe",
   "support-success": "#198038",
   "support-warning": "#f1c21b",
   "support-error": "#da1e28",

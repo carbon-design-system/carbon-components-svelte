@@ -84,7 +84,7 @@ component has them. A clipped shape reads as a rendering bug at
 thumbnail size.
 
 **Spend color on the point.** Stay in greys and use one accent, either
-`interactive-01` blue or a status color, on the element that carries
+`background-brand` blue or a status color, on the element that carries
 the idea: the selected tab, the pressed button, the meter fill. Two
 accents compete.
 
@@ -162,13 +162,13 @@ The same state should look the same in every thumbnail.
 | Meaning | Draw it as | Seen in |
 | :--- | :--- | :--- |
 | Selected | 1px `icon-primary` outline on the tile, plus a filled control | RadioTile, SelectableTile |
-| Pressed | `border-subtle` fill with a 2px `interactive-01` bottom bar | ToggleButtonGroup |
-| Current or active | 2px `interactive-01` underline or fill | Tabs, PaginationNav, PageHeader |
+| Pressed | `border-subtle` fill with a 2px `background-brand` bottom bar | ToggleButtonGroup |
+| Current or active | 2px `background-brand` underline or fill | Tabs, PaginationNav, PageHeader |
 | Typing | 1×14 `icon-primary` caret after the text bar | ComboBox |
 | Filter match | the start of each row's bar dark, the rest light | ComboBox |
 | Open | floating panel under the field, chevron pointing up | Dropdown, MultiSelect |
 | Not rendered, or a boundary | 1px dashed `text-disabled` outline | VirtualList, Bleed, Breakpoint, FloatingPortal |
-| Composed of parts | 1px dashed `interactive-01` outline around each part | ComposedModal |
+| Composed of parts | 1px dashed `background-brand` outline around each part | ComposedModal |
 | Loading | shimmer gradient from `text-disabled` to `border-subtle` | Skeleton family |
 | Stored data | outlined `{` `}` around key/value bars | LocalStorage, SessionStorage |
 | Status | support color on the icon and a 3px left edge | InlineNotification, ToastNotification |
@@ -198,18 +198,18 @@ GitHub and `rsvg-convert`. Reuse these pairs exactly:
 
 | Token | Hex | Use for |
 | :--- | :--- | :--- |
-| `--cds-ui-02` | `#ffffff` | Raised surfaces, containers |
+| `--cds-layer-02` | `#ffffff` | Raised surfaces, containers |
 | `--cds-field-01` | `#f4f4f4` | Fields, tiles, unpressed buttons |
 | `--cds-border-subtle` | `#e0e0e0` | Rules, tracks, pressed or selected fills, media blocks |
 | `--cds-text-disabled` | `#c6c6c6` | Secondary text bars, dashed outlines |
-| `--cds-text-03` | `#a8a8a8` | Primary text bars |
+| `--cds-layer-accent-active` | `#a8a8a8` | Primary text bars |
 | `--cds-border-strong` | `#8d8d8d` | Strong borders, emphasized blocks |
 | `--cds-text-secondary` | `#525252` | Headings, terms, labels with weight |
 | `--cds-button-secondary` | `#393939` | Secondary buttons, dark selected segments |
 | `--cds-icon-primary` | `#161616` | Icons, real text |
 | `--cds-icon-inverse` | `#ffffff` | Marks on `icon-primary` or inverse fills (checkbox checks, notification titles); flips with them |
-| `--cds-text-04` | `#ffffff` | Labels and icons on blue, status, or secondary-button fills; white in every theme |
-| `--cds-interactive-01` | `#0f62fe` | The one accent: selected, active, links |
+| `--cds-text-on-color` | `#ffffff` | Labels and icons on blue, status, or secondary-button fills; white in every theme |
+| `--cds-background-brand` | `#0f62fe` | The one accent: selected, active, links |
 | `--cds-support-success` | `#198038` | Success status |
 | `--cds-support-warning` | `#f1c21b` | Warning status |
 | `--cds-support-error` | `#da1e28` | Error status |
@@ -221,8 +221,8 @@ defines the tokens. Loaded through `<img>` or on GitHub, an SVG is its
 own document, so every `var()` falls back to the hex.
 
 Pick tokens by what they sit on, because some flip in dark themes and
-some don't. `icon-inverse`, `ui-02`, and `background-inverse` flip;
-`text-04` stays white. A label on a blue button is `text-04`: with
+some don't. `icon-inverse`, `layer-02`, and `background-inverse` flip;
+`text-on-color` stays white. A label on a blue button is `text-on-color`: with
 `icon-inverse` it turns dark on g80, g90, and g100. A check on an
 `icon-primary` checkbox is `icon-inverse`, so the two flip together.
 
@@ -234,7 +234,7 @@ color (tag, tag-set, theme, user-avatar-group; see
 To match what the component really renders, read its partial in
 `css/_<component>.scss` and map the Sass token to the closest row
 above. For example, `_meter.scss` fills the warning state with
-`$support-03`, which is `--cds-support-warning`.
+`$support-warning`, which is `--cds-support-warning`.
 
 ## File template
 
@@ -270,7 +270,7 @@ under the shadow filter, then the surface on top.
     </filter>
 </defs>
 <rect id="shadow" fill="black" filter="url(#component-name-shadow)" x="100" y="48" width="120" height="44"></rect>
-<rect id="surface" fill="var(--cds-ui-02, #ffffff)" x="100" y="48" width="120" height="44"></rect>
+<rect id="surface" fill="var(--cds-layer-02, #ffffff)" x="100" y="48" width="120" height="44"></rect>
 ```
 
 The filter region covers the whole canvas on purpose. A region in

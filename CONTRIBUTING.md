@@ -540,7 +540,7 @@ Values:
 
 - Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
 - Spacing tokens: `$carbon--spacing-01` … `-13`. Not the `$spacing-0N` aliases.
-- Color: theme tokens (`$ui-01`, `$field-01`, `$support-error`, …). No hex. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
+- Color: Carbon v11 theme tokens (`$layer-01`, `$field-01`, `$support-error`, …). No hex, and no v10 names (`$ui-01`, `$text-01`): `all.css` no longer declares them, and `tests/css/v11-tokens.test.ts` fails on any that reach the CSS. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
@@ -566,7 +566,7 @@ Selectors:
 Naming:
 
 - Component variants are BEM modifiers (`bx--meter--sm`). Sizes use `--xs`/`--sm`/`--md`/`--lg`/`--xl`; a bare number (`--20`) only when the prop itself is a pixel size.
-- Token utilities are `bx--{block}-{property}-{step}` (`bx--box-p-5`, `bx--type-mono`). Map v11 token names in docs and props to v10 theme variables in SCSS where needed (for example `layer-01` → `$ui-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss).
+- Token utilities are `bx--{block}-{property}-{step}` (`bx--box-p-5`, `bx--type-mono`). Docs, props and SCSS all use the same Carbon v11 token names (`layer-01` is `$layer-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss).
 
 Document the mixin with SassDoc (`/// @access private`, `/// @group components`) and use `//` for everything else. Use double quotes. When a partial overrides a single vendored component, say in its header why it could not live in the vendored file.
 

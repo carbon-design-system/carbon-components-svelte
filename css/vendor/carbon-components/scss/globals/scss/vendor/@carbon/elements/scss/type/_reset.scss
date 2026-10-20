@@ -46,35 +46,35 @@
 /// @group @carbon/type
 @mixin carbon--default-type {
   h1 {
-    @include carbon--type-style('productive-heading-06');
+    @include carbon--type-style('heading-06');
   }
 
   h2 {
-    @include carbon--type-style('productive-heading-05');
+    @include carbon--type-style('heading-05');
   }
 
   h3 {
-    @include carbon--type-style('productive-heading-04');
+    @include carbon--type-style('heading-04');
   }
 
   h4 {
-    @include carbon--type-style('productive-heading-03');
+    @include carbon--type-style('heading-03');
   }
 
   h5 {
-    @include carbon--type-style('productive-heading-02');
+    @include carbon--type-style('heading-compact-02');
   }
 
   h6 {
-    @include carbon--type-style('productive-heading-01');
+    @include carbon--type-style('heading-compact-01');
   }
 
   p {
-    @include carbon--type-style('body-long-02');
+    @include carbon--type-style('body-02');
   }
 
   a {
-    color: $link-01; // ccs: token, not the compile-time theme map, so plain links follow runtime theming
+    color: $link-primary; // ccs: token, not the compile-time theme map, so plain links follow runtime theming
   }
 
   em {

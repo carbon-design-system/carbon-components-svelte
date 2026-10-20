@@ -13,8 +13,8 @@ describe("PageHeaderSkeleton", () => {
     const lines = node.querySelectorAll(".bx--page-header__skeleton-line");
     expect(lines).toHaveLength(2);
     // Each a line of the header's own type, holding a bar.
-    expect(lines[0]).toHaveClass("bx--type-productive-heading-04");
-    expect(lines[1]).toHaveClass("bx--type-body-short-01");
+    expect(lines[0]).toHaveClass("bx--type-heading-04");
+    expect(lines[1]).toHaveClass("bx--type-body-compact-01");
     for (const line of lines) {
       expect(
         line.querySelector(".bx--page-header__skeleton-bar"),
@@ -62,6 +62,6 @@ describe("PageHeaderSkeleton", () => {
       .getByTestId("no-subtitle")
       .querySelectorAll(".bx--page-header__skeleton-line");
     expect(lines).toHaveLength(1);
-    expect(lines[0]).toHaveClass("bx--type-productive-heading-03");
+    expect(lines[0]).toHaveClass("bx--type-heading-03");
   });
 });

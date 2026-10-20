@@ -5,7 +5,7 @@
         <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="100" y="62" width="72" height="8"></rect>
         <g id="bold">
             <rect fill="var(--cds-border-subtle, #e0e0e0)" x="100" y="80" width="40" height="40"></rect>
-            <rect id="pressed" fill="var(--cds-interactive-01, #0f62fe)" x="100" y="118" width="40" height="2"></rect>
+            <rect id="pressed" fill="var(--cds-background-brand, #0f62fe)" x="100" y="118" width="40" height="2"></rect>
             <path transform="translate(112, 92) scale(0.5)" fill="var(--cds-icon-primary, #161616)" d="M18.25,25H9V7h8.5a5.25,5.25,0,0,1,4,8.65A5.25,5.25,0,0,1,18.25,25ZM12,22h6.23a2.25,2.25,0,1,0,0-4.5H12Zm0-7.5h5.5a2.25,2.25,0,1,0,0-4.5H12Z"></path>
         </g>
         <g id="italic">
@@ -14,7 +14,7 @@
         </g>
         <g id="underline">
             <rect fill="var(--cds-border-subtle, #e0e0e0)" x="180" y="80" width="40" height="40"></rect>
-            <rect id="pressed" fill="var(--cds-interactive-01, #0f62fe)" x="180" y="118" width="40" height="2"></rect>
+            <rect id="pressed" fill="var(--cds-background-brand, #0f62fe)" x="180" y="118" width="40" height="2"></rect>
             <path transform="translate(192, 92) scale(0.5)" fill="var(--cds-icon-primary, #161616)" d="M4 26H28V28H4z M16,23a7,7,0,0,1-7-7V5h2V16a5,5,0,0,0,10,0V5h2V16A7,7,0,0,1,16,23Z"></path>
         </g>
     </g>

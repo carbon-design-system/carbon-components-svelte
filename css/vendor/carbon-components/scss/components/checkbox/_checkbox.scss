@@ -71,7 +71,7 @@
   // accommodate the spacing needed for the checkbox.
   .#{$prefix}--checkbox-label {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     position: relative;
     display: flex;
@@ -251,11 +251,7 @@
 // (`grep` for `checkbox…--invalid` under carbon-components' checkbox SCSS
 // returns nothing) - ported from Carbon React's real @carbon/styles
 // `_checkbox.scss`, translated to this repo's `to-rem()`/`$carbon--spacing-*`
-// conventions. `$icon-primary`, `$support-error`, `$support-warning`, and
-// `$text-error` are v11 token names that the v10 theme mixin already
-// globally aliases to their v10 equivalents (`$icon-primary`, `$support-error`,
-// `$support-warning`, `$text-error`), so they resolve correctly under this
-// repo's v10 pin.
+// conventions.
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

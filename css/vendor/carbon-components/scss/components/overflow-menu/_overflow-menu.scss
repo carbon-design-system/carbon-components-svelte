@@ -246,7 +246,7 @@
 
   .#{$prefix}--overflow-menu-options__btn {
     @include reset;
-    @include type-style('body-short-01', $omit: (font-weight));
+    @include type-style('body-compact-01', $omit: (font-weight));
     @include focus-outline('reset');
 
     display: inline-flex;

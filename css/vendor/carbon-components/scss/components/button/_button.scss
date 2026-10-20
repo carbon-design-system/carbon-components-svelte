@@ -392,7 +392,7 @@
   }
 
   .#{$prefix}--btn--expressive {
-    @include carbon--type-style('body-short-02');
+    @include carbon--type-style('body-compact-02');
 
     min-height: 3rem;
   }

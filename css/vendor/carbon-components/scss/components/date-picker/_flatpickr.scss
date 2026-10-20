@@ -170,7 +170,7 @@
   }
 
   .flatpickr-month {
-    @include type-style('productive-heading-01', $omit: (line-height));
+    @include type-style('heading-compact-01', $omit: (line-height));
 
     display: flex;
     align-items: center;
@@ -206,7 +206,7 @@
   }
 
   .flatpickr-current-month {
-    @include type-style('productive-heading-01');
+    @include type-style('heading-compact-01');
 
     display: flex;
     align-items: center;
@@ -372,7 +372,7 @@
   }
 
   .flatpickr-weekday {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     flex: 1;
     color: $text-primary;
@@ -410,7 +410,7 @@
   }
 
   .flatpickr-day {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: flex;
     align-items: center;
@@ -474,7 +474,7 @@
   }
 
   .flatpickr-weekwrapper .flatpickr-weekday {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: flex;
     align-items: center;

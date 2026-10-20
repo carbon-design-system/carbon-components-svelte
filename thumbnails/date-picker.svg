@@ -9,7 +9,7 @@
         </filter>
     </defs>
     <g id="date-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="var(--cds-text-03, #a8a8a8)" x="88" y="24" width="56" height="6"></rect>
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="24" width="56" height="6"></rect>
         <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="88" y="40" width="144" height="32"></rect>
         <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="88" y="71" width="144" height="1"></rect>
         <rect id="value" fill="var(--cds-text-secondary, #525252)" x="100" y="52" width="56" height="8"></rect>
@@ -17,7 +17,7 @@
             <path d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"></path>
         </g>
         <rect x="88" y="72" width="144" height="92" fill="black" filter="url(#date-picker-shadow)"></rect>
-        <rect x="88" y="72" width="144" height="92" fill="var(--cds-ui-02, #ffffff)"></rect>
+        <rect x="88" y="72" width="144" height="92" fill="var(--cds-layer-02, #ffffff)"></rect>
         <g id="prev-month" transform="translate(98, 78) scale(0.5)" fill="var(--cds-border-strong, #8d8d8d)">
             <path d="M20 24L10 16 20 8z"></path>
         </g>

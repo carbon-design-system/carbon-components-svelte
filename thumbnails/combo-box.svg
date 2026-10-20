@@ -9,17 +9,17 @@
         </filter>
     </defs>
     <g id="combo-box" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="var(--cds-text-03, #a8a8a8)" x="76" y="42" width="56" height="8"></rect>
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="42" width="56" height="8"></rect>
         <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="58" width="168" height="32"></rect>
         <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="89" width="168" height="1"></rect>
         <rect id="typed" fill="var(--cds-text-secondary, #525252)" x="88" y="70" width="28" height="8"></rect>
         <rect id="caret" fill="var(--cds-icon-primary, #161616)" x="119" y="67" width="1" height="14"></rect>
         <path id="clear" fill="var(--cds-icon-primary, #161616)" transform="translate(222, 66) scale(0.5)" d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"></path>
         <rect id="menu-shadow" fill="black" filter="url(#combo-box-shadow)" x="76" y="90" width="168" height="48"></rect>
-        <rect id="menu" fill="var(--cds-ui-02, #ffffff)" x="76" y="90" width="168" height="48"></rect>
+        <rect id="menu" fill="var(--cds-layer-02, #ffffff)" x="76" y="90" width="168" height="48"></rect>
         <rect id="match-1" fill="var(--cds-text-secondary, #525252)" x="88" y="102" width="28" height="8"></rect>
-        <rect id="rest-1" fill="var(--cds-text-03, #a8a8a8)" x="116" y="102" width="44" height="8"></rect>
+        <rect id="rest-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="116" y="102" width="44" height="8"></rect>
         <rect id="match-2" fill="var(--cds-text-secondary, #525252)" x="88" y="120" width="28" height="8"></rect>
-        <rect id="rest-2" fill="var(--cds-text-03, #a8a8a8)" x="116" y="120" width="64" height="8"></rect>
+        <rect id="rest-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="116" y="120" width="64" height="8"></rect>
     </g>
 </svg>

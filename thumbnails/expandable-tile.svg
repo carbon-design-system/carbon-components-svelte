@@ -4,7 +4,7 @@
     <g id="expandable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="tile" fill="var(--cds-field-01, #f4f4f4)" x="76" y="32" width="168" height="116"></rect>
         <rect id="heading" fill="var(--cds-text-secondary, #525252)" x="92" y="48" width="88" height="8"></rect>
-        <rect id="summary" fill="var(--cds-text-03, #a8a8a8)" x="92" y="64" width="112" height="6"></rect>
+        <rect id="summary" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="64" width="112" height="6"></rect>
         <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="92" y="83" width="136" height="1"></rect>
         <rect id="more-1" fill="var(--cds-text-disabled, #c6c6c6)" x="92" y="96" width="128" height="6"></rect>
         <rect id="more-2" fill="var(--cds-text-disabled, #c6c6c6)" x="92" y="108" width="96" height="6"></rect>

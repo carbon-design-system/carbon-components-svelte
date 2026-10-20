@@ -63,7 +63,7 @@
 
     .#{$prefix}--tree-node__label {
       // ccs: match v11, which sets `body-compact-01` instead of inheriting.
-      @include type-style('body-short-01');
+      @include type-style('body-compact-01');
 
       display: flex;
       min-height: to-rem(32px);

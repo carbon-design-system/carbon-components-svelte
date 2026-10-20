@@ -3,13 +3,13 @@
     <title>divider</title>
     <g id="divider" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="row">
-            <rect id="item-1" fill="var(--cds-text-03, #a8a8a8)" x="76" y="62" width="36" height="8"></rect>
+            <rect id="item-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="62" width="36" height="8"></rect>
             <rect id="vertical-rule-1" fill="var(--cds-border-subtle, #e0e0e0)" x="128" y="54" width="1" height="24"></rect>
-            <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="145" y="62" width="36" height="8"></rect>
+            <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="145" y="62" width="36" height="8"></rect>
             <rect id="vertical-rule-2" fill="var(--cds-border-subtle, #e0e0e0)" x="197" y="54" width="1" height="24"></rect>
-            <rect id="item-3" fill="var(--cds-text-03, #a8a8a8)" x="214" y="62" width="30" height="8"></rect>
+            <rect id="item-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="214" y="62" width="30" height="8"></rect>
         </g>
         <rect id="horizontal-rule" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="96" width="168" height="1"></rect>
-        <rect id="text" fill="var(--cds-text-03, #a8a8a8)" x="76" y="114" width="120" height="8"></rect>
+        <rect id="text" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="114" width="120" height="8"></rect>
     </g>
 </svg>

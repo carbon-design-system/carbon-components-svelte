@@ -111,7 +111,7 @@
   }
 
   .#{$prefix}--tooltip-portal__content {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     display: flex;
     align-items: center;

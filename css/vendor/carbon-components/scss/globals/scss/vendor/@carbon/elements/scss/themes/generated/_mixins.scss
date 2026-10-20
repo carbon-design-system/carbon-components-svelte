@@ -119,7 +119,7 @@
   $border-interactive: map-get($theme, 'border-interactive') !global;
   $text-primary: map-get($theme, 'text-primary') !global;
   $text-secondary: map-get($theme, 'text-secondary') !global;
-  $text-placeholder: map-get($theme, 'text-05') !global; // ccs: placeholders draw in text-05
+  $text-placeholder: map-get($theme, 'text-placeholder') !global;
   $text-helper: map-get($theme, 'text-helper') !global;
   $text-on-color: map-get($theme, 'text-on-color') !global;
   $text-inverse: map-get($theme, 'text-inverse') !global;
@@ -450,7 +450,7 @@
     $border-interactive: custom-property-var('border-interactive', map-get($theme, 'border-interactive')) !global;
     $text-primary: custom-property-var('text-primary', map-get($theme, 'text-primary')) !global;
     $text-secondary: custom-property-var('text-secondary', map-get($theme, 'text-secondary')) !global;
-    $text-placeholder: custom-property-var('text-placeholder', map-get($theme, 'text-05')) !global; // ccs: placeholders draw in text-05
+    $text-placeholder: custom-property-var('text-placeholder', map-get($theme, 'text-placeholder')) !global;
     $text-helper: custom-property-var('text-helper', map-get($theme, 'text-helper')) !global;
     $text-on-color: custom-property-var('text-on-color', map-get($theme, 'text-on-color')) !global;
     $text-inverse: custom-property-var('text-inverse', map-get($theme, 'text-inverse')) !global;
@@ -1324,13 +1324,13 @@
     @if should-emit(
       $theme,
       $parent-carbon-theme,
-      'text-05', // ccs: placeholders draw in text-05
+      'text-placeholder',
       $emit-difference
     )
     {
       @include custom-property(
         'text-placeholder',
-        map-get($theme, 'text-05') // ccs: placeholders draw in text-05
+        map-get($theme, 'text-placeholder')
       );
     }
 

@@ -31,7 +31,7 @@
   }
 
   .#{$prefix}--shape-indicator--14 {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
   }
 
   .#{$prefix}--shape-indicator--failed,

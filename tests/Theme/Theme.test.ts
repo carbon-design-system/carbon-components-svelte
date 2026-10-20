@@ -125,19 +125,19 @@ describe("Theme", () => {
 
   it("should apply custom tokens", async () => {
     const tokens = {
-      "interactive-01": "#ff0000",
-      "ui-background": "#ffffff",
+      "button-primary": "#ff0000",
+      background: "#ffffff",
     };
 
     render(Theme, { props: { tokens } });
     await tick();
 
     expect(documentMock.style.setProperty).toHaveBeenCalledWith(
-      "--cds-interactive-01",
+      "--cds-button-primary",
       "#ff0000",
     );
     expect(documentMock.style.setProperty).toHaveBeenCalledWith(
-      "--cds-ui-background",
+      "--cds-background",
       "#ffffff",
     );
   });
@@ -324,8 +324,8 @@ describe("Theme", () => {
   describe("Generics", () => {
     it("should support custom token types with generics", () => {
       type CustomTokens = {
-        "interactive-01": string;
-        "ui-background": string;
+        "button-primary": string;
+        background: string;
       };
 
       type ComponentType = ThemeComponent<CustomTokens>;

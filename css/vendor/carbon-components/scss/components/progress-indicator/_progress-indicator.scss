@@ -71,7 +71,7 @@
   }
 
   .#{$prefix}--progress-label {
-    @include type-style('body-short-01', $omit: (line-height));
+    @include type-style('body-compact-01', $omit: (line-height));
 
     overflow: hidden;
     max-width: to-rem(88px);

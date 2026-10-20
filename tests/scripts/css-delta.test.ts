@@ -8,7 +8,7 @@ import {
 
 const BASE = `
 @font-face { font-family: "Plex"; src: url("a.woff2"); }
-:root { --cds-ui-01: #fff; }
+:root { --cds-layer-01: #fff; }
 .bx--btn { color: red; }
 .bx--tag { color: blue; }
 @media (min-width: 42rem) { .bx--tag--sm { height: 1rem; } }

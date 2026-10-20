@@ -63,15 +63,15 @@
   }
 
   .#{$prefix}--user-avatar--md .#{$prefix}--user-avatar__text {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
   }
 
   .#{$prefix}--user-avatar--lg .#{$prefix}--user-avatar__text {
-    @include type-style("productive-heading-02");
+    @include type-style("heading-compact-02");
   }
 
   .#{$prefix}--user-avatar--xl .#{$prefix}--user-avatar__text {
-    @include type-style("productive-heading-04");
+    @include type-style("heading-04");
   }
 
   .#{$prefix}--user-avatar--red {

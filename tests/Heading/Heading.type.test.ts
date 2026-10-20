@@ -7,7 +7,7 @@ describe("Heading type", () => {
 
     const heading = screen.getByText("Sized heading");
     expect(heading.tagName).toBe("H2");
-    expect(heading).toHaveClass("bx--type-productive-heading-03");
+    expect(heading).toHaveClass("bx--type-heading-03");
   });
 
   it("should not add a type class when type is unset", () => {

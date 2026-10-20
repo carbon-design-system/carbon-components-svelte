@@ -8,7 +8,7 @@ description: Text applies Carbon typography to any element — type scale, seman
 
 ## Basic
 
-The default component renders a `<p>` with the body-long-01 type style.
+The default component renders a `<p>` with the body-01 type style.
 
 <Text>Carbon Components Svelte implements the Carbon Design System.</Text>
 
@@ -67,64 +67,62 @@ Use `inverse` for text on an inverse surface, such as a tooltip or notification:
 
 ## Type styles
 
-Set `type` to a Carbon type token. The scale covers supporting text, body copy, and the productive and expressive heading sets. Productive styles use fixed sizes for dense product UI; expressive styles scale fluidly with the viewport for editorial layouts.
+Set `type` to a Carbon v11 type token. The scale covers supporting text, body copy, fixed headings for product UI, and fluid styles that scale with the viewport for editorial layouts.
 
-| Token                     | Description                                              |
-| ------------------------- | -------------------------------------------------------- |
-| `caption-01`              | Smallest supporting text for captions and footnotes      |
-| `caption-02`              | Caption text, one step larger                            |
-| `label-01`                | Form field and UI labels                                 |
-| `label-02`                | Label text, one step larger                              |
-| `helper-text-01`          | Helper text beneath form inputs                          |
-| `helper-text-02`          | Helper text, one step larger                             |
-| `body-short-01`           | Dense, single-line body text                             |
-| `body-short-02`           | Dense body text, one step larger                         |
-| `body-long-01`            | Paragraph body text for multiple lines                   |
-| `body-long-02`            | Paragraph body text, one step larger                     |
-| `code-01`                 | Inline code set in IBM Plex Mono                         |
-| `code-02`                 | Code text, one step larger                               |
-| `heading-01`              | Bold heading for dense UI                                |
-| `heading-02`              | Bold heading, one step larger                            |
-| `productive-heading-01`   | Productive heading scale, step 1 (smallest)              |
-| `productive-heading-02`   | Productive heading scale, step 2                         |
-| `productive-heading-03`   | Productive heading scale, step 3                         |
-| `productive-heading-04`   | Productive heading scale, step 4                         |
-| `productive-heading-05`   | Productive heading scale, step 5                         |
-| `productive-heading-06`   | Productive heading scale, step 6 (light weight)          |
-| `productive-heading-07`   | Productive heading scale, step 7 (largest, light weight) |
-| `expressive-paragraph-01` | Fluid paragraph for editorial layouts                    |
-| `expressive-heading-01`   | Expressive heading, step 1                               |
-| `expressive-heading-02`   | Expressive heading, step 2                               |
-| `expressive-heading-03`   | Expressive heading, fluid above step 2                   |
-| `expressive-heading-04`   | Expressive heading, fluid                                |
-| `expressive-heading-05`   | Expressive heading, fluid                                |
-| `expressive-heading-06`   | Expressive heading, fluid (largest)                      |
-| `quotation-01`            | Fluid quotation set in IBM Plex Serif                    |
-| `quotation-02`            | Quotation, one step larger                               |
-| `display-01`              | Largest fluid display text                               |
-| `display-02`              | Display text, fluid                                      |
-| `display-03`              | Display text, fluid                                      |
-| `display-04`              | Display text, fluid (largest)                            |
+| Token                | Description                                              |
+| -------------------- | -------------------------------------------------------- |
+| `label-01`           | Form field and UI labels                                 |
+| `label-02`           | Label text, one step larger                              |
+| `helper-text-01`     | Helper text beneath form inputs                          |
+| `helper-text-02`     | Helper text, one step larger                             |
+| `legal-01`           | Legal and fine-print text                                |
+| `legal-02`           | Legal text, one step larger                              |
+| `body-compact-01`    | Dense, single-line body text                             |
+| `body-compact-02`    | Dense body text, one step larger                         |
+| `body-01`            | Paragraph body text for multiple lines                   |
+| `body-02`            | Paragraph body text, one step larger                     |
+| `code-01`            | Inline code set in IBM Plex Mono                         |
+| `code-02`            | Code text, one step larger                               |
+| `heading-compact-01` | Dense heading, step 1 (smallest)                         |
+| `heading-compact-02` | Dense heading, step 2                                    |
+| `heading-01`         | Heading scale, step 1                                    |
+| `heading-02`         | Heading scale, step 2                                    |
+| `heading-03`         | Heading scale, step 3                                    |
+| `heading-04`         | Heading scale, step 4                                    |
+| `heading-05`         | Heading scale, step 5                                    |
+| `heading-06`         | Heading scale, step 6 (light weight)                     |
+| `heading-07`         | Heading scale, step 7 (largest, light weight)            |
+| `fluid-heading-03`   | Fluid heading, step 3                                    |
+| `fluid-heading-04`   | Fluid heading, step 4                                    |
+| `fluid-heading-05`   | Fluid heading, step 5                                    |
+| `fluid-heading-06`   | Fluid heading, step 6 (largest)                          |
+| `fluid-paragraph-01` | Fluid paragraph for editorial layouts                    |
+| `fluid-quotation-01` | Fluid quotation set in IBM Plex Serif                    |
+| `fluid-quotation-02` | Quotation, one step larger                               |
+| `fluid-display-01`   | Fluid display text                                       |
+| `fluid-display-02`   | Display text, one step larger                            |
+| `fluid-display-03`   | Display text, one step larger                            |
+| `fluid-display-04`   | Display text (largest)                                   |
 
 ### Supporting text
 
-Captions, labels, and helper text support the smallest UI elements.
+Labels, helper text, and legal text support the smallest UI elements.
 
-<Text type="caption-01">Caption 01</Text>
-<Text type="caption-02">Caption 02</Text>
 <Text type="label-01">Label 01</Text>
 <Text type="label-02">Label 02</Text>
 <Text type="helper-text-01">Helper text 01</Text>
 <Text type="helper-text-02">Helper text 02</Text>
+<Text type="legal-01">Legal 01</Text>
+<Text type="legal-02">Legal 02</Text>
 
 ### Body text
 
-`body-short` styles suit dense, single-line text; `body-long` styles suit multi-line paragraphs.
+`body-compact` styles suit dense, single-line text; `body` styles suit multi-line paragraphs.
 
-<Text type="body-short-01">Body short 01</Text>
-<Text type="body-short-02">Body short 02</Text>
-<Text type="body-long-01">Body long 01</Text>
-<Text type="body-long-02">Body long 02</Text>
+<Text type="body-compact-01">Body compact 01</Text>
+<Text type="body-compact-02">Body compact 02</Text>
+<Text type="body-01">Body 01</Text>
+<Text type="body-02">Body 02</Text>
 
 ### Code
 
@@ -135,57 +133,50 @@ Set in IBM Plex Mono.
 
 ### Headings
 
-Bold, fixed-size headings for dense UI.
+Fixed sizes for application UI. `heading-compact` styles use tighter line heights for dense layouts.
 
+<Text tag="h6" type="heading-compact-01">Heading compact 01</Text>
+<Text tag="h5" type="heading-compact-02">Heading compact 02</Text>
 <Text tag="h6" type="heading-01">Heading 01</Text>
 <Text tag="h5" type="heading-02">Heading 02</Text>
+<Text tag="h4" type="heading-03">Heading 03</Text>
+<Text tag="h3" type="heading-04">Heading 04</Text>
+<Text tag="h2" type="heading-05">Heading 05</Text>
+<Text tag="h2" type="heading-06">Heading 06</Text>
+<Text tag="h1" type="heading-07">Heading 07</Text>
 
-### Productive headings
+### Fluid type
 
-A fixed heading scale for application UI, from smallest to largest.
+Sizes that scale with the viewport, for editorial layouts.
 
-<Text tag="h6" type="productive-heading-01">Productive heading 01</Text>
-<Text tag="h5" type="productive-heading-02">Productive heading 02</Text>
-<Text tag="h4" type="productive-heading-03">Productive heading 03</Text>
-<Text tag="h3" type="productive-heading-04">Productive heading 04</Text>
-<Text tag="h2" type="productive-heading-05">Productive heading 05</Text>
-<Text tag="h2" type="productive-heading-06">Productive heading 06</Text>
-<Text tag="h1" type="productive-heading-07">Productive heading 07</Text>
-
-### Expressive type
-
-Fluid sizes that scale with the viewport, for editorial layouts.
-
-<Text type="expressive-paragraph-01">Expressive paragraph 01</Text>
-<Text tag="h4" type="expressive-heading-01">Expressive heading 01</Text>
-<Text tag="h3" type="expressive-heading-02">Expressive heading 02</Text>
-<Text tag="h3" type="expressive-heading-03">Expressive heading 03</Text>
-<Text tag="h2" type="expressive-heading-04">Expressive heading 04</Text>
-<Text tag="h2" type="expressive-heading-05">Expressive heading 05</Text>
-<Text tag="h1" type="expressive-heading-06">Expressive heading 06</Text>
+<Text type="fluid-paragraph-01">Fluid paragraph 01</Text>
+<Text tag="h3" type="fluid-heading-03">Fluid heading 03</Text>
+<Text tag="h2" type="fluid-heading-04">Fluid heading 04</Text>
+<Text tag="h2" type="fluid-heading-05">Fluid heading 05</Text>
+<Text tag="h1" type="fluid-heading-06">Fluid heading 06</Text>
 
 ### Quotation
 
 Set in IBM Plex Serif.
 
-<Text tag="blockquote" type="quotation-01">Quotation 01</Text>
-<Text tag="blockquote" type="quotation-02">Quotation 02</Text>
+<Text tag="blockquote" type="fluid-quotation-01">Quotation 01</Text>
+<Text tag="blockquote" type="fluid-quotation-02">Quotation 02</Text>
 
 ### Display
 
 The largest fluid sizes, for hero moments.
 
-<Text tag="h1" type="display-01">Display 01</Text>
-<Text tag="h1" type="display-02">Display 02</Text>
-<Text tag="h1" type="display-03">Display 03</Text>
-<Text tag="h1" type="display-04">Display 04</Text>
+<Text tag="h1" type="fluid-display-01">Display 01</Text>
+<Text tag="h1" type="fluid-display-02">Display 02</Text>
+<Text tag="h1" type="fluid-display-03">Display 03</Text>
+<Text tag="h1" type="fluid-display-04">Display 04</Text>
 
 ## Custom element
 
 Set `tag` to render a different element. Type and color apply to whichever tag you choose.
 
-<Text tag="em" type="body-short-01">Inline emphasis</Text>
-<Text tag="blockquote" type="quotation-01">A quotation rendered as a blockquote.</Text>
+<Text tag="em" type="body-compact-01">Inline emphasis</Text>
+<Text tag="blockquote" type="fluid-quotation-01">A quotation rendered as a blockquote.</Text>
 
 ## Modifiers
 
@@ -194,14 +185,14 @@ Set modifier props alongside a type style.
 ### Weight, style, and family
 
 <Stack gap={5}>
-  <Text type="body-long-01" weight="light">Light weight (300)</Text>
-  <Text type="body-long-01" weight="regular">Regular weight (400)</Text>
-  <Text type="body-long-01" weight="semibold">Semibold weight (600)</Text>
-  <Text type="body-long-01" italic>Italic body text</Text>
-  <Text type="body-long-01" family="mono">IBM Plex Mono</Text>
-  <Text type="body-long-01" family="serif">IBM Plex Serif</Text>
-  <Text type="body-long-01" family="sans-condensed">IBM Plex Sans Condensed</Text>
-  <Text type="body-long-01" family="sans-hebrew">IBM Plex Sans Hebrew</Text>
+  <Text type="body-01" weight="light">Light weight (300)</Text>
+  <Text type="body-01" weight="regular">Regular weight (400)</Text>
+  <Text type="body-01" weight="semibold">Semibold weight (600)</Text>
+  <Text type="body-01" italic>Italic body text</Text>
+  <Text type="body-01" family="mono">IBM Plex Mono</Text>
+  <Text type="body-01" family="serif">IBM Plex Serif</Text>
+  <Text type="body-01" family="sans-condensed">IBM Plex Sans Condensed</Text>
+  <Text type="body-01" family="sans-hebrew">IBM Plex Sans Hebrew</Text>
 </Stack>
 
 ### Wrapping
@@ -209,16 +200,16 @@ Set modifier props alongside a type style.
 Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one line.
 
 <Box maxWidth="12rem" border="subtle" padding={3}>
-  <Text type="body-short-01" wrap="break-word">supercalifragilisticexpialidocious@example.com</Text>
+  <Text type="body-compact-01" wrap="break-word">supercalifragilisticexpialidocious@example.com</Text>
 </Box>
 
 <Box maxWidth="12rem" border="subtle" padding={3}>
-  <Text type="body-short-01" wrap="nowrap">This line will not wrap to the next row.</Text>
+  <Text type="body-compact-01" wrap="nowrap">This line will not wrap to the next row.</Text>
 </Box>
 
 Set `balance` to even out line lengths across a wrapped heading.
 
-<Text tag="h2" type="productive-heading-04" balance maxWidth="20rem">Balanced heading across multiple lines</Text>
+<Text tag="h2" type="heading-04" balance maxWidth="20rem">Balanced heading across multiple lines</Text>
 
 ### Pretty formatting
 
@@ -228,7 +219,7 @@ Set `pretty` to avoid a single orphaned word on the last line of a wrapped parag
   <Stack gap={2}>
     <Text type="label-01" color="secondary">Without pretty</Text>
     <Box maxWidth="13rem" border="subtle" padding={3}>
-      <Text type="body-long-01">
+      <Text type="body-01">
         Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
       </Text>
     </Box>
@@ -236,7 +227,7 @@ Set `pretty` to avoid a single orphaned word on the last line of a wrapped parag
   <Stack gap={2}>
     <Text type="label-01" color="secondary">With pretty</Text>
     <Box maxWidth="13rem" border="subtle" padding={3}>
-      <Text type="body-long-01" pretty>
+      <Text type="body-01" pretty>
         Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
       </Text>
     </Box>
@@ -248,13 +239,13 @@ Set `pretty` to avoid a single orphaned word on the last line of a wrapped parag
 Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept units such as ch, rem, %, or px. Text fills its container by default. Width caps are opt-in — neither maxWidth nor fullWidth applies unless you set one.
 
 <Stack gap={5}>
-  <Text type="body-long-01" maxWidth="38ch">
+  <Text type="body-01" maxWidth="38ch">
     Character measure (`38ch`) scales with the font size and is useful for readable line length.
   </Text>
-  <Text type="body-long-01" maxWidth="20rem">
+  <Text type="body-01" maxWidth="20rem">
     Rem-based width (`20rem`) tracks the root font size.
   </Text>
-  <Text type="body-long-01" maxWidth={480}>
+  <Text type="body-01" maxWidth={480}>
     Pixel width (`480`) when you need a fixed cap.
   </Text>
 </Stack>
@@ -262,13 +253,13 @@ Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept 
 Set `fullWidth` when the row should span its container (`width: 100%`). A block element already spans its parent; use it in flex or grid layouts where width must be explicit. Pair with maxWidth when the row is full width but the copy should stay capped. Use [Box](/components/Box) for the bordered container:
 
 <Box border="subtle" padding={5} fullWidth>
-  <Text type="body-long-01" fullWidth maxWidth="38ch">
+  <Text type="body-01" fullWidth maxWidth="38ch">
     This paragraph fills the container row but stops at 38ch.
   </Text>
 </Box>
 
 <Box border="subtle" padding={5} fullWidth>
-  <Text type="body-long-01" fullWidth>
+  <Text type="body-01" fullWidth>
     Without `maxWidth`, `fullWidth` stretches across the entire container.
   </Text>
 </Box>
@@ -281,13 +272,13 @@ Set `lines` to truncate overflow while keeping the Carbon type style. See also [
 
 Set `lines` to `1` to truncate a single line with an ellipsis. Pair with `maxWidth` (or a constrained container) so there is a boundary to truncate against.
 
-<Text type="body-short-01" maxWidth="16rem" lines={1}>
+<Text type="body-compact-01" maxWidth="16rem" lines={1}>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System.
 </Text>
 
 Set `clamp` to `"front"` to truncate from the start instead of the end. `clamp` only takes effect when `lines` is `1`; multiline mode always clamps at the end.
 
-<Text type="body-short-01" maxWidth="16rem" lines={1} clamp="front">
+<Text type="body-compact-01" maxWidth="16rem" lines={1} clamp="front">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System.
 </Text>
 
@@ -295,7 +286,7 @@ Set `clamp` to `"front"` to truncate from the start instead of the end. `clamp` 
 
 Values of `lines` above `1` use multiline mode (end clamp only).
 
-<Text type="body-long-01" maxWidth="20rem" lines={3}>
+<Text type="body-01" maxWidth="20rem" lines={3}>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
 </Text>
 
@@ -303,7 +294,7 @@ Alternatively, wrap inline Text with the Truncate component:
 
 <Box maxWidth="20rem">
   <Truncate lines={3}>
-    <Text tag="span" type="body-long-02">
+    <Text tag="span" type="body-02">
       Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
     </Text>
   </Truncate>
@@ -314,22 +305,22 @@ Alternatively, wrap inline Text with the Truncate component:
 Combine type, color, and element choice as you would on an IBM product page: expressive type for editorial moments, productive type for application UI.
 
 <Stack gap={8}>
-  <Text type="caption-02" color="secondary">IBM Cloud · Observability</Text>
-  <Text tag="h1" type="display-03" color="primary" balance>See what your systems are telling you</Text>
-  <Text type="expressive-paragraph-01" color="primary" maxWidth="44ch">Before an incident reaches your customers, traces and logs already carry the signal. IBM Cloud Observability brings metrics, logs, and traces into one workspace so your team can investigate faster and ship with confidence.</Text>
+  <Text type="label-02" color="secondary">IBM Cloud · Observability</Text>
+  <Text tag="h1" type="fluid-display-03" color="primary" balance>See what your systems are telling you</Text>
+  <Text type="fluid-paragraph-01" color="primary" maxWidth="44ch">Before an incident reaches your customers, traces and logs already carry the signal. IBM Cloud Observability brings metrics, logs, and traces into one workspace so your team can investigate faster and ship with confidence.</Text>
   <Stack gap={5}>
-    <Text tag="h2" type="productive-heading-05" color="primary">Unified telemetry across hybrid cloud</Text>
-    <Text type="body-long-02" color="primary" maxWidth="52ch">Connect Kubernetes clusters on Red Hat OpenShift, virtual servers, and managed services without reconfiguring your instrumentation. Retention policies and access controls follow the governance model your organization already uses in IBM Cloud.</Text>
+    <Text tag="h2" type="heading-05" color="primary">Unified telemetry across hybrid cloud</Text>
+    <Text type="body-02" color="primary" maxWidth="52ch">Connect Kubernetes clusters on Red Hat OpenShift, virtual servers, and managed services without reconfiguring your instrumentation. Retention policies and access controls follow the governance model your organization already uses in IBM Cloud.</Text>
   </Stack>
-  <Text tag="blockquote" type="quotation-01" color="primary" maxWidth="24ch">Good typography earns trust by staying out of the way while you make decisions that matter.</Text>
+  <Text tag="blockquote" type="fluid-quotation-01" color="primary" maxWidth="24ch">Good typography earns trust by staying out of the way while you make decisions that matter.</Text>
   <Stack gap={2}>
     <Text tag="h4" type="heading-02" color="primary">Active incidents</Text>
-    <Text type="body-short-01" color="secondary">3 open · Last updated 2 minutes ago</Text>
-    <Text type="caption-01" color="placeholder">Metrics retained for 30 days on the Standard plan.</Text>
+    <Text type="body-compact-01" color="secondary">3 open · Last updated 2 minutes ago</Text>
+    <Text type="label-01" color="placeholder">Metrics retained for 30 days on the Standard plan.</Text>
   </Stack>
   <Box display="flex" direction="column" gap={6} fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
-    <Text tag="h3" type="productive-heading-03" color="primary">Create an ingestion endpoint</Text>
-    <Text type="body-long-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
+    <Text tag="h3" type="heading-03" color="primary">Create an ingestion endpoint</Text>
+    <Text type="body-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
     <Stack gap={1}>
       <Text type="label-01" color="primary">Service name</Text>
       <Text type="helper-text-01" color="helper">Use lowercase letters, numbers, and hyphens.</Text>
@@ -367,5 +358,5 @@ Apply Carbon type utilities directly when you do not need the component. Classes
 | `bx--type-full-width` | Span the full container width (`width: 100%`) |
 
 <p class="bx--type-heading-02">Styled with bx--type-heading-02</p>
-<p class="bx--type-body-long-01 bx--type-semibold">Semibold body text</p>
-<p class="bx--type-body-long-01 bx--type-nowrap">Kept on one line with bx--type-nowrap</p>
+<p class="bx--type-body-01 bx--type-semibold">Semibold body text</p>
+<p class="bx--type-body-01 bx--type-nowrap">Kept on one line with bx--type-nowrap</p>

@@ -330,7 +330,7 @@ Use the `titleChildren` slot for rich title content. It renders inside the headi
 
 <PageHeader subtitle="Manage your database instances">
   <svelte:fragment slot="titleChildren">
-    <Text tag="span" type="productive-heading-03">Databases</Text>
+    <Text tag="span" type="heading-03">Databases</Text>
   </svelte:fragment>
 </PageHeader>
 

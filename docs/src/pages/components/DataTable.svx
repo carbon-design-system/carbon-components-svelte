@@ -286,7 +286,7 @@ Use slots to customize the elements and styles. Destructure the original classes
   ]}"
 >
     <h1 slot="titleChildren" let:props {...props}>Load balancers</h1>
-    <Text slot="descriptionChildren" let:props {...props} tag="span" type="body-long-02">Your organization's active load balancers.</Text>
+    <Text slot="descriptionChildren" let:props {...props} tag="span" type="body-02">Your organization's active load balancers.</Text>
 </DataTable>
 
 ## Width
