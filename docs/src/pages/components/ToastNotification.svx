@@ -33,11 +33,11 @@ Span the full container width with `fullWidth`.
 
 ## Title, subtitle, caption
 
-The subtitle and caption are optional, and all three can be customized with slots.
+All three are optional and can be customized with slots.
 
 ### Optional
 
-Subtitle and caption only render when provided.
+Title, subtitle, and caption each render only when provided.
 
 <ToastNotification subtitle="Your session has ended. Please sign in again to continue." />
 <ToastNotification title="Session expired" subtitle="Your session has ended. Please sign in again to continue." />
