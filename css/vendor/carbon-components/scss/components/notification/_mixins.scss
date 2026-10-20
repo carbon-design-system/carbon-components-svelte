@@ -36,38 +36,38 @@
 /// @group notification
 @mixin notification--icon-fills($type) {
   .#{$prefix}--#{$type}-notification__icon--error { // ccs: flatten
-    fill: $inverse-support-01;
+    fill: $support-error-inverse;
   }
 
   .#{$prefix}--#{$type}-notification__icon--success { // ccs: flatten
-    fill: $inverse-support-02;
+    fill: $support-success-inverse;
   }
 
   .#{$prefix}--#{$type}-notification__icon--info, // ccs: flatten
   .#{$prefix}--#{$type}-notification__icon--info-square { // ccs: flatten
-    fill: $inverse-support-04;
+    fill: $support-info-inverse;
   }
 
   .#{$prefix}--#{$type}-notification__icon--warning, // ccs: flatten
   .#{$prefix}--#{$type}-notification__icon--warning-alt { // ccs: flatten
-    fill: $inverse-support-03;
+    fill: $support-warning-inverse;
   }
 
   .#{$prefix}--#{$type}-notification__icon--low-contrast-error { // ccs: flatten
-    fill: $support-01;
+    fill: $support-error;
   }
 
   .#{$prefix}--#{$type}-notification__icon--low-contrast-success { // ccs: flatten
-    fill: $support-02;
+    fill: $support-success;
   }
 
   .#{$prefix}--#{$type}-notification__icon--low-contrast-info, // ccs: flatten
   .#{$prefix}--#{$type}-notification__icon--low-contrast-info-square { // ccs: flatten
-    fill: $support-04;
+    fill: $support-info;
   }
 
   .#{$prefix}--#{$type}-notification__icon--low-contrast-warning, // ccs: flatten
   .#{$prefix}--#{$type}-notification__icon--low-contrast-warning-alt { // ccs: flatten
-    fill: $support-03;
+    fill: $support-warning;
   }
 }

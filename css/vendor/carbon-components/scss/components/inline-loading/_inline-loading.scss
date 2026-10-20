@@ -27,7 +27,7 @@
     // ccs: match v11 `label-02` (14px), which has the same values as `body-short-01`.
     @include type-style('body-short-01');
 
-    color: $text-02;
+    color: $text-secondary;
   }
 
   // ccs: `size="sm"` fits a line of small text: label-sized text and no
@@ -49,7 +49,7 @@
   }
 
   .#{$prefix}--inline-loading__checkmark-container {
-    fill: $support-02;
+    fill: $support-success;
 
     &[hidden] {
       display: none;
@@ -59,7 +59,7 @@
   .#{$prefix}--inline-loading--error {
     width: to-rem(16px);
     height: to-rem(16px);
-    fill: $support-01;
+    fill: $support-error;
 
     &[hidden] {
       display: none;

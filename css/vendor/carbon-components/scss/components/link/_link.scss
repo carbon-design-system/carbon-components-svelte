@@ -23,20 +23,20 @@
     @include type-style('body-short-01');
 
     display: inline-flex;
-    color: $link-01;
+    color: $link-primary;
     outline: none;
     text-decoration: none;
     transition: color $duration--fast-01 motion(standard, productive);
 
     &:hover {
-      color: $hover-primary-text;
+      color: $link-primary-hover;
       text-decoration: underline;
     }
 
     &:active,
     &:active:visited,
     &:active:visited:hover {
-      color: $text-01;
+      color: $text-primary;
       text-decoration: underline;
     }
 
@@ -45,11 +45,11 @@
     }
 
     &:visited {
-      color: $link-01;
+      color: $link-primary;
     }
 
     &:visited:hover {
-      color: $hover-primary-text;
+      color: $link-primary-hover;
     }
   }
 
@@ -58,18 +58,18 @@
     @include reset;
     @include type-style('body-short-01', $omit: (font-weight));
 
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
     font-weight: 400;
     text-decoration: none;
   }
 
   .#{$prefix}--link--visited:visited { // ccs: flatten
-    color: $visited-link;
+    color: $link-visited;
   }
 
   .#{$prefix}--link--visited:visited:hover { // ccs: flatten
-    color: $hover-primary-text;
+    color: $link-primary-hover;
   }
 
   .#{$prefix}--link--disabled.#{$prefix}--link--inline {
@@ -170,11 +170,11 @@
 /// @group components
 @mixin link-visited {
   .#{$prefix}--link--visited {
-    color: $visited-link;
+    color: $link-visited;
   }
 
   .#{$prefix}--link--visited:hover {
-    color: $hover-primary-text;
+    color: $link-primary-hover;
   }
 }
 

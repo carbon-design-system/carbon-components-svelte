@@ -20,7 +20,7 @@
     // 1px over it.
     padding: $carbon--spacing-03 $carbon--spacing-05
       calc(#{$carbon--spacing-03} - 1px);
-    border-bottom: 1px solid $ui-04;
+    border-bottom: 1px solid $border-strong-01;
     background-color: $field-01;
     cursor: text;
   }
@@ -48,7 +48,7 @@
   }
 
   .#{$prefix}--tag-input--invalid {
-    outline: 2px solid $support-01;
+    outline: 2px solid $support-error;
     outline-offset: -2px;
   }
 
@@ -79,7 +79,7 @@
   }
 
   .#{$prefix}--tag-input--readonly {
-    border-bottom-color: $ui-03;
+    border-bottom-color: $border-subtle-01;
     background-color: transparent;
     cursor: default;
   }
@@ -101,7 +101,7 @@
     padding: 0;
     border: 0;
     background-color: transparent;
-    color: $text-01;
+    color: $text-primary;
     outline: none;
   }
 
@@ -115,17 +115,17 @@
   }
 
   .#{$prefix}--tag-input__input::placeholder {
-    color: $text-05;
+    color: $text-helper;
     opacity: 1;
   }
 
   .#{$prefix}--tag-input__input:disabled {
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
   .#{$prefix}--tag-input__input:disabled::placeholder {
-    color: $disabled-02;
+    color: $text-disabled;
   }
 
   .#{$prefix}--tag-input__tags--below {

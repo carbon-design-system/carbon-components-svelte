@@ -43,7 +43,7 @@
   }
 
   .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input__field-wrapper .#{$prefix}--text-input {
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -122,7 +122,7 @@
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid]:not(:focus-within) {
@@ -156,9 +156,9 @@
 
   .#{$prefix}--text-input--fluid__skeleton {
     position: relative;
-    background: $skeleton-01;
+    background: $skeleton-background;
     block-size: to-rem(64px);
-    border-block-end: 1px solid $skeleton-02;
+    border-block-end: 1px solid $skeleton-element;
   }
 
   .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--skeleton {

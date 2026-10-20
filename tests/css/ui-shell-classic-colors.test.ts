@@ -20,18 +20,24 @@ describe("UI shell header colors", () => {
   // re-declares them.
   it("gives classic header tooltips the page's inverse colors", async () => {
     const rules = parseRules(await compileEntry("all.scss"));
-    const root = rules.find((r) => r.decls.has("--ccs-page-inverse-01"));
+    const root = rules.find((r) => r.decls.has("--ccs-page-text-inverse"));
     expect(root?.selector).toBe("html");
     const tooltip = rules.find(
       (r) =>
         r.selector.includes(".bx--header--ui-shell-classic") &&
         r.selector.includes(".bx--tooltip__trigger"),
     );
-    expect(tooltip?.decls.get("--cds-inverse-01")).toBe(
-      "var(--ccs-page-inverse-01)",
+    expect(tooltip?.decls.get("--cds-text-inverse")).toBe(
+      "var(--ccs-page-text-inverse)",
     );
-    expect(tooltip?.decls.get("--cds-inverse-02")).toBe(
-      "var(--ccs-page-inverse-02)",
+    expect(tooltip?.decls.get("--cds-background-inverse")).toBe(
+      "var(--ccs-page-background-inverse)",
     );
+    // The override only works if the tooltip reads the tokens it re-declares.
+    const reads = rules
+      .filter((r) => r.selector.includes(".bx--tooltip__trigger"))
+      .flatMap((r) => [...r.decls.values()]);
+    expect(reads).toContain("var(--cds-background-inverse)");
+    expect(reads).toContain("var(--cds-text-inverse)");
   }, 30_000);
 });

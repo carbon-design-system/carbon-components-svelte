@@ -80,7 +80,7 @@
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select--warning {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--select--fluid
@@ -139,9 +139,9 @@
 
   .#{$prefix}--select--fluid__skeleton {
     position: relative;
-    background: $skeleton-01;
+    background: $skeleton-background;
     block-size: to-rem(64px);
-    border-block-end: 1px solid $skeleton-02;
+    border-block-end: 1px solid $skeleton-element;
   }
 
   .#{$prefix}--select--fluid__skeleton .#{$prefix}--skeleton {

@@ -44,14 +44,14 @@
     padding-right: to-rem(128px);
     padding-left: $carbon--spacing-05;
     border: 0;
-    border-bottom: to-rem(1px) solid $ui-04;
+    border-bottom: to-rem(1px) solid $border-strong-01;
 
     // Firefox: Hide spinner (up and down buttons)
     -moz-appearance: textfield;
     appearance: textfield;
     background-color: $field-01;
     border-radius: 0;
-    color: $text-01;
+    color: $text-primary;
     font-family: carbon--font-family('sans');
     transition: background-color $duration--fast-01 motion(standard, productive);
 
@@ -121,7 +121,7 @@
   .#{$prefix}--number input[type='number']:disabled,
   .#{$prefix}--number input[type='text']:disabled {
     border-bottom-color: transparent;
-    background-color: $disabled-01;
+    background-color: $field-01;
     color: $disabled;
     cursor: not-allowed;
   }
@@ -156,8 +156,8 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-    border-bottom: to-rem(1px) solid $ui-04;
-    color: $icon-01;
+    border-bottom: to-rem(1px) solid $border-strong-01;
+    color: $icon-primary;
 
     &::before,
     &::after {
@@ -186,19 +186,19 @@
     &:focus {
       @include focus-outline;
 
-      color: $icon-01;
+      color: $icon-primary;
       outline-offset: -2px;
       outline-width: 2px;
     }
 
     &:hover {
-      background-color: $hover-ui;
-      color: $icon-01;
+      background-color: $layer-hover-01;
+      color: $icon-primary;
       cursor: pointer;
 
       &::before,
       &::after {
-        background-color: $hover-ui;
+        background-color: $layer-hover-01;
       }
     }
 
@@ -285,7 +285,7 @@
     input[type='text'][data-invalid]
     ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn.up-icon::after {
-    background-color: $support-01;
+    background-color: $support-error;
   }
 
   .#{$prefix}--number
@@ -312,7 +312,7 @@
     z-index: z('overlay');
     width: to-rem(1px);
     height: to-rem(16px);
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
 
     &:first-of-type {
       order: 0;
@@ -328,7 +328,7 @@
   .#{$prefix}--number__invalid
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
-    background-color: $ui-03;
+    background-color: $layer-accent-01;
   }
 
   .#{$prefix}--number--light .#{$prefix}--number__rule-divider,
@@ -336,7 +336,7 @@
     .#{$prefix}--number__invalid
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
-    background-color: $decorative-01;
+    background-color: $border-subtle-02;
   }
 
   .#{$prefix}--number
@@ -358,7 +358,7 @@
     input[type='text']:disabled
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider {
-    background-color: $disabled-02;
+    background-color: $button-disabled;
   }
 
   .#{$prefix}--number__control-btn:focus ~ .#{$prefix}--number__rule-divider {
@@ -368,7 +368,7 @@
   .#{$prefix}--number__invalid {
     position: absolute;
     right: to-rem(96px);
-    fill: $support-01;
+    fill: $support-error;
   }
 
   .#{$prefix}--number--xl .#{$prefix}--number__invalid {
@@ -420,7 +420,7 @@
   }
 
   .#{$prefix}--number__invalid--warning {
-    fill: $support-03;
+    fill: $support-warning;
   }
 
   .#{$prefix}--number__invalid--warning path:first-of-type {
@@ -451,7 +451,7 @@
     .#{$prefix}--number__control-btn:not(:focus):hover::before,
   .#{$prefix}--number--light
     .#{$prefix}--number__control-btn:not(:focus):hover::after {
-    background-color: $hover-light-ui;
+    background-color: $layer-hover-02;
   }
 
   .#{$prefix}--number--xl input[type='number'],

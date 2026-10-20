@@ -57,7 +57,7 @@
     padding-block-start: to-rem(32px);
     padding-inline: $carbon--spacing-05;
     padding-block-end: to-rem(13px);
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   // One row border (or full-width divider when invalid/warn), not per-segment underlines.
@@ -122,7 +122,7 @@
     border: none;
     margin: 0 $carbon--spacing-05;
     block-size: to-rem(1px);
-    border-block-end: 1px solid $ui-03;
+    border-block-end: 1px solid $border-subtle-01;
     transition: border-color $duration--fast-01 motion(standard, productive);
   }
 
@@ -148,7 +148,7 @@
 
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fields--warning {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--pin-code-input--fluid

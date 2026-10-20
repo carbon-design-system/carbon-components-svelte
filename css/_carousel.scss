@@ -31,7 +31,7 @@
 
     align-self: center;
     margin-inline-end: $carbon--spacing-03;
-    color: $text-02;
+    color: $text-secondary;
     font-variant-numeric: tabular-nums;
   }
 
@@ -45,7 +45,7 @@
     border: 1px solid $border-subtle;
     margin: 0;
     background: transparent;
-    color: $icon-01;
+    color: $icon-primary;
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
@@ -64,7 +64,7 @@
 
     @media (any-hover: hover) {
       &:hover:not(:disabled) {
-        background-color: $hover-ui;
+        background-color: $layer-hover-01;
       }
     }
   }

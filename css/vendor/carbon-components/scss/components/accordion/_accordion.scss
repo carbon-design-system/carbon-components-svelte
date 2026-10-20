@@ -38,13 +38,13 @@
 
   .#{$prefix}--accordion__item {
     overflow: visible;
-    border-top: 1px solid $ui-03;
+    border-top: 1px solid $border-subtle-01;
     // ccs: only border colors differ (disabled, flush); avoid `all` so the
     // browser doesn't interpolate the rest of the animatable property set.
     transition: border-color $duration--fast-02 motion(standard, productive);
 
     &:last-child {
-      border-bottom: 1px solid $ui-03;
+      border-bottom: 1px solid $border-subtle-01;
     }
   }
 
@@ -59,7 +59,7 @@
     justify-content: $accordion-justify-content;
     padding: to-rem(10px) 0;
     margin: 0;
-    color: $text-01;
+    color: $text-primary;
     transition: background-color motion(standard, productive) $duration--fast-02;
 
     &:hover::before,
@@ -73,7 +73,7 @@
     }
 
     &:hover::before {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     &:focus {
@@ -95,12 +95,12 @@
   }
 
   .#{$prefix}--accordion__heading[disabled] {
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
   .#{$prefix}--accordion__heading[disabled] .#{$prefix}--accordion__arrow {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 
   .#{$prefix}--accordion__heading[disabled]:hover::before {
@@ -109,12 +109,12 @@
 
   .#{$prefix}--accordion__item--disabled,
   .#{$prefix}--accordion__item--disabled + .#{$prefix}--accordion__item {
-    border-top: 1px solid $disabled-01;
+    border-top: 1px solid $field-01;
   }
 
   // After `.bx--accordion__item:last-child`; wins by order.
   .#{$prefix}--accordion__item--disabled:last-of-type { // ccs: flatten
-    border-bottom: 1px solid $disabled-01;
+    border-bottom: 1px solid $field-01;
   }
 
   .#{$prefix}--accordion__arrow {
@@ -126,7 +126,7 @@
     // <16px and cause the icon to render in the incorrect artboard size
     flex: 0 0 1rem;
     margin: $accordion-arrow-margin;
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
     transform: rotate(-270deg) #{'/*rtl:ignore*/'};
     // ccs: only transform (active) and fill (disabled) differ; avoid `all`
     // so the browser doesn't interpolate the rest of the animatable
@@ -228,7 +228,7 @@
     }
 
     .#{$prefix}--accordion__arrow {
-      fill: $ui-05;
+      fill: $layer-selected-inverse;
       transform: rotate(-90deg) #{'/*rtl:ignore*/'};
     }
   }
@@ -240,7 +240,7 @@
 
   .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__arrow {
     cursor: default;
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
     pointer-events: none;
 
     &:hover,
@@ -352,12 +352,12 @@
 
     &::before {
       inset-block-start: -1px;
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
     }
 
     &:last-child::after {
       inset-block-end: -1px;
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
     }
   }
 
@@ -378,7 +378,7 @@
       + .#{$prefix}--accordion__item::before,
     .#{$prefix}--accordion--flush
       .#{$prefix}--accordion__item:last-child:hover::after {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
   }
 

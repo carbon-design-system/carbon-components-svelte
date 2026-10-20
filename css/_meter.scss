@@ -33,7 +33,7 @@
     position: relative;
     width: 100%;
     height: to-rem(8px);
-    background: $ui-03;
+    background: $layer-accent-01;
     overflow: hidden;
   }
 
@@ -44,21 +44,21 @@
   .#{$prefix}--meter__bar {
     height: 100%;
     width: 100%;
-    background: $interactive-04;
+    background: $interactive;
     transform-origin: 0 50%;
     transition: transform $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--meter--success .#{$prefix}--meter__bar {
-    background: $support-02;
+    background: $support-success;
   }
 
   .#{$prefix}--meter--warning .#{$prefix}--meter__bar {
-    background: $support-03;
+    background: $support-warning;
   }
 
   .#{$prefix}--meter--error .#{$prefix}--meter__bar {
-    background: $support-01;
+    background: $support-error;
   }
 
   .#{$prefix}--meter__threshold {
@@ -67,15 +67,15 @@
     height: 100%;
     width: to-rem(2px);
     transform: translateX(-50%);
-    background: $ui-04;
+    background: $border-strong-01;
   }
 
   .#{$prefix}--meter__threshold--warning {
-    background: $support-03;
+    background: $support-warning;
   }
 
   .#{$prefix}--meter__threshold--error {
-    background: $support-01;
+    background: $support-error;
   }
 
   .#{$prefix}--meter__helper-text {

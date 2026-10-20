@@ -71,14 +71,14 @@
     background-color: $field-02;
 
     &:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     &:disabled,
     &:hover:disabled {
       border-bottom: 1px solid transparent;
       background-color: transparent;
-      color: $disabled-02;
+      color: $text-disabled;
       cursor: not-allowed;
     }
   }
@@ -133,7 +133,7 @@
 @mixin time-picker-readonly {
   .#{$prefix}--time-picker--readonly .#{$prefix}--time-picker__input-field[readonly] {
     background: transparent;
-    border-bottom-color: $disabled-02;
+    border-bottom-color: $icon-disabled;
     cursor: text;
   }
 
@@ -144,7 +144,7 @@
   // or directly on a `TimePickerSelect` (for standalone use).
   .#{$prefix}--time-picker--readonly .#{$prefix}--select-input,
   .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select-input {
-    border-bottom-color: $disabled-02;
+    border-bottom-color: $icon-disabled;
     cursor: default;
 
     &:hover {
@@ -154,7 +154,7 @@
 
   .#{$prefix}--time-picker--readonly .#{$prefix}--select__arrow,
   .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select__arrow {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 }
 

@@ -26,7 +26,7 @@
     display: block;
     width: 0;
     height: $carbon--spacing-02;
-    background-color: $interactive-01;
+    background-color: $background-brand;
     content: '';
     opacity: 0;
     transition: width $duration--fast-02 motion(standard, productive);
@@ -47,9 +47,9 @@
 /// Pagination nav base styles
 /// @access private
 /// @group pagination-nav
-/// @param {Color} $text-color [$text-02]
-/// @param {Color} $text-color-active [$text-02]
-/// @param {Color} $background-color-hover [$hover-ui]
+/// @param {Color} $text-color [$text-secondary]
+/// @param {Color} $text-color-active [$text-secondary]
+/// @param {Color} $background-color-hover [$layer-hover-01]
 /// @param {Color} $background-color-active [initial]
 /// @param {Number} $font-weight [400]
 /// @param {Number} $item-padding [0]
@@ -59,9 +59,9 @@
 /// @param {Number} $select-icon-top-position [$carbon--spacing-05]
 /// @param {Number} $select-icon-left-position [$carbon--spacing-05]
 @mixin pagination-nav(
-  $text-color: $text-02,
-  $text-color-active: $text-02,
-  $background-color-hover: $hover-ui,
+  $text-color: $text-secondary,
+  $text-color-active: $text-secondary,
+  $background-color-hover: $layer-hover-01,
   $background-color-active: initial,
   $font-weight: 400,
   $item-padding: 0,

@@ -42,9 +42,9 @@
     to-rem(8px) to-rem(16px),
     to-rem(3px) to-rem(16px)
   );
-  background-color: $inverse-02;
+  background-color: $background-inverse;
   border-radius: to-rem(2px);
-  color: $inverse-01;
+  color: $text-inverse;
   text-align: left;
   @if not index($omit, transform) {
     transform: translateX(-50%);
@@ -338,25 +338,25 @@
     @if ($position == 'top') {
       top: -$caret-spacing;
       border-width: to-rem(5px) to-rem(4px) 0 to-rem(4px);
-      border-color: $inverse-02 transparent transparent transparent;
+      border-color: $background-inverse transparent transparent transparent;
       transform: translate(-50%, -100%);
     }
     @if ($position == 'right') {
       right: -$caret-spacing;
       border-width: to-rem(4px) to-rem(5px) to-rem(4px) 0;
-      border-color: transparent $inverse-02 transparent transparent;
+      border-color: transparent $background-inverse transparent transparent;
       transform: translate(100%, -50%);
     }
     @if ($position == 'bottom') {
       bottom: -$caret-spacing;
       border-width: 0 to-rem(4px) to-rem(5px) to-rem(4px);
-      border-color: transparent transparent $inverse-02 transparent;
+      border-color: transparent transparent $background-inverse transparent;
       transform: translate(-50%, 100%);
     }
     @if ($position == 'left') {
       left: -$caret-spacing;
       border-width: to-rem(4px) 0 to-rem(4px) to-rem(5px);
-      border-color: transparent transparent transparent $inverse-02;
+      border-color: transparent transparent transparent $background-inverse;
       transform: translate(-100%, -50%);
     }
   }
@@ -498,19 +498,19 @@
 
   @if ($position == 'top') {
     --cds-tooltip-caret-bw: #{to-rem(5px)} #{to-rem(4px)} 0 #{to-rem(4px)};
-    --cds-tooltip-caret-bc: #{$inverse-02} transparent transparent transparent;
+    --cds-tooltip-caret-bc: #{$background-inverse} transparent transparent transparent;
     --cds-tooltip-caret-tf: translate(-50%, -100%);
   } @else if ($position == 'right') {
     --cds-tooltip-caret-bw: #{to-rem(4px)} #{to-rem(5px)} #{to-rem(4px)} 0;
-    --cds-tooltip-caret-bc: transparent #{$inverse-02} transparent transparent;
+    --cds-tooltip-caret-bc: transparent #{$background-inverse} transparent transparent;
     --cds-tooltip-caret-tf: translate(100%, -50%);
   } @else if ($position == 'bottom') {
     --cds-tooltip-caret-bw: 0 #{to-rem(4px)} #{to-rem(5px)} #{to-rem(4px)};
-    --cds-tooltip-caret-bc: transparent transparent #{$inverse-02} transparent;
+    --cds-tooltip-caret-bc: transparent transparent #{$background-inverse} transparent;
     --cds-tooltip-caret-tf: translate(-50%, 100%);
   } @else {
     --cds-tooltip-caret-bw: #{to-rem(4px)} 0 #{to-rem(4px)} #{to-rem(5px)};
-    --cds-tooltip-caret-bc: transparent transparent transparent #{$inverse-02};
+    --cds-tooltip-caret-bc: transparent transparent transparent #{$background-inverse};
     --cds-tooltip-caret-tf: translate(-100%, -50%);
   }
 }

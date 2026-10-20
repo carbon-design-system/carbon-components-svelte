@@ -10,9 +10,9 @@
 @function ccs-fill-tokens() {
   @return (
     background: $background,
-    layer-01: $ui-01,
-    layer-02: $ui-02,
-    layer-03: $ui-03,
+    layer-01: $layer-01,
+    layer-02: $layer-02,
+    layer-03: $border-subtle-01,
     layer-accent: $layer-accent,
     field: $field-01,
     inverse: $background-inverse,

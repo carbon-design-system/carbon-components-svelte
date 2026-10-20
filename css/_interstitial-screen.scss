@@ -22,7 +22,7 @@
     bottom: 0;
     left: 0;
     z-index: z("modal");
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 
   .#{$prefix}--interstitial-screen--full-screen
@@ -41,7 +41,7 @@
     @include type-style("body-short-01");
 
     margin-top: $carbon--spacing-03;
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .#{$prefix}--interstitial-screen__progress {

@@ -98,7 +98,7 @@
     }
 
     .#{$prefix}--data-table tr:hover .#{$prefix}--link--disabled {
-      color: $disabled-02;
+      color: $text-disabled;
     }
   }
 
@@ -379,7 +379,7 @@
       + .#{$prefix}--checkbox-label,
     // `tr.` kept: ties `.bx--data-table tr:hover .bx--link--disabled` above.
     tr.#{$prefix}--data-table--selected:hover .#{$prefix}--link--disabled { // ccs: element
-      color: $disabled-03;
+      color: $text-on-color-disabled;
     }
 
     // Disabled radio button, checkbox fix #10913
@@ -390,7 +390,7 @@
     .#{$prefix}--data-table--selected:hover
       .#{$prefix}--checkbox[disabled]
       + .#{$prefix}--checkbox-label:before { // ccs: flatten
-      border-color: $disabled-03;
+      border-color: $text-on-color-disabled;
     }
   }
 

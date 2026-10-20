@@ -30,13 +30,13 @@ $input-label-weight: 400 !default;
 /// @type Color
 /// @access public
 /// @group global-themes
-$disabled: $disabled-02 !default;
+$disabled: $text-disabled !default;
 
 /// @type Color
 /// @access public
 /// @group global-themes
 /// @deprecated
-$disabled-background-color: $disabled-01 !default;
+$disabled-background-color: $field-01 !default;
 
 /// @type Color
 /// @access public
@@ -46,24 +46,24 @@ $focus: $ibm-color__blue-60 !default;
 /// @type Color
 /// @access public
 /// @group global-themes
-$inverse-focus-ui: $ibm-color__white-0 !default;
+$focus-inverse: $ibm-color__white-0 !default;
 
 /// @type Color
 /// @access public
 /// @group link
 /// @deprecated
-$link-visited: $visited-link !default;
+$link-visited: $link-visited !default;
 
 /// @type Color
 /// @access public
-/// @deprecated Use theme token `$inverse-link` instead.
+/// @deprecated Use theme token `$link-inverse` instead.
 /// @group link
 $link-inverse-color: #6ea6ff !default;
 
 /// @type Color
 /// @access public
 /// @group tooltip
-$tooltip-background-color: $inverse-02 !default;
+$tooltip-background-color: $background-inverse !default;
 
 /// @type Number
 /// @access public
@@ -184,7 +184,7 @@ $snippet-background-color: $field-01 !default;
 /// @type Color
 /// @access public
 /// @group code-snippet
-$snippet-border-color: $ui-03 !default;
+$snippet-border-color: $border-subtle-01 !default;
 
 /// @type Number
 /// @access public
@@ -199,7 +199,7 @@ $content-switcher-option-border: 1px solid $brand-01 !default;
 /// @type Color
 /// @access public
 /// @group content-switcher
-$content-switcher-divider: $ui-03 !default;
+$content-switcher-divider: $border-subtle-01 !default;
 
 /// @type Value
 /// @access public
@@ -219,12 +219,12 @@ $data-table-row-height: 2rem !default;
 /// @type Color
 /// @access public
 /// @group data-table
-$data-table-zebra-color: $ui-02 !default;
+$data-table-zebra-color: $layer-02 !default;
 
 /// @type Color
 /// @access public
 /// @group data-table
-$data-table-column-hover: $hover-selected-ui !default;
+$data-table-column-hover: $layer-selected-hover-01 !default;
 
 /// @type Color
 /// @access public
@@ -241,7 +241,7 @@ $modal-border-top: $brand-01 4px solid !default;
 /// @access public
 /// @group modal
 /// @deprecated
-$modal-footer-background-color: $ui-03 !default;
+$modal-footer-background-color: $border-subtle-01 !default;
 
 /// @type Color
 /// @access public
@@ -289,12 +289,12 @@ $progress-indicator-line-offset: 0.625rem !default;
 /// @type Color
 /// @access public
 /// @group copy-button
-$copy-active: $active-ui !default;
+$copy-active: $layer-active-01 !default;
 
 /// @type Color
 /// @access public
 /// @group copy-button
-$copy-btn-feedback: $inverse-02 !default;
+$copy-btn-feedback: $background-inverse !default;
 
 /// @type Number
 /// @access public
@@ -314,27 +314,27 @@ $structured-list-text-transform: none !default;
 /// @type Value
 /// @access public
 /// @group tabs
-$tab-underline-color: 2px solid $ui-03 !default;
+$tab-underline-color: 2px solid $border-subtle-01 !default;
 
 /// @type Value
 /// @access public
 /// @group tabs
-$tab-underline-color-hover: 2px solid $ui-04 !default;
+$tab-underline-color-hover: 2px solid $border-strong-01 !default;
 
 /// @type Color
 /// @access public
 /// @group tabs
-$tab-text-disabled: $disabled-02 !default;
+$tab-text-disabled: $text-disabled !default;
 
 /// @type Value
 /// @access public
 /// @group tabs
-$tab-underline-disabled: 2px solid $disabled-01 !default;
+$tab-underline-disabled: 2px solid $field-01 !default;
 
 /// @type Color
 /// @access public
 /// @group skeleton
-$skeleton: $skeleton-01 !default;
+$skeleton: $skeleton-background !default;
 
 // Determine the "light" color for a given token.
 /// @param {String} $token The theme token.

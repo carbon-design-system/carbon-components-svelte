@@ -35,13 +35,13 @@
     stroke: currentColor;
   }
 
-  // Ghost icon-only buttons render their icon in $icon-01/$disabled-03 (see
+  // Ghost icon-only buttons render their icon in $icon-primary/$text-on-color-disabled (see
   // the .bx--btn--ghost.bx--btn--icon-only `color` rules in
   // components/button/_button.scss) — mirror that for the spinner stroke.
-  // The `.bx--btn--disabled` loading state does not get $disabled-03 `color`,
+  // The `.bx--btn--disabled` loading state does not get $text-on-color-disabled `color`,
   // so the stroke rule below is still needed for it.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
-    stroke: $icon-01;
+    stroke: $icon-primary;
   }
 
   // `loading` alone never sets the native `disabled` attribute (see
@@ -49,7 +49,7 @@
   // class the component still applies for the visual treatment.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] .#{$prefix}--btn__loading .#{$prefix}--loading__stroke,
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only.#{$prefix}--btn--disabled .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
-    stroke: $disabled-03;
+    stroke: $icon-on-color-disabled;
   }
 
   // Every kind's disabled styling (components/button/_mixins.scss and the
@@ -65,7 +65,7 @@
   .#{$prefix}--btn.#{$prefix}--btn--disabled:focus {
     border-color: $focus;
     box-shadow: inset 0 0 0 $button-outline-width $focus,
-      inset 0 0 0 $button-border-width $ui-background;
+      inset 0 0 0 $button-border-width $background;
   }
 }
 

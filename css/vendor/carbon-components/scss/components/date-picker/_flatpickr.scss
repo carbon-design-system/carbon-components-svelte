@@ -117,7 +117,7 @@
     padding: $carbon--spacing-02 $carbon--spacing-02 $carbon--spacing-03
       $carbon--spacing-02;
     overflow: hidden;
-    background-color: $ui-01;
+    background-color: $layer-01;
     border: none;
 
     &:focus {
@@ -135,7 +135,7 @@
     width: to-rem(288px);
     padding: $carbon--spacing-02 $carbon--spacing-02 $carbon--spacing-03
       $carbon--spacing-02;
-    background-color: $ui-01;
+    background-color: $layer-01;
   }
 
   .flatpickr-calendar.static {
@@ -175,7 +175,7 @@
     display: flex;
     align-items: center;
     height: to-rem(40px);
-    color: $text-01;
+    color: $text-primary;
     line-height: 1;
     text-align: center;
     background-color: transparent;
@@ -195,14 +195,14 @@
     transform: scale(1, 1) #{'/*rtl: scale(-1,1)*/'};
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive);
-    fill: $icon-01;
+    fill: $icon-primary;
     user-select: none;
   }
 
   .flatpickr-next-month.disabled svg,
   .flatpickr-prev-month.disabled svg {
     cursor: not-allowed;
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
   }
 
   .flatpickr-current-month {
@@ -230,7 +230,7 @@
     width: 100%;
     margin: 0;
     padding: $carbon--spacing-02;
-    color: $text-01;
+    color: $text-primary;
     font-weight: 600;
     font-size: inherit;
     font-family: inherit;
@@ -252,8 +252,8 @@
     }
 
     &[disabled] {
-      color: $disabled-02;
-      background-color: $ui-01;
+      color: $text-disabled;
+      background-color: $layer-01;
       pointer-events: none;
     }
   }
@@ -264,25 +264,25 @@
   @media (any-hover: hover) {
     .flatpickr-prev-month:hover,
     .flatpickr-next-month:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .flatpickr-next-month.disabled:hover svg,
     .flatpickr-prev-month.disabled:hover svg {
-      fill: $ui-05;
+      fill: $layer-selected-inverse;
     }
 
     .flatpickr-current-month .cur-month:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .numInputWrapper:hover {
-      background-color: $hover-ui;
+      background-color: $layer-hover-01;
     }
 
     .numInputWrapper .numInput[disabled]:hover {
-      color: $disabled-02;
-      background-color: $ui-01;
+      color: $text-disabled;
+      background-color: $layer-01;
       pointer-events: none;
     }
   }
@@ -291,7 +291,7 @@
     top: to-rem(4px);
 
     &::after {
-      border-bottom: to-rem(4px) solid $icon-01;
+      border-bottom: to-rem(4px) solid $icon-primary;
     }
   }
 
@@ -299,7 +299,7 @@
     top: to-rem(11px);
 
     &::after {
-      border-top: to-rem(4px) solid $icon-01;
+      border-top: to-rem(4px) solid $icon-primary;
     }
   }
 
@@ -331,8 +331,8 @@
   @media (any-hover: hover) {
     .numInputWrapper .arrowUp:hover::after,
     .numInputWrapper .arrowDown:hover::after {
-      border-top-color: $interactive-01;
-      border-bottom-color: $interactive-01;
+      border-top-color: $background-brand;
+      border-bottom-color: $background-brand;
     }
 
     .numInputWrapper:hover .arrowUp,
@@ -348,16 +348,16 @@
 
   .numInputWrapper .arrowUp:active::after,
   .numInputWrapper .arrowDown:active::after {
-    border-top-color: $interactive-04;
-    border-bottom-color: $interactive-04;
+    border-top-color: $interactive;
+    border-bottom-color: $interactive;
   }
 
   .numInput[disabled] ~ .arrowUp::after {
-    border-bottom-color: $disabled-02;
+    border-bottom-color: $icon-disabled;
   }
 
   .numInput[disabled] ~ .arrowDown::after {
-    border-top-color: $disabled-02;
+    border-top-color: $icon-disabled;
   }
 
   .flatpickr-weekdays {
@@ -375,7 +375,7 @@
     @include type-style('body-short-01');
 
     flex: 1;
-    color: $text-01;
+    color: $text-primary;
     cursor: default;
   }
 
@@ -417,27 +417,27 @@
     justify-content: center;
     width: to-rem(40px);
     height: to-rem(40px);
-    color: $text-01;
+    color: $text-primary;
     cursor: pointer;
     user-select: none;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     @media (any-hover: hover) {
       &:hover {
-        background: $hover-ui;
+        background: $layer-hover-01;
       }
     }
 
     &:focus-visible {
       @include focus-outline('outline');
 
-      outline-color: $interactive-01;
+      outline-color: $background-brand;
     }
   }
 
   .nextMonthDay,
   .prevMonthDay {
-    color: $text-05;
+    color: $text-helper;
   }
 
   // Week numbers (flatpickr `weekNumbers`): a 40px column beside the grid.
@@ -481,7 +481,7 @@
     justify-content: center;
     width: to-rem(40px);
     height: to-rem(40px);
-    color: $text-02;
+    color: $text-secondary;
   }
 
   .flatpickr-rContainer {
@@ -502,7 +502,7 @@
   }
 
   .flatpickr-weekwrapper .flatpickr-day {
-    color: $text-02;
+    color: $text-secondary;
     cursor: default;
 
     @media (any-hover: hover) {
@@ -514,7 +514,7 @@
 
   .flatpickr-day.today {
     position: relative;
-    color: $link-01;
+    color: $link-primary;
     font-weight: 600;
 
     &::after {
@@ -524,7 +524,7 @@
       display: block;
       width: to-rem(4px);
       height: to-rem(4px);
-      background-color: $link-01;
+      background-color: $link-primary;
       transform: translateX(-50%);
       content: '';
     }
@@ -539,16 +539,16 @@
   }
 
   .flatpickr-day.inRange {
-    color: $text-01;
+    color: $text-primary;
     background-color: $highlight;
   }
 
   .flatpickr-day.selected {
-    color: $text-04;
-    background-color: $interactive-01;
+    color: $text-on-color;
+    background-color: $background-brand;
 
     &:focus-visible {
-      outline: to-rem(1px) solid $ui-02;
+      outline: to-rem(1px) solid $layer-02;
       outline-offset: to-rem(-3px);
     }
   }
@@ -563,25 +563,25 @@
     @include focus-outline('outline');
 
     z-index: 3;
-    background: $ui-01;
+    background: $layer-01;
   }
 
   @media (any-hover: hover) {
     .flatpickr-day.endRange:hover {
       @include focus-outline('outline');
 
-      color: $text-01;
-      background: $ui-01;
+      color: $text-primary;
+      background: $layer-01;
     }
   }
 
   .flatpickr-day.endRange.inRange.selected {
-    color: $text-04;
-    background: $interactive-01;
+    color: $text-on-color;
+    background: $background-brand;
   }
 
   .flatpickr-day.flatpickr-disabled {
-    color: $disabled-02;
+    color: $text-disabled;
     cursor: not-allowed;
 
     @media (any-hover: hover) {

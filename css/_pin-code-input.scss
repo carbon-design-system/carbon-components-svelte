@@ -49,7 +49,7 @@
   // Read-only: same treatment as text input read-only.
   .#{$prefix}--pin-code-input--readonly .#{$prefix}--pin-code-input__field {
     background-color: transparent;
-    border-bottom-color: $text-05;
+    border-bottom-color: $text-helper;
   }
 
   .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xs {
@@ -73,11 +73,11 @@
   .#{$prefix}--pin-code-input__icon {
     flex-shrink: 0;
     margin-left: $carbon--spacing-03;
-    fill: $support-01;
+    fill: $support-error;
   }
 
   .#{$prefix}--pin-code-input__icon--warning {
-    fill: $support-03;
+    fill: $support-warning;
   }
 
   // Carbon does not theme the warning icon's inner triangle by default.

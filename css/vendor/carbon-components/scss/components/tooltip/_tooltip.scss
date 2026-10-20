@@ -24,7 +24,7 @@
 
     display: inline-flex;
     align-items: center;
-    color: $text-02;
+    color: $text-secondary;
 
     &:focus {
       @include focus-outline('border');
@@ -32,7 +32,7 @@
   }
 
   .#{$prefix}--tooltip__trigger svg {
-    fill: $icon-02;
+    fill: $icon-secondary;
   }
 
   .#{$prefix}--tooltip__trigger:not(.#{$prefix}--btn--icon-only) {
@@ -45,7 +45,7 @@
     &:focus {
       @include focus-outline('border');
 
-      fill: $hover-primary;
+      fill: $button-primary-hover;
     }
   }
 
@@ -69,14 +69,14 @@
     max-width: to-rem(288px);
     padding: $carbon--spacing-05;
     margin-top: $carbon--spacing-02;
-    background: $inverse-02;
+    background: $background-inverse;
     border-radius: to-rem(2px);
-    color: $inverse-01;
+    color: $text-inverse;
     word-wrap: break-word;
 
     // @todo this can be deprecated in v11 since focus should always be on the content container not the tooltip
     &:focus {
-      box-shadow: inset 0 0 0 1px $inverse-02, inset 0 0 0 2px $ui-background;
+      box-shadow: inset 0 0 0 1px $background-inverse, inset 0 0 0 2px $background;
       outline: 0;
     }
 
@@ -143,27 +143,27 @@
     }
 
     .#{$prefix}--btn:focus {
-      border-color: $inverse-focus-ui;
-      outline-color: $inverse-02;
+      border-color: $focus-inverse;
+      outline-color: $background-inverse;
     }
 
     .#{$prefix}--link {
-      color: $inverse-link;
+      color: $link-inverse;
       font-size: to-rem(14px);
 
       &:focus {
-        outline: 1px solid $inverse-focus-ui;
+        outline: 1px solid $focus-inverse;
         outline-offset: 2px;
       }
 
       &:active,
       &:active:visited,
       &:active:visited:hover {
-        color: $inverse-01;
+        color: $text-inverse;
       }
 
       &:visited {
-        color: $inverse-link;
+        color: $link-inverse;
       }
     }
 
@@ -182,7 +182,7 @@
       width: 0;
       height: 0;
       border-right: $caret-size solid transparent;
-      border-bottom: $caret-size solid $inverse-02;
+      border-bottom: $caret-size solid $background-inverse;
       border-left: $caret-size solid transparent;
       margin: 0 auto;
       content: '';
@@ -254,7 +254,7 @@
     // default buttons in Safari are adding a small margin, affecting tooltip
     // placement (formerly `.bx--tooltip--definition button.bx--tooltip--a11y`)
     margin: 0; // ccs: moved
-    border-bottom: to-rem(1px) dotted $text-02;
+    border-bottom: to-rem(1px) dotted $text-secondary;
     // ccs: from the pruned `tooltip--definition--legacy` block. The trigger
     // is a <button>, so without this it takes the UA `buttontext` color.
     color: $text-primary;
@@ -263,7 +263,7 @@
 
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:hover,
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:focus {
-    border-bottom-color: $interactive-04;
+    border-bottom-color: $interactive;
   }
 
   // ccs: definition tooltips hosted by a Tag. The dotted dictionary-term
@@ -342,14 +342,14 @@
     &:hover,
     &:focus {
       svg {
-        fill: $icon-02;
+        fill: $icon-secondary;
       }
     }
   }
 
   // carbon-components-svelte patch (button-icon-fill)
   // An icon-only Button trigger keeps its `currentColor` icon (the button sets
-  // `color`), not the tooltip icon's `$icon-02`. Each position class is
+  // `color`), not the tooltip icon's `$icon-secondary`. Each position class is
   // emitted only on a Button trigger, so these match one class plus `svg`,
   // tying `.bx--tooltip__trigger svg` and winning on source order while still
   // losing to a consumer's `.my-btn svg`.

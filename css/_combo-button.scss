@@ -19,7 +19,7 @@
 
   .#{$prefix}--combo-button
     .#{$prefix}--combo-button__trigger.#{$prefix}--btn--disabled {
-    box-shadow: to-rem(-1px) 0 0 0 $disabled-03;
+    box-shadow: to-rem(-1px) 0 0 0 $text-on-color-disabled;
   }
 
   .#{$prefix}--combo-button__trigger .#{$prefix}--btn__icon {

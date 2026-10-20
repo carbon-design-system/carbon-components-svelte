@@ -203,7 +203,7 @@
   }
 
   .#{$prefix}--table-expand__svg {
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
     transform: rotate(90deg);
     transition: transform $duration--moderate-01 motion(standard, productive);
   }

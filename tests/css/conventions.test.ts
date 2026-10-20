@@ -536,7 +536,10 @@ const LEGACY_CDS_PROPERTIES = new Set([
 // Carbon tokens re-pointed inside a scope, not new names: a classic
 // header's tooltips open over the page, so they take the page's inverse
 // colors (`_ui-shell-classic.scss`).
-const REPOINTED_CDS_TOKENS = new Set(["--cds-inverse-01", "--cds-inverse-02"]);
+const REPOINTED_CDS_TOKENS = new Set([
+  "--cds-text-inverse",
+  "--cds-background-inverse",
+]);
 
 const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
   // `z("…")` covers anything that floats over the page; one digit is local

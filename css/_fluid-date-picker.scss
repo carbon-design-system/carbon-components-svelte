@@ -111,7 +111,7 @@
     .#{$prefix}--date-picker__input:not(
       .#{$prefix}--date-picker__input--invalid
     ) {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__icon {
@@ -123,7 +123,7 @@
     .#{$prefix}--date-picker__input:not(
       .#{$prefix}--date-picker__input--invalid
     ) {
-    border-block-end: 1px solid $ui-04;
+    border-block-end: 1px solid $border-strong-01;
   }
 
   // Width/style stay unconditional across every state this rule already
@@ -149,7 +149,7 @@
     .#{$prefix}--date-picker-container:not(
       .#{$prefix}--date-picker--fluid--invalid
     ):not(.#{$prefix}--date-picker--fluid--readonly) {
-    border-block-end-color: $ui-04;
+    border-block-end-color: $border-strong-01;
   }
 
   .#{$prefix}--date-picker--fluid
@@ -199,7 +199,7 @@
     .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container:last-child
     .#{$prefix}--date-picker__input {
-    border-inline-start: 1px solid $ui-04;
+    border-inline-start: 1px solid $border-strong-01;
   }
 
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid,
@@ -286,7 +286,7 @@
     ):not(.#{$prefix}--date-picker--fluid--warn)
     .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly
     .#{$prefix}--date-picker__input {
-    border-block-end-color: $ui-03;
+    border-block-end-color: $border-subtle-01;
   }
 
   .#{$prefix}--date-picker--fluid:not(
@@ -295,13 +295,13 @@
     .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--readonly:last-child
     .#{$prefix}--date-picker__input {
-    border-inline-start-color: $ui-03;
+    border-inline-start-color: $border-subtle-01;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton {
-    background: $skeleton-01;
+    background: $skeleton-background;
     block-size: to-rem(64px);
-    border-block-end: 1px solid $skeleton-02;
+    border-block-end: 1px solid $skeleton-element;
     inline-size: to-rem(288px);
     max-inline-size: 100%;
   }
@@ -343,7 +343,7 @@
 
   .#{$prefix}--date-picker--fluid__skeleton--range
     .#{$prefix}--date-picker--fluid__skeleton--container:first-of-type {
-    border-inline-end: 1px solid $skeleton-02;
+    border-inline-end: 1px solid $skeleton-element;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton--range

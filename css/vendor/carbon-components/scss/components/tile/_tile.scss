@@ -28,7 +28,7 @@
     min-width: 8rem;
     min-height: 4rem;
     padding: $spacing-05;
-    background-color: $ui-01;
+    background-color: $layer-01;
     outline: 2px solid transparent;
     outline-offset: -2px;
 
@@ -38,7 +38,7 @@
   }
 
   .#{$prefix}--tile--light {
-    background-color: $ui-02;
+    background-color: $layer-02;
   }
 
   // ccs: the expandable tile's `transition` here never won (the later
@@ -61,7 +61,7 @@
     cursor: pointer;
 
     &:hover {
-      background: $hover-ui;
+      background: $layer-hover-01;
     }
   }
   .#{$prefix}--tile--expandable .#{$prefix}--link {
@@ -91,7 +91,7 @@
     @include reset;
     @include type-style('body-short-01');
 
-    color: $text-01;
+    color: $text-primary;
     text-decoration: none;
   }
 
@@ -99,18 +99,18 @@
   .#{$prefix}--tile--clickable:active,
   .#{$prefix}--tile--clickable:visited,
   .#{$prefix}--tile--clickable:visited:hover {
-    color: $text-01;
+    color: $text-primary;
     text-decoration: none;
   }
 
   .#{$prefix}--tile--clickable.#{$prefix}--link--disabled {
-    color: $disabled-02;
+    color: $text-disabled;
   }
 
   .#{$prefix}--tile--clickable:hover.#{$prefix}--link--disabled {
     display: block;
-    background-color: $disabled-01;
-    color: $disabled-02;
+    background-color: $field-01;
+    color: $text-disabled;
   }
 
   .#{$prefix}--tile--selectable {
@@ -137,7 +137,7 @@
 
     svg {
       border-radius: 50%;
-      fill: $icon-02;
+      fill: $icon-secondary;
     }
 
     &:focus {
@@ -155,7 +155,7 @@
 
     svg {
       margin-left: $carbon--spacing-03;
-      fill: $ui-05;
+      fill: $layer-selected-inverse;
       transform-origin: center;
       transition: transform $duration--fast-02 motion(standard, productive); // ccs
 
@@ -228,7 +228,7 @@
   }
 
   .#{$prefix}--tile--is-selected {
-    border: 1px solid $ui-05;
+    border: 1px solid $border-inverse;
   }
 
   .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark {
@@ -236,7 +236,7 @@
   }
 
   .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark svg {
-    fill: $ui-05;
+    fill: $layer-selected-inverse;
 
     // Windows, Firefox HCM Fix
     @media screen and (prefers-contrast) {
@@ -265,23 +265,23 @@
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable {
-    background-color: $ui-01;
-    color: $disabled-02;
+    background-color: $layer-01;
+    color: $text-disabled;
     cursor: not-allowed;
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable.#{$prefix}--tile--light {
-    background-color: $ui-02;
+    background-color: $layer-02;
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected {
-    border-color: $disabled-02;
+    border-color: $icon-disabled;
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected
     .#{$prefix}--tile__checkmark
     svg {
-    fill: $disabled-02;
+    fill: $icon-disabled;
   }
 }
 

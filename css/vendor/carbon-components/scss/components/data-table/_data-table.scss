@@ -108,13 +108,13 @@
 @mixin data-table-tooltip-link {
   .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link,
   .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:visited {
-    color: $inverse-link;
+    color: $link-inverse;
   }
 
   .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:active,
   .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:active:visited,
   .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:active:visited:hover {
-    color: $inverse-01;
+    color: $text-inverse;
   }
 }
 

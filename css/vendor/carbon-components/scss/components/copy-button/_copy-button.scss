@@ -150,15 +150,15 @@
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost:hover {
-    background-color: $hover-ui;
+    background-color: $layer-hover-01;
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost:active {
-    background-color: $active-ui;
+    background-color: $layer-active-01;
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost .#{$prefix}--snippet__icon {
-    fill: $icon-01;
+    fill: $icon-primary;
   }
 
   // Sizes (square dimensions matching Button's small/lg/xl heights;

@@ -54,7 +54,7 @@
       left: 50%;
       width: 1px;
       height: 100%;
-      background-color: $ui-03;
+      background-color: $layer-accent-01;
       content: "";
       transform: translateX(-50%);
       transition: background-color $duration--fast-02 motion(standard, productive);
@@ -76,7 +76,7 @@
     cursor: col-resize;
 
     &::after {
-      background-color: $interactive-04;
+      background-color: $interactive;
     }
   }
 
@@ -114,7 +114,7 @@
   }
 
   .#{$prefix}--splitter--resizing > .#{$prefix}--splitter__separator::after {
-    background-color: $interactive-04;
+    background-color: $interactive;
     transition: none;
   }
 

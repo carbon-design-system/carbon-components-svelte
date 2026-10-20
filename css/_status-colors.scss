@@ -13,7 +13,7 @@
 @function ccs-status-colors() {
   $is-light-theme: true;
   @if not feature-flag-enabled("enable-css-custom-properties") {
-    $is-light-theme: lightness($ui-background) > 50%;
+    $is-light-theme: lightness($background) > 50%;
   }
 
   @return (
