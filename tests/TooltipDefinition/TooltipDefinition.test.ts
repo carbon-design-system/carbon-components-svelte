@@ -338,6 +338,24 @@ describe("TooltipDefinition", () => {
       );
     });
 
+    it("hides a focused portal tooltip on Escape without bubbling", async () => {
+      const onParentKeydown = vi.fn();
+      render(TooltipDefinition, {
+        props: { portalTooltip: true, onParentKeydown },
+      });
+
+      await user.tab();
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      expect(onParentKeydown).not.toHaveBeenCalled();
+
+      // With nothing left to dismiss, Escape reaches ancestors (a Modal).
+      await user.keyboard("{Escape}");
+      expect(onParentKeydown).toHaveBeenCalledTimes(1);
+    });
+
     // Regression test: the portalled tooltip sits right against (and
     // slightly overlaps) the trigger, so the pointer can leave the trigger
     // and land on the portal before the close timer fires. Without a
