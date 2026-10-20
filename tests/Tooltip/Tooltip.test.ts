@@ -8,6 +8,7 @@ import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
 import TooltipDefault from "./TooltipDefault.test.svelte";
 import TooltipDirections from "./TooltipDirections.test.svelte";
+import TooltipEscape from "./TooltipEscape.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
@@ -146,6 +147,21 @@ describe("Tooltip", () => {
 
     await fireEvent.keyDown(tooltip, { key: "Escape" });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("stops Escape only when it closes the tooltip", async () => {
+    const onParentKeydown = vi.fn();
+    render(TooltipEscape, { props: { onParentKeydown } });
+
+    const trigger = screen.getByRole("button", { name: "Information" });
+    await fireEvent.focus(trigger);
+    await fireEvent.keyDown(trigger, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(onParentKeydown).not.toHaveBeenCalled();
+
+    // With nothing left to dismiss, Escape reaches ancestors (a Modal).
+    await fireEvent.keyDown(trigger, { key: "Escape" });
+    expect(onParentKeydown).toHaveBeenCalledTimes(1);
   });
 
   it("should open tooltip on mouseenter", async () => {

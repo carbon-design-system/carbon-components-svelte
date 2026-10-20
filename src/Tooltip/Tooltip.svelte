@@ -170,7 +170,8 @@
 
   function handleKeydown(event) {
     if (event.key === "Escape") {
-      event.stopPropagation();
+      // Let Escape reach a parent (e.g. a Modal) when nothing was dismissed.
+      if (open) event.stopPropagation();
       // With `hideIcon`, the trigger is `ref` and `refIcon` is never bound.
       (hideIcon ? ref : refIcon)?.focus();
       open = false;
