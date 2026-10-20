@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type StructuredListComponent from "carbon-components-svelte/StructuredList/StructuredList.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -465,6 +465,17 @@ describe("StructuredList", () => {
     await user.click(checkboxes[0]);
     expect(screen.getByTestId("value").textContent).toBe('["row-3-value"]');
     expect(checkboxes[0]).not.toBeChecked();
+  });
+
+  it("should toggle a checkbox once when Enter is held down", async () => {
+    render(StructuredListMultiple);
+    const checkbox = screen.getAllByRole("checkbox")[0];
+
+    await fireEvent.keyDown(checkbox, { key: "Enter" });
+    await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
+
+    expect(checkbox).toBeChecked();
+    expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
   });
 });
 
