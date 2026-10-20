@@ -24,3 +24,12 @@
     <p>{text}</p>
   </Tooltip>
 </div>
+
+<div style="height: 120vh"></div>
+
+<!-- Open at load, far below the window: nothing to fit to yet. -->
+<div data-testid="offscreen" style="padding: 0 0 120vh 4rem">
+  <Tooltip iconDescription="Off screen" open>
+    <p>{text}</p>
+  </Tooltip>
+</div>
