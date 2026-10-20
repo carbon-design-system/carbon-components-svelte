@@ -50,10 +50,6 @@
     color: $popover-text-color;
   }
 
-  .#{$prefix}--popover--light .#{$prefix}--popover-contents {
-    background-color: $background;
-  }
-
   .#{$prefix}--popover--high-contrast .#{$prefix}--popover-contents {
     background-color: $background-inverse;
     color: $text-inverse;

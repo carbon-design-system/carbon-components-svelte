@@ -12,7 +12,6 @@
     "center";
   export let tooltipPosition: ComponentProps<PasswordInput>["tooltipPosition"] =
     "bottom";
-  export let light = false;
   export let disabled = false;
   export let helperText = "";
   export let labelText = "";
@@ -46,7 +45,6 @@
   {showPasswordLabel}
   {tooltipAlignment}
   {tooltipPosition}
-  {light}
   {disabled}
   {helperText}
   {labelText}

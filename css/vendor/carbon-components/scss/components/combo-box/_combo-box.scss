@@ -19,10 +19,6 @@
     background-color: $field;
   }
 
-  .#{$prefix}--combo-box.#{$prefix}--list-box--light:hover {
-    background-color: $field-02;
-  }
-
 
   .#{$prefix}--combo-box.#{$prefix}--list-box--expanded
     .#{$prefix}--text-input {

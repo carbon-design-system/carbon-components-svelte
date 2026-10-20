@@ -4,7 +4,7 @@ description: Copy inputs display a read-only value in a text field with a built-
 ---
 
 <script>
-  import { Box, Button, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, Stack, TooltipIcon } from "carbon-components-svelte";
+  import { Box, Button, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, Layer, Stack, TooltipIcon } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import View from "carbon-icons-svelte/lib/View.svelte";
@@ -153,9 +153,13 @@ Set `disabled` to disable the input and copy button.
 
 <CopyInput disabled labelText="API token" value="sk-1234567890abcdef" />
 
-## Light
+## On a layer
 
-<CopyInput light labelText="API endpoint" value="https://api.acme.io/v1" />
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
+
+<Layer withBackground style="padding: 1rem">
+  <CopyInput labelText="API endpoint" value="https://api.acme.io/v1" />
+</Layer>
 
 ## Custom feedback
 

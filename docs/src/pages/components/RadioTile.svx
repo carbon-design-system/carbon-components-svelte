@@ -1,10 +1,10 @@
 ---
 components: ["TileGroup", "RadioTile"]
-description: Radio tiles provide a tile-based interface for choosing a single option from a set, with light and disabled states.
+description: Radio tiles provide a tile-based interface for choosing a single option from a set, with disabled states.
 ---
 
 <script>
-  import { TileGroup, RadioTile } from "carbon-components-svelte";
+  import { Layer, RadioTile, TileGroup } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -90,21 +90,23 @@ Set `size="sm"` on the TileGroup for compact tiles, such as rows in a list of ch
   <RadioTile value="pickup">Pick up in store</RadioTile>
 </TileGroup>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<TileGroup legendText="Service pricing tiers" name="plan-light" selected="standard">
-  <RadioTile light value="lite">
-    Lite plan
-  </RadioTile>
-  <RadioTile light value="standard">
-    Standard plan
-  </RadioTile>
-  <RadioTile light value="plus">
-    Plus plan
-  </RadioTile>
-</TileGroup>
+<Layer withBackground style="padding: 1rem">
+  <TileGroup legendText="Service pricing tiers" name="plan-layer" selected="standard">
+    <RadioTile value="lite">
+      Lite plan
+    </RadioTile>
+    <RadioTile value="standard">
+      Standard plan
+    </RadioTile>
+    <RadioTile value="plus">
+      Plus plan
+    </RadioTile>
+  </TileGroup>
+</Layer>
 
 ## Disabled
 

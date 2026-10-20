@@ -45,10 +45,6 @@
     @include type-style('body-01');
   }
 
-  .#{$prefix}--text-area--light {
-    background-color: $field-02;
-  }
-
   .#{$prefix}--text-area--invalid {
     padding-right: $carbon--spacing-08;
   }
@@ -76,10 +72,6 @@
 
   .#{$prefix}--text-area:disabled::placeholder {
     color: $text-disabled;
-  }
-
-  .#{$prefix}--text-area.#{$prefix}--text-area--light:disabled {
-    background-color: $field-02;
   }
 
   .#{$prefix}--text-area.#{$prefix}--skeleton {

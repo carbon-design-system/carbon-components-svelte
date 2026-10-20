@@ -83,8 +83,6 @@
    */
   export let readonlyText = "Read-only";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to hide the text inputs */
   export let hideTextInput = false;
@@ -533,7 +531,6 @@
         style:width={textInputWidth}
         class:bx--slider-text-input--lower={true}
         class:bx--slider-text-input--xs={effectiveSize === "xs"}
-        class:bx--text-input--light={light}
         class:bx--text-input--invalid={showInvalid}
         class:bx--slider-text-input--warn={showWarn}
         {value}
@@ -587,7 +584,6 @@
           class:bx--slider-text-input--lower={true}
           class:bx--slider-text-input--readonly={true}
           class:bx--slider-text-input--xs={effectiveSize === "xs"}
-          class:bx--text-input--light={light}
         >
           {value}
         </div>
@@ -811,7 +807,6 @@
         style:width={textInputWidth}
         class:bx--slider-text-input--upper={true}
         class:bx--slider-text-input--xs={effectiveSize === "xs"}
-        class:bx--text-input--light={light}
         class:bx--text-input--invalid={showInvalid}
         class:bx--slider-text-input--warn={showWarn}
         value={valueUpper}
@@ -863,7 +858,6 @@
           class:bx--slider-text-input--upper={true}
           class:bx--slider-text-input--readonly={true}
           class:bx--slider-text-input--xs={effectiveSize === "xs"}
-          class:bx--text-input--light={light}
         >
           {valueUpper}
         </div>

@@ -37,10 +37,6 @@
     }
   }
 
-  .#{$prefix}--tile--light {
-    background-color: $layer-02;
-  }
-
   // ccs: the expandable tile's `transition` here never won (the later
   // `.#{$prefix}--tile--expandable` rule sets its own), so it is split out
   // rather than raised to the `:not()` weight below.
@@ -268,10 +264,6 @@
     background-color: $layer;
     color: $text-disabled;
     cursor: not-allowed;
-  }
-
-  .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable.#{$prefix}--tile--light {
-    background-color: $layer-02;
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected {

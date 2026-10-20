@@ -62,8 +62,6 @@
    */
   export let limitReachedText = undefined;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
@@ -455,7 +453,6 @@
       {placeholder}
       {readonly}
       class:bx--text-area={true}
-      class:bx--text-area--light={light}
       class:bx--text-area--invalid={showInvalid}
       class:bx--text-area--warning={showWarn}
       style:resize={typeof cols === "number" || grow ? "none" : undefined}

@@ -10,8 +10,6 @@
    */
   export let expanded = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /**
    * Specify the collapsed height of the above-the-fold content (number of
@@ -162,7 +160,6 @@
   class:bx--tile--expandable={true}
   class:bx--tile--expandable--interactive={hasInteractiveContent}
   class:bx--tile--is-expanded={expanded}
-  class:bx--tile--light={light}
   style:max-height={expanded || effectiveMaxHeight <= 0
     ? "none"
     : `${effectiveMaxHeight + effectivePadding}px`}

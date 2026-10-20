@@ -14,8 +14,6 @@
   /** Set to `true` to open the list box */
   export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to disable the list box */
   export let disabled = false;
@@ -59,7 +57,6 @@
   class:bx--list-box--inline={type === "inline"}
   class:bx--list-box--disabled={disabled}
   class:bx--list-box--expanded={open}
-  class:bx--list-box--light={light}
   class:bx--list-box--warning={!invalid && warn}
   {...$$restProps}
   on:keydown

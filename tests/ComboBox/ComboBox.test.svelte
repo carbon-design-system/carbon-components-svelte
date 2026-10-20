@@ -19,7 +19,6 @@
   export let disabled = false;
   export let invalid = false;
   export let warn = false;
-  export let light = false;
   export let open = false;
   export let readonly = false;
   export let labelText = "Contact";
@@ -66,7 +65,6 @@
   {invalid}
   {invalidText}
   {items}
-  {light}
   {open}
   {readonly}
   {placeholder}

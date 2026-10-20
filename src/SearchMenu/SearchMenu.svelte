@@ -72,8 +72,6 @@
    */
   export let menuMaxHeight = undefined;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to disable the search input */
   export let disabled = false;
@@ -459,7 +457,6 @@
     <Search
       bind:this={search}
       {size}
-      {light}
       {disabled}
       {readonly}
       {hideLabel}

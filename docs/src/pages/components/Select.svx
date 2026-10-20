@@ -4,7 +4,7 @@ description: Selects provide a dropdown menu for selecting a single option, with
 ---
 
 <script>
-  import { Select, SelectItem, SelectItemGroup, SelectSkeleton, FluidSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { FluidSelectSkeleton, Layer, Select, SelectItem, SelectItemGroup, SelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -201,17 +201,19 @@ Use the inline variant for horizontal layouts.
   <SelectItem value="enterprise" text="Enterprise" />
 </Select>
 
-### Light
+### On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Select light labelText="Account plan" selected="starter" >
-  <SelectItem value="free" text="Free" />
-  <SelectItem value="starter" text="Starter" />
-  <SelectItem value="team" text="Team" />
-  <SelectItem value="business" text="Business" />
-  <SelectItem value="enterprise" text="Enterprise" />
-</Select>
+<Layer withBackground style="padding: 1rem">
+  <Select labelText="Account plan" selected="starter" >
+    <SelectItem value="free" text="Free" />
+    <SelectItem value="starter" text="Starter" />
+    <SelectItem value="team" text="Team" />
+    <SelectItem value="business" text="Business" />
+    <SelectItem value="enterprise" text="Enterprise" />
+  </Select>
+</Layer>
 
 ## Fluid
 

@@ -77,8 +77,6 @@
    */
   export let readonlyText = "Read-only";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to hide the text input */
   export let hideTextInput = false;
@@ -495,7 +493,6 @@
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         style:width={textInputWidth}
-        class:bx--text-input--light={light}
         class:bx--slider-text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--invalid={showInvalid}
         class:bx--slider-text-input--warn={showWarn}
@@ -548,7 +545,6 @@
           class:bx--text-input={true}
           class:bx--slider-text-input={true}
           class:bx--slider-text-input--readonly={true}
-          class:bx--text-input--light={light}
           class:bx--slider-text-input--xs={effectiveSize === "xs"}
         >
           {value}

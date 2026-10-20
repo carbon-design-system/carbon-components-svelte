@@ -42,8 +42,6 @@
    */
   export let tooltipPosition = "bottom";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
@@ -203,7 +201,6 @@
   class:bx--form-item={true}
   class:bx--text-input-wrapper={true}
   class:bx--password-input-wrapper={true}
-  class:bx--text-input-wrapper--light={light}
   class:bx--text-input-wrapper--inline={inline}
   class:bx--text-input-wrapper--readonly={readonly}
   class:bx--text-input--fluid={isFluid}
@@ -297,7 +294,6 @@
         {readonly}
         class:bx--text-input={true}
         class:bx--password-input={true}
-        class:bx--text-input--light={light}
         class:bx--text-input--invalid={showInvalid}
         class:bx--text-input--warning={showWarn}
         class:bx--text-input--xs={effectiveSize === "xs"}

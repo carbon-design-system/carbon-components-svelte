@@ -109,10 +109,6 @@ $list-box-menu-width: to-rem(300px);
     background-color: $field;
   }
 
-  .#{$prefix}--list-box--expanded:hover.#{$prefix}--list-box--light:hover {
-    background-color: $field-02;
-  }
-
   .#{$prefix}--list-box .#{$prefix}--text-input {
     min-width: 0;
     height: 100%;
@@ -151,32 +147,8 @@ $list-box-menu-width: to-rem(300px);
     padding-right: carbon--mini-units(7);
   }
 
-  .#{$prefix}--list-box--light {
-    background-color: $field-02;
-
-    &:hover {
-      background-color: $layer-hover-02;
-    }
-  }
-
-  .#{$prefix}--list-box--light .#{$prefix}--list-box__menu {
-    background: $field-02;
-  }
-
-  .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item__option {
-    border-top-color: $border-subtle-02;
-  }
-
-  .#{$prefix}--list-box--light.#{$prefix}--list-box--expanded {
-    border-bottom-color: transparent;
-  }
-
   .#{$prefix}--list-box--disabled:hover {
     background-color: $field;
-  }
-
-  .#{$prefix}--list-box--light.#{$prefix}--list-box--disabled {
-    background-color: $field-02;
   }
 
   .#{$prefix}--list-box--disabled,
@@ -539,10 +511,6 @@ $list-box-menu-width: to-rem(300px);
     }
   }
 
-  .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item:hover {
-    background-color: $layer-hover-02;
-  }
-
   .#{$prefix}--list-box--sm .#{$prefix}--list-box__menu-item {
     height: to-rem(32px);
   }
@@ -554,10 +522,6 @@ $list-box-menu-width: to-rem(300px);
 
   .#{$prefix}--list-box--disabled .#{$prefix}--list-box__menu-item:hover {
     background-color: transparent;
-  }
-
-  .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item:active {
-    background-color: $layer-selected-02;
   }
 
   .#{$prefix}--list-box--disabled
@@ -707,11 +671,6 @@ $list-box-menu-width: to-rem(300px);
     border-bottom-color: $layer-selected;
     background-color: $layer-selected;
     color: $text-primary;
-  }
-
-  .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item--active {
-    border-bottom-color: $layer-selected-02;
-    background-color: $layer-selected-02;
   }
 
   .#{$prefix}--list-box__menu-item--active:hover,

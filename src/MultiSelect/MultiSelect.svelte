@@ -197,8 +197,6 @@
    */
   export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /**
    * Set to `true` to use the fluid variant.
@@ -1526,7 +1524,6 @@
     invalidText={isFluid ? "" : shownInvalidText}
     invalidId={errorId}
     {open}
-    {light}
     size={effectiveSize}
     warn={showWarn}
     warnText={isFluid ? "" : warnText}
@@ -1587,7 +1584,6 @@
             )}
             class:bx--text-input={true}
             class:bx--text-input--empty={value === ""}
-            class:bx--text-input--light={light}
             on:click={() => {
               if (disabled) return;
               openMenu("click");

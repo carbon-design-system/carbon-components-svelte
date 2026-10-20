@@ -4,7 +4,7 @@ description: Text areas provide a multi-line field for longer text like descript
 ---
 
 <script>
-  import { TextArea, TextAreaSkeleton, FluidTextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { FluidTextAreaSkeleton, Layer, TextArea, TextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -92,11 +92,13 @@ Use the `labelChildren` slot to provide custom label content.
   <strong slot="labelChildren">Incident summary</strong>
 </TextArea>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<TextArea light labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
+<Layer withBackground style="padding: 1rem">
+  <TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
+</Layer>
 
 ## Fluid
 

@@ -119,19 +119,6 @@ describe("Dropdown", () => {
     expect(screen.getByLabelText("Contact")).toBe(screen.getByRole("combobox"));
   });
 
-  it("should handle light variant", () => {
-    render(Dropdown, {
-      props: {
-        items,
-        selectedId: "0",
-        light: true,
-      },
-    });
-
-    const button = screen.getByRole("combobox");
-    expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--light");
-  });
-
   it("should handle inline variant", () => {
     render(Dropdown, {
       props: {

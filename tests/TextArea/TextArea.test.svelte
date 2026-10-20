@@ -13,7 +13,6 @@
   export let counterText: ComponentProps<TextArea>["counterText"] = undefined;
   export let limitReachedText: ComponentProps<TextArea>["limitReachedText"] =
     undefined;
-  export let light = false;
   export let disabled = false;
   export let readonly = false;
   export let helperText = "";
@@ -41,7 +40,6 @@
   {counterMode}
   {counterText}
   {limitReachedText}
-  {light}
   {disabled}
   {readonly}
   {helperText}

@@ -4,7 +4,7 @@ description: Text inputs provide a single-line field for short text like usernam
 ---
 
 <script>
-  import { TextInput, TextInputSkeleton, FluidTextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { FluidTextInputSkeleton, Layer, TextInput, TextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -81,11 +81,13 @@ The action takes a boolean, so pass an expression to turn it on and off. Pass `f
 
 <FileSource src="/framed/TextInput/PreserveFocusSelectionToggling" />
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<TextInput light labelText="Workspace name" placeholder="Enter workspace name..." />
+<Layer withBackground style="padding: 1rem">
+  <TextInput labelText="Workspace name" placeholder="Enter workspace name..." />
+</Layer>
 
 ## Fluid
 

@@ -55,8 +55,6 @@
    */
   export let size = undefined;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /**
    * Set to `true` to disable the input and copy button. The copy button is
@@ -204,7 +202,6 @@
   class:bx--form-item={true}
   class:bx--text-input-wrapper={true}
   class:bx--text-input-wrapper--inline={inline}
-  class:bx--text-input-wrapper--light={light}
   class:bx--text-input--fluid={isFluid}
   on:click
   on:mouseover
@@ -277,7 +274,6 @@
         {id}
         name={masked ? undefined : name}
         class:bx--text-input={true}
-        class:bx--text-input--light={light}
         class:bx--text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}

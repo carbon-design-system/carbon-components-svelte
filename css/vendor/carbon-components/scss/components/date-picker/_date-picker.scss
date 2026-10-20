@@ -24,10 +24,6 @@
   }
 
   // V11: Possibly deprecate
-  .#{$prefix}--date-picker--light .#{$prefix}--date-picker__input {
-    background: $field-02;
-  }
-
   .#{$prefix}--date-picker ~ .#{$prefix}--label {
     order: 1;
   }

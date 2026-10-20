@@ -3,7 +3,7 @@ description: Expandable tiles show a summary and reveal more content on demand, 
 ---
 
 <script>
-  import { Box, ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
+  import { Box, Button, ExpandableTile, Layer, OutboundLink, Stack } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -58,14 +58,16 @@ Display the tile expanded by default with `expanded`.
   <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<ExpandableTile light>
-  <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
-  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
-</ExpandableTile>
+<Layer withBackground style="padding: 1rem">
+  <ExpandableTile>
+    <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+    <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
+  </ExpandableTile>
+</Layer>
 
 ## Content height
 

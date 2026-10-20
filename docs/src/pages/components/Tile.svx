@@ -3,7 +3,7 @@ description: Tiles provide a container for displaying content in a structured, c
 ---
 
 <script>
-  import { Box, Column, Grid, Row, Tile } from "carbon-components-svelte";
+  import { Box, Column, Grid, Layer, Row, Tile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -12,11 +12,13 @@ Create a basic tile container for your content.
 
 <Tile>Payments API — Operational, 99.98% uptime</Tile>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Tile light>Object storage — 82% capacity used</Tile>
+<Layer withBackground style="padding: 1rem">
+  <Tile>Object storage — 82% capacity used</Tile>
+</Layer>
 
 ## Full height
 

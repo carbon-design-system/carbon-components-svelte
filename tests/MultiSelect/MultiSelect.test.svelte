@@ -13,7 +13,6 @@
   export let placeholder = "";
   export let labelText = "";
   export let hideLabel = false;
-  export let light = false;
   export let size: ComponentProps<MultiSelect>["size"] = undefined;
   export let type: ComponentProps<MultiSelect>["type"] = "default";
   export let invalid = false;
@@ -70,7 +69,6 @@
   {placeholder}
   {labelText}
   {hideLabel}
-  {light}
   {size}
   {type}
   {invalid}

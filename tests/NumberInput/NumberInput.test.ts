@@ -51,14 +51,6 @@ describe("NumberInput", () => {
     }
   });
 
-  it("should handle light variant", () => {
-    render(NumberInput, { props: { light: true } });
-
-    expect(screen.getByRole("spinbutton").closest(".bx--number")).toHaveClass(
-      "bx--number--light",
-    );
-  });
-
   it("should handle disabled state", () => {
     render(NumberInput, {
       props: { disabled: true },

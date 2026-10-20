@@ -16,7 +16,6 @@
   export let labelText = "Select label";
   export let size: ComponentProps<Select>["size"] = undefined;
   export let inline = false;
-  export let light = false;
   export let readonly = false;
   export let readonlyText: ComponentProps<Select>["readonlyText"] = undefined;
   export let fluid = false;
@@ -39,7 +38,6 @@
   {labelText}
   {size}
   {inline}
-  {light}
   {readonly}
   {readonlyText}
   {fluid}

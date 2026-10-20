@@ -132,22 +132,6 @@ describe("Select", () => {
     );
   });
 
-  it("renders default theme", () => {
-    render(Select);
-    const selectElement = screen.getByLabelText("Select label");
-    const selectWrapper = selectElement.closest(".bx--select");
-    assert(selectWrapper);
-    expect(selectWrapper).not.toHaveClass("bx--select--light");
-  });
-
-  it("renders light theme", () => {
-    render(Select, { light: true });
-    const selectElement = screen.getByLabelText("Select label");
-    const selectWrapper = selectElement.closest(".bx--select");
-    assert(selectWrapper);
-    expect(selectWrapper).toHaveClass("bx--select--light");
-  });
-
   it("renders disabled state", () => {
     render(Select, { disabled: true });
     const selectElement = screen.getByLabelText("Select label");

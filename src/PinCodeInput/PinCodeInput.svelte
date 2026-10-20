@@ -93,8 +93,6 @@
    */
   export let size = undefined;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Specify the label text */
   export let labelText = "";
@@ -537,7 +535,6 @@
   bind:this={ref}
   class:bx--form-item={true}
   class:bx--pin-code-input={true}
-  class:bx--pin-code-input--light={light}
   class:bx--pin-code-input--readonly={readonly}
   class:bx--pin-code-input--fluid={isFluid}
   class:bx--pin-code-input--xs={effectiveSize === "xs"}
@@ -606,7 +603,6 @@
             class:bx--pin-code-input__field={true}
             class:bx--pin-code-input__field--masked={mask}
             class:bx--pin-code-input__field--uppercase={uppercase}
-            class:bx--text-input--light={light}
             class:bx--text-input--invalid={hasError}
             class:bx--text-input--warning={hasWarn}
             class:bx--text-input--xs={effectiveSize === "xs"}

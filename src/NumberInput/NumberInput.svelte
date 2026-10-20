@@ -65,8 +65,6 @@
    */
   export let stepStartValue = undefined;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
@@ -508,7 +506,6 @@
     class:bx--number--neutral={neutral}
     class:bx--number--helpertext={true}
     class:bx--number--readonly={readonly}
-    class:bx--number--light={light}
     class:bx--number--nolabel={hideLabel}
     class:bx--number--nosteppers={hideSteppers}
     class:bx--number--xs={effectiveSize === "xs"}

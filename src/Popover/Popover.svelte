@@ -31,8 +31,6 @@
    */
   export let align = "top";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
 
   /** Set to `true` to enable the high contrast variant */
   export let highContrast = false;
@@ -103,7 +101,6 @@
   }}
   class:bx--popover={true}
   class:bx--popover--caret={caret}
-  class:bx--popover--light={light}
   class:bx--popover--high-contrast={highContrast}
   class:bx--popover--top={align === "top"}
   class:bx--popover--top-left={align === "top-left"}
