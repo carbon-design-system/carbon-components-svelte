@@ -65,4 +65,28 @@ describe("StorageBinding", () => {
       expect(component.value).toBeUndefined();
     },
   );
+
+  it.each(cases)(
+    "$name does not write back a remote value",
+    async ({ Component, area }) => {
+      const onUpdate = vi.fn();
+      render(StorageBinding, {
+        props: { Component, key: "k", value: "initial", onUpdate },
+      });
+      await tick();
+
+      // Valid JSON that re-serializes differently ('{"a":1}').
+      window[area].setItem("k", '{ "a": 1 }');
+      fireStorageEvent({
+        key: "k",
+        newValue: '{ "a": 1 }',
+        storageArea: window[area],
+      });
+      await tick();
+      await tick();
+
+      expect(window[area].getItem("k")).toBe('{ "a": 1 }');
+      expect(onUpdate).toHaveBeenCalledTimes(1);
+    },
+  );
 });
