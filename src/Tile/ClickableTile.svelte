@@ -8,9 +8,6 @@
    */
   export let clicked = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /**
    * Set the size: `"sm"` for a compact tile, such as a row in a list of
    * choices, with less padding and no minimum height.
@@ -52,7 +49,6 @@
     "bx--tile",
     "bx--tile--clickable",
     clicked && "bx--tile--is-clicked",
-    light && "bx--tile--light",
     size === "sm" && "bx--tile--sm",
     fullHeight && "bx--tile--full-height",
     noPadding && "bx--tile--no-padding",

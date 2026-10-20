@@ -4,7 +4,7 @@ description: Time pickers provide a time input field with optional period (AM/PM
 ---
 
 <script>
-  import { Box, TimePicker, TimePickerSelect, SelectItem, TimePickerSkeleton, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, FluidTimePickerSkeleton, Layer, SelectItem, TimePicker, TimePickerSelect, TimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -142,20 +142,22 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
   </TimePickerSelect>
 </TimePicker>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<TimePicker light labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect labelText="Period" value="pm">
-    <SelectItem value="am" text="AM" />
-    <SelectItem value="pm" text="PM" />
-  </TimePickerSelect>
-  <TimePickerSelect labelText="Timezone" value="pdt">
-    <SelectItem value="pdt" text="PDT" />
-    <SelectItem value="gmt" text="GMT" />
-  </TimePickerSelect>
-</TimePicker>
+<Layer withBackground style="padding: 1rem">
+  <TimePicker labelText="Cron job" placeholder="hh:mm">
+    <TimePickerSelect labelText="Period" value="pm">
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+    <TimePickerSelect labelText="Timezone" value="pdt">
+      <SelectItem value="pdt" text="PDT" />
+      <SelectItem value="gmt" text="GMT" />
+    </TimePickerSelect>
+  </TimePicker>
+</Layer>
 
 ## Fluid
 

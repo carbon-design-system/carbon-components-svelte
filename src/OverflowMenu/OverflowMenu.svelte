@@ -29,9 +29,6 @@
    */
   export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Set to `true` to disable the trigger button */
   export let disabled = false;
 
@@ -444,7 +441,6 @@
   {id}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
-  class:bx--overflow-menu--light={light}
   class:bx--overflow-menu--xs={size === "xs"}
   class:bx--overflow-menu--sm={size === "sm"}
   class:bx--overflow-menu--xl={size === "xl"}
@@ -511,7 +507,6 @@
     class:bx--overflow-menu-options={true}
     class:bx--overflow-menu--flip={flipped}
     class:bx--overflow-menu-options--open={open}
-    class:bx--overflow-menu-options--light={light}
     class:bx--overflow-menu-options--xs={size === "xs"}
     class:bx--overflow-menu-options--sm={size === "sm"}
     class:bx--overflow-menu-options--xl={size === "xl"}
@@ -545,7 +540,6 @@
       class:bx--overflow-menu-options={true}
       class:bx--overflow-menu--flip={flipped}
       class:bx--overflow-menu-options--open={open}
-      class:bx--overflow-menu-options--light={light}
       class:bx--overflow-menu-options--xs={size === "xs"}
       class:bx--overflow-menu-options--sm={size === "sm"}
       class:bx--overflow-menu-options--xl={size === "xl"}

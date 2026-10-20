@@ -331,14 +331,6 @@
     background-color: $layer-accent;
   }
 
-  .#{$prefix}--number--light .#{$prefix}--number__rule-divider,
-  .#{$prefix}--number--light
-    .#{$prefix}--number__invalid
-    + .#{$prefix}--number__controls
-    .#{$prefix}--number__rule-divider:first-of-type {
-    background-color: $border-subtle-02;
-  }
-
   .#{$prefix}--number
     input[type='number']:disabled
     + .#{$prefix}--number__controls
@@ -429,31 +421,9 @@
   }
 
   // V11: Possibly deprecate
-  .#{$prefix}--number--light input[type='number'],
-  .#{$prefix}--number--light input[type='text'],
-  .#{$prefix}--number--light input[type='number']:disabled,
-  .#{$prefix}--number--light input[type='text']:disabled,
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn::before,
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn::after { // ccs: dedupe
-    background-color: $field-02;
-  }
-
   // V11: Possibly deprecate
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn:focus::before,
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn:focus::after {
-    background-color: transparent;
-  }
-
   // We include `:not(:focus)` here because the pseudo elements will overlap the
   // focus outline on the button if we set their background-color on focus
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn:hover,
-  .#{$prefix}--number--light
-    .#{$prefix}--number__control-btn:not(:focus):hover::before,
-  .#{$prefix}--number--light
-    .#{$prefix}--number__control-btn:not(:focus):hover::after {
-    background-color: $layer-hover-02;
-  }
-
   .#{$prefix}--number--xl input[type='number'],
   .#{$prefix}--number--xl input[type='text'] {
     height: to-rem(48px);

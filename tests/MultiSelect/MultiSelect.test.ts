@@ -281,19 +281,6 @@ describe("MultiSelect", () => {
       },
     );
 
-    it("renders in light variant", async () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          light: true,
-        },
-      });
-
-      await openMenu();
-      const listBox = screen.getByRole("listbox").closest(".bx--list-box");
-      expect(listBox).toHaveClass("bx--list-box--light");
-    });
-
     it("renders in inline variant", () => {
       render(MultiSelect, {
         props: {

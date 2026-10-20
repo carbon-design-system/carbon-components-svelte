@@ -25,7 +25,6 @@
     | ReadonlyArray<{ value: number; label?: string }>
     | undefined = false;
   export let snapToMarks = false;
-  export let light = false;
   export let hideLabel = false;
   export let labelText = "Test Slider";
   export let name = "";
@@ -72,7 +71,6 @@
     {hideRangeLabels}
     {fullWidth}
     {orientation}
-    {light}
     {hideLabel}
     {name}
     {inputType}
@@ -110,7 +108,6 @@
     {hideRangeLabels}
     {fullWidth}
     {orientation}
-    {light}
     {hideLabel}
     {name}
     {inputType}

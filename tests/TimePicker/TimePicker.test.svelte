@@ -10,7 +10,6 @@
   export let pattern: ComponentProps<TimePicker>["pattern"] =
     "(1[012]|[1-9]):[0-5][0-9](\\s)?";
   export let maxlength: ComponentProps<TimePicker>["maxlength"] = 5;
-  export let light: ComponentProps<TimePicker>["light"] = false;
   export let disabled: ComponentProps<TimePicker>["disabled"] = false;
   export let readonly: ComponentProps<TimePicker>["readonly"] = false;
   export let labelText: ComponentProps<TimePicker>["labelText"] = "Time";
@@ -38,7 +37,6 @@
   {placeholder}
   {pattern}
   {maxlength}
-  {light}
   {disabled}
   {readonly}
   {labelText}

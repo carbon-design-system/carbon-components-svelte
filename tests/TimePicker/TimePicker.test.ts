@@ -52,13 +52,6 @@ describe("TimePicker", () => {
     }
   });
 
-  it("should handle light variant", () => {
-    render(TimePicker, { props: { light: true } });
-
-    const timePicker = screen.getByRole("textbox").closest(".bx--time-picker");
-    expect(timePicker).toHaveClass("bx--time-picker--light");
-  });
-
   it("should handle disabled state", () => {
     render(TimePicker, { props: { disabled: true } });
 

@@ -4,7 +4,7 @@ description: Sliders provide a visual way to select a value from a range, with k
 ---
 
 <script>
-  import { Box, Slider, RangeSlider, SliderSkeleton, RangeSliderSkeleton } from "carbon-components-svelte";
+  import { Box, Layer, RangeSlider, RangeSliderSkeleton, Slider, SliderSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -283,11 +283,13 @@ The upper input sits beside the `max` label and the lower input beside the `min`
   ]}
 />
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+<Layer withBackground style="padding: 1rem">
+  <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+</Layer>
 
 ## Events
 

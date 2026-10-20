@@ -873,7 +873,7 @@ describe("DatePicker", () => {
     const setDateSpy = vi.spyOn(fp, "setDate");
 
     // Trigger a reactive update that does not change value/min/max/format.
-    await rerender({ light: true });
+    await rerender({ fullWidth: true });
     await tick();
 
     expect(setDateSpy).not.toHaveBeenCalled();
@@ -1764,7 +1764,7 @@ describe("DatePicker", () => {
       const setSpy = vi.spyOn(getFlatpickrInstance(input), "set");
 
       // Trigger a reactive update that keeps the same `disabledDates` reference.
-      await rerender({ disabledDates, light: true });
+      await rerender({ disabledDates, fullWidth: true });
       await tick();
 
       expect(setSpy).not.toHaveBeenCalledWith("disable", expect.anything());

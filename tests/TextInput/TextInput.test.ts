@@ -38,12 +38,6 @@ describe("TextInput", () => {
     }
   });
 
-  it("should handle light variant", () => {
-    render(TextInput, { props: { light: true } });
-
-    expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--light");
-  });
-
   it("should handle disabled state", () => {
     render(TextInput, { props: { disabled: true } });
 

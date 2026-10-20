@@ -5,7 +5,6 @@
   export let size: ComponentProps<ListBox>["size"] = undefined;
   export let type: ComponentProps<ListBox>["type"] = "default";
   export let open: ComponentProps<ListBox>["open"] = false;
-  export let light: ComponentProps<ListBox>["light"] = false;
   export let disabled: ComponentProps<ListBox>["disabled"] = false;
   export let invalid: ComponentProps<ListBox>["invalid"] = false;
   export let invalidText: ComponentProps<ListBox>["invalidText"] = "";
@@ -23,7 +22,6 @@
   {size}
   {type}
   {open}
-  {light}
   {disabled}
   {invalid}
   {invalidText}

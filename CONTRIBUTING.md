@@ -333,7 +333,7 @@ Typical section order (follow sibling sections on that page):
 1. `## Basic`
 2. Core variants grouped (kinds, sizes)
 3. Feature sections (slots, filtering, typeahead, portal, etc.)
-4. Layout options (direction, light)
+4. Layout options (direction, layering with `Layer`)
 5. Validation states (`invalid`, `warn`)
 6. Interaction states (`disabled`, `readonly`)
 7. Skeleton (if applicable)

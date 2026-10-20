@@ -628,12 +628,6 @@ describe("ComboBox", () => {
     },
   );
 
-  it("should handle light variant", () => {
-    render(ComboBox, { props: { light: true } });
-
-    expect(getInput()).toHaveClass("bx--text-input--light");
-  });
-
   it.each([
     ["sm", "bx--list-box--sm"],
     ["xl", "bx--list-box--xl"],

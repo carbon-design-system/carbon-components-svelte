@@ -93,9 +93,6 @@
    */
   export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Set to `true` to disable the dropdown */
   export let disabled = false;
 
@@ -725,7 +722,6 @@
     effectiveSize === "xl" && "bx--dropdown--xl",
     inline && "bx--dropdown--inline",
     disabled && "bx--dropdown--disabled",
-    light && "bx--dropdown--light",
     readonly && "bx--dropdown--readonly",
   ]
     .filter(Boolean)
@@ -781,7 +777,6 @@
     {disabled}
     {open}
     invalid={showInvalid}
-    {light}
     warn={showWarn}
   >
     {#if showInvalid}

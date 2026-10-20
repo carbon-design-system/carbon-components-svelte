@@ -42,12 +42,6 @@ describe("ListBox", () => {
     expect(getRoot(container)).toHaveClass("bx--list-box--disabled");
   });
 
-  it("should handle light variant", () => {
-    const { container } = render(ListBox, { props: { light: true } });
-
-    expect(getRoot(container)).toHaveClass("bx--list-box--light");
-  });
-
   it("should handle inline type", () => {
     const { container } = render(ListBox, { props: { type: "inline" } });
 

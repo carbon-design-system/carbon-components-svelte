@@ -243,9 +243,6 @@
    */
   export let fullWidth = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
@@ -1805,7 +1802,6 @@
     class:bx--date-picker={true}
     class:bx--date-picker--short={short}
     class:bx--date-picker--full-width={fullWidth}
-    class:bx--date-picker--light={light}
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||
       datePickerType === "month" ||

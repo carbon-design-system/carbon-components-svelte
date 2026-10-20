@@ -61,10 +61,6 @@
     @include placeholder-colors;
   }
 
-  .#{$prefix}--text-input--light {
-    background-color: $field-02;
-  }
-
   .#{$prefix}--text-input__field-wrapper {
     position: relative;
     display: flex;
@@ -190,10 +186,6 @@
     -webkit-text-fill-color: $text-disabled;
   }
 
-  .#{$prefix}--text-input--light:disabled {
-    background-color: $field-02;
-  }
-
   .#{$prefix}--text-input:disabled::placeholder {
     color: $text-disabled;
     opacity: 1;
@@ -258,10 +250,6 @@
 
   .#{$prefix}--form--fluid .#{$prefix}--text-input__invalid-icon {
     top: to-rem(80px);
-  }
-
-  .#{$prefix}--form--fluid .#{$prefix}--text-input-wrapper--light {
-    background: $field-02;
   }
 
   .#{$prefix}--form--fluid

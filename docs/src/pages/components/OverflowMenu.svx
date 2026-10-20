@@ -4,7 +4,7 @@ description: Overflow menus present a list of actions in a compact dropdown, ide
 ---
 
 <script>
-  import { Box, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import { Box, Layer, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
@@ -62,15 +62,17 @@ Set `direction` to `"top"` to position the menu above the button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<OverflowMenu light>
-  <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
-  <OverflowMenuItem danger text="Delete service" />
-</OverflowMenu>
+<Layer withBackground style="padding: 1rem">
+  <OverflowMenu>
+    <OverflowMenuItem text="Manage credentials" />
+    <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
+    <OverflowMenuItem danger text="Delete service" />
+  </OverflowMenu>
+</Layer>
 
 ## Sizes
 

@@ -3,7 +3,7 @@ description: Clickable tiles are interactive content areas that link to another 
 ---
 
 <script>
-  import { ClickableTile } from "carbon-components-svelte";
+  import { ClickableTile, Layer } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -38,13 +38,15 @@ Handle the `click` event to override default link behavior. Call `e.preventDefau
   Create incident
 </ClickableTile>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<ClickableTile light href="/services/object-storage">
-Object storage
-</ClickableTile>
+<Layer withBackground style="padding: 1rem">
+  <ClickableTile href="/services/object-storage">
+  Object storage
+  </ClickableTile>
+</Layer>
 
 ## Disabled
 

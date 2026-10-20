@@ -210,15 +210,6 @@ describe("PasswordInput", () => {
   });
 
   describe("Variants", () => {
-    it("should render light variant", () => {
-      render(PasswordInput, { labelText: "Password", light: true });
-
-      const wrapper = screen
-        .getByLabelText("Password")
-        .closest(".bx--text-input-wrapper");
-      expect(wrapper).toHaveClass("bx--text-input-wrapper--light");
-    });
-
     it("should render inline variant", () => {
       render(PasswordInput, {
         labelText: "Password",

@@ -4,7 +4,7 @@ description: Date pickers collect dates through simple typed fields, single cale
 ---
 
 <script>
-  import { DatePicker, DatePickerSkeleton, FluidDatePickerSkeleton, DatePickerInput, TooltipIcon } from "carbon-components-svelte";
+  import { DatePicker, DatePickerInput, DatePickerSkeleton, FluidDatePickerSkeleton, Layer, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -373,13 +373,15 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
   <DatePickerInput hideLabel labelText="Report date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<DatePicker light>
-  <DatePickerInput labelText="Onboarding date" placeholder="mm/dd/yyyy" />
-</DatePicker>
+<Layer withBackground style="padding: 1rem">
+  <DatePicker>
+    <DatePickerInput labelText="Onboarding date" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+</Layer>
 
 ## Fluid
 

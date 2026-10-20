@@ -4,7 +4,7 @@ description: Multi-selects provide a dropdown for selecting multiple options wit
 ---
 
 <script>
-  import { Box, FluidMultiSelectSkeleton, MultiSelect, MultiSelectSkeleton, Tag, TooltipIcon } from "carbon-components-svelte";
+  import { Box, FluidMultiSelectSkeleton, Layer, MultiSelect, MultiSelectSkeleton, Tag, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -498,15 +498,17 @@ Use the extra-large size for prominent selections by setting `size` to `"xl"`.
     {id: "2", text: "Fax"}]}"
   />
 
-## Light
+## On a layer
 
-Use the light variant for light backgrounds.
+Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<MultiSelect light labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
+<Layer withBackground style="padding: 1rem">
+  <MultiSelect labelText="Contact" label="Select contact methods..."
+      items="{[{id: "0", text: "Slack"},
+      {id: "1", text: "Email"},
+      {id: "2", text: "Fax"}]}"
+    />
+</Layer>
 
 ## Inline
 

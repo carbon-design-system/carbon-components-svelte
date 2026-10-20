@@ -34,12 +34,6 @@ describe("TextArea", () => {
     expect(textarea).toHaveAttribute("cols", "100");
   });
 
-  it("should handle light variant", () => {
-    render(TextArea, { props: { light: true } });
-
-    expect(screen.getByRole("textbox")).toHaveClass("bx--text-area--light");
-  });
-
   it("should handle disabled state", () => {
     render(TextArea, { props: { disabled: true } });
 
