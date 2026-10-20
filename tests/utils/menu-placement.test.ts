@@ -98,4 +98,9 @@ describe("menuSide", () => {
   it("keeps `direction` for a menu with no layout", () => {
     expect(side(300, 0, "bottom")).toBe("bottom");
   });
+
+  it("keeps `direction` for an anchor out of the window", () => {
+    expect(side(500, 200, "bottom")).toBe("bottom");
+    expect(side(-100, 200, "top")).toBe("top");
+  });
 });

@@ -42,3 +42,10 @@
     <OverflowMenuItem text="Delete" />
   </OverflowMenu>
 </div>
+
+<div style="height: 120vh"></div>
+
+<!-- Open at load, far below the window: nothing to fit to yet. -->
+<div data-testid="offscreen" style="width: 12rem; margin: 0 1rem 120vh">
+  <Dropdown labelText="Offscreen" selectedId="0" {items} open />
+</div>
