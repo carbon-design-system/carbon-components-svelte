@@ -60,7 +60,7 @@
 
   .#{$prefix}--search-menu__menu {
     width: 100%;
-    background-color: $layer-01;
+    background-color: $layer;
     box-shadow: 0 2px 6px rgba($carbon--black-100, 0.2);
     overflow-y: auto;
     max-height: to-rem(360px);
@@ -96,7 +96,7 @@
   }
 
   .#{$prefix}--search-menu-item--highlighted {
-    background-color: $layer-hover-01;
+    background-color: $layer-hover;
   }
 
   .#{$prefix}--search-menu-item--disabled {
@@ -121,7 +121,7 @@
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
     .#{$prefix}--search-menu-item:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .#{$prefix}--search-menu-item--disabled:hover {
@@ -166,7 +166,7 @@
   }
 
   .#{$prefix}--search-menu-group--divider {
-    border-top: 1px solid $border-subtle-01;
+    border-top: 1px solid $border-subtle;
     margin-top: $carbon--spacing-03;
     padding-top: $carbon--spacing-03;
   }

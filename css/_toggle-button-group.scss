@@ -34,7 +34,7 @@
     justify-content: center;
     column-gap: $carbon--spacing-03;
     padding: $carbon--spacing-02 $carbon--spacing-05;
-    background-color: $field-01;
+    background-color: $field;
     color: $text-secondary;
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive),
@@ -60,7 +60,7 @@
     left: 0;
     width: to-rem(1px);
     height: 100%;
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
     content: "";
   }
 
@@ -93,23 +93,23 @@
   // stuck in its hover state.
   @media (any-hover: hover) {
     .#{$prefix}--toggle-button:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .#{$prefix}--toggle-button--pressed:hover {
-      background-color: $layer-selected-hover-01;
+      background-color: $layer-selected-hover;
     }
   }
 
   .#{$prefix}--toggle-button:active {
-    background-color: $layer-active-01;
+    background-color: $layer-active;
   }
 
   .#{$prefix}--toggle-button--pressed {
-    background-color: $layer-selected-01;
+    background-color: $layer-selected;
     color: $text-primary;
     // Non-color pressed cue (WCAG 1.4.11 fails on color alone against
-    // `$field-01` in some themes).
+    // `$field` in some themes).
     box-shadow: inset 0 to-rem(-2px) 0 0 $interactive;
   }
 
@@ -122,7 +122,7 @@
   }
 
   .#{$prefix}--toggle-button:disabled {
-    background-color: $field-01;
+    background-color: $field;
     color: $text-disabled;
     cursor: not-allowed;
   }

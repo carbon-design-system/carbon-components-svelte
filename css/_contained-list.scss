@@ -34,7 +34,7 @@
     z-index: 1;
 
     &.#{$prefix}--search--expandable .#{$prefix}--search-input {
-      background-color: $field-01;
+      background-color: $field;
     }
   }
 
@@ -63,7 +63,7 @@
 
   .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-input {
     background-color: $background;
-    border-bottom: 1px solid $border-subtle-01;
+    border-bottom: 1px solid $border-subtle;
   }
 
   .#{$prefix}--contained-list
@@ -90,7 +90,7 @@
 
     background-color: $background;
     height: to-rem(48px);
-    border-bottom: 1px solid $border-subtle-01;
+    border-bottom: 1px solid $border-subtle;
     color: $text-primary;
   }
 
@@ -112,7 +112,7 @@
   .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__header {
     @include type-style("label-01");
 
-    background-color: $layer-01;
+    background-color: $layer;
     height: to-rem(32px);
     color: $text-secondary;
   }
@@ -183,7 +183,7 @@
 
   .#{$prefix}--contained-list-item:not(:last-of-type)::before {
     position: absolute;
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
     height: 1px;
     content: "";
     bottom: 0;
@@ -217,12 +217,12 @@
 
     .#{$prefix}--contained-list-item--clickable
       .#{$prefix}--contained-list-item__content:not(:disabled):hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .#{$prefix}--contained-list-item--selected
       .#{$prefix}--contained-list-item__content:not(:disabled):hover {
-      background-color: $layer-selected-hover-01;
+      background-color: $layer-selected-hover;
     }
 
     @media (forced-colors: active) {
@@ -239,7 +239,7 @@
   // selected fill and a bar on its leading edge.
   .#{$prefix}--contained-list-item--selected
     .#{$prefix}--contained-list-item__content {
-    background-color: $layer-selected-01;
+    background-color: $layer-selected;
     box-shadow: inset 3px 0 0 $interactive;
   }
 
@@ -258,7 +258,7 @@
 
   .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content:not(:disabled):active {
-    background-color: $layer-active-01;
+    background-color: $layer-active;
   }
 
   .#{$prefix}--contained-list-item--clickable

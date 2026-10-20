@@ -64,7 +64,7 @@
 
     @media (any-hover: hover) {
       &:hover:not(:disabled) {
-        background-color: $layer-hover-01;
+        background-color: $layer-hover;
       }
     }
   }

@@ -187,7 +187,7 @@
   .#{$prefix}--page-header--container-tabs
     + .#{$prefix}--page-header__body
     > .#{$prefix}--tab-content {
-    background-color: $layer-01;
+    background-color: $layer;
   }
 
   .#{$prefix}--page-header--container-tabs:not(

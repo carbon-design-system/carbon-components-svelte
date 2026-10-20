@@ -49,7 +49,7 @@
 /// @group pagination-nav
 /// @param {Color} $text-color [$text-secondary]
 /// @param {Color} $text-color-active [$text-secondary]
-/// @param {Color} $background-color-hover [$layer-hover-01]
+/// @param {Color} $background-color-hover [$layer-hover]
 /// @param {Color} $background-color-active [initial]
 /// @param {Number} $font-weight [400]
 /// @param {Number} $item-padding [0]
@@ -61,7 +61,7 @@
 @mixin pagination-nav(
   $text-color: $text-secondary,
   $text-color-active: $text-secondary,
-  $background-color-hover: $layer-hover-01,
+  $background-color-hover: $layer-hover,
   $background-color-active: initial,
   $font-weight: 400,
   $item-padding: 0,

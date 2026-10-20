@@ -150,11 +150,11 @@
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost:hover {
-    background-color: $layer-hover-01;
+    background-color: $layer-hover;
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost:active {
-    background-color: $layer-active-01;
+    background-color: $layer-active;
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost .#{$prefix}--snippet__icon {

@@ -18,7 +18,7 @@
   }
 
   .#{$prefix}--time-picker--fluid {
-    background: $field-01;
+    background: $field;
     inline-size: 100%;
   }
 
@@ -71,7 +71,7 @@
     .#{$prefix}--time-picker__input
     .#{$prefix}--text-input-wrapper {
     position: relative;
-    background: $field-01;
+    background: $field;
     block-size: to-rem(64px);
     transition:
       background-color $duration--fast-01 motion(standard, productive),
@@ -135,7 +135,7 @@
     .#{$prefix}--select-input__wrapper::before {
     position: absolute;
     display: block;
-    background-color: $border-strong-01;
+    background-color: $border-strong;
     block-size: calc(100% - 1px);
     content: "";
     inline-size: 1px;
@@ -148,7 +148,7 @@
     .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select--readonly
     .#{$prefix}--select-input__wrapper::before {
-    background-color: $layer-accent-01;
+    background-color: $layer-accent;
   }
 
   .#{$prefix}--time-picker--fluid__wrapper
@@ -175,7 +175,7 @@
   .#{$prefix}--time-picker--fluid .#{$prefix}--form-requirement {
     @include fluid-requirement-padding;
 
-    background: $field-01;
+    background: $field;
   }
 
   .#{$prefix}--time-picker--fluid--invalid {
@@ -258,7 +258,7 @@
 
     .#{$prefix}--time-picker--fluid--invalid
       .#{$prefix}--select-input:hover:not([disabled]) {
-      background: $layer-hover-01;
+      background: $layer-hover;
     }
 
     .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--select-input:hover {

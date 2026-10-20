@@ -54,7 +54,7 @@
       left: 50%;
       width: 1px;
       height: 100%;
-      background-color: $layer-accent-01;
+      background-color: $layer-accent;
       content: "";
       transform: translateX(-50%);
       transition: background-color $duration--fast-02 motion(standard, productive);

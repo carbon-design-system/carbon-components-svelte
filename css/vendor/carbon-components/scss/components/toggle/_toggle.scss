@@ -189,7 +189,7 @@
         width: to-rem(48px);
         height: to-rem(24px);
         box-sizing: border-box;
-        background-color: $border-strong-01;
+        background-color: $border-strong;
         border-radius: to-rem(15px);
         // Corresponds to the double-border for focused state (`0 0 0 1px $layer-02, 0 0 0 3px $focus`)
         box-shadow: 0 0 0 1px transparent, 0 0 0 3px transparent;

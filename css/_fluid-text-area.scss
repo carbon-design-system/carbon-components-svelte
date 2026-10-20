@@ -14,7 +14,7 @@
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper {
     position: relative;
     flex-direction: column;
-    background: $field-01;
+    background: $field;
     block-size: 100%;
   }
 
@@ -121,14 +121,14 @@
     overflow: visible;
     padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
-    background: $field-01;
+    background: $field;
     max-block-size: to-rem(200px);
   }
 
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper--warn
     .#{$prefix}--form-requirement {
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
     color: $text-primary;
   }
 
@@ -140,7 +140,7 @@
   }
 
   // `none` instead of a transparent 1px would drop the vendor default
-  // `border-bottom: 1px solid $border-strong-01` this hides, shrinking the textarea by
+  // `border-bottom: 1px solid $border-strong` this hides, shrinking the textarea by
   // 1px at rest; `.text-area:focus` below already reserves 1px transparent,
   // so this keeps the height constant instead of growing it on focus.
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area--warning {

@@ -1,0 +1,92 @@
+// ccs: Carbon v11 layering. Contextual tokens (layer, field, border-subtle,
+// ...) take a numbered token by nesting level: :root and .bx--layer-one use
+// level 1, .bx--layer-two level 2, .bx--layer-three level 3. Components read
+// the contextual names, so a Layer restyles everything inside it. Matches
+// @carbon/styles scss/layer/_layer-sets.scss; border-subtle starts at -00.
+
+$ccs-layer-sets: (
+  layer: (layer-01, layer-02, layer-03),
+  layer-active: (layer-active-01, layer-active-02, layer-active-03),
+  layer-background: (layer-background-01, layer-background-02, layer-background-03),
+  layer-hover: (layer-hover-01, layer-hover-02, layer-hover-03),
+  layer-selected: (layer-selected-01, layer-selected-02, layer-selected-03),
+  layer-selected-hover: (layer-selected-hover-01, layer-selected-hover-02, layer-selected-hover-03),
+  layer-accent: (layer-accent-01, layer-accent-02, layer-accent-03),
+  layer-accent-hover: (layer-accent-hover-01, layer-accent-hover-02, layer-accent-hover-03),
+  layer-accent-active: (layer-accent-active-01, layer-accent-active-02, layer-accent-active-03),
+  field: (field-01, field-02, field-03),
+  field-hover: (field-hover-01, field-hover-02, field-hover-03),
+  border-subtle: (border-subtle-00, border-subtle-01, border-subtle-02, border-subtle-03),
+  border-subtle-selected: (border-subtle-selected-01, border-subtle-selected-02, border-subtle-selected-03),
+  border-strong: (border-strong-01, border-strong-02, border-strong-03),
+  border-tile: (border-tile-01, border-tile-02, border-tile-03),
+);
+
+// Each contextual token's value in a theme is its level 1 token.
+@function ccs-v11-extend-layer($theme) {
+  @each $token, $set in $ccs-layer-sets {
+    $theme: map-merge($theme, ($token: map-get($theme, nth($set, 1))));
+  }
+  @return $theme;
+}
+
+$carbon--theme--white: ccs-v11-extend-layer($carbon--theme--white);
+$carbon--theme--g10: ccs-v11-extend-layer($carbon--theme--g10);
+$carbon--theme--g80: ccs-v11-extend-layer($carbon--theme--g80);
+$carbon--theme--g90: ccs-v11-extend-layer($carbon--theme--g90);
+$carbon--theme--g100: ccs-v11-extend-layer($carbon--theme--g100);
+$carbon--theme--v9: ccs-v11-extend-layer($carbon--theme--v9);
+$carbon--theme: ccs-v11-extend-layer($carbon--theme);
+
+$layer-background: map-get($carbon--theme, 'layer-background') !default;
+$border-tile: map-get($carbon--theme, 'border-tile') !default;
+
+// The v10 theme only emitted the contextual tokens it knew.
+@each $token in (layer-background, border-tile) {
+  @if not index($ccs-v11-token-names, $token) {
+    $ccs-v11-token-names: append($ccs-v11-token-names, $token);
+  }
+}
+
+/// A theme token: its custom property when the build emits them, else the
+/// value in the compiled theme.
+/// @param {String} $name - Token name
+/// @return {Color}
+@function ccs-token($name) {
+  @if global-variable-exists('feature-flags') and
+    map-get($feature-flags, 'enable-css-custom-properties')
+  {
+    @return custom-property-var($name, map-get($carbon--theme, $name));
+  }
+  @return map-get($carbon--theme, $name);
+}
+
+// A contextual token reads its custom property in every build, so a Layer
+// can re-point it. The single-theme files declare none on :root, so the
+// compiled value is the fallback there.
+@function ccs-contextual($name, $theme) {
+  @if global-variable-exists('feature-flags') and
+    map-get($feature-flags, 'enable-css-custom-properties')
+  {
+    @return custom-property-var($name, map-get($theme, $name));
+  }
+  @return var(--#{$custom-property-prefix}-#{$name}, #{map-get($theme, $name)});
+}
+
+@mixin ccs-v11-layer-globals($theme) {
+  $layer: ccs-contextual('layer', $theme) !global;
+  $layer-active: ccs-contextual('layer-active', $theme) !global;
+  $layer-background: ccs-contextual('layer-background', $theme) !global;
+  $layer-hover: ccs-contextual('layer-hover', $theme) !global;
+  $layer-selected: ccs-contextual('layer-selected', $theme) !global;
+  $layer-selected-hover: ccs-contextual('layer-selected-hover', $theme) !global;
+  $layer-accent: ccs-contextual('layer-accent', $theme) !global;
+  $layer-accent-hover: ccs-contextual('layer-accent-hover', $theme) !global;
+  $layer-accent-active: ccs-contextual('layer-accent-active', $theme) !global;
+  $field: ccs-contextual('field', $theme) !global;
+  $field-hover: ccs-contextual('field-hover', $theme) !global;
+  $border-subtle: ccs-contextual('border-subtle', $theme) !global;
+  $border-subtle-selected: ccs-contextual('border-subtle-selected', $theme) !global;
+  $border-strong: ccs-contextual('border-strong', $theme) !global;
+  $border-tile: ccs-contextual('border-tile', $theme) !global;
+}

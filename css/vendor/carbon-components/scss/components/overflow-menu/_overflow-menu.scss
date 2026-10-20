@@ -41,11 +41,11 @@
   // strictly, so precedence here is spec-, not order-, determined)
   @media (any-hover: hover) {
     .#{$prefix}--overflow-menu:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
 
     .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open:hover {
-      background-color: $field-01;
+      background-color: $field;
     }
 
     .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open:hover {
@@ -90,7 +90,7 @@
   .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open {
     @include box-shadow;
 
-    background-color: $field-01;
+    background-color: $field;
     transition: none;
   }
 
@@ -116,13 +116,13 @@
     width: to-rem(160px);
     flex-direction: column;
     align-items: flex-start;
-    background-color: $field-01;
+    background-color: $field;
     list-style: none;
 
     &::after {
       position: absolute;
       display: block;
-      background-color: $field-01;
+      background-color: $field;
       content: '';
       transition: background-color $duration--fast-02
         motion(entrance, productive);
@@ -229,7 +229,7 @@
   }
 
   .#{$prefix}--overflow-menu--divider {
-    border-top: 1px solid $border-subtle-01;
+    border-top: 1px solid $border-subtle;
   }
 
   .#{$prefix}--overflow-menu--light .#{$prefix}--overflow-menu--divider {
@@ -298,7 +298,7 @@
     }
 
     .#{$prefix}--overflow-menu-options__option:hover {
-      background-color: $layer-hover-01;
+      background-color: $layer-hover;
     }
   }
 
@@ -329,7 +329,7 @@
     }
 
     .#{$prefix}--overflow-menu-options__option--disabled:hover {
-      background-color: $layer-01;
+      background-color: $layer;
       cursor: not-allowed;
     }
 
@@ -337,7 +337,7 @@
       .#{$prefix}--overflow-menu-options__btn:hover {
       @include focus-outline('reset');
 
-      background-color: $layer-01;
+      background-color: $layer;
     }
   }
 
@@ -350,7 +350,7 @@
     &:focus {
       @include focus-outline('reset');
 
-      background-color: $layer-01;
+      background-color: $layer;
     }
   }
 

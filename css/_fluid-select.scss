@@ -13,7 +13,7 @@
 @mixin fluid-select {
   .#{$prefix}--select--fluid .#{$prefix}--select {
     position: relative;
-    background: $field-01;
+    background: $field;
     block-size: 100%;
     transition:
       background-color $duration--fast-01 motion(standard, productive),
@@ -80,7 +80,7 @@
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select--warning {
-    border-block-end: 1px solid $border-strong-01;
+    border-block-end: 1px solid $border-strong;
   }
 
   .#{$prefix}--select--fluid
