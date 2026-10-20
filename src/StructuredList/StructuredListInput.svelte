@@ -53,7 +53,7 @@
   const inputName = ctx?.inputName ?? writable("");
 
   if (initialChecked && ctx) {
-    update(value);
+    ctx.add(value);
   }
 
   $: checked = $multiple

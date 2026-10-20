@@ -44,7 +44,7 @@
   export let icon = CheckmarkFilled;
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import { readonly, writable } from "svelte/store";
+  import { get, readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -98,6 +98,21 @@
     }
   }
 
+  /**
+   * Select the value of an input that mounts `checked`. Markup is not a
+   * user choice, so this fires no `change`.
+   * @type {(value: Value) => void}
+   */
+  function add(value) {
+    const current = get(selectedValue);
+    const list = Array.isArray(current) ? current : [];
+    if (multiple ? list.includes(value) : current === value) return;
+    // The `change` block skips the initial render without reading the flag,
+    // so setting it then would swallow the next user change.
+    if (!initialRender) fromProp = true;
+    selectedValue.set(multiple ? [...list, value] : value);
+  }
+
   /** @type {HTMLDivElement | null} */
   let listRef = null;
 
@@ -125,6 +140,7 @@
 
   setContext("carbon:StructuredListWrapper", {
     selectedValue,
+    add,
     update,
     multiple: readonly(multipleValue),
     selection: readonly(selectionValue),

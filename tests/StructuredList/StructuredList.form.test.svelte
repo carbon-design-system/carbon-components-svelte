@@ -10,15 +10,22 @@
   export let selected: string | string[] | undefined = undefined;
   export let multiple = false;
   export let onChange: () => void = () => {};
+  export let engines = ["postgresql", "mongodb", "redis"];
+  export let checkedEngines: string[] = [];
 </script>
 
 <form data-testid="form">
   <StructuredList selection {multiple} bind:selected on:change={onChange}>
     <StructuredListBody>
-      {#each ["postgresql", "mongodb", "redis"] as engine}
+      {#each engines as engine}
         <StructuredListRow label for={engine} value={engine}>
           <StructuredListCell>{engine}</StructuredListCell>
-          <StructuredListInput id={engine} value={engine} name="engine" />
+          <StructuredListInput
+            id={engine}
+            value={engine}
+            name="engine"
+            checked={checkedEngines.includes(engine)}
+          />
         </StructuredListRow>
       {/each}
     </StructuredListBody>

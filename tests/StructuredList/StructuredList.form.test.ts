@@ -59,3 +59,23 @@ describe("StructuredList form reset", () => {
     expect(getInputs()[0]).toBeChecked();
   });
 });
+
+describe("StructuredList rows mounted after the list", () => {
+  it("selects a row mounted `checked` without firing change", async () => {
+    const onChange = vi.fn();
+    const { rerender } = render(StructuredListForm, {
+      props: {
+        multiple: true,
+        selected: ["postgresql"],
+        checkedEngines: ["postgresql", "sqlite"],
+        onChange,
+      },
+    });
+    expect(getBoundText()).toBe('["postgresql"]');
+
+    await rerender({ engines: ["postgresql", "mongodb", "redis", "sqlite"] });
+
+    expect(getBoundText()).toBe('["postgresql","sqlite"]');
+    expect(onChange).not.toHaveBeenCalled();
+  });
+});
