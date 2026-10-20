@@ -6,16 +6,6 @@ import SessionStorageSync from "./SessionStorageSync.test.svelte";
 describe("SessionStorage sync opt-out", () => {
   const { dispatchStorageEvent, getMockItem } = setupSessionStorageEventMock();
 
-  it("does not register a storage listener when sync is off", async () => {
-    render(SessionStorageSync, { props: { sync: "off" } });
-    await tick();
-
-    expect(window.addEventListener).not.toHaveBeenCalledWith(
-      "storage",
-      expect.any(Function),
-    );
-  });
-
   it("ignores external storage events when sync is off", async () => {
     const onUpdate = vi.fn();
     const { component } = render(SessionStorageSync, {

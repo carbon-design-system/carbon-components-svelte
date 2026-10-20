@@ -68,8 +68,6 @@
 
 <Tag inline>Inline tag</Tag>
 
-<Tag id="custom-tag-id">Custom ID tag</Tag>
-
 <Tag
   on:mouseover={() => {
     console.log("mouseover");

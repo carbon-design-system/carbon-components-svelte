@@ -32,42 +32,6 @@ describe("NotificationQueue", () => {
     expect(queueContainer).not.toBeInTheDocument();
   });
 
-  it("should render with default props", async () => {
-    const { component } = render(NotificationQueueTest);
-
-    getQueue(component.queue).add({
-      kind: "success",
-      title: "Test notification",
-    });
-    await tick();
-
-    const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toBeInTheDocument();
-    expectInlineStyle(queueContainer, {
-      position: "fixed",
-      right: "1rem",
-      top: "3rem",
-      "z-index": "9000",
-    });
-  });
-
-  it("should add a notification", async () => {
-    const { component } = render(NotificationQueueTest);
-
-    const id = getQueue(component.queue).add({
-      kind: "success",
-      title: "Success notification",
-      subtitle: "Your changes have been saved.",
-    });
-    await tick();
-
-    expect(id).toBeTruthy();
-    expect(screen.getByText("Success notification")).toBeInTheDocument();
-    expect(
-      screen.getByText("Your changes have been saved."),
-    ).toBeInTheDocument();
-  });
-
   it("should generate unique ids when id is not provided", async () => {
     const { component } = render(NotificationQueueTest);
 
@@ -86,19 +50,6 @@ describe("NotificationQueue", () => {
     expect(id1).not.toBe(id2);
     expect(id1).toMatch(/^notification-\d+$/);
     expect(id2).toMatch(/^notification-\d+$/);
-  });
-
-  it("should use provided id", async () => {
-    const { component } = render(NotificationQueueTest);
-
-    const id = getQueue(component.queue).add({
-      id: "custom-id",
-      kind: "warning",
-      title: "Custom ID notification",
-    });
-    await tick();
-
-    expect(id).toBe("custom-id");
   });
 
   it("should not put the queue id on the toast element", async () => {
@@ -405,7 +356,12 @@ describe("NotificationQueue", () => {
     {
       position: "top-right",
       className: "bx--notification-queue--top-right",
-      styles: { top: "3rem", right: "1rem" },
+      styles: {
+        position: "fixed",
+        top: "3rem",
+        right: "1rem",
+        "z-index": "9000",
+      },
       absent: ["bottom", "left", "transform"],
     },
     {
@@ -462,20 +418,6 @@ describe("NotificationQueue", () => {
     },
   );
 
-  it("should position notifications at top-right by default", async () => {
-    const { component } = render(NotificationQueueTest);
-
-    getQueue(component.queue).add({
-      kind: "success",
-      title: "Test",
-    });
-    await tick();
-
-    const queueContainer = document.querySelector(".bx--notification-queue");
-    expect(queueContainer).toHaveClass("bx--notification-queue--top-right");
-    expectInlineStyle(queueContainer, { top: "3rem", right: "1rem" });
-  });
-
   it("should use custom offsets", async () => {
     const { component } = render(NotificationQueueTest, {
       props: {
@@ -527,6 +469,9 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.queryByText("Test notification")).not.toBeInTheDocument();
+    expect(
+      document.querySelector('[style*="position: fixed"]'),
+    ).not.toBeInTheDocument();
   });
 
   it("should remove notification after timeout", async () => {
@@ -582,28 +527,6 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.getByText("Persistent notification")).toBeInTheDocument();
-  });
-
-  it("should handle notifications with all properties", async () => {
-    const { component } = render(NotificationQueueTest);
-
-    getQueue(component.queue).add({
-      id: "full-notification",
-      kind: "info-square",
-      title: "Full notification",
-      subtitle: "Subtitle text",
-      caption: "Caption text",
-      timeout: 5000,
-      lowContrast: true,
-      closeButtonDescription: "Custom close",
-      hideCloseButton: false,
-    });
-    await tick();
-
-    expect(screen.getByText("Full notification")).toBeInTheDocument();
-    expect(screen.getByText("Subtitle text")).toBeInTheDocument();
-    expect(screen.getByText("Caption text")).toBeInTheDocument();
-    expect(screen.getByLabelText("Custom close")).toBeInTheDocument();
   });
 
   it("should forward toast-only props (pauseOnHover, role, fullWidth)", async () => {
@@ -688,28 +611,6 @@ describe("NotificationQueue", () => {
       expect(notifications[1]).toHaveTextContent("Second");
     },
   );
-
-  it("should not render container when all notifications are removed", async () => {
-    vi.useRealTimers();
-    const { component, container } = render(NotificationQueueTest);
-
-    getQueue(component.queue).add({
-      kind: "success",
-      title: "Test notification",
-    });
-    await tick();
-
-    expect(screen.getByText("Test notification")).toBeInTheDocument();
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    const queueContainer = container.querySelector(
-      '[style*="position: fixed"]',
-    );
-    expect(queueContainer).not.toBeInTheDocument();
-  });
 
   describe("NotificationButton Generics", () => {
     it("should support custom Icon types with generics", () => {

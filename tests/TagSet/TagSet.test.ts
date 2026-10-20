@@ -145,25 +145,6 @@ describe("TagSet", () => {
     ).toHaveLength(0);
   });
 
-  it("dispatches close:tag with the tag and its index", async () => {
-    const onTagClose = vi.fn();
-    const { container } = render(TagSetFixture, {
-      dismissible: true,
-      onTagClose,
-    });
-
-    const closeButtons = within(container).getAllByTitle("Clear filter");
-    expect(closeButtons).toHaveLength(4);
-    await user.click(closeButtons[1]);
-
-    expect(onTagClose).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        tag: expect.objectContaining({ label: "Tag 2" }),
-        index: 1,
-      }),
-    );
-  });
-
   it("includes the closed tag's value in close:tag", async () => {
     const onTagClose = vi.fn();
     const { container } = render(TagSetFixture, {
@@ -173,6 +154,7 @@ describe("TagSet", () => {
     });
 
     const closeButtons = within(container).getAllByTitle("Clear filter");
+    expect(closeButtons).toHaveLength(4);
     await user.click(closeButtons[2]);
 
     expect(onTagClose).toHaveBeenCalledExactlyOnceWith(

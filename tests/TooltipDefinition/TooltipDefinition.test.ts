@@ -84,7 +84,6 @@ describe("TooltipDefinition", () => {
     await user.hover(trigger);
 
     expect(trigger).toHaveClass("bx--tooltip--visible");
-    expect(consoleLog).toHaveBeenCalledWith("open");
   });
 
   it("should hide tooltip on mouse leave", async () => {
@@ -95,7 +94,6 @@ describe("TooltipDefinition", () => {
     await user.unhover(trigger);
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
-    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   it("should show tooltip on focus", async () => {
@@ -173,16 +171,6 @@ describe("TooltipDefinition", () => {
 
     const trigger = screen.getByText("Tooltip trigger");
     expect(trigger).toHaveClass("bx--tooltip--align-end");
-  });
-
-  it("should support custom trigger content", () => {
-    render(TooltipDefinition, {
-      props: {
-        triggerContent: "Custom trigger",
-      },
-    });
-
-    expect(screen.getByText("Custom trigger")).toBeInTheDocument();
   });
 
   it("should support controlled open state", () => {

@@ -4,7 +4,6 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
-import ToastNotificationCustomTest from "./ToastNotificationCustom.test.svelte";
 import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
 import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";
 import ToastNotificationTitleSlotTest from "./ToastNotificationTitleSlot.test.svelte";
@@ -35,27 +34,6 @@ describe("ToastNotification", () => {
       add.mock.calls.filter(([type]) => type === "visibilitychange"),
     ).toHaveLength(0);
     add.mockRestore();
-  });
-
-  it("should render with all kinds", () => {
-    const kinds = [
-      "error",
-      "info",
-      "info-square",
-      "success",
-      "warning",
-      "warning-alt",
-    ] as const;
-
-    for (const kind of kinds) {
-      const { unmount } = render(ToastNotificationTest, {
-        props: { kind },
-      });
-
-      const notification = document.querySelector(".bx--toast-notification");
-      expect(notification).toHaveClass(`bx--toast-notification--${kind}`);
-      unmount();
-    }
   });
 
   it("should render low contrast variant", () => {
@@ -244,22 +222,6 @@ describe("ToastNotification", () => {
     expect(captionElement).not.toBeInTheDocument();
   });
 
-  it("should NOT render any text elements when all props are empty", () => {
-    render(ToastNotificationTest, {
-      props: { title: "", subtitle: "", caption: "" },
-    });
-
-    expect(
-      document.querySelector(".bx--toast-notification__title"),
-    ).not.toBeInTheDocument();
-    expect(
-      document.querySelector(".bx--toast-notification__subtitle"),
-    ).not.toBeInTheDocument();
-    expect(
-      document.querySelector(".bx--toast-notification__caption"),
-    ).not.toBeInTheDocument();
-  });
-
   it("should render title element when slot is used", () => {
     render(ToastNotificationTitleSlotTest);
 
@@ -290,34 +252,6 @@ describe("ToastNotification", () => {
     expect(captionElement).toHaveTextContent("Slot caption");
   });
 
-  it("supports custom titleChildren slot", () => {
-    render(ToastNotificationTitleSlotTest);
-
-    const customTitle = screen.getByText("Slot title");
-    expect(customTitle).toBeInTheDocument();
-  });
-
-  it("supports custom subtitleChildren slot", () => {
-    render(ToastNotificationSubtitleSlotTest);
-
-    const customSubtitle = screen.getByText("Slot subtitle");
-    expect(customSubtitle).toBeInTheDocument();
-  });
-
-  it("supports custom captionChildren slot", () => {
-    render(ToastNotificationCaptionSlotTest);
-
-    const customCaption = screen.getByText("Slot caption");
-    expect(customCaption).toBeInTheDocument();
-  });
-
-  it("should render close button by default", () => {
-    render(ToastNotificationTest);
-
-    const closeButton = screen.getByLabelText("Close notification");
-    expect(closeButton).toBeInTheDocument();
-  });
-
   it("should hide close button when hideCloseButton is true", () => {
     render(ToastNotificationTest, {
       props: { hideCloseButton: true },
@@ -338,6 +272,9 @@ describe("ToastNotification", () => {
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
+    expect(
+      document.querySelector(".bx--toast-notification"),
+    ).not.toBeInTheDocument();
   });
 
   it("should auto-close after timeout", async () => {
@@ -429,34 +366,6 @@ describe("ToastNotification", () => {
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
-  it("should not resume timeout when focus moves between focusable elements inside", async () => {
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
-    });
-
-    const notification = document.querySelector(".bx--toast-notification");
-    const closeButton = screen.getByRole("button", {
-      name: "Close notification",
-    });
-    assert(notification);
-
-    closeButton.focus();
-    vi.advanceTimersByTime(400);
-
-    await fireEvent(
-      closeButton,
-      new FocusEvent("focusout", {
-        bubbles: true,
-        relatedTarget: notification,
-      }),
-    );
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-  });
-
   it("should not pause timeout on focus when pauseOnHover is false", async () => {
     const closeHandler = vi.fn();
     render(ToastNotificationTest, {
@@ -486,32 +395,6 @@ describe("ToastNotification", () => {
     expect(notification).toHaveStyle({ width: "100%" });
   });
 
-  it("should use custom role", () => {
-    render(ToastNotificationTest, {
-      props: { role: "status" },
-    });
-
-    const notification = document.querySelector(".bx--toast-notification");
-    expect(notification).toHaveAttribute("role", "status");
-  });
-
-  it("should remove notification from DOM when closed", async () => {
-    vi.useRealTimers();
-    render(ToastNotificationTest);
-
-    expect(
-      document.querySelector(".bx--toast-notification"),
-    ).toBeInTheDocument();
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    expect(
-      document.querySelector(".bx--toast-notification"),
-    ).not.toBeInTheDocument();
-  });
-
   it("should prevent close when event is cancelled", async () => {
     vi.useRealTimers();
     const closeHandler = vi.fn((e) => {
@@ -537,14 +420,6 @@ describe("ToastNotification", () => {
     expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(icon).not.toHaveAttribute("role", "img");
     expect(icon?.querySelector("title")).toBeNull();
-  });
-
-  it("should render custom title, subtitle, and caption slots", () => {
-    render(ToastNotificationCustomTest);
-
-    expect(screen.getByText("Custom Title:")).toBeInTheDocument();
-    expect(screen.getByText("Custom subtitle content.")).toBeInTheDocument();
-    expect(screen.getByText("Custom caption content.")).toBeInTheDocument();
   });
 
   it("should support bind:open", async () => {

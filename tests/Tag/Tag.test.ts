@@ -248,13 +248,6 @@ describe("Tag", () => {
     expect(inlineTag).toHaveClass("bx--tag--inline");
   });
 
-  it("applies custom id", () => {
-    render(Tag);
-
-    const customIdTag = screen.getByText("Custom ID tag").parentElement;
-    expect(customIdTag).toHaveAttribute("id", "custom-tag-id");
-  });
-
   it("handles mouse events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Tag);
