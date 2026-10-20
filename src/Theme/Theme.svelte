@@ -117,6 +117,10 @@
   /** @type {MediaQueryList | undefined} */
   let mql;
 
+  // Tokens set on the document, so one dropped from `tokens` can be removed.
+  /** @type {Set<string>} */
+  const appliedTokens = new Set();
+
   /** @param {{ matches: boolean }} event */
   function onSystemChange(event) {
     theme = event.matches ? systemThemes[1] : systemThemes[0];
@@ -186,8 +190,15 @@
   // Apply theme before dispatching update. Reactive blocks run in source order,
   // and a throwing on:update handler aborts the rest of the flush.
   $: if (typeof window !== "undefined") {
+    for (const token of appliedTokens) {
+      if (token in tokens) continue;
+      document.documentElement.style.removeProperty(`--cds-${token}`);
+      appliedTokens.delete(token);
+    }
+
     for (const [token, value] of Object.entries(tokens)) {
       document.documentElement.style.setProperty(`--cds-${token}`, value);
+      appliedTokens.add(token);
     }
 
     if (theme in themes) {
