@@ -1,32 +1,41 @@
 import { render } from "@testing-library/svelte";
 import type SessionStorageComponent from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStorage from "./SessionStorage.test.svelte";
 
 describe("SessionStorage", () => {
-  setupSessionStorageMock();
+  const storageMock = setupSessionStorageMock();
 
-  it("clears specific item from sessionStorage", () => {
+  it("clearItem removes the key from storage and resets the bound value", async () => {
+    const { setMockItem, getMockItem } = storageMock;
     const { component } = render(SessionStorage);
-    const storage = component.storage;
+    await tick();
+    setMockItem("other-key", "kept");
 
-    if (storage) {
-      storage.clearItem();
-      expect(sessionStorage.removeItem).toHaveBeenCalledWith(
-        "programmatic-key",
-      );
-    }
+    component.storage?.clearItem();
+    await tick();
+
+    expect(sessionStorage.removeItem).toHaveBeenCalledWith("programmatic-key");
+    expect(getMockItem("programmatic-key")).toBeUndefined();
+    expect(getMockItem("other-key")).toBe("kept");
+    expect(component.programmaticValue).toBeUndefined();
   });
 
-  it("clears all items from sessionStorage", () => {
+  it("clearAll empties storage and resets the bound value", async () => {
+    const { setMockItem, getMockItem } = storageMock;
     const { component } = render(SessionStorage);
-    const storage = component.storage;
+    await tick();
+    setMockItem("other-key", "gone");
 
-    if (storage) {
-      storage.clearAll();
-      expect(sessionStorage.clear).toHaveBeenCalled();
-    }
+    component.storage?.clearAll();
+    await tick();
+
+    expect(sessionStorage.clear).toHaveBeenCalled();
+    expect(getMockItem("programmatic-key")).toBeUndefined();
+    expect(getMockItem("other-key")).toBeUndefined();
+    expect(component.programmaticValue).toBeUndefined();
   });
 
   it("uses default key if none provided", () => {

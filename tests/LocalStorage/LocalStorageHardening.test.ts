@@ -4,7 +4,7 @@ import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStorageHardening from "./LocalStorageHardening.test.svelte";
 
 describe("LocalStorage - storage hardening", () => {
-  const { setMockItem } = setupLocalStorageMock();
+  const { setMockItem, getMockItem } = setupLocalStorageMock();
 
   afterEach(() => vi.restoreAllMocks());
 
@@ -19,18 +19,20 @@ describe("LocalStorage - storage hardening", () => {
     expect(component.value).toBe("{invalid-json}");
   });
 
-  it("does not throw on mount when setItem throws", async () => {
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+  it("still saves and keeps the value on mount when setItem throws", async () => {
+    vi.mocked(localStorage.setItem).mockImplementation(() => {
       throw new DOMException("QuotaExceededError");
     });
 
     const onSave = vi.fn();
+    const onError = vi.fn();
     const { component } = render(LocalStorageHardening, {
-      props: { key: "new-key", value: "fresh", onSave },
+      props: { key: "new-key", value: "fresh", onSave, onError },
     });
     await tick();
 
     expect(onSave).toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledTimes(1);
     expect(component.value).toBe("fresh");
   });
 
@@ -38,25 +40,32 @@ describe("LocalStorage - storage hardening", () => {
     setMockItem("hardening-key", JSON.stringify("stored"));
 
     const onUpdate = vi.fn();
+    const onError = vi.fn();
     const { component } = render(LocalStorageHardening, {
-      props: { key: "hardening-key", value: "stored", onUpdate },
+      props: { key: "hardening-key", value: "stored", onUpdate, onError },
     });
     await tick();
     onUpdate.mockClear();
 
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
-      throw new DOMException("QuotaExceededError");
+    const quotaError = new DOMException("QuotaExceededError");
+    vi.mocked(localStorage.setItem).mockImplementation(() => {
+      throw quotaError;
     });
 
     component.value = "changed";
     await tick();
 
+    await vi.waitFor(() => {
+      expect(onUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          detail: { prevValue: "stored", value: "changed" },
+        }),
+      );
+    });
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(onError.mock.calls[0][0].detail).toEqual({ error: quotaError });
     expect(component.value).toBe("changed");
-    expect(onUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        detail: { prevValue: "stored", value: "changed" },
-      }),
-    );
+    expect(getMockItem("hardening-key")).toBe(JSON.stringify("stored"));
   });
 
   it("clearItem and clearAll do not throw when localStorage is blocked", async () => {

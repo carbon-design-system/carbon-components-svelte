@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
@@ -28,7 +29,7 @@ describe("InlineNotification", () => {
 
   it("does not listen for visibilitychange with the default timeout", () => {
     const add = vi.spyOn(document, "addEventListener");
-    render(InlineNotificationTest);
+    render(InlineNotification);
 
     expect(
       add.mock.calls.filter(([type]) => type === "visibilitychange"),
@@ -518,7 +519,7 @@ describe("InlineNotification", () => {
       document.querySelector(".bx--inline-notification"),
     ).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     expect(

@@ -7,6 +7,10 @@ import {
 import TooltipDispatchGuard from "./TooltipDispatchGuard.test.svelte";
 
 describe("Tooltip dispatch guard", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("updates the previous-open guard before dispatching, so a throwing on:open handler does not prevent the dispatch itself from firing exactly once", async () => {
     const onOpen = vi.fn(() => {
       throw new Error("consumer boom");
@@ -55,7 +59,5 @@ describe("Tooltip dispatch guard", () => {
     const tooltip = screen.getByRole("dialog");
     await fireEvent.keyDown(tooltip, { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
-
-    vi.useRealTimers();
   });
 });

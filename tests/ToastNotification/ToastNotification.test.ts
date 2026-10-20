@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
@@ -28,7 +29,7 @@ describe("ToastNotification", () => {
 
   it("does not listen for visibilitychange with the default timeout", () => {
     const add = vi.spyOn(document, "addEventListener");
-    render(ToastNotificationTest);
+    render(ToastNotification);
 
     expect(
       add.mock.calls.filter(([type]) => type === "visibilitychange"),
@@ -555,7 +556,7 @@ describe("ToastNotification", () => {
       document.querySelector(".bx--toast-notification"),
     ).toBeInTheDocument();
 
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     expect(

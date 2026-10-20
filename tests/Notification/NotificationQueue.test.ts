@@ -234,10 +234,18 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
+    expect(screen.getByRole("alert")).toHaveClass(
+      "bx--toast-notification--info",
+    );
+
     getQueue(component.queue).update(id, { kind: "success" });
     await tick();
 
+    expect(screen.getByRole("alert")).toHaveClass(
+      "bx--toast-notification--success",
+    );
     expect(screen.getByText("Title")).toBeInTheDocument();
+    expect(screen.getByText("Subtitle")).toBeInTheDocument();
     expect(screen.getByText("Subtitle")).toBeInTheDocument();
   });
 
@@ -606,13 +614,25 @@ describe("NotificationQueue", () => {
       pauseOnHover: true,
       role: "status",
       fullWidth: true,
-      timeout: 0,
+      timeout: 1000,
     });
     await tick();
 
     const toast = screen.getByRole("status");
     expect(toast).toBeInTheDocument();
     expectInlineStyle(toast, { width: "100%" });
+
+    await fireEvent.mouseEnter(toast);
+    vi.advanceTimersByTime(3000);
+    await tick();
+
+    expect(screen.getByText("Saved")).toBeInTheDocument();
+
+    await fireEvent.mouseLeave(toast);
+    vi.advanceTimersByTime(1000);
+    await tick();
+
+    expect(screen.queryByText("Saved")).not.toBeInTheDocument();
   });
 
   it.each(["top-right", "top-left", "top-center"] as const)(

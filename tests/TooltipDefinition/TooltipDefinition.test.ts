@@ -48,6 +48,7 @@ describe("TooltipDefinition", () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -397,8 +398,6 @@ describe("TooltipDefinition", () => {
       await vi.advanceTimersByTimeAsync(200);
 
       expect(screen.getByText("Test tooltip text")).toBeInTheDocument();
-
-      vi.useRealTimers();
     });
 
     it("should close after leaveDelayMs when the pointer leaves the portal", async () => {
@@ -422,8 +421,6 @@ describe("TooltipDefinition", () => {
       await vi.advanceTimersByTimeAsync(200);
 
       expect(screen.queryByText("Test tooltip text")).not.toBeInTheDocument();
-
-      vi.useRealTimers();
     });
   });
 

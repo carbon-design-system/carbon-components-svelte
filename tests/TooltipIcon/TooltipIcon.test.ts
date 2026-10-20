@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type TooltipIconComponent from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import type { ComponentProps } from "svelte";
+import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
@@ -20,6 +21,7 @@ describe("TooltipIcon", () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -240,14 +242,18 @@ describe("TooltipIcon", () => {
   });
 
   it("should not show tooltip when disabled", async () => {
+    // `--hidden` is also forced by `disabled`, so the class alone cannot
+    // tell whether hover tried to open the tooltip. The open event can.
+    const onOpen = vi.fn();
     render(TooltipIcon, {
-      props: { disabled: true },
+      props: { disabled: true, onOpen },
     });
 
     const trigger = screen.getByRole("button");
     await user.hover(trigger);
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(onOpen).not.toHaveBeenCalled();
   });
 
   it("should support custom tooltip text", () => {
@@ -275,6 +281,10 @@ describe("TooltipIcon", () => {
 
     expect(trigger).toHaveAttribute("aria-describedby", "test-tooltip");
     expect(tooltip).toHaveClass("bx--assistive-text");
+    // The id must point at the rendered tooltip text.
+    expect(
+      document.getElementById(trigger.getAttribute("aria-describedby") ?? ""),
+    ).toBe(tooltip);
   });
 
   describe("size", () => {
@@ -372,8 +382,6 @@ describe("TooltipIcon", () => {
       // Moving to B should show instantly (warm handoff, no delay).
       await fireEvent.mouseEnter(btnB);
       expect(btnB).not.toHaveClass("bx--tooltip--hidden");
-
-      vi.useRealTimers();
     });
   });
 
@@ -430,10 +438,16 @@ describe("TooltipIcon", () => {
       render(TooltipIconPortal);
 
       const buttons = screen.getAllByRole("button");
+      expect(openTooltips()).toHaveLength(0);
+
       // TooltipIconPortal order: top, right, bottom, left
       await user.hover(buttons[2]);
 
-      expect(screen.getByText("Portal tooltip bottom")).toBeInTheDocument();
+      const open = openTooltips();
+      expect(open).toHaveLength(1);
+      expect(open[0]).toHaveTextContent("Portal tooltip bottom");
+      // Portalled out of the trigger, not rendered inline beside it.
+      expect(buttons[2]).not.toContainElement(open[0] as HTMLElement);
     });
 
     it("should not render assistive text span when using portal", () => {
