@@ -187,6 +187,18 @@ describe("SearchMenu", () => {
     );
   });
 
+  it.each([{ isComposing: true }, { keyCode: 229 }])(
+    "ignores Enter while an IME composition is active (%o)",
+    async (init) => {
+      render(SearchMenu);
+      const input = screen.getByRole("combobox");
+      await user.click(input);
+      await user.type(input, "ni");
+      await fireEvent.keyDown(input, { key: "Enter", ...init });
+      expect(screen.getByTestId("result")).not.toHaveTextContent("submit:");
+    },
+  );
+
   it("submits the typed value when Enter follows a hover highlight", async () => {
     render(SearchMenu);
     const input = screen.getByRole("combobox");
