@@ -15,11 +15,16 @@ export function parseStoredValue(raw) {
 
 /**
  * JSON.stringify objects (null included); String() for other values.
- * Same rules LocalStorage and SessionStorage used before this helper.
+ * Strings that parseStoredValue would read back as something else ("123",
+ * "true", '{"a":1}') are JSON-encoded; other strings stay raw, so values
+ * stored by older versions read back unchanged.
  * @param {any} value
  * @returns {string}
  */
 export function serializeStoredValue(value) {
+  if (typeof value === "string" && parseStoredValue(value) !== value) {
+    return JSON.stringify(value);
+  }
   return typeof value === "object" ? JSON.stringify(value) : String(value);
 }
 

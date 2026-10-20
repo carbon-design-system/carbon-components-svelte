@@ -34,6 +34,13 @@ describe("serializeStoredValue", () => {
     expect(serializeStoredValue("hello")).toBe("hello");
     expect(serializeStoredValue(undefined)).toBe("undefined");
   });
+
+  it.each(["123", "true", "null", '{"a":1}', "hello", ""])(
+    "round-trips the string %j through parseStoredValue",
+    (value) => {
+      expect(parseStoredValue(serializeStoredValue(value))).toBe(value);
+    },
+  );
 });
 
 describe("safeBrowserStorage (working storage)", () => {
