@@ -382,6 +382,31 @@ describe("ProgressIndicator", () => {
       expect(buttons[0]).toHaveFocus();
     });
 
+    it.each(["altKey", "ctrlKey", "metaKey"])(
+      "leaves ArrowRight with %s held to the browser",
+      async (modifier) => {
+        render(ProgressIndicator, {
+          currentIndex: 1,
+          steps: fourSteps,
+        });
+
+        const buttons = screen.getAllByRole("button");
+        buttons[0].focus();
+
+        const event = new KeyboardEvent("keydown", {
+          key: "ArrowRight",
+          bubbles: true,
+          cancelable: true,
+          [modifier]: true,
+        });
+        buttons[0].dispatchEvent(event);
+        await tick();
+
+        expect(event.defaultPrevented).toBe(false);
+        expect(buttons[0]).toHaveFocus();
+      },
+    );
+
     it("moves focus with ArrowUp/ArrowDown when vertical, ignoring horizontal arrows", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,
