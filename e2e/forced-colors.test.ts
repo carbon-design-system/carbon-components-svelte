@@ -144,10 +144,13 @@ test.describe("forced colors", () => {
     for (const [on, off] of selected) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(on);
-      expect.soft(await style(page, on), on).toMatchObject({
-        background: system.Highlight,
-        color: system.HighlightText,
-      });
+      // Polled: a hover transition can still be running at the first read.
+      await expect
+        .poll(() => style(page, on), { message: on })
+        .toMatchObject({
+          background: system.Highlight,
+          color: system.HighlightText,
+        });
       expect
         .soft((await style(page, off)).background, off)
         .not.toBe(system.Highlight);
@@ -187,8 +190,12 @@ test.describe("forced colors", () => {
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
-      const { background, color } = await style(page, selector);
-      expect.soft(color, selector).toBe(system.GrayText);
+      await expect
+        .poll(async () => (await style(page, selector)).color, {
+          message: selector,
+        })
+        .toBe(system.GrayText);
+      const { background } = await style(page, selector);
       expect.soft(background, selector).not.toBe(system.Highlight);
     }
   });
