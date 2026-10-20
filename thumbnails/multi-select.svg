@@ -9,7 +9,7 @@
         </filter>
     </defs>
     <g id="multi-select" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="var(--cds-text-03, #a8a8a8)" x="76" y="32" width="70" height="8"></rect>
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="32" width="70" height="8"></rect>
         <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="48" width="168" height="32"></rect>
         <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="79" width="168" height="1"></rect>
         <rect id="tag" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="56" width="52" height="16" rx="8"></rect>
@@ -18,7 +18,7 @@
             <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
         </g>
         <rect x="76" y="80" width="168" height="68" fill="black" filter="url(#multi-select-shadow)"></rect>
-        <rect x="76" y="80" width="168" height="68" fill="var(--cds-ui-02, #ffffff)"></rect>
+        <rect x="76" y="80" width="168" height="68" fill="var(--cds-layer-02, #ffffff)"></rect>
         <rect id="item-highlight" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="86" width="168" height="22"></rect>
         <rect id="check-1" fill="var(--cds-icon-primary, #161616)" x="88" y="91" width="12" height="12" rx="1"></rect>
         <g id="check-1-mark" transform="translate(91, 90.5) translate(6.75, 3.75) rotate(-45) translate(-6.75, -3.75)">
@@ -26,8 +26,8 @@
         </g>
         <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="110" y="93" width="60" height="8"></rect>
         <rect id="check-2" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="88.5" y="111.5" width="11" height="11" rx="1"></rect>
-        <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="110" y="115" width="80" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="110" y="115" width="80" height="8"></rect>
         <rect id="check-3" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="88.5" y="129.5" width="11" height="11" rx="1"></rect>
-        <rect id="item-3" fill="var(--cds-text-03, #a8a8a8)" x="110" y="133" width="50" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="110" y="133" width="50" height="8"></rect>
     </g>
 </svg>

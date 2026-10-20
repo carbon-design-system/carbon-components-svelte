@@ -92,7 +92,7 @@ Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100m
 Wrap a passage with several defined terms in a [TooltipGroup](/components/TooltipGroup). Once one definition is open, moving to the next term shows its definition right away, with no enter delay or fade-in. Inside a group, `enterDelayMs` and `leaveDelayMs` default to the group's delays.
 
 <TooltipGroup>
-  <Text tag="div" type="body-long-01">
+  <Text tag="div" type="body-01">
     Sign in with
     <TooltipDefinition tooltipText="Single sign-on: one login for all connected applications.">SSO</TooltipDefinition>
     or

@@ -58,7 +58,7 @@
   }
 
   .#{$prefix}--toc__link {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     display: flex;
     min-height: $carbon--spacing-07;

@@ -25,14 +25,14 @@
   {:else if variant === "step" && !fullWidth}
     <Column sm={4} md={8} lg={4}>
       <Stack gap={3}>
-        <Text tag="span" type="productive-heading-05" color="secondary">
+        <Text tag="span" type="heading-05" color="secondary">
           {step}
         </Text>
         <Stack gap={1}>
-          <Text tag="h3" type="productive-heading-03" color="primary">
+          <Text tag="h3" type="heading-03" color="primary">
             {title}
           </Text>
-          <Text type="body-long-01" color="secondary" maxWidth="36ch">
+          <Text type="body-01" color="secondary" maxWidth="36ch">
             {description}
           </Text>
         </Stack>
@@ -41,7 +41,7 @@
   {:else if variant === "principle"}
     <Column sm={4} md={2} lg={4}>
       <Stack gap={4}>
-        <Text tag="h3" type="productive-heading-04" color="primary">
+        <Text tag="h3" type="heading-04" color="primary">
           {title}
         </Text>
         {#if icon}
@@ -50,7 +50,7 @@
       </Stack>
     </Column>
     <Column sm={4} md={6} lg={8}>
-      <Text type="body-long-02" color="secondary" maxWidth="52ch">
+      <Text type="body-02" color="secondary" maxWidth="52ch">
         {description}
       </Text>
     </Column>
@@ -58,16 +58,12 @@
     <Column sm={4} md={8} lg={4}>
       <Stack gap={3}>
         {#if eyebrow}
-          <Text type="caption-02" color="secondary">{eyebrow}</Text>
+          <Text type="label-02" color="secondary">{eyebrow}</Text>
         {/if}
-        <Text tag="h2" type="productive-heading-05" color="primary">
+        <Text tag="h2" type="heading-05" color="primary">
           {title}
         </Text>
-        <Text
-          type="body-long-01"
-          color="secondary"
-          maxWidth={descriptionMaxWidth}
-        >
+        <Text type="body-01" color="secondary" maxWidth={descriptionMaxWidth}>
           {description}
         </Text>
       </Stack>

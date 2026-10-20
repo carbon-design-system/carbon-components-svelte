@@ -5,11 +5,11 @@
         <rect id="panel" fill="none" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="70.5" y="40.5" width="179" height="99"></rect>
         <rect id="title" fill="var(--cds-text-secondary, #525252)" x="86" y="56" width="64" height="8"></rect>
         <rect id="progress-track" fill="var(--cds-border-subtle, #e0e0e0)" x="96" y="84" width="128" height="1"></rect>
-        <circle id="step-1" cx="96" cy="84.5" r="5" fill="var(--cds-interactive-01, #0f62fe)"></circle>
-        <circle id="step-2" cx="139" cy="84.5" r="5" fill="var(--cds-interactive-01, #0f62fe)"></circle>
-        <circle id="step-3" cx="181" cy="84.5" r="4.25" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5"></circle>
-        <circle id="step-4" cx="224" cy="84.5" r="4.25" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1.5"></circle>
-        <rect id="next" fill="var(--cds-interactive-01, #0f62fe)" x="174" y="108" width="64" height="20"></rect>
-        <rect id="next-label" fill="var(--cds-text-04, #ffffff)" x="190" y="115" width="32" height="6"></rect>
+        <circle id="step-1" cx="96" cy="84.5" r="5" fill="var(--cds-background-brand, #0f62fe)"></circle>
+        <circle id="step-2" cx="139" cy="84.5" r="5" fill="var(--cds-background-brand, #0f62fe)"></circle>
+        <circle id="step-3" cx="181" cy="84.5" r="4.25" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5"></circle>
+        <circle id="step-4" cx="224" cy="84.5" r="4.25" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1.5"></circle>
+        <rect id="next" fill="var(--cds-background-brand, #0f62fe)" x="174" y="108" width="64" height="20"></rect>
+        <rect id="next-label" fill="var(--cds-text-on-color, #ffffff)" x="190" y="115" width="32" height="6"></rect>
     </g>
 </svg>

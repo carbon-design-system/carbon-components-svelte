@@ -8,7 +8,7 @@
     body: string;
   }[] = [];
   export let titleTag: "h3" | "h4" = "h4";
-  export let titleType: "heading-02" | "productive-heading-03" = "heading-02";
+  export let titleType: "heading-02" | "heading-03" = "heading-02";
 </script>
 
 <div class="benefit-grid">
@@ -20,7 +20,7 @@
       <Text tag={titleTag} type={titleType} color="primary">
         {item.title}
       </Text>
-      <Text type="body-long-01" color="secondary" maxWidth="48ch">
+      <Text type="body-01" color="secondary" maxWidth="48ch">
         {item.body}
       </Text>
     </Stack>

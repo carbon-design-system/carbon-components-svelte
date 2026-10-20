@@ -13,7 +13,7 @@
         <rect id="box-2-digit" fill="var(--cds-text-secondary, #525252)" x="157" y="74" width="6" height="12"></rect>
         <rect id="box-3" fill="var(--cds-field-01, #f4f4f4)" x="182" y="64" width="28" height="32"></rect>
         <rect id="box-3-border" fill="var(--cds-border-strong, #8d8d8d)" x="182" y="95" width="28" height="1"></rect>
-        <rect id="box-3-cursor" fill="var(--cds-interactive-01, #0f62fe)" x="195" y="72" width="1.5" height="16"></rect>
+        <rect id="box-3-cursor" fill="var(--cds-background-brand, #0f62fe)" x="195" y="72" width="1.5" height="16"></rect>
         <rect id="box-4" fill="var(--cds-field-01, #f4f4f4)" x="218" y="64" width="28" height="32"></rect>
         <rect id="box-4-border" fill="var(--cds-border-strong, #8d8d8d)" x="218" y="95" width="28" height="1"></rect>
     </g>

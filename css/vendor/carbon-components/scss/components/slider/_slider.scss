@@ -59,7 +59,7 @@
 
   .#{$prefix}--slider__range-label {
     // ccs: match v11 (`body-compact-01`) instead of v10's mono `code-02`.
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     color: $text-primary;
     white-space: nowrap;
@@ -474,7 +474,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    // $border-inverse is the highest-contrast UI color in v10 (dark on light themes,
+    // $border-inverse is the highest-contrast UI color (dark on light themes,
     // light on dark themes); equivalent to v11's $layer-selected-inverse used
     // by Carbon React for the range-slider arrow handles.
     fill: $layer-selected-inverse;

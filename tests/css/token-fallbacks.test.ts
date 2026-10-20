@@ -15,6 +15,6 @@ describe("all.scss token fallbacks", () => {
 
     // Generated token references carry no static fallback any more.
     expect(css).not.toMatch(/var\(--cds-spacing-05,/);
-    expect(css).not.toMatch(/var\(--cds-body-short-01-font-size,/);
+    expect(css).not.toMatch(/var\(--cds-body-compact-01-font-size,/);
   }, 30_000);
 });

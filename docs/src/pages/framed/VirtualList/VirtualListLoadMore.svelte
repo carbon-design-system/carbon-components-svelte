@@ -70,11 +70,11 @@
     {#if loading}
       <InlineLoading description="Loading more…" />
     {:else if !hasMore}
-      <Text type="body-short-01" color="secondary">
+      <Text type="body-compact-01" color="secondary">
         Loaded all {TOTAL} audit events.
       </Text>
     {:else}
-      <Text type="body-short-01" color="secondary">
+      <Text type="body-compact-01" color="secondary">
         {items.length}
         of {TOTAL} audit events loaded. Scroll to the bottom to fetch more.
       </Text>

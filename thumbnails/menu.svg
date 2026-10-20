@@ -10,9 +10,9 @@
     </defs>
     <g id="menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect x="80" y="52" width="160" height="76" fill="black" filter="url(#menu-shadow)"></rect>
-        <rect x="80" y="52" width="160" height="76" fill="var(--cds-ui-02, #ffffff)"></rect>
+        <rect x="80" y="52" width="160" height="76" fill="var(--cds-layer-02, #ffffff)"></rect>
         <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="92" y="62" width="70" height="8"></rect>
-        <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="92" y="84" width="90" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="84" width="90" height="8"></rect>
         <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="80" y="102" width="160" height="1"></rect>
         <rect id="item-danger" fill="var(--cds-support-error, #da1e28)" x="92" y="110" width="60" height="8"></rect>
     </g>

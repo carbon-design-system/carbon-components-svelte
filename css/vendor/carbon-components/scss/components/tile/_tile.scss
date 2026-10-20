@@ -22,7 +22,7 @@
   .#{$prefix}--tile {
     // ccs: set body text like `.#{$prefix}--tile--clickable` does, rather
     // than inheriting the reset's `line-height: 1`
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     display: block;
     min-width: 8rem;
@@ -89,7 +89,7 @@
 
   .#{$prefix}--tile--clickable {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     color: $text-primary;
     text-decoration: none;

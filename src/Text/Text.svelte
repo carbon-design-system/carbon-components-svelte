@@ -10,9 +10,9 @@
    * Set the Carbon type style. Use `"inherit"` to apply no type style and
    * keep the parent's font size, weight, and line height, for example to
    * recolor text inside a component slot.
-   * @type {"inherit" | "caption-01" | "caption-02" | "label-01" | "label-02" | "helper-text-01" | "helper-text-02" | "body-short-01" | "body-short-02" | "body-long-01" | "body-long-02" | "code-01" | "code-02" | "heading-01" | "heading-02" | "productive-heading-01" | "productive-heading-02" | "productive-heading-03" | "productive-heading-04" | "productive-heading-05" | "productive-heading-06" | "productive-heading-07" | "expressive-paragraph-01" | "expressive-heading-01" | "expressive-heading-02" | "expressive-heading-03" | "expressive-heading-04" | "expressive-heading-05" | "expressive-heading-06" | "quotation-01" | "quotation-02" | "display-01" | "display-02" | "display-03" | "display-04"}
+   * @type {"inherit" | "label-01" | "label-02" | "helper-text-01" | "helper-text-02" | "legal-01" | "legal-02" | "body-compact-01" | "body-compact-02" | "body-01" | "body-02" | "code-01" | "code-02" | "heading-compact-01" | "heading-compact-02" | "heading-01" | "heading-02" | "heading-03" | "heading-04" | "heading-05" | "heading-06" | "heading-07" | "fluid-heading-03" | "fluid-heading-04" | "fluid-heading-05" | "fluid-heading-06" | "fluid-paragraph-01" | "fluid-quotation-01" | "fluid-quotation-02" | "fluid-display-01" | "fluid-display-02" | "fluid-display-03" | "fluid-display-04"}
    */
-  export let type = "body-long-01";
+  export let type = "body-01";
 
   /**
    * Set the text color using a Carbon text token.

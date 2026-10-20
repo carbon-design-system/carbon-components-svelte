@@ -33,7 +33,7 @@
   {...$$restProps}
 >
   <dt class:bx--type-label-01={true}><slot name="term">{term ?? ""}</slot></dt>
-  <dd class:bx--type-body-short-01={true}>
+  <dd class:bx--type-body-compact-01={true}>
     <slot />
   </dd>
 </div>

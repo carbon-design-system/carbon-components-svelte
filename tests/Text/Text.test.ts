@@ -8,7 +8,7 @@ describe("Text", () => {
 
     const node = screen.getByText("Default body");
     expect(node.tagName).toBe("P");
-    expect(node).toHaveClass("bx--type-body-long-01");
+    expect(node).toHaveClass("bx--type-body-01");
   });
 
   it("renders a custom element via `tag` with the given type", () => {
@@ -16,7 +16,7 @@ describe("Text", () => {
 
     const node = screen.getByText("Heading");
     expect(node.tagName).toBe("H1");
-    expect(node).toHaveClass("bx--type-productive-heading-04");
+    expect(node).toHaveClass("bx--type-heading-04");
   });
 
   it("applies a text color token class", () => {
@@ -65,7 +65,7 @@ describe("Text", () => {
     render(Text);
 
     const node = screen.getByText("Color only");
-    expect(node).toHaveClass("bx--type-body-long-01", "bx--type-text-helper");
+    expect(node).toHaveClass("bx--type-body-01", "bx--type-text-helper");
   });
 
   it("applies font weight modifier classes", () => {
@@ -136,7 +136,7 @@ describe("Text", () => {
 
     const node = screen.getByText("Combined modifiers");
     expect(node).toHaveClass(
-      "bx--type-body-long-01",
+      "bx--type-body-01",
       "bx--type-semibold",
       "bx--type-text-primary",
       "combined",

@@ -238,7 +238,7 @@
   }
 
   .#{$prefix}--snippet-btn--expand {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     @include carbon--font-family('sans');
 
     position: absolute;

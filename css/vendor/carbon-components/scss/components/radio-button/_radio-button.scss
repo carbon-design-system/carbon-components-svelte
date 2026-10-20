@@ -57,7 +57,7 @@
   // label was `justify-content: center`), and the blank space either
   // side toggled it.
   .#{$prefix}--radio-button__label {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: flex;
     width: fit-content;

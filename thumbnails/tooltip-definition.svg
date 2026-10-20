@@ -15,6 +15,6 @@
         <rect id="text-1" fill="var(--cds-text-inverse, #ffffff)" x="112" y="60" width="80" height="6"></rect>
         <rect id="text-2" fill="var(--cds-text-inverse, #ffffff)" x="112" y="74" width="56" height="6"></rect>
         <rect id="term" fill="var(--cds-text-secondary, #525252)" x="130" y="114" width="60" height="8"></rect>
-        <line id="dotted-underline" x1="130" y1="126" x2="190" y2="126" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" stroke-dasharray="2 2"></line>
+        <line id="dotted-underline" x1="130" y1="126" x2="190" y2="126" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" stroke-dasharray="2 2"></line>
     </g>
 </svg>

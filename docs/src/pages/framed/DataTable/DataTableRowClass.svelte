@@ -79,6 +79,6 @@
   }
 
   :global(:not(.bx--data-table--selected) .expanded) {
-    border-left: 3px solid var(--cds-interactive-01);
+    border-left: 3px solid var(--cds-background-brand);
   }
 </style>

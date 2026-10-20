@@ -71,7 +71,7 @@
   }
 
   .#{$prefix}--disclosure__summary {
-    @include type-style("body-long-01");
+    @include type-style("body-01");
 
     z-index: 1;
     width: 100%;

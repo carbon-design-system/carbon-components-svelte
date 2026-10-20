@@ -20,7 +20,7 @@
 @mixin link {
   .#{$prefix}--link {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     display: inline-flex;
     color: $link-primary;
@@ -56,7 +56,7 @@
   .#{$prefix}--link--disabled,
   .#{$prefix}--link--disabled:hover {
     @include reset;
-    @include type-style('body-short-01', $omit: (font-weight));
+    @include type-style('body-compact-01', $omit: (font-weight));
 
     color: $text-disabled;
     cursor: not-allowed;
@@ -91,7 +91,7 @@
   }
 
   .#{$prefix}--link--lg {
-    @include type-style('body-short-02');
+    @include type-style('body-compact-02');
   }
 
   .#{$prefix}--link__icon {

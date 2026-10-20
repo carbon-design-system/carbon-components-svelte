@@ -571,7 +571,7 @@
   }
 
   .#{$prefix}--operational-tag__content {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     padding: $carbon--spacing-05;
   }

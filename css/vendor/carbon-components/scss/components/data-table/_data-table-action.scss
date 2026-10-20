@@ -389,7 +389,7 @@
   }
 
   .#{$prefix}--batch-summary__para {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
   }
 
   // V11: remove --small

@@ -93,7 +93,7 @@
   // below 160px. `.bx--tag-set__space > *` pins children at
   // `flex-shrink: 0`; let the input shrink in a field narrower than that.
   .#{$prefix}--tag-input .#{$prefix}--tag-input__input {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     min-width: 0;
     height: to-rem(24px);

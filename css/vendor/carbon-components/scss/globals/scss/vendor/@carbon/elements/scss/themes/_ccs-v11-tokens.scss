@@ -169,6 +169,8 @@ $ccs-v11-new-tokens: (
       $theme: map-merge($theme, ($token: map-get($theme, $source)));
     }
   }
+  // Placeholders draw in text-05 (text-helper): text-03 is 2.3:1 on a white field.
+  $theme: map-merge($theme, (text-placeholder: map-get($theme, 'text-05')));
   @return map-merge(map-get($ccs-v11-new-tokens, $name), $theme);
 }
 
@@ -313,3 +315,27 @@ $ccs-v11-token-names: (layer-01, layer-02, layer-active-01, layer-active-02, lay
   }
 }
 
+// ccs: v10 token names. The theme maps keep them (internal Sass still
+// derives values from them), but no stylesheet declares them as custom
+// properties: components read the v11 names.
+$ccs-v10-token-names: (
+  active-01, active-danger, active-light-ui, active-primary, active-secondary,
+  active-tertiary, active-ui, body-long-01, body-long-02, body-short-01,
+  body-short-02, brand-01, brand-02, brand-03, caption-01, caption-02, danger,
+  danger-01, danger-02, decorative-01, disabled-01, disabled-02, disabled-03,
+  display-01, display-02, display-03, display-04, expressive-heading-01,
+  expressive-heading-02, expressive-heading-03, expressive-heading-04,
+  expressive-heading-05, expressive-heading-06, expressive-paragraph-01,
+  hover-danger, hover-field, hover-light-ui, hover-primary, hover-primary-text,
+  hover-row, hover-secondary, hover-selected-ui, hover-tertiary, hover-ui,
+  icon-01, icon-02, icon-03, interactive-01, interactive-02, interactive-03,
+  interactive-04, inverse-01, inverse-02, inverse-focus-ui, inverse-hover-ui,
+  inverse-link, inverse-support-01, inverse-support-02, inverse-support-03,
+  inverse-support-04, link-01, link-02, overlay-01, productive-heading-01,
+  productive-heading-02, productive-heading-03, productive-heading-04,
+  productive-heading-05, productive-heading-06, productive-heading-07,
+  quotation-01, quotation-02, selected-light-ui, selected-ui, skeleton-01,
+  skeleton-02, support-01, support-02, support-03, support-04, text-01,
+  text-02, text-03, text-04, text-05, ui-01, ui-02, ui-03, ui-04, ui-05,
+  ui-background, visited-link,
+);

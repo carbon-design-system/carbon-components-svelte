@@ -31,7 +31,7 @@
   .#{$prefix}--number input[type='number'],
   .#{$prefix}--number input[type='text'] {
     // ccs: match v11 (`body-compact-01`, sans, 400) instead of v10's mono 300.
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     @include focus-outline('reset');
 
     display: inline-flex;

@@ -87,7 +87,7 @@
     color: $text-secondary;
     cursor: pointer;
     text-decoration: none;
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     // `display: flex` above beats the UA `[hidden] { display: none }`.
     &[hidden] {
@@ -207,7 +207,7 @@
     padding-top: $carbon--spacing-05;
     padding-bottom: $carbon--spacing-05;
     color: $text-secondary;
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
   }
 
   @each $size, $inset in $search-menu-insets {

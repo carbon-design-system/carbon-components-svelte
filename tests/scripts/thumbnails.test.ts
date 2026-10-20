@@ -64,10 +64,10 @@ describe("auditThumbnail", () => {
 
   it("flags tokens outside the table and mismatched fallbacks", () => {
     const body =
-      '<rect fill="var(--cds-hover-ui, #e5e5e5)"></rect>' +
+      '<rect fill="var(--cds-layer-hover-01, #e5e5e5)"></rect>' +
       '<rect fill="var(--cds-field-01, #ffffff)"></rect>';
     expect(auditThumbnail("meter", svg(body))).toEqual([
-      "token --cds-hover-ui is not in the token table",
+      "token --cds-layer-hover-01 is not in the token table",
       "token --cds-field-01 falls back to #ffffff, not #f4f4f4",
     ]);
   });
@@ -108,7 +108,9 @@ describe("auditThumbnail", () => {
   });
 
   it("flags files over the size budget", () => {
-    const body = `<rect fill="var(--cds-ui-02, #ffffff)"></rect>`.repeat(200);
+    const body = `<rect fill="var(--cds-layer-02, #ffffff)"></rect>`.repeat(
+      200,
+    );
     expect(auditThumbnail("meter", svg(body))).toEqual([
       expect.stringMatching(/B exceeds the 8000 B budget$/),
     ]);

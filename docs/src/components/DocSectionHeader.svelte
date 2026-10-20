@@ -7,8 +7,7 @@
   export let icon: ComponentType | undefined = undefined;
   export let title = "";
   export let description = "";
-  export let titleType: "productive-heading-05" | "productive-heading-06" =
-    "productive-heading-05";
+  export let titleType: "heading-05" | "heading-06" = "heading-05";
   export let gap: 4 | 6 = 4;
   export let maxWidth = "54ch";
   export let wide = false;
@@ -27,7 +26,7 @@
       {#if $$slots.description}
         <slot name="description" />
       {:else if description}
-        <Text type="body-long-02" color="secondary" {maxWidth}>
+        <Text type="body-02" color="secondary" {maxWidth}>
           {description}
         </Text>
       {/if}

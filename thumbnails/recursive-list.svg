@@ -3,14 +3,14 @@
     <title>recursive-list</title>
     <g id="recursive-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path id="marker-1" fill="var(--cds-text-secondary, #525252)" d="M105.38 48.81V47.9H111.57V48.81Z"></path>
-        <rect id="item-1" fill="var(--cds-text-03, #a8a8a8)" x="120" y="44" width="84" height="8"></rect>
+        <rect id="item-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="44" width="84" height="8"></rect>
         <rect id="marker-2" fill="var(--cds-text-secondary, #525252)" x="129" y="67" width="3" height="3"></rect>
-        <rect id="item-2" fill="var(--cds-text-03, #a8a8a8)" x="140" y="64" width="72" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="140" y="64" width="72" height="8"></rect>
         <rect id="marker-3" fill="var(--cds-text-secondary, #525252)" x="129" y="87" width="3" height="3"></rect>
-        <rect id="item-3" fill="var(--cds-text-03, #a8a8a8)" x="140" y="84" width="64" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="140" y="84" width="64" height="8"></rect>
         <path id="marker-4" fill="var(--cds-text-secondary, #525252)" d="M105.38 108.81V107.9H111.57V108.81Z"></path>
-        <rect id="item-4" fill="var(--cds-text-03, #a8a8a8)" x="120" y="104" width="96" height="8"></rect>
+        <rect id="item-4" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="104" width="96" height="8"></rect>
         <rect id="marker-5" fill="var(--cds-text-secondary, #525252)" x="129" y="127" width="3" height="3"></rect>
-        <rect id="item-5" fill="var(--cds-text-03, #a8a8a8)" x="140" y="124" width="56" height="8"></rect>
+        <rect id="item-5" fill="var(--cds-layer-accent-active, #a8a8a8)" x="140" y="124" width="56" height="8"></rect>
     </g>
 </svg>

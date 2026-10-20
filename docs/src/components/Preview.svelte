@@ -63,7 +63,7 @@
   }
 
   .preview-viewer {
-    border: 1px solid var(--cds-ui-03);
+    border: 1px solid var(--cds-border-subtle-01);
     border-bottom: 0;
     position: relative;
     /* Above side nav for breakout content but below portal content */

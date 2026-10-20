@@ -98,17 +98,17 @@
   }
 
   .#{$prefix}--profile-menu__name {
-    @include type-style('productive-heading-01');
+    @include type-style('heading-compact-01');
     color: $text-primary;
   }
 
   .#{$prefix}--profile-menu__username {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     color: $text-secondary;
   }
 
   .#{$prefix}--profile-menu__view {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     color: $text-primary;
   }
 
@@ -133,7 +133,7 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
@@ -193,13 +193,13 @@
   }
 
   .#{$prefix}--profile-menu__detail-value {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     color: $text-primary;
   }
 
   .#{$prefix}--profile-menu__detail-action a,
   .#{$prefix}--profile-menu__detail-action button {
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
     padding: 0;
     color: $link-primary;
     text-decoration: none;

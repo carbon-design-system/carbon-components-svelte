@@ -18,7 +18,7 @@
     @include reset;
     // line-height is set by the eric-meyer reset above (`css--reset`),
     // which always runs before this
-    @include type-style('body-short-01', $omit: (line-height));
+    @include type-style('body-compact-01', $omit: (line-height));
 
     background-color: $background;
     color: $text-primary;

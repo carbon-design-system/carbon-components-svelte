@@ -8,7 +8,7 @@
 </script>
 
 <Stack gap={4}>
-  <Text tag="span" type="productive-heading-05" color="primary">
+  <Text tag="span" type="heading-05" color="primary">
     {value}
     {#if tooltipText}
       <TooltipDefinition align="start" direction="bottom" {tooltipText}>
@@ -17,7 +17,7 @@
     {/if}
   </Text>
   <Stack gap={1}>
-    <Text type="body-short-01" color="primary">{label}</Text>
-    <Text type="caption-01" color="secondary">{caption}</Text>
+    <Text type="body-compact-01" color="primary">{label}</Text>
+    <Text type="label-01" color="secondary">{caption}</Text>
   </Stack>
 </Stack>

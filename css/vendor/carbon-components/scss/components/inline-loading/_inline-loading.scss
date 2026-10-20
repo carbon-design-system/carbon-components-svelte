@@ -25,7 +25,7 @@
 
   .#{$prefix}--inline-loading__text {
     // ccs: match v11 `label-02` (14px), which has the same values as `body-short-01`.
-    @include type-style('body-short-01');
+    @include type-style('body-compact-01');
 
     color: $text-secondary;
   }

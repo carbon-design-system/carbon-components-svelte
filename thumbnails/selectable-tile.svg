@@ -8,7 +8,7 @@
         <rect id="checkbox-1" fill="var(--cds-icon-primary, #161616)" x="76" y="108" width="12" height="12"></rect>
         <path id="check-1" fill="var(--cds-icon-inverse, #ffffff)" transform="translate(76, 108) scale(0.375)" d="M13 24 4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"></path>
         <rect id="tile-2" fill="var(--cds-field-01, #f4f4f4)" x="128" y="54" width="52" height="72"></rect>
-        <rect id="label-2" fill="var(--cds-text-03, #a8a8a8)" x="136" y="66" width="28" height="8"></rect>
+        <rect id="label-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="136" y="66" width="28" height="8"></rect>
         <rect id="checkbox-2" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="136.5" y="108.5" width="11" height="11"></rect>
         <rect id="tile-3" fill="var(--cds-field-01, #f4f4f4)" x="188" y="54" width="52" height="72"></rect>
         <rect id="tile-3-selected" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="188.5" y="54.5" width="51" height="71"></rect>

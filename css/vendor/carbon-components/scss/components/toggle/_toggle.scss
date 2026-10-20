@@ -84,7 +84,7 @@
     }
 
     .#{$prefix}--toggle__text {
-      @include type-style('body-long-01');
+      @include type-style('body-01');
 
       color: $text-primary;
     }
@@ -225,7 +225,7 @@
     // and does not change width when the state flips.
     .#{$prefix}--toggle__text--off,
     .#{$prefix}--toggle__text--on {
-      @include type-style('body-short-01');
+      @include type-style('body-compact-01');
 
       grid-area: 1 / 1;
       margin-left: to-rem(56px);

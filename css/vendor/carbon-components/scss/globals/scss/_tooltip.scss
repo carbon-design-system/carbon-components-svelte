@@ -51,7 +51,7 @@
   }
   // The font-weight this sets is always redundant: type-style below emits
   // its own `font-weight` right after, in the same rule.
-  @include type-style('body-short-01');
+  @include type-style('body-compact-01');
 
   // Windows, Firefox HCM Fix
   @media screen and (prefers-contrast) {

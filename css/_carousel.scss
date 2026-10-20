@@ -27,7 +27,7 @@
   }
 
   .#{$prefix}--carousel__counter {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     align-self: center;
     margin-inline-end: $carbon--spacing-03;

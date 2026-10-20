@@ -215,7 +215,7 @@
 /// @group components
 @mixin data-table-footer {
   .#{$prefix}--data-table tfoot {
-    @include type-style("productive-heading-01");
+    @include type-style("heading-compact-01");
 
     background-color: $layer-accent;
   }

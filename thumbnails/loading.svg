@@ -3,6 +3,6 @@
     <title>loading</title>
     <g id="loading" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="track" cx="160" cy="90" r="28" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="4" fill="none"></circle>
-        <circle id="indicator" cx="160" cy="90" r="28" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="4" fill="none" stroke-dasharray="66 176" transform="rotate(-90 160 90)"></circle>
+        <circle id="indicator" cx="160" cy="90" r="28" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="4" fill="none" stroke-dasharray="66 176" transform="rotate(-90 160 90)"></circle>
     </g>
 </svg>

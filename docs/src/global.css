@@ -24,19 +24,19 @@ html {
 
 .prose > pre,
 .code-override {
-  border: 1px solid var(--cds-ui-03);
+  border: 1px solid var(--cds-border-subtle-01);
 }
 
 /* Dark theme code block styles (default for g80, g90, g100) */
 .prose > pre {
-  background-color: var(--cds-ui-background);
+  background-color: var(--cds-background);
   color: #f4f4f4;
 }
 
 .code-override .bx--copy-btn,
 .code-override .bx--snippet,
 .code-override button.bx--btn.bx--snippet-btn--expand {
-  background-color: var(--cds-layer-01, var(--cds-ui-01));
+  background-color: var(--cds-layer-01, var(--cds-layer-01));
   color: #f4f4f4;
 }
 
@@ -52,8 +52,8 @@ html {
 /* Light theme code block styles (white, g10) */
 [theme="white"] .prose > pre,
 [theme="g10"] .prose > pre {
-  background-color: var(--cds-ui-background);
-  color: var(--cds-text-01, #161616);
+  background-color: var(--cds-background);
+  color: var(--cds-text-primary, #161616);
 }
 
 [theme="white"] .code-override .bx--copy-btn,
@@ -62,8 +62,8 @@ html {
 [theme="g10"] .code-override .bx--snippet,
 [theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand,
 [theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand {
-  background-color: var(--cds-layer-01, var(--cds-ui-01));
-  color: var(--cds-text-01, #161616);
+  background-color: var(--cds-layer-01, var(--cds-layer-01));
+  color: var(--cds-text-primary, #161616);
 }
 
 [theme="white"] .code-override .bx--copy-btn:hover,
@@ -78,7 +78,7 @@ html {
 
 [theme="white"] .code-override .bx--snippet__icon,
 [theme="g10"] .code-override .bx--snippet__icon {
-  fill: var(--cds-icon-01, #161616);
+  fill: var(--cds-icon-primary, #161616);
 }
 
 .prose > pre,
@@ -112,7 +112,7 @@ html {
 /** Gray 80 is the "lighted" dark theme. Ensure the background is dark. */
 [theme="g80"] .code-override,
 [theme="g80"] .code-override-inline {
-  background-color: var(--cds-layer-01, var(--cds-ui-01));
+  background-color: var(--cds-layer-01, var(--cds-layer-01));
 }
 
 .token.builtin,
@@ -257,7 +257,7 @@ html {
 }
 
 /* Auto-generated TOC (aside slot): a compact stack of anchor links,
-   no list markup. bx--link already applies body-short-01 and link color. */
+   no list markup. bx--link already applies body-compact-01 and link color. */
 .toc-nav {
   display: flex;
   flex-direction: column;
@@ -266,7 +266,7 @@ html {
 
 .toc-nav .bx--link {
   padding: var(--cds-spacing-01) 0;
-  color: var(--cds-text-02);
+  color: var(--cds-text-secondary);
 }
 
 .toc-nav .bx--link.toc-nav__sub {
@@ -280,17 +280,17 @@ html {
 
 .toc-nav .bx--link:visited,
 .toc-nav .bx--link:visited:hover {
-  color: var(--cds-text-02);
+  color: var(--cds-text-secondary);
 }
 
 .toc-nav .bx--link.is-active {
   text-decoration: underline;
-  color: var(--cds-text-01);
+  color: var(--cds-text-primary);
 }
 
 .toc-nav .bx--link.is-active:visited,
 .toc-nav .bx--link.is-active:visited:hover {
-  color: var(--cds-text-01);
+  color: var(--cds-text-primary);
 }
 
 .table {
@@ -410,7 +410,7 @@ html {
 }
 
 .preview-viewer > .bx--aspect-ratio {
-  outline: 1px solid var(--cds-interactive-04);
+  outline: 1px solid var(--cds-interactive);
 }
 
 [data-component="Popover"] .preview-viewer > div:not(.bx--stack),
@@ -419,14 +419,14 @@ html {
   .bx--stack:not(:has(> .bx--divider))
   > * {
   padding: 0.125rem 0.25rem;
-  outline: 1px solid var(--cds-interactive-04);
+  outline: 1px solid var(--cds-interactive);
 }
 
 [data-component="Popover"] .preview-viewer > div:not(.bx--stack),
 [data-component="Popover"] .preview-viewer > .bx--stack > div {
   position: relative;
   padding: 0.125rem 0.25rem;
-  outline: 1px solid var(--cds-interactive-04);
+  outline: 1px solid var(--cds-interactive);
 }
 
 [data-component="Popover"] .preview-viewer .bx--popover-contents {
@@ -444,52 +444,52 @@ html {
   line-height: var(--cds-code-01-line-height);
 }
 
-.body-short-01 {
-  font-size: var(--cds-body-short-01-font-size);
-  font-weight: var(--cds-body-short-01-font-weight);
-  letter-spacing: var(--cds-body-short-01-letter-spacing);
-  line-height: var(--cds-body-short-01-line-height);
+.body-compact-01 {
+  font-size: var(--cds-body-compact-01-font-size);
+  font-weight: var(--cds-body-compact-01-font-weight);
+  letter-spacing: var(--cds-body-compact-01-letter-spacing);
+  line-height: var(--cds-body-compact-01-line-height);
 }
 
 /* Font styling comes from the Text component's type class
-   (bx--type-expressive-heading-06); this rule only owns layout. */
+   (bx--type-fluid-heading-06); this rule only owns layout. */
 .bx--col > h1 {
   margin-bottom: var(--cds-layout-01);
 }
 
 .big-paragraph {
-  font-size: var(--cds-expressive-heading-03-font-size);
-  font-weight: var(--cds-expressive-heading-03-font-weight);
-  letter-spacing: var(--cds-expressive-heading-03-letter-spacing);
-  line-height: var(--cds-expressive-heading-03-line-height);
+  font-size: var(--cds-fluid-heading-03-font-size);
+  font-weight: var(--cds-fluid-heading-03-font-weight);
+  letter-spacing: var(--cds-fluid-heading-03-letter-spacing);
+  line-height: var(--cds-fluid-heading-03-line-height);
   margin-top: var(--cds-layout-03);
   margin-bottom: var(--cds-layout-06);
 }
 
 .big-link,
 .bx--col > .big-paragraph > code {
-  font-size: var(--cds-expressive-heading-03-font-size);
-  font-weight: var(--cds-expressive-heading-03-font-weight);
-  letter-spacing: var(--cds-expressive-heading-03-letter-spacing);
-  line-height: var(--cds-expressive-heading-03-line-height);
+  font-size: var(--cds-fluid-heading-03-font-size);
+  font-weight: var(--cds-fluid-heading-03-font-weight);
+  letter-spacing: var(--cds-fluid-heading-03-letter-spacing);
+  line-height: var(--cds-fluid-heading-03-line-height);
 }
 
 .prose > p:not(.prose-section-intro) {
-  font-size: var(--cds-body-long-02-font-size);
-  font-weight: var(--cds-body-long-02-font-weight);
-  letter-spacing: var(--cds-body-long-02-letter-spacing);
-  line-height: var(--cds-body-long-02-line-height);
-  color: var(--cds-text-primary, var(--cds-text-01));
+  font-size: var(--cds-body-02-font-size);
+  font-weight: var(--cds-body-02-font-weight);
+  letter-spacing: var(--cds-body-02-letter-spacing);
+  line-height: var(--cds-body-02-line-height);
+  color: var(--cds-text-primary, var(--cds-text-primary));
   max-width: 54ch;
   text-wrap: pretty;
 }
 
 .prose > p.prose-section-intro {
-  font-size: var(--cds-productive-heading-03-font-size);
-  font-weight: var(--cds-productive-heading-03-font-weight);
-  letter-spacing: var(--cds-productive-heading-03-letter-spacing);
-  line-height: var(--cds-productive-heading-03-line-height);
-  color: var(--cds-text-primary, var(--cds-text-01));
+  font-size: var(--cds-heading-03-font-size);
+  font-weight: var(--cds-heading-03-font-weight);
+  letter-spacing: var(--cds-heading-03-letter-spacing);
+  line-height: var(--cds-heading-03-line-height);
+  color: var(--cds-text-primary, var(--cds-text-primary));
   max-width: 54ch;
   margin-bottom: var(--cds-layout-02);
 }
@@ -520,12 +520,12 @@ html {
   display: inline-block;
   padding: var(--cds-spacing-01) var(--cds-spacing-02);
   background-color: var(--cds-field-01, #f4f4f4);
-  border: 1px solid var(--cds-ui-03);
+  border: 1px solid var(--cds-border-subtle-01);
   border-radius: 4px;
-  box-shadow: inset 0 -1px 0 var(--cds-ui-03);
+  box-shadow: inset 0 -1px 0 var(--cds-border-subtle-01);
 }
 
-/* Match table cell line metrics; prose kbd padding is taller than caption-01. */
+/* Match table cell line metrics; prose kbd padding is taller than label-01. */
 .prose > table kbd.bx--type-code-01 {
   display: inline;
   padding: 0 var(--cds-spacing-02);
@@ -554,15 +554,15 @@ html {
   padding: var(--cds-spacing-03) var(--cds-spacing-04);
   text-align: left;
   vertical-align: top;
-  border: 1px solid var(--cds-ui-03);
+  border: 1px solid var(--cds-border-subtle-01);
 }
 
 .prose > table th.bx--type-label-01 {
   background-color: var(--cds-field-01, #f4f4f4);
 }
 
-.prose > table tbody tr:nth-child(even) td.bx--type-caption-01 {
-  background-color: var(--cds-ui-background);
+.prose > table tbody tr:nth-child(even) td.bx--type-label-01 {
+  background-color: var(--cds-background);
 }
 
 .prose > table td code.bx--type-code-01,
@@ -572,7 +572,7 @@ html {
   border-radius: 4px;
 }
 
-/* bx--link uses body-short-01; inherit caption-01 / label-01 metrics from the cell. */
+/* bx--link uses body-compact-01; inherit label-01 metrics from the cell. */
 .prose > table td .bx--link,
 .prose > table th .bx--link {
   font-size: inherit;
@@ -582,32 +582,32 @@ html {
   text-decoration: underline;
 }
 
-[class*="bx--col"] > h2.bx--type-productive-heading-04,
-.bx--tab-content > h2.bx--type-productive-heading-04 {
+[class*="bx--col"] > h2.bx--type-heading-04,
+.bx--tab-content > h2.bx--type-heading-04 {
   padding-top: var(--cds-layout-03);
   margin-bottom: var(--cds-layout-01);
 }
 
 /* Sub-section headings (### within a ## group): layout only; type from bx--type-*. */
-[class*="bx--col"] > h3.bx--type-productive-heading-03,
-.bx--tab-content > h3.bx--type-productive-heading-03 {
+[class*="bx--col"] > h3.bx--type-heading-03,
+.bx--tab-content > h3.bx--type-heading-03 {
   padding-top: var(--cds-layout-02);
   margin-bottom: var(--cds-spacing-05);
 }
 
 .bx--col > h4 {
-  font-size: var(--cds-expressive-heading-02-font-size);
-  font-weight: var(--cds-expressive-heading-02-font-weight);
-  letter-spacing: var(--cds-expressive-heading-02-letter-spacing);
-  line-height: var(--cds-expressive-heading-02-line-height);
+  font-size: var(--cds-heading-02-font-size);
+  font-weight: var(--cds-heading-02-font-weight);
+  letter-spacing: var(--cds-heading-02-letter-spacing);
+  line-height: var(--cds-heading-02-line-height);
   padding-top: var(--cds-layout-04);
   margin-bottom: var(--cds-layout-01);
 }
 
-.bx--col > h2.bx--type-productive-heading-04,
-.bx--tab-content > h2.bx--type-productive-heading-04,
-.bx--col > h3.bx--type-productive-heading-03,
-.bx--tab-content > h3.bx--type-productive-heading-03,
+.bx--col > h2.bx--type-heading-04,
+.bx--tab-content > h2.bx--type-heading-04,
+.bx--col > h3.bx--type-heading-03,
+.bx--tab-content > h3.bx--type-heading-03,
 .bx--col > h4 {
   scroll-margin-top: 3rem;
 }
@@ -615,7 +615,7 @@ html {
 /* `#` heading anchor: hidden until hover, always shown on devices without hover. */
 .heading-anchor {
   margin-left: var(--cds-spacing-03);
-  color: var(--cds-text-placeholder, var(--cds-text-05));
+  color: var(--cds-text-placeholder, var(--cds-text-helper));
   text-decoration: none;
   font-weight: 400;
   opacity: 0;
@@ -662,7 +662,7 @@ h3:hover .heading-anchor,
 .hero {
   margin-top: calc(-1 * var(--cds-spacing-07));
   margin-bottom: var(--cds-spacing-08);
-  border-bottom: 1px solid var(--cds-border-subtle, var(--cds-ui-03));
+  border-bottom: 1px solid var(--cds-border-subtle, var(--cds-border-subtle-01));
 }
 
 .hero--component {
@@ -838,14 +838,14 @@ h3:hover .heading-anchor,
 
 .benefit-icon,
 .principle-icon {
-  fill: var(--cds-interactive-04, var(--cds-icon-primary, #0f62fe));
+  fill: var(--cds-interactive, var(--cds-icon-primary, #0f62fe));
 }
 
 .footer-cta {
   margin-top: var(--cds-spacing-12);
   padding-top: var(--cds-spacing-09);
   padding-bottom: var(--cds-spacing-07);
-  border-top: 1px solid var(--cds-border-subtle, var(--cds-ui-03));
+  border-top: 1px solid var(--cds-border-subtle, var(--cds-border-subtle-01));
 }
 
 .overview-page {

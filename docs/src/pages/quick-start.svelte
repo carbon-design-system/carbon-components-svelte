@@ -104,7 +104,7 @@
                 code={themeCssSnippet}
               />
             </DocCodeBox>
-            <Text type="caption-01" color="secondary">
+            <Text type="label-01" color="secondary">
               Import this once at the top-level, like index.js or
               src/+layout.svelte.
             </Text>
@@ -118,7 +118,7 @@
             <DocCodeBox>
               <CodeBlock language="svelte" code={usageExample} />
             </DocCodeBox>
-            <Text type="caption-01" color="secondary">
+            <Text type="label-01" color="secondary">
               Explore the full{" "}
               <Link inline size="sm" href="/component-index">
                 component index.
@@ -148,7 +148,7 @@
           <Column sm={4} md={8} lg={12} xlg={8} class="code-col">
             <Stack gap={7}>
               <Stack gap={3}>
-                <Text type="caption-01" color="secondary" maxWidth="60ch">
+                <Text type="label-01" color="secondary" maxWidth="60ch">
                   Import the stylesheet once, at the top-level entry point of
                   your app.
                 </Text>
@@ -161,7 +161,7 @@
                 </DocCodeBox>
               </Stack>
               <Stack gap={3}>
-                <Text type="caption-01" color="secondary">
+                <Text type="label-01" color="secondary">
                   Then set the theme reactively in Svelte:
                 </Text>
                 <DocCodeBox>
@@ -169,14 +169,14 @@
                 </DocCodeBox>
               </Stack>
               <Stack gap={3}>
-                <Text type="caption-01" color="secondary">
+                <Text type="label-01" color="secondary">
                   Or statically in your HTML:
                 </Text>
                 <DocCodeBox>
                   <CodeBlock language="svelte" code={themeHtmlSnippet} />
                 </DocCodeBox>
               </Stack>
-              <Text type="body-long-01" color="secondary" maxWidth="60ch">
+              <Text type="body-01" color="secondary" maxWidth="60ch">
                 Or use the
                 <Link inline href="/components/Theme">Theme component</Link>
                 to manage the theme reactively.
@@ -196,7 +196,7 @@
         maxWidth="58ch"
       >
         <svelte:fragment slot="description">
-          <Text type="body-long-02" color="secondary" maxWidth="58ch">
+          <Text type="body-02" color="secondary" maxWidth="58ch">
             The fast path is enough to build.
             <OutboundLink
               inline
@@ -218,7 +218,7 @@
               <Text tag="h3" type="heading-02" color="primary">
                 {preprocessor.title}
               </Text>
-              <Text type="body-long-01" color="secondary" maxWidth="40ch">
+              <Text type="body-01" color="secondary" maxWidth="40ch">
                 {preprocessor.body}
               </Text>
             </Stack>
@@ -303,12 +303,10 @@
       <Row class="example-row">
         <Column sm={4} md={8} lg={8} class="code-col">
           <Stack gap={5}>
-            <Text tag="h3" type="productive-heading-03" color="primary">
-              Icons
-            </Text>
+            <Text tag="h3" type="heading-03" color="primary"> Icons </Text>
             <Stack gap={3}>
               <div class="glyph-desc">
-                <Text type="body-long-01" color="secondary" maxWidth="40ch">
+                <Text type="body-01" color="secondary" maxWidth="40ch">
                   2,700+ icons designed for product UI, in four sizes (16, 20,
                   24, and 32 pixels), set with a single prop.
                 </Text>
@@ -349,51 +347,49 @@
                 />
                 <div class="glyph-grid glyph-grid--icons">
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Add</Text>
+                    <Text type="label-01" color="secondary">Add</Text>
                     <div class="glyph-icon">
                       <Add size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Edit</Text>
+                    <Text type="label-01" color="secondary">Edit</Text>
                     <div class="glyph-icon">
                       <Edit size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Search</Text>
+                    <Text type="label-01" color="secondary">Search</Text>
                     <div class="glyph-icon">
                       <Search size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Settings</Text>
+                    <Text type="label-01" color="secondary">Settings</Text>
                     <div class="glyph-icon">
                       <Settings size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary"
-                      >Notification</Text
-                    >
+                    <Text type="label-01" color="secondary">Notification</Text>
                     <div class="glyph-icon">
                       <Notification size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Calendar</Text>
+                    <Text type="label-01" color="secondary">Calendar</Text>
                     <div class="glyph-icon">
                       <Calendar size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">UserAvatar</Text>
+                    <Text type="label-01" color="secondary">UserAvatar</Text>
                     <div class="glyph-icon">
                       <UserAvatar size={iconSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">TrashCan</Text>
+                    <Text type="label-01" color="secondary">TrashCan</Text>
                     <div class="glyph-icon">
                       <TrashCan size={iconSize} />
                     </div>
@@ -414,12 +410,10 @@
 
         <Column sm={4} md={8} lg={8} class="code-col">
           <Stack gap={5}>
-            <Text tag="h3" type="productive-heading-03" color="primary">
-              Pictograms
-            </Text>
+            <Text tag="h3" type="heading-03" color="primary"> Pictograms </Text>
             <Stack gap={3}>
               <div class="glyph-desc">
-                <Text type="body-long-01" color="secondary" maxWidth="40ch">
+                <Text type="body-01" color="secondary" maxWidth="40ch">
                   1,500+ illustrative pictograms for empty states, onboarding,
                   hero sections, and feature callouts. Larger than icons, 64px
                   by default.
@@ -462,25 +456,25 @@
                 />
                 <div class="glyph-grid glyph-grid--pictograms">
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Analytics</Text>
+                    <Text type="label-01" color="secondary">Analytics</Text>
                     <div class="glyph-icon glyph-icon--pictogram">
                       <Analytics width={pictogramSize} height={pictogramSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Cloud</Text>
+                    <Text type="label-01" color="secondary">Cloud</Text>
                     <div class="glyph-icon glyph-icon--pictogram">
                       <Cloud width={pictogramSize} height={pictogramSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">Code</Text>
+                    <Text type="label-01" color="secondary">Code</Text>
                     <div class="glyph-icon glyph-icon--pictogram">
                       <Code width={pictogramSize} height={pictogramSize} />
                     </div>
                   </div>
                   <div class="glyph-cell">
-                    <Text type="caption-01" color="secondary">DataStorage</Text>
+                    <Text type="label-01" color="secondary">DataStorage</Text>
                     <div class="glyph-icon glyph-icon--pictogram">
                       <DataStorage
                         width={pictogramSize}
@@ -526,7 +520,7 @@
                 llms.txt
               </Link>
             </Text>
-            <Text type="body-long-01" color="secondary" maxWidth="40ch">
+            <Text type="body-01" color="secondary" maxWidth="40ch">
               A component index where each entry links to its per-component
               Markdown doc, sized for model context windows.
             </Text>
@@ -544,7 +538,7 @@
                 llms-full.txt
               </Link>
             </Text>
-            <Text type="body-long-01" color="secondary" maxWidth="40ch">
+            <Text type="body-01" color="secondary" maxWidth="40ch">
               The full component documentation in a single plain-text file.
             </Text>
           </Stack>
@@ -588,7 +582,7 @@
   .glyph-grid {
     display: grid;
     gap: var(--cds-spacing-06) var(--cds-spacing-05);
-    color: var(--cds-icon-01);
+    color: var(--cds-icon-primary);
   }
 
   .glyph-grid--icons,

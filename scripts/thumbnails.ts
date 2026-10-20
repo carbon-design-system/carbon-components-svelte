@@ -169,10 +169,10 @@ if (command === "missing") {
   const frame = (theme: string) => {
     const attribute = theme === "white" ? "" : ` theme="${theme}"`;
     const doc = `<!doctype html><html${attribute}><head><style>${css}
-      body { margin: 0; padding: 8px; background: var(--cds-ui-background); color: var(--cds-text-02); font: 11px sans-serif; }
+      body { margin: 0; padding: 8px; background: var(--cds-background); color: var(--cds-text-secondary); font: 11px sans-serif; }
       .grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
       figure { margin: 0; width: 160px; }
-      .tile { height: 90px; outline: 1px solid var(--cds-ui-03); }
+      .tile { height: 90px; outline: 1px solid var(--cds-border-subtle-01); }
     </style></head><body><b>${theme}</b><div class="grid">${tiles}</div></body></html>`;
     const srcdoc = doc.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
     return `<iframe srcdoc="${srcdoc}" style="display:block;border:0;width:${width}px;height:${height}px"></iframe>`;

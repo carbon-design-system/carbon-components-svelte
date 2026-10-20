@@ -137,26 +137,18 @@
         </Breadcrumb>
       {/if}
       <Stack gap={7}>
-        <Text tag="h1" type="expressive-heading-06" color="primary">
+        <Text tag="h1" type="fluid-heading-06" color="primary">
           {component}
         </Text>
         {#if descriptionHtml}
           <div class="hero__description">
-            <Text
-              type="productive-heading-04"
-              color="secondary"
-              maxWidth="52ch"
-            >
+            <Text type="heading-04" color="secondary" maxWidth="52ch">
               {@html descriptionHtml}
             </Text>
           </div>
         {:else if description}
           <div class="hero__description">
-            <Text
-              type="productive-heading-04"
-              color="secondary"
-              maxWidth="52ch"
-            >
+            <Text type="heading-04" color="secondary" maxWidth="52ch">
               {description}
             </Text>
           </div>
@@ -197,12 +189,7 @@
     <slot />
     <div class="component-api-header">
       <Stack gap={4}>
-        <Text
-          tag="h2"
-          id="component-api"
-          type="productive-heading-05"
-          color="primary"
-        >
+        <Text tag="h2" id="component-api" type="heading-05" color="primary">
           Component API
           <a
             class="heading-anchor"
@@ -211,7 +198,7 @@
             >#</a
           >
         </Text>
-        <Text type="body-long-02" color="secondary">
+        <Text type="body-02" color="secondary">
           API documentation is
           <Link
             inline

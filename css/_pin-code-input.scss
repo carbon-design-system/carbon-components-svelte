@@ -27,7 +27,7 @@
   }
 
   .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     width: to-rem(40px);
     min-width: to-rem(40px);

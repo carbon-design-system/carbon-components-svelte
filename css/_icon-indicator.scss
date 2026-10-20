@@ -19,7 +19,7 @@
   $status-gray: map-get($status, gray);
 
   .#{$prefix}--icon-indicator {
-    @include type-style("body-short-01");
+    @include type-style("body-compact-01");
 
     display: flex;
     color: $text-secondary;
@@ -37,7 +37,7 @@
   }
 
   .#{$prefix}--icon-indicator--20 {
-    @include type-style("body-short-02");
+    @include type-style("body-compact-02");
   }
 
   .#{$prefix}--icon-indicator--failed {

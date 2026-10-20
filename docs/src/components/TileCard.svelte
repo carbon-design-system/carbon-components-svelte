@@ -36,9 +36,9 @@
           <svelte:component
             this={LogoGithub}
             size={32}
-            style="fill: var(--cds-icon-01)"
+            style="fill: var(--cds-icon-primary)"
           />
-          <Launch size={20} style="fill: var(--cds-icon-01)" />
+          <Launch size={20} style="fill: var(--cds-icon-primary)" />
         </div>
       </div>
     </svelte:component>
@@ -52,11 +52,11 @@
   }
 
   .borderRight {
-    border-right: 1px solid var(--cds-ui-03);
+    border-right: 1px solid var(--cds-border-subtle-01);
   }
 
   .borderBottom {
-    border-bottom: 1px solid var(--cds-ui-03);
+    border-bottom: 1px solid var(--cds-border-subtle-01);
   }
 
   .card {
@@ -77,14 +77,14 @@
   }
 
   .subtitle {
-    color: var(--cds-text-02);
+    color: var(--cds-text-secondary);
   }
 
   @media (max-width: 671px) {
     .card-wrapper,
     .borderRight {
       border-right: 0;
-      border-bottom: 1px solid var(--cds-ui-03);
+      border-bottom: 1px solid var(--cds-border-subtle-01);
     }
   }
 </style>

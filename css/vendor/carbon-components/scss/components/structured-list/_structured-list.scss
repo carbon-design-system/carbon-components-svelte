@@ -97,8 +97,8 @@
   @media (any-hover: hover) {
     .#{$prefix}--structured-list--selection
       .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected) {
-      border-bottom: 1px solid $hover-row;
-      background-color: $hover-row;
+      border-bottom: 1px solid $layer-hover-01;
+      background-color: $layer-hover-01;
       cursor: pointer;
     }
 
@@ -127,7 +127,7 @@
   .#{$prefix}--structured-list-th {
     @include reset;
     @include padding-th;
-    @include type-style('productive-heading-01', $omit: (font-weight));
+    @include type-style('heading-compact-01', $omit: (font-weight));
 
     display: table-cell;
     height: to-rem(40px);
@@ -145,7 +145,7 @@
 
   .#{$prefix}--structured-list-td {
     @include reset;
-    @include type-style('body-long-01');
+    @include type-style('body-01');
     @include padding-td;
 
     position: relative;
