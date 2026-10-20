@@ -153,6 +153,16 @@ describe("SearchMenu", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
+  it("clears aria-activedescendant when typing hides the highlighted option", async () => {
+    render(SearchMenu);
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.keyboard("{ArrowDown}");
+    expect(input).toHaveAttribute("aria-activedescendant");
+    await user.type(input, "memcache");
+    expect(input).not.toHaveAttribute("aria-activedescendant");
+  });
+
   it("scrolls the highlighted option within the menu, not the page", async () => {
     render(SearchMenu);
     const input = screen.getByRole("combobox");
