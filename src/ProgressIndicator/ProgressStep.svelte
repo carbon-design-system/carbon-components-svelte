@@ -110,7 +110,7 @@
       $preventChangeOnClick}
     on:click
     on:click={() => {
-      if (!step.complete) return;
+      if (!step.complete || step.current) return;
       change(step.index);
     }}
     on:mouseover

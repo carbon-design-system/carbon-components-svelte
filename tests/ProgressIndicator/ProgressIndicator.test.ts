@@ -320,10 +320,11 @@ describe("ProgressIndicator", () => {
     it("should dispatch change exactly once per keypress on a complete step", async () => {
       const changeHandler = vi.fn();
       render(ProgressIndicator, {
-        currentIndex: 1,
+        currentIndex: 2,
         steps: [
           { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: false },
+          { label: "Step 2", description: "Second step", complete: true },
+          { label: "Step 3", description: "Third step", complete: false },
         ],
         onchange: changeHandler,
       });
@@ -335,8 +336,28 @@ describe("ProgressIndicator", () => {
       await user.keyboard("{Enter}");
       expect(changeHandler).toHaveBeenCalledTimes(1);
 
+      await user.keyboard("{ArrowRight}");
       await user.keyboard(" ");
       expect(changeHandler).toHaveBeenCalledTimes(2);
+    });
+
+    it("does not dispatch change for the current step", async () => {
+      const onchange = vi.fn();
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: [
+          { label: "Step 1", description: "First step", complete: true },
+          { label: "Step 2", description: "Second step", complete: true },
+        ],
+        onchange,
+      });
+
+      const buttons = screen.getAllByRole("button");
+      await user.click(buttons[1]);
+      expect(onchange).not.toHaveBeenCalled();
+
+      await user.click(buttons[0]);
+      expect(onchange).toHaveBeenCalledTimes(1);
     });
   });
 
