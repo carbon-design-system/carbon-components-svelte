@@ -101,6 +101,15 @@ describe("NotificationQueue", () => {
     expect(id).toBe("custom-id");
   });
 
+  it("should not put the queue id on the toast element", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component.queue).add({ id: "save", title: "Saved" });
+    await tick();
+
+    expect(screen.getByRole("alert")).not.toHaveAttribute("id");
+  });
+
   it("should deduplicate notifications by id", async () => {
     const { component } = render(NotificationQueueTest);
 

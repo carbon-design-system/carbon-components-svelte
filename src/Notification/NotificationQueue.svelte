@@ -168,11 +168,9 @@
       : undefined}
     style:z-index={zIndex}
   >
-    {#each notifications as notification (notification.id)}
-      <ToastNotification
-        {...notification}
-        on:close={() => remove(notification.id)}
-      />
+    <!-- `id` keys the queue; spreading it would set duplicate DOM ids across queues. -->
+    {#each notifications as { id, ...notification } (id)}
+      <ToastNotification {...notification} on:close={() => remove(id)} />
     {/each}
   </div>
 {/if}
