@@ -14,6 +14,7 @@
   export let orientation: ComponentProps<ToggleButtonGroup>["orientation"] =
     undefined;
   export let disabled: ComponentProps<ToggleButtonGroup>["disabled"] = false;
+  export let grid: ComponentProps<ToggleButtonGroup>["grid"] = false;
   export let boldDisabled = false;
   export let labelText: ComponentProps<ToggleButtonGroup>["labelText"] =
     "Text formatting";
@@ -27,6 +28,7 @@
   {size}
   {orientation}
   {disabled}
+  {grid}
   {labelText}
   aria-label={ariaLabel}
   on:change={(e) => {

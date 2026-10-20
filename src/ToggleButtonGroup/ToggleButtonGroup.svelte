@@ -62,6 +62,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
@@ -197,7 +198,11 @@
    * @param {KeyboardEvent} event
    */
   function handleGridKeydown(event) {
-    if (!isGrid || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) {
+    if (
+      !isGrid ||
+      hasModifierKey(event) ||
+      (event.key !== "ArrowUp" && event.key !== "ArrowDown")
+    ) {
       return;
     }
     const items = /** @type {HTMLButtonElement[]} */ (
@@ -239,7 +244,7 @@
     orientation,
     wrap: true,
     skipDisabled: true,
-    focusOnMove: true,
+    focusOnMove: false,
     getActiveIndex: () => {
       const items = Array.from(
         ref?.querySelectorAll(TOGGLE_BUTTON_SELECTOR) ?? [],
@@ -248,12 +253,16 @@
       const index = current ? items.indexOf(current) : -1;
       return index === -1 ? 0 : index;
     },
-    onMove: (index) => {
+    onMove: (index, event) => {
+      // Leave Alt/Ctrl/Meta+Arrow (Back, scroll) to the browser.
+      if (hasModifierKey(event)) return;
       const items = /** @type {HTMLButtonElement[]} */ (
         Array.from(ref?.querySelectorAll(TOGGLE_BUTTON_SELECTOR) ?? [])
       );
       const item = items[index];
-      if (item) tabStopElement.set(item);
+      if (!item) return;
+      tabStopElement.set(item);
+      item.focus();
     },
   }}
   on:focusin={handleFocusIn}

@@ -87,6 +87,38 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     expect(bold).toHaveFocus();
   });
 
+  it.each(
+    [
+      { key: "ArrowRight", grid: false },
+      { key: "ArrowDown", grid: true },
+    ].flatMap((row) =>
+      ["altKey", "ctrlKey", "metaKey"].map((modifier) => ({
+        ...row,
+        modifier,
+      })),
+    ),
+  )(
+    "leaves $key with $modifier held to the browser (grid: $grid)",
+    async ({ key, grid, modifier }) => {
+      render(ToggleButtonGroupFixture, { props: { grid } });
+      const bold = screen.getByRole("button", { name: "Bold" });
+      bold.focus();
+
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+        [modifier]: true,
+      });
+      bold.dispatchEvent(event);
+      await tick();
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(bold).toHaveFocus();
+      expect(bold).toHaveAttribute("tabindex", "0");
+    },
+  );
+
   it("keeps a valid tab stop when the focused button unmounts", async () => {
     const { component } = render(ToggleButtonGroupConditional);
 
