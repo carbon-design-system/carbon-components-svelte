@@ -89,4 +89,19 @@ describe("StorageBinding", () => {
       expect(onUpdate).toHaveBeenCalledTimes(1);
     },
   );
+
+  it.each(cases)(
+    "$name reads back a stored string that looks like JSON as a string",
+    async ({ Component }) => {
+      render(StorageBinding, { props: { Component, key: "k", value: "123" } });
+      await tick();
+
+      const { component } = render(StorageBinding, {
+        props: { Component, key: "k", value: "initial" },
+      });
+      await tick();
+
+      expect(component.value).toBe("123");
+    },
+  );
 });
