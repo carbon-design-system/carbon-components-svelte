@@ -164,6 +164,23 @@ describe("Tooltip", () => {
     expect(onParentKeydown).toHaveBeenCalledTimes(1);
   });
 
+  it("closes a hovered tooltip on Escape before ancestors see it when focus is elsewhere", async () => {
+    const onParentKeydown = vi.fn();
+    render(TooltipEscape, { props: { onParentKeydown } });
+
+    await fireEvent.mouseEnter(
+      screen.getByRole("button", { name: "Information" }),
+    );
+    await vi.advanceTimersByTimeAsync(100);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    const other = screen.getByLabelText("Other control");
+    other.focus();
+    await fireEvent.keyDown(other, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(onParentKeydown).not.toHaveBeenCalled();
+  });
+
   it("should open tooltip on mouseenter", async () => {
     render(TooltipDefault);
 

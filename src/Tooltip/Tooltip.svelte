@@ -117,6 +117,7 @@
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -176,6 +177,18 @@
       (hideIcon ? ref : refIcon)?.focus();
       open = false;
     }
+  }
+
+  // A hover-opened tooltip must close on Escape wherever focus is. Runs in
+  // the capture phase so it closes before an ancestor (e.g. a Modal) sees
+  // Escape. Focus inside the tooltip is left to `handleKeydown`, so nested
+  // widgets still get Escape first.
+  function handleWindowKeydown(event) {
+    if (event.key !== "Escape" || !open) return;
+    const target = event.target;
+    if (ref?.contains(target) || refTooltip?.contains(target)) return;
+    event.stopPropagation();
+    open = false;
   }
 
   // Bound to both the trigger and the tooltip content (which can hold
@@ -326,6 +339,12 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:dismiss={{
+    enabled: open,
+    type: "keydown",
+    handler: handleWindowKeydown,
+    options: { capture: true },
+  }}
   style:position="relative"
   style:z-index={open ? 1 : undefined}
   {...wrapperProps}
