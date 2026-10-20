@@ -111,6 +111,9 @@
   let prevTheme = theme;
   let mounted = false;
 
+  // Captured before LocalStorage restores a stored value.
+  const initialTheme = theme;
+
   /** @type {MediaQueryList | undefined} */
   let mql;
 
@@ -133,10 +136,16 @@
     mql = undefined;
   }
 
+  function fallbackTheme() {
+    if (mql) return mql.matches ? systemThemes[1] : systemThemes[0];
+    return initialTheme;
+  }
+
   function finishMount() {
     // Resolve the system theme before snapshotting so mount does not dispatch `update`.
     if (system) watchSystem();
-    prevTheme = theme;
+    // A restored theme that is not valid is replaced in the next flush.
+    prevTheme = persist && !(theme in themes) ? fallbackTheme() : theme;
     mounted = true;
   }
 
@@ -169,6 +178,10 @@
       unwatchSystem();
     }
   }
+
+  // LocalStorage sets `undefined` when the key is removed or storage is
+  // cleared, and a stored value can be any string.
+  $: if (persist && !(theme in themes)) theme = fallbackTheme();
 
   // Apply theme before dispatching update. Reactive blocks run in source order,
   // and a throwing on:update handler aborts the rest of the flush.

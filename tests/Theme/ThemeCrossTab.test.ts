@@ -7,7 +7,7 @@ describe("Theme cross-tab sync", () => {
   let documentMock: {
     setAttribute: ReturnType<typeof vi.spyOn>;
   };
-  const { dispatchStorageEvent } = setupStorageEventMock();
+  const { dispatchStorageEvent, setMockItem } = setupStorageEventMock();
 
   beforeEach(() => {
     documentMock = {
@@ -31,6 +31,28 @@ describe("Theme cross-tab sync", () => {
 
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g100");
   });
+
+  it.each([
+    { desc: "is removed in another tab", stored: "g100", removed: true },
+    { desc: "is not a theme", stored: "garbage", removed: false },
+  ])(
+    "falls back to the initial theme when the stored value $desc",
+    async ({ stored, removed }) => {
+      const warn = vi.spyOn(console, "warn");
+      setMockItem("theme", stored);
+      const { component } = render(ThemeCrossTab, { props: { theme: "g10" } });
+      await tick();
+
+      if (removed) {
+        dispatchStorageEvent("theme", null);
+        await tick();
+      }
+
+      expect(component.theme).toBe("g10");
+      expect(document.documentElement).toHaveAttribute("theme", "g10");
+      expect(warn).not.toHaveBeenCalled();
+    },
+  );
 
   it("uses custom persistKey for cross-tab sync", async () => {
     render(ThemeCrossTab, {
