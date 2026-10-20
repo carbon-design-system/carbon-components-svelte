@@ -1,12 +1,8 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { closeButtonOf } from "./helpers";
 import TagSetFocusReturn from "./TagSetFocusReturn.test.svelte";
-
-function closeButtonOf(label: string) {
-  const tag = screen.getByText(label).closest(".bx--tag") as HTMLElement;
-  return within(tag).getByTitle("Clear filter");
-}
 
 describe("TagSet focus after closing a tag", () => {
   it("moves focus to the next tag's close button", async () => {

@@ -801,7 +801,7 @@ Check [`tests/utils/`](tests/utils/) before writing a helper:
 | [`treeItemById`](tests/utils/tree-item-by-id.ts) | A tree node by `id`, narrowed |
 | [`virtualWindowLayer`](tests/utils/virtual-window-layer.ts) | The element that holds a virtualized list's rendered rows, narrowed |
 | [`renderSSR`](tests/utils/ssr.ts) | Server-render a component to normalized HTML and a queryable `document` (see [Server rendering tests](#server-rendering-tests)) |
-| [`storage-mocks`](tests/utils/storage-mocks.ts) | `localStorage` and `sessionStorage` mocks |
+| [`storage-mocks`](tests/utils/storage-mocks.ts) | A `storage` event mock for cross-tab tests |
 
 Component folders keep their own `helpers.ts` for queries such as `getBodyRows` in [`tests/DataTable/helpers.ts`](tests/DataTable/helpers.ts) and `openMenu` in [`tests/MultiSelect/helpers.ts`](tests/MultiSelect/helpers.ts).
 

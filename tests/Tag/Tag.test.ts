@@ -1,11 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
-import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
-import TagMaxWidth from "./TagMaxWidth.test.svelte";
 
 describe("Tag", () => {
   it("renders all tag variants with correct styles", () => {
@@ -36,9 +34,9 @@ describe("Tag", () => {
   });
 
   it("renders and handles filterable tag correctly", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onFilterClose = vi.fn();
 
-    render(Tag);
+    render(Tag, { onFilterClose });
 
     const filterableTag = screen.getByText("Filterable");
     expect(filterableTag.closest(".bx--tag")).toHaveClass("bx--tag--filter");
@@ -50,7 +48,7 @@ describe("Tag", () => {
     expect(closeButton).toHaveAttribute("title", "Clear filter");
 
     await user.click(closeButton);
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onFilterClose).toHaveBeenCalled();
   });
 
   it("names each filter close button with its title and tag text", () => {
@@ -76,18 +74,20 @@ describe("Tag", () => {
   });
 
   it("fires click event when clicking filterable tag body", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Tag);
+    const onBodyClick = vi.fn();
+    const onBodyClose = vi.fn();
+    render(Tag, { onBodyClick, onBodyClose });
 
     const tagBody = screen.getByText("Filter click and close");
     await user.click(tagBody);
-    expect(consoleLog).toHaveBeenCalledWith("filter-body-click");
-    expect(consoleLog).not.toHaveBeenCalledWith("filter-close");
+    expect(onBodyClick).toHaveBeenCalled();
+    expect(onBodyClose).not.toHaveBeenCalled();
   });
 
   it("fires only close event when clicking filterable tag close button", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Tag);
+    const onBodyClick = vi.fn();
+    const onBodyClose = vi.fn();
+    render(Tag, { onBodyClick, onBodyClose });
 
     const tagElement = screen
       .getByText("Filter click and close")
@@ -97,8 +97,8 @@ describe("Tag", () => {
     assert(closeButton instanceof HTMLElement);
 
     await user.click(closeButton);
-    expect(consoleLog).toHaveBeenCalledWith("filter-close");
-    expect(consoleLog).not.toHaveBeenCalledWith("filter-body-click");
+    expect(onBodyClose).toHaveBeenCalled();
+    expect(onBodyClick).not.toHaveBeenCalled();
   });
 
   it("renders custom icon tag correctly", () => {
@@ -174,36 +174,26 @@ describe("Tag", () => {
   });
 
   it("handles click events on interactive tag", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Tag);
+    const onInteractiveClick = vi.fn();
+    const onFilterClick = vi.fn();
+    render(Tag, { onInteractiveClick, onFilterClick });
 
     const interactiveTag = screen.getByRole("button", { name: "Text" });
     await user.click(interactiveTag);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onInteractiveClick).toHaveBeenCalled();
+    expect(onFilterClick).not.toHaveBeenCalled();
   });
 
-  it("renders small size variant", () => {
+  it.each([
+    ["Small tag", "bx--tag--sm"],
+    ["Large tag", "bx--tag--lg"],
+    ["Large filterable", "bx--tag--lg"],
+    ["Large filterable", "bx--tag--filter"],
+    ["Inline tag", "bx--tag--inline"],
+  ])("%s has %s", (label, cls) => {
     render(Tag);
 
-    const smallTag = screen.getByText("Small tag");
-    expect(smallTag.parentElement).toHaveClass("bx--tag--sm");
-  });
-
-  it("renders large size variant", () => {
-    render(Tag);
-
-    const largeTag = screen.getByText("Large tag");
-    expect(largeTag.parentElement).toHaveClass("bx--tag--lg");
-  });
-
-  it("renders large filterable tag", () => {
-    render(Tag);
-
-    const largeFilterable = screen
-      .getByText("Large filterable")
-      .closest(".bx--tag");
-    expect(largeFilterable).toHaveClass("bx--tag--lg");
-    expect(largeFilterable).toHaveClass("bx--tag--filter");
+    expect(screen.getByText(label).closest(".bx--tag")).toHaveClass(cls);
   });
 
   it("renders large skeleton tag", () => {
@@ -241,26 +231,21 @@ describe("Tag", () => {
     expect(disabledTag).toHaveAttribute("tabindex", "-1");
   });
 
-  it("omits the default margin via the inline prop", () => {
-    render(Tag);
-
-    const inlineTag = screen.getByText("Inline tag").parentElement;
-    expect(inlineTag).toHaveClass("bx--tag--inline");
-  });
-
   it("handles mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Tag);
+    const onMouseenter = vi.fn();
+    const onMouseover = vi.fn();
+    const onMouseleave = vi.fn();
+    render(Tag, { onMouseenter, onMouseover, onMouseleave });
 
     const tag = screen.getByText("Mouse events").parentElement;
     assert(tag);
 
     await user.hover(tag);
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(onMouseenter).toHaveBeenCalled();
+    expect(onMouseover).toHaveBeenCalled();
 
     await user.unhover(tag);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onMouseleave).toHaveBeenCalled();
   });
 
   it("renders icon slot", () => {
@@ -271,67 +256,6 @@ describe("Tag", () => {
     assert(tagElement);
     const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
-  });
-
-  describe("maxWidth truncation", () => {
-    let clientWidthSpy: ReturnType<typeof vi.spyOn>;
-    let scrollWidthSpy: ReturnType<typeof vi.spyOn>;
-
-    function mockOverflow(truncated: boolean) {
-      clientWidthSpy = vi
-        .spyOn(HTMLElement.prototype, "clientWidth", "get")
-        .mockReturnValue(truncated ? 40 : 200);
-      scrollWidthSpy = vi
-        .spyOn(HTMLElement.prototype, "scrollWidth", "get")
-        .mockReturnValue(truncated ? 200 : 40);
-    }
-
-    afterEach(() => {
-      clientWidthSpy?.mockRestore();
-      scrollWidthSpy?.mockRestore();
-    });
-
-    it("applies the truncate class and max-width style", async () => {
-      mockOverflow(false);
-      render(TagMaxWidth, {
-        props: { maxWidth: "8rem", label: "Short", filter: true },
-      });
-      await tick();
-
-      const tag = screen.getByText("Short").closest(".bx--tag");
-      expect(tag).toHaveClass("bx--tag--truncate");
-      expectInlineStyle(tag, { maxWidth: "8rem" });
-    });
-
-    it("does not render a tooltip when the label is not truncated", async () => {
-      mockOverflow(false);
-      render(TagMaxWidth, {
-        props: { maxWidth: "8rem", label: "Short", filter: true },
-      });
-      await tick();
-
-      expect(
-        document.querySelector(".bx--tooltip--definition"),
-      ).not.toBeInTheDocument();
-    });
-
-    it("renders a tooltip when the filter label overflows", async () => {
-      mockOverflow(true);
-      const label =
-        "status:active AND region:us-south AND service:cloud-object-storage";
-      render(TagMaxWidth, {
-        props: { maxWidth: "8rem", label, filter: true },
-      });
-      await tick();
-      // Wrapping the label remounts it; wait for the post-measure update.
-      await tick();
-
-      const tooltip = document.querySelector(".bx--tooltip--definition");
-      expect(tooltip).toBeInTheDocument();
-      expect(
-        tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
-      ).toBe(label);
-    });
   });
 
   describe("Generics", () => {

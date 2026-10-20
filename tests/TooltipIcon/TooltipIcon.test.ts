@@ -14,30 +14,22 @@ import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
 type Props = ComponentProps<TooltipIconComponent>;
 
 describe("TooltipIcon", () => {
-  let consoleLog: Console["log"];
-
-  beforeEach(() => {
-    consoleLog = vi.spyOn(console, "log");
-  });
-
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
-  it("does not fire open/close event on initial render", () => {
-    render(TooltipIcon);
+  it.each([{ open: false }, { open: true }])(
+    "does not fire open/close event on initial render with open: $open",
+    ({ open }) => {
+      const onOpen = vi.fn();
+      const onClose = vi.fn();
+      render(TooltipIcon, { props: { open, onOpen, onClose } });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("open");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
-  });
-
-  it("does not fire open/close event on initial render when open is true", () => {
-    render(TooltipIcon, { props: { open: true } });
-
-    expect(consoleLog).not.toHaveBeenCalledWith("open");
-    expect(consoleLog).not.toHaveBeenCalledWith("close");
-  });
+      expect(onOpen).not.toHaveBeenCalled();
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
 
   it("should render with default props", () => {
     render(TooltipIcon);
@@ -110,21 +102,23 @@ describe("TooltipIcon", () => {
   });
 
   it("should dispatch close event on Escape", async () => {
-    render(TooltipIcon);
+    const onClose = vi.fn();
+    render(TooltipIcon, { props: { onClose } });
 
     const trigger = screen.getByRole("button");
     await user.hover(trigger);
     await user.keyboard("{Escape}");
 
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(onClose).toHaveBeenCalled();
   });
 
   it("should dispatch open event on focus", async () => {
-    render(TooltipIcon);
+    const onOpen = vi.fn();
+    render(TooltipIcon, { props: { onOpen } });
 
     await user.tab();
 
-    expect(consoleLog).toHaveBeenCalledWith("open");
+    expect(onOpen).toHaveBeenCalled();
   });
 
   describe("reactive (bind:open)", () => {

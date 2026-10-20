@@ -9,12 +9,4 @@
     "An internal server error occurred.";
 </script>
 
-<InlineNotification
-  bind:open
-  {timeout}
-  {title}
-  {subtitle}
-  on:close={(e) => {
-    console.log("close", e.detail);
-  }}
-/>
+<InlineNotification bind:open {timeout} {title} {subtitle} />

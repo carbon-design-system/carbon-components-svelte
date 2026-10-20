@@ -11,13 +11,4 @@
     "2024-03-21 12:00:00";
 </script>
 
-<ToastNotification
-  bind:open
-  {timeout}
-  {title}
-  {subtitle}
-  {caption}
-  on:close={(e) => {
-    console.log("close", e.detail);
-  }}
-/>
+<ToastNotification bind:open {timeout} {title} {subtitle} {caption} />

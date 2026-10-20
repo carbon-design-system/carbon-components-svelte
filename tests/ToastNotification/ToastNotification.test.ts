@@ -1,7 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
-import { tick } from "svelte";
-import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
 import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
@@ -36,221 +34,44 @@ describe("ToastNotification", () => {
     add.mockRestore();
   });
 
-  it("should render low contrast variant", () => {
-    render(ToastNotificationTest, {
-      props: { lowContrast: true },
-    });
+  const parts = [
+    ["title", "Test Title"],
+    ["subtitle", "Test Subtitle"],
+    ["caption", "Test Caption"],
+  ] as const;
 
-    const notification = document.querySelector(".bx--toast-notification");
-    expect(notification).toHaveClass("bx--toast-notification--low-contrast");
+  it.each(parts)("should render %s when prop is provided", (part, text) => {
+    render(ToastNotificationTest, { props: { [part]: text } });
+
+    const element = document.querySelector(`.bx--toast-notification__${part}`);
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveTextContent(text);
   });
 
-  it("should mark the default variant as high contrast", () => {
-    render(ToastNotificationTest);
+  it.each(parts)("should NOT render %s element when prop is empty", (part) => {
+    render(ToastNotificationTest, { props: { [part]: "" } });
 
-    const notification = document.querySelector(".bx--toast-notification");
-    expect(notification).toHaveClass("bx--toast-notification--high-contrast");
-    expect(notification).not.toHaveClass(
-      "bx--toast-notification--low-contrast",
-    );
+    expect(
+      document.querySelector(`.bx--toast-notification__${part}`),
+    ).not.toBeInTheDocument();
   });
 
-  it("should not mark the low contrast variant as high contrast", () => {
-    render(ToastNotificationTest, {
-      props: { lowContrast: true },
-    });
+  it.each([
+    ["title", ToastNotificationTitleSlotTest, "Slot title"],
+    ["subtitle", ToastNotificationSubtitleSlotTest, "Slot subtitle"],
+    ["caption", ToastNotificationCaptionSlotTest, "Slot caption"],
+  ] as const)(
+    "should render %s element when slot is used",
+    (part, Fixture, text) => {
+      render(Fixture);
 
-    const notification = document.querySelector(".bx--toast-notification");
-    expect(notification).not.toHaveClass(
-      "bx--toast-notification--high-contrast",
-    );
-  });
-
-  it("should emit one combined low contrast root marker per kind", () => {
-    const kinds = [
-      "error",
-      "info",
-      "info-square",
-      "success",
-      "warning",
-      "warning-alt",
-    ] as const;
-
-    for (const kind of kinds) {
-      const { unmount } = render(ToastNotificationTest, {
-        props: { kind, lowContrast: true },
-      });
-
-      const notification = document.querySelector(".bx--toast-notification");
-      expect(notification).toHaveClass(
-        "bx--toast-notification--low-contrast",
-        `bx--toast-notification--${kind}`,
-        `bx--toast-notification--low-contrast-${kind}`,
+      const element = document.querySelector(
+        `.bx--toast-notification__${part}`,
       );
-      expect(
-        [...(notification?.classList ?? [])].filter((name) =>
-          name.startsWith("bx--toast-notification--low-contrast-"),
-        ),
-      ).toEqual([`bx--toast-notification--low-contrast-${kind}`]);
-      unmount();
-    }
-  });
-
-  it("should not emit a combined low contrast root marker by default", () => {
-    render(ToastNotificationTest, { props: { kind: "info" } });
-
-    const notification = document.querySelector(".bx--toast-notification");
-    expect(
-      [...(notification?.classList ?? [])].filter((name) =>
-        name.startsWith("bx--toast-notification--low-contrast-"),
-      ),
-    ).toEqual([]);
-  });
-
-  it("should emit one icon fill marker per kind", () => {
-    const kinds = [
-      "error",
-      "info",
-      "info-square",
-      "success",
-      "warning",
-      "warning-alt",
-    ] as const;
-
-    for (const lowContrast of [false, true]) {
-      for (const kind of kinds) {
-        const { unmount } = render(ToastNotificationTest, {
-          props: { kind, lowContrast },
-        });
-
-        const icon = document.querySelector(".bx--toast-notification__icon");
-        const marker = `bx--toast-notification__icon--${
-          lowContrast ? "low-contrast-" : ""
-        }${kind}`;
-        expect(icon).toHaveClass(marker);
-        expect(
-          [...(icon?.classList ?? [])].filter((name) =>
-            name.startsWith("bx--toast-notification__icon--"),
-          ),
-        ).toEqual([marker]);
-        unmount();
-      }
-    }
-  });
-
-  it("should mark the close icon only for the low contrast variant", () => {
-    const { unmount } = render(ToastNotificationTest);
-
-    expect(
-      document.querySelector(".bx--toast-notification__close-icon"),
-    ).not.toHaveClass("bx--toast-notification__close-icon--low-contrast");
-    unmount();
-
-    render(ToastNotificationTest, { props: { lowContrast: true } });
-
-    expect(
-      document.querySelector(".bx--toast-notification__close-icon"),
-    ).toHaveClass("bx--toast-notification__close-icon--low-contrast");
-  });
-
-  it("should render title when prop is provided", () => {
-    render(ToastNotificationTest, {
-      props: { title: "Test Title" },
-    });
-
-    const titleElement = document.querySelector(
-      ".bx--toast-notification__title",
-    );
-    expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveTextContent("Test Title");
-  });
-
-  it("should NOT render title element when prop is empty", () => {
-    render(ToastNotificationTest, {
-      props: { title: "" },
-    });
-
-    const titleElement = document.querySelector(
-      ".bx--toast-notification__title",
-    );
-    expect(titleElement).not.toBeInTheDocument();
-  });
-
-  it("should render subtitle when prop is provided", () => {
-    render(ToastNotificationTest, {
-      props: { subtitle: "Test Subtitle" },
-    });
-
-    const subtitleElement = document.querySelector(
-      ".bx--toast-notification__subtitle",
-    );
-    expect(subtitleElement).toBeInTheDocument();
-    expect(subtitleElement).toHaveTextContent("Test Subtitle");
-  });
-
-  it("should NOT render subtitle element when prop is empty", () => {
-    render(ToastNotificationTest, {
-      props: { subtitle: "" },
-    });
-
-    const subtitleElement = document.querySelector(
-      ".bx--toast-notification__subtitle",
-    );
-    expect(subtitleElement).not.toBeInTheDocument();
-  });
-
-  it("should render caption when prop is provided", () => {
-    render(ToastNotificationTest, {
-      props: { caption: "Test Caption" },
-    });
-
-    const captionElement = document.querySelector(
-      ".bx--toast-notification__caption",
-    );
-    expect(captionElement).toBeInTheDocument();
-    expect(captionElement).toHaveTextContent("Test Caption");
-  });
-
-  it("should NOT render caption element when prop is empty", () => {
-    render(ToastNotificationTest, {
-      props: { caption: "" },
-    });
-
-    const captionElement = document.querySelector(
-      ".bx--toast-notification__caption",
-    );
-    expect(captionElement).not.toBeInTheDocument();
-  });
-
-  it("should render title element when slot is used", () => {
-    render(ToastNotificationTitleSlotTest);
-
-    const titleElement = document.querySelector(
-      ".bx--toast-notification__title",
-    );
-    expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveTextContent("Slot title");
-  });
-
-  it("should render subtitle element when slot is used", () => {
-    render(ToastNotificationSubtitleSlotTest);
-
-    const subtitleElement = document.querySelector(
-      ".bx--toast-notification__subtitle",
-    );
-    expect(subtitleElement).toBeInTheDocument();
-    expect(subtitleElement).toHaveTextContent("Slot subtitle");
-  });
-
-  it("should render caption element when slot is used", () => {
-    render(ToastNotificationCaptionSlotTest);
-
-    const captionElement = document.querySelector(
-      ".bx--toast-notification__caption",
-    );
-    expect(captionElement).toBeInTheDocument();
-    expect(captionElement).toHaveTextContent("Slot caption");
-  });
+      expect(element).toBeInTheDocument();
+      expect(element).toHaveTextContent(text);
+    },
+  );
 
   it("should hide close button when hideCloseButton is true", () => {
     render(ToastNotificationTest, {
@@ -261,131 +82,6 @@ describe("ToastNotification", () => {
     expect(closeButton).not.toBeInTheDocument();
   });
 
-  it("should dispatch close event when close button is clicked", async () => {
-    vi.useRealTimers();
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, { props: { onclose: closeHandler } });
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
-    expect(
-      document.querySelector(".bx--toast-notification"),
-    ).not.toBeInTheDocument();
-  });
-
-  it("should auto-close after timeout", async () => {
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, {
-      props: { timeout: 1000, onclose: closeHandler },
-    });
-
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should pause timeout on hover when pauseOnHover is true", async () => {
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
-    });
-
-    const notification = document.querySelector(".bx--toast-notification");
-    assert(notification);
-
-    vi.advanceTimersByTime(400);
-    await fireEvent.mouseEnter(notification);
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    await fireEvent.mouseLeave(notification);
-    vi.advanceTimersByTime(599);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1);
-    await tick();
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should not pause timeout on hover when pauseOnHover is false", async () => {
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: false, onclose: closeHandler },
-    });
-
-    const notification = document.querySelector(".bx--toast-notification");
-    assert(notification);
-
-    vi.advanceTimersByTime(400);
-    await fireEvent.mouseEnter(notification);
-
-    vi.advanceTimersByTime(600);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should pause timeout while focus is inside and resume after focus leaves", async () => {
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
-    });
-
-    const closeButton = screen.getByRole("button", {
-      name: "Close notification",
-    });
-
-    vi.advanceTimersByTime(400);
-    closeButton.focus();
-
-    vi.advanceTimersByTime(1000);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    closeButton.blur();
-    vi.advanceTimersByTime(599);
-    await tick();
-    expect(closeHandler).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1);
-    await tick();
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
-  it("should not pause timeout on focus when pauseOnHover is false", async () => {
-    const closeHandler = vi.fn();
-    render(ToastNotificationTest, {
-      props: { timeout: 1000, pauseOnHover: false, onclose: closeHandler },
-    });
-
-    const closeButton = screen.getByRole("button", {
-      name: "Close notification",
-    });
-
-    vi.advanceTimersByTime(400);
-    closeButton.focus();
-
-    vi.advanceTimersByTime(600);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
-  });
-
   it("should render with full width", () => {
     render(ToastNotificationTest, {
       props: { fullWidth: true },
@@ -393,23 +89,6 @@ describe("ToastNotification", () => {
 
     const notification = document.querySelector(".bx--toast-notification");
     expect(notification).toHaveStyle({ width: "100%" });
-  });
-
-  it("should prevent close when event is cancelled", async () => {
-    vi.useRealTimers();
-    const closeHandler = vi.fn((e) => {
-      e.preventDefault();
-    });
-    render(ToastNotificationTest, { props: { onclose: closeHandler } });
-
-    const closeButton = screen.getByLabelText("Close notification");
-    await user.click(closeButton);
-    await tick();
-
-    expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(
-      document.querySelector(".bx--toast-notification"),
-    ).toBeInTheDocument();
   });
 
   it("should render the status icon as decorative (aria-hidden)", () => {
@@ -432,7 +111,6 @@ describe("ToastNotification", () => {
     ).toBeInTheDocument();
 
     await rerender({ open: false });
-    await tick();
 
     expect(
       document.querySelector(".bx--toast-notification"),

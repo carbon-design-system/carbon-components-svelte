@@ -103,26 +103,19 @@ describe("TagSet", () => {
     expect(container.querySelector(".bx--tag-set-overflow--empty")).toBeNull();
   });
 
-  it("names the +N indicator with a noun, keeping the visible +N", async () => {
-    const { container } = render(TagSetFixture);
+  it.each([
+    ["a noun by default", undefined, "+3 more tags"],
+    [
+      "a custom overflowLabel",
+      (count: number) => `${count} weitere Tags`,
+      "3 weitere Tags",
+    ],
+  ])("names the +N indicator with %s", async (_, overflowLabel, name) => {
+    const { container } = render(TagSetFixture, { overflowLabel });
 
     stubMeasurements(container, 110, 50);
 
-    expect(
-      await screen.findByRole("button", { name: "+3 more tags" }),
-    ).toBeInTheDocument();
-  });
-
-  it("names the +N indicator with a custom overflowLabel", async () => {
-    const { container } = render(TagSetFixture, {
-      overflowLabel: (count: number) => `${count} weitere Tags`,
-    });
-
-    stubMeasurements(container, 110, 50);
-
-    expect(
-      await screen.findByRole("button", { name: "3 weitere Tags" }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name })).toBeInTheDocument();
   });
 
   it("shows the hidden labels as a plain-text tooltip, not more tags", async () => {

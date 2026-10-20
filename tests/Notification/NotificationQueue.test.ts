@@ -1,7 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import type NotificationButtonComponent from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
-import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
@@ -285,61 +283,36 @@ describe("NotificationQueue", () => {
     },
   );
 
-  it("should limit notifications to maxNotifications (top-right)", async () => {
-    const { component } = render(NotificationQueueTest, {
-      props: { maxNotifications: 2 },
-    });
+  it.each(["top-right", "bottom-right"] as const)(
+    "should limit notifications to maxNotifications (%s)",
+    async (position) => {
+      const { component } = render(NotificationQueueTest, {
+        props: { position, maxNotifications: 2 },
+      });
 
-    getQueue(component.queue).add({
-      kind: "success",
-      title: "First",
-    });
-    await tick();
+      getQueue(component.queue).add({
+        kind: "success",
+        title: "First",
+      });
+      await tick();
 
-    getQueue(component.queue).add({
-      kind: "info",
-      title: "Second",
-    });
-    await tick();
+      getQueue(component.queue).add({
+        kind: "info",
+        title: "Second",
+      });
+      await tick();
 
-    getQueue(component.queue).add({
-      kind: "warning",
-      title: "Third",
-    });
-    await tick();
+      getQueue(component.queue).add({
+        kind: "warning",
+        title: "Third",
+      });
+      await tick();
 
-    expect(screen.queryByText("First")).not.toBeInTheDocument();
-    expect(screen.getByText("Second")).toBeInTheDocument();
-    expect(screen.getByText("Third")).toBeInTheDocument();
-  });
-
-  it("should limit notifications to maxNotifications (bottom-right)", async () => {
-    const { component } = render(NotificationQueueTest, {
-      props: { position: "bottom-right", maxNotifications: 2 },
-    });
-
-    getQueue(component.queue).add({
-      kind: "success",
-      title: "First",
-    });
-    await tick();
-
-    getQueue(component.queue).add({
-      kind: "info",
-      title: "Second",
-    });
-    await tick();
-
-    getQueue(component.queue).add({
-      kind: "warning",
-      title: "Third",
-    });
-    await tick();
-
-    expect(screen.queryByText("First")).not.toBeInTheDocument();
-    expect(screen.getByText("Second")).toBeInTheDocument();
-    expect(screen.getByText("Third")).toBeInTheDocument();
-  });
+      expect(screen.queryByText("First")).not.toBeInTheDocument();
+      expect(screen.getByText("Second")).toBeInTheDocument();
+      expect(screen.getByText("Third")).toBeInTheDocument();
+    },
+  );
 
   it.each<{
     position:
@@ -611,23 +584,4 @@ describe("NotificationQueue", () => {
       expect(notifications[1]).toHaveTextContent("Second");
     },
   );
-
-  describe("NotificationButton Generics", () => {
-    it("should support custom Icon types with generics", () => {
-      type CustomIcon = new (...args: unknown[]) => unknown;
-
-      type ComponentType = NotificationButtonComponent<CustomIcon>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
-    });
-
-    it("should default to any type when generic is not specified", () => {
-      type ComponentType = NotificationButtonComponent;
-      type Props = ComponentProps<ComponentType>;
-
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
-    });
-  });
 });

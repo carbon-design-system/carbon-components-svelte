@@ -36,14 +36,8 @@
   on:mouseenter
   on:mouseleave
   on:focus
-  on:open={() => {
-    console.log("open");
-    onOpen();
-  }}
-  on:close={() => {
-    console.log("close");
-    onClose();
-  }}
+  on:open={onOpen}
+  on:close={onClose}
 >
   <slot name="tooltipText" />
   <slot />
