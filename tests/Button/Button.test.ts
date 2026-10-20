@@ -110,6 +110,12 @@ describe("Button", () => {
     }
   });
 
+  it("should keep a consumer style on a skeleton", () => {
+    render(Button);
+
+    expect(screen.getByTestId("btn-skeleton")).toHaveStyle({ width: "200px" });
+  });
+
   it("should handle click events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Button);
