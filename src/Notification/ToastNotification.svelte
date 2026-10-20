@@ -117,9 +117,11 @@
   >
     <NotificationIcon {kind} {lowContrast} />
     <div class:bx--toast-notification__details={true}>
-      <h3 class:bx--toast-notification__title={true}>
-        <slot name="titleChildren">{title}</slot>
-      </h3>
+      {#if title || $$slots.titleChildren}
+        <h3 class:bx--toast-notification__title={true}>
+          <slot name="titleChildren">{title}</slot>
+        </h3>
+      {/if}
       {#if subtitle || $$slots.subtitleChildren}
         <div class:bx--toast-notification__subtitle={true}>
           <slot name="subtitleChildren">{subtitle}</slot>

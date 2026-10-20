@@ -186,7 +186,7 @@ describe("ToastNotification", () => {
     expect(titleElement).toHaveTextContent("Test Title");
   });
 
-  it("should render title element when prop is empty", () => {
+  it("should NOT render title element when prop is empty", () => {
     render(ToastNotificationTest, {
       props: { title: "" },
     });
@@ -194,7 +194,7 @@ describe("ToastNotification", () => {
     const titleElement = document.querySelector(
       ".bx--toast-notification__title",
     );
-    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).not.toBeInTheDocument();
   });
 
   it("should render subtitle when prop is provided", () => {
@@ -250,7 +250,7 @@ describe("ToastNotification", () => {
 
     expect(
       document.querySelector(".bx--toast-notification__title"),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     expect(
       document.querySelector(".bx--toast-notification__subtitle"),
     ).not.toBeInTheDocument();
