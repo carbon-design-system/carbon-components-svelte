@@ -474,6 +474,16 @@ describe("Accordion", () => {
     itemIsCollapsed(/Language Translator/);
   });
 
+  it('lets an item inserted with open take over when type is "single"', async () => {
+    const { rerender } = render(AccordionSingle);
+
+    await user.click(screen.getByText("Language Translator"));
+    await rerender({ showLate: true });
+
+    itemIsExpanded(/Late/);
+    itemIsCollapsed(/Language Translator/);
+  });
+
   it('opens an item inserted with open after the open item unmounts when type is "single"', async () => {
     const { rerender } = render(AccordionSingle);
 

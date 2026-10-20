@@ -65,7 +65,15 @@
 
   const itemKey = {};
 
+  // An item added after mount with `open` takes over, as setting `open` on
+  // an existing item does. On the first render, the first open item wins.
+  let claimOnMount = open && ctx.isMounted();
+
   const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
+    if (claimOnMount) {
+      claimOnMount = false;
+      return;
+    }
     if (openItemId !== null && openItemId !== itemKey) {
       open = false;
     }

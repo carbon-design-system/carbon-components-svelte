@@ -32,7 +32,7 @@
    */
   export let type = "multiple";
 
-  import { setContext } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { get, writable } from "svelte/store";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
@@ -72,12 +72,24 @@
     return currentId === id;
   }
 
+  let mounted = false;
+
+  onMount(() => {
+    mounted = true;
+  });
+
+  /** @returns {boolean} */
+  function isMounted() {
+    return mounted;
+  }
+
   setContext("carbon:Accordion", {
     disableItems,
     openId,
     typeStore,
     notifyOpen,
     claimSingle,
+    isMounted,
   });
 </script>
 
