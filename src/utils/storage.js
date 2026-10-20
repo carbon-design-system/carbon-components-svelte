@@ -132,3 +132,49 @@ export function safeBrowserStorage(type) {
     },
   };
 }
+
+/**
+ * @typedef {{ type: "set", key: string, value: string | null }
+ *   | { type: "clear" }
+ *   | { type: "hello", key: string }
+ *   | { type: "state", key: string, value: string }} TabMessage
+ */
+
+export const TAB_CHANNEL_NAME = "carbon-components-svelte:sessionStorage";
+
+/** @type {null | BroadcastChannel} */
+let tabChannel = null;
+
+/** @type {Set<(message: TabMessage) => void>} */
+const tabListeners = new Set();
+
+/**
+ * Share sessionStorage changes with other tabs on this origin. Uses one
+ * BroadcastChannel per document, so a page never receives its own messages.
+ * post does nothing where BroadcastChannel is missing (SSR, old browsers).
+ * @param {(message: TabMessage) => void} fn
+ * @returns {{ post(message: TabMessage): void, leave(): void }}
+ */
+export function joinTabChannel(fn) {
+  if (!tabChannel && typeof BroadcastChannel !== "undefined") {
+    tabChannel = new BroadcastChannel(TAB_CHANNEL_NAME);
+    tabChannel.onmessage = (event) => {
+      if (!event.data || typeof event.data !== "object") return;
+      for (const listener of tabListeners) listener(event.data);
+    };
+  }
+  tabListeners.add(fn);
+
+  return {
+    post(message) {
+      tabChannel?.postMessage(message);
+    },
+    leave() {
+      tabListeners.delete(fn);
+      if (tabListeners.size === 0 && tabChannel) {
+        tabChannel.close();
+        tabChannel = null;
+      }
+    },
+  };
+}

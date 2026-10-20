@@ -40,3 +40,21 @@ interface SafeStorage {
 export function safeBrowserStorage(
   type: "localStorage" | "sessionStorage",
 ): SafeStorage;
+
+export type TabMessage =
+  | { type: "set"; key: string; value: string | null }
+  | { type: "clear" }
+  | { type: "hello"; key: string }
+  | { type: "state"; key: string; value: string };
+
+export const TAB_CHANNEL_NAME: "carbon-components-svelte:sessionStorage";
+
+/**
+ * Share sessionStorage changes with other tabs on this origin. Uses one
+ * BroadcastChannel per document, so a page never receives its own messages.
+ * post does nothing where BroadcastChannel is missing (SSR, old browsers).
+ */
+export function joinTabChannel(fn: (message: TabMessage) => void): {
+  post(message: TabMessage): void;
+  leave(): void;
+};
