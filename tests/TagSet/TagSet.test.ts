@@ -173,6 +173,24 @@ describe("TagSet", () => {
     expect(await screen.findByText("Tag 2, New, Tag 3")).toBeInTheDocument();
   });
 
+  it.each([
+    [["A", "D", "C", "B"], "A", "D, C, B"],
+    [["D", "A", "B", "C"], "D", "A, B, C"],
+  ])("follows a keyed reorder to %j", async (labels, visible, hidden) => {
+    const { container, rerender } = render(TagSetFixture, {
+      labels: ["A", "B", "C", "D"],
+      maxVisible: 1,
+    });
+    stubMeasurements(container, 1000, 50);
+    await screen.findByText("+3");
+
+    await rerender({ labels });
+    await user.hover(screen.getByText("+3"));
+
+    expect(await screen.findByText(hidden)).toBeInTheDocument();
+    expect(visibleTagLabels(container)).toEqual([visible]);
+  });
+
   it("shows the hidden labels as a plain-text tooltip, not more tags", async () => {
     const { container } = render(TagSetFixture);
 

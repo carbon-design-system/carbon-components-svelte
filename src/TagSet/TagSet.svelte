@@ -109,10 +109,14 @@
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { noop } from "../utils/noop.js";
+  import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
+  import {
+    insertByDomOrder,
+    sortByDomOrder,
+  } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
@@ -331,6 +335,15 @@
 
     const stops = [wrapperRef, containingElement].map((element) =>
       element ? observeResize(element, () => throttledMeasure()) : noop,
+    );
+    // A keyed reorder moves tags without re-registering them. Registered ids
+    // aren't the tags' DOM ids, so compare by each node's own id.
+    stops.push(
+      observeDomOrder(wrapperRef, {
+        selector: ".bx--tag",
+        getItems: () => $items.map((item) => ({ id: item.node?.id })),
+        onReorder: () => batchedItemsUpdate(sortByDomOrder),
+      }),
     );
 
     return () => {
