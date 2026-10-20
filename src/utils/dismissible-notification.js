@@ -35,8 +35,14 @@ export function createDismissibleNotification({
 }) {
   const dismiss = createTimeoutDismiss();
 
-  const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
-    createHoverFocusPause(dismiss, getPauseOnHover);
+  const {
+    handleMouseenter,
+    handleMouseleave,
+    handleFocusIn,
+    handleFocusOut,
+    refresh,
+    reset,
+  } = createHoverFocusPause(dismiss, getPauseOnHover);
 
   /** @type {HTMLElement | null} */
   let prevFocus = null;
@@ -92,9 +98,15 @@ export function createDismissibleNotification({
   function sync(open, timeout) {
     // Also covers a consumer setting `open` to false (e.g. from an action
     // button), which skips `close()`.
-    if (wasOpen && !open) restoreFocus();
+    if (wasOpen && !open) {
+      restoreFocus();
+      reset();
+    }
     wasOpen = open;
     dismiss.sync(open, timeout, () => close(true));
+    // `dismiss.sync()` restarts the timer unpaused; keep it paused while
+    // the pointer or focus is still inside (e.g. a queue `update()`).
+    if (open) refresh();
   }
 
   return {
