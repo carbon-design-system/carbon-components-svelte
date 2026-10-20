@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import type ThemeComponent from "carbon-components-svelte/Theme/Theme.svelte";
-import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
+import type {
+  CarbonTheme,
+  CarbonToken,
+} from "carbon-components-svelte/Theme/Theme.svelte";
 import { themes } from "carbon-components-svelte/Theme/Theme.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -321,36 +324,24 @@ describe("Theme", () => {
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
 
-  describe("Generics", () => {
-    it("should support custom token types with generics", () => {
-      type CustomTokens = {
-        "button-primary": string;
-        background: string;
-      };
+  describe("Token types", () => {
+    type Tokens = ComponentProps<ThemeComponent>["tokens"];
 
-      type ComponentType = ThemeComponent<CustomTokens>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["tokens"]>().toEqualTypeOf<CustomTokens | undefined>();
-    });
-
-    it("should default to Record<string, any> when generic is not specified", () => {
-      type ComponentType = ThemeComponent;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["tokens"]>().toEqualTypeOf<
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-        Record<string, any> | undefined
+    it("types tokens by Carbon v11 token name", () => {
+      expectTypeOf<Tokens>().toEqualTypeOf<
+        Partial<Record<CarbonToken, string>> | undefined
       >();
+      expectTypeOf<"button-primary">().toExtend<CarbonToken>();
+      expectTypeOf<"layer-03">().toExtend<CarbonToken>();
     });
 
-    it("should work with index signature token types", () => {
-      type TokenMap = Record<string, string | number>;
-
-      type ComponentType = ThemeComponent<TokenMap>;
-      type Props = ComponentProps<ComponentType>;
-
-      expectTypeOf<Props["tokens"]>().toEqualTypeOf<TokenMap | undefined>();
+    it("rejects v10 token names", () => {
+      const tokens: Tokens = {
+        "button-primary": "#d02670",
+        // @ts-expect-error: v10 name, use "text-primary"
+        "text-01": "#ffffff",
+      };
+      expect(tokens).toBeDefined();
     });
   });
 });

@@ -130,6 +130,15 @@ describe("parseDependencies", () => {
     ).toEqual(["src/Button/Button.svelte", "src/utils/uid.js"]);
   });
 
+  it("resolves a JSDoc type import to a declaration file", () => {
+    expect(
+      deps(
+        "src/Modal/Modal.svelte",
+        `<script>\n  /** @typedef {import("../types").Type} Type */\n</script>`,
+      ).files,
+    ).toEqual(["src/types.d.ts"]);
+  });
+
   it("resolves named barrel imports to the re-exported file", () => {
     expect(
       deps(

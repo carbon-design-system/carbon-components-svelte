@@ -44,6 +44,7 @@ const RESOLVE_SUFFIXES = [
   "",
   ".ts",
   ".js",
+  ".d.ts",
   ".svelte",
   "/index.ts",
   "/index.js",
