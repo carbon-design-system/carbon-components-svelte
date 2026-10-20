@@ -78,9 +78,9 @@
   >
     <slot />
     {#if $selection && head}
-      <StructuredListCell head style="width: 1px;">
-        <span class:bx--visually-hidden={true}>Select row</span>
-      </StructuredListCell>
+      <!-- Keeps the selection column's width. Selection drops the table
+           roles, so a column name here would only be stray text. -->
+      <StructuredListCell head style="width: 1px;"></StructuredListCell>
     {/if}
   </div>
 {/if}
