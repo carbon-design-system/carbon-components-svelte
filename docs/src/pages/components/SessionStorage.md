@@ -7,7 +7,7 @@ description: Session storage provides a reactive wrapper around the sessionStora
 
 See how the component maintains state within a session. Toggle the switch and refresh the page to see the persisted state. State is cleared when the tab is closed. Unlike [LocalStorage](/components/LocalStorage), data is isolated per tab.
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Session storage is isolated per tab, so this event does not propagate across tabs or windows. When the key is removed from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Other SessionStorage components with the same key on the same page stay in sync as well. Session storage is isolated per tab, so this event does not propagate across tabs or windows. When the key is removed or storage is cleared from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
 
 This example logs the `save` and `update` events as they fire — see [Events](#events) for what each one means and its payload shape.
 
@@ -36,7 +36,7 @@ Switching keys only hydrates the bound value from storage; it does not dispatch 
 
 ## Disabling sync
 
-With sync enabled by default, the component listens for storage events and updates the bound value when another same-origin document in this tab writes the same key, such as an iframe. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
+With sync enabled by default, the component listens for storage events and updates the bound value when another same-origin document in this tab, such as an iframe, or another SessionStorage on the page writes the same key. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
 
 Session storage is already per tab, so this matters mainly when an iframe shares the session. Turn sync off when the host page should not follow iframe writes, or when the app handles conflicts itself. Sync is reactive, so you can change it at runtime.
 
@@ -53,7 +53,7 @@ The component provides methods to manage stored data:
 | `clearItem` | Remove a specific key-value pair. |
 | `clearAll`  | Remove all stored data.           |
 
-Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again.
+Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again. Other SessionStorage components on the page reset their bound value for the cleared keys.
 
 In this example, toggle the switch and refresh the page to confirm the value persists, then try either button to clear storage.
 
@@ -71,7 +71,7 @@ This fires the first time a key is used in the current session, and again after 
 
 ### Update
 
-Dispatched whenever the stored value changes: after a local bound-value write, after `clearItem` or `clearAll`, or after `sync` picks up a matching write from another same-origin document in this tab (see [Disabling sync](#disabling-sync)). The payload is `{ prevValue, value }`; `prevValue` is a snapshot taken before the change, not a live reference to the current value.
+Dispatched whenever the stored value changes: after a local bound-value write, after `clearItem` or `clearAll`, or after `sync` picks up a matching write from another component on the page or another same-origin document in this tab (see [Disabling sync](#disabling-sync)). The payload is `{ prevValue, value }`; `prevValue` is a snapshot taken before the change, not a live reference to the current value.
 
 Switching `key` hydrates the bound value from storage but does not dispatch this event (see [Reactive key](#reactive-key)).
 

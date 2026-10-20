@@ -10,7 +10,7 @@ description: Local storage provides a reactive wrapper around the localStorage A
 
 See how the component maintains state across page reloads. Toggle the switch and refresh the page to see the persisted state. Unlike [SessionStorage](/components/SessionStorage), data persists indefinitely and is shared across all tabs of the same origin.
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event), so changes made in one browser tab are automatically synchronized to other tabs with the same key. Cross-tab updates dispatch `on:update` with a payload shaped like `{ prevValue, value }`. When another tab removes the key, the bound value resets to undefined so the next local write does not re-persist stale data.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event), so changes made in one browser tab are automatically synchronized to other tabs with the same key. Other LocalStorage components with the same key on the same page stay in sync as well. These updates dispatch `on:update` with a payload shaped like `{ prevValue, value }`. When another tab removes the key or clears storage, the bound value resets to undefined so the next local write does not re-persist stale data.
 
 The example below logs both `on:save` and `on:update` as they fire; see [Events](#events) for what each one means.
 
@@ -37,9 +37,9 @@ Switching keys only hydrates the bound value from storage; it does not dispatch 
 
 <FileSource src="/framed/LocalStorage/LocalStorageReactiveKey" />
 
-## Disabling cross-tab sync
+## Disabling sync
 
-With sync enabled by default, another tab writing the same key updates the bound value and fires `on:update`. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
+With sync enabled by default, another tab or another LocalStorage on the page writing the same key updates the bound value and fires `on:update`. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
 
 Use sync off when each tab should keep separate state: drafts, forms in progress, or a second login tab that should not clobber the first. You can also turn sync off if the app resolves conflicts itself. Sync is reactive, so you can change it at runtime.
 
@@ -56,7 +56,7 @@ The component provides methods to manage stored data:
 | `clearItem`  | Remove a specific key-value pair.   |
 | `clearAll`   | Remove all stored data.             |
 
-Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again. Other tabs with the same key reset their bound value when they receive the storage event.
+Use `bind:this` to access these methods. Both also reset the bound value to `undefined` and dispatch [`update`](#update), so there is no need to reset it yourself. The key stays cleared until the value changes again. Other tabs, and other LocalStorage components on the page, reset their bound value for the cleared keys.
 
 In this example, try toggling the switch, refreshing the page, then clearing the storage.
 
@@ -68,7 +68,7 @@ The component dispatches three events: `save`, `update`, and `error`.
 
 ### Update
 
-Fires whenever the persisted value changes — after your own `bind:value` write, after `clearItem` or `clearAll`, or when another tab or window writes the same key while `sync` is `"on"` (the default). The payload is `{ prevValue, value }`.
+Fires whenever the persisted value changes — after your own `bind:value` write, after `clearItem` or `clearAll`, or when another tab, window or LocalStorage on the page writes the same key while `sync` is `"on"` (the default). The payload is `{ prevValue, value }`.
 
 ```svelte
 <LocalStorage
