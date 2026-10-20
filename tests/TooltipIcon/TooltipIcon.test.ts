@@ -508,6 +508,30 @@ describe("TooltipIcon", () => {
       expect(onParentKeydown).not.toHaveBeenCalled();
     });
 
+    it.each([
+      [
+        "hover",
+        () => user.hover(screen.getByRole("button")),
+        () => user.unhover(screen.getByRole("button")),
+      ],
+      ["focus", () => user.tab(), () => user.tab()],
+    ])(
+      "dispatches open and close on %s when using portal",
+      async (_, show, hide) => {
+        const onOpen = vi.fn();
+        const onClose = vi.fn();
+        render(TooltipIconPortalEscape, { props: { onOpen, onClose } });
+
+        await show();
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+        expect(onOpen).toHaveBeenCalledTimes(1);
+
+        await hide();
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        expect(onClose).toHaveBeenCalledTimes(1);
+      },
+    );
+
     it("keeps aria-describedby on the tooltip when a consumer supplies aria-label", async () => {
       render(TooltipIconPortalEscape, { props: { ariaLabel: "Custom name" } });
 

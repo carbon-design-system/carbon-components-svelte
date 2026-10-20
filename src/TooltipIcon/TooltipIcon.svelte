@@ -273,6 +273,7 @@
     if (effectivePortalTooltip) {
       tooltipHandoff.scheduleEnter(() => {
         hovered = true;
+        show();
       });
     } else {
       tooltipHandoff.scheduleEnter(show);
@@ -284,6 +285,7 @@
     if (effectivePortalTooltip) {
       tooltipHandoff.scheduleLeave(() => {
         hovered = false;
+        if (!focused) hide();
       });
     } else {
       tooltipHandoff.scheduleLeave(hide);
@@ -295,16 +297,14 @@
     hidden = false;
     // Focus shows the tooltip at once, without the fade-in.
     tooltipHandoff.claim({ instant: true });
-    if (effectivePortalTooltip) {
-      focused = true;
-    } else {
-      show();
-    }
+    if (effectivePortalTooltip) focused = true;
+    show();
   }}
   on:blur
   on:blur={() => {
     if (effectivePortalTooltip) {
       focused = false;
+      if (!hovered) hide();
     } else {
       hide();
     }

@@ -4,6 +4,8 @@
 
   export let onParentKeydown: (event: KeyboardEvent) => void = () => {};
   export let ariaLabel: string | undefined = undefined;
+  export let onOpen: () => void = () => {};
+  export let onClose: () => void = () => {};
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -15,6 +17,8 @@
     tooltipText="Portal tooltip"
     icon={Carbon}
     aria-label={ariaLabel}
+    on:open={onOpen}
+    on:close={onClose}
   />
   <input aria-label="Other control">
 </div>
