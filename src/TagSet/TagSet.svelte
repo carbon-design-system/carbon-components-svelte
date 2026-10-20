@@ -107,6 +107,7 @@
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { noop } from "../utils/noop.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -371,8 +372,13 @@
         0,
         rovingItems().findIndex((entry) => entry.id === $tabStopId),
       ),
-    onMove: (index) => tabStopId.set(rovingItems()[index]?.id ?? null),
-    focusOnMove: true,
+    onMove: (index, event) => {
+      if (hasModifierKey(event)) return;
+      const entry = rovingItems()[index];
+      tabStopId.set(entry?.id ?? null);
+      entry?.element.focus();
+    },
+    focusOnMove: false,
     wrap: false,
     itemsOnly: true,
   }}
