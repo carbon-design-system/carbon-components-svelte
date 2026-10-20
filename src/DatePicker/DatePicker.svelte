@@ -411,7 +411,7 @@
 
   /**
    * Set to `true` to render the calendar in a portal to prevent clipping.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Inside a Modal or DataTable, defaults to `true` unless explicitly set to `false`.
    *
    * When the date picker is inside a native `<dialog>` (opened with
    * `showModal()`) or an open `[popover]` element, the calendar auto-mounts

@@ -136,7 +136,7 @@
    * Set to `true` to render the icon-only tooltip in a portal,
    * preventing it from being clipped by `overflow: hidden` containers
    * and enabling auto-flipping when the preferred direction lacks space.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * By default, the tooltip is portalled when inside a `Modal` or `DataTable`.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
