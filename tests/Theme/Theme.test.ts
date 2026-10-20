@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
-import type ThemeComponent from "carbon-components-svelte/Theme/Theme.svelte";
 import type {
   CarbonTheme,
   CarbonToken,
 } from "carbon-components-svelte/Theme/Theme.svelte";
-import { themes } from "carbon-components-svelte/Theme/Theme.svelte";
+import ThemeComponent, {
+  themes,
+} from "carbon-components-svelte/Theme/Theme.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -323,6 +324,27 @@ describe("Theme", () => {
     expect(button).toHaveTextContent("White");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
+
+  it.each([
+    { mode: "toggle", check: (el: HTMLElement) => expect(el).toBeChecked() },
+    {
+      mode: "select",
+      check: (el: HTMLElement) => expect(el).toHaveValue("g100"),
+    },
+    {
+      mode: "dropdown",
+      check: (el: HTMLElement) => expect(el).toHaveTextContent("Gray 100"),
+    },
+  ] as const)(
+    "uses the default themes when $mode props omit them",
+    ({ mode, check }) => {
+      render(ThemeComponent, {
+        props: { theme: "g100", render: mode, [mode]: { labelText: "Theme" } },
+      });
+
+      check(screen.getByLabelText("Theme", { exact: false }));
+    },
+  );
 
   describe("Token types", () => {
     type Tokens = ComponentProps<ThemeComponent>["tokens"];
