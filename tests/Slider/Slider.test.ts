@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
-import { flushDismiss } from "../utils/flush-dismiss";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
@@ -34,16 +33,16 @@ const mockTrackRect = (
   vi.spyOn(track, "getBoundingClientRect").mockReturnValue(rect(edges));
 };
 
-/** Presses the slider at the given pointer coordinates, then releases the window. */
+/** Presses the slider at the given pointer coordinates, then releases it. */
 const pressTrack = async (
   container: HTMLElement,
   coords: { clientX?: number; clientY?: number },
 ) => {
   const slider = container.querySelector(".bx--slider");
   assert(slider instanceof HTMLElement);
-  await fireEvent.mouseDown(slider, coords);
+  await fireEvent.pointerDown(slider, { ...coords, pointerId: 1 });
   await tick();
-  await fireEvent.mouseUp(window);
+  await fireEvent.pointerUp(slider, { pointerId: 1 });
 };
 
 describe("Slider", () => {
@@ -638,22 +637,19 @@ describe("Slider", () => {
     mockTrackRect(container, HORIZONTAL_TRACK);
     const thumb = screen.getByRole("slider");
 
-    await fireEvent.mouseDown(slider, { clientX: 50 });
-    await flushDismiss();
+    await fireEvent.pointerDown(slider, { clientX: 50, pointerId: 1 });
     expect(thumb).toHaveAttribute("aria-valuenow", "25");
     expect(onchange).not.toHaveBeenCalled();
 
-    await fireEvent.mouseMove(window, { clientX: 150 });
-    await tick();
+    await fireEvent.pointerMove(slider, { clientX: 150, pointerId: 1 });
     expect(thumb).toHaveAttribute("aria-valuenow", "75");
     expect(onchange).not.toHaveBeenCalled();
 
-    await fireEvent.mouseUp(window);
+    await fireEvent.pointerUp(slider, { pointerId: 1 });
     expect(onchange).toHaveBeenCalledTimes(1);
     expect(onchange).toHaveBeenLastCalledWith(75);
 
-    await fireEvent.mouseMove(window, { clientX: 20 });
-    await tick();
+    await fireEvent.pointerMove(slider, { clientX: 20, pointerId: 1 });
     expect(thumb).toHaveAttribute("aria-valuenow", "75");
   });
 
@@ -716,24 +712,62 @@ describe("Slider", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(50);
   });
 
-  it("ends the drag on a release right after the press", async () => {
-    const onchange = vi.fn();
-    const { container } = render(Slider, { props: { onchange } });
-    const slider = container.querySelector(".bx--slider");
-    const track = container.querySelector(".bx--slider__track");
-    assert(slider instanceof HTMLElement && track instanceof HTMLElement);
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
-      rect({ right: 200, height: 2 }),
-    );
+  describe("pointer drag", () => {
+    const setup = () => {
+      const oninput = vi.fn();
+      const onchange = vi.fn();
+      const { container } = render(Slider, {
+        props: { value: 0, min: 0, max: 100, oninput, onchange },
+      });
+      const slider = container.querySelector(".bx--slider");
+      assert(slider instanceof HTMLElement);
+      mockTrackRect(container, HORIZONTAL_TRACK);
+      return { oninput, onchange, slider };
+    };
 
-    await fireEvent.mouseDown(slider, { clientX: 100 });
-    await fireEvent.mouseUp(window);
-    expect(onchange).toHaveBeenCalledExactlyOnceWith(50);
+    it("follows the pointer and commits once on release", async () => {
+      const { oninput, onchange, slider } = setup();
 
-    // With no button held, a later move must not drag the thumb.
-    await flushDismiss();
-    await fireEvent.mouseMove(window, { clientX: 180 });
-    expect(screen.getByRole("slider")).toHaveAttribute("aria-valuenow", "50");
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 100, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 150, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(oninput.mock.calls).toEqual([[10], [50], [75]]);
+      expect(onchange).toHaveBeenCalledExactlyOnceWith(75);
+      expect(screen.getByRole("spinbutton")).toHaveValue(75);
+    });
+
+    it("commits a press released before any render", () => {
+      const { onchange, slider } = setup();
+
+      fireEvent.pointerDown(slider, { clientX: 60, pointerId: 1 });
+      fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(onchange).toHaveBeenCalledExactlyOnceWith(30);
+    });
+
+    it("stops following the pointer after pointercancel", async () => {
+      const { onchange, slider } = setup();
+
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerCancel(slider, { pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 150, pointerId: 1 });
+
+      expect(onchange).toHaveBeenLastCalledWith(10);
+      expect(screen.getByRole("spinbutton")).toHaveValue(10);
+    });
+
+    it("adds no window listeners", async () => {
+      const add = vi.spyOn(window, "addEventListener");
+      const { slider } = setup();
+
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(add).not.toHaveBeenCalled();
+      add.mockRestore();
+    });
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1980
@@ -840,14 +874,8 @@ describe("Slider", () => {
         thumb.focus();
         await user.keyboard(keys);
       } else {
-        const slider = container.querySelector(".bx--slider");
-        const track = container.querySelector(".bx--slider__track");
-        assert(slider instanceof HTMLElement && track instanceof HTMLElement);
-        vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
-          rect({ right: 200, height: 2 }),
-        );
-        await fireEvent.mouseDown(slider, { clientX });
-        await fireEvent.mouseUp(window);
+        mockTrackRect(container, HORIZONTAL_TRACK);
+        await pressTrack(container, { clientX });
       }
       expect(thumb).toHaveAttribute("aria-valuenow", expected);
     },
