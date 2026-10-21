@@ -68,4 +68,23 @@ describe("SkeletonPlaceholder", () => {
     const element = screen.getByTestId("skeleton-placeholder");
     expect(element).toHaveClass("bx--skeleton__placeholder", "custom-class");
   });
+
+  it("should not add the AI class by default", () => {
+    render(SkeletonPlaceholder);
+
+    const element = screen.getByTestId("skeleton-placeholder");
+    expect(element).toHaveAttribute("class", "bx--skeleton__placeholder");
+  });
+
+  it("should render the AI variant", () => {
+    render(SkeletonPlaceholder, { props: { ai: true, size: 64 } });
+
+    const element = screen.getByTestId("skeleton-placeholder");
+    expect(element).toHaveClass(
+      "bx--skeleton__placeholder",
+      "bx--skeleton__placeholder--ai",
+    );
+    expect(element).toHaveStyle({ width: "64px", height: "64px" });
+    expect(element).toHaveAttribute("aria-hidden", "true");
+  });
 });

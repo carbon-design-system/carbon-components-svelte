@@ -1,0 +1,136 @@
+// AI skeleton from @carbon/styles (`skeleton-styles/_ai-skeleton-styles`):
+// the `ai` variant of SkeletonText, SkeletonPlaceholder and SkeletonIcon.
+// A blue gradient sweeps across a blue surface.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./ai-tokens";
+
+/// The shimmer: `ai-skeleton-element-background` fading in and out, with its
+/// alpha set to half at the peak, as upstream does. Only relative color
+/// syntax can replace a custom property's alpha, so older browsers draw the
+/// token at half opacity instead (fainter in the dark themes, whose token is
+/// already translucent).
+/// @access private
+/// @group components
+@mixin ai-skeleton-shimmer {
+  $element: ai-token("ai-skeleton-element-background");
+
+  @if type-of($element) == color {
+    background: linear-gradient(
+      to right,
+      rgba($element, 0) 0%,
+      rgba($element, 0.5) 50%,
+      rgba($element, 0) 100%
+    );
+  } @else {
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      $element 50%,
+      transparent 100%
+    );
+    opacity: 0.5;
+
+    @supports (color: rgb(from red r g b / 0.5)) {
+      background: linear-gradient(
+        to right,
+        rgb(from $element r g b / 0) 0%,
+        rgb(from $element r g b / 0.5) 50%,
+        rgb(from $element r g b / 0) 100%
+      );
+      opacity: 1;
+    }
+  }
+}
+
+/// AI skeleton surface and shimmer
+/// @access private
+/// @group components
+@mixin ai-skeleton {
+  @keyframes ai-skeleton {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .#{$prefix}--skeleton__text--ai,
+  .#{$prefix}--skeleton__placeholder--ai,
+  .#{$prefix}--skeleton__icon--ai {
+    overflow: hidden;
+    background: ai-token("ai-skeleton-background");
+  }
+
+  .#{$prefix}--skeleton__text--ai::before,
+  .#{$prefix}--skeleton__placeholder--ai::before,
+  .#{$prefix}--skeleton__icon--ai::before {
+    animation: 1250ms ease-in-out ai-skeleton infinite;
+
+    @include ai-skeleton-shimmer;
+  }
+
+  // Twice as wide, and centered, so the peak rests mid-block when the
+  // animation stops.
+  .#{$prefix}--skeleton__placeholder--ai::before,
+  .#{$prefix}--skeleton__icon--ai::before {
+    left: -50%;
+    width: 200%;
+  }
+
+  .#{$prefix}--skeleton__text--ai {
+    border-radius: to-rem(16px);
+  }
+
+  .#{$prefix}--skeleton__placeholder--ai {
+    border-radius: to-rem(8px);
+  }
+
+  .#{$prefix}--skeleton__icon--ai {
+    border-radius: to-rem(2px);
+  }
+
+  // The rules above replace the base skeleton's animation, and with it the
+  // base's reduced-motion opt-out, so restate it.
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--skeleton__text--ai::before,
+    .#{$prefix}--skeleton__placeholder--ai::before,
+    .#{$prefix}--skeleton__icon--ai::before {
+      animation: none;
+    }
+  }
+
+  // Forced colors drop the gradient: draw the block in text color and sweep
+  // a canvas-colored band across it.
+  @include high-contrast-mode {
+    .#{$prefix}--skeleton__text--ai,
+    .#{$prefix}--skeleton__placeholder--ai,
+    .#{$prefix}--skeleton__icon--ai {
+      background: CanvasText;
+    }
+
+    .#{$prefix}--skeleton__text--ai::before,
+    .#{$prefix}--skeleton__placeholder--ai::before,
+    .#{$prefix}--skeleton__icon--ai::before {
+      background: Canvas;
+      opacity: 1;
+    }
+  }
+
+  // At rest, that band would cover the whole block.
+  @media (forced-colors: active) and (prefers-reduced-motion: reduce) {
+    .#{$prefix}--skeleton__text--ai::before,
+    .#{$prefix}--skeleton__placeholder--ai::before,
+    .#{$prefix}--skeleton__icon--ai::before {
+      display: none;
+    }
+  }
+}
+
+@include exports("ai-skeleton") {
+  @include ai-skeleton;
+}

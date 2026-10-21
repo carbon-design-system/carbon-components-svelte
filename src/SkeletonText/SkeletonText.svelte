@@ -18,6 +18,12 @@
    */
   export let noMargin = false;
 
+  /**
+   * Set to `true` to use the AI variant, a blue shimmer for content that
+   * AI is generating
+   */
+  export let ai = false;
+
   const RANDOM = [0.973, 0.153, 0.567];
 
   $: widthNum = Number.parseInt(width, 10);
@@ -44,6 +50,7 @@
         class:bx--skeleton__text={true}
         class:bx--skeleton__heading={heading}
         class:bx--skeleton__text--no-margin={noMargin && i === lines - 1}
+        class:bx--skeleton__text--ai={ai}
         style:width
       ></p>
     {/each}
@@ -54,6 +61,7 @@
     class:bx--skeleton__text={true}
     class:bx--skeleton__heading={heading}
     class:bx--skeleton__text--no-margin={noMargin}
+    class:bx--skeleton__text--ai={ai}
     style:width
     {...$$restProps}
     on:click
