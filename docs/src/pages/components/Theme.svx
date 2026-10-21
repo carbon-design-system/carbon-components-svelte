@@ -187,7 +187,7 @@ colorTokens["background"].g100; // "#161616"
 typeTokens["heading-compact-01"]["font-size"]; // "0.875rem"
 ```
 
-The table below lists every theme color.
+The table below lists every theme color. The [token reference](/tokens) shows every token with a swatch in all five themes, plus the type, spacing and size scales.
 
 <FileSource src="/framed/Theme/ThemeTokenData" />
 
