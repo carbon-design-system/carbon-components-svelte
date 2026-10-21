@@ -19,6 +19,13 @@ export const MODAL_CONTEXT_KEY: "carbon:Modal";
 export const LAYER_CONTEXT_KEY: "carbon:Layer";
 
 /**
+ * Set by `LayoutDirection` to a readable store of its `dir`; read through
+ * `getLayoutDirection` by components that need the writing direction,
+ * and by portals so content they move out of the subtree keeps it.
+ */
+export const LAYOUT_DIRECTION_CONTEXT_KEY: "carbon:LayoutDirection";
+
+/**
  * Set by `ProfileMenu` and `HeaderSwitcher`; read by `ProfileMenuItem`
  * so items register with either parent.
  */

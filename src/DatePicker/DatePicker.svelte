@@ -473,6 +473,7 @@
   } from "../ThemeZone/theme-zone.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { getLayoutDirection } from "../utils/layout-direction.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -572,9 +573,11 @@
   let engine = null;
   $: calendar = engine ? createCalendarApi(engine) : null;
 
-  // A portalled calendar leaves a ThemeZone in the DOM, so it takes the
-  // zone's theme class, as Portal content does.
+  // A portalled calendar leaves a ThemeZone and a LayoutDirection in the
+  // DOM, so it takes the zone's theme class and the direction, as Portal
+  // content does.
   const zoneClass = getThemeZoneClass();
+  const layoutDirection = getLayoutDirection();
 
   $: if (engine?.calendarContainer) {
     for (const name of Object.values(themeZoneClasses)) {
@@ -582,6 +585,14 @@
         name,
         effectivePortalMenu && name === $zoneClass,
       );
+    }
+  }
+
+  $: if (engine?.calendarContainer) {
+    if (effectivePortalMenu && $layoutDirection) {
+      engine.calendarContainer.setAttribute("dir", $layoutDirection);
+    } else {
+      engine.calendarContainer.removeAttribute("dir");
     }
   }
   /** @type {Set<string>} */
