@@ -31,6 +31,8 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 | `link`        | Link-colored text that is not itself a link                   |
 | `disabled`    | Disabled text                                                 |
 
+Carbon v11 has no success text token, and its `support-success` color is too light for small text. `success` reads `--ccs-text-success`, a green that meets 4.5:1 wherever `error` does: on the page background and the first two layers. Override it with CSS, such as `:root { --ccs-text-success: #0e6027; }`; the `Theme` `tokens` prop only sets Carbon's `--cds-*` tokens.
+
 <Text color="primary">Primary text</Text>
 <Text color="secondary">Secondary text</Text>
 <Text color="placeholder">Placeholder text</Text>
