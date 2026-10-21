@@ -96,6 +96,10 @@
   import { rowsEqual } from "./data-table-utils.js";
 
   const ctx = getContext("carbon:DataTable") ?? {};
+  // The search matches the toolbar's height (48px, or 32px in a small
+  // toolbar), not the 40px of a field on its own.
+  const toolbarSize = getContext("carbon:Toolbar")?.toolbarSize;
+  $: searchSize = $$restProps.size ?? ($toolbarSize === "sm" ? "sm" : "xl");
 
   let rows = null;
   let unsubscribe = null;
@@ -220,14 +224,13 @@
     .join(" ");
 </script>
 
-<!-- The toolbar is 48px tall, so its search keeps the xl size. -->
 <Search
-  size="xl"
   {labelText}
   {tabindex}
   {disabled}
   {selectTextOnFocus}
   {...$$restProps}
+  size={searchSize}
   searchClass={[classes, $$restProps.class].filter(Boolean).join(" ")}
   bind:ref
   bind:value
