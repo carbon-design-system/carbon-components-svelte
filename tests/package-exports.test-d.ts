@@ -4,6 +4,7 @@ import type {
   ThemeZone as BarrelThemeZone,
   breakpointObserver,
   breakpoints,
+  createTheme,
   dismiss,
   floatingPosition,
   formatFileSize,
@@ -23,6 +24,11 @@ import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBo
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
+import type {
+  ContrastWarning,
+  CreateThemeOptions,
+  CreateThemeResult,
+} from "carbon-components-svelte/src/Theme/create-theme.js";
 import type {
   CarbonTheme,
   ThemeProps,
@@ -70,6 +76,10 @@ type _Breakpoints = typeof breakpoints;
 type _Button = Button;
 type _CarbonTheme = CarbonTheme;
 type _ComboBoxSkeleton = ComboBoxSkeleton;
+type _ContrastWarning = ContrastWarning;
+type _CreateTheme = ReturnType<typeof createTheme>;
+type _CreateThemeOptions = CreateThemeOptions;
+type _CreateThemeResult = CreateThemeResult;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
 type _FormatFileSize = ReturnType<typeof formatFileSize>;
