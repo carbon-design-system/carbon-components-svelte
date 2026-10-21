@@ -17,6 +17,8 @@ Create an icon indicator with `kind` and `label`.
 
 Set `kind` to match the status being communicated.
 
+Each kind reads a Carbon v11 `status-*` theme token, such as `status-red` for `failed`, so it follows the theme.
+
 <Stack gap={3}>
   <IconIndicator kind="failed" label="Failed" />
   <IconIndicator kind="caution-major" label="Caution major" />

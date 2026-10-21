@@ -1,21 +1,22 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
-@import "./status-colors";
+@import "./status-tokens";
 
-/// Icon indicator (absent from v10). v10 has no reactive per-theme status
-/// tokens, so `kind` colors come from the static Carbon palette with a
-/// light/dark branch instead.
+/// Icon indicator (absent from v10). Each kind reads one of Carbon v11's
+/// `status-*` tokens, as v11 does, so the colors follow the theme.
 /// @access private
 /// @group components
 @mixin icon-indicator {
-  $status: ccs-status-colors();
-  $status-red: map-get($status, "red");
-  $status-purple: map-get($status, "purple");
-  $status-green: map-get($status, "green");
-  $status-blue: map-get($status, "blue");
-  $status-gray: map-get($status, "gray");
+  $status-red: get-token-value($status-colors, "status-red");
+  $status-orange: get-token-value($status-colors, "status-orange");
+  $status-yellow: get-token-value($status-colors, "status-yellow");
+  $status-purple: get-token-value($status-colors, "status-purple");
+  $status-green: get-token-value($status-colors, "status-green");
+  $status-blue: get-token-value($status-colors, "status-blue");
+  $status-gray: get-token-value($status-colors, "status-gray");
 
   .#{$prefix}--icon-indicator {
     @include type-style("body-compact-01");
@@ -44,7 +45,7 @@
   }
 
   .#{$prefix}--icon-indicator--caution-major {
-    fill: $carbon--orange-40;
+    fill: $status-orange;
 
     path:first-of-type {
       fill: $carbon--black-100;
@@ -52,7 +53,7 @@
   }
 
   .#{$prefix}--icon-indicator--caution-minor {
-    fill: $carbon--yellow-30;
+    fill: $status-yellow;
 
     path:first-of-type {
       fill: $carbon--black-100;
