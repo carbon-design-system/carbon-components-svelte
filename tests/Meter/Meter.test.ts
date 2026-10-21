@@ -90,6 +90,19 @@ describe("Meter", () => {
     expect(meter).toHaveAttribute("aria-valuenow", "0");
   });
 
+  it("clamps an infinite value to a full bar like any large value", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("infinite-value");
+    expect(within(el).getByRole("meter")).toHaveAttribute(
+      "aria-valuenow",
+      "100",
+    );
+    expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
+      transform: "scaleX(1)",
+    });
+  });
+
   it("announces the real value and status when over capacity and valueText is unset", () => {
     render(Meter);
 
@@ -220,7 +233,7 @@ describe("Meter", () => {
     });
   });
 
-  it("renders an empty bar for a non-finite value", () => {
+  it("renders an empty bar for a NaN value", () => {
     const { container } = render(MeterComponent, {
       props: { labelText: "Storage", value: Number.NaN, max: 100 },
     });
