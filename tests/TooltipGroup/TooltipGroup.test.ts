@@ -159,8 +159,11 @@ describe("TooltipGroup", () => {
     const del = screen.getByRole("button", { name: "Delete" });
     const icon = screen.getByRole("button", { name: "Synced" });
 
-    // The first tooltip fades in as usual.
+    // The first tooltip waits out the enter delay and fades in as usual.
     await fireEvent.mouseEnter(edit);
+    expect(edit).toHaveClass("bx--tooltip--hidden");
+    await vi.advanceTimersByTimeAsync(100);
+    expect(edit).not.toHaveClass("bx--tooltip--hidden");
     expect(edit).not.toHaveClass("bx--tooltip--instant");
 
     await fireEvent.mouseLeave(edit);
