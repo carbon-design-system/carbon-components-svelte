@@ -173,10 +173,8 @@
 
   $: pinned = optimizeFastScroll && !scrollElement && virtualData.isVirtualized;
 
-  /** @param {Event} event */
-  function handleScroll(event) {
-    const target = /** @type {HTMLElement} */ (event.currentTarget);
-
+  /** @param {HTMLElement} target The element that scrolls the list. */
+  function syncScrollTop(target) {
     // An outer scroller can hold content above the list, so measure how far
     // the list's top has scrolled past the scroller's inner top edge.
     const listTop = spacerTag ? startSpacer : ref;
@@ -188,6 +186,13 @@
           listTop.getBoundingClientRect().top;
     scrollDelta = nextScrollTop - scrollTop;
     scrollTop = nextScrollTop;
+  }
+
+  /** @param {Event} event */
+  function handleScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.currentTarget);
+
+    syncScrollTop(target);
 
     const detail = scrollEndTracker.observe({
       scrollTop: target.scrollTop,
@@ -208,6 +213,12 @@
     detachScrollElement = () => {
       element.removeEventListener("scroll", handleScroll);
     };
+
+    // The scroller may already be scrolled, which fires no event to catch up
+    // with. Wait for the list to render, since its position is what counts.
+    tick().then(() => {
+      if (scrollElement === element) syncScrollTop(element);
+    });
   }
 
   $: attachScrollElement(scrollElement);

@@ -9,6 +9,7 @@
   }));
   const shortItems = items.slice(0, 20);
 
+  export let lateList = false;
   export let measuredItems = Array.from({ length: 20 }, (_, i) => ({
     id: i,
     height: i < 5 ? 100 : 40,
@@ -70,6 +71,19 @@
   >
     <div data-testid="external-row-{index}">{item.label}</div>
   </VirtualList>
+  {#if lateList}
+    <VirtualList
+      data-testid="late"
+      {items}
+      itemHeight={40}
+      containerHeight={200}
+      scrollElement={scroller}
+      let:item
+      let:index
+    >
+      <div data-testid="late-row-{index}">{item.label}</div>
+    </VirtualList>
+  {/if}
 </div>
 
 <div data-testid="list-scroller" bind:this={listScroller} style:height="200px">

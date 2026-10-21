@@ -7,6 +7,8 @@ import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import VirtualList from "./VirtualList.test.svelte";
 
 describe("VirtualList", () => {
+  afterEach(vi.restoreAllMocks);
+
   it("renders only a windowed slice of a large list", () => {
     render(VirtualList);
 
@@ -81,6 +83,23 @@ describe("VirtualList", () => {
 
     expect(screen.getByTestId("external-row-100")).toBeInTheDocument();
     expect(screen.queryByTestId("external-row-0")).not.toBeInTheDocument();
+  });
+
+  it("windows against an already scrolled scrollElement on mount", async () => {
+    const { rerender } = render(VirtualList);
+
+    // jsdom has no layout: place the list 4000px above the scroller's top.
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: Element) {
+        return rect({ top: this.matches(".bx--virtual-list") ? -4000 : 0 });
+      },
+    );
+    screen.getByTestId("scroller").scrollTop = 4000;
+    await rerender({ lateList: true });
+    await tick();
+
+    expect(screen.getByTestId("late-row-100")).toBeInTheDocument();
+    expect(screen.queryByTestId("late-row-0")).not.toBeInTheDocument();
   });
 
   describe("measured", () => {
