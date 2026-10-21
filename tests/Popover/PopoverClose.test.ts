@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PopoverClose from "./PopoverClose.test.svelte";
 
@@ -62,6 +62,21 @@ describe("Popover close event", () => {
     expect(onClose.mock.calls[0][0].detail).toEqual({
       trigger: "escape-key",
     });
+  });
+
+  it("does not dispatch close on an Escape that cancels an IME composition", async () => {
+    const onClose = vi.fn();
+    render(PopoverClose, {
+      props: { open: true, closeOnEscape: true, onClose },
+    });
+
+    await fireEvent.keyDown(document.body, {
+      key: "Escape",
+      isComposing: true,
+      keyCode: 229,
+    });
+
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("does not dispatch close on Escape when closeOnEscape is false", async () => {

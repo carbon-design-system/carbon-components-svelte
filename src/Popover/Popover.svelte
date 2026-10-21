@@ -83,6 +83,8 @@
   // rely on Escape bubbling to their own handlers.
   function handleEscape(event) {
     if (open && closeOnEscape && event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (event.isComposing || event.keyCode === 229) return;
       open = false;
       dispatch("close", { trigger: "escape-key" });
     }

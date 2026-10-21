@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { nextFrame } from "../utils/next-frame";
@@ -55,5 +55,21 @@ describe("Toggletip", () => {
 
     await user.click(trigger);
     expect(trigger).toHaveAttribute("aria-describedby");
+  });
+
+  it("should not close on an Escape that cancels an IME composition", async () => {
+    const onClose = vi.fn();
+    render(Toggletip, { props: { open: false, onClose } });
+
+    const trigger = screen.getByRole("button", { name: "Information" });
+    await user.click(trigger);
+
+    await fireEvent.keyDown(trigger, {
+      key: "Escape",
+      isComposing: true,
+      keyCode: 229,
+    });
+
+    expect(onClose).not.toHaveBeenCalled();
   });
 });
