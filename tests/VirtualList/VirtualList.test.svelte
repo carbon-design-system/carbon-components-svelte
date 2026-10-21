@@ -9,6 +9,11 @@
   }));
   const shortItems = items.slice(0, 20);
 
+  export let measuredItems = Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    height: i < 5 ? 100 : 40,
+  }));
+
   let scrollendCount = 0;
   let scrollendDetail = "";
   let scroller: HTMLDivElement | null = null;
@@ -116,6 +121,24 @@
     <div data-testid="pinned-external-row-{index}">{item.label}</div>
   </VirtualList>
 </div>
+
+<VirtualList
+  data-testid="measured"
+  items={measuredItems}
+  itemHeight={40}
+  containerHeight={200}
+  measured
+  let:item
+  let:index
+>
+  <div
+    data-testid="measured-row-{index}"
+    data-measured-height={item.height}
+    style:height="{item.height}px"
+  >
+    {item.id}
+  </div>
+</VirtualList>
 
 <div data-testid="scrollend-count">{scrollendCount}</div>
 <div data-testid="scrollend-detail">{scrollendDetail}</div>

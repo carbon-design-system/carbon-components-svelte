@@ -1,6 +1,8 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
+import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import VirtualList from "./VirtualList.test.svelte";
 
@@ -79,6 +81,32 @@ describe("VirtualList", () => {
 
     expect(screen.getByTestId("external-row-100")).toBeInTheDocument();
     expect(screen.queryByTestId("external-row-0")).not.toBeInTheDocument();
+  });
+
+  describe("measured", () => {
+    beforeEach(stubPerOptionResizeObserver);
+    afterEach(vi.unstubAllGlobals);
+
+    it("forgets measured heights when items are replaced", async () => {
+      const { rerender } = render(VirtualList);
+      const list = screen.getByTestId("measured");
+      const getTotalHeight = () =>
+        virtualWindowLayer(list).parentElement?.style.height;
+
+      await nextFrame();
+      list.scrollTop = 5000;
+      await fireEvent.scroll(list);
+      await nextFrame();
+
+      await rerender({
+        measuredItems: Array.from({ length: 20 }, (_, i) => ({
+          id: i + 20,
+          height: 40,
+        })),
+      });
+      await nextFrame();
+      expect(getTotalHeight()).toBe("800px");
+    });
   });
 
   describe("spacerTag", () => {

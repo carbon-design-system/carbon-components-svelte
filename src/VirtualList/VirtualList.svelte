@@ -137,6 +137,26 @@
     includeMargins: Boolean(spacerTag),
   });
 
+  /** @type {ReadonlyArray<Item>} */
+  let knownItems = items;
+
+  /**
+   * Forget the measured heights when `items` holds other items than the ones
+   * they describe. Heights are indexed by item, so they stay right when items
+   * are appended (load-more), but not when the list is replaced.
+   * @param {ReadonlyArray<Item>} next
+   */
+  function noteItems(next) {
+    const prev = knownItems;
+    knownItems = next;
+    if (next === prev) return;
+    if (next.length >= prev.length && prev.every((item, i) => next[i] === item))
+      return;
+    heightMeasurer.clear();
+  }
+
+  $: if (measured) noteItems(items);
+
   $: scrollEndTracker.noteItemCount(items.length);
 
   $: virtualData = virtualize({
