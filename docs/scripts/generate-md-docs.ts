@@ -52,8 +52,6 @@ type ComponentApiFile = {
 };
 
 const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
-const COMPONENTS_KEY_RE = /^components\s*:/m;
-const QUOTED_COMPONENT_RE = /"([^"]+)"|'([^']+)'/g;
 const TAG_LINE_RE = /^\s*</;
 const WHITESPACE_RE = /\s+/;
 
@@ -120,39 +118,21 @@ function splitFrontmatter(source: string) {
   return { frontmatter: match[1], body: source.slice(match[0].length) };
 }
 
-function extractComponents(frontmatter: string | null) {
+/**
+ * Parses with `Bun.YAML`, a strict YAML 1.2 parser, so frontmatter that
+ * only mdsvex's lenient parser accepts fails the build.
+ */
+function extractComponents(
+  frontmatter: string | null,
+  filePath: string,
+): string[] {
   if (!frontmatter) return [];
 
-  const keyIdx = frontmatter.search(COMPONENTS_KEY_RE);
-  if (keyIdx === -1) return [];
-
-  const afterKey = frontmatter.slice(keyIdx);
-  const bracketStart = afterKey.indexOf("[");
-  if (bracketStart === -1) return [];
-
-  let i = bracketStart;
-  let depth = 0;
-  for (; i < afterKey.length; i++) {
-    const ch = afterKey[i];
-    if (ch === "[") depth++;
-    if (ch === "]") {
-      depth--;
-      if (depth === 0) {
-        i++; // include closing ]
-        break;
-      }
-    }
+  try {
+    return Bun.YAML.parse(frontmatter)?.components ?? [];
+  } catch (error) {
+    throw new Error(`${filePath}: invalid frontmatter`, { cause: error });
   }
-
-  const listText = afterKey.slice(bracketStart, i);
-  const out: string[] = [];
-  let match = QUOTED_COMPONENT_RE.exec(listText);
-  while (match) {
-    out.push(match[1] ?? match[2]);
-    match = QUOTED_COMPONENT_RE.exec(listText);
-  }
-
-  return out;
 }
 
 function escapeTableCell(text: unknown) {
@@ -752,7 +732,7 @@ for (const componentName of getComponentNames()) {
   const filePath = path.join(COMPONENTS_PATH, `${componentName}.svx`);
   const fileContent = fs.readFileSync(filePath, "utf8");
   const { frontmatter, body } = splitFrontmatter(fileContent);
-  const components = extractComponents(frontmatter);
+  const components = extractComponents(frontmatter, filePath);
 
   const componentsForUsage =
     components.length > 0 ? components : [componentName];
