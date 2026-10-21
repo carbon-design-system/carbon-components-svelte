@@ -784,6 +784,27 @@
     dispatch("click:row--select", { row, selected: false });
   }
 
+  /**
+   * Header ids whose `headerDecorator` holds an active `AILabel`. The cells in
+   * those columns take the AI gradient, as in Carbon v11.
+   * @type {import("svelte/store").Writable<Set<string>>}
+   */
+  const aiLabelColumns = writable(new Set());
+
+  /**
+   * @param {string} headerId
+   * @param {boolean} active
+   */
+  function setColumnAILabel(headerId, active) {
+    aiLabelColumns.update((columns) => {
+      if (active === columns.has(headerId)) return columns;
+      const next = new Set(columns);
+      if (active) next.add(headerId);
+      else next.delete(headerId);
+      return next;
+    });
+  }
+
   setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,
@@ -792,6 +813,7 @@
     filterRows,
     refreshRow,
     refreshCells,
+    setColumnAILabel,
   });
 
   let expanded = false;
@@ -1654,6 +1676,9 @@
                 <td
                   class={formatAlignClass(cell.columnAlign)}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
+                  class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
+                    `${id}-${cell.key}`,
+                  )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
                   on:click={(event) => {
                     if (cell.empty) return;
@@ -1926,6 +1951,9 @@
                 <td
                   class={formatAlignClass(cell.columnAlign)}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
+                  class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
+                    `${id}-${cell.key}`,
+                  )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
                   on:click={(event) => {
                     if (cell.empty) return;
