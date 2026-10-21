@@ -85,6 +85,15 @@
   labelText="Storage"
   value={812}
   max={1000}
+  hideLabel
+  valueText="   "
+  data-testid="hidden-label-whitespace-value-text"
+/>
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
   helperText="Approaching limit"
   data-testid="helper-text"
 />

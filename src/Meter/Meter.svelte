@@ -136,7 +136,7 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
-  $: hasValueText = !!valueText || !!$$slots.valueChildren;
+  $: hasValueText = !!valueText?.trim() || !!$$slots.valueChildren;
 
   let prevStatus = undefined;
   let statusAnnouncement = "";

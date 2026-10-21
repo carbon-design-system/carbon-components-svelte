@@ -182,6 +182,16 @@ describe("Meter", () => {
     expect(within(el).getByText("812 GB of 1 TB")).toBeVisible();
   });
 
+  it("hides the label row when hideLabel is set and valueText is whitespace", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("hidden-label-whitespace-value-text");
+    expect(el.querySelector(".bx--meter__label")).toHaveClass(
+      "bx--visually-hidden",
+    );
+    expect(el.querySelector(".bx--meter__value-text")).toBeNull();
+  });
+
   it("links helper text via aria-describedby", () => {
     render(Meter);
 
