@@ -138,6 +138,8 @@
   // mode already gets this from ComposedModal's own handler); this listener
   // only ever runs for the full-screen case.
   function handleWindowKeydown(event) {
+    // Escape that cancels an IME composition is not a close.
+    if (event.isComposing || event.keyCode === 229) return;
     if (event.key === "Escape") {
       handleClose("close");
     }
