@@ -131,6 +131,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Notifications",
     components: [
+      "Callout",
       "InlineNotification",
       "ToastNotification",
       "NotificationQueue",

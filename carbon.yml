@@ -187,6 +187,20 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ButtonSet
     tags:
       - input-control
+  callout:
+    name: Callout
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/callout.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Callout
+    tags:
+      - system-feedback
   carousel:
     name: Carousel
     status: stable
