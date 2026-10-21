@@ -216,18 +216,18 @@
     }
 
     .#{$prefix}--contained-list-item--clickable
-      .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+      .#{$prefix}--contained-list-item__content:not(:disabled):not([aria-disabled="true"]):hover {
       background-color: $layer-hover;
     }
 
     .#{$prefix}--contained-list-item--selected
-      .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+      .#{$prefix}--contained-list-item__content:not(:disabled):not([aria-disabled="true"]):hover {
       background-color: $layer-selected-hover;
     }
 
     @media (forced-colors: active) {
       .#{$prefix}--contained-list-item--selected
-        .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+        .#{$prefix}--contained-list-item__content:not(:disabled):not([aria-disabled="true"]):hover {
         background-color: Highlight;
         color: HighlightText;
         forced-color-adjust: none;
@@ -257,12 +257,14 @@
   }
 
   .#{$prefix}--contained-list-item--clickable
-    .#{$prefix}--contained-list-item__content:not(:disabled):active {
+    .#{$prefix}--contained-list-item__content:not(:disabled):not([aria-disabled="true"]):active {
     background-color: $layer-active;
   }
 
   .#{$prefix}--contained-list-item--clickable
-    .#{$prefix}--contained-list-item__content:disabled {
+    .#{$prefix}--contained-list-item__content:disabled,
+  .#{$prefix}--contained-list-item--clickable
+    .#{$prefix}--contained-list-item__content[aria-disabled="true"] {
     color: $text-disabled;
     cursor: not-allowed;
   }

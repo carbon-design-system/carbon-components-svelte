@@ -2,6 +2,8 @@
   import ContainedList from "carbon-components-svelte/ContainedList/ContainedList.svelte";
   import ContainedListItem from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
 
+  export let onclick: (() => void) | undefined = undefined;
+
   function handleClick(event: MouseEvent) {
     event.preventDefault();
     console.log("click");
@@ -14,6 +16,9 @@
   </ContainedListItem>
   <ContainedListItem href="/docs" interactive on:click={handleClick}>
     Prefer href
+  </ContainedListItem>
+  <ContainedListItem href="/docs" disabled on:click={() => onclick?.()}>
+    Disabled
   </ContainedListItem>
   <ContainedListItem interactive on:click={() => console.log("click")}>
     Interactive
