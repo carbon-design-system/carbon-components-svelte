@@ -88,6 +88,16 @@ describe("Tabs server render with a secondary label", () => {
     expect(overview).not.toHaveClass("bx--tabs__nav-item--secondary-label");
   });
 
+  it("marks the sibling links that draw no secondary line", () => {
+    const { document } = renderSSR(TabsSecondaryLabel);
+    const [overview, details] = items(document).map((item) =>
+      item.querySelector(".bx--tabs__nav-link"),
+    );
+
+    expect(overview).toHaveClass("bx--tabs__nav-link--single-line");
+    expect(details).not.toHaveClass("bx--tabs__nav-link--single-line");
+  });
+
   it("leaves secondary labels off line tabs", () => {
     const { document } = renderSSR(TabsSecondaryLabel, { type: "default" });
 

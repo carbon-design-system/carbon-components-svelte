@@ -54,6 +54,27 @@ function literalTransitions(lines: string[]) {
   };
 }
 
+// `:has()` outside an `@supports selector(:has(…))` block, as 1-based line
+// numbers. A gated block is the one place `:has()` may appear: a browser
+// without it skips the block whole instead of dropping a rule it shares.
+// Use it only where no markup can carry the state, such as a set that must
+// know about a later child before the server has rendered that child.
+function ungatedHas(lines: string[]): number[] {
+  const found: number[] = [];
+  let depth = 0;
+  let gateDepth = -1;
+  lines.forEach((line, index) => {
+    const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "PFX");
+    if (gateDepth < 0 && /@supports\s+selector\(\s*:has\(/.test(code))
+      gateDepth = depth;
+    if (gateDepth < 0 && code.includes(":has(")) found.push(index + 1);
+    depth += (code.match(/\{/g) ?? []).length;
+    depth -= (code.match(/\}/g) ?? []).length;
+    if (gateDepth >= 0 && depth <= gateDepth) gateDepth = -1;
+  });
+  return found;
+}
+
 // `:hover` outside an `(any-hover: hover)` block, as 1-based line numbers.
 // Two shapes are exempt because they restate a resting style instead of
 // adding a hover effect, and guarding them would let an unguarded base hover
@@ -373,7 +394,27 @@ describe("css partial conventions", () => {
   });
 
   it("avoids :has(), which is newer than the browser baseline", () => {
-    expect(offenders(/:has\(/)).toEqual([]);
+    const found = PARTIALS.flatMap((name) =>
+      ungatedHas(readFileSync(join(CSS_DIR, name), "utf8").split("\n")).map(
+        (line) => `${name}:${line}`,
+      ),
+    );
+    expect(found).toEqual([]);
+  });
+
+  it("lets :has() through only inside its @supports gate", () => {
+    const lines = [
+      ".a:has(.b) {}",
+      "@supports selector(:has(*)) {",
+      "  .a:has(.b) {",
+      "    @include carbon--breakpoint(md) {",
+      "      .#{$prefix}--c:has(.d) {}",
+      "    }",
+      "  }",
+      "}",
+      ".a:has(.b) {}",
+    ];
+    expect(ungatedHas(lines)).toEqual([1, 9]);
   });
 
   it("does not pad specificity by repeating a class in one compound", () => {
@@ -423,7 +464,7 @@ const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
   "var() with literal fallback": matching(
     /var\(--cds-[\w-]+,\s*(rgba?\(|#[0-9a-f])/i,
   ),
-  ":has()": matching(/:has\(/),
+  ":has()": ungatedHas,
   "repeated class": matching(/(\.#\{\$prefix\}--[\w-]+)\1(?![\w-])/),
   "literal transition": (lines) => literalTransitions(lines).found,
   "unguarded :hover": unguardedHover,

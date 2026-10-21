@@ -114,6 +114,11 @@
   // siblings learn of it, and make room, only once it registers. Until
   // then (server markup), CSS sizes the row from this tab's own class.
   $: ownSecondaryLabel = $secondaryLabelSupported && hasOwnSecondaryLabel;
+  // A container tab that draws its label alone, with no secondary label
+  // or placeholder under it. Before the tabs register, a sized set with a
+  // secondary label gives these links the placeholder's empty line in CSS.
+  $: singleLine =
+    $useContainer && !$iconOnly && !($hasSecondaryLabel || ownSecondaryLabel);
 
   $: add({
     id,
@@ -222,6 +227,7 @@
       !disabled}
     class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
     class:bx--tabs__nav-link--icon-only={$iconOnly}
+    class:bx--tabs__nav-link--single-line={singleLine}
     style:width={$iconOnly
       ? undefined
       : $useFullWidth
