@@ -170,7 +170,6 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -179,6 +178,7 @@
   } from "../utils/field-status.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { clamp, parse } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
@@ -196,7 +196,6 @@
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */
   /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
-  /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
   /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
   $: textInputWidth = getTextInputWidth(min, max, step);
@@ -215,10 +214,6 @@
   let upperInputRef = null;
   /** @type {ActiveHandle} */
   let activeHandle = "lower";
-  let dragging = false;
-  let holding = false;
-  /** @type {PointerLikeEvent | null} */
-  let currentEvent = null;
   // Pointer distance from the active handle's value point when the press
   // started on the handle itself, so grabbing a handle doesn't jump it.
   let grabOffset = 0;
@@ -233,7 +228,7 @@
     return getSliderValueText(numericValue, formatValue);
   }
 
-  /** @type {(e: PointerLikeEvent) => ActiveHandle} */
+  /** @type {(e: PointerEvent) => ActiveHandle} */
   function pickHandle(event) {
     const target = /** @type {Node | null} */ (event.target);
     if (target && lowerThumbRef?.contains(target)) return "lower";
@@ -281,9 +276,9 @@
     dispatch("blur", { value, valueUpper, handle: "upper" });
   }
 
-  /** @type {(e: MouseEvent | TouchEvent) => void} */
-  function startInteraction(event) {
-    if (disabled || readonly) return;
+  /** @type {(e: PointerEvent) => boolean | undefined} */
+  function handleDragStart(event) {
+    if (disabled || readonly) return false;
     activeHandle = pickHandle(event);
     const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
     thumbRef?.focus({ preventScroll: true });
@@ -299,29 +294,12 @@
       const percent = activeHandle === "lower" ? left : leftUpper;
       grabOffset = point - (start + (length * percent) / 100);
     }
-    currentEvent = event;
-    holding = true;
-    dragging = true;
+    calcValue(event);
   }
 
-  /** @type {() => void} */
-  function stopHolding() {
-    const wasHolding = holding;
-    holding = false;
-    dragging = false;
-    currentEvent = null;
+  function handleDragEnd() {
     grabOffset = 0;
-    if (wasHolding && !disabled && !readonly) {
-      dispatch("change", { value, valueUpper });
-    }
-  }
-
-  /** @type {(e: PointerLikeEvent) => void} */
-  function move(event) {
-    if (holding) {
-      currentEvent = event;
-      dragging = true;
-    }
+    if (!disabled && !readonly) dispatch("change", { value, valueUpper });
   }
 
   // The gap applies before the bounds, so a `minGap` wider than the range
@@ -336,9 +314,9 @@
     return Math.min(max, Math.max(next, value + minGap));
   }
 
-  /** @type {(e: PointerLikeEvent | null) => void} */
+  /** @type {(e: PointerEvent) => void} */
   function calcValue(event) {
-    if (disabled || readonly || !event || !trackRef) return;
+    if (disabled || readonly || !trackRef) return;
 
     const nextValue = valueFromPointer(
       event,
@@ -454,11 +432,6 @@
       if (valueUpper - value < minGap)
         value = Math.max(min, valueUpper - minGap);
     }
-
-    if (dragging && currentEvent) {
-      calcValue(currentEvent);
-      dragging = false;
-    }
   }
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -472,18 +445,6 @@
   class:bx--form-item={true}
   class:bx--form-item--fit={!fullWidth}
   class:bx--slider-form-item--vertical={orientation === "vertical"}
-  use:dismiss={{
-    enabled: holding,
-    // A fast press and release must still end the drag.
-    immediate: true,
-    listeners: [
-      { type: "mousemove", handler: move, options: { passive: true } },
-      { type: "touchmove", handler: move, options: { passive: true } },
-      { type: "mouseup", handler: stopHolding },
-      { type: "touchend", handler: stopHolding },
-      { type: "touchcancel", handler: stopHolding },
-    ],
-  }}
   {...wrapperProps}
   on:click
   on:mouseover
@@ -611,8 +572,11 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startInteraction}
-      on:touchstart={startInteraction}
+      use:pointerDrag={{
+        onStart: handleDragStart,
+        onMove: calcValue,
+        onEnd: handleDragEnd,
+      }}
     >
       <div
         class:bx--slider__thumb-wrapper={true}
