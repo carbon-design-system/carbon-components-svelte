@@ -41,4 +41,34 @@ describe("SkeletonIcon", () => {
     await user.unhover(element);
     expect(handlers.onmouseleave).toHaveBeenCalled();
   });
+
+  it("should not add the AI class by default", () => {
+    render(SkeletonIcon);
+
+    const element = screen.getByTestId("skeleton-icon");
+    expect(element).toHaveAttribute("class", "bx--skeleton__placeholder");
+  });
+
+  it("should render the AI variant with the icon class", () => {
+    render(SkeletonIcon, { props: { ai: true, size: 24 } });
+
+    const element = screen.getByTestId("skeleton-icon");
+    expect(element).toHaveClass(
+      "bx--skeleton__placeholder",
+      "bx--skeleton__icon--ai",
+    );
+    expect(element).not.toHaveClass("bx--skeleton__placeholder--ai");
+    expect(element).toHaveStyle({ width: "24px", height: "24px" });
+  });
+
+  it("should keep additional classes on the AI variant", () => {
+    render(SkeletonIcon, { props: { ai: true, class: "custom-class" } });
+
+    const element = screen.getByTestId("skeleton-icon");
+    expect(element).toHaveClass(
+      "bx--skeleton__placeholder",
+      "bx--skeleton__icon--ai",
+      "custom-class",
+    );
+  });
 });

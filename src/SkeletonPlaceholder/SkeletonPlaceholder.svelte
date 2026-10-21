@@ -28,6 +28,12 @@
    */
   export let height = undefined;
 
+  /**
+   * Set to `true` to use the AI variant, a blue shimmer for content that
+   * AI is generating
+   */
+  export let ai = false;
+
   import { toCssLength } from "../utils/css-length.js";
 
   $: resolvedWidth = resolveDimension(width, size);
@@ -37,6 +43,7 @@
 <div
   aria-hidden="true"
   class:bx--skeleton__placeholder={true}
+  class:bx--skeleton__placeholder--ai={ai}
   style:width={resolvedWidth}
   style:height={resolvedHeight}
   {...$$restProps}

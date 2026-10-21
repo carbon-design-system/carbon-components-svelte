@@ -144,4 +144,43 @@ describe("SkeletonText", () => {
     await user.unhover(container);
     expect(handlers.onmouseleave).toHaveBeenCalled();
   });
+
+  it("should not add the AI class by default", () => {
+    render(SkeletonText);
+
+    const element = screen.getByRole("paragraph", { hidden: true });
+    expect(element).toHaveAttribute("class", "bx--skeleton__text");
+  });
+
+  it("should render the AI variant", () => {
+    render(SkeletonText, { props: { ai: true } });
+
+    const element = screen.getByRole("paragraph", { hidden: true });
+    expect(element).toHaveClass("bx--skeleton__text", "bx--skeleton__text--ai");
+  });
+
+  it("should render the AI heading variant", () => {
+    render(SkeletonText, { props: { ai: true, heading: true } });
+
+    const element = screen.getByRole("paragraph", { hidden: true });
+    expect(element).toHaveClass(
+      "bx--skeleton__text",
+      "bx--skeleton__heading",
+      "bx--skeleton__text--ai",
+    );
+  });
+
+  it("should put the AI class on every paragraph line", () => {
+    render(SkeletonText, { props: { ai: true, paragraph: true } });
+
+    const elements = screen.getAllByRole("paragraph", { hidden: true });
+    expect(elements).toHaveLength(3);
+    for (const element of elements) {
+      expect(element).toHaveClass(
+        "bx--skeleton__text",
+        "bx--skeleton__text--ai",
+      );
+    }
+    expect(elements[0].parentElement).not.toHaveAttribute("class");
+  });
 });
