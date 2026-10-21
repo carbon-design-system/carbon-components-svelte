@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Popover from "carbon-components-svelte/Popover/Popover.svelte";
   import type { ComponentProps } from "svelte";
+  import Popover from "../../src/Popover/Popover.svelte";
 
   export let open = false;
   export let align: ComponentProps<Popover>["align"] = "top";
@@ -8,20 +8,25 @@
   export let highContrast = false;
   export let relative = false;
   export let closeOnOutsideClick = false;
+  export let closeOnEscape = false;
+  export let onClickOutside: (
+    e: CustomEvent<{ target: EventTarget | null }>,
+  ) => void = () => {};
+  export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
 </script>
 
 <div data-testid="parent">
   Parent
   <Popover
-    {open}
+    bind:open
     {closeOnOutsideClick}
+    {closeOnEscape}
     {align}
     {caret}
     {highContrast}
     {relative}
-    on:click:outside={(e) => {
-      console.log("click:outside", e.detail);
-    }}
+    on:click:outside={onClickOutside}
+    on:close={onClose}
   >
     <div data-testid="content">Content</div>
   </Popover>

@@ -13,18 +13,18 @@ describe("Popover", () => {
   });
 
   it("should handle outside clicks", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onClickOutside = vi.fn();
     render(Popover, {
       props: {
         open: true,
         closeOnOutsideClick: true,
+        onClickOutside,
       },
     });
 
     await user.click(document.body);
-    expect(consoleLog).toHaveBeenCalledWith(
-      "click:outside",
-      expect.any(Object),
+    expect(onClickOutside).toHaveBeenCalledWith(
+      expect.objectContaining({ detail: expect.any(Object) }),
     );
   });
 
@@ -82,12 +82,12 @@ describe("Popover", () => {
   });
 
   it("should not dispatch click:outside event when clicking inside", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onClickOutside = vi.fn();
     render(Popover, {
-      props: { open: true, closeOnOutsideClick: true },
+      props: { open: true, closeOnOutsideClick: true, onClickOutside },
     });
 
     await user.click(screen.getByTestId("content"));
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onClickOutside).not.toHaveBeenCalled();
   });
 });

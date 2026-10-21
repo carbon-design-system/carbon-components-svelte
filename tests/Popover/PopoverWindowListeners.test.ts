@@ -1,36 +1,31 @@
 import { render } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import Popover from "./Popover.test.svelte";
 
-const netClick = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === "click").length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
-
 describe("Popover window listeners", () => {
-  it("closed popovers register no window click listener", async () => {
-    const add = vi.spyOn(window, "addEventListener");
-    const remove = vi.spyOn(window, "removeEventListener");
+  let add: ReturnType<typeof vi.spyOn>;
+  let remove: ReturnType<typeof vi.spyOn>;
 
-    for (let i = 0; i < 5; i++) render(Popover, { props: { open: false } });
-    await flushDismiss();
-    expect(netClick(add, remove)).toBe(0);
+  beforeEach(() => {
+    add = vi.spyOn(window, "addEventListener");
+    remove = vi.spyOn(window, "removeEventListener");
+  });
 
+  afterEach(() => {
     add.mockRestore();
     remove.mockRestore();
   });
 
-  it("an open popover registers exactly one window click listener", async () => {
-    const add = vi.spyOn(window, "addEventListener");
-    const remove = vi.spyOn(window, "removeEventListener");
+  it("closed popovers register no window click listener", async () => {
+    for (let i = 0; i < 5; i++) render(Popover, { props: { open: false } });
+    await flushDismiss();
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
+  });
 
+  it("an open popover registers exactly one window click listener", async () => {
     render(Popover, { props: { open: true } });
     await flushDismiss();
-    expect(netClick(add, remove)).toBe(1);
-
-    add.mockRestore();
-    remove.mockRestore();
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
   });
 });

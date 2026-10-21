@@ -13,6 +13,7 @@
   export let separatorLabel: ComponentProps<Splitter>["separatorLabel"] =
     undefined;
   export let enterDelayMs: ComponentProps<Splitter>["enterDelayMs"] = undefined;
+  export let onResize: (detail: { size: number }) => void = () => {};
 </script>
 
 <Splitter
@@ -26,7 +27,7 @@
   {enterDelayMs}
   {separatorLabel}
   data-testid="splitter"
-  on:resize={(e) => console.log("resize", e.detail)}
+  on:resize={(e) => onResize(e.detail)}
 >
   <div slot="start">Start pane <a href="#start">Start link</a></div>
   <div slot="end">End pane <a href="#end">End link</a></div>

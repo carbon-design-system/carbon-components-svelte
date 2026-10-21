@@ -1,12 +1,10 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
+import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import CopyButton from "./CopyButton.test.svelte";
 import CopyButtonAsync from "./CopyButtonAsync.test.svelte";
-import CopyButtonAsyncDoubleClick from "./CopyButtonAsyncDoubleClick.test.svelte";
-import CopyButtonDoubleClick from "./CopyButtonDoubleClick.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
-import CopyButtonMouseEnter from "./CopyButtonMouseEnter.test.svelte";
 import CopyButtonPortalTooltipTimeout from "./CopyButtonPortalTooltipTimeout.test.svelte";
 
 describe("CopyButton", () => {
@@ -21,25 +19,23 @@ describe("CopyButton", () => {
   });
 
   afterEach(() => {
+    Reflect.deleteProperty(document, "execCommand");
     for (const portal of document.querySelectorAll("[data-floating-portal]")) {
       portal.remove();
     }
   });
 
   it("renders and functions correctly", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(CopyButton);
+    const onCopy = vi.fn();
+    render(CopyButton, { props: { onCopy } });
 
     const button = getCopyButton("Basic");
 
     await user.click(button);
-    expect(consoleLog).toHaveBeenCalledWith("copied");
+    expect(onCopy).toHaveBeenCalledTimes(1);
 
     // Feedback is portalled by default; it shares the hover tooltip surface.
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Copied!");
+    expect(openTooltips()[0]).toHaveTextContent("Copied!");
   });
 
   it("supports custom feedback text and timeout (inline caret)", async () => {
@@ -59,15 +55,13 @@ describe("CopyButton", () => {
   });
 
   it("supports custom copy function", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onCustomCopy = vi.fn();
     const clipboard = vi.spyOn(navigator.clipboard, "writeText");
-    render(CopyButton);
+    render(CopyButton, { props: { onCustomCopy } });
 
     const button = getCopyButton("Custom copy function");
     await user.click(button);
-    expect(consoleLog).toHaveBeenCalledWith(
-      "Custom copy: Custom copy function",
-    );
+    expect(onCustomCopy).toHaveBeenCalledWith("Custom copy function");
     expect(clipboard).not.toHaveBeenCalled();
   });
 
@@ -92,10 +86,7 @@ describe("CopyButton", () => {
     });
     expect(button).toHaveClass("bx--copy-btn--fade-in");
 
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Failed to copy");
+    expect(openTooltips()[0]).toHaveTextContent("Failed to copy");
     expect(screen.queryByText("Copied!")).toBeNull();
   });
 
@@ -124,10 +115,7 @@ describe("CopyButton", () => {
     });
 
     expect(button).not.toHaveAttribute("aria-busy");
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Copied!");
+    expect(openTooltips()[0]).toHaveTextContent("Copied!");
   });
 
   it("async copy failure shows error feedback and dispatches copy:error", async () => {
@@ -145,10 +133,7 @@ describe("CopyButton", () => {
     expect(onCopyError).toHaveBeenCalledWith({ error });
     expect(button).toHaveClass("bx--copy-btn--fade-in");
 
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Failed to copy");
+    expect(openTooltips()[0]).toHaveTextContent("Failed to copy");
 
     // Error feedback holds the button until timeout/dismiss.
     await user.click(button);
@@ -190,9 +175,9 @@ describe("CopyButton", () => {
 
   it("forwards mouseenter events to parent handlers", () => {
     const onMouseEnter = vi.fn();
-    render(CopyButtonMouseEnter, { props: { onMouseEnter } });
+    render(CopyButtonAsync, { props: { onMouseEnter } });
 
-    const button = getCopyButton("Hover test");
+    const button = getCopyButton("Async copy");
     fireEvent.mouseEnter(button);
 
     expect(onMouseEnter).toHaveBeenCalledTimes(1);
@@ -200,15 +185,14 @@ describe("CopyButton", () => {
 
   it("should not copy again while feedback is active", async () => {
     const copy = vi.fn();
-    render(CopyButtonDoubleClick, {
-      props: { copy },
-    });
+    const onCopy = vi.fn();
+    render(CopyButtonAsync, { props: { copy, onCopy } });
 
-    const button = getCopyButton("Copy");
+    const button = getCopyButton("Async copy");
     await user.dblClick(button);
 
     expect(copy).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+    expect(onCopy).toHaveBeenCalledTimes(1);
   });
 
   it("should not copy again while async copy is in flight", async () => {
@@ -220,19 +204,20 @@ describe("CopyButton", () => {
         }),
     );
 
-    render(CopyButtonAsyncDoubleClick, { props: { copy } });
+    const onCopy = vi.fn();
+    render(CopyButtonAsync, { props: { copy, onCopy } });
 
-    const button = getCopyButton("Async double click");
+    const button = getCopyButton("Async copy");
     fireEvent.click(button);
     await Promise.resolve();
     fireEvent.click(button);
 
     expect(copy).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
+    expect(onCopy).not.toHaveBeenCalled();
 
     resolveCopy();
     await waitFor(() => {
-      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+      expect(onCopy).toHaveBeenCalledTimes(1);
     });
   });
 

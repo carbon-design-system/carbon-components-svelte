@@ -1,33 +1,39 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import SplitterComponent from "carbon-components-svelte/Splitter/Splitter.svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Splitter from "./Splitter.test.svelte";
 import SplitterNested from "./SplitterNested.test.svelte";
 
-function mockRect(element: HTMLElement) {
-  vi.spyOn(element, "getBoundingClientRect").mockReturnValue({
-    left: 0,
-    right: 400,
-    width: 400,
-    top: 0,
-    bottom: 200,
-    height: 200,
-    x: 0,
-    y: 0,
-    toJSON: () => ({}),
-  });
+/** Returns the "bound-size" element that mirrors the bound `size`. */
+const boundSize = () => screen.getByTestId("bound-size");
+/** Returns the "bound-collapsed" element that mirrors the bound `collapsed`. */
+const boundCollapsed = () => screen.getByTestId("bound-collapsed");
+
+/** Presses the separator at `from`, moves it to `to` and releases it along `axis`. */
+async function drag(
+  separator: HTMLElement,
+  from: number,
+  to: number,
+  axis: "clientX" | "clientY" = "clientX",
+) {
+  await fireEvent.pointerDown(separator, { [axis]: from, pointerId: 1 });
+  await fireEvent.pointerMove(separator, { [axis]: to, pointerId: 1 });
+  await fireEvent.pointerUp(separator, { pointerId: 1 });
 }
 
 function setup(props: Record<string, unknown> = {}) {
-  const consoleLog = vi.spyOn(console, "log");
-  render(Splitter, { props });
+  const onResize = vi.fn();
+  render(Splitter, { props: { onResize, ...props } });
   const root = screen.getByTestId("splitter");
-  mockRect(root);
+  vi.spyOn(root, "getBoundingClientRect").mockReturnValue(
+    rect({ width: 400, height: 200 }),
+  );
   const separator = screen.getByRole("separator");
   const startPane = screen.getByText("Start pane").parentElement;
   assert(startPane);
-  return { consoleLog, root, separator, startPane };
+  return { onResize, root, separator, startPane };
 }
 
 describe("Splitter", () => {
@@ -66,7 +72,7 @@ describe("Splitter", () => {
 
     expect(separator).toHaveAttribute("aria-valuenow", "80");
     expect(startPane.style.flexBasis).toBe("80%");
-    expect(screen.getByTestId("bound-size")).toHaveTextContent("95");
+    expect(boundSize()).toHaveTextContent("95");
   });
 
   it.each([
@@ -83,7 +89,7 @@ describe("Splitter", () => {
     await user.keyboard(keys);
 
     expect(separator).toHaveAttribute("aria-valuenow", expected);
-    expect(screen.getByTestId("bound-size")).toHaveTextContent(expected);
+    expect(boundSize()).toHaveTextContent(expected);
   });
 
   it.each(["altKey", "ctrlKey", "metaKey"])(
@@ -114,7 +120,7 @@ describe("Splitter", () => {
   });
 
   it("collapses to min on Enter and restores the previous size", async () => {
-    const { consoleLog, separator } = setup({ size: 40, min: 10 });
+    const { onResize, separator } = setup({ size: 40, min: 10 });
 
     separator.focus();
     await user.keyboard("{Enter}");
@@ -122,22 +128,18 @@ describe("Splitter", () => {
 
     await user.keyboard("{Enter}");
     expect(separator).toHaveAttribute("aria-valuenow", "40");
-    expect(consoleLog.mock.calls).toEqual([
-      ["resize", { size: 10 }],
-      ["resize", { size: 40 }],
-    ]);
+    expect(onResize.mock.calls).toEqual([[{ size: 10 }], [{ size: 40 }]]);
   });
 
   describe("collapsed", () => {
     const toggle = () =>
       user.click(screen.getByRole("button", { name: "Toggle collapsed" }));
-    const boundCollapsed = () => screen.getByTestId("bound-collapsed");
 
     it("collapses on mount and restores the given size", async () => {
       const { separator } = setup({ size: 40, min: 10, collapsed: true });
 
       expect(separator).toHaveAttribute("aria-valuenow", "10");
-      expect(screen.getByTestId("bound-size")).toHaveTextContent("10");
+      expect(boundSize()).toHaveTextContent("10");
 
       await toggle();
 
@@ -146,14 +148,14 @@ describe("Splitter", () => {
     });
 
     it("collapses and restores when set, without firing resize", async () => {
-      const { consoleLog, separator } = setup({ size: 40, min: 10 });
+      const { onResize, separator } = setup({ size: 40, min: 10 });
 
       await toggle();
       expect(separator).toHaveAttribute("aria-valuenow", "10");
       await toggle();
       expect(separator).toHaveAttribute("aria-valuenow", "40");
 
-      expect(consoleLog).not.toHaveBeenCalled();
+      expect(onResize).not.toHaveBeenCalled();
     });
 
     it("reflects Enter and Home, and restores to where the gesture began", async () => {
@@ -174,9 +176,7 @@ describe("Splitter", () => {
     it("reflects a drag to min and restores the drag's start size", async () => {
       const { separator } = setup({ size: 40, min: 10 });
 
-      await fireEvent.pointerDown(separator, { clientX: 160, pointerId: 1 });
-      await fireEvent.pointerMove(separator, { clientX: 0, pointerId: 1 });
-      await fireEvent.pointerUp(separator, { pointerId: 1 });
+      await drag(separator, 160, 0);
       expect(boundCollapsed()).toHaveTextContent("true");
 
       separator.focus();
@@ -246,12 +246,10 @@ describe("Splitter", () => {
       report(400, 200);
       await tick();
 
-      await fireEvent.pointerDown(separator, { clientX: 200, pointerId: 1 });
-      await fireEvent.pointerMove(separator, { clientX: 0, pointerId: 1 });
-      await fireEvent.pointerUp(separator, { pointerId: 1 });
+      await drag(separator, 200, 0);
 
       expect(separator).toHaveAttribute("aria-valuenow", "25");
-      expect(screen.getByTestId("bound-collapsed")).toHaveTextContent("true");
+      expect(boundCollapsed()).toHaveTextContent("true");
     });
 
     it("re-clamps when the splitter shrinks, without rewriting size", async () => {
@@ -266,7 +264,7 @@ describe("Splitter", () => {
       expect(separator).toHaveAttribute("aria-valuemin", "50");
       expect(separator).toHaveAttribute("aria-valuenow", "50");
       expect(startPane.style.flexBasis).toBe("50%");
-      expect(screen.getByTestId("bound-size")).toHaveTextContent("30");
+      expect(boundSize()).toHaveTextContent("30");
     });
 
     it("uses the height when vertical", async () => {
@@ -287,20 +285,31 @@ describe("Splitter", () => {
       expect(separator).toHaveAttribute("aria-valuenow", "75");
     });
 
-    it("sets the pixel bounds on the start pane for before it is measured", () => {
-      const { startPane } = setup({ min: "100px", max: "300px" });
+    it.each([
+      {
+        orientation: "horizontal",
+        set: ["minWidth", "maxWidth"],
+        unset: "minHeight",
+      },
+      {
+        orientation: "vertical",
+        set: ["minHeight", "maxHeight"],
+        unset: "minWidth",
+      },
+    ] as const)(
+      "sets the $orientation pixel bounds on the start pane before it is measured",
+      ({ orientation, set, unset }) => {
+        const { startPane } = setup({
+          orientation,
+          min: "100px",
+          max: "300px",
+        });
 
-      expect(startPane.style.minWidth).toBe("100px");
-      expect(startPane.style.maxWidth).toBe("300px");
-      expect(startPane.style.minHeight).toBe("");
-    });
-
-    it("sets min and max height when vertical", () => {
-      const { startPane } = setup({ orientation: "vertical", min: "100px" });
-
-      expect(startPane.style.minHeight).toBe("100px");
-      expect(startPane.style.minWidth).toBe("");
-    });
+        expect(startPane.style[set[0]]).toBe("100px");
+        expect(startPane.style[set[1]]).toBe("300px");
+        expect(startPane.style[unset]).toBe("");
+      },
+    );
   });
 
   it("makes a pane shrunk to nothing inert", async () => {
@@ -325,7 +334,7 @@ describe("Splitter", () => {
   });
 
   it("follows a pointer drag and fires resize once on release", async () => {
-    const { consoleLog, root, separator } = setup();
+    const { onResize, root, separator } = setup();
 
     await fireEvent.pointerDown(separator, { clientX: 200, pointerId: 1 });
     expect(root).toHaveClass("bx--splitter--resizing");
@@ -337,15 +346,13 @@ describe("Splitter", () => {
 
     expect(separator).toHaveAttribute("aria-valuenow", "33.25");
     expect(root).not.toHaveClass("bx--splitter--resizing");
-    expect(consoleLog.mock.calls).toEqual([["resize", { size: 33.25 }]]);
+    expect(onResize.mock.calls).toEqual([[{ size: 33.25 }]]);
   });
 
   it("measures a vertical drag along the height", async () => {
     const { separator } = setup({ orientation: "vertical" });
 
-    await fireEvent.pointerDown(separator, { clientY: 100, pointerId: 1 });
-    await fireEvent.pointerMove(separator, { clientY: 150, pointerId: 1 });
-    await fireEvent.pointerUp(separator, { pointerId: 1 });
+    await drag(separator, 100, 150, "clientY");
 
     expect(separator).toHaveAttribute("aria-valuenow", "75");
   });
@@ -363,39 +370,37 @@ describe("Splitter", () => {
   });
 
   it("does not fire resize for a press without movement", async () => {
-    const { consoleLog, separator } = setup();
+    const { onResize, separator } = setup();
 
     await fireEvent.pointerDown(separator, { clientX: 200, pointerId: 1 });
     await fireEvent.pointerUp(separator, { pointerId: 1 });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onResize).not.toHaveBeenCalled();
   });
 
   it("restores the initial size on double click", async () => {
-    const { consoleLog, separator } = setup({ size: 30 });
+    const { onResize, separator } = setup({ size: 30 });
 
     separator.focus();
     await user.keyboard("{End}");
     await user.dblClick(separator);
 
     expect(separator).toHaveAttribute("aria-valuenow", "30");
-    expect(consoleLog).toHaveBeenLastCalledWith("resize", { size: 30 });
+    expect(onResize).toHaveBeenLastCalledWith({ size: 30 });
   });
 
   it("ignores drags and keys when disabled", async () => {
-    const { consoleLog, separator } = setup({ disabled: true });
+    const { onResize, separator } = setup({ disabled: true });
 
     expect(separator).not.toHaveAttribute("tabindex");
     expect(separator).not.toHaveAttribute("aria-valuenow");
     expect(separator).toHaveClass("bx--splitter__separator--disabled");
 
-    await fireEvent.pointerDown(separator, { clientX: 200, pointerId: 1 });
-    await fireEvent.pointerMove(separator, { clientX: 100, pointerId: 1 });
-    await fireEvent.pointerUp(separator, { pointerId: 1 });
+    await drag(separator, 200, 100);
     await fireEvent.keyDown(separator, { key: "ArrowRight" });
 
-    expect(consoleLog).not.toHaveBeenCalled();
-    expect(screen.getByTestId("bound-size")).toHaveTextContent("50");
+    expect(onResize).not.toHaveBeenCalled();
+    expect(boundSize()).toHaveTextContent("50");
   });
 
   describe("hover delay", () => {

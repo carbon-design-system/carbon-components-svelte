@@ -4,14 +4,13 @@
 
   export let open: ComponentProps<Disclosure>["open"] = false;
   export let align: ComponentProps<Disclosure>["align"] = "end";
+  export let onToggle: (e: CustomEvent<{ open: boolean }>) => void = () => {};
 </script>
 
 <Disclosure
   bind:open
   {align}
-  on:toggle={(e) => {
-    console.log("toggle:", e.detail.open);
-  }}
+  on:toggle={onToggle}
   on:click
   on:keydown
   on:mouseover

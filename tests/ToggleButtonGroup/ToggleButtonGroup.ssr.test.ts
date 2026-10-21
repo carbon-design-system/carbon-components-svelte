@@ -11,29 +11,34 @@ function tabStops(props: Record<string, unknown> = {}) {
 }
 
 describe("ToggleButtonGroup server render", () => {
-  it("makes the first button the tab stop when nothing is pressed", () => {
-    expect(tabStops()).toEqual(["Bold"]);
-  });
-
-  it("makes the pressed button the tab stop", () => {
-    expect(tabStops({ selected: ["italic"] })).toEqual(["Italic"]);
-  });
-
-  it("makes the first pressed button the tab stop in multiple mode", () => {
-    expect(tabStops({ selected: ["underline", "italic"] })).toEqual(["Italic"]);
-  });
-
-  it("uses the first entry in single mode", () => {
-    expect(
-      tabStops({ selectionMode: "single", selected: ["underline", "italic"] }),
-    ).toEqual(["Underline"]);
-  });
-
-  it("skips a disabled first button", () => {
-    expect(tabStops({ firstDisabled: true })).toEqual(["Italic"]);
-  });
-
-  it("has no tab stop when the whole group is disabled", () => {
-    expect(tabStops({ groupDisabled: true })).toEqual([]);
+  it.each([
+    [
+      "makes the first button the tab stop when nothing is pressed",
+      {},
+      ["Bold"],
+    ],
+    [
+      "makes the pressed button the tab stop",
+      { selected: ["italic"] },
+      ["Italic"],
+    ],
+    [
+      "makes the first pressed button the tab stop in multiple mode",
+      { selected: ["underline", "italic"] },
+      ["Italic"],
+    ],
+    [
+      "uses the first entry in single mode",
+      { selectionMode: "single", selected: ["underline", "italic"] },
+      ["Underline"],
+    ],
+    ["skips a disabled first button", { firstDisabled: true }, ["Italic"]],
+    [
+      "has no tab stop when the whole group is disabled",
+      { groupDisabled: true },
+      [],
+    ],
+  ])("%s", (_name, props, expected) => {
+    expect(tabStops(props)).toEqual(expected);
   });
 });
