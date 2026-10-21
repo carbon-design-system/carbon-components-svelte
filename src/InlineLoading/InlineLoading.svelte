@@ -51,14 +51,19 @@
   // `delay > 0` renders nothing during SSR while `status` is "active", since the timer only fires client-side.
   let visible = false;
 
+  // With `successDelay={0}` the event dispatches synchronously; during init (Svelte 3/4) the parent hasn't attached `on:success` yet.
+  let mounted = false;
+
   onMount(() => {
+    mounted = true;
+
     return () => {
       scheduleSuccess.cancel();
       schedule.cancel();
     };
   });
 
-  $: if (status === "finished") {
+  $: if (mounted && status === "finished") {
     scheduleSuccess(successDelay, () => {
       dispatch("success");
     });
