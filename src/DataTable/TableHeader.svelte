@@ -35,6 +35,7 @@
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
+  import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
@@ -58,6 +59,11 @@
 
   /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
   const aiLabelState = writable(undefined);
+
+  // Inside a DataTable, an active AI label marks the whole column.
+  const setColumnAILabel = getContext("carbon:DataTable")?.setColumnAILabel;
+  $: setColumnAILabel?.(id, $aiLabelState === "active");
+  onMount(() => () => setColumnAILabel?.(id, false));
 </script>
 
 {#if sortable}

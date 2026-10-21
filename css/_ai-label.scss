@@ -988,10 +988,19 @@ $ai-label-sizes: (
     align-items: center;
   }
 
+
   .#{$prefix}--data-table--ai-label-row td {
     @include ai-table-gradient;
 
     background-attachment: fixed;
+  }
+
+  // The cells of a column whose header has an AI label, as in v11. In an AI
+  // row they keep their own gradient, not the row's viewport-fixed aura.
+  .#{$prefix}--data-table .#{$prefix}--table-cell--column-ai-label {
+    @include ai-table-gradient;
+
+    background-attachment: scroll;
   }
 
   .#{$prefix}--data-table--ai-label-row .#{$prefix}--table-column-decorator {

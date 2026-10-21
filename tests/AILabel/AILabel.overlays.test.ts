@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import AILabelOverlays from "./AILabel.overlays.test.svelte";
 import { aiLabel } from "./helpers";
 
@@ -41,6 +42,21 @@ describe("AILabel in data tables", () => {
     expect(aiRow).not.toHaveClass("bx--data-table--ai-label-row");
     expect(aiLabel(aiRow)).toHaveClass("bx--ai-label--revert");
   });
+
+  it.each([false, true])(
+    "gives an AI column's cells the AI gradient (sortable: %s)",
+    async (sortable) => {
+      render(AILabelOverlays, { props: { sortable } });
+
+      // The header's label reports its state after mount.
+      await tick();
+      for (const row of table().querySelectorAll("tbody tr")) {
+        const [, name, forecast] = row.querySelectorAll("td");
+        expect(forecast).toHaveClass("bx--table-cell--column-ai-label");
+        expect(name).not.toHaveClass("bx--table-cell--column-ai-label");
+      }
+    },
+  );
 
   it("spans expanded rows across the decorator column", () => {
     render(AILabelOverlays, { props: { expandable: true } });
