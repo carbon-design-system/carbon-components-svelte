@@ -1,26 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import { hideAtBreakpoint } from "../../src/Breakpoint/hide-at-breakpoint.js";
+import { stubViewport } from "../utils/match-media";
 import HideAtBreakpoint from "./HideAtBreakpoint.test.svelte";
 
-type Size = "sm" | "md" | "lg" | "xlg" | "max";
+const width = { sm: 400, md: 800, lg: 1100, xlg: 1400, max: 1700 };
 
-function stubMatchMediaForSize(size: Size) {
-  const isMatch: Record<Size, (query: string) => boolean> = {
-    sm: (query) => query.includes("(max-width: 672px)"),
-    md: (query) => query.includes("(min-width: 672px) and (max-width: 1056px)"),
-    lg: (query) =>
-      query.includes("(min-width: 1056px) and (max-width: 1312px)"),
-    xlg: (query) =>
-      query.includes("(min-width: 1312px) and (max-width: 1584px)"),
-    max: (query) => query.includes("(min-width: 1584px)"),
-  };
-
-  vi.stubGlobal("matchMedia", (query: string) => ({
-    matches: isMatch[size](query),
-    media: query,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  }));
+function stubMatchMediaForSize(size: keyof typeof width) {
+  stubViewport(width[size]);
 }
 
 describe("hideAtBreakpoint", () => {
