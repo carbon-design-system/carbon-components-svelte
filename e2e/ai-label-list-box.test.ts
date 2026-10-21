@@ -72,4 +72,23 @@ test.describe("AILabel in list boxes", () => {
       expect(onTop).toBe(true);
     });
   }
+
+  test("the revert button's icon sits where the label did", async ({
+    page,
+  }) => {
+    const iconRight = (testId: string) =>
+      page
+        .getByTestId(testId)
+        .locator(".bx--field-decorator")
+        .evaluate((node) => {
+          const icon = node.querySelector(
+            ".bx--toggletip-button, .bx--ai-label__revert svg",
+          );
+          return icon?.getBoundingClientRect().right ?? Number.NaN;
+        });
+    expect(await iconRight("text-input-revert")).toBeCloseTo(
+      await iconRight("text-input"),
+      0,
+    );
+  });
 });

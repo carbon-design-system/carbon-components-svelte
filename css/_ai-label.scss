@@ -252,6 +252,18 @@ $ai-label-sizes: (
     border-bottom-right-radius: to-rem(7px);
   }
 
+  // In a field, the revert button is wider than the label it replaces, so it
+  // moves toward the field's edge by the difference on that side, as in v11:
+  // its icon sits where the label did.
+  .#{$prefix}--field-decorator .#{$prefix}--ai-label--revert {
+    transform: translateX(to-rem(8px));
+  }
+
+  .#{$prefix}--field-decorator
+    .#{$prefix}--ai-label--revert.#{$prefix}--ai-label--field-xs {
+    transform: translateX(to-rem(4px));
+  }
+
   // Revert button: a 24px square in extra-small fields
   .#{$prefix}--ai-label--field-xs .#{$prefix}--ai-label__revert {
     width: to-rem(24px);

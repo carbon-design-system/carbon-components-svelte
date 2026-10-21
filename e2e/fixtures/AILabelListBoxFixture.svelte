@@ -1,5 +1,10 @@
 <script>
-  import { AILabel, ComboBox, Dropdown } from "carbon-components-svelte";
+  import {
+    AILabel,
+    ComboBox,
+    Dropdown,
+    TextInput,
+  } from "carbon-components-svelte";
 
   const items = [
     {
@@ -51,4 +56,17 @@
   >
     <AILabel slot="decorator" />
   </ComboBox>
+</div>
+
+<!-- The revert button is wider than the label it replaces. -->
+<div data-testid="text-input">
+  <TextInput labelText="Incident title" value="Database failover">
+    <AILabel slot="decorator" />
+  </TextInput>
+</div>
+
+<div data-testid="text-input-revert">
+  <TextInput labelText="Incident title" value="Database failover">
+    <AILabel slot="decorator" revertActive />
+  </TextInput>
 </div>
