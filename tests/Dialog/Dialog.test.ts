@@ -93,6 +93,33 @@ describe("Dialog", () => {
     });
   });
 
+  it.each([false, true])(
+    "stays open across an unrelated prop update (modal: %s)",
+    async (modal) => {
+      const { rerender } = render(Dialog, { props: { modal } });
+      await rerender({ modal, open: true });
+      expect(screen.getByRole("dialog")).toHaveAttribute("open");
+
+      await rerender({ modal, open: true, preventCloseOnClickOutside: true });
+
+      expect(screen.getByRole("dialog")).toHaveAttribute("open");
+    },
+  );
+
+  it('dispatches close once with trigger "programmatic" for a modal opened after mount', async () => {
+    const onclose = vi.fn();
+    const { rerender } = render(Dialog, { props: { modal: true, onclose } });
+    await rerender({ modal: true, open: true, onclose });
+
+    await rerender({ modal: true, open: false, onclose });
+    await tick();
+
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      trigger: "programmatic",
+    });
+  });
+
   it('dispatches close with trigger "escape-key" when Escape closes the dialog', () => {
     const onclose = vi.fn();
     render(Dialog, { props: { open: true, modal: true, onclose } });
