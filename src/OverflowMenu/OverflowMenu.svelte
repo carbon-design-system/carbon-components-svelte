@@ -324,7 +324,16 @@
     },
   };
 
+  /** Set when ArrowUp opens the menu: focus its last item once items register. */
+  let openOnLast = false;
+
   afterUpdate(() => {
+    if (open && openOnLast && $items.length > 0) {
+      openOnLast = false;
+      last();
+    }
+    if (!open) openOnLast = false;
+
     if (open && $moveFocus && $focusedIndex < 0) {
       menuRef?.focus({ preventScroll: true });
     }
@@ -482,6 +491,14 @@
         event.stopPropagation();
         closeFromKeyboard();
       }
+    } else if (
+      (event.key === "ArrowDown" || event.key === "ArrowUp") &&
+      !hasModifierKey(event)
+    ) {
+      // Open on the first item, or on the last for ArrowUp.
+      event.preventDefault();
+      openOnLast = event.key === "ArrowUp";
+      open = true;
     }
   }}
 >
