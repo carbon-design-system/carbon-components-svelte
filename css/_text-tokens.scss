@@ -1,0 +1,77 @@
+@import "carbon-components/scss/globals/scss/feature-flags";
+@import "carbon-components/scss/globals/scss/theme-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/colors/colors";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Text colors Carbon v11 has no token for. `support-success` is an indicator
+/// color and reads at about 3:1 as small text, so success text takes the
+/// green step that passes AA wherever `text-error` does: on the background
+/// and the first two layers. The steps mirror `text-error`'s reds (60 in the
+/// light themes, 30 in Gray 80 and 90, 40 in Gray 100).
+/// @access private
+/// @group type
+// prettier-ignore
+$ccs-text-colors: (
+  "text-success": (
+    white: $carbon__green-60,
+    g10: $carbon__green-60,
+    g80: $carbon__green-30,
+    g90: $carbon__green-30,
+    g100: $carbon__green-40,
+  ),
+);
+
+/// The name of a theme map, found by its `background`, which every theme sets
+/// differently. Whole-map comparison breaks once a later partial extends the
+/// maps. Unknown maps read as white.
+/// @access private
+/// @param {Map} $theme - A `$carbon--theme--*` map
+/// @return {String}
+@function ccs-theme-name($theme) {
+  $themes: (
+    white: $carbon--theme--white,
+    g10: $carbon--theme--g10,
+    g80: $carbon--theme--g80,
+    g90: $carbon--theme--g90,
+    g100: $carbon--theme--g100,
+  );
+  @each $name, $map in $themes {
+    @if map-get($map, "background") == map-get($theme, "background") {
+      @return $name;
+    }
+  }
+  @return white;
+}
+
+/// A library text color: `var(--ccs-*)` where the build emits custom
+/// properties (`all.css`), else the compiled theme's value.
+/// @access private
+/// @param {String} $name - Key in `$ccs-text-colors`
+@function ccs-text-color($name) {
+  $value: map-get(map-get($ccs-text-colors, $name), ccs-theme-name($carbon--theme));
+  @if feature-flag-enabled("enable-css-custom-properties") {
+    // `all.css` declares every token on `:root`, so it drops the fallback.
+    @if global-variable-exists("ccs-omit-token-fallbacks") and
+      $ccs-omit-token-fallbacks
+    {
+      @return var(--ccs-#{$name});
+    }
+    @return var(--ccs-#{$name}, #{$value});
+  }
+  @return $value;
+}
+
+/// Declares the library text colors as `--ccs-*` custom properties for
+/// `$theme`, skipping any that match `$base` when it's given.
+/// @param {Map} $theme - Theme to declare
+/// @param {Map} $base [null] - Theme the selector already inherits
+/// @access private
+/// @group type
+@mixin ccs-emit-text-colors($theme, $base: null) {
+  @each $name, $values in $ccs-text-colors {
+    $value: map-get($values, ccs-theme-name($theme));
+    @if $base == null or map-get($values, ccs-theme-name($base)) != $value {
+      --ccs-#{$name}: #{$value};
+    }
+  }
+}

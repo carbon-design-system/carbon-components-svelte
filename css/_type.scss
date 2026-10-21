@@ -3,12 +3,14 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/classes";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-family";
+@import "./text-tokens";
 
 /// Type utility classes and text-color helpers.
 ///
 /// Modifier utilities (weight, family, italic) are re-emitted after token
 /// rules so they win when combined (e.g. `.bx--type-body-long-01.bx--type-semibold`).
-/// Color helpers use v11 token names backed by v10 theme variables.
+/// Color helpers use v11 token names; success text uses the library's
+/// `text-success` (see `_text-tokens.scss`), which Carbon lacks.
 /// @access private
 /// @group components
 @mixin type {
@@ -22,7 +24,7 @@
     text-on-color: $text-on-color,
     text-inverse: $text-inverse,
     text-error: $text-error,
-    text-success: $support-success,
+    text-success: ccs-text-color("text-success"),
     text-link: $link-primary,
     text-disabled: $text-disabled,
   );
