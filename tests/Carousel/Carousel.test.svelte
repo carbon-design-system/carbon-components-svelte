@@ -5,6 +5,7 @@
 
   export let selectedIndex = 0;
   export let showExtra = false;
+  export let loaded = true;
   export let wrap = false;
   export let showCounter = false;
   export let counterText:
@@ -30,12 +31,14 @@
     if (moveFocusOnChange) elsewhere.focus();
   }}
 >
-  <CarouselItem>Slide one</CarouselItem>
-  <CarouselItem>
-    Slide two
-    <TextInput labelText="Name" />
-  </CarouselItem>
-  <CarouselItem>Slide three</CarouselItem>
+  {#if loaded}
+    <CarouselItem>Slide one</CarouselItem>
+    <CarouselItem>
+      Slide two
+      <TextInput labelText="Name" />
+    </CarouselItem>
+    <CarouselItem>Slide three</CarouselItem>
+  {/if}
   {#if showExtra}
     <CarouselItem>Slide four</CarouselItem>
   {/if}
@@ -44,6 +47,7 @@
 <div data-testid="current-index">{currentIndex}</div>
 <div data-testid="previous-index">{previousIndex}</div>
 <div data-testid="selected-index">{selectedIndex}</div>
+<button type="button" on:click={() => (loaded = true)}>Load slides</button>
 <button type="button" on:click={() => (showExtra = true)}>Add slide</button>
 <button
   type="button"

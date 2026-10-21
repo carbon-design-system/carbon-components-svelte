@@ -133,6 +133,18 @@ describe("Carousel", () => {
     expect(screen.getByText("Slide four")).toBeVisible();
   });
 
+  it("keeps selectedIndex when the slides load after mount", async () => {
+    render(Carousel, { props: { loaded: false, selectedIndex: 2 } });
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+
+    await user.click(screen.getByRole("button", { name: "Load slides" }));
+    await tick();
+
+    expect(screen.getByText("Slide three")).toBeVisible();
+    expect(screen.getByText("Slide one")).not.toBeVisible();
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+  });
+
   it("selects a slide added in the same update", async () => {
     render(Carousel);
 
