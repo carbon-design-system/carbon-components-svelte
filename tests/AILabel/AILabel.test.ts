@@ -90,7 +90,7 @@ describe("AILabel", () => {
     expect(screen.getByTestId("revert-active")).toHaveTextContent("false");
     expect(
       screen.getByRole("button", { name: "AI Show information" }),
-    ).toBeInTheDocument();
+    ).toHaveFocus();
   });
 });
 
