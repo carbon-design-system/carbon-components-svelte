@@ -14,17 +14,22 @@ import { breakpoints } from "./breakpoints.js";
  * @returns {() => void} Cleanup function that removes the listeners.
  */
 export function observeBreakpoint(callback) {
+  // `max-width` is inclusive, so each upper bound stops 0.02px short of the
+  // next breakpoint (Carbon's `breakpoint-down`). Otherwise two lists match at
+  // the boundary and the size sticks when only one of them flips.
+  const below = (/** @type {number} */ px) => `(max-width: ${px - 0.02}px)`;
+
   /** @type {Record<BreakpointSize, MediaQueryList>} */
   const match = {
-    sm: window.matchMedia(`(max-width: ${breakpoints.md}px)`),
+    sm: window.matchMedia(below(breakpoints.md)),
     md: window.matchMedia(
-      `(min-width: ${breakpoints.md}px) and (max-width: ${breakpoints.lg}px)`,
+      `(min-width: ${breakpoints.md}px) and ${below(breakpoints.lg)}`,
     ),
     lg: window.matchMedia(
-      `(min-width: ${breakpoints.lg}px) and (max-width: ${breakpoints.xlg}px)`,
+      `(min-width: ${breakpoints.lg}px) and ${below(breakpoints.xlg)}`,
     ),
     xlg: window.matchMedia(
-      `(min-width: ${breakpoints.xlg}px) and (max-width: ${breakpoints.max}px)`,
+      `(min-width: ${breakpoints.xlg}px) and ${below(breakpoints.max)}`,
     ),
     max: window.matchMedia(`(min-width: ${breakpoints.max}px)`),
   };

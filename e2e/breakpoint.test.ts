@@ -2,10 +2,10 @@ import { expect, test } from "./helpers/host";
 
 // Carbon breakpoints: sm=320, md=672, lg=1056, xlg=1312, max=1584
 // Ranges used by breakpointObserver:
-//   sm:  max-width: 672px        → viewport < 672
-//   md:  min-width: 672px, max-width: 1056px
-//   lg:  min-width: 1056px, max-width: 1312px
-//   xlg: min-width: 1312px, max-width: 1584px
+//   sm:  max-width: 671.98px     → viewport < 672
+//   md:  min-width: 672px, max-width: 1055.98px
+//   lg:  min-width: 1056px, max-width: 1311.98px
+//   xlg: min-width: 1312px, max-width: 1583.98px
 //   max: min-width: 1584px
 
 test.describe("Breakpoint", () => {

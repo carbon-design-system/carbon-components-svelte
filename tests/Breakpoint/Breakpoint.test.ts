@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
+import { stubViewport } from "../utils/match-media";
 import Breakpoint from "./Breakpoint.test.svelte";
 import BreakpointObserver from "./BreakpointObserver.test.svelte";
 import Breakpoints from "./Breakpoints.test.svelte";
@@ -14,12 +16,7 @@ describe("Breakpoint", () => {
   });
 
   it("renders and detects breakpoint size", () => {
-    vi.stubGlobal("matchMedia", (query: string) => ({
-      matches: query.includes("(min-width: 1056px) and (max-width: 1312px)"),
-      media: query,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    }));
+    stubViewport(1100);
 
     render(Breakpoint);
 
@@ -33,72 +30,47 @@ describe("Breakpoint", () => {
 
   it("updates when window size changes", async () => {
     const mockChangeHandler = vi.fn();
-    const mediaQueryListeners = new Map();
+    const viewport = stubViewport(1100);
 
-    vi.stubGlobal("matchMedia", (query: string) => {
-      const isLgQuery = query.includes(
-        "(min-width: 1056px) and (max-width: 1312px)",
-      );
-
-      return {
-        matches: isLgQuery,
-        media: query,
-        addEventListener: (event: string, listener: MediaQueryList) => {
-          if (!mediaQueryListeners.has(query)) {
-            mediaQueryListeners.set(query, []);
-          }
-          mediaQueryListeners.get(query).push({ event, listener });
-        },
-        removeEventListener: vi.fn(),
-      };
-    });
-
-    const { rerender } = render(Breakpoint, {
-      props: { onchange: mockChangeHandler },
-    });
+    render(Breakpoint, { props: { onchange: mockChangeHandler } });
 
     expect(screen.getByTestId("current-size").textContent).toBe("lg");
     mockChangeHandler.mockClear();
 
-    for (const [query, listeners] of mediaQueryListeners.entries()) {
-      const isXlgQuery = query.includes(
-        "(min-width: 1312px) and (max-width: 1584px)",
-      );
+    viewport.setWidth(1400);
+    await tick();
 
-      for (const { event, listener } of listeners) {
-        if (event === "change") {
-          listener({ matches: isXlgQuery, media: query });
-        }
-      }
-    }
-
-    await vi.runOnlyPendingTimersAsync();
-
-    expect(mockChangeHandler).toHaveBeenCalled();
-
-    rerender({
+    expect(mockChangeHandler).toHaveBeenCalledTimes(1);
+    expect(mockChangeHandler.mock.calls[0][0].detail).toEqual({
       size: "xlg",
-      sizes: {
-        sm: false,
-        md: false,
-        lg: false,
-        xlg: true,
-        max: false,
-      },
-      onchange: mockChangeHandler,
+      breakpointValue: 1312,
     });
-
     expect(screen.getByTestId("current-size").textContent).toBe("xlg");
     expect(screen.getByTestId("is-xlg").textContent).toBe("true");
   });
 
+  it.each([
+    [[672], "md"],
+    [[700, 672, 673], "md"],
+    [[600, 672, 671], "sm"],
+    [[1100, 1056, 1057], "lg"],
+    [[1400, 1584, 1583], "xlg"],
+  ])(
+    "assigns one size at the boundary, widths %j -> %s",
+    async (widths, size) => {
+      const [first, ...rest] = widths as number[];
+      const viewport = stubViewport(first);
+
+      render(Breakpoint);
+      for (const width of rest) viewport.setWidth(width);
+      await tick();
+
+      expect(screen.getByTestId("current-size").textContent).toBe(size);
+    },
+  );
+
   it("provides breakpointObserver utilities", () => {
-    vi.stubGlobal("matchMedia", (query: string) => ({
-      matches: query.includes("(min-width: 1056px) and (max-width: 1312px)"),
-      media: query,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    }));
+    stubViewport(1100);
 
     render(BreakpointObserver);
 
