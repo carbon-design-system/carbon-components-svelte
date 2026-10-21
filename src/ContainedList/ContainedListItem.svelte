@@ -34,13 +34,16 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
 
   $: isLink = Boolean(href);
+  $: isDisabledLink = isLink && disabled;
   $: isClickable = isLink || interactive;
   $: tag = isLink ? "a" : interactive ? "button" : "div";
   $: props = {
     type: tag === "button" ? "button" : undefined,
     disabled: tag === "button" ? disabled : undefined,
-    href: isLink ? href : undefined,
-    rel: isLink ? resolveLinkRel($$restProps.target) : undefined,
+    href: isLink && !disabled ? href : undefined,
+    rel: isLink && !disabled ? resolveLinkRel($$restProps.target) : undefined,
+    role: isDisabledLink ? "link" : undefined,
+    "aria-disabled": isDisabledLink ? "true" : undefined,
     "aria-current": isClickable && selected ? "true" : undefined,
   };
 </script>
@@ -56,6 +59,13 @@
     this="{tag}"
     {...props}
     {...$$restProps}
+    on:click="{(event) => {
+      if (!isDisabledLink) return;
+      // Runs before the forwarded `click`, so a disabled link never reaches
+      // a consumer's handler.
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }}"
     on:click
     class:bx--contained-list-item__content="{true}"
   >

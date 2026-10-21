@@ -238,6 +238,18 @@ describe("ContainedList", () => {
     expect(consoleLog).toHaveBeenCalledWith("click");
   });
 
+  it("should disable a link item", async () => {
+    const onclick = vi.fn();
+    render(ContainedListItemHref, { props: { onclick } });
+
+    const link = screen.getByRole("link", { name: "Disabled" });
+    expect(link).not.toHaveAttribute("href");
+    expect(link).toHaveAttribute("aria-disabled", "true");
+
+    await user.click(link);
+    expect(onclick).not.toHaveBeenCalled();
+  });
+
   it("should keep button and div when href is unset", () => {
     render(ContainedListItemHref);
 
