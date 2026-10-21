@@ -80,25 +80,31 @@ describe("UserAvatarGroup", () => {
     expect(root).not.toHaveTextContent("+");
   });
 
-  it("spaces avatars apart when a gap is set", async () => {
-    render(UserAvatarGroup);
-    await tick();
+  it.each<[string, boolean, (root: HTMLElement) => void]>([
+    ["spaced", false, (root) => expect(root).toHaveClass("bx--stack-scale-3")],
+    [
+      "tighter",
+      true,
+      (root) =>
+        expect(root.style.getPropertyValue("--user-avatar-group-overlap")).toBe(
+          "-1rem",
+        ),
+    ],
+  ])(
+    "applies the overlap modifier only as needed for the %s gap",
+    async (testId, hasOverlap, extra) => {
+      render(UserAvatarGroup);
+      await tick();
 
-    const root = groupRoot("spaced");
-    expect(root).not.toHaveClass("bx--user-avatar-group--overlap");
-    expect(root).toHaveClass("bx--stack-scale-3");
-  });
-
-  it("tightens the overlap with a negative gap", async () => {
-    render(UserAvatarGroup);
-    await tick();
-
-    const root = groupRoot("tighter");
-    expect(root).toHaveClass("bx--user-avatar-group--overlap");
-    expect(root.style.getPropertyValue("--user-avatar-group-overlap")).toBe(
-      "-1rem",
-    );
-  });
+      const root = groupRoot(testId);
+      if (hasOverlap) {
+        expect(root).toHaveClass("bx--user-avatar-group--overlap");
+      } else {
+        expect(root).not.toHaveClass("bx--user-avatar-group--overlap");
+      }
+      extra(root);
+    },
+  );
 
   it("uses total for the overflow without rendering the hidden avatars", async () => {
     render(UserAvatarGroup);

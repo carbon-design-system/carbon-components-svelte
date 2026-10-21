@@ -30,14 +30,24 @@ describe("PageHeader tabs with body panels", () => {
     expect(row).toHaveClass("bx--page-header__tabs-row--with-end");
   });
 
-  it("keeps the divider and no container marker for default tabs", async () => {
-    render(PageHeaderTabs);
-    await tick();
+  it.each([
+    ["default", true, false],
+    ["container", false, true],
+  ] as const)(
+    "%s tabs: divider %s, container marker %s",
+    async (type, hasDivider, hasContainerClass) => {
+      render(PageHeaderTabs, { type });
+      await tick();
 
-    const header = screen.getByTestId("header");
-    expect(header).toHaveClass("bx--page-header--divider");
-    expect(header).not.toHaveClass("bx--page-header--container-tabs");
-  });
+      const header = screen.getByTestId("header");
+      expect(header.classList.contains("bx--page-header--divider")).toBe(
+        hasDivider,
+      );
+      expect(header.classList.contains("bx--page-header--container-tabs")).toBe(
+        hasContainerClass,
+      );
+    },
+  );
 
   it("pairs body panels with the header tabs, skipping nested panels", async () => {
     render(PageHeaderTabs);

@@ -31,15 +31,14 @@ describe("AILabel in selection controls, tags, and tiles", () => {
     expect(label("tag")).toHaveClass("bx--ai-label--inline");
   });
 
-  it.each(["checkbox", "radio"])("marks the %s wrapper", (testId) => {
+  it.each([
+    ["checkbox", "bx--checkbox-wrapper"],
+    ["radio", "bx--radio-button-wrapper"],
+  ])("marks the %s wrapper", (testId, wrapper) => {
     render(AILabelSelection);
 
-    expect(
-      label(testId).closest(
-        `.bx--${testId === "radio" ? "radio-button" : "checkbox"}-wrapper`,
-      ),
-    ).toHaveClass(
-      `bx--${testId === "radio" ? "radio-button" : "checkbox"}-wrapper--decorator`,
+    expect(label(testId).closest(`.${wrapper}`)).toHaveClass(
+      `${wrapper}--decorator`,
     );
   });
 

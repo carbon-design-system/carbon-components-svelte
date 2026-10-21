@@ -17,6 +17,7 @@
   export let disabled: ComponentProps<ContainedListItem>["disabled"] = false;
   export let showIcon = false;
   export let showAction = false;
+  export let onClick: (() => void) | undefined = undefined;
 </script>
 
 <ContainedList {kind} {labelText} {size} {inset} {hideLabel} {id}>
@@ -27,7 +28,7 @@
     {interactive}
     {disabled}
     icon={showIcon ? Add : undefined}
-    on:click={() => console.log("click")}
+    on:click={() => onClick?.()}
   >
     Item 1
   </ContainedListItem>

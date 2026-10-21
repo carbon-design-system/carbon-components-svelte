@@ -4,6 +4,7 @@ import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { virtualWindowLayer } from "../utils/virtual-window-layer";
+import { scrollListTo } from "./helpers";
 import VirtualList from "./VirtualList.test.svelte";
 
 describe("VirtualList", () => {
@@ -75,11 +76,7 @@ describe("VirtualList", () => {
     const list = screen.getByTestId("external");
     expect(list.style.height).toBe("");
 
-    // jsdom has no layout: place the list 4000px above the scroller's top.
-    list.getBoundingClientRect = () => ({ top: -4000 }) as DOMRect;
-    const scroller = screen.getByTestId("scroller");
-    scroller.scrollTop = 4000;
-    await fireEvent.scroll(scroller);
+    await scrollListTo(screen.getByTestId("scroller"), list, 4000);
 
     expect(screen.getByTestId("external-row-100")).toBeInTheDocument();
     expect(screen.queryByTestId("external-row-0")).not.toBeInTheDocument();
@@ -154,10 +151,7 @@ describe("VirtualList", () => {
 
       const list = getList();
       const start = list.firstElementChild as HTMLElement;
-      start.getBoundingClientRect = () => ({ top: -20_000 }) as DOMRect;
-      const scroller = screen.getByTestId("list-scroller");
-      scroller.scrollTop = 20_000;
-      await fireEvent.scroll(scroller);
+      await scrollListTo(screen.getByTestId("list-scroller"), start, 20_000);
       await tick();
 
       // The true last item stays last, so `:last-of-type` styles still apply.
@@ -173,9 +167,7 @@ describe("VirtualList", () => {
       const start = list.firstElementChild as HTMLElement;
       const scroller = screen.getByTestId("list-scroller");
       async function scrollTo(top: number) {
-        start.getBoundingClientRect = () => ({ top: -top }) as DOMRect;
-        scroller.scrollTop = top;
-        await fireEvent.scroll(scroller);
+        await scrollListTo(scroller, start, top);
         await tick();
       }
 
@@ -210,11 +202,7 @@ describe("VirtualList", () => {
 
       const list = getList();
       const start = list.firstElementChild as HTMLElement;
-      // jsdom has no layout: place the list 4000px above the scroller's top.
-      start.getBoundingClientRect = () => ({ top: -4000 }) as DOMRect;
-      const scroller = screen.getByTestId("list-scroller");
-      scroller.scrollTop = 4000;
-      await fireEvent.scroll(scroller);
+      await scrollListTo(screen.getByTestId("list-scroller"), start, 4000);
       await tick();
 
       expect(start).toHaveStyle({ height: `${97 * 40}px` });
@@ -255,10 +243,7 @@ describe("VirtualList", () => {
     render(VirtualList);
 
     const list = screen.getByTestId("pinned-external");
-    list.getBoundingClientRect = () => rect({ top: -4000 });
-    const scroller = screen.getByTestId("pinned-scroller");
-    scroller.scrollTop = 4000;
-    await fireEvent.scroll(scroller);
+    await scrollListTo(screen.getByTestId("pinned-scroller"), list, 4000);
 
     const layer = virtualWindowLayer(list);
     expect(layer.style.position).toBe("");

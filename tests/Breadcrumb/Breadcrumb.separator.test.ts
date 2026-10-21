@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
+import BreadcrumbProps from "./Breadcrumb.props.test.svelte";
 import BreadcrumbSeparatorIcon from "./Breadcrumb.separator.icon.test.svelte";
-import BreadcrumbSeparator from "./Breadcrumb.separator.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
 
 describe("Breadcrumb separator", () => {
@@ -13,7 +13,7 @@ describe("Breadcrumb separator", () => {
   });
 
   it("reflects a custom separator as the quoted custom property", () => {
-    render(BreadcrumbSeparator);
+    render(BreadcrumbProps, { props: { separator: "→" } });
 
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     const list = within(nav).getByRole("list");
@@ -24,7 +24,7 @@ describe("Breadcrumb separator", () => {
     ["\\", "'\\\\'"],
     ["'", "'\\''"],
   ])("escapes %j in the quoted custom property", (separator, expected) => {
-    render(BreadcrumbSeparator, { props: { separator } });
+    render(BreadcrumbProps, { props: { separator } });
 
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     const list = within(nav).getByRole("list");

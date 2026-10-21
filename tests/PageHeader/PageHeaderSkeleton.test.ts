@@ -20,26 +20,19 @@ describe("PageHeaderSkeleton", () => {
         line.querySelector(".bx--page-header__skeleton-bar"),
       ).not.toBeNull();
     }
-    expect(node.querySelector(".bx--breadcrumb")).toBeNull();
-    expect(node.querySelector(".bx--btn")).toBeNull();
-    expect(node.querySelector(".bx--tabs")).toBeNull();
   });
 
-  it("renders breadcrumb, action, and tab placeholders on request", () => {
+  it.each([
+    ["breadcrumb", ".bx--page-header__breadcrumb-row .bx--skeleton", 1],
+    ["action", ".bx--page-header__actions .bx--btn.bx--skeleton", 1],
+    ["tab", ".bx--page-header__tabs-row .bx--tabs--scrollable__nav-item", 3],
+  ])("renders %s placeholders only on request", (_, selector, count) => {
     render(PageHeaderSkeleton);
 
-    const node = screen.getByTestId("full");
-    expect(
-      node.querySelector(".bx--page-header__breadcrumb-row .bx--skeleton"),
-    ).not.toBeNull();
-    expect(
-      node.querySelector(".bx--page-header__actions .bx--btn.bx--skeleton"),
-    ).not.toBeNull();
-    expect(
-      node.querySelectorAll(
-        ".bx--page-header__tabs-row .bx--tabs--scrollable__nav-item",
-      ),
-    ).toHaveLength(3);
+    expect(screen.getByTestId("default").querySelector(selector)).toBeNull();
+    expect(screen.getByTestId("full").querySelectorAll(selector)).toHaveLength(
+      count,
+    );
   });
 
   it("matches the header's grid, fill, and divider", () => {

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import AILabelOverlays from "./AILabel.overlays.test.svelte";
+import { aiLabel } from "./helpers";
 
 function table(testId = "table") {
   const element = screen.getByTestId(testId).querySelector("table");
@@ -26,11 +27,9 @@ describe("AILabel in data tables", () => {
 
     const [aiRow, plainRow] = table().querySelectorAll("tbody tr");
     expect(aiRow).toHaveClass("bx--data-table--ai-label-row");
-    expect(aiRow.querySelector(".bx--ai-label")).toHaveClass(
-      "bx--ai-label--mini",
-    );
+    expect(aiLabel(aiRow)).toHaveClass("bx--ai-label--mini");
     expect(plainRow).not.toHaveClass("bx--data-table--ai-label-row");
-    expect(plainRow.querySelector(".bx--ai-label")).toBeNull();
+    expect(aiLabel(plainRow)).toBeNull();
   });
 
   it("spans expanded rows across the decorator column", () => {
@@ -47,9 +46,7 @@ describe("AILabel in data tables", () => {
 
       const forecast = table().querySelectorAll("thead th")[2];
       expect(forecast).toHaveClass("bx--table-header--ai-label");
-      expect(forecast.querySelector(".bx--ai-label")).toHaveClass(
-        "bx--ai-label--mini",
-      );
+      expect(aiLabel(forecast)).toHaveClass("bx--ai-label--mini");
       expect(forecast.querySelector("button .bx--ai-label")).toBeNull();
       expect(table().querySelectorAll("thead th")[1]).not.toHaveClass(
         "bx--table-header--ai-label",

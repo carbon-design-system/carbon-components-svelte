@@ -431,6 +431,14 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("link"),
   },
   {
+    name: "BreadcrumbItem",
+    variant: "no-href",
+    // Without an href there is no link, so the item keeps the attributes.
+    render: (attrs) =>
+      render(BreadcrumbItemFixture, { props: { href: "", ...attrs } }),
+    target: () => screen.getByRole("listitem"),
+  },
+  {
     name: "ComboButton",
     render: (attrs) =>
       render(ComboButton, { props: { labelText: "Save", ...attrs } }),

@@ -6,13 +6,8 @@ import Breakpoint from "./Breakpoint.test.svelte";
 import BreakpointObserver from "./BreakpointObserver.test.svelte";
 
 describe("Breakpoint", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
-    vi.useRealTimers();
   });
 
   it("renders and detects breakpoint size", () => {
@@ -79,12 +74,8 @@ describe("Breakpoint", () => {
   });
 
   it("does not throw when no media query matches (find returns undefined); derived stores emit boolean", () => {
-    vi.stubGlobal("matchMedia", (query: string) => ({
-      matches: false,
-      media: query,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    }));
+    // NaN is a viewport that no width query matches.
+    stubViewport(Number.NaN);
 
     render(BreakpointObserver);
     expect(screen.getByTestId("smaller-than-md").textContent).toBe("false");

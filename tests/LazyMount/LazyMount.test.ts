@@ -1,51 +1,17 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import {
+  type IntersectionObserverMock,
+  stubIntersectionObserver,
+} from "../utils/intersection-observer-mock";
 import LazyMount from "./LazyMount.test.svelte";
 import LazyMountBind from "./LazyMountBind.test.svelte";
 
-class IntersectionObserverMock {
-  static instances: IntersectionObserverMock[] = [];
-  callback: IntersectionObserverCallback;
-  options?: IntersectionObserverInit;
-  elements = new Set<Element>();
-
-  constructor(
-    callback: IntersectionObserverCallback,
-    options?: IntersectionObserverInit,
-  ) {
-    this.callback = callback;
-    this.options = options;
-    IntersectionObserverMock.instances.push(this);
-  }
-
-  observe(element: Element) {
-    this.elements.add(element);
-  }
-
-  unobserve(element: Element) {
-    this.elements.delete(element);
-  }
-
-  disconnect() {
-    this.elements.clear();
-  }
-
-  trigger(target: Element, isIntersecting: boolean) {
-    this.callback(
-      [{ target, isIntersecting } as IntersectionObserverEntry],
-      this as unknown as IntersectionObserver,
-    );
-  }
-}
-
 describe("LazyMount", () => {
+  let instances: IntersectionObserverMock[];
+
   beforeEach(() => {
-    IntersectionObserverMock.instances = [];
-    // A fresh class per test: shared observers are kept per constructor.
-    vi.stubGlobal(
-      "IntersectionObserver",
-      class extends IntersectionObserverMock {},
-    );
+    ({ instances } = stubIntersectionObserver());
   });
 
   afterEach(() => {
@@ -62,7 +28,7 @@ describe("LazyMount", () => {
     expect(wrapper).toHaveStyle({ minHeight: "200px" });
     expect(wrapper).toHaveAttribute("aria-busy", "true");
 
-    const [observer] = IntersectionObserverMock.instances;
+    const [observer] = instances;
     expect(observer.options).toEqual({ rootMargin: "600px", threshold: 0 });
     observer.trigger(wrapper, false);
     await tick();
@@ -80,8 +46,8 @@ describe("LazyMount", () => {
 
   it("shares one observer across instances", () => {
     render(LazyMount, { props: { count: 3 } });
-    expect(IntersectionObserverMock.instances).toHaveLength(1);
-    expect(IntersectionObserverMock.instances[0].elements.size).toBe(3);
+    expect(instances).toHaveLength(1);
+    expect(instances[0].elements.size).toBe(3);
   });
 
   it("renders right away with eager", async () => {
@@ -125,7 +91,7 @@ describe("LazyMount", () => {
 
   it("keeps mounted content when a parent writes mounted", async () => {
     const { component } = render(LazyMountBind);
-    const [observer] = IntersectionObserverMock.instances;
+    const [observer] = instances;
     observer.trigger(screen.getByTestId("lazy"), true);
     await tick();
     expect(component.mounted).toBe(true);

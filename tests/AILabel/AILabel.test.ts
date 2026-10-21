@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import AILabelHost from "./AILabel.host.test.svelte";
 import AILabel from "./AILabel.test.svelte";
+import { aiLabel } from "./helpers";
 
 describe("AILabel", () => {
   it("renders an AI button with an accessible name", () => {
@@ -9,18 +10,14 @@ describe("AILabel", () => {
 
     const button = screen.getByRole("button", { name: "AI Show information" });
     expect(button).toHaveTextContent("AI");
-    expect(container.querySelector(".bx--ai-label")).toHaveClass(
-      "bx--ai-label--xs",
-    );
+    expect(aiLabel(container)).toHaveClass("bx--ai-label--xs");
   });
 
   it.each(["mini", "2xs", "sm", "md", "lg", "xl"] as const)(
     "applies the %s size",
     (size) => {
       const { container } = render(AILabel, { props: { size } });
-      expect(container.querySelector(".bx--ai-label")).toHaveClass(
-        `bx--ai-label--${size}`,
-      );
+      expect(aiLabel(container)).toHaveClass(`bx--ai-label--${size}`);
     },
   );
 
@@ -29,7 +26,7 @@ describe("AILabel", () => {
       props: { kind: "inline", textLabel: "Generated" },
     });
 
-    expect(container.querySelector(".bx--ai-label")).toHaveClass(
+    expect(aiLabel(container)).toHaveClass(
       "bx--ai-label--inline",
       "bx--ai-label--inline-with-content",
     );
@@ -128,9 +125,7 @@ describe("AILabel in a field decorator", () => {
   it("always renders the mini size inside a field", () => {
     render(AILabelHost);
 
-    const label = screen
-      .getByTestId("text-input")
-      .querySelector(".bx--ai-label");
+    const label = aiLabel(screen.getByTestId("text-input"));
     expect(label).toHaveClass("bx--ai-label--mini", "bx--ai-label--field-xs");
     expect(label).not.toHaveClass("bx--ai-label--xl");
   });
