@@ -41,3 +41,9 @@ Number values default to pixels.
 `width` and `height` each take precedence over `size` independently, so you can set `size` as a base and override just one dimension.
 
 <SkeletonPlaceholder size="4rem" height="10rem" />
+
+## AI
+
+Set `ai` to `true` for content that AI is generating, such as an image or a chart. The placeholder turns blue, and a gradient sweeps across it. The sweep stops when the user prefers reduced motion.
+
+<SkeletonPlaceholder ai />
