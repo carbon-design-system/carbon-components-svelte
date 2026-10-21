@@ -73,6 +73,23 @@ The notification action button accepts an href prop to render as a link instead 
   </svelte:fragment>
 </InlineNotification>
 
+## Actionable
+
+Set `actionable` to `true` when users must reach the action, such as
+an undo after a delete or a retry after a failed save. The notification
+becomes an `alertdialog` named by its title and described by its
+subtitle. When it opens, focus moves to the first action, or to the
+close button if there is no action. Tab stays inside the notification,
+and <DocKbd label="Escape" /> closes it. Focus then returns to where it
+was before, such as the button that opened it.
+
+Set `focusOnOpen` to `false` to leave focus in place, or
+`closeOnEscape` to `false` to keep it open on <DocKbd label="Escape" />.
+If the close button is also hidden, Tab can leave the notification, so
+keyboard users are never trapped. Keep the default for a notification that only informs.
+
+<FileSource src="/framed/InlineNotification/InlineNotificationActionable" />
+
 ## Close button
 
 Hide the close button or customize its behavior and label.
