@@ -414,9 +414,11 @@ $ai-label-sizes: (
     @include ai-field-gradient;
   }
 
-  // Select and the list boxes: left of the chevron, behind a divider
+  // Select and the list boxes: left of the chevron, behind a divider. Above
+  // the field, which spans the list box and comes later in the markup.
   .#{$prefix}--select__inner-wrapper--decorator,
   .#{$prefix}--list-box__inner-wrapper--decorator {
+    z-index: 1;
     right: $carbon--spacing-09;
   }
 
@@ -464,9 +466,42 @@ $ai-label-sizes: (
     padding-right: $carbon--spacing-12;
   }
 
-  // The clear button moves left of the decorator.
+  // A ComboBox, like a filterable MultiSelect, pads its input instead of the
+  // field around it, so the input, its border, and its focus ring span the
+  // whole field.
+  .#{$prefix}--list-box--decorator.#{$prefix}--combo-box
+    .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box--decorator.#{$prefix}--combo-box[data-invalid]
+    .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box--decorator.#{$prefix}--combo-box.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field {
+    padding-right: 0;
+  }
+
+  // A clear button stays by the chevron behind its own divider, and the
+  // label moves left of it: label | clear | chevron, as in v11.
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection {
-    right: to-rem(72px);
+    right: to-rem(45px);
+  }
+
+  .#{$prefix}--list-box--decorator
+    .#{$prefix}--list-box__selection:not(.#{$prefix}--list-box__selection--multi)::after {
+    position: absolute;
+    top: to-rem(4px);
+    right: to-rem(-9px);
+    width: 1px;
+    height: $carbon--spacing-05;
+    background-color: $border-subtle;
+    content: "";
+  }
+
+  .#{$prefix}--list-box--clearable .#{$prefix}--list-box__inner-wrapper--decorator {
+    right: to-rem(82px);
+  }
+
+  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--clearable
+    .#{$prefix}--text-input {
+    padding-right: to-rem(112px);
   }
 
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection--multi {
@@ -485,7 +520,7 @@ $ai-label-sizes: (
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(98px);
+    right: to-rem(106px);
   }
 
   .#{$prefix}--list-box--decorator[data-invalid]
@@ -503,19 +538,19 @@ $ai-label-sizes: (
   // A clearable Dropdown keeps its label clear of the clear button, and its
   // invalid or warn icon moves left of it.
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(104px);
+    padding-right: to-rem(112px);
   }
 
   .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable
     .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(98px);
+    right: to-rem(106px);
   }
 
   .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
   .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(122px);
+    padding-right: to-rem(130px);
   }
 
   // ComboBox text stops short of the invalid or warn icon.
@@ -525,12 +560,18 @@ $ai-label-sizes: (
   .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input {
-    padding-right: to-rem(122px);
+    padding-right: to-rem(130px);
   }
 
-  .#{$prefix}--list-box--ai-label,
-  .#{$prefix}--list-box--ai-label .#{$prefix}--text-input {
+  // The list box carries the gradient. The ComboBox input is transparent
+  // over it; a second gradient on the input doubled it to the input's edge.
+  // The input draws the field's bottom border, so it keeps the AI color.
+  .#{$prefix}--list-box--ai-label {
     @include ai-field-gradient;
+  }
+
+  .#{$prefix}--list-box--ai-label .#{$prefix}--text-input {
+    border-bottom-color: ai-token("ai-border-strong");
   }
 
   // DatePicker: left of the calendar (or invalid) icon
@@ -595,6 +636,14 @@ $ai-label-sizes: (
       input[type="text"] {
       padding-right: to-rem($steppers + 72px);
     }
+  }
+
+  // A divider between the label and the steppers, as in v11. The first
+  // rule divider is otherwise drawn only beside an invalid icon.
+  .#{$prefix}--number__input-wrapper--decorator
+    .#{$prefix}--number__controls
+    .#{$prefix}--number__rule-divider:first-of-type {
+    background-color: $border-subtle;
   }
 
   .#{$prefix}--number__input-wrapper--ai-label input[type="number"],
