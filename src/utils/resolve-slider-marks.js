@@ -1,6 +1,8 @@
 // @ts-check
 // Resolve Slider / RangeSlider `marks` into a list of tick positions.
 
+import { snapToStep } from "./slider-value.js";
+
 /**
  * @typedef {{ value: number; label?: string }} SliderMark
  */
@@ -36,7 +38,8 @@ export function resolveSliderMarks(marks, min, max, step) {
   /** @type {SliderMark[]} */
   const resolved = [];
   for (let i = 0; i <= steps; i++) {
-    const value = i === steps ? max : min + i * step;
+    const value =
+      i === steps ? max : snapToStep(min + i * step, { min, max, step });
     resolved.push({ value });
   }
   return resolved;
