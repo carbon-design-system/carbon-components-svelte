@@ -18,6 +18,8 @@
   export let checkedValue: string | undefined = undefined;
   /** Leaves the inputs without a `name`, so the list assigns one. */
   export let unnamed = false;
+  /** Name for the list's radio group; used by inputs left unnamed. */
+  export let name: ComponentProps<StructuredList>["name"] = undefined;
   export let onClick: () => void = () => {};
   export let onMouseOver: () => void = () => {};
   export let onMouseLeave: () => void = () => {};
@@ -32,6 +34,7 @@
   {selection}
   {multiple}
   {icon}
+  {name}
   on:click={onClick}
   on:mouseover={onMouseOver}
   on:mouseleave={onMouseLeave}

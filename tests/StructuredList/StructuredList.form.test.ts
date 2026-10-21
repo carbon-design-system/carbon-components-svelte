@@ -63,6 +63,28 @@ describe("StructuredList form reset", () => {
   });
 });
 
+describe("StructuredList form submission", () => {
+  it("submits the selected radio's value", async () => {
+    render(StructuredListForm);
+
+    await user.click(getInputs()[1]);
+
+    expect(new FormData(getForm()).getAll("engine")).toEqual(["mongodb"]);
+  });
+
+  it("submits every checked checkbox's value", async () => {
+    render(StructuredListForm, { props: { multiple: true } });
+
+    await user.click(getInputs()[0]);
+    await user.click(getInputs()[2]);
+
+    expect(new FormData(getForm()).getAll("engine")).toEqual([
+      "postgresql",
+      "redis",
+    ]);
+  });
+});
+
 describe("StructuredList rows mounted or removed after the list", () => {
   it("selects a row mounted `checked` without firing change", async () => {
     const onChange = vi.fn();

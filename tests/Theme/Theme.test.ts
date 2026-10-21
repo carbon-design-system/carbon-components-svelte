@@ -341,6 +341,44 @@ describe("Theme", () => {
   });
 
   it.each([
+    {
+      mode: "toggle",
+      check: (el: HTMLElement) => expect(el).toBeChecked(),
+      label: "Dark mode",
+    },
+    {
+      mode: "select",
+      check: (el: HTMLElement) => expect(el).toHaveValue("g100"),
+      label: "Themes",
+    },
+    {
+      mode: "dropdown",
+      check: (el: HTMLElement) => expect(el).toHaveTextContent("Gray 100"),
+      label: "Themes",
+    },
+  ] as const)(
+    "reflects a programmatic theme change in the $mode control",
+    async ({ mode, check, label }) => {
+      const { component } = render(Theme, { props: { render: mode } });
+
+      component.theme = "g100";
+      await tick();
+
+      check(screen.getByLabelText(label));
+    },
+  );
+
+  it("passes the current theme to the default slot", async () => {
+    const { component } = render(Theme, { props: { theme: "g10" } });
+    expect(screen.getByTestId("slot-theme")).toHaveTextContent("g10");
+
+    component.theme = "g90";
+    await tick();
+
+    expect(screen.getByTestId("slot-theme")).toHaveTextContent("g90");
+  });
+
+  it.each([
     { mode: "toggle", check: (el: HTMLElement) => expect(el).toBeChecked() },
     {
       mode: "select",

@@ -239,6 +239,57 @@ describe("ProgressIndicator", () => {
       await user.click(buttons[0]);
       expect(onchange).toHaveBeenCalledTimes(1);
     });
+
+    it("moves the current step to the clicked step", async () => {
+      render(ProgressIndicator, {
+        currentIndex: 2,
+        steps: makeSteps([true, true, true, false]),
+      });
+
+      const buttons = screen.getAllByRole("button");
+      const items = screen.getAllByRole("listitem");
+      expect(buttons[2]).toHaveAttribute("aria-current", "step");
+
+      await user.click(buttons[0]);
+
+      expect(buttons[0]).toHaveAttribute("aria-current", "step");
+      expect(buttons[2]).not.toHaveAttribute("aria-current");
+      expect(items[0]).toHaveClass("bx--progress-step--current");
+      expect(items[2]).not.toHaveClass("bx--progress-step--current");
+    });
+
+    it("moves the current step when currentIndex changes", async () => {
+      const { rerender } = render(ProgressIndicator, {
+        currentIndex: 0,
+        steps: makeSteps([true, true, false]),
+      });
+
+      await rerender({ currentIndex: 2 });
+
+      const items = screen.getAllByRole("listitem");
+      expect(items[2]).toHaveClass("bx--progress-step--current");
+      expect(items[0]).not.toHaveClass("bx--progress-step--current");
+      expect(screen.getAllByRole("button")[2]).toHaveAttribute(
+        "aria-current",
+        "step",
+      );
+    });
+
+    it("toggles the unclickable class when preventChangeOnClick changes", async () => {
+      const { rerender } = render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: makeSteps([true, true, false]),
+      });
+
+      const button = screen.getAllByRole("button")[0];
+      expect(button).not.toHaveClass("bx--progress-step-button--unclickable");
+
+      await rerender({ preventChangeOnClick: true });
+      expect(button).toHaveClass("bx--progress-step-button--unclickable");
+
+      await rerender({ preventChangeOnClick: false });
+      expect(button).not.toHaveClass("bx--progress-step-button--unclickable");
+    });
   });
 
   describe("Keyboard navigation", () => {
@@ -277,6 +328,27 @@ describe("ProgressIndicator", () => {
       expect(buttons[0]).toHaveFocus();
 
       expect(onchange).not.toHaveBeenCalled();
+    });
+
+    it("prevents the default action of an unmodified ArrowRight", async () => {
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: fourSteps,
+      });
+
+      const buttons = screen.getAllByRole("button");
+      buttons[0].focus();
+
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true,
+        cancelable: true,
+      });
+      buttons[0].dispatchEvent(event);
+      await tick();
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(buttons[1]).toHaveFocus();
     });
 
     it.each(["altKey", "ctrlKey", "metaKey"])(
@@ -514,6 +586,17 @@ describe("ProgressIndicator", () => {
       expect(listItems[2]).toHaveClass("bx--progress-step--current");
       expect(screen.getByTestId("current-index")).toHaveTextContent("2");
       expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+    });
+
+    it("updates the bound selectedId when a step is clicked", async () => {
+      render(ProgressIndicatorSelectedId, {
+        props: { selectedId: "step-b" },
+      });
+
+      await user.click(screen.getAllByRole("button")[0]);
+
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("step-a");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("0");
     });
 
     it("lets selectedId win over currentIndex", async () => {

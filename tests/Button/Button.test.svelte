@@ -54,6 +54,8 @@
 
 <Button disabled>Disabled button</Button>
 
+<Button data-testid="btn-tabindex" tabindex="-1">Skipped in tab order</Button>
+
 <Button data-testid="btn-disabled-href" href="#" disabled>
   Disabled link button
 </Button>
