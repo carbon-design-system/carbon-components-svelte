@@ -49,6 +49,16 @@
     outline: 1px solid $focus;
   }
 
+  // Start and end alignment point the caret at the button's center for any
+  // button size, as v11 does: the component places the popover edge
+  // `--ccs-toggletip-caret` (from its corner to the caret's center: the 8px
+  // offset plus half the 8px caret) before that center. For the 16px info
+  // button that is 4px past the button's edge.
+  .#{$prefix}--popover.#{$prefix}--toggletip-popover {
+    --cds-popover-caret-offset: #{to-rem(8px)};
+    --ccs-toggletip-caret: #{to-rem(12px)};
+  }
+
   .#{$prefix}--toggletip-content {
     @include type-style("body-compact-01");
 
