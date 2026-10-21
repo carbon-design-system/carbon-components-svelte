@@ -40,13 +40,13 @@
   let dialog;
 
   /**
-   * Initial `open` state rendered as the `open` attribute so a non-modal
-   * dialog is visible in server HTML. Modal dialogs need `showModal()` (top
-   * layer), which only runs on the client, and `showModal()` throws on a
-   * dialog that already carries `open`. Evaluated once, so Svelte never
-   * rewrites the attribute afterward; later changes go through `dialogAction`.
+   * Server-rendered `open` attribute so a non-modal dialog is visible in
+   * server HTML. Modal dialogs need `showModal()` (top layer), which only
+   * runs on the client, and `showModal()` throws on a dialog that already
+   * carries `open`. Server-only: Svelte 3/4 re-apply every attribute on a
+   * spread element on each update, which would undo `dialogAction`.
    */
-  const initialOpen = open && !modal;
+  const initialOpen = typeof document === "undefined" && open && !modal;
 
   /**
    * Calls `showModal()`/`show()`/`close()` on the native `<dialog>` element
@@ -54,8 +54,8 @@
    * reassignment of `open`/`modal`, not just real transitions, so the guard
    * on the element's own `open` state stops `dispatch("open")` from firing
    * again on a redundant re-run while the dialog is already open.
-   * A dialog that arrives with the `open` attribute (server-rendered, or
-   * `initialOpen` on the client) has not been shown yet, so the first sync
+   * A dialog that arrives with the `open` attribute (server-rendered and
+   * hydrated by Svelte 5) has not been shown yet, so the first sync
    * drops the attribute and calls `show()` to run the usual open path.
    */
   function dialogAction(node, options) {
@@ -138,9 +138,8 @@
 <dialog
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}
-  open={initialOpen ? true : undefined}
   use:dialogAction={{ open, modal }}
-  {...$$restProps}
+  {...initialOpen ? { ...$$restProps, open: true } : $$restProps}
   on:cancel={handleCancel}
   on:close={handleClose}
   on:mousedown={handleMouseDown}
