@@ -86,7 +86,7 @@
    */
   export let id = uniqueId();
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
   import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
   import Undo from "../icons/Undo.svelte";
@@ -127,9 +127,13 @@
     return typeof labelSize === "function" ? labelSize(labelKind) : labelSize;
   }
 
-  function handleRevert() {
+  async function handleRevert() {
     revertActive = false;
     dispatch("revert");
+    // The revert button unmounts with the click, so focus would
+    // otherwise fall back to the body.
+    await tick();
+    ref?.focus();
   }
 
   // Rest props go on the root, but naming and description belong on the
