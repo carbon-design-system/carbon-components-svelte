@@ -393,5 +393,29 @@ describe("CopyButton", () => {
         document.querySelector("[data-floating-portal]"),
       ).not.toBeInTheDocument();
     });
+
+    it("should not reopen feedback when an in-flight copy resolves after the modal closes", async () => {
+      let resolveCopy!: () => void;
+      const copy = vi.fn(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveCopy = resolve;
+          }),
+      );
+      const { rerender } = render(CopyButtonInModal, {
+        props: { modalOpen: true, copy },
+      });
+
+      await user.click(getCopyButton("Copy"));
+      await rerender({ modalOpen: false, copy });
+      await flushMacrotask();
+
+      resolveCopy();
+      await flushMacrotask();
+
+      expect(
+        document.querySelector("[data-floating-portal]"),
+      ).not.toBeInTheDocument();
+    });
   });
 });
