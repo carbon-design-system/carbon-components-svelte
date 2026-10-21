@@ -74,10 +74,16 @@
     if (image != null) image = null;
     loaded = false;
     error = false;
-    image = new Image();
-    image.src = url || src;
-    image.onload = () => (loaded = true);
-    image.onerror = () => (error = true);
+    const img = new Image();
+    image = img;
+    img.src = url || src;
+    // Ignore a superseded image that settles after `src` has changed.
+    img.onload = () => {
+      if (image === img) loaded = true;
+    };
+    img.onerror = () => {
+      if (image === img) error = true;
+    };
   }
 
   import { createEventDispatcher, onMount } from "svelte";
