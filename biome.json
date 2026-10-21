@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -16,12 +16,19 @@
       "indentScriptAndStyle": true
     }
   },
+  "markdown": {
+    "formatter": { "enabled": false }
+  },
+  "yaml": {
+    "formatter": { "enabled": false }
+  },
   "files": {
     "includes": [
       "**",
       "!!**/.*/**/*",
       "!!**/docs/src/pages/index.svelte",
-      "!**/*.svg"
+      "!**/*.svg",
+      "!**/*.scss"
     ]
   },
   "linter": {
@@ -38,6 +45,7 @@
       },
       "correctness": {
         "noUnusedFunctionParameters": "error",
+        "usePlaywrightValidDescribeCallback": "off",
         "noUnusedImports": "error",
         "noUnusedLabels": "error",
         "noUnusedVariables": "error"
@@ -93,11 +101,6 @@
   },
   "overrides": [
     {
-      "includes": ["css/*.scss"],
-      "formatter": { "enabled": false },
-      "linter": { "enabled": false }
-    },
-    {
       "includes": ["**/*.svelte"],
       "linter": {
         "rules": {
@@ -144,21 +147,6 @@
         "rules": {
           "performance": {
             "useTopLevelRegex": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": [
-        "docs/src/components/DocThemePicker.svelte",
-        "docs/src/pages/_module.svelte",
-        "docs/src/pages/component-index.svelte",
-        "src/UIShell/Header.svelte"
-      ],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedImports": "off"
           }
         }
       }

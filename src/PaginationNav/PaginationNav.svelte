@@ -83,7 +83,7 @@
   $: if (page > total) page = Math.max(total, 1);
 
   // number of nav overflow or items that may appear
-  $: fit = shown >= MIN ? shown : MIN;
+  $: fit = Math.max(shown, MIN);
   $: startOffset = fit <= MIN && page > 1 ? 0 : 1;
   $: if (fit >= total) {
     front = 0;
