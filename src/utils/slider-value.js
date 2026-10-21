@@ -110,15 +110,20 @@ export function getPointerPosition(event, orientation) {
 /**
  * Resolve a track rect into its start and signed length along the slider
  * axis. Values increase upward when vertical, so the start is the bottom
- * edge and the length is negative.
+ * edge and the length is negative. In RTL, values increase leftward, so
+ * the start is the right edge.
  *
- * @param {Pick<DOMRect, "left" | "width" | "bottom" | "height">} rect
+ * @param {Pick<DOMRect, "left" | "right" | "width" | "bottom" | "height">} rect
  * @param {"horizontal" | "vertical"} orientation
+ * @param {boolean} [rtl]
  * @returns {{ start: number; length: number }}
  */
-export function getTrackAxis(rect, orientation) {
-  return orientation === "vertical"
-    ? { start: rect.bottom, length: -rect.height }
+export function getTrackAxis(rect, orientation, rtl = false) {
+  if (orientation === "vertical") {
+    return { start: rect.bottom, length: -rect.height };
+  }
+  return rtl
+    ? { start: rect.right, length: -rect.width }
     : { start: rect.left, length: rect.width };
 }
 
@@ -129,23 +134,24 @@ export function getTrackAxis(rect, orientation) {
  * Returns `null` for a touch event with no active touch point.
  *
  * @param {MouseEvent | TouchEvent} event
- * @param {Pick<DOMRect, "left" | "width" | "bottom" | "height">} rect
+ * @param {Pick<DOMRect, "left" | "right" | "width" | "bottom" | "height">} rect
  * @param {Object} options
  * @param {"horizontal" | "vertical"} options.orientation
  * @param {number} options.min
  * @param {number} options.max
  * @param {number} options.step
  * @param {number} [options.offset]
+ * @param {boolean} [options.rtl] - Values increase leftward.
  * @returns {number | null}
  */
 export function valueFromPointer(
   event,
   rect,
-  { orientation, min, max, step, offset = 0 },
+  { orientation, min, max, step, offset = 0, rtl = false },
 ) {
   const point = getPointerPosition(event, orientation);
   if (point == null) return null;
-  const { start, length } = getTrackAxis(rect, orientation);
+  const { start, length } = getTrackAxis(rect, orientation, rtl);
   // valueFromTrackPosition is axis-agnostic: a negative `width` (vertical)
   // flips the interpolation so the bottom edge is `min`.
   return valueFromTrackPosition({

@@ -163,6 +163,10 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
@@ -247,6 +251,7 @@
       min,
       max,
       step,
+      rtl: horizontalRtl,
     });
     if (nextValue == null) return;
     if (snapToMarks && resolvedMarks.length) {
@@ -268,6 +273,24 @@
   }));
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
+
+  // In RTL, `min` sits at the right end of a horizontal track. A
+  // LayoutDirection gives the direction on the server. Without one, read
+  // the track's computed direction once it mounts.
+  const layoutDirection = getLayoutDirection();
+  $: horizontalRtl =
+    orientation !== "vertical" &&
+    !!($layoutDirection || trackRef) &&
+    resolveLayoutDirection($layoutDirection, trackRef) === "rtl";
+
+  /**
+   * @param {number} percent
+   * @param {boolean} rtl
+   * @returns {string}
+   */
+  function toLeft(percent, rtl) {
+    return `${rtl ? 100 - percent : percent}%`;
+  }
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
   $: hasMarkLabels = resolvedMarks.some(
     (mark) => mark.label != null && mark.label !== "",
@@ -351,7 +374,9 @@
         aria-disabled={disabled || undefined}
         tabindex={disabled ? undefined : 0}
         class:bx--slider__thumb={true}
-        style:left={orientation === "vertical" ? undefined : `${left}%`}
+        style:left={orientation === "vertical"
+          ? undefined
+          : toLeft(left, horizontalRtl)}
         style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
         aria-valuemax={max}
         aria-valuemin={min}
@@ -390,10 +415,12 @@
             return;
           }
 
+          // Left and right move the thumb the way they point, as they do
+          // on a native range input in RTL.
           const keys = {
             ArrowDown: -1,
-            ArrowLeft: -1,
-            ArrowRight: 1,
+            ArrowLeft: horizontalRtl ? 1 : -1,
+            ArrowRight: horizontalRtl ? -1 : 1,
             ArrowUp: 1,
             PageDown: -1,
             PageUp: 1,
@@ -444,7 +471,9 @@
         class:bx--slider__filled-track={true}
         style:transform={orientation === "vertical"
           ? `translate(-50%, 0) scaleY(${left / 100})`
-          : `translate(0, -50%) scaleX(${left / 100})`}
+          : horizontalRtl
+            ? `translate(100%, -50%) scaleX(${-left / 100})`
+            : `translate(0, -50%) scaleX(${left / 100})`}
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
@@ -455,7 +484,7 @@
               class:bx--slider__mark={true}
               style:left={orientation === "vertical"
                 ? undefined
-                : `${percent}%`}
+                : toLeft(percent, horizontalRtl)}
               style:top={orientation === "vertical"
                 ? `${100 - percent}%`
                 : undefined}
