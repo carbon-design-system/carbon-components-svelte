@@ -24,6 +24,16 @@
   .#{$prefix}--btn {
     word-break: break-word;
   }
+
+  // `word-break` also lets a box shrink below its longest word, so in a
+  // row short of space an inline Dropdown's or MultiSelect's label went to
+  // a letter a line ("R/e/g/i/o/n/s"). Words stay whole here and the label
+  // still wraps between them. A single word wider than the room left beside
+  // the control now runs past its box instead of breaking.
+  .#{$prefix}--list-box__wrapper--inline > .#{$prefix}--label {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
 }
 
 @include exports("long-words") {
