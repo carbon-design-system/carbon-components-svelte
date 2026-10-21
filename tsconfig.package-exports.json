@@ -4,6 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
+    "resolveJsonModule": true,
     "noUncheckedSideEffectImports": true
   },
   "include": ["tests/package-exports.test-d.ts"]

@@ -42,12 +42,14 @@ import {
   type TokenType,
   tokenize,
 } from "carbon-components-svelte/syntax";
+import type tailwindPreset from "carbon-components-svelte/tailwind";
 import type {
   ColorToken,
   colorTokens,
   TypeToken,
   typeTokens,
 } from "carbon-components-svelte/tokens";
+import type dtcgTokens from "carbon-components-svelte/tokens.json";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";
@@ -79,6 +81,11 @@ type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _ColorTokenValue = (typeof colorTokens)[ColorToken]["g100"];
 type _TypeTokenSize = (typeof typeTokens)[TypeToken]["font-size"];
+type _TailwindColor =
+  (typeof tailwindPreset)["theme"]["extend"]["colors"]["layer-01"];
+type _TailwindFontSize =
+  (typeof tailwindPreset)["theme"]["extend"]["fontSize"]["body-01"][0];
+type _DtcgColor = (typeof dtcgTokens)["g100"]["background"]["$value"];
 type _ThemeScript = ReturnType<typeof themeScript>;
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;

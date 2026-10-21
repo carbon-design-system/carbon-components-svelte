@@ -21,6 +21,12 @@
       "types": "./src/tokens/index.d.ts",
       "import": "./src/tokens/index.js"
     },
+    "./tokens.json": "./src/tokens/tokens.json",
+    "./tailwind": {
+      "types": "./src/tokens/tailwind.d.ts",
+      "default": "./src/tokens/tailwind.js"
+    },
+    "./tailwind.css": "./src/tokens/tailwind.css",
     "./css/*.css": {
       "types": "./css/css.d.ts",
       "default": "./css/*.css"
