@@ -108,6 +108,8 @@ describe("Button", () => {
     for (const skeleton of skeletons) {
       expect(skeleton).toHaveClass("bx--btn");
     }
+    expect(skeletons[1]).toHaveClass("bx--btn--field");
+    expect(skeletons[2]).toHaveClass("bx--btn--sm");
   });
 
   it("should keep a consumer style on a skeleton", () => {

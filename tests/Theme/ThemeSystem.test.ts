@@ -72,7 +72,7 @@ describe("Theme system", () => {
 
   it("applies the light theme when the system prefers light", async () => {
     stubMatchMedia(false);
-    render(ThemeSystem);
+    render(ThemeSystem, { props: { theme: "g100" } });
     await tick();
 
     expect(document.documentElement.getAttribute("theme")).toBe("white");
@@ -105,11 +105,11 @@ describe("Theme system", () => {
 
   it("does not call matchMedia when system is false", async () => {
     const { matchMedia } = stubMatchMedia(true);
-    render(ThemeSystem, { props: { system: false } });
+    render(ThemeSystem, { props: { system: false, theme: "g100" } });
     await tick();
 
     expect(matchMedia).not.toHaveBeenCalled();
-    expect(document.documentElement.getAttribute("theme")).toBe("white");
+    expect(document.documentElement.getAttribute("theme")).toBe("g100");
   });
 
   it("applies immediately when system is enabled at runtime", async () => {

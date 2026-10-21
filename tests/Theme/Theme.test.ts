@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type {
   CarbonTheme,
   CarbonToken,
@@ -108,7 +108,7 @@ describe("Theme", () => {
       "light",
     );
 
-    rerender({ theme: "g100" });
+    await rerender({ theme: "g100" });
     await tick();
 
     expect(documentMock.style.setProperty).toHaveBeenCalledWith(
@@ -120,7 +120,7 @@ describe("Theme", () => {
   it("should update theme attribute when theme changes", async () => {
     const { rerender } = render(Theme);
 
-    rerender({ theme: "g100" });
+    await rerender({ theme: "g100" });
     await tick();
 
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g100");
@@ -190,7 +190,7 @@ describe("Theme", () => {
     const consoleWarn = vi.spyOn(console, "warn");
     const { rerender } = render(Theme);
 
-    rerender({ theme: "invalid" as unknown as CarbonTheme });
+    await rerender({ theme: "invalid" as unknown as CarbonTheme });
     await tick();
 
     expect(consoleWarn).toHaveBeenCalledWith(
@@ -202,7 +202,6 @@ describe("Theme", () => {
     render(ThemeToggle);
 
     const toggle = screen.getByLabelText("Dark mode");
-    expect(toggle).toBeInTheDocument();
     expect(toggle).toHaveAttribute("type", "checkbox");
 
     await user.click(toggle);
@@ -216,11 +215,9 @@ describe("Theme", () => {
     render(ThemeToggleCustom);
 
     const checkbox = screen.getByRole("switch");
-    assert(checkbox);
     expect(checkbox).not.toBeChecked();
 
     const toggle = screen.getAllByText("Enable dark mode")[0];
-    expect(toggle).toBeInTheDocument();
 
     await user.click(toggle);
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g80" });
@@ -235,17 +232,13 @@ describe("Theme", () => {
     render(ThemeSelect);
 
     const select = screen.getByLabelText("Themes");
-    expect(select).toBeInTheDocument();
-    expect(select).toHaveTextContent("White");
     expect(select).toHaveValue("white");
 
     await user.selectOptions(select, "g100");
-    expect(select).toHaveTextContent("Gray 100");
     expect(select).toHaveValue("g100");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
 
     await user.selectOptions(select, "white");
-    expect(select).toHaveTextContent("White");
     expect(select).toHaveValue("white");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
@@ -254,17 +247,18 @@ describe("Theme", () => {
     render(ThemeSelectCustom);
 
     const select = screen.getByLabelText("Select a theme");
-    expect(select).toBeInTheDocument();
-    expect(select).toHaveTextContent("White");
+    expect(
+      within(select)
+        .getAllByRole("option")
+        .map((option) => option.getAttribute("value")),
+    ).toEqual(["white", "g90", "g100"]);
     expect(select).toHaveValue("white");
 
     await user.selectOptions(select, "g100");
-    expect(select).toHaveTextContent("Gray 100");
     expect(select).toHaveValue("g100");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
 
     await user.selectOptions(select, "white");
-    expect(select).toHaveTextContent("White");
     expect(select).toHaveValue("white");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
@@ -280,14 +274,15 @@ describe("Theme", () => {
     });
 
     const select = screen.getByLabelText("Available themes");
-    expect(select).toBeInTheDocument();
 
     await Object.entries(themes).reduce(async (promise, [key, label]) => {
       await promise;
       const themeKey = key as CarbonTheme;
       await user.selectOptions(select, themeKey);
-      expect(select).toHaveTextContent(label);
       expect(select).toHaveValue(themeKey);
+      expect(
+        within(select).getByRole("option", { selected: true }),
+      ).toHaveTextContent(label);
     }, Promise.resolve());
   });
 
@@ -296,18 +291,23 @@ describe("Theme", () => {
 
     const select = screen.getByLabelText("Light themes");
 
-    await user.selectOptions(select, "white");
-    expect(select).toHaveTextContent(themes.white);
+    expect(
+      within(select)
+        .getAllByRole("option")
+        .map((option) => option.getAttribute("value")),
+    ).toEqual(["white", "g10"]);
 
     await user.selectOptions(select, "g10");
-    expect(select).toHaveTextContent(themes.g10);
+    expect(select).toHaveValue("g10");
+    expect(
+      within(select).getByRole("option", { selected: true }),
+    ).toHaveTextContent(themes.g10);
   });
 
   it("should render dropdown when render prop is set to dropdown", async () => {
     render(ThemeDropdown);
 
     const button = screen.getByLabelText("Themes");
-    expect(button).toBeInTheDocument();
     expect(button).toHaveTextContent("White");
 
     await user.click(button);
@@ -325,10 +325,12 @@ describe("Theme", () => {
     render(ThemeDropdownCustom);
 
     const button = screen.getByLabelText("Select a theme");
-    expect(button).toBeInTheDocument();
     expect(button).toHaveTextContent("White");
 
     await user.click(button);
+    expect(
+      screen.getAllByRole("option").map((option) => option.textContent?.trim()),
+    ).toEqual(["White", "Gray 90", "Gray 100"]);
     await user.click(screen.getByText("Gray 100"));
     expect(button).toHaveTextContent("Gray 100");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });

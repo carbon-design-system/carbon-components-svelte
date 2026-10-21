@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type StructuredListComponent from "carbon-components-svelte/StructuredList/StructuredList.svelte";
+import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
+import CheckmarkOutline from "carbon-icons-svelte/lib/CheckmarkOutline.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import StructuredList from "./StructuredList.test.svelte";
@@ -97,6 +99,16 @@ describe("StructuredList", () => {
   });
 
   it("should render a custom selection icon via the `icon` prop", () => {
+    const pathOf = (component: typeof CheckmarkOutline) => {
+      const { container, unmount } = render(component);
+      const d = container.querySelector("path")?.getAttribute("d");
+      unmount();
+      return d;
+    };
+    const outlinePath = pathOf(CheckmarkOutline);
+    expect(outlinePath).toBeTruthy();
+    expect(outlinePath).not.toBe(pathOf(CheckmarkFilled));
+
     const { container } = render(StructuredListCustomIcon);
 
     // One auto-rendered, decorative icon per selectable row.
@@ -104,6 +116,7 @@ describe("StructuredList", () => {
     expect(icons).toHaveLength(3);
     for (const icon of icons) {
       expect(icon).toHaveAttribute("aria-hidden", "true");
+      expect(icon.querySelector("path")?.getAttribute("d")).toBe(outlinePath);
     }
   });
 
@@ -325,16 +338,16 @@ describe("StructuredList", () => {
   it("should handle noWrap cells", () => {
     render(StructuredList);
 
-    const noWrapCells = screen
-      .getAllByRole("cell")
-      .filter(
-        (cell) =>
-          cell.textContent?.startsWith("Row") && cell.textContent?.length === 5,
-      );
-
-    for (const cell of noWrapCells) {
-      expect(cell).toHaveClass("bx--structured-list-td");
-    }
+    // Each row renders [noWrap cell, plain cell, plain cell].
+    const cells = screen.getAllByRole("cell");
+    expect(cells).toHaveLength(9);
+    cells.forEach((cell, index) => {
+      if (index % 3 === 0) {
+        expect(cell).toHaveClass("bx--structured-list-content--nowrap");
+      } else {
+        expect(cell).not.toHaveClass("bx--structured-list-content--nowrap");
+      }
+    });
   });
 
   it("should not throw when rendered outside a StructuredList", () => {
@@ -360,11 +373,15 @@ describe("StructuredList", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", "row-1-value");
   });
 
-  it("should not emit change event on initial render when a child has checked={true}", () => {
+  it("should select a row with checked={true} on initial render without emitting change", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(StructuredListChecked);
 
     expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    const radios = screen.getAllByRole("radio");
+    expect(radios[0]).not.toBeChecked();
+    expect(radios[1]).toBeChecked();
+    expect(screen.getByTestId("value")).toHaveTextContent("row-2-value");
   });
 
   it("should expose aria-sort only on a sortable column header", () => {
