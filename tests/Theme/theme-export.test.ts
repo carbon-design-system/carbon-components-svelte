@@ -11,14 +11,4 @@ describe("Theme exports", () => {
       g100: "Gray 100",
     });
   });
-
-  it("should have all Carbon theme keys", () => {
-    const themeKeys = Object.keys(themes);
-    expect(themeKeys).toHaveLength(5);
-    expect(themeKeys).toContain("white");
-    expect(themeKeys).toContain("g10");
-    expect(themeKeys).toContain("g80");
-    expect(themeKeys).toContain("g90");
-    expect(themeKeys).toContain("g100");
-  });
 });

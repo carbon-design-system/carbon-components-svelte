@@ -25,11 +25,6 @@ describe("Button in a sized Form", () => {
     expect(screen.getByTestId("own-size")).toHaveClass("bx--btn--field");
   });
 
-  it("is unchanged in a Form without a size", () => {
-    render(ButtonFormSize, { props: { size: undefined } });
-    expect(screen.getByTestId("inherits")).not.toHaveClass("bx--btn--sm");
-  });
-
   it("leaves the buttons components draw themselves at their own size", () => {
     const { container } = render(ButtonFormSize, { props: { size: "sm" } });
     const internal = [

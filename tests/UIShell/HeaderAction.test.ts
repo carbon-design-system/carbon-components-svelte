@@ -6,6 +6,8 @@ import {
   within,
 } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
+import HeaderGlobalAction from "carbon-components-svelte/UIShell/HeaderGlobalAction.svelte";
+import Add from "carbon-icons-svelte/lib/Add.svelte";
 import Help from "carbon-icons-svelte/lib/Help.svelte";
 import type { ComponentProps } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
@@ -198,5 +200,22 @@ describe("HeaderGlobalAction", () => {
     expect(button).toHaveClass("bx--btn--lg");
     expect(badge).not.toHaveClass("bx--badge-indicator--count");
     expect(badge?.textContent?.trim()).toBe("");
+  });
+
+  it("should forward portalTooltip to the underlying Button", () => {
+    render(HeaderGlobalAction, {
+      props: {
+        "data-testid": "header-global-action",
+        icon: Add,
+        iconDescription: "Tooltip text",
+        portalTooltip: true,
+      },
+    });
+
+    const button = screen.getByTestId("header-global-action");
+    expect(button).toHaveClass("bx--header__action");
+    expect(button).toHaveClass("bx--btn--icon-only");
+    expect(button).not.toHaveClass("bx--tooltip__trigger");
+    expect(button).not.toHaveClass("bx--tooltip--a11y");
   });
 });

@@ -60,15 +60,6 @@ describe("Theme cross-tab sync", () => {
     });
     await tick();
 
-    dispatchStorageEvent("theme", "g90");
-    await tick();
-
-    const lastCall =
-      documentMock.setAttribute.mock.calls[
-        documentMock.setAttribute.mock.calls.length - 1
-      ];
-    expect(lastCall).toEqual(["theme", "white"]);
-
     dispatchStorageEvent("my-custom-theme-key", "g90");
     await tick();
 

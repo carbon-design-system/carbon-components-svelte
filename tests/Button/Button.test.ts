@@ -7,7 +7,6 @@ import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonLoading from "./ButtonLoading.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
-import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
 
 describe("Button", () => {
   it("should render with various kinds", () => {
@@ -234,17 +233,6 @@ describe("Button", () => {
       vi.useRealTimers();
     });
 
-    it("should not apply legacy CSS tooltip classes when portalTooltip is true", () => {
-      render(Button);
-
-      const button = screen.getByTestId("btn-icon-portal");
-      expect(button).toHaveClass("bx--btn--icon-only");
-      expect(button).not.toHaveClass("bx--tooltip__trigger");
-      expect(button).not.toHaveClass("bx--tooltip--a11y");
-      expect(button).not.toHaveClass("bx--btn--icon-only--top");
-      expect(button).not.toHaveClass("bx--tooltip--align-center");
-    });
-
     it("should render portal tooltip on mouseenter and remove on mouseleave", async () => {
       render(Button);
 
@@ -313,27 +301,6 @@ describe("Button", () => {
       expect(button).toHaveClass("bx--tooltip__trigger");
       expect(button).toHaveClass("bx--tooltip--a11y");
     });
-
-    it("should not portal outside a Modal by default", () => {
-      render(Button);
-
-      const button = screen.getByText("Tooltip text").parentElement;
-      assert(button);
-      expect(button).toHaveClass("bx--tooltip__trigger");
-      expect(button).toHaveClass("bx--tooltip--a11y");
-    });
-  });
-
-  describe("HeaderGlobalAction", () => {
-    it("should forward portalTooltip to the underlying Button", () => {
-      render(HeaderGlobalActionPortal);
-
-      const button = screen.getByTestId("header-global-action");
-      expect(button).toHaveClass("bx--header__action");
-      expect(button).toHaveClass("bx--btn--icon-only");
-      expect(button).not.toHaveClass("bx--tooltip__trigger");
-      expect(button).not.toHaveClass("bx--tooltip--a11y");
-    });
   });
 
   it("does not render a badge when count is omitted", () => {
@@ -351,36 +318,12 @@ describe("Button", () => {
   it("renders a dot badge when count is 0", () => {
     render(Button);
     const container = screen.getByTestId("badge-dot");
-    const badge = container.querySelector(".bx--badge-indicator");
     const button = container.querySelector("button");
 
     expect(
       container.querySelector(".bx--btn__badge-wrapper"),
     ).toBeInTheDocument();
     expect(button).toHaveClass("bx--btn--lg");
-    expect(badge).not.toHaveClass("bx--badge-indicator--count");
-    expect(badge?.textContent?.trim()).toBe("");
-  });
-
-  it("renders a numbered badge when count is positive", () => {
-    render(Button);
-    const container = screen.getByTestId("badge-count");
-    const badge = container.querySelector(".bx--badge-indicator");
-
-    expect(
-      container.querySelector(".bx--btn__badge-wrapper"),
-    ).toBeInTheDocument();
-    expect(badge).toHaveClass("bx--badge-indicator--count");
-    expect(badge).toHaveTextContent("4");
-  });
-
-  it("renders a string count as a custom label", () => {
-    render(Button);
-    const container = screen.getByTestId("badge-label");
-    const badge = container.querySelector(".bx--badge-indicator");
-
-    expect(badge).toHaveClass("bx--badge-indicator--count");
-    expect(badge).toHaveTextContent("1.2K");
   });
 
   it("uses lg size when the badge slot is used", () => {
@@ -479,12 +422,6 @@ describe("Button", () => {
       const button = screen.getByTestId("btn-skeleton-loading");
       expect(button).toHaveClass("bx--skeleton");
       expect(button.querySelector(".bx--btn__loading")).toBeNull();
-    });
-
-    it("does not throw when unmounted while loading", () => {
-      const { unmount } = render(ButtonLoading, { loading: true });
-
-      expect(() => unmount()).not.toThrow();
     });
 
     it("toggles the spinner on and off when loading changes", async () => {

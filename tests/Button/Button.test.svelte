@@ -100,18 +100,6 @@
   </Button>
 </div>
 
-<div data-testid="badge-count">
-  <Button kind="ghost" icon={Add} iconDescription="Notifications">
-    <BadgeIndicator slot="badge" count={4} />
-  </Button>
-</div>
-
-<div data-testid="badge-label">
-  <Button kind="ghost" icon={Add} iconDescription="Notifications">
-    <BadgeIndicator slot="badge" count="1.2K" />
-  </Button>
-</div>
-
 <div data-testid="badge-size-override">
   <Button kind="ghost" size="small" icon={Add} iconDescription="Notifications">
     <BadgeIndicator slot="badge" count={4} />

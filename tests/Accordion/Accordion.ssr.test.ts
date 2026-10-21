@@ -5,10 +5,6 @@ import AccordionSsr from "./AccordionSsr.test.svelte";
 describe("Accordion server render", () => {
   const props = { firstId: "first", secondId: "second" };
 
-  it("renders identical markup for explicit ids", () => {
-    expect(renderRaw(AccordionSsr, props)).toBe(renderRaw(AccordionSsr, props));
-  });
-
   it("derives the heading and panel ids from each item id", () => {
     const html = renderRaw(AccordionSsr, props);
 

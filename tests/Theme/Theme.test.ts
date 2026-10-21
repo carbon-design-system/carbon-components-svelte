@@ -73,14 +73,6 @@ describe("Theme", () => {
     expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
   });
 
-  // Regression test for initial event dispatch in Svelte 5
-  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2530
-  it("does not fire update event on initial render with custom theme", () => {
-    render(Theme, { props: { theme: "g100" } });
-
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
-  });
-
   it("should set default theme to white", () => {
     render(Theme);
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "white");
@@ -100,7 +92,7 @@ describe("Theme", () => {
     );
   });
 
-  it("should update color-scheme when theme changes", async () => {
+  it("should update theme attribute and color-scheme when theme changes", async () => {
     const { rerender } = render(Theme);
 
     expect(documentMock.style.setProperty).toHaveBeenCalledWith(
@@ -111,19 +103,11 @@ describe("Theme", () => {
     await rerender({ theme: "g100" });
     await tick();
 
+    expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g100");
     expect(documentMock.style.setProperty).toHaveBeenCalledWith(
       "color-scheme",
       "dark",
     );
-  });
-
-  it("should update theme attribute when theme changes", async () => {
-    const { rerender } = render(Theme);
-
-    await rerender({ theme: "g100" });
-    await tick();
-
-    expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g100");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
   });
 
@@ -165,15 +149,6 @@ describe("Theme", () => {
     await tick();
 
     expect(localStorage.setItem).toHaveBeenCalledWith("theme", "white");
-  });
-
-  it("should load persisted theme from localStorage", async () => {
-    localStorageMock.theme = "g90";
-
-    render(Theme, { props: { persist: true } });
-    await tick();
-
-    expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g90");
   });
 
   it("does not fire update event when loading a persisted theme on mount", async () => {

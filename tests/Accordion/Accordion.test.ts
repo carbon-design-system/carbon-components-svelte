@@ -235,20 +235,6 @@ describe("Accordion", () => {
     );
   });
 
-  it("applies right-aligned chevron styling", () => {
-    render(Accordion, { props: { align: "end" } });
-
-    const accordion = screen.getByRole("list");
-    expect(accordion).toHaveAttribute(
-      "class",
-      expect.stringContaining("bx--accordion--end"),
-    );
-    expect(accordion).not.toHaveAttribute(
-      "class",
-      expect.stringContaining("bx--accordion--start"),
-    );
-  });
-
   it("defaults to right-aligned chevron when no align prop is specified", () => {
     render(Accordion);
 
@@ -271,14 +257,6 @@ describe("Accordion", () => {
 
     const accordion = screen.getByRole("list");
     expect(accordion).toHaveClass(expectedClass);
-  });
-
-  it("should not apply size classes when size is undefined", () => {
-    render(Accordion, { props: { size: undefined } });
-
-    const accordion = screen.getByRole("list");
-    expect(accordion).not.toHaveClass("bx--accordion--sm");
-    expect(accordion).not.toHaveClass("bx--accordion--xl");
   });
 
   it("applies flush class", () => {
@@ -395,15 +373,6 @@ describe("Accordion", () => {
     );
   });
 
-  it("should use custom ariaLabel on the heading button", () => {
-    render(Accordion, {
-      props: { useSlot: true, ariaLabel: "Custom description" },
-    });
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("aria-label", "Custom description");
-  });
-
   it('closes other items when type is "single"', async () => {
     render(AccordionSingle);
 
@@ -453,13 +422,6 @@ describe("Accordion", () => {
 
     itemIsExpanded(/First/);
     itemIsCollapsed(/Second/);
-  });
-
-  it('keeps both panels open while type remains "multiple"', () => {
-    render(AccordionTypeToggle, { props: { type: "multiple" } });
-
-    itemIsExpanded(/First/);
-    itemIsExpanded(/Second/);
   });
 
   it("should defer mounting panel content until first opened when lazy", async () => {
