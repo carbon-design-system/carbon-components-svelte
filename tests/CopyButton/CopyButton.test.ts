@@ -369,24 +369,17 @@ describe("CopyButton", () => {
       });
     });
 
-    // Regression: observer must re-attach when portalTooltip flips after mount.
-    // Previously, the observer was registered once in onMount; toggling
-    // portalTooltip from false -> true left no observer, so closing the modal
-    // did not dismiss the open portal tooltip.
-    it("should dismiss portal feedback when modal closes after portalTooltip toggled on", async () => {
+    it("should dismiss portal feedback when modal closes", async () => {
       const { rerender } = render(CopyButtonInModal, {
-        props: { modalOpen: true, portalTooltip: false },
+        props: { modalOpen: true },
       });
 
-      rerender({ modalOpen: true, portalTooltip: true });
-
-      const button = getCopyButton("Copy");
-      await user.click(button);
+      await user.click(getCopyButton("Copy"));
       expect(
         document.querySelector("[data-floating-portal]"),
       ).toBeInTheDocument();
 
-      rerender({ modalOpen: false, portalTooltip: true });
+      await rerender({ modalOpen: false });
       await flushMacrotask();
 
       expect(

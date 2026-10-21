@@ -21,7 +21,7 @@ describe("Dialog", () => {
     const showModalSpy = vi.spyOn(HTMLDialogElement.prototype, "showModal");
 
     const { rerender } = render(Dialog, { props: { modal: true } });
-    rerender({ modal: true, open: true });
+    await rerender({ modal: true, open: true });
     await tick();
 
     expect(showModalSpy).toHaveBeenCalledTimes(1);
@@ -32,7 +32,7 @@ describe("Dialog", () => {
     const showSpy = vi.spyOn(HTMLDialogElement.prototype, "show");
 
     const { rerender } = render(Dialog, { props: { modal: false } });
-    rerender({ modal: false, open: true });
+    await rerender({ modal: false, open: true });
     await tick();
 
     expect(showSpy).toHaveBeenCalledTimes(1);
@@ -42,7 +42,7 @@ describe("Dialog", () => {
   it("dispatches an open event when the dialog opens", async () => {
     const onopen = vi.fn();
     const { rerender } = render(Dialog, { props: { onopen } });
-    rerender({ open: true, onopen });
+    await rerender({ open: true, onopen });
     await tick();
 
     expect(onopen).toHaveBeenCalledTimes(1);
@@ -62,7 +62,7 @@ describe("Dialog", () => {
   it("closes a dialog that was mounted open and dispatches close", async () => {
     const onclose = vi.fn();
     const { rerender } = render(Dialog, { props: { open: true, onclose } });
-    rerender({ open: false, onclose });
+    await rerender({ open: false, onclose });
     await tick();
 
     expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute(
@@ -75,7 +75,7 @@ describe("Dialog", () => {
     const closeSpy = vi.spyOn(HTMLDialogElement.prototype, "close");
 
     const { rerender } = render(Dialog, { props: { open: true } });
-    rerender({ open: false });
+    await rerender({ open: false });
     await tick();
 
     expect(closeSpy).toHaveBeenCalledTimes(1);
@@ -84,7 +84,7 @@ describe("Dialog", () => {
   it('dispatches close with trigger "programmatic" when open is set to false', async () => {
     const onclose = vi.fn();
     const { rerender } = render(Dialog, { props: { open: true, onclose } });
-    rerender({ open: false, onclose });
+    await rerender({ open: false, onclose });
     await tick();
 
     expect(onclose).toHaveBeenCalledTimes(1);
@@ -214,30 +214,46 @@ describe("Dialog", () => {
     render(Dialog, { props: { modal: true } });
 
     const opener = screen.getByTestId("opener");
-    opener.focus();
     await user.click(opener);
     await tick();
 
     expect(screen.getByRole("dialog")).toHaveAttribute("open");
 
-    await user.keyboard("{Escape}");
+    // Focus is inside the dialog when it closes, so only the restore puts it
+    // back on the opener.
+    const closeButton = screen.getByTestId("close-button");
+    closeButton.focus();
+    expect(closeButton).toHaveFocus();
+
+    await user.click(closeButton);
     await tick();
 
+    expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute(
+      "open",
+    );
     expect(opener).toHaveFocus();
   });
 
-  it("dispatches a close event and syncs open to false when the browser closes the dialog", () => {
+  it("syncs open to false when the browser closes the dialog, so it can open again", async () => {
+    const onopen = vi.fn();
     const onclose = vi.fn();
-    render(Dialog, { props: { open: true, onclose } });
+    render(Dialog, { props: { open: true, modal: true, onopen, onclose } });
 
     const dialogEl = screen.getByRole("dialog");
     assert(dialogEl instanceof HTMLDialogElement);
     dialogEl.close();
+    await tick();
 
     expect(onclose).toHaveBeenCalledTimes(1);
     expect(onclose.mock.calls[0][0].detail).toEqual({
       trigger: "close-button",
     });
     expect(dialogEl).not.toHaveAttribute("open");
+
+    await user.click(screen.getByTestId("opener"));
+    await tick();
+
+    expect(onopen).toHaveBeenCalledTimes(2);
+    expect(dialogEl).toHaveAttribute("open");
   });
 });

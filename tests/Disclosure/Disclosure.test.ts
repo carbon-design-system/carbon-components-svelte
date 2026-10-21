@@ -21,8 +21,7 @@ describe("Disclosure", () => {
       "bx--disclosure--end",
     );
 
-    const content = screen.getByText("Hidden content");
-    expect(content.closest(".bx--disclosure__content")).not.toHaveClass(
+    expect(control.closest(".bx--disclosure")).not.toHaveClass(
       "bx--disclosure--open",
     );
   });

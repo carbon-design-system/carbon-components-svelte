@@ -47,11 +47,11 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     await user.keyboard("{ArrowLeft}");
     expect(underline).toHaveFocus();
 
-    await user.keyboard("{End}");
-    expect(underline).toHaveFocus();
-
     await user.keyboard("{Home}");
     expect(bold).toHaveFocus();
+
+    await user.keyboard("{End}");
+    expect(underline).toHaveFocus();
 
     for (const button of [bold, italic, underline]) {
       expect(button).toHaveAttribute("aria-pressed", "false");
@@ -162,10 +162,10 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     component.showMiddle = false;
     await tick();
 
-    const buttons = screen.getAllByRole("button");
-    const tabbable = buttons.filter(
-      (button) => button.getAttribute("tabindex") === "0",
-    );
-    expect(tabbable).toHaveLength(1);
+    const a = screen.getByRole("button", { name: "A" });
+    const c = screen.getByRole("button", { name: "C" });
+    expect(screen.getAllByRole("button")).toEqual([a, c]);
+    expect(a).toHaveAttribute("tabindex", "0");
+    expect(c).toHaveAttribute("tabindex", "-1");
   });
 });

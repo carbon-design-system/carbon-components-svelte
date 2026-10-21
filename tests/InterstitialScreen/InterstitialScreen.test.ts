@@ -181,16 +181,21 @@ describe("InterstitialScreen", () => {
     expect(onclose).not.toHaveBeenCalled();
   });
 
-  it("returns focus to the launcher after closing", async () => {
-    render(InterstitialScreenTest, { props: { open: false, stepCount: 1 } });
+  // Full-screen only: a modal-hosted screen also gets ComposedModal's own
+  // focus return to the element focused at open, which wins over the launcher.
+  it("returns focus to the launcher after closing, not to the element that opened it", async () => {
+    render(InterstitialScreenTest, {
+      props: {
+        open: false,
+        isFullScreen: true,
+        stepCount: 1,
+        showOtherOpener: true,
+      },
+    });
 
     const launcher = screen.getByRole("button", { name: "Open launcher" });
-    await user.click(launcher);
+    await user.click(screen.getByRole("button", { name: "Open other" }));
     await tick();
-
-    expect(
-      screen.getByRole("button", { name: "Get Started" }),
-    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Get Started" }));
     await flushMacrotask();
@@ -254,5 +259,6 @@ describe("InterstitialScreen", () => {
 
     const button = screen.getByText("Get Started").closest("button");
     expect(button).toBeDisabled();
+    expect(button?.querySelector(".bx--inline-loading")).toBeInTheDocument();
   });
 });

@@ -118,8 +118,9 @@ describe("TooltipGroup", () => {
     await fireEvent.mouseEnter(edit);
     await vi.advanceTimersByTimeAsync(100);
     await fireEvent.mouseLeave(edit);
-    await vi.advanceTimersByTimeAsync(300);
+    await vi.advanceTimersByTimeAsync(50);
 
+    // Within the default 300ms window, which `skipDelayMs: 0` overrides.
     await fireEvent.mouseEnter(list);
     await tick();
     expect(texts()).toEqual([]);
