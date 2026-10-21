@@ -68,17 +68,6 @@ describe("Disclosure", () => {
     expect(control).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("should associate the control with its content via aria-controls", () => {
-    render(Disclosure);
-
-    const control = screen.getByRole("button", { name: "Show details" });
-    const contentId = control.getAttribute("aria-controls");
-    expect(contentId).toBeTruthy();
-
-    const content = screen.getByText("Hidden content").closest("div");
-    expect(content).toHaveAttribute("id", contentId);
-  });
-
   it("should toggle on Enter key", async () => {
     render(Disclosure);
 

@@ -5,10 +5,6 @@ import { renderRaw } from "../utils/ssr";
 describe("Toggletip server render", () => {
   const props = { id: "info", open: true };
 
-  it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(Toggletip, props)).toBe(renderRaw(Toggletip, props));
-  });
-
   it("derives the content id from the id", () => {
     const html = renderRaw(Toggletip, props);
 

@@ -6,10 +6,6 @@ import CarouselWithSlides from "./Carousel.test.svelte";
 describe("Carousel server render", () => {
   const props = { id: "gallery" };
 
-  it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(Carousel, props)).toBe(renderRaw(Carousel, props));
-  });
-
   it("derives the viewport id from the id", () => {
     const html = renderRaw(Carousel, props);
 

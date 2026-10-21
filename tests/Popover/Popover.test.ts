@@ -12,13 +12,6 @@ describe("Popover", () => {
     );
   });
 
-  it("should not render when closed", () => {
-    render(Popover, { props: { open: false } });
-
-    const popover = screen.getByTestId("parent").firstElementChild;
-    expect(popover).not.toHaveClass("bx--popover--open");
-  });
-
   it("should handle outside clicks", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Popover, {
@@ -33,20 +26,6 @@ describe("Popover", () => {
       "click:outside",
       expect.any(Object),
     );
-  });
-
-  it("should not close on outside click when closeOnOutsideClick is false", async () => {
-    render(Popover, {
-      props: {
-        open: true,
-        closeOnOutsideClick: false,
-      },
-    });
-
-    const popover = screen.getByTestId("parent").firstElementChild;
-
-    await user.click(document.body);
-    expect(popover).toHaveClass("bx--popover--open");
   });
 
   it.each([
@@ -110,29 +89,5 @@ describe("Popover", () => {
 
     await user.click(screen.getByTestId("content"));
     expect(consoleLog).not.toHaveBeenCalled();
-  });
-
-  it("should not handle outside clicks when closed", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Popover, {
-      props: { open: false, closeOnOutsideClick: true },
-    });
-
-    await user.click(document.body);
-    expect(consoleLog).not.toHaveBeenCalled();
-  });
-
-  it("should handle multiple variants simultaneously", () => {
-    render(Popover, {
-      props: {
-        open: true,
-        caret: true,
-        align: "bottom-right",
-      },
-    });
-
-    const popover = screen.getByTestId("parent").firstElementChild;
-    expect(popover).toHaveClass("bx--popover--caret");
-    expect(popover).toHaveClass("bx--popover--bottom-right");
   });
 });

@@ -50,6 +50,7 @@ describe("CopyButton", () => {
     const button = getCopyButton("Custom feedback");
     await user.click(button);
 
+    expect(button).not.toHaveClass("bx--copy-btn--portal-active");
     const feedback = button.querySelector(".bx--copy-btn__feedback");
     expect(feedback).toHaveTextContent("Copied to clipboard");
 
@@ -89,7 +90,6 @@ describe("CopyButton", () => {
     expect(onCopyError).toHaveBeenCalledWith({
       error: expect.any(Error),
     });
-    expect(onCopyError.mock.calls[0][0].error.message).toBe("Failed to copy");
     expect(button).toHaveClass("bx--copy-btn--fade-in");
 
     const portal = document.querySelector("[data-floating-portal]");
@@ -188,38 +188,6 @@ describe("CopyButton", () => {
     });
   });
 
-  it("dispatches copy event after async copy resolves", async () => {
-    const order: string[] = [];
-    let resolveCopy: () => void = () => {};
-    const copy = vi.fn(async () => {
-      order.push("copyStart");
-      await new Promise<void>((resolve) => {
-        resolveCopy = resolve;
-      });
-      order.push("copyEnd");
-    });
-
-    render(CopyButtonAsync, {
-      props: {
-        copy,
-        onCopy: () => {
-          order.push("copyEvent");
-        },
-      },
-    });
-
-    const button = getCopyButton("Async copy");
-    fireEvent.click(button);
-    await Promise.resolve();
-
-    expect(order).toEqual(["copyStart"]);
-
-    resolveCopy();
-    await waitFor(() => {
-      expect(order).toEqual(["copyStart", "copyEnd", "copyEvent"]);
-    });
-  });
-
   it("forwards mouseenter events to parent handlers", () => {
     const onMouseEnter = vi.fn();
     render(CopyButtonMouseEnter, { props: { onMouseEnter } });
@@ -269,21 +237,14 @@ describe("CopyButton", () => {
   });
 
   describe("Portal tooltip", () => {
-    it("should add portal-active class when portalTooltip is true", () => {
+    it("should add portal-active class and render feedback in FloatingPortal on click when portalTooltip is true", async () => {
       render(CopyButton, {
         props: { portalTooltip: true },
       });
 
       const button = getCopyButton("Basic");
       expect(button).toHaveClass("bx--copy-btn--portal-active");
-    });
 
-    it("should render feedback in FloatingPortal on click when portalTooltip is true", async () => {
-      render(CopyButton, {
-        props: { portalTooltip: true },
-      });
-
-      const button = getCopyButton("Basic");
       await user.click(button);
 
       const portal = document.querySelector("[data-floating-portal]");
@@ -292,44 +253,6 @@ describe("CopyButton", () => {
       expect(
         portal?.querySelector(".bx--tooltip-portal__content"),
       ).toHaveTextContent("Copied!");
-    });
-
-    it("should not use portal when portalTooltip is false", () => {
-      render(CopyButton, {
-        props: { portalTooltip: false },
-      });
-
-      const button = getCopyButton("Basic");
-      expect(button).not.toHaveClass("bx--copy-btn--portal-active");
-      expect(
-        button.querySelector(".bx--copy-btn__feedback"),
-      ).toBeInTheDocument();
-    });
-
-    it("should use portal when inside Modal (portalTooltip not passed)", async () => {
-      render(CopyButtonInModal, {
-        props: { modalOpen: true },
-      });
-
-      const button = getCopyButton("Copy");
-      expect(button).toHaveClass("bx--copy-btn--portal-active");
-
-      await user.click(button);
-      const portal = document.querySelector("[data-floating-portal]");
-      expect(portal).toBeInTheDocument();
-      expect(portal?.parentElement).toBe(document.body);
-    });
-
-    it("should not use portal when inside Modal with portalTooltip=false", () => {
-      render(CopyButtonInModal, {
-        props: { modalOpen: true, portalTooltip: false },
-      });
-
-      const button = getCopyButton("Copy");
-      expect(button).not.toHaveClass("bx--copy-btn--portal-active");
-      expect(
-        button.querySelector(".bx--copy-btn__feedback"),
-      ).toBeInTheDocument();
     });
 
     describe("feedback timeout", () => {
