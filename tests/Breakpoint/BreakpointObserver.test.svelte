@@ -4,9 +4,11 @@
   export let smallerThanMd = false;
   export let largerThanMd = false;
 
+  export let compareTo: "sm" | "md" | "lg" | "xlg" | "max" = "md";
+
   const observer = breakpointObserver();
-  const smallerThan = observer.smallerThan("md");
-  const largerThan = observer.largerThan("md");
+  const smallerThan = observer.smallerThan(compareTo);
+  const largerThan = observer.largerThan(compareTo);
 
   smallerThan.subscribe((value) => {
     smallerThanMd = value;

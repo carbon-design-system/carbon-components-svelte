@@ -195,6 +195,51 @@ describe("ImageLoader", () => {
     expect(screen.queryByTestId("loading-state")).not.toBeInTheDocument();
   });
 
+  it.each(["onload", "onerror"] as const)(
+    "clears the previous result when src changes after %s",
+    async (outcome) => {
+      const { container, rerender } = render(ImageLoaderLazyToggle, {
+        props: { src: "a.jpg" },
+      });
+      await settle("a.jpg", outcome);
+      expect(
+        outcome === "onload"
+          ? visibleImg(container)
+          : screen.queryByTestId("error-state"),
+      ).toBeTruthy();
+
+      await rerender({ src: "b.jpg" });
+
+      expect(screen.queryByTestId("error-state")).not.toBeInTheDocument();
+      expect(visibleImg(container)).toBeUndefined();
+    },
+  );
+
+  it("shows the error slot inside the aspect ratio", async () => {
+    const { container } = render(ImageLoaderLazyToggle, {
+      props: { src: "a.jpg", ratio: "16x9" },
+    });
+    await settle("a.jpg", "onerror");
+
+    const aspectRatio = container.querySelector(".bx--aspect-ratio");
+    assert(aspectRatio);
+    expect(
+      aspectRatio.querySelector('[data-testid="error-state"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("stops observing the viewport on unmount", () => {
+    const { instances } = stubIntersectionObserver();
+    const { unmount } = render(ImageLoaderComponent, {
+      props: { src: validImageSrc, lazy: true },
+    });
+    expect(instances[0].elements.size).toBe(1);
+
+    unmount();
+
+    expect(instances[0].elements.size).toBe(0);
+  });
+
   it("dispatches load when the image loads", async () => {
     const load = vi.fn();
     const error = vi.fn();

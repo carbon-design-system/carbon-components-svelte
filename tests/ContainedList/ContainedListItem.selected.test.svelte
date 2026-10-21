@@ -17,4 +17,5 @@
     </ContainedListItem>
   {/each}
   <ContainedListItem href="#docs" selected>Docs</ContainedListItem>
+  <ContainedListItem selected>Notes</ContainedListItem>
 </ContainedList>

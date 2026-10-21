@@ -10,6 +10,10 @@
   const shortItems = items.slice(0, 20);
 
   export let lateList = false;
+  export let keyedItems = Array.from({ length: 10 }, (_, i) => ({
+    id: i,
+    label: `Keyed ${i}`,
+  }));
   export let measuredItems = Array.from({ length: 20 }, (_, i) => ({
     id: i,
     height: i < 5 ? 100 : 40,
@@ -152,6 +156,16 @@
   >
     {item.id}
   </div>
+</VirtualList>
+
+<VirtualList
+  items={keyedItems}
+  itemHeight={40}
+  containerHeight={200}
+  getKey={(item) => item.id}
+  let:item
+>
+  <div data-testid="keyed-row">{item.label}</div>
 </VirtualList>
 
 <div data-testid="scrollend-count">{scrollendCount}</div>

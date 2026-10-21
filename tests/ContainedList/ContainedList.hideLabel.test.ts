@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import ContainedListHideLabelAction from "./ContainedList.hideLabel.action.test.svelte";
+import ContainedListLabelChildren from "./ContainedList.labelChildren.test.svelte";
 import ContainedList from "./ContainedList.test.svelte";
 
 describe("ContainedList hideLabel", () => {
@@ -19,6 +20,18 @@ describe("ContainedList hideLabel", () => {
 
     const list = screen.getByRole("list");
     expect(list).toHaveAccessibleName("List title");
+  });
+
+  it("should hide a labelChildren label without the header bar", () => {
+    const { container } = render(ContainedListLabelChildren, {
+      props: { hideLabel: true },
+    });
+
+    expect(container.querySelector(".bx--contained-list__header")).toBeNull();
+    expect(screen.getByText("Custom Slot Label").parentElement).toHaveClass(
+      "bx--visually-hidden",
+    );
+    expect(screen.getByRole("list")).toHaveAccessibleName("Custom Slot Label");
   });
 
   it("should keep the header bar and only hide the label text when an action slot is used", () => {

@@ -8,6 +8,7 @@
 
   export let sortable = false;
   export let expandable = false;
+  export let revertActive = false;
 
   const headers = [
     { key: "name", value: "Service" },
@@ -36,7 +37,7 @@
     </svelte:fragment>
     <svelte:fragment slot="rowDecorator" let:row>
       {#if row.ai}
-        <AILabel />
+        <AILabel bind:revertActive />
       {/if}
     </svelte:fragment>
     <svelte:fragment slot="expandedRow">Details</svelte:fragment>

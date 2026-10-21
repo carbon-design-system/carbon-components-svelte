@@ -99,6 +99,36 @@ describe("VirtualList", () => {
     expect(screen.queryByTestId("late-row-0")).not.toBeInTheDocument();
   });
 
+  it("keeps a row's element when items are prepended with getKey", async () => {
+    const { rerender } = render(VirtualList);
+    const row = screen.getByText("Keyed 2");
+
+    await rerender({
+      keyedItems: [
+        { id: 100, label: "Keyed 100" },
+        ...Array.from({ length: 10 }, (_, i) => ({
+          id: i,
+          label: `Keyed ${i}`,
+        })),
+      ],
+    });
+
+    expect(screen.getByText("Keyed 2")).toBe(row);
+  });
+
+  it("detaches its scroll listener from scrollElement on unmount", () => {
+    const { unmount } = render(VirtualList);
+    const scroller = screen.getByTestId("scroller");
+    const removeEventListener = vi.spyOn(scroller, "removeEventListener");
+
+    unmount();
+
+    expect(removeEventListener).toHaveBeenCalledWith(
+      "scroll",
+      expect.any(Function),
+    );
+  });
+
   describe("measured", () => {
     beforeEach(stubPerOptionResizeObserver);
     afterEach(vi.unstubAllGlobals);

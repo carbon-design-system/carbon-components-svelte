@@ -52,6 +52,31 @@ describe("AILabel", () => {
     ).toHaveClass("bx--ai-label-actions");
   });
 
+  it("forwards open and close and binds open", async () => {
+    const onopen = vi.fn();
+    const onclose = vi.fn();
+    render(AILabel, { props: { onopen, onclose } });
+    const trigger = screen.getByRole("button", { name: "AI Show information" });
+
+    await user.click(trigger);
+    expect(onopen).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId("open")).toHaveTextContent("true");
+
+    await user.click(trigger);
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId("open")).toHaveTextContent("false");
+  });
+
+  it("opens the explanation when open is set", async () => {
+    const { rerender } = render(AILabel);
+
+    await rerender({ open: true });
+
+    expect(
+      screen.getByRole("button", { name: "AI Show information" }),
+    ).toHaveAttribute("aria-expanded", "true");
+  });
+
   it("reopens closed after a revert", async () => {
     const { rerender } = render(AILabel);
 
@@ -88,6 +113,37 @@ describe("AILabel", () => {
     expect(
       screen.getByRole("button", { name: "AI Show information" }),
     ).toHaveFocus();
+  });
+});
+
+describe("AILabel explanation alignment", () => {
+  const popover = () =>
+    screen
+      .getByText("Generated from the last 30 days of incident logs.")
+      .closest(".bx--popover");
+
+  it("aligns to the start by default", () => {
+    render(AILabel);
+
+    expect(popover()).toHaveClass("bx--popover--bottom-left");
+  });
+
+  it("aligns to the end inside a field decorator", () => {
+    render(AILabelHost);
+
+    const label = aiLabel(screen.getByTestId("text-input"));
+    expect(label?.querySelector(".bx--popover")).toHaveClass(
+      "bx--popover--bottom-right",
+    );
+  });
+
+  it("lets an explicit align win inside a field decorator", () => {
+    render(AILabelHost);
+
+    const label = aiLabel(screen.getByTestId("aligned"));
+    expect(label?.querySelector(".bx--popover")).toHaveClass(
+      "bx--popover--bottom-left",
+    );
   });
 });
 

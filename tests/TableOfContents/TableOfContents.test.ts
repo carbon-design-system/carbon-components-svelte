@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { renderMeasured } from "./helpers";
+import TableOfContentsItems from "./TableOfContents.items.test.svelte";
 import TableOfContents from "./TableOfContents.test.svelte";
 
 // Viewport-relative section tops, keyed by element id.
@@ -104,19 +105,39 @@ describe("TableOfContents", () => {
     ).toHaveAttribute("aria-current", "location");
   });
 
-  it("ignores modified clicks that open a new tab or window", async () => {
+  it.each([
+    ["Ctrl", "[ControlLeft>]", "[/ControlLeft]"],
+    ["Meta", "[MetaLeft>]", "[/MetaLeft]"],
+    ["Shift", "[ShiftLeft>]", "[/ShiftLeft]"],
+    ["Alt", "[AltLeft>]", "[/AltLeft]"],
+  ])(
+    "ignores %s-clicks that open a new tab or window",
+    async (_, press, release) => {
+      const onChange = vi.fn();
+      render(TableOfContents, { noScrollSpy: true, onChange });
+
+      const link = screen.getByRole("link", { name: "Key moments" });
+      // Cancel navigation so jsdom doesn't try to open a window.
+      link.addEventListener("click", (event) => event.preventDefault());
+      await user.keyboard(press);
+      await user.click(link);
+      await user.keyboard(release);
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(link).not.toHaveAttribute("aria-current");
+    },
+  );
+
+  it("ignores a middle-button click", () => {
     const onChange = vi.fn();
     render(TableOfContents, { noScrollSpy: true, onChange });
 
     const link = screen.getByRole("link", { name: "Key moments" });
-    // Cancel navigation so jsdom doesn't try to open a window.
     link.addEventListener("click", (event) => event.preventDefault());
-    await user.keyboard("[ControlLeft>]");
-    await user.click(link);
-    await user.keyboard("[/ControlLeft]");
+    // user-event sends a middle click as `auxclick`, so dispatch `click`.
+    fireEvent.click(link, { button: 1 });
 
     expect(onChange).not.toHaveBeenCalled();
-    expect(link).not.toHaveAttribute("aria-current");
   });
 
   it("selects on a click a router has cancelled", async () => {
@@ -244,6 +265,105 @@ describe("TableOfContents", () => {
     await nextFrame();
 
     expect(screen.getByTestId("selected-id")).toHaveTextContent("key-moments");
+  });
+
+  it("hands back to the scroll spy once the click lock expires", async () => {
+    render(TableOfContents);
+    await nextFrame();
+
+    await user.click(screen.getByRole("link", { name: "Key moments" }));
+    // Longer than the lock's idle time.
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    tops = { overview: -500, "measures-of-success": -100, "key-moments": 300 };
+    window.dispatchEvent(new Event("scroll"));
+    await nextFrame();
+
+    expect(screen.getByTestId("selected-id")).toHaveTextContent(
+      "measures-of-success",
+    );
+  });
+
+  it("tracks scrolling of the scrollContainer, not the window", async () => {
+    const container = document.createElement("div");
+    render(TableOfContents, { scrollContainer: container });
+    await nextFrame();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("overview");
+
+    tops = { overview: -500, "measures-of-success": -100, "key-moments": 300 };
+    window.dispatchEvent(new Event("scroll"));
+    await nextFrame();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("overview");
+
+    container.dispatchEvent(new Event("scroll"));
+    await nextFrame();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent(
+      "measures-of-success",
+    );
+  });
+
+  it("re-checks the active section when the window resizes", async () => {
+    render(TableOfContents);
+    await nextFrame();
+
+    tops = { overview: -500, "measures-of-success": -100, "key-moments": 300 };
+    window.dispatchEvent(new Event("resize"));
+    await nextFrame();
+
+    expect(screen.getByTestId("selected-id")).toHaveTextContent(
+      "measures-of-success",
+    );
+  });
+
+  it("decodes a percent-encoded hash to match the section id", () => {
+    render(TableOfContentsItems, {
+      items: [{ href: "#caf%C3%A9", text: "Cafe" }],
+      sectionIds: ["café"],
+      selectedId: "café",
+    });
+
+    expect(screen.getByRole("link", { name: "Cafe" })).toHaveAttribute(
+      "aria-current",
+      "location",
+    );
+  });
+
+  it("doesn't track a link to the same page with another query string", () => {
+    render(TableOfContentsItems, {
+      items: [
+        {
+          href: `${window.location.pathname}?other=1#overview`,
+          text: "Overview",
+        },
+      ],
+      sectionIds: ["overview"],
+      selectedId: "overview",
+    });
+
+    expect(screen.getByRole("link", { name: "Overview" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  });
+
+  it("stops tracking a section once its item unmounts", async () => {
+    const items = [
+      { href: "#overview", text: "Overview" },
+      { href: "#details", text: "Details" },
+    ];
+    tops = { overview: 0, details: 400 };
+    const { rerender } = render(TableOfContentsItems, {
+      items,
+      sectionIds: ["overview", "details"],
+      noScrollSpy: false,
+    });
+    await nextFrame();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("overview");
+
+    await rerender({ items: items.slice(0, 1) });
+    tops = { overview: -500, details: -100 };
+    window.dispatchEvent(new Event("scroll"));
+    await nextFrame();
+
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("overview");
   });
 
   it("ignores scrolling when noScrollSpy is set", async () => {

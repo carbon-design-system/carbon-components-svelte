@@ -32,6 +32,16 @@ describe("AILabel in data tables", () => {
     expect(aiLabel(plainRow)).toBeNull();
   });
 
+  it("unmarks a row whose AI label is reverted", async () => {
+    const { rerender } = render(AILabelOverlays);
+    const [aiRow] = table().querySelectorAll("tbody tr");
+
+    await rerender({ revertActive: true });
+
+    expect(aiRow).not.toHaveClass("bx--data-table--ai-label-row");
+    expect(aiLabel(aiRow)).toHaveClass("bx--ai-label--revert");
+  });
+
   it("spans expanded rows across the decorator column", () => {
     render(AILabelOverlays, { props: { expandable: true } });
 

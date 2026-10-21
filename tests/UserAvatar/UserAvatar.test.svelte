@@ -113,3 +113,24 @@
   interactive
   name="John Doe"
 />
+
+<UserAvatar
+  data-testid="tooltip-interactive"
+  interactive
+  name="John Doe"
+  tooltipText="John Doe"
+/>
+
+<UserAvatar
+  data-testid="tooltip-href"
+  href="/profile"
+  name="John Doe"
+  tooltipText="John Doe"
+/>
+
+<UserAvatar
+  data-testid="aria-label-override"
+  interactive
+  name="John Doe"
+  aria-label="Open profile"
+/>

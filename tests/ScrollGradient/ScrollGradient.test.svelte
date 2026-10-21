@@ -6,6 +6,9 @@
   export let height: string | undefined = undefined;
   export let hideStartGradient = false;
   export let className: string | undefined = undefined;
+  export let scrollElementClassName: string | undefined = undefined;
+  export let style: string | undefined = undefined;
+  export let onScroll: (event: Event) => void = () => {};
 </script>
 
 <ScrollGradient
@@ -13,7 +16,10 @@
   {background}
   {height}
   {hideStartGradient}
+  {scrollElementClassName}
   class={className}
+  {style}
+  on:scroll={onScroll}
 >
   <p>Content</p>
 </ScrollGradient>

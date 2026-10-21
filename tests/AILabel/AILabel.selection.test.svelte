@@ -12,6 +12,7 @@
   import Tile from "carbon-components-svelte/Tile/Tile.svelte";
 
   export let selected = false;
+  export let revertActive = false;
 </script>
 
 <div data-testid="checkbox">
@@ -41,7 +42,7 @@
   <Tag>Forecast<AILabel slot="decorator" /></Tag>
 </div>
 <div data-testid="tile">
-  <Tile>Forecast<AILabel slot="decorator" size="xl" /></Tile>
+  <Tile>Forecast<AILabel slot="decorator" size="xl" bind:revertActive /></Tile>
 </div>
 <div data-testid="clickable-tile">
   <ClickableTile href="#">Open<AILabel slot="decorator" /></ClickableTile>

@@ -24,6 +24,45 @@ describe("hideAtBreakpoint", () => {
     expect(display === "none").toBe(hidden);
   });
 
+  it("shows and hides as the viewport resizes", () => {
+    const viewport = stubViewport(width.xlg);
+
+    render(HideAtBreakpoint, { props: { options: { above: "lg" } } });
+    const target = screen.getByTestId("target");
+    expect(target).toHaveStyle({ display: "none" });
+
+    viewport.setWidth(width.lg);
+    expect(target).not.toHaveStyle({ display: "none" });
+
+    viewport.setWidth(width.max);
+    expect(target).toHaveStyle({ display: "none" });
+  });
+
+  it("removes its media query listeners on destroy", () => {
+    stubViewport(width.xlg);
+    const lists: MediaQueryList[] = [];
+    const matchMedia = window.matchMedia;
+    vi.stubGlobal("matchMedia", (query: string) => {
+      const list = matchMedia(query);
+      lists.push(list);
+      return list;
+    });
+
+    const { destroy } = hideAtBreakpoint(document.createElement("div"), {
+      above: "lg",
+    });
+    expect(lists).toHaveLength(5);
+
+    destroy();
+
+    for (const list of lists) {
+      expect(list.removeEventListener).toHaveBeenCalledWith(
+        "change",
+        expect.any(Function),
+      );
+    }
+  });
+
   it("supports direct import and updates visibility on option change", () => {
     stubViewport(width.xlg);
 

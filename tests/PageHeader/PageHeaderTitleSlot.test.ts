@@ -21,4 +21,17 @@ describe("PageHeader titleChildren slot", () => {
       screen.getByRole("heading", { name: "Slot only" }),
     ).toBeInTheDocument();
   });
+
+  it.each([
+    ["start-only", "title-start", "start"],
+    ["end-only", "title-end", "end"],
+  ])("renders %s content without a title", (header, className, content) => {
+    render(PageHeaderTitleSlot);
+
+    const root = screen.getByTestId(header);
+    expect(
+      root.querySelector(`.bx--page-header__${className}`),
+    ).toContainElement(screen.getByTestId(content));
+    expect(root.querySelector(".bx--page-header__title")).toBeNull();
+  });
 });

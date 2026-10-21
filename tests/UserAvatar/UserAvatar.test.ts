@@ -249,6 +249,26 @@ describe("UserAvatar", () => {
     expect(avatar).not.toHaveAttribute("type");
   });
 
+  it.each([
+    ["tooltip-interactive", "BUTTON"],
+    ["tooltip-href", "A"],
+  ])("skips the tooltip wrapper for %s and keeps it a %s", (testId, tag) => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId(testId);
+    expect(avatar.tagName).toBe(tag);
+    expect(avatar.closest(".bx--tooltip__trigger--definition")).toBeNull();
+  });
+
+  it.each([
+    ["aria-label-override", "Open profile"],
+    ["initials-multi", null],
+  ])("sets aria-label on %s to %j", (testId, label) => {
+    render(UserAvatar);
+
+    expect(screen.getByTestId(testId).getAttribute("aria-label")).toBe(label);
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;

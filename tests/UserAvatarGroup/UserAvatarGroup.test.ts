@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import UserAvatarGroup from "./UserAvatarGroup.test.svelte";
+import UserAvatarGroupDynamic from "./UserAvatarGroupDynamic.test.svelte";
 import UserAvatarGroupTooltips from "./UserAvatarGroupTooltips.test.svelte";
 
 function groupRoot(testId: string): HTMLElement {
@@ -225,5 +226,71 @@ describe("UserAvatarGroup", () => {
       root.querySelectorAll('[data-overflow="true"]'),
     ).map((el) => el.textContent?.trim());
     expect(hidden).toEqual(["C3", "D4"]);
+  });
+
+  it("shrinks the overflow when an avatar is removed", async () => {
+    const { container, rerender } = render(UserAvatarGroupDynamic, {
+      props: { names: ["Ann", "Bob", "Cy"], max: 2 },
+    });
+    await tick();
+    const root = container.querySelector<HTMLElement>(".bx--user-avatar-group");
+    assert(root);
+    expect(root).toHaveTextContent("+1");
+
+    await rerender({ names: ["Ann", "Bob"] });
+    await tick();
+
+    expect(root).not.toHaveTextContent("+");
+    expect(root.querySelectorAll('[data-overflow="true"]')).toHaveLength(0);
+  });
+
+  it("updates the overflow tooltip when a hidden avatar is renamed", async () => {
+    const { container, rerender } = render(UserAvatarGroupDynamic, {
+      props: { names: ["Ann", "Bob"], max: 1 },
+    });
+    await tick();
+    await rerender({ names: ["Ann", "Zed"] });
+    await tick();
+
+    const overflow = container.querySelector(
+      ".bx--user-avatar-group__overflow",
+    );
+    assert(overflow);
+    await user.hover(overflow);
+
+    await waitFor(() => {
+      expect(screen.getByRole("tooltip")).toHaveTextContent("Zed");
+    });
+  });
+
+  it("removes the stacking index when stackOrder returns to last", async () => {
+    const { container, rerender } = render(UserAvatarGroupDynamic, {
+      props: { names: ["Ann", "Bob"], stackOrder: "first" },
+    });
+    await tick();
+    const indexes = () =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(".bx--user-avatar"),
+      ).map((avatar) => avatar.style.getPropertyValue("--user-avatar-index"));
+    expect(indexes()).toEqual(["0", "1"]);
+
+    await rerender({ stackOrder: "last" });
+    await tick();
+
+    expect(indexes()).toEqual(["", ""]);
+  });
+
+  it("merges a consumer style with the computed group style", async () => {
+    const { container } = render(UserAvatarGroupDynamic, {
+      props: { names: ["Ann", "Bob"], gap: "-1rem", style: "color: red" },
+    });
+    await tick();
+
+    const root = container.querySelector<HTMLElement>(".bx--user-avatar-group");
+    assert(root);
+    expect(root.style.color).toBe("red");
+    expect(root.style.getPropertyValue("--user-avatar-group-overlap")).toBe(
+      "-1rem",
+    );
   });
 });

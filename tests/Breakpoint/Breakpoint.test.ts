@@ -73,6 +73,29 @@ describe("Breakpoint", () => {
     expect(screen.getByTestId("larger-than-md").textContent).toBe("true");
   });
 
+  it.each([
+    [400, "true", "false"],
+    [800, "false", "false"],
+  ])(
+    "at width %i, smallerThan('md') is %s and largerThan('md') is %s",
+    (width, smaller, larger) => {
+      stubViewport(width);
+
+      render(BreakpointObserver);
+
+      expect(screen.getByTestId("smaller-than-md").textContent).toBe(smaller);
+      expect(screen.getByTestId("larger-than-md").textContent).toBe(larger);
+    },
+  );
+
+  it("throws for an unknown breakpoint size", () => {
+    stubViewport(1100);
+
+    expect(() =>
+      render(BreakpointObserver, { props: { compareTo: "huge" as "md" } }),
+    ).toThrow('"huge" is not a valid breakpoint size.');
+  });
+
   it("does not throw when no media query matches (find returns undefined); derived stores emit boolean", () => {
     // NaN is a viewport that no width query matches.
     stubViewport(Number.NaN);

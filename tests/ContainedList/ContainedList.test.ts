@@ -62,6 +62,15 @@ describe("ContainedList", () => {
     expect(header).toHaveClass("bx--layout--size-sm");
   });
 
+  it("should not apply layout size classes to a disclosed header", () => {
+    render(ContainedList, { props: { kind: "disclosed", size: "sm" } });
+
+    const header = screen
+      .getByText("List title")
+      .closest(".bx--contained-list__header");
+    expect(header).not.toHaveClass("bx--layout--size-sm");
+  });
+
   it("should associate label with list via aria-labelledby", () => {
     render(ContainedList);
 
@@ -189,6 +198,18 @@ describe("ContainedList", () => {
 
     await user.click(link);
     expect(onclick).toHaveBeenCalledOnce();
+  });
+
+  it("should add rel to a link item that opens a new tab", () => {
+    render(ContainedListItemHref);
+
+    expect(screen.getByRole("link", { name: "External" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(
+      screen.getByRole("link", { name: "Documentation" }),
+    ).not.toHaveAttribute("rel");
   });
 
   it("should disable a link item", async () => {
