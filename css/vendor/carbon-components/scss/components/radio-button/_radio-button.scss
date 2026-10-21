@@ -22,7 +22,14 @@
 
     position: relative;
     display: flex;
+    // ccs: a row too narrow for every button moves the next button to a
+    // new line. Labels break inside a word only when nothing else fits
+    // (long-words), so without wrapping, the buttons shrank and broke
+    // short labels such as "Compact" mid-word instead.
+    flex-wrap: wrap;
     align-items: center;
+    --ccs-radio-row-gap: #{$carbon--spacing-03};
+    row-gap: var(--ccs-radio-row-gap);
   }
 
   // Remove spacing above collection of radio buttons if label is present
@@ -32,6 +39,8 @@
 
   .#{$prefix}--radio-button-group--vertical {
     flex-direction: column;
+    flex-wrap: nowrap;
+    --ccs-radio-row-gap: 0px;
     align-items: flex-start;
 
     &.#{$prefix}--radio-button-group--label-left {
@@ -244,7 +253,12 @@
     flex: 0 0 100%;
     align-items: flex-start;
     inline-size: 100%;
-    margin-block-start: $carbon--spacing-02;
+    // ccs: the message is a flex line too, so the group's row gap
+    // already separates it from the buttons. Take the gap off the
+    // margin so the message stays $carbon--spacing-02 below them.
+    margin-block-start: calc(
+      #{$carbon--spacing-02} - var(--ccs-radio-row-gap, 0px)
+    );
   }
 
   .#{$prefix}--radio-button-group__invalid-icon {
