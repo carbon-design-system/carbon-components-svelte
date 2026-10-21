@@ -71,6 +71,22 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     expect(underline).toHaveFocus();
   });
 
+  it("moves the tab stop off a button that becomes disabled", async () => {
+    const { component } = render(ToggleButtonGroupFixture);
+
+    component.boldDisabled = true;
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+    expect(screen.getByRole("button", { name: "Italic" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+  });
+
   it("uses ArrowUp/ArrowDown when vertical", async () => {
     render(ToggleButtonGroupFixture, { props: { orientation: "vertical" } });
 
