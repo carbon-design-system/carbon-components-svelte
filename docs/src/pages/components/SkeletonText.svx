@@ -51,3 +51,15 @@ flex or grid layout that sets its own gap.
   <SkeletonText noMargin width="40%" />
   <SkeletonText noMargin width="20%" />
 </Stack>
+
+## AI
+
+Set `ai` to `true` for text that AI is generating. The skeleton turns blue, and a gradient sweeps across it. The sweep stops when the user prefers reduced motion.
+
+<SkeletonText ai />
+
+### Paragraph
+
+`ai` works with every variant.
+
+<SkeletonText ai paragraph />

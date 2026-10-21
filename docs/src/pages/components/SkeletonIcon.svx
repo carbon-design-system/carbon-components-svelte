@@ -3,7 +3,7 @@ description: Skeleton icons provide a loading-state placeholder sized to match i
 ---
 
 <script>
-  import { SkeletonIcon } from "carbon-components-svelte";
+  import { SkeletonIcon, Stack } from "carbon-components-svelte";
 </script>
 
 ## Sizes
@@ -31,3 +31,14 @@ SkeletonIcon wraps [SkeletonPlaceholder](/components/SkeletonPlaceholder) for ic
 SkeletonIcon also accepts `width` and `height`, forwarded to the underlying [SkeletonPlaceholder](/components/SkeletonPlaceholder), for a non-square placeholder instead of `size`.
 
 <SkeletonIcon width="2rem" height="1rem" />
+
+## AI
+
+Set `ai` to `true` for an icon that AI is generating. The skeleton turns blue, and a gradient sweeps across it. The sweep stops when the user prefers reduced motion.
+
+<Stack orientation="horizontal" gap={5}>
+  <SkeletonIcon ai />
+  <SkeletonIcon ai size={20} />
+  <SkeletonIcon ai size={24} />
+  <SkeletonIcon ai size={32} />
+</Stack>
