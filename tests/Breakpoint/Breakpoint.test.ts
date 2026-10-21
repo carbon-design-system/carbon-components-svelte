@@ -86,7 +86,7 @@ describe("Breakpoint", () => {
       removeEventListener: vi.fn(),
     }));
 
-    expect(() => render(BreakpointObserver)).not.toThrow();
+    render(BreakpointObserver);
     expect(screen.getByTestId("smaller-than-md").textContent).toBe("false");
     expect(screen.getByTestId("larger-than-md").textContent).toBe("false");
   });

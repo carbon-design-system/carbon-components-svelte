@@ -116,11 +116,22 @@ describe("Breadcrumb", () => {
 
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(3);
-    expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
-    expect(items[2]).not.toHaveAttribute("aria-current");
-
     const links = screen.getAllByRole("link");
+
+    // `aria-current="step"` is forwarded as given and does not mark current.
+    expect(links[0]).toHaveAttribute("aria-current", "step");
+    expect(items[0]).not.toHaveClass("bx--breadcrumb-item--current");
+
+    // `aria-current="page"` alone marks the item current.
+    expect(links[1]).toHaveAttribute("aria-current", "page");
+    expect(items[1]).toHaveClass("bx--breadcrumb-item--current");
+
     expect(links[2]).toHaveAttribute("aria-current", "page");
+    expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
+
+    for (const item of items) {
+      expect(item).not.toHaveAttribute("aria-current");
+    }
   });
 
   it("spreads link class and aria-current onto a custom link", () => {

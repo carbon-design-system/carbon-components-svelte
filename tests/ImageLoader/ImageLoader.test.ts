@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import { tick } from "svelte";
+import { isSvelte5 } from "../utils/svelte-version";
 import ImageLoader from "./ImageLoader.test.svelte";
 import ImageLoaderLazyToggle from "./ImageLoaderLazyToggle.test.svelte";
 
@@ -118,13 +119,31 @@ describe("ImageLoader", () => {
     );
   });
 
-  it("supports fade in", async () => {
-    render(ImageLoader);
+  // Svelte 4 and 3 run transitions as CSS animations, so only Svelte 5's
+  // Web Animations calls expose the duration.
+  it.skipIf(!isSvelte5)("fades the image in only with fadeIn", async () => {
+    const durations: number[] = [];
+    const animate = Element.prototype.animate;
+    Element.prototype.animate = function (
+      this: Element,
+      ...args: Parameters<Element["animate"]>
+    ) {
+      durations.push(Number((args[1] as KeyframeAnimationOptions).duration));
+      return animate.apply(this, args);
+    };
 
-    const wrapper = screen.getByTestId("loader-with-fade");
+    const { container, rerender } = render(ImageLoaderComponent, {
+      props: { src: validImageSrc, alt: "Logo", fadeIn: false },
+    });
     await settle(validImageSrc, "onload");
+    expect(visibleImg(container)).toHaveAttribute("src", validImageSrc);
+    expect(durations.filter((duration) => duration > 0)).toEqual([]);
 
-    expect(visibleImg(wrapper)).toHaveAttribute("src", validImageSrc);
+    await rerender({ src: "", fadeIn: true });
+    await rerender({ src: validImageSrc });
+    await settle(validImageSrc, "onload");
+    expect(visibleImg(container)).toHaveAttribute("src", validImageSrc);
+    expect(durations.some((duration) => duration > 0)).toBe(true);
   });
 
   it("supports programmatic image loading", async () => {
