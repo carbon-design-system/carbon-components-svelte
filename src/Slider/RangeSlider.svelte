@@ -399,9 +399,11 @@
     const delta =
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
     if (activeHandle === "lower") {
-      value = clampLower(snapToStep(value + delta, min, step));
+      value = clampLower(snapToStep(value + delta, { min, max, step }));
     } else {
-      valueUpper = clampUpper(snapToStep(valueUpper + delta, min, step));
+      valueUpper = clampUpper(
+        snapToStep(valueUpper + delta, { min, max, step }),
+      );
     }
     dispatch("input", { value, valueUpper });
     dispatch("change", { value, valueUpper });

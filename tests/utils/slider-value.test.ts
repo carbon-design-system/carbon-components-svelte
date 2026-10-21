@@ -3,6 +3,7 @@ import {
   getPointerPosition,
   getTrackAxis,
   getValueText,
+  snapToStep,
   valueFromPointer,
 } from "../../src/utils/slider-value.js";
 
@@ -27,6 +28,36 @@ describe("formatRangeLabel", () => {
 
   it("falls back to the raw numeric value when label and formatValue are both unset", () => {
     expect(formatRangeLabel("", 0, undefined)).toBe(0);
+  });
+});
+
+describe("snapToStep", () => {
+  it.each([
+    { value: 0.3, min: 0, max: 1, step: 0.1, expected: 0.3 },
+    { value: 0.7, min: 0, max: 1, step: 0.1, expected: 0.7 },
+    { value: 3, min: 1, max: 10, step: 2, expected: 3 },
+    { value: 4.1, min: 1, max: 10, step: 2, expected: 5 },
+    { value: 0.18, min: 0.05, max: 1, step: 0.1, expected: 0.15 },
+    { value: 3e-7, min: 0, max: 1e-6, step: 1e-7, expected: 3e-7 },
+  ])(
+    "snaps $value to $expected (min $min, step $step)",
+    ({ value, min, max, step, expected }) => {
+      expect(snapToStep(value, { min, max, step })).toBe(expected);
+    },
+  );
+
+  it("clamps to the bounds", () => {
+    expect(snapToStep(-5, { min: 0, max: 10, step: 1 })).toBe(0);
+    expect(snapToStep(15, { min: 0, max: 10, step: 1 })).toBe(10);
+  });
+
+  it("clamps a step that overshoots max back to max", () => {
+    expect(snapToStep(10.6, { min: 0, max: 10, step: 3 })).toBe(10);
+  });
+
+  it("only clamps when step is not positive", () => {
+    expect(snapToStep(3.3, { min: 0, max: 10, step: 0 })).toBe(3.3);
+    expect(snapToStep(-1, { min: 0, max: 10, step: -1 })).toBe(0);
   });
 });
 

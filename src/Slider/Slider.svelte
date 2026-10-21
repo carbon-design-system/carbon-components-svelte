@@ -456,10 +456,7 @@
                 step *
                 (isLargeStep ? range / step / stepMultiplier : 1) *
                 keys[event.key];
-              let next = snapToStep(value + delta, min, step);
-              if (next < min) next = min;
-              else if (next > max) next = max;
-              value = next;
+              value = snapToStep(value + delta, { min, max, step });
             }
             dispatch("input", value);
             dispatch("change", value);
