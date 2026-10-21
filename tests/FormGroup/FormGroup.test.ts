@@ -185,6 +185,18 @@ describe("FormGroup", () => {
     expect(fieldset).toHaveAttribute("aria-labelledby", "custom-legend-id");
   });
 
+  it("does not copy an external aria-labelledby onto the legend id", () => {
+    render(FormGroupTest, {
+      props: {
+        legendText: "Test Legend",
+        "aria-labelledby": "external-label",
+        slotContent: "Content",
+      },
+    });
+
+    expect(screen.getByText("Test Legend")).not.toHaveAttribute("id");
+  });
+
   it("should handle aria-labelledby override", () => {
     render(FormGroupTest, {
       props: {

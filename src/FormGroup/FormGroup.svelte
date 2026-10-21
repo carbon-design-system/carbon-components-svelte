@@ -94,10 +94,7 @@
   on:mouseleave
 >
   {#if legendText}
-    <legend
-      class:bx--label={true}
-      id={legendId || $$restProps["aria-labelledby"]}
-    >
+    <legend class:bx--label={true} id={legendId || undefined}>
       {legendText}
     </legend>
   {/if}
