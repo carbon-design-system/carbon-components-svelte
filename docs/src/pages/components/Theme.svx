@@ -14,6 +14,8 @@ Theme supports five built-in themes and custom token overrides. Import `all.css`
 import "carbon-components-svelte/css/all.css";
 ```
 
+`Theme` sets the theme for the whole page. To theme one part of it, such as a sidebar, use [ThemeZone](/components/ThemeZone).
+
 ## Basic
 
 Create a basic theme component that can be controlled programmatically.

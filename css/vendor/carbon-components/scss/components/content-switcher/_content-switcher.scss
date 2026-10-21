@@ -354,22 +354,28 @@
 /// dark themes use a transparent container with a raised selected card ($layer-02).
 ///
 /// Single-theme builds detect light/dark from background lightness. `all.css`
-/// uses CSS custom properties, so lightness() fails; default to light and
-/// override via `[theme="g80"|"g90"|"g100"]`.
+/// uses CSS custom properties, so lightness() fails. There the dark theme
+/// blocks set `--ccs-content-switcher-low-contrast-background` to
+/// `transparent` and the light ones reset it to `initial`, which falls back
+/// to `$layer-accent`. The nearest theme wins, a theme zone included.
 /// @access private
 /// @group components
 @mixin content-switcher-low-contrast {
-  $custom-props: feature-flag-enabled("enable-css-custom-properties");
-  $is-light-theme: true;
-  @if not $custom-props {
-    $is-light-theme: lightness($background) > 50%;
+  $container-background: $layer-accent;
+  @if feature-flag-enabled("enable-css-custom-properties") {
+    $container-background: var(
+      --ccs-content-switcher-low-contrast-background,
+      #{$layer-accent}
+    );
+  } @else if lightness($background) <= 50% {
+    $container-background: transparent;
   }
 
   .#{$prefix}--content-switcher--low-contrast {
     // Match the end switches' 4px corners so the gray fill doesn't show
     // outside a selected end card's rounded ring.
     border-radius: to-rem(4px);
-    background-color: if($is-light-theme, $layer-accent, transparent);
+    background-color: $container-background;
 
     .#{$prefix}--content-switcher-btn {
       border-color: $border-strong;
@@ -478,14 +484,6 @@
     & .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon.#{$prefix}--content-switcher--selected
       svg {
       fill: $icon-primary;
-    }
-  }
-
-  @if $custom-props {
-    @each $dark-theme in ("g80", "g90", "g100") {
-      [theme="#{$dark-theme}"] .#{$prefix}--content-switcher--low-contrast {
-        background-color: transparent;
-      }
     }
   }
 }

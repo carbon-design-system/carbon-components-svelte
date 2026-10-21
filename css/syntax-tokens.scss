@@ -3,22 +3,31 @@
 // single-theme stylesheet, load the matching `syntax-tokens-<theme>.css`.
 @import "./syntax/tokens";
 
+// Each block also names the theme zone classes (`ThemeZone`), so code in a
+// zone takes the zone's scheme. Every block declares the full set.
+
 // Default: white. g10 shares the light values.
-:root {
+:root,
+.bx--white,
+.bx--g10 {
   @include syntax-tokens(light);
 }
 
 // Carbon gives the dark themes one set; v11 has no g80, which takes it too.
 :root[theme="g80"],
 :root[theme="g90"],
-:root[theme="g100"] {
+:root[theme="g100"],
+.bx--g80,
+.bx--g90,
+.bx--g100 {
   @include syntax-tokens(dark);
 }
 
 // Carbon tunes its dark set for g100's snippet background. On g80's and
 // g90's lighter ones, a few tokens move a palette step lighter to keep 4.5:1.
 @each $theme, $tokens in $ccs-syntax-contrast-adjustments {
-  :root[theme="#{$theme}"] {
+  :root[theme="#{$theme}"],
+  .bx--#{$theme} {
     @include syntax-contrast-adjustments($theme);
   }
 }

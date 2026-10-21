@@ -35,6 +35,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Stack",
       "Box",
       "Layer",
+      "ThemeZone",
       "AspectRatio",
       "ScrollGradient",
       "Accordion",

@@ -50,6 +50,23 @@ describe("syntax stylesheets", () => {
     expect(css).not.toContain(".tok-");
   }, 30_000);
 
+  // A ThemeZone takes its theme's full syntax set, whatever page it sits on.
+  it("syntax-tokens.css gives each theme zone its theme's tokens", async () => {
+    const css = await compileEntry("syntax-tokens.scss");
+    const page = (theme: string) =>
+      new Map([
+        ...syntaxTokens(css, ":root"),
+        ...syntaxTokens(css, `:root[theme=${theme}]`),
+      ]);
+    for (const theme of THEMES) {
+      const zone = syntaxTokens(css, `.bx--${theme}`);
+      expect(zone.size, theme).toBe(88);
+      expect(Object.fromEntries(zone), theme).toEqual(
+        Object.fromEntries(page(theme)),
+      );
+    }
+  }, 30_000);
+
   it("each static syntax-tokens-<theme>.css declares its theme's scheme", async () => {
     const themes = [
       ["white", "#198038"],
