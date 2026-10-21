@@ -198,36 +198,39 @@ describe("Toggletip", () => {
 
   describe("alignment", () => {
     const cases = [
-      ["bottom", "start", "bottom-left", "marginLeft"],
-      ["bottom", "center", "bottom", undefined],
-      ["bottom", "end", "bottom-right", "marginRight"],
-      ["top", "start", "top-left", "marginLeft"],
-      ["top", "center", "top", undefined],
-      ["top", "end", "top-right", "marginRight"],
-      ["left", "start", "left-top", "marginTop"],
-      ["left", "center", "left", undefined],
-      ["left", "end", "left-bottom", "marginBottom"],
-      ["right", "start", "right-top", "marginTop"],
-      ["right", "center", "right", undefined],
-      ["right", "end", "right-bottom", "marginBottom"],
+      ["bottom", "start", "bottom-left", "left"],
+      ["bottom", "center", "bottom", null],
+      ["bottom", "end", "bottom-right", "right"],
+      ["top", "start", "top-left", "left"],
+      ["top", "center", "top", null],
+      ["top", "end", "top-right", "right"],
+      ["left", "start", "left-top", "top"],
+      ["left", "center", "left", null],
+      ["left", "end", "left-bottom", "bottom"],
+      ["right", "start", "right-top", "top"],
+      ["right", "center", "right", null],
+      ["right", "end", "right-bottom", "bottom"],
     ] as const;
 
     it.each(cases)(
       "maps direction %s and align %s to %s",
-      (direction, align, popoverAlign, margin) => {
+      (direction, align, popoverAlign, edge) => {
         const { container } = render(Toggletip, {
           props: { direction, align },
         });
 
         const popover = container.querySelector<HTMLElement>(".bx--popover");
         expect(popover).toHaveClass(`bx--popover--${popoverAlign}`);
-        for (const side of [
-          "marginLeft",
-          "marginRight",
-          "marginTop",
-          "marginBottom",
-        ] as const) {
-          expect(popover?.style[side]).toBe(side === margin ? "-4px" : "");
+        expect(popover).toHaveClass("bx--toggletip-popover");
+        // Start and end place the popover edge so the caret points at the
+        // button's center.
+        const style = popover?.getAttribute("style") ?? "";
+        if (edge) {
+          expect(style).toContain(
+            `${edge}: calc(50% - var(--ccs-toggletip-caret))`,
+          );
+        } else {
+          expect(style).not.toMatch(/calc/);
         }
       },
     );
