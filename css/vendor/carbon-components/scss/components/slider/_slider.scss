@@ -37,6 +37,10 @@
     padding: $spacing-05 0;
     margin: 0 $carbon--spacing-05;
     cursor: pointer;
+    // ccs: keep horizontal drags as pointer events instead of a page pan,
+    // which would fire `pointercancel` mid-drag. Vertical page scroll still
+    // works when a swipe starts on the track.
+    touch-action: pan-y;
   }
 
   .#{$prefix}--slider-container--full-width .#{$prefix}--slider {
@@ -628,6 +632,7 @@
     padding: 0 $carbon--spacing-05;
     margin: to-rem(20px) 0;
     grid-area: track;
+    touch-action: pan-x;
   }
 
   // Center each range label on its end of the track.
