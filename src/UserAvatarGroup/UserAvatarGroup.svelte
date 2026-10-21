@@ -103,7 +103,7 @@
   // overflow names tracking the rendered layout. Sorting after a batched
   // flush matches sorting after each registration.
 
-  // Route register, unregister, and updateName through the same batched
+  // Route register, unregister, updateName, and updateNode through the same batched
   // queue. Mixing in a direct items.update() would read a stale array
   // still missing not-yet-flushed registrations.
   const batchedItemsUpdate = batchStoreUpdates(items);
@@ -125,6 +125,13 @@
     updateName: (id, name) => {
       batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, name } : item)),
+      );
+    },
+    // Toggling `tooltipText`, `interactive` or `href` swaps an avatar's root
+    // element. The replacement sits in the same slot, so the order holds.
+    updateNode: (id, node) => {
+      batchedItemsUpdate((current) =>
+        current.map((item) => (item.id === id ? { ...item, node } : item)),
       );
     },
   });

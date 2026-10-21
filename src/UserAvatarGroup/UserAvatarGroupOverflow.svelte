@@ -32,6 +32,8 @@
     unregister: noop,
     /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["updateName"]} */
     updateName: noop,
+    /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["updateNode"]} */
+    updateNode: noop,
   });
 </script>
 

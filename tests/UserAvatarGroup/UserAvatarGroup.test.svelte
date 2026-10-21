@@ -5,6 +5,9 @@
   // Toggles a leading avatar to exercise DOM-order resync: the avatar mounts
   // last but renders first.
   let showLead = false;
+  // Toggling `tooltipText` swaps the middle avatar's root element.
+  let tooltipOn = false;
+  let showSwapLead = false;
 </script>
 
 <div data-testid="under-max">
@@ -93,5 +96,34 @@
     {/if}
     <UserAvatar name="Bob" initials="B2" />
     <UserAvatar name="Cara" initials="C3" />
+  </UserAvatarGroup>
+</div>
+
+<button
+  type="button"
+  data-testid="toggle-tooltip"
+  on:click={() => (tooltipOn = !tooltipOn)}
+>
+  tooltip
+</button>
+<button
+  type="button"
+  data-testid="toggle-swap-lead"
+  on:click={() => (showSwapLead = !showSwapLead)}
+>
+  lead
+</button>
+<div data-testid="root-swap">
+  <UserAvatarGroup max={2}>
+    {#if showSwapLead}
+      <UserAvatar name="Alice" initials="A1" />
+    {/if}
+    <UserAvatar name="Bob" initials="B2" />
+    <UserAvatar
+      name="Cara"
+      initials="C3"
+      tooltipText={tooltipOn ? "Cara" : undefined}
+    />
+    <UserAvatar name="Dan" initials="D4" />
   </UserAvatarGroup>
 </div>
