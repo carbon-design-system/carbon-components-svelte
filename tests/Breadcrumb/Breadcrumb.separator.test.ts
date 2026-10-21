@@ -21,6 +21,17 @@ describe("Breadcrumb separator", () => {
     expect(list.style.getPropertyValue("--ccs-separator")).toBe("'→'");
   });
 
+  it.each([
+    ["\\", "'\\\\'"],
+    ["'", "'\\''"],
+  ])("escapes %j in the quoted custom property", (separator, expected) => {
+    render(BreadcrumbSeparator, { props: { separator } });
+
+    const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
+    const list = within(nav).getByRole("list");
+    expect(list.style.getPropertyValue("--ccs-separator")).toBe(expected);
+  });
+
   it("still suppresses the trailing separator with noTrailingSlash", () => {
     render(BreadcrumbSeparatorNoTrailingSlash);
 
