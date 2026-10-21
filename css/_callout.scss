@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// Callout reuses the inline notification's markup, tokens and kind
+// mixins, so this only covers where a static notice differs. It must
+// emit after `inline-notifications`: the margin rule wins a tie on order.
+
+/// Callout: a static inline notification with no close button and no
+/// outer margin, spaced by the layout that holds it, as in Carbon v11.
+/// @access private
+/// @group components
+@mixin callout {
+  .#{$prefix}--inline-notification--callout {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  // The inline notification keeps 48px clear for its close button below
+  // `md` and in a narrow container. A callout has no close button.
+  .#{$prefix}--inline-notification--callout
+    .#{$prefix}--inline-notification__details {
+    margin-right: $carbon--spacing-05;
+  }
+}
+
+@include exports("callout") {
+  @include callout;
+}
