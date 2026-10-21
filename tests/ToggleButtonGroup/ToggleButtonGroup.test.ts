@@ -1,13 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import ToggleButton from "carbon-components-svelte/ToggleButtonGroup/ToggleButton.svelte";
 import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
-import { tick } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import ToggleButtonGroupIconOnly from "./ToggleButtonGroup.iconOnly.test.svelte";
 import ToggleButtonGroupFixture from "./ToggleButtonGroup.test.svelte";
 
-/** Open tooltips currently rendered in the portal. */
 describe("ToggleButtonGroup", () => {
   it("renders a toolbar with the accessible name from labelText", () => {
     render(ToggleButtonGroupFixture);
@@ -27,19 +26,21 @@ describe("ToggleButtonGroup", () => {
   });
 
   it("toggles a button on click and dispatches change with the new array", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ToggleButtonGroupFixture);
+    const onChange = vi.fn();
+    render(ToggleButtonGroupFixture, { props: { onChange } });
 
     const bold = screen.getByRole("button", { name: "Bold" });
     await user.click(bold);
 
     expect(bold).toHaveAttribute("aria-pressed", "true");
-    expect(consoleLog).toHaveBeenCalledWith("change", ["bold"]);
+    expect(onChange).toHaveBeenCalledWith(["bold"]);
   });
 
   it("does not dispatch change when selected is set programmatically", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { component } = render(ToggleButtonGroupFixture);
+    const onChange = vi.fn();
+    const { component } = render(ToggleButtonGroupFixture, {
+      props: { onChange },
+    });
 
     component.selected = ["italic"];
     await tick();
@@ -48,7 +49,7 @@ describe("ToggleButtonGroup", () => {
       "aria-pressed",
       "true",
     );
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("supports multiple simultaneous selections", async () => {
@@ -92,9 +93,14 @@ describe("ToggleButtonGroup", () => {
     });
 
     it("required keeps the pressed button pressed and dispatches nothing", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onChange = vi.fn();
       const { component } = render(ToggleButtonGroupFixture, {
-        props: { selectionMode: "single", required: true, selected: ["bold"] },
+        props: {
+          selectionMode: "single",
+          required: true,
+          selected: ["bold"],
+          onChange,
+        },
       });
 
       const bold = screen.getByRole("button", { name: "Bold" });
@@ -102,14 +108,14 @@ describe("ToggleButtonGroup", () => {
 
       expect(bold).toHaveAttribute("aria-pressed", "true");
       expect(component.selected).toEqual(["bold"]);
-      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+      expect(onChange).not.toHaveBeenCalled();
     });
   });
 
   it("required in multiple mode keeps the last pressed button pressed", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     const { component } = render(ToggleButtonGroupFixture, {
-      props: { required: true, selected: ["bold"] },
+      props: { required: true, selected: ["bold"], onChange },
     });
 
     const bold = screen.getByRole("button", { name: "Bold" });
@@ -117,7 +123,7 @@ describe("ToggleButtonGroup", () => {
 
     expect(bold).toHaveAttribute("aria-pressed", "true");
     expect(component.selected).toEqual(["bold"]);
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("disables every button when the group is disabled", () => {
@@ -189,38 +195,31 @@ describe("ToggleButtonGroup", () => {
       expect(openTooltips()).toHaveLength(0);
     });
 
-    it("defaults the tooltip direction to bottom when horizontal", async () => {
-      render(ToggleButtonGroupIconOnly);
-      const bold = screen.getByRole("button", { name: "Bold" });
-
-      await fireEvent.focus(bold);
-      await tick();
-      const portal = document.querySelector(".bx--tooltip-portal");
-      expect(portal).toHaveAttribute("data-direction", "bottom");
-    });
-
-    it("defaults the tooltip direction to right when vertical, so it doesn't land on the next segment", async () => {
-      render(ToggleButtonGroupIconOnly, {
+    it.each<{
+      name: string;
+      props: ComponentProps<typeof ToggleButtonGroupIconOnly>;
+      dir: string;
+    }>([
+      { name: "bottom when horizontal", props: {}, dir: "bottom" },
+      {
+        name: "right when vertical, so it doesn't land on the next segment",
         props: { orientation: "vertical" },
-      });
-      const bold = screen.getByRole("button", { name: "Bold" });
-
-      await fireEvent.focus(bold);
-      await tick();
-      const portal = document.querySelector(".bx--tooltip-portal");
-      expect(portal).toHaveAttribute("data-direction", "right");
-    });
-
-    it("lets an explicit tooltipPosition override the vertical default", async () => {
-      render(ToggleButtonGroupIconOnly, {
+        dir: "right",
+      },
+      {
+        name: "the explicit tooltipPosition over the vertical default",
         props: { orientation: "vertical", tooltipPosition: "top" },
-      });
-      const bold = screen.getByRole("button", { name: "Bold" });
+        dir: "top",
+      },
+    ])("sets the tooltip direction to $name", async ({ props, dir }) => {
+      render(ToggleButtonGroupIconOnly, { props });
 
-      await fireEvent.focus(bold);
+      await fireEvent.focus(screen.getByRole("button", { name: "Bold" }));
       await tick();
-      const portal = document.querySelector(".bx--tooltip-portal");
-      expect(portal).toHaveAttribute("data-direction", "top");
+      expect(document.querySelector(".bx--tooltip-portal")).toHaveAttribute(
+        "data-direction",
+        dir,
+      );
     });
   });
 

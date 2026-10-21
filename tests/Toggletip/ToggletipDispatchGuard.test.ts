@@ -5,7 +5,7 @@ import {
   isConsumerBoom,
 } from "../utils/absorb-unhandled-rejection";
 import { user } from "../utils/user";
-import ToggletipDispatchGuard from "./ToggletipDispatchGuard.test.svelte";
+import ToggletipDispatchGuard from "./Toggletip.test.svelte";
 
 describe("Toggletip dispatch guard", () => {
   it("updates the previous-open guard before dispatching, so a throwing on:open handler does not prevent the dispatch itself from firing exactly once", async () => {

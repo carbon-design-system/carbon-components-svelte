@@ -4,36 +4,35 @@ import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Dialog from "./Dialog.test.svelte";
 
+interface CloseContext {
+  dialogEl: HTMLDialogElement;
+  rerender: (props: object) => Promise<void>;
+  onclose: () => void;
+}
+
 describe("Dialog", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  it("calls showModal() when modal is true and open becomes true", async () => {
-    const showModalSpy = vi.spyOn(HTMLDialogElement.prototype, "showModal");
-    const onopen = vi.fn();
+  it.each([
+    [true, "showModal"],
+    [false, "show"],
+  ] as const)(
+    "modal=%s calls %s() and dispatches open once when open becomes true",
+    async (modal, method) => {
+      const spy = vi.spyOn(HTMLDialogElement.prototype, method);
+      const onopen = vi.fn();
 
-    const { rerender } = render(Dialog, { props: { modal: true, onopen } });
-    await rerender({ modal: true, open: true, onopen });
-    await tick();
+      const { rerender } = render(Dialog, { props: { modal, onopen } });
+      await rerender({ modal, open: true, onopen });
+      await tick();
 
-    expect(showModalSpy).toHaveBeenCalledTimes(1);
-    expect(onopen).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole("dialog")).toHaveAttribute("open");
-  });
-
-  it("calls show() when modal is false and open becomes true", async () => {
-    const showSpy = vi.spyOn(HTMLDialogElement.prototype, "show");
-    const onopen = vi.fn();
-
-    const { rerender } = render(Dialog, { props: { modal: false, onopen } });
-    await rerender({ modal: false, open: true, onopen });
-    await tick();
-
-    expect(showSpy).toHaveBeenCalledTimes(1);
-    expect(onopen).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole("dialog")).toHaveAttribute("open");
-  });
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(onopen).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole("dialog")).toHaveAttribute("open");
+    },
+  );
 
   it("shows the dialog once and dispatches open once when mounted open", () => {
     const showSpy = vi.spyOn(HTMLDialogElement.prototype, "show");
@@ -46,19 +45,51 @@ describe("Dialog", () => {
     expect(screen.getByRole("dialog")).toHaveAttribute("open");
   });
 
-  it('dispatches close with trigger "programmatic" when open is set to false', async () => {
+  it.each([
+    [
+      "programmatic",
+      false,
+      async ({ rerender, onclose }: CloseContext) => {
+        await rerender({ open: false, onclose });
+      },
+    ],
+    [
+      "backdrop",
+      true,
+      async ({ dialogEl }: CloseContext) => {
+        await user.click(dialogEl);
+      },
+    ],
+    [
+      "close-button",
+      true,
+      async () => {
+        await user.click(screen.getByTestId("close-button"));
+      },
+    ],
+    [
+      "escape-key",
+      true,
+      // dom-env turns no key press into `cancel`, so dispatch it by hand.
+      ({ dialogEl }: CloseContext) => {
+        dialogEl.dispatchEvent(new Event("cancel"));
+        dialogEl.close();
+      },
+    ],
+  ])('dispatches close with trigger "%s"', async (trigger, modal, act) => {
     const onclose = vi.fn();
-    const { rerender } = render(Dialog, { props: { open: true, onclose } });
-    await rerender({ open: false, onclose });
+    const { rerender } = render(Dialog, {
+      props: { open: true, modal, onclose },
+    });
+
+    const dialogEl = screen.getByRole("dialog");
+    assert(dialogEl instanceof HTMLDialogElement);
+    await act({ dialogEl, rerender, onclose });
     await tick();
 
-    expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute(
-      "open",
-    );
     expect(onclose).toHaveBeenCalledTimes(1);
-    expect(onclose.mock.calls[0][0].detail).toEqual({
-      trigger: "programmatic",
-    });
+    expect(onclose.mock.calls[0][0].detail).toEqual({ trigger });
+    expect(dialogEl).not.toHaveAttribute("open");
   });
 
   it.each([false, true])(
@@ -85,34 +116,6 @@ describe("Dialog", () => {
     expect(onclose).toHaveBeenCalledTimes(1);
     expect(onclose.mock.calls[0][0].detail).toEqual({
       trigger: "programmatic",
-    });
-  });
-
-  it('dispatches close with trigger "escape-key" when Escape closes the dialog', () => {
-    const onclose = vi.fn();
-    render(Dialog, { props: { open: true, modal: true, onclose } });
-
-    const dialogEl = screen.getByRole("dialog");
-    assert(dialogEl instanceof HTMLDialogElement);
-    dialogEl.dispatchEvent(new Event("cancel"));
-    dialogEl.close();
-
-    expect(onclose).toHaveBeenCalledTimes(1);
-    expect(onclose.mock.calls[0][0].detail).toEqual({
-      trigger: "escape-key",
-    });
-  });
-
-  it('dispatches close with trigger "backdrop" when clicking the backdrop', async () => {
-    const onclose = vi.fn();
-    render(Dialog, { props: { open: true, modal: true, onclose } });
-
-    const dialogEl = screen.getByRole("dialog");
-    await user.click(dialogEl);
-
-    expect(onclose).toHaveBeenCalledTimes(1);
-    expect(onclose.mock.calls[0][0].detail).toEqual({
-      trigger: "backdrop",
     });
   });
 
@@ -164,18 +167,6 @@ describe("Dialog", () => {
 
     expect(onclose).not.toHaveBeenCalled();
     expect(dialogEl).toHaveAttribute("open");
-  });
-
-  it('dispatches close with trigger "close-button" when dialog.close() is called', async () => {
-    const onclose = vi.fn();
-    render(Dialog, { props: { open: true, modal: true, onclose } });
-
-    await user.click(screen.getByTestId("close-button"));
-
-    expect(onclose).toHaveBeenCalledTimes(1);
-    expect(onclose.mock.calls[0][0].detail).toEqual({
-      trigger: "close-button",
-    });
   });
 
   it("restores focus to the opener when the dialog closes", async () => {

@@ -5,8 +5,6 @@
 
   export let modalOpen = true;
   export let copy: ComponentProps<CopyButton>["copy"] = undefined;
-  export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] =
-    undefined;
 </script>
 
 <Modal
@@ -15,5 +13,5 @@
   primaryButtonText="OK"
   secondaryButtonText="Cancel"
 >
-  <CopyButton text="copy me" iconDescription="Copy" {portalTooltip} {copy} />
+  <CopyButton text="copy me" iconDescription="Copy" {copy} />
 </Modal>

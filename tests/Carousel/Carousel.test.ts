@@ -3,6 +3,11 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import Carousel from "./Carousel.test.svelte";
 
+/** Returns the "Previous slide" button. */
+const prevButton = () => screen.getByRole("button", { name: "Previous slide" });
+/** Returns the "Next slide" button. */
+const nextButton = () => screen.getByRole("button", { name: "Next slide" });
+
 describe("Carousel", () => {
   it("renders only the first slide visible", () => {
     render(Carousel);
@@ -29,8 +34,8 @@ describe("Carousel", () => {
   it("disables the previous button on the first slide and the next button on the last", async () => {
     render(Carousel);
 
-    const prev = screen.getByRole("button", { name: "Previous slide" });
-    const next = screen.getByRole("button", { name: "Next slide" });
+    const prev = prevButton();
+    const next = nextButton();
     expect(prev).toBeDisabled();
     expect(next).not.toBeDisabled();
 
@@ -44,19 +49,17 @@ describe("Carousel", () => {
   it("moves focus to the previous button when next reaches the last slide", async () => {
     render(Carousel);
 
-    const next = screen.getByRole("button", { name: "Next slide" });
+    const next = nextButton();
     await user.click(next);
     await user.click(next);
 
-    expect(document.activeElement).toBe(
-      screen.getByRole("button", { name: "Previous slide" }),
-    );
+    expect(document.activeElement).toBe(prevButton());
   });
 
   it("leaves focus where a change handler moved it at a bound", async () => {
     render(Carousel, { props: { selectedIndex: 1, moveFocusOnChange: true } });
 
-    const next = screen.getByRole("button", { name: "Next slide" });
+    const next = nextButton();
     next.focus();
     await user.keyboard("{Enter}");
 
@@ -67,7 +70,7 @@ describe("Carousel", () => {
   it("dispatches change with the new index on navigation", async () => {
     render(Carousel);
 
-    await user.click(screen.getByRole("button", { name: "Next slide" }));
+    await user.click(nextButton());
 
     expect(screen.getByTestId("current-index")).toHaveTextContent("1");
     expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
@@ -113,7 +116,7 @@ describe("Carousel", () => {
 
   it("picks up slides added after mount", async () => {
     render(Carousel, { props: { selectedIndex: 2 } });
-    const next = screen.getByRole("button", { name: "Next slide" });
+    const next = nextButton();
     expect(next).toBeDisabled();
 
     await user.click(screen.getByRole("button", { name: "Add slide" }));
@@ -159,18 +162,14 @@ describe("Carousel", () => {
     it("keeps both buttons enabled at the bounds", () => {
       render(Carousel, { props: { wrap: true } });
 
-      expect(
-        screen.getByRole("button", { name: "Previous slide" }),
-      ).not.toBeDisabled();
-      expect(
-        screen.getByRole("button", { name: "Next slide" }),
-      ).not.toBeDisabled();
+      expect(prevButton()).not.toBeDisabled();
+      expect(nextButton()).not.toBeDisabled();
     });
 
     it("goes from the last slide to the first on next", async () => {
       render(Carousel, { props: { wrap: true, selectedIndex: 2 } });
 
-      await user.click(screen.getByRole("button", { name: "Next slide" }));
+      await user.click(nextButton());
 
       expect(screen.getByText("Slide one")).toBeVisible();
       expect(screen.getByTestId("current-index")).toHaveTextContent("0");
@@ -207,7 +206,7 @@ describe("Carousel", () => {
 
       expect(screen.getByText("1 of 3")).toBeInTheDocument();
 
-      await user.click(screen.getByRole("button", { name: "Next slide" }));
+      await user.click(nextButton());
 
       expect(screen.getByText("2 of 3")).toBeInTheDocument();
     });

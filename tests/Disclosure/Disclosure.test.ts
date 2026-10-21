@@ -49,16 +49,20 @@ describe("Disclosure", () => {
   });
 
   it("should dispatch a toggle event with the new open state", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Disclosure);
+    const onToggle = vi.fn();
+    render(Disclosure, { props: { onToggle } });
 
     const control = screen.getByRole("button", { name: "Show details" });
 
     await user.click(control);
-    expect(consoleLog).toHaveBeenCalledWith("toggle:", true);
+    expect(onToggle).toHaveBeenLastCalledWith(
+      expect.objectContaining({ detail: { open: true } }),
+    );
 
     await user.click(control);
-    expect(consoleLog).toHaveBeenCalledWith("toggle:", false);
+    expect(onToggle).toHaveBeenLastCalledWith(
+      expect.objectContaining({ detail: { open: false } }),
+    );
   });
 
   it("should render open when bound to true", () => {
@@ -68,23 +72,13 @@ describe("Disclosure", () => {
     expect(control).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("should toggle on Enter key", async () => {
+  it.each([["{Enter}"], [" "]])("should toggle on %j key", async (key) => {
     render(Disclosure);
 
     const control = screen.getByRole("button", { name: "Show details" });
     control.focus();
 
-    await user.keyboard("{Enter}");
-    expect(control).toHaveAttribute("aria-expanded", "true");
-  });
-
-  it("should toggle on Space key", async () => {
-    render(Disclosure);
-
-    const control = screen.getByRole("button", { name: "Show details" });
-    control.focus();
-
-    await user.keyboard(" ");
+    await user.keyboard(key);
     expect(control).toHaveAttribute("aria-expanded", "true");
   });
 

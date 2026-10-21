@@ -3,8 +3,7 @@ import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { nextFrame } from "../utils/next-frame";
 import { user } from "../utils/user";
-import Toggletip from "./ToggletipDispatchGuard.test.svelte";
-import ToggletipWithInteractiveContent from "./ToggletipWithInteractiveContent.test.svelte";
+import Toggletip from "./Toggletip.test.svelte";
 
 /**
  * Listeners are enabled on the animation frame after opening, on top of the
@@ -34,7 +33,7 @@ describe("Toggletip", () => {
 
   it("should not close when clicking an interactive element inside the content", async () => {
     const onClose = vi.fn();
-    render(ToggletipWithInteractiveContent, {
+    render(Toggletip, {
       props: { open: false, onClose },
     });
 
@@ -49,7 +48,7 @@ describe("Toggletip", () => {
 
   it("should close when focus leaves portalled content", async () => {
     const onClose = vi.fn();
-    render(ToggletipWithInteractiveContent, {
+    render(Toggletip, {
       props: { open: false, portalTooltip: true, onClose },
     });
 

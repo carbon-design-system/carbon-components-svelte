@@ -19,6 +19,7 @@
   export let labelText: ComponentProps<ToggleButtonGroup>["labelText"] =
     "Text formatting";
   export let ariaLabel: string | undefined = undefined;
+  export let onChange = (_detail: readonly (string | number)[]) => {};
 </script>
 
 <ToggleButtonGroup
@@ -31,9 +32,7 @@
   {grid}
   {labelText}
   aria-label={ariaLabel}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
+  on:change={(e) => onChange(e.detail)}
 >
   <ToggleButton value="bold" disabled={boldDisabled}>Bold</ToggleButton>
   <ToggleButton value="italic">Italic</ToggleButton>

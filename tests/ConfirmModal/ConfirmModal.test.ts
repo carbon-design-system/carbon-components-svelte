@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ConfirmModalTest from "./ConfirmModal.test.svelte";
+import { isOpen } from "./helpers";
 
 describe("ConfirmModal", () => {
   it("renders the heading and both buttons", () => {
@@ -38,7 +39,7 @@ describe("ConfirmModal", () => {
     expect(onconfirm).toHaveBeenCalledTimes(1);
     await tick();
     await tick();
-    expect(document.querySelector(".bx--modal")).not.toHaveClass("is-visible");
+    expect(isOpen()).toBe(false);
     expect(oncancel).not.toHaveBeenCalled();
   });
 
@@ -79,7 +80,7 @@ describe("ConfirmModal", () => {
     });
     await tick();
     await tick();
-    expect(document.querySelector(".bx--modal")).not.toHaveClass("is-visible");
+    expect(isOpen()).toBe(false);
   });
 
   describe("confirmationPhrase", () => {
@@ -146,7 +147,7 @@ describe("ConfirmModal", () => {
 
     expect(oncancel).not.toHaveBeenCalled();
     expect(onclose).not.toHaveBeenCalled();
-    expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
+    expect(isOpen()).toBe(true);
   });
 
   it("waits for a confirm promise, then closes without a cancel", async () => {
@@ -176,7 +177,7 @@ describe("ConfirmModal", () => {
     await tick();
     expect(confirm).toHaveBeenCalledTimes(1);
     expect(onclose).not.toHaveBeenCalled();
-    expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
+    expect(isOpen()).toBe(true);
 
     finish();
     await vi.waitFor(() => expect(onclose).toHaveBeenCalledTimes(1));
@@ -227,7 +228,7 @@ describe("ConfirmModal", () => {
     await tick();
     await tick();
 
-    expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
+    expect(isOpen()).toBe(true);
     expect(screen.getByRole("button", { name: "Cancel" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Delete" })).toBeEnabled();
   });
@@ -249,27 +250,30 @@ describe("ConfirmModal", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toHaveFocus();
   });
 
-  it("is a plain dialog for kind info", () => {
-    render(ConfirmModalTest, {
-      props: { open: true, title: "Publish now?", kind: "info" },
-    });
+  it.each([
+    { kind: undefined, role: "alertdialog", danger: true, icon: false },
+    {
+      kind: "warning" as const,
+      role: "alertdialog",
+      danger: false,
+      icon: true,
+    },
+    { kind: "info" as const, role: "dialog", danger: false, icon: false },
+  ])(
+    "kind $kind: role $role, danger button $danger, heading icon $icon",
+    ({ kind, role, danger, icon }) => {
+      const { container } = render(ConfirmModalTest, {
+        props: { open: true, title: "Publish now?", confirmText: "Go", kind },
+      });
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-  });
-
-  it("renders the warning icon for kind warning", () => {
-    const { container } = render(ConfirmModalTest, {
-      props: {
-        open: true,
-        title: "Unsaved changes",
-        kind: "warning",
-      },
-    });
-
-    expect(
-      container.querySelector(".bx--confirm-modal__heading-icon"),
-    ).toBeInTheDocument();
-  });
+      expect(screen.getByRole(role)).toBeInTheDocument();
+      const confirmButton = screen.getByRole("button", { name: "Go" });
+      expect(confirmButton.classList.contains("bx--btn--danger")).toBe(danger);
+      expect(
+        container.querySelector(".bx--confirm-modal__heading-icon") !== null,
+      ).toBe(icon);
+    },
+  );
 
   it("uses the xs size by default", () => {
     render(ConfirmModalTest, {
