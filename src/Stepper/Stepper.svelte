@@ -196,7 +196,7 @@
     bind:this={panelRef}
     class:bx--stepper__panel={true}
     role="group"
-    aria-label={steps[currentIndex]}
+    aria-label={submitted ? undefined : steps[currentIndex]}
     tabindex="-1"
   >
     <slot {currentIndex} {submitted} />
