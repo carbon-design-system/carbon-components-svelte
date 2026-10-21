@@ -85,8 +85,12 @@
   let silent = false;
 
   function syncIndex() {
-    currentIndex = Math.max(0, carousel?.getActiveItem().index ?? 0);
-    selectedIndex = currentIndex;
+    // No slides yet: keep `currentIndex` and the bound `selectedIndex` so a
+    // slide count that arrives later still starts at the requested slide.
+    const index = carousel?.getActiveItem().index ?? -1;
+    if (index < 0) return;
+    currentIndex = index;
+    selectedIndex = index;
   }
 
   /** @param {number} index */
