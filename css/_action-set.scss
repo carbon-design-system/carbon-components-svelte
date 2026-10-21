@@ -14,6 +14,13 @@
 /// @access private
 /// @group components
 @mixin action-set {
+  // ccs: a container, so the set can stack by its own width (see the end).
+  // Wrapping lets a stacked button take a line of its own.
+  .#{$prefix}--action-set {
+    container-type: inline-size;
+    flex-wrap: wrap;
+  }
+
   .#{$prefix}--action-set .#{$prefix}--btn {
     @include type-style('body-compact-01');
 
@@ -182,6 +189,70 @@
   }
 }
 
+/// Stacked layout for buttons the server can't see stacked: the set stacks
+/// in JavaScript once it has counted its buttons, so until then (and
+/// without JavaScript) these rules count them with `:nth-last-child`. A
+/// `md` set of three or more buttons stacks, as does any set narrower than
+/// 10rem a button, where its labels would break a letter a line.
+/// @access private
+/// @group components
+@mixin action-set-stacked-buttons {
+  flex: 0 0 100%;
+  max-width: none;
+
+  &:not(:focus) {
+    box-shadow: 0 to-rem(-1px) 0 0 $button-separator;
+  }
+
+  &:first-child:not(:focus) {
+    box-shadow: inherit;
+  }
+
+  &.#{$prefix}--btn--primary {
+    order: 1;
+  }
+
+  &.#{$prefix}--btn--danger {
+    order: 2;
+  }
+
+  &.#{$prefix}--btn--tertiary,
+  &.#{$prefix}--btn--danger-tertiary {
+    order: 4;
+  }
+
+  &.#{$prefix}--btn--ghost,
+  &.#{$prefix}--btn--danger-ghost {
+    order: 5;
+  }
+}
+
+@mixin action-set-fit {
+  // Repeated classes: outrank the per-count and per-size widths above,
+  // which apply once the set has counted its buttons.
+  $set: ".#{$prefix}--action-set.#{$prefix}--action-set.#{$prefix}--btn-set:not(.#{$prefix}--action-set--disable-stacking)";
+
+  #{$set}.#{$prefix}--action-set--md
+    > .#{$prefix}--btn:first-child:nth-last-child(n + 3),
+  #{$set}.#{$prefix}--action-set--md
+    > .#{$prefix}--btn:first-child:nth-last-child(n + 3)
+    ~ .#{$prefix}--btn {
+    @include action-set-stacked-buttons;
+  }
+
+  @each $count, $width in (2: 20rem, 3: 30rem, 4: 40rem) {
+    @container (width < #{$width}) {
+      #{$set} > .#{$prefix}--btn:first-child:nth-last-child(n + #{$count}),
+      #{$set}
+        > .#{$prefix}--btn:first-child:nth-last-child(n + #{$count})
+        ~ .#{$prefix}--btn {
+        @include action-set-stacked-buttons;
+      }
+    }
+  }
+}
+
 @include exports("action-set") {
   @include action-set;
+  @include action-set-fit;
 }
