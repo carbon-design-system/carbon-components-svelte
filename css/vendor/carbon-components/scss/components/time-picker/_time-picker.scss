@@ -24,9 +24,9 @@
   .#{$prefix}--time-picker__select {
     justify-content: center;
 
-    &:not(:last-of-type) {
-      margin: 0 $carbon--spacing-01;
-    }
+    // ccs: 1px before each select, after the time or the select before it:
+    // the same seam as an InputGroup's (Carbon: 2px, between selects only).
+    margin-inline-start: to-rem(1px);
   }
 
   .#{$prefix}--time-picker__input {
