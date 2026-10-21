@@ -422,10 +422,13 @@
   }
 
   .#{$prefix}--btn-set .#{$prefix}--btn {
-    width: 100%;
+    // ccs: each button starts from its label's width and grows to the cap,
+    // so a set that sizes to its content never splits that width evenly
+    // and wraps the longer label; wide sets still reach equal 196px widths.
+    width: auto;
     // 196px from design kit
     max-width: to-rem(196px);
-    flex: 1 1 0; // ccs: allow shrink below max-width
+    flex: 1 1 auto;
     min-width: 0; // ccs: allow shrink below max-width
 
     // ccs: the divider sits at the inline start, `--ccs-inline-sign` flips it
