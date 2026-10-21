@@ -25,7 +25,7 @@ Stepper draws a [ProgressIndicator](/components/ProgressIndicator), so the two l
 
 ### Async
 
-`validate` can return a promise, such as for a check the server makes. Continue shows `validatingDescription` while it runs, and a second press is ignored.
+`validate` can return a promise, such as for a check the server makes. Continue shows `validatingDescription` while it runs, and a second press is ignored. If the check throws or rejects, the stepper stays on the step and `validate:error` carries the error, so a failed request can be told apart from invalid input.
 
 ```svelte
 <Stepper
