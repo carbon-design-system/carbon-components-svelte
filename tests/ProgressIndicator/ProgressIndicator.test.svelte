@@ -14,6 +14,8 @@
     disabled?: boolean;
   }> = [];
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onfocus: ((label: string) => void) | undefined = undefined;
+  export let onblur: ((label: string) => void) | undefined = undefined;
 </script>
 
 <ProgressIndicator
@@ -21,10 +23,7 @@
   {vertical}
   {spaceEqually}
   {preventChangeOnClick}
-  on:change={onchange ||
-    ((e) => {
-      console.log("change", e.detail);
-    })}
+  on:change={(e) => onchange?.(e)}
 >
   {#each steps as step (step.label)}
     <ProgressStep
@@ -33,12 +32,8 @@
       complete={step.complete}
       invalid={step.invalid}
       disabled={step.disabled}
-      on:focus={() => {
-        console.log("focus", step.label);
-      }}
-      on:blur={() => {
-        console.log("blur", step.label);
-      }}
+      on:focus={() => onfocus?.(step.label)}
+      on:blur={() => onblur?.(step.label)}
     />
   {/each}
 </ProgressIndicator>

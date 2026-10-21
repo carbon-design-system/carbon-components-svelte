@@ -5,12 +5,10 @@ import CheckmarkOutline from "carbon-icons-svelte/lib/CheckmarkOutline.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import StructuredList from "./StructuredList.test.svelte";
-import StructuredListChecked from "./StructuredListChecked.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
-import StructuredListCustomIcon from "./StructuredListCustomIcon.test.svelte";
 import StructuredListInputStandalone from "./StructuredListInputStandalone.test.svelte";
-import StructuredListMultiple from "./StructuredListMultiple.test.svelte";
-import StructuredListUnnamed from "./StructuredListUnnamed.test.svelte";
+
+const multipleProps = { selection: true, multiple: true };
 
 describe("StructuredList", () => {
   it("should render with default props", () => {
@@ -109,7 +107,9 @@ describe("StructuredList", () => {
     expect(outlinePath).toBeTruthy();
     expect(outlinePath).not.toBe(pathOf(CheckmarkFilled));
 
-    const { container } = render(StructuredListCustomIcon);
+    const { container } = render(StructuredList, {
+      props: { selection: true, icon: CheckmarkOutline },
+    });
 
     // One auto-rendered, decorative icon per selectable row.
     const icons = container.querySelectorAll("svg.bx--structured-list-svg");
@@ -135,25 +135,25 @@ describe("StructuredList", () => {
   });
 
   it("should follow the `selected` prop when the parent changes it", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     const { rerender } = render(StructuredList, {
-      props: { selection: true, selected: "row-2-value" },
+      props: { selection: true, selected: "row-2-value", onChange },
     });
 
     expect(
       screen.getByRole("radio", { checked: true }).closest("label"),
     ).toHaveTextContent("Row 2");
 
-    consoleLog.mockClear();
+    onChange.mockClear();
     await rerender({ selected: "row-1-value" });
 
     const radios = screen.getAllByRole("radio");
     expect(radios[0]).toBeChecked();
     expect(radios[1]).not.toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onChange).not.toHaveBeenCalled();
 
     await user.click(radios[1]);
-    expect(consoleLog).toHaveBeenCalledWith("change", "row-2-value");
+    expect(onChange).toHaveBeenCalledWith("row-2-value");
     expect(radios[1]).toBeChecked();
   });
 
@@ -227,7 +227,7 @@ describe("StructuredList", () => {
   });
 
   it("should group unnamed single-select inputs under one name", async () => {
-    render(StructuredListUnnamed);
+    render(StructuredList, { props: { selection: true, unnamed: true } });
 
     const radios = screen.getAllByRole("radio");
     const name = radios[0].getAttribute("name");
@@ -252,7 +252,9 @@ describe("StructuredList", () => {
   });
 
   it("should not share a name across multiple-select inputs", () => {
-    render(StructuredListMultiple);
+    render(StructuredList, {
+      props: { ...multipleProps, unnamed: true },
+    });
 
     for (const checkbox of screen.getAllByRole("checkbox")) {
       expect(checkbox).toHaveAttribute("name", "");
@@ -271,17 +273,19 @@ describe("StructuredList", () => {
   });
 
   it("should handle mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(StructuredList);
+    const onClick = vi.fn();
+    const onMouseOver = vi.fn();
+    const onMouseLeave = vi.fn();
+    render(StructuredList, { props: { onClick, onMouseOver, onMouseLeave } });
 
     const list = screen.getByRole("table");
 
     await user.click(list);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onClick).toHaveBeenCalled();
     await user.hover(list);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(onMouseOver).toHaveBeenCalled();
     await user.unhover(list);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onMouseLeave).toHaveBeenCalled();
   });
 
   it("should handle noWrap cells", () => {
@@ -306,23 +310,25 @@ describe("StructuredList", () => {
   });
 
   it("should emit change event on selection", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(StructuredList, { props: { selection: true } });
+    const onChange = vi.fn();
+    render(StructuredList, { props: { selection: true, onChange } });
 
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
 
     await user.click(screen.getAllByRole("radio")[1]);
-    expect(consoleLog).toHaveBeenCalledWith("change", "row-2-value");
+    expect(onChange).toHaveBeenCalledWith("row-2-value");
 
     await user.click(screen.getAllByRole("radio")[0]);
-    expect(consoleLog).toHaveBeenCalledWith("change", "row-1-value");
+    expect(onChange).toHaveBeenCalledWith("row-1-value");
   });
 
   it("should select a row with checked={true} on initial render without emitting change", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(StructuredListChecked);
+    const onChange = vi.fn();
+    render(StructuredList, {
+      props: { selection: true, checkedValue: "row-2-value", onChange },
+    });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onChange).not.toHaveBeenCalled();
     const radios = screen.getAllByRole("radio");
     expect(radios[0]).not.toBeChecked();
     expect(radios[1]).toBeChecked();
@@ -355,24 +361,31 @@ describe("StructuredList", () => {
   });
 
   it("should still fire the sort event when clicked in a selection list", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(StructuredList, { props: { sortable: true, selection: true } });
+    const onSort = vi.fn();
+    render(StructuredList, {
+      props: { sortable: true, selection: true, onSort },
+    });
 
     await user.click(screen.getByRole("button", { name: /sort rows/i }));
-    expect(consoleLog).toHaveBeenCalledWith("sort");
+    expect(onSort).toHaveBeenCalledTimes(1);
   });
 
   it("should switch input type and body role when `multiple` changes", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     const { container, rerender } = render(StructuredList, {
-      props: { selection: true, multiple: false, selected: "row-2-value" },
+      props: {
+        selection: true,
+        multiple: false,
+        selected: "row-2-value",
+        onChange,
+      },
     });
     const body = container.querySelector(".bx--structured-list-tbody");
 
     expect(screen.getAllByRole("radio")).toHaveLength(3);
     expect(body).toHaveAttribute("role", "radiogroup");
 
-    consoleLog.mockClear();
+    onChange.mockClear();
     await rerender({ multiple: true });
 
     const checkboxes = screen.getAllByRole("checkbox");
@@ -380,15 +393,12 @@ describe("StructuredList", () => {
     expect(screen.queryAllByRole("radio")).toHaveLength(0);
     expect(body).toHaveAttribute("role", "group");
     expect(checkboxes[1]).toBeChecked();
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onChange).not.toHaveBeenCalled();
 
     await user.click(checkboxes[0]);
-    expect(consoleLog).toHaveBeenCalledWith("change", [
-      "row-2-value",
-      "row-1-value",
-    ]);
+    expect(onChange).toHaveBeenCalledWith(["row-2-value", "row-1-value"]);
 
-    consoleLog.mockClear();
+    onChange.mockClear();
     await rerender({ multiple: false });
 
     const radios = screen.getAllByRole("radio");
@@ -397,12 +407,12 @@ describe("StructuredList", () => {
     expect(radios[1]).toBeChecked();
     expect(radios[0]).not.toBeChecked();
     expect(screen.getByTestId("value").textContent).toBe("row-2-value");
-    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it("should support multi-select via the `multiple` prop", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(StructuredListMultiple);
+    const onChange = vi.fn();
+    render(StructuredList, { props: { ...multipleProps, onChange } });
 
     const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes).toHaveLength(3);
@@ -415,7 +425,7 @@ describe("StructuredList", () => {
 
     await user.click(checkboxes[0]);
     expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
-    expect(consoleLog).toHaveBeenLastCalledWith("change", ["row-1-value"]);
+    expect(onChange).toHaveBeenLastCalledWith(["row-1-value"]);
     expect(checkboxes[0]).toBeChecked();
 
     await user.click(checkboxes[2]);
@@ -430,8 +440,8 @@ describe("StructuredList", () => {
   });
 
   it("should wrap a single `selected` value in an array in `multiple` mode", async () => {
-    const { rerender } = render(StructuredListMultiple, {
-      props: { selected: "row-1-value" },
+    const { rerender } = render(StructuredList, {
+      props: { ...multipleProps, selected: "row-1-value" },
     });
     const checkboxes = screen.getAllByRole("checkbox");
 
@@ -446,7 +456,7 @@ describe("StructuredList", () => {
   });
 
   it("should toggle a checkbox once when Enter is held down", async () => {
-    render(StructuredListMultiple);
+    render(StructuredList, { props: multipleProps });
     const checkbox = screen.getAllByRole("checkbox")[0];
 
     await fireEvent.keyDown(checkbox, { key: "Enter" });

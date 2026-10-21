@@ -13,6 +13,15 @@
   export let useSlot = false;
   export let noTitle = false;
   export let ref: ComponentProps<AccordionItem>["ref"] = null;
+  export let onClick: () => void = () => {};
+  export let onMouseover: () => void = () => {};
+  export let onMouseenter: () => void = () => {};
+  export let onMouseleave: () => void = () => {};
+  export let onItemClick: () => void = () => {};
+  export let onFocus: () => void = () => {};
+  export let onBlur: () => void = () => {};
+  export let onKeydown: (key: string) => void = () => {};
+  export let onToggle: (open: boolean) => void = () => {};
 </script>
 
 <Accordion
@@ -20,18 +29,10 @@
   {size}
   {flush}
   class={customClass}
-  on:click={() => {
-    console.log("accordion-click");
-  }}
-  on:mouseover={() => {
-    console.log("accordion-mouseover");
-  }}
-  on:mouseenter={() => {
-    console.log("accordion-mouseenter");
-  }}
-  on:mouseleave={() => {
-    console.log("accordion-mouseleave");
-  }}
+  on:click={() => onClick()}
+  on:mouseover={() => onMouseover()}
+  on:mouseenter={() => onMouseenter()}
+  on:mouseleave={() => onMouseleave()}
 >
   {#if useSlot}
     <AccordionItem class={itemClass}>
@@ -50,24 +51,11 @@
     <AccordionItem
       title="Language Translator"
       class={itemClass}
-      on:click={() => {
-        console.log("item-click");
-      }}
-      on:focus={() => {
-        console.log("item-focus");
-      }}
-      on:blur={() => {
-        console.log("item-blur");
-      }}
-      on:keydown={(e) => {
-        console.log("item-keydown", e.key);
-      }}
-      on:animationend={() => {
-        console.log("item-animationend");
-      }}
-      on:toggle={(e) => {
-        console.log("item-toggle", e.detail.open);
-      }}
+      on:click={() => onItemClick()}
+      on:focus={() => onFocus()}
+      on:blur={() => onBlur()}
+      on:keydown={(e) => onKeydown(e.key)}
+      on:toggle={(e) => onToggle(e.detail.open)}
       >3</AccordionItem
     >
   {/if}

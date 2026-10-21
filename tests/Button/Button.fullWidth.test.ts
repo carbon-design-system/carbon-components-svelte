@@ -2,19 +2,12 @@ import { render, screen } from "@testing-library/svelte";
 import ButtonFullWidth from "./Button.fullWidth.test.svelte";
 
 describe("Button fullWidth", () => {
-  it("should apply the full width class to a button", () => {
+  it.each([
+    ["button", "Full width button"],
+    ["link", "Full width link"],
+  ])("should apply the full width class to a %s", (role, name) => {
     render(ButtonFullWidth);
 
-    expect(
-      screen.getByRole("button", { name: "Full width button" }),
-    ).toHaveClass("bx--btn--full-width");
-  });
-
-  it("should apply the full width class to a link", () => {
-    render(ButtonFullWidth);
-
-    expect(screen.getByRole("link", { name: "Full width link" })).toHaveClass(
-      "bx--btn--full-width",
-    );
+    expect(screen.getByRole(role, { name })).toHaveClass("bx--btn--full-width");
   });
 });

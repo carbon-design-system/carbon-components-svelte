@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import ProgressIndicatorSkeleton from "carbon-components-svelte/ProgressIndicator/ProgressIndicatorSkeleton.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { makeSteps } from "./helpers";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
@@ -13,16 +15,7 @@ describe("ProgressIndicator", () => {
     it("should expose current, complete, and invalid state to assistive tech", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: false },
-          {
-            label: "Step 3",
-            description: "Third step",
-            complete: false,
-            invalid: true,
-          },
-        ],
+        steps: makeSteps([true, false, false], { 2: { invalid: true } }),
       });
       await tick();
 
@@ -40,12 +33,7 @@ describe("ProgressIndicator", () => {
       const onchange = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 2,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: true },
-          { label: "Step 3", description: "Third step", complete: true },
-          { label: "Step 4", description: "Fourth step", complete: false },
-        ],
+        steps: makeSteps([true, true, true, false]),
         onchange,
       });
 
@@ -56,41 +44,39 @@ describe("ProgressIndicator", () => {
       );
     });
 
-    it("should not update currentIndex when preventChangeOnClick is true", async () => {
-      const changeHandler = vi.fn();
-      render(ProgressIndicator, {
-        props: {
+    it.each([
+      [
+        "a complete step when preventChangeOnClick is true",
+        {
           currentIndex: 2,
           preventChangeOnClick: true,
-          steps: [
-            { label: "Step 1", description: "First step", complete: true },
-            { label: "Step 2", description: "Second step", complete: true },
-            { label: "Step 3", description: "Third step", complete: true },
-            { label: "Step 4", description: "Fourth step", complete: false },
-          ],
-          onchange: changeHandler,
+          steps: makeSteps([true, true, true, false]),
         },
-      });
+        "Step 1",
+      ],
+      [
+        "an incomplete step",
+        { currentIndex: 0, steps: makeSteps([true, false, false, false]) },
+        "Step 4",
+      ],
+    ])(
+      "should not dispatch change when clicking %s",
+      async (_, props, label) => {
+        const onchange = vi.fn();
+        render(ProgressIndicator, { ...props, onchange });
 
-      await user.click(screen.getByText("Step 1"));
-      expect(changeHandler).not.toHaveBeenCalled();
-    });
+        await user.click(screen.getByText(label));
+        expect(onchange).not.toHaveBeenCalled();
+      },
+    );
   });
 
   describe("Invalid and disabled states", () => {
     it("should render an invalid step as incomplete with the warning icon", () => {
       render(ProgressIndicator, {
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          {
-            label: "Step 2",
-            description: "Second step",
-            complete: false,
-            invalid: true,
-            disabled: false,
-          },
-          { label: "Step 3", description: "Third step", complete: false },
-        ],
+        steps: makeSteps([true, false, false], {
+          1: { invalid: true, disabled: false },
+        }),
       });
 
       const invalidStep = screen.getAllByRole("listitem")[1];
@@ -107,23 +93,10 @@ describe("ProgressIndicator", () => {
 
     it("should render disabled steps", () => {
       render(ProgressIndicator, {
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          {
-            label: "Step 2",
-            description: "Second step",
-            complete: false,
-            invalid: false,
-            disabled: true,
-          },
-          {
-            label: "Step 3",
-            description: "Third step",
-            complete: false,
-            invalid: false,
-            disabled: true,
-          },
-        ],
+        steps: makeSteps([true, false, false], {
+          1: { invalid: false, disabled: true },
+          2: { invalid: false, disabled: true },
+        }),
       });
 
       const disabledSteps = screen.getAllByRole("listitem").slice(1);
@@ -133,48 +106,32 @@ describe("ProgressIndicator", () => {
     });
   });
 
-  describe("Variants", () => {
-    it("should render vertical variant", () => {
-      render(ProgressIndicator, {
-        vertical: true,
-        steps: [
-          { label: "Step 1", description: "First step", complete: false },
-          { label: "Step 2", description: "Second step", complete: false },
-          { label: "Step 3", description: "Third step", complete: false },
-        ],
-      });
+  // The fixture's `steps` defaults to `[]`, so both accept the same props.
+  describe.each<[string, typeof ProgressIndicator]>([
+    ["ProgressIndicator", ProgressIndicator],
+    [
+      "ProgressIndicatorSkeleton",
+      ProgressIndicatorSkeleton as unknown as typeof ProgressIndicator,
+    ],
+  ])("%s variants", (_, Component) => {
+    it.each([
+      [{}, { spaceEqual: false, vertical: false }],
+      [{ spaceEqually: true }, { spaceEqual: true, vertical: false }],
+      [{ vertical: true }, { spaceEqual: false, vertical: true }],
+      [
+        { vertical: true, spaceEqually: true },
+        { spaceEqual: false, vertical: true },
+      ],
+    ])("props %j -> classes %j", (props, expected) => {
+      render(Component, { props });
 
-      const progressIndicator = screen.getByRole("list");
-      expect(progressIndicator).toHaveClass("bx--progress--vertical");
-    });
-
-    it("should render with equal spacing", () => {
-      render(ProgressIndicator, {
-        spaceEqually: true,
-        steps: [
-          { label: "Step 1", description: "First step", complete: false },
-          { label: "Step 2", description: "Second step", complete: false },
-          { label: "Step 3", description: "Third step", complete: false },
-        ],
-      });
-
-      const progressIndicator = screen.getByRole("list");
-      expect(progressIndicator).toHaveClass("bx--progress--space-equal");
-    });
-
-    it("should not apply equal spacing in vertical variant", () => {
-      render(ProgressIndicator, {
-        vertical: true,
-        spaceEqually: true,
-        steps: [
-          { label: "Step 1", description: "First step", complete: false },
-          { label: "Step 2", description: "Second step", complete: false },
-          { label: "Step 3", description: "Third step", complete: false },
-        ],
-      });
-
-      const progressIndicator = screen.getByRole("list");
-      expect(progressIndicator).not.toHaveClass("bx--progress--space-equal");
+      const list = screen.getByRole("list");
+      expect(list.classList.contains("bx--progress--space-equal")).toBe(
+        expected.spaceEqual,
+      );
+      expect(list.classList.contains("bx--progress--vertical")).toBe(
+        expected.vertical,
+      );
     });
   });
 
@@ -182,11 +139,7 @@ describe("ProgressIndicator", () => {
     it("should have correct button attributes for different states", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: false },
-          { label: "Step 3", description: "Third step", complete: false },
-        ],
+        steps: makeSteps([true, false, false]),
       });
       await tick();
 
@@ -207,36 +160,9 @@ describe("ProgressIndicator", () => {
       expect(buttons[2]).toHaveClass("bx--progress-step-button--unclickable");
     });
 
-    it("should not dispatch change when clicking an incomplete step", async () => {
-      const changeHandler = vi.fn();
-      render(ProgressIndicator, {
-        props: {
-          currentIndex: 0,
-          steps: [
-            { label: "Step 1", description: "First step", complete: true },
-            { label: "Step 2", description: "Second step", complete: false },
-            { label: "Step 3", description: "Third step", complete: false },
-            { label: "Step 4", description: "Fourth step", complete: false },
-          ],
-          onchange: changeHandler,
-        },
-      });
-
-      await user.click(screen.getByText("Step 4"));
-      expect(changeHandler).not.toHaveBeenCalled();
-    });
-
     it("should have correct button attributes for disabled state", () => {
       render(ProgressIndicator, {
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          {
-            label: "Step 2",
-            description: "Second step",
-            complete: false,
-            disabled: true,
-          },
-        ],
+        steps: makeSteps([true, false], { 1: { disabled: true } }),
       });
 
       const disabledButton = screen.getAllByRole("button")[1];
@@ -258,33 +184,29 @@ describe("ProgressIndicator", () => {
     });
 
     it("should forward focus and blur events from step button", () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onfocus = vi.fn();
+      const onblur = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 1,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: false },
-        ],
+        steps: makeSteps([true, false]),
+        onfocus,
+        onblur,
       });
 
       const completeStepButton = screen.getAllByRole("button")[0];
       completeStepButton.focus();
-      expect(consoleLog).toHaveBeenCalledWith("focus", "Step 1");
+      expect(onfocus).toHaveBeenCalledWith("Step 1");
 
       completeStepButton.blur();
-      expect(consoleLog).toHaveBeenCalledWith("blur", "Step 1");
+      expect(onblur).toHaveBeenCalledWith("Step 1");
     });
 
     it("should dispatch change exactly once per keypress on a complete step", async () => {
-      const changeHandler = vi.fn();
+      const onchange = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 2,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: true },
-          { label: "Step 3", description: "Third step", complete: false },
-        ],
-        onchange: changeHandler,
+        steps: makeSteps([true, true, false]),
+        onchange,
       });
 
       const completeStepButton = screen.getAllByRole("button")[0];
@@ -292,24 +214,21 @@ describe("ProgressIndicator", () => {
       expect(completeStepButton).toHaveFocus();
 
       await user.keyboard("{Enter}");
-      expect(changeHandler).toHaveBeenCalledTimes(1);
-      expect(changeHandler).toHaveBeenLastCalledWith(
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange).toHaveBeenLastCalledWith(
         expect.objectContaining({ detail: 0 }),
       );
 
       await user.keyboard("{ArrowRight}");
       await user.keyboard(" ");
-      expect(changeHandler).toHaveBeenCalledTimes(2);
+      expect(onchange).toHaveBeenCalledTimes(2);
     });
 
     it("does not dispatch change for the current step", async () => {
       const onchange = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 1,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: true },
-        ],
+        steps: makeSteps([true, true]),
         onchange,
       });
 
@@ -323,22 +242,16 @@ describe("ProgressIndicator", () => {
   });
 
   describe("Keyboard navigation", () => {
-    const fourSteps = [
-      { label: "Step 1", description: "First step", complete: true },
-      { label: "Step 2", description: "Second step", complete: false },
-      { label: "Step 3", description: "Third step", complete: false },
-      {
-        label: "Step 4",
-        description: "Fourth step",
-        complete: false,
-        disabled: true,
-      },
-    ];
+    const fourSteps = makeSteps([true, false, false, false], {
+      3: { disabled: true },
+    });
 
-    it("moves focus with ArrowLeft/ArrowRight, skips the disabled step, and wraps at the ends", async () => {
+    it("moves focus with ArrowLeft/ArrowRight, skips the disabled step, wraps at the ends, and never dispatches change", async () => {
+      const onchange = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 1,
         steps: fourSteps,
+        onchange,
       });
 
       const buttons = screen.getAllByRole("button");
@@ -362,6 +275,8 @@ describe("ProgressIndicator", () => {
       expect(buttons[2]).toHaveFocus();
       await user.keyboard("{ArrowRight}");
       expect(buttons[0]).toHaveFocus();
+
+      expect(onchange).not.toHaveBeenCalled();
     });
 
     it.each(["altKey", "ctrlKey", "metaKey"])(
@@ -407,36 +322,20 @@ describe("ProgressIndicator", () => {
       await user.keyboard("{ArrowRight}");
       expect(buttons[1]).toHaveFocus();
     });
-
-    it("does not dispatch change from arrow movement alone", async () => {
-      const changeHandler = vi.fn();
-      render(ProgressIndicator, {
-        currentIndex: 1,
-        steps: fourSteps,
-        onchange: changeHandler,
-      });
-
-      await user.tab();
-      await user.keyboard("{ArrowRight}");
-      await user.keyboard("{ArrowLeft}");
-      await user.keyboard("{End}");
-      await user.keyboard("{Home}");
-
-      expect(changeHandler).not.toHaveBeenCalled();
-    });
   });
 
   describe("Conditional step rendering", () => {
     it("should remove unmounted steps and re-index, so change emits the correct index", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onchange = vi.fn();
       const { rerender } = render(ProgressIndicatorConditional, {
         showOptional: true,
         currentIndex: 0,
+        onchange,
       });
 
       expect(screen.getAllByRole("listitem")).toHaveLength(3);
 
-      await rerender({ showOptional: false, currentIndex: 0 });
+      await rerender({ showOptional: false, currentIndex: 0, onchange });
 
       await waitFor(() => {
         expect(screen.getAllByRole("listitem")).toHaveLength(2);
@@ -444,7 +343,9 @@ describe("ProgressIndicator", () => {
 
       // The remaining "Step 3" must now report index 1, not 2.
       await user.click(screen.getByText("Step 3"));
-      expect(consoleLog).toHaveBeenLastCalledWith("change", 1);
+      expect(onchange).toHaveBeenLastCalledWith(
+        expect.objectContaining({ detail: 1 }),
+      );
     });
 
     it.each([

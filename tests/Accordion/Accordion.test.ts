@@ -1,15 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
 import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionDisabledOpen from "./Accordion.disabled-open.test.svelte";
 import AccordionLazy from "./Accordion.lazy.test.svelte";
-import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
-import AccordionTypeToggle from "./Accordion.type-toggle.test.svelte";
 
 describe("Accordion", () => {
   const itemIsDisabled = (name: string | RegExp) => {
@@ -76,7 +73,7 @@ describe("Accordion", () => {
   });
 
   it("programmatically expands and collapses all items", async () => {
-    render(AccordionProgrammatic);
+    render(AccordionBatchDisable);
 
     itemIsCollapsed(/Natural Language Classifier/);
     itemIsCollapsed(/Natural Language Understanding/);
@@ -221,118 +218,124 @@ describe("Accordion", () => {
     );
   });
 
-  it("applies left-aligned chevron styling", () => {
-    render(Accordion, { props: { align: "start" } });
+  it.each([
+    {
+      name: "align start",
+      props: { align: "start" as const },
+      has: ["bx--accordion--start"],
+      not: ["bx--accordion--end"],
+    },
+    {
+      name: "no align (defaults to end)",
+      props: {},
+      has: ["bx--accordion--end"],
+      not: ["bx--accordion--start"],
+    },
+    {
+      name: "size sm",
+      props: { size: "sm" as const },
+      has: ["bx--accordion--sm"],
+    },
+    {
+      name: "size xl",
+      props: { size: "xl" as const },
+      has: ["bx--accordion--xl"],
+    },
+    { name: "flush", props: { flush: true }, has: ["bx--accordion--flush"] },
+    {
+      name: "flush with align start",
+      props: { flush: true, align: "start" as const },
+      not: ["bx--accordion--flush"],
+    },
+  ] satisfies {
+    name: string;
+    props: Record<string, unknown>;
+    has?: string[];
+    not?: string[];
+  }[])(
+    "applies the expected classes: $name",
+    ({ props, has = [], not = [] }) => {
+      render(Accordion, { props });
 
-    const accordion = screen.getByRole("list");
-    expect(accordion).toHaveAttribute(
-      "class",
-      expect.stringContaining("bx--accordion--start"),
-    );
-    expect(accordion).not.toHaveAttribute(
-      "class",
-      expect.stringContaining("bx--accordion--end"),
-    );
-  });
-
-  it("defaults to right-aligned chevron when no align prop is specified", () => {
-    render(Accordion);
-
-    const accordion = screen.getByRole("list");
-    expect(accordion).toHaveAttribute(
-      "class",
-      expect.stringContaining("bx--accordion--end"),
-    );
-    expect(accordion).not.toHaveAttribute(
-      "class",
-      expect.stringContaining("bx--accordion--start"),
-    );
-  });
+      const accordion = screen.getByRole("list");
+      for (const cls of has) expect(accordion).toHaveClass(cls);
+      for (const cls of not) expect(accordion).not.toHaveClass(cls);
+    },
+  );
 
   it.each([
-    ["sm", "bx--accordion--sm"],
-    ["xl", "bx--accordion--xl"],
-  ] as const)("should support %s size", (size, expectedClass) => {
-    render(Accordion, { props: { size } });
+    {
+      name: "Accordion",
+      props: { customClass: "custom-accordion" },
+      getElement: () => screen.getByRole("list"),
+      custom: "custom-accordion",
+      base: "bx--accordion",
+    },
+    {
+      name: "AccordionItem",
+      props: { itemClass: "custom-item" },
+      getElement: () => screen.getByText("Language Translator").closest("li"),
+      custom: "custom-item",
+      base: "bx--accordion__item",
+    },
+  ])(
+    "should apply custom class to $name",
+    ({ props, getElement, custom, base }) => {
+      render(Accordion, { props });
 
-    const accordion = screen.getByRole("list");
-    expect(accordion).toHaveClass(expectedClass);
-  });
-
-  it("applies flush class", () => {
-    render(Accordion, { props: { flush: true } });
-
-    const accordion = screen.getByRole("list");
-    expect(accordion).toHaveClass("bx--accordion--flush");
-  });
-
-  it("does not apply flush class when align is start", () => {
-    render(Accordion, { props: { flush: true, align: "start" } });
-
-    const accordion = screen.getByRole("list");
-    expect(accordion).not.toHaveClass("bx--accordion--flush");
-  });
-
-  it("should apply custom class to Accordion", () => {
-    render(Accordion, { props: { customClass: "custom-accordion" } });
-
-    const accordion = screen.getByRole("list");
-    expect(accordion).toHaveClass("custom-accordion");
-    expect(accordion).toHaveClass("bx--accordion");
-  });
-
-  it("should apply custom class to AccordionItem", () => {
-    render(Accordion, { props: { itemClass: "custom-item" } });
-
-    const item = screen.getByText("Language Translator").closest("li");
-    expect(item).toHaveClass("custom-item");
-    expect(item).toHaveClass("bx--accordion__item");
-  });
+      const element = getElement();
+      expect(element).toHaveClass(custom);
+      expect(element).toHaveClass(base);
+    },
+  );
 
   it("should handle click events on Accordion", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Accordion);
+    const onClick = vi.fn();
+    render(Accordion, { props: { onClick } });
 
     const accordion = screen.getByRole("list");
     await user.click(accordion);
 
-    expect(consoleLog).toHaveBeenCalledWith("accordion-click");
+    expect(onClick).toHaveBeenCalled();
   });
 
   it("should handle mouse events on Accordion", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Accordion);
+    const onMouseenter = vi.fn();
+    const onMouseover = vi.fn();
+    const onMouseleave = vi.fn();
+    render(Accordion, { props: { onMouseenter, onMouseover, onMouseleave } });
 
     const accordion = screen.getByRole("list");
     await user.hover(accordion);
 
-    expect(consoleLog).toHaveBeenCalledWith("accordion-mouseenter");
-    expect(consoleLog).toHaveBeenCalledWith("accordion-mouseover");
+    expect(onMouseenter).toHaveBeenCalled();
+    expect(onMouseover).toHaveBeenCalled();
 
     await user.unhover(accordion);
-    expect(consoleLog).toHaveBeenCalledWith("accordion-mouseleave");
+    expect(onMouseleave).toHaveBeenCalled();
   });
 
   it("should handle click events on AccordionItem", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Accordion);
+    const onItemClick = vi.fn();
+    render(Accordion, { props: { onItemClick } });
 
     const item = screen.getByText("Language Translator");
     await user.click(item);
 
-    expect(consoleLog).toHaveBeenCalledWith("item-click");
+    expect(onItemClick).toHaveBeenCalled();
   });
 
   it("should forward focus and blur from the heading button", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Accordion);
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(Accordion, { props: { onFocus, onBlur } });
 
     const button = screen.getByRole("button", { name: /Language Translator/ });
     button.focus();
-    expect(consoleLog).toHaveBeenCalledWith("item-focus");
+    expect(onFocus).toHaveBeenCalled();
 
     button.blur();
-    expect(consoleLog).toHaveBeenCalledWith("item-blur");
+    expect(onBlur).toHaveBeenCalled();
   });
 
   it("should render title slot", () => {
@@ -349,8 +352,8 @@ describe("Accordion", () => {
   });
 
   it("should forward Escape keydown without closing the item", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Accordion);
+    const onKeydown = vi.fn();
+    render(Accordion, { props: { onKeydown } });
 
     const item = screen.getByText("Language Translator");
     await user.click(item);
@@ -358,7 +361,7 @@ describe("Accordion", () => {
     itemIsExpanded(/Language Translator/);
 
     await user.keyboard("{Escape}");
-    expect(consoleLog).toHaveBeenCalledWith("item-keydown", "Escape");
+    expect(onKeydown).toHaveBeenCalledWith("Escape");
 
     itemIsExpanded(/Language Translator/);
   });
@@ -411,33 +414,35 @@ describe("Accordion", () => {
   });
 
   it('closes the extra open panel when type changes from "multiple" to "single"', async () => {
-    const { rerender } = render(AccordionTypeToggle, {
-      props: { type: "multiple" },
+    const { rerender } = render(AccordionSingle, {
+      props: { type: "multiple", count: 2, open: true },
     });
 
-    itemIsExpanded(/First/);
-    itemIsExpanded(/Second/);
+    itemIsExpanded(/Natural Language Classifier/);
+    itemIsExpanded(/Natural Language Understanding/);
 
     await rerender({ type: "single" });
 
-    itemIsExpanded(/First/);
-    itemIsCollapsed(/Second/);
+    itemIsExpanded(/Natural Language Classifier/);
+    itemIsCollapsed(/Natural Language Understanding/);
   });
 
   it("should defer mounting panel content until first opened when lazy", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(AccordionLazy, { props: { lazy: true, open: false } });
+    const onContentMount = vi.fn();
+    render(AccordionLazy, {
+      props: { lazy: true, open: false, onContentMount },
+    });
 
     expect(screen.queryByText("Lazy panel content")).not.toBeInTheDocument();
-    expect(consoleLog).not.toHaveBeenCalledWith("lazy-content-mounted");
+    expect(onContentMount).not.toHaveBeenCalled();
 
     await user.click(
       screen.getByRole("button", { name: /Natural Language Classifier/ }),
     );
 
     expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
-    expect(consoleLog).toHaveBeenCalledWith("lazy-content-mounted");
-    consoleLog.mockClear();
+    expect(onContentMount).toHaveBeenCalled();
+    onContentMount.mockClear();
 
     // Collapsing keeps the content mounted (no remount on re-expand).
     await user.click(
@@ -448,20 +453,20 @@ describe("Accordion", () => {
     );
 
     expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
-    expect(consoleLog).not.toHaveBeenCalledWith("lazy-content-mounted");
+    expect(onContentMount).not.toHaveBeenCalled();
   });
 
-  it("should mount panel content immediately when lazy is false", () => {
-    render(AccordionLazy, { props: { lazy: false, open: false } });
+  it.each([
+    { lazy: false, open: false },
+    { lazy: true, open: true },
+  ])(
+    "should mount panel content immediately (lazy=$lazy, open=$open)",
+    ({ lazy, open }) => {
+      render(AccordionLazy, { props: { lazy, open } });
 
-    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
-  });
-
-  it("should mount panel content immediately when lazy item starts open", () => {
-    render(AccordionLazy, { props: { lazy: true, open: true } });
-
-    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
-  });
+      expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+    },
+  );
 
   it("names an open panel as a region labelled by its header button", async () => {
     render(Accordion);
@@ -491,10 +496,8 @@ describe("Accordion", () => {
     expect(content).not.toHaveAttribute("role", "region");
   });
 
-  it("does not mount a disabled item as open", async () => {
+  it("does not mount a disabled item as open", () => {
     render(AccordionDisabledOpen, { props: { open: true, disabled: true } });
-
-    await tick();
 
     const item = screen.getByText("Natural Language Classifier").closest("li");
     expect(item).not.toHaveClass("bx--accordion__item--active");
@@ -538,38 +541,34 @@ describe("Accordion", () => {
   });
 
   it("should dispatch toggle with the next open state on click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Accordion);
+    const onToggle = vi.fn();
+    render(Accordion, { props: { onToggle } });
 
     const item = screen.getByText("Language Translator");
 
     await user.click(item);
-    expect(consoleLog).toHaveBeenCalledWith("item-toggle", true);
+    expect(onToggle).toHaveBeenLastCalledWith(true);
 
     await user.click(item);
-    expect(consoleLog).toHaveBeenCalledWith("item-toggle", false);
+    expect(onToggle).toHaveBeenLastCalledWith(false);
   });
 
   it("should not dispatch toggle when mounted open", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(AccordionLazy, { props: { open: true } });
+    const onToggle = vi.fn();
+    render(AccordionLazy, { props: { open: true, onToggle } });
 
-    expect(consoleLog).not.toHaveBeenCalledWith(
-      "item-toggle",
-      expect.anything(),
-    );
+    expect(onToggle).not.toHaveBeenCalled();
   });
 
   it("should not dispatch toggle when open changes via a parent-driven prop update", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { rerender } = render(AccordionLazy, { props: { open: false } });
+    const onToggle = vi.fn();
+    const { rerender } = render(AccordionLazy, {
+      props: { open: false, onToggle },
+    });
 
     await rerender({ open: true });
     await rerender({ open: false });
 
-    expect(consoleLog).not.toHaveBeenCalledWith(
-      "item-toggle",
-      expect.anything(),
-    );
+    expect(onToggle).not.toHaveBeenCalled();
   });
 });

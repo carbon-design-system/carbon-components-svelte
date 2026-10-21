@@ -8,24 +8,16 @@ import ThemeComponent, {
 } from "carbon-components-svelte/Theme/Theme.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { setupStorageEventMock } from "../utils/storage-mocks";
 import { user } from "../utils/user";
 import Theme from "./Theme.test.svelte";
-import ThemeDropdown from "./ThemeDropdown.test.svelte";
-import ThemeDropdownCustom from "./ThemeDropdownCustom.test.svelte";
-import ThemeSelect from "./ThemeSelect.test.svelte";
-import ThemeSelectCustom from "./ThemeSelectCustom.test.svelte";
-import ThemeSelectDynamic from "./ThemeSelectDynamic.test.svelte";
-import ThemeSelectExported from "./ThemeSelectExported.svelte";
-import ThemeToggle from "./ThemeToggle.test.svelte";
-import ThemeToggleCustom from "./ThemeToggleCustom.test.svelte";
 
 describe("Theme", () => {
   let documentMock: {
     setAttribute: ReturnType<typeof vi.spyOn>;
     style: { setProperty: ReturnType<typeof vi.spyOn> };
   };
-  let consoleLog: Console["log"];
-  let localStorageMock: Record<string, string>;
+  const { setMockItem } = setupStorageEventMock();
 
   beforeEach(() => {
     documentMock = {
@@ -40,37 +32,15 @@ describe("Theme", () => {
         ) as unknown as ReturnType<typeof vi.spyOn>,
       },
     };
-    consoleLog = vi.spyOn(console, "log");
-    localStorageMock = {};
-
-    vi.stubGlobal("localStorage", {
-      getItem: vi.fn((key) => localStorageMock[key] || null),
-      setItem: vi.fn((key, value) => {
-        localStorageMock[key] = value;
-      }),
-      removeItem: vi.fn((key) => {
-        delete localStorageMock[key];
-      }),
-      clear: vi.fn(() => {
-        localStorageMock = {};
-      }),
-      length: 0,
-      key: vi.fn(),
-    });
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.unstubAllGlobals();
-    localStorageMock = {};
   });
 
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2530
   it("does not fire update event on initial render", () => {
-    render(Theme);
+    const onUpdate = vi.fn();
+    render(Theme, { props: { onUpdate } });
 
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("should set default theme to white", () => {
@@ -93,7 +63,8 @@ describe("Theme", () => {
   });
 
   it("should update theme attribute and color-scheme when theme changes", async () => {
-    const { rerender } = render(Theme);
+    const onUpdate = vi.fn();
+    const { rerender } = render(Theme, { props: { onUpdate } });
 
     expect(documentMock.style.setProperty).toHaveBeenCalledWith(
       "color-scheme",
@@ -108,7 +79,7 @@ describe("Theme", () => {
       "color-scheme",
       "dark",
     );
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
+    expect(onUpdate).toHaveBeenCalledWith({ theme: "g100" });
   });
 
   it("should apply custom tokens", async () => {
@@ -152,13 +123,14 @@ describe("Theme", () => {
   });
 
   it("does not fire update event when loading a persisted theme on mount", async () => {
-    localStorageMock.theme = "g90";
+    setMockItem("theme", "g90");
+    const onUpdate = vi.fn();
 
-    render(Theme, { props: { persist: true } });
+    render(Theme, { props: { persist: true, onUpdate } });
     await tick();
 
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g90");
-    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("should warn on invalid theme", async () => {
@@ -173,78 +145,158 @@ describe("Theme", () => {
     );
   });
 
-  it("should render toggle when render prop is set to toggle", async () => {
-    render(ThemeToggle);
+  describe.each<{
+    name: string;
+    props: Partial<ComponentProps<Theme>>;
+    getControl: () => HTMLElement;
+    /** Picks `theme` through the control (toggle ignores it and flips). */
+    pick: (control: HTMLElement, theme: CarbonTheme) => Promise<void>;
+    /** Asserts the control reflects `theme`. */
+    expectShows: (control: HTMLElement, theme: CarbonTheme) => void;
+    /** The themes picked in order, starting from "white". */
+    picks: [CarbonTheme, CarbonTheme];
+    /** Reads the rendered options, when the render mode lists them. */
+    readOptions?: (control: HTMLElement) => Promise<string[]>;
+    expectedOptions?: string[];
+  }>([
+    {
+      name: "toggle",
+      props: { render: "toggle" },
+      getControl: () => screen.getByLabelText("Dark mode"),
+      pick: (control) => user.click(control),
+      expectShows: (control, theme) =>
+        theme === "g100"
+          ? expect(control).toBeChecked()
+          : expect(control).not.toBeChecked(),
+      picks: ["g100", "white"],
+    },
+    {
+      name: "custom toggle",
+      props: {
+        render: "toggle",
+        toggle: {
+          themes: ["g10", "g80"],
+          labelA: "Enable dark mode",
+          labelB: "Enable dark mode",
+          hideLabel: true,
+          size: "sm",
+        },
+      },
+      getControl: () => screen.getByRole("switch"),
+      pick: () => user.click(screen.getAllByText("Enable dark mode")[0]),
+      expectShows: (control, theme) =>
+        theme === "g80"
+          ? expect(control).toBeChecked()
+          : expect(control).not.toBeChecked(),
+      picks: ["g80", "g10"],
+    },
+    {
+      name: "select",
+      props: { render: "select" },
+      getControl: () => screen.getByLabelText("Themes"),
+      pick: (control, theme) => user.selectOptions(control, theme),
+      expectShows: (control, theme) => expect(control).toHaveValue(theme),
+      picks: ["g100", "white"],
+    },
+    {
+      name: "custom select",
+      props: {
+        render: "select",
+        select: {
+          themes: ["white", "g90", "g100"],
+          labelText: "Select a theme",
+          inline: true,
+        },
+      },
+      getControl: () => screen.getByLabelText("Select a theme"),
+      pick: (control, theme) => user.selectOptions(control, theme),
+      expectShows: (control, theme) => expect(control).toHaveValue(theme),
+      picks: ["g100", "white"],
+      readOptions: async (control) =>
+        within(control)
+          .getAllByRole("option")
+          .map((option) => option.getAttribute("value") ?? ""),
+      expectedOptions: ["white", "g90", "g100"],
+    },
+    {
+      name: "dropdown",
+      props: { render: "dropdown" },
+      getControl: () => screen.getByLabelText("Themes"),
+      pick: async (control, theme) => {
+        await user.click(control);
+        await user.click(screen.getByText(themes[theme]));
+      },
+      expectShows: (control, theme) =>
+        expect(control).toHaveTextContent(themes[theme]),
+      picks: ["g100", "white"],
+    },
+    {
+      name: "custom dropdown",
+      props: {
+        render: "dropdown",
+        dropdown: {
+          themes: ["white", "g90", "g100"],
+          labelText: "Select a theme",
+          type: "inline",
+        },
+      },
+      getControl: () => screen.getByLabelText("Select a theme"),
+      pick: async (control, theme) => {
+        await user.click(control);
+        await user.click(screen.getByText(themes[theme]));
+      },
+      expectShows: (control, theme) =>
+        expect(control).toHaveTextContent(themes[theme]),
+      picks: ["g100", "white"],
+      readOptions: async (control) => {
+        await user.click(control);
+        const options = screen
+          .getAllByRole("option")
+          .map((option) => option.textContent?.trim() ?? "");
+        await user.click(control);
+        return options;
+      },
+      expectedOptions: ["White", "Gray 90", "Gray 100"],
+    },
+  ])(
+    "render $name",
+    ({
+      props,
+      getControl,
+      pick,
+      expectShows,
+      picks,
+      readOptions,
+      expectedOptions,
+    }) => {
+      it("switches the theme through the control", async () => {
+        const onUpdate = vi.fn();
+        render(Theme, { props: { ...props, onUpdate } });
 
-    const toggle = screen.getByLabelText("Dark mode");
-    expect(toggle).toHaveAttribute("type", "checkbox");
+        const control = getControl();
+        expectShows(control, "white");
+        if (readOptions) {
+          expect(await readOptions(control)).toEqual(expectedOptions);
+        }
 
-    await user.click(toggle);
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
-
-    await user.click(toggle);
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
-  });
-
-  it("should render custom toggle when render prop is set to toggle and custom toggle options are provided", async () => {
-    render(ThemeToggleCustom);
-
-    const checkbox = screen.getByRole("switch");
-    expect(checkbox).not.toBeChecked();
-
-    const toggle = screen.getAllByText("Enable dark mode")[0];
-
-    await user.click(toggle);
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g80" });
-    expect(checkbox).toBeChecked();
-
-    await user.click(toggle);
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g10" });
-    expect(checkbox).not.toBeChecked();
-  });
-
-  it("should render select when render prop is set to select", async () => {
-    render(ThemeSelect);
-
-    const select = screen.getByLabelText("Themes");
-    expect(select).toHaveValue("white");
-
-    await user.selectOptions(select, "g100");
-    expect(select).toHaveValue("g100");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
-
-    await user.selectOptions(select, "white");
-    expect(select).toHaveValue("white");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
-  });
-
-  it("should render custom select when render prop is set to select and custom select options are provided", async () => {
-    render(ThemeSelectCustom);
-
-    const select = screen.getByLabelText("Select a theme");
-    expect(
-      within(select)
-        .getAllByRole("option")
-        .map((option) => option.getAttribute("value")),
-    ).toEqual(["white", "g90", "g100"]);
-    expect(select).toHaveValue("white");
-
-    await user.selectOptions(select, "g100");
-    expect(select).toHaveValue("g100");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
-
-    await user.selectOptions(select, "white");
-    expect(select).toHaveValue("white");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
-  });
+        const step = async (theme: CarbonTheme) => {
+          await pick(control, theme);
+          expectShows(control, theme);
+          expect(onUpdate).toHaveBeenLastCalledWith({ theme });
+        };
+        await step(picks[0]);
+        await step(picks[1]);
+      });
+    },
+  );
 
   it("should allow using exported themes const to build custom select", async () => {
     const customThemeKeys = Object.keys(themes) as CarbonTheme[];
 
-    render(ThemeSelectDynamic, {
+    render(Theme, {
       props: {
-        themes: customThemeKeys,
-        labelText: "Available themes",
+        render: "select",
+        select: { themes: customThemeKeys, labelText: "Available themes" },
       },
     });
 
@@ -262,7 +314,16 @@ describe("Theme", () => {
   });
 
   it("should allow using subset of exported themes", async () => {
-    render(ThemeSelectExported);
+    const lightThemes = (Object.keys(themes) as CarbonTheme[]).filter((theme) =>
+      ["white", "g10"].includes(theme),
+    );
+
+    render(Theme, {
+      props: {
+        render: "select",
+        select: { themes: lightThemes, labelText: "Light themes" },
+      },
+    });
 
     const select = screen.getByLabelText("Light themes");
 
@@ -277,43 +338,6 @@ describe("Theme", () => {
     expect(
       within(select).getByRole("option", { selected: true }),
     ).toHaveTextContent(themes.g10);
-  });
-
-  it("should render dropdown when render prop is set to dropdown", async () => {
-    render(ThemeDropdown);
-
-    const button = screen.getByLabelText("Themes");
-    expect(button).toHaveTextContent("White");
-
-    await user.click(button);
-    await user.click(screen.getByText("Gray 100"));
-    expect(button).toHaveTextContent("Gray 100");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
-
-    await user.click(button);
-    await user.click(screen.getByText("White"));
-    expect(button).toHaveTextContent("White");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
-  });
-
-  it("should render custom dropdown when render prop is set to dropdown and custom dropdown options are provided", async () => {
-    render(ThemeDropdownCustom);
-
-    const button = screen.getByLabelText("Select a theme");
-    expect(button).toHaveTextContent("White");
-
-    await user.click(button);
-    expect(
-      screen.getAllByRole("option").map((option) => option.textContent?.trim()),
-    ).toEqual(["White", "Gray 90", "Gray 100"]);
-    await user.click(screen.getByText("Gray 100"));
-    expect(button).toHaveTextContent("Gray 100");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
-
-    await user.click(button);
-    await user.click(screen.getByText("White"));
-    expect(button).toHaveTextContent("White");
-    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
 
   it.each([

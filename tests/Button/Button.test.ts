@@ -7,40 +7,33 @@ import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonLoading from "./ButtonLoading.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
+import { expectInlineTooltip } from "./helpers";
 
 describe("Button", () => {
-  it("should render with various kinds", () => {
+  it.each([
+    "primary",
+    "secondary",
+    "tertiary",
+    "ghost",
+    "danger",
+    "danger-tertiary",
+    "danger-ghost",
+  ])("should render the %s kind", (kind) => {
     render(Button);
 
-    const kinds = [
-      "primary",
-      "secondary",
-      "tertiary",
-      "ghost",
-      "danger",
-      "danger-tertiary",
-      "danger-ghost",
-    ];
-
-    for (const kind of kinds) {
-      const button = screen.getByText(kind);
-      expect(button.closest("button")).toHaveClass(`bx--btn--${kind}`);
-    }
+    const button = screen.getByText(kind);
+    expect(button.closest("button")).toHaveClass(`bx--btn--${kind}`);
   });
 
-  it("should render with different sizes", () => {
+  it.each([
+    ["field", "bx--btn--field"],
+    ["small", "bx--btn--sm"],
+  ])("should render the %s size", (size, className) => {
     render(Button);
 
-    const sizes = {
-      field: "bx--btn--field",
-      small: "bx--btn--sm",
-    };
-
-    for (const [size, className] of Object.entries(sizes)) {
-      const buttons = screen.getAllByText(new RegExp(`${size}`, "i"));
-      for (const button of buttons) {
-        expect(button.closest("button")).toHaveClass(className);
-      }
+    const buttons = screen.getAllByText(new RegExp(`${size}`, "i"));
+    for (const button of buttons) {
+      expect(button.closest("button")).toHaveClass(className);
     }
   });
 
@@ -50,10 +43,7 @@ describe("Button", () => {
     const iconButton = screen.getByText("Tooltip text").parentElement;
     assert(iconButton);
     expect(iconButton).toHaveClass("bx--btn--icon-only");
-    expect(iconButton).toHaveClass("bx--tooltip__trigger");
-    expect(iconButton).toHaveClass("bx--tooltip--a11y");
-    expect(iconButton).toHaveClass("bx--btn--icon-only--bottom");
-    expect(iconButton).toHaveClass("bx--tooltip--align-center");
+    expectInlineTooltip(iconButton, true);
   });
 
   it("should render as link when href is provided", () => {
@@ -118,13 +108,12 @@ describe("Button", () => {
   });
 
   it("should handle click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Button);
+    const onClick = vi.fn();
+    render(Button, { props: { onClick } });
 
     const button = screen.getByTestId("btn");
     await user.click(button);
-    expect(consoleLog).toHaveBeenCalledWith("click");
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
   it("should render with icon", () => {
@@ -135,7 +124,7 @@ describe("Button", () => {
     expect(icon).toBeInTheDocument();
   });
 
-  it("should not set aria-label on the icon (relies on assistive text)", () => {
+  it("should label an icon-only button through its assistive text, not the icon", () => {
     render(Button);
 
     const btnA = screen.getByTestId("btn-icon-a");
@@ -143,12 +132,7 @@ describe("Button", () => {
     assert(icon);
     expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(icon).not.toHaveAttribute("aria-label");
-  });
 
-  it("should set pointer-events to none on assistive text for icon-only buttons", () => {
-    render(Button);
-
-    const btnA = screen.getByTestId("btn-icon-a");
     const assistiveText = btnA.querySelector(".bx--assistive-text");
     assert(assistiveText instanceof HTMLElement);
     expect(assistiveText.style.pointerEvents).toBe("none");
@@ -196,10 +180,7 @@ describe("Button", () => {
     const iconButton = screen.getByTestId("btn-icon-only-hide-tooltip");
     expect(iconButton).toHaveClass("bx--btn--icon-only");
 
-    expect(iconButton).not.toHaveClass("bx--tooltip__trigger");
-    expect(iconButton).not.toHaveClass("bx--tooltip--a11y");
-    expect(iconButton).not.toHaveClass("bx--btn--icon-only--bottom");
-    expect(iconButton).not.toHaveClass("bx--tooltip--align-center");
+    expectInlineTooltip(iconButton, false);
 
     const assistiveText = iconButton.querySelector(".bx--assistive-text");
     assert(assistiveText);
@@ -212,10 +193,7 @@ describe("Button", () => {
     const button = screen.getByTestId("btn-icon-no-description");
     expect(button).toHaveClass("bx--btn--icon-only");
 
-    expect(button).not.toHaveClass("bx--tooltip__trigger");
-    expect(button).not.toHaveClass("bx--tooltip--a11y");
-    expect(button).not.toHaveClass("bx--btn--icon-only--bottom");
-    expect(button).not.toHaveClass("bx--tooltip--align-center");
+    expectInlineTooltip(button, false);
     expect(button.querySelector(".bx--assistive-text")).not.toBeInTheDocument();
 
     expect(button).toHaveAttribute("aria-label", "Custom accessible name");
@@ -350,7 +328,7 @@ describe("Button", () => {
   });
 
   describe("loading", () => {
-    it("replaces the icon with a spinner and sets aria-busy on an icon-only button", () => {
+    it("replaces the icon with a spinner, sets aria-busy and suppresses the assistive text on an icon-only button", () => {
       const { container } = render(ButtonLoading, { loading: true });
 
       const button = screen.getByTestId("btn-icon-only-loading");
@@ -358,12 +336,6 @@ describe("Button", () => {
       expect(button.querySelector(".bx--btn__icon")).toBeNull();
       expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
       expect(container.querySelector("title")).toHaveTextContent("Adding item");
-    });
-
-    it("suppresses the assistive-text span while loading", () => {
-      render(ButtonLoading, { loading: true });
-
-      const button = screen.getByTestId("btn-icon-only-loading");
       expect(button.querySelector(".bx--assistive-text")).toBeNull();
     });
 
@@ -387,8 +359,7 @@ describe("Button", () => {
       expect(button).toHaveFocus();
     });
 
-    it("keeps href and blocks the click handler while loading", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+    it("keeps href and cancels the default action while loading", () => {
       render(ButtonLoading, { loading: true });
 
       const button = screen.getByTestId("btn-href-loading");
@@ -401,19 +372,17 @@ describe("Button", () => {
       });
       button.dispatchEvent(clickEvent);
       expect(clickEvent.defaultPrevented).toBe(true);
-
-      const clickGuardButton = screen.getByTestId("btn-click-guard");
-      await user.click(clickGuardButton);
-      expect(consoleLog).not.toHaveBeenCalled();
     });
 
-    it("still fires the click handler when not loading", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(ButtonLoading, { loading: false });
+    it.each([
+      [true, 0],
+      [false, 1],
+    ])("calls the click handler per loading=%s", async (loading, calls) => {
+      const onClick = vi.fn();
+      render(ButtonLoading, { loading, onClick });
 
-      const clickGuardButton = screen.getByTestId("btn-click-guard");
-      await user.click(clickGuardButton);
-      expect(consoleLog).toHaveBeenCalledWith("click");
+      await user.click(screen.getByTestId("btn-click-guard"));
+      expect(onClick).toHaveBeenCalledTimes(calls);
     });
 
     it("does not render a spinner when skeleton and loading are both set", () => {

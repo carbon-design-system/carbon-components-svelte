@@ -3,6 +3,7 @@
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
   export let loading = false;
+  export let onClick: () => void = () => {};
 </script>
 
 <Button
@@ -19,10 +20,6 @@
 
 <Button data-testid="btn-skeleton-loading" skeleton {loading} />
 
-<Button
-  data-testid="btn-click-guard"
-  {loading}
-  on:click={() => console.log("click")}
->
+<Button data-testid="btn-click-guard" {loading} on:click={onClick}>
   Submit
 </Button>

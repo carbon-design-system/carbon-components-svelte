@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { setupStorageEventMock } from "../utils/storage-mocks";
-import ThemeCrossTab from "./ThemeCrossTab.test.svelte";
+import ThemeCrossTab from "./Theme.test.svelte";
 
 describe("Theme cross-tab sync", () => {
   let documentMock: {
@@ -40,7 +40,9 @@ describe("Theme cross-tab sync", () => {
     async ({ stored, removed }) => {
       const warn = vi.spyOn(console, "warn");
       setMockItem("theme", stored);
-      const { component } = render(ThemeCrossTab, { props: { theme: "g10" } });
+      const { component } = render(ThemeCrossTab, {
+        props: { theme: "g10", persist: true },
+      });
       await tick();
 
       if (removed) {
@@ -63,7 +65,7 @@ describe("Theme cross-tab sync", () => {
     dispatchStorageEvent("my-custom-theme-key", "g90");
     await tick();
 
-    expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g90");
+    expect(documentMock.setAttribute).toHaveBeenLastCalledWith("theme", "g90");
   });
 
   it("does not sync when persist is false", async () => {

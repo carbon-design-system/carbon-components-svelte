@@ -13,6 +13,16 @@
   export let selection: ComponentProps<StructuredList>["selection"] = false;
   export let multiple: ComponentProps<StructuredList>["multiple"] = false;
   export let sortable = false;
+  export let icon: ComponentProps<StructuredList>["icon"] = undefined;
+  /** Value of the row whose input renders with `checked`. */
+  export let checkedValue: string | undefined = undefined;
+  /** Leaves the inputs without a `name`, so the list assigns one. */
+  export let unnamed = false;
+  export let onClick: () => void = () => {};
+  export let onMouseOver: () => void = () => {};
+  export let onMouseLeave: () => void = () => {};
+  export let onChange: (detail: unknown) => void = () => {};
+  export let onSort: () => void = () => {};
 </script>
 
 <StructuredList
@@ -21,30 +31,15 @@
   {flush}
   {selection}
   {multiple}
-  on:click={() => {
-    console.log("click");
-  }}
-  on:mouseover={() => {
-    console.log("mouseover");
-  }}
-  on:mouseenter={() => {
-    console.log("mouseenter");
-  }}
-  on:mouseleave={() => {
-    console.log("mouseleave");
-  }}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
+  {icon}
+  on:click={onClick}
+  on:mouseover={onMouseOver}
+  on:mouseleave={onMouseLeave}
+  on:change={(e) => onChange(e.detail)}
 >
   <StructuredListHead>
     <StructuredListRow head>
-      <StructuredListCell
-        head
-        {sortable}
-        on:sort={() => {
-          console.log("sort");
-        }}
+      <StructuredListCell head {sortable} on:sort={onSort}
         >Column A</StructuredListCell
       >
       <StructuredListCell head>Column B</StructuredListCell>
@@ -66,7 +61,8 @@
             id="row-{item}"
             value="row-{item}-value"
             title="row-{item}-title"
-            name="row-{item}-name"
+            name={unnamed ? "" : `row-${item}-name`}
+            checked={checkedValue === `row-${item}-value`}
           />
         {/if}
       </StructuredListRow>
@@ -74,4 +70,4 @@
   </StructuredListBody>
 </StructuredList>
 
-<div data-testid="value">{selected}</div>
+<div data-testid="value">{multiple ? JSON.stringify(selected) : selected}</div>
