@@ -78,6 +78,10 @@ test.describe("forced colors", () => {
       ".bx--tag--selectable:not(.bx--tag--selectable-selected)",
     ],
     [
+      ".bx--chat-btn--quick-action--selected:not([disabled])",
+      ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected):not([disabled])",
+    ],
+    [
       ".bx--content-switcher--selected",
       ".bx--content-switcher-btn:not(.bx--content-switcher--selected)",
     ],
@@ -126,6 +130,7 @@ test.describe("forced colors", () => {
     for (const selector of [
       ".bx--tree-node--disabled > .bx--tree-node__label",
       ".bx--toggle-button:disabled",
+      ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected)[disabled]",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
@@ -187,6 +192,17 @@ test.describe("forced colors", () => {
     expect.soft(selected.fill).toBe(system.Highlight);
     expect.soft(disabled.fill).toBe(system.GrayText);
     expect.soft(disabledSelected.fill).toBe(system.GrayText);
+  });
+
+  test("a chosen quick action keeps Highlight when disabled", async ({
+    page,
+  }) => {
+    const chosen = ".bx--chat-btn--quick-action--selected[disabled]";
+    await page.hover(chosen, { force: true });
+    expect(await style(page, chosen)).toMatchObject({
+      background: system.Highlight,
+      color: system.HighlightText,
+    });
   });
 
   // [focus target, element drawing the ring, pseudo-element, ring color]

@@ -22,6 +22,8 @@ export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";
 export { default as Carousel } from "./Carousel/Carousel.svelte";
 export { default as CarouselItem } from "./Carousel/CarouselItem.svelte";
+export { default as ChatButton } from "./Chat/ChatButton.svelte";
+export { default as ChatButtonSkeleton } from "./Chat/ChatButtonSkeleton.svelte";
 export { default as ChatDivider } from "./Chat/ChatDivider.svelte";
 export { default as ChatLog } from "./Chat/ChatLog.svelte";
 export { default as ChatMessage } from "./Chat/ChatMessage.svelte";

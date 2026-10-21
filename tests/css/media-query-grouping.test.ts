@@ -41,10 +41,12 @@ describe("any-hover media query grouping", () => {
     // quarter, and year grids gained one hover block (date-picker-grid in
     // components/date-picker/_date-picker.scss, replacing four unguarded
     // hover rules), and _calendar.scss has one fewer than _flatpickr.scss.
+    // Raised again from 70 to 71 for ChatButton's quick-action hover block
+    // (_chat-button.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(70);
+    expect(blocks.length).toBeLessThanOrEqual(71);
   }, 30_000);
 });

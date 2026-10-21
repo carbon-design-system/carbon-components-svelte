@@ -1,0 +1,122 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ChatButton: a pill-shaped Button for chat, and its quick action, an
+/// outlined pill such as a suggested reply. Ported from Carbon v11's
+/// chat-button styles, on the v11 chat-button tokens.
+/// @access private
+/// @group components
+@mixin chat-button {
+  // Fully rounded at each height: 48px, 40px (field) and 32px (small).
+  .#{$prefix}--chat-btn {
+    border-radius: to-rem(24px);
+  }
+
+  // Without an icon, the end padding Button keeps for it closes up.
+  .#{$prefix}--chat-btn:not(.#{$prefix}--chat-btn--with-icon) {
+    padding-right: to-rem(15px);
+  }
+
+  .#{$prefix}--chat-btn.#{$prefix}--btn--field {
+    border-radius: to-rem(20px);
+  }
+
+  .#{$prefix}--chat-btn.#{$prefix}--btn--sm {
+    border-radius: to-rem(16px);
+  }
+
+  .#{$prefix}--chat-btn--quick-action {
+    align-items: center;
+    border: 1px solid ccs-token("chat-button");
+    background: transparent;
+    color: ccs-token("chat-button");
+  }
+
+  .#{$prefix}--chat-btn--quick-action:active {
+    border-color: transparent;
+    background: ccs-token("chat-button-active");
+    color: ccs-token("chat-button-text-hover");
+  }
+
+  // A 1px ring in place of Button's 2px one, inside the pill's border.
+  .#{$prefix}--chat-btn--quick-action.#{$prefix}--btn--ghost:focus {
+    border-color: $focus;
+    box-shadow: inset 0 0 0 1px $focus;
+  }
+
+  .#{$prefix}--chat-btn--quick-action[disabled],
+  .#{$prefix}--chat-btn--quick-action[disabled]:hover {
+    border-color: $button-disabled;
+    color: $button-disabled;
+  }
+
+  // Selected stays filled when disabled, as when the other choices are
+  // disabled once one is picked.
+  .#{$prefix}--chat-btn--quick-action--selected,
+  .#{$prefix}--chat-btn--quick-action--selected[disabled],
+  .#{$prefix}--chat-btn--quick-action--selected[disabled]:hover {
+    border-color: transparent;
+    background: ccs-token("chat-button-selected");
+    color: ccs-token("chat-button-text-selected");
+  }
+
+  .#{$prefix}--chat-btn--quick-action.#{$prefix}--chat-btn--quick-action--selected:not(
+      [disabled]
+    ):active {
+    color: ccs-token("chat-button-text-selected");
+  }
+
+  .#{$prefix}--chat-btn.#{$prefix}--skeleton {
+    overflow: hidden;
+  }
+
+  // Hover only where a pointer can hover, so a tapped chip doesn't stay lit.
+  @media (any-hover: hover) {
+    .#{$prefix}--chat-btn--quick-action:hover:not(:active):not([disabled]) {
+      border-color: transparent;
+      background: ccs-token("chat-button-hover");
+      color: ccs-token("chat-button-text-hover");
+    }
+
+    // After the hover rule, which would clear the focus border.
+    .#{$prefix}--chat-btn--quick-action.#{$prefix}--btn--ghost:hover:focus {
+      border-color: $focus;
+      box-shadow: inset 0 0 0 1px $focus-inset;
+    }
+
+    .#{$prefix}--chat-btn--quick-action.#{$prefix}--chat-btn--quick-action--selected:not(
+        [disabled]
+      ):hover {
+      color: ccs-token("chat-button-text-selected");
+    }
+  }
+
+  // Forced colors drop the fills, so selected and unselected chips looked
+  // the same. Selected takes the system highlight, disabled or not, and
+  // after the hover block so hovering doesn't take it away. Only system
+  // colors, so `forced-color-adjust` stays `auto`.
+  @media (forced-colors: active) {
+    .#{$prefix}--chat-btn--quick-action[disabled],
+    .#{$prefix}--chat-btn--quick-action[disabled]:hover {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    .#{$prefix}--chat-btn--quick-action.#{$prefix}--chat-btn--quick-action--selected:not(
+        [disabled]
+      ),
+    .#{$prefix}--chat-btn--quick-action.#{$prefix}--chat-btn--quick-action--selected:not(
+        [disabled]
+      ):hover,
+    .#{$prefix}--chat-btn--quick-action.#{$prefix}--chat-btn--quick-action--selected[disabled] {
+      border-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}
+
+@include exports("chat-button") {
+  @include chat-button;
+}

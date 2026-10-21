@@ -39,6 +39,7 @@ import AccordionItem from "../fixtures/AccordionItem.test.svelte";
 import BreadcrumbItemFixture from "../fixtures/BreadcrumbItem.test.svelte";
 import Button from "../fixtures/Button.test.svelte";
 import CarouselItem from "../fixtures/CarouselItem.test.svelte";
+import ChatButton from "../fixtures/ChatButton.test.svelte";
 import ClickableTile from "../fixtures/ClickableTile.test.svelte";
 import ComposedModal from "../fixtures/ComposedModal.test.svelte";
 import ContextMenu from "../fixtures/ContextMenu.test.svelte";
@@ -97,6 +98,20 @@ export const interactive: AriaEntry[] = [
         props: { icon: Add, iconDescription: "Add", ...attrs },
       }),
     target: () => screen.getByRole("button"),
+  },
+  {
+    name: "ChatButton",
+    render: (attrs) => render(ChatButton, { props: attrs }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "ChatButton",
+    variant: "quick action",
+    render: (attrs) =>
+      render(ChatButton, {
+        props: { quickAction: true, selected: true, ...attrs },
+      }),
+    target: () => screen.getByRole("button", { pressed: true }),
   },
   {
     name: "Carousel",
