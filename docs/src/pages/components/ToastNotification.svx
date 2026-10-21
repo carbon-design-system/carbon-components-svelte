@@ -25,6 +25,24 @@ Automatically close the notification after a specified duration (in milliseconds
 
 <FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
 
+## Actionable
+
+Set `actionable` to `true` when users must reach an action in the
+toast, such as a retry after a failed upload. Place the action, such as
+a small tertiary button, in the default slot. The toast becomes an `alertdialog` named by its title and
+described by its subtitle. When it opens, focus moves to the first
+action, or to the close button if there is no action. Tab stays inside
+the toast, and <DocKbd label="Escape" /> closes it. Focus then returns
+to where it was before, such as the button that opened it.
+
+Set `focusOnOpen` to `false` to leave focus in place, or
+`closeOnEscape` to `false` to keep it open on <DocKbd label="Escape" />.
+If the close button is also hidden, Tab can leave the toast, so
+keyboard users are never trapped. Avoid a `timeout` here, since the toast could close before users act.
+[NotificationQueue](NotificationQueue) accepts the same options.
+
+<FileSource src="/framed/ToastNotification/ToastNotificationActionable" />
+
 ## Full width
 
 Span the full container width with `fullWidth`.
