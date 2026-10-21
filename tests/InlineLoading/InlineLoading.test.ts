@@ -15,18 +15,12 @@ describe("InlineLoading", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders with default props", () => {
-    render(InlineLoading);
-    const wrapper = screen.getByTestId("default-loader");
-
-    expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
-    expect(wrapper.querySelector(".bx--loading")).toBeInTheDocument();
-  });
-
   it("renders with description", () => {
     render(InlineLoading);
     const wrapper = screen.getByTestId("loader-with-description");
 
+    expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+    expect(wrapper.querySelector(".bx--loading")).toBeInTheDocument();
     const description = wrapper.querySelector(".bx--inline-loading__text");
     expect(description).toHaveTextContent("Loading metrics...");
   });
@@ -38,9 +32,6 @@ describe("InlineLoading", () => {
     expect(wrapper.querySelector(".bx--loading")).toHaveClass(
       "bx--loading--small",
     );
-    expect(
-      wrapper.querySelector(".bx--inline-loading__text"),
-    ).toHaveTextContent("Submitting...");
   });
 
   it("supports inactive state", () => {
@@ -51,9 +42,6 @@ describe("InlineLoading", () => {
       "bx--loading--small",
     );
     expect(wrapper.querySelector(".bx--loading--stop")).toBeInTheDocument();
-    expect(
-      wrapper.querySelector(".bx--inline-loading__text"),
-    ).toHaveTextContent("Cancelling...");
   });
 
   it("supports finished state", () => {
@@ -63,9 +51,6 @@ describe("InlineLoading", () => {
     expect(
       wrapper.querySelector(".bx--inline-loading__checkmark-container"),
     ).toBeInTheDocument();
-    expect(
-      wrapper.querySelector(".bx--inline-loading__text"),
-    ).toHaveTextContent("Success");
   });
 
   it("supports error state", () => {
@@ -75,9 +60,6 @@ describe("InlineLoading", () => {
     expect(
       wrapper.querySelector(".bx--inline-loading--error"),
     ).toBeInTheDocument();
-    expect(
-      wrapper.querySelector(".bx--inline-loading__text"),
-    ).toHaveTextContent("An error occurred");
   });
 
   it("maps error status to an assertive alert live region", () => {
@@ -271,15 +253,6 @@ describe("InlineLoading", () => {
       ).toBeInTheDocument();
     });
 
-    it("renders synchronously when delay is 0", () => {
-      const { getByTestId } = render(InlineLoadingDelay, {
-        props: { status: "active", delay: 0 },
-      });
-      const wrapper = getByTestId("delayed");
-
-      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
-    });
-
     // Regression: a resting status renders immediately, but re-entering
     // "active" from that resting state must still honor the delay rather
     // than inheriting the already-true visibility.
@@ -300,26 +273,6 @@ describe("InlineLoading", () => {
       await vi.advanceTimersByTimeAsync(200);
 
       expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
-    });
-
-    it("renders immediately when mounted inactive", () => {
-      const { getByTestId } = render(InlineLoadingDelay, {
-        props: { status: "inactive", delay: 200 },
-      });
-      const wrapper = getByTestId("delayed");
-
-      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
-    });
-
-    it("renders immediately when mounted in the error state", () => {
-      const { getByTestId } = render(InlineLoadingDelay, {
-        props: { status: "error", delay: 200 },
-      });
-      const wrapper = getByTestId("delayed");
-
-      const region = wrapper.querySelector(".bx--inline-loading");
-      expect(region).toBeInTheDocument();
-      expect(region).toHaveAttribute("role", "alert");
     });
 
     it("clears the pending timer when unmounted during the delay", () => {

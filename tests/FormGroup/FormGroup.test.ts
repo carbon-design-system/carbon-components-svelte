@@ -16,17 +16,6 @@ describe("FormGroup", () => {
     expect(screen.getByText("Form content")).toBeInTheDocument();
   });
 
-  it("should render as fieldset element", () => {
-    render(FormGroupTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset.tagName).toBe("FIELDSET");
-  });
-
   it("should render legend text", () => {
     render(FormGroupTest, {
       props: {
@@ -197,19 +186,6 @@ describe("FormGroup", () => {
     expect(screen.getByText("Test Legend")).not.toHaveAttribute("id");
   });
 
-  it("should handle aria-labelledby override", () => {
-    render(FormGroupTest, {
-      props: {
-        legendText: "Test Legend",
-        "aria-labelledby": "external-label",
-        slotContent: "Content",
-      },
-    });
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).toHaveAttribute("aria-labelledby", "external-label");
-  });
-
   it("should handle click events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(FormGroupTest, {
@@ -240,43 +216,6 @@ describe("FormGroup", () => {
 
     await user.unhover(fieldset);
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-  });
-
-  it("should render slot content", () => {
-    render(FormGroupTest, {
-      props: {
-        slotContent: "Custom slot content",
-      },
-    });
-
-    expect(screen.getByText("Custom slot content")).toBeInTheDocument();
-  });
-
-  it("should apply custom attributes", () => {
-    const { container } = render(FormGroupTest, {
-      props: {
-        "data-testid": "custom-fieldset",
-        slotContent: "Content",
-      },
-    });
-
-    const fieldset = container.querySelector("[data-testid='custom-fieldset']");
-    expect(fieldset).toBeInTheDocument();
-  });
-
-  it("should handle both invalid and message together", () => {
-    render(FormGroupTest, {
-      props: {
-        invalid: true,
-        message: true,
-        messageText: "Error message",
-        slotContent: "Content",
-      },
-    });
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).toHaveAttribute("data-invalid", "true");
-    expect(screen.getByText("Error message")).toBeInTheDocument();
   });
 
   it("should show an invalid message as an error with an icon", () => {

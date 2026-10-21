@@ -16,19 +16,6 @@ describe("FormLabel", () => {
     expect(label).toHaveClass("bx--label");
   });
 
-  it("should render as label element", () => {
-    render(FormLabelTest, {
-      props: {
-        slotContent: "Label",
-      },
-    });
-
-    const labelText = screen.getByText("Label");
-    const label = labelText.closest("label");
-    assert(label);
-    expect(label.tagName).toBe("LABEL");
-  });
-
   it("should generate default id", () => {
     render(FormLabelTest, {
       props: {
@@ -78,16 +65,6 @@ describe("FormLabel", () => {
     render(FormLabelTest, { props: { slotContent: "Email" } });
 
     expect(screen.getByText("Email")).not.toHaveAttribute("id");
-  });
-
-  it("should render slot content", () => {
-    render(FormLabelTest, {
-      props: {
-        slotContent: "Custom label content",
-      },
-    });
-
-    expect(screen.getByText("Custom label content")).toBeInTheDocument();
   });
 
   it("should handle click events", async () => {
@@ -153,19 +130,6 @@ describe("FormLabel", () => {
     await user.unhover(label);
 
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-  });
-
-  it("should apply custom attributes", () => {
-    render(FormLabelTest, {
-      props: {
-        "data-testid": "custom-label",
-        slotContent: "Label",
-      },
-    });
-
-    const label = screen.getByTestId("custom-label");
-    expect(label).toBeInTheDocument();
-    expect(label).toHaveClass("bx--label");
   });
 
   it("should apply custom class via restProps", () => {

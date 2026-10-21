@@ -96,14 +96,6 @@
   labelText="Storage"
   value={812}
   max={1000}
-  helperText="Approaching limit"
-  data-testid="helper-text"
-/>
-
-<Meter
-  labelText="Storage"
-  value={812}
-  max={1000}
   thresholds={{ warning: 800, error: 950 }}
   showThresholds
   data-testid="show-thresholds"

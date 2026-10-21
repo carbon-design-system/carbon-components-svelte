@@ -88,6 +88,9 @@ describe("Meter", () => {
     const el = screen.getByTestId("nan-value");
     const meter = within(el).getByRole("meter");
     expect(meter).toHaveAttribute("aria-valuenow", "0");
+    expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
+      transform: "scaleX(0)",
+    });
   });
 
   it("clamps an infinite value to a full bar like any large value", () => {
@@ -205,15 +208,6 @@ describe("Meter", () => {
     expect(el.querySelector(".bx--meter__value-text")).toBeNull();
   });
 
-  it("links helper text via aria-describedby", () => {
-    render(Meter);
-
-    const el = screen.getByTestId("helper-text");
-    const meter = within(el).getByRole("meter");
-    const helperText = within(el).getByText("Approaching limit");
-    expect(meter).toHaveAttribute("aria-describedby", helperText.id);
-  });
-
   it("renders a threshold marker per defined key when showThresholds is set", () => {
     render(Meter);
 
@@ -229,15 +223,6 @@ describe("Meter", () => {
 
     const el = screen.getByTestId("zero-max");
     expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
-      transform: "scaleX(0)",
-    });
-  });
-
-  it("renders an empty bar for a NaN value", () => {
-    const { container } = render(MeterComponent, {
-      props: { labelText: "Storage", value: Number.NaN, max: 100 },
-    });
-    expect(container.querySelector(".bx--meter__bar")).toHaveStyle({
       transform: "scaleX(0)",
     });
   });

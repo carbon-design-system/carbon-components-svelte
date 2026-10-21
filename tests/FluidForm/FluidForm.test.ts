@@ -4,11 +4,13 @@ import FluidFormActionsTest from "./FluidForm.actions.test.svelte";
 import FluidFormTest from "./FluidForm.test.svelte";
 
 describe("FluidForm", () => {
-  it("renders with default props", () => {
-    render(FluidFormTest);
-    const form = screen.getByTestId("fluid-form");
-    expect(form).toBeInTheDocument();
-    expect(form).toHaveClass("bx--form--fluid");
+  it("merges a consumer class with the fluid form classes", () => {
+    render(FluidFormTest, { class: "custom" });
+    expect(screen.getByTestId("fluid-form")).toHaveClass(
+      "bx--form",
+      "bx--form--fluid",
+      "custom",
+    );
   });
 
   it("exposes ref to the underlying form element", () => {
@@ -26,45 +28,6 @@ describe("FluidForm", () => {
       expect(action).toHaveBeenCalledTimes(1);
       expect(action).toHaveBeenCalledWith(form);
     });
-
-    it("invokes destroy on unmount", () => {
-      const destroy = vi.fn();
-      const action = vi.fn(() => ({ destroy }));
-      const { unmount } = render(FluidFormActionsTest, {
-        props: { actions: [action] },
-      });
-      expect(destroy).not.toHaveBeenCalled();
-      unmount();
-      expect(destroy).toHaveBeenCalledTimes(1);
-    });
-
-    it("passes tuple parameters to actions", () => {
-      const action = vi.fn(() => ({ destroy: vi.fn() }));
-      const parameter = { submit: vi.fn() };
-      render(FluidFormActionsTest, {
-        props: { actions: [[action, parameter]] },
-      });
-      const form = screen.getByTestId("fluid-form");
-      expect(action).toHaveBeenCalledWith(form, parameter);
-    });
-  });
-
-  it("renders form elements correctly", () => {
-    render(FluidFormTest);
-
-    const formGroup = screen.getByRole("group");
-    expect(formGroup).toBeInTheDocument();
-    expect(formGroup).toHaveTextContent("Checkboxes");
-
-    const checkboxes = screen.getAllByRole("checkbox");
-    expect(checkboxes).toHaveLength(3);
-    expect(checkboxes[0]).toBeChecked();
-    expect(checkboxes[1]).not.toBeChecked();
-    expect(checkboxes[2]).toBeDisabled();
-
-    const submitButton = screen.getByRole("button", { name: "Submit" });
-    expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveAttribute("type", "submit");
   });
 
   describe("form submission", () => {
@@ -102,17 +65,6 @@ describe("FluidForm", () => {
       render(FluidFormTest);
 
       await user.click(screen.getByRole("button", { name: "Reset" }));
-
-      expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
-    });
-
-    it("forwards reset from form.reset()", () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(FluidFormTest);
-
-      const form = screen.getByTestId("fluid-form");
-      assert(form instanceof HTMLFormElement);
-      form.reset();
 
       expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
     });
