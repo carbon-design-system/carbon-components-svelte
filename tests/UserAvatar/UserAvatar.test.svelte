@@ -5,13 +5,9 @@
 
 <UserAvatar data-testid="default" />
 
-<UserAvatar data-testid="initials-single" name="Eric" />
-
 <UserAvatar data-testid="initials-multi" name="John Doe" />
 
 <UserAvatar data-testid="initials-override" name="John Doe" initials="XY" />
-
-<UserAvatar data-testid="initials-emoji" name="👩‍🚀 Astronaut" />
 
 <UserAvatar
   data-testid="image"
@@ -64,8 +60,6 @@
 />
 
 <UserAvatar data-testid="color-auto" backgroundColor="auto" name="John Doe" />
-
-<UserAvatar data-testid="color-auto-2" backgroundColor="auto" name="John Doe" />
 
 <UserAvatar data-testid="tooltip" name="Jane Roe" tooltipText="Jane Roe" />
 

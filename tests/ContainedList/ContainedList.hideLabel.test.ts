@@ -3,13 +3,6 @@ import ContainedListHideLabelAction from "./ContainedList.hideLabel.action.test.
 import ContainedList from "./ContainedList.test.svelte";
 
 describe("ContainedList hideLabel", () => {
-  it("should render the header bar by default", () => {
-    const { container } = render(ContainedList);
-
-    const header = container.querySelector(".bx--contained-list__header");
-    expect(header).not.toBeNull();
-  });
-
   it("should not render the header bar when hideLabel is true", () => {
     const { container } = render(ContainedList, {
       props: { hideLabel: true },

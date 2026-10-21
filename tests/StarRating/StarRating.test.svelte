@@ -12,7 +12,6 @@
   export let invalidText = "";
   export let warn = false;
   export let warnText = "";
-  export let form: string | undefined = undefined;
   export let disabled = false;
   export let readonly = false;
   export let allowDeselect = false;
@@ -29,7 +28,6 @@
   {invalidText}
   {warn}
   {warnText}
-  {form}
   {disabled}
   {readonly}
   {allowDeselect}

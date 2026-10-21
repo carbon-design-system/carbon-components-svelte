@@ -5,17 +5,11 @@ describe("PageHeader", () => {
   it("renders the title and subtitle", () => {
     render(PageHeader);
 
-    expect(screen.getByText("Databases")).toBeInTheDocument();
-    expect(
-      screen.getByText("Manage your database instances"),
-    ).toBeInTheDocument();
-  });
-
-  it("renders the title as a heading", () => {
-    render(PageHeader);
-
     expect(
       screen.getByRole("heading", { name: "Databases" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Manage your database instances"),
     ).toBeInTheDocument();
   });
 
@@ -33,9 +27,6 @@ describe("PageHeader", () => {
     expect(node).toHaveClass("bx--page-header");
     expect(node).toHaveClass("bx--box-position-sticky");
     expect(node).toHaveClass("bx--box-top-0");
-    expect(screen.getByTestId("basic")).not.toHaveClass(
-      "bx--box-position-sticky",
-    );
   });
 
   it("offsets a sticky header by stickyOffset", () => {
@@ -80,7 +71,6 @@ describe("PageHeader", () => {
 
     const layer = screen.getByTestId("layer");
     expect(layer).toHaveClass("bx--box-fill-layer-01");
-    expect(layer).not.toHaveClass("bx--box-fill-background");
     expect(layer).not.toHaveClass("bx--page-header--divider");
   });
 

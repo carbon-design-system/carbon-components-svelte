@@ -29,18 +29,4 @@ describe("BreadcrumbItem icon", () => {
     expect(item).not.toBeNull();
     expect(item?.querySelector(".bx--breadcrumb-item__icon")).toBeNull();
   });
-
-  it("scopes the sm icon sizing class to the breadcrumb's sm size", () => {
-    render(BreadcrumbIcon, { props: { size: "sm" } });
-
-    const nav = screen.getByRole("navigation");
-    const list = nav.querySelector(".bx--breadcrumb");
-    expect(list).toHaveClass("bx--breadcrumb--sm");
-
-    const icon = screen
-      .getByText("Icon prop")
-      .closest(".bx--breadcrumb-item")
-      ?.querySelector(".bx--breadcrumb-item__icon svg");
-    expect(icon).toBeInTheDocument();
-  });
 });

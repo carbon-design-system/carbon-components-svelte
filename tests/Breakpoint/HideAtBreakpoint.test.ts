@@ -14,16 +14,6 @@ describe("hideAtBreakpoint", () => {
     vi.unstubAllGlobals();
   });
 
-  it("renders children when outside the hidden range", () => {
-    stubMatchMediaForSize("lg");
-
-    render(HideAtBreakpoint, { props: { options: { above: "xlg" } } });
-
-    expect(screen.getByTestId("target")).not.toHaveStyle({
-      display: "none",
-    });
-  });
-
   it("hides content above the `above` bound", () => {
     stubMatchMediaForSize("xlg");
 

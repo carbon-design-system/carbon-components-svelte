@@ -42,10 +42,6 @@
   />
 </div>
 
-<div data-testid="loader-with-fade">
-  <ImageLoader fadeIn src={validImageSrc} alt="IBM Logo with fade" />
-</div>
-
 <div data-testid="programmatic-loader">
   <ImageLoader
     bind:this={imageLoader}

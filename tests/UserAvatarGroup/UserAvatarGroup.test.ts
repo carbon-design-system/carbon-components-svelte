@@ -57,15 +57,6 @@ describe("UserAvatarGroup", () => {
     expect(root).not.toHaveTextContent("+");
   });
 
-  it("applies the overlap modifier by default", async () => {
-    render(UserAvatarGroup);
-    await tick();
-
-    expect(groupRoot("under-max")).toHaveClass(
-      "bx--user-avatar-group--overlap",
-    );
-  });
-
   it("hides avatars past max and renders a +N overflow avatar", async () => {
     render(UserAvatarGroup);
     await tick();

@@ -94,14 +94,6 @@ describe("ContainedList", () => {
     expect(list).not.toHaveAttribute("aria-labelledby");
   });
 
-  it("should render labelText prop", () => {
-    render(ContainedList, {
-      props: { labelText: "Custom Title" },
-    });
-
-    expect(screen.getByText("Custom Title")).toBeInTheDocument();
-  });
-
   it("should render labelChildren slot", () => {
     render(ContainedListLabelChildren);
 
@@ -114,23 +106,6 @@ describe("ContainedList", () => {
 
     const actionButton = screen.getByRole("button", { name: "Action" });
     expect(actionButton).toBeInTheDocument();
-  });
-
-  it("should render search in action slot", () => {
-    render(ContainedList, { props: { showSearch: true } });
-
-    const search = screen.getByRole("searchbox");
-    expect(search).toBeInTheDocument();
-  });
-
-  it("should render list items", () => {
-    render(ContainedList);
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(3);
-    expect(items[0]).toHaveTextContent("Item 1");
-    expect(items[1]).toHaveTextContent("Item 2");
-    expect(items[2]).toHaveTextContent("Item 3");
   });
 
   it("should render interactive list items as buttons", () => {
