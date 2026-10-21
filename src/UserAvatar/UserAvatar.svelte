@@ -210,9 +210,12 @@
     .join(" ");
 
   // Fall back to icon/initials when the photo URL fails. Comparing against the
-  // failed URL means a new `image` value automatically retries without a
-  // reactive reset that would fight the error handler.
+  // failed URL means a new `image` value automatically retries. Forget the
+  // failure once `image` moves off it, so returning to that URL retries too.
   let failedImage = undefined;
+  $: if (failedImage !== undefined && image !== failedImage) {
+    failedImage = undefined;
+  }
 
   function handleImageError() {
     failedImage = image;
