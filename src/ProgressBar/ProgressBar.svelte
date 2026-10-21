@@ -100,7 +100,7 @@
       : 0;
 
   $: hasStatusIcon = status === "error" || status === "finished";
-  $: hasValueText = !!valueText.trim() || !!$$slots.valueChildren;
+  $: hasValueText = !!valueText?.trim() || !!$$slots.valueChildren;
 
   $: statusText =
     status === "error" ? errorText : status === "finished" ? finishedText : "";
@@ -164,7 +164,7 @@
     aria-valuemin={indeterminate ? undefined : 0}
     aria-valuemax={indeterminate ? undefined : upper}
     aria-valuenow={indeterminate ? undefined : capped}
-    aria-valuetext={valueText.trim() ? valueText : undefined}
+    aria-valuetext={valueText?.trim() ? valueText : undefined}
     aria-describedby={joinDescribedBy(describedBy, ariaDescribedBy)}
   >
     <div

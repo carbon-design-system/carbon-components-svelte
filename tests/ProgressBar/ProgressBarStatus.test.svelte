@@ -7,6 +7,7 @@
   export let helperText = "";
   export let errorText = "Error";
   export let finishedText = "Complete";
+  export let valueText: string | undefined = "";
 </script>
 
 <ProgressBar
@@ -15,5 +16,6 @@
   {helperText}
   {errorText}
   {finishedText}
+  {valueText}
   labelText="Progress"
 />

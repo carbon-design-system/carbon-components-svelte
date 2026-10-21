@@ -278,6 +278,18 @@ describe("ProgressBar", () => {
     );
   });
 
+  it("clears valueText after mount without throwing", async () => {
+    const { container, rerender } = render(ProgressBarStatus, {
+      props: { valueText: "40 MB of 100 MB" },
+    });
+
+    const progressBar = within(container).getByRole("progressbar");
+    expect(progressBar).toHaveAttribute("aria-valuetext", "40 MB of 100 MB");
+
+    await rerender({ valueText: undefined });
+    expect(progressBar).not.toHaveAttribute("aria-valuetext");
+  });
+
   it("announces a status change but not value ticks or the first render", async () => {
     const { container, rerender } = render(ProgressBarStatus, {
       props: { status: "active", value: 40 },
