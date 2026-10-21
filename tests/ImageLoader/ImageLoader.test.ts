@@ -141,6 +141,10 @@ describe("ImageLoader", () => {
     expect(FakeImage.instances.some((image) => image.src === newSrc)).toBe(
       true,
     );
+
+    await settle(newSrc, "onload");
+
+    expect(wrapper.querySelector("img")).toHaveAttribute("src", newSrc);
   });
 
   it("ignores a superseded image settling after src changes", async () => {

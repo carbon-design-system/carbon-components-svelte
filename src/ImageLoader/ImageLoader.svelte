@@ -76,7 +76,8 @@
     error = false;
     const img = new Image();
     image = img;
-    img.src = url || src;
+    currentSrc = url || src;
+    img.src = currentSrc;
     // Ignore a superseded image that settles after `src` has changed.
     img.onload = () => {
       if (image === img) loaded = true;
@@ -98,6 +99,9 @@
   const fast02 = 110;
 
   let image = null;
+
+  /** The URL being loaded and shown, which `loadImage(url)` can set apart from `src`. */
+  let currentSrc = src;
 
   /** In `lazy` mode, an empty element where the image will be, to observe. */
   let sentinel = null;
@@ -151,12 +155,12 @@
   {#if loading}
     <slot name="loading" />
   {/if}
-  {#key src}
+  {#key currentSrc}
     {#if loaded}
       <img
         style:width="100%"
         {...$$restProps}
-        {src}
+        src={currentSrc}
         {alt}
         transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
       >
@@ -177,12 +181,12 @@
     {#if loading}
       <slot name="loading" />
     {/if}
-    {#key src}
+    {#key currentSrc}
       {#if loaded}
         <img
           style:width="100%"
           {...$$restProps}
-          {src}
+          src={currentSrc}
           {alt}
           transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
         >
