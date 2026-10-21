@@ -8,7 +8,12 @@
   const id = uniqueId();
   const ctx = getContext("carbon:InterstitialScreen");
 
-  $: ctx?.addView({ id, stepTitle });
+  /** @type {HTMLElement | undefined} */
+  let node;
+
+  // `node` binds after the first registration; re-registering with it lets a
+  // view inserted after mount take its DOM position in the step order.
+  $: ctx?.addView({ id, stepTitle, node });
 
   onMount(() => {
     return () => {
@@ -17,6 +22,10 @@
   });
 </script>
 
-<div class:bx--interstitial-screen-view={true} {...$$restProps}>
+<div
+  bind:this={node}
+  class:bx--interstitial-screen-view={true}
+  {...$$restProps}
+>
   <slot />
 </div>

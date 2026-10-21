@@ -78,6 +78,20 @@ describe("InterstitialScreen", () => {
     ).toBeInTheDocument();
   });
 
+  it("orders a view inserted after mount by its DOM position", async () => {
+    const { rerender } = render(InterstitialScreenTest, {
+      props: { open: true, stepCount: 3, hiddenStep: 2 },
+    });
+
+    await rerender({ hiddenStep: 0 });
+
+    const labels = Array.from(
+      document.querySelectorAll(".bx--progress-label"),
+      (el) => el.textContent,
+    );
+    expect(labels).toEqual(["Step 1", "Step 2", "Step 3"]);
+  });
+
   it("Back returns to the previous step", async () => {
     render(InterstitialScreenTest, { props: { open: true, stepCount: 2 } });
 
