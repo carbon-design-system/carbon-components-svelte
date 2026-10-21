@@ -70,9 +70,6 @@
   class:bx--disclosure--collapsing={animation === "collapsing"}
   {...wrapperProps}
   on:animationend
-  on:animationend={() => {
-    animation = undefined;
-  }}
 >
   <button
     type="button"
@@ -96,7 +93,14 @@
       <slot name="summary">{summary}</slot>
     </span>
   </button>
-  <div id="{id}-content" class:bx--disclosure__content={true}>
+  <!-- Only the content animates; `self` ignores descendants' bubbled events. -->
+  <div
+    id="{id}-content"
+    class:bx--disclosure__content={true}
+    on:animationend|self={() => {
+      animation = undefined;
+    }}
+  >
     <slot />
   </div>
 </div>

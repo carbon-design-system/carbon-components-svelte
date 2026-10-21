@@ -136,9 +136,6 @@
   class:bx--accordion__item--collapsing={animation === "collapsing"}
   {...wrapperProps}
   on:animationend
-  on:animationend={() => {
-    animation = undefined;
-  }}
 >
   <button
     bind:this={ref}
@@ -169,9 +166,13 @@
       <slot name="title">{title ?? ""}</slot>
     </div>
   </button>
+  <!-- Only the content animates; `self` ignores descendants' bubbled events. -->
   <div
     id="{id}-content"
     class:bx--accordion__content={true}
+    on:animationend|self={() => {
+      animation = undefined;
+    }}
     role={open ? "region" : undefined}
     aria-labelledby={open ? `${id}-button` : undefined}
   >

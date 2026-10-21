@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import Disclosure from "./Disclosure.test.svelte";
 import DisclosureSummaryProp from "./DisclosureSummaryProp.test.svelte";
@@ -98,5 +98,26 @@ describe("Disclosure", () => {
 
     await user.keyboard(" ");
     expect(control).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("should clear expanding and collapsing only on the content's own animationend", async () => {
+    render(Disclosure);
+
+    const control = screen.getByRole("button", { name: "Show details" });
+    const wrapper = control.closest(".bx--disclosure");
+    const content = screen.getByText("Hidden content").parentElement;
+    assert(content);
+
+    await user.click(control);
+    expect(wrapper).toHaveClass("bx--disclosure--expanding");
+    await fireEvent.animationEnd(screen.getByText("Hidden content"));
+    expect(wrapper).toHaveClass("bx--disclosure--expanding");
+    await fireEvent.animationEnd(content);
+    expect(wrapper).not.toHaveClass("bx--disclosure--expanding");
+
+    await user.click(control);
+    expect(wrapper).toHaveClass("bx--disclosure--collapsing");
+    await fireEvent.animationEnd(content);
+    expect(wrapper).not.toHaveClass("bx--disclosure--collapsing");
   });
 });
