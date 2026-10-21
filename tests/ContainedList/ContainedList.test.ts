@@ -197,6 +197,7 @@ describe("ContainedList", () => {
 
     const label = screen.getByText("List title");
     expect(label).toHaveAttribute("id", "label-custom-id");
+    expect(screen.getByRole("list")).toHaveAttribute("id", "custom-id");
   });
 
   it("should render items with action slot", async () => {

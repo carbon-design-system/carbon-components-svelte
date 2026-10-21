@@ -29,7 +29,10 @@
    */
   export let hideLabel = false;
 
-  /** Set an id for the list element */
+  /**
+   * Set an id for the list element.
+   * The label id derives from it as `label-{id}`.
+   */
   export let id = uniqueId();
 
   $: labelId = `label-${id}`;
@@ -78,6 +81,7 @@
     </div>
   {/if}
   <ul
+    {id}
     aria-labelledby={labelText || $$slots.labelChildren ? labelId : undefined}
   >
     <slot />
