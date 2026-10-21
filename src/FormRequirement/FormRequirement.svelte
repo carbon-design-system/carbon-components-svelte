@@ -13,9 +13,10 @@
   /**
    * Set an id for the message element.
    * Inside a `FormItem`, defaults to `error-{controlId}` or
-   * `warn-{controlId}`, and the item's control lists it in
-   * `aria-describedby`. An invalid message also sets the control's
-   * `aria-invalid` while it's mounted.
+   * `warn-{controlId}` (`-1`, `-2`, and so on for later messages of the
+   * same kind), and the item's control lists it in `aria-describedby`.
+   * An invalid message also sets the control's `aria-invalid` while it's
+   * mounted.
    * @type {string}
    */
   export let id = undefined;
@@ -32,7 +33,11 @@
 
   $: invalid = kind === "invalid";
   $: fieldIds = buildFieldIds($controlId);
-  $: messageId = id ?? (invalid ? fieldIds.errorId : fieldIds.warnId);
+  $: messageId =
+    id ??
+    (invalid
+      ? setInvalidId?.numbered(fieldIds.errorId)
+      : setWarnId?.numbered(fieldIds.warnId));
   $: setInvalidId?.(invalid ? messageId : undefined);
   $: setWarnId?.(invalid ? undefined : messageId);
 

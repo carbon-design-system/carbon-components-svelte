@@ -49,7 +49,7 @@
   const parts = formParts.parts;
   /**
    * Registers a mounted part's id under its kind.
-   * @type {(kind: "label" | "helper" | "invalid" | "warn") => (id: string | undefined) => void}
+   * @type {(kind: "label" | "helper" | "invalid" | "warn") => import("../utils/form-parts.js").FormPart}
    */
   const part = formParts.part;
 

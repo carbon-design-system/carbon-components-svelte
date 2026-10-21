@@ -5,8 +5,9 @@
 
   /**
    * Set an id for the helper text element.
-   * Inside a `FormItem`, defaults to `helper-{controlId}`, and the
-   * item's control lists it in `aria-describedby`.
+   * Inside a `FormItem`, defaults to `helper-{controlId}` (`-1`, `-2`,
+   * and so on for later helper texts), and the item's control lists it
+   * in `aria-describedby`.
    * @type {string}
    */
   export let id = undefined;
@@ -22,17 +23,16 @@
   import { readable } from "svelte/store";
   import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
-  import { noop } from "../utils/noop.js";
 
   const formItem = getContext(FORM_ITEM_CONTEXT_KEY);
   const controlId = formItem?.controlId ?? readable(undefined);
   const parentDisabled = formItem?.disabled ?? readable(false);
-  const setPartId = formItem?.part("helper") ?? noop;
+  const part = formItem?.part("helper");
 
-  $: helperId = id ?? buildFieldIds($controlId).helperId;
-  $: setPartId(helperId);
+  $: helperId = id ?? part?.numbered(buildFieldIds($controlId).helperId);
+  $: part?.(helperId);
 
-  onMount(() => () => setPartId(undefined));
+  onMount(() => () => part?.(undefined));
 </script>
 
 <div
