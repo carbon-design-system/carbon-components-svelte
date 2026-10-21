@@ -137,6 +137,51 @@ describe("InterstitialScreen", () => {
       expect(onclose.mock.calls[0][0].detail).toEqual({ actionType: "skip" });
       expect(screen.queryByRole(region)).not.toBeInTheDocument();
     });
+
+    it("closes from the header X with actionType 'close'", async () => {
+      const onclose = vi.fn();
+      render(InterstitialScreenTest, {
+        props: { open: true, isFullScreen, stepCount: 2, onclose },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Close" }));
+      await tick();
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({ actionType: "close" });
+      expect(screen.queryByRole(region)).not.toBeInTheDocument();
+    });
+
+    it("ignores a footer button press while an action is loading", () => {
+      const onaction = vi.fn();
+      render(InterstitialScreenTest, {
+        props: {
+          open: true,
+          isFullScreen,
+          stepCount: 2,
+          loadingAction: "next",
+          onaction,
+        },
+      });
+
+      // A disabled button swallows real clicks, so fire the event directly.
+      fireEvent.click(screen.getByText("Skip").closest("button") as Element);
+
+      expect(onaction).not.toHaveBeenCalled();
+    });
+
+    it("hides the progress indicator when hideProgressIndicator is set", () => {
+      render(InterstitialScreenTest, {
+        props: {
+          open: true,
+          isFullScreen,
+          stepCount: 2,
+          hideProgressIndicator: true,
+        },
+      });
+
+      expect(screen.queryByText("Step 1 of 2")).not.toBeInTheDocument();
+    });
   });
 
   it("orders a view inserted after mount by its DOM position", async () => {
@@ -164,6 +209,36 @@ describe("InterstitialScreen", () => {
 
     expect(onclose).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("closes a modal-hosted screen from the header X with actionType 'close'", async () => {
+    const onclose = vi.fn();
+    render(InterstitialScreenTest, {
+      props: { open: true, stepCount: 1, onclose },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    await tick();
+
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose.mock.calls[0][0].detail).toEqual({ actionType: "close" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("closes a modal-hosted screen on Escape with actionType 'close'", async () => {
+    const onclose = vi.fn();
+    render(InterstitialScreenTest, {
+      props: { open: true, stepCount: 1, onclose },
+    });
+
+    // Escape only reaches the modal when focus is inside it.
+    screen.getByRole("dialog").focus();
+    await user.keyboard("{Escape}");
+    await tick();
+
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose.mock.calls[0][0].detail).toEqual({ actionType: "close" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("Escape closes in full-screen mode", async () => {

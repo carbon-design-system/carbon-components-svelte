@@ -25,7 +25,7 @@ async function drag(
 
 function setup(props: Record<string, unknown> = {}) {
   const onResize = vi.fn();
-  render(Splitter, { props: { onResize, ...props } });
+  const { rerender } = render(Splitter, { props: { onResize, ...props } });
   const root = screen.getByTestId("splitter");
   vi.spyOn(root, "getBoundingClientRect").mockReturnValue(
     rect({ width: 400, height: 200 }),
@@ -33,7 +33,7 @@ function setup(props: Record<string, unknown> = {}) {
   const separator = screen.getByRole("separator");
   const startPane = screen.getByText("Start pane").parentElement;
   assert(startPane);
-  return { onResize, root, separator, startPane };
+  return { onResize, root, separator, startPane, rerender };
 }
 
 describe("Splitter", () => {
@@ -106,6 +106,17 @@ describe("Splitter", () => {
       expect(separator).toHaveAttribute("aria-valuenow", "50");
     },
   );
+
+  it("moves by step, and by ten steps with Shift", async () => {
+    const { separator } = setup({ step: 5, size: 20 });
+
+    separator.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(separator).toHaveAttribute("aria-valuenow", "25");
+
+    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+    expect(separator).toHaveAttribute("aria-valuenow", "75");
+  });
 
   it("uses ArrowUp and ArrowDown when vertical", async () => {
     const { separator, root } = setup({ orientation: "vertical" });
@@ -403,6 +414,16 @@ describe("Splitter", () => {
     expect(boundSize()).toHaveTextContent("50");
   });
 
+  it("ignores double click when disabled", async () => {
+    const { onResize, separator, rerender } = setup({ size: 30 });
+
+    await rerender({ size: 60, disabled: true });
+    await user.dblClick(separator);
+
+    expect(onResize).not.toHaveBeenCalled();
+    expect(boundSize()).toHaveTextContent("60");
+  });
+
   describe("hover delay", () => {
     const HOVER = "bx--splitter__separator--hover";
 
@@ -459,6 +480,17 @@ describe("Splitter", () => {
       await fireEvent.pointerEnter(disabledSeparator, { pointerType: "mouse" });
       await vi.advanceTimersByTimeAsync(150);
       expect(disabledSeparator).not.toHaveClass(HOVER);
+    });
+
+    it("cancels a pending hover when disabled mid-wait", async () => {
+      const { separator, rerender } = setup();
+
+      await fireEvent.pointerEnter(separator, { pointerType: "mouse" });
+      await vi.advanceTimersByTimeAsync(100);
+      await rerender({ disabled: true });
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(separator).not.toHaveClass(HOVER);
     });
 
     it("inherits the enclosing splitter's delay unless set", async () => {

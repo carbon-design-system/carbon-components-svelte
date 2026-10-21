@@ -13,6 +13,10 @@
     | undefined = undefined;
 
   export let moveFocusOnChange = false;
+  export let useMaxHeight = true;
+  export let single = false;
+  export let guarded = false;
+  export let slideLabel: string | undefined = undefined;
 
   let currentIndex = -1;
   let elsewhere: HTMLInputElement;
@@ -23,6 +27,7 @@
   data-testid="carousel"
   {wrap}
   {showCounter}
+  {useMaxHeight}
   {...counterText ? { counterText } : {}}
   bind:selectedIndex
   on:change={(e) => {
@@ -32,12 +37,31 @@
   }}
 >
   {#if loaded}
-    <CarouselItem>Slide one</CarouselItem>
-    <CarouselItem>
-      Slide two
-      <TextInput labelText="Name" />
+    <CarouselItem label={slideLabel}>
+      Slide one
+      {#if guarded}
+        <textarea aria-label="Notes"></textarea>
+        <select aria-label="Choice">
+          <option>A</option>
+        </select>
+        <div
+          role="slider"
+          tabindex="0"
+          aria-label="Volume"
+          aria-valuenow="1"
+        ></div>
+        <div role="listbox" tabindex="0" aria-label="Options"></div>
+        <div role="tablist" tabindex="0" aria-label="Sections"></div>
+        <div contenteditable="true" role="textbox" aria-label="Rich text"></div>
+      {/if}
     </CarouselItem>
-    <CarouselItem>Slide three</CarouselItem>
+    {#if !single}
+      <CarouselItem>
+        Slide two
+        <TextInput labelText="Name" />
+      </CarouselItem>
+      <CarouselItem>Slide three</CarouselItem>
+    {/if}
   {/if}
   {#if showExtra}
     <CarouselItem>Slide four</CarouselItem>

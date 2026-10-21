@@ -72,6 +72,23 @@ describe("Disclosure", () => {
     expect(control).toHaveAttribute("aria-expanded", "true");
   });
 
+  it("should add the open class to the wrapper when open", async () => {
+    const { rerender } = render(Disclosure);
+
+    const control = screen.getByRole("button", { name: "Show details" });
+    const wrapper = control.closest(".bx--disclosure");
+    expect(wrapper).not.toHaveClass("bx--disclosure--open");
+
+    await user.click(control);
+    expect(wrapper).toHaveClass("bx--disclosure--open");
+
+    await user.click(control);
+    expect(wrapper).not.toHaveClass("bx--disclosure--open");
+
+    await rerender({ open: true });
+    expect(wrapper).toHaveClass("bx--disclosure--open");
+  });
+
   it.each([["{Enter}"], [" "]])("should toggle on %j key", async (key) => {
     render(Disclosure);
 

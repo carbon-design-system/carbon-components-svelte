@@ -128,6 +128,19 @@ describe("TooltipGroup", () => {
     expect(texts()).toEqual(["List view"]);
   });
 
+  it("reads `enterDelayMs` live after mount", async () => {
+    const { rerender } = render(TooltipGroup);
+    await tick();
+    await rerender({ enterDelayMs: 400 });
+    const list = screen.getByRole("tab", { name: "List view" });
+
+    await fireEvent.mouseEnter(list);
+    await vi.advanceTimersByTimeAsync(399);
+    expect(texts()).toEqual([]);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(texts()).toEqual(["List view"]);
+  });
+
   it("applies `enterDelayMs` to its members", async () => {
     const { list } = await setup({ enterDelayMs: 400 });
 

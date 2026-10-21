@@ -150,6 +150,160 @@ describe("ConfirmModal", () => {
     expect(isOpen()).toBe(true);
   });
 
+  it("disables Cancel while loading", () => {
+    render(ConfirmModalTest, {
+      props: { open: true, title: "Delete this item?", loading: true },
+    });
+
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
+  });
+
+  it.each([
+    [
+      "the X",
+      async () => {
+        await user.click(screen.getByLabelText("Close the modal"));
+      },
+    ],
+    [
+      "an outside click",
+      async () => {
+        const overlay = document.querySelector(".bx--modal");
+        assert(overlay);
+        await user.click(overlay);
+      },
+    ],
+  ])("blocks closing with %s while loading", async (_, act) => {
+    const oncancel = vi.fn();
+    const onclose = vi.fn();
+    render(ConfirmModalTest, {
+      props: {
+        open: true,
+        title: "Delete this item?",
+        loading: true,
+        preventCloseOnClickOutside: false,
+        oncancel,
+        onclose,
+      },
+    });
+
+    await act();
+    await tick();
+
+    expect(oncancel).not.toHaveBeenCalled();
+    expect(onclose).not.toHaveBeenCalled();
+    expect(isOpen()).toBe(true);
+  });
+
+  it("ignores an outside click by default", async () => {
+    const oncancel = vi.fn();
+    render(ConfirmModalTest, {
+      props: { open: true, title: "Delete this item?", oncancel },
+    });
+
+    const overlay = document.querySelector(".bx--modal");
+    assert(overlay);
+    await user.click(overlay);
+    await tick();
+
+    expect(oncancel).not.toHaveBeenCalled();
+    expect(isOpen()).toBe(true);
+  });
+
+  it("stays open and sends no cancel when a close handler prevents the default", async () => {
+    const oncancel = vi.fn();
+    const onclose = vi.fn((event: CustomEvent) => event.preventDefault());
+    render(ConfirmModalTest, {
+      props: { open: true, title: "Delete this item?", oncancel, onclose },
+    });
+
+    await user.click(screen.getByLabelText("Close the modal"));
+    await tick();
+
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(oncancel).not.toHaveBeenCalled();
+    expect(isOpen()).toBe(true);
+  });
+
+  it("clears the typed phrase when the modal is reopened", async () => {
+    const { rerender } = render(ConfirmModalTest, {
+      props: {
+        open: true,
+        title: "Delete this item?",
+        confirmText: "Delete",
+        confirmationPhrase: "delete",
+      },
+    });
+
+    const input = screen.getByLabelText("Type delete to confirm");
+    await user.type(input, "delete");
+    expect(screen.getByRole("button", { name: "Delete" })).toBeEnabled();
+
+    await rerender({ open: false });
+    await rerender({ open: true });
+
+    expect(input).toHaveValue("");
+    expect(screen.getByRole("button", { name: "Delete" })).toBeDisabled();
+  });
+
+  it.each([
+    [
+      "Cancel button",
+      // Not "danger": Modal's own fallback already picks Cancel there.
+      { kind: "info" as const },
+      () => screen.getByRole("button", { name: "Cancel" }),
+    ],
+    [
+      "phrase input",
+      { confirmationPhrase: "delete" },
+      () => screen.getByLabelText("Type delete to confirm"),
+    ],
+  ])("focuses the %s on open", async (_, props, getTarget) => {
+    const { rerender } = render(ConfirmModalTest, {
+      props: { title: "Delete this item?", ...props },
+    });
+
+    await rerender({ open: true });
+    await tick();
+
+    expect(getTarget()).toHaveFocus();
+  });
+
+  it("stays open and reports the error when confirm throws synchronously", async () => {
+    const error = new Error("Boom");
+    const onconfirmerror = vi.fn();
+    render(ConfirmModalTest, {
+      props: {
+        open: true,
+        title: "Delete this item?",
+        confirmText: "Delete",
+        confirm: () => {
+          throw error;
+        },
+        onconfirmerror,
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+    await tick();
+
+    expect(onconfirmerror).toHaveBeenCalledTimes(1);
+    expect(onconfirmerror.mock.calls[0][0].detail).toEqual({ error });
+    expect(isOpen()).toBe(true);
+  });
+
+  it("marks the confirmation phrase as not translatable", () => {
+    render(ConfirmModalTest, {
+      props: {
+        open: true,
+        title: "Delete this item?",
+        confirmationPhrase: "delete",
+      },
+    });
+
+    expect(screen.getByText("delete")).toHaveAttribute("translate", "no");
+  });
+
   it("waits for a confirm promise, then closes without a cancel", async () => {
     let finish = () => {};
     const confirm = vi.fn(

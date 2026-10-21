@@ -5,14 +5,23 @@
   export let open: ComponentProps<Toggletip>["open"] = false;
   export let portalTooltip: ComponentProps<Toggletip>["portalTooltip"] =
     undefined;
+  export let direction: ComponentProps<Toggletip>["direction"] = "bottom";
+  export let align: ComponentProps<Toggletip>["align"] = "center";
+  export let iconDescription: ComponentProps<Toggletip>["iconDescription"] =
+    "Information";
+  export let labelText: ComponentProps<Toggletip>["labelText"] = "";
   export let onOpen: () => void = () => {};
   export let onClose: () => void = () => {};
 </script>
 
 <Toggletip
+  id="tt"
   bind:open
   {portalTooltip}
-  iconDescription="Information"
+  {direction}
+  {align}
+  {iconDescription}
+  {labelText}
   on:open={onOpen}
   on:close={onClose}
 >

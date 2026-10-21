@@ -92,6 +92,24 @@ describe("ToggleButtonGroup", () => {
       expect(component.selected).toEqual([]);
     });
 
+    it("presses only the first of several selected values and collapses to one on click", async () => {
+      const { component } = render(ToggleButtonGroupFixture, {
+        props: { selectionMode: "single", selected: ["italic", "bold"] },
+      });
+
+      const bold = screen.getByRole("button", { name: "Bold" });
+      expect(screen.getByRole("button", { name: "Italic" })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+      expect(bold).toHaveAttribute("aria-pressed", "false");
+
+      await user.click(bold);
+
+      expect(bold).toHaveAttribute("aria-pressed", "true");
+      expect(component.selected).toEqual(["bold"]);
+    });
+
     it("required keeps the pressed button pressed and dispatches nothing", async () => {
       const onChange = vi.fn();
       const { component } = render(ToggleButtonGroupFixture, {
@@ -124,6 +142,21 @@ describe("ToggleButtonGroup", () => {
     expect(bold).toHaveAttribute("aria-pressed", "true");
     expect(component.selected).toEqual(["bold"]);
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("required in multiple mode lets a button off while another stays pressed", async () => {
+    const onChange = vi.fn();
+    render(ToggleButtonGroupFixture, {
+      props: { required: true, selected: ["bold", "italic"], onChange },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Bold" }));
+
+    expect(onChange).toHaveBeenCalledWith(["italic"]);
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
   });
 
   it("disables every button when the group is disabled", () => {

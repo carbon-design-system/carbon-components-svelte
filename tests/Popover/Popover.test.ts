@@ -12,20 +12,17 @@ describe("Popover", () => {
     );
   });
 
-  it("should handle outside clicks", async () => {
+  it("dispatches click:outside with the target even when closeOnOutsideClick is false", async () => {
     const onClickOutside = vi.fn();
     render(Popover, {
-      props: {
-        open: true,
-        closeOnOutsideClick: true,
-        onClickOutside,
-      },
+      props: { open: true, closeOnOutsideClick: false, onClickOutside },
     });
 
     await user.click(document.body);
-    expect(onClickOutside).toHaveBeenCalledWith(
-      expect.objectContaining({ detail: expect.any(Object) }),
-    );
+    expect(onClickOutside).toHaveBeenCalledTimes(1);
+    expect(onClickOutside.mock.calls[0][0].detail).toEqual({
+      target: document.body,
+    });
   });
 
   it.each([

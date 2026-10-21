@@ -169,6 +169,17 @@ describe("Dialog", () => {
     expect(dialogEl).toHaveAttribute("open");
   });
 
+  it("does not close a non-modal dialog on an outside click", async () => {
+    const onclose = vi.fn();
+    render(Dialog, { props: { open: true, modal: false, onclose } });
+
+    const dialogEl = screen.getByRole("dialog");
+    await user.click(dialogEl);
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(dialogEl).toHaveAttribute("open");
+  });
+
   it("restores focus to the opener when the dialog closes", async () => {
     render(Dialog, { props: { modal: true } });
 
