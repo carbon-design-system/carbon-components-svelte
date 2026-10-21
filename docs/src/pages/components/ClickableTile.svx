@@ -3,7 +3,9 @@ description: Clickable tiles are interactive content areas that link to another 
 ---
 
 <script>
-  import { AILabel, ClickableTile, Layer } from "carbon-components-svelte";
+  import { AILabel, ClickableTile, Layer, Stack } from "carbon-components-svelte";
+  import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
 ## Basic
@@ -23,6 +25,26 @@ Bind to `clicked` to read whether the tile has been activated. Without
 press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle `clicked`.
 
 <FileSource src="/framed/ClickableTile/ReactiveClickableTile" />
+
+## With icon
+
+Set `icon` to show an icon in the bottom-right corner. Use `ArrowRight` for a
+page in your app and `Launch` for a link that opens another site. The icon is
+decorative and hidden from screen readers, so let the tile's text name the
+destination.
+
+<Stack gap={5}>
+  <ClickableTile href="/docs/deploy" icon={ArrowRight}>
+    Deployment guide
+  </ClickableTile>
+  <ClickableTile
+    href="https://status.cloud.ibm.com/"
+    target="_blank"
+    icon={Launch}
+  >
+    Service status
+  </ClickableTile>
+</Stack>
 
 ## Prevent default
 
