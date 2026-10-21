@@ -87,6 +87,34 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     );
   });
 
+  it("makes a clicked button the only tab stop", async () => {
+    render(ToggleButtonGroupFixture);
+
+    await user.click(screen.getByRole("button", { name: "Underline" }));
+
+    const buttons = screen.getAllByRole("button");
+    const tabbable = buttons.filter(
+      (button) => button.getAttribute("tabindex") === "0",
+    );
+    expect(tabbable).toEqual([
+      screen.getByRole("button", { name: "Underline" }),
+    ]);
+  });
+
+  it("ignores grid and moves with Up/Down through roving focus when vertical", async () => {
+    render(ToggleButtonGroupFixture, {
+      props: { grid: true, orientation: "vertical" },
+    });
+
+    expect(screen.getByRole("toolbar")).not.toHaveClass(
+      "bx--toggle-button-group--grid",
+    );
+
+    await user.tab();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Italic" })).toHaveFocus();
+  });
+
   it("uses ArrowUp/ArrowDown when vertical", async () => {
     render(ToggleButtonGroupFixture, { props: { orientation: "vertical" } });
 

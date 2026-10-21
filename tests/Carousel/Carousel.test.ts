@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import Carousel from "./Carousel.test.svelte";
@@ -67,6 +67,15 @@ describe("Carousel", () => {
     expect(screen.getByRole("textbox", { name: "Elsewhere" })).toHaveFocus();
   });
 
+  it("moves focus to the next button when previous reaches the first slide", async () => {
+    render(Carousel, { props: { selectedIndex: 1 } });
+
+    await user.click(prevButton());
+
+    expect(prevButton()).toBeDisabled();
+    expect(nextButton()).toHaveFocus();
+  });
+
   it("dispatches change with the new index on navigation", async () => {
     render(Carousel);
 
@@ -97,6 +106,62 @@ describe("Carousel", () => {
 
     expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
     expect(screen.getByText("Slide two")).toBeVisible();
+  });
+
+  it.each(["altKey", "ctrlKey", "metaKey", "shiftKey"])(
+    "ignores arrow keys with %s",
+    async (modifier) => {
+      render(Carousel);
+
+      const notPrevented = await fireEvent.keyDown(
+        screen.getByTestId("carousel"),
+        { key: "ArrowRight", [modifier]: true },
+      );
+
+      expect(notPrevented).toBe(true);
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    },
+  );
+
+  it("ignores arrow keys another handler already handled", async () => {
+    render(Carousel);
+    const slide = screen.getByText("Slide one");
+    slide.addEventListener("keydown", (event) => event.preventDefault());
+
+    await fireEvent.keyDown(slide, { key: "ArrowRight" });
+
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+  });
+
+  it.each(["Notes", "Choice", "Volume", "Options", "Sections"])(
+    "ignores arrow keys inside %s",
+    async (name) => {
+      render(Carousel, { props: { guarded: true } });
+
+      const notPrevented = await fireEvent.keyDown(
+        screen.getByLabelText(name),
+        {
+          key: "ArrowRight",
+        },
+      );
+
+      expect(notPrevented).toBe(true);
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    },
+  );
+
+  it("ignores arrow keys inside contenteditable content", async () => {
+    render(Carousel, { props: { guarded: true } });
+    const editor = screen.getByLabelText("Rich text");
+    // dom-env doesn't implement `isContentEditable`.
+    Object.defineProperty(editor, "isContentEditable", { value: true });
+
+    const notPrevented = await fireEvent.keyDown(editor, {
+      key: "ArrowRight",
+    });
+
+    expect(notPrevented).toBe(true);
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
   });
 
   it("starts at the initial selectedIndex without dispatching change", () => {
@@ -145,6 +210,26 @@ describe("Carousel", () => {
     expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
   });
 
+  it("labels a slide with the label prop", () => {
+    render(Carousel, { props: { slideLabel: "Welcome" } });
+
+    expect(
+      screen.getByText("Slide one").closest("[role='group']"),
+    ).toHaveAttribute("aria-label", "Welcome");
+  });
+
+  it("re-measures when useMaxHeight is turned off", async () => {
+    vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(80);
+    const { rerender } = render(Carousel);
+    const viewport = screen.getByText("Slide one").parentElement;
+    assert(viewport);
+    expect(viewport.style.minBlockSize).toBe("80px");
+
+    await rerender({ useMaxHeight: false });
+
+    expect(viewport.style.minBlockSize).toBe("");
+  });
+
   it("selects a slide added in the same update", async () => {
     render(Carousel);
 
@@ -164,6 +249,13 @@ describe("Carousel", () => {
 
       expect(prevButton()).not.toBeDisabled();
       expect(nextButton()).not.toBeDisabled();
+    });
+
+    it("disables both buttons for a single slide", () => {
+      render(Carousel, { props: { wrap: true, single: true } });
+
+      expect(prevButton()).toBeDisabled();
+      expect(nextButton()).toBeDisabled();
     });
 
     it("goes from the last slide to the first on next", async () => {

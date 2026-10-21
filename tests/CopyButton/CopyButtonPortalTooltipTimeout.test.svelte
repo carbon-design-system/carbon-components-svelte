@@ -4,6 +4,8 @@
 
   export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] = true;
   export let feedbackTimeout = 100;
+  export let tooltipPosition: ComponentProps<CopyButton>["tooltipPosition"] =
+    "bottom";
 </script>
 
 <CopyButton
@@ -11,4 +13,5 @@
   iconDescription="Copy"
   {portalTooltip}
   {feedbackTimeout}
+  {tooltipPosition}
 />

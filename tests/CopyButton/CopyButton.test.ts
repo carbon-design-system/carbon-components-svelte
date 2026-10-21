@@ -221,6 +221,35 @@ describe("CopyButton", () => {
     });
   });
 
+  describe("hover and focus tooltip", () => {
+    it("opens the description on keyboard focus and closes on blur", async () => {
+      render(CopyButton);
+
+      await user.tab();
+      expect(getCopyButton("Basic")).toHaveFocus();
+      expect(openTooltips()).toHaveLength(1);
+      expect(openTooltips()[0]).toHaveTextContent("Basic");
+
+      await user.click(document.body);
+      expect(openTooltips()).toHaveLength(0);
+    });
+
+    it("hides the focused tooltip while the inline caret shows feedback", async () => {
+      render(CopyButtonPortalTooltipTimeout, {
+        props: { portalTooltip: false },
+      });
+
+      const button = getCopyButton("Copy");
+      await user.click(button);
+
+      expect(button).toHaveFocus();
+      expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
+        "Copied!",
+      );
+      expect(openTooltips()).toHaveLength(0);
+    });
+  });
+
   describe("Portal tooltip", () => {
     it("should add portal-active class and render feedback in FloatingPortal on click when portalTooltip is true", async () => {
       render(CopyButton, {
@@ -238,6 +267,20 @@ describe("CopyButton", () => {
       expect(
         portal?.querySelector(".bx--tooltip-portal__content"),
       ).toHaveTextContent("Copied!");
+    });
+
+    it("portals feedback for a custom tooltipPosition even with portalTooltip=false", async () => {
+      render(CopyButtonPortalTooltipTimeout, {
+        props: { portalTooltip: false, tooltipPosition: "top" },
+      });
+
+      const button = getCopyButton("Copy");
+      expect(button).toHaveClass("bx--copy-btn--portal-active");
+
+      await user.click(button);
+
+      expect(button.querySelector(".bx--copy-btn__feedback")).toBeNull();
+      expect(openTooltips()[0]).toHaveTextContent("Copied!");
     });
 
     describe("feedback timeout", () => {
