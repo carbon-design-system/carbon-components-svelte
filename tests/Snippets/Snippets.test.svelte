@@ -40,32 +40,20 @@
   headers={dataTableHeaders}
   rows={dataTableRows}
 >
-  {#snippet expandIcon({
-    expanded,
-    row,
-    props,
-  })}
+  {#snippet expandIcon({ expanded, row, props })}
     <span
       data-testid="datatable-expand-icon-snippet"
       {...props}
       data-expanded={expanded}
     ></span>
   {/snippet}
-  {#snippet expandedRow({
-    row,
-    rowSelected: _rowSelected,
-  })}
+  {#snippet expandedRow({ row, rowSelected: _rowSelected })}
     <pre>{JSON.stringify(row, null, 2)}</pre>
   {/snippet}
 </DataTable>
 
 <Dropdown data-testid="dropdown-snippet" {items} selectedId="1">
-  {#snippet children({
-    item,
-    index,
-    selected,
-    highlighted,
-  })}
+  {#snippet children({ item, index, selected, highlighted })}
     <span
       data-testid="dropdown-item-{index}"
       data-selected={selected}
@@ -103,15 +91,10 @@
 </ShapeIndicator>
 
 <Dropdown data-testid="dropdown-icon-snippets" {items} selectedId="1">
-  {#snippet icon({
-    item,
-  })}
+  {#snippet icon({ item })}
     <span data-testid="dropdown-icon-{item.id}">L</span>
   {/snippet}
-  {#snippet iconRight({
-    item,
-    selected,
-  })}
+  {#snippet iconRight({ item, selected })}
     <span data-testid="dropdown-icon-right-{item.id}" data-selected={selected}
       >R</span
     >
@@ -119,11 +102,7 @@
 </Dropdown>
 
 <ComboBox data-testid="combobox-snippet" {items} selectedId="2">
-  {#snippet children({
-    item,
-    index,
-    selected,
-  })}
+  {#snippet children({ item, index, selected })}
     <span data-testid="combobox-item-{index}" data-selected={selected}
       >{item.text}
       - index {index}</span
@@ -148,9 +127,7 @@
 
 <div data-testid="theme-snippet">
   <Theme>
-    {#snippet children({
-      theme,
-    })}
+    {#snippet children({ theme })}
       <div data-testid="theme-value">Current theme: {theme}</div>
     {/snippet}
   </Theme>
@@ -158,11 +135,7 @@
 
 <ProgressIndicator data-testid="progress-step-icon-snippet" currentIndex={1}>
   <ProgressStep complete label="Step 1" description="Completed">
-    {#snippet icon({
-      complete,
-      current,
-      invalid,
-    })}
+    {#snippet icon({ complete, current, invalid })}
       <span
         data-testid="progress-step-icon-1"
         data-complete={complete}
@@ -173,11 +146,7 @@
     {/snippet}
   </ProgressStep>
   <ProgressStep label="Step 2" description="Current">
-    {#snippet icon({
-      complete,
-      current,
-      invalid,
-    })}
+    {#snippet icon({ complete, current, invalid })}
       <span
         data-testid="progress-step-icon-2"
         data-complete={complete}
@@ -188,11 +157,7 @@
     {/snippet}
   </ProgressStep>
   <ProgressStep invalid label="Step 3" description="Invalid">
-    {#snippet icon({
-      complete,
-      current,
-      invalid,
-    })}
+    {#snippet icon({ complete, current, invalid })}
       <span
         data-testid="progress-step-icon-3"
         data-complete={complete}
@@ -222,11 +187,7 @@
 </Tabs>
 
 <TagInput labelText="Topics" value={["alpha", "beta"]}>
-  {#snippet tag({
-    tag,
-    index,
-    props,
-  })}
+  {#snippet tag({ tag, index, props })}
     <Tag {...props} type="teal" data-testid="tag-input-tag-{index}">{tag}</Tag>
   {/snippet}
 </TagInput>
@@ -238,11 +199,7 @@
   selectionDisplay="tags"
   selectedIds={["1", "3"]}
 >
-  {#snippet tag({
-    item,
-    index,
-    props,
-  })}
+  {#snippet tag({ item, index, props })}
     <Tag {...props} type="teal" data-testid="multiselect-tag-{index}">
       {item.text}
     </Tag>
