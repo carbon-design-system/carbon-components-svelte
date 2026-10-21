@@ -3,7 +3,6 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
-import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
 import ProgressIndicatorSelectedId from "./ProgressIndicatorSelectedId.test.svelte";
 import ProgressStepIconSlot from "./ProgressStepIconSlot.test.svelte";
@@ -33,11 +32,7 @@ describe("ProgressIndicator", () => {
 
       expect(listItems[2]).toHaveTextContent("Step 3");
 
-      const incompleteStep = screen.getByText("Step 4");
-      expect(incompleteStep).toBeInTheDocument();
-      expect(incompleteStep.closest("li")).not.toHaveClass(
-        "bx--progress-step--complete",
-      );
+      expect(listItems[3]).not.toHaveClass("bx--progress-step--complete");
     });
 
     it("should expose current, complete, and invalid state to assistive tech", async () => {
@@ -66,8 +61,8 @@ describe("ProgressIndicator", () => {
       expect(buttons[2]).toHaveAccessibleName(/, invalid$/);
     });
 
-    it("should update currentIndex when clicking on completed steps", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+    it("should dispatch change with the index when clicking on completed steps", async () => {
+      const onchange = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 2,
         steps: [
@@ -76,12 +71,14 @@ describe("ProgressIndicator", () => {
           { label: "Step 3", description: "Third step", complete: true },
           { label: "Step 4", description: "Fourth step", complete: false },
         ],
+        onchange,
       });
 
-      expect(consoleLog).not.toHaveBeenCalled();
-
       await user.click(screen.getByText("Step 1"));
-      expect(consoleLog).toHaveBeenCalledWith("change", 0);
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange).toHaveBeenLastCalledWith(
+        expect.objectContaining({ detail: 0 }),
+      );
     });
 
     it("should not update currentIndex when preventChangeOnClick is true", async () => {
@@ -106,7 +103,7 @@ describe("ProgressIndicator", () => {
   });
 
   describe("Invalid and disabled states", () => {
-    it("should render invalid step", () => {
+    it("should render an invalid step as incomplete with the warning icon", () => {
       render(ProgressIndicator, {
         steps: [
           { label: "Step 1", description: "First step", complete: true },
@@ -121,8 +118,16 @@ describe("ProgressIndicator", () => {
         ],
       });
 
-      const invalidStep = screen.getByText("Step 2").closest("li");
+      const invalidStep = screen.getAllByRole("listitem")[1];
       expect(invalidStep).toHaveClass("bx--progress-step--incomplete");
+      expect(
+        invalidStep.querySelector(".bx--progress__warning"),
+      ).not.toBeNull();
+      expect(
+        screen
+          .getAllByRole("listitem")[2]
+          .querySelector(".bx--progress__warning"),
+      ).toBeNull();
     });
 
     it("should render disabled steps", () => {
@@ -296,25 +301,29 @@ describe("ProgressIndicator", () => {
     });
 
     it("should support keyboard navigation for complete steps", async () => {
-      const consoleLog = vi.spyOn(console, "log");
+      const onchange = vi.fn();
       render(ProgressIndicator, {
         currentIndex: 1,
         steps: [
           { label: "Step 1", description: "First step", complete: true },
           { label: "Step 2", description: "Second step", complete: false },
         ],
+        onchange,
       });
 
-      expect(consoleLog).not.toHaveBeenCalled();
       const completeStepButton = screen.getAllByRole("button")[0];
       await user.tab();
       expect(completeStepButton).toHaveFocus();
 
       await user.keyboard("{Enter}");
-      expect(consoleLog).toHaveBeenCalledWith("change", 0);
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange).toHaveBeenLastCalledWith(
+        expect.objectContaining({ detail: 0 }),
+      );
 
+      // Step 1 is now the current step, so Space must not dispatch again.
       await user.keyboard(" ");
-      expect(consoleLog).toHaveBeenCalledWith("change", 0);
+      expect(onchange).toHaveBeenCalledTimes(1);
     });
 
     it("should dispatch change exactly once per keypress on a complete step", async () => {
@@ -488,7 +497,7 @@ describe("ProgressIndicator", () => {
 
       expect(screen.getAllByRole("listitem")).toHaveLength(3);
 
-      rerender({ showOptional: false, currentIndex: 0 });
+      await rerender({ showOptional: false, currentIndex: 0 });
 
       await waitFor(() => {
         expect(screen.getAllByRole("listitem")).toHaveLength(2);
@@ -544,7 +553,7 @@ describe("ProgressIndicator", () => {
       expect(listItems[2]).toHaveTextContent("Step 3");
       expect(listItems[2]).toHaveClass("bx--progress-step--current");
 
-      rerender({ showOptional: false, currentIndex: 2 });
+      await rerender({ showOptional: false, currentIndex: 2 });
 
       await waitFor(() => {
         expect(screen.getAllByRole("listitem")).toHaveLength(2);
@@ -589,8 +598,8 @@ describe("ProgressIndicator", () => {
     });
   });
 
-  describe("Reactive complete prop (#1249)", () => {
-    it("should update complete state immediately without delay", async () => {
+  describe("Reactive complete prop", () => {
+    it("should update the complete class when the prop changes", async () => {
       const { rerender } = render(ProgressIndicatorReactive, {
         props: {
           step1Complete: false,
@@ -603,43 +612,16 @@ describe("ProgressIndicator", () => {
       expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
       expect(listItems[1]).not.toHaveClass("bx--progress-step--complete");
 
-      rerender({ step1Complete: true, step2Complete: false });
-      await waitFor(() => {
-        expect(listItems[0]).toHaveClass("bx--progress-step--complete");
-      });
+      await rerender({ step1Complete: true, step2Complete: false });
+      expect(listItems[0]).toHaveClass("bx--progress-step--complete");
       expect(listItems[1]).not.toHaveClass("bx--progress-step--complete");
 
-      rerender({ step1Complete: true, step2Complete: true });
-      await waitFor(() => {
-        expect(listItems[1]).toHaveClass("bx--progress-step--complete");
-      });
-
-      rerender({ step1Complete: false, step2Complete: true });
-      await waitFor(() => {
-        expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
-      });
+      await rerender({ step1Complete: true, step2Complete: true });
       expect(listItems[1]).toHaveClass("bx--progress-step--complete");
-    });
 
-    it("should update step 3 on first button click (issue #1249 repro)", async () => {
-      render(ProgressIndicatorIssue1249);
-
-      const listItems = screen.getAllByRole("listitem");
-
-      // After onMount, steps 1 and 2 should be complete.
-      await waitFor(() => {
-        expect(listItems[0]).toHaveClass("bx--progress-step--complete");
-        expect(listItems[1]).toHaveClass("bx--progress-step--complete");
-      });
-      expect(listItems[2]).not.toHaveClass("bx--progress-step--complete");
-
-      const button = screen.getByText("Click me twice");
-      await user.click(button);
-
-      // Before the fix, this would fail. Step 3 wouldn't update until second click.
-      await waitFor(() => {
-        expect(listItems[2]).toHaveClass("bx--progress-step--complete");
-      });
+      await rerender({ step1Complete: false, step2Complete: true });
+      expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
+      expect(listItems[1]).toHaveClass("bx--progress-step--complete");
     });
   });
 

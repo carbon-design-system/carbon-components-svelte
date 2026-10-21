@@ -5,7 +5,7 @@
   import AccordionItem from "carbon-components-svelte/Accordion/AccordionItem.svelte";
   import type { ComponentProps } from "svelte";
 
-  export let align: ComponentProps<Accordion>["align"] = "end";
+  export let align: ComponentProps<Accordion>["align"] = undefined;
   export let size: ComponentProps<Accordion>["size"] = undefined;
   export let flush: ComponentProps<Accordion>["flush"] = false;
   export let customClass = "";

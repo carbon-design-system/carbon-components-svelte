@@ -38,3 +38,5 @@
     </StructuredListRow>
   </StructuredListBody>
 </StructuredList>
+
+<div data-testid="value">{selected}</div>

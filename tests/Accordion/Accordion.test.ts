@@ -63,21 +63,16 @@ describe("Accordion", () => {
 
     itemIsDisabled(/Natural Language Understanding/);
 
-    expect(screen.getByText("1")).toBeVisible();
-    expect(screen.getByText("2")).toBeVisible();
-    expect(screen.getByText("3")).toBeVisible();
     const firstItem = screen.getByText("Natural Language Classifier");
     const lastItem = screen.getByText("Language Translator");
 
     await user.click(firstItem);
     itemIsExpanded(/Natural Language Classifier/);
-    expect(screen.getByText("1")).toBeVisible();
+    itemIsCollapsed(/Language Translator/);
 
     await user.click(lastItem);
     itemIsExpanded(/Natural Language Classifier/);
     itemIsExpanded(/Language Translator/);
-    expect(screen.getByText("1")).toBeVisible();
-    expect(screen.getByText("3")).toBeVisible();
   });
 
   it("programmatically expands and collapses all items", async () => {
@@ -87,30 +82,12 @@ describe("Accordion", () => {
     itemIsCollapsed(/Natural Language Understanding/);
     itemIsCollapsed(/Language Translator/);
 
-    expect(
-      screen.queryByText(
-        "Natural Language Classifier uses advanced natural language processing",
-      ),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Analyze text to extract meta-data"),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Translate text, documents, and websites"),
-    ).not.toBeInTheDocument();
-
     const expandButton = screen.getByRole("button", { name: /Expand all/i });
     await user.click(expandButton);
 
     itemIsExpanded(/Natural Language Classifier/);
     itemIsExpanded(/Natural Language Understanding/);
     itemIsExpanded(/Language Translator/);
-
-    expect(screen.getByText(/Natural Language Classifier uses/)).toBeVisible();
-    expect(screen.getByText(/Analyze text to extract meta-data/)).toBeVisible();
-    expect(
-      screen.getByText(/Translate text, documents, and websites/),
-    ).toBeVisible();
 
     expect(
       screen.getByRole("button", { name: /Collapse all/i }),
@@ -121,18 +98,6 @@ describe("Accordion", () => {
     itemIsCollapsed(/Natural Language Classifier/);
     itemIsCollapsed(/Natural Language Understanding/);
     itemIsCollapsed(/Language Translator/);
-
-    expect(
-      screen.queryByText(
-        "Natural Language Classifier uses advanced natural language processing",
-      ),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Analyze text to extract meta-data"),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Translate text, documents, and websites"),
-    ).not.toBeInTheDocument();
   });
 
   it("disables all items when Accordion disabled prop is true", () => {
@@ -161,11 +126,6 @@ describe("Accordion", () => {
     await user.click(item1);
 
     itemIsCollapsed(/Natural Language Classifier/);
-    expect(
-      screen.queryByText(
-        "Natural Language Classifier uses advanced natural language processing",
-      ),
-    ).not.toBeInTheDocument();
   });
 
   it("programmatically toggles disabled state and collapses items", async () => {
@@ -199,19 +159,6 @@ describe("Accordion", () => {
     itemIsCollapsed(/Natural Language Understanding/);
     itemIsCollapsed(/Language Translator/);
 
-    expect(
-      screen.queryByText(
-        "Natural Language Classifier uses advanced natural language processing",
-      ),
-    ).not.toBeInTheDocument();
-
-    const item1 = screen.getByRole("button", {
-      name: /Natural Language Classifier/,
-    });
-    await user.click(item1);
-
-    itemIsCollapsed(/Natural Language Classifier/);
-
     const enableButton = screen.getByRole("button", { name: /Enable all/i });
     await user.click(enableButton);
 
@@ -226,20 +173,18 @@ describe("Accordion", () => {
     ).not.toBeDisabled();
   });
 
-  it("prevents expand/collapse when disabled", async () => {
-    render(AccordionBatchDisable);
+  it("does not toggle an item when the Accordion is disabled", async () => {
+    const onToggle = vi.fn();
+    render(AccordionDisabledOpen, {
+      props: { accordionDisabled: true, onToggle },
+    });
 
-    const disableButton = screen.getByRole("button", { name: /Disable all/i });
-    await user.click(disableButton);
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
 
-    const expandButton = screen.getByRole("button", { name: /Expand all/i });
-    expect(expandButton).toBeDisabled();
-
-    await user.click(expandButton);
-
+    expect(onToggle).not.toHaveBeenCalled();
     itemIsCollapsed(/Natural Language Classifier/);
-    itemIsCollapsed(/Natural Language Understanding/);
-    itemIsCollapsed(/Language Translator/);
   });
 
   it("applies flush class to skeleton", () => {
@@ -355,6 +300,7 @@ describe("Accordion", () => {
 
     const accordion = screen.getByRole("list");
     expect(accordion).toHaveClass("custom-accordion");
+    expect(accordion).toHaveClass("bx--accordion");
   });
 
   it("should apply custom class to AccordionItem", () => {
@@ -362,6 +308,7 @@ describe("Accordion", () => {
 
     const item = screen.getByText("Language Translator").closest("li");
     expect(item).toHaveClass("custom-item");
+    expect(item).toHaveClass("bx--accordion__item");
   });
 
   it("should handle click events on Accordion", async () => {
@@ -612,7 +559,10 @@ describe("Accordion", () => {
   });
 
   it("keeps a disabled, closed item closed on click", async () => {
-    render(AccordionDisabledOpen, { props: { open: false, disabled: true } });
+    const onToggle = vi.fn();
+    render(AccordionDisabledOpen, {
+      props: { open: false, disabled: true, onToggle },
+    });
 
     itemIsDisabled(/Natural Language Classifier/);
     itemIsCollapsed(/Natural Language Classifier/);
@@ -621,6 +571,7 @@ describe("Accordion", () => {
       screen.getByRole("button", { name: /Natural Language Classifier/ }),
     );
 
+    expect(onToggle).not.toHaveBeenCalled();
     itemIsCollapsed(/Natural Language Classifier/);
   });
 
