@@ -85,20 +85,38 @@
    * @type {import("svelte/action").Action<HTMLElement>}
    */
   function control(node) {
-    const ownDescribedBy = node.getAttribute("aria-describedby");
+    let ownDescribedBy = node.getAttribute("aria-describedby");
     const labelledByLabel =
       !LABELABLE.has(node.localName) &&
       !node.hasAttribute("aria-labelledby") &&
       !node.hasAttribute("aria-label");
     let appliedInvalid = false;
+    let state;
+    /** @type {string | undefined} */
+    let describedBy;
 
-    const unsubscribe = controlState.subscribe((state) => {
+    function applyDescribedBy() {
+      describedBy = joinDescribedBy(ownDescribedBy, state.describedBy);
+      setAttribute(node, "aria-describedby", describedBy);
+    }
+
+    // A reactive `aria-describedby` on the control overwrites the merged
+    // value; treat any write that isn't ours as the new own value.
+    const observer = new MutationObserver(() => {
+      const live = node.getAttribute("aria-describedby");
+      if ((live ?? undefined) === describedBy) return;
+      ownDescribedBy = live;
+      applyDescribedBy();
+    });
+    observer.observe(node, {
+      attributes: true,
+      attributeFilter: ["aria-describedby"],
+    });
+
+    const unsubscribe = controlState.subscribe((next) => {
+      state = next;
       node.id = state.id;
-      setAttribute(
-        node,
-        "aria-describedby",
-        joinDescribedBy(ownDescribedBy, state.describedBy),
-      );
+      applyDescribedBy();
       if (labelledByLabel) setAttribute(node, "aria-labelledby", state.labelId);
       if (state.invalid) {
         node.setAttribute("aria-invalid", "true");
@@ -109,7 +127,12 @@
       }
     });
 
-    return { destroy: unsubscribe };
+    return {
+      destroy() {
+        observer.disconnect();
+        unsubscribe();
+      },
+    };
   }
 
   $: sharedControlId.set(controlId);
