@@ -152,9 +152,17 @@
     dispatch("close", { trigger });
   }
 
+  /**
+   * Set when the menu opens from the keyboard (the context menu key or
+   * Shift+F10), which fires `contextmenu` with no button down. A
+   * right-click opens on the menu itself, like a native context menu.
+   */
+  let focusFirstOption = false;
+
   /** @type {(event: MouseEvent) => void} */
   function openMenu(event) {
     event.preventDefault();
+    focusFirstOption = event.button !== 2 && event.buttons === 0;
     const { height, width } = ref.getBoundingClientRect();
 
     // The menu opens toward the inline end of the pointer: the left in RTL.
@@ -251,6 +259,13 @@
         if (prevX !== x || prevY !== y) ref.focus();
         prevX = x;
         prevY = y;
+        if (focusFirstOption) {
+          focusFirstOption = false;
+          const first = options.findIndex(
+            (option) => option.getAttribute("aria-disabled") !== "true",
+          );
+          if (first !== -1) focusIndex = first;
+        }
       }
 
       if (!prevOpen) dispatch("open", openDetail);
