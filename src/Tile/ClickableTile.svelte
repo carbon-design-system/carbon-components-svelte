@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @template [Icon=any]
+   */
+
   /** @restProps {a} */
 
   /**
@@ -23,6 +27,14 @@
 
   /** Set to `true` to remove the tile's padding */
   export let noPadding = false;
+
+  /**
+   * Specify an icon to render in the bottom-right corner, such as
+   * `ArrowRight` for a link within the app or `Launch` for an external
+   * link. The icon is decorative and hidden from assistive technology.
+   * @type {Icon}
+   */
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Set the `href`.
@@ -94,6 +106,13 @@
       on:blur
     >
       <slot />
+      {#if icon}
+        <svelte:component
+          this={icon}
+          class="bx--tile--icon"
+          aria-hidden="true"
+        />
+      {/if}
     </a>
   {:else}
     <a
@@ -130,6 +149,13 @@
       on:blur
     >
       <slot />
+      {#if icon}
+        <svelte:component
+          this={icon}
+          class="bx--tile--icon"
+          aria-hidden="true"
+        />
+      {/if}
     </a>
   {/if}
   <svelte:fragment slot="decorator">

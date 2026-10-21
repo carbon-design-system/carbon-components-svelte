@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ClickableTile from "./ClickableTile.test.svelte";
 import ClickableTileButton from "./ClickableTileButton.test.svelte";
+import ClickableTileIcon from "./ClickableTileIcon.test.svelte";
 
 describe("ClickableTile", () => {
   it("should render with href", () => {
@@ -165,5 +166,51 @@ describe("ClickableTile", () => {
     const tile = screen.getByText("Link only");
     expect(tile).not.toHaveAttribute("role");
     expect(tile).not.toHaveAttribute("tabindex");
+  });
+
+  describe("icon", () => {
+    it("renders the icon inside the tile, hidden from assistive technology", () => {
+      render(ClickableTileIcon);
+
+      const tile = screen.getByRole("link", { name: "Deployment guide" });
+      const icon = tile.querySelector("svg");
+      assert(icon);
+      expect(icon).toHaveClass("bx--tile--icon");
+      expect(icon).toHaveAttribute("aria-hidden", "true");
+      expect(icon).not.toHaveAttribute("aria-label");
+      expect(tile.lastElementChild).toBe(icon);
+    });
+
+    it("keeps the icon out of an external link's name", () => {
+      render(ClickableTileIcon);
+
+      const tile = screen.getByTestId("external");
+      expect(tile).toHaveAccessibleName("Service status");
+      expect(tile.querySelector(".bx--tile--icon")).toHaveAttribute(
+        "aria-hidden",
+        "true",
+      );
+    });
+
+    it("renders the icon on a disabled tile", () => {
+      render(ClickableTileIcon);
+
+      const tile = screen.getByTestId("disabled");
+      expect(tile).toHaveClass("bx--link--disabled");
+      expect(tile).toHaveAttribute("aria-disabled", "true");
+      expect(tile.querySelector(".bx--tile--icon")).toHaveAttribute(
+        "aria-hidden",
+        "true",
+      );
+    });
+
+    it("leaves the markup unchanged without an icon", () => {
+      render(ClickableTileIcon);
+
+      const tile = screen.getByTestId("no-icon");
+      expect(tile.children).toHaveLength(0);
+      expect(tile.className).toBe("bx--tile bx--tile--clickable bx--link");
+      expect(tile).toHaveTextContent(/^Supported regions$/);
+    });
   });
 });

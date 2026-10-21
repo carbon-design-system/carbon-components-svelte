@@ -335,3 +335,48 @@
 @include exports("tile-expandable-interactive") {
   @include tile-expandable-interactive;
 }
+
+// carbon-components-svelte patch (tile-clickable-icon)
+
+/// `ClickableTile`'s `icon` in the bottom-right corner, backported from
+/// Carbon v11
+/// @access private
+/// @group components
+@mixin tile-clickable-icon {
+  // v11 sets this on every tile. The icon needs it to sit in the corner.
+  .#{$prefix}--tile--clickable {
+    position: relative;
+  }
+
+  .#{$prefix}--tile--clickable .#{$prefix}--tile--icon {
+    position: absolute;
+    right: $carbon--spacing-04;
+    bottom: $carbon--spacing-04;
+    width: to-rem(20px);
+    height: to-rem(20px);
+    fill: ccs-token("icon-interactive");
+  }
+
+  .#{$prefix}--tile--clickable.#{$prefix}--link--disabled
+    .#{$prefix}--tile--icon {
+    fill: $icon-disabled;
+  }
+
+  // Forced colors leave an SVG fill alone, so the token blue stayed on a
+  // dark Canvas. Follow the tile's forced text color instead, and gray out
+  // a disabled tile's icon.
+  @media (forced-colors: active) {
+    .#{$prefix}--tile--clickable .#{$prefix}--tile--icon {
+      fill: currentColor;
+    }
+
+    .#{$prefix}--tile--clickable.#{$prefix}--link--disabled
+      .#{$prefix}--tile--icon {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("tile-clickable-icon") {
+  @include tile-clickable-icon;
+}

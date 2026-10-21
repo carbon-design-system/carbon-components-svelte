@@ -134,6 +134,28 @@ test.describe("forced colors", () => {
     }
   });
 
+  // Forced colors leave an SVG fill alone, so the icon's token blue would
+  // stay on a dark Canvas.
+  test("clickable tile icons follow the tile's text, or GrayText when disabled", async ({
+    page,
+  }) => {
+    const [tile, disabled] = await page.evaluate(() =>
+      [
+        ".bx--tile--clickable:not(.bx--link--disabled)",
+        ".bx--tile--clickable.bx--link--disabled",
+      ].map((selector) => {
+        const icon = document.querySelector(`${selector} .bx--tile--icon`);
+        if (!icon?.parentElement) throw new Error(`no ${selector} icon`);
+        return {
+          color: getComputedStyle(icon.parentElement).color,
+          fill: getComputedStyle(icon).fill,
+        };
+      }),
+    );
+    expect.soft(tile.fill).toBe(tile.color);
+    expect.soft(disabled.fill).toBe(system.GrayText);
+  });
+
   // [focus target, element drawing the ring, pseudo-element, ring color]
   const rings: [string, string, string | undefined, SystemColor][] = [
     [

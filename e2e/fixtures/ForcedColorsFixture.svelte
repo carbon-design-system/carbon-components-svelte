@@ -1,5 +1,6 @@
 <script>
   import {
+    ClickableTile,
     ContentSwitcher,
     Header,
     HeaderAction,
@@ -30,6 +31,7 @@
     TreeView,
     Truncate,
   } from "carbon-components-svelte";
+  import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
 
   let menuAnchor = null;
@@ -98,6 +100,9 @@
     Failed to deploy revision 214: container image payments-api:2.4.1-rc3
     exceeded the memory limit configured for the production namespace.
   </Truncate>
+
+  <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
+  <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>
 
   <ProgressBar labelText="Progress" value={50} />
   <ProgressBar labelText="Indeterminate" />
