@@ -30,6 +30,8 @@
    * @type {string | Separator}
    */
   export let separator = /** @type {string | Separator} */ ("/");
+
+  import { toCssString } from "../utils/css-string.js";
 </script>
 
 <div
@@ -42,7 +44,7 @@
   class:bx--breadcrumb--vertical={orientation === "vertical"}
   class:bx--breadcrumb--separator-icon={typeof separator !== "string"}
   style:--ccs-separator={typeof separator === "string"
-    ? `'${separator}'`
+    ? toCssString(separator)
     : "''"}
   {...$$restProps}
   on:click

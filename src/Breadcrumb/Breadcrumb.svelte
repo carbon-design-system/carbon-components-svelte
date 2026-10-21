@@ -44,6 +44,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
+  import { toCssString } from "../utils/css-string.js";
   import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
 
   const separatorStore = writable(separator);
@@ -82,7 +83,7 @@
       class:bx--breadcrumb--vertical={orientation === "vertical"}
       class:bx--breadcrumb--separator-icon={typeof separator !== "string"}
       style:--ccs-separator={typeof separator === "string"
-        ? `'${separator}'`
+        ? toCssString(separator)
         : "''"}
     >
       <slot />
