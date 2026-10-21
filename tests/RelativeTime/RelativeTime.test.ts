@@ -81,6 +81,40 @@ describe("RelativeTime", () => {
       expect(vi.getTimerCount()).toBe(0);
     });
 
+    it.each([
+      [
+        "date changes",
+        { date: now - 3 * 60 * 60_000 },
+        30 * 60_000,
+        { date: now + 30 * 60_000 - 10_000 },
+        "10 seconds ago",
+      ],
+      [
+        "live turns on",
+        { date: now - 60_000, live: false },
+        10 * 60_000,
+        { live: true },
+        "11 minutes ago",
+      ],
+      [
+        "now is removed",
+        { date: now - 60_000, now },
+        10 * 60_000,
+        { now: undefined },
+        "11 minutes ago",
+      ],
+    ])(
+      "re-reads the clock when %s between ticks",
+      async (_, props, elapsed, next, text) => {
+        const { rerender } = render(RelativeTimeLive, { props });
+
+        vi.advanceTimersByTime(elapsed);
+        await rerender(next);
+
+        expect(screen.getByTestId("live")).toHaveTextContent(text);
+      },
+    );
+
     it("shares one timer across instances in the same cadence", () => {
       const { unmount } = render(RelativeTimeLivePair, {
         props: { dateA: now - 30_000, dateB: now - 20_000 },
