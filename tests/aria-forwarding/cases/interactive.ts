@@ -196,10 +196,27 @@ export const interactive: AriaEntry[] = [
   },
   {
     name: "ImageLoader",
-    // jsdom never loads images, so render the loaded state directly. An
-    // empty `src` keeps the component from starting a new load.
-    render: (attrs) =>
-      render(ImageLoader, { props: { alt: "Logo", loaded: true, ...attrs } }),
+    // jsdom never loads images, so stub `Image` to settle as soon as the
+    // component listens, rendering the loaded state.
+    render: (attrs) => {
+      vi.stubGlobal(
+        "Image",
+        class {
+          src = "";
+          onerror = null;
+          set onload(callback: () => void) {
+            callback();
+          }
+        },
+      );
+      try {
+        return render(ImageLoader, {
+          props: { src: "logo.png", alt: "Logo", ...attrs },
+        });
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    },
     target: () => screen.getByRole("img"),
   },
   {
