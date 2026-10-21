@@ -26,7 +26,6 @@
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
-  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const context = getContext(FORM_ITEM_CONTEXT_KEY);
@@ -34,16 +33,18 @@
   const formItem = context?.group ? undefined : context;
   const controlId = formItem?.controlId ?? readable(undefined);
   const parentDisabled = formItem?.disabled ?? readable(false);
-  const setPartId = formItem?.part("label") ?? noop;
+  const part = formItem?.part("label");
   const fallbackId = uniqueId();
 
   $: htmlFor = forId ?? id ?? $controlId ?? fallbackId;
   // Only a label for the item's own control labels it.
   $: labelId =
-    formItem && htmlFor === $controlId ? `label-${$controlId}` : undefined;
-  $: setPartId(labelId);
+    formItem && htmlFor === $controlId
+      ? part?.numbered(`label-${$controlId}`)
+      : undefined;
+  $: part?.(labelId);
 
-  onMount(() => () => setPartId(undefined));
+  onMount(() => () => part?.(undefined));
 </script>
 
 <label

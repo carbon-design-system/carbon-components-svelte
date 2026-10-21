@@ -11,6 +11,7 @@
   export let custom = false;
   export let hint = "own";
   export let helper = false;
+  export let extraHelper = false;
   export let error = false;
   export let ariaInvalid: "true" | undefined = undefined;
 </script>
@@ -36,6 +37,9 @@
   {/if}
   {#if helper}
     <FormHelperText>Helper</FormHelperText>
+  {/if}
+  {#if extraHelper}
+    <FormHelperText>More help</FormHelperText>
   {/if}
   {#if error}
     <FormRequirement>Error</FormRequirement>

@@ -4,13 +4,19 @@ export type FormPartKind = "label" | "helper" | "invalid" | "warn";
 
 export type FormParts = Record<FormPartKind, string[]>;
 
+export type FormPart = {
+  (id: string | undefined): void;
+  /** Suffix a default id with the part's ordinal among parts of its kind. */
+  numbered: (id: string | undefined) => string | undefined;
+};
+
 /**
  * Registry of the form parts (`FormLabel`, `FormHelperText`,
  * `FormRequirement`) mounted inside a `FormItem` or `FormGroup`.
  */
 export function createFormParts(): {
   parts: Writable<FormParts>;
-  part: (kind: FormPartKind) => (id: string | undefined) => void;
+  part: (kind: FormPartKind) => FormPart;
 };
 
 /**

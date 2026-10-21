@@ -182,6 +182,32 @@ describe("FormItem control association", () => {
     expect(input).toHaveAttribute("aria-describedby", "other helper-email");
   });
 
+  it("gives a second helper text its own id", async () => {
+    const { component } = render(FormItemControlTest, {
+      props: { helper: true, extraHelper: true },
+    });
+    const input = screen.getByTestId("control");
+
+    expect(screen.getByText("More help")).toHaveAttribute(
+      "id",
+      "helper-email-1",
+    );
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      "own helper-email helper-email-1",
+    );
+
+    component.extraHelper = false;
+    await tick();
+    component.extraHelper = true;
+    await tick();
+
+    expect(screen.getByText("More help")).toHaveAttribute(
+      "id",
+      "helper-email-1",
+    );
+  });
+
   it("restores the control's own aria-invalid when an error unmounts", async () => {
     const { component } = render(FormItemControlTest, {
       props: { ariaInvalid: "true" },
