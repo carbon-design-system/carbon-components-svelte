@@ -64,6 +64,25 @@ describe("Loading", () => {
     expect(loader).toHaveAttribute("aria-live", "off");
   });
 
+  it("passes rest props to the overlay", () => {
+    render(Loading);
+    const wrapper = screen.getByTestId("loader-rest");
+
+    const overlay = wrapper.querySelector(".bx--loading-overlay");
+    expect(overlay).toHaveAttribute("id", "rest-overlay");
+    expect(overlay).toHaveAttribute("data-extra", "yes");
+  });
+
+  it("turns off aria-live without an overlay when inactive", () => {
+    render(Loading);
+    const wrapper = screen.getByTestId("loader-no-overlay-inactive");
+
+    expect(wrapper.querySelector(".bx--loading")).toHaveAttribute(
+      "aria-live",
+      "off",
+    );
+  });
+
   it("supports custom description", () => {
     render(Loading);
     const wrapper = screen.getByTestId("loader-description");

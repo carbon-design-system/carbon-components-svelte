@@ -22,10 +22,24 @@ describe("RelativeTime", () => {
     ["numeric-auto", "yesterday"],
     ["short-style", "5 min. ago"],
     ["slot-fixture", "Updated 5 minutes ago"],
+    ["date-object", "5 minutes ago"],
+    ["iso-string", "5 minutes ago"],
   ])("renders the %s fixture as %s", (testId, text) => {
     render(RelativeTime);
 
     expect(screen.getByTestId(testId)).toHaveTextContent(text);
+  });
+
+  it.each([
+    ["title-options", "9/13/26"],
+    ["title-zone-override", "8:55 PM"],
+  ])("formats the %s title from titleFormatOptions", (testId, title) => {
+    render(RelativeTime);
+
+    // Newer ICU versions put a narrow no-break space before AM/PM.
+    expect(
+      screen.getByTestId(testId).getAttribute("title")?.replace(/\s/g, " "),
+    ).toBe(title);
   });
 
   it("renders an empty time element with no datetime for an invalid date", () => {
@@ -71,6 +85,26 @@ describe("RelativeTime", () => {
       expect(vi.getTimerCount()).toBe(1);
 
       unmount();
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it.each([
+      ["live is false", { live: false }],
+      ["now is set", { now }],
+    ])("runs no timer when %s", (_, props) => {
+      render(RelativeTimeLive, { props: { date: now - 30_000, ...props } });
+
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it("clears the timer when live turns false", async () => {
+      const { rerender } = render(RelativeTimeLive, {
+        props: { date: now - 30_000 },
+      });
+      expect(vi.getTimerCount()).toBe(1);
+
+      await rerender({ live: false });
+
       expect(vi.getTimerCount()).toBe(0);
     });
 

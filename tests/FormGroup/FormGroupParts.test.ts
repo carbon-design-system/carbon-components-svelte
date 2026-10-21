@@ -66,4 +66,30 @@ describe("FormGroup with form parts", () => {
       "bx--form__helper-text--disabled",
     );
   });
+
+  it("restyles helper text when the group's disabled changes", async () => {
+    const { component } = render(FormGroupParts);
+    const helper = screen.getByText("Pick at least one");
+    expect(helper).not.toHaveClass("bx--form__helper-text--disabled");
+
+    component.disabled = true;
+    await tick();
+
+    expect(helper).toHaveClass("bx--form__helper-text--disabled");
+  });
+
+  it("moves the helper text id when the group id changes", async () => {
+    const { component } = render(FormGroupParts);
+
+    component.id = "reach";
+    await tick();
+
+    expect(screen.getByText("Pick at least one")).toHaveAttribute(
+      "id",
+      "helper-reach",
+    );
+    expect(
+      screen.getByRole("group", { name: "Contact" }),
+    ).toHaveAccessibleDescription("Pick at least one");
+  });
 });

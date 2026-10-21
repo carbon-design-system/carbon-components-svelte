@@ -65,11 +65,17 @@ describe("Stepper", () => {
     },
   );
 
-  it("disables Continue with nextDisabled", () => {
-    render(Stepper, { nextDisabled: true });
+  it.each([
+    [0, "Continue"],
+    [2, "Place order"],
+  ])(
+    "disables the button on step %s with nextDisabled",
+    (currentIndex, name) => {
+      render(Stepper, { currentIndex, nextDisabled: true });
 
-    expect(continueButton()).toBeDisabled();
-  });
+      expect(screen.getByRole("button", { name })).toBeDisabled();
+    },
+  );
 
   it("dispatches submit on the last step once validate passes", async () => {
     const validate = vi.fn(() => true);
@@ -79,6 +85,7 @@ describe("Stepper", () => {
 
     expect(validate).toHaveBeenCalledWith(2);
     expect(component.submits).toBe(1);
+    expect(component.errors).toEqual([]);
   });
 
   it("shows the loading state and disables Back while submitting", () => {
@@ -130,9 +137,45 @@ describe("Stepper", () => {
 
     await user.click(screen.getByRole("button", { name: "Place order" }));
 
-    expect(await screen.findByText("Order placed")).toBeVisible();
+    const confirmation = await screen.findByText("Order placed");
+    expect(confirmation).toBeVisible();
+    expect(confirmation.parentElement).toHaveFocus();
     // The confirmation isn't the step it replaced.
     expect(screen.queryByRole("group", { name: "Payment" })).toBeNull();
+  });
+
+  it("marks the flow submitted when a sync submit returns", async () => {
+    render(Stepper, { currentIndex: 2, submit: () => {} });
+
+    await user.click(screen.getByRole("button", { name: "Place order" }));
+
+    expect(await screen.findByText("Order placed")).toBeVisible();
+  });
+
+  it("shows the loading state and disables Back while a submit promise is pending", async () => {
+    let finish = () => {};
+    const submit = () => new Promise<void>((resolve) => (finish = resolve));
+    render(Stepper, { currentIndex: 2, submit });
+
+    await user.click(screen.getByRole("button", { name: "Place order" }));
+    expect(screen.getByText("Placing order")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Back" })).toBeDisabled();
+
+    finish();
+    expect(await screen.findByText("Order placed")).toBeVisible();
+  });
+
+  it("focuses an input inside a wrapper marked invalid", async () => {
+    const { component } = render(Stepper, { currentIndex: 1 });
+    component.validate = () => {
+      component.wrapperInvalid = true;
+      return false;
+    };
+    await tick();
+
+    await user.click(continueButton());
+
+    expect(screen.getByRole("textbox", { name: "Wrapped" })).toHaveFocus();
   });
 
   it("reports a failed submit and focuses the submit button", async () => {
@@ -156,6 +199,18 @@ describe("Stepper", () => {
 
     expect(screen.getByText("Step 1 content")).toBeVisible();
     expect(component.changes).toEqual([0]);
+  });
+
+  it.each([
+    ["busy", { submitting: true }],
+    ["submitted", { submitted: true }],
+  ])("ignores step clicks while %s", async (_state, props) => {
+    const { component } = render(Stepper, { currentIndex: 2, ...props });
+
+    await user.click(screen.getByRole("button", { name: /Cart/ }));
+
+    expect(component.changes).toEqual([]);
+    expect(component.currentIndex).toBe(2);
   });
 
   it("moves to the last step when the list gets shorter", async () => {

@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import InlineLoading from "./InlineLoading.test.svelte";
 import InlineLoadingDelay from "./InlineLoadingDelay.test.svelte";
+import InlineLoadingEvents from "./InlineLoadingEvents.test.svelte";
 import InlineLoadingRerender from "./InlineLoadingRerender.test.svelte";
 import InlineLoadingTransition from "./InlineLoadingTransition.test.svelte";
 
@@ -101,6 +102,39 @@ describe("InlineLoading", () => {
     );
     assert(icon);
     expect(icon).toHaveTextContent("Operation completed successfully");
+  });
+
+  it.each([
+    ["loader-finished", "finished"],
+    ["loader-error", "error"],
+  ])("titles the %s icon with its status by default", (testId, title) => {
+    render(InlineLoading);
+
+    expect(screen.getByTestId(testId).querySelector("title")).toHaveTextContent(
+      title,
+    );
+  });
+
+  it("passes iconDescription to the active spinner as its title", () => {
+    render(InlineLoading);
+
+    expect(
+      screen.getByTestId("loader-active-icon").querySelector("title"),
+    ).toHaveTextContent("Saving data");
+  });
+
+  it.each([
+    ["click", (el: Element) => fireEvent.click(el)],
+    ["mouseover", (el: Element) => fireEvent.mouseOver(el)],
+    ["mouseenter", (el: Element) => fireEvent.mouseEnter(el)],
+    ["mouseleave", (el: Element) => fireEvent.mouseLeave(el)],
+  ])("forwards %s", async (type, fire) => {
+    const onEvent = vi.fn();
+    render(InlineLoadingEvents, { props: { onEvent } });
+
+    await fire(screen.getByTestId("events"));
+
+    expect(onEvent).toHaveBeenCalledExactlyOnceWith(type);
   });
 
   it("dispatches success event after delay when finished", () => {

@@ -13,3 +13,11 @@
 <div data-testid="loader-description">
   <Loading description="Processing data..." />
 </div>
+
+<div data-testid="loader-rest">
+  <Loading id="rest-overlay" data-extra="yes" />
+</div>
+
+<div data-testid="loader-no-overlay-inactive">
+  <Loading withOverlay={false} active={false} />
+</div>

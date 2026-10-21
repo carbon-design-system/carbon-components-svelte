@@ -56,6 +56,21 @@ describe("FluidForm", () => {
     );
   });
 
+  it.each([
+    ["click", MouseEvent],
+    ["keydown", KeyboardEvent],
+    ["mouseover", MouseEvent],
+    ["mouseenter", MouseEvent],
+    ["mouseleave", MouseEvent],
+  ])("forwards %s", (type, EventType) => {
+    const onevent = vi.fn();
+    render(FluidFormTest, { onevent });
+
+    getForm().dispatchEvent(new EventType(type));
+
+    expect(onevent).toHaveBeenCalledExactlyOnceWith(type);
+  });
+
   describe("form reset", () => {
     it("forwards reset from a reset button", async () => {
       const onreset = vi.fn();

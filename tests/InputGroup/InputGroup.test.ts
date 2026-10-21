@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import { getBoundText } from "../utils/get-bound-text";
+import InputGroupLegend from "./InputGroup.legend.test.svelte";
 import InputGroup from "./InputGroup.test.svelte";
 
 describe("InputGroup", () => {
@@ -125,4 +127,29 @@ describe("InputGroup", () => {
       "bx--btn--sm",
     );
   });
+
+  it("prefers its own size over the parent Form's", () => {
+    render(InputGroup, { formSize: "sm", size: "xl" });
+
+    expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--xl");
+    expect(screen.getByRole("textbox")).not.toHaveClass("bx--text-input--sm");
+  });
+
+  it("names the group with the legendChildren slot", () => {
+    render(InputGroupLegend);
+
+    expect(screen.getByRole("group", { name: "Promo code" })).toBeVisible();
+  });
+
+  it.each([
+    [{ warn: true }, "true sm"],
+    [{ invalid: true, warn: true }, "false sm"],
+  ])(
+    "passes warn and size to the field through slot props: %j",
+    (props, expected) => {
+      render(InputGroup, { size: "sm", ...props });
+
+      expect(getBoundText()).toBe(expected);
+    },
+  );
 });

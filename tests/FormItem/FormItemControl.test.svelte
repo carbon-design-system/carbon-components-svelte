@@ -14,15 +14,26 @@
   export let extraHelper = false;
   export let error = false;
   export let ariaInvalid: "true" | undefined = undefined;
+  export let errorKind: "invalid" | "warn" = "invalid";
+  export let errorId: string | undefined = undefined;
+  export let helperId: string | undefined = undefined;
+  export let showLabel = true;
+  export let labelFor: string | undefined = undefined;
+  export let labelDisabled: boolean | undefined = undefined;
+  export let helperDisabled: boolean | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
 </script>
 
 <FormItem {controlId} {disabled} let:control let:controlId={slotControlId}>
-  <FormLabel>Email</FormLabel>
+  {#if showLabel}
+    <FormLabel for={labelFor} disabled={labelDisabled}>Email</FormLabel>
+  {/if}
   {#if custom}
     <div
       role="combobox"
       aria-controls="menu"
       aria-expanded="false"
+      aria-label={ariaLabel}
       tabindex="0"
       use:control
       data-testid="control"
@@ -36,13 +47,15 @@
     >
   {/if}
   {#if helper}
-    <FormHelperText>Helper</FormHelperText>
+    <FormHelperText id={helperId} disabled={helperDisabled}>
+      Helper
+    </FormHelperText>
   {/if}
   {#if extraHelper}
     <FormHelperText>More help</FormHelperText>
   {/if}
   {#if error}
-    <FormRequirement>Error</FormRequirement>
+    <FormRequirement kind={errorKind} id={errorId}>Error</FormRequirement>
   {/if}
   <span data-testid="slot-control-id">{slotControlId}</span>
 </FormItem>

@@ -8,6 +8,7 @@
   export let ref: null | HTMLFormElement = null;
   export let onsubmit: (e: Event) => void = () => {};
   export let onreset: (e: Event) => void = () => {};
+  export let onevent: (type: string) => void = () => {};
 
   let className: undefined | string = undefined;
 
@@ -18,6 +19,11 @@
   bind:ref
   class={className}
   data-testid="form"
+  on:click={(e) => onevent(e.type)}
+  on:keydown={(e) => onevent(e.type)}
+  on:mouseover={(e) => onevent(e.type)}
+  on:mouseenter={(e) => onevent(e.type)}
+  on:mouseleave={(e) => onevent(e.type)}
   on:submit={(e) => {
     if (preventDefault) {
       e.preventDefault();
