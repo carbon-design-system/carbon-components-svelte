@@ -79,4 +79,38 @@ describe("PageHeader tabs with body panels", () => {
     expect(screen.getByTestId("overview")).not.toHaveAttribute("hidden");
     expect(screen.getByTestId("backups")).toHaveAttribute("hidden");
   });
+
+  it.each([
+    ["re-mount", true],
+    ["late mount", false],
+  ])(
+    "pairs and switches panels after the header tabs %s",
+    async (_, initial) => {
+      const { rerender } = render(PageHeaderTabs, { show: initial });
+      if (initial) await rerender({ show: false });
+      await rerender({ show: true });
+      await tick();
+
+      const tab = screen.getByRole("tab", { name: "Backups" });
+      const panel = screen.getByTestId("backups");
+      expect(panel).toHaveAttribute("aria-labelledby", tab.id);
+      expect(tab).toHaveAttribute("aria-controls", panel.id);
+
+      await user.click(tab);
+
+      expect(panel).not.toHaveAttribute("hidden");
+    },
+  );
+
+  it("clears the container marker when the header tabs unmount", async () => {
+    const { rerender } = render(PageHeaderTabs, { type: "container" });
+    await tick();
+    const header = screen.getByTestId("header");
+    expect(header).toHaveClass("bx--page-header--container-tabs");
+
+    await rerender({ show: false });
+
+    expect(header).not.toHaveClass("bx--page-header--container-tabs");
+    expect(header).toHaveClass("bx--page-header--divider");
+  });
 });

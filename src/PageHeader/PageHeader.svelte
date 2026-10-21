@@ -114,8 +114,9 @@
 
   setContext("carbon:PageHeader", {
     /**
-     * Returns the element holding the tab panels and a setter for the tabs'
-     * `type`, or `undefined` when another `Tabs` already registered.
+     * Returns the element holding the tab panels, a setter for the tabs'
+     * `type` and an `unregister` for when the tabs are destroyed, or
+     * `undefined` when another `Tabs` already registered.
      */
     registerTabs: (context) => {
       if (tabsContext) return undefined;
@@ -124,6 +125,10 @@
         getBody: () => bodyRef,
         setType: (type) => {
           tabsType = type;
+        },
+        unregister: () => {
+          tabsContext = undefined;
+          tabsType = undefined;
         },
       };
     },

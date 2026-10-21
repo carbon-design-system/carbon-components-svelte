@@ -418,7 +418,7 @@
 
   // Lets `TabContent` in a `PageHeader` body pair with tabs slotted into
   // its header; panels then live in the body, not beside these tabs.
-  /** @type {undefined | { getBody: () => HTMLElement | null; setType: (type: string) => void }} */
+  /** @type {undefined | { getBody: () => HTMLElement | null; setType: (type: string) => void; unregister: () => void }} */
   const pageHeader = getContext("carbon:PageHeader")?.registerTabs(tabsContext);
 
   $: pageHeader?.setType(type);
@@ -505,6 +505,7 @@
       mounted = false;
       stopObserving();
       stopObservingOrder();
+      pageHeader?.unregister();
     };
   });
 
