@@ -6,7 +6,8 @@
     ThemeZone,
   } from "carbon-components-svelte";
 
-  // `?page=g100` sets the page theme the zones sit in.
+  // `?page=g100` sets the page theme the zones sit in; `?page=system`
+  // follows the system color scheme.
   const page = new URLSearchParams(window.location.search).get("page");
   if (page) document.documentElement.setAttribute("theme", page);
 
@@ -26,4 +27,8 @@
     </Layer>
     <Dropdown portalMenu labelText="Inner region" selectedId="0" {items} />
   </ThemeZone>
+</ThemeZone>
+
+<ThemeZone theme="system" data-testid="system" style="padding: 1rem">
+  <TextInput labelText="System field" />
 </ThemeZone>

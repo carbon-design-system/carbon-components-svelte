@@ -16,7 +16,7 @@ import "carbon-components-svelte/css/all.css";
 
 ## Basic
 
-Set `theme` to one of the five themes. Use `tag` to render another element, such as `aside` or `section`.
+Set `theme` to one of the five themes, or to `"system"`. Use `tag` to render another element, such as `aside` or `section`.
 
 <ThemeZone theme="g100">
   <Box padding={5}>
@@ -35,6 +35,12 @@ A Gray 100 sidebar keeps its theme whatever the page theme is. Switch the docs t
 Zones nest. Each one takes its theme's full token set, so a White zone inside a Gray 100 zone looks the same as a White page.
 
 <FileSource src="/framed/ThemeZone/ThemeZoneNested" />
+
+## System color scheme
+
+Set `theme` to `"system"` to follow the operating system color scheme with CSS alone. The zone is White when the system is light and Gray 100 when it is dark. It switches as soon as the setting changes. See [Theme](/components/Theme#follow-the-system-with-css-only) to do the same for the whole page.
+
+<FileSource src="/framed/ThemeZone/ThemeZoneSystem" />
 
 ## Layers
 

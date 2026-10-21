@@ -5,7 +5,7 @@
   $: exampleName = $activeRoute?.leaf?.node?.name ?? "";
   $: componentName = $activeRoute?.leaf?.node?.parent?.name ?? "";
 
-  const validThemes = ["white", "g10", "g80", "g90", "g100"];
+  const validThemes = ["white", "g10", "g80", "g90", "g100", "system"];
 
   function applyTheme(theme) {
     if (validThemes.includes(theme)) {

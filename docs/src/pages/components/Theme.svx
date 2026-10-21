@@ -38,6 +38,8 @@ Set `systemThemes` to choose which theme represents light and dark; the default 
 
 With `persist` also set, the system preference wins when the page loads and the stored value is updated to match. Choosing a theme from a control keeps that theme until the system preference changes again.
 
+To follow the system without JavaScript, see [Follow the system with CSS only](#follow-the-system-with-css-only).
+
 <FileSource src="/framed/Theme/ThemeSystem" />
 
 ## Apply before first paint
@@ -75,6 +77,29 @@ export function handle({ event, resolve }) {
 ```
 
 For other setups, generate the string at build time and inline it the same way. With a Content Security Policy, add the page's nonce to the `<script>` tag.
+
+## Follow the system with CSS only
+
+`all.css` also has a `system` theme. Set `theme="system"` on `<html>`, and the page is White when the operating system is light and Gray 100 when it is dark. It runs no JavaScript, so nothing flashes. It suits static and server-rendered pages, and pages whose Content Security Policy blocks inline scripts.
+
+```html
+<html theme="system">
+```
+
+[ThemeZone](/components/ThemeZone#system-color-scheme) takes `theme="system"` too.
+
+Use `Theme` with `system` and `themeScript` when you need more than White and Gray 100:
+
+| You need | Use |
+| :--- | :--- |
+| White and Gray 100, with no JavaScript | `<html theme="system">` |
+| Another pair, such as Gray 10 and Gray 90 | `<Theme system systemThemes={["g10", "g90"]} />` and `themeScript` |
+| To remember the user's choice | `<Theme persist system />` and `themeScript` |
+| A theme control, or `update` events | `<Theme render="toggle" system />` |
+
+The `theme` prop doesn't take `"system"`. It holds the theme that the controls show, `update` reports, and `persist` stores, so it is always one of the five themes. When `Theme` mounts, it sets the `theme` attribute on `<html>` to that theme.
+
+So you can start with CSS and let `Theme` take over. Render `<html theme="system">` and mount `<Theme system />`. With the default `systemThemes`, `Theme` picks the theme that the page already shows, so nothing changes on screen.
 
 ## Custom theme
 

@@ -143,6 +143,27 @@ describe("Theme", () => {
     expect(consoleWarn).toHaveBeenCalledWith(
       expect.stringContaining('invalid theme "invalid"'),
     );
+    expect(consoleWarn).not.toHaveBeenCalledWith(
+      expect.stringContaining('"system" prop'),
+    );
+  });
+
+  // `theme="system"` is a CSS-only theme for <html>. The `theme` prop holds
+  // a concrete theme, so it points to the `system` prop instead.
+  it("points a system theme to the system prop", async () => {
+    const consoleWarn = vi.spyOn(console, "warn");
+    const { rerender } = render(Theme);
+
+    await rerender({ theme: "system" as unknown as CarbonTheme });
+    await tick();
+
+    expect(consoleWarn).toHaveBeenCalledWith(
+      expect.stringContaining('Set the "system" prop'),
+    );
+    expect(documentMock.setAttribute).not.toHaveBeenCalledWith(
+      "theme",
+      "system",
+    );
   });
 
   describe.each<{
