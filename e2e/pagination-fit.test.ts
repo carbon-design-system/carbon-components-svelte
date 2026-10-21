@@ -31,3 +31,23 @@ test("pagination fits its container", async ({ page }) => {
     page.getByTestId("pagination-480").locator(".bx--select").first(),
   ).toBeHidden();
 });
+
+/**
+ * A skeleton follows the same layout: narrow, a bar for the item count and
+ * one for the page buttons, rather than none.
+ */
+test("pagination skeleton shows the narrow layout's bars", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/pagination-fit.html");
+
+  const visibleBars = (width: number) =>
+    page
+      .getByTestId(`skeleton-${width}`)
+      .locator(".bx--skeleton__text")
+      .evaluateAll(
+        (bars) =>
+          bars.filter((bar) => bar.getBoundingClientRect().width > 0).length,
+      );
+  expect(await visibleBars(320)).toBe(2);
+  expect(await visibleBars(800)).toBe(4);
+});
