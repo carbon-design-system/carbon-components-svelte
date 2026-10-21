@@ -148,33 +148,32 @@ describe("InlineLoading", () => {
   });
 
   it("dispatches success when status transitions to finished after mount", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSuccess = vi.fn();
     const { component } = render(InlineLoadingTransition, {
-      props: { status: "active" },
+      props: { status: "active", onSuccess },
     });
 
     vi.advanceTimersByTime(1500);
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onSuccess).not.toHaveBeenCalled();
 
     component.status = "finished";
     await tick();
     vi.advanceTimersByTime(1500);
 
-    expect(consoleLog).toHaveBeenCalledTimes(1);
-    expect(consoleLog).toHaveBeenCalledWith("success");
+    expect(onSuccess).toHaveBeenCalledTimes(1);
   });
 
   // Regression: re-entering finished must arm a fresh success timer
   it("re-arms success on each transition back into finished", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onSuccess = vi.fn();
     const { component } = render(InlineLoadingTransition, {
-      props: { status: "active" },
+      props: { status: "active", onSuccess },
     });
 
     component.status = "finished";
     await tick();
     vi.advanceTimersByTime(1500);
-    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(onSuccess).toHaveBeenCalledTimes(1);
 
     component.status = "active";
     await tick();
@@ -182,8 +181,21 @@ describe("InlineLoading", () => {
     await tick();
     vi.advanceTimersByTime(1500);
 
-    expect(consoleLog).toHaveBeenCalledTimes(2);
-    expect(consoleLog).toHaveBeenNthCalledWith(2, "success");
+    expect(onSuccess).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not dispatch success when status leaves finished before the delay", async () => {
+    const onSuccess = vi.fn();
+    const { component } = render(InlineLoadingTransition, {
+      props: { status: "finished", onSuccess },
+    });
+
+    vi.advanceTimersByTime(500);
+    component.status = "error";
+    await tick();
+    vi.advanceTimersByTime(2000);
+
+    expect(onSuccess).not.toHaveBeenCalled();
   });
 
   it("supports custom success delay", () => {
