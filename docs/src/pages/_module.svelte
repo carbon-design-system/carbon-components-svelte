@@ -359,6 +359,11 @@
           href={$url("/theme-builder")}
           isSelected={$isActive($url("/theme-builder"))}
         />
+        <SideNavLink
+          text="Tokens"
+          href={$url("/tokens")}
+          isSelected={$isActive($url("/tokens"))}
+        />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
           <Text
