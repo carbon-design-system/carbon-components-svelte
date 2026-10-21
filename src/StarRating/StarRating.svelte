@@ -114,6 +114,8 @@
   let fieldsetRef = null;
 
   $: stars = Array.from({ length: max }, (_, index) => index + 1);
+  // A disabled rating takes no pointerleave, so drop the preview now.
+  $: if (disabled) hovered = 0;
   $: shown = hovered || value;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,

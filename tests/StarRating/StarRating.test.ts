@@ -54,6 +54,20 @@ describe("StarRating", () => {
     expect(filled(container)).toBe(2);
   });
 
+  it("drops the hover preview when the rating becomes disabled", async () => {
+    const { container, rerender } = render(StarRating, { value: 2 });
+
+    const fifth = screen.getByRole("radio", { name: "5 out of 5 stars" });
+    await fireEvent.pointerEnter(fifth.closest("label") as HTMLElement, {
+      pointerType: "mouse",
+    });
+    expect(filled(container)).toBe(5);
+
+    await rerender({ disabled: true });
+
+    expect(filled(container)).toBe(2);
+  });
+
   it("previews only for a mouse, and shows a chosen star over the preview", async () => {
     const { container } = render(StarRating, { value: 2 });
     const label = (stars: number) =>
