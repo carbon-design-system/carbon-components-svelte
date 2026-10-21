@@ -3,6 +3,7 @@
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./text-tokens";
 
 /// Big number (absent from v10; ported from `carbon-for-ibm-products`).
 /// A dashboard stat widget: a label, a large numeric value, and optional
@@ -90,12 +91,14 @@
     @include type-style("body-compact-01");
   }
 
+  // Text colors, not the indicator colors the trend icons use: small text
+  // in support-success reads at about 3:1.
   .#{$prefix}--big-number__delta-value--success {
-    color: $support-success;
+    color: ccs-text-color("text-success");
   }
 
   .#{$prefix}--big-number__delta-value--error {
-    color: $support-error;
+    color: $text-error;
   }
 
   .#{$prefix}--big-number__delta-value--neutral {
