@@ -84,6 +84,7 @@
   import { SEPARATOR_HOVER_DELAY_MS } from "../constants/timing.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { noop } from "../utils/noop.js";
   import { clamp } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
@@ -209,7 +210,8 @@
   }
 
   function handleKeydown(event) {
-    if (disabled) return;
+    // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
+    if (disabled || hasModifierKey(event)) return;
     const distance = step * (event.shiftKey ? LARGE_STEP_MULTIPLIER : 1);
     const vertical = orientation === "vertical";
     let next;

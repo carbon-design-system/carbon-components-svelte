@@ -86,6 +86,21 @@ describe("Splitter", () => {
     expect(screen.getByTestId("bound-size")).toHaveTextContent(expected);
   });
 
+  it.each(["altKey", "ctrlKey", "metaKey"])(
+    "leaves %s+Arrow to the browser",
+    async (modifier) => {
+      const { separator } = setup();
+
+      const notPrevented = await fireEvent.keyDown(separator, {
+        key: "ArrowLeft",
+        [modifier]: true,
+      });
+
+      expect(notPrevented).toBe(true);
+      expect(separator).toHaveAttribute("aria-valuenow", "50");
+    },
+  );
+
   it("uses ArrowUp and ArrowDown when vertical", async () => {
     const { separator, root } = setup({ orientation: "vertical" });
 
