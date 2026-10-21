@@ -54,7 +54,7 @@
    */
   export let ref = null;
 
-  import { getContext, onMount } from "svelte";
+  import { afterUpdate, getContext, onMount } from "svelte";
   import { get, readable } from "svelte/store";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -167,6 +167,13 @@
     if (isDisabled) return;
     toggle(value);
   }
+
+  // Disabling the tab-stop button after mount doesn't re-run the group's own
+  // `afterUpdate` on Svelte 5 (same slot-update limitation as
+  // `notifyUnmount`), so hand the tab stop off from here.
+  afterUpdate(() => {
+    if (isDisabled && get(tabStopElement) === ref) notifyUnmount(ref);
+  });
 
   onMount(() => {
     return () => {
