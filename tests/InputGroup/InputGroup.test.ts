@@ -24,6 +24,26 @@ describe("InputGroup", () => {
     expect(screen.getByRole("button", { name: "Apply" })).toBeDisabled();
   });
 
+  it.each([
+    ["invalid", { invalid: true, invalidText: "Code expired" }],
+    ["warn", { warn: true, warnText: "Ends tonight" }],
+  ])("ignores %s when disabled", (_state, props) => {
+    const { container } = render(InputGroup, {
+      disabled: true,
+      helperText: "One code per order",
+      ...props,
+    });
+
+    expect(screen.getByText("One code per order")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-invalid");
+    expect(
+      container.querySelector(
+        ".bx--input-group--invalid, .bx--input-group--warning",
+      ),
+    ).toBeNull();
+  });
+
   it("replaces the helper text when invalid without a message", () => {
     render(InputGroup, { invalid: true, helperText: "One code per order" });
 
