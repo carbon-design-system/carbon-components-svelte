@@ -145,7 +145,7 @@
   $: resolvedStatus = status ?? deriveStatus(value, thresholds, overCapacity);
   $: markers = showThresholds && thresholds ? getMarkers(thresholds, max) : [];
   $: cappedValue =
-    max > 0 && Number.isFinite(value) ? Math.min(Math.max(value, 0), max) : 0;
+    max > 0 && !Number.isNaN(value) ? Math.min(Math.max(value, 0), max) : 0;
   $: ratio = max > 0 ? cappedValue / max : 0;
   $: resolvedThresholdsText =
     showThresholds && thresholds ? thresholdsText(thresholds, locale) : "";

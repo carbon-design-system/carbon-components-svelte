@@ -120,6 +120,13 @@
 
 <Meter
   labelText="Storage"
+  value={Number.POSITIVE_INFINITY}
+  max={100}
+  data-testid="infinite-value"
+/>
+
+<Meter
+  labelText="Storage"
   value={812}
   max={1000}
   thresholds={{ warning: 700, error: 900 }}
