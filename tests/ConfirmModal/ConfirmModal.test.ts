@@ -218,6 +218,8 @@ describe("ConfirmModal", () => {
     await tick();
 
     expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Delete" })).toBeEnabled();
   });
 
   it("puts focus back on the confirm button when loading ends", async () => {
