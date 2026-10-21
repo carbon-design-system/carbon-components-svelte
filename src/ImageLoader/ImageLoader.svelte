@@ -21,7 +21,8 @@
   export let ratio = undefined;
 
   /**
-   * Set to `true` when `loaded` is `true` and `error` is false.
+   * Set to `true` while the image is loading: `src` is set and
+   * neither `loaded` nor `error` is `true`.
    * @bindable readonly
    */
   export let loading = false;
@@ -112,7 +113,13 @@
   // the image has loaded doesn't reload it.
   $: if (!lazy) nearViewport = true;
   $: deferLoad = lazy && !nearViewport;
-  $: loading = !loaded && !error;
+  $: loading = !!currentSrc && !loaded && !error;
+  $: if (!src) {
+    loaded = false;
+    error = false;
+    currentSrc = "";
+    image = null;
+  }
   $: if (src && typeof window !== "undefined" && !deferLoad) loadImage();
 
   /**

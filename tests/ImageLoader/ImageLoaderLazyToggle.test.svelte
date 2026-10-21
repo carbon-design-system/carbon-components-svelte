@@ -7,4 +7,8 @@
   export let lazy = false;
 </script>
 
-<ImageLoader {src} {lazy} alt="Logo" />
+<ImageLoader {src} {lazy} alt="Logo">
+  <svelte:fragment slot="loading">
+    <span data-testid="loading-state"></span>
+  </svelte:fragment>
+</ImageLoader>

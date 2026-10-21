@@ -160,6 +160,19 @@ describe("ImageLoader", () => {
     expect(container.querySelector("img")).toHaveAttribute("src", "b.jpg");
   });
 
+  it("resets to idle when src is cleared", async () => {
+    const { container, rerender } = render(ImageLoaderLazyToggle, {
+      props: { src: validImageSrc },
+    });
+    await settle(validImageSrc, "onload");
+    expect(visibleImg(container)).toBeTruthy();
+
+    await rerender({ src: "" });
+
+    expect(container.querySelector("img")).toBeNull();
+    expect(screen.queryByTestId("loading-state")).not.toBeInTheDocument();
+  });
+
   it("dispatches load when the image loads", async () => {
     const load = vi.fn();
     const error = vi.fn();
