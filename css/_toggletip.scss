@@ -59,6 +59,15 @@
     --ccs-toggletip-caret: #{to-rem(12px)};
   }
 
+  // A bare paragraph keeps the content's type style. A page's `p` rule, or
+  // this library's own default type, matches the element and would beat
+  // inheritance. `Text` and other classed paragraphs keep their own style.
+  .#{$prefix}--toggletip-content p:not([class]) {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
   .#{$prefix}--toggletip-content {
     @include type-style("body-compact-01");
 
