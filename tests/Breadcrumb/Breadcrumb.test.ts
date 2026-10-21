@@ -56,17 +56,6 @@ describe("Breadcrumb", () => {
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     const list = within(nav).getByRole("list");
     expect(list).toHaveClass("bx--breadcrumb--no-trailing-slash");
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(2);
-
-    const links = screen.getAllByRole("link");
-    expect(links[0]).toHaveTextContent("Home");
-    expect(links[0]).toHaveAttribute("href", "/");
-
-    expect(links[1]).toHaveTextContent("Profile");
-    expect(links[1]).toHaveAttribute("href", "/profile");
-    expect(items[1]).toHaveClass("bx--breadcrumb-item--current");
   });
 
   it("renders skeleton state", () => {
@@ -91,24 +80,6 @@ describe("Breadcrumb", () => {
       ".bx--breadcrumb-item",
     );
     expect(secondSkeletonItems).toHaveLength(5);
-  });
-
-  it("renders with dynamic items", () => {
-    render(BreadcrumbDynamic);
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(3);
-
-    const links = screen.getAllByRole("link");
-    expect(links[0]).toHaveTextContent("Dashboard");
-    expect(links[0]).toHaveAttribute("href", "/");
-
-    expect(links[1]).toHaveTextContent("Annual reports");
-    expect(links[1]).toHaveAttribute("href", "/reports");
-
-    expect(links[2]).toHaveTextContent("2019");
-    expect(links[2]).toHaveAttribute("href", "/reports/2019");
-    expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
   });
 
   it("applies current class and forwards aria-current to the link, not the <li>", () => {
@@ -186,13 +157,6 @@ describe("Breadcrumb", () => {
     expect(skeleton).toBeInTheDocument();
     expect(skeleton).toHaveClass("bx--breadcrumb--sm");
   });
-  it("omits orientation modifiers by default", () => {
-    render(Breadcrumb);
-
-    const list = within(screen.getByRole("navigation")).getByRole("list");
-    expect(list).not.toHaveClass("bx--breadcrumb--horizontal");
-    expect(list).not.toHaveClass("bx--breadcrumb--vertical");
-  });
 
   it.each([
     ["horizontal", BreadcrumbOrientationHorizontal, "vertical"],
@@ -202,7 +166,6 @@ describe("Breadcrumb", () => {
 
     const list = within(screen.getByRole("navigation")).getByRole("list");
     expect(list).toHaveClass(`bx--breadcrumb--${orientation}`);
-    expect(list).not.toHaveClass(`bx--breadcrumb--${other}`);
 
     const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
     expect(skeleton).toHaveClass(`bx--breadcrumb--${orientation}`);

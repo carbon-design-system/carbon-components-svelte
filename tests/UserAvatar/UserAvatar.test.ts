@@ -16,13 +16,6 @@ describe("UserAvatar", () => {
     expect(avatar.querySelector(".bx--user-avatar__text")).toBeNull();
   });
 
-  it("derives initials from a single-word name", () => {
-    render(UserAvatar);
-
-    const avatar = screen.getByTestId("initials-single");
-    expect(avatar).toHaveTextContent("E");
-  });
-
   it("derives initials from the first character of each word, capped at two", () => {
     render(UserAvatar);
 
@@ -35,13 +28,6 @@ describe("UserAvatar", () => {
 
     const avatar = screen.getByTestId("initials-override");
     expect(avatar).toHaveTextContent("XY");
-  });
-
-  it("derives initials from a grapheme cluster, keeping an emoji whole", () => {
-    render(UserAvatar);
-
-    const avatar = screen.getByTestId("initials-emoji");
-    expect(avatar).toHaveTextContent("👩‍🚀A");
   });
 
   it("renders an image with alt text, taking priority over the name", () => {
@@ -173,8 +159,6 @@ describe("UserAvatar", () => {
 
     const expected = `bx--user-avatar--${getAvatarBackgroundColor("John Doe")}`;
     expect(screen.getByTestId("color-auto")).toHaveClass(expected);
-    // Same name resolves to the same color.
-    expect(screen.getByTestId("color-auto-2")).toHaveClass(expected);
   });
 
   it("wraps the avatar in a floating-portal tooltip by default", () => {

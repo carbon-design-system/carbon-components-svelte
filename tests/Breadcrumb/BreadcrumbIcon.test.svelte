@@ -2,11 +2,9 @@
   import Breadcrumb from "carbon-components-svelte/Breadcrumb/Breadcrumb.svelte";
   import BreadcrumbItem from "carbon-components-svelte/Breadcrumb/BreadcrumbItem.svelte";
   import Home from "carbon-icons-svelte/lib/Home.svelte";
-
-  export let size: "sm" | "md" = "md";
 </script>
 
-<Breadcrumb {size}>
+<Breadcrumb>
   <BreadcrumbItem href="/" icon={Home}>Icon prop</BreadcrumbItem>
   <BreadcrumbItem href="/settings">
     <Home slot="icon" />

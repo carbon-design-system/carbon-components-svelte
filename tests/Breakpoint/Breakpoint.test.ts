@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
+import { breakpoints } from "carbon-components-svelte/Breakpoint/breakpoints";
 import { tick } from "svelte";
 import { stubViewport } from "../utils/match-media";
 import Breakpoint from "./Breakpoint.test.svelte";
 import BreakpointObserver from "./BreakpointObserver.test.svelte";
-import Breakpoints from "./Breakpoints.test.svelte";
 
 describe("Breakpoint", () => {
   beforeEach(() => {
@@ -92,12 +92,12 @@ describe("Breakpoint", () => {
   });
 
   it("exposes breakpoint values", () => {
-    render(Breakpoints);
-
-    expect(screen.getByTestId("sm").textContent).toBe("320");
-    expect(screen.getByTestId("md").textContent).toBe("672");
-    expect(screen.getByTestId("lg").textContent).toBe("1056");
-    expect(screen.getByTestId("xlg").textContent).toBe("1312");
-    expect(screen.getByTestId("max").textContent).toBe("1584");
+    expect(breakpoints).toEqual({
+      sm: 320,
+      md: 672,
+      lg: 1056,
+      xlg: 1312,
+      max: 1584,
+    });
   });
 });

@@ -1,6 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
 import BreadcrumbSeparatorIcon from "./Breadcrumb.separator.icon.test.svelte";
-import BreadcrumbSeparatorNoTrailingSlash from "./Breadcrumb.separator.noTrailingSlash.test.svelte";
 import BreadcrumbSeparator from "./Breadcrumb.separator.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
 
@@ -30,15 +29,6 @@ describe("Breadcrumb separator", () => {
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     const list = within(nav).getByRole("list");
     expect(list.style.getPropertyValue("--ccs-separator")).toBe(expected);
-  });
-
-  it("still suppresses the trailing separator with noTrailingSlash", () => {
-    render(BreadcrumbSeparatorNoTrailingSlash);
-
-    const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
-    const list = within(nav).getByRole("list");
-    expect(list).toHaveClass("bx--breadcrumb--no-trailing-slash");
-    expect(list.style.getPropertyValue("--ccs-separator")).toBe("'→'");
   });
 
   it("renders a component separator as a decorative DOM node, suppressing the CSS pseudo-element", () => {

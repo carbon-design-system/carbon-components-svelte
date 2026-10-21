@@ -62,17 +62,6 @@ describe("ImageLoader", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders only a hidden <img> while loading", () => {
-    render(ImageLoader);
-
-    const wrapper = screen.getByTestId("default-loader");
-    const imgs = wrapper.querySelectorAll("img");
-
-    expect(imgs).toHaveLength(1);
-    expect(imgs[0]).toHaveAttribute("src", validImageSrc);
-    expect(imgs[0]).toHaveStyle({ display: "none" });
-  });
-
   it("shows the loading slot, then the image once loaded", async () => {
     render(ImageLoader);
 

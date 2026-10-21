@@ -2,7 +2,6 @@
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import ContainedList from "carbon-components-svelte/ContainedList/ContainedList.svelte";
   import ContainedListItem from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
-  import Search from "carbon-components-svelte/Search/Search.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Close from "carbon-icons-svelte/lib/Close.svelte";
   import type { ComponentProps } from "svelte";
@@ -18,13 +17,9 @@
   export let disabled: ComponentProps<ContainedListItem>["disabled"] = false;
   export let showIcon = false;
   export let showAction = false;
-  export let showSearch = false;
 </script>
 
 <ContainedList {kind} {labelText} {size} {inset} {hideLabel} {id}>
-  {#if showSearch}
-    <Search slot="action" expandable />
-  {/if}
   {#if showAction}
     <Button slot="action" kind="ghost" icon={Close} iconDescription="Action" />
   {/if}
