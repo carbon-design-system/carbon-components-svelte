@@ -65,7 +65,9 @@ Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-genera
 <ExpandableTile>
   <div slot="above" style="height: 8rem">Incident summary</div>
   <div slot="below">The primary database failed over after a storage node stopped responding.</div>
-  <AILabel slot="decorator" />
+  <AILabel slot="decorator">
+    <p>Written from the incident timeline and the database logs.</p>
+  </AILabel>
 </ExpandableTile>
 
 ## On a layer

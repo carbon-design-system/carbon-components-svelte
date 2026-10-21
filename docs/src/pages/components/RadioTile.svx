@@ -87,7 +87,9 @@ Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-genera
 <TileGroup legendText="Recommended region">
   <RadioTile value="us-east-1" checked>
     US East (N. Virginia)
-    <AILabel slot="decorator" />
+    <AILabel slot="decorator">
+      <p>Closest to most of your users, by request latency.</p>
+    </AILabel>
   </RadioTile>
   <RadioTile value="eu-west-1">EU West (Ireland)</RadioTile>
 </TileGroup>

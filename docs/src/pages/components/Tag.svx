@@ -168,8 +168,8 @@ Set `href` to render the tag as an anchor. Link tags reuse interactive styles. D
 
 Put an `AILabel` in the `decorator` slot to mark the tag as AI-generated. The label renders as inline text in the tag's color. Static and filterable tags have the slot.
 
-<Tag type="blue">Forecast<AILabel slot="decorator" /></Tag>
-<Tag type="green" filter>us-east-1<AILabel slot="decorator" /></Tag>
+<Tag type="blue">Forecast<AILabel slot="decorator"><p>Generated from the last 90 days of usage.</p></AILabel></Tag>
+<Tag type="green" filter>us-east-1<AILabel slot="decorator"><p>Suggested because most of the alerts came from this region.</p></AILabel></Tag>
 
 ## Disabled
 
