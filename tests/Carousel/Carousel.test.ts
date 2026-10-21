@@ -20,13 +20,10 @@ describe("Carousel", () => {
     const slide = screen.getByText("Slide one").closest("[role='group']");
     expect(slide).toHaveAttribute("aria-roledescription", "slide");
     expect(slide).toHaveAttribute("aria-label", "Slide 1 of 3");
-  });
-
-  it("announces slide changes politely", () => {
-    render(Carousel);
-
-    const viewport = screen.getByText("Slide one").parentElement;
-    expect(viewport).toHaveAttribute("aria-live", "polite");
+    expect(screen.getByText("Slide one").parentElement).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
   });
 
   it("disables the previous button on the first slide and the next button on the last", async () => {

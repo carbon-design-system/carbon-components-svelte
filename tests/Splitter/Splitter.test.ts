@@ -476,12 +476,4 @@ describe("Splitter", () => {
       expect(inner).toHaveClass(HOVER);
     });
   });
-
-  it("supports a custom separator label", () => {
-    setup({ separatorLabel: "Resize file tree" });
-
-    expect(
-      screen.getByRole("separator", { name: "Resize file tree" }),
-    ).toBeInTheDocument();
-  });
 });

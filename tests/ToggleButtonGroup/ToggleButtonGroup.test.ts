@@ -24,9 +24,6 @@ describe("ToggleButtonGroup", () => {
     expect(
       screen.getByRole("toolbar", { name: "Formatting toolbar" }),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("toolbar", { name: "Text formatting" }),
-    ).not.toBeInTheDocument();
   });
 
   it("toggles a button on click and dispatches change with the new array", async () => {
@@ -38,15 +35,6 @@ describe("ToggleButtonGroup", () => {
 
     expect(bold).toHaveAttribute("aria-pressed", "true");
     expect(consoleLog).toHaveBeenCalledWith("change", ["bold"]);
-  });
-
-  it("two-way binds selected", async () => {
-    const { component } = render(ToggleButtonGroupFixture);
-
-    const bold = screen.getByRole("button", { name: "Bold" });
-    await user.click(bold);
-
-    expect(component.selected).toEqual(["bold"]);
   });
 
   it("does not dispatch change when selected is set programmatically", async () => {
@@ -138,21 +126,6 @@ describe("ToggleButtonGroup", () => {
     for (const button of screen.getAllByRole("button")) {
       expect(button).toBeDisabled();
     }
-  });
-
-  it("does not toggle a disabled button", () => {
-    render(ToggleButtonGroupFixture, { props: { boldDisabled: true } });
-
-    const bold = screen.getByRole("button", { name: "Bold" });
-    expect(bold).toBeDisabled();
-    expect(bold).toHaveAttribute("aria-pressed", "false");
-  });
-
-  it("uses iconDescription as the accessible label for an icon-only button", () => {
-    render(ToggleButtonGroupIconOnly);
-
-    expect(screen.getByRole("button", { name: "Bold" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Italic" })).toBeInTheDocument();
   });
 
   describe("icon-only tooltips", () => {

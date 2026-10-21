@@ -14,10 +14,10 @@ describe("ConfirmModal", () => {
       },
     });
 
-    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
-    expect(screen.getByText("Delete this item?")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    screen.getByRole("alertdialog");
+    screen.getByText("Delete this item?");
+    screen.getByRole("button", { name: "Delete" });
+    screen.getByRole("button", { name: "Cancel" });
   });
 
   it("dispatches confirm and closes on confirm click", async () => {
