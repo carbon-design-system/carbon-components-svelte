@@ -11,13 +11,24 @@ import Meter from "./Meter.test.svelte";
 // @ts-ignore
 import MeterStatus from "./MeterStatus.test.svelte";
 
+/** Returns the `meter` element inside the fixture instance with this test id. */
+function getMeter(testId: string, options?: { name: string }) {
+  return within(screen.getByTestId(testId)).getByRole("meter", options);
+}
+
+/** Returns the trimmed text of the live region in the MeterStatus fixture. */
+function getAnnouncement() {
+  return screen
+    .getByTestId("status")
+    .querySelector("[aria-live]")
+    ?.textContent?.trim();
+}
+
 describe("Meter", () => {
   it("renders ARIA min/max/now", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("basic")).getByRole("meter", {
-      name: "Storage",
-    });
+    const meter = getMeter("basic", { name: "Storage" });
     expect(meter).toHaveAttribute("aria-valuemin", "0");
     expect(meter).toHaveAttribute("aria-valuemax", "1000");
     expect(meter).toHaveAttribute("aria-valuenow", "812");
@@ -32,35 +43,17 @@ describe("Meter", () => {
     expect(el).toHaveTextContent("812 GB of 1 TB");
   });
 
-  it("derives warning status from thresholds", () => {
+  it.each([
+    ["warning", ["bx--meter--warning"], ["bx--meter--error"]],
+    ["error", ["bx--meter--error"], []],
+    ["neither", [], ["bx--meter--warning", "bx--meter--error"]],
+    ["explicit-success", ["bx--meter--success"], ["bx--meter--error"]],
+  ])("derives the status classes for %s", (testId, present, absent) => {
     render(Meter);
 
-    const el = screen.getByTestId("warning");
-    expect(el).toHaveClass("bx--meter--warning");
-    expect(el).not.toHaveClass("bx--meter--error");
-  });
-
-  it("derives error status from thresholds", () => {
-    render(Meter);
-
-    const el = screen.getByTestId("error");
-    expect(el).toHaveClass("bx--meter--error");
-  });
-
-  it("derives no status below thresholds", () => {
-    render(Meter);
-
-    const el = screen.getByTestId("neither");
-    expect(el).not.toHaveClass("bx--meter--warning");
-    expect(el).not.toHaveClass("bx--meter--error");
-  });
-
-  it("lets explicit status override thresholds", () => {
-    render(Meter);
-
-    const el = screen.getByTestId("explicit-success");
-    expect(el).toHaveClass("bx--meter--success");
-    expect(el).not.toHaveClass("bx--meter--error");
+    const el = screen.getByTestId(testId);
+    for (const className of present) expect(el).toHaveClass(className);
+    for (const className of absent) expect(el).not.toHaveClass(className);
   });
 
   it("caps aria-valuenow and marks over-capacity when value exceeds max", () => {
@@ -73,25 +66,20 @@ describe("Meter", () => {
     expect(el).toHaveClass("bx--meter--error");
   });
 
-  it("clamps aria-valuenow to zero when value is negative", () => {
-    render(Meter);
+  it.each([["negative-value"], ["nan-value"]])(
+    "renders an empty bar with aria-valuenow 0 for %s",
+    (testId) => {
+      render(Meter);
 
-    const el = screen.getByTestId("negative-value");
-    const meter = within(el).getByRole("meter");
-    expect(meter).toHaveAttribute("aria-valuenow", "0");
-    expect(meter).toHaveAttribute("aria-valuemin", "0");
-  });
-
-  it("clamps aria-valuenow to zero when value is NaN", () => {
-    render(Meter);
-
-    const el = screen.getByTestId("nan-value");
-    const meter = within(el).getByRole("meter");
-    expect(meter).toHaveAttribute("aria-valuenow", "0");
-    expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
-      transform: "scaleX(0)",
-    });
-  });
+      const el = screen.getByTestId(testId);
+      const meter = within(el).getByRole("meter");
+      expect(meter).toHaveAttribute("aria-valuenow", "0");
+      expect(meter).toHaveAttribute("aria-valuemin", "0");
+      expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
+        transform: "scaleX(0)",
+      });
+    },
+  );
 
   it("clamps an infinite value to a full bar like any large value", () => {
     render(Meter);
@@ -109,41 +97,35 @@ describe("Meter", () => {
   it("announces the real value and status when over capacity and valueText is unset", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("over-capacity")).getByRole(
-      "meter",
-    );
+    const meter = getMeter("over-capacity");
     expect(meter).toHaveAttribute("aria-valuetext", "1,200 of 1,000, Error");
   });
 
   it("keeps valueText for aria-valuetext even when the value is over capacity", () => {
     render(Meter);
 
-    const meter = within(
-      screen.getByTestId("over-capacity-value-text"),
-    ).getByRole("meter");
+    const meter = getMeter("over-capacity-value-text");
     expect(meter).toHaveAttribute("aria-valuetext", "812 GB of 1 TB");
   });
 
   it("omits aria-valuetext when the value is in range with no thresholds and no valueText", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("basic")).getByRole("meter");
+    const meter = getMeter("basic");
     expect(meter).not.toHaveAttribute("aria-valuetext");
   });
 
   it("appends the derived warning status to aria-valuetext when valueText is unset", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("warning")).getByRole("meter");
+    const meter = getMeter("warning");
     expect(meter).toHaveAttribute("aria-valuetext", "812 of 1,000, Warning");
   });
 
   it("describes the status when valueText is set", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("value-text-error")).getByRole(
-      "meter",
-    );
+    const meter = getMeter("value-text-error");
     expect(meter).toHaveAttribute("aria-valuetext", "960 GB of 1 TB");
     expect(meter).toHaveAccessibleDescription("Error");
   });
@@ -151,25 +133,21 @@ describe("Meter", () => {
   it("does not describe the status twice when valueText is unset", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("warning")).getByRole("meter");
+    const meter = getMeter("warning");
     expect(meter).toHaveAccessibleDescription("");
   });
 
   it("uses a custom errorText in aria-valuetext", () => {
     render(Meter);
 
-    const meter = within(screen.getByTestId("custom-error-text")).getByRole(
-      "meter",
-    );
+    const meter = getMeter("custom-error-text");
     expect(meter).toHaveAttribute("aria-valuetext", "960 of 1,000, Critical");
   });
 
   it("uses a custom valueRangeText in aria-valuetext", () => {
     render(Meter);
 
-    const meter = within(
-      screen.getByTestId("custom-value-range-text"),
-    ).getByRole("meter");
+    const meter = getMeter("custom-value-range-text");
     expect(meter).toHaveAttribute("aria-valuetext", "1200/1000, Error");
   });
 
@@ -230,12 +208,6 @@ describe("Meter", () => {
   it("announces a status transition to warning and error, and stays quiet for default and value ticks", async () => {
     const { rerender } = render(MeterStatus);
 
-    const getAnnouncement = () =>
-      screen
-        .getByTestId("status")
-        .querySelector("[aria-live]")
-        ?.textContent?.trim();
-
     expect(getAnnouncement()).toBe("");
 
     await rerender({ value: 10, status: "warning" });
@@ -254,23 +226,13 @@ describe("Meter", () => {
   it("stays quiet when a meter mounts already in error", () => {
     render(MeterStatus, { props: { value: 10, status: "error" } });
 
-    const announcement = screen
-      .getByTestId("status")
-      .querySelector("[aria-live]")
-      ?.textContent?.trim();
-    expect(announcement).toBe("");
+    expect(getAnnouncement()).toBe("");
   });
 
   it("announces a custom errorText on transition to error", async () => {
     const { rerender } = render(MeterStatus, {
       props: { value: 10, errorText: "Critical" },
     });
-
-    const getAnnouncement = () =>
-      screen
-        .getByTestId("status")
-        .querySelector("[aria-live]")
-        ?.textContent?.trim();
 
     expect(getAnnouncement()).toBe("");
 
@@ -335,15 +297,6 @@ describe("Meter", () => {
     );
   });
 
-  it("omits the threshold description when showThresholds is not set", () => {
-    render(Meter);
-
-    const el = screen.getByTestId("thresholds-no-show");
-    const meter = within(el).getByRole("meter");
-    expect(meter).not.toHaveAttribute("aria-describedby");
-    expect(within(el).queryByText(/warning at/i)).not.toBeInTheDocument();
-  });
-
   it("uses a custom thresholdsText function", () => {
     render(Meter);
 
@@ -353,11 +306,16 @@ describe("Meter", () => {
     expect(meter).toHaveAttribute("aria-describedby", text.id);
   });
 
-  it("omits the threshold description when thresholdsText returns an empty string", () => {
-    render(Meter);
+  it.each([["thresholds-no-show"], ["empty-thresholds-text"]])(
+    "omits the threshold description for %s",
+    (testId) => {
+      render(Meter);
 
-    const el = screen.getByTestId("empty-thresholds-text");
-    const meter = within(el).getByRole("meter");
-    expect(meter).not.toHaveAttribute("aria-describedby");
-  });
+      const el = screen.getByTestId(testId);
+      expect(within(el).getByRole("meter")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+      expect(within(el).queryByText(/warning at/i)).not.toBeInTheDocument();
+    },
+  );
 });

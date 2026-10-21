@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
 import InputGroup from "./InputGroup.test.svelte";
-import InputGroupInForm from "./InputGroupInForm.test.svelte";
 
 describe("InputGroup", () => {
   it("names the group with its label", () => {
@@ -97,26 +96,29 @@ describe("InputGroup", () => {
   });
 
   it.each([
-    [undefined, "bx--btn--field", undefined],
+    [undefined, "bx--btn--field", null],
+    ["xs", "bx--btn--xs", "bx--text-input--xs"],
     ["sm", "bx--btn--sm", "bx--text-input--sm"],
-    ["xl", undefined, "bx--text-input--xl"],
+    ["xl", null, "bx--text-input--xl"],
   ] as const)(
     "matches the button to size %s",
     (size, buttonClass, inputClass) => {
       render(InputGroup, { size });
 
       const button = screen.getByRole("button", { name: "Apply" });
-      for (const name of ["bx--btn--sm", "bx--btn--field", "bx--btn--xs"]) {
-        if (name === buttonClass) expect(button).toHaveClass(name);
-        else expect(button).not.toHaveClass(name);
+      if (buttonClass) {
+        expect(button).toHaveClass(buttonClass);
+      } else {
+        expect(button.className).not.toMatch(/bx--btn--(xs|sm|field)/);
       }
-      if (inputClass)
+      if (inputClass) {
         expect(screen.getByRole("textbox")).toHaveClass(inputClass);
+      }
     },
   );
 
   it("inherits the size of a parent Form", () => {
-    render(InputGroupInForm);
+    render(InputGroup, { formSize: "sm" });
 
     expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--sm");
     expect(screen.getByRole("button", { name: "Apply" })).toHaveClass(

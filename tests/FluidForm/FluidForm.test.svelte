@@ -6,6 +6,8 @@
 
   export let preventDefault = false;
   export let ref: null | HTMLFormElement = null;
+  export let onsubmit: (e: Event) => void = () => {};
+  export let onreset: (e: Event) => void = () => {};
 
   let className: undefined | string = undefined;
 
@@ -15,15 +17,15 @@
 <FluidForm
   bind:ref
   class={className}
-  data-testid="fluid-form"
+  data-testid="form"
   on:submit={(e) => {
     if (preventDefault) {
       e.preventDefault();
     }
-    console.log("submit", e);
+    onsubmit(e);
   }}
   on:reset={(e) => {
-    console.log("reset", e);
+    onreset(e);
   }}
 >
   <Button type="submit">Submit</Button>

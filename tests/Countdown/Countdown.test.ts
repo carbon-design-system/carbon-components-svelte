@@ -26,16 +26,16 @@ describe("Countdown", () => {
     expect(timer()).toHaveTextContent("1:27");
   });
 
-  it("writes an hour or more as h:mm:ss", () => {
-    render(Countdown, { seconds: 3725 });
+  it.each([
+    [3725, "auto", "1:02:05"],
+    [300, "mm:ss", "05:00"],
+    [300, "h:mm:ss", "0:05:00"],
+    [3725, "m:ss", "62:05"],
+    [3725, "mm:ss", "62:05"],
+  ] as const)("formats %i s with %s as %s", (seconds, format, text) => {
+    render(Countdown, { seconds, format });
 
-    expect(timer()).toHaveTextContent("1:02:05");
-  });
-
-  it("pads the minutes with mm:ss", () => {
-    render(Countdown, { seconds: 300, format: "mm:ss" });
-
-    expect(timer()).toHaveTextContent("05:00");
+    expect(timer()).toHaveTextContent(text);
   });
 
   it("pauses while running is false", async () => {

@@ -10,9 +10,8 @@ describe("FormLabel", () => {
       },
     });
 
-    const labelText = screen.getByText("Label text");
-    const label = labelText.closest("label");
-    expect(label).toBeInTheDocument();
+    const label = screen.getByText("Label text");
+    expect(label.tagName).toBe("LABEL");
     expect(label).toHaveClass("bx--label");
   });
 
@@ -23,42 +22,19 @@ describe("FormLabel", () => {
       },
     });
 
-    const labelText = screen.getByText("Label");
-    const label = labelText.closest("label");
-    assert(label);
-    const forAttr = label.getAttribute("for");
+    const forAttr = screen.getByText("Label").getAttribute("for");
     expect(forAttr).toBeTruthy();
     expect(forAttr).toMatch(/^ccs-/);
   });
 
-  it("should handle custom id", () => {
-    render(FormLabelTest, {
-      props: {
-        id: "custom-input-id",
-        slotContent: "Label",
-      },
-    });
+  it.each([
+    [{ id: "custom-input-id" }, "custom-input-id"],
+    [{ htmlFor: "email" }, "email"],
+    [{ htmlFor: "email", id: "legacy" }, "email"],
+  ])("resolves for from %j", (props, expectedFor) => {
+    render(FormLabelTest, { props: { ...props, slotContent: "Label" } });
 
-    const labelText = screen.getByText("Label");
-    const label = labelText.closest("label");
-    assert(label);
-    expect(label).toHaveAttribute("for", "custom-input-id");
-  });
-
-  it("should set the for attribute from the for prop", () => {
-    render(FormLabelTest, {
-      props: { htmlFor: "email", slotContent: "Email" },
-    });
-
-    expect(screen.getByText("Email")).toHaveAttribute("for", "email");
-  });
-
-  it("should prefer for over the deprecated id prop", () => {
-    render(FormLabelTest, {
-      props: { htmlFor: "email", id: "legacy", slotContent: "Email" },
-    });
-
-    expect(screen.getByText("Email")).toHaveAttribute("for", "email");
+    expect(screen.getByText("Label")).toHaveAttribute("for", expectedFor);
   });
 
   it("should not set its own id outside a FormItem", () => {
@@ -67,69 +43,31 @@ describe("FormLabel", () => {
     expect(screen.getByText("Email")).not.toHaveAttribute("id");
   });
 
-  it("should handle click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+  it("forwards click and mouse events", async () => {
+    const onClick = vi.fn();
+    const onMouseover = vi.fn();
+    const onMouseenter = vi.fn();
+    const onMouseleave = vi.fn();
     render(FormLabelTest, {
       props: {
-        slotContent: "Clickable label",
+        slotContent: "Label",
+        onClick,
+        onMouseover,
+        onMouseenter,
+        onMouseleave,
       },
     });
 
-    const labelText = screen.getByText("Clickable label");
-    const label = labelText.closest("label");
-    assert(label);
+    const label = screen.getByText("Label");
     await user.click(label);
+    expect(onClick).toHaveBeenCalledTimes(1);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
-  });
-
-  it("should handle mouseover event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(FormLabelTest, {
-      props: {
-        slotContent: "Hoverable label",
-      },
-    });
-
-    const labelText = screen.getByText("Hoverable label");
-    const label = labelText.closest("label");
-    assert(label);
     await user.hover(label);
+    expect(onMouseover).toHaveBeenCalled();
+    expect(onMouseenter).toHaveBeenCalled();
 
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
-  });
-
-  it("should handle mouseenter event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(FormLabelTest, {
-      props: {
-        slotContent: "Label",
-      },
-    });
-
-    const labelText = screen.getByText("Label");
-    const label = labelText.closest("label");
-    assert(label);
-    await user.hover(label);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
-  });
-
-  it("should handle mouseleave event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(FormLabelTest, {
-      props: {
-        slotContent: "Label",
-      },
-    });
-
-    const labelText = screen.getByText("Label");
-    const label = labelText.closest("label");
-    assert(label);
-    await user.hover(label);
     await user.unhover(label);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onMouseleave).toHaveBeenCalled();
   });
 
   it("should apply custom class via restProps", () => {
@@ -140,10 +78,7 @@ describe("FormLabel", () => {
       },
     });
 
-    const labelText = screen.getByText("Label");
-    const label = labelText.closest("label");
-    assert(label);
-    expect(label).toHaveClass("custom-label-class");
+    expect(screen.getByText("Label")).toHaveClass("custom-label-class");
   });
 
   it("should name an associated input", () => {

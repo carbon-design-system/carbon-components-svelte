@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import FluidFormActionsTest from "./FluidForm.actions.test.svelte";
 import FluidFormTest from "./FluidForm.test.svelte";
@@ -6,16 +7,12 @@ import FluidFormTest from "./FluidForm.test.svelte";
 describe("FluidForm", () => {
   it("merges a consumer class with the fluid form classes", () => {
     render(FluidFormTest, { class: "custom" });
-    expect(screen.getByTestId("fluid-form")).toHaveClass(
-      "bx--form",
-      "bx--form--fluid",
-      "custom",
-    );
+    expect(getForm()).toHaveClass("bx--form", "bx--form--fluid", "custom");
   });
 
   it("exposes ref to the underlying form element", () => {
     const { component } = render(FluidFormTest);
-    const form = screen.getByTestId("fluid-form");
+    const form = getForm();
     expect(component.ref).toBe(form);
     expect(component.ref?.tagName).toBe("FORM");
   });
@@ -24,7 +21,7 @@ describe("FluidForm", () => {
     it("calls each action with the form element", () => {
       const action = vi.fn(() => ({ destroy: vi.fn() }));
       render(FluidFormActionsTest, { props: { actions: [action] } });
-      const form = screen.getByTestId("fluid-form");
+      const form = getForm();
       expect(action).toHaveBeenCalledTimes(1);
       expect(action).toHaveBeenCalledWith(form);
     });
@@ -32,13 +29,13 @@ describe("FluidForm", () => {
 
   describe("form submission", () => {
     it("handles form submission", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(FluidFormTest);
+      const onsubmit = vi.fn();
+      render(FluidFormTest, { onsubmit });
 
       const submitButton = screen.getByRole("button", { name: "Submit" });
       await user.click(submitButton);
 
-      expect(consoleLog).toHaveBeenCalledWith("submit", expect.any(Event));
+      expect(onsubmit).toHaveBeenCalledWith(expect.any(Event));
     });
 
     it.each([
@@ -49,7 +46,7 @@ describe("FluidForm", () => {
       (preventDefault, proceeds) => {
         render(FluidFormTest, { preventDefault });
 
-        const form = screen.getByTestId("fluid-form");
+        const form = getForm();
         const notCancelled = form.dispatchEvent(
           new Event("submit", { bubbles: true, cancelable: true }),
         );
@@ -61,12 +58,12 @@ describe("FluidForm", () => {
 
   describe("form reset", () => {
     it("forwards reset from a reset button", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      render(FluidFormTest);
+      const onreset = vi.fn();
+      render(FluidFormTest, { onreset });
 
       await user.click(screen.getByRole("button", { name: "Reset" }));
 
-      expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
+      expect(onreset).toHaveBeenCalledWith(expect.any(Event));
     });
   });
 });
