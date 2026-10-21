@@ -1,6 +1,7 @@
 import { act, render, screen } from "@testing-library/svelte";
 import Countdown from "./Countdown.test.svelte";
 import CountdownSentence from "./CountdownSentence.test.svelte";
+import CountdownUnbound from "./CountdownUnbound.test.svelte";
 
 const timer = () => screen.getByRole("timer");
 const advance = async (ms: number) => {
@@ -71,6 +72,35 @@ describe("Countdown", () => {
     expect(live).toHaveTextContent("Time is up");
     expect(component.ends).toBe(1);
     expect(component.running).toBe(false);
+  });
+
+  it.each([
+    [
+      "an expired until at mount",
+      () => ({ until: Date.now() - 5000 }),
+      undefined,
+      "",
+    ],
+    ["seconds of 0 at mount", () => ({ seconds: 0 }), undefined, ""],
+    [
+      "until moved into the past",
+      () => ({ until: Date.now() + 60_000 }),
+      () => ({ until: Date.now() - 5000 }),
+      "Time is up",
+    ],
+  ])("ends once for %s", async (_, initial, change, announced) => {
+    const { component, container, rerender } = render(
+      CountdownUnbound,
+      initial(),
+    );
+    if (change) await rerender(change());
+
+    await advance(2000);
+
+    expect(timer()).toHaveTextContent("0:00");
+    expect(component.ends).toBe(1);
+    expect(component.running).toBe(false);
+    expect(container.querySelector("[aria-live]")).toHaveTextContent(announced);
   });
 
   it("rewrites the time when format changes", async () => {
