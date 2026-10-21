@@ -314,6 +314,34 @@ describe("NotificationQueue", () => {
     },
   );
 
+  it("focuses an actionable toast, removes it on Escape, and returns focus", async () => {
+    const { component } = render(NotificationQueueTest);
+    const before = document.createElement("button");
+    document.body.append(before);
+    onTestFinished(() => before.remove());
+    before.focus();
+
+    getQueue(component.queue).add({
+      title: "Upload failed",
+      subtitle: "Retry from the files list.",
+      actionable: true,
+    });
+    await tick();
+    await tick();
+
+    const dialog = screen.getByRole("alertdialog", { name: "Upload failed" });
+    const close = within(dialog).getByRole("button", {
+      name: "Close notification",
+    });
+    expect(close).toHaveFocus();
+
+    await fireEvent.keyDown(close, { key: "Escape" });
+    await tick();
+
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    expect(before).toHaveFocus();
+  });
+
   it.each(["top-right", "bottom-right"] as const)(
     "should limit notifications to maxNotifications (%s)",
     async (position) => {

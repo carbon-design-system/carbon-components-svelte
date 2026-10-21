@@ -1,6 +1,11 @@
 export interface DismissibleNotification {
   close: (closeFromTimeout?: unknown) => void;
   sync: (open: boolean, timeout: number) => void;
+  syncFocusOnOpen: (open: boolean, enabled: boolean) => void;
+  handleActionableKeydown: (
+    event: KeyboardEvent,
+    options: { closeOnEscape: boolean; hideCloseButton: boolean },
+  ) => void;
   handleMouseenter: () => void;
   handleMouseleave: (event: MouseEvent) => void;
   handleFocusIn: (event: FocusEvent) => void;
@@ -12,9 +17,18 @@ export interface DismissibleNotificationOptions {
   dispatch: (name: string, detail?: object, options?: object) => boolean;
   getPauseOnHover: () => boolean;
   setOpen: (open: boolean) => void;
+  getRef?: () => HTMLElement | null | undefined;
 }
 
 /** Shared open/close + auto-dismiss + pause-on-hover wiring. */
 export function createDismissibleNotification(
   options: DismissibleNotificationOptions,
 ): DismissibleNotification;
+
+/**
+ * Focus an actionable notification's first action, else its close button,
+ * else the notification itself.
+ */
+export function focusActionableNotification(
+  root: HTMLElement | null | undefined,
+): void;

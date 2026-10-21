@@ -544,6 +544,21 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("status"),
   },
   {
+    name: "InlineNotification",
+    variant: "actionable",
+    render: (attrs) =>
+      render(InlineNotification, {
+        props: {
+          actionable: true,
+          focusOnOpen: false,
+          title: "Error",
+          subtitle: "Try again",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("alertdialog"),
+  },
+  {
     name: "InterstitialScreenBody",
     render: (attrs) => render(InterstitialScreenBody, { props: attrs }),
     target: () => screen.getByRole("region"),
@@ -602,6 +617,22 @@ export const interactive: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("status"),
+  },
+  {
+    name: "ToastNotification",
+    variant: "actionable",
+    render: (attrs) =>
+      render(ToastNotification, {
+        props: {
+          actionable: true,
+          focusOnOpen: false,
+          title: "Saved",
+          subtitle: "All changes saved",
+          caption: "Just now",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("alertdialog"),
   },
   {
     name: "ConfirmModal",
