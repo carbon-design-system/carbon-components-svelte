@@ -1,8 +1,11 @@
 <script lang="ts">
   import Accordion from "carbon-components-svelte/Accordion/Accordion.svelte";
   import AccordionItem from "carbon-components-svelte/Accordion/AccordionItem.svelte";
+  import type { ComponentProps } from "svelte";
 
+  export let type: ComponentProps<Accordion>["type"] = "single";
   export let count = 3;
+  export let open = false;
   export let showLate = false;
 
   const items = [
@@ -24,9 +27,9 @@
   ];
 </script>
 
-<Accordion type="single">
+<Accordion {type}>
   {#each items.slice(0, count) as item}
-    <AccordionItem title={item.title}>
+    <AccordionItem title={item.title} {open}>
       <p>{item.description}</p>
     </AccordionItem>
   {/each}

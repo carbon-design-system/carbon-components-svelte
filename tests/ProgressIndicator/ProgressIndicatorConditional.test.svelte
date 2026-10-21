@@ -4,12 +4,10 @@
 
   export let showOptional = true;
   export let currentIndex = 0;
+  export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
-<ProgressIndicator
-  {currentIndex}
-  on:change={(e) => console.log("change", e.detail)}
->
+<ProgressIndicator {currentIndex} on:change={(e) => onchange?.(e)}>
   <ProgressStep label="Step 1" complete />
   {#if showOptional}
     <ProgressStep label="Optional" complete />

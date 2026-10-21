@@ -2,6 +2,8 @@
   import BadgeIndicator from "carbon-components-svelte/BadgeIndicator/BadgeIndicator.svelte";
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
+
+  export let onClick: () => void = () => {};
 </script>
 
 <Button>primary</Button>
@@ -58,14 +60,7 @@
 
 <Button icon={Add}>With icon</Button>
 
-<Button
-  data-testid="btn"
-  on:click={() => {
-    console.log("click");
-  }}
->
-  Test button
-</Button>
+<Button data-testid="btn" on:click={onClick}> Test button </Button>
 
 <Button data-testid="btn-skeleton" skeleton style="width: 200px" />
 <Button skeleton size="field" />

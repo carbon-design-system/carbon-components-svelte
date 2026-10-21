@@ -4,9 +4,11 @@
 
   export let lazy = true;
   export let open = false;
+  export let onToggle: (open: boolean) => void = () => {};
+  export let onContentMount: () => void = () => {};
 
-  function logMount(_node: HTMLElement) {
-    console.log("lazy-content-mounted");
+  function trackMount(_node: HTMLElement) {
+    onContentMount();
   }
 </script>
 
@@ -15,10 +17,8 @@
     title="Natural Language Classifier"
     {lazy}
     {open}
-    on:toggle={(e) => {
-      console.log("item-toggle", e.detail.open);
-    }}
+    on:toggle={(e) => onToggle(e.detail.open)}
   >
-    <p use:logMount>Lazy panel content</p>
+    <p use:trackMount>Lazy panel content</p>
   </AccordionItem>
 </Accordion>

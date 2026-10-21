@@ -1,6 +1,8 @@
 import { render } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import ThemeSystem from "./ThemeSystem.test.svelte";
+import { setupStorageEventMock } from "../utils/storage-mocks";
+import Theme from "./Theme.test.svelte";
 
 type Listener = (e: { matches: boolean }) => void;
 
@@ -29,41 +31,29 @@ function stubMatchMedia(matches: boolean) {
   };
 }
 
+/** Renders the Theme harness with `system` on by default. */
+function renderSystem(props: Partial<ComponentProps<Theme>> = {}) {
+  return render(Theme, { props: { system: true, ...props } });
+}
+
 describe("Theme system", () => {
   let setAttribute: ReturnType<typeof vi.spyOn>;
   let setProperty: ReturnType<typeof vi.spyOn>;
-  let consoleLog: ReturnType<typeof vi.spyOn>;
-  let localStorageMock: Record<string, string>;
+  const { setMockItem, getMockItem } = setupStorageEventMock();
 
   beforeEach(() => {
     setAttribute = vi.spyOn(document.documentElement, "setAttribute");
     setProperty = vi.spyOn(document.documentElement.style, "setProperty");
-    consoleLog = vi.spyOn(console, "log");
-    localStorageMock = {};
-    vi.stubGlobal("localStorage", {
-      getItem: vi.fn((key: string) => localStorageMock[key] || null),
-      setItem: vi.fn((key: string, value: string) => {
-        localStorageMock[key] = value;
-      }),
-      removeItem: vi.fn((key: string) => {
-        delete localStorageMock[key];
-      }),
-      clear: vi.fn(),
-      length: 0,
-      key: vi.fn(),
-    });
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
-    vi.unstubAllGlobals();
     document.documentElement.removeAttribute("theme");
     document.documentElement.style.removeProperty("color-scheme");
   });
 
   it("applies the dark theme when the system prefers dark", async () => {
     stubMatchMedia(true);
-    render(ThemeSystem);
+    renderSystem();
     await tick();
 
     expect(setAttribute).toHaveBeenLastCalledWith("theme", "g100");
@@ -72,7 +62,7 @@ describe("Theme system", () => {
 
   it("applies the light theme when the system prefers light", async () => {
     stubMatchMedia(false);
-    render(ThemeSystem, { props: { theme: "g100" } });
+    renderSystem({ theme: "g100" });
     await tick();
 
     expect(document.documentElement.getAttribute("theme")).toBe("white");
@@ -80,7 +70,7 @@ describe("Theme system", () => {
 
   it("uses custom systemThemes", async () => {
     stubMatchMedia(true);
-    render(ThemeSystem, { props: { systemThemes: ["g10", "g90"] } });
+    renderSystem({ systemThemes: ["g10", "g90"] });
     await tick();
 
     expect(document.documentElement.getAttribute("theme")).toBe("g90");
@@ -88,7 +78,8 @@ describe("Theme system", () => {
 
   it("follows system changes after mount and dispatches update once", async () => {
     const { fire } = stubMatchMedia(true);
-    render(ThemeSystem);
+    const onUpdate = vi.fn();
+    renderSystem({ onUpdate });
     await tick();
     expect(document.documentElement.getAttribute("theme")).toBe("g100");
 
@@ -96,16 +87,13 @@ describe("Theme system", () => {
     await tick();
 
     expect(document.documentElement.getAttribute("theme")).toBe("white");
-    const updates = consoleLog.mock.calls.filter(
-      (c: unknown[]) => c[0] === "update",
-    );
-    expect(updates).toHaveLength(1);
-    expect(updates[0][1]).toEqual({ theme: "white" });
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledWith({ theme: "white" });
   });
 
   it("does not call matchMedia when system is false", async () => {
     const { matchMedia } = stubMatchMedia(true);
-    render(ThemeSystem, { props: { system: false, theme: "g100" } });
+    renderSystem({ system: false, theme: "g100" });
     await tick();
 
     expect(matchMedia).not.toHaveBeenCalled();
@@ -114,7 +102,7 @@ describe("Theme system", () => {
 
   it("applies immediately when system is enabled at runtime", async () => {
     const { matchMedia } = stubMatchMedia(true);
-    const { component } = render(ThemeSystem, { props: { system: false } });
+    const { component } = renderSystem({ system: false });
     await tick();
     expect(matchMedia).not.toHaveBeenCalled();
 
@@ -126,7 +114,7 @@ describe("Theme system", () => {
 
   it("stops following when system is disabled at runtime", async () => {
     const { fire, mql } = stubMatchMedia(true);
-    const { component } = render(ThemeSystem);
+    const { component } = renderSystem();
     await tick();
 
     component.system = false;
@@ -143,7 +131,7 @@ describe("Theme system", () => {
 
   it("removes the change listener on unmount", async () => {
     const { mql } = stubMatchMedia(true);
-    const { unmount } = render(ThemeSystem);
+    const { unmount } = renderSystem();
     await tick();
     expect(mql.addEventListener).toHaveBeenCalledWith(
       "change",
@@ -159,19 +147,19 @@ describe("Theme system", () => {
   });
 
   it("lets system win over the stored value with persist", async () => {
-    localStorageMock.theme = "g10";
+    setMockItem("theme", "g10");
     stubMatchMedia(true);
-    render(ThemeSystem, { props: { persist: true } });
+    renderSystem({ persist: true });
     await tick();
     await tick();
 
     expect(document.documentElement.getAttribute("theme")).toBe("g100");
-    expect(localStorageMock.theme).toBe("g100");
+    expect(getMockItem("theme")).toBe("g100");
   });
 
   it("does not watch the system when unmounted before persist settles", async () => {
     const { matchMedia } = stubMatchMedia(true);
-    const { unmount } = render(ThemeSystem, { props: { persist: true } });
+    const { unmount } = renderSystem({ persist: true });
     unmount();
     await tick();
 

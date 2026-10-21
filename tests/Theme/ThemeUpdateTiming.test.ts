@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import ThemeUpdateTiming from "./ThemeUpdateTiming.test.svelte";
+import ThemeUpdateTiming from "./Theme.test.svelte";
 
 describe("Theme update dispatch", () => {
   afterEach(() => {
