@@ -106,6 +106,15 @@
   let ownRunning = running;
   let ownUntil = until;
 
+  /** @param {boolean} announce */
+  function finish(announce) {
+    stop();
+    ended = true;
+    running = ownRunning = false;
+    if (announce) announcement = expiredDescription;
+    dispatch("end");
+  }
+
   function step() {
     const next = Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
     if (next === remaining) return;
@@ -113,18 +122,19 @@
       announcement = warnDescription;
     }
     remaining = ownRemaining = next;
-    if (remaining === 0) {
-      stop();
-      ended = true;
-      running = ownRunning = false;
-      announcement = expiredDescription;
-      dispatch("end");
-    }
+    if (remaining === 0) finish(true);
   }
 
-  function start() {
+  /** @param {boolean} [atMount] Whether an end that is already past is silent. */
+  function start(atMount = false) {
     stop();
-    if (!running || remaining <= 0) return;
+    if (!running) return;
+    // Already at zero (an expired `until`, `seconds={0}`): there is nothing
+    // to count down, but the end still happens.
+    if (remaining <= 0) {
+      if (!ended) finish(!atMount);
+      return;
+    }
     endsAt = until == null ? Date.now() + remaining * 1000 : +until;
     interval = setInterval(step, 250);
   }
@@ -150,7 +160,7 @@
     // set stays paused.
     let go = nextRunning;
     if (ended && left > 0 && !go) go = running = true;
-    if (go) ended = false;
+    if (go && left > 0) ended = false;
     ownRemaining = left;
     ownRunning = go;
     ownUntil = nextUntil;
@@ -168,7 +178,7 @@
 
   onMount(() => {
     mounted = true;
-    start();
+    start(true);
     // A background tab runs timers about once a minute; catch up as soon
     // as it is shown again.
     const catchUp = () => {
