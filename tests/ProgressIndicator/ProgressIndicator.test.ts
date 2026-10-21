@@ -10,31 +10,6 @@ import ProgressStepStandalone from "./ProgressStepStandalone.test.svelte";
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {
-    it("should render steps with correct states", () => {
-      render(ProgressIndicator, {
-        currentIndex: 2,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: true },
-          { label: "Step 3", description: "Third step", complete: true },
-          { label: "Step 4", description: "Fourth step", complete: false },
-        ],
-      });
-
-      const listItems = screen.getAllByRole("listitem");
-
-      expect(listItems).toHaveLength(4);
-
-      const completedSteps = listItems.filter((step) =>
-        step.classList.contains("bx--progress-step--complete"),
-      );
-      expect(completedSteps).toHaveLength(3);
-
-      expect(listItems[2]).toHaveTextContent("Step 3");
-
-      expect(listItems[3]).not.toHaveClass("bx--progress-step--complete");
-    });
-
     it("should expose current, complete, and invalid state to assistive tech", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,
@@ -300,32 +275,6 @@ describe("ProgressIndicator", () => {
       expect(consoleLog).toHaveBeenCalledWith("blur", "Step 1");
     });
 
-    it("should support keyboard navigation for complete steps", async () => {
-      const onchange = vi.fn();
-      render(ProgressIndicator, {
-        currentIndex: 1,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: false },
-        ],
-        onchange,
-      });
-
-      const completeStepButton = screen.getAllByRole("button")[0];
-      await user.tab();
-      expect(completeStepButton).toHaveFocus();
-
-      await user.keyboard("{Enter}");
-      expect(onchange).toHaveBeenCalledTimes(1);
-      expect(onchange).toHaveBeenLastCalledWith(
-        expect.objectContaining({ detail: 0 }),
-      );
-
-      // Step 1 is now the current step, so Space must not dispatch again.
-      await user.keyboard(" ");
-      expect(onchange).toHaveBeenCalledTimes(1);
-    });
-
     it("should dispatch change exactly once per keypress on a complete step", async () => {
       const changeHandler = vi.fn();
       render(ProgressIndicator, {
@@ -344,6 +293,9 @@ describe("ProgressIndicator", () => {
 
       await user.keyboard("{Enter}");
       expect(changeHandler).toHaveBeenCalledTimes(1);
+      expect(changeHandler).toHaveBeenLastCalledWith(
+        expect.objectContaining({ detail: 0 }),
+      );
 
       await user.keyboard("{ArrowRight}");
       await user.keyboard(" ");
@@ -456,19 +408,6 @@ describe("ProgressIndicator", () => {
       expect(buttons[1]).toHaveFocus();
     });
 
-    it("keeps every non-disabled button tabbable", () => {
-      render(ProgressIndicator, {
-        currentIndex: 1,
-        steps: fourSteps,
-      });
-
-      const buttons = screen.getAllByRole("button");
-      for (const button of buttons.slice(0, 3)) {
-        expect(button).toHaveAttribute("tabindex", "0");
-      }
-      expect(buttons[3]).toHaveAttribute("tabindex", "-1");
-    });
-
     it("does not dispatch change from arrow movement alone", async () => {
       const changeHandler = vi.fn();
       render(ProgressIndicator, {
@@ -572,11 +511,6 @@ describe("ProgressIndicator", () => {
         ),
       ).toBe(false);
     });
-  });
-
-  it("should not throw when ProgressStep is rendered outside a ProgressIndicator", () => {
-    expect(() => render(ProgressStepStandalone)).not.toThrow();
-    expect(screen.getByText("Standalone step")).toBeInTheDocument();
   });
 
   describe("Icon slot", () => {

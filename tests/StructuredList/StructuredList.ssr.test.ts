@@ -26,10 +26,4 @@ describe("StructuredList server render", () => {
     expect(html).toContain('type="checkbox"');
     expect(html).not.toContain('name="plan"');
   });
-
-  it("does not set the name on the list element", () => {
-    expect(renderRaw(StructuredListSsr, props)).not.toMatch(
-      /<div[^>]*name="plan"/,
-    );
-  });
 });

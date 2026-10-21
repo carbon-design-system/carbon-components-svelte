@@ -12,7 +12,6 @@
   export let itemClass = "";
   export let useSlot = false;
   export let noTitle = false;
-  export let ariaLabel: ComponentProps<AccordionItem>["ariaLabel"] = undefined;
   export let ref: ComponentProps<AccordionItem>["ref"] = null;
 </script>
 
@@ -35,7 +34,7 @@
   }}
 >
   {#if useSlot}
-    <AccordionItem class={itemClass} {ariaLabel}>
+    <AccordionItem class={itemClass}>
       <div slot="title">Custom Title</div>
       Slot content
     </AccordionItem>

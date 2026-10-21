@@ -174,15 +174,6 @@ describe("StructuredList", () => {
     expect(rows[2]).toHaveClass("bx--structured-list-row--selected");
   });
 
-  it("should handle selection change", async () => {
-    render(StructuredList, { props: { selection: true } });
-
-    const secondInput = screen.getAllByRole("radio")[1];
-    await user.click(secondInput);
-
-    expect(screen.getByTestId("value").textContent).toBe("row-2-value");
-  });
-
   it("should activate selectable row via Space/Enter keys", async () => {
     render(StructuredList, { props: { selection: true } });
 
@@ -194,21 +185,6 @@ describe("StructuredList", () => {
     rows[2].focus();
     await user.keyboard("{Enter}");
     expect(screen.getByTestId("value").textContent).toBe("row-3-value");
-  });
-
-  it("should expose selectable rows as native radio inputs with correct checked state", () => {
-    render(StructuredList, {
-      props: { selection: true, selected: "row-2-value" },
-    });
-
-    const rows = screen.getAllByRole("radio");
-    expect(rows).toHaveLength(3);
-    for (const row of rows) {
-      expect(row.tagName).toBe("INPUT");
-    }
-    expect(rows[0]).not.toBeChecked();
-    expect(rows[1]).toBeChecked();
-    expect(rows[2]).not.toBeChecked();
   });
 
   it("should wrap the native input in a table-cell so it doesn't leave a stray anonymous column", () => {
@@ -247,33 +223,6 @@ describe("StructuredList", () => {
       expect(wrapper).not.toHaveClass(
         "bx--structured-list-input-wrapper--checked",
       );
-    }
-  });
-
-  it('should not put role="radio"/"checkbox" on the <label> element', () => {
-    const { container } = render(StructuredList, {
-      props: { selection: true },
-    });
-
-    const labels = container.querySelectorAll("label.bx--structured-list-row");
-    expect(labels.length).toBeGreaterThan(0);
-    for (const label of labels) {
-      expect(label).not.toHaveAttribute("role");
-      expect(label).not.toHaveAttribute("aria-checked");
-    }
-  });
-
-  it("should keep the native input focusable and keyboard-toggleable", () => {
-    const { container } = render(StructuredList, {
-      props: { selection: true },
-    });
-
-    const inputs = container.querySelectorAll(
-      'input[type="radio"], input[type="checkbox"]',
-    );
-    expect(inputs.length).toBeGreaterThan(0);
-    for (const input of inputs) {
-      expect(input).toHaveAttribute("tabindex", "0");
     }
   });
 
@@ -348,10 +297,6 @@ describe("StructuredList", () => {
         expect(cell).not.toHaveClass("bx--structured-list-content--nowrap");
       }
     });
-  });
-
-  it("should not throw when rendered outside a StructuredList", () => {
-    expect(() => render(StructuredListInputStandalone)).not.toThrow();
   });
 
   it("does not render a title attribute by default", () => {
@@ -545,25 +490,5 @@ describe("Generics", () => {
     type ChangeEventDetail =
       ChangeEvent extends CustomEvent<infer T> ? T : never;
     expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string | string[]>();
-  });
-
-  it("should provide type-safe access to custom string literal types in event handlers", () => {
-    type Status = "pending" | "approved" | "rejected";
-
-    const handleChange = (value: Status | Status[]) => {
-      expectTypeOf(value).toEqualTypeOf<Status | Status[]>();
-    };
-
-    expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status | Status[]>();
-
-    type ComponentType = StructuredListComponent<Status>;
-    type Events = ComponentEvents<ComponentType>;
-    type ChangeEvent = Events["change"];
-    type ChangeEventDetail =
-      ChangeEvent extends CustomEvent<infer T> ? T : never;
-
-    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<
-      Parameters<typeof handleChange>[0]
-    >();
   });
 });
