@@ -29,7 +29,8 @@
   class:bx--carousel__item={true}
   role="group"
   aria-roledescription="slide"
-  aria-label={label ?? `Slide ${position + 1} of ${$views.length}`}
+  aria-label={label ??
+    (position < 0 ? undefined : `Slide ${position + 1} of ${$views.length}`)}
   {...$$restProps}
 >
   <slot />
