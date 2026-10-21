@@ -467,6 +467,10 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import {
+    getThemeZoneClass,
+    themeZoneClasses,
+  } from "../ThemeZone/theme-zone.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
@@ -567,6 +571,19 @@
   /** @type {import("./calendar.js").CalendarInstance | null} */
   let engine = null;
   $: calendar = engine ? createCalendarApi(engine) : null;
+
+  // A portalled calendar leaves a ThemeZone in the DOM, so it takes the
+  // zone's theme class, as Portal content does.
+  const zoneClass = getThemeZoneClass();
+
+  $: if (engine?.calendarContainer) {
+    for (const name of Object.values(themeZoneClasses)) {
+      engine.calendarContainer.classList.toggle(
+        name,
+        effectivePortalMenu && name === $zoneClass,
+      );
+    }
+  }
   /** @type {Set<string>} */
   const reportedWarnings = new Set();
   /** @param {string} message */

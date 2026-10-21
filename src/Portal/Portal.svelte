@@ -20,6 +20,11 @@
   export let ref = null;
 
   import { onMount } from "svelte";
+  import { getThemeZoneClass } from "../ThemeZone/theme-zone.js";
+
+  // Content portalled out of a ThemeZone keeps the zone's theme. The
+  // portal takes the zone's theme class, but not its painted surface.
+  const zoneClass = getThemeZoneClass();
 
   // Render nothing on the server and on the first client render, so the
   // hydrated markup matches the server's. The content mounts after that,
@@ -57,7 +62,14 @@
 </script>
 
 {#if mounted}
-  <svelte:element this={tag} bind:this={ref} data-portal {...$$restProps}>
+  <svelte:element
+    this={tag}
+    bind:this={ref}
+    data-portal
+    {...$$restProps}
+    class={[$$restProps.class, $zoneClass].filter(Boolean).join(" ") ||
+      undefined}
+  >
     <slot />
   </svelte:element>
 {/if}

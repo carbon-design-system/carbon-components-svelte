@@ -35,7 +35,11 @@ export type TokenData = {
   size: Record<string, string>;
 };
 
-const ROOT_BLOCK = /:root(?:\[theme=["']?(\w+)["']?\])?\s*\{([^}]*)\}/g;
+// A theme block leads with `:root` or `:root[theme=…]`; the theme zone
+// classes that share it follow in the same selector list. The two branches
+// start on different characters, so the match never backtracks between them.
+const ROOT_BLOCK =
+  /:root(?:\[theme=["']?(\w+)["']?\])?(?:,[^{}]*|\s*)\{([^}]*)\}/g;
 const DECLARATION = /--cds-([\w-]+)\s*:\s*([^;]+)/g;
 const COLOR = /^(#[\da-f]{3,8}|rgba?\(|hsla?\(|transparent$)/i;
 /** Carbon v11's component tokens; every other color is a theme token. */

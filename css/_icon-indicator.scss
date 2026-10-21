@@ -10,13 +10,12 @@
 /// @access private
 /// @group components
 @mixin icon-indicator {
-  $custom-props: feature-flag-enabled("enable-css-custom-properties");
   $status: ccs-status-colors();
-  $status-red: map-get($status, red);
-  $status-purple: map-get($status, purple);
-  $status-green: map-get($status, green);
-  $status-blue: map-get($status, blue);
-  $status-gray: map-get($status, gray);
+  $status-red: map-get($status, "red");
+  $status-purple: map-get($status, "purple");
+  $status-green: map-get($status, "green");
+  $status-blue: map-get($status, "blue");
+  $status-gray: map-get($status, "gray");
 
   .#{$prefix}--icon-indicator {
     @include type-style("body-compact-01");
@@ -82,37 +81,6 @@
 
   .#{$prefix}--icon-indicator--informative {
     fill: $status-blue;
-  }
-
-  @if $custom-props {
-    @each $dark-theme in ("g80", "g90", "g100") {
-      [theme="#{$dark-theme}"] {
-        .#{$prefix}--icon-indicator--failed {
-          fill: $carbon--red-50;
-        }
-
-        .#{$prefix}--icon-indicator--undefined {
-          fill: $carbon--purple-50;
-        }
-
-        .#{$prefix}--icon-indicator--succeeded {
-          fill: $carbon--green-40;
-        }
-
-        .#{$prefix}--icon-indicator--normal,
-        .#{$prefix}--icon-indicator--in-progress,
-        .#{$prefix}--icon-indicator--incomplete,
-        .#{$prefix}--icon-indicator--informative {
-          fill: $carbon--blue-50;
-        }
-
-        .#{$prefix}--icon-indicator--not-started,
-        .#{$prefix}--icon-indicator--pending,
-        .#{$prefix}--icon-indicator--unknown {
-          fill: $carbon--gray-50;
-        }
-      }
-    }
   }
 }
 

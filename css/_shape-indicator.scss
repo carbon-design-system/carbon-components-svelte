@@ -10,13 +10,12 @@
 /// @access private
 /// @group components
 @mixin shape-indicator {
-  $custom-props: feature-flag-enabled("enable-css-custom-properties");
   $status: ccs-status-colors();
-  $status-red: map-get($status, red);
-  $status-purple: map-get($status, purple);
-  $status-green: map-get($status, green);
-  $status-blue: map-get($status, blue);
-  $status-gray: map-get($status, gray);
+  $status-red: map-get($status, "red");
+  $status-purple: map-get($status, "purple");
+  $status-green: map-get($status, "green");
+  $status-blue: map-get($status, "blue");
+  $status-gray: map-get($status, "gray");
 
   .#{$prefix}--shape-indicator {
     @include type-style("helper-text-01");
@@ -84,35 +83,6 @@
 
   .#{$prefix}--shape-indicator--draft {
     fill: $status-gray;
-  }
-
-  @if $custom-props {
-    @each $dark-theme in ("g80", "g90", "g100") {
-      [theme="#{$dark-theme}"] {
-        .#{$prefix}--shape-indicator--failed,
-        .#{$prefix}--shape-indicator--critical,
-        .#{$prefix}--shape-indicator--high {
-          fill: $carbon--red-50;
-        }
-
-        .#{$prefix}--shape-indicator--undefined {
-          fill: $carbon--purple-50;
-        }
-
-        .#{$prefix}--shape-indicator--stable {
-          fill: $carbon--green-40;
-        }
-
-        .#{$prefix}--shape-indicator--informative,
-        .#{$prefix}--shape-indicator--incomplete path:nth-of-type(2) {
-          fill: $carbon--blue-50;
-        }
-
-        .#{$prefix}--shape-indicator--draft {
-          fill: $carbon--gray-50;
-        }
-      }
-    }
   }
 }
 

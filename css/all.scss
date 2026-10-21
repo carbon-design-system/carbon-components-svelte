@@ -29,57 +29,79 @@ $ccs-omit-token-fallbacks: true;
 
 @import "./carbon-styles";
 
-// Default: white
-:root {
-  @include carbon--theme($carbon--theme--white, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+/// Declares a theme's tokens: Carbon's, the tag and notification component
+/// tokens, and the library's own colors. With `$base`, only the ones that
+/// differ from it.
+/// @param {Map} $theme - Theme to declare
+/// @param {Map} $base [null] - Theme the selector already declares
+/// @access private
+/// @group themes
+@mixin ccs-theme-tokens($theme, $base: null) {
+  $dark: lightness(map-get($theme, "background")) < 50%;
+  $difference: if($base, ($base,), ());
+
+  @if $dark {
+    color-scheme: dark;
   }
-  @include ccs-emit-text-colors($carbon--theme--white);
+
+  @include carbon--theme($theme, true, if($base, $difference, false)) {
+    @include emit-component-tokens($tag-colors, $difference);
+    @include emit-component-tokens($notification-colors, $difference);
+  }
+  @include ccs-emit-text-colors($theme, $base);
+  @include ccs-emit-status-colors($theme, $base);
+
+  // The low contrast ContentSwitcher drops its fill on a dark theme.
+  // `initial` restores the fallback in a light zone nested in a dark one.
+  @if $dark {
+    --ccs-content-switcher-low-contrast-background: transparent;
+  } @else if not $base {
+    --ccs-content-switcher-low-contrast-background: initial;
+  }
+}
+
+// Theme zones (`ThemeZone`, Carbon React's `<Theme>`): a `.bx--{theme}`
+// element takes a theme's full token set, whatever it is nested in. It
+// matches the white block, which declares every token, then its own theme's
+// block, which re-declares what differs from white. So the zones share the
+// `:root` blocks and add no declarations of their own.
+$ccs-non-default-themes: (
+  g10: $carbon--theme--g10,
+  g80: $carbon--theme--g80,
+  g90: $carbon--theme--g90,
+  g100: $carbon--theme--g100,
+);
+
+// Default: white
+:root,
+.#{$prefix}--white,
+.#{$prefix}--g10,
+.#{$prefix}--g80,
+.#{$prefix}--g90,
+.#{$prefix}--g100 {
+  @include ccs-theme-tokens($carbon--theme--white);
 }
 
 // Non-default themes only re-declare the tokens that differ from white, which
-// `:root` above always provides.
-$ccs-theme-base: ($carbon--theme--white,);
-
-// <html theme="g10">
-:root[theme="g10"] {
-  @include carbon--theme($carbon--theme--g10, true, $ccs-theme-base) {
-    @include emit-component-tokens($tag-colors, $ccs-theme-base);
-    @include emit-component-tokens($notification-colors, $ccs-theme-base);
+// the block above always provides.
+@each $name, $theme in $ccs-non-default-themes {
+  // <html theme="…">
+  :root[theme="#{$name}"],
+  .#{$prefix}--#{$name} {
+    @include ccs-theme-tokens($theme, $carbon--theme--white);
   }
-  @include ccs-emit-text-colors($carbon--theme--g10, $carbon--theme--white);
 }
 
-// <html theme="g80">
-:root[theme="g80"] {
-  color-scheme: dark;
-
-  @include carbon--theme($carbon--theme--g80, true, $ccs-theme-base) {
-    @include emit-component-tokens($tag-colors, $ccs-theme-base);
-    @include emit-component-tokens($notification-colors, $ccs-theme-base);
-  }
-  @include ccs-emit-text-colors($carbon--theme--g80, $carbon--theme--white);
+// A zone paints its own surface. Portalled content carries the zone's theme
+// class without this one, so it isn't painted.
+.#{$prefix}--theme-zone {
+  background-color: var(--cds-background);
+  color: var(--cds-text-primary);
 }
 
-// <html theme="g90">
-:root[theme="g90"] {
-  color-scheme: dark;
-
-  @include carbon--theme($carbon--theme--g90, true, $ccs-theme-base) {
-    @include emit-component-tokens($tag-colors, $ccs-theme-base);
-    @include emit-component-tokens($notification-colors, $ccs-theme-base);
-  }
-  @include ccs-emit-text-colors($carbon--theme--g90, $carbon--theme--white);
-}
-
-// <html theme="g100">
-:root[theme="g100"] {
-  color-scheme: dark;
-
-  @include carbon--theme($carbon--theme--g100, true, $ccs-theme-base) {
-    @include emit-component-tokens($tag-colors, $ccs-theme-base);
-    @include emit-component-tokens($notification-colors, $ccs-theme-base);
-  }
-  @include ccs-emit-text-colors($carbon--theme--g100, $carbon--theme--white);
+// The dark blocks set `color-scheme: dark`; a light zone nested in one
+// resets it.
+.#{$prefix}--white,
+.#{$prefix}--g10 {
+  color-scheme: light;
 }

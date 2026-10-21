@@ -1,6 +1,7 @@
 import type {
   Button as BarrelButton,
   DataTable as BarrelDataTable,
+  ThemeZone as BarrelThemeZone,
   breakpointObserver,
   breakpoints,
   dismiss,
@@ -27,6 +28,8 @@ import type {
   ThemeProps,
   themes,
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
+import type ThemeZone from "carbon-components-svelte/src/ThemeZone/ThemeZone.svelte";
+import type { ThemeZoneProps } from "carbon-components-svelte/src/ThemeZone/ThemeZone.svelte";
 import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
 import type { DismissParams } from "carbon-components-svelte/src/utils/dismiss.js";
@@ -81,6 +84,9 @@ type _ColorTokenValue = (typeof colorTokens)[ColorToken]["g100"];
 type _TypeTokenSize = (typeof typeTokens)[TypeToken]["font-size"];
 type _ThemeScript = ReturnType<typeof themeScript>;
 type _Themes = typeof themes;
+type _BarrelThemeZone = BarrelThemeZone;
+type _ThemeZone = ThemeZone;
+type _ThemeZoneProps = ThemeZoneProps<"aside">["theme"];
 type _TimePickerSkeleton = TimePickerSkeleton;
 type _Dismiss = ReturnType<typeof dismiss>;
 type _DismissParams = Parameters<typeof dismiss>[1];
