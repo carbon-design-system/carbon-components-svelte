@@ -101,6 +101,8 @@ Position the content with `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`)
 
 ### Alignment
 
+With `align` set to `"start"` or `"end"`, the caret points at the button's center whatever its size. If the content would run past its container, such as a table's scroll area, it opens toward the other side.
+
 <Stack orientation="horizontal" gap={10}>
   <Toggletip direction="bottom" align="start">start</Toggletip>
   <Toggletip direction="bottom" align="center">center</Toggletip>

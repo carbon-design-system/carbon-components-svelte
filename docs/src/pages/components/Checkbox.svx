@@ -73,7 +73,9 @@ Put an `AILabel` in the `decorator` slot to mark the option as AI-generated. The
     </AILabel>
   </Checkbox>
   <CheckboxGroup legendText="Alert channels">
-    <AILabel slot="decorator" />
+    <AILabel slot="decorator">
+      <p>Picked from the channels your team acknowledged alerts in last month.</p>
+    </AILabel>
     <Checkbox labelText="Email" checked />
     <Checkbox labelText="Slack" checked />
     <Checkbox labelText="PagerDuty" />

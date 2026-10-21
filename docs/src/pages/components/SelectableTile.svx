@@ -106,7 +106,9 @@ Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-genera
 
 <SelectableTile>
   Recommended plan: Team
-  <AILabel slot="decorator" />
+  <AILabel slot="decorator">
+    <p>Recommended for a workspace with 8 to 20 active members.</p>
+  </AILabel>
 </SelectableTile>
 
 ## Small size

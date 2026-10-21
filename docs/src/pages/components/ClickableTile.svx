@@ -44,7 +44,9 @@ Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-genera
 
 <ClickableTile href="https://www.carbondesignsystem.com/">
   Open the usage forecast
-  <AILabel slot="decorator" />
+  <AILabel slot="decorator">
+    <p>Projected from the last six months of spend.</p>
+  </AILabel>
 </ClickableTile>
 
 ## On a layer
