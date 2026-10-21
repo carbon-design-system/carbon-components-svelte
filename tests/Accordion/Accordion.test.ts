@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
@@ -216,6 +216,36 @@ describe("Accordion", () => {
       "class",
       expect.not.stringContaining("bx--accordion__item--active"),
     );
+  });
+
+  it("renders no active skeleton item when open is false", () => {
+    render(AccordionSkeleton, { props: { open: false, count: 3 } });
+
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(3);
+    for (const item of items) {
+      expect(item).not.toHaveClass("bx--accordion__item--active");
+    }
+  });
+
+  it("marks the item expanding on open and collapsing on close until animationend", async () => {
+    render(Accordion);
+
+    const button = screen.getByRole("button", {
+      name: /Natural Language Classifier/,
+    });
+    const item = button.closest("li");
+    assert(item);
+
+    await user.click(button);
+    expect(item).toHaveClass("bx--accordion__item--expanding");
+    await fireEvent.animationEnd(item);
+    expect(item).not.toHaveClass("bx--accordion__item--expanding");
+
+    await user.click(button);
+    expect(item).toHaveClass("bx--accordion__item--collapsing");
+    await fireEvent.animationEnd(item);
+    expect(item).not.toHaveClass("bx--accordion__item--collapsing");
   });
 
   it.each([

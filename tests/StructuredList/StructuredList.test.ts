@@ -7,6 +7,7 @@ import { user } from "../utils/user";
 import StructuredList from "./StructuredList.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
 import StructuredListInputStandalone from "./StructuredListInputStandalone.test.svelte";
+import StructuredListSort from "./StructuredListSort.test.svelte";
 
 const multipleProps = { selection: true, multiple: true };
 
@@ -335,6 +336,49 @@ describe("StructuredList", () => {
     expect(screen.getByTestId("value")).toHaveTextContent("row-2-value");
   });
 
+  it("should mark only the row mounted with checked={true} as selected", () => {
+    const { container } = render(StructuredList, {
+      props: { selection: true, checkedValue: "row-2-value" },
+    });
+
+    const rows = container.querySelectorAll(".bx--structured-list-row");
+    // rows[0] is the header row
+    expect(rows[1]).not.toHaveClass("bx--structured-list-row--selected");
+    expect(rows[2]).toHaveClass("bx--structured-list-row--selected");
+    expect(rows[3]).not.toHaveClass("bx--structured-list-row--selected");
+  });
+
+  it("should check a standalone input when it is clicked", async () => {
+    const { container } = render(StructuredListInputStandalone);
+    const input = screen.getByRole("radio");
+    const wrapper = container.querySelector(
+      ".bx--structured-list-input-wrapper",
+    );
+
+    expect(wrapper).not.toHaveClass(
+      "bx--structured-list-input-wrapper--checked",
+    );
+
+    await user.click(input);
+
+    expect(wrapper).toHaveClass("bx--structured-list-input-wrapper--checked");
+  });
+
+  it("should apply a `name` set after mount to unnamed inputs", async () => {
+    const { rerender } = render(StructuredList, {
+      props: { selection: true, unnamed: true, name: "before" },
+    });
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "before");
+    }
+
+    await rerender({ name: "after" });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "after");
+    }
+  });
+
   it("should expose aria-sort only on a sortable column header", () => {
     const { container } = render(StructuredList, {
       props: { sortable: true },
@@ -368,6 +412,41 @@ describe("StructuredList", () => {
 
     await user.click(screen.getByRole("button", { name: /sort rows/i }));
     expect(onSort).toHaveBeenCalledTimes(1);
+  });
+
+  describe("sortable header cell", () => {
+    const iconLabel = (container: HTMLElement) =>
+      container
+        .querySelector(".bx--structured-list-sort__icon")
+        ?.getAttribute("aria-label");
+
+    it.each([
+      // active, sortDirection, sortAlways, next direction, aria-sort, order in label
+      [false, "none", false, "ascending", "none", "ascending"],
+      [false, "descending", false, "ascending", "none", "ascending"],
+      [true, "none", false, "ascending", "none", "descending"],
+      [true, "ascending", false, "descending", "ascending", "descending"],
+      [true, "descending", false, "none", "descending", "ascending"],
+      [true, "descending", true, "ascending", "descending", "ascending"],
+    ] as const)(
+      "active=%s, sortDirection=%s, sortAlways=%s: emits %s, aria-sort=%s, labels %s",
+      async (active, sortDirection, sortAlways, next, ariaSort, order) => {
+        const onSort = vi.fn();
+        const { container } = render(StructuredListSort, {
+          props: { active, sortDirection, sortAlways, onSort },
+        });
+
+        expect(screen.getByRole("columnheader")).toHaveAttribute(
+          "aria-sort",
+          ariaSort,
+        );
+        expect(iconLabel(container)).toContain(`${order} order`);
+
+        await user.click(screen.getByRole("button"));
+
+        expect(onSort).toHaveBeenCalledWith({ direction: next });
+      },
+    );
   });
 
   it("should switch input type and body role when `multiple` changes", async () => {

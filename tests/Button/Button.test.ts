@@ -1,12 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
-import type { ComponentProps } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
 import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonLoading from "./ButtonLoading.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
+import ButtonSelected from "./ButtonSelected.test.svelte";
 import { expectInlineTooltip } from "./helpers";
 
 describe("Button", () => {
@@ -52,7 +53,34 @@ describe("Button", () => {
     const linkButton = screen.getByText("Link button");
     expect(linkButton.tagName).toBe("A");
     expect(linkButton).toHaveAttribute("href", "#");
+    expect(linkButton).not.toHaveAttribute("type");
   });
+
+  it("should forward tabindex", () => {
+    render(Button);
+
+    expect(screen.getByTestId("btn-tabindex")).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+  });
+
+  it.each([
+    ["ghost", true, "true", true],
+    ["ghost", false, "false", false],
+    ["primary", true, null, false],
+  ] as const)(
+    "reflects isSelected on a %s icon-only button (%s)",
+    (kind, isSelected, pressed, selectedClass) => {
+      render(ButtonSelected, { props: { kind, isSelected } });
+
+      const button = screen.getByTestId("button");
+      if (pressed === null) expect(button).not.toHaveAttribute("aria-pressed");
+      else expect(button).toHaveAttribute("aria-pressed", pressed);
+      if (selectedClass) expect(button).toHaveClass("bx--btn--selected");
+      else expect(button).not.toHaveClass("bx--btn--selected");
+    },
+  );
 
   it('should set rel="noopener noreferrer" on link when target="_blank"', () => {
     render(Button);
@@ -160,6 +188,23 @@ describe("Button", () => {
     expect(btnC).toHaveClass("bx--tooltip--hidden");
   });
 
+  it("should show the icon-only tooltip at once on keyboard focus and release it on blur", async () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const btnB = screen.getByTestId("btn-icon-b");
+
+    btnA.focus();
+    await tick();
+    expect(btnA).toHaveClass("bx--tooltip--instant");
+    expect(btnB).toHaveClass("bx--tooltip--hidden");
+
+    btnA.blur();
+    await tick();
+    expect(btnA).not.toHaveClass("bx--tooltip--instant");
+    expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+  });
+
   it("should clear tooltip hidden state on mouseleave", async () => {
     render(Button);
 
@@ -261,6 +306,30 @@ describe("Button", () => {
   });
 
   describe("portalTooltip (modal auto-portal)", () => {
+    it("should dismiss the portal tooltip when its Modal closes", async () => {
+      vi.useFakeTimers();
+      try {
+        const { rerender } = render(ButtonInModal, {
+          props: { modalOpen: true },
+        });
+
+        await fireEvent.mouseEnter(screen.getByTestId("btn-icon-modal"));
+        await vi.advanceTimersByTimeAsync(100);
+        expect(
+          document.body.querySelector(".bx--tooltip-portal"),
+        ).toBeInTheDocument();
+
+        await rerender({ modalOpen: false });
+        await vi.advanceTimersByTimeAsync(300);
+
+        expect(
+          document.body.querySelector(".bx--tooltip-portal"),
+        ).not.toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
     it("should portal the tooltip by default when inside a Modal", () => {
       render(ButtonInModal, { props: { modalOpen: true } });
 

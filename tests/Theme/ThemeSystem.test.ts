@@ -91,6 +91,18 @@ describe("Theme system", () => {
     expect(onUpdate).toHaveBeenCalledWith({ theme: "white" });
   });
 
+  it("re-resolves the theme when systemThemes changes at runtime", async () => {
+    stubMatchMedia(true);
+    const { component } = renderSystem({ systemThemes: ["white", "g100"] });
+    await tick();
+    expect(document.documentElement.getAttribute("theme")).toBe("g100");
+
+    component.systemThemes = ["g10", "g90"];
+    await tick();
+
+    expect(document.documentElement.getAttribute("theme")).toBe("g90");
+  });
+
   it("does not call matchMedia when system is false", async () => {
     const { matchMedia } = stubMatchMedia(true);
     renderSystem({ system: false, theme: "g100" });

@@ -31,4 +31,7 @@
   {select}
   {dropdown}
   on:update={(e) => onUpdate?.(e.detail)}
-/>
+  let:theme={slotTheme}
+>
+  <span data-testid="slot-theme">{slotTheme}</span>
+</Theme>
