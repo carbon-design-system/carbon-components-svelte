@@ -62,6 +62,8 @@
     scheduleSuccess(successDelay, () => {
       dispatch("success");
     });
+  } else {
+    scheduleSuccess.cancel();
   }
 
   $: if (status === "active") {
