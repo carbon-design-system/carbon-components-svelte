@@ -85,7 +85,7 @@ describe("theme zones", () => {
     expect(mismatches(nested, page(rules, "white"))).toEqual([]);
     expect(nested.get("--cds-background")).toBe("#ffffff");
     expect(nested.get("--cds-layer")).toBe("#f4f4f4");
-    expect(nested.get("--ccs-status-red")).toBe("#da1e28");
+    expect(nested.get("--cds-status-red")).toBe("#da1e28");
     expect(nested.get("--cds-content-switcher-background")).toBe("#e0e0e0");
   });
 

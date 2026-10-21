@@ -1,21 +1,30 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
-@import "./status-colors";
+@import "./status-tokens";
 
-/// Shape indicator (absent from v10). v10 has no reactive per-theme status
-/// tokens, so `kind` colors come from the static Carbon palette with a
-/// light/dark branch instead.
+/// Shape indicator (absent from v10). Each kind reads one of Carbon v11's
+/// `status-*` tokens, as v11 does, so the colors follow the theme.
 /// @access private
 /// @group components
 @mixin shape-indicator {
-  $status: ccs-status-colors();
-  $status-red: map-get($status, "red");
-  $status-purple: map-get($status, "purple");
-  $status-green: map-get($status, "green");
-  $status-blue: map-get($status, "blue");
-  $status-gray: map-get($status, "gray");
+  $status-red: get-token-value($status-colors, "status-red");
+  $status-orange: get-token-value($status-colors, "status-orange");
+  $status-orange-outline: get-token-value(
+    $status-colors,
+    "status-orange-outline"
+  );
+  $status-yellow: get-token-value($status-colors, "status-yellow");
+  $status-yellow-outline: get-token-value(
+    $status-colors,
+    "status-yellow-outline"
+  );
+  $status-purple: get-token-value($status-colors, "status-purple");
+  $status-green: get-token-value($status-colors, "status-green");
+  $status-blue: get-token-value($status-colors, "status-blue");
+  $status-gray: get-token-value($status-colors, "status-gray");
 
   .#{$prefix}--shape-indicator {
     @include type-style("helper-text-01");
@@ -39,27 +48,30 @@
     fill: $status-red;
   }
 
+  // Medium, low and cautious draw an edge (the first path, or the second
+  // for low) around a lighter fill. The light themes darken the edge; the
+  // dark themes' outline tokens hold the fill color.
   .#{$prefix}--shape-indicator--medium {
-    fill: $carbon--orange-40;
+    fill: $status-orange;
 
     path:first-of-type {
-      fill: $carbon--orange-60;
+      fill: $status-orange-outline;
     }
   }
 
   .#{$prefix}--shape-indicator--low {
-    fill: $carbon--yellow-30;
+    fill: $status-yellow;
 
     path:nth-of-type(2) {
-      fill: $carbon--yellow-60;
+      fill: $status-yellow-outline;
     }
   }
 
   .#{$prefix}--shape-indicator--cautious {
-    fill: $carbon--yellow-30;
+    fill: $status-yellow;
 
     path:first-of-type {
-      fill: $carbon--yellow-60;
+      fill: $status-yellow-outline;
     }
   }
 
@@ -83,6 +95,18 @@
 
   .#{$prefix}--shape-indicator--draft {
     fill: $status-gray;
+  }
+
+  // Forced colors keep these fills, but repaint the page as Canvas. A light
+  // Canvas behind a dark theme's edgeless yellow shape leaves almost nothing
+  // to see, so draw the edge in CanvasText, which contrasts with any Canvas.
+  // The ancestor class outranks the edge rules above.
+  @media (forced-colors: active) {
+    .#{$prefix}--shape-indicator .#{$prefix}--shape-indicator--medium path:first-of-type,
+    .#{$prefix}--shape-indicator .#{$prefix}--shape-indicator--low path:nth-of-type(2),
+    .#{$prefix}--shape-indicator .#{$prefix}--shape-indicator--cautious path:first-of-type {
+      fill: CanvasText;
+    }
   }
 }
 

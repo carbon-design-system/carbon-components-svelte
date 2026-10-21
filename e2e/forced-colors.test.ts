@@ -259,6 +259,30 @@ test.describe("forced colors", () => {
       )
       .toMatchObject({ background: system.Highlight, backgroundImage: "none" });
   });
+
+  // Forced colors keep SVG fills. A dark theme draws these edges in the light
+  // fill color, which a light Canvas would swallow.
+  test("shape indicator edges read CanvasText, also in a dark theme", async ({
+    page,
+  }) => {
+    const edges = [
+      ".bx--shape-indicator--medium path:first-of-type",
+      "[theme=g100] .bx--shape-indicator--low path:nth-of-type(2)",
+      "[theme=g100] .bx--shape-indicator--cautious path:first-of-type",
+    ];
+    const fills = await page.evaluate(
+      (selectors) =>
+        selectors.map((selector) => {
+          const el = document.querySelector(selector);
+          if (!el) throw new Error(`no ${selector}`);
+          return getComputedStyle(el).fill;
+        }),
+      edges,
+    );
+    edges.forEach((edge, i) => {
+      expect.soft(fills[i], edge).toBe(system.CanvasText);
+    });
+  });
 });
 
 test("prefers-contrast: more dots the focus outline", async ({ page }) => {

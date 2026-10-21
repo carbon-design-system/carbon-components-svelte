@@ -20,7 +20,6 @@ const NO_EXPORTS = new Set([
   "_fill-tokens.scss",
   "_fluid-shared.scss",
   "_spacing-scale.scss",
-  "_status-colors.scss",
   "_status-tokens.scss",
   "_text-tokens.scss",
   "_ui-shell-classic.scss",
@@ -223,16 +222,14 @@ describe("css partial conventions", () => {
     }
   });
 
-  it("derives indicator status colors from one shared palette", () => {
-    const shape = readFileSync(join(CSS_DIR, "_shape-indicator.scss"), "utf8");
-    expect(shape).toContain("ccs-status-colors()");
-    expect(shape).not.toMatch(/\$status-\w+: if\(/);
-
-    // IconIndicator reads the v11 status-* tokens, which follow the theme.
-    const icon = readFileSync(join(CSS_DIR, "_icon-indicator.scss"), "utf8");
-    expect(icon).toContain('get-token-value($status-colors, "status-');
-    expect(icon).not.toContain("ccs-status-colors()");
-    expect(icon).not.toContain("[theme=");
+  it("reads indicator status colors from the v11 status tokens", () => {
+    // The tokens follow the theme, so no partial branches on one.
+    for (const name of ["_icon-indicator.scss", "_shape-indicator.scss"]) {
+      const source = readFileSync(join(CSS_DIR, name), "utf8");
+      expect(source).toContain('get-token-value($status-colors, "status-');
+      expect(source).not.toContain("[theme=");
+      expect(source).not.toMatch(/\$status-\w+: if\(/);
+    }
   });
 
   it("keeps _fluid-shared.scss to declaration mixins that emit nothing", () => {
