@@ -55,6 +55,25 @@ describe("AILabel", () => {
     ).toHaveClass("bx--ai-label-actions");
   });
 
+  it("reopens closed after a revert", async () => {
+    const { rerender } = render(AILabel);
+
+    await user.click(
+      screen.getByRole("button", { name: "AI Show information" }),
+    );
+    await rerender({ revertActive: true });
+    await rerender({ revertActive: false });
+
+    expect(
+      screen.getByRole("button", { name: "AI Show information" }),
+    ).toHaveAttribute("aria-expanded", "false");
+    expect(
+      screen
+        .getByText("Generated from the last 30 days of incident logs.")
+        .closest(".bx--popover"),
+    ).not.toHaveClass("bx--popover--open");
+  });
+
   it("reverts on click of the revert button", async () => {
     const onrevert = vi.fn();
     render(AILabel, { props: { revertActive: true, onrevert } });

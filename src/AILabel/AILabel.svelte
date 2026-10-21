@@ -113,6 +113,9 @@
   $: effectiveAlign = align ?? host?.labelAlign ?? "start";
   $: inlineWithContent = effectiveKind === "inline" && !!textLabel;
   $: host?.state.set(revertActive ? "revert" : "active");
+  // The revert button replaces the Toggletip, so the explanation
+  // would otherwise reappear open once the label is restored.
+  $: if (revertActive) open = false;
 
   onMount(() => {
     return () => host?.state.set(undefined);
