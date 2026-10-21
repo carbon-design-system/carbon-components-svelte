@@ -103,6 +103,23 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     expect(bold).toHaveFocus();
   });
 
+  it("prevents the page from scrolling when an arrow key moves focus", async () => {
+    render(ToggleButtonGroupFixture, { props: { orientation: "vertical" } });
+    const bold = screen.getByRole("button", { name: "Bold" });
+    bold.focus();
+
+    const event = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    bold.dispatchEvent(event);
+    await tick();
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(screen.getByRole("button", { name: "Italic" })).toHaveFocus();
+  });
+
   it.each(
     [
       { key: "ArrowRight", grid: false },

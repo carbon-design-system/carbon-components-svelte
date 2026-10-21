@@ -256,6 +256,8 @@
     onMove: (index, event) => {
       // Leave Alt/Ctrl/Meta+Arrow (Back, scroll) to the browser.
       if (hasModifierKey(event)) return;
+      // Keep the page from scrolling with the arrow key.
+      event.preventDefault();
       const items = /** @type {HTMLButtonElement[]} */ (
         Array.from(ref?.querySelectorAll(TOGGLE_BUTTON_SELECTOR) ?? [])
       );
