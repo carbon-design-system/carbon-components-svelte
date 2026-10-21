@@ -115,6 +115,8 @@ describe("Stepper", () => {
     await vi.waitFor(() =>
       expect(screen.getByText("Order placed")).toBeVisible(),
     );
+    // The confirmation isn't the step it replaced.
+    expect(screen.queryByRole("group", { name: "Payment" })).toBeNull();
   });
 
   it("reports a failed submit and focuses the submit button", async () => {
