@@ -92,4 +92,17 @@ describe("PinCodeInput form participation", () => {
 
     expect(getForm().checkValidity()).toBe(false);
   });
+
+  it("clears the submitted code when the form named by `form` resets", async () => {
+    render(PinCodeInputFormAttribute, { props: { value: "" } });
+
+    await user.click(screen.getAllByRole("textbox")[0]);
+    await user.keyboard("9");
+    expect(new FormData(getForm()).get("otp")).toBe("9");
+
+    await resetForm();
+
+    expect(getSegments()).toEqual(["", "", "", ""]);
+    expect(new FormData(getForm()).get("otp")).toBe("");
+  });
 });

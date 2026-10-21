@@ -541,6 +541,7 @@
 >
   <fieldset
     use:formReset={handleFormReset}
+    {form}
     class:bx--pin-code-input__fieldset={true}
     {disabled}
     aria-label={ariaLabel}
