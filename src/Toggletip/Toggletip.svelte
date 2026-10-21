@@ -178,6 +178,8 @@
 
   function handleKeydown(event) {
     if (open && event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (event.isComposing || event.keyCode === 229) return;
       event.stopPropagation();
       close();
       ref?.focus();
