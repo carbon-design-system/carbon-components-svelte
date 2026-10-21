@@ -4,6 +4,7 @@
    * @event {number} change
    * @event {null} submit - Continue was pressed on the last step and `validate` passed.
    * @event {{ error: unknown }} submit:error
+   * @event {{ error: unknown; index: number }} validate:error - Dispatched when `validate` throws or rejects. The stepper stays on the step.
    * @slot {{ currentIndex: number; submitted: boolean }} - The current step's content, and the confirmation once `submitted` is `true`.
    */
 
@@ -25,7 +26,8 @@
    * Specify a check that runs when Continue is pressed, such as one that
    * marks invalid fields. Return `false`, or a promise of `false`, to stay
    * on the step; focus then moves to the step's first invalid field. While
-   * a promise is pending, Continue shows its loading state.
+   * a promise is pending, Continue shows its loading state. When it throws
+   * or rejects, the stepper stays on the step and dispatches `validate:error`.
    * @type {(index: number) => boolean | Promise<boolean>}
    */
   export let validate = () => true;
@@ -133,8 +135,9 @@
       } else {
         valid = result;
       }
-    } catch {
+    } catch (error) {
       valid = false;
+      dispatch("validate:error", { error, index });
     } finally {
       checking = false;
     }

@@ -43,6 +43,31 @@ describe("Stepper", () => {
     expect(screen.getByText("Step 1 content")).toBeVisible();
   });
 
+  it.each([
+    [
+      "throws",
+      () => {
+        throw new Error("Offline");
+      },
+    ],
+    ["rejects", () => Promise.reject(new Error("Offline"))],
+  ])(
+    "dispatches validate:error and stays on the step when validate %s",
+    async (_case, validate) => {
+      const { component } = render(Stepper, { validate });
+
+      await user.click(continueButton());
+
+      await vi.waitFor(() => expect(component.validateErrors).toHaveLength(1));
+      expect(component.validateErrors[0]).toEqual({
+        error: new Error("Offline"),
+        index: 0,
+      });
+      expect(screen.getByText("Step 1 content")).toBeVisible();
+      expect(continueButton()).toBeEnabled();
+    },
+  );
+
   it("disables Continue with nextDisabled", () => {
     render(Stepper, { nextDisabled: true });
 
