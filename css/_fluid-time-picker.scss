@@ -67,6 +67,12 @@
     inline-size: 100%;
   }
 
+  // The fluid parts meet edge to edge, so a full-width select keeps no 1px
+  // seam before it, which would push it 1px past the picker.
+  .#{$prefix}--time-picker--fluid .#{$prefix}--time-picker__select {
+    margin-inline-start: 0;
+  }
+
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--text-input-wrapper {
