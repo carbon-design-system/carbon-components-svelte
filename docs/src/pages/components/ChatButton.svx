@@ -1,0 +1,88 @@
+---
+components: ["ChatButton", "ChatButtonSkeleton"]
+description: Chat buttons are pill-shaped buttons for chat, and quick actions are small outlined pills, such as suggested replies under a message.
+---
+
+<script>
+  import { ChatButton, ChatButtonSkeleton, Stack } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import Send from "carbon-icons-svelte/lib/Send.svelte";
+</script>
+
+ChatButton is a [Button](/components/Button) with fully rounded ends, for actions in a chat, such as in a ChatLog or beside its composer. It takes Button's props, such as `href`, `type` and `loading`, and forwards its events.
+
+## Kinds
+
+Set `kind` to `"primary"` (the default), `"secondary"`, `"tertiary"`, `"ghost"` or `"danger"`.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <ChatButton>Primary</ChatButton>
+  <ChatButton kind="secondary">Secondary</ChatButton>
+  <ChatButton kind="tertiary">Tertiary</ChatButton>
+  <ChatButton kind="ghost">Ghost</ChatButton>
+  <ChatButton kind="danger">Danger</ChatButton>
+</Stack>
+
+## Sizes
+
+Set `size` to `"field"` or `"small"` for a shorter button. Each size stays fully rounded.
+
+<Stack orientation="horizontal" gap={3} align="center" wrap="wrap">
+  <ChatButton>Default</ChatButton>
+  <ChatButton size="field">Field</ChatButton>
+  <ChatButton size="small">Small</ChatButton>
+</Stack>
+
+## With icon
+
+Set `icon` to show an icon after the label.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <ChatButton icon={Send}>Send</ChatButton>
+  <ChatButton kind="tertiary" icon={Add}>New chat</ChatButton>
+</Stack>
+
+## Quick action
+
+Set `quickAction` for a quick action: a small pill with an outline in place of a fill, such as a suggested reply or a follow-up question. A quick action is always small and ghost, so it ignores `kind` and `size`. It fills on hover.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <ChatButton quickAction>Summarize</ChatButton>
+  <ChatButton quickAction>Translate</ChatButton>
+  <ChatButton quickAction icon={Add}>Add a source</ChatButton>
+</Stack>
+
+### Selected
+
+Set `selected` to mark the quick action someone chose. It fills in a quieter color. Screen readers hear a quick action as a toggle button, pressed when selected, from `aria-pressed`. A quick action rendered as a link with `href` has no pressed state.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <ChatButton quickAction selected>Summarize</ChatButton>
+  <ChatButton quickAction>Translate</ChatButton>
+</Stack>
+
+### Disabled
+
+Set `disabled` to turn off a button. A selected quick action keeps its fill when disabled, so once a choice is made, the others can be disabled and the chosen one still shows.
+
+<Stack orientation="horizontal" gap={3} align="center" wrap="wrap">
+  <ChatButton quickAction selected disabled>Summarize</ChatButton>
+  <ChatButton quickAction disabled>Translate</ChatButton>
+  <ChatButton disabled>Primary</ChatButton>
+</Stack>
+
+## Quick actions under a message
+
+Put quick actions in a ChatMessage's `attachments` slot, so they sit under the bubble. Here, choosing one sends it as your reply, keeps it selected, and disables the others. The chosen button stays enabled, so keyboard focus isn't lost.
+
+<FileSource src="/framed/Chat/QuickActions" />
+
+## Skeleton
+
+Use ChatButtonSkeleton while the buttons load. Set `size` to match the buttons it stands in for, such as `"small"` for quick actions.
+
+<Stack orientation="horizontal" gap={3} align="center" wrap="wrap">
+  <ChatButtonSkeleton />
+  <ChatButtonSkeleton size="field" />
+  <ChatButtonSkeleton size="small" />
+</Stack>
