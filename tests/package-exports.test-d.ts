@@ -12,6 +12,7 @@ import type {
   fuzzyMatch,
   getAvatarBackgroundColor,
   getInitials,
+  getLayoutDirection,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
@@ -23,6 +24,8 @@ import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBoxSkeleton.svelte";
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
+import type LayoutDirection from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
+import type { LayoutDirectionProps } from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
 import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
 import type {
   ContrastWarning,
@@ -86,6 +89,9 @@ type _FormatFileSize = ReturnType<typeof formatFileSize>;
 type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
 type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _GetInitials = ReturnType<typeof getInitials>;
+type _GetLayoutDirection = ReturnType<typeof getLayoutDirection>;
+type _LayoutDirection = LayoutDirection;
+type _LayoutDirectionProps = LayoutDirectionProps<"section">["dir"];
 type _MultiSelectSkeleton = MultiSelectSkeleton;
 type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;

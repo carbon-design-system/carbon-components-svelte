@@ -21,10 +21,15 @@
 
   import { onMount } from "svelte";
   import { getThemeZoneClass } from "../ThemeZone/theme-zone.js";
+  import { getLayoutDirection } from "../utils/layout-direction.js";
 
   // Content portalled out of a ThemeZone keeps the zone's theme. The
   // portal takes the zone's theme class, but not its painted surface.
   const zoneClass = getThemeZoneClass();
+
+  // Content portalled out of a LayoutDirection keeps its direction. A `dir`
+  // passed to the portal wins.
+  const layoutDirection = getLayoutDirection();
 
   // Render nothing on the server and on the first client render, so the
   // hydrated markup matches the server's. The content mounts after that,
@@ -66,6 +71,7 @@
     this={tag}
     bind:this={ref}
     data-portal
+    dir={$layoutDirection}
     {...$$restProps}
     class={[$$restProps.class, $zoneClass].filter(Boolean).join(" ") ||
       undefined}
