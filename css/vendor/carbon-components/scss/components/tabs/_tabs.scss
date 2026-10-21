@@ -1529,6 +1529,54 @@ $tabs-sizes: (
   .#{$prefix}--tabs--vertical--row.#{$prefix}--layout--size-xl {
     min-block-size: $size-lg;
   }
+
+  // ccs: sized container tabs with a secondary label lay out like unsized
+  // ones. The size rules above center a one-row link, which in the tall
+  // column layout centered each label across its tab; the label and its
+  // secondary label start at the tab's edge, as at the default size.
+  $sized: '.#{$prefix}--tabs.#{$prefix}--tabs--container:not(.#{$prefix}--tabs--vertical)[class*="#{$prefix}--layout--size-"]';
+  $link: '.#{$prefix}--tabs__nav-link';
+
+  #{$sized}.#{$prefix}--tabs--tall #{$link},
+  #{$sized}.#{$prefix}--tabs--tall #{$link}:focus,
+  #{$sized}.#{$prefix}--tabs--tall #{$link}:active {
+    align-items: flex-start;
+  }
+
+  // Before the tabs register, the set has no `--tall` yet: a tab with its
+  // own secondary label is tall and its sized siblings kept their one-row
+  // height until hydration. Where `:has()` is supported, a set holding a
+  // secondary label is tall from the first paint, and a sibling's link
+  // (`--single-line`) gets the empty line the secondary placeholder adds
+  // once it registers, so labels don't move. Without `:has()`, the set
+  // still turns tall when it registers. No marker can stand in for the
+  // set-level `:has()`: the server writes the set's classes before its
+  // tabs render, and a tab before the secondary label can't see it.
+  @supports selector(:has(*)) {
+    $has: ':has(.#{$prefix}--tabs__nav-item--secondary-label)';
+
+    @include carbon--breakpoint(md) {
+      #{$sized}#{$has} .#{$prefix}--tabs__nav-item {
+        min-height: to-rem(64px);
+      }
+    }
+
+    #{$sized}#{$has} #{$link},
+    #{$sized}#{$has} #{$link}:focus,
+    #{$sized}#{$has} #{$link}:active {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      // As the label wrapper a registered tab adds.
+      line-height: normal;
+    }
+
+    #{$sized}#{$has} #{$link}.#{$prefix}--tabs__nav-link--single-line::after {
+      content: "";
+      display: block;
+      min-height: to-rem(16px);
+    }
+  }
 }
 
 @include exports('tabs-size') {
