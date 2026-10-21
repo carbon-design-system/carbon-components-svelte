@@ -32,6 +32,9 @@
    * @property {boolean} [pauseOnHover]
    * @property {"alert" | "log" | "status"} [role]
    * @property {boolean} [fullWidth]
+   * @property {boolean} [actionable] - Render as an `alertdialog` that takes focus and closes on Escape
+   * @property {boolean} [focusOnOpen]
+   * @property {boolean} [closeOnEscape]
    */
 
   /**

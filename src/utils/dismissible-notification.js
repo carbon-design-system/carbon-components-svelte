@@ -1,7 +1,29 @@
 // @ts-check
+import { tick } from "svelte";
 import { returnFocus } from "./focus.js";
 import { createHoverFocusPause } from "./pause-on-hover-focus.js";
 import { createTimeoutDismiss } from "./timeout-dismiss.js";
+import { selectorTabbable, trapFocus } from "./trap-focus.js";
+
+const selectorCloseButton =
+  ".bx--inline-notification__close-button, .bx--toast-notification__close-button";
+
+/**
+ * Move focus into an actionable notification. Carbon React focuses the
+ * action button. Fall back to the close button, then to the notification
+ * itself, so focus always lands inside.
+ * @param {HTMLElement | null | undefined} root
+ * @returns {void}
+ */
+export function focusActionableNotification(root) {
+  if (!root?.isConnected) return;
+  const closeButton = root.querySelector(selectorCloseButton);
+  const action = Array.from(root.querySelectorAll(selectorTabbable)).find(
+    (node) => node !== closeButton,
+  );
+  const target = action ?? closeButton ?? root;
+  if (target instanceof HTMLElement) target.focus();
+}
 
 /**
  * Shared open/close + auto-dismiss-timeout + pause-on-hover wiring for
@@ -10,6 +32,9 @@ import { createTimeoutDismiss } from "./timeout-dismiss.js";
  * when no listener calls `preventDefault()`; an auto-dismiss timeout closes
  * the same way, with `timeout: true`. Closing while focus is inside returns
  * it to the element focused before focus entered the notification.
+ *
+ * An actionable notification (`role="alertdialog"`) also moves focus in
+ * when it opens, closes on Escape, and wraps Tab inside itself.
  * @param {object} options
  * @param {(
  *   name: string,
@@ -18,9 +43,15 @@ import { createTimeoutDismiss } from "./timeout-dismiss.js";
  * ) => boolean} options.dispatch
  * @param {() => boolean} options.getPauseOnHover
  * @param {(open: boolean) => void} options.setOpen
+ * @param {() => HTMLElement | null | undefined} [options.getRef]
  * @returns {{
  *   close: (closeFromTimeout?: unknown) => void,
  *   sync: (open: boolean, timeout: number) => void,
+ *   syncFocusOnOpen: (open: boolean, enabled: boolean) => void,
+ *   handleActionableKeydown: (
+ *     event: KeyboardEvent,
+ *     options: { closeOnEscape: boolean, hideCloseButton: boolean },
+ *   ) => void,
  *   handleMouseenter: () => void,
  *   handleMouseleave: (event: MouseEvent) => void,
  *   handleFocusIn: (event: FocusEvent) => void,
@@ -32,6 +63,7 @@ export function createDismissibleNotification({
   dispatch,
   getPauseOnHover,
   setOpen,
+  getRef = () => null,
 }) {
   const dismiss = createTimeoutDismiss();
 
@@ -125,9 +157,50 @@ export function createDismissibleNotification({
     if (open) refresh();
   }
 
+  let wasOpenForFocus = false;
+
+  /**
+   * Focus the action once the notification opens, on mount or when `open`
+   * turns true. `enabled` is `actionable && focusOnOpen`.
+   * @param {boolean} open
+   * @param {boolean} enabled
+   */
+  function syncFocusOnOpen(open, enabled) {
+    if (open && !wasOpenForFocus && enabled) {
+      // Also runs during server rendering, where the ref stays unset.
+      tick().then(() => focusActionableNotification(getRef()));
+    }
+    wasOpenForFocus = open;
+  }
+
+  /**
+   * Escape closes through `close()`, so the close event and focus return
+   * work as they do for the close button. Tab wraps inside, as in Carbon
+   * React, but only while the keyboard can close the notification.
+   * @param {KeyboardEvent} event
+   * @param {{ closeOnEscape: boolean, hideCloseButton: boolean }} options
+   */
+  function handleActionableKeydown(event, { closeOnEscape, hideCloseButton }) {
+    if (event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (!closeOnEscape || event.isComposing || event.keyCode === 229) return;
+      // Keep a surrounding modal or popover from closing on the same key.
+      event.stopPropagation();
+      close();
+    } else if (event.key === "Tab" && !event.defaultPrevented) {
+      // With no Escape and no close button, a trap would have no exit
+      // (WCAG 2.1.2, No Keyboard Trap), so let Tab leave.
+      if (!closeOnEscape && hideCloseButton) return;
+      const container = event.currentTarget;
+      if (container instanceof Element) trapFocus({ container, event });
+    }
+  }
+
   return {
     close,
     sync,
+    syncFocusOnOpen,
+    handleActionableKeydown,
     handleMouseenter,
     handleMouseleave,
     handleFocusIn: trackFocusIn,

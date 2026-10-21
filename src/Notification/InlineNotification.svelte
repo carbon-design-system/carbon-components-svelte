@@ -21,9 +21,32 @@
 
   /**
    * Specify the ARIA `role` for the notification container.
+   * `actionable` overrides it with `alertdialog`.
    * @type {"alert" | "log" | "status"}
    */
   export let role = "status";
+
+  /**
+   * Set to `true` when the notification holds an action that users must
+   * reach, such as an undo or a retry. The notification becomes an
+   * `alertdialog` named by its title, moves focus to its first action
+   * (or the close button) when it opens, keeps Tab inside, and closes
+   * on Escape.
+   */
+  export let actionable = false;
+
+  /**
+   * Set to `false` to keep focus where it is when an actionable
+   * notification opens. Has no effect unless `actionable` is `true`.
+   */
+  export let focusOnOpen = true;
+
+  /**
+   * Set to `false` to keep an actionable notification open on Escape.
+   * With `hideCloseButton` also set, Tab can leave the notification.
+   * Has no effect unless `actionable` is `true`.
+   */
+  export let closeOnEscape = true;
 
   /** Specify the title text */
   export let title = "";
@@ -58,16 +81,26 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
+  import { joinDescribedBy } from "../utils/field-status.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
   import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
+  const titleId = uniqueId();
+  const subtitleId = uniqueId();
+
+  /** @type {null | HTMLDivElement} */
+  let notificationRef = null;
 
   const {
     close,
     sync,
+    syncFocusOnOpen,
+    handleActionableKeydown,
     handleMouseenter,
     handleMouseleave,
     handleFocusIn,
@@ -79,16 +112,37 @@
     setOpen: (value) => {
       open = value;
     },
+    getRef: () => notificationRef,
   });
 
   $: sync(open, timeout);
+  $: syncFocusOnOpen(open, actionable && focusOnOpen);
+
+  $: hasTitle = !!(title || $$slots.titleChildren);
+  $: hasSubtitle = !!(subtitle || $$slots.subtitleChildren);
+  $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
+    splitAriaNaming($$restProps));
+  // As in Carbon React, the title names the dialog, or the subtitle when
+  // there is no title. aria-labelledby beats aria-label, so a consumer
+  // aria-label drops the built-in id.
+  $: labelId = hasTitle ? titleId : hasSubtitle ? subtitleId : undefined;
+  $: builtInLabelledBy = actionable && !ariaLabel ? labelId : undefined;
+  $: builtInDescribedBy =
+    actionable && hasTitle && hasSubtitle ? subtitleId : undefined;
 
   onMount(() => dispose);
 </script>
 
 {#if open}
+  <!-- An actionable notification takes focus itself when it holds no button. -->
+  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <div
-    {role}
+    bind:this={notificationRef}
+    role={actionable ? "alertdialog" : role}
+    tabindex={actionable ? -1 : undefined}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
+    aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
     class:bx--inline-notification={true}
     class:bx--inline-notification--low-contrast={lowContrast}
     class:bx--inline-notification--high-contrast={!lowContrast}
@@ -112,7 +166,7 @@
     class:bx--inline-notification--warning-alt={kind === "warning-alt"}
     class:bx--inline-notification--low-contrast-warning-alt={lowContrast &&
       kind === "warning-alt"}
-    {...$$restProps}
+    {...rest}
     on:click
     on:mouseover
     on:mouseenter
@@ -121,6 +175,11 @@
     on:mouseleave={handleMouseleave}
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
+    on:keydown={(event) => {
+      if (actionable) {
+        handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
+      }
+    }}
   >
     <div class:bx--inline-notification__details={true}>
       <NotificationIcon
@@ -130,13 +189,19 @@
         iconDescription={statusIconDescription || statusIconLabel(kind)}
       />
       <div class:bx--inline-notification__text-wrapper={true}>
-        {#if title || $$slots.titleChildren}
-          <p class:bx--inline-notification__title={true}>
+        {#if hasTitle}
+          <p
+            id={actionable ? titleId : undefined}
+            class:bx--inline-notification__title={true}
+          >
             <strong><slot name="titleChildren">{title}</slot></strong>
           </p>
         {/if}
-        {#if subtitle || $$slots.subtitleChildren}
-          <div class:bx--inline-notification__subtitle={true}>
+        {#if hasSubtitle}
+          <div
+            id={actionable ? subtitleId : undefined}
+            class:bx--inline-notification__subtitle={true}
+          >
             <slot name="subtitleChildren">{subtitle}</slot>
           </div>
         {/if}
