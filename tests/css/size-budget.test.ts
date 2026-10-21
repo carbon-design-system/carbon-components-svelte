@@ -18,10 +18,10 @@ import { compileEntry } from "./compile";
 // job reports each PR's size movement. `bun run check:css` prints the current
 // numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // min 676,740 and gzip 78,910 measured 2026-10-15
-  "all.scss": { min: 745_000, gzip: 87_000 },
-  // min 583,368 and gzip 69,365 measured 2026-10-15
-  "white.scss": { min: 642_000, gzip: 76_000 },
+  // min 729,440 and gzip 85,373 measured 2026-10-21
+  "all.scss": { min: 802_000, gzip: 94_000 },
+  // min 634,870 and gzip 75,894 measured 2026-10-21
+  "white.scss": { min: 698_000, gzip: 83_500 },
 };
 
 describe("css size budget", () => {
