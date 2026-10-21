@@ -34,6 +34,7 @@
   import ComposedModal from "../ComposedModal/ComposedModal.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
+  import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
 
   const dispatch = createEventDispatcher();
 
@@ -45,7 +46,7 @@
    */
   const progStep = writable(0);
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; stepTitle: string }>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; stepTitle: string; node?: HTMLElement }>>}
    */
   const views = writable([]);
 
@@ -54,14 +55,14 @@
   // `$views.length` during the very first render, before anything can `await
   // tick()` to observe a deferred flush.
   /**
-   * @type {(view: { id: string; stepTitle: string }) => void}
+   * @type {(view: { id: string; stepTitle: string; node?: HTMLElement }) => void}
    */
   function addView(view) {
     views.update((_) => {
       const index = _.findIndex((_view) => _view.id === view.id);
       if (index !== -1) {
-        return _.map((_view, i) =>
-          i === index ? { ..._view, ...view } : _view,
+        return sortByDomOrder(
+          _.map((_view, i) => (i === index ? { ..._view, ...view } : _view)),
         );
       }
       return [..._, view];

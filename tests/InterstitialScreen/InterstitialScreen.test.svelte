@@ -19,6 +19,8 @@
   export let subTitle = "";
   export let hideProgressIndicator = false;
   export let stepCount = 1;
+  /** 1-based step to leave out, so it can be inserted after mount. */
+  export let hiddenStep = 0;
   export let skipButtonText = "Skip";
   export let loadingAction: ComponentProps<InterstitialScreenFooter>["loadingAction"] =
     "";
@@ -40,9 +42,11 @@
   <InterstitialScreenHeader {title} {subTitle} {hideProgressIndicator} />
   <InterstitialScreenBody>
     {#each Array.from({ length: stepCount }) as _, i (i)}
-      <InterstitialScreenView stepTitle={`Step ${i + 1}`}>
-        <p>Content {i + 1}</p>
-      </InterstitialScreenView>
+      {#if i + 1 !== hiddenStep}
+        <InterstitialScreenView stepTitle={`Step ${i + 1}`}>
+          <p>Content {i + 1}</p>
+        </InterstitialScreenView>
+      {/if}
     {/each}
   </InterstitialScreenBody>
   <InterstitialScreenFooter
