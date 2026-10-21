@@ -34,7 +34,6 @@ const UNREGISTERED_PARTIALS = [
   "_fill-tokens.scss",
   "_fluid-shared.scss",
   "_spacing-scale.scss",
-  "_status-colors.scss",
   "_status-tokens.scss",
   "_text-tokens.scss",
   MANIFEST,

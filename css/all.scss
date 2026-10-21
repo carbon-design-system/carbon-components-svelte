@@ -53,7 +53,6 @@ $ccs-omit-token-fallbacks: true;
     @include emit-component-tokens($status-colors, $difference);
   }
   @include ccs-emit-text-colors($theme, $base);
-  @include ccs-emit-status-colors($theme, $base);
 }
 
 // Theme zones (`ThemeZone`, Carbon React's `<Theme>`): a `.bx--{theme}`

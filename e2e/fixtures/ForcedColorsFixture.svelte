@@ -17,6 +17,7 @@
     Popover,
     ProgressBar,
     SelectableTag,
+    ShapeIndicator,
     StructuredList,
     StructuredListBody,
     StructuredListCell,
@@ -124,4 +125,10 @@
   <Menu anchor={menuAnchor} open labelText="Menu">
     <MenuItem labelText="Item" />
   </Menu>
+
+  <ShapeIndicator kind="medium" label="Medium" />
+  <div theme="g100">
+    <ShapeIndicator kind="low" label="Low" />
+    <ShapeIndicator kind="cautious" label="Cautious" />
+  </div>
 </main>

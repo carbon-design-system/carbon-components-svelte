@@ -2,8 +2,9 @@
 import { parseRules } from "crassus";
 import { compileEntry } from "./compile";
 
-// IconIndicator paints every kind with a Carbon v11 status-* token, as v11
-// does. A theme or override that re-points a token restyles it.
+// IconIndicator and ShapeIndicator paint every kind with a Carbon v11
+// status-* token, as v11 does. A theme or override that re-points a token
+// restyles them.
 const ICON_KINDS = [
   ["failed", "status-red"],
   ["caution-major", "status-orange"],
@@ -17,6 +18,43 @@ const ICON_KINDS = [
   ["pending", "status-gray"],
   ["unknown", "status-gray"],
   ["informative", "status-blue"],
+] as const;
+
+const SHAPE_KINDS = [
+  ["failed", "status-red"],
+  ["critical", "status-red"],
+  ["high", "status-red"],
+  ["medium", "status-orange"],
+  ["low", "status-yellow"],
+  ["cautious", "status-yellow"],
+  ["undefined", "status-purple"],
+  ["stable", "status-green"],
+  ["informative", "status-blue"],
+  ["incomplete path:nth-of-type(2)", "status-blue"],
+  ["draft", "status-gray"],
+] as const;
+
+// The edge path of each two-tone shape, with its outline token and its
+// White and Gray 100 values. The dark themes draw the edge in the fill color.
+const EDGES = [
+  [
+    ".bx--shape-indicator--medium path:first-of-type",
+    "status-orange-outline",
+    "#ba4e00",
+    "#ff832b",
+  ],
+  [
+    ".bx--shape-indicator--low path:nth-of-type(2)",
+    "status-yellow-outline",
+    "#8e6a00",
+    "#f1c21b",
+  ],
+  [
+    ".bx--shape-indicator--cautious path:first-of-type",
+    "status-yellow-outline",
+    "#8e6a00",
+    "#f1c21b",
+  ],
 ] as const;
 
 async function rules(entry: string) {
@@ -43,12 +81,37 @@ describe("indicator status tokens", () => {
     expect(themed(".bx--icon-indicator")).toEqual([]);
   }, 30_000);
 
+  it("reads a status token for every shape kind and edge, in every theme", async () => {
+    const { find, themed } = await rules("all.scss");
+    for (const [kind, token] of SHAPE_KINDS) {
+      expect(find(`.bx--shape-indicator--${kind}`)?.get("fill"), kind).toBe(
+        `var(--cds-${token})`,
+      );
+    }
+    for (const [selector, token] of EDGES) {
+      expect(find(selector)?.get("fill"), selector).toBe(`var(--cds-${token})`);
+    }
+    expect(themed(".bx--shape-indicator")).toEqual([]);
+  }, 30_000);
+
   it("keeps the black mark on the caution icons", async () => {
     const { find } = await rules("all.scss");
     for (const kind of ["caution-major", "caution-minor"]) {
       expect(
         find(`.bx--icon-indicator--${kind} path:first-of-type`)?.get("fill"),
       ).toBe("#000000");
+    }
+  }, 30_000);
+
+  it("draws the shape edges in CanvasText in forced colors", async () => {
+    const { find } = await rules("all.scss");
+    for (const [selector] of EDGES) {
+      expect(
+        find(
+          `.bx--shape-indicator ${selector}`,
+          "@media (forced-colors:active)",
+        )?.get("fill"),
+      ).toBe("CanvasText");
     }
   }, 30_000);
 
@@ -59,15 +122,30 @@ describe("indicator status tokens", () => {
     "compiles the theme's values into %s",
     async (entry, red, purple, green, blue, gray) => {
       const { find } = await rules(entry);
-      const fill = (kind: string) =>
+      const icon = (kind: string) =>
         find(`.bx--icon-indicator--${kind}`)?.get("fill");
-      expect(fill("failed")).toBe(red);
-      expect(fill("caution-major")).toBe("#ff832b");
-      expect(fill("caution-minor")).toBe("#f1c21b");
-      expect(fill("undefined")).toBe(purple);
-      expect(fill("succeeded")).toBe(green);
-      expect(fill("normal")).toBe(blue);
-      expect(fill("pending")).toBe(gray);
+      expect(icon("failed")).toBe(red);
+      expect(icon("caution-major")).toBe("#ff832b");
+      expect(icon("caution-minor")).toBe("#f1c21b");
+      expect(icon("undefined")).toBe(purple);
+      expect(icon("succeeded")).toBe(green);
+      expect(icon("normal")).toBe(blue);
+      expect(icon("pending")).toBe(gray);
+
+      const shape = (kind: string) =>
+        find(`.bx--shape-indicator--${kind}`)?.get("fill");
+      expect(shape("high")).toBe(red);
+      expect(shape("medium")).toBe("#ff832b");
+      expect(shape("cautious")).toBe("#f1c21b");
+      expect(shape("undefined")).toBe(purple);
+      expect(shape("stable")).toBe(green);
+      expect(shape("informative")).toBe(blue);
+      expect(shape("draft")).toBe(gray);
+      for (const [selector, , white, g100] of EDGES) {
+        expect(find(selector)?.get("fill"), selector).toBe(
+          entry === "white.scss" ? white : g100,
+        );
+      }
     },
     60_000,
   );

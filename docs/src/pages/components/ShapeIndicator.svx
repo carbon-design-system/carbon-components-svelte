@@ -17,6 +17,8 @@ Create a shape indicator with `kind` and `label`. For a version that pairs a sta
 
 Set `kind` to match the status being communicated.
 
+Each kind reads a Carbon v11 `status-*` theme token, such as `status-orange` for `medium`, so it follows the theme. In light themes, the `medium`, `low` and `cautious` shapes have a darker edge.
+
 <Stack gap={3}>
   <ShapeIndicator kind="failed" label="Failed" />
   <ShapeIndicator kind="critical" label="Critical" />
