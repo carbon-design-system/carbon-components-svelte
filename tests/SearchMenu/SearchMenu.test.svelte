@@ -21,6 +21,8 @@
   };
   export let closeTrigger = "";
   export let events: string[] = [];
+  /** Gives each item an id `value` apart from its `text`. */
+  export let itemValues = false;
 
   const items = [
     "Databases for TestSQL",
@@ -50,8 +52,8 @@
   on:close={(e) => (closeTrigger = e.detail.trigger)}
   on:keyup={() => (events = [...events, "keyup"])}
 >
-  {#each items as text (text)}
-    <SearchMenuItem {text} />
+  {#each items as text, i (text)}
+    <SearchMenuItem {text} value={itemValues ? `item-${i}` : undefined} />
   {/each}
 </SearchMenu>
 

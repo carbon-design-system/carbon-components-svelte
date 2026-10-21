@@ -131,6 +131,14 @@ describe("SearchMenu", () => {
     expect(screen.getByTestId("close")).toHaveTextContent("select");
   });
 
+  it("fills the field with the picked text and sends the item's value", async () => {
+    const input = await openMenu(undefined, { itemValues: true });
+    await user.keyboard("{ArrowDown}{Enter}");
+
+    expect(input).toHaveValue("Databases for TestSQL");
+    expect(screen.getByTestId("result")).toHaveTextContent("item-0");
+  });
+
   it("clears aria-activedescendant when typing hides the highlighted option", async () => {
     const input = await openMenu();
     await user.keyboard("{ArrowDown}");
