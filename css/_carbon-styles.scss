@@ -70,6 +70,7 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/modal/modal";
 @import "carbon-components/scss/components/multi-select/multi-select";
 @import "carbon-components/scss/components/notification/inline-notification";
+@import "./callout";
 @import "carbon-components/scss/components/notification/toast-notification";
 @import "carbon-components/scss/components/number-input/number-input";
 @import "carbon-components/scss/components/overflow-menu/overflow-menu";

@@ -1,3 +1,4 @@
+export { default as Callout } from "./Callout.svelte";
 export { default as InlineNotification } from "./InlineNotification.svelte";
 export { default as NotificationActionButton } from "./NotificationActionButton.svelte";
 export { default as NotificationButton } from "./NotificationButton.svelte";

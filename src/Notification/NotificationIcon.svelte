@@ -14,6 +14,13 @@
   /** Set to `true` to use the low contrast icon fill. */
   export let lowContrast = false;
 
+  /**
+   * Specify a label for screen readers. Leave it unset when the icon is
+   * decorative, as when a live region announces the message.
+   * @type {string | undefined}
+   */
+  export let iconDescription = undefined;
+
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import InformationFilled from "../icons/InformationFilled.svelte";
@@ -40,4 +47,9 @@
         : "";
 </script>
 
-<svelte:component this={icons[kind]} size={20} class={iconClass} />
+<svelte:component
+  this={icons[kind]}
+  size={20}
+  class={iconClass}
+  title={iconDescription}
+/>

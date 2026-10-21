@@ -49,6 +49,7 @@ import Menu from "../fixtures/Menu.test.svelte";
 import MenuItem from "../fixtures/MenuItem.test.svelte";
 import ModalBody from "../fixtures/ModalBody.test.svelte";
 import NotificationActionButton from "../fixtures/NotificationActionButton.test.svelte";
+import NotificationActionButtonInCallout from "../fixtures/NotificationActionButtonInCallout.test.svelte";
 import OutboundLink from "../fixtures/OutboundLink.test.svelte";
 import OverflowMenuItem from "../fixtures/OverflowMenuItem.test.svelte";
 import RadioTile from "../fixtures/RadioTile.test.svelte";
@@ -530,6 +531,11 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("alert"),
   },
   {
+    name: "Callout",
+    exempt:
+      "static notice with no role or focusable element; its action is described by the title",
+  },
+  {
     name: "InlineNotification",
     render: (attrs) =>
       render(InlineNotification, {
@@ -565,6 +571,13 @@ export const interactive: AriaEntry[] = [
   {
     name: "NotificationActionButton",
     render: (attrs) => render(NotificationActionButton, { props: attrs }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "NotificationActionButton",
+    variant: "in a Callout",
+    render: (attrs) =>
+      render(NotificationActionButtonInCallout, { props: attrs }),
     target: () => screen.getByRole("button"),
   },
   {
