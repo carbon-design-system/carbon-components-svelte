@@ -15,7 +15,8 @@
    * Specify when the countdown ends, as a `Date` or a timestamp in
    * milliseconds, such as a session timeout or a hold that the server set.
    * The time left then follows the clock, so it agrees across reloads and
-   * tabs. Overrides `seconds` as the starting point.
+   * tabs. Overrides `seconds` as the starting point. To extend the time,
+   * set a later `until`; changing `remaining` does not move the deadline.
    * @type {undefined | Date | number}
    */
   export let until = undefined;
@@ -23,6 +24,8 @@
   /**
    * The seconds left. Starts at `seconds`, or the time to `until`; add to
    * it to extend the time, which also restarts a countdown that ended.
+   * With `until`, the deadline decides the time left, so set a later
+   * `until` instead.
    * @type {number}
    * @bindable writable
    */

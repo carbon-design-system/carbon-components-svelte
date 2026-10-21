@@ -9,7 +9,7 @@ description: Countdowns show the time left on a hold, a session or a meter, coun
 
 ## Basic
 
-Set `seconds` to the length of the countdown. The time is written as m:ss, or h:mm:ss from an hour up, in a `role="timer"` element. The `end` event fires at zero.
+Set `seconds` to the length of the countdown. The time is written as m:ss, or h:mm:ss from an hour up, in a `role="timer"` element. The `end` event fires at zero, and right away if the time is already up.
 
 <Countdown seconds={125} />
 
@@ -37,7 +37,9 @@ Screen readers hear `warnDescription` when `warnAt` seconds are left, and `expir
 
 ## Extend and pause
 
-Bind `remaining` and add to it to extend the time, or set a later `until`. Either restarts a countdown that already reached zero. Bind `running` and set it to `false` to pause.
+Bind `remaining` and add to it to extend the time, which also restarts a countdown that already reached zero. Bind `running` and set it to `false` to pause.
+
+With `until`, the deadline sets the time left and changing `remaining` has no lasting effect. Extend by setting a later `until` instead, which restarts the countdown the same way.
 
 ## Custom rendering
 
