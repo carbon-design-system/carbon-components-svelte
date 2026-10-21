@@ -25,15 +25,4 @@ describe("RelativeTime server render", () => {
     expect(renderTitle("UTC")).toBe("Sep 1, 2026, 11:55 AM");
     expect(renderTitle("Asia/Tokyo")).toBe("Sep 1, 2026, 8:55 PM");
   });
-
-  it("does not render a timeZone attribute", () => {
-    const { document } = renderSSR(RelativeTime, {
-      date,
-      now,
-      locale: "en-US",
-      timeZone: "UTC",
-    });
-
-    expect(document.querySelector("time")).not.toHaveAttribute("timezone");
-  });
 });

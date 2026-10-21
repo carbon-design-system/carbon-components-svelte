@@ -31,8 +31,6 @@
 
 <ProgressBar status="error" value={5} max={0} data-testid="error-zero-max" />
 
-<ProgressBar labelText="Hidden label" hideLabel value={50} />
-
 <ProgressBar
   kind="inline"
   labelText="Hidden inline label"

@@ -2,8 +2,6 @@
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 </script>
 
-<div data-testid="default-loader"><InlineLoading /></div>
-
 <div data-testid="loader-with-description">
   <InlineLoading description="Loading metrics..." />
 </div>

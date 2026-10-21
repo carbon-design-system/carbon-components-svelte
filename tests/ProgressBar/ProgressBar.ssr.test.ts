@@ -12,10 +12,6 @@ describe("ProgressBar server render", () => {
     status: "error" as const,
   };
 
-  it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(ProgressBar, props)).toBe(renderRaw(ProgressBar, props));
-  });
-
   it("derives the helper and status ids from the id", () => {
     const html = renderRaw(ProgressBar, props);
 

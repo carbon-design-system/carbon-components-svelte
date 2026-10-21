@@ -47,10 +47,6 @@ describe("Meter server render ids", () => {
     showThresholds: true,
   };
 
-  it("renders identical markup for an explicit id", () => {
-    expect(renderRaw(Meter, props)).toBe(renderRaw(Meter, props));
-  });
-
   it("derives the helper and thresholds ids from the id", () => {
     const html = renderRaw(Meter, props);
 

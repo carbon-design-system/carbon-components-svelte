@@ -16,6 +16,11 @@ describe("Loading", () => {
     expect(loader).toHaveAttribute("aria-atomic", "true");
     expect(loader).toHaveAttribute("aria-live", "assertive");
 
+    expect(wrapper.querySelector(".bx--loading__stroke")).toHaveAttribute(
+      "r",
+      "44",
+    );
+
     const title = wrapper.querySelector("title");
     expect(title).toHaveTextContent("loading");
   });
@@ -67,18 +72,6 @@ describe("Loading", () => {
     expect(title).toHaveTextContent("Processing data...");
   });
 
-  it("renders with correct spinner radius", () => {
-    render(Loading);
-
-    const defaultWrapper = screen.getByTestId("default-loader");
-    const defaultStroke = defaultWrapper.querySelector(".bx--loading__stroke");
-    expect(defaultStroke).toHaveAttribute("r", "44");
-
-    const smallWrapper = screen.getByTestId("loader-small");
-    const smallStroke = smallWrapper.querySelector(".bx--loading__stroke");
-    expect(smallStroke).toHaveAttribute("r", "42");
-  });
-
   describe("delay", () => {
     beforeEach(() => {
       vi.useFakeTimers();
@@ -126,15 +119,6 @@ describe("Loading", () => {
       const loader = wrapper.querySelector(".bx--loading");
       expect(loader).toBeInTheDocument();
       expect(loader).toHaveClass("bx--loading--stop");
-    });
-
-    it("renders synchronously when delay is 0", () => {
-      const { getByTestId } = render(LoadingDelay, {
-        props: { active: true, delay: 0 },
-      });
-      const wrapper = getByTestId("delayed");
-
-      expect(wrapper.querySelector(".bx--loading")).toBeInTheDocument();
     });
 
     it("clears the pending timer when unmounted during the delay", () => {

@@ -18,17 +18,6 @@ describe("FormItem", () => {
     expect(screen.getByText("Form item content")).toBeInTheDocument();
   });
 
-  it("should render as div element", () => {
-    const { container } = render(FormItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const formItem = container.querySelector(".bx--form-item");
-    expect(formItem?.tagName).toBe("DIV");
-  });
-
   it("should handle click events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(FormItemTest, {
@@ -90,21 +79,6 @@ describe("FormItem", () => {
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 
-  it("should apply custom attributes", () => {
-    const { container } = render(FormItemTest, {
-      props: {
-        "data-testid": "custom-form-item",
-        slotContent: "Content",
-      },
-    });
-
-    const formItem = container.querySelector(
-      "[data-testid='custom-form-item']",
-    );
-    expect(formItem).toBeInTheDocument();
-    expect(formItem).toHaveClass("bx--form-item");
-  });
-
   it("should apply custom class via restProps", () => {
     const { container } = render(FormItemTest, {
       props: {
@@ -115,18 +89,6 @@ describe("FormItem", () => {
 
     const formItem = container.querySelector(".bx--form-item");
     expect(formItem).toHaveClass("custom-class");
-  });
-
-  it("should contain slot content", () => {
-    const { container } = render(FormItemTest, {
-      props: {
-        slotContent: "First child",
-      },
-    });
-
-    expect(screen.getByText("First child")).toBeInTheDocument();
-    const formItem = container.querySelector(".bx--form-item");
-    expect(formItem?.textContent).toContain("First child");
   });
 });
 

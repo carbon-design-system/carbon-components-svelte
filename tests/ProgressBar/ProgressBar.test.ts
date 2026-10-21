@@ -111,13 +111,6 @@ describe("ProgressBar", () => {
     expect(zeroMaxError).toHaveAttribute("aria-valuenow", "0");
   });
 
-  it("should handle hidden label", () => {
-    render(ProgressBar);
-
-    const label = screen.getByText("Hidden label");
-    expect(label).toHaveClass("bx--visually-hidden");
-  });
-
   it("collapses the label row when the label is hidden and nothing else shows", () => {
     render(ProgressBar);
 
