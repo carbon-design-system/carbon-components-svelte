@@ -282,6 +282,17 @@ $css--helpers: true;
       display: flex;
     }
 
+    // A skeleton keeps the bars that stand for the item count (the last
+    // on the left) and the page buttons.
+    .#{$prefix}--pagination.#{$prefix}--skeleton
+      .#{$prefix}--pagination__left
+      > :last-child,
+    .#{$prefix}--pagination.#{$prefix}--skeleton
+      .#{$prefix}--pagination__right
+      > * {
+      display: block;
+    }
+
     .#{$prefix}--pagination--simple .#{$prefix}--pagination__right > * {
       display: flex;
     }
