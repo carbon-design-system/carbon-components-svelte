@@ -84,6 +84,31 @@ describe("ContextMenu focus return", () => {
     expect(host).toHaveFocus();
   });
 
+  it("focuses the first option when opened from the keyboard", async () => {
+    render(ContextMenuFocusReturn);
+
+    const host = screen.getByRole("button", { name: "Host" });
+    host.focus();
+    // The context menu key and Shift+F10 fire `contextmenu` with no button down.
+    await fireEvent.contextMenu(host, {
+      button: -1,
+      buttons: 0,
+      clientX: 50,
+      clientY: 50,
+    });
+    expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    expect(host).toHaveFocus();
+  });
+
+  it("focuses the menu, not an option, when opened by right-click", async () => {
+    render(ContextMenuFocusReturn);
+
+    await rightClick(screen.getByRole("button", { name: "Host" }));
+    expect(screen.getAllByRole("menu")[0]).toHaveFocus();
+  });
+
   it("should return focus to the opener when closed by selecting an option", async () => {
     render(ContextMenuFocusReturn);
 
