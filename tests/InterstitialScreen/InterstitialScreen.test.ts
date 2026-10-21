@@ -61,6 +61,23 @@ describe("InterstitialScreen", () => {
     ).toBeInTheDocument();
   });
 
+  it("keeps Get Started available when the current last view is removed", async () => {
+    const { rerender } = render(InterstitialScreenTest, {
+      props: { open: true, stepCount: 3 },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    expect(screen.getByText("Step 3 of 3")).toBeInTheDocument();
+
+    await rerender({ stepCount: 2 });
+
+    expect(screen.getByText("Step 2 of 2")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Get Started" }),
+    ).toBeInTheDocument();
+  });
+
   it("Back returns to the previous step", async () => {
     render(InterstitialScreenTest, { props: { open: true, stepCount: 2 } });
 

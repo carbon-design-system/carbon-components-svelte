@@ -73,6 +73,9 @@
    */
   function removeView(id) {
     views.update((_) => _.filter((view) => view.id !== id));
+    // Removing the current last view would otherwise strand the step past the
+    // end, hiding both Next and Get Started.
+    handleGotoStep($progStep);
   }
 
   /**
