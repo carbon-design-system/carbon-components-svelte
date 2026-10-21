@@ -1,6 +1,12 @@
 <script lang="ts">
   import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
+
+  export let onClick = () => {};
+  export let onMouseenter = () => {};
+  export let onFocus = () => {};
+  export let onBlur = () => {};
+  export let onKeydown = () => {};
 </script>
 
 <UserAvatar data-testid="default" />
@@ -73,8 +79,8 @@
 <UserAvatar
   data-testid="events"
   name="John Doe"
-  on:click={() => console.log("click")}
-  on:mouseenter={() => console.log("mouseenter")}
+  on:click={onClick}
+  on:mouseenter={onMouseenter}
 />
 
 <UserAvatar data-testid="slot" name="John Doe">
@@ -94,9 +100,9 @@
   data-testid="interactive"
   interactive
   name="John Doe"
-  on:focus={() => console.log("focus")}
-  on:blur={() => console.log("blur")}
-  on:keydown={() => console.log("keydown")}
+  on:focus={onFocus}
+  on:blur={onBlur}
+  on:keydown={onKeydown}
 />
 
 <UserAvatar data-testid="href" href="/profile" name="John Doe" />

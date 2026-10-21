@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
+import { hover, star } from "./helpers";
 import StarRating from "./StarRating.test.svelte";
 import StarRatingForm from "./StarRatingForm.test.svelte";
 import StarRatingText from "./StarRatingText.test.svelte";
@@ -28,12 +29,10 @@ describe("StarRating", () => {
   it("sets the value and dispatches change when a star is chosen", async () => {
     const { component } = render(StarRating);
 
-    await user.click(screen.getByRole("radio", { name: "4 out of 5 stars" }));
+    await user.click(star(4));
 
     expect(screen.getByTestId("value")).toHaveTextContent("4");
-    expect(
-      screen.getByRole("radio", { name: "4 out of 5 stars" }),
-    ).toBeChecked();
+    expect(star(4)).toBeChecked();
     expect(component.changes).toEqual([4]);
   });
 
@@ -41,10 +40,7 @@ describe("StarRating", () => {
     const { container } = render(StarRating, { value: 2 });
     expect(filled(container)).toBe(2);
 
-    const fourth = screen.getByRole("radio", { name: "4 out of 5 stars" });
-    await fireEvent.pointerEnter(fourth.closest("label") as HTMLElement, {
-      pointerType: "mouse",
-    });
+    await hover(4);
     expect(filled(container)).toBe(4);
     expect(screen.getByTestId("value")).toHaveTextContent("2");
 
@@ -57,10 +53,7 @@ describe("StarRating", () => {
   it("drops the hover preview when the rating becomes disabled", async () => {
     const { container, rerender } = render(StarRating, { value: 2 });
 
-    const fifth = screen.getByRole("radio", { name: "5 out of 5 stars" });
-    await fireEvent.pointerEnter(fifth.closest("label") as HTMLElement, {
-      pointerType: "mouse",
-    });
+    await hover(5);
     expect(filled(container)).toBe(5);
 
     await rerender({ disabled: true });
@@ -70,26 +63,20 @@ describe("StarRating", () => {
 
   it("previews only for a mouse, and shows a chosen star over the preview", async () => {
     const { container } = render(StarRating, { value: 2 });
-    const label = (stars: number) =>
-      screen
-        .getByRole("radio", { name: `${stars} out of 5 stars` })
-        .closest("label") as HTMLElement;
 
     // A tap has no leave to clear a preview, so touch doesn't start one.
-    await fireEvent.pointerEnter(label(4), { pointerType: "touch" });
+    await hover(4, "touch");
     expect(filled(container)).toBe(2);
 
-    await fireEvent.pointerEnter(label(4), { pointerType: "mouse" });
-    await fireEvent.click(
-      screen.getByRole("radio", { name: "3 out of 5 stars" }),
-    );
+    await hover(4);
+    await fireEvent.click(star(3));
     expect(filled(container)).toBe(3);
   });
 
   it("keeps the rating when the current star is clicked", async () => {
     render(StarRating, { value: 3 });
 
-    await user.click(screen.getByRole("radio", { name: "3 out of 5 stars" }));
+    await user.click(star(3));
 
     expect(screen.getByTestId("value")).toHaveTextContent("3");
   });
@@ -97,7 +84,7 @@ describe("StarRating", () => {
   it("clears the rating when the current star is clicked with allowDeselect", async () => {
     const { component } = render(StarRating, { value: 3, allowDeselect: true });
 
-    await user.click(screen.getByRole("radio", { name: "3 out of 5 stars" }));
+    await user.click(star(3));
 
     expect(screen.getByTestId("value")).toHaveTextContent("0");
     expect(component.changes).toEqual([0]);
@@ -116,20 +103,19 @@ describe("StarRating", () => {
     expect(screen.getByRole("radio", { name: "Great" })).toBeInTheDocument();
   });
 
-  it("describes the group with the warning text", () => {
-    render(StarRating, { warn: true, warnText: "Add a comment" });
+  it.each([
+    [
+      "the warning text",
+      { warn: true, warnText: "Add a comment" },
+      "Add a comment",
+    ],
+    ["helper text", { helperText: "Rate your stay" }, "Rate your stay"],
+  ])("describes the group with %s", (_, props, description) => {
+    render(StarRating, props);
 
     expect(
       screen.getByRole("radiogroup", { name: "Overall rating" }),
-    ).toHaveAccessibleDescription("Add a comment");
-  });
-
-  it("describes the group with helper text", () => {
-    render(StarRating, { helperText: "Rate your stay" });
-
-    expect(
-      screen.getByRole("radiogroup", { name: "Overall rating" }),
-    ).toHaveAccessibleDescription("Rate your stay");
+    ).toHaveAccessibleDescription(description);
   });
 
   it("shows the invalid message and describes the group with it", () => {
@@ -158,10 +144,7 @@ describe("StarRating", () => {
     render(StarRatingText);
     expect(screen.getByText("Fair")).toBeInTheDocument();
 
-    const fourth = screen.getByRole("radio", { name: "4 out of 5 stars" });
-    await fireEvent.pointerEnter(fourth.closest("label") as HTMLElement, {
-      pointerType: "mouse",
-    });
+    await hover(4);
 
     expect(screen.getByText("Very good")).toBeInTheDocument();
   });
@@ -192,7 +175,7 @@ describe("StarRating", () => {
   it("submits the rating with the form and follows a reset", async () => {
     const { component } = render(StarRatingForm);
 
-    await user.click(screen.getByRole("radio", { name: "2 out of 5 stars" }));
+    await user.click(star(2));
     expect(new FormData(getForm()).get("rating")).toBe("2");
 
     getForm().reset();
@@ -205,7 +188,7 @@ describe("StarRating", () => {
   it("follows the reset of a form it names with `form`", async () => {
     const { component, container } = render(StarRatingForm, { outside: true });
 
-    await user.click(screen.getByRole("radio", { name: "4 out of 5 stars" }));
+    await user.click(star(4));
     expect(new FormData(getForm()).get("rating")).toBe("4");
 
     getForm().reset();

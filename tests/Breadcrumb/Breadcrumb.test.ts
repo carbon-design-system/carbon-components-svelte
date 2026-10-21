@@ -2,14 +2,9 @@ import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import BreadcrumbAriaCurrent from "./Breadcrumb.ariaCurrent.test.svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
-import BreadcrumbLabelText from "./Breadcrumb.labelText.test.svelte";
-import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
-import BreadcrumbOrientationHorizontal from "./Breadcrumb.orientation-horizontal.test.svelte";
 import BreadcrumbOrientationToggle from "./Breadcrumb.orientation-toggle.test.svelte";
-import BreadcrumbOrientationVertical from "./Breadcrumb.orientation-vertical.test.svelte";
-import BreadcrumbSize from "./Breadcrumb.size.test.svelte";
+import BreadcrumbProps from "./Breadcrumb.props.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
-import BreadcrumbSkeletonSm from "./Breadcrumb.skeleton-sm.test.svelte";
 import BreadcrumbSlotProps from "./Breadcrumb.slotProps.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
 
@@ -44,18 +39,10 @@ describe("Breadcrumb", () => {
   });
 
   it("supports custom labelText", () => {
-    render(BreadcrumbLabelText);
+    render(BreadcrumbProps, { props: { labelText: "Page navigation" } });
 
     const nav = screen.getByRole("navigation", { name: "Page navigation" });
     expect(nav).toBeInTheDocument();
-  });
-
-  it("renders with noTrailingSlash", () => {
-    render(BreadcrumbNoTrailingSlash);
-
-    const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
-    const list = within(nav).getByRole("list");
-    expect(list).toHaveClass("bx--breadcrumb--no-trailing-slash");
   });
 
   it("renders skeleton state", () => {
@@ -141,35 +128,28 @@ describe("Breadcrumb", () => {
     expect(items[1]).toHaveClass("bx--breadcrumb-item--current");
   });
 
-  it("renders with size sm", () => {
-    render(BreadcrumbSize);
-
-    const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
-    const list = within(nav).getByRole("list");
-    expect(list).toHaveClass("bx--breadcrumb");
-    expect(list).toHaveClass("bx--breadcrumb--sm");
-  });
-
-  it("renders skeleton with size sm", () => {
-    render(BreadcrumbSkeletonSm);
-
-    const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
-    expect(skeleton).toBeInTheDocument();
-    expect(skeleton).toHaveClass("bx--breadcrumb--sm");
-  });
-
   it.each([
-    ["horizontal", BreadcrumbOrientationHorizontal, "vertical"],
-    ["vertical", BreadcrumbOrientationVertical, "horizontal"],
-  ] as const)("renders orientation %s", (orientation, Fixture, other) => {
-    render(Fixture);
+    [{ size: "sm" }, "bx--breadcrumb--sm", []],
+    [{ noTrailingSlash: true }, "bx--breadcrumb--no-trailing-slash", []],
+    [
+      { orientation: "horizontal" },
+      "bx--breadcrumb--horizontal",
+      ["bx--breadcrumb--vertical"],
+    ],
+    [
+      { orientation: "vertical" },
+      "bx--breadcrumb--vertical",
+      ["bx--breadcrumb--horizontal"],
+    ],
+  ])("applies %j to the list and the skeleton", (props, className, absent) => {
+    render(BreadcrumbProps, { props: { ...props, withSkeleton: true } });
 
     const list = within(screen.getByRole("navigation")).getByRole("list");
-    expect(list).toHaveClass(`bx--breadcrumb--${orientation}`);
+    expect(list).toHaveClass(className);
 
     const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
-    expect(skeleton).toHaveClass(`bx--breadcrumb--${orientation}`);
-    expect(skeleton).not.toHaveClass(`bx--breadcrumb--${other}`);
+    expect(skeleton).toHaveClass(className);
+    for (const other of absent) expect(skeleton).not.toHaveClass(other);
   });
 
   it("updates the orientation class when orientation changes", async () => {

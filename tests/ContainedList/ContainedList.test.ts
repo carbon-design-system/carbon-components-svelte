@@ -7,15 +7,21 @@ import ContainedList from "./ContainedList.test.svelte";
 import ContainedListItemAction from "./ContainedListItem.action.test.svelte";
 import ContainedListItemHref from "./ContainedListItem.href.test.svelte";
 
+/** Returns the contained list root element. */
+const root = () => screen.getByRole("list").closest("div");
+
+/** Returns the button inside each list item (null for non-button items). */
+const itemButtons = () =>
+  screen.getAllByRole("listitem").map((item) => item.querySelector("button"));
+
 describe("ContainedList", () => {
   it("should render with default props", () => {
     render(ContainedList);
 
-    const list = screen.getByRole("list");
-    expect(list).toBeInTheDocument();
-    expect(list.closest("div")).toHaveClass("bx--contained-list");
-    expect(list.closest("div")).toHaveClass("bx--contained-list--on-page");
-    expect(list.closest("div")).toHaveClass("bx--contained-list--md");
+    expect(screen.getByRole("list")).toBeInTheDocument();
+    expect(root()).toHaveClass("bx--contained-list");
+    expect(root()).toHaveClass("bx--contained-list--on-page");
+    expect(root()).toHaveClass("bx--contained-list--md");
 
     expect(screen.getByText("List title")).toBeInTheDocument();
     expect(screen.getByText("Item 1")).toBeInTheDocument();
@@ -33,30 +39,18 @@ describe("ContainedList", () => {
   it("should render with disclosed kind", () => {
     render(ContainedList, { props: { kind: "disclosed" } });
 
-    const list = screen.getByRole("list");
-    expect(list.closest("div")).toHaveClass("bx--contained-list--disclosed");
-    expect(list.closest("div")).not.toHaveClass("bx--contained-list--on-page");
+    expect(root()).toHaveClass("bx--contained-list--disclosed");
+    expect(root()).not.toHaveClass("bx--contained-list--on-page");
   });
 
-  it("should render with small size", () => {
-    render(ContainedList, { props: { size: "sm" } });
-    expect(screen.getByRole("list").closest("div")).toHaveClass(
-      "bx--contained-list--sm",
-    );
-  });
-
-  it("should render with large size", () => {
-    render(ContainedList, { props: { size: "lg" } });
-    expect(screen.getByRole("list").closest("div")).toHaveClass(
-      "bx--contained-list--lg",
-    );
-  });
-
-  it("should render with extra-large size", () => {
-    render(ContainedList, { props: { size: "xl" } });
-    expect(screen.getByRole("list").closest("div")).toHaveClass(
-      "bx--contained-list--xl",
-    );
+  it.each([
+    [{ size: "sm" }, "bx--contained-list--sm"],
+    [{ size: "lg" }, "bx--contained-list--lg"],
+    [{ size: "xl" }, "bx--contained-list--xl"],
+    [{ inset: true }, "bx--contained-list--inset-rulers"],
+  ] as const)("should render with %j", (props, className) => {
+    render(ContainedList, { props });
+    expect(root()).toHaveClass(className);
   });
 
   it("should apply layout size classes to header", () => {
@@ -66,14 +60,6 @@ describe("ContainedList", () => {
       .getByText("List title")
       .closest(".bx--contained-list__header");
     expect(header).toHaveClass("bx--layout--size-sm");
-  });
-
-  it("should render with inset rulers", () => {
-    render(ContainedList, { props: { inset: true } });
-
-    expect(screen.getByRole("list").closest("div")).toHaveClass(
-      "bx--contained-list--inset-rulers",
-    );
   });
 
   it("should associate label with list via aria-labelledby", () => {
@@ -111,36 +97,27 @@ describe("ContainedList", () => {
   it("should render interactive list items as buttons", () => {
     render(ContainedList, { props: { interactive: true } });
 
-    const items = screen.getAllByRole("listitem");
-    const buttons = items.map((item) => item.querySelector("button"));
-
-    for (const button of buttons) {
+    for (const button of itemButtons()) {
       expect(button).toBeInTheDocument();
       expect(button).toHaveClass("bx--contained-list-item__content");
     }
   });
 
   it("should handle click events on interactive items", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContainedList, { props: { interactive: true } });
+    const onClick = vi.fn();
+    render(ContainedList, { props: { interactive: true, onClick } });
 
-    const firstButton = screen
-      .getAllByRole("listitem")[0]
-      .querySelector("button");
+    const firstButton = itemButtons()[0];
     assert(firstButton);
     await user.click(firstButton);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onClick).toHaveBeenCalledOnce();
   });
 
   it("should render disabled interactive items", () => {
     render(ContainedList, { props: { interactive: true, disabled: true } });
 
-    const buttons = screen
-      .getAllByRole("listitem")
-      .map((item) => item.querySelector("button"));
-
-    for (const button of buttons) {
+    for (const button of itemButtons()) {
       assert(button);
       expect(button).toBeDisabled();
     }
@@ -176,8 +153,8 @@ describe("ContainedList", () => {
   });
 
   it("should render items with action slot", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContainedListItemAction);
+    const onActionClick = vi.fn();
+    render(ContainedListItemAction, { props: { onActionClick } });
 
     const dismissButton = screen.getByRole("button", { name: "Dismiss" });
     expect(dismissButton).toBeInTheDocument();
@@ -186,7 +163,7 @@ describe("ContainedList", () => {
     expect(item).toHaveClass("bx--contained-list-item--with-action");
 
     await user.click(dismissButton);
-    expect(consoleLog).toHaveBeenCalledWith("action click");
+    expect(onActionClick).toHaveBeenCalledOnce();
   });
 
   it("should render href items as anchors with clickable styles", () => {
@@ -201,8 +178,8 @@ describe("ContainedList", () => {
   });
 
   it("should prefer href over interactive and forward click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ContainedListItemHref);
+    const onclick = vi.fn();
+    render(ContainedListItemHref, { props: { onclick } });
 
     const link = screen.getByRole("link", { name: "Prefer href" });
     expect(link.tagName).toBe("A");
@@ -211,7 +188,7 @@ describe("ContainedList", () => {
     ).toBeNull();
 
     await user.click(link);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onclick).toHaveBeenCalledOnce();
   });
 
   it("should disable a link item", async () => {

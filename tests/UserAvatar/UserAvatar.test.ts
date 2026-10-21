@@ -14,6 +14,8 @@ describe("UserAvatar", () => {
     expect(avatar).toHaveClass("bx--user-avatar", "bx--user-avatar--md");
     expect(avatar.querySelector("svg")).toBeInTheDocument();
     expect(avatar.querySelector(".bx--user-avatar__text")).toBeNull();
+    expect(avatar.tagName).toBe("SPAN");
+    expect(avatar).not.toHaveClass("bx--user-avatar--interactive");
   });
 
   it("derives initials from the first character of each word, capped at two", () => {
@@ -30,38 +32,25 @@ describe("UserAvatar", () => {
     expect(avatar).toHaveTextContent("XY");
   });
 
-  it("renders an image with alt text, taking priority over the name", () => {
-    render(UserAvatar);
+  it.each([
+    ["image", "A user photo"],
+    ["image-name-alt", "Ann One"],
+    ["image-attributes-alt", "Ann at the summit"],
+    ["image-decorative", ""],
+  ])(
+    "renders the %s image with alt %j, in place of the name",
+    (testId, alt) => {
+      render(UserAvatar);
 
-    const avatar = screen.getByTestId("image");
-    const img = avatar.querySelector("img");
-    assert(img);
-    expect(img).toHaveAttribute("src", "https://example.com/photo.jpg");
-    expect(img).toHaveAttribute("alt", "A user photo");
-    expect(avatar).not.toHaveTextContent("SN");
-    expect(avatar.querySelector(".bx--user-avatar__text")).toBeNull();
-  });
-
-  it("falls back to the name for the image alt text", () => {
-    render(UserAvatar);
-
-    const img = screen.getByTestId("image-name-alt").querySelector("img");
-    expect(img).toHaveAttribute("alt", "Ann One");
-  });
-
-  it("keeps an alt passed through imageAttributes", () => {
-    render(UserAvatar);
-
-    const img = screen.getByTestId("image-attributes-alt").querySelector("img");
-    expect(img).toHaveAttribute("alt", "Ann at the summit");
-  });
-
-  it("marks an image with no description or name as decorative", () => {
-    render(UserAvatar);
-
-    const img = screen.getByTestId("image-decorative").querySelector("img");
-    expect(img).toHaveAttribute("alt", "");
-  });
+      const avatar = screen.getByTestId(testId);
+      const img = avatar.querySelector("img");
+      assert(img);
+      expect(img).toHaveAttribute("src", "https://example.com/photo.jpg");
+      expect(img).toHaveAttribute("alt", alt);
+      expect(avatar.textContent?.trim()).toBe("");
+      expect(avatar.querySelector(".bx--user-avatar__text")).toBeNull();
+    },
+  );
 
   it("spreads imageAttributes onto the img and keeps rest props on the host", () => {
     render(UserAvatar);
@@ -137,21 +126,14 @@ describe("UserAvatar", () => {
     expect(avatar.querySelector(".bx--user-avatar__text")).toBeNull();
   });
 
-  it("applies the size class", () => {
+  it.each([
+    ["size-lg", "bx--user-avatar--lg"],
+    ["color-blue", "bx--user-avatar--blue"],
+    ["color-cool-gray", "bx--user-avatar--cool-gray"],
+  ])("applies the class for %s", (testId, className) => {
     render(UserAvatar);
 
-    expect(screen.getByTestId("size-lg")).toHaveClass("bx--user-avatar--lg");
-  });
-
-  it("applies the background color class", () => {
-    render(UserAvatar);
-
-    expect(screen.getByTestId("color-blue")).toHaveClass(
-      "bx--user-avatar--blue",
-    );
-    expect(screen.getByTestId("color-cool-gray")).toHaveClass(
-      "bx--user-avatar--cool-gray",
-    );
+    expect(screen.getByTestId(testId)).toHaveClass(className);
   });
 
   it('picks a stable background color when backgroundColor is "auto"', () => {
@@ -210,38 +192,33 @@ describe("UserAvatar", () => {
   });
 
   it("forwards DOM events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(UserAvatar);
+    const onClick = vi.fn();
+    const onMouseenter = vi.fn();
+    render(UserAvatar, { props: { onClick, onMouseenter } });
 
     const avatar = screen.getByTestId("events");
     await user.click(avatar);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onClick).toHaveBeenCalledTimes(1);
 
     await user.hover(avatar);
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
-  });
-
-  it("renders a span by default", () => {
-    render(UserAvatar);
-
-    const avatar = screen.getByTestId("default");
-    expect(avatar.tagName).toBe("SPAN");
-    expect(avatar).not.toHaveClass("bx--user-avatar--interactive");
+    expect(onMouseenter).toHaveBeenCalledTimes(1);
   });
 
   it("forwards focus, keydown, and blur events on an interactive avatar", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(UserAvatar);
+    const onFocus = vi.fn();
+    const onKeydown = vi.fn();
+    const onBlur = vi.fn();
+    render(UserAvatar, { props: { onFocus, onKeydown, onBlur } });
 
     const avatar = screen.getByTestId("interactive");
     avatar.focus();
-    expect(consoleLog).toHaveBeenCalledWith("focus");
+    expect(onFocus).toHaveBeenCalledTimes(1);
 
     await user.keyboard("a");
-    expect(consoleLog).toHaveBeenCalledWith("keydown");
+    expect(onKeydown).toHaveBeenCalledTimes(1);
 
     avatar.blur();
-    expect(consoleLog).toHaveBeenCalledWith("blur");
+    expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
   it("renders a button when interactive is set", () => {

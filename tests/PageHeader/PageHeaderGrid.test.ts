@@ -11,24 +11,24 @@ describe("PageHeader grid", () => {
     expect(header).not.toHaveClass("bx--page-header--grid");
   });
 
-  it("marks the header for grid alignment and renders Rows in the body", () => {
-    render(PageHeaderGrid);
+  it.each([
+    ["grid", false],
+    ["full-width", true],
+  ])(
+    "marks the %s header for grid alignment and renders Rows in the body",
+    (testId, hasFullWidth) => {
+      render(PageHeaderGrid);
 
-    const header = screen.getByTestId("grid");
-    expect(header).toHaveClass("bx--page-header--grid");
-    expect(header).not.toHaveClass("bx--page-header--grid-full-width");
+      const header = screen.getByTestId(testId);
+      expect(header).toHaveClass("bx--page-header--grid");
+      expect(
+        header.classList.contains("bx--page-header--grid-full-width"),
+      ).toBe(hasFullWidth);
 
-    const body = header.nextElementSibling;
-    expect(body).toHaveClass("bx--page-header__body");
-    expect(body?.firstElementChild).toHaveClass("bx--row");
-    expect(body).toContainElement(screen.getByTestId("column"));
-  });
-
-  it("adds the full-width modifier", () => {
-    render(PageHeaderGrid);
-
-    const header = screen.getByTestId("full-width");
-    expect(header).toHaveClass("bx--page-header--grid");
-    expect(header).toHaveClass("bx--page-header--grid-full-width");
-  });
+      const body = header.nextElementSibling;
+      expect(body).toHaveClass("bx--page-header__body");
+      expect(body?.firstElementChild).toHaveClass("bx--row");
+      expect(body).toHaveTextContent("Column content");
+    },
+  );
 });

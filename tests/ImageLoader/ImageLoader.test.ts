@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import { tick } from "svelte";
+import { stubIntersectionObserver } from "../utils/intersection-observer-mock";
 import { isSvelte5 } from "../utils/svelte-version";
 import ImageLoader from "./ImageLoader.test.svelte";
 import ImageLoaderLazyToggle from "./ImageLoaderLazyToggle.test.svelte";
@@ -217,35 +218,23 @@ describe("ImageLoader", () => {
   });
 
   it("waits for the viewport before loading with lazy", async () => {
-    let trigger: ((isIntersecting: boolean) => void) | undefined;
-    vi.stubGlobal(
-      "IntersectionObserver",
-      class {
-        constructor(callback: IntersectionObserverCallback) {
-          trigger = (isIntersecting) =>
-            callback(
-              [{ isIntersecting, target: sentinel } as never],
-              this as never,
-            );
-        }
-        observe() {}
-        unobserve() {}
-      },
-    );
-    let sentinel: Element | null = null;
+    const { instances } = stubIntersectionObserver();
     const { container } = render(ImageLoaderComponent, {
       props: { src: validImageSrc, alt: "Logo", lazy: true },
     });
-    sentinel = container.querySelector("span[aria-hidden]");
+    const sentinel = container.querySelector("span[aria-hidden]");
+    assert(sentinel);
+    const trigger = (isIntersecting: boolean) =>
+      instances[0].trigger(sentinel, isIntersecting);
 
     expect(FakeImage.instances).toHaveLength(0);
     expect(container.querySelector("img")).toHaveAttribute("loading", "lazy");
 
-    trigger?.(false);
+    trigger(false);
     await tick();
     expect(FakeImage.instances).toHaveLength(0);
 
-    trigger?.(true);
+    trigger(true);
     await tick();
     expect(FakeImage.instances.map((image) => image.src)).toEqual([
       validImageSrc,
@@ -257,25 +246,14 @@ describe("ImageLoader", () => {
     [undefined, "600px"],
     ["1200px", "1200px"],
   ])("observes with rootMargin %s in lazy mode", (rootMargin, expected) => {
-    const options: IntersectionObserverInit[] = [];
-    vi.stubGlobal(
-      "IntersectionObserver",
-      class {
-        constructor(
-          _: IntersectionObserverCallback,
-          init: IntersectionObserverInit,
-        ) {
-          options.push(init);
-        }
-        observe() {}
-        unobserve() {}
-      },
-    );
+    const { instances } = stubIntersectionObserver();
     render(ImageLoaderComponent, {
       props: { src: validImageSrc, lazy: true, rootMargin },
     });
 
-    expect(options).toEqual([{ rootMargin: expected, threshold: 0 }]);
+    expect(instances.map((instance) => instance.options)).toEqual([
+      { rootMargin: expected, threshold: 0 },
+    ]);
   });
 
   it("doesn't reload a loaded image when lazy turns on", async () => {

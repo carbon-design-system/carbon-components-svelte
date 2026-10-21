@@ -6,7 +6,7 @@
 
   function handleClick(event: MouseEvent) {
     event.preventDefault();
-    console.log("click");
+    onclick?.();
   }
 </script>
 
@@ -20,7 +20,7 @@
   <ContainedListItem href="/docs" disabled on:click={() => onclick?.()}>
     Disabled
   </ContainedListItem>
-  <ContainedListItem interactive on:click={() => console.log("click")}>
+  <ContainedListItem interactive on:click={() => onclick?.()}>
     Interactive
   </ContainedListItem>
   <ContainedListItem>Static</ContainedListItem>

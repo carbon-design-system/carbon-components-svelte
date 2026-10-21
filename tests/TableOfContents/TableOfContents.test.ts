@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
+import { renderMeasured } from "./helpers";
 import TableOfContents from "./TableOfContents.test.svelte";
 
 // Viewport-relative section tops, keyed by element id.
@@ -71,29 +72,21 @@ describe("TableOfContents", () => {
     );
   });
 
-  it("tracks links with a path to the current page", () => {
+  it.each([
+    ["a path to the current page", window.location.pathname, "location"],
+    ["a path to another page", "/elsewhere", null],
+  ])("tracks links with %s: aria-current %s", (_, hrefPrefix, current) => {
     render(TableOfContents, {
       selectedId: "key-moments",
       noScrollSpy: true,
-      hrefPrefix: window.location.pathname,
-    });
-
-    expect(screen.getByRole("link", { name: "Key moments" })).toHaveAttribute(
-      "aria-current",
-      "location",
-    );
-  });
-
-  it("doesn't track links to another page", () => {
-    render(TableOfContents, {
-      selectedId: "key-moments",
-      noScrollSpy: true,
-      hrefPrefix: "/elsewhere",
+      hrefPrefix,
     });
 
     expect(
-      screen.getByRole("link", { name: "Key moments" }),
-    ).not.toHaveAttribute("aria-current");
+      screen
+        .getByRole("link", { name: "Key moments" })
+        .getAttribute("aria-current"),
+    ).toBe(current);
   });
 
   it("selects an item on click and dispatches change", async () => {
@@ -264,8 +257,7 @@ describe("TableOfContents", () => {
   });
 
   it("shows the active bar once it is measured", async () => {
-    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(32);
-    render(TableOfContents, { selectedId: "overview", noScrollSpy: true });
+    renderMeasured(32);
 
     const nav = screen.getByTestId("toc");
     const bar = nav.querySelector(".bx--toc__bar");
@@ -279,10 +271,7 @@ describe("TableOfContents", () => {
   });
 
   it("places the bar without sliding once a hidden nav shows", async () => {
-    const offsetHeight = vi
-      .spyOn(HTMLElement.prototype, "offsetHeight", "get")
-      .mockReturnValue(0);
-    render(TableOfContents, { selectedId: "overview", noScrollSpy: true });
+    const { offsetHeight } = renderMeasured(0);
     await nextFrame();
 
     const nav = screen.getByTestId("toc");
@@ -340,13 +329,7 @@ describe("TableOfContents", () => {
           disconnect() {}
         },
       );
-      const offsetHeight = vi
-        .spyOn(HTMLElement.prototype, "offsetHeight", "get")
-        .mockReturnValue(32);
-      const { unmount } = render(TableOfContents, {
-        selectedId: "overview",
-        noScrollSpy: true,
-      });
+      const { offsetHeight, unmount } = renderMeasured(32);
       await nextFrame();
 
       const nav = screen.getByTestId("toc");

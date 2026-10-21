@@ -1,48 +1,17 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
+import {
+  type IntersectionObserverMock,
+  stubIntersectionObserver,
+} from "../utils/intersection-observer-mock";
 import ScrollGradientRef from "./ScrollGradient.ref.test.svelte";
 import ScrollGradient from "./ScrollGradient.test.svelte";
 
-class IntersectionObserverMock {
-  static instances: IntersectionObserverMock[] = [];
-
-  callback: IntersectionObserverCallback;
-  options?: IntersectionObserverInit;
-  elements = new Set<Element>();
-
-  constructor(
-    callback: IntersectionObserverCallback,
-    options?: IntersectionObserverInit,
-  ) {
-    this.callback = callback;
-    this.options = options;
-    IntersectionObserverMock.instances.push(this);
-  }
-
-  observe(element: Element) {
-    this.elements.add(element);
-  }
-
-  unobserve(element: Element) {
-    this.elements.delete(element);
-  }
-
-  disconnect() {
-    this.elements.clear();
-  }
-
-  trigger(target: Element, isIntersecting: boolean) {
-    this.callback(
-      [{ target, isIntersecting } as IntersectionObserverEntry],
-      this as unknown as IntersectionObserver,
-    );
-  }
-}
+let instances: IntersectionObserverMock[];
 
 beforeEach(() => {
-  IntersectionObserverMock.instances = [];
-  vi.stubGlobal("IntersectionObserver", IntersectionObserverMock);
+  ({ instances } = stubIntersectionObserver());
 });
 
 afterEach(() => {
@@ -83,7 +52,7 @@ function getSentinels(container: HTMLElement) {
 }
 
 function getObserverFor(scrollElement: Element) {
-  const observer = IntersectionObserverMock.instances.find(
+  const observer = instances.find(
     (instance) => instance.options?.root === scrollElement,
   );
   if (!observer) throw new Error("No IntersectionObserver found for root");
@@ -236,17 +205,39 @@ describe("ScrollGradient", () => {
     ).not.toBeNull();
   });
 
-  it("applies the color prop to the wrapper", () => {
-    const { container } = render(ScrollGradient, {
-      props: { color: "red" },
-    });
-
-    const wrapper = container.querySelector(".bx--scroll-gradient");
-    assert(wrapper instanceof HTMLElement);
-    expect(wrapper.style.getPropertyValue("--cds-scroll-gradient-color")).toBe(
+  it.each([
+    [
+      "color",
+      { color: "red" },
+      ".bx--scroll-gradient",
+      (element: HTMLElement) =>
+        element.style.getPropertyValue("--cds-scroll-gradient-color"),
       "red",
-    );
-  });
+    ],
+    [
+      "background",
+      { background: "transparent" },
+      ".bx--scroll-gradient__scroll-element",
+      (element: HTMLElement) => element.style.backgroundColor,
+      "transparent",
+    ],
+    [
+      "height",
+      { height: "100vh" },
+      ".bx--scroll-gradient",
+      (element: HTMLElement) => element.style.height,
+      "100vh",
+    ],
+  ])(
+    "applies the %s prop as an inline style",
+    (_name, props, selector, read, expected) => {
+      const { container } = render(ScrollGradient, { props });
+
+      const element = container.querySelector(selector);
+      assert(element instanceof HTMLElement);
+      expect(read(element)).toBe(expected);
+    },
+  );
 
   it("maps fill token names to classes instead of inline styles", () => {
     const { container } = render(ScrollGradient, {
@@ -273,28 +264,6 @@ describe("ScrollGradient", () => {
     );
     expectInlineStyle(wrapper, { "--cds-scroll-gradient-color": "" });
     expectInlineStyle(scrollElement, { backgroundColor: "" });
-  });
-
-  it("applies the background prop to the scroll element", () => {
-    const { container } = render(ScrollGradient, {
-      props: { background: "transparent" },
-    });
-
-    const scrollElement = container.querySelector(
-      ".bx--scroll-gradient__scroll-element",
-    );
-    assert(scrollElement instanceof HTMLElement);
-    expect(scrollElement.style.backgroundColor).toBe("transparent");
-  });
-
-  it("applies the height prop to the wrapper", () => {
-    const { container } = render(ScrollGradient, {
-      props: { height: "100vh" },
-    });
-
-    const wrapper = container.querySelector(".bx--scroll-gradient");
-    assert(wrapper instanceof HTMLElement);
-    expect(wrapper.style.height).toBe("100vh");
   });
 
   it("binds `scrollElementRef` to the inner scrollable element", async () => {

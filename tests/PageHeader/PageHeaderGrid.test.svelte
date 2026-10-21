@@ -6,10 +6,14 @@
 
 <PageHeader data-testid="grid" grid title="Grid">
   <Row>
-    <Column data-testid="column">Column content</Column>
+    <Column>Column content</Column>
   </Row>
 </PageHeader>
 
-<PageHeader data-testid="full-width" grid="full-width" title="Full width" />
+<PageHeader data-testid="full-width" grid="full-width" title="Full width">
+  <Row>
+    <Column>Column content</Column>
+  </Row>
+</PageHeader>
 
 <PageHeader data-testid="no-grid" title="No grid" />

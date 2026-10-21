@@ -86,13 +86,24 @@ describe("PageHeader", () => {
     ).toHaveTextContent("Create");
   });
 
-  it("omits the breadcrumb and actions rows when the slots are empty", () => {
+  it.each([
+    "breadcrumb-row",
+    "breadcrumb-end",
+    "actions",
+    "tabs-row",
+    "tabs-row--with-end",
+    "tabs-end",
+    "title-start",
+    "title-end",
+    "description",
+    "eyebrow",
+    "meta",
+  ])("omits the %s element when its slot or prop is unused", (part) => {
     render(PageHeader);
 
-    const basic = screen.getByTestId("basic");
-    expect(basic.querySelector(".bx--page-header__breadcrumb-row")).toBeNull();
-    expect(basic.querySelector(".bx--page-header__actions")).toBeNull();
-    expect(basic.querySelector(".bx--page-header__tabs-row")).toBeNull();
+    expect(
+      screen.getByTestId("basic").querySelector(`.bx--page-header__${part}`),
+    ).toBeNull();
   });
 
   it("renders titleStart and titleEnd around the title", () => {
@@ -130,16 +141,10 @@ describe("PageHeader", () => {
     ).toContainElement(screen.getByRole("button", { name: "Share" }));
   });
 
-  it("omits the optional title and description wrappers when unused", () => {
+  it("omits the body when no panels are slotted", () => {
     render(PageHeader);
 
     expect(document.querySelector(".bx--page-header__body")).toBeNull();
-
-    const basic = screen.getByTestId("basic");
-    expect(basic.querySelector(".bx--page-header__title-start")).toBeNull();
-    expect(basic.querySelector(".bx--page-header__title-end")).toBeNull();
-    expect(basic.querySelector(".bx--page-header__description")).toBeNull();
-    expect(basic.querySelector(".bx--page-header__breadcrumb-end")).toBeNull();
   });
 
   it("renders the eyebrow above the title", () => {
@@ -168,14 +173,6 @@ describe("PageHeader", () => {
     expect(eyebrow?.lastElementChild).toHaveTextContent("Resources");
   });
 
-  it("omits the eyebrow when unset", () => {
-    render(PageHeader);
-
-    expect(
-      screen.getByTestId("basic").querySelector(".bx--page-header__eyebrow"),
-    ).toBeNull();
-  });
-
   it("renders the meta row after the title row", () => {
     render(PageHeader);
 
@@ -186,9 +183,6 @@ describe("PageHeader", () => {
     expect(meta?.previousElementSibling).toHaveClass(
       "bx--page-header__title-row",
     );
-    expect(
-      screen.getByTestId("basic").querySelector(".bx--page-header__meta"),
-    ).toBeNull();
   });
 
   it("renders the tabs row for tabsEnd alone", () => {
@@ -200,13 +194,5 @@ describe("PageHeader", () => {
     expect(row?.querySelector(".bx--page-header__tabs-end")).toHaveTextContent(
       "Range",
     );
-    expect(
-      screen
-        .getByTestId("basic")
-        .querySelector(".bx--page-header__tabs-row--with-end"),
-    ).toBeNull();
-    expect(
-      screen.getByTestId("basic").querySelector(".bx--page-header__tabs-end"),
-    ).toBeNull();
   });
 });
