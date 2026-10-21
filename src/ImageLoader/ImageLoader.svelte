@@ -113,7 +113,6 @@
   // the image has loaded doesn't reload it.
   $: if (!lazy) nearViewport = true;
   $: deferLoad = lazy && !nearViewport;
-  $: loading = !!currentSrc && !loaded && !error;
   $: if (!src) {
     loaded = false;
     error = false;
@@ -121,6 +120,10 @@
     image = null;
   }
   $: if (src && typeof window !== "undefined" && !deferLoad) loadImage();
+  // Declared after the blocks above: Svelte 3/4 run reactive statements once
+  // per flush in source order, and `loadImage()` resets `loaded`/`error`
+  // inside a call, so an earlier `loading` would miss the reset.
+  $: loading = !!currentSrc && !loaded && !error;
 
   /**
    * @param {null | Element} element
