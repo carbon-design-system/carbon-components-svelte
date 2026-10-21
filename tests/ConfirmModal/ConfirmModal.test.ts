@@ -136,12 +136,17 @@ describe("ConfirmModal", () => {
       },
     });
 
+    // Escape only reaches the modal when focus is inside it.
+    const container = screen.getByRole("alertdialog");
+    container.focus();
+    expect(container).toHaveFocus();
+
     await user.keyboard("{Escape}");
     await tick();
 
     expect(oncancel).not.toHaveBeenCalled();
     expect(onclose).not.toHaveBeenCalled();
-    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 
   it("waits for a confirm promise, then closes without a cancel", async () => {
@@ -164,8 +169,13 @@ describe("ConfirmModal", () => {
 
     await user.click(screen.getByRole("button", { name: "Delete" }));
     // Escape can't close the modal mid-request.
+    const container = screen.getByRole("alertdialog");
+    container.focus();
+    expect(container).toHaveFocus();
     await user.keyboard("{Escape}");
+    await tick();
     expect(confirm).toHaveBeenCalledTimes(1);
+    expect(onclose).not.toHaveBeenCalled();
     expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
 
     finish();

@@ -24,7 +24,7 @@
   {orientation}
   {disabled}
   {enterDelayMs}
-  separatorLabel={separatorLabel ?? "Resize panes"}
+  {separatorLabel}
   data-testid="splitter"
   on:resize={(e) => console.log("resize", e.detail)}
 >

@@ -11,6 +11,8 @@
   export let launcherButtonRef: ComponentProps<InterstitialScreen>["launcherButtonRef"] =
     undefined;
   export let bindLauncher = true;
+  /** Renders a second opener that is not `launcherButtonRef`. */
+  export let showOtherOpener = false;
 
   let launcher: HTMLButtonElement;
   $: launcherButtonRef = bindLauncher ? launcher : undefined;
@@ -32,6 +34,10 @@
 <button type="button" bind:this={launcher} on:click={() => (open = true)}>
   Open launcher
 </button>
+
+{#if showOtherOpener}
+  <button type="button" on:click={() => (open = true)}>Open other</button>
+{/if}
 
 <InterstitialScreen
   bind:open

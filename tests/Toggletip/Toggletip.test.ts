@@ -73,7 +73,10 @@ describe("Toggletip", () => {
     expect(trigger).not.toHaveAttribute("aria-describedby");
 
     await user.click(trigger);
-    expect(trigger).toHaveAttribute("aria-describedby");
+    expect(trigger).toHaveAttribute(
+      "aria-describedby",
+      trigger.getAttribute("aria-controls") as string,
+    );
   });
 
   it("should not close on an Escape that cancels an IME composition", async () => {

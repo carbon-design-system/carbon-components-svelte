@@ -10,11 +10,12 @@ const netClick = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
 describe("Popover window listeners", () => {
-  it("closed popovers register no window click listener", () => {
+  it("closed popovers register no window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
     for (let i = 0; i < 5; i++) render(Popover, { props: { open: false } });
+    await flushDismiss();
     expect(netClick(add, remove)).toBe(0);
 
     add.mockRestore();
