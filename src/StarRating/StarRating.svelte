@@ -226,6 +226,7 @@
     <fieldset
       bind:this={fieldsetRef}
       use:formReset={handleFormReset}
+      {form}
       role="radiogroup"
       class:bx--star-rating__fieldset={true}
       aria-label={ariaLabel}
