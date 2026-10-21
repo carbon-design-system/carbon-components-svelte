@@ -134,6 +134,8 @@
     if (!prevOpen && open) {
       phraseValue = "";
       session += 1;
+      // The earlier opening's confirm is now ignored, so it can't clear this.
+      pending = false;
     }
     prevOpen = open;
   }
