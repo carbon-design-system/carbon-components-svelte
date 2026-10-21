@@ -318,7 +318,11 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(popoverAlign)}"
     >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div class:bx--toggletip-content={true} on:keydown={handleKeydown}>
+      <div
+        class:bx--toggletip-content={true}
+        on:keydown={handleKeydown}
+        on:focusout={handleFocusout}
+      >
         <slot />
       </div>
     </Popover>

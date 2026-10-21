@@ -47,6 +47,25 @@ describe("Toggletip", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
+  it("should close when focus leaves portalled content", async () => {
+    const onClose = vi.fn();
+    render(ToggletipWithInteractiveContent, {
+      props: { open: false, portalTooltip: true, onClose },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Information" }));
+    await flush();
+
+    screen.getByTestId("inside-button").focus();
+    await tick();
+    expect(onClose).not.toHaveBeenCalled();
+
+    screen.getByTestId("outside-button").focus();
+    await tick();
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
   it("should set aria-describedby on the trigger so content is announced the first time it opens", async () => {
     render(Toggletip, { props: { open: false } });
 
