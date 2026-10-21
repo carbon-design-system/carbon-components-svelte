@@ -210,4 +210,23 @@ describe("UserAvatarGroup", () => {
     });
     expect(root).toHaveTextContent("+2");
   });
+
+  it("tracks an avatar whose root element is replaced", async () => {
+    render(UserAvatarGroup);
+    await tick();
+
+    const root = groupRoot("root-swap");
+    await user.click(screen.getByTestId("toggle-tooltip"));
+    await user.click(screen.getByTestId("toggle-swap-lead"));
+
+    // Alice leads, so Cara and Dan overflow. A stale node for Cara would
+    // misplace her in the registry and hide the wrong avatars.
+    await waitFor(() => {
+      expect(root).toHaveTextContent("+2");
+    });
+    const hidden = Array.from(
+      root.querySelectorAll('[data-overflow="true"]'),
+    ).map((el) => el.textContent?.trim());
+    expect(hidden).toEqual(["C3", "D4"]);
+  });
 });

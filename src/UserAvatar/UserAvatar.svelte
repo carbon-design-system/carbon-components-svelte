@@ -158,6 +158,8 @@
   }
 
   $: if (userAvatarGroup) userAvatarGroup.updateName(groupItemId, name);
+  // `ref` points at a new element when the root is swapped (see `updateNode`).
+  $: if (userAvatarGroup && ref) userAvatarGroup.updateNode(groupItemId, ref);
   $: groupIndex = userAvatarGroup
     ? $groupItems.findIndex((item) => item.id === groupItemId)
     : -1;
