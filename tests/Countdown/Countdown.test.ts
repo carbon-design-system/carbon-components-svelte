@@ -134,8 +134,11 @@ describe("Countdown", () => {
   });
 
   it("counts down to an absolute time with until", async () => {
-    const { rerender } = render(Countdown, { until: Date.now() + 90_000 });
-    expect(timer()).toHaveTextContent("1:30");
+    // `seconds` defaults to 60, so only `until` can make this read 0:30.
+    const { rerender } = render(CountdownUnbound, {
+      until: Date.now() + 30_000,
+    });
+    expect(timer()).toHaveTextContent("0:30");
 
     await rerender({ until: Date.now() + 300_000 });
 

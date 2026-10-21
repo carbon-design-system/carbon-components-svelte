@@ -6,7 +6,13 @@
   const oneDayAgo = now - 24 * 60 * 60 * 1000;
 </script>
 
-<RelativeTime date={fiveMinutesAgo} {now} locale="en" data-testid="basic" />
+<RelativeTime
+  date={fiveMinutesAgo}
+  {now}
+  locale="en"
+  timeZone="UTC"
+  data-testid="basic"
+/>
 
 <RelativeTime
   date={oneDayAgo}

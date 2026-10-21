@@ -5,13 +5,16 @@ import RelativeTimeLive from "./RelativeTimeLive.test.svelte";
 import RelativeTimeLivePair from "./RelativeTimeLivePair.test.svelte";
 
 describe("RelativeTime", () => {
-  it("renders relative text with an ISO datetime and a non-empty title", () => {
+  it("renders relative text with an ISO datetime and the absolute time as title", () => {
     render(RelativeTime);
 
     const el = screen.getByTestId("basic");
     expect(el).toHaveTextContent("5 minutes ago");
-    expect(el).toHaveAttribute("datetime");
-    expect(el.getAttribute("title")).not.toBe("");
+    expect(el).toHaveAttribute("datetime", "2026-09-13T11:55:00.000Z");
+    // Newer ICU versions put a narrow no-break space before AM/PM.
+    expect(el.getAttribute("title")?.replace(/\s/g, " ")).toBe(
+      "Sep 13, 2026, 11:55 AM",
+    );
   });
 
   it("respects numeric always vs the default auto", () => {

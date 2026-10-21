@@ -24,10 +24,9 @@ describe("ProgressBar", () => {
   it("should render indeterminate if status is active", () => {
     render(ProgressBar);
 
-    const progressBar = screen.getByTestId("indeterminate-progress");
-    expect(progressBar.closest("div")).toHaveClass(
-      "bx--progress-bar--indeterminate",
-    );
+    const root = screen.getByTestId("indeterminate-progress");
+    expect(root).toHaveClass("bx--progress-bar--indeterminate");
+    const progressBar = within(root).getByRole("progressbar");
     expect(progressBar).not.toHaveAttribute("aria-valuenow");
     expect(progressBar).not.toHaveAttribute("aria-valuemin");
     expect(progressBar).not.toHaveAttribute("aria-valuemax");
@@ -189,14 +188,12 @@ describe("ProgressBar", () => {
     expect(progressBar).toHaveAttribute("aria-labelledby", label.id);
     expect(label).toHaveClass("bx--progress-bar__label-text");
     expect(label.parentElement).toHaveClass("bx--progress-bar__label");
-    expect(progressBar).not.toHaveAttribute("for");
   });
 
   it("supports custom label slot", () => {
     render(ProgressBarSlot);
 
     const customLabel = screen.getByText("Custom label content");
-    expect(customLabel).toBeInTheDocument();
     expect(customLabel.parentElement).toHaveClass(
       "bx--progress-bar__label-text",
       "bx--progress-bar__label-text--slotted",

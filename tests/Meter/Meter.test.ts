@@ -248,7 +248,7 @@ describe("Meter", () => {
     const getAnnouncement = () =>
       screen
         .getByTestId("status")
-        .querySelector(".bx--visually-hidden")
+        .querySelector("[aria-live]")
         ?.textContent?.trim();
 
     expect(getAnnouncement()).toBe("");
@@ -271,7 +271,7 @@ describe("Meter", () => {
 
     const announcement = screen
       .getByTestId("status")
-      .querySelector(".bx--visually-hidden")
+      .querySelector("[aria-live]")
       ?.textContent?.trim();
     expect(announcement).toBe("");
   });
@@ -284,7 +284,7 @@ describe("Meter", () => {
     const getAnnouncement = () =>
       screen
         .getByTestId("status")
-        .querySelector(".bx--visually-hidden")
+        .querySelector("[aria-live]")
         ?.textContent?.trim();
 
     expect(getAnnouncement()).toBe("");
@@ -312,12 +312,29 @@ describe("Meter", () => {
     expect(text).not.toHaveTextContent(/error at/i);
   });
 
-  it("omits the threshold description when thresholds is unset", () => {
-    render(Meter);
+  it("omits the threshold description and markers when showThresholds is set but thresholds is unset", async () => {
+    const { container, rerender } = render(MeterComponent, {
+      props: {
+        labelText: "Storage",
+        value: 812,
+        max: 1000,
+        showThresholds: true,
+      },
+    });
 
-    const el = screen.getByTestId("no-thresholds");
-    const meter = within(el).getByRole("meter");
+    const meter = within(container).getByRole("meter");
     expect(meter).not.toHaveAttribute("aria-describedby");
+    expect(container.querySelectorAll(".bx--meter__threshold")).toHaveLength(0);
+    expect(
+      within(container).queryByText(/warning at/i),
+    ).not.toBeInTheDocument();
+
+    await rerender({ thresholds: { warning: 700 } });
+    expect(container.querySelectorAll(".bx--meter__threshold")).toHaveLength(1);
+    expect(meter).toHaveAttribute(
+      "aria-describedby",
+      within(container).getByText("Warning at 700").id,
+    );
   });
 
   it("lists the helper text before the threshold sentence in aria-describedby", () => {

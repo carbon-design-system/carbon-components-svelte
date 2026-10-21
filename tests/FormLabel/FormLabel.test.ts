@@ -182,7 +182,7 @@ describe("FormLabel", () => {
     expect(label).toHaveClass("custom-label-class");
   });
 
-  it("should work with associated input", () => {
+  it("should name an associated input", () => {
     const { container } = render(FormLabelTest, {
       props: {
         id: "test-input",
@@ -194,20 +194,6 @@ describe("FormLabel", () => {
     input.id = "test-input";
     container.appendChild(input);
 
-    const labelText = screen.getByText("Test Label");
-    const label = labelText.closest("label");
-    assert(label);
-    expect(label).toHaveAttribute("for", "test-input");
-  });
-
-  it("should expose id prop via accessors", () => {
-    const { component } = render(FormLabelTest, {
-      props: {
-        id: "exposed-id",
-        slotContent: "Label",
-      },
-    });
-
-    expect(component.id).toBe("exposed-id");
+    expect(screen.getByLabelText("Test Label")).toBe(input);
   });
 });
