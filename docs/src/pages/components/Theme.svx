@@ -117,6 +117,56 @@ Tokens use Carbon v11 names, matching the v11 Figma kit: `layer-01`, `text-prima
 
 Where a v10 token split into several v11 tokens, pick the one for the role. For example, `ui-03` became `border-subtle-01` for borders and `layer-accent-01` for fills.
 
+## Brand theme
+
+Build a brand theme from one color with `createTheme`. Pass a base theme and a brand color. It returns `tokens` for `Theme`, contrast `warnings`, and a `css` method for static use. Try it in the [theme builder](/theme-builder).
+
+```svelte
+<script>
+  import { createTheme, Theme } from "carbon-components-svelte";
+
+  const { tokens } = createTheme({ theme: "g100", brand: "#d02670" });
+</script>
+
+<Theme theme="g100" {tokens} />
+```
+
+The brand becomes `button-primary`. The tokens Carbon pairs with its brand blue follow it: the button hover and active states, interactive borders, focus, links, and `background-brand`. Dark themes get lighter link and interactive colors, as in Carbon.
+
+A Carbon palette color, such as purple 60 (`#8a3ffc`), steps through Carbon's own palette. Any other color keeps its hue and takes the luminance of Carbon's steps, so it keeps Carbon's contrast. `support-info` and `link-visited` keep their Carbon values, since Carbon doesn't tie them to the brand.
+
+The tokens suit their base theme only. If users can switch themes, call `createTheme` for each theme and pass the matching tokens with it.
+
+### Contrast warnings
+
+`warnings` lists each pair below WCAG AA. `text-on-color` on `button-primary` and `link-primary` on `background` need 4.5:1, and `focus` on `background` needs 3:1. Each warning has both token names, the ratio, the minimum, and a message.
+
+Fix a pair with an override in `tokens`. Overrides win over the derived tokens. `text-on-color` applies to every colored surface, not only buttons.
+
+```js
+const { warnings } = createTheme({
+  brand: "#f1c21b",
+  tokens: {
+    "text-on-color": "#161616",
+    "link-primary": "#8e6a00",
+    focus: "#8e6a00",
+  },
+});
+
+warnings; // []
+```
+
+### Static CSS
+
+Call `css` to get the tokens as a CSS rule for a stylesheet. The rule applies while the base theme is set on the html element, so load it after `all.css`. Pass a selector to scope it elsewhere.
+
+```js
+const { css } = createTheme({ theme: "g100", brand: "#d02670" });
+
+css(); // :root[theme="g100"] { --cds-button-primary: #d02670; ... }
+css(".brand-zone");
+```
+
 ## Token data
 
 Import token names and values from `carbon-components-svelte/tokens` to list tokens, build a palette, or pass a theme color to code that can't read CSS custom properties, such as a canvas. The data comes from the same build as `all.css`, so it has the same Carbon v11 names and values.
