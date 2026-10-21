@@ -4,6 +4,7 @@
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;
+  export let copy: ComponentProps<CopyButton>["copy"] = undefined;
   export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] =
     undefined;
 </script>
@@ -14,5 +15,5 @@
   primaryButtonText="OK"
   secondaryButtonText="Cancel"
 >
-  <CopyButton text="copy me" iconDescription="Copy" {portalTooltip} />
+  <CopyButton text="copy me" iconDescription="Copy" {portalTooltip} {copy} />
 </Modal>

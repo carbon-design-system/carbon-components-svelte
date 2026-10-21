@@ -32,6 +32,9 @@ export function createCopyFeedbackState(onSync) {
   let copyActive = false;
   let copyPending = false;
   let copyFailed = false;
+  // Bumped by `cleanup` so a copy still in flight when feedback is dismissed
+  // (e.g. the Modal closes) doesn't reopen it on resolve.
+  let epoch = 0;
 
   function notify() {
     onSync?.();
@@ -63,6 +66,7 @@ export function createCopyFeedbackState(onSync) {
   }
 
   function cleanup() {
+    epoch++;
     feedbackOpen = false;
     animation = undefined;
     copyActive = false;
@@ -94,14 +98,16 @@ export function createCopyFeedbackState(onSync) {
     copyFailed = false;
     notify();
 
+    const startEpoch = epoch;
+
     try {
       await performCopy();
     } catch (error) {
-      openFeedback(feedbackTimeout, portalled, true);
+      if (epoch === startEpoch) openFeedback(feedbackTimeout, portalled, true);
       throw error;
     }
 
-    openFeedback(feedbackTimeout, portalled, false);
+    if (epoch === startEpoch) openFeedback(feedbackTimeout, portalled, false);
   }
 
   /** @param {{ animationName: string }} event */
