@@ -90,6 +90,7 @@
       !LABELABLE.has(node.localName) &&
       !node.hasAttribute("aria-labelledby") &&
       !node.hasAttribute("aria-label");
+    const ownInvalid = node.getAttribute("aria-invalid") ?? undefined;
     let appliedInvalid = false;
     let state;
     /** @type {string | undefined} */
@@ -122,7 +123,7 @@
         node.setAttribute("aria-invalid", "true");
         appliedInvalid = true;
       } else if (appliedInvalid) {
-        node.removeAttribute("aria-invalid");
+        setAttribute(node, "aria-invalid", ownInvalid);
         appliedInvalid = false;
       }
     });

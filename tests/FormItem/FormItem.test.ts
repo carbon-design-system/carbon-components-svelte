@@ -182,6 +182,21 @@ describe("FormItem control association", () => {
     expect(input).toHaveAttribute("aria-describedby", "other helper-email");
   });
 
+  it("restores the control's own aria-invalid when an error unmounts", async () => {
+    const { component } = render(FormItemControlTest, {
+      props: { ariaInvalid: "true" },
+    });
+    const input = screen.getByTestId("control");
+
+    component.error = true;
+    await tick();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+
+    component.error = false;
+    await tick();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
   it("follows controlId changes", async () => {
     const { component } = render(FormItemControlTest);
 
