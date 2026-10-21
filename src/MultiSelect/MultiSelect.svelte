@@ -1414,6 +1414,8 @@
     direction === "top" && "bx--list-box--up",
     filterable && "bx--combo-box",
     filterable && "bx--multi-select--filterable",
+    // A clear button for the filter text shows by the chevron.
+    filterable && value && "bx--list-box--clearable",
     showInvalid && "bx--multi-select--invalid",
     inline && "bx--multi-select--inline",
     readonly && "bx--multi-select--readonly",

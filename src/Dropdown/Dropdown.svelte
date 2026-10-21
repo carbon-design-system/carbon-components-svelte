@@ -722,6 +722,7 @@
     showInvalid && "bx--dropdown--invalid",
     showWarn && "bx--dropdown--warning",
     clearable && selectedId !== undefined && "bx--dropdown--clearable",
+    clearable && selectedId !== undefined && "bx--list-box--clearable",
     open && "bx--dropdown--open",
     effectiveSize === "xs" && "bx--dropdown--xs",
     effectiveSize === "sm" && "bx--dropdown--sm",

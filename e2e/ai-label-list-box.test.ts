@@ -28,13 +28,14 @@ test.describe("AILabel in list boxes", () => {
       const clear = await left(wrapper.locator(".bx--list-box__selection"));
       const decorator = await left(wrapper.locator(".bx--field-decorator"));
 
-      expect(clear.x + clear.width).toBeLessThanOrEqual(decorator.x);
+      // As in v11: status icon, label | clear | chevron.
+      expect(decorator.x + decorator.width).toBeLessThanOrEqual(clear.x);
 
-      const icons = [clear];
+      const icons = [decorator, clear];
       const status = wrapper.locator(".bx--list-box__invalid-icon");
       if (await status.count()) {
         const icon = await left(status);
-        expect(icon.x + icon.width).toBeLessThanOrEqual(clear.x);
+        expect(icon.x + icon.width).toBeLessThanOrEqual(decorator.x);
         icons.push(icon);
       }
 
@@ -44,6 +45,31 @@ test.describe("AILabel in list boxes", () => {
       );
       const textEnd = field.x + field.width - paddingRight;
       expect(textEnd).toBeLessThanOrEqual(Math.min(...icons.map((i) => i.x)));
+    });
+  }
+
+  for (const testId of [
+    "dropdown",
+    "dropdown-invalid",
+    "dropdown-warning",
+    "combobox-invalid",
+  ]) {
+    test(`${testId}: the label stays clickable above the field`, async ({
+      page,
+    }) => {
+      const button = page
+        .getByTestId(testId)
+        .locator(".bx--ai-label .bx--toggletip-button");
+      // The field spans the list box and comes later in the markup.
+      const onTop = await button.evaluate((node) => {
+        const box = node.getBoundingClientRect();
+        const hit = document.elementFromPoint(
+          box.left + box.width / 2,
+          box.top + box.height / 2,
+        );
+        return node.contains(hit);
+      });
+      expect(onTop).toBe(true);
     });
   }
 });

@@ -876,6 +876,8 @@
     "bx--combo-box",
     $$slots.decorator && !isFluid && "bx--list-box--decorator",
     $aiLabelState === "active" && "bx--list-box--ai-label",
+    // A clear button shows by the chevron.
+    value && "bx--list-box--clearable",
     direction === "top" && "bx--list-box--up",
     showWarn && "bx--combo-box--warning",
     readonly && "bx--combo-box--readonly",
