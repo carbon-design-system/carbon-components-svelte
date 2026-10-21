@@ -133,7 +133,9 @@ $ai-label-sizes: (
   // Explanation callout: a light surface with the AI aura and a gradient
   // border, replacing the toggletip's high-contrast surface.
   .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents {
-    border: 1px solid transparent;
+    // The 1px gradient edge is padding, not a border, so the caret's edge is
+    // the callout's outer edge.
+    padding: 1px;
     background:
       linear-gradient(
           to top,
@@ -141,18 +143,18 @@ $ai-label-sizes: (
           15%,
           ai-token("ai-aura-end") 50%
         )
-        padding-box,
+        content-box,
       linear-gradient(
           ai-token("ai-popover-background"),
           ai-token("ai-popover-background")
         )
-        padding-box,
+        content-box,
       linear-gradient(
           to bottom,
           ai-token("ai-border-start"),
           ai-token("ai-border-end")
         )
-        border-box;
+        padding-box;
     // The caret boxes inherit this color.
     background-color: ai-token("ai-popover-background");
     border-radius: to-rem(8px);
@@ -169,11 +171,31 @@ $ai-label-sizes: (
     padding: $carbon--spacing-06;
   }
 
-  // Give each caret the border color of the callout edge it sits on: light
-  // at the top, strongest at the bottom.
+  // v11's callout caret: a 12px square centered on the callout's outer edge,
+  // about 17px wide and 8.5px tall. The toggletip's 8px caret read short. The
+  // offset grows with it so the tip clears the label by the same 4px.
+  // v11 puts the caret 20px in from the callout's corner, centered on the
+  // label; the toggletip turns these into that placement.
+  .#{$prefix}--popover.#{$prefix}--toggletip-popover.#{$prefix}--ai-label-popover {
+    --cds-popover-offset: #{to-rem(12px)};
+    --cds-popover-caret-offset: #{to-rem(14px)};
+    // The 14px offset plus half the 12px caret
+    --ccs-toggletip-caret: #{to-rem(20px)};
+  }
+
   .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents::after {
     box-sizing: border-box;
+    width: to-rem(12px);
+    height: to-rem(12px);
   }
+
+  // The toggletip's caret shadow is dark; the callout casts its own.
+  .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents::before {
+    display: none;
+  }
+
+  // Give each caret the border color of the callout edge it sits on: light
+  // at the top, strongest at the bottom.
 
   .#{$prefix}--ai-label-popover.#{$prefix}--popover--bottom
     .#{$prefix}--popover-contents::after,
@@ -239,11 +261,14 @@ $ai-label-sizes: (
     @include focus-outline("outline");
   }
 
-  // Action bar flush with the callout's bottom edge
+  // Action bar flush with the callout's bottom edge. As in v11, it blurs the
+  // aura behind it into a tinted bar.
   .#{$prefix}--ai-label-actions {
     display: flex;
     justify-content: flex-end;
     margin: 0 to-rem(-24px) to-rem(-24px);
+    backdrop-filter: blur(85px);
+    background: rgba(0, 0, 0, 0.01);
     border-radius: 0 0 to-rem(7px) to-rem(7px);
   }
 
@@ -334,10 +359,12 @@ $ai-label-sizes: (
     }
   }
 
-  // The callout's surface is a gradient, which forced colors drop.
+  // The callout's surface and edge are gradients, which forced colors drop.
   @include high-contrast-mode {
     .#{$prefix}--ai-label-popover .#{$prefix}--popover-contents {
       background-color: Canvas;
+      outline: 1px solid;
+      outline-offset: -1px;
     }
   }
 }
