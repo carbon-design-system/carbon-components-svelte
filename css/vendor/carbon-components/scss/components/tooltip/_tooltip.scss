@@ -39,6 +39,10 @@
     @include button-reset($width: false, $omit: (display));
 
     display: inline-flex;
+    // ccs: a flex or grid parent that stretches its items (a vertical
+    // Stack does by default) would widen the trigger, which centers the
+    // tooltip on the stretched box instead of the icon.
+    width: fit-content;
     align-items: center;
     font-size: 1rem;
 
@@ -246,6 +250,9 @@
     // Wrapping element set to inline since the tooltip isn't contained within the trigger (affects center and end alignments)
     // Also allows for Definition Tooltip to be used within a paragraph of text as defined in the usage guidelines
     display: inline-flex;
+    // ccs: keeps a stretching flex or grid parent from widening the
+    // wrapper, which would center the tooltip on it instead of the term.
+    width: fit-content;
   }
 
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
