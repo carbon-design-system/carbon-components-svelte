@@ -52,7 +52,8 @@ describe("UserAvatar", () => {
     assert(img);
     expect(img).toHaveAttribute("src", "https://example.com/photo.jpg");
     expect(img).toHaveAttribute("alt", "A user photo");
-    expect(avatar).not.toHaveTextContent("SS");
+    expect(avatar).not.toHaveTextContent("SN");
+    expect(avatar.querySelector(".bx--user-avatar__text")).toBeNull();
   });
 
   it("falls back to the name for the image alt text", () => {

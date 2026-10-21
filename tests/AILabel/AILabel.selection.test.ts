@@ -78,10 +78,12 @@ describe("AILabel in selection controls, tags, and tiles", () => {
     render(AILabelSelection);
 
     const host = screen.getByTestId("selectable-tile");
-    await user.click(
-      within(host).getByRole("button", { name: "AI Show information" }),
-    );
+    const trigger = within(host).getByRole("button", {
+      name: "AI Show information",
+    });
+    await user.click(trigger);
 
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByTestId("selected")).toHaveTextContent("false");
     expect(within(host).getByRole("checkbox")).toHaveAccessibleName("Plan");
   });

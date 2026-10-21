@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import PageHeaderBodyTabs from "./PageHeaderBodyTabs.test.svelte";
 import PageHeaderTabs from "./PageHeaderTabs.test.svelte";
 
 describe("PageHeader tabs with body panels", () => {
@@ -68,16 +69,26 @@ describe("PageHeader tabs with body panels", () => {
     expect(screen.getByTestId("backups")).not.toHaveAttribute("hidden");
   });
 
-  it("keeps tabs nested in a panel independent of the header tabs", async () => {
-    render(PageHeaderTabs);
+  it("keeps tabs in the body independent when the header has no tabs", async () => {
+    render(PageHeaderBodyTabs);
     await tick();
 
-    await user.click(screen.getByRole("tab", { name: "Weekly" }));
+    const header = screen.getByTestId("header");
+    expect(header).not.toHaveClass("bx--page-header--container-tabs");
+    expect(header).toHaveClass("bx--page-header--divider");
 
-    expect(screen.getByText("Weekly panel")).not.toHaveAttribute("hidden");
-    expect(screen.getByText("Daily panel")).toHaveAttribute("hidden");
-    expect(screen.getByTestId("overview")).not.toHaveAttribute("hidden");
-    expect(screen.getByTestId("backups")).toHaveAttribute("hidden");
+    const weekly = screen.getByRole("tab", { name: "Weekly" });
+    expect(screen.getByTestId("daily")).not.toHaveAttribute("hidden");
+    expect(screen.getByTestId("weekly")).toHaveAttribute("hidden");
+
+    await user.click(weekly);
+
+    expect(screen.getByTestId("weekly")).not.toHaveAttribute("hidden");
+    expect(screen.getByTestId("daily")).toHaveAttribute("hidden");
+    expect(weekly).toHaveAttribute(
+      "aria-controls",
+      screen.getByTestId("weekly").id,
+    );
   });
 
   it.each([

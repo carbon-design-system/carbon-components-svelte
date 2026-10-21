@@ -146,6 +146,19 @@ describe("ScrollGradient", () => {
 
   it("shows no gradients when content does not overflow", async () => {
     const { container } = render(ScrollGradient);
+    const scrollElement = container.querySelector(
+      ".bx--scroll-gradient__scroll-element",
+    );
+    assert(scrollElement instanceof HTMLElement);
+
+    await markScrollable(scrollElement, {});
+    const observer = getObserverFor(scrollElement);
+
+    // The sentinels leave view in every direction, but there is nothing to
+    // scroll, so no gradient may appear.
+    for (const sentinel of getSentinels(container)) {
+      observer.trigger(sentinel, false);
+    }
     await tick();
 
     expect(
@@ -223,19 +236,10 @@ describe("ScrollGradient", () => {
     ).not.toBeNull();
   });
 
-  it("applies the color prop to the gradient overlays", async () => {
+  it("applies the color prop to the wrapper", () => {
     const { container } = render(ScrollGradient, {
       props: { color: "red" },
     });
-    const scrollElement = container.querySelector(
-      ".bx--scroll-gradient__scroll-element",
-    );
-    assert(scrollElement instanceof HTMLElement);
-
-    await markScrollable(scrollElement, { y: true });
-    const [top] = getSentinels(container);
-    getObserverFor(scrollElement).trigger(top, false);
-    await tick();
 
     const wrapper = container.querySelector(".bx--scroll-gradient");
     assert(wrapper instanceof HTMLElement);
