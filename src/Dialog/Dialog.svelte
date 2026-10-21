@@ -28,12 +28,16 @@
 
   import { createEventDispatcher } from "svelte";
   import { restoreFocus } from "../utils/focus.js";
+  import { createOutsideDismiss } from "../utils/outside-dismiss.js";
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();
 
   /** @type {DialogCloseTrigger | null} */
   let pendingTrigger = null;
+
+  /** @type {HTMLDialogElement} */
+  let dialog;
 
   /**
    * Initial `open` state rendered as the `open` attribute so a non-modal
@@ -55,6 +59,7 @@
    * drops the attribute and calls `show()` to run the usual open path.
    */
   function dialogAction(node, options) {
+    dialog = node;
     let hasInitialAttribute = node.hasAttribute("open");
 
     sync(options);
@@ -90,19 +95,34 @@
     pendingTrigger = "escape-key";
   }
 
+  const outsideDismiss = createOutsideDismiss(() => {
+    pendingTrigger = "backdrop";
+    dialog.close();
+  });
+
   /**
-   * Light-dismiss on backdrop: clicks on `::backdrop` are retargeted to the
-   * `<dialog>` element, so `event.target === event.currentTarget` means the
-   * click was outside the dialog's content children.
+   * Clicks on `::backdrop` are retargeted to the `<dialog>` element, but so
+   * are clicks on its own padding, so the pointer must also be outside the
+   * dialog's box.
    * @param {MouseEvent} event
    */
-  function handleClick(event) {
+  function isOnBackdrop(event) {
+    if (event.target !== dialog) return false;
+    const { left, right, top, bottom } = dialog.getBoundingClientRect();
+    const { clientX: x, clientY: y } = event;
+    return !(x >= left && x < right && y >= top && y < bottom);
+  }
+
+  /** @param {MouseEvent} event */
+  function handleMouseDown(event) {
+    if (isOnBackdrop(event)) outsideDismiss.pressOutside();
+    else outsideDismiss.pressInside();
+  }
+
+  /** @param {MouseEvent} event */
+  function handleMouseUp(event) {
     if (!modal || preventCloseOnClickOutside) return;
-    if (event.target !== event.currentTarget) return;
-    /** @type {HTMLDialogElement} */
-    const node = event.currentTarget;
-    pendingTrigger = "backdrop";
-    node.close();
+    if (isOnBackdrop(event)) outsideDismiss.release();
   }
 
   /** @param {Event & { currentTarget: HTMLDialogElement }} event */
@@ -123,7 +143,8 @@
   {...$$restProps}
   on:cancel={handleCancel}
   on:close={handleClose}
-  on:click={handleClick}
+  on:mousedown={handleMouseDown}
+  on:mouseup={handleMouseUp}
   on:click
 >
   <slot />

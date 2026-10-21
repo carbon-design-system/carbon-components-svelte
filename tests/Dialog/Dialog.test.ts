@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Dialog from "./Dialog.test.svelte";
 
@@ -118,6 +119,38 @@ describe("Dialog", () => {
     expect(onclose.mock.calls[0][0].detail).toEqual({
       trigger: "backdrop",
     });
+  });
+
+  it.each([
+    [
+      "a press that started inside the content and is released on the backdrop",
+      async (dialogEl: HTMLElement) => {
+        await user.pointer([
+          { keys: "[MouseLeft>]", target: screen.getByText("Dialog content") },
+          { keys: "[/MouseLeft]", target: dialogEl },
+        ]);
+      },
+    ],
+    [
+      "a click on the dialog's own padding",
+      async (dialogEl: HTMLElement) => {
+        dialogEl.getBoundingClientRect = () =>
+          rect({ top: 100, left: 100, width: 400, height: 300 });
+        const point = { clientX: 105, clientY: 105 };
+        await fireEvent.mouseDown(dialogEl, point);
+        await fireEvent.mouseUp(dialogEl, point);
+        await fireEvent.click(dialogEl, point);
+      },
+    ],
+  ])("does not close on %s", async (_, act) => {
+    const onclose = vi.fn();
+    render(Dialog, { props: { open: true, modal: true, onclose } });
+
+    const dialogEl = screen.getByRole("dialog");
+    await act(dialogEl);
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(dialogEl).toHaveAttribute("open");
   });
 
   it("does not close on backdrop click when preventCloseOnClickOutside is set", async () => {
