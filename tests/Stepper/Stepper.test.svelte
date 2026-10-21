@@ -16,6 +16,7 @@
   export let changes: number[] = [];
   export let submits = 0;
   export let errors: unknown[] = [];
+  export let validateErrors: { error: unknown; index: number }[] = [];
 </script>
 
 <Stepper
@@ -32,6 +33,8 @@
   on:change={(event) => (changes = [...changes, event.detail])}
   on:submit={() => (submits += 1)}
   on:submit:error={(event) => (errors = [...errors, event.detail.error])}
+  on:validate:error={(event) =>
+    (validateErrors = [...validateErrors, event.detail])}
   let:currentIndex={current}
   let:submitted={done}
 >
