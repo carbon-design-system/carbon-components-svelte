@@ -168,6 +168,20 @@ describe("FormItem control association", () => {
     );
   });
 
+  it("follows a reactive aria-describedby on the control", async () => {
+    const { component } = render(FormItemControlTest, {
+      props: { helper: true },
+    });
+    const input = screen.getByTestId("control");
+    expect(input).toHaveAttribute("aria-describedby", "own helper-email");
+
+    component.hint = "other";
+    await tick();
+    await tick();
+
+    expect(input).toHaveAttribute("aria-describedby", "other helper-email");
+  });
+
   it("follows controlId changes", async () => {
     const { component } = render(FormItemControlTest);
 
