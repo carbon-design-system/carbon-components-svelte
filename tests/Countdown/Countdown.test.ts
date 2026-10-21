@@ -103,6 +103,45 @@ describe("Countdown", () => {
     expect(container.querySelector("[aria-live]")).toHaveTextContent(announced);
   });
 
+  it("resumes from the paused value and pauses again", async () => {
+    const { component, rerender } = render(Countdown);
+    await advance(10_000);
+    await rerender({ running: false });
+    await advance(5000);
+    expect(timer()).toHaveTextContent("1:20");
+
+    await rerender({ running: true });
+    await advance(2000);
+
+    expect(timer()).toHaveTextContent("1:18");
+    expect(component.running).toBe(true);
+
+    await rerender({ running: false });
+    await advance(5000);
+
+    expect(timer()).toHaveTextContent("1:18");
+  });
+
+  it("announces the warning again after time is added above warnAt", async () => {
+    const { container, rerender } = render(Countdown, { seconds: 62 });
+    const live = container.querySelector("[aria-live]");
+    await advance(2000);
+    expect(live).toHaveTextContent("One minute left");
+
+    await rerender({ remaining: 300 });
+
+    expect(live).toHaveTextContent("");
+  });
+
+  it("clears its interval on unmount", () => {
+    const { unmount } = render(Countdown);
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it("rewrites the time when format changes", async () => {
     const { rerender } = render(Countdown, { seconds: 300 });
 

@@ -50,3 +50,7 @@
     iconDescription="Operation completed successfully"
   />
 </div>
+
+<div data-testid="loader-active-icon">
+  <InlineLoading status="active" iconDescription="Saving data" />
+</div>

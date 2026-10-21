@@ -223,6 +223,63 @@ describe("Meter", () => {
     expect(getAnnouncement()).toBe("");
   });
 
+  it("derives the status from value crossing thresholds, inclusive at each threshold", async () => {
+    const thresholds = { warning: 50, error: 90 };
+    const { rerender } = render(MeterStatus, {
+      props: { value: 10, thresholds },
+    });
+
+    const root = screen.getByTestId("status");
+    const meter = within(root).getByRole("meter");
+    expect(root).not.toHaveClass("bx--meter--warning", "bx--meter--error");
+    expect(getAnnouncement()).toBe("");
+
+    await rerender({ value: 50, thresholds });
+    expect(root).toHaveClass("bx--meter--warning");
+    expect(meter).toHaveAttribute("aria-valuetext", "50 of 100, Warning");
+    expect(getAnnouncement()).toBe("Warning");
+
+    await rerender({ value: 90, thresholds });
+    expect(root).toHaveClass("bx--meter--error");
+    expect(meter).toHaveAttribute("aria-valuetext", "90 of 100, Error");
+    expect(getAnnouncement()).toBe("Error");
+  });
+
+  it("uses a custom warningText in aria-valuetext and the announcement", async () => {
+    const thresholds = { warning: 50, error: 90 };
+    const { rerender } = render(MeterStatus, {
+      props: { value: 10, thresholds, warningText: "Careful" },
+    });
+
+    await rerender({ value: 60, thresholds, warningText: "Careful" });
+    expect(
+      within(screen.getByTestId("status")).getByRole("meter"),
+    ).toHaveAttribute("aria-valuetext", "60 of 100, Careful");
+    expect(getAnnouncement()).toBe("Careful");
+  });
+
+  it("clamps threshold markers to the track when a threshold is outside 0 to max", () => {
+    render(Meter);
+
+    const markers = screen
+      .getByTestId("out-of-range-thresholds")
+      .querySelectorAll(".bx--meter__threshold");
+    expect(markers[0]).toHaveStyle({ left: "100%" });
+    expect(markers[1]).toHaveStyle({ left: "0%" });
+  });
+
+  it("keeps the label row visible for valueChildren when hideLabel is set", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("value-children");
+    expect(el.querySelector(".bx--meter__label")).not.toHaveClass(
+      "bx--visually-hidden",
+    );
+    expect(el.querySelector(".bx--meter__value-text strong")).toHaveTextContent(
+      "50 of 100",
+    );
+  });
+
   it("stays quiet when a meter mounts already in error", () => {
     render(MeterStatus, { props: { value: 10, status: "error" } });
 

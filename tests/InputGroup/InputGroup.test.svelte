@@ -30,7 +30,10 @@
     {disabled}
     let:describedBy
     let:invalid={fieldInvalid}
+    let:warn={slotWarn}
+    let:size={slotSize}
   >
+    <span data-testid="bound">{slotWarn} {slotSize}</span>
     <TextInput
       hideLabel
       labelText="Code"

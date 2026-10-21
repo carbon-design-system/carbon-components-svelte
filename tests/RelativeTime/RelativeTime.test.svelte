@@ -53,3 +53,34 @@
 
 <RelativeTime date={fiveMinutesAgo} {now} locale="sv" data-testid="cache-1" />
 <RelativeTime date={fiveMinutesAgo} {now} locale="sv" data-testid="cache-2" />
+
+<RelativeTime
+  date={new Date(fiveMinutesAgo)}
+  {now}
+  locale="en"
+  data-testid="date-object"
+/>
+
+<RelativeTime
+  date={new Date(fiveMinutesAgo).toISOString()}
+  {now}
+  locale="en"
+  data-testid="iso-string"
+/>
+
+<RelativeTime
+  date={fiveMinutesAgo}
+  {now}
+  locale="en"
+  titleFormatOptions={{ dateStyle: "short", timeZone: "UTC" }}
+  data-testid="title-options"
+/>
+
+<RelativeTime
+  date={fiveMinutesAgo}
+  {now}
+  locale="en"
+  titleFormatOptions={{ timeStyle: "short", timeZone: "UTC" }}
+  timeZone="Asia/Tokyo"
+  data-testid="title-zone-override"
+/>

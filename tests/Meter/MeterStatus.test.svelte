@@ -5,6 +5,9 @@
   export let status: "default" | "success" | "warning" | "error" | undefined =
     undefined;
   export let errorText: string | undefined = undefined;
+  export let warningText: string | undefined = undefined;
+  export let thresholds: { warning?: number; error?: number } | undefined =
+    undefined;
 </script>
 
 <Meter
@@ -13,5 +16,8 @@
   max={100}
   {status}
   {errorText}
+  {warningText}
+  {thresholds}
+  locale="en-US"
   data-testid="status"
 />

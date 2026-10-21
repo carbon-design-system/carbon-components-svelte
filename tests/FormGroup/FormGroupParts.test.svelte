@@ -10,10 +10,11 @@
   export let error = "";
   export let message = false;
   export let disabled = false;
+  export let id = "contact";
 </script>
 
 <FormGroup
-  id="contact"
+  {id}
   legendText="Contact"
   {message}
   {disabled}

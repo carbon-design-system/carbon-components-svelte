@@ -151,19 +151,151 @@ describe("FormItem control association", () => {
   });
 
   it("follows controlId changes", async () => {
-    const { component } = render(FormItemControlTest);
+    const { component } = render(FormItemControlTest, {
+      props: { custom: true, helper: true, error: true },
+    });
 
     component.controlId = "work-email";
     await tick();
 
-    expect(screen.getByTestId("control")).toHaveAttribute("id", "work-email");
+    const control = screen.getByTestId("control");
+    expect(control).toHaveAttribute("id", "work-email");
+    expect(control).toHaveAttribute("aria-labelledby", "label-work-email");
+    expect(control).toHaveAttribute(
+      "aria-describedby",
+      "error-work-email helper-work-email",
+    );
     expect(screen.getByText("Email")).toHaveAttribute("for", "work-email");
+    expect(screen.getByText("Email")).toHaveAttribute("id", "label-work-email");
+    expect(screen.getByText("Helper")).toHaveAttribute(
+      "id",
+      "helper-work-email",
+    );
+    expect(screen.getByText("Error")).toHaveAttribute("id", "error-work-email");
   });
+
+  it("switches a message between invalid and warn at runtime", async () => {
+    const { component } = render(FormItemControlTest, {
+      props: { helper: true, error: true },
+    });
+    const input = screen.getByTestId("control");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+
+    component.errorKind = "warn";
+    await tick();
+
+    const message = screen.getByText("Error");
+    expect(message).toHaveAttribute("id", "warn-email");
+    expect(message).not.toHaveAttribute("role");
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      "own warn-email helper-email",
+    );
+
+    component.errorKind = "invalid";
+    await tick();
+
+    expect(message).toHaveAttribute("id", "error-email");
+    expect(message).toHaveAttribute("role", "alert");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      "own error-email helper-email",
+    );
+  });
+
+  it.each([
+    ["helperId", { helper: true }, "Helper", "own custom-id"],
+    ["errorId", { error: true }, "Error", "own custom-id"],
+  ] as const)(
+    "uses an explicit %s as the element and described-by id",
+    (prop, parts, text, describedBy) => {
+      render(FormItemControlTest, { props: { ...parts, [prop]: "custom-id" } });
+
+      expect(screen.getByText(text)).toHaveAttribute("id", "custom-id");
+      expect(screen.getByTestId("control")).toHaveAttribute(
+        "aria-describedby",
+        describedBy,
+      );
+    },
+  );
 
   it("styles the label as disabled", () => {
     render(FormItemControlTest, { props: { disabled: true } });
 
     expect(screen.getByText("Email")).toHaveClass("bx--label--disabled");
+  });
+
+  it("lets a part's own disabled override the item's", () => {
+    render(FormItemControlTest, {
+      props: {
+        disabled: true,
+        helper: true,
+        labelDisabled: false,
+        helperDisabled: false,
+      },
+    });
+
+    expect(screen.getByText("Email")).not.toHaveClass("bx--label--disabled");
+    expect(screen.getByText("Helper")).not.toHaveClass(
+      "bx--form__helper-text--disabled",
+    );
+  });
+
+  it("restyles parts when the item's disabled changes", async () => {
+    const { component } = render(FormItemControlTest, {
+      props: { helper: true },
+    });
+    const label = screen.getByText("Email");
+    const helper = screen.getByText("Helper");
+    expect(label).not.toHaveClass("bx--label--disabled");
+
+    component.disabled = true;
+    await tick();
+
+    expect(label).toHaveClass("bx--label--disabled");
+    expect(helper).toHaveClass("bx--form__helper-text--disabled");
+
+    component.disabled = false;
+    await tick();
+
+    expect(label).not.toHaveClass("bx--label--disabled");
+    expect(helper).not.toHaveClass("bx--form__helper-text--disabled");
+  });
+
+  it("doesn't label a non-labelable control from a label for another control", () => {
+    render(FormItemControlTest, {
+      props: { custom: true, labelFor: "other" },
+    });
+
+    expect(screen.getByText("Email")).not.toHaveAttribute("id");
+    expect(screen.getByTestId("control")).not.toHaveAttribute(
+      "aria-labelledby",
+    );
+  });
+
+  it("leaves a non-labelable control's own aria-label alone", () => {
+    render(FormItemControlTest, {
+      props: { custom: true, ariaLabel: "Mail" },
+    });
+
+    expect(screen.getByTestId("control")).not.toHaveAttribute(
+      "aria-labelledby",
+    );
+  });
+
+  it("clears aria-labelledby when the label unmounts", async () => {
+    const { component } = render(FormItemControlTest, {
+      props: { custom: true },
+    });
+    const control = screen.getByTestId("control");
+    expect(control).toHaveAttribute("aria-labelledby", "label-email");
+
+    component.showLabel = false;
+    await tick();
+
+    expect(control).not.toHaveAttribute("aria-labelledby");
   });
 });
 

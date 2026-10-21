@@ -254,6 +254,52 @@ describe("ProgressBar", () => {
     expect(progressBar).not.toHaveAttribute("aria-valuetext");
   });
 
+  it("switches between determinate and indeterminate when value changes after mount", async () => {
+    const { container, rerender } = render(ProgressBarStatus, {
+      props: { status: "active", value: 40 },
+    });
+
+    const root = container.querySelector(".bx--progress-bar");
+    const progressBar = within(container).getByRole("progressbar");
+    expect(root).not.toHaveClass("bx--progress-bar--indeterminate");
+    expect(progressBar).toHaveAttribute("aria-valuenow", "40");
+
+    await rerender({ status: "active", value: undefined });
+    expect(root).toHaveClass("bx--progress-bar--indeterminate");
+    expect(progressBar).not.toHaveAttribute("aria-valuenow");
+
+    await rerender({ status: "active", value: 40 });
+    expect(root).not.toHaveClass("bx--progress-bar--indeterminate");
+    expect(progressBar).toHaveAttribute("aria-valuenow", "40");
+  });
+
+  it("sets aria-busy only while the status is active", async () => {
+    const { container, rerender } = render(ProgressBarStatus, {
+      props: { status: "active", value: 40 },
+    });
+
+    const progressBar = within(container).getByRole("progressbar");
+    expect(progressBar).toHaveAttribute("aria-busy", "true");
+
+    await rerender({ status: "error", value: 40 });
+    expect(progressBar).toHaveAttribute("aria-busy", "false");
+
+    await rerender({ status: "finished", value: 40 });
+    expect(progressBar).toHaveAttribute("aria-busy", "false");
+  });
+
+  it.each([["error-progress"], ["finished-partial"]])(
+    "leaves the bar without an inline transform for %s",
+    (testId) => {
+      render(ProgressBar);
+
+      const bar = screen
+        .getByTestId(testId)
+        .querySelector<HTMLElement>(".bx--progress-bar__bar");
+      expect(bar?.style.transform).toBe("");
+    },
+  );
+
   it("announces a status change but not value ticks or the first render", async () => {
     const { container, rerender } = render(ProgressBarStatus, {
       props: { status: "active", value: 40 },

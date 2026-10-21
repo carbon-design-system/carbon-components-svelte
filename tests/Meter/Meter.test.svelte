@@ -201,3 +201,22 @@
   valueRangeText={shortRangeText}
   data-testid="custom-value-range-text"
 />
+
+<Meter
+  labelText="Storage"
+  value={50}
+  max={100}
+  thresholds={{ warning: 150, error: -10 }}
+  showThresholds
+  data-testid="out-of-range-thresholds"
+/>
+
+<Meter
+  labelText="Storage"
+  value={50}
+  max={100}
+  hideLabel
+  data-testid="value-children"
+>
+  <strong slot="valueChildren">50 of 100</strong>
+</Meter>

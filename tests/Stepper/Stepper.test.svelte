@@ -13,6 +13,7 @@
   export let nextDisabled = false;
   export let submitting = false;
   export let addressInvalid = false;
+  export let wrapperInvalid = false;
   export let changes: number[] = [];
   export let submits = 0;
   export let errors: unknown[] = [];
@@ -44,6 +45,9 @@
     <p>Step {current + 1} content</p>
     {#if current === 1}
       <TextInput labelText="Address" invalid={addressInvalid} />
+      <div aria-invalid={wrapperInvalid ? "true" : undefined}>
+        <input aria-label="Wrapped">
+      </div>
     {/if}
   {/if}
 </Stepper>
