@@ -110,14 +110,6 @@ describe("StarRating", () => {
     ).toHaveAccessibleDescription("Add a comment");
   });
 
-  it("associates the stars with the form it names", () => {
-    render(StarRating, { form: "review" });
-
-    for (const radio of screen.getAllByRole("radio")) {
-      expect(radio).toHaveAttribute("form", "review");
-    }
-  });
-
   it("describes the group with helper text", () => {
     render(StarRating, { helperText: "Rate your stay" });
 
@@ -193,6 +185,20 @@ describe("StarRating", () => {
     await flushFormReset();
 
     expect(component.value).toBe(0);
+    expect(new FormData(getForm()).get("rating")).toBeNull();
+  });
+
+  it("follows the reset of a form it names with `form`", async () => {
+    const { component, container } = render(StarRatingForm, { outside: true });
+
+    await user.click(screen.getByRole("radio", { name: "4 out of 5 stars" }));
+    expect(new FormData(getForm()).get("rating")).toBe("4");
+
+    getForm().reset();
+    await flushFormReset();
+
+    expect(component.value).toBe(0);
+    expect(filled(container)).toBe(0);
     expect(new FormData(getForm()).get("rating")).toBeNull();
   });
 });
