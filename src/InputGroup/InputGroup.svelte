@@ -55,6 +55,7 @@
   import {
     buildFieldIds,
     resolveStatusDescribedBy,
+    resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -79,8 +80,12 @@
 
   $: labelId = `label-${id}`;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
-  $: showInvalid = invalid;
-  $: showWarn = !invalid && warn;
+  // As on a field, a disabled group shows neither state.
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+  }));
   $: describedBy = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
