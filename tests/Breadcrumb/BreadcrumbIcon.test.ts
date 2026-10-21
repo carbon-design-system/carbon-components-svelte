@@ -18,6 +18,22 @@ describe("BreadcrumbItem icon", () => {
     },
   );
 
+  it.each([
+    ["prop", "No href icon prop"],
+    ["slot", "No href icon slot"],
+  ])(
+    "renders an icon from the icon %s on an item without an href",
+    (_, text) => {
+      render(BreadcrumbIcon);
+
+      const item = screen.getByText(text).closest(".bx--breadcrumb-item");
+      expect(item?.querySelector("a")).toBeNull();
+      expect(
+        item?.querySelector(".bx--breadcrumb-item__icon svg"),
+      ).toBeInTheDocument();
+    },
+  );
+
   it("does not render an icon container when no icon is provided", () => {
     render(BreadcrumbIcon);
 

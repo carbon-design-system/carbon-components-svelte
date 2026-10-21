@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
@@ -130,6 +130,85 @@ describe("StarRating", () => {
     expect(group).toHaveAccessibleDescription("Choose a rating");
     expect(screen.getByRole("alert")).toHaveTextContent("Choose a rating");
     expect(screen.queryByText("Rate your stay")).not.toBeInTheDocument();
+  });
+
+  it("hides the helper text while a warning shows", () => {
+    render(StarRating, {
+      helperText: "Rate your stay",
+      warn: true,
+      warnText: "Add a comment",
+    });
+
+    expect(screen.queryByText("Rate your stay")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("radiogroup", { name: "Overall rating" }),
+    ).toHaveAccessibleDescription("Add a comment");
+  });
+
+  it("suppresses the invalid state while disabled", () => {
+    render(StarRating, {
+      disabled: true,
+      invalid: true,
+      invalidText: "Choose a rating",
+    });
+
+    const group = screen.getByRole("radiogroup", { name: "Overall rating" });
+    expect(group).not.toHaveAttribute("aria-invalid");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("gives each rating its own radio group", async () => {
+    const first = render(StarRating);
+    const second = render(StarRating);
+    const radio = (view: typeof first, n: number) =>
+      within(view.container).getByRole("radio", {
+        name: `${n} out of 5 stars`,
+      });
+
+    await user.click(radio(first, 2));
+    await user.click(radio(second, 3));
+
+    expect(radio(first, 2)).toBeChecked();
+    expect(radio(second, 3)).toBeChecked();
+  });
+
+  it("requires a rating", () => {
+    render(StarRating, { required: true });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toBeRequired();
+    }
+  });
+
+  it("hides the legend visually and keeps it as the name", () => {
+    render(StarRating, { hideLegend: true });
+
+    expect(screen.getByText("Overall rating")).toHaveClass(
+      "bx--visually-hidden",
+    );
+    expect(
+      screen.getByRole("radiogroup", { name: "Overall rating" }),
+    ).toBeInTheDocument();
+  });
+
+  it("describes a read-only rating with its helper text", () => {
+    render(StarRating, {
+      readonly: true,
+      value: 4,
+      helperText: "Based on 12 reviews",
+    });
+
+    expect(screen.getByRole("img")).toHaveAccessibleDescription(
+      "Based on 12 reviews",
+    );
+  });
+
+  it("does not preview a hovered star while disabled", async () => {
+    const { container } = render(StarRating, { value: 2, disabled: true });
+
+    await hover(5);
+
+    expect(filled(container)).toBe(2);
   });
 
   it("disables every star", () => {

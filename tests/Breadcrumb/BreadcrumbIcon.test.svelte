@@ -10,6 +10,11 @@
     <Home slot="icon" />
     Icon slot
   </BreadcrumbItem>
+  <BreadcrumbItem icon={Home}>No href icon prop</BreadcrumbItem>
+  <BreadcrumbItem>
+    <Home slot="icon" />
+    No href icon slot
+  </BreadcrumbItem>
   <BreadcrumbItem href="/settings/profile" isCurrentPage>
     No icon
   </BreadcrumbItem>

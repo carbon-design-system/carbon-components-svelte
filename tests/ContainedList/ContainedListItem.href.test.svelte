@@ -20,6 +20,9 @@
   <ContainedListItem href="/docs" disabled on:click={() => onclick?.()}>
     Disabled
   </ContainedListItem>
+  <ContainedListItem href="https://example.com" target="_blank">
+    External
+  </ContainedListItem>
   <ContainedListItem interactive on:click={() => onclick?.()}>
     Interactive
   </ContainedListItem>

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import {
@@ -135,6 +135,36 @@ describe("ScrollGradient", () => {
     ).toHaveLength(0);
   });
 
+  it.each([
+    [{}, [], ["v", "h"]],
+    [{ y: true }, ["v"], ["h"]],
+    [{ x: true }, ["h"], ["v"]],
+  ] as const)(
+    "with overflow %j, the content has classes %j and lacks %j",
+    async (overflow, present, absent) => {
+      const { container } = render(ScrollGradient);
+      const scrollElement = container.querySelector<HTMLElement>(
+        ".bx--scroll-gradient__scroll-element",
+      );
+      const content = container.querySelector(".bx--scroll-gradient__content");
+      assert(scrollElement);
+      assert(content);
+
+      await markScrollable(scrollElement, overflow);
+
+      for (const axis of present) {
+        expect(content).toHaveClass(
+          `bx--scroll-gradient__content--${axis}-scrollable`,
+        );
+      }
+      for (const axis of absent) {
+        expect(content).not.toHaveClass(
+          `bx--scroll-gradient__content--${axis}-scrollable`,
+        );
+      }
+    },
+  );
+
   it("shows the top and bottom gradients once scrolled past the start", async () => {
     const { container } = render(ScrollGradient);
     const scrollElement = container.querySelector(
@@ -238,6 +268,41 @@ describe("ScrollGradient", () => {
       expect(read(element)).toBe(expected);
     },
   );
+
+  it("adds scrollElementClassName to the scroll element", () => {
+    const { container } = render(ScrollGradient, {
+      props: { scrollElementClassName: "inner" },
+    });
+
+    expect(
+      container.querySelector(".bx--scroll-gradient__scroll-element"),
+    ).toHaveClass("inner");
+  });
+
+  it("applies a consumer style after the generated declarations", () => {
+    const { container } = render(ScrollGradient, {
+      props: { height: "100vh", style: "height: 50px; margin: 4px;" },
+    });
+
+    const wrapper = container.querySelector<HTMLElement>(
+      ".bx--scroll-gradient",
+    );
+    assert(wrapper);
+    expectInlineStyle(wrapper, { height: "50px", margin: "4px" });
+  });
+
+  it("forwards scroll events from the scroll element", async () => {
+    const onScroll = vi.fn();
+    const { container } = render(ScrollGradient, { props: { onScroll } });
+
+    const scrollElement = container.querySelector(
+      ".bx--scroll-gradient__scroll-element",
+    );
+    assert(scrollElement);
+    await fireEvent.scroll(scrollElement);
+
+    expect(onScroll).toHaveBeenCalledTimes(1);
+  });
 
   it("maps fill token names to classes instead of inline styles", () => {
     const { container } = render(ScrollGradient, {

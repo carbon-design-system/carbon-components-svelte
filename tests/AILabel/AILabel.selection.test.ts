@@ -87,6 +87,16 @@ describe("AILabel in selection controls, tags, and tiles", () => {
     expect(within(host).getByRole("checkbox")).toHaveAccessibleName("Plan");
   });
 
+  it("drops the AI surface while the tile label is reverted", async () => {
+    const { rerender } = render(AILabelSelection);
+    const tile = screen.getByTestId("tile").querySelector(".bx--tile");
+
+    await rerender({ revertActive: true });
+
+    expect(tile).toHaveClass("bx--tile--decorator");
+    expect(tile).not.toHaveClass("bx--tile--ai-label");
+  });
+
   it("leaves tiles without a decorator unwrapped", () => {
     render(AILabelSelection);
 

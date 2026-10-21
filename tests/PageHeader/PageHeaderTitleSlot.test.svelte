@@ -11,3 +11,11 @@
 <PageHeader data-testid="slot-only">
   <svelte:fragment slot="titleChildren">Slot only</svelte:fragment>
 </PageHeader>
+
+<PageHeader data-testid="start-only">
+  <span slot="titleStart" data-testid="start">Start</span>
+</PageHeader>
+
+<PageHeader data-testid="end-only">
+  <span slot="titleEnd" data-testid="end">End</span>
+</PageHeader>

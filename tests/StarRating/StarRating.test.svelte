@@ -14,6 +14,8 @@
   export let warnText = "";
   export let disabled = false;
   export let readonly = false;
+  export let required = false;
+  export let hideLegend = false;
   export let allowDeselect = false;
   export let valueText: ComponentProps<StarRating>["valueText"] = undefined;
   export let changes: number[] = [];
@@ -30,6 +32,8 @@
   {warnText}
   {disabled}
   {readonly}
+  {required}
+  {hideLegend}
   {allowDeselect}
   {...valueText ? { valueText } : {}}
   on:change={(event) => (changes = [...changes, event.detail])}

@@ -82,6 +82,62 @@ describe("LazyMount", () => {
     expect(screen.getByText("Content 0")).toBeInTheDocument();
   });
 
+  it("falls back to a timer for when='idle' without requestIdleCallback", async () => {
+    vi.stubGlobal("requestIdleCallback", undefined);
+    vi.useFakeTimers();
+    try {
+      render(LazyMount, { props: { when: "idle" } });
+      await tick();
+      expect(screen.queryByText("Content 0")).toBeNull();
+
+      await vi.advanceTimersByTimeAsync(1);
+      await tick();
+      expect(screen.getByText("Content 0")).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("waits again with the new rootMargin when it changes", async () => {
+    const { rerender } = render(LazyMount, {
+      props: { rootMargin: "100px" },
+    });
+    expect(instances.map((instance) => instance.options?.rootMargin)).toEqual([
+      "100px",
+    ]);
+
+    await rerender({ rootMargin: "50px" });
+
+    const [first, second] = instances;
+    expect(first.elements.size).toBe(0);
+    expect(second.options?.rootMargin).toBe("50px");
+    expect(second.elements.size).toBe(1);
+  });
+
+  it("stops waiting when unmounted before it shows", () => {
+    const { unmount } = render(LazyMount);
+    const [observer] = instances;
+    expect(observer.elements.size).toBe(1);
+
+    unmount();
+
+    expect(observer.elements.size).toBe(0);
+  });
+
+  it("dispatches mount once across later updates", async () => {
+    const onMount = vi.fn();
+    const { rerender } = render(LazyMount, {
+      props: { eager: true, onMount },
+    });
+    await tick();
+    expect(onMount).toHaveBeenCalledTimes(1);
+
+    await rerender({ estimatedHeight: 300 });
+    await rerender({ estimatedHeight: 400 });
+
+    expect(onMount).toHaveBeenCalledTimes(1);
+  });
+
   it("mounts before printing", async () => {
     render(LazyMount);
     window.dispatchEvent(new Event("beforeprint"));

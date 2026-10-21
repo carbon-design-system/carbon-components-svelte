@@ -60,6 +60,11 @@
     ><AILabel slot="decorator" /></MultiSelect
   >
 </div>
+<div data-testid="aligned">
+  <TextInput labelText="Aligned">
+    <AILabel slot="decorator" align="start" />
+  </TextInput>
+</div>
 <div data-testid="plain">
   <TextInput labelText="Plain" />
 </div>

@@ -4,6 +4,7 @@
   export let count = 1;
   export let eager = false;
   export let when: "visible" | "idle" = "visible";
+  export let rootMargin: string | undefined = undefined;
   export let estimatedHeight: number | string | undefined = 200;
   export let onMount: (index: number) => void = () => {};
 </script>
@@ -12,6 +13,7 @@
   <LazyMount
     {eager}
     {when}
+    {rootMargin}
     {estimatedHeight}
     data-testid="lazy-{i}"
     on:mount={() => onMount(i)}

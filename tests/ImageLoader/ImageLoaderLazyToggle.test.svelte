@@ -5,10 +5,14 @@
 
   export let src = "";
   export let lazy = false;
+  export let ratio: "16x9" | undefined = undefined;
 </script>
 
-<ImageLoader {src} {lazy} alt="Logo">
+<ImageLoader {src} {lazy} {ratio} alt="Logo">
   <svelte:fragment slot="loading">
     <span data-testid="loading-state"></span>
+  </svelte:fragment>
+  <svelte:fragment slot="error">
+    <span data-testid="error-state"></span>
   </svelte:fragment>
 </ImageLoader>
