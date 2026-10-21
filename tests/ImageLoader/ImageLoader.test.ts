@@ -143,6 +143,19 @@ describe("ImageLoader", () => {
     );
   });
 
+  it("ignores a superseded image settling after src changes", async () => {
+    const { container, rerender } = render(ImageLoaderComponent, {
+      props: { src: "a.jpg", alt: "Logo" },
+    });
+    await rerender({ src: "b.jpg" });
+
+    await settle("a.jpg", "onload");
+    expect(visibleImg(container)).toBeUndefined();
+
+    await settle("a.jpg", "onerror");
+    expect(container.querySelector("img")).toHaveAttribute("src", "b.jpg");
+  });
+
   it("dispatches load when the image loads", async () => {
     const load = vi.fn();
     const error = vi.fn();
