@@ -113,7 +113,7 @@ describe("UserAvatar", () => {
     });
   });
 
-  it("retries the image when the src changes after a failed load", async () => {
+  it("retries the image when the src changes after a failed load, even back to the failed one", async () => {
     const { rerender } = render(UserAvatarImageError, {
       props: { image: "https://example.com/broken.jpg" },
     });
@@ -132,6 +132,14 @@ describe("UserAvatar", () => {
     assert(nextImg);
     expect(nextImg).toHaveAttribute("src", "https://example.com/photo.jpg");
     expect(avatar).not.toHaveTextContent("JD");
+
+    // Returning to the URL that failed retries it.
+    await rerender({ image: "https://example.com/broken.jpg" });
+
+    expect(avatar.querySelector("img")).toHaveAttribute(
+      "src",
+      "https://example.com/broken.jpg",
+    );
   });
 
   it("renders a custom icon, taking priority over the name", () => {
