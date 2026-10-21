@@ -13,6 +13,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ButtonSet: "0.9.2",
   Callout: "0.114.0",
   Carousel: "0.113.0",
+  ChatButton: "0.114.0",
   ChatDivider: "0.114.0",
   ChatLog: "0.114.0",
   ChatMessage: "0.114.0",

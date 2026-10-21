@@ -87,7 +87,7 @@ Set `status` on your own message to `"sending"`, `"sent"`, `"delivered"`, `"read
 
 ## Attachments
 
-Put cards, files, images and code blocks in the `attachments` slot. They sit under the bubble on the page's background, so they read the same in a message from anyone. Use the components you would use elsewhere: CodeSnippet for code, and ClickableTile for a link preview, so the whole card is the link. For an assistant, give UserAvatar an `icon`.
+Put cards, files, images and code blocks in the `attachments` slot. They sit under the bubble on the page's background, so they read the same in a message from anyone. Use the components you would use elsewhere: CodeSnippet for code, and ClickableTile for a link preview, so the whole card is the link. For an assistant, give UserAvatar an `icon`. Suggested replies go here too, as [quick actions](/components/ChatButton#quick-actions-under-a-message).
 
 <ChatLog labelText="Conversation with the assistant">
   <ChatMessage from="me" author="You" status="read">
