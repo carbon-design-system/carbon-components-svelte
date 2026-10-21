@@ -228,23 +228,26 @@ describe("Accordion", () => {
     }
   });
 
-  it("marks the item expanding on open and collapsing on close until animationend", async () => {
+  it("marks the item expanding on open and collapsing on close until the content's own animationend", async () => {
     render(Accordion);
 
     const button = screen.getByRole("button", {
       name: /Natural Language Classifier/,
     });
     const item = button.closest("li");
-    assert(item);
+    const content = item?.querySelector(".bx--accordion__content");
+    assert(item && content);
 
     await user.click(button);
     expect(item).toHaveClass("bx--accordion__item--expanding");
-    await fireEvent.animationEnd(item);
+    await fireEvent.animationEnd(button);
+    expect(item).toHaveClass("bx--accordion__item--expanding");
+    await fireEvent.animationEnd(content);
     expect(item).not.toHaveClass("bx--accordion__item--expanding");
 
     await user.click(button);
     expect(item).toHaveClass("bx--accordion__item--collapsing");
-    await fireEvent.animationEnd(item);
+    await fireEvent.animationEnd(content);
     expect(item).not.toHaveClass("bx--accordion__item--collapsing");
   });
 
