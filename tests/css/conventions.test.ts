@@ -224,11 +224,15 @@ describe("css partial conventions", () => {
   });
 
   it("derives indicator status colors from one shared palette", () => {
-    for (const name of ["_icon-indicator.scss", "_shape-indicator.scss"]) {
-      const source = readFileSync(join(CSS_DIR, name), "utf8");
-      expect(source).toContain("ccs-status-colors()");
-      expect(source).not.toMatch(/\$status-\w+: if\(/);
-    }
+    const shape = readFileSync(join(CSS_DIR, "_shape-indicator.scss"), "utf8");
+    expect(shape).toContain("ccs-status-colors()");
+    expect(shape).not.toMatch(/\$status-\w+: if\(/);
+
+    // IconIndicator reads the v11 status-* tokens, which follow the theme.
+    const icon = readFileSync(join(CSS_DIR, "_icon-indicator.scss"), "utf8");
+    expect(icon).toContain('get-token-value($status-colors, "status-');
+    expect(icon).not.toContain("ccs-status-colors()");
+    expect(icon).not.toContain("[theme=");
   });
 
   it("keeps _fluid-shared.scss to declaration mixins that emit nothing", () => {
