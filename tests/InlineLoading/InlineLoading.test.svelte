@@ -1,5 +1,8 @@
 <script lang="ts">
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+
+  export let onSuccess: () => void = () => {};
+  export let onCustomDelaySuccess: () => void = () => {};
 </script>
 
 <div data-testid="loader-with-description">
@@ -18,9 +21,7 @@
   <InlineLoading
     status="finished"
     description="Success"
-    on:success={() => {
-      console.log("success");
-    }}
+    on:success={onSuccess}
   />
 </div>
 
@@ -29,9 +30,7 @@
     status="finished"
     description="Processing..."
     successDelay={500}
-    on:success={() => {
-      console.log("success custom delay");
-    }}
+    on:success={onCustomDelaySuccess}
   />
 </div>
 

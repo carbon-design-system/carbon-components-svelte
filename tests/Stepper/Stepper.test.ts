@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { stepsWith } from "./helpers";
 import Stepper from "./Stepper.test.svelte";
 
 const continueButton = () => screen.getByRole("button", { name: "Continue" });
@@ -13,9 +14,7 @@ describe("Stepper", () => {
     expect(screen.getByRole("group", { name: "Cart" })).toBeInTheDocument();
     expect(continueButton()).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Back" })).toBeNull();
-    expect(
-      document.querySelectorAll(".bx--progress-step--current"),
-    ).toHaveLength(1);
+    expect(stepsWith("current")).toBe(1);
   });
 
   it("moves forward and back, marks passed steps complete and focuses the step", async () => {
@@ -24,9 +23,7 @@ describe("Stepper", () => {
     await user.click(continueButton());
     expect(screen.getByText("Step 2 content")).toBeVisible();
     expect(screen.getByRole("group", { name: "Delivery" })).toHaveFocus();
-    expect(
-      document.querySelectorAll(".bx--progress-step--complete"),
-    ).toHaveLength(1);
+    expect(stepsWith("complete")).toBe(1);
 
     await user.click(screen.getByRole("button", { name: "Back" }));
     expect(screen.getByText("Step 1 content")).toBeVisible();
@@ -99,9 +96,7 @@ describe("Stepper", () => {
     expect(screen.getByText("Order placed")).toBeVisible();
     expect(screen.queryByRole("button", { name: "Back" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Place order" })).toBeNull();
-    expect(
-      document.querySelectorAll(".bx--progress-step--complete"),
-    ).toHaveLength(3);
+    expect(stepsWith("complete")).toBe(3);
   });
 
   it("waits for an async validate, showing its loading state", async () => {
@@ -114,9 +109,7 @@ describe("Stepper", () => {
     expect(screen.getByText("Checking address")).toBeInTheDocument();
 
     finish(true);
-    await vi.waitFor(() =>
-      expect(screen.getByText("Step 2 content")).toBeVisible(),
-    );
+    expect(await screen.findByText("Step 2 content")).toBeVisible();
   });
 
   it("focuses the first invalid field when validate fails", async () => {
@@ -137,9 +130,7 @@ describe("Stepper", () => {
 
     await user.click(screen.getByRole("button", { name: "Place order" }));
 
-    await vi.waitFor(() =>
-      expect(screen.getByText("Order placed")).toBeVisible(),
-    );
+    expect(await screen.findByText("Order placed")).toBeVisible();
     // The confirmation isn't the step it replaced.
     expect(screen.queryByRole("group", { name: "Payment" })).toBeNull();
   });

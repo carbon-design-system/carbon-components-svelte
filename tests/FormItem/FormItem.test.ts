@@ -4,91 +4,56 @@ import { user } from "../utils/user";
 import FormItemTest from "./FormItem.test.svelte";
 import FormItemControlTest from "./FormItemControl.test.svelte";
 import FormItemSlotPropsTest from "./FormItemSlotProps.test.svelte";
+import { getItem } from "./helpers";
 
 describe("FormItem", () => {
   it("should render with default props", () => {
-    const { container } = render(FormItemTest, {
+    render(FormItemTest, {
       props: {
         slotContent: "Form item content",
       },
     });
 
-    const formItem = container.querySelector(".bx--form-item");
-    expect(formItem).toBeInTheDocument();
+    expect(getItem()).toBeInTheDocument();
     expect(screen.getByText("Form item content")).toBeInTheDocument();
   });
 
-  it("should handle click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormItemTest, {
+  it("forwards click and mouse events", async () => {
+    const onClick = vi.fn();
+    const onMouseover = vi.fn();
+    const onMouseenter = vi.fn();
+    const onMouseleave = vi.fn();
+    render(FormItemTest, {
       props: {
         slotContent: "Content",
+        onClick,
+        onMouseover,
+        onMouseenter,
+        onMouseleave,
       },
     });
 
-    const formItem = container.querySelector(".bx--form-item");
-    assert(formItem);
+    const formItem = getItem();
     await user.click(formItem);
+    expect(onClick).toHaveBeenCalledTimes(1);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
-  });
-
-  it("should handle mouseover event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const formItem = container.querySelector(".bx--form-item");
-    assert(formItem);
     await user.hover(formItem);
+    expect(onMouseover).toHaveBeenCalled();
+    expect(onMouseenter).toHaveBeenCalled();
 
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
-  });
-
-  it("should handle mouseenter event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const formItem = container.querySelector(".bx--form-item");
-    assert(formItem);
-    await user.hover(formItem);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
-  });
-
-  it("should handle mouseleave event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const formItem = container.querySelector(".bx--form-item");
-    assert(formItem);
-    await user.hover(formItem);
     await user.unhover(formItem);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onMouseleave).toHaveBeenCalled();
   });
 
   it("should apply custom class via restProps", () => {
-    const { container } = render(FormItemTest, {
+    render(FormItemTest, {
       props: {
         class: "custom-class",
         slotContent: "Content",
       },
     });
 
-    const formItem = container.querySelector(".bx--form-item");
-    expect(formItem).toHaveClass("custom-class");
+    expect(getItem()).toHaveClass("custom-class");
   });
 });
 

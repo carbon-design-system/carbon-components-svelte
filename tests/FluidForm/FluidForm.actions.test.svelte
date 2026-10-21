@@ -9,6 +9,6 @@
   export let ref: null | HTMLFormElement = null;
 </script>
 
-<FluidForm bind:ref data-testid="fluid-form" {actions}>
+<FluidForm bind:ref data-testid="form" {actions}>
   <button type="submit">Submit</button>
 </FluidForm>

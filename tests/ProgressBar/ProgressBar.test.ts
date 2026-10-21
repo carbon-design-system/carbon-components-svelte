@@ -3,6 +3,11 @@ import ProgressBarSlot from "./ProgressBar.slot.test.svelte";
 import ProgressBar from "./ProgressBar.test.svelte";
 import ProgressBarStatus from "./ProgressBarStatus.test.svelte";
 
+/** Returns the `progressbar` element inside the fixture instance with this test id. */
+function getBar(testId: string, options?: { name: string }) {
+  return within(screen.getByTestId(testId)).getByRole("progressbar", options);
+}
+
 function getLiveRegion(container: HTMLElement) {
   const region = container.querySelector('[aria-live="polite"]');
   if (region === null) throw new Error("live region not found");
@@ -42,32 +47,21 @@ describe("ProgressBar", () => {
   it("should render with specified value and max", () => {
     render(ProgressBar);
 
-    const progressBar = within(screen.getByTestId("progress-40%")).getByRole(
-      "progressbar",
-    );
+    const progressBar = getBar("progress-40%");
     expect(progressBar).toHaveAttribute("aria-valuenow", "40");
     expect(progressBar).toHaveAttribute("aria-valuemin", "0");
     expect(progressBar).toHaveAttribute("aria-valuemax", "100");
   });
 
-  it("should render different sizes", () => {
+  it.each([
+    ["small-progress", "bx--progress-bar--small"],
+    ["medium-progress", "bx--progress-bar--big"],
+    ["inline-progress", "bx--progress-bar--inline"],
+    ["indented-progress", "bx--progress-bar--indented"],
+  ])("renders %s with the %s class", (testId, className) => {
     render(ProgressBar);
 
-    const smallBar = screen.getByTestId("small-progress");
-    const mediumBar = screen.getByTestId("medium-progress");
-
-    expect(smallBar).toHaveClass("bx--progress-bar--small");
-    expect(mediumBar).toHaveClass("bx--progress-bar--big");
-  });
-
-  it("should render different kinds", () => {
-    render(ProgressBar);
-
-    const inlineBar = screen.getByTestId("inline-progress");
-    const indentedBar = screen.getByTestId("indented-progress");
-
-    expect(inlineBar).toHaveClass("bx--progress-bar--inline");
-    expect(indentedBar).toHaveClass("bx--progress-bar--indented");
+    expect(screen.getByTestId(testId)).toHaveClass(className);
   });
 
   it("should handle different statuses", () => {
@@ -83,29 +77,19 @@ describe("ProgressBar", () => {
   it("reports the actual value when errored and the maximum when finished", () => {
     render(ProgressBar);
 
-    const errorBar = within(screen.getByTestId("error-progress")).getByRole(
-      "progressbar",
-    );
+    const errorBar = getBar("error-progress");
     expect(errorBar).toHaveAttribute("aria-valuenow", "40");
 
-    const finishedBar = within(
-      screen.getByTestId("finished-progress"),
-    ).getByRole("progressbar");
+    const finishedBar = getBar("finished-progress");
     expect(finishedBar).toHaveAttribute("aria-valuenow", "100");
 
-    const partiallyFinishedBar = within(
-      screen.getByTestId("finished-partial"),
-    ).getByRole("progressbar");
+    const partiallyFinishedBar = getBar("finished-partial");
     expect(partiallyFinishedBar).toHaveAttribute("aria-valuenow", "100");
 
-    const finishedWithoutValue = within(
-      screen.getByTestId("finished-without-value"),
-    ).getByRole("progressbar");
+    const finishedWithoutValue = getBar("finished-without-value");
     expect(finishedWithoutValue).toHaveAttribute("aria-valuenow", "100");
 
-    const zeroMaxError = within(screen.getByTestId("error-zero-max")).getByRole(
-      "progressbar",
-    );
+    const zeroMaxError = getBar("error-zero-max");
     expect(zeroMaxError).toHaveAttribute("aria-valuemin", "0");
     expect(zeroMaxError).toHaveAttribute("aria-valuemax", "0");
     expect(zeroMaxError).toHaveAttribute("aria-valuenow", "0");
@@ -136,14 +120,10 @@ describe("ProgressBar", () => {
   it("should cap values appropriately", () => {
     render(ProgressBar);
 
-    const overMax = within(screen.getByTestId("over-max")).getByRole(
-      "progressbar",
-    );
+    const overMax = getBar("over-max");
     expect(overMax).toHaveAttribute("aria-valuenow", "100");
 
-    const underZero = within(screen.getByTestId("under-zero")).getByRole(
-      "progressbar",
-    );
+    const underZero = getBar("under-zero");
     expect(underZero).toHaveAttribute("aria-valuenow", "0");
   });
 
@@ -174,9 +154,7 @@ describe("ProgressBar", () => {
   it("associates the label with the progressbar via aria-labelledby", () => {
     render(ProgressBar);
 
-    const progressBar = within(screen.getByTestId("progress-40%")).getByRole(
-      "progressbar",
-    );
+    const progressBar = getBar("progress-40%");
     const label = screen.getByText("Progress 40%");
     expect(progressBar).toHaveAttribute("aria-labelledby", label.id);
     expect(label).toHaveClass("bx--progress-bar__label-text");
@@ -208,18 +186,14 @@ describe("ProgressBar", () => {
   it("uses explicit valueText for an error status", () => {
     render(ProgressBar);
 
-    const progressBar = within(
-      screen.getByTestId("value-text-error"),
-    ).getByRole("progressbar");
+    const progressBar = getBar("value-text-error");
     expect(progressBar).toHaveAttribute("aria-valuetext", "Failed at 40 MB");
   });
 
   it("omits aria-valuetext and the value-text node when valueText is unset", () => {
     render(ProgressBar);
 
-    const progressBar = within(screen.getByTestId("no-value-text")).getByRole(
-      "progressbar",
-    );
+    const progressBar = getBar("no-value-text");
     expect(progressBar).not.toHaveAttribute("aria-valuetext");
     expect(
       screen

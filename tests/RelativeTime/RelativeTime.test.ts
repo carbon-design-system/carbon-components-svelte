@@ -17,25 +17,15 @@ describe("RelativeTime", () => {
     );
   });
 
-  it("respects numeric always vs the default auto", () => {
+  it.each([
+    ["numeric-always", "1 day ago"],
+    ["numeric-auto", "yesterday"],
+    ["short-style", "5 min. ago"],
+    ["slot-fixture", "Updated 5 minutes ago"],
+  ])("renders the %s fixture as %s", (testId, text) => {
     render(RelativeTime);
 
-    expect(screen.getByTestId("numeric-always")).toHaveTextContent("1 day ago");
-    expect(screen.getByTestId("numeric-auto")).toHaveTextContent("yesterday");
-  });
-
-  it("respects the short style", () => {
-    render(RelativeTime);
-
-    expect(screen.getByTestId("short-style")).toHaveTextContent("5 min. ago");
-  });
-
-  it("exposes formatted through the default slot", () => {
-    render(RelativeTime);
-
-    expect(screen.getByTestId("slot-fixture")).toHaveTextContent(
-      "Updated 5 minutes ago",
-    );
+    expect(screen.getByTestId(testId)).toHaveTextContent(text);
   });
 
   it("renders an empty time element with no datetime for an invalid date", () => {

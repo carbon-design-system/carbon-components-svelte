@@ -104,8 +104,8 @@ describe("InlineLoading", () => {
   });
 
   it("dispatches success event after delay when finished", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(InlineLoading);
+    const onSuccess = vi.fn();
+    render(InlineLoading, { props: { onSuccess } });
 
     const wrapper = screen.getByTestId("loader-finished");
     expect(
@@ -113,7 +113,7 @@ describe("InlineLoading", () => {
     ).toBeInTheDocument();
 
     vi.advanceTimersByTime(1500);
-    expect(consoleLog).toHaveBeenCalledWith("success");
+    expect(onSuccess).toHaveBeenCalledTimes(1);
   });
 
   it("keeps the success timer when the child re-renders while finished", async () => {
@@ -197,14 +197,14 @@ describe("InlineLoading", () => {
   });
 
   it("supports custom success delay", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(InlineLoading);
+    const onCustomDelaySuccess = vi.fn();
+    render(InlineLoading, { props: { onCustomDelaySuccess } });
 
     vi.advanceTimersByTime(400);
-    expect(consoleLog).not.toHaveBeenCalled();
+    expect(onCustomDelaySuccess).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(100);
-    expect(consoleLog).toHaveBeenCalledWith("success custom delay");
+    expect(onCustomDelaySuccess).toHaveBeenCalledTimes(1);
   });
 
   it("does not dispatch success when unmounted before the delay", () => {

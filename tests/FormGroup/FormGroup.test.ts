@@ -54,8 +54,8 @@ describe("FormGroup", () => {
     expect(fieldset).toHaveClass("bx--fieldset--no-margin");
   });
 
-  it("should handle invalid state", () => {
-    render(FormGroupTest, {
+  it("should handle invalid state", async () => {
+    const { rerender } = render(FormGroupTest, {
       props: {
         invalid: true,
         slotContent: "Content",
@@ -64,10 +64,14 @@ describe("FormGroup", () => {
 
     const fieldset = screen.getByRole("group");
     expect(fieldset).toHaveAttribute("data-invalid", "true");
+
+    await rerender({ invalid: false });
+
+    expect(fieldset).not.toHaveAttribute("data-invalid");
   });
 
-  it("should set disabled on the fieldset", () => {
-    render(FormGroupTest, {
+  it("should set disabled on the fieldset", async () => {
+    const { rerender } = render(FormGroupTest, {
       props: {
         disabled: true,
         withNativeInput: true,
@@ -82,35 +86,15 @@ describe("FormGroup", () => {
     const input = screen.getByRole("textbox", { name: "Nested input" });
     expect(input).toBeDisabled();
     expect(input).not.toHaveAttribute("disabled");
+
+    await rerender({ disabled: false });
+
+    expect(fieldset).not.toBeDisabled();
+    expect(input).not.toBeDisabled();
   });
 
-  it("should not disable the fieldset by default", () => {
-    render(FormGroupTest, {
-      props: {
-        withNativeInput: true,
-      },
-    });
-
-    expect(screen.getByRole("group")).not.toBeDisabled();
-    expect(
-      screen.getByRole("textbox", { name: "Nested input" }),
-    ).not.toBeDisabled();
-  });
-
-  it("should not have data-invalid when invalid is false", () => {
-    render(FormGroupTest, {
-      props: {
-        invalid: false,
-        slotContent: "Content",
-      },
-    });
-
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).not.toHaveAttribute("data-invalid");
-  });
-
-  it("should render message when message prop is true", () => {
-    render(FormGroupTest, {
+  it("should render message only when message prop is true", async () => {
+    const { rerender } = render(FormGroupTest, {
       props: {
         message: true,
         messageText: "This is a message",
@@ -121,6 +105,10 @@ describe("FormGroup", () => {
     const message = screen.getByText("This is a message");
     expect(message).toBeInTheDocument();
     expect(message).toHaveClass("bx--form__requirement");
+
+    await rerender({ message: false });
+
+    expect(screen.queryByText("This is a message")).not.toBeInTheDocument();
   });
 
   it("should announce the message only while invalid", async () => {
@@ -135,18 +123,6 @@ describe("FormGroup", () => {
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(screen.getByText("Pick one")).toBeInTheDocument();
-  });
-
-  it("should not render message when message prop is false", () => {
-    render(FormGroupTest, {
-      props: {
-        message: false,
-        messageText: "This is a message",
-        slotContent: "Content",
-      },
-    });
-
-    expect(screen.queryByText("This is a message")).not.toBeInTheDocument();
   });
 
   it("omits aria-labelledby without legendId and is named by its legend", () => {
@@ -186,40 +162,35 @@ describe("FormGroup", () => {
     expect(screen.getByText("Test Legend")).not.toHaveAttribute("id");
   });
 
-  it("should handle click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+  it("forwards click and mouse events", async () => {
+    const onClick = vi.fn();
+    const onMouseover = vi.fn();
+    const onMouseenter = vi.fn();
+    const onMouseleave = vi.fn();
     render(FormGroupTest, {
       props: {
         slotContent: "Content",
+        onClick,
+        onMouseover,
+        onMouseenter,
+        onMouseleave,
       },
     });
 
     const fieldset = screen.getByRole("group");
     await user.click(fieldset);
+    expect(onClick).toHaveBeenCalledTimes(1);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
-  });
-
-  it("should handle mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(FormGroupTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const fieldset = screen.getByRole("group");
     await user.hover(fieldset);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+    expect(onMouseover).toHaveBeenCalled();
+    expect(onMouseenter).toHaveBeenCalled();
 
     await user.unhover(fieldset);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(onMouseleave).toHaveBeenCalled();
   });
 
-  it("should show an invalid message as an error with an icon", () => {
-    render(FormGroupTest, {
+  it("should show the error icon only while the group is invalid", async () => {
+    const { rerender } = render(FormGroupTest, {
       props: {
         invalid: true,
         message: true,
@@ -233,24 +204,15 @@ describe("FormGroup", () => {
     expect(message.querySelector("svg")).toHaveClass(
       "bx--form__requirement-icon",
     );
-  });
 
-  it("should not show the error icon when the group is valid", () => {
-    render(FormGroupTest, {
-      props: {
-        message: true,
-        messageText: "Pick any",
-        slotContent: "Content",
-      },
-    });
+    await rerender({ invalid: false });
 
-    const message = screen.getByText("Pick any");
     expect(message).not.toHaveClass("bx--form__requirement--invalid");
     expect(message.querySelector("svg")).toBeNull();
   });
 
-  it("should describe the fieldset with its message", () => {
-    render(FormGroupTest, {
+  it("should describe the fieldset only while it has a message", async () => {
+    const { rerender } = render(FormGroupTest, {
       props: {
         invalid: true,
         message: true,
@@ -259,15 +221,12 @@ describe("FormGroup", () => {
       },
     });
 
-    expect(screen.getByRole("group")).toHaveAccessibleDescription(
-      "Select at least one",
-    );
-  });
+    const fieldset = screen.getByRole("group");
+    expect(fieldset).toHaveAccessibleDescription("Select at least one");
 
-  it("should not set aria-describedby without a message", () => {
-    render(FormGroupTest, { props: { invalid: true, slotContent: "Content" } });
+    await rerender({ message: false });
 
-    expect(screen.getByRole("group")).not.toHaveAttribute("aria-describedby");
+    expect(fieldset).not.toHaveAttribute("aria-describedby");
   });
 
   it("should handle legendId with aria-labelledby", () => {
