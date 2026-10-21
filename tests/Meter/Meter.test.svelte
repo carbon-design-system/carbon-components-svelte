@@ -21,6 +21,7 @@
   value={812}
   max={1000}
   thresholds={{ warning: 800, error: 950 }}
+  locale="en-US"
   data-testid="warning"
 />
 
@@ -53,6 +54,7 @@
   labelText="Storage"
   value={1200}
   max={1000}
+  locale="en-US"
   data-testid="over-capacity"
 />
 
@@ -140,6 +142,7 @@
   max={1000}
   thresholds={{ warning: 800, error: 950 }}
   errorText="Critical"
+  locale="en-US"
   data-testid="custom-error-text"
 />
 
@@ -160,8 +163,6 @@
   showThresholds
   data-testid="thresholds-warning-only"
 />
-
-<Meter labelText="Storage" value={812} max={1000} data-testid="no-thresholds" />
 
 <Meter
   labelText="Storage"

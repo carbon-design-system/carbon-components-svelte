@@ -336,7 +336,7 @@ describe("FormGroup", () => {
       props: {
         legendText: "Legend",
         legendId: "legend-1",
-        "aria-labelledby": "legend-1",
+        "aria-labelledby": "external-label",
         slotContent: "Content",
       },
     });
@@ -345,7 +345,7 @@ describe("FormGroup", () => {
     expect(legend).toHaveAttribute("id", "legend-1");
 
     const fieldset = screen.getByRole("group");
-    expect(fieldset).toHaveAttribute("aria-labelledby", "legend-1");
+    expect(fieldset).toHaveAttribute("aria-labelledby", "external-label");
   });
 
   // Regression: ?? for aria-labelledby so empty string is used (not legendId)

@@ -2,14 +2,11 @@
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 
   export let tick = 0;
+  export let onSuccess: () => void = () => {};
 </script>
-
-{tick}
 
 <InlineLoading
   status="finished"
-  description="Success"
-  on:success={() => {
-    console.log("success");
-  }}
+  description="Render {tick}"
+  on:success={onSuccess}
 />

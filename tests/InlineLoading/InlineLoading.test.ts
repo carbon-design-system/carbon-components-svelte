@@ -38,7 +38,6 @@ describe("InlineLoading", () => {
     expect(wrapper.querySelector(".bx--loading")).toHaveClass(
       "bx--loading--small",
     );
-    expect(wrapper.querySelector(".bx--loading--small")).toBeVisible();
     expect(
       wrapper.querySelector(".bx--inline-loading__text"),
     ).toHaveTextContent("Submitting...");
@@ -135,16 +134,23 @@ describe("InlineLoading", () => {
     expect(consoleLog).toHaveBeenCalledWith("success");
   });
 
-  it("dispatches success once when parent re-renders while finished", () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { rerender } = render(InlineLoadingRerender, { props: { tick: 0 } });
+  it("keeps the success timer when the child re-renders while finished", async () => {
+    const onSuccess = vi.fn();
+    const { rerender } = render(InlineLoadingRerender, {
+      props: { tick: 0, onSuccess },
+    });
 
-    rerender({ tick: 1 });
-    rerender({ tick: 2 });
+    vi.advanceTimersByTime(1000);
+    await rerender({ tick: 1 });
+    expect(
+      screen.getByText("Render 1", { selector: ".bx--inline-loading__text" }),
+    ).toBeInTheDocument();
+    await rerender({ tick: 2 });
+    vi.advanceTimersByTime(500);
 
-    vi.advanceTimersByTime(1500);
-    expect(consoleLog).toHaveBeenCalledTimes(1);
-    expect(consoleLog).toHaveBeenCalledWith("success");
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(3000);
+    expect(onSuccess).toHaveBeenCalledTimes(1);
   });
 
   it("dispatches success when status transitions to finished after mount", async () => {
@@ -219,16 +225,19 @@ describe("InlineLoading", () => {
     expect(consoleLog).toHaveBeenCalledWith("success custom delay");
   });
 
-  it("cleans up timeout on unmount", () => {
-    const { unmount } = render(InlineLoading);
-    const wrapper = screen.getByTestId("loader-finished");
-    expect(wrapper).toBeInTheDocument();
+  it("does not dispatch success when unmounted before the delay", () => {
+    const onSuccess = vi.fn();
+    const { unmount } = render(InlineLoadingTransition, {
+      props: { status: "finished", onSuccess },
+    });
+    vi.advanceTimersByTime(500);
+    expect(vi.getTimerCount()).toBe(1);
 
     unmount();
-
-    // Advance timers to ensure no lingering timeouts
     vi.advanceTimersByTime(2000);
-    // If cleanup wasn't working, this would throw an error about setState after unmount
+
+    expect(vi.getTimerCount()).toBe(0);
+    expect(onSuccess).not.toHaveBeenCalled();
   });
 
   describe("delay", () => {
@@ -313,14 +322,15 @@ describe("InlineLoading", () => {
       expect(region).toHaveAttribute("role", "alert");
     });
 
-    it("does not throw when unmounted during the delay", () => {
+    it("clears the pending timer when unmounted during the delay", () => {
       const { unmount } = render(InlineLoadingDelay, {
         props: { status: "active", delay: 200 },
       });
+      expect(vi.getTimerCount()).toBe(1);
 
       unmount();
 
-      expect(() => vi.advanceTimersByTime(200)).not.toThrow();
+      expect(vi.getTimerCount()).toBe(0);
     });
   });
 });

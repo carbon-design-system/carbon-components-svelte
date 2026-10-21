@@ -137,14 +137,15 @@ describe("Loading", () => {
       expect(wrapper.querySelector(".bx--loading")).toBeInTheDocument();
     });
 
-    it("does not throw when unmounted during the delay", () => {
+    it("clears the pending timer when unmounted during the delay", () => {
       const { unmount } = render(LoadingDelay, {
         props: { active: true, delay: 200 },
       });
+      expect(vi.getTimerCount()).toBe(1);
 
       unmount();
 
-      expect(() => vi.advanceTimersByTime(200)).not.toThrow();
+      expect(vi.getTimerCount()).toBe(0);
     });
   });
 });

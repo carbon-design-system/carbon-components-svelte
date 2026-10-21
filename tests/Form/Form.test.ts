@@ -81,18 +81,22 @@ describe("Form", () => {
       expect(consoleLog).toHaveBeenCalledWith("submit", expect.any(Event));
     });
 
-    it("prevents default submission when preventDefault is true", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const preventDefaultSpy = vi.fn();
+    it.each([
+      [true, false],
+      [false, true],
+    ])(
+      "submit handler preventDefault=%s: event proceeds=%s",
+      (preventDefault, proceeds) => {
+        render(FormTest, { preventDefault });
 
-      render(FormTest, { preventDefault: true });
+        const form = screen.getByTestId("form");
+        const notCancelled = form.dispatchEvent(
+          new Event("submit", { bubbles: true, cancelable: true }),
+        );
 
-      const submitButton = screen.getByRole("button", { name: "Submit" });
-      await user.click(submitButton);
-
-      expect(preventDefaultSpy).not.toHaveBeenCalled();
-      expect(consoleLog).toHaveBeenCalled();
-    });
+        expect(notCancelled).toBe(proceeds);
+      },
+    );
   });
 
   describe("form reset", () => {
