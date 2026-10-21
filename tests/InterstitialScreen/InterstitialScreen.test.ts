@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
@@ -134,6 +134,20 @@ describe("InterstitialScreen", () => {
 
     expect(onclose).toHaveBeenCalledTimes(1);
     expect(onclose.mock.calls[0][0].detail).toEqual({ actionType: "close" });
+  });
+
+  it("does not close on an Escape that cancels IME composition in full-screen mode", async () => {
+    const onclose = vi.fn();
+    render(InterstitialScreenTest, {
+      props: { open: true, isFullScreen: true, stepCount: 1, onclose },
+    });
+
+    await fireEvent.keyDown(document.body, {
+      key: "Escape",
+      isComposing: true,
+    });
+
+    expect(onclose).not.toHaveBeenCalled();
   });
 
   it("returns focus to the launcher after closing", async () => {
