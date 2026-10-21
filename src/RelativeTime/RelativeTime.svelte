@@ -70,6 +70,9 @@
     tickNow = Date.now();
   }
 
+  // Re-read the clock whenever the inputs change. Otherwise `tickNow` is stale
+  // (the timer is off, or its cadence is slow) and the new text is wrong.
+  $: handleTick(date, live, now);
   $: timestamp = toTimestamp(date);
   $: valid = !Number.isNaN(timestamp);
   $: referenceNow = now == null ? tickNow : toTimestamp(now);
