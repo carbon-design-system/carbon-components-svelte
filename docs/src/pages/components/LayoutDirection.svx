@@ -1,0 +1,107 @@
+---
+components: ["LayoutDirection"]
+description: LayoutDirection sets the writing direction for part of a page, such as an Arabic or Hebrew form in an English app.
+---
+
+<script>
+  import {
+    Button,
+    CodeSnippet,
+    Dropdown,
+    LayoutDirection,
+    Slider,
+    Stack,
+    Tab,
+    TabContent,
+    Tabs,
+    Text,
+    TextInput,
+  } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `dir` to `"rtl"` or `"ltr"`. `LayoutDirection` renders a `div` with that `dir`, and components inside it read the direction from context. Use `tag` to render another element, such as `section` or `form`.
+
+It matches Carbon React's `LayoutDirection`. To set the direction for the whole page, set `dir` on `<html>` instead.
+
+<LayoutDirection dir="rtl" lang="ar" tag="form">
+  <Stack gap={6}>
+    <TextInput labelText="اسم الخدمة" placeholder="api-gateway" />
+    <TextInput labelText="البريد الإلكتروني للمالك" placeholder="ops@example.com" />
+    <Stack orientation="horizontal" gap={5}>
+      <Button>نشر</Button>
+      <Button kind="secondary">إلغاء</Button>
+    </Stack>
+  </Stack>
+</LayoutDirection>
+
+## Slider
+
+In RTL, `Slider` puts `min` at the right end of the track. Dragging, clicking the track, and the arrow keys follow it: <DocKbd label="ArrowLeft" /> raises the value.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Slider labelText="عدد النسخ" min={0} max={10} value={3} />
+</LayoutDirection>
+
+## Tabs
+
+Tabs run from right to left.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Tabs>
+    <Tab label="نظرة عامة" />
+    <Tab label="السجلات" />
+    <Tab label="الإعدادات" />
+    <svelte:fragment slot="content">
+      <TabContent>حالة الخدمة وآخر عملية نشر.</TabContent>
+      <TabContent>سجلات آخر ٢٤ ساعة.</TabContent>
+      <TabContent>المنطقة وحدود الموارد.</TabContent>
+    </svelte:fragment>
+  </Tabs>
+</LayoutDirection>
+
+## Portalled menus
+
+A menu or tooltip that renders in a portal leaves the subtree in the DOM, so it would lose the direction. `LayoutDirection` carries it to the portal. This covers `portalMenu` on Dropdown, ComboBox, and MultiSelect, a portalled DatePicker calendar, and every component that portals a tooltip or menu.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Dropdown
+    portalMenu
+    labelText="المنطقة"
+    selectedId="0"
+    items={[
+      { id: "0", text: "شرق الولايات المتحدة" },
+      { id: "1", text: "غرب أوروبا" },
+      { id: "2", text: "جنوب شرق آسيا" },
+    ]}
+  />
+</LayoutDirection>
+
+## Mixed directions
+
+Nest a `LayoutDirection` to switch back for one part, such as code or a log in an RTL page.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Stack gap={5}>
+    <Text>شغّل هذا الأمر لنشر الخدمة:</Text>
+    <LayoutDirection dir="ltr" lang="en">
+      <CodeSnippet code="npm run deploy -- --service api-gateway" />
+    </LayoutDirection>
+    <Text>يظهر الرابط بعد اكتمال النشر.</Text>
+  </Stack>
+</LayoutDirection>
+
+## Reading the direction
+
+Call `getLayoutDirection` during component initialization to read the nearest direction in your own components. It returns a store that holds `"ltr"`, `"rtl"`, or `undefined` outside a `LayoutDirection`.
+
+```svelte
+<script>
+  import { getLayoutDirection } from "carbon-components-svelte";
+
+  const direction = getLayoutDirection();
+</script>
+
+<span>{$direction === "rtl" ? "←" : "→"}</span>
+```

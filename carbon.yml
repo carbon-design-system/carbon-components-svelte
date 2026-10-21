@@ -643,6 +643,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Layer
+  layout-direction:
+    name: Layout direction
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/layout-direction.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LayoutDirection
   lazy-mount:
     name: Lazy mount
     status: stable
