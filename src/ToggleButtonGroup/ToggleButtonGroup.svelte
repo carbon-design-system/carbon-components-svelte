@@ -24,9 +24,10 @@
 
   /**
    * Specify the size of the buttons.
-   * @type {"sm" | "md" | "lg"}
+   * Inherits the parent `InputGroup` size when unset, otherwise `"md"`.
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
-  export let size = "md";
+  export let size = undefined;
 
   /**
    * Specify the orientation of the group.
@@ -60,8 +61,13 @@
    */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
-  import { get, readonly, writable } from "svelte/store";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    getContext,
+    setContext,
+  } from "svelte";
+  import { get, readable, readonly, writable } from "svelte/store";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
@@ -233,6 +239,12 @@
       tabStopElement.set(/** @type {HTMLButtonElement} */ (target));
     }
   }
+
+  // Beside a field in an InputGroup, the buttons take the row's height.
+  const SIZE_BY_GROUP_SIZE = { xs: "xs", sm: "sm", xl: "lg" };
+  const groupSize =
+    getContext("carbon:InputGroup")?.size ?? readable(undefined);
+  $: effectiveSize = size ?? SIZE_BY_GROUP_SIZE[$groupSize] ?? "md";
 </script>
 
 <div
@@ -270,8 +282,9 @@
   on:focusin={handleFocusIn}
   on:keydown={handleGridKeydown}
   class:bx--toggle-button-group={true}
-  class:bx--toggle-button-group--sm={size === "sm"}
-  class:bx--toggle-button-group--lg={size === "lg"}
+  class:bx--toggle-button-group--xs={effectiveSize === "xs"}
+  class:bx--toggle-button-group--sm={effectiveSize === "sm"}
+  class:bx--toggle-button-group--lg={effectiveSize === "lg"}
   class:bx--toggle-button-group--vertical={orientation === "vertical"}
   class:bx--toggle-button-group--grid={isGrid}
   {...$$restProps}
