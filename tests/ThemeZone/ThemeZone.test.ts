@@ -29,6 +29,16 @@ describe("ThemeZone", () => {
     expect(zone).not.toHaveClass("bx--g100");
   });
 
+  it("follows the system color scheme with the system theme", async () => {
+    render(ThemeZoneTest, { props: { theme: "system" } });
+    await tick();
+    expect(screen.getByTestId("zone")).toHaveClass(
+      "bx--theme-zone",
+      "bx--system",
+    );
+    expect(portal("portal-zone")).toHaveClass("bx--system");
+  });
+
   it("nests zones", () => {
     render(ThemeZoneTest);
     const inner = screen.getByTestId("inner-zone");

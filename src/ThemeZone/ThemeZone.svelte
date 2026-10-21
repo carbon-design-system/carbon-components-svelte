@@ -22,8 +22,9 @@
    */
 
   /**
-   * Specify the theme for the zone.
-   * @type {import("../Theme/Theme.svelte").CarbonTheme}
+   * Specify the theme for the zone. `"system"` follows the operating
+   * system color scheme with CSS alone: White for light, Gray 100 for dark.
+   * @type {import("../Theme/Theme.svelte").CarbonTheme | "system"}
    */
   export let theme;
 

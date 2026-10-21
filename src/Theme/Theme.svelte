@@ -211,7 +211,13 @@
       console.warn(
         `[Theme.svelte] invalid theme "${theme}". Value must be one of: ${JSON.stringify(
           Object.keys(themes),
-        )}`,
+        )}${
+          // all.css has a CSS-only "system" theme for <html>, but `theme`
+          // holds the concrete theme that controls show and `persist` stores.
+          theme === "system"
+            ? '. Set the "system" prop to follow the system color scheme.'
+            : ""
+        }`,
       );
     }
   }

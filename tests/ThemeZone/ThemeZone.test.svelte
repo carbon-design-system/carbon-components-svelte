@@ -5,7 +5,7 @@
   import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
   import ThemeZone from "carbon-components-svelte/ThemeZone/ThemeZone.svelte";
 
-  export let theme: CarbonTheme = "g100";
+  export let theme: CarbonTheme | "system" = "g100";
   export let innerTheme: CarbonTheme = "white";
   export let tag: keyof HTMLElementTagNameMap = "div";
 </script>

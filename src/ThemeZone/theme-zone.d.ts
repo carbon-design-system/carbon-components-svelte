@@ -4,7 +4,7 @@ import type { CarbonTheme } from "../Theme/Theme.svelte";
 /**
  * The class that gives an element a theme's full token set in `all.css`.
  */
-export declare const themeZoneClasses: Record<CarbonTheme, string>;
+export declare const themeZoneClasses: Record<CarbonTheme | "system", string>;
 
 /**
  * The theme class of the nearest `ThemeZone`, for content a component

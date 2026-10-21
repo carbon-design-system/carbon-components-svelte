@@ -1,4 +1,4 @@
-// Client-side theme switching (white, g10, g80, g90, g100).
+// Client-side theme switching (white, g10, g80, g90, g100, and system).
 
 $feature-flags: (
   // Required for runtime theme switch
@@ -78,7 +78,8 @@ $ccs-non-default-themes: (
 .#{$prefix}--g10,
 .#{$prefix}--g80,
 .#{$prefix}--g90,
-.#{$prefix}--g100 {
+.#{$prefix}--g100,
+.#{$prefix}--system {
   @include ccs-theme-tokens($carbon--theme--white);
 }
 
@@ -102,6 +103,17 @@ $ccs-non-default-themes: (
 // The dark blocks set `color-scheme: dark`; a light zone nested in one
 // resets it.
 .#{$prefix}--white,
-.#{$prefix}--g10 {
+.#{$prefix}--g10,
+.#{$prefix}--system {
   color-scheme: light;
+}
+
+// <html theme="system">: White, or Gray 100 when the operating system
+// prefers dark, with no JavaScript. Like `Theme`'s default `systemThemes`.
+// The white block above covers light; dark adds what Gray 100 changes.
+@media (prefers-color-scheme: dark) {
+  :root[theme="system"],
+  .#{$prefix}--system {
+    @include ccs-theme-tokens($carbon--theme--g100, $carbon--theme--white);
+  }
 }

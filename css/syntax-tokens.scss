@@ -9,7 +9,8 @@
 // Default: white. g10 shares the light values.
 :root,
 .bx--white,
-.bx--g10 {
+.bx--g10,
+.bx--system {
   @include syntax-tokens(light);
 }
 
@@ -29,5 +30,14 @@
   :root[theme="#{$theme}"],
   .bx--#{$theme} {
     @include syntax-contrast-adjustments($theme);
+  }
+}
+
+// <html theme="system"> takes the dark set when the operating system
+// prefers dark, as all.css takes Gray 100.
+@media (prefers-color-scheme: dark) {
+  :root[theme="system"],
+  .bx--system {
+    @include syntax-tokens(dark);
   }
 }
