@@ -79,7 +79,9 @@ Hide the close button or customize its behavior and label.
 
 ### Hidden
 
-Create a persistent notification by hiding the close button.
+Create a persistent notification by hiding the close button. For
+static guidance that screen readers shouldn't announce, use a
+[Callout](/components/Callout) instead.
 
 <InlineNotification hideCloseButton kind="warning" title="Scheduled downtime:" subtitle="The system will be unavailable during tonight's maintenance window." />
 

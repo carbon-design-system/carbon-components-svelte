@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>callout</title>
+    <g id="callout" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="surface" fill="var(--cds-background-inverse, #393939)" x="56" y="58" width="208" height="64"></rect>
+        <rect id="status-border" fill="var(--cds-support-info, #0043ce)" x="56" y="58" width="3" height="64"></rect>
+        <path id="status-icon" fill="var(--cds-support-info, #0043ce)" transform="translate(72, 74) scale(0.5)" d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,6a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,16.125H12v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z"></path>
+        <rect id="title" fill="var(--cds-icon-inverse, #ffffff)" x="98" y="78" width="72" height="8"></rect>
+        <rect id="subtitle" fill="var(--cds-text-inverse, #ffffff)" x="98" y="96" width="140" height="6"></rect>
+        <rect id="subtitle-2" fill="var(--cds-text-inverse, #ffffff)" x="98" y="106" width="96" height="6"></rect>
+    </g>
+</svg>
