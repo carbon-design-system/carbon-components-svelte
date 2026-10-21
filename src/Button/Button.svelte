@@ -228,18 +228,28 @@
 
   $: tooltipHidden = hasTooltipContent && !hideTooltip && $tooltipOthersActive;
 
-  // The inline tooltip is shown by CSS `:hover`/`:focus`; these only hold
-  // the active slot so the group can hide other tooltips and skip the fade.
+  // CSS `:hover` shows the inline tooltip, so the hidden class holds it back
+  // while a hover waits out the group's enter delay, as TooltipIcon's does.
+  // A warm handoff from a neighbor opens it at once. Before hydration, and
+  // on the server, CSS alone shows it.
+  let tooltipShown = false;
+
   function handleMouseenter() {
     if (!hasTooltip) return;
     hovered = true;
-    tooltipHandoff.claim();
+    tooltipHandoff.scheduleEnter(() => {
+      tooltipShown = true;
+    });
   }
 
   function handleMouseleave() {
     if (!hasTooltip) return;
     hovered = false;
-    if (!focused) tooltipHandoff.release();
+    tooltipHandoff.scheduleLeave(() => {
+      if (focused) return;
+      tooltipShown = false;
+      tooltipHandoff.release();
+    });
   }
 
   function handlePortalMouseEnter() {
@@ -261,13 +271,16 @@
   function handleFocus() {
     if (!(hasTooltip || usePortal) || disabled) return;
     focused = true;
+    tooltipShown = true;
     tooltipHandoff.claim({ instant: true });
   }
 
   function handleBlur() {
     if (!(hasTooltip || usePortal)) return;
     focused = false;
-    if (!hovered) tooltipHandoff.release();
+    if (hovered) return;
+    tooltipShown = false;
+    tooltipHandoff.release();
   }
 
   $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
@@ -337,7 +350,9 @@
       hasTooltip &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
-      hasTooltip && tooltipHidden && "bx--tooltip--hidden",
+      hasTooltip &&
+        (tooltipHidden || (hovered && !tooltipShown)) &&
+        "bx--tooltip--hidden",
       hasTooltip && $tooltipInstant && "bx--tooltip--instant",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,

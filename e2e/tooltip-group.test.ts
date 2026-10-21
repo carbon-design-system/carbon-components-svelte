@@ -20,7 +20,9 @@ test.describe("TooltipGroup", () => {
     const edit = page.getByRole("button", { name: "Edit" });
     const duplicate = page.getByRole("button", { name: "Duplicate" });
 
+    // The first tooltip waits out the enter delay, then fades in.
     await edit.hover();
+    await expect(edit).not.toHaveClass(/bx--tooltip--hidden/);
     expect(await animations(edit)).toEqual({
       text: "tooltip-fade",
       caret: "tooltip-fade",
@@ -39,7 +41,9 @@ test.describe("TooltipGroup", () => {
   }) => {
     const portalTooltips = page.locator(".bx--tooltip-portal__content");
 
-    await page.getByRole("button", { name: "Duplicate" }).hover();
+    const duplicate = page.getByRole("button", { name: "Duplicate" });
+    await duplicate.hover();
+    await expect(duplicate).not.toHaveClass(/bx--tooltip--hidden/);
     await page.getByRole("tab", { name: "List view" }).hover();
     // No wait for the enter delay: the tooltip is already up.
     expect(await portalTooltips.allTextContents()).toEqual(["List view"]);

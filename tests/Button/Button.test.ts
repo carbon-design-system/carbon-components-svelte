@@ -167,6 +167,7 @@ describe("Button", () => {
   });
 
   it("should hide other icon-only button tooltips on mouseenter", async () => {
+    vi.useFakeTimers();
     render(Button);
 
     const btnA = screen.getByTestId("btn-icon-a");
@@ -177,15 +178,21 @@ describe("Button", () => {
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
     expect(btnC).not.toHaveClass("bx--tooltip--hidden");
 
+    // The hovered tooltip waits out the enter delay.
     await fireEvent.mouseEnter(btnA);
+    expect(btnA).toHaveClass("bx--tooltip--hidden");
+    await vi.advanceTimersByTimeAsync(100);
     expect(btnA).not.toHaveClass("bx--tooltip--hidden");
     expect(btnB).toHaveClass("bx--tooltip--hidden");
     expect(btnC).toHaveClass("bx--tooltip--hidden");
 
+    // Moving to a neighbor hands the tooltip over at once.
     await fireEvent.mouseEnter(btnB);
+    await vi.advanceTimersByTimeAsync(0);
     expect(btnA).toHaveClass("bx--tooltip--hidden");
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
     expect(btnC).toHaveClass("bx--tooltip--hidden");
+    vi.useRealTimers();
   });
 
   it("should show the icon-only tooltip at once on keyboard focus and release it on blur", async () => {
@@ -206,17 +213,20 @@ describe("Button", () => {
   });
 
   it("should clear tooltip hidden state on mouseleave", async () => {
+    vi.useFakeTimers();
     render(Button);
 
     const btnA = screen.getByTestId("btn-icon-a");
     const btnB = screen.getByTestId("btn-icon-b");
 
     await fireEvent.mouseEnter(btnA);
+    await vi.advanceTimersByTimeAsync(100);
     expect(btnB).toHaveClass("bx--tooltip--hidden");
 
     await fireEvent.mouseLeave(btnA);
     expect(btnA).not.toHaveClass("bx--tooltip--hidden");
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+    vi.useRealTimers();
   });
 
   it("should hide tooltip but keep accessibility when hideTooltip is true", () => {
