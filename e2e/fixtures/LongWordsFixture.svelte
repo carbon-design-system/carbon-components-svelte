@@ -4,8 +4,10 @@
     AccordionItem,
     Button,
     Checkbox,
+    Dropdown,
     InlineNotification,
     Link,
+    MultiSelect,
     RadioButton,
     TextInput,
     Tile,
@@ -15,6 +17,11 @@
 
   const word = "Datenschutzgrundverordnungskonformitätsprüfung";
   const url = "https://api.example.com/v2/organizations/8f14e45fceea167a";
+  const regions = [
+    { id: "us", text: "US East" },
+    { id: "eu", text: "EU West" },
+    { id: "ap", text: "Asia Pacific" },
+  ];
 </script>
 
 <div data-testid="column" style="width: 12rem">
@@ -39,4 +46,44 @@
     hideCloseButton
     timeout={0}
   />
+</div>
+
+<!-- Inline controls in a row that shrinks: the filter beside each gives
+     way, so each label keeps its words whole and the row stays inside its
+     box. -->
+<div style="display: grid; gap: 1rem">
+  {#each [
+    { id: "dropdown", label: "Region" },
+    { id: "multiselect", label: "Regions" },
+  ] as { id, label }}
+    <div data-testid="rows-{id}" style="display: flex; gap: 1rem; width: 22rem">
+      {#if id === "dropdown"}
+        <Dropdown
+          type="inline"
+          labelText={label}
+          items={regions}
+          selectedId="us"
+        />
+      {:else}
+        <MultiSelect
+          type="inline"
+          labelText={label}
+          placeholder="Choose regions"
+          items={regions}
+          selectedIds={["us", "eu"]}
+        />
+      {/if}
+      <div style="flex: 1 1 14rem; min-width: 0">
+        <TextInput labelText="Filter" hideLabel placeholder="Filter" />
+      </div>
+    </div>
+  {/each}
+  <div data-testid="rows-words" style="width: 12rem">
+    <Dropdown
+      type="inline"
+      labelText="A label with several words in it"
+      items={regions}
+      selectedId="us"
+    />
+  </div>
 </div>
