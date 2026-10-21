@@ -275,7 +275,8 @@
     /** @param {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} detail */
     selectItem(detail) {
       dispatchSearch?.cancel();
-      value = detail.value ?? value;
+      // The field shows what was picked; `select` carries the item's value.
+      value = detail.item.text ?? detail.value ?? value;
       dispatch("select", detail);
       close("select");
       dismissed = true;
