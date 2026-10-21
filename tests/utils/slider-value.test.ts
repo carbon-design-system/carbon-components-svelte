@@ -49,7 +49,7 @@ describe("getPointerPosition", () => {
 });
 
 describe("getTrackAxis", () => {
-  const rect = { left: 10, width: 200, bottom: 300, height: 100 };
+  const rect = { left: 10, right: 210, width: 200, bottom: 300, height: 100 };
 
   it("starts at the left edge when horizontal", () => {
     expect(getTrackAxis(rect, "horizontal")).toEqual({
@@ -57,10 +57,24 @@ describe("getTrackAxis", () => {
       length: 200,
     });
   });
+
+  it("starts at the right edge when horizontal in RTL", () => {
+    expect(getTrackAxis(rect, "horizontal", true)).toEqual({
+      start: 210,
+      length: -200,
+    });
+  });
+
+  it("ignores RTL when vertical", () => {
+    expect(getTrackAxis(rect, "vertical", true)).toEqual({
+      start: 300,
+      length: -100,
+    });
+  });
 });
 
 describe("valueFromPointer", () => {
-  const rect = { left: 0, width: 200, bottom: 200, height: 200 };
+  const rect = { left: 0, right: 200, width: 200, bottom: 200, height: 200 };
   const options = { min: 0, max: 100, step: 1 };
 
   it("maps a horizontal pointer left to right", () => {
@@ -68,6 +82,17 @@ describe("valueFromPointer", () => {
     expect(
       valueFromPointer(event, rect, { ...options, orientation: "horizontal" }),
     ).toBe(25);
+  });
+
+  it("maps a horizontal pointer right to left in RTL", () => {
+    const event = { clientX: 50, clientY: 0 } as MouseEvent;
+    expect(
+      valueFromPointer(event, rect, {
+        ...options,
+        orientation: "horizontal",
+        rtl: true,
+      }),
+    ).toBe(75);
   });
 
   it("maps a vertical pointer bottom to top", () => {

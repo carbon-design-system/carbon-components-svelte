@@ -22,7 +22,10 @@ export function formatRangeLabel(
  */
 export function snapToStep(value: number, min: number, step: number): number;
 
-type TrackRect = Pick<DOMRect, "left" | "width" | "bottom" | "height">;
+type TrackRect = Pick<
+  DOMRect,
+  "left" | "right" | "width" | "bottom" | "height"
+>;
 
 /**
  * Read the client coordinate along the slider axis from a mouse or touch
@@ -36,11 +39,13 @@ export function getPointerPosition(
 /**
  * Resolve a track rect into its start and signed length along the slider
  * axis. Values increase upward when vertical, so the start is the bottom
- * edge and the length is negative.
+ * edge and the length is negative. In RTL, values increase leftward, so
+ * the start is the right edge.
  */
 export function getTrackAxis(
   rect: TrackRect,
   orientation: "horizontal" | "vertical",
+  rtl?: boolean,
 ): { start: number; length: number };
 
 /**
@@ -58,6 +63,8 @@ export function valueFromPointer(
     max: number;
     step: number;
     offset?: number;
+    /** Values increase leftward. */
+    rtl?: boolean;
   },
 ): number | null;
 
