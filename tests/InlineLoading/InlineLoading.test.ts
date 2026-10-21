@@ -198,6 +198,16 @@ describe("InlineLoading", () => {
     expect(onSuccess).not.toHaveBeenCalled();
   });
 
+  it("dispatches success when mounted finished with no delay", async () => {
+    const onSuccess = vi.fn();
+    render(InlineLoadingTransition, {
+      props: { status: "finished", successDelay: 0, onSuccess },
+    });
+    await tick();
+
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+  });
+
   it("supports custom success delay", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(InlineLoading);

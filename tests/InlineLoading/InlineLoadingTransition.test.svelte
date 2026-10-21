@@ -5,7 +5,13 @@
   import type { ComponentProps } from "svelte";
 
   export let status: ComponentProps<InlineLoading>["status"] = "active";
+  export let successDelay = 1500;
   export let onSuccess: () => void = () => {};
 </script>
 
-<InlineLoading {status} description="Working" on:success={onSuccess} />
+<InlineLoading
+  {status}
+  {successDelay}
+  description="Working"
+  on:success={onSuccess}
+/>
