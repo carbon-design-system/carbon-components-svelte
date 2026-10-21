@@ -1,5 +1,6 @@
 <script>
   import {
+    ChatButton,
     ClickableTile,
     ContentSwitcher,
     Header,
@@ -69,6 +70,11 @@
     <ToggleButton value="plain">Plain</ToggleButton>
     <ToggleButton value="disabled" disabled>Disabled</ToggleButton>
   </ToggleButtonGroup>
+
+  <ChatButton quickAction selected>Selected chip</ChatButton>
+  <ChatButton quickAction>Chip</ChatButton>
+  <ChatButton quickAction disabled>Disabled chip</ChatButton>
+  <ChatButton quickAction selected disabled>Chosen chip</ChatButton>
 
   <SelectableTag selected>Selected tag</SelectableTag>
   <SelectableTag>Tag</SelectableTag>

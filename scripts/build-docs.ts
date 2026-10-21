@@ -12,7 +12,8 @@ const SVELD_OPTIONS = {
   },
   diagnostics: {
     ignore: [
-      // Both narrow the prop they inherit on purpose.
+      // Each narrows the prop it inherits on purpose. ChatButton and its
+      // skeleton take Carbon's ChatButton kinds and sizes, not Button's.
       {
         code: "sveld/extend-props-override",
         component: "./SkeletonIcon/SkeletonIcon.svelte",
@@ -22,6 +23,21 @@ const SVELD_OPTIONS = {
         code: "sveld/extend-props-override",
         component: "./UIShell/HeaderGlobalAction.svelte",
         name: "ref",
+      },
+      {
+        code: "sveld/extend-props-override",
+        component: "./Chat/ChatButton.svelte",
+        name: "kind",
+      },
+      {
+        code: "sveld/extend-props-override",
+        component: "./Chat/ChatButton.svelte",
+        name: "size",
+      },
+      {
+        code: "sveld/extend-props-override",
+        component: "./Chat/ChatButtonSkeleton.svelte",
+        name: "size",
       },
     ],
   },
