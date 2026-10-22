@@ -185,8 +185,11 @@ $ccs-v11-new-tokens: (
       $theme: map-merge($theme, ($token: map-get($theme, $source)));
     }
   }
-  // Placeholders draw in text-05 (text-helper): text-03 is 2.3:1 on a white field.
-  $theme: map-merge($theme, (text-placeholder: map-get($theme, 'text-05')));
+  // Placeholders draw in text-helper: text-03 is 2.3:1 on a white field.
+  // Read text-helper, not its v10 twin text-05: on a second import the theme
+  // already holds the v11 text-helper, and a v10 text-placeholder would stop
+  // $carbon--theme matching its own theme map in component token lookups.
+  $theme: map-merge($theme, (text-placeholder: map-get($theme, 'text-helper')));
   @return map-merge(map-get($ccs-v11-new-tokens, $name), $theme);
 }
 
