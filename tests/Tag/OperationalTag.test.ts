@@ -80,6 +80,22 @@ describe("OperationalTag", () => {
     expect(container.querySelector(".bx--popover")).toBeNull();
   });
 
+  it.each([
+    [true, true],
+    [false, false],
+  ])(
+    "with an icon (%s), marks the tag for the tighter leading padding",
+    (withIcon, marked) => {
+      render(OperationalTag, { action: true, withIcon });
+
+      expect(
+        screen
+          .getByRole("button", { name: "Run scan" })
+          .classList.contains("bx--tag--with-icon"),
+      ).toBe(marked);
+    },
+  );
+
   it("takes its size from a parent TagSet", () => {
     render(OperationalTag, { inSet: true });
 

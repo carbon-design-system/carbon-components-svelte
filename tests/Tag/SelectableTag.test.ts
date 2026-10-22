@@ -18,6 +18,17 @@ describe("SelectableTag", () => {
     expect(tag).toHaveAttribute("aria-pressed", "false");
   });
 
+  it("marks a tag with an icon for the tighter leading padding", () => {
+    render(SelectableTag);
+
+    expect(screen.getByRole("button", { name: "With icon" })).toHaveClass(
+      "bx--tag--with-icon",
+    );
+    expect(screen.getByRole("button", { name: "Default" })).not.toHaveClass(
+      "bx--tag--with-icon",
+    );
+  });
+
   it("reflects an initially `selected` prop on aria-pressed", () => {
     render(SelectableTag);
 

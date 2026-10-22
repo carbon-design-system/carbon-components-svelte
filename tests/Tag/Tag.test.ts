@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
+import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
 
@@ -45,7 +47,8 @@ describe("Tag", () => {
     assert(tagElement);
     const closeButton = tagElement.querySelector(".bx--tag__close-icon");
     assert(closeButton instanceof HTMLElement);
-    expect(closeButton).toHaveAttribute("title", "Clear filter");
+    // A tooltip shows the label, so no native `title` doubles it.
+    expect(closeButton).not.toHaveAttribute("title");
 
     await user.click(closeButton);
     expect(onFilterClose).toHaveBeenCalled();
@@ -60,6 +63,26 @@ describe("Tag", () => {
     expect(
       screen.getByRole("button", { name: "Custom title Disabled filterable" }),
     ).toBeInTheDocument();
+  });
+
+  it("shows the close button's title in a tooltip on focus, unless disabled", async () => {
+    render(Tag);
+
+    screen.getByRole("button", { name: "Clear filter Filterable" }).focus();
+    await tick();
+    expect(openTooltips().map((tooltip) => tooltip.textContent)).toEqual([
+      "Clear filter",
+    ]);
+
+    // Escape hides it; with the button focused, the key goes on too.
+    await user.keyboard("{Escape}");
+    expect(openTooltips()).toHaveLength(0);
+
+    const disabled = screen.getByRole("button", {
+      name: "Custom title Disabled filterable",
+    });
+    await user.hover(disabled);
+    expect(openTooltips()).toHaveLength(0);
   });
 
   it("moves aria-label from the role-less filter tag wrapper to the close button", () => {
@@ -109,6 +132,20 @@ describe("Tag", () => {
     assert(tagElement);
     const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
+  });
+
+  it("marks tags with an icon for the tighter leading padding", () => {
+    render(Tag);
+
+    expect(screen.getByText("Custom icon").closest(".bx--tag")).toHaveClass(
+      "bx--tag--with-icon",
+    );
+    expect(screen.getByText("Icon slot").closest(".bx--tag")).toHaveClass(
+      "bx--tag--with-icon",
+    );
+    expect(screen.getByText("IBM Cloud").closest(".bx--tag")).not.toHaveClass(
+      "bx--tag--with-icon",
+    );
   });
 
   it("renders interactive tag as a button", () => {
@@ -216,7 +253,6 @@ describe("Tag", () => {
 
     const closeButton = screen.getByRole("button", { name: /custom title/i });
     expect(closeButton).toBeDisabled();
-    expect(closeButton).toHaveAttribute("title", "Custom title");
   });
 
   it("renders disabled interactive tag", () => {
