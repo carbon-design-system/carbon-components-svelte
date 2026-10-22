@@ -16,7 +16,7 @@ description: Histogram counts values into bins over a numeric axis, to show the 
   const p95 = sorted[Math.floor(sorted.length * 0.95)];
 </script>
 
-`Histogram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`Histogram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [Chart](/components/Chart) preset. For a table cell, use [MicroHistogram](/components/MicroHistogram).
 

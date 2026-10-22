@@ -7,7 +7,7 @@ description: Live sparkline draws a stream of samples over a fixed window, batch
   import { LiveSparkline } from "carbon-components-svelte/viz";
 </script>
 
-`LiveSparkline` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`LiveSparkline` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [Sparkline](/components/Sparkline) that keeps its own values. Give it samples as they arrive and it draws the last `capacity` of them. Every other prop, such as `width`, `height`, `color`, and `fill`, is passed through.
 

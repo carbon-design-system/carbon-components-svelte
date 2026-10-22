@@ -27,7 +27,7 @@ description: Forest plot shows an estimate and its confidence interval per study
   let selected = null;
 </script>
 
-`ForestPlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`ForestPlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is the review chart for many estimates of one effect: a row per study, segment, or experiment, each with its point estimate and interval on one shared scale, and the pooled result as a diamond. A marker whose interval crosses the line of no effect is hollow, so the finding never rests on where the line falls.
 

@@ -8,7 +8,7 @@ description: Target indicator shows progress toward a target with a tick for whe
   import { TargetIndicator } from "carbon-components-svelte/viz";
 </script>
 
-`TargetIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`TargetIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Use it for quota, budget burn, or any goal with a deadline: the fill is the value, the end of the track is the target, and a tick marks where the value should be by now. A [BulletChart](/components/BulletChart) compares a value against qualitative bands instead; [VarianceIndicator](/components/VarianceIndicator) shows a signed difference from plan.
 

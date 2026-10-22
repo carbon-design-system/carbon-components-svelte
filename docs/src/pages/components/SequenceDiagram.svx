@@ -25,7 +25,7 @@ description: Sequence diagram shows who sends what to whom, in order, as arrows 
   ];
 </script>
 
-`SequenceDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`SequenceDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Actors stand across the top, each with a lifeline down the page, and every message is an arrow from its sender to its receiver, one row each, in order. It takes rows rather than a diagram language, so a trace or an event log can draw itself.
 

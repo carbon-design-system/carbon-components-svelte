@@ -25,7 +25,7 @@ description: Sequence sunburst shows paths through ordered steps as rings around
   ];
 </script>
 
-`SequenceSunburst` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`SequenceSunburst` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [SunburstChart](/components/SunburstChart) whose rings are steps in order rather than levels of containment: the first ring is where sequences begin, the next is what came second, and so on out. An arc is as wide as the sequences that pass through that prefix, and the part of it with nothing beyond is where they stopped. The same step name has the same color on every ring. An [AlluvialChart](/components/AlluvialChart) shows the same flows as ribbons and is often the plainer choice; use this when the branching from one starting point is the story.
 

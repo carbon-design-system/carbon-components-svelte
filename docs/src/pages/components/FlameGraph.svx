@@ -23,7 +23,7 @@ description: Flame graph shows where time went in a profile, each frame as wide 
   let root = null;
 </script>
 
-`FlameGraph` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`FlameGraph` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is an [IcicleChart](/components/IcicleChart) stood on its head, with the vocabulary of profiling: the root is at the bottom, callees stack on their callers, and a frame's width is its share of the total. A wide plateau near the top is a hot function. The position of a frame along the row means nothing, only its width does, so time on the x axis is a [SpanWaterfall](/components/SpanWaterfall).
 

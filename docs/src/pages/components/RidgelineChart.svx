@@ -28,7 +28,7 @@ description: Ridgeline chart stacks a density curve per series on one shared axi
   let selected = null;
 </script>
 
-`RidgelineChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`RidgelineChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [ViolinPlot](/components/ViolinPlot) turned on its side and stacked: a density curve per series, every peak the same height, each row rising into the one above. It suits many series that shift along one scale, such as months, cohorts, or releases. Rows are drawn top down, so a ridge sits in front of the one above it.
 

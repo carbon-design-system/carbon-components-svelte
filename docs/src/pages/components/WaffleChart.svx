@@ -24,7 +24,7 @@ description: Waffle chart shows the parts of a whole as a grid of cells, one per
   let selectedId;
 </script>
 
-`WaffleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`WaffleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 A waffle counts where a [DonutChart](/components/DonutChart) estimates: ten by ten cells make each one a percent, so a part's size can be read off. It takes the same `data` as [StackedBar](/components/StackedBar), which suits a table cell better.
 

@@ -39,7 +39,7 @@ description: Tile grid map shows a value per region as equal squares laid out ro
   let selected = null;
 </script>
 
-`TileGridMap` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`TileGridMap` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Every region is the same size, so a small one is as easy to read as a large one, and the map needs no geometry, no projection, and no data file. When shapes matter, use a [ChoroplethChart](/components/ChoroplethChart) with your own GeoJSON.
 

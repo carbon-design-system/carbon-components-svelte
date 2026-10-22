@@ -32,7 +32,7 @@ description: Arc diagram lays nodes along one line and draws each link as an arc
   let selected = null;
 </script>
 
-`ArcDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`ArcDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is the one-dimensional network: every node on one line, in an order that means something, and a semicircle per link. It suits adjacency and sequence, where the order carries information a force layout would throw away. A [ChordDiagram](/components/ChordDiagram) suits flows with amounts between every pair, and a [LayeredGraph](/components/LayeredGraph) a dependency graph with ranks.
 

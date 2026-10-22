@@ -19,7 +19,7 @@ description: Candlestick chart shows the open, high, low, and close of each peri
   });
 </script>
 
-`CandlestickChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`CandlestickChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [Chart](/components/Chart) preset and takes the same props. Each period is a candle: a wick from the low to the high and a body from the open to the close. A rising period is hollow and a falling one filled, so the direction reads without color.
 
