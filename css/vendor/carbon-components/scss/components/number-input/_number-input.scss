@@ -504,11 +504,31 @@
 
   .#{$prefix}--number--readonly input[type='number'],
   .#{$prefix}--number--readonly input[type='text'] {
+    // ccs: match v11's subtle read-only bottom border
+    border-bottom-color: $border-subtle;
     background: transparent;
   }
 
-  .#{$prefix}--number--readonly .#{$prefix}--number__controls {
-    display: none;
+  // ccs: v11 keeps read-only steppers visible but inert, instead of hiding
+  // them. They replace the read-only icon, as in the fluid variant.
+  .#{$prefix}--number--readonly .#{$prefix}--number__control-btn {
+    color: $icon-disabled;
+    pointer-events: none;
+
+    &::before,
+    &::after {
+      background-color: transparent;
+    }
+  }
+
+  .#{$prefix}--number--readonly .#{$prefix}--number__rule-divider {
+    background-color: $border-subtle;
+  }
+
+  // ccs: without steppers the read-only icon stays; keep text clear of it.
+  .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers input[type='number'],
+  .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers input[type='text'] {
+    padding-right: $carbon--spacing-08;
   }
 
   .#{$prefix}--number.#{$prefix}--skeleton {
@@ -549,6 +569,12 @@
 
   .#{$prefix}--number__control-btn svg {
     @include high-contrast-mode('icon-fill');
+  }
+
+  // ccs: disabled and read-only steppers read GrayText, not ButtonText, so
+  // they don't look live in forced colors.
+  .#{$prefix}--number__control-btn:disabled svg {
+    @include high-contrast-mode('disabled');
   }
   /* stylelint-enable */
 }
