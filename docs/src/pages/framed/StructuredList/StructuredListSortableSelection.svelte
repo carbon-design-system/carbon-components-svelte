@@ -71,7 +71,7 @@
   </StructuredListHead>
   <StructuredListBody>
     {#each sorted as db (db.name)}
-      <StructuredListRow label for={db.id}>
+      <StructuredListRow label for={db.id} value="{db.id}-value">
         <StructuredListCell>{db.name}</StructuredListCell>
         <StructuredListCell>{db.type}</StructuredListCell>
         <StructuredListCell>{db.version}</StructuredListCell>
