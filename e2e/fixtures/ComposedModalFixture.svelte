@@ -9,6 +9,10 @@
     SelectItem,
   } from "carbon-components-svelte";
 
+  // `?passive` leaves out the ModalFooter, so an outside click closes the
+  // modal.
+  const passive = new URLSearchParams(location.search).has("passive");
+
   let open = false;
   let closeEvents = [];
 </script>
@@ -38,11 +42,13 @@
       <SelectItem value="email" text="Email" />
     </Select>
   </ModalBody>
-  <ModalFooter>
-    <!-- The footer "Close" closes via app code (sets `open = false`), not a
-         built-in close affordance — exercises the "programmatic" trigger. -->
-    <Button data-testid="close-modal" on:click={() => (open = false)}>
-      Close
-    </Button>
-  </ModalFooter>
+  {#if !passive}
+    <ModalFooter>
+      <!-- The footer "Close" closes via app code (sets `open = false`), not a
+           built-in close affordance — exercises the "programmatic" trigger. -->
+      <Button data-testid="close-modal" on:click={() => (open = false)}>
+        Close
+      </Button>
+    </ModalFooter>
+  {/if}
 </ComposedModal>

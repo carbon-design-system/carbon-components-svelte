@@ -1,7 +1,10 @@
 <script lang="ts">
   import Modal from "carbon-components-svelte/Modal/Modal.svelte";
+  import type { ComponentProps } from "svelte";
 
   export let moveFocusOnClose = false;
+  export let preventCloseOnClickOutside: ComponentProps<Modal>["preventCloseOnClickOutside"] =
+    undefined;
   export let passiveModal = false;
   export let hideCloseButton = false;
 
@@ -16,6 +19,7 @@
   primaryButtonText="Save"
   secondaryButtonText="Cancel"
   {passiveModal}
+  {preventCloseOnClickOutside}
   {hideCloseButton}
   on:close={() => {
     if (moveFocusOnClose) elsewhere.focus();

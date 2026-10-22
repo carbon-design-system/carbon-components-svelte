@@ -218,24 +218,63 @@ describe("ComposedModal", () => {
     expect(container.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 
-  it("should prevent close on outside click when configured", async () => {
+  // Carbon v11: without a ModalFooter the modal is passive and closes on an
+  // outside click by default; with one it stays open. An explicit boolean
+  // overrides both.
+  it.each([
+    { footer: true, preventCloseOnClickOutside: undefined, closes: false },
+    { footer: true, preventCloseOnClickOutside: true, closes: false },
+    { footer: true, preventCloseOnClickOutside: false, closes: true },
+    { footer: false, preventCloseOnClickOutside: undefined, closes: true },
+    { footer: false, preventCloseOnClickOutside: true, closes: false },
+    { footer: false, preventCloseOnClickOutside: false, closes: true },
+  ])(
+    "outside click with footer=$footer and preventCloseOnClickOutside=$preventCloseOnClickOutside closes: $closes",
+    async ({ footer, preventCloseOnClickOutside, closes }) => {
+      const onclose = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          preventCloseOnClickOutside,
+          headerTitle: "Test Modal",
+          footerPrimaryButtonText: footer ? "Save" : "",
+          onclose,
+        },
+      });
+
+      const modalWrapper = container.querySelector(".bx--modal");
+      assert(modalWrapper);
+      await user.click(modalWrapper);
+      await tick();
+
+      expect(onclose).toHaveBeenCalledTimes(closes ? 1 : 0);
+      expect(modalWrapper.classList.contains("is-visible")).toBe(!closes);
+    },
+  );
+
+  it("becomes passive when its ModalFooter unmounts", async () => {
     const onclose = vi.fn();
-    const { container } = render(ComposedModalTest, {
+    const { container, rerender } = render(ComposedModalTest, {
       props: {
         open: true,
-        preventCloseOnClickOutside: true,
         headerTitle: "Test Modal",
+        footerPrimaryButtonText: "Save",
         onclose,
       },
     });
-
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
+
+    await user.click(modalWrapper);
+    await tick();
+    expect(onclose).not.toHaveBeenCalled();
+
+    await rerender({ footerPrimaryButtonText: "" });
     await user.click(modalWrapper);
     await tick();
 
-    expect(onclose).not.toHaveBeenCalled();
-    expect(modalWrapper).toHaveClass("is-visible");
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(modalWrapper).not.toHaveClass("is-visible");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2671
@@ -348,7 +387,9 @@ describe("ComposedModal", () => {
   ])(
     "returns focus to the trigger when closed via %s",
     async (_label, close) => {
-      const { container } = render(ComposedModalFocusReturnTest);
+      const { container } = render(ComposedModalFocusReturnTest, {
+        props: { preventCloseOnClickOutside: false },
+      });
       const modalRoot = container.querySelector(".bx--modal");
       assert(modalRoot);
 

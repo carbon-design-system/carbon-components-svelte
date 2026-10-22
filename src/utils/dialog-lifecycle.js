@@ -33,7 +33,9 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  *   opts?: object,
  * ) => boolean} options.dispatch
  * @param {(open: boolean) => void} options.setOpen
- * @param {() => boolean} options.preventCloseOnClickOutside
+ * @param {() => boolean | undefined} options.preventCloseOnClickOutside
+ * @param {() => boolean} options.passive - Whether the dialog has no
+ *   actions. See `closesOnOutsideClick`.
  * @param {() => void} options.saveFocusReturn - Capture
  *   `document.activeElement` before this dialog's own DOM can steal
  *   focus; called synchronously, before "open" is dispatched.
@@ -60,6 +62,7 @@ export function createDialogLifecycle({
   dispatch,
   setOpen,
   preventCloseOnClickOutside,
+  passive,
   saveFocusReturn,
   focus,
   restoreFocusReturn,
@@ -82,7 +85,9 @@ export function createDialogLifecycle({
   }
 
   const outsideDismiss = createOutsideDismiss(() => {
-    if (!preventCloseOnClickOutside()) close("outside-click");
+    if (closesOnOutsideClick(preventCloseOnClickOutside(), passive())) {
+      close("outside-click");
+    }
   });
 
   function setMounted() {
@@ -126,6 +131,20 @@ export function createDialogLifecycle({
   }
 
   return { close, outsideDismiss, setMounted, syncOpen };
+}
+
+/**
+ * Carbon v11's outside-click rule. A passive dialog (no actions) closes
+ * unless `preventCloseOnClickOutside` is `true`. A transactional dialog
+ * stays open unless it is explicitly `false`.
+ * @param {boolean | undefined} preventCloseOnClickOutside
+ * @param {boolean} passive
+ * @returns {boolean}
+ */
+export function closesOnOutsideClick(preventCloseOnClickOutside, passive) {
+  return passive
+    ? !preventCloseOnClickOutside
+    : preventCloseOnClickOutside === false;
 }
 
 /**

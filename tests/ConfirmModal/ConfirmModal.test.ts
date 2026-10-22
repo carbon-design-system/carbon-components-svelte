@@ -210,6 +210,29 @@ describe("ConfirmModal", () => {
     expect(isOpen()).toBe(true);
   });
 
+  it("cancels on an outside click when preventCloseOnClickOutside is false", async () => {
+    const oncancel = vi.fn();
+    render(ConfirmModalTest, {
+      props: {
+        open: true,
+        title: "Delete this item?",
+        preventCloseOnClickOutside: false,
+        oncancel,
+      },
+    });
+
+    const overlay = document.querySelector(".bx--modal");
+    assert(overlay);
+    await user.click(overlay);
+    await tick();
+
+    expect(oncancel).toHaveBeenCalledTimes(1);
+    expect(oncancel.mock.calls[0][0].detail).toEqual({
+      trigger: "outside-click",
+    });
+    expect(isOpen()).toBe(false);
+  });
+
   it("stays open and sends no cancel when a close handler prevents the default", async () => {
     const oncancel = vi.fn();
     const onclose = vi.fn((event: CustomEvent) => event.preventDefault());

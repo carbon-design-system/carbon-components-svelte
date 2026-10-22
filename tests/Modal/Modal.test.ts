@@ -445,7 +445,9 @@ describe("Modal", () => {
       const spy = reportClosingTransition();
 
       try {
-        render(ModalFocusReturnTest);
+        render(ModalFocusReturnTest, {
+          props: { preventCloseOnClickOutside: false },
+        });
 
         const trigger = screen.getByRole("button", { name: "Open Modal" });
         await user.click(trigger);
@@ -594,24 +596,58 @@ describe("Modal", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toHaveFocus();
   });
 
-  it("prevents closing when clicking outside if configured", async () => {
+  // Carbon v11: a passive modal closes on an outside click by default, a
+  // transactional one stays open, and an explicit boolean overrides both.
+  it.each([
+    {
+      passiveModal: false,
+      preventCloseOnClickOutside: undefined,
+      closes: false,
+    },
+    { passiveModal: false, preventCloseOnClickOutside: true, closes: false },
+    { passiveModal: false, preventCloseOnClickOutside: false, closes: true },
+    { passiveModal: true, preventCloseOnClickOutside: undefined, closes: true },
+    { passiveModal: true, preventCloseOnClickOutside: true, closes: false },
+    { passiveModal: true, preventCloseOnClickOutside: false, closes: true },
+  ])(
+    "outside click with passiveModal=$passiveModal and preventCloseOnClickOutside=$preventCloseOnClickOutside closes: $closes",
+    async ({ passiveModal, preventCloseOnClickOutside, closes }) => {
+      const closeHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          passiveModal,
+          preventCloseOnClickOutside,
+          modalHeading: "Outside click",
+          primaryButtonText: "Save",
+          secondaryButtonText: "Cancel",
+          onclose: closeHandler,
+        },
+      });
+
+      await closeVia["outside-click"]();
+
+      expect(closeHandler).toHaveBeenCalledTimes(closes ? 1 : 0);
+      expect(getOverlay().classList.contains("is-visible")).toBe(!closes);
+    },
+  );
+
+  it("applies the outside-click rule when passiveModal changes after mount", async () => {
     const closeHandler = vi.fn();
-    const { container } = render(ModalTest, {
+    const { rerender } = render(ModalTest, {
       props: {
         open: true,
-        preventCloseOnClickOutside: true,
-        modalHeading: "Prevent Close Test",
+        modalHeading: "Outside click",
+        primaryButtonText: "Save",
         onclose: closeHandler,
       },
     });
 
-    const modalOverlay = container.querySelector(".bx--modal");
-    assert(modalOverlay);
-    await user.click(modalOverlay);
-    await tick();
+    await rerender({ passiveModal: true });
+    await closeVia["outside-click"]();
 
-    expect(closeHandler).not.toHaveBeenCalled();
-    expect(modalOverlay).toHaveClass("is-visible");
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(getOverlay()).not.toHaveClass("is-visible");
   });
 
   it("supports passive modal variant", () => {
@@ -652,6 +688,7 @@ describe("Modal", () => {
       props: {
         open: true,
         modalHeading: "Close Trigger Test",
+        preventCloseOnClickOutside: false,
         onclose: closeHandler,
       },
     });
@@ -754,6 +791,7 @@ describe("Modal", () => {
       props: {
         open: true,
         modalHeading: "Prevent Close Test",
+        preventCloseOnClickOutside: false,
         onclose: closeHandler,
       },
     });

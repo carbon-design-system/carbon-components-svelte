@@ -70,12 +70,18 @@
   /** Set to `true` to use the danger variant */
   export let danger = false;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
 
   const dispatch = createEventDispatcher();
-  const { closeModal, submit } = getContext("carbon:ComposedModal");
+  const { closeModal, submit, registerFooter } = getContext(
+    "carbon:ComposedModal",
+  );
+  // A footer makes the modal transactional, so an outside click keeps it
+  // open by default. Register during init, as ModalHeader does.
+  const unregisterFooter = registerFooter();
+  onMount(() => unregisterFooter);
 
   function handlePrimaryClick() {
     if (primaryButtonLoading) return;

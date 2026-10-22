@@ -45,6 +45,7 @@ test.describe("Modal", () => {
   test("does not close when mousedown inside modal and mouseup outside", async ({
     page,
   }) => {
+    await page.goto("/modal.html?passive");
     await page.getByTestId("open-modal").click();
     const modal = page.locator(".bx--modal");
     await expect(modal).toHaveClass(/is-visible/);
@@ -71,6 +72,7 @@ test.describe("Modal", () => {
   test("does not close when clicking a native select inside the modal (#3710)", async ({
     page,
   }) => {
+    await page.goto("/modal.html?passive");
     await page.getByTestId("open-modal").click();
     const modal = page.locator(".bx--modal");
     await expect(modal).toHaveClass(/is-visible/);
@@ -104,7 +106,23 @@ test.describe("Modal", () => {
     await expect(page.getByTestId("events")).toHaveText("secondary");
   });
 
-  test("closes when clicking directly on the backdrop", async ({ page }) => {
+  test("stays open on a backdrop click by default", async ({ page }) => {
+    await page.getByTestId("open-modal").click();
+    const modal = page.locator(".bx--modal");
+    await expect(modal).toHaveClass(/is-visible/);
+
+    const modalBox = await modal.boundingBox();
+    if (modalBox == null) {
+      throw new Error("expected modal bounding box");
+    }
+
+    await page.mouse.click(modalBox.x + 5, modalBox.y + 5);
+    await expect(modal).toHaveClass(/is-visible/);
+    await expect(page.getByTestId("close-events")).toHaveText("");
+  });
+
+  test("closes a passive modal on a backdrop click", async ({ page }) => {
+    await page.goto("/modal.html?passive");
     await page.getByTestId("open-modal").click();
     const modal = page.locator(".bx--modal");
     await expect(modal).toHaveClass(/is-visible/);
@@ -117,5 +135,6 @@ test.describe("Modal", () => {
     // click directly on the backdrop (outside the container)
     await page.mouse.click(modalBox.x + 5, modalBox.y + 5);
     await expect(modal).not.toHaveClass(/is-visible/);
+    await expect(page.getByTestId("close-events")).toHaveText("outside-click");
   });
 });

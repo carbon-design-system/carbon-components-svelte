@@ -32,8 +32,15 @@
   /** Set to `true` to remove the modal body padding so content spans edge to edge */
   export let fullWidth = false;
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
-  export let preventCloseOnClickOutside = false;
+  /**
+   * Control whether clicking outside the modal closes it.
+   * By default, a passive modal (one without a `ModalFooter`) closes and a
+   * modal with a `ModalFooter` stays open, as in Carbon v11.
+   * Set to `true` to always keep the modal open on an outside click, or
+   * `false` to always close it.
+   * @type {boolean | undefined}
+   */
+  export let preventCloseOnClickOutside = undefined;
 
   /** Specify a class for the inner modal */
   export let containerClass = "";
@@ -91,6 +98,8 @@
 
   let innerModalRef = null;
   let mounted = false;
+  // Live ModalFooters. Without one the modal is passive (Carbon v11).
+  let footerCount = 0;
 
   const lifecycle = createDialogLifecycle({
     dispatch,
@@ -98,6 +107,7 @@
       open = value;
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
+    passive: () => footerCount === 0,
     saveFocusReturn: focusReturn.save,
     restoreFocusReturn: () => focusReturn.restore(ref),
     getContainer: () => innerModalRef,
@@ -155,6 +165,16 @@
   }
 
   /**
+   * @type {() => () => void}
+   */
+  function registerFooter() {
+    footerCount += 1;
+    return () => {
+      footerCount -= 1;
+    };
+  }
+
+  /**
    * @type {(value: string | undefined) => void}
    */
   function setBodyId(value) {
@@ -171,6 +191,7 @@
     updateLabel,
     updateTitle,
     registerHeader,
+    registerFooter,
     ids,
     label,
     title,
