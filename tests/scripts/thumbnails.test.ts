@@ -62,6 +62,16 @@ describe("auditThumbnail", () => {
     ]);
   });
 
+  it("flags a canvas whose width and height differ from the viewBox", () => {
+    const wide = svg("").replace(
+      'width="320px" height="180px"',
+      'width="640px" height="360px"',
+    );
+    expect(auditThumbnail("meter", wide)).toEqual([
+      'canvas is not width="320px" height="180px" viewBox="0 0 320 180"',
+    ]);
+  });
+
   it("flags tokens outside the table and mismatched fallbacks", () => {
     const body =
       '<rect fill="var(--cds-layer-hover-01, #e5e5e5)"></rect>' +
@@ -80,6 +90,14 @@ describe("auditThumbnail", () => {
     expect(auditThumbnail("meter", svg(body))).toEqual([
       'raw color fill="#6F6F6F"',
       'raw color stroke="black"',
+    ]);
+  });
+
+  it("flags raw gradient stop colors", () => {
+    const defs =
+      '<defs><linearGradient id="meter-fade"><stop stop-color="#ff0000"></stop></linearGradient></defs>';
+    expect(auditThumbnail("meter", svg("", defs))).toEqual([
+      'raw color stop-color="#ff0000"',
     ]);
   });
 

@@ -232,4 +232,100 @@ describe("Svelte 5 Snippets", () => {
       expect(snippetContent).toHaveTextContent("(12/16)");
     });
   });
+
+  describe("Dropdown highlighted", () => {
+    it("should pass highlighted for the selected item when the menu opens", async () => {
+      await openDropdown("dropdown-snippet");
+
+      expect(screen.getByTestId("dropdown-item-0")).toHaveAttribute(
+        "data-highlighted",
+        "true",
+      );
+      expect(screen.getByTestId("dropdown-item-1")).toHaveAttribute(
+        "data-highlighted",
+        "false",
+      );
+    });
+
+    it("should move highlighted with keyboard navigation", async () => {
+      await openDropdown("dropdown-snippet");
+      await user.keyboard("{ArrowDown}");
+
+      expect(screen.getByTestId("dropdown-item-1")).toHaveAttribute(
+        "data-highlighted",
+        "true",
+      );
+      expect(screen.getByTestId("dropdown-item-0")).toHaveAttribute(
+        "data-highlighted",
+        "false",
+      );
+    });
+  });
+
+  describe("DataTable cellHeader and footerCell", () => {
+    it("should render cellHeader and footerCell snippets with header and index", () => {
+      render(Snippets);
+
+      const table = screen.getByTestId("datatable-header-footer-snippets");
+      expect(
+        within(table).getByTestId("datatable-cell-header-name"),
+      ).toHaveTextContent("Header: Name");
+      expect(
+        within(table).getByTestId("datatable-cell-header-protocol"),
+      ).toHaveTextContent("Header: Protocol");
+      expect(
+        within(table).getByTestId("datatable-footer-cell-0"),
+      ).toHaveTextContent("Footer: name");
+      expect(
+        within(table).getByTestId("datatable-footer-cell-1"),
+      ).toHaveTextContent("Footer: protocol");
+    });
+  });
+
+  describe("HeaderSearch result", () => {
+    it("should render the result snippet with result, index, and selected", () => {
+      render(Snippets);
+
+      const first = screen.getByTestId("header-search-result-0");
+      expect(first).toHaveTextContent("Result: First result");
+      expect(first).toHaveAttribute("data-selected", "true");
+      expect(screen.getByTestId("header-search-result-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+    });
+  });
+
+  describe("Tab children", () => {
+    it("should render the children snippet with selected", async () => {
+      render(Snippets);
+
+      const overview = screen.getByTestId("tab-children-overview");
+      const details = screen.getByTestId("tab-children-details");
+      expect(overview).toHaveAttribute("data-selected", "true");
+      expect(details).toHaveAttribute("data-selected", "false");
+
+      await user.click(details);
+
+      expect(overview).toHaveAttribute("data-selected", "false");
+      expect(details).toHaveAttribute("data-selected", "true");
+    });
+  });
+
+  describe("TreeView children", () => {
+    it("should render the children snippet with node for every node", () => {
+      render(Snippets);
+
+      expect(screen.getByTestId("tree-node-parent")).toHaveTextContent(
+        "Node: Parent",
+      );
+      expect(screen.getByTestId("tree-node-parent")).toHaveAttribute(
+        "data-expanded",
+        "true",
+      );
+      expect(screen.getByTestId("tree-node-child")).toHaveTextContent(
+        "Node: Child",
+      );
+    });
+  });
 });

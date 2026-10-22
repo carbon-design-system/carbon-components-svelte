@@ -15,6 +15,8 @@
   import Tag from "carbon-components-svelte/Tag/Tag.svelte";
   import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
   import Theme from "carbon-components-svelte/Theme/Theme.svelte";
+  import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import HeaderSearch from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 
   const items = [
     { id: "1", text: "Option 1" },
@@ -26,6 +28,20 @@
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
   ] as const;
+
+  const treeNodes = [
+    {
+      id: "parent",
+      text: "Parent",
+      expanded: true,
+      nodes: [{ id: "child", text: "Child" }],
+    },
+  ];
+
+  const searchResults = [
+    { href: "/one", text: "First result" },
+    { href: "/two", text: "Second result" },
+  ];
 
   const dataTableRows = [
     { id: "a", name: "Load Balancer 1", protocol: "HTTP" },
@@ -196,3 +212,57 @@
     </Tag>
   {/snippet}
 </MultiSelect>
+
+<DataTable
+  data-testid="datatable-header-footer-snippets"
+  headers={dataTableHeaders}
+  rows={dataTableRows}
+>
+  {#snippet cellHeader({ header })}
+    <span data-testid="datatable-cell-header-{header.key}"
+      >Header: {header.value}</span
+    >
+  {/snippet}
+  {#snippet footerCell({ header, index })}
+    <span data-testid="datatable-footer-cell-{index}"
+      >Footer: {header.key}</span
+    >
+  {/snippet}
+</DataTable>
+
+<HeaderSearch active results={searchResults} value="result">
+  {#snippet children({ result, index, selected })}
+    <span data-testid="header-search-result-{index}" data-selected={selected}
+      >Result: {result.text}</span
+    >
+  {/snippet}
+</HeaderSearch>
+
+<Tabs aria-label="Tab children tabs">
+  <Tab label="Overview">
+    {#snippet children({ selected })}
+      <span data-testid="tab-children-overview" data-selected={selected}
+        >Overview label</span
+      >
+    {/snippet}
+  </Tab>
+  <Tab label="Details">
+    {#snippet children({ selected })}
+      <span data-testid="tab-children-details" data-selected={selected}
+        >Details label</span
+      >
+    {/snippet}
+  </Tab>
+  <svelte:fragment slot="content">
+    <TabContent>Overview content</TabContent>
+    <TabContent>Details content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+<TreeView labelText="Snippet tree" nodes={treeNodes} expandedIds={["parent"]}>
+  {#snippet children({ node })}
+    <span data-testid="tree-node-{node.id}" data-expanded={node.expanded}
+      >Node: {node.text}</span
+    >
+  {/snippet}
+</TreeView>

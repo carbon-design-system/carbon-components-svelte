@@ -359,6 +359,15 @@ describe("parseDependencies", () => {
     });
   });
 
+  it.each([
+    ["child_process", `import { spawnSync } from "node:child_process";`],
+    ["Bun.Glob", `const files = new Bun.Glob("*.ts").scanSync(".");`],
+  ])("treats %s as reading the disk", (_, source) => {
+    expect(deps("tests/x.test.ts", source).unknown).toEqual([
+      "reads the disk without @depends-on",
+    ]);
+  });
+
   it("keeps a brace list in @depends-on as one glob", () => {
     expect(
       deps(
@@ -540,7 +549,12 @@ describe("planTests", () => {
   });
 
   it("runs everything for files outside the graph and selector changes", () => {
-    for (const file of ["package.json", "scripts/lib/test-graph.ts"]) {
+    for (const file of [
+      "package.json",
+      "scripts/test-changed.ts",
+      "scripts/lib/test-graph.ts",
+      "scripts/lib/css-delta.ts",
+    ]) {
       expect(plan([file])).toMatchObject({ unit: "all", e2e: "all" });
     }
     expect(plan(["tests-svelte3/setup-tests.ts"])).toMatchObject({

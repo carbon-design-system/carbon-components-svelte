@@ -1,5 +1,9 @@
 // @vitest-environment node
-import { affectedBy, planTests } from "../../scripts/lib/test-graph";
+import {
+  affectedBy,
+  type FileDeps,
+  planTests,
+} from "../../scripts/lib/test-graph";
 import { loadGraph } from "../../scripts/test-changed";
 
 const graph = loadGraph();
@@ -43,5 +47,55 @@ describe("repo test graph", () => {
     expect(e2e.mode).toBe("some");
     if (e2e.mode !== "some") return;
     expect(e2e.files).toContain("e2e/date-picker-examples.test.ts");
+  });
+});
+
+describe("declared dependencies", () => {
+  // The graph lists every file under the roots it reads, which is where a
+  // test's globs have to land.
+  const tracked = [...graph.keys()];
+
+  // `planTests` skips an ignored file, so a lone test that depends on it
+  // is the one that stays unselected.
+  const ignored = new Map<string, boolean>();
+  const isIgnored = (file: string) => {
+    if (!ignored.has(file)) {
+      const probe = new Map<string, FileDeps>([
+        [
+          "tests/probe.test.ts",
+          { files: new Set([file]), patterns: [], reads: [], unknown: [] },
+        ],
+      ]);
+      ignored.set(file, planTests(probe, [file]).unit.mode === "none");
+    }
+    return ignored.get(file);
+  };
+
+  // Globs the selector can't act on, so a change to what they match selects
+  // nothing. The docs ones are ignored (docs-only changes skip CI entirely);
+  // the lockfile is outside the graph, so a change runs every test instead.
+  const DEAD_GLOBS = [
+    "e2e/date-picker-examples.test.ts depends-on /^docs\\/src\\/pages\\/framed\\/DatePicker\\/[^/]*\\.svelte$/",
+    "e2e/fixtures/date-picker-examples.ts depends-on /^docs\\/src\\/pages\\/framed\\/DatePicker\\/[^/]*\\.svelte$/",
+    "scripts/lib/syntax-tokens.ts depends-on /^bun\\.lock$/",
+    "tests/css/v11-tokens.test.ts depends-on /^docs\\/src\\/.*$/",
+    "tests/css/v11-tokens.test.ts depends-on /^docs\\/svelte\\.config\\.ts$/",
+  ];
+
+  it("points every glob at files that can select its test", () => {
+    const dead: string[] = [];
+    for (const [file, deps] of graph) {
+      // Its fixtures hold `@depends-on` lines as text.
+      if (file === "tests/scripts/test-graph.test.ts") continue;
+      const globs = [
+        ...deps.patterns.map((re) => ["depends-on", re] as const),
+        ...deps.reads.map((re) => ["reads", re] as const),
+      ];
+      for (const [kind, re] of globs) {
+        const matches = tracked.filter((path) => re.test(path));
+        if (matches.every(isIgnored)) dead.push(`${file} ${kind} ${re}`);
+      }
+    }
+    expect(dead).toEqual(DEAD_GLOBS);
   });
 });
