@@ -47,6 +47,24 @@ describe("Search debounce", () => {
     expect(onSearch).toHaveBeenCalledTimes(1);
   });
 
+  it.each([
+    { key: "Enter", isComposing: true },
+    { key: "Enter", keyCode: 229 },
+  ])(
+    "does not dispatch search when Enter commits an IME composition (%o)",
+    async (init) => {
+      const onSearch = vi.fn();
+      render(SearchDebounce, { props: { onSearch } });
+
+      const input = screen.getByRole("searchbox");
+
+      await fireEvent.input(input, { target: { value: "東京" } });
+      await fireEvent.keyDown(input, init);
+
+      expect(onSearch).not.toHaveBeenCalled();
+    },
+  );
+
   it("does not dispatch search on input when debounce is 0 (default)", async () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { onSearch } });
