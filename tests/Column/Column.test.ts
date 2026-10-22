@@ -106,6 +106,15 @@ describe("Column", () => {
     }
   });
 
+  it("should skip a null breakpoint and keep the other breakpoint classes", () => {
+    render(Column, {
+      props: { sm: null as unknown as undefined, md: 4 },
+    });
+    const column = screen.getByTestId("content").parentElement;
+    assert(column);
+    expect(column).toHaveClass("bx--col-md-4");
+  });
+
   it("should combine multiple breakpoint classes", () => {
     render(Column, {
       props: {
