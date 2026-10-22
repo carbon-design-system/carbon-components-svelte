@@ -37,11 +37,18 @@ describe("packageContentProblems", () => {
   });
 
   test("rejects unexpected files", () => {
-    const problems = packageContentProblems(
-      [file("src/data.json"), file("css/_button.scss"), file("docs/x.md")],
-      1,
+    const paths = [
+      "src/data.json",
+      "src/Button/Button.test.ts",
+      "css/_button.scss",
+      "css/vendor/x.css",
+      "docs/x.md",
+    ];
+    expect(packageContentProblems(paths.map(file), 1)).toEqual(
+      paths.map((path) =>
+        expect.stringContaining(`${path} (1 B): not an expected package file`),
+      ),
     );
-    expect(problems).toHaveLength(3);
   });
 
   test("rejects an unpacked size over budget", () => {

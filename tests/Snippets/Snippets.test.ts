@@ -8,10 +8,7 @@ describe("Svelte 5 Snippets", () => {
     it("should render custom expand icon via expandIcon snippet with expanded, row, and props", async () => {
       const { container } = render(Snippets);
 
-      const datatable = screen.getByTestId(
-        "datatable-expand-icon-snippet-container",
-      );
-      expect(datatable).toBeInTheDocument();
+      screen.getByTestId("datatable-expand-icon-snippet-container");
 
       const customIcons = screen.getAllByTestId(
         "datatable-expand-icon-snippet",
@@ -21,6 +18,11 @@ describe("Svelte 5 Snippets", () => {
       const firstExpandButton = screen.getAllByRole("button", {
         name: /expand/i,
       })[0];
+      expect(
+        container.querySelector(".bx--child-row-inner-container"),
+      ).toBeNull();
+      expect(screen.queryByText(/"name": "Load Balancer 1"/)).toBeNull();
+
       const iconInButton = within(firstExpandButton).getByTestId(
         "datatable-expand-icon-snippet",
       );
@@ -34,6 +36,11 @@ describe("Svelte 5 Snippets", () => {
         ".bx--child-row-inner-container",
       );
       expect(expandedContent).toBeInTheDocument();
+      // The expandedRow snippet receives the row and renders it as JSON.
+      expect(expandedContent?.querySelector("pre")).toHaveTextContent(
+        /"name": "Load Balancer 1"/,
+      );
+      expect(screen.queryByText(/"name": "Load Balancer 2"/)).toBeNull();
     });
   });
 
@@ -72,7 +79,6 @@ describe("Svelte 5 Snippets", () => {
       render(Snippets);
 
       const dropdown = screen.getByTestId("dropdown-snippet");
-      expect(dropdown).toBeInTheDocument();
 
       const button = dropdown.querySelector("button");
       if (!button) throw new Error("expected dropdown trigger button");
@@ -98,7 +104,6 @@ describe("Svelte 5 Snippets", () => {
       render(Snippets);
 
       const customLabel = screen.getByTestId("dropdown-custom-label");
-      expect(customLabel).toBeInTheDocument();
       expect(customLabel).toHaveTextContent("Custom label content");
     });
   });
@@ -109,7 +114,6 @@ describe("Svelte 5 Snippets", () => {
 
       const indicator = screen.getByTestId("icon-indicator-label-children");
       const customLabel = screen.getByTestId("icon-indicator-custom-label");
-      expect(customLabel).toBeInTheDocument();
       expect(customLabel).toHaveTextContent("Custom label content");
       expect(indicator).not.toHaveTextContent("Succeeded");
     });
@@ -121,7 +125,6 @@ describe("Svelte 5 Snippets", () => {
 
       const indicator = screen.getByTestId("shape-indicator-label-children");
       const customLabel = screen.getByTestId("shape-indicator-custom-label");
-      expect(customLabel).toBeInTheDocument();
       expect(customLabel).toHaveTextContent("Custom label content");
       expect(indicator).not.toHaveTextContent("Stable");
     });
@@ -137,7 +140,7 @@ describe("Svelte 5 Snippets", () => {
       await user.click(button);
 
       // items have ids "1","2","3"; selectedId="1" is selected
-      expect(screen.getByTestId("dropdown-icon-1")).toBeInTheDocument();
+      screen.getByTestId("dropdown-icon-1");
       expect(screen.getByTestId("dropdown-icon-right-1")).toHaveAttribute(
         "data-selected",
         "true",
@@ -154,7 +157,6 @@ describe("Svelte 5 Snippets", () => {
       render(Snippets);
 
       const comboboxInput = screen.getByTestId("combobox-snippet");
-      expect(comboboxInput).toBeInTheDocument();
 
       await user.click(comboboxInput);
 
@@ -178,13 +180,11 @@ describe("Svelte 5 Snippets", () => {
       render(Snippets);
 
       const leftIcon = screen.getByTestId("overflow-item-icon-left");
-      expect(leftIcon).toBeInTheDocument();
       expect(
         leftIcon.closest(".bx--overflow-menu-options__option-icon--left"),
       ).toBeInTheDocument();
 
       const rightIcon = screen.getByTestId("overflow-item-icon-right");
-      expect(rightIcon).toBeInTheDocument();
       expect(
         rightIcon.closest(".bx--overflow-menu-options__option-icon--right"),
       ).toBeInTheDocument();
@@ -196,7 +196,6 @@ describe("Svelte 5 Snippets", () => {
       render(Snippets);
 
       const customButton = screen.getByTestId("custom-button");
-      expect(customButton).toBeInTheDocument();
       expect(customButton).toHaveTextContent("Custom Button Element");
 
       expect(customButton.tagName).toBe("DIV");
@@ -209,7 +208,6 @@ describe("Svelte 5 Snippets", () => {
       render(Snippets);
 
       const themeValue = screen.getByTestId("theme-value");
-      expect(themeValue).toBeInTheDocument();
 
       expect(themeValue).toHaveTextContent("Current theme:");
       expect(themeValue.textContent).toMatch(
@@ -246,11 +244,10 @@ describe("Svelte 5 Snippets", () => {
       await tick();
 
       const tabsContainer = screen.getByTestId("tabs-secondary-label-snippet");
-      expect(tabsContainer).toBeInTheDocument();
       expect(tabsContainer).toHaveClass("bx--tabs--container");
       expect(tabsContainer).toHaveClass("bx--tabs--tall");
 
-      expect(screen.getByText("(21/25)")).toBeInTheDocument();
+      screen.getByText("(21/25)");
     });
 
     it("should render secondary label via secondaryChildren snippet", async () => {
@@ -258,7 +255,6 @@ describe("Svelte 5 Snippets", () => {
       await tick();
 
       const snippetContent = screen.getByTestId("tab-secondary-label-snippet");
-      expect(snippetContent).toBeInTheDocument();
       expect(snippetContent).toHaveTextContent("(12/16)");
     });
 
