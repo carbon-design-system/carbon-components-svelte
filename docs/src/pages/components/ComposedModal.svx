@@ -20,6 +20,8 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 Control how focus moves when the composed modal opens, and override the default target when needed. Focus follows the same priority order as Modal. See [focus behavior](/components/Modal#focus-behavior).
 
+The `ModalHeader` close button shows `iconDescription` in a tooltip on hover and focus. When the modal opens with focus on the close button, the tooltip stays closed until the next hover or focus. While the tooltip shows, <DocKbd label="Escape" /> hides it first. The next <DocKbd label="Escape" /> closes the modal.
+
 ### Custom focus
 
 Use `selectorPrimaryFocus` on `ComposedModal` to override the default and target a specific element when the automatic first-input focus is not desired.

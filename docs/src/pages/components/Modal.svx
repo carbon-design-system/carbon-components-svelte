@@ -27,6 +27,8 @@ When the modal opens, focus is set using the following priority:
 
 After closing the modal, focus is returned to the element that triggered the modal.
 
+The close button shows `iconDescription` in a tooltip on hover and focus. When the modal opens with focus on the close button, the tooltip stays closed until the next hover or focus. While the tooltip shows, <DocKbd label="Escape" /> hides it first. The next <DocKbd label="Escape" /> closes the modal.
+
 ### Custom focus
 
 Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired. Set `selectorPrimaryFocus` to `null` to skip initial focus when you move focus yourself, for example in `on:transitionend`.
