@@ -318,6 +318,8 @@
   .#{$prefix}--form--fluid .#{$prefix}--text-input-wrapper--readonly,
   .#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input {
     background: transparent;
+    // ccs: match v11's subtle read-only bottom border, as TextArea and Select do
+    border-bottom-color: $border-subtle;
   }
 
   // Windows HCM fix

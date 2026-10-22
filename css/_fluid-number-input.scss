@@ -362,14 +362,6 @@
     @include focus-outline("outline");
   }
 
-  // Readonly fluid fields keep disabled steppers instead of the readonly icon
-  // used by the default variant. v10 hides controls for `.bx--number--readonly`.
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number--readonly
-    .#{$prefix}--number__controls {
-    display: flex;
-  }
-
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number--readonly
     input[type="number"],

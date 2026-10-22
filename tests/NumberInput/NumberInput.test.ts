@@ -117,25 +117,6 @@ describe("NumberInput", () => {
       },
     );
 
-    it("renders disabled steppers instead of the readonly icon when readonly", () => {
-      render(NumberInput, { fluid: true, readonly: true });
-
-      const input = screen.getByLabelText("Clusters");
-      const numberWrapper = input.closest(".bx--number");
-
-      expect(
-        numberWrapper?.querySelector(".bx--text-input__readonly-icon"),
-      ).not.toBeInTheDocument();
-      expect(
-        numberWrapper?.querySelectorAll(".bx--number__control-btn"),
-      ).toHaveLength(2);
-      for (const button of numberWrapper?.querySelectorAll(
-        ".bx--number__control-btn",
-      ) ?? []) {
-        expect(button).toBeDisabled();
-      }
-    });
-
     it("renders the fluid variant with hidden steppers", () => {
       render(NumberInput, { fluid: true, hideSteppers: true });
 
@@ -517,13 +498,35 @@ describe("NumberInput", () => {
     expect(input).toHaveAttribute("inputmode", "decimal");
   });
 
-  it("should render readonly icon when readonly", () => {
-    render(NumberInput, {
-      props: { readonly: true },
-    });
+  it.each([false, true])(
+    "renders disabled steppers instead of the readonly icon when readonly (fluid: %s)",
+    (fluid) => {
+      render(NumberInput, { fluid, readonly: true });
 
-    const input = screen.getByLabelText("Clusters");
-    const numberWrapper = input.closest(".bx--number");
+      const numberWrapper = screen
+        .getByLabelText("Clusters")
+        .closest(".bx--number");
+      assert(numberWrapper);
+
+      expect(
+        numberWrapper.querySelector(".bx--text-input__readonly-icon"),
+      ).not.toBeInTheDocument();
+      const steppers = numberWrapper.querySelectorAll(
+        ".bx--number__control-btn",
+      );
+      expect(steppers).toHaveLength(2);
+      for (const button of steppers) {
+        expect(button).toBeDisabled();
+      }
+    },
+  );
+
+  it("renders the readonly icon when readonly without steppers", () => {
+    render(NumberInput, { readonly: true, hideSteppers: true });
+
+    const numberWrapper = screen
+      .getByLabelText("Clusters")
+      .closest(".bx--number");
     // Icon is decorative (aria-hidden) so we check by class within the wrapper
     expect(
       numberWrapper?.querySelector(".bx--text-input__readonly-icon"),

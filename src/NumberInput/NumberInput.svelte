@@ -646,7 +646,9 @@
           }}
         >
       {/if}
-      {#if readonly && !isFluid}
+      {#if readonly && hideSteppers && !isFluid}
+        <!-- Read-only steppers stay visible but inert and mark the state
+          instead, so the icon only shows without them. -->
         <EditOff class="bx--text-input__readonly-icon" />
       {:else if !readonly}
         {#if showInvalid}

@@ -13,6 +13,7 @@ const SYSTEM_COLORS = [
   "HighlightText",
   "GrayText",
   "LinkText",
+  "ButtonText",
 ] as const;
 type SystemColor = (typeof SYSTEM_COLORS)[number];
 
@@ -336,6 +337,42 @@ test.describe("forced colors", () => {
     edges.forEach((edge, i) => {
       expect.soft(fills[i], edge).toBe(system.CanvasText);
     });
+  });
+});
+
+// The subtle read-only border is a color cue that forced colors erases, so
+// the read-only icon, or the steppers' disabled color, has to carry the state.
+test("forced colors: read-only fields keep a non-color cue", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/readonly-fields.html");
+  await expect(page.getByTestId("fluid-number-input")).toBeVisible();
+  const system = await systemColors(page);
+  const icon = ".bx--text-input__readonly-icon";
+  const stepper = ".bx--number__control-btn svg";
+  const cases: [string, string, SystemColor][] = [
+    ["text-input", icon, "CanvasText"],
+    ["password-input", icon, "CanvasText"],
+    ["number-input-no-steppers", icon, "CanvasText"],
+    ["fluid-text-input", icon, "CanvasText"],
+    ["number-input", stepper, "GrayText"],
+    ["fluid-number-input", stepper, "GrayText"],
+    ["number-input-editable", stepper, "ButtonText"],
+  ];
+  const fills = await Promise.all(
+    cases.map(([id, selector]) =>
+      page
+        .getByTestId(id)
+        .locator(selector)
+        .first()
+        .evaluate((el) => getComputedStyle(el).fill),
+    ),
+  );
+  cases.forEach(([id, , color], i) => {
+    expect.soft(fills[i], id).toBe(system[color]);
   });
 });
 
