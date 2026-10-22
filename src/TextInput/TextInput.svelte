@@ -53,6 +53,20 @@
    */
   export let maxCount = undefined;
 
+  /**
+   * Override the counter text read by screen readers.
+   * @type {(count: number, max: number) => string}
+   * @default `${count} of ${max} characters`
+   */
+  export let counterText = undefined;
+
+  /**
+   * Specify the text announced when the limit is reached.
+   * @type {string}
+   * @default "Character limit reached"
+   */
+  export let limitReachedText = undefined;
+
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
@@ -91,7 +105,7 @@
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { createEventDispatcher, getContext, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import {
@@ -101,6 +115,7 @@
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { debounce } from "../utils/debounce.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -157,6 +172,38 @@
   }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: counterId = `counter-${id}`;
+  $: count = graphemeCount((value ?? "").toString());
+  $: resolvedCounterText = counterText ?? ((c, m) => `${c} of ${m} characters`);
+  $: resolvedLimitReachedText = limitReachedText ?? "Character limit reached";
+
+  let prevCount = graphemeCount((value ?? "").toString());
+  let limitAnnouncement = "";
+
+  // Wait 1s, as Carbon does. A screen reader can drop a live update that
+  // lands while it echoes the last keystroke, and a quick backspace off the
+  // limit stays silent.
+  const announceLimit = debounce(() => {
+    limitAnnouncement = resolvedLimitReachedText;
+  }, 1000);
+
+  onMount(() => announceLimit.cancel);
+
+  $: {
+    if (
+      maxCount != null &&
+      maxCount > 0 &&
+      count === maxCount &&
+      prevCount !== maxCount
+    ) {
+      announceLimit();
+    } else if (count !== maxCount) {
+      announceLimit.cancel();
+      limitAnnouncement = "";
+    }
+    prevCount = count;
+  }
+
   // NVDA ignores `readonly` on a number input and announces it as editable,
   // so a read-only number field renders as a text input.
   $: typeOverride =
@@ -202,8 +249,9 @@
               class:bx--label={true}
               class:bx--label--disabled={disabled}
               class:bx--text-input__label-counter={true}
+              aria-hidden="true"
             >
-              {graphemeCount((value ?? "").toString())}/{maxCount}
+              {count}/{maxCount}
             </div>
           {/if}
         </div>
@@ -237,10 +285,21 @@
           class:bx--label={true}
           class:bx--label--disabled={disabled}
           class:bx--text-input__label-counter={true}
+          aria-hidden="true"
         >
-          {graphemeCount((value ?? "").toString())}/{maxCount}
+          {count}/{maxCount}
         </div>
       {/if}
+    </div>
+  {/if}
+  {#if maxCount != null}
+    <span id={counterId} class:bx--visually-hidden={true}>
+      {resolvedCounterText(count, maxCount)}
+    </span>
+    <!-- Polite, not assertive like Carbon's, so it never cuts off the
+      screen reader's echo of what was just typed. -->
+    <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
+      {limitAnnouncement}
     </div>
   {/if}
   <div
@@ -306,6 +365,7 @@
             helperId,
             includeErrorId: false,
           }),
+          maxCount == null ? null : counterId,
           $$restProps["aria-describedby"],
         )}
         on:change={handleChange}
