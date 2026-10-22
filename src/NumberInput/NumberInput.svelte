@@ -196,10 +196,6 @@
   import { createEventDispatcher, getContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import Add from "../icons/Add.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -230,9 +226,9 @@
   };
 
   const dispatch = createEventDispatcher();
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
 
   /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */

@@ -126,10 +126,6 @@
   export let debounce = 0;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -160,9 +156,9 @@
     skipSelectOnFocus = true;
     ref?.focus();
   }
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize ?? "xl";
 
   let searchRef = null;

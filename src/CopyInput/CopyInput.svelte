@@ -145,19 +145,15 @@
 
   import { createEventDispatcher, getContext, tick } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const ctx = getContext(FORM_CONTEXT_KEY);
+  const ctx = getContext("carbon:Form");
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
 
   let focused = false;

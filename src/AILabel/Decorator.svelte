@@ -36,12 +36,11 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
 
   const sharedSize = writable(size);
   $: sharedSize.set(size);
 
-  setContext(AI_LABEL_HOST_CONTEXT_KEY, {
+  setContext("carbon:AILabelHost", {
     size: sharedSize,
     state,
     labelSize,

@@ -11,7 +11,7 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  *
  * Each component still owns, and calls into this factory's return value
  * from, its own:
- * - `setContext(MODAL_CONTEXT_KEY, {})` (and any component-specific
+ * - `setContext("carbon:Modal", {})` (and any component-specific
  *   context, e.g. ComposedModal's `"carbon:ComposedModal"`).
  * - The `sharedOpen`/`trackModal` registration (`const sharedOpen =
  *   writable(open); $: $sharedOpen = open; trackModal(sharedOpen);`).

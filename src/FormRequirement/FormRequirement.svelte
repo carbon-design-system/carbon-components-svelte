@@ -23,10 +23,9 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
 
-  const formItem = getContext(FORM_ITEM_CONTEXT_KEY);
+  const formItem = getContext("carbon:FormItem");
   const controlId = formItem?.controlId ?? readable(undefined);
   const setInvalidId = formItem?.part("invalid");
   const setWarnId = formItem?.part("warn");

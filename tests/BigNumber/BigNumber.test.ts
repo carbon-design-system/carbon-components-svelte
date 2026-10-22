@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import BigNumberComponent from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import BigNumber from "./BigNumber.test.svelte";
 
 describe("BigNumber", () => {
@@ -19,6 +20,20 @@ describe("BigNumber", () => {
 
       const el = screen.getByTestId("no-total");
       expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
+    });
+
+    it("hides the denominator when total is null", () => {
+      const { container } = render(BigNumberComponent, {
+        props: {
+          labelText: "Null total",
+          value: 42,
+          total: null as unknown as number,
+        },
+      });
+
+      expect(
+        container.querySelector(".bx--big-number__denominator"),
+      ).toBeNull();
     });
 
     it("shows the denominator when total is greater than value and formats differently", () => {
@@ -232,6 +247,18 @@ describe("BigNumber", () => {
 
       const el = screen.getByTestId("no-delta");
       expect(el.querySelector(".bx--big-number__delta")).toBeNull();
+    });
+
+    it("renders no delta block when delta is null", () => {
+      const { container } = render(BigNumberComponent, {
+        props: {
+          labelText: "Null delta",
+          value: 42,
+          delta: null as unknown as number,
+        },
+      });
+
+      expect(container.querySelector(".bx--big-number__delta")).toBeNull();
     });
   });
 

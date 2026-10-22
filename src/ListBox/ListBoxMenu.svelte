@@ -76,14 +76,11 @@
   import { setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { uniqueId } from "../utils/unique-id.js";
-  import {
-    createHighlightCursor,
-    HIGHLIGHT_CURSOR_KEY,
-  } from "./highlight-cursor.js";
+  import { createHighlightCursor } from "./highlight-cursor.js";
 
   /** @type {ReturnType<typeof import("./highlight-cursor.js").createHighlightCursor>} */
   const highlightCursor = createHighlightCursor();
-  setContext(HIGHLIGHT_CURSOR_KEY, highlightCursor);
+  setContext("carbon:ListBoxHighlight", highlightCursor);
 
   $: highlightCursor.set(highlightedId, { scroll: highlightScroll });
 </script>

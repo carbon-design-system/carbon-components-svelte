@@ -15,10 +15,9 @@
 
   import { getContext } from "svelte";
   import ButtonSkeleton from "../Button/ButtonSkeleton.svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { formButtonSize } from "../utils/form-button-size.js";
 
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
 </script>
 

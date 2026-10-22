@@ -14,12 +14,11 @@
   export let size = undefined;
 
   import { getContext } from "svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? formButtonSize($formSize) ?? "default";
 </script>
 

@@ -121,7 +121,6 @@
   export let hideTooltip = false;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
@@ -131,7 +130,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
 
   // Rest props go to the hidden input, which never takes focus. Move the

@@ -97,7 +97,6 @@
   export let contentRef = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Popover from "../Popover/Popover.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
@@ -110,7 +109,7 @@
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
 
   // Inside a `TagSet`, register like `Tag` does.
   const group = joinTagSet(() => ({

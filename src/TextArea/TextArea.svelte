@@ -117,7 +117,6 @@
   import { afterUpdate, getContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -135,7 +134,7 @@
   import { uniqueId } from "../utils/unique-id.js";
   import { wordCount, wordLimitAction } from "../utils/word-count.js";
 
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
 
   /**
    * @param {string} text
@@ -164,10 +163,9 @@
     disabled,
     readonly,
   }));
-  $: overCount =
-    typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
+  $: overCount = hasMaxCount && count > maxCount && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
-  $: hasMaxCount = typeof maxCount === "number";
+  $: hasMaxCount = maxCount != null;
   $: errorMessageId = showInvalid && invalidText ? errorId : undefined;
   $: describedBy =
     [
@@ -420,7 +418,7 @@
       {/if}
     </div>
   {/if}
-  {#if typeof maxCount === "number"}
+  {#if hasMaxCount}
     <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
       {limitAnnouncement}
     </div>

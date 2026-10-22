@@ -51,7 +51,6 @@
 
   import { getContext, setContext } from "svelte";
   import { derived, readable, writable } from "svelte/store";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import {
     buildFieldIds,
     resolveStatusDescribedBy,
@@ -62,7 +61,7 @@
   /** Button size whose height matches a field of each size. */
   const BUTTON_SIZE = { xs: "xs", sm: "small", md: "field", xl: undefined };
 
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
+  const formSize = getContext("carbon:FormSize") ?? readable(undefined);
   const ownSize = writable(size);
   $: ownSize.set(size);
 
@@ -73,7 +72,7 @@
 
   // Fields read the size like any other form size; buttons read a height
   // match, the same way they read an `ActionSet`'s size.
-  setContext(FORM_SIZE_CONTEXT_KEY, sharedSize);
+  setContext("carbon:FormSize", sharedSize);
   setContext("carbon:InputGroup", {
     buttonSize: derived(sharedSize, ($size) => BUTTON_SIZE[$size ?? "md"]),
   });
