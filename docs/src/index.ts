@@ -4,6 +4,7 @@ import "../../css/all.css";
 import "../../css/prose.css";
 import "../../css/syntax-tokens.css";
 import "../../css/syntax.css";
+import "../../css/viz.css";
 import "./global.css";
 
 const app = mount(App, { target: document.body });

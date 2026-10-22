@@ -13,7 +13,7 @@ const CACHE_DIR = ".cache/build-css";
 const WATCH = process.argv.includes("--watch");
 const FULL_THEMES = process.argv.includes("--themes");
 // Built by default alongside `all`: small, and the docs site loads them.
-const DEFAULT_ENTRIES = ["all", "prose", "syntax", "syntax-tokens"];
+const DEFAULT_ENTRIES = ["all", "prose", "syntax", "syntax-tokens", "viz"];
 
 // `BUILD_CSS_MINIFY=0` keeps the output readable for debugging.
 const MINIFY = process.env.BUILD_CSS_MINIFY !== "0";
@@ -97,6 +97,7 @@ async function sharedInputs(): Promise<string> {
   return [
     await hashGlob("_*.scss", "css"),
     await hashGlob("syntax/**/*.scss", "css"),
+    await hashGlob("viz/**/*.scss", "css"),
     await hashGlob("vendor/**/*.scss", "css"),
     packageJson.devDependencies?.lightningcss ?? "",
     packageJson.devDependencies?.browserslist ?? "",
