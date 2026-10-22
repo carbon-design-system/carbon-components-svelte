@@ -10,7 +10,7 @@ test.describe("FloatingPortal inside native dialog", () => {
   test("OverflowMenu portal mounts inside the dialog (not document.body)", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "menu" }).click();
+    await page.getByRole("button", { name: "Options" }).click();
 
     await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
 
@@ -24,7 +24,7 @@ test.describe("FloatingPortal inside native dialog", () => {
   test("OverflowMenu portal uses position: fixed inside the dialog", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "menu" }).click();
+    await page.getByRole("button", { name: "Options" }).click();
     await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
 
     const style = await page
@@ -37,7 +37,7 @@ test.describe("FloatingPortal inside native dialog", () => {
   test("OverflowMenu menu is anchored under its trigger inside the dialog", async ({
     page,
   }) => {
-    const trigger = page.getByRole("button", { name: "menu" });
+    const trigger = page.getByRole("button", { name: "Options" });
     await trigger.click();
     await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
 
@@ -61,7 +61,7 @@ test.describe("FloatingPortal inside native dialog", () => {
   test("OverflowMenu menu is visible above the modal backdrop", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "menu" }).click();
+    await page.getByRole("button", { name: "Options" }).click();
     const item = page.getByRole("menuitem", { name: "Edit" });
     await expect(item).toBeVisible();
 

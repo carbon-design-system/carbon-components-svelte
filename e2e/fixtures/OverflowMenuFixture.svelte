@@ -10,8 +10,7 @@
 
 <OverflowMenu
   data-testid="overflow-menu"
-  aria-label="Actions"
-  iconDescription="Open menu"
+  iconDescription="Actions"
   on:close={({ detail }) => {
     if (detail?.text) selectedAction = detail.text;
   }}

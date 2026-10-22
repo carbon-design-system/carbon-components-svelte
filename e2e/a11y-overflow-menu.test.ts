@@ -11,6 +11,15 @@ test.describe("OverflowMenu a11y", () => {
       .analyze();
     expect(staticResults.violations).toEqual([]);
 
+    await page.getByRole("button", { name: "Actions" }).hover();
+    await expect(page.locator(".bx--tooltip-portal")).toBeVisible();
+
+    const tooltipResults = await new AxeBuilder({ page })
+      .include("#app")
+      .include("[data-floating-portal]")
+      .analyze();
+    expect(tooltipResults.violations).toEqual([]);
+
     await page.getByRole("button", { name: "Actions" }).click();
     await expect(page.getByRole("menu")).toBeVisible();
     await expect(

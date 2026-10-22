@@ -20,7 +20,7 @@ test.describe("DataTable OverflowMenu a11y", () => {
       .analyze();
     expect(withoutKnownGaps(staticResults.violations)).toEqual([]);
 
-    await page.getByRole("button", { name: "menu" }).first().click();
+    await page.getByRole("button", { name: "Options" }).first().click();
     await expect(
       page.getByRole("menuitem", { name: "Edit" }).first(),
     ).toBeVisible();

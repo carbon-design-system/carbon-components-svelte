@@ -96,4 +96,37 @@ test.describe("OverflowMenu", () => {
     expect(menuBox.y).toBeCloseTo(triggerBox.y + triggerBox.height, 0);
     expect(menuBox.x).toBeCloseTo(triggerBox.x, 0);
   });
+
+  test("shows the trigger's tooltip above it on hover and focus, not while open", async ({
+    page,
+  }) => {
+    const trigger = page.getByRole("button", { name: "Actions" });
+    const tooltip = page.locator(".bx--tooltip-portal");
+    await expect(trigger.locator("title")).toHaveCount(0);
+
+    await trigger.hover();
+    await expect(tooltip).toHaveText("Actions");
+    await expect(tooltip).toHaveAttribute("data-direction", "top");
+    const triggerBox = await trigger.boundingBox();
+    const tooltipBox = await tooltip.boundingBox();
+    if (!triggerBox || !tooltipBox) throw new Error("missing bounding box");
+    expect(tooltipBox.y + tooltipBox.height).toBeLessThanOrEqual(triggerBox.y);
+    expect(tooltipBox.x + tooltipBox.width / 2).toBeCloseTo(
+      triggerBox.x + triggerBox.width / 2,
+      0,
+    );
+
+    await trigger.click();
+    await expect(page.getByRole("menu")).toBeVisible();
+    await expect(tooltip).toHaveCount(0);
+
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+    await expect(tooltip).toHaveCount(0);
+
+    await page.mouse.move(0, 0);
+    await trigger.blur();
+    await trigger.focus();
+    await expect(tooltip).toHaveText("Actions");
+  });
 });

@@ -62,8 +62,26 @@
    */
   export let iconClass = undefined;
 
-  /** Specify the ARIA label for the icon */
-  export let iconDescription = "Open and close list of options";
+  /**
+   * Specify the trigger's accessible name and tooltip text.
+   * An `aria-label` on the component overrides the name, not the tooltip.
+   * A custom trigger in the `menu` slot is named by its content and has no
+   * tooltip.
+   */
+  export let iconDescription = "Options";
+
+  /**
+   * Set the position of the trigger's tooltip.
+   * The tooltip flips to the opposite side when there is not enough space.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let tooltipPosition = "top";
+
+  /**
+   * Set the alignment of the trigger's tooltip.
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
 
   /** Set an id for the button element */
   export let id = uniqueId();
@@ -100,16 +118,23 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { observeModalClose } from "../Portal/portal-utils.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
+  import { noop } from "../utils/noop.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -161,6 +186,9 @@
     mounted = true;
     return () => {
       typeahead.clear();
+      tooltipHandoff.cancel();
+      disconnectModalObserver();
+      tooltipHandoff.release();
     };
   });
 
@@ -251,6 +279,7 @@
       // to the trigger unless the item's handler already moved it elsewhere.
       open = false;
       returnFocus(buttonRef, menuRef);
+      dismissTooltip();
     }
   }
 
@@ -375,7 +404,107 @@
   });
 
   $: menuId = `menu-${id}`;
-  $: ariaLabel = $$props["aria-label"] ?? "menu";
+  // The trigger is named like any icon-only button, by `iconDescription`,
+  // and a `menu` slot names it with its own content. The menu takes the
+  // trigger's name. An `aria-label` still names both, as documented before
+  // v11 moved it to the menu alone.
+  $: ariaLabel = $$props["aria-label"];
+  $: triggerLabel = ariaLabel ?? ($$slots.menu ? undefined : iconDescription);
+
+  // Always portalled: the inline icon tooltip's CSS restyles its trigger
+  // (display, icon fill, a focus ring on the icon), which would change how
+  // the overflow menu trigger looks.
+  $: hasTooltip = !$$slots.menu && Boolean(iconDescription);
+
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipActive = tooltipHandoff.active;
+
+  let hovered = false;
+  let focused = false;
+  // Set by Escape or a click on the trigger. The tooltip stays hidden while
+  // the trigger keeps hover or focus, until the next pointer enter or focus.
+  let dismissed = false;
+  // The tooltip mounts on first hover or focus, so a table with a menu per
+  // row doesn't mount a portal per row up front.
+  let tooltipMounted = false;
+
+  $: tooltipOpen =
+    hasTooltip &&
+    !open &&
+    !disabled &&
+    !dismissed &&
+    (hovered || focused) &&
+    $tooltipActive;
+  $: tooltipGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+
+  function handleTooltipMouseenter() {
+    if (!hasTooltip || disabled) return;
+    tooltipMounted = true;
+    dismissed = false;
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
+  }
+
+  function handleTooltipMouseleave() {
+    if (!hasTooltip) return;
+    tooltipHandoff.scheduleLeave(() => {
+      hovered = false;
+      if (!focused) tooltipHandoff.release();
+    });
+  }
+
+  function handleTooltipFocus() {
+    if (!hasTooltip || disabled) return;
+    tooltipMounted = true;
+    focused = true;
+    dismissed = false;
+    tooltipHandoff.claim({ instant: true });
+  }
+
+  function handleTooltipBlur() {
+    if (!hasTooltip) return;
+    focused = false;
+    if (!hovered) tooltipHandoff.release();
+  }
+
+  // Also called after the menu hands focus back to the trigger, so the
+  // next Escape reaches an ancestor such as a Modal instead of hiding a
+  // tooltip that focus alone brought up.
+  function dismissTooltip() {
+    dismissed = true;
+    tooltipHandoff.dismiss();
+  }
+
+  // Listens on `window` in the capture phase, as Button does, so a hovered
+  // tooltip also hides while focus is elsewhere, and an ancestor such as a
+  // Modal doesn't also see the Escape that hid it.
+  function handleTooltipKeydown(event) {
+    if (event.key !== "Escape" || !tooltipOpen) return;
+    // Escape that cancels an IME composition is not a dismissal.
+    if (isImeComposition(event)) return;
+    event.stopPropagation();
+    dismissTooltip();
+  }
+
+  function closeTooltip() {
+    tooltipHandoff.cancel();
+    hovered = false;
+    focused = false;
+    tooltipHandoff.release();
+  }
+
+  // Hide the tooltip when an ancestor modal closes, as Button does.
+  let disconnectModalObserver = noop;
+
+  $: {
+    disconnectModalObserver();
+    disconnectModalObserver =
+      tooltipMounted && buttonRef
+        ? observeModalClose(buttonRef, closeTooltip)
+        : noop;
+  }
+
   $: if ($items[$focusedIndex]) {
     focusedId.set($items[$focusedIndex].id);
   }
@@ -425,6 +554,7 @@
     if (shouldContinue) {
       open = false;
       buttonRef.focus({ preventScroll: true });
+      dismissTooltip();
     }
   }
 </script>
@@ -432,11 +562,16 @@
 <button
   bind:this={buttonRef}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
+  use:dismiss={{
+    enabled: tooltipOpen,
+    type: "keydown",
+    handler: handleTooltipKeydown,
+    options: { capture: true },
+  }}
   type="button"
   {disabled}
   aria-haspopup="menu"
   aria-expanded={open}
-  aria-label={ariaLabel}
   aria-controls={open ? menuId : undefined}
   {id}
   class:bx--overflow-menu={true}
@@ -446,9 +581,11 @@
   class:bx--overflow-menu--xl={size === "xl"}
   class:bx--overflow-menu--custom-trigger={$$slots.menu}
   {...$$restProps}
+  aria-label={triggerLabel}
   on:click
   on:click={({ target }) => {
     if (!menuRef?.contains(target)) {
+      dismissTooltip();
       if (open) {
         const shouldContinue = dispatch(
           "close",
@@ -465,7 +602,11 @@
   }}
   on:mouseover
   on:mouseenter
+  on:mouseenter={handleTooltipMouseenter}
   on:mouseleave
+  on:mouseleave={handleTooltipMouseleave}
+  on:focus={handleTooltipFocus}
+  on:blur={handleTooltipBlur}
   on:keydown
   on:keydown={(event) => {
     if (open) {
@@ -486,12 +627,7 @@
   }}
 >
   <slot name="menu">
-    <svelte:component
-      this={icon}
-      aria-label={iconDescription}
-      title={iconDescription}
-      class="bx--overflow-menu__icon {iconClass}"
-    />
+    <svelte:component this={icon} class="bx--overflow-menu__icon {iconClass}" />
   </slot>
 </button>
 
@@ -503,6 +639,7 @@
     tabindex="-1"
     id={menuId}
     aria-label={ariaLabel}
+    aria-labelledby={ariaLabel === undefined ? id : undefined}
     data-floating-menu-direction={direction}
     class:bx--overflow-menu-options={true}
     class:bx--overflow-menu--flip={flipped}
@@ -536,6 +673,7 @@
       tabindex="-1"
       id={menuId}
       aria-label={ariaLabel}
+      aria-labelledby={ariaLabel === undefined ? id : undefined}
       data-floating-menu-direction={portalDirection}
       class:bx--overflow-menu-options={true}
       class:bx--overflow-menu--flip={flipped}
@@ -557,6 +695,23 @@
       <slot />
     </ul>
   </FloatingPortal>
+{/if}
+
+{#if tooltipMounted}
+  <PortalTooltip
+    anchor={buttonRef}
+    direction={tooltipPosition}
+    open={tooltipOpen}
+    text={iconDescription}
+    tooltipType="icon"
+    intrinsicAlign={tooltipAlignment}
+    horizontalGapLeft={tooltipGaps.horizontalGapLeft}
+    horizontalGapRight={tooltipGaps.horizontalGapRight}
+    gapTop={tooltipGaps.gapTop}
+    gapBottom={tooltipGaps.gapBottom}
+    verticalAlignOffsetLeft={tooltipGaps.verticalAlignOffsetLeft}
+    verticalAlignOffsetRight={tooltipGaps.verticalAlignOffsetRight}
+  />
 {/if}
 
 <style>

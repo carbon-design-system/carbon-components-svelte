@@ -10,7 +10,7 @@ test.describe("FloatingPortal inside native popover", () => {
   test("OverflowMenu portal mounts inside the popover (not document.body)", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "menu" }).click();
+    await page.getByRole("button", { name: "Options" }).click();
 
     await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
 
@@ -24,7 +24,7 @@ test.describe("FloatingPortal inside native popover", () => {
   test("OverflowMenu portal uses position: fixed inside the popover", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "menu" }).click();
+    await page.getByRole("button", { name: "Options" }).click();
     await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
 
     const style = await page
@@ -37,7 +37,7 @@ test.describe("FloatingPortal inside native popover", () => {
   test("OverflowMenu menu is anchored under its trigger inside the popover", async ({
     page,
   }) => {
-    const trigger = page.getByRole("button", { name: "menu" });
+    const trigger = page.getByRole("button", { name: "Options" });
     await trigger.click();
     await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
 
@@ -59,7 +59,7 @@ test.describe("FloatingPortal inside native popover", () => {
   test("OverflowMenu menu is hit-testable at its center (popover top layer)", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "menu" }).click();
+    await page.getByRole("button", { name: "Options" }).click();
     const item = page.getByRole("menuitem", { name: "Edit" });
     await expect(item).toBeVisible();
 
