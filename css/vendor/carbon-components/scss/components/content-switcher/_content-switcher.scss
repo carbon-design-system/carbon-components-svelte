@@ -290,6 +290,15 @@
     width: fit-content;
   }
 
+  // ccs: `--icon-only` is known once the switches register. Where `:has()`
+  // is supported, a switcher whose switches are all icons fits them from
+  // the first paint instead of spanning its container until hydration.
+  @supports selector(:has(*)) {
+    .#{$prefix}--content-switcher:has(> .#{$prefix}--content-switcher-btn--icon):not(:has(> .#{$prefix}--content-switcher-btn:not(.#{$prefix}--content-switcher-btn--icon))) {
+      width: fit-content;
+    }
+  }
+
   // ccs: the switch styles key on `--icon`, which each Switch sets as it
   // renders, not the switcher's `--icon-only`, which is known only once
   // the switches register: server-rendered markup lacked it, so icon

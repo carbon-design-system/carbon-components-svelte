@@ -190,6 +190,15 @@
     bottom: 0;
   }
 
+  // ccs: an open menu beside its button is placed under the button once it
+  // mounts. Until then (a menu open in the server's markup), it takes its
+  // place in the flow, under the button's line, rather than `top`/`left`
+  // above, which put it over the button.
+  .#{$prefix}--overflow-menu-options:not(.#{$prefix}--overflow-menu--flip):not([data-floating-menu-direction="top"]):not(.#{$prefix}--breadcrumb-menu-options) {
+    top: auto;
+    left: auto;
+  }
+
   .#{$prefix}--overflow-menu-options--open {
     display: flex;
   }

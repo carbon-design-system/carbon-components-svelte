@@ -90,15 +90,20 @@
 
   let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
 
-  function offset() {
-    const depth = computeTreeLeafDepth(refLabel) - 1;
-
+  /**
+   * The label's inset, in rem, at a depth (0 at the root).
+   * @param {number} depth
+   * @param {boolean} checkboxMode
+   * @param {boolean} isParent
+   * @param {any} nodeIcon
+   */
+  function offset(depth, checkboxMode, isParent, nodeIcon) {
     // Checkbox is the leading element; use one inset per depth. The
     // leaf/icon offsets below align text with a parent's caret and would
     // shift the checkboxes instead.
-    if (isCheckboxMode) return depth + 1;
-    if (parent) return depth + 1;
-    if (icon) return depth + 2;
+    if (checkboxMode) return depth + 1;
+    if (isParent) return depth + 1;
+    if (nodeIcon) return depth + 2;
     return depth + 2.5;
   }
 
@@ -151,11 +156,10 @@
 
     prevActiveId = $activeNodeId;
   }
-  $: if (refLabel) {
-    const rem = offset();
-    refLabel.style.marginInlineStart = `-${rem}rem`;
-    refLabel.style.paddingInlineStart = `${rem}rem`;
-  }
+  // From `level` until the label is in the DOM, so the server's markup is
+  // indented; then from the DOM, for nodes placed by hand.
+  $: depth = refLabel ? computeTreeLeafDepth(refLabel) - 1 : level - 1;
+  $: inset = offset(depth, isCheckboxMode, parent, icon);
 </script>
 
 {#if root}
@@ -278,7 +282,12 @@
       focusNode(node);
     }}
   >
-    <div class:bx--tree-node__label={true} bind:this={refLabel}>
+    <div
+      class:bx--tree-node__label={true}
+      bind:this={refLabel}
+      style:margin-inline-start="-{inset}rem"
+      style:padding-inline-start="{inset}rem"
+    >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
         <Checkbox
