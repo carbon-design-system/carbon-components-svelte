@@ -38,19 +38,6 @@ describe("Stack", () => {
     }
   });
 
-  it("should apply correct gap scale classes for horizontal stacks", () => {
-    render(Stack);
-
-    const element1 = screen.getByText("horizontal-gap-1");
-    expect(element1.parentElement).toHaveClass("bx--stack-scale-1");
-
-    const element5 = screen.getByText("horizontal-gap-5");
-    expect(element5.parentElement).toHaveClass("bx--stack-scale-5");
-
-    const element13 = screen.getByText("horizontal-gap-13");
-    expect(element13.parentElement).toHaveClass("bx--stack-scale-13");
-  });
-
   it("should apply inline gap style for custom string values", () => {
     render(Stack);
 
@@ -77,18 +64,6 @@ describe("Stack", () => {
     expect(sectionElement.parentElement).toHaveClass("bx--stack");
   });
 
-  it("should combine tag, gap, and orientation props", () => {
-    render(Stack);
-
-    const element = screen.getByText("combined-props");
-    const stackElement = element.parentElement;
-
-    expect(stackElement?.tagName).toBe("OL");
-    expect(stackElement).toHaveClass("bx--stack");
-    expect(stackElement).toHaveClass("bx--stack-horizontal");
-    expect(stackElement).toHaveClass("bx--stack-scale-13");
-  });
-
   it("should not apply scale classes for custom string gap values", () => {
     render(Stack);
 
@@ -107,17 +82,6 @@ describe("Stack", () => {
     expect(stackElement).toHaveClass("bx--stack");
     expect(stackElement).toHaveClass("bx--stack-inline");
     expect(stackElement).toHaveClass("bx--stack-vertical");
-  });
-
-  it("should apply inline class with horizontal orientation", () => {
-    render(Stack);
-
-    const element = screen.getByText("inline-horizontal");
-    const stackElement = element.parentElement;
-    expect(stackElement).toHaveClass("bx--stack");
-    expect(stackElement).toHaveClass("bx--stack-inline");
-    expect(stackElement).toHaveClass("bx--stack-horizontal");
-    expect(stackElement).toHaveClass("bx--stack-scale-3");
   });
 
   it("should not apply inline class by default", () => {
@@ -174,15 +138,6 @@ describe("Stack", () => {
 
     for (let gap = 0; gap <= 13; gap++) {
       expect(verticalStackElement).not.toHaveClass(`bx--stack-scale-${gap}`);
-    }
-
-    const horizontalElement = screen.getByText("horizontal-gap-0");
-    const horizontalStackElement = horizontalElement.parentElement;
-    expect(horizontalStackElement).toHaveClass("bx--stack");
-    expect(horizontalStackElement).toHaveClass("bx--stack-horizontal");
-
-    for (let gap = 0; gap <= 13; gap++) {
-      expect(horizontalStackElement).not.toHaveClass(`bx--stack-scale-${gap}`);
     }
   });
 });

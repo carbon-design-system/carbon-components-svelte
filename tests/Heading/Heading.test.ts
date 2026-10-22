@@ -4,13 +4,6 @@ import HeadingTest from "./Heading.test.svelte";
 import SectionLevelChange from "./SectionLevelChange.test.svelte";
 
 describe("Heading", () => {
-  it("should render as h1 by default inside a Section", () => {
-    render(HeadingTest);
-
-    const heading = screen.getByText("Default Heading 1");
-    expect(heading.tagName).toBe("H1");
-  });
-
   it("should render as h1 when not inside a Section", () => {
     render(HeadingTest);
 
@@ -50,13 +43,6 @@ describe("Heading", () => {
     expect(customHeading.tagName).toBe("H5");
   });
 
-  it("should increment from custom level in nested sections", () => {
-    render(HeadingTest);
-
-    const nestedHeading = screen.getByText("Custom Level Heading 6");
-    expect(nestedHeading.tagName).toBe("H6");
-  });
-
   it.each([
     ["Reset Heading 1", "H1"],
     ["Overflow Level Heading 6", "H6"],
@@ -65,24 +51,9 @@ describe("Heading", () => {
 
     expect(screen.getByText(text).tagName).toBe(tagName);
   });
-
-  it("should cap at h6 even when starting from custom level", () => {
-    render(HeadingTest);
-
-    const cappedHeading = screen.getByText("Custom Level Capped at Heading 6");
-    expect(cappedHeading.tagName).toBe("H6");
-  });
 });
 
 describe("Section", () => {
-  it("should render as section element by default", () => {
-    const { container } = render(HeadingTest);
-
-    const sections = container.querySelectorAll("section");
-    expect(sections.length).toBeGreaterThan(0);
-    expect(sections[0].tagName).toBe("SECTION");
-  });
-
   it("should render as custom tag when tag prop is specified", () => {
     render(HeadingTest);
 

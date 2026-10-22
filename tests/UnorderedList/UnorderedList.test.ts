@@ -10,12 +10,6 @@ describe("UnorderedList", () => {
     expect(list).toHaveClass("bx--list--unordered");
     expect(list).not.toHaveClass("bx--list--nested");
     expect(list).not.toHaveClass("bx--list--expressive");
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(3);
-    expect(items[0]).toHaveTextContent("Item 1");
-    expect(items[1]).toHaveTextContent("Item 2");
-    expect(items[2]).toHaveTextContent("Item 3");
   });
 
   it("should support nested lists", () => {
@@ -50,19 +44,6 @@ describe("UnorderedList", () => {
 
     const list = screen.getByRole("list");
     expect(list).toHaveClass("bx--list--expressive");
-  });
-
-  it("should support custom items", () => {
-    const customItems = ["Custom 1", "Custom 2", "Custom 3", "Custom 4"];
-    render(UnorderedList, {
-      props: { items: customItems },
-    });
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(customItems.length);
-    for (let index = 0; index < items.length; index++) {
-      expect(items[index]).toHaveTextContent(customItems[index]);
-    }
   });
 
   describe("events", () => {

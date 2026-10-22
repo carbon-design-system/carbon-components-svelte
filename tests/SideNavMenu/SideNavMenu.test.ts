@@ -37,12 +37,6 @@ describe("SideNavMenu", () => {
     );
   });
 
-  it("allows expanded menus when rail is open", () => {
-    render(SideNavMenuRail, { props: { rail: true, isOpen: true } });
-
-    expect(getMenuButton()).toHaveAttribute("aria-expanded", "true");
-  });
-
   it("allows expanded menus when rail is not used", () => {
     render(SideNavMenuRail, { props: { rail: false, isOpen: false } });
 

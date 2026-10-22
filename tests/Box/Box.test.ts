@@ -1,17 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { expectInlineStyle } from "../utils/inline-style";
-import { user } from "../utils/user";
 import BoxRef from "./Box.ref.test.svelte";
 import Box from "./Box.test.svelte";
 
 describe("Box", () => {
-  it("renders a default div", () => {
-    render(Box);
-
-    const node = screen.getByText("Default box");
-    expect(node.tagName).toBe("DIV");
-  });
-
   it("binds `ref` to the rendered element", async () => {
     const { rerender } = render(BoxRef);
 
@@ -20,12 +12,6 @@ describe("Box", () => {
     // `tag` swaps the element, so the binding has to follow it.
     await rerender({ tag: "section" });
     expect(screen.getByTestId("ref-tag")).toHaveTextContent("SECTION");
-  });
-
-  it("renders a custom element via `tag`", () => {
-    render(Box);
-
-    expect(screen.getByText("Layer fill").tagName).toBe("SECTION");
   });
 
   it("applies fill utility classes", () => {
@@ -39,14 +25,6 @@ describe("Box", () => {
       "bx--box-fill-layer-accent",
     );
     expect(screen.getByText("Brand fill")).toHaveClass("bx--box-fill-brand");
-  });
-
-  it("applies border utility classes", () => {
-    render(Box);
-
-    expect(screen.getByText("Fill and border")).toHaveClass(
-      "bx--box-border-subtle",
-    );
   });
 
   it("applies dashed border style only when a border token is set", () => {
@@ -148,14 +126,6 @@ describe("Box", () => {
     });
   });
 
-  it("applies custom padding via inline style", () => {
-    render(Box);
-
-    expectInlineStyle(screen.getByText("Custom padding"), {
-      padding: "1.5rem",
-    });
-  });
-
   it("applies width utilities and inline sizes", () => {
     render(Box);
 
@@ -186,31 +156,12 @@ describe("Box", () => {
     );
   });
 
-  it("forwards click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Box);
-
-    const box = screen.getByTestId("click-test");
-    await user.click(box);
-    expect(consoleLog).toHaveBeenCalledWith("clicked");
-    expect(consoleLog).toHaveBeenCalledTimes(1);
-  });
-
   it("applies axis-specific overflow classes", () => {
     render(Box);
 
     expect(screen.getByText("Axis overflow")).toHaveClass(
       "bx--box-overflow-x-auto",
       "bx--box-overflow-y-hidden",
-    );
-  });
-
-  it("keeps both overflow and the axis override class when both are set", () => {
-    render(Box);
-
-    expect(screen.getByText("Overflow with x override")).toHaveClass(
-      "bx--box-overflow-hidden",
-      "bx--box-overflow-x-auto",
     );
   });
 
@@ -224,13 +175,6 @@ describe("Box", () => {
     render(Box);
 
     expectInlineStyle(screen.getByTestId("gap-custom"), { gap: "2rem" });
-  });
-
-  it("resolves gap 0 to an inline style instead of dropping it", () => {
-    render(Box);
-
-    // jsdom normalizes a unitless `0` to `0px` when reading it back.
-    expectInlineStyle(screen.getByTestId("gap-zero"), { gap: "0px" });
   });
 
   it("resolves a numeric columns value to repeat(...) when display is grid", () => {

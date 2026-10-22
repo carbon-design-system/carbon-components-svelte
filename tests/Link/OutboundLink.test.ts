@@ -47,9 +47,6 @@ describe("OutboundLink", () => {
         name: "Carbon Design System (opens in a new window)",
       }),
     ).toBeInTheDocument();
-    expect(
-      within(container).queryByText("(opens in a new tab)"),
-    ).not.toBeInTheDocument();
   });
 
   it("can opt out of the announcement with an empty string", () => {

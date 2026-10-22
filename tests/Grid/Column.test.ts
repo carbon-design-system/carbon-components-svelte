@@ -8,10 +8,10 @@ describe("Column", () => {
     expect(col).toHaveClass("bx--aspect-ratio", "bx--aspect-ratio--2x3");
   });
 
-  it("should render aspectRatio 3x2", () => {
-    render(Column, { props: { aspectRatio: "3x2" } });
+  it("should apply the align class", () => {
+    render(Column, { props: { align: "end" } });
     const col = screen.getByTestId("test-col");
-    expect(col).toHaveClass("bx--aspect-ratio", "bx--aspect-ratio--3x2");
+    expect(col).toHaveClass("bx--col--align-end");
   });
 
   it("should not render aspect ratio classes when aspectRatio is unset", () => {

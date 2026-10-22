@@ -8,6 +8,7 @@
   export let noGutterLeft: ComponentProps<Row>["noGutterLeft"] = false;
   export let noGutterRight: ComponentProps<Row>["noGutterRight"] = false;
   export let padding: ComponentProps<Row>["padding"] = false;
+  export let align: ComponentProps<Row>["align"] = undefined;
   export let as: ComponentProps<Row>["as"] = false;
 </script>
 
@@ -32,6 +33,7 @@
     {noGutterLeft}
     {noGutterRight}
     {padding}
+    {align}
     data-testid="test-row"
   >
     Row content

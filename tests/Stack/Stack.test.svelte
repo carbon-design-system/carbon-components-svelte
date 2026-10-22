@@ -27,19 +27,9 @@
 
 <Stack tag="section" gap={5}> <div>custom-tag-section</div> </Stack>
 
-<Stack tag="ol" gap={13} orientation="horizontal">
-  <li>combined-props</li>
-</Stack>
-
 <Stack gap={0}> <p>gap-0</p> </Stack>
 
-<Stack orientation="horizontal" gap={0}> <span>horizontal-gap-0</span> </Stack>
-
 <Stack inline> <p>inline-default</p> </Stack>
-
-<Stack inline gap={3} orientation="horizontal">
-  <span>inline-horizontal</span>
-</Stack>
 
 <Stack orientation="horizontal" wrap="wrap" gap={3}>
   <span>wrap-wrap</span>

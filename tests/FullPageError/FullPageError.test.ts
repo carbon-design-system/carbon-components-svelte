@@ -12,33 +12,6 @@ describe("FullPageError", () => {
     expect(root).toHaveTextContent("An unexpected error occurred.");
   });
 
-  it("defaults to the custom illustration", () => {
-    render(FullPageError);
-    const root = screen.getByTestId("default").querySelector("[role=main]");
-
-    expect(
-      root?.querySelector("svg.bx--full-page-error__custom"),
-    ).toBeInTheDocument();
-  });
-
-  it("renders the 403 illustration for kind='403'", () => {
-    render(FullPageError);
-    const root = screen.getByTestId("kind-403").querySelector("[role=main]");
-
-    expect(
-      root?.querySelector("svg.bx--full-page-error__403"),
-    ).toBeInTheDocument();
-  });
-
-  it("renders the 404 illustration for kind='404'", () => {
-    render(FullPageError);
-    const root = screen.getByTestId("kind-404").querySelector("[role=main]");
-
-    expect(
-      root?.querySelector("svg.bx--full-page-error__404"),
-    ).toBeInTheDocument();
-  });
-
   it.each([
     ["default", "custom", "0 0 750 506"],
     ["kind-403", "403", "0 0 750 570"],

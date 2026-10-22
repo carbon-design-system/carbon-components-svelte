@@ -9,40 +9,10 @@ describe("Row", () => {
     expect(row.tagName).toBe("DIV");
   });
 
-  it("should render condensed variant", () => {
-    render(Row, { props: { condensed: true } });
+  it("should apply the align class", () => {
+    render(Row, { props: { align: "center" } });
     const row = screen.getByTestId("test-row");
-    expect(row).toHaveClass("bx--row--condensed");
-  });
-
-  it("should render narrow variant", () => {
-    render(Row, { props: { narrow: true } });
-    const row = screen.getByTestId("test-row");
-    expect(row).toHaveClass("bx--row--narrow");
-  });
-
-  it("should remove all gutters", () => {
-    render(Row, { props: { noGutter: true } });
-    const row = screen.getByTestId("test-row");
-    expect(row).toHaveClass("bx--no-gutter");
-  });
-
-  it("should remove left gutter", () => {
-    render(Row, { props: { noGutterLeft: true } });
-    const row = screen.getByTestId("test-row");
-    expect(row).toHaveClass("bx--no-gutter--left");
-  });
-
-  it("should remove right gutter", () => {
-    render(Row, { props: { noGutterRight: true } });
-    const row = screen.getByTestId("test-row");
-    expect(row).toHaveClass("bx--no-gutter--right");
-  });
-
-  it("should add padding", () => {
-    render(Row, { props: { padding: true } });
-    const row = screen.getByTestId("test-row");
-    expect(row).toHaveClass("bx--row-padding");
+    expect(row).toHaveClass("bx--row--align-center");
   });
 
   it("should render as custom element when as is true", () => {
@@ -57,6 +27,7 @@ describe("Row", () => {
       props: {
         condensed: true,
         narrow: true,
+        noGutter: true,
         noGutterLeft: true,
         noGutterRight: true,
         padding: true,
@@ -67,16 +38,11 @@ describe("Row", () => {
       "bx--row",
       "bx--row--condensed",
       "bx--row--narrow",
+      "bx--no-gutter",
       "bx--no-gutter--left",
       "bx--no-gutter--right",
       "bx--row-padding",
     );
-  });
-
-  it("should pass custom attributes via rest props", () => {
-    render(Row);
-    const row = screen.getByTestId("test-row");
-    expect(row).toHaveAttribute("data-testid", "test-row");
   });
 
   it("should pass all classes to custom element", () => {
@@ -86,6 +52,8 @@ describe("Row", () => {
         condensed: true,
         narrow: true,
         noGutter: true,
+        noGutterLeft: true,
+        noGutterRight: true,
         padding: true,
       },
     });
@@ -95,6 +63,8 @@ describe("Row", () => {
       "bx--row--condensed",
       "bx--row--narrow",
       "bx--no-gutter",
+      "bx--no-gutter--left",
+      "bx--no-gutter--right",
       "bx--row-padding",
     );
   });

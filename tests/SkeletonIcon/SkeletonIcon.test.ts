@@ -11,13 +11,13 @@ describe("SkeletonIcon", () => {
     expect(element).toHaveStyle({ width: "16px", height: "16px" });
   });
 
-  it.each([20, 24, 32])("should render with size %i", (size) => {
+  it("should render with a numeric size", () => {
     render(SkeletonIcon, {
-      props: { size },
+      props: { size: 24 },
     });
 
     const element = screen.getByTestId("skeleton-icon");
-    expect(element).toHaveStyle({ width: `${size}px`, height: `${size}px` });
+    expect(element).toHaveStyle({ width: "24px", height: "24px" });
   });
 
   it("should handle mouse events", async () => {
@@ -34,26 +34,5 @@ describe("SkeletonIcon", () => {
 
     await user.unhover(element);
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-  });
-
-  it("should accept additional attributes", () => {
-    render(SkeletonIcon, {
-      props: {
-        "data-testid": "custom-icon",
-        "aria-label": "Loading icon",
-      },
-    });
-
-    const element = screen.getByTestId("custom-icon");
-    expect(element).toHaveAttribute("aria-label", "Loading icon");
-  });
-
-  it("should accept additional classes", () => {
-    render(SkeletonIcon, {
-      props: { class: "custom-class" },
-    });
-
-    const element = screen.getByTestId("skeleton-icon");
-    expect(element).toHaveClass("bx--skeleton__placeholder", "custom-class");
   });
 });

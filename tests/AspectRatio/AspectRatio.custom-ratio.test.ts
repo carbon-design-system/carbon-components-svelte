@@ -33,29 +33,17 @@ describe("AspectRatio custom ratio", () => {
     expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("42.553%");
   });
 
-  it("falls back to the default 2x1 class when width or height is zero", () => {
+  it.each([
+    ["a zero width or height", "invalid-zero"],
+    ["a non-numeric ratio", "invalid-word"],
+    ["a colon-separated ratio", "invalid-colon"],
+  ])("falls back to the default 2x1 class for %s", (_, testId) => {
     render(AspectRatioCustom);
 
-    const el = screen.getByTestId("invalid-zero");
+    const el = screen.getByTestId(testId);
     expect(el).toHaveClass("bx--aspect-ratio--2x1");
     expect(el).not.toHaveClass("bx--aspect-ratio--custom");
     expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("");
-  });
-
-  it("falls back to the default 2x1 class for a non-numeric ratio", () => {
-    render(AspectRatioCustom);
-
-    const el = screen.getByTestId("invalid-word");
-    expect(el).toHaveClass("bx--aspect-ratio--2x1");
-    expect(el).not.toHaveClass("bx--aspect-ratio--custom");
-  });
-
-  it("falls back to the default 2x1 class for a colon-separated ratio", () => {
-    render(AspectRatioCustom);
-
-    const el = screen.getByTestId("invalid-colon");
-    expect(el).toHaveClass("bx--aspect-ratio--2x1");
-    expect(el).not.toHaveClass("bx--aspect-ratio--custom");
   });
 
   it("keeps a named ratio unchanged", () => {

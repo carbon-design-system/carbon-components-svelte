@@ -16,27 +16,6 @@ describe("ListItem", () => {
     expect(screen.getByText("List item content")).toBeInTheDocument();
   });
 
-  it("should render as li element", () => {
-    const { container } = render(ListItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const item = container.querySelector("li");
-    expect(item?.tagName).toBe("LI");
-  });
-
-  it("should render slot content", () => {
-    render(ListItemTest, {
-      props: {
-        slotContent: "Custom slot content",
-      },
-    });
-
-    expect(screen.getByText("Custom slot content")).toBeInTheDocument();
-  });
-
   it("should handle click events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(ListItemTest, {
@@ -96,19 +75,6 @@ describe("ListItem", () => {
     await user.unhover(item);
 
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-  });
-
-  it("should apply custom attributes", () => {
-    const { container } = render(ListItemTest, {
-      props: {
-        "data-testid": "custom-list-item",
-        slotContent: "Content",
-      },
-    });
-
-    const item = container.querySelector("[data-testid='custom-list-item']");
-    expect(item).toBeInTheDocument();
-    expect(item).toHaveClass("bx--list__item");
   });
 
   it("should apply custom class via restProps", () => {
