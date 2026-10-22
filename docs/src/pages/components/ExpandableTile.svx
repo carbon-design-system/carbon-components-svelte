@@ -137,9 +137,9 @@ Customize expand/collapse button labels with `tileExpandedLabel` and `tileCollap
 Customize the text that describes the expand/collapse control with
 `tileCollapsedIconText` and `tileExpandedIconText`. By default it renders as
 the tile's `title`: a tooltip and accessible description, while the tile's
-content is its accessible name. With `hasInteractiveContent`, it names the
-chevron button when no chevron label is set; otherwise the visible label names
-the button and this text describes it.
+content is its accessible name. With interactive content, it names the chevron
+button when no chevron label is set; otherwise the visible label names the
+button and this text describes it.
 
 <ExpandableTile
   tileCollapsedIconText="Show more details"
@@ -153,7 +153,7 @@ the button and this text describes it.
 
 By default, the tile uses a button element to toggle expand/collapse.
 
-If you need interactive content inside the tile, set `hasInteractiveContent` to render a div instead and avoid invalid HTML nesting.
+A button cannot hold links, buttons, or inputs, so a tile with interactive content renders a div instead, and the chevron becomes a button. The tile looks for such content once it mounts, and again as content arrives. Set `hasInteractiveContent` to `true` to render the div from the start, or `false` to keep the button without looking.
 
 Only the chevron button toggles the tile. Press <DocKbd label="Tab" /> to move
 through the tile's links and buttons to the chevron, then
@@ -161,7 +161,7 @@ press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to expand or collapse
 
 | Do | Why |
 | --- | --- |
-| Set `hasInteractiveContent` whenever a slot holds links, buttons, or inputs | A `button` cannot contain interactive elements; nested controls break clicks and screen readers. |
+| Set `hasInteractiveContent` when you know a slot holds links, buttons, or inputs | The server renders the button, since it cannot look. The switch after mount recreates the slotted content and resets any state inside it. |
 | Give the chevron a visible label with `tileCollapsedLabel` and `tileExpandedLabel` | The chevron is the only toggle. A label makes it an obvious target and names it for voice control. |
 | Keep `hasInteractiveContent` fixed for the tile's lifetime | Changing it swaps the root element, which recreates the slotted content and resets any state inside it. |
 
