@@ -364,6 +364,8 @@
             tick().then(() => returnFocus(searchRef, ref));
           }
         } else if (event.key === "Enter") {
+          // Enter that commits an IME composition is not a search.
+          if (isImeComposition(event)) return;
           event.preventDefault();
           dispatchSearch?.cancel();
           dispatch("search", value ?? "");
