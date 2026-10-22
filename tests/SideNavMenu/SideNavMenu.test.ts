@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { isSideNavCollapsed, isSideNavRail } from "../../src/UIShell/nav-store";
 import { user } from "../utils/user";
 import SideNavMenuRail from "./SideNavMenu.rail.test.svelte";
@@ -19,6 +20,19 @@ describe("SideNavMenu", () => {
     render(SideNavMenuRail, { props: { rail: true, isOpen: false } });
 
     expect(getMenuButton()).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("keeps a menu holding the current page collapsed in a collapsed rail", async () => {
+    render(SideNavMenuRail, {
+      props: { rail: true, isOpen: false, expanded: false, isSelected: true },
+    });
+    await tick();
+    await tick();
+
+    expect(getMenuButton()).toHaveAttribute("aria-expanded", "false");
+    expect(getMenuButton().closest("li")).toHaveClass(
+      "bx--side-nav__item--active",
+    );
   });
 
   it("allows expanded menus when rail is open", () => {
