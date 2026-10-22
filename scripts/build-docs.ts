@@ -3,6 +3,7 @@ import { sveld } from "sveld";
 
 const SVELD_OPTIONS = {
   glob: true,
+  documentExports: true,
   json: true,
   jsonOptions: {
     outFile: "docs/src/COMPONENT_API.json",

@@ -354,6 +354,11 @@
           href={$url("/component-index")}
           isSelected={$isActive($url("/component-index"))}
         />
+        <SideNavLink
+          text="Utility index"
+          href={$url("/utility-index")}
+          isSelected={$isActive($url("/utility-index"))}
+        />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
           <Text
