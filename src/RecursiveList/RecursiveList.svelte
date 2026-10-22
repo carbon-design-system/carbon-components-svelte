@@ -42,7 +42,7 @@
   {nested}
   {...$$restProps}
 >
-  {#each nodes as child, index (child.id ?? index)}
+  {#each nodes as child, index (child.id ?? `index:${index}`)}
     <li class:bx--list__item={true}>
       {#if child.text && !child.href}
         {child.text}

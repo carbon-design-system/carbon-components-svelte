@@ -76,6 +76,15 @@ describe("RecursiveList id field", () => {
     expect(screen.getByText("Item C1")).toBeInTheDocument();
   });
 
+  it.each([
+    [[{ id: 1, text: "a" }, { text: "b" }]],
+    [[{ text: "a" }, { id: 0, text: "b" }]],
+  ])("renders nodes that mix id and no id", (nodes) => {
+    render(RecursiveList, { nodes });
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+  });
+
   it("keeps node fields off the nested list element", () => {
     render(RecursiveListIdTest);
 
