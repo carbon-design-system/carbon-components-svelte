@@ -44,6 +44,8 @@ jobs:
 
       - run: bun run check:package
 
+      - run: bun run thumbnails catalog
+
   changes:
     runs-on: ubuntu-latest
     outputs:
