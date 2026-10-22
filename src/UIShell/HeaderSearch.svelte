@@ -16,6 +16,7 @@
    * @property {string} href
    * @property {string} text
    * @property {string} [description]
+   * @event {MouseEvent} click:button - Dispatched when the search button is clicked. Cancelable: call `preventDefault()` to keep the search bar closed, for example to open a command palette instead.
    * @event {null} active
    * @event {null} inactive
    * @event {null} clear
@@ -479,8 +480,9 @@
       class:bx--header-search-button={true}
       class:bx--header__action={true}
       class:bx--header-search-button--disabled={active}
-      on:click={() => {
-        active = true;
+      on:click={(event) => {
+        if (dispatch("click:button", event, { cancelable: true }))
+          active = true;
       }}
     >
       <svelte:component this={icon} size={20} />
