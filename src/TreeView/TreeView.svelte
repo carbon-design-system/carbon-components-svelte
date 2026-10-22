@@ -304,6 +304,7 @@
    * @property {string | number} [badge] - Optional count or short value shown at the row's trailing edge (e.g., the number of items in a folder)
    * @property {string} [badgeDescription] - Text screen readers hear for the badge, after the node text (e.g., "4 items"). Defaults to the badge value
    * @property {boolean} [hasChildren] - Whether the node has children that have not been loaded yet. Renders an expander even without a `nodes` array; expanding fires `toggle` so children can be loaded lazily.
+   * @property {boolean} [editable] - Whether the node can be renamed inline. Defaults to the tree-level `editable` value; set `false` to opt a single node out.
    * @property {TreeNode<Id>[]} [nodes]
    */
 
@@ -337,6 +338,14 @@
    * @property {Array<Id>} added - Node ids checked since the previous change
    * @property {Array<Id>} removed - Node ids unchecked since the previous change
    * @property {ReadonlyArray<Id>} indeterminateIds - The partially checked node ids after the change
+   */
+
+  /**
+   * @template [Id=(string|number)]
+   * @typedef {object} TreeViewRename
+   * @property {Id} id - Id of the renamed node
+   * @property {string} text - The committed text, trimmed
+   * @property {string} previousText - The text before the edit
    */
 
   /**
@@ -378,6 +387,11 @@
   /**
    * @event check:change
    * @type {TreeViewCheckChange<Node["id"]>}
+   */
+
+  /**
+   * @event rename
+   * @type {TreeViewRename<Node["id"]>}
    */
 
   /**
@@ -449,6 +463,13 @@
    * @type {'node' | 'shallow' | 'deep'}
    */
   export let multiselectMode = "node";
+
+  /**
+   * Set to `true` to rename nodes inline.
+   * F2 or a double-click starts an edit; Enter and blur commit it, Escape cancels.
+   * Set `editable` to `false` on a node to opt it out.
+   */
+  export let editable = false;
 
   /**
    * Specify how a selection is presented.
@@ -676,6 +697,27 @@
   }
 
   /**
+   * Programmatically start renaming a node by `id`.
+   * Ancestors are expanded first so a collapsed target scrolls into view.
+   * No-op if the node is disabled, links elsewhere, or opts out of `editable`.
+   * @type {(id: Node["id"]) => void}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} editable {nodes} on:rename={rename} />
+   * <button on:click={() => treeView.editNode('node-123')}>
+   *   Rename Node
+   * </button>
+   * ```
+   */
+  export function editNode(id) {
+    const node = getNode(id);
+    if (!isNodeEditable(node)) return;
+    showNode(id, { focus: false });
+    startEdit(node);
+    if (virtualConfig) tick().then(() => scrollVirtualRowIntoView(id));
+  }
+
+  /**
    * Look up a node by `id` without re-implementing tree traversal.
    * Returns `null` if no node with the given `id` exists.
    * @type {(id: Node["id"]) => Node | null}
@@ -754,6 +796,12 @@
   const sharedMultiselect = writable(multiselect);
   /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
   const sharedSelectionMode = writable(selectionMode);
+  /** @type {import("svelte/store").Writable<boolean>} */
+  const sharedEditable = writable(editable);
+  /** @type {import("svelte/store").Writable<Node["id"] | null>} */
+  const editingNodeId = writable(null);
+  /** @type {import("svelte/store").Writable<string>} */
+  const renameLabel = writable("");
 
   /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
@@ -1267,6 +1315,80 @@
     dispatch("toggle", withLiveState(node));
   }
 
+  /** @type {Node["id"] | null} */
+  let editingId = null;
+  /** Text the node carried when the current edit session started. */
+  let editingText = "";
+
+  /** @type {(node: Node | null) => node is Node} */
+  function isNodeEditable(node) {
+    if (!editable || node == null) return false;
+    if (node.disabled || node.href) return false;
+    return node.editable !== false;
+  }
+
+  /** @type {(node: Node) => void} */
+  function startEdit(node) {
+    if (!isNodeEditable(node)) return;
+    editingId = node.id;
+    editingText = String(node.text ?? "");
+    editingNodeId.set(editingId);
+  }
+
+  /** Leaves edit mode and hands focus back to the row the input replaced. */
+  function endEdit() {
+    const id = editingId;
+    editingId = null;
+    editingNodeId.set(null);
+    if (id === null) return;
+    tick().then(() => {
+      const root = virtualConfig ? scrollContainerRef : ref;
+      const row = root?.querySelector(treeRowIdSelector(id));
+      if (row instanceof HTMLElement) row.focus();
+    });
+  }
+
+  /** @type {(text: string) => void} */
+  function commitEdit(text) {
+    if (editingId === null) return;
+    const id = editingId;
+    const previousText = editingText;
+    const nextText = text.trim();
+    endEdit();
+    if (nextText === "" || nextText === previousText) return;
+    dispatch("rename", { id, text: nextText, previousText });
+  }
+
+  function cancelEdit() {
+    if (editingId === null) return;
+    endEdit();
+  }
+
+  /**
+   * Action for the rename input: typing replaces the current name.
+   * @param {HTMLInputElement} input
+   */
+  function initEditInput(input) {
+    input.focus();
+    input.select();
+  }
+
+  /** @param {KeyboardEvent & { currentTarget: HTMLInputElement }} event */
+  function handleEditKeyDown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      commitEdit(event.currentTarget.value);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      cancelEdit();
+    }
+  }
+
+  /** @param {FocusEvent & { currentTarget: HTMLInputElement }} event */
+  function handleEditBlur(event) {
+    commitEdit(event.currentTarget.value);
+  }
+
   let initialRenderComplete = false;
 
   /**
@@ -1320,6 +1442,14 @@
     indeterminateIdSet,
     multiselect: sharedMultiselect,
     selectionMode: sharedSelectionMode,
+    editable: sharedEditable,
+    editingNodeId,
+    renameLabel,
+    isNodeEditable,
+    startEdit,
+    initEditInput,
+    handleEditKeyDown,
+    handleEditBlur,
     clickNode,
     selectNode,
     expandNode,
@@ -1451,6 +1581,16 @@
 
     const treeItem = getTreeItemFromTarget(event.target);
     if (!treeItem) return;
+
+    if (event.key === "F2") {
+      const rowId = nodeIdFromTreeItem(treeItem);
+      const rowNode = rowId === undefined ? null : getNode(rowId);
+      if (isNodeEditable(rowNode)) {
+        event.preventDefault();
+        startEdit(rowNode);
+      }
+      return;
+    }
 
     if (handleTypeAhead(event, treeItem)) return;
 
@@ -1655,6 +1795,8 @@
 
   $: sharedMultiselect.set(isMultiselect);
   $: sharedSelectionMode.set(selectionMode);
+  $: sharedEditable.set(editable);
+  $: renameLabel.set(labelText ? `Rename ${labelText}` : "Rename");
 
   /** @type {ReadonlyArray<Node["id"]>} */
   let prevIndeterminateIdsPushed = indeterminateIds.slice();
@@ -1985,17 +2127,16 @@
   }
 
   /**
-   * Scroll a virtual row into view and focus it. Callers schedule this on a
-   * `tick`, so the virtual index already reflects the ancestors `showNode` expanded.
+   * Scroll a virtual row into view. Callers schedule this on a `tick`, so the
+   * virtual index already reflects the ancestors `showNode` expanded.
    * @param {string | number} targetId
+   * @returns {boolean} Whether the row exists in the virtual index.
    */
-  function focusVirtualRowById(targetId) {
-    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return;
+  function scrollVirtualRowIntoView(targetId) {
+    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return false;
 
     const index = virtualIndex.findIndexById(targetId);
-    if (index < 0) return;
-
-    virtualFocusedId = targetId;
+    if (index < 0) return false;
 
     const nextScrollTop = scrollHighlightedIntoView({
       highlightedIndex: index,
@@ -2007,6 +2148,17 @@
       overscan: 0,
     });
     if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
+    return true;
+  }
+
+  /**
+   * Scroll a virtual row into view and focus it.
+   * @param {string | number} targetId
+   */
+  function focusVirtualRowById(targetId) {
+    if (!scrollVirtualRowIntoView(targetId)) return;
+
+    virtualFocusedId = targetId;
 
     tick().then(() => {
       /** @type {HTMLElement | null | undefined} */ (
@@ -2112,6 +2264,14 @@
     if (activeIdx < 0) return;
     const item = virtualIndex.getRowAt(activeIdx);
     if (!item) return;
+
+    if (event.key === "F2") {
+      if (isNodeEditable(item.node)) {
+        event.preventDefault();
+        startEdit(item.node);
+      }
+      return;
+    }
 
     if (handleVirtualTypeAhead(event, activeIdx)) {
       event.preventDefault();
