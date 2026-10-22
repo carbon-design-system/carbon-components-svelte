@@ -44,6 +44,13 @@
   export let maxHeight = undefined;
 
   /**
+   * Set to `true` to align the menu to the button's other edge when the
+   * default placement would overflow the right edge of the viewport.
+   * Implies `portalMenu`; ignored when `portalMenu` is explicitly `false`.
+   */
+  export let autoAlign = false;
+
+  /**
    * Specify the menu options class.
    * @type {string}
    */
@@ -108,7 +115,9 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
+  import { rafThrottle } from "../utils/raf-throttle.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { shouldFlipHorizontally } from "../utils/should-flip-horizontally.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import {
     createTypeaheadBuffer,
@@ -124,7 +133,8 @@
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
 
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined ? autoAlign || !!insideModal : portalMenu;
+  $: isAutoAligned = autoAlign && effectivePortalMenu;
 
   const dispatch = createEventDispatcher();
   /**
@@ -144,6 +154,31 @@
 
   let buttonWidth = undefined;
   let mounted = false;
+  let autoFlipped = false;
+
+  $: effectiveFlipped = isAutoAligned ? autoFlipped : flipped;
+
+  /**
+   * Measure the trigger against the viewport and pick the edge the menu aligns
+   * to. Returns the side to use right now: `effectiveFlipped` only catches up
+   * on the next flush, and callers position the menu in the same pass.
+   */
+  function updateAutoAlign() {
+    if (isAutoAligned && buttonRef && menuRef) {
+      const { left, width } = buttonRef.getBoundingClientRect();
+
+      autoFlipped = shouldFlipHorizontally({
+        anchorLeft: left,
+        anchorWidth: width,
+        floatingWidth: menuRef.offsetWidth,
+        viewportWidth: window.innerWidth,
+      });
+    }
+
+    return isAutoAligned ? autoFlipped : flipped;
+  }
+
+  const scheduleAutoAlign = rafThrottle(updateAutoAlign);
 
   // Whether opening moves focus into the menu: only when it opens after
   // mounting, or once focus enters it. A menu rendered open leaves focus
@@ -161,6 +196,7 @@
     mounted = true;
     return () => {
       typeahead.clear();
+      scheduleAutoAlign.cancel();
     };
   });
 
@@ -170,7 +206,7 @@
    * while open (each arrow key, hover).
    */
   $: positionKey = open
-    ? `${direction}|${flipped}|${size}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
+    ? `${direction}|${effectiveFlipped}|${isAutoAligned}|${size}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
     : null;
 
   /**
@@ -336,6 +372,8 @@
 
       buttonWidth = width;
 
+      const isFlipped = updateAutoAlign();
+
       if (!effectivePortalMenu) {
         // Menu is a button sibling; position from offsetTop/offsetLeft.
         const { offsetTop, offsetLeft } = buttonRef;
@@ -352,7 +390,7 @@
           menuRef.style.top = `${offsetTop + height}px`;
         }
 
-        if (flipped) {
+        if (isFlipped) {
           menuRef.style.left = `${offsetLeft + width - menuWidth}px`;
         } else {
           menuRef.style.left = `${offsetLeft}px`;
@@ -362,13 +400,18 @@
           menuRef.style.top = `${offsetTop + height + 10}px`;
           menuRef.style.left = `${offsetLeft - 11}px`;
         }
-      } else if (flipped && menuRef) {
-        menuRef.style.marginLeft = `${width - menuRef.offsetWidth}px`;
+      } else if (menuRef) {
+        // Clear rather than skip: `autoAlign` can flip back mid-session.
+        menuRef.style.marginLeft = isFlipped
+          ? `${width - menuRef.offsetWidth}px`
+          : "";
       }
     }
 
     if (!open) {
       measuredPositionKey = null;
+      autoFlipped = false;
+      scheduleAutoAlign.cancel();
       currentId.set(undefined);
       focusedIndex.set(-1);
     }
@@ -428,6 +471,11 @@
     }
   }
 </script>
+
+<svelte:window
+  on:scroll|passive={open && isAutoAligned ? scheduleAutoAlign : undefined}
+  on:resize|passive={open && isAutoAligned ? scheduleAutoAlign : undefined}
+/>
 
 <button
   bind:this={buttonRef}
@@ -505,7 +553,7 @@
     aria-label={ariaLabel}
     data-floating-menu-direction={direction}
     class:bx--overflow-menu-options={true}
-    class:bx--overflow-menu--flip={flipped}
+    class:bx--overflow-menu--flip={effectiveFlipped}
     class:bx--overflow-menu-options--open={open}
     class:bx--overflow-menu-options--xs={size === "xs"}
     class:bx--overflow-menu-options--sm={size === "sm"}
@@ -538,7 +586,7 @@
       aria-label={ariaLabel}
       data-floating-menu-direction={portalDirection}
       class:bx--overflow-menu-options={true}
-      class:bx--overflow-menu--flip={flipped}
+      class:bx--overflow-menu--flip={effectiveFlipped}
       class:bx--overflow-menu-options--open={open}
       class:bx--overflow-menu-options--xs={size === "xs"}
       class:bx--overflow-menu-options--sm={size === "sm"}
