@@ -10,6 +10,9 @@
   export let labelText = "User name";
   export let hideLabel = false;
   export let maxCount: ComponentProps<TextInput>["maxCount"] = undefined;
+  export let counterText: ComponentProps<TextInput>["counterText"] = undefined;
+  export let limitReachedText: ComponentProps<TextInput>["limitReachedText"] =
+    undefined;
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -42,6 +45,8 @@
   {labelText}
   {hideLabel}
   {maxCount}
+  {counterText}
+  {limitReachedText}
   {invalid}
   {invalidText}
   {warn}
