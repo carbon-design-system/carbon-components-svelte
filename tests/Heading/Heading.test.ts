@@ -57,6 +57,15 @@ describe("Heading", () => {
     expect(nestedHeading.tagName).toBe("H6");
   });
 
+  it.each([
+    ["Reset Heading 1", "H1"],
+    ["Overflow Level Heading 6", "H6"],
+  ])("should honor an explicit level for %s", (text, tagName) => {
+    render(HeadingTest);
+
+    expect(screen.getByText(text).tagName).toBe(tagName);
+  });
+
   it("should cap at h6 even when starting from custom level", () => {
     render(HeadingTest);
 
