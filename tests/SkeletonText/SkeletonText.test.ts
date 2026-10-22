@@ -16,21 +16,17 @@ describe("SkeletonText", () => {
     expect(element).toHaveClass("bx--skeleton__text", "bx--skeleton__heading");
   });
 
-  it("should render paragraph variant with default lines", () => {
-    render(SkeletonText, { props: { paragraph: true } });
+  it.each([
+    ["default", {}, 3],
+    ["custom", { lines: 8 }, 8],
+  ])("should render paragraph with %s line count", (_, props, count) => {
+    render(SkeletonText, { props: { paragraph: true, ...props } });
 
     const elements = screen.getAllByRole("paragraph", { hidden: true });
-    expect(elements).toHaveLength(3);
+    expect(elements).toHaveLength(count);
     for (const element of elements) {
       expect(element).toHaveClass("bx--skeleton__text");
     }
-  });
-
-  it("should render paragraph with custom line count", () => {
-    render(SkeletonText, { props: { paragraph: true, lines: 8 } });
-
-    const elements = screen.getAllByRole("paragraph", { hidden: true });
-    expect(elements).toHaveLength(8);
   });
 
   it("should render with custom width", () => {
@@ -77,35 +73,48 @@ describe("SkeletonText", () => {
   });
 
   it("should handle mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SkeletonText);
+    const handlers = {
+      onclick: vi.fn(),
+      onmouseover: vi.fn(),
+      onmouseenter: vi.fn(),
+      onmouseleave: vi.fn(),
+    };
+    render(SkeletonText, { props: handlers });
 
     const element = screen.getByRole("paragraph", { hidden: true });
 
     await user.click(element);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(handlers.onclick).toHaveBeenCalled();
 
     await user.hover(element);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(handlers.onmouseover).toHaveBeenCalled();
+    expect(handlers.onmouseenter).toHaveBeenCalled();
 
     await user.unhover(element);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(handlers.onmouseleave).toHaveBeenCalled();
   });
 
   it("should handle paragraph mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SkeletonText, { props: { paragraph: true } });
+    const handlers = {
+      onclick: vi.fn(),
+      onmouseover: vi.fn(),
+      onmouseenter: vi.fn(),
+      onmouseleave: vi.fn(),
+    };
+    render(SkeletonText, { props: { ...handlers, paragraph: true } });
 
     const container = screen.getAllByRole("paragraph", { hidden: true })[0]
       .parentElement;
     assert(container);
+
     await user.click(container);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(handlers.onclick).toHaveBeenCalled();
 
     await user.hover(container);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(handlers.onmouseover).toHaveBeenCalled();
+    expect(handlers.onmouseenter).toHaveBeenCalled();
 
     await user.unhover(container);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(handlers.onmouseleave).toHaveBeenCalled();
   });
 });

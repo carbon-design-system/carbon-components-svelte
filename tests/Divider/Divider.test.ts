@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import Divider from "./Divider.test.svelte";
 
 describe("Divider", () => {
@@ -39,7 +40,7 @@ describe("Divider", () => {
   it("applies a custom margin as an inline style", () => {
     render(Divider);
 
-    expect(screen.getByTestId("margin-custom")).toHaveStyle({
+    expectInlineStyle(screen.getByTestId("margin-custom"), {
       marginBlock: "2rem",
     });
   });

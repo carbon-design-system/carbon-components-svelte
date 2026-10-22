@@ -1,19 +1,37 @@
 import { render, screen } from "@testing-library/svelte";
+import UnorderedList from "../UnorderedList/UnorderedList.test.svelte";
 import { user } from "../utils/user";
-import UnorderedList from "./UnorderedList.test.svelte";
+import OrderedList from "./OrderedList.test.svelte";
 
-describe("UnorderedList", () => {
+/** Behavior `OrderedList` and `UnorderedList` share; each row picks the fixture, root tag and base class. */
+const variants = [
+  {
+    name: "OrderedList",
+    Fixture: OrderedList,
+    tag: "OL",
+    baseClass: "bx--list--ordered",
+  },
+  {
+    name: "UnorderedList",
+    Fixture: UnorderedList,
+    tag: "UL",
+    baseClass: "bx--list--unordered",
+  },
+] as const;
+
+describe.each(variants)("$name (shared)", ({ Fixture, tag, baseClass }) => {
   it("should render with default props", () => {
-    render(UnorderedList);
+    render(Fixture);
 
     const list = screen.getByRole("list");
-    expect(list).toHaveClass("bx--list--unordered");
+    expect(list).toHaveClass(baseClass);
+    expect(list).not.toHaveClass("bx--list--ordered--native");
     expect(list).not.toHaveClass("bx--list--nested");
     expect(list).not.toHaveClass("bx--list--expressive");
   });
 
   it("should support nested lists", () => {
-    render(UnorderedList, {
+    render(Fixture, {
       props: {
         nested: true,
         nestedItems: ["Nested 1", "Nested 2"],
@@ -24,12 +42,12 @@ describe("UnorderedList", () => {
     expect(lists).toHaveLength(4); // Main list + 3 nested lists (one for each main item)
 
     const mainList = lists[0];
-    expect(mainList).toHaveClass("bx--list--unordered");
+    expect(mainList).toHaveClass(baseClass);
     expect(mainList).toHaveClass("bx--list--nested");
 
     const nestedLists = lists.slice(1);
     for (const list of nestedLists) {
-      expect(list).toHaveClass("bx--list--unordered");
+      expect(list).toHaveClass(baseClass);
       expect(list).toHaveClass("bx--list--nested");
     }
 
@@ -38,7 +56,7 @@ describe("UnorderedList", () => {
   });
 
   it("should support expressive styles", () => {
-    render(UnorderedList, {
+    render(Fixture, {
       props: { expressive: true },
     });
 
@@ -49,7 +67,7 @@ describe("UnorderedList", () => {
   describe("events", () => {
     it("should emit click event", async () => {
       const mock = vi.fn();
-      render(UnorderedList, { props: { onclick: mock } });
+      render(Fixture, { props: { onclick: mock } });
       const list = screen.getByRole("list");
 
       await user.click(list);
@@ -62,7 +80,7 @@ describe("UnorderedList", () => {
       ["mouseleave", "onmouseleave"],
     ])("should emit %s event", (eventName, propName) => {
       const mock = vi.fn();
-      render(UnorderedList, { props: { [propName]: mock } });
+      render(Fixture, { props: { [propName]: mock } });
       const list = screen.getByRole("list");
 
       const event = new MouseEvent(eventName);
@@ -74,10 +92,10 @@ describe("UnorderedList", () => {
 
   describe("accessibility", () => {
     it("should have correct ARIA role", () => {
-      render(UnorderedList);
+      render(Fixture);
 
       const list = screen.getByRole("list");
-      expect(list.tagName).toBe("UL");
+      expect(list.tagName).toBe(tag);
 
       const items = screen.getAllByRole("listitem");
       for (const item of items) {
@@ -86,7 +104,7 @@ describe("UnorderedList", () => {
     });
 
     it("should maintain list structure with nested items", () => {
-      render(UnorderedList, {
+      render(Fixture, {
         props: {
           nested: true,
           nestedItems: ["Nested 1", "Nested 2"],
@@ -95,7 +113,7 @@ describe("UnorderedList", () => {
 
       const lists = screen.getAllByRole("list");
       for (const list of lists) {
-        expect(list.tagName).toBe("UL");
+        expect(list.tagName).toBe(tag);
         expect(list.children.length).toBeGreaterThan(0);
         for (const child of Array.from(list.children)) {
           expect(child.tagName).toBe("LI");

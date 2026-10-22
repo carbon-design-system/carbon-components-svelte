@@ -5,14 +5,18 @@
   export let size: "sm" | "md" | "lg" | "xl" | "2xl" = "md";
   export let disableStacking = false;
   export let count = 2;
+  export let sticky = false;
 </script>
 
-<ActionSet data-testid="action-set" {size} {disableStacking}>
+<ActionSet data-testid="action-set" {size} {disableStacking} {sticky}>
   <Button kind="secondary">Cancel</Button>
   {#if count >= 2}
     <Button kind="danger">Delete</Button>
   {/if}
   {#if count >= 3}
     <Button>Save</Button>
+  {/if}
+  {#if count >= 4}
+    <Button kind="tertiary">Archive</Button>
   {/if}
 </ActionSet>

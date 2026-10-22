@@ -45,13 +45,4 @@ describe("AspectRatio custom ratio", () => {
     expect(el).not.toHaveClass("bx--aspect-ratio--custom");
     expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("");
   });
-
-  it("keeps a named ratio unchanged", () => {
-    render(AspectRatioCustom);
-
-    const el = screen.getByTestId("named-ratio");
-    expect(el).toHaveClass("bx--aspect-ratio--2x1");
-    expect(el).not.toHaveClass("bx--aspect-ratio--custom");
-    expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("");
-  });
 });

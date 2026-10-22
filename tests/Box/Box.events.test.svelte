@@ -1,17 +1,19 @@
 <script lang="ts">
-  import Box from "carbon-components-svelte/Box/Box.svelte";
+  import type Box from "carbon-components-svelte/Box/Box.svelte";
+  import type Stack from "carbon-components-svelte/Stack/Stack.svelte";
 
-  export let events: string[] = [];
+  export let component: typeof Box | typeof Stack;
+  export let onEvent: (event: string) => void;
 </script>
 
-<Box
+<svelte:component
+  this={component}
   data-testid="target"
-  on:click={() => (events = [...events, "click"])}
-  on:scroll={() => (events = [...events, "scroll"])}
-  on:keydown={(e) => (events = [...events, `keydown:${e.key}`])}
-  on:focusin={() => (events = [...events, "focusin"])}
-  on:focusout={() => (events = [...events, "focusout"])}
+  on:click={() => onEvent("click")}
+  on:scroll={() => onEvent("scroll")}
+  on:keydown={(e) => onEvent(`keydown:${e.key}`)}
+  on:focusin={() => onEvent("focusin")}
+  on:focusout={() => onEvent("focusout")}
 >
   <button type="button">Inner</button>
-</Box>
-<p data-testid="events">{events.join(",")}</p>
+</svelte:component>

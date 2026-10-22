@@ -39,19 +39,25 @@ describe("SkeletonPlaceholder", () => {
   });
 
   it("should handle mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(SkeletonPlaceholder);
+    const handlers = {
+      onclick: vi.fn(),
+      onmouseover: vi.fn(),
+      onmouseenter: vi.fn(),
+      onmouseleave: vi.fn(),
+    };
+    render(SkeletonPlaceholder, { props: handlers });
 
     const element = screen.getByTestId("skeleton-placeholder");
 
     await user.click(element);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(handlers.onclick).toHaveBeenCalled();
 
     await user.hover(element);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(handlers.onmouseover).toHaveBeenCalled();
+    expect(handlers.onmouseenter).toHaveBeenCalled();
 
     await user.unhover(element);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(handlers.onmouseleave).toHaveBeenCalled();
   });
 
   it("should accept additional classes", () => {

@@ -5,6 +5,12 @@
   export let heading = false;
   export let paragraph = false;
   export let width = "100%";
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
+  export let onmouseover: ((event: MouseEvent) => void) | undefined = undefined;
+  export let onmouseenter: ((event: MouseEvent) => void) | undefined =
+    undefined;
+  export let onmouseleave: ((event: MouseEvent) => void) | undefined =
+    undefined;
 </script>
 
 <SkeletonText
@@ -12,16 +18,8 @@
   {heading}
   {paragraph}
   {width}
-  on:click={() => {
-    console.log("click");
-  }}
-  on:mouseover={() => {
-    console.log("mouseover");
-  }}
-  on:mouseenter={() => {
-    console.log("mouseenter");
-  }}
-  on:mouseleave={() => {
-    console.log("mouseleave");
-  }}
+  on:click={(e) => onclick?.(e)}
+  on:mouseover={(e) => onmouseover?.(e)}
+  on:mouseenter={(e) => onmouseenter?.(e)}
+  on:mouseleave={(e) => onmouseleave?.(e)}
 />

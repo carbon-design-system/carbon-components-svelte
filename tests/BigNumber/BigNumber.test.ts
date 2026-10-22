@@ -14,36 +14,35 @@ describe("BigNumber", () => {
   });
 
   describe("denominator visibility", () => {
-    it("hides the denominator when there is no total", () => {
+    it.each([
+      ["total is greater than value", "total-shown", "/ 10"],
+      ["total is less than value", "total-less", "/ 3"],
+      [
+        "forceShowTotal is set, even if total equals value",
+        "force-show-total",
+        "/ 999",
+      ],
+    ])("shows the denominator when %s", (_, testId, expected) => {
       render(BigNumber);
 
-      const el = screen.getByTestId("no-total");
-      expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
-    });
-
-    it("shows the denominator when total is greater than value and formats differently", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("total-shown");
       expect(
-        el.querySelector(".bx--big-number__denominator"),
-      ).toHaveTextContent("/ 10");
+        screen
+          .getByTestId(testId)
+          .querySelector(".bx--big-number__denominator"),
+      ).toHaveTextContent(expected);
     });
 
-    it("hides the denominator when total equals value", () => {
+    it.each([
+      ["there is no total", "no-total"],
+      ["total equals value", "total-equal"],
+    ])("hides the denominator when %s", (_, testId) => {
       render(BigNumber);
 
-      const el = screen.getByTestId("total-equal");
-      expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
-    });
-
-    it("shows the denominator when total is less than value", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("total-less");
       expect(
-        el.querySelector(".bx--big-number__denominator"),
-      ).toHaveTextContent("/ 3");
+        screen
+          .getByTestId(testId)
+          .querySelector(".bx--big-number__denominator"),
+      ).toBeNull();
     });
 
     it("hides the denominator when its truncated display matches the value's", () => {
@@ -108,20 +107,19 @@ describe("BigNumber", () => {
   });
 
   describe("trend", () => {
-    it("renders an up arrow colored success by default", () => {
+    it.each([
+      ["an up arrow colored success by default", "trend-up", "success"],
+      ["a down arrow colored error by default", "trend-down", "error"],
+      ["an up trend overridden to error", "trend-up-error", "error"],
+      ["a down trend overridden to success", "trend-down-success", "success"],
+      ["a flat trend colored neutral by default", "trend-flat", "neutral"],
+      ["a flat trend overridden to error", "trend-flat-error", "error"],
+    ])("renders %s", (_, testId, color) => {
       render(BigNumber);
 
-      const el = screen.getByTestId("trend-up");
-      const icon = el.querySelector(".bx--big-number__trend-icon");
-      expect(icon).toHaveClass("bx--big-number__trend-icon--success");
-    });
-
-    it("renders a down arrow colored error by default", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("trend-down");
-      const icon = el.querySelector(".bx--big-number__trend-icon");
-      expect(icon).toHaveClass("bx--big-number__trend-icon--error");
+      expect(
+        screen.getByTestId(testId).querySelector(".bx--big-number__trend-icon"),
+      ).toHaveClass(`bx--big-number__trend-icon--${color}`);
     });
 
     it("renders no trend icon by default", () => {
@@ -129,38 +127,6 @@ describe("BigNumber", () => {
 
       const el = screen.getByTestId("no-trend");
       expect(el.querySelector(".bx--big-number__trend-icon")).toBeNull();
-    });
-
-    it("overrides an up trend's color independent of direction", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("trend-up-error");
-      const icon = el.querySelector(".bx--big-number__trend-icon");
-      expect(icon).toHaveClass("bx--big-number__trend-icon--error");
-    });
-
-    it("overrides a down trend's color independent of direction", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("trend-down-success");
-      const icon = el.querySelector(".bx--big-number__trend-icon");
-      expect(icon).toHaveClass("bx--big-number__trend-icon--success");
-    });
-
-    it("renders a flat trend icon colored neutral by default", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("trend-flat");
-      const icon = el.querySelector(".bx--big-number__trend-icon");
-      expect(icon).toHaveClass("bx--big-number__trend-icon--neutral");
-    });
-
-    it("overrides a flat trend's color", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("trend-flat-error");
-      const icon = el.querySelector(".bx--big-number__trend-icon");
-      expect(icon).toHaveClass("bx--big-number__trend-icon--error");
     });
 
     it("announces the default trend description to assistive tech", () => {

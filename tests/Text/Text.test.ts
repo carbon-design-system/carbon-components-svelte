@@ -19,12 +19,22 @@ describe("Text", () => {
     expect(node).toHaveClass("bx--type-heading-04");
   });
 
-  it("applies a text color token class", () => {
+  it.each([
+    ["Secondary text", "bx--type-text-secondary"],
+    ["Success text", "bx--type-text-success"],
+    ["Link text", "bx--type-text-link"],
+    ["Semibold text", "bx--type-semibold"],
+    ["Italic text", "bx--type-italic"],
+    ["Mono text", "bx--type-mono"],
+    ["Break word text", "bx--type-break-word"],
+    ["Nowrap text", "bx--type-nowrap"],
+    ["Balanced heading", "bx--type-balance"],
+    ["Pretty-wrapped paragraph", "bx--type-pretty"],
+    ["Full width text", "bx--type-full-width"],
+  ])("applies the modifier class for %s", (text, expectedClass) => {
     render(Text);
 
-    expect(screen.getByText("Secondary text")).toHaveClass(
-      "bx--type-text-secondary",
-    );
+    expect(screen.getByText(text)).toHaveClass(expectedClass);
   });
 
   it("omits the type class when `type` is inherit", () => {
@@ -33,15 +43,6 @@ describe("Text", () => {
     const node = screen.getByText("Inherited type");
     expect(node).toHaveClass("bx--type-text-error");
     expect(node.className).not.toMatch(/bx--type-(?!text-)/);
-  });
-
-  it("applies success and link color classes", () => {
-    render(Text);
-
-    expect(screen.getByText("Success text")).toHaveClass(
-      "bx--type-text-success",
-    );
-    expect(screen.getByText("Link text")).toHaveClass("bx--type-text-link");
   });
 
   it("merges type, color, and rest class", () => {
@@ -55,67 +56,13 @@ describe("Text", () => {
     );
   });
 
-  it("applies font weight modifier classes", () => {
+  it.each([
+    ["Max width px", "320px"],
+    ["Max width ch", "38ch"],
+  ])("applies maxWidth for %s", (text, maxWidth) => {
     render(Text);
 
-    expect(screen.getByText("Semibold text")).toHaveClass("bx--type-semibold");
-  });
-
-  it("applies italic modifier class", () => {
-    render(Text);
-
-    expect(screen.getByText("Italic text")).toHaveClass("bx--type-italic");
-  });
-
-  it("applies font family modifier class", () => {
-    render(Text);
-
-    expect(screen.getByText("Mono text")).toHaveClass("bx--type-mono");
-  });
-
-  it("applies wrap modifier classes", () => {
-    render(Text);
-
-    expect(screen.getByText("Break word text")).toHaveClass(
-      "bx--type-break-word",
-    );
-    expect(screen.getByText("Nowrap text")).toHaveClass("bx--type-nowrap");
-  });
-
-  it("applies balance modifier class", () => {
-    render(Text);
-
-    expect(screen.getByText("Balanced heading")).toHaveClass(
-      "bx--type-balance",
-    );
-  });
-
-  it("applies pretty modifier class", () => {
-    render(Text);
-
-    expect(screen.getByText("Pretty-wrapped paragraph")).toHaveClass(
-      "bx--type-pretty",
-    );
-  });
-
-  it("applies maxWidth as px when given a number", () => {
-    render(Text);
-
-    expect(screen.getByText("Max width px")).toHaveStyle({ maxWidth: "320px" });
-  });
-
-  it("applies maxWidth as a CSS length string", () => {
-    render(Text);
-
-    expectInlineStyle(screen.getByText("Max width ch"), { maxWidth: "38ch" });
-  });
-
-  it("applies full width modifier class", () => {
-    render(Text);
-
-    expect(screen.getByText("Full width text")).toHaveClass(
-      "bx--type-full-width",
-    );
+    expectInlineStyle(screen.getByText(text), { maxWidth });
   });
 
   it("applies multiline truncation when `lines` is set", () => {

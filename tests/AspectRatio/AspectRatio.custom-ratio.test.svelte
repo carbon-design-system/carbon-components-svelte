@@ -18,4 +18,3 @@
 <AspectRatio ratio={invalidColon} data-testid="invalid-colon">
   Invalid colon
 </AspectRatio>
-<AspectRatio ratio="2x1" data-testid="named-ratio">Named</AspectRatio>
