@@ -474,6 +474,10 @@ allows the user to remove the file.
 Provide detailed error messages for invalid files with `errorSubject` and
 `errorBody`. This helps users understand and resolve upload issues.
 
+Screen readers announce the error when the item becomes invalid. The error
+also describes the remove button, so it is read again when the button takes
+focus.
+
 <FileUploaderItem
   invalid
   id="q3-report"
