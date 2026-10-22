@@ -37,6 +37,8 @@
   export let translateWithIdSelection: ComponentProps<ComboBox>["translateWithIdSelection"] =
     undefined;
   export let allowCustomValue = false;
+  export let createOptionText:
+    string | ((query: string) => string) | undefined = undefined;
   export let clearFilterOnOpen = false;
   export let selectTextOnFocus = false;
   export let openOnClear = false;
@@ -77,6 +79,7 @@
   shouldFilterItem={defaultFilter ? undefined : shouldFilterItem}
   {translateWithIdSelection}
   {allowCustomValue}
+  {createOptionText}
   {clearFilterOnOpen}
   {selectTextOnFocus}
   {openOnClear}

@@ -67,6 +67,13 @@
    */
 
   /**
+   * Dispatched with the typed text when the user chooses the "create" row (or
+   * presses Enter on a novel query). Requires `allowCustomValue`. The consumer
+   * owns appending the new option to `items`.
+   * @event {string} create
+   */
+
+  /**
    * Dispatched when the menu is scrolled near the bottom (load-more signal).
    * Not the browser's native `scrollend` (scroll stopped).
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
@@ -175,9 +182,25 @@
   /**
    * Set to `true` to allow custom values that are not in the items list.
    * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
-   * When enabled, custom text is preserved.
+   * When enabled, custom text is preserved. A trailing "Create …" menu row is also shown for novel
+   * queries (no case-insensitive `itemToString` match); listen to `create` to append a new option.
    */
   export let allowCustomValue = false;
+
+  /**
+   * @param {string} query
+   * @returns {string}
+   */
+  function defaultCreateOptionText(query) {
+    return `Create "${query}"`;
+  }
+
+  /**
+   * Label for the trailing create row when `allowCustomValue` is enabled.
+   * Pass a string for a fixed label, or a function of the current query.
+   * @type {string | ((query: string) => string)}
+   */
+  export let createOptionText = defaultCreateOptionText;
 
   /**
    * Set to `true` to clear the input value when opening the dropdown.
@@ -518,6 +541,9 @@
     }
   }
 
+  /** Stable sentinel so the create row never collides with a real item id. */
+  const CREATE_OPTION_ID = "__ccs-combo-box-create-option__";
+
   let fieldFocused = false;
   /** Set when a required, empty combo box blocked form submission. */
   let requiredError = false;
@@ -650,9 +676,21 @@
     // "Focusability of disabled controls") so assistive-tech users can
     // discover them; the Enter handler and the option click handlers refuse
     // the actual selection.
-    const navigableItems = filteredItems?.length ? filteredItems : orderedItems;
-    highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
+    highlightedIndex = moveIndex(highlightedIndex, step, navigableCount);
     highlightOrigin = "keyboard";
+  }
+
+  /**
+   * Dispatch `create` for the query and close the menu. Does not mutate
+   * `items`; the consumer owns appending the new option.
+   * @param {string} query
+   */
+  function commitCreate(query) {
+    valueBeforeOpen = "";
+    dispatch("create", query);
+    close("select");
+    highlightedIndex = -1;
+    highlightOrigin = null;
   }
 
   /**
@@ -661,11 +699,10 @@
    * @param {1 | -1} direction
    */
   function changePage(direction) {
-    const navigableItems = filteredItems?.length ? filteredItems : orderedItems;
     highlightedIndex = clampIndex(
       highlightedIndex,
       direction * MENU_PAGE_STEP,
-      navigableItems.length,
+      navigableCount,
     );
     highlightOrigin = "keyboard";
   }
@@ -969,7 +1006,7 @@
   // The default `shouldFilterItem` keeps every item, so only announce while a
   // filter can actually narrow the list.
   $: if (open && value.length > 0 && filterFn !== defaultShouldFilter) {
-    announceFilterResults(filteredItems.length);
+    announceFilterResults(filteredItems.length + (showCreateOption ? 1 : 0));
   } else {
     announceFilterResults.cancel();
   }
@@ -983,12 +1020,38 @@
       ? emptyText(value)
       : emptyText
     : "";
-  // A row after the options, not an option, so arrow keys never reach it.
-  $: showEmpty = hasNoMatches && ($$slots.empty || emptyMessage !== "");
+  $: trimmedQuery = typeof value === "string" ? value.trim() : "";
+  // The create row shows for a novel query: no item's label equals it
+  // (case-insensitive), matching the equality Enter uses to select. Partial
+  // matches may remain.
+  $: showCreateOption =
+    allowCustomValue &&
+    open &&
+    trimmedQuery.length > 0 &&
+    !items.some((item) => labelMatchesInput(item, trimmedQuery));
+  $: createOptionIndex = showCreateOption ? filteredItems.length : -1;
+  $: createOptionLabel =
+    typeof createOptionText === "function"
+      ? createOptionText(trimmedQuery)
+      : createOptionText;
+  // Options the highlight can reach, counting the trailing create row.
+  $: navigableCount = showCreateOption
+    ? filteredItems.length + 1
+    : filteredItems?.length
+      ? filteredItems.length
+      : orderedItems.length;
+  // The create row is an option too, so it counts toward the set size.
+  $: optionSetSize = filteredItems.length + (showCreateOption ? 1 : 0);
+  // A row after the options, not an option, so arrow keys never reach it. The
+  // create row takes its place when it shows.
+  $: showEmpty =
+    hasNoMatches && !showCreateOption && ($$slots.empty || emptyMessage !== "");
   $: highlightedId =
-    filteredItems[highlightedIndex] == null
-      ? undefined
-      : `${id}-${filteredItems[highlightedIndex].id}`;
+    showCreateOption && highlightedIndex === createOptionIndex
+      ? `${id}-${CREATE_OPTION_ID}`
+      : filteredItems[highlightedIndex] == null
+        ? undefined
+        : `${id}-${filteredItems[highlightedIndex].id}`;
 
   $: if (shouldVirtualize && !menuWindow) menuWindow = createWindow();
   $: menuState = menuWindow
@@ -1397,6 +1460,10 @@
               ) {
                 return;
               }
+              if (showCreateOption && highlightedIndex === createOptionIndex) {
+                commitCreate((ref?.value ?? value).trim());
+                return;
+              }
               const wasOpen = open;
               if (wasOpen) open = false;
               else openMenu("keydown");
@@ -1426,6 +1493,10 @@
                   value = itemToString(selectedItem);
                   selectedId = selectedItem.id;
                   if (wasOpen) dispatch("close", { trigger: "select" });
+                } else if (wasOpen && showCreateOption) {
+                  // Novel custom text with no highlight: signal create and
+                  // close as `allowCustomValue` always has.
+                  dispatch("create", (ref?.value ?? value).trim());
                 }
               }
               highlightedIndex = -1;
@@ -1465,11 +1536,7 @@
               // first/last option instead, matching Carbon React's ComboBox
               // (downshift's useCombobox gates the same jump on `isOpen`).
               event.preventDefault();
-              const navigableItems = filteredItems?.length
-                ? filteredItems
-                : orderedItems;
-              highlightedIndex =
-                event.key === "Home" ? 0 : navigableItems.length - 1;
+              highlightedIndex = event.key === "Home" ? 0 : navigableCount - 1;
               highlightOrigin = "keyboard";
             } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
               const step = event.key === "ArrowDown" ? 1 : -1;
@@ -1647,7 +1714,7 @@
                       active={selectedId === item.id}
                       disabled={item.disabled}
                       hasLeftIcon={Boolean($$slots.icon || item.icon)}
-                      aria-setsize={filteredItems.length}
+                      aria-setsize={optionSetSize}
                       aria-posinset={actualIndex + 1}
                       data-virtual-index={isMeasured ? rowIndex : undefined}
                       on:click={(event) => {
@@ -1776,7 +1843,7 @@
                     hidden={hideMode && matchIndex === undefined
                       ? true
                       : undefined}
-                    aria-setsize={filteredItems.length}
+                    aria-setsize={optionSetSize}
                     aria-posinset={matchIndex === undefined
                       ? undefined
                       : matchIndex + 1}
@@ -1865,6 +1932,26 @@
               {/each}
             </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if showCreateOption}
+          <ListBoxMenuItem
+            id="{id}-{CREATE_OPTION_ID}"
+            highlighted={highlightedIndex === createOptionIndex}
+            aria-setsize={optionSetSize}
+            aria-posinset={optionSetSize}
+            on:click={() => commitCreate(trimmedQuery)}
+            on:mousedown={(event) => {
+              // Keep focus on the field so screen readers don't
+              // re-announce it on every option click.
+              event.preventDefault();
+            }}
+            on:mouseenter={() => {
+              highlightedIndex = createOptionIndex;
+              highlightOrigin = null;
+            }}
+          >
+            {createOptionLabel}
+          </ListBoxMenuItem>
         {/if}
         {#if showEmpty}
           <ListBoxMenuStatus>
