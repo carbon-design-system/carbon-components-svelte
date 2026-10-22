@@ -2,6 +2,7 @@
   /**
    * @template [Icon=any]
    * @event {{ text: string }} click:button--secondary - Dispatched when a secondary button is clicked. For `secondaryButtonText`, the event is cancelable: call `preventDefault()` to keep the modal open. If not cancelled, the modal closes. Array `secondaryButtons` never auto-close.
+   * @event {null} loading:success - Dispatched when `loadingStatus` is `"finished"`, after the `InlineLoading` success delay.
    */
 
   /** Specify the primary button text */
@@ -19,14 +20,33 @@
   /**
    * Set to `true` to show a loading state on the primary button.
    * While loading, the button is non-interactive and submit is suppressed.
+   * Same as `loadingStatus="active"`, except that the secondary buttons
+   * stay enabled. `loadingStatus` wins when it is not `"inactive"`.
    */
   export let primaryButtonLoading = false;
+
+  /**
+   * Set the loading status of the footer.
+   * Any status other than `"inactive"` shows `InlineLoading` with that
+   * status in the primary button, disables the footer buttons, and
+   * suppresses submit. `"finished"` dispatches `loading:success` after the
+   * success delay.
+   * @type {"inactive" | "active" | "finished" | "error"}
+   */
+  export let loadingStatus = "inactive";
 
   /**
    * Specify the description for the primary button loading state.
    * Passed to `InlineLoading` as `description`.
    */
   export let primaryButtonLoadingDescription = "Loading";
+
+  /**
+   * Specify the description for the primary button loading icon.
+   * Passed to `InlineLoading` as `iconDescription`.
+   * @type {string}
+   */
+  export let primaryButtonLoadingIconDescription = undefined;
 
   /**
    * Specify a class for the primary button.
@@ -83,13 +103,23 @@
   const unregisterFooter = registerFooter();
   onMount(() => unregisterFooter);
 
+  $: footerBusy = Boolean(loadingStatus) && loadingStatus !== "inactive";
+  // `primaryButtonLoading` is the boolean form of "active"; a status
+  // other than "inactive" takes precedence.
+  $: primaryStatus = footerBusy
+    ? loadingStatus
+    : primaryButtonLoading
+      ? "active"
+      : "inactive";
+  $: primaryBusy = primaryStatus !== "inactive";
+
   function handlePrimaryClick() {
-    if (primaryButtonLoading) return;
+    if (primaryBusy) return;
     submit();
   }
 
   function handleSecondaryClick() {
-    if (secondaryButtonLoading) return;
+    if (secondaryButtonLoading || footerBusy) return;
     const shouldContinue = dispatch(
       "click:button--secondary",
       { text: secondaryButtonText },
@@ -104,6 +134,7 @@
 <div
   class:bx--modal-footer={true}
   class:bx--modal-footer--three-button={secondaryButtons.length === 2}
+  aria-busy={primaryStatus === "active" ? "true" : undefined}
   {...$$restProps}
 >
   {#if secondaryButtons.length > 0}
@@ -111,9 +142,9 @@
       <Button
         size="default"
         kind={button.kind ?? "secondary"}
-        disabled={button.disabled || button.loading}
+        disabled={button.disabled || button.loading || footerBusy}
         on:click={() => {
-          if (button.loading) return;
+          if (button.loading || footerBusy) return;
           dispatch("click:button--secondary", { text: button.text });
         }}
       >
@@ -132,7 +163,7 @@
       size="default"
       kind="secondary"
       class={secondaryClass}
-      disabled={secondaryButtonLoading}
+      disabled={secondaryButtonLoading || footerBusy}
       on:click={handleSecondaryClick}
     >
       {#if secondaryButtonLoading}
@@ -149,15 +180,17 @@
     <Button
       size="default"
       kind={danger ? "danger" : "primary"}
-      disabled={primaryButtonDisabled || primaryButtonLoading}
+      disabled={primaryButtonDisabled || primaryBusy}
       class={primaryClass}
-      icon={primaryButtonLoading ? undefined : primaryButtonIcon}
+      icon={primaryBusy ? undefined : primaryButtonIcon}
       on:click={handlePrimaryClick}
     >
-      {#if primaryButtonLoading}
+      {#if primaryBusy}
         <InlineLoading
-          status="active"
+          status={primaryStatus}
           description={primaryButtonLoadingDescription}
+          iconDescription={primaryButtonLoadingIconDescription}
+          on:success={() => dispatch("loading:success")}
         />
       {:else}
         {primaryButtonText}

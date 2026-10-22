@@ -11,6 +11,7 @@
    * @event click:button--secondary
    * @type {object}
    * @property {string} text
+   * @event {null} loading:success - Dispatched when `loadingStatus` is `"finished"`, after the `InlineLoading` success delay.
    * @restProps {div}
    */
 
@@ -81,14 +82,33 @@
   /**
    * Set to `true` to show a loading state on the primary button.
    * While loading, the button is non-interactive and submit is suppressed.
+   * Same as `loadingStatus="active"`, except that the secondary buttons
+   * stay enabled. `loadingStatus` wins when it is not `"inactive"`.
    */
   export let primaryButtonLoading = false;
+
+  /**
+   * Set the loading status of the footer.
+   * Any status other than `"inactive"` shows `InlineLoading` with that
+   * status in the primary button, disables the footer buttons, and
+   * suppresses submit. `"finished"` dispatches `loading:success` after the
+   * success delay.
+   * @type {"inactive" | "active" | "finished" | "error"}
+   */
+  export let loadingStatus = "inactive";
 
   /**
    * Specify the description for the primary button loading state.
    * Passed to `InlineLoading` as `description`.
    */
   export let primaryButtonLoadingDescription = "Loading";
+
+  /**
+   * Specify the description for the primary button loading icon.
+   * Passed to `InlineLoading` as `iconDescription`.
+   * @type {string}
+   */
+  export let primaryButtonLoadingIconDescription = undefined;
 
   /**
    * Specify the primary button icon.
@@ -259,6 +279,16 @@
   $: builtInLabel = modalLabel ?? modalAriaLabel ?? modalHeading;
   $: ariaLabel = consumerLabel ?? builtInLabel;
 
+  $: footerBusy = Boolean(loadingStatus) && loadingStatus !== "inactive";
+  // `primaryButtonLoading` is the boolean form of "active"; a status
+  // other than "inactive" takes precedence.
+  $: primaryStatus = footerBusy
+    ? loadingStatus
+    : primaryButtonLoading
+      ? "active"
+      : "inactive";
+  $: primaryBusy = primaryStatus !== "inactive";
+
   /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
   const aiLabelState = writable(undefined);
 </script>
@@ -296,7 +326,7 @@
         shouldSubmitOnEnter &&
         event.key === "Enter" &&
         !primaryButtonDisabled &&
-        !primaryButtonLoading
+        !primaryBusy
       ) {
         // Enter that commits an IME composition is not a submit.
         if (isImeComposition(event)) return;
@@ -426,15 +456,16 @@
       <div
         class:bx--modal-footer={true}
         class:bx--modal-footer--three-button={secondaryButtons.length === 2}
+        aria-busy={primaryStatus === "active" ? "true" : undefined}
       >
         {#if secondaryButtons.length > 0}
           {#each secondaryButtons as button (button.text)}
             <Button
               size="default"
               kind={button.kind ?? "secondary"}
-              disabled={button.disabled || button.loading}
+              disabled={button.disabled || button.loading || footerBusy}
               on:click={() => {
-                if (button.loading) return;
+                if (button.loading || footerBusy) return;
                 dispatch("click:button--secondary", { text: button.text });
               }}
             >
@@ -452,9 +483,9 @@
           <Button
             size="default"
             kind="secondary"
-            disabled={secondaryButtonLoading}
+            disabled={secondaryButtonLoading || footerBusy}
             on:click={() => {
-              if (secondaryButtonLoading) return;
+              if (secondaryButtonLoading || footerBusy) return;
               dispatch("click:button--secondary", {
                 text: secondaryButtonText,
               });
@@ -474,20 +505,22 @@
           size="default"
           bind:ref={primaryButtonRef}
           kind={danger ? "danger" : "primary"}
-          disabled={primaryButtonDisabled || primaryButtonLoading}
-          icon={primaryButtonLoading ? undefined : primaryButtonIcon}
+          disabled={primaryButtonDisabled || primaryBusy}
+          icon={primaryBusy ? undefined : primaryButtonIcon}
           type={formId ? "submit" : "button"}
           form={formId}
           on:click={() => {
-            if (primaryButtonLoading) return;
+            if (primaryBusy) return;
             dispatch("submit");
             dispatch("click:button--primary");
           }}
         >
-          {#if primaryButtonLoading}
+          {#if primaryBusy}
             <InlineLoading
-              status="active"
+              status={primaryStatus}
               description={primaryButtonLoadingDescription}
+              iconDescription={primaryButtonLoadingIconDescription}
+              on:success={() => dispatch("loading:success")}
             />
           {:else}
             {primaryButtonText}
