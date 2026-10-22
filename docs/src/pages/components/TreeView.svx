@@ -121,9 +121,19 @@ Combine `size="compact"` with `selectionMode="checkbox"`.
 
 ### Inline editing
 
-Use a `contenteditable` element in each tree view node to enable inline editing of node names. The editable region is wrapped in a container with `stopPropagation` to prevent tree node selection when editing.
+Set `editable` to rename nodes in place. Press <DocKbd label="F2" /> or double-click a node to start editing. <DocKbd label="Enter" /> commits the new name, as does clicking away from the input; <DocKbd label="Escape" /> restores the original name.
+
+Nodes stay yours to manage: `rename` reports the node id, the committed text, and the previous text, and your handler applies it. An unchanged or empty name reports nothing.
+
+Set `editable` to `false` on a node to opt it out, as the first node here does. Disabled nodes and link nodes are never editable.
 
 <FileSource src="/framed/TreeView/TreeViewInlineEditing" />
+
+### Programmatic rename
+
+Use `TreeView.editNode` to start an edit from elsewhere in the interface, such as a toolbar or context menu. A collapsed target expands into view first.
+
+<FileSource src="/framed/TreeView/TreeViewEditNode" />
 
 ## Events
 
@@ -145,6 +155,7 @@ The tree is one tab stop; arrow keys move focus between visible rows, skipping d
 | <DocKbd label="Home" /> / <DocKbd label="End" /> | Moves focus to the first or last row. |
 | <DocKbd label="Enter" /> | Selects the row; on a parent, also expands or collapses it. In `selectionMode="checkbox"`, checks or unchecks the row instead. On a [link node](#links), follows the link. |
 | <DocKbd label="Space" /> | Selects the row without expanding or collapsing it. In checkbox mode, checks or unchecks the row. |
+| <DocKbd label="F2" /> | With `editable`, starts [renaming](#inline-editing) the focused row. |
 | Letters | Moves focus to the next row whose text starts with the typed characters. Repeating one letter cycles through rows that start with it. The typed text resets after a short pause. |
 
 With `multiselect`, these keys also change the selection. A row's unit depends on `multiselectMode`; see [Multi-select](#multi-select).
