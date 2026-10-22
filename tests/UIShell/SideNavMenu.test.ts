@@ -1,10 +1,13 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import SideNavMenuItem from "carbon-components-svelte/UIShell/SideNavMenuItem.svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
+import { setViewportWidth } from "../utils/viewport";
 import SideNavMenuActive from "./SideNavMenuActive.test.svelte";
 import SideNavMenuBadge from "./SideNavMenuBadge.test.svelte";
 import SideNavMenuDepth from "./SideNavMenuDepth.test.svelte";
+import SideNavMenuEscape from "./SideNavMenuEscape.test.svelte";
 
 describe("SideNavMenu active state", () => {
   const MENUS = ["Level 1", "Level 2", "Level 3", "Sibling"];
@@ -92,6 +95,56 @@ describe("SideNavMenu nesting depth", () => {
       ).toBe(hasIcon);
     },
   );
+});
+
+describe("SideNavMenu Escape", () => {
+  const menu = (name: string) => screen.getByRole("button", { name });
+
+  // Below the breakpoint any Escape closes the open side nav, so each one
+  // the menus take must stop there.
+  beforeEach(() => {
+    setViewportWidth(500);
+  });
+
+  afterEach(() => {
+    setViewportWidth(1024);
+  });
+
+  it("closes the innermost open menu first, then the side nav", async () => {
+    const { component } = render(SideNavMenuEscape);
+    await flushMacrotask();
+    await user.click(menu("Billing"));
+    await user.click(menu("Payment methods"));
+    screen.getByRole("link", { name: "Cards" }).focus();
+
+    await user.keyboard("{Escape}");
+    expect(menu("Payment methods")).toHaveAttribute("aria-expanded", "false");
+    expect(menu("Payment methods")).toHaveFocus();
+    expect(menu("Billing")).toHaveAttribute("aria-expanded", "true");
+    expect(component.isOpen).toBe(true);
+
+    await user.keyboard("{Escape}");
+    expect(menu("Billing")).toHaveAttribute("aria-expanded", "false");
+    expect(menu("Billing")).toHaveFocus();
+    expect(component.isOpen).toBe(true);
+
+    await user.keyboard("{Escape}");
+    expect(component.isOpen).toBe(false);
+  });
+
+  it.each([
+    ["isComposing", { isComposing: true }],
+    ["keyCode 229", { keyCode: 229 }],
+  ])("ignores Escape while an IME is composing (%s)", async (_, init) => {
+    render(SideNavMenuEscape);
+    await flushMacrotask();
+    await user.click(menu("Billing"));
+    const invoices = screen.getByRole("link", { name: "Invoices" });
+
+    await fireEvent.keyDown(invoices, { key: "Escape", ...init });
+
+    expect(menu("Billing")).toHaveAttribute("aria-expanded", "true");
+  });
 });
 
 describe("SideNavMenuItem", () => {
