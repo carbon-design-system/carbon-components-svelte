@@ -108,9 +108,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildChord } from "./chord-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
 
   /** @type {{ kind: "group" | "ribbon"; index: number } | null} */
   let active = null;
@@ -282,6 +285,7 @@
     const degrees = (group.labelAngle * 180) / Math.PI - 90;
     return `rotate(${degrees}) translate(${radius + 8} 0)${group.flip ? " rotate(180)" : ""}`;
   }
+  $: tooltipTiming.settle(active !== null && anchor);
 </script>
 
 <figure
@@ -305,6 +309,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:pointerleave={() => setActive(null)}
       on:blur={() => setActive(null)}
     >
@@ -351,7 +356,7 @@
         {/each}
       </g>
     </svg>
-    {#if active !== null && anchor}
+    {#if active !== null && anchor && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={anchor.x > 0}

@@ -110,9 +110,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildRadar, nearestSpoke } from "./radar-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   /** Room for a spoke label on either side, and above and below. */
   const LABEL_X = 104;
   const LABEL_Y = 40;
@@ -228,6 +231,7 @@
     hidden = isHidden ? hidden.filter((k) => k !== key) : [...hidden, key];
     dispatch("legend:toggle", { series: key, hidden: !isHidden });
   }
+  $: tooltipTiming.settle(spoke);
 </script>
 
 <figure bind:this={ref} class:bx--viz-radar={true} {...$$restProps}>
@@ -250,6 +254,7 @@
       on:pointerleave={() => setActive(-1)}
       on:click={select}
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:blur={() => setActive(-1)}
     >
       <g aria-hidden="true">
@@ -305,7 +310,7 @@
         {/each}
       </g>
     </svg>
-    {#if spoke}
+    {#if spoke && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={spoke.x > width / 2}

@@ -15,6 +15,7 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import ChartTooltipRow from "./ChartTooltipRow.svelte";
   import { CHART_CONTEXT, FACETS_CONTEXT } from "./context.js";
   import {
@@ -27,35 +28,11 @@
   const { groups, scales, size, hover, hoverOrigin, banded } =
     getContext(CHART_CONTEXT);
 
-  let shown = false;
-  /** @type {ReturnType<typeof setTimeout> | undefined} */
-  let timer;
+  const timing = createTooltipTiming(delay);
+  const { shown } = timing;
 
-  /**
-   * @param {unknown} current
-   * @param {"pointer" | "keyboard" | "sync"} origin
-   */
-  function settle(current, origin) {
-    if (!current) {
-      clearTimeout(timer);
-      timer = undefined;
-      shown = false;
-      return;
-    }
-    if (shown || origin === "keyboard" || delay <= 0) {
-      shown = true;
-      return;
-    }
-    if (timer === undefined) {
-      timer = setTimeout(() => {
-        timer = undefined;
-        shown = $hover !== null;
-      }, delay);
-    }
-  }
-
-  $: settle($hover, $hoverOrigin);
-  onMount(() => () => clearTimeout(timer));
+  $: timing.settle($hover, $hoverOrigin);
+  onMount(() => () => timing.destroy());
   // Inside a facet grid the tooltip sits in a corner of the plot that no
   // series crosses, top left first, so the tooltips of a row line up and
   // cover nothing. When every corner is taken it follows the point as
@@ -145,7 +122,7 @@
   The chart's live region announces the focused point, so the tooltip is
   hidden from assistive technology instead of announcing every pointer move.
 -->
-{#if $hover && shown && points.length > 0}
+{#if $hover && $shown && points.length > 0}
   <div
     class:bx--viz-chart-tooltip={true}
     class:bx--viz-chart-tooltip--flipped={flipped}

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../../utils/user";
 import ChordDiagram from "./ChordDiagram.test.svelte";
 
@@ -112,12 +112,15 @@ describe("ChordDiagram", () => {
         backward: 8,
       }),
     );
-    expect(
-      document
-        .querySelector(".bx--viz-chart-tooltip")
-        ?.textContent?.replace(/\s+/g, " ")
-        .trim(),
-    ).toBe("Eng → Design 12 Design → Eng 8");
+    // The tooltip waits for the pointer to settle.
+    await waitFor(() =>
+      expect(
+        document
+          .querySelector(".bx--viz-chart-tooltip")
+          ?.textContent?.replace(/\s+/g, " ")
+          .trim(),
+      ).toBe("Eng → Design 12 Design → Eng 8"),
+    );
     expect(groups()[0]).toHaveClass("bx--viz-chord__group--active");
     expect(groups()[1]).toHaveClass("bx--viz-chord__group--active");
     expect(groups()[2]).not.toHaveClass("bx--viz-chord__group--active");

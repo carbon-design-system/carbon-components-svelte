@@ -104,9 +104,12 @@
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
   import { categoricalColors, vizColor } from "../utils/tokens.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { layoutWords } from "../utils/word-cloud.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
 
   /** @type {string | null} */
   let activeText = null;
@@ -231,6 +234,7 @@
     event.preventDefault();
     setActive(cloud.words[focusIndex]);
   }
+  $: tooltipTiming.settle(active);
 </script>
 
 <figure bind:this={ref} class:bx--viz-word-cloud={true} {...$$restProps}>
@@ -252,6 +256,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:click={selectActive}
       on:mouseleave={() => setActive(null)}
       on:blur={() => setActive(null)}
@@ -278,7 +283,7 @@
         {/each}
       </g>
     </svg>
-    {#if active}
+    {#if active && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={active.x > width / 2}

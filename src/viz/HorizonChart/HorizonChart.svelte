@@ -121,9 +121,12 @@
   import { resolveFormat } from "../utils/format-compact.js";
   import { bisectNearest } from "../utils/nearest-point.js";
   import { nextId } from "../utils/next-id.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildHorizon } from "./horizon-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   const AXIS = 20;
   const clipId = nextId("bx-viz-horizon");
 
@@ -285,6 +288,7 @@
       sync?.leave();
     };
   });
+  $: tooltipTiming.settle(at);
 </script>
 
 <figure bind:this={ref} class:bx--viz-horizon={true} {...$$restProps}>
@@ -307,6 +311,7 @@
       on:pointerleave={() => setActive(-1)}
       on:click={select}
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:blur={() => setActive(-1)}
     >
       <defs>
@@ -383,7 +388,7 @@
         {/if}
       </g>
     </svg>
-    {#if at !== undefined}
+    {#if at !== undefined && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={horizon.x.map(at) > width / 2}

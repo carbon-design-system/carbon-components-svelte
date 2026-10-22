@@ -129,8 +129,11 @@
   import { resolveFormat } from "../utils/format-compact.js";
   import { geoPaths } from "../utils/geo-path.js";
   import { heatColor } from "../utils/heat-grid.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   const LEGEND_STEPS = [0, 0.25, 0.5, 0.75, 1];
 
   /** @type {string | null} */
@@ -293,6 +296,7 @@
     event.preventDefault();
     setActive(order[focusIndex]);
   }
+  $: tooltipTiming.settle(active);
 </script>
 
 <figure bind:this={ref} class:bx--viz-choropleth={true} {...$$restProps}>
@@ -313,6 +317,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:click={selectActive}
       on:mouseleave={() => setActive(null)}
       on:blur={() => setActive(null)}
@@ -342,7 +347,7 @@
         {/if}
       </g>
     </svg>
-    {#if active}
+    {#if active && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={active.cx > width / 2}

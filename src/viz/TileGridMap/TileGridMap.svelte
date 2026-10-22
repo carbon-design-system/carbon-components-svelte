@@ -106,8 +106,11 @@
   import { resolveFormat } from "../utils/format-compact.js";
   import { heatColor } from "../utils/heat-grid.js";
   import { resolveTiles } from "../utils/tile-grid.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   const LEGEND_STEPS = [0, 0.25, 0.5, 0.75, 1];
 
   /** @type {string | null} */
@@ -247,6 +250,7 @@
     sync(enabled);
     return { update: sync, destroy: () => sync(false) };
   }
+  $: tooltipTiming.settle(active);
 </script>
 
 <figure
@@ -263,6 +267,7 @@
     <!-- Static tiles say nothing to assistive technology, which reads the
          table instead. Toggle buttons are exposed, each named in full. -->
     <ul
+      use:tooltipTiming.track
       class:bx--viz-tile-map__grid={true}
       style:--bx-viz-columns={grid.columns}
       aria-hidden={selectable ? undefined : "true"}
@@ -308,7 +313,7 @@
         </li>
       {/each}
     </ul>
-    {#if active}
+    {#if active && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={active.column + 0.5 >

@@ -122,9 +122,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildMarimekko } from "./marimekko-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   const HEADER = 28;
 
   /** @type {{ column: number; cell: number }} */
@@ -285,6 +288,7 @@
     const name = labels === "auto" && h >= 20 && w >= cell.key.length * 7 + 12;
     return { name, share: name && h >= 38 && w >= 40 };
   }
+  $: tooltipTiming.settle(current);
 </script>
 
 <figure
@@ -308,6 +312,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:pointerleave={() => setActive(-1, -1)}
       on:blur={() => setActive(-1, -1)}
     >
@@ -380,7 +385,7 @@
         {/each}
       </g>
     </svg>
-    {#if current}
+    {#if current && $tooltipShown}
       {@const cx = (current.x0 + current.x1) / 2}
       {@const cy = HEADER + (current.y0 + current.y1) / 2}
       <div
