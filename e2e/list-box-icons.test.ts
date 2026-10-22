@@ -25,8 +25,13 @@ async function offsetFromEdge(wrapper: Locator, selector: string) {
 function ring(locator: Locator) {
   return locator.evaluate((node) => {
     const style = getComputedStyle(node);
+    const hidden =
+      style.outlineStyle === "none" ||
+      style.outlineColor === "rgba(0, 0, 0, 0)";
     return {
-      outline: `${style.outlineStyle} ${style.outlineWidth} ${style.outlineOffset}`,
+      outline: hidden
+        ? "none"
+        : `${style.outlineStyle} ${style.outlineWidth} ${style.outlineOffset}`,
       background: style.backgroundColor,
     };
   });
@@ -89,19 +94,59 @@ test.describe("list box icons and highlight", () => {
   }) => {
     await page.getByTestId("combobox").locator("input").focus();
     await page.keyboard.press("ArrowDown");
-    await page.keyboard.press("Home");
+    await page.keyboard.press("End");
 
     const [slack, email, fax] = await options(page, "combobox").all();
-    await expect(slack).toHaveClass(/--highlighted/);
+    await expect(fax).toHaveClass(/--highlighted/);
     await expect(email).not.toHaveClass(/--highlighted/);
 
-    const highlighted = await ring(slack);
-    const resting = await ring(fax);
+    const highlighted = await ring(fax);
+    const resting = await ring(slack);
     expect(highlighted.outline).toBe("solid 2px -2px");
     expect(highlighted.background).toBe(resting.background);
-    expect(resting.outline.startsWith("none")).toBe(true);
-    expect((await ring(email)).outline.startsWith("none")).toBe(true);
+    expect(resting.outline).toBe("none");
+    expect((await ring(email)).outline).toBe("none");
   });
+
+  // The field's ring and the first option's top edge meet as one 2px line.
+  for (const testId of ["combobox", "multiselect"]) {
+    test(`${testId}: thins the field ring over a highlighted first option`, async ({
+      page,
+    }) => {
+      const wrapper = page.getByTestId(testId);
+      const field =
+        testId === "combobox"
+          ? wrapper.locator("input")
+          : wrapper.locator(".bx--list-box__field");
+      const ringElement =
+        testId === "combobox"
+          ? field
+          : wrapper.locator(".bx--list-box__field--wrapper");
+      await field.focus();
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("Home");
+
+      const first = options(page, testId).first();
+      await expect(first).toHaveClass(/--highlighted/);
+      expect((await ring(ringElement)).outline).toBe("solid 1px -1px");
+      expect((await ring(first)).outline).toBe("none");
+      // Border-box, so the ring stays inside the option and the menu.
+      expect(
+        await first.evaluate((node) => {
+          const style = getComputedStyle(node, "::before");
+          return `${style.borderTopWidth} ${style.borderLeftWidth} ${style.boxSizing}`;
+        }),
+      ).toBe("1px 2px border-box");
+
+      await page.keyboard.press("End");
+      expect((await ring(first)).outline).toBe("none");
+      expect(
+        await first.evaluate(
+          (node) => getComputedStyle(node, "::before").content,
+        ),
+      ).toBe("none");
+    });
+  }
 
   test("keeps a highlighted selected option's color", async ({ page }) => {
     await page.getByTestId("dropdown").locator(".bx--list-box__field").focus();
