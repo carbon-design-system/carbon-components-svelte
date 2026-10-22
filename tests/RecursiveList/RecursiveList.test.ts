@@ -133,6 +133,12 @@ describe("RecursiveList props", () => {
     }
   });
 
+  it("does not render a nested list for empty `nodes`", () => {
+    render(RecursiveList, { nodes: [{ text: "Item 1", nodes: [] }] });
+
+    expect(screen.getAllByRole("list")).toHaveLength(1);
+  });
+
   it("renders the top-level list as nested when `nested` is set", () => {
     render(RecursiveList, { nodes, nested: true });
 
