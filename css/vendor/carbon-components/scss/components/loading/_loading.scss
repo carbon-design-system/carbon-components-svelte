@@ -90,6 +90,11 @@
     transition: background-color $duration--slow-02 motion(standard, expressive);
   }
 
+  // ccs: the overlay holds focus while loading, as in v11; no ring around the viewport
+  .#{$prefix}--loading-overlay:focus {
+    @include focus-outline('reset');
+  }
+
   .#{$prefix}--loading-overlay--stop {
     display: none;
   }

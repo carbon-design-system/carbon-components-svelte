@@ -19,6 +19,7 @@
 
   import { onMount } from "svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { overlayFocus } from "./overlay-focus.js";
 
   const schedule = createDelayedSetter();
 
@@ -44,9 +45,13 @@
 {#if visible}
   {#if withOverlay}
     <div
+      role={active ? "dialog" : undefined}
+      aria-label={active ? description : undefined}
+      tabindex="-1"
       class:bx--loading-overlay={true}
       class:bx--loading-overlay--stop={!active}
       {...$$restProps}
+      use:overlayFocus={active}
     >
       <div
         aria-atomic="true"
@@ -55,7 +60,8 @@
         class:bx--loading--small={small}
         class:bx--loading--stop={!active}
       >
-        <svg class:bx--loading__svg={true} viewBox="0 0 100 100">
+        <!-- The <title> names the image; aria-label too would be read twice. -->
+        <svg class:bx--loading__svg={true} viewBox="0 0 100 100" role="img">
           <title>{description}</title>
           {#if small}
             <circle
@@ -83,7 +89,7 @@
       class:bx--loading--stop={!active}
       {...$$restProps}
     >
-      <svg class:bx--loading__svg={true} viewBox="0 0 100 100">
+      <svg class:bx--loading__svg={true} viewBox="0 0 100 100" role="img">
         <title>{description}</title>
         {#if small}
           <circle
