@@ -541,7 +541,7 @@ export const interactive: AriaEntry[] = [
       render(InlineNotification, {
         props: { title: "Error", subtitle: "Try again", ...attrs },
       }),
-    target: () => screen.getByRole("alert"),
+    target: () => screen.getByRole("status"),
   },
   {
     name: "InterstitialScreenBody",
@@ -601,7 +601,7 @@ export const interactive: AriaEntry[] = [
           ...attrs,
         },
       }),
-    target: () => screen.getByRole("alert"),
+    target: () => screen.getByRole("status"),
   },
   {
     name: "ConfirmModal",

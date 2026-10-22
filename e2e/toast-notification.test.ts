@@ -7,7 +7,12 @@ test.describe("ToastNotification", () => {
 
   test("renders toast notification", async ({ page }) => {
     await expect(page.getByTestId("toast-notification")).toBeVisible();
-    await expect(page.getByRole("alert")).toBeVisible();
+    const notification = page.getByTestId("toast-notification");
+    await expect(notification).toHaveRole("status");
+    // Named once, by role="img" and <title>, so it isn't read twice.
+    const icon = notification.getByRole("img", { name: "Success" });
+    await expect(icon).toBeVisible();
+    await expect(icon).not.toHaveAttribute("aria-label");
     await expect(page.getByText("Toast title")).toBeVisible();
     await expect(page.getByText("Toast subtitle")).toBeVisible();
   });

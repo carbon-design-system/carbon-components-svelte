@@ -15,8 +15,8 @@
   export let lowContrast = false;
 
   /**
-   * Specify a label for screen readers. Leave it unset when the icon is
-   * decorative, as when a live region announces the message.
+   * Specify a label for screen readers, such as "Warning". Leave it unset
+   * to hide the icon from screen readers.
    * @type {string | undefined}
    */
   export let iconDescription = undefined;

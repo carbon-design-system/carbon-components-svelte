@@ -23,7 +23,7 @@
    * Specify the ARIA `role` for the notification container.
    * @type {"alert" | "log" | "status"}
    */
-  export let role = "alert";
+  export let role = "status";
 
   /** Specify the title text */
   export let title = "";
@@ -36,6 +36,13 @@
 
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
+
+  /**
+   * Specify the label of the status icon for screen readers.
+   * Defaults to the kind, such as "Warning".
+   * @type {string | undefined}
+   */
+  export let statusIconDescription = undefined;
 
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
@@ -56,6 +63,7 @@
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
+  import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
 
@@ -115,7 +123,11 @@
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
   >
-    <NotificationIcon {kind} {lowContrast} />
+    <NotificationIcon
+      {kind}
+      {lowContrast}
+      iconDescription={statusIconDescription || statusIconLabel(kind)}
+    />
     <div class:bx--toast-notification__details={true}>
       {#if title || $$slots.titleChildren}
         <h3 class:bx--toast-notification__title={true}>

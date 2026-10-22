@@ -27,6 +27,7 @@
    * @property {number} [timeout]
    * @property {boolean} [lowContrast]
    * @property {string} [closeButtonDescription]
+   * @property {string} [statusIconDescription]
    * @property {boolean} [hideCloseButton]
    * @property {boolean} [pauseOnHover]
    * @property {"alert" | "log" | "status"} [role]

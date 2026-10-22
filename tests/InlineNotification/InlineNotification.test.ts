@@ -22,7 +22,13 @@ describe("InlineNotification", () => {
     const notification = document.querySelector(".bx--inline-notification");
     expect(notification).toBeInTheDocument();
     expect(notification).toHaveClass("bx--inline-notification--error");
-    expect(notification).toHaveAttribute("role", "alert");
+  });
+
+  it("defaults to role status, which screen readers announce politely", () => {
+    render(InlineNotification, { props: { title: "Saved" } });
+
+    expect(screen.getByRole("status")).toHaveClass("bx--inline-notification");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("does not listen for visibilitychange with the default timeout", () => {
@@ -86,23 +92,35 @@ describe("InlineNotification", () => {
     );
   });
 
-  it("should use custom role", () => {
+  it("uses role alert when set, for urgent errors", () => {
     render(InlineNotificationTest, {
-      props: { role: "status" },
+      props: { role: "alert" },
     });
 
-    const notification = document.querySelector(".bx--inline-notification");
-    expect(notification).toHaveAttribute("role", "status");
+    expect(screen.getByRole("alert")).toHaveClass("bx--inline-notification");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("should render the status icon as decorative (aria-hidden)", () => {
-    render(InlineNotificationTest, { props: { kind: "error" } });
+  it("names the status icon after its kind", () => {
+    render(InlineNotificationTest, { props: { kind: "warning-alt" } });
 
-    const icon = document.querySelector(".bx--inline-notification__icon");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("aria-hidden", "true");
-    expect(icon).not.toHaveAttribute("role", "img");
-    expect(icon?.querySelector("title")).toBeNull();
+    const icon = screen.getByRole("img", { name: "Warning" });
+    expect(icon).toHaveClass("bx--inline-notification__icon");
+    expect(icon).toHaveAttribute("role", "img");
+    expect(icon).not.toHaveAttribute("aria-hidden");
+    expect(icon).not.toHaveAttribute("aria-label");
+    expect(icon.querySelector("title")).toHaveTextContent("Warning");
+  });
+
+  it("names the status icon with statusIconDescription", () => {
+    render(InlineNotificationTest, {
+      props: { kind: "warning", statusIconDescription: "Avertissement" },
+    });
+
+    expect(
+      screen.getByRole("img", { name: "Avertissement" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("img", { name: "Warning" })).toBeNull();
   });
 
   it("should render the actions slot", () => {

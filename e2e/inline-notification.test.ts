@@ -7,7 +7,12 @@ test.describe("InlineNotification", () => {
 
   test("renders notification", async ({ page }) => {
     await expect(page.getByTestId("inline-notification")).toBeVisible();
-    await expect(page.getByRole("alert")).toBeVisible();
+    const notification = page.getByTestId("inline-notification");
+    await expect(notification).toHaveRole("status");
+    // Named once, by role="img" and <title>, so it isn't read twice.
+    const icon = notification.getByRole("img", { name: "Information" });
+    await expect(icon).toBeVisible();
+    await expect(icon).not.toHaveAttribute("aria-label");
     await expect(page.getByText("Notification title")).toBeVisible();
     await expect(page.getByText("Notification subtitle")).toBeVisible();
   });

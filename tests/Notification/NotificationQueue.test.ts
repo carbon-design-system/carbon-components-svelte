@@ -56,7 +56,7 @@ describe("NotificationQueue", () => {
     getQueue(component.queue).add({ id: "save", title: "Saved" });
     await tick();
 
-    expect(screen.getByRole("alert")).not.toHaveAttribute("id");
+    expect(screen.getByRole("status")).not.toHaveAttribute("id");
   });
 
   it("should deduplicate notifications by id", async () => {
@@ -78,7 +78,7 @@ describe("NotificationQueue", () => {
     expect(id).toBe("duplicate-id");
     expect(id2).toBe("duplicate-id");
 
-    const notifications = screen.getAllByRole("alert");
+    const notifications = screen.getAllByRole("status");
     expect(notifications).toHaveLength(1);
     expect(screen.getByText("First notification")).toBeInTheDocument();
     expect(screen.queryByText("Second notification")).not.toBeInTheDocument();
@@ -169,7 +169,7 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("0%")).not.toBeInTheDocument();
     expect(screen.getByText("Upload complete")).toBeInTheDocument();
     expect(screen.getByText("100%")).toBeInTheDocument();
-    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(screen.getAllByRole("status")).toHaveLength(1);
   });
 
   it("should merge patch into existing notification on update", async () => {
@@ -183,14 +183,14 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
-    expect(screen.getByRole("alert")).toHaveClass(
+    expect(screen.getByRole("status")).toHaveClass(
       "bx--toast-notification--info",
     );
 
     getQueue(component.queue).update(id, { kind: "success" });
     await tick();
 
-    expect(screen.getByRole("alert")).toHaveClass(
+    expect(screen.getByRole("status")).toHaveClass(
       "bx--toast-notification--success",
     );
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -203,12 +203,12 @@ describe("NotificationQueue", () => {
 
     const id = getQueue(component.queue).add({ title: "Uploading" });
     await tick();
-    const toast = screen.getByRole("alert");
+    const toast = screen.getByRole("status");
 
     getQueue(component.queue).update(id, { title: "Done" });
     await tick();
 
-    expect(screen.getByRole("alert")).toBe(toast);
+    expect(screen.getByRole("status")).toBe(toast);
   });
 
   it("should not restart the timeout when updating a toast", async () => {
@@ -488,7 +488,7 @@ describe("NotificationQueue", () => {
     getQueue(component.queue).add({ title: "Second" });
     await tick();
 
-    const secondToast = screen.getAllByRole("alert")[1];
+    const secondToast = screen.getAllByRole("status")[1];
     expect(secondToast).toHaveTextContent("Second");
     await user.click(
       within(secondToast).getByRole("button", { name: "Close notification" }),
@@ -527,7 +527,7 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
-    await fireEvent.mouseEnter(screen.getByRole("alert"));
+    await fireEvent.mouseEnter(screen.getByRole("status"));
     getQueue(component.queue).update(id, { timeout: 2000 });
     await tick();
     vi.advanceTimersByTime(3000);
@@ -554,20 +554,22 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("Persistent notification")).toBeInTheDocument();
   });
 
-  it("should forward toast-only props (pauseOnHover, role, fullWidth)", async () => {
+  it("should forward toast-only props (pauseOnHover, role, fullWidth, statusIconDescription)", async () => {
     const { component } = render(NotificationQueueTest);
 
     getQueue(component.queue).add({
       title: "Saved",
+      kind: "success",
       pauseOnHover: true,
-      role: "status",
+      role: "alert",
       fullWidth: true,
+      statusIconDescription: "Réussite",
       timeout: 1000,
     });
     await tick();
 
-    const toast = screen.getByRole("status");
-    expect(toast).toBeInTheDocument();
+    const toast = screen.getByRole("alert");
+    expect(within(toast).getByRole("img", { name: "Réussite" })).toBeVisible();
     expectInlineStyle(toast, { width: "100%" });
 
     await fireEvent.mouseEnter(toast);
@@ -604,7 +606,7 @@ describe("NotificationQueue", () => {
       });
       await tick();
 
-      const notifications = screen.getAllByRole("alert");
+      const notifications = screen.getAllByRole("status");
       expect(notifications[0]).toHaveTextContent("Second");
       expect(notifications[1]).toHaveTextContent("First");
     },
@@ -631,7 +633,7 @@ describe("NotificationQueue", () => {
       });
       await tick();
 
-      const notifications = screen.getAllByRole("alert");
+      const notifications = screen.getAllByRole("status");
       expect(notifications[0]).toHaveTextContent("First");
       expect(notifications[1]).toHaveTextContent("Second");
     },
