@@ -9,9 +9,9 @@
   /**
    * @event {{ ids: string[]; dx: number; dy: number }} move Fires when nodes have been dragged or nudged, with the total distance moved.
    * @event {{ source: string; target: string; sourcePort: string; targetPort: string }} connect Fires before an edge is added. Cancelable: call `preventDefault()` to refuse the connection.
-   * @event {{ edge: E }} disconnect Fires when an edge has been removed.
-   * @event {{ nodes: N[]; edges: E[] }} remove Fires when nodes and their edges have been removed.
-   * @event {{ nodes: string[]; edges: string[] }} select Fires when the selection changes.
+   * @event {{ link: E }} disconnect Fires when a link has been removed.
+   * @event {{ nodes: N[]; links: E[] }} remove Fires when nodes and their links have been removed.
+   * @event {{ nodes: string[]; links: string[] }} select Fires when the selection changes.
    * @event {{ label: string; undo: () => void; redo: () => void }} change Fires after every edit, with the step that was recorded.
    * @event {{ k: number; tx: number; ty: number }} transform Fires when the view pans or zooms.
    * @slot {{ node: { id: string; label: string; datum: N; selected: boolean } }} node
@@ -27,10 +27,10 @@
   export let nodes = [];
 
   /**
-   * Specify the edges. Bind it: the editor adds and removes rows.
+   * Specify the links, one row each. Bind it: the editor adds and removes rows.
    * @type {ReadonlyArray<E>}
    */
-  export let edges = [];
+  export let links = [];
 
   /**
    * Specify how to read a node's id: a key or a function.
@@ -109,7 +109,7 @@
   export let snap = 8;
 
   /**
-   * Specify how edges are drawn: straight, with right angles and rounded
+   * Specify how links are drawn: straight, with right angles and rounded
    * corners, or as curves.
    * @type {"straight" | "orthogonal" | "curved"}
    */
@@ -117,9 +117,9 @@
 
   /**
    * Specify the selection: node ids and edge ids.
-   * @type {{ nodes: string[]; edges: string[] }}
+   * @type {{ nodes: string[]; links: string[] }}
    */
-  export let selected = { nodes: [], edges: [] };
+  export let selected = { nodes: [], links: [] };
 
   /**
    * Specify the view: a scale and a translation in pixels. Leave `null`
@@ -259,7 +259,7 @@
     };
   });
   $: boxOf = new Map(boxes.map((box) => [box.id, box]));
-  $: wires = routeWires(edges, boxOf, edge);
+  $: wires = routeWires(links, boxOf, edge);
   $: bounds = extent(boxes);
   $: view =
     transform ??
@@ -271,7 +271,7 @@
         )
       : identity());
   $: selectedNodes = new Set(selected.nodes);
-  $: selectedEdges = new Set(selected.edges);
+  $: selectedEdges = new Set(selected.links);
   $: window_ = {
     a: toWorld(view, 0, 0),
     b: toWorld(view, stageWidth, stageHeight),
@@ -466,10 +466,10 @@
     edit({
       label: text.connected,
       do: () => {
-        edges = [...edges, row];
+        links = [...links, row];
       },
       undo: () => {
-        edges = edges.filter((entry) => entry !== row);
+        links = links.filter((entry) => entry !== row);
       },
     });
     announcement = `${text.connected} ${labelFor(from)} ${text.to} ${labelFor(to)}`;
@@ -482,7 +482,7 @@
       selectedNodes.has(String(idOf(row, i))),
     );
     const goneIds = new Set(goneNodes.map((row, i) => String(idOf(row, i))));
-    const goneEdges = edges.filter((row) => {
+    const goneEdges = links.filter((row) => {
       const rec = /** @type {Record<string, unknown>} */ (row);
       return (
         selectedEdges.has(edgeKey(row)) ||
@@ -492,21 +492,21 @@
     });
     if (goneNodes.length === 0 && goneEdges.length === 0) return;
     const keepNodes = nodes.filter((row) => !goneNodes.includes(row));
-    const keepEdges = edges.filter((row) => !goneEdges.includes(row));
-    const before = { nodes, edges };
+    const keepEdges = links.filter((row) => !goneEdges.includes(row));
+    const before = { nodes, links };
     edit({
       label: text.removed,
       do: () => {
         nodes = keepNodes;
-        edges = keepEdges;
+        links = keepEdges;
       },
       undo: () => {
         nodes = before.nodes;
-        edges = before.edges;
+        links = before.links;
       },
     });
-    for (const row of goneEdges) dispatch("disconnect", { edge: row });
-    dispatch("remove", { nodes: goneNodes, edges: goneEdges });
+    for (const row of goneEdges) dispatch("disconnect", { link: row });
+    dispatch("remove", { nodes: goneNodes, links: goneEdges });
     setSelection([], []);
     announcement = `${goneNodes.length + goneEdges.length} ${text.removed}`;
     // Focus stays on the stage: the node at the same place, or the last.
@@ -550,8 +550,8 @@
    * @param {string[]} edgeIds
    */
   function setSelection(nodeIds, edgeIds) {
-    selected = { nodes: nodeIds, edges: edgeIds };
-    dispatch("select", { nodes: nodeIds, edges: edgeIds });
+    selected = { nodes: nodeIds, links: edgeIds };
+    dispatch("select", { nodes: nodeIds, links: edgeIds });
   }
 
   /** @param {string} key */
@@ -762,7 +762,7 @@
       const next = selectedNodes.has(key)
         ? selected.nodes.filter((entry) => entry !== key)
         : [...selected.nodes, key];
-      setSelection(next, selected.edges);
+      setSelection(next, selected.links);
     } else {
       setSelection([key], []);
     }
@@ -878,7 +878,7 @@
       )
     )
       return;
-    if (selected.nodes.length || selected.edges.length) setSelection([], []);
+    if (selected.nodes.length || selected.links.length) setSelection([], []);
   }
 
   /** As nodes move, keep the focused node's index in range. */
@@ -960,7 +960,7 @@
             tooltipPosition="bottom"
             tooltipAlignment="end"
             disabled={selected.nodes.length === 0 &&
-              selected.edges.length === 0}
+              selected.links.length === 0}
             on:click={removeSelected}
           />
           <Button

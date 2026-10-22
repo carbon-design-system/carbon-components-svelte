@@ -4,7 +4,7 @@ import NodeEditor from "./NodeEditor.test.svelte";
 
 const nodes = () =>
   Array.from(document.querySelectorAll<HTMLElement>(".bx--viz-editor__node"));
-const edges = () =>
+const links = () =>
   Array.from(document.querySelectorAll(".bx--viz-editor__edge"));
 const out = (id: string) => screen.getByTestId(id).textContent?.trim();
 const pointer = (
@@ -28,7 +28,7 @@ const pointer = (
 const settle = () => new Promise((r) => setTimeout(r, 30));
 
 describe("NodeEditor", () => {
-  it("places nodes from their rows with ports, draws edges between ports, and lists both", () => {
+  it("places nodes from their rows with ports, draws links between ports, and lists both", () => {
     render(NodeEditor);
 
     expect(nodes().map((n) => n.textContent?.trim())).toEqual([
@@ -40,9 +40,9 @@ describe("NodeEditor", () => {
     expect(nodes()[0].querySelectorAll(".bx--viz-editor__port")).toHaveLength(
       2,
     );
-    expect(edges()).toHaveLength(1);
+    expect(links()).toHaveLength(1);
     expect(
-      edges()[0].querySelector(".bx--viz-editor__edge-line")?.getAttribute("d"),
+      links()[0].querySelector(".bx--viz-editor__edge-line")?.getAttribute("d"),
     ).toMatch(/^M160,24L/);
     expect(nodes().map((n) => n.tabIndex)).toEqual([0, -1, -1]);
   });
@@ -91,7 +91,7 @@ describe("NodeEditor", () => {
       sourcePort: "out",
       targetPort: "in",
     });
-    expect(out("edges")).toBe("src>map map>sink");
+    expect(out("links")).toBe("src>map map>sink");
     expect(document.querySelector("[aria-live]")).toHaveTextContent(
       "connected map to sink",
     );
@@ -100,12 +100,12 @@ describe("NodeEditor", () => {
     // The same connection again adds nothing.
     nodes()[1].focus();
     await user.keyboard("c{ArrowRight}{Enter}");
-    expect(out("edges")).toBe("src>map map>sink");
+    expect(out("links")).toBe("src>map map>sink");
 
     await rerender({ onconnect, refuse: "src" });
     nodes()[2].focus();
     await user.keyboard("c{Home}{Enter}");
-    expect(out("edges")).toBe("src>map map>sink");
+    expect(out("links")).toBe("src>map map>sink");
     expect(document.querySelector("[aria-live]")).toHaveTextContent(
       "not allowed",
     );
@@ -123,7 +123,7 @@ describe("NodeEditor", () => {
     await user.keyboard("{/Shift}");
     expect(onselect).toHaveBeenLastCalledWith({
       nodes: ["src", "map"],
-      edges: [],
+      links: [],
     });
     expect(nodes()[0]).toHaveAttribute("aria-pressed", "true");
 
@@ -134,7 +134,7 @@ describe("NodeEditor", () => {
     await user.keyboard("{Delete}");
     await settle();
     expect(out("nodes")).toBe("sink@480,0");
-    expect(out("edges")).toBe("");
+    expect(out("links")).toBe("");
     expect(onremove).toHaveBeenCalledWith(
       expect.objectContaining({
         nodes: [
@@ -147,7 +147,7 @@ describe("NodeEditor", () => {
 
     await user.keyboard("{Control>}z{/Control}");
     expect(out("nodes")).toBe("src@0,8 map@240,8 sink@480,0");
-    expect(out("edges")).toBe("src>map");
+    expect(out("links")).toBe("src>map");
   });
 
   it("selects an edge by clicking its hit path and removes it", async () => {
@@ -156,9 +156,9 @@ describe("NodeEditor", () => {
     await fireEvent.click(
       document.querySelector(".bx--viz-editor__edge-hit") as Element,
     );
-    expect(edges()[0]).toHaveClass("bx--viz-editor__edge--selected");
+    expect(links()[0]).toHaveClass("bx--viz-editor__edge--selected");
     await user.click(screen.getByRole("button", { name: "Remove selected" }));
-    expect(out("edges")).toBe("");
+    expect(out("links")).toBe("");
     expect(out("nodes")).toBe("src@0,0 map@240,0 sink@480,0");
   });
 
@@ -187,7 +187,7 @@ describe("NodeEditor", () => {
     await pointer(stage, "pointerup", 300, 100, { shiftKey: true });
     expect(onselect).toHaveBeenLastCalledWith({
       nodes: ["src", "map"],
-      edges: [],
+      links: [],
     });
     expect(document.querySelector(".bx--viz-editor__marquee")).toBeNull();
   });
@@ -198,7 +198,7 @@ describe("NodeEditor", () => {
         { id: "a", name: "a", x: 500, y: 300 },
         { id: "b", name: "b", x: 0, y: 0 },
       ],
-      edges: [{ source: "a", target: "b" }],
+      links: [{ source: "a", target: "b" }],
     });
     await user.click(screen.getByRole("button", { name: "Arrange" }));
     const [a, b] =
@@ -212,7 +212,7 @@ describe("NodeEditor", () => {
     expect(out("nodes")).toBe("a@500,300 b@0,0");
   });
 
-  it("gives edges that share a port separate channels, routes a backward edge around, and can curve", async () => {
+  it("gives links that share a port separate channels, routes a backward edge around, and can curve", async () => {
     const { rerender } = render(NodeEditor, {
       nodes: [
         { id: "a", name: "a", x: 0, y: 0 },
@@ -220,7 +220,7 @@ describe("NodeEditor", () => {
         { id: "c", name: "c", x: 300, y: 100 },
         { id: "d", name: "d", x: -300, y: 100 },
       ],
-      edges: [
+      links: [
         { source: "a", target: "c" },
         { source: "b", target: "c" },
         { source: "c", target: "d" },
@@ -230,7 +230,7 @@ describe("NodeEditor", () => {
       Array.from(document.querySelectorAll(".bx--viz-editor__edge-line")).map(
         (p) => p.getAttribute("d") ?? "",
       );
-    // The two edges into c turn at different x, five pixels either side of
+    // The two links into c turn at different x, five pixels either side of
     // the midpoint; the turn is the first rounded corner.
     const channel = (d: string) => Number(d.match(/Q([\d.-]+),/)?.[1]);
     expect(channel(paths()[0])).toBe(225);
@@ -244,7 +244,7 @@ describe("NodeEditor", () => {
         { id: "a", name: "a", x: 0, y: 0 },
         { id: "c", name: "c", x: 300, y: 100 },
       ],
-      edges: [{ source: "a", target: "c" }],
+      links: [{ source: "a", target: "c" }],
       edge: "curved",
     });
     expect(paths()[0]).toMatch(/^M[\d.]+,[\d.]+C/);
@@ -257,7 +257,7 @@ describe("NodeEditor", () => {
         { id: "a", name: "a", x: 0, y: 0 },
         { id: "far", name: "far", x: 5000, y: 5000 },
       ],
-      edges: [],
+      links: [],
       ontransform,
     });
     const stage = document.querySelector(

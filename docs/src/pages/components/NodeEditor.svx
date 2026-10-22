@@ -16,14 +16,14 @@ description: Node editor lets people build a graph by hand, moving nodes on a st
     { id: "warehouse", name: "warehouse", kind: "sink", x: 960, y: 40 },
     { id: "report", name: "weekly report", kind: "sink", x: 960, y: 160 },
   ];
-  let edges = [
+  let links = [
     { source: "orders", target: "clean" },
     { source: "clean", target: "join" },
     { source: "customers", target: "join" },
     { source: "join", target: "enrich" },
     { source: "enrich", target: "warehouse" },
   ];
-  let selected = { nodes: [], edges: [] };
+  let selected = { nodes: [], links: [] };
   let log = [];
 
   function onConnect(event) {
@@ -38,26 +38,26 @@ description: Node editor lets people build a graph by hand, moving nodes on a st
 
 `NodeEditor` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
-It is a [GraphCanvas](/components/GraphCanvas) that edits: drag a node to move it, drag from a node's out port to another node to connect them, sweep a marquee with Shift to select several, and press Delete to remove. Every edit is one undo step, including a whole drag. The graph stays yours: bind `nodes` and `edges`, and the editor writes new rows back, never mutating the ones it was given.
+It is a [GraphCanvas](/components/GraphCanvas) that edits: drag a node to move it, drag from a node's out port to another node to connect them, sweep a marquee with Shift to select several, and press Delete to remove. Every edit is one undo step, including a whole drag. The graph stays yours: bind `nodes` and `links`, and the editor writes new rows back, never mutating the ones it was given.
 
 ## Basic
 
-Pass `nodes` with an `id`, a `label`, and `x` and `y` keys for their positions, and `edges` read with `source` and `target`. Each node has an `in` port on the left and an `out` port on the right unless `ports` says otherwise. Listen for `connect` and call `preventDefault()` to refuse a connection; here a source refuses inputs.
+Pass `nodes` with an `id`, a `label`, and `x` and `y` keys for their positions, and `links` read with `source` and `target`. Each node has an `in` port on the left and an `out` port on the right unless `ports` says otherwise. Listen for `connect` and call `preventDefault()` to refuse a connection; here a source refuses inputs.
 
-<NodeEditor bind:nodes bind:edges bind:selected id="id" label="name" title="Pipeline" on:connect={onConnect} on:change={onChange}>
+<NodeEditor bind:nodes bind:links bind:selected id="id" label="name" title="Pipeline" on:connect={onConnect} on:change={onChange}>
   <span class="bx--viz-editor__label" slot="node" let:node>
     {node.label}
     <Tag size="sm" type={node.datum.kind === "source" ? "blue" : node.datum.kind === "sink" ? "green" : "gray"}>{node.datum.kind}</Tag>
   </span>
 </NodeEditor>
 
-<p>Last edits: {log.join(", ") || "none yet"}. Selected: {[...selected.nodes, ...selected.edges].join(", ") || "nothing"}.</p>
+<p>Last edits: {log.join(", ") || "none yet"}. Selected: {[...selected.nodes, ...selected.links].join(", ") || "nothing"}.</p>
 
 ## Edits and undo
 
-Every change fires `change` with the step's label and its `undo` and `redo`, so the graph can be persisted or replayed elsewhere. Ctrl or Cmd with Z undoes and with Shift or Y redoes, and the controls do the same. The arrange button lays the graph out in ranks, as the layered graph does, in one step. Set `snap` for the grid moves land on, and `readonly` to show a graph that cannot be changed. `edge` picks straight lines, right angles with rounded corners, or curves; an edge whose target sits behind its source goes around, and edges that share a port take channels of their own.
+Every change fires `change` with the step's label and its `undo` and `redo`, so the graph can be persisted or replayed elsewhere. Ctrl or Cmd with Z undoes and with Shift or Y redoes, and the controls do the same. The arrange button lays the graph out in ranks, as the layered graph does, in one step. Set `snap` for the grid moves land on, and `readonly` to show a graph that cannot be changed. `edge` picks straight lines, right angles with rounded corners, or curves; an edge whose target sits behind its source goes around, and links that share a port take channels of their own.
 
-<NodeEditor nodes={nodes.slice(0, 4)} edges={edges.slice(0, 3)} id="id" label="name" readonly height={260} minimap={false} title="Read only" />
+<NodeEditor nodes={nodes.slice(0, 4)} links={links.slice(0, 3)} id="id" label="name" readonly height={260} minimap={false} title="Read only" />
 
 ## Accessibility
 

@@ -14,12 +14,12 @@
     { id: "map", name: "map", x: 240, y: 0 },
     { id: "sink", name: "sink", x: 480, y: 0 },
   ];
-  export let edges: Edge[] = [{ source: "src", target: "map" }];
+  export let links: Edge[] = [{ source: "src", target: "map" }];
   export let refuse: string | null = null;
   export let readonly = false;
   export let edge: "straight" | "orthogonal" | "curved" = "orthogonal";
   export let ontransform: (detail: unknown) => void = () => {};
-  export let selected = { nodes: [] as string[], edges: [] as string[] };
+  export let selected = { nodes: [] as string[], links: [] as string[] };
   export let onmove: (detail: unknown) => void = () => {};
   export let onconnect: (detail: unknown) => void = () => {};
   export let onremove: (detail: unknown) => void = () => {};
@@ -29,7 +29,7 @@
 
 <NodeEditor
   bind:nodes
-  bind:edges
+  bind:links
   bind:selected
   id="id"
   label="name"
@@ -51,9 +51,9 @@
 <output data-testid="nodes"
   >{nodes.map((n) => `${n.id}@${n.x},${n.y}`).join(" ")}</output
 >
-<output data-testid="edges"
-  >{edges.map((e) => `${e.source}>${e.target}`).join(" ")}</output
+<output data-testid="links"
+  >{links.map((e) => `${e.source}>${e.target}`).join(" ")}</output
 >
 <output data-testid="selected"
-  >{[...selected.nodes, ...selected.edges].join(",")}</output
+  >{[...selected.nodes, ...selected.links].join(",")}</output
 >
