@@ -1,0 +1,7 @@
+<script>
+  import * as Carbon from "carbon-components-svelte";
+</script>
+
+<Carbon.Layer>
+  <Carbon.NumberInput label="Count" />
+</Carbon.Layer>

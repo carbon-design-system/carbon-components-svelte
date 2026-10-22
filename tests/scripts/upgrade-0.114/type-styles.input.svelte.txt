@@ -1,0 +1,17 @@
+<script>
+  import { Heading, Text } from "carbon-components-svelte";
+  import Label from "./Label.svelte";
+
+  export let big = false;
+</script>
+
+<Text type="body-short-01">Saved</Text>
+<Text type="caption-01">Updated today</Text>
+<Heading type={big ? "productive-heading-03" : "expressive-heading-04"}>Settings</Heading>
+<Heading type="heading-02">Already v11</Heading>
+
+<p class="bx--type-caption-02">Updated today</p>
+<p class="bx--type-body-long-01 bx--type-quotation-01">Quote</p>
+
+<Label type="body-short-01">Not Carbon</Label>
+<p>body-short-01 in prose stays.</p>

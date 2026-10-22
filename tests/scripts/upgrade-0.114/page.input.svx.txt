@@ -1,0 +1,28 @@
+---
+title: Settings
+---
+
+<script>
+  import { TextInput } from "carbon-components-svelte";
+</script>
+
+# Settings
+
+A field on a light surface:
+
+<TextInput light labelText="Name" />
+
+Code samples keep their markup, but `var(--cds-text-01)` reads in them
+are renamed:
+
+```css
+.field { color: var(--cds-text-01); }
+```
+
+```svelte
+<TextInput light labelText="In a code sample" />
+```
+
+<style>
+  .note { border-color: var(--cds-ui-03); }
+</style>

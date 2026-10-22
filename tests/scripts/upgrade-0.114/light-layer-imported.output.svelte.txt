@@ -1,0 +1,11 @@
+<script>
+  import { Layer as Surface, Select, SelectItem } from "carbon-components-svelte";
+</script>
+
+<Surface>
+  <Surface>
+    <Select labelText="Size">
+      <SelectItem value="s" />
+    </Select>
+  </Surface>
+</Surface>

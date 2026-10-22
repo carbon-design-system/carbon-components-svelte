@@ -1,0 +1,51 @@
+<script>
+  import {
+    ClickableTile,
+    CodeSnippet,
+    Modal,
+    Search,
+    TextInput,
+    Tile,
+  } from "carbon-components-svelte";
+  import Field from "./Field.svelte";
+
+  export let dark = false;
+  const help = "<TextInput light />";
+</script>
+
+<!-- <TextInput light labelText="In a comment" /> -->
+
+<TextInput light labelText="Name" />
+
+<div>
+  <Tile light>
+    <TextInput light={true} labelText="Nested" />
+  </Tile>
+</div>
+
+<TextInput
+  light
+  labelText="Multi-line"
+  placeholder="Type"
+/>
+
+<p>Search: <Search light size="sm" /></p>
+
+<TextInput light={false} labelText="Not light" />
+
+<TextInput light={dark} labelText="Dynamic" />
+
+<Modal open modalHeading="Edit">
+  <TextInput light labelText="In a modal" />
+</Modal>
+
+<CodeSnippet light type="multi">
+line one
+  line two
+</CodeSnippet>
+
+<ClickableTile light href="/">
+	<span>Tabbed</span>
+</ClickableTile>
+
+<Field light label="Not Carbon" />
