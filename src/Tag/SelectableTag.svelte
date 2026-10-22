@@ -43,13 +43,19 @@
   /** Set an id for the tag */
   export let id = uniqueId();
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TagTooltip from "./TagTooltip.svelte";
+  import { observeTruncation } from "./tag-truncation.js";
 
   const dispatch = createEventDispatcher();
 
   let buttonRef = null;
+  let labelRef = null;
+  let truncated = false;
+  let stopObservingLabel = noop;
 
   // Inside a `TagSet`, register like `Tag` does.
   const group = joinTagSet(() => ({
@@ -69,6 +75,23 @@
 
   $: resolvedSize = size ?? $groupSize ?? "default";
   $: group.update({ value, type, size: resolvedSize, disabled });
+  $: hasIcon = Boolean(icon || $$slots.icon);
+
+  // A truncated label shows its full text in a tooltip on the tag. A
+  // disabled tag gets no hover or focus, so it falls back to `title`.
+  $: {
+    stopObservingLabel();
+    stopObservingLabel = labelRef
+      ? observeTruncation(labelRef, (value) => {
+          truncated = value;
+        })
+      : noop;
+  }
+  $: truncationLabel = truncated ? (labelRef?.textContent?.trim() ?? "") : "";
+
+  onMount(() => {
+    return () => stopObservingLabel();
+  });
 
   function toggle() {
     if (disabled) return;
@@ -86,10 +109,12 @@
   {disabled}
   aria-disabled={disabled}
   tabindex={disabled ? "-1" : $rovingTabindex}
+  title={disabled && truncated ? truncationLabel : undefined}
   class:bx--tag={true}
   class:bx--tag--selectable={true}
   class:bx--tag--selectable-selected={selected}
   class:bx--tag--disabled={disabled}
+  class:bx--tag--with-icon={hasIcon}
   class:bx--tag--sm={resolvedSize === "sm"}
   class:bx--tag--lg={resolvedSize === "lg"}
   class:bx--tag--red={type === "red"}
@@ -117,5 +142,10 @@
       <slot name="icon"> <svelte:component this={icon} /> </slot>
     </div>
   {/if}
-  <span> <slot /> </span>
+  <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
 </button>
+<TagTooltip
+  anchor={buttonRef}
+  text={truncationLabel}
+  enabled={truncated && !disabled}
+/>

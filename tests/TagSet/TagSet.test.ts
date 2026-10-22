@@ -219,7 +219,9 @@ describe("TagSet", () => {
       onTagClose,
     });
 
-    const closeButtons = within(container).getAllByTitle("Clear filter");
+    const closeButtons = within(container).getAllByRole("button", {
+      name: /^Clear filter/,
+    });
     expect(closeButtons).toHaveLength(4);
     await user.click(closeButtons[2]);
 

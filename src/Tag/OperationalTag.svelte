@@ -108,6 +108,8 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TagTooltip from "./TagTooltip.svelte";
+  import { observeTruncation } from "./tag-truncation.js";
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
@@ -130,6 +132,9 @@
 
   let wrapperRef = null;
   let portalRef = null;
+  let labelRef = null;
+  let truncated = false;
+  let stopObservingLabel = noop;
   let disconnectModalObserver = noop;
   // Window listeners are enabled on the frame after opening, so the click
   // that opened the popover can't bubble to the outside-click handler and
@@ -147,6 +152,20 @@
   $: popoverAlign = toPopoverAlign(direction, align);
   $: insideElements = [wrapperRef, portalRef];
   $: if (disabled || !hasContent) open = false;
+  $: hasIcon = Boolean(icon || $$slots.icon);
+
+  // A truncated label shows its full text in a tooltip on the tag, except
+  // while the popover is open. A disabled tag gets no hover or focus, so it
+  // falls back to `title`.
+  $: {
+    stopObservingLabel();
+    stopObservingLabel = labelRef
+      ? observeTruncation(labelRef, (value) => {
+          truncated = value;
+        })
+      : noop;
+  }
+  $: truncationLabel = truncated ? (labelRef?.textContent?.trim() ?? "") : "";
 
   $: group.update({ type, size: resolvedSize, disabled });
 
@@ -207,6 +226,7 @@
     return () => {
       cancelAnimationFrame(enableFrame);
       disconnectModalObserver();
+      stopObservingLabel();
     };
   });
 </script>
@@ -231,10 +251,12 @@
     aria-expanded={hasContent ? open : undefined}
     aria-controls={hasContent ? contentId : undefined}
     tabindex={$rovingTabindex}
+    title={disabled && truncated ? truncationLabel : undefined}
     class:bx--tag={true}
     class:bx--tag--interactive={true}
     class:bx--tag--operational={true}
     class:bx--tag--disabled={disabled}
+    class:bx--tag--with-icon={hasIcon}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -259,8 +281,13 @@
         <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
-    <span class:bx--tag__label={true}><slot /></span>
+    <span bind:this={labelRef} class:bx--tag__label={true}><slot /></span>
   </button>
+  <TagTooltip
+    anchor={ref}
+    text={truncationLabel}
+    enabled={truncated && !disabled && !open}
+  />
   {#if hasContent && !effectivePortal}
     <Popover {open} align={popoverAlign} id={contentId}>
       <div bind:this={contentRef} class:bx--operational-tag__content={true}>

@@ -39,12 +39,16 @@
   /** Set to `true` to omit the default outer margin */
   export let inline = false;
 
-  /** Set the title for the close button in a filterable tag */
+  /**
+   * Set the label of the close button in a filterable tag.
+   * Shown in a tooltip on hover and focus, and leads the button's accessible name.
+   */
   export let title = "Clear filter";
 
   /**
-   * Cap the tag width. When the label overflows, a tooltip shows the full text.
-   * Accepts any CSS length (for example `"8rem"`, `"120px"`).
+   * Override the tag's 208px width cap.
+   * Accepts any CSS length (for example `"8rem"`, `"120px"`, or `"100%"` to fit the container).
+   * At any width, a truncated label shows its full text in a tooltip.
    * @type {string | undefined}
    */
   export let maxWidth = undefined;
@@ -72,7 +76,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import Close from "../icons/Close.svelte";
@@ -80,8 +84,11 @@
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
+  import TagTooltip from "./TagTooltip.svelte";
+  import { observeTruncation } from "./tag-truncation.js";
 
   const dispatch = createEventDispatcher();
 
@@ -105,9 +112,10 @@
   } = group;
 
   let labelRef = null;
+  let closeRef = null;
   let truncated = false;
   let truncationLabel = "";
-  let measureToken = 0;
+  let stopObservingLabel = noop;
 
   // In a filter tag, the close button is the only focusable element, so
   // naming and description go there instead of onto the wrapper.
@@ -121,44 +129,42 @@
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
 
-  // Interactive tags are already buttons, and link tags are already anchors.
-  // Wrapping the label in `TooltipDefinition` would nest interactive
-  // elements, so use the native `title` instead. A roving `TagSet` is a
-  // single tab stop, which the tooltip's focusable trigger would break.
+  $: hasIcon = Boolean(icon || $$slots.icon);
+
+  // A truncated label shows its full text in a tooltip. Static and filter
+  // tags wrap the label in `TooltipDefinition`. Interactive and link tags
+  // are already a button or an anchor, so the tooltip anchors to the tag
+  // itself instead of nesting another control. A roving `TagSet` is a
+  // single tab stop, which the definition's focusable trigger would break,
+  // and a disabled tag gets no hover or focus: both fall back to `title`.
   $: showTruncationTooltip =
     truncated && !interactive && !href && $groupNavigation !== "roving";
+  $: showHostTooltip = truncated && (interactive || !!href) && !disabled;
   $: nativeTitle =
-    truncated && !showTruncationTooltip ? truncationLabel : undefined;
+    truncated && !showTruncationTooltip && !showHostTooltip
+      ? truncationLabel
+      : undefined;
 
-  async function measureTruncation() {
-    const token = ++measureToken;
-    await tick();
-    if (token !== measureToken) return;
-
-    if (!maxWidth || !labelRef) {
-      truncated = false;
-      truncationLabel = "";
-      return;
-    }
-
-    const text = labelRef.textContent?.trim() ?? "";
-    const overflowing = labelRef.scrollWidth > labelRef.clientWidth;
+  /** @param {boolean} overflowing */
+  function setTruncated(overflowing) {
     truncated = overflowing;
-    truncationLabel = overflowing ? text : "";
+    truncationLabel = overflowing ? (labelRef?.textContent?.trim() ?? "") : "";
   }
 
-  $: if (maxWidth != null && !skeleton) {
-    void maxWidth;
-    void filter;
-    void interactive;
-    void href;
-    void type;
-    void resolvedSize;
-    measureTruncation();
-  } else if (maxWidth == null) {
-    truncated = false;
-    truncationLabel = "";
+  // Measure once the label is laid out, then whenever it resizes: a new
+  // `maxWidth`, size or icon, or a container narrower than the cap.
+  // Swapping the root element or wrapping the label in the tooltip mounts
+  // a new label node, which is observed in turn.
+  $: {
+    stopObservingLabel();
+    stopObservingLabel = labelRef
+      ? observeTruncation(labelRef, setTruncated)
+      : noop;
   }
+
+  onMount(() => {
+    return () => stopObservingLabel();
+  });
 
   // Toggling `filter`, `interactive` or `href` swaps the root element, so the
   // set must be told about the new node too.
@@ -264,11 +270,12 @@
       class:bx--tag__close-icon={true}
       tabindex={$rovingTabindex}
       {disabled}
-      {title}
+      bind:this={closeRef}
       on:click|stopPropagation={handleClose}
     >
       <Close />
     </button>
+    <TagTooltip anchor={closeRef} text={title} enabled={!disabled} />
   </div>
 {:else if href}
   <a
@@ -286,6 +293,7 @@
     class:bx--tag--interactive={true}
     class:bx--tag--disabled={disabled}
     class:bx--tag--truncate={maxWidth != null}
+    class:bx--tag--with-icon={hasIcon}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -314,6 +322,7 @@
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
   </a>
+  <TagTooltip anchor={ref} text={truncationLabel} enabled={showHostTooltip} />
 {:else if interactive}
   <button
     bind:this={ref}
@@ -329,6 +338,7 @@
     class:bx--tag--interactive={true}
     class:bx--tag--disabled={disabled}
     class:bx--tag--truncate={maxWidth != null}
+    class:bx--tag--with-icon={hasIcon}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -357,6 +367,7 @@
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
   </button>
+  <TagTooltip anchor={ref} text={truncationLabel} enabled={showHostTooltip} />
 {:else}
   <div
     bind:this={ref}
@@ -367,6 +378,7 @@
     class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
     class:bx--tag--truncate={maxWidth != null}
+    class:bx--tag--with-icon={hasIcon}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}

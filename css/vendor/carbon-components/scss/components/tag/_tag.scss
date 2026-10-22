@@ -31,7 +31,8 @@
     // ensures tag stays pill shaped;
     min-width: to-rem(32px);
     // restricts size of contained elements
-    max-width: 100%;
+    // ccs: v11 caps a tag at 208px; a longer label truncates
+    max-width: to-rem(208px);
     min-height: to-rem(24px);
     align-items: center;
     justify-content: center;
@@ -150,19 +151,22 @@
   .#{$prefix}--tag--disabled,
   .#{$prefix}--tag--filter.#{$prefix}--tag--disabled,
   .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled {
-    @include tag-theme($field, $text-disabled, $emit-hover: false);
+    @include tag-theme($layer, $text-disabled, $emit-hover: false); // ccs: v11
   }
 
   .#{$prefix}--tag__label {
+    // ccs: v11; also clips inside the truncation tooltip's trigger
+    display: block;
     overflow: hidden;
     max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  // ccs: v11 focus ring, outside the tag
   .#{$prefix}--tag--interactive:focus {
-    box-shadow: inset 0 0 0 1px $focus;
-    outline: none;
+    outline: 2px solid $focus;
+    outline-offset: 1px;
   }
 
   .#{$prefix}--tag--filter {
@@ -358,7 +362,7 @@
     .#{$prefix}--tag--filter.#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover,
     .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
     .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover {
-      background-color: $field;
+      background-color: $layer; // ccs: v11
     }
 
     // Must stay after the disabled rule above: same selector, same
@@ -413,6 +417,22 @@
   }
 }
 
+/// v11 tightens the leading padding next to a custom icon. v11 selects
+/// the tag with `:has(.bx--tag__custom-icon)`, which the CSS baseline
+/// lacks, so the component marks the tag with `--with-icon` instead.
+/// Emits after `tag-lg` to win its padding tie.
+/// @access private
+/// @group components
+@mixin tag-with-icon {
+  .#{$prefix}--tag--with-icon {
+    padding-left: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--tag--lg.#{$prefix}--tag--with-icon {
+    padding-left: $carbon--spacing-03;
+  }
+}
+
 /// Inline tag without default outer margin
 /// @access private
 /// @group components
@@ -442,6 +462,10 @@
   @include tag-lg;
 }
 
+@include exports("tag-with-icon") {
+  @include tag-with-icon;
+}
+
 @include exports("tag-inline") {
   @include tag-inline;
 }
@@ -454,7 +478,10 @@
 @import '../../globals/scss/helper-mixins';
 
 @mixin selectable-tag {
+  // No block padding: the border would add 2px to `min-height`.
   .#{$prefix}--tag--selectable {
+    padding-top: 0;
+    padding-bottom: 0;
     border: 1px solid $border-inverse;
     background-color: $layer;
     color: $text-primary;
@@ -467,7 +494,7 @@
   }
 
   .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled {
-    border: 1px solid $icon-disabled;
+    border: 1px solid $border-disabled;
     background-color: $layer;
     color: $text-disabled;
   }
@@ -532,7 +559,7 @@
 
 // carbon-components-svelte patch (operational tag)
 /// OperationalTag: a tag-styled button that discloses a popover. The whole
-/// tag is the trigger, with a 2px focus outline.
+/// tag is the trigger, with `--interactive`'s 2px focus outline.
 /// @access private
 /// @group components
 @mixin tag-operational {
@@ -541,28 +568,28 @@
     display: inline-flex;
   }
 
-  // A 1px ring in the tag's own text color marks it as a trigger.
+  // A 1px border in the type's `tag-border-*` color marks it as a trigger.
+  // No block padding: the border would add 2px to `min-height`.
   .#{$prefix}--tag--operational {
-    border: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 1px solid get-token-value($tag-colors, "tag-border-gray");
     margin: 0;
-    box-shadow: inset 0 0 0 1px currentColor;
     font-family: inherit;
   }
 
-  // Replaces `--interactive`'s inset focus shadow, keeping the ring.
-  .#{$prefix}--tag--operational:focus {
-    box-shadow: inset 0 0 0 1px currentColor;
-    outline: 2px solid $focus;
-    outline-offset: 1px;
+  @each $type
+    in (red, magenta, purple, blue, cyan, teal, green, gray, cool-gray, warm-gray)
+  {
+    .#{$prefix}--tag--operational.#{$prefix}--tag--#{$type} {
+      border-color: get-token-value($tag-colors, "tag-border-#{$type}");
+    }
   }
 
-  // Gray types get a lighter neutral ring. Their near-black text color
-  // would otherwise match an unselected `SelectableTag`'s
-  // `$border-inverse` border.
-  .#{$prefix}--tag--operational.#{$prefix}--tag--gray,
-  .#{$prefix}--tag--operational.#{$prefix}--tag--cool-gray,
-  .#{$prefix}--tag--operational.#{$prefix}--tag--warm-gray {
-    box-shadow: inset 0 0 0 1px $border-strong;
+  // After the types: same specificity. The fill and text color come from
+  // `.#{$prefix}--tag--interactive.#{$prefix}--tag--disabled`.
+  .#{$prefix}--tag--operational.#{$prefix}--tag--disabled {
+    border-color: $border-disabled;
   }
 
   // Clear the trigger's 2px focus outline.
