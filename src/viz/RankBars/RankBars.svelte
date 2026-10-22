@@ -6,7 +6,7 @@
    */
 
   /**
-   * @event {import("../utils/rank.js").RankRow<Id>} select Fires when a row is activated by click or keyboard. Requires `selectable`.
+   * @event {{ row: import("../utils/rank.js").RankRow<Id>; originalEvent: Event }} select Fires when a row is activated by click or keyboard. Requires `selectable`.
    * @event {import("../utils/rank.js").RankRow<Id> | null} hover Fires when the pointer or focus enters a row, and with `null` when it leaves. Requires `selectable`.
    */
 
@@ -18,7 +18,7 @@
   /** @restProps {table} */
 
   /**
-   * Specify the items. They are sorted by value unless `sort` is `false`.
+   * Specify the items. They are sorted by value unless `sort` is `"none"`.
    * @type {ReadonlyArray<import("../utils/shares.js").ShareItem<Id> & { href?: string }>}
    */
   export let data = [];
@@ -41,8 +41,12 @@
   /** Specify the label of the folded row */
   export let otherLabel = "Other";
 
-  /** Set to `false` to keep the input order */
-  export let sort = true;
+  /**
+   * Specify the row order. `"value"` ranks by value; `"none"` keeps the
+   * input order.
+   * @type {"none" | "value"}
+   */
+  export let sort = "value";
 
   /** Set to `true` to hide the rank numbers */
   export let hideRank = false;
@@ -119,7 +123,12 @@
       : vizColor(value);
   }
 
-  $: ranks = getRanks(data, { top, other, otherLabel, sort });
+  $: ranks = getRanks(data, {
+    top,
+    other,
+    otherLabel,
+    sort: sort !== "none",
+  });
   $: formatValue = resolveFormat(format, locale);
   $: write = (/** @type {import("../utils/rank.js").RankRow<Id>} */ row) =>
     valueType === "percent"
@@ -166,10 +175,13 @@
     return { update: sync, destroy: () => sync(false) };
   }
 
-  /** @param {import("../utils/rank.js").RankRow<Id>} row */
-  function select(row) {
+  /**
+   * @param {(typeof ranks.rows)[number]} row
+   * @param {Event} originalEvent
+   */
+  function select(row, originalEvent) {
     selectedId = row.item.id;
-    dispatch("select", row);
+    dispatch("select", { row, originalEvent });
   }
 </script>
 
@@ -228,7 +240,7 @@
               class:bx--viz-rank-bars__button={true}
               aria-pressed={row.item.id === selectedId}
               tabindex={i === tabStopIndex ? 0 : -1}
-              on:click|stopPropagation={() => select(row)}
+              on:click|stopPropagation={(event) => select(row, event)}
               on:focus={() => {
                 focusedIndex = i;
                 dispatch("hover", row);

@@ -62,6 +62,7 @@ describe("WinLoss", () => {
     expect(onselect).toHaveBeenCalledWith({
       result: { value: -2, label: "Tue" },
       index: 1,
+      originalEvent: expect.any(Event),
     });
 
     await user.keyboard("{ArrowLeft}");

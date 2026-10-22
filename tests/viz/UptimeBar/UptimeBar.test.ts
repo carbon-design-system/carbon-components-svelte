@@ -68,6 +68,7 @@ describe("UptimeBar", () => {
     expect(onselect).toHaveBeenCalledWith({
       period: { status: "down", label: "Mar 4" },
       index: 3,
+      originalEvent: expect.any(Event),
     });
 
     await user.keyboard("{ArrowLeft}");

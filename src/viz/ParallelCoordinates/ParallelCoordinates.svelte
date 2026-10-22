@@ -70,7 +70,7 @@
 
   /**
    * Specify the hidden series.
-   * @type {ReadonlyArray<string>}
+   * @type {ReadonlyArray<string | number>}
    */
   export let hidden = [];
 

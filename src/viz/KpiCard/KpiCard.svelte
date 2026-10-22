@@ -13,6 +13,12 @@
   export let label = "";
 
   /**
+   * Obtain a reference to the tile element
+   * @type {null | HTMLDivElement | HTMLAnchorElement}
+   */
+  export let ref = null;
+
+  /**
    * Specify the value. A missing or non-finite value renders a dash.
    * @type {number | null | undefined}
    */
@@ -80,6 +86,7 @@
   this={href ? ClickableTile : Tile}
   {href}
   class="bx--viz-kpi"
+  bind:ref
   aria-busy={loading ? "true" : undefined}
   {...$$restProps}
 >

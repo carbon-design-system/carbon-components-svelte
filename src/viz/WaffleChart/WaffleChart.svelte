@@ -6,7 +6,7 @@
    */
 
   /**
-   * @event {{ item: import("../utils/shares.js").ShareItem<Id>; items: ReadonlyArray<import("../utils/shares.js").ShareItem<Id>> | null; value: number; share: number; pct: number; index: number }} select Fires when a part is activated by click or keyboard. Requires `selectable`.
+   * @event {{ item: import("../utils/shares.js").ShareItem<Id>; items: ReadonlyArray<import("../utils/shares.js").ShareItem<Id>> | null; value: number; share: number; pct: number; index: number; originalEvent: Event }} select Fires when a part is activated by click or keyboard. Requires `selectable`.
    */
 
   /** @restProps {div} */
@@ -28,7 +28,7 @@
 
   /**
    * Specify what is written next to each legend label.
-   * @type {"percent" | "value"}
+   * @type {"value" | "percent"}
    */
   export let valueType = "percent";
 
@@ -179,11 +179,14 @@
     return { update: sync, destroy: () => sync(false) };
   }
 
-  /** @param {(typeof parts)[number]} part */
-  function select(part) {
+  /**
+   * @param {(typeof parts)[number]} part
+   * @param {Event} originalEvent
+   */
+  function select(part, originalEvent) {
     selectedId = selectedId === part.id ? undefined : part.id;
     focusedIndex = part.segment.index;
-    dispatch("select", part.segment);
+    dispatch("select", { ...part.segment, originalEvent });
   }
 </script>
 
@@ -230,7 +233,7 @@
               class:bx--viz-waffle__key={true}
               tabindex={i === tabStopIndex ? 0 : -1}
               aria-pressed={part.id === selectedId}
-              on:click={() => select(part)}
+              on:click={(event) => select(part, event)}
               on:focus={() => (focusedIndex = i)}
             >
               <span class:bx--viz-waffle__swatch={true}></span>

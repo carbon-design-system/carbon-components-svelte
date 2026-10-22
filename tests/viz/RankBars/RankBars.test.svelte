@@ -28,7 +28,7 @@
 />
 <RankBars
   {data}
-  sort={false}
+  sort="none"
   hideRank
   format={(value) => `${value} pts`}
   label="Unsorted"

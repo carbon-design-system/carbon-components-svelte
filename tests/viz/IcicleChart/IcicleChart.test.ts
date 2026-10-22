@@ -67,7 +67,7 @@ describe("IcicleChart", () => {
   });
 
   it("stands on its head as a flame graph", () => {
-    render(IcicleChart, { orientation: "bottom" });
+    render(IcicleChart, { direction: "up" });
 
     expect(named("bundle").style.top).toBe("40px");
     expect(named("viz").style.top).toBe("0px");

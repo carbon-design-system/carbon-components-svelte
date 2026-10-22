@@ -2,7 +2,7 @@
 
 <script>
   /**
-   * @event {{ threshold: number; kind: "target" | "band"; direction: "above" | "below"; value: number }} threshold Fires when an update moves the value across the target or a band boundary. Never fires on mount.
+   * @event {{ threshold: { value: number; kind: "target" | "band" }; direction: "above" | "below"; value: number }} threshold Fires when an update moves the value across the target or a band boundary. Never fires on mount.
    */
 
   /** @restProps {div} */
@@ -121,28 +121,24 @@
     if (prev === undefined || prev === next) return;
     if (!Number.isFinite(prev) || !Number.isFinite(next)) return;
 
-    /** @type {Array<{ threshold: number; kind: "target" | "band" }>} */
-    const marks = bounds.map((threshold) => ({ threshold, kind: "band" }));
+    /** @type {Array<{ value: number; kind: "target" | "band" }>} */
+    const marks = bounds.map((value) => ({ value, kind: "band" }));
     if (goal !== undefined && goal !== null) {
-      marks.push({ threshold: goal, kind: "target" });
+      marks.push({ value: goal, kind: "target" });
     }
 
     const rising = next > prev;
     const crossed = marks
-      .filter(({ threshold }) =>
-        rising
-          ? prev < threshold && threshold <= next
-          : next < threshold && threshold <= prev,
+      .filter(({ value }) =>
+        rising ? prev < value && value <= next : next < value && value <= prev,
       )
-      .sort((a, b) =>
-        rising ? a.threshold - b.threshold : b.threshold - a.threshold,
-      );
+      .sort((a, b) => (rising ? a.value - b.value : b.value - a.value));
     if (crossed.length === 0) return;
 
     tick().then(() => {
-      for (const mark of crossed) {
+      for (const threshold of crossed) {
         dispatch("threshold", {
-          ...mark,
+          threshold,
           direction: rising ? "above" : "below",
           value: next,
         });

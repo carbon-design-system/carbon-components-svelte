@@ -18,7 +18,7 @@
     { id: "css", parent: "assets", name: "css", bytes: 60 },
     { id: "img", parent: "assets", name: "img", bytes: 120 },
   ];
-  export let orientation: "top" | "bottom" = "top";
+  export let direction: "down" | "up" = "down";
   export let root: string | null = null;
   export let selectable = false;
   export let selected: string | null = null;
@@ -36,7 +36,7 @@
   title="Bundle composition"
   locale="en-US"
   rowHeight={20}
-  {orientation}
+  {direction}
   {valueType}
   {selectable}
   bind:root

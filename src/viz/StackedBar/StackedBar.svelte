@@ -6,7 +6,7 @@
    */
 
   /**
-   * @event {{ item: import("../utils/shares.js").ShareItem<Id>; items: ReadonlyArray<import("../utils/shares.js").ShareItem<Id>> | null; value: number; share: number; pct: number; index: number }} select Fires when a segment is activated by click or keyboard. Requires `selectable`.
+   * @event {{ item: import("../utils/shares.js").ShareItem<Id>; items: ReadonlyArray<import("../utils/shares.js").ShareItem<Id>> | null; value: number; share: number; pct: number; index: number; originalEvent: Event }} select Fires when a segment is activated by click or keyboard. Requires `selectable`.
    */
 
   /** @restProps {div} */
@@ -31,7 +31,7 @@
 
   /**
    * Specify what is written next to each label.
-   * @type {"percent" | "value"}
+   * @type {"value" | "percent"}
    */
   export let valueType = "percent";
 
@@ -164,11 +164,14 @@
     return { update: sync, destroy: () => sync(false) };
   }
 
-  /** @param {(typeof parts)[number]} part */
-  function select(part) {
+  /**
+   * @param {(typeof parts)[number]} part
+   * @param {Event} originalEvent
+   */
+  function select(part, originalEvent) {
     selectedId = selectedId === part.id ? undefined : part.id;
     focusedIndex = part.segment.index;
-    dispatch("select", part.segment);
+    dispatch("select", { ...part.segment, originalEvent });
   }
 </script>
 
@@ -201,7 +204,7 @@
           aria-label="{part.label} {part.text}"
           style:--bx-viz-pct={part.segment.pct}
           style:--bx-viz-color={part.color}
-          on:click={() => select(part)}
+          on:click={(event) => select(part, event)}
           on:focus={() => (focusedIndex = i)}
         ></button>
       {:else}

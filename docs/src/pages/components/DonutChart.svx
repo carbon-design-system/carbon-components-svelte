@@ -59,7 +59,7 @@ The legend lists every slice, so it is also the text alternative. Set `valueType
   category="device"
   title="Values and shares"
   valueType="both"
-  legend="bottom"
+  legendPosition="bottom"
   diameter={160}
 />
 
