@@ -27,9 +27,11 @@
    */
   export const tabindex = "0";
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
+  import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { noop } from "../utils/noop.js";
   import StructuredListCell from "./StructuredListCell.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
@@ -38,6 +40,29 @@
   const multiple = ctx?.multiple ?? readable(false);
   // Standalone (no wrapper context) never matches, same as StructuredListInput.
   const selectedValue = ctx?.selectedValue ?? writable(undefined);
+  /** @type {import("svelte/store").Readable<Value[]>} */
+  const selectableValues = ctx?.selectableValues ?? readable([]);
+  const selectAllDescription =
+    ctx?.selectAllDescription ?? readable("Select all rows");
+  const toggleAll = ctx?.toggleAll ?? noop;
+
+  // Counts only rows that are not disabled, so a disabled row neither
+  // blocks the checked state nor joins select all.
+  $: selectedCount =
+    head && $multiple && Array.isArray($selectedValue)
+      ? $selectableValues.filter((v) => $selectedValue.includes(v)).length
+      : 0;
+  $: allSelected =
+    $selectableValues.length > 0 && selectedCount === $selectableValues.length;
+  $: someSelected = selectedCount > 0 && !allSelected;
+
+  // Rows register after the header renders, so the server sees none.
+  // Disable the header checkbox only once mounted rows show there are none
+  // to select, so the server does not render it disabled.
+  let mounted = false;
+  onMount(() => {
+    mounted = true;
+  });
 
   $: isSelected =
     value !== undefined &&
@@ -78,9 +103,24 @@
   >
     <slot />
     {#if $selection && head}
+      {#if $multiple}
+        <!-- Each body row has a column for its hidden input before the
+             icon. An empty one here puts select all over the icons. -->
+        <span class:bx--structured-list-input-wrapper={true}></span>
+      {/if}
       <!-- Keeps the selection column's width. Selection drops the table
            roles, so a column name here would only be stray text. -->
-      <StructuredListCell head style="width: 1px;"></StructuredListCell>
+      <StructuredListCell head style="width: 1px;">
+        {#if $multiple}
+          <InlineCheckbox
+            aria-label={$selectAllDescription}
+            checked={allSelected}
+            indeterminate={someSelected}
+            disabled={mounted && $selectableValues.length === 0}
+            on:change={toggleAll}
+          />
+        {/if}
+      </StructuredListCell>
     {/if}
   </div>
 {/if}

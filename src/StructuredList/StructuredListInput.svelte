@@ -21,6 +21,12 @@
    */
   export let value = /** @type {Value} */ ("value");
 
+  /**
+   * Set to `true` to disable the input. A disabled row is left out of the
+   * header checkbox that selects every row.
+   */
+  export let disabled = false;
+
   /** Set an id for the input element */
   export let id = useId("structured-list-input");
 
@@ -61,14 +67,16 @@
     ctx.add(value);
   }
 
-  let unregister = register(value);
+  let unregister = register(value, disabled);
   let prevValue = value;
+  let prevDisabled = disabled;
   onMount(() => () => unregister());
 
-  $: if (value !== prevValue) {
+  $: if (value !== prevValue || disabled !== prevDisabled) {
     unregister();
-    unregister = register(value);
+    unregister = register(value, disabled);
     prevValue = value;
+    prevDisabled = disabled;
   }
 
   $: checked = $multiple
@@ -90,6 +98,7 @@
     name={groupName}
     {title}
     {value}
+    {disabled}
     class:bx--structured-list-input={true}
     {...$$restProps}
     on:change={() => {

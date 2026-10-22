@@ -1899,6 +1899,13 @@
       "defaultKind": "text"
     },
     {
+      "component": "StructuredList",
+      "prop": "selectAllDescription",
+      "type": "string",
+      "default": "Select all rows",
+      "defaultKind": "text"
+    },
+    {
       "component": "TableOfContents",
       "prop": "labelText",
       "type": "string",
