@@ -8,6 +8,10 @@
   // Toggling `tooltipText` swaps the middle avatar's root element.
   let tooltipOn = false;
   let showSwapLead = false;
+
+  export let onOverflowClick: (event: CustomEvent) => void = () => {};
+  export let showOverflowSlot = false;
+  export let overflowOpen = false;
 </script>
 
 <div data-testid="under-max">
@@ -127,3 +131,31 @@
     <UserAvatar name="Dan" initials="D4" />
   </UserAvatarGroup>
 </div>
+<div data-testid="overflow-click">
+  <UserAvatarGroup max={2} on:click:overflow={onOverflowClick}>
+    <UserAvatar name="Monica" />
+    <UserAvatar name="Richard Hendricks" />
+    <UserAvatar name="Dinesh Chugtai" />
+    <UserAvatar name="Bertram Gilfoyle" />
+  </UserAvatarGroup>
+</div>
+
+{#if showOverflowSlot}
+  <div data-testid="overflow-slot">
+    <UserAvatarGroup max={2}>
+      <UserAvatar name="Monica" />
+      <UserAvatar name="Richard Hendricks" />
+      <UserAvatar name="Dinesh Chugtai" />
+      <UserAvatar name="Bertram Gilfoyle" />
+      <div slot="overflow" let:hidden>
+        {#if overflowOpen}
+          <ul data-testid="overflow-members">
+            {#each hidden as member (member.id)}
+              <li>{member.name}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+    </UserAvatarGroup>
+  </div>
+{/if}
