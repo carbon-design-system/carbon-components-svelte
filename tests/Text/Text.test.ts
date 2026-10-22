@@ -151,4 +151,17 @@ describe("Text", () => {
       "bx--text-truncate--multiline",
     );
   });
+
+  it.each([
+    ["type", { truncatedType: "body-02" as const }],
+    ["style", { truncatedStyle: "color: red" }],
+  ])("keeps truncation when `%s` changes after mount", async (_, props) => {
+    const { rerender } = render(Text);
+
+    await rerender(props);
+
+    const node = screen.getByText("Truncated text");
+    expect(node).toHaveClass("bx--text-truncate--multiline");
+    expectInlineStyle(node, { "--ccs-truncate-lines": "3" });
+  });
 });

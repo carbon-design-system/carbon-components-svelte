@@ -1,6 +1,4 @@
 <script>
-  import { truncate } from "../Truncate/truncate.js";
-
   /**
    * @template {keyof HTMLElementTagNameMap} [Tag="p"]
    * @slot {{}}
@@ -81,6 +79,9 @@
         ? `${maxWidth}px`
         : maxWidth;
 
+  $: truncated = lines !== undefined;
+  $: multiline = truncated && lines > 1;
+
   $: textClass = [
     type && type !== "inherit" && `bx--type-${type}`,
     color && `bx--type-text-${color}`,
@@ -98,23 +99,15 @@
     .join(" ");
 </script>
 
-{#if lines !== undefined}
-  <svelte:element
-    this={tag}
-    use:truncate={{ lines, clamp }}
-    {...$$restProps}
-    style:max-width={resolvedMaxWidth}
-    class={textClass}
-  >
-    <slot />
-  </svelte:element>
-{:else}
-  <svelte:element
-    this={tag}
-    {...$$restProps}
-    style:max-width={resolvedMaxWidth}
-    class={textClass}
-  >
-    <slot />
-  </svelte:element>
-{/if}
+<svelte:element
+  this={tag}
+  {...$$restProps}
+  style:max-width={resolvedMaxWidth}
+  style:--ccs-truncate-lines={multiline ? lines : undefined}
+  class={textClass}
+  class:bx--text-truncate--multiline={multiline}
+  class:bx--text-truncate--front={truncated && !multiline && clamp === "front"}
+  class:bx--text-truncate--end={truncated && !multiline && clamp !== "front"}
+>
+  <slot />
+</svelte:element>
