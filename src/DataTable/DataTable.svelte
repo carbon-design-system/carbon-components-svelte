@@ -1550,7 +1550,10 @@
               }}
             >
               {#if hasRowDecorator}
-                <td class="bx--table-column-decorator" class:bx--table-cell={true}>
+                <td
+                  class="bx--table-column-decorator"
+                  class:bx--table-cell={true}
+                >
                   <Decorator
                     class="bx--table-column-decorator__inner"
                     state={rowAILabelState(row.id)}
@@ -1845,7 +1848,10 @@
               }}
             >
               {#if hasRowDecorator}
-                <td class="bx--table-column-decorator" class:bx--table-cell={true}>
+                <td
+                  class="bx--table-column-decorator"
+                  class:bx--table-cell={true}
+                >
                   <Decorator
                     class="bx--table-column-decorator__inner"
                     state={rowAILabelState(row.id)}
