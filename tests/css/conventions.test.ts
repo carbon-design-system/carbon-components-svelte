@@ -21,6 +21,7 @@ const NO_EXPORTS = new Set([
   "_fluid-shared.scss",
   "_spacing-scale.scss",
   "_status-colors.scss",
+  "_status-tokens.scss",
   "_text-tokens.scss",
   "_ui-shell-classic.scss",
 ]);

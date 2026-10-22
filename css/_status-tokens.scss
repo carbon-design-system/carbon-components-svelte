@@ -1,0 +1,241 @@
+// Carbon v11's status tokens, which IconIndicator and ShapeIndicator read in
+// v11. v10 has no indicator, so the map lives here. Emits no CSS.
+
+@import "carbon-components/scss/globals/scss/theme-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/colors/colors";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The @carbon/themes values. v11 has no g80 theme, so g80 takes g90's
+/// values, as the v11 tokens the themes lacked do. @carbon/themes gives the
+/// outline tokens no dark value; @carbon/styles fills g90 and g100 with the
+/// matching fill color, and so does this map.
+/// @access private
+/// @group components
+// prettier-ignore
+$status-colors: (
+  "status-red": (
+    fallback: $carbon__red-60,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__red-60,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__red-60,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__red-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__red-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__red-50,
+      ),
+    ),
+  ),
+  "status-orange": (
+    fallback: $carbon__orange-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__orange-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__orange-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__orange-40,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__orange-40,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__orange-40,
+      ),
+    ),
+  ),
+  "status-orange-outline": (
+    fallback: $carbon__orange-60,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__orange-60,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__orange-60,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__orange-40,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__orange-40,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__orange-40,
+      ),
+    ),
+  ),
+  "status-yellow": (
+    fallback: $carbon__yellow-30,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__yellow-30,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__yellow-30,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__yellow-30,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__yellow-30,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__yellow-30,
+      ),
+    ),
+  ),
+  "status-yellow-outline": (
+    fallback: $carbon__yellow-60,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__yellow-60,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__yellow-60,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__yellow-30,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__yellow-30,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__yellow-30,
+      ),
+    ),
+  ),
+  "status-green": (
+    fallback: $carbon__green-50,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__green-50,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__green-50,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__green-40,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__green-40,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__green-40,
+      ),
+    ),
+  ),
+  "status-blue": (
+    fallback: $carbon__blue-70,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__blue-70,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__blue-70,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__blue-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__blue-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__blue-50,
+      ),
+    ),
+  ),
+  "status-purple": (
+    fallback: $carbon__purple-60,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__purple-60,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__purple-60,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__purple-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__purple-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__purple-50,
+      ),
+    ),
+  ),
+  "status-gray": (
+    fallback: $carbon__gray-60,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__gray-60,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__gray-60,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__gray-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__gray-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__gray-50,
+      ),
+    ),
+  ),
+);

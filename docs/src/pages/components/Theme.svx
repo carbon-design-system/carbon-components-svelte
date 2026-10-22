@@ -174,7 +174,7 @@ Import token names and values from `carbon-components-svelte/tokens` to list tok
 | Export | Contents |
 | :--- | :--- |
 | `colorTokens` | Theme colors, with a value for each theme |
-| `componentTokens` | Button, tag, and notification colors, with a value for each theme |
+| `componentTokens` | Button, tag, notification, content switcher, and status colors, with a value for each theme |
 | `typeTokens` | Type styles: font size, weight, line height, and letter spacing |
 | `spacingTokens`, `layoutTokens`, `containerTokens`, `sizeTokens` | Spacing and size scales |
 

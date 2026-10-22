@@ -167,8 +167,20 @@ export const COMPONENT_GROUPS: TokenGroupDefinition[] = [
     id: "notification",
     label: "Notification",
     description:
-      "Notification backgrounds by kind, and the action button hover.",
+      "Notification backgrounds by kind, and the action button colors.",
     prefix: "notification",
+  },
+  {
+    id: "content-switcher",
+    label: "Content switcher",
+    description: "The low contrast switcher's container, hover and selection.",
+    prefix: "content-switcher",
+  },
+  {
+    id: "status",
+    label: "Status",
+    description: "Status indicator fills and outlines, by color.",
+    prefix: "status",
   },
 ];
 
