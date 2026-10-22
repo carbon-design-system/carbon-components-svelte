@@ -69,6 +69,8 @@
     width: 100%;
     height: 100%;
     max-height: 100%;
+    // ccs: v11 draws the container edge with a subtle border.
+    border: 1px solid $border-subtle-01;
     background-color: $layer;
     grid-template-columns: 100%;
     grid-template-rows: auto 1fr auto;
@@ -120,7 +122,8 @@
 
   // text/p gets 20% right padding
   .#{$prefix}--modal-content > p {
-    padding-right: 20%;
+    // ccs: v11 takes the content's side padding into account.
+    padding-right: calc(20% - #{$spacing-07});
     @include type-style('body-01');
   }
 
@@ -131,6 +134,9 @@
   }
 
   .#{$prefix}--modal-header {
+    // ccs: v11 caps a long header and scrolls it.
+    max-height: 50vh;
+    overflow-y: auto;
     padding-top: $spacing-05;
     padding-right: $spacing-09;
     padding-left: $spacing-05;
@@ -149,6 +155,8 @@
   .#{$prefix}--modal-header__heading {
     @include type-style('heading-03');
 
+    // ccs: v11 keeps the heading's line length close to the body text's.
+    padding-right: calc(20% - #{$spacing-09});
     color: $text-primary;
   }
 
@@ -324,7 +332,9 @@
     max-width: none;
     height: to-rem(64px);
     flex: 0 1 50%;
-    padding-top: $spacing-05;
+    // ccs: v11 aligns the label on its baseline, 2px higher.
+    align-items: baseline;
+    padding-top: calc(#{$spacing-05} - 2px);
     padding-bottom: $spacing-07;
     margin: 0;
   }
