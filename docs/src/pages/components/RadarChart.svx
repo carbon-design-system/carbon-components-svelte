@@ -11,6 +11,7 @@ description: Radar chart compares a few series across several measures that shar
   const audits = Object.entries(SCORES).flatMap(([page, scores]) =>
     AXES.map((category, i) => ({ page, category, score: scores[i] })),
   );
+  let selectedAxis = null;
 </script>
 
 `RadarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -58,6 +59,12 @@ The scale ends at the largest value, rounded out. Set `max` to fix it, which kee
 ## Interaction
 
 Hover near a spoke, or focus the chart and use the arrow keys, to read every series on it. Click a legend entry to hide a series. The last visible one cannot be hidden. Bind `hidden`, and listen for `hover` and `legend:toggle`.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused spoke. Bind `selected`, the axis key, or listen for `select`.
+
+<RadarChart data={audits} axis="category" value="score" series="page" selectable bind:selected={selectedAxis} title="Audit scores, pick a page" />
 
 ## Accessibility
 

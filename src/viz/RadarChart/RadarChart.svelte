@@ -6,6 +6,7 @@
    */
 
   /**
+   * @event {{ axis: string; points: Array<{ series: string; value: number }>; originalEvent: Event }} select Fires when a spoke is activated by click or keyboard. Requires `selectable`.
    * @event {{ axis: string; points: Array<{ series: string; value: number }> } | null} hover Fires when the pointer or keyboard focus moves to another spoke, and with `null` when it leaves.
    * @event {{ series: string; hidden: boolean }} legend:toggle Fires when a series is shown or hidden.
    */
@@ -41,6 +42,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make spokes selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected axis key.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /** Specify the radius of the plot, in pixels */
   export let radius = 120;
 
@@ -70,7 +80,7 @@
 
   /**
    * Specify the hidden series keys.
-   * @type {ReadonlyArray<string>}
+   * @type {ReadonlyArray<string | number>}
    */
   export let hidden = [];
 
@@ -186,10 +196,28 @@
     } else if (event.key === "Escape") {
       setActive(-1);
       return;
+    } else if (event.key === "Enter" || event.key === " ") {
+      select(event);
     } else {
       return;
     }
     event.preventDefault();
+  }
+
+  /** @param {Event} originalEvent */
+  function select(originalEvent) {
+    if (!selectable || active < 0) return;
+    const at = radar.axes[active];
+    if (!at) return;
+    selected = selected === at.key ? null : at.key;
+    dispatch("select", {
+      axis: at.key,
+      points: visible.map((entry) => ({
+        series: entry.key,
+        value: entry.values[active],
+      })),
+      originalEvent,
+    });
   }
 
   /** @param {string} key */
@@ -220,6 +248,7 @@
       tabindex="0"
       on:pointermove={onPointerMove}
       on:pointerleave={() => setActive(-1)}
+      on:click={select}
       on:keydown={onKeydown}
       on:blur={() => setActive(-1)}
     >
@@ -231,6 +260,7 @@
           <line
             class:bx--viz-radar__spoke={true}
             class:bx--viz-radar__spoke--active={spokeAxis.index === active}
+            class:bx--viz-radar__spoke--selected={spokeAxis.key === selected}
             x1={width / 2}
             y1={height / 2}
             x2={spokeAxis.x}

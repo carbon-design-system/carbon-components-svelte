@@ -51,6 +51,11 @@
     stroke: $border-inverse;
   }
 
+  .#{$prefix}--viz-horizon__ruler--selected {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
   @media (forced-colors: active) {
     .#{$prefix}--viz-horizon__band {
       forced-color-adjust: none;
