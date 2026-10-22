@@ -93,6 +93,16 @@ describe("Section", () => {
     expect(customSection).toHaveTextContent("Custom Tag Heading 1");
   });
 
+  it("forwards rest props to the section element", () => {
+    render(HeadingTest);
+
+    const region = screen.getByRole("region", {
+      name: "Labelled Section Heading 1",
+    });
+    expect(region.tagName).toBe("SECTION");
+    expect(region).toHaveClass("labelled-section");
+  });
+
   it("should provide context for nested headings", () => {
     render(HeadingTest);
 

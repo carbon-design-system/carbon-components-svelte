@@ -46,6 +46,10 @@
   <Heading>Overflow Level Heading 6</Heading>
 </Section>
 
+<Section class="labelled-section" aria-labelledby="labelled-section-heading">
+  <Heading id="labelled-section-heading">Labelled Section Heading 1</Heading>
+</Section>
+
 <div data-testid="custom-tag-wrapper">
   <Section tag="div"> <Heading>Custom Tag Heading 1</Heading> </Section>
 </div>

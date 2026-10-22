@@ -9,6 +9,7 @@
    * The section automatically increments the heading level for nested sections,
    * ensuring proper semantic heading hierarchy. Heading levels are capped at `h6`.
    *
+   * @restProps {section}
    * @example
    * ```svelte
    * <Section>
@@ -78,4 +79,4 @@
   setContext("carbon:Section", readonly(internalLevel));
 </script>
 
-<svelte:element this="{tag}"><slot /></svelte:element>
+<svelte:element this="{tag}" {...$$restProps}><slot /></svelte:element>
