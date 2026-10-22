@@ -6,9 +6,9 @@ description: Composed modals let you build custom modals from modal header, body
 <script>
 </script>
 
-## ComposedModal vs Modal
+## When to use
 
-The composed modal provides a composition-based approach with modal header, modal body, and modal footer sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events, accessibility features, and [focus behavior](/components/Modal#focus-behavior).
+See [Choosing an overlay](/components/Modal#choosing-an-overlay) for how ComposedModal compares to Modal and Dialog.
 
 ## Basic
 
@@ -21,6 +21,8 @@ Create a modal with a header, body, and footer. Each section can be customized i
 Control how focus moves when the composed modal opens, and override the default target when needed. Focus follows the same priority order as Modal. See [focus behavior](/components/Modal#focus-behavior).
 
 The `ModalHeader` close button shows `iconDescription` in a tooltip on hover and focus. When the modal opens with focus on the close button, the tooltip stays closed until the next hover or focus. While the tooltip shows, <DocKbd label="Escape" /> hides it first. The next <DocKbd label="Escape" /> closes the modal.
+
+Set `returnFocusTo` to an element, or a function returning one, to focus instead of the trigger when it has unmounted while the modal was open. See Modal's [return focus to a fallback element](/components/Modal#return-focus-to-a-fallback-element) example.
 
 ### Custom focus
 
