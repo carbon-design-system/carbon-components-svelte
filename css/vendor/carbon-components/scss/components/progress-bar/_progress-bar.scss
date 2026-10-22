@@ -34,7 +34,7 @@
     width: 100%;
     min-width: to-rem(48px);
     height: to-rem(8px);
-    background-color: $layer;
+    background-color: $border-subtle; // ccs: v11's higher-contrast track
   }
 
   .#{$prefix}--progress-bar--big .#{$prefix}--progress-bar__track {
