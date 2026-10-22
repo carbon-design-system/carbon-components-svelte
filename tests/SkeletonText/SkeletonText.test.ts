@@ -57,6 +57,33 @@ describe("SkeletonText", () => {
     }
   });
 
+  it("should subtract a random pixel offset from percentage paragraph widths", () => {
+    render(SkeletonText, { props: { paragraph: true, width: "50%" } });
+
+    for (const element of screen.getAllByRole("paragraph", { hidden: true })) {
+      expect(element.style.width).toMatch(/^calc\(50% - \d+px\)$/);
+    }
+  });
+
+  it("should remove the bottom margin of a single line with `noMargin`", () => {
+    render(SkeletonText, { props: { noMargin: true } });
+
+    expect(screen.getByRole("paragraph", { hidden: true })).toHaveClass(
+      "bx--skeleton__text--no-margin",
+    );
+  });
+
+  it("should remove the bottom margin of only the last paragraph line with `noMargin`", () => {
+    render(SkeletonText, { props: { paragraph: true, noMargin: true } });
+
+    const elements = screen.getAllByRole("paragraph", { hidden: true });
+    expect(
+      elements.map((el) =>
+        el.classList.contains("bx--skeleton__text--no-margin"),
+      ),
+    ).toEqual([false, false, true]);
+  });
+
   it("should hide text lines from assistive technology", () => {
     render(SkeletonText);
 

@@ -100,6 +100,35 @@ describe("Stack", () => {
     },
   );
 
+  it.each([
+    ["align", "start", "bx--stack-align-start"],
+    ["align", "center", "bx--stack-align-center"],
+    ["align", "end", "bx--stack-align-end"],
+    ["align", "baseline", "bx--stack-align-baseline"],
+    ["justify", "center", "bx--stack-justify-center"],
+    ["justify", "end", "bx--stack-justify-end"],
+    ["justify", "space-between", "bx--stack-justify-space-between"],
+    ["justify", "space-around", "bx--stack-justify-space-around"],
+    ["justify", "space-evenly", "bx--stack-justify-space-evenly"],
+  ] as const)("should map %s %s to its class", (prop, value, className) => {
+    render(Stack, { props: { [prop]: value } });
+
+    const stack = screen.getByTestId("stack");
+    expect(stack).toHaveClass(className);
+    // Only the requested value's class is emitted.
+    expect(
+      stack.className.match(new RegExp(`bx--stack-${prop}-`, "g")),
+    ).toHaveLength(1);
+  });
+
+  it("should emit no align class for the default stretch", () => {
+    render(Stack, { props: { align: "stretch" } });
+
+    expect(screen.getByTestId("stack").className).not.toMatch(
+      /bx--stack-align-/,
+    );
+  });
+
   it("should omit gap class when gap is 0", () => {
     render(Stack, { props: { gap: 0 } });
 

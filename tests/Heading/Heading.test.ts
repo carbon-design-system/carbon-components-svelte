@@ -31,6 +31,15 @@ describe("Heading", () => {
     expect(heading).toHaveClass("bx--type-heading-03");
   });
 
+  it("should merge the type class with a passed class", () => {
+    render(HeadingTest);
+
+    expect(screen.getByText("Typed classed heading")).toHaveClass(
+      "bx--type-heading-03",
+      "custom-heading",
+    );
+  });
+
   it("should not add a type class when type is unset", () => {
     render(HeadingTest);
 

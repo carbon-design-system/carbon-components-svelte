@@ -17,6 +17,22 @@ describe("fill tokens", () => {
     30_000,
   );
 
+  // These names differ from, or add to, the token they paint with.
+  it.each([
+    ["layer-accent", "layer-accent"],
+    ["field", "field-01"],
+    ["inverse", "background-inverse"],
+    ["brand", "background-brand"],
+  ])(
+    "Box fill %s reads the %s token",
+    async (name, token) => {
+      const rules = parseRules(await compileEntry("all.scss"));
+      const rule = rules.find((r) => r.selector === `.bx--box-fill-${name}`);
+      expect(rule?.decls.get("background-color")).toBe(`var(--cds-${token})`);
+    },
+    30_000,
+  );
+
   it.each(fills)(
     "ScrollGradient color %s reads the %s token",
     async (name) => {

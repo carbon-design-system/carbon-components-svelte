@@ -47,6 +47,25 @@ describe("ActionSet", () => {
     },
   );
 
+  it("re-measures stacking when actions are added or removed after mount", async () => {
+    const { rerender } = render(ActionSet, { size: "md", count: 2 });
+    const actionSet = screen.getByTestId("action-set");
+    await waitFor(() =>
+      expect(actionSet).toHaveClass("bx--action-set--row-double"),
+    );
+
+    await rerender({ count: 3 });
+    await waitFor(() =>
+      expect(actionSet).toHaveClass("bx--action-set--stacking"),
+    );
+
+    await rerender({ count: 2 });
+    await waitFor(() =>
+      expect(actionSet).toHaveClass("bx--action-set--row-double"),
+    );
+    expect(actionSet).not.toHaveClass("bx--action-set--stacking");
+  });
+
   it("applies the sticky class when sticky is set", () => {
     render(ActionSet, { sticky: true });
 

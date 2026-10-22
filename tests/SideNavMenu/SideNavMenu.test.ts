@@ -37,6 +37,25 @@ describe("SideNavMenu", () => {
     );
   });
 
+  it("makes the links of a collapsed menu inert and frees them when expanded", async () => {
+    // Svelte 5 sets the `inert` property, which dom-env doesn't reflect to
+    // the attribute; Svelte 3 and 4 set the attribute.
+    const isInert = (element: Element) =>
+      Boolean((element as HTMLElement).inert) || element.hasAttribute("inert");
+
+    render(SideNavMenuRail, {
+      props: { rail: true, isOpen: true, expanded: false },
+    });
+
+    const submenu = getMenuButton().closest("li")?.querySelector("ul");
+    assert(submenu);
+    expect(isInert(submenu)).toBe(true);
+
+    await user.click(getMenuButton());
+
+    expect(isInert(submenu)).toBe(false);
+  });
+
   it("allows expanded menus when rail is not used", () => {
     render(SideNavMenuRail, { props: { rail: false, isOpen: false } });
 

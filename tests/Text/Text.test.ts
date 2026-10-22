@@ -73,6 +73,14 @@ describe("Text", () => {
     );
   });
 
+  it("clamps a single line from the front", () => {
+    render(Text);
+
+    const node = screen.getByText("Front clamped");
+    expect(node).toHaveClass("bx--text-truncate--front");
+    expect(node).not.toHaveClass("bx--text-truncate--end");
+  });
+
   it.each([
     ["type", { truncatedType: "body-02" as const }],
     ["style", { truncatedStyle: "color: red" }],

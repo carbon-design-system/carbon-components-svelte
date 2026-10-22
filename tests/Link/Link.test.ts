@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type LinkComponent from "carbon-components-svelte/Link/Link.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -95,6 +95,55 @@ describe("Link", () => {
     await user.click(link);
 
     expect(onDisabledClick).not.toHaveBeenCalled();
+  });
+
+  it("drops href, rel, and size classes when disabled", () => {
+    render(Link);
+    const link = within(screen.getByTestId("link-disabled-blank")).getByRole(
+      "link",
+    );
+
+    expect(link).toHaveClass("bx--link--disabled");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).not.toHaveAttribute("href");
+    expect(link).not.toHaveAttribute("rel");
+    expect(link).not.toHaveClass("bx--link--lg");
+  });
+
+  it("prevents the default action when disabled", async () => {
+    render(Link);
+    const link = within(screen.getByTestId("link-disabled")).getByRole("link");
+
+    // `fireEvent` returns false when a handler called `preventDefault()`.
+    expect(await fireEvent.click(link)).toBe(false);
+  });
+
+  it("lets a consumer rel override the default rel", () => {
+    render(Link);
+    const link = within(screen.getByTestId("link-rel-override")).getByRole(
+      "link",
+    );
+
+    expect(link).toHaveAttribute("rel", "nofollow");
+  });
+
+  it("forwards focus, blur, keydown, and keyup", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const onKeydown = vi.fn();
+    const onKeyup = vi.fn();
+    render(Link, { props: { onFocus, onBlur, onKeydown, onKeyup } });
+
+    const link = within(screen.getByTestId("default-link")).getByRole("link");
+    link.focus();
+    expect(onFocus).toHaveBeenCalledTimes(1);
+
+    await user.keyboard("a");
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onKeyup).toHaveBeenCalledTimes(1);
+
+    link.blur();
+    expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
   it("supports click and mouse events", async () => {

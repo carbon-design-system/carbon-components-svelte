@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import AspectRatioCustom from "./AspectRatio.custom-ratio.test.svelte";
+import AspectRatioRerender from "./AspectRatio.rerender.test.svelte";
 
 const NAMED_RATIO_CLASSES = [
   "2x1",
@@ -42,6 +43,23 @@ describe("AspectRatio custom ratio", () => {
 
     const el = screen.getByTestId(testId);
     expect(el).toHaveClass("bx--aspect-ratio--2x1");
+    expect(el).not.toHaveClass("bx--aspect-ratio--custom");
+    expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("");
+  });
+
+  it("swaps between named and custom ratios when `ratio` changes", async () => {
+    const { rerender } = render(AspectRatioRerender);
+
+    const el = screen.getByTestId("ratio");
+    expect(el).toHaveClass("bx--aspect-ratio--2x1");
+
+    await rerender({ ratio: "21x9" });
+    expect(el).toHaveClass("bx--aspect-ratio--custom");
+    expect(el).not.toHaveClass("bx--aspect-ratio--2x1");
+    expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("42.857%");
+
+    await rerender({ ratio: "16x9" });
+    expect(el).toHaveClass("bx--aspect-ratio--16x9");
     expect(el).not.toHaveClass("bx--aspect-ratio--custom");
     expect(el.style.getPropertyValue("--ccs-aspect-ratio")).toBe("");
   });
