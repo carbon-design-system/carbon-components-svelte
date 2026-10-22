@@ -103,6 +103,14 @@
     expandedIdSet,
     indeterminateIdSet,
     selectionMode,
+    editable,
+    editingNodeId,
+    renameLabel,
+    isNodeEditable,
+    startEdit,
+    initEditInput,
+    handleEditKeyDown,
+    handleEditBlur,
     clickNode,
     selectNode,
     expandNode,
@@ -149,6 +157,8 @@
   $: checked = $checkedIdSet.has(id);
   $: isCheckboxMode = $selectionMode === "checkbox";
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: canEdit = $editable && isNodeEditable(node);
+  $: isEditing = $editingNodeId === id;
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -360,14 +370,31 @@
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <span
           id="{$treeId}-{id}__label"
           class:bx--tree-node__label__text={true}
           use:titleWhenTruncated
+          on:dblclick={() => {
+            if (canEdit) startEdit(node);
+          }}
         >
-          <slot {node} />
+          {#if isEditing}
+            <input
+              class:bx--tree-node__rename={true}
+              aria-label={$renameLabel}
+              value={text}
+              use:initEditInput
+              on:click|stopPropagation
+              on:dblclick|stopPropagation
+              on:keydown|stopPropagation={handleEditKeyDown}
+              on:blur={handleEditBlur}
+            />
+          {:else}
+            <slot {node} />
+          {/if}
         </span>
-      </span>{#if slottedBadge}<span
+      </span>{#if isEditing}{:else if slottedBadge}<span
           class:bx--tree-node__badge={true}
           class:bx--tree-node__badge--slot={true}
           ><slot name="badgeChildren" {node} /></span

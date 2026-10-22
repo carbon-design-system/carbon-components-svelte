@@ -36,6 +36,14 @@
     expandedIdSet,
     indeterminateIdSet,
     selectionMode,
+    editable,
+    editingNodeId,
+    renameLabel,
+    isNodeEditable,
+    startEdit,
+    initEditInput,
+    handleEditKeyDown,
+    handleEditBlur,
     clickNode,
     selectNode,
     expandNode,
@@ -82,6 +90,9 @@
     checked,
     indeterminate,
   };
+
+  $: canEdit = $editable && isNodeEditable(mergedNode);
+  $: isEditing = $editingNodeId === id;
 
   // Match TreeViewNode: externally-set activeId auto-selects the row.
   $: {
@@ -179,10 +190,14 @@
     }}
     on:focus={() => focusNode(mergedNode)}
   >
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class:bx--tree-node__label={true}
       style:margin-inline-start="-{indentRem}rem"
       style:padding-inline-start="{indentRem}rem"
+      on:dblclick={() => {
+        if (canEdit) startEdit(mergedNode);
+      }}
     >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
@@ -219,10 +234,36 @@
         </span>
         <span class:bx--tree-node__label__details={true}>
           <svelte:component this={icon} class="bx--tree-node__icon" />
-          <slot node={mergedNode}>{node.text}</slot>
+          {#if isEditing}
+            <input
+              class:bx--tree-node__rename={true}
+              aria-label={$renameLabel}
+              value={node.text}
+              use:initEditInput
+              on:click|stopPropagation
+              on:dblclick|stopPropagation
+              on:keydown|stopPropagation={handleEditKeyDown}
+              on:blur={handleEditBlur}
+            />
+          {:else}
+            <slot node={mergedNode}>{node.text}</slot>
+          {/if}
         </span>{:else}
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot node={mergedNode}>{node.text}</slot>{/if}{#if slottedBadge}<span
+        {#if isEditing}
+          <input
+            class:bx--tree-node__rename={true}
+            aria-label={$renameLabel}
+            value={node.text}
+            use:initEditInput
+            on:click|stopPropagation
+            on:dblclick|stopPropagation
+            on:keydown|stopPropagation={handleEditKeyDown}
+            on:blur={handleEditBlur}
+          />
+        {:else}
+          <slot node={mergedNode}>{node.text}</slot
+          >{/if}{/if}{#if isEditing}{:else if slottedBadge}<span
           class:bx--tree-node__badge={true}
           class:bx--tree-node__badge--slot={true}
           ><slot name="badgeChildren" node={mergedNode} /></span

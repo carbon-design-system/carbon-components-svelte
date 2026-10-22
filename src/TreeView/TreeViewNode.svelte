@@ -136,6 +136,14 @@
     checkedIdSet,
     indeterminateIdSet,
     selectionMode,
+    editable,
+    editingNodeId,
+    renameLabel,
+    isNodeEditable,
+    startEdit,
+    initEditInput,
+    handleEditKeyDown,
+    handleEditBlur,
     clickNode,
     selectNode,
     focusNode,
@@ -164,6 +172,8 @@
   // Link rows navigate; they render no checkbox.
   $: isCheckboxMode = $selectionMode === "checkbox" && href === undefined;
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: canEdit = $editable && isNodeEditable(node);
+  $: isEditing = $editingNodeId === id;
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -349,11 +359,15 @@
       focusNode(node);
     }}
   >
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this={refLabel}
       class:bx--tree-node__label={true}
       style:margin-inline-start="-{inset}rem"
       style:padding-inline-start="{inset}rem"
+      on:dblclick={() => {
+        if (canEdit) startEdit(node);
+      }}
     >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
@@ -368,17 +382,30 @@
         />
       {/if}
       <svelte:component this={icon} class="bx--tree-node__icon" />
-      <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
-        ><slot {node}>{text}</slot></span
-      >{#if slottedBadge}<span
-          class:bx--tree-node__badge={true}
-          class:bx--tree-node__badge--slot={true}
-          ><slot name="badgeChildren" {node} /></span
-        >{:else if hasBadge}<span class:bx--visually-hidden={true}
-          >, {badgeDescription ?? badge}</span
-        ><span class:bx--tree-node__badge={true} aria-hidden="true"
-          >{badge}</span
-        >{/if}
+      {#if isEditing}
+        <input
+          class:bx--tree-node__rename={true}
+          aria-label={$renameLabel}
+          value={text}
+          use:initEditInput
+          on:click|stopPropagation
+          on:dblclick|stopPropagation
+          on:keydown|stopPropagation={handleEditKeyDown}
+          on:blur={handleEditBlur}
+        />
+      {:else}
+        <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
+          ><slot {node}>{text}</slot></span
+        >{#if slottedBadge}<span
+            class:bx--tree-node__badge={true}
+            class:bx--tree-node__badge--slot={true}
+            ><slot name="badgeChildren" {node} /></span
+          >{:else if hasBadge}<span class:bx--visually-hidden={true}
+            >, {badgeDescription ?? badge}</span
+          ><span class:bx--tree-node__badge={true} aria-hidden="true"
+            >{badge}</span
+          >{/if}
+      {/if}
     </div>
   </li>
 {/if}
