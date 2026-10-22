@@ -29,6 +29,12 @@
   export let noPadding = false;
 
   /**
+   * Set to `true` to round the tile's corners when it has a `decorator`,
+   * such as an `AILabel`. Carbon reserves rounded tiles for AI content.
+   */
+  export let rounded = false;
+
+  /**
    * Specify an icon to render in the bottom-right corner, such as
    * `ArrowRight` for a link within the app or `Launch` for an external
    * link. The icon is decorative and hidden from assistive technology.
@@ -70,6 +76,7 @@
     fullHeight && "bx--tile--full-height",
     noPadding && "bx--tile--no-padding",
     $$slots.decorator && "bx--tile--decorator",
+    rounded && $$slots.decorator && "bx--tile--decorator-rounded",
     $aiLabelState === "active" && "bx--tile--ai-label",
     $$restProps.class,
   ]

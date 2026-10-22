@@ -30,6 +30,12 @@
   export let fullHeight = false;
 
   /**
+   * Set to `true` to round the tile's corners when it has a `decorator`,
+   * such as an `AILabel`. Carbon reserves rounded tiles for AI content.
+   */
+  export let rounded = false;
+
+  /**
    * Specify the title of the selectable tile.
    * @type {string | undefined}
    */
@@ -222,6 +228,7 @@
     class:bx--tile--disabled={effectiveDisabled}
     class:bx--tile--full-height={fullHeight}
     class:bx--tile--decorator={$$slots.decorator}
+    class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
     class:bx--tile--ai-label={$aiLabelState === "active"}
     {...labelProps}
     on:click
