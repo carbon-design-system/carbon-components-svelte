@@ -7,7 +7,7 @@
    */
 
   /**
-   * @event {{ period: UptimePeriod; index: number }} select Fires when a period is activated by click or keyboard. Requires `selectable`.
+   * @event {{ period: UptimePeriod; index: number; originalEvent: Event }} select Fires when a period is activated by click or keyboard. Requires `selectable`.
    */
 
   /** @restProps {div} */
@@ -144,11 +144,12 @@
   /**
    * @param {UptimePeriod} period
    * @param {number} index
+   * @param {Event} originalEvent
    */
-  function select(period, index) {
+  function select(period, index, originalEvent) {
     selectedIndex = index;
     focusedIndex = index;
-    dispatch("select", { period, index });
+    dispatch("select", { period, index, originalEvent });
   }
 </script>
 
@@ -175,7 +176,7 @@
           aria-label={[period.label, words[period.status]]
             .filter(Boolean)
             .join(": ")}
-          on:click={() => select(period, i)}
+          on:click={(event) => select(period, i, event)}
           on:focus={() => (focusedIndex = i)}
         ></button>
       {:else}

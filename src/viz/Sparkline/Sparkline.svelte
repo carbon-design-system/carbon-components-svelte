@@ -66,6 +66,12 @@
    */
   export let label = "";
 
+  /**
+   * Obtain a reference to the SVG element
+   * @type {null | SVGSVGElement}
+   */
+  export let ref = null;
+
   import {
     getSparklineBars,
     getSparklinePoints,
@@ -118,6 +124,7 @@
 </script>
 
 <svg
+  bind:this={ref}
   class:bx--sparkline={true}
   class:bx--sparkline--line={kind === "line"}
   class:bx--sparkline--bar={kind === "bar"}

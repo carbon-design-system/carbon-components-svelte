@@ -86,7 +86,9 @@
         style:--bx-viz-color={sequentialColor(
           lines.length > 1 ? i / (lines.length - 1) : 1,
           hue,
-          { minStep: 4 },
+          {
+            minStep: 4,
+          },
         )}
       />
     {/if}

@@ -46,8 +46,12 @@
   /** Specify the label of the folded slice */
   export let otherLabel = "Other";
 
-  /** Set to `false` to keep categories in first-seen order */
-  export let sort = true;
+  /**
+   * Specify the slice order. `"value"` puts the largest first; `"none"`
+   * keeps categories in first-seen order.
+   * @type {"none" | "value"}
+   */
+  export let sort = "value";
 
   /** Specify the diameter, in pixels */
   export let diameter = 200;
@@ -59,15 +63,20 @@
   export let innerRadius = 0.6;
 
   /**
-   * Specify where the legend goes. It lists every slice with its value, so
-   * it is also the text alternative.
+   * Set to `false` to hide the legend. It lists every slice with its value,
+   * so it stays in the markup for assistive technology.
+   */
+  export let legend = true;
+
+  /**
+   * Specify where the legend goes.
    * @type {"right" | "bottom"}
    */
-  export let legend = "right";
+  export let legendPosition = "right";
 
   /**
    * Specify what the legend writes for each slice.
-   * @type {"percent" | "value" | "both"}
+   * @type {"value" | "percent" | "both"}
    */
   export let valueType = "percent";
 
@@ -128,7 +137,7 @@
     category: categoryOf,
     maxSlices,
     otherLabel,
-    sort,
+    sort: sort !== "none",
     diameter,
     innerRadius,
     palette,
@@ -170,7 +179,7 @@
 <figure
   bind:this={ref}
   class:bx--viz-donut={true}
-  class:bx--viz-donut--bottom={legend === "bottom"}
+  class:bx--viz-donut--bottom={legendPosition === "bottom"}
   class:bx--viz-donut--selectable={selectable}
   class:bx--viz-donut--emphasis={hasEmphasis}
   {...$$restProps}

@@ -37,7 +37,7 @@
 <!-- A flame graph is an icicle stood on its head: the root at the bottom
      and the deepest frames on top. -->
 <IcicleChart
-  orientation="bottom"
+  direction="up"
   bind:root
   bind:selected
   bind:ref

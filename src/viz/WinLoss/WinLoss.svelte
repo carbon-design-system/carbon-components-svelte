@@ -6,7 +6,7 @@
    */
 
   /**
-   * @event {{ result: WinLossResult; index: number }} select Fires when a result is activated by click or keyboard. Requires `selectable`.
+   * @event {{ result: WinLossResult; index: number; originalEvent: Event }} select Fires when a result is activated by click or keyboard. Requires `selectable`.
    */
 
   /** @restProps {div} */
@@ -144,11 +144,12 @@
   /**
    * @param {WinLossResult} result
    * @param {number} index
+   * @param {Event} originalEvent
    */
-  function select(result, index) {
+  function select(result, index, originalEvent) {
     selectedIndex = index;
     focusedIndex = index;
-    dispatch("select", { result, index });
+    dispatch("select", { result, index, originalEvent });
   }
 </script>
 
@@ -177,7 +178,7 @@
           aria-label={[result.label, words[outcomes[i]]]
             .filter(Boolean)
             .join(": ")}
-          on:click={() => select(result, i)}
+          on:click={(event) => select(result, i, event)}
           on:focus={() => (focusedIndex = i)}
         ></button>
       {:else}

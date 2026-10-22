@@ -23,6 +23,7 @@
   {value}
   label="Requests"
   data-testid="live"
+  emitUpdate
   on:update={(e) => (shown = e.detail.values)}
 />
 <button type="button" on:click={() => live.push(next())}>push</button>

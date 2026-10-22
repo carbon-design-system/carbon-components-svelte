@@ -56,11 +56,11 @@
   export let title = "";
 
   /**
-   * Specify where the root sits. `"top"` hangs children below it, as an
-   * icicle. `"bottom"` stacks them upward, as a flame graph.
-   * @type {"top" | "bottom"}
+   * Specify which way the tree grows. `"down"` hangs children below the
+   * root, as an icicle. `"up"` stacks them upward, as a flame graph.
+   * @type {"down" | "up"}
    */
-  export let orientation = "top";
+  export let direction = "down";
 
   /**
    * Specify the node to show from. Its ancestors stay above it at full
@@ -310,14 +310,14 @@
 
   /** @param {import("../utils/partition.js").PartitionNode<T>} node */
   function rowOf(node) {
-    return orientation === "bottom" ? tree.depth - node.depth : node.depth;
+    return direction === "up" ? tree.depth - node.depth : node.depth;
   }
 </script>
 
 <figure
   bind:this={ref}
   class:bx--viz-icicle={true}
-  class:bx--viz-icicle--flame={orientation === "bottom"}
+  class:bx--viz-icicle--flame={direction === "up"}
   class:bx--viz-icicle--selectable={selectable}
   class:bx--viz-icicle--emphasis={activeId !== null}
   {...$$restProps}

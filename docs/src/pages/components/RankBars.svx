@@ -60,7 +60,7 @@ Set `valueType` to `"percent"` to write each row's share of the total of every i
 
 Set `sort` to `false` to keep the input order, and `hideRank` to drop the numbers. Together they make a plain labeled bar list.
 
-<RankBars data={stages} sort={false} hideRank format={(value) => `${value}s`} label="Pipeline stages in order" />
+<RankBars data={stages} sort="none" hideRank format={(value) => `${value}s`} label="Pipeline stages in order" />
 
 ## Color
 

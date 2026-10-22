@@ -96,7 +96,9 @@
       style:--bx-viz-color={sequentialColor(
         most > 0 ? Math.sqrt(cell.count / most) : 0,
         hue,
-        { minStep: 2 },
+        {
+          minStep: 2,
+        },
       )}
     >
       <title>{cell.count}</title>

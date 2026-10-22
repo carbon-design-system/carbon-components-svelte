@@ -3,7 +3,7 @@
 <script>
   /**
    * @restProps {svg}
-   * @event {{ values: ReadonlyArray<number | null> }} update Fires once per animation frame in which samples were appended after mount, with the values now shown.
+   * @event {{ values: ReadonlyArray<number | null> }} update Fires once per animation frame in which samples were appended after mount, with the values now shown. Requires `emitUpdate`.
    */
 
   /**
@@ -32,6 +32,15 @@
    * Accessible name for the chart. Leave empty to mark it as decorative.
    */
   export let label = "";
+
+  /**
+   * Obtain a reference to the SVG element
+   * @type {null | SVGSVGElement}
+   */
+  export let ref = null;
+
+  /** Set to `true` to dispatch the `update` event */
+  export let emitUpdate = false;
 
   import { createEventDispatcher, onMount } from "svelte";
   import Sparkline from "../Sparkline/Sparkline.svelte";
@@ -84,7 +93,7 @@
     const next = values.concat(queue);
     queue = [];
     values = next.length > capacity ? next.slice(next.length - capacity) : next;
-    dispatch("update", { values });
+    if (emitUpdate) dispatch("update", { values });
   }
 
   function onVisibility() {
@@ -106,4 +115,4 @@
   });
 </script>
 
-<Sparkline {values} {label} {...$$restProps} />
+<Sparkline {values} {label} bind:ref {...$$restProps} />

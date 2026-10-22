@@ -9,7 +9,7 @@
    * The stage type is written inline rather than as a typedef: a typedef
    * cannot carry the `Id` constraint into the generated declarations.
    * @restProps {table}
-   * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number }} select Fires when a stage is activated by click or keyboard. Requires `selectable`.
+   * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number; originalEvent: Event }} select Fires when a stage is activated by click or keyboard. Requires `selectable`.
    * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number } | null} hover Fires when the pointer or focus enters a stage, and with `null` when it leaves. Requires `selectable`.
    * @event {{ count: number; domain: [number, number]; stats: { overallRate: number | null; largestDropIndex: number; total: number } }} update Fires after the stages change. Requires `emitUpdate`.
    * @slot {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number }} label
@@ -232,10 +232,13 @@
     return { update: sync, destroy: () => sync(false) };
   }
 
-  /** @param {(typeof funnel.rows)[number]} row */
-  function select(row) {
+  /**
+   * @param {(typeof funnel.rows)[number]} row
+   * @param {Event} originalEvent
+   */
+  function select(row, originalEvent) {
     selectedId = row.stage.id;
-    dispatch("select", row);
+    dispatch("select", { ...row, originalEvent });
   }
 </script>
 
@@ -303,7 +306,7 @@
               class:bx--viz-funnel-bars__button={true}
               aria-pressed={stage.id === selectedId}
               tabindex={i === tabStopIndex ? 0 : -1}
-              on:click|stopPropagation={() => select(row)}
+              on:click|stopPropagation={(event) => select(row, event)}
               on:focus={() => {
                 focusedIndex = i;
                 dispatch("hover", row);

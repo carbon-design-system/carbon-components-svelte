@@ -79,16 +79,32 @@ describe("BulletChart", () => {
     await rerender({ value: 320, onthreshold });
     await tick();
     expect(onthreshold.mock.calls.map(([detail]) => detail)).toEqual([
-      { threshold: 300, kind: "target", direction: "above", value: 320 },
+      {
+        threshold: { value: 300, kind: "target" },
+        direction: "above",
+        value: 320,
+      },
     ]);
 
     onthreshold.mockClear();
     await rerender({ value: 100, onthreshold });
     await tick();
     expect(onthreshold.mock.calls.map(([detail]) => detail)).toEqual([
-      { threshold: 300, kind: "target", direction: "below", value: 100 },
-      { threshold: 250, kind: "band", direction: "below", value: 100 },
-      { threshold: 150, kind: "band", direction: "below", value: 100 },
+      {
+        threshold: { value: 300, kind: "target" },
+        direction: "below",
+        value: 100,
+      },
+      {
+        threshold: { value: 250, kind: "band" },
+        direction: "below",
+        value: 100,
+      },
+      {
+        threshold: { value: 150, kind: "band" },
+        direction: "below",
+        value: 100,
+      },
     ]);
 
     onthreshold.mockClear();

@@ -35,5 +35,6 @@
   height={48}
   fill
   label="Requests per second, last twelve seconds"
+  emitUpdate
   on:update={(e) => (latest = e.detail.values.at(-1) ?? latest)}
 />

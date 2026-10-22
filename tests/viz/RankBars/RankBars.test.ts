@@ -118,8 +118,8 @@ describe("RankBars", () => {
     expect(buttons[1]).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByTestId("selected")).toHaveTextContent("safari");
     expect(onselect.mock.calls[0][0]).toMatchObject({
-      item: { id: "safari" },
-      rank: 2,
+      row: { item: { id: "safari" }, rank: 2 },
+      originalEvent: expect.any(Event),
     });
     expect(onhover).toHaveBeenCalledWith(expect.objectContaining({ rank: 2 }));
 
