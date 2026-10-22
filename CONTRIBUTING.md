@@ -222,6 +222,8 @@ bun test:types   # svelte-check on tests/
 
 `bun setup` already runs `build:docs` once. Repeat `build:docs` only when the component API changes.
 
+When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/framed/` for the old name. Type checks don't cover them, and Svelte ignores an unknown prop, so a stale one passes every check until an E2E assertion fails.
+
 ### Creating a component
 
 [File an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) first.
@@ -501,6 +503,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 5. Add the page to a category in `docs/src/component-categories.ts` and its first version to `docs/src/component-since-versions.ts`
 6. Preview with `cd docs && bun dev`
 7. Add a catalog thumbnail at `thumbnails/{component-name}.svg`. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
+8. Add an aria-forwarding case in `tests/aria-forwarding/cases/`, or an exemption with the reason. `tests/aria-forwarding/coverage.test.ts` fails for an interactive component that has neither
 
 ### Custom styles (patching Carbon v10)
 
@@ -626,6 +629,8 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
 | `conventions.test.ts` | Source rules, with exact baselines for what predates them. |
 
+These numbers are counts, so two branches that each raise 67 to 68 merge cleanly to a wrong 68. After a rebase over a branch that changed one, rebuild and set it to the measured count. Don't add your change on top.
+
 Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets a `css-cascade` job whose summary shows the rule delta and size movement against the base branch and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
 
 These come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes white --viewport 1280x900` or `--no-states`. They use Playwright's `chrome-headless-shell` when it's installed and half the cores, dropping to one tab while the machine is busy. `crassus --help` lists the options; `--format json` gives the same report as data.
@@ -723,10 +728,11 @@ Types and E2E:
 - `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
-Two process traps:
+Three process traps:
 
 - Read the exit code, not the tail. `bun run lint:changed | tail -1` prints "No fixes applied" and exits 0 even when Biome reported errors above it. Gate commits on the checks themselves: `bunx biome check <paths> && bun run test:types && git commit ...`.
 - `bun test:types` reporting that a new prop or event "does not exist" usually means the generated `.d.ts` is stale, not that the code is wrong. Run `bun build:docs` first. This bites after a rebase as well as after an API change.
+- A test that globs `src/**/*.svelte`, such as `ssr-smoke`, can miss a component you just added when Vitest's cache is stale. Delete `node_modules/.vitest-cache` and run it again.
 
 ## Testing
 
