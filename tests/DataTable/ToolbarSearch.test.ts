@@ -31,6 +31,12 @@ describe("ToolbarSearch label", () => {
       screen.getByRole("searchbox", { name: "Filter servers" }),
     ).toBeInTheDocument();
   });
+
+  it("keeps the xl size to fill the 48px toolbar", () => {
+    render(ToolbarSearchHost);
+
+    expect(screen.getByRole("search")).toHaveClass("bx--search--xl");
+  });
 });
 
 describe("ToolbarSearch clear()", () => {

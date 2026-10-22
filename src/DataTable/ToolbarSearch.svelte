@@ -220,7 +220,9 @@
     .join(" ");
 </script>
 
+<!-- The toolbar is 48px tall, so its search keeps the xl size. -->
 <Search
+  size="xl"
   {labelText}
   {tabindex}
   {disabled}

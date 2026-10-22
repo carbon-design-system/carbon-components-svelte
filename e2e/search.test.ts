@@ -73,4 +73,8 @@ test.describe("Search", () => {
     await page.getByTestId("search-query").click();
     await expect(wrapper).not.toHaveClass(/bx--search--expanded/);
   });
+
+  test("defaults to the 40px md height, as in v11", async ({ page }) => {
+    await expect(page.getByTestId("search-query")).toHaveCSS("height", "40px");
+  });
 });

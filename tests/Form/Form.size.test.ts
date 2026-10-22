@@ -40,7 +40,7 @@ describe("Form size", () => {
       /bx--text-input--(xs|sm|xl)/,
     );
     expect(screen.getByRole("searchbox").closest(".bx--search")).toHaveClass(
-      "bx--search--xl",
+      "bx--search--lg",
     );
   });
 

@@ -1,9 +1,10 @@
 <script>
   /**
    * Specify the size of the search input.
-   * Inherits the parent `Form` size when unset, otherwise `"xl"`.
+   * Inherits the parent `Form` size when unset, otherwise `"lg"` (40px),
+   * as in Carbon v11.
    * @type {"xs" | "sm" | "lg" | "xl"}
-   * @default "xl"
+   * @default "lg"
    */
   export let size = undefined;
 
@@ -20,7 +21,7 @@
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? $formSize ?? "xl";
+  $: effectiveSize = size ?? $formSize ?? "lg";
 </script>
 
 <div

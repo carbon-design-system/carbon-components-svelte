@@ -278,7 +278,7 @@ describe("Search", () => {
     const skeletons = document.querySelectorAll(".bx--skeleton");
     expect(skeletons).toHaveLength(4);
 
-    expect(skeletons[0]).toHaveClass("bx--search--xl");
+    expect(skeletons[0]).toHaveClass("bx--search--lg");
 
     expect(skeletons[1]).toHaveClass("bx--search--lg");
 
