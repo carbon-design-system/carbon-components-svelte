@@ -119,6 +119,15 @@ describe("tokenize", () => {
     ]);
   });
 
+  test.each(["http://x.com/a.png", "//cdn.example/a.png"])(
+    "keeps the slashes of an unquoted SCSS url(%s) out of comments",
+    (url) => {
+      expect(
+        types(`a { background: url(${url}); b: 1 }\n.c { d: 2 }`, "scss"),
+      ).toContain("class-name:.c");
+    },
+  );
+
   test("reads expressions inside quoted attribute values as script", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",
