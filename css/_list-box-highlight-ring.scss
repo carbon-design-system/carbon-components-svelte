@@ -1,0 +1,45 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// While an option holds the highlight, v11 thins the field's focus ring to
+/// 1px and draws the first option's top edge at 1px, so the two rings meet
+/// as one 2px line. ComboBox and MultiSelect put
+/// `bx--list-box--option-highlighted` on the list box for it; v11 reads
+/// `aria-activedescendant` through `:has()`, which the CSS baseline lacks.
+///
+/// A partial, not a vendored patch: the rings it thins come from
+/// `text-input`, `multi-select`, and `fluid-list-box`, which emit later at
+/// equal or lower specificity.
+/// @access private
+/// @group components
+@mixin list-box-highlight-ring {
+  .#{$prefix}--list-box--option-highlighted .#{$prefix}--text-input:focus,
+  .#{$prefix}--list-box--option-highlighted
+    .#{$prefix}--list-box__field--wrapper--input-focused {
+    outline-width: 1px;
+    outline-offset: -1px;
+  }
+
+  .#{$prefix}--list-box--option-highlighted
+    .#{$prefix}--list-box__menu-item--highlighted:first-child {
+    @include focus-outline("reset");
+  }
+
+  .#{$prefix}--list-box--option-highlighted
+    .#{$prefix}--list-box__menu-item--highlighted:first-child::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 2px solid $focus;
+    border-top-width: 1px;
+    content: "";
+  }
+}
+
+@include exports("list-box-highlight-ring") {
+  @include list-box-highlight-ring;
+}

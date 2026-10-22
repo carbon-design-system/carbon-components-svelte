@@ -882,6 +882,8 @@
     direction === "top" && "bx--list-box--up",
     showWarn && "bx--combo-box--warning",
     readonly && "bx--combo-box--readonly",
+    // Thins the input's focus ring while an option holds the highlight.
+    open && highlightedId && "bx--list-box--option-highlighted",
   ]
     .filter(Boolean)
     .join(" ");

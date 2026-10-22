@@ -1422,6 +1422,8 @@
     readonly && "bx--multi-select--readonly",
     selectionCount > 0 && "bx--multi-select--selected",
     hasSelectAll && "bx--multi-select--selectall",
+    // Thins the field's focus ring while an option holds the highlight.
+    open && highlightedId != null && "bx--list-box--option-highlighted",
   ]
     .filter(Boolean)
     .join(" ");
