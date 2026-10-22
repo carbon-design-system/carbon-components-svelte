@@ -119,10 +119,10 @@ Add a search input to filter list items.
 
 ### Expandable
 
-Use the `action` slot on the list to add an expandable search control in the header.
+Use the `action` slot on the list to add an expandable search control in the header. Set `size` to `"xl"` so the search fills the 48px header.
 
 <ContainedList labelText="Team members">
-  <Search slot="action" expandable />
+  <Search slot="action" expandable size="xl" />
   <ContainedListItem>Jane Cooper</ContainedListItem>
   <ContainedListItem>Devon Lane</ContainedListItem>
   <ContainedListItem>Esther Howard</ContainedListItem>
