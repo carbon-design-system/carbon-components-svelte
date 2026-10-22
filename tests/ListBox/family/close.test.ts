@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/svelte";
+import { fireEvent, screen } from "@testing-library/svelte";
 import { user } from "../../utils/user";
 import { caseRows, field, renderCase } from "./cases";
 
@@ -60,6 +60,25 @@ describe.each(caseRows)("%s close event", (_, c) => {
       field().focus();
       await act();
 
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
+
+  // Only a text input composes; button fields never see an IME Escape.
+  it.runIf(c.opensOnInput).each([
+    { key: "Escape", isComposing: true },
+    { key: "Escape", keyCode: 229 },
+  ])(
+    "keeps the menu and the text when Escape cancels an IME composition (%o)",
+    async (init) => {
+      const onClose = setup();
+
+      await user.type(field(), "a");
+      expect(field()).toHaveAttribute("aria-expanded", "true");
+
+      await fireEvent.keyDown(field(), init);
+      expect(field()).toHaveAttribute("aria-expanded", "true");
+      expect(field()).toHaveValue("a");
       expect(onClose).not.toHaveBeenCalled();
     },
   );
