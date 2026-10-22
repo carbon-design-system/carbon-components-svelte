@@ -240,7 +240,7 @@
         </div>
       {/if}
     </div>
-    <ul class:bx--viz-donut__legend={true}>
+    <ul class:bx--viz-donut__legend={true} class:bx--visually-hidden={!legend}>
       {#each donut.slices as slice (slice.id)}
         <li
           class:bx--viz-donut__item={true}

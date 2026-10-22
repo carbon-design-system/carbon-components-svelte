@@ -71,7 +71,7 @@ describe("CirclePackChart", () => {
   it("moves circle to circle with the keyboard, without repacking, and selects", async () => {
     const onhover = vi.fn();
     const onselect = vi.fn();
-    render(CirclePackChart, { selectable: true, onhover, onselect });
+    render(CirclePackChart, { onhover, onselect });
     const built = geometry.calls;
 
     chart().focus();

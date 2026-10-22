@@ -1,9 +1,9 @@
 export type PortSide = "top" | "right" | "bottom" | "left";
 
-/** A path through the points, straight or with one elbow between each pair. */
+/** A path through the points: straight, with one elbow between each pair, or one cubic per leg. */
 export function routePolyline(
   points: ReadonlyArray<{ x: number; y: number }>,
-  options?: { kind?: "straight" | "orthogonal"; axis?: "x" | "y" },
+  options?: { kind?: "straight" | "orthogonal" | "curved"; axis?: "x" | "y" },
 ): string;
 
 /** Where a port sits on a node's side, and the direction an edge leaves it. */

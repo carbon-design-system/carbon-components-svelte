@@ -43,7 +43,7 @@
    * Specify the selected stage id.
    * @type {Id | undefined}
    */
-  export let selectedId = undefined;
+  export let selected = undefined;
 
   /**
    * Obtain a reference to the table element.
@@ -61,7 +61,7 @@
     <div class:bx--viz-chart__title={true} aria-hidden="true">{title}</div>
   {/if}
   <FunnelBars
-    bind:selectedId
+    bind:selected
     bind:ref
     {...$$restProps}
     {stages}
