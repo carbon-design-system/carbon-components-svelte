@@ -58,6 +58,12 @@ Use `count` to set the number of segments. For example, six is common for SMS, e
 
 <PinCodeInput count={6} labelText="Verification code" />
 
+### Groups
+
+Use `groups` to visually partition segments with a decorative separator. Each entry is the number of segments in that group and the values must sum to `count`. Separators are decorative only and do not affect focus, paste, or the bound value.
+
+<PinCodeInput count={6} groups={[3, 3]} labelText="Verification code" />
+
 ### Alphanumeric
 
 The default input mode is `"numeric"`. Set `type` to `"alphanumeric"` to allow letters and digits.
