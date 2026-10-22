@@ -5,6 +5,8 @@
   export let value = "secret-token-123";
   export let type: ComponentProps<CopyInput>["type"] = "text";
   export let revealMode: ComponentProps<CopyInput>["revealMode"] = undefined;
+  export let revealTimeout: ComponentProps<CopyInput>["revealTimeout"] =
+    undefined;
   export let revealed: ComponentProps<CopyInput>["revealed"] = false;
   export let showValueText: ComponentProps<CopyInput>["showValueText"] =
     undefined;
@@ -33,6 +35,7 @@
   {value}
   {type}
   {revealMode}
+  {revealTimeout}
   bind:revealed
   {showValueText}
   {hideValueText}
