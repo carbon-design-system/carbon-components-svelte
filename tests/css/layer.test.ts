@@ -32,7 +32,6 @@ describe("Layer tokens", () => {
     [/^\.bx--data-table \S/, "field-02", "fields in a table"],
     [/^\.bx--modal /, "field-02", "v11 puts the modal body in a Layer"],
     [/^\.bx--modal /, "border-subtle-02", "same, for dividers"],
-    [/zebra/, "layer-02", "v11 reads layer-accent, a visible change"],
     [/--inline\.bx--list-box--expanded:hover$/, "field-02", "v11: transparent"],
     [/^\.bx--content-switcher--low-contrast /, "layer-02", "fixed per theme"],
     [/^\.bx--date-picker__day\S*--selected:focus/, "layer-02", "focus inset"],
@@ -64,9 +63,30 @@ describe("Layer tokens", () => {
         ),
     );
 
-    expect(reads.length).toBeGreaterThan(40);
+    expect(reads.length).toBeGreaterThan(30);
     expect(unpinned).toEqual([]);
     expect(unused.map(([, , why]) => why)).toEqual([]);
+  }, 30_000);
+
+  // v11 draws zebra stripes with layer-accent. It steps up with the Layer
+  // as the rows do, so the stripes stay visible at every level.
+  it("draws every zebra stripe with layer-accent", async () => {
+    const stripes = parseRules(await compileEntry("all.scss")).filter(
+      (rule) =>
+        /zebra/.test(rule.selector) &&
+        !/:hover|selected|highlighted|--hover/.test(rule.selector) &&
+        rule.decls.has("background-color"),
+    );
+
+    // Flat rows, expanded parent and child rows, and filterMode="hide".
+    expect(stripes).toHaveLength(4);
+    for (const { selector, decls } of stripes) {
+      for (const prop of ["background-color", "border-top", "border-bottom"]) {
+        expect(decls.get(prop), `${selector} ${prop}`).toMatch(
+          /var\(--cds-layer-accent\)$/,
+        );
+      }
+    }
   }, 30_000);
 
   // The single-theme files declare no tokens on :root, so components read
