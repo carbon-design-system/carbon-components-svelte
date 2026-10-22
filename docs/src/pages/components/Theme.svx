@@ -114,6 +114,55 @@ The table below lists every theme color.
 
 <FileSource src="/framed/Theme/ThemeTokenData" />
 
+## Carbon Charts
+
+[Carbon Charts](https://charts.carbondesignsystem.com/) doesn't follow the page theme. Each chart sets its own token values from its `theme` option, which defaults to White, so a chart on a dark page stays light.
+
+Call `getChartTheme` when a component initializes to get a store of the chart theme. It follows `Theme`, a theme set by `themeScript`, and the nearest `ThemeZone`. Charts has no Gray 80, so `g80` maps to `g90`.
+
+```svelte
+<script>
+  import { BarChartSimple } from "@carbon/charts-svelte";
+  import "@carbon/charts-svelte/styles.css";
+  import { getChartTheme } from "carbon-components-svelte";
+
+  const chartTheme = getChartTheme();
+
+  const data = [
+    { group: "us-east-1", value: 4120 },
+    { group: "us-west-2", value: 2890 },
+    { group: "eu-west-1", value: 3310 },
+  ];
+
+  const options = {
+    title: "Requests by region",
+    axes: {
+      left: { mapsTo: "value" },
+      bottom: { mapsTo: "group", scaleType: "labels" },
+    },
+    height: "300px",
+  };
+</script>
+
+<BarChartSimple {data} options={{ ...options, theme: $chartTheme }} />
+```
+
+To map a theme you already have, such as the theme of a static stylesheet, call `toChartTheme`.
+
+```js
+import { toChartTheme } from "carbon-components-svelte";
+
+toChartTheme("g80"); // "g90"
+```
+
+Custom `tokens` don't reach a chart either, because the chart sets every token again. To pass one through, set it to `inherit` in CSS that loads after the Charts stylesheet. For series colors, use the Charts `color.scale` option.
+
+```css
+.cds--chart-holder[data-carbon-theme] {
+  --cds-focus: inherit;
+}
+```
+
 ## Controls
 
 Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.
