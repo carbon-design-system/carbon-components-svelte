@@ -21,7 +21,20 @@ describe("ToastNotification", () => {
     const notification = document.querySelector(".bx--toast-notification");
     expect(notification).toBeInTheDocument();
     expect(notification).toHaveClass("bx--toast-notification--error");
-    expect(notification).toHaveAttribute("role", "alert");
+  });
+
+  it("defaults to role status, which screen readers announce politely", () => {
+    render(ToastNotification, { props: { title: "Saved" } });
+
+    expect(screen.getByRole("status")).toHaveClass("bx--toast-notification");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("uses role alert when set, for urgent errors", () => {
+    render(ToastNotificationTest, { props: { role: "alert" } });
+
+    expect(screen.getByRole("alert")).toHaveClass("bx--toast-notification");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
   it("does not listen for visibilitychange with the default timeout", () => {
@@ -91,14 +104,26 @@ describe("ToastNotification", () => {
     expect(notification).toHaveStyle({ width: "100%" });
   });
 
-  it("should render the status icon as decorative (aria-hidden)", () => {
-    render(ToastNotificationTest, { props: { kind: "error" } });
+  it("names the status icon after its kind", () => {
+    render(ToastNotificationTest, { props: { kind: "warning-alt" } });
 
-    const icon = document.querySelector(".bx--toast-notification__icon");
-    expect(icon).toBeInTheDocument();
-    expect(icon).toHaveAttribute("aria-hidden", "true");
-    expect(icon).not.toHaveAttribute("role", "img");
-    expect(icon?.querySelector("title")).toBeNull();
+    const icon = screen.getByRole("img", { name: "Warning" });
+    expect(icon).toHaveClass("bx--toast-notification__icon");
+    expect(icon).toHaveAttribute("role", "img");
+    expect(icon).not.toHaveAttribute("aria-hidden");
+    expect(icon).not.toHaveAttribute("aria-label");
+    expect(icon.querySelector("title")).toHaveTextContent("Warning");
+  });
+
+  it("names the status icon with statusIconDescription", () => {
+    render(ToastNotificationTest, {
+      props: { kind: "warning", statusIconDescription: "Avertissement" },
+    });
+
+    expect(
+      screen.getByRole("img", { name: "Avertissement" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("img", { name: "Warning" })).toBeNull();
   });
 
   it("should support bind:open", async () => {

@@ -52,15 +52,7 @@
   import { writable } from "svelte/store";
   import { uniqueId } from "../utils/unique-id.js";
   import NotificationIcon from "./NotificationIcon.svelte";
-
-  const KIND_DESCRIPTIONS = {
-    error: "Error",
-    info: "Information",
-    "info-square": "Information",
-    success: "Success",
-    warning: "Warning",
-    "warning-alt": "Warning",
-  };
+  import { statusIconLabel } from "./status-icon-label.js";
 
   const describedBy = writable(undefined);
 
@@ -106,7 +98,7 @@
       notificationType="inline"
       {kind}
       {lowContrast}
-      iconDescription={statusIconDescription || KIND_DESCRIPTIONS[kind]}
+      iconDescription={statusIconDescription || statusIconLabel(kind)}
     />
     <div class:bx--inline-notification__text-wrapper={true}>
       {#if titled}

@@ -10,7 +10,7 @@ test.describe("NotificationQueue", () => {
     await page.goto("/notification-queue.html");
   });
 
-  test("add shows a toast alert", async ({ page }) => {
+  test("add shows a toast", async ({ page }) => {
     await page.getByTestId("nq-add").click();
     await expect(toastWithText(page, "Toast A")).toBeVisible();
   });

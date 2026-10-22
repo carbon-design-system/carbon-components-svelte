@@ -16,7 +16,7 @@ describe("InlineNotification focus return", () => {
 
     await user.keyboard("{Enter}");
 
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
     expect(before).toHaveFocus();
   });
 
@@ -30,7 +30,7 @@ describe("InlineNotification focus return", () => {
 
     await user.keyboard("{Enter}");
 
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
     expect(before).toHaveFocus();
   });
 });
