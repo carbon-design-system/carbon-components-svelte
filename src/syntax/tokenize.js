@@ -190,6 +190,7 @@ const STRING_ESCAPE =
   /\\(?:u\{[\da-fA-F]+\}|u[\da-fA-F]{4}|x[\da-fA-F]{2}|[\s\S])/g;
 const DECORATOR = /@[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*/y;
 const PRIVATE_NAME = /#[A-Za-z_$][\w$]*/y;
+const HASHBANG = /#![^\n]*/y;
 const JS_REGEXP =
   /\/(?![*/])(?:\\.|\[(?:\\.|[^\]\\\n])*\]|[^/\\\n[])+\/[dgimsuvy]*/y;
 const JS_NUMBER =
@@ -374,6 +375,7 @@ const SCRIPT_RULES = [
   [JS_COMMENT, "comment"],
   [JS_REGEXP, "regexp", (state) => regexAllowed(lastSignificant(state.out))],
   [JS_NUMBER, "number"],
+  [HASHBANG, "comment", (_state, at) => at === 0],
   [PRIVATE_NAME, "property-name"],
   [DECORATOR, "annotation"],
   // A Svelte 4 reactive statement, `$: doubled = count * 2`.
@@ -1193,12 +1195,12 @@ const lexJson = (code, out) => {
   runRules(code, out, JSON_RULES, { code });
 };
 const SHELL_LINE = /[^\n]*\n?/g;
-// Comment, string, variable, flag, operator (a command follows), `)`, word,
-// whitespace, and any other single character, so no text is dropped.
+// Comment (only at a word start), string, variable, flag, operator (a command
+// follows), `)`, word, whitespace, and any other single character, so no text
+// is dropped.
 const SHELL_TOKEN =
-  /(#.*)|("(?:\\.|[^"\\])*"?|'[^']*'?)|(\$\{[^}]*\}?|\$[\w@*#?$!-]+)|(\s--?[\w-]+(?:=\S*)?)|(\$\(|\|\|?|&&|;|>>?|<|&)|(\))|([^\s"'$|&;<>#()]+)|(\s+)|([\s\S])/g;
+  /((?<=^|\s)#.*)|("(?:\\.|[^"\\])*"?|'[^']*'?)|(\$\{[^}]*\}?|\$[\w@*#?$!-]+)|(\s--?[\w-]+(?:=\S*)?)|(\$\(|\|\|?|&&|;|>>?|<|&)|(\))|([^\s"'$|&;<>#()]+)|(\s+)|([\s\S])/g;
 const SHELL_ASSIGNMENT = /^([A-Za-z_]\w*)=([\s\S]*)$/;
-const SPACE_BEFORE = /\s/;
 const DIFF_HEADER =
   /^(?:diff |index |--- |\+\+\+ |new file|deleted file|similarity|rename |old mode|new mode)/;
 /** @type {Lexer} */
@@ -1207,11 +1209,7 @@ const lexShell = (code, out) => {
     let command = true;
     for (const m of line.matchAll(SHELL_TOKEN)) {
       const [text, comment, string, variable, flag, operator, close, word] = m;
-      const at = m.index ?? 0;
-      if (
-        comment !== undefined &&
-        (at === 0 || SPACE_BEFORE.test(line[at - 1]))
-      ) {
+      if (comment !== undefined) {
         out.push({ type: "comment", text });
       } else if (string !== undefined) {
         out.push({ type: "string", text });
@@ -1295,6 +1293,7 @@ const FIRST_CHAR = new Map([
   [CSS_IDENT, /[-A-Za-z_]/],
   [JSON_STRING, /"/],
   [JSON_NUMBER, /[-\d.]/],
+  [HASHBANG, /#/],
   [PRIVATE_NAME, /#/],
   [DECORATOR, /@/],
   [CSS_IMPORTANT, /!/],
