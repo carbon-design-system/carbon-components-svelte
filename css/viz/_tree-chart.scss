@@ -69,6 +69,11 @@
     font-weight: 600;
   }
 
+  .#{$prefix}--viz-tree__node--selected .#{$prefix}--viz-tree__dot {
+    fill: $border-interactive;
+    stroke: $border-interactive;
+  }
+
   @media (forced-colors: active) {
     .#{$prefix}--viz-tree__node--collapsed .#{$prefix}--viz-tree__dot {
       fill: CanvasText;

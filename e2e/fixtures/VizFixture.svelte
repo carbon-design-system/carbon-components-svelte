@@ -116,7 +116,7 @@
       hi: i >= 8 ? row.revenue + (i - 7) * 2500 : null,
     }));
 
-  let selectedId = "activate";
+  let selected = "activate";
 </script>
 
 <main data-testid="viz" style="padding: 1rem; max-width: 40rem">
@@ -687,10 +687,10 @@
     label="Selectable signup funnel"
     rate="step"
     selectable
-    bind:selectedId
+    bind:selected
     data-testid="selectable-funnel"
   />
-  <output data-testid="selected">{selectedId}</output>
+  <output data-testid="selected">{selected}</output>
 
   <AreaChart
     data={revenue}

@@ -89,7 +89,7 @@ describe("TreeChart", () => {
 
   it("folds a branch and fires select on click", async () => {
     const onselect = vi.fn();
-    render(TreeChart, { onselect });
+    render(TreeChart, { selectable: true, onselect });
 
     const engineering = document.querySelectorAll(".bx--viz-tree__node")[1];
     await user.click(engineering);

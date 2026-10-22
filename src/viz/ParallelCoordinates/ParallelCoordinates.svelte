@@ -45,6 +45,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make rows selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected row index.
+   * @type {number | null}
+   */
+  export let selected = null;
+
   /** Specify the width the chart is drawn at. It scales to its container. */
   export let width = 640;
 
@@ -200,7 +209,9 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (current) dispatch("select", { line: detail(current), originalEvent });
+    if (!selectable || !current) return;
+    selected = selected === current.index ? null : current.index;
+    dispatch("select", { line: detail(current), originalEvent });
   }
 
   /** @param {PointerEvent} event */
@@ -366,6 +377,7 @@
             class:bx--viz-parallel__line={true}
             class:bx--viz-parallel__line--faded={!line.kept}
             class:bx--viz-parallel__line--active={line.index === active}
+            class:bx--viz-parallel__line--selected={line.index === selected}
             d={line.d}
             style:--bx-viz-color={line.color}
           />

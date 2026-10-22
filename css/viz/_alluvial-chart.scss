@@ -46,6 +46,11 @@
     fill-opacity: 0.6;
   }
 
+  .#{$prefix}--viz-alluvial__node--selected {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
   .#{$prefix}--viz-alluvial__node rect {
     fill: var(--bx-viz-color, #{$border-interactive});
   }

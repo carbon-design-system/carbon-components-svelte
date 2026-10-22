@@ -23,7 +23,7 @@ description: Uptime bar draws one mark for each period of a service's history, w
     ...days.slice(0, 40),
   ];
 
-  let selectedIndex;
+  let selected;
 </script>
 
 `UptimeBar` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -71,9 +71,9 @@ Set `showValue` to write the uptime next to the bar. It is the share of measured
 
 ## Selectable
 
-Set `selectable` to make each period a toggle button. Bind `selectedIndex` or listen for `select`. Give each period a `label`, such as its date, so the buttons have distinct names.
+Set `selectable` to make each period a toggle button. Bind `selected` or listen for `select`. Give each period a `label`, such as its date, so the buttons have distinct names.
 
-<UptimeBar data={days} selectable bind:selectedIndex showValue label="API, pick a day" />
+<UptimeBar data={days} selectable bind:selected showValue label="API, pick a day" />
 
 ## Accessibility
 

@@ -7,7 +7,7 @@
     { id: "tablet", label: "Tablet", value: 15 },
     { id: "tv", label: "TV", value: 5 },
   ];
-  export let selectedId: string | undefined = undefined;
+  export let selected: string | undefined = undefined;
   export let onselect: (detail: unknown) => void = () => {};
 </script>
 
@@ -36,9 +36,9 @@
   {data}
   labels="below"
   selectable
-  bind:selectedId
+  bind:selected
   label="Pick a device"
   data-testid="selectable"
   on:select={(e) => onselect(e.detail)}
 />
-<output data-testid="selected">{selectedId ?? ""}</output>
+<output data-testid="selected">{selected ?? ""}</output>

@@ -21,7 +21,7 @@ description: Waffle chart shows the parts of a whole as a grid of cells, one per
     { id: "skipped", label: "Skipped", value: 14, color: "neutral" },
   ];
 
-  let selectedId;
+  let selected;
 </script>
 
 `WaffleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -63,9 +63,9 @@ Parts take Carbon's prescribed color groups in order. Set `palette` to pick anot
 
 ## Selectable
 
-Set `selectable` to make each legend entry a toggle that lights up its cells and dims the rest. Bind `selectedId` or listen for `select`. Activating the selected entry clears the selection.
+Set `selectable` to make each legend entry a toggle that lights up its cells and dims the rest. Bind `selected` or listen for `select`. Activating the selected entry clears the selection.
 
-<WaffleChart data={devices} selectable bind:selectedId label="Sessions by device" />
+<WaffleChart data={devices} selectable bind:selected label="Sessions by device" />
 
 ## Accessibility
 

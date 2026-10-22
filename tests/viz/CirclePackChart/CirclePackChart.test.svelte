@@ -15,6 +15,7 @@
 </script>
 
 <CirclePackChart
+  selectable
   {data}
   value="commits"
   label="repo"

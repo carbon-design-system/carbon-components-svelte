@@ -37,6 +37,10 @@
     transition: opacity $duration--fast-02 carbon--motion(standard, productive);
   }
 
+  .#{$prefix}--viz-word-cloud__word--selected {
+    text-decoration: underline;
+  }
+
   // Emphasis dims the rest instead of recoloring what is active.
   .#{$prefix}--viz-word-cloud__svg--emphasis
     .#{$prefix}--viz-word-cloud__word:not(

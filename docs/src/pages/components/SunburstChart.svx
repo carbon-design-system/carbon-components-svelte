@@ -28,6 +28,7 @@ description: Sunburst chart shows a hierarchy as rings around a center, each nod
   const kb = { style: "unit", unit: "kilobyte", unitDisplay: "narrow" };
 
   let root = null;
+  let selected = null;
 </script>
 
 `SunburstChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -44,7 +45,7 @@ Pass long `data` with `id`, `parent`, and `value` accessors. Nodes take the colo
 
 Bind `root` to the node at the center. Its ancestors are not drawn; the center becomes a button back up, and Backspace does the same from the keyboard. The example sets `root` from `select`.
 
-<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} bind:root title="Bundle composition, click to drill" on:select={(e) => (root = e.detail.node.id)} />
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} selectable bind:root title="Bundle composition, click to drill" on:select={(e) => (root = e.detail.node.id)} />
 
 ## Rings and size
 
@@ -53,6 +54,12 @@ Bind `root` to the node at the center. Its ancestors are not drawn; the center b
 <SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} maxDepth={2} sort="value" diameter={240} innerRadius={0.4} title="Bundle composition, two rings" let:formattedTotal>
   <strong>{formattedTotal}</strong>
 </SunburstChart>
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused arc. Bind `selected`, its id, or listen for `select`, which carries the arc and the original event.
+
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} selectable bind:selected title="Pick a arc" />
 
 ## Accessibility
 

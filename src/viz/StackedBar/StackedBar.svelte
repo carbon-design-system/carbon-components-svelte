@@ -71,7 +71,7 @@
    * Specify the selected part id. The folded segment has the id `"other"`.
    * @type {Id | undefined}
    */
-  export let selectedId = undefined;
+  export let selected = undefined;
 
   /**
    * Specify the locale.
@@ -102,7 +102,7 @@
   $: name = [label, ...parts.map((part) => `${part.label} ${part.text}`)]
     .filter(Boolean)
     .join(", ");
-  $: hasSelection = selectable && parts.some((part) => part.id === selectedId);
+  $: hasSelection = selectable && parts.some((part) => part.id === selected);
   $: tabStopIndex = Math.min(focusedIndex, Math.max(parts.length - 1, 0));
 
   /**
@@ -169,7 +169,7 @@
    * @param {Event} originalEvent
    */
   function select(part, originalEvent) {
-    selectedId = selectedId === part.id ? undefined : part.id;
+    selected = selected === part.id ? undefined : part.id;
     focusedIndex = part.segment.index;
     dispatch("select", { ...part.segment, originalEvent });
   }
@@ -197,10 +197,10 @@
         <button
           type="button"
           class:bx--viz-stacked-bar__segment={true}
-          class:bx--viz-stacked-bar__segment--selected={part.id === selectedId}
+          class:bx--viz-stacked-bar__segment--selected={part.id === selected}
           class:bx--viz-stacked-bar__segment--empty={part.segment.value === 0}
           tabindex={i === tabStopIndex ? 0 : -1}
-          aria-pressed={part.id === selectedId}
+          aria-pressed={part.id === selected}
           aria-label="{part.label} {part.text}"
           style:--bx-viz-pct={part.segment.pct}
           style:--bx-viz-color={part.color}
@@ -226,7 +226,7 @@
         <li
           class:bx--viz-stacked-bar__item={true}
           class:bx--viz-stacked-bar__item--selected={selectable &&
-            part.id === selectedId}
+            part.id === selected}
           style:--bx-viz-color={part.color}
         >
           <span class:bx--viz-stacked-bar__swatch={true}></span>

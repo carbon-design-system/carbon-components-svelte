@@ -112,6 +112,11 @@
     font-weight: 600;
   }
 
+  .#{$prefix}--viz-sequence__message--selected .#{$prefix}--viz-sequence__line {
+    stroke: $border-interactive;
+    stroke-width: 2.5;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .#{$prefix}--viz-sequence__line {
       transition: none;

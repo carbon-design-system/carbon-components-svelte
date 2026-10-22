@@ -105,7 +105,7 @@
    * Specify the selected stage id.
    * @type {Id | undefined}
    */
-  export let selectedId = undefined;
+  export let selected = undefined;
 
   /** Set to `true` to dispatch `update` after the stages change */
   export let emitUpdate = false;
@@ -181,7 +181,7 @@
       ? focusedIndex
       : Math.max(
           0,
-          funnel.rows.findIndex((row) => row.stage.id === selectedId),
+          funnel.rows.findIndex((row) => row.stage.id === selected),
         );
 
   $: if (emitUpdate) announceUpdate(funnel);
@@ -237,7 +237,7 @@
    * @param {Event} originalEvent
    */
   function select(row, originalEvent) {
-    selectedId = row.stage.id;
+    selected = row.stage.id;
     dispatch("select", { ...row, originalEvent });
   }
 </script>
@@ -288,7 +288,7 @@
         class:bx--viz-funnel-bars__row={true}
         class:bx--viz-funnel-bars__row--highlight={highlighted}
         class:bx--viz-funnel-bars__row--selected={selectable &&
-          stage.id === selectedId}
+          stage.id === selected}
         style:--bx-viz-pct={stats.pct}
         style:--bx-viz-previous-pct={stats.previousPct}
         style:--bx-viz-next-pct={shape === "tapered"
@@ -304,7 +304,7 @@
             <button
               type="button"
               class:bx--viz-funnel-bars__button={true}
-              aria-pressed={stage.id === selectedId}
+              aria-pressed={stage.id === selected}
               tabindex={i === tabStopIndex ? 0 : -1}
               on:click|stopPropagation={(event) => select(row, event)}
               on:focus={() => {

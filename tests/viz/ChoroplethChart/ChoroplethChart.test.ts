@@ -85,7 +85,7 @@ describe("ChoroplethChart", () => {
 
   it("selects the focused region with the rows summed into it", async () => {
     const onselect = vi.fn();
-    render(ChoroplethChart, { onselect });
+    render(ChoroplethChart, { selectable: true, onselect });
 
     chart().focus();
     await user.keyboard("{End}{Enter}");

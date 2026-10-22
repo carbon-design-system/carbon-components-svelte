@@ -9,7 +9,7 @@
     { status: "down", label: "Mar 4" },
     { status: "ok", label: "Mar 5" },
   ];
-  export let selectedIndex: number | undefined = undefined;
+  export let selected: number | undefined = undefined;
   export let onselect: (detail: unknown) => void = () => {};
 </script>
 
@@ -21,7 +21,7 @@
   fractionDigits={0}
   translations={{ uptime: "verfügbar", down: "Ausfall" }}
   selectable
-  bind:selectedIndex
+  bind:selected
   label="API wählen"
   data-testid="selectable"
   on:select={(e) => onselect(e.detail)}
@@ -32,4 +32,4 @@
   showValue
   data-testid="unmeasured"
 />
-<output data-testid="selected">{selectedIndex ?? ""}</output>
+<output data-testid="selected">{selected ?? ""}</output>

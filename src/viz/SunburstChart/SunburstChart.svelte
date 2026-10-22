@@ -56,6 +56,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make arcs selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected node id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /**
    * Specify the node at the center. Its ancestors are not drawn; the
    * center is the way back up. Bind it to drill in from `select`.
@@ -192,7 +201,9 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (current) dispatch("select", { node: detail(current), originalEvent });
+    if (!selectable || !current) return;
+    selected = selected === current.id ? null : current.id;
+    dispatch("select", { node: detail(current), originalEvent });
   }
 
   function up() {
@@ -273,6 +284,7 @@
           <path
             class:bx--viz-sunburst__arc={true}
             class:bx--viz-sunburst__arc--active={i === active}
+            class:bx--viz-sunburst__arc--selected={arc.id === selected}
             d={arc.d}
             style:--bx-viz-color={arc.color}
             style:--bx-viz-ring={group === undefined ? arc.ring : 0}

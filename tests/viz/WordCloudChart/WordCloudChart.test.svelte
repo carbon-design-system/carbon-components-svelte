@@ -17,6 +17,7 @@
 </script>
 
 <WordCloudChart
+  selectable
   {data}
   word="term"
   value="mentions"

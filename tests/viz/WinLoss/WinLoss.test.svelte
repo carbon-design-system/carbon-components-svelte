@@ -1,7 +1,7 @@
 <script lang="ts">
   import WinLoss from "carbon-components-svelte/viz/WinLoss/WinLoss.svelte";
 
-  export let selectedIndex: number | undefined = undefined;
+  export let selected: number | undefined = undefined;
   export let onselect: (detail: unknown) => void = () => {};
 </script>
 
@@ -19,7 +19,7 @@
     { value: 0, label: "Wed" },
   ]}
   selectable
-  bind:selectedIndex
+  bind:selected
   label="Pick a day"
   translations={{
     win: "Sieg",
@@ -32,4 +32,4 @@
   data-testid="selectable"
   on:select={(e) => onselect(e.detail)}
 />
-<output data-testid="selected">{selectedIndex ?? ""}</output>
+<output data-testid="selected">{selected ?? ""}</output>

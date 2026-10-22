@@ -108,7 +108,7 @@ describe("GanttChart", () => {
   it("moves task by task with the keyboard, without laying out again", async () => {
     const onhover = vi.fn();
     const onselect = vi.fn();
-    render(GanttChart, { onhover, onselect });
+    render(GanttChart, { selectable: true, onhover, onselect });
     const built = geometry.calls;
 
     chart().focus();

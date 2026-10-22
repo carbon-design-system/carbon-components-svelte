@@ -41,6 +41,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make circles selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected circle id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /** Specify the diameter the pack is drawn at, in pixels. It scales to its container. */
   export let diameter = 400;
 
@@ -131,7 +140,9 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (active) dispatch("select", { leaf: active, originalEvent });
+    if (!selectable || !active) return;
+    selected = selected === active.id ? null : active.id;
+    dispatch("select", { leaf: active, originalEvent });
   }
 
   /** @param {KeyboardEvent} event */
@@ -209,6 +220,7 @@
               <circle
                 class:bx--viz-pack__leaf={true}
                 class:bx--viz-pack__leaf--active={leaf.id === activeId}
+                class:bx--viz-pack__leaf--selected={leaf.id === selected}
                 cx={leaf.cx}
                 cy={leaf.cy}
                 r={leaf.r}

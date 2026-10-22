@@ -44,7 +44,7 @@
    * Specify the index of the selected period.
    * @type {number | undefined}
    */
-  export let selectedIndex = undefined;
+  export let selected = undefined;
 
   /**
    * Specify the locale.
@@ -90,8 +90,8 @@
   $: tabStopIndex =
     focusedIndex >= 0 && focusedIndex < data.length
       ? focusedIndex
-      : selectedIndex !== undefined && selectedIndex < data.length
-        ? selectedIndex
+      : selected !== undefined && selected < data.length
+        ? selected
         : Math.max(data.length - 1, 0);
 
   /**
@@ -147,7 +147,7 @@
    * @param {Event} originalEvent
    */
   function select(period, index, originalEvent) {
-    selectedIndex = index;
+    selected = index;
     focusedIndex = index;
     dispatch("select", { period, index, originalEvent });
   }
@@ -170,9 +170,9 @@
         <button
           type="button"
           class="bx--viz-uptime__period bx--viz-uptime__period--{period.status}"
-          class:bx--viz-uptime__period--selected={i === selectedIndex}
+          class:bx--viz-uptime__period--selected={i === selected}
           tabindex={i === tabStopIndex ? 0 : -1}
-          aria-pressed={i === selectedIndex}
+          aria-pressed={i === selected}
           aria-label={[period.label, words[period.status]]
             .filter(Boolean)
             .join(": ")}

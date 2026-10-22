@@ -8,7 +8,7 @@
     { id: "safari", label: "Safari", value: 19, color: "success" },
     { id: "opera", label: "Opera", value: 8 },
   ];
-  export let selectedId: string | undefined = undefined;
+  export let selected: string | undefined = undefined;
   export let onselect: (detail: unknown) => void = () => {};
   export let onhover: (detail: unknown) => void = () => {};
 </script>
@@ -38,10 +38,10 @@
   {data}
   top={3}
   selectable
-  bind:selectedId
+  bind:selected
   label="Pick a browser"
   data-testid="selectable"
   on:select={(e) => onselect(e.detail)}
   on:hover={(e) => onhover(e.detail)}
 />
-<output data-testid="selected">{selectedId ?? ""}</output>
+<output data-testid="selected">{selected ?? ""}</output>

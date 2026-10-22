@@ -50,6 +50,12 @@
     stroke-width: 2.5;
   }
 
+  .#{$prefix}--viz-parallel__line--selected {
+    stroke: $border-interactive;
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
+
   .#{$prefix}--viz-parallel__axis-line,
   .#{$prefix}--viz-parallel__tick {
     shape-rendering: crispEdges;

@@ -84,6 +84,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make messages selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected message id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /** Specify the width of an actor box, in pixels */
   export let actorWidth = 112;
 
@@ -224,8 +233,9 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (current)
-      dispatch("select", { message: detail(current), originalEvent });
+    if (!selectable || !current) return;
+    selected = selected === current.id ? null : current.id;
+    dispatch("select", { message: detail(current), originalEvent });
   }
 
   /** @param {KeyboardEvent} event */
@@ -345,6 +355,7 @@
           class:bx--viz-sequence__message--return={message.kind === "return"}
           class:bx--viz-sequence__message--error={message.kind === "error"}
           class:bx--viz-sequence__message--active={i === active}
+          class:bx--viz-sequence__message--selected={message.id === selected}
           on:mouseenter={() => setActive(i)}
         >
           <!-- A wide, invisible strip: the line alone is too thin to hit. -->

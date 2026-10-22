@@ -67,7 +67,7 @@ describe("ParallelCoordinates", () => {
   it("moves row to row with the keyboard, without rebuilding the geometry", async () => {
     const onhover = vi.fn();
     const onselect = vi.fn();
-    render(ParallelCoordinates, { onhover, onselect });
+    render(ParallelCoordinates, { selectable: true, onhover, onselect });
     const built = geometry.calls;
 
     chart().focus();

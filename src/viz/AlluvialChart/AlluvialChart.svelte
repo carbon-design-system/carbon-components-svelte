@@ -40,6 +40,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make nodes selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected node id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /** Specify the width the layout is drawn at. The chart scales to its container. */
   export let width = 720;
 
@@ -140,8 +149,9 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (!active) return;
+    if (!selectable || !active) return;
     const id = active.id;
+    selected = selected === id ? null : id;
     dispatch("select", {
       node: active,
       links: flow.links.filter(
@@ -227,6 +237,7 @@
         <g
           class:bx--viz-alluvial__node={true}
           class:bx--viz-alluvial__node--active={node.id === activeId}
+          class:bx--viz-alluvial__node--selected={node.id === selected}
           on:mouseenter={() => setActive(node)}
         >
           <rect

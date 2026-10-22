@@ -16,6 +16,7 @@
 </script>
 
 <TreeChart
+  selectable
   {data}
   id="id"
   parent="parent"

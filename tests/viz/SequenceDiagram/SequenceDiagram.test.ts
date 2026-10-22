@@ -71,7 +71,7 @@ describe("SequenceDiagram", () => {
   it("moves message by message with the keyboard, without laying out again", async () => {
     const onhover = vi.fn();
     const onselect = vi.fn();
-    render(SequenceDiagram, { onhover, onselect });
+    render(SequenceDiagram, { selectable: true, onhover, onselect });
     const built = geometry.calls;
 
     chart().focus();

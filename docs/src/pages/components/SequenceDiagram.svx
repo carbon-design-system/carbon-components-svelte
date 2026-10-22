@@ -23,6 +23,7 @@ description: Sequence diagram shows who sends what to whom, in order, as arrows 
     { from: "worker", to: "payments", msg: "charge, attempt 2", at: 4 },
     { from: "payments", to: "worker", msg: "200", kind: "return", at: 5 },
   ];
+  let selected = null;
 </script>
 
 `SequenceDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -60,6 +61,12 @@ The diagram is grayscale until told otherwise. Set `groups`, a group per actor, 
 `actorWidth`, `actorGap`, and `rowHeight` set the geometry, and the diagram scales down with its container.
 
 <SequenceDiagram data={order} from="from" to="to" label="msg" kind="kind" actorWidth={96} actorGap={56} rowHeight={32} title="Create an order, compact" />
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused message. Bind `selected`, its id, or listen for `select`, which carries the message and the original event.
+
+<SequenceDiagram data={order} from="from" to="to" label="msg" kind="kind" selectable bind:selected title="Pick a message" />
 
 ## Accessibility
 

@@ -32,6 +32,7 @@ description: Alluvial chart shows how a quantity flows between stages, as ribbon
     ["Operations", "Salaries", 110],
     ["Operations", "Facilities", 60],
   ].map(([from, to, amount]) => ({ from, to, amount }));
+  let selected = null;
 </script>
 
 `AlluvialChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -78,6 +79,12 @@ Nodes take the categorical colors in order, and a ribbon takes the color of the 
 ## Interaction
 
 Hover a node, or focus the chart and use the arrow keys, to emphasize every flow through it. Hovering a ribbon shows its endpoints and value. `hover` fires with the node, and `select` with the node and the flows it touches, each carrying the `rows` summed into it.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused node. Bind `selected`, its id, or listen for `select`, which carries the node and the original event.
+
+<AlluvialChart data={journey} source="from" target="to" value="users" selectable bind:selected title="Pick a node" />
 
 ## Accessibility
 

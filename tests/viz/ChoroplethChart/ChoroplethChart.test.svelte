@@ -29,6 +29,7 @@
 </script>
 
 <ChoroplethChart
+  selectable
   {features}
   {data}
   region="area"
