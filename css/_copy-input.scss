@@ -107,6 +107,24 @@
       @at-root .#{$prefix}--copy-input__reveal-toggle:hover:not(:disabled) svg {
         fill: $icon-primary;
       }
+
+      // `copyButtonVisibility="hover-focus"`: the copy button shows while
+      // the field is hovered or holds focus, and while its feedback plays.
+      // Only where a pointer can hover, so touch screens always show it.
+      @at-root .#{$prefix}--copy-input__field-wrapper--copy-on-hover
+          .#{$prefix}--copy-btn {
+        opacity: 0;
+        transition: opacity $duration--fast-01 motion(standard, productive);
+      }
+
+      @at-root .#{$prefix}--copy-input__field-wrapper--copy-on-hover:hover
+          .#{$prefix}--copy-btn,
+        .#{$prefix}--copy-input__field-wrapper--copy-on-hover:focus-within
+          .#{$prefix}--copy-btn,
+        .#{$prefix}--copy-input__field-wrapper--copy-on-hover
+          .#{$prefix}--copy-btn--animating {
+        opacity: 1;
+      }
     }
 
     &:focus .#{$prefix}--snippet__icon {
@@ -255,6 +273,7 @@
       );
     }
   }
+
 }
 
 @include exports("copy-input") {

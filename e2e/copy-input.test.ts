@@ -1,4 +1,8 @@
+import type { Locator } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+
+const opacity = (el: Locator) =>
+  el.evaluate((node) => getComputedStyle(node).opacity);
 
 test.describe("CopyInput reveal toggle", () => {
   test("puts the toggle's tooltip as far from it as the copy button's", async ({
@@ -69,4 +73,51 @@ test.describe("CopyInput reveal toggle", () => {
       }
     });
   }
+});
+
+test.describe('CopyInput copyButtonVisibility="hover-focus"', () => {
+  test("shows the copy button on hover and on keyboard focus", async ({
+    page,
+  }) => {
+    await page.goto("/copy-input.html");
+    const field = page.getByTestId("copy-on-hover");
+    const input = field.getByRole("textbox", { name: "Webhook secret" });
+    const copy = field.getByRole("button", { name: "Copy to clipboard" });
+
+    await page.mouse.move(0, 0);
+    await expect.poll(() => opacity(copy)).toBe("0");
+
+    await input.hover();
+    await expect.poll(() => opacity(copy)).toBe("1");
+    await page.mouse.move(0, 0);
+    await expect.poll(() => opacity(copy)).toBe("0");
+
+    // Tab reaches the hidden button, and it shows while focus is inside.
+    await input.focus();
+    await expect.poll(() => opacity(copy)).toBe("1");
+    await page.keyboard.press("Tab");
+    await expect(copy).toBeFocused();
+    await expect.poll(() => opacity(copy)).toBe("1");
+  });
+
+  test("always shows the copy button where nothing can hover", async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext({
+      baseURL,
+      hasTouch: true,
+      isMobile: true,
+    });
+    const page = await context.newPage();
+    await page.goto("/copy-input.html");
+    expect(
+      await page.evaluate(() => matchMedia("(any-hover: none)").matches),
+    ).toBe(true);
+    const copy = page
+      .getByTestId("copy-on-hover")
+      .getByRole("button", { name: "Copy to clipboard" });
+    await expect.poll(() => opacity(copy)).toBe("1");
+    await context.close();
+  });
 });

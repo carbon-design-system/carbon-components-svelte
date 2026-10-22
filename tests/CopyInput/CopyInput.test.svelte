@@ -12,6 +12,8 @@
     undefined;
   export let hideValueText: ComponentProps<CopyInput>["hideValueText"] =
     undefined;
+  export let copyButtonVisibility: ComponentProps<CopyInput>["copyButtonVisibility"] =
+    undefined;
   export let maskedValue: ComponentProps<CopyInput>["maskedValue"] = undefined;
   export let selectTextOnFocus: ComponentProps<CopyInput>["selectTextOnFocus"] =
     undefined;
@@ -39,6 +41,7 @@
   bind:revealed
   {showValueText}
   {hideValueText}
+  {copyButtonVisibility}
   {maskedValue}
   {selectTextOnFocus}
   {labelText}
