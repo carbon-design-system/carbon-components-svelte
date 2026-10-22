@@ -326,19 +326,3 @@ $ccs-v11-token-names: (layer-01, layer-02, layer-active-01, layer-active-02, lay
     }
   }
 }
-
-// ccs: v10 token names. The theme maps keep them (internal Sass still
-// derives values from them), but no stylesheet declares them as custom
-// properties: components read the v11 names.
-$ccs-v10-token-names: (
-  active-light-ui, active-ui, body-long-01, body-long-02, body-short-01,
-  body-short-02, brand-01, caption-01, caption-02, decorative-01, display-01,
-  display-02, display-03, display-04, expressive-heading-01,
-  expressive-heading-02, expressive-heading-03, expressive-heading-04,
-  expressive-heading-05, expressive-heading-06, expressive-paragraph-01,
-  hover-light-ui, hover-selected-ui, hover-ui, productive-heading-01,
-  productive-heading-02, productive-heading-03, productive-heading-04,
-  productive-heading-05, productive-heading-06, productive-heading-07,
-  quotation-01, quotation-02, selected-light-ui, selected-ui, text-05, ui-01,
-  ui-02, ui-03, ui-04, ui-background,
-);
