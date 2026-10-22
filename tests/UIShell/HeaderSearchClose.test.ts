@@ -55,15 +55,27 @@ describe("HeaderSearch close event", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it.each([
-    { key: "Escape", isComposing: true },
-    { key: "Escape", keyCode: 229 },
-  ])(
-    "keeps the query and stays open when Escape cancels an IME composition (%o)",
+  it.each(
+    ["Escape", "Enter", "ArrowDown"].flatMap((key) => [
+      { key, isComposing: true },
+      { key, keyCode: 229 },
+    ]),
+  )(
+    "keeps the query, results and highlight on an IME composition key (%o)",
     async (init) => {
       const onClose = vi.fn();
+      const onSelect = vi.fn();
       render(HeaderSearchClose, {
-        props: { active: true, value: "query", onClose },
+        props: {
+          active: true,
+          value: "query",
+          results: [
+            { href: "/1", text: "Result 1" },
+            { href: "/2", text: "Result 2" },
+          ],
+          onClose,
+          onSelect,
+        },
       });
 
       const input = screen.getByRole("textbox");
@@ -75,6 +87,11 @@ describe("HeaderSearch close event", () => {
         "bx--header__search--active",
       );
       expect(onClose).not.toHaveBeenCalled();
+      expect(onSelect).not.toHaveBeenCalled();
+
+      await fireEvent.keyDown(input, { key: "Enter" });
+      expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onSelect.mock.calls[0][0].detail.selectedResultIndex).toBe(0);
     },
   );
 
