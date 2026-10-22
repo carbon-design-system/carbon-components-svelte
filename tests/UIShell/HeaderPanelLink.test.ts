@@ -37,6 +37,30 @@ describe("HeaderPanelLink", () => {
   });
 });
 
+describe("HeaderPanelLinks", () => {
+  it.each([
+    ["aria-label", { "aria-label": "Workspace tools" }],
+    ["aria-labelledby", { "aria-labelledby": "panel-links-heading" }],
+  ])("names the list with %s", (_, listProps) => {
+    render(HeaderPanelLink, { props: { listProps } });
+
+    expect(
+      screen.getByRole("list", { name: "Workspace tools" }),
+    ).toBeInTheDocument();
+  });
+
+  it("forwards other attributes and keeps its own class", () => {
+    render(HeaderPanelLink, {
+      props: { listProps: { class: "custom", "data-panel": "tools" } },
+    });
+
+    const list = screen.getByRole("list");
+    expect(list).toHaveClass("bx--switcher__item", "custom");
+    expect(list).toHaveAttribute("data-panel", "tools");
+    expect(list).not.toHaveAttribute("aria-label");
+  });
+});
+
 describe("HeaderPanelLink element", () => {
   it("applies anchor-only and button-only attributes to the right element", async () => {
     const { component } = render(HeaderPanelLinkElement);
