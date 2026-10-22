@@ -41,6 +41,11 @@
     stroke: $border-inverse;
   }
 
+  .#{$prefix}--viz-radar__spoke--selected {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
   .#{$prefix}--viz-radar__label,
   .#{$prefix}--viz-radar__tick {
     fill: $text-secondary;

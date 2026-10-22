@@ -21,6 +21,7 @@ description: Horizon chart folds each series into layers of color on one short r
       net: Math.round(Math.sin(i / 9 + r) * 40 + Math.cos(i / 4) * 15),
     })),
   );
+  let selectedX = null;
 </script>
 
 `HorizonChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -48,6 +49,12 @@ A value below zero folds the same way into layers of another hue, set with `nega
 ## Synced hover
 
 Set `syncId` to share hover with every other chart that has the same id, as a [LineChart](/components/LineChart) does, so a dashboard shows one moment across all of them.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused column. Bind `selected`, the x value, or listen for `select`.
+
+<HorizonChart data={cpu} x="t" y="cpu" series="host" selectable bind:selected={selectedX} title="CPU by host, pick a time" />
 
 ## Accessibility
 

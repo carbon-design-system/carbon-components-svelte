@@ -6,6 +6,7 @@
    */
 
   /**
+   * @event {{ x: number; points: Array<{ series: string; value: number | null }>; originalEvent: Event }} select Fires when a column is activated by click or keyboard. Requires `selectable`.
    * @event {{ x: number; points: Array<{ series: string; value: number | null }> } | null} hover Fires when the pointer or keyboard focus moves to another x, and with `null` when it leaves.
    */
 
@@ -50,6 +51,15 @@
 
   /** Specify the width the chart is drawn at. It scales to its container. */
   export let width = 640;
+
+  /** Set to `true` to make columns selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected x value.
+   * @type {number | null}
+   */
+  export let selected = null;
 
   /** Specify the height of one row, in pixels */
   export let rowHeight = 20;
@@ -187,19 +197,7 @@
     if (!fromSync) sync?.publish(value);
     dispatch(
       "hover",
-      value === null
-        ? null
-        : {
-            x: value,
-            points: horizon.series.map((entry) => {
-              const i = entry.xs.indexOf(value);
-              return {
-                series: entry.key,
-                value:
-                  i >= 0 && Number.isFinite(entry.ys[i]) ? entry.ys[i] : null,
-              };
-            }),
-          },
+      value === null ? null : { x: value, points: pointsAt(value) },
     );
   }
 
@@ -249,11 +247,35 @@
       case "Escape":
         setActive(-1);
         return;
+      case "Enter":
+      case " ":
+        select(event);
+        event.preventDefault();
+        return;
       default:
         return;
     }
     event.preventDefault();
     setActive(next);
+  }
+
+  /** @param {Event} originalEvent */
+  function select(originalEvent) {
+    if (!selectable || active < 0) return;
+    const x = horizon.xs[active];
+    selected = selected === x ? null : x;
+    dispatch("select", { x, points: pointsAt(x), originalEvent });
+  }
+
+  /** @param {number} value */
+  function pointsAt(value) {
+    return horizon.series.map((entry) => {
+      const i = entry.xs.indexOf(value);
+      return {
+        series: entry.key,
+        value: i >= 0 && Number.isFinite(entry.ys[i]) ? entry.ys[i] : null,
+      };
+    });
   }
 
   onMount(() => {
@@ -283,6 +305,7 @@
       tabindex="0"
       on:pointermove={onPointerMove}
       on:pointerleave={() => setActive(-1)}
+      on:click={select}
       on:keydown={onKeydown}
       on:blur={() => setActive(-1)}
     >
@@ -339,6 +362,16 @@
             {tick.label}
           </text>
         {/each}
+        {#if selected !== null && horizon.xs.includes(selected)}
+          <line
+            class:bx--viz-horizon__ruler={true}
+            class:bx--viz-horizon__ruler--selected={true}
+            x1={horizon.x.map(selected)}
+            x2={horizon.x.map(selected)}
+            y1="0"
+            y2={height - AXIS}
+          />
+        {/if}
         {#if at !== undefined}
           <line
             class:bx--viz-horizon__ruler={true}
