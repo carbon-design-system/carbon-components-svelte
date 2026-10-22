@@ -1,0 +1,57 @@
+/// WordCloudChart: words sized by value, drawn at a fixed logical size and
+/// scaled to the container. The legend reuses the treemap's.
+/// @access private
+/// @group viz
+@mixin viz-word-cloud-chart {
+  .#{$prefix}--viz-word-cloud {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-word-cloud .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-word-cloud__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-word-cloud__svg {
+    display: block;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-word-cloud__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  // Without groups, words take the text color, which keeps the smallest ones
+  // at full contrast. A group color is an override.
+  .#{$prefix}--viz-word-cloud__word {
+    cursor: default;
+    fill: var(--bx-viz-color, #{$text-primary});
+    font-family: inherit;
+    font-weight: 600;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // Emphasis dims the rest instead of recoloring what is active.
+  .#{$prefix}--viz-word-cloud__svg--emphasis
+    .#{$prefix}--viz-word-cloud__word:not(
+      .#{$prefix}--viz-word-cloud__word--active
+    ) {
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-word-cloud__word {
+      transition: none;
+    }
+  }
+}
+
+@include exports("viz-word-cloud-chart") {
+  @include viz-word-cloud-chart;
+}
