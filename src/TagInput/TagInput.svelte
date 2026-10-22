@@ -172,6 +172,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -373,9 +374,8 @@
 
   /** @param {KeyboardEvent} event */
   function handleInputKeydown(event) {
-    // Enter that commits an IME composition is not an add. Safari reports
-    // the committing keydown with isComposing false but keyCode 229.
-    if (event.isComposing || event.keyCode === 229 || !interactive) return;
+    // Enter that commits an IME composition is not an add.
+    if (isImeComposition(event) || !interactive) return;
 
     if (event.key === "Enter") {
       if (!draft.trim()) return;

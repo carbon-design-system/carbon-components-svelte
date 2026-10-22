@@ -39,6 +39,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
 
   const dispatch = createEventDispatcher();
@@ -84,7 +85,7 @@
   function handleEscape(event) {
     if (open && closeOnEscape && event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
-      if (event.isComposing || event.keyCode === 229) return;
+      if (isImeComposition(event)) return;
       open = false;
       dispatch("close", { trigger: "escape-key" });
     }

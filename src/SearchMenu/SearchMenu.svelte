@@ -175,6 +175,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
@@ -314,9 +315,8 @@
   });
 
   function handleKeydown(event) {
-    // Keys during an IME composition belong to the IME. Safari reports the
-    // committing keydown with isComposing false but keyCode 229.
-    if (event.isComposing || event.keyCode === 229) return;
+    // Keys during an IME composition belong to the IME.
+    if (isImeComposition(event)) return;
     if (disabled || readonly) return;
     switch (event.key) {
       case "ArrowDown":

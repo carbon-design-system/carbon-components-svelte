@@ -66,6 +66,7 @@
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -252,7 +253,7 @@
     if (open) {
       if (event.key === "Escape") {
         // Escape that cancels an IME composition is not a close.
-        if (event.isComposing || event.keyCode === 229) return;
+        if (isImeComposition(event)) return;
         // Stop stacked (DOM-nested) modals from also closing: this
         // handler is on each modal's own root and Escape bubbles from
         // the focused (innermost, topmost) modal up through ancestors.
