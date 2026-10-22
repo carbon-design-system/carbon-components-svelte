@@ -26,7 +26,7 @@ description: Span waterfall shows a trace as a tree of intervals on one time sca
   let selected = null;
 </script>
 
-`SpanWaterfall` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`SpanWaterfall` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 A trace is a tree of intervals: each span has a parent and a place in time. This draws it the way tracing tools do, one span per row in depth-first order, indented by depth, on one time axis. It is not a [GanttChart](/components/GanttChart): there are no dependencies or progress, only what called what and how long it took.
 

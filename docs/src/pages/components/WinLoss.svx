@@ -16,7 +16,7 @@ description: Win-loss draws a tick per result, rising for a win and dropping for
   let selectedIndex;
 </script>
 
-`WinLoss` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`WinLoss` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [Sparkline](/components/Sparkline) for outcomes rather than amounts: A/B results, daily direction, a match record. A win rises from the midline, a loss drops from it, and a tie is a dash on it, so the run reads in grayscale.
 

@@ -19,7 +19,7 @@ description: Gantt chart lays tasks out as bars on one time scale, grouped by wo
   ];
 </script>
 
-`GanttChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`GanttChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Each task is a bar from its start to its end on one time scale, one row each, grouped under its workstream. It shows a plan; it does not edit one. Dragging a bar to reschedule belongs to a scheduler. For a trace, where the rows are a tree of calls, use [SpanWaterfall](/components/SpanWaterfall).
 

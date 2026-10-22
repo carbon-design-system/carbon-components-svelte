@@ -28,7 +28,7 @@ description: Donut chart shows the parts of a whole as a ring, beside a legend t
   let selected = null;
 </script>
 
-`DonutChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`DonutChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Angles are harder to compare than lengths. Use a donut for a few parts where the mix matters more than the exact values, and a [BarChart](/components/BarChart) when the parts need comparing. For a table cell, use [MicroDonut](/components/MicroDonut).
 

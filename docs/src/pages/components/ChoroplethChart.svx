@@ -38,7 +38,7 @@ description: Choropleth colors the regions of a map by value, to show where some
   ];
 </script>
 
-`ChoroplethChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`ChoroplethChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 A large region draws the eye whatever its value, so a choropleth suits rates and densities better than raw counts. When geography is not the point, a sorted [BarChart](/components/BarChart) of the same regions is easier to read.
 

@@ -33,7 +33,7 @@ description: Chord diagram shows flows between a set of nodes as ribbons inside 
   let selected = null;
 </script>
 
-`ChordDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`ChordDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It shows flows among one set of nodes where every node can send and receive: team handoffs, traffic between regions, trade. Each node is an arc sized by what it sends, and each pair of nodes shares one ribbon whose two ends are as wide as the flow in each direction, so what a node receives shows in the ribbons arriving at it. An [AlluvialChart](/components/AlluvialChart) is the better choice when flows run one way through stages. Keep the nodes to a dozen or so, or the ribbons turn to hair.
 

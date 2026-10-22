@@ -13,7 +13,7 @@ description: Radar chart compares a few series across several measures that shar
   );
 </script>
 
-`RadarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`RadarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 A radar is good for one thing: seeing the shape of a profile, and how two or three profiles differ. Positions around a circle are hard to compare and the area of a polygon means nothing, so use a grouped [BarChart](/components/BarChart) when the values matter more than the shape.
 

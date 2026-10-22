@@ -25,7 +25,7 @@ description: Parallel coordinates draw one axis per variable, each on its own sc
   let kept = instances.length;
 </script>
 
-`ParallelCoordinates` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`ParallelCoordinates` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Carbon treats this as a [RadarChart](/components/RadarChart) with real axes, and prefers it in most cases: every variable is its own axis on its own scale, so the units can differ, and a row is a line through them. Patterns show as bundles of lines and crossings.
 

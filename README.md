@@ -144,7 +144,7 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 **Refer to the [documentation site](https://svelte.carbondesignsystem.com) for component API documentation.**
 
-### Data visualization (experimental)
+### Data visualization
 
 Charts and small inline graphics ship from a separate entry point, so they add nothing to your bundle or your CSS unless you use them. Import components from `carbon-components-svelte/viz` and load `viz.css` alongside `all.css`.
 
@@ -162,8 +162,6 @@ import "carbon-components-svelte/css/viz.css";
 ```
 
 With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
-
-This entry point is experimental: its API may change in a minor release.
 
 ## Preprocessors & Plugins
 

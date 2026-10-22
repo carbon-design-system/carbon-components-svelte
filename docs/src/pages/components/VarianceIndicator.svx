@@ -15,7 +15,7 @@ description: Variance indicator shows a signed difference, such as actual minus 
   ].map((row) => ({ ...row, variance: row.actual - row.plan }));
 </script>
 
-`VarianceIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`VarianceIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It answers "how far off plan" at a glance: the bar grows from the middle toward the sign of the variance, and takes the success or error color by whether that sign is good. A [DeltaIndicator](/components/DeltaIndicator) writes a change; this draws one, so a column of them compares.
 

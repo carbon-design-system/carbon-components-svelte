@@ -8,7 +8,7 @@ description: Share of total shows one part of a whole as a filled track and a pe
   import { ShareOfTotal } from "carbon-components-svelte/viz";
 </script>
 
-`ShareOfTotal` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`ShareOfTotal` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 Use it for a single part. For every part of the whole, use [StackedBar](/components/StackedBar).
 

@@ -31,7 +31,7 @@ description: Icicle chart shows a hierarchy as nested slices, each level a row a
   let selected = null;
 </script>
 
-`IcicleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`IcicleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It takes the same rows as [TreeChart](/components/TreeChart), each with an `id` and a `parent`, and lays them out as a partition: every level is a row, every node is as wide as its share of the root, and children sit directly under their parent. Where a [TreemapChart](/components/TreemapChart) shows two levels well, an icicle shows any depth and keeps the levels legible. [FlameGraph](/components/FlameGraph) is the same chart with the root at the bottom.
 

@@ -22,7 +22,7 @@ description: Hive plot lays a network out on a few axes by node kind, so the sam
   let selected = null;
 </script>
 
-`HivePlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`HivePlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is the network chart without a force simulation: each kind of node gets an axis out from the center, nodes sit along their axis in a defined order, and links curve between axes. The layout is a function of the data, so it renders on the server, never jitters, and the same topology always looks the same. Use it when a [LayeredGraph](/components/LayeredGraph) has no natural direction and an [ArcDiagram](/components/ArcDiagram) has too many kinds of node for one line.
 

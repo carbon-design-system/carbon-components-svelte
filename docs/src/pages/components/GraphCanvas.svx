@@ -21,7 +21,7 @@ description: Graph canvas draws a directed graph on a stage that pans and zooms,
   let transform = null;
 </script>
 
-`GraphCanvas` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+`GraphCanvas` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 It is a [LayeredGraph](/components/LayeredGraph) on a stage: the same layout, but the view pans and zooms, the nodes are real buttons that can hold any Carbon content, and a minimap shows where you are. Reach for it when a graph no longer fits one drawing. It is still read-only: nothing is dragged or connected here.
 
