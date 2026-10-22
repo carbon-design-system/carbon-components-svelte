@@ -31,6 +31,10 @@ export default defineConfig({
       // Compiled SCSS does not depend on the Svelte version; the root harness
       // covers it.
       "../tests/css/**",
+      // Plain TypeScript that never touches Svelte: repo tooling and the
+      // `/syntax` tokenizer. The root harness covers them.
+      "../tests/scripts/**",
+      "../tests/syntax/**",
     ],
     setupFiles: ["./setup-tests.ts"],
     // `@testing-library/*` resolve from the root `node_modules`, outside this
