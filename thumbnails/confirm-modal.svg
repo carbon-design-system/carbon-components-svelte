@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>confirm-modal</title>
+    <defs>
+        <filter id="confirm-modal-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="confirm-modal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="box-shadow" fill="black" filter="url(#confirm-modal-shadow)" x="80" y="48" width="160" height="84"></rect>
+        <rect id="box" fill="var(--cds-layer-02, #ffffff)" x="80" y="48" width="160" height="84"></rect>
+        <rect id="title" fill="var(--cds-text-secondary, #525252)" x="90" y="60" width="60" height="8"></rect>
+        <path id="close" fill="var(--cds-icon-primary, #161616)" transform="translate(218, 56) scale(0.375)" d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"></path>
+        <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="90" y="76" width="140" height="6"></rect>
+        <rect id="body-2" fill="var(--cds-border-subtle, #e0e0e0)" x="90" y="88" width="100" height="6"></rect>
+        <rect id="cancel-button" fill="var(--cds-button-secondary, #393939)" x="80" y="106" width="80" height="26"></rect>
+        <rect id="confirm-button" fill="var(--cds-support-error, #da1e28)" x="160" y="106" width="80" height="26"></rect>
+    </g>
+</svg>
