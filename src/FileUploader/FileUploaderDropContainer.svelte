@@ -2,7 +2,7 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" }>} rejected
+   * @event {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" | "count" }>} rejected
    * @restProps {div}
    */
 
@@ -53,6 +53,19 @@
    * via the `rejected` event with `reason: 'duplicate'`.
    */
   export let preventDuplicate = false;
+
+  /**
+   * Specify the maximum number of files that can be attached.
+   * Excess files are rejected after `validateFiles`, in selection order, via
+   * the `rejected` event with `reason: "count"`.
+   * When the list is at capacity, further picks are disabled until a file is removed.
+   * @type {number | undefined}
+   * @example
+   * ```svelte
+   * <FileUploaderDropContainer multiple maxFiles={3} />
+   * ```
+   */
+  export let maxFiles = undefined;
 
   /**
    * Override the default behavior of validating uploaded files.
@@ -132,6 +145,9 @@
 
   let over = false;
 
+  $: atMaxFiles = maxFiles !== undefined && files.length >= maxFiles;
+  $: inputDisabled = effectiveDisabled || atMaxFiles;
+
   /** @param {ReadonlyArray<File>} incoming */
   function processIncoming(incoming) {
     const { accepted, rejected: builtInRejected } = filterIncomingFiles(
@@ -144,15 +160,33 @@
         existingFiles: files,
       },
     );
-    const validated = validateFiles(accepted);
+    let validated = validateFiles(accepted);
     const acceptedSet = new Set(validated);
-    /** @type {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" }>} */
+    /** @type {Array<{ file: File; reason: "type" | "size" | "duplicate" | "invalid" | "count" }>} */
     const rejected = [
       ...builtInRejected,
       ...accepted
         .filter((file) => !acceptedSet.has(file))
         .map((file) => ({ file, reason: /** @type {const} */ ("invalid") })),
     ];
+
+    // Count check runs after validateFiles. In multiple mode, slots are
+    // relative to files already attached; in single mode, the selection replaces.
+    if (maxFiles !== undefined) {
+      const existingCount = multiple ? files.length : 0;
+      const slots = Math.max(0, maxFiles - existingCount);
+      if (validated.length > slots) {
+        const excess = validated.slice(slots);
+        rejected.push(
+          ...excess.map((file) => ({
+            file,
+            reason: /** @type {const} */ ("count"),
+          })),
+        );
+        validated = validated.slice(0, slots);
+      }
+    }
+
     if (rejected.length > 0) dispatch("rejected", rejected);
     // Cap single mode after validation, so it keeps the first valid file.
     files = multiple ? [...files, ...validated] : validated.slice(0, 1);
@@ -190,7 +224,7 @@
   {...wrapperRestProps}
   on:dragover
   on:dragover|preventDefault|stopPropagation={(event) => {
-    if (!effectiveDisabled) {
+    if (!inputDisabled) {
       over = true;
       if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
     }
@@ -212,7 +246,7 @@
   }}
   on:drop
   on:drop|preventDefault|stopPropagation={(event) => {
-    if (!effectiveDisabled) {
+    if (!inputDisabled) {
       over = false;
       processIncoming([...(event.dataTransfer?.files ?? [])]);
     }
@@ -227,19 +261,19 @@
     aria-label={ariaLabel}
     aria-describedby={ariaDescribedBy}
     aria-labelledby={ariaLabelledBy}
-    tabindex={tabindexAttribute(effectiveDisabled ? -1 : tabindex)}
-    aria-disabled={effectiveDisabled || undefined}
+    tabindex={tabindexAttribute(inputDisabled ? -1 : tabindex)}
+    aria-disabled={inputDisabled || undefined}
     class:bx--file-browse-btn={true}
     class:bx--file-browse-btn--full-width={fullWidth}
-    class:bx--file-browse-btn--disabled={effectiveDisabled}
+    class:bx--file-browse-btn--disabled={inputDisabled}
     on:click={() => {
-      if (!effectiveDisabled) /** @type {HTMLInputElement} */ (ref).click();
+      if (!inputDisabled) /** @type {HTMLInputElement} */ (ref).click();
     }}
     on:keydown
     on:keydown={(event) => {
       if (event.key === " " || event.key === "Enter") {
         event.preventDefault();
-        if (!effectiveDisabled) /** @type {HTMLInputElement} */ (ref).click();
+        if (!inputDisabled) /** @type {HTMLInputElement} */ (ref).click();
       }
     }}
   >
@@ -258,7 +292,7 @@
     aria-hidden="true"
     aria-labelledby={dropTargetId}
     {id}
-    disabled={effectiveDisabled}
+    disabled={inputDisabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}
     {capture}
     {name}
