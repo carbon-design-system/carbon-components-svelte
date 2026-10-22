@@ -455,6 +455,14 @@ describe("tokenize: precision", () => {
     expect(types("html`<p>${x}</p>`", "js")?.[0]).toBe("function:html");
   });
 
+  test.each([
+    ["i++ / 2 / 3", ["operator:++", "operator:/", "number:2", "operator:/"]],
+    ["a-- / 2 / 3", ["operator:--", "operator:/", "number:2", "operator:/"]],
+    ["`${/x/.test(a)}`", ["string:`", "special:${", "regexp:/x/"]],
+  ])("tells division from a regexp in %s", (code, expected) => {
+    expect(types(code, "js")?.slice(0, expected.length)).toEqual(expected);
+  });
+
   test("splits escape sequences out of strings", () => {
     expect(types('"a\\nb\\u00e9\\u{1F600}"', "js")).toEqual([
       'string:"a',
