@@ -468,6 +468,7 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -1515,7 +1516,8 @@
    * @param {KeyboardEvent} event
    */
   function handleCalendarEscape(event) {
-    if (!engine?.isOpen) return;
+    // Escape that cancels an IME composition (the year input) is not a close.
+    if (!engine?.isOpen || isImeComposition(event)) return;
     // Also keeps flatpickr's own handler from closing (and firing `onClose`)
     // a second time, and keeps the key from reaching an enclosing Modal.
     event.stopImmediatePropagation();
@@ -1859,6 +1861,8 @@
     class:bx--date-picker--inline={usesInline && $hasCalendar}
     on:keydown={(event) => {
       if (engine?.isOpen && event.key === "Escape") {
+        // Escape that cancels an IME composition is not a close.
+        if (isImeComposition(event)) return;
         event.stopPropagation();
         dismissCalendar("escape-key");
       }

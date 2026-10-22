@@ -1,4 +1,6 @@
 // @ts-check
+
+import { isImeComposition } from "../utils/ime-composition.js";
 import {
   compareDays,
   DAY_MS,
@@ -2030,6 +2032,8 @@ export function createCalendarEngine(element, userConfig = {}) {
           focusByKey(target, code, event.shiftKey);
           break;
         case 27:
+          // Escape that cancels an IME composition is not a close.
+          if (isImeComposition(event)) break;
           event.preventDefault();
           focusAndClose();
           break;
