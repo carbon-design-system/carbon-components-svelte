@@ -195,7 +195,7 @@ const JS_REGEXP =
   /\/(?![*/])(?:\\.|\[(?:\\.|[^\]\\\n])*\]|[^/\\\n[])+\/[dgimsuvy]*/y;
 const JS_NUMBER =
   /(?:0[xob][\da-f_]+|(?:\d[\d_]*\.?[\d_]*|\.\d[\d_]*)(?:e[+-]?\d+)?)n?/iy;
-const IDENTIFIER = /[A-Za-z_$][\w$]*/y;
+const IDENTIFIER = /[\p{ID_Start}_$][\p{ID_Continue}$\u200c\u200d]*/uy;
 const JS_OPERATOR =
   /=>|\+\+|--|\.\.\.|\?\?=?|\?\.|[=!]==?|[<>]{1,3}=?|&&=?|\|\|=?|\*\*=?|[-+*/%&|^~!?:=]=?/y;
 const WHITESPACE = /\s+/y;
@@ -839,7 +839,7 @@ const UNQUOTED = /[^\s>"'`=<]+/y;
 const BLOCK_TAG = /[#:/@][A-Za-z]+/y;
 const TEXT = /[^<{]+/y;
 const ENTITY = /&(?:#\d+|#x[\da-f]+|[a-z][a-z\d]*);/gi;
-const IDENTIFIER_TEXT = /^[A-Za-z_$][\w$]*$/;
+const IDENTIFIER_TEXT = /^[\p{ID_Start}_$][\p{ID_Continue}$\u200c\u200d]*$/u;
 /** `on:click|once`, `bind:value`, `transition:fade|local`, … */
 const DIRECTIVE =
   /^(on|bind|class|style|use|transition|in|out|animate|let):(.+)$/;

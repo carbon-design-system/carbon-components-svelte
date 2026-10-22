@@ -168,6 +168,13 @@ describe("tokenize", () => {
     ]);
   });
 
+  test.each(["café", "π", "日本"])("reads %s as one identifier", (name) => {
+    expect(types(`const ${name} = 1`, "js")?.slice(0, 2)).toEqual([
+      "definition-keyword:const",
+      `definition:${name}`,
+    ]);
+  });
+
   test("reads expressions inside quoted attribute values as script", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",
