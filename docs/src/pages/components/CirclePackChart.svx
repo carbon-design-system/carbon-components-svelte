@@ -44,7 +44,7 @@ Set `group` to a parent accessor. Circles of one parent are packed inside a dash
 
 The pack is drawn at `size` pixels square and scales down with its container. `padding` is the gap between circles. A circle carries a label only when it can hold one, shortened to fit.
 
-<CirclePackChart data={repos} value="commits" label="repo" group="team" size={280} padding={2} title="A smaller pack" />
+<CirclePackChart data={repos} value="commits" label="repo" group="team" diameter={280} padding={2} title="A smaller pack" />
 
 ## Color
 
@@ -57,7 +57,7 @@ Groups take Carbon's prescribed color groups in order. Set `palette` to pick ano
   group="team"
   palette={2}
   colors={{ Mobile: "neutral" }}
-  size={320}
+  diameter={320}
   title="Commits by team and repository"
 />
 

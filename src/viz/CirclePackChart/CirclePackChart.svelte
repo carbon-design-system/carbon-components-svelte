@@ -41,8 +41,8 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
-  /** Specify the width and height the pack is drawn at. It scales to its container. */
-  export let size = 400;
+  /** Specify the diameter the pack is drawn at, in pixels. It scales to its container. */
+  export let diameter = 400;
 
   /** Specify the gap between circles, in pixels */
   export let padding = 3;
@@ -95,12 +95,12 @@
   $: valueOf = toAccessor(value);
   $: labelOf = toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
-  // Depends on the data and the size only, so hover never rebuilds it.
+  // Depends on the data and the diameter only, so hover never rebuilds it.
   $: pack = buildPack(data, {
     value: valueOf,
     label: labelOf,
     group: groupOf,
-    size,
+    size: diameter,
     padding,
     palette,
     colors,
@@ -174,7 +174,7 @@
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-pack__plot={true} style:max-width="{size}px">
+  <div class:bx--viz-pack__plot={true} style:max-width="{diameter}px">
     <!-- A chart is one tab stop. Arrow keys move between circles. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -183,7 +183,7 @@
     <svg
       class:bx--viz-pack__svg={true}
       class:bx--viz-pack__svg--emphasis={activeId !== null}
-      viewBox="0 0 {size} {size}"
+      viewBox="0 0 {diameter} {diameter}"
       role="application"
       aria-roledescription="chart"
       aria-label={title || undefined}
@@ -233,13 +233,13 @@
     {#if active}
       <div
         class:bx--viz-chart-tooltip={true}
-        class:bx--viz-chart-tooltip--flipped={active.cx > size / 2}
+        class:bx--viz-chart-tooltip--flipped={active.cx > diameter / 2}
         aria-hidden="true"
         style:left="{((active.cx +
-          (active.cx > size / 2 ? -active.r : active.r)) /
-          size) *
+          (active.cx > diameter / 2 ? -active.r : active.r)) /
+          diameter) *
           100}%"
-        style:top="{(active.cy / size) * 100}%"
+        style:top="{(active.cy / diameter) * 100}%"
       >
         {#if pack.grouped}
           <div class:bx--viz-chart-tooltip__title={true}>{active.group}</div>

@@ -19,7 +19,7 @@
    * Specify the nodes, one row each.
    * @type {ReadonlyArray<T>}
    */
-  export let data = [];
+  export let nodes = [];
 
   /**
    * Specify the edges, one row each, read with `source` and `target`.
@@ -169,7 +169,7 @@
   $: statusOf = status === undefined ? undefined : toAccessor(status);
   $: sourceOf = toAccessor(source);
   $: targetOf = toAccessor(target);
-  $: vertices = data.map((row, i) => ({
+  $: vertices = nodes.map((row, i) => ({
     id: idOf(row, i),
     label: labelOf ? String(labelOf(row, i) ?? idOf(row, i)) : undefined,
     lane: laneOf ? laneOf(row, i) : undefined,
@@ -208,7 +208,7 @@
   };
   // Group and status per node, and a color per group in first-seen order.
   $: groupKeys = groupOf
-    ? [...new Set(data.map((row, i) => String(groupOf(row, i))))]
+    ? [...new Set(nodes.map((row, i) => String(groupOf(row, i))))]
     : [];
   $: groupColor = paint(groupKeys, palette, colors);
   $: extra = new Map(
