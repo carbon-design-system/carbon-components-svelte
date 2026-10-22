@@ -297,6 +297,9 @@
 /// @access private
 /// @group components
 @mixin content-switcher-icon-only {
+  // ccs: the switcher infers `--icon-only` once its switches register,
+  // after it renders. The `iconOnly` prop sets it from the first render,
+  // so server-rendered markup fits its switches too.
   .#{$prefix}--content-switcher--icon-only {
     width: fit-content;
   }

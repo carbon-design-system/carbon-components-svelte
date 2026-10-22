@@ -214,6 +214,13 @@
     visibility: hidden;
   }
 
+  // ccs: the collapsed height is measured once the tile mounts. Until then
+  // (the server's markup), content below the fold takes no space, so the
+  // tile is as tall as it is once measured instead of fully open.
+  .#{$prefix}--tile--unmeasured .#{$prefix}--tile-content__below-the-fold {
+    display: none;
+  }
+
   .#{$prefix}--tile--is-expanded {
     overflow: visible;
     transition: max-height $duration--fast-02 motion(standard, productive);

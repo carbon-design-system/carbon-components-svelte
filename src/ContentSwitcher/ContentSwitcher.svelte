@@ -45,6 +45,13 @@
   export let autoWidth = false;
 
   /**
+   * Set to `true` when every switch sets `icon`, so the switcher fits its
+   * switches from the first render, server-rendered markup included. The
+   * switcher infers icon-only once its switches register, and that wins.
+   */
+  export let iconOnly = false;
+
+  /**
    * Obtain a reference to the tablist HTML element.
    * @type {HTMLDivElement | null}
    * @bindable readonly
@@ -137,8 +144,11 @@
     return { panelBySwitch, switchByPanel };
   });
 
-  // Inferred when every registered switch provides an `icon`.
-  $: iconOnly = switches.length > 0 && switches.every((s) => s.icon);
+  // Inferred when every registered switch provides an `icon`. The switches
+  // register after the switcher renders, never on the server, so until
+  // then the `iconOnly` prop stands in.
+  $: isIconOnly =
+    switches.length > 0 ? switches.every((s) => s.icon) : iconOnly;
 
   $: if (selectedId !== undefined && switches) {
     syncSelection();
@@ -479,7 +489,7 @@
   class:bx--content-switcher={true}
   class:bx--content-switcher--sm={effectiveSize === "sm"}
   class:bx--content-switcher--xl={effectiveSize === "xl"}
-  class:bx--content-switcher--icon-only={iconOnly}
+  class:bx--content-switcher--icon-only={isIconOnly}
   class:bx--content-switcher--low-contrast={lowContrast}
   class:bx--content-switcher--auto-width={autoWidth}
   {...$$restProps}

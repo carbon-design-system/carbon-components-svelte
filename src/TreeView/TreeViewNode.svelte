@@ -118,13 +118,19 @@
     treeKey,
   } = getContext("carbon:TreeView");
 
-  function offset() {
-    const depth = computeTreeLeafDepth(refLabel) - 1;
+  /**
+   * The label's inset, in rem, at a depth (0 at the root).
+   * @param {number} depth
+   * @param {boolean} checkboxMode
+   * @param {boolean} isLeaf
+   * @param {any} nodeIcon
+   */
+  function offset(depth, checkboxMode, isLeaf, nodeIcon) {
     // Checkbox is the leading element; use one inset per depth. The
     // leaf/icon offsets below align text with a parent's caret and would
     // shift the checkboxes instead.
-    if (isCheckboxMode) return depth + 1;
-    return depth + (leaf && icon ? 2 : 2.5);
+    if (checkboxMode) return depth + 1;
+    return depth + (isLeaf && nodeIcon ? 2 : 2.5);
   }
 
   $: selected = $selectedIdSet.has(id);
@@ -160,11 +166,10 @@
 
     prevActiveId = $activeNodeId;
   }
-  $: if (refLabel) {
-    const rem = offset();
-    refLabel.style.marginInlineStart = `-${rem}rem`;
-    refLabel.style.paddingInlineStart = `${rem}rem`;
-  }
+  // From `level` until the label is in the DOM, so the server's markup is
+  // indented; then from the DOM, for nodes placed by hand.
+  $: depth = refLabel ? computeTreeLeafDepth(refLabel) - 1 : level - 1;
+  $: inset = offset(depth, isCheckboxMode, leaf, icon);
 </script>
 
 {#if href}
@@ -228,7 +233,12 @@
         focusNode(node);
       }}
     >
-      <div bind:this={refLabel} class:bx--tree-node__label={true}>
+      <div
+        bind:this={refLabel}
+        class:bx--tree-node__label={true}
+        style:margin-inline-start="-{inset}rem"
+        style:padding-inline-start="{inset}rem"
+      >
         <svelte:component this={icon} class="bx--tree-node__icon" />
         <slot {node}> {text} </slot>
       </div>
@@ -298,7 +308,12 @@
       focusNode(node);
     }}
   >
-    <div bind:this={refLabel} class:bx--tree-node__label={true}>
+    <div
+      bind:this={refLabel}
+      class:bx--tree-node__label={true}
+      style:margin-inline-start="-{inset}rem"
+      style:padding-inline-start="{inset}rem"
+    >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
         <Checkbox
