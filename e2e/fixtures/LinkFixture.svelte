@@ -76,3 +76,11 @@
 </Link>
 
 <Link data-testid="link-disabled" disabled href="#">Disabled</Link>
+
+<Link
+  data-testid="link-themed"
+  href="#"
+  style="--cds-link-text-color: rgb(0, 128, 0)"
+>
+  Themed
+</Link>

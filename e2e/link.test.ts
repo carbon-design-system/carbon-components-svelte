@@ -112,4 +112,9 @@ test.describe("Link", () => {
     expect(rects.length).toBeGreaterThanOrEqual(2);
     expect(rects[1]).toBeGreaterThan(rects[0]);
   });
+
+  test("reads v11's link color custom properties", async ({ page }) => {
+    // The fixture sets `--cds-link-text-color` on the link itself.
+    expect(await color(page, "link-themed")).toBe("rgb(0, 128, 0)");
+  });
 });

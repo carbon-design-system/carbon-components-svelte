@@ -14,6 +14,17 @@
 @import '../../globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
 @import '../../globals/scss/css--reset';
 
+// ccs: v11's link color hooks. Set one on a link, or on an element that
+// holds links, to recolor them without restating each state. Each falls
+// back to the theme token.
+$link-text-color: var(--cds-link-text-color, #{$link-primary});
+$link-hover-text-color: var(
+  --cds-link-hover-text-color,
+  #{$link-primary-hover}
+);
+$link-visited-text-color: var(--cds-link-visited-text-color, #{$link-visited});
+$link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
+
 /// Link styles
 /// @access private
 /// @group link
@@ -23,13 +34,13 @@
     @include type-style('body-compact-01');
 
     display: inline-flex;
-    color: $link-primary;
+    color: $link-text-color;
     outline: none;
     text-decoration: none;
     transition: color $duration--fast-01 motion(standard, productive);
 
     &:hover {
-      color: $link-primary-hover;
+      color: $link-hover-text-color;
       text-decoration: underline;
     }
 
@@ -39,7 +50,8 @@
     &:active:visited:hover {
       @include focus-outline;
 
-      color: $link-primary;
+      color: $link-text-color;
+      outline-color: $link-focus-text-color;
       text-decoration: underline;
     }
 
@@ -47,15 +59,16 @@
     &:focus {
       @include focus-outline;
 
+      outline-color: $link-focus-text-color;
       text-decoration: underline;
     }
 
     &:visited {
-      color: $link-primary;
+      color: $link-text-color;
     }
 
     &:visited:hover {
-      color: $link-primary-hover;
+      color: $link-hover-text-color;
     }
   }
 
@@ -80,11 +93,11 @@
   }
 
   .#{$prefix}--link--visited:visited { // ccs: flatten
-    color: $link-visited;
+    color: $link-visited-text-color;
   }
 
   .#{$prefix}--link--visited:visited:hover { // ccs: flatten
-    color: $link-primary-hover;
+    color: $link-hover-text-color;
   }
 
   .#{$prefix}--link--disabled.#{$prefix}--link--inline {
@@ -182,11 +195,11 @@
 /// @group components
 @mixin link-visited {
   .#{$prefix}--link--visited {
-    color: $link-visited;
+    color: $link-visited-text-color;
   }
 
   .#{$prefix}--link--visited:hover {
-    color: $link-primary-hover;
+    color: $link-hover-text-color;
   }
 }
 

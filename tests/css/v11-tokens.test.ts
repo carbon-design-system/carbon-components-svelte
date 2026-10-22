@@ -64,6 +64,15 @@ const TYPE_STYLES = [
   ...[1, 2, 3, 4].map((n) => `fluid-display-0${n}`),
 ];
 
+// Carbon v11 component hooks. A consumer sets them, and the CSS reads each
+// with the theme token as its fallback, so nothing declares them.
+const V11_HOOKS = new Set([
+  "link-text-color",
+  "link-hover-text-color",
+  "link-visited-text-color",
+  "link-focus-text-color",
+]);
+
 describe("Carbon v11 tokens", () => {
   let css = "";
   beforeAll(async () => {
@@ -85,7 +94,11 @@ describe("Carbon v11 tokens", () => {
 
   it("declares every token it reads", () => {
     const names = declared();
-    expect([...read()].filter((name) => !names.has(name))).toEqual([]);
+    expect(
+      [...read()].filter((name) => !names.has(name) && !V11_HOOKS.has(name)),
+    ).toEqual([]);
+    // Each hook is still read, so a stale entry does not hide a typo.
+    expect([...V11_HOOKS].filter((name) => !read().has(name))).toEqual([]);
   });
 
   // A scope that re-points a token nothing reads has no effect, which is how
