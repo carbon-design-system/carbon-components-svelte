@@ -1,5 +1,5 @@
 {
-  "source": "@carbon/themes 11.83.0 on npm: buttonTokens, tagTokens and notificationTokens, and the white, g10, g90 and g100 theme objects. Holds the tokens all.css declares, as [white, g10, g90, g100]; null where the package leaves a theme out.",
+  "source": "@carbon/themes 11.83.0 on npm: buttonTokens, tagTokens, notificationTokens, contentSwitcherTokens and statusTokens, and the white, g10, g90 and g100 theme objects. Holds the tokens all.css declares, as [white, g10, g90, g100]; null where the package leaves a theme out.",
   "component": {
     "button-separator": ["#e0e0e0", "#e0e0e0", "#161616", "#161616"],
     "button-primary": ["#0f62fe", "#0f62fe", "#0f62fe", "#0f62fe"],
@@ -85,7 +85,64 @@
       "#393939",
       "#262626"
     ],
-    "notification-action-hover": ["#ffffff", "#ffffff", null, null]
+    "notification-action-hover": ["#ffffff", "#ffffff", null, null],
+    "notification-action-tertiary-inverse": [
+      "#ffffff",
+      "#ffffff",
+      "#0f62fe",
+      "#0f62fe"
+    ],
+    "notification-action-tertiary-inverse-active": [
+      "#c6c6c6",
+      "#c6c6c6",
+      "#002d9c",
+      "#002d9c"
+    ],
+    "notification-action-tertiary-inverse-hover": [
+      "#f4f4f4",
+      "#f4f4f4",
+      "#0050e6",
+      "#0050e6"
+    ],
+    "notification-action-tertiary-inverse-text": [
+      "#161616",
+      "#161616",
+      "#ffffff",
+      "#ffffff"
+    ],
+    "notification-action-tertiary-inverse-text-on-color-disabled": [
+      "rgba(255, 255, 255, 0.25)",
+      "rgba(255, 255, 255, 0.25)",
+      "#8d8d8d",
+      "#8d8d8d"
+    ],
+    "content-switcher-background": [
+      "#e0e0e0",
+      "#e0e0e0",
+      "rgba(0, 0, 0, 0)",
+      "rgba(0, 0, 0, 0)"
+    ],
+    "content-switcher-background-hover": [
+      "#d1d1d1",
+      "#d1d1d1",
+      "rgba(141, 141, 141, 0.12)",
+      "rgba(141, 141, 141, 0.12)"
+    ],
+    "content-switcher-selected": [
+      "#ffffff",
+      "#ffffff",
+      "rgba(141, 141, 141, 0.24)",
+      "rgba(141, 141, 141, 0.24)"
+    ],
+    "status-red": ["#da1e28", "#da1e28", "#fa4d56", "#fa4d56"],
+    "status-orange": ["#ff832b", "#ff832b", "#ff832b", "#ff832b"],
+    "status-orange-outline": ["#ba4e00", "#ba4e00", null, null],
+    "status-yellow": ["#f1c21b", "#f1c21b", "#f1c21b", "#f1c21b"],
+    "status-yellow-outline": ["#8e6a00", "#8e6a00", null, null],
+    "status-green": ["#24a148", "#24a148", "#42be65", "#42be65"],
+    "status-blue": ["#0043ce", "#0043ce", "#4589ff", "#4589ff"],
+    "status-purple": ["#8a3ffc", "#8a3ffc", "#a56eff", "#a56eff"],
+    "status-gray": ["#6f6f6f", "#6f6f6f", "#8d8d8d", "#8d8d8d"]
   },
   "theme": {
     "background": ["#ffffff", "#f4f4f4", "#262626", "#161616"],

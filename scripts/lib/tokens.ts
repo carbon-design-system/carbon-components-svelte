@@ -43,7 +43,7 @@ const ROOT_BLOCK =
 const DECLARATION = /--cds-([\w-]+)\s*:\s*([^;]+)/g;
 const COLOR = /^(#[\da-f]{3,8}|rgba?\(|hsla?\(|transparent$)/i;
 /** Carbon v11's component tokens; every other color is a theme token. */
-const COMPONENT = /^(button|tag|notification)-/;
+const COMPONENT = /^(button|tag|notification|content-switcher|status)-/;
 const TYPE_SIZE = /^(.+)-font-size$/;
 
 /**

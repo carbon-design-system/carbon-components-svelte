@@ -136,4 +136,132 @@ $notification-colors: (
       ),
     ),
   ),
+
+  // ccs: v11's actionable notification button. v11 has no g80 theme, so g80
+  // takes g90's values, as the v11 tokens the themes lacked do.
+  'notification-action-tertiary-inverse': (
+    fallback: $carbon__white-0,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__white-0,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__white-0,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__blue-60,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__blue-60,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__blue-60,
+      ),
+    ),
+  ),
+  'notification-action-tertiary-inverse-active': (
+    fallback: $carbon__gray-30,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__gray-30,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__gray-30,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__blue-80,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__blue-80,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__blue-80,
+      ),
+    ),
+  ),
+  'notification-action-tertiary-inverse-hover': (
+    fallback: $carbon__gray-10,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__gray-10,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__gray-10,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $blue-60-hover,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $blue-60-hover,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $blue-60-hover,
+      ),
+    ),
+  ),
+  'notification-action-tertiary-inverse-text': (
+    fallback: $carbon__gray-100,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__gray-100,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__gray-100,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__white-0,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__white-0,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__white-0,
+      ),
+    ),
+  ),
+  'notification-action-tertiary-inverse-text-on-color-disabled': (
+    fallback: rgba($carbon__white-0, 0.25),
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: rgba($carbon__white-0, 0.25),
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: rgba($carbon__white-0, 0.25),
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__gray-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__gray-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__gray-50,
+      ),
+    ),
+  ),
 );

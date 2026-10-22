@@ -225,7 +225,24 @@ export type ComponentToken =
   | "notification-background-success"
   | "notification-background-info"
   | "notification-background-warning"
-  | "notification-action-hover";
+  | "notification-action-hover"
+  | "notification-action-tertiary-inverse"
+  | "notification-action-tertiary-inverse-active"
+  | "notification-action-tertiary-inverse-hover"
+  | "notification-action-tertiary-inverse-text"
+  | "notification-action-tertiary-inverse-text-on-color-disabled"
+  | "content-switcher-background"
+  | "content-switcher-background-hover"
+  | "content-switcher-selected"
+  | "status-red"
+  | "status-orange"
+  | "status-orange-outline"
+  | "status-yellow"
+  | "status-yellow-outline"
+  | "status-green"
+  | "status-blue"
+  | "status-purple"
+  | "status-gray";
 
 export type TypeToken =
   | "label-01"

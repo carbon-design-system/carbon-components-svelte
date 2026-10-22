@@ -1,0 +1,87 @@
+// ccs: Carbon v11's content switcher tokens, which v10 lacks, with the
+// @carbon/themes values. v11 has no g80 theme, so g80 takes g90's values, as
+// the v11 tokens the themes lacked do. The dark values are translucent, so
+// they suit g80's background as they do g90's.
+
+@import '../../globals/scss/theme-tokens';
+@import '../../globals/scss/vendor/@carbon/elements/scss/colors/colors';
+@import '../../globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+
+// prettier-ignore
+$content-switcher-colors: (
+  'content-switcher-background': (
+    fallback: $carbon__gray-20,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__gray-20,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__gray-20,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: rgba($carbon__black-100, 0),
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: rgba($carbon__black-100, 0),
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: rgba($carbon__black-100, 0),
+      ),
+    ),
+  ),
+  'content-switcher-background-hover': (
+    fallback: $gray-20-hover,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $gray-20-hover,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $gray-20-hover,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: rgba($carbon__gray-50, 0.12),
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: rgba($carbon__gray-50, 0.12),
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: rgba($carbon__gray-50, 0.12),
+      ),
+    ),
+  ),
+  'content-switcher-selected': (
+    fallback: $carbon__white-0,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__white-0,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__white-0,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: rgba($carbon__gray-50, 0.24),
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: rgba($carbon__gray-50, 0.24),
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: rgba($carbon__gray-50, 0.24),
+      ),
+    ),
+  ),
+);

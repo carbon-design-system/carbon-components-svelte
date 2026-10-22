@@ -15,14 +15,16 @@ const THEME_ENTRIES = [
 ];
 
 // all.scss needs the component token maps before its `:root` theme blocks;
-// these imports define variables only and emit no CSS. `./ai-tokens` holds
-// the v11 AI tokens, which v10 does not vendor; `./text-tokens` the library's
-// own text colors, declared as `--ccs-*`.
+// these imports define variables only and emit no CSS. `./ai-tokens` and
+// `./status-tokens` hold v11 tokens that v10 does not vendor; `./text-tokens`
+// the library's own text colors, declared as `--ccs-*`.
 const ALL_ONLY_IMPORTS = [
   "carbon-components/scss/globals/scss/component-tokens",
   "carbon-components/scss/components/tag/tokens",
   "carbon-components/scss/components/notification/tokens",
+  "carbon-components/scss/components/content-switcher/tokens",
   "./ai-tokens",
+  "./status-tokens",
   "./text-tokens",
 ];
 
@@ -33,6 +35,7 @@ const UNREGISTERED_PARTIALS = [
   "_fluid-shared.scss",
   "_spacing-scale.scss",
   "_status-colors.scss",
+  "_status-tokens.scss",
   "_text-tokens.scss",
   MANIFEST,
 ];

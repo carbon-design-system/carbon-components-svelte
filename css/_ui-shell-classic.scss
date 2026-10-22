@@ -20,6 +20,8 @@ $ccs-themes: (
   @include carbon--theme($carbon--theme--g100, true, $ccs-themes) {
     @include emit-component-tokens($tag-colors, $ccs-themes);
     @include emit-component-tokens($notification-colors, $ccs-themes);
+    @include emit-component-tokens($content-switcher-colors, $ccs-themes);
+    @include emit-component-tokens($status-colors, $ccs-themes);
   }
 
   // The header panel is always g100 (dark) in the classic variant, regardless of
@@ -56,6 +58,8 @@ html {
   @include carbon--theme($carbon--theme--white, true, $ccs-themes) {
     @include emit-component-tokens($tag-colors, $ccs-themes);
     @include emit-component-tokens($notification-colors, $ccs-themes);
+    @include emit-component-tokens($content-switcher-colors, $ccs-themes);
+    @include emit-component-tokens($status-colors, $ccs-themes);
   }
 }
 }
