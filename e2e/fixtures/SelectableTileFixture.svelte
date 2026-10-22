@@ -20,3 +20,6 @@
   >
 </SelectableTileGroup>
 <div data-testid="selected-values">{selected.join(",") || "none"}</div>
+<SelectableTile disabled data-testid="selectable-tile-disabled"
+  >Option Z</SelectableTile
+>
