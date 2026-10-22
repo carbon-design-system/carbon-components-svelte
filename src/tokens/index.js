@@ -390,7 +390,7 @@ export const colorTokens = {
   "border-interactive": {
     white: "#0f62fe",
     g10: "#0f62fe",
-    g80: "#4589ff",
+    g80: "#78a9ff",
     g90: "#4589ff",
     g100: "#4589ff",
   },
@@ -537,7 +537,7 @@ export const colorTokens = {
   "text-helper": {
     white: "#6f6f6f",
     g10: "#6f6f6f",
-    g80: "#a8a8a8",
+    g80: "#c6c6c6",
     g90: "#c6c6c6",
     g100: "#a8a8a8",
   },
@@ -565,7 +565,7 @@ export const colorTokens = {
   "text-placeholder": {
     white: "#6f6f6f",
     g10: "#6f6f6f",
-    g80: "#a8a8a8",
+    g80: "#c6c6c6",
     g90: "#c6c6c6",
     g100: "#a8a8a8",
   },
