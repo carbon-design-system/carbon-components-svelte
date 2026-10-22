@@ -112,6 +112,28 @@ describe("TooltipIcon", () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it.each([
+    { key: "Escape", isComposing: true },
+    { key: "Escape", keyCode: 229 },
+  ])(
+    "stays open when Escape cancels an IME composition in another field (%o)",
+    async (init) => {
+      const onClose = vi.fn();
+      render(TooltipIcon, { props: { onClose, withInput: true } });
+
+      const trigger = screen.getByRole("button");
+      await user.hover(trigger);
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+
+      const input = screen.getByRole("textbox", { name: "Unrelated" });
+      input.focus();
+      await fireEvent.keyDown(input, init);
+
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
+
   it("should dispatch open event on focus", async () => {
     const onOpen = vi.fn();
     render(TooltipIcon, { props: { onOpen } });

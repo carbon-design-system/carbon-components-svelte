@@ -120,6 +120,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -171,6 +172,8 @@
 
   function handleKeydown(event) {
     if (event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (isImeComposition(event)) return;
       // Let Escape reach a parent (e.g. a Modal) when nothing was dismissed.
       if (open) event.stopPropagation();
       // With `hideIcon`, the trigger is `ref` and `refIcon` is never bound.
@@ -184,7 +187,8 @@
   // Escape. Focus inside the tooltip is left to `handleKeydown`, so nested
   // widgets still get Escape first.
   function handleWindowKeydown(event) {
-    if (event.key !== "Escape" || !open) return;
+    // Escape that cancels an IME composition is not a close.
+    if (event.key !== "Escape" || !open || isImeComposition(event)) return;
     const target = event.target;
     if (ref?.contains(target) || refTooltip?.contains(target)) return;
     event.stopPropagation();

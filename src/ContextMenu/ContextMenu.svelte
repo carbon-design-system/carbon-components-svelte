@@ -59,6 +59,7 @@
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -237,7 +238,10 @@
     if (open && isOutsideClick(event, ref)) close("outside-click");
   }
   function handleEscape(event) {
-    if (open && event.key === "Escape") close("escape-key");
+    // Escape that cancels an IME composition is not a close.
+    if (open && event.key === "Escape" && !isImeComposition(event)) {
+      close("escape-key");
+    }
   }
 </script>
 

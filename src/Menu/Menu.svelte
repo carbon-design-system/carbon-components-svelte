@@ -112,6 +112,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -292,6 +293,8 @@
     // Tab is treated like Escape: without this, focus would leave the
     // (possibly portaled) menu for whatever happens to be next in the DOM.
     if (event.key === "Escape" || event.key === "Tab") {
+      // Escape that cancels an IME composition is not a close.
+      if (event.key === "Escape" && isImeComposition(event)) return;
       event.preventDefault();
       close("escape-key");
     }

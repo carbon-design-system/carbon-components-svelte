@@ -17,6 +17,8 @@
   export let leaveDelayMs = 0;
   export let onOpen: () => void = () => {};
   export let onClose: () => void = () => {};
+  // Renders a text field outside the tooltip.
+  export let withInput = false;
 </script>
 
 <TooltipIcon
@@ -42,3 +44,6 @@
   <slot name="tooltipText" />
   <slot />
 </TooltipIcon>
+{#if withInput}
+  <input aria-label="Unrelated">
+{/if}
