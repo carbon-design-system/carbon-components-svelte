@@ -57,7 +57,10 @@
    */
   export let modalAriaLabel = undefined;
 
-  /** Specify the ARIA label for the close icon */
+  /**
+   * Specify the label of the close button.
+   * It names the button and shows in its tooltip.
+   */
   export let iconDescription = "Close the modal";
 
   /** Set to `true` if the modal contains form elements */
@@ -222,7 +225,9 @@
         container,
       ],
     });
+    initialFocusTarget = target;
     target?.focus();
+    initialFocusTarget = null;
   }
 
   const lifecycle = createDialogLifecycle({
@@ -244,7 +249,13 @@
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
-  setContext(MODAL_CONTEXT_KEY, {});
+  // The element initial focus is moving to, while it moves. An icon-only
+  // Button there keeps its tooltip closed, so a single Escape still closes
+  // the modal.
+  let initialFocusTarget = null;
+  setContext(MODAL_CONTEXT_KEY, {
+    isInitialFocus: (node) => node != null && node === initialFocusTarget,
+  });
   // As in v11, the modal starts a layer at level 0 wherever it renders,
   // and its body is a layer at level 1, so a `Layer` inside sits at 2.
   setContext(LAYER_CONTEXT_KEY, readable(2));
@@ -385,17 +396,26 @@
   >
     <div class:bx--modal-header={true}>
       {#if passiveModal && !hideCloseButton}
-        <button
-          bind:this={buttonRef}
-          type="button"
-          aria-label={iconDescription}
-          class:bx--modal-close={true}
-          on:click={() => {
-            close("close-button");
-          }}
-        >
-          <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
-        </button>
+        <div class:bx--modal-close-button={true}>
+          <Button
+            bind:ref={buttonRef}
+            kind="ghost"
+            class="bx--modal-close"
+            {iconDescription}
+            aria-label={iconDescription}
+            tooltipPosition="left"
+            on:click={() => {
+              close("close-button");
+            }}
+          >
+            <Close
+              slot="icon"
+              size={20}
+              class="bx--modal-close__icon"
+              aria-hidden="true"
+            />
+          </Button>
+        </div>
       {/if}
       {#if modalLabel}
         <h2 id={modalLabelId} class:bx--modal-header__label={true}>
@@ -415,17 +435,26 @@
         </Decorator>
       {/if}
       {#if !passiveModal && !hideCloseButton}
-        <button
-          bind:this={buttonRef}
-          type="button"
-          aria-label={iconDescription}
-          class:bx--modal-close={true}
-          on:click={() => {
-            close("close-button");
-          }}
-        >
-          <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
-        </button>
+        <div class:bx--modal-close-button={true}>
+          <Button
+            bind:ref={buttonRef}
+            kind="ghost"
+            class="bx--modal-close"
+            {iconDescription}
+            aria-label={iconDescription}
+            tooltipPosition="left"
+            on:click={() => {
+              close("close-button");
+            }}
+          >
+            <Close
+              slot="icon"
+              size={20}
+              class="bx--modal-close__icon"
+              aria-hidden="true"
+            />
+          </Button>
+        </div>
       {/if}
     </div>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->

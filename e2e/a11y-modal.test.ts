@@ -30,4 +30,21 @@ test.describe("Modal a11y", () => {
       expect.soft(results.violations, status).toEqual([]);
     }
   });
+
+  test("has no violations with the close button tooltip open", async ({
+    page,
+  }) => {
+    await page.goto("/modal-v11.html");
+    await page.getByTestId("open-modal").click();
+    await page.getByRole("button", { name: "Close the modal" }).focus();
+    await expect(page.locator(".bx--tooltip-portal__content")).toBeVisible();
+
+    // The tooltip is portalled to <body>, outside #app.
+    const results = await new AxeBuilder({ page })
+      .include("#app")
+      .include("[data-floating-portal]")
+      .analyze();
+
+    expect(results.violations).toEqual([]);
+  });
 });

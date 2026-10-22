@@ -53,3 +53,105 @@ test.describe("Modal loadingStatus", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("Modal close button tooltip", () => {
+  for (const { name, trigger, root, label } of [
+    {
+      name: "Modal",
+      trigger: "open-modal",
+      root: "modal",
+      label: "Close the modal",
+    },
+    {
+      name: "ComposedModal",
+      trigger: "open-composed-modal",
+      root: "composed-modal",
+      label: "Close",
+    },
+  ]) {
+    test(`${name}: shows the label to the left on hover`, async ({ page }) => {
+      await page.goto("/modal-v11.html");
+      await page.getByTestId(trigger).click();
+      const close = page.getByTestId(root).getByRole("button", { name: label });
+      const tooltip = page.locator(".bx--tooltip-portal__content");
+
+      await expect(tooltip).toHaveCount(0);
+      await close.hover();
+
+      await expect(tooltip).toHaveText(label);
+      const closeLeft = (await close.boundingBox())?.x ?? 0;
+      const tooltipBox = await tooltip.boundingBox();
+      expect(tooltipBox).not.toBeNull();
+      expect(
+        (tooltipBox?.x ?? 0) + (tooltipBox?.width ?? 0),
+      ).toBeLessThanOrEqual(closeLeft);
+    });
+
+    test(`${name}: Escape hides the tooltip, then closes the modal`, async ({
+      page,
+    }) => {
+      await page.goto("/modal-v11.html");
+      await page.getByTestId(trigger).click();
+      const modal = page.getByTestId(root);
+      await expect(modal).toHaveClass(/is-visible/);
+      const close = modal.getByRole("button", { name: label });
+      const tooltip = page.locator(".bx--tooltip-portal__content");
+
+      await close.focus();
+      await expect(tooltip).toHaveText(label);
+
+      await page.keyboard.press("Escape");
+      await expect(tooltip).toHaveCount(0);
+      await expect(modal).toHaveClass(/is-visible/);
+      await expect(close).toBeFocused();
+
+      await page.keyboard.press("Escape");
+      await expect(modal).not.toHaveClass(/is-visible/);
+    });
+  }
+});
+
+test.describe("Passive modal close button as initial focus", () => {
+  for (const opener of ["click", "keyboard"] as const) {
+    test(`closes on one Escape when opened by ${opener}`, async ({ page }) => {
+      await page.goto("/modal-v11.html");
+      const trigger = page.getByTestId("open-passive-modal");
+      if (opener === "click") {
+        await trigger.click();
+      } else {
+        await trigger.focus();
+        await page.keyboard.press("Enter");
+      }
+      const modal = page.getByTestId("passive-modal");
+      const close = modal.getByRole("button", { name: "Close the modal" });
+      await expect(close).toBeFocused();
+      await expect(page.locator(".bx--tooltip-portal__content")).toHaveCount(0);
+
+      await page.keyboard.press("Escape");
+      await expect(modal).not.toHaveClass(/is-visible/);
+    });
+  }
+
+  test("shows the tooltip when Tab brings focus back", async ({ page }) => {
+    await page.goto("/modal-v11.html");
+    await page.getByTestId("open-passive-modal").focus();
+    await page.keyboard.press("Enter");
+    const modal = page.getByTestId("passive-modal");
+    const close = modal.getByRole("button", { name: "Close the modal" });
+    const tooltip = page.locator(".bx--tooltip-portal__content");
+    await expect(close).toBeFocused();
+
+    await page.keyboard.press("Tab");
+    await expect(close).not.toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(close).toBeFocused();
+    await expect(tooltip).toHaveText("Close the modal");
+
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toHaveCount(0);
+    await expect(modal).toHaveClass(/is-visible/);
+
+    await page.keyboard.press("Escape");
+    await expect(modal).not.toHaveClass(/is-visible/);
+  });
+});

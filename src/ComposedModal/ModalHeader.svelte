@@ -17,7 +17,10 @@
   /** Specify the close icon class */
   export let closeIconClass = "";
 
-  /** Specify the ARIA label for the close icon */
+  /**
+   * Specify the label of the close button.
+   * It names the button and shows in its tooltip.
+   */
   export let iconDescription = "Close";
 
   /**
@@ -27,6 +30,7 @@
   export let hideCloseButton = false;
 
   import { getContext, onMount } from "svelte";
+  import Button from "../Button/Button.svelte";
   import Close from "../icons/Close.svelte";
 
   const { closeModal, updateLabel, updateTitle, ids, registerHeader } =
@@ -63,19 +67,23 @@
   {/if}
   <slot />
   {#if !hideCloseButton}
-    <button
-      type="button"
-      aria-label={iconDescription}
-      class:bx--modal-close={true}
-      class={closeClass}
-      on:click
-      on:click={closeModal}
-    >
-      <Close
-        size={20}
-        class="bx--modal-close__icon {closeIconClass}"
-        aria-hidden="true"
-      />
-    </button>
+    <div class:bx--modal-close-button={true}>
+      <Button
+        kind="ghost"
+        class="bx--modal-close {closeClass}"
+        {iconDescription}
+        aria-label={iconDescription}
+        tooltipPosition="left"
+        on:click
+        on:click={closeModal}
+      >
+        <Close
+          slot="icon"
+          size={20}
+          class="bx--modal-close__icon {closeIconClass}"
+          aria-hidden="true"
+        />
+      </Button>
+    </div>
   {/if}
 </div>

@@ -9,6 +9,7 @@
 
   let open = false;
   let composedOpen = false;
+  let passiveOpen = false;
   /** @type {"inactive" | "active" | "finished" | "error"} */
   let loadingStatus = "inactive";
   let successCount = 0;
@@ -24,6 +25,24 @@
 >
   Open composed modal
 </button>
+
+<button
+  type="button"
+  data-testid="open-passive-modal"
+  on:click={() => (passiveOpen = true)}
+>
+  Open passive modal
+</button>
+
+<Modal
+  data-testid="passive-modal"
+  bind:open={passiveOpen}
+  passiveModal
+  modalHeading="Release notes"
+>
+  <p>Version 2.4 adds audit logs.</p>
+  <a href="#changelog">Read the changelog</a>
+</Modal>
 
 <Modal
   data-testid="modal"

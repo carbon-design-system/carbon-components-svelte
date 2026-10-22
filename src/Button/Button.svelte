@@ -289,6 +289,14 @@
   function handleFocus() {
     if (!(hasTooltip || usePortal) || disabled) return;
     focused = true;
+    // A modal moving its initial focus here did not ask for the tooltip.
+    // Treat it as dismissed, so Escape reaches the modal, until the next
+    // pointer enter or focus.
+    if (insideModal?.isInitialFocus?.(ref)) {
+      dismissed = true;
+      tooltipShown = false;
+      return;
+    }
     dismissed = false;
     tooltipShown = true;
     tooltipHandoff.claim({ instant: true });
