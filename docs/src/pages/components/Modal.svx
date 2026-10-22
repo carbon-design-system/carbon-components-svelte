@@ -131,6 +131,14 @@ Set `primaryButtonLoading` while an async submit is in progress. The primary but
 
 <FileSource src="/framed/Modal/ModalPrimaryButtonLoading" />
 
+### Loading status
+
+Set `loadingStatus` to show the progress of the primary action in its button: `"active"` while the work runs, then `"finished"` or `"error"`. Any status other than `"inactive"` disables the footer buttons and suppresses `submit`. After `"finished"`, the modal dispatches `loading:success` when the [InlineLoading](/components/InlineLoading) success delay ends. Close the modal there.
+
+`primaryButtonLoading` is the same as `"active"`, except that the secondary buttons stay enabled.
+
+<FileSource src="/framed/Modal/ModalLoadingStatus" />
+
 ### Secondary button loading
 
 Secondary buttons support their own, independent loading state, useful when a secondary action (such as "Save as draft") is itself async. For `secondaryButtons`, set `loading` (and optionally `loadingDescription`) on the entry; for `secondaryButtonText`, use `secondaryButtonLoading` and `secondaryButtonLoadingDescription`. A loading secondary button shows its own `InlineLoading` spinner and becomes non-interactive, independent of `primaryButtonLoading`.
