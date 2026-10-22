@@ -141,6 +141,12 @@
     }
   }
 
+  // ccs: v11's selectable tile shows its checkbox in every state, empty
+  // until selected
+  .#{$prefix}--tile__checkmark--persistent {
+    opacity: 1;
+  }
+
   .#{$prefix}--tile__chevron {
     position: absolute;
     right: $carbon--spacing-05;
@@ -270,9 +276,9 @@
     border-color: $icon-disabled;
   }
 
-  .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected
-    .#{$prefix}--tile__checkmark
-    svg {
+  // ccs: every disabled tile, as in v11, so an unselected tile's empty
+  // checkbox grays out too
+  .#{$prefix}--tile--disabled .#{$prefix}--tile__checkmark svg {
     fill: $icon-disabled;
   }
 }
@@ -334,6 +340,34 @@
 
 @include exports("tile-expandable-interactive") {
   @include tile-expandable-interactive;
+}
+
+// carbon-components-svelte patch (tile-checkbox-forced-colors)
+
+/// `SelectableTile`'s checkbox in forced-colors mode
+/// @access private
+/// @group components
+@mixin tile-checkbox-forced-colors {
+  // Forced colors leave an SVG fill alone, so the empty box kept its token
+  // gray and a selected box its token fill. Follow the tile's text, fill a
+  // selected box with `Highlight`, and gray out a disabled tile's box.
+  @media (forced-colors: active) {
+    .#{$prefix}--tile__checkmark--persistent svg {
+      fill: currentColor;
+    }
+
+    .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark--persistent svg {
+      fill: Highlight;
+    }
+
+    .#{$prefix}--tile--disabled .#{$prefix}--tile__checkmark--persistent svg {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("tile-checkbox-forced-colors") {
+  @include tile-checkbox-forced-colors;
 }
 
 // carbon-components-svelte patch (tile-clickable-icon)

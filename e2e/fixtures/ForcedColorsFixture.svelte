@@ -18,6 +18,7 @@
     Popover,
     ProgressBar,
     SelectableTag,
+    SelectableTile,
     ShapeIndicator,
     StructuredList,
     StructuredListBody,
@@ -103,6 +104,11 @@
 
   <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
   <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>
+
+  <SelectableTile>Selectable tile</SelectableTile>
+  <SelectableTile selected>Selected tile</SelectableTile>
+  <SelectableTile disabled>Disabled selectable tile</SelectableTile>
+  <SelectableTile selected disabled>Disabled selected tile</SelectableTile>
 
   <ProgressBar labelText="Progress" value={50} />
   <ProgressBar labelText="Indeterminate" />

@@ -17,7 +17,7 @@
 
   /**
    * Set the size: `"sm"` for a compact tile, such as a row in a list of
-   * choices, with less padding, no minimum height, and the checkmark
+   * choices, with less padding, no minimum height, and the checkbox
    * pulled in. Defaults to the size of a parent tile group.
    * @type {"sm" | "md"}
    */
@@ -48,7 +48,7 @@
   export let tabindex = "0";
 
   /**
-   * Specify the title of the checkmark icon, shown as a tooltip on hover.
+   * Specify the title of the checkbox icon, shown as a tooltip on hover.
    * The icon is hidden from assistive technology.
    */
   export let iconDescription = "Tile checkmark";
@@ -77,7 +77,8 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import CheckboxCheckedFilled from "../icons/CheckboxCheckedFilled.svelte";
+  import CheckboxIcon from "../icons/CheckboxIcon.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
@@ -228,8 +229,19 @@
     on:mouseenter
     on:mouseleave
   >
-    <span aria-hidden="true" class:bx--tile__checkmark={true}>
-      <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
+    <span
+      aria-hidden="true"
+      class:bx--tile__checkmark={true}
+      class:bx--tile__checkmark--persistent={true}
+    >
+      {#if selected}
+        <CheckboxCheckedFilled
+          aria-label={iconDescription}
+          title={iconDescription}
+        />
+      {:else}
+        <CheckboxIcon aria-label={iconDescription} title={iconDescription} />
+      {/if}
     </span>
     <span class:bx--tile-content={true}> <slot /> </span>
   </label>

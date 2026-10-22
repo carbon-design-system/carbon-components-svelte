@@ -86,6 +86,26 @@ describe("SelectableTile", () => {
     expect(checkmark).toHaveAttribute("aria-hidden", "true");
   });
 
+  it("shows an empty checkbox until selected, then a checked one", async () => {
+    render(SelectableTileTest);
+    const tile = screen.getByTestId("selectable-tile");
+    const checkmark = tile.querySelector(".bx--tile__checkmark");
+    // Only the checked icon has a check cut out of its box.
+    const checkedIcon = () =>
+      checkmark?.querySelector('[data-icon-path="inner-path"]');
+
+    expect(checkmark).toHaveClass("bx--tile__checkmark--persistent");
+    expect(checkmark?.querySelectorAll("svg")).toHaveLength(1);
+    expect(checkedIcon()).toBeNull();
+
+    await user.click(tile);
+    expect(checkmark?.querySelectorAll("svg")).toHaveLength(1);
+    expect(checkedIcon()).not.toBeNull();
+
+    await user.click(tile);
+    expect(checkedIcon()).toBeNull();
+  });
+
   describe("interaction", () => {
     const activate = {
       click: () => user.click(screen.getByTestId("selectable-tile")),

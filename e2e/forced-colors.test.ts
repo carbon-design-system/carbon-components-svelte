@@ -156,6 +156,38 @@ test.describe("forced colors", () => {
     expect.soft(disabled.fill).toBe(system.GrayText);
   });
 
+  // The empty and the checked box differ only in shape and fill, and the
+  // forced border is the same either way, so the fill carries the state.
+  test("selectable tile checkboxes follow the text, fill with Highlight when selected, or read GrayText when disabled", async ({
+    page,
+  }) => {
+    const states = await page.evaluate(() =>
+      [
+        ".bx--tile--selectable:not(.bx--tile--is-selected):not(.bx--tile--disabled)",
+        ".bx--tile--is-selected:not(.bx--tile--disabled)",
+        ".bx--tile--disabled:not(.bx--tile--is-selected)",
+        ".bx--tile--disabled.bx--tile--is-selected",
+      ].map((selector) => {
+        const box = document.querySelector(
+          `${selector} .bx--tile__checkmark--persistent`,
+        );
+        const icon = box?.querySelector("svg");
+        if (!box || !icon) throw new Error(`no ${selector} checkbox`);
+        return {
+          color: getComputedStyle(box).color,
+          fill: getComputedStyle(icon).fill,
+          opacity: getComputedStyle(box).opacity,
+        };
+      }),
+    );
+    const [unselected, selected, disabled, disabledSelected] = states;
+    for (const state of states) expect.soft(state.opacity).toBe("1");
+    expect.soft(unselected.fill).toBe(unselected.color);
+    expect.soft(selected.fill).toBe(system.Highlight);
+    expect.soft(disabled.fill).toBe(system.GrayText);
+    expect.soft(disabledSelected.fill).toBe(system.GrayText);
+  });
+
   // [focus target, element drawing the ring, pseudo-element, ring color]
   const rings: [string, string, string | undefined, SystemColor][] = [
     [
