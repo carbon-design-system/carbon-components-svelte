@@ -350,6 +350,26 @@ The selected files, and FileUploaderDropContainer's drop area, stop at 20rem. Se
 Disable the file uploader by setting `disabled` to `true`. The add button and
 each row's remove button are disabled.
 
+### Paste uploads
+
+Set `pasteTarget` to `true` to accept screenshots and other clipboard files
+pasted anywhere on the page.
+
+Pasted files use the same size limits, duplicate detection, `maxFiles`, ordering, and
+`add` / `change` / `rejected` events as button selection. Paste is ignored when
+`disabled` is `true`.
+
+<FileSource src="/framed/FileUploader/FileUploaderPaste" />
+
+### Focused target
+
+Pass an `HTMLElement` to listen only when paste happens on that element (for
+example a bug-report form). Focus inside the form and paste a screenshot.
+
+<FileSource src="/framed/FileUploader/FileUploaderPasteFocusedTarget" />
+
+## Disabled
+
 <FileUploader
   disabled
   multiple
