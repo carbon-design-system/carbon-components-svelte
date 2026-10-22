@@ -34,6 +34,7 @@
   import ComposedModal from "../ComposedModal/ComposedModal.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
 
   const dispatch = createEventDispatcher();
@@ -143,7 +144,7 @@
   // only ever runs for the full-screen case.
   function handleWindowKeydown(event) {
     // Escape that cancels an IME composition is not a close.
-    if (event.isComposing || event.keyCode === 229) return;
+    if (isImeComposition(event)) return;
     if (event.key === "Escape") {
       handleClose("close");
     }
