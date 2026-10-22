@@ -23,7 +23,8 @@
     undefined;
   export let selectorPrimaryFocus: ComponentProps<Modal>["selectorPrimaryFocus"] =
     "[data-modal-primary-focus]";
-  export let preventCloseOnClickOutside = false;
+  export let preventCloseOnClickOutside: ComponentProps<Modal>["preventCloseOnClickOutside"] =
+    undefined;
   export let hideCloseButton = false;
   export let size: ComponentProps<Modal>["size"] = undefined;
   export let danger = false;

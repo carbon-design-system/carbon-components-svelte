@@ -1,6 +1,9 @@
 <script>
   import { Modal, Select, SelectItem } from "carbon-components-svelte";
 
+  // `?passive` renders a passive modal, which closes on an outside click.
+  const passiveModal = new URLSearchParams(location.search).has("passive");
+
   let open = false;
   let events = [];
   let closeEvents = [];
@@ -16,6 +19,7 @@
 <Modal
   data-testid="modal"
   bind:open
+  {passiveModal}
   modalHeading="Modal title"
   primaryButtonText="Save"
   secondaryButtonText="Cancel"

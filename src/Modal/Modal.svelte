@@ -136,8 +136,15 @@
    */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
-  export let preventCloseOnClickOutside = false;
+  /**
+   * Control whether clicking outside the modal closes it.
+   * By default, a passive modal (`passiveModal`) closes and a modal with
+   * actions stays open, as in Carbon v11.
+   * Set to `true` to always keep the modal open on an outside click, or
+   * `false` to always close it.
+   * @type {boolean | undefined}
+   */
+  export let preventCloseOnClickOutside = undefined;
 
   /**
    * Set to `true` to hide the header close button.
@@ -204,6 +211,7 @@
       open = value;
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
+    passive: () => passiveModal,
     saveFocusReturn: focusReturn.save,
     restoreFocusReturn: () => focusReturn.restore(ref),
     getContainer: () => innerModalRef,

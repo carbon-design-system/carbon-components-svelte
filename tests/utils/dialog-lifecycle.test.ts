@@ -1,5 +1,8 @@
 // @vitest-environment node
-import { createDialogLifecycle } from "../../src/utils/dialog-lifecycle.js";
+import {
+  closesOnOutsideClick,
+  createDialogLifecycle,
+} from "../../src/utils/dialog-lifecycle.js";
 
 function createHarness(
   overrides: Partial<Parameters<typeof createDialogLifecycle>[0]> = {},
@@ -14,7 +17,8 @@ function createHarness(
   const lifecycle = createDialogLifecycle({
     dispatch,
     setOpen,
-    preventCloseOnClickOutside: () => false,
+    preventCloseOnClickOutside: () => undefined,
+    passive: () => true,
     saveFocusReturn,
     restoreFocusReturn,
     getContainer: () => null,
@@ -75,9 +79,9 @@ describe("createDialogLifecycle", () => {
       );
     });
 
-    it("does not close when preventCloseOnClickOutside is true", () => {
+    it("does not close a transactional dialog by default", () => {
       const { lifecycle, dispatch } = createHarness({
-        preventCloseOnClickOutside: () => true,
+        passive: () => false,
       });
 
       lifecycle.outsideDismiss.pressOutside();
@@ -85,6 +89,24 @@ describe("createDialogLifecycle", () => {
 
       expect(dispatch).not.toHaveBeenCalled();
     });
+  });
+
+  describe("closesOnOutsideClick()", () => {
+    it.each([
+      [true, undefined, true],
+      [true, true, false],
+      [true, false, true],
+      [false, undefined, false],
+      [false, true, false],
+      [false, false, true],
+    ])(
+      "passive=%s, preventCloseOnClickOutside=%s returns %s",
+      (passive, preventCloseOnClickOutside, expected) => {
+        expect(closesOnOutsideClick(preventCloseOnClickOutside, passive)).toBe(
+          expected,
+        );
+      },
+    );
   });
 
   describe("syncOpen()", () => {
