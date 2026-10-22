@@ -63,8 +63,20 @@
    */
   export let ref = null;
 
-  /** Set to `true` to mark the field as required */
+  /**
+   * Set to `true` to mark the field as required. A wrapping `<form>` blocks
+   * submission while an empty-valued option is selected, and the field shows
+   * its invalid state with `requiredInvalidText` instead of the browser's
+   * error bubble.
+   */
   export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required select blocks
+   * submission. Cleared once an option with a value is selected. `invalid`
+   * and `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select an option";
 
   /** Set to `true` for the select to be read-only */
   export let readonly = false;
@@ -106,6 +118,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -221,9 +234,16 @@
     selectedValue.set(selected ?? $defaultValue);
     syncNativeSelectValue();
   }
+  /** Set when the select, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || ($selectedValue != null && $selectedValue !== "")) {
+    requiredError = false;
+  }
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   // Invalid/warn states are suppressed when the select is disabled or read-only.
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled,
     readonly,
@@ -232,7 +252,7 @@
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
-    invalidText,
+    invalidText: shownInvalidText,
     warnText,
     helperText,
     isFluid,
@@ -285,6 +305,10 @@
             aria-readonly={readonly || undefined}
             disabled={disabled || undefined}
             required={required || undefined}
+            use:requiredInvalid={{
+              enabled: required,
+              onChange: (missing) => (requiredError = missing),
+            }}
             {id}
             {name}
             class:bx--select-input={true}
@@ -330,9 +354,9 @@
             >{readonlyText}</span
           >
         {/if}
-        {#if showInvalid && invalidText}
+        {#if showInvalid && shownInvalidText}
           <div class:bx--form-requirement={true} id={errorId} role="alert">
-            {invalidText}
+            {shownInvalidText}
           </div>
         {/if}
         {#if showWarn && warnText}
@@ -365,6 +389,10 @@
           {name}
           disabled={disabled || undefined}
           required={required || undefined}
+          use:requiredInvalid={{
+            enabled: required,
+            onChange: (missing) => (requiredError = missing),
+          }}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
           class:bx--select-input={true}
@@ -406,9 +434,9 @@
         {/if}
         {#if isFluid}
           <hr class:bx--select__divider={true}>
-          {#if showInvalid && invalidText}
+          {#if showInvalid && shownInvalidText}
             <div id={errorId} class:bx--form-requirement={true} role="alert">
-              {invalidText}
+              {shownInvalidText}
             </div>
           {/if}
           {#if showWarn && warnText}
@@ -432,9 +460,9 @@
           {helperText}
         </div>
       {/if}
-      {#if !isFluid && showInvalid && invalidText}
+      {#if !isFluid && showInvalid && shownInvalidText}
         <div id={errorId} class:bx--form-requirement={true} role="alert">
-          {invalidText}
+          {shownInvalidText}
         </div>
       {/if}
       {#if !isFluid && showWarn && warnText}
