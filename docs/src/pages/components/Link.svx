@@ -40,6 +40,17 @@ Set `muted` to `true` so the link inherits the surrounding text color instead of
   for root cause analysis and remediation steps.
 </Text>
 
+## Custom colors
+
+Set `--cds-link-text-color` on a link, or on an element that holds links, to recolor it. `--cds-link-hover-text-color`, `--cds-link-visited-text-color` and `--cds-link-focus-text-color` set the hover color, the `visited` color and the focus ring. Each falls back to its theme token.
+
+<Link
+  href="/billing/invoices"
+  style="--cds-link-text-color: var(--cds-text-secondary); --cds-link-hover-text-color: var(--cds-text-primary)"
+>
+  Billing invoices
+</Link>
+
 ## External links
 
 Use these patterns when linking to resources outside your app.
