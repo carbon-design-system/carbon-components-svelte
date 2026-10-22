@@ -65,6 +65,31 @@
     white-space: nowrap;
   }
 
+  // ccs: v11's option box and check, which keep the box centered on its
+  // text now that the base checkbox label is 20px tall.
+  .#{$prefix}--multi-select
+    .#{$prefix}--list-box__menu-item__option
+    .#{$prefix}--checkbox-label::before {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .#{$prefix}--multi-select
+    .#{$prefix}--list-box__menu-item__option
+    .#{$prefix}--checkbox-label::after {
+    top: to-rem(5px);
+  }
+
+  .#{$prefix}--multi-select
+    .#{$prefix}--list-box__menu-item__option
+    .#{$prefix}--checkbox:indeterminate
+    + .#{$prefix}--checkbox-label::after,
+  .#{$prefix}--multi-select
+    .#{$prefix}--list-box__menu-item__option
+    .#{$prefix}--checkbox-label[data-contained-checkbox-state='mixed']::after {
+    top: to-rem(9px);
+  }
+
   .#{$prefix}--multi-select
     .#{$prefix}--list-box__menu-item__option
     > .#{$prefix}--form-item {

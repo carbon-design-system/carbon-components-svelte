@@ -59,6 +59,39 @@ test.describe("Checkbox", () => {
     ).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
+  test("uses v11's checkbox metrics", async ({ page }) => {
+    const metrics = await page
+      .getByTestId("checkbox-agree")
+      .evaluate((wrapper) => {
+        const label = wrapper.querySelector(".bx--checkbox-label");
+        const text = wrapper.querySelector(".bx--checkbox-label-text");
+        if (!label || !text) throw new Error("no label");
+        const labelStyle = getComputedStyle(label);
+        const box = getComputedStyle(label, "::before");
+        const check = getComputedStyle(label, "::after");
+        return {
+          gap: getComputedStyle(wrapper).marginBottom,
+          minHeight: labelStyle.minHeight,
+          paddingTop: labelStyle.paddingTop,
+          textInset: getComputedStyle(text).paddingLeft,
+          radius: box.borderTopLeftRadius,
+          stroke: check.borderBottomWidth,
+          checkTop: check.top,
+        };
+      });
+    const { stroke, ...rest } = metrics;
+    expect(rest).toEqual({
+      gap: "6px",
+      minHeight: "20px",
+      paddingTop: "1px",
+      textInset: "10px",
+      radius: "2px",
+      checkTop: "6.5px",
+    });
+    // Chromium snaps the 1.5px stroke to whole device pixels at 1x.
+    expect(["1px", "1.5px"]).toContain(stroke);
+  });
+
   test.describe("noMargin", () => {
     test("has no outer margin", async ({ page }) => {
       const wrapper = page
