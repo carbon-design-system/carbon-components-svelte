@@ -47,45 +47,6 @@ $base-font-size: 16px !default;
   }
 }
 
-/// This function causes an error when using sass > 1.65.0
-/// Replaced with `to-rem` function
-/// @access public
-/// @param {Number} $px - Value of type in pixels
-/// @returns {Number} In rem
-/// @example to-rem(48px);
-/// @group global-typography
-/// @deprecated (For v10) Use `to-rem()`
-@function rem($px) {
-  @if unit($px) != 'px' {
-    @warn "Expected argument $px to be of type `px`, instead received: `#{unit($px)}`";
-  }
-
-  @if meta.function-exists('div', 'math') {
-    @return math.div($px, $base-font-size) * 1rem;
-  } @else {
-    @return ($px / $base-font-size) * 1rem;
-  }
-}
-
-/// Convert px to em
-/// @access public
-/// @param {Number} $px - Value of type in pixels
-/// @returns {Number} In em
-/// @example em(48px);
-/// @group global-typography
-/// @deprecated (For v10) Use `carbon--em()`
-@function em($px) {
-  @if unit($px) != 'px' {
-    @warn "Expected argument $px to be of type `px`, instead received: `#{unit($px)}`";
-  }
-
-  @if meta.function-exists('div', 'math') {
-    @return math.div($px, $base-font-size) * 1em;
-  } @else {
-    @return ($px / $base-font-size) * 1em;
-  }
-}
-
 // stylelint-disable-next-line no-invalid-position-at-import-rule
 @import '../../globals/scss/vendor/@carbon/elements/scss/type/font-family';
 // stylelint-disable-next-line no-invalid-position-at-import-rule

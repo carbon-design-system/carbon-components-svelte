@@ -26,26 +26,6 @@
 /// @type Map
 /// @access public
 /// @group @carbon/type
-$caption-01: (
-  font-size: carbon--type-scale(1),
-  font-weight: carbon--font-weight('regular'),
-  line-height: 1.34,
-  letter-spacing: 0.32px,
-) !default;
-
-/// @type Map
-/// @access public
-/// @group @carbon/type
-$caption-02: (
-  font-size: carbon--type-scale(2),
-  font-weight: carbon--font-weight('regular'),
-  line-height: 1.29,
-  letter-spacing: 0.32px,
-) !default;
-
-/// @type Map
-/// @access public
-/// @group @carbon/type
 $label-01: (
   font-size: carbon--type-scale(1),
   font-weight: carbon--font-weight('regular'),
@@ -223,16 +203,6 @@ $productive-heading-07: (
   font-weight: carbon--font-weight('light'),
   line-height: 1.19,
   letter-spacing: 0,
-) !default;
-
-/// @type Map
-/// @access public
-/// @group @carbon/type
-$expressive-heading-01: map-merge(
-  $heading-01,
-  (
-    line-height: 1.25,
-  )
 ) !default;
 
 /// @type Map

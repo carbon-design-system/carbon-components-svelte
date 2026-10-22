@@ -41,19 +41,3 @@ $carbon--type-scale: ();
   @return nth($carbon--type-scale, $step);
 }
 
-/// Set the font-size value of a selector with the value at the given `$step`
-/// @param {Number} $step
-/// @access public
-/// @group @carbon/type
-@mixin carbon--type-scale($step) {
-  font-size: carbon--type-scale($step);
-}
-
-/// Alias of `type-scale` mixin.
-/// @param {Number} $step
-/// @alias carbon--type-scale
-/// @access public
-/// @group @carbon/type
-@mixin carbon--font-size($step) {
-  font-size: carbon--type-scale($step);
-}
