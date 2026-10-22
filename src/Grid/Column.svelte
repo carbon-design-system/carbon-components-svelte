@@ -84,7 +84,7 @@
         return `bx--col-${name}`;
       } else if (typeof breakpoint === "number") {
         return `bx--col-${name}-${breakpoint}`;
-      } else if (typeof breakpoint === "object") {
+      } else if (breakpoint && typeof breakpoint === "object") {
         let bp = [];
 
         if (typeof breakpoint.span === "number") {
