@@ -16,6 +16,7 @@ import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownload
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
 import Modal from "carbon-components-svelte/Modal/Modal.svelte";
@@ -248,6 +249,11 @@ export const interactive: AriaEntry[] = [
     variant: "disabled",
     render: (attrs) => render(Link, { props: { disabled: true, ...attrs } }),
     target: () => screen.getByRole("link"),
+  },
+  {
+    name: "Loading",
+    render: (attrs) => render(Loading, { props: attrs }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "Menu",
