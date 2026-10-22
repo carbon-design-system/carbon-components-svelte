@@ -216,6 +216,9 @@
   // `flipped` aligns the menu with the button's inline end. The class and
   // the position below are physical: aligned with the button's right edge.
   $: alignRight = flipped !== rtl;
+  // Opens down from the button's left edge: until it is placed (the
+  // server's markup), such a menu takes its place in the flow instead.
+  $: belowLeft = !alignRight && direction !== "top" && !ctxBreadcrumbItem;
 
   /**
    * Everything the menu's position depends on. `afterUpdate` re-measures only
@@ -550,7 +553,12 @@
   // Use CSS custom properties instead of dynamic style injection for better
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
-  $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
+  // The button's width per size until it's measured, so a menu open in the
+  // server's markup joins its button as it does once mounted.
+  const BUTTON_WIDTHS = { xs: "1.5rem", sm: "2rem", xl: "3rem" };
+  $: overflowMenuOptionsAfterWidth = buttonWidth
+    ? `${buttonWidth}px`
+    : (BUTTON_WIDTHS[effectiveSize] ?? "2.5rem");
   $: maxHeightStyle = toCssLength(maxHeight);
 
   function handleOutsideClick(event) {
@@ -688,6 +696,7 @@
     class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
     class:bx--overflow-menu-options--scrollable={!!maxHeight}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+    class:bx--overflow-menu-options--below-left={belowLeft}
     class={menuOptionsClass}
     style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
     style:max-height={maxHeightStyle}

@@ -297,7 +297,7 @@ describe("OverflowMenu", () => {
 
     expect(allMenus.length).toBeGreaterThan(0);
     for (const menu of allMenus) {
-      expect(menu).toHaveStyle("--overflow-menu-options-after-width: 2rem");
+      expect(menu).toHaveStyle("--overflow-menu-options-after-width: 2.5rem");
     }
   });
 

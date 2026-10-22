@@ -136,7 +136,7 @@ The default slot exposes `selected`, so custom content can change with the selec
 
 ## Icon-only
 
-Set `icon` on every switch for compact, icon-only controls. The switcher becomes icon-only when all switches include an icon. Use `text` for the accessible label and tooltip. Press <DocKbd label="Escape" /> to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
+Set `icon` on every switch for compact, icon-only controls. The switcher becomes icon-only when all switches include an icon, once they register. Set `iconOnly` on the switcher to fit them from the first render, so server-rendered markup does not span its container until hydration. Use `text` for the accessible label and tooltip. Press <DocKbd label="Escape" /> to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
 
 <ContentSwitcher>
   <Switch icon={TableOfContents} text="Table of contents" />

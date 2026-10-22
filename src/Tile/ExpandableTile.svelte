@@ -260,6 +260,7 @@
     class:bx--tile--expandable={true}
     class:bx--tile--expandable--interactive={interactive}
     class:bx--tile--is-expanded={expanded}
+    class:bx--tile--unmeasured={!expanded && effectiveMaxHeight <= 0}
     class:bx--tile--decorator={$$slots.decorator}
     class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
     class:bx--tile--ai-label={$aiLabelState === "active"}
