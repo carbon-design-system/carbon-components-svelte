@@ -346,6 +346,62 @@ describe("CopyInput", () => {
     });
   });
 
+  describe("revealTimeout", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("re-obscures the value after revealTimeout elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      expect(
+        screen.getByRole("button", { name: "Hide value" }),
+      ).toHaveAttribute("aria-pressed", "true");
+
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(
+        screen.getByRole("button", { name: "Show value" }),
+      ).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("clears the timeout when hidden manually before it elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      await fireEvent.click(screen.getByRole("button", { name: "Hide value" }));
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+
+      // The first timer would have fired here had it not been cleared.
+      await vi.advanceTimersByTimeAsync(60);
+      await vi.advanceTimersByTimeAsync(60);
+
+      expect(
+        screen.getByRole("button", { name: "Show value" }),
+      ).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("keeps the value revealed when revealTimeout is unset", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle" },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      await vi.advanceTimersByTimeAsync(60_000);
+
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+    });
+  });
+
   it("async copy failure shows error feedback and dispatches copy:error", async () => {
     const error = new Error("copy failed");
     const copy = vi.fn().mockRejectedValue(error);
