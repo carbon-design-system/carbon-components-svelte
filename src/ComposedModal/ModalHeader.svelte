@@ -56,14 +56,14 @@
     </h2>
   {/if}
   {#if title}
-    <h3
+    <h2
       id={$ids.title}
       class:bx--modal-header__heading={true}
       class:bx--type-beta={true}
       class={titleClass}
     >
       {title}
-    </h3>
+    </h2>
   {/if}
   <slot />
   {#if !hideCloseButton}

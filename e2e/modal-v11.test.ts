@@ -155,3 +155,23 @@ test.describe("Passive modal close button as initial focus", () => {
     await expect(modal).not.toHaveClass(/is-visible/);
   });
 });
+
+test.describe("Modal heading", () => {
+  test("renders the heading as an h2", async ({ page }) => {
+    await openModal(page);
+
+    await expect(
+      page
+        .getByTestId("modal")
+        .getByRole("heading", { level: 2, name: "Save changes" }),
+    ).toBeVisible();
+
+    await page.goto("/modal-v11.html");
+    await page.getByTestId("open-composed-modal").click();
+    await expect(
+      page
+        .getByTestId("composed-modal")
+        .getByRole("heading", { level: 2, name: "Rename workspace" }),
+    ).toBeVisible();
+  });
+});

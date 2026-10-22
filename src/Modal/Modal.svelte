@@ -422,9 +422,9 @@
           <slot name="label">{modalLabel}</slot>
         </h2>
       {/if}
-      <h3 id={modalHeadingId} class:bx--modal-header__heading={true}>
+      <h2 id={modalHeadingId} class:bx--modal-header__heading={true}>
         <slot name="heading">{modalHeading}</slot>
-      </h3>
+      </h2>
       {#if $$slots.decorator}
         <Decorator
           class="bx--modal--inner__decorator"
