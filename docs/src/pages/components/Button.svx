@@ -84,7 +84,7 @@ Use the `icon` named slot to render custom icon markup instead of, or with diffe
 
 ### Icon-only
 
-Omit the label and provide an `iconDescription` for accessibility. This text is used as the button's tooltip and screen reader label.
+Omit the label and provide an `iconDescription` for accessibility. This text is used as the button's tooltip and screen reader label. Press Escape to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
 
 <Button iconDescription="Tooltip text" icon={Add} />
 

@@ -145,6 +145,40 @@ describe("createTooltipHandoff", () => {
     expect(onHide).toHaveBeenCalledTimes(1);
   });
 
+  it("dismiss() clears the slot and ends the group's skip window", () => {
+    const shared = group();
+    const a = createTooltipHandoff({ group: shared });
+    const b = createTooltipHandoff({ group: shared });
+    const c = createTooltipHandoff({ group: shared });
+    const onShow = vi.fn();
+
+    // b holds the slot by warm handoff, inside a's skip window.
+    a.claim();
+    a.release();
+    b.claim();
+    b.dismiss();
+    expect(get(activeTooltip)).toBe(null);
+
+    c.scheduleEnter(onShow);
+    expect(onShow).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(100);
+    expect(onShow).toHaveBeenCalledTimes(1);
+    expect(get(c.instant)).toBe(false);
+  });
+
+  it("dismiss() cancels a pending enter and leaves another tooltip's slot alone", () => {
+    const a = createTooltipHandoff({ group: group() });
+    const b = createTooltipHandoff({ group: group() });
+    const onShow = vi.fn();
+
+    b.claim();
+    a.scheduleEnter(onShow);
+    a.dismiss();
+    vi.advanceTimersByTime(100);
+    expect(onShow).not.toHaveBeenCalled();
+    expect(get(b.active)).toBe(true);
+  });
+
   it("release() is a no-op when another tooltip holds the slot", () => {
     const a = createTooltipHandoff({ group: group() });
     const b = createTooltipHandoff({ group: group() });
