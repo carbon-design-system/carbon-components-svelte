@@ -49,4 +49,26 @@ describe("Search Escape key", () => {
     await fireEvent.keyDown(input, { key: "Escape" });
     expect(onClear).not.toHaveBeenCalled();
   });
+
+  it.each([
+    { key: "Escape", isComposing: true },
+    { key: "Escape", keyCode: 229 },
+  ])(
+    "keeps the value when Escape cancels an IME composition (%o)",
+    async (init) => {
+      const onClear = vi.fn();
+
+      render(SearchEscapeCollapse, {
+        props: { expanded: true, value: "a", onClear },
+      });
+
+      const input = screen.getByRole("searchbox");
+      input.focus();
+
+      await fireEvent.keyDown(input, init);
+      expect(input).toHaveValue("a");
+      expect(onClear).not.toHaveBeenCalled();
+      expect(screen.getByRole("search")).toHaveClass("bx--search--expanded");
+    },
+  );
 });

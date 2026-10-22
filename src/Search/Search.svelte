@@ -144,6 +144,7 @@
   } from "../utils/field-status.js";
   import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
@@ -348,6 +349,8 @@
       on:keydown
       on:keydown={(event) => {
         if (event.key === "Escape") {
+          // Escape that cancels an IME composition is not a clear.
+          if (isImeComposition(event)) return;
           if (!readonly && value !== "" && value != null) {
             value = "";
             dispatchSearch?.cancel();

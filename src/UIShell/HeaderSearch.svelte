@@ -139,6 +139,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
@@ -295,6 +296,8 @@
         break;
       }
       case "Escape":
+        // Escape that cancels an IME composition is not a clear or close.
+        if (isImeComposition(event)) break;
         if (richMenuVisible) {
           // Close the menu but keep the bar active and the value intact.
           menuDismissed = true;
@@ -503,6 +506,8 @@
             );
             break;
           case "Escape":
+            // Escape that cancels an IME composition is not a clear or close.
+            if (isImeComposition(event)) break;
             if (value === "") {
               // If the search bar is empty, deactivate the input.
               active = false;
