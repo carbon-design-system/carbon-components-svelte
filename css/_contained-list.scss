@@ -88,7 +88,7 @@
   .#{$prefix}--contained-list--on-page .#{$prefix}--contained-list__header {
     @include type-style("heading-compact-01");
 
-    background-color: $background;
+    background-color: $layer-background;
     height: to-rem(48px);
     border-bottom: 1px solid $border-subtle;
     color: $text-primary;

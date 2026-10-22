@@ -22,6 +22,53 @@ describe("Layer tokens", () => {
     30_000,
   );
 
+  // A numbered token (layer-01, field-02, ...) stays on one surface however
+  // deep the Layer, so components read the contextual name. Each entry
+  // below pins a level on purpose; @carbon/styles v11 pins the same ones
+  // unless noted.
+  const PINNED: [selector: RegExp, token: string, why: string][] = [
+    [/^\.bx--box-fill-layer-0\d$/, "layer-0", "the fill names the level"],
+    [/^\.bx--scroll-gradient\S*layer-0\d$/, "layer-0", "the color names it"],
+    [/^\.bx--data-table \S/, "field-02", "fields in a table"],
+    [/^\.bx--modal /, "field-02", "v11 puts the modal body in a Layer"],
+    [/^\.bx--modal /, "border-subtle-02", "same, for dividers"],
+    [/zebra/, "layer-02", "v11 reads layer-accent, a visible change"],
+    [/--inline\.bx--list-box--expanded:hover$/, "field-02", "v11: transparent"],
+    [/^\.bx--content-switcher--low-contrast /, "layer-02", "fixed per theme"],
+    [/^\.bx--date-picker__day\S*--selected:focus/, "layer-02", "focus inset"],
+    [/^\.bx--toggle-input:(focus|active)\+/, "layer-02", "v11: no gap"],
+  ];
+  const NUMBERED =
+    /var\(--cds-((?:layer|field|border-(?:subtle|strong|tile))[a-z-]*-0[0-3])\)/g;
+
+  it("reads numbered layer tokens only where a level is pinned", async () => {
+    const reads = parseRules(await compileEntry("all.scss")).flatMap((rule) =>
+      [...rule.decls]
+        // Skip the theme and Layer blocks that define the tokens.
+        .filter(([prop]) => !/^--cds-(layer|field|border-)/.test(prop))
+        .flatMap(([, value]) =>
+          [...value.matchAll(NUMBERED)].map(([, token]) => ({
+            selector: rule.selector,
+            token,
+          })),
+        ),
+    );
+    const unpinned = reads.filter(
+      ({ selector, token }) =>
+        !PINNED.some(([re, t]) => re.test(selector) && token.startsWith(t)),
+    );
+    const unused = PINNED.filter(
+      ([re, t]) =>
+        !reads.some(
+          ({ selector, token }) => re.test(selector) && token.startsWith(t),
+        ),
+    );
+
+    expect(reads.length).toBeGreaterThan(40);
+    expect(unpinned).toEqual([]);
+    expect(unused.map(([, , why]) => why)).toEqual([]);
+  }, 30_000);
+
   // The single-theme files declare no tokens on :root, so components read
   // contextual tokens with the compiled value as a fallback, and a Layer
   // can still re-point them.
