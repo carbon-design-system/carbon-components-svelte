@@ -102,6 +102,24 @@
       align-items: center;
     }
 
+    // ccs: inline rename input, rendered in place of a node's label text
+    // while editing. The row already draws the focus outline on its label.
+    .#{$prefix}--tree-node__rename {
+      min-width: 0;
+      flex: 1 1 auto;
+      padding: 0;
+      border: 0;
+      margin: 0;
+      background-color: transparent;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
     .#{$prefix}--tree-node--with-icon .#{$prefix}--tree-parent-node__toggle {
       margin-right: 0;
     }
