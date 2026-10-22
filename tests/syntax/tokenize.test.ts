@@ -128,6 +128,14 @@ describe("tokenize", () => {
     },
   );
 
+  test("reads JSON exponents as part of the number", () => {
+    expect(
+      types("[2.5e3, 1E+5, -1e-2]", "json")?.filter((t) =>
+        t.startsWith("number"),
+      ),
+    ).toEqual(["number:2.5e3", "number:1E+5", "number:-1e-2"]);
+  });
+
   test("reads expressions inside quoted attribute values as script", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",

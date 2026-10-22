@@ -1161,6 +1161,7 @@ const lexMarkup = (code, out) => {
   }
 };
 const JSON_STRING = /"(?:\\.|[^"\\\n])*"?/y;
+const JSON_NUMBER = /-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/iy;
 /** @type {Rule<{ code: string }>[]} */
 const JSON_RULES = [
   [WHITESPACE, null],
@@ -1171,7 +1172,7 @@ const JSON_RULES = [
       return NEXT_IS_COLON.test(state.code) ? "property-name" : "string";
     },
   ],
-  [CSS_NUMBER, "number"],
+  [JSON_NUMBER, "number"],
   [
     IDENTIFIER,
     (text) =>
@@ -1289,6 +1290,7 @@ const FIRST_CHAR = new Map([
   [CSS_UNIT, /[%A-Za-z]/],
   [CSS_IDENT, /[-A-Za-z_]/],
   [JSON_STRING, /"/],
+  [JSON_NUMBER, /[-\d.]/],
   [PRIVATE_NAME, /#/],
   [DECORATOR, /@/],
   [CSS_IMPORTANT, /!/],
