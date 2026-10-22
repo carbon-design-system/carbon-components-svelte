@@ -58,9 +58,12 @@
   export let id = uniqueId();
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, readable, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    LAYER_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
@@ -159,6 +162,9 @@
   }
 
   setContext(MODAL_CONTEXT_KEY, {});
+  // As in v11, the modal starts a layer at level 0 wherever it renders.
+  // ModalHeader and ModalFooter sit on it; ModalBody steps up to level 1.
+  setContext(LAYER_CONTEXT_KEY, readable(1));
   setContext("carbon:ComposedModal", {
     closeModal,
     submit,
@@ -241,6 +247,7 @@
   bind:this={ref}
   role="presentation"
   class:bx--modal={true}
+  class:bx--layer-one={true}
   class:is-visible={open}
   class:bx--modal--danger={danger}
   class:bx--modal--decorator={$$slots.decorator}

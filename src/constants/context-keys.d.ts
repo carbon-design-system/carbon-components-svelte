@@ -12,6 +12,13 @@ export const FORM_ITEM_CONTEXT_KEY: "carbon:FormItem";
 export const MODAL_CONTEXT_KEY: "carbon:Modal";
 
 /**
+ * Set by `Layer`, and by `Modal`, `ComposedModal`, and `ModalBody`, which
+ * start their own layers; read by `Layer`. Holds a readable store of the
+ * level a child `Layer` sits at.
+ */
+export const LAYER_CONTEXT_KEY: "carbon:Layer";
+
+/**
  * Set by `ProfileMenu` and `HeaderSwitcher`; read by `ProfileMenuItem`
  * so items register with either parent.
  */

@@ -18,12 +18,6 @@
     block-size: 100%;
   }
 
-  .#{$prefix}--modal
-    .#{$prefix}--text-area--fluid
-    .#{$prefix}--text-area__wrapper {
-    background: $field-02;
-  }
-
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__label-wrapper {
     position: relative;
     block-size: 100%;
@@ -145,14 +139,6 @@
   // so this keeps the height constant instead of growing it on focus.
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area--warning {
     border-block-end: 1px solid transparent;
-  }
-
-  .#{$prefix}--modal
-    .#{$prefix}--text-area--fluid
-    .#{$prefix}--text-area__wrapper[data-invalid]
-    .#{$prefix}--text-area__divider
-    + .#{$prefix}--form-requirement {
-    background: $field-02;
   }
 
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__invalid-icon {

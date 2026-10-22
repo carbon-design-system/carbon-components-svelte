@@ -40,11 +40,12 @@
 
   import { getContext, setContext } from "svelte";
   import { readable, readonly, writable } from "svelte/store";
+  import { LAYER_CONTEXT_KEY } from "../constants/context-keys.js";
 
   const LEVELS = ["one", "two", "three"];
 
   /** @type {import("svelte/store").Readable<LayerLevel>} */
-  const parentLevel = getContext("carbon:Layer") ?? readable(1);
+  const parentLevel = getContext(LAYER_CONTEXT_KEY) ?? readable(1);
 
   /** @type {import("svelte/store").Writable<LayerLevel>} */
   const childLevel = writable(1);
@@ -55,7 +56,7 @@
     /** @type {LayerLevel} */ (Math.max(0, Math.min(current + 1, 2))),
   );
 
-  setContext("carbon:Layer", readonly(childLevel));
+  setContext(LAYER_CONTEXT_KEY, readonly(childLevel));
 
   $: layerClass = [
     `bx--layer-${LEVELS[current]}`,

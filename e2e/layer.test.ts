@@ -79,3 +79,76 @@ test("zebra stripes stand out from the rows at every Layer level", async ({
     );
   }
 });
+
+// v11 renders the modal as a Layer and its body as the next one up. The
+// container stays on layer-01, content inside sits on level 2, and a
+// Layer inside the body steps up to level 3.
+const MODAL = {
+  white: {
+    container: "rgb(244, 244, 244)",
+    field: "rgb(255, 255, 255)",
+    layer: "rgb(255, 255, 255)",
+    nested: "rgb(244, 244, 244)",
+  },
+  g100: {
+    container: "rgb(38, 38, 38)",
+    field: "rgb(57, 57, 57)",
+    layer: "rgb(57, 57, 57)",
+    nested: "rgb(82, 82, 82)",
+  },
+};
+
+const MODAL_CASES: [
+  name: string,
+  selector: string,
+  token: keyof (typeof MODAL)["white"],
+][] = [
+  ["container", ".bx--modal-container", "container"],
+  ["TextInput", ".bx--modal-content > .bx--form-item .bx--text-input", "field"],
+  ["Tile", ".bx--tile", "layer"],
+  ["DataTable cell", ".bx--data-table td", "layer"],
+  ["nested Layer TextInput", "[data-testid$=nested] .bx--text-input", "nested"],
+];
+
+// v10 kept these on field-02 with `.bx--modal .bx--text-input` rules.
+// The body Layer gives them the same color.
+const MODAL_FIELDS = [
+  ".bx--number input",
+  ".bx--dropdown",
+  ".bx--multi-select",
+  ".bx--form-item .bx--select-input",
+  ".bx--search-input",
+  ".bx--text-area",
+  ".bx--pagination",
+];
+
+test("modal content sits one Layer level up", async ({ page }) => {
+  await page.goto("/modal-layer.html");
+
+  for (const [theme, colors] of Object.entries(MODAL)) {
+    // biome-ignore lint/performance/noAwaitInLoops: one page, read in order
+    await page.evaluate(
+      (t) => document.documentElement.setAttribute("theme", t),
+      theme,
+    );
+    const cases = ["modal", "composed-modal"].flatMap((modal) =>
+      MODAL_CASES.map(([name, selector, token]) =>
+        expect
+          .soft(
+            page.getByTestId(modal).locator(selector).first(),
+            `${theme} ${modal} ${name}`,
+          )
+          .toHaveCSS("background-color", colors[token]),
+      ),
+    );
+    const fields = MODAL_FIELDS.map((selector) =>
+      expect
+        .soft(
+          page.getByTestId("modal").locator(selector).first(),
+          `${theme} ${selector}`,
+        )
+        .toHaveCSS("background-color", colors.field),
+    );
+    await Promise.all([...cases, ...fields]);
+  }
+});
