@@ -13,6 +13,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { compile } from "mdsvex";
 import { visit } from "unist-util-visit";
+import { PAGE_EXTENSION } from "./constants";
 
 const DOCS = path.resolve(import.meta.dirname, "..");
 const PAGES = path.join(DOCS, "src/pages");
@@ -147,7 +148,7 @@ async function writePage(svx: string) {
       map.push(start + i);
     }
   }
-  const name = `${path.basename(svx, ".svx")}.svelte`;
+  const name = `${path.basename(svx, PAGE_EXTENSION)}.svelte`;
   fs.writeFileSync(path.join(OUT, name), lines.join("\n"));
   lineMaps.set(name, map);
 }
@@ -157,7 +158,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const pages = fs
   .readdirSync(PAGES, { recursive: true, encoding: "utf8" })
-  .filter((f) => f.endsWith(".svx"))
+  .filter((f) => f.endsWith(PAGE_EXTENSION))
   .map((f) => path.join(PAGES, f));
 await Promise.all(pages.map(writePage));
 
@@ -219,7 +220,7 @@ for (const line of check.stdout.split("\n")) {
   if (IGNORED.some((re) => re.test(message))) continue;
   const map = lineMaps.get(file);
   const source = map
-    ? `src/pages/components/${file.replace(".svelte", ".svx")}`
+    ? `src/pages/components/${file.replace(".svelte", PAGE_EXTENSION)}`
     : path.relative(DOCS, path.resolve(OUT, file));
   const known = KNOWN.findIndex(([f, re]) => f === source && re.test(message));
   if (known !== -1) {
