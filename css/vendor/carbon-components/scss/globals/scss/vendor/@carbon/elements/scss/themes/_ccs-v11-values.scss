@@ -622,6 +622,10 @@ $ccs-v11-values: (
     // theme (#4589ff is 2.3:1 on layer-01).
     border-interactive: #78a9ff,
     text-helper: #c6c6c6,
+    // Values g80 shared with g90 in v10 follow g90 to v11.
+    highlight: #002d9c,
+    overlay: rgba(0, 0, 0, 0.6),
+    support-info-inverse: #0043ce,
     ai-aura-end: rgba(0, 0, 0, 0),
     ai-aura-hover-background: #474747,
     ai-aura-hover-end: rgba(0, 0, 0, 0),

@@ -733,7 +733,7 @@ export const colorTokens = {
   "support-info-inverse": {
     white: "#4589ff",
     g10: "#4589ff",
-    g80: "#0f62fe",
+    g80: "#0043ce",
     g90: "#0043ce",
     g100: "#0043ce",
   },
@@ -796,14 +796,14 @@ export const colorTokens = {
   highlight: {
     white: "#d0e2ff",
     g10: "#d0e2ff",
-    g80: "#0043ce",
+    g80: "#002d9c",
     g90: "#002d9c",
     g100: "#001d6c",
   },
   overlay: {
     white: "rgba(0, 0, 0, 0.6)",
     g10: "rgba(0, 0, 0, 0.6)",
-    g80: "rgba(0, 0, 0, 0.65)",
+    g80: "rgba(0, 0, 0, 0.6)",
     g90: "rgba(0, 0, 0, 0.6)",
     g100: "rgba(0, 0, 0, 0.6)",
   },
