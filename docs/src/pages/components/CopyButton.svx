@@ -95,7 +95,7 @@ Set `copy` to a no-op function to disable copying.
 
 ## Hover tooltip
 
-On hover or focus, the button shows a proactive tooltip with the `iconDescription`. It renders in a floating portal so it is never clipped and flips when space is tight.
+On hover or focus, the button shows a proactive tooltip with the `iconDescription`. It renders in a floating portal so it is never clipped and flips when space is tight. Press Escape to hide the tooltip, or the copy feedback, without moving the pointer or focus.
 
 ### Directions
 

@@ -250,6 +250,69 @@ describe("CopyButton", () => {
     });
   });
 
+  describe("Escape", () => {
+    const modal = () => document.querySelector(".bx--modal");
+
+    it("hides the focused tooltip on the first Escape and closes the Modal on the second", async () => {
+      render(CopyButtonInModal, { props: { modalOpen: true } });
+      const button = getCopyButton("Copy");
+
+      button.focus();
+      await waitFor(() => expect(openTooltips()).toHaveLength(1));
+
+      await user.keyboard("{Escape}");
+      expect(openTooltips()).toHaveLength(0);
+      expect(button).toHaveFocus();
+      expect(modal()).toHaveClass("is-visible");
+
+      await user.keyboard("{Escape}");
+      expect(modal()).not.toHaveClass("is-visible");
+    });
+
+    it("hides the copy feedback without closing the Modal", async () => {
+      render(CopyButtonInModal, { props: { modalOpen: true } });
+
+      await user.click(getCopyButton("Copy"));
+      expect(openTooltips()[0]).toHaveTextContent("Copied!");
+
+      await user.keyboard("{Escape}");
+      expect(openTooltips()).toHaveLength(0);
+      expect(modal()).toHaveClass("is-visible");
+    });
+
+    it("hides a hovered tooltip while focus is elsewhere, until the next pointer enter", async () => {
+      render(CopyButton);
+      const button = getCopyButton("Basic");
+
+      const other = getCopyButton("Custom copy function");
+      other.focus();
+      await user.hover(button);
+      await waitFor(() => expect(openTooltips()[0]).toHaveTextContent("Basic"));
+
+      await user.keyboard("{Escape}");
+      expect(openTooltips()).toHaveLength(0);
+      expect(other).toHaveFocus();
+
+      await user.unhover(button);
+      await user.hover(button);
+      await waitFor(() => expect(openTooltips()[0]).toHaveTextContent("Basic"));
+    });
+
+    it.each([{ init: { isComposing: true } }, { init: { keyCode: 229 } }])(
+      "ignores Escape during IME composition ($init)",
+      async ({ init }) => {
+        render(CopyButtonInModal, { props: { modalOpen: true } });
+        const button = getCopyButton("Copy");
+
+        button.focus();
+        await waitFor(() => expect(openTooltips()).toHaveLength(1));
+
+        await fireEvent.keyDown(button, { key: "Escape", ...init });
+        expect(openTooltips()).toHaveLength(1);
+      },
+    );
+  });
+
   describe("Portal tooltip", () => {
     it("should add portal-active class and render feedback in FloatingPortal on click when portalTooltip is true", async () => {
       render(CopyButton, {

@@ -1,5 +1,5 @@
 <script>
-  import { Button, Modal } from "carbon-components-svelte";
+  import { Button, CopyButton, Modal } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
 
@@ -20,4 +20,5 @@
     portalTooltip={false}
   />
   <Button kind="ghost" icon={Edit} iconDescription="Edit item" />
+  <CopyButton text="copied" iconDescription="Copy link" />
 </Modal>
