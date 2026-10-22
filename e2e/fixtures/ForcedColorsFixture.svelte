@@ -35,6 +35,7 @@
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
+  import ForcedColorsMoreFixture from "./ForcedColorsMoreFixture.svelte";
 
   let menuAnchor = null;
 </script>
@@ -131,6 +132,8 @@
     thresholds={{ error: 90 }}
     showThresholds
   />
+
+  <ForcedColorsMoreFixture />
 
   <div style="position: relative; height: 4rem;">
     <Popover open caret align="bottom">Popover</Popover>

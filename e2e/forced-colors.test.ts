@@ -42,9 +42,11 @@ function style(page: Page, selector: string, pseudo?: string) {
       return {
         background: s.backgroundColor,
         backgroundImage: s.backgroundImage,
+        borderColor: s.borderLeftColor,
         color: s.color,
         outline: `${s.outlineStyle} ${s.outlineWidth}`,
         outlineColor: s.outlineColor,
+        fill: s.fill,
       };
     },
     [selector, pseudo ?? null] as const,
@@ -320,8 +322,9 @@ test.describe("forced colors", () => {
 
     // The Canvas caret would read as a gap in the outline; its edge stays.
     const carets = [
-      ".bx--popover--caret:not(.bx--popover--border) .bx--popover-contents",
-      ".bx--popover--caret.bx--popover--border .bx--popover-contents",
+      // Toggletip keeps the v10 caret, so match the v11 caret only.
+      ".bx--popover--caret:not(.bx--popover--border):not(.bx--toggletip-popover) .bx--popover-contents",
+      ".bx--popover--caret.bx--popover--border:not(.bx--toggletip-popover) .bx--popover-contents",
     ];
     const caretStyles = await Promise.all(
       carets.map((caret) => style(page, caret, "::before")),
@@ -366,6 +369,126 @@ test.describe("forced colors", () => {
     edges.forEach((edge, i) => {
       expect.soft(fills[i], edge).toBe(system.CanvasText);
     });
+  });
+
+  test("the active TableOfContents bar fills with Highlight", async ({
+    page,
+  }) => {
+    // Wait for the measurement, so it can't put the class back below.
+    await expect(page.locator(".bx--toc")).toHaveClass(/bx--toc--measured/);
+    expect
+      .soft((await style(page, ".bx--toc__bar")).background)
+      .toBe(system.Highlight);
+    // A theme's Highlight can sit close to its CanvasText, so the bar also
+    // stands out by width: it's wider than the track it covers.
+    const widths = await page.evaluate(() => {
+      const bar = document.querySelector(".bx--toc__bar");
+      const list = document.querySelector(".bx--toc__list");
+      if (!bar || !list) throw new Error("no toc");
+      return {
+        bar: bar.getBoundingClientRect().width,
+        track: Number.parseFloat(getComputedStyle(list).borderLeftWidth),
+      };
+    });
+    expect.soft(widths.bar).toBeGreaterThan(widths.track);
+    // Before its first measurement, the active row draws its own bar.
+    await page.evaluate(() =>
+      document.querySelector(".bx--toc")?.classList.remove("bx--toc--measured"),
+    );
+    expect
+      .soft(
+        (await style(page, ".bx--toc__item--active", "::before")).background,
+      )
+      .toBe(system.Highlight);
+  });
+
+  test("chat bubbles, typing dots and the streaming caret stay visible", async ({
+    page,
+  }) => {
+    const agent = ".bx--chat-message:not(.bx--chat-message--me)";
+    const me = ".bx--chat-message--me";
+    expect
+      .soft(await style(page, `${agent} .bx--chat-message__bubble`))
+      .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
+    expect
+      .soft((await style(page, `${me} .bx--chat-message__bubble`)).outline)
+      .toMatch(/^none /);
+    // The typing dots, then the streaming caret in either bubble.
+    const marks: [string, string?][] = [
+      [".bx--chat-message__dot"],
+      ...[agent, me].map((from): [string, string] => [
+        `${from}.bx--chat-message--streaming .bx--chat-message__bubble`,
+        "::after",
+      ]),
+    ];
+    const markStyles = await Promise.all(
+      marks.map(([mark, pseudo]) => style(page, mark, pseudo)),
+    );
+    marks.forEach(([mark], i) => {
+      expect.soft(markStyles[i].background, mark).toBe(system.CanvasText);
+    });
+  });
+
+  test("disabled checkboxes read GrayText, box and check included", async ({
+    page,
+  }) => {
+    for (const label of [
+      ".bx--checkbox:disabled:not(:checked) + .bx--checkbox-label",
+      ".bx--checkbox:disabled:checked + .bx--checkbox-label",
+    ]) {
+      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
+      await page.hover(label, { force: true });
+      const [text, box, check] = await Promise.all([
+        style(page, label),
+        style(page, label, "::before"),
+        style(page, label, "::after"),
+      ]);
+      expect.soft(text.color, label).toBe(system.GrayText);
+      expect.soft(box.borderColor, `${label}::before`).toBe(system.GrayText);
+      expect.soft(check.borderColor, `${label}::after`).toBe(system.GrayText);
+    }
+    const enabled = ".bx--checkbox:not(:disabled) + .bx--checkbox-label";
+    expect
+      .soft((await style(page, enabled, "::before")).borderColor, enabled)
+      .toBe(system.CanvasText);
+  });
+
+  test("the Toggletip icon reads ButtonText, also open and on hover", async ({
+    page,
+  }) => {
+    const closed = ".bx--toggletip:not(.bx--toggletip--open) svg";
+    const open = ".bx--toggletip--open .bx--toggletip-button svg";
+    expect.soft((await style(page, open)).fill, open).toBe(system.ButtonText);
+    await page.hover(closed);
+    expect
+      .soft((await style(page, closed)).fill, closed)
+      .toBe(system.ButtonText);
+  });
+
+  test("the SearchMenu highlighted row fills with Highlight", async ({
+    page,
+  }) => {
+    await page.getByRole("combobox", { name: "Search menu" }).focus();
+    await page.keyboard.press("ArrowDown");
+    const highlighted = ".bx--search-menu-item--highlighted";
+    await page.hover(highlighted);
+    expect.soft(await style(page, highlighted), highlighted).toMatchObject({
+      background: system.Highlight,
+      color: system.HighlightText,
+    });
+    const plain =
+      ".bx--search-menu-item:not(.bx--search-menu-item--highlighted):not(.bx--search-menu-item--disabled)";
+    expect
+      .soft((await style(page, plain)).background, plain)
+      .not.toBe(system.Highlight);
+    const disabled = ".bx--search-menu-item--disabled";
+    expect
+      .soft((await style(page, disabled)).color, disabled)
+      .toBe(system.GrayText);
+    // The menu loses the shadow that separated it from the page.
+    expect
+      .soft(await style(page, ".bx--search-menu__menu"))
+      .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
   });
 });
 

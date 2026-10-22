@@ -241,6 +241,38 @@
       }
     }
   }
+
+  // Forced-colors mode drops the menu's shadow and repaints the highlighted
+  // row's fill as `Canvas`, so the menu had no edge and arrow keys showed
+  // no row. A disabled row read like the others. The menu gets a
+  // transparent outline, repainted as a visible system color. The
+  // highlighted row fills with `Highlight`, as a native list's current
+  // option does, and opts out of forcing: forced text sits on a `Canvas`
+  // backplate that would hide `HighlightText`. Its matched text follows.
+  // The doubled item class outranks the hover fill. A disabled row reads
+  // `GrayText`.
+  @media (forced-colors: active) {
+    .#{$prefix}--search-menu__menu {
+      outline: 1px solid transparent;
+    }
+
+    .#{$prefix}--search-menu-item.#{$prefix}--search-menu-item--highlighted {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--search-menu-item--highlighted
+      .#{$prefix}--search-menu-item__highlight {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--search-menu-item--disabled,
+    .#{$prefix}--search-menu-item--disabled
+      .#{$prefix}--search-menu-item__highlight {
+      color: GrayText;
+    }
+  }
 }
 
 @include exports("search-menu") {

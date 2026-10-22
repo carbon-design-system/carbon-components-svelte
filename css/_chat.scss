@@ -307,6 +307,29 @@
     background-color: $layer-accent;
     content: "";
   }
+
+  // Forced-colors mode drops the agent bubble's inset-shadow border, which
+  // left it looking like your own, and repaints the typing dots and the
+  // streaming caret as `Canvas`, which hid them. The agent bubble gets a
+  // transparent outline, repainted as a visible system color, inset like
+  // the shadow. The dots and caret paint in `CanvasText`. The doubled
+  // message class outranks the caret's `currentColor` in your own message.
+  @media (forced-colors: active) {
+    .#{$prefix}--chat-message__bubble {
+      outline: 1px solid transparent;
+      outline-offset: -1px;
+    }
+
+    .#{$prefix}--chat-message--me .#{$prefix}--chat-message__bubble {
+      outline: none;
+    }
+
+    .#{$prefix}--chat-message__dot,
+    .#{$prefix}--chat-message.#{$prefix}--chat-message--streaming
+      .#{$prefix}--chat-message__bubble::after {
+      background-color: CanvasText;
+    }
+  }
 }
 
 @include exports("chat") {
