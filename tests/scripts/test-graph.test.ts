@@ -233,6 +233,41 @@ describe("parseDependencies", () => {
     ]);
   });
 
+  it.each([
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    "const m = await import(`./x/${name}.svelte`);",
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    "const m = require(`./${name}`);",
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    "vi.mock(`./${name}`);",
+  ])("flags a templated module path as unreadable: %s", (source) => {
+    expect(deps("tests/x.test.ts", source).unknown).toEqual([
+      "non-literal dynamic import",
+    ]);
+  });
+
+  it("reads a glob whose type argument nests generics", () => {
+    expect(
+      deps(
+        "tests/ssr.test.ts",
+        `const m = import.meta.glob<Record<string, string>>("../src/**/*.svelte");`,
+      ),
+    ).toEqual({
+      files: [],
+      patterns: [String(globToRegExp("src/**/*.svelte"))],
+      unknown: [],
+    });
+  });
+
+  it("reads an import on the same line as <script>", () => {
+    expect(
+      deps(
+        "e2e/fixtures/ModalFixture.svelte",
+        `<script>import { user } from "../../tests/user";</script>`,
+      ).files,
+    ).toEqual(["tests/user.ts"]);
+  });
+
   it("maps e2e page.goto() to the fixture page", () => {
     expect(
       deps(
@@ -273,6 +308,16 @@ describe("parseDependencies", () => {
     ).toEqual(["e2e/fixtures/accordion.ts"]);
   });
 
+  it("reads fixture HTML iframe sources", () => {
+    expect(
+      deps(
+        "e2e/fixtures/accordion-framed.html",
+        `<iframe title="demo" src="./accordion.html"></iframe>`,
+        [...Object.keys(REPO), "e2e/fixtures/accordion-framed.html"],
+      ).files,
+    ).toEqual(["e2e/fixtures/accordion.html"]);
+  });
+
   it("requires a @depends-on declaration to read the disk", () => {
     expect(
       deps("tests/x.test.ts", `import { readFileSync } from "node:fs";`)
@@ -291,6 +336,18 @@ describe("parseDependencies", () => {
       ],
       unknown: [],
     });
+  });
+
+  it("keeps a brace list in @depends-on as one glob", () => {
+    expect(
+      deps(
+        "tests/x.test.ts",
+        `// @depends-on src/*.{js,ts} css/**\nimport { readFileSync } from "node:fs";`,
+      ).patterns,
+    ).toEqual([
+      String(globToRegExp("src/*.{js,ts}")),
+      String(globToRegExp("css/**")),
+    ]);
   });
 
   it("builds compiled css from the css tree and its build script", () => {

@@ -84,20 +84,26 @@ const STRING_LITERAL = /^["'`]([^"'`$]*)["'`]$/;
 // still known: `/modal.html?variant=${variant}`.
 const STATIC_PATH_TEMPLATE = /^`([^`$?#]*)[?#][^`]*`$/;
 const QUOTED = /["']([^"']+)["']/g;
-const LIST_SEPARATOR = /[\s,]+/;
+// Commas inside `{a,b}` belong to the glob.
+const LIST_SEPARATOR = /[\s,]+(?![^{]*\})/;
 
 const BARREL_EXPORT = /export\s*\{([^}]*)\}\s*from\s*["']([^"']+)["']/g;
+// `>` lets a one-line `<script>import …</script>` through.
 const STATIC_IMPORT =
-  /(?:^|[\n;])\s*(?:import|export)\s+(?:type\s+)?([^;"'`]*?)\s*from\s*["']([^"'\n]+)["']/g;
-const SIDE_EFFECT_IMPORT = /(?:^|[\n;])\s*import\s*["']([^"'\n]+)["']/g;
+  /(?:^|[\n;>])\s*(?:import|export)\s+(?:type\s+)?([^;"'`]*?)\s*from\s*["']([^"'\n]+)["']/g;
+const SIDE_EFFECT_IMPORT = /(?:^|[\n;>])\s*import\s*["']([^"'\n]+)["']/g;
 const CALL_WITH_LITERAL =
   /\b(?:import|require|vi\.(?:mock|doMock|unmock|importActual|importMock))\(\s*(["'`])([^"'`$\n]+)\1\s*[,)]/g;
 const NON_LITERAL_CALL = /(?<![.\w])(?:import|require)\(\s*(?!["'`])[^)\s]/;
+const TEMPLATE_CALL =
+  /(?<![.\w])(?:import|require|vi\.(?:mock|doMock|unmock|importActual|importMock))\(\s*`[^`]*\$\{/;
+// One level of nested generics: `glob<Record<string, string>>(…)`.
 const GLOB_CALL =
-  /\bimport\.meta\.glob(?:<[^>]*>)?\(\s*(\[[^\]]*\]|["'][^"']*["'])/g;
-const GLOB_CALL_ANY = /\bimport\.meta\.glob(?:<[^>]*>)?\(/g;
+  /\bimport\.meta\.glob(?:<(?:[^<>]|<[^<>]*>)*>)?\(\s*(\[[^\]]*\]|["'][^"']*["'])/g;
+const GLOB_CALL_ANY = /\bimport\.meta\.glob[<(]/g;
 const GOTO = /\.goto\(\s*([^,)]*)/g;
-const HTML_REF = /<(?:script|link)\b[^>]*\b(?:src|href)=["']([^"']+)["']/g;
+const HTML_REF =
+  /<(?:script|link|iframe)\b[^>]*\b(?:src|href)=["']([^"']+)["']/g;
 const READS_DISK =
   /\b(?:from|import|require|importActual)\s*\(?\s*["'](?:node:)?(?:fs|fs\/promises|child_process)["']|\bBun\.(?:file|Glob|spawn)/;
 const DEPENDS_ON =
@@ -237,7 +243,7 @@ export function parseDependencies(
   for (const [, , specifier] of source.matchAll(CALL_WITH_LITERAL)) {
     add(specifier);
   }
-  if (NON_LITERAL_CALL.test(source)) {
+  if (NON_LITERAL_CALL.test(source) || TEMPLATE_CALL.test(source)) {
     deps.unknown.push("non-literal dynamic import");
   }
 
