@@ -1,0 +1,34 @@
+/// SmallMultiples: a grid of charts that share their scales.
+/// @access private
+/// @group viz
+@mixin viz-small-multiples {
+  .#{$prefix}--viz-facets {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-facets .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-facets__grid {
+    display: grid;
+    gap: $carbon--spacing-05 $carbon--spacing-06;
+    grid-template-columns: repeat(var(--bx-viz-columns, 3), minmax(0, 1fr));
+  }
+
+  // A chart measures its cell, so the cell must be allowed to shrink.
+  .#{$prefix}--viz-facets__cell {
+    min-inline-size: 0;
+  }
+
+  @media (max-width: 41.98rem) {
+    .#{$prefix}--viz-facets__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
+@include exports("viz-small-multiples") {
+  @include viz-small-multiples;
+}
