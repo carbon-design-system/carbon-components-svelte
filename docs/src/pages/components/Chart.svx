@@ -49,6 +49,27 @@ The chart primitives are part of the data visualization subpackage. Import them 
 
 For the common case use a ready-made chart such as [LineChart](/components/LineChart), [AreaChart](/components/AreaChart), or [BarChart](/components/BarChart). Compose the primitives yourself when you need a different arrangement.
 
+## Choosing a chart
+
+Start from the question the chart has to answer. Each preset is one import from `carbon-components-svelte/viz`; compose the primitives on this page when none fits.
+
+| Question | Chart |
+| --- | --- |
+| How does a value change over time? | [LineChart](/components/LineChart), [AreaChart](/components/AreaChart) for totals, [Sparkline](/components/Sparkline) inline |
+| How do categories compare? | [BarChart](/components/BarChart), [LollipopChart](/components/LollipopChart), [DumbbellChart](/components/DumbbellChart) for two values each |
+| How is a whole divided? | [DonutChart](/components/DonutChart), [StackedBar](/components/StackedBar), [WaffleChart](/components/WaffleChart), [TreemapChart](/components/TreemapChart) for a hierarchy |
+| How is a value distributed? | [Histogram](/components/Histogram), [BoxplotChart](/components/BoxplotChart), [ViolinPlot](/components/ViolinPlot), [BeeswarmChart](/components/BeeswarmChart) |
+| How do two measures relate? | [ScatterChart](/components/ScatterChart), with `density` for thousands of points |
+| What changed between two periods? | [SlopeChart](/components/SlopeChart), [WaterfallChart](/components/WaterfallChart), [DeltaIndicator](/components/DeltaIndicator) |
+| How far along is something? | [RadialProgress](/components/RadialProgress), [SegmentedProgress](/components/SegmentedProgress), [TargetIndicator](/components/TargetIndicator), [BulletChart](/components/BulletChart) |
+| Where did people drop off? | [FunnelBars](/components/FunnelBars), [FunnelChart](/components/FunnelChart), [FunnelCompare](/components/FunnelCompare) |
+| What is dense across two dimensions? | [Heatmap](/components/Heatmap), [CalendarHeatmap](/components/CalendarHeatmap), [CohortTable](/components/CohortTable) |
+| When did things happen? | [EventTimeline](/components/EventTimeline), [StateTimeline](/components/StateTimeline), [GanttChart](/components/GanttChart), [SpanWaterfall](/components/SpanWaterfall) |
+| How are things connected? | [LayeredGraph](/components/LayeredGraph), [TreeChart](/components/TreeChart), [OrgChart](/components/OrgChart), [GraphCanvas](/components/GraphCanvas) to pan and zoom, [NodeEditor](/components/NodeEditor) to edit |
+| What flows where? | [AlluvialChart](/components/AlluvialChart), [ChordDiagram](/components/ChordDiagram), [SequenceSunburst](/components/SequenceSunburst) |
+| One number on a dashboard? | [KpiCard](/components/KpiCard), or [BigNumber](/components/BigNumber) from the core library |
+| Many small charts to compare? | [SmallMultiples](/components/SmallMultiples) with any chart inside |
+
 ## Composition
 
 `Chart` reads the `data` and shares series, scales, and hover state with the marks inside it. Marks that draw in the plot go in the default slot. The tooltip and the legend are HTML, so they go in the `tooltip` and `legend` slots.
