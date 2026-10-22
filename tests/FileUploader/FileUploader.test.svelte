@@ -39,6 +39,7 @@
     undefined;
   export let maxFileSize: ComponentProps<FileUploader>["maxFileSize"] =
     undefined;
+  export let maxFiles: ComponentProps<FileUploader>["maxFiles"] = undefined;
   export let preventDuplicate: ComponentProps<FileUploader>["preventDuplicate"] = false;
   export let orderFiles: ComponentProps<FileUploader>["orderFiles"] = "append";
   export let iconDescription: ComponentProps<FileUploader>["iconDescription"] =
@@ -67,6 +68,7 @@
     {name}
     {minFileSize}
     {maxFileSize}
+    {maxFiles}
     {preventDuplicate}
     {orderFiles}
     {iconDescription}
