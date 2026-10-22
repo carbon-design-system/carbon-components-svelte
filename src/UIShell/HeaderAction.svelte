@@ -80,6 +80,7 @@
   import Switcher from "../icons/Switcher.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocusOnClose } from "../utils/focus.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
@@ -151,6 +152,8 @@
 
   function handleKeydown(event) {
     if (isOpen && event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (isImeComposition(event)) return;
       isOpen = false;
       dispatch("close", { trigger: "escape-key" });
       ref?.focus();

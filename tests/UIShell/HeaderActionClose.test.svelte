@@ -7,6 +7,7 @@
   export let preventCloseOnClickOutside = false;
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
   export let customCloseIcon = false;
+  export let withInput = false;
   export let onOpen: (e: CustomEvent<{ trigger: string }>) => void = () => {};
 
   $: closeIconProps = customCloseIcon ? { closeIcon: Help } : {};
@@ -24,6 +25,9 @@
       on:close={onClose}
     >
       <p data-testid="panel-content">Panel content</p>
+      {#if withInput}
+        <input aria-label="Filter">
+      {/if}
     </HeaderAction>
   </HeaderUtilities>
 </Header>

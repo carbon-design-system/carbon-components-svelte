@@ -108,6 +108,7 @@
   } from "../utils/body-scroll-lock.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
@@ -123,6 +124,8 @@
 
   function handleEscape(event) {
     if (isOpen && !fixed && $isSideNavMobile && event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (isImeComposition(event)) return;
       isOpen = false;
       $hamburgerMenuRef?.focus();
     }
