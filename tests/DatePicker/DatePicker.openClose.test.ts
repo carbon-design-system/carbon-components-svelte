@@ -167,6 +167,27 @@ describe("DatePicker close event", () => {
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
   });
 
+  it.each([
+    { key: "Escape", isComposing: true },
+    { key: "Escape", keyCode: 229 },
+  ])(
+    "keeps the calendar open when Escape cancels an IME composition (%o)",
+    async (init) => {
+      const onClose = vi.fn();
+      render(DatePickerClose, { props: { onClose } });
+
+      const input = screen.getByLabelText("Date");
+      const calendar = await openCalendar();
+
+      input.focus();
+      await fireEvent.keyDown(input, init);
+      await settle();
+
+      expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
+
   // A browser's Escape carries `keyCode`, which flatpickr's grid handler
   // switches on. user-event's `{Escape}` does not, so fire it by hand.
   async function pressEscapeInGrid() {
