@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Button from "carbon-components-svelte/Button/Button.svelte";
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
@@ -121,10 +120,6 @@
   </OverflowMenuItem>
 </OverflowMenu>
 
-<Button data-testid="button-snippet" as let:props>
-  <div {...props} data-testid="custom-button">Custom Button Element</div>
-</Button>
-
 <div data-testid="theme-snippet">
   <Theme>
     {#snippet children({ theme })}
@@ -169,12 +164,8 @@
   </ProgressStep>
 </ProgressIndicator>
 
-<Tabs
-  type="container"
-  data-testid="tabs-secondary-label-snippet"
-  aria-label="Secondary label tabs"
->
-  <Tab label="Engage" secondaryLabel="(21/25)" />
+<Tabs type="container" aria-label="Secondary label tabs">
+  <Tab label="Engage" />
   <Tab label="Analyze">
     {#snippet secondaryChildren()}
       <span data-testid="tab-secondary-label-snippet">(12/16)</span>
