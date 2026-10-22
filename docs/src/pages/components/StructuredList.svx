@@ -122,7 +122,7 @@ Let users select one or more rows.
 
 Enable row selection with `selection` and structured list input components. The selection icon column is rendered automatically for each selectable row.
 
-Pass the same `value` to `StructuredListRow` as its nested `StructuredListInput` so the row can tell it's the current selection. This suppresses the hover highlight on an already-selected row.
+Pass the same `value` to `StructuredListRow` as its nested `StructuredListInput` so the row can tell it's the current selection. The selected row gets a selected fill and no hover highlight.
 
 <StructuredList selection selected="postgresql-value">
   <StructuredListHead>
