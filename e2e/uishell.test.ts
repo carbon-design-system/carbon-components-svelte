@@ -40,6 +40,40 @@ test.describe("UIShell", () => {
       page.getByRole("navigation", { name: "Side navigation" }),
     ).toBeHidden();
   });
+
+  test("Escape closes the innermost open layer, then the mobile side nav", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const sideNav = page.getByRole("navigation", { name: "Side navigation" });
+
+    // A header menu inside the side nav takes its own Escape.
+    const headerMenu = page.getByRole("menuitem", { name: "Side submenu" });
+    await headerMenu.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(headerMenu).toHaveAttribute("aria-expanded", "true");
+    await page.keyboard.press("Escape");
+    await expect(headerMenu).toHaveAttribute("aria-expanded", "false");
+    await expect(sideNav).toBeVisible();
+
+    const menu = page.getByRole("button", { name: "Side menu" });
+    await menu.focus();
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("link", { name: "Side menu item" }),
+    ).toBeFocused();
+
+    await page.keyboard.press("Escape");
+    await expect(menu).toHaveAttribute("aria-expanded", "false");
+    await expect(menu).toBeFocused();
+    await expect(sideNav).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(sideNav).toBeHidden();
+    await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
+  });
 });
 
 test.describe("UIShell header nav menu (desktop)", () => {

@@ -1,4 +1,9 @@
-import { render, screen } from "@testing-library/svelte";
+import {
+  createEvent,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/svelte";
 import type HeaderActionLinkComponent from "carbon-components-svelte/UIShell/HeaderActionLink.svelte";
 import type HeaderGlobalActionComponent from "carbon-components-svelte/UIShell/HeaderGlobalAction.svelte";
 import type SideNavLinkComponent from "carbon-components-svelte/UIShell/SideNavLink.svelte";
@@ -79,7 +84,14 @@ describe("UIShell", () => {
       );
     });
 
-    describe("Escape key (overlay mode)", () => {
+    describe("Escape key", () => {
+      function sideNavLink(container: HTMLElement) {
+        const link =
+          container.querySelector<HTMLAnchorElement>(".bx--side-nav a");
+        assert(link);
+        return link;
+      }
+
       it("closes the overlay side nav and refocuses the hamburger trigger", async () => {
         setViewportWidth(500); // Mobile viewport
 
@@ -96,28 +108,93 @@ describe("UIShell", () => {
         expect(hamburgerButton).toHaveFocus();
       });
 
-      it("does not close on Escape when fixed", async () => {
-        setViewportWidth(500); // Mobile viewport
+      it.each([
+        ["mobile", 500, {}],
+        ["mobile rail", 500, { sideNavRail: true }],
+        ["desktop", 1200, { persistentHamburgerMenu: true }],
+      ])(
+        "closes a %s side nav from inside and refocuses the hamburger",
+        async (_, width, props) => {
+          setViewportWidth(width);
 
-        const { component } = render(UiShell, {
-          props: { sideNavIsOpen: true, sideNavFixed: true },
+          const { component, container } = render(UiShell, {
+            props: { sideNavIsOpen: true, ...props },
+          });
+          await flushMacrotask();
+          sideNavLink(container).focus();
+
+          await user.keyboard("{Escape}");
+
+          expect(component.sideNavIsOpen).toBe(false);
+          expect(screen.getByRole("button", { name: /menu/i })).toHaveFocus();
+        },
+      );
+
+      it.each([
+        ["fixed", 500, { sideNavFixed: true }],
+        ["desktop side nav with no hamburger", 1200, {}],
+        [
+          "desktop rail",
+          1200,
+          { sideNavRail: true, persistentHamburgerMenu: true },
+        ],
+        [
+          "desktop fixed",
+          1200,
+          { sideNavFixed: true, persistentHamburgerMenu: true },
+        ],
+      ])("does not close a %s side nav", async (_, width, props) => {
+        setViewportWidth(width);
+
+        const { component, container } = render(UiShell, {
+          props: { sideNavIsOpen: true, ...props },
         });
         await flushMacrotask();
+        sideNavLink(container).focus();
 
         await user.keyboard("{Escape}");
 
         expect(component.sideNavIsOpen).toBe(true);
       });
 
-      it("does not close on Escape on desktop viewport", async () => {
-        setViewportWidth(1200); // Desktop viewport
+      it.each([
+        ["the hamburger", true],
+        ["the page", false],
+      ])(
+        "on desktop, Escape from %s closes the side nav: %s",
+        async (origin, closes) => {
+          setViewportWidth(1200);
 
-        const { component } = render(UiShell, {
+          const { component } = render(UiShell, {
+            props: { sideNavIsOpen: true, persistentHamburgerMenu: true },
+          });
+          await flushMacrotask();
+          if (origin === "the hamburger") {
+            screen.getByRole("button", { name: /menu/i }).focus();
+          }
+
+          await user.keyboard("{Escape}");
+
+          expect(component.sideNavIsOpen).toBe(!closes);
+        },
+      );
+
+      it.each([
+        ["isComposing", { isComposing: true }],
+        ["keyCode 229", { keyCode: 229 }],
+        ["defaultPrevented", {}],
+      ])("ignores an Escape with %s", async (name, init) => {
+        setViewportWidth(500);
+
+        const { component, container } = render(UiShell, {
           props: { sideNavIsOpen: true },
         });
         await flushMacrotask();
+        const link = sideNavLink(container);
+        const event = createEvent.keyDown(link, { key: "Escape", ...init });
+        if (name === "defaultPrevented") event.preventDefault();
 
-        await user.keyboard("{Escape}");
+        await fireEvent(link, event);
 
         expect(component.sideNavIsOpen).toBe(true);
       });
