@@ -265,8 +265,9 @@ $list-box-width: 100%;
     outline: none;
   }
 
+  // ccs: v11. The text stops short of the clear button, 45px in.
   .#{$prefix}--list-box__field .#{$prefix}--text-input {
-    padding-right: carbon--mini-units(9);
+    padding-right: to-rem(70px);
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -276,7 +277,7 @@ $list-box-width: 100%;
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input {
     // to account for clear input button outline
-    padding-right: to-rem(98px);
+    padding-right: to-rem(105px); // ccs: v11
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -288,7 +289,7 @@ $list-box-width: 100%;
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon {
     // to account for clear input button outline
-    right: to-rem(66px);
+    right: to-rem(82px); // ccs: v11
   }
 
   .#{$prefix}--list-box__field .#{$prefix}--text-input--empty {
@@ -301,7 +302,7 @@ $list-box-width: 100%;
   .#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input--empty {
-    padding-right: carbon--mini-units(9);
+    padding-right: $carbon--spacing-10; // ccs: v11
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -330,7 +331,7 @@ $list-box-width: 100%;
     @include button-reset($width: false, $omit: (display));
 
     position: absolute;
-    right: $carbon--spacing-05;
+    right: $carbon--spacing-04; // ccs: v11
     display: flex;
     width: to-rem(24px);
     height: to-rem(24px);
@@ -356,7 +357,7 @@ $list-box-width: 100%;
     position: absolute;
     top: 50%;
     /* to preserve .5rem space between icons according to spec top/transform used to center the combobox clear selection icon in IE11 */
-    right: to-rem(40px);
+    right: to-rem(45px); // ccs: v11
     display: flex;
     width: to-rem(24px);
     height: to-rem(24px);
@@ -561,7 +562,7 @@ $list-box-width: 100%;
     &:focus {
       @include focus-outline('outline');
 
-      padding: to-rem(11px) to-rem(16px);
+      padding: to-rem(12px) to-rem(16px); // ccs: v11
       border-color: transparent;
       margin: 0;
     }
@@ -633,9 +634,11 @@ $list-box-width: 100%;
     }
   }
 
+  // ccs: v11 rings the highlighted option and leaves its background alone,
+  // so a selected option keeps its color under the ring.
   .#{$prefix}--list-box__menu-item--highlighted {
-    border-color: transparent;
-    background-color: $layer-hover;
+    @include focus-outline('outline');
+
     color: $text-primary;
   }
 
@@ -658,8 +661,7 @@ $list-box-width: 100%;
     color: $text-primary;
   }
 
-  .#{$prefix}--list-box__menu-item--active:hover,
-  .#{$prefix}--list-box__menu-item--active.#{$prefix}--list-box__menu-item--highlighted {
+  .#{$prefix}--list-box__menu-item--active:hover {
     border-bottom-color: $layer-selected-hover;
     background-color: $layer-selected-hover;
   }
@@ -898,4 +900,48 @@ $list-box-width: 100%;
 
 @include exports("list-box-menu-group-header") {
   @include list-box-menu-group-header;
+}
+
+// carbon-components-svelte patch
+// v11 draws a hairline between the clear button and the chevron, and another
+// before the clear button while the field is invalid or warns.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Dividers beside a list box's clear button.
+/// @access private
+/// @group components
+@mixin list-box-selection-divider {
+  .#{$prefix}--list-box__selection::after,
+  .#{$prefix}--list-box[data-invalid] .#{$prefix}--list-box__selection::before,
+  .#{$prefix}--list-box--warning .#{$prefix}--list-box__selection::before {
+    position: absolute;
+    top: to-rem(4px);
+    width: 1px;
+    height: $carbon--spacing-05;
+    background-color: $border-subtle;
+    content: "";
+  }
+
+  // Midway to the chevron, 9px to the right.
+  .#{$prefix}--list-box__selection::after {
+    right: to-rem(-5px);
+  }
+
+  // Between the status icon and the clear button, where v11 puts it.
+  .#{$prefix}--list-box[data-invalid] .#{$prefix}--list-box__selection::before,
+  .#{$prefix}--list-box--warning .#{$prefix}--list-box__selection::before {
+    left: to-rem(-5px);
+  }
+
+  // An inline chevron sits 4px closer to the edge. The clear button follows
+  // it to keep the 9px gap.
+  .#{$prefix}--list-box--inline .#{$prefix}--list-box__selection {
+    right: to-rem(41px);
+  }
+}
+
+@include exports("list-box-selection-divider") {
+  @include list-box-selection-divider;
 }

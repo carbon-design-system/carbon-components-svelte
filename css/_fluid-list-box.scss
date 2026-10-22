@@ -266,6 +266,17 @@
     right: to-rem(41px);
   }
 
+  // The fluid status icon sits apart from the clear button, so v11 drops
+  // the divider between them.
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--list-box[data-invalid]
+    .#{$prefix}--list-box__selection::before,
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__selection::before {
+    content: none;
+  }
+
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box--up
     .#{$prefix}--list-box__menu {

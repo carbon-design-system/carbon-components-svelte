@@ -47,29 +47,24 @@
   // Do not put `--highlighted` on a `class:` directive when the listbox owns
   // a cursor. Svelte 3 removes that class on every update if the expression
   // is false, which undoes the cursor's classList write.
-  $: bindCursor(optionRef, id, active, highlighted);
+  $: bindCursor(optionRef, id, highlighted);
 
   /**
    * @param {HTMLElement | null} node
    * @param {string | undefined} optionId
-   * @param {boolean} isActive
    * @param {boolean} isHighlighted
    */
-  function bindCursor(node, optionId, isActive, isHighlighted) {
+  function bindCursor(node, optionId, isHighlighted) {
     unregisterHighlight();
     unregisterHighlight = noop;
     if (!node) return;
     if (highlightCursor) {
       if (optionId) {
-        unregisterHighlight = highlightCursor.register(
-          optionId,
-          node,
-          isActive,
-        );
+        unregisterHighlight = highlightCursor.register(optionId, node);
       }
       return;
     }
-    node.classList.toggle(HIGHLIGHT_CLASS, Boolean(isActive || isHighlighted));
+    node.classList.toggle(HIGHLIGHT_CLASS, isHighlighted);
   }
 
   onMount(() => () => unregisterHighlight());

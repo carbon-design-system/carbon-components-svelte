@@ -29,7 +29,7 @@ describe("ListBoxMenu highlight cursor", () => {
     );
   });
 
-  it("keeps the highlight class on an active option after the cursor moves away", async () => {
+  it("moves the highlight class off an active option with the cursor", async () => {
     const { rerender } = render(HighlightCursorMenu, {
       props: { highlightedId: "hl-c" },
     });
@@ -38,9 +38,9 @@ describe("ListBoxMenu highlight cursor", () => {
     rerender({ highlightedId: "hl-a" });
     await tick();
 
-    expect(screen.getByText("Gamma").closest("[role='option']")).toHaveClass(
-      HIGHLIGHT,
-    );
+    expect(
+      screen.getByText("Gamma").closest("[role='option']"),
+    ).not.toHaveClass(HIGHLIGHT);
     expect(screen.getByText("Gamma").closest("[role='option']")).toHaveClass(
       "bx--list-box__menu-item--active",
     );

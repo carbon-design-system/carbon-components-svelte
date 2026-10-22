@@ -46,35 +46,6 @@ describe("createHighlightCursor", () => {
     expect(b).toHaveClass(HIGHLIGHT);
   });
 
-  it("does not strip highlight from an active (selected) node", () => {
-    const cursor = createHighlightCursor();
-    const selected = option("sel");
-    const other = option("other");
-    cursor.register("sel", selected, true);
-    cursor.register("other", other);
-
-    cursor.set("sel", { scroll: false });
-    cursor.set("other", { scroll: false });
-
-    expect(selected).toHaveClass(HIGHLIGHT);
-    expect(other).toHaveClass(HIGHLIGHT);
-  });
-
-  it("re-registering with isActive false clears the highlight once the cursor moves on", () => {
-    const cursor = createHighlightCursor();
-    const selected = option("sel");
-    const other = option("other");
-    cursor.register("sel", selected, true);
-    cursor.register("other", other);
-    cursor.set("other", { scroll: false });
-
-    // Deselecting re-registers with `isActive: false`, mirroring
-    // `ListBoxMenuItem` re-running `bindCursor` when its `active` prop flips.
-    cursor.register("sel", selected, false);
-
-    expect(selected).not.toHaveClass(HIGHLIGHT);
-  });
-
   it("applies highlight on register when set ran first", () => {
     const cursor = createHighlightCursor();
     cursor.set("late", { scroll: false });
