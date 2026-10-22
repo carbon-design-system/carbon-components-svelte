@@ -22,6 +22,21 @@ describe("routePolyline", () => {
   });
 });
 
+describe("routePolyline curved", () => {
+  test("draws one cubic per leg with tangents along the flow axis", () => {
+    const points = [
+      { x: 0, y: 0 },
+      { x: 40, y: 100 },
+    ];
+    expect(routePolyline(points, { kind: "curved" })).toBe(
+      "M0,0C0,50 40,50 40,100",
+    );
+    expect(routePolyline(points, { kind: "curved", axis: "x" })).toBe(
+      "M0,0C20,0 20,100 40,100",
+    );
+  });
+});
+
 describe("portPoint", () => {
   test("places a port on each side, pointing outward", () => {
     const node = { x: 10, y: 20, width: 100, height: 40 };

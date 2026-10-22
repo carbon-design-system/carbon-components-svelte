@@ -12,16 +12,33 @@ function r(value) {
  * halfway along `axis` between consecutive points.
  *
  * @param {ReadonlyArray<{ x: number; y: number }>} points
- * @param {{ kind?: "straight" | "orthogonal"; axis?: "x" | "y" }} [options]
+ * @param {{ kind?: "straight" | "orthogonal" | "curved"; axis?: "x" | "y" }} [options]
  * @returns {string}
  */
 export function routePolyline(points, options = {}) {
   const { kind = "straight", axis = "y" } = options;
   if (points.length === 0) return "";
-  if (kind !== "orthogonal" || points.length < 2) {
+  if (kind === "straight" || points.length < 2) {
     return points
       .map((point, i) => `${i === 0 ? "M" : "L"}${r(point.x)},${r(point.y)}`)
       .join("");
+  }
+  if (kind === "curved") {
+    // One cubic per leg, with tangents along the flow axis, so the curve
+    // leaves and enters each waypoint in the direction of the layout.
+    let d = `M${r(points[0].x)},${r(points[0].y)}`;
+    for (let i = 1; i < points.length; i++) {
+      const a = points[i - 1];
+      const b = points[i];
+      if (axis === "x") {
+        const mid = (a.x + b.x) / 2;
+        d += `C${r(mid)},${r(a.y)} ${r(mid)},${r(b.y)} ${r(b.x)},${r(b.y)}`;
+      } else {
+        const mid = (a.y + b.y) / 2;
+        d += `C${r(a.x)},${r(mid)} ${r(b.x)},${r(mid)} ${r(b.x)},${r(b.y)}`;
+      }
+    }
+    return d;
   }
   let d = `M${r(points[0].x)},${r(points[0].y)}`;
   for (let i = 1; i < points.length; i++) {
