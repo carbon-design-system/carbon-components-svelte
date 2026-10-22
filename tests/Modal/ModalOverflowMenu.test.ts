@@ -10,7 +10,7 @@ describe.each([
     const onclose = vi.fn();
     render(ModalOverflowMenu, { props: { onclose, portalMenu } });
 
-    const menuButton = screen.getByRole("button", { name: "menu" });
+    const menuButton = screen.getByRole("button", { name: "More options" });
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 

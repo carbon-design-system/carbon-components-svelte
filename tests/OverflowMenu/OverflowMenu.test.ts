@@ -61,7 +61,7 @@ describe("OverflowMenu", () => {
     render(OverflowMenuInModal, { props: { modalOpen: true } });
 
     const { menuButton } = await openMenu(
-      screen.getByRole("button", { name: "menu" }),
+      screen.getByRole("button", { name: "Options" }),
     );
     await user.click(screen.getByRole("menuitem", { name: "Option 2" }));
 
@@ -558,7 +558,7 @@ describe("OverflowMenu", () => {
     it("should render menu in FloatingPortal when inside Modal (portalMenu not passed)", async () => {
       render(OverflowMenuInModal, { props: { modalOpen: true } });
 
-      await openMenu(screen.getByRole("button", { name: "menu" }));
+      await openMenu(screen.getByRole("button", { name: "Options" }));
 
       const menu = screen.getByRole("menu");
       expect(menu).toBeInTheDocument();
@@ -572,7 +572,7 @@ describe("OverflowMenu", () => {
         props: { modalOpen: true, portalMenu: false },
       });
 
-      await openMenu(screen.getByRole("button", { name: "menu" }));
+      await openMenu(screen.getByRole("button", { name: "Options" }));
 
       const menu = screen.getByRole("menu");
       expect(menu).toBeInTheDocument();

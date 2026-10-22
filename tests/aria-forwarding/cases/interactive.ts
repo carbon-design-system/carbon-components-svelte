@@ -331,6 +331,19 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("button"),
   },
   {
+    name: "OverflowMenu",
+    variant: "open",
+    render: (attrs) =>
+      render(OverflowMenu, { props: { open: true, ...attrs } }),
+    // An aria-label names the menu as well as its trigger.
+    target: () => [screen.getByRole("button"), screen.getByRole("menu")],
+    skip: {
+      "aria-labelledby": "lands on the trigger only; the closed case covers it",
+      "aria-describedby":
+        "lands on the trigger only; the closed case covers it",
+    },
+  },
+  {
     name: "OverflowMenuItem",
     render: (attrs) => render(OverflowMenuItem, { props: attrs }),
     target: () => screen.getByRole("menuitem"),
