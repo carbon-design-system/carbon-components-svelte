@@ -42,7 +42,7 @@
 
   /**
    * Specify the tabindex of the toggle: the tile itself, or the
-   * chevron button when `hasInteractiveContent` is `true`.
+   * chevron button when the tile has interactive content.
    * @type {number | string | undefined}
    */
   export let tabindex = "0";
@@ -51,12 +51,15 @@
   export let id = uniqueId();
 
   /**
-   * Set to `true` if the tile contains interactive content
-   * (e.g., links, buttons, inputs). The tile will render as
-   * a `div` instead of a `button` to avoid invalid HTML nesting,
-   * and the expand/collapse toggle moves to the chevron button.
+   * Set to `true` if the tile contains interactive content, such as links,
+   * buttons, or inputs. The tile renders a `div` instead of a `button` to
+   * avoid invalid HTML nesting, and the chevron button becomes the toggle.
+   * By default, the tile looks for interactive content once it mounts and
+   * switches then. Set to `true` to render the `div` from the start, such
+   * as on the server, or `false` to keep the `button` without looking.
+   * @type {boolean | undefined}
    */
-  export let hasInteractiveContent = false;
+  export let hasInteractiveContent = undefined;
 
   /**
    * Obtain a reference to the top-level element.
@@ -64,7 +67,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -75,9 +78,75 @@
 
   const dispatch = createEventDispatcher();
 
+  // HTML's interactive content, which a `button` must not contain, plus
+  // any element with a `tabindex`, which it must not contain either.
+  const INTERACTIVE_CONTENT = [
+    "a[href]",
+    "area[href]",
+    "audio[controls]",
+    "button",
+    "details",
+    "embed",
+    "iframe",
+    "input:not([type='hidden'])",
+    "label",
+    "select",
+    "textarea",
+    "video[controls]",
+    "[tabindex]",
+    "[contenteditable]:not([contenteditable='false'])",
+  ].join(", ");
+
   let refAbove = null;
+  let chevronRef = null;
   let mounted = false;
   let stopObserving = noop;
+  let stopWatching = noop;
+  let detectedInteractive = false;
+
+  $: interactive = hasInteractiveContent ?? detectedInteractive;
+
+  /**
+   * Whether the button holds interactive content. The switch to the `div`
+   * replaces the button and everything in it, so a focused tile hands focus
+   * to the chevron button that takes over as the toggle.
+   * @param {HTMLElement} node
+   * @returns {boolean}
+   */
+  function checkContent(node) {
+    if (!node.querySelector(INTERACTIVE_CONTENT)) return false;
+    if (node.contains(document.activeElement)) {
+      tick().then(() => chevronRef?.focus());
+    }
+    return true;
+  }
+
+  /**
+   * Look for interactive content in the button. Content can arrive after
+   * mount, so keep watching until it does. The server cannot look, so it
+   * renders the `button`.
+   * @param {null | HTMLElement} node
+   * @returns {boolean}
+   */
+  function watchContent(node) {
+    stopWatching();
+    stopWatching = noop;
+    if (!node) return false;
+    if (checkContent(node)) return true;
+
+    const observer = new MutationObserver(() => {
+      if (!detectedInteractive && checkContent(node)) {
+        detectedInteractive = true;
+      }
+    });
+    observer.observe(node, {
+      childList: true,
+      subtree: true,
+      attributeFilter: ["href", "tabindex", "contenteditable", "controls"],
+    });
+    stopWatching = () => observer.disconnect();
+    return false;
+  }
 
   /**
    * Internal, measured fallbacks. These are only used when the consumer has
@@ -109,10 +178,21 @@
 
     return () => {
       stopObserving();
+      stopWatching();
     };
   });
 
-  // Follow the elements as they change, such as when `hasInteractiveContent`
+  // Assign here, not inside `watchContent`, so Svelte 3 and 4 order this
+  // block before `interactive` and re-derive it in the same flush.
+  $: if (mounted) {
+    if (hasInteractiveContent === undefined && !detectedInteractive) {
+      detectedInteractive = watchContent(ref);
+    } else {
+      watchContent(null);
+    }
+  }
+
+  // Follow the elements as they change, such as when interactive content
   // swaps the root tag.
   $: if (mounted) {
     stopObserving();
@@ -164,16 +244,17 @@
   <!-- svelte-ignore a11y-mouse-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <svelte:element
-    this={hasInteractiveContent ? "div" : "button"}
+    this={interactive ? "div" : "button"}
     bind:this={ref}
-    type={hasInteractiveContent ? undefined : "button"}
+    type={interactive ? undefined : "button"}
     {id}
-    aria-expanded={hasInteractiveContent ? undefined : expanded}
-    tabindex={hasInteractiveContent ? undefined : tabindex}
-    title={hasInteractiveContent ? undefined : iconText}
+    aria-expanded={interactive ? undefined : expanded}
+    aria-controls={interactive ? undefined : `${id}-content`}
+    tabindex={interactive ? undefined : tabindex}
+    title={interactive ? undefined : iconText}
     class:bx--tile={true}
     class:bx--tile--expandable={true}
-    class:bx--tile--expandable--interactive={hasInteractiveContent}
+    class:bx--tile--expandable--interactive={interactive}
     class:bx--tile--is-expanded={expanded}
     class:bx--tile--decorator={$$slots.decorator}
     class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
@@ -181,10 +262,10 @@
     style:max-height={expanded || effectiveMaxHeight <= 0
       ? "none"
       : `${effectiveMaxHeight + effectivePadding}px`}
-    {...hasInteractiveContent ? wrapperProps : $$restProps}
+    {...interactive ? wrapperProps : $$restProps}
     on:click
     on:click={() => {
-      if (!hasInteractiveContent) toggle();
+      if (!interactive) toggle();
     }}
     on:keydown
     on:keypress
@@ -201,20 +282,21 @@
         </span>
       </div>
       <svelte:element
-        this={hasInteractiveContent ? "button" : "div"}
-        type={hasInteractiveContent ? "button" : undefined}
-        tabindex={hasInteractiveContent ? tabindex : undefined}
+        this={interactive ? "button" : "div"}
+        bind:this={chevronRef}
+        type={interactive ? "button" : undefined}
+        tabindex={interactive ? tabindex : undefined}
         class:bx--tile__chevron={true}
-        aria-expanded={hasInteractiveContent ? expanded : undefined}
-        aria-label={hasInteractiveContent
+        aria-expanded={interactive ? expanded : undefined}
+        aria-label={interactive
           ? (ariaLabel ?? (label ? undefined : iconText))
           : undefined}
-        aria-labelledby={hasInteractiveContent ? ariaLabelledBy : undefined}
-        aria-describedby={hasInteractiveContent ? ariaDescribedBy : undefined}
-        aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
-        title={hasInteractiveContent ? iconText : undefined}
+        aria-labelledby={interactive ? ariaLabelledBy : undefined}
+        aria-describedby={interactive ? ariaDescribedBy : undefined}
+        aria-controls={interactive ? `${id}-content` : undefined}
+        title={interactive ? iconText : undefined}
         on:click={() => {
-          if (hasInteractiveContent) toggle();
+          if (interactive) toggle();
         }}
         on:focus
         on:blur
