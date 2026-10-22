@@ -94,9 +94,15 @@ carbon-components
 
 ### Max width
 
-Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full text appears only when the label is truncated. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`. Interactive and link tags expose the full label through the native `title` attribute on hover instead of a tooltip.
+Tags cap at 208px, as in Carbon v11. A longer label truncates with an ellipsis, and a tooltip shows the full text on hover and focus. Set `maxWidth` to change the cap, for example `"100%"` to fit the container. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
 
 <Stack gap={5}>
+  <div>
+    <div>Default (208px)</div>
+    <Tag filter on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
   <div>
     <div>maxWidth="8rem"</div>
     <Tag filter maxWidth="8rem" on:close>
@@ -127,7 +133,7 @@ Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full 
 
 ### Close button label
 
-Set `title` to customize the hover tooltip and the leading words of the close button's accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components".
+Set `title` to customize the close button's tooltip, shown on hover and focus, and the leading words of its accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components".
 
 <Tag filter title="Remove filter" on:close>carbon-components</Tag>
 
@@ -191,7 +197,7 @@ Embed a tooltip within a tag to provide additional context.
 
 ## Operational
 
-Use `OperationalTag` for a tag that reveals related content, such as the rest of a list, in a popover. The whole tag is the trigger, and a ring in the tag's own color marks it as one. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to open it. <DocKbd label="Escape" /> closes it and returns focus to the tag; so does clicking outside or moving focus away. Put the popover content in the `content` slot.
+Use `OperationalTag` for a tag that reveals related content, such as the rest of a list, in a popover. The whole tag is the trigger, and a border in the tag's color marks it as one. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to open it. <DocKbd label="Escape" /> closes it and returns focus to the tag; so does clicking outside or moving focus away. Put the popover content in the `content` slot.
 
 <OperationalTag type="blue">
   3 policies
