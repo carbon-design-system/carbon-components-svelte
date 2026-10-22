@@ -296,8 +296,6 @@
         break;
       }
       case "Escape":
-        // Escape that cancels an IME composition is not a clear or close.
-        if (isImeComposition(event)) break;
         if (richMenuVisible) {
           // Close the menu but keep the bar active and the value intact.
           menuDismissed = true;
@@ -476,6 +474,9 @@
       on:keydown
       on:keydown={(event) => {
         trackTab(event);
+        // Keys that belong to an IME composition (Enter commits, Escape
+        // cancels, arrows pick a candidate) are not search keys.
+        if (isImeComposition(event)) return;
         if (richMenu) {
           handleRichKeydown(event);
           return;
@@ -506,8 +507,6 @@
             );
             break;
           case "Escape":
-            // Escape that cancels an IME composition is not a clear or close.
-            if (isImeComposition(event)) break;
             if (value === "") {
               // If the search bar is empty, deactivate the input.
               active = false;
