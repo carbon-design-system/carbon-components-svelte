@@ -156,6 +156,18 @@ describe("tokenize", () => {
     expect(types(code, lang)?.slice(0, expected.length)).toEqual(expected);
   });
 
+  test.each(["json", "jsonc"])("reads comments in %s", (lang) => {
+    expect(types('{ // "q"\n  "a": 1 /* b */ }', lang)).toEqual([
+      "brace:{",
+      'comment:// "q"',
+      'property-name:"a"',
+      "punctuation::",
+      "number:1",
+      "comment:/* b */",
+      "brace:}",
+    ]);
+  });
+
   test("reads expressions inside quoted attribute values as script", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",
