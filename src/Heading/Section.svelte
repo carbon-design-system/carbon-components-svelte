@@ -22,11 +22,12 @@
 
   /**
    * Specify the heading level the section should start at.
+   * When omitted, the level is one more than the parent section (1 at the top).
    * When nested, child sections automatically increment from this level.
    * Levels are capped at 6 (h6).
    *
-   * @type {SectionLevel}
-   * @default 1
+   * @type {SectionLevel | undefined}
+   * @default undefined
    * @example
    * ```svelte
    * <Section level={5}>
@@ -37,7 +38,7 @@
    * </Section>
    * ```
    */
-  export let level = 1;
+  export let level = undefined;
 
   /**
    * Specify the HTML tag name to render instead of the default `section` element.
@@ -69,10 +70,10 @@
   const parentLevel = getContext("carbon:Section") ?? readable(0);
 
   /** @type {import("svelte/store").Writable<SectionLevel>} */
-  const internalLevel = writable(level);
+  const internalLevel = writable(Math.min(level ?? $parentLevel + 1, 6));
 
   // Custom level should override the inferred parent level.
-  $: internalLevel.set(level === 1 ? Math.min($parentLevel + 1, 6) : level);
+  $: internalLevel.set(Math.min(level ?? $parentLevel + 1, 6));
 
   setContext("carbon:Section", readonly(internalLevel));
 </script>

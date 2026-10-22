@@ -1,6 +1,9 @@
 <script lang="ts">
   import Heading from "carbon-components-svelte/Heading/Heading.svelte";
   import Section from "carbon-components-svelte/Heading/Section.svelte";
+
+  // Out of range on purpose: `level` is typed 1-6 but capped at runtime.
+  const overflowLevel = 7 as unknown as 6;
 </script>
 
 <Section> <Heading>Default Heading 1</Heading> </Section>
@@ -32,6 +35,15 @@
     <Heading>Custom Level Heading 6</Heading>
     <Section> <Heading>Custom Level Capped at Heading 6</Heading> </Section>
   </Section>
+</Section>
+
+<Section>
+  <Heading>Reset Outer Heading 1</Heading>
+  <Section level={1}> <Heading>Reset Heading 1</Heading> </Section>
+</Section>
+
+<Section level={overflowLevel}>
+  <Heading>Overflow Level Heading 6</Heading>
 </Section>
 
 <div data-testid="custom-tag-wrapper">
