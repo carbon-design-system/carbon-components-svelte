@@ -370,6 +370,22 @@
   @include tile-checkbox-forced-colors;
 }
 
+// carbon-components-svelte patch (tile-rounded)
+
+/// Rounded corners on a tile with a decorator (`rounded`), backported from
+/// Carbon v11
+/// @access private
+/// @group components
+@mixin tile-rounded {
+  .#{$prefix}--tile--decorator-rounded {
+    border-radius: $carbon--spacing-03;
+  }
+}
+
+@include exports("tile-rounded") {
+  @include tile-rounded;
+}
+
 // carbon-components-svelte patch (tile-clickable-icon)
 
 /// `ClickableTile`'s `icon` in the bottom-right corner, backported from

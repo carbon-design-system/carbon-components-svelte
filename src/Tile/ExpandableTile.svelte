@@ -35,6 +35,12 @@
   export let tileCollapsedLabel = "";
 
   /**
+   * Set to `true` to round the tile's corners when it has a `decorator`,
+   * such as an `AILabel`. Carbon reserves rounded tiles for AI content.
+   */
+  export let rounded = false;
+
+  /**
    * Specify the tabindex of the toggle: the tile itself, or the
    * chevron button when `hasInteractiveContent` is `true`.
    * @type {number | string | undefined}
@@ -170,6 +176,7 @@
     class:bx--tile--expandable--interactive={hasInteractiveContent}
     class:bx--tile--is-expanded={expanded}
     class:bx--tile--decorator={$$slots.decorator}
+    class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
     class:bx--tile--ai-label={$aiLabelState === "active"}
     style:max-height={expanded || effectiveMaxHeight <= 0
       ? "none"

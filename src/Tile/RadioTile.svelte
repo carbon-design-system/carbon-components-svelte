@@ -24,6 +24,12 @@
   /** Set to `true` to stretch the tile to fill the height of its container */
   export let fullHeight = false;
 
+  /**
+   * Set to `true` to round the tile's corners when it has a `decorator`,
+   * such as an `AILabel`. Carbon reserves rounded tiles for AI content.
+   */
+  export let rounded = false;
+
   /** Set to `true` to mark the field as required */
   export let required = false;
 
@@ -244,6 +250,7 @@
     class:bx--tile--disabled={effectiveDisabled}
     class:bx--tile--full-height={fullHeight}
     class:bx--tile--decorator={$$slots.decorator}
+    class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
     class:bx--tile--ai-label={$aiLabelState === "active"}
     {...labelRestProps}
     on:click
