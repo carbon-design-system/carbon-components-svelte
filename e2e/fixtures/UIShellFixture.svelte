@@ -16,6 +16,8 @@
     SideNav,
     SideNavItems,
     SideNavLink,
+    SideNavMenu,
+    SideNavMenuItem,
     SkipToContent,
   } from "carbon-components-svelte";
 
@@ -64,6 +66,9 @@
     </HeaderSideNavItems>
     <SideNavLink href="#" text="Side item A" />
     <SideNavLink href="#" text="Side item B" />
+    <SideNavMenu text="Side menu">
+      <SideNavMenuItem href="#" text="Side menu item" />
+    </SideNavMenu>
   </SideNavItems>
 </SideNav>
 

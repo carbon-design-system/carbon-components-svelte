@@ -130,12 +130,23 @@
   } from "./nav-store.js";
 
   function handleEscape(event) {
-    if (isOpen && !fixed && $isSideNavMobile && event.key === "Escape") {
-      // Escape that cancels an IME composition is not a close.
-      if (isImeComposition(event)) return;
-      isOpen = false;
-      $hamburgerMenuRef?.focus();
+    if (!dismissible || event.key !== "Escape") return;
+    // Escape that cancels an IME composition is not a close.
+    if (isImeComposition(event)) return;
+    // A control inside the nav (a `HeaderNavMenu`) already used this Escape.
+    if (event.defaultPrevented) return;
+    // Below the breakpoint the open nav traps focus, so any Escape closes
+    // it. Above it the nav sits beside the page, so only Escape from the
+    // nav or its menu button does.
+    if (
+      !$isSideNavMobile &&
+      !navRef?.contains(event.target) &&
+      event.target !== $hamburgerMenuRef
+    ) {
+      return;
     }
+    isOpen = false;
+    $hamburgerMenuRef?.focus();
   }
 
   const RESIZE_KEYBOARD_STEP = 16;
@@ -286,6 +297,13 @@
   $: if (!resizeEnabled) stopResizing();
   $: $isSideNavMobile =
     winWidth !== undefined && winWidth < expansionBreakpoint && !fixed;
+  // Escape closes the nav wherever the menu button can reopen it. Above the
+  // breakpoint a rail's width follows hover and focus, not `isOpen`, and a
+  // nav closed with no menu button would stay hidden.
+  $: dismissible =
+    isOpen &&
+    !fixed &&
+    ($isSideNavMobile || (!rail && $hamburgerMenuRef != null));
 
   // Lock body scroll when SideNav is open on mobile (below breakpoint).
   // Only applies to non-fixed, non-rail variants. Uses the shared ref-counted
@@ -359,7 +377,7 @@
 <nav
   bind:this={navRef}
   use:dismiss={{
-    enabled: isOpen && !fixed && $isSideNavMobile,
+    enabled: dismissible,
     type: "keydown",
     handler: handleEscape,
   }}
