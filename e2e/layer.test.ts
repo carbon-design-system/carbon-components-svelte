@@ -35,3 +35,47 @@ test("components take the surface of their Layer level", async ({ page }) => {
     }
   }
 });
+
+// v11 draws zebra stripes with layer-accent, which steps up with the
+// Layer as the rows do. A fixed stripe matched the rows at one level.
+const ZEBRA = {
+  white: {
+    row: ["rgb(244, 244, 244)", "rgb(255, 255, 255)", "rgb(244, 244, 244)"],
+    stripe: ["rgb(224, 224, 224)", "rgb(224, 224, 224)", "rgb(224, 224, 224)"],
+  },
+  g100: {
+    row: ["rgb(38, 38, 38)", "rgb(57, 57, 57)", "rgb(82, 82, 82)"],
+    stripe: ["rgb(57, 57, 57)", "rgb(82, 82, 82)", "rgb(111, 111, 111)"],
+  },
+};
+
+test("zebra stripes stand out from the rows at every Layer level", async ({
+  page,
+}) => {
+  await page.goto("/layer.html");
+  // Keep the pointer off the rows so no hover color applies.
+  await page.mouse.move(0, 0);
+
+  for (const [theme, { row, stripe }] of Object.entries(ZEBRA)) {
+    // biome-ignore lint/performance/noAwaitInLoops: one page, read in order
+    await page.evaluate(
+      (t) => document.documentElement.setAttribute("theme", t),
+      theme,
+    );
+    await Promise.all(
+      [1, 2, 3].flatMap((level) => {
+        const cells = page
+          .getByTestId(`level-${level}`)
+          .locator(".bx--data-table--zebra tbody td");
+        return [
+          expect
+            .soft(cells.nth(0), `${theme} row at level ${level}`)
+            .toHaveCSS("background-color", row[level - 1]),
+          expect
+            .soft(cells.nth(1), `${theme} stripe at level ${level}`)
+            .toHaveCSS("background-color", stripe[level - 1]),
+        ];
+      }),
+    );
+  }
+});
