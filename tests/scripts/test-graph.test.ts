@@ -1,3 +1,4 @@
+// @vitest-environment node
 import {
   affectedBy,
   BARREL,
@@ -277,36 +278,47 @@ describe("parseDependencies", () => {
     ).toEqual(["tests/user.ts"]);
   });
 
-  it("maps e2e page.goto() to the fixture page", () => {
-    expect(
-      deps(
-        "e2e/x.test.ts",
-        `await page.goto("/accordion.html#top");\nawait other.goto("about:blank");`,
-      ),
-    ).toEqual({
-      files: ["e2e/fixtures/accordion.html"],
-      patterns: [],
-      unknown: [],
-    });
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
-    const staticPath = "`/accordion.html?v=${v}`";
-    expect(deps("e2e/x.test.ts", `await page.goto(${staticPath});`)).toEqual({
-      files: ["e2e/fixtures/accordion.html"],
-      patterns: [],
-      unknown: [],
-    });
-    expect(deps("e2e/x.test.ts", "await page.goto(url);").unknown).toEqual([
-      "non-literal goto(url)",
-    ]);
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
-    const dynamicPath = "`/${name}.html?v=1`";
-    expect(
-      deps("e2e/x.test.ts", `await page.goto(${dynamicPath});`).unknown,
-    ).toEqual([`non-literal goto(${dynamicPath})`]);
-    expect(
-      deps("e2e/x.test.ts", `await page.goto("/gone.html");`).unknown,
-    ).toEqual([`missing fixture "/gone.html"`]);
-  });
+  const fixturePage = {
+    files: ["e2e/fixtures/accordion.html"],
+    patterns: [],
+    unknown: [],
+  };
+
+  it.each([
+    [
+      "a literal path with a hash, ignoring another goto",
+      `await page.goto("/accordion.html#top");\nawait other.goto("about:blank");`,
+      fixturePage,
+    ],
+    [
+      "a template literal with an interpolated query",
+      // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+      "await page.goto(`/accordion.html?v=${v}`);",
+      fixturePage,
+    ],
+    [
+      "a variable it can't read",
+      "await page.goto(url);",
+      { unknown: ["non-literal goto(url)"] },
+    ],
+    [
+      "an interpolated page name",
+      // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+      "await page.goto(`/${name}.html?v=1`);",
+      // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+      { unknown: ["non-literal goto(`/${name}.html?v=1`)"] },
+    ],
+    [
+      "a page with no fixture",
+      `await page.goto("/gone.html");`,
+      { unknown: [`missing fixture "/gone.html"`] },
+    ],
+  ])(
+    "maps e2e page.goto() to the fixture page: %s",
+    (_name, source, expected) => {
+      expect(deps("e2e/x.test.ts", source)).toMatchObject(expected);
+    },
+  );
 
   it("reads fixture HTML script sources", () => {
     expect(

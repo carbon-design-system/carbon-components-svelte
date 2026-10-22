@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { affectedBy, planTests } from "../../scripts/lib/test-graph";
 import { loadGraph } from "../../scripts/test-changed";
 

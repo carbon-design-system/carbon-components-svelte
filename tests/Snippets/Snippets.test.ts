@@ -3,6 +3,14 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import Snippets from "./Snippets.test.svelte";
 
+/** Renders the fixture and clicks the trigger button inside `testid`. */
+const openDropdown = async (testid: string) => {
+  render(Snippets);
+  const button = screen.getByTestId(testid).querySelector("button");
+  if (!button) throw new Error("expected dropdown trigger button");
+  await user.click(button);
+};
+
 describe("Svelte 5 Snippets", () => {
   describe("DataTable expandIcon", () => {
     it("should render custom expand icon via expandIcon snippet with expanded, row, and props", async () => {
@@ -74,70 +82,82 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
-  describe("Dropdown", () => {
-    it("should render snippet with item and index arguments", async () => {
-      render(Snippets);
+  describe("item and index snippet arguments", () => {
+    it.each([
+      {
+        name: "Dropdown",
+        open: () => openDropdown("dropdown-snippet"),
+        prefix: "dropdown-item",
+        texts: ["Option 1 (#0)", "Option 2 (#1)", "Option 3 (#2)"],
+        // items have ids "1","2","3"; selectedId="1" -> index 0
+        selectedIndex: 0,
+      },
+      {
+        name: "ComboBox",
+        open: async () => {
+          render(Snippets);
+          await user.click(screen.getByTestId("combobox-snippet"));
+        },
+        prefix: "combobox-item",
+        texts: [
+          "Option 1 - index 0",
+          "Option 2 - index 1",
+          "Option 3 - index 2",
+        ],
+        // selectedId="2" -> index 1
+        selectedIndex: 1,
+      },
+    ])("should render $name snippet with item and index", async (row) => {
+      await row.open();
 
-      const dropdown = screen.getByTestId("dropdown-snippet");
-
-      const button = dropdown.querySelector("button");
-      if (!button) throw new Error("expected dropdown trigger button");
-      await user.click(button);
-
-      const item0 = screen.getByTestId("dropdown-item-0");
-      const item1 = screen.getByTestId("dropdown-item-1");
-      const item2 = screen.getByTestId("dropdown-item-2");
-
-      expect(item0).toHaveTextContent("Option 1 (#0)");
-      expect(item1).toHaveTextContent("Option 2 (#1)");
-      expect(item2).toHaveTextContent("Option 3 (#2)");
-
-      // items have ids "1","2","3"; selectedId="1" -> index 0 (item0)
-      expect(item0).toHaveAttribute("data-selected", "true");
-      expect(item1).toHaveAttribute("data-selected", "false");
-      expect(item2).toHaveAttribute("data-selected", "false");
+      row.texts.forEach((text, index) => {
+        const item = screen.getByTestId(`${row.prefix}-${index}`);
+        expect(item).toHaveTextContent(text);
+        expect(item).toHaveAttribute(
+          "data-selected",
+          String(index === row.selectedIndex),
+        );
+      });
     });
   });
 
-  describe("Dropdown labelChildren", () => {
-    it("should render labelChildren slot", () => {
+  describe("labelChildren", () => {
+    it("should render Dropdown labelChildren", () => {
       render(Snippets);
 
-      const customLabel = screen.getByTestId("dropdown-custom-label");
-      expect(customLabel).toHaveTextContent("Custom label content");
+      expect(screen.getByTestId("dropdown-custom-label")).toHaveTextContent(
+        "Custom label content",
+      );
     });
-  });
 
-  describe("IconIndicator labelChildren", () => {
-    it("should render labelChildren snippet", () => {
+    it.each([
+      {
+        name: "IconIndicator",
+        indicator: "icon-indicator-label-children",
+        custom: "icon-indicator-custom-label",
+        replacedLabel: "Succeeded",
+      },
+      {
+        name: "ShapeIndicator",
+        indicator: "shape-indicator-label-children",
+        custom: "shape-indicator-custom-label",
+        replacedLabel: "Stable",
+      },
+    ])("should render $name labelChildren", (row) => {
       render(Snippets);
 
-      const indicator = screen.getByTestId("icon-indicator-label-children");
-      const customLabel = screen.getByTestId("icon-indicator-custom-label");
-      expect(customLabel).toHaveTextContent("Custom label content");
-      expect(indicator).not.toHaveTextContent("Succeeded");
-    });
-  });
-
-  describe("ShapeIndicator labelChildren", () => {
-    it("should render labelChildren snippet", () => {
-      render(Snippets);
-
-      const indicator = screen.getByTestId("shape-indicator-label-children");
-      const customLabel = screen.getByTestId("shape-indicator-custom-label");
-      expect(customLabel).toHaveTextContent("Custom label content");
-      expect(indicator).not.toHaveTextContent("Stable");
+      expect(screen.getByTestId(row.custom)).toHaveTextContent(
+        "Custom label content",
+      );
+      expect(screen.getByTestId(row.indicator)).not.toHaveTextContent(
+        row.replacedLabel,
+      );
     });
   });
 
   describe("Dropdown icon/iconRight", () => {
     it("should render icon and iconRight snippets with selected", async () => {
-      render(Snippets);
-
-      const dropdown = screen.getByTestId("dropdown-icon-snippets");
-      const button = dropdown.querySelector("button");
-      if (!button) throw new Error("expected dropdown trigger button");
-      await user.click(button);
+      await openDropdown("dropdown-icon-snippets");
 
       // items have ids "1","2","3"; selectedId="1" is selected
       screen.getByTestId("dropdown-icon-1");
@@ -149,29 +169,6 @@ describe("Svelte 5 Snippets", () => {
         "data-selected",
         "false",
       );
-    });
-  });
-
-  describe("ComboBox", () => {
-    it("should render snippet with item and index arguments", async () => {
-      render(Snippets);
-
-      const comboboxInput = screen.getByTestId("combobox-snippet");
-
-      await user.click(comboboxInput);
-
-      const item0 = screen.getByTestId("combobox-item-0");
-      const item1 = screen.getByTestId("combobox-item-1");
-      const item2 = screen.getByTestId("combobox-item-2");
-
-      expect(item0).toHaveTextContent("Option 1 - index 0");
-      expect(item1).toHaveTextContent("Option 2 - index 1");
-      expect(item2).toHaveTextContent("Option 3 - index 2");
-
-      // items have ids "1","2","3"; selectedId="2" -> index 1 (item1)
-      expect(item0).toHaveAttribute("data-selected", "false");
-      expect(item1).toHaveAttribute("data-selected", "true");
-      expect(item2).toHaveAttribute("data-selected", "false");
     });
   });
 
