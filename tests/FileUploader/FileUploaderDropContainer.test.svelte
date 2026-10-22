@@ -14,7 +14,7 @@
         e: CustomEvent<
           Array<{
             file: File;
-            reason: "type" | "size" | "duplicate" | "invalid";
+            reason: "type" | "size" | "duplicate" | "invalid" | "count";
           }>
         >,
       ) => void)
