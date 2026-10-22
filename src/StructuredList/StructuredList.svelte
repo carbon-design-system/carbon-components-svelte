@@ -43,9 +43,16 @@
    */
   export let icon = /** @type {Icon} */ (CheckmarkFilled);
 
+  /**
+   * Specify the accessible name of the header checkbox that selects every
+   * row. Only used when `selection` and `multiple` are `true`.
+   */
+  export let selectAllDescription = "Select all rows";
+
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { formReset } from "../utils/form-reset.js";
   import { createIdScope } from "../utils/id-scope.js";
 
@@ -81,6 +88,7 @@
   const multipleValue = writable(multiple);
   const selectionValue = writable(selection);
   const iconValue = writable(icon);
+  const selectAllDescriptionValue = writable(selectAllDescription);
 
   let prevSelectedValue = $selectedValue;
   let prevMultiple = multiple;
@@ -125,15 +133,47 @@
   const mountedValues = new Map();
 
   /**
-   * Count an input's value. Returns a function that releases it.
-   * @type {(value: Value) => () => void}
+   * How many mounted inputs that are not disabled carry each value.
+   * @type {Map<Value, number>}
    */
-  function register(value) {
-    mountedValues.set(value, (mountedValues.get(value) ?? 0) + 1);
+  const enabledValues = new Map();
+
+  /**
+   * The values select all checks: those of inputs that are not disabled,
+   * in registration order.
+   * @type {import("svelte/store").Writable<Value[]>}
+   */
+  const selectableValues = writable([]);
+  // Every input registers in the same synchronous mount pass, so publish
+  // the values once rather than once per input.
+  const publishSelectableValues = batchStoreUpdates(selectableValues);
+
+  /**
+   * Add `delta` to the count of `value` in `counts`.
+   * @type {(counts: Map<Value, number>, value: Value, delta: number) => void}
+   */
+  function addCount(counts, value, delta) {
+    const count = (counts.get(value) ?? 0) + delta;
+    if (count > 0) counts.set(value, count);
+    else counts.delete(value);
+  }
+
+  /**
+   * Count an input's value. Returns a function that releases it.
+   * @type {(value: Value, disabled?: boolean) => () => void}
+   */
+  function register(value, disabled = false) {
+    addCount(mountedValues, value, 1);
+    if (!disabled) {
+      addCount(enabledValues, value, 1);
+      publishSelectableValues(() => [...enabledValues.keys()]);
+    }
     return () => {
-      const count = (mountedValues.get(value) ?? 0) - 1;
-      if (count > 0) mountedValues.set(value, count);
-      else mountedValues.delete(value);
+      addCount(mountedValues, value, -1);
+      if (!disabled) {
+        addCount(enabledValues, value, -1);
+        publishSelectableValues(() => [...enabledValues.keys()]);
+      }
       // An `{#if}` swap or re-render destroys an input before mounting its
       // replacement, so wait for the flush before deciding the value is
       // gone. Then drop a selection no input carries anymore, as the browser
@@ -149,6 +189,25 @@
         );
       });
     };
+  }
+
+  /**
+   * Select every row that is not disabled, or clear them if all are
+   * selected. Selected disabled rows stay selected. Fires one `change`.
+   */
+  function toggleAll() {
+    publishSelectableValues.flush();
+    const values = get(selectableValues);
+    if (values.length === 0) return;
+    const current = get(selectedValue);
+    const list = Array.isArray(current) ? current : [];
+    const allSelected =
+      values.length > 0 && values.every((v) => list.includes(v));
+    selectedValue.set(
+      allSelected
+        ? list.filter((v) => !values.includes(v))
+        : [...list, ...values.filter((v) => !list.includes(v))],
+    );
   }
 
   /** @type {HTMLDivElement | null} */
@@ -181,6 +240,9 @@
     add,
     update,
     register,
+    selectableValues: readonly(selectableValues),
+    selectAllDescription: readonly(selectAllDescriptionValue),
+    toggleAll,
     multiple: readonly(multipleValue),
     selection: readonly(selectionValue),
     icon: readonly(iconValue),
@@ -196,6 +258,7 @@
   $: $multipleValue = multiple;
   $: $selectionValue = selection;
   $: $iconValue = icon;
+  $: $selectAllDescriptionValue = selectAllDescription;
   $: if (multiple !== prevMultiple || selected !== $selectedValue) {
     prevMultiple = multiple;
     // Coerce the value to the mode. This is a parent write, not a user

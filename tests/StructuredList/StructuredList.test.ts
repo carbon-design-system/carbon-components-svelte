@@ -12,6 +12,14 @@ import StructuredListSort from "./StructuredListSort.test.svelte";
 
 const multipleProps = { selection: true, multiple: true };
 
+// Excludes the header's "Select all rows" checkbox.
+const getRowCheckboxes = () =>
+  screen
+    .getAllByRole("checkbox")
+    .filter((checkbox) =>
+      checkbox.classList.contains("bx--structured-list-input"),
+    );
+
 describe("StructuredList", () => {
   it("should render with default props", () => {
     render(StructuredList);
@@ -264,7 +272,7 @@ describe("StructuredList", () => {
       props: { ...multipleProps, unnamed: true },
     });
 
-    for (const checkbox of screen.getAllByRole("checkbox")) {
+    for (const checkbox of getRowCheckboxes()) {
       expect(checkbox).toHaveAttribute("name", "");
     }
   });
@@ -474,7 +482,7 @@ describe("StructuredList", () => {
     onChange.mockClear();
     await rerender({ multiple: true });
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = getRowCheckboxes();
     expect(checkboxes).toHaveLength(3);
     expect(screen.queryAllByRole("radio")).toHaveLength(0);
     expect(body).toHaveAttribute("role", "group");
@@ -500,7 +508,7 @@ describe("StructuredList", () => {
     const onChange = vi.fn();
     render(StructuredList, { props: { ...multipleProps, onChange } });
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = getRowCheckboxes();
     expect(checkboxes).toHaveLength(3);
     expect(screen.queryAllByRole("radio")).toHaveLength(0);
     expect(screen.getByTestId("value").textContent).toBe("[]");
@@ -529,7 +537,7 @@ describe("StructuredList", () => {
     const { rerender } = render(StructuredList, {
       props: { ...multipleProps, selected: "row-1-value" },
     });
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = getRowCheckboxes();
 
     expect(checkboxes[0]).toBeChecked();
     expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
@@ -543,13 +551,118 @@ describe("StructuredList", () => {
 
   it("should toggle a checkbox once when Enter is held down", async () => {
     render(StructuredList, { props: multipleProps });
-    const checkbox = screen.getAllByRole("checkbox")[0];
+    const checkbox = getRowCheckboxes()[0];
 
     await fireEvent.keyDown(checkbox, { key: "Enter" });
     await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
 
     expect(checkbox).toBeChecked();
     expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
+  });
+
+  it("should select and clear every row from the header checkbox", async () => {
+    const onChange = vi.fn();
+    render(StructuredList, { props: { ...multipleProps, onChange } });
+
+    const selectAll = screen.getByRole("checkbox", { name: "Select all rows" });
+    const checkboxes = getRowCheckboxes();
+    expect(selectAll).not.toBeChecked();
+
+    await user.click(selectAll);
+    for (const checkbox of checkboxes) {
+      expect(checkbox).toBeChecked();
+    }
+    expect(selectAll).toBeChecked();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith([
+      "row-1-value",
+      "row-2-value",
+      "row-3-value",
+    ]);
+
+    onChange.mockClear();
+    await user.click(selectAll);
+    for (const checkbox of checkboxes) {
+      expect(checkbox).not.toBeChecked();
+    }
+    expect(selectAll).not.toBeChecked();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith([]);
+  });
+
+  it("should mark the header checkbox indeterminate when some rows are selected", async () => {
+    render(StructuredList, { props: multipleProps });
+
+    const selectAll = screen.getByRole<HTMLInputElement>("checkbox", {
+      name: "Select all rows",
+    });
+    expect(selectAll.indeterminate).toBe(false);
+
+    await user.click(getRowCheckboxes()[0]);
+    expect(selectAll.indeterminate).toBe(true);
+    expect(selectAll).not.toBeChecked();
+  });
+
+  it("should not render a select-all checkbox when `multiple` is false", () => {
+    render(StructuredList, { props: { selection: true, multiple: false } });
+
+    expect(screen.getAllByRole("radio")).toHaveLength(3);
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
+  });
+
+  it("should name the header checkbox with selectAllDescription", () => {
+    render(StructuredList, {
+      props: { ...multipleProps, selectAllDescription: "Select all plans" },
+    });
+
+    expect(
+      screen.getByRole("checkbox", { name: "Select all plans" }),
+    ).toBeInTheDocument();
+  });
+
+  it("should leave a disabled row out of select all", async () => {
+    const onChange = vi.fn();
+    render(StructuredList, {
+      props: { ...multipleProps, disabledValue: "row-2-value", onChange },
+    });
+    const selectAll = screen.getByRole<HTMLInputElement>("checkbox", {
+      name: "Select all rows",
+    });
+
+    await user.click(selectAll);
+    expect(onChange).toHaveBeenCalledWith(["row-1-value", "row-3-value"]);
+    expect(selectAll).toBeChecked();
+    expect(selectAll.indeterminate).toBe(false);
+
+    await user.click(selectAll);
+    expect(onChange).toHaveBeenLastCalledWith([]);
+  });
+
+  it("should keep a selected disabled row when select all toggles", async () => {
+    const onChange = vi.fn();
+    render(StructuredList, {
+      props: {
+        ...multipleProps,
+        selected: ["row-2-value"],
+        disabledValue: "row-2-value",
+        onChange,
+      },
+    });
+    const selectAll = screen.getByRole<HTMLInputElement>("checkbox", {
+      name: "Select all rows",
+    });
+    expect(selectAll).not.toBeChecked();
+    expect(selectAll.indeterminate).toBe(false);
+
+    await user.click(selectAll);
+    expect(onChange).toHaveBeenLastCalledWith([
+      "row-2-value",
+      "row-1-value",
+      "row-3-value",
+    ]);
+
+    await user.click(selectAll);
+    expect(onChange).toHaveBeenLastCalledWith(["row-2-value"]);
   });
 });
 

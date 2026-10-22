@@ -14,6 +14,10 @@
   export let multiple: ComponentProps<StructuredList>["multiple"] = false;
   export let sortable = false;
   export let icon: ComponentProps<StructuredList>["icon"] = undefined;
+  export let selectAllDescription: ComponentProps<StructuredList>["selectAllDescription"] =
+    undefined;
+  /** Value of the row whose input renders `disabled`. */
+  export let disabledValue: string | undefined = undefined;
   /** Value of the row whose input renders with `checked`. */
   export let checkedValue: string | undefined = undefined;
   /** Leaves the inputs without a `name`, so the list assigns one. */
@@ -35,6 +39,7 @@
   {multiple}
   {icon}
   {name}
+  {selectAllDescription}
   on:click={onClick}
   on:mouseover={onMouseOver}
   on:mouseleave={onMouseLeave}
@@ -66,6 +71,7 @@
             title="row-{item}-title"
             name={unnamed ? "" : `row-${item}-name`}
             checked={checkedValue === `row-${item}-value`}
+            disabled={disabledValue === `row-${item}-value`}
           />
         {/if}
       </StructuredListRow>

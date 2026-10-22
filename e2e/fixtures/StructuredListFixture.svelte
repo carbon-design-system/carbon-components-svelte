@@ -9,6 +9,7 @@
   } from "carbon-components-svelte";
 
   let selected;
+  let selectedMany = ["c"];
 </script>
 
 <StructuredList data-testid="structured-list" bind:selected selection>
@@ -33,3 +34,33 @@
   </StructuredListBody>
 </StructuredList>
 <div data-testid="selected-value">{selected ?? "none"}</div>
+
+<StructuredList
+  data-testid="structured-list-multiple"
+  bind:selected={selectedMany}
+  selection
+  multiple
+>
+  <StructuredListHead>
+    <StructuredListRow head>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Value</StructuredListCell>
+    </StructuredListRow>
+  </StructuredListHead>
+  <StructuredListBody>
+    {#each ["c", "d", "e"] as id}
+      {@const name = id.toUpperCase()}
+      <StructuredListRow label for="row-{id}" value={id}>
+        <StructuredListCell>Row {name}</StructuredListCell>
+        <StructuredListCell>Value {name}</StructuredListCell>
+        <StructuredListInput
+          id="row-{id}"
+          value={id}
+          title="Select row {name}"
+          disabled={id === "e"}
+        />
+      </StructuredListRow>
+    {/each}
+  </StructuredListBody>
+</StructuredList>
+<div data-testid="selected-many">{selectedMany.join(",")}</div>

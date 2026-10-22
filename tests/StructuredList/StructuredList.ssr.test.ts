@@ -1,6 +1,6 @@
 // @vitest-environment node
 
-import { renderRaw } from "../utils/ssr";
+import { renderRaw, renderSSR } from "../utils/ssr";
 import StructuredListSsr from "./StructuredListSsr.test.svelte";
 
 describe("StructuredList server render", () => {
@@ -25,5 +25,16 @@ describe("StructuredList server render", () => {
 
     expect(html).toContain('type="checkbox"');
     expect(html).not.toContain('name="plan"');
+  });
+
+  it("renders the select-all checkbox enabled in multiple mode", () => {
+    const { document } = renderSSR(StructuredListSsr, {
+      ...props,
+      multiple: true,
+    });
+    const selectAll = document.querySelector('[aria-label="Select all rows"]');
+
+    expect(selectAll).toHaveAttribute("type", "checkbox");
+    expect(selectAll).not.toHaveAttribute("disabled");
   });
 });

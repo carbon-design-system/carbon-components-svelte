@@ -64,4 +64,21 @@ test.describe("StructuredList", () => {
     await expect(rowB).toHaveCSS("border-top-color", token.selected);
     await expect(rowB).toHaveCSS("border-bottom-style", "solid");
   });
+
+  test("selects every enabled row from the header checkbox", async ({
+    page,
+  }) => {
+    const list = page.getByTestId("structured-list-multiple");
+    const selectAll = list.getByRole("checkbox", { name: "Select all rows" });
+    // The label draws the box, over the hidden native input.
+    const box = list.locator(".bx--checkbox-label");
+    await expect(selectAll).toHaveJSProperty("indeterminate", true);
+
+    await box.click();
+    await expect(page.getByTestId("selected-many")).toHaveText("c,d");
+    await expect(selectAll).toBeChecked();
+
+    await box.click();
+    await expect(page.getByTestId("selected-many")).toHaveText("");
+  });
 });
