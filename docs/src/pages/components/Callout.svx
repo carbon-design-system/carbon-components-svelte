@@ -36,8 +36,8 @@ button.
 
 Use an [InlineNotification](/components/InlineNotification) for the
 result of something the user just did, such as a failed save. Its
-`role="alert"` makes screen readers announce it when it appears, and the
-user can close it.
+`role="status"` makes screen readers announce it when it appears, and
+the user can close it.
 
 | Need | Use |
 | :-- | :-- |

@@ -85,9 +85,30 @@ Prevent the default close behavior using `e.preventDefault()` in the `on:close` 
 
 ## ARIA role
 
-Specify the ARIA `role` for the notification container to control how screen readers announce it. Defaults to `"alert"` for interruptive announcements. Use `"status"` for polite live-region updates, or `"log"` for a running log of messages.
+Screen readers announce a notification when it appears. The default,
+`role="status"`, waits until the user pauses. Use it for most messages,
+such as a finished export.
 
-<ToastNotification role="status" kind="success" title="Export complete" subtitle="Your report has been exported and is ready for download." caption="{new Date().toLocaleString()}" />
+Set `role="alert"` for an urgent error that needs action now, such as a
+failed payment. An alert interrupts whatever the screen reader is
+reading, so keep it rare. Set `role="log"` for a running log of
+messages.
+
+<ToastNotification kind="success" title="Export complete" subtitle="Your report has been exported and is ready for download." caption="{new Date().toLocaleString()}" />
+<ToastNotification role="alert" kind="error" title="Payment failed" subtitle="Update your card to keep the workspace active." caption="{new Date().toLocaleString()}" />
+
+## Status icon label
+
+The status icon has a label for screen readers, such as "Warning" for
+the warning kinds. Translate it with `statusIconDescription`.
+
+<ToastNotification
+  kind="warning"
+  title="Maintenance planifiée"
+  subtitle="La facturation est en lecture seule samedi de 02:00 à 04:00 UTC."
+  statusIconDescription="Avertissement"
+  closeButtonDescription="Fermer la notification"
+/>
 
 ## Variants
 
