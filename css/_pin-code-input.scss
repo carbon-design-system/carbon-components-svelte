@@ -31,6 +31,15 @@
     gap: $carbon--spacing-01;
   }
 
+  .#{$prefix}--pin-code-input__group-separator {
+    @include type-style("body-compact-01");
+
+    flex-shrink: 0;
+    margin-inline: $carbon--spacing-02;
+    color: $text-secondary;
+    user-select: none;
+  }
+
   // Segments keep their size where there's room and shrink, down to the
   // minimum, in a narrower container rather than overflowing it. One
   // character still fits at the minimum.
