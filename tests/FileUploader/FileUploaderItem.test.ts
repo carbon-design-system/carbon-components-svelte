@@ -68,10 +68,9 @@ describe("FileUploaderItem", () => {
     const item = container.querySelector(".bx--file__selected-file");
     assert(item);
     expect(item).toHaveClass("bx--file__selected-file--invalid");
-    expect(screen.getByText("File size exceeds limit")).toBeInTheDocument();
-    expect(
-      screen.getByText("Please select a smaller file"),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "File size exceeds limit Please select a smaller file",
+    );
   });
 
   it("should not render error message when not invalid", () => {
@@ -86,6 +85,27 @@ describe("FileUploaderItem", () => {
 
     expect(screen.queryByText("Error")).not.toBeInTheDocument();
     expect(screen.queryByText("Error message")).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  // A live region re-announces when it is inserted again, so an update
+  // that keeps the error must keep the same node.
+  it("should announce the error once, when the item becomes invalid", async () => {
+    const { rerender } = render(FileUploaderItem, {
+      props: {
+        name: "test.txt",
+        status: "edit",
+        errorSubject: "File size exceeds limit",
+      },
+    });
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+
+    await rerender({ invalid: true });
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("File size exceeds limit");
+
+    await rerender({ fileSize: 2048 });
+    expect(screen.getByRole("alert")).toBe(alert);
   });
 
   it.each(["click", "{Enter}", " "])(
