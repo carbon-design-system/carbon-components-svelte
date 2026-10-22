@@ -137,6 +137,13 @@
   export let iconDescription = "Copy to clipboard";
 
   /**
+   * Control when the copy button is visible.
+   * Set to `"hover-focus"` to fade it in only while the field is hovered or has focus within.
+   * @type {"always" | "hover-focus"}
+   */
+  export let copyButtonVisibility = "always";
+
+  /**
    * Override the default copy behavior (`navigator.clipboard.writeText` with
    * a `document.execCommand("copy")` fallback). Failures reject so the control
    * can show `errorFeedback` and dispatch `copy:error`.
@@ -367,6 +374,8 @@
       class:bx--text-input__field-wrapper={true}
       class:bx--copy-input__field-wrapper={true}
       class:bx--copy-input__field-wrapper--toggle={showToggle}
+      class:bx--copy-input__field-wrapper--copy-on-hover={copyButtonVisibility ===
+        "hover-focus"}
       on:mouseenter={() => (hovered = true)}
       on:mouseleave={() => (hovered = false)}
     >

@@ -402,6 +402,27 @@ describe("CopyInput", () => {
     });
   });
 
+  describe("copyButtonVisibility", () => {
+    it("marks the field for hover-and-focus reveal when set to hover-focus", () => {
+      render(CopyInput, { props: { copyButtonVisibility: "hover-focus" } });
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      expect(getFieldWrapper(button)).toHaveClass(
+        "bx--copy-input__field-wrapper--copy-on-hover",
+      );
+      expect(button).toBeInTheDocument();
+    });
+
+    it("does not add the copy-on-hover class by default", () => {
+      render(CopyInput);
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      expect(getFieldWrapper(button)).not.toHaveClass(
+        "bx--copy-input__field-wrapper--copy-on-hover",
+      );
+    });
+  });
+
   it("async copy failure shows error feedback and dispatches copy:error", async () => {
     const error = new Error("copy failed");
     const copy = vi.fn().mockRejectedValue(error);
