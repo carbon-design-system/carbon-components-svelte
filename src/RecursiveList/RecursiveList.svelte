@@ -60,7 +60,7 @@
       {#if !child.text && child.html}
         {@html child.html}
       {/if}
-      {#if Array.isArray(child.nodes)}
+      {#if child.nodes?.length}
         <svelte:self nodes={child.nodes} {type} {expressive} nested />
       {/if}
     </li>
