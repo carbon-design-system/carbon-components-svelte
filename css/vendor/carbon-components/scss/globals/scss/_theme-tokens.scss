@@ -17,11 +17,6 @@
 
 /// Theme variables
 
-/// @type Value
-/// @access public
-/// @group global-themes
-$input-border: 1px solid transparent !default;
-
 /// @type Number
 /// @access public
 /// @group global-themes
@@ -31,12 +26,6 @@ $input-label-weight: 400 !default;
 /// @access public
 /// @group global-themes
 $disabled: $text-disabled !default;
-
-/// @type Color
-/// @access public
-/// @group global-themes
-/// @deprecated
-$disabled-background-color: $field !default;
 
 /// @type Color
 /// @access public
@@ -53,27 +42,6 @@ $focus-inverse: $ibm-color__white-0 !default;
 /// @group link
 /// @deprecated
 $link-visited: $link-visited !default;
-
-/// @type Color
-/// @access public
-/// @deprecated Use theme token `$link-inverse` instead.
-/// @group link
-$link-inverse-color: #6ea6ff !default;
-
-/// @type Color
-/// @access public
-/// @group tooltip
-$tooltip-background-color: $background-inverse !default;
-
-/// @type Number
-/// @access public
-/// @group button
-$button-font-weight: 400 !default;
-
-/// @type Number
-/// @access public
-/// @group button
-$button-font-size: 0.875rem !default;
 
 /// @type Number
 /// @access public
@@ -103,11 +71,6 @@ $button-padding-sm: calc(0.375rem - 3px) 60px calc(0.375rem - 3px) 12px !default
 /// @type Number
 /// @access public
 /// @group button
-$button-padding-lg: $carbon--spacing-04 !default;
-
-/// @type Number
-/// @access public
-/// @group button
 /// Uses the same padding-y as normal buttons, but removes extra padding-right
 $button-padding-ghost: calc(0.875rem - 3px) 16px !default;
 
@@ -133,18 +96,6 @@ $button-border-width: 2px !default;
 /// @group button
 $button-outline-width: 1px !default;
 
-/// @type Number
-/// @access public
-/// @group button
-/// @deprecated
-$button-outline-offset: -5px !default;
-
-/// @type Value
-/// @access public
-/// @group button
-/// @deprecated
-$button-outline: 1px solid $ibm-color__white-0 !default;
-
 /// @type Value
 /// @access public
 /// @group accordion
@@ -165,57 +116,6 @@ $accordion-arrow-margin: 2px $carbon--spacing-05 0 0 !default;
 /// @group accordion
 $accordion-title-margin: 0 0 0 $carbon--spacing-05 !default;
 
-/// @type Value
-/// @access public
-/// @group accordion
-$accordion-content-padding: 0 0 0 $carbon--spacing-05 !default;
-
-/// @type Number
-/// @access public
-/// @group checkbox
-$checkbox-border-width: 2px !default;
-
-/// @type Color
-/// @access public
-/// @group code-snippet
-/// @deprecated
-$snippet-background-color: $field !default;
-
-/// @type Color
-/// @access public
-/// @group code-snippet
-$snippet-border-color: $border-subtle !default;
-
-/// @type Number
-/// @access public
-/// @group content-switcher
-$content-switcher-border-radius: 0 !default;
-
-/// @type Number
-/// @access public
-/// @group content-switcher
-$content-switcher-option-border: 1px solid $brand-01 !default;
-
-/// @type Color
-/// @access public
-/// @group content-switcher
-$content-switcher-divider: $border-subtle !default;
-
-/// @type Value
-/// @access public
-/// @group data-table
-$data-table-heading-transform: uppercase !default;
-
-/// @type Value
-/// @access public
-/// @group data-table
-$data-table-heading-border-bottom: 1px solid $brand-01 !default;
-
-/// @type Number
-/// @access public
-/// @group data-table
-$data-table-row-height: 2rem !default;
-
 /// @type Color
 /// @access public
 /// @group data-table
@@ -226,75 +126,15 @@ $data-table-zebra-color: $layer-02 !default;
 /// @group data-table
 $data-table-column-hover: $layer-selected-hover !default;
 
-/// @type Color
-/// @access public
-/// @group date-picker
-/// @deprecated
-$date-picker-in-range-background-color: $ibm-color__blue-20 !default;
-
-/// @type Color
-/// @access public
-/// @group modal
-$modal-border-top: $brand-01 4px solid !default;
-
-/// @type Color
-/// @access public
-/// @group modal
-/// @deprecated
-$modal-footer-background-color: $border-subtle !default;
-
-/// @type Color
-/// @access public
-/// @group notification
-/// @deprecated
-$notification-info-background-color: $ibm-color__blue-10 !default;
-
-/// @type Color
-/// @access public
-/// @group notification
-/// @deprecated
-$notification-error-background-color: $ibm-color__red-10 !default;
-
-/// @type Color
-/// @access public
-/// @group notification
-/// @deprecated
-$notification-warning-background-color: mix(
-  $ibm-color__yellow-30,
-  $ibm-color__white-0,
-  15%
-) !default;
-
-/// @type Color
-/// @access public
-/// @group notification
-/// @deprecated
-$notification-success-background-color: $ibm-color__green-10 !default;
-
 /// @type Value
 /// @access public
 /// @group progress-indicator
 $progress-indicator-bar-width: 1px inset transparent !default;
 
-/// @type Number
-/// @access public
-/// @group progress-indicator
-$progress-indicator-stroke-width: 5 !default;
-
-/// @type Number
-/// @access public
-/// @group progress-indicator
-$progress-indicator-line-offset: 0.625rem !default;
-
 /// @type Color
 /// @access public
 /// @group copy-button
 $copy-active: $layer-active !default;
-
-/// @type Color
-/// @access public
-/// @group copy-button
-$copy-btn-feedback: $background-inverse !default;
 
 /// @type Number
 /// @access public
@@ -367,7 +207,3 @@ $skeleton: $skeleton-background !default;
   @return $value;
 }
 
-/// @type Color
-/// @access public
-/// @group light-ui
-$hover-ui-light: get-light-value('ui-01');
