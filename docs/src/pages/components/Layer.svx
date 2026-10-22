@@ -56,6 +56,10 @@ Set `level` to pick a level instead of counting from the parent: `0` is the page
   </div>
 </Layer>
 
+## Modals
+
+[Modal](/components/Modal) and [ComposedModal](/components/ComposedModal) start their own layer at level `0`, wherever they render. The modal body sits on level `1`, so fields in it take `field-02`, and a `Layer` inside the body sits on level `2`.
+
 ## Slot props
 
 The default slot receives the layer's `level`.
