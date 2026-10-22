@@ -23,6 +23,15 @@
     // either way; icon switches, at fixed widths, sit together in
     // server-rendered markup, before the switcher is marked icon-only.
     justify-content: flex-start;
+    // ccs: v11's 1px outline around the switcher. The switches' own borders
+    // cover it, except above and below the selected switch's rounded fill.
+    border-radius: to-rem(4px);
+    outline: 1px solid $border-inverse;
+    outline-offset: -1px;
+  }
+
+  .#{$prefix}--content-switcher--low-contrast {
+    outline-color: $border-strong; // ccs: as v11, to match its switches
   }
 
   .#{$prefix}--content-switcher--sm {
@@ -68,6 +77,7 @@
       width: 100%;
       height: 100%;
       background-color: $layer-selected-inverse;
+      border-radius: to-rem(4px); // ccs: v11's rounded selected fill
       content: '';
       transform: scaleY(0);
     }
@@ -185,7 +195,9 @@
 
   .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
     z-index: 3;
-    background-color: $layer-selected-inverse;
+    // ccs: the rounded `::after` is the fill, as in v11. A button fill
+    // would square its corners, and show behind it on hover.
+    background-color: transparent;
     color: $text-inverse;
 
     &::after {
@@ -209,6 +221,7 @@
   // are. Bars of their own: a switch's `::before` is its divider.
   .#{$prefix}--content-switcher.#{$prefix}--skeleton {
     gap: 1px;
+    outline: 0;
   }
 
   .#{$prefix}--content-switcher__skeleton-switch {

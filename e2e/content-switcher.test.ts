@@ -29,4 +29,32 @@ test.describe("ContentSwitcher", () => {
       "true",
     );
   });
+
+  test("rounds the selected fill inside a 1px outline, as in v11", async ({
+    page,
+  }) => {
+    const switcher = page.getByTestId("content-switcher");
+    const second = page.getByRole("tab", { name: "Second" });
+    await second.click();
+    await page.mouse.move(0, 0);
+    await expect(second).toHaveAttribute("aria-selected", "true");
+
+    const inverse = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.color = "var(--cds-border-inverse)";
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+    await expect(switcher).toHaveCSS("outline", `${inverse} solid 1px`);
+    await expect(switcher).toHaveCSS("outline-offset", "-1px");
+    // The middle switch's fill is its rounded ::after, not the button.
+    await expect(second).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    expect(
+      await second.evaluate(
+        (el) => getComputedStyle(el, "::after").borderRadius,
+      ),
+    ).toBe("4px");
+  });
 });
