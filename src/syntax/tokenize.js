@@ -1171,6 +1171,8 @@ const JSON_NUMBER = /-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/iy;
 /** @type {Rule<{ code: string }>[]} */
 const JSON_RULES = [
   [WHITESPACE, null],
+  // Not valid JSON, but common in `tsconfig`-style files and `jsonc`.
+  [JS_COMMENT, "comment"],
   [
     JSON_STRING,
     (text, at, state) => {
@@ -1338,7 +1340,7 @@ const LEXERS = Object.assign(Object.create(null), {
   css: lexCss,
   scss: lexScss,
   json: lexJson,
-  jsonc: lexScript,
+  jsonc: lexJson,
   sh: lexShell,
   bash: lexShell,
   shell: lexShell,
