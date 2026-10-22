@@ -1610,6 +1610,9 @@
             on:keydown={(event) => {
               // ListBox decides whether Escape propagates.
               if (event.key !== "Escape") event.stopPropagation();
+              // Keys that belong to an IME composition (Enter commits, Escape
+              // cancels, arrows pick a candidate) are not menu keys.
+              if (isImeComposition(event)) return;
               // Read-only opens and navigates the menu to review values, but the
               // keys that clear the selection are blocked; selectItem guards the
               // rest (Enter/option toggle).
@@ -1648,8 +1651,7 @@
                 event.preventDefault();
                 changePage(event.key === "PageDown" ? 1 : -1);
               } else if (event.key === "Escape") {
-                // Escape that cancels an IME composition is not a close.
-                if (!isImeComposition(event)) close("escape-key");
+                close("escape-key");
               } else if (event.key === " ") {
                 if (readonly) event.preventDefault();
                 openMenu("keydown");

@@ -64,21 +64,25 @@ describe.each(caseRows)("%s close event", (_, c) => {
     },
   );
 
-  // Only a text input composes; button fields never see an IME Escape.
-  it.runIf(c.opensOnInput).each([
-    { key: "Escape", isComposing: true },
-    { key: "Escape", keyCode: 229 },
-  ])(
-    "keeps the menu and the text when Escape cancels an IME composition (%o)",
+  // Only a text input composes; button fields never see IME keys.
+  it.runIf(c.opensOnInput).each(
+    ["Escape", "Enter", "ArrowDown"].flatMap((key) => [
+      { key, isComposing: true },
+      { key, keyCode: 229 },
+    ]),
+  )(
+    "keeps the menu, text and highlight on an IME composition key (%o)",
     async (init) => {
       const onClose = setup();
 
       await user.type(field(), "a");
       expect(field()).toHaveAttribute("aria-expanded", "true");
+      const highlight = field().getAttribute("aria-activedescendant");
 
       await fireEvent.keyDown(field(), init);
       expect(field()).toHaveAttribute("aria-expanded", "true");
       expect(field()).toHaveValue("a");
+      expect(field().getAttribute("aria-activedescendant")).toBe(highlight);
       expect(onClose).not.toHaveBeenCalled();
     },
   );

@@ -1143,6 +1143,9 @@
             // ListBox decides whether Escape propagates, unless Escape clears
             // a value below.
             if (event.key !== "Escape") event.stopPropagation();
+            // Keys that belong to an IME composition (Enter commits, Escape
+            // cancels, arrows pick a candidate) are not menu keys.
+            if (isImeComposition(event)) return;
             if (readonly) return;
             if (
               event.key === "Enter" ||
@@ -1262,8 +1265,6 @@
               event.preventDefault();
               changePage(event.key === "PageDown" ? 1 : -1);
             } else if (event.key === "Escape") {
-              // Escape that cancels an IME composition is not a close or clear.
-              if (isImeComposition(event)) return;
               // Dispatch before `clear()` flips `open`, so the guard still sees it open.
               const hadSelection = selectedId !== undefined;
               // Clearing a closed field consumes Escape; with nothing to close
