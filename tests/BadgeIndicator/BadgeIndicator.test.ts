@@ -1,57 +1,31 @@
-import { render, screen } from "@testing-library/svelte";
-import BadgeIndicator from "./BadgeIndicator.test.svelte";
+import { render } from "@testing-library/svelte";
+import BadgeIndicator from "carbon-components-svelte/BadgeIndicator/BadgeIndicator.svelte";
+
+const renderBadge = (props: Record<string, unknown> = {}) => {
+  const { container } = render(BadgeIndicator, { props });
+  return container.querySelector(".bx--badge-indicator");
+};
 
 describe("BadgeIndicator", () => {
-  it("renders an empty dot with no count", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("dot").querySelector("div");
+  it.each([
+    [undefined, ""],
+    [0, ""],
+    [-1, ""],
+    [4, "4"],
+    [999, "999"],
+    [1000, "999+"],
+    ["1.2k", "1.2k"],
+  ])("renders count=%j as %j", (count, text) => {
+    const badge = renderBadge({ count });
 
-    expect(badge).toHaveClass("bx--badge-indicator");
-    expect(badge).not.toHaveClass("bx--badge-indicator--count");
-    expect(badge?.textContent?.trim()).toBe("");
-  });
-
-  it("treats count={0} as an empty dot", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("zero").querySelector("div");
-
-    expect(badge).not.toHaveClass("bx--badge-indicator--count");
-    expect(badge?.textContent?.trim()).toBe("");
-  });
-
-  it("renders a numbered count", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("count").querySelector("div");
-
-    expect(badge).toHaveClass("bx--badge-indicator--count");
-    expect(badge?.textContent?.trim()).toBe("4");
-  });
-
-  it("renders the boundary value 999 as-is", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("boundary").querySelector("div");
-
-    expect(badge?.textContent?.trim()).toBe("999");
-  });
-
-  it("caps counts over 999 at '999+'", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("overflow").querySelector("div");
-
-    expect(badge?.textContent?.trim()).toBe("999+");
-  });
-
-  it("renders a string count as a custom label", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("label").querySelector("div");
-
-    expect(badge).toHaveClass("bx--badge-indicator--count");
-    expect(badge?.textContent?.trim()).toBe("1.2k");
+    expect(badge?.textContent?.trim()).toBe(text);
+    expect(badge?.classList.contains("bx--badge-indicator--count")).toBe(
+      text !== "",
+    );
   });
 
   it("forwards rest props to the underlying element", () => {
-    render(BadgeIndicator);
-    const badge = screen.getByTestId("restprops").querySelector("div");
+    const badge = renderBadge({ id: "notifications", class: "custom" });
 
     expect(badge).toHaveAttribute("id", "notifications");
     expect(badge).toHaveClass("bx--badge-indicator", "custom");

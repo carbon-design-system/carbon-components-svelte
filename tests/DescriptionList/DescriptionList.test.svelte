@@ -12,6 +12,10 @@
   <DescriptionListItem term="Name">MongoDB</DescriptionListItem>
 </DescriptionList>
 
+<DescriptionList data-testid="summary" layout="summary">
+  <DescriptionListItem term="Total">42</DescriptionListItem>
+</DescriptionList>
+
 <DescriptionList data-testid="columns" columns={2}>
   <DescriptionListItem term="A">1</DescriptionListItem>
   <DescriptionListItem term="B">2</DescriptionListItem>

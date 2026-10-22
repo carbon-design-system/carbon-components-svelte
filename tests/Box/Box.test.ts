@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
+import type BoxSource from "carbon-components-svelte/Box/Box.svelte";
+import type { ComponentProps } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import BoxRef from "./Box.ref.test.svelte";
 import Box from "./Box.test.svelte";
+
+type BoxProps = ComponentProps<BoxSource>;
 
 describe("Box", () => {
   it("binds `ref` to the rendered element", async () => {
@@ -14,279 +18,232 @@ describe("Box", () => {
     expect(screen.getByTestId("ref-tag")).toHaveTextContent("SECTION");
   });
 
-  it("applies fill utility classes", () => {
-    render(Box);
+  it.each<[string, BoxProps, string[]]>([
+    ["fill", { fill: "layer-01" }, ["bx--box-fill-layer-01"]],
+    [
+      "fill with border",
+      { fill: "background", border: "subtle" },
+      ["bx--box-fill-background", "bx--box-border-subtle"],
+    ],
+    ["fill accent", { fill: "layer-accent" }, ["bx--box-fill-layer-accent"]],
+    ["fill brand", { fill: "brand" }, ["bx--box-fill-brand"]],
+    [
+      "dashed border",
+      { border: "strong", borderStyle: "dashed" },
+      ["bx--box-border-strong", "bx--box-border-style-dashed"],
+    ],
+    [
+      "one-side border",
+      { border: "subtle", borderSide: "top" },
+      ["bx--box-border-subtle", "bx--box-border-side-top"],
+    ],
+    ["shadow", { shadow: true }, ["bx--box-shadow"]],
+    ["display", { display: "flex" }, ["bx--box-display-flex"]],
+    ["overflow", { overflow: "auto" }, ["bx--box-overflow-auto"]],
+    [
+      "axis overflow",
+      { overflowX: "auto", overflowY: "hidden" },
+      ["bx--box-overflow-x-auto", "bx--box-overflow-y-hidden"],
+    ],
+    ["padding scale", { padding: 5 }, ["bx--box-p-5"]],
+    [
+      "axis padding scale",
+      { paddingX: 3, paddingY: 5 },
+      ["bx--box-px-3", "bx--box-py-5"],
+    ],
+    ["margin scale", { margin: 4 }, ["bx--box-m-4"]],
+    [
+      "axis padding over custom all-sides",
+      { padding: "1rem", paddingX: 3 },
+      ["bx--box-px-3"],
+    ],
+    [
+      "axis margin over custom all-sides",
+      { margin: "1rem", marginY: 3 },
+      ["bx--box-my-3"],
+    ],
+    [
+      "side padding over axis and all-sides",
+      { padding: "1rem", paddingY: 7, paddingBottom: 3 },
+      ["bx--box-py-7", "bx--box-pb-3"],
+    ],
+    [
+      "side margin over axis",
+      { marginY: 7, marginTop: 3 },
+      ["bx--box-my-7", "bx--box-mt-3"],
+    ],
+    [
+      "side margin over custom all-sides",
+      { margin: "1rem", marginTop: 3 },
+      ["bx--box-mt-3"],
+    ],
+    ["full width", { fullWidth: true, maxWidth: 480 }, ["bx--box-full-width"]],
+    ["gap scale", { display: "flex", gap: 3 }, ["bx--box-gap-3"]],
+    [
+      "direction",
+      { display: "flex", direction: "column" },
+      ["bx--box-direction-column"],
+    ],
+    ["wrap", { display: "flex", wrap: "wrap" }, ["bx--box-wrap-wrap"]],
+    [
+      "flex item",
+      { alignSelf: "stretch", grow: true },
+      ["bx--box-align-self-stretch", "bx--box-grow"],
+    ],
+    ["align", { display: "flex", align: "center" }, ["bx--box-align-center"]],
+    [
+      "justify",
+      { display: "flex", justify: "space-between" },
+      ["bx--box-justify-space-between"],
+    ],
+    ["hideBelow", { hideBelow: "md" }, ["bx--box-hide-below-md"]],
+    ["hideAbove", { hideAbove: "md" }, ["bx--box-hide-above-md"]],
+    [
+      "combined modifiers",
+      { fill: "layer-02", padding: 6, border: "subtle", class: "combined" },
+      [
+        "bx--box-fill-layer-02",
+        "bx--box-p-6",
+        "bx--box-border-subtle",
+        "combined",
+      ],
+    ],
+    [
+      "viewport min height",
+      { minHeight: "viewport" },
+      ["bx--box-min-height-viewport"],
+    ],
+    ["height scale", { height: 7 }, ["bx--box-height-7"]],
+    [
+      "position and top offset",
+      { position: "sticky", top: 0 },
+      ["bx--box-position-sticky", "bx--box-top-0"],
+    ],
+    [
+      "position and left offset",
+      { position: "sticky", left: 0 },
+      ["bx--box-position-sticky", "bx--box-left-0"],
+    ],
+  ])("adds utility classes: %s", (_, props, classes) => {
+    render(Box, { props });
 
-    expect(screen.getByText("Layer fill")).toHaveClass("bx--box-fill-layer-01");
-    expect(screen.getByText("Fill and border")).toHaveClass(
-      "bx--box-fill-background",
-    );
-    expect(screen.getByText("Accent fill")).toHaveClass(
-      "bx--box-fill-layer-accent",
-    );
-    expect(screen.getByText("Brand fill")).toHaveClass("bx--box-fill-brand");
+    expect(screen.getByTestId("box")).toHaveClass(...classes);
   });
 
-  it("applies dashed border style only when a border token is set", () => {
-    render(Box);
-
-    expect(screen.getByText("Dashed border")).toHaveClass(
-      "bx--box-border-strong",
+  it.each<[string, BoxProps, RegExp | string]>([
+    [
+      "dashed style without a border token",
+      { borderStyle: "dashed" },
       "bx--box-border-style-dashed",
-    );
-    expect(screen.getByText("No border, dashed style")).not.toHaveClass(
-      "bx--box-border-style-dashed",
-    );
-  });
-
-  it("applies border width only when a border token is set", () => {
-    render(Box);
-
-    expectInlineStyle(screen.getByText("Thick border"), {
-      borderWidth: "2px",
-    });
-    expectInlineStyle(screen.getByText("No border, custom width"), {
-      borderWidth: "",
-    });
-  });
-
-  it("scopes the border to one side only when a border token is set", () => {
-    render(Box);
-
-    expect(screen.getByText("Top border only")).toHaveClass(
-      "bx--box-border-subtle",
+    ],
+    [
+      "one-side border without a border token",
+      { borderSide: "top" },
       "bx--box-border-side-top",
-    );
-    expect(screen.getByText("No border, top side only")).not.toHaveClass(
-      "bx--box-border-side-top",
-    );
+    ],
+    ["scale class for padding 0", { padding: 0 }, /bx--box-p-\d/],
+    [
+      "direction, wrap, flex item, align and justify by default",
+      { display: "flex" },
+      /bx--box-(direction-|wrap|align-|justify-|grow)/,
+    ],
+  ])("omits classes: %s", (_, props, forbidden) => {
+    render(Box, { props });
 
-    expectInlineStyle(screen.getByText("Thick left border"), {
-      borderTopWidth: "",
-      borderRightWidth: "",
-      borderBottomWidth: "",
-      borderLeftWidth: "3px",
-    });
+    const node = screen.getByTestId("box");
+    if (typeof forbidden === "string") {
+      expect(node).not.toHaveClass(forbidden);
+    } else {
+      expect(node.className).not.toMatch(forbidden);
+    }
   });
 
-  it("applies the shadow utility class", () => {
-    render(Box);
-
-    expect(screen.getByText("Raised shadow")).toHaveClass("bx--box-shadow");
-  });
-
-  it("applies the display utility class", () => {
-    render(Box);
-
-    expect(screen.getByText("Flex display")).toHaveClass(
-      "bx--box-display-flex",
-    );
-  });
-
-  it("applies the overflow utility class", () => {
-    render(Box);
-
-    expect(screen.getByText("Auto overflow")).toHaveClass(
-      "bx--box-overflow-auto",
-    );
-  });
-
-  it("applies spacing scale classes", () => {
-    render(Box);
-
-    expect(screen.getByText("Padding scale")).toHaveClass("bx--box-p-5");
-    expect(screen.getByText("Axis padding")).toHaveClass(
-      "bx--box-px-3",
-      "bx--box-py-5",
-    );
-    expect(screen.getByText("Margin scale")).toHaveClass("bx--box-m-4");
-  });
-
-  it("lets an axis scale step override a custom all-sides value", () => {
-    render(Box);
-
-    const padding = screen.getByTestId("padding-axis-over-custom");
-    expect(padding).toHaveClass("bx--box-px-3");
-    expectInlineStyle(padding, { paddingLeft: "", paddingTop: "1rem" });
-
-    const margin = screen.getByTestId("margin-axis-over-custom");
-    expect(margin).toHaveClass("bx--box-my-3");
-    expectInlineStyle(margin, { marginTop: "", marginLeft: "1rem" });
-  });
-
-  it("applies single-side padding over axis and all-sides values", () => {
-    render(Box);
-
-    const node = screen.getByTestId("padding-side");
-    expect(node).toHaveClass("bx--box-py-7", "bx--box-pb-3");
-    expectInlineStyle(node, {
-      paddingTop: "",
-      paddingBottom: "",
-      paddingLeft: "1rem",
-    });
-  });
-
-  it("applies width utilities and inline sizes", () => {
-    render(Box);
-
-    expect(screen.getByText("Full width capped")).toHaveClass(
-      "bx--box-full-width",
-    );
-    expectInlineStyle(screen.getByText("Full width capped"), {
-      maxWidth: "480px",
-    });
-    expectInlineStyle(screen.getByText("Custom width"), {
-      width: "12rem",
-      minWidth: "8rem",
-    });
-  });
-
-  it("resolves 0 to an inline style instead of dropping it", () => {
-    render(Box);
-
+  it.each<[string, BoxProps, Record<string, string>]>([
+    [
+      "border width",
+      { border: "strong", borderWidth: 2 },
+      { borderWidth: "2px" },
+    ],
+    [
+      "border width without a border token",
+      { borderWidth: 2 },
+      { borderWidth: "" },
+    ],
+    [
+      "one-side border width",
+      { border: "strong", borderSide: "left", borderWidth: 3 },
+      {
+        borderTopWidth: "",
+        borderRightWidth: "",
+        borderBottomWidth: "",
+        borderLeftWidth: "3px",
+      },
+    ],
+    [
+      "axis scale step over custom all-sides padding",
+      { padding: "1rem", paddingX: 3 },
+      { paddingLeft: "", paddingTop: "1rem" },
+    ],
+    [
+      "axis scale step over custom all-sides margin",
+      { margin: "1rem", marginY: 3 },
+      { marginTop: "", marginLeft: "1rem" },
+    ],
+    [
+      "single-side padding over axis and all-sides",
+      { padding: "1rem", paddingY: 7, paddingBottom: 3 },
+      { paddingTop: "", paddingBottom: "", paddingLeft: "1rem" },
+    ],
+    [
+      "custom single-side margin",
+      { marginBottom: "1.5rem", marginLeft: 0 },
+      { marginBottom: "1.5rem", marginLeft: "0px", marginTop: "" },
+    ],
+    [
+      "single-side scale margin over custom all-sides",
+      { margin: "1rem", marginTop: 3 },
+      {
+        marginTop: "",
+        marginRight: "1rem",
+        marginBottom: "1rem",
+        marginLeft: "1rem",
+      },
+    ],
+    ["max width", { fullWidth: true, maxWidth: 480 }, { maxWidth: "480px" }],
+    [
+      "custom width",
+      { width: "12rem", minWidth: "8rem" },
+      { width: "12rem", minWidth: "8rem" },
+    ],
     // jsdom normalizes a unitless `0` to `0px` when reading it back.
-    expectInlineStyle(screen.getByTestId("padding-zero"), { padding: "0px" });
-    expectInlineStyle(screen.getByTestId("margin-zero"), { margin: "0px" });
-    expectInlineStyle(screen.getByTestId("min-height-zero"), {
-      minHeight: "0px",
-    });
+    ["padding 0", { padding: 0 }, { padding: "0px" }],
+    ["margin 0", { margin: 0 }, { margin: "0px" }],
+    ["min height 0", { minHeight: 0 }, { minHeight: "0px" }],
+    ["custom gap", { display: "flex", gap: "2rem" }, { gap: "2rem" }],
+    [
+      "numeric columns on a grid",
+      { display: "grid", columns: 3 },
+      { gridTemplateColumns: "repeat(3, minmax(0, 1fr))" },
+    ],
+    [
+      "string columns on a grid",
+      { display: "grid", columns: "200px 1fr 200px" },
+      { gridTemplateColumns: "200px 1fr 200px" },
+    ],
+    [
+      "columns without display=grid",
+      { columns: 3 },
+      { gridTemplateColumns: "" },
+    ],
+    ["custom height", { height: "24rem" }, { height: "24rem" }],
+    [
+      "custom right offset",
+      { position: "relative", right: "2rem" },
+      { right: "2rem" },
+    ],
+  ])("sets inline styles: %s", (_, props, styles) => {
+    render(Box, { props });
 
-    expect(screen.getByTestId("padding-zero").className).not.toMatch(
-      /bx--box-p-\d/,
-    );
-  });
-
-  it("applies axis-specific overflow classes", () => {
-    render(Box);
-
-    expect(screen.getByText("Axis overflow")).toHaveClass(
-      "bx--box-overflow-x-auto",
-      "bx--box-overflow-y-hidden",
-    );
-  });
-
-  it("applies the gap scale class", () => {
-    render(Box);
-
-    expect(screen.getByTestId("gap-scale")).toHaveClass("bx--box-gap-3");
-  });
-
-  it("applies a custom gap via inline style", () => {
-    render(Box);
-
-    expectInlineStyle(screen.getByTestId("gap-custom"), { gap: "2rem" });
-  });
-
-  it("resolves a numeric columns value to repeat(...) when display is grid", () => {
-    render(Box);
-
-    expectInlineStyle(screen.getByTestId("grid-columns-number"), {
-      gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-    });
-  });
-
-  it("passes a string columns value through as-is", () => {
-    render(Box);
-
-    expectInlineStyle(screen.getByTestId("grid-columns-string"), {
-      gridTemplateColumns: "200px 1fr 200px",
-    });
-  });
-
-  it("does nothing when columns is set without display=grid", () => {
-    render(Box);
-
-    expectInlineStyle(screen.getByTestId("grid-columns-no-grid"), {
-      gridTemplateColumns: "",
-    });
-  });
-
-  it("applies hideBelow and hideAbove classes", () => {
-    render(Box);
-
-    expect(screen.getByTestId("hide-below-md")).toHaveClass(
-      "bx--box-hide-below-md",
-    );
-    expect(screen.getByTestId("hide-above-md")).toHaveClass(
-      "bx--box-hide-above-md",
-    );
-  });
-
-  it("applies the direction class", () => {
-    render(Box);
-
-    expect(screen.getByTestId("direction-column")).toHaveClass(
-      "bx--box-direction-column",
-    );
-    expect(screen.getByText("Flex display").className).not.toMatch(
-      /bx--box-direction-/,
-    );
-  });
-
-  it("applies single-side margin classes and styles", () => {
-    render(Box);
-
-    expect(screen.getByTestId("margin-top-scale")).toHaveClass(
-      "bx--box-my-7",
-      "bx--box-mt-3",
-    );
-    expectInlineStyle(screen.getByTestId("margin-side-custom"), {
-      marginBottom: "1.5rem",
-      marginLeft: "0px",
-      marginTop: "",
-    });
-
-    const overCustom = screen.getByTestId("margin-side-over-custom");
-    expect(overCustom).toHaveClass("bx--box-mt-3");
-    expectInlineStyle(overCustom, {
-      marginTop: "",
-      marginRight: "1rem",
-      marginBottom: "1rem",
-      marginLeft: "1rem",
-    });
-  });
-
-  it("applies wrap and flex item classes", () => {
-    render(Box);
-
-    expect(screen.getByTestId("wrap")).toHaveClass("bx--box-wrap-wrap");
-    expect(screen.getByTestId("flex-item")).toHaveClass(
-      "bx--box-align-self-stretch",
-      "bx--box-grow",
-    );
-    expect(screen.getByText("Flex display").className).not.toMatch(
-      /bx--box-(wrap|align-self|grow)/,
-    );
-  });
-
-  it("applies align and justify classes", () => {
-    render(Box);
-
-    expect(screen.getByTestId("align-center")).toHaveClass(
-      "bx--box-align-center",
-    );
-    expect(screen.getByTestId("justify-between")).toHaveClass(
-      "bx--box-justify-space-between",
-    );
-  });
-
-  it("omits align and justify classes by default", () => {
-    render(Box);
-
-    expect(screen.getByText("Flex display").className).not.toMatch(
-      /bx--box-(align|justify)-/,
-    );
-  });
-
-  it("merges multiple modifier classes", () => {
-    render(Box);
-
-    const node = screen.getByText("Combined modifiers");
-    expect(node).toHaveClass(
-      "bx--box-fill-layer-02",
-      "bx--box-p-6",
-      "bx--box-border-subtle",
-      "combined",
-    );
+    expectInlineStyle(screen.getByTestId("box"), styles);
   });
 });

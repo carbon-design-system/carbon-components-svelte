@@ -23,53 +23,36 @@ describe("ActionSet", () => {
     expect(screen.getByTestId("action-set")).toHaveClass("bx--action-set--lg");
   });
 
-  it("always stacks at the sm size, regardless of action count", async () => {
-    render(ActionSet, { size: "sm", count: 2 });
+  it.each([
+    ["sm", 2, false, "bx--action-set--stacking", true],
+    ["md", 3, false, "bx--action-set--stacking", true],
+    ["md", 1, false, "bx--action-set--row-single", false],
+    ["md", 2, false, "bx--action-set--row-double", false],
+    ["lg", 3, false, "bx--action-set--row-triple", false],
+    ["lg", 4, false, "bx--action-set--row-quadruple", false],
+    ["sm", 2, true, "bx--action-set--row-double", false],
+  ] as const)(
+    "at size %s with %i actions (disableStacking=%s) it has %s",
+    async (size, count, disableStacking, expectedClass, stacked) => {
+      render(ActionSet, { size, count, disableStacking });
 
-    const actionSet = screen.getByTestId("action-set");
-    await waitFor(() =>
-      expect(actionSet).toHaveClass("bx--action-set--stacking"),
+      const actionSet = screen.getByTestId("action-set");
+      await waitFor(() => expect(actionSet).toHaveClass(expectedClass));
+      expect(actionSet.classList.contains("bx--action-set--stacking")).toBe(
+        stacked,
+      );
+      expect(actionSet.classList.contains("bx--btn-set--stacked")).toBe(
+        stacked,
+      );
+    },
+  );
+
+  it("applies the sticky class when sticky is set", () => {
+    render(ActionSet, { sticky: true });
+
+    expect(screen.getByTestId("action-set")).toHaveClass(
+      "bx--action-set--sticky",
     );
-    expect(actionSet).toHaveClass("bx--btn-set--stacked");
-  });
-
-  it("stacks at the md size once there are more than two actions", async () => {
-    render(ActionSet, { size: "md", count: 3 });
-
-    const actionSet = screen.getByTestId("action-set");
-    await waitFor(() =>
-      expect(actionSet).toHaveClass("bx--action-set--stacking"),
-    );
-  });
-
-  it("does not stack at the md size with two or fewer actions", async () => {
-    render(ActionSet, { size: "md", count: 2 });
-
-    const actionSet = screen.getByTestId("action-set");
-    await waitFor(() =>
-      expect(actionSet).toHaveClass("bx--action-set--row-double"),
-    );
-    expect(actionSet).not.toHaveClass("bx--action-set--stacking");
-  });
-
-  it("never stacks at the lg size, even with three actions", async () => {
-    render(ActionSet, { size: "lg", count: 3 });
-
-    const actionSet = screen.getByTestId("action-set");
-    await waitFor(() =>
-      expect(actionSet).toHaveClass("bx--action-set--row-triple"),
-    );
-    expect(actionSet).not.toHaveClass("bx--action-set--stacking");
-  });
-
-  it("does not stack at the sm size when disableStacking is true", async () => {
-    render(ActionSet, { size: "sm", count: 2, disableStacking: true });
-
-    const actionSet = screen.getByTestId("action-set");
-    await waitFor(() =>
-      expect(actionSet).toHaveClass("bx--action-set--row-double"),
-    );
-    expect(actionSet).not.toHaveClass("bx--action-set--stacking");
   });
 
   it("cascades its size to child buttons that don't set their own, without overriding one that does", () => {

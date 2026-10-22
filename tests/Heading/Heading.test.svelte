@@ -44,6 +44,10 @@
   <Heading id="labelled-section-heading">Labelled Section Heading 1</Heading>
 </Section>
 
+<Section level={2}>
+  <Heading type="heading-03">Sized heading</Heading>
+</Section>
+
 <div data-testid="custom-tag-wrapper">
   <Section tag="div"> <Heading>Custom Tag Heading 1</Heading> </Section>
 </div>

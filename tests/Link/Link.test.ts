@@ -39,15 +39,6 @@ describe("Link", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
 
-  it("supports inline variant", () => {
-    render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.classList.contains("bx--link--inline"));
-    assert(link);
-
-    expect(link).toHaveClass("bx--link--inline");
-  });
-
   it("supports icon prop", () => {
     render(Link);
     const link = within(screen.getByTestId("link-with-icon")).getByRole("link");
@@ -69,22 +60,18 @@ describe("Link", () => {
     expect(iconWrapper.querySelector("svg")).toBeInTheDocument();
   });
 
-  it("supports large size variant", () => {
+  it.each([
+    ["inline", "link-inline", "bx--link--inline"],
+    ["muted", "link-muted", "bx--link--muted"],
+    ["visited", "link-visited", "bx--link--visited"],
+    ["large size", "link-large", "bx--link--lg"],
+    ["small size", "link-small", "bx--link--sm"],
+  ])("supports %s", (_, testId, expectedClass) => {
     render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.classList.contains("bx--link--lg"));
-    assert(link);
 
-    expect(link).toHaveClass("bx--link--lg");
-  });
-
-  it("supports small size variant", () => {
-    render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.classList.contains("bx--link--sm"));
-    assert(link);
-
-    expect(link).toHaveClass("bx--link--sm");
+    expect(within(screen.getByTestId(testId)).getByRole("link")).toHaveClass(
+      expectedClass,
+    );
   });
 
   it("supports disabled state", () => {
@@ -108,24 +95,6 @@ describe("Link", () => {
     await user.click(link);
 
     expect(onDisabledClick).not.toHaveBeenCalled();
-  });
-
-  it("supports muted variant", () => {
-    render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.classList.contains("bx--link--muted"));
-    assert(link);
-
-    expect(link).toHaveClass("bx--link--muted");
-  });
-
-  it("supports visited state", () => {
-    render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.classList.contains("bx--link--visited"));
-    assert(link);
-
-    expect(link).toHaveClass("bx--link--visited");
   });
 
   it("supports click and mouse events", async () => {

@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import Stack from "./Stack.as.test.svelte";
 
 describe("Stack as", () => {
@@ -39,7 +40,7 @@ describe("Stack as", () => {
       props: { as: true, gap: "22px" },
     });
     const header = container.querySelector("header");
-    expect(header).toHaveStyle({ gap: "22px" });
+    expectInlineStyle(header, { gap: "22px" });
     expect(header?.className).not.toMatch(/bx--stack-scale-/);
   });
 
@@ -48,7 +49,7 @@ describe("Stack as", () => {
       props: { gap: "22px", style: "color: red" },
     });
     const stack = container.querySelector("div.bx--stack");
-    expect(stack).toHaveStyle({ gap: "22px", color: "rgb(255, 0, 0)" });
+    expectInlineStyle(stack, { gap: "22px", color: "red" });
   });
 
   it("omits the style attribute when there is no custom gap or caller style", () => {

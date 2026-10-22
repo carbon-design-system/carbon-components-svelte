@@ -16,65 +16,31 @@ describe("ListItem", () => {
     expect(screen.getByText("List item content")).toBeInTheDocument();
   });
 
-  it("should handle click events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+  it.each([
+    ["onclick", (item: HTMLElement) => user.click(item)],
+    ["onmouseover", (item: HTMLElement) => user.hover(item)],
+    ["onmouseenter", (item: HTMLElement) => user.hover(item)],
+    [
+      "onmouseleave",
+      async (item: HTMLElement) => {
+        await user.hover(item);
+        await user.unhover(item);
+      },
+    ],
+  ])("should call %s", async (propName, interact) => {
+    const mock = vi.fn();
     const { container } = render(ListItemTest, {
       props: {
         slotContent: "Content",
+        [propName]: mock,
       },
     });
 
     const item = container.querySelector("li");
     assert(item);
-    await user.click(item);
+    await interact(item);
 
-    expect(consoleLog).toHaveBeenCalledWith("click");
-  });
-
-  it("should handle mouseover event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(ListItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const item = container.querySelector("li");
-    assert(item);
-    await user.hover(item);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
-  });
-
-  it("should handle mouseenter event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(ListItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const item = container.querySelector("li");
-    assert(item);
-    await user.hover(item);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
-  });
-
-  it("should handle mouseleave event", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(ListItemTest, {
-      props: {
-        slotContent: "Content",
-      },
-    });
-
-    const item = container.querySelector("li");
-    assert(item);
-    await user.hover(item);
-    await user.unhover(item);
-
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    expect(mock).toHaveBeenCalled();
   });
 
   it("should apply custom class via restProps", () => {

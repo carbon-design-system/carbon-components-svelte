@@ -4,52 +4,38 @@ import HeadingTest from "./Heading.test.svelte";
 import SectionLevelChange from "./SectionLevelChange.test.svelte";
 
 describe("Heading", () => {
-  it("should render as h1 when not inside a Section", () => {
-    render(HeadingTest);
-
-    const heading = screen.getByText("Heading without Section");
-    expect(heading.tagName).toBe("H1");
-  });
-
-  it("should increment heading levels in nested sections", () => {
-    render(HeadingTest);
-
-    expect(screen.getByText("Nested Heading 1").tagName).toBe("H1");
-    expect(screen.getByText("Nested Heading 2").tagName).toBe("H2");
-    expect(screen.getByText("Nested Heading 3").tagName).toBe("H3");
-    expect(screen.getByText("Nested Heading 4").tagName).toBe("H4");
-    expect(screen.getByText("Nested Heading 5").tagName).toBe("H5");
-    expect(screen.getByText("Nested Heading 6").tagName).toBe("H6");
-  });
-
-  it("should cap heading level at h6", () => {
-    render(HeadingTest);
-
-    const cappedHeading = screen.getByText("Nested Capped at Heading 6");
-    expect(cappedHeading.tagName).toBe("H6");
-  });
-
-  it("should reset heading level for sibling sections", () => {
-    render(HeadingTest);
-
-    const siblingHeading = screen.getByText("Sibling Heading 2");
-    expect(siblingHeading.tagName).toBe("H2");
-  });
-
-  it("should start at custom level when level prop is specified", () => {
-    render(HeadingTest);
-
-    const customHeading = screen.getByText("Custom Level Heading 5");
-    expect(customHeading.tagName).toBe("H5");
-  });
-
   it.each([
+    ["Heading without Section", "H1"],
+    ["Nested Heading 1", "H1"],
+    ["Nested Heading 2", "H2"],
+    ["Nested Heading 3", "H3"],
+    ["Nested Heading 4", "H4"],
+    ["Nested Heading 5", "H5"],
+    ["Nested Heading 6", "H6"],
+    ["Nested Capped at Heading 6", "H6"],
+    ["Sibling Heading 2", "H2"],
+    ["Custom Level Heading 5", "H5"],
     ["Reset Heading 1", "H1"],
     ["Overflow Level Heading 6", "H6"],
-  ])("should honor an explicit level for %s", (text, tagName) => {
+  ])("should render %s as %s", (text, tagName) => {
     render(HeadingTest);
 
     expect(screen.getByText(text).tagName).toBe(tagName);
+  });
+
+  it("should render the semantic level from Section with a size class", () => {
+    render(HeadingTest);
+
+    const heading = screen.getByText("Sized heading");
+    expect(heading.tagName).toBe("H2");
+    expect(heading).toHaveClass("bx--type-heading-03");
+  });
+
+  it("should not add a type class when type is unset", () => {
+    render(HeadingTest);
+
+    const heading = screen.getByText("Heading without Section");
+    expect(heading.className).not.toMatch(/bx--type-/);
   });
 });
 

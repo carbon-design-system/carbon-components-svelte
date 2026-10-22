@@ -24,13 +24,16 @@ describe("DescriptionList", () => {
     expect(within(list).queryByText("Ignored")).not.toBeInTheDocument();
   });
 
-  it("applies the horizontal layout class", () => {
-    render(DescriptionList);
+  it.each(["horizontal", "summary"])(
+    "applies the %s layout class",
+    (layout) => {
+      render(DescriptionList);
 
-    expect(screen.getByTestId("horizontal")).toHaveClass(
-      "bx--description-list--horizontal",
-    );
-  });
+      expect(screen.getByTestId(layout)).toHaveClass(
+        `bx--description-list--${layout}`,
+      );
+    },
+  );
 
   it("sets grid-template-columns when columns is greater than 1", () => {
     render(DescriptionList);
