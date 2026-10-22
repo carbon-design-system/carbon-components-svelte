@@ -145,6 +145,17 @@ describe("tokenize", () => {
     },
   );
 
+  test.each([
+    ["sh", "echo a#b # c", ["function:echo", "comment:# c"]],
+    [
+      "js",
+      "#!/usr/bin/env node\nx / 2 / 3",
+      ["comment:#!/usr/bin/env node", "operator:/", "number:2", "operator:/"],
+    ],
+  ])("starts a %s comment only where it is one", (lang, code, expected) => {
+    expect(types(code, lang)?.slice(0, expected.length)).toEqual(expected);
+  });
+
   test("reads expressions inside quoted attribute values as script", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",
