@@ -23,6 +23,13 @@ describe("Layer", () => {
     expect(screen.getByTestId("inner")).toHaveClass("bx--layer-three");
   });
 
+  it("lets a nested layer set its own level, and continues from it", () => {
+    render(LayerTest);
+    expect(screen.getByTestId("reset-outer")).toHaveClass("bx--layer-two");
+    expect(screen.getByTestId("reset-nested")).toHaveClass("bx--layer-one");
+    expect(screen.getByTestId("reset-child")).toHaveClass("bx--layer-two");
+  });
+
   it("follows a level change", async () => {
     const { rerender } = render(LayerTest, { props: { level: 2 } });
     expect(screen.getByTestId("outer")).toHaveClass("bx--layer-three");

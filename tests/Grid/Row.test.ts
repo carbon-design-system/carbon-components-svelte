@@ -15,6 +15,11 @@ describe("Row", () => {
     expect(row).toHaveClass("bx--row--align-center");
   });
 
+  it("should keep a consumer class alongside the row class", () => {
+    render(Row, { props: { className: "custom" } });
+    expect(screen.getByTestId("test-row")).toHaveClass("bx--row", "custom");
+  });
+
   it("should render as custom element when as is true", () => {
     render(Row, { props: { as: true } });
     const row = screen.getByTestId("custom-row");

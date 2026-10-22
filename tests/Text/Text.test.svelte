@@ -25,3 +25,4 @@
 <Text type={truncatedType} style={truncatedStyle} lines={3}
   >Truncated text</Text
 >
+<Text lines={1} clamp="front">Front clamped</Text>

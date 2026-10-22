@@ -5,8 +5,9 @@
   export let tag: ComponentProps<Truncate>["tag"] = "p";
   export let clamp: ComponentProps<Truncate>["clamp"] = "end";
   export let lines: ComponentProps<Truncate>["lines"] = 1;
+  export let style: string | undefined = undefined;
   export let text =
     "This is a long text that should be truncated when it exceeds the available space";
 </script>
 
-<Truncate {tag} {clamp} {lines}> {text} </Truncate>
+<Truncate {tag} {clamp} {lines} {style}> {text} </Truncate>

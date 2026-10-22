@@ -22,3 +22,9 @@
     </Layer>
   </Layer>
 </Layer>
+
+<Layer data-testid="reset-outer">
+  <Layer level={0} data-testid="reset-nested">
+    <Layer data-testid="reset-child" />
+  </Layer>
+</Layer>

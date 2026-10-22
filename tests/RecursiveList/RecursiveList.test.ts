@@ -128,6 +128,45 @@ describe("RecursiveList props", () => {
     }
   });
 
+  it.each([
+    ["unordered", "UL", "bx--list--unordered"],
+    ["ordered", "OL", "bx--list--ordered"],
+    ["ordered-native", "OL", "bx--list--ordered--native"],
+  ] as const)(
+    "renders `type` %s as %s with %s at every depth",
+    (type, tagName, className) => {
+      const { container } = render(RecursiveList, { nodes, type });
+
+      const lists = container.querySelectorAll("ul, ol");
+      expect(lists).toHaveLength(2);
+      for (const list of lists) {
+        expect(list.tagName).toBe(tagName);
+        expect(list).toHaveClass(className);
+      }
+    },
+  );
+
+  it("renders `text` instead of `html` when a node has both", () => {
+    const { container } = render(RecursiveList, {
+      nodes: [{ text: "Plain", html: "<strong>Bold</strong>" }],
+    });
+
+    expect(screen.getByText("Plain")).toBeInTheDocument();
+    expect(container.querySelector("strong")).toBeNull();
+  });
+
+  it("keeps the same element for a keyed node when nodes are reordered", async () => {
+    const a = { id: "a", text: "Item A" };
+    const b = { id: "b", text: "Item B" };
+    const { rerender } = render(RecursiveList, { nodes: [a, b] });
+    const itemA = screen.getByText("Item A");
+
+    await rerender({ nodes: [b, a] });
+
+    expect(screen.getByText("Item A")).toBe(itemA);
+    expect(screen.getAllByRole("listitem")[1]).toBe(itemA);
+  });
+
   it("does not render a nested list for empty `nodes`", () => {
     render(RecursiveList, { nodes: [{ text: "Item 1", nodes: [] }] });
 

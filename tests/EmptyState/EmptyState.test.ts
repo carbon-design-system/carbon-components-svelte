@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import EmptyStateComponent from "../../src/EmptyState/EmptyState.svelte";
 import EmptyState from "./EmptyState.test.svelte";
+import EmptyStateTitleChildren from "./EmptyState.titleChildren.test.svelte";
 import EmptyStateInSection from "./EmptyStateInSection.test.svelte";
 
 describe("EmptyState", () => {
@@ -43,6 +44,32 @@ describe("EmptyState", () => {
     render(EmptyStateComponent, { subtitle: "Nothing here" });
 
     expect(screen.queryByRole("heading")).toBeNull();
+  });
+
+  it("renders the heading for a `titleChildren` slot without a title", () => {
+    render(EmptyStateTitleChildren);
+
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Custom title" }),
+    ).toBeVisible();
+  });
+
+  it("renders the `subtitle` prop when there is no subtitle slot", () => {
+    render(EmptyState, { withSlots: false });
+
+    expect(
+      screen.getByText(
+        "Projects hold the files and people for one piece of work.",
+      ),
+    ).toHaveClass("bx--empty-state__subtitle");
+  });
+
+  it("caps the heading level at 6 inside a level 6 Section", () => {
+    render(EmptyStateInSection, { level: 6 });
+
+    expect(
+      screen.getByRole("heading", { level: 6, name: "No files yet" }),
+    ).toBeVisible();
   });
 
   it("hides the illustration from assistive technology", () => {

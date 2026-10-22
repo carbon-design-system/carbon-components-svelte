@@ -27,6 +27,15 @@ describe("GridOverlay", () => {
     expect(overlay).toHaveClass("bx--grid--condensed");
   });
 
+  it("should render fullWidth variant", () => {
+    const { container } = render(GridOverlay, {
+      props: { open: true, fullWidth: true },
+    });
+    expect(container.querySelector(".bx--grid-overlay")).toHaveClass(
+      "bx--grid--full-width",
+    );
+  });
+
   it("should shade gutters only when gutters is set", async () => {
     const { container, rerender } = render(GridOverlay, {
       props: { open: true },
@@ -50,5 +59,13 @@ describe("GridOverlay", () => {
     const hidden = container.querySelectorAll(".bx--col-sm-0");
     expect(shown.length).toBe(4);
     expect(hidden.length).toBe(12);
+  });
+
+  it("should show exactly 8 columns and hide the rest at the md breakpoint", () => {
+    const { container } = render(GridOverlay, {
+      props: { open: true },
+    });
+    expect(container.querySelectorAll(".bx--col-md-1").length).toBe(8);
+    expect(container.querySelectorAll(".bx--col-md-0").length).toBe(8);
   });
 });

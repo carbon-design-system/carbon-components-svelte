@@ -44,4 +44,29 @@ describe("Divider", () => {
       marginBlock: "2rem",
     });
   });
+
+  it("applies a vertical scale-step margin as an inline-axis class", () => {
+    render(Divider);
+
+    const node = screen.getByTestId("vertical-margin-scale");
+    expect(node).toHaveClass("bx--divider-margin-x-5");
+    expect(node.className).not.toContain("bx--divider-margin-y-");
+  });
+
+  it("applies a vertical custom margin to the inline axis only", () => {
+    render(Divider);
+
+    expectInlineStyle(screen.getByTestId("vertical-margin-custom"), {
+      marginInline: "2rem",
+      marginBlock: "",
+    });
+  });
+
+  it("omits aria-orientation on a decorative vertical divider", () => {
+    render(Divider);
+
+    expect(screen.getByTestId("decorative-vertical")).not.toHaveAttribute(
+      "aria-orientation",
+    );
+  });
 });

@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import Chat from "./Chat.test.svelte";
+import ChatTyping from "./Chat.typing.test.svelte";
 
 describe("Chat", () => {
   it("renders a focusable, named log around a list of messages", () => {
@@ -57,6 +58,30 @@ describe("Chat", () => {
     render(Chat, { typing: true });
 
     expect(screen.getByRole("status")).toHaveTextContent("Sam is typing");
+  });
+
+  it("renders the actions slot beside the bubble", () => {
+    render(ChatTyping);
+
+    expect(
+      screen
+        .getByRole("button", { name: "Reply" })
+        .closest(".bx--chat-message__actions"),
+    ).not.toBeNull();
+  });
+
+  it.each([
+    ["actions", () => screen.queryByRole("button", { name: "Reply" })],
+    ["attachments", () => screen.queryByRole("img", { name: "Receipt" })],
+    ["meta", () => screen.queryByText("9:41")],
+    ["status", () => screen.queryByText("Sent")],
+  ])("hides %s while typing", async (_, query) => {
+    const { rerender } = render(ChatTyping);
+    expect(query()).not.toBeNull();
+
+    await rerender({ typing: true });
+
+    expect(query()).toBeNull();
   });
 
   it("puts attachments under the bubble, not inside it", () => {

@@ -10,6 +10,7 @@
   export let padding: ComponentProps<Row>["padding"] = false;
   export let align: ComponentProps<Row>["align"] = undefined;
   export let as: ComponentProps<Row>["as"] = false;
+  export let className: string | undefined = undefined;
 </script>
 
 {#if as}
@@ -34,6 +35,7 @@
     {noGutterRight}
     {padding}
     {align}
+    class={className}
     data-testid="test-row"
   >
     Row content

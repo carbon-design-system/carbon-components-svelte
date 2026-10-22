@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import { user } from "../utils/user";
 import OutboundLink from "./OutboundLink.test.svelte";
 
 describe("OutboundLink", () => {
@@ -8,6 +9,33 @@ describe("OutboundLink", () => {
 
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("lets a consumer rel override the default rel", () => {
+    render(OutboundLink);
+    const link = within(screen.getByTestId("rel-override")).getByRole("link");
+
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "nofollow");
+  });
+
+  it("forwards focus, blur, keydown, and keyup", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const onKeydown = vi.fn();
+    const onKeyup = vi.fn();
+    render(OutboundLink, { props: { onFocus, onBlur, onKeydown, onKeyup } });
+
+    const link = within(screen.getByTestId("default")).getByRole("link");
+    link.focus();
+    expect(onFocus).toHaveBeenCalledTimes(1);
+
+    await user.keyboard("a");
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onKeyup).toHaveBeenCalledTimes(1);
+
+    link.blur();
+    expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
   it("announces that the link opens in a new tab", () => {

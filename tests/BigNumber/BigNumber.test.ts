@@ -1,5 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import BigNumber from "./BigNumber.test.svelte";
+import BigNumberProps from "./BigNumberProps.test.svelte";
+
+const getValue = () =>
+  screen.getByTestId("metric").querySelector(".bx--big-number__value");
 
 describe("BigNumber", () => {
   it("renders the label and value", () => {
@@ -11,6 +15,16 @@ describe("BigNumber", () => {
     expect(basic.querySelector(".bx--big-number__value")).toHaveTextContent(
       "42",
     );
+  });
+
+  it.each([
+    ["undefined", undefined],
+    ["NaN", Number.NaN],
+    ["null", null as unknown as number],
+  ])("renders a dash when value is %s", (_, value) => {
+    render(BigNumberProps, { props: { options: { value } } });
+
+    expect(getValue()).toHaveTextContent(/^–$/);
   });
 
   describe("denominator visibility", () => {
@@ -106,7 +120,104 @@ describe("BigNumber", () => {
     });
   });
 
+  describe("locale and fractionDigits", () => {
+    it("formats the value with the given locale", () => {
+      render(BigNumberProps, {
+        props: { options: { value: 1500, fullNumber: true, locale: "de-DE" } },
+      });
+
+      expect(getValue()).toHaveTextContent("1.500");
+    });
+
+    it("limits the fraction digits of the value", () => {
+      render(BigNumberProps, {
+        props: {
+          options: { value: 1.2345, fullNumber: true, fractionDigits: 3 },
+        },
+      });
+
+      expect(getValue()).toHaveTextContent("1.235");
+    });
+
+    it("abbreviates the total", () => {
+      render(BigNumberProps, { props: { options: { value: 3, total: 1500 } } });
+
+      expect(
+        screen
+          .getByTestId("metric")
+          .querySelector(".bx--big-number__denominator"),
+      ).toHaveTextContent("/ 1.5K");
+    });
+  });
+
+  describe("reactivity", () => {
+    it("updates the value and total after mount", async () => {
+      const { rerender } = render(BigNumberProps, {
+        props: { options: { value: 3, total: 10 } },
+      });
+
+      await rerender({ options: { value: 7, total: 20 } });
+
+      expect(getValue()).toHaveTextContent("7");
+      expect(
+        screen
+          .getByTestId("metric")
+          .querySelector(".bx--big-number__denominator"),
+      ).toHaveTextContent("/ 20");
+    });
+  });
+
+  describe("size", () => {
+    it.each([
+      ["lg", "bx--big-number--lg", "20"],
+      ["xl", "bx--big-number--xl", "24"],
+    ] as const)(
+      "applies the %s class and scales the trend icon",
+      (size, expectedClass, iconSize) => {
+        render(BigNumberProps, {
+          props: { options: { value: 42, trend: "up", size } },
+        });
+
+        const el = screen.getByTestId("metric");
+        expect(el).toHaveClass(expectedClass);
+        expect(el.querySelector(".bx--big-number__trend-icon")).toHaveAttribute(
+          "width",
+          iconSize,
+        );
+      },
+    );
+
+    it("keeps the default trend icon size at 16", () => {
+      render(BigNumberProps, {
+        props: { options: { value: 42, trend: "up" } },
+      });
+
+      expect(
+        screen
+          .getByTestId("metric")
+          .querySelector(".bx--big-number__trend-icon"),
+      ).toHaveAttribute("width", "16");
+    });
+  });
+
   describe("trend", () => {
+    it("renders a distinct icon for each trend", () => {
+      const icons = (["up", "down", "flat"] as const).map((trend) => {
+        const { unmount } = render(BigNumberProps, {
+          props: { options: { value: 42, trend } },
+        });
+        const icon = screen
+          .getByTestId("metric")
+          .querySelector(".bx--big-number__trend-icon");
+        assert(icon);
+        const markup = icon.innerHTML;
+        unmount();
+        return markup;
+      });
+
+      expect(new Set(icons).size).toBe(3);
+    });
+
     it.each([
       ["an up arrow colored success by default", "trend-up", "success"],
       ["a down arrow colored error by default", "trend-down", "error"],
@@ -174,6 +285,27 @@ describe("BigNumber", () => {
       expect(deltaValue).toHaveTextContent("-120");
       expect(deltaValue).toHaveClass("bx--big-number__delta-value--neutral");
     });
+
+    it.each([
+      ["up", undefined, "success"],
+      ["up", "error", "error"],
+      ["down", "success", "success"],
+      ["flat", "error", "error"],
+      ["flat", undefined, "neutral"],
+    ] as const)(
+      "colors the delta for trend %s with trendColor %s as %s",
+      (trend, trendColor, expected) => {
+        render(BigNumberProps, {
+          props: { options: { value: 42, delta: 5, trend, trendColor } },
+        });
+
+        expect(
+          screen
+            .getByTestId("metric")
+            .querySelector(".bx--big-number__delta-value"),
+        ).toHaveClass(`bx--big-number__delta-value--${expected}`);
+      },
+    );
 
     it("renders a zero delta without a sign", () => {
       render(BigNumber);

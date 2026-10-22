@@ -63,6 +63,22 @@ describe("Box", () => {
       ["bx--box-my-3"],
     ],
     [
+      "top, right and left padding",
+      { paddingTop: 1, paddingRight: 2, paddingLeft: 3 },
+      ["bx--box-pt-1", "bx--box-pr-2", "bx--box-pl-3"],
+    ],
+    [
+      "x, right, bottom and left margin",
+      { marginX: 2, marginRight: 3, marginBottom: 4, marginLeft: 5 },
+      ["bx--box-mx-2", "bx--box-mr-3", "bx--box-mb-4", "bx--box-ml-5"],
+    ],
+    ["max height scale", { maxHeight: 6 }, ["bx--box-max-height-6"]],
+    [
+      "bottom and right offsets",
+      { position: "sticky", bottom: 1, right: 2 },
+      ["bx--box-bottom-1", "bx--box-right-2"],
+    ],
+    [
       "side padding over axis and all-sides",
       { padding: "1rem", paddingY: 7, paddingBottom: 3 },
       ["bx--box-py-7", "bx--box-pb-3"],
@@ -236,6 +252,17 @@ describe("Box", () => {
       { gridTemplateColumns: "" },
     ],
     ["custom height", { height: "24rem" }, { height: "24rem" }],
+    ["custom max height", { maxHeight: "20rem" }, { maxHeight: "20rem" }],
+    [
+      "custom right padding",
+      { paddingRight: "1.5rem" },
+      { paddingRight: "1.5rem", paddingLeft: "" },
+    ],
+    [
+      "custom top, bottom and left offsets",
+      { position: "sticky", top: "1rem", bottom: "2rem", left: "3rem" },
+      { top: "1rem", bottom: "2rem", left: "3rem", right: "" },
+    ],
     [
       "custom right offset",
       { position: "relative", right: "2rem" },

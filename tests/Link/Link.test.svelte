@@ -9,6 +9,10 @@
   export let onMouseenter: () => void = () => {};
   export let onMouseleave: () => void = () => {};
   export let onDisabledClick: () => void = () => {};
+  export let onFocus: () => void = () => {};
+  export let onBlur: () => void = () => {};
+  export let onKeydown: () => void = () => {};
+  export let onKeyup: () => void = () => {};
 </script>
 
 <div data-testid="default-link">
@@ -21,6 +25,10 @@
     on:mouseover={() => onMouseover()}
     on:mouseenter={() => onMouseenter()}
     on:mouseleave={() => onMouseleave()}
+    on:focus={() => onFocus()}
+    on:blur={() => onBlur()}
+    on:keydown={() => onKeydown()}
+    on:keyup={() => onKeyup()}
   >
     Carbon Design System
   </Link>
@@ -95,5 +103,27 @@
   <Link inline href="https://www.carbondesignsystem.com/">
     Carbon Design System
     <svelte:fragment slot="icon"> <Carbon /> </svelte:fragment>
+  </Link>
+</div>
+
+<div data-testid="link-disabled-blank">
+  <Link
+    disabled
+    size="lg"
+    target="_blank"
+    href="https://www.carbondesignsystem.com/"
+    on:click={() => onDisabledClick()}
+  >
+    Carbon Design System
+  </Link>
+</div>
+
+<div data-testid="link-rel-override">
+  <Link
+    target="_blank"
+    rel="nofollow"
+    href="https://www.carbondesignsystem.com/"
+  >
+    Carbon Design System
   </Link>
 </div>

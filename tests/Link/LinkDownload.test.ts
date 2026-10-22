@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import LinkDownload from "./LinkDownload.test.svelte";
 
@@ -95,6 +96,82 @@ describe("LinkDownload", () => {
     await user.click(getLink());
 
     expect(onDownloadError).toHaveBeenCalledWith({ error });
+  });
+
+  it("does nothing with the default downloader when data is unset", async () => {
+    const onDownload = vi.fn();
+
+    render(LinkDownload, { props: { data: null, onDownload } });
+    await user.click(getLink());
+
+    expect(createObjectURL).not.toHaveBeenCalled();
+    expect(onDownload).not.toHaveBeenCalled();
+  });
+
+  it("calls a custom download function even when data is unset", async () => {
+    const download = vi.fn();
+
+    render(LinkDownload, { props: { data: null, download } });
+    await user.click(getLink());
+
+    expect(download).toHaveBeenCalledWith(
+      undefined,
+      "load-balancers.csv",
+      "text/csv;charset=utf-8",
+    );
+  });
+
+  it("dispatches download:error when the download function throws synchronously", async () => {
+    const error = new Error("download failed");
+    const download = vi.fn(() => {
+      throw error;
+    });
+    const onDownloadError = vi.fn();
+
+    render(LinkDownload, { props: { download, onDownloadError } });
+    await user.click(getLink());
+
+    expect(onDownloadError).toHaveBeenCalledWith({ error });
+  });
+
+  it("dispatches download only after an async download resolves", async () => {
+    let resolveDownload = () => {};
+    const download = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDownload = resolve;
+        }),
+    );
+    const onDownload = vi.fn();
+
+    render(LinkDownload, { props: { download, onDownload } });
+    await user.click(getLink());
+    expect(download).toHaveBeenCalledTimes(1);
+    expect(onDownload).not.toHaveBeenCalled();
+
+    resolveDownload();
+    await flushMacrotask();
+
+    expect(onDownload).toHaveBeenCalledTimes(1);
+  });
+
+  it("forwards focus, blur, keydown, and keyup", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const onKeydown = vi.fn();
+    const onKeyup = vi.fn();
+    render(LinkDownload, { props: { onFocus, onBlur, onKeydown, onKeyup } });
+
+    const link = getLink();
+    link.focus();
+    expect(onFocus).toHaveBeenCalledTimes(1);
+
+    await user.keyboard("a");
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onKeyup).toHaveBeenCalledTimes(1);
+
+    link.blur();
+    expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
   it("does not download when disabled", async () => {

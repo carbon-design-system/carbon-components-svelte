@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { truncate } from "../../src/Truncate/truncate.js";
+import { expectInlineStyle } from "../utils/inline-style";
 import Truncate from "./Truncate.test.svelte";
 import TruncateAction from "./TruncateAction.test.svelte";
 
@@ -39,6 +40,18 @@ describe("Truncate", () => {
       expect(element.tagName).toBe("DIV");
       expect(element).toHaveClass("bx--text-truncate--multiline");
       expect(element.style.getPropertyValue("--ccs-truncate-lines")).toBe("2");
+    });
+
+    it("should merge a consumer style with the lines variable", async () => {
+      const { rerender } = render(Truncate, {
+        props: { style: "color: red", lines: 3 },
+      });
+      const element = screen.getByText(/This is a long text/);
+      expectInlineStyle(element, { "--ccs-truncate-lines": "3", color: "red" });
+
+      await rerender({ lines: 1 });
+
+      expectInlineStyle(element, { "--ccs-truncate-lines": "", color: "red" });
     });
 
     it("should ignore clamp direction when multiline", () => {

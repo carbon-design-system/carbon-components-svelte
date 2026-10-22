@@ -48,6 +48,10 @@
   <Heading type="heading-03">Sized heading</Heading>
 </Section>
 
+<Heading type="heading-03" class="custom-heading"
+  >Typed classed heading</Heading
+>
+
 <div data-testid="custom-tag-wrapper">
   <Section tag="div"> <Heading>Custom Tag Heading 1</Heading> </Section>
 </div>
