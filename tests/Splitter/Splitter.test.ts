@@ -239,7 +239,7 @@ describe("Splitter", () => {
     });
 
     it("snaps a drag past halfway below min collapsed, and back open", async () => {
-      const { consoleLog, separator } = setup({
+      const { onResize, separator } = setup({
         size: 50,
         min: 20,
         collapsedSize: 0,
@@ -259,7 +259,7 @@ describe("Splitter", () => {
       await fireEvent.pointerUp(separator, { pointerId: 1 });
 
       expect(boundCollapsed()).toHaveTextContent("true");
-      expect(consoleLog.mock.calls).toEqual([["resize", { size: 0 }]]);
+      expect(onResize.mock.calls).toEqual([[{ size: 0 }]]);
     });
 
     it("collapses below min when set, and renders a stored collapsed size", async () => {
