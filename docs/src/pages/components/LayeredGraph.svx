@@ -51,37 +51,37 @@ It is Carbon's network diagram: nodes in ranks, every edge running one way, cros
 
 Pass the nodes as `data` with an `id` accessor and a `label`, and the edges as `links` read with `source` and `target`. Ranks are the longest path from a node with nothing pointing at it, so a dependency sits below everything that depends on it.
 
-<LayeredGraph data={services} links={calls} id="id" label="name" title="Service dependencies" />
+<LayeredGraph nodes={services} links={calls} id="id" label="name" title="Service dependencies" />
 
 ## Lanes
 
 Set `lane` to group nodes into bands that run across the ranks, and `lanes` to fix their order. A lane is a field on the node, not another chart.
 
-<LayeredGraph data={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} title="Service dependencies by tier" />
+<LayeredGraph nodes={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} title="Service dependencies by tier" />
 
 ## Color and status
 
 The graph is grayscale until told otherwise, so nothing is colored by accident. Set `group` to color nodes by a field: the frame, the edges leaving the node, and any lane of the same name take the group's color, and a legend names the groups. Set `status` to read a state per node, one of `"success"`, `"warning"`, `"error"`, `"info"`, or `"neutral"`: it colors the frame and adds a glyph, so the state reads without color too. `colors` fixes a group's color and `palette` picks another color group.
 
-<LayeredGraph data={services.map((s) => ({ ...s, health: health[s.id] }))} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} group="tier" status="health" title="Service dependencies, by tier and health" />
+<LayeredGraph nodes={services.map((s) => ({ ...s, health: health[s.id] }))} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} group="tier" status="health" title="Service dependencies, by tier and health" />
 
 ## Direction and edges
 
 Set `rankDir` to `"LR"` to run ranks left to right, which suits a pipeline, and `edge` to `"orthogonal"` for right angles. An edge that would close a cycle is drawn dashed, pointing back up the ranks, rather than breaking the layout.
 
-<LayeredGraph data={stages} links={needs} id="id" label="name" rankDir="LR" edge="orthogonal" nodeWidth={112} title="Release pipeline" />
+<LayeredGraph nodes={stages} links={needs} id="id" label="name" rankDir="LR" edge="orthogonal" nodeWidth={112} title="Release pipeline" />
 
 ## Folding
 
 Bind `collapsed`, a list of ids, to fold away everything reachable only through a node. A folded node shows how many it hides. Double click a node to fold it, or use the arrow keys.
 
-<LayeredGraph data={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} bind:collapsed title="Service dependencies, checkout folded" />
+<LayeredGraph nodes={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} bind:collapsed title="Service dependencies, checkout folded" />
 
 ## Selection and size
 
 Bind `selected` or listen for `select`, whose detail carries the node and its `datum`. `nodeWidth`, `nodeHeight`, `rankGap`, and `nodeGap` set the geometry; a label wider than its node is cut short, and the full text is in the tooltip.
 
-<LayeredGraph data={services} links={calls} id="id" label="name" bind:selected nodeWidth={100} nodeHeight={28} rankGap={32} title="Pick a service" />
+<LayeredGraph nodes={services} links={calls} id="id" label="name" bind:selected nodeWidth={100} nodeHeight={28} rankGap={32} title="Pick a service" />
 
 ## Accessibility
 

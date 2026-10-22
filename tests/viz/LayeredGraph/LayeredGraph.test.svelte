@@ -3,7 +3,7 @@
 
   type Node = { id: string; name: string; tier?: string; health?: string };
 
-  export let data: ReadonlyArray<Node> = [
+  export let nodes: ReadonlyArray<Node> = [
     { id: "app", name: "app", tier: "edge", health: "success" },
     { id: "api", name: "api", tier: "services", health: "warning" },
     { id: "web", name: "web", tier: "edge" },
@@ -31,7 +31,7 @@
 </script>
 
 <LayeredGraph
-  {data}
+  {nodes}
   {links}
   id="id"
   label="name"
