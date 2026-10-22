@@ -11,9 +11,9 @@
 
   /**
    * Specify the value of the nested `StructuredListInput`, so a selectable
-   * row can reflect its own selected state (e.g. suppressing the hover
-   * highlight when already selected). Only relevant when `selection` is
-   * `true` on the parent `StructuredList`.
+   * row can show its own selected state: a selected fill, with no hover
+   * highlight. Only relevant when `selection` is `true` on the parent
+   * `StructuredList`.
    * @type {Value}
    */
   export let value = undefined;
