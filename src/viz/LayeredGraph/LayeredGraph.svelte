@@ -99,7 +99,7 @@
   /**
    * Specify how edges are drawn: straight between ranks, or with right
    * angles.
-   * @type {"straight" | "orthogonal"}
+   * @type {"straight" | "orthogonal" | "curved"}
    */
   export let edge = "straight";
 

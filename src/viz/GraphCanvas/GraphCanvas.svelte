@@ -74,7 +74,7 @@
 
   /**
    * Specify how edges are drawn.
-   * @type {"straight" | "orthogonal"}
+   * @type {"straight" | "orthogonal" | "curved"}
    */
   export let edge = "orthogonal";
 
