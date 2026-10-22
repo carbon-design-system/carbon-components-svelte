@@ -371,6 +371,51 @@ describe("ComposedModal", () => {
     },
   );
 
+  describe("returnFocusTo", () => {
+    const getElsewhere = () =>
+      screen.getByRole("textbox", { name: "Elsewhere" });
+
+    // The trigger unmounts while the modal is open, as when a confirm deletes
+    // the row that opened it.
+    async function openThenRemoveTrigger() {
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+      trigger.remove();
+    }
+
+    async function closeAndFinish(container: Element) {
+      await user.click(screen.getByLabelText("Close"));
+      await tick();
+      container
+        .querySelector(".bx--modal")
+        ?.dispatchEvent(
+          new TransitionEvent("transitionend", { propertyName: "transform" }),
+        );
+      await tick();
+    }
+
+    it("focuses the fallback when the trigger unmounted while open", async () => {
+      const { container } = render(ComposedModalFocusReturnTest, {
+        props: { returnFocusTo: getElsewhere },
+      });
+      await openThenRemoveTrigger();
+
+      await closeAndFinish(container);
+
+      expect(getElsewhere()).toHaveFocus();
+    });
+
+    it("leaves focus alone without a fallback", async () => {
+      const { container } = render(ComposedModalFocusReturnTest);
+      await openThenRemoveTrigger();
+
+      await closeAndFinish(container);
+
+      expect(getElsewhere()).not.toHaveFocus();
+    });
+  });
+
   it("focuses the dialog when it has nothing else to focus", async () => {
     render(ComposedModalFocusReturnTest, {
       props: { hideCloseButton: true, showFooter: false },

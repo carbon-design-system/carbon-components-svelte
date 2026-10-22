@@ -1,6 +1,10 @@
 // @ts-check
 import { tick } from "svelte";
 
+/**
+ * @typedef {HTMLElement | null | undefined | (() => HTMLElement | null | undefined)} FocusFallback
+ */
+
 const selectorFirstInput =
   'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
 
@@ -33,9 +37,10 @@ export function initialFocus({
  * Save focus before an overlay opens and restore it on close when the element
  * is still connected. Pass the overlay as `region` to skip the restore when
  * focus has already moved outside it (e.g. a close handler opened another
- * dialog).
+ * dialog). Pass `fallback`, an element or a function returning one, to focus
+ * instead when the saved element has left the DOM, for example a deleted row.
  *
- * @returns {{ save: () => void; restore: (region?: Element | null) => void }}
+ * @returns {{ save: () => void; restore: (region?: Element | null, fallback?: FocusFallback) => void }}
  */
 export function restoreFocus() {
   /** @type {HTMLElement | null} */
@@ -49,10 +54,16 @@ export function restoreFocus() {
           ? document.activeElement
           : null;
     },
-    restore(region) {
-      if (!prevFocus?.isConnected) return;
-      if (region === undefined || focusIsFree(region)) prevFocus.focus();
+    restore(region, fallback) {
+      const saved = prevFocus;
       prevFocus = null;
+      const target = saved?.isConnected
+        ? saved
+        : typeof fallback === "function"
+          ? fallback()
+          : fallback;
+      if (!target?.isConnected) return;
+      if (region === undefined || focusIsFree(region)) target.focus();
     },
   };
 }

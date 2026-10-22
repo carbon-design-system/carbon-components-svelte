@@ -114,6 +114,80 @@ describe("restoreFocus", () => {
     focusReturn.restore();
     expect(document.activeElement).toBe(other);
   });
+
+  describe("fallback", () => {
+    function saveThenRemoveTrigger() {
+      const trigger = document.createElement("button");
+      document.body.appendChild(trigger);
+      trigger.focus();
+
+      const focusReturn = restoreFocus();
+      focusReturn.save();
+      trigger.remove();
+      return focusReturn;
+    }
+
+    it("focuses the fallback when the saved element is disconnected", () => {
+      const focusReturn = saveThenRemoveTrigger();
+      const fallbackTarget = document.createElement("button");
+      document.body.appendChild(fallbackTarget);
+
+      focusReturn.restore(undefined, () => fallbackTarget);
+      expect(document.activeElement).toBe(fallbackTarget);
+    });
+
+    it("accepts the fallback as an element", () => {
+      const focusReturn = saveThenRemoveTrigger();
+      const fallbackTarget = document.createElement("button");
+      document.body.appendChild(fallbackTarget);
+
+      focusReturn.restore(undefined, fallbackTarget);
+      expect(document.activeElement).toBe(fallbackTarget);
+    });
+
+    it("is a no-op when the fallback is disconnected", () => {
+      const focusReturn = saveThenRemoveTrigger();
+      const other = document.createElement("button");
+      document.body.appendChild(other);
+      other.focus();
+
+      focusReturn.restore(undefined, () => document.createElement("button"));
+      expect(document.activeElement).toBe(other);
+    });
+
+    it("prefers the saved element while it is still connected", () => {
+      const trigger = document.createElement("button");
+      document.body.appendChild(trigger);
+      trigger.focus();
+
+      const focusReturn = restoreFocus();
+      focusReturn.save();
+
+      const other = document.createElement("button");
+      document.body.appendChild(other);
+      other.focus();
+
+      const fallbackTarget = document.createElement("button");
+      document.body.appendChild(fallbackTarget);
+
+      focusReturn.restore(undefined, () => fallbackTarget);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it("leaves focus alone when it already left the region", () => {
+      const focusReturn = saveThenRemoveTrigger();
+      const region = document.createElement("div");
+      document.body.appendChild(region);
+      const other = document.createElement("button");
+      document.body.appendChild(other);
+      other.focus();
+      const fallbackTarget = document.createElement("button");
+      document.body.appendChild(fallbackTarget);
+
+      focusReturn.restore(region, () => fallbackTarget);
+      expect(document.activeElement).toBe(other);
+    });
+  });
 });
 
 describe("restoreFocus with a region", () => {

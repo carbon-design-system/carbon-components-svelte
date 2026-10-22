@@ -3,18 +3,23 @@
   import ModalBody from "carbon-components-svelte/ComposedModal/ModalBody.svelte";
   import ModalFooter from "carbon-components-svelte/ComposedModal/ModalFooter.svelte";
   import ModalHeader from "carbon-components-svelte/ComposedModal/ModalHeader.svelte";
+  import type { ComponentProps } from "svelte";
 
   export let hideCloseButton = false;
   export let showFooter = true;
+  export let returnFocusTo: ComponentProps<ComposedModal>["returnFocusTo"] =
+    null;
 
   let open = false;
 </script>
 
 <button type="button" on:click={() => (open = true)}>Open Modal</button>
-<ComposedModal bind:open>
+<ComposedModal bind:open {returnFocusTo}>
   <ModalHeader title="Focus Return Test" {hideCloseButton} />
   <ModalBody />
   {#if showFooter}
     <ModalFooter primaryButtonText="Save" secondaryButtonText="Cancel" />
   {/if}
 </ComposedModal>
+
+<input aria-label="Elsewhere">
