@@ -1,29 +1,26 @@
 <script>
   import {
     Button,
+    CodeSnippet,
     ComposedModal,
     ModalBody,
-    ModalFooter,
     ModalHeader,
+    Stack,
   } from "carbon-components-svelte";
 
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Create database</Button>
+<Button on:click={() => (open = true)}>Create API key</Button>
 
-<ComposedModal
-  preventCloseOnClickOutside
-  bind:open
-  on:submit={() => (open = false)}
->
-  <ModalHeader title="Create database" />
+<ComposedModal preventCloseOnClickOutside bind:open>
+  <ModalHeader title="API key created" />
   <ModalBody>
-    <p>Create a new Cloudant database in the US South region.</p>
+    <Stack gap={5}>
+      <p>
+        Copy this key now. You can't view it again after you close this dialog.
+      </p>
+      <CodeSnippet code="cld_live_8f3a2c91e4b7d605" />
+    </Stack>
   </ModalBody>
-  <ModalFooter
-    primaryButtonText="Confirm"
-    secondaryButtonText="Cancel"
-    on:click:button--secondary={() => (open = false)}
-  />
 </ComposedModal>

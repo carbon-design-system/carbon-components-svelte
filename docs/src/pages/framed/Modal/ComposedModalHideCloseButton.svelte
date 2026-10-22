@@ -12,11 +12,7 @@
 
 <Button on:click={() => (open = true)}>Review terms</Button>
 
-<ComposedModal
-  bind:open
-  preventCloseOnClickOutside
-  on:submit={() => (open = false)}
->
+<ComposedModal bind:open on:submit={() => (open = false)}>
   <ModalHeader title="Accept terms of use" hideCloseButton />
   <ModalBody>
     <p>

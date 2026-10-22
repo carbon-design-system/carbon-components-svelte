@@ -68,7 +68,7 @@ Remove modal body padding so content spans edge to edge with `fullWidth`. Use it
 
 ### Has scrolling content
 
-Set `hasScrollingContent` on `ModalBody` to enable vertical scrolling for lengthy content, matching Modal's [Has scrolling content](/components/Modal#has-scrolling-content). Omitting `ModalFooter`, as in this example, creates a passive, information-only modal, the composed equivalent of Modal's `passiveModal`.
+Set `hasScrollingContent` on `ModalBody` to enable vertical scrolling for lengthy content, matching Modal's [Has scrolling content](/components/Modal#has-scrolling-content). Omitting `ModalFooter`, as in this example, creates a passive, information-only modal, the composed equivalent of Modal's `passiveModal`. A passive modal closes on an outside click; see [Outside click](#outside-click).
 
 <FileSource src="/framed/Modal/ComposedModalScrollingContent" />
 
@@ -142,15 +142,17 @@ The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to ke
 
 <FileSource src="/framed/Modal/ComposedModalPreventClose" />
 
-### Prevent on outside click
+### Outside click
 
-Disable closing the modal when clicking outside with `preventCloseOnClickOutside`. This is useful for transactional modals where explicit user action is required.
+A modal with a `ModalFooter` stays open when the user clicks outside it, so the user has to choose an action. A modal without one is passive and closes. This matches Carbon v11.
+
+Set `preventCloseOnClickOutside` to `true` to keep a passive modal open, for example while it shows a value the user must copy. Set it to `false` to close a modal with a footer on an outside click. Carbon advises against this, since the user can lose their input.
 
 <FileSource src="/framed/Modal/ComposedModalPreventOutsideClick" />
 
 ### Hide close button
 
-Set `hideCloseButton` on `ModalHeader` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path, typically footer actions, and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
+Set `hideCloseButton` on `ModalHeader` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path, typically footer actions. A modal with a `ModalFooter` already stays open on an outside click. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
 
 <FileSource src="/framed/Modal/ComposedModalHideCloseButton" />
 
@@ -162,7 +164,7 @@ Set `hideCloseButton` on `ModalHeader` to remove the header close button. Use th
 
 ## Events
 
-ComposedModal and ModalFooter dispatch events for the modal's lifecycle and button interactions. The close button, <DocKbd label="Escape" />, (by default) an outside click, and `ModalFooter`'s `secondaryButtonText` button close the modal automatically. See [Closing](#closing) above. Every other action, including the primary button and `secondaryButtons` entries, leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
+ComposedModal and ModalFooter dispatch events for the modal's lifecycle and button interactions. The close button, <DocKbd label="Escape" />, an outside click on a passive modal, and `ModalFooter`'s `secondaryButtonText` button close the modal automatically. See [Closing](#closing) above. Every other action, including the primary button and `secondaryButtons` entries, leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
 
 ### Open
 

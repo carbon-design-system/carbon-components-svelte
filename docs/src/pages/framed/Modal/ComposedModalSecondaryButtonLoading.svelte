@@ -20,11 +20,7 @@
 
 <Button on:click={() => (open = true)}>Save changes</Button>
 
-<ComposedModal
-  bind:open
-  preventCloseOnClickOutside={savingDraft}
-  on:submit={() => (open = false)}
->
+<ComposedModal bind:open on:submit={() => (open = false)}>
   <ModalHeader title="Save changes" />
   <ModalBody>
     <p>Save your changes to the Cloudant database configuration.</p>

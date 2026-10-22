@@ -22,7 +22,6 @@
   secondaryButtonText="Cancel"
   primaryButtonLoading={saving}
   primaryButtonLoadingDescription="Saving..."
-  preventCloseOnClickOutside={saving}
   on:click:button--secondary={() => {
     if (!saving) open = false;
   }}
