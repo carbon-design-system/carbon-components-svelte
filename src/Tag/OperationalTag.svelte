@@ -104,6 +104,7 @@
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -160,6 +161,8 @@
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (open && event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (isImeComposition(event)) return;
       event.stopPropagation();
       close();
       ref?.focus();

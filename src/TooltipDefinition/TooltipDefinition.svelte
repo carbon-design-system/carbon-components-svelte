@@ -71,6 +71,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -159,7 +160,8 @@
   // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
   // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
   function handleKeydown(event) {
-    if (event.key !== "Escape") return;
+    // Escape that cancels an IME composition is not a close.
+    if (event.key !== "Escape" || isImeComposition(event)) return;
     const visible = shown;
     hide();
     if (visible) event.stopPropagation();
