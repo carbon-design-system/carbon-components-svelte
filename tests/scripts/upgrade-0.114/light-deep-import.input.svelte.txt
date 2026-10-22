@@ -1,0 +1,9 @@
+<script lang="ts">
+  import Dropdown from "carbon-components-svelte/src/Dropdown/Dropdown.svelte";
+  import TextInput from "carbon-components-svelte/src/TextInput/TextInput.svelte";
+
+  let value: string = "";
+</script>
+
+<TextInput light bind:value labelText="Name" />
+<Dropdown light items={[]} />

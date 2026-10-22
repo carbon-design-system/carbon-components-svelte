@@ -1,0 +1,8 @@
+<script>
+  import { TextArea } from "carbon-components-svelte";
+  import Layer from "./Layer.svelte";
+</script>
+
+<Layer>
+  <TextArea light labelText="Notes" />
+</Layer>

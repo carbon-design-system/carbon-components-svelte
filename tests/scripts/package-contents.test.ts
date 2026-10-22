@@ -16,6 +16,8 @@ describe("packageContentProblems", () => {
       "src/index.d.ts",
       "src/Button/Button.svelte",
       "src/Button/Button.svelte.d.ts",
+      "codemods/cli.js",
+      "codemods/v0.114/index.d.ts",
     ].map(file);
     expect(packageContentProblems(files, 1)).toEqual([]);
   });
