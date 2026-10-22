@@ -40,10 +40,29 @@
    * Has no effect unless `type` is `"password"` or `maskedValue` is set.
    * - `"focus"`: reveal while the input is focused.
    * - `"hover-focus"`: reveal while the input is hovered or focused.
+   * - `"toggle"`: reveal only while the show/hide button is toggled on.
    * When unset, the value stays obscured; the copy button still copies the full value.
-   * @type {"focus" | "hover-focus" | undefined}
+   * @type {"focus" | "hover-focus" | "toggle" | undefined}
    */
   export let revealMode = undefined;
+
+  /**
+   * Whether the value currently renders as text, in any reveal mode.
+   * @bindable readonly
+   */
+  export let revealed = false;
+
+  /**
+   * Specify the reveal toggle's tooltip and accessible name while the value
+   * is obscured. Applies when `revealMode` is `"toggle"`.
+   */
+  export let showValueText = "Show value";
+
+  /**
+   * Specify the reveal toggle's tooltip and accessible name while the value
+   * is shown. Applies when `revealMode` is `"toggle"`.
+   */
+  export let hideValueText = "Hide value";
 
   /**
    * Set to `true` to select the full value when the input receives focus.
@@ -160,18 +179,24 @@
    */
   export let tooltipAlignment = "end";
 
-  import { createEventDispatcher, getContext, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import View from "../icons/View.svelte";
+  import ViewOff from "../icons/ViewOff.svelte";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -185,15 +210,28 @@
 
   let focused = false;
   let hovered = false;
+  let toggled = false;
+  let toggleHovered = false;
+  let toggleFocused = false;
+
+  /** @type {null | HTMLButtonElement} */
+  let toggleRef = null;
+
+  // The toggle's tooltip joins the copy button's tooltip group, so moving
+  // between the two hands off instantly and the delays are shared.
+  const toggleHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const toggleTooltipActive = toggleHandoff.active;
 
   // Browsers still fire mouseenter on disabled inputs; never reveal those.
   $: revealed =
     !effectiveDisabled &&
-    (revealMode === "hover-focus"
-      ? focused || hovered
-      : revealMode === "focus"
-        ? focused
-        : false);
+    (revealMode === "toggle"
+      ? toggled
+      : revealMode === "hover-focus"
+        ? focused || hovered
+        : revealMode === "focus"
+          ? focused
+          : false);
   $: inputType = type === "password" && !revealed ? "password" : "text";
   $: masked = maskedValue != null;
   $: shownValue = masked && !revealed ? maskedValue : value;
@@ -201,6 +239,31 @@
   $: ({ helperId } = buildFieldIds(id));
   $: hasLabel = !!(labelText || $$slots.labelChildren);
   $: labelId = id ? `${id}-label` : undefined;
+  $: toggleLabel = toggled ? hideValueText : showValueText;
+  $: showToggle = revealMode === "toggle" && (type === "password" || masked);
+  // Above or below, on the side the copy button's tooltip takes.
+  /** @type {"top" | "bottom"} */
+  let toggleTooltipDirection = "bottom";
+  $: toggleTooltipDirection =
+    effectiveTooltipPosition === "top" ? "top" : "bottom";
+  // Matches the copy button's own gap so both tooltips sit the same
+  // distance from their trigger.
+  $: toggleTooltipGaps = iconTooltipPortalGaps(
+    toggleTooltipDirection,
+    "center",
+  );
+  $: toggleTooltipOpen =
+    (toggleHovered || toggleFocused) && $toggleTooltipActive;
+
+  $: if (!showToggle) {
+    toggled = false;
+    if (toggleHovered || toggleFocused) {
+      toggleHovered = false;
+      toggleFocused = false;
+      toggleHandoff.release();
+    }
+    toggleHandoff.cancel();
+  }
 
   function handleFocus() {
     focused = true;
@@ -225,6 +288,40 @@
   // field. The other rest props go on the input. The class falls back to "",
   // since Svelte 3 and 4 render an unset class as "undefined" on the server.
   $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
+
+  function handleToggleClick() {
+    toggled = !toggled;
+  }
+
+  function handleToggleMouseEnter() {
+    toggleHandoff.scheduleEnter(() => {
+      toggleHovered = true;
+    });
+  }
+
+  function handleToggleMouseLeave() {
+    toggleHandoff.scheduleLeave(() => {
+      toggleHovered = false;
+      if (!toggleFocused) toggleHandoff.release();
+    });
+  }
+
+  function handleToggleFocus() {
+    toggleFocused = true;
+    toggleHandoff.claim();
+  }
+
+  function handleToggleBlur() {
+    toggleFocused = false;
+    if (!toggleHovered) toggleHandoff.release();
+  }
+
+  onMount(() => {
+    return () => {
+      toggleHandoff.cancel();
+      toggleHandoff.release();
+    };
+  });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -295,6 +392,7 @@
     <div
       class:bx--text-input__field-wrapper={true}
       class:bx--copy-input__field-wrapper={true}
+      class:bx--copy-input__field-wrapper--toggle={showToggle}
       on:mouseenter={() => (hovered = true)}
       on:mouseleave={() => (hovered = false)}
     >
@@ -339,6 +437,26 @@
       {#if isFluid}
         <hr class:bx--text-input__divider={true} />
       {/if}
+      {#if showToggle}
+        <button
+          bind:this={toggleRef}
+          type="button"
+          disabled={effectiveDisabled}
+          aria-label={toggleLabel}
+          class:bx--copy-input__reveal-toggle={true}
+          on:click={handleToggleClick}
+          on:mouseenter={handleToggleMouseEnter}
+          on:mouseleave={handleToggleMouseLeave}
+          on:focus={handleToggleFocus}
+          on:blur={handleToggleBlur}
+        >
+          {#if toggled}
+            <ViewOff class="bx--icon-visibility-off" />
+          {:else}
+            <View class="bx--icon-visibility-on" />
+          {/if}
+        </button>
+      {/if}
       <CopyButton
         text={value}
         {feedback}
@@ -369,3 +487,15 @@
     {/if}
   </div>
 </div>
+
+{#if toggleRef}
+  <PortalTooltip
+    anchor={toggleRef}
+    direction={toggleTooltipDirection}
+    open={toggleTooltipOpen}
+    text={toggleLabel}
+    tooltipType="icon"
+    gapTop={toggleTooltipGaps.gapTop}
+    gapBottom={toggleTooltipGaps.gapBottom}
+  />
+{/if}

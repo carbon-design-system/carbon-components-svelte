@@ -458,6 +458,13 @@
     },
     {
       "component": "CopyInput",
+      "prop": "hideValueText",
+      "type": "string",
+      "default": "Hide value",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyInput",
       "prop": "iconDescription",
       "type": "string",
       "default": "Copy to clipboard",
@@ -468,6 +475,13 @@
       "prop": "labelText",
       "type": "string",
       "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyInput",
+      "prop": "showValueText",
+      "type": "string",
+      "default": "Show value",
       "defaultKind": "text"
     },
     {

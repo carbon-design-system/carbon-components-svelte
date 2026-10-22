@@ -5,6 +5,11 @@
   export let value = "secret-token-123";
   export let type: ComponentProps<CopyInput>["type"] = "text";
   export let revealMode: ComponentProps<CopyInput>["revealMode"] = undefined;
+  export let revealed: ComponentProps<CopyInput>["revealed"] = false;
+  export let showValueText: ComponentProps<CopyInput>["showValueText"] =
+    undefined;
+  export let hideValueText: ComponentProps<CopyInput>["hideValueText"] =
+    undefined;
   export let maskedValue: ComponentProps<CopyInput>["maskedValue"] = undefined;
   export let selectTextOnFocus: ComponentProps<CopyInput>["selectTextOnFocus"] =
     undefined;
@@ -28,6 +33,9 @@
   {value}
   {type}
   {revealMode}
+  bind:revealed
+  {showValueText}
+  {hideValueText}
   {maskedValue}
   {selectTextOnFocus}
   {labelText}
@@ -45,3 +53,4 @@
   on:mouseenter:copy-button={(event) => onMouseEnterCopyButton(event.detail)}
   on:mouseleave:copy-button={(event) => onMouseLeaveCopyButton(event.detail)}
 />
+<p>Revealed: {revealed}</p>
