@@ -1,0 +1,60 @@
+---
+components: ["ChordDiagram"]
+description: Chord diagram shows flows between a set of nodes as ribbons inside a circle, with both directions of each pair in one shape.
+---
+
+<script>
+  import { ChordDiagram } from "carbon-components-svelte/viz";
+
+  const handoffs = [
+    { from: "Engineering", to: "Design", n: 42 },
+    { from: "Engineering", to: "Sales", n: 12 },
+    { from: "Engineering", to: "Support", n: 31 },
+    { from: "Design", to: "Engineering", n: 28 },
+    { from: "Design", to: "Marketing", n: 19 },
+    { from: "Sales", to: "Support", n: 24 },
+    { from: "Sales", to: "Marketing", n: 9 },
+    { from: "Support", to: "Engineering", n: 37 },
+    { from: "Support", to: "Sales", n: 6 },
+    { from: "Marketing", to: "Design", n: 14 },
+    { from: "Marketing", to: "Sales", n: 21 },
+  ];
+  const migration = [
+    { from: "us-east", to: "us-west", gb: 820 },
+    { from: "us-east", to: "eu", gb: 310 },
+    { from: "us-west", to: "us-east", gb: 640 },
+    { from: "us-west", to: "apac", gb: 220 },
+    { from: "eu", to: "us-east", gb: 190 },
+    { from: "eu", to: "eu", gb: 450 },
+    { from: "apac", to: "us-west", gb: 260 },
+    { from: "apac", to: "eu", gb: 80 },
+  ];
+
+  let selected = null;
+</script>
+
+`ChordDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It shows flows among one set of nodes where every node can send and receive: team handoffs, traffic between regions, trade. Each node is an arc sized by what it sends, and each pair of nodes shares one ribbon whose two ends are as wide as the flow in each direction, so what a node receives shows in the ribbons arriving at it. An [AlluvialChart](/components/AlluvialChart) is the better choice when flows run one way through stages. Keep the nodes to a dozen or so, or the ribbons turn to hair.
+
+## Basic
+
+Pass tidy `data` with a `source`, a `target`, and a `value` per flow, the same shape as the alluvial chart. Nodes appear in the order first seen. Hover a ribbon to read both directions.
+
+<ChordDiagram data={handoffs} source="from" target="to" value="n" title="Cross-team handoffs" />
+
+## Order, self flows, and color
+
+Set `nodes` to fix the order around the circle, or `sort` to `"value"` for the largest first. A flow from a node to itself is a loop within its own arc. `colors` fixes a node's color and `palette` picks another color group.
+
+<ChordDiagram data={migration} source="from" target="to" value="gb" sort="value" format={(v) => `${v} GB`} colors={{ eu: "warning" }} title="Data moved between regions" />
+
+## Selection and size
+
+Bind `selected` or listen for `select`, whose detail carries the node's totals and every ribbon touching it. `diameter`, `thickness`, and `labelSpace` set the geometry.
+
+<ChordDiagram data={handoffs} source="from" target="to" value="n" bind:selected diameter={280} thickness={16} title="Pick a team" />
+
+## Accessibility
+
+The chart is a single tab stop. Right and Left walk the nodes around the circle, announcing each with what it sends and receives; the ribbons touching it light up. Enter or Space selects, Escape clears. The figure also holds a visually hidden table of the flows, a row per source and a column per target.

@@ -1,0 +1,75 @@
+---
+components: ["CohortTable"]
+description: Cohort table shows how each cohort retains over the periods since it began, as a table whose cells are colored by value.
+---
+
+<script>
+  import { CohortTable } from "carbon-components-svelte/viz";
+
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  const SIZES = [1204, 1530, 1377, 1689, 1411, 1812];
+  const CURVE = [1, 0.62, 0.48, 0.41, 0.37, 0.35];
+  const cohorts = MONTHS.map((label, i) => ({
+    id: label,
+    label,
+    size: SIZES[i],
+    values: CURVE.slice(0, MONTHS.length - i).map((v, p) =>
+      p === 0 ? 1 : Math.round((v + ((i * 3 + p) % 5) / 100 - 0.02) * 100) / 100,
+    ),
+  }));
+  const revenue = cohorts.map((cohort) => ({
+    ...cohort,
+    values: cohort.values.map((v, p) => Math.round(cohort.size * v * (12 + p))),
+  }));
+
+  let selected = null;
+</script>
+
+`CohortTable` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `rows`, oldest cohort first. Each has an `id`, a `label`, an optional `size`, and `values`: one entry per period since the cohort began, as a share from 0 to 1. Later cohorts have fewer periods, which gives the table its triangle.
+
+<CohortTable rows={cohorts} title="Retention by signup month" sizeHeader="Users" />
+
+## Summary
+
+Set `summary` to `"average"` for a footer with the mean of each period over the cohorts that reached it. It is weighted by `size` when every cohort has one.
+
+<CohortTable rows={cohorts} title="Retention by signup month" sizeHeader="Users" summary="average" />
+
+## Headers
+
+`periodLabel` is a prefix, as in `"W"` for W0 and W1, or a function of the period index. `cohortHeader`, `sizeHeader`, and `summaryLabel` name the rest.
+
+<CohortTable
+  rows={cohorts.slice(2)}
+  title="Retention by signup week"
+  cohortHeader="Week of"
+  sizeHeader="Signups"
+  periodLabel={(period) => (period === 0 ? "Start" : `+${period} wk`)}
+/>
+
+## Values other than shares
+
+Values need not be shares. Set `domain` to the ends of the ramp and `format` to `Intl.NumberFormat` options or a function.
+
+<CohortTable
+  rows={revenue}
+  title="Revenue by signup month"
+  sizeHeader="Users"
+  domain={[0, 25000]}
+  format={{ style: "currency", currency: "USD", notation: "compact" }}
+  hue="teal"
+/>
+
+## Selectable
+
+Set `selectable` to turn cells into toggle buttons. Bind `selected` or listen for `select`, whose detail holds the `cohort`, the `period`, and the `value`.
+
+<CohortTable rows={cohorts} title="Pick a cohort and period" sizeHeader="Users" selectable bind:selected />
+
+## Accessibility
+
+It is a table: the `title` is its caption, cohorts head the rows, and periods head the columns. Every cell shows its value, in a label color that holds 4.5:1 against the fill in every theme, so nothing rests on color. When `selectable`, the table is one tab stop and the arrow keys move between cells without leaving the triangle. In a narrow container the table scrolls sideways.

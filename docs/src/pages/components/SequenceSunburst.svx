@@ -1,0 +1,46 @@
+---
+components: ["SequenceSunburst"]
+description: Sequence sunburst shows paths through ordered steps as rings around a center, each arc a prefix as wide as the sequences that pass through it.
+---
+
+<script>
+  import { SequenceSunburst } from "carbon-components-svelte/viz";
+
+  const sessions = [
+    { path: "home/search/product/cart/checkout", users: 1840 },
+    { path: "home/search/product/cart", users: 920 },
+    { path: "home/search/product", users: 2600 },
+    { path: "home/search", users: 1900 },
+    { path: "home/product/cart/checkout", users: 760 },
+    { path: "home/product/cart", users: 410 },
+    { path: "home/product", users: 1300 },
+    { path: "home/account/orders", users: 640 },
+    { path: "home/account", users: 380 },
+    { path: "home", users: 2200 },
+    { path: "search/product/cart/checkout", users: 520 },
+    { path: "search/product", users: 900 },
+    { path: "search", users: 700 },
+    { path: "product/cart/checkout", users: 300 },
+    { path: "product", users: 1100 },
+  ];
+</script>
+
+`SequenceSunburst` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [SunburstChart](/components/SunburstChart) whose rings are steps in order rather than levels of containment: the first ring is where sequences begin, the next is what came second, and so on out. An arc is as wide as the sequences that pass through that prefix, and the part of it with nothing beyond is where they stopped. The same step name has the same color on every ring. An [AlluvialChart](/components/AlluvialChart) shows the same flows as ribbons and is often the plainer choice; use this when the branching from one starting point is the story.
+
+## Basic
+
+Pass rows with `steps`, an array or a string split by `separator`, and `value` for how many sequences the row stands for. Hover an arc to read its path above the chart, with its share of every sequence.
+
+<SequenceSunburst data={sessions} steps="path" value="users" rootLabel="Sessions" title="Checkout click paths" />
+
+## Depth, color, and size
+
+`maxDepth` limits the rings, `colors` fixes a step's color, and `diameter` and `innerRadius` set the geometry. Set `trail` to `false` to drop the path above the chart.
+
+<SequenceSunburst data={sessions} steps="path" value="users" rootLabel="Sessions" maxDepth={3} colors={{ checkout: "success", cart: "warning" }} diameter={260} trail={false} title="Checkout click paths, three steps" />
+
+## Accessibility
+
+The chart is a single tab stop. Arrow keys move arc by arc, announcing each step with its count and share, and the path above the chart follows. Enter or Space selects, with the path, the count, and how many sequences stopped at that step in the event. The figure also holds a visually hidden table of every prefix with its ring, count, and share.

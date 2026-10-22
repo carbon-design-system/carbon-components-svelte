@@ -1,0 +1,62 @@
+---
+components: ["TreeChart"]
+description: Tree chart draws a hierarchy as nodes joined by curves, left to right, with branches that fold away.
+---
+
+<script>
+  import { TreeChart } from "carbon-components-svelte/viz";
+
+  const org = [
+    ["company", null, "Company"],
+    ["eng", "company", "Engineering"],
+    ["platform", "eng", "Platform"],
+    ["gateway", "platform", "Gateway"],
+    ["identity", "platform", "Identity"],
+    ["web", "eng", "Web"],
+    ["storefront", "web", "Storefront"],
+    ["design", "web", "Design system"],
+    ["data", "eng", "Data"],
+    ["ops", "company", "Operations"],
+    ["support", "ops", "Support"],
+    ["finance", "ops", "Finance"],
+    ["sales", "company", "Sales"],
+  ].map(([id, parent, name]) => ({ id, parent, name }));
+
+  let collapsed = ["web"];
+</script>
+
+`TreeChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+For a hierarchy people act on, such as files to open, use [TreeView](/components/TreeView). This chart is for seeing the shape of one.
+
+## Basic
+
+Pass one row for each node, with `id` and `parent` accessors, and `label` for the text. A row with no parent, or with a parent that is not in the data, is a root. A node's column is its depth, leaves take consecutive rows, and a parent sits midway between its first and last child.
+
+<TreeChart data={org} id="id" parent="parent" label="name" title="Organization" />
+
+## Dendrogram
+
+Set `type` to `"dendrogram"` to line every leaf up in the last column, whatever its depth.
+
+<TreeChart data={org} id="id" parent="parent" label="name" type="dendrogram" title="Organization, leaves aligned" />
+
+## Folding
+
+Click a branch, or press Left and Right on it, to fold its children away: a folded branch has a filled dot. The rest of the tree takes the room. Bind `collapsed`, a list of ids, to read or set what is folded, and listen for `toggle`.
+
+<TreeChart data={org} id="id" parent="parent" label="name" bind:collapsed title="Organization, with Web folded" />
+
+## Size
+
+The layout is drawn at `width` by `height` and scales down with its container, text included. `labelSpace` is the room kept on either side for labels.
+
+<TreeChart data={org} id="id" parent="parent" label="name" height={240} labelSpace={72} title="A shorter tree" />
+
+## Data
+
+Rows are an adjacency list, the same long format the rest of the library takes, so a query that returns `id` and `parent_id` needs no reshaping. A row that would close a cycle is treated as a root, and a repeated id keeps its first row. Several roots are laid out one under the other.
+
+## Accessibility
+
+The chart is a single tab stop with the keyboard model of a tree view: Up and Down walk the visible nodes, Right opens a branch or steps into it, Left closes it or steps out to the parent, Home and End jump to the first and last, and Enter or Space selects. The focused node is announced with its level and whether it is expanded, such as "Engineering, level 2, expanded". The figure also lists the visible nodes in reading order for assistive technology. Set `translations` to translate "level", "expanded", and "collapsed". A folded branch differs by a filled dot, not by color.

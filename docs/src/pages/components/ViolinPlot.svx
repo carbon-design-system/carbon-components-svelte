@@ -1,0 +1,45 @@
+---
+components: ["ViolinPlot", "ChartViolins"]
+description: Violin plot shows the shape of each group's distribution as a mirrored density curve, with the quartiles and median inside.
+---
+
+<script>
+  import { ViolinPlot } from "carbon-components-svelte/viz";
+
+  const SERVICES = ["auth", "billing", "search", "ingest", "export"];
+  const samples = SERVICES.flatMap((service, s) =>
+    Array.from({ length: 80 }, (_, i) => {
+      const u = ((i * 7919 + s * 131) % 97) / 97;
+      const base = 60 + s * 35;
+      // Two modes for search: a cache hit and a miss.
+      const bump = service === "search" && i % 3 === 0 ? 120 : 0;
+      return { service, ms: Math.round(base + -30 * Math.log(1 - u * 0.95) + bump) };
+    }),
+  );
+</script>
+
+`ViolinPlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props. Where a [BoxplotChart](/components/BoxplotChart) reduces each group to five numbers, a violin keeps the shape: a second mode, a long tail, or a gap shows. Every violin is scaled to the same peak width, so the shapes compare and the width says nothing about the count.
+
+## Basic
+
+Pass one row for each observation, with an `x` accessor for the group and a `y` accessor for the value. A slim box from the lower to the upper quartile and a dot at the median sit inside each violin. The y axis is not forced to zero.
+
+<ViolinPlot data={samples} x="service" y="ms" title="Latency by service" yTitle="Milliseconds" />
+
+## Smoothing
+
+The curve is a kernel density estimate with a bandwidth from Silverman's rule of thumb per group. Set `bandwidth`, in data units, to smooth more or less; set `inner` to `false` to show the shape alone.
+
+<ViolinPlot data={samples} x="service" y="ms" bandwidth={25} inner={false} title="Latency by service, smoothed" height={260} />
+
+## Orientation and export
+
+Set `orientation` to `"horizontal"` when the group names are long. The toolbar swaps in a table with the five statistics per group.
+
+<ViolinPlot data={samples} x="service" y="ms" orientation="horizontal" toolbar title="Latency by service" height={300} />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between groups, reading out the maximum, quartiles, median, minimum, and count. The table view lists the same statistics for every group.

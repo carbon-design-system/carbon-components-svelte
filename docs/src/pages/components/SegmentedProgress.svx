@@ -1,0 +1,41 @@
+---
+components: ["SegmentedProgress"]
+description: Segmented progress shows how many of a fixed number of steps are done, one segment per step.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { SegmentedProgress } from "carbon-components-svelte/viz";
+</script>
+
+`SegmentedProgress` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Use it when progress is a count of steps rather than a share: an onboarding checklist, a rollout in waves, a form with pages. A continuous bar belongs to `ProgressBar`.
+
+## Basic
+
+Pass `value` for the steps done and `max` for the steps in all. The count is appended to the `label`. Set `showValue` to write it next to the segments.
+
+<SegmentedProgress value={4} max={8} label="Onboarding" showValue />
+
+## Partial steps
+
+A fraction fills part of a segment, for a step that is under way.
+
+<SegmentedProgress value={2.5} max={4} label="Rollout" showValue />
+
+## Status and sizes
+
+Set `status` to color the done segments by state.
+
+<Stack gap={5}>
+  <SegmentedProgress value={5} max={5} status="success" label="Done" showValue />
+  <SegmentedProgress value={3} max={5} status="warning" label="Slow" showValue />
+  <SegmentedProgress value={1} max={5} status="error" label="Blocked" showValue />
+  <SegmentedProgress value={3} max={5} size="sm" label="Small" />
+  <SegmentedProgress value={3} max={5} size="lg" label="Large" />
+</Stack>
+
+## Accessibility
+
+With a `label`, the graphic is a progress bar named with the label and the count, with its value, minimum, and maximum set. Without one it is decorative. The word between the counts can be changed with `translations`.

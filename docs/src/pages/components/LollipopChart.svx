@@ -1,0 +1,68 @@
+---
+components: ["LollipopChart"]
+description: Lollipop chart compares values across categories with a stem and a head, a lighter alternative to bars when there are many categories.
+---
+
+<script>
+  import { ChartThreshold, LollipopChart } from "carbon-components-svelte/viz";
+
+  const services = ["auth", "billing", "search", "ingest", "export", "notify", "media", "audit", "sync", "admin"].map((service, i) => ({
+    service,
+    p95: 80 + ((i * 7919) % 340),
+  }));
+  const change = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"].flatMap((month, i) => [
+    { month, plan: "Team", net: [42, 18, -12, 27, -6, 35][i] },
+    { month, plan: "Enterprise", net: [12, 9, 4, -8, 15, 11][i] },
+  ]);
+</script>
+
+`LollipopChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props. Reach for it over a [BarChart](/components/BarChart) when many categories would turn bars into a wall of ink.
+
+## Basic
+
+Pass long `data` with `x` and `y` accessors. Stem length encodes the value, so the axis always includes zero.
+
+<LollipopChart data={services} x="service" y="p95" title="p95 latency by service" yTitle="Milliseconds" />
+
+## Orientation
+
+Set `orientation` to `"horizontal"` for long labels and ranked lists.
+
+<LollipopChart
+  data={[...services].sort((a, b) => b.p95 - a.p95)}
+  x="service"
+  y="p95"
+  orientation="horizontal"
+  title="Services ranked by p95 latency"
+  height={320}
+/>
+
+## Series and negative values
+
+Series sit side by side inside a slot. A negative value hangs below zero.
+
+<LollipopChart data={change} x="month" y="net" series="plan" title="Net new accounts" height={260} />
+
+## Thresholds
+
+Other marks go in the default slot.
+
+<LollipopChart data={services} x="service" y="p95" title="p95 latency against the objective" height={260}>
+  <ChartThreshold y={300} label="Objective" kind="error" />
+</LollipopChart>
+
+## Head size
+
+Set `radius` for the head and `padding` for the gap between slots.
+
+<LollipopChart data={services} x="service" y="p95" radius={3} title="Small heads" height={220} />
+
+## Composition
+
+`LollipopChart` is `ChartLollipops` inside a `Chart`. It shares its slots, lanes, and zero line with `ChartBars`, so the two can be swapped without changing anything else. `ChartLollipops` is listed with the other primitives on the [Chart](/components/Chart) page.
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between categories, Up and Down between series, Enter or Space selects, and Escape clears. A horizontal chart follows the screen instead. The focused category is highlighted with a band and the others are dimmed, and its values are announced. The data table view lists every value.

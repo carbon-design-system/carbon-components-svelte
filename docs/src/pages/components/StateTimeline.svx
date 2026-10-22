@@ -1,0 +1,94 @@
+---
+components: ["StateTimeline"]
+description: State timeline shows what state each of several things was in over a shared stretch of time, one row each.
+---
+
+<script>
+  import { StateTimeline } from "carbon-components-svelte/viz";
+
+  const at = (hour, minute = 0) => new Date(2026, 8, 21, hour, minute);
+  const health = [
+    { service: "api", status: "ok", from: at(0), to: at(9, 40) },
+    { service: "api", status: "degraded", from: at(9, 40), to: at(10, 15) },
+    { service: "api", status: "ok", from: at(10, 15), to: at(24) },
+    { service: "checkout", status: "ok", from: at(0), to: at(14) },
+    { service: "checkout", status: "down", from: at(14), to: at(14, 25) },
+    { service: "checkout", status: "degraded", from: at(14, 25), to: at(15, 30) },
+    { service: "checkout", status: "ok", from: at(15, 30), to: at(24) },
+    { service: "worker", status: "ok", from: at(0), to: at(3) },
+    { service: "worker", status: "down", from: at(3), to: at(5, 30) },
+    { service: "worker", status: "ok", from: at(5, 30), to: at(24) },
+    { service: "search", status: "ok", from: at(0), to: at(24) },
+  ];
+  const machine = ["Idle", "Running", "Idle", "Running", "Maintenance", "Running", "Idle"].map((state, i) => ({
+    line: "Line 3",
+    state,
+    from: at(i * 3),
+    to: at(i * 3 + 3),
+  }));
+
+  let selected = null;
+</script>
+
+`StateTimeline` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+For one thing's history by fixed period, such as a day at a time, [UptimeBar](/components/UptimeBar) is simpler.
+
+## Basic
+
+Pass one row for each span: a `row` it belongs to, its `state`, and when it `start`s and `end`s, as a `Date`, a timestamp, or a date string. Rows keep first-seen order, spans within a row are sorted by start, and every row shares one time scale from the earliest start to the latest end. Hover a span to read its state, its times, and how long it lasted.
+
+<StateTimeline data={health} row="service" state="status" start="from" end="to" title="Service health, today" />
+
+## State colors
+
+States take the categorical colors in first-seen order. Set `states` to give each a color: a semantic name such as `"success"`, a categorical index, a viz token name, or any CSS color.
+
+<StateTimeline
+  data={health}
+  row="service"
+  state="status"
+  start="from"
+  end="to"
+  states={{ ok: "success", degraded: "warning", down: "error" }}
+  title="Service health, today"
+/>
+
+## Domain
+
+Set `domain` to show a fixed range. Spans are clipped to it, and a span entirely outside is dropped.
+
+<StateTimeline
+  data={health}
+  row="service"
+  state="status"
+  start="from"
+  end="to"
+  states={{ ok: "success", degraded: "warning", down: "error" }}
+  domain={[at(8), at(16)]}
+  title="Service health, working hours"
+/>
+
+## Sizes
+
+<StateTimeline data={machine} row="line" state="state" start="from" end="to" size="lg" title="Line 3, today" />
+
+## Selectable
+
+Set `selectable` to turn spans into toggle buttons. Bind `selected`, a span's id, or listen for `select`, whose detail carries the span and its `datum`.
+
+<StateTimeline
+  data={health}
+  row="service"
+  state="status"
+  start="from"
+  end="to"
+  states={{ ok: "success", degraded: "warning", down: "error" }}
+  title="Pick an incident"
+  selectable
+  bind:selected
+/>
+
+## Accessibility
+
+The timeline is a table: the `title` is its caption and each row's name is a row header. Every span holds its state, its start and end, and its length as text, such as "down, Sep 21, 2026, 2:00 PM to Sep 21, 2026, 2:25 PM, 25m", so nothing rests on color. Set `rowHeader` to name the first column, `locale` for the times, and `utc` to place the axis ticks on UTC boundaries. When `selectable`, the spans share one tab stop and the arrow keys move between them.

@@ -1,0 +1,60 @@
+---
+components: ["ForestPlot"]
+description: Forest plot shows an estimate and its confidence interval per study or segment on one scale, with the pooled result as a diamond.
+---
+
+<script>
+  import { ForestPlot } from "carbon-components-svelte/viz";
+
+  const regions = [
+    { study: "North America", or: 1.12, lo: 0.91, hi: 1.38, n: 4120 },
+    { study: "South America", or: 0.94, lo: 0.80, hi: 1.10, n: 6890 },
+    { study: "Europe", or: 1.21, lo: 1.02, hi: 1.48, n: 3050 },
+    { study: "Middle East", or: 1.34, lo: 0.88, hi: 2.04, n: 940 },
+    { study: "Asia Pacific", or: 1.05, lo: 0.97, hi: 1.14, n: 12400 },
+    { study: "Africa", or: 0.78, lo: 0.52, hi: 1.17, n: 610 },
+  ];
+  const pooled = { estimate: 1.06, lo: 1.01, hi: 1.12, label: "All regions" };
+
+  const experiments = [
+    { name: "New checkout", lift: 2.4, lo: 0.8, hi: 4.0 },
+    { name: "Shorter form", lift: 1.1, lo: -0.6, hi: 2.8 },
+    { name: "Saved carts", lift: 3.9, lo: 2.1, hi: 5.7 },
+    { name: "Free shipping banner", lift: -0.4, lo: -2.0, hi: 1.2 },
+    { name: "Reviews above fold", lift: 0.9, lo: -0.3, hi: 2.1 },
+  ];
+
+  let selected = null;
+</script>
+
+`ForestPlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is the review chart for many estimates of one effect: a row per study, segment, or experiment, each with its point estimate and interval on one shared scale, and the pooled result as a diamond. A marker whose interval crosses the line of no effect is hollow, so the finding never rests on where the line falls.
+
+## Basic
+
+Pass rows with a `label`, an `estimate`, and the `lo` and `hi` ends of the interval. Set `nullValue` to draw the line of no effect: 1 for a ratio, 0 for a difference. The values are written beside each row.
+
+<ForestPlot data={regions} label="study" estimate="or" lo="lo" hi="hi" nullValue={1} format={{ maximumFractionDigits: 2 }} title="Odds ratio by region" />
+
+## Pooled estimate and weights
+
+Pass `overall` to add the pooled estimate in a row of its own, drawn as a diamond that spans its interval. Set `weight` to size each marker by how much it contributes.
+
+<ForestPlot data={regions} label="study" estimate="or" lo="lo" hi="hi" weight="n" overall={pooled} nullValue={1} format={{ maximumFractionDigits: 2 }} title="Odds ratio by region, pooled" />
+
+## Log scale
+
+A ratio reads best on a log scale, where doubling and halving are the same distance from one. Set `scale` to `"log"`; a domain that reaches zero falls back to linear.
+
+<ForestPlot data={regions} label="study" estimate="or" lo="lo" hi="hi" weight="n" overall={pooled} nullValue={1} scale="log" format={{ maximumFractionDigits: 2 }} title="Odds ratio by region, log scale" />
+
+## Differences
+
+Any estimate with an interval fits: here the lift of each experiment in percentage points, with zero as the null. Bind `selected` or listen for `select`, whose detail carries the row.
+
+<ForestPlot data={experiments} label="name" estimate="lift" lo="lo" hi="hi" nullValue={0} bind:selected format={(v) => `${v > 0 ? "+" : ""}${v.toFixed(1)} pp`} valueWidth={176} title="Conversion lift by experiment" />
+
+## Accessibility
+
+The chart is a single tab stop. Down and Up walk the rows, announcing each with its estimate, its interval, and whether the interval is clear of the null. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with a row per estimate and the pooled result.

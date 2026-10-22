@@ -1,0 +1,56 @@
+---
+components: ["SlopeChart"]
+description: Slope chart shows how each series moved between two periods, as a line between two labeled columns.
+---
+
+<script>
+  import { SlopeChart } from "carbon-components-svelte/viz";
+
+  const TEAMS = ["Web", "Data", "Platform", "Mobile", "Security", "Support", "Design"];
+  const BEFORE = [62, 71, 58, 44, 80, 67, 60];
+  const AFTER = [78, 65, 73, 61, 82, 60, 59];
+  const scores = TEAMS.flatMap((team, i) => [
+    { team, survey: "2025", score: BEFORE[i] },
+    { team, survey: "2026", score: AFTER[i] },
+  ]);
+  const latency = [
+    { region: "us-east", quarter: "Q1", p95: 420 },
+    { region: "us-west", quarter: "Q1", p95: 510 },
+    { region: "eu", quarter: "Q1", p95: 380 },
+    { region: "apac", quarter: "Q1", p95: 640 },
+    { region: "us-east", quarter: "Q2", p95: 360 },
+    { region: "us-west", quarter: "Q2", p95: 545 },
+    { region: "eu", quarter: "Q2", p95: 375 },
+    { region: "apac", quarter: "Q2", p95: 520 },
+  ];
+
+  let selected = null;
+</script>
+
+`SlopeChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is the before-and-after chart: a column per period, a line per series, and the value written at both ends. Where a [DumbbellChart](/components/DumbbellChart) ranks the categories, a slope chart shows which ones crossed. Every line is labeled, so there is no legend.
+
+## Basic
+
+Pass long `data` with `x` for the period, `y` for the value, and `series` naming each line. The first two periods in the data are compared; set `periods` to pick or reorder them. By default a line is colored by which way it went.
+
+<SlopeChart data={scores} x="survey" y="score" series="team" title="Engagement score by team, 2025 to 2026" />
+
+## Which way is good
+
+Set `positive` to `"down"` when a fall is the good news, as for latency or cost. Set `colorBy` to `"series"` for a color per line, or `"none"` to leave every line gray.
+
+<SlopeChart data={latency} x="quarter" y="p95" series="region" positive="down" format={(v) => `${v} ms`} title="p95 latency by region, Q1 to Q2" />
+
+<SlopeChart data={scores} x="survey" y="score" series="team" colorBy="series" title="Engagement score by team, by team color" />
+
+## Selection and size
+
+Bind `selected` or listen for `select`, whose detail carries both rows. `width`, `height`, and `labelWidth` set the geometry; labels that would collide are pushed apart. Set `zero` to force the scale to include zero.
+
+<SlopeChart data={scores} x="survey" y="score" series="team" bind:selected zero height={200} title="Pick a team" />
+
+## Accessibility
+
+The chart is a single tab stop. Down and Up walk the lines from the top of the first column, announcing each with both values and the change. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with a row per series and its change.

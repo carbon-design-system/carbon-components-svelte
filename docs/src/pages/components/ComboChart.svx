@@ -1,0 +1,94 @@
+---
+components: ["ComboChart"]
+description: Combo chart draws some series as bars and others as lines or areas over one shared axis, with an optional secondary axis for a series in another unit.
+---
+
+<script>
+  import { ChartThreshold, ComboChart } from "carbon-components-svelte/viz";
+
+  const QUARTERS = ["Q1", "Q2", "Q3", "Q4", "Q1 '27", "Q2 '27"];
+  const REVENUE = [1200, 1450, 1380, 1720, 1910, 2240];
+  const COST = [940, 1010, 1060, 1180, 1240, 1350];
+  const finance = QUARTERS.flatMap((quarter, i) => [
+    { quarter, metric: "Revenue", value: REVENUE[i] },
+    { quarter, metric: "Cost", value: COST[i] },
+    { quarter, metric: "Margin", value: Math.round(((REVENUE[i] - COST[i]) / REVENUE[i]) * 100) / 100 },
+  ]);
+  const plan = QUARTERS.flatMap((quarter, i) => [
+    { quarter, metric: "Actual", value: REVENUE[i] },
+    { quarter, metric: "Plan", value: 1150 + i * 190 },
+  ]);
+</script>
+
+`ComboChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props.
+
+## Basic
+
+Pass long `data` as usual, then say which series are `bars` and which are `lines`. Both share one axis here, because they share a unit: the line makes the plan easy to follow across the bars.
+
+<ComboChart
+  data={plan}
+  x="quarter"
+  y="value"
+  series="metric"
+  bars={["Actual"]}
+  lines={["Plan"]}
+  title="Revenue against plan"
+/>
+
+## Secondary axis
+
+Set `secondary` to the series in another unit. They get their own domain, drawn on the right, and their ticks land on the first axis's grid lines. `y2Format` and `y2Title` describe that axis. The tooltip, announcements, and the table write each series in its own axis's format.
+
+<ComboChart
+  data={finance}
+  x="quarter"
+  y="value"
+  series="metric"
+  bars={["Revenue", "Cost"]}
+  lines={["Margin"]}
+  secondary={["Margin"]}
+  y2Format={{ style: "percent" }}
+  yTitle="USD, thousands"
+  y2Title="Margin"
+  title="Revenue, cost, and margin"
+/>
+
+Use a secondary axis only for a different unit. Two series in the same unit on two axes invite a comparison of heights that means nothing, because each axis has its own scale.
+
+## Stacked bars and areas
+
+Set `barMode` to `"stacked"`, and `areas` for series drawn as filled layers behind the bars. A stack always lives on the first axis.
+
+<ComboChart
+  data={finance}
+  x="quarter"
+  y="value"
+  series="metric"
+  bars={["Cost"]}
+  areas={["Revenue"]}
+  lines={["Margin"]}
+  secondary={["Margin"]}
+  y2Format={{ style: "percent" }}
+  curve="monotone"
+  title="Cost inside revenue, with margin"
+  height={260}
+/>
+
+## Thresholds
+
+Other marks go in the default slot. A `ChartThreshold` reads the first axis.
+
+<ComboChart data={plan} x="quarter" y="value" series="metric" bars={["Actual"]} lines={["Plan"]} title="Revenue against plan" height={260}>
+  <ChartThreshold y={2000} label="Stretch goal" kind="success" />
+</ComboChart>
+
+## Composition
+
+`ComboChart` is a `Chart` holding a `ChartArea`, a `ChartBars`, and a `ChartLine`, each given its own `series`. Every mark takes `series`, and `Chart` takes `secondary`, so any mix can be composed by hand: points over a fitted line, lollipops with a moving average, and so on.
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between categories, Up and Down between series, Enter or Space selects, and Escape clears. The focused category is announced with every series in its own format, such as "Q2: Revenue 1.5K, Cost 1K, Margin 30%". Mark type is a second channel beside color, which makes a combo easier to read without color than a multi-series line chart. The data table view lists every value.

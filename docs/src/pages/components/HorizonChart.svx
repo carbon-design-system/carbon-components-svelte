@@ -1,0 +1,54 @@
+---
+components: ["HorizonChart"]
+description: Horizon chart folds each series into layers of color on one short row, so dozens of series over a long window fit the height of a few lines.
+---
+
+<script>
+  import { HorizonChart } from "carbon-components-svelte/viz";
+
+  const HOSTS = ["web-1", "web-2", "web-3", "api-1", "api-2", "db-1", "db-2", "cache-1", "queue-1", "batch-1", "batch-2", "search-1"];
+  const cpu = HOSTS.flatMap((host, h) =>
+    Array.from({ length: 288 }, (_, i) => ({
+      t: new Date(2026, 8, 21, 0, i * 5),
+      host,
+      cpu: Math.max(0, Math.min(100, 28 + h * 3 + Math.sin(i / 20 + h) * 22 + Math.sin(i / 3 + h * 2) * 8 + ((i * 7919 * (h + 1)) % 11) - 5 + (h === 9 && i > 200 && i < 230 ? 45 : 0))),
+    })),
+  );
+  const balance = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
+    Array.from({ length: 90 }, (_, i) => ({
+      day: new Date(2026, 6, 1 + i),
+      region,
+      net: Math.round(Math.sin(i / 9 + r) * 40 + Math.cos(i / 4) * 15),
+    })),
+  );
+</script>
+
+`HorizonChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Every series is cut into layers of equal value and the layers are stacked on one row, each darker than the last. A spike does not need more height: it shows as a darker patch. That is what lets a page of hosts sit in the space of a few [Sparkline](/components/Sparkline)s, and it is the dense form of a [SmallMultiples](/components/SmallMultiples) grid of area charts.
+
+## Basic
+
+Pass long `data` with `x`, `y`, and `series` accessors. Each series takes a row in first-seen order, and every row shares one x scale. `bands` is how many layers to cut into, and `max` the value that fills the last one; it defaults to the largest value in the data, rounded out.
+
+<HorizonChart data={cpu} x="t" y="cpu" series="host" title="CPU by host, today" max={100} />
+
+## Layers and height
+
+More `bands` show more detail in less height, at the cost of reading. `rowHeight` sets the height of a row, `labelSpace` the room for its name, and `hue` the ramp.
+
+<HorizonChart data={cpu} x="t" y="cpu" series="host" bands={4} rowHeight={14} hue="teal" max={100} title="CPU by host, four layers" />
+
+## Below zero
+
+A value below zero folds the same way into layers of another hue, set with `negativeHue`, so a balance reads as two ramps meeting at the baseline.
+
+<HorizonChart data={balance} x="day" y="net" series="region" bands={2} rowHeight={28} title="Net flow by region" />
+
+## Synced hover
+
+Set `syncId` to share hover with every other chart that has the same id, as a [LineChart](/components/LineChart) does, so a dashboard shows one moment across all of them.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move along x, Home and End jump to the ends, and Escape clears. The moment under the pointer or focus is announced with every series' value. The figure also holds a visually hidden table with each series' latest, lowest, and highest value: the layers are for the eye, and every sample would be too many to read.

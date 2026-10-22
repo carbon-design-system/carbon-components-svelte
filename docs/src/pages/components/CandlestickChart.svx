@@ -1,0 +1,54 @@
+---
+components: ["CandlestickChart", "ChartCandles"]
+description: Candlestick chart shows the open, high, low, and close of each period as a wick and a body, hollow when the period rose.
+---
+
+<script>
+  import { CandlestickChart, ChartThreshold } from "carbon-components-svelte/viz";
+
+  const DAYS = ["Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 10", "Mar 11", "Mar 12", "Mar 13", "Mar 14", "Mar 17", "Mar 18", "Mar 19", "Mar 20", "Mar 21", "Mar 24", "Mar 25", "Mar 26", "Mar 27", "Mar 28"];
+  let price = 142;
+  const daily = DAYS.map((day, i) => {
+    const drift = Math.sin(i / 3) * 3 + ((i * 37) % 7) - 3;
+    const open = price;
+    const close = Math.round((open + drift) * 100) / 100;
+    const high = Math.max(open, close) + ((i * 13) % 5) / 2 + 0.5;
+    const low = Math.min(open, close) - ((i * 11) % 4) / 2 - 0.5;
+    price = close;
+    return { day, open, high, low, close };
+  });
+</script>
+
+`CandlestickChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props. Each period is a candle: a wick from the low to the high and a body from the open to the close. A rising period is hollow and a falling one filled, so the direction reads without color.
+
+## Basic
+
+Pass one row per period with `x` for the period and `open`, `high`, `low`, and `close` accessors. Periods are categories, so a closed day leaves no gap. The y axis is not forced to zero.
+
+<CandlestickChart data={daily} x="day" open="open" high="high" low="low" close="close" title="ACME daily" yTitle="USD" yFormat={{ style: "currency", currency: "USD" }} />
+
+## Fill and color
+
+Set `hollow` to `false` to fill rising candles too, and `upColor` and `downColor` to change the pair of colors.
+
+<CandlestickChart data={daily} x="day" open="open" high="high" low="low" close="close" hollow={false} upColor="info" downColor="warning" title="ACME daily, filled" height={240} />
+
+## Composition
+
+Marks compose like any chart: add a `ChartThreshold` for a level to watch.
+
+<CandlestickChart data={daily} x="day" open="open" high="high" low="low" close="close" title="ACME daily against the 52-week high" height={260}>
+  <ChartThreshold y={150} label="52-week high" kind="warning" />
+</CandlestickChart>
+
+## Data table and export
+
+The toolbar swaps in a table with the four prices per period and exports it.
+
+<CandlestickChart data={daily} x="day" open="open" high="high" low="low" close="close" title="ACME daily" toolbar height={240} />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between periods, reading out the four prices and the change. The table view lists every period with its prices. The direction of each candle is drawn as hollow or filled as well as colored, so it survives grayscale.

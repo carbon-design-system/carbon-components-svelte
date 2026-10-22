@@ -1,0 +1,100 @@
+---
+components: ["Histogram"]
+description: Histogram counts values into bins over a numeric axis, to show the shape of a distribution.
+---
+
+<script>
+  import { ChartThreshold, Histogram } from "carbon-components-svelte/viz";
+
+  // A right-skewed sample, like request latencies.
+  const requests = Array.from({ length: 1200 }, (_, i) => {
+    const u = ((i * 7919) % 1200) / 1200 + 0.0004;
+    return { latencyMs: Math.round(20 + -70 * Math.log(1 - u * 0.985)), route: i % 3 ? "/api" : "/search" };
+  });
+  const sorted = requests.map((row) => row.latencyMs).sort((a, b) => a - b);
+  const p50 = sorted[Math.floor(sorted.length * 0.5)];
+  const p95 = sorted[Math.floor(sorted.length * 0.95)];
+</script>
+
+`Histogram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset. For a table cell, use [MicroHistogram](/components/MicroHistogram).
+
+## Basic
+
+Pass `data` and an `x` accessor. Values are counted into bins whose bars touch, because the axis is continuous. Hover or focus a bin to read its range and count.
+
+<Histogram data={requests} x="latencyMs" title="Request latency" xTitle="Milliseconds" yTitle="Requests" />
+
+## Bins
+
+Set `bins` to a target count or to a rule: `"sturges"` (the default) or `"freedman-diaconis"`, which suits skewed data. Bin edges snap to round numbers, so the count may shift. Set `domain` to bin over a fixed range.
+
+<Histogram data={requests} x="latencyMs" bins={40} title="40 bins" height={220} />
+
+<Histogram data={requests} x="latencyMs" bins={12} domain={[0, 600]} title="Fixed range" height={220} />
+
+### Counted elsewhere
+
+Pass a list of `{ x0, x1, count }` to `bins` when the counting happens on the server. `data` and `x` are then ignored.
+
+<Histogram
+  bins={[
+    { x0: 0, x1: 20, count: 14 },
+    { x0: 20, x1: 40, count: 62 },
+    { x0: 40, x1: 60, count: 118 },
+    { x0: 60, x1: 80, count: 74 },
+    { x0: 80, x1: 100, count: 21 },
+  ]}
+  title="Order value"
+  xTitle="USD"
+  height={220}
+/>
+
+## Markers
+
+Set `markers` to values to call out, such as percentiles. A marker is a labelled rule that never grows the axis: outside the range it is not drawn. Other marks, such as a `ChartThreshold`, go in the default slot.
+
+<Histogram
+  data={requests}
+  x="latencyMs"
+  bins={30}
+  markers={[{ x: p50, label: "p50" }, { x: p95, label: "p95" }]}
+  title="Request latency with percentiles"
+  height={240}
+>
+  <ChartThreshold y={150} label="Alert volume" kind="warning" />
+</Histogram>
+
+## Labels and formats
+
+`seriesLabel` names the count in the tooltip and the table. `rangeFormat` writes a bin's range, and `yFormat` the count.
+
+<Histogram
+  data={requests}
+  x="latencyMs"
+  seriesLabel="Requests"
+  rangeFormat={(from, to) => `${from} to ${to} ms`}
+  title="Request latency"
+  height={220}
+/>
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Histogram data={requests} x="latencyMs" color="neutral" title="Request latency" height={220} />
+
+## Data table
+
+Set `toolbar` to let people swap the chart for a table of the bins, and export it.
+
+<Histogram data={requests} x="latencyMs" seriesLabel="Requests" title="Request latency" toolbar height={220} />
+
+## Composition
+
+`Histogram` is `ChartBins` inside a `Chart` whose rows are bins. Compose them yourself for anything the preset does not cover: `ChartBins` draws any rows that carry numeric `x0` and `x1`, and `ChartMarker` works in any chart. Both are listed with the other primitives on the [Chart](/components/Chart) page.
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between bins, Enter or Space selects, and Escape clears. The focused bin is announced with its range and count, such as "40–60: Count 118", and the other bins are dimmed rather than recoloring the focused one. The data table view lists every bin.

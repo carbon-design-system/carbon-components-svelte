@@ -1,0 +1,55 @@
+---
+components: ["RidgelineChart"]
+description: Ridgeline chart stacks a density curve per series on one shared axis, overlapping, so how a distribution shifts across series reads at a glance.
+---
+
+<script>
+  import { RidgelineChart } from "carbon-components-svelte/viz";
+
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const MEANS = [2, 3, 7, 12, 17, 21, 24, 23, 19, 13, 7, 3];
+  const temperatures = MONTHS.flatMap((month, m) =>
+    Array.from({ length: 30 }, (_, i) => {
+      const u = ((i * 7919 + m * 131) % 97) / 97 - 0.5;
+      const v = ((i * 104729 + m * 17) % 89) / 89 - 0.5;
+      return { month, temp: Math.round((MEANS[m] + (u + v) * 9) * 10) / 10 };
+    }),
+  );
+
+  const SERVICES = ["auth", "billing", "search", "ingest", "export", "report"];
+  const latencies = SERVICES.flatMap((service, s) =>
+    Array.from({ length: 60 }, (_, i) => {
+      const u = ((i * 7919 + s * 131) % 97) / 97;
+      const bump = service === "search" && i % 3 === 0 ? 120 : 0;
+      return { service, ms: Math.round(50 + s * 30 + -30 * Math.log(1 - u * 0.95) + bump) };
+    }),
+  );
+
+  let selected = null;
+</script>
+
+`RidgelineChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [ViolinPlot](/components/ViolinPlot) turned on its side and stacked: a density curve per series, every peak the same height, each row rising into the one above. It suits many series that shift along one scale, such as months, cohorts, or releases. Rows are drawn top down, so a ridge sits in front of the one above it.
+
+## Basic
+
+Pass one row for each observation, with `x` for the value and `series` for the ridge. Series appear in the order first seen; set `order` to `"median"` to sort them.
+
+<RidgelineChart data={temperatures} x="temp" series="month" title="Daily temperature by month" xTitle="°C" />
+
+## Overlap, smoothing, and color
+
+`overlap` sets how far a ridge may rise into the row above, and `rowHeight` the row. The curve is a kernel density estimate; set `bandwidth`, in data units, to smooth more or less. Set `colorBy` to `"series"` for a color per ridge.
+
+<RidgelineChart data={latencies} x="ms" series="service" order="median" overlap={1.2} rowHeight={40} bandwidth={12} colorBy="series" title="Latency by service" xTitle="Milliseconds" />
+
+## Selection
+
+Bind `selected` or listen for `select`, whose detail carries the series' count, median, and peak.
+
+<RidgelineChart data={temperatures} x="temp" series="month" bind:selected rowHeight={28} title="Pick a month" />
+
+## Accessibility
+
+The chart is a single tab stop. Down and Up walk the rows, announcing each with its median, the value at its peak, and its count. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with the same summary per series.

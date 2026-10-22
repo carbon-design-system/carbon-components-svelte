@@ -1,0 +1,109 @@
+---
+components: ["MicroDonut"]
+description: Micro donut shows the parts of a whole as a small ring, for a table cell, a list item, or the corner of a card.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { MicroDonut } from "carbon-components-svelte/viz";
+
+  const plans = [
+    { id: "team", label: "Team", value: 450 },
+    { id: "ent", label: "Enterprise", value: 380 },
+    { id: "free", label: "Free", value: 170 },
+  ];
+  const status = [
+    { id: "passed", label: "Passed", value: 182, color: "success" },
+    { id: "failed", label: "Failed", value: 9, color: "error" },
+    { id: "skipped", label: "Skipped", value: 14, color: "neutral" },
+  ];
+  const countries = ["US", "DE", "JP", "BR", "IN", "FR", "UK", "CA"].map((label, i) => ({
+    id: label,
+    label,
+    value: 40 - i * 4,
+  }));
+</script>
+
+`MicroDonut` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Angles are harder to compare than lengths. Prefer [StackedBar](/components/StackedBar) when the parts need comparing, and use the donut when a glance at the mix is enough.
+
+## Basic
+
+Pass `data` and a `label`. Each part and its share is appended to the accessible name. Slices run clockwise from 12 o'clock.
+
+<MicroDonut data={plans} label="Plan mix" />
+
+## Sizes
+
+`size` gives 16, 24, or 32 pixels. Set `diameter` for anything else, and `thickness` to change the ring.
+
+<Stack orientation="horizontal" gap={6}>
+  <MicroDonut data={plans} size="sm" label="Small" />
+  <MicroDonut data={plans} label="Medium (default)" />
+  <MicroDonut data={plans} size="lg" label="Large" />
+  <MicroDonut data={plans} diameter={64} label="64 pixels" />
+  <MicroDonut data={plans} diameter={64} thickness={6} label="Thin" />
+</Stack>
+
+## Center
+
+Fill the default slot to put content in the hole. The slot receives `total` and `segments`. It needs a diameter of 48 pixels or more to stay readable.
+
+<Stack orientation="horizontal" gap={6}>
+  <MicroDonut data={plans} diameter={64} thickness={8} label="Plan mix" let:segments>
+    {Math.round(segments[0].pct)}%
+  </MicroDonut>
+  <MicroDonut data={status} diameter={64} thickness={8} label="Test results" let:total>
+    {total}
+  </MicroDonut>
+</Stack>
+
+## Folding
+
+Past five slices a ring this small stops being readable, so `maxSegments` defaults to 5: the parts past the limit fold into one neutral slice. Parts keep their input order, so sort by value first to fold the smallest.
+
+<Stack orientation="horizontal" gap={6}>
+  <MicroDonut data={countries} diameter={48} label="Sessions by country" />
+  <MicroDonut data={countries} diameter={48} maxSegments={3} label="Sessions by country, top 2" />
+</Stack>
+
+## Color
+
+Parts take Carbon's prescribed color groups in order. Set `palette` to pick another group, or give a part its own `color`.
+
+<Stack orientation="horizontal" gap={6}>
+  <MicroDonut data={plans} size="lg" palette={2} label="Plan mix" />
+  <MicroDonut data={status} size="lg" label="Test results" />
+</Stack>
+
+## In a data table
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "suite", value: "Suite" },
+    { key: "results", value: "Results" },
+    { key: "passed", value: "Passed" },
+  ]}
+  rows={[
+    { id: "a", suite: "Unit", results: status, passed: "182 of 205" },
+    { id: "b", suite: "End to end", passed: "40 of 55", results: [
+      { id: "passed", label: "Passed", value: 40, color: "success" },
+      { id: "failed", label: "Failed", value: 12, color: "error" },
+      { id: "skipped", label: "Skipped", value: 3, color: "neutral" },
+    ] },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "results"}
+      <MicroDonut data={cell.value} size="sm" label="{row.suite} results" />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the ring is announced as an image named with the label and every part, such as "Plan mix, Team 45%, Enterprise 38%, Free 17%". Without a label it is hidden from assistive technology. Slices are separated by a gap so neighbors stay distinct without relying on color. The ring mirrors in a right to left layout.
