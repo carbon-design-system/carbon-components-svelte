@@ -83,12 +83,17 @@
     text-decoration: underline;
   }
 
-  .#{$prefix}--inline-notification a:focus {
+  // ccs: `:active` too, so a pressed link shows this ring rather than the
+  // `.#{$prefix}--link:active` one, as in v11
+  .#{$prefix}--inline-notification a:focus,
+  .#{$prefix}--inline-notification a:active {
     outline: 1px solid $link-inverse;
   }
 
   .#{$prefix}--inline-notification.#{$prefix}--inline-notification--low-contrast
-    a:focus {
+    a:focus,
+  .#{$prefix}--inline-notification.#{$prefix}--inline-notification--low-contrast
+    a:active {
     @include focus-outline;
   }
 

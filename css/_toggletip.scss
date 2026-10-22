@@ -106,7 +106,9 @@
     color: $text-inverse;
   }
 
-  .#{$prefix}--toggletip-content .#{$prefix}--link:focus {
+  // A pressed link shows the focus ring too (v11), so it needs the inverse one.
+  .#{$prefix}--toggletip-content .#{$prefix}--link:focus,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active {
     outline: 1px solid $focus-inverse;
     outline-offset: 2px;
   }

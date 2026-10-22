@@ -46,6 +46,8 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
+<!-- No whitespace after the slot: an inline link would underline it. -->
+<!-- biome-ignore format: whitespace between these nodes renders as text -->
 <a
   bind:this={ref}
   role={disabled ? "link" : undefined}
@@ -76,8 +78,7 @@
   on:keydown
   on:keyup
 >
-  <slot />
-  {#if !inline && ($$slots.icon || icon)}
+  <slot />{#if !inline && ($$slots.icon || icon)}
     <span class:bx--link__icon={true}>
       <slot name="icon"> <svelte:component this={icon} /> </slot>
     </span>
