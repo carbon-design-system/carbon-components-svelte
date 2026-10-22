@@ -223,6 +223,22 @@ describe("FileUploader", () => {
     expect(getFileInput(container)).toHaveAttribute(attr, expected);
   });
 
+  it("should show each file's folder path when directory is set", async () => {
+    const { component } = render(FileUploader, {
+      props: { directory: true },
+    });
+    assert(component.ref instanceof HTMLInputElement);
+    expect(component.ref).toHaveAttribute("webkitdirectory");
+
+    const file = new File(["a"], "index.html");
+    Object.defineProperty(file, "webkitRelativePath", {
+      value: "site/blog/index.html",
+    });
+    simulateFileSelection(component.ref, [file]);
+
+    expect(await screen.findByText("site/blog/index.html")).toBeInTheDocument();
+  });
+
   it("should disable each row's remove button when disabled", async () => {
     const { container } = render(FileUploader, {
       props: { disabled: true, files: [makeFile("a.txt")] },
