@@ -25,6 +25,18 @@
     list-style: none;
   }
 
+  // ccs: indent top-level lists, as v11 does, so the markers sit inside the
+  // list's box instead of hanging past its left edge, where a clipping
+  // parent cut them off.
+  .#{$prefix}--list--unordered:not(.#{$prefix}--list--nested) {
+    margin-left: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--list--ordered:not(.#{$prefix}--list--nested),
+  .#{$prefix}--list--ordered--native:not(.#{$prefix}--list--nested) {
+    padding-left: $carbon--spacing-06;
+  }
+
   .#{$prefix}--list--expressive,
   .#{$prefix}--list--expressive .#{$prefix}--list--nested {
     @include type-style('body-02');
@@ -83,8 +95,8 @@
     > .#{$prefix}--list__item::before {
     // offset to account for smaller ▪ vs –
     left: -$carbon--spacing-04;
-    // ▪ square
-    content: '\0025AA';
+    // ▪ square, in text presentation (iOS drew it as an emoji)
+    content: '\0025AA\00FE0E'; // ccs: v11's variation selector
   }
 }
 
