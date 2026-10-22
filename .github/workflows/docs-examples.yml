@@ -1,7 +1,8 @@
 name: Docs examples
 
-# Type-checks the docs examples against the library's types. Runs only
-# when the docs change; `checks.yml` ignores `docs/**`.
+# Type-checks the docs examples against the library's types and checks the
+# docs markup against the CSS. Runs only when the docs change; `checks.yml`
+# ignores `docs/**`.
 on:
   pull_request:
     paths:
@@ -26,6 +27,11 @@ jobs:
       - run: bun ci --ignore-scripts
       - run: bun ci --ignore-scripts
         working-directory: docs
+
+      # Scans `docs/src` for type helper classes the CSS no longer emits. It
+      # compiles the Sass itself, so no build step is needed.
+      - name: Check type helper classes
+        run: bunx vitest run tests/css/v11-tokens.test.ts
 
       - name: Generate types
         run: bun run build:docs
