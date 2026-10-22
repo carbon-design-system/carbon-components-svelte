@@ -46,10 +46,6 @@ $ccs-omit-token-fallbacks: false !default;
 /// @access private
 /// @group @carbon/themes
 @function should-emit($theme-a, $theme-b, $token, $emit-difference) {
-  // ccs: v10 names stay in the maps but never reach CSS
-  @if index($ccs-v10-token-names, $token) {
-    @return false;
-  }
   @if $emit-difference == false {
     @return true;
   }
