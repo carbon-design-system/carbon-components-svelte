@@ -99,15 +99,15 @@ $notification-colors: (
     ),
   ),
   'notification-background-warning': (
-    fallback: mix($carbon__yellow-30, $carbon__white-0, 15%),
+    fallback: $carbon__yellow-10, // ccs: v11
     values: (
       (
         theme: $carbon--theme--white,
-        value: mix($carbon__yellow-30, $carbon__white-0, 15%),
+        value: $carbon__yellow-10, // ccs: v11
       ),
       (
         theme: $carbon--theme--g10,
-        value: mix($carbon__yellow-30, $carbon__white-0, 15%),
+        value: $carbon__yellow-10, // ccs: v11
       ),
       (
         theme: $carbon--theme--g80,

@@ -38,7 +38,7 @@
   &.#{$prefix}--btn--disabled,
   &.#{$prefix}--btn--disabled:hover,
   &.#{$prefix}--btn--disabled:focus {
-    border-color: $icon-disabled;
+    border-color: $button-disabled; // ccs: v11, borders match the fill
     background: $button-disabled;
     box-shadow: none;
     color: $text-on-color-disabled;
