@@ -49,6 +49,29 @@ export function formatHeaderWidth<
 >(header: Header): string | undefined;
 
 /**
+ * Returns true when a column filter value should narrow the rows.
+ * `undefined`, `null`, a blank string, and an empty array leave the column unfiltered.
+ */
+export function isColumnFilterActive(filterValue: unknown): boolean;
+
+/**
+ * Builds the predicate for one active column filter. Called once per filter pass so
+ * per-value work (lowercasing a needle, building a membership set) stays out of the
+ * row loop.
+ *
+ * `headerFilter` wins when the column defines one. Otherwise an array `filterValue`
+ * matches cell values that are members of it, a string matches a case-insensitive
+ * substring of a string or number cell value (what the toolbar search does), and any
+ * other value matches by strict equality.
+ */
+export function createColumnFilterPredicate<
+  Row extends Record<string, unknown> = Record<string, unknown>,
+>(
+  filterValue: unknown,
+  headerFilter?: (value: unknown, filterValue: unknown, row: Row) => boolean,
+): (cellValue: unknown, row: Row) => boolean;
+
+/**
  * Compares two values for sorting in a data table.
  * Handles numbers, strings, null/undefined values, and custom sort functions.
  * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
