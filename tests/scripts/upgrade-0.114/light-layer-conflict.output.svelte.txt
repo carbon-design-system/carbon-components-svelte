@@ -1,0 +1,10 @@
+<script>
+  import { Layer as CarbonLayer, TextArea } from "carbon-components-svelte";
+  import Layer from "./Layer.svelte";
+</script>
+
+<Layer>
+  <CarbonLayer>
+    <TextArea labelText="Notes" />
+  </CarbonLayer>
+</Layer>

@@ -1,6 +1,7 @@
 import { $ } from "bun";
 
 const PRESERVE_FIELDS = new Set([
+  "bin",
   "bugs",
   "dependencies",
   "description",

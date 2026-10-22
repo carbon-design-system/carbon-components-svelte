@@ -48,6 +48,7 @@ const GRAPH_ROOTS = [
   "css",
   "scripts",
   "docs/src/pages/framed/DatePicker",
+  "codemods",
   "crassus.config.ts",
 ];
 /** Where the classes a fixture page renders are spelled. */

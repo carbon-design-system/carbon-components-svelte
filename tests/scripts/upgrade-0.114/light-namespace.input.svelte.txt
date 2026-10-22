@@ -1,0 +1,5 @@
+<script>
+  import * as Carbon from "carbon-components-svelte";
+</script>
+
+<Carbon.NumberInput light label="Count" />

@@ -1,0 +1,47 @@
+<script>
+  import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+
+  export let isWeekend = () => false;
+  export let anchor = undefined;
+  export let options = {};
+  const minDate = "01/01/2024";
+</script>
+
+<DatePicker
+  datePickerType="single"
+  months={2}
+  disabledDates={[isWeekend]}
+>
+  <DatePickerInput labelText="Date" />
+</DatePicker>
+
+<DatePicker {minDate} maxDate="12/31/2024" allowInput conjunction=" to " />
+
+<DatePicker
+  {anchor}
+  keepOutOfRangeValue
+  keepOpenFor={[anchor]}
+  enabledDates={[isWeekend]}
+  closeOnSelect={false}
+  inline
+  monthLabel="short"
+/>
+
+<DatePicker displayFormat="F j, Y" />
+
+<DatePicker
+  maxDate="12/31/2024"
+  flatpickrProps={{
+    maxDate: "06/30/2024",
+    plugins: [],
+    onChange: () => {},
+    onDayCreate: () => {},
+    enableTime: true,
+    position: "above",
+    defaultDate: "01/01/2024",
+    altInput: true,
+    locale: "de",
+  }}
+/>
+
+<DatePicker flatpickrProps={options} />

@@ -1,0 +1,9 @@
+<script>
+  import { CopyInput, TextInput } from "carbon-components-svelte";
+
+  export let apiKey = "";
+</script>
+
+<CopyInput selectTextOnFocus value={apiKey} />
+<CopyInput selectTextOnFocus={false} value={apiKey} />
+<TextInput selectOnFocus labelText="Not CopyInput" />
