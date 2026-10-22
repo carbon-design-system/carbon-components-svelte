@@ -422,6 +422,75 @@ describe("Modal", () => {
     expect(trigger).toHaveFocus();
   });
 
+  describe("returnFocusTo", () => {
+    const getElsewhere = () =>
+      screen.getByRole("textbox", { name: "Elsewhere" });
+
+    // The trigger unmounts while the modal is open, as when a confirm deletes
+    // the row that opened it.
+    async function openThenRemoveTrigger() {
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+      trigger.remove();
+    }
+
+    it("focuses the fallback when the trigger unmounted while open", async () => {
+      render(ModalFocusReturnTest, {
+        props: { returnFocusTo: getElsewhere },
+      });
+      await openThenRemoveTrigger();
+
+      await closeVia["close-button"]();
+      await tick();
+
+      expect(getElsewhere()).toHaveFocus();
+    });
+
+    it("focuses the fallback once the closing transition ends", async () => {
+      const spy = reportClosingTransition();
+
+      try {
+        render(ModalFocusReturnTest, {
+          props: { returnFocusTo: getElsewhere },
+        });
+        await openThenRemoveTrigger();
+
+        await closeVia["close-button"]();
+        expect(getElsewhere()).not.toHaveFocus();
+
+        await finishClose();
+        expect(getElsewhere()).toHaveFocus();
+      } finally {
+        spy.mockRestore();
+      }
+    });
+
+    it("prefers the trigger while it is still mounted", async () => {
+      render(ModalFocusReturnTest, {
+        props: { returnFocusTo: getElsewhere },
+      });
+
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+      await closeVia["close-button"]();
+      await tick();
+
+      expect(trigger).toHaveFocus();
+    });
+
+    it("leaves focus alone without a fallback", async () => {
+      render(ModalFocusReturnTest);
+      await openThenRemoveTrigger();
+
+      await closeVia["close-button"]();
+      await tick();
+
+      expect(getElsewhere()).not.toHaveFocus();
+    });
+  });
+
   it("focuses the dialog when it has nothing else to focus", async () => {
     render(ModalFocusReturnTest, {
       props: { passiveModal: true, hideCloseButton: true },

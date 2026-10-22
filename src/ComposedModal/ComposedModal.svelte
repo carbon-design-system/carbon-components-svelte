@@ -39,6 +39,14 @@
   export let containerClass = "";
 
   /**
+   * Specify an element, or a function returning one, to focus when the modal
+   * closes and the element that opened it has unmounted, for example a
+   * deleted row.
+   * @type {HTMLElement | (() => HTMLElement | null) | null}
+   */
+  export let returnFocusTo = null;
+
+  /**
    * Specify a selector to be focused when opening the modal.
    * @type {null | string}
    */
@@ -88,6 +96,10 @@
   let innerModalRef = null;
   let mounted = false;
 
+  function restoreFocusReturn() {
+    focusReturn.restore(ref, returnFocusTo);
+  }
+
   const lifecycle = createDialogLifecycle({
     dispatch,
     setOpen: (value) => {
@@ -95,7 +107,7 @@
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
     saveFocusReturn: focusReturn.save,
-    restoreFocusReturn: () => focusReturn.restore(ref),
+    restoreFocusReturn,
     getContainer: () => innerModalRef,
     focus: () => focus(),
     getOpen: () => open,
@@ -276,7 +288,7 @@
   on:transitionend={(event) => {
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
-      if (!open) focusReturn.restore(ref);
+      if (!open) restoreFocusReturn();
     }
   }}
 >

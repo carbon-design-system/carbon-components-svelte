@@ -4,9 +4,15 @@ export function initialFocus(options: {
   fallbacks?: Array<Element | null | undefined>;
 }): HTMLElement | null;
 
+export type FocusFallback =
+  | HTMLElement
+  | null
+  | undefined
+  | (() => HTMLElement | null | undefined);
+
 export function restoreFocus(): {
   save(): void;
-  restore(region?: Element | null): void;
+  restore(region?: Element | null, fallback?: FocusFallback): void;
 };
 
 export function returnFocus(
