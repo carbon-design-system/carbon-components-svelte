@@ -6,7 +6,6 @@ describe("ButtonSet", () => {
     render(ButtonSet);
 
     const buttonSet = screen.getByTestId("button-set");
-    expect(buttonSet).toBeInTheDocument();
     expect(buttonSet).toHaveClass("bx--btn-set");
   });
 
@@ -14,7 +13,6 @@ describe("ButtonSet", () => {
     render(ButtonSet, { stacked: true });
 
     const buttonSet = screen.getByTestId("button-set");
-    expect(buttonSet).toBeInTheDocument();
     expect(buttonSet).toHaveClass("bx--btn-set");
     expect(buttonSet).toHaveClass("bx--btn-set--stacked");
 

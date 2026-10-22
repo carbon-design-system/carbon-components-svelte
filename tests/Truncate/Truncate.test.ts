@@ -81,20 +81,19 @@ describe("Truncate", () => {
     });
 
     it("should preserve existing classes", () => {
-      render(TruncateAction, {
-        props: {
-          element: "p",
-          text: "Test",
-        },
-      });
+      const node = document.createElement("p");
+      node.classList.add("custom-class");
+      const { update } = truncate(node, { clamp: "end" });
+      expect(node).toHaveClass("custom-class");
+      expect(node).toHaveClass("bx--text-truncate--end");
 
-      const element = screen.getByText("Test");
-      element.classList.add("custom-class");
+      node.classList.add("added-later");
+      update({ clamp: "front" });
 
-      element.dispatchEvent(new Event("update"));
-
-      expect(element).toHaveClass("custom-class");
-      expect(element).toHaveClass("bx--text-truncate--end");
+      expect(node).toHaveClass("custom-class");
+      expect(node).toHaveClass("added-later");
+      expect(node).toHaveClass("bx--text-truncate--front");
+      expect(node).not.toHaveClass("bx--text-truncate--end");
     });
 
     it("should default to end clamp", () => {

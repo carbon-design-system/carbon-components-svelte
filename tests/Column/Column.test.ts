@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import ColumnAs from "./Column.as.test.svelte";
 import Column from "./Column.test.svelte";
 
 describe("Column", () => {
@@ -9,11 +10,13 @@ describe("Column", () => {
     expect(column).toHaveClass("bx--col");
   });
 
-  it("should render with custom element when as is true", () => {
-    render(Column, { props: { as: true } });
-    const column = screen.getByTestId("content").parentElement;
-    assert(column);
-    expect(column.tagName).toBe("DIV");
+  it("should hand the column props to the slot when as is true", () => {
+    render(ColumnAs);
+    const column = screen.getByTestId("content");
+    expect(column.tagName).toBe("ARTICLE");
+    expect(column).toHaveClass("bx--col-sm-4");
+    expect(column).toHaveAttribute("aria-label", "Custom column");
+    expect(column.parentElement?.querySelector("div.bx--col-sm-4")).toBeNull();
   });
 
   describe("Gutter modifiers", () => {

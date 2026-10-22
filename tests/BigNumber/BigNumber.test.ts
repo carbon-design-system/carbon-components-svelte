@@ -224,7 +224,7 @@ describe("BigNumber", () => {
       const el = screen.getByTestId("delta-zero");
       expect(
         el.querySelector(".bx--big-number__delta-value"),
-      ).toHaveTextContent("0");
+      ).toHaveTextContent(/^0$/);
     });
 
     it("renders no delta block when delta is not set", () => {

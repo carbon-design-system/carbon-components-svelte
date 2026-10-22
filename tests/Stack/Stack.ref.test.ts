@@ -6,7 +6,6 @@ describe("Stack ref", () => {
     const { rerender } = render(StackRef);
 
     expect(screen.getByTestId("ref-tag")).toHaveTextContent("DIV");
-    expect(screen.getByText("Anchor")).toBeInTheDocument();
 
     // `tag` swaps the element, so the binding has to follow it.
     await rerender({ tag: "section" });

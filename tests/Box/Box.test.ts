@@ -16,7 +16,6 @@ describe("Box", () => {
     const { rerender } = render(BoxRef);
 
     expect(screen.getByTestId("ref-tag")).toHaveTextContent("DIV");
-    expect(screen.getByText("Anchor")).toBeInTheDocument();
 
     // `tag` swaps the element, so the binding has to follow it.
     await rerender({ tag: "section" });

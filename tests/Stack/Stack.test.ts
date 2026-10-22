@@ -96,10 +96,7 @@ describe("Stack", () => {
     const stackElement = element.parentElement;
 
     expect(stackElement).toHaveClass("bx--stack");
-
-    for (let gap = 1; gap <= 13; gap++) {
-      expect(stackElement).not.toHaveClass(`bx--stack-scale-${gap}`);
-    }
+    expect(stackElement?.className).not.toMatch(/bx--stack-scale-/);
   });
 
   it("should apply inline class when inline is true", () => {

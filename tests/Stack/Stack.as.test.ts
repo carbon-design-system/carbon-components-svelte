@@ -5,7 +5,7 @@ describe("Stack as", () => {
   it("renders through tag by default", () => {
     const { container } = render(Stack);
     const stack = container.querySelector("div.bx--stack");
-    expect(stack).toHaveClass("bx--stack", "bx--stack-vertical");
+    expect(stack).toHaveClass("bx--stack-vertical");
   });
 
   it("renders as a custom element using the as prop", () => {
@@ -40,9 +40,7 @@ describe("Stack as", () => {
     });
     const header = container.querySelector("header");
     expect(header).toHaveStyle({ gap: "22px" });
-    for (let gap = 1; gap <= 13; gap++) {
-      expect(header).not.toHaveClass(`bx--stack-scale-${gap}`);
-    }
+    expect(header?.className).not.toMatch(/bx--stack-scale-/);
   });
 
   it("merges a caller style with a custom gap value", () => {

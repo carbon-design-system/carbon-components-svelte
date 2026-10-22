@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import LinkDownload from "./LinkDownload.test.svelte";
 
@@ -42,10 +42,14 @@ describe("LinkDownload", () => {
     const link = getLink();
     expect(link).toHaveAttribute("href", "#");
 
-    const { pathname } = window.location;
-    await user.click(link);
+    const initialHash = window.location.hash;
+    const notPrevented = await fireEvent.click(link);
+    // `fireEvent` returns false when a handler called `preventDefault()`.
+    expect(notPrevented).toBe(false);
 
-    expect(window.location.pathname).toBe(pathname);
+    await user.click(link);
+    // `href="#"` would otherwise set the hash to `#`.
+    expect(window.location.hash).toBe(initialHash);
   });
 
   it("passes a Blob straight through without rewrapping it", async () => {

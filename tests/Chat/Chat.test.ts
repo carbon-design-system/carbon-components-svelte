@@ -8,7 +8,7 @@ describe("Chat", () => {
 
     const log = screen.getByRole("log", { name: "Conversation with Sam" });
     expect(log).toHaveAttribute("tabindex", "0");
-    expect(within(log).getByRole("list")).toBeInTheDocument();
+    within(log).getByRole("list");
     expect(screen.getAllByRole("listitem")).toHaveLength(4);
   });
 
