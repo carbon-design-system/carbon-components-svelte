@@ -101,6 +101,24 @@
       color: $text-primary;
     }
   }
+
+  // Forced-colors mode repaints the active bar as `Canvas`, so it showed as
+  // a gap in the `CanvasText` track. It paints in `Highlight`, as a
+  // ProgressBar fill does. A theme's `Highlight` can sit close to its
+  // `CanvasText`, so the track also thins to 1px and the bar stands out by
+  // width. The padding keeps the text where the 4px track left it.
+  @media (forced-colors: active) {
+    .#{$prefix}--toc__list {
+      border-inline-start-width: 1px;
+      padding-inline-start: $carbon--spacing-02 - to-rem(1px);
+    }
+
+    .#{$prefix}--toc__bar,
+    .#{$prefix}--toc:not(.#{$prefix}--toc--measured)
+      .#{$prefix}--toc__item--active::before {
+      background-color: Highlight;
+    }
+  }
 }
 
 @include exports("table-of-contents") {

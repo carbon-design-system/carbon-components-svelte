@@ -377,3 +377,31 @@
 @include exports("checkbox-no-margin") {
   @include checkbox-no-margin;
 }
+
+// carbon-components-svelte patch (checkbox-forced-colors)
+// Forced-colors mode paints a disabled checkbox like an enabled one: the
+// lighter label, box and check all become `CanvasText`. They read
+// `GrayText`, as a disabled TreeView node does.
+
+/// Disabled checkbox in forced-colors mode.
+/// @access private
+/// @group checkbox
+@mixin checkbox-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--checkbox:disabled + .#{$prefix}--checkbox-label,
+    .#{$prefix}--checkbox-label[data-contained-checkbox-disabled="true"] {
+      color: GrayText;
+    }
+
+    .#{$prefix}--checkbox:disabled + .#{$prefix}--checkbox-label::before,
+    .#{$prefix}--checkbox:disabled + .#{$prefix}--checkbox-label::after,
+    .#{$prefix}--checkbox-label[data-contained-checkbox-disabled="true"]::before,
+    .#{$prefix}--checkbox-label[data-contained-checkbox-disabled="true"]::after {
+      border-color: GrayText;
+    }
+  }
+}
+
+@include exports("checkbox-forced-colors") {
+  @include checkbox-forced-colors;
+}

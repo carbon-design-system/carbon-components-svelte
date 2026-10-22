@@ -119,6 +119,16 @@
     justify-content: space-between;
     column-gap: $carbon--spacing-05;
   }
+
+  // Forced-colors mode leaves SVG fills alone, and the button's icon fills
+  // outrank the global `ButtonText` icon rule, so the theme's dark gray icon
+  // vanished on a dark contrast theme. The icon reads `ButtonText` when
+  // closed, open and hovered.
+  @media (forced-colors: active) {
+    .#{$prefix}--toggletip .#{$prefix}--toggletip-button svg {
+      fill: ButtonText;
+    }
+  }
 }
 
 @include exports("toggletip") {
