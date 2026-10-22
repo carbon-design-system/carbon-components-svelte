@@ -51,6 +51,22 @@ describe("packageContentProblems", () => {
     );
   });
 
+  test.each([
+    "docs/package.json",
+    "docs/README.md",
+    "packages/LICENSE",
+    "LICENSE.txt",
+    "telemetry.yml.bak",
+    "css/vendor/css.d.ts",
+    "css/all.css.map",
+    "src/index.js.map",
+    "docs/src/Button.svelte",
+  ])("rejects %s, which only resembles an allowed file", (path) => {
+    expect(packageContentProblems([file(path)], 1)).toEqual([
+      expect.stringContaining("not an expected package file"),
+    ]);
+  });
+
   test("rejects an unpacked size over budget", () => {
     expect(packageContentProblems([], 11, 10)).toEqual([
       expect.stringContaining("exceeds the 10 B budget"),

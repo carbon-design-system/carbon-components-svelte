@@ -79,4 +79,11 @@ describe("highlightCode", () => {
     vi.stubGlobal("CSS", {});
     expect(() => highlightCode(code, "js")).not.toThrow();
   });
+
+  it("removes its ranges when updated to an unknown language", () => {
+    const code = mount("<code>let a</code>");
+    const action = highlightCode(code, "js");
+    action.update("cobol");
+    expect(registry().size).toBe(0);
+  });
 });

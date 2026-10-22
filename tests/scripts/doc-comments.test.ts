@@ -19,6 +19,13 @@ describe("stripDocComments", () => {
     );
   });
 
+  test("keeps code that shares a line with a doc comment", () => {
+    expect(stripDocComments("/** x */ export let a;\n")).toBe(
+      " export let a;\n",
+    );
+    expect(stripDocComments("foo(); /** x */\n")).toBe("foo(); \n");
+  });
+
   test("keeps plain block, legal and line comments", () => {
     const code =
       "/* keep */\nconst a = /* @__PURE__ */ f();\n/*! legal */\n// line\n";

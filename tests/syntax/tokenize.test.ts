@@ -220,6 +220,27 @@ describe("tokenize", () => {
     expect(rejoined(code, "svelte")).toBe(code);
   });
 
+  test.each([
+    ["javascript", "js", "const a = 1; // c"],
+    ["mjs", "js", "const a = 1; // c"],
+    ["cjs", "js", "const a = 1; // c"],
+    ["jsx", "js", "const a = 1; // c"],
+    ["JS", "js", "const a = 1; // c"],
+    ["typescript", "ts", "let n: number = 1;"],
+    ["tsx", "ts", "let n: number = 1;"],
+    ["xml", "html", '<p class="a">x</p>'],
+    ["svg", "html", '<p class="a">x</p>'],
+    ["HTML", "html", '<p class="a">x</p>'],
+    ["jsonc", "json", '{"a": 1}'],
+    ["shell", "sh", 'echo "a" # c'],
+    ["zsh", "sh", 'echo "a" # c'],
+    ["bash", "sh", 'echo "a" # c'],
+  ])("reads the language alias %s like %s", (alias, canonical, code) => {
+    const expected = tokenize(code, canonical);
+    expect(expected?.some((token) => token.type)).toBe(true);
+    expect(tokenize(code, alias)).toEqual(expected);
+  });
+
   test.each(["cobol", "constructor", "__proto__"])(
     "returns undefined for the unknown language %s",
     (lang) => {
@@ -509,6 +530,30 @@ describe("tokenize: precision", () => {
     ["i++ / 2 / 3", ["operator:++", "operator:/", "number:2", "operator:/"]],
     ["a-- / 2 / 3", ["operator:--", "operator:/", "number:2", "operator:/"]],
     ["`${/x/.test(a)}`", ["string:`", "special:${", "regexp:/x/"]],
+    ["a / b / c", ["operator:/", "operator:/"]],
+    [
+      "(a) / 2 / c",
+      ["paren:(", "paren:)", "operator:/", "number:2", "operator:/"],
+    ],
+    [
+      "a[0] / 2 / c",
+      [
+        "bracket:[",
+        "number:0",
+        "bracket:]",
+        "operator:/",
+        "number:2",
+        "operator:/",
+      ],
+    ],
+    [
+      "1 / 2 / 3",
+      ["number:1", "operator:/", "number:2", "operator:/", "number:3"],
+    ],
+    ["return /x/g", ["control-keyword:return", "regexp:/x/g"]],
+    ["typeof /x/", ["keyword:typeof", "regexp:/x/"]],
+    ["a ? /x/ : /y/", ["operator:?", "regexp:/x/", "operator::", "regexp:/y/"]],
+    ["x = /[/]/.test(s)", ["operator:=", "regexp:/[/]/"]],
   ])("tells division from a regexp in %s", (code, expected) => {
     expect(types(code, "js").slice(0, expected.length)).toEqual(expected);
   });
@@ -663,4 +708,51 @@ describe("tokenize: precision", () => {
       }
     }
   });
+});
+
+describe("tokenize: unterminated input", () => {
+  test.each([
+    ["js", '"abc', ['string:"abc']],
+    ["js", "'abc\ndef", ["string:'abc"]],
+    ["js", "/* abc", ["comment:/* abc"]],
+    ["js", "`abc", ["string:`abc"]],
+    ["js", "`a ${b", ["string:`a ", "special:${"]],
+    ["css", "/* x", ["comment:/* x"]],
+    [
+      "json",
+      '{"a": "b',
+      ["brace:{", 'property-name:"a"', "punctuation::", 'string:"b'],
+    ],
+    ["sh", 'echo "abc', ["function:echo", 'string:"abc']],
+    ["html", "<!-- x", ["comment:<!-- x"]],
+    [
+      "html",
+      '<div class="a',
+      [
+        "angle-bracket:<",
+        "tag-name:div",
+        "attribute-name:class",
+        "operator:=",
+        'attribute-value:"a',
+      ],
+    ],
+    ["svelte", "{#if a", ["brace:{", "control-keyword:#if"]],
+    [
+      "html",
+      "<script>let a",
+      [
+        "angle-bracket:<",
+        "tag-name:script",
+        "angle-bracket:>",
+        "definition-keyword:let",
+        "definition:a",
+      ],
+    ],
+  ])(
+    "lexes unterminated %s %j to the end of the input",
+    (lang, code, expected) => {
+      expect(types(code, lang)).toEqual(expected);
+      expect(rejoined(code, lang)).toBe(code);
+    },
+  );
 });
