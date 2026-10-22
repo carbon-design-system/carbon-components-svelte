@@ -46,6 +46,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocusOnClose } from "../utils/focus.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -96,6 +97,8 @@
 
   function handleKeydown(event) {
     if (isOpen && event.key === "Escape") {
+      // Escape that cancels an IME composition is not a close.
+      if (isImeComposition(event)) return;
       close("escape-key");
       ref?.focus();
     }

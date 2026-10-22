@@ -62,6 +62,27 @@ describe("HeaderAction", () => {
       }
       expect(button).toHaveFocus();
     });
+
+    it.each([
+      { key: "Escape", isComposing: true },
+      { key: "Escape", keyCode: 229 },
+    ])(
+      "keeps the panel open when Escape cancels an IME composition (%o)",
+      async (init) => {
+        const onClose = vi.fn();
+        render(HeaderActionClose, { props: { withInput: true, onClose } });
+
+        await user.click(getActionButton());
+        await flushDismiss();
+
+        const input = screen.getByRole("textbox", { name: "Filter" });
+        input.focus();
+        await fireEvent.keyDown(input, init);
+
+        expect(screen.getByTestId("panel-content")).toBeInTheDocument();
+        expect(onClose).not.toHaveBeenCalled();
+      },
+    );
   });
 
   describe("tooltip group", () => {
