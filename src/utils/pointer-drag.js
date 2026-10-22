@@ -13,8 +13,9 @@
  * starts synchronously, so a fast press-release is never missed. An idle
  * node only listens for `pointerdown`.
  *
- * Only the primary button starts a drag, and a second pointer is ignored
- * while one is active. `onStart` may return `false` to decline the drag.
+ * Only the primary button starts a drag unless `buttons` lists others, and
+ * a second pointer is ignored while one is active. `onStart` may return
+ * `false` to decline the drag.
  *
  * @param {HTMLElement} node
  * @param {PointerDragOptions} options
@@ -30,7 +31,7 @@ export function pointerDrag(node, options) {
     if (current.enabled === false || activePointerId !== null) return;
     // A secondary button opens the context menu, which swallows the
     // matching `pointerup`.
-    if (event.button !== 0) return;
+    if (!(current.buttons ?? [0]).includes(event.button)) return;
     if (current.onStart?.(event) === false) return;
     activePointerId = event.pointerId;
     node.addEventListener("pointermove", handlePointermove);

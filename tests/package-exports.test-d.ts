@@ -48,6 +48,13 @@ import type {
   TypeToken,
   typeTokens,
 } from "carbon-components-svelte/tokens";
+import type {
+  scaleLinear,
+  Chart as VizChart,
+  DeltaIndicator as VizDeltaIndicator,
+  FunnelBars as VizFunnelBars,
+  vizColor,
+} from "carbon-components-svelte/viz";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";
@@ -57,6 +64,12 @@ import "carbon-components-svelte/css/g90.css";
 import "carbon-components-svelte/css/syntax-tokens-g100.css";
 import "carbon-components-svelte/css/syntax-tokens.css";
 import "carbon-components-svelte/css/syntax.css";
+import "carbon-components-svelte/css/viz.css";
+import "carbon-components-svelte/css/viz-g10.css";
+import "carbon-components-svelte/css/viz-g100.css";
+import "carbon-components-svelte/css/viz-g80.css";
+import "carbon-components-svelte/css/viz-g90.css";
+import "carbon-components-svelte/css/viz-white.css";
 import "carbon-components-svelte/css/white.css";
 
 type _BarrelButton = BarrelButton;
@@ -100,3 +113,8 @@ const _html: string | undefined = highlight("let a", "js");
 const _action: { destroy: () => void } = highlightCode(document.body, {
   language: "js",
 });
+type _VizChart = VizChart<{ date: Date; value: number }>;
+type _VizColor = ReturnType<typeof vizColor>;
+type _VizDeltaIndicator = VizDeltaIndicator;
+type _VizFunnelBars = VizFunnelBars<"a" | "b">;
+type _VizScaleLinear = ReturnType<typeof scaleLinear>;

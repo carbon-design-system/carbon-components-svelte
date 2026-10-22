@@ -21,6 +21,10 @@
       "types": "./src/tokens/index.d.ts",
       "import": "./src/tokens/index.js"
     },
+    "./viz": {
+      "types": "./src/viz/index.d.ts",
+      "svelte": "./src/viz/index.js"
+    },
     "./css/*.css": {
       "types": "./css/css.d.ts",
       "default": "./css/*.css"

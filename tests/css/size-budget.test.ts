@@ -22,6 +22,9 @@ const BUDGETS: Record<string, { min: number; gzip: number }> = {
   "all.scss": { min: 802_000, gzip: 94_000 },
   // min 634,870 and gzip 75,894 measured 2026-10-21
   "white.scss": { min: 698_000, gzip: 83_500 },
+  // The data visualization entry, loaded only by apps that import it.
+  // min 130,043 and gzip 15,334 measured 2026-10-22
+  "viz.scss": { min: 143_000, gzip: 17_000 },
 };
 
 describe("css size budget", () => {
