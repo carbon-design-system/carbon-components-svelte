@@ -77,7 +77,11 @@
   }
 
   onMount(() => {
-    if (menuRef?.querySelector('[aria-current="page"]')) {
+    // Keep the menu collapsed in a collapsed rail; it still shows the active mark.
+    if (
+      !($isSideNavRail && $isSideNavCollapsed) &&
+      menuRef?.querySelector('[aria-current="page"]')
+    ) {
       expanded = true;
     }
 
