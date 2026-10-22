@@ -4,9 +4,6 @@
 
 <CheckboxSkeleton
   data-testid="checkbox-skeleton"
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

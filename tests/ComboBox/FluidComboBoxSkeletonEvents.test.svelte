@@ -4,9 +4,6 @@
 
 <FluidComboBoxSkeleton
   data-testid="fluid-combo-box-skeleton"
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

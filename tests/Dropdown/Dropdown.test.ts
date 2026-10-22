@@ -20,8 +20,8 @@ import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
 import DropdownSkeleton from "./DropdownSkeleton.test.svelte";
-import FluidDropdownSkeletonEvents from "./FluidDropdownSkeletonEvents.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
+import FluidDropdownSkeletonEvents from "./FluidDropdownSkeletonEvents.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },

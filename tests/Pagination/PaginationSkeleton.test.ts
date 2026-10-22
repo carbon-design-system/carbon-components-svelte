@@ -28,7 +28,8 @@ describe("PaginationSkeleton", () => {
       const consoleLog = vi.spyOn(console, "log");
       const { container } = render(PaginationSkeletonFixture);
 
-      const skeleton = getRoot(container);
+      const skeleton = container.querySelector(".bx--pagination");
+      assert(skeleton);
 
       await user.click(skeleton);
       expect(consoleLog).not.toHaveBeenCalledWith("click");

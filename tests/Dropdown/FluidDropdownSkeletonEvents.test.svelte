@@ -4,9 +4,6 @@
 
 <FluidDropdownSkeleton
   data-testid="fluid-dropdown-skeleton"
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

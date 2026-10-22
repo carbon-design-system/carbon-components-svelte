@@ -3,8 +3,8 @@ import type SearchComponent from "carbon-components-svelte/Search/Search.svelte"
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import SearchFocusWithoutSelect from "./Search.focusWithoutSelect.test.svelte";
 import FluidSearchSkeletonEvents from "./FluidSearchSkeleton.events.test.svelte";
+import SearchFocusWithoutSelect from "./Search.focusWithoutSelect.test.svelte";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";

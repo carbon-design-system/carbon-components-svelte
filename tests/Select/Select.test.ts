@@ -4,12 +4,12 @@ import type SelectItemComponent from "carbon-components-svelte/Select/SelectItem
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import FluidSelectSkeletonEvents from "./FluidSelectSkeletonEvents.test.svelte";
-import SelectSkeletonEvents from "./SelectSkeletonEvents.test.svelte";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectManyItems from "./Select.manyItems.test.svelte";
 import Select from "./Select.test.svelte";
 import SelectToggle from "./Select.toggle.test.svelte";
+import SelectSkeletonEvents from "./SelectSkeletonEvents.test.svelte";
 
 describe("Select", () => {
   // Items register in one batched flush on mount. A dropped or reordered

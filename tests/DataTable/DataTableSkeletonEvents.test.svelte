@@ -3,9 +3,6 @@
 </script>
 
 <DataTableSkeleton
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

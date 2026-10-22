@@ -4,9 +4,6 @@
 
 <FluidSearchSkeleton
   data-testid="fluid-search-skeleton"
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

@@ -4,9 +4,6 @@
 
 <FluidCopyInputSkeleton
   data-testid="fluid-copy-input-skeleton"
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

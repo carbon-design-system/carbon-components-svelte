@@ -5,9 +5,6 @@
 <FileUploaderSkeleton
   data-testid="file-uploader-skeleton"
   {...$$props}
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}

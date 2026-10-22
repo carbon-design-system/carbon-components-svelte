@@ -8,8 +8,8 @@ import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonLoading from "./ButtonLoading.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
 import ButtonSelected from "./ButtonSelected.test.svelte";
-import { expectInlineTooltip } from "./helpers";
 import ButtonSkeletonForwardedEvents from "./ButtonSkeleton.forwarded-events.test.svelte";
+import { expectInlineTooltip } from "./helpers";
 
 describe("Button", () => {
   it.each([

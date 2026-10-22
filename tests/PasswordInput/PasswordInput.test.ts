@@ -6,8 +6,8 @@ import PasswordInputForm from "./PasswordInput.form.test.svelte";
 import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
-import PasswordInputTooltipGroup from "./PasswordInputTooltipGroup.test.svelte";
 import PasswordInputSkeletonEvents from "./PasswordInputSkeletonEvents.test.svelte";
+import PasswordInputTooltipGroup from "./PasswordInputTooltipGroup.test.svelte";
 
 describe("PasswordInput", () => {
   it("shows the toggle tooltip without the fade-in on focus", async () => {

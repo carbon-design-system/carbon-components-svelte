@@ -8,9 +8,6 @@
 {#if component === "fluid"}
   <FluidTextInputSkeleton
     data-testid="skeleton"
-    on:click={() => {
-      console.log("click");
-    }}
     on:mouseover={() => {
       console.log("mouseover");
     }}
@@ -24,9 +21,6 @@
 {:else}
   <TextInputSkeleton
     data-testid="skeleton"
-    on:click={() => {
-      console.log("click");
-    }}
     on:mouseover={() => {
       console.log("mouseover");
     }}

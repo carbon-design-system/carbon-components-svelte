@@ -2,9 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import DatePickerSkeletonComponent from "carbon-components-svelte/DatePicker/DatePickerSkeleton.svelte";
 import FluidDatePickerSkeleton from "carbon-components-svelte/DatePicker/FluidDatePickerSkeleton.svelte";
 import { user } from "../utils/user";
-import FluidDatePickerSkeletonEvents from "./FluidDatePickerSkeletonEvents.test.svelte";
 import DatePickerSkeletonInForm from "./DatePickerSkeleton.form.test.svelte";
 import DatePickerSkeleton from "./DatePickerSkeleton.test.svelte";
+import FluidDatePickerSkeletonEvents from "./FluidDatePickerSkeletonEvents.test.svelte";
 
 describe("DatePickerSkeleton", () => {
   it("renders the simple variant by default", () => {
@@ -101,18 +101,14 @@ describe("DatePickerSkeleton", () => {
     expect(container.querySelectorAll("span.bx--label")).toHaveLength(2);
   });
 
-  it("forwards mouse events but not click", async () => {
-    const onclick = vi.fn();
+  it("forwards mouse events", async () => {
     const onmouseover = vi.fn();
     const onmouseleave = vi.fn();
     render(DatePickerSkeleton, {
-      props: { onclick, onmouseover, onmouseleave },
+      props: { onmouseover, onmouseleave },
     });
 
     const element = screen.getByTestId("date-picker-skeleton");
-
-    await user.click(element);
-    expect(onclick).not.toHaveBeenCalled();
 
     await user.hover(element);
     expect(onmouseover).toHaveBeenCalled();

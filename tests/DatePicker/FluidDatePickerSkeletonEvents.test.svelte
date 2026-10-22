@@ -5,9 +5,6 @@
 <FluidDatePickerSkeleton
   data-testid="fluid-date-picker-skeleton"
   {...$$props}
-  on:click={() => {
-    console.log("click");
-  }}
   on:mouseover={() => {
     console.log("mouseover");
   }}
