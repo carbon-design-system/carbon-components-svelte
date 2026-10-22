@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type LinkComponent from "carbon-components-svelte/Link/Link.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -50,9 +50,7 @@ describe("Link", () => {
 
   it("supports icon prop", () => {
     render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.querySelector(".bx--link__icon"));
-    assert(link);
+    const link = within(screen.getByTestId("link-with-icon")).getByRole("link");
 
     const iconWrapper = link.querySelector(".bx--link__icon");
     assert(iconWrapper);
@@ -62,13 +60,9 @@ describe("Link", () => {
 
   it("supports icon slot", () => {
     render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    // Find the second link with icon (first is from icon prop, second is from slot)
-    const linksWithIcons = links.filter((l) =>
-      l.querySelector(".bx--link__icon"),
+    const link = within(screen.getByTestId("link-with-icon-slot")).getByRole(
+      "link",
     );
-    const link = linksWithIcons[1];
-    assert(link);
 
     const iconWrapper = link.querySelector(".bx--link__icon");
     assert(iconWrapper);
@@ -126,15 +120,15 @@ describe("Link", () => {
   });
 
   it("does not call onClick when disabled", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Link);
+    const onDisabledClick = vi.fn();
+    render(Link, { props: { onDisabledClick } });
     const links = screen.getAllByRole("link", { name: "Carbon Design System" });
     const link = links.find((l) => l.getAttribute("aria-disabled") === "true");
     assert(link);
 
     await user.click(link);
 
-    expect(consoleLog).not.toHaveBeenCalledWith("disabled-click");
+    expect(onDisabledClick).not.toHaveBeenCalled();
   });
 
   it("supports muted variant", () => {
@@ -156,36 +150,39 @@ describe("Link", () => {
   });
 
   it("supports click and mouse events", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(Link);
+    const onClick = vi.fn();
+    const onMouseover = vi.fn();
+    const onMouseenter = vi.fn();
+    const onMouseleave = vi.fn();
+    render(Link, {
+      props: { onClick, onMouseover, onMouseenter, onMouseleave },
+    });
 
-    // Find the first link (default link) which has the click handler
+    // The first link (default link) has the handlers
     const links = screen.getAllByRole("link", { name: "Carbon Design System" });
     const link = links[0];
     assert(link);
 
     await user.click(link);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(onClick).toHaveBeenCalledTimes(1);
 
     await user.hover(link);
-    expect(consoleLog).toHaveBeenCalledWith("mouseover");
-
-    await user.hover(link);
-    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+    expect(onMouseover).toHaveBeenCalledTimes(1);
+    expect(onMouseenter).toHaveBeenCalledTimes(1);
 
     await user.unhover(link);
-    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-    expect(consoleLog).toHaveBeenCalledTimes(4);
+    expect(onMouseleave).toHaveBeenCalledTimes(1);
   });
 
-  it("prevents icon rendering when inline is true", () => {
+  it("does not render an icon on an inline link", () => {
     render(Link);
-    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
-    const link = links.find((l) => l.classList.contains("bx--link--inline"));
-    assert(link);
 
-    expect(link).toHaveClass("bx--link--inline");
-    expect(link.querySelector(".bx--link__icon")).not.toBeInTheDocument();
+    for (const testId of ["link-inline-icon", "link-inline-icon-slot"]) {
+      const link = within(screen.getByTestId(testId)).getByRole("link");
+      expect(link).toHaveClass("bx--link--inline");
+      expect(link.querySelector(".bx--link__icon")).not.toBeInTheDocument();
+      expect(link.querySelector("svg")).not.toBeInTheDocument();
+    }
   });
 
   describe("Generics", () => {

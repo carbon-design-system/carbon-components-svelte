@@ -6,8 +6,10 @@ import SideNavMenuRail from "./SideNavMenu.rail.test.svelte";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/746
 describe("SideNavMenu", () => {
+  // A closed non-rail SideNav is aria-hidden, which empties the button's
+  // accessible name, so look the button up by its text instead of by role name.
   const getMenuButton = () =>
-    screen.getByRole("button", { name: /Menu/, hidden: true });
+    screen.getByText("Menu").closest("button") as HTMLButtonElement;
 
   beforeEach(() => {
     // Reset global nav store state to ensure test isolation.
@@ -42,7 +44,7 @@ describe("SideNavMenu", () => {
   });
 
   it("allows expanded menus when rail is not used", () => {
-    render(SideNavMenuRail, { props: { rail: false, isOpen: true } });
+    render(SideNavMenuRail, { props: { rail: false, isOpen: false } });
 
     expect(getMenuButton()).toHaveAttribute("aria-expanded", "true");
   });

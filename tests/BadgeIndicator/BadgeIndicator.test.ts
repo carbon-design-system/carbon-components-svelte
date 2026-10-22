@@ -24,21 +24,21 @@ describe("BadgeIndicator", () => {
     const badge = screen.getByTestId("count").querySelector("div");
 
     expect(badge).toHaveClass("bx--badge-indicator--count");
-    expect(badge).toHaveTextContent("4");
+    expect(badge?.textContent?.trim()).toBe("4");
   });
 
   it("renders the boundary value 999 as-is", () => {
     render(BadgeIndicator);
     const badge = screen.getByTestId("boundary").querySelector("div");
 
-    expect(badge).toHaveTextContent("999");
+    expect(badge?.textContent?.trim()).toBe("999");
   });
 
   it("caps counts over 999 at '999+'", () => {
     render(BadgeIndicator);
     const badge = screen.getByTestId("overflow").querySelector("div");
 
-    expect(badge).toHaveTextContent("999+");
+    expect(badge?.textContent?.trim()).toBe("999+");
   });
 
   it("renders a string count as a custom label", () => {
@@ -46,7 +46,7 @@ describe("BadgeIndicator", () => {
     const badge = screen.getByTestId("label").querySelector("div");
 
     expect(badge).toHaveClass("bx--badge-indicator--count");
-    expect(badge).toHaveTextContent("1.2k");
+    expect(badge?.textContent?.trim()).toBe("1.2k");
   });
 
   it("forwards rest props to the underlying element", () => {

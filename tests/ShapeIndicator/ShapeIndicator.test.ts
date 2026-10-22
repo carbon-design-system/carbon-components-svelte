@@ -1,5 +1,27 @@
 import { render, screen } from "@testing-library/svelte";
+import Caution from "carbon-components-svelte/icons/Caution.svelte";
+import CircleFill from "carbon-components-svelte/icons/CircleFill.svelte";
+import CircleStroke from "carbon-components-svelte/icons/CircleStroke.svelte";
+import Critical from "carbon-components-svelte/icons/Critical.svelte";
+import CriticalSeverity from "carbon-components-svelte/icons/CriticalSeverity.svelte";
+import DiamondFill from "carbon-components-svelte/icons/DiamondFill.svelte";
+import LowSeverity from "carbon-components-svelte/icons/LowSeverity.svelte";
+import ShapeIndicatorIncomplete from "carbon-components-svelte/ShapeIndicator/ShapeIndicatorIncomplete.svelte";
 import ShapeIndicator from "./ShapeIndicator.test.svelte";
+
+const shapes = {
+  failed: Critical,
+  critical: CriticalSeverity,
+  high: Caution,
+  medium: DiamondFill,
+  low: LowSeverity,
+  cautious: Caution,
+  undefined: DiamondFill,
+  stable: CircleFill,
+  informative: LowSeverity,
+  incomplete: ShapeIndicatorIncomplete,
+  draft: CircleStroke,
+};
 
 describe("ShapeIndicator", () => {
   it("renders all kind variants with the correct shape class", () => {
@@ -24,6 +46,19 @@ describe("ShapeIndicator", () => {
       expect(indicator).toHaveClass("bx--shape-indicator");
       expect(indicator.querySelector("svg")).toHaveClass(
         `bx--shape-indicator--${kind}`,
+      );
+    }
+  });
+
+  it("renders the matching shape for each kind", () => {
+    render(ShapeIndicator);
+
+    for (const [kind, Shape] of Object.entries(shapes)) {
+      const indicator = screen.getByText(kind);
+      const { container } = render(Shape, { size: 16 });
+
+      expect(indicator.querySelector("svg")?.innerHTML).toBe(
+        container.querySelector("svg")?.innerHTML,
       );
     }
   });

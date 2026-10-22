@@ -3,6 +3,12 @@
 <script lang="ts">
   import Link from "carbon-components-svelte/Link/Link.svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
+
+  export let onClick: (event: MouseEvent) => void = () => {};
+  export let onMouseover: () => void = () => {};
+  export let onMouseenter: () => void = () => {};
+  export let onMouseleave: () => void = () => {};
+  export let onDisabledClick: () => void = () => {};
 </script>
 
 <div data-testid="default-link">
@@ -10,17 +16,11 @@
     href="https://www.carbondesignsystem.com/"
     on:click={(e) => {
       e.preventDefault();
-      console.log("click");
+      onClick(e);
     }}
-    on:mouseover={() => {
-      console.log("mouseover");
-    }}
-    on:mouseenter={() => {
-      console.log("mouseenter");
-    }}
-    on:mouseleave={() => {
-      console.log("mouseleave");
-    }}
+    on:mouseover={() => onMouseover()}
+    on:mouseenter={() => onMouseenter()}
+    on:mouseleave={() => onMouseleave()}
   >
     Carbon Design System
   </Link>
@@ -79,7 +79,7 @@
   <Link
     disabled
     href="https://www.carbondesignsystem.com/"
-    on:click={() => console.log("disabled-click")}
+    on:click={() => onDisabledClick()}
   >
     Carbon Design System
   </Link>
@@ -94,5 +94,18 @@
 <div data-testid="link-visited">
   <Link visited href="https://www.carbondesignsystem.com/">
     Carbon Design System
+  </Link>
+</div>
+
+<div data-testid="link-inline-icon">
+  <Link inline href="https://www.carbondesignsystem.com/" icon={Carbon}>
+    Carbon Design System
+  </Link>
+</div>
+
+<div data-testid="link-inline-icon-slot">
+  <Link inline href="https://www.carbondesignsystem.com/">
+    Carbon Design System
+    <svelte:fragment slot="icon"> <Carbon /> </svelte:fragment>
   </Link>
 </div>

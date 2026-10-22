@@ -115,7 +115,7 @@ describe("UnorderedList", () => {
       const lists = screen.getAllByRole("list");
       for (const list of lists) {
         expect(list.tagName).toBe("UL");
-        expect(list.children).toBeTruthy();
+        expect(list.children.length).toBeGreaterThan(0);
         for (const child of Array.from(list.children)) {
           expect(child.tagName).toBe("LI");
         }

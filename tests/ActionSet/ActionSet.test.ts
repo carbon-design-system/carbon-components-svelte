@@ -82,4 +82,29 @@ describe("ActionSet", () => {
     expect(buttons[1]).toHaveClass("bx--btn--field");
     expect(buttons[1]).not.toHaveClass("bx--btn--sm");
   });
+
+  it.each([
+    ["sm", "bx--btn--sm"],
+    ["md", "bx--btn--field"],
+    ["lg", null],
+    ["xl", "bx--btn--lg"],
+    ["2xl", "bx--btn--xl"],
+  ] as const)(
+    "maps the %s size to the child button's size class",
+    (size, expected) => {
+      render(ActionSetSizeOverride, { size });
+
+      const sizeClasses = [
+        "bx--btn--xs",
+        "bx--btn--sm",
+        "bx--btn--field",
+        "bx--btn--lg",
+        "bx--btn--xl",
+      ];
+      const button = screen.getAllByRole("button")[0];
+      expect(sizeClasses.filter((c) => button.classList.contains(c))).toEqual(
+        expected ? [expected] : [],
+      );
+    },
+  );
 });
