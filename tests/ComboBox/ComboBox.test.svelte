@@ -46,6 +46,7 @@
   export let filterMode: ComponentProps<ComboBox>["filterMode"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let wrapOptions: ComponentProps<ComboBox>["wrapOptions"] = false;
+  export let maxHeight: ComponentProps<ComboBox>["maxHeight"] = undefined;
   export let ariaLabel: ComponentProps<ComboBox>["aria-label"] = undefined;
   export let fluid: ComponentProps<ComboBox>["fluid"] = false;
   export let condensed: ComponentProps<ComboBox>["condensed"] = false;
@@ -86,6 +87,7 @@
   {filterMode}
   {portalMenu}
   {wrapOptions}
+  {maxHeight}
   on:select={(e) => onSelect(e.detail)}
   on:clear={(e) => {
     onClear(e);

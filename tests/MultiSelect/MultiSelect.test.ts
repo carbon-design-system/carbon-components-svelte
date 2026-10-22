@@ -1519,6 +1519,19 @@ describe("MultiSelect", () => {
     await expectScopedActiveDescendant(comboboxes[1], "second");
   });
 
+  describe("maxHeight", () => {
+    it("should override the size-based default on a portaled menu", async () => {
+      render(MultiSelect, {
+        props: { items, portalMenu: true, maxHeight: 200 },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu.style.maxHeight).toBe("200px");
+    });
+  });
+
   describe("fluid variant", () => {
     const getCombobox = () => screen.getByRole("combobox");
 

@@ -225,6 +225,15 @@
    */
   export let portalMenu = undefined;
 
+  /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * Only applies to a portaled menu that is not virtualized.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
   /** Set an id for the list box component */
   export let id = uniqueId();
 
@@ -1005,9 +1014,10 @@
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-          : effectivePortalMenu
-            ? `max-height: ${menuMaxHeight};`
-            : undefined}
+          : undefined}
+        maxHeight={!isWindowed && effectivePortalMenu
+          ? (maxHeight ?? menuMaxHeight)
+          : undefined}
       >
         {#if isVirtualized}
           <VirtualWindow

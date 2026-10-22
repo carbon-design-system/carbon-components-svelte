@@ -59,6 +59,14 @@
   export let wrapOptions = false;
 
   /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * DOM id of the highlighted option (`{instanceId}-{item.id}`).
    * Applied as a two-node class change so `{#each}` does not re-run
    * every `ListBoxMenuItem` on ArrowDown.
@@ -75,6 +83,7 @@
 
   import { setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { toCssLength } from "../utils/css-length.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     createHighlightCursor,
@@ -86,6 +95,9 @@
   setContext(HIGHLIGHT_CURSOR_KEY, highlightCursor);
 
   $: highlightCursor.set(highlightedId, { scroll: highlightScroll });
+
+  $: maxHeightStyle = maxHeight ? `max-height: ${toCssLength(maxHeight)};` : "";
+  $: menuStyle = [maxHeightStyle, $$restProps.style].filter(Boolean).join(" ");
 </script>
 
 {#if portal}
@@ -102,7 +114,7 @@
         class:bx--list-box__menu--align-end={align === "end"}
         class:bx--list-box__menu--wrap-options={wrapOptions}
         {...$$restProps}
-        style="position: static; {$$restProps.style || ""}"
+        style="position: static; {menuStyle}"
         on:scroll
         on:mouseleave
       >
@@ -119,6 +131,7 @@
     class:bx--list-box__menu--align-end={align === "end"}
     class:bx--list-box__menu--wrap-options={wrapOptions}
     {...$$restProps}
+    style={menuStyle || undefined}
     on:scroll
     on:mouseleave
   >
