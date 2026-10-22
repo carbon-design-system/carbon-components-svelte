@@ -279,8 +279,7 @@
   @include date-picker-input-wrapper;
 }
 
-// Readonly date picker (v11 backport). The modal companion rule that keeps
-// the input transparent on a `$field-02` modal lives in modal/_modal.scss.
+// Readonly date picker (v11 backport).
 // The `readonly` prop marks the wrapper. `allowInput={false}` also makes the
 // input `[readonly]`, but the field is still active: it opens on click.
 @mixin date-picker-readonly {

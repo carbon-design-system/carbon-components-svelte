@@ -155,10 +155,13 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import Button from "../Button/Button.svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    LAYER_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -214,6 +217,9 @@
   trackModal(sharedOpen);
 
   setContext(MODAL_CONTEXT_KEY, {});
+  // As in v11, the modal starts a layer at level 0 wherever it renders,
+  // and its body is a layer at level 1, so a `Layer` inside sits at 2.
+  setContext(LAYER_CONTEXT_KEY, readable(2));
 
   // Initial mount already runs the reactive block below, which handles
   // dispatching "open" and the `prevOpen`/`focusReturn.save()` bookkeeping.
@@ -255,6 +261,7 @@
   role="presentation"
   {id}
   class:bx--modal={true}
+  class:bx--layer-one={true}
   class:bx--modal-tall={!passiveModal}
   class:is-visible={open}
   class:bx--modal--danger={danger}
@@ -387,6 +394,7 @@
     <div
       id={modalBodyId}
       class:bx--modal-content={true}
+      class:bx--layer-two={true}
       class:bx--modal-content--with-form={hasForm}
       class:bx--modal-scroll-content={hasScrollingContent}
       tabindex={hasScrollingContent ? "0" : undefined}

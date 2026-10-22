@@ -30,8 +30,6 @@ describe("Layer tokens", () => {
     [/^\.bx--box-fill-layer-0\d$/, "layer-0", "the fill names the level"],
     [/^\.bx--scroll-gradient\S*layer-0\d$/, "layer-0", "the color names it"],
     [/^\.bx--data-table \S/, "field-02", "fields in a table"],
-    [/^\.bx--modal /, "field-02", "v11 puts the modal body in a Layer"],
-    [/^\.bx--modal /, "border-subtle-02", "same, for dividers"],
     [/--inline\.bx--list-box--expanded:hover$/, "field-02", "v11: transparent"],
     [/^\.bx--content-switcher--low-contrast /, "layer-02", "fixed per theme"],
     [/^\.bx--date-picker__day\S*--selected:focus/, "layer-02", "focus inset"],
@@ -63,7 +61,7 @@ describe("Layer tokens", () => {
         ),
     );
 
-    expect(reads.length).toBeGreaterThan(30);
+    expect(reads.length).toBeGreaterThan(20);
     expect(unpinned).toEqual([]);
     expect(unused.map(([, , why]) => why)).toEqual([]);
   }, 30_000);

@@ -229,13 +229,12 @@ const contextCases: Case[] = [
     value: RED,
   },
   {
-    // Needs `@layer` or a token-based layer context, not a flatten, so it
-    // stays a documented gap.
+    // The modal body is a Layer, so the field reads `$field` from the base
+    // rule instead of a `.bx--modal .bx--text-input` override.
     name: "text input background inside a modal",
     target: id("modal-input"),
     property: "background-color",
     value: PINK,
-    gap: ".bx--modal .bx--text-input (0,2,0)",
   },
 ];
 

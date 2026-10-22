@@ -11,14 +11,18 @@
    */
   export let ref = null;
 
-  import { getContext, onMount } from "svelte";
-  import { writable } from "svelte/store";
+  import { getContext, onMount, setContext } from "svelte";
+  import { readable, writable } from "svelte/store";
+  import { LAYER_CONTEXT_KEY } from "../constants/context-keys.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 
   const composedModalCtx = getContext("carbon:ComposedModal");
   const modalLabel = composedModalCtx?.label ?? writable(undefined);
   const modalTitle = composedModalCtx?.title ?? writable(undefined);
   const modalIds = composedModalCtx?.ids ?? writable({});
+
+  // As in v11, the body is a layer at level 1, so a `Layer` inside sits at 2.
+  setContext(LAYER_CONTEXT_KEY, readable(2));
 
   // Give the body an id ComposedModal can reference from `aria-describedby`
   // in alert mode. A consumer `id` wins and is reported instead.
@@ -46,6 +50,7 @@
   role={hasScrollingContent ? "region" : undefined}
   aria-labelledby={hasScrollingContent ? regionLabelledby : undefined}
   class:bx--modal-content={true}
+  class:bx--layer-two={true}
   class:bx--modal-content--with-form={hasForm}
   class:bx--modal-scroll-content={hasScrollingContent}
   on:focusin={(event) => {
