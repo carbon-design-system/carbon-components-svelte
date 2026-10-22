@@ -280,6 +280,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ComposedModal
     tags:
       - input-control
+  confirm-modal:
+    name: Confirm modal
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/confirm-modal.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ConfirmModal
   contained-list:
     name: Contained list
     status: stable
@@ -619,6 +631,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/InterstitialScreen
+  layer:
+    name: Layer
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/layer.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Layer
   lazy-mount:
     name: Lazy mount
     status: stable
