@@ -83,6 +83,19 @@ export function createTooltipHandoff({
   }
 
   /**
+   * Hide on the user's request (Escape). Cancel any pending enter or leave,
+   * clear the slot, and end the group's skip window. The user asked for
+   * the tooltip to go, so the next one in the group waits out its enter
+   * delay and fades in, rather than popping up at once.
+   */
+  function dismiss() {
+    scheduleTooltip.cancel();
+    if (get(activeTooltip) !== token) return;
+    group.scope.releasedAt = Number.NEGATIVE_INFINITY;
+    activeTooltip.set(null);
+  }
+
+  /**
    * Call `onShow` and claim the slot after the enter delay, or right away
    * on a warm handoff.
    * @param {() => void} onShow
@@ -116,6 +129,7 @@ export function createTooltipHandoff({
     scheduleLeave,
     claim,
     release,
+    dismiss,
     cancel: scheduleTooltip.cancel,
   };
 }

@@ -53,6 +53,26 @@ describe("TooltipGroup", () => {
     expect(texts()).toEqual(["List view"]);
   });
 
+  it("ends the warm handoff when Escape hides a tooltip", async () => {
+    const { edit, copy } = await setup();
+
+    await fireEvent.mouseEnter(edit);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(texts()).toEqual(["Edit"]);
+
+    await fireEvent.keyDown(edit, { key: "Escape" });
+    expect(texts()).toEqual([]);
+
+    // The user asked for the tooltip to go, so the neighbor waits out
+    // the enter delay instead of opening at once.
+    await fireEvent.mouseLeave(edit);
+    await fireEvent.mouseEnter(copy);
+    await tick();
+    expect(texts()).toEqual([]);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(texts()).toEqual(["Copy link"]);
+  });
+
   it("waits for the enter delay when crossing the group boundary", async () => {
     const { edit, deleteButton } = await setup();
 
@@ -206,6 +226,26 @@ describe("TooltipGroup", () => {
     await fireEvent.mouseEnter(del);
     expect(icon).toHaveClass("bx--tooltip--hidden");
     expect(del).not.toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("fades in the next inline tooltip after Escape hides one", async () => {
+    render(TooltipGroupInline);
+    await tick();
+
+    const edit = screen.getByRole("button", { name: "Edit" });
+    const del = screen.getByRole("button", { name: "Delete" });
+
+    await fireEvent.mouseEnter(edit);
+    await vi.advanceTimersByTimeAsync(100);
+    await fireEvent.keyDown(edit, { key: "Escape" });
+    expect(edit).toHaveClass("bx--tooltip--hidden");
+
+    await fireEvent.mouseLeave(edit);
+    await fireEvent.mouseEnter(del);
+    expect(del).toHaveClass("bx--tooltip--hidden");
+    await vi.advanceTimersByTimeAsync(100);
+    expect(del).not.toHaveClass("bx--tooltip--hidden");
+    expect(del).not.toHaveClass("bx--tooltip--instant");
   });
 
   it("keeps a focused inline Button holding the slot after the pointer leaves", async () => {

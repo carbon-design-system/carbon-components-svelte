@@ -165,7 +165,9 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { formButtonSize } from "../utils/form-button-size.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -204,9 +206,22 @@
 
   let hovered = false;
   let focused = false;
+  // Set by Escape. The tooltip stays hidden while the button keeps hover
+  // or focus, until the next pointer enter or focus (WCAG 1.4.13).
+  let dismissed = false;
 
   $: portalOpen =
-    usePortal && !disabled && (hovered || focused) && $tooltipActive;
+    usePortal &&
+    !disabled &&
+    !dismissed &&
+    (hovered || focused) &&
+    $tooltipActive;
+  $: inlineOpen =
+    hasTooltip &&
+    !disabled &&
+    !dismissed &&
+    (hovered || focused) &&
+    $tooltipActive;
 
   function dismissPortalTooltip() {
     tooltipHandoff.cancel();
@@ -238,6 +253,7 @@
   function handleMouseenter() {
     if (!hasTooltip) return;
     hovered = true;
+    dismissed = false;
     tooltipHandoff.scheduleEnter(() => {
       tooltipShown = true;
     });
@@ -255,6 +271,7 @@
 
   function handlePortalMouseEnter() {
     if (!usePortal || disabled) return;
+    dismissed = false;
     tooltipHandoff.scheduleEnter(() => {
       hovered = true;
     });
@@ -272,9 +289,30 @@
   function handleFocus() {
     if (!(hasTooltip || usePortal) || disabled) return;
     focused = true;
+    dismissed = false;
     tooltipShown = true;
     tooltipHandoff.claim({ instant: true });
   }
+
+  // Listens on `window` in the capture phase, as TooltipIcon does, so a
+  // hovered tooltip also hides while focus is elsewhere, and an ancestor
+  // such as a Modal doesn't also see the Escape that hid it.
+  function handleKeydown(event) {
+    if (event.key !== "Escape" || !(portalOpen || inlineOpen)) return;
+    // Escape that cancels an IME composition is not a dismissal.
+    if (isImeComposition(event)) return;
+    event.stopPropagation();
+    dismissed = true;
+    tooltipShown = false;
+    tooltipHandoff.dismiss();
+  }
+
+  $: escapeListener = {
+    enabled: portalOpen || inlineOpen,
+    type: "keydown",
+    handler: handleKeydown,
+    options: { capture: true },
+  };
 
   function handleBlur() {
     if (!(hasTooltip || usePortal)) return;
@@ -352,7 +390,9 @@
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
       hasTooltip &&
-        (tooltipHidden || (hovered && !tooltipShown)) &&
+        (tooltipHidden ||
+          (dismissed && (hovered || focused)) ||
+          (hovered && !tooltipShown)) &&
         "bx--tooltip--hidden",
       hasTooltip && $tooltipInstant && "bx--tooltip--instant",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
@@ -385,6 +425,7 @@
     <div class:bx--btn__badge-wrapper={true}>
       <a
         bind:this={ref}
+        use:dismiss={escapeListener}
         {...buttonProps}
         on:click={handleClick}
         on:click
@@ -436,6 +477,7 @@
   {:else}
     <a
       bind:this={ref}
+      use:dismiss={escapeListener}
       {...buttonProps}
       on:click={handleClick}
       on:click
@@ -488,6 +530,7 @@
     <button
       type="button"
       bind:this={ref}
+      use:dismiss={escapeListener}
       {...buttonProps}
       on:click={handleClick}
       on:click
@@ -540,6 +583,7 @@
   <button
     type="button"
     bind:this={ref}
+    use:dismiss={escapeListener}
     {...buttonProps}
     on:click={handleClick}
     on:click

@@ -34,5 +34,11 @@ export function createTooltipHandoff(options?: {
    */
   claim: (options?: { instant?: boolean }) => void;
   release: () => void;
+  /**
+   * Hide on the user's request (Escape): cancel pending timers, clear the
+   * slot, and end the group's skip window, so the next tooltip waits out
+   * its enter delay.
+   */
+  dismiss: () => void;
   cancel: () => void;
 };
