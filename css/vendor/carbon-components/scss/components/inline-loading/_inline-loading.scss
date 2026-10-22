@@ -40,6 +40,13 @@
     @include type-style('label-01');
   }
 
+  // ccs: v11 `inline-loading--btn`. No minimum height inside a button, so
+  // a modal footer button that aligns on the baseline keeps the status on
+  // the label's line.
+  .#{$prefix}--btn .#{$prefix}--inline-loading--btn {
+    min-height: 0;
+  }
+
   .#{$prefix}--inline-loading__animation {
     position: relative;
     display: flex;

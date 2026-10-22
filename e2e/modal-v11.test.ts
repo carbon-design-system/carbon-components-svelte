@@ -175,3 +175,73 @@ test.describe("Modal heading", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("Modal styles", () => {
+  test("match v11 container, header and footer spacing", async ({ page }) => {
+    await openModal(page);
+    await page.getByTestId("status-active").click();
+    await expect(
+      page.getByTestId("modal").locator(".bx--inline-loading__text"),
+    ).toBeVisible();
+
+    const read = await page.evaluate(() => {
+      const root = document.querySelector('[data-testid="modal"]');
+      const find = (selector: string) => {
+        const el = root?.querySelector(selector);
+        if (!(el instanceof HTMLElement)) throw new Error(`no ${selector}`);
+        return el;
+      };
+      const style = (el: HTMLElement) => getComputedStyle(el);
+      const contentWidth = (el: HTMLElement) =>
+        el.clientWidth -
+        Number.parseFloat(style(el).paddingLeft) -
+        Number.parseFloat(style(el).paddingRight);
+      const container = find(".bx--modal-container");
+      const header = find(".bx--modal-header");
+      const heading = find(".bx--modal-header__heading");
+      const content = find(".bx--modal-content");
+      const paragraph = find(".bx--modal-content > p");
+      const cancel = find(".bx--modal-footer > .bx--btn--secondary");
+      const loaderText = find(".bx--inline-loading__text");
+
+      const probe = document.createElement("div");
+      probe.style.color = "var(--cds-border-subtle-01)";
+      container.append(probe);
+      const borderSubtle = style(probe).color;
+      probe.remove();
+
+      const label = document.createRange();
+      label.selectNodeContents(cancel);
+
+      return {
+        border: `${style(container).borderTopWidth} ${style(container).borderTopStyle} ${style(container).borderTopColor}`,
+        borderExpected: `1px solid ${borderSubtle}`,
+        headerMaxHeight: style(header).maxHeight,
+        headerMaxHeightExpected: `${window.innerHeight / 2}px`,
+        headerOverflowY: style(header).overflowY,
+        headingPadding: Number.parseFloat(style(heading).paddingRight),
+        headingPaddingExpected: 0.2 * contentWidth(header) - 48,
+        paragraphPadding: Number.parseFloat(style(paragraph).paddingRight),
+        paragraphPaddingExpected: 0.2 * contentWidth(content) - 32,
+        buttonPaddingTop: style(cancel).paddingTop,
+        buttonAlignItems: style(cancel).alignItems,
+        loaderOffset:
+          loaderText.getBoundingClientRect().top -
+          label.getBoundingClientRect().top,
+      };
+    });
+
+    expect.soft(read.border).toBe(read.borderExpected);
+    expect.soft(read.headerMaxHeight).toBe(read.headerMaxHeightExpected);
+    expect.soft(read.headerOverflowY).toBe("auto");
+    expect
+      .soft(read.headingPadding)
+      .toBeCloseTo(read.headingPaddingExpected, 0);
+    expect
+      .soft(read.paragraphPadding)
+      .toBeCloseTo(read.paragraphPaddingExpected, 0);
+    expect.soft(read.buttonPaddingTop).toBe("14px");
+    expect.soft(read.buttonAlignItems).toBe("baseline");
+    expect.soft(Math.abs(read.loaderOffset)).toBeLessThanOrEqual(1);
+  });
+});

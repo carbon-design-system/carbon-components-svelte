@@ -34,6 +34,7 @@ describe("Layer tokens", () => {
     [/^\.bx--content-switcher--low-contrast /, "layer-02", "fixed per theme"],
     [/^\.bx--date-picker__day\S*--selected:focus/, "layer-02", "focus inset"],
     [/^\.bx--toggle-input:(focus|active)\+/, "layer-02", "v11: no gap"],
+    [/^\.bx--modal-container$/, "border-subtle-01", "modal edge"],
   ];
   const NUMBERED =
     /var\(--cds-((?:layer|field|border-(?:subtle|strong|tile))[a-z-]*-0[0-3])\)/g;

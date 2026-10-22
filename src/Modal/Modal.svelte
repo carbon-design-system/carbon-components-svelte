@@ -500,6 +500,7 @@
             >
               {#if button.loading}
                 <InlineLoading
+                  class="bx--inline-loading--btn"
                   status="active"
                   description={button.loadingDescription ?? "Loading"}
                 />
@@ -522,6 +523,7 @@
           >
             {#if secondaryButtonLoading}
               <InlineLoading
+                class="bx--inline-loading--btn"
                 status="active"
                 description={secondaryButtonLoadingDescription}
               />
@@ -546,6 +548,7 @@
         >
           {#if primaryBusy}
             <InlineLoading
+              class="bx--inline-loading--btn"
               status={primaryStatus}
               description={primaryButtonLoadingDescription}
               iconDescription={primaryButtonLoadingIconDescription}
