@@ -160,7 +160,7 @@ export const COMPONENT_GROUPS: TokenGroupDefinition[] = [
   {
     id: "tag",
     label: "Tag",
-    description: "Tag backgrounds, text and hover colors, by tag type.",
+    description: "Tag backgrounds, text, hover and border colors, by tag type.",
     prefix: "tag",
   },
   {
