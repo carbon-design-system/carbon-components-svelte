@@ -291,6 +291,9 @@ function lastSignificant(out, end = out.length) {
  */
 function regexAllowed(previous) {
   if (!previous) return true;
+  // `i++ / 2` divides; `${/x/.test(a)}` starts an expression.
+  if (previous.text === "++" || previous.text === "--") return false;
+  if (previous.text === "${") return true;
   if (previous.type === "operator" || previous.type === "punctuation") {
     return true;
   }
