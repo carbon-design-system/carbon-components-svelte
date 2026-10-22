@@ -9,11 +9,13 @@ import type {
   formReset,
   fuzzyMatch,
   getAvatarBackgroundColor,
+  getChartTheme,
   getInitials,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
   themeScript,
+  toChartTheme,
   trapFocus,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
@@ -22,6 +24,7 @@ import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBo
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
+import type { ChartTheme } from "carbon-components-svelte/src/Theme/chart-theme.js";
 import type {
   CarbonTheme,
   ThemeProps,
@@ -66,6 +69,8 @@ type _BreakpointSize = BreakpointSize;
 type _Breakpoints = typeof breakpoints;
 type _Button = Button;
 type _CarbonTheme = CarbonTheme;
+type _ChartTheme = ChartTheme;
+type _GetChartTheme = ReturnType<typeof getChartTheme>;
 type _ComboBoxSkeleton = ComboBoxSkeleton;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
@@ -81,6 +86,7 @@ type _ColorTokenValue = (typeof colorTokens)[ColorToken]["g100"];
 type _TypeTokenSize = (typeof typeTokens)[TypeToken]["font-size"];
 type _ThemeScript = ReturnType<typeof themeScript>;
 type _Themes = typeof themes;
+type _ToChartTheme = ReturnType<typeof toChartTheme>;
 type _TimePickerSkeleton = TimePickerSkeleton;
 type _Dismiss = ReturnType<typeof dismiss>;
 type _DismissParams = Parameters<typeof dismiss>[1];

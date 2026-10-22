@@ -33,3 +33,9 @@ export const PROFILE_MENU_CONTEXT_KEY = "carbon:ProfileMenu";
  * itself for the field and report its state back.
  */
 export const AI_LABEL_HOST_CONTEXT_KEY = "carbon:AILabelHost";
+
+/**
+ * Set by `ThemeZone` to a readable store of its theme; read by portals so
+ * content they move out of the zone keeps its theme.
+ */
+export const THEME_ZONE_CONTEXT_KEY = "carbon:ThemeZone";

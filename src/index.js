@@ -231,6 +231,7 @@ export { default as PasswordInput } from "./TextInput/PasswordInput.svelte";
 export { default as PasswordInputSkeleton } from "./TextInput/PasswordInputSkeleton.svelte";
 export { default as TextInput } from "./TextInput/TextInput.svelte";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svelte";
+export { getChartTheme, toChartTheme } from "./Theme/chart-theme.js";
 export { default as Theme } from "./Theme/Theme.svelte";
 export { themeScript } from "./Theme/theme-script.js";
 export { default as ClickableTile } from "./Tile/ClickableTile.svelte";
