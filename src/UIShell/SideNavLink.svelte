@@ -38,17 +38,50 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
+  import { fuzzyMatch, highlightSegmentsToHtml } from "../utils/fuzzy-match.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const menu = getContext("carbon:SideNavMenu");
   const key = {};
 
   $: menu?.setCurrent(key, isSelected);
 
-  onMount(() => () => menu?.setCurrent(key, false));
+  // A `SideNavFilter` shares its query through the nearest `SideNavItems`.
+  // An item reports whether it matches to its parent menu, else to the list.
+  const itemsCtx = getContext("carbon:SideNavItems");
+  const query = itemsCtx?.query ?? readable("");
+  const filterId = uniqueId();
+
+  $: matchText = text ?? ref?.textContent ?? "";
+  $: matchResult = fuzzyMatch(matchText, $query);
+  $: matches = matchResult.matched;
+  $: (menu?.setChildMatch ?? itemsCtx?.setItemMatch)?.(filterId, matches);
+  $: hiddenByFilter = $query.length > 0 && !matches;
+
+  // Highlighting only applies to the plain `text` prop; a custom default
+  // slot is rendered as-is.
+  $: labelHtml =
+    text && !$$slots.default && $query.length > 0
+      ? highlightSegmentsToHtml(
+          text,
+          matchResult.indices,
+          "bx--side-nav-filter__highlight",
+        )
+      : null;
+
+  onMount(() => () => {
+    menu?.setCurrent(key, false);
+    (menu?.unregisterChild ?? itemsCtx?.unregisterItem)?.(filterId);
+  });
 </script>
 
-<li class:bx--side-nav__item={true} class:bx--side-nav__item--large={large}>
+<li
+  hidden={hiddenByFilter || undefined}
+  class:bx--side-nav__item={true}
+  class:bx--side-nav__item--large={large}
+>
   <a
     bind:this={ref}
     aria-current={isSelected ? "page" : undefined}
@@ -67,7 +100,13 @@
         <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
-    <span class:bx--side-nav__link-text={true}> <slot> {text} </slot> </span>
+    <span class:bx--side-nav__link-text={true}>
+      {#if labelHtml}
+        {@html labelHtml}
+      {:else}
+        <slot> {text} </slot>
+      {/if}
+    </span>
     {#if $$slots.badge}
       <div class:bx--side-nav__link-badge={true}><slot name="badge" /></div>
     {/if}

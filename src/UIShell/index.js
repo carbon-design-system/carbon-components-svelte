@@ -21,6 +21,7 @@ export { default as ProfileMenuItem } from "./ProfileMenuItem.svelte";
 export { default as ProfileMenuList } from "./ProfileMenuList.svelte";
 export { default as SideNav } from "./SideNav.svelte";
 export { default as SideNavDivider } from "./SideNavDivider.svelte";
+export { default as SideNavFilter } from "./SideNavFilter.svelte";
 export { default as SideNavItems } from "./SideNavItems.svelte";
 export { default as SideNavLink } from "./SideNavLink.svelte";
 export { default as SideNavMenu } from "./SideNavMenu.svelte";

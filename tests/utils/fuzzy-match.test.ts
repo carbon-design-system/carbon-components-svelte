@@ -1,5 +1,9 @@
 // @vitest-environment node
-import { fuzzyMatch, highlightSegments } from "../../src/utils/fuzzy-match.js";
+import {
+  fuzzyMatch,
+  highlightSegments,
+  highlightSegmentsToHtml,
+} from "../../src/utils/fuzzy-match.js";
 
 describe("fuzzyMatch", () => {
   it("empty query matches with no highlighted indices", () => {
@@ -119,5 +123,23 @@ describe("highlightSegments", () => {
       { text: "Data", match: true },
       { text: " Plans", match: false },
     ]);
+  });
+});
+
+describe("highlightSegmentsToHtml", () => {
+  it("wraps each matched run in a <strong> with the class", () => {
+    expect(
+      highlightSegmentsToHtml("Databases", [0, 1, 2, 3], "highlight"),
+    ).toBe('<strong class="highlight">Data</strong>bases');
+  });
+
+  it("escapes markup in matched and unmatched runs", () => {
+    expect(highlightSegmentsToHtml("A<b>&c", [1], "highlight")).toBe(
+      'A<strong class="highlight">&lt;</strong>b&gt;&amp;c',
+    );
+  });
+
+  it("returns the escaped text when there are no indices", () => {
+    expect(highlightSegmentsToHtml("a & b", [], "highlight")).toBe("a &amp; b");
   });
 });

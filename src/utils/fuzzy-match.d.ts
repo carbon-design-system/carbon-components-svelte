@@ -35,3 +35,13 @@ export function highlightSegments(
   text: string,
   indices: number[],
 ): Array<{ text: string; match: boolean }>;
+
+/**
+ * Render `text` as one HTML string, escaping it and wrapping each matched run
+ * in a `<strong class={highlightClass}>`.
+ */
+export function highlightSegmentsToHtml(
+  text: string,
+  indices: number[],
+  highlightClass: string,
+): string;

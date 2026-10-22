@@ -40,6 +40,7 @@
   import { getContext, onMount, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { uniqueId } from "../utils/unique-id.js";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
   const parentMenu = getContext("carbon:SideNavMenu");
@@ -60,7 +61,49 @@
     currentKeys = currentKeys;
   }
 
-  setContext("carbon:SideNavMenu", { depth, iconDepth, setCurrent });
+  // A `SideNavFilter` shares its query through the nearest `SideNavItems`. The
+  // menu is visible while any of its own items (or nested menus) match, and
+  // reports that to its parent menu, else to the list.
+  const itemsCtx = getContext("carbon:SideNavItems");
+  const query = itemsCtx?.query ?? readable("");
+  const filterId = uniqueId();
+
+  /** @type {Map<string, boolean>} */
+  const childMatches = new Map();
+  const anyChildVisible = writable(false);
+
+  function recomputeChildVisible() {
+    anyChildVisible.set(Array.from(childMatches.values()).some(Boolean));
+  }
+
+  /**
+   * @param {string} childId
+   * @param {boolean} isVisible
+   */
+  function setChildMatch(childId, isVisible) {
+    childMatches.set(childId, isVisible);
+    recomputeChildVisible();
+  }
+
+  /** @param {string} childId */
+  function unregisterChild(childId) {
+    childMatches.delete(childId);
+    recomputeChildVisible();
+  }
+
+  setContext("carbon:SideNavMenu", {
+    depth,
+    iconDepth,
+    setCurrent,
+    setChildMatch,
+    unregisterChild,
+  });
+
+  $: groupVisible = $query.length === 0 || $anyChildVisible;
+  $: (parentMenu?.setChildMatch ?? itemsCtx?.setItemMatch)?.(
+    filterId,
+    groupVisible,
+  );
 
   $: iconDepth.set($parentIconDepth + (icon || $$slots.icon ? 1 : 0));
 
@@ -76,16 +119,42 @@
     expanded = false;
   }
 
+  // While a filter has matches in this menu it opens, and it goes back to
+  // its prior state once the filter clears. Run from a function so toggling
+  // the menu by hand while filtering doesn't re-apply the filter's state.
+  let savedExpanded = expanded;
+  let wasFiltering = false;
+
+  /**
+   * @param {boolean} filtering
+   * @param {boolean} hasMatch
+   */
+  function syncFilterExpansion(filtering, hasMatch) {
+    if (filtering && !wasFiltering) savedExpanded = expanded;
+    if (filtering) {
+      if (hasMatch) expanded = true;
+    } else if (wasFiltering) {
+      expanded = savedExpanded;
+    }
+    wasFiltering = filtering;
+  }
+
+  $: syncFilterExpansion($query.length > 0, $anyChildVisible);
+
   onMount(() => {
     if (menuRef?.querySelector('[aria-current="page"]')) {
       expanded = true;
     }
 
-    return () => parentMenu?.setCurrent(key, false);
+    return () => {
+      parentMenu?.setCurrent(key, false);
+      (parentMenu?.unregisterChild ?? itemsCtx?.unregisterItem)?.(filterId);
+    };
   });
 </script>
 
 <li
+  hidden={!groupVisible || undefined}
   class:bx--side-nav__item={true}
   class:bx--side-nav__item--icon={icon || $$slots.icon}
   class:bx--side-nav__item--large={large}

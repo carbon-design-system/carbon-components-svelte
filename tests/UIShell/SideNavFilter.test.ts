@@ -1,0 +1,235 @@
+import { render, screen } from "@testing-library/svelte";
+import { user } from "../utils/user";
+import SideNavFilterTest from "./SideNavFilter.test.svelte";
+import SideNavFilterNested from "./SideNavFilterNested.test.svelte";
+
+describe("SideNavFilter", () => {
+  it("hides non-matching links and keeps matching ones visible", async () => {
+    render(SideNavFilterTest);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "dashboard",
+    );
+
+    expect(screen.getByRole("link", { name: "Dashboard" })).toBeVisible();
+    expect(
+      screen.queryByRole("link", { name: "Resource list" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("highlights the matched substring in a visible link's label", async () => {
+    render(SideNavFilterTest);
+
+    const link = screen.getByRole("link", { name: "Dashboard" });
+    expect(
+      link.querySelector(".bx--side-nav-filter__highlight"),
+    ).not.toBeInTheDocument();
+
+    await user.type(screen.getByRole("searchbox", { name: "Filter" }), "dash");
+
+    const highlight = link.querySelector(".bx--side-nav-filter__highlight");
+    expect(highlight).toHaveTextContent("Dash");
+    expect(link).toHaveTextContent("Dashboard");
+  });
+
+  it("force-expands a collapsed SideNavMenu containing a match and hides it when no child matches", async () => {
+    render(SideNavFilterTest);
+
+    const getMenuButton = () =>
+      screen.getByRole("button", { name: "Kubernetes" });
+
+    expect(getMenuButton()).toHaveAttribute("aria-expanded", "false");
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "clusters",
+    );
+
+    expect(getMenuButton()).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("link", { name: "Clusters" })).toBeVisible();
+    expect(
+      screen.queryByRole("link", { name: "Worker pools" }),
+    ).not.toBeInTheDocument();
+
+    await user.clear(screen.getByRole("searchbox", { name: "Filter" }));
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "no such nav item",
+    );
+
+    expect(screen.queryByRole("button", { name: "Kubernetes" })).toBeNull();
+  });
+
+  it("restores the original expand state when the filter is cleared", async () => {
+    render(SideNavFilterTest);
+
+    const input = screen.getByRole("searchbox", { name: "Filter" });
+    await user.type(input, "clusters");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+
+    await user.clear(input);
+
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    expect(screen.getByRole("link", { name: "Dashboard" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "Resource list" })).toBeVisible();
+  });
+
+  it("shows the empty state when nothing matches", async () => {
+    render(SideNavFilterTest);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "no such nav item",
+    );
+
+    expect(screen.getByText("No results found")).toBeInTheDocument();
+  });
+
+  it("does not show the empty state before typing or once a match exists", async () => {
+    render(SideNavFilterTest);
+
+    expect(screen.queryByText("No results found")).not.toBeInTheDocument();
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "dashboard",
+    );
+
+    expect(screen.queryByText("No results found")).not.toBeInTheDocument();
+  });
+
+  it("moves focus with the arrow keys only across currently-visible rows", async () => {
+    render(SideNavFilterTest);
+
+    const input = screen.getByRole("searchbox", { name: "Filter" });
+    await user.type(input, "clusters");
+
+    // Only the (now force-expanded) Kubernetes menu and its matching child
+    // remain visible; Dashboard, Resource list, and Worker pools are hidden.
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveFocus();
+
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("link", { name: "Clusters" })).toHaveFocus();
+
+    // Wraps back to the first visible row rather than landing on a hidden one.
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveFocus();
+  });
+
+  it("moves focus onto a collapsed SideNavMenu's own toggle button, not its inert children", async () => {
+    render(SideNavFilterTest);
+
+    screen.getByRole("link", { name: "Dashboard" }).focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("link", { name: "Resource list" })).toHaveFocus();
+
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveFocus();
+
+    // Space toggles the now-focused button open, per native button
+    // semantics; the group's own items become reachable next.
+    await user.keyboard(" ");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("link", { name: "Clusters" })).toHaveFocus();
+  });
+
+  it("does not render the filter input when the rail is collapsed", () => {
+    // Query the raw DOM rather than by role: `SideNav` marks its `<nav>`
+    // `aria-hidden` whenever `isOpen` is false (rail or not), which would
+    // also hide an always-rendered filter from role queries and mask a
+    // regression here.
+    const { container } = render(SideNavFilterTest, {
+      props: { rail: true, isSideNavOpen: false },
+    });
+
+    expect(container.querySelector(".bx--side-nav-filter")).toBeNull();
+  });
+
+  it("renders the filter input for a non-collapsed rail", () => {
+    const { container } = render(SideNavFilterTest, {
+      props: { rail: true, isSideNavOpen: true },
+    });
+
+    expect(container.querySelector(".bx--side-nav-filter")).not.toBeNull();
+  });
+
+  it("expands every menu level that holds a match and restores them on clear", async () => {
+    render(SideNavFilterNested);
+
+    const input = screen.getByRole("searchbox", { name: "Filter" });
+    await user.type(input, "instances");
+
+    expect(screen.getByRole("button", { name: "Platform" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    expect(screen.getByRole("button", { name: "Compute" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    expect(screen.getByRole("link", { name: "Instances" })).toBeVisible();
+    expect(
+      screen.queryByRole("link", { name: "Images" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Storage" }),
+    ).not.toBeInTheDocument();
+
+    await user.clear(input);
+
+    expect(screen.getByRole("button", { name: "Platform" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    expect(screen.getByRole("button", { name: "Compute" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
+  it("counts a SideNavLink inside a menu toward that menu", async () => {
+    render(SideNavFilterNested);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "overview",
+    );
+
+    expect(screen.getByRole("button", { name: "Platform" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    expect(screen.getByRole("link", { name: "Overview" })).toBeVisible();
+    expect(
+      screen.queryByRole("button", { name: "Compute" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("lets a menu be collapsed by hand while filtering", async () => {
+    render(SideNavFilterTest);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Filter" }),
+      "clusters",
+    );
+    const menu = screen.getByRole("button", { name: "Kubernetes" });
+    expect(menu).toHaveAttribute("aria-expanded", "true");
+
+    await user.click(menu);
+    expect(menu).toHaveAttribute("aria-expanded", "false");
+  });
+});
