@@ -5,10 +5,17 @@ import { compileEntry } from "./compile";
 // Box `fill` and ScrollGradient `color` names are Carbon v11 tokens, so each
 // one paints with the token of the same name.
 describe("fill tokens", () => {
-  const fills = ["background", "layer-01", "layer-02", "layer-03"];
+  const fills = [
+    "background",
+    "layer-01",
+    "layer-02",
+    "layer-03",
+    "layer-accent",
+    "field",
+  ];
 
   it.each(fills)(
-    "Box fill %s reads the %s token",
+    "Box fill %s reads the token of the same name",
     async (name) => {
       const rules = parseRules(await compileEntry("all.scss"));
       const rule = rules.find((r) => r.selector === `.bx--box-fill-${name}`);
@@ -20,7 +27,6 @@ describe("fill tokens", () => {
   // These names differ from, or add to, the token they paint with.
   it.each([
     ["layer-accent", "layer-accent"],
-    ["field", "field-01"],
     ["inverse", "background-inverse"],
     ["brand", "background-brand"],
   ])(
@@ -34,7 +40,7 @@ describe("fill tokens", () => {
   );
 
   it.each(fills)(
-    "ScrollGradient color %s reads the %s token",
+    "ScrollGradient color %s reads the token of the same name",
     async (name) => {
       const rules = parseRules(await compileEntry("all.scss"));
       const rule = rules.find(
