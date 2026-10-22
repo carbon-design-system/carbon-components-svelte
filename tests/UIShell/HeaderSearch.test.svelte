@@ -16,6 +16,7 @@
   export let onSelect: (
     detail: ComponentEvents<HeaderSearch>["select"]["detail"],
   ) => void = () => {};
+  export let onClick: (event: CustomEvent<MouseEvent>) => void = () => {};
 </script>
 
 <HeaderSearch
@@ -29,6 +30,7 @@
   on:inactive={() => onInactive()}
   on:clear={() => onClear()}
   on:select={(e) => onSelect(e.detail)}
+  on:click={(e) => onClick(e)}
   let:result
   let:index
   let:selected
