@@ -267,6 +267,33 @@ Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it foll
 
 <FileSource src="/framed/Chart/VizPalettes" />
 
+## Conventions
+
+The presets share one vocabulary, so what you learn on one chart carries to the next.
+
+| Prop or event | Meaning |
+| --- | --- |
+| `data` | Rows, one per mark, read through accessor props such as `x`, `y`, `series`, `value`, `label`, `id`, `parent`, `group`. An accessor is a field name or a function of the row. |
+| `nodes`, `links` | A graph's rows and the pairs between them, read with `source` and `target`. |
+| `values`, `stages` | A plain array of numbers for a sparkline or strip; the stages of a funnel. |
+| `title` | The caption of a chart, also its accessible name. |
+| `label` | On a micrographic, its accessible name. On a chart, the accessor for a mark's label. |
+| `size` | `"sm"`, `"md"`, or `"lg"`. Only `ScatterChart` uses `size` for the bubble accessor. |
+| `width`, `height` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container. |
+| `format`, `xFormat`, `yFormat` | `Intl.NumberFormat` options or a function of the value. `locale` goes with them. |
+| `palette`, `colors`, `color` | A group option number, or a sequential hue on heat charts; a map from series to a token; one token. Values are `--cds-viz-*` names, never colors. |
+| `legend`, `legendPosition` | Whether to draw the legend, and where. |
+| `sort`, `valueType` | Enums: `"none" \| "value"`; `"value" \| "percent"`, with `"both"` or `"none"` where a chart can write them. |
+| `selectable`, `selected` | Selection is opt in. `selected` is the row id, the index on an index-keyed strip, or `{ series, index }` on a Cartesian chart. |
+| `hidden` | Series keys the legend has hidden; bind it. |
+| `loading`, `emptyText` | A skeleton while data is on its way, and the message when there is none. |
+| `hover` | The hovered item, or `null` when the pointer leaves. |
+| `select` | `{ <item>, originalEvent }`, the same item `hover` carries, when `selectable` is set. |
+| `toggle`, `legend:toggle`, `threshold`, `brush`, `zoom` | `{ id, collapsed }`; `{ series, hidden }`; `{ threshold, direction, value }`; a brush or zoom range. |
+| `update` | After the data changes, with what is now drawn. Fires only with `emitUpdate`. |
+
+Tooltips never take the pointer, wait for it to settle, show at once from the keyboard, and flip only where they fit. Every chart is one tab stop: arrows move within it, <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the ends, <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects, and <DocKbd label="Escape" /> clears.
+
 ## Writing a mark
 
 A mark is a component that reads the chart context and renders SVG. `groups` holds the series, `scales` maps data to pixels, and `hover` holds the focused point. Subscribe only to what you draw from: a mark that reads `groups` and `scales` but not `hover` never re-renders while the pointer moves.
