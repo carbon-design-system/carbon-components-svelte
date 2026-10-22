@@ -55,6 +55,29 @@ describe("HeaderSearch close event", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
+  it.each([
+    { key: "Escape", isComposing: true },
+    { key: "Escape", keyCode: 229 },
+  ])(
+    "keeps the query and stays open when Escape cancels an IME composition (%o)",
+    async (init) => {
+      const onClose = vi.fn();
+      render(HeaderSearchClose, {
+        props: { active: true, value: "query", onClose },
+      });
+
+      const input = screen.getByRole("textbox");
+      input.focus();
+      await fireEvent.keyDown(input, init);
+
+      expect(input).toHaveValue("query");
+      expect(screen.getByRole("search")).toHaveClass(
+        "bx--header__search--active",
+      );
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
+
   it("does not dispatch close when the clear button collapses the search", async () => {
     const onClose = vi.fn();
     render(HeaderSearchClose, {
