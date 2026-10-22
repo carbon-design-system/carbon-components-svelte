@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import CopyInputSkeleton from "carbon-components-svelte/CopyInput/CopyInputSkeleton.svelte";
+import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import CopyInput from "./CopyInput.test.svelte";
 import CopyInputMultiple from "./CopyInputMultiple.test.svelte";
@@ -218,6 +219,130 @@ describe("CopyInput", () => {
         0,
         "secret-token-123".length,
       ]);
+    });
+  });
+
+  describe("reveal toggle", () => {
+    it("renders a toggle that reveals and re-obscures the value", async () => {
+      render(CopyInput, { props: { type: "password", revealMode: "toggle" } });
+
+      const input = screen.getByLabelText("API token") as HTMLInputElement;
+      expect(getFieldWrapper(input)).toHaveClass(
+        "bx--copy-input__field-wrapper--toggle",
+      );
+      expect(input).toHaveAttribute("type", "password");
+
+      const toggle = screen.getByRole("button", { name: "Show value" });
+      expect(toggle).toHaveAttribute("aria-pressed", "false");
+
+      await user.click(toggle);
+      expect(input).toHaveAttribute("type", "text");
+      expect(
+        screen.getByRole("button", { name: "Hide value" }),
+      ).toHaveAttribute("aria-pressed", "true");
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Hide value" }));
+      expect(input).toHaveAttribute("type", "password");
+      expect(screen.getByText("Revealed: false")).toBeInTheDocument();
+    });
+
+    it("reveals a maskedValue and keeps the value revealed after blur", async () => {
+      render(CopyInput, {
+        props: {
+          maskedValue: "secret-••••-123",
+          revealMode: "toggle",
+        },
+      });
+
+      const input = screen.getByLabelText("API token");
+      expect(input).toHaveValue("secret-••••-123");
+
+      await user.click(screen.getByRole("button", { name: "Show value" }));
+      expect(input).toHaveValue("secret-token-123");
+
+      await user.click(document.body);
+      expect(input).toHaveValue("secret-token-123");
+    });
+
+    it("supports custom showValueLabel and hideValueLabel", async () => {
+      render(CopyInput, {
+        props: {
+          type: "password",
+          revealMode: "toggle",
+          showValueLabel: "Reveal",
+          hideValueLabel: "Conceal",
+        },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Reveal" }));
+
+      expect(
+        screen.getByRole("button", { name: "Conceal" }),
+      ).toBeInTheDocument();
+    });
+
+    it("does not render the toggle for plain text", () => {
+      render(CopyInput, { props: { type: "text", revealMode: "toggle" } });
+      expect(
+        screen.queryByRole("button", { name: "Show value" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not render the toggle for other reveal modes", () => {
+      const { unmount } = render(CopyInput, {
+        props: { type: "password", revealMode: "focus" },
+      });
+      expect(
+        screen.queryByRole("button", { name: "Show value" }),
+      ).not.toBeInTheDocument();
+      unmount();
+
+      render(CopyInput, { props: { type: "password" } });
+      expect(
+        screen.queryByRole("button", { name: "Show value" }),
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--copy-input__field-wrapper--toggle"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("opens its label on keyboard focus and hands off to the copy button", async () => {
+      render(CopyInput, { props: { type: "password", revealMode: "toggle" } });
+
+      await user.tab();
+      await user.tab();
+      expect(screen.getByRole("button", { name: "Show value" })).toHaveFocus();
+      expect(openTooltips()).toHaveLength(1);
+      expect(openTooltips()[0]).toHaveTextContent("Show value");
+
+      await user.tab();
+      expect(
+        screen.getByRole("button", { name: "Copy to clipboard" }),
+      ).toHaveFocus();
+      expect(openTooltips()).toHaveLength(1);
+      expect(openTooltips()[0]).toHaveTextContent("Copy to clipboard");
+    });
+
+    it("disables the toggle when disabled", () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", disabled: true },
+      });
+
+      expect(screen.getByRole("button", { name: "Show value" })).toBeDisabled();
+    });
+
+    it("obscures the value when revealMode switches away from toggle", async () => {
+      const { rerender } = render(CopyInput, {
+        props: { type: "password", revealMode: "toggle" },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Show value" }));
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+
+      await rerender({ type: "password", revealMode: "focus" });
+
+      expect(screen.getByText("Revealed: false")).toBeInTheDocument();
     });
   });
 
