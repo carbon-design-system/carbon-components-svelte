@@ -34,10 +34,6 @@ $notification-colors: (
         theme: $carbon--theme--g100,
         value: $layer,
       ),
-      (
-        theme: $carbon--theme--v9,
-        value: $carbon__red-10,
-      ),
     ),
   ),
   'notification-background-success': (
@@ -62,10 +58,6 @@ $notification-colors: (
       (
         theme: $carbon--theme--g100,
         value: $layer,
-      ),
-      (
-        theme: $carbon--theme--v9,
-        value: $carbon__green-10,
       ),
     ),
   ),
@@ -92,10 +84,6 @@ $notification-colors: (
         theme: $carbon--theme--g100,
         value: $layer,
       ),
-      (
-        theme: $carbon--theme--v9,
-        value: $carbon__blue-10,
-      ),
     ),
   ),
   'notification-background-warning': (
@@ -121,10 +109,6 @@ $notification-colors: (
         theme: $carbon--theme--g100,
         value: $layer,
       ),
-      (
-        theme: $carbon--theme--v9,
-        value: mix($carbon__yellow-30, $carbon__white-0, 15%),
-      ),
     ),
   ),
   'notification-action-hover': (
@@ -149,10 +133,6 @@ $notification-colors: (
       (
         theme: $carbon--theme--g100,
         value: $layer-hover,
-      ),
-      (
-        theme: $carbon--theme--v9,
-        value: $carbon__white-0,
       ),
     ),
   ),
