@@ -6,6 +6,8 @@ description: ThemeZone renders part of a page in another Carbon theme, such as a
   import { Box, TextInput, ThemeZone } from "carbon-components-svelte";
 </script>
 
+## Basic
+
 [Theme](/components/Theme) sets the theme for the whole page. `ThemeZone` sets it for one part of the page. It paints the theme's background and text color, and every component inside it takes the theme's tokens. It matches Carbon React's scoped `<Theme>`.
 
 `ThemeZone` needs `all.css`, which declares every theme as CSS custom properties. The single-theme stylesheets (`white.css`, `g100.css`, and the others) compile one theme's values into the rules, so a zone has nothing to switch.
@@ -13,8 +15,6 @@ description: ThemeZone renders part of a page in another Carbon theme, such as a
 ```js
 import "carbon-components-svelte/css/all.css";
 ```
-
-## Basic
 
 Set `theme` to one of the five themes, or to `"system"`. Use `tag` to render another element, such as `aside` or `section`.
 
