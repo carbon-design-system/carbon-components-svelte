@@ -9,7 +9,7 @@ description: Selectable tiles provide a tile-based interface for choosing multip
 
 ## Basic
 
-Group multiple selectable tiles together for multi-selection scenarios.
+Group multiple selectable tiles together for multi-selection scenarios. Each tile shows a checkbox in its top-right corner: empty until the tile is selected, then checked.
 
 <SelectableTileGroup legendText="Deployment regions" name="options" selected={["us-east-1", "us-west-2"]}>
   <SelectableTile value="us-east-1">
@@ -102,7 +102,7 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
 
 ## AI label
 
-Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner, beside the checkmark at the `"xs"` size.
+Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner, beside the checkbox at the `"xs"` size.
 
 <SelectableTile>
   Recommended plan: Team
@@ -113,7 +113,7 @@ Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-genera
 
 ## Small size
 
-Set `size="sm"` on the SelectableTileGroup for compact tiles, such as rows in a list of choices: less padding, no minimum height, and the checkmark pulled in. A tile's own `size` overrides the group's.
+Set `size="sm"` on the SelectableTileGroup for compact tiles, such as rows in a list of choices: less padding, no minimum height, and the checkbox pulled in. A tile's own `size` overrides the group's.
 
 <SelectableTileGroup legendText="Extras" name="extras" selected={["breakfast"]} size="sm">
   <SelectableTile value="breakfast">Breakfast</SelectableTile>
@@ -175,11 +175,11 @@ Disable every tile at once by setting `disabled` on `SelectableTileGroup`. The u
   </SelectableTile>
 </SelectableTileGroup>
 
-## Checkmark label
+## Checkbox label
 
-Set `iconDescription` to change the checkmark icon's tooltip, shown on hover. Defaults to `"Tile checkmark"`. Screen readers skip the icon and announce the checked state from the tile's checkbox.
+Set `iconDescription` to change the checkbox icon's tooltip, shown on hover. Defaults to `"Tile checkmark"`. Screen readers skip the icon and announce the checked state from the tile's checkbox.
 
-<SelectableTileGroup legendText="Deployment regions" name="options-checkmark-label" selected={["us-east-1"]}>
+<SelectableTileGroup legendText="Deployment regions" name="options-checkbox-label" selected={["us-east-1"]}>
   <SelectableTile iconDescription="US East (N. Virginia) selected" value="us-east-1">
     US East (N. Virginia)
   </SelectableTile>
