@@ -61,7 +61,7 @@ By default, the cancel button receives focus instead of the critical button to p
 
 ### Passive
 
-Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation. Since there is no primary button, the close button will receive focus when the modal opens.
+Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation. Since there is no primary button, the close button will receive focus when the modal opens. A passive modal closes on an outside click; see [Outside click](#outside-click).
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
@@ -205,21 +205,23 @@ The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to ke
 
 <FileSource src="/framed/Modal/ModalPreventClose" />
 
-### Prevent on outside click
+### Outside click
 
-Disable closing the modal when clicking outside with `preventCloseOnClickOutside`. This is useful for transactional modals where explicit user action is required.
+A modal with actions stays open when the user clicks outside it, so the user has to choose an action. A passive modal closes. This matches Carbon v11.
+
+Set `preventCloseOnClickOutside` to `true` to keep a passive modal open, for example while it shows a value the user must copy. Set it to `false` to close a modal with actions on an outside click. Carbon advises against this, since the user can lose their input.
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
 
 ### Hide close button
 
-Set `hideCloseButton` to `true` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path, typically footer actions, and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
+Set `hideCloseButton` to `true` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path, typically footer actions. A modal with actions already stays open on an outside click. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
 
 <FileSource src="/framed/Modal/ModalHideCloseButton" />
 
 ## Events
 
-Modal dispatches events for its lifecycle and button interactions. Only the close button, <DocKbd label="Escape" />, and (by default) an outside click close the modal automatically. See [Closing](#closing) above. Every other action leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
+Modal dispatches events for its lifecycle and button interactions. Only the close button, <DocKbd label="Escape" />, and an outside click on a passive modal close the modal automatically. See [Closing](#closing) above. Every other action leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
 
 ### Open
 

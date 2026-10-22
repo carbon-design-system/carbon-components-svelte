@@ -26,7 +26,6 @@
       loadingDescription: "Saving...",
     },
   ]}
-  preventCloseOnClickOutside={savingDraft}
   on:click:button--secondary={({ detail }) => {
     if (detail.text === "Save as draft") onSaveDraft();
   }}

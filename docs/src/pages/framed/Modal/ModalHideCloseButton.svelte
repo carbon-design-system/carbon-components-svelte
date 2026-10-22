@@ -9,7 +9,6 @@
 <Modal
   bind:open
   hideCloseButton
-  preventCloseOnClickOutside
   modalHeading="Accept terms of use"
   primaryButtonText="Accept"
   secondaryButtonText="Decline"
