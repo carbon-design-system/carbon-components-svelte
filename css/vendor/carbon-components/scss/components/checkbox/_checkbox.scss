@@ -16,13 +16,15 @@
 /// @access private
 /// @group checkbox
 @mixin checkbox {
+  // ccs: v11's metrics through the box's `::after` below: 6px between
+  // checkboxes, none above the first, and a 20px label.
   .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
     position: relative;
-    margin-bottom: $carbon--spacing-02;
+    margin-bottom: to-rem(6px);
   }
 
   .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:first-of-type {
-    margin-top: to-rem(3px);
+    margin-top: 0;
   }
 
   // Shift collection of checkboxes up if label is present
@@ -75,15 +77,15 @@
 
     position: relative;
     display: flex;
-    min-height: to-rem(24px);
-    padding-top: to-rem(3px);
+    min-height: to-rem(20px);
+    padding-top: to-rem(1px);
     padding-left: to-rem(20px);
     cursor: pointer;
     user-select: none;
   }
 
   .#{$prefix}--checkbox-label-text {
-    padding-left: to-rem(6px);
+    padding-left: to-rem(10px);
   }
 
   // Required because `$css--reset: true` cannot currently apply to this `::before` and `::after`
@@ -108,23 +110,23 @@
     height: to-rem(16px);
     border: 1px solid $icon-primary;
     // increase left margin for #6480
-    margin: to-rem(2px) to-rem(2px) to-rem(2px) to-rem(3px);
+    margin: to-rem(1px) to-rem(2px) to-rem(2px) to-rem(3px);
 
     // Checkboxes with a background color look visually off against a parent container.
     background-color: transparent;
-    border-radius: 1px;
+    border-radius: 2px;
     content: '';
   }
 
   // Create the appearance of the check in the `after` pseudo-element
   .#{$prefix}--checkbox-label::after {
     position: absolute;
-    top: to-rem(8px);
+    top: to-rem(6.5px);
     left: to-rem(7px);
     width: to-rem(9px);
     height: to-rem(5px);
-    border-bottom: 2px solid $focus-inset;
-    border-left: 2px solid $focus-inset;
+    border-bottom: 1.5px solid $icon-inverse;
+    border-left: 1.5px solid $icon-inverse;
     margin-top: to-rem(-3px) #{'/*rtl:0rem*/'};
     background: none;
     content: '';
@@ -150,8 +152,8 @@
   .#{$prefix}--checkbox-label[data-contained-checkbox-state='mixed']::after {
     top: to-rem(11px);
     width: to-rem(8px);
-    border-bottom: 2px solid $focus-inset;
-    border-left: 0 solid $focus-inset;
+    border-bottom: 2px solid $icon-inverse;
+    border-left: 0 solid $icon-inverse;
     transform: scale(1) rotate(0deg);
   }
 

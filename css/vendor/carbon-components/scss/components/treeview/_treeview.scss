@@ -329,6 +329,21 @@
     min-height: $carbon--spacing-06;
     padding-top: 0;
   }
+
+  // The checkbox's box and check sit 1px higher in its 20px label. Move
+  // them back down, as DataTable does, so they stay centered on the row.
+  .#{$prefix}--tree--checkbox .#{$prefix}--checkbox-label::before {
+    margin-top: to-rem(2px);
+  }
+
+  .#{$prefix}--tree--checkbox .#{$prefix}--checkbox-label::after {
+    top: to-rem(7.5px);
+  }
+
+  .#{$prefix}--tree--checkbox
+    .#{$prefix}--checkbox-label[data-contained-checkbox-state="mixed"]::after {
+    top: to-rem(11px);
+  }
 }
 
 @include exports("treeview-checkbox") {
