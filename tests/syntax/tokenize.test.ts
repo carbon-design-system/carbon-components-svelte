@@ -2,10 +2,15 @@
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: the strings are source code to tokenize
 import { highlight, tokenize } from "../../src/syntax/tokenize.js";
 
-const types = (code: string, lang: string) =>
-  tokenize(code, lang)
-    ?.filter((token) => token.type)
+/** `type:text` for the named tokens, in order. */
+const types = (code: string, lang = "svelte") =>
+  (tokenize(code, lang) ?? [])
+    .filter((token) => token.type)
     .map((token) => `${token.type}:${token.text}`);
+
+/** The token texts joined back together, which must equal the source. */
+const rejoined = (code: string, lang: string) =>
+  (tokenize(code, lang) ?? []).map((token) => token.text).join("");
 
 describe("tokenize", () => {
   test("classifies script tokens by Carbon's syntax token names", () => {
@@ -130,7 +135,7 @@ describe("tokenize", () => {
 
   test("reads JSON exponents as part of the number", () => {
     expect(
-      types("[2.5e3, 1E+5, -1e-2]", "json")?.filter((t) =>
+      types("[2.5e3, 1E+5, -1e-2]", "json").filter((t) =>
         t.startsWith("number"),
       ),
     ).toEqual(["number:2.5e3", "number:1E+5", "number:-1e-2"]);
@@ -139,9 +144,9 @@ describe("tokenize", () => {
   test.each(["SCRIPT", "Script"])(
     "ends a <%s> body at its closing tag",
     (tag) => {
-      expect(
-        types(`<${tag}>let a</${tag}><p>x</p>`, "html")?.slice(-3),
-      ).toEqual(["angle-bracket:</", "tag-name:p", "angle-bracket:>"]);
+      expect(types(`<${tag}>let a</${tag}><p>x</p>`, "html").slice(-3)).toEqual(
+        ["angle-bracket:</", "tag-name:p", "angle-bracket:>"],
+      );
     },
   );
 
@@ -153,7 +158,7 @@ describe("tokenize", () => {
       ["comment:#!/usr/bin/env node", "operator:/", "number:2", "operator:/"],
     ],
   ])("starts a %s comment only where it is one", (lang, code, expected) => {
-    expect(types(code, lang)?.slice(0, expected.length)).toEqual(expected);
+    expect(types(code, lang).slice(0, expected.length)).toEqual(expected);
   });
 
   test.each(["json", "jsonc"])("reads comments in %s", (lang) => {
@@ -169,7 +174,7 @@ describe("tokenize", () => {
   });
 
   test.each(["café", "π", "日本"])("reads %s as one identifier", (name) => {
-    expect(types(`const ${name} = 1`, "js")?.slice(0, 2)).toEqual([
+    expect(types(`const ${name} = 1`, "js").slice(0, 2)).toEqual([
       "definition-keyword:const",
       `definition:${name}`,
     ]);
@@ -212,20 +217,11 @@ describe("tokenize", () => {
 
   test("keeps every character, so offsets map back to the source", () => {
     const code = '<A b="c" {d}>{#each e as f}{f}{/each}</A>\n<!-- g -->';
-    expect(
-      tokenize(code, "svelte")
-        ?.map((token) => token.text)
-        .join(""),
-    ).toBe(code);
+    expect(rejoined(code, "svelte")).toBe(code);
   });
 
-  test("returns undefined for an unknown language", () => {
-    expect(tokenize("x", "cobol")).toBeUndefined();
-    expect(highlight("x", "cobol")).toBeUndefined();
-  });
-
-  test.each(["constructor", "__proto__"])(
-    "treats the inherited object key %s as an unknown language",
+  test.each(["cobol", "constructor", "__proto__"])(
+    "returns undefined for the unknown language %s",
     (lang) => {
       expect(tokenize("x", lang)).toBeUndefined();
       expect(highlight("x", lang)).toBeUndefined();
@@ -314,18 +310,15 @@ describe("tokenize: keys, specifiers, and nesting", () => {
   });
 });
 
-/** `type:text` for the named tokens, in order. */
-const named = (code: string, lang = "svelte") => types(code, lang) ?? [];
-
 describe("tokenize: Svelte 4 and 5", () => {
   test("declares the names blocks bind, not their expressions", () => {
-    expect(named("{#each items as item, i (item.id)}{/each}")).toEqual(
+    expect(types("{#each items as item, i (item.id)}{/each}")).toEqual(
       expect.arrayContaining(["definition:item", "definition:i"]),
     );
-    expect(named("{#each items as item, i (item.id)}{/each}")).not.toContain(
+    expect(types("{#each items as item, i (item.id)}{/each}")).not.toContain(
       "function:i",
     );
-    expect(named("{#each rows as { id, cells: [first] }}{/each}")).toEqual(
+    expect(types("{#each rows as { id, cells: [first] }}{/each}")).toEqual(
       expect.arrayContaining([
         "definition:id",
         "property-name:cells",
@@ -333,27 +326,27 @@ describe("tokenize: Svelte 4 and 5", () => {
       ]),
     );
     // Svelte 5: no `as`.
-    expect(named("{#each { length: 3 }, i}{/each}")).toContain("definition:i");
-    expect(named("{#await p then value}{/await}")).toEqual(
+    expect(types("{#each { length: 3 }, i}{/each}")).toContain("definition:i");
+    expect(types("{#await p then value}{/await}")).toEqual(
       expect.arrayContaining(["control-keyword:then", "definition:value"]),
     );
-    expect(named("{#await load() catch error}{/await}")).toEqual(
+    expect(types("{#await load() catch error}{/await}")).toEqual(
       expect.arrayContaining(["control-keyword:catch", "definition:error"]),
     );
-    expect(named("{#await p.then(f)}{/await}")).not.toContain(
+    expect(types("{#await p.then(f)}{/await}")).not.toContain(
       "control-keyword:then",
     );
-    expect(named("{:then { data }}{:catch e}")).toEqual(
+    expect(types("{:then { data }}{:catch e}")).toEqual(
       expect.arrayContaining(["definition:data", "definition:e"]),
     );
-    expect(named("{@const { a, b } = pair}{@const total = a + b}")).toEqual(
+    expect(types("{@const { a, b } = pair}{@const total = a + b}")).toEqual(
       expect.arrayContaining([
         "definition:a",
         "definition:b",
         "definition:total",
       ]),
     );
-    expect(named("{#snippet row(item, index = 0)}{/snippet}")).toEqual(
+    expect(types("{#snippet row(item, index = 0)}{/snippet}")).toEqual(
       expect.arrayContaining([
         "definition:row",
         "definition:item",
@@ -364,7 +357,7 @@ describe("tokenize: Svelte 4 and 5", () => {
 
   test("splits directives into keyword, name, and modifiers", () => {
     expect(
-      named(
+      types(
         '<a on:click|preventDefault|once={go} bind:this={el} style:--gap="1px" />',
       ),
     ).toEqual(
@@ -388,10 +381,10 @@ describe("tokenize: Svelte 4 and 5", () => {
       "animate",
       "let",
     ]) {
-      expect(named(`<a ${prefix}:x />`), prefix).toContain(`keyword:${prefix}`);
+      expect(types(`<a ${prefix}:x />`), prefix).toContain(`keyword:${prefix}`);
     }
     // Svelte 5 event attributes and `{@attach}` are plain attributes and tags.
-    expect(named("<a onclick={go} {@attach tip} />")).toEqual(
+    expect(types("<a onclick={go} {@attach tip} />")).toEqual(
       expect.arrayContaining([
         "attribute-name:onclick",
         "control-keyword:@attach",
@@ -407,7 +400,7 @@ describe("tokenize: Svelte 4 and 5", () => {
   $: doubled = $count * 2;
   $: if (a) console.log($$restProps);
 </script>`;
-    expect(named(script)).toEqual(
+    expect(types(script)).toEqual(
       expect.arrayContaining([
         "definition:a",
         "property-name:b",
@@ -423,7 +416,7 @@ describe("tokenize: Svelte 4 and 5", () => {
       ]),
     );
     // Plain JavaScript keeps `$` names as ordinary identifiers.
-    const js = named("const $el = $(x);\n$: a = 1;", "js");
+    const js = types("const $el = $(x);\n$: a = 1;", "js");
     expect(js).toContain("definition:$el");
     expect(
       js.filter((t) => t.startsWith("special:") || t === "keyword:$:"),
@@ -431,7 +424,7 @@ describe("tokenize: Svelte 4 and 5", () => {
   });
 
   test("reads :global() selectors, nested rules, and SCSS in <style>", () => {
-    expect(named("<style>\n  :global(.x) .y { color: red }\n</style>")).toEqual(
+    expect(types("<style>\n  :global(.x) .y { color: red }\n</style>")).toEqual(
       expect.arrayContaining([
         "special::global",
         "class-name:.x",
@@ -447,7 +440,7 @@ describe("tokenize: Svelte 4 and 5", () => {
     @media (min-width: 40rem) { padding: 0; }
   }
 </style>`;
-    expect(named(scss)).toEqual(
+    expect(types(scss)).toEqual(
       expect.arrayContaining([
         "comment:// comment",
         "variable-name:$gap",
@@ -459,13 +452,13 @@ describe("tokenize: Svelte 4 and 5", () => {
       ]),
     );
     // Plain CSS nesting, without SCSS.
-    expect(named(".a { color: red; .b { margin: 0 } }", "css")).toEqual(
+    expect(types(".a { color: red; .b { margin: 0 } }", "css")).toEqual(
       expect.arrayContaining(["class-name:.b", "property-name:margin"]),
     );
   });
 
   test("splits character references out of text", () => {
-    expect(named("<p>a &amp; b &#123; c</p>")).toEqual(
+    expect(types("<p>a &amp; b &#123; c</p>")).toEqual(
       expect.arrayContaining(["character:&amp;", "character:&#123;"]),
     );
   });
@@ -492,11 +485,7 @@ describe("tokenize: Svelte 4 and 5", () => {
 <style lang="scss">
   button { &.active { outline: 1px solid; } }
 </style>`;
-    expect(
-      tokenize(code, "svelte")
-        ?.map((token) => token.text)
-        .join(""),
-    ).toBe(code);
+    expect(rejoined(code, "svelte")).toBe(code);
   });
 });
 
@@ -513,7 +502,7 @@ describe("tokenize: precision", () => {
       "special:}",
       "string: e`",
     ]);
-    expect(types("html`<p>${x}</p>`", "js")?.[0]).toBe("function:html");
+    expect(types("html`<p>${x}</p>`", "js")[0]).toBe("function:html");
   });
 
   test.each([
@@ -521,7 +510,7 @@ describe("tokenize: precision", () => {
     ["a-- / 2 / 3", ["operator:--", "operator:/", "number:2", "operator:/"]],
     ["`${/x/.test(a)}`", ["string:`", "special:${", "regexp:/x/"]],
   ])("tells division from a regexp in %s", (code, expected) => {
-    expect(types(code, "js")?.slice(0, expected.length)).toEqual(expected);
+    expect(types(code, "js").slice(0, expected.length)).toEqual(expected);
   });
 
   test("splits escape sequences out of strings", () => {
@@ -589,7 +578,7 @@ describe("tokenize: precision", () => {
   });
 
   test("reads doctypes, attribute selectors, combinators, and !important", () => {
-    expect(types("<!doctype html><p>a</p>", "html")?.[0]).toBe(
+    expect(types("<!doctype html><p>a</p>", "html")[0]).toBe(
       "meta:<!doctype html>",
     );
     expect(
@@ -664,10 +653,9 @@ describe("tokenize: precision", () => {
         const start = Math.floor(random() * code.length);
         const slice = code.slice(start, start + Math.floor(random() * 80));
         const tokens = tokenize(slice, lang) ?? [];
-        expect(
-          tokens.map((t) => t.text).join(""),
-          `${lang}: ${JSON.stringify(slice)}`,
-        ).toBe(slice);
+        expect(rejoined(slice, lang), `${lang}: ${JSON.stringify(slice)}`).toBe(
+          slice,
+        );
         expect(
           tokens.every((t) => t.text.length > 0),
           lang,
