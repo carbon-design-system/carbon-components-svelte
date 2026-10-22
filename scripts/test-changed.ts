@@ -38,13 +38,16 @@ import {
  * tree to narrow the e2e tests (see `scripts/lib/css-delta.ts`). That needs
  * an install; without one, it runs every test that loads a stylesheet.
  */
-// Directories, plus the root-level config a test imports.
+// Directories, plus the root-level config a test imports. The framed
+// DatePicker pages are examples an e2e test renders from `src`. Adding all of
+// `framed/` brings in pages that import docs-only packages.
 const GRAPH_ROOTS = [
   "src",
   "tests",
   "e2e",
   "css",
   "scripts",
+  "docs/src/pages/framed/DatePicker",
   "crassus.config.ts",
 ];
 /** Where the classes a fixture page renders are spelled. */
