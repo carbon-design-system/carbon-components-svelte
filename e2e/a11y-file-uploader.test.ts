@@ -20,6 +20,30 @@ test.describe("FileUploader a11y", () => {
   });
 });
 
+test.describe("FileUploaderItem a11y", () => {
+  test("announces an invalid item's error and describes the remove button with it", async ({
+    page,
+  }) => {
+    await page.goto("/file-uploader-item.html");
+    await expect(page.getByRole("alert")).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Reject file" }).click();
+
+    await expect(page.getByRole("alert")).toHaveText(
+      /File size exceeds limit\s*500 KB max file size/,
+    );
+    await expect(
+      page.getByRole("button", { name: "Remove file report.pdf" }),
+    ).toHaveAccessibleDescription(
+      /File size exceeds limit\s*500 KB max file size/,
+    );
+
+    const results = await new AxeBuilder({ page }).include("#app").analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+});
+
 test.describe("FileUploaderDropContainer a11y", () => {
   test("has no detectable accessibility violations", async ({ page }) => {
     await page.goto("/file-uploader-drop-container.html");

@@ -49,6 +49,8 @@
   /**
    * Per-file error subject when the row is invalid.
    * Receives `(file, index)` and returns the subject text.
+   * The error is announced with `role="alert"` when the row becomes
+   * invalid, and describes the row's remove button.
    * @type {undefined | ((file: File, index: number) => string)}
    */
   export let fileErrorSubject = undefined;
@@ -501,7 +503,7 @@
           />
         </span>
         {#if rowErrorId}
-          <div id={rowErrorId} class:bx--form-requirement={true}>
+          <div id={rowErrorId} class:bx--form-requirement={true} role="alert">
             <div class:bx--form-requirement__title={true}>
               {rowErrorSubject}
             </div>

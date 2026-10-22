@@ -898,8 +898,9 @@ describe("FileUploader", () => {
     expect(rows).toHaveLength(2);
     expect(rows[0]).not.toHaveClass("bx--file__selected-file--invalid");
     expect(rows[1]).toHaveClass("bx--file__selected-file--invalid");
-    expect(screen.getByText("Upload failed")).toBeInTheDocument();
-    expect(screen.getByText("Please try again.")).toBeInTheDocument();
+    const alert = screen.getByRole("alert");
+    expect(rows[1]).toContainElement(alert);
+    expect(alert).toHaveTextContent("Upload failed Please try again.");
     expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
   });
 
@@ -999,6 +1000,23 @@ describe("FileUploader", () => {
     expect(
       screen.getByRole("button", { name: "Remove file good.txt" }),
     ).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("should keep an invalid row's alert when another file is added", async () => {
+    const { component } = render(FileUploader, {
+      props: {
+        multiple: true,
+        status: "edit",
+        fileInvalid: (file: File) => file.name === "bad.txt",
+        fileErrorSubject: () => "Upload failed",
+      },
+    });
+
+    await selectFiles(component, [makeFile("bad.txt")]);
+    const alert = screen.getByRole("alert");
+
+    await selectFiles(component, [makeFile("good.txt")]);
+    expect(screen.getAllByRole("alert")).toEqual([alert]);
   });
 
   describe("long file names", () => {

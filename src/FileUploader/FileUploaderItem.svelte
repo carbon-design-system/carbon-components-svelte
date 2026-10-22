@@ -41,7 +41,11 @@
   /** Set to `true` to disable the remove button */
   export let disabled = false;
 
-  /** Specify the error subject text */
+  /**
+   * Specify the error subject text.
+   * When `invalid`, the error is announced with `role="alert"` and
+   * describes the remove button.
+   */
   export let errorSubject = "";
 
   /** Specify the error body text */
@@ -111,7 +115,7 @@
     />
   </span>
   {#if errorId}
-    <div id={errorId} class:bx--form-requirement={true}>
+    <div id={errorId} class:bx--form-requirement={true} role="alert">
       <div class:bx--form-requirement__title={true}>{errorSubject}</div>
       {#if errorBody}
         <p class:bx--form-requirement__supplement={true}>{errorBody}</p>
