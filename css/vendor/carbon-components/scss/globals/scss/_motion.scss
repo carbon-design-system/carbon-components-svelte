@@ -7,12 +7,6 @@
 
 @import './vendor/@carbon/elements/scss/motion/motion';
 
-/// Used primarily for removing elements from the screen
-/// @type Function
-/// @access public
-/// @group global-motion
-$carbon--ease-in: cubic-bezier(0.25, 0, 1, 1);
-
 /// Used for adding elements to the screen or changing on-screen states at a users's input
 /// @type Function
 /// @access public
@@ -74,12 +68,6 @@ $duration--slow-01: 400ms;
 /// @access public
 /// @group global-motion
 $duration--slow-02: 720ms;
-
-/// Default ease-in for components
-/// @access public
-/// @type Function
-/// @group global-motion
-$carbon--ease-in: cubic-bezier(0, 0, 0.38, 0.9);
 
 /// Default ease-out for components
 /// @access public

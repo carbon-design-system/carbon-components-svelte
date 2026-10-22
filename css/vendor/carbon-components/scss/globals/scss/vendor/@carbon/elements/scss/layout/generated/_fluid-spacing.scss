@@ -26,16 +26,6 @@ $carbon--fluid-spacing-03: 5vw !default;
 /// @group @carbon/layout
 $carbon--fluid-spacing-04: 10vw !default;
 
-/// @type List
-/// @access public
-/// @group @carbon/layout
-$carbon--fluid-spacing: (
-  $carbon--fluid-spacing-01,
-  $carbon--fluid-spacing-02,
-  $carbon--fluid-spacing-03,
-  $carbon--fluid-spacing-04
-);
-
 /// @type Number
 /// @access public
 /// @group @carbon/layout
