@@ -7,72 +7,26 @@
 //
 
 $carbon--theme--white: (
-  interactive-01: #0f62fe,
-  interactive-02: #393939,
-  interactive-03: #0f62fe,
-  interactive-04: #0f62fe,
   ui-background: #ffffff,
   ui-01: #f4f4f4,
   ui-02: #ffffff,
   ui-03: #e0e0e0,
   ui-04: #8d8d8d,
-  ui-05: #161616,
-  text-01: #161616,
-  text-02: #525252,
-  text-03: #a8a8a8,
-  text-04: #ffffff,
   text-05: #6f6f6f,
   text-error: #da1e28,
-  icon-01: #161616,
-  icon-02: #525252,
-  icon-03: #ffffff,
-  link-01: #0f62fe,
-  link-02: #0043ce,
-  inverse-link: #78a9ff,
   field-01: #f4f4f4,
   field-02: #ffffff,
-  inverse-01: #ffffff,
-  inverse-02: #393939,
-  support-01: #da1e28,
-  support-02: #198038,
-  support-03: #f1c21b,
-  support-04: #0043ce,
-  inverse-support-01: #fa4d56,
-  inverse-support-02: #42be65,
-  inverse-support-03: #f1c21b,
-  inverse-support-04: #4589ff,
-  overlay-01: rgba(22, 22, 22, 0.5),
-  danger-01: #da1e28,
-  danger-02: #da1e28,
   focus: #0f62fe,
-  inverse-focus-ui: #ffffff,
-  hover-primary: #0353e9,
-  active-primary: #002d9c,
-  hover-primary-text: #0043ce,
-  hover-secondary: #4c4c4c,
-  active-secondary: #6f6f6f,
-  hover-tertiary: #0353e9,
-  active-tertiary: #002d9c,
   hover-ui: #e5e5e5,
   hover-light-ui: #e5e5e5,
   active-ui: #c6c6c6,
   active-light-ui: #c6c6c6,
   selected-ui: #e0e0e0,
   selected-light-ui: #e0e0e0,
-  inverse-hover-ui: #4c4c4c,
   hover-selected-ui: #cacaca,
-  hover-danger: #b81921,
-  active-danger: #750e13,
-  hover-row: #e5e5e5,
-  visited-link: #8a3ffc,
-  disabled-01: #f4f4f4,
-  disabled-02: #c6c6c6,
-  disabled-03: #8d8d8d,
   highlight: #d0e2ff,
   decorative-01: #e0e0e0,
   button-separator: #e0e0e0,
-  skeleton-01: #e5e5e5,
-  skeleton-02: #c6c6c6,
   background: #ffffff,
   layer: #f4f4f4,
   layer-accent: #e0e0e0,
@@ -149,11 +103,6 @@ $carbon--theme--white: (
   skeleton-background: #e5e5e5,
   skeleton-element: #c6c6c6,
   brand-01: #0f62fe,
-  brand-02: #393939,
-  brand-03: #0f62fe,
-  active-01: #c6c6c6,
-  hover-field: #e5e5e5,
-  danger: #da1e28,
   caption-01: (
     font-size: 0.75rem,
     font-weight: 400,
@@ -947,7 +896,6 @@ $carbon--theme--g10: map-merge(
     ui-02: #f4f4f4,
     field-01: #ffffff,
     field-02: #f4f4f4,
-    disabled-01: #ffffff,
     background: #f4f4f4,
     layer: #ffffff,
     field: #ffffff,
@@ -1030,63 +978,22 @@ $carbon--theme--g80: map-merge(
     layer-selected-disabled: #c6c6c6,
     skeleton-background: #474747,
     skeleton-element: #6f6f6f,
-    interactive-02: #6f6f6f,
-    interactive-03: #ffffff,
-    interactive-04: #78a9ff,
     ui-background: #393939,
     ui-01: #525252,
     ui-02: #525252,
     ui-03: #6f6f6f,
     ui-04: #a8a8a8,
-    ui-05: #f4f4f4,
-    text-01: #f4f4f4,
-    text-02: #c6c6c6,
-    text-03: #6f6f6f,
     text-05: #a8a8a8,
-    icon-01: #f4f4f4,
-    icon-02: #c6c6c6,
-    link-01: #78a9ff,
-    link-02: #a6c8ff,
-    inverse-link: #0f62fe,
     field-01: #525252,
     field-02: #6f6f6f,
-    inverse-01: #161616,
-    inverse-02: #f4f4f4,
-    support-01: #ff8389,
-    support-02: #42be65,
-    support-04: #4589ff,
-    inverse-support-01: #da1e28,
-    inverse-support-02: #24a148,
-    inverse-support-04: #0f62fe,
-    overlay-01: rgba(0, 0, 0, 0.65),
-    danger-02: #ff8389,
-    inverse-focus-ui: #0f62fe,
-    hover-primary: #0151e4,
-    hover-primary-text: #a6c8ff,
-    hover-secondary: #5e5e5e,
-    active-secondary: #525252,
-    hover-tertiary: #ffffff,
-    active-tertiary: #c6c6c6,
     hover-ui: #474747,
     hover-light-ui: #5e5e5e,
     active-ui: #525252,
     active-light-ui: #8d8d8d,
     selected-ui: #525252,
     selected-light-ui: #8d8d8d,
-    inverse-hover-ui: #e8e8e8,
     hover-selected-ui: #616161,
-    hover-row: #636363,
-    visited-link: #be95ff,
-    disabled-01: #525252,
-    disabled-02: #8d8d8d,
-    disabled-03: #c6c6c6,
     decorative-01: #6f6f6f,
-    skeleton-01: #474747,
-    skeleton-02: #6f6f6f,
-    brand-02: #6f6f6f,
-    brand-03: #ffffff,
-    active-01: #525252,
-    hover-field: #474747,
   )
 ) !default;
 
@@ -1097,61 +1004,25 @@ $carbon--theme--g80: map-merge(
 $carbon--theme--g90: map-merge(
   $carbon--theme--white,
   (
-    interactive-02: #6f6f6f,
-    interactive-03: #ffffff,
-    interactive-04: #4589ff,
     ui-background: #262626,
     ui-01: #393939,
     ui-02: #525252,
     ui-03: #525252,
-    ui-05: #f4f4f4,
-    text-01: #f4f4f4,
-    text-02: #c6c6c6,
-    text-03: #6f6f6f,
     text-05: #8d8d8d,
     text-error: #ffb3b8,
-    icon-01: #f4f4f4,
-    icon-02: #c6c6c6,
-    link-01: #78a9ff,
-    link-02: #a6c8ff,
-    inverse-link: #0f62fe,
     field-01: #393939,
     field-02: #525252,
-    inverse-01: #161616,
-    inverse-02: #f4f4f4,
-    support-01: #ff8389,
-    support-02: #42be65,
-    support-04: #4589ff,
-    inverse-support-01: #da1e28,
-    inverse-support-02: #24a148,
-    inverse-support-04: #0f62fe,
-    overlay-01: rgba(0, 0, 0, 0.65),
-    danger-02: #ff8389,
     focus: #ffffff,
-    inverse-focus-ui: #0f62fe,
-    hover-primary-text: #a6c8ff,
-    hover-secondary: #606060,
-    active-secondary: #393939,
-    hover-tertiary: #f4f4f4,
-    active-tertiary: #c6c6c6,
     hover-ui: #4c4c4c,
     hover-light-ui: #656565,
     active-ui: #6f6f6f,
     active-light-ui: #8d8d8d,
     selected-ui: #525252,
     selected-light-ui: #6f6f6f,
-    inverse-hover-ui: #e5e5e5,
     hover-selected-ui: #656565,
-    hover-row: #4c4c4c,
-    visited-link: #be95ff,
-    disabled-01: #393939,
-    disabled-02: #6f6f6f,
-    disabled-03: #a8a8a8,
     highlight: #0043ce,
     decorative-01: #6f6f6f,
     button-separator: #161616,
-    skeleton-01: #353535,
-    skeleton-02: #525252,
     background: #262626,
     layer: #393939,
     layer-accent: #525252,
@@ -1214,10 +1085,6 @@ $carbon--theme--g90: map-merge(
     layer-selected-disabled: #a8a8a8,
     skeleton-background: #353535,
     skeleton-element: #525252,
-    brand-02: #6f6f6f,
-    brand-03: #ffffff,
-    active-01: #6f6f6f,
-    hover-field: #4c4c4c,
   )
 ) !default;
 
@@ -1228,61 +1095,26 @@ $carbon--theme--g90: map-merge(
 $carbon--theme--g100: map-merge(
   $carbon--theme--white,
   (
-    interactive-02: #6f6f6f,
-    interactive-03: #ffffff,
-    interactive-04: #4589ff,
     ui-background: #161616,
     ui-01: #262626,
     ui-02: #393939,
     ui-03: #393939,
     ui-04: #6f6f6f,
-    ui-05: #f4f4f4,
-    text-01: #f4f4f4,
-    text-02: #c6c6c6,
-    text-03: #6f6f6f,
     text-05: #8d8d8d,
     text-error: #ff8389,
-    icon-01: #f4f4f4,
-    icon-02: #c6c6c6,
-    link-01: #78a9ff,
-    link-02: #a6c8ff,
-    inverse-link: #0f62fe,
     field-01: #262626,
     field-02: #393939,
-    inverse-01: #161616,
-    inverse-02: #f4f4f4,
-    support-01: #fa4d56,
-    support-02: #42be65,
-    support-04: #4589ff,
-    inverse-support-01: #da1e28,
-    inverse-support-02: #24a148,
-    inverse-support-04: #0f62fe,
-    overlay-01: rgba(0, 0, 0, 0.65),
-    danger-02: #fa4d56,
     focus: #ffffff,
-    inverse-focus-ui: #0f62fe,
-    hover-primary-text: #a6c8ff,
-    hover-secondary: #606060,
-    active-secondary: #393939,
-    hover-tertiary: #f4f4f4,
-    active-tertiary: #c6c6c6,
     hover-ui: #353535,
     hover-light-ui: #4c4c4c,
     active-ui: #525252,
     active-light-ui: #6f6f6f,
     selected-ui: #393939,
     selected-light-ui: #525252,
-    inverse-hover-ui: #e5e5e5,
     hover-selected-ui: #4c4c4c,
-    hover-row: #353535,
-    visited-link: #be95ff,
-    disabled-01: #262626,
-    disabled-02: #525252,
     highlight: #002d9c,
     decorative-01: #525252,
     button-separator: #161616,
-    skeleton-01: #353535,
-    skeleton-02: #525252,
     background: #161616,
     layer: #262626,
     layer-accent: #393939,
@@ -1344,10 +1176,6 @@ $carbon--theme--g100: map-merge(
     icon-disabled: #525252,
     skeleton-background: #353535,
     skeleton-element: #525252,
-    brand-02: #6f6f6f,
-    brand-03: #ffffff,
-    active-01: #525252,
-    hover-field: #353535,
   )
 ) !default;
 
@@ -1358,47 +1186,16 @@ $carbon--theme--g100: map-merge(
 $carbon--theme--v9: map-merge(
   $carbon--theme--white,
   (
-    interactive-01: #3d70b2,
-    interactive-02: #4d5358,
-    interactive-03: #3d70b2,
-    interactive-04: #3d70b2,
     ui-background: #f4f7fb,
     ui-01: #ffffff,
     ui-02: #f4f7fb,
     ui-03: #dfe3e6,
     ui-04: #8897a2,
-    ui-05: #5a6872,
-    text-01: #152935,
-    text-02: #5a6872,
-    text-03: #cdd1d4,
     text-05: #5a6872,
     text-error: #e0182d,
-    icon-01: #3d70b2,
-    icon-02: #5a6872,
-    link-01: #3d70b2,
-    link-02: #3d70b2,
-    inverse-link: #5596e6,
     field-01: #ffffff,
     field-02: #f4f7fb,
-    inverse-02: #272d33,
-    support-01: #e0182d,
-    support-02: #5aa700,
-    support-03: #efc100,
-    support-04: #5aaafa,
-    inverse-support-01: #ff5050,
-    inverse-support-02: #8cd211,
-    inverse-support-03: #fdd600,
-    inverse-support-04: #5aaafa,
-    overlay-01: rgba(223, 227, 230, 0.5),
     focus: #3d70b2,
-    inverse-focus-ui: #3d70b2,
-    hover-primary: #30588c,
-    active-primary: #30588c,
-    hover-primary-text: #294c86,
-    hover-secondary: #4d5b65,
-    active-secondary: #414f59,
-    hover-tertiary: #5a6872,
-    active-tertiary: #414f59,
     hover-ui: #eef4fc,
     hover-light-ui: #eef4fc,
     active-ui: #dfeafa,
@@ -1406,17 +1203,8 @@ $carbon--theme--v9: map-merge(
     selected-ui: #eef4fc,
     selected-light-ui: #eef4fc,
     hover-selected-ui: #dfeafa,
-    hover-danger: #c70014,
-    active-danger: #ad1625,
-    hover-row: #eef4fc,
-    visited-link: #294c86,
-    disabled-01: #fafbfd,
-    disabled-02: #dfe3e6,
-    disabled-03: #cdd1d4,
     highlight: #f4f7fb,
     decorative-01: #eef4fc,
-    skeleton-01: rgba(61, 112, 178, 0.1),
-    skeleton-02: rgba(61, 112, 178, 0.1),
     background: #f4f7fb,
     layer: #ffffff,
     layer-accent: #dfe3e6,
@@ -1483,10 +1271,6 @@ $carbon--theme--v9: map-merge(
     skeleton-background: rgba(61, 112, 178, 0.1),
     skeleton-element: rgba(61, 112, 178, 0.1),
     brand-01: #3d70b2,
-    brand-02: #4d5358,
-    brand-03: #3d70b2,
-    active-01: #dfeafa,
-    hover-field: #eef4fc,
   )
 ) !default;
 
@@ -1496,30 +1280,6 @@ $carbon--theme--v9: map-merge(
 /// @alias carbon--theme--white
 /// @group @carbon/themes
 $carbon--theme: (
-  interactive-01:
-    if(
-      global-variable-exists('interactive-01'),
-      $interactive-01,
-      map-get($carbon--theme--white, 'interactive-01')
-    ),
-  interactive-02:
-    if(
-      global-variable-exists('interactive-02'),
-      $interactive-02,
-      map-get($carbon--theme--white, 'interactive-02')
-    ),
-  interactive-03:
-    if(
-      global-variable-exists('interactive-03'),
-      $interactive-03,
-      map-get($carbon--theme--white, 'interactive-03')
-    ),
-  interactive-04:
-    if(
-      global-variable-exists('interactive-04'),
-      $interactive-04,
-      map-get($carbon--theme--white, 'interactive-04')
-    ),
   ui-background:
     if(
       global-variable-exists('ui-background'),
@@ -1550,36 +1310,6 @@ $carbon--theme: (
       $ui-04,
       map-get($carbon--theme--white, 'ui-04')
     ),
-  ui-05:
-    if(
-      global-variable-exists('ui-05'),
-      $ui-05,
-      map-get($carbon--theme--white, 'ui-05')
-    ),
-  text-01:
-    if(
-      global-variable-exists('text-01'),
-      $text-01,
-      map-get($carbon--theme--white, 'text-01')
-    ),
-  text-02:
-    if(
-      global-variable-exists('text-02'),
-      $text-02,
-      map-get($carbon--theme--white, 'text-02')
-    ),
-  text-03:
-    if(
-      global-variable-exists('text-03'),
-      $text-03,
-      map-get($carbon--theme--white, 'text-03')
-    ),
-  text-04:
-    if(
-      global-variable-exists('text-04'),
-      $text-04,
-      map-get($carbon--theme--white, 'text-04')
-    ),
   text-05:
     if(
       global-variable-exists('text-05'),
@@ -1591,42 +1321,6 @@ $carbon--theme: (
       global-variable-exists('text-error'),
       $text-error,
       map-get($carbon--theme--white, 'text-error')
-    ),
-  icon-01:
-    if(
-      global-variable-exists('icon-01'),
-      $icon-01,
-      map-get($carbon--theme--white, 'icon-01')
-    ),
-  icon-02:
-    if(
-      global-variable-exists('icon-02'),
-      $icon-02,
-      map-get($carbon--theme--white, 'icon-02')
-    ),
-  icon-03:
-    if(
-      global-variable-exists('icon-03'),
-      $icon-03,
-      map-get($carbon--theme--white, 'icon-03')
-    ),
-  link-01:
-    if(
-      global-variable-exists('link-01'),
-      $link-01,
-      map-get($carbon--theme--white, 'link-01')
-    ),
-  link-02:
-    if(
-      global-variable-exists('link-02'),
-      $link-02,
-      map-get($carbon--theme--white, 'link-02')
-    ),
-  inverse-link:
-    if(
-      global-variable-exists('inverse-link'),
-      $inverse-link,
-      map-get($carbon--theme--white, 'inverse-link')
     ),
   field-01:
     if(
@@ -1640,137 +1334,11 @@ $carbon--theme: (
       $field-02,
       map-get($carbon--theme--white, 'field-02')
     ),
-  inverse-01:
-    if(
-      global-variable-exists('inverse-01'),
-      $inverse-01,
-      map-get($carbon--theme--white, 'inverse-01')
-    ),
-  inverse-02:
-    if(
-      global-variable-exists('inverse-02'),
-      $inverse-02,
-      map-get($carbon--theme--white, 'inverse-02')
-    ),
-  support-01:
-    if(
-      global-variable-exists('support-01'),
-      $support-01,
-      map-get($carbon--theme--white, 'support-01')
-    ),
-  support-02:
-    if(
-      global-variable-exists('support-02'),
-      $support-02,
-      map-get($carbon--theme--white, 'support-02')
-    ),
-  support-03:
-    if(
-      global-variable-exists('support-03'),
-      $support-03,
-      map-get($carbon--theme--white, 'support-03')
-    ),
-  support-04:
-    if(
-      global-variable-exists('support-04'),
-      $support-04,
-      map-get($carbon--theme--white, 'support-04')
-    ),
-  inverse-support-01:
-    if(
-      global-variable-exists('inverse-support-01'),
-      $inverse-support-01,
-      map-get($carbon--theme--white, 'inverse-support-01')
-    ),
-  inverse-support-02:
-    if(
-      global-variable-exists('inverse-support-02'),
-      $inverse-support-02,
-      map-get($carbon--theme--white, 'inverse-support-02')
-    ),
-  inverse-support-03:
-    if(
-      global-variable-exists('inverse-support-03'),
-      $inverse-support-03,
-      map-get($carbon--theme--white, 'inverse-support-03')
-    ),
-  inverse-support-04:
-    if(
-      global-variable-exists('inverse-support-04'),
-      $inverse-support-04,
-      map-get($carbon--theme--white, 'inverse-support-04')
-    ),
-  overlay-01:
-    if(
-      global-variable-exists('overlay-01'),
-      $overlay-01,
-      map-get($carbon--theme--white, 'overlay-01')
-    ),
-  danger-01:
-    if(
-      global-variable-exists('danger-01'),
-      $danger-01,
-      map-get($carbon--theme--white, 'danger-01')
-    ),
-  danger-02:
-    if(
-      global-variable-exists('danger-02'),
-      $danger-02,
-      map-get($carbon--theme--white, 'danger-02')
-    ),
   focus:
     if(
       global-variable-exists('focus'),
       $focus,
       map-get($carbon--theme--white, 'focus')
-    ),
-  inverse-focus-ui:
-    if(
-      global-variable-exists('inverse-focus-ui'),
-      $inverse-focus-ui,
-      map-get($carbon--theme--white, 'inverse-focus-ui')
-    ),
-  hover-primary:
-    if(
-      global-variable-exists('hover-primary'),
-      $hover-primary,
-      map-get($carbon--theme--white, 'hover-primary')
-    ),
-  active-primary:
-    if(
-      global-variable-exists('active-primary'),
-      $active-primary,
-      map-get($carbon--theme--white, 'active-primary')
-    ),
-  hover-primary-text:
-    if(
-      global-variable-exists('hover-primary-text'),
-      $hover-primary-text,
-      map-get($carbon--theme--white, 'hover-primary-text')
-    ),
-  hover-secondary:
-    if(
-      global-variable-exists('hover-secondary'),
-      $hover-secondary,
-      map-get($carbon--theme--white, 'hover-secondary')
-    ),
-  active-secondary:
-    if(
-      global-variable-exists('active-secondary'),
-      $active-secondary,
-      map-get($carbon--theme--white, 'active-secondary')
-    ),
-  hover-tertiary:
-    if(
-      global-variable-exists('hover-tertiary'),
-      $hover-tertiary,
-      map-get($carbon--theme--white, 'hover-tertiary')
-    ),
-  active-tertiary:
-    if(
-      global-variable-exists('active-tertiary'),
-      $active-tertiary,
-      map-get($carbon--theme--white, 'active-tertiary')
     ),
   hover-ui:
     if(
@@ -1814,54 +1382,6 @@ $carbon--theme: (
       $selected-light-ui,
       map-get($carbon--theme--white, 'selected-light-ui')
     ),
-  inverse-hover-ui:
-    if(
-      global-variable-exists('inverse-hover-ui'),
-      $inverse-hover-ui,
-      map-get($carbon--theme--white, 'inverse-hover-ui')
-    ),
-  hover-danger:
-    if(
-      global-variable-exists('hover-danger'),
-      $hover-danger,
-      map-get($carbon--theme--white, 'hover-danger')
-    ),
-  active-danger:
-    if(
-      global-variable-exists('active-danger'),
-      $active-danger,
-      map-get($carbon--theme--white, 'active-danger')
-    ),
-  hover-row:
-    if(
-      global-variable-exists('hover-row'),
-      $hover-row,
-      map-get($carbon--theme--white, 'hover-row')
-    ),
-  visited-link:
-    if(
-      global-variable-exists('visited-link'),
-      $visited-link,
-      map-get($carbon--theme--white, 'visited-link')
-    ),
-  disabled-01:
-    if(
-      global-variable-exists('disabled-01'),
-      $disabled-01,
-      map-get($carbon--theme--white, 'disabled-01')
-    ),
-  disabled-02:
-    if(
-      global-variable-exists('disabled-02'),
-      $disabled-02,
-      map-get($carbon--theme--white, 'disabled-02')
-    ),
-  disabled-03:
-    if(
-      global-variable-exists('disabled-03'),
-      $disabled-03,
-      map-get($carbon--theme--white, 'disabled-03')
-    ),
   highlight:
     if(
       global-variable-exists('highlight'),
@@ -1879,18 +1399,6 @@ $carbon--theme: (
       global-variable-exists('button-separator'),
       $button-separator,
       map-get($carbon--theme--white, 'button-separator')
-    ),
-  skeleton-01:
-    if(
-      global-variable-exists('skeleton-01'),
-      $skeleton-01,
-      map-get($carbon--theme--white, 'skeleton-01')
-    ),
-  skeleton-02:
-    if(
-      global-variable-exists('skeleton-02'),
-      $skeleton-02,
-      map-get($carbon--theme--white, 'skeleton-02')
     ),
   background:
     if(
@@ -2347,36 +1855,6 @@ $carbon--theme: (
       global-variable-exists('brand-01'),
       $brand-01,
       map-get($carbon--theme--white, 'brand-01')
-    ),
-  brand-02:
-    if(
-      global-variable-exists('brand-02'),
-      $brand-02,
-      map-get($carbon--theme--white, 'brand-02')
-    ),
-  brand-03:
-    if(
-      global-variable-exists('brand-03'),
-      $brand-03,
-      map-get($carbon--theme--white, 'brand-03')
-    ),
-  active-01:
-    if(
-      global-variable-exists('active-01'),
-      $active-01,
-      map-get($carbon--theme--white, 'active-01')
-    ),
-  hover-field:
-    if(
-      global-variable-exists('hover-field'),
-      $hover-field,
-      map-get($carbon--theme--white, 'hover-field')
-    ),
-  danger:
-    if(
-      global-variable-exists('danger'),
-      $danger,
-      map-get($carbon--theme--white, 'danger')
     ),
   caption-01:
     if(
