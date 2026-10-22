@@ -85,4 +85,48 @@ test.describe("RangeSlider", () => {
     await expect(page.getByTestId("value-upper-display")).toHaveText("20");
     await expect(page.getByTestId("value-display")).toHaveText("20");
   });
+
+  test("dragging a handle keeps it under the pointer and commits on release", async ({
+    page,
+  }) => {
+    const slider = page.getByTestId("range-slider");
+    const track = slider.locator(".bx--slider__track");
+    const upperThumb = slider.getByRole("slider").nth(1);
+    const box = await track.boundingBox();
+    const thumbBox = await upperThumb.boundingBox();
+    if (!box || !thumbBox) throw new Error("missing box");
+    const y = box.y + box.height / 2;
+
+    // The handle hangs to one side of its value point; grabbing it there
+    // must not jump the value to the press point.
+    const pressX = thumbBox.x + thumbBox.width / 2;
+    const grabOffset = pressX - (box.x + box.width * 0.8);
+    await page.mouse.move(pressX, y);
+    await page.mouse.down();
+    await expect(page.getByTestId("value-upper-display")).toHaveText("80");
+
+    await page.mouse.move(box.x + box.width * 0.6 + grabOffset, y, {
+      steps: 4,
+    });
+    await expect(page.getByTestId("value-upper-display")).toHaveText("60");
+
+    await page.mouse.move(box.x + box.width + 100, y + 150, { steps: 4 });
+    await page.mouse.up();
+    await expect(page.getByTestId("value-upper-display")).toHaveText("100");
+    await expect(page.getByTestId("value-display")).toHaveText("20");
+    await expect(page.getByTestId("change-count")).toHaveText("1");
+    await expect(upperThumb).toBeFocused();
+  });
+
+  test("pressing the track focuses the nearer handle", async ({ page }) => {
+    const slider = page.getByTestId("range-slider");
+    const box = await slider.locator(".bx--slider__track").boundingBox();
+    if (!box) throw new Error("missing track box");
+
+    await page.mouse.click(box.x + box.width * 0.3, box.y + box.height / 2);
+
+    await expect(slider.getByRole("slider").first()).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByTestId("value-display")).toHaveText("31");
+  });
 });

@@ -155,7 +155,6 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -164,6 +163,7 @@
   } from "../utils/field-status.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { clamp, parse } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
@@ -194,10 +194,8 @@
   $: controlLabelledBy = ariaLabelledBy ?? (ariaLabel ? undefined : labelId);
 
   let trackRef = null;
+  let thumbRef = null;
   let textInputRef = null;
-  let dragging = false;
-  let holding = false;
-  let currentEvent = null;
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
@@ -209,28 +207,18 @@
     return getSliderValueText(numericValue, formatValue);
   }
 
-  function startInteraction(event) {
-    if (disabled || readonly) return;
-    currentEvent = event;
-    holding = true;
-    dragging = true;
+  /** @param {PointerEvent} event */
+  function handleDragStart(event) {
+    if (disabled || readonly) return false;
+    // Focus the thumb so arrow keys work after a press on the track. The
+    // compat `mousedown` would otherwise move focus to the body.
+    event.preventDefault();
+    thumbRef?.focus({ preventScroll: true });
+    calcValue(event);
   }
 
-  function stopHolding() {
-    const wasHolding = holding;
-    holding = false;
-    dragging = false;
-    currentEvent = null;
-    if (wasHolding && !disabled && !readonly) {
-      dispatch("change", value);
-    }
-  }
-
-  function move(event) {
-    if (holding) {
-      currentEvent = event;
-      dragging = true;
-    }
+  function handleDragEnd() {
+    if (!disabled && !readonly) dispatch("change", value);
   }
 
   function handleTextInputFocus() {
@@ -272,14 +260,7 @@
   $: hasMarkLabels = resolvedMarks.some(
     (mark) => mark.label != null && mark.label !== "",
   );
-  $: {
-    value = clamp(value, min, max);
-
-    if (dragging && currentEvent) {
-      calcValue(currentEvent);
-      dragging = false;
-    }
-  }
+  $: value = clamp(value, min, max);
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
@@ -292,18 +273,6 @@
   class:bx--form-item={true}
   class:bx--form-item--fit={!fullWidth}
   class:bx--slider-form-item--vertical={orientation === "vertical"}
-  use:dismiss={{
-    enabled: holding,
-    // A fast press and release must still end the drag.
-    immediate: true,
-    listeners: [
-      { type: "mousemove", handler: move, options: { passive: true } },
-      { type: "touchmove", handler: move, options: { passive: true } },
-      { type: "mouseup", handler: stopHolding },
-      { type: "touchend", handler: stopHolding },
-      { type: "touchcancel", handler: stopHolding },
-    ],
-  }}
   {...wrapperProps}
   on:click
   on:mouseover
@@ -343,10 +312,14 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startInteraction}
-      on:touchstart={startInteraction}
+      use:pointerDrag={{
+        onStart: handleDragStart,
+        onMove: calcValue,
+        onEnd: handleDragEnd,
+      }}
     >
       <div
+        bind:this={thumbRef}
         role="slider"
         aria-disabled={disabled || undefined}
         tabindex={disabled ? undefined : 0}
