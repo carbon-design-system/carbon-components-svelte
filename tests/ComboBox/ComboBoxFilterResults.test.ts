@@ -71,6 +71,18 @@ describe("ComboBox filter result announcements", () => {
     expect(getStatus()).toHaveTextContent("3 results available");
   });
 
+  it("counts the create row among the available results", async () => {
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    await type("sl");
+    await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+    expect(getStatus()).toHaveTextContent("2 results available");
+
+    await type("zzz");
+    await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+    expect(getStatus()).toHaveTextContent("1 result available");
+  });
+
   it("skips the announcement when the count has not changed, supports a custom message", async () => {
     const filterResultsText = vi.fn((count: number) => `${count} matches`);
     render(ComboBoxReal, {
