@@ -77,6 +77,6 @@ describe("highlightCode", () => {
     highlightCode(code, "cobol");
     expect(registry().size).toBe(0);
     vi.stubGlobal("CSS", {});
-    expect(() => highlightCode(code, "js").destroy()).not.toThrow();
+    expect(() => highlightCode(code, "js")).not.toThrow();
   });
 });

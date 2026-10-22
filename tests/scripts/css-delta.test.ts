@@ -62,6 +62,15 @@ describe("changedSelectors", () => {
     });
   });
 
+  it("returns the selectors of rules that only changed order", () => {
+    expect(
+      changedSelectors(
+        ".a{color:red}.b{color:blue}",
+        ".b{color:blue}.a{color:red}",
+      ),
+    ).toEqual({ selectors: [".a"] });
+  });
+
   it("returns no selectors for identical output", () => {
     expect(changedSelectors(BASE, `/* moved */${BASE}`)).toEqual({
       selectors: [],

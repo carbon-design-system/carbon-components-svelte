@@ -237,6 +237,20 @@ describe("tokenize", () => {
       'a <span class="tok-operator">&lt;</span> <span class="tok-brace">&#123;</span>b<span class="tok-brace">&#125;</span>',
     );
   });
+
+  test("escapes ampersands, angle brackets, and quotes in every kind of text", () => {
+    // `&` and `>` are plain operator tokens, the quote is inside a string, and
+    // `&amp;` is inside a comment, so each escape runs on a different token.
+    expect(highlight("a & b > c", "js")).toBe(
+      'a <span class="tok-operator">&amp;</span> b <span class="tok-operator">&gt;</span> c',
+    );
+    expect(highlight("'\"' // &amp; <b>", "js")).toBe(
+      `<span class="tok-string">'&quot;'</span> <span class="tok-comment">// &amp;amp; &lt;b&gt;</span>`,
+    );
+    expect(highlight('<p title="&">', "html")).toBe(
+      '<span class="tok-angle-bracket">&lt;</span><span class="tok-tag-name">p</span> <span class="tok-attribute-name">title</span><span class="tok-operator">=</span><span class="tok-attribute-value">&quot;&amp;&quot;</span><span class="tok-angle-bracket">&gt;</span>',
+    );
+  });
 });
 
 describe("tokenize: keys, specifiers, and nesting", () => {

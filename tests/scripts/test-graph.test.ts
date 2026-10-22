@@ -143,9 +143,18 @@ describe("parseDependencies", () => {
     expect(
       deps(
         "tests/x.test.ts",
-        `import {\n  Accordion,\n  Header as H,\n  type Unknown,\n} from "carbon-components-svelte";`,
+        `import {\n  Accordion,\n  Header as H,\n  type Button,\n} from "carbon-components-svelte";`,
       ).files,
-    ).toEqual([BARREL, `${BARREL}#Accordion`, `${BARREL}#Header`]);
+    ).toEqual([`${BARREL}#Accordion`, `${BARREL}#Button`, `${BARREL}#Header`]);
+  });
+
+  it("falls back to the whole barrel for a name it doesn't export", () => {
+    expect(
+      deps(
+        "tests/x.test.ts",
+        `import { Accordion, Unknown } from "carbon-components-svelte";`,
+      ).files,
+    ).toEqual([BARREL, `${BARREL}#Accordion`]);
   });
 
   it("treats default and namespace barrel imports as the whole barrel", () => {
@@ -479,6 +488,26 @@ describe("planTests", () => {
       e2e: "all",
       reasons: ["css/: `:root` changed"],
     });
+  });
+
+  it("runs an e2e test that loads no stylesheet when a change can't be narrowed", () => {
+    const sources = new Map(Object.entries(REPO));
+    sources.set(
+      "e2e/fixtures/plain.html",
+      `<script type="module" src="./plain.ts"></script>`,
+    );
+    sources.set("e2e/fixtures/plain.ts", `document.body.append("plain");`);
+    sources.set(
+      "e2e/plain.test.ts",
+      `test("x", async ({ page }) => {\n  await page.goto("/plain.html");\n});`,
+    );
+    const { e2e } = planTests(
+      buildGraph(sources, context(sources.keys())),
+      ["css/_button.scss"],
+      [],
+      { reason: "`:root` changed" },
+    );
+    expect(formatSelection(e2e)).toBe("all");
   });
 
   it("lists the compiled stylesheets the graph imports", () => {
