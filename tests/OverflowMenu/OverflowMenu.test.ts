@@ -6,6 +6,7 @@ import { netListenerCalls } from "../utils/net-listener-calls";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { closeDetails, openMenu } from "./helpers";
+import OverflowMenuAutoAlign from "./OverflowMenu.autoAlign.test.svelte";
 import OverflowMenuCustomTrigger from "./OverflowMenu.customTrigger.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
@@ -698,6 +699,106 @@ describe("OverflowMenu", () => {
       expect(menu.closest("[data-floating-portal]") !== null).toBe(portalMenu);
       expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
       expect(menu).toHaveStyle("max-height: 240px");
+    });
+  });
+
+  describe("autoAlign", () => {
+    const VIEWPORT_WIDTH = 1000;
+    const MENU_WIDTH = 200;
+    const TRIGGER_WIDTH = 40;
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    /** jsdom has no layout, so place the trigger and size the menu by hand. */
+    function stubLayout(triggerLeft: number) {
+      const originalRect = Element.prototype.getBoundingClientRect;
+
+      vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+        function (this: Element) {
+          return this.classList?.contains("bx--overflow-menu")
+            ? rect({
+                top: 100,
+                left: triggerLeft,
+                width: TRIGGER_WIDTH,
+                height: 32,
+              })
+            : originalRect.call(this);
+        },
+      );
+
+      vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(
+        function (this: HTMLElement) {
+          return this.getAttribute("role") === "menu"
+            ? MENU_WIDTH
+            : TRIGGER_WIDTH;
+        },
+      );
+
+      vi.spyOn(window, "innerWidth", "get").mockReturnValue(VIEWPORT_WIDTH);
+    }
+
+    it("flips the menu when the trigger sits near the right edge", async () => {
+      stubLayout(VIEWPORT_WIDTH - 60);
+      render(OverflowMenuAutoAlign);
+
+      await openMenu();
+
+      await waitFor(() => {
+        expect(screen.getByRole("menu")).toHaveClass("bx--overflow-menu--flip");
+      });
+    });
+
+    it("leaves the menu unflipped when there is room to the right", async () => {
+      stubLayout(100);
+      render(OverflowMenuAutoAlign);
+
+      await openMenu();
+      await tick();
+
+      expect(screen.getByRole("menu")).not.toHaveClass(
+        "bx--overflow-menu--flip",
+      );
+    });
+
+    it("ignores autoAlign when portalMenu is explicitly false", async () => {
+      stubLayout(VIEWPORT_WIDTH - 60);
+      render(OverflowMenuAutoAlign, { props: { portalMenu: false } });
+
+      await openMenu();
+      await tick();
+
+      const menu = screen.getByRole("menu");
+      expect(menu.closest("[data-floating-portal]")).not.toBeInTheDocument();
+      expect(menu).not.toHaveClass("bx--overflow-menu--flip");
+    });
+
+    it("stops re-measuring on scroll and resize once the menu closes", async () => {
+      stubLayout(VIEWPORT_WIDTH - 60);
+      // `svelte:window` keeps its listeners attached and calls through to an
+      // `undefined` handler when closed, so assert on the scheduled work
+      // rather than on listener counts.
+      const raf = vi.spyOn(window, "requestAnimationFrame");
+
+      render(OverflowMenuAutoAlign);
+
+      raf.mockClear();
+      window.dispatchEvent(new Event("scroll"));
+      expect(raf).not.toHaveBeenCalled();
+
+      await openMenu();
+
+      raf.mockClear();
+      window.dispatchEvent(new Event("scroll"));
+      expect(raf).toHaveBeenCalled();
+
+      await user.keyboard("{Escape}");
+
+      raf.mockClear();
+      window.dispatchEvent(new Event("scroll"));
+      window.dispatchEvent(new Event("resize"));
+      expect(raf).not.toHaveBeenCalled();
     });
   });
 
