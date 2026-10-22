@@ -232,7 +232,6 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
@@ -246,7 +245,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
 
   $: descriptionId = `${id}-description`;

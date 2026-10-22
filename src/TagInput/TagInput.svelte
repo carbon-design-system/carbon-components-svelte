@@ -159,7 +159,6 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -177,7 +176,7 @@
   const dispatch = createEventDispatcher();
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"

@@ -17,11 +17,6 @@
 
   import { getContext, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_ITEM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -37,8 +32,8 @@
     "textarea",
   ]);
 
-  const formContext = getContext(FORM_CONTEXT_KEY);
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
+  const formContext = getContext("carbon:Form");
+  const formSize = getContext("carbon:FormSize") ?? readable(undefined);
   const fluid = !!formContext?.isFluid;
 
   const sharedControlId = writable(controlId);
@@ -60,7 +55,7 @@
     invalid: false,
   });
 
-  setContext(FORM_ITEM_CONTEXT_KEY, {
+  setContext("carbon:FormItem", {
     controlId: sharedControlId,
     disabled: sharedDisabled,
     part,

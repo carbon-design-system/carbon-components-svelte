@@ -52,13 +52,12 @@
 
   import { getContext, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
   const timePickerContext = getContext("carbon:TimePicker");
   const parentReadonly = timePickerContext?.readonly ?? readable(false);
   const parentDisabled = timePickerContext?.disabled ?? readable(false);

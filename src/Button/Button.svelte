@@ -156,10 +156,6 @@
   export let loadingDescription = undefined;
 
   import { getContext, onMount } from "svelte";
-  import {
-    FORM_SIZE_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import Loading from "../Loading/Loading.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -171,10 +167,10 @@
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
 
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
   const actionSetSize = getContext("carbon:ActionSet")?.size;
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   // Inside an `InputGroup`, match the height of the group's fields.
   const inputGroupSize = getContext("carbon:InputGroup")?.buttonSize;
 

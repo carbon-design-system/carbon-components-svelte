@@ -117,7 +117,6 @@
   import { afterUpdate, getContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -135,7 +134,7 @@
   import { uniqueId } from "../utils/unique-id.js";
   import { wordCount, wordLimitAction } from "../utils/word-count.js";
 
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
 
   /**
    * @param {string} text

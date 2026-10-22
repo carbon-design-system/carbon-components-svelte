@@ -26,10 +26,9 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
 
-  const ctx = getContext(PROFILE_MENU_CONTEXT_KEY);
+  const ctx = getContext("carbon:ProfileMenu");
 
   onMount(() => {
     if (ctx && ref) ctx.registerMenuItem(ref);

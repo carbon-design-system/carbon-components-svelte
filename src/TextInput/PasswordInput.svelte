@@ -107,11 +107,6 @@
   export let selectTextOnFocus = false;
 
   import { getContext, onMount, tick } from "svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import EditOff from "../icons/EditOff.svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
@@ -130,11 +125,11 @@
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const ctx = getContext(FORM_CONTEXT_KEY);
+  const ctx = getContext("carbon:Form");
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
 
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,

@@ -114,7 +114,6 @@
   import { getContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import Calendar from "../icons/Calendar.svelte";
   import Close from "../icons/Close.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -130,7 +129,7 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
 
   /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */

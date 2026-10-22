@@ -80,10 +80,6 @@
 
   import { getContext, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
@@ -97,9 +93,9 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const formContext = getContext("carbon:Form");
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
   const groupReadonly = writable(readonly);
   const groupDisabled = writable(disabled);

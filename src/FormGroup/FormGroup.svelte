@@ -42,7 +42,6 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
@@ -61,7 +60,7 @@
   // Helper text and messages placed directly in the group describe the
   // fieldset. `group` tells FormLabel not to treat the fieldset as its
   // control: a legend names a fieldset, not a label.
-  setContext(FORM_ITEM_CONTEXT_KEY, {
+  setContext("carbon:FormItem", {
     controlId: sharedId,
     disabled: sharedDisabled,
     part,

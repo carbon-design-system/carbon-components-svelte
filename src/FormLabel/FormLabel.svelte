@@ -25,10 +25,9 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const context = getContext(FORM_ITEM_CONTEXT_KEY);
+  const context = getContext("carbon:FormItem");
   // A FormGroup's fieldset is named by its legend, not a label.
   const formItem = context?.group ? undefined : context;
   const controlId = formItem?.controlId ?? readable(undefined);

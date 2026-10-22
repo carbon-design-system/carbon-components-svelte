@@ -1,7 +1,10 @@
 // @ts-check
 
-// Context keys read by components outside the family that sets them.
-// Family-local keys (e.g. "carbon:Tabs") stay inline next to their use.
+// Context keys read by components outside the family that sets them, for
+// consumers and tests that provide or read the same context. Components
+// write the string literal at each `getContext`/`setContext` call instead of
+// importing these, so `carbon-preprocess-svelte` can resolve the key and
+// drop branches guarded by a context that is never provided.
 
 /** Set by `FluidForm`; read by form fields to opt into fluid styles. */
 export const FORM_CONTEXT_KEY = "carbon:Form";

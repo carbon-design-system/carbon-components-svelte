@@ -13,10 +13,9 @@
   export let inline = false;
 
   import { getContext } from "svelte";
-  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
-  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const formSize = getContext("carbon:FormSize");
   $: effectiveSize = size ?? $formSize;
 </script>
 

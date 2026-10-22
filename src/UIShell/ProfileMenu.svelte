@@ -41,7 +41,6 @@
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { get } from "svelte/store";
   import { slide } from "svelte/transition";
-  import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
@@ -65,7 +64,7 @@
   /** @type {(node: HTMLElement) => void} */
   const unregisterMenuItem = menuItemRegistry.unregister;
 
-  setContext(PROFILE_MENU_CONTEXT_KEY, {
+  setContext("carbon:ProfileMenu", {
     menuItems,
     registerMenuItem,
     unregisterMenuItem,

@@ -2,8 +2,6 @@
 import { writable } from "svelte/store";
 import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 
-export const HIGHLIGHT_CURSOR_KEY = "carbon:ListBoxHighlight";
-
 const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
 
 /**

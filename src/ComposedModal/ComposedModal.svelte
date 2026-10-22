@@ -60,7 +60,6 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
@@ -157,7 +156,7 @@
     bodyId.set(value);
   }
 
-  setContext(MODAL_CONTEXT_KEY, {});
+  setContext("carbon:Modal", {});
   setContext("carbon:ComposedModal", {
     closeModal,
     submit,

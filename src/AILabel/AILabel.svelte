@@ -88,7 +88,6 @@
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
-  import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
   import Undo from "../icons/Undo.svelte";
   import Toggletip from "../Toggletip/Toggletip.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -105,7 +104,7 @@
    *   labelAlign: "start" | "center" | "end";
    * }}
    */
-  const host = getContext(AI_LABEL_HOST_CONTEXT_KEY);
+  const host = getContext("carbon:AILabelHost");
   const hostSize = host?.size;
 
   $: effectiveKind = host?.labelKind ?? kind;
