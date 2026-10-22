@@ -50,6 +50,7 @@
   export let fileErrorBody: ComponentProps<FileUploader>["fileErrorBody"] =
     undefined;
   export let fileSize: ComponentProps<FileUploader>["fileSize"] = false;
+  export let pasteTarget: ComponentProps<FileUploader>["pasteTarget"] = false;
 </script>
 
 <form data-testid="file-form">
@@ -76,6 +77,7 @@
     {fileErrorSubject}
     {fileErrorBody}
     {fileSize}
+    {pasteTarget}
     bind:ref
     bind:files
     on:add={(e) => onAdd?.(e)}
