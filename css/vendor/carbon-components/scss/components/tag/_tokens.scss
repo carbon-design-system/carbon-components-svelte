@@ -650,4 +650,257 @@ $tag-colors: (
       ),
     ),
   ),
+
+  // ccs: v11's operational tag borders. v11 has no g80 theme, so g80 takes
+  // g90's values, as the v11 tokens the themes lacked do.
+  'tag-border-red': (
+    fallback: $carbon__red-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__red-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__red-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__red-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__red-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__red-50,
+      ),
+    ),
+  ),
+  'tag-border-magenta': (
+    fallback: $carbon__magenta-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__magenta-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__magenta-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__magenta-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__magenta-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__magenta-50,
+      ),
+    ),
+  ),
+  'tag-border-purple': (
+    fallback: $carbon__purple-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__purple-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__purple-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__purple-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__purple-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__purple-50,
+      ),
+    ),
+  ),
+  'tag-border-blue': (
+    fallback: $carbon__blue-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__blue-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__blue-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__blue-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__blue-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__blue-50,
+      ),
+    ),
+  ),
+  'tag-border-cyan': (
+    fallback: $carbon__cyan-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__cyan-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__cyan-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__cyan-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__cyan-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__cyan-50,
+      ),
+    ),
+  ),
+  'tag-border-teal': (
+    fallback: $carbon__teal-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__teal-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__teal-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__teal-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__teal-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__teal-50,
+      ),
+    ),
+  ),
+  'tag-border-green': (
+    fallback: $carbon__green-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__green-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__green-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__green-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__green-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__green-50,
+      ),
+    ),
+  ),
+  'tag-border-gray': (
+    fallback: $carbon__gray-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__gray-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__gray-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__gray-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__gray-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__gray-50,
+      ),
+    ),
+  ),
+  'tag-border-cool-gray': (
+    fallback: $carbon__cool-gray-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__cool-gray-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__cool-gray-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__cool-gray-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__cool-gray-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__cool-gray-50,
+      ),
+    ),
+  ),
+  'tag-border-warm-gray': (
+    fallback: $carbon__warm-gray-40,
+    values: (
+      (
+        theme: $carbon--theme--white,
+        value: $carbon__warm-gray-40,
+      ),
+      (
+        theme: $carbon--theme--g10,
+        value: $carbon__warm-gray-40,
+      ),
+      (
+        theme: $carbon--theme--g80,
+        value: $carbon__warm-gray-50,
+      ),
+      (
+        theme: $carbon--theme--g90,
+        value: $carbon__warm-gray-50,
+      ),
+      (
+        theme: $carbon--theme--g100,
+        value: $carbon__warm-gray-50,
+      ),
+    ),
+  ),
 ) !default;
