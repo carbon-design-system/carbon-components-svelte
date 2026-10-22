@@ -93,9 +93,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildPack } from "./pack-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
 
   /** @type {string | null} */
   let activeId = null;
@@ -179,6 +182,7 @@
     event.preventDefault();
     setActive(order[focusIndex]);
   }
+  $: tooltipTiming.settle(active);
 </script>
 
 <figure bind:this={ref} class:bx--viz-pack={true} {...$$restProps}>
@@ -200,6 +204,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:click={selectActive}
       on:mouseleave={() => setActive(null)}
       on:blur={() => setActive(null)}
@@ -242,7 +247,7 @@
         {/each}
       </g>
     </svg>
-    {#if active}
+    {#if active && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={active.cx > diameter / 2}

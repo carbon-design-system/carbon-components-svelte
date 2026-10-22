@@ -136,9 +136,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildSunburst } from "./sunburst-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
 
   let active = -1;
 
@@ -249,6 +252,7 @@
     event.preventDefault();
     setActive(next);
   }
+  $: tooltipTiming.settle(current);
 </script>
 
 <figure
@@ -273,6 +277,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:click={selectActive}
       on:pointerleave={() => setActive(-1)}
       on:blur={() => setActive(-1)}
@@ -332,7 +337,7 @@
         {/if}
       </slot>
     </div>
-    {#if current}
+    {#if current && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={current.cx > diameter / 2}

@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/svelte";
 import { user } from "../../utils/user";
 import TileGridMap from "./TileGridMap.test.svelte";
 
@@ -72,8 +78,11 @@ describe("TileGridMap", () => {
     expect(onhover).toHaveBeenLastCalledWith(
       expect.objectContaining({ id: "TX", label: "Texas", value: 300 }),
     );
-    expect(document.querySelector(".bx--viz-chart-tooltip")).toHaveTextContent(
-      /Texas\s*300/,
+    // The tooltip waits for the pointer to settle.
+    await waitFor(() =>
+      expect(
+        document.querySelector(".bx--viz-chart-tooltip"),
+      ).toHaveTextContent(/Texas\s*300/),
     );
     expect(document.querySelector("[aria-live]")).toHaveTextContent(
       "Texas: 300",

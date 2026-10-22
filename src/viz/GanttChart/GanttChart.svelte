@@ -144,9 +144,12 @@
   import { toAccessor } from "../utils/accessor.js";
   import { formatDuration, formatPercent } from "../utils/format-compact.js";
   import { nextId } from "../utils/next-id.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildGantt } from "./gantt-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   const AXIS = 24;
   const PAD = 8;
   const markerId = nextId("bx-viz-gantt");
@@ -278,6 +281,7 @@
     event.preventDefault();
     setActive(next);
   }
+  $: tooltipTiming.settle(current);
 </script>
 
 <figure
@@ -302,6 +306,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:click={selectActive}
       on:pointerleave={() => setActive(-1)}
       on:blur={() => setActive(-1)}
@@ -429,7 +434,7 @@
         </g>
       </g>
     </svg>
-    {#if current}
+    {#if current && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={current.x0 > width / 2}

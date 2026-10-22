@@ -120,6 +120,7 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import {
     buildParallel,
     nearestLine,
@@ -127,6 +128,8 @@
   } from "./parallel-geometry.js";
 
   const dispatch = createEventDispatcher();
+  const tooltipTiming = createTooltipTiming();
+  const { shown: tooltipShown } = tooltipTiming;
   const MARGIN = { top: 36, right: 40, bottom: 24, left: 40 };
   const HIT = 24;
 
@@ -338,6 +341,7 @@
   }
 
   onMount(() => () => onPointerMove.cancel());
+  $: tooltipTiming.settle(current);
 </script>
 
 <figure
@@ -369,6 +373,7 @@
       on:pointerleave={() => setActive(-1)}
       on:click={selectActive}
       on:keydown={onKeydown}
+      use:tooltipTiming.track
       on:blur={() => setActive(-1)}
     >
       <g aria-hidden="true">
@@ -449,7 +454,7 @@
         {/each}
       </g>
     </svg>
-    {#if current}
+    {#if current && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={true}
