@@ -5,20 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-/// Map deep get
-/// @author Hugo Giraudel
-/// @access public
-/// @param {Map} $map - Map
-/// @param {Arglist} $keys - Key chain
-/// @return {*} Desired value
-/// @group @carbon/layout
-@function map-deep-get($map, $keys...) {
-  @each $key in $keys {
-    $map: map-get($map, $key);
-  }
-  @return $map;
-}
-
 /// Provide a map and index, and get back the relevant key value
 /// @access public
 /// @param {Map} $map - Map
