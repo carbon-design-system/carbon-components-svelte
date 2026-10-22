@@ -9,7 +9,7 @@ description: Loading indicators display a full-screen or inline spinner, ideal f
 
 ## Basic
 
-Display a loading indicator with a semi-transparent overlay that covers the entire viewport.
+Display a loading indicator with a semi-transparent overlay that covers the entire viewport. While active, the overlay holds keyboard focus. Focus returns to the previous element when loading stops.
 
 <FileSource src="/framed/Loading/Loading" />
 
