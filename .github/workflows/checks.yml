@@ -69,6 +69,8 @@ jobs:
               - 'tests-svelte3/**'
               - 'tests-svelte4/**'
               - 'scripts/**'
+              - 'e2e/**'
+              - 'crassus.config.ts'
               - 'vite.config.ts'
               - 'tsconfig*.json'
               - 'package.json'
