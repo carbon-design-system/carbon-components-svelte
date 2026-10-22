@@ -16,6 +16,16 @@ test.describe("PasswordInput a11y", () => {
       "type",
       "text",
     );
+    // The click leaves the toggle hovered and focused, so its "Hide password"
+    // tooltip fades in. Scan once it is opaque: mid-fade, axe reads the text
+    // against a half-transparent background and reports a contrast failure.
+    await page
+      .locator("#app")
+      .evaluate((app) =>
+        Promise.all(
+          app.getAnimations({ subtree: true }).map((a) => a.finished),
+        ),
+      );
 
     const revealedResults = await new AxeBuilder({ page })
       .include("#app")
