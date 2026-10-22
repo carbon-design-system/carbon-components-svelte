@@ -4,13 +4,9 @@ description: Copy inputs display a read-only value in a text field with a built-
 ---
 
 <script>
-  import { Box, Button, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, Layer, Stack, TooltipIcon } from "carbon-components-svelte";
+  import { Box, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, Layer, TooltipIcon } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
-  import View from "carbon-icons-svelte/lib/View.svelte";
-  import ViewOff from "carbon-icons-svelte/lib/ViewOff.svelte";
-
-  let shown = false;
 </script>
 
 ## Basic
@@ -67,6 +63,30 @@ Use `"hover-focus"` to reveal while the field is hovered or focused. The value s
 
 <CopyInput labelText="API token" type="password" revealMode="hover-focus" value="sk-1234567890abcdef" />
 
+### Reveal toggle
+
+Use `"toggle"` to render a show/hide button between the field and the copy button. The value stays revealed until the button is clicked again.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" value="sk-1234567890abcdef" />
+
+### Toggle labels
+
+Set `showValueLabel` to change the toggle button's label and tooltip while the value is obscured. Set `hideValueLabel` to change them while the value is revealed.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" showValueLabel="Reveal" hideValueLabel="Conceal" value="sk-1234567890abcdef" />
+
+### Reveal timeout
+
+Set `revealTimeout` to re-obscure a toggled value automatically, in milliseconds. It applies only to `revealMode="toggle"`.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" revealTimeout={5000} value="sk-1234567890abcdef" />
+
+### Revealed state
+
+Bind to `revealed` to read whether the value currently renders as text, in any reveal mode.
+
+<FileSource src="/framed/CopyInput/CopyInputRevealed" />
+
 ## Masked value
 
 Set `maskedValue` to show other text in place of `value`, such as a key with only its prefix and last characters. The copy button still copies `value`, and a form submits `value`. Unlike `type="password"`, browsers don't offer to save it as a password. `revealMode` works the same way.
@@ -77,24 +97,22 @@ Set `maskedValue` to show other text in place of `value`, such as a key with onl
   maskedValue="key_••••••••4f2a"
 />
 
-### Reveal with a button
+### Reveal with a toggle
 
-To reveal on click, clear `maskedValue` from a button beside the field.
+`revealMode="toggle"` works with `maskedValue` too.
 
-<Stack orientation="horizontal" align="end" gap={2}>
-  <CopyInput
-    labelText="Signing secret"
-    value="sig_8c1f0a6e2b9d47a3e5f1c4b7a91f"
-    maskedValue={shown ? undefined : "sig_••••••••••••a91f"}
-  />
-  <Button
-    kind="ghost"
-    size="field"
-    icon={shown ? ViewOff : View}
-    iconDescription={shown ? "Hide secret" : "Show secret"}
-    on:click={() => (shown = !shown)}
-  />
-</Stack>
+<CopyInput
+  labelText="Signing secret"
+  value="sig_8c1f0a6e2b9d47a3e5f1c4b7a91f"
+  maskedValue="sig_••••••••••••a91f"
+  revealMode="toggle"
+/>
+
+## Copy button visibility
+
+Set `copyButtonVisibility` to `"hover-focus"` to fade the copy button in only while the field is hovered or has focus within. Keyboard focus and the copy feedback keep the button visible.
+
+<CopyInput labelText="API token" copyButtonVisibility="hover-focus" value="sk-1234567890abcdef" />
 
 ## Truncation
 
@@ -259,6 +277,12 @@ tooltip icon.
 ### Disabled
 
 <CopyInput fluid disabled labelText="API token" value="sk-1234567890abcdef" />
+
+### Reveal toggle
+
+The reveal toggle positions itself correctly in the fluid variant.
+
+<CopyInput fluid labelText="API token" type="password" revealMode="toggle" value="sk-1234567890abcdef" />
 
 ### Skeleton
 
