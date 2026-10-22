@@ -1,0 +1,100 @@
+---
+components: ["AreaChart"]
+description: Area chart shows how a total and its parts change over a continuous or ordered axis, overlapping, stacked, normalized to shares, or as a stream.
+---
+
+<script>
+  import { AreaChart, ChartThreshold } from "carbon-components-svelte/viz";
+
+  const DAY = 86_400_000;
+  const START = new Date(2026, 0, 1).getTime();
+  const CHANNELS = ["Organic", "Paid", "Referral"];
+
+  function make(n, channels = CHANNELS) {
+    const rows = [];
+    for (let i = 0; i < n; i++) {
+      for (let c = 0; c < channels.length; c++) {
+        rows.push({
+          date: new Date(START + (i * DAY * 365) / n),
+          channel: channels[c],
+          sessions: Math.round(900 + c * 350 + Math.sin(i / (n / 8) + c * 1.7) * 380 + ((i * 131 * (c + 1)) % 160)),
+        });
+      }
+    }
+    return rows;
+  }
+
+  const data = make(40);
+  const single = make(40, ["Organic"]);
+  const gaps = single.map((row, i) => (i > 14 && i < 19 ? { ...row, sessions: null } : row));
+</script>
+
+`AreaChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a ready-made composition of the [Chart](/components/Chart) primitives. The filled area encodes the value, so the y axis includes zero.
+
+## Basic
+
+Pass long format `data`, one row per x and series, and name the fields with `x`, `y`, and `series`. Set `title`: it names the chart for assistive technology. By default the layers overlap and are translucent, so every series stays visible.
+
+<AreaChart {data} x="date" y="sessions" series="channel" title="Sessions by channel" />
+
+## Stacking
+
+### Stacked
+
+Set `stack` to `"stacked"` to pile the series up and read the total from the top edge. The y axis grows to fit the tallest stack.
+
+<AreaChart {data} x="date" y="sessions" series="channel" title="Total sessions" stack="stacked" />
+
+### Normalized
+
+Set `stack` to `"normalized"` to show each series as a share of the total. The axis runs from 0% to 100%.
+
+<AreaChart {data} x="date" y="sessions" series="channel" title="Channel mix" stack="normalized" />
+
+### Stream
+
+Set `stack` to `"stream"` to center the stack on a middle line. It shows how the mix ebbs and flows, at the cost of a readable baseline, so the y labels are hidden.
+
+<AreaChart {data} x="date" y="sessions" series="channel" title="Sessions stream" stack="stream" curve="monotone" height={240} />
+
+## Data
+
+### Single series
+
+Omit `series` to draw one layer. The legend is hidden for a single series.
+
+<AreaChart data={single} x="date" y="sessions" title="Organic sessions" height={220} />
+
+### Missing values
+
+When layers overlap, a `null` or non-finite y breaks the layer. It is never bridged.
+
+<AreaChart data={gaps} x="date" y="sessions" title="Sessions with missing weeks" height={220} />
+
+When layers are stacked, a missing value counts as zero instead. Every layer above it needs something to sit on, so a gap there would break the whole stack.
+
+## Curve and opacity
+
+Set `curve` to `"monotone"` for a smooth edge that never overshoots the data, and `opacity` to change the fill.
+
+<AreaChart data={single} x="date" y="sessions" title="Smooth and light" curve="monotone" opacity={0.15} height={220} />
+
+## Thresholds
+
+Add marks in the default slot. A `ChartThreshold` draws a labelled rule and keeps its value inside the y domain.
+
+<AreaChart {data} x="date" y="sessions" series="channel" title="Sessions against capacity" stack="stacked" height={260}>
+  <ChartThreshold y={5000} label="Capacity" kind="warning" />
+</AreaChart>
+
+## Data table and export
+
+Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or the visible series as CSV, and show the chart fullscreen.
+
+<AreaChart {data} x="date" y="sessions" series="channel" title="Sessions by channel" stack="stacked" toolbar />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between data points, Up and Down between series, Enter or Space selects, and Escape clears. The focused point is announced with its full date and every series value. Stacked layers are told apart by position as well as color, and the data table view gives every value as text.

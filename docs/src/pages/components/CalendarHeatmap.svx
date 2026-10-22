@@ -1,0 +1,54 @@
+---
+components: ["CalendarHeatmap"]
+description: Calendar heatmap shows a value for every day of a year, one column per week, to reveal weekly rhythm, streaks, and gaps.
+---
+
+<script>
+  import { CalendarHeatmap } from "carbon-components-svelte/viz";
+
+  const commits = Array.from({ length: 365 }, (_, i) => {
+    const day = new Date(2026, 0, 1 + i);
+    const weekend = day.getDay() === 0 || day.getDay() === 6;
+    const n = (i * 7919) % 23;
+    // Quiet weekends, a two week gap in August, and the odd busy day.
+    if (day.getMonth() === 7 && day.getDate() < 15) return null;
+    if (weekend && n > 3) return null;
+    return { day, commits: weekend ? n : n % 5 === 0 ? n + 14 : Math.round(n / 3) };
+  }).filter(Boolean);
+
+  let selected = null;
+</script>
+
+`CalendarHeatmap` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass long `data` with a `date` and a `value` accessor. Rows that fall on the same day are summed. A day with no rows is outlined, so it cannot be read as a low value, while a recorded zero takes the low end of the ramp. Hover a day to read its date and total.
+
+<CalendarHeatmap data={commits} date="day" value="commits" title="Commits in 2026" />
+
+## Year and week start
+
+`year` defaults to the year of the latest date. Set `weekStart` to the first day of the week, 0 for Sunday.
+
+<CalendarHeatmap data={commits} date="day" value="commits" year={2026} weekStart={1} title="Weeks that start on Monday" />
+
+## Hue and domain
+
+Set `hue` to `"blue"`, `"purple"`, `"cyan"`, or `"teal"`. The ramp spans the smallest to the largest day. Set `domain` to cap it, so one unusual day does not wash out the rest.
+
+<CalendarHeatmap data={commits} date="day" value="commits" hue="teal" domain={[0, 10]} title="Capped at 10 commits" />
+
+## Selectable
+
+Set `selectable` to turn days into toggle buttons. Bind `selected`, a `YYYY-MM-DD` string, or listen for `select`, whose detail holds the day and the `data` rows summed into it.
+
+<CalendarHeatmap data={commits} date="day" value="commits" title="Pick a day" selectable bind:selected />
+
+## Narrow containers
+
+A year is 53 columns wide. In a container that cannot fit them, the calendar scrolls sideways instead of squeezing the days.
+
+## Accessibility
+
+The calendar is a table: the `title` is its caption, months head the columns, and weekdays head the rows. Every day holds its full date and total as text, such as "Monday, January 5: 5", so nothing rests on color. Set `noDataText` to translate the text for a day with no data, and `locale` for the month and weekday names. When `selectable`, the calendar is one tab stop, which starts on the latest day with data. Left and Right move a week, Up and Down a day.

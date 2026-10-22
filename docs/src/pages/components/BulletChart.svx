@@ -1,0 +1,113 @@
+---
+components: ["BulletChart"]
+description: Bullet chart compares one measure against a target, over qualitative bands, in the space of a table cell or KPI card.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { BulletChart } from "carbon-components-svelte/viz";
+</script>
+
+`BulletChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass a `value`, a `max`, and a `label`. The value is appended to the accessible name.
+
+<BulletChart value={270} max={400} label="Revenue" />
+
+## Target
+
+Set `target` to draw a tick across the bar. The tick is taller than the measure, so it stays visible once the value passes it.
+
+<Stack gap={5}>
+  <BulletChart value={270} target={300} max={400} label="Revenue" />
+  <BulletChart value={340} target={300} max={400} label="Revenue" />
+</Stack>
+
+## Bands
+
+Set `bands` to the upper bounds of the qualitative ranges, such as poor and satisfactory. The last band runs to the end of the scale. Bands are one neutral that lightens toward the high end, so they never read as a status color.
+
+<BulletChart value={270} target={300} max={400} bands={[150, 250]} label="Revenue" />
+
+## Scale
+
+The scale starts at `min`, which defaults to 0. Without `max`, it ends at the largest of the value, the target, and the last band.
+
+<Stack gap={5}>
+  <BulletChart value={72} target={80} min={50} max={100} bands={[60, 75]} label="Satisfaction" />
+  <BulletChart value={270} target={300} label="Revenue, scale ends at the target" />
+</Stack>
+
+## Value
+
+Set `showValue` to write the value next to the bar. `format` takes `Intl.NumberFormat` options or a function.
+
+<Stack gap={5}>
+  <BulletChart value={270000} target={300000} max={400000} showValue label="Revenue" />
+  <BulletChart
+    value={0.72}
+    target={0.8}
+    max={1}
+    showValue
+    format={{ style: "percent" }}
+    label="Satisfaction"
+  />
+</Stack>
+
+## Color
+
+The measure defaults to a high contrast neutral. Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={5}>
+  <BulletChart value={270} target={300} max={400} bands={[150, 250]} color="interactive" label="Revenue" />
+  <BulletChart value={340} target={300} max={400} bands={[150, 250]} color="success" label="Revenue" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <BulletChart value={270} target={300} max={400} bands={[150, 250]} size="sm" label="Small" />
+  <BulletChart value={270} target={300} max={400} bands={[150, 250]} label="Medium (default)" />
+  <BulletChart value={270} target={300} max={400} bands={[150, 250]} size="lg" label="Large" />
+</Stack>
+
+## In a data table
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "region", value: "Region" },
+    { key: "revenue", value: "Revenue against target" },
+  ]}
+  rows={[
+    { id: "a", region: "EMEA", revenue: { value: 270, target: 300 } },
+    { id: "b", region: "APAC", revenue: { value: 340, target: 300 } },
+    { id: "c", region: "AMER", revenue: { value: 120, target: 300 } },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "revenue"}
+      <BulletChart
+        value={cell.value.value}
+        target={cell.value.target}
+        max={400}
+        bands={[150, 250]}
+        size="sm"
+        showValue
+        label="{row.region} revenue"
+      />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Threshold event
+
+`threshold` fires when an update moves the value across the target or a band boundary, once for each boundary crossed. It never fires on mount. The detail holds the `threshold`, its `kind` (`"target"` or `"band"`), the `direction` (`"above"` or `"below"`), and the new `value`.
+
+## Accessibility
+
+With a `label`, the graphic is announced as an image named with the label, the value, and the target, such as "Revenue: 270, target 300". Set `targetLabel` to translate the word "target". Without a label it is hidden from assistive technology.

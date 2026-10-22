@@ -1,0 +1,52 @@
+---
+components: ["GanttChart"]
+description: Gantt chart lays tasks out as bars on one time scale, grouped by workstream, with what is done and what waits for what, read-only.
+---
+
+<script>
+  import { GanttChart } from "carbon-components-svelte/viz";
+
+  const day = (d) => new Date(2026, 8, d);
+  const plan = [
+    { id: "spec", name: "Write the spec", stream: "Design", from: day(1), to: day(6), done: 1 },
+    { id: "mocks", name: "Mocks", stream: "Design", from: day(4), to: day(10), done: 1, after: "spec" },
+    { id: "api", name: "Checkout API", stream: "API", from: day(7), to: day(18), done: 0.55, after: "spec" },
+    { id: "auth", name: "Session hardening", stream: "API", from: day(9), to: day(14), done: 0.8 },
+    { id: "web", name: "Storefront", stream: "Web", from: day(11), to: day(22), done: 0.2, after: ["mocks", "api"] },
+    { id: "email", name: "Order emails", stream: "Web", from: day(16), to: day(20), after: "api" },
+    { id: "qa", name: "Hardening", stream: "QA", from: day(20), to: day(25), after: ["web", "email"] },
+    { id: "launch", name: "Launch", stream: "QA", from: day(25), to: day(26), after: "qa" },
+  ];
+</script>
+
+`GanttChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Each task is a bar from its start to its end on one time scale, one row each, grouped under its workstream. It shows a plan; it does not edit one. Dragging a bar to reschedule belongs to a scheduler. For a trace, where the rows are a tree of calls, use [SpanWaterfall](/components/SpanWaterfall).
+
+## Basic
+
+Pass one row per task with `start` and `end` accessors, a `label`, and a `group` for the workstream, which sets the color. The axis is widened to whole days.
+
+<GanttChart data={plan} label="name" group="stream" start="from" end="to" title="Launch plan" />
+
+## Progress and dependencies
+
+Set `progress` to read how much of a task is done, drawn as the solid part of its bar. Set `id` and `dependsOn` to draw an arrow from the end of each task another waits for to that task's start. An arrow is red and dashed when the waiting task starts before the other ends.
+
+<GanttChart data={plan} id="id" label="name" group="stream" start="from" end="to" progress="done" dependsOn="after" title="Launch plan, with dependencies" />
+
+## Today and domain
+
+Set `today` to mark a moment with a rule, and `domain` to show a fixed range.
+
+<GanttChart data={plan} id="id" label="name" group="stream" start="from" end="to" progress="done" dependsOn="after" today={day(13)} domain={[day(1), day(31)]} title="Launch plan, as of the 13th" />
+
+## Colors and size
+
+Set `colors` to fix a workstream's color, `palette` to pick another color group, `rowHeight` for the height of a row, and `labelSpace` for the room for labels.
+
+<GanttChart data={plan} id="id" label="name" group="stream" start="from" end="to" progress="done" colors={{ QA: "warning" }} rowHeight={22} labelSpace={200} legend={false} title="Launch plan, QA in warning" />
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move task by task, Home and End jump to the ends, Enter or Space selects, and Escape clears. Each task is announced with its workstream, dates, length, and progress. The figure also holds a visually hidden table of every task with its start, end, progress, and what it waits for, so the plan reads without the picture.

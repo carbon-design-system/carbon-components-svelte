@@ -1,0 +1,80 @@
+---
+components: ["WaterfallChart"]
+description: Waterfall chart shows how a starting value becomes an ending one, one step at a time, with each bar floating from the running total before it.
+---
+
+<script>
+  import { ChartThreshold, WaterfallChart } from "carbon-components-svelte/viz";
+
+  const bridge = [
+    { step: "Q1 revenue", change: 1240 },
+    { step: "New customers", change: 310 },
+    { step: "Expansion", change: 180 },
+    { step: "Churn", change: -140 },
+    { step: "Contraction", change: -60 },
+    { step: "Q2 revenue", change: 0 },
+  ];
+  const cash = [
+    { step: "Opening", change: 420 },
+    { step: "Operations", change: 210 },
+    { step: "Investing", change: -380 },
+    { step: "Financing", change: 150 },
+    { step: "FX", change: -25 },
+    { step: "Closing", change: 0 },
+  ];
+</script>
+
+`WaterfallChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props.
+
+## Basic
+
+Pass long `data` with an `x` accessor for the step and a `y` accessor for its change. The first step rises from zero, and each bar after it floats from the running total before it to the running total after. Increases and decreases take the status colors, and dashed connectors carry each total across to the next step.
+
+<WaterfallChart data={bridge} x="step" y="change" totals={["Q2 revenue"]} title="Revenue bridge, Q1 to Q2" yTitle="USD, thousands" />
+
+## Totals
+
+Name the steps that are subtotals in `totals`. Their bar rises from zero to the running total, is drawn neutral, and ignores the step's own value, so pass `0` or anything. Put one at the end for the closing figure, and more in the middle to break a long bridge up.
+
+<WaterfallChart
+  data={[
+    ...bridge.slice(0, 3),
+    { step: "Gross", change: 0 },
+    ...bridge.slice(3),
+  ]}
+  x="step"
+  y="change"
+  totals={["Gross", "Q2 revenue"]}
+  title="Revenue bridge with a gross subtotal"
+  height={260}
+/>
+
+## Below zero
+
+A running total can go negative. The axis grows to hold it, and bars keep floating from the total before them.
+
+<WaterfallChart data={cash} x="step" y="change" totals={["Closing"]} title="Cash flow" height={260} />
+
+## Orientation
+
+Set `orientation` to `"horizontal"` for long step names.
+
+<WaterfallChart data={bridge} x="step" y="change" totals={["Q2 revenue"]} orientation="horizontal" title="Revenue bridge, Q1 to Q2" height={280} />
+
+## Thresholds and sizing
+
+Other marks go in the default slot. `padding` sets the gap between slots, `maxBarWidth` caps the bars, and `connectors` can be turned off.
+
+<WaterfallChart data={bridge} x="step" y="change" totals={["Q2 revenue"]} maxBarWidth={32} title="Against the plan" height={260}>
+  <ChartThreshold y={1600} label="Plan" kind="info" />
+</WaterfallChart>
+
+## Composition
+
+`WaterfallChart` is `ChartWaterfall` inside a `Chart`. The mark walks the first visible series, so a chart with several series draws only the first as a waterfall. It is listed with the other primitives on the [Chart](/components/Chart) page.
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between steps, Enter or Space selects, and Escape clears. The focused step is highlighted with a band and the others are dimmed, and its change is announced. Direction is shown by color and by which way the bar floats from its connector, so it never rests on color alone. The data table view lists every step's change.

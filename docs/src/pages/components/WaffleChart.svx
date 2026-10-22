@@ -1,0 +1,72 @@
+---
+components: ["WaffleChart"]
+description: Waffle chart shows the parts of a whole as a grid of cells, one per percent, which reads more exactly than a pie.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { WaffleChart } from "carbon-components-svelte/viz";
+
+  const devices = [
+    { id: "desktop", label: "Desktop", value: 5200 },
+    { id: "mobile", label: "Mobile", value: 3100 },
+    { id: "tablet", label: "Tablet", value: 1100 },
+    { id: "tv", label: "TV", value: 400 },
+    { id: "watch", label: "Watch", value: 200 },
+  ];
+
+  const status = [
+    { id: "passed", label: "Passed", value: 182, color: "success" },
+    { id: "failed", label: "Failed", value: 9, color: "error" },
+    { id: "skipped", label: "Skipped", value: 14, color: "neutral" },
+  ];
+
+  let selectedId;
+</script>
+
+`WaffleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+A waffle counts where a [DonutChart](/components/DonutChart) estimates: ten by ten cells make each one a percent, so a part's size can be read off. It takes the same `data` as [StackedBar](/components/StackedBar), which suits a table cell better.
+
+## Basic
+
+Pass `data` as parts with an `id`, a `label`, and a `value`. Cells are handed out so they add up to the grid exactly, by largest remainder, and a part above zero always gets at least one cell. They fill column by column from the bottom left, so each part is one block.
+
+<WaffleChart data={devices} label="Sessions by device" />
+
+## Legend
+
+The legend lists each part with its share. Set `valueType` to `"value"` to write the value instead, and `format` to say how. Set `legend` to `false` to drop it.
+
+<Stack gap={6}>
+  <WaffleChart data={devices} valueType="value" label="Sessions by device" />
+  <WaffleChart data={devices} legend={false} label="Sessions by device" />
+</Stack>
+
+## Grid
+
+Set `rows` and `columns` for another grid. Five by four makes each cell five percent. `maxSegments` folds the parts past the limit into one, so sort by value first to fold the smallest.
+
+<Stack gap={6}>
+  <WaffleChart data={devices} rows={4} columns={5} size="lg" maxSegments={3} label="Sessions by device" />
+  <WaffleChart data={devices} rows={5} columns={20} size="sm" label="Sessions by device" />
+</Stack>
+
+## Color
+
+Parts take Carbon's prescribed color groups in order. Set `palette` to pick another group, or give a part its own `color`: a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={6}>
+  <WaffleChart data={devices} palette={2} label="Sessions by device" />
+  <WaffleChart data={status} valueType="value" label="Test results" />
+</Stack>
+
+## Selectable
+
+Set `selectable` to make each legend entry a toggle that lights up its cells and dims the rest. Bind `selectedId` or listen for `select`. Activating the selected entry clears the selection.
+
+<WaffleChart data={devices} selectable bind:selectedId label="Sessions by device" />
+
+## Accessibility
+
+With a `label`, the chart is announced as an image named with the label and every part, such as "Sessions by device, Desktop 52%, Mobile 31%", and the legend is hidden so nothing is read twice. Without a label the legend stands in. Without either, the chart is decorative. When `selectable`, it is a group of toggle buttons with arrow key navigation and a single tab stop. Cells are separated by a gap, so parts stay distinct without relying on color.

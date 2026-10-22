@@ -1,0 +1,50 @@
+---
+components: ["FlameGraph"]
+description: Flame graph shows where time went in a profile, each frame as wide as its share and stacked on its caller, with the root at the bottom.
+---
+
+<script>
+  import { FlameGraph } from "carbon-components-svelte/viz";
+
+  const profile = [
+    { id: "main", parent: null, fn: "main", ms: 812 },
+    { id: "render", parent: "main", fn: "render", ms: 430 },
+    { id: "layout", parent: "render", fn: "layout", ms: 260 },
+    { id: "measure", parent: "layout", fn: "measureText", ms: 190 },
+    { id: "paint", parent: "render", fn: "paint", ms: 120 },
+    { id: "fetch", parent: "main", fn: "fetch", ms: 210 },
+    { id: "json", parent: "fetch", fn: "JSON.parse", ms: 150 },
+    { id: "parse", parent: "main", fn: "parse", ms: 96 },
+    { id: "tokenize", parent: "parse", fn: "tokenize", ms: 70 },
+    { id: "gc", parent: "main", fn: "(garbage collector)", ms: 40 },
+  ];
+  const ms = (v) => `${v} ms`;
+
+  let root = null;
+</script>
+
+`FlameGraph` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is an [IcicleChart](/components/IcicleChart) stood on its head, with the vocabulary of profiling: the root is at the bottom, callees stack on their callers, and a frame's width is its share of the total. A wide plateau near the top is a hot function. The position of a frame along the row means nothing, only its width does, so time on the x axis is a [SpanWaterfall](/components/SpanWaterfall).
+
+## Basic
+
+Pass long `data` with `id`, `parent`, and `value` accessors, where the value is the total time in a frame including its callees. What a frame spends on its own is the room its callees leave empty. Frames take the color of their branch, the callee just under the root.
+
+<FlameGraph data={profile} id="id" parent="parent" value="ms" label="fn" format={ms} title="CPU profile, 812 ms" />
+
+## Drill
+
+Bind `root` to the frame to show from. Its callers stay below it, dimmed and at full width, as steps back out. The example below sets `root` from `select`.
+
+<FlameGraph data={profile} id="id" parent="parent" value="ms" label="fn" format={ms} selectable bind:root title="CPU profile, click to drill" on:select={(e) => (root = e.detail.node.id)} />
+
+## Icicle chart props
+
+Every `IcicleChart` prop passes through: `sort`, `maxDepth`, `rowHeight`, `valueType`, `group`, `colors`, and `selectable`.
+
+<FlameGraph data={profile} id="id" parent="parent" value="ms" label="fn" valueType="percent" sort="value" rowHeight={22} title="CPU profile, as shares, largest first" />
+
+## Accessibility
+
+The same as the icicle chart: frames are hidden from assistive technology, which reads a table of every frame with its level, value, and share, and when `selectable` the frames are toggle buttons with arrow key navigation and a single tab stop.

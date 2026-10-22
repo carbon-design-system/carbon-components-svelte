@@ -1,0 +1,45 @@
+---
+components: ["WinLoss"]
+description: Win-loss draws a tick per result, rising for a win and dropping for a loss, so a run of outcomes reads at a glance.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { WinLoss } from "carbon-components-svelte/viz";
+
+  const experiments = [1, 1, -1, 1, 1, 1, -1, -1, 1, 0, 1, 1];
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri"].map((label, i) => ({
+    label,
+    value: [3, -2, 0, 1, -1][i],
+  }));
+
+  let selectedIndex;
+</script>
+
+`WinLoss` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Sparkline](/components/Sparkline) for outcomes rather than amounts: A/B results, daily direction, a match record. A win rises from the midline, a loss drops from it, and a tie is a dash on it, so the run reads in grayscale.
+
+## Basic
+
+Pass `data`, oldest first, as numbers: positive is a win, negative a loss, zero a tie. The record is appended to the `label`. Set `showValue` to write it short.
+
+<WinLoss data={experiments} label="Last 12 experiments" showValue />
+
+## Sizes
+
+<Stack gap={5}>
+  <WinLoss data={experiments} size="sm" label="Small" />
+  <WinLoss data={experiments} label="Medium" />
+  <WinLoss data={experiments} size="lg" label="Large" />
+</Stack>
+
+## Selectable
+
+Set `selectable` to make each result a button. Give the results a `label` so each is named, and bind `selectedIndex` or listen for `select`.
+
+<WinLoss data={days} selectable bind:selectedIndex label="Pick a day" showValue />
+
+## Accessibility
+
+With a `label`, the graphic is an image named with the label and the record in words. Without one it is decorative. When `selectable`, it is a group of buttons named by their label and outcome, one tab stop with the arrow keys moving between them. The words for each outcome can be changed with `translations`.

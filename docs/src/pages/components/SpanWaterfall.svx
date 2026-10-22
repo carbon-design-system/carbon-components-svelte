@@ -1,0 +1,71 @@
+---
+components: ["SpanWaterfall"]
+description: Span waterfall shows a trace as a tree of intervals on one time scale, one span per row, with the chain that decided the total outlined.
+---
+
+<script>
+  import { SpanWaterfall } from "carbon-components-svelte/viz";
+
+  const checkout = [
+    { id: "gw", parent: null, name: "POST /checkout", service: "gateway", start: 0, ms: 164 },
+    { id: "auth", parent: "gw", name: "verify session", service: "auth", start: 3, ms: 21 },
+    { id: "api", parent: "gw", name: "checkout.create", service: "api", start: 26, ms: 92 },
+    { id: "cart", parent: "api", name: "SELECT cart", service: "postgres", start: 30, ms: 18 },
+    { id: "price", parent: "api", name: "price.quote", service: "pricing", start: 50, ms: 34 },
+    { id: "cache", parent: "price", name: "GET rates", service: "redis", start: 52, ms: 4 },
+    { id: "tax", parent: "price", name: "tax.calculate", service: "pricing", start: 58, ms: 24 },
+    { id: "insert", parent: "api", name: "INSERT order", service: "postgres", start: 88, ms: 26 },
+    { id: "queue", parent: "api", name: "publish order.created", service: "kafka", start: 114, ms: 3 },
+    { id: "render", parent: "gw", name: "render confirmation", service: "web", start: 120, ms: 42 },
+  ];
+  // The same shape, as a slow batch job with real times.
+  const at = (s) => new Date(2026, 8, 21, 14, 3, 7 + s);
+  const timed = checkout.map((span) => ({ ...span, at: at(span.start), until: at(span.start + span.ms) }));
+
+  let collapsed = ["price"];
+  let selected = null;
+</script>
+
+`SpanWaterfall` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+A trace is a tree of intervals: each span has a parent and a place in time. This draws it the way tracing tools do, one span per row in depth-first order, indented by depth, on one time axis. It is not a [GanttChart](/components/GanttChart): there are no dependencies or progress, only what called what and how long it took.
+
+## Basic
+
+Pass one row per span with `id`, `parent`, `start`, and `duration` accessors. A span with no parent is a root. Starts may be offsets in milliseconds, as here, or times. The axis is labeled with offsets from the first start. Set `label` for the row names and `group` to color spans by service.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" title="POST /checkout, 164 ms" />
+
+## Critical path
+
+The chain from the root through whichever child ends last is the critical path: those spans decided how long the whole took, and they are outlined. Set `criticalPath` to `false` to draw them like the rest.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" criticalPath={false} title="POST /checkout, no critical path" />
+
+## Folding
+
+Every span with children has a toggle. Bind `collapsed`, a list of ids, or listen for `toggle`, to fold a subtree away and remember it.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" bind:collapsed title="POST /checkout, pricing folded" />
+
+## Times
+
+Give `end` instead of `duration` when the data has both ends. Set `absolute` to label the axis with times of day rather than offsets, which suits spans whose `start` is a real time. A trace shorter than a second falls back to offsets, since no time of day would tell it apart.
+
+<SpanWaterfall data={timed} id="id" parent="parent" start="at" end="until" label="name" group="service" absolute title="Nightly export at 14:03" />
+
+## Colors and sizes
+
+Set `groups` to give a group a color: a semantic name, a categorical index, a viz token name, or any CSS color. `size` is `"sm"`, `"md"`, or `"lg"`.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" groups={{ postgres: "warning", kafka: "info" }} size="sm" title="POST /checkout, stores highlighted" />
+
+## Selectable
+
+Set `selectable` to turn spans into toggle buttons. Bind `selected`, a span's id, or listen for `select`, whose detail carries the span and its `datum`.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" selectable bind:selected title="Pick a span" />
+
+## Accessibility
+
+The waterfall is a table: the `title` is its caption and each span's name is a row header. Every bar holds its group, its length, and its offset as text, such as "postgres, 18ms, 30ms in", and says when it is on the critical path, so nothing rests on color or outline. Fold toggles say which span they fold. When `selectable`, the bars share one tab stop and the up and down arrows move between them.

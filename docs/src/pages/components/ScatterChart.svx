@@ -1,0 +1,115 @@
+---
+components: ["ScatterChart"]
+description: Scatter chart plots two measures against each other to show how they relate, and becomes a bubble chart when a third sets the size of each point.
+---
+
+<script>
+  import { ChartThreshold, ScatterChart } from "carbon-components-svelte/viz";
+
+  const TIERS = ["Standard", "Compute", "Memory"];
+  const instances = Array.from({ length: 90 }, (_, i) => {
+    const t = i % 3;
+    const u = ((i * 7919) % 97) / 97;
+    const v = ((i * 104729) % 89) / 89;
+    const cpu = Math.round(12 + u * 80);
+    return {
+      tier: TIERS[t],
+      cpu,
+      latency: Math.round(40 + cpu * (1.2 + t * 0.9) + v * 70),
+      cost: Math.round((20 + u * 60) * (1 + t) * (0.6 + v)),
+    };
+  });
+  const few = instances.filter((_, i) => i % 4 === 0);
+
+  // Two clusters and a tail, the shape a hexbin is for. A seeded generator
+  // keeps the page stable between builds.
+  let seed = 7;
+  const random = () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const gaussian = () => Math.sqrt(-2 * Math.log(1 - random())) * Math.cos(2 * Math.PI * random());
+  const crowd = Array.from({ length: 4000 }, (_, i) => {
+    const hot = i % 4 === 0;
+    const g = gaussian();
+    return {
+      cpu: Math.min(100, Math.max(0, (hot ? 78 : 35) + g * (hot ? 8 : 12))),
+      latency: Math.max(5, (hot ? 320 : 90) + gaussian() * (hot ? 60 : 25) + (hot ? 0 : Math.abs(g) * 20)),
+    };
+  });
+</script>
+
+`ScatterChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props.
+
+## Basic
+
+Pass long `data` with `x` and `y` accessors, and `series` to color by group. Both axes are measures, so neither is forced to zero and both round out to tick values. Points are translucent, so a pile of them reads darker than one.
+
+<ScatterChart data={instances} x="cpu" y="latency" series="tier" title="Latency against CPU" xTitle="CPU %" yTitle="Latency (ms)" />
+
+## Bubble
+
+Set `size` to a third accessor. A circle's area follows the value, because a radius that followed it would overstate large values. `sizeRange` sets the smallest and largest radius, `sizeLabel` names the size in the tooltip, and `sizeFormat` writes it. Larger bubbles are drawn first, so smaller ones stay on top and reachable.
+
+<ScatterChart
+  data={few}
+  x="cpu"
+  y="latency"
+  series="tier"
+  size="cost"
+  sizeLabel="Cost"
+  sizeFormat={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
+  title="Latency against CPU, sized by cost"
+  xTitle="CPU %"
+  yTitle="Latency (ms)"
+/>
+
+## Hover and keyboard
+
+Points rarely share an x, so hover follows the nearest point in both directions, within 32 pixels, instead of the nearest x. The arrow keys sweep through the points in reading order, left to right. The nearest point comes from a grid index that is built once for the data and the size, so a pointer move costs one lookup whatever the number of points.
+
+## Thresholds and marks
+
+Other marks go in the default slot.
+
+<ScatterChart data={instances} x="cpu" y="latency" series="tier" title="Latency against CPU, with the objective" height={260}>
+  <ChartThreshold y={250} label="Objective" kind="error" />
+</ScatterChart>
+
+## Density
+
+Above a few thousand points, dots pile up and the picture lies. Set `density` to `"hexbin"` to bin the plot into hexagons colored by count, or `"contour"` for the isolines of a smoothed density. The points fade behind the layer by default; set `points` to `"front"` or `"none"`. Hover and the keyboard still find every point, and the hexagon it falls in lights up.
+
+<ScatterChart data={crowd} x="cpu" y="latency" density="hexbin" hexSize={10} radius={2} title="Latency against CPU, 4,000 requests" xTitle="CPU %" yTitle="Latency (ms)" legend={false} />
+
+<ScatterChart data={crowd} x="cpu" y="latency" density="contour" contourLevels={8} bandwidth={16} points="none" title="Latency against CPU, as contours" xTitle="CPU %" yTitle="Latency (ms)" legend={false} height={260} />
+
+`hexSize`, `contourLevels`, and `bandwidth` (in pixels) tune the layer, and `densityHue` picks its sequential ramp. The marks are `ChartHexbin` and `ChartContours`, so any chart can compose them.
+
+## Many points
+
+Above about five thousand points, SVG elements cost more to lay out than they are worth. `renderer="auto"` paints the points onto a canvas behind the chart past `canvasThreshold`, one path per series, and repaints only when the data, the scales, or the visible series change. Hover, the keyboard, the tooltip, the legend, the data table, and image export are unchanged: only the hovered point is an element, drawn on top, while the rest of the layer fades. Set `renderer` to `"canvas"` or `"svg"` to decide yourself.
+
+<ScatterChart data={crowd} x="cpu" y="latency" renderer="canvas" radius={2.5} title="Latency against CPU, painted" xTitle="CPU %" yTitle="Latency (ms)" legend={false} height={260} />
+
+Points painted on a canvas take the same tokens as the SVG marks, so themes and forced colors apply. They do not animate, and the server renders the axes with an empty plot until the page hydrates.
+
+## Single series
+
+<ScatterChart data={instances.filter((row) => row.tier === "Standard")} x="cpu" y="latency" title="Standard tier" legend={false} height={240} />
+
+## Data table and export
+
+<ScatterChart data={few} x="cpu" y="latency" series="tier" title="Latency against CPU" toolbar height={240} />
+
+## Composition
+
+`ScatterChart` is `ChartPoints` inside a `Chart` with `xDomain="nice"` and `zero={false}`. Compose them yourself to mix points with other marks, such as a `ChartLine` for a fitted trend. `ChartPoints` is listed with the other primitives on the [Chart](/components/Chart) page.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move through the points, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused point is enlarged and the others are dimmed, and it is announced with its x, series, and y. Series differ by color only, so name them in the legend and keep to a few, or split them into separate charts. The data table view lists every point.

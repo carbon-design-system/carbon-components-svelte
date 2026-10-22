@@ -1,0 +1,69 @@
+---
+components: ["BoxplotChart"]
+description: Box plot summarizes how values spread within each group: the median, the quartiles, whiskers, and outliers.
+---
+
+<script>
+  import { BoxplotChart, ChartThreshold } from "carbon-components-svelte/viz";
+
+  const SERVICES = ["auth", "billing", "search", "ingest", "export"];
+  const samples = SERVICES.flatMap((service, s) =>
+    Array.from({ length: 60 }, (_, i) => {
+      const u = ((i * 7919 + s * 131) % 97) / 97;
+      const base = 60 + s * 35;
+      // A long right tail, as latencies have, and the odd spike.
+      const spike = i % 29 === 0 ? 260 + s * 20 : 0;
+      return { service, ms: Math.round(base + -45 * Math.log(1 - u * 0.97) + spike) };
+    }),
+  );
+</script>
+
+`BoxplotChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass one row for each observation, with an `x` accessor for the group and a `y` accessor for the value. Each group becomes a box from the lower to the upper quartile, with a heavy line at the median. Whiskers reach the furthest points within 1.5 times the box's height, and anything beyond them is drawn as a hollow outlier. The y axis is not forced to zero, which would squash the spread.
+
+<BoxplotChart data={samples} x="service" y="ms" title="Latency by service" yTitle="Milliseconds" />
+
+## Orientation
+
+Set `orientation` to `"horizontal"` for long labels or many groups.
+
+<BoxplotChart data={samples} x="service" y="ms" orientation="horizontal" title="Latency by service" height={280} />
+
+## Thresholds
+
+Other marks go in the default slot.
+
+<BoxplotChart data={samples} x="service" y="ms" title="Latency against the objective" height={260}>
+  <ChartThreshold y={250} label="Objective" kind="error" />
+</BoxplotChart>
+
+## Color and format
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color. `yFormat` takes `Intl.NumberFormat` options or a function.
+
+<BoxplotChart
+  data={samples}
+  x="service"
+  y="ms"
+  color={3}
+  yFormat={(value) => `${Math.round(value)} ms`}
+  title="Latency by service"
+  height={240}
+/>
+
+## Data table and export
+
+The five statistics are the chart's series, so the table view and the CSV list all of them for every group. Set `statLabels` to rename or translate them.
+
+<BoxplotChart data={samples} x="service" y="ms" title="Latency by service" toolbar height={240} />
+
+## Statistics yourself
+
+`boxStats(values)` returns the same summary, including the mean and the count. `ChartBoxes` takes a list of summaries directly, for data that is summarized on the server: compose it inside a `Chart` whose x scale holds the categories. It is listed with the other primitives on the [Chart](/components/Chart) page.
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between groups, Enter or Space selects, and Escape clears. The focused group is announced with all five statistics, highest first, and the other boxes are dimmed. Outliers are hollow so they never read as part of the box, and nothing rests on color. The data table view lists every statistic.

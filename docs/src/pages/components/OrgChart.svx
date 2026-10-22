@@ -1,0 +1,56 @@
+---
+components: ["OrgChart"]
+description: Org chart lays a reporting tree out top down, a card per person with a name and a title, with folding and selection.
+---
+
+<script>
+  import { OrgChart } from "carbon-components-svelte/viz";
+
+  const people = [
+    { id: "vp", manager: null, name: "A. Rivera", title: "VP Engineering" },
+    { id: "plat", manager: "vp", name: "K. Chen", title: "Director, Platform", team: "Platform" },
+    { id: "prod", manager: "vp", name: "J. Patel", title: "Director, Product", team: "Product" },
+    { id: "design", manager: "vp", name: "R. Haddad", title: "Head of Design", team: "Design" },
+    { id: "obs", manager: "plat", name: "M. Lee", title: "Observability lead", team: "Platform" },
+    { id: "infra", manager: "plat", name: "S. Okafor", title: "Infrastructure lead", team: "Platform" },
+    { id: "sre", manager: "infra", name: "T. Novak", title: "SRE", team: "Platform" },
+    { id: "checkout", manager: "prod", name: "S. Ng", title: "Checkout lead", team: "Product" },
+    { id: "catalog", manager: "prod", name: "L. Duarte", title: "Catalog lead", team: "Product" },
+    { id: "ux", manager: "design", name: "P. Ito", title: "UX research", team: "Design" },
+  ];
+
+  let collapsed = ["plat"];
+  let selected = null;
+</script>
+
+`OrgChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [TreeChart](/components/TreeChart) stood upright with card-sized nodes: a name and a title per person, every manager centered over their reports, and links that turn at right angles. It is read-only; moving people between managers is an editor's job, not a chart's.
+
+## Basic
+
+Pass rows with an `id` accessor and a `parent` accessor for the manager's id. A row whose manager is missing or not in the data is a root. `label` is the first line of a card and `sublabel` the second.
+
+<OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" title="Engineering org" />
+
+## Color by group
+
+The chart is grayscale until told otherwise. Set `group` to color the start edge of each card by a field, with a legend that names the groups. A card without a group stays plain. `colors` fixes a group's color and `palette` picks another color group.
+
+<OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" group="team" title="Engineering org, by team" />
+
+## Folding
+
+Bind `collapsed`, a list of ids, to fold away everything under a card. A folded card shows how many people it hides on its bottom edge; click that control, double click the card, or use the arrow keys to fold and unfold.
+
+<OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" group="team" bind:collapsed title="Engineering org, platform folded" />
+
+## Selection and size
+
+Bind `selected` or listen for `select`, whose detail carries the node and its `datum`. `nodeWidth`, `nodeHeight`, `rankGap`, and `nodeGap` set the geometry; a line wider than its card is cut short, and the full text is in the tooltip.
+
+<OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" bind:selected nodeWidth={124} nodeHeight={44} rankGap={32} nodeGap={12} title="Pick a person" />
+
+## Accessibility
+
+The chart is a single tab stop. Up and Down walk the cards in reading order, a manager before their reports, announcing each with its title, level, group, manager, and whether it is folded. Right unfolds a folded card, or steps into the first report; Left folds an open card, or steps up to the manager. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every card with its manager, so the shape of the org is readable without seeing it.

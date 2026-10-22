@@ -1,0 +1,84 @@
+---
+components: ["AlluvialChart"]
+description: Alluvial chart shows how a quantity flows between stages, as ribbons whose thickness is the size of each flow.
+---
+
+<script>
+  import { AlluvialChart } from "carbon-components-svelte/viz";
+
+  const journey = [
+    ["Organic", "Landing page", 5200],
+    ["Paid search", "Landing page", 3100],
+    ["Referral", "Pricing", 1400],
+    ["Paid search", "Pricing", 900],
+    ["Landing page", "Signup", 3600],
+    ["Landing page", "Left", 4700],
+    ["Pricing", "Signup", 1500],
+    ["Pricing", "Left", 800],
+    ["Signup", "Activated", 3200],
+    ["Signup", "Left", 1900],
+    ["Activated", "Paying", 1100],
+    ["Activated", "Free plan", 2100],
+  ].map(([from, to, users]) => ({ from, to, users }));
+
+  const budget = [
+    ["Revenue", "Engineering", 420],
+    ["Revenue", "Sales", 310],
+    ["Revenue", "Operations", 170],
+    ["Engineering", "Salaries", 330],
+    ["Engineering", "Cloud", 90],
+    ["Sales", "Salaries", 210],
+    ["Sales", "Marketing", 100],
+    ["Operations", "Salaries", 110],
+    ["Operations", "Facilities", 60],
+  ].map(([from, to, amount]) => ({ from, to, amount }));
+</script>
+
+`AlluvialChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+For a strict sequence of stages with no branching, a [FunnelChart](/components/FunnelChart) is easier to read.
+
+## Basic
+
+Pass one row for each flow, with `source`, `target`, and `value` accessors. Rows that share a source and a target are summed. Nodes are derived from the names: each goes in a column by its longest path from a start, its height follows the larger of what flows in and out, and a node nothing flows out of sits at the far end.
+
+<AlluvialChart data={journey} source="from" target="to" value="users" title="Visitor journey" />
+
+## Layout
+
+The layout is drawn at `width` by `height` and scales down with its container, text included. `nodePadding` is the least gap between the nodes of a column. A few relaxation sweeps pull each node toward the nodes it connects to, which untangles most crossings.
+
+<AlluvialChart
+  data={budget}
+  source="from"
+  target="to"
+  value="amount"
+  height={280}
+  nodePadding={24}
+  format={{ style: "currency", currency: "USD", notation: "compact" }}
+  title="Where the revenue goes, in thousands"
+/>
+
+A flow that would close a cycle is dropped, since the chart reads left to right, as is a flow with a value that is not positive.
+
+## Color
+
+Nodes take the categorical colors in order, and a ribbon takes the color of the node it leaves. Set `palette` to pick another group, or `colors` to fix a node.
+
+<AlluvialChart
+  data={journey}
+  source="from"
+  target="to"
+  value="users"
+  colors={{ Left: "neutral", Paying: "success" }}
+  height={300}
+  title="Visitor journey, with the endings called out"
+/>
+
+## Interaction
+
+Hover a node, or focus the chart and use the arrow keys, to emphasize every flow through it. Hovering a ribbon shows its endpoints and value. `hover` fires with the node, and `select` with the node and the flows it touches, each carrying the `rows` summed into it.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move through the nodes column by column, top to bottom, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused node is announced with its value. A ribbon says nothing to assistive technology, so the figure also holds every flow as a visually hidden table. Set `headerLabels` to translate its column headers. Labels carry a halo of the page background, so they stay readable over a ribbon.

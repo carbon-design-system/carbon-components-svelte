@@ -1,0 +1,79 @@
+---
+components: ["ComparisonBar"]
+description: Comparison bar sets a value against a previous one as two thin bars, with an optional relative change.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { ComparisonBar } from "carbon-components-svelte/viz";
+</script>
+
+`ComparisonBar` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `value`, `previous`, and a `label`. Both bars are scaled against the larger of the two. The comparison bar is always neutral.
+
+<ComparisonBar value={1284} previous={912} label="Orders this period against the previous one" />
+
+## Row labels
+
+<ComparisonBar
+  value={1284}
+  previous={912}
+  valueLabel="This week"
+  previousLabel="Last week"
+  label="Orders"
+/>
+
+## Delta
+
+Set `showDelta` to write the relative change with a [DeltaIndicator](/components/DeltaIndicator). Set `positive` to `"down"` for metrics where lower is better.
+
+<Stack gap={6}>
+  <ComparisonBar value={1284} previous={912} showDelta label="Orders" />
+  <ComparisonBar
+    value={182}
+    previous={240}
+    positive="down"
+    showDelta
+    format={(value) => `${value} ms`}
+    label="Median latency"
+  />
+</Stack>
+
+## Format
+
+`format` takes `Intl.NumberFormat` options or a function.
+
+<ComparisonBar
+  value={128400}
+  previous={91200}
+  format={{ style: "currency", currency: "USD", notation: "compact" }}
+  showDelta
+  label="Revenue"
+/>
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<ComparisonBar value={1284} previous={912} color={3} label="Orders" />
+
+## Sizes
+
+<Stack gap={6}>
+  <ComparisonBar value={1284} previous={912} showDelta size="sm" label="Small" />
+  <ComparisonBar value={1284} previous={912} showDelta label="Medium (default)" />
+  <ComparisonBar value={1284} previous={912} showDelta size="lg" label="Large" />
+</Stack>
+
+## Missing baseline
+
+Without a `previous` value, the comparison row and the delta show a dash.
+
+<ComparisonBar value={1284} previous={null} showDelta label="Orders, first period" />
+
+## Accessibility
+
+The bars are a two row table: the `label` is its caption and each row label is a row header. Set `headerLabels` to translate the visually hidden column headers. The bars are hidden from assistive technology because the value column carries the same information. The delta announces its direction in words. Without a `label`, the whole graphic is hidden.
