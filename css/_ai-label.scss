@@ -518,20 +518,14 @@ $ai-label-sizes: (
   }
 
   // A clear button stays by the chevron behind its own divider, and the
-  // label moves left of it: label | clear | chevron, as in v11.
-  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection {
-    right: to-rem(45px);
-  }
-
-  .#{$prefix}--list-box--decorator
-    .#{$prefix}--list-box__selection:not(.#{$prefix}--list-box__selection--multi)::after {
-    position: absolute;
-    top: to-rem(4px);
-    right: to-rem(-9px);
-    width: 1px;
-    height: $carbon--spacing-05;
-    background-color: $border-subtle;
-    content: "";
+  // label moves left of it: label | clear | chevron, as in v11. The label's
+  // divider already parts it from the clear button, so an invalid or warn
+  // field drops the clear button's own.
+  .#{$prefix}--list-box--decorator[data-invalid]
+    .#{$prefix}--list-box__selection::before,
+  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__selection::before {
+    content: none;
   }
 
   .#{$prefix}--list-box--clearable .#{$prefix}--list-box__inner-wrapper--decorator {

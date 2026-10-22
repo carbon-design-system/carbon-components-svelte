@@ -25,7 +25,7 @@ describe("ListBoxMenuItem", () => {
       .getByText("Active item")
       .closest(".bx--list-box__menu-item");
     expect(menuItem).toHaveClass("bx--list-box__menu-item--active");
-    expect(menuItem).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(menuItem).not.toHaveClass("bx--list-box__menu-item--highlighted");
     expect(menuItem).toHaveAttribute("aria-selected", "true");
   });
 

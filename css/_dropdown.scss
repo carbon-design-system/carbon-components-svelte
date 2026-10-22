@@ -3,49 +3,50 @@
 
 /// `.bx--list-box__field`'s base padding-right reserves room for one
 /// absolutely-positioned icon (the menu chevron). `Dropdown`'s clearable
-/// selection button is a second icon of the same size, positioned to the
-/// chevron's left, so it needs the same 24px + 8px gap the chevron already
-/// gets. Without this, a long selected label's ellipsis cutoff sits under
-/// the clear button instead of stopping short of it.
+/// selection button is a second icon of the same size, 45px in, to the
+/// chevron's left. The field stops the label short of it, as v11 stops a
+/// ComboBox's text. Without this, a long selected label's ellipsis cutoff
+/// sits under the clear button instead of stopping short of it.
 /// @access private
 /// @group components
 @mixin dropdown-clearable {
   .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(72px);
+    padding-right: to-rem(70px);
   }
 
   // The invalid and warn icons render before the field, so the list box
   // carries the marker. Like ComboBox, the icon moves left of the clear
   // button and the field reserves room for both.
   .#{$prefix}--dropdown--clearable .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(66px);
+    right: to-rem(82px);
   }
 
   .#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
   .#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(98px);
+    padding-right: to-rem(105px);
   }
 
   // An inline field sets its padding and icon offset at higher specificity,
   // so restate the clearable room for it; otherwise the value and the
-  // status icon run under the clear button.
+  // status icon run under the clear button. Its clear button sits 4px
+  // closer to the edge, with the chevron, so everything shifts 4px.
   .#{$prefix}--list-box.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__field.#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(72px);
+    padding-right: to-rem(66px);
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable
     .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(66px);
+    right: to-rem(78px);
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
   .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(98px);
+    padding-right: to-rem(101px);
   }
 }
 
