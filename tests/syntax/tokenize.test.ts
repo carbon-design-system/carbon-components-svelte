@@ -136,6 +136,15 @@ describe("tokenize", () => {
     ).toEqual(["number:2.5e3", "number:1E+5", "number:-1e-2"]);
   });
 
+  test.each(["SCRIPT", "Script"])(
+    "ends a <%s> body at its closing tag",
+    (tag) => {
+      expect(
+        types(`<${tag}>let a</${tag}><p>x</p>`, "html")?.slice(-3),
+      ).toEqual(["angle-bracket:</", "tag-name:p", "angle-bracket:>"]);
+    },
+  );
+
   test("reads expressions inside quoted attribute values as script", () => {
     expect(types('<B on:click="{() => log("x")}" />', "svelte")).toEqual([
       "angle-bracket:<",
