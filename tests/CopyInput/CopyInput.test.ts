@@ -362,6 +362,61 @@ describe("CopyInput", () => {
     });
   });
 
+  describe("revealTimeout", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("re-obscures the value after revealTimeout elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+      const input = screen.getByLabelText("API token");
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      expect(input).toHaveAttribute("type", "text");
+
+      await vi.advanceTimersByTimeAsync(99);
+      expect(input).toHaveAttribute("type", "text");
+      await vi.advanceTimersByTimeAsync(1);
+      expect(input).toHaveAttribute("type", "password");
+      expect(screen.getByRole("button", { name: "Show value" })).toBeVisible();
+    });
+
+    it("restarts the timeout when the value is shown again", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+      const input = screen.getByLabelText("API token");
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      await vi.advanceTimersByTimeAsync(60);
+      await fireEvent.click(screen.getByRole("button", { name: "Hide value" }));
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+
+      // The first timer would have fired here had it not been cleared.
+      await vi.advanceTimersByTimeAsync(60);
+      expect(input).toHaveAttribute("type", "text");
+      await vi.advanceTimersByTimeAsync(40);
+      expect(input).toHaveAttribute("type", "password");
+    });
+
+    it("keeps the value revealed when revealTimeout is unset", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle" },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      await vi.advanceTimersByTimeAsync(60_000);
+
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+    });
+  });
+
   it("async copy failure shows error feedback and dispatches copy:error", async () => {
     const error = new Error("copy failed");
     const copy = vi.fn().mockRejectedValue(error);

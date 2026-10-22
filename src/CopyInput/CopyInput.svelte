@@ -47,6 +47,14 @@
   export let revealMode = undefined;
 
   /**
+   * Milliseconds a revealed value stays visible before it is obscured again.
+   * Only applies when `revealMode` is `"toggle"`.
+   * When unset, the value stays revealed until the toggle is clicked again.
+   * @type {number | undefined}
+   */
+  export let revealTimeout = undefined;
+
+  /**
    * Whether the value currently renders as text, in any reveal mode.
    * @bindable readonly
    */
@@ -189,6 +197,7 @@
   } from "../constants/context-keys.js";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -216,6 +225,8 @@
 
   /** @type {null | HTMLButtonElement} */
   let toggleRef = null;
+
+  const scheduleObscure = createDelayedSetter();
 
   // The toggle's tooltip joins the copy button's tooltip group, so moving
   // between the two hands off instantly and the delays are shared.
@@ -257,6 +268,7 @@
 
   $: if (!showToggle) {
     toggled = false;
+    scheduleObscure.cancel();
     if (toggleHovered || toggleFocused) {
       toggleHovered = false;
       toggleFocused = false;
@@ -291,6 +303,13 @@
 
   function handleToggleClick() {
     toggled = !toggled;
+    if (!toggled) {
+      scheduleObscure.cancel();
+    } else if (revealTimeout !== undefined && revealTimeout > 0) {
+      scheduleObscure(revealTimeout, () => {
+        toggled = false;
+      });
+    }
   }
 
   function handleToggleMouseEnter() {
@@ -318,6 +337,7 @@
 
   onMount(() => {
     return () => {
+      scheduleObscure.cancel();
       toggleHandoff.cancel();
       toggleHandoff.release();
     };
