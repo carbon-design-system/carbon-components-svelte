@@ -189,6 +189,12 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defa
 
 <FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 
+### Custom max height
+
+Set `maxHeight` to override the size-based default height of a portaled menu. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. The menu scrolls once its items exceed the height.
+
+<FileSource src="/framed/Dropdown/DropdownMaxHeight" />
+
 ### Open by default
 
 Set `open` to `true` to render the dropdown already expanded. The prop is bindable (`bind:open`), so you can also drive it externally, such as from a trigger elsewhere on the page.
