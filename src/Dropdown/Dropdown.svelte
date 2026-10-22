@@ -322,6 +322,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -901,7 +902,8 @@
             event.preventDefault();
             changePage(event.key === "PageDown" ? 1 : -1);
           } else if (event.key === "Escape") {
-            close("escape-key");
+            // Escape that cancels an IME composition is not a close.
+            if (!isImeComposition(event)) close("escape-key");
           } else if (
             clearable &&
             selectedId !== undefined &&

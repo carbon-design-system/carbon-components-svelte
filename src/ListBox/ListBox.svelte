@@ -41,6 +41,8 @@
    */
   export let warnId = undefined;
 
+  import { isImeComposition } from "../utils/ime-composition.js";
+
   // Read in the capture phase, before the field's own handler closes the menu.
   let escapeClosesMenu = false;
 </script>
@@ -60,7 +62,9 @@
   {...$$restProps}
   on:keydown
   on:keydown|capture={(event) => {
-    escapeClosesMenu = event.key === "Escape" && open;
+    // Escape that cancels an IME composition does not close the menu.
+    escapeClosesMenu =
+      event.key === "Escape" && open && !isImeComposition(event);
   }}
   on:keydown={(event) => {
     // An Escape that closes the menu stops here so an ancestor (Modal) stays

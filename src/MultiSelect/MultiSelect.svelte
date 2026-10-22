@@ -491,6 +491,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -1647,7 +1648,8 @@
                 event.preventDefault();
                 changePage(event.key === "PageDown" ? 1 : -1);
               } else if (event.key === "Escape") {
-                close("escape-key");
+                // Escape that cancels an IME composition is not a close.
+                if (!isImeComposition(event)) close("escape-key");
               } else if (event.key === " ") {
                 if (readonly) event.preventDefault();
                 openMenu("keydown");
@@ -1799,7 +1801,8 @@
               event.preventDefault();
               changePage(event.key === "PageDown" ? 1 : -1);
             } else if (event.key === "Escape") {
-              close("escape-key");
+              // Escape that cancels an IME composition is not a close.
+              if (!isImeComposition(event)) close("escape-key");
             } else if (event.key === "Home" || event.key === "End") {
               // APG select-only combobox: Home/End open a closed listbox, then
               // move the highlight to the first/last option. The filterable

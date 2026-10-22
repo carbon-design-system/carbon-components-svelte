@@ -371,6 +371,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -1261,6 +1262,8 @@
               event.preventDefault();
               changePage(event.key === "PageDown" ? 1 : -1);
             } else if (event.key === "Escape") {
+              // Escape that cancels an IME composition is not a close or clear.
+              if (isImeComposition(event)) return;
               // Dispatch before `clear()` flips `open`, so the guard still sees it open.
               const hadSelection = selectedId !== undefined;
               // Clearing a closed field consumes Escape; with nothing to close
