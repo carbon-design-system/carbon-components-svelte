@@ -9,9 +9,9 @@ description: Chat buttons are pill-shaped buttons for chat, and quick actions ar
   import Send from "carbon-icons-svelte/lib/Send.svelte";
 </script>
 
-ChatButton is a [Button](/components/Button) with fully rounded ends, for actions in a chat, such as in a ChatLog or beside its composer. It takes Button's props, such as `href`, `type` and `loading`, and forwards its events.
-
 ## Kinds
+
+ChatButton is a [Button](/components/Button) with fully rounded ends, for actions in a chat, such as in a ChatLog or beside its composer. It takes Button's props, such as `href`, `type` and `loading`, and forwards its events.
 
 Set `kind` to `"primary"` (the default), `"secondary"`, `"tertiary"`, `"ghost"` or `"danger"`.
 
