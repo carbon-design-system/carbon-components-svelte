@@ -125,6 +125,14 @@ describe("RecursiveList props", () => {
     expect(lists[1]).toHaveClass("bx--list--nested");
   });
 
+  it("does not set a `native` attribute on unordered lists", () => {
+    render(RecursiveList, { nodes });
+
+    for (const list of screen.getAllByRole("list")) {
+      expect(list).not.toHaveAttribute("native");
+    }
+  });
+
   it("renders the top-level list as nested when `nested` is set", () => {
     render(RecursiveList, { nodes, nested: true });
 

@@ -37,7 +37,7 @@
 
 <svelte:component
   this={type === "unordered" ? UnorderedList : OrderedList}
-  native={type === "ordered-native"}
+  native={type === "ordered-native" || undefined}
   {expressive}
   {nested}
   {...$$restProps}
