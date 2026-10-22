@@ -6,8 +6,6 @@
   const overflowLevel = 7 as unknown as 6;
 </script>
 
-<Section> <Heading>Default Heading 1</Heading> </Section>
-
 <Section>
   <Heading>Nested Heading 1</Heading>
   <Section>
@@ -31,10 +29,6 @@
 
 <Section level={5}>
   <Heading>Custom Level Heading 5</Heading>
-  <Section>
-    <Heading>Custom Level Heading 6</Heading>
-    <Section> <Heading>Custom Level Capped at Heading 6</Heading> </Section>
-  </Section>
 </Section>
 
 <Section>

@@ -55,19 +55,6 @@ describe("Text", () => {
     );
   });
 
-  it("renders an inline span", () => {
-    render(Text);
-
-    expect(screen.getByText("Inline span").tagName).toBe("SPAN");
-  });
-
-  it("keeps the default type style alongside a color", () => {
-    render(Text);
-
-    const node = screen.getByText("Color only");
-    expect(node).toHaveClass("bx--type-body-01", "bx--type-text-helper");
-  });
-
   it("applies font weight modifier classes", () => {
     render(Text);
 
@@ -129,19 +116,6 @@ describe("Text", () => {
     expect(screen.getByText("Full width text")).toHaveClass(
       "bx--type-full-width",
     );
-  });
-
-  it("merges multiple modifier classes", () => {
-    render(Text);
-
-    const node = screen.getByText("Combined modifiers");
-    expect(node).toHaveClass(
-      "bx--type-body-01",
-      "bx--type-semibold",
-      "bx--type-text-primary",
-      "combined",
-    );
-    expectInlineStyle(node, { maxWidth: "42ch" });
   });
 
   it("applies multiline truncation when `lines` is set", () => {

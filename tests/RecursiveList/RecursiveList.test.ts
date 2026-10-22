@@ -110,19 +110,14 @@ describe("RecursiveList props", () => {
     }
   });
 
-  it("does not apply the expressive class by default", () => {
-    render(RecursiveList, { nodes });
-
-    const [topLevel] = screen.getAllByRole("list");
-    expect(topLevel).not.toHaveClass("bx--list--expressive");
-  });
-
-  it("always renders descendant lists as nested", () => {
+  it("renders only descendant lists as nested and applies no expressive class by default", () => {
     render(RecursiveList, { nodes });
 
     const lists = screen.getAllByRole("list");
     expect(lists).toHaveLength(2);
     expect(lists[1]).toHaveClass("bx--list--nested");
+    expect(lists[0]).not.toHaveClass("bx--list--nested");
+    expect(lists[0]).not.toHaveClass("bx--list--expressive");
   });
 
   it("does not set a `native` attribute on unordered lists", () => {
@@ -144,13 +139,6 @@ describe("RecursiveList props", () => {
 
     const [topLevel] = screen.getAllByRole("list");
     expect(topLevel).toHaveClass("bx--list--nested");
-  });
-
-  it("does not render the top-level list as nested by default", () => {
-    render(RecursiveList, { nodes });
-
-    const [topLevel] = screen.getAllByRole("list");
-    expect(topLevel).not.toHaveClass("bx--list--nested");
   });
 });
 

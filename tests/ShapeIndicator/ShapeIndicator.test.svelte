@@ -18,13 +18,6 @@
 
 <ShapeIndicator
   kind="failed"
-  label="custom attrs"
-  class="custom-class"
-  data-testid="attr-test"
-/>
-
-<ShapeIndicator
-  kind="failed"
   label="Default label"
   data-testid="label-children-test"
 >

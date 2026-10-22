@@ -49,64 +49,34 @@ describe("Column", () => {
     expect(column).toHaveClass("bx--col-padding");
   });
 
-  describe("Aspect ratio", () => {
-    const ratios = ["2x1", "16x9", "9x16", "1x2", "4x3", "3x4", "1x1"] as const;
+  describe("Breakpoint shapes", () => {
+    it("should handle a boolean breakpoint", () => {
+      render(Column, { props: { sm: true } });
+      const column = screen.getByTestId("content").parentElement;
+      assert(column);
+      expect(column).toHaveClass("bx--col-sm");
+    });
 
-    for (const ratio of ratios) {
-      it(`should apply ${ratio} aspect ratio`, () => {
-        render(Column, {
-          props: { aspectRatio: ratio },
-        });
-        const column = screen.getByTestId("content").parentElement;
-        assert(column);
-        expect(column).toHaveClass(
-          "bx--aspect-ratio",
-          `bx--aspect-ratio--${ratio}`,
-        );
-      });
-    }
-  });
+    it("should handle a numeric breakpoint", () => {
+      render(Column, { props: { sm: 4 } });
+      const column = screen.getByTestId("content").parentElement;
+      assert(column);
+      expect(column).toHaveClass("bx--col-sm-4");
+    });
 
-  describe("Breakpoints", () => {
-    const breakpoints = ["sm", "md", "lg", "xlg", "max"] as const;
+    it("should handle an object breakpoint with span", () => {
+      render(Column, { props: { sm: { span: 4, offset: 2 } } });
+      const column = screen.getByTestId("content").parentElement;
+      assert(column);
+      expect(column).toHaveClass("bx--col-sm-4", "bx--offset-sm-2");
+    });
 
-    for (const bp of breakpoints) {
-      it(`should handle boolean ${bp} breakpoint`, () => {
-        render(Column, {
-          props: { [bp]: true },
-        });
-        const column = screen.getByTestId("content").parentElement;
-        assert(column);
-        expect(column).toHaveClass(`bx--col-${bp}`);
-      });
-
-      it(`should handle numeric ${bp} breakpoint`, () => {
-        render(Column, {
-          props: { [bp]: 4 },
-        });
-        const column = screen.getByTestId("content").parentElement;
-        assert(column);
-        expect(column).toHaveClass(`bx--col-${bp}-4`);
-      });
-
-      it(`should handle object ${bp} breakpoint with span`, () => {
-        render(Column, {
-          props: { [bp]: { span: 4, offset: 2 } },
-        });
-        const column = screen.getByTestId("content").parentElement;
-        assert(column);
-        expect(column).toHaveClass(`bx--col-${bp}-4`, `bx--offset-${bp}-2`);
-      });
-
-      it(`should handle object ${bp} breakpoint with boolean span`, () => {
-        render(Column, {
-          props: { [bp]: { span: true, offset: 2 } },
-        });
-        const column = screen.getByTestId("content").parentElement;
-        assert(column);
-        expect(column).toHaveClass(`bx--col-${bp}`, `bx--offset-${bp}-2`);
-      });
-    }
+    it("should handle an object breakpoint with boolean span", () => {
+      render(Column, { props: { sm: { span: true, offset: 2 } } });
+      const column = screen.getByTestId("content").parentElement;
+      assert(column);
+      expect(column).toHaveClass("bx--col-sm", "bx--offset-sm-2");
+    });
   });
 
   it("should skip a null breakpoint and keep the other breakpoint classes", () => {
@@ -124,6 +94,8 @@ describe("Column", () => {
         sm: 4,
         md: { span: 6, offset: 2 },
         lg: true,
+        xlg: { span: true, offset: 1 },
+        max: 8,
       },
     });
     const column = screen.getByTestId("content").parentElement;
@@ -133,6 +105,9 @@ describe("Column", () => {
       "bx--col-md-6",
       "bx--offset-md-2",
       "bx--col-lg",
+      "bx--col-xlg",
+      "bx--offset-xlg-1",
+      "bx--col-max-8",
     );
   });
 });

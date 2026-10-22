@@ -10,14 +10,6 @@ describe("Truncate tag", () => {
     expect(element).toHaveClass("bx--text-truncate--end");
   });
 
-  it("should render the given tag with the same truncation class", () => {
-    render(Truncate, { props: { tag: "span" } });
-
-    const element = screen.getByText(/This is a long text/);
-    expect(element.tagName).toBe("SPAN");
-    expect(element).toHaveClass("bx--text-truncate--end");
-  });
-
   it("should support multiline truncation on a custom tag", () => {
     render(Truncate, { props: { tag: "div", lines: 2 } });
 

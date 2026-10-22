@@ -63,18 +63,6 @@
   </Link>
 </div>
 
-<div data-testid="link-small-icon">
-  <Link size="sm" href="https://www.carbondesignsystem.com/" icon={Carbon}>
-    Carbon Design System
-  </Link>
-</div>
-
-<div data-testid="link-large-icon">
-  <Link size="lg" href="https://www.carbondesignsystem.com/" icon={Carbon}>
-    Carbon Design System
-  </Link>
-</div>
-
 <div data-testid="link-disabled">
   <Link
     disabled

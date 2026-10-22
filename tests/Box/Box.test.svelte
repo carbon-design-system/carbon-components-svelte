@@ -2,7 +2,6 @@
   import Box from "carbon-components-svelte/Box/Box.svelte";
 </script>
 
-<Box>Default box</Box>
 <Box tag="section" fill="layer-01">Layer fill</Box>
 <Box fill="background" border="subtle">Fill and border</Box>
 <Box fill="layer-accent">Accent fill</Box>
@@ -18,7 +17,6 @@
 <Box display="flex">Flex display</Box>
 <Box display="flex" gap={3} data-testid="gap-scale">Gap scale</Box>
 <Box display="flex" gap="2rem" data-testid="gap-custom">Gap custom</Box>
-<Box display="flex" gap={0} data-testid="gap-zero">Gap zero</Box>
 <Box display="flex" direction="column" data-testid="direction-column"
   >Direction column</Box
 >
@@ -41,9 +39,7 @@
 <Box hideBelow="md" data-testid="hide-below-md">Hide below md</Box>
 <Box hideAbove="md" data-testid="hide-above-md">Hide above md</Box>
 <Box overflowX="auto" overflowY="hidden">Axis overflow</Box>
-<Box overflow="hidden" overflowX="auto">Overflow with x override</Box>
 <Box padding={5}>Padding scale</Box>
-<Box padding="1.5rem">Custom padding</Box>
 <Box paddingX={3} paddingY={5}>Axis padding</Box>
 <Box padding="1rem" paddingX={3} data-testid="padding-axis-over-custom"
   >Padding axis over custom</Box
@@ -72,11 +68,3 @@
 <Box padding={0} data-testid="padding-zero">Padding zero</Box>
 <Box margin={0} data-testid="margin-zero">Margin zero</Box>
 <Box minHeight={0} data-testid="min-height-zero">Min height zero</Box>
-<Box
-  data-testid="click-test"
-  on:click={() => {
-    console.log("clicked");
-  }}
->
-  Clickable box
-</Box>

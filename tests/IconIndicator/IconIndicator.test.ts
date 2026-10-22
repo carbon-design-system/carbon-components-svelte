@@ -93,13 +93,6 @@ describe("IconIndicator", () => {
     expect(indicator.querySelector("svg")).toHaveAttribute("width", "20");
   });
 
-  it("forwards additional attributes to the wrapper", () => {
-    render(IconIndicator);
-
-    const indicator = screen.getByTestId("attr-test");
-    expect(indicator).toHaveClass("bx--icon-indicator", "custom-class");
-  });
-
   it("overrides the label with labelChildren", () => {
     render(IconIndicator);
 

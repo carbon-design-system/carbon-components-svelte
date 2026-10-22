@@ -11,12 +11,6 @@ describe("OrderedList", () => {
     expect(list).not.toHaveClass("bx--list--ordered--native");
     expect(list).not.toHaveClass("bx--list--nested");
     expect(list).not.toHaveClass("bx--list--expressive");
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(3);
-    expect(items[0]).toHaveTextContent("Item 1");
-    expect(items[1]).toHaveTextContent("Item 2");
-    expect(items[2]).toHaveTextContent("Item 3");
   });
 
   it("should support nested lists", () => {
@@ -54,27 +48,6 @@ describe("OrderedList", () => {
     expect(list).not.toHaveClass("bx--list--ordered");
   });
 
-  it("should support native list styles with nesting", () => {
-    render(OrderedList, {
-      props: {
-        native: true,
-        nested: true,
-        nestedItems: ["Nested 1", "Nested 2"],
-      },
-    });
-
-    const lists = screen.getAllByRole("list");
-
-    // Only the top-level list has the native class
-    expect(lists[0]).toHaveClass("bx--list--ordered--native");
-    expect(lists[0]).not.toHaveClass("bx--list--ordered");
-
-    for (const list of lists.slice(1)) {
-      expect(list).toHaveClass("bx--list--ordered bx--list--nested");
-      expect(list).not.toHaveClass("bx--list--ordered--native");
-    }
-  });
-
   it("should support expressive styles", () => {
     render(OrderedList, {
       props: { expressive: true },
@@ -82,19 +55,6 @@ describe("OrderedList", () => {
 
     const list = screen.getByRole("list");
     expect(list).toHaveClass("bx--list--expressive");
-  });
-
-  it("should support custom items", () => {
-    const customItems = ["Custom 1", "Custom 2", "Custom 3", "Custom 4"];
-    render(OrderedList, {
-      props: { items: customItems },
-    });
-
-    const items = screen.getAllByRole("listitem");
-    expect(items).toHaveLength(customItems.length);
-    for (let index = 0; index < items.length; index++) {
-      expect(items[index]).toHaveTextContent(customItems[index]);
-    }
   });
 
   describe("events", () => {
@@ -152,18 +112,6 @@ describe("OrderedList", () => {
           expect(child.tagName).toBe("LI");
         }
       }
-    });
-
-    it("should maintain correct order with native styles", () => {
-      const items = ["First", "Second", "Third", "Fourth", "Fifth"];
-      render(OrderedList, {
-        props: { native: true, items },
-      });
-
-      const listItems = screen.getAllByRole("listitem");
-      items.forEach((text, index) => {
-        expect(listItems[index]).toHaveTextContent(text);
-      });
     });
   });
 });

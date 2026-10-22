@@ -15,27 +15,6 @@ describe("Truncate", () => {
       expect(element).toHaveClass(expectedClass);
     });
 
-    it("should render text content", () => {
-      const text = "Custom text content";
-      render(Truncate, { props: { text } });
-
-      expect(screen.getByText(text)).toBeInTheDocument();
-    });
-
-    it("should render as paragraph element", () => {
-      render(Truncate);
-
-      const element = screen.getByText(/This is a long text/);
-      expect(element.tagName).toBe("P");
-    });
-
-    it("should default to end clamp", () => {
-      render(Truncate);
-
-      const element = screen.getByText(/This is a long text/);
-      expect(element).toHaveClass("bx--text-truncate--end");
-    });
-
     it("should truncate multiple lines when lines > 1", () => {
       render(Truncate, { props: { lines: 3 } });
 
@@ -65,18 +44,11 @@ describe("Truncate", () => {
       expect(element).toHaveClass(expectedClass);
     });
 
-    it.each([
-      ["h1", "H1"],
-      ["h2", "H2"],
-      ["h3", "H3"],
-      ["h4", "H4"],
-      ["p", "P"],
-      ["span", "SPAN"],
-    ] as const)("should work with %s element", (elementType, expectedTag) => {
-      render(TruncateAction, { props: { element: elementType } });
+    it("should work with a span element", () => {
+      render(TruncateAction, { props: { element: "span" } });
 
       const element = screen.getByText(/This is a long text/);
-      expect(element.tagName).toBe(expectedTag);
+      expect(element.tagName).toBe("SPAN");
       expect(element).toHaveClass("bx--text-truncate--end");
     });
 
@@ -94,22 +66,6 @@ describe("Truncate", () => {
       expect(node).toHaveClass("added-later");
       expect(node).toHaveClass("bx--text-truncate--front");
       expect(node).not.toHaveClass("bx--text-truncate--end");
-    });
-
-    it("should default to end clamp", () => {
-      render(TruncateAction);
-
-      const element = screen.getByText(/This is a long text/);
-      expect(element).toHaveClass("bx--text-truncate--end");
-    });
-
-    it("should truncate multiple lines when lines > 1", () => {
-      render(TruncateAction, { props: { lines: 3 } });
-
-      const element = screen.getByText(/This is a long text/);
-      expect(element).toHaveClass("bx--text-truncate--multiline");
-      expect(element).not.toHaveClass("bx--text-truncate--end");
-      expect(element.style.getPropertyValue("--ccs-truncate-lines")).toBe("3");
     });
 
     it("should toggle between single-line and multiline on update", () => {

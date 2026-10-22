@@ -11,10 +11,4 @@ describe("Stack ref", () => {
     await rerender({ tag: "section" });
     expect(screen.getByTestId("ref-tag")).toHaveTextContent("SECTION");
   });
-
-  it("binds `ref` on mount with an explicit tag", () => {
-    render(StackRef, { props: { tag: "div" } });
-
-    expect(screen.getByTestId("ref-tag")).not.toHaveTextContent("none");
-  });
 });

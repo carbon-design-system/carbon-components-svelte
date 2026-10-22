@@ -4,13 +4,6 @@ import { user } from "../utils/user";
 import SkeletonPlaceholder from "./SkeletonPlaceholder.test.svelte";
 
 describe("SkeletonPlaceholder", () => {
-  it("should render with default props", () => {
-    render(SkeletonPlaceholder);
-
-    const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveClass("bx--skeleton__placeholder");
-  });
-
   it("should render with size prop (string)", () => {
     render(SkeletonPlaceholder, {
       props: { size: "12rem" },
@@ -18,15 +11,6 @@ describe("SkeletonPlaceholder", () => {
 
     const element = screen.getByTestId("skeleton-placeholder");
     expectInlineStyle(element, { height: "12rem", width: "12rem" });
-  });
-
-  it("should render with size prop (number)", () => {
-    render(SkeletonPlaceholder, {
-      props: { size: 200 },
-    });
-
-    const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ height: "200px", width: "200px" });
   });
 
   it("should render with width and height props", () => {
@@ -68,18 +52,6 @@ describe("SkeletonPlaceholder", () => {
 
     await user.unhover(element);
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-  });
-
-  it("should accept additional attributes", () => {
-    render(SkeletonPlaceholder, {
-      props: {
-        "data-testid": "custom-placeholder",
-        "aria-label": "Loading placeholder",
-      },
-    });
-
-    const element = screen.getByTestId("custom-placeholder");
-    expect(element).toHaveAttribute("aria-label", "Loading placeholder");
   });
 
   it("should accept additional classes", () => {

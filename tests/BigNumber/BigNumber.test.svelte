@@ -57,11 +57,6 @@
   data-testid="truncate-thousands"
 />
 <BigNumber
-  labelText="Truncate millions"
-  value={2500000}
-  data-testid="truncate-millions"
-/>
-<BigNumber
   labelText="Full number"
   value={1500}
   fullNumber

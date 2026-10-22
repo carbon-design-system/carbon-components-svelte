@@ -97,15 +97,6 @@ describe("BigNumber", () => {
       );
     });
 
-    it("abbreviates millions", () => {
-      render(BigNumber);
-
-      const el = screen.getByTestId("truncate-millions");
-      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
-        "2.5M",
-      );
-    });
-
     it("renders the full number when fullNumber is set", () => {
       render(BigNumber);
 

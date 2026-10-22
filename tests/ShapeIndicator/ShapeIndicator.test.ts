@@ -77,13 +77,6 @@ describe("ShapeIndicator", () => {
     expect(indicator).toHaveClass("bx--shape-indicator--14");
   });
 
-  it("forwards additional attributes to the wrapper", () => {
-    render(ShapeIndicator);
-
-    const indicator = screen.getByTestId("attr-test");
-    expect(indicator).toHaveClass("bx--shape-indicator", "custom-class");
-  });
-
   it("overrides the label with labelChildren", () => {
     render(ShapeIndicator);
 

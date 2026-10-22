@@ -27,29 +27,18 @@ describe("GridOverlay", () => {
     expect(overlay).toHaveClass("bx--grid--condensed");
   });
 
-  it("should shade gutters only when gutters is set", () => {
-    const { container, unmount } = render(GridOverlay, {
+  it("should shade gutters only when gutters is set", async () => {
+    const { container, rerender } = render(GridOverlay, {
       props: { open: true },
     });
     expect(container.querySelector(".bx--grid-overlay")).not.toHaveClass(
       "bx--grid-overlay--gutters",
     );
-    unmount();
 
-    const { container: withGutters } = render(GridOverlay, {
-      props: { open: true, gutters: true, narrow: true, class: "custom" },
-    });
-    const overlay = withGutters.querySelector(".bx--grid-overlay");
+    await rerender({ gutters: true, narrow: true, class: "custom" });
+    const overlay = container.querySelector(".bx--grid-overlay");
     expect(overlay).toHaveClass("bx--grid-overlay--gutters");
     expect(overlay).toHaveClass("bx--grid--narrow");
-    expect(overlay).toHaveClass("custom");
-  });
-
-  it("should keep a caller-supplied class alongside the overlay class", () => {
-    const { container } = render(GridOverlay, {
-      props: { open: true, class: "custom" },
-    });
-    const overlay = container.querySelector(".bx--grid-overlay");
     expect(overlay).toHaveClass("custom");
   });
 
