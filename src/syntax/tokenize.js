@@ -1104,6 +1104,9 @@ function hasScssLang(tokens, from) {
   }
   return false;
 }
+// Tag names match case-insensitively, so the closing tag does too.
+const SCRIPT_CLOSE = /<\/script/gi;
+const STYLE_CLOSE = /<\/style/gi;
 /** @type {Lexer} */
 const lexMarkup = (code, out) => {
   let pos = 0;
@@ -1151,8 +1154,9 @@ const lexMarkup = (code, out) => {
       close === ">" &&
       (lower === "script" || lower === "style")
     ) {
-      const end = code.indexOf(`</${lower}`, pos);
-      const stop = end < 0 ? code.length : end;
+      const closer = lower === "script" ? SCRIPT_CLOSE : STYLE_CLOSE;
+      closer.lastIndex = pos;
+      const stop = closer.exec(code)?.index ?? code.length;
       const body = code.slice(pos, stop);
       if (lower === "script") lexScript(body, out, true);
       else lexCss(body, out, hasScssLang(out, attributes));
