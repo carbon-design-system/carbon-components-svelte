@@ -946,7 +946,7 @@
       { id: "map", name: "map", x: 240, y: 0 },
       { id: "sink", name: "sink", x: 480, y: 0 },
     ]}
-    edges={[{ source: "src", target: "map" }]}
+    links={[{ source: "src", target: "map" }]}
     id="id"
     label="name"
     title="Pipeline editor"
