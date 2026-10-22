@@ -8,7 +8,7 @@ const inlineClip = (button: Locator) =>
       getComputedStyle(el.querySelector(".bx--assistive-text") as Element).clip,
   );
 
-test.describe("Icon-only Button tooltips with Escape", () => {
+test.describe("Icon-only Button and CopyButton tooltips with Escape", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/button-tooltip-escape.html");
   });
@@ -29,14 +29,17 @@ test.describe("Icon-only Button tooltips with Escape", () => {
     await expect(add).toBeFocused();
     await expect(modal).toHaveClass(/is-visible/);
 
-    // The portalled tooltip.
-    await page.keyboard.press("Tab");
-    await expect(page.getByRole("button", { name: "Edit item" })).toBeFocused();
-    await expect(portalTooltips).toHaveText(["Edit item"]);
+    // The portalled Button tooltip, then the CopyButton's.
+    for (const name of ["Edit item", "Copy link"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: keys go one at a time
+      await page.keyboard.press("Tab");
+      await expect(page.getByRole("button", { name })).toBeFocused();
+      await expect(portalTooltips).toHaveText([name]);
 
-    await page.keyboard.press("Escape");
-    await expect(portalTooltips).toHaveCount(0);
-    await expect(modal).toHaveClass(/is-visible/);
+      await page.keyboard.press("Escape");
+      await expect(portalTooltips).toHaveCount(0);
+      await expect(modal).toHaveClass(/is-visible/);
+    }
 
     // With no tooltip left to hide, Escape closes the Modal.
     await page.keyboard.press("Escape");

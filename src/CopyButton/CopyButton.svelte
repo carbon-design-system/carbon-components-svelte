@@ -89,6 +89,8 @@
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
+  import { dismiss } from "../utils/dismiss.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
@@ -128,6 +130,9 @@
   const tooltipActive = tooltipHandoff.active;
   let hovered = false;
   let focused = false;
+  // Set by Escape. The tooltip stays hidden while the button keeps hover
+  // or focus, until the next pointer enter or focus (WCAG 1.4.13).
+  let dismissed = false;
 
   // Feedback shares the proactive tooltip's portal surface whenever the tooltip
   // is portalled OR a non-default position/alignment is set, so the "Copied!"
@@ -141,7 +146,10 @@
   $: showingInlineFeedback =
     !feedbackPortalled && (feedbackOpen || copyPending);
   $: tooltipHoverActive =
-    !showingInlineFeedback && (hovered || focused) && $tooltipActive;
+    !showingInlineFeedback &&
+    !dismissed &&
+    (hovered || focused) &&
+    $tooltipActive;
   $: feedbackInPortal = feedbackPortalled && feedbackOpen;
   $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
   $: tooltipText = feedbackOpen ? feedbackText : iconDescription;
@@ -149,6 +157,7 @@
   function handleTooltipMouseEnter() {
     // Skip the enter delay when another icon tooltip is already open so moving
     // between adjacent buttons feels instant.
+    dismissed = false;
     tooltipHandoff.scheduleEnter(() => {
       hovered = true;
     });
@@ -163,7 +172,23 @@
 
   function handleTooltipFocus() {
     focused = true;
+    dismissed = false;
     tooltipHandoff.claim();
+  }
+
+  // Escape hides whatever the tooltip surface shows: the description, or
+  // the feedback after a copy. Listens on `window` in the capture phase,
+  // as TooltipIcon does, so a hovered tooltip also hides while focus is
+  // elsewhere, and an ancestor such as a Modal doesn't also see the
+  // Escape that hid it.
+  function handleKeydown(event) {
+    if (event.key !== "Escape" || !(tooltipOpen || feedbackOpen)) return;
+    // Escape that cancels an IME composition is not a dismissal.
+    if (isImeComposition(event)) return;
+    event.stopPropagation();
+    dismissed = true;
+    if (feedbackOpen) copyFeedback.dismiss();
+    tooltipHandoff.dismiss();
   }
 
   function handleTooltipBlur() {
@@ -207,6 +232,12 @@
 
 <button
   bind:this={ref}
+  use:dismiss={{
+    enabled: tooltipOpen || feedbackOpen,
+    type: "keydown",
+    handler: handleKeydown,
+    options: { capture: true },
+  }}
   type="button"
   aria-busy={copyPending || undefined}
   class:bx--copy-btn={true}
