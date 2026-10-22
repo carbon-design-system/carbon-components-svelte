@@ -8,6 +8,10 @@
  * `files: ["src"]` packs everything under src/. The negated `files` entries
  * in package.json now exclude it; this guard catches the next tool that
  * writes somewhere under a published directory.
+ *
+ * Missing files are a separate, opt-in check: the build outputs are
+ * gitignored, so an unbuilt tree packs without them. Only the release
+ * workflow builds first, so only it asks for them (`requireBuilt`).
  */
 
 export type PackedFile = { path: string; size: number };
@@ -25,6 +29,13 @@ const ALLOWED: RegExp[] = [
   /^src\/.+\.(svelte|js|d\.ts)$/,
 ];
 
+/** Build outputs a release tarball must contain, keyed by description. */
+const REQUIRED: [string, RegExp][] = [
+  ["css/*.css", /^css\/[^/]+\.css$/],
+  ["src/**/*.svelte.d.ts", /^src\/.+\.svelte\.d\.ts$/],
+  ["src/index.d.ts", /^src\/index\.d\.ts$/],
+];
+
 /**
  * Release builds (all themes, doc comments stripped) unpack to ~5.7 MB as of
  * 0.112.1. The budget leaves room for real source growth while still
@@ -36,6 +47,7 @@ export function packageContentProblems(
   files: PackedFile[],
   unpackedSize: number,
   budget = UNPACKED_SIZE_BUDGET,
+  { requireBuilt = false } = {},
 ): string[] {
   const problems: string[] = [];
 
@@ -45,6 +57,14 @@ export function packageContentProblems(
       problems.push(`${path} (${size} B): contains a ${segment}/ segment`);
     } else if (!ALLOWED.some((pattern) => pattern.test(path))) {
       problems.push(`${path} (${size} B): not an expected package file`);
+    }
+  }
+
+  if (requireBuilt) {
+    for (const [description, pattern] of REQUIRED) {
+      if (!files.some(({ path }) => pattern.test(path))) {
+        problems.push(`no ${description} file: was the package built?`);
+      }
     }
   }
 

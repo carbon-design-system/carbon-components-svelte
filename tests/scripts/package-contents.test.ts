@@ -50,4 +50,25 @@ describe("packageContentProblems", () => {
     ]);
     expect(packageContentProblems([], 10, 10)).toEqual([]);
   });
+
+  test("requires build outputs only when asked", () => {
+    const unbuilt = [file("package.json"), file("src/index.js")];
+    expect(packageContentProblems(unbuilt, 1)).toEqual([]);
+    expect(
+      packageContentProblems(unbuilt, 1, undefined, { requireBuilt: true }),
+    ).toEqual([
+      expect.stringContaining("css/*.css"),
+      expect.stringContaining("src/**/*.svelte.d.ts"),
+      expect.stringContaining("src/index.d.ts"),
+    ]);
+    const built = [
+      ...unbuilt,
+      file("css/all.css"),
+      file("src/index.d.ts"),
+      file("src/Button/Button.svelte.d.ts"),
+    ];
+    expect(
+      packageContentProblems(built, 1, undefined, { requireBuilt: true }),
+    ).toEqual([]);
+  });
 });
