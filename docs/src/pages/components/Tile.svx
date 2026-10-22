@@ -24,6 +24,18 @@ Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-genera
   </AILabel>
 </Tile>
 
+### Rounded corners
+
+Set `rounded` to `true` to round the corners of a tile with a decorator. Carbon reserves rounded tiles for AI content, so a tile without a decorator stays square.
+
+<Tile rounded>
+  <h4>Usage forecast</h4>
+  <p>Spend is projected to grow 12% next month.</p>
+  <AILabel slot="decorator">
+    <p>Generated from 90 days of billing data.</p>
+  </AILabel>
+</Tile>
+
 ## On a layer
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
