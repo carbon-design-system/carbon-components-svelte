@@ -53,6 +53,14 @@ describe("SkeletonText", () => {
     }
   });
 
+  it("should not render a negative paragraph line width for narrow pixel widths", () => {
+    render(SkeletonText, { props: { paragraph: true, width: "50px" } });
+
+    for (const element of screen.getAllByRole("paragraph", { hidden: true })) {
+      expect(element.style.width).toMatch(/^\d+px$/);
+    }
+  });
+
   it("should hide text lines from assistive technology", () => {
     render(SkeletonText);
 
