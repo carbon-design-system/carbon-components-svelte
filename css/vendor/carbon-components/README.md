@@ -21,6 +21,10 @@ these prunings relative to upstream:
 - every file the six theme compiles never load (measured with sass-embedded's
   `loadedUrls`), mostly `vendor/@carbon/*` packages recursively re-vendoring
   each other
+- Sass that no compile reads: the v10 color tokens' globals, defaults,
+  custom property branches and theme map keys; the v9 theme; v10 aliases,
+  type maps, mixins and functions with no reader. Each removal left every
+  compiled entry byte-identical
 - the standalone `vendor/@carbon/themes` package — byte-identical to the copy
   inside `vendor/@carbon/elements/scss/themes`, which the theme entry files
   now import instead

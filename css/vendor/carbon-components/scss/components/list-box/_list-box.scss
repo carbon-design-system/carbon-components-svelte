@@ -19,21 +19,6 @@
 /// @group list-box
 $list-box-width: 100%;
 
-/// @type Number
-/// @access private
-/// @group list-box
-$list-box-height: to-rem(40px);
-
-/// @type Number
-/// @access private
-/// @group list-box
-$list-box-inline-height: $list-box-height;
-
-/// @type Number
-/// @access private
-/// @group list-box
-$list-box-menu-width: to-rem(300px);
-
 /// List box styles
 /// @access private
 /// @group list-box

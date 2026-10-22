@@ -353,20 +353,6 @@ $carbon--aspect-ratios: (
   max-width: map-get($largest-breakpoint, 'width');
 }
 
-/// Add in the max-widths for each breakpoint to the container
-/// @param {Map} $breakpoints [$carbon--grid-breakpoints] - A map of breakpoints where the key is the name
-/// @access private
-/// @group @carbon/grid
-@mixin carbon--make-container-max-widths(
-  $breakpoints: $carbon--grid-breakpoints
-) {
-  @each $name, $value in $breakpoints {
-    @include carbon--breakpoint($name) {
-      max-width: map-get($value, width);
-    }
-  }
-}
-
 /// Generate the CSS for a grid for the given breakpoints and gutters
 /// @param {Map} $breakpoints [$carbon--grid-breakpoints] - The default breakpoints
 /// @param {Number} $grid-gutter [$carbon--grid-gutter] - The default gutters
