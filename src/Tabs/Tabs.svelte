@@ -24,6 +24,7 @@
    * Choose whether arrow keys change the selection on focus.
    * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
    * focus; press Enter or Space to select.
+   * Ignored when `navigation` is set.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";
@@ -33,6 +34,16 @@
    * @type {"default" | "container"}
    */
   export let type = "default";
+
+  /**
+   * Set to `true` to render the tabs as page navigation: a list of links
+   * where the selected link has `aria-current="page"`, instead of a tab list
+   * that switches panels in place. Links keep the browser's Tab order and
+   * arrow keys do not move between them. Give each `Tab` an `href`, set
+   * `selected` or `selectedId` from the current route, and label the
+   * navigation with `aria-label`.
+   */
+  export let navigation = false;
 
   /** Set to `true` for tabs to have an auto-width */
   export let autoWidth = false;
@@ -126,6 +137,10 @@
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useContainer = writable(type === "container");
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useNavigation = writable(navigation);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
@@ -332,7 +347,7 @@
       return;
     }
 
-    const items = refTabList.querySelectorAll("[role='tab']");
+    const items = refTabList.querySelectorAll(".bx--tabs__nav-link");
     if (items.length === 0) return;
     const next = /** @type {HTMLElement} */ (
       items[Math.min(tab.index, items.length - 1)]
@@ -427,6 +442,7 @@
     useFullWidth,
     useDismissible,
     useContainer,
+    navigation: useNavigation,
     secondaryLabelSupported: useContainer,
     hasSecondaryLabel,
     add,
@@ -456,7 +472,7 @@
     tabs.update((currentTabs) =>
       syncDomOrder({
         root: refTabList,
-        selector: "[role='tab']",
+        selector: ".bx--tabs__nav-link",
         items: currentTabs,
       }),
     );
@@ -516,7 +532,7 @@
     // selected tab selected at its new index. An insert or removal syncs in
     // afterUpdate instead, which keeps the index.
     const stopObservingOrder = observeDomOrder(refTabList, {
-      selector: "[role='tab']",
+      selector: ".bx--tabs__nav-link",
       getItems: () => get(tabs),
       onReorder: () => {
         if (needsDomSync) return;
@@ -565,6 +581,7 @@
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
   $: useContainer.set(type === "container");
+  $: useNavigation.set(navigation);
   $: useIconOnly.set(iconOnly);
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
@@ -609,8 +626,9 @@
   {/if}
   <ul
     bind:this={refTabList}
-    role="tablist"
+    role={navigation ? undefined : "tablist"}
     use:rovingFocus={{
+      // Navigation links have no tab role, so arrow keys leave them alone.
       selector: "[role='tab']",
       orientation: "horizontal",
       skipDisabled: true,
