@@ -2,10 +2,11 @@
 // names; this gives every v11 token its @carbon/themes v11 value in white,
 // g10, g90 and g100, and adds the v11 tokens the themes lacked (ai-*, chat-*,
 // icon-interactive, ...). The syntax-* tokens ship separately, opt-in.
-// v11 has no g80 theme, so g80 keeps its palette and only gains the new
-// tokens: g90's values, except chat surfaces and text, which take g80's own
-// token in the role g90's chat token plays (the chat shell is the page
-// background, a user bubble is layer-01, and so on).
+// v11 has no g80 theme, so g80 keeps its palette and gains the new tokens:
+// g90's values, except chat surfaces and text, which take g80's own token in
+// the role g90's chat token plays (the chat shell is the page background, a
+// user bubble is layer-01, and so on). The few kept tokens it overrides are
+// listed first in its map.
 // text-placeholder keeps text-helper's value: v11's 40% gray is 2.6:1 on a
 // white field.
 // The v10 maps also hold the button-* component tokens. Each map ends with
@@ -615,6 +616,12 @@ $ccs-v11-values: (
     button-secondary-hover: #5e5e5e,
   ),
   g80: (
+    // g80's layer-01 is #525252, a step lighter than g90's. Helper text takes
+    // g90's v11 value, since v10's #a8a8a8 is 3.3:1 there, and the
+    // interactive border takes g80's own interactive, as it does in every v11
+    // theme (#4589ff is 2.3:1 on layer-01).
+    border-interactive: #78a9ff,
+    text-helper: #c6c6c6,
     ai-aura-end: rgba(0, 0, 0, 0),
     ai-aura-hover-background: #474747,
     ai-aura-hover-end: rgba(0, 0, 0, 0),
