@@ -24,7 +24,7 @@
 </script>
 
 <ScrollGradient height="240px" bind:scrollElementRef>
-  <Box paddingY={4} paddingRight={5} paddingLeft={6}>
+  <Box paddingY={4} paddingX={5}>
     <UnorderedList>
       <VirtualList
         {items}
