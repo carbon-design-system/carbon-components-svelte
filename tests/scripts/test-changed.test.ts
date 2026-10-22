@@ -36,4 +36,11 @@ describe("repo test graph", () => {
     expect(e2e.files).toContain("e2e/a11y-button.test.ts");
     expect(e2e.files).not.toContain("e2e/accordion.test.ts");
   });
+
+  it("runs the DatePicker examples e2e test when DatePicker changes", () => {
+    const { e2e } = planTests(graph, ["src/DatePicker/DatePicker.svelte"]);
+    expect(e2e.mode).toBe("some");
+    if (e2e.mode !== "some") return;
+    expect(e2e.files).toContain("e2e/date-picker-examples.test.ts");
+  });
 });
