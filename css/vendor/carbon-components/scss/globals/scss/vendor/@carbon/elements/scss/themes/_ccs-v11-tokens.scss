@@ -151,30 +151,6 @@ $ccs-v11-new-tokens: (
     border-tile-02: #6f6f6f,
     border-tile-03: #8d8d8d,
   ),
-  v9: (
-    layer-03: #f4f4f4,
-    layer-active-03: #c6c6c6,
-    layer-hover-03: #e8e8e8,
-    layer-selected-03: #e0e0e0,
-    layer-selected-hover-02: #d1d1d1,
-    layer-selected-hover-03: #d1d1d1,
-    layer-accent-02: #e0e0e0,
-    layer-accent-03: #e0e0e0,
-    layer-accent-active-02: #a8a8a8,
-    layer-accent-active-03: #a8a8a8,
-    layer-accent-hover-02: #d1d1d1,
-    layer-accent-hover-03: #d1d1d1,
-    field-03: #f4f4f4,
-    field-hover-03: #e8e8e8,
-    border-subtle-03: #c6c6c6,
-    border-strong-02: #8d8d8d,
-    border-strong-03: #8d8d8d,
-    border-subtle-selected-02: #c6c6c6,
-    border-subtle-selected-03: #c6c6c6,
-    border-tile-01: #c6c6c6,
-    border-tile-02: #a8a8a8,
-    border-tile-03: #c6c6c6,
-  ),
 );
 
 // Idempotent: this partial can be imported more than once, and keys already
@@ -198,7 +174,6 @@ $carbon--theme--g10: ccs-v11-extend($carbon--theme--g10, g10);
 $carbon--theme--g80: ccs-v11-extend($carbon--theme--g80, g80);
 $carbon--theme--g90: ccs-v11-extend($carbon--theme--g90, g90);
 $carbon--theme--g100: ccs-v11-extend($carbon--theme--g100, g100);
-$carbon--theme--v9: ccs-v11-extend($carbon--theme--v9, v9);
 $carbon--theme: ccs-v11-extend($carbon--theme, white);
 
 $layer-01: map-get($carbon--theme, 'layer-01') !default;

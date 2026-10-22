@@ -35,7 +35,6 @@ $carbon--theme--g10: ccs-v11-extend-layer($carbon--theme--g10);
 $carbon--theme--g80: ccs-v11-extend-layer($carbon--theme--g80);
 $carbon--theme--g90: ccs-v11-extend-layer($carbon--theme--g90);
 $carbon--theme--g100: ccs-v11-extend-layer($carbon--theme--g100);
-$carbon--theme--v9: ccs-v11-extend-layer($carbon--theme--v9);
 $carbon--theme: ccs-v11-extend-layer($carbon--theme);
 
 $layer-background: map-get($carbon--theme, 'layer-background') !default;
