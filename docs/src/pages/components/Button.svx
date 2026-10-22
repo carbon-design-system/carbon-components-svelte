@@ -178,7 +178,7 @@ Link buttons can also have icons.
 
 ### Custom element
 
-Set `as` to `true` and spread `let:props` to the element.
+Set `as` to `true` and spread `let:props` to the element. `bind:ref` stays `null` in this mode; use `bind:this` on your own element instead.
 
 <Button as let:props>
   <p {...props}>Custom element</p>
