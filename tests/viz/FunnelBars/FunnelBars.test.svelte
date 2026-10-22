@@ -24,7 +24,7 @@
   export let scale: "linear" | "sqrt" = "linear";
   export let align: "start" | "center" = "start";
   export let selectable = false;
-  export let selectedId: string | undefined = undefined;
+  export let selected: string | undefined = undefined;
   export let emitUpdate = false;
   export let color: string | number = "interactive";
   export let withSlots = false;
@@ -58,7 +58,7 @@
     {selectable}
     {emitUpdate}
     {color}
-    bind:selectedId
+    bind:selected
     data-testid="funnel"
     on:select={(e) => onselect(e.detail)}
     on:hover={(e) => onhover(e.detail)}
@@ -66,4 +66,4 @@
   />
 {/if}
 
-<output data-testid="selected">{selectedId ?? ""}</output>
+<output data-testid="selected">{selected ?? ""}</output>

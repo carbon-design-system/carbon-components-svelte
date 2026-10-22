@@ -41,6 +41,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make nodes selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected node id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /**
    * Specify the shape. `"dendrogram"` lines every leaf up in the last column.
    * @type {"tree" | "dendrogram"}
@@ -135,6 +144,8 @@
   function activate(node, originalEvent) {
     activeId = node.id;
     toggle(node);
+    if (!selectable) return;
+    selected = selected === node.id ? null : node.id;
     dispatch("select", { node, originalEvent });
   }
 
@@ -217,6 +228,7 @@
           class:bx--viz-tree__node--branch={node.branch}
           class:bx--viz-tree__node--collapsed={node.collapsed}
           class:bx--viz-tree__node--active={node.id === activeId}
+          class:bx--viz-tree__node--selected={node.id === selected}
           on:click={(event) => activate(node, event)}
         >
           <!-- A wide, invisible target: the dot alone is too small to hit. -->

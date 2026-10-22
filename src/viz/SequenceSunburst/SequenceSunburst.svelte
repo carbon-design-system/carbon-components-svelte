@@ -38,6 +38,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make steps selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected step id, the path joined by `/`.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /** Specify the label of the center, which stands for every sequence */
   export let rootLabel = "All";
 
@@ -220,6 +229,8 @@
     {palette}
     {colors}
     {legend}
+    {selectable}
+    bind:selected
     {locale}
     on:hover={onHover}
     on:select={onSelect}

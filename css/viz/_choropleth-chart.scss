@@ -52,6 +52,11 @@
     vector-effect: non-scaling-stroke;
   }
 
+  .#{$prefix}--viz-choropleth__region--selected {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
   @media (forced-colors: active) {
     .#{$prefix}--viz-choropleth__region {
       forced-color-adjust: none;

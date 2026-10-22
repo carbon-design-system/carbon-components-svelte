@@ -15,6 +15,7 @@
 </script>
 
 <SequenceSunburst
+  selectable
   {data}
   steps="path"
   value="users"

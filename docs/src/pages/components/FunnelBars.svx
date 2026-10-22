@@ -24,7 +24,7 @@ description: Funnel bars show how a count narrows across ordered stages, such as
     { id: "won", label: "Won", value: 96, medianDurationMs: 12 * DAY },
   ];
 
-  let selectedId = "activate";
+  let selected = "activate";
   let live = stages;
 
   function reshuffle() {
@@ -139,14 +139,14 @@ Set `format` to `Intl.NumberFormat` options or a function. Values use compact no
 
 ## Selectable
 
-Set `selectable` to make stages interactive and bind `selectedId`. Use the arrow keys to move between stages and Enter or Space to select one. The `select` event fires on user action only.
+Set `selectable` to make stages interactive and bind `selected`. Use the arrow keys to move between stages and Enter or Space to select one. The `select` event fires on user action only.
 
 <FunnelBars
   {stages}
   label="Signup funnel"
   rate="step"
   selectable
-  bind:selectedId
+  bind:selected
   on:select={(e) => console.log("select", e.detail.stage.id)}
 />
 

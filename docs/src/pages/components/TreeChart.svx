@@ -23,6 +23,7 @@ description: Tree chart draws a hierarchy as nodes joined by curves, left to rig
   ].map(([id, parent, name]) => ({ id, parent, name }));
 
   let collapsed = ["web"];
+  let selected = null;
 </script>
 
 `TreeChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -56,6 +57,12 @@ The layout is drawn at `width` by `height` and scales down with its container, t
 ## Data
 
 Rows are an adjacency list, the same long format the rest of the library takes, so a query that returns `id` and `parent_id` needs no reshaping. A row that would close a cycle is treated as a root, and a repeated id keeps its first row. Several roots are laid out one under the other.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused node. Bind `selected`, its id, or listen for `select`, which carries the node and the original event.
+
+<TreeChart data={org} id="id" parent="parent" label="name" selectable bind:selected title="Pick a node" />
 
 ## Accessibility
 

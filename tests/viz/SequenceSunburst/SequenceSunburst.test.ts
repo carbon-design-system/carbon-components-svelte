@@ -87,7 +87,10 @@ describe("SequenceSunburst", () => {
 
   it("selects on Enter with the path in the detail, and can hide the trail", async () => {
     const onselect = vi.fn();
-    const { rerender } = render(SequenceSunburst, { onselect });
+    const { rerender } = render(SequenceSunburst, {
+      selectable: true,
+      onselect,
+    });
 
     chart().focus();
     await user.keyboard("{ArrowRight}{Enter}");
@@ -95,7 +98,7 @@ describe("SequenceSunburst", () => {
       expect.objectContaining({ path: ["home"], value: 100, stopped: 0 }),
     );
 
-    await rerender({ onselect, trail: false });
+    await rerender({ selectable: true, onselect, trail: false });
     expect(trail()).toBeNull();
   });
 });

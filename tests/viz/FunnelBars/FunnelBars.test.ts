@@ -208,7 +208,7 @@ describe("FunnelBars", () => {
     });
 
     it("exposes one tab stop, on the selected stage", () => {
-      render(FunnelBars, { selectable: true, selectedId: "activate" });
+      render(FunnelBars, { selectable: true, selected: "activate" });
 
       const buttons = screen.getAllByRole("button");
       expect(buttons.map((button) => button.tabIndex)).toEqual([-1, -1, 0, -1]);
@@ -222,7 +222,7 @@ describe("FunnelBars", () => {
 
     it("moves focus with the arrow keys without selecting, and wraps", async () => {
       const onselect = vi.fn();
-      render(FunnelBars, { selectable: true, selectedId: "paid", onselect });
+      render(FunnelBars, { selectable: true, selected: "paid", onselect });
 
       screen.getByRole("button", { name: "Paid" }).focus();
       await user.keyboard("{ArrowDown}");
@@ -253,11 +253,11 @@ describe("FunnelBars", () => {
       expect(onselect).toHaveBeenCalledTimes(2);
     });
 
-    it("does not dispatch select when selectedId is set from outside", async () => {
+    it("does not dispatch select when selected is set from outside", async () => {
       const onselect = vi.fn();
       const { rerender } = render(FunnelBars, { selectable: true, onselect });
 
-      await rerender({ selectedId: "paid" });
+      await rerender({ selected: "paid" });
       expect(screen.getByRole("button", { name: "Paid" })).toHaveAttribute(
         "aria-pressed",
         "true",

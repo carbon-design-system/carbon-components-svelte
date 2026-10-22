@@ -23,6 +23,7 @@ description: Sequence sunburst shows paths through ordered steps as rings around
     { path: "product/cart/checkout", users: 300 },
     { path: "product", users: 1100 },
   ];
+  let selected = null;
 </script>
 
 `SequenceSunburst` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -40,6 +41,12 @@ Pass rows with `steps`, an array or a string split by `separator`, and `value` f
 `maxDepth` limits the rings, `colors` fixes a step's color, and `diameter` and `innerRadius` set the geometry. Set `trail` to `false` to drop the path above the chart.
 
 <SequenceSunburst data={sessions} steps="path" value="users" rootLabel="Sessions" maxDepth={3} colors={{ checkout: "success", cart: "warning" }} diameter={260} trail={false} title="Checkout click paths, three steps" />
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused step. Bind `selected`, the step path, or listen for `select`, which carries the step and the original event.
+
+<SequenceSunburst data={sessions} steps="path" value="users" rootLabel="Sessions" selectable bind:selected title="Pick a step" />
 
 ## Accessibility
 

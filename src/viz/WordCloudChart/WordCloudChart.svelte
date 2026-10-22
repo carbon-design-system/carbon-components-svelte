@@ -42,6 +42,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make words selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected word.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /** Specify the width the cloud is drawn at. It scales to its container. */
   export let width = 640;
 
@@ -182,9 +191,10 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (active) {
-      dispatch("select", { word: totals[active.index], originalEvent });
-    }
+    if (!selectable || !active) return;
+    const text = totals[active.index].text;
+    selected = selected === text ? null : text;
+    dispatch("select", { word: totals[active.index], originalEvent });
   }
 
   /** @param {KeyboardEvent} event */
@@ -252,6 +262,7 @@
           <text
             class:bx--viz-word-cloud__word={true}
             class:bx--viz-word-cloud__word--active={placed.text === activeText}
+            class:bx--viz-word-cloud__word--selected={placed.text === selected}
             x={placed.x}
             y={placed.y}
             dy="0.35em"

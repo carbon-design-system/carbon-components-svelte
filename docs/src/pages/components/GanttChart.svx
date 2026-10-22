@@ -17,6 +17,7 @@ description: Gantt chart lays tasks out as bars on one time scale, grouped by wo
     { id: "qa", name: "Hardening", stream: "QA", from: day(20), to: day(25), after: ["web", "email"] },
     { id: "launch", name: "Launch", stream: "QA", from: day(25), to: day(26), after: "qa" },
   ];
+  let selected = null;
 </script>
 
 `GanttChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -46,6 +47,12 @@ Set `today` to mark a moment with a rule, and `domain` to show a fixed range.
 Set `colors` to fix a workstream's color, `palette` to pick another color group, `rowHeight` for the height of a row, and `labelSpace` for the room for labels.
 
 <GanttChart data={plan} id="id" label="name" group="stream" start="from" end="to" progress="done" colors={{ QA: "warning" }} rowHeight={22} labelSpace={200} legend={false} title="Launch plan, QA in warning" />
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused task. Bind `selected`, its id, or listen for `select`, which carries the task and the original event.
+
+<GanttChart data={plan} label="name" group="stream" start="from" end="to" selectable bind:selected title="Pick a task" />
 
 ## Accessibility
 

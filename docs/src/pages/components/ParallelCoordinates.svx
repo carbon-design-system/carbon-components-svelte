@@ -23,6 +23,7 @@ description: Parallel coordinates draw one axis per variable, each on its own sc
   /** @type {Record<string, readonly [number, number]>} */
   let brushes = { cpu: [3, 5] };
   let kept = instances.length;
+  let selected = null;
 </script>
 
 `ParallelCoordinates` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -63,6 +64,12 @@ Drag along an axis to keep only the rows whose value falls in that range; the re
 ## Interaction
 
 Hover a line, or focus the chart and use the arrow keys, to read a row: it stands out, the rest recede, and a tooltip lists its value on every axis. `hover` fires with the row and `select` on click, Enter, or Space. The legend toggles series.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused row. Bind `selected`, the row index, or listen for `select`, which carries the row and the original event.
+
+<ParallelCoordinates data={instances} dimensions={["cpu", "mem", "io", "cost"]} series="tier" label="name" selectable bind:selected title="Pick a row" />
 
 ## Accessibility
 

@@ -45,6 +45,11 @@
     opacity: 0.4;
   }
 
+  .#{$prefix}--viz-sunburst__arc--selected {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
   // The hole holds the center's name and total, or a button back up.
   .#{$prefix}--viz-sunburst__center {
     position: absolute;

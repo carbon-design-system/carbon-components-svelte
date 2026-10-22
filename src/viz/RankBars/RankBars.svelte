@@ -84,7 +84,7 @@
    * Specify the selected item id. The folded row has the id `"other"`.
    * @type {Id | undefined}
    */
-  export let selectedId = undefined;
+  export let selected = undefined;
 
   /**
    * Specify the locale.
@@ -140,7 +140,7 @@
       ? focusedIndex
       : Math.max(
           0,
-          ranks.rows.findIndex((row) => row.item.id === selectedId),
+          ranks.rows.findIndex((row) => row.item.id === selected),
         );
 
   /**
@@ -180,7 +180,7 @@
    * @param {Event} originalEvent
    */
   function select(row, originalEvent) {
-    selectedId = row.item.id;
+    selected = row.item.id;
     dispatch("select", { row, originalEvent });
   }
 </script>
@@ -221,7 +221,7 @@
         class:bx--viz-rank-bars__row={true}
         class:bx--viz-rank-bars__row--other={row.items !== null}
         class:bx--viz-rank-bars__row--selected={selectable &&
-          row.item.id === selectedId}
+          row.item.id === selected}
         style:--bx-viz-pct={row.pct}
         style:--bx-viz-color={row.items === null
           ? inlineColor(row.item.color)
@@ -238,7 +238,7 @@
             <button
               type="button"
               class:bx--viz-rank-bars__button={true}
-              aria-pressed={row.item.id === selectedId}
+              aria-pressed={row.item.id === selected}
               tabindex={i === tabStopIndex ? 0 : -1}
               on:click|stopPropagation={(event) => select(row, event)}
               on:focus={() => {

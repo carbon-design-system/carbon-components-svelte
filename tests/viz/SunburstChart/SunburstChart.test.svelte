@@ -21,6 +21,7 @@
 </script>
 
 <SunburstChart
+  selectable
   {data}
   id="id"
   parent="parent"

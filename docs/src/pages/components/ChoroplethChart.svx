@@ -36,6 +36,7 @@ description: Choropleth colors the regions of a map by value, to show where some
     { region: "Southshore", customers: 3120 },
     { region: "Lakeland", customers: 1380 },
   ];
+  let selected = null;
 </script>
 
 `ChoroplethChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -87,6 +88,12 @@ Set `hue` to `"blue"`, `"purple"`, `"cyan"`, or `"teal"`. The ramp spans the sma
 ## Interaction
 
 Hover a region, or focus the map and use the arrow keys, to read its name and value: it gains an outline. `hover` fires with the region, and `select` on click, Enter, or Space. Both carry the feature and the `rows` summed into it.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused region. Bind `selected`, its id, or listen for `select`, which carries the region and the original event.
+
+<ChoroplethChart {features} data={customers} region="region" value="customers" selectable bind:selected title="Pick a region" />
 
 ## Accessibility
 

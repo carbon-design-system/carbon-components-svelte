@@ -23,7 +23,7 @@ description: Rank bars list items in order of value, with a number, a label, a b
     { id: "deploy", label: "Deploy", value: 48 },
   ];
 
-  let selectedId;
+  let selected;
 </script>
 
 `RankBars` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -78,9 +78,9 @@ Set `color` to a semantic name, a categorical index from 1 to 14, a viz token na
 
 ## Selectable
 
-Set `selectable` to put a toggle button in each row. Bind `selectedId` or listen for `select`. `hover` fires as the pointer or focus moves between rows.
+Set `selectable` to put a toggle button in each row. Bind `selected` or listen for `select`. `hover` fires as the pointer or focus moves between rows.
 
-<RankBars data={browsers} top={4} selectable bind:selectedId label="Pick a browser" />
+<RankBars data={browsers} top={4} selectable bind:selected label="Pick a browser" />
 
 ## Links
 

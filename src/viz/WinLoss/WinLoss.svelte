@@ -41,7 +41,7 @@
    * Specify the index of the selected result.
    * @type {number | undefined}
    */
-  export let selectedIndex = undefined;
+  export let selected = undefined;
 
   /**
    * Override the words used for each outcome. The record reads
@@ -98,8 +98,8 @@
   $: tabStopIndex =
     focusedIndex >= 0 && focusedIndex < results.length
       ? focusedIndex
-      : selectedIndex !== undefined && selectedIndex < results.length
-        ? selectedIndex
+      : selected !== undefined && selected < results.length
+        ? selected
         : Math.max(results.length - 1, 0);
 
   /** @param {ReadonlyArray<"win" | "loss" | "tie">} list */
@@ -147,7 +147,7 @@
    * @param {Event} originalEvent
    */
   function select(result, index, originalEvent) {
-    selectedIndex = index;
+    selected = index;
     focusedIndex = index;
     dispatch("select", { result, index, originalEvent });
   }
@@ -172,9 +172,9 @@
         <button
           type="button"
           class="bx--viz-winloss__result bx--viz-winloss__result--{outcomes[i]}"
-          class:bx--viz-winloss__result--selected={i === selectedIndex}
+          class:bx--viz-winloss__result--selected={i === selected}
           tabindex={i === tabStopIndex ? 0 : -1}
-          aria-pressed={i === selectedIndex}
+          aria-pressed={i === selected}
           aria-label={[result.label, words[outcomes[i]]]
             .filter(Boolean)
             .join(": ")}

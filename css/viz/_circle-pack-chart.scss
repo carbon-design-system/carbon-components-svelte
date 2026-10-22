@@ -55,6 +55,11 @@
     stroke-width: 2.5;
   }
 
+  .#{$prefix}--viz-pack__leaf--selected {
+    stroke: $border-interactive;
+    stroke-width: 2.5;
+  }
+
   // A halo of the page background keeps a label readable over any color.
   .#{$prefix}--viz-pack__label {
     fill: $text-primary;

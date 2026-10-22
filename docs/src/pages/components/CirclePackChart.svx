@@ -22,6 +22,7 @@ description: Circle pack shows values as circles packed inside their parents, fo
     ["Mobile", "ios", 1600],
     ["Mobile", "android", 1400],
   ].map(([team, repo, commits]) => ({ team, repo, commits }));
+  let selected = null;
 </script>
 
 `CirclePackChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -64,6 +65,12 @@ Groups take Carbon's prescribed color groups in order. Set `palette` to pick ano
 ## Interaction
 
 Hover a circle, or focus the chart and use the arrow keys, to read its label and value: the rest dim. `hover` fires with the leaf, and `select` on click, Enter, or Space. Both carry the `rows` summed into it.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused circle. Bind `selected`, its id, or listen for `select`, which carries the circle and the original event.
+
+<CirclePackChart data={repos} value="commits" label="repo" selectable bind:selected title="Pick a circle" />
 
 ## Accessibility
 

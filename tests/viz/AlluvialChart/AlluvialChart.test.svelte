@@ -15,6 +15,7 @@
 </script>
 
 <AlluvialChart
+  selectable
   {data}
   source="from"
   target="to"

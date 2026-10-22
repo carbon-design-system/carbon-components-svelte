@@ -13,7 +13,7 @@ description: Win-loss draws a tick per result, rising for a win and dropping for
     value: [3, -2, 0, 1, -1][i],
   }));
 
-  let selectedIndex;
+  let selected;
 </script>
 
 `WinLoss` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -36,9 +36,9 @@ Pass `data`, oldest first, as numbers: positive is a win, negative a loss, zero 
 
 ## Selectable
 
-Set `selectable` to make each result a button. Give the results a `label` so each is named, and bind `selectedIndex` or listen for `select`.
+Set `selectable` to make each result a button. Give the results a `label` so each is named, and bind `selected` or listen for `select`.
 
-<WinLoss data={days} selectable bind:selectedIndex label="Pick a day" showValue />
+<WinLoss data={days} selectable bind:selected label="Pick a day" showValue />
 
 ## Accessibility
 

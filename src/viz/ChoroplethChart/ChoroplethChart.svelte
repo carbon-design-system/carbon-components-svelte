@@ -57,6 +57,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make regions selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected region id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /**
    * Specify the projection. `"mercator"` keeps shapes and suits regions.
    * `"equirectangular"` plots degrees as they are.
@@ -236,7 +245,8 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (!active) return;
+    if (!selectable || !active) return;
+    selected = selected === active.id ? null : active.id;
     dispatch("select", {
       region: {
         id: active.id,
@@ -313,6 +323,7 @@
           <path
             class:bx--viz-choropleth__region={true}
             class:bx--viz-choropleth__region--empty={entry.value === null}
+            class:bx--viz-choropleth__region--selected={entry.id === selected}
             d={entry.path}
             fill-rule="evenodd"
             style:--bx-viz-color={entry.value === null

@@ -45,6 +45,7 @@
 </script>
 
 <GanttChart
+  selectable
   {data}
   id="id"
   label="name"

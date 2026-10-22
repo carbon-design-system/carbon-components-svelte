@@ -74,7 +74,7 @@
    * Specify the selected part id. The folded part has the id `"other"`.
    * @type {Id | undefined}
    */
-  export let selectedId = undefined;
+  export let selected = undefined;
 
   /**
    * Specify the locale.
@@ -116,7 +116,7 @@
     .filter(Boolean)
     .join(", ");
   $: selectedIndex = selectable
-    ? parts.findIndex((part) => part.id === selectedId)
+    ? parts.findIndex((part) => part.id === selected)
     : -1;
   $: tabStopIndex = Math.min(focusedIndex, Math.max(parts.length - 1, 0));
 
@@ -184,7 +184,7 @@
    * @param {Event} originalEvent
    */
   function select(part, originalEvent) {
-    selectedId = selectedId === part.id ? undefined : part.id;
+    selected = selected === part.id ? undefined : part.id;
     focusedIndex = part.segment.index;
     dispatch("select", { ...part.segment, originalEvent });
   }
@@ -224,7 +224,7 @@
       {#each parts as part, i (part.id)}
         <li
           class:bx--viz-waffle__item={true}
-          class:bx--viz-waffle__item--selected={part.id === selectedId}
+          class:bx--viz-waffle__item--selected={part.id === selected}
           style:--bx-viz-color={part.color}
         >
           {#if selectable}
@@ -232,7 +232,7 @@
               type="button"
               class:bx--viz-waffle__key={true}
               tabindex={i === tabStopIndex ? 0 : -1}
-              aria-pressed={part.id === selectedId}
+              aria-pressed={part.id === selected}
               on:click={(event) => select(part, event)}
               on:focus={() => (focusedIndex = i)}
             >

@@ -74,7 +74,7 @@ describe("WordCloudChart", () => {
   it("moves word to word, largest first, without laying out again, and selects", async () => {
     const onhover = vi.fn();
     const onselect = vi.fn();
-    render(WordCloudChart, { onhover, onselect });
+    render(WordCloudChart, { selectable: true, onhover, onselect });
     const laidOut = layout.calls;
 
     chart().focus();

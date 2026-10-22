@@ -16,6 +16,7 @@
 </script>
 
 <SequenceDiagram
+  selectable
   {data}
   from="from"
   to="to"

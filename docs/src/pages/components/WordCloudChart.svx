@@ -16,6 +16,7 @@ description: Word cloud sizes words by value, for a first impression of which te
     ["backlog", "symptom", 26], ["throttle", "fix", 24], ["schema", "cause", 21],
     ["postmortem", "process", 19], ["paging", "process", 16], ["disk", "cause", 14],
   ].map(([term, kind, mentions]) => ({ term, kind, mentions }));
+  let selected = null;
 </script>
 
 `WordCloudChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -61,6 +62,12 @@ The cloud is drawn at `width` by `height` and scales down with its container. `m
 ## Interaction
 
 Hover a word, or focus the chart and use the arrow keys, to read its value: the rest dim. `hover` fires with the word, and `select` on click, Enter, or Space. Both carry the `rows` summed into it.
+
+## Selection
+
+Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused word. Bind `selected`, the word, or listen for `select`, which carries the word and the original event.
+
+<WordCloudChart data={TERMS} word="term" value="mentions" selectable bind:selected title="Pick a word" />
 
 ## Accessibility
 

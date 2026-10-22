@@ -85,6 +85,11 @@
     font-weight: 600;
   }
 
+  .#{$prefix}--viz-gantt__task--selected .#{$prefix}--viz-gantt__bar {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
   .#{$prefix}--viz-gantt--emphasis
     .#{$prefix}--viz-gantt__task:not(.#{$prefix}--viz-gantt__task--active) {
     opacity: 0.5;

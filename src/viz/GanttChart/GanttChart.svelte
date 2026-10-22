@@ -68,6 +68,15 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to make tasks selectable */
+  export let selectable = false;
+
+  /**
+   * Specify the selected task id.
+   * @type {string | null}
+   */
+  export let selected = null;
+
   /**
    * Specify the time range shown. Defaults to the earliest start and the
    * latest end, widened to whole days.
@@ -230,7 +239,9 @@
 
   /** @param {Event} originalEvent */
   function selectActive(originalEvent) {
-    if (current) dispatch("select", { task: detail(current), originalEvent });
+    if (!selectable || !current) return;
+    selected = selected === current.id ? null : current.id;
+    dispatch("select", { task: detail(current), originalEvent });
   }
 
   /** @param {KeyboardEvent} event */
@@ -359,6 +370,7 @@
             <g
               class:bx--viz-gantt__task={true}
               class:bx--viz-gantt__task--active={i === active}
+              class:bx--viz-gantt__task--selected={task.id === selected}
               style:--bx-viz-color={task.color}
               on:mouseenter={() => setActive(i)}
             >

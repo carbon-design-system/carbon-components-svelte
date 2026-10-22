@@ -22,6 +22,7 @@
 </script>
 
 <ParallelCoordinates
+  selectable
   {data}
   dimensions={["cpu", "mem", { key: "cost", label: "Cost", domain: [0, 250] }]}
   series="tier"
