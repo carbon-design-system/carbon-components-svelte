@@ -1,5 +1,8 @@
 <script lang="ts">
   import Text from "carbon-components-svelte/Text/Text.svelte";
+
+  export let truncatedType: "body-01" | "body-02" = "body-01";
+  export let truncatedStyle: string | undefined = undefined;
 </script>
 
 <Text>Default body</Text>
@@ -29,4 +32,6 @@
   class="combined"
   >Combined modifiers</Text
 >
-<Text type="body-01" lines={3}>Truncated text</Text>
+<Text type={truncatedType} style={truncatedStyle} lines={3}
+  >Truncated text</Text
+>
