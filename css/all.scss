@@ -54,14 +54,6 @@ $ccs-omit-token-fallbacks: true;
   }
   @include ccs-emit-text-colors($theme, $base);
   @include ccs-emit-status-colors($theme, $base);
-
-  // The low contrast ContentSwitcher drops its fill on a dark theme.
-  // `initial` restores the fallback in a light zone nested in a dark one.
-  @if $dark {
-    --ccs-content-switcher-low-contrast-background: transparent;
-  } @else if not $base {
-    --ccs-content-switcher-low-contrast-background: initial;
-  }
 }
 
 // Theme zones (`ThemeZone`, Carbon React's `<Theme>`): a `.bx--{theme}`

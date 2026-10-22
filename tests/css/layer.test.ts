@@ -31,7 +31,6 @@ describe("Layer tokens", () => {
     [/^\.bx--scroll-gradient\S*layer-0\d$/, "layer-0", "the color names it"],
     [/^\.bx--data-table \S/, "field-02", "fields in a table"],
     [/--inline\.bx--list-box--expanded:hover$/, "field-02", "v11: transparent"],
-    [/^\.bx--content-switcher--low-contrast /, "layer-02", "fixed per theme"],
     [/^\.bx--date-picker__day\S*--selected:focus/, "layer-02", "focus inset"],
     [/^\.bx--toggle-input:(focus|active)\+/, "layer-02", "v11: no gap"],
     [/^\.bx--modal-container$/, "border-subtle-01", "modal edge"],

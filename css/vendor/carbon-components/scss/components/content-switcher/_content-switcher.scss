@@ -346,36 +346,30 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "tokens";
 
 /// Low contrast content switcher (Carbon React lowContrast).
-/// v10 has no low-contrast tokens. Selected segment becomes an outlined card;
-/// unselected buttons stay transparent. Light themes use a gray container;
-/// dark themes use a transparent container with a raised selected card ($layer-02).
-///
-/// Single-theme builds detect light/dark from background lightness. `all.css`
-/// uses CSS custom properties, so lightness() fails. There the dark theme
-/// blocks set `--ccs-content-switcher-low-contrast-background` to
-/// `transparent` and the light ones reset it to `initial`, which falls back
-/// to `$layer-accent`. The nearest theme wins, a theme zone included.
+/// Selected segment becomes an outlined card; unselected buttons stay
+/// transparent. The fills read Carbon v11's `content-switcher-*` tokens: a
+/// gray container in the light themes and a transparent one in the dark
+/// themes, where the hover and the selected card are translucent grays.
 /// @access private
 /// @group components
 @mixin content-switcher-low-contrast {
-  $container-background: $layer-accent;
-  @if feature-flag-enabled("enable-css-custom-properties") {
-    $container-background: var(
-      --ccs-content-switcher-low-contrast-background,
-      #{$layer-accent}
-    );
-  } @else if lightness($background) <= 50% {
-    $container-background: transparent;
-  }
+  $background: get-token-value($content-switcher-colors, "content-switcher-background");
+  $background-hover: get-token-value(
+    $content-switcher-colors,
+    "content-switcher-background-hover"
+  );
+  $selected: get-token-value($content-switcher-colors, "content-switcher-selected");
 
   .#{$prefix}--content-switcher--low-contrast {
     // Match the end switches' 4px corners so the gray fill doesn't show
     // outside a selected end card's rounded ring.
     border-radius: to-rem(4px);
-    background-color: $container-background;
+    background-color: $background;
 
     .#{$prefix}--content-switcher-btn {
       border-color: $border-strong;
@@ -387,13 +381,13 @@
 
       &::after {
         border-radius: to-rem(4px);
-        background-color: $layer-02;
+        background-color: $selected;
         box-shadow: inset 0 0 0 to-rem(1px) $border-inverse;
       }
 
       &:hover,
       &:active {
-        background-color: $layer-selected-hover;
+        background-color: $background-hover;
         color: $text-primary;
       }
 
