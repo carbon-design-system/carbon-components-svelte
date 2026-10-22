@@ -40,6 +40,7 @@
   import { getContext, onMount, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
   // Follow the enclosing `SideNav`; the module stores cover a menu rendered
@@ -95,11 +96,22 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
   class:bx--side-nav__item={true}
   class:bx--side-nav__item--icon={icon || $$slots.icon}
   class:bx--side-nav__item--large={large}
   class:bx--side-nav__item--active={(isActive || current) && !expanded}
+  on:keydown={(event) => {
+    if (!expanded || event.key !== "Escape") return;
+    if (isImeComposition(event)) return;
+    // The innermost open menu takes the key, so one Escape closes one
+    // level and leaves the side nav open.
+    event.stopPropagation();
+    expanded = false;
+    // The collapsed list is inert, which would drop focus held inside it.
+    ref?.focus();
+  }}
 >
   <button
     type="button"
