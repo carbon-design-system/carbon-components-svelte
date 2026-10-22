@@ -79,3 +79,7 @@ Set `disableStacking` to `true` to force a horizontal layout even at a size that
   <Button kind="danger">Delete</Button>
   <Button>Save</Button>
 </ActionSet>
+
+## Server rendering
+
+`ActionSet` counts its actions in the browser, so the stacking and row layout classes are applied after mount. A server-rendered page can reflow on hydration.
