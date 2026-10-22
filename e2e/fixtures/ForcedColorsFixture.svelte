@@ -17,6 +17,11 @@
     Popover,
     ProgressBar,
     SelectableTag,
+    StructuredList,
+    StructuredListBody,
+    StructuredListCell,
+    StructuredListInput,
+    StructuredListRow,
     Switch,
     Toggle,
     ToggleButton,
@@ -67,6 +72,19 @@
     <Switch text="Selected switch" />
     <Switch text="Switch" />
   </ContentSwitcher>
+
+  <StructuredList selection selected="selected">
+    <StructuredListBody>
+      <StructuredListRow label for="structured-selected" value="selected">
+        <StructuredListCell>Selected row</StructuredListCell>
+        <StructuredListInput id="structured-selected" value="selected" />
+      </StructuredListRow>
+      <StructuredListRow label for="structured-plain" value="plain">
+        <StructuredListCell>Row</StructuredListCell>
+        <StructuredListInput id="structured-plain" value="plain" />
+      </StructuredListRow>
+    </StructuredListBody>
+  </StructuredList>
 
   <Toggle labelText="Toggle" />
 

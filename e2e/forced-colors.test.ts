@@ -83,6 +83,10 @@ test.describe("forced colors", () => {
       ".bx--switcher__item-link--selected",
       ".bx--switcher__item-link:not(.bx--switcher__item-link--selected)",
     ],
+    [
+      ".bx--structured-list-row--selected",
+      ".bx--structured-list-row:not(.bx--structured-list-row--selected)",
+    ],
   ] as const;
 
   test("selected and pressed items fill with Highlight, also on hover", async ({
@@ -144,6 +148,12 @@ test.describe("forced colors", () => {
     [
       ".bx--switcher__item-link--selected",
       ".bx--switcher__item-link--selected",
+      undefined,
+      "HighlightText",
+    ],
+    [
+      "#structured-selected",
+      ".bx--structured-list-row--selected",
       undefined,
       "HighlightText",
     ],

@@ -74,15 +74,42 @@
     padding-left: 0;
   }
 
+  // ccs: a top border on each row and a bottom border on the last body row,
+  // as in v11, so a hovered or selected row can recolor the line above it.
   .#{$prefix}--structured-list-row {
     display: table-row;
-    border-bottom: 1px solid $border-subtle;
+    border-top: 1px solid $border-subtle;
     transition: background-color $duration--fast-02 motion(standard, productive);
   }
 
+  .#{$prefix}--structured-list-tbody
+    .#{$prefix}--structured-list-row:last-child {
+    border-bottom: 1px solid $border-subtle;
+  }
+
   .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--header-row {
-    border-bottom: 1px solid $layer-selected;
+    border: none; // ccs: v11 draws no header border
     cursor: inherit;
+  }
+
+  // ccs: v11's selected row, a `$layer-selected` fill and lines, with
+  // primary text. The line below it is the next row's top border.
+  .#{$prefix}--structured-list--selection
+    .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected {
+    border-color: $layer-selected;
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--structured-list--selection
+    .#{$prefix}--structured-list-row--selected
+    + .#{$prefix}--structured-list-row {
+    border-color: $layer-selected;
+  }
+
+  .#{$prefix}--structured-list--selection
+    .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected
+    > .#{$prefix}--structured-list-td {
+    color: $text-primary;
   }
 
   @if not feature-flag-enabled('enable-v11-release') {
@@ -92,30 +119,28 @@
   }
 
   // ccs: grouped this component's any-hover rules into one block
-  // (order-safe: no rule in between touches the row's border-bottom/
-  // background-color or the cell's color/border-top at equal specificity)
+  // (order-safe: no rule in between touches the row's border-color/
+  // background-color or the cell's color at equal specificity). The
+  // hovered row recolors its own top line and the next row's, as in v11,
+  // instead of v10's bottom border and cell top border.
   @media (any-hover: hover) {
     .#{$prefix}--structured-list--selection
       .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected) {
-      border-bottom: 1px solid $layer-hover;
+      border-color: $layer-hover;
       background-color: $layer-hover;
       cursor: pointer;
+    }
+
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected)
+      + .#{$prefix}--structured-list-row {
+      border-color: $layer-hover;
     }
 
     .#{$prefix}--structured-list--selection
       .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
       > .#{$prefix}--structured-list-td {
       color: $text-primary;
-    }
-
-    .#{$prefix}--structured-list--selection
-      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
-      > .#{$prefix}--structured-list-td {
-      @if feature-flag-enabled('enable-v11-release') {
-        border-top: 1px solid $border-subtle;
-      } @else {
-        border-top: 1px solid $layer;
-      }
     }
   }
 
@@ -282,22 +307,6 @@
     @include focus-outline("outline");
   }
 
-  // Under `border-collapse: collapse`, every column's top border is
-  // resolved independently against the column above it. Carbon's hover
-  // rule below only adds `border-top` to `.bx--structured-list-td`
-  // cells, so the wrapper's column -- lacking that border -- resolves
-  // to a different edge than its neighbors, showing as a 1px seam right
-  // where the wrapper sits. Giving the wrapper the identical
-  // conditional border keeps every column's top edge resolving the same
-  // way, hover or not.
-  @media (any-hover: hover) {
-    .#{$prefix}--structured-list--selection
-      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
-      > .#{$prefix}--structured-list-input-wrapper {
-      border-top: 1px solid $layer;
-    }
-  }
-
   // Carbon's base CSS fills the selection icon via
   // `.bx--structured-list-input:checked + .bx--structured-list-td`, an
   // adjacent-sibling selector that requires the input to be a direct
@@ -454,4 +463,49 @@
 
 @include exports("structured-list-sort") {
   @include structured-list-sort;
+}
+
+// carbon-components-svelte patch (structured-list-forced-colors)
+// The selected row is a `$layer-selected` fill, which forced-colors mode
+// repaints as Canvas, so only the icon told it apart. Author system colors
+// survive forcing, so fill it with Highlight, as TreeView does. The hover
+// rule for cell text outranks the plain selected rule, so its `:hover`
+// twin re-asserts HighlightText.
+
+/// Selected structured list row in forced-colors mode.
+/// @access private
+/// @group components
+@mixin structured-list-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected
+      > .#{$prefix}--structured-list-td,
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected:hover
+      > .#{$prefix}--structured-list-td {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row--selected
+      .#{$prefix}--structured-list-svg {
+      fill: HighlightText;
+    }
+
+    // The focus ring sits inside the row, on the Highlight fill.
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row--selected:focus-within {
+      outline-color: HighlightText;
+    }
+  }
+}
+
+@include exports("structured-list-forced-colors") {
+  @include structured-list-forced-colors;
 }

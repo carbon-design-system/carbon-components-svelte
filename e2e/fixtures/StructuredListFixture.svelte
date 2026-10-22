@@ -20,12 +20,12 @@
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
-    <StructuredListRow label for="row-a">
+    <StructuredListRow label for="row-a" value="a">
       <StructuredListCell>Row A</StructuredListCell>
       <StructuredListCell>Value A</StructuredListCell>
       <StructuredListInput id="row-a" value="a" title="Select row A" />
     </StructuredListRow>
-    <StructuredListRow label for="row-b">
+    <StructuredListRow label for="row-b" value="b">
       <StructuredListCell>Row B</StructuredListCell>
       <StructuredListCell>Value B</StructuredListCell>
       <StructuredListInput id="row-b" value="b" title="Select row B" />
