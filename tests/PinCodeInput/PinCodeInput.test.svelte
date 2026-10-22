@@ -30,6 +30,7 @@
   export let fluid: ComponentProps<PinCodeInput>["fluid"] = false;
   export let name: ComponentProps<PinCodeInput>["name"] = undefined;
   export let required: ComponentProps<PinCodeInput>["required"] = false;
+  export let groups: ComponentProps<PinCodeInput>["groups"] = undefined;
   export let segmentLabelText: ComponentProps<PinCodeInput>["segmentLabelText"] =
     undefined;
   export let onChange: (detail: unknown) => void = () => {};
@@ -63,6 +64,7 @@
   {fluid}
   {name}
   {required}
+  {groups}
   {...segmentLabelText ? { segmentLabelText } : {}}
   on:change={(e) => onChange(e.detail)}
   on:complete={(e) => onComplete(e.detail)}
