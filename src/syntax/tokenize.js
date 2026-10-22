@@ -692,6 +692,8 @@ const CSS_IMPORTANT = /!\s*important\b/iy;
 const CSS_OPERATOR = /[~|^$*]?=|[>+~*]/y;
 const SCSS_INTERPOLATION = /#\{[^}]*\}?/y;
 const CSS_STATEMENT_END = new Set(["{", ";", "}"]);
+/** `//` after these is a URL's scheme or host separator, not a comment: `url(http://…)`, `url(//cdn…)`. */
+const URL_SLASHES = new Set([":", "("]);
 /**
  * Whether the statement starting at `at` is a selector: it reaches `{`
  * before `;` or `}`, outside parentheses, strings, and comments, and isn't
@@ -710,7 +712,12 @@ function selectorAhead(code, at, scss) {
       const close = code.indexOf("*/", i + 2);
       if (close < 0) return false;
       i = close + 1;
-    } else if (scss && c === "/" && code[i + 1] === "/") {
+    } else if (
+      scss &&
+      c === "/" &&
+      code[i + 1] === "/" &&
+      !URL_SLASHES.has(code[i - 1])
+    ) {
       const newline = code.indexOf("\n", i);
       if (newline < 0) return false;
       i = newline;
@@ -759,7 +766,11 @@ function cssIdentifier(text, at, state) {
 const CSS_RULES = [
   [WHITESPACE, null],
   [CSS_COMMENT, "comment"],
-  [SCSS_LINE_COMMENT, "comment", (state) => state.scss],
+  [
+    SCSS_LINE_COMMENT,
+    "comment",
+    (state, at) => state.scss && !URL_SLASHES.has(state.code[at - 1]),
+  ],
   [SCSS_INTERPOLATION, "special", (state) => state.scss],
   [SCSS_VARIABLE, "variable-name", (state) => state.scss],
   [
