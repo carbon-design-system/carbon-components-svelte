@@ -257,7 +257,10 @@ $ai-label-sizes: (
 
   .#{$prefix}--ai-label-popover
     .#{$prefix}--toggletip-content
-    .#{$prefix}--link:focus {
+    .#{$prefix}--link:focus,
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:active {
     @include focus-outline("outline");
   }
 

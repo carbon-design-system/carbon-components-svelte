@@ -33,15 +33,21 @@
       text-decoration: underline;
     }
 
+    // ccs: v11 keeps the link color while pressed and adds the focus ring
     &:active,
     &:active:visited,
     &:active:visited:hover {
-      color: $text-primary;
+      @include focus-outline;
+
+      color: $link-primary;
       text-decoration: underline;
     }
 
+    // ccs: v11 underlines a focused link as well as outlining it
     &:focus {
       @include focus-outline;
+
+      text-decoration: underline;
     }
 
     &:visited {
@@ -64,6 +70,15 @@
     text-decoration: none;
   }
 
+  // ccs: ties `.#{$prefix}--link:active` and wins by order, so pressing a
+  // disabled link shows no ring, link color or underline (v11 guards the
+  // active rule with `:not(.#{$prefix}--link--disabled)` instead)
+  .#{$prefix}--link--disabled:active {
+    outline: none;
+    color: $text-disabled;
+    text-decoration: none;
+  }
+
   .#{$prefix}--link--visited:visited { // ccs: flatten
     color: $link-visited;
   }
@@ -76,14 +91,11 @@
     text-decoration: underline;
   }
 
-  // After the disabled variant so `:focus` / `:visited` still win by order.
+  // ccs: v11 sets `display: inline` so a long link wraps with the running
+  // text, and keeps the underline when the link is focused or visited
   .#{$prefix}--link--inline { // ccs: flatten
+    display: inline;
     text-decoration: underline;
-
-    &:focus,
-    &:visited {
-      text-decoration: none;
-    }
   }
 
   .#{$prefix}--link--sm {

@@ -64,6 +64,12 @@
     color: $link-secondary;
   }
 
+  // ccs: a pressed clickable tile keeps the tile's own outline instead of
+  // the ring `.#{$prefix}--link:active` adds; `:focus` below still wins
+  .#{$prefix}--tile--clickable:active {
+    outline: 2px solid transparent;
+  }
+
   .#{$prefix}--tile--clickable,
   .#{$prefix}--tile--expandable {
     &:focus {
@@ -93,6 +99,8 @@
 
   .#{$prefix}--tile--clickable:hover,
   .#{$prefix}--tile--clickable:active,
+  // ccs: also `:focus`, which `.#{$prefix}--link:focus` now underlines
+  .#{$prefix}--tile--clickable:focus,
   .#{$prefix}--tile--clickable:visited,
   .#{$prefix}--tile--clickable:visited:hover {
     color: $text-primary;

@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
-test.describe("Link icon scaling", () => {
+test.describe("Link", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/link.html");
   });
@@ -52,5 +52,64 @@ test.describe("Link icon scaling", () => {
     expect(await color(page, "link-muted")).toBe("rgb(10, 20, 30)");
     // A non-muted link keeps Carbon's link color.
     expect(await color(page, "link-default")).not.toBe("rgb(10, 20, 30)");
+  });
+
+  /** Reads a computed style once the color transition has finished. */
+  function style(page: Page, testId: string, property: string) {
+    return page.getByTestId(testId).evaluate(async (el, property) => {
+      await Promise.all(el.getAnimations().map((a) => a.finished));
+      return getComputedStyle(el).getPropertyValue(property);
+    }, property);
+  }
+
+  test("matches v11 inline, active and focus styles", async ({ page }) => {
+    expect.soft(await style(page, "link-default", "display")).toBe("inline");
+    expect.soft(await style(page, "link-md", "display")).toBe("inline-flex");
+
+    // Pressing keeps the link color and adds the focus ring.
+    const press = page.getByTestId("link-press");
+    const rest = await style(page, "link-press", "color");
+    await press.hover();
+    await page.mouse.down();
+    expect.soft(await style(page, "link-press", "color"), "active").toBe(rest);
+    await expect.soft(press, "active ring").toHaveCSS("outline-style", "solid");
+    await expect
+      .soft(press, "active underline")
+      .toHaveCSS("text-decoration-line", "underline");
+    await page.mouse.up();
+
+    // A pressed disabled link shows no ring or underline.
+    const disabled = page.getByTestId("link-disabled");
+    await disabled.hover();
+    await page.mouse.down();
+    await expect
+      .soft(disabled, "disabled active ring")
+      .toHaveCSS("outline-style", "none");
+    await expect
+      .soft(disabled, "disabled active underline")
+      .toHaveCSS("text-decoration-line", "none");
+    await page.mouse.up();
+
+    // Focus underlines, and inline links keep their underline.
+    for (const testId of ["link-md", "link-default"]) {
+      const link = page.getByTestId(testId);
+      // biome-ignore lint/performance/noAwaitInLoops: one focus at a time
+      await link.focus();
+      await expect
+        .soft(link, `${testId} focus underline`)
+        .toHaveCSS("text-decoration-line", "underline");
+      await expect
+        .soft(link, `${testId} focus ring`)
+        .toHaveCSS("outline-style", "solid");
+    }
+  });
+
+  test("wraps a long inline link across lines", async ({ page }) => {
+    const rects = await page
+      .getByTestId("link-wrap")
+      .evaluate((el) => [...el.getClientRects()].map(({ top }) => top));
+    // One box per line: an `inline-flex` link is a single box.
+    expect(rects.length).toBeGreaterThanOrEqual(2);
+    expect(rects[1]).toBeGreaterThan(rects[0]);
   });
 });

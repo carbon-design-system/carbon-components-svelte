@@ -171,6 +171,14 @@ describe("Link", () => {
     expect(onMouseleave).toHaveBeenCalledTimes(1);
   });
 
+  it("adds no space after an inline link's text", () => {
+    render(Link);
+    const link = within(screen.getByTestId("link-inline")).getByRole("link");
+
+    // An inline link is `display: inline`, so a trailing space is underlined.
+    expect(link.textContent).toBe("Carbon Design System");
+  });
+
   it("does not render an icon on an inline link", () => {
     render(Link);
 
