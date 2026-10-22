@@ -18,8 +18,8 @@
   /**
    * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
+   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; match: [number, number] | null; } }}
+   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; match: [number, number] | null; } }} childNodes
    */
 
   /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
@@ -77,6 +77,8 @@
     checkedIdSet,
     expandedIdSet,
     indeterminateIdSet,
+    filteredOutIdSet,
+    matchesById,
     selectionMode,
     clickNode,
     selectNode,
@@ -115,6 +117,8 @@
   }
   $: selected = $selectedIdSet.has(id);
   $: checked = $checkedIdSet.has(id);
+  $: filteredOut = $filteredOutIdSet.has(id);
+  $: match = $matchesById.get(id) ?? null;
   $: isCheckboxMode = $selectionMode === "checkbox";
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   // Merge all props (including custom properties) with computed properties
@@ -136,6 +140,7 @@
     selected,
     checked,
     indeterminate,
+    match,
   };
   $: {
     // The root list is a non-selectable wrapper; its default empty `id` would
@@ -205,6 +210,7 @@
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--filtered-out={filteredOut}
     aria-expanded={expanded}
     aria-owns="{$treeId}-{id}-subtree"
     aria-level={level}

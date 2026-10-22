@@ -35,6 +35,7 @@
     checkedIdSet,
     expandedIdSet,
     indeterminateIdSet,
+    matchesById,
     selectionMode,
     clickNode,
     selectNode,
@@ -75,6 +76,7 @@
     selected,
     checked,
     indeterminate,
+    match: $matchesById.get(id) ?? null,
   };
 
   // Match TreeViewNode: externally-set activeId auto-selects the row.

@@ -55,7 +55,7 @@
   /**
    * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
    * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
-   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
+   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; match: [number, number] | null; } }}
    */
 
   /** Set to `true` if the node has no children. */
@@ -110,6 +110,8 @@
     selectedIdSet,
     checkedIdSet,
     indeterminateIdSet,
+    filteredOutIdSet,
+    matchesById,
     selectionMode,
     clickNode,
     selectNode,
@@ -128,6 +130,8 @@
 
   $: selected = $selectedIdSet.has(id);
   $: checked = $checkedIdSet.has(id);
+  $: filteredOut = $filteredOutIdSet.has(id);
+  $: match = $matchesById.get(id) ?? null;
   // Link rows navigate; they render no checkbox.
   $: isCheckboxMode = $selectionMode === "checkbox" && href === undefined;
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
@@ -148,6 +152,7 @@
     selected,
     checked,
     indeterminate,
+    match,
   };
   $: {
     if (
@@ -189,6 +194,7 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
+      class:bx--tree-node--filtered-out={filteredOut}
       on:click|stopPropagation={(event) => {
         if (disabled) return;
         clickNode(node, event);
@@ -256,6 +262,7 @@
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--filtered-out={filteredOut}
     on:click|stopPropagation={(event) => {
       if (disabled) return;
       // Stop the label from toggling the decorative input; `clickNode`

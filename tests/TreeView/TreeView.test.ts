@@ -79,6 +79,7 @@ describe("TreeView", () => {
       id: 0,
       indeterminate: false,
       leaf: true,
+      match: null,
       selected: true,
       text: "AI / Machine learning",
     });

@@ -309,6 +309,7 @@ export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
 export { linkSegments } from "./utils/link-segments.js";
+export { matchTreeNodes } from "./utils/match-tree-nodes.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
