@@ -250,12 +250,24 @@
   export let id = useId("file-uploader");
 
   /**
+   * Enable paste-to-upload for screenshots and clipboard files.
+   * When `true`, listens for `paste` on `document`. Pass an `HTMLElement`
+   * (for example a form) to listen on that element instead.
+   * Clipboard files use the same size, duplicate, `maxFiles`, ordering,
+   * `add`, `change`, and `rejected` path as button selection. No-op when
+   * `disabled`, or when the paste lands in a text input, textarea, or
+   * contenteditable region.
+   * @type {boolean | HTMLElement}
+   */
+  export let pasteTarget = false;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
@@ -294,6 +306,123 @@
 
   /** @type {ReadonlyArray<File>} */
   let prevFiles = [];
+
+  /**
+   * Shared path for files from button selection and paste: filters by size
+   * and duplicates, orders, and dispatches `change`/`rejected`.
+   * @param {ReadonlyArray<File>} incoming
+   */
+  function processIncomingFiles(incoming) {
+    // In multiple mode, `incoming` includes re-sent existing files (same
+    // reference) plus new ones. Only reject new objects that match an
+    // existing file by content.
+    const existingRefs = new Set(prevFiles);
+    let { accepted, rejected } = filterIncomingFiles(incoming, {
+      minFileSize,
+      maxFileSize,
+      preventDuplicate,
+      existingFiles: prevFiles,
+      carryRefs: existingRefs,
+    });
+
+    /** @type {Array<{ file: File; reason: import("../utils/filter-incoming-files.js").FileRejectionReason | "count" }>} */
+    const allRejected = [...rejected];
+
+    // Count check runs after size/duplicate. Keep carried files; trim
+    // newly added files that would exceed maxFiles (selection order).
+    if (maxFiles !== undefined) {
+      const carriedForCount = accepted.filter((f) => existingRefs.has(f));
+      const addedForCount = accepted.filter((f) => !existingRefs.has(f));
+      const slots = Math.max(0, maxFiles - carriedForCount.length);
+      if (addedForCount.length > slots) {
+        const excess = addedForCount.slice(slots);
+        allRejected.push(
+          ...excess.map((file) => ({
+            file,
+            reason: /** @type {const} */ ("count"),
+          })),
+        );
+        accepted = [...carriedForCount, ...addedForCount.slice(0, slots)];
+      }
+    }
+
+    if (allRejected.length > 0) {
+      dispatch("rejected", allRejected);
+    }
+
+    const carried = accepted.filter((f) => existingRefs.has(f));
+    const added = accepted.filter((f) => !existingRefs.has(f));
+
+    if (typeof orderFiles === "function") {
+      files = orderFiles(carried, added);
+    } else if (orderFiles === "prepend") {
+      files = [...added, ...carried];
+    } else {
+      files = [...carried, ...added];
+    }
+
+    dispatch("change", files);
+  }
+
+  /** @type {EventTarget | null} */
+  let pasteListenNode = null;
+
+  /**
+   * Whether the paste landed in a field that handles it itself: a text
+   * input, textarea, or contenteditable region.
+   * @param {EventTarget | null} target
+   */
+  function isEditableTarget(target) {
+    if (!(target instanceof Element)) return false;
+    if (target.closest("textarea")) return true;
+    const input = target.closest("input");
+    if (input)
+      return ![
+        "file",
+        "checkbox",
+        "radio",
+        "button",
+        "submit",
+        "reset",
+        "image",
+      ].includes(input.type);
+    const editable = target.closest("[contenteditable]");
+    return !!editable && editable.getAttribute("contenteditable") !== "false";
+  }
+
+  /** @param {Event} event A `paste` event, typed as `Event` for `addEventListener` on any target. */
+  function handlePaste(event) {
+    if (effectiveDisabled || isEditableTarget(event.target)) return;
+    const clipboardFiles = /** @type {ClipboardEvent} */ (event).clipboardData
+      ?.files;
+    if (!clipboardFiles?.length) return;
+
+    event.preventDefault();
+    const incoming = [...clipboardFiles];
+    processIncomingFiles(multiple ? [...files, ...incoming] : incoming);
+  }
+
+  /** @param {boolean | HTMLElement} target */
+  function setPasteListener(target) {
+    /** @type {EventTarget | null} */
+    const next =
+      target === true
+        ? typeof document === "undefined"
+          ? null
+          : document
+        : typeof HTMLElement !== "undefined" && target instanceof HTMLElement
+          ? target
+          : null;
+
+    if (pasteListenNode === next) return;
+    pasteListenNode?.removeEventListener("paste", handlePaste);
+    pasteListenNode = next;
+    pasteListenNode?.addEventListener("paste", handlePaste);
+  }
+
+  $: setPasteListener(pasteTarget);
+
+  onMount(() => () => setPasteListener(false));
 
   // Set by a row's remove button, so the removal also reports the new
   // list in `change`, as a pick does.
@@ -464,57 +593,7 @@
     aria-labelledby={ariaLabelledBy}
     bind:ref
     bind:files
-    on:change={(event) => {
-      // In multiple mode, newFiles includes re-sent existing files
-      // (same reference) plus newly selected ones. Only reject new
-      // objects that match an existing file by content.
-      const existingRefs = new Set(prevFiles);
-      let { accepted: newFiles, rejected } = filterIncomingFiles(event.detail, {
-        minFileSize,
-        maxFileSize,
-        preventDuplicate,
-        existingFiles: prevFiles,
-        carryRefs: existingRefs,
-      });
-
-      /** @type {Array<{ file: File; reason: import("../utils/filter-incoming-files.js").FileRejectionReason | "count" }>} */
-      const allRejected = [...rejected];
-
-      // Count check runs after size/duplicate. Keep carried files; trim
-      // newly added files that would exceed maxFiles (selection order).
-      if (maxFiles !== undefined) {
-        const carriedForCount = newFiles.filter((f) => existingRefs.has(f));
-        const addedForCount = newFiles.filter((f) => !existingRefs.has(f));
-        const slots = Math.max(0, maxFiles - carriedForCount.length);
-        if (addedForCount.length > slots) {
-          const excess = addedForCount.slice(slots);
-          allRejected.push(
-            ...excess.map((file) => ({
-              file,
-              reason: /** @type {const} */ ("count"),
-            })),
-          );
-          newFiles = [...carriedForCount, ...addedForCount.slice(0, slots)];
-        }
-      }
-
-      if (allRejected.length > 0) {
-        dispatch("rejected", allRejected);
-      }
-
-      const carried = newFiles.filter((f) => existingRefs.has(f));
-      const added = newFiles.filter((f) => !existingRefs.has(f));
-
-      if (typeof orderFiles === "function") {
-        files = orderFiles(carried, added);
-      } else if (orderFiles === "prepend") {
-        files = [...added, ...carried];
-      } else {
-        files = [...carried, ...added];
-      }
-
-      dispatch("change", files);
-    }}
+    on:change={(event) => processIncomingFiles(event.detail)}
   />
   <div class:bx--file-container={true}>
     {#each filesWithKeys as { file, key }, index (key)}
