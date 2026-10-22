@@ -8,6 +8,10 @@
 // background, a user bubble is layer-01, and so on).
 // text-placeholder keeps text-helper's value: v11's 40% gray is 2.6:1 on a
 // white field.
+// The v10 maps also hold the button-* component tokens. Each map ends with
+// the ones whose v11 value differs. g80 takes v11's primary hover, which is
+// the same in every v11 theme, and keeps its opaque disabled color, as it
+// keeps text-disabled and icon-disabled.
 
 $ccs-v11-values: (
   white: (
@@ -156,6 +160,9 @@ $ccs-v11-values: (
     support-caution-major: #ff832b,
     support-caution-minor: #f1c21b,
     support-caution-undefined: #8a3ffc,
+    button-primary-hover: #0050e6,
+    button-secondary-hover: #474747,
+    button-tertiary-hover: #0050e6,
   ),
   g10: (
     background: #f4f4f4,
@@ -303,6 +310,9 @@ $ccs-v11-values: (
     support-caution-major: #ff832b,
     support-caution-minor: #f1c21b,
     support-caution-undefined: #8a3ffc,
+    button-primary-hover: #0050e6,
+    button-secondary-hover: #474747,
+    button-tertiary-hover: #0050e6,
   ),
   g90: (
     background: #262626,
@@ -450,6 +460,9 @@ $ccs-v11-values: (
     support-caution-major: #ff832b,
     support-caution-minor: #f1c21b,
     support-caution-undefined: #a56eff,
+    button-disabled: rgba(141, 141, 141, 0.3),
+    button-primary-hover: #0050e6,
+    button-secondary-hover: #5e5e5e,
   ),
   g100: (
     background: #161616,
@@ -597,6 +610,9 @@ $ccs-v11-values: (
     support-caution-major: #ff832b,
     support-caution-minor: #f1c21b,
     support-caution-undefined: #a56eff,
+    button-disabled: rgba(141, 141, 141, 0.3),
+    button-primary-hover: #0050e6,
+    button-secondary-hover: #5e5e5e,
   ),
   g80: (
     ai-aura-end: rgba(0, 0, 0, 0),
@@ -648,6 +664,7 @@ $ccs-v11-values: (
     support-caution-major: #ff832b,
     support-caution-minor: #f1c21b,
     support-caution-undefined: #a56eff,
+    button-primary-hover: #0050e6,
   ),
 );
 
