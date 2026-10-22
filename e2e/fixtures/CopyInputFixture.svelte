@@ -18,6 +18,13 @@
         />
       </div>
     {/each}
+    <div data-testid="copy-on-hover">
+      <CopyInput
+        labelText="Webhook secret"
+        copyButtonVisibility="hover-focus"
+        value="whsec_1234567890"
+      />
+    </div>
     <div data-testid="toggle-fluid">
       <CopyInput
         fluid
