@@ -7,7 +7,7 @@
     { id: "paid", label: "Paid", value: 900 },
   ];
   export let shape: "tapered" | "bars" = "tapered";
-  export let selectedId: string | undefined = undefined;
+  export let selected: string | undefined = undefined;
   export let onselect: (detail: unknown) => void = () => {};
 </script>
 
@@ -17,7 +17,7 @@
   title="Signup funnel"
   selectable
   locale="en-US"
-  bind:selectedId
+  bind:selected
   on:select={(e) => onselect(e.detail)}
 />
-<output data-testid="selected">{selectedId ?? ""}</output>
+<output data-testid="selected">{selected ?? ""}</output>

@@ -91,7 +91,7 @@ describe("AlluvialChart", () => {
 
   it("selects the focused node with the flows it touches", async () => {
     const onselect = vi.fn();
-    render(AlluvialChart, { selectable: true, onselect });
+    render(AlluvialChart, { onselect });
 
     chart().focus();
     await user.keyboard("{End}{Enter}");
