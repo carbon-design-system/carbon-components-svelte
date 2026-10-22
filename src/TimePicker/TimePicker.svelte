@@ -1,7 +1,8 @@
 <script>
   /**
    * @typedef {import("../utils/time-format.js").TimeFormat} TimeFormat
-   * @typedef {{ value: string; hours: number | null; minutes: number | null; seconds?: number | null; valid: boolean }} TimePickerChangeDetail
+   * @typedef {import("../utils/time-format.js").TimeConstraintReason} TimeConstraintReason
+   * @typedef {{ value: string; hours: number | null; minutes: number | null; seconds?: number | null; valid: boolean; reason?: TimeConstraintReason }} TimePickerChangeDetail
    * @event {TimePickerChangeDetail} change
    */
 
@@ -38,6 +39,22 @@
    * (for example `930` → `09:30`).
    */
   export let normalize = false;
+
+  /**
+   * Specify the earliest allowed time (same format as `value`, e.g. `"09:00"`).
+   * Out-of-range values participate in the invalid state and set
+   * `reason: "min"` on the `change` detail. Unset means no lower bound.
+   * @type {string}
+   */
+  export let min = undefined;
+
+  /**
+   * Specify the latest allowed time (same format as `value`, e.g. `"17:00"`).
+   * Out-of-range values participate in the invalid state and set
+   * `reason: "max"` on the `change` detail. Unset means no upper bound.
+   * @type {string}
+   */
+  export let max = undefined;
 
   /**
    * Specify the input placeholder text.
@@ -132,7 +149,11 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { getTimeInputPreset, parseTime } from "../utils/time-format.js";
+  import {
+    checkTimeConstraints,
+    getTimeInputPreset,
+    parseTime,
+  } from "../utils/time-format.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -179,6 +200,18 @@
     if (seconds) {
       detail.seconds = parsed.seconds;
     }
+    if (parsed.valid && parsed.hours !== null) {
+      const range = checkTimeConstraints(parsed, {
+        format,
+        seconds,
+        min,
+        max,
+      });
+      if (!range.valid && range.reason) {
+        detail.valid = false;
+        detail.reason = range.reason;
+      }
+    }
     return detail;
   }
 
@@ -206,8 +239,19 @@
   $: resolvedPlaceholder = placeholder ?? preset.placeholder;
   $: resolvedMaxlength = maxlength ?? preset.maxlength;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: rangeConstraint = checkTimeConstraints(value, {
+    format,
+    seconds,
+    min,
+    max,
+  });
+  $: autoInvalid =
+    ((min != null && min !== "") || (max != null && max !== "")) &&
+    value.trim() !== "" &&
+    (rangeConstraint.reason === "min" || rangeConstraint.reason === "max");
+  $: effectiveInvalid = invalid || autoInvalid;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: effectiveInvalid,
     warn,
     disabled,
     readonly,

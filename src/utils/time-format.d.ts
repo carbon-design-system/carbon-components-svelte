@@ -46,3 +46,31 @@ export function isValidTime(
   raw: string,
   options?: { format?: TimeFormat; seconds?: boolean },
 ): boolean;
+
+/** Convert clock parts to minutes since midnight (seconds as a fraction). */
+export function toMinutesSinceMidnight(
+  hours: number,
+  minutes: number,
+  seconds?: number,
+): number;
+
+export type TimeConstraintReason = "min" | "max";
+
+export type TimeConstraintResult = {
+  valid: boolean;
+  reason?: TimeConstraintReason;
+};
+
+/**
+ * Check a parsed or raw time against optional `min` / `max` bounds.
+ * Unset or unparsable bounds are ignored. Empty input is valid. Inclusive.
+ */
+export function checkTimeConstraints(
+  rawOrParsed: string | ParsedTime,
+  options?: {
+    format?: TimeFormat;
+    seconds?: boolean;
+    min?: string;
+    max?: string;
+  },
+): TimeConstraintResult;
