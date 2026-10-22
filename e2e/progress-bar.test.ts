@@ -22,4 +22,20 @@ test.describe("ProgressBar", () => {
       expect(trackBox.y).toBeCloseTo(rootBox.y, 0);
     });
   }
+
+  test("paints the track with border-subtle, as in v11", async ({ page }) => {
+    const subtle = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = "var(--cds-border-subtle)";
+      document.body.append(probe);
+      const color = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return color;
+    });
+    await expect(
+      page
+        .getByTestId("hidden-label-default")
+        .locator(".bx--progress-bar__track"),
+    ).toHaveCSS("background-color", subtle);
+  });
 });
