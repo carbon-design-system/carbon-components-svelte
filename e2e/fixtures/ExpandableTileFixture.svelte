@@ -16,3 +16,13 @@
   <a slot="above" href="#details">View details</a>
   <span slot="below">Below the fold</span>
 </ExpandableTile>
+
+<!-- No `hasInteractiveContent`: the tile finds the link itself. -->
+<ExpandableTile
+  data-testid="detected-tile"
+  tileCollapsedLabel="Show billing"
+  tileExpandedLabel="Hide billing"
+>
+  <span slot="above">Team plan</span>
+  <a slot="below" href="#billing">Billing history</a>
+</ExpandableTile>

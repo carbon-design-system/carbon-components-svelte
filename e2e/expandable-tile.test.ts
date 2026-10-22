@@ -39,6 +39,37 @@ test.describe("ExpandableTile", () => {
     await expect(tile).toHaveAttribute("aria-expanded", "false");
   });
 
+  test("points the tile at its below-the-fold content", async ({ page }) => {
+    const controls = await page
+      .getByTestId("expandable-tile")
+      .getAttribute("aria-controls");
+
+    expect(controls).toBeTruthy();
+    await expect(page.locator(`[id="${controls}"]`)).toContainText(
+      "Below the fold",
+    );
+  });
+
+  test("finds interactive content and toggles from the chevron", async ({
+    page,
+  }) => {
+    const tile = page.getByTestId("detected-tile");
+    const chevron = tile.getByRole("button", { name: "Show billing" });
+    const link = page.getByRole("link", { name: "Billing history" });
+
+    await expect(tile).toHaveClass(/bx--tile--expandable--interactive/);
+    expect(await tile.evaluate((el) => el.tagName)).toBe("DIV");
+    await expect(link).toBeHidden();
+
+    await chevron.click();
+    await expect(tile).toHaveClass(/bx--tile--is-expanded/);
+    await expect(link).toBeVisible();
+
+    // The link is its own control, not a toggle.
+    await link.click();
+    await expect(tile).toHaveClass(/bx--tile--is-expanded/);
+  });
+
   test.describe("with interactive content", () => {
     test("shows a focus ring on the chevron button", async ({ page }) => {
       const chevron = page
