@@ -38,6 +38,8 @@ Use the `labelChildren` slot to provide custom label content.
 
 Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
+Screen readers hear the count read as words (for example, "3 of 10 characters"), and hear "Character limit reached" once typing pauses at the limit. Override either message with the `counterText` and `limitReachedText` props.
+
 <TextInput labelText="Tag name" placeholder="Enter tag name..." maxCount={10} />
 
 ## Events
