@@ -168,6 +168,14 @@ describe("tokenize", () => {
     expect(highlight("x", "cobol")).toBeUndefined();
   });
 
+  test.each(["constructor", "__proto__"])(
+    "treats the inherited object key %s as an unknown language",
+    (lang) => {
+      expect(tokenize("x", lang)).toBeUndefined();
+      expect(highlight("x", lang)).toBeUndefined();
+    },
+  );
+
   test("renders spans with escaped text", () => {
     expect(highlight("a < {b}", "js")).toBe(
       'a <span class="tok-operator">&lt;</span> <span class="tok-brace">&#123;</span>b<span class="tok-brace">&#125;</span>',

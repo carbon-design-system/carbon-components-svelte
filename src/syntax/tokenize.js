@@ -1301,8 +1301,9 @@ function dispatchTable(rules) {
   }
   return table;
 }
+// No prototype, so `constructor` and `__proto__` are unknown languages.
 /** @type {Record<string, Lexer>} */
-const LEXERS = {
+const LEXERS = Object.assign(Object.create(null), {
   js: lexScript,
   javascript: lexScript,
   mjs: lexScript,
@@ -1324,7 +1325,7 @@ const LEXERS = {
   shell: lexShell,
   zsh: lexShell,
   diff: lexDiff,
-};
+});
 /**
  * Tokens for `code` in `lang`, or `undefined` for a language it doesn't know.
  * The tokens' text joins back to `code` exactly.
