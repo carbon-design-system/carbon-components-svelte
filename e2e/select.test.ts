@@ -66,6 +66,31 @@ test.describe("Select", () => {
     expect(helper?.x).toBeCloseTo(field?.x ?? 0, 0);
   });
 
+  // The status icon sits clear of the value, as invalid's does.
+  test("keeps an inline select's warning icon clear of its value", async ({
+    page,
+  }) => {
+    const box = page.getByTestId("inline-warning");
+    const { valueEnd, iconStart } = await box.evaluate((el) => {
+      const select = el.querySelector("select") as HTMLSelectElement;
+      const style = getComputedStyle(select);
+      const canvas = document.createElement("canvas").getContext("2d");
+      if (canvas) canvas.font = `${style.fontSize} ${style.fontFamily}`;
+      const text = select.selectedOptions[0]?.text ?? "";
+      const r = select.getBoundingClientRect();
+      return {
+        valueEnd:
+          r.left +
+          Number.parseFloat(style.paddingLeft) +
+          (canvas?.measureText(text).width ?? 0),
+        iconStart:
+          el.querySelector(".bx--select__invalid-icon")?.getBoundingClientRect()
+            .left ?? 0,
+      };
+    });
+    expect(iconStart).toBeGreaterThan(valueEnd);
+  });
+
   // The label stays centred on the field, whatever goes under it.
   test("centres an inline select's label on the field under a warning", async ({
     page,

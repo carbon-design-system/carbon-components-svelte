@@ -222,12 +222,19 @@
     right: $carbon--spacing-03;
   }
 
+  // ccs: the warning icon gets the same room as the invalid one; the
+  // inline padding above otherwise ran the value under it.
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
+    .#{$prefix}--select-input,
+  .#{$prefix}--select--inline.#{$prefix}--select--warning
     .#{$prefix}--select-input {
     padding-right: to-rem(56px);
   }
 
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
+    .#{$prefix}--select-input
+    ~ .#{$prefix}--select__invalid-icon,
+  .#{$prefix}--select--inline.#{$prefix}--select--warning
     .#{$prefix}--select-input
     ~ .#{$prefix}--select__invalid-icon {
     right: $spacing-07;
