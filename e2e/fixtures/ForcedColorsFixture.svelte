@@ -2,6 +2,8 @@
   import {
     Button,
     ChatButton,
+    ChatMessage,
+    Checkbox,
     ClickableTile,
     ContentSwitcher,
     Header,
@@ -20,6 +22,8 @@
     Popover,
     ProgressBar,
     RadioTile,
+    SearchMenu,
+    SearchMenuItem,
     SelectableTag,
     SelectableTile,
     ShapeIndicator,
@@ -30,18 +34,20 @@
     StructuredListRow,
     Switch,
     Tab,
+    TableOfContents,
+    TableOfContentsItem,
     Tabs,
     Tag,
     Toggle,
     ToggleButton,
     ToggleButtonGroup,
+    Toggletip,
     TreeView,
     Truncate,
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
-  import ForcedColorsMoreFixture from "./ForcedColorsMoreFixture.svelte";
 
   let menuAnchor = null;
 </script>
@@ -152,8 +158,6 @@
     showThresholds
   />
 
-  <ForcedColorsMoreFixture />
-
   <div style="position: relative; height: 4rem;">
     <Popover open caret align="bottom">Popover</Popover>
   </div>
@@ -172,5 +176,33 @@
   <div theme="g100">
     <ShapeIndicator kind="low" label="Low" />
     <ShapeIndicator kind="cautious" label="Cautious" />
+  </div>
+
+  <Checkbox labelText="Checkbox" />
+  <Checkbox labelText="Disabled checkbox" disabled />
+  <Checkbox labelText="Disabled checked checkbox" disabled checked />
+
+  <TableOfContents selectedId="active" noScrollSpy>
+    <TableOfContentsItem href="#plain" text="Plain" />
+    <TableOfContentsItem href="#active" text="Active" />
+  </TableOfContents>
+
+  <ul style="list-style: none; padding: 0;">
+    <ChatMessage from="them">Agent</ChatMessage>
+    <ChatMessage from="me">Me</ChatMessage>
+    <ChatMessage from="them" typing />
+    <ChatMessage from="them" streaming>Streaming agent</ChatMessage>
+    <ChatMessage from="me" streaming>Streaming me</ChatMessage>
+  </ul>
+
+  <SearchMenu labelText="Search menu">
+    <SearchMenuItem text="Result" />
+    <SearchMenuItem text="Disabled result" disabled />
+    <SearchMenuItem text="Other result" />
+  </SearchMenu>
+
+  <div style="height: 8rem;">
+    <Toggletip labelText="Toggletip">Closed</Toggletip>
+    <Toggletip labelText="Open toggletip" open>Open</Toggletip>
   </div>
 </main>
