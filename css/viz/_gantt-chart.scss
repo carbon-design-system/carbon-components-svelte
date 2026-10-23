@@ -130,6 +130,19 @@
   }
 
   @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-gantt__group:nth-of-type(even) {
+      fill: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-gantt__tick,
+    .#{$prefix}--viz-gantt__label,
+    .#{$prefix}--viz-gantt__task--active .#{$prefix}--viz-gantt__label,
+    .#{$prefix}--viz-gantt__today-label {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-gantt__bar,
     .#{$prefix}--viz-gantt__done {
       forced-color-adjust: none;

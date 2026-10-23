@@ -84,6 +84,12 @@
   }
 
   @media (forced-colors: active) {
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-marimekko__column-label,
+    .#{$prefix}--viz-marimekko__column-share {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-marimekko__box {
       stroke: CanvasText;
     }

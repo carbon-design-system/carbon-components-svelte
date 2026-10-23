@@ -78,6 +78,14 @@
   }
 
   @media (forced-colors: active) {
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-radar__label,
+    .#{$prefix}--viz-radar__tick,
+    .#{$prefix}--viz-radar__label--active,
+    .#{$prefix}--viz-radar__tick {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-radar__area {
       fill: none;
       forced-color-adjust: none;

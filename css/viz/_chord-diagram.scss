@@ -89,6 +89,11 @@
   }
 
   @media (forced-colors: active) {
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-chord__label {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-chord__ribbon,
     .#{$prefix}--viz-chord__arc {
       fill: Canvas;

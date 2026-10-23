@@ -75,6 +75,21 @@
   }
 
   @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-tree__dot {
+      fill: Canvas;
+    }
+
+    // A halo in the page color keeps hiding the line behind a label.
+    .#{$prefix}--viz-tree__label {
+      stroke: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-tree__label {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-tree__node--collapsed .#{$prefix}--viz-tree__dot {
       fill: CanvasText;
     }

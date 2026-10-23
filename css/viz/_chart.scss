@@ -712,6 +712,49 @@
   }
 
   @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-candles__candle--hollow .#{$prefix}--viz-candles__body,
+    .#{$prefix}--viz-violins__median,
+    .#{$prefix}--viz-bars__band {
+      fill: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-axis__label,
+    .#{$prefix}--viz-axis__title,
+    .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__label,
+    .#{$prefix}--viz-threshold--success .#{$prefix}--viz-threshold__label,
+    .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__label,
+    .#{$prefix}--viz-marker__label {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--viz-axis__line {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-grid__line {
+      stroke: GrayText;
+    }
+
+    // A swatch is the one place a series' color is named, so it keeps it;
+    // the system palette would paint every swatch the same.
+    .#{$prefix}--viz-legend__swatch,
+    .#{$prefix}--viz-chart-tooltip__swatch {
+      forced-color-adjust: none;
+    }
+
+    // The tooltip's shadow and inverse background go; a border stays.
+    .#{$prefix}--viz-chart-tooltip {
+      border: 1px solid CanvasText;
+    }
+
+    // The shimmer is a background, which forced colors drop.
+    .#{$prefix}--viz-chart__skeleton {
+      outline: 1px dashed GrayText;
+      outline-offset: -1px;
+    }
+
     .#{$prefix}--viz-zoom__handle {
       background: Highlight;
       forced-color-adjust: none;
@@ -719,6 +762,20 @@
 
     .#{$prefix}--viz-zoom__window {
       border: 1px solid Highlight;
+    }
+  }
+
+  // On paper a chart is one block, without its pointer-driven parts.
+  @media print {
+    .#{$prefix}--viz-chart {
+      break-inside: avoid;
+    }
+
+    .#{$prefix}--viz-chart-tooltip,
+    .#{$prefix}--viz-chart-toolbar,
+    .#{$prefix}--viz-ruler,
+    .#{$prefix}--viz-zoom {
+      display: none;
     }
   }
 
@@ -790,11 +847,13 @@
     }
   }
 
+  // A bar keeps its series color, as the swatches and slices do, and an
+  // outline in the text color keeps it visible on either contrast canvas.
   @media (forced-colors: active) {
     .#{$prefix}--viz-bars__bar {
-      fill: CanvasText;
       forced-color-adjust: none;
-      stroke: Canvas;
+      stroke: CanvasText;
+      stroke-width: 1;
     }
   }
 }

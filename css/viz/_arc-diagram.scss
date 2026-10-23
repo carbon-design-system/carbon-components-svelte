@@ -82,6 +82,11 @@
   }
 
   @media (forced-colors: active) {
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-arc__label {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-arc__link {
       stroke: CanvasText;
     }

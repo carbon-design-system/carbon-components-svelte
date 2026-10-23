@@ -58,6 +58,11 @@
   }
 
   @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-choropleth__region--empty {
+      fill: Canvas;
+    }
+
     .#{$prefix}--viz-choropleth__region {
       forced-color-adjust: none;
     }

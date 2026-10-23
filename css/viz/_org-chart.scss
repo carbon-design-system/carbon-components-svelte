@@ -117,6 +117,19 @@
   }
 
   @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-org__card,
+    .#{$prefix}--viz-org__node--selected .#{$prefix}--viz-org__card,
+    .#{$prefix}--viz-org__toggle-box {
+      fill: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-org__label,
+    .#{$prefix}--viz-org__sublabel {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-org__card,
     .#{$prefix}--viz-org__toggle-box {
       stroke: CanvasText;

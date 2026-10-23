@@ -111,6 +111,21 @@
   }
 
   @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-forest__row--active .#{$prefix}--viz-forest__band,
+    .#{$prefix}--viz-forest__row--selected .#{$prefix}--viz-forest__band,
+    .#{$prefix}--viz-forest__marker,
+    .#{$prefix}--viz-forest__diamond {
+      fill: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-forest__axis-label,
+    .#{$prefix}--viz-forest__label,
+    .#{$prefix}--viz-forest__value {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-forest__marker,
     .#{$prefix}--viz-forest__diamond {
       stroke: CanvasText;

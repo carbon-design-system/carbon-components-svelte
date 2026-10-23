@@ -57,6 +57,17 @@
   }
 
   @media (forced-colors: active) {
+    // A halo in the page color keeps hiding the line behind a label.
+    .#{$prefix}--viz-horizon__track {
+      stroke: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-horizon__label,
+    .#{$prefix}--viz-horizon__tick {
+      fill: CanvasText;
+    }
+
     .#{$prefix}--viz-horizon__band {
       forced-color-adjust: none;
     }
