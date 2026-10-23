@@ -1,6 +1,10 @@
 <script>
   import {
     Button,
+    Card,
+    CardBody,
+    CardHeader,
+    CardTitle,
     ChatButton,
     ChatMessage,
     Checkbox,
@@ -135,6 +139,24 @@
 
   <Button kind="ghost" icon={Add} iconDescription="Add" />
   <Button kind="ghost" icon={Add} iconDescription="Add" isSelected />
+
+  <Card clickable href="/" aria-label="Card" data-testid="card">
+    <CardBody>Card</CardBody>
+  </Card>
+  <Card
+    clickable
+    disabled
+    aria-label="Disabled card"
+    data-testid="card-disabled"
+  >
+    <CardHeader>
+      <CardTitle>
+        <svelte:fragment slot="label">Label</svelte:fragment>
+        Disabled card
+      </CardTitle>
+    </CardHeader>
+  </Card>
+  <Card data-testid="card-static"><CardBody>Static card</CardBody></Card>
 
   <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
   <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>

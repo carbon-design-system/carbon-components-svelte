@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
 // Under `dir="rtl"`, the UI Shell, the list boxes, the menus, the
-// ClickableTile icon and TreeView mirror their LTR layout: every part sits
+// ClickableTile icon, Card and TreeView mirror their LTR layout: every part sits
 // as far from the right edge as it sat from the left one.
 
 type Box = { left: number; right: number; width: number };
@@ -27,6 +27,18 @@ const PARTS = {
   multiSelectTagClose: "[data-testid=multiselect] .bx--tag__close-icon",
   multiSelectChevron: "[data-testid=multiselect] .bx--list-box__menu-icon",
   clickableTileIcon: "[data-testid=clickable-tile] .bx--tile--icon",
+  cardIcon: "[data-testid=card] .bx--card__clickable-footer svg",
+  cardDecorator: "[data-testid=card] .bx--card__decorator",
+  cardTitleMedia: "[data-testid=card-actions] .bx--card__title-media",
+  cardTitle: "[data-testid=card-actions] .bx--card__title",
+  cardActions: "[data-testid=card-actions] .bx--card__actions",
+  cardActionsDecorator: "[data-testid=card-actions] .bx--card__decorator",
+  cardFooterAction:
+    "[data-testid=card-actions] .bx--card__action:not(.bx--card__action--icon-only)",
+  cardFooterIconAction:
+    "[data-testid=card-actions] .bx--card__action--icon-only",
+  cardMediaDecorator: "[data-testid=card-media] .bx--card__decorator",
+  cardMediaEndDecorator: "[data-testid=card-media-end] .bx--card__decorator",
   treeToggle:
     "[data-testid=tree] [data-tree-row-id=engine] > .bx--tree-node__label .bx--tree-parent-node__toggle",
   treeLeafIcon:
@@ -304,6 +316,45 @@ test.describe("right-to-left layout", () => {
     expect(
       (rtl.comboBoxChevron as Box).left - (comboBox.field as Box).left,
     ).toBe(12);
+  });
+
+  // As upstream's decorator in CardHeader: 8px inside the header's top
+  // inline-end corner, below top media and clear of media at the end.
+  test("keeps Card decorators at the header's corner, off the media", async ({
+    page,
+  }) => {
+    const parts = {
+      header: "[data-testid=card-media] .bx--card__header",
+      decorator: "[data-testid=card-media] .bx--card__decorator",
+      endMedia: "[data-testid=card-media-end] .bx--card__media",
+      endDecorator: "[data-testid=card-media-end] .bx--card__decorator",
+    };
+    const tops = () =>
+      page.evaluate(
+        (parts) =>
+          [parts.header, parts.decorator].map(
+            (selector) =>
+              document.querySelector(selector)?.getBoundingClientRect().top ??
+              Number.NaN,
+          ),
+        parts,
+      );
+
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      const [headerTop, decoratorTop] = await tops();
+      expect.soft(Math.abs(decoratorTop - headerTop - 8), dir).toBeLessThan(1);
+
+      const box = await boxes(page, parts);
+      const media = box.endMedia as Box;
+      const decorator = box.endDecorator as Box;
+      const gap =
+        dir === "ltr"
+          ? media.left - decorator.right
+          : decorator.left - media.right;
+      expect.soft(Math.abs(gap - 8), dir).toBeLessThanOrEqual(1);
+    }
   });
 
   test("mirrors the TreeView active and selected bars", async ({ page }) => {

@@ -1,6 +1,16 @@
 <script>
   import {
+    AILabel,
     Button,
+    Card,
+    CardAction,
+    CardActions,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    CardMedia,
+    CardTitle,
+    CardTitleMedia,
     ClickableTile,
     CodeSnippet,
     ComboBox,
@@ -30,6 +40,7 @@
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
+  import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
 
   const items = [
@@ -185,6 +196,65 @@ export async function rollback(region, id) {
     />
     <CodeSnippet data-testid="snippet-inline" type="inline" code="npm ci;" />
     <CodeSnippet data-testid="snippet-skeleton" type="multi" skeleton />
+  </div>
+  <div data-testid="card" class="field">
+    <Card clickable href="#" aria-label="Billing settings">
+      <AILabel slot="decorator" />
+      <CardHeader>
+        <CardTitle>Billing settings</CardTitle>
+      </CardHeader>
+    </Card>
+  </div>
+  <div data-testid="card-actions" class="field">
+    <Card>
+      <AILabel slot="decorator" />
+      <CardHeader>
+        <CardTitleMedia><Document size={20} /></CardTitleMedia>
+        <CardTitle>Invoices</CardTitle>
+        <CardActions slot="actions">
+          <CardAction>
+            <Button
+              kind="ghost"
+              size="sm"
+              icon={Settings}
+              iconDescription="Settings"
+            />
+          </CardAction>
+        </CardActions>
+      </CardHeader>
+      <CardBody>Three invoices are due this month.</CardBody>
+      <CardFooter actionSet>
+        <CardAction>
+          <Button kind="ghost">View invoices</Button>
+        </CardAction>
+        <CardAction iconOnly>
+          <Button
+            kind="ghost"
+            icon={OverflowMenuVertical}
+            iconDescription="More"
+          />
+        </CardAction>
+      </CardFooter>
+    </Card>
+  </div>
+  <div data-testid="card-media" class="field">
+    <Card clickable href="#" aria-label="Usage">
+      <CardMedia slot="media" ratio="2x1"><div></div></CardMedia>
+      <AILabel slot="decorator" />
+      <CardHeader>
+        <CardTitle>Usage</CardTitle>
+      </CardHeader>
+    </Card>
+  </div>
+  <div data-testid="card-media-end" class="field">
+    <Card horizontal mediaPosition="end">
+      <CardMedia slot="media" mediaWidth="40%"><div></div></CardMedia>
+      <AILabel slot="decorator" />
+      <CardHeader>
+        <CardTitle>Usage</CardTitle>
+      </CardHeader>
+      <CardBody>Three invoices are due this month.</CardBody>
+    </Card>
   </div>
   <div data-testid="menu-button" class="field">
     <MenuButton labelText="Actions">
