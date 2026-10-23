@@ -20,6 +20,7 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
    * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
+   * @slot {{}} empty
    */
 
   /**
@@ -213,6 +214,14 @@
    * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number, optimizeFastScroll?: boolean }}
    */
   export let virtualize = undefined;
+
+  /**
+   * Specify the message shown in the open menu when `items` is empty, such as
+   * before async options arrive. Screen readers hear it through the status
+   * live region, also when the `empty` slot replaces the visible text.
+   * Set to `""` to show no message.
+   */
+  export let emptyText = "No options";
 
   /**
    * Set to `true` to show a loading row after the options while the menu is
@@ -549,6 +558,10 @@
     groupRows,
   );
   $: scrollEndTracker.noteItemCount(items.length);
+  // A row after the (absent) options, not an option, so arrow keys never
+  // reach it. `loading` holds it back until the items arrive.
+  $: hasNoItems = open && !loading && items.length === 0;
+  $: showEmpty = hasNoItems && ($$slots.empty || emptyText !== "");
 
   afterUpdate(() => {
     syncOpenEvent();
@@ -702,6 +715,10 @@
   }
 
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
+
+  // The empty row is hidden from assistive tech, since a listbox holds only
+  // options and groups, so the live region carries its message instead.
+  $: if (hasNoItems && emptyText) announceStatus(emptyText);
 
   /**
    * Clear the dropdown selection programmatically.
@@ -1318,6 +1335,11 @@
               {/each}
             </ListBoxMenuGroup>
           {/each}
+        {/if}
+        {#if showEmpty}
+          <ListBoxMenuStatus>
+            <slot name="empty">{emptyText}</slot>
+          </ListBoxMenuStatus>
         {/if}
         {#if loading}
           <ListBoxMenuStatus>
