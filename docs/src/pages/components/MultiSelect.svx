@@ -374,6 +374,16 @@ Without `filterable`, an empty `items` list shows "No options" instead, such as 
 
 <MultiSelect labelText="Contact" label="Select contact methods..." emptyText="No contact methods yet" items={[]} />
 
+### Async
+
+For async (for example, server-side) filtering, bind to `value` and replace `items` with the server's results. Set `filterItem` to return `true` so the menu shows every result as sent. This example simulates the request with a debounced value change.
+
+Keep the selected options in `items`. An option missing from `items` has no tag.
+
+Set `loading` to `true` while a request is in flight. The menu shows a loading row after the options, is marked busy for screen readers, and holds back the empty state until the results arrive.
+
+<FileSource src="/framed/MultiSelect/AsyncMultiSelect" />
+
 ## Multiple multi-selects
 
 Manage multiple dropdowns in a form with coordinated state.
