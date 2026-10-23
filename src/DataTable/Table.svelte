@@ -1,7 +1,8 @@
 <script>
   /**
    * Set the size of the table.
-   * @type {"compact" | "short" | "medium" | "tall"}
+   * Accepts the same Carbon v11 aliases as `DataTable`.
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -63,10 +64,16 @@
   import { joinDescribedBy } from "../utils/field-status.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import {
+    DATA_TABLE_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
 
   // Context is only consulted for the standalone `TableContainer` + `Table`
   // composition: an explicit `labelledBy`/`describedBy` prop (set by
   // `DataTable`, which renders its own title/description markup) always wins.
+  $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
+
   const tableContainerCtx = getContext("carbon:TableContainer");
   const hasContextTitle = tableContainerCtx?.hasTitle ?? writable(false);
   const hasContextDescription =
@@ -156,10 +163,10 @@
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}
       class:bx--data-table={true}
-      class:bx--data-table--compact={size === "compact"}
-      class:bx--data-table--short={size === "short"}
-      class:bx--data-table--tall={size === "tall"}
-      class:bx--data-table--md={size === "medium"}
+      class:bx--data-table--compact={effectiveSize === "compact"}
+      class:bx--data-table--short={effectiveSize === "short"}
+      class:bx--data-table--tall={effectiveSize === "tall"}
+      class:bx--data-table--md={effectiveSize === "medium"}
       class:bx--data-table--sort={sortable}
       class:bx--data-table--zebra={zebra}
       class:bx--data-table--static={useStaticWidth}
@@ -182,10 +189,10 @@
     <table
       bind:this={tableRef}
       class:bx--data-table={true}
-      class:bx--data-table--compact={size === "compact"}
-      class:bx--data-table--short={size === "short"}
-      class:bx--data-table--tall={size === "tall"}
-      class:bx--data-table--md={size === "medium"}
+      class:bx--data-table--compact={effectiveSize === "compact"}
+      class:bx--data-table--short={effectiveSize === "short"}
+      class:bx--data-table--tall={effectiveSize === "tall"}
+      class:bx--data-table--md={effectiveSize === "medium"}
       class:bx--data-table--sort={sortable}
       class:bx--data-table--zebra={zebra}
       class:bx--data-table--static={useStaticWidth}

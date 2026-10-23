@@ -1,7 +1,9 @@
 <script>
   /**
    * Set the size of the list box.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default). `"lg"` and `"xl"`
+   * are both 48px.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 

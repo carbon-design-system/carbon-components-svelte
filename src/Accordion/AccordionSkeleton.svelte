@@ -10,7 +10,8 @@
 
   /**
    * Specify the size of the accordion.
-   * @type {"sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -25,6 +26,9 @@
 
   import ChevronRight from "../icons/ChevronRight.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+
+  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
 </script>
 
 <ul
@@ -32,8 +36,8 @@
   class:bx--accordion={true}
   class:bx--accordion--start={align === "start"}
   class:bx--accordion--end={align === "end"}
-  class:bx--accordion--sm={size === "sm"}
-  class:bx--accordion--xl={size === "xl"}
+  class:bx--accordion--sm={effectiveSize === "sm"}
+  class:bx--accordion--xl={effectiveSize === "xl"}
   class:bx--accordion--flush={flush && align !== "start"}
   {...$$restProps}
   on:click

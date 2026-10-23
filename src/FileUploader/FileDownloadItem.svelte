@@ -48,7 +48,9 @@
 
   /**
    * Specify the size of the item.
-   * @type {"default" | "field" | "small" | "xs"}
+   * Also accepts Carbon v11's `"sm"` (`"small"`), `"md"` (`"field"`) and
+   * `"lg"` (`"default"`).
+   * @type {"default" | "field" | "small" | "xs" | "sm" | "md" | "lg"}
    */
   export let size = "default";
 
@@ -76,9 +78,15 @@
   import Download from "../icons/Download.svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
+  import {
+    FILE_ITEM_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
 
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
+
+  $: effectiveSize = normalizeSize(size, FILE_ITEM_SIZE_ALIASES);
 </script>
 
 {#if href !== undefined}
@@ -100,9 +108,9 @@
     class:bx--file__selected-file--full-width={fullWidth}
     class:bx--file__selected-file--no-margin={noMargin}
     class:bx--file__selected-file--disabled={disabled}
-    class:bx--file__selected-file--md={size === "field"}
-    class:bx--file__selected-file--sm={size === "small"}
-    class:bx--file__selected-file--xs={size === "xs"}
+    class:bx--file__selected-file--md={effectiveSize === "field"}
+    class:bx--file__selected-file--sm={effectiveSize === "small"}
+    class:bx--file__selected-file--xs={effectiveSize === "xs"}
     {...$$restProps}
     on:click
     on:mouseover
@@ -138,9 +146,9 @@
     class:bx--file__selected-file--full-width={fullWidth}
     class:bx--file__selected-file--no-margin={noMargin}
     class:bx--file__selected-file--disabled={disabled}
-    class:bx--file__selected-file--md={size === "field"}
-    class:bx--file__selected-file--sm={size === "small"}
-    class:bx--file__selected-file--xs={size === "xs"}
+    class:bx--file__selected-file--md={effectiveSize === "field"}
+    class:bx--file__selected-file--sm={effectiveSize === "small"}
+    class:bx--file__selected-file--xs={effectiveSize === "xs"}
     {...$$restProps}
     on:click
     on:mouseover

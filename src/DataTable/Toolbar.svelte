@@ -3,7 +3,8 @@
    * Specify the toolbar size.
    * If unset, the size is inherited from the parent `DataTable`
    * ("xs" for "compact", "sm" for "short", "default" otherwise).
-   * @type {"xs" | "sm" | "default"}
+   * Also accepts Carbon v11's `"lg"` (`"default"`).
+   * @type {"xs" | "sm" | "default" | "lg"}
    */
   export let size = undefined;
 
@@ -30,6 +31,10 @@
   import { writable } from "svelte/store";
   import { isHeaderRendered } from "../UIShell/nav-store.js";
   import { toCssLength } from "../utils/css-length.js";
+  import {
+    normalizeSize,
+    TOOLBAR_SIZE_ALIASES,
+  } from "../utils/size-aliases.js";
 
   // Matches `.bx--header`'s fixed height (`mini-units(6)` in
   // _header.scss); Header has no prop to override it.
@@ -53,7 +58,8 @@
   $: inheritedSize = $tableSize
     ? TOOLBAR_SIZE_BY_TABLE_SIZE[$tableSize]
     : undefined;
-  $: effectiveSize = size ?? inheritedSize ?? "default";
+  $: effectiveSize =
+    normalizeSize(size, TOOLBAR_SIZE_ALIASES) ?? inheritedSize ?? "default";
   $: effectiveStickyOffset =
     stickyOffset ?? ($isHeaderRendered ? UI_SHELL_HEADER_HEIGHT : 0);
 

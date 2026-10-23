@@ -54,14 +54,18 @@
 
   /**
    * Specify the size of the search input.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Also accepts Carbon v11's `"md"` (`"lg"`, 40px). `"lg"` keeps this
+   * library's 40px; Carbon v11's 48px `lg` is `"xl"` here.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = "xl";
 
   /**
    * Specify the size of the results menu, independent of the input `size`.
    * Defaults to the input `size`.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Also accepts Carbon v11's `"md"` (`"lg"`, 40px). `"lg"` keeps this
+   * library's 40px; Carbon v11's 48px `lg` is `"xl"` here.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let menuSize = undefined;
 
@@ -179,6 +183,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
+  import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -246,7 +251,7 @@
   $: describedById = joinDescribedBy(readonly ? readonlyId : null);
   $: menuLabel = labelText || placeholder;
   $: menuAnchor = $$slots.before ? searchAnchorRef : anchorRef;
-  $: resolvedMenuSize = menuSize ?? size;
+  $: resolvedMenuSize = normalizeSize(menuSize ?? size, SEARCH_SIZE_ALIASES);
   $: resolvedMenuMaxHeight = toCssLength(menuMaxHeight);
   $: menuClass = [
     "bx--search-menu__menu",

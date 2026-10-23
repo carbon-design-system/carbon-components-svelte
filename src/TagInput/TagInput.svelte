@@ -19,7 +19,9 @@
   /**
    * Set the size of the field. Tags scale with it.
    * Inherits the parent `Form` size when unset.
-   * @type {"xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
+   * `Form` size) and `"lg"` (`"xl"`).
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -173,13 +175,14 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? $formSize;
+  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"
       ? "sm"

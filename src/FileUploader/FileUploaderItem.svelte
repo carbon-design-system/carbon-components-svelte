@@ -23,7 +23,9 @@
 
   /**
    * Specify the size of button skeleton.
-   * @type {"default" | "field" | "small" | "xs"}
+   * Also accepts Carbon v11's `"sm"` (`"small"`), `"md"` (`"field"`) and
+   * `"lg"` (`"default"`).
+   * @type {"default" | "field" | "small" | "xs" | "sm" | "md" | "lg"}
    */
   export let size = "default";
 
@@ -70,6 +72,10 @@
   import { createEventDispatcher } from "svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
+  import {
+    FILE_ITEM_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
 
@@ -78,6 +84,8 @@
   $: errorId = invalid && errorSubject ? `${id}-error` : undefined;
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
+
+  $: effectiveSize = normalizeSize(size, FILE_ITEM_SIZE_ALIASES);
 </script>
 
 <span
@@ -87,9 +95,9 @@
   class:bx--file__selected-file--no-margin={noMargin}
   class:bx--file__selected-file--invalid={invalid}
   class:bx--file__selected-file--disabled={disabled}
-  class:bx--file__selected-file--md={size === "field"}
-  class:bx--file__selected-file--sm={size === "small"}
-  class:bx--file__selected-file--xs={size === "xs"}
+  class:bx--file__selected-file--md={effectiveSize === "field"}
+  class:bx--file__selected-file--sm={effectiveSize === "small"}
+  class:bx--file__selected-file--xs={effectiveSize === "xs"}
   {...$$restProps}
   on:mouseover
   on:mouseenter

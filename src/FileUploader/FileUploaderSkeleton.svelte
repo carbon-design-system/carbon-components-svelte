@@ -9,6 +9,7 @@
    * Specify the size of the button skeleton, as on the FileUploader it
    * stands in for. Inherits the height of the parent `Form` size when
    * unset, otherwise defaults to `"small"`.
+   * Accepts the same Carbon v11 aliases as `Button`.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
   export let size = undefined;
@@ -17,9 +18,13 @@
   import ButtonSkeleton from "../Button/ButtonSkeleton.svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { formButtonSize } from "../utils/form-button-size.js";
+  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
+  $: effectiveSize =
+    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
+    formButtonSize($formSize) ??
+    "small";
 </script>
 
 <div

@@ -13,7 +13,8 @@
   /**
    * Specify the size of the tag.
    * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
-   * @type {"sm" | "default" | "lg"}
+   * Also accepts Carbon v11's `"md"` (`"default"`).
+   * @type {"sm" | "default" | "lg" | "md"}
    */
   export let size = undefined;
 
@@ -89,6 +90,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
+  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
   import TagTooltip from "./TagTooltip.svelte";
@@ -131,7 +133,8 @@
   } = splitAriaNaming($$restProps));
 
   // Fall back to the group's size, then to "default".
-  $: resolvedSize = size ?? $groupSize ?? "default";
+  $: resolvedSize =
+    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
 
   $: hasIcon = Boolean(icon || $$slots.icon);
 

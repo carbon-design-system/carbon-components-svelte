@@ -88,7 +88,8 @@
   /**
    * Set the size of the input.
    * Inherits the parent `Form` size when unset, otherwise `"default"`.
-   * @type {"default" | "xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (`"default"`) and `"lg"` (`"xl"`).
+   * @type {"default" | "xs" | "sm" | "xl" | "md" | "lg"}
    * @default "default"
    */
   export let size = undefined;
@@ -204,13 +205,20 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import {
+    normalizeSize,
+    PIN_CODE_INPUT_SIZE_ALIASES,
+  } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? $formSize ?? "default";
+  $: effectiveSize = normalizeSize(
+    size ?? $formSize ?? "default",
+    PIN_CODE_INPUT_SIZE_ALIASES,
+  );
 
   /** @type {HTMLInputElement[]} */
   let inputs = [];

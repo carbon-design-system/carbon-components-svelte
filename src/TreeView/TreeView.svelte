@@ -351,7 +351,9 @@
 
   /**
    * Specify the TreeView size.
-   * @type {"default" | "compact"}
+   * Also accepts Carbon v11's `"sm"` (`"default"`, 32px) and `"xs"`
+   * (`"compact"`, 24px).
+   * @type {"default" | "compact" | "sm" | "xs"}
    */
   export let size = "default";
 
@@ -656,6 +658,10 @@
   import { rangeSlice } from "../utils/range-slice.js";
   import { observeResize } from "../utils/shared-observer.js";
   import {
+    normalizeSize,
+    TREE_VIEW_SIZE_ALIASES,
+  } from "../utils/size-aliases.js";
+  import {
     resolveCheckboxState,
     toggleCheckboxNode,
   } from "../utils/tree-checkbox-state.js";
@@ -674,6 +680,8 @@
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
   const dispatch = createEventDispatcher();
+  $: effectiveSize = normalizeSize(size, TREE_VIEW_SIZE_ALIASES);
+
   /** @type {import("svelte/store").Writable<string>} */
   const treeId = writable(id);
   $: treeId.set(id);
@@ -1573,7 +1581,7 @@
         containerHeight: undefined,
         overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
         ...(typeof virtualize === "object" ? virtualize : {}),
-        itemHeight: size === "compact" ? 24 : 32,
+        itemHeight: effectiveSize === "compact" ? 24 : 32,
       }
     : null;
 
@@ -2136,8 +2144,8 @@
     bind:this={scrollContainerRef}
     tabindex="-1"
     class:bx--tree={true}
-    class:bx--tree--default={size === "default"}
-    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--default={effectiveSize === "default"}
+    class:bx--tree--compact={effectiveSize === "compact"}
     class:bx--tree--multiselect={isMultiselect}
     class:bx--tree--checkbox={isCheckboxMode}
     class:bx--tree--multiselect-modifier={isMultiselect &&
@@ -2182,8 +2190,8 @@
     role="tree"
     bind:this={ref}
     class:bx--tree={true}
-    class:bx--tree--default={size === "default"}
-    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--default={effectiveSize === "default"}
+    class:bx--tree--compact={effectiveSize === "compact"}
     class:bx--tree--multiselect={isMultiselect}
     class:bx--tree--checkbox={isCheckboxMode}
     class:bx--tree--multiselect-modifier={isMultiselect &&

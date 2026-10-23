@@ -1,5 +1,5 @@
 <script>
-  /** @type {"sm" | "default" | "lg"} */
+  /** @type {"sm" | "default" | "lg" | "md"} */
   export let size = "default";
 </script>
 

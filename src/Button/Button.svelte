@@ -24,7 +24,10 @@
    * to the height of a parent `Form`'s size (`xs`, `small` for `sm`,
    * `default` for `xl`).
    * Use `"xs"` for icon-only buttons in dense layouts.
-   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl"}
+   * Also accepts Carbon v11's `"sm"` (`"small"`), `"md"` (`"field"`) and
+   * `"2xl"` (`"xl"`). `"lg"` and `"xl"` keep this library's 64px and 80px;
+   * Carbon v11's 48px `lg` and 64px `xl` are `"default"` and `"lg"` here.
+   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl" | "sm" | "md" | "2xl"}
    * @default "default"
    */
   export let size = undefined;
@@ -170,13 +173,14 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
+  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const actionSetSize = getContext("carbon:ActionSet")?.size;
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   // Inside an `InputGroup`, match the height of the group's fields.
   const inputGroupSize = getContext("carbon:InputGroup")?.buttonSize;
@@ -351,7 +355,7 @@
   $: isVisuallyDisabled = isDisabled || loading;
   $: effectiveSize = $$slots.badge
     ? "lg"
-    : (size ??
+    : (normalizeSize(size, BUTTON_SIZE_ALIASES) ??
       $actionSetSize ??
       $inputGroupSize ??
       formButtonSize($formSize) ??
