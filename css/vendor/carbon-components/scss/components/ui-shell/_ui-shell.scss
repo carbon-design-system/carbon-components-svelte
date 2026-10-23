@@ -130,14 +130,14 @@
   // `:hover > svg` fill by order, so the icon tracks the text color.
   .#{$prefix}--header__menu-title > svg:not(.#{$prefix}--header__menu-arrow) {
     flex-shrink: 0;
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
     fill: currentColor;
   }
 
   // A `Tag` in the trigger's `text` slot sits the same distance from the
   // label as an icon. Tags have no outer margin of their own.
   .#{$prefix}--header__menu-title > .#{$prefix}--tag {
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
   }
 
   // An auto-width text action reserves the 2px focus border at rest (the
@@ -152,7 +152,7 @@
   }
 
   .#{$prefix}--header__action-text {
-    margin-left: to-rem(12px);
+    margin-inline-start: to-rem(12px);
     @include type-style('body-compact-01');
   }
 

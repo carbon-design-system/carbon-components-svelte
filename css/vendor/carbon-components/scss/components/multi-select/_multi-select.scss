@@ -34,11 +34,13 @@
 
   .#{$prefix}--multi-select .#{$prefix}--tag {
     min-width: auto;
-    margin: 0 $spacing-03 0 $spacing-05;
+    margin-block: 0;
+    margin-inline: $spacing-05 $spacing-03;
   }
 
   .#{$prefix}--multi-select--filterable .#{$prefix}--tag {
-    margin: 0 $carbon--spacing-03 0 $carbon--spacing-05;
+    margin-block: 0;
+    margin-inline: $carbon--spacing-05 $carbon--spacing-03;
   }
 
   .#{$prefix}--multi-select .#{$prefix}--list-box__menu {
@@ -60,7 +62,7 @@
     display: inline-block;
     overflow: hidden;
     width: 100%;
-    padding-left: to-rem(28px);
+    padding-inline-start: to-rem(28px);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -124,7 +126,7 @@
     .#{$prefix}--text-input,
   .#{$prefix}--multi-select.#{$prefix}--multi-select--selected
     .#{$prefix}--list-box__field {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .#{$prefix}--multi-select--filterable.#{$prefix}--list-box--disabled:hover
@@ -134,7 +136,8 @@
 
   .#{$prefix}--multi-select--filterable
     .#{$prefix}--list-box__selection--multi {
-    margin: 0 0 0 $spacing-05;
+    margin-block: 0;
+    margin-inline: $spacing-05 0;
   }
 
   .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--inline,
@@ -166,10 +169,10 @@
     .#{$prefix}--list-box__menu-item:first-child
     .#{$prefix}--list-box__menu-item__option {
     border-block-end: 1px solid $border-subtle;
-    margin-left: 0;
-    padding-left: $carbon--spacing-05;
-    margin-right: 0;
-    padding-right: $carbon--spacing-05;
+    margin-inline-start: 0;
+    padding-inline-start: $carbon--spacing-05;
+    margin-inline-end: 0;
+    padding-inline-end: $carbon--spacing-05;
   }
 
   // Second item: no top border (adjacent to select-all separator).

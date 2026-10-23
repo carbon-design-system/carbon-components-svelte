@@ -273,3 +273,34 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
     @content;
   }
 }
+
+// carbon-components-svelte patch
+// Right-to-left offsets. Lightning CSS expands `inset-inline-start` and
+// `inset-inline-end` into `:lang()` rules for the Safari 14 baseline, and
+// `:dir()` is newer than it, so a `[dir="rtl"]` ancestor mirrors them.
+
+/// Sets `left` to `$start` and `right` to `$end`, and swaps them under a
+/// `[dir="rtl"]` ancestor. A side left `null` stays unset in LTR and resets
+/// to `auto` in RTL. Include it after the rule's declarations: Sass splits a
+/// rule around the nested one.
+/// @access private
+/// @group global-helpers
+/// @example @include ccs-inset-inline($end: $carbon--spacing-05);
+@mixin ccs-inset-inline($start: null, $end: null) {
+  left: $start;
+  right: $end;
+
+  [dir="rtl"] & {
+    @if $start == null {
+      right: auto;
+    } @else {
+      right: $start;
+    }
+
+    @if $end == null {
+      left: auto;
+    } @else {
+      left: $end;
+    }
+  }
+}

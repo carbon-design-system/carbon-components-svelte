@@ -94,7 +94,8 @@
     display: flex;
     height: 100%;
     align-items: center;
-    padding: 0 mini-units(4) 0 mini-units(2);
+    padding-block: 0;
+    padding-inline: mini-units(2) mini-units(4);
     border: to-rem(2px) solid transparent;
     font-weight: 600;
     letter-spacing: 0.1px;
@@ -118,14 +119,14 @@
   }
 
   .#{$prefix}--header__menu-toggle ~ .#{$prefix}--header__name { // ccs: dropped guard on unrendered __hidden
-    padding-left: to-rem(8px);
+    padding-inline-start: to-rem(8px);
   }
 
   .#{$prefix}--header__nav {
     position: relative;
     display: none;
     height: 100%;
-    padding-left: mini-units(2);
+    padding-inline-start: mini-units(2);
 
     @include carbon--breakpoint('lg') {
       display: block;
@@ -134,13 +135,13 @@
     &::before {
       position: absolute;
       top: 50%;
-      left: 0;
       display: block;
       width: to-rem(1px);
       height: to-rem(24px);
       background-color: $shell-header-border-01;
       content: '';
       transform: translateY(-50%);
+      @include ccs-inset-inline($start: 0);
     }
   }
 
@@ -278,21 +279,20 @@
     position: absolute;
     z-index: z('header');
     bottom: 0;
-    left: 0;
     display: flex;
     width: mini-units(25);
     flex-direction: column;
     background-color: $shell-header-bg-06;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     transform: translateY(100%);
+    @include ccs-inset-inline($start: 0);
   }
 
   // ccs: a menu that would run past the viewport's right edge aligns to its
   // trigger's right edge instead (`HeaderNavMenu` sets the class on open).
   .#{$prefix}--header__menu-title[aria-expanded='true']
     + .#{$prefix}--header__menu--align-end {
-    right: 0;
-    left: auto;
+    @include ccs-inset-inline($start: auto, $end: 0);
   }
 
   // ccs: submenu items sit on the `$layer` surface, so they and their
@@ -333,7 +333,7 @@
   }
 
   .#{$prefix}--header__menu-arrow {
-    margin-left: mini-units(1);
+    margin-inline-start: mini-units(1);
     fill: $shell-header-icon-03;
     transition: transform $duration--fast-02, fill $duration--fast-02;
   }
@@ -361,7 +361,6 @@
   .#{$prefix}--skip-to-content:focus {
     z-index: 9999;
     top: 0;
-    left: 0;
     display: flex;
     width: auto;
     height: 3rem;
@@ -372,6 +371,7 @@
     clip: auto;
     color: $shell-header-text-01;
     outline: none;
+    @include ccs-inset-inline($start: 0);
   }
 }
 

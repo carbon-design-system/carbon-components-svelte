@@ -244,7 +244,7 @@
     color: $text-secondary;
     cursor: pointer;
     font-weight: 400;
-    text-align: left;
+    text-align: start;
     transition: background-color $duration--fast-02 motion(entrance, productive),
       color $duration--fast-02 motion(entrance, productive);
 
@@ -408,12 +408,12 @@
   }
 
   .#{$prefix}--overflow-menu-options__option-icon--left {
-    margin-right: $carbon--spacing-03;
+    margin-inline-end: $carbon--spacing-03;
   }
 
   .#{$prefix}--overflow-menu-options__option-icon--right {
-    margin-left: auto;
-    padding-left: $carbon--spacing-05;
+    margin-inline-start: auto;
+    padding-inline-start: $carbon--spacing-05;
   }
 
   // Let the text region grow so the right icon pins to the edge while the text truncates.

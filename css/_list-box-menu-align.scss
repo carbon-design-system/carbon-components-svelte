@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// End alignment, reached by the `bx--list-box__menu--align-end` marker class
@@ -9,6 +10,8 @@
 /// 288px minimum makes it: the box is overconstrained, `left` wins, and the
 /// menu runs past the field's right edge. Releasing `left` hands the position
 /// to `right: 0`, so the menu's right edge lines up with the field's instead.
+/// Under `[dir="rtl"]`, `right` wins the overconstrained box, so end
+/// alignment releases `right` instead.
 ///
 /// Physical, not `inset-inline-start`: lightningcss expands flow-relative
 /// insets into `:lang()` RTL rules for the Safari 14 baseline, and Carbon's
@@ -21,7 +24,7 @@
 /// @group list-box
 @mixin list-box-menu-align {
   .#{$prefix}--list-box__menu--align-end {
-    left: auto;
+    @include ccs-inset-inline($start: auto, $end: 0);
   }
 
   .#{$prefix}--list-box__menu-host--align-end {

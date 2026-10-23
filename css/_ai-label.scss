@@ -402,6 +402,12 @@ $ai-label-sizes: (
     bottom: auto;
   }
 
+  // Of the fields, only the list boxes flip under `[dir="rtl"]` so far.
+  [dir="rtl"] .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--field-decorator {
+    right: auto;
+    left: $carbon--spacing-05;
+  }
+
   .#{$prefix}--select--fluid .#{$prefix}--field-decorator::after,
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--field-decorator::after {
     display: none;
@@ -461,6 +467,11 @@ $ai-label-sizes: (
     right: $carbon--spacing-09;
   }
 
+  [dir="rtl"] .#{$prefix}--list-box__inner-wrapper--decorator {
+    right: auto;
+    left: $carbon--spacing-09;
+  }
+
   .#{$prefix}--select__inner-wrapper--decorator::after,
   .#{$prefix}--list-box__inner-wrapper--decorator::after {
     position: absolute;
@@ -471,6 +482,11 @@ $ai-label-sizes: (
     margin-top: to-rem(-8px);
     background-color: $border-subtle;
     content: "";
+  }
+
+  [dir="rtl"] .#{$prefix}--list-box__inner-wrapper--decorator::after {
+    right: auto;
+    left: to-rem(-8px);
   }
 
   .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select-input {
@@ -496,13 +512,13 @@ $ai-label-sizes: (
   // Dropdown, ComboBox, and MultiSelect
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field,
   .#{$prefix}--list-box--decorator .#{$prefix}--text-input {
-    padding-right: to-rem(72px);
+    padding-inline-end: to-rem(72px);
   }
 
   .#{$prefix}--list-box--decorator[data-invalid] .#{$prefix}--list-box__field,
   .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field {
-    padding-right: $carbon--spacing-12;
+    padding-inline-end: $carbon--spacing-12;
   }
 
   // A ComboBox, like a filterable MultiSelect, pads its input instead of the
@@ -514,7 +530,7 @@ $ai-label-sizes: (
     .#{$prefix}--list-box__field,
   .#{$prefix}--list-box--decorator.#{$prefix}--combo-box.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field {
-    padding-right: 0;
+    padding-inline-end: 0;
   }
 
   // A clear button stays by the chevron behind its own divider, and the
@@ -529,20 +545,20 @@ $ai-label-sizes: (
   }
 
   .#{$prefix}--list-box--clearable .#{$prefix}--list-box__inner-wrapper--decorator {
-    right: to-rem(82px);
+    @include ccs-inset-inline($end: to-rem(82px));
   }
 
   .#{$prefix}--list-box--decorator.#{$prefix}--list-box--clearable
     .#{$prefix}--text-input {
-    padding-right: to-rem(112px);
+    padding-inline-end: to-rem(112px);
   }
 
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection--multi {
-    right: auto;
+    @include ccs-inset-inline($end: auto);
   }
 
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(72px);
+    @include ccs-inset-inline($end: to-rem(72px));
   }
 
   .#{$prefix}--list-box--decorator[data-invalid]
@@ -553,7 +569,7 @@ $ai-label-sizes: (
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(106px);
+    @include ccs-inset-inline($end: to-rem(106px));
   }
 
   .#{$prefix}--list-box--decorator[data-invalid]
@@ -564,26 +580,26 @@ $ai-label-sizes: (
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input--empty
     + .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(72px);
+    @include ccs-inset-inline($end: to-rem(72px));
   }
 
   // ComboBox and filterable MultiSelect inputs paint over the list box.
   // A clearable Dropdown keeps its label clear of the clear button, and its
   // invalid or warn icon moves left of it.
   .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(112px);
+    padding-inline-end: to-rem(112px);
   }
 
   .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable
     .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(106px);
+    @include ccs-inset-inline($end: to-rem(106px));
   }
 
   .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
   .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(130px);
+    padding-inline-end: to-rem(130px);
   }
 
   // ComboBox text stops short of the invalid or warn icon.
@@ -593,7 +609,7 @@ $ai-label-sizes: (
   .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input {
-    padding-right: to-rem(130px);
+    padding-inline-end: to-rem(130px);
   }
 
   // The list box carries the gradient. The ComboBox input is transparent

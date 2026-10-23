@@ -1,7 +1,8 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// `.bx--list-box__field`'s base padding-right reserves room for one
+/// `.bx--list-box__field`'s base end padding reserves room for one
 /// absolutely-positioned icon (the menu chevron). `Dropdown`'s clearable
 /// selection button is a second icon of the same size, 45px in, to the
 /// chevron's left. The field stops the label short of it, as v11 stops a
@@ -11,21 +12,21 @@
 /// @group components
 @mixin dropdown-clearable {
   .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(70px);
+    padding-inline-end: to-rem(70px);
   }
 
   // The invalid and warn icons render before the field, so the list box
   // carries the marker. Like ComboBox, the icon moves left of the clear
   // button and the field reserves room for both.
   .#{$prefix}--dropdown--clearable .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(82px);
+    @include ccs-inset-inline($end: to-rem(82px));
   }
 
   .#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
   .#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(105px);
+    padding-inline-end: to-rem(105px);
   }
 
   // An inline field sets its padding and icon offset at higher specificity,
@@ -34,19 +35,19 @@
   // closer to the edge, with the chevron, so everything shifts 4px.
   .#{$prefix}--list-box.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__field.#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(66px);
+    padding-inline-end: to-rem(66px);
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable
     .#{$prefix}--list-box__invalid-icon {
-    right: to-rem(78px);
+    @include ccs-inset-inline($end: to-rem(78px));
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
   .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
-    padding-right: to-rem(101px);
+    padding-inline-end: to-rem(101px);
   }
 }
 
