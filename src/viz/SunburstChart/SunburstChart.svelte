@@ -56,6 +56,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Set to `true` to make arcs selectable */
   export let selectable = false;
 
@@ -286,9 +289,21 @@
     setActive(next);
   }
   $: tooltipTiming.settle(current);
+
+  /** @param {string} key */
+  function toggleGroup(key) {
+    const next = nextHidden(hidden, key, groupKeysAll.length);
+    if (!next) return;
+    hidden = next;
+    dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
+  }
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-sunburst={true}
   class:bx--viz-sunburst--emphasis={active >= 0}

@@ -40,6 +40,9 @@
   /** Specify the title, shown as the caption */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Specify the width of the map over its height. The width follows the container. */
   export let aspectRatio = 2;
 
@@ -209,9 +212,21 @@
     for (let k = 0; k < g; k++) at += map.groups[k].leaves.length;
     return at;
   }
+
+  /** @param {string} key */
+  function toggleGroup(key) {
+    const next = nextHidden(hidden, key, groupKeysAll.length);
+    if (!next) return;
+    hidden = next;
+    dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
+  }
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-treemap={true}
   class:bx--viz-treemap--selectable={selectable}

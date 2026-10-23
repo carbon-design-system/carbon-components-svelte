@@ -90,6 +90,26 @@
     inline-size: auto;
   }
 
+  // A chart that is loading or empty shows one state box in place of its
+  // body and keeps its title. Charts built on `Chart` size the box to the
+  // plot; the others give it their height, or the minimum here.
+  .#{$prefix}--viz-chart__state {
+    position: relative;
+    min-block-size: to-rem(128px);
+  }
+
+  .#{$prefix}--viz-chart__state .#{$prefix}--viz-chart__skeleton {
+    position: absolute;
+    inset: 0;
+  }
+
+  // The legend row stays, empty, so the chart below it does not move when
+  // the series arrive.
+  .#{$prefix}--viz-chart--loading > :not(.#{$prefix}--viz-chart__state):not(.#{$prefix}--viz-chart__title):not(.#{$prefix}--viz-chart__header):not(.#{$prefix}--viz-legend):not(.#{$prefix}--viz-treemap__legend),
+  .#{$prefix}--viz-chart--empty > :not(.#{$prefix}--viz-chart__state):not(.#{$prefix}--viz-chart__title):not(.#{$prefix}--viz-chart__header):not(.#{$prefix}--viz-legend):not(.#{$prefix}--viz-treemap__legend) {
+    display: none;
+  }
+
   .#{$prefix}--viz-chart__empty {
     position: absolute;
     display: flex;
@@ -228,6 +248,8 @@
     flex-wrap: wrap;
     gap: $carbon--spacing-02 $carbon--spacing-05;
     margin-block-start: $carbon--spacing-03;
+    // One row of items, held while the chart loads or is empty.
+    min-block-size: to-rem(20px);
   }
 
   .#{$prefix}--viz-legend__item {

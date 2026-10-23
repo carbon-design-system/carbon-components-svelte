@@ -38,6 +38,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Set to `true` to make steps selectable */
   export let selectable = false;
 
@@ -176,9 +179,17 @@
       originalEvent: event.detail.originalEvent,
     });
   }
+  $: empty = !loading && data.length === 0;
 </script>
 
-<figure bind:this={ref} class:bx--viz-sequence-sunburst={true} {...$$restProps}>
+<figure
+  bind:this={ref}
+  class:bx--viz-sequence-sunburst={true}
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
+  {...$$restProps}
+>
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
@@ -235,4 +246,22 @@
     on:hover={onHover}
     on:select={onSelect}
   />
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{diameter}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
 </figure>

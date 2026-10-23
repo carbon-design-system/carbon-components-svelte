@@ -66,6 +66,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /**
    * Specify the direction ranks run.
    * @type {"TB" | "LR"}
@@ -501,9 +504,13 @@
       stageHeight = Math.round(h);
     });
   });
+  $: empty = !loading && nodes.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-graph-canvas={true}
   aria-label={title || undefined}
@@ -718,4 +725,22 @@
     {/each}
   </ul>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{height}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{height}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
 </figure>

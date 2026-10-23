@@ -78,6 +78,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Specify the diameter, in pixels. It scales down with its container. */
   export let diameter = 400;
 
@@ -292,9 +295,13 @@
     const x = Math.sin(entry.angle);
     return x > 0.1 ? "start" : x < -0.1 ? "end" : "middle";
   }
+  $: empty = !loading && nodes.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-hive={true}
   class:bx--viz-hive--emphasis={active >= 0}
@@ -368,6 +375,24 @@
       {/each}
     </g>
   </svg>
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{diameter}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
   <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
     {#each hive.axes as entry (entry.key)}
       <li

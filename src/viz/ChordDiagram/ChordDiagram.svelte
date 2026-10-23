@@ -53,6 +53,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Specify the diameter of the circle, in pixels. It scales down with its container. */
   export let diameter = 360;
 
@@ -286,9 +289,13 @@
     return `rotate(${degrees}) translate(${radius + 8} 0)${group.flip ? " rotate(180)" : ""}`;
   }
   $: tooltipTiming.settle(active !== null && anchor);
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-chord={true}
   class:bx--viz-chord--emphasis={active !== null}
@@ -430,4 +437,22 @@
     </tbody>
   </table>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{size}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{size}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
 </figure>

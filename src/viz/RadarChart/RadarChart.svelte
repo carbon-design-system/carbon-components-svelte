@@ -42,6 +42,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Set to `true` to make spokes selectable */
   export let selectable = false;
 
@@ -232,9 +235,17 @@
     dispatch("legend:toggle", { series: key, hidden: !isHidden });
   }
   $: tooltipTiming.settle(spoke);
+  $: empty = !loading && data.length === 0;
 </script>
 
-<figure bind:this={ref} class:bx--viz-radar={true} {...$$restProps}>
+<figure
+  bind:this={ref}
+  class:bx--viz-radar={true}
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
+  {...$$restProps}
+>
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
@@ -356,7 +367,25 @@
     </tbody>
   </table>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
-  {#if legend && radar.series.length > 1}
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{height}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{height}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
+  {#if legend && (radar.series.length > 1 || loading || empty)}
     <div class:bx--viz-legend={true} role="group" aria-label={legendLabel}>
       {#each radar.series as entry (entry.key)}
         <button

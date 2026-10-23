@@ -55,6 +55,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /**
    * Specify which way the tree grows. `"down"` hangs children below the
    * root, as an icicle. `"up"` stacks them upward, as a flame graph.
@@ -345,9 +348,21 @@
   function rowOf(node) {
     return direction === "up" ? tree.depth - node.depth : node.depth;
   }
+
+  /** @param {string} key */
+  function toggleGroup(key) {
+    const next = nextHidden(hidden, key, groupKeysAll.length);
+    if (!next) return;
+    hidden = next;
+    dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
+  }
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-icicle={true}
   class:bx--viz-icicle--flame={direction === "up"}

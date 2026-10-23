@@ -39,6 +39,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Specify how many layers each series is cut into */
   export let bands = 3;
 
@@ -300,7 +303,14 @@
   $: tooltipTiming.settle(at);
 </script>
 
-<figure bind:this={ref} class:bx--viz-horizon={true} {...$$restProps}>
+<figure
+  bind:this={ref}
+  class:bx--viz-horizon={true}
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
+  {...$$restProps}
+>
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}

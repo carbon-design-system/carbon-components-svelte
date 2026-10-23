@@ -50,6 +50,9 @@
   /** Specify the title, shown as the table caption */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /**
    * Specify the time range shown. Defaults to the earliest start and the
    * latest end.
@@ -218,9 +221,13 @@
     sync(enabled);
     return { update: sync, destroy: () => sync(false) };
   }
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-timeline={true}
   class:bx--viz-timeline--sm={size === "sm"}
@@ -311,7 +318,26 @@
       </tr>
     </tfoot>
   </table>
-  {#if legend && timeline.states.length > 0}
+  {#if title && (loading || empty)}
+    <!-- The table, and its caption with it, is hidden while there is no
+         data; the title stays as the figure's own. -->
+    <div class:bx--viz-chart__title={true}>{title}</div>
+  {/if}
+  {#if loading}
+    <div class:bx--viz-chart__state={true} aria-hidden="true">
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true}>
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
+  {#if legend && (timeline.states.length > 0 || loading || empty)}
     <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
       {#each timeline.states as entry (entry.key)}
         <li

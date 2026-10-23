@@ -71,6 +71,9 @@
   /** Specify the title, shown as the table caption */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /**
    * Specify the time range shown. Defaults to the earliest start and the
    * latest end.
@@ -300,9 +303,21 @@
     sync(enabled);
     return { update: sync, destroy: () => sync(false) };
   }
+
+  /** @param {string} key */
+  function toggleGroup(key) {
+    const next = nextHidden(hidden, key, groupKeysAll.length);
+    if (!next) return;
+    hidden = next;
+    dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
+  }
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-timeline={true}
   class:bx--viz-timeline--spans={true}

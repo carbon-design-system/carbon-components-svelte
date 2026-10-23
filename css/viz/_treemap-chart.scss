@@ -117,6 +117,8 @@
     color: $text-secondary;
     gap: $carbon--spacing-02 $carbon--spacing-05;
     margin-block-start: $carbon--spacing-03;
+    // One row of items, held while the chart loads or is empty.
+    min-block-size: to-rem(16px);
 
     @include type-style("label-01");
   }

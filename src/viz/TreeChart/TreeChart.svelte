@@ -41,6 +41,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Set to `true` to make nodes selectable */
   export let selectable = false;
 
@@ -205,9 +208,25 @@
     event.preventDefault();
     if (next) activeId = next.id;
   }
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+  $: empty = !loading && data.length === 0;
 </script>
 
-<figure bind:this={ref} class:bx--viz-tree={true} {...$$restProps}>
+<figure
+  bind:this={ref}
+  class:bx--viz-tree={true}
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
+  {...$$restProps}
+>
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
@@ -274,4 +293,22 @@
     {/each}
   </ul>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{height}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{height}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
 </figure>

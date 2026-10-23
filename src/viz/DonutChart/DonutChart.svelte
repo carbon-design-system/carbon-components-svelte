@@ -37,6 +37,9 @@
   /** Specify the title, shown as the caption */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /**
    * Specify the most slices to draw. The smallest categories past the limit
    * fold into one neutral slice.
@@ -174,9 +177,11 @@
     selected = selected === slice.id ? null : slice.id;
     dispatch("select", { slice, originalEvent });
   }
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-donut={true}
   class:bx--viz-donut--bottom={legendPosition === "bottom"}
@@ -192,52 +197,71 @@
       class:bx--viz-donut__plot={true}
       style:--bx-viz-diameter="{diameter}px"
     >
-      <!-- The legend lists every slice with its value, so the ring is decorative. -->
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-      <svg
-        class:bx--viz-donut__svg={true}
-        viewBox="0 0 {diameter} {diameter}"
-        width={diameter}
-        height={diameter}
-        aria-hidden="true"
-        focusable="false"
-        on:mouseleave={() => setActive(null)}
-      >
-        {#if donut.total === 0}
-          <circle
-            class:bx--viz-donut__track={true}
-            cx={diameter / 2}
-            cy={diameter / 2}
-            r={(diameter / 2) *
-              (1 + Math.min(Math.max(innerRadius, 0), 0.95)) *
-              0.5}
-            stroke-width={(diameter / 2) *
-              (1 - Math.min(Math.max(innerRadius, 0), 0.95))}
-          />
-        {/if}
-        {#each donut.slices as slice (slice.id)}
-          {#if slice.d}
-            <path
-              class:bx--viz-donut__slice={true}
-              class:bx--viz-donut__slice--active={slice.id === emphasis}
-              d={slice.d}
-              style:--bx-viz-color={slice.color}
-              on:mouseenter={() => setActive(slice)}
-              on:click={(event) => select(slice, event)}
+      {#if loading}
+        <div
+          class:bx--viz-chart__state={true}
+          style:block-size="{diameter}px"
+          aria-hidden="true"
+        >
+          <div
+            class:bx--viz-chart__skeleton={true}
+            class:bx--skeleton__placeholder={true}
+          ></div>
+        </div>
+      {:else if empty}
+        <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+          <div class:bx--viz-chart__empty={true}>
+            <slot name="empty">{emptyText}</slot>
+          </div>
+        </div>
+      {:else}
+        <!-- The legend lists every slice with its value, so the ring is decorative. -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <svg
+          class:bx--viz-donut__svg={true}
+          viewBox="0 0 {diameter} {diameter}"
+          width={diameter}
+          height={diameter}
+          aria-hidden="true"
+          focusable="false"
+          on:mouseleave={() => setActive(null)}
+        >
+          {#if donut.total === 0}
+            <circle
+              class:bx--viz-donut__track={true}
+              cx={diameter / 2}
+              cy={diameter / 2}
+              r={(diameter / 2) *
+                (1 + Math.min(Math.max(innerRadius, 0), 0.95)) *
+                0.5}
+              stroke-width={(diameter / 2) *
+                (1 - Math.min(Math.max(innerRadius, 0), 0.95))}
             />
           {/if}
-        {/each}
-      </svg>
-      {#if innerRadius > 0 && $$slots.default}
-        <div class:bx--viz-donut__center={true}>
-          <slot
-            total={donut.total}
-            formattedTotal={formatValue(donut.total)}
-            {active}
-          />
-        </div>
+          {#each donut.slices as slice (slice.id)}
+            {#if slice.d}
+              <path
+                class:bx--viz-donut__slice={true}
+                class:bx--viz-donut__slice--active={slice.id === emphasis}
+                d={slice.d}
+                style:--bx-viz-color={slice.color}
+                on:mouseenter={() => setActive(slice)}
+                on:click={(event) => select(slice, event)}
+              />
+            {/if}
+          {/each}
+        </svg>
+        {#if innerRadius > 0 && $$slots.default}
+          <div class:bx--viz-donut__center={true}>
+            <slot
+              total={donut.total}
+              formattedTotal={formatValue(donut.total)}
+              {active}
+            />
+          </div>
+        {/if}
       {/if}
     </div>
     <ul class:bx--viz-donut__legend={true} class:bx--visually-hidden={!legend}>

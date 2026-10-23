@@ -270,6 +270,8 @@
     /** @type {"pointer" | "keyboard" | "sync"} */ ("pointer"),
   );
   const hiddenStore = writable(hidden);
+  /** @type {import("svelte/store").Writable<"ready" | "loading" | "empty">} */
+  const stateStore = writable("ready");
   const viewStore = writable(view);
   const titleStore = writable(title);
   const xHeaderStore = writable("");
@@ -425,6 +427,7 @@
     hover,
     hoverOrigin,
     banded,
+    state: stateStore,
     hidden: hiddenStore,
     view: viewStore,
     title: titleStore,
@@ -968,6 +971,7 @@
   }
 
   $: empty = !loading && $groups.every((group) => group.xs.length === 0);
+  $: stateStore.set(loading ? "loading" : empty ? "empty" : "ready");
 
   $: announcement = $hover
     ? `${$scales.xLabel($hover.x)}: ${$hover.points

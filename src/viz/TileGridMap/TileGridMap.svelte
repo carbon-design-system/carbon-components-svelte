@@ -252,9 +252,21 @@
     return { update: sync, destroy: () => sync(false) };
   }
   $: tooltipTiming.settle(active);
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+  $: empty = !loading && data.length === 0;
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-tile-map={true}
   class:bx--viz-tile-map--selectable={selectable}
@@ -353,7 +365,21 @@
     </tbody>
   </table>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
-  {#if legend && totals.size > 0}
+  {#if loading}
+    <div class:bx--viz-chart__state={true} aria-hidden="true">
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true}>
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
+  {#if legend && (totals.size > 0 || loading || empty)}
     <div class:bx--viz-heatmap__legend={true} aria-hidden="true">
       <span>{formatValue(range[0])}</span>
       <span class:bx--viz-heatmap__ramp={true}>

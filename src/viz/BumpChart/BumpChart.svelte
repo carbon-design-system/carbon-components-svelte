@@ -59,6 +59,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /**
    * Specify a fixed color per series.
    * @type {Record<string, import("../utils/tokens.js").VizColor>}
@@ -293,6 +296,9 @@
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-bump={true}
   class:bx--viz-bump--emphasis={active >= 0}

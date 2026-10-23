@@ -112,10 +112,13 @@ describe("DonutChart", () => {
     expect(screen.getByTestId("selected")).toHaveTextContent("");
   });
 
-  it("draws an empty track for no data", () => {
+  it("shows the empty text in place of the ring for no data", () => {
     render(DonutChart, { data: [] });
 
     expect(slices()).toEqual([]);
-    expect(document.querySelector(".bx--viz-donut__track")).not.toBeNull();
+    expect(document.querySelector(".bx--viz-donut__track")).toBeNull();
+    expect(document.querySelector(".bx--viz-chart__empty")).toHaveTextContent(
+      "No data",
+    );
   });
 });

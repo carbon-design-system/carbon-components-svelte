@@ -229,6 +229,9 @@
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-ridgeline={true}
   class:bx--viz-ridgeline--emphasis={active >= 0}

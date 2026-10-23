@@ -44,6 +44,8 @@ export type ChartContext<T> = {
   hoverOrigin: Readable<"pointer" | "keyboard" | "sync">;
   /** Whether a mounted mark fills from the baseline, as bars do. */
   banded: Readable<boolean>;
+  /** Whether the chart is loading, has no data, or is ready. The legend keeps its row in the first two. */
+  state: Readable<"ready" | "loading" | "empty">;
   hidden: Readable<ReadonlyArray<ChartSeriesKey>>;
   /** Whether the chart or its data table is showing. */
   view: Readable<"chart" | "table">;

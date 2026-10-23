@@ -32,11 +32,16 @@
   export let ref = null;
 
   import IcicleChart from "../IcicleChart/IcicleChart.svelte";
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
 </script>
 
 <!-- A flame graph is an icicle stood on its head: the root at the bottom
      and the deepest frames on top. -->
 <IcicleChart
+  {loading}
+  {emptyText}
   direction="up"
   bind:root
   bind:selected

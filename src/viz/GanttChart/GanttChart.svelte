@@ -68,6 +68,9 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
   /** Set to `true` to make tasks selectable */
   export let selectable = false;
 
@@ -323,6 +326,9 @@
 </script>
 
 <figure
+  class:bx--viz-chart--loading={loading}
+  class:bx--viz-chart--empty={empty}
+  aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-gantt={true}
   class:bx--viz-gantt--emphasis={active >= 0}
