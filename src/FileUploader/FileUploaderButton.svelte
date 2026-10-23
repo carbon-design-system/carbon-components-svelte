@@ -66,6 +66,7 @@
    * Specify the size of the file uploader button.
    * Inherits the height of the parent `Form` size when unset,
    * otherwise defaults to `"small"`.
+   * Accepts the same Carbon v11 aliases as `Button`.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
   export let size = undefined;
@@ -126,13 +127,17 @@
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formReset } from "../utils/form-reset.js";
+  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
+  $: effectiveSize =
+    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
+    formButtonSize($formSize) ??
+    "small";
 
   // Rest props go to the hidden input, which never takes focus. Move the
   // naming and description attributes to the button that does.

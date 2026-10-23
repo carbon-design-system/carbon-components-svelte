@@ -2,7 +2,9 @@
   /**
    * Set the size of the input.
    * Inherits the parent `Form` size when unset.
-   * @type {"xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
+   * `Form` size) and `"lg"` (`"xl"`).
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -126,14 +128,15 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? $formSize;
+  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({

@@ -77,7 +77,7 @@
   /** @type {(count: number) => string} */
   export let overflowLabel = (count) => `+${count} more tags`;
 
-  /** @type {"sm" | "default" | "lg" | undefined} */
+  /** @type {"sm" | "default" | "lg" | "md" | undefined} */
   export let size = undefined;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";

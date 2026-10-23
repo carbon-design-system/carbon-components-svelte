@@ -8,17 +8,25 @@
   /**
    * Specify the size of the segments.
    * Inherits the parent `Form` size when unset, otherwise `"default"`.
-   * @type {"default" | "xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (`"default"`) and `"lg"` (`"xl"`).
+   * @type {"default" | "xs" | "sm" | "xl" | "md" | "lg"}
    * @default "default"
    */
   export let size = undefined;
 
   import { getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    normalizeSize,
+    PIN_CODE_INPUT_SIZE_ALIASES,
+  } from "../utils/size-aliases.js";
 
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? $formSize ?? "default";
+  $: effectiveSize = normalizeSize(
+    size ?? $formSize ?? "default",
+    PIN_CODE_INPUT_SIZE_ALIASES,
+  );
 </script>
 
 <div

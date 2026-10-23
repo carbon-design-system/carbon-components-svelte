@@ -10,7 +10,8 @@
 
   /**
    * Set the size of the data table.
-   * @type {"compact" | "short" | "medium" | "tall"}
+   * Accepts the same Carbon v11 aliases as `DataTable`.
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -30,6 +31,12 @@
   /** Set to `false` to hide the toolbar */
   export let showToolbar = true;
 
+  import {
+    DATA_TABLE_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
+
+  $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
   $: values = headers.map((header) =>
     header.value === undefined ? header : header.value,
   );
@@ -68,10 +75,10 @@
     <table
       class:bx--skeleton={true}
       class:bx--data-table={true}
-      class:bx--data-table--compact={size === "compact"}
-      class:bx--data-table--short={size === "short"}
-      class:bx--data-table--md={size === "medium"}
-      class:bx--data-table--tall={size === "tall"}
+      class:bx--data-table--compact={effectiveSize === "compact"}
+      class:bx--data-table--short={effectiveSize === "short"}
+      class:bx--data-table--md={effectiveSize === "medium"}
+      class:bx--data-table--tall={effectiveSize === "tall"}
       class:bx--data-table--zebra={zebra}
       on:click
       on:mouseover

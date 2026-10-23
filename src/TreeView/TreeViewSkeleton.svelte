@@ -4,12 +4,21 @@
 
   /**
    * Specify the size of the tree view it stands in for.
-   * @type {"default" | "compact"}
+   * Also accepts Carbon v11's `"sm"` (`"default"`, 32px) and `"xs"`
+   * (`"compact"`, 24px).
+   * @type {"default" | "compact" | "sm" | "xs"}
    */
   export let size = "default";
 
   /** Set to `true` to leave out the label bar, as TreeView's `hideLabel` does */
   export let hideLabel = false;
+
+  import {
+    normalizeSize,
+    TREE_VIEW_SIZE_ALIASES,
+  } from "../utils/size-aliases.js";
+
+  $: effectiveSize = normalizeSize(size, TREE_VIEW_SIZE_ALIASES);
 </script>
 
 <div
@@ -25,8 +34,8 @@
   {/if}
   <ul
     class:bx--tree={true}
-    class:bx--tree--default={size === "default"}
-    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--default={effectiveSize === "default"}
+    class:bx--tree--compact={effectiveSize === "compact"}
     class:bx--skeleton={true}
   >
     {#each Array.from({ length: count }, (_, i) => i) as item (item)}

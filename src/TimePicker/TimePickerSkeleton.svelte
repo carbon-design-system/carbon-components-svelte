@@ -1,7 +1,9 @@
 <script>
   /**
    * Set the size of the skeleton to match the time picker it stands in for.
-   * @type {"xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
+   * `Form` size) and `"lg"` (`"xl"`).
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 

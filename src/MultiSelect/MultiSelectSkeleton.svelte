@@ -2,7 +2,9 @@
   /**
    * Set the size of the skeleton to match the field it stands in for.
    * Inherits the parent `Form` size when unset.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
+   * `Form` size). `"lg"` and `"xl"` are both 48px.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -15,7 +17,7 @@
   import { getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
 
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
 </script>

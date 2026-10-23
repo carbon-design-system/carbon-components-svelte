@@ -8,7 +8,8 @@
   /**
    * Specify the size of button skeleton.
    * Falls back to the height of a parent `Form`'s size, as Button does.
-   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl"}
+   * Accepts the same Carbon v11 aliases as Button.
+   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl" | "sm" | "md" | "2xl"}
    * @default "default"
    */
   export let size = undefined;
@@ -17,10 +18,14 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
 
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? formButtonSize($formSize) ?? "default";
+  $: effectiveSize =
+    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
+    formButtonSize($formSize) ??
+    "default";
 </script>
 
 {#if href}

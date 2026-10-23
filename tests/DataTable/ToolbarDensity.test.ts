@@ -147,6 +147,31 @@ describe("DataTable Toolbar size inheritance", () => {
     expect(toolbar(container)).not.toHaveClass("bx--table-toolbar--normal");
   });
 
+  it('maps a DataTable\'s Carbon v11 "sm" to the short toolbar and item', async () => {
+    const { container } = render(ToolbarDensity, {
+      props: { tableSize: "sm" },
+    });
+
+    expect(toolbar(container)).toHaveClass("bx--table-toolbar--small");
+
+    await user.click(screen.getByRole("button", { name: "Row height" }));
+
+    expect(
+      screen.getByRole("menuitemradio", { name: "Short" }),
+    ).toHaveAttribute("aria-checked", "true");
+  });
+
+  it('checks the item for its own Carbon v11 "xl" size', async () => {
+    render(ToolbarDensity, { props: { standalone: true, size: "xl" } });
+
+    await user.click(screen.getByRole("button", { name: "Row height" }));
+
+    expect(screen.getByRole("menuitemradio", { name: "Tall" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+  });
+
   it("inherits the extra small toolbar from a compact DataTable", () => {
     const { container } = render(ToolbarDensity, {
       props: { tableSize: "compact" },

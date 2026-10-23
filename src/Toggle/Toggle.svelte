@@ -6,7 +6,8 @@
 
   /**
    * Specify the toggle size.
-   * @type {"default" | "sm"}
+   * Also accepts Carbon v11's `"md"` (`"default"`).
+   * @type {"default" | "sm" | "md"}
    */
   export let size = "default";
 

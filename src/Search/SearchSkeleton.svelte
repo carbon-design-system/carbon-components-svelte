@@ -2,8 +2,9 @@
   /**
    * Specify the size of the search input.
    * Inherits the parent `Form` size when unset, otherwise `"lg"` (40px),
-   * as in Carbon v11.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * as in Carbon v11. Also accepts Carbon v11's `"md"` (`"lg"`, 40px).
+   * Carbon v11's 48px `lg` is `"xl"` here.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    * @default "lg"
    */
   export let size = undefined;
@@ -18,10 +19,14 @@
 
   import { getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
 
-  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? $formSize ?? "lg";
+  $: effectiveSize = normalizeSize(
+    size ?? $formSize ?? "lg",
+    SEARCH_SIZE_ALIASES,
+  );
 </script>
 
 <div

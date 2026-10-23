@@ -10,7 +10,8 @@
 
   /**
    * Set the size of the composed modal.
-   * @type {"xs" | "sm" | "lg"}
+   * Also accepts Carbon v11's `"md"`, the default width.
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = undefined;
 

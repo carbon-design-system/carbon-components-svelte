@@ -287,6 +287,16 @@ describe("TagSet", () => {
     }
   });
 
+  it('renders slotted tags at the default size for Carbon v11\'s "md"', () => {
+    const { container } = render(TagSetFixture, { size: "md" });
+
+    const tags = container.querySelectorAll(".bx--tag");
+    expect(tags.length).toBeGreaterThan(0);
+    for (const tag of tags) {
+      expect(tag.className).not.toMatch(/bx--tag--(sm|lg)/);
+    }
+  });
+
   it("applies a custom gap between tags", () => {
     const { container } = render(TagSetFixture, { gap: "2rem" });
 

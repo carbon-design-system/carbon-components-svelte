@@ -102,6 +102,8 @@ describe("InputGroup", () => {
     ["xs", "bx--btn--xs", "bx--text-input--xs"],
     ["sm", "bx--btn--sm", "bx--text-input--sm"],
     ["xl", null, "bx--text-input--xl"],
+    ["md", "bx--btn--field", null],
+    ["lg", null, "bx--text-input--xl"],
   ] as const)(
     "matches the button to size %s",
     (size, buttonClass, inputClass) => {
@@ -126,6 +128,13 @@ describe("InputGroup", () => {
     expect(screen.getByRole("button", { name: "Apply" })).toHaveClass(
       "bx--btn--sm",
     );
+  });
+
+  it('maps a parent Form\'s Carbon v11 "lg" to "xl"', () => {
+    render(InputGroup, { formSize: "lg" });
+
+    expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--xl");
+    expect(getBoundText()).toBe("false xl");
   });
 
   it("prefers its own size over the parent Form's", () => {

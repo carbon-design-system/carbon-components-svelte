@@ -80,7 +80,8 @@
 
   /**
    * Set the size of the modal.
-   * @type {"xs" | "sm" | "lg"}
+   * Also accepts Carbon v11's `"md"`, the width of a `Modal` with no size.
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "xs";
 

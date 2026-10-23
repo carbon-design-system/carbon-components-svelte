@@ -13,7 +13,8 @@
 
   /**
    * Specify the size of the overflow menu.
-   * @type {"xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -132,6 +133,7 @@
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
@@ -144,6 +146,8 @@
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+
+  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
 
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
@@ -198,7 +202,7 @@
    * while open (each arrow key, hover).
    */
   $: positionKey = open
-    ? `${direction}|${flipped}|${size}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
+    ? `${direction}|${flipped}|${effectiveSize}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
     : null;
 
   /**
@@ -576,9 +580,9 @@
   {id}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
-  class:bx--overflow-menu--xs={size === "xs"}
-  class:bx--overflow-menu--sm={size === "sm"}
-  class:bx--overflow-menu--xl={size === "xl"}
+  class:bx--overflow-menu--xs={effectiveSize === "xs"}
+  class:bx--overflow-menu--sm={effectiveSize === "sm"}
+  class:bx--overflow-menu--xl={effectiveSize === "xl"}
   class:bx--overflow-menu--custom-trigger={$$slots.menu}
   {...$$restProps}
   aria-label={triggerLabel}
@@ -644,9 +648,9 @@
     class:bx--overflow-menu-options={true}
     class:bx--overflow-menu--flip={flipped}
     class:bx--overflow-menu-options--open={open}
-    class:bx--overflow-menu-options--xs={size === "xs"}
-    class:bx--overflow-menu-options--sm={size === "sm"}
-    class:bx--overflow-menu-options--xl={size === "xl"}
+    class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
+    class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
+    class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
     class:bx--overflow-menu-options--scrollable={!!maxHeight}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
     class={menuOptionsClass}
@@ -678,9 +682,9 @@
       class:bx--overflow-menu-options={true}
       class:bx--overflow-menu--flip={flipped}
       class:bx--overflow-menu-options--open={open}
-      class:bx--overflow-menu-options--xs={size === "xs"}
-      class:bx--overflow-menu-options--sm={size === "sm"}
-      class:bx--overflow-menu-options--xl={size === "xl"}
+      class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
+      class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
+      class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
       class:bx--overflow-menu-options--scrollable={!!maxHeight}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}

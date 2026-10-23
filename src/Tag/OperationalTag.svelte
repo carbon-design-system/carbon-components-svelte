@@ -37,7 +37,8 @@
   /**
    * Specify the size of the tag.
    * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
-   * @type {"sm" | "default" | "lg"}
+   * Also accepts Carbon v11's `"md"` (`"default"`).
+   * @type {"sm" | "default" | "lg" | "md"}
    */
   export let size = undefined;
 
@@ -107,6 +108,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
+  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagTooltip from "./TagTooltip.svelte";
   import { observeTruncation } from "./tag-truncation.js";
@@ -142,7 +144,8 @@
   let listenersEnabled = false;
   let enableFrame;
 
-  $: resolvedSize = size ?? $groupSize ?? "default";
+  $: resolvedSize =
+    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
   // Without `content`, the tag is a plain action trigger: no popover, and
   // no disclosure state.
   $: hasContent = !!$$slots.content;

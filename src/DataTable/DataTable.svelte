@@ -189,7 +189,10 @@
 
   /**
    * Set the size of the data table.
-   * @type {"compact" | "short" | "medium" | "tall"}
+   * Also accepts Carbon v11's row heights: `"xs"` (`"compact"`), `"sm"`
+   * (`"short"`), `"md"` (`"medium"`), `"lg"` (the 48px default) and `"xl"`
+   * (`"tall"`).
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -445,6 +448,10 @@
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
+  import {
+    DATA_TABLE_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
@@ -479,8 +486,9 @@
    * so it can derive a matching size unless explicitly overridden.
    * @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined>}
    */
-  const tableSize = writable(size);
-  $: $tableSize = size;
+  const tableSize = writable(normalizeSize(size, DATA_TABLE_SIZE_ALIASES));
+  $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
+  $: $tableSize = effectiveSize;
 
   /** Row heights per size variant, matching `bx--data-table--<size>` */
   const ROW_HEIGHTS = {
@@ -1002,7 +1010,7 @@
           return compareValues(itemA, itemB, ascending);
         })
       : $tableRows;
-  $: defaultRowHeight = ROW_HEIGHTS[size] ?? DEFAULT_ROW_HEIGHT;
+  $: defaultRowHeight = ROW_HEIGHTS[effectiveSize] ?? DEFAULT_ROW_HEIGHT;
   $: virtualConfig = virtualize
     ? {
         itemHeight: defaultRowHeight,
@@ -1284,7 +1292,7 @@
     <Table
       bind:ref={tableRef}
       zebra={zebra && !hideMode}
-      {size}
+      size={effectiveSize}
       {stickyHeader}
       {sortable}
       {useStaticWidth}

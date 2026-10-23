@@ -1,7 +1,7 @@
 <script>
   /**
    * @restProps {fieldset}
-   * @slot {{ describedBy: string | undefined; invalid: boolean; warn: boolean; size: "xs" | "sm" | "xl" | undefined }}
+   * @slot {{ describedBy: string | undefined; invalid: boolean; warn: boolean; size: "xs" | "sm" | "md" | "xl" | undefined }}
    * @slot {{}} legendChildren
    */
 
@@ -42,7 +42,8 @@
   /**
    * Set the size of the fields in the group. Buttons in the group match
    * the field height. Defaults to the size of a parent `Form`.
-   * @type {"xs" | "sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -57,14 +58,15 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   /** Button size whose height matches a field of each size. */
   const BUTTON_SIZE = { xs: "xs", sm: "small", md: "field", xl: undefined };
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
-  const ownSize = writable(size);
-  $: ownSize.set(size);
+  const ownSize = writable(normalizeSize(size, FIELD_SIZE_ALIASES));
+  $: ownSize.set(normalizeSize(size, FIELD_SIZE_ALIASES));
 
   const sharedSize = derived(
     [ownSize, formSize],

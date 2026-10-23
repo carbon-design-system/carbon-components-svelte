@@ -18,13 +18,14 @@
   import type { ComponentProps } from "svelte";
 
   export let size: ComponentProps<Form>["size"] = undefined;
+  export let overrideSize: ComponentProps<TextInput>["size"] = "xl";
 
   const items = [{ id: "us-east-1", text: "US East" }];
 </script>
 
 <Form {size} data-testid="form">
   <TextInput labelText="Workspace" />
-  <TextInput labelText="Override" size="xl" />
+  <TextInput labelText="Override" size={overrideSize} />
   <PasswordInput labelText="Password" />
   <NumberInput labelText="Clusters" value={1} />
   <Select labelText="Plan">

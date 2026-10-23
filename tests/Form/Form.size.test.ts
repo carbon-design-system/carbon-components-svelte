@@ -52,6 +52,36 @@ describe("Form size", () => {
     }
   });
 
+  it('passes Carbon v11\'s "lg" to every field as "xl"', () => {
+    render(FormSize, { props: { size: "lg" } });
+
+    for (const [element, className] of fieldClasses("xl")) {
+      expect(element).toHaveClass(className);
+    }
+  });
+
+  it('renders fields at 40px for Carbon v11\'s "md", with Search at "lg"', () => {
+    render(FormSize, { props: { size: "md" } });
+
+    expect(screen.getByLabelText("Workspace").className).not.toMatch(
+      /bx--text-input--(xs|sm|xl)/,
+    );
+    expect(screen.getByRole("searchbox").closest(".bx--search")).toHaveClass(
+      "bx--search--lg",
+    );
+  });
+
+  it('lets a field\'s own "md" win over the form size', () => {
+    render(FormSize, { props: { size: "xs", overrideSize: "md" } });
+
+    expect(screen.getByLabelText("Override").className).not.toMatch(
+      /bx--text-input--(xs|sm|xl)/,
+    );
+    expect(screen.getByLabelText("Workspace")).toHaveClass(
+      "bx--text-input--xs",
+    );
+  });
+
   it("lets a field's own size win", () => {
     render(FormSize, { props: { size: "xs" } });
 

@@ -85,7 +85,8 @@
   /**
    * Size of every tag, including the "+N" overflow indicator. Applies to
    * slotted `Tag` children without their own `size`.
-   * @type {"sm" | "default" | "lg"}
+   * Also accepts Carbon v11's `"md"` (`"default"`).
+   * @type {"sm" | "default" | "lg" | "md"}
    */
   export let size = undefined;
 
@@ -113,6 +114,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import {
     insertByDomOrder,
     sortByDomOrder,
@@ -127,8 +129,8 @@
   const items = writable([]);
   /** @type {import("svelte/store").Writable<Set<string>>} */
   const overflowIds = writable(new Set());
-  const sharedSize = writable(size);
-  $: sharedSize.set(size);
+  const sharedSize = writable(normalizeSize(size, TAG_SIZE_ALIASES));
+  $: sharedSize.set(normalizeSize(size, TAG_SIZE_ALIASES));
   const sharedNavigation = writable(navigation);
   $: sharedNavigation.set(navigation);
 
@@ -433,7 +435,7 @@
       {overflowAlign}
       {overflowDirection}
       {overflowLabel}
-      {size}
+      size={$sharedSize}
       on:trigger={handleTriggerClick}
       on:close={handleOverflowTagClose}
       on:empty={handleOverflowEmpty}

@@ -15,8 +15,9 @@
    * Specify the row height.
    * Pass this value to the `DataTable`'s `size` prop.
    * When unset, the checked item mirrors the parent table's size,
-   * falling back to `"medium"`.
-   * @type {"compact" | "short" | "medium" | "tall" | undefined}
+   * falling back to `"medium"`. Accepts the same Carbon v11 aliases as
+   * `DataTable`; a selection always writes this library's name.
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined}
    * @bindable writable
    */
   export let size = undefined;
@@ -62,6 +63,10 @@
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuItemRadioGroup from "../Menu/MenuItemRadioGroup.svelte";
   import MenuButton from "../MenuButton/MenuButton.svelte";
+  import {
+    DATA_TABLE_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
 
   const dispatch = createEventDispatcher();
 
@@ -70,7 +75,8 @@
   const toolbarCtx = getContext("carbon:Toolbar") ?? {};
   const toolbarSize = toolbarCtx.toolbarSize;
 
-  $: selectedId = size ?? $tableSize ?? "medium";
+  $: selectedId =
+    normalizeSize(size, DATA_TABLE_SIZE_ALIASES) ?? $tableSize ?? "medium";
 
   $: menuSize = MENU_SIZE_BY_TOOLBAR_SIZE[$toolbarSize ?? "default"] ?? "lg";
 

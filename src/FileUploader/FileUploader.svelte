@@ -194,6 +194,7 @@
    * At `"xs"`, the file rows are extra small too.
    * Inherits the height of the parent `Form` size when unset,
    * otherwise defaults to `"small"`.
+   * Accepts the same Carbon v11 aliases as `Button`.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
   export let size = undefined;
@@ -242,6 +243,7 @@
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
+  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
@@ -249,7 +251,10 @@
   const dispatch = createEventDispatcher();
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = size ?? formButtonSize($formSize) ?? "small";
+  $: effectiveSize =
+    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
+    formButtonSize($formSize) ??
+    "small";
 
   $: descriptionId = `${id}-description`;
   $: hasDescription = Boolean(labelDescription || $$slots.labelDescription);

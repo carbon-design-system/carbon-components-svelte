@@ -23,7 +23,8 @@
 
   /**
    * Specify the size of the content switcher.
-   * @type {"sm" | "xl"}
+   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -65,8 +66,11 @@
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
+
+  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
 
   const dispatch = createEventDispatcher();
   /**
@@ -467,8 +471,8 @@
     },
   }}
   class:bx--content-switcher={true}
-  class:bx--content-switcher--sm={size === "sm"}
-  class:bx--content-switcher--xl={size === "xl"}
+  class:bx--content-switcher--sm={effectiveSize === "sm"}
+  class:bx--content-switcher--xl={effectiveSize === "xl"}
   class:bx--content-switcher--icon-only={iconOnly}
   class:bx--content-switcher--low-contrast={lowContrast}
   class:bx--content-switcher--auto-width={autoWidth}

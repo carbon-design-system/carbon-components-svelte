@@ -20,7 +20,8 @@
   /**
    * Specify the size of the tag.
    * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
-   * @type {"sm" | "default" | "lg"}
+   * Also accepts Carbon v11's `"md"` (`"default"`).
+   * @type {"sm" | "default" | "lg" | "md"}
    */
   export let size = undefined;
 
@@ -46,6 +47,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { noop } from "../utils/noop.js";
+  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagTooltip from "./TagTooltip.svelte";
   import { observeTruncation } from "./tag-truncation.js";
@@ -73,7 +75,8 @@
     tabindex: rovingTabindex,
   } = group;
 
-  $: resolvedSize = size ?? $groupSize ?? "default";
+  $: resolvedSize =
+    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
   $: group.update({ value, type, size: resolvedSize, disabled });
   $: hasIcon = Boolean(icon || $$slots.icon);
 
