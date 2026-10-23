@@ -168,7 +168,10 @@
               </Stack>
               <Stack gap={3}>
                 <Text type="label-01" color="secondary">
-                  Then set the theme reactively in Svelte:
+                  Then set the theme at runtime with the
+                  <Link inline size="sm" href="/components/Theme"
+                    >Theme component</Link
+                  >:
                 </Text>
                 <DocCodeBox>
                   <CodeBlock language="svelte" code={themeToggleSnippet} />
@@ -183,9 +186,11 @@
                 </DocCodeBox>
               </Stack>
               <Text type="body-01" color="secondary" maxWidth="60ch">
-                Or use the
-                <Link inline href="/components/Theme">Theme component</Link>
-                to manage the theme reactively.
+                Rendering on the server? See
+                <Link inline href="/server-rendering#theme-without-a-flash">
+                  Theme without a flash
+                </Link>
+                to set the theme before the first paint.
               </Text>
             </Stack>
           </Column>

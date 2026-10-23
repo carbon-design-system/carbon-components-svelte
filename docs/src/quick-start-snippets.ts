@@ -156,10 +156,12 @@ export function themeCssImport(theme: CarbonTheme) {
 
 export function themeToggle(theme: CarbonTheme) {
   return `<script>
-  let theme = "${theme}"; // "white" | "g10" | "g80" | "g90" | "g100"
+  import { Theme } from "carbon-components-svelte";
 
-  $: document.documentElement.setAttribute("theme", theme);
-</script>`;
+  let theme = "${theme}"; // "white" | "g10" | "g80" | "g90" | "g100"
+</script>
+
+<Theme bind:theme />`;
 }
 
 export function themeHtml(theme: CarbonTheme) {
