@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
+import ToastNotificationActionsTest from "./ToastNotificationActions.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
 import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
 import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";
@@ -93,6 +94,47 @@ describe("ToastNotification", () => {
 
     const closeButton = screen.queryByLabelText("Close notification");
     expect(closeButton).not.toBeInTheDocument();
+  });
+
+  it("renders the actions slot as a tertiary button under the text", () => {
+    render(ToastNotificationActionsTest);
+
+    const button = screen.getByRole("button", { name: "Retry" });
+    const actions = button.parentElement;
+    expect(actions).toHaveClass("bx--toast-notification__actions");
+    expect(actions?.previousElementSibling).toHaveClass(
+      "bx--toast-notification__caption",
+    );
+    expect(button).toHaveClass(
+      "bx--toast-notification__action-button",
+      "bx--btn--tertiary",
+      "bx--btn--sm",
+    );
+    expect(button).not.toHaveClass(
+      "bx--inline-notification__action-button",
+      "bx--btn--ghost",
+    );
+  });
+
+  it("renders an action with href as a tertiary link", () => {
+    render(ToastNotificationActionsTest, {
+      props: { href: "https://example.com/uploads" },
+    });
+
+    const link = screen.getByRole("link", { name: "Retry" });
+    expect(link).toHaveAttribute("href", "https://example.com/uploads");
+    expect(link).toHaveClass(
+      "bx--toast-notification__action-button",
+      "bx--btn--tertiary",
+    );
+  });
+
+  it("renders no actions wrapper without the actions slot", () => {
+    render(ToastNotificationTest, { props: { title: "Saved" } });
+
+    expect(
+      document.querySelector(".bx--toast-notification__actions"),
+    ).not.toBeInTheDocument();
   });
 
   it("should render with full width", () => {

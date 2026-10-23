@@ -34,7 +34,9 @@
   title="Upload failed"
   subtitle="The connection timed out."
 >
-  <Button kind="tertiary" size="small" on:click={() => (toastOpen = false)}>
-    Retry
-  </Button>
+  <svelte:fragment slot="actions">
+    <NotificationActionButton on:click={() => (toastOpen = false)}>
+      Retry
+    </NotificationActionButton>
+  </svelte:fragment>
 </ToastNotification>

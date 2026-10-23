@@ -267,3 +267,102 @@
 @include exports('toast-notifications') {
   @include toast-notifications;
 }
+
+// carbon-components-svelte patch
+// The `actions` slot, as in v11's actionable toast: a small tertiary button
+// under the text. Tertiary colors are built for the page background, so the
+// dark high-contrast toast flips them with v11's notification tokens.
+/// @access private
+/// @group notification
+@mixin toast-notification-actions {
+  .#{$prefix}--toast-notification__actions {
+    display: flex;
+    margin-top: $carbon--spacing-06;
+    margin-bottom: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--toast-notification__action-button {
+    padding-right: $carbon--spacing-05;
+    padding-left: $carbon--spacing-05;
+  }
+
+  // `:hover` restates the resting colors, so the base tertiary hover
+  // can't paint a tap on a touch screen.
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__action-button,
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__action-button:hover {
+    border-color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse"
+    );
+    background-color: transparent;
+    color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse"
+    );
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--toast-notification--high-contrast
+      .#{$prefix}--toast-notification__action-button:hover {
+      background-color: get-token-value(
+        $notification-colors,
+        "notification-action-tertiary-inverse-hover"
+      );
+      color: get-token-value(
+        $notification-colors,
+        "notification-action-tertiary-inverse-text"
+      );
+    }
+  }
+
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__action-button:focus {
+    border-color: $focus-inverse;
+    background-color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse"
+    );
+    box-shadow:
+      inset 0 0 0 $button-outline-width $focus-inverse,
+      inset 0 0 0 $button-border-width $background-inverse;
+    color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse-text"
+    );
+  }
+
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__action-button:active {
+    border-color: transparent;
+    background-color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse-active"
+    );
+    color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse-text"
+    );
+  }
+
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__action-button:disabled,
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__action-button.#{$prefix}--btn--disabled {
+    border-color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse-text-on-color-disabled"
+    );
+    background-color: transparent;
+    box-shadow: none;
+    color: get-token-value(
+      $notification-colors,
+      "notification-action-tertiary-inverse-text-on-color-disabled"
+    );
+  }
+}
+
+@include exports("toast-notification-actions") {
+  @include toast-notification-actions;
+}

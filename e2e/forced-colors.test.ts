@@ -656,6 +656,23 @@ test.describe("forced colors", () => {
     expect.soft(lower).not.toBe("none");
     expect.soft(lower).not.toBe(system.Canvas);
   });
+
+  // The action's ring is a box-shadow, which forced colors drop, so the
+  // button's own forced-colors outline has to win.
+  test("a toast action keeps its edge and a Highlight focus ring", async ({
+    page,
+  }) => {
+    const action = ".bx--toast-notification__action-button";
+    expect.soft(await style(page, action)).toMatchObject({
+      borderColor: system.ButtonText,
+      color: system.ButtonText,
+    });
+    await page.focus(action);
+    expect.soft(await style(page, action)).toMatchObject({
+      outline: "solid 1px",
+      outlineColor: system.Highlight,
+    });
+  });
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so

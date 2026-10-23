@@ -7,13 +7,20 @@
 
   // Inside a `Callout`, the callout's title describes the action.
   const calloutDescribedBy = getContext("carbon:Callout")?.describedBy;
+  // As in Carbon React, a toast's action is a tertiary button, not a ghost.
+  const toast = getContext("carbon:ToastNotification") !== undefined;
 </script>
 
 <Button
-  kind="ghost"
+  kind={toast ? "tertiary" : "ghost"}
   size="small"
   {...$$restProps}
-  class={["bx--inline-notification__action-button", $$restProps.class]
+  class={[
+    toast
+      ? "bx--toast-notification__action-button"
+      : "bx--inline-notification__action-button",
+    $$restProps.class,
+  ]
     .filter(Boolean)
     .join(" ")}
   aria-describedby={joinDescribedBy(
