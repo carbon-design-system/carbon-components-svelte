@@ -1,3 +1,17 @@
+<script context="module">
+  // Carbon v11 names map to the placement classes of the older names.
+  const ALIGN_CLASS = {
+    "top-start": "top-left",
+    "top-end": "top-right",
+    "bottom-start": "bottom-left",
+    "bottom-end": "bottom-right",
+    "left-start": "left-top",
+    "left-end": "left-bottom",
+    "right-start": "right-top",
+    "right-end": "right-bottom",
+  };
+</script>
+
 <script>
   /**
    * @event click:outside
@@ -27,7 +41,10 @@
 
   /**
    * Specify the alignment of the caret.
-   * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
+   * Prefer the Carbon v11 names (`"top-start"`, `"left-end"`, and so on).
+   * The older names (`"top-left"`, `"left-bottom"`, and so on) still work and
+   * give the same placement.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | "top-left" | "top-right" | "bottom-left" | "bottom-right" | "left-bottom" | "left-top" | "right-bottom" | "right-top"}
    */
   export let align = "top";
 
@@ -45,6 +62,8 @@
   const dispatch = createEventDispatcher();
 
   let popoverRef = null;
+
+  $: alignClass = ALIGN_CLASS[align] ?? align;
 
   // A DatePicker nested in this popover may portal its flatpickr calendar to
   // `document.body` (outside `popoverRef`), so a click on it looks like an outside
@@ -104,18 +123,18 @@
   class:bx--popover={true}
   class:bx--popover--caret={caret}
   class:bx--popover--high-contrast={highContrast}
-  class:bx--popover--top={align === "top"}
-  class:bx--popover--top-left={align === "top-left"}
-  class:bx--popover--top-right={align === "top-right"}
-  class:bx--popover--bottom={align === "bottom"}
-  class:bx--popover--bottom-left={align === "bottom-left"}
-  class:bx--popover--bottom-right={align === "bottom-right"}
-  class:bx--popover--left={align === "left"}
-  class:bx--popover--left-bottom={align === "left-bottom"}
-  class:bx--popover--left-top={align === "left-top"}
-  class:bx--popover--right={align === "right"}
-  class:bx--popover--right-bottom={align === "right-bottom"}
-  class:bx--popover--right-top={align === "right-top"}
+  class:bx--popover--top={alignClass === "top"}
+  class:bx--popover--top-left={alignClass === "top-left"}
+  class:bx--popover--top-right={alignClass === "top-right"}
+  class:bx--popover--bottom={alignClass === "bottom"}
+  class:bx--popover--bottom-left={alignClass === "bottom-left"}
+  class:bx--popover--bottom-right={alignClass === "bottom-right"}
+  class:bx--popover--left={alignClass === "left"}
+  class:bx--popover--left-bottom={alignClass === "left-bottom"}
+  class:bx--popover--left-top={alignClass === "left-top"}
+  class:bx--popover--right={alignClass === "right"}
+  class:bx--popover--right-bottom={alignClass === "right-bottom"}
+  class:bx--popover--right-top={alignClass === "right-top"}
   class:bx--popover--open={open}
   class:bx--popover--relative={relative}
   style:position={relative ? "relative" : undefined}
