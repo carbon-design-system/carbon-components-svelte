@@ -205,6 +205,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { getLayoutDirection } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -223,6 +224,7 @@
     getTextInputWidth,
     getTrackAxis,
     getValueText,
+    isTrackRtl,
     shiftRange,
     snapToStep,
     valueFromPointer,
@@ -286,9 +288,9 @@
     /** @type {(rect: DOMRect | undefined) => number} */
     const offset = (rect) => {
       if (!rect) return Number.POSITIVE_INFINITY;
-      return vertical
-        ? rect.top + rect.height / 2 - point
-        : point - (rect.left + rect.width / 2);
+      if (vertical) return rect.top + rect.height / 2 - point;
+      const fromCenter = point - (rect.left + rect.width / 2);
+      return horizontalRtl ? -fromCenter : fromCenter;
     };
     const toLower = offset(lowerThumbRef?.getBoundingClientRect());
     const toUpper = offset(upperThumbRef?.getBoundingClientRect());
@@ -330,6 +332,7 @@
       min,
       max,
       step: snap,
+      rtl: horizontalRtl,
     });
   }
 
@@ -380,6 +383,7 @@
   /** @type {(e: PointerEvent) => boolean | undefined} */
   function handleDragStart(event) {
     if (disabled || readonly) return false;
+    readDirection();
     const rangePress = getRangePressValue(event);
     hoverCursor = undefined;
     // The compat `mousedown` would move focus to the body for a press on
@@ -408,6 +412,7 @@
       const { start, length } = getTrackAxis(
         trackRef.getBoundingClientRect(),
         orientation,
+        horizontalRtl,
       );
       const percent = activeHandle === "lower" ? left : leftUpper;
       grabOffset = point - (start + (length * percent) / 100);
@@ -453,6 +458,7 @@
           max,
           marks: resolvedMarks,
           distance: markSnapDistance,
+          rtl: horizontalRtl,
         });
     return mark?.value ?? pointerValue;
   }
@@ -514,6 +520,7 @@
       max,
       step,
       offset: grabOffset,
+      rtl: horizontalRtl,
     });
     if (nextValue == null) return;
     if (snapToMarks && resolvedMarks.length) {
@@ -529,6 +536,7 @@
           marks: getReachableMarks(activeHandle),
           distance: markSnapDistance,
           offset: grabOffset,
+          rtl: horizontalRtl,
         })?.value ?? nextValue;
     }
 
@@ -544,6 +552,7 @@
   function handleKeydown(event) {
     // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
     if (disabled || readonly || hasModifierKey(event)) return;
+    readDirection();
 
     if (event.key === "Home" || event.key === "End") {
       // Prevent the browser from also scrolling to the top/bottom of the page.
@@ -559,11 +568,13 @@
       return;
     }
 
+    // Left and right move the handle the way they point, as they do on a
+    // native range input in RTL.
     /** @type {Record<string, number>} */
     const keys = {
       ArrowDown: -1,
-      ArrowLeft: -1,
-      ArrowRight: 1,
+      ArrowLeft: horizontalRtl ? 1 : -1,
+      ArrowRight: horizontalRtl ? -1 : 1,
       ArrowUp: 1,
       PageDown: -1,
       PageUp: 1,
@@ -623,6 +634,39 @@
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: leftUpper = range === 0 ? 0 : ((valueUpper - min) / range) * 100;
+
+  // In RTL, `min` sits at the right end of a horizontal track. A
+  // LayoutDirection gives the direction, on the server too, and updates
+  // it. Without one, read the track's computed direction at mount and
+  // again when the pointer enters, a thumb takes focus, or a key is
+  // pressed. Nothing reports a `dir` change on an ancestor, so until then
+  // the slider keeps the direction it last read.
+  const layoutDirection = getLayoutDirection();
+  let horizontalRtl = false;
+
+  /**
+   * @param {"horizontal" | "vertical"} axis
+   * @param {"ltr" | "rtl" | undefined} contextDirection
+   * @param {Element | null} track
+   */
+  function syncDirection(axis, contextDirection, track) {
+    horizontalRtl = isTrackRtl(axis, contextDirection, track);
+  }
+
+  function readDirection() {
+    syncDirection(orientation, $layoutDirection, trackRef);
+  }
+
+  $: syncDirection(orientation, $layoutDirection, trackRef);
+
+  /**
+   * @param {number} percent
+   * @param {boolean} rtl
+   * @returns {string}
+   */
+  function toLeft(percent, rtl) {
+    return `${rtl ? 100 - percent : percent}%`;
+  }
   // Furthest each handle may travel toward the other, kept within bounds.
   // Same as clampLower(max)/clampUpper(min), inlined so Svelte tracks
   // valueUpper, value, and minGap as dependencies.
@@ -791,16 +835,22 @@
         onMove: handleDragMove,
         onEnd: handleDragEnd,
       }}
+      on:pointerenter={readDirection}
       on:pointermove={handlePointermove}
       on:pointerleave={handlePointerleave}
     >
+      <!-- Each handle sits beside its value point, on the side away from
+        the range. In RTL the sides swap, and the arrows mirror with them. -->
       <div
         class:bx--slider__thumb-wrapper={true}
         class:bx--slider__thumb-wrapper--lower={true}
-        style:inset-inline-start={orientation === "vertical"
+        style:left={orientation === "vertical"
           ? undefined
-          : `${left}%`}
+          : toLeft(left, horizontalRtl)}
         style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
+        style:transform={horizontalRtl
+          ? "translate(0, -50%) scaleX(-1)"
+          : undefined}
       >
         <div
           bind:this={lowerThumbRef}
@@ -832,7 +882,10 @@
           )}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
-          on:focus={() => (activeHandle = "lower")}
+          on:focus={() => {
+            activeHandle = "lower";
+            readDirection();
+          }}
           on:keydown={handleKeydown}
           {id}
         >
@@ -867,11 +920,14 @@
       <div
         class:bx--slider__thumb-wrapper={true}
         class:bx--slider__thumb-wrapper--upper={true}
-        style:inset-inline-start={orientation === "vertical"
+        style:left={orientation === "vertical"
           ? undefined
-          : `${leftUpper}%`}
+          : toLeft(leftUpper, horizontalRtl)}
         style:top={orientation === "vertical"
           ? `${100 - leftUpper}%`
+          : undefined}
+        style:transform={horizontalRtl
+          ? "translate(-100%, -50%) scaleX(-1)"
           : undefined}
       >
         <div
@@ -905,7 +961,10 @@
           )}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
-          on:focus={() => (activeHandle = "upper")}
+          on:focus={() => {
+            activeHandle = "upper";
+            readDirection();
+          }}
           on:keydown={handleKeydown}
         >
           <svg
@@ -941,7 +1000,7 @@
         class:bx--slider__filled-track={true}
         style:transform={orientation === "vertical"
           ? `translate(-50%, ${-left}%) scaleY(${(leftUpper - left) / 100})`
-          : `translate(${left}%, -50%) scaleX(${(leftUpper - left) / 100})`}
+          : `translate(${horizontalRtl ? 100 - leftUpper : left}%, -50%) scaleX(${(leftUpper - left) / 100})`}
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
@@ -952,7 +1011,7 @@
               class:bx--slider__mark={true}
               style:left={orientation === "vertical"
                 ? undefined
-                : `${percent}%`}
+                : toLeft(percent, horizontalRtl)}
               style:top={orientation === "vertical"
                 ? `${100 - percent}%`
                 : undefined}

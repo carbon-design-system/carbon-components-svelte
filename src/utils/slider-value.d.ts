@@ -68,6 +68,18 @@ export function getPointerPosition(
 ): number | null;
 
 /**
+ * Whether values increase leftward along a track: a horizontal track in
+ * RTL. The nearest `LayoutDirection` decides first, then the track's
+ * computed direction. Before mount, without a `LayoutDirection`, the
+ * track counts as LTR, so nothing reads the document on the server.
+ */
+export function isTrackRtl(
+  orientation: "horizontal" | "vertical",
+  contextDirection: "ltr" | "rtl" | undefined,
+  track: Element | null,
+): boolean;
+
+/**
  * Resolve a track rect into its start and signed length along the slider
  * axis. Values increase upward when vertical, so the start is the bottom
  * edge and the length is negative. In RTL, values increase leftward, so

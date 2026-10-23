@@ -4,6 +4,7 @@ import {
   getPointerPosition,
   getTrackAxis,
   getValueText,
+  isTrackRtl,
   shiftRange,
   snapToStep,
   valueFromPointer,
@@ -176,6 +177,36 @@ describe("getTrackAxis", () => {
       start: 300,
       length: -100,
     });
+  });
+});
+
+describe("isTrackRtl", () => {
+  const track = () => {
+    const node = document.createElement("div");
+    document.body.append(node);
+    return node;
+  };
+
+  afterEach(() => {
+    document.body.replaceChildren();
+    document.documentElement.style.removeProperty("direction");
+  });
+
+  it.each([
+    ["the context", "rtl", null, "", true],
+    ["the context over the track", "ltr", "track", "rtl", false],
+    ["the track", undefined, "track", "rtl", true],
+    ["LTR before mount", undefined, null, "rtl", false],
+  ] as const)("follows %s", (_name, context, node, direction, expected) => {
+    document.documentElement.style.direction = direction;
+    expect(isTrackRtl("horizontal", context, node ? track() : null)).toBe(
+      expected,
+    );
+  });
+
+  it("never runs a vertical track right to left", () => {
+    document.documentElement.style.direction = "rtl";
+    expect(isTrackRtl("vertical", "rtl", track())).toBe(false);
   });
 });
 
