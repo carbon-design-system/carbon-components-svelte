@@ -99,7 +99,14 @@
    */
   export let leaveDelayMs = 0;
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import {
+    createEventDispatcher,
+    // biome-ignore lint/style/noRestrictedImports: the only hook the server runs after a render
+    onDestroy,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { writable } from "svelte/store";
   import { SEPARATOR_HOVER_DELAY_MS } from "../constants/timing.js";
   import {
@@ -229,15 +236,22 @@
 
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
   const sharedWinWidth = writable(undefined);
+  const sharedRail = writable(rail);
+  const collapsed = writable(false);
 
   // `HeaderSideNavItems` reads these to switch at a custom `expansionBreakpoint`.
+  // `SideNavMenu` reads the rail state here, so another `SideNav` on the page
+  // can't collapse its menus.
   setContext("carbon:SideNav", {
     expansionBreakpoint: sharedExpansionBreakpoint,
     winWidth: sharedWinWidth,
+    rail: sharedRail,
+    collapsed,
   });
 
   $: $sharedExpansionBreakpoint = expansionBreakpoint;
   $: $sharedWinWidth = winWidth;
+  $: $sharedRail = rail;
   let prevIsOpen = isOpen;
   // Double-clicking the handle restores the width the side nav started at.
   const initialWidth = width;
@@ -259,6 +273,7 @@
   // During SSR, defer to Carbon CSS media queries to handle visibility
   // to avoid a flash when JS sets isOpen after hydration.
   $: if (winWidth !== undefined) {
+    $collapsed = !isOpen;
     $isSideNavCollapsed = !isOpen;
   }
   $: $isSideNavRail = rail;
@@ -303,18 +318,23 @@
       }
     });
     return () => {
-      shouldRenderHamburgerMenu.set(false);
-      isSideNavMobile.set(false);
-      isSideNavCollapsed.set(false);
-      isSideNavRail.set(false);
       if (holdsBodyLock) {
         holdsBodyLock = false;
         releaseBodyScrollLock();
       }
       scheduleResizeHover.cancel();
       stopResizing();
-      sideNavWidth.set(undefined);
     };
+  });
+
+  // The server runs this too, once the whole page has rendered. A `Content`
+  // after this nav still reads the width, and the next request starts clean.
+  onDestroy(() => {
+    shouldRenderHamburgerMenu.set(false);
+    isSideNavMobile.set(false);
+    isSideNavCollapsed.set(false);
+    isSideNavRail.set(false);
+    sideNavWidth.set(undefined);
   });
 </script>
 
