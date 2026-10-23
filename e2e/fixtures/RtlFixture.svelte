@@ -1,5 +1,6 @@
 <script>
   import {
+    ClickableTile,
     ComboBox,
     Content,
     Dropdown,
@@ -19,6 +20,7 @@
     SideNavMenuItem,
     SkipToContent,
   } from "carbon-components-svelte";
+  import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -70,6 +72,9 @@
   </div>
   <div data-testid="multiselect" class="field">
     <MultiSelect labelText="Contact" {items} selectedIds={["1"]} />
+  </div>
+  <div data-testid="clickable-tile" class="field">
+    <ClickableTile href="#" icon={ArrowRight}>Billing settings</ClickableTile>
   </div>
   <div data-testid="menu-button" class="field">
     <MenuButton labelText="Actions">

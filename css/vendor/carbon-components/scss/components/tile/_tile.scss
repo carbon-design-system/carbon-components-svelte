@@ -396,8 +396,8 @@
 
 // carbon-components-svelte patch (tile-clickable-icon)
 
-/// `ClickableTile`'s `icon` in the bottom-right corner, backported from
-/// Carbon v11
+/// `ClickableTile`'s `icon` in the bottom inline-end corner, backported
+/// from Carbon v11
 /// @access private
 /// @group components
 @mixin tile-clickable-icon {
@@ -408,11 +408,11 @@
 
   .#{$prefix}--tile--clickable .#{$prefix}--tile--icon {
     position: absolute;
-    right: $carbon--spacing-04;
     bottom: $carbon--spacing-04;
     width: to-rem(20px);
     height: to-rem(20px);
     fill: ccs-token("icon-interactive");
+    @include ccs-inset-inline($end: $carbon--spacing-04);
   }
 
   .#{$prefix}--tile--clickable.#{$prefix}--link--disabled
