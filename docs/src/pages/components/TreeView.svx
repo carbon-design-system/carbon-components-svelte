@@ -147,6 +147,8 @@ The tree is one tab stop; arrow keys move focus between visible rows, skipping d
 | <DocKbd label="Space" /> | Selects the row without expanding or collapsing it. In checkbox mode, checks or unchecks the row. |
 | Letters | Moves focus to the next row whose text starts with the typed characters. Repeating one letter cycles through rows that start with it. The typed text resets after a short pause. |
 
+In a right-to-left layout, <DocKbd label="Left" /> and <DocKbd label="Right" /> swap, and a collapsed caret points left, toward where its children indent. See [LayoutDirection](/components/LayoutDirection#treeview).
+
 With `multiselect`, these keys also change the selection. A row's unit depends on `multiselectMode`; see [Multi-select](#multi-select).
 
 | Key | Behavior |
