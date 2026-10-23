@@ -42,6 +42,10 @@ export default defineConfig({
         find: /^carbon-components-svelte\/tokens$/,
         replacement: path.join(carbonRoot, "src/tokens/index.js"),
       },
+      {
+        find: /^carbon-components-svelte\/viz$/,
+        replacement: path.join(carbonRoot, "src/viz/index.js"),
+      },
       { find: "carbon-components-svelte", replacement: carbonRoot },
     ],
   },

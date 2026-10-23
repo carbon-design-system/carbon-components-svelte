@@ -1,0 +1,9 @@
+// Shared by every `viz*.scss` entry: emit only what viz partials declare.
+// The paired core stylesheet already ships the reset, fonts, and type.
+$css--font-face: false;
+$css--helpers: false;
+$css--body: false;
+$css--use-layer: false;
+$css--reset: false;
+$css--default-type: false;
+$css--plex: false;
