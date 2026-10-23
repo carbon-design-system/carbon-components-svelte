@@ -4,19 +4,29 @@ import { renderSSR } from "../utils/ssr";
 import LayoutDirectionSlider from "./LayoutDirectionSlider.ssr.test.svelte";
 
 describe("LayoutDirection server render", () => {
-  it("renders dir and mirrors a Slider inside it", () => {
+  it("renders dir and mirrors the sliders inside it", () => {
     const { document } = renderSSR(LayoutDirectionSlider, { dir: "rtl" });
     expect(document.querySelector("section")?.getAttribute("dir")).toBe("rtl");
     expect(
       document.querySelector(".bx--slider__thumb")?.getAttribute("style"),
     ).toContain("left: 80%");
+    expect(
+      document
+        .querySelector(".bx--slider__thumb-wrapper--lower")
+        ?.getAttribute("style"),
+    ).toContain("left: 80%");
   });
 
-  it("leaves a Slider outside one unchanged", () => {
+  it("leaves the sliders outside one unchanged", () => {
     const { document } = renderSSR(LayoutDirectionSlider, { dir: undefined });
     expect(document.querySelector("[dir]")).toBeNull();
     expect(
       document.querySelector(".bx--slider__thumb")?.getAttribute("style"),
+    ).toContain("left: 20%");
+    expect(
+      document
+        .querySelector(".bx--slider__thumb-wrapper--lower")
+        ?.getAttribute("style"),
     ).toContain("left: 20%");
   });
 

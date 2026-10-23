@@ -1,6 +1,8 @@
 // @ts-check
 // Shared value/label logic for Slider and RangeSlider.
 
+import { resolveLayoutDirection } from "./layout-direction.js";
+
 /**
  * Resolve the `aria-valuetext` for a numeric slider value. A value sitting
  * on a labeled mark announces the mark's label, after the formatted value
@@ -191,6 +193,25 @@ export function brushRange(anchor, point, { min, max, minGap }) {
  */
 export function getPointerPosition(event, orientation) {
   return orientation === "vertical" ? getClientY(event) : getClientX(event);
+}
+
+/**
+ * Whether values increase leftward along a track: a horizontal track in
+ * RTL. The nearest `LayoutDirection` decides first, then the track's
+ * computed direction. Before mount, without a `LayoutDirection`, the
+ * track counts as LTR, so nothing reads the document on the server.
+ *
+ * @param {"horizontal" | "vertical"} orientation
+ * @param {"ltr" | "rtl" | undefined} contextDirection - From `getLayoutDirection`.
+ * @param {Element | null} track
+ * @returns {boolean}
+ */
+export function isTrackRtl(orientation, contextDirection, track) {
+  return (
+    orientation !== "vertical" &&
+    !!(contextDirection || track) &&
+    resolveLayoutDirection(contextDirection, track) === "rtl"
+  );
 }
 
 /**
