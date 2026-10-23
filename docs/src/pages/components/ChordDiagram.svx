@@ -55,6 +55,14 @@ Bind `selected` or listen for `select`, whose detail carries the node's totals a
 
 <ChordDiagram data={handoffs} source="from" target="to" value="n" bind:selected diameter={280} thickness={16} title="Pick a team" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<ChordDiagram data={handoffs} source="from" target="to" value="n" loading title="Loading" />
+
+<ChordDiagram data={[]} source="from" target="to" value="n" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Right and Left walk the nodes around the circle, announcing each with what it sends and receives; the ribbons touching it light up. Enter or Space selects, Escape clears. The figure also holds a visually hidden table of the flows, a row per source and a column per target.

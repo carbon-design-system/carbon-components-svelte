@@ -108,6 +108,14 @@ Set `selectable` to turn the legend entries into toggle buttons. Clicking a slic
   bind:selected
 />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<DonutChart data={sessions} value="sessions" category="device" loading title="Loading" />
+
+<DonutChart data={[]} value="sessions" category="device" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The title is the figure's caption. The ring is hidden from assistive technology because the legend carries the same information as text: every category with its share or value. When `selectable`, the legend entries are toggle buttons in the tab order, and focusing one emphasizes its slice. Slices are separated by a gap, and emphasis dims the other slices instead of recoloring the active one, so nothing rests on color alone.

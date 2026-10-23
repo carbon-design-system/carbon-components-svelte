@@ -64,6 +64,14 @@ Set `selectable` to make each combination a toggle button. Bind `selected`, a co
 
 <UpSetPlot sets={flags} data={accounts} membership="tags" selectable bind:selected title="Pick a combination" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<UpSetPlot sets={flags} data={accounts} membership="tags" loading title="Loading" />
+
+<UpSetPlot sets={flags} data={[]} membership="tags" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The plot is a table captioned with the title: each combination is a row header that names its sets in words, such as "Enterprise and SSO", and every dot says in text whether the row is in that set, so nothing rests on the picture. When `selectable`, the row headers are toggle buttons with arrow key navigation and a single tab stop. Keep to six or so sets, or the matrix outgrows the eye.

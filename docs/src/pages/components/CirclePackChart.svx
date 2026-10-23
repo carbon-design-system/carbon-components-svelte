@@ -79,6 +79,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <CirclePackChart data={repos} value="commits" label="repo" group="team" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<CirclePackChart data={repos} value="commits" label="repo" loading title="Loading" />
+
+<CirclePackChart data={[]} value="commits" label="repo" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move through the circles group by group, largest first, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused circle is announced with its group, label, and value. Circles say nothing to assistive technology, so the figure also holds every value as a visually hidden outline: groups, each with a list of its leaves. Labels carry a halo of the page background, so they stay readable over any color.

@@ -86,6 +86,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <AlluvialChart data={journey} source="from" target="to" value="users" selectable bind:selected title="Pick a node" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<AlluvialChart data={journey} source="from" target="to" value="users" loading title="Loading" />
+
+<AlluvialChart data={[]} source="from" target="to" value="users" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move through the nodes column by column, top to bottom, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused node is announced with its value. A ribbon says nothing to assistive technology, so the figure also holds every flow as a visually hidden table. Set `headerLabels` to translate its column headers. Labels carry a halo of the page background, so they stay readable over a ribbon.

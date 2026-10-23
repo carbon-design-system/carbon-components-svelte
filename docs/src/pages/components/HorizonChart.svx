@@ -56,6 +56,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <HorizonChart data={cpu} x="t" y="cpu" series="host" selectable bind:selected={selectedX} title="CPU by host, pick a time" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<HorizonChart data={cpu} x="t" y="cpu" series="host" max={100} loading title="Loading" />
+
+<HorizonChart data={[]} x="t" y="cpu" series="host" max={100} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move along x, Home and End jump to the ends, and Escape clears. The moment under the pointer or focus is announced with every series' value. The figure also holds a visually hidden table with each series' latest, lowest, and highest value: the layers are for the eye, and every sample would be too many to read.

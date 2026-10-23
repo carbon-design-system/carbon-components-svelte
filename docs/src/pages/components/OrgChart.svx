@@ -58,6 +58,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" group="team" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" loading title="Loading" />
+
+<OrgChart data={[]} id="id" parent="manager" label="name" sublabel="title" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Up and Down walk the cards in reading order, a manager before their reports, announcing each with its title, level, group, manager, and whether it is folded. Right unfolds a folded card, or steps into the first report; Left folds an open card, or steps up to the manager. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every card with its manager, so the shape of the org is readable without seeing it.

@@ -51,6 +51,14 @@ Bind `selected` or listen for `select`, whose detail carries both rows. `width`,
 
 <SlopeChart data={scores} x="survey" y="score" series="team" bind:selected zero height={200} title="Pick a team" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<SlopeChart data={scores} x="survey" y="score" series="team" loading title="Loading" />
+
+<SlopeChart data={[]} x="survey" y="score" series="team" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Down and Up walk the lines from the top of the first column, announcing each with both values and the change. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with a row per series and its change.

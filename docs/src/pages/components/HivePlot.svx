@@ -44,6 +44,14 @@ Bind `selected` or listen for `select`, whose detail carries the node and every 
 
 <HivePlot {nodes} links={calls} id="id" axis="kind" source="from" target="to" axes={["service", "datastore", "queue"]} bind:selected diameter={320} colors={{ queue: "warning" }} title="Pick a node" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<HivePlot {nodes} links={calls} id="id" axis="kind" source="from" target="to" axes={["service", "datastore", "queue"]} loading title="Loading" />
+
+<HivePlot {nodes} links={calls} id="id" axis="kind" source="from" target="to" axes={["service", "datastore", "queue"]} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Down and Up walk the nodes axis by axis from the center out, and Right and Left jump to the next axis; each node is announced with its axis and how many links touch it, and those links light up. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every link.

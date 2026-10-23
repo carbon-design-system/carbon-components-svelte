@@ -49,6 +49,14 @@ Set `selectable` to turn days into toggle buttons. Bind `selected`, a `YYYY-MM-D
 
 A year is 53 columns wide. In a container that cannot fit them, the calendar scrolls sideways instead of squeezing the days.
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<CalendarHeatmap data={commits} date="day" value="commits" loading title="Loading" />
+
+<CalendarHeatmap data={[]} date="day" value="commits" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The calendar is a table: the `title` is its caption, months head the columns, and weekdays head the rows. Every day holds its full date and total as text, such as "Monday, January 5: 5", so nothing rests on color. Set `noDataText` to translate the text for a day with no data, and `locale` for the month and weekday names. When `selectable`, the calendar is one tab stop, which starts on the latest day with data. Left and Right move a week, Up and Down a day.

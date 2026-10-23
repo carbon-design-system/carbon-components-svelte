@@ -95,6 +95,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <ChoroplethChart {features} data={customers} region="region" value="customers" selectable bind:selected title="Pick a region" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<ChoroplethChart {features} data={customers} region="region" value="customers" loading title="Loading" />
+
+<ChoroplethChart {features} data={[]} region="region" value="customers" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The map is a single tab stop. The arrow keys move through the regions by name, since a map has no reading order of its own, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused region is announced with its value. A shape says nothing to assistive technology, so the figure also holds every region and its value as a visually hidden table, sorted by name. Set `headerLabels` and `noDataText` to translate it. Holes, such as a lake, are cut out of their region.

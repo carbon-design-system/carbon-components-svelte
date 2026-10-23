@@ -69,6 +69,14 @@ Set `selectable` to make each tile a toggle button. Bind `selected` or listen fo
 
 <TileGridMap data={SIGNUPS} region="state" value="signups" selectable bind:selected title="Pick a state" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<TileGridMap data={SIGNUPS} region="state" value="signups" loading title="Loading" />
+
+<TileGridMap data={[]} region="state" value="signups" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The tiles are hidden from assistive technology, which reads the same values as a table sorted by region name, captioned with the title. Hovering a tile shows a tooltip and announces the value. When `selectable`, the tiles are toggle buttons instead, each named with the region and its value, with arrow key navigation in reading order and a single tab stop. Tile text takes the dark or light label color that stays readable on its step of the ramp in every theme.

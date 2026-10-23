@@ -45,6 +45,14 @@ Every `IcicleChart` prop passes through: `sort`, `maxDepth`, `rowHeight`, `value
 
 <FlameGraph data={profile} id="id" parent="parent" value="ms" label="fn" valueType="percent" sort="value" rowHeight={22} title="CPU profile, as shares, largest first" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<FlameGraph data={profile} id="id" parent="parent" value="ms" label="fn" format={ms} loading title="Loading" />
+
+<FlameGraph data={[]} id="id" parent="parent" value="ms" label="fn" format={ms} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The same as the icicle chart: frames are hidden from assistive technology, which reads a table of every frame with its level, value, and share, and when `selectable` the frames are toggle buttons with arrow key navigation and a single tab stop.

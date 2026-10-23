@@ -68,6 +68,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <SequenceDiagram data={order} from="from" to="to" label="msg" kind="kind" selectable bind:selected title="Pick a message" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<SequenceDiagram data={order} from="from" to="to" label="msg" kind="kind" loading title="Loading" />
+
+<SequenceDiagram data={[]} from="from" to="to" label="msg" kind="kind" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The diagram is a single tab stop. The arrow keys move message by message, Home and End jump to the ends, Enter or Space selects, and Escape clears. Each message is announced as "3., row, from db to api, returns". The figure also holds a visually hidden ordered list of every message in the same words, so the whole exchange reads as prose.

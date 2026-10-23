@@ -95,6 +95,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <TreemapChart data={spend} value="cost" label="service" group="team" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<TreemapChart data={spend} value="cost" label="service" loading title="Loading" />
+
+<TreemapChart data={[]} value="cost" label="service" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The map is a list of groups, each holding a list of its cells, in order of size, so it reads as an outline: "Platform: Compute 41K, Storage 18K". Labels sit on a chip of the page background, so they hold their contrast over any cell color in any theme. When `selectable`, the cells share one tab stop and the arrow keys move between them in order of size. Hovering or focusing a cell dims the rest instead of recoloring it.

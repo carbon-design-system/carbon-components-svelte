@@ -50,6 +50,14 @@ Bind `selected` or listen for `select`, whose detail carries the series' count, 
 
 <RidgelineChart data={temperatures} x="temp" series="month" bind:selected rowHeight={28} title="Pick a month" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<RidgelineChart data={temperatures} x="temp" series="month" xTitle="°C" loading title="Loading" />
+
+<RidgelineChart data={[]} x="temp" series="month" xTitle="°C" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Down and Up walk the rows, announcing each with its median, the value at its peak, and its count. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with the same summary per series.

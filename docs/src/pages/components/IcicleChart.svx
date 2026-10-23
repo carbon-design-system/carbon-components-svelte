@@ -72,6 +72,14 @@ The legend entries are toggles: click one to hide its branch, or its group when 
 
 <IcicleChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} bind:hidden title="Click a branch to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<IcicleChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} loading title="Loading" />
+
+<IcicleChart data={[]} id="id" parent="parent" value="bytes" label="name" format={kb} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 Slices are hidden from assistive technology, which reads the same nodes as a table with their level, value, and share, captioned with the title. A slice too narrow for its text keeps the text for the tooltip and the table. When `selectable`, the slices are toggle buttons instead, each named with its label and value, with arrow key navigation in reading order and a single tab stop. Text sits on a chip of the page background, so it stays readable over any branch color in any theme.

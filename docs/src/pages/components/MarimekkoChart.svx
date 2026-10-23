@@ -69,6 +69,14 @@ The legend entries are toggles: click one to hide its series, and again to show 
 
 <MarimekkoChart data={traffic} x="channel" y="sessions" series="device" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<MarimekkoChart data={traffic} x="channel" y="sessions" series="device" loading title="Loading" />
+
+<MarimekkoChart data={[]} x="channel" y="sessions" series="device" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Left and Right move between columns, staying on the same series where it exists, and Up and Down move within a column; each cell is announced with its share of the column and the column's share of the whole. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with a row per series, a column per category, and the column's share in its header.

@@ -64,6 +64,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <TreeChart data={org} id="id" parent="parent" label="name" selectable bind:selected title="Pick a node" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<TreeChart data={org} id="id" parent="parent" label="name" loading title="Loading" />
+
+<TreeChart data={[]} id="id" parent="parent" label="name" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop with the keyboard model of a tree view: Up and Down walk the visible nodes, Right opens a branch or steps into it, Left closes it or steps out to the parent, Home and End jump to the first and last, and Enter or Space selects. The focused node is announced with its level and whether it is expanded, such as "Engineering, level 2, expanded". The figure also lists the visible nodes in reading order for assistive technology. Set `translations` to translate "level", "expanded", and "collapsed". A folded branch differs by a filled dot, not by color.

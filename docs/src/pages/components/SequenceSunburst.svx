@@ -48,6 +48,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <SequenceSunburst data={sessions} steps="path" value="users" rootLabel="Sessions" selectable bind:selected title="Pick a step" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<SequenceSunburst data={sessions} steps="path" value="users" rootLabel="Sessions" loading title="Loading" />
+
+<SequenceSunburst data={[]} steps="path" value="users" rootLabel="Sessions" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Arrow keys move arc by arc, announcing each step with its count and share, and the path above the chart follows. Enter or Space selects, with the path, the count, and how many sequences stopped at that step in the event. The figure also holds a visually hidden table of every prefix with its ring, count, and share.

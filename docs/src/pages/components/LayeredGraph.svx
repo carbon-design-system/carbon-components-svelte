@@ -90,6 +90,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <LayeredGraph nodes={services.map((s) => ({ ...s, health: health[s.id] }))} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} group="tier" status="health" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<LayeredGraph nodes={services} links={calls} id="id" label="name" loading title="Loading" />
+
+<LayeredGraph nodes={[]} links={calls} id="id" label="name" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The graph is a single tab stop. Up and Down walk the nodes in reading order, by rank and then position, announcing each with its status, level, lane, group, and whether it is folded. Left folds a node with children and Right unfolds it. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every edge, so the shape of the graph is readable without seeing it.

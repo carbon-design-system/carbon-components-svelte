@@ -214,6 +214,10 @@ With no data and `loading` unset, the plot shows `emptyText`. Fill the `empty` s
   <ChartLine />
 </Chart>
 
+Every chart takes the same two props. Flip them here to see a Cartesian chart keep its axes while it loads, and the others swap in a box of their own size.
+
+<FileSource src="/framed/Chart/ChartStates" />
+
 ## Toolbar and data table
 
 `ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads the visible series as CSV, in the same long format the chart reads: ISO dates, plain numbers, and an empty field for a missing value. Anything in its default slot sits before the buttons.

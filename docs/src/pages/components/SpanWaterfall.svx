@@ -73,6 +73,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" loading title="Loading" />
+
+<SpanWaterfall data={[]} id="id" parent="parent" start="start" duration="ms" label="name" group="service" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The waterfall is a table: the `title` is its caption and each span's name is a row header. Every bar holds its group, its length, and its offset as text, such as "postgres, 18ms, 30ms in", and says when it is on the critical path, so nothing rests on color or outline. Fold toggles say which span they fold. When `selectable`, the bars share one tab stop and the up and down arrows move between them.

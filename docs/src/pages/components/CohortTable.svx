@@ -70,6 +70,14 @@ Set `selectable` to turn cells into toggle buttons. Bind `selected` or listen fo
 
 <CohortTable rows={cohorts} title="Pick a cohort and period" sizeHeader="Users" selectable bind:selected />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<CohortTable rows={cohorts} sizeHeader="Users" loading title="Loading" />
+
+<CohortTable rows={[]} sizeHeader="Users" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 It is a table: the `title` is its caption, cohorts head the rows, and periods head the columns. Every cell shows its value, in a label color that holds 4.5:1 against the fill in every theme, so nothing rests on color. When `selectable`, the table is one tab stop and the arrow keys move between cells without leaving the triangle. In a narrow container the table scrolls sideways.

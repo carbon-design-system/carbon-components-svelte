@@ -61,6 +61,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <GanttChart data={plan} label="name" group="stream" start="from" end="to" bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<GanttChart data={plan} label="name" group="stream" start="from" end="to" loading title="Loading" />
+
+<GanttChart data={[]} label="name" group="stream" start="from" end="to" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move task by task, Home and End jump to the ends, Enter or Space selects, and Escape clears. Each task is announced with its workstream, dates, length, and progress. The figure also holds a visually hidden table of every task with its start, end, progress, and what it waits for, so the plan reads without the picture.

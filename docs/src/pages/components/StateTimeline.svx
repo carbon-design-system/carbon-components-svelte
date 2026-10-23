@@ -89,6 +89,14 @@ Set `selectable` to turn spans into toggle buttons. Bind `selected`, a span's id
   bind:selected
 />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<StateTimeline data={health} row="service" state="status" start="from" end="to" loading title="Loading" />
+
+<StateTimeline data={[]} row="service" state="status" start="from" end="to" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The timeline is a table: the `title` is its caption and each row's name is a row header. Every span holds its state, its start and end, and its length as text, such as "down, Sep 21, 2026, 2:00 PM to Sep 21, 2026, 2:25 PM, 25m", so nothing rests on color. Set `rowHeader` to name the first column, `locale` for the times, and `utc` to place the axis ticks on UTC boundaries. When `selectable`, the spans share one tab stop and the arrow keys move between them.

@@ -61,6 +61,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
 
 <ArcDiagram nodes={modules} links={imports} id="id" group="bundle" source="from" target="to" value="n" sort="group" directed bind:hidden title="Click a group to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<ArcDiagram nodes={chapters} links={references} id="id" source="from" target="to" labelSpace={48} loading title="Loading" />
+
+<ArcDiagram nodes={[]} links={references} id="id" source="from" target="to" labelSpace={48} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Right and Left walk the nodes along the line, announcing each with its group and how many links touch it; those links light up. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every link.

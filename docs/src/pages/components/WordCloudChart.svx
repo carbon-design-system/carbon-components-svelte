@@ -84,6 +84,14 @@ The legend entries are toggles: click one to hide its group, and again to show i
   title="Click a group to hide it"
 />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<WordCloudChart data={TERMS} word="term" value="mentions" loading title="Loading" />
+
+<WordCloudChart data={[]} word="term" value="mentions" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move through the words from the largest down, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused word is announced with its value. The figure also holds the placed words as a visually hidden ordered list with their values, which is the ranking the picture only hints at.

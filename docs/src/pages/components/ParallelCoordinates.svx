@@ -71,6 +71,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <ParallelCoordinates data={instances} dimensions={["cpu", "mem", "io", "cost"]} series="tier" label="name" selectable bind:selected title="Pick a row" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<ParallelCoordinates data={instances} dimensions={["cpu", "mem", "io", "cost"]} series="tier" label="name" loading title="Loading" />
+
+<ParallelCoordinates data={[]} dimensions={["cpu", "mem", "io", "cost"]} series="tier" label="name" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move row by row, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused row is announced with every value. The figure also holds every row as a visually hidden table, one column per dimension. Brushing is a pointer gesture; set `brushes` from a control of your own for a keyboard path, and the `brush` event tells you what passes.

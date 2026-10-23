@@ -68,6 +68,14 @@ The legend entries are toggles: click one to hide its branch, or its group when 
 
 <SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} bind:hidden title="Click a branch to hide it" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} loading title="Loading" />
+
+<SunburstChart data={[]} id="id" parent="parent" value="bytes" label="name" format={kb} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move arc by arc in reading order, Enter or Space selects, Backspace steps back up, and Escape clears. The focused arc is announced with its value and share. The figure also holds a visually hidden table of every arc with its ring, value, and share, captioned with the title.

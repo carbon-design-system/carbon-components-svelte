@@ -88,6 +88,14 @@ Set `selectable` to turn marks into toggle buttons. Bind `selected`, an event's 
   bind:selected
 />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<EventTimeline data={release} at="at" kind="type" label="name" loading title="Loading" />
+
+<EventTimeline data={[]} at="at" kind="type" label="name" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The timeline is a table: the `title` is its caption and each row's name is a row header, hidden when there is only one lane. Every mark holds its kind, its label, and its time as text, such as "alert, Error rate above 1%, Sep 21, 2026, 3:20 AM", so nothing rests on color. Marks are ringed in the page background, so two that coincide still read as more than one. Set `locale` for the times and `utc` to place the axis ticks on UTC boundaries. When `selectable`, the marks share one tab stop and the arrow keys move between them.

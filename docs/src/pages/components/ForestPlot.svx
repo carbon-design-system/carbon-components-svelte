@@ -55,6 +55,14 @@ Any estimate with an interval fits: here the lift of each experiment in percenta
 
 <ForestPlot data={experiments} label="name" estimate="lift" lo="lo" hi="hi" nullValue={0} bind:selected format={(v) => `${v > 0 ? "+" : ""}${v.toFixed(1)} pp`} valueWidth={176} title="Conversion lift by experiment" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<ForestPlot data={regions} label="study" estimate="or" lo="lo" hi="hi" nullValue={1} format={{ maximumFractionDigits: 2 }} loading title="Loading" />
+
+<ForestPlot data={[]} label="study" estimate="or" lo="lo" hi="hi" nullValue={1} format={{ maximumFractionDigits: 2 }} emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. Down and Up walk the rows, announcing each with its estimate, its interval, and whether the interval is clear of the null. Enter or Space selects, Escape clears. The figure also holds a visually hidden table with a row per estimate and the pooled result.

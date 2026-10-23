@@ -66,6 +66,14 @@ Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Spa
 
 <RadarChart data={audits} axis="category" value="score" series="page" selectable bind:selected={selectedAxis} title="Audit scores, pick a page" />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<RadarChart data={audits} axis="category" value="score" series="page" loading title="Loading" />
+
+<RadarChart data={[]} axis="category" value="score" series="page" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The chart is a single tab stop. The arrow keys move around the spokes and wrap, Home and End jump to the first and last, and Escape clears. The focused spoke is announced with every series, such as "SEO: Checkout 96, Search 80". A polygon says nothing to assistive technology, so the figure also holds every value as a visually hidden table of spokes by series. Set `axisHeader` and `legendLabel` to translate its first column header and the legend's name.

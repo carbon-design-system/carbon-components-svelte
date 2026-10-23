@@ -97,6 +97,14 @@ Set `selectable` to turn cells into toggle buttons. Bind `selected` or listen fo
   bind:selected
 />
 
+## Loading and empty
+
+Set `loading` while the data is on its way: a skeleton takes the chart's place and the figure is marked busy for assistive technology. With no data and `loading` unset, the chart shows `emptyText`, or the `empty` slot.
+
+<Heatmap data={requests} x="day" y="block" value="requests" rowHeader="Time" loading title="Loading" />
+
+<Heatmap data={[]} x="day" y="block" value="requests" rowHeader="Time" emptyText="Nothing to show yet" title="Empty" />
+
 ## Accessibility
 
 The heatmap is a table: the `title` is its caption, and every cell has a row header and a column header. Set `rowHeader` to name the header column. Each cell holds its value as text even when `cellLabels` is off, so nothing rests on color alone. When `selectable`, the grid is one tab stop and the arrow keys move between cells, skipping empty ones. The legend is hidden from assistive technology because the cells already carry their values.
