@@ -15,15 +15,6 @@
     min-width: 0;
   }
 
-  // `Stack`'s `gap` is the single source of spacing between tags (including
-  // the "+N" indicator) — zero out `Tag`'s own default margin so the two
-  // mechanisms don't stack. Carbon's own margin also only zeroes
-  // `margin-left` for `:not(:first-child)`, which breaks once the indicator
-  // wraps a tag-styled span in its own element (no longer a direct sibling).
-  .#{$prefix}--tag-set__space .#{$prefix}--tag {
-    margin: 0;
-  }
-
   .#{$prefix}--tag-set__space > * {
     // Every child is either shown at natural width or pulled out of flow via
     // `data-overflow` below — never squeeze one to fit, which would force its
@@ -55,10 +46,6 @@
     gap: $carbon--spacing-03;
     list-style: none;
     overflow-y: auto;
-  }
-
-  .#{$prefix}--tag-set-overflow__list .#{$prefix}--tag {
-    margin: 0;
   }
 
   .#{$prefix}--tag-set-overflow__popover-trigger {

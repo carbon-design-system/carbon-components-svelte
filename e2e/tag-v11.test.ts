@@ -105,6 +105,53 @@ test.describe("Tag (Carbon v11)", () => {
     expect(overflow).toEqual([]);
   });
 
+  test("has no outer margin on any tag kind or size", async ({ page }) => {
+    const margins = await page.getByTestId("margins").evaluate((node) =>
+      Array.from(node.querySelectorAll(".bx--tag"), (tag) => {
+        const s = getComputedStyle(tag);
+        return `${tag.className}: ${s.marginTop} ${s.marginRight} ${s.marginBottom} ${s.marginLeft}`;
+      }),
+    );
+    expect(margins).toHaveLength(24);
+    expect(
+      margins.filter((margin) => !margin.endsWith("0px 0px 0px 0px")),
+    ).toEqual([]);
+  });
+
+  test("spaces TagSet and TagInput tags with the container's 8px gap", async ({
+    page,
+  }) => {
+    // Gaps between neighbors on the same row, and how far any tag runs
+    // past the container's right edge.
+    function layout(testId: string, tags: string) {
+      return page.getByTestId(testId).evaluate((node, tags) => {
+        const right = node.getBoundingClientRect().right;
+        const boxes = Array.from(node.querySelectorAll(tags))
+          .filter((tag) => !tag.closest("[data-overflow='true']"))
+          .map((tag) => tag.getBoundingClientRect());
+        return {
+          count: boxes.length,
+          gaps: boxes
+            .slice(1)
+            .filter((box, i) => box.top === boxes[i].top)
+            .map((box, i) => Math.round(box.left - boxes[i].right)),
+          overflow: boxes.filter((box) => box.right > right + 0.5).length,
+        };
+      }, tags);
+    }
+
+    const set = await layout("short-set", ".bx--tag--filter");
+    expect.soft(set.count).toBe(5);
+    expect.soft(set.gaps).toEqual([8, 8, 8, 8]);
+    expect.soft(set.overflow).toBe(0);
+
+    const input = await layout("tag-input", ".bx--tag-input .bx--tag--filter");
+    expect.soft(input.count).toBe(5);
+    expect.soft(input.gaps.length).toBeGreaterThan(0);
+    expect.soft(input.gaps.every((gap) => gap === 8)).toBe(true);
+    expect.soft(input.overflow).toBe(0);
+  });
+
   test("rings focused interactive tags with a 2px outline", async ({
     page,
   }) => {
