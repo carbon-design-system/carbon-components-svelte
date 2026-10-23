@@ -118,6 +118,8 @@ Display a loading skeleton for the fluid search variant.
 
 Set `size` to control the input height. The default is `"lg"`, 40px.
 
+Carbon v11's `"md"` also works and renders the default 40px `"lg"` size. Carbon v11's 48px `lg` is `"xl"` here.
+
 ### Extra-large
 
 Set `size` to `"xl"` for a 48px search input.
