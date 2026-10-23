@@ -24,6 +24,7 @@ description: Span waterfall shows a trace as a tree of intervals on one time sca
 
   let collapsed = ["price"];
   let selected = null;
+  let hidden = [];
 </script>
 
 `SpanWaterfall` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -65,6 +66,12 @@ Set `groups` to give a group a color: a semantic name, a categorical index, a vi
 Set `selectable` to turn spans into toggle buttons. Bind `selected`, a span's id, or listen for `select`, whose detail carries the span and its `datum`.
 
 <SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" selectable bind:selected title="Pick a span" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<SpanWaterfall data={checkout} id="id" parent="parent" start="start" duration="ms" label="name" group="service" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

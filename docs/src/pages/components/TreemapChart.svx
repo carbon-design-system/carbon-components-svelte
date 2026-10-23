@@ -22,6 +22,7 @@ description: Treemap shows how a total divides among many parts, and their paren
   ].map(([team, service, cost]) => ({ team, service, cost }));
 
   let selected = null;
+  let hidden = [];
 </script>
 
 `TreemapChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -87,6 +88,12 @@ Set `selectable` to turn cells into toggle buttons. Bind `selected`, which is th
   selectable
   bind:selected
 />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<TreemapChart data={spend} value="cost" label="service" group="team" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

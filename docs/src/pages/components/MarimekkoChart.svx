@@ -38,6 +38,7 @@ description: Marimekko chart shows share within share, as columns as wide as eac
   ];
 
   let selected = null;
+  let hidden = [];
 </script>
 
 `MarimekkoChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -61,6 +62,12 @@ Set `xValue` to size the columns by a field of their own, such as market size, w
 Cells with room carry their series and share; set `labels` to `"none"` to leave them bare, and hover or use the keyboard for the tooltip. Bind `selected` or listen for `select`, whose detail carries the cell's share and the column's. `width` and `height` set the geometry; `colors` fixes a series' color and `palette` picks another color group.
 
 <MarimekkoChart data={market} x="segment" xValue="size" y="share" series="vendor" labels="none" bind:selected height={220} colors={{ Other: "neutral" }} title="Pick a cell" />
+
+## Hiding series
+
+The legend entries are toggles: click one to hide its series, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible series cannot be hidden, and colors stay with their series while others are hidden.
+
+<MarimekkoChart data={traffic} x="channel" y="sessions" series="device" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

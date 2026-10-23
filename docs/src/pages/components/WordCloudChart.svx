@@ -17,6 +17,7 @@ description: Word cloud sizes words by value, for a first impression of which te
     ["postmortem", "process", 19], ["paging", "process", 16], ["disk", "cause", 14],
   ].map(([term, kind, mentions]) => ({ term, kind, mentions }));
   let selected = null;
+  let hidden = [];
 </script>
 
 `WordCloudChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -68,6 +69,20 @@ Hover a word, or focus the chart and use the arrow keys, to read its value: the 
 Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused word. Bind `selected`, the word, or listen for `select`, which carries the word and the original event.
 
 <WordCloudChart data={TERMS} word="term" value="mentions" selectable bind:selected title="Pick a word" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<WordCloudChart
+  data={TERMS}
+  word="term"
+  value="mentions"
+  group="kind"
+  minSize={14}
+  bind:hidden
+  title="Click a group to hide it"
+/>
 
 ## Accessibility
 

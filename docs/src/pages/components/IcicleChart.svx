@@ -29,6 +29,7 @@ description: Icicle chart shows a hierarchy as nested slices, each level a row a
 
   let root = null;
   let selected = null;
+  let hidden = [];
 </script>
 
 `IcicleChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -64,6 +65,12 @@ Set `valueType` to `"percent"` to write shares instead of values, or `"none"` to
 Set `selectable` to make each node a toggle button. Bind `selected` or listen for `select`, whose detail carries the node and its `datum`.
 
 <IcicleChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} selectable bind:selected title="Pick a node" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its branch, or its group when `group` is set, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible one cannot be hidden, and colors stay with their branch while others are hidden.
+
+<IcicleChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} bind:hidden title="Click a branch to hide it" />
 
 ## Accessibility
 

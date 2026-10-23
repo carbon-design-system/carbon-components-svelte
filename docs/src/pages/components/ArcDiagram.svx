@@ -30,6 +30,7 @@ description: Arc diagram lays nodes along one line and draws each link as an arc
   ].map(([from, to]) => ({ from: `Ch ${from}`, to: `Ch ${to}` }));
 
   let selected = null;
+  let hidden = [];
 </script>
 
 `ArcDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -53,6 +54,12 @@ Set `group` to color the nodes, and the links leaving them, by a field with a le
 Bind `selected` or listen for `select`, whose detail carries the node and every link touching it. Hover or focus a node to fade the links that do not touch it.
 
 <ArcDiagram nodes={modules} links={imports} id="id" group="bundle" source="from" target="to" value="n" sort="degree" bind:selected title="Pick a module" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<ArcDiagram nodes={modules} links={imports} id="id" group="bundle" source="from" target="to" value="n" sort="group" directed bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

@@ -21,6 +21,7 @@ description: Org chart lays a reporting tree out top down, a card per person wit
 
   let collapsed = ["plat"];
   let selected = null;
+  let hidden = [];
 </script>
 
 `OrgChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -50,6 +51,12 @@ Bind `collapsed`, a list of ids, to fold away everything under a card. A folded 
 Bind `selected` or listen for `select`, whose detail carries the node and its `datum`. `nodeWidth`, `nodeHeight`, `rankGap`, and `nodeGap` set the geometry; a line wider than its card is cut short, and the full text is in the tooltip.
 
 <OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" bind:selected nodeWidth={124} nodeHeight={44} rankGap={32} nodeGap={12} title="Pick a person" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<OrgChart data={people} id="id" parent="manager" label="name" sublabel="title" group="team" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

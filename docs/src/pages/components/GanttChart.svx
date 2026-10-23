@@ -18,6 +18,7 @@ description: Gantt chart lays tasks out as bars on one time scale, grouped by wo
     { id: "launch", name: "Launch", stream: "QA", from: day(25), to: day(26), after: "qa" },
   ];
   let selected = null;
+  let hidden = [];
 </script>
 
 `GanttChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -53,6 +54,12 @@ Set `colors` to fix a workstream's color, `palette` to pick another color group,
 Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused task. Bind `selected`, its id, or listen for `select`, which carries the task and the original event.
 
 <GanttChart data={plan} label="name" group="stream" start="from" end="to" selectable bind:selected title="Pick a task" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<GanttChart data={plan} label="name" group="stream" start="from" end="to" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

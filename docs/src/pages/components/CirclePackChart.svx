@@ -23,6 +23,7 @@ description: Circle pack shows values as circles packed inside their parents, fo
     ["Mobile", "android", 1400],
   ].map(([team, repo, commits]) => ({ team, repo, commits }));
   let selected = null;
+  let hidden = [];
 </script>
 
 `CirclePackChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -71,6 +72,12 @@ Hover a circle, or focus the chart and use the arrow keys, to read its label and
 Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused circle. Bind `selected`, its id, or listen for `select`, which carries the circle and the original event.
 
 <CirclePackChart data={repos} value="commits" label="repo" selectable bind:selected title="Pick a circle" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<CirclePackChart data={repos} value="commits" label="repo" group="team" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

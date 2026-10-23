@@ -41,6 +41,7 @@ description: Layered graph lays a directed graph out in ranks, for service maps,
 
   let collapsed = ["checkout"];
   let selected = null;
+  let hidden = [];
 </script>
 
 `LayeredGraph` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -82,6 +83,12 @@ Bind `collapsed`, a list of ids, to fold away everything reachable only through 
 Bind `selected` or listen for `select`, whose detail carries the node and its `datum`. `nodeWidth`, `nodeHeight`, `rankGap`, and `nodeGap` set the geometry; a label wider than its node is cut short, and the full text is in the tooltip.
 
 <LayeredGraph nodes={services} links={calls} id="id" label="name" bind:selected nodeWidth={100} nodeHeight={28} rankGap={32} title="Pick a service" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its group, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible group cannot be hidden, and colors stay with their group while others are hidden.
+
+<LayeredGraph nodes={services.map((s) => ({ ...s, health: health[s.id] }))} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} group="tier" status="health" bind:hidden title="Click a group to hide it" />
 
 ## Accessibility
 

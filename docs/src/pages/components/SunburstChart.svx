@@ -29,6 +29,7 @@ description: Sunburst chart shows a hierarchy as rings around a center, each nod
 
   let root = null;
   let selected = null;
+  let hidden = [];
 </script>
 
 `SunburstChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -60,6 +61,12 @@ Bind `root` to the node at the center. Its ancestors are not drawn; the center b
 Set `selectable` to let a click, <DocKbd label="Enter" />, or <DocKbd label="Space" /> pick the focused arc. Bind `selected`, its id, or listen for `select`, which carries the arc and the original event.
 
 <SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} selectable bind:selected title="Pick a arc" />
+
+## Hiding groups
+
+The legend entries are toggles: click one to hide its branch, or its group when `group` is set, and again to show it. Bind `hidden`, the hidden keys, or listen for `legend:toggle`. The last visible one cannot be hidden, and colors stay with their branch while others are hidden.
+
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} bind:hidden title="Click a branch to hide it" />
 
 ## Accessibility
 
