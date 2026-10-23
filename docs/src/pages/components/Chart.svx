@@ -244,6 +244,12 @@ While fullscreen, the plot grows to fill what the title, toolbar, and legend lea
 
 Both are on the chart context for a control of your own: `exportImage("png" | "svg")` resolves to a `Blob` or to markup, and `toggleFullscreen()` pairs with the `fullscreen` store.
 
+## Motion
+
+Set `transition` to animate bars and points to their new place when the data changes, instead of snapping. Lines redraw at once. Nothing moves where the user prefers reduced motion. `TreemapChart` takes the same prop for its cells.
+
+<FileSource src="/framed/Chart/ChartMotion" />
+
 ## Zoom
 
 `ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. Bind `zoom` on the chart to read or set the range yourself. On a category axis the range is category indexes, and the slots shown grow to fill the plot.
