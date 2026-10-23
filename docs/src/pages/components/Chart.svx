@@ -334,3 +334,5 @@ A mark is a component that reads the chart context and renders SVG. `groups` hol
 ## Accessibility
 
 Every chart has a data table view, which is its text alternative. The chart itself is one tab stop with `role="application"`. Left and Right move between data points, Up and Down between series, Home and End jump to the ends, Enter or Space selects, and Escape clears. The focused point is announced through a live region with a full x label. The tooltip and the axes are hidden from assistive technology so that nothing is read twice. Always set `title`.
+
+Under forced colors (Windows contrast themes) axis and label text takes the system text color; swatches, bars, slices, and leaves keep their series color, since color is how a series is named, and bars gain an outline; the loading state keeps a dashed edge where its shimmer was. In print the tooltip, toolbar, ruler, and zoom bar are dropped and a chart does not break across pages.
