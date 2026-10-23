@@ -498,7 +498,7 @@
           />
         </span>
         {#if rowInvalid && rowErrorSubject}
-          <div class:bx--form-requirement={true}>
+          <div class:bx--form-requirement={true} role="alert">
             <div class:bx--form-requirement__title={true}>
               {rowErrorSubject}
             </div>

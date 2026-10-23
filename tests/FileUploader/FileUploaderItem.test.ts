@@ -72,6 +72,9 @@ describe("FileUploaderItem", () => {
     expect(
       screen.getByText("Please select a smaller file"),
     ).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "File size exceeds limit",
+    );
   });
 
   it("should not render error message when not invalid", () => {

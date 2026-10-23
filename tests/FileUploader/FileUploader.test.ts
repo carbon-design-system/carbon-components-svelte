@@ -901,6 +901,7 @@ describe("FileUploader", () => {
     expect(screen.getByText("Upload failed")).toBeInTheDocument();
     expect(screen.getByText("Please try again.")).toBeInTheDocument();
     expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Upload failed");
   });
 
   it("hides the error copy for a row that is not invalid", () => {

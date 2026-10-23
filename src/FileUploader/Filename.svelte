@@ -51,6 +51,9 @@
    * - `uploading`: passed to `Loading` as `"uploading"`
    * - `edit`: close button `aria-label` is `"Remove file"`
    * - `complete`: checkmark `aria-label` / `title` are `"Upload complete"`
+   *
+   * The resolved `complete` value is also announced to screen readers when
+   * the file finishes uploading. Use the function form to include the file name.
    * @type {string | undefined | ((ctx: FilenameIconDescriptionContext) => string | undefined)}
    */
   export let iconDescription = undefined;
@@ -78,11 +81,28 @@
     iconDescription,
   );
 
+  let prevStatus = status;
+  let statusAnnouncement = "";
+
+  // Announce the transition into "complete" only (not the initial render)
+  // so a screen reader user hears completion without being told about the
+  // status a file starts in. An override from `iconDescription` is read as
+  // is; the default names the file.
+  $: if (status !== prevStatus) {
+    statusAnnouncement =
+      status === "complete"
+        ? (resolvedIconLabel ?? `${fileName} upload complete`)
+        : "";
+    prevStatus = status;
+  }
+
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import Close from "../icons/Close.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
 </script>
+
+<span role="status" class:bx--visually-hidden={true}>{statusAnnouncement}</span>
 
 {#if status === "uploading"}
   <Loading
