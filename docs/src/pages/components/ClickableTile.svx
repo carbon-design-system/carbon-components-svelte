@@ -28,10 +28,10 @@ press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle `clicked`.
 
 ## With icon
 
-Set `icon` to show an icon in the bottom-right corner. Use `ArrowRight` for a
-page in your app and `Launch` for a link that opens another site. The icon is
-decorative and hidden from screen readers, so let the tile's text name the
-destination.
+Set `icon` to show an icon in the bottom-right corner, or the bottom-left in a
+right-to-left layout. Use `ArrowRight` for a page in your app and `Launch` for
+a link that opens another site. The icon is decorative and hidden from screen
+readers, so let the tile's text name the destination.
 
 <Stack gap={5}>
   <ClickableTile href="/docs/deploy" icon={ArrowRight}>
