@@ -235,6 +235,22 @@ Set `loadingText` to change the row's text.
 
 <FileSource src="/framed/Dropdown/DropdownLoading" />
 
+### Empty state
+
+When `items` is empty, the open menu shows "No options". `loading` holds the message back until the items arrive. Screen readers hear it through the dropdown's live region.
+
+Set `emptyText` to change the message, or set it to `""` to leave the menu empty instead.
+
+<Dropdown labelText="Contact" label="Select a contact method" emptyText="No contact methods yet" items={[]} />
+
+Use the `empty` slot for richer content. The slot changes the visible row only; screen readers still hear `emptyText`.
+
+<Dropdown labelText="Contact" label="Select a contact method" emptyText="No contact methods yet" items={[]}>
+  <svelte:fragment slot="empty">
+    No contact methods yet. Add one in Settings.
+  </svelte:fragment>
+</Dropdown>
+
 ### Wrapped options
 
 Option labels are truncated to one line. At a 320px viewport, that hides text and can leave two options looking identical, a WCAG 1.4.10 Reflow failure.
