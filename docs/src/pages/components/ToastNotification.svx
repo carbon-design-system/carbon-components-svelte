@@ -1,10 +1,10 @@
 ---
-components: ["ToastNotification"]
+components: ["ToastNotification", "NotificationActionButton"]
 description: Toast notifications are non-modal, time-based messages that appear briefly and dismiss automatically. They support multiple types and custom content.
 ---
 
 <script>
-  import { ToastNotification } from "carbon-components-svelte";
+  import { NotificationActionButton, ToastNotification } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -25,11 +25,28 @@ Automatically close the notification after a specified duration (in milliseconds
 
 <FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
 
+## Actions
+
+Add an action, such as a retry, in the `actions` slot. A
+`NotificationActionButton` there renders as a small tertiary button
+under the text, in colors that read on every kind.
+
+<ToastNotification kind="error" title="Upload failed" subtitle="The connection timed out before quarterly-report.pdf finished." caption="{new Date().toLocaleString()}">
+  <svelte:fragment slot="actions">
+    <NotificationActionButton>Retry</NotificationActionButton>
+  </svelte:fragment>
+</ToastNotification>
+<ToastNotification lowContrast kind="error" title="Upload failed" subtitle="The connection timed out before quarterly-report.pdf finished." caption="{new Date().toLocaleString()}">
+  <svelte:fragment slot="actions">
+    <NotificationActionButton>Retry</NotificationActionButton>
+  </svelte:fragment>
+</ToastNotification>
+
 ## Actionable
 
 Set `actionable` to `true` when users must reach an action in the
-toast, such as a retry after a failed upload. Place the action, such as
-a small tertiary button, in the default slot. The toast becomes an `alertdialog` named by its title and
+toast, such as a retry after a failed upload. Place the action in the
+`actions` slot. The toast becomes an `alertdialog` named by its title and
 described by its subtitle. When it opens, focus moves to the first
 action, or to the close button if there is no action. Tab stays inside
 the toast, and <DocKbd label="Escape" /> closes it. Focus then returns

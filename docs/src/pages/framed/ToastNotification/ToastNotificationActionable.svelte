@@ -1,7 +1,7 @@
 <script>
   import {
-    Box,
     Button,
+    NotificationActionButton,
     Stack,
     ToastNotification,
   } from "carbon-components-svelte";
@@ -20,10 +20,10 @@
     subtitle="The connection timed out before quarterly-report.pdf finished."
     caption={new Date().toLocaleString()}
   >
-    <Box marginBottom={5}>
-      <Button kind="tertiary" size="small" on:click={() => (open = false)}>
+    <svelte:fragment slot="actions">
+      <NotificationActionButton on:click={() => (open = false)}>
         Retry
-      </Button>
-    </Box>
+      </NotificationActionButton>
+    </svelte:fragment>
   </ToastNotification>
 </Stack>
