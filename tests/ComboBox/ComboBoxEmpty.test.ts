@@ -28,6 +28,30 @@ describe("ComboBox empty state", () => {
     expect(emptyRow()).toBeNull();
   });
 
+  it("opens the menu with the row when typing into an empty list", async () => {
+    render(ComboBoxEmpty, { props: { items: [] } });
+
+    const input = screen.getByRole("combobox");
+    await user.type(input, "a");
+
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    expect(emptyRow()).toHaveTextContent("No results");
+  });
+
+  it('keeps hidden options mounted beside the row with filterMode="hide"', async () => {
+    const { container } = render(ComboBoxEmpty, {
+      props: { filterMode: "hide" },
+    });
+
+    await user.type(screen.getByRole("combobox"), "zzz");
+
+    expect(emptyRow()).toHaveTextContent("No results");
+    expect(container.querySelectorAll('[role="option"][hidden]')).toHaveLength(
+      2,
+    );
+  });
+
   it("builds the message from the typed value", async () => {
     render(ComboBoxEmpty, {
       props: { emptyText: (value: string) => `No match for "${value}"` },
