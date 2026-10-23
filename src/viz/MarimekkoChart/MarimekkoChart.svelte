@@ -154,8 +154,10 @@
   import { buildMarimekko } from "./marimekko-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(-1, -1),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const HEADER = 28;
 
   /** @type {{ column: number; cell: number }} */
@@ -300,6 +302,7 @@
         if (column >= 0) select(column, cell, event);
         return;
       case "Escape":
+        tooltipTiming.unpin();
         setActive(-1, -1);
         return;
       default:
@@ -365,8 +368,9 @@
       tabindex="0"
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:pointerleave={() => setActive(-1, -1)}
-      on:blur={() => setActive(-1, -1)}
+      on:pointerleave={() => $tooltipPinned || setActive(-1, -1)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(-1, -1)}
     >
       <g aria-hidden="true">
         {#each m.columns as column, c (column.key)}
@@ -399,7 +403,7 @@
                   `${cell.column}\u0000${cell.key}`}
                 style:--bx-viz-color={cell.color}
                 on:click={(event) => select(c, i, event)}
-                on:mouseenter={() => setActive(c, i)}
+                on:mouseenter={() => $tooltipPinned || setActive(c, i)}
               >
                 <rect
                   class:bx--viz-marimekko__box={true}

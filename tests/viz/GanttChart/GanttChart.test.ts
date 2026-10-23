@@ -146,4 +146,22 @@ describe("GanttChart", () => {
       expect.objectContaining({ id: "web" }),
     );
   });
+
+  it("pins the tooltip on click and releases it with Escape", async () => {
+    const onhover = vi.fn();
+    render(GanttChart, { onhover });
+    chart().focus();
+    await user.keyboard("{ArrowDown}");
+    expect(document.querySelector(".bx--viz-chart-tooltip")).not.toBeNull();
+
+    await fireEvent.click(chart());
+    await fireEvent.pointerLeave(chart());
+    expect(document.querySelector(".bx--viz-chart-tooltip")).not.toBeNull();
+    expect(onhover).not.toHaveBeenLastCalledWith(null);
+
+    await user.keyboard("{Escape}");
+    expect(document.querySelector(".bx--viz-chart-tooltip")).toBeNull();
+    expect(onhover).toHaveBeenLastCalledWith(null);
+  });
+
 });

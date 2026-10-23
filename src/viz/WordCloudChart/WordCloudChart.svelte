@@ -135,8 +135,10 @@
   import { layoutWords } from "../utils/word-cloud.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(null),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
 
   /** @type {string | null} */
   let activeText = null;
@@ -236,6 +238,7 @@
         return;
       case "Escape":
         focusIndex = -1;
+        tooltipTiming.unpin();
         setActive(null);
         return;
       default:
@@ -292,8 +295,9 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:mouseleave={() => setActive(null)}
-      on:blur={() => setActive(null)}
+      on:mouseleave={() => $tooltipPinned || setActive(null)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(null)}
     >
       <g aria-hidden="true">
         {#each cloud.words as placed (placed.text)}
@@ -310,7 +314,7 @@
             style:--bx-viz-color={group === undefined
               ? undefined
               : colorOf.get(totals[placed.index].group)}
-            on:mouseenter={() => setActive(placed)}
+            on:mouseenter={() => $tooltipPinned || setActive(placed)}
           >
             {placed.text}
           </text>

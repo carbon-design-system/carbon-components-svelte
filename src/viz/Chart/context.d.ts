@@ -41,7 +41,9 @@ export type ChartContext<T> = {
   size: Readable<ChartSize>;
   hover: Readable<ChartHover<T>>;
   /** What last moved the hover. A tooltip waits for a pointer, not a key. */
-  hoverOrigin: Readable<"pointer" | "keyboard" | "sync">;
+  hoverOrigin: Readable<"pointer" | "keyboard" | "touch" | "sync">;
+  /** Whether a click holds the tooltip on its point. */
+  pinned: Readable<boolean>;
   /** Whether a mounted mark fills from the baseline, as bars do. */
   banded: Readable<boolean>;
   /** Whether the chart is loading, has no data, or is ready. The legend keeps its row in the first two. */

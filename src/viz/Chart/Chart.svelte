@@ -274,8 +274,11 @@
   // What last moved the hover: the tooltip waits for a pointer to settle,
   // but a key press shows it at once.
   const hoverOrigin = writable(
-    /** @type {"pointer" | "keyboard" | "sync"} */ ("pointer"),
+    /** @type {"pointer" | "keyboard" | "touch" | "sync"} */ ("pointer"),
   );
+  // A click holds the tooltip on its point until Escape, another click, or
+  // a press outside the chart.
+  const pinned = writable(false);
   const hiddenStore = writable(hidden);
   /** @type {import("svelte/store").Writable<"ready" | "loading" | "empty">} */
   const stateStore = writable("ready");
@@ -433,6 +436,7 @@
     size,
     hover,
     hoverOrigin,
+    pinned,
     banded,
     state: stateStore,
     hidden: hiddenStore,
@@ -660,6 +664,18 @@
   }
 
   onMount(() => {
+    /** @param {Event} event */
+    const release = (event) => {
+      if (!get(pinned) || ref?.contains(/** @type {Node} */ (event.target)))
+        return;
+      pinned.set(false);
+      clearHover();
+    };
+    document.addEventListener("pointerdown", release, true);
+    return () => document.removeEventListener("pointerdown", release, true);
+  });
+
+  onMount(() => {
     if (width !== "auto" || !ref) return;
     return observeResize(ref, (measured) => {
       const rounded = Math.round(measured);
@@ -672,6 +688,7 @@
     sync?.leave();
     sync = id
       ? joinSync(id, (x) => {
+          if (get(pinned)) return;
           hoverOrigin.set("sync");
           if (x === null) clearHover(true);
           else hoverAt(x, true);
@@ -835,10 +852,14 @@
   }
 
   const onPointerMove = rafThrottle((/** @type {PointerEvent} */ event) => {
-    if (!svg) return;
+    if (!svg || get(pinned)) return;
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
-    hoverOrigin.set("pointer");
+    hoverOrigin.set(
+      event.pointerType === "touch" || event.pointerType === "pen"
+        ? "touch"
+        : "pointer",
+    );
     const current = get(scales);
     if (pointRequests > 0) {
       const sx = ((event.clientX - rect.left) / rect.width) * get(size).width;
@@ -864,7 +885,23 @@
    * @param {PointerEvent} event
    */
   function onPointerLeave() {
+    if (get(pinned)) return;
     clearHover();
+  }
+
+  /**
+   * A tap has no hover before it, so it reads the point under the finger.
+   * @param {PointerEvent} event
+   */
+  function onPointerDown(event) {
+    if (event.pointerType !== "mouse") onPointerMove(event);
+  }
+
+  /** @param {MouseEvent} event */
+  function onClick(event) {
+    selectCurrent(event);
+    if (get(pinned)) pinned.set(false);
+    else if (get(hover)) pinned.set(true);
   }
 
   /** @param {Event} event */
@@ -913,6 +950,7 @@
         return;
       case "Escape":
         focusPoint = -1;
+        pinned.set(false);
         clearHover();
         return;
       default:
@@ -966,6 +1004,7 @@
         return;
       case "Escape":
         focusIndex = -1;
+        pinned.set(false);
         clearHover();
         return;
       default:
@@ -1040,8 +1079,9 @@
       aria-label={[title, description].filter(Boolean).join(". ") || undefined}
       tabindex="0"
       on:pointermove={onPointerMove}
+      on:pointerdown={onPointerDown}
       on:pointerleave={onPointerLeave}
-      on:click={selectCurrent}
+      on:click={onClick}
       on:keydown={onKeydown}
       on:blur={() => clearHover()}
     >

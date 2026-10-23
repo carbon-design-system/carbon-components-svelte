@@ -116,8 +116,10 @@
   import { buildPack } from "./pack-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(null),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
 
   /** @type {string | null} */
   let activeId = null;
@@ -197,6 +199,7 @@
         return;
       case "Escape":
         focusIndex = -1;
+        tooltipTiming.unpin();
         setActive(null);
         return;
       default:
@@ -245,8 +248,9 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:mouseleave={() => setActive(null)}
-      on:blur={() => setActive(null)}
+      on:mouseleave={() => $tooltipPinned || setActive(null)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(null)}
     >
       <g aria-hidden="true">
         {#each pack.groups as entry (entry.key)}
@@ -268,7 +272,7 @@
                 cx={leaf.cx}
                 cy={leaf.cy}
                 r={leaf.r}
-                on:mouseenter={() => setActive(leaf)}
+                on:mouseenter={() => $tooltipPinned || setActive(leaf)}
               />
               {#if leaf.label}
                 <text

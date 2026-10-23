@@ -215,6 +215,11 @@
   }
 
   // Pinned to a corner of the plot: no offset from the anchor.
+  // Pinned, the tooltip can be read, selected, and copied.
+  .#{$prefix}--viz-chart-tooltip--pinned {
+    pointer-events: auto;
+  }
+
   .#{$prefix}--viz-chart-tooltip--fixed {
     transform: none;
   }

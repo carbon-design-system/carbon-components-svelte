@@ -110,8 +110,10 @@
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(null),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const LEGEND_STEPS = [0, 0.25, 0.5, 0.75, 1];
 
   /** @type {string | null} */
@@ -301,8 +303,8 @@
           style:--bx-viz-color={tile.color}
           style:--bx-viz-text-color={tile.textColor}
           title="{tile.label}: {write(tile.value)}"
-          on:mouseenter={() => setActive(tile)}
-          on:mouseleave={() => setActive(null)}
+          on:mouseenter={() => $tooltipPinned || setActive(tile)}
+          on:mouseleave={() => $tooltipPinned || setActive(null)}
         >
           {#if selectable}
             <button
@@ -316,7 +318,7 @@
                 focusedIndex = i;
                 setActive(tile);
               }}
-              on:blur={() => setActive(null)}
+              on:blur={() => $tooltipPinned || setActive(null)}
             >
               {tile.id}
             </button>

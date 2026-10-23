@@ -140,8 +140,10 @@
   } from "./parallel-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(-1),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const MARGIN = { top: 36, right: 40, bottom: 24, left: 40 };
   const HIT = 24;
 
@@ -241,6 +243,7 @@
   }
 
   const onPointerMove = rafThrottle((/** @type {PointerEvent} */ event) => {
+    if ($tooltipPinned) return;
     const at = toChart(event);
     if (!at) return;
     if (drag) {
@@ -333,6 +336,7 @@
         selectActive(event);
         return;
       case "Escape":
+        tooltipTiming.unpin();
         setActive(-1);
         return;
       default:
@@ -394,11 +398,12 @@
       on:pointermove={onPointerMove}
       on:pointerup={onPointerUp}
       on:pointercancel={onPointerUp}
-      on:pointerleave={() => setActive(-1)}
+      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:click={() => tooltipTiming.togglePin()}
       on:click={selectActive}
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:blur={() => setActive(-1)}
+      on:blur={() => $tooltipPinned || setActive(-1)}
     >
       <g aria-hidden="true">
         {#each visible as line (line.id)}

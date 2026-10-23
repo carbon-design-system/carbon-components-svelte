@@ -43,4 +43,41 @@ describe("createTooltipTiming", () => {
     await wait(40);
     expect(get(timing.shown)).toBe(false);
   });
+
+  test("shows at once from a finger, and a pin holds the item until released", async () => {
+    const onUnpin = vi.fn();
+    const timing = createTooltipTiming(20, { onUnpin });
+    const node = document.createElement("div");
+    document.body.appendChild(node);
+    const action = timing.track(node);
+    node.dispatchEvent(
+      new PointerEvent("pointerdown", { pointerType: "touch" }),
+    );
+    timing.settle({ id: "a" });
+    expect(get(timing.shown)).toBe(true);
+
+    timing.togglePin();
+    expect(get(timing.pinned)).toBe(true);
+    timing.settle(null);
+    expect(get(timing.shown)).toBe(true);
+    timing.settle({ id: "b" }, "pointer");
+    expect(get(timing.shown)).toBe(true);
+
+    // A press inside keeps the pin; one outside releases it.
+    node.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+    expect(get(timing.pinned)).toBe(true);
+    document.body.dispatchEvent(
+      new PointerEvent("pointerdown", { bubbles: true }),
+    );
+    expect(get(timing.pinned)).toBe(false);
+    expect(onUnpin).toHaveBeenCalledTimes(1);
+
+    timing.settle(null);
+    expect(get(timing.shown)).toBe(false);
+    // Nothing to pin while nothing shows.
+    timing.pin();
+    expect(get(timing.pinned)).toBe(false);
+    action.destroy();
+    node.remove();
+  });
 });

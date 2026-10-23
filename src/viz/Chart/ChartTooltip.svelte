@@ -25,7 +25,7 @@
   } from "./tooltip-placement.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, size, hover, hoverOrigin, banded } =
+  const { groups, scales, size, hover, hoverOrigin, banded, pinned } =
     getContext(CHART_CONTEXT);
 
   const timing = createTooltipTiming(delay);
@@ -128,6 +128,7 @@
     class:bx--viz-chart-tooltip--flipped={flipped}
     class:bx--viz-chart-tooltip--above={above}
     class:bx--viz-chart-tooltip--fixed={spot !== null}
+    class:bx--viz-chart-tooltip--pinned={$pinned}
     aria-hidden="true"
     style:left="{(left / $size.width) * 100}%"
     style:top="{top}px"

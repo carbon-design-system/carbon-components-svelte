@@ -160,8 +160,10 @@
   import { buildSunburst } from "./sunburst-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(-1),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
 
   let active = -1;
 
@@ -280,6 +282,7 @@
         up();
         return;
       case "Escape":
+        tooltipTiming.unpin();
         setActive(-1);
         return;
       default:
@@ -327,8 +330,9 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:pointerleave={() => setActive(-1)}
-      on:blur={() => setActive(-1)}
+      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(-1)}
     >
       <g aria-hidden="true">
         {#each sun.arcs as arc, i (arc.id)}
@@ -341,7 +345,7 @@
             d={arc.d}
             style:--bx-viz-color={arc.color}
             style:--bx-viz-ring={group === undefined ? arc.ring : 0}
-            on:mouseenter={() => setActive(i)}
+            on:mouseenter={() => $tooltipPinned || setActive(i)}
           />
         {/each}
       </g>

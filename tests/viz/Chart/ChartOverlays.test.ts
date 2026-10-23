@@ -262,4 +262,26 @@ describe("ChartThreshold", () => {
       "bx--viz-threshold--warning",
     );
   });
+
+  it("pins the tooltip on click and releases it with Escape or a press outside", async () => {
+    render(ChartOverlays);
+    await focusSecondPoint();
+    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
+
+    await fireEvent.click(chart());
+    expect(screen.getByTestId("tooltip")).toHaveClass(
+      "bx--viz-chart-tooltip--pinned",
+    );
+    await fireEvent.pointerLeave(chart());
+    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+    expect(screen.queryByTestId("tooltip")).toBeNull();
+
+    await focusSecondPoint();
+    await fireEvent.click(chart());
+    await fireEvent.pointerDown(document.body);
+    expect(screen.queryByTestId("tooltip")).toBeNull();
+  });
+
 });

@@ -117,8 +117,10 @@
   import { buildRadar, nearestSpoke } from "./radar-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(-1),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   /** Room for a spoke label on either side, and above and below. */
   const LABEL_X = 104;
   const LABEL_Y = 40;
@@ -179,6 +181,7 @@
 
   /** @param {PointerEvent} event */
   function onPointerMove(event) {
+    if ($tooltipPinned) return;
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
@@ -200,6 +203,7 @@
     } else if (event.key === "End") {
       setActive(count - 1);
     } else if (event.key === "Escape") {
+      tooltipTiming.unpin();
       setActive(-1);
       return;
     } else if (event.key === "Enter" || event.key === " ") {
@@ -262,11 +266,12 @@
       aria-label={title || undefined}
       tabindex="0"
       on:pointermove={onPointerMove}
-      on:pointerleave={() => setActive(-1)}
+      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:click={() => tooltipTiming.togglePin()}
       on:click={select}
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:blur={() => setActive(-1)}
+      on:blur={() => $tooltipPinned || setActive(-1)}
     >
       <g aria-hidden="true">
         {#each radar.rings as ring (ring.value)}

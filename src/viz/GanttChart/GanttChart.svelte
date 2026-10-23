@@ -176,8 +176,10 @@
   import { buildGantt } from "./gantt-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(-1),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const AXIS = 24;
   const PAD = 8;
   const markerId = nextId("bx-viz-gantt");
@@ -305,6 +307,7 @@
         selectActive(event);
         return;
       case "Escape":
+        tooltipTiming.unpin();
         setActive(-1);
         return;
       default:
@@ -361,8 +364,9 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:pointerleave={() => setActive(-1)}
-      on:blur={() => setActive(-1)}
+      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(-1)}
     >
       <defs>
         <marker
@@ -430,7 +434,7 @@
               class:bx--viz-gantt__task--active={i === active}
               class:bx--viz-gantt__task--selected={task.id === selected}
               style:--bx-viz-color={task.color}
-              on:mouseenter={() => setActive(i)}
+              on:mouseenter={() => $tooltipPinned || setActive(i)}
             >
               <rect
                 class:bx--viz-gantt__hit={true}

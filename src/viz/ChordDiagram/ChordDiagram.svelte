@@ -115,8 +115,10 @@
   import { buildChord } from "./chord-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(null),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
 
   /** @type {{ kind: "group" | "ribbon"; index: number } | null} */
   let active = null;
@@ -274,6 +276,7 @@
         if (at >= 0) selectGroup(at, event);
         return;
       case "Escape":
+        tooltipTiming.unpin();
         setActive(null);
         return;
       default:
@@ -317,8 +320,9 @@
       tabindex="0"
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:pointerleave={() => setActive(null)}
-      on:blur={() => setActive(null)}
+      on:pointerleave={() => $tooltipPinned || setActive(null)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(null)}
     >
       <g aria-hidden="true">
         {#each chord.ribbons as link, i (link.id)}
@@ -333,7 +337,8 @@
               false}
             style:--bx-viz-color={link.color}
             d={link.d}
-            on:mouseenter={() => setActive({ kind: "ribbon", index: i })}
+            on:mouseenter={() =>
+              $tooltipPinned || setActive({ kind: "ribbon", index: i })}
           />
         {/each}
         {#each chord.groups as group, i (group.key)}
@@ -347,7 +352,8 @@
             class:bx--viz-chord__group--selected={group.key === selected}
             style:--bx-viz-color={group.color}
             on:click={(event) => selectGroup(i, event)}
-            on:mouseenter={() => setActive({ kind: "group", index: i })}
+            on:mouseenter={() =>
+              $tooltipPinned || setActive({ kind: "group", index: i })}
           >
             <path class:bx--viz-chord__arc={true} d={group.d} />
             <text

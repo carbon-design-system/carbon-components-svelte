@@ -144,8 +144,10 @@
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(null),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const LEGEND_STEPS = [0, 0.25, 0.5, 0.75, 1];
 
   /** @type {string | null} */
@@ -305,6 +307,7 @@
         return;
       case "Escape":
         focusIndex = -1;
+        tooltipTiming.unpin();
         setActive(null);
         return;
       default:
@@ -352,8 +355,9 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:mouseleave={() => setActive(null)}
-      on:blur={() => setActive(null)}
+      on:mouseleave={() => $tooltipPinned || setActive(null)}
+      on:click={() => tooltipTiming.togglePin()}
+      on:blur={() => $tooltipPinned || setActive(null)}
     >
       <g aria-hidden="true">
         {#each regions as entry (entry.id)}
@@ -367,7 +371,7 @@
             style:--bx-viz-color={entry.value === null
               ? undefined
               : heatColor(entry.value, range, hue).color}
-            on:mouseenter={() => setActive(entry)}
+            on:mouseenter={() => $tooltipPinned || setActive(entry)}
           />
         {/each}
         <!-- Drawn last, so its outline is never under a neighbor. -->

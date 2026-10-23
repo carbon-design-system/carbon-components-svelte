@@ -143,8 +143,10 @@
   import { buildHorizon } from "./horizon-geometry.js";
 
   const dispatch = createEventDispatcher();
-  const tooltipTiming = createTooltipTiming();
-  const { shown: tooltipShown } = tooltipTiming;
+  const tooltipTiming = createTooltipTiming(150, {
+    onUnpin: () => setActive(-1),
+  });
+  const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const AXIS = 20;
   const clipId = nextId("bx-viz-horizon");
 
@@ -240,6 +242,7 @@
   }
 
   const onPointerMove = rafThrottle((/** @type {PointerEvent} */ event) => {
+    if ($tooltipPinned) return;
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
@@ -266,6 +269,7 @@
         next = last;
         break;
       case "Escape":
+        tooltipTiming.unpin();
         setActive(-1);
         return;
       case "Enter":
@@ -343,11 +347,12 @@
       aria-label={title || undefined}
       tabindex="0"
       on:pointermove={onPointerMove}
-      on:pointerleave={() => setActive(-1)}
+      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:click={() => tooltipTiming.togglePin()}
       on:click={select}
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:blur={() => setActive(-1)}
+      on:blur={() => $tooltipPinned || setActive(-1)}
     >
       <defs>
         <clipPath id={clipId}>
