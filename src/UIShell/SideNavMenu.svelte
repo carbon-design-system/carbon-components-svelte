@@ -42,6 +42,12 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
+  // Follow the enclosing `SideNav`; the module stores cover a menu rendered
+  // outside one.
+  const sideNav = getContext("carbon:SideNav");
+  const rail = sideNav?.rail ?? isSideNavRail;
+  const collapsed = sideNav?.collapsed ?? isSideNavCollapsed;
+
   const parentMenu = getContext("carbon:SideNavMenu");
   /** @type {number} */
   const depth = (parentMenu?.depth ?? 0) + 1;
@@ -72,14 +78,14 @@
 
   let menuRef = null;
 
-  $: if ($isSideNavRail && $isSideNavCollapsed) {
+  $: if ($rail && $collapsed) {
     expanded = false;
   }
 
   onMount(() => {
     // Keep the menu collapsed in a collapsed rail; it still shows the active mark.
     if (
-      !($isSideNavRail && $isSideNavCollapsed) &&
+      !($rail && $collapsed) &&
       menuRef?.querySelector('[aria-current="page"]')
     ) {
       expanded = true;

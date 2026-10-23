@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { isSideNavCollapsed, isSideNavRail } from "../../src/UIShell/nav-store";
 import { user } from "../utils/user";
 import SideNavMenuRail from "./SideNavMenu.rail.test.svelte";
+import SideNavMenuTwoNavs from "./SideNavMenu.twoNavs.test.svelte";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/746
 describe("SideNavMenu", () => {
@@ -60,6 +61,16 @@ describe("SideNavMenu", () => {
     render(SideNavMenuRail, { props: { rail: false, isOpen: false } });
 
     expect(getMenuButton()).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("follows its own side nav, not a collapsed rail elsewhere on the page", () => {
+    render(SideNavMenuTwoNavs);
+
+    const menuButton = (text: string) =>
+      screen.getByText(text).closest("button");
+
+    expect(menuButton("Billing")).toHaveAttribute("aria-expanded", "true");
+    expect(menuButton("Access")).toHaveAttribute("aria-expanded", "false");
   });
 
   it("can expand a menu by clicking when rail is open", async () => {
