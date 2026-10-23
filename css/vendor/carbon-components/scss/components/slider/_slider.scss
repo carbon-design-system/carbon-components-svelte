@@ -50,9 +50,11 @@
   // ccs: `hideRangeLabels`. The track's side margins space it from the range
   // labels; where nothing sits beside it, inset it by the thumb's radius
   // instead, so the thumb at either end lines up with the label above.
+  // Logical, so the inset stays at the start and the text input keeps its
+  // gap in RTL.
   .#{$prefix}--slider-container--no-range-labels:not(.#{$prefix}--slider-container--two-handles):not(.#{$prefix}--slider-container--vertical)
     > .#{$prefix}--slider {
-    margin-left: to-rem(7px);
+    margin-inline-start: to-rem(7px);
   }
 
   .#{$prefix}--slider-container--no-range-labels.#{$prefix}--slider-container--no-text-input:not(.#{$prefix}--slider-container--vertical)
@@ -68,8 +70,10 @@
     color: $text-primary;
     white-space: nowrap;
 
+    // ccs: logical, so the max label keeps its gap from the text input in
+    // RTL.
     &:last-of-type {
-      margin-right: $carbon--spacing-05;
+      margin-inline-end: $carbon--spacing-05;
     }
   }
 
@@ -684,14 +688,14 @@
   .#{$prefix}--slider-container--vertical
     > .#{$prefix}--slider-text-input-wrapper--upper {
     align-self: start;
-    margin-left: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
     grid-area: upper;
   }
 
   .#{$prefix}--slider-container--vertical
     > .#{$prefix}--slider-text-input-wrapper--lower {
     align-self: end;
-    margin-left: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
     grid-area: lower;
   }
 

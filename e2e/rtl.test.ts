@@ -195,6 +195,48 @@ test.describe("right-to-left layout", () => {
     expectMirrored(rtl, mirror(ltr, viewportWidth));
   });
 
+  test("keeps the Slider gaps beside the text input", async ({ page }) => {
+    // Each pair is a part and the text input beside it, in the fixture's
+    // Slider, hideRangeLabels Slider, RangeSlider and vertical RangeSlider.
+    const slider = (n: number) =>
+      `[data-testid=slider-gaps] > :nth-child(${n})`;
+    const max = ".bx--slider__range-label:last-of-type";
+    const min = ".bx--slider__range-label:first-of-type";
+    const input = ".bx--slider-text-input-wrapper";
+    const PAIRS: Record<string, [string, string]> = {
+      maxLabel: [`${slider(1)} ${max}`, `${slider(1)} ${input}`],
+      hideRangeLabels: [`${slider(2)} .bx--slider`, `${slider(2)} ${input}`],
+      rangeMaxLabel: [`${slider(3)} ${max}`, `${slider(3)} ${input}--upper`],
+      verticalMaxLabel: [`${slider(4)} ${max}`, `${slider(4)} ${input}--upper`],
+      verticalMinLabel: [`${slider(4)} ${min}`, `${slider(4)} ${input}--lower`],
+    };
+    const parts = Object.fromEntries(
+      Object.entries(PAIRS).flatMap(([name, [part, field]]) => [
+        [name, part],
+        [`${name}Input`, field],
+      ]),
+    );
+
+    async function gaps() {
+      const box = await boxes(page, parts);
+      return Object.fromEntries(
+        Object.keys(PAIRS).map((name) => {
+          const a = box[name] as Box;
+          const b = box[`${name}Input`] as Box;
+          return [name, Math.max(b.left - a.right, a.left - b.right)];
+        }),
+      );
+    }
+
+    const ltr = await gaps();
+    for (const [name, gap] of Object.entries(ltr)) {
+      expect.soft(gap, `${name} in LTR`).toBeGreaterThanOrEqual(16);
+    }
+
+    await setDirection(page, "rtl");
+    expect(await gaps()).toEqual(ltr);
+  });
+
   test("puts the checkmark at the inline end of an open ComboBox", async ({
     page,
   }) => {

@@ -93,6 +93,18 @@
 </SideNav>
 
 <Content id="main-content">
+  <div data-testid="slider-gaps">
+    <Slider labelText="Replicas" max={10} value={2} />
+    <Slider labelText="Replicas" max={10} value={2} hideRangeLabels />
+    <RangeSlider labelText="Window" max={10} value={2} valueUpper={6} />
+    <RangeSlider
+      labelText="Window"
+      max={10}
+      value={2}
+      valueUpper={6}
+      orientation="vertical"
+    />
+  </div>
   <div data-testid="combobox" class="field">
     <ComboBox
       labelText="Contact"
