@@ -188,6 +188,17 @@ Set `as` to `true` and spread `let:props` to the element. `bind:ref` stays `null
 
 Set the `size` prop. The default is `"default"`.
 
+Carbon v11's names also work: `"sm"`, `"md"` and `"2xl"` render as `"small"`, `"field"` and `"xl"`. Button's own `"lg"` and `"xl"` keep their 64px and 80px heights. When you port code from Carbon React, use `"default"` for v11's 48px `lg` and `"lg"` for its 64px `xl`.
+
+| Height | Carbon v11 | Button |
+| :--- | :--- | :--- |
+| 24px | `xs` | `xs` |
+| 32px | `sm` | `small` or `sm` |
+| 40px | `md` | `field` or `md` |
+| 48px | `lg` | `default` |
+| 64px | `xl` | `lg` |
+| 80px | `2xl` | `xl` or `2xl` |
+
 ### Field
 
 Set `size="field"` for field-sized buttons that align with form input heights.

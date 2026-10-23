@@ -146,6 +146,30 @@ The `{#if skeleton}` early-return pattern is being phased out. Follow it only wh
 11. Active-item state: `highlighted*` (focus stays on the trigger), `focused*` (item receives DOM
     focus), `selected*` (committed).
 
+#### Carbon v11 size aliases
+
+Many `size` props use Carbon v10 names. They also accept Carbon v11's names, so code ported from Carbon React gets the right height. A v11 name is an alias only where the component doesn't already use it. A name that collides keeps this library's meaning.
+
+Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/utils/size-aliases.js). Resolve it before the value reaches a class, a child or a context, so children only see this library's names. List the aliases in the prop's `@type` union.
+
+| Component | Our names | v11 aliases | Kept on collision |
+| :--- | :--- | :--- | :--- |
+| Button, ButtonSkeleton, FileUploader, FileUploaderButton, FileUploaderSkeleton | `xs` 24, `small` 32, `field` 40, `default` 48, `lg` 64, `xl` 80 | `sm` → `small`, `md` → `field`, `2xl` → `xl` | `lg` (v11 48), `xl` (v11 64) |
+| TextInput, PasswordInput, Select, NumberInput, DatePickerInput, TimePicker, CopyInput, TagInput, their skeletons, Form, InputGroup | `xs` 24, `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
+| PinCodeInput, PinCodeInputSkeleton | `xs`, `sm`, `default` 40, `xl` 48 | `md` → `default`, `lg` → `xl` | none |
+| ComboBox, Dropdown, MultiSelect, ListBox, their skeletons | `xs` 24, `sm` 32, unset 40, `lg` 48, `xl` 48 | `md` → unset | none |
+| Search, SearchSkeleton, SearchMenu, SearchMenuSkeleton | `xs` 24, `sm` 32, `lg` 40, `xl` 48 | `md` → `lg` | `lg` (v11 48) |
+| Accordion, ContentSwitcher, their skeletons, OverflowMenu | `xs` 24 (OverflowMenu only), `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
+| Tag, SelectableTag, OperationalTag, TagSkeleton, TagSet | `sm`, `default`, `lg` | `md` → `default` | none |
+| Toggle, ToggleSkeleton | `sm`, `default` | `md` → `default` | none |
+| Modal, ComposedModal, ConfirmModal | `xs`, `sm`, unset, `lg` | `md` → unset | none |
+| TreeView, TreeViewSkeleton | `compact` 24, `default` 32 | `xs` → `compact`, `sm` → `default` | none |
+| DataTable, Table, DataTableSkeleton, ToolbarDensity | `compact` 24, `short` 32, `medium` 40, unset 48, `tall` 64 | `xs`, `sm`, `md`, `lg` → unset, `xl` | none |
+| Toolbar | `xs` 24, `sm` 32, `default` 48 | `lg` → `default` | none |
+| FileUploaderItem, FileDownloadItem | `xs`, `small` 32, `field` 40, `default` 48 | `sm` → `small`, `md` → `field`, `lg` → `default` | none |
+
+An explicit `md` on a field wins over a parent `Form` size, as any field size does. Components such as ActionSet, Tabs, ContainedList, Pagination and Menu already use v11 names.
+
 API, docs, and workflow:
 
 - Never hand-edit generated files. `src/**/*.svelte.d.ts`, `src/index.d.ts`, and `docs/src/COMPONENT_API.json` are produced by sveld and are gitignored.

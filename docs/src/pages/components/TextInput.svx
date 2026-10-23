@@ -176,6 +176,8 @@ Use the `labelChildren` slot to provide custom inline label content.
 
 Set `size` to control input height. The default is `md`.
 
+Carbon v11's names also work. `"md"` sets the 40px default explicitly, even inside a sized `Form`, and `"lg"` renders as `"xl"`.
+
 ### Extra-large
 
 Use the extra-large size for more prominent inputs by setting `size` to `"xl"`.
