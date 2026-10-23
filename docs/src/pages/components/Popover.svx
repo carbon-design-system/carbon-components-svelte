@@ -34,21 +34,21 @@ Position the popover relative to its parent with `relative`.
 
 ### Alignment
 
-Customize popover alignment with `align`. Valid values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"`, and `"right-top"`.
+Customize popover alignment with `align`. Valid values include `"top"`, `"top-start"`, `"top-end"`, `"bottom"`, `"bottom-start"`, `"bottom-end"`, `"left"`, `"left-start"`, `"left-end"`, `"right"`, `"right-start"`, and `"right-end"`.
 
-The default is top.
+The default is top. These are the Carbon v11 names. The older names (`"top-left"`, `"left-bottom"`, and so on) still work and give the same placement.
 
 <Stack gap={10}>
 <div>
     Parent
-    <Popover open align="top-left">
-        top-left
+    <Popover open align="top-start">
+        top-start
     </Popover>
 </div>
 <div>
     Parent
-    <Popover open align="top-right">
-        top-right
+    <Popover open align="top-end">
+        top-end
     </Popover>
 </div>
 <div>
@@ -59,14 +59,14 @@ The default is top.
 </div>
 <div>
     Parent
-    <Popover open align="bottom-left">
-        bottom-left
+    <Popover open align="bottom-start">
+        bottom-start
     </Popover>
 </div>
 <div>
     Parent
-    <Popover open align="bottom-right">
-        <div>bottom-right</div>
+    <Popover open align="bottom-end">
+        <div>bottom-end</div>
     </Popover>
 </div>
 <div>
@@ -77,14 +77,14 @@ The default is top.
 </div>
 <div>
     Parent
-    <Popover open align="left-bottom">
-        left-bottom
+    <Popover open align="left-end">
+        left-end
     </Popover>
 </div>
 <div>
     Parent
-    <Popover open align="left-top">
-        left-top
+    <Popover open align="left-start">
+        left-start
     </Popover>
 </div>
 <div>
@@ -95,14 +95,14 @@ The default is top.
 </div>
 <div>
     Parent
-    <Popover open align="right-bottom">
-        right-bottom
+    <Popover open align="right-end">
+        right-end
     </Popover>
 </div>
 <div>
     Parent
-    <Popover open align="right-top">
-        right-top
+    <Popover open align="right-start">
+        right-start
     </Popover>
 </div>
 </Stack>
@@ -124,7 +124,7 @@ By default, the caret aligns to top. See [Alignment](#alignment) for all valid v
 
 <div>
     Parent
-    <Popover caret align="top-left" open>
+    <Popover caret align="top-start" open>
         Content
     </Popover>
 </div>
@@ -145,6 +145,28 @@ Place the component in a [`Layer`](/components/Layer) to put it on the next surf
       </Popover>
   </div>
 </Layer>
+
+### Without a drop shadow
+
+The popover casts a drop shadow by default. Set `dropShadow` to `false` to remove it, for example on a surface that already separates it from the page.
+
+<div>
+    Parent
+    <Popover caret dropShadow={false} open>
+        Content
+    </Popover>
+</div>
+
+### Border
+
+Set `border` to `true` to draw a 1px border around the popover and its caret.
+
+<div>
+    Parent
+    <Popover caret border open>
+        Content
+    </Popover>
+</div>
 
 ### High contrast
 

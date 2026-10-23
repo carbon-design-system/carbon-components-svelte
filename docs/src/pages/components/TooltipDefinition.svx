@@ -14,6 +14,18 @@ Display a basic definition tooltip with the default bottom-center alignment.
   SSO
 </TooltipDefinition>
 
+Focus or hover the term to show the tooltip. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle it. The term sets `aria-expanded` to match.
+
+## In body text
+
+Place the term in running text. It takes the font of the text around it.
+
+<Text type="body-01">
+  Every workspace signs in through
+  <TooltipDefinition tooltipText="Single sign-on: one login for all connected applications.">single sign-on</TooltipDefinition>
+  and loses access when an account leaves the directory.
+</Text>
+
 ## Placement
 
 Position the tooltip with direction and alignment.
