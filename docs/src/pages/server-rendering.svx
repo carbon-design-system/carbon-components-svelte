@@ -155,7 +155,7 @@ Before hydration `SideNav` is neither expanded nor collapsed, since nothing has 
 
 On a small screen the hamburger button is missing until hydration, so the navigation cannot be opened without JavaScript. Set `persistentHamburgerMenu` on `Header` to render it on the server. The server also renders the nav with `aria-hidden`, even where CSS shows it, so assistive technology finds it only after hydration. <!-- FIX: SSR-12 -->
 
-`SideNav` writes its `rail` state and `resizable` width to module-level stores while rendering, and a later request can read them. Render `SideNav` before `Content` in every layout. <!-- FIX: SSR-01 -->
+On the server, `Content` takes the `resizable` width from a `SideNav` rendered before it. Render `SideNav` first. Otherwise `Content` starts at the default width and moves on hydration.
 
 ## Stable ids
 
