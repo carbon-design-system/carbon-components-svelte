@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import GanttChartRaw from "../../../src/viz/GanttChart/GanttChart.svelte";
 import { user } from "../../utils/user";
 import GanttChart from "./GanttChart.test.svelte";
 
@@ -164,4 +165,43 @@ describe("GanttChart", () => {
     expect(onhover).toHaveBeenLastCalledWith(null);
   });
 
+  it("fits a narrow container: labels cut to their column, ticks kept apart", () => {
+    render(GanttChartRaw, {
+      props: {
+        data: [
+          {
+            id: "a",
+            name: "Specification of the launch",
+            stream: "Design",
+            from: new Date(2026, 8, 1),
+            to: new Date(2026, 8, 8),
+          },
+          {
+            id: "b",
+            name: "Build",
+            stream: "API",
+            from: new Date(2026, 8, 6),
+            to: new Date(2026, 8, 20),
+          },
+        ],
+        id: "id",
+        label: "name",
+        group: "stream",
+        start: "from",
+        end: "to",
+        width: 240,
+        title: "Narrow",
+      },
+    });
+
+    const labels = Array.from(
+      document.querySelectorAll(".bx--viz-gantt__label"),
+    ).map((el) => el.textContent?.trim());
+    expect(labels[0]).toMatch(/…$/);
+    expect(labels[0]?.length).toBeLessThan(12);
+    expect(labels[1]).toBe("Build");
+    expect(
+      document.querySelectorAll(".bx--viz-gantt__tick").length,
+    ).toBeLessThanOrEqual(2);
+  });
 });

@@ -8,6 +8,7 @@
   /**
    * The task type is written inline: a typedef cannot carry the generic
    * into the generated declarations.
+   * @event {{ series: string; hidden: boolean }} legend:toggle Fires when a group is shown or hidden from the legend.
    * @event {{ id: string; label: string; group: string; from: number; to: number; duration: number; progress: number | null; datum: T; index: number } | null} hover Fires when the pointer or keyboard focus moves to another task, and with `null` when it leaves.
    * @event {{ task: { id: string; label: string; group: string; from: number; to: number; duration: number; progress: number | null; datum: T; index: number }; originalEvent: Event }} select Fires when the focused task is activated by click, Enter, or Space.
    */
@@ -71,6 +72,9 @@
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
   /** Set to `true` to make tasks selectable */
   export let selectable = false;
 
@@ -110,7 +114,17 @@
   /** Specify the height of a task row, in pixels */
   export let rowHeight = 28;
 
-  /** Specify the room for task labels, in pixels */
+  /**
+   * Specify how many rows the loading and empty states reserve, so the chart
+   * holds its height until the data arrives.
+   */
+  export let placeholderRows = 4;
+
+  /**
+   * Specify the room for task labels, in pixels. A label that does not fit
+   * is cut with an ellipsis, and the column never takes more than half of
+   * a narrow container.
+   */
   export let labelSpace = 160;
 
   /**
@@ -137,6 +151,24 @@
 
   /** Specify the accessible name of the legend */
   export let legendLabel = "Groups";
+
+  /** Specify how many legend items show before the rest fold behind a "more" button */
+  export let maxLegendItems = 8;
+
+  /**
+   * Specify the label of the button that unfolds the rest of the legend.
+   * @type {(count: number) => string}
+   */
+  export let legendMoreLabel = (count) => `+${count} more`;
+
+  /** Specify the label of the button that folds the legend again */
+  export let legendLessLabel = "Show less";
+
+  let legendExpanded = false;
+  $: legendKeysShown = legendExpanded
+    ? groupKeysAll
+    : groupKeysAll.slice(0, maxLegendItems);
+  $: legendFolded = groupKeysAll.length - legendKeysShown.length;
 
   /** Set to `true` to place ticks on UTC boundaries */
   export let utc = false;
@@ -197,7 +229,9 @@
   $: endOf = toAccessor(end);
   $: progressOf = progress === undefined ? undefined : toAccessor(progress);
   $: dependsOf = dependsOn === undefined ? undefined : toAccessor(dependsOn);
-  $: plot = { x0: labelSpace, x1: width - PAD };
+  // The label column yields to the plot in a narrow container.
+  $: labelColumn = Math.min(labelSpace, Math.floor(layoutWidth / 2));
+  $: plot = { x0: labelColumn, x1: layoutWidth - PAD };
   // Depends on the data and the shape only, so hover never lays out again.
   $: gantt = buildGantt(visibleRows, {
     id: idOf,
@@ -387,7 +421,11 @@
             class:bx--viz-gantt__tick={true}
             x={tick.px}
             y={AXIS - 8}
-            text-anchor="middle"
+            text-anchor={tick.px > plot.x1 - 28
+              ? "end"
+              : tick.px < plot.x0 + 28
+                ? "start"
+                : "middle"}
           >
             {tick.label}
           </text>
@@ -445,12 +483,12 @@
               />
               <text
                 class:bx--viz-gantt__label={true}
-                x={labelSpace - PAD}
+                x={labelColumn - PAD}
                 y={task.y + rowHeight / 2}
                 dy="0.32em"
                 text-anchor="end"
               >
-                {task.label}
+                {task.short}
               </text>
               <rect
                 class:bx--viz-gantt__bar={true}
@@ -561,17 +599,55 @@
     </tbody>
   </table>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
-  {#if legend && gantt.groups.length > 1}
-    <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
-      {#each gantt.groups as entry (entry.key)}
-        <li
-          class:bx--viz-treemap__legend-item={true}
-          style:--bx-viz-color={entry.color}
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+    >
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
+  {#if legend && (groupKeysAll.length > 1 || loading || empty)}
+    <div class:bx--viz-legend={true} role="group" aria-label={legendLabel}>
+      {#each legendKeysShown as key (key)}
+        <button
+          type="button"
+          class:bx--viz-legend__item={true}
+          class:bx--viz-legend__item--hidden={hiddenSet.has(key)}
+          aria-pressed={!hiddenSet.has(key)}
+          style:--bx-viz-color={groupColorMap[key]}
+          on:click={() => toggleGroup(key)}
         >
           <span class:bx--viz-legend__swatch={true}></span>
           {key}
         </button>
       {/each}
-    </ul>
+      {#if legendFolded > 0 || legendExpanded}
+        <button
+          type="button"
+          class:bx--viz-legend__item={true}
+          class:bx--viz-legend__more={true}
+          aria-expanded={legendExpanded}
+          on:click={() => {
+            legendExpanded = !legendExpanded;
+          }}
+        >
+          {legendExpanded ? legendLessLabel : legendMoreLabel(legendFolded)}
+        </button>
+      {/if}
+    </div>
   {/if}
 </figure>

@@ -23,6 +23,8 @@ export type GanttOptions<T> = {
 export type GanttRow<T> = {
   id: string;
   label: string;
+  /** The label cut to the room it has, with an ellipsis. */
+  short: string;
   group: string;
   color: string;
   /** Epoch milliseconds, before clipping. */

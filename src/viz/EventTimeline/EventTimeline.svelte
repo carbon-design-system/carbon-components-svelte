@@ -55,6 +55,9 @@
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
   /**
    * Specify the time range shown. Defaults to the first and last event.
    * @type {readonly [TimeLike, TimeLike]}

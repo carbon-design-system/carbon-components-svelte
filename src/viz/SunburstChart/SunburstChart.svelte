@@ -8,6 +8,7 @@
   /**
    * The node type is written inline: a typedef cannot carry the generic
    * into the generated declarations.
+   * @event {{ series: string; hidden: boolean }} legend:toggle Fires when a group is shown or hidden from the legend.
    * @event {{ id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; color: string; datum: T; index: number } | null} hover Fires when the pointer or keyboard focus moves to another arc, and with `null` when it leaves.
    * @event {{ node: { id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; color: string; datum: T; index: number }; originalEvent: Event }} select Fires when the focused arc is activated by click, Enter, or Space.
    * @slot {{ center: { id: string; label: string; value: number } | null; total: number; formattedTotal: string }}
@@ -58,6 +59,9 @@
 
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
+
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
 
   /** Set to `true` to make arcs selectable */
   export let selectable = false;
@@ -122,6 +126,24 @@
 
   /** Specify the accessible name of the legend */
   export let legendLabel = "Groups";
+
+  /** Specify how many legend items show before the rest fold behind a "more" button */
+  export let maxLegendItems = 8;
+
+  /**
+   * Specify the label of the button that unfolds the rest of the legend.
+   * @type {(count: number) => string}
+   */
+  export let legendMoreLabel = (count) => `+${count} more`;
+
+  /** Specify the label of the button that folds the legend again */
+  export let legendLessLabel = "Show less";
+
+  let legendExpanded = false;
+  $: legendKeysShown = legendExpanded
+    ? groupKeysAll
+    : groupKeysAll.slice(0, maxLegendItems);
+  $: legendFolded = groupKeysAll.length - legendKeysShown.length;
 
   /** Specify the label of the button in the center that steps back up */
   export let upLabel = "Up";
@@ -435,17 +457,52 @@
     </tbody>
   </table>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
-  {#if legend && sun.groups.length > 1}
-    <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
-      {#each sun.groups as entry (entry.key)}
-        <li
-          class:bx--viz-treemap__legend-item={true}
-          style:--bx-viz-color={entry.color}
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{diameter}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
+  {#if legend && (groupKeysAll.length > 1 || loading || empty)}
+    <div class:bx--viz-legend={true} role="group" aria-label={legendLabel}>
+      {#each legendKeysShown as key (key)}
+        <button
+          type="button"
+          class:bx--viz-legend__item={true}
+          class:bx--viz-legend__item--hidden={hiddenSet.has(key)}
+          aria-pressed={!hiddenSet.has(key)}
+          style:--bx-viz-color={groupColorMap[key]}
+          on:click={() => toggleGroup(key)}
         >
           <span class:bx--viz-legend__swatch={true}></span>
           {groupOf === undefined ? (labelByKey.get(key) ?? key) : key}
         </button>
       {/each}
-    </ul>
+      {#if legendFolded > 0 || legendExpanded}
+        <button
+          type="button"
+          class:bx--viz-legend__item={true}
+          class:bx--viz-legend__more={true}
+          aria-expanded={legendExpanded}
+          on:click={() => {
+            legendExpanded = !legendExpanded;
+          }}
+        >
+          {legendExpanded ? legendLessLabel : legendMoreLabel(legendFolded)}
+        </button>
+      {/if}
+    </div>
   {/if}
 </figure>

@@ -45,8 +45,22 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
-  /** Specify the width, in pixels. It scales down with its container. */
-  export let width = 640;
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 640 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 640 : width;
 
   /** Specify the height of a row, in pixels */
   export let rowHeight = 36;

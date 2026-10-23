@@ -81,6 +81,9 @@
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
   /** Specify the diameter, in pixels. It scales down with its container. */
   export let diameter = 400;
 

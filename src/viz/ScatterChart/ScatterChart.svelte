@@ -90,6 +90,9 @@
   /** Set to `false` to hide the legend */
   export let legend = true;
 
+  /** Specify how many legend items show before the rest fold behind a "more" button */
+  export let maxLegendItems = 8;
+
   /** Set to `false` to hide the tooltip */
   export let tooltip = true;
 
@@ -234,7 +237,7 @@
   </svelte:fragment>
   <svelte:fragment slot="legend">
     {#if legend}
-      <ChartLegend />
+      <ChartLegend maxItems={maxLegendItems} />
     {/if}
   </svelte:fragment>
 </Chart>

@@ -160,6 +160,8 @@ export function buildGantt(rows, options) {
         x0,
         x1: Math.max(x1, x0),
         duration: task.to - task.from,
+        // The group label shares the column, from the left.
+        short: fitText(task.label, plot.x0 - 24 - key.length * CHAR),
       });
       line++;
     }
@@ -193,7 +195,12 @@ export function buildGantt(rows, options) {
     }
   }
 
-  const result = timeTicks(domain[0], domain[1], 6, { utc });
+  // About one tick per 80px, so a narrow plot does not stack its labels.
+  const tickCount = Math.max(
+    2,
+    Math.min(6, Math.floor((plot.x1 - plot.x0) / 80)),
+  );
+  const result = timeTicks(domain[0], domain[1], tickCount, { utc });
   const write = timeTickFormat(result.interval, locale, { utc });
   const full = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
@@ -206,10 +213,45 @@ export function buildGantt(rows, options) {
     groups,
     tasks,
     links,
-    ticks: result.values
-      .filter((value) => value >= domain[0] && value <= domain[1])
-      .map((value) => ({ value, px: x.map(value), label: write(value) })),
+    ticks: spaceTicks(
+      result.values
+        .filter((value) => value >= domain[0] && value <= domain[1])
+        .map((value) => ({ value, px: x.map(value), label: write(value) })),
+    ),
     xLabel: (value) => full.format(value),
     height: line * rowHeight,
   };
+}
+
+// Labels are not measured; an average glyph of the 12px label style.
+const CHAR = 6.5;
+
+/**
+ * Cut a label to about the room it has, with an ellipsis.
+ * @param {string} text
+ * @param {number} room in pixels
+ */
+function fitText(text, room) {
+  const max = Math.floor(room / CHAR);
+  if (text.length <= max) return text;
+  return max < 2 ? "…" : `${text.slice(0, max - 1)}…`;
+}
+
+/**
+ * Drop the ticks whose labels would overlap the one before them.
+ * @template {{ px: number; label: string }} Tick
+ * @param {Tick[]} ticks
+ * @returns {Tick[]}
+ */
+function spaceTicks(ticks) {
+  /** @type {Tick[]} */
+  const kept = [];
+  let edge = Number.NEGATIVE_INFINITY;
+  for (const tick of ticks) {
+    const half = (tick.label.length * CHAR) / 2;
+    if (tick.px - half < edge + 8) continue;
+    kept.push(tick);
+    edge = tick.px + half;
+  }
+  return kept;
 }

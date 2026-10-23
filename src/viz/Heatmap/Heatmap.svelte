@@ -57,6 +57,9 @@
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
   /**
    * Specify the palette: a sequential hue, or a diverging palette, which is
    * centered on the middle of the domain.

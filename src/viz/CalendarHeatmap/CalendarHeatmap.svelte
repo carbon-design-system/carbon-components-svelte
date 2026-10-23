@@ -45,6 +45,9 @@
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
   /**
    * Specify the hue of the sequential ramp.
    * @type {import("../utils/tokens.js").VizSequentialHue}

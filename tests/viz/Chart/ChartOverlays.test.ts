@@ -284,4 +284,27 @@ describe("ChartThreshold", () => {
     expect(screen.queryByTestId("tooltip")).toBeNull();
   });
 
+  it("folds a long legend behind a more button", async () => {
+    const data = Array.from({ length: 10 }, (_, s) => [
+      { day: 0, region: `s${s}`, revenue: s },
+      { day: 1, region: `s${s}`, revenue: s + 1 },
+    ]).flat();
+    render(ChartOverlays, { data });
+    const items = () =>
+      legend()
+        .getAllByRole("button")
+        .filter((b) => !b.classList.contains("bx--viz-legend__more"));
+    expect(items()).toHaveLength(8);
+    const more = legend().getByRole("button", {
+      name: "+2 more",
+      expanded: false,
+    });
+
+    await user.click(more);
+    expect(items()).toHaveLength(10);
+    await user.click(
+      legend().getByRole("button", { name: "Show less", expanded: true }),
+    );
+    expect(items()).toHaveLength(8);
+  });
 });

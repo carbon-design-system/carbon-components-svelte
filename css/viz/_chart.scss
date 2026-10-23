@@ -287,6 +287,10 @@
 
   // A hidden series reads as off three ways: hollow swatch, struck text,
   // and the pressed state.
+  .#{$prefix}--viz-legend__more {
+    color: $link-primary;
+  }
+
   .#{$prefix}--viz-legend__item--hidden {
     text-decoration: line-through;
   }

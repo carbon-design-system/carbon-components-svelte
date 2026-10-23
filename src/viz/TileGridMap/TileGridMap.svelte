@@ -43,8 +43,22 @@
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
-  /** Specify the width the map may grow to, in pixels */
-  export let width = 480;
+  /** Set to `true` to show a skeleton while the data is on its way */
+  export let loading = false;
+
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 480 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 480 : width;
 
   /**
    * Specify the hue of the sequential ramp.

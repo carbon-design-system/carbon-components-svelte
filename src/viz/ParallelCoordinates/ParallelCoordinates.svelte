@@ -48,6 +48,9 @@
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
+  /** Specify the text shown when there is no data */
+  export let emptyText = "No data";
+
   /** Set to `true` to make rows selectable */
   export let selectable = false;
 
