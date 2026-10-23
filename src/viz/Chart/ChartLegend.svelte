@@ -13,7 +13,8 @@
   import { CHART_CONTEXT } from "./context.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, toggleSeries, isolateSeries } = getContext(CHART_CONTEXT);
+  const { groups, state, toggleSeries, isolateSeries } =
+    getContext(CHART_CONTEXT);
 </script>
 
 {#if $groups.length > 1 || (showSingle && $groups.length === 1)}

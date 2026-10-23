@@ -96,6 +96,16 @@
   export let legend = true;
 
   /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
+  /**
    * Specify the selected node, as its id.
    * @type {string | null}
    */
@@ -116,6 +126,13 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
+  import {
+    colorGroups,
+    dropGroups,
+    listGroups,
+    nextHidden,
+  } from "../utils/group-legend.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { buildArcDiagram } from "./arc-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -126,11 +143,15 @@
   $: idOf = toAccessor(id);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: groupKeysAll = listGroups(nodes, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(nodes, groupOf, hiddenSet);
   $: sourceOf = toAccessor(source);
   $: targetOf = toAccessor(target);
   $: valueOf = value === undefined ? undefined : toAccessor(value);
   // Depends on the data and the options only, so hover never lays out again.
-  $: arc = buildArcDiagram(nodes, links, {
+  $: arc = buildArcDiagram(visibleRows, links, {
     id: idOf,
     label: labelOf,
     group: groupOf,
@@ -141,7 +162,7 @@
     directed,
     width: layoutWidth - PAD * 2,
     palette,
-    colors,
+    colors: groupColorMap,
   });
   $: top = arc.above + PAD;
   $: total = top + Math.max(arc.below, 0) + labelSpace;
@@ -329,9 +350,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}

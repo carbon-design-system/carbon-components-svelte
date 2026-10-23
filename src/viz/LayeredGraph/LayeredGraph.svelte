@@ -76,6 +76,16 @@
   export let legend = true;
 
   /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
+  /**
    * Specify how to read an edge's source id.
    * @type {import("../utils/accessor.js").Accessor<any, string | number>}
    */
@@ -148,6 +158,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
+  import { dropGroups, listGroups, nextHidden } from "../utils/group-legend.js";
   import { layoutLayered } from "../utils/layout-layered.js";
   import { nextId } from "../utils/next-id.js";
   import { routePolyline } from "../utils/route-edge.js";
@@ -169,7 +180,7 @@
   $: statusOf = status === undefined ? undefined : toAccessor(status);
   $: sourceOf = toAccessor(source);
   $: targetOf = toAccessor(target);
-  $: vertices = nodes.map((row, i) => ({
+  $: vertices = visibleRows.map((row, i) => ({
     id: idOf(row, i),
     label: labelOf ? String(labelOf(row, i) ?? idOf(row, i)) : undefined,
     lane: laneOf ? laneOf(row, i) : undefined,
@@ -207,10 +218,10 @@
     ...words,
   };
   // Group and status per node, and a color per group in first-seen order.
-  $: groupKeys = groupOf
-    ? [...new Set(nodes.map((row, i) => String(groupOf(row, i))))]
-    : [];
+  $: groupKeys = listGroups(nodes, groupOf);
   $: groupColor = paint(groupKeys, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(nodes, groupOf, hiddenSet);
   $: extra = new Map(
     layout.nodes.map((node) => {
       const key = groupOf ? String(groupOf(node.datum, node.index)) : undefined;

@@ -69,6 +69,16 @@
   /** Set to `false` to hide the legend, which lists the groups */
   export let legend = true;
 
+  /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
   /** Set to `true` to make cells selectable */
   export let selectable = false;
 
@@ -95,6 +105,12 @@
   import { rovingFocus } from "../../utils/roving-focus.js";
   import { toAccessor } from "../utils/accessor.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
+  import {
+    colorGroups,
+    dropGroups,
+    listGroups,
+    nextHidden,
+  } from "../utils/group-legend.js";
   import { buildTreemap } from "./treemap-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -111,14 +127,18 @@
   $: valueOf = toAccessor(value);
   $: labelOf = toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: groupKeysAll = listGroups(data, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(data, groupOf, hiddenSet);
   // Depends on the data and the shape only, so hover never rebuilds it.
-  $: map = buildTreemap(data, {
+  $: map = buildTreemap(visibleRows, {
     value: valueOf,
     label: labelOf,
     group: groupOf,
     aspect: aspectRatio,
     palette,
-    colors,
+    colors: groupColorMap,
   });
   $: formatValue = resolveFormat(format, locale);
   $: write = (
@@ -285,9 +305,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}

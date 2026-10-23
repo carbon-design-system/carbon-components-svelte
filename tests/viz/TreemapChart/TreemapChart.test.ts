@@ -79,14 +79,12 @@ describe("TreemapChart", () => {
   it("lists groups in a legend, and has none without groups", () => {
     const { unmount } = render(TreemapChart);
     expect(
-      Array.from(
-        document.querySelectorAll(".bx--viz-treemap__legend-item"),
-      ).map(text),
+      Array.from(document.querySelectorAll(".bx--viz-legend__item")).map(text),
     ).toEqual(["Platform", "Data", "Web"]);
     unmount();
 
     render(TreemapChart, { grouped: false, valueType: "percent" });
-    expect(document.querySelector(".bx--viz-treemap__legend")).toBeNull();
+    expect(document.querySelector(".bx--viz-legend")).toBeNull();
     expect(leaves().map(text)).toEqual([
       "compute 40%",
       "warehouse 40%",
@@ -114,8 +112,11 @@ describe("TreemapChart", () => {
   it("renders no buttons unless selectable", () => {
     render(TreemapChart);
 
+    // The legend's toggles are not cells.
     expect(
-      within(screen.getByTestId("treemap")).queryAllByRole("button"),
+      within(screen.getByTestId("treemap"))
+        .queryAllByRole("button")
+        .filter((b) => !b.classList.contains("bx--viz-legend__item")),
     ).toEqual([]);
   });
 
@@ -123,9 +124,9 @@ describe("TreemapChart", () => {
     const onselect = vi.fn();
     render(TreemapChart, { selectable: true, onselect });
 
-    const buttons = within(screen.getByTestId("treemap")).getAllByRole(
-      "button",
-    );
+    const buttons = within(screen.getByTestId("treemap"))
+      .getAllByRole("button")
+      .filter((b) => !b.classList.contains("bx--viz-legend__item"));
     expect(buttons.map((b) => b.tabIndex)).toEqual([0, -1, -1, -1]);
 
     buttons[0].focus();

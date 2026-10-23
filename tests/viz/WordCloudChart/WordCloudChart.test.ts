@@ -54,7 +54,7 @@ describe("WordCloudChart", () => {
   it("uses the text color without groups, and a color and legend with them", () => {
     const { unmount } = render(WordCloudChart);
     expect(words()[0].style.getPropertyValue("--bx-viz-color")).toBe("");
-    expect(document.querySelector(".bx--viz-treemap__legend")).toBeNull();
+    expect(document.querySelector(".bx--viz-legend")).toBeNull();
     unmount();
 
     render(WordCloudChart, { grouped: true });
@@ -65,9 +65,9 @@ describe("WordCloudChart", () => {
     expect(colors[0]).toBe(colors[1]);
     expect(colors[0]).not.toBe(colors[2]);
     expect(
-      Array.from(
-        document.querySelectorAll(".bx--viz-treemap__legend-item"),
-      ).map((node) => node.textContent?.trim()),
+      Array.from(document.querySelectorAll(".bx--viz-legend__item")).map(
+        (node) => node.textContent?.trim(),
+      ),
     ).toEqual(["symptom", "cause"]);
   });
 

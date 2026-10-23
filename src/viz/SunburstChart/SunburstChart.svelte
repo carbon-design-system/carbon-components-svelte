@@ -110,6 +110,16 @@
   /** Set to `false` to hide the legend, which lists the branches */
   export let legend = true;
 
+  /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
   /** Specify the label of the button in the center that steps back up */
   export let upLabel = "Up";
 
@@ -136,6 +146,13 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
+  import {
+    branchAccessor,
+    colorGroups,
+    listGroups,
+    nextHidden,
+    pruneGroups,
+  } from "../utils/group-legend.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildSunburst } from "./sunburst-geometry.js";
 
@@ -150,8 +167,24 @@
   $: valueOf = toAccessor(value);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  // Without a group field the legend lists the branches under the center,
+  // as the chart colors them, and hiding one prunes its subtree.
+  $: keyOfRow =
+    groupOf === undefined
+      ? branchAccessor(data, idOf, parentOf, root)
+      : groupOf;
+  $: labelByKey = new Map(
+    data.map((row, i) => [
+      String(idOf(row, i)),
+      String(labelOf ? labelOf(row, i) : idOf(row, i)),
+    ]),
+  );
+  $: groupKeysAll = listGroups(data, keyOfRow);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = pruneGroups(data, idOf, parentOf, keyOfRow, hiddenSet);
   // Depends on the data and the options only, so hover never lays out again.
-  $: sun = buildSunburst(data, {
+  $: sun = buildSunburst(visibleRows, {
     id: idOf,
     parent: parentOf,
     value: valueOf,
@@ -163,7 +196,7 @@
     radius: diameter / 2,
     innerRadius,
     palette,
-    colors,
+    colors: groupColorMap,
   });
   $: formatValue = resolveFormat(format, locale);
   $: headers = {
@@ -390,9 +423,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.label}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {groupOf === undefined ? (labelByKey.get(key) ?? key) : key}
+        </button>
       {/each}
     </ul>
   {/if}

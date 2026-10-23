@@ -61,7 +61,7 @@ describe("ArcDiagram", () => {
     );
     expect(nodes()[0]).not.toHaveClass("bx--viz-arc__node--grouped");
     expect(
-      screen.getByTestId("arc").querySelector(".bx--viz-treemap__legend"),
+      screen.getByTestId("arc").querySelector(".bx--viz-legend"),
     ).toBeNull();
   });
 
@@ -122,9 +122,7 @@ describe("ArcDiagram", () => {
     );
     expect(
       Array.from(
-        screen
-          .getByTestId("arc")
-          .querySelectorAll(".bx--viz-treemap__legend-item"),
+        screen.getByTestId("arc").querySelectorAll(".bx--viz-legend__item"),
       ).map((n) => n.textContent?.trim()),
     ).toEqual(["core", "ui"]);
     expect(links()[2].getAttribute("d")).toMatch(/,0,0,0,/);

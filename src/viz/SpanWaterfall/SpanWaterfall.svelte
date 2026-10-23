@@ -118,6 +118,16 @@
   /** Set to `false` to hide the legend */
   export let legend = true;
 
+  /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
   /** Set to `true` to make spans selectable */
   export let selectable = false;
 
@@ -152,6 +162,12 @@
   import { rovingFocus } from "../../utils/roving-focus.js";
   import { toAccessor } from "../utils/accessor.js";
   import { formatDuration } from "../utils/format-compact.js";
+  import {
+    colorGroups,
+    listGroups,
+    nextHidden,
+    pruneGroups,
+  } from "../utils/group-legend.js";
   import { buildSpans } from "./span-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -165,8 +181,12 @@
   $: endOf = end === undefined ? undefined : toAccessor(end);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: groupKeysAll = listGroups(data, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, groups);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = pruneGroups(data, idOf, parentOf, groupOf, hiddenSet);
   // Depends on the data and the options only, so hover never rebuilds it.
-  $: tree = buildSpans(data, {
+  $: tree = buildSpans(visibleRows, {
     id: idOf,
     parent: parentOf,
     start: startOf,
@@ -176,7 +196,7 @@
     group: groupOf,
     collapsed,
     domain,
-    groups,
+    groups: groupColorMap,
     palette,
     locale,
     utc,
@@ -405,9 +425,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}

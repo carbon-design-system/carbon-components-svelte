@@ -48,7 +48,7 @@ describe("SunburstChart", () => {
       Array.from(
         screen
           .getByTestId("sunburst")
-          .querySelectorAll(".bx--viz-treemap__legend-item"),
+          .querySelectorAll(".bx--viz-legend__item"),
       ).map((n) => n.textContent?.trim()),
     ).toEqual(["src", "vendor"]);
   });

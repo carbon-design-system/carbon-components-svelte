@@ -36,9 +36,7 @@ describe("CirclePackChart", () => {
     expect(document.querySelectorAll(".bx--viz-pack__leaf")).toHaveLength(4);
     expect(document.querySelectorAll(".bx--viz-pack__group")).toHaveLength(2);
     expect(
-      Array.from(
-        document.querySelectorAll(".bx--viz-treemap__legend-item"),
-      ).map(text),
+      Array.from(document.querySelectorAll(".bx--viz-legend__item")).map(text),
     ).toEqual(["Platform", "Data"]);
   });
 
@@ -64,7 +62,7 @@ describe("CirclePackChart", () => {
     render(CirclePackChart, { grouped: false });
 
     expect(document.querySelectorAll(".bx--viz-pack__group")).toHaveLength(0);
-    expect(document.querySelector(".bx--viz-treemap__legend")).toBeNull();
+    expect(document.querySelector(".bx--viz-legend")).toBeNull();
     expect(document.querySelectorAll(".bx--viz-pack__leaf")).toHaveLength(4);
   });
 

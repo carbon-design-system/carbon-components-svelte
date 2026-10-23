@@ -82,6 +82,16 @@
   export let legend = true;
 
   /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
+  /**
    * Specify which cells are labeled: those with room, or none.
    * @type {"auto" | "none"}
    */
@@ -130,6 +140,13 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
+  import {
+    colorGroups,
+    dropGroups,
+    listGroups,
+    nextHidden,
+  } from "../utils/group-legend.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildMarimekko } from "./marimekko-geometry.js";
 
@@ -144,10 +161,14 @@
   $: xOf = toAccessor(x);
   $: yOf = toAccessor(y);
   $: seriesOf = toAccessor(series);
+  $: groupKeysAll = listGroups(data, seriesOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(data, seriesOf, hiddenSet);
   $: xValueOf = xValue === undefined ? undefined : toAccessor(xValue);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   // Depends on the data and the options only, so hover never lays out again.
-  $: m = buildMarimekko(data, {
+  $: m = buildMarimekko(visibleRows, {
     x: xOf,
     y: yOf,
     series: seriesOf,
@@ -157,7 +178,7 @@
     width: layoutWidth,
     height,
     palette,
-    colors,
+    colors: groupColorMap,
   });
   $: total = height + HEADER;
   $: formatValue = resolveFormat(format, locale);
@@ -427,9 +448,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}

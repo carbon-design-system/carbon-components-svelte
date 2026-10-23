@@ -95,6 +95,16 @@
   export let legend = true;
 
   /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
+  /**
    * Specify the locale.
    * @type {string}
    */
@@ -111,7 +121,13 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
-  import { categoricalColors, vizColor } from "../utils/tokens.js";
+  import {
+    colorGroups,
+    dropGroups,
+    listGroups,
+    nextHidden,
+  } from "../utils/group-legend.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { layoutWords } from "../utils/word-cloud.js";
 
@@ -126,7 +142,11 @@
   $: wordOf = toAccessor(word);
   $: valueOf = toAccessor(value);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
-  $: totals = sum(data, wordOf, valueOf, groupOf);
+  $: groupKeysAll = listGroups(data, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(data, groupOf, hiddenSet);
+  $: totals = sum(visibleRows, wordOf, valueOf, groupOf);
   // Depends on the data and the size only, so hover never lays it out again.
   $: cloud = layoutWords(totals, {
     width: layoutWidth,
@@ -135,8 +155,7 @@
     maxSize,
     maxWords,
   });
-  $: groups = [...new Set(totals.map((entry) => entry.group))];
-  $: colorOf = paint(groups, palette, colors);
+  $: colorOf = new Map(Object.entries(groupColorMap));
   $: formatValue = resolveFormat(format, locale);
   $: active = cloud.words.find((entry) => entry.text === activeText) ?? null;
   $: announcement = active
@@ -170,26 +189,6 @@
       }
     }
     return [...out.values()];
-  }
-
-  /**
-   * @param {ReadonlyArray<string>} keys
-   * @param {number} option
-   * @param {Record<string, import("../utils/tokens.js").VizColor>} fixed
-   */
-  function paint(keys, option, fixed) {
-    const assigned = categoricalColors(keys.length, option);
-    /** @type {Map<string, string>} */
-    const out = new Map();
-    keys.forEach((key, i) => {
-      out.set(
-        key,
-        fixed[key] === undefined
-          ? assigned[i]
-          : (vizColor(fixed[key]) ?? assigned[i]),
-      );
-    });
-    return out;
   }
 
   /** @param {{ text: string; index: number } | null} placed */
@@ -332,9 +331,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={colorOf.get(key)}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
+          <span class:bx--viz-legend__swatch={true}></span>
           {key}
-        </li>
+        </button>
       {/each}
     </ul>
   {/if}

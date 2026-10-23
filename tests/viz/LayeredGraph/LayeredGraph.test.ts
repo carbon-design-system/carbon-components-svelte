@@ -157,9 +157,7 @@ describe("LayeredGraph", () => {
     );
     expect(
       Array.from(
-        screen
-          .getByTestId("graph")
-          .querySelectorAll(".bx--viz-treemap__legend-item"),
+        screen.getByTestId("graph").querySelectorAll(".bx--viz-legend__item"),
       ).map((n) => n.textContent?.trim()),
     ).toEqual(["edge", "services", "data"]);
   });

@@ -35,9 +35,7 @@ describe("SequenceSunburst", () => {
     expect(color(1)).not.toBe(color(2));
     expect(
       Array.from(
-        screen
-          .getByTestId("seq")
-          .querySelectorAll(".bx--viz-treemap__legend-item"),
+        screen.getByTestId("seq").querySelectorAll(".bx--viz-legend__item"),
       ).map((n) => n.textContent?.trim()),
     ).toEqual(["home", "search", "pdp", "cart"]);
     expect(trail()).toHaveTextContent("100 sequences");

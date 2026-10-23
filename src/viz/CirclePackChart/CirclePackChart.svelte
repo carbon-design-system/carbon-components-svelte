@@ -77,6 +77,16 @@
   export let legend = true;
 
   /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
+  /**
    * Specify the locale.
    * @type {string}
    */
@@ -93,6 +103,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import {
+    colorGroups,
+    dropGroups,
+    listGroups,
+    nextHidden,
+  } from "../utils/group-legend.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildPack } from "./pack-geometry.js";
 
@@ -107,15 +123,19 @@
   $: valueOf = toAccessor(value);
   $: labelOf = toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: groupKeysAll = listGroups(data, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(data, groupOf, hiddenSet);
   // Depends on the data and the diameter only, so hover never rebuilds it.
-  $: pack = buildPack(data, {
+  $: pack = buildPack(visibleRows, {
     value: valueOf,
     label: labelOf,
     group: groupOf,
     size: diameter,
     padding,
     palette,
-    colors,
+    colors: groupColorMap,
   });
   $: formatValue = resolveFormat(format, locale);
   // Reading order for the keyboard: group by group, largest first.
@@ -296,9 +316,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}

@@ -146,7 +146,7 @@ describe("OrgChart", () => {
     expect(nodes()[1]).not.toHaveClass("bx--viz-org__node--grouped");
     expect(document.querySelector(".bx--viz-org__accent")).toBeNull();
     expect(
-      screen.getByTestId("org").querySelector(".bx--viz-treemap__legend"),
+      screen.getByTestId("org").querySelector(".bx--viz-legend"),
     ).toBeNull();
 
     await rerender({ withGroups: true });
@@ -159,9 +159,7 @@ describe("OrgChart", () => {
     expect(color(1)).not.toBe(color(4));
     expect(
       Array.from(
-        screen
-          .getByTestId("org")
-          .querySelectorAll(".bx--viz-treemap__legend-item"),
+        screen.getByTestId("org").querySelectorAll(".bx--viz-legend__item"),
       ).map((n) => n.textContent?.trim()),
     ).toEqual(["Platform", "Product"]);
     expect(items().find((item) => item.startsWith("Node: K. Chen"))).toContain(

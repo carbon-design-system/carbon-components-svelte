@@ -67,6 +67,16 @@
   /** Set to `false` to hide the legend, which names the groups */
   export let legend = true;
 
+  /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
@@ -109,6 +119,12 @@
 
   import { createEventDispatcher } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
+  import {
+    colorGroups,
+    listGroups,
+    nextHidden,
+    pruneGroups,
+  } from "../utils/group-legend.js";
   import { buildOrg } from "./org-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -123,8 +139,12 @@
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   $: sublabelOf = sublabel === undefined ? undefined : toAccessor(sublabel);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: groupKeysAll = listGroups(data, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = pruneGroups(data, idOf, parentOf, groupOf, hiddenSet);
   // Depends on the data and the options only, so hover never lays out again.
-  $: org = buildOrg(data, {
+  $: org = buildOrg(visibleRows, {
     id: idOf,
     parent: parentOf,
     label: labelOf,
@@ -136,7 +156,7 @@
     rankGap,
     nodeGap,
     palette,
-    colors,
+    colors: groupColorMap,
   });
   $: width = org.width + PAD * 2;
   $: height =
@@ -406,9 +426,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}

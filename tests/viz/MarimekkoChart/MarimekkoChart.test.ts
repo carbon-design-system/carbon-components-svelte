@@ -67,7 +67,7 @@ describe("MarimekkoChart", () => {
       Array.from(
         screen
           .getByTestId("marimekko")
-          .querySelectorAll(".bx--viz-treemap__legend-item"),
+          .querySelectorAll(".bx--viz-legend__item"),
       ).map((n) => n.textContent?.trim()),
     ).toEqual(["Acme", "Beta", "Ce"]);
   });

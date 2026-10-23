@@ -85,10 +85,8 @@ describe("IcicleChart", () => {
     expect(color("bundle")).toBe("var(--cds-viz-neutral)");
     expect(
       within(screen.getByTestId("icicle"))
-        .getAllByRole("listitem", { hidden: true })
-        .filter((item) =>
-          item.classList.contains("bx--viz-treemap__legend-item"),
-        )
+        .getAllByRole("button")
+        .filter((item) => item.classList.contains("bx--viz-legend__item"))
         .map((item) => item.textContent?.trim()),
     ).toEqual(["src", "vendor", "assets"]);
   });
@@ -151,7 +149,9 @@ describe("IcicleChart", () => {
     const onselect = vi.fn();
     render(IcicleChart, { selectable: true, onselect });
 
-    const buttons = within(screen.getByTestId("icicle")).getAllByRole("button");
+    const buttons = within(screen.getByTestId("icicle"))
+      .getAllByRole("button")
+      .filter((b) => !b.classList.contains("bx--viz-legend__item"));
     expect(buttons).toHaveLength(8);
     expect(buttons.map((button) => button.tabIndex)).toEqual([
       0, -1, -1, -1, -1, -1, -1, -1,

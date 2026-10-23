@@ -125,6 +125,16 @@
   /** Set to `false` to hide the legend, which lists the workstreams */
   export let legend = true;
 
+  /**
+   * Specify the hidden group keys. Bind it: the legend toggles them. The
+   * last visible group cannot be hidden.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let hidden = [];
+
+  /** Specify the accessible name of the legend */
+  export let legendLabel = "Groups";
+
   /** Set to `true` to place ticks on UTC boundaries */
   export let utc = false;
 
@@ -151,6 +161,12 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatDuration, formatPercent } from "../utils/format-compact.js";
+  import {
+    colorGroups,
+    dropGroups,
+    listGroups,
+    nextHidden,
+  } from "../utils/group-legend.js";
   import { nextId } from "../utils/next-id.js";
   import { observeResize } from "../utils/resize-pool.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
@@ -168,13 +184,17 @@
   $: idOf = id === undefined ? undefined : toAccessor(id);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: groupKeysAll = listGroups(data, groupOf);
+  $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
+  $: hiddenSet = new Set(hidden.map(String));
+  $: visibleRows = dropGroups(data, groupOf, hiddenSet);
   $: startOf = toAccessor(start);
   $: endOf = toAccessor(end);
   $: progressOf = progress === undefined ? undefined : toAccessor(progress);
   $: dependsOf = dependsOn === undefined ? undefined : toAccessor(dependsOn);
   $: plot = { x0: labelSpace, x1: width - PAD };
   // Depends on the data and the shape only, so hover never lays out again.
-  $: gantt = buildGantt(data, {
+  $: gantt = buildGantt(visibleRows, {
     id: idOf,
     label: labelOf,
     group: groupOf,
@@ -183,7 +203,7 @@
     progress: progressOf,
     dependsOn: dependsOf,
     domain,
-    colors,
+    colors: groupColorMap,
     palette,
     plot,
     rowHeight,
@@ -529,9 +549,9 @@
           class:bx--viz-treemap__legend-item={true}
           style:--bx-viz-color={entry.color}
         >
-          <span class:bx--viz-treemap__swatch={true}></span>
-          {entry.key}
-        </li>
+          <span class:bx--viz-legend__swatch={true}></span>
+          {key}
+        </button>
       {/each}
     </ul>
   {/if}
