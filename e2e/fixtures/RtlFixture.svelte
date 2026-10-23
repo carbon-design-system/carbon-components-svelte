@@ -110,6 +110,23 @@
       orientation="vertical"
     />
   </div>
+  <div data-testid="slider-vertical-marks">
+    <Slider
+      labelText="Replicas"
+      max={10}
+      value={2}
+      {marks}
+      orientation="vertical"
+    />
+    <RangeSlider
+      labelText="Window"
+      max={10}
+      value={2}
+      valueUpper={6}
+      {marks}
+      orientation="vertical"
+    />
+  </div>
   <div data-testid="combobox" class="field">
     <ComboBox
       labelText="Contact"

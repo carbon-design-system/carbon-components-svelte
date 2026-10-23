@@ -307,6 +307,78 @@ test.describe("right-to-left layout", () => {
     expect(await gaps()).toEqual(ltr);
   });
 
+  test("mirrors vertical Slider labels and ticks around the track", async ({
+    page,
+  }) => {
+    // The fixture's vertical Slider and vertical RangeSlider with labeled
+    // marks. Each part is measured from its own track's center.
+    const slider = (n: number) =>
+      `[data-testid=slider-vertical-marks] > :nth-child(${n})`;
+    const SLIDERS = [slider(1), slider(2)];
+    const PARTS = {
+      markLabel: ".bx--slider__mark:nth-child(2) .bx--slider__mark-label",
+      maxLabel: ".bx--slider__range-label:last-of-type",
+      minLabel: ".bx--slider__range-label:first-of-type",
+    };
+    const selectors = Object.fromEntries(
+      SLIDERS.flatMap((root, i) =>
+        Object.entries({ track: ".bx--slider__track", ...PARTS }).map(
+          ([name, part]) => [`${name}${i}`, `${root} ${part}`],
+        ),
+      ),
+    );
+
+    /** Each part's edges as offsets from its track's center. */
+    async function offsets() {
+      const box = await boxes(page, selectors);
+      const result: Record<string, { start: number; end: number }> = {};
+      for (const i of SLIDERS.keys()) {
+        const track = box[`track${i}`] as Box;
+        const center = (track.left + track.right) / 2;
+        for (const name of Object.keys(PARTS)) {
+          const part = box[`${name}${i}`] as Box;
+          result[`${name}${i}`] = {
+            start: part.left - center,
+            end: part.right - center,
+          };
+        }
+      }
+      // The center tick is the `::before` of a track without marks.
+      result.centerTick = await page
+        .locator("[data-testid=slider-gaps] > :nth-child(4) .bx--slider__track")
+        .evaluate((track) => {
+          const rect = track.getBoundingClientRect();
+          const tick = getComputedStyle(track, "::before");
+          const start = rect.left + Number.parseFloat(tick.left);
+          const center = (rect.left + rect.right) / 2;
+          return {
+            start: Math.round(start - center),
+            end: Math.round(start + Number.parseFloat(tick.width) - center),
+          };
+        });
+      return result;
+    }
+
+    // In LTR the labels sit right of the track, mark labels nearest, and
+    // the center tick sits left of it.
+    const ltr = await offsets();
+    for (const i of SLIDERS.keys()) {
+      expect.soft(ltr[`markLabel${i}`].start, "LTR").toBeGreaterThan(0);
+      expect
+        .soft(ltr[`maxLabel${i}`].start, "LTR")
+        .toBeGreaterThan(ltr[`markLabel${i}`].end);
+    }
+    expect.soft(ltr.centerTick.end, "LTR").toBeLessThan(0);
+
+    await setDirection(page, "rtl");
+    const rtl = await offsets();
+    for (const [name, { start, end }] of Object.entries(ltr)) {
+      const actual = rtl[name];
+      expect.soft(Math.abs(actual.end + start), name).toBeLessThanOrEqual(1);
+      expect.soft(Math.abs(actual.start + end), name).toBeLessThanOrEqual(1);
+    }
+  });
+
   test("puts the checkmark at the inline end of an open ComboBox", async ({
     page,
   }) => {
