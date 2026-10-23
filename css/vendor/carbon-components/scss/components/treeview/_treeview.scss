@@ -124,6 +124,12 @@
       // the animatable property set.
       transition: transform $duration--fast-02 motion(standard, productive),
         fill $duration--fast-02 motion(standard, productive);
+
+      // ccs: in RTL, child rows indent toward the left, so a collapsed
+      // caret points left. Expanded, it points down in both directions.
+      [dir='rtl'] &:not(.#{$prefix}--tree-parent-node__toggle-icon--expanded) {
+        transform: rotate(90deg);
+      }
     }
 
     .#{$prefix}--tree-parent-node__toggle-icon--expanded {

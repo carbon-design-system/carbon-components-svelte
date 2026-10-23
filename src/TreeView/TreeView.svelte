@@ -654,6 +654,10 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -1136,6 +1140,27 @@
       ? nodes.find((node) => !node.disabled)?.id
       : undefined;
 
+  // In RTL, child rows indent toward the left, so Left expands and Right
+  // collapses. A LayoutDirection gives the direction. Without one, read
+  // the computed direction on each arrow key, since nothing reports a
+  // `dir` change on an ancestor.
+  const layoutDirection = getLayoutDirection();
+
+  /**
+   * The key pressed, with ArrowLeft and ArrowRight swapped in RTL, so
+   * "ArrowRight" always means toward the children.
+   * @param {KeyboardEvent} event
+   * @returns {string}
+   */
+  function treeKey(event) {
+    const { key } = event;
+    if (key !== "ArrowLeft" && key !== "ArrowRight") return key;
+    const node =
+      event.currentTarget instanceof Element ? event.currentTarget : null;
+    if (resolveLayoutDirection($layoutDirection, node) !== "rtl") return key;
+    return key === "ArrowLeft" ? "ArrowRight" : "ArrowLeft";
+  }
+
   setContext("carbon:TreeView", {
     treeId,
     serverTabStopId,
@@ -1153,6 +1178,7 @@
     expandNode,
     focusNode,
     toggleNode,
+    treeKey,
     isInitialRender: () => !initialRenderComplete,
   });
 
@@ -1967,7 +1993,7 @@
       }
     }
 
-    switch (event.key) {
+    switch (treeKey(event)) {
       case "ArrowDown": {
         event.preventDefault();
         event.stopPropagation();

@@ -85,6 +85,7 @@
     toggleNode,
     isInitialRender,
     serverTabStopId,
+    treeKey,
   } = getContext("carbon:TreeView");
 
   let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
@@ -236,7 +237,9 @@
         event.stopPropagation();
       }
 
-      if (parent && event.key === "ArrowLeft") {
+      const key = treeKey(event);
+
+      if (parent && key === "ArrowLeft") {
         if (expanded) {
           expandNode(node, false);
           toggleNode(node);
@@ -246,7 +249,7 @@
         }
       }
 
-      if (parent && event.key === "ArrowRight") {
+      if (parent && key === "ArrowRight") {
         if (expanded) {
           const groupUl = ref.lastElementChild;
           if (groupUl instanceof HTMLElement) {
