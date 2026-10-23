@@ -82,7 +82,7 @@
    */
   export let open = true;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import { joinDescribedBy } from "../utils/field-status.js";
@@ -97,6 +97,9 @@
 
   /** @type {null | HTMLDivElement} */
   let notificationRef = null;
+
+  // A `NotificationActionButton` in a toast renders as a tertiary button.
+  setContext("carbon:ToastNotification", {});
 
   const {
     close,
@@ -210,6 +213,11 @@
         </div>
       {/if}
       <slot />
+      {#if $$slots.actions}
+        <div class:bx--toast-notification__actions={true}>
+          <slot name="actions" />
+        </div>
+      {/if}
     </div>
     {#if !hideCloseButton}
       <NotificationButton

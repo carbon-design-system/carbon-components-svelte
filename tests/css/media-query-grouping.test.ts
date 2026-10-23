@@ -45,10 +45,12 @@ describe("any-hover media query grouping", () => {
     // (_chat-button.scss).
     // Raised again from 71 to 72 for InlineEdit's one hover block
     // (_inline-edit.scss).
+    // Raised again from 72 to 73 for the toast action button's one hover
+    // block (components/notification/_toast-notification.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(72);
+    expect(blocks.length).toBeLessThanOrEqual(73);
   }, 30_000);
 });

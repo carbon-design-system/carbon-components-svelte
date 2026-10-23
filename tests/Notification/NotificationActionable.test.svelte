@@ -48,9 +48,11 @@
       {subtitle}
       on:close={onClose}
     >
-      {#if withAction}
-        <NotificationActionButton>Undo</NotificationActionButton>
-      {/if}
+      <svelte:fragment slot="actions">
+        {#if withAction}
+          <NotificationActionButton>Undo</NotificationActionButton>
+        {/if}
+      </svelte:fragment>
     </ToastNotification>
   {/if}
 

@@ -22,6 +22,7 @@
     Menu,
     MenuItem,
     Meter,
+    NotificationActionButton,
     OverflowMenu,
     OverflowMenuItem,
     Popover,
@@ -44,6 +45,7 @@
     TableOfContentsItem,
     Tabs,
     Tag,
+    ToastNotification,
     Toggle,
     ToggleButton,
     ToggleButtonGroup,
@@ -269,4 +271,10 @@
     value={20}
     valueUpper={60}
   />
+
+  <ToastNotification title="Upload failed" subtitle="The connection timed out.">
+    <svelte:fragment slot="actions">
+      <NotificationActionButton>Retry</NotificationActionButton>
+    </svelte:fragment>
+  </ToastNotification>
 </main>
