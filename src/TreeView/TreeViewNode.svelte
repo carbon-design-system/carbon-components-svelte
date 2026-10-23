@@ -161,8 +161,8 @@
   }
   $: if (refLabel) {
     const rem = offset();
-    refLabel.style.marginLeft = `-${rem}rem`;
-    refLabel.style.paddingLeft = `${rem}rem`;
+    refLabel.style.marginInlineStart = `-${rem}rem`;
+    refLabel.style.paddingInlineStart = `${rem}rem`;
   }
 </script>
 

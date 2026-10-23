@@ -61,8 +61,8 @@
 
   // Flattened-row indent that matches what the recursive TreeViewNodeList
   // produces visually. In the recursive tree, each ancestor `<li>` contributes
-  // its `.bx--tree-node` `padding-left: $spacing-05` (1rem) through nesting.
-  // The leaf class adds `padding-left: $spacing-08` (2.5rem) or `$spacing-07`
+  // its `.bx--tree-node` `padding-inline-start: $spacing-05` (1rem) through
+  // nesting. The leaf class adds `$spacing-08` (2.5rem) or `$spacing-07`
   // (2rem) with an icon. Checkbox mode uses one inset per depth so the
   // leading control lines up across parents and leaves.
   $: leafBase = icon ? 2 : 2.5;
@@ -100,7 +100,7 @@
       href={disabled ? undefined : href}
       target={disabled ? undefined : target}
       rel={resolveLinkRel(target)}
-      style:padding-left="{indentRem}rem"
+      style:padding-inline-start="{indentRem}rem"
       tabindex={disabled ? undefined : isTabAnchor ? 0 : -1}
       aria-level={depth + 1}
       aria-posinset={posInSet}
@@ -121,8 +121,8 @@
     >
       <div
         class:bx--tree-node__label={true}
-        style:margin-left="-{indentRem}rem"
-        style:padding-left="{indentRem}rem"
+        style:margin-inline-start="-{indentRem}rem"
+        style:padding-inline-start="{indentRem}rem"
       >
         <svelte:component this={icon} class="bx--tree-node__icon" />
         <slot node={mergedNode}>{node.text}</slot>
@@ -137,7 +137,7 @@
     role="treeitem"
     id="{$treeId}-{id}"
     style:height="{itemHeight}px"
-    style:padding-left="{indentRem}rem"
+    style:padding-inline-start="{indentRem}rem"
     tabindex={disabled ? undefined : isTabAnchor ? 0 : -1}
     aria-level={depth + 1}
     aria-posinset={posInSet}
@@ -167,8 +167,8 @@
   >
     <div
       class:bx--tree-node__label={true}
-      style:margin-left="-{indentRem}rem"
-      style:padding-left="{indentRem}rem"
+      style:margin-inline-start="-{indentRem}rem"
+      style:padding-inline-start="{indentRem}rem"
     >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->

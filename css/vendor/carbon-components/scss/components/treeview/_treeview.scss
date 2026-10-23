@@ -30,7 +30,7 @@
     overflow: hidden;
 
     .#{$prefix}--tree-node {
-      padding-left: $spacing-05;
+      padding-inline-start: $spacing-05;
       background-color: $layer;
       color: $text-secondary;
 
@@ -73,7 +73,7 @@
 
     .#{$prefix}--tree-leaf-node {
       display: flex;
-      padding-left: $spacing-08;
+      padding-inline-start: $spacing-08;
     }
 
     // ccs: TreeViewSkeleton: a bar where each leaf's text sits, in the
@@ -94,7 +94,7 @@
     }
 
     .#{$prefix}--tree-leaf-node.#{$prefix}--tree-node--with-icon {
-      padding-left: $spacing-07;
+      padding-inline-start: $spacing-07;
     }
 
     .#{$prefix}--tree-node__label__details {
@@ -103,13 +103,13 @@
     }
 
     .#{$prefix}--tree-node--with-icon .#{$prefix}--tree-parent-node__toggle {
-      margin-right: 0;
+      margin-inline-end: 0;
     }
 
     .#{$prefix}--tree-parent-node__toggle {
       padding: 0;
       border: 0;
-      margin-right: $spacing-03;
+      margin-inline-end: $spacing-03;
 
       &:focus {
         outline: none;
@@ -132,7 +132,7 @@
 
     .#{$prefix}--tree-node__icon {
       flex-shrink: 0;
-      margin-right: $spacing-03;
+      margin-inline-end: $spacing-03;
       fill: $icon-secondary;
     }
 
@@ -207,11 +207,11 @@
       &::before {
         position: absolute;
         top: 0;
-        left: 0;
         width: to-rem(4px);
         height: 100%;
         background-color: $interactive;
         content: '';
+        @include ccs-inset-inline($start: 0);
       }
     }
   }
@@ -241,11 +241,11 @@
     > .#{$prefix}--tree-node__label::before {
     position: absolute;
     top: 0;
-    left: 0;
     width: to-rem(4px);
     height: 100%;
     background-color: $interactive;
     content: "";
+    @include ccs-inset-inline($start: 0);
   }
 
   .#{$prefix}--tree--multiselect
@@ -289,11 +289,11 @@
 @mixin treeview-checkbox {
   // Carbon pads leaf rows for a missing caret so text lines up with parents.
   // The checkbox sits ahead of that pad, so reset it or leaf checkboxes
-  // drift right of their parent siblings.
+  // drift toward the inline end of their parent siblings.
   .#{$prefix}--tree--checkbox .#{$prefix}--tree-leaf-node,
   .#{$prefix}--tree--checkbox
     .#{$prefix}--tree-leaf-node.#{$prefix}--tree-node--with-icon {
-    padding-left: $carbon--spacing-05;
+    padding-inline-start: $carbon--spacing-05;
   }
 
   // `bx--form-item` stretches to fill its flex parent and would shove the
@@ -304,10 +304,9 @@
     position: relative;
     flex: 0 0 auto;
     margin-top: 0;
-    // Nudge the checkbox left into the row inset and widen the gap after it
+    // Nudge the checkbox back into the row inset and widen the gap after it
     // by the same amount so the text column does not move.
-    margin-left: -$carbon--spacing-03;
-    margin-right: $carbon--spacing-04;
+    margin-inline: -$carbon--spacing-03 $carbon--spacing-04;
     margin-bottom: 0;
   }
 
@@ -317,7 +316,7 @@
     .#{$prefix}--tree-leaf-node
     .#{$prefix}--tree-node__label
     > .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
-    margin-right: $carbon--spacing-04 + $carbon--spacing-05 + $carbon--spacing-03;
+    margin-inline-end: $carbon--spacing-04 + $carbon--spacing-05 + $carbon--spacing-03;
   }
 
   // Carbon pads the label for ascenders of label text. There is none here,
