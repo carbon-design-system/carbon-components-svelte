@@ -82,6 +82,26 @@ describe("Popover", () => {
     );
   });
 
+  it("draws the drop shadow by default and drops it when dropShadow is false", async () => {
+    const { rerender } = render(Popover, { props: { open: true } });
+    const popover = screen.getByTestId("parent").firstElementChild;
+
+    expect(popover).toHaveClass("bx--popover--drop-shadow");
+
+    await rerender({ dropShadow: false });
+    expect(popover).not.toHaveClass("bx--popover--drop-shadow");
+  });
+
+  it("draws a border only when border is true", async () => {
+    const { rerender } = render(Popover, { props: { open: true } });
+    const popover = screen.getByTestId("parent").firstElementChild;
+
+    expect(popover).not.toHaveClass("bx--popover--border");
+
+    await rerender({ border: true });
+    expect(popover).toHaveClass("bx--popover--border");
+  });
+
   it("should handle high contrast variant", () => {
     render(Popover, {
       props: { open: true, highContrast: true },

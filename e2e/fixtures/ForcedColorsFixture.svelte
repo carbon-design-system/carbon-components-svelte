@@ -129,6 +129,9 @@
   <div style="position: relative; height: 4rem;">
     <Popover open caret align="bottom">Popover</Popover>
   </div>
+  <div style="position: relative; height: 4rem;">
+    <Popover open caret border align="bottom">Bordered popover</Popover>
+  </div>
   <OverflowMenu open iconDescription="Overflow">
     <OverflowMenuItem text="Item" />
   </OverflowMenu>

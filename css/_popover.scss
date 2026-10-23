@@ -1,4 +1,5 @@
-// Popover from carbon-components@10.47 (removed in 10.48).
+// Popover from carbon-components@10.47 (removed in 10.48), with the Carbon
+// v11 caret, drop shadow and border.
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
@@ -38,8 +39,7 @@
   }
 
   .#{$prefix}--popover-contents {
-    @include box-shadow;
-    // The box-shadow is the only edge; forced colors drop it.
+    // The shadow is the only edge; forced colors drop it.
     @include high-contrast-mode("outline");
 
     position: relative;
@@ -50,46 +50,26 @@
     color: $popover-text-color;
   }
 
+  // v11 draws the shadow as a filter on the whole popover, so it follows the
+  // caret too. Toggletip keeps the v10 box-shadow (see the end of this mixin).
+  .#{$prefix}--popover--drop-shadow:not(.#{$prefix}--toggletip-popover) {
+    filter: drop-shadow(0 $carbon--spacing-01 $carbon--spacing-01 rgba(0, 0, 0, 0.2));
+  }
+
+  .#{$prefix}--popover--border .#{$prefix}--popover-contents {
+    outline: 1px solid $border-subtle;
+    outline-offset: -1px;
+  }
+
   .#{$prefix}--popover--high-contrast .#{$prefix}--popover-contents {
     background-color: $background-inverse;
     color: $text-inverse;
   }
 
-  .#{$prefix}--popover--caret {
-    --cds-popover-offset: 0.5rem;
-  }
-
-  .#{$prefix}--popover--caret .#{$prefix}--popover-contents::before,
-  .#{$prefix}--popover--caret .#{$prefix}--popover-contents::after {
-    position: absolute;
-    display: inline-block;
-    width: to-rem(8px);
-    height: to-rem(8px);
-    background-color: inherit;
-    content: "";
-  }
-
-  .#{$prefix}--popover--caret .#{$prefix}--popover-contents::before {
-    z-index: -1;
-    box-shadow: 2px 2px 6px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  // The popover's tooltip is created by drawing two 8px x 8px boxes, one for
-  // rendering the box-shadow that the popover content uses and another for
-  // layering on top of this box to create an effect of a popover caret with a
-  // box-shadow. The layer with the box-shadow is rendered behind the popover
-  // content, while the other is rendered above of the popover content.
-
   .#{$prefix}--popover--bottom {
     bottom: 0;
     left: 50%;
     transform: translate(-50%, calc(100% + var(--cds-popover-offset)));
-  }
-
-  @include place-caret(bottom) {
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
   }
 
   .#{$prefix}--popover--bottom-left {
@@ -98,23 +78,10 @@
     transform: translateY(calc(100% + var(--cds-popover-offset)));
   }
 
-  @include place-caret(bottom-left) {
-    top: 0;
-    left: 0;
-    transform: translate(var(--cds-popover-caret-offset), -50%) rotate(45deg);
-  }
-
   .#{$prefix}--popover--bottom-right {
     right: 0;
     bottom: 0;
     transform: translateY(calc(100% + var(--cds-popover-offset)));
-  }
-
-  @include place-caret(bottom-right) {
-    top: 0;
-    right: 0;
-    transform: translate(calc(-1 * var(--cds-popover-caret-offset)), -50%)
-      rotate(45deg);
   }
 
   .#{$prefix}--popover--bottom::before,
@@ -133,35 +100,16 @@
     transform: translate(-50%, calc(-1 * var(--cds-popover-offset)));
   }
 
-  @include place-caret(top) {
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 50%) rotate(45deg);
-  }
-
   .#{$prefix}--popover--top-left {
     bottom: 100%;
     left: 0;
     transform: translateY(calc(-1 * var(--cds-popover-offset)));
   }
 
-  @include place-caret(top-left) {
-    bottom: 0;
-    left: 0;
-    transform: translate(var(--cds-popover-caret-offset), 50%) rotate(45deg);
-  }
-
   .#{$prefix}--popover--top-right {
     right: 0;
     bottom: 100%;
     transform: translateY(calc(-1 * var(--cds-popover-offset)));
-  }
-
-  @include place-caret(top-right) {
-    right: 0;
-    bottom: 0;
-    transform: translate(calc(-1 * var(--cds-popover-caret-offset)), 50%)
-      rotate(45deg);
   }
 
   .#{$prefix}--popover--top::before,
@@ -180,35 +128,16 @@
     transform: translate(var(--cds-popover-offset), -50%);
   }
 
-  @include place-caret(right) {
-    top: 50%;
-    left: 0;
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
   .#{$prefix}--popover--right-top {
     top: 0;
     left: 100%;
     transform: translateX(var(--cds-popover-offset));
   }
 
-  @include place-caret(right-top) {
-    top: 0;
-    left: 0;
-    transform: translate(-50%, var(--cds-popover-caret-offset)) rotate(45deg);
-  }
-
   .#{$prefix}--popover--right-bottom {
     bottom: 0;
     left: 100%;
     transform: translateX(var(--cds-popover-offset));
-  }
-
-  @include place-caret(right-bottom) {
-    bottom: 0;
-    left: 0;
-    transform: translate(-50%, calc(-1 * var(--cds-popover-caret-offset)))
-      rotate(45deg);
   }
 
   .#{$prefix}--popover--right::before,
@@ -227,35 +156,16 @@
     transform: translate(calc(-1 * var(--cds-popover-offset)), -50%);
   }
 
-  @include place-caret(left) {
-    top: 50%;
-    right: 0;
-    transform: translate(50%, -50%) rotate(45deg);
-  }
-
   .#{$prefix}--popover--left-top {
     top: 0;
     right: 100%;
     transform: translateX(calc(-1 * var(--cds-popover-offset)));
   }
 
-  @include place-caret(left-top) {
-    top: 0;
-    right: 0;
-    transform: translate(50%, var(--cds-popover-caret-offset)) rotate(45deg);
-  }
-
   .#{$prefix}--popover--left-bottom {
     right: 100%;
     bottom: 0;
     transform: translateX(calc(-1 * var(--cds-popover-offset)));
-  }
-
-  @include place-caret(left-bottom) {
-    right: 0;
-    bottom: 0;
-    transform: translate(50%, calc(-1 * var(--cds-popover-caret-offset)))
-      rotate(45deg);
   }
 
   .#{$prefix}--popover--left::before,
@@ -266,6 +176,237 @@
     bottom: 0;
     width: var(--cds-popover-offset);
     transform: translateX(100%);
+  }
+
+  // The v11 caret: a 12px x 6px triangle outside the contents' edge, 10px off
+  // the trigger. A start or end caret centers where the v10 caret did,
+  // `--cds-popover-caret-offset` plus 4px in from the corner. Each placement
+  // sets the caret's position, shape and shift on the popover, so one rule
+  // draws it. `::before` is the 1px edge that `border` and forced colors draw
+  // under it; there `::after` moves 1px in and narrows by 1px.
+  $caret-center: calc(var(--cds-popover-caret-offset) + #{to-rem(4px)});
+  $caret-end: calc(100% - var(--cds-popover-caret-offset) - #{to-rem(4px)});
+
+  .#{$prefix}--popover--bottom,
+  .#{$prefix}--popover--bottom-left,
+  .#{$prefix}--popover--bottom-right {
+    --ccs-popover-caret-y: 0;
+    --ccs-popover-caret-shift: translate(-50%, -100%);
+    --ccs-popover-caret-width: #{to-rem(12px)};
+    --ccs-popover-caret-height: #{to-rem(6px)};
+    --ccs-popover-caret-shape: polygon(0 100%, 50% 0, 100% 100%);
+    --ccs-popover-caret-inner: polygon(0.5px 100%, 50% 0, calc(100% - 0.5px) 100%);
+    --ccs-popover-caret-edge: 1px 0 0;
+  }
+
+  .#{$prefix}--popover--top,
+  .#{$prefix}--popover--top-left,
+  .#{$prefix}--popover--top-right {
+    --ccs-popover-caret-y: 100%;
+    --ccs-popover-caret-shift: translateX(-50%);
+    --ccs-popover-caret-width: #{to-rem(12px)};
+    --ccs-popover-caret-height: #{to-rem(6px)};
+    --ccs-popover-caret-shape: polygon(0 0, 50% 100%, 100% 0);
+    --ccs-popover-caret-inner: polygon(0.5px 0, 50% 100%, calc(100% - 0.5px) 0);
+    --ccs-popover-caret-edge: -1px 0 0;
+  }
+
+  .#{$prefix}--popover--right,
+  .#{$prefix}--popover--right-top,
+  .#{$prefix}--popover--right-bottom {
+    --ccs-popover-caret-x: 0;
+    --ccs-popover-caret-shift: translate(-100%, -50%);
+    --ccs-popover-caret-width: #{to-rem(6px)};
+    --ccs-popover-caret-height: #{to-rem(12px)};
+    --ccs-popover-caret-shape: polygon(100% 0, 0 50%, 100% 100%);
+    --ccs-popover-caret-inner: polygon(100% 0.5px, 0 50%, 100% calc(100% - 0.5px));
+    --ccs-popover-caret-edge: 0 0 0 1px;
+  }
+
+  .#{$prefix}--popover--left,
+  .#{$prefix}--popover--left-top,
+  .#{$prefix}--popover--left-bottom {
+    --ccs-popover-caret-x: 100%;
+    --ccs-popover-caret-shift: translateY(-50%);
+    --ccs-popover-caret-width: #{to-rem(6px)};
+    --ccs-popover-caret-height: #{to-rem(12px)};
+    --ccs-popover-caret-shape: polygon(0 0, 100% 50%, 0 100%);
+    --ccs-popover-caret-inner: polygon(0 0.5px, 100% 50%, 0 calc(100% - 0.5px));
+    --ccs-popover-caret-edge: 0 0 0 -1px;
+  }
+
+  .#{$prefix}--popover--bottom,
+  .#{$prefix}--popover--top {
+    --ccs-popover-caret-x: 50%;
+  }
+
+  .#{$prefix}--popover--bottom-left,
+  .#{$prefix}--popover--top-left {
+    --ccs-popover-caret-x: #{$caret-center};
+  }
+
+  .#{$prefix}--popover--bottom-right,
+  .#{$prefix}--popover--top-right {
+    --ccs-popover-caret-x: #{$caret-end};
+  }
+
+  .#{$prefix}--popover--right,
+  .#{$prefix}--popover--left {
+    --ccs-popover-caret-y: 50%;
+  }
+
+  .#{$prefix}--popover--right-top,
+  .#{$prefix}--popover--left-top {
+    --ccs-popover-caret-y: #{$caret-center};
+  }
+
+  .#{$prefix}--popover--right-bottom,
+  .#{$prefix}--popover--left-bottom {
+    --ccs-popover-caret-y: #{$caret-end};
+  }
+
+  .#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover) {
+    --cds-popover-offset: #{to-rem(10px)};
+  }
+
+  .#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover)
+    .#{$prefix}--popover-contents::before,
+  .#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover)
+    .#{$prefix}--popover-contents::after {
+    position: absolute;
+    top: var(--ccs-popover-caret-y);
+    left: var(--ccs-popover-caret-x);
+    display: none;
+    width: var(--ccs-popover-caret-width);
+    height: var(--ccs-popover-caret-height);
+    background-color: inherit;
+    clip-path: var(--ccs-popover-caret-shape);
+    content: "";
+    transform: var(--ccs-popover-caret-shift);
+  }
+
+  .#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover)
+    .#{$prefix}--popover-contents::after {
+    display: block;
+  }
+
+  @include v11-caret-edge(".#{$prefix}--popover--border", $border-subtle);
+
+  // The caret is painted Canvas in forced colors, so it would read as a gap
+  // in the surface outline. Draw its edge as for `border`.
+  @include high-contrast-mode {
+    @include v11-caret-edge("", CanvasText);
+
+    // Forced colors would repaint the `border` edge color Canvas.
+    .#{$prefix}--popover--border.#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover)
+      .#{$prefix}--popover-contents::before {
+      background-color: CanvasText;
+    }
+  }
+
+  // Toggletip, and the AI label callout built on it, keep the v10 caret:
+  // two 8px x 8px boxes, one for rendering the box-shadow that the popover
+  // content uses and another for layering on top of this box to create an
+  // effect of a popover caret with a box-shadow. The layer with the
+  // box-shadow is rendered behind the popover content, while the other is
+  // rendered above of the popover content. Both partials tune that caret.
+  .#{$prefix}--toggletip-popover {
+    --cds-popover-offset: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--toggletip-popover .#{$prefix}--popover-contents {
+    @include box-shadow;
+  }
+
+  .#{$prefix}--toggletip-popover .#{$prefix}--popover-contents::before,
+  .#{$prefix}--toggletip-popover .#{$prefix}--popover-contents::after {
+    position: absolute;
+    display: inline-block;
+    width: to-rem(8px);
+    height: to-rem(8px);
+    background-color: inherit;
+    content: "";
+  }
+
+  .#{$prefix}--toggletip-popover .#{$prefix}--popover-contents::before {
+    z-index: -1;
+    box-shadow: 2px 2px 6px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  @include place-caret(bottom) {
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  @include place-caret(bottom-left) {
+    top: 0;
+    left: 0;
+    transform: translate(var(--cds-popover-caret-offset), -50%) rotate(45deg);
+  }
+
+  @include place-caret(bottom-right) {
+    top: 0;
+    right: 0;
+    transform: translate(calc(-1 * var(--cds-popover-caret-offset)), -50%)
+      rotate(45deg);
+  }
+
+  @include place-caret(top) {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
+  @include place-caret(top-left) {
+    bottom: 0;
+    left: 0;
+    transform: translate(var(--cds-popover-caret-offset), 50%) rotate(45deg);
+  }
+
+  @include place-caret(top-right) {
+    right: 0;
+    bottom: 0;
+    transform: translate(calc(-1 * var(--cds-popover-caret-offset)), 50%)
+      rotate(45deg);
+  }
+
+  @include place-caret(right) {
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  @include place-caret(right-top) {
+    top: 0;
+    left: 0;
+    transform: translate(-50%, var(--cds-popover-caret-offset)) rotate(45deg);
+  }
+
+  @include place-caret(right-bottom) {
+    bottom: 0;
+    left: 0;
+    transform: translate(-50%, calc(-1 * var(--cds-popover-caret-offset)))
+      rotate(45deg);
+  }
+
+  @include place-caret(left) {
+    top: 50%;
+    right: 0;
+    transform: translate(50%, -50%) rotate(45deg);
+  }
+
+  @include place-caret(left-top) {
+    top: 0;
+    right: 0;
+    transform: translate(50%, var(--cds-popover-caret-offset)) rotate(45deg);
+  }
+
+  @include place-caret(left-bottom) {
+    right: 0;
+    bottom: 0;
+    transform: translate(50%, calc(-1 * var(--cds-popover-caret-offset)))
+      rotate(45deg);
   }
 
   // The caret is the rotated 8px box layered over the surface. Forced colors
@@ -290,7 +431,7 @@
 
   @include high-contrast-mode {
     @each $direction, $edges in $caret-edges {
-      .#{$prefix}--popover--caret.#{$prefix}--popover--#{$direction}
+      .#{$prefix}--toggletip-popover.#{$prefix}--popover--#{$direction}
         .#{$prefix}--popover-contents::after {
         box-sizing: border-box;
         border: 0 solid CanvasText;
@@ -303,18 +444,38 @@
   }
 }
 
-/// Helper for placing the caret inside a popover. The selectors here can get
-/// distracting in the main stylesheet, but ultimately they target the ::before
-/// and ::after pseudo-elements for the given direction. The @content block
-/// passed in should appropriately position the caret for the given direction.
+/// Helper for placing the v10 caret that Toggletip keeps. The selectors here
+/// can get distracting in the main stylesheet, but ultimately they target the
+/// ::before and ::after pseudo-elements for the given direction. The @content
+/// block passed in should appropriately position the caret for the given
+/// direction.
 /// @access private
 /// @group components
 @mixin place-caret($direction) {
-  .#{$prefix}--popover--caret.#{$prefix}--popover--#{$direction}
+  .#{$prefix}--toggletip-popover.#{$prefix}--popover--#{$direction}
     .#{$prefix}--popover-contents::before,
-  .#{$prefix}--popover--caret.#{$prefix}--popover--#{$direction}
+  .#{$prefix}--toggletip-popover.#{$prefix}--popover--#{$direction}
     .#{$prefix}--popover-contents::after {
     @content;
+  }
+}
+
+/// Draws a 1px `$color` edge under the v11 caret: `::before` fills the
+/// caret's shape and `::after` moves 1px in and narrows by 1px, so the edge
+/// shows along both slopes. `$scope` qualifies the popover (`--border`).
+/// @access private
+/// @group components
+@mixin v11-caret-edge($scope, $color) {
+  #{$scope}.#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover)
+    .#{$prefix}--popover-contents::before {
+    display: block;
+    background-color: $color;
+  }
+
+  #{$scope}.#{$prefix}--popover--caret:not(.#{$prefix}--toggletip-popover)
+    .#{$prefix}--popover-contents::after {
+    margin: var(--ccs-popover-caret-edge);
+    clip-path: var(--ccs-popover-caret-inner);
   }
 }
 
