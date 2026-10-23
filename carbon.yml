@@ -201,6 +201,20 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/Callout
     tags:
       - system-feedback
+  card:
+    name: Card
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/card.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Card
+    tags:
+      - content-element
   carousel:
     name: Carousel
     status: stable

@@ -168,6 +168,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Tiles",
     components: [
+      "Card",
       "Tile",
       "ClickableTile",
       "ExpandableTile",
