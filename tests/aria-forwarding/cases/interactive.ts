@@ -38,6 +38,7 @@ import type { AriaEntry } from "../contract";
 import AccordionItem from "../fixtures/AccordionItem.test.svelte";
 import BreadcrumbItemFixture from "../fixtures/BreadcrumbItem.test.svelte";
 import Button from "../fixtures/Button.test.svelte";
+import Card from "../fixtures/Card.test.svelte";
 import CarouselItem from "../fixtures/CarouselItem.test.svelte";
 import ChatButton from "../fixtures/ChatButton.test.svelte";
 import ClickableTile from "../fixtures/ClickableTile.test.svelte";
@@ -117,6 +118,17 @@ export const interactive: AriaEntry[] = [
     name: "Carousel",
     render: (attrs) => render(Carousel, { props: attrs }),
     target: () => screen.getByRole("region"),
+  },
+  {
+    name: "Card",
+    render: (attrs) => render(Card, { props: attrs }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "Card",
+    variant: "href",
+    render: (attrs) => render(Card, { props: { href: "/report", ...attrs } }),
+    target: () => screen.getByRole("link"),
   },
   {
     name: "CarouselItem",

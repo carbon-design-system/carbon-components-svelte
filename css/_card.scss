@@ -1,0 +1,388 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+
+/// Card styles. Ported from Carbon React's `preview__Card`
+/// (`packages/styles/scss/components/card`), with the same v11 tokens,
+/// type styles and spacing. Upstream relies on `:has()`, which is newer
+/// than the Safari 14 baseline, so marker classes stand in: CardFooter's
+/// `actionSet`, CardAction's `iconOnly`, and `__header--actions`, which
+/// CardHeader sets when its `actions` slot is filled. Title media pairs
+/// with the title through `+`. Media keeps AspectRatio's padding box
+/// instead of the `aspect-ratio` property, which Safari 14 also lacks.
+/// The decorator sits on a wrapper beside the card (CardWrapper), so a
+/// clickable card never nests the AI label's button. CardMedia reports
+/// its shape, so the decorator still sits at the header's corner, where
+/// upstream's CardHeader puts it. The AI surface comes from
+/// `ai-label-tiles` in `_ai-label.scss`, shared with Tile.
+/// @access private
+/// @group components
+@mixin card {
+  .#{$prefix}--card {
+    position: relative;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  // A disabled clickable card keeps the class, so it keeps its border.
+  // `pointer-events: none` on the disabled card blocks hover and press.
+  .#{$prefix}--card--clickable {
+    display: block;
+    border: 1px solid $border-tile;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--card__clickable-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: $carbon--spacing-05;
+    color: ccs-token("icon-interactive");
+  }
+
+  .#{$prefix}--card--disabled {
+    border-color: $border-disabled;
+    color: $text-disabled;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--card--disabled .#{$prefix}--card__clickable-footer {
+    color: $icon-disabled;
+  }
+
+  .#{$prefix}--card__header {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .#{$prefix}--card__body {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--card__body--no-padding {
+    padding: 0;
+  }
+
+  .#{$prefix}--card__footer {
+    display: flex;
+    align-items: center;
+    padding: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--card__footer--action-set {
+    padding: 0;
+    border-top: 1px solid $border-subtle;
+    gap: 1px;
+  }
+
+  // Text actions share the row.
+  .#{$prefix}--card__footer--action-set > .#{$prefix}--card__action {
+    min-width: 0;
+    flex: 1 0 0;
+  }
+
+  .#{$prefix}--card__footer--action-set
+    > .#{$prefix}--card__action
+    > .#{$prefix}--btn {
+    width: 100%;
+    max-width: none;
+  }
+
+  // Icon-only actions keep their width at the inline end. Only the first
+  // of a run takes the auto margin.
+  .#{$prefix}--card__footer--action-set > .#{$prefix}--card__action--icon-only {
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--card__action--icon-only + .#{$prefix}--card__action--icon-only {
+    margin-inline-start: 0;
+  }
+
+  .#{$prefix}--card__action {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--card__actions {
+    position: absolute;
+    top: $carbon--spacing-03;
+    display: inline-flex;
+    width: calc(50% - #{$carbon--spacing-03});
+    height: $carbon--spacing-07;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $carbon--spacing-02;
+    @include ccs-inset-inline($end: $carbon--spacing-03);
+  }
+
+  .#{$prefix}--card__header--actions > .#{$prefix}--card__title {
+    max-width: calc(50% - #{$carbon--spacing-03});
+  }
+
+  // Spans both columns, above the title media and title.
+  .#{$prefix}--card__header-media {
+    display: flex;
+    max-height: $carbon--spacing-10;
+    align-items: flex-start;
+    grid-column: 1 / -1;
+    margin-top: $carbon--spacing-05;
+    margin-bottom: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
+  }
+
+  // Images and video fill the media box.
+  .#{$prefix}--card__media .#{$prefix}--aspect-ratio--object > *,
+  .#{$prefix}--card__media--horizontal > * {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .#{$prefix}--card--horizontal {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .#{$prefix}--card__media--horizontal {
+    overflow: hidden;
+    flex: 0 0 var(--ccs-card-media-width, 33.33%);
+  }
+
+  .#{$prefix}--card__content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--card__content > .#{$prefix}--card__body {
+    flex: 1 0 auto;
+  }
+
+  .#{$prefix}--card__content > .#{$prefix}--card__footer,
+  .#{$prefix}--card__content > .#{$prefix}--card__clickable-footer {
+    margin-top: auto;
+  }
+
+  .#{$prefix}--card__title {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-01;
+    grid-column: 2;
+    margin-inline-end: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--card__header > .#{$prefix}--card__title {
+    margin-top: $carbon--spacing-05;
+    margin-bottom: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--card__title-text-row {
+    display: block;
+  }
+
+  .#{$prefix}--card--productive .#{$prefix}--card__title-text-row {
+    @include type-style("heading-compact-02");
+  }
+
+  .#{$prefix}--card--expressive .#{$prefix}--card__title-text-row {
+    @include type-style("heading-03");
+  }
+
+  .#{$prefix}--card__title-text-row--with-start-icon {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  // Lines the icon up with the first line of text.
+  .#{$prefix}--card__title-start-icon {
+    display: flex;
+    flex-shrink: 0;
+    margin-top: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--card__title-end-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-inline-start: $carbon--spacing-03;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--card__label,
+  .#{$prefix}--card__description {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--card--disabled .#{$prefix}--card__label,
+  .#{$prefix}--card--disabled .#{$prefix}--card__description {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--card__title-text-row--truncate,
+  .#{$prefix}--card__label--truncate,
+  .#{$prefix}--card__description--truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--card__title-text-row--truncate-multi,
+  .#{$prefix}--card__label--truncate-multi,
+  .#{$prefix}--card__description--truncate-multi {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--card__title-text-row--truncate,
+  .#{$prefix}--card__title-text-row--truncate-multi {
+    max-width: var(--ccs-card-title-max-width, 100%);
+  }
+
+  .#{$prefix}--card__title-text-row--truncate-multi {
+    -webkit-line-clamp: var(--ccs-card-title-line-clamp);
+  }
+
+  .#{$prefix}--card__label--truncate-multi {
+    -webkit-line-clamp: var(--ccs-card-label-line-clamp);
+  }
+
+  .#{$prefix}--card__description--truncate-multi {
+    -webkit-line-clamp: var(--ccs-card-description-line-clamp);
+  }
+
+  .#{$prefix}--card__title-media {
+    display: flex;
+    max-height: $carbon--spacing-10;
+    flex-shrink: 0;
+    align-items: flex-start;
+    justify-content: center;
+    grid-column: 1;
+    margin-top: $carbon--spacing-05;
+    padding-inline-end: $carbon--spacing-05;
+    padding-inline-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--card__title-media + .#{$prefix}--card__title {
+    margin-inline-start: 0;
+  }
+
+  .#{$prefix}--card__wrapper {
+    position: relative;
+  }
+
+  // At the header's corner, inside the card's edge: below media on top,
+  // and clear of media at the inline end. A percentage margin reads the
+  // card's width, which sets the media's height. CardWrapper sets the
+  // media variables.
+  .#{$prefix}--card__decorator {
+    position: absolute;
+    z-index: 1;
+    top: $carbon--spacing-03;
+    display: flex;
+    height: $carbon--spacing-07;
+    align-items: center;
+    margin-top: calc(
+      var(--ccs-card-edge, 0px) +
+        (100% - 2 * var(--ccs-card-edge, 0px)) *
+        var(--ccs-card-media-block, 0)
+    );
+    @include ccs-inset-inline(
+      $end:
+        calc(
+          #{$carbon--spacing-03} + var(--ccs-card-edge, 0px) +
+            var(--ccs-card-media-inline, 0px)
+        )
+    );
+  }
+
+  // A clickable card and the AI surface draw a 1px border.
+  .#{$prefix}--card--clickable ~ .#{$prefix}--card__decorator,
+  .#{$prefix}--card--ai-label ~ .#{$prefix}--card__decorator {
+    --ccs-card-edge: 1px;
+  }
+
+  // Clear of the decorator in the corner
+  .#{$prefix}--card--decorator
+    .#{$prefix}--card__header
+    > .#{$prefix}--card__title {
+    padding-inline-end: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--card--decorator .#{$prefix}--card__actions {
+    @include ccs-inset-inline(
+      $end: calc(#{$carbon--spacing-03} * 2 + #{$carbon--spacing-06})
+    );
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--card--clickable:hover {
+      background-color: $layer-hover;
+    }
+  }
+
+  // After the hover block, so a press and the focus ring win over hover.
+  .#{$prefix}--card--clickable:active {
+    background-color: $layer-active;
+  }
+
+  .#{$prefix}--card--clickable:focus {
+    @include focus-outline("outline");
+  }
+
+  // Forced colors drop the card's fill, so a card without a border loses
+  // its edge, and the disabled colors turn back into CanvasText. They
+  // leave outline colors and SVG fills alone. Draw the edge and the focus
+  // ring in CanvasText, gray out a disabled card, and let the icon follow
+  // the card's text.
+  @media (forced-colors: active) {
+    .#{$prefix}--card {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
+    .#{$prefix}--card--clickable:focus {
+      outline-color: CanvasText;
+    }
+
+    .#{$prefix}--card--disabled {
+      border-color: GrayText;
+      outline-color: GrayText;
+    }
+
+    .#{$prefix}--card__clickable-footer {
+      color: inherit;
+    }
+
+    .#{$prefix}--card__clickable-footer svg {
+      fill: currentColor;
+    }
+
+    .#{$prefix}--card--disabled,
+    .#{$prefix}--card--disabled .#{$prefix}--card__label,
+    .#{$prefix}--card--disabled .#{$prefix}--card__description,
+    .#{$prefix}--card--disabled .#{$prefix}--card__clickable-footer {
+      color: GrayText;
+    }
+  }
+}
+
+@include exports("card") {
+  @include card;
+}

@@ -201,6 +201,9 @@ test.describe("forced colors", () => {
       ".bx--tile--clickable.bx--link--disabled",
       ".bx--tile--selectable.bx--tile--disabled",
       ".bx--edit-in-place--disabled .bx--edit-in-place__text-input",
+      ".bx--card--disabled",
+      ".bx--card--disabled .bx--card__label",
+      ".bx--card--disabled .bx--card__title-text-row",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
@@ -234,6 +237,36 @@ test.describe("forced colors", () => {
     );
     expect.soft(tile.fill).toBe(tile.color);
     expect.soft(disabled.fill).toBe(system.GrayText);
+  });
+
+  // A card's edge is its fill, which forced colors drop, so every card
+  // draws a CanvasText outline over its border. A clickable card's icon
+  // follows its text. A disabled card reads GrayText, edge and icon too.
+  test("cards keep an edge, and clickable card icons follow the text", async ({
+    page,
+  }) => {
+    const [card, disabled, still] = await page.evaluate(() =>
+      ["card", "card-disabled", "card-static"].map((id) => {
+        const card = document.querySelector(`[data-testid=${id}]`);
+        if (!card) throw new Error(`no ${id}`);
+        const style = getComputedStyle(card);
+        const icon = card.querySelector(".bx--card__clickable-footer svg");
+        return {
+          border: style.borderLeftColor,
+          outline: `${style.outlineStyle} ${style.outlineColor}`,
+          color: style.color,
+          fill: icon ? getComputedStyle(icon).fill : null,
+        };
+      }),
+    );
+    expect.soft(card.outline).toBe(`solid ${system.CanvasText}`);
+    expect.soft(card.fill).toBe(card.color);
+    expect.soft(still.outline).toBe(`solid ${system.CanvasText}`);
+    expect.soft(disabled).toMatchObject({
+      border: system.GrayText,
+      outline: `solid ${system.GrayText}`,
+      fill: system.GrayText,
+    });
   });
 
   // The empty and the checked box differ only in shape and fill, and the
@@ -345,6 +378,7 @@ test.describe("forced colors", () => {
       "Highlight",
     ],
     ["#inline-edit", ".bx--edit-in-place--focused", undefined, "CanvasText"],
+    ["[data-testid=card]", "[data-testid=card]", undefined, "CanvasText"],
   ];
 
   test("focus rings stay visible in a contrasting system color", async ({

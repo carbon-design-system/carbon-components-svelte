@@ -333,10 +333,12 @@ $ai-label-sizes: (
       color: $link-primary-hover;
     }
 
-    // Interactive tiles with an active AI label: a stronger aura on hover
+    // Interactive tiles and cards with an active AI label: a stronger aura
+    // on hover
     .#{$prefix}--tile--ai-label.#{$prefix}--tile--clickable:hover,
     .#{$prefix}--tile--ai-label.#{$prefix}--tile--selectable:hover,
-    .#{$prefix}--tile--ai-label.#{$prefix}--tile--expandable:hover {
+    .#{$prefix}--tile--ai-label.#{$prefix}--tile--expandable:hover,
+    .#{$prefix}--card--ai-label.#{$prefix}--card--clickable:hover {
       background:
         linear-gradient(
             to top,
@@ -829,8 +831,8 @@ $ai-label-sizes: (
   @include ai-label-selection;
 }
 
-/// Tile `decorator` slots and the AI surface on tiles with an active
-/// `AILabel`
+/// Tile `decorator` slots and the AI surface on tiles and cards with an
+/// active `AILabel`
 /// @access private
 /// @group components
 @mixin ai-label-tiles {
@@ -855,7 +857,8 @@ $ai-label-sizes: (
     right: $carbon--spacing-08;
   }
 
-  .#{$prefix}--tile--ai-label {
+  .#{$prefix}--tile--ai-label,
+  .#{$prefix}--card--ai-label {
     border: 1px solid transparent;
     background:
       linear-gradient(
