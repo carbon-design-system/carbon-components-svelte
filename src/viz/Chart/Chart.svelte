@@ -50,6 +50,13 @@
   /** Specify the title. It names the chart for assistive technology. */
   export let title = "";
 
+  /**
+   * Specify where the legend goes: under the plot, or in a column to its
+   * right.
+   * @type {"bottom" | "right"}
+   */
+  export let legendPosition = "bottom";
+
   /** Specify a longer description, announced after the title */
   export let description = "";
 
