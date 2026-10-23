@@ -171,10 +171,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
-  import {
-    getLayoutDirection,
-    resolveLayoutDirection,
-  } from "../utils/layout-direction.js";
+  import { getLayoutDirection } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -190,6 +187,7 @@
     formatRangeLabel as formatSliderRangeLabel,
     getTextInputWidth,
     getValueText,
+    isTrackRtl,
     snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
@@ -220,6 +218,7 @@
 
   function handleDragStart(event) {
     if (disabled || readonly) return false;
+    readDirection();
     // Focus the thumb so arrow keys work after a press on the track. The
     // compat `mousedown` would otherwise move focus to the body.
     event.preventDefault();
@@ -280,13 +279,28 @@
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
 
   // In RTL, `min` sits at the right end of a horizontal track. A
-  // LayoutDirection gives the direction on the server. Without one, read
-  // the track's computed direction once it mounts.
+  // LayoutDirection gives the direction, on the server too, and updates
+  // it. Without one, read the track's computed direction at mount and
+  // again when the pointer enters, the thumb takes focus, or a key is
+  // pressed. Nothing reports a `dir` change on an ancestor, so until then
+  // the slider keeps the direction it last read.
   const layoutDirection = getLayoutDirection();
-  $: horizontalRtl =
-    orientation !== "vertical" &&
-    !!($layoutDirection || trackRef) &&
-    resolveLayoutDirection($layoutDirection, trackRef) === "rtl";
+  let horizontalRtl = false;
+
+  /**
+   * @param {"horizontal" | "vertical"} axis
+   * @param {"ltr" | "rtl" | undefined} contextDirection
+   * @param {Element | null} track
+   */
+  function syncDirection(axis, contextDirection, track) {
+    horizontalRtl = isTrackRtl(axis, contextDirection, track);
+  }
+
+  function readDirection() {
+    syncDirection(orientation, $layoutDirection, trackRef);
+  }
+
+  $: syncDirection(orientation, $layoutDirection, trackRef);
 
   /**
    * @param {number} percent
@@ -356,6 +370,7 @@
         onMove: calcValue,
         onEnd: handleDragEnd,
       }}
+      on:pointerenter={readDirection}
     >
       <div
         bind:this={thumbRef}
@@ -391,9 +406,11 @@
         aria-invalid={showInvalid || undefined}
         aria-readonly={readonly || undefined}
         {id}
+        on:focus={readDirection}
         on:keydown={(event) => {
           // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
           if (disabled || readonly || hasModifierKey(event)) return;
+          readDirection();
 
           if (event.key === "Home" || event.key === "End") {
             // Prevent the browser from also scrolling to the top/bottom of the page.
