@@ -110,7 +110,12 @@
 
   .#{$prefix}--menu-option__info {
     display: inline-flex;
-    margin-left: $spacing-05;
+    margin-inline-start: $spacing-05;
+  }
+
+  // ccs: the submenu caret points to the inline end.
+  [dir='rtl'] .#{$prefix}--menu-option__info > svg {
+    transform: scaleX(-1);
   }
 
   .#{$prefix}--menu-option__icon {
@@ -118,7 +123,7 @@
     width: 1rem;
     height: 1rem;
     align-items: center;
-    margin-right: $spacing-03;
+    margin-inline-end: $spacing-03;
   }
 
   .#{$prefix}--menu-divider {
@@ -201,7 +206,7 @@
     width: to-rem(16px);
     height: to-rem(16px);
     align-items: center;
-    margin-right: $carbon--spacing-03;
+    margin-inline-end: $carbon--spacing-03;
   }
 }
 

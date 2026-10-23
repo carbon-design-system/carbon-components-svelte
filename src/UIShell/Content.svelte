@@ -10,17 +10,18 @@
   } from "./nav-store.js";
 
   /**
-   * By default, the `SideNav` applies a left margin of `3rem` to `Content`
-   * if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
+   * By default, the `SideNav` applies an inline-start margin of `3rem` to
+   * `Content` if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
+   * It is the left margin, or the right one under `dir="rtl"`.
    *
-   * Unset the left margin if `SideNav` is not the `rail` variant and:
+   * Unset the margin if `SideNav` is not the `rail` variant and:
    * - it's collapsed, OR
    * - it overlays content on mobile (below the breakpoint)
    *
    * The rail stays visible on mobile, so keep its `3rem` margin there.
    * Pin it so an expanded rail overlays content instead of pushing it.
    */
-  $: marginLeft = $isSideNavRail
+  $: marginInlineStart = $isSideNavRail
     ? $isSideNavMobile
       ? "3rem"
       : undefined
@@ -37,7 +38,7 @@
 <main
   {id}
   class:bx--content={true}
-  style:margin-left={marginLeft}
+  style:margin-inline-start={marginInlineStart}
   style:--ccs-side-nav-width={sideNavWidthStyle}
   {...$$restProps}
 >

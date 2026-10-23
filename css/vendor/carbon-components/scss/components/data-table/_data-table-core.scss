@@ -282,7 +282,7 @@
 
   .#{$prefix}--table-column-checkbox .#{$prefix}--checkbox-label {
     min-height: $carbon--spacing-06; // ccs: v11 keeps the 24px label here
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   // ccs: as v11 does, keep the box and check where the 24px label centered

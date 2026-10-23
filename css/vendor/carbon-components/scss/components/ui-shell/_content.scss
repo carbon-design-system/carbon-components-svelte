@@ -22,11 +22,11 @@
   }
 
   .#{$prefix}--side-nav ~ .#{$prefix}--content {
-    margin-left: mini-units(6);
+    margin-inline-start: mini-units(6);
   }
 
   .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded ~ .#{$prefix}--content {
-    margin-left: mini-units(32);
+    margin-inline-start: mini-units(32);
   }
 
   // carbon-components-svelte patch
@@ -34,7 +34,7 @@
   // from the side nav's store, since a sibling can't inherit it.
   .#{$prefix}--side-nav.#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--expanded
     ~ .#{$prefix}--content {
-    margin-left: var(--ccs-side-nav-width, #{mini-units(32)});
+    margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
   }
 
   // carbon-components-svelte patch
@@ -48,7 +48,7 @@
   @include carbon--breakpoint('lg') {
     .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--collapsed):not(.#{$prefix}--side-nav--rail)
       ~ .#{$prefix}--content {
-      margin-left: var(--ccs-side-nav-width, #{mini-units(32)});
+      margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
     }
   }
 
@@ -60,12 +60,12 @@
   @include carbon--breakpoint-down('lg') {
     .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
       ~ .#{$prefix}--content {
-      margin-left: 0;
+      margin-inline-start: 0;
     }
 
     .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
       ~ .#{$prefix}--content {
-      margin-left: var(--ccs-side-nav-width, #{mini-units(32)});
+      margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
     }
   }
 }

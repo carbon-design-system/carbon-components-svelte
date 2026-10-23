@@ -95,7 +95,6 @@
     z-index: z('header');
     top: 0;
     bottom: 0;
-    left: 0;
     // Useful to toggle this property to see what's going on when not expanded
     overflow: hidden;
     width: mini-units(6);
@@ -103,12 +102,13 @@
     background-color: $shell-side-nav-bg-01;
     color: $shell-side-nav-text-01;
     transition: width 0.11s cubic-bezier(0.2, 0, 1, 0.9);
+    @include ccs-inset-inline($start: 0);
   }
 
   // ccs: opt-in border separating the side nav from its content, since both
   // typically share the same background and otherwise blend together.
   .#{$prefix}--side-nav--border {
-    border-right: 1px solid $border-subtle;
+    border-inline-end: 1px solid $border-subtle;
   }
 
   .#{$prefix}--side-nav--ux {
@@ -175,6 +175,10 @@
   .#{$prefix}--side-nav--collapsed {
     width: mini-units(32);
     transform: translateX(mini-units(-32));
+
+    [dir='rtl'] & {
+      transform: translateX(mini-units(32));
+    }
   }
 
   .#{$prefix}--side-nav__navigation {
@@ -282,7 +286,7 @@
   .#{$prefix}--side-nav__submenu-title {
     @include text-overflow();
 
-    text-align: left;
+    text-align: start;
   }
 
   .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__submenu-chevron {
@@ -292,12 +296,12 @@
   }
 
   // ccs: with a badge, the chevron stops filling the row so the badge's
-  // `margin-left: auto` pushes it to the row's end, next to the chevron, as
+  // `margin-inline-start: auto` pushes it to the row's end, next to the chevron, as
   // `SideNavLink` places its badge.
   .#{$prefix}--side-nav__submenu-badge
     + .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__submenu-chevron {
     flex: 0 0 auto;
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
   }
 
   .#{$prefix}--side-nav__submenu-chevron > svg {
@@ -326,10 +330,10 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 0;
       width: 3px; // ccs: matches the current link's accent
       background-color: $shell-side-nav-accent-01;
       content: '';
+      @include ccs-inset-inline($start: 0);
     }
   }
 
@@ -348,20 +352,20 @@
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link { // ccs: flatten
     height: mini-units(4);
     min-height: mini-units(4);
-    padding-left: side-nav-menu-indent(0); // ccs: depth-scaled, was a bare mini-units(4)
+    padding-inline-start: side-nav-menu-indent(0); // ccs: depth-scaled, was a bare mini-units(4)
     font-weight: 400;
   }
 
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item--icon
     .#{$prefix}--side-nav__link { // ccs: flatten, depth-scaled
-    padding-left: side-nav-menu-indent(1); // ccs: was a bare mini-units(9)
+    padding-inline-start: side-nav-menu-indent(1); // ccs: was a bare mini-units(9)
   }
 
   // ccs: Carbon has no submenu-in-submenu, so a nested trigger kept the base
   // `padding: 0 mini-units(2)` at any depth instead of lining up with its
   // sibling links.
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__submenu {
-    padding-left: side-nav-menu-indent(0);
+    padding-inline-start: side-nav-menu-indent(0);
   }
 
   // ccs: needs the `__menu` ancestor, unlike the link rule above: the
@@ -369,7 +373,7 @@
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item--icon
     .#{$prefix}--side-nav__menu
     .#{$prefix}--side-nav__submenu {
-    padding-left: side-nav-menu-indent(1);
+    padding-inline-start: side-nav-menu-indent(1);
   }
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link--current,
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link[aria-current='page'],
@@ -438,10 +442,10 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
     width: 3px; // ccs
     background-color: $shell-side-nav-accent-01;
     content: '';
+    @include ccs-inset-inline($start: 0);
   }
 
   .#{$prefix}--side-nav__icon {
@@ -454,7 +458,7 @@
   }
 
   .#{$prefix}--side-nav__icon:not(.#{$prefix}--side-nav__submenu-chevron) {
-    margin-right: mini-units(3);
+    margin-inline-end: mini-units(3);
   }
 
   .#{$prefix}--side-nav__icon > svg {
@@ -514,12 +518,11 @@
     // Offset by the item's 2px transparent border so the bar lines up with
     // `SideNavLink`'s at the panel edge.
     top: -2px;
-    right: auto;
     bottom: -2px;
-    left: -2px;
     width: 3px;
     border-bottom: 0;
     background-color: $shell-side-nav-accent-01;
+    @include ccs-inset-inline($start: -2px, $end: auto);
   }
 
   .#{$prefix}--side-nav
@@ -537,7 +540,7 @@
     }
 
     .#{$prefix}--header__menu-item { // ccs: flatten
-      padding-left: 4.25rem;
+      padding-inline-start: 4.25rem;
       font-weight: 400;
     }
 
@@ -640,7 +643,7 @@
 /// Position a badge slot as a layout sibling to the link/submenu text,
 /// not nested inside it — nesting it in `bx--side-nav__link-text` would
 /// put it inside that element's single-line ellipsis truncation. The
-/// wrapper is pushed to the row's trailing edge with `margin-left: auto`
+/// wrapper is pushed to the row's trailing edge with `margin-inline-start: auto`
 /// (not `justify-content: space-between` on the row, which would also
 /// shove the text flex item away from the icon).
 ///
@@ -659,8 +662,8 @@
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    margin-left: auto;
-    padding-left: $carbon--spacing-03;
+    margin-inline-start: auto;
+    padding-inline-start: $carbon--spacing-03;
 
     .#{$prefix}--badge-indicator {
       position: static;
@@ -701,6 +704,10 @@
   // which leaves part of a wider nav on screen.
   .#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--collapsed {
     transform: translateX(-100%);
+
+    [dir='rtl'] & {
+      transform: translateX(100%);
+    }
   }
 
   // Let the handle straddle the trailing edge (below) instead of sitting
@@ -727,24 +734,24 @@
     position: absolute;
     z-index: 1;
     top: 0;
-    right: to-rem(-6px);
     width: to-rem(8px);
     height: 100%;
     // Without this, a touch drag pans or scrolls the page instead of
     // delivering `pointermove` events to the handle.
     touch-action: none;
+    @include ccs-inset-inline($end: to-rem(-6px));
 
     // Drawn over the nav's own trailing 2px.
     &::after {
       content: '';
       position: absolute;
       top: 0;
-      left: 0;
       width: to-rem(2px);
       height: 100%;
       background-color: transparent;
       // No delay leaving hover, so the highlight clears immediately.
       transition: background-color $duration--fast-02 motion(standard, productive);
+      @include ccs-inset-inline($start: 0);
     }
 
     // `cursor` can't be delayed in CSS, so the component adds this class

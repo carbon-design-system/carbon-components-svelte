@@ -356,14 +356,14 @@ describe("UIShell", () => {
           name: "is unset on a mobile viewport",
           width: 500,
           props: { sideNavIsOpen: true },
-          marginLeft: "0px",
+          marginInlineStart: "0px",
         },
         {
           name: "is not forced on desktop when SideNav is open",
           width: 1200,
           props: { sideNavIsOpen: true },
           // CSS handles the margin via `.bx--side-nav ~ .bx--content`.
-          marginLeft: "",
+          marginInlineStart: "",
         },
         {
           name: "is not unset on mobile when SideNav is fixed",
@@ -371,31 +371,34 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: true, sideNavFixed: true },
           // Regression: https://github.com/carbon-design-system/carbon-components-svelte/issues/2701
           // A fixed SideNav is always visible, so Content keeps its CSS margin.
-          marginLeft: "",
+          marginInlineStart: "",
         },
         {
           name: "is not set for a rail on desktop",
           width: 1200,
           props: { sideNavRail: true, sideNavIsOpen: false },
-          marginLeft: "",
+          marginInlineStart: "",
         },
         {
           name: "is unset when SideNav is collapsed on desktop",
           width: 1200,
           props: { sideNavIsOpen: false },
-          marginLeft: "0px",
+          marginInlineStart: "0px",
         },
-      ])("left margin $name", async ({ width, props, marginLeft }) => {
-        setViewportWidth(width);
+      ])(
+        "inline-start margin $name",
+        async ({ width, props, marginInlineStart }) => {
+          setViewportWidth(width);
 
-        const { container } = render(UiShell, { props });
+          const { container } = render(UiShell, { props });
 
-        await flushMacrotask();
+          await flushMacrotask();
 
-        expectInlineStyle(container.querySelector(".bx--content"), {
-          marginLeft,
-        });
-      });
+          expectInlineStyle(container.querySelector(".bx--content"), {
+            marginInlineStart,
+          });
+        },
+      );
 
       it("should keep the rail margin on mobile when SideNav is an expanded rail", async () => {
         setViewportWidth(500);
@@ -411,7 +414,7 @@ describe("UIShell", () => {
           "bx--side-nav--expanded",
         );
         expectInlineStyle(container.querySelector(".bx--content"), {
-          marginLeft: "3rem",
+          marginInlineStart: "3rem",
         });
       });
     });

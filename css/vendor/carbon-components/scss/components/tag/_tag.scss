@@ -167,7 +167,7 @@
 
   .#{$prefix}--tag--filter {
     padding-top: 0;
-    padding-right: 0;
+    padding-inline-end: 0;
     padding-bottom: 0;
     cursor: pointer;
   }
@@ -205,7 +205,8 @@
     justify-content: center;
     padding: 0;
     border: 0;
-    margin: 0 0 0 to-rem(2px);
+    margin-block: 0;
+    margin-inline: to-rem(2px) 0;
     background-color: transparent;
     border-radius: 50%;
     color: currentColor;
@@ -223,7 +224,7 @@
     flex-shrink: 0;
     padding: 0;
     border: 0;
-    margin-right: $spacing-02;
+    margin-inline-end: $spacing-02;
     background-color: transparent;
     color: currentColor;
     outline: none;
@@ -257,13 +258,13 @@
   }
 
   .#{$prefix}--tag--sm.#{$prefix}--tag--filter {
-    padding-right: 0;
+    padding-inline-end: 0;
   }
 
   .#{$prefix}--tag--sm .#{$prefix}--tag__close-icon {
     width: to-rem(18px);
     height: to-rem(18px);
-    margin-left: to-rem(5px);
+    margin-inline-start: to-rem(5px);
   }
 
   .#{$prefix}--tag.#{$prefix}--skeleton {
@@ -403,7 +404,7 @@
   }
 
   .#{$prefix}--tag--lg.#{$prefix}--tag--filter {
-    padding-right: 0;
+    padding-inline-end: 0;
   }
 
   // Match the close button to the tag height, as `--sm` does.

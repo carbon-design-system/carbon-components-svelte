@@ -102,9 +102,9 @@ $list-box-width: 100%;
   .#{$prefix}--list-box__invalid-icon {
     position: absolute;
     top: 50%;
-    right: $carbon--spacing-08;
     fill: $support-error;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
   .#{$prefix}--list-box__invalid-icon--warning {
@@ -119,7 +119,7 @@ $list-box-width: 100%;
   .#{$prefix}--list-box[data-invalid] .#{$prefix}--list-box__field,
   .#{$prefix}--list-box.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field {
-    padding-right: carbon--mini-units(8);
+    padding-inline-end: carbon--mini-units(8);
     border-bottom: 0;
   }
 
@@ -129,7 +129,7 @@ $list-box-width: 100%;
     .#{$prefix}--list-box__field,
   .#{$prefix}--list-box.#{$prefix}--list-box--warning.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__field {
-    padding-right: carbon--mini-units(7);
+    padding-inline-end: carbon--mini-units(7);
   }
 
   .#{$prefix}--list-box--disabled:hover {
@@ -174,12 +174,12 @@ $list-box-width: 100%;
 
   .#{$prefix}--list-box--disabled.#{$prefix}--list-box[data-invalid]
     .#{$prefix}--list-box__field {
-    padding-right: $carbon--spacing-09;
+    padding-inline-end: $carbon--spacing-09;
   }
 
   .#{$prefix}--list-box--disabled.#{$prefix}--list-box[data-invalid].#{$prefix}--list-box--inline
     .#{$prefix}--list-box__field {
-    padding-right: carbon--mini-units(4);
+    padding-inline-end: carbon--mini-units(4);
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline {
@@ -210,17 +210,18 @@ $list-box-width: 100%;
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__field {
-    padding: 0 carbon--mini-units(4) 0 $carbon--spacing-03;
+    padding-block: 0;
+    padding-inline: $carbon--spacing-03 carbon--mini-units(4);
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__menu-icon {
-    right: $carbon--spacing-03;
+    @include ccs-inset-inline($end: $carbon--spacing-03);
   }
 
   .#{$prefix}--list-box.#{$prefix}--list-box--inline
     .#{$prefix}--list-box__invalid-icon {
-    right: $carbon--spacing-07;
+    @include ccs-inset-inline($end: $carbon--spacing-07);
   }
 
   .#{$prefix}--list-box--inline .#{$prefix}--list-box__label {
@@ -249,7 +250,8 @@ $list-box-width: 100%;
     // Account for the border in `.bx--list-box`
     height: calc(100% + 1px);
     align-items: center;
-    padding: 0 $carbon--spacing-09 0 $carbon--spacing-05;
+    padding-block: 0;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-09;
     outline: none;
     text-overflow: ellipsis;
     vertical-align: top;
@@ -267,7 +269,7 @@ $list-box-width: 100%;
 
   // ccs: v11. The text stops short of the clear button, 45px in.
   .#{$prefix}--list-box__field .#{$prefix}--text-input {
-    padding-right: to-rem(70px);
+    padding-inline-end: to-rem(70px);
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -277,7 +279,7 @@ $list-box-width: 100%;
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input {
     // to account for clear input button outline
-    padding-right: to-rem(105px); // ccs: v11
+    padding-inline-end: to-rem(105px); // ccs: v11
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -289,11 +291,11 @@ $list-box-width: 100%;
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon {
     // to account for clear input button outline
-    right: to-rem(82px); // ccs: v11
+    @include ccs-inset-inline($end: to-rem(82px)); // ccs: v11
   }
 
   .#{$prefix}--list-box__field .#{$prefix}--text-input--empty {
-    padding-right: $carbon--spacing-09;
+    padding-inline-end: $carbon--spacing-09;
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -302,7 +304,7 @@ $list-box-width: 100%;
   .#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input--empty {
-    padding-right: $carbon--spacing-10; // ccs: v11
+    padding-inline-end: $carbon--spacing-10; // ccs: v11
   }
 
   .#{$prefix}--list-box[data-invalid]
@@ -314,7 +316,7 @@ $list-box-width: 100%;
     .#{$prefix}--text-input--empty
     + .#{$prefix}--list-box__invalid-icon {
     // to account for clear input button outline
-    right: to-rem(40px);
+    @include ccs-inset-inline($end: to-rem(40px));
   }
 
   .#{$prefix}--list-box__label {
@@ -331,7 +333,6 @@ $list-box-width: 100%;
     @include button-reset($width: false, $omit: (display));
 
     position: absolute;
-    right: $carbon--spacing-04; // ccs: v11
     display: flex;
     width: to-rem(24px);
     height: to-rem(24px);
@@ -339,6 +340,7 @@ $list-box-width: 100%;
     justify-content: center;
     outline: none;
     transition: transform $duration--fast-01 motion(standard, productive);
+    @include ccs-inset-inline($end: $carbon--spacing-04); // ccs: v11
   }
 
   .#{$prefix}--list-box__menu-icon > svg {
@@ -357,7 +359,6 @@ $list-box-width: 100%;
     position: absolute;
     top: 50%;
     /* to preserve .5rem space between icons according to spec top/transform used to center the combobox clear selection icon in IE11 */
-    right: to-rem(45px); // ccs: v11
     display: flex;
     width: to-rem(24px);
     height: to-rem(24px);
@@ -366,6 +367,7 @@ $list-box-width: 100%;
     transform: translateY(-50%);
     transition: background-color $duration--fast-01 motion(standard, productive);
     user-select: none;
+    @include ccs-inset-inline($end: to-rem(45px)); // ccs: v11
 
     &:focus {
       @include focus-outline('outline');
@@ -397,8 +399,8 @@ $list-box-width: 100%;
     justify-content: space-between;
     padding: to-rem(8px);
     // Align with hover circle of X button
-    padding-right: to-rem(2px);
-    margin-right: to-rem(10px);
+    padding-inline-end: to-rem(2px);
+    margin-inline-end: to-rem(10px);
     background-color: $background-inverse;
     border-radius: to-rem(12px);
     color: $text-inverse;
@@ -410,7 +412,7 @@ $list-box-width: 100%;
     width: to-rem(20px);
     height: to-rem(20px);
     padding: to-rem(2px);
-    margin-left: to-rem(4px);
+    margin-inline-start: to-rem(4px);
     fill: $icon-inverse;
 
     &:hover {
@@ -545,7 +547,7 @@ $list-box-width: 100%;
     overflow: hidden;
     height: to-rem(40px);
     padding: to-rem(11px) 0;
-    padding-right: $carbon--spacing-06;
+    padding-inline-end: $carbon--spacing-06;
     border-top: 1px solid transparent;
     border-top-color: $border-subtle;
     border-bottom: 1px solid transparent;
@@ -681,15 +683,15 @@ $list-box-width: 100%;
   .#{$prefix}--list-box__menu-item__selected-icon {
     position: absolute;
     top: 50%;
-    right: to-rem(16px);
     display: none;
     fill: $icon-primary;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: to-rem(16px));
   }
 
   .#{$prefix}--list-box--inline
     .#{$prefix}--list-box__menu-item__selected-icon {
-    right: to-rem(8px);
+    @include ccs-inset-inline($end: to-rem(8px));
   }
 
   .#{$prefix}--list-box__menu-item--active
@@ -794,15 +796,15 @@ $list-box-width: 100%;
   }
 
   .#{$prefix}--list-box__menu-item__icon--left {
-    left: $carbon--spacing-05;
+    @include ccs-inset-inline($start: $carbon--spacing-05);
   }
 
   .#{$prefix}--list-box__menu-item__icon--right {
-    right: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--list-box__menu-item__option--icon-left {
-    padding-left: $carbon--spacing-06;
+    padding-inline-start: $carbon--spacing-06;
   }
 
   // ComboBox `filterMode="hide"` uses the `hidden` attribute. Be explicit in
@@ -926,19 +928,19 @@ $list-box-width: 100%;
 
   // Midway to the chevron, 9px to the right.
   .#{$prefix}--list-box__selection::after {
-    right: to-rem(-5px);
+    @include ccs-inset-inline($end: to-rem(-5px));
   }
 
   // Between the status icon and the clear button, where v11 puts it.
   .#{$prefix}--list-box[data-invalid] .#{$prefix}--list-box__selection::before,
   .#{$prefix}--list-box--warning .#{$prefix}--list-box__selection::before {
-    left: to-rem(-5px);
+    @include ccs-inset-inline($start: to-rem(-5px));
   }
 
   // An inline chevron sits 4px closer to the edge. The clear button follows
   // it to keep the 9px gap.
   .#{$prefix}--list-box--inline .#{$prefix}--list-box__selection {
-    right: to-rem(41px);
+    @include ccs-inset-inline($end: to-rem(41px));
   }
 }
 

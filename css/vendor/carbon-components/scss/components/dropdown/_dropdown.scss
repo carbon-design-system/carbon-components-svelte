@@ -64,7 +64,7 @@
 
   // Menu's triggering element updated to button with Downshift v5 upgrade
   .#{$prefix}--dropdown .#{$prefix}--list-box__field {
-    text-align: left;
+    text-align: start;
   }
 
   // ccs: `lg` is 48px, as on ComboBox and MultiSelect; `.bx--dropdown`'s

@@ -60,13 +60,13 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--dropdown
     .#{$prefix}--list-box__menu-icon {
-    right: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--multi-select
     .#{$prefix}--list-box__menu-icon {
-    right: $carbon--spacing-04;
+    @include ccs-inset-inline($end: $carbon--spacing-04);
   }
 
   .#{$prefix}--list-box__wrapper--fluid:not(
@@ -157,7 +157,8 @@
   // the fluid wrapper. The base v10 styles already reveal it via the
   // `[data-invalid] ~` and `--warning ~` general sibling selectors.
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--form-requirement {
-    padding: to-rem(8px) to-rem(64px) to-rem(8px) $carbon--spacing-05;
+    padding-block: to-rem(8px);
+    padding-inline: $carbon--spacing-05 to-rem(64px);
     margin-block-start: 0;
   }
 
@@ -263,7 +264,7 @@
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__selection {
-    right: to-rem(41px);
+    @include ccs-inset-inline($end: to-rem(41px));
   }
 
   // The fluid status icon sits apart from the clear button, so v11 drops

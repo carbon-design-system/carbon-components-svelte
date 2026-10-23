@@ -65,7 +65,7 @@
 
     //even though its hidden, positioning is for native validation to be aligned to checkbox
     top: 1.25rem;
-    left: 0.7rem;
+    @include ccs-inset-inline($start: 0.7rem);
   }
 
   // The label corresponds to the content inside of the `label` tag. Since we're
@@ -79,13 +79,13 @@
     display: flex;
     min-height: to-rem(20px);
     padding-top: to-rem(1px);
-    padding-left: to-rem(20px);
+    padding-inline-start: to-rem(20px);
     cursor: pointer;
     user-select: none;
   }
 
   .#{$prefix}--checkbox-label-text {
-    padding-left: to-rem(10px);
+    padding-inline-start: to-rem(10px);
   }
 
   // Required because `$css--reset: true` cannot currently apply to this `::before` and `::after`
@@ -101,7 +101,6 @@
     // text overflows.
     position: absolute;
     top: to-rem(2px);
-    left: 0;
 
     // According to the spec, we'll want the bounding box for our checkbox to
     // be 16px. The border size will be what will be updated during the
@@ -110,19 +109,20 @@
     height: to-rem(16px);
     border: 1px solid $icon-primary;
     // increase left margin for #6480
-    margin: to-rem(1px) to-rem(2px) to-rem(2px) to-rem(3px);
+    margin-block: to-rem(1px) to-rem(2px);
+    margin-inline: to-rem(3px) to-rem(2px);
 
     // Checkboxes with a background color look visually off against a parent container.
     background-color: transparent;
     border-radius: 2px;
     content: '';
+    @include ccs-inset-inline($start: 0);
   }
 
   // Create the appearance of the check in the `after` pseudo-element
   .#{$prefix}--checkbox-label::after {
     position: absolute;
     top: to-rem(6.5px);
-    left: to-rem(7px);
     width: to-rem(9px);
     height: to-rem(5px);
     border-bottom: 1.5px solid $icon-inverse;
@@ -132,6 +132,7 @@
     content: '';
     transform: scale(0) rotate(-45deg);
     transform-origin: bottom right #{'/*rtl:center*/'};
+    @include ccs-inset-inline($start: to-rem(7px));
   }
 
   .#{$prefix}--checkbox:checked + .#{$prefix}--checkbox-label::before,
@@ -198,7 +199,8 @@
     width: to-rem(100px);
     height: $spacing-05;
 
-    margin: to-rem(1px) 0 0 to-rem(6px);
+    margin-block: to-rem(1px) 0;
+    margin-inline: to-rem(6px) 0;
   }
 
   .#{$prefix}--checkbox--inline {
