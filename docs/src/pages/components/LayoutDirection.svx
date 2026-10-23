@@ -17,6 +17,7 @@ description: LayoutDirection sets the writing direction for part of a page, such
     Tabs,
     Text,
     TextInput,
+    TreeView,
   } from "carbon-components-svelte";
 </script>
 
@@ -76,6 +77,32 @@ Tabs run from right to left.
       <TabContent>المنطقة وحدود الموارد.</TabContent>
     </svelte:fragment>
   </Tabs>
+</LayoutDirection>
+
+## TreeView
+
+In RTL, rows indent from the right and a collapsed caret points left. <DocKbd label="ArrowLeft" /> expands a row or moves to its first child, and <DocKbd label="ArrowRight" /> collapses it or moves to its parent. Outside a `LayoutDirection`, the tree reads the page direction on each arrow key.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <TreeView
+    labelText="الخدمات"
+    expandedIds={["analytics"]}
+    nodes={[
+      {
+        id: "analytics",
+        text: "التحليلات",
+        nodes: [
+          { id: "spark", text: "Apache Spark" },
+          { id: "query", text: "استعلام SQL" },
+        ],
+      },
+      {
+        id: "storage",
+        text: "التخزين",
+        nodes: [{ id: "object-storage", text: "تخزين الكائنات" }],
+      },
+    ]}
+  />
 </LayoutDirection>
 
 ## Portalled menus
