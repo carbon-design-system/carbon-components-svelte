@@ -416,6 +416,23 @@
         background-color: HighlightText;
       }
 
+      // Forcing turns the drop indicator's `$border-interactive` border into
+      // `CanvasText`; `Highlight` marks it as the drop target instead.
+      .#{$prefix}--tree-node--drag-over-before
+        > .#{$prefix}--tree-node__label::after,
+      .#{$prefix}--tree-node--drag-over-after
+        > .#{$prefix}--tree-node__label::after,
+      .#{$prefix}--tree-node--drag-over-inside
+        > .#{$prefix}--tree-node__label::after {
+        border-color: Highlight;
+      }
+
+      // A selected row's indicator contrasts with its `Highlight` fill.
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label::after {
+        border-color: HighlightText;
+      }
+
       // Disabled nodes (and their hover states) read as GrayText, with no
       // selection fill.
       .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled,
@@ -452,4 +469,62 @@
 
 @include exports("treeview-forced-colors") {
   @include treeview-forced-colors;
+}
+
+// carbon-components-svelte patch: native drag-and-drop reparenting
+// (TreeView `draggable` prop). The indicator sits on the row's own label, not
+// the node: a parent's node also wraps its children, whose rows would paint
+// over it, and a hovered or selected label's background would hide it. It is
+// an `::after` overlay, so it paints above the label's content and the active
+// accent bar (`::before`). It ignores the pointer, so drags pass through it.
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// @access private
+/// @group components
+@mixin treeview-drag-drop {
+  .#{$prefix}--tree-node--dragging {
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--tree-node--drag-over-before > .#{$prefix}--tree-node__label,
+  .#{$prefix}--tree-node--drag-over-after > .#{$prefix}--tree-node__label,
+  .#{$prefix}--tree-node--drag-over-inside > .#{$prefix}--tree-node__label {
+    position: relative;
+  }
+
+  .#{$prefix}--tree-node--drag-over-before
+    > .#{$prefix}--tree-node__label::after,
+  .#{$prefix}--tree-node--drag-over-after
+    > .#{$prefix}--tree-node__label::after,
+  .#{$prefix}--tree-node--drag-over-inside
+    > .#{$prefix}--tree-node__label::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 0 solid $border-interactive;
+    content: "";
+    pointer-events: none;
+  }
+
+  .#{$prefix}--tree-node--drag-over-before
+    > .#{$prefix}--tree-node__label::after {
+    border-top-width: 2px;
+  }
+
+  .#{$prefix}--tree-node--drag-over-after
+    > .#{$prefix}--tree-node__label::after {
+    border-bottom-width: 2px;
+  }
+
+  .#{$prefix}--tree-node--drag-over-inside
+    > .#{$prefix}--tree-node__label::after {
+    border-width: 2px;
+  }
+}
+
+@include exports("treeview-drag-drop") {
+  @include treeview-drag-drop;
 }

@@ -78,11 +78,18 @@
     expandedIdSet,
     indeterminateIdSet,
     selectionMode,
+    dragEnabled,
+    dragState,
     clickNode,
     selectNode,
     expandNode,
     focusNode,
     toggleNode,
+    startDrag,
+    dragOverNode,
+    dragLeaveNode,
+    dropOnNode,
+    endDrag,
     isInitialRender,
     serverTabStopId,
   } = getContext("carbon:TreeView");
@@ -117,6 +124,9 @@
   $: checked = $checkedIdSet.has(id);
   $: isCheckboxMode = $selectionMode === "checkbox";
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: isDragging = $dragState.draggedIds.includes(id);
+  $: dropPosition =
+    $dragState.dropTargetId === id ? $dragState.dropPosition : null;
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -193,6 +203,7 @@
     role="treeitem"
     id="{$treeId}-{id}"
     tabindex={disabled ? undefined : id === serverTabStopId ? 0 : -1}
+    draggable={$dragEnabled && !disabled}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
@@ -205,6 +216,10 @@
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--dragging={isDragging}
+    class:bx--tree-node--drag-over-before={dropPosition === "before"}
+    class:bx--tree-node--drag-over-after={dropPosition === "after"}
+    class:bx--tree-node--drag-over-inside={dropPosition === "inside"}
     aria-expanded={expanded}
     aria-owns="{$treeId}-{id}-subtree"
     aria-level={level}
@@ -217,6 +232,11 @@
       if (isCheckboxMode) event.preventDefault();
       clickNode(node, event);
     }}
+    on:dragstart|stopPropagation={(event) => startDrag(node, event)}
+    on:dragover|stopPropagation={(event) => dragOverNode(node, event)}
+    on:dragleave|stopPropagation={(event) => dragLeaveNode(node, event)}
+    on:drop|stopPropagation={(event) => dropOnNode(node, event)}
+    on:dragend|stopPropagation={endDrag}
     on:keydown={(event) => {
       if (
         event.key === "ArrowUp" ||
