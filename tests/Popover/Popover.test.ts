@@ -48,6 +48,30 @@ describe("Popover", () => {
     );
   });
 
+  it.each([
+    ["top-start", "top-left"],
+    ["top-end", "top-right"],
+    ["bottom-start", "bottom-left"],
+    ["bottom-end", "bottom-right"],
+    ["left-start", "left-top"],
+    ["left-end", "left-bottom"],
+    ["right-start", "right-top"],
+    ["right-end", "right-bottom"],
+  ] as const)("places the v11 %s alignment as %s", (align, placement) => {
+    render(Popover, {
+      props: { open: true, align },
+    });
+
+    const popover = screen.getByTestId("parent").firstElementChild;
+    assert(popover);
+    expect(popover).toHaveClass(`bx--popover--${placement}`);
+    expect(
+      [...popover.classList].filter((name) =>
+        /^bx--popover--(top|bottom|left|right)/.test(name),
+      ),
+    ).toEqual([`bx--popover--${placement}`]);
+  });
+
   it("should render with caret", () => {
     render(Popover, {
       props: { open: true, caret: true },
