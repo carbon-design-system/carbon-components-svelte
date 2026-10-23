@@ -156,23 +156,41 @@
     }
   }
 
+  // ccs: a two-column grid, as inline Dropdown and MultiSelect: the label
+  // beside the field, centred on it at any size, and the helper text or
+  // message under the field. (As a flex row, the label centred on the
+  // field and its message together, and helper text went beside the
+  // field.) The field's wrapper is laid out by the grid.
   .#{$prefix}--select--inline {
-    display: flex;
-    flex-direction: row;
+    display: grid;
     align-items: center;
+    grid-template-columns: auto auto;
+    justify-content: start;
   }
 
-  .#{$prefix}--select--inline.#{$prefix}--select--invalid .#{$prefix}--label,
-  .#{$prefix}--select--inline.#{$prefix}--select--invalid
-    .#{$prefix}--form__helper-text {
-    align-self: flex-start;
-    // Offset label text margin
-    margin-top: to-rem(13px);
+  .#{$prefix}--select--inline > .#{$prefix}--select-input--inline__wrapper {
+    display: contents;
+  }
+
+  .#{$prefix}--select--inline .#{$prefix}--select-input__wrapper,
+  .#{$prefix}--select--inline .#{$prefix}--form-requirement,
+  .#{$prefix}--select--inline .#{$prefix}--form__helper-text {
+    grid-column: 2;
   }
 
   .#{$prefix}--select--inline .#{$prefix}--form__helper-text {
-    margin-bottom: 0;
-    margin-left: $spacing-03;
+    margin: $carbon--spacing-02 0 0;
+  }
+
+  // Pagination's selects keep their own row (see _pagination.scss).
+  .#{$prefix}--pagination .#{$prefix}--select.#{$prefix}--select--inline {
+    display: flex;
+  }
+
+  .#{$prefix}--pagination
+    .#{$prefix}--select--inline
+    > .#{$prefix}--select-input--inline__wrapper {
+    display: flex;
   }
 
   .#{$prefix}--select--inline .#{$prefix}--label {
