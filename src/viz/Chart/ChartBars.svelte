@@ -23,7 +23,15 @@
    */
   export let series = undefined;
 
+  /**
+   * Specify a color per bar from its row, for bars that read by sign or
+   * state. A bar without one keeps its series color.
+   * @type {((datum: any, index: number, series: string | number) => import("../utils/tokens.js").VizColor | undefined) | undefined}
+   */
+  export let colorOf = undefined;
+
   import { getContext, onMount } from "svelte";
+  import { vizColor } from "../utils/tokens.js";
   import { buildBars, stackedExtent } from "./bar-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
   import { pickGroups } from "./model.js";
@@ -104,7 +112,9 @@
       y={bar.y}
       width={bar.width}
       height={bar.height}
-      style:--bx-viz-color={bar.color}
+      style:--bx-viz-color={colorOf
+        ? (vizColor(colorOf(bar.datum, bar.index, bar.series)) ?? bar.color)
+        : bar.color}
     />
   {/each}
 </g>

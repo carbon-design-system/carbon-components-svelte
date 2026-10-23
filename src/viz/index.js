@@ -93,6 +93,7 @@ export { default as SpanWaterfall } from "./SpanWaterfall/SpanWaterfall.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { default as StackedBar } from "./StackedBar/StackedBar.svelte";
 export { default as StateTimeline } from "./StateTimeline/StateTimeline.svelte";
+export { default as StockChart } from "./StockChart/StockChart.svelte";
 export { default as SunburstChart } from "./SunburstChart/SunburstChart.svelte";
 export { default as TargetIndicator } from "./TargetIndicator/TargetIndicator.svelte";
 export { default as TileGridMap } from "./TileGridMap/TileGridMap.svelte";

@@ -40,7 +40,7 @@ export function clampWindow(start, end, full, minSpan, moving = "both") {
  * Area path of the total y at each x over the visible series: the shape of
  * the whole dataset, drawn small. Thinned to about one point per pixel.
  *
- * @param {ReadonlyArray<import("./model.js").ChartGroup<any>>} groups
+ * @param {ReadonlyArray<{ hidden?: boolean; xs: ReadonlyArray<number>; ys: ReadonlyArray<number> }>} groups
  * @param {readonly [number, number]} full The x range with no zoom applied.
  * @param {{ x0: number; x1: number; height: number }} box
  * @returns {string}

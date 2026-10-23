@@ -25,6 +25,23 @@
   /** Specify the label of the button that folds the legend again */
   export let lessLabel = "Show less";
 
+  /**
+   * Specify the series to list, in order. By default every series is listed.
+   * @type {ReadonlyArray<string | number> | undefined}
+   */
+  export let series = undefined;
+
+  let expanded = false;
+  $: listed =
+    series === undefined
+      ? $groups
+      : series.flatMap((key) => {
+          const group = $groups.find((g) => String(g.key) === String(key));
+          return group ? [group] : [];
+        });
+  $: shown = expanded ? listed : listed.slice(0, maxItems);
+  $: folded = listed.length - shown.length;
+
   import { getContext } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
 
@@ -33,9 +50,14 @@
     getContext(CHART_CONTEXT);
 </script>
 
-{#if $groups.length > 1 || (showSingle && $groups.length === 1)}
+<!-- While the chart loads or is empty the row stays, so the plot does not
+     move when the series arrive. -->
+{#if listed.length > 1 ||
+  (showSingle && listed.length === 1) ||
+  ($state !== "ready" && listed.length === 0)}
   <div
     class:bx--viz-legend={true}
+    class:bx--viz-legend--placeholder={listed.length === 0}
     role="group"
     aria-label={label}
     {...$$restProps}

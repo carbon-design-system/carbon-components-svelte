@@ -29,6 +29,8 @@ export type BarRect = {
   width: number;
   height: number;
   color: string;
+  /** The row the bar stands for. */
+  datum: T;
   /** The datum's own value, before any normalizing. */
   value: number;
 };

@@ -25,6 +25,14 @@
   /** Specify the label of the button that shows everything again */
   export let resetLabel = "Reset zoom";
 
+  /**
+   * Specify the shape drawn in the bar, as `{ x, y }` points in data space,
+   * instead of the sum of the chart's own series. A chart in a stack of
+   * panes can show the pane above it.
+   * @type {ReadonlyArray<{ x: number; y: number | null }> | undefined}
+   */
+  export let overview = undefined;
+
   import { createEventDispatcher, getContext } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
   import { clampWindow, overviewPath } from "./zoom-geometry.js";
@@ -47,7 +55,15 @@
   $: x0 = $scales.plot.x0;
   $: x1 = $scales.plot.x1;
   // Depends on the data and the width only, so dragging never rebuilds it.
-  $: path = usable ? overviewPath($groups, full, { x0, x1, height }) : "";
+  $: shape = overview
+    ? [
+        {
+          xs: overview.map((point) => point.x),
+          ys: overview.map((point) => point.y ?? Number.NaN),
+        },
+      ]
+    : $groups;
+  $: path = usable ? overviewPath(shape, full, { x0, x1, height }) : "";
   $: startPct = usable ? ((current[0] - full[0]) / span) * 100 : 0;
   $: endPct = usable ? ((current[1] - full[0]) / span) * 100 : 100;
 

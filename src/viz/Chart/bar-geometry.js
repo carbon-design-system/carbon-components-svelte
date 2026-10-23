@@ -108,6 +108,7 @@ export function buildBars(groups, scales, options = {}) {
         height: scales.horizontal ? width : length,
         color: group.color,
         value: group.ys[j],
+        datum: group.rows[j],
       });
     }
   });
