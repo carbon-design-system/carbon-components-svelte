@@ -41,6 +41,12 @@
   /** Specify the title, shown as the caption */
   export let title = "";
 
+  /**
+   * Set to `true` to animate groups and cells to their new place when the
+   * data changes. Off where the user prefers reduced motion.
+   */
+  export let transition = false;
+
   /** Set to `true` to show a skeleton while the data is on its way */
   export let loading = false;
 
@@ -251,6 +257,7 @@
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-treemap={true}
+  class:bx--viz-treemap--transition={transition}
   class:bx--viz-treemap--selectable={selectable}
   class:bx--viz-treemap--emphasis={activeId !== null}
   {...$$restProps}

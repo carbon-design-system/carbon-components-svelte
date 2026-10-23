@@ -212,4 +212,11 @@ describe("Chart", () => {
       count: 6,
     });
   });
+
+  it("opts into motion with a class the stylesheet animates under", () => {
+    const { container } = render(Chart, { transition: true });
+    expect(container.querySelector("figure")).toHaveClass(
+      "bx--viz-chart--transition",
+    );
+  });
 });

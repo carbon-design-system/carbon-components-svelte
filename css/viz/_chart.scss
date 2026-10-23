@@ -10,6 +10,53 @@
     color: $text-primary;
   }
 
+  // The legend in a column beside the plot. The header spans both columns;
+  // everything else stays in the first.
+  .#{$prefix}--viz-chart--legend-right {
+    display: grid;
+    column-gap: $carbon--spacing-05;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .#{$prefix}--viz-chart--legend-right > * {
+    grid-column: 1;
+  }
+
+  .#{$prefix}--viz-chart--legend-right > .#{$prefix}--viz-chart__header {
+    grid-column: 1 / -1;
+  }
+
+  .#{$prefix}--viz-chart--legend-right > .#{$prefix}--viz-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: start;
+    grid-column: 2;
+    grid-row: 2;
+    margin-block-start: 0;
+  }
+
+  // Marks move to their new place when the data changes, for charts that
+  // opt in. Geometry attributes transition as CSS properties where the
+  // browser supports it and snap elsewhere; lines always snap, as `d` only
+  // animates when set from CSS.
+  @media (prefers-reduced-motion: no-preference) {
+    .#{$prefix}--viz-chart--transition .#{$prefix}--viz-bars__bar,
+    .#{$prefix}--viz-chart--transition .#{$prefix}--viz-bars__band {
+      transition:
+        x $duration--moderate-02 motion(standard, productive),
+        y $duration--moderate-02 motion(standard, productive),
+        width $duration--moderate-02 motion(standard, productive),
+        height $duration--moderate-02 motion(standard, productive);
+    }
+
+    .#{$prefix}--viz-chart--transition .#{$prefix}--viz-points__point {
+      transition:
+        cx $duration--moderate-02 motion(standard, productive),
+        cy $duration--moderate-02 motion(standard, productive),
+        r $duration--moderate-02 motion(standard, productive);
+    }
+  }
+
   // Title on one side, toolbar on the other.
   .#{$prefix}--viz-chart__header {
     display: flex;

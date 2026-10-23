@@ -14,6 +14,7 @@
   ];
   export let x: "day" | ((row: Row) => string) = "day";
   export let hidden: ReadonlyArray<string | number> = [];
+  export let transition = false;
   export let selected: { series: string | number; index: number } | null = null;
   export let title = "Revenue by region";
   export let emitUpdate = false;
@@ -31,6 +32,7 @@
 <span data-testid="tickle">{tickle}</span>
 
 <Chart
+  {transition}
   {data}
   {x}
   y="revenue"

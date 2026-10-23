@@ -57,6 +57,12 @@
    */
   export let legendPosition = "bottom";
 
+  /**
+   * Set to `true` to animate bars and points to their new place when the
+   * data changes. Off where the user prefers reduced motion.
+   */
+  export let transition = false;
+
   /** Specify a longer description, announced after the title */
   export let description = "";
 
@@ -1035,6 +1041,8 @@
   bind:this={ref}
   class:bx--viz-chart={true}
   class:bx--viz-chart--fullscreen={$fullscreenStore}
+  class:bx--viz-chart--legend-right={legendPosition === "right"}
+  class:bx--viz-chart--transition={transition}
   on:fullscreenchange={onFullscreenChange}
   aria-busy={loading ? "true" : undefined}
   aria-label={title || undefined}

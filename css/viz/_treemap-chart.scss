@@ -111,6 +111,17 @@
       inset 0 0 0 to-rem(3px) $background;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .#{$prefix}--viz-treemap--transition .#{$prefix}--viz-treemap__group,
+    .#{$prefix}--viz-treemap--transition .#{$prefix}--viz-treemap__leaf {
+      transition:
+        left $duration--moderate-02 motion(standard, productive),
+        top $duration--moderate-02 motion(standard, productive),
+        width $duration--moderate-02 motion(standard, productive),
+        height $duration--moderate-02 motion(standard, productive);
+    }
+  }
+
   .#{$prefix}--viz-treemap__legend {
     display: flex;
     flex-wrap: wrap;
