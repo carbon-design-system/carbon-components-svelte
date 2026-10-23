@@ -707,12 +707,13 @@
     transform: translate(-50%, 0);
   }
 
+  // The center tick sits on the inline start side, away from the labels.
   .#{$prefix}--slider--vertical .#{$prefix}--slider__track:before {
     top: 50%;
-    left: to-rem(-5px);
     width: to-rem(4px);
     height: to-rem(2px);
     transform: translate(0, -50%);
+    @include ccs-inset-inline($start: to-rem(-5px));
   }
 
   .#{$prefix}--slider--vertical .#{$prefix}--slider__filled-track {
@@ -740,16 +741,18 @@
     height: to-rem(2px);
   }
 
+  // Labels sit on the inline end side of the track, toward the range
+  // labels, so they mirror to its left in RTL.
   .#{$prefix}--slider--vertical .#{$prefix}--slider__mark-label {
     top: 50%;
-    left: to-rem(12px);
     transform: translateY(-50%);
+    @include ccs-inset-inline($start: to-rem(12px));
   }
 
-  // Labels sit to the right of the track instead of below it; reserve room
-  // with margin (not padding, which would shift the 50% track position).
+  // Labels sit beside the track instead of below it; reserve room with
+  // margin (not padding, which would shift the 50% track position).
   .#{$prefix}--slider--vertical.#{$prefix}--slider--with-mark-labels {
-    margin-right: $carbon--spacing-08;
+    margin-inline-end: $carbon--spacing-08;
   }
 
   // RangeSlider: rotate the 16x24 arrow handles a quarter turn so they point
