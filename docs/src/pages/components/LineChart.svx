@@ -177,6 +177,10 @@ Bind `selected` and `hidden`, and listen for `select` and `legend:toggle`. Click
 
 <FileSource src="/framed/LineChart/LineChartSelect" />
 
+Set `legendPosition` to `"right"` to put the legend in a column beside the plot, where a long list of series would otherwise wrap under it. Past `maxLegendItems` (eight) the rest fold behind a "more" button, so a legend never takes the plot's height in a narrow card.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Revenue by region, legend beside" legendPosition="right" height={200} />
+
 ## Data table and export
 
 Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or the visible series as CSV, and show the chart fullscreen. The table is the chart's text alternative: it needs no pointer and no color vision, and assistive technology reads it as an ordinary table. Bind `view` to control it yourself.

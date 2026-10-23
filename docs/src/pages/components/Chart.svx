@@ -156,6 +156,8 @@ Set `orientation` to `"horizontal"` to run the x scale down the left side and th
 
 `ChartTooltip` passes `x`, `xLabel`, and the hovered `points` to its slot. Each point carries its `series`, `datum`, `color`, and a formatted `value`.
 
+A click, or a tap on a touch screen, pins the tooltip on its point so it can be read and its text selected; another click, <DocKbd label="Escape" />, or a press outside the chart releases it. A tap shows the tooltip at once, where a mouse has to settle for a moment.
+
 <Chart {data} x="date" y="revenue" series="region" title="Custom tooltip" height={240}>
   <ChartAxis position="bottom" />
   <ChartAxis position="left" />
@@ -286,7 +288,7 @@ The presets share one vocabulary, so what you learn on one chart carries to the 
 | `width`, `height` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container. |
 | `format`, `xFormat`, `yFormat` | `Intl.NumberFormat` options or a function of the value. `locale` goes with them. |
 | `palette`, `colors`, `color` | A group option number, or a sequential hue on heat charts; a map from series to a token; one token. Values are `--cds-viz-*` names, never colors. |
-| `legend`, `legendPosition` | Whether to draw the legend, and where. |
+| `legend`, `legendPosition`, `maxLegendItems` | Whether to draw the legend, where, and how many items show before the rest fold behind a "more" button. |
 | `sort`, `valueType` | Enums: `"none" \| "value"`; `"value" \| "percent"`, with `"both"` or `"none"` where a chart can write them. |
 | `selectable`, `selected` | Selection is opt in. `selected` is the row id, the index on an index-keyed strip, or `{ series, index }` on a Cartesian chart. |
 | `hidden` | Series keys the legend has hidden; bind it. |
@@ -296,7 +298,7 @@ The presets share one vocabulary, so what you learn on one chart carries to the 
 | `toggle`, `legend:toggle`, `threshold`, `brush`, `zoom` | `{ id, collapsed }`; `{ series, hidden }`; `{ threshold, direction, value }`; a brush or zoom range. |
 | `update` | After the data changes, with what is now drawn. Fires only with `emitUpdate`. |
 
-Tooltips never take the pointer, wait for it to settle, show at once from the keyboard, and flip only where they fit. Every chart is one tab stop: arrows move within it, <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the ends, <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects, and <DocKbd label="Escape" /> clears.
+Tooltips never take the pointer, wait for a mouse to settle, show at once from the keyboard or a tap, pin on click until Escape or a press outside, and flip only where they fit. Every chart is one tab stop: arrows move within it, <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the ends, <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects, and <DocKbd label="Escape" /> clears.
 
 ## Writing a mark
 
