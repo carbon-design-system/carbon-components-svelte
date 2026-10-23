@@ -60,6 +60,7 @@ Start from the question the chart has to answer. Each preset is one import from 
 | How is a whole divided? | [DonutChart](/components/DonutChart), [StackedBar](/components/StackedBar), [WaffleChart](/components/WaffleChart), [TreemapChart](/components/TreemapChart) for a hierarchy |
 | How is a value distributed? | [Histogram](/components/Histogram), [BoxplotChart](/components/BoxplotChart), [ViolinPlot](/components/ViolinPlot), [BeeswarmChart](/components/BeeswarmChart) |
 | How do two measures relate? | [ScatterChart](/components/ScatterChart), with `density` for thousands of points |
+| How did a price move? | [StockChart](/components/StockChart) with volume, overlays, and indicator panes; [CandlestickChart](/components/CandlestickChart) alone |
 | What changed between two periods? | [SlopeChart](/components/SlopeChart), [WaterfallChart](/components/WaterfallChart), [DeltaIndicator](/components/DeltaIndicator) |
 | How far along is something? | [RadialProgress](/components/RadialProgress), [SegmentedProgress](/components/SegmentedProgress), [TargetIndicator](/components/TargetIndicator), [BulletChart](/components/BulletChart) |
 | Where did people drop off? | [FunnelBars](/components/FunnelBars), [FunnelChart](/components/FunnelChart), [FunnelCompare](/components/FunnelCompare) |

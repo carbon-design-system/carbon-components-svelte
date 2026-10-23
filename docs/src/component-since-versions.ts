@@ -167,6 +167,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   StackedBar: "0.114.0",
   StarRating: "0.114.0",
   StateTimeline: "0.114.0",
+  StockChart: "0.114.0",
   Stepper: "0.114.0",
   StructuredList: "0.2.0",
   SunburstChart: "0.114.0",
