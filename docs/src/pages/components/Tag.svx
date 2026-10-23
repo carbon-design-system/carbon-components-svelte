@@ -34,26 +34,28 @@ Use the large size variant for more prominent layouts.
 
 Choose from a variety of color types to match your design system.
 
-<Tag type="red">Critical</Tag>
-<Tag type="magenta">Security</Tag>
-<Tag type="purple">Beta</Tag>
-<Tag type="blue">Info</Tag>
-<Tag type="cyan">Preview</Tag>
-<Tag type="teal">Verified</Tag>
-<Tag type="green">Healthy</Tag>
-<Tag type="gray">Inactive</Tag>
-<Tag type="cool-gray">Archived</Tag>
-<Tag type="warm-gray">Deprecated</Tag>
-<Tag type="high-contrast">Featured</Tag>
-<Tag type="outline">Draft</Tag>
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag type="red">Critical</Tag>
+  <Tag type="magenta">Security</Tag>
+  <Tag type="purple">Beta</Tag>
+  <Tag type="blue">Info</Tag>
+  <Tag type="cyan">Preview</Tag>
+  <Tag type="teal">Verified</Tag>
+  <Tag type="green">Healthy</Tag>
+  <Tag type="gray">Inactive</Tag>
+  <Tag type="cool-gray">Archived</Tag>
+  <Tag type="warm-gray">Deprecated</Tag>
+  <Tag type="high-contrast">Featured</Tag>
+  <Tag type="outline">Draft</Tag>
+</Stack>
 
-## Inline
+## Spacing
 
-By default, a tag renders with outer margin to space it from adjacent tags. Set `inline` to omit the margin when controlling spacing yourself (for example, within a flex layout).
+Tags have no outer margin, as in Carbon v11. Space them with their container: a horizontal `Stack` with `gap={3}` gives the 8px Carbon recommends between tags, and `TagSet` spaces its tags for you. The `inline` prop is deprecated and has no effect.
 
-<Stack orientation="horizontal" gap={1}>
-  <Tag inline>IBM Cloud</Tag>
-  <Tag inline type="blue">Machine learning</Tag>
+<Stack orientation="horizontal" gap={3}>
+  <Tag>IBM Cloud</Tag>
+  <Tag type="blue">Machine learning</Tag>
 </Stack>
 
 ## Filterable
@@ -157,33 +159,39 @@ Set `interactive` to render a button element instead of a div for clickable tags
 
 Set `href` to render the tag as an anchor. Link tags reuse interactive styles. Do not wrap a `Tag` in an `<a>`; pass `href` on the tag itself. `href` is mutually exclusive with `filter`; when both are set, `filter` takes precedence.
 
-<Tag href="/components/Tag" type="red">Critical</Tag>
-<Tag href="/components/Tag" type="magenta">Security</Tag>
-<Tag href="/components/Tag" type="purple">Beta</Tag>
-<Tag href="/components/Tag" type="blue">Info</Tag>
-<Tag href="/components/Tag" type="cyan">Preview</Tag>
-<Tag href="/components/Tag" type="teal">Verified</Tag>
-<Tag href="/components/Tag" type="green">Healthy</Tag>
-<Tag href="/components/Tag" type="gray">Inactive</Tag>
-<Tag href="/components/Tag" type="cool-gray">Archived</Tag>
-<Tag href="/components/Tag" type="warm-gray">Deprecated</Tag>
-<Tag href="/components/Tag" type="high-contrast">Featured</Tag>
-<Tag href="/components/Tag" type="outline">Draft</Tag>
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag href="/components/Tag" type="red">Critical</Tag>
+  <Tag href="/components/Tag" type="magenta">Security</Tag>
+  <Tag href="/components/Tag" type="purple">Beta</Tag>
+  <Tag href="/components/Tag" type="blue">Info</Tag>
+  <Tag href="/components/Tag" type="cyan">Preview</Tag>
+  <Tag href="/components/Tag" type="teal">Verified</Tag>
+  <Tag href="/components/Tag" type="green">Healthy</Tag>
+  <Tag href="/components/Tag" type="gray">Inactive</Tag>
+  <Tag href="/components/Tag" type="cool-gray">Archived</Tag>
+  <Tag href="/components/Tag" type="warm-gray">Deprecated</Tag>
+  <Tag href="/components/Tag" type="high-contrast">Featured</Tag>
+  <Tag href="/components/Tag" type="outline">Draft</Tag>
+</Stack>
 
 ## AI label
 
 Put an `AILabel` in the `decorator` slot to mark the tag as AI-generated. The label renders as inline text in the tag's color. Static and filterable tags have the slot.
 
-<Tag type="blue">Forecast<AILabel slot="decorator"><p>Generated from the last 90 days of usage.</p></AILabel></Tag>
-<Tag type="green" filter>us-east-1<AILabel slot="decorator"><p>Suggested because most of the alerts came from this region.</p></AILabel></Tag>
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag type="blue">Forecast<AILabel slot="decorator"><p>Generated from the last 90 days of usage.</p></AILabel></Tag>
+  <Tag type="green" filter>us-east-1<AILabel slot="decorator"><p>Suggested because most of the alerts came from this region.</p></AILabel></Tag>
+</Stack>
 
 ## Disabled
 
 Filterable, interactive, and link tag variants support a disabled state.
 
-<Tag filter disabled>Machine learning</Tag>
-<Tag interactive disabled>Machine learning</Tag>
-<Tag href="/components/Tag" disabled>Machine learning</Tag>
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag filter disabled>Machine learning</Tag>
+  <Tag interactive disabled>Machine learning</Tag>
+  <Tag href="/components/Tag" disabled>Machine learning</Tag>
+</Stack>
 
 ## Tooltip
 
@@ -212,10 +220,12 @@ Use `OperationalTag` for a tag that reveals related content, such as the rest of
 
 `OperationalTag` takes the ten color `type`s; it has no `high-contrast` or `outline` variant. The default is `gray`.
 
-<OperationalTag type="gray">Gray</OperationalTag>
-<OperationalTag type="purple">Purple</OperationalTag>
-<OperationalTag type="teal">Teal</OperationalTag>
-<OperationalTag type="red">Red</OperationalTag>
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <OperationalTag type="gray">Gray</OperationalTag>
+  <OperationalTag type="purple">Purple</OperationalTag>
+  <OperationalTag type="teal">Teal</OperationalTag>
+  <OperationalTag type="red">Red</OperationalTag>
+</Stack>
 
 ## Selectable
 
