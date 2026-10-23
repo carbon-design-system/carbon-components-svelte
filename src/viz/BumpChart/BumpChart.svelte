@@ -77,8 +77,16 @@
    */
   export let format = undefined;
 
-  /** Specify the width, in pixels. It scales down with its container. */
-  export let width = 560;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 560 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 560 : width;
 
   /** Specify the height of a rank row, in pixels */
   export let rowHeight = 32;
@@ -111,9 +119,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { buildBump } from "./bump-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -137,7 +146,7 @@
     series: seriesOf,
     label: labelOf,
     periods,
-    width,
+    width: layoutWidth,
     height,
     labelWidth,
     palette,
@@ -297,8 +306,8 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <svg
     class:bx--viz-bump__svg={true}
-    viewBox="0 0 {width} {total}"
-    style:max-width="{width}px"
+    viewBox="0 0 {layoutWidth} {total}"
+    style:max-width="{layoutWidth}px"
     role="application"
     aria-roledescription="chart"
     aria-label={title || undefined}

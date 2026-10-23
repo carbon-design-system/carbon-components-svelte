@@ -115,9 +115,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { buildRidgeline } from "./ridgeline-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -128,7 +129,7 @@
   $: xOf = toAccessor(x);
   $: seriesOf = toAccessor(series);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
-  $: plotWidth = Math.max(width - labelWidth, 40);
+  $: plotWidth = Math.max(layoutWidth - labelWidth, 40);
   // Depends on the data and the options only, so hover never lays out again.
   $: ridge = buildRidgeline(data, {
     x: xOf,
@@ -241,8 +242,8 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <svg
     class:bx--viz-ridgeline__svg={true}
-    viewBox="0 0 {width} {total}"
-    style:max-width="{width}px"
+    viewBox="0 0 {layoutWidth} {total}"
+    style:max-width="{layoutWidth}px"
     role="application"
     aria-roledescription="chart"
     aria-label={title || undefined}

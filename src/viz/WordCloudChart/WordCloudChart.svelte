@@ -51,8 +51,16 @@
    */
   export let selected = null;
 
-  /** Specify the width the cloud is drawn at. It scales to its container. */
-  export let width = 640;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 640 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 640 : width;
 
   /** Specify the height the cloud is drawn at */
   export let height = 320;
@@ -99,7 +107,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
@@ -121,7 +129,7 @@
   $: totals = sum(data, wordOf, valueOf, groupOf);
   // Depends on the data and the size only, so hover never lays it out again.
   $: cloud = layoutWords(totals, {
-    width,
+    width: layoutWidth,
     height,
     minSize,
     maxSize,
@@ -235,13 +243,22 @@
     setActive(cloud.words[focusIndex]);
   }
   $: tooltipTiming.settle(active);
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+
 </script>
 
 <figure bind:this={ref} class:bx--viz-word-cloud={true} {...$$restProps}>
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-word-cloud__plot={true} style:max-width="{width}px">
+  <div class:bx--viz-word-cloud__plot={true} style:max-width="{layoutWidth}px">
     <!-- A chart is one tab stop. Arrow keys move between words, largest first. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -250,7 +267,7 @@
     <svg
       class:bx--viz-word-cloud__svg={true}
       class:bx--viz-word-cloud__svg--emphasis={activeText !== null}
-      viewBox="0 0 {width} {height}"
+      viewBox="0 0 {layoutWidth} {height}"
       role="application"
       aria-roledescription="chart"
       aria-label={title || undefined}
@@ -286,9 +303,9 @@
     {#if active && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
-        class:bx--viz-chart-tooltip--flipped={active.x > width / 2}
+        class:bx--viz-chart-tooltip--flipped={active.x > layoutWidth / 2}
         aria-hidden="true"
-        style:left="{(active.x / width) * 100}%"
+        style:left="{(active.x / layoutWidth) * 100}%"
         style:top="{((active.y + active.size / 2) / height) * 100}%"
       >
         <ChartTooltipRow

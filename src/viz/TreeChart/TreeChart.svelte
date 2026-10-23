@@ -56,8 +56,16 @@
    */
   export let type = "tree";
 
-  /** Specify the width the layout is drawn at. The chart scales to its container. */
-  export let width = 720;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 720 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 720 : width;
 
   /** Specify the height the layout is drawn at */
   export let height = 360;
@@ -84,8 +92,9 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { buildTree } from "./tree-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -103,7 +112,7 @@
     parent: parentOf,
     label: labelOf,
     collapsed,
-    width,
+    width: layoutWidth,
     height,
     labelSpace,
     align: type === "dendrogram" ? "leaves" : "depth",
@@ -208,8 +217,8 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <svg
     class:bx--viz-tree__svg={true}
-    viewBox="0 0 {width} {height}"
-    style:max-width="{width}px"
+    viewBox="0 0 {layoutWidth} {height}"
+    style:max-width="{layoutWidth}px"
     role="application"
     aria-roledescription="chart"
     aria-label={title || undefined}

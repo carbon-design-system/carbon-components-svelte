@@ -73,8 +73,16 @@
    */
   export let projection = "mercator";
 
-  /** Specify the width the map is drawn at. It scales to its container. */
-  export let width = 720;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 720 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 720 : width;
 
   /** Specify the height the map is drawn at */
   export let height = 400;
@@ -123,12 +131,13 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
   import { geoPaths } from "../utils/geo-path.js";
   import { heatColor } from "../utils/heat-grid.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
 
   const dispatch = createEventDispatcher();
@@ -148,7 +157,12 @@
   }
 
   // Projection is the costly part, and depends on the map and the size only.
-  $: shapes = geoPaths(features, { width, height, projection, padding: 4 });
+  $: shapes = geoPaths(features, {
+    width: layoutWidth,
+    height,
+    projection,
+    padding: 4,
+  });
   $: regionOf = toAccessor(region);
   $: valueOf = toAccessor(value);
   $: totals = sum(data, regionOf, valueOf);
@@ -303,7 +317,7 @@
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-choropleth__plot={true} style:max-width="{width}px">
+  <div class:bx--viz-choropleth__plot={true} style:max-width="{layoutWidth}px">
     <!-- A chart is one tab stop. Arrow keys move between regions by name. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -311,7 +325,7 @@
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
     <svg
       class:bx--viz-choropleth__svg={true}
-      viewBox="0 0 {width} {height}"
+      viewBox="0 0 {layoutWidth} {height}"
       role="application"
       aria-roledescription="chart"
       aria-label={title || undefined}
@@ -350,9 +364,9 @@
     {#if active && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
-        class:bx--viz-chart-tooltip--flipped={active.cx > width / 2}
+        class:bx--viz-chart-tooltip--flipped={active.cx > layoutWidth / 2}
         aria-hidden="true"
-        style:left="{(active.cx / width) * 100}%"
+        style:left="{(active.cx / layoutWidth) * 100}%"
         style:top="{(active.cy / height) * 100}%"
       >
         <ChartTooltipRow label={active.label} value={write(active.value)} />

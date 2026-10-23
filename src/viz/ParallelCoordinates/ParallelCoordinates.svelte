@@ -54,8 +54,16 @@
    */
   export let selected = null;
 
-  /** Specify the width the chart is drawn at. It scales to its container. */
-  export let width = 640;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 640 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 640 : width;
 
   /** Specify the height the chart is drawn at */
   export let height = 320;
@@ -120,6 +128,7 @@
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import {
     buildParallel,
@@ -141,7 +150,7 @@
 
   $: plot = {
     x0: MARGIN.left,
-    x1: width - MARGIN.right,
+    x1: layoutWidth - MARGIN.right,
     y0: MARGIN.top,
     y1: height - MARGIN.bottom,
   };
@@ -223,7 +232,7 @@
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return null;
     return {
-      x: ((event.clientX - rect.left) / rect.width) * width,
+      x: ((event.clientX - rect.left) / rect.width) * layoutWidth,
       y: ((event.clientY - rect.top) / rect.height) * height,
     };
   }
@@ -354,7 +363,7 @@
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-parallel__plot={true} style:max-width="{width}px">
+  <div class:bx--viz-parallel__plot={true} style:max-width="{layoutWidth}px">
     <!-- A chart is one tab stop. Arrow keys move between rows. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -362,7 +371,7 @@
     <svg
       bind:this={svg}
       class:bx--viz-parallel__svg={true}
-      viewBox="0 0 {width} {height}"
+      viewBox="0 0 {layoutWidth} {height}"
       role="application"
       aria-roledescription="chart"
       aria-label={title || undefined}
@@ -459,7 +468,7 @@
         class:bx--viz-chart-tooltip={true}
         class:bx--viz-chart-tooltip--flipped={true}
         aria-hidden="true"
-        style:left="{((plot.x1 + MARGIN.right / 2) / width) * 100}%"
+        style:left="{((plot.x1 + MARGIN.right / 2) / layoutWidth) * 100}%"
         style:top="{(plot.y0 / height) * 100}%"
       >
         <div class:bx--viz-chart-tooltip__title={true}>{current.label}</div>

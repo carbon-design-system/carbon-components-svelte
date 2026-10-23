@@ -49,8 +49,16 @@
    */
   export let selected = null;
 
-  /** Specify the width the layout is drawn at. The chart scales to its container. */
-  export let width = 720;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 720 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 720 : width;
 
   /** Specify the height the layout is drawn at */
   export let height = 360;
@@ -94,9 +102,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { buildAlluvial } from "./alluvial-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -115,7 +124,7 @@
     source: sourceOf,
     target: targetOf,
     value: valueOf,
-    width,
+    width: layoutWidth,
     height,
     nodePadding,
     palette,
@@ -209,8 +218,8 @@
   <svg
     class:bx--viz-alluvial__svg={true}
     class:bx--viz-alluvial__svg--emphasis={activeId !== null}
-    viewBox="0 0 {width} {height}"
-    style:max-width="{width}px"
+    viewBox="0 0 {layoutWidth} {height}"
+    style:max-width="{layoutWidth}px"
     role="application"
     aria-roledescription="chart"
     aria-label={title || undefined}

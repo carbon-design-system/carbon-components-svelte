@@ -87,8 +87,16 @@
    */
   export let labels = "auto";
 
-  /** Specify the width, in pixels. It scales down with its container. */
-  export let width = 640;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 640 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 640 : width;
 
   /** Specify the height of the plot, in pixels */
   export let height = 320;
@@ -118,7 +126,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
@@ -146,7 +154,7 @@
     xValue: xValueOf,
     label: labelOf,
     sort,
-    width,
+    width: layoutWidth,
     height,
     palette,
     colors,
@@ -289,6 +297,15 @@
     return { name, share: name && h >= 38 && w >= 40 };
   }
   $: tooltipTiming.settle(current);
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+
 </script>
 
 <figure
@@ -300,13 +317,13 @@
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-marimekko__plot={true} style:max-width="{width}px">
+  <div class:bx--viz-marimekko__plot={true} style:max-width="{layoutWidth}px">
     <!-- A chart is one tab stop. Arrow keys move between cells. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <svg
       class:bx--viz-marimekko__svg={true}
-      viewBox="0 0 {width} {total}"
+      viewBox="0 0 {layoutWidth} {total}"
       role="application"
       aria-roledescription="chart"
       aria-label={title || undefined}
@@ -390,9 +407,9 @@
       {@const cy = HEADER + (current.y0 + current.y1) / 2}
       <div
         class:bx--viz-chart-tooltip={true}
-        class:bx--viz-chart-tooltip--flipped={cx > width / 2}
+        class:bx--viz-chart-tooltip--flipped={cx > layoutWidth / 2}
         aria-hidden="true"
-        style:left="{(cx / width) * 100}%"
+        style:left="{(cx / layoutWidth) * 100}%"
         style:top="{(cy / total) * 100}%"
       >
         <ChartTooltipRow

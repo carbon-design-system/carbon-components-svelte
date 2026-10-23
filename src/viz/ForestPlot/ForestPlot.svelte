@@ -77,8 +77,16 @@
    */
   export let format = undefined;
 
-  /** Specify the width, in pixels. It scales down with its container. */
-  export let width = 640;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 640 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 640 : width;
 
   /** Specify the height of a row, in pixels */
   export let rowHeight = 32;
@@ -114,9 +122,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { buildForest } from "./forest-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -130,7 +139,7 @@
   $: loOf = toAccessor(lo);
   $: hiOf = toAccessor(hi);
   $: weightOf = weight === undefined ? undefined : toAccessor(weight);
-  $: plotWidth = Math.max(width - labelWidth - valueWidth - PAD * 2, 40);
+  $: plotWidth = Math.max(layoutWidth - labelWidth - valueWidth - PAD * 2, 40);
   // Depends on the data and the options only, so hover never lays out again.
   $: forest = buildForest(data, {
     label: labelOf,
@@ -250,8 +259,8 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <svg
     class:bx--viz-forest__svg={true}
-    viewBox="0 0 {width} {total}"
-    style:max-width="{width}px"
+    viewBox="0 0 {layoutWidth} {total}"
+    style:max-width="{layoutWidth}px"
     role="application"
     aria-roledescription="chart"
     aria-label={title || undefined}
@@ -306,7 +315,7 @@
             class:bx--viz-forest__band={true}
             x="0"
             y={row.y - rowHeight / 2}
-            {width}
+            width={layoutWidth}
             height={rowHeight}
           />
           <text
@@ -351,7 +360,7 @@
           {#if valueWidth > 0}
             <text
               class:bx--viz-forest__value={true}
-              x={width - valueWidth + PAD}
+              x={layoutWidth - valueWidth + PAD}
               y={row.y}
               dy="0.32em"
             >
@@ -368,7 +377,7 @@
           <line
             class:bx--viz-forest__rule={true}
             x1="0"
-            x2={width}
+            x2={layoutWidth}
             y1={forest.overall.y - rowHeight / 2}
             y2={forest.overall.y - rowHeight / 2}
           />
@@ -392,7 +401,7 @@
             <text
               class:bx--viz-forest__value={true}
               class:bx--viz-forest__value--overall={true}
-              x={width - valueWidth + PAD}
+              x={layoutWidth - valueWidth + PAD}
               y={forest.overall.y}
               dy="0.32em"
             >

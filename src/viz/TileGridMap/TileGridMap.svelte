@@ -99,12 +99,13 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { rovingFocus } from "../../utils/roving-focus.js";
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
   import { heatColor } from "../utils/heat-grid.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { resolveTiles } from "../utils/tile-grid.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
 
@@ -263,7 +264,7 @@
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-tile-map__plot={true} style:max-width="{width}px">
+  <div class:bx--viz-tile-map__plot={true} style:max-width="{layoutWidth}px">
     <!-- Static tiles say nothing to assistive technology, which reads the
          table instead. Toggle buttons are exposed, each named in full. -->
     <ul

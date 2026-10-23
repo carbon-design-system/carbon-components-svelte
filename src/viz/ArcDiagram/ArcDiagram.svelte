@@ -114,7 +114,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { buildArcDiagram } from "./arc-geometry.js";
 
@@ -139,7 +139,7 @@
     value: valueOf,
     sort,
     directed,
-    width: width - PAD * 2,
+    width: layoutWidth - PAD * 2,
     palette,
     colors,
   });
@@ -240,6 +240,15 @@
     event.preventDefault();
     setActive(next);
   }
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+
 </script>
 
 <figure
@@ -256,8 +265,8 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <svg
     class:bx--viz-arc__svg={true}
-    viewBox="0 0 {width} {total}"
-    style:max-width="{width}px"
+    viewBox="0 0 {layoutWidth} {total}"
+    style:max-width="{layoutWidth}px"
     role="application"
     aria-roledescription="chart"
     aria-label={title || undefined}
@@ -269,7 +278,7 @@
       <line
         class:bx--viz-arc__line={true}
         x1="0"
-        x2={width - PAD * 2}
+        x2={layoutWidth - PAD * 2}
         y1="0"
         y2="0"
       />

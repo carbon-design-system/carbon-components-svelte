@@ -93,8 +93,16 @@
   /** Specify the label of the rule at `today` */
   export let todayLabel = "Today";
 
-  /** Specify the width the chart is drawn at. It scales to its container. */
-  export let width = 720;
+  /**
+   * Specify the width in pixels, or `"auto"` to fill the container.
+   * @type {number | "auto"}
+   */
+  export let width = "auto";
+
+  // The width laid out at: the container's under `"auto"`, the nominal
+  // 720 before it is measured.
+  let measuredWidth = 0;
+  $: layoutWidth = width === "auto" ? measuredWidth || 720 : width;
 
   /** Specify the height of a task row, in pixels */
   export let rowHeight = 28;
@@ -139,11 +147,12 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import ChartTooltipRow from "../Chart/ChartTooltipRow.svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { formatDuration, formatPercent } from "../utils/format-compact.js";
   import { nextId } from "../utils/next-id.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import { buildGantt } from "./gantt-geometry.js";
 
@@ -282,6 +291,15 @@
     setActive(next);
   }
   $: tooltipTiming.settle(current);
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+
 </script>
 
 <figure
@@ -293,14 +311,14 @@
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
   {/if}
-  <div class:bx--viz-gantt__plot={true} style:max-width="{width}px">
+  <div class:bx--viz-gantt__plot={true} style:max-width="{layoutWidth}px">
     <!-- A chart is one tab stop. Arrow keys move task by task. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <svg
       class:bx--viz-gantt__svg={true}
-      viewBox="0 0 {width} {height}"
+      viewBox="0 0 {layoutWidth} {height}"
       role="application"
       aria-roledescription="chart"
       aria-label={title || undefined}
@@ -348,7 +366,7 @@
               class:bx--viz-gantt__group={true}
               x="0"
               y={entry.y}
-              {width}
+              width={layoutWidth}
               height={entry.count * rowHeight}
             />
             <text
@@ -383,7 +401,7 @@
                 class:bx--viz-gantt__hit={true}
                 x="0"
                 y={task.y}
-                {width}
+                width={layoutWidth}
                 height={rowHeight}
               />
               <text
@@ -437,9 +455,9 @@
     {#if current && $tooltipShown}
       <div
         class:bx--viz-chart-tooltip={true}
-        class:bx--viz-chart-tooltip--flipped={current.x0 > width / 2}
+        class:bx--viz-chart-tooltip--flipped={current.x0 > layoutWidth / 2}
         aria-hidden="true"
-        style:left="{(current.x0 / width) * 100}%"
+        style:left="{(current.x0 / layoutWidth) * 100}%"
         style:top="{((AXIS + current.y + rowHeight) / height) * 100}%"
       >
         <div class:bx--viz-chart-tooltip__title={true}>{current.label}</div>
