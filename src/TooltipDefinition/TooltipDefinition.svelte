@@ -120,6 +120,14 @@
     open = !open;
   }
 
+  // Enter and Space toggle the tooltip, as in v11. A keyboard press
+  // activates the button with a click whose `detail` is 0, so the click
+  // still reaches `on:click` listeners. A pointer click toggles only with
+  // `clickToOpen`.
+  function handleClick(event) {
+    if (clickToOpen || event.detail === 0) toggle();
+  }
+
   // Focus shows the tooltip at once, without the fade-in.
   function showOnFocus() {
     tooltipHandoff.claim({ instant: true });
@@ -191,6 +199,8 @@
       effectivePortalTooltip && !shown ? undefined : id,
       ariaDescribedBy,
     )}
+    aria-controls={effectivePortalTooltip && !shown ? undefined : id}
+    aria-expanded={shown}
     class:bx--tooltip--portal-active={effectivePortalTooltip}
     class:bx--tooltip--a11y={!effectivePortalTooltip}
     class:bx--tooltip__trigger={true}
@@ -206,7 +216,7 @@
     class:bx--tooltip--align-center={!effectivePortalTooltip &&
       align === "center"}
     class:bx--tooltip--align-end={!effectivePortalTooltip && align === "end"}
-    on:click={clickToOpen ? toggle : undefined}
+    on:click={handleClick}
     on:click
     on:mouseover
     on:mouseenter

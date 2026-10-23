@@ -256,7 +256,75 @@ describe("TooltipDefinition", () => {
     expect(tooltip).toHaveClass("bx--assistive-text");
   });
 
+  it("controls the tooltip and reflects it in aria-expanded", async () => {
+    render(TooltipDefinition);
+
+    const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+    expect(trigger).toHaveAttribute("aria-controls", "test-tooltip");
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    await user.tab();
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it.each([
+    ["Enter", "{Enter}"],
+    ["Space", " "],
+  ])("toggles the tooltip with %s", async (_, key) => {
+    const onClick = vi.fn();
+    render(TooltipDefinition);
+
+    const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+    trigger.addEventListener("click", onClick);
+    await user.tab();
+
+    await user.keyboard(key);
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+
+    await user.keyboard(key);
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(trigger).toHaveClass("bx--tooltip--visible");
+    // The key still clicks the button, for `on:click` listeners.
+    expect(onClick).toHaveBeenCalledTimes(2);
+  });
+
+  it("toggles once per Enter when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+    await user.tab();
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{Enter}");
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Enter}");
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("keeps a hover-opened tooltip open on a pointer click", async () => {
+    render(TooltipDefinition);
+
+    const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+    await user.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+  });
+
   describe("portal tooltip", () => {
+    it("references the portal tooltip with aria-controls only while shown", async () => {
+      render(TooltipDefinition, { props: { portalTooltip: true } });
+
+      const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+      expect(trigger).not.toHaveAttribute("aria-controls");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      await user.tab();
+      expect(trigger).toHaveAttribute("aria-controls", "test-tooltip");
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+    });
+
     it("should render tooltip content in a portal when open", () => {
       render(TooltipDefinitionPortal);
 

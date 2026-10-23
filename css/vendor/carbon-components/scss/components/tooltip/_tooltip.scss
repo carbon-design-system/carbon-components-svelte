@@ -249,12 +249,15 @@
   }
 
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
-    @include type-style('label-01');
+    // ccs: v11's definition term takes the surrounding font, so a term in
+    // body text matches the words around it. v10 set `label-01` (12px).
+    font: inherit;
+    letter-spacing: inherit;
 
     // default buttons in Safari are adding a small margin, affecting tooltip
     // placement (formerly `.bx--tooltip--definition button.bx--tooltip--a11y`)
     margin: 0; // ccs: moved
-    border-bottom: to-rem(1px) dotted $text-secondary;
+    border-bottom: 1px dotted $border-strong; // ccs: v11 color
     // ccs: from the pruned `tooltip--definition--legacy` block. The trigger
     // is a <button>, so without this it takes the UA `buttontext` color.
     color: $text-primary;
@@ -263,7 +266,7 @@
 
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:hover,
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:focus {
-    border-bottom-color: $interactive;
+    border-bottom-color: $border-interactive; // ccs: v11 color
   }
 
   // ccs: definition tooltips hosted by a Tag. The dotted dictionary-term

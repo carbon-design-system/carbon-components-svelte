@@ -35,7 +35,8 @@
   }
   width: max-content;
   min-width: to-rem(24px);
-  max-width: to-rem(208px);
+  // ccs: v11's definition tooltip is 176px wide at most
+  max-width: if($tooltip-type == 'definition', to-rem(176px), to-rem(208px));
   height: auto;
   padding: if(
     $tooltip-type == 'definition',
@@ -51,7 +52,10 @@
   }
   // The font-weight this sets is always redundant: type-style below emits
   // its own `font-weight` right after, in the same rule.
-  @include type-style('body-compact-01');
+  // ccs: v11's definition tooltip sets `body-01`
+  @include type-style(
+    if($tooltip-type == 'definition', 'body-01', 'body-compact-01')
+  );
 
   // Windows, Firefox HCM Fix
   @media screen and (prefers-contrast) {

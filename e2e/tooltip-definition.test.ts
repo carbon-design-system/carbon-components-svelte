@@ -29,6 +29,49 @@ test.describe("TooltipDefinition", () => {
   });
 });
 
+test.describe("TooltipDefinition in body text", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/tooltip-definition-inline.html");
+  });
+
+  test("takes the surrounding font", async ({ page }) => {
+    const fonts = await page.evaluate(() => {
+      const read = (el: Element | null) => {
+        if (!el) throw new Error("missing element");
+        const s = getComputedStyle(el);
+        return {
+          fontFamily: s.fontFamily,
+          fontSize: s.fontSize,
+          fontWeight: s.fontWeight,
+          letterSpacing: s.letterSpacing,
+          lineHeight: s.lineHeight,
+        };
+      };
+      return {
+        text: read(document.querySelector('[data-testid="body-text"]')),
+        term: read(document.querySelector(".bx--tooltip__trigger--definition")),
+      };
+    });
+
+    expect(fonts.text.fontSize).toBe("14px");
+    expect(fonts.term).toEqual(fonts.text);
+  });
+
+  test("toggles with Enter and reflects it in aria-expanded", async ({
+    page,
+  }) => {
+    const term = page.getByRole("button", { name: "service level objective" });
+    await term.focus();
+    await expect(term).toHaveAttribute("aria-expanded", "true");
+
+    await page.keyboard.press("Enter");
+    await expect(term).toHaveAttribute("aria-expanded", "false");
+
+    await page.keyboard.press("Space");
+    await expect(term).toHaveAttribute("aria-expanded", "true");
+  });
+});
+
 test.describe("TooltipDefinition portaled inside Modal", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/tooltip-definition-modal.html");
