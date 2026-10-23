@@ -370,6 +370,10 @@ Use the `empty` slot for richer content. `let:value` is the filter text.
   </svelte:fragment>
 </MultiSelect>
 
+Without `filterable`, an empty `items` list shows "No options" instead, such as before async options arrive. `loading` holds the message back, and screen readers hear it through the multi-select's live region.
+
+<MultiSelect labelText="Contact" label="Select contact methods..." emptyText="No contact methods yet" items={[]} />
+
 ## Multiple multi-selects
 
 Manage multiple dropdowns in a form with coordinated state.
