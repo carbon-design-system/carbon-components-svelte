@@ -51,6 +51,7 @@ export { default as ContextMenuGroup } from "./ContextMenu/ContextMenuGroup.svel
 export { default as ContextMenuOption } from "./ContextMenu/ContextMenuOption.svelte";
 export { default as ContextMenuRadioGroup } from "./ContextMenu/ContextMenuRadioGroup.svelte";
 export { default as CopyButton } from "./CopyButton/CopyButton.svelte";
+export { copy } from "./CopyButton/copy.js";
 export { default as CopyInput } from "./CopyInput/CopyInput.svelte";
 export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svelte";
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
@@ -295,6 +296,7 @@ export {
   applyColumnSettings,
   toColumnSettings,
 } from "./utils/column-settings.js";
+export { copyText } from "./utils/copy-text.js";
 export { dismiss } from "./utils/dismiss.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
