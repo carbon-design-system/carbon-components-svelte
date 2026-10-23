@@ -30,6 +30,7 @@ import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
+import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import type { AriaEntry } from "../contract";
@@ -665,5 +666,14 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(ChatLog, { props: { labelText: "Conversation", ...attrs } }),
     target: () => screen.getByRole("log"),
+  },
+  {
+    // The text takes focus while clipped; the expand toggle has its own
+    // visible label.
+    name: "Truncate",
+    render: (attrs) =>
+      render(Truncate, { props: { reveal: "tooltip", ...attrs } }),
+    target: (result) =>
+      result.container.querySelector<HTMLElement>("p") as HTMLElement,
   },
 ];

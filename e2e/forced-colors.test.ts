@@ -12,6 +12,7 @@ const SYSTEM_COLORS = [
   "Highlight",
   "HighlightText",
   "GrayText",
+  "LinkText",
 ] as const;
 type SystemColor = (typeof SYSTEM_COLORS)[number];
 
@@ -105,6 +106,21 @@ test.describe("forced colors", () => {
     }
   });
 
+  test("the Truncate toggle reads as a link, also on hover", async ({
+    page,
+  }) => {
+    const toggle = ".bx--text-truncate__toggle";
+    // The toggle shows once the text measures as clipped.
+    await page.locator(toggle).waitFor();
+    expect
+      .soft((await style(page, toggle)).color, toggle)
+      .toBe(system.LinkText);
+    await page.hover(toggle);
+    expect
+      .soft((await style(page, toggle)).color, toggle)
+      .toBe(system.LinkText);
+  });
+
   test("disabled items read GrayText, also on hover", async ({ page }) => {
     for (const selector of [
       ".bx--tree-node--disabled > .bx--tree-node__label",
@@ -158,6 +174,18 @@ test.describe("forced colors", () => {
       "HighlightText",
     ],
     [".bx--toggle-input", ".bx--toggle__switch", "::before", "Highlight"],
+    [
+      ".bx--text-truncate--focusable",
+      ".bx--text-truncate--focusable",
+      undefined,
+      "CanvasText",
+    ],
+    [
+      ".bx--text-truncate__toggle",
+      ".bx--text-truncate__toggle",
+      undefined,
+      "CanvasText",
+    ],
     [".bx--header__name", ".bx--header__name", undefined, "Highlight"],
     [
       ".bx--header__menu-item",
@@ -176,6 +204,7 @@ test.describe("forced colors", () => {
   test("focus rings stay visible in a contrasting system color", async ({
     page,
   }) => {
+    await page.locator(".bx--text-truncate__toggle").waitFor();
     for (const [target, ring, pseudo, color] of rings) {
       // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
       await page.focus(target);
