@@ -126,6 +126,32 @@ function expectMirrored(
   }
 }
 
+/** The moving parts of the `${prefix}slider` and `${prefix}range-slider`. */
+function sliderParts(prefix: string) {
+  const slider = `[data-testid=${prefix}slider]`;
+  const range = `[data-testid=${prefix}range-slider]`;
+  return {
+    thumb: `${slider} .bx--slider__thumb`,
+    fill: `${slider} .bx--slider__filled-track`,
+    mark: `${slider} .bx--slider__mark:nth-child(4)`,
+    lower: `${range} .bx--slider__thumb-wrapper--lower`,
+    upper: `${range} .bx--slider__thumb-wrapper--upper`,
+    rangeFill: `${range} .bx--slider__filled-track`,
+    rangeMark: `${range} .bx--slider__mark:nth-child(2)`,
+    rangeMarkLabel: `${range} .bx--slider__mark:nth-child(2) .bx--slider__mark-label`,
+  };
+}
+
+/** Whether each RangeSlider handle is flipped, as its transform's x scale. */
+function handleScales(page: Page, testId: string) {
+  return page
+    .getByTestId(testId)
+    .locator(".bx--slider__thumb-wrapper")
+    .evaluateAll((nodes) =>
+      nodes.map((node) => new DOMMatrix(getComputedStyle(node).transform).a),
+    );
+}
+
 test.describe("right-to-left layout", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/rtl.html");
@@ -245,5 +271,61 @@ test.describe("right-to-left layout", () => {
         .boundingBox(),
     ]);
     expect(caretBox && labelBox && caretBox.x < labelBox.x).toBe(true);
+  });
+
+  test("mirrors a Slider and a RangeSlider once the pointer reaches them", async ({
+    page,
+  }) => {
+    const parts = sliderParts("");
+    const viewportWidth = await page.evaluate(
+      () => document.documentElement.clientWidth,
+    );
+    const ltr = await boxes(page, parts);
+
+    // Nothing reports a page direction change, so each slider re-reads
+    // its direction when the pointer enters it.
+    await setDirection(page, "rtl");
+    await page.getByTestId("slider").locator(".bx--slider").hover();
+    await page.getByTestId("range-slider").locator(".bx--slider").hover();
+    await expect
+      .poll(() => handleScales(page, "range-slider"), {
+        message: "handles flip",
+      })
+      .toEqual([-1, -1]);
+    expectMirrored(await boxes(page, parts), mirror(ltr, viewportWidth));
+
+    // A press 10% in from the right is 1, and ArrowLeft raises it.
+    const range = page.getByTestId("range-slider");
+    const track = await range.locator(".bx--slider__track").boundingBox();
+    if (!track) throw new Error("no track");
+    await page.mouse.click(
+      track.x + track.width * 0.9,
+      track.y + track.height / 2,
+    );
+    const lower = range.getByRole("slider", { name: /Lower bound/ });
+    await expect(lower).toHaveAttribute("aria-valuenow", "1");
+    await page.keyboard.press("ArrowLeft");
+    await expect(lower).toHaveAttribute("aria-valuenow", "2");
+  });
+
+  test("mirrors sliders in a LayoutDirection when its dir changes", async ({
+    page,
+  }) => {
+    const parts = sliderParts("region-");
+    const region = await page.getByTestId("region").boundingBox();
+    if (!region) throw new Error("no region");
+    const ltr = await boxes(page, parts);
+    expect(await handleScales(page, "region-range-slider")).toEqual([1, 1]);
+
+    // The button sits outside the region, so the pointer never enters a
+    // slider: the context alone updates them.
+    await page.getByRole("button", { name: "Flip region" }).click();
+    await expect
+      .poll(() => handleScales(page, "region-range-slider"), {
+        message: "handles flip",
+      })
+      .toEqual([-1, -1]);
+    const axis = Math.round(region.x * 2 + region.width);
+    expectMirrored(await boxes(page, parts), mirror(ltr, axis));
   });
 });

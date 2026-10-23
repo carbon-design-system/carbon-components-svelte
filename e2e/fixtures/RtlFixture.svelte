@@ -1,5 +1,6 @@
 <script>
   import {
+    Button,
     ClickableTile,
     ComboBox,
     Content,
@@ -10,15 +11,18 @@
     HeaderNavItem,
     HeaderNavMenu,
     HeaderUtilities,
+    LayoutDirection,
     MenuButton,
     MenuItem,
     MultiSelect,
+    RangeSlider,
     SideNav,
     SideNavItems,
     SideNavLink,
     SideNavMenu,
     SideNavMenuItem,
     SkipToContent,
+    Slider,
     TreeView,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
@@ -52,6 +56,15 @@
     },
   ];
   const expandedIds = ["analytics", "engine"];
+
+  const marks = [
+    { value: 0, label: "Off" },
+    { value: 5, label: "Half" },
+    { value: 10, label: "Full" },
+  ];
+
+  /** @type {"ltr" | "rtl"} */
+  let regionDir = "ltr";
 </script>
 
 <Header companyName="E2E" platformName="RTL">
@@ -137,6 +150,37 @@
       activeId="hadoop"
     />
   </div>
+  <Slider data-testid="slider" labelText="Replicas" max={10} value={2} marks />
+  <RangeSlider
+    data-testid="range-slider"
+    labelText="Window"
+    max={10}
+    value={2}
+    valueUpper={6}
+    {marks}
+  />
+  <Button
+    size="small"
+    on:click={() => (regionDir = regionDir === "ltr" ? "rtl" : "ltr")}
+    >Flip region</Button
+  >
+  <LayoutDirection dir={regionDir} data-testid="region">
+    <Slider
+      data-testid="region-slider"
+      labelText="Region replicas"
+      max={10}
+      value={2}
+      marks
+    />
+    <RangeSlider
+      data-testid="region-range-slider"
+      labelText="Region window"
+      max={10}
+      value={2}
+      valueUpper={6}
+      {marks}
+    />
+  </LayoutDirection>
 </Content>
 
 <style>
