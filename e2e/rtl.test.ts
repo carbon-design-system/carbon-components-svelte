@@ -1,9 +1,9 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
-// Under `dir="rtl"`, the UI Shell, the list boxes, the menus and the
-// ClickableTile icon mirror their LTR layout: every part sits as far from the
-// right edge as it sat from the left one.
+// Under `dir="rtl"`, the UI Shell, the list boxes, the menus, the
+// ClickableTile icon and TreeView mirror their LTR layout: every part sits
+// as far from the right edge as it sat from the left one.
 
 type Box = { left: number; right: number; width: number };
 
@@ -27,6 +27,29 @@ const PARTS = {
   multiSelectTagClose: "[data-testid=multiselect] .bx--tag__close-icon",
   multiSelectChevron: "[data-testid=multiselect] .bx--list-box__menu-icon",
   clickableTileIcon: "[data-testid=clickable-tile] .bx--tile--icon",
+  treeToggle:
+    "[data-testid=tree] [data-tree-row-id=engine] > .bx--tree-node__label .bx--tree-parent-node__toggle",
+  treeLeafIcon:
+    "[data-testid=tree] [data-tree-row-id=spark] .bx--tree-node__icon",
+  treeCheckbox:
+    "[data-testid=tree-checkbox] [data-tree-row-id=hadoop] .bx--checkbox-label",
+  treeParentCheckbox:
+    "[data-testid=tree-checkbox] [data-tree-row-id=engine] > .bx--tree-node__label .bx--checkbox-label",
+  treeVirtualToggle:
+    "[data-testid=tree-virtual] [data-tree-row-id=engine] .bx--tree-parent-node__toggle",
+  treeVirtualIcon:
+    "[data-testid=tree-virtual] [data-tree-row-id=spark] .bx--tree-node__icon",
+};
+
+// The active and multiselect bars are `::before` boxes, so build each one
+// from its label's box and its own `left` and `width`.
+const BARS = {
+  treeActiveBar:
+    "[data-testid=tree] [data-tree-row-id=hadoop] > .bx--tree-node__label",
+  treeSelectedBar:
+    "[data-testid=tree-multiselect] [data-tree-row-id=spark] > .bx--tree-node__label",
+  treeVirtualActiveBar:
+    "[data-testid=tree-virtual] [data-tree-row-id=hadoop] > .bx--tree-node__label",
 };
 
 function boxes(page: Page, parts: Record<string, string>) {
@@ -44,6 +67,29 @@ function boxes(page: Page, parts: Record<string, string>) {
     }
     return result;
   }, parts);
+}
+
+function barBoxes(page: Page, bars: Record<string, string>) {
+  return page.evaluate((bars) => {
+    const result: Record<string, Box | null> = {};
+    for (const [name, selector] of Object.entries(bars)) {
+      const label = document.querySelector(selector);
+      const bar = label && getComputedStyle(label, "::before");
+      if (!label || !bar || bar.content === "none") {
+        result[name] = null;
+        continue;
+      }
+      const left =
+        label.getBoundingClientRect().left + Number.parseFloat(bar.left);
+      const width = Number.parseFloat(bar.width);
+      result[name] = {
+        left: Math.round(left),
+        right: Math.round(left + width),
+        width: Math.round(width),
+      };
+    }
+    return result;
+  }, bars);
 }
 
 function setDirection(page: Page, dir: "rtl" | "ltr") {
@@ -85,7 +131,9 @@ test.describe("right-to-left layout", () => {
     await page.goto("/rtl.html");
   });
 
-  test("mirrors the UI Shell and closed list boxes", async ({ page }) => {
+  test("mirrors the UI Shell, closed list boxes and tree rows", async ({
+    page,
+  }) => {
     const viewportWidth = await page.evaluate(
       () => document.documentElement.clientWidth,
     );
@@ -108,6 +156,17 @@ test.describe("right-to-left layout", () => {
     expect(
       (rtl.comboBoxChevron as Box).left - (comboBox.field as Box).left,
     ).toBe(12);
+  });
+
+  test("mirrors the TreeView active and selected bars", async ({ page }) => {
+    const viewportWidth = await page.evaluate(
+      () => document.documentElement.clientWidth,
+    );
+    const ltr = await barBoxes(page, BARS);
+
+    await setDirection(page, "rtl");
+    const rtl = await barBoxes(page, BARS);
+    expectMirrored(rtl, mirror(ltr, viewportWidth));
   });
 
   test("puts the checkmark at the inline end of an open ComboBox", async ({

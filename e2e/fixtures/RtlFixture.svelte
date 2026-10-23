@@ -19,9 +19,11 @@
     SideNavMenu,
     SideNavMenuItem,
     SkipToContent,
+    TreeView,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
+  import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
 
@@ -30,6 +32,26 @@
     { id: "1", text: "Email" },
     { id: "2", text: "Fax" },
   ];
+
+  const nodes = [
+    { id: "ml", text: "Machine learning" },
+    {
+      id: "analytics",
+      text: "Analytics",
+      nodes: [
+        {
+          id: "engine",
+          text: "Analytics Engine",
+          nodes: [
+            { id: "spark", text: "Apache Spark", icon: Document },
+            { id: "hadoop", text: "Hadoop" },
+          ],
+        },
+        { id: "query", text: "SQL Query" },
+      ],
+    },
+  ];
+  const expandedIds = ["analytics", "engine"];
 </script>
 
 <Header companyName="E2E" platformName="RTL">
@@ -84,6 +106,36 @@
         <MenuItem labelText="PNG" />
       </MenuItem>
     </MenuButton>
+  </div>
+  <div data-testid="tree" class="field">
+    <TreeView labelText="Services" {nodes} {expandedIds} activeId="hadoop" />
+  </div>
+  <div data-testid="tree-multiselect" class="field">
+    <TreeView
+      labelText="Services"
+      multiselect
+      {nodes}
+      {expandedIds}
+      selectedIds={["spark", "query"]}
+    />
+  </div>
+  <div data-testid="tree-checkbox" class="field">
+    <TreeView
+      labelText="Services"
+      selectionMode="checkbox"
+      {nodes}
+      {expandedIds}
+      checkedIds={["spark"]}
+    />
+  </div>
+  <div data-testid="tree-virtual" class="field">
+    <TreeView
+      labelText="Services"
+      virtualize
+      {nodes}
+      {expandedIds}
+      activeId="hadoop"
+    />
   </div>
 </Content>
 

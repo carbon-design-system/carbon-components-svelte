@@ -548,8 +548,8 @@ describe("TreeView Props", () => {
       const activeNode = screen.getByRole("treeitem", { name: /Node 2/ });
       const label = activeNode.querySelector(".bx--tree-node__label");
       assert(label instanceof HTMLElement);
-      expect(label.style.paddingLeft).toBe("2.5rem");
-      expect(label.style.marginLeft).toBe("-2.5rem");
+      expect(label.style.paddingInlineStart).toBe("2.5rem");
+      expect(label.style.marginInlineStart).toBe("-2.5rem");
     });
 
     it("applies correct offset to nested leaf node label when expanded", () => {
@@ -573,8 +573,8 @@ describe("TreeView Props", () => {
       const label = activeNode.querySelector(".bx--tree-node__label");
       assert(label instanceof HTMLElement);
       // Nested at depth 2: offset = (2 - 1) + 2.5 = 3.5rem
-      expect(label.style.paddingLeft).toBe("3.5rem");
-      expect(label.style.marginLeft).toBe("-3.5rem");
+      expect(label.style.paddingInlineStart).toBe("3.5rem");
+      expect(label.style.marginInlineStart).toBe("-3.5rem");
     });
 
     it("applies correct offset to root-level parent node label", () => {
@@ -594,8 +594,8 @@ describe("TreeView Props", () => {
       const label = activeNode.querySelector(".bx--tree-node__label");
       assert(label instanceof HTMLElement);
       // Root parent: offset = (1 - 1) + 1 = 1rem
-      expect(label.style.paddingLeft).toBe("1rem");
-      expect(label.style.marginLeft).toBe("-1rem");
+      expect(label.style.paddingInlineStart).toBe("1rem");
+      expect(label.style.marginInlineStart).toBe("-1rem");
     });
   });
 
