@@ -174,7 +174,7 @@ Set `markSnapDistance` to pull drags and clicks onto a mark once the pointer com
 
 ## Vertical
 
-Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The `max` label sits at the top right of the track, the `min` label at the bottom right, and the text input below the track.
+Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The `max` label sits at the top of the track and the `min` label at the bottom, on the side where lines end: the right in a left-to-right page, the left in a right-to-left one. The text input sits below the track.
 
 <Slider labelText="Volume" orientation="vertical" value={40} />
 
@@ -202,7 +202,7 @@ A vertical slider fills the height of its container, minus its label and helper 
 
 ### Marks
 
-Mark labels render to the right of the track instead of below it.
+Mark labels render beside the track, on the same side as the range labels, instead of below it.
 
 <Slider
   labelText="Log verbosity"
