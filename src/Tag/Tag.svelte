@@ -36,7 +36,11 @@
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
-  /** Set to `true` to omit the default outer margin */
+  /**
+   * Set to `true` to omit the default outer margin.
+   * @deprecated has no effect -- tags have no outer margin, as in Carbon
+   * v11. Space tags with their container, such as `Stack` or `TagSet`.
+   */
   export let inline = false;
 
   /**

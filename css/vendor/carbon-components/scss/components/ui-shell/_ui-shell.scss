@@ -134,10 +134,10 @@
     fill: currentColor;
   }
 
-  // A `Tag` in the trigger's `text` slot drops its trailing margin so the
-  // chevron's own margin is the only gap, as after text or an icon.
+  // A `Tag` in the trigger's `text` slot sits the same distance from the
+  // label as an icon. Tags have no outer margin of their own.
   .#{$prefix}--header__menu-title > .#{$prefix}--tag {
-    margin-right: 0;
+    margin-left: $carbon--spacing-03;
   }
 
   // An auto-width text action reserves the 2px focus border at rest (the

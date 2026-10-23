@@ -37,15 +37,11 @@
     align-items: center;
     justify-content: center;
     padding: $carbon--spacing-02 $carbon--spacing-03;
-    margin: $carbon--spacing-02;
+    // ccs: v11 drops v10's outer margin; the container spaces tags
     border-radius: to-rem(15px);
     cursor: default;
     vertical-align: middle;
     word-break: break-word;
-
-    &:not(:first-child) {
-      margin-left: 0;
-    }
   }
 
   .#{$prefix}--tag--red {
@@ -433,15 +429,6 @@
   }
 }
 
-/// Inline tag without default outer margin
-/// @access private
-/// @group components
-@mixin tag-inline {
-  .#{$prefix}--tag--inline {
-    margin: 0;
-  }
-}
-
 /// Truncation tooltip inside a capped-width tag. The trigger itself is
 /// restyled in tooltip/_tooltip.scss, which emits after this file.
 /// @access private
@@ -464,10 +451,6 @@
 
 @include exports("tag-with-icon") {
   @include tag-with-icon;
-}
-
-@include exports("tag-inline") {
-  @include tag-inline;
 }
 
 @include exports("tag-truncate") {
@@ -574,7 +557,6 @@
     padding-top: 0;
     padding-bottom: 0;
     border: 1px solid get-token-value($tag-colors, "tag-border-gray");
-    margin: 0;
     font-family: inherit;
   }
 

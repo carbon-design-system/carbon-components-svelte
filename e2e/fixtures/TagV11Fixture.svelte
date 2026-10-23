@@ -3,7 +3,9 @@
     OperationalTag,
     SelectableTag,
     Tag,
+    TagInput,
     TagSet,
+    TagSkeleton,
   } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 
@@ -45,4 +47,29 @@
       <Tag filter value={region}>{region}: {long}</Tag>
     {/each}
   </TagSet>
+</div>
+
+<div data-testid="margins">
+  {#each ["sm", "default", "lg"] as size (size)}
+    <Tag {size}>Static</Tag>
+    <Tag {size} filter>Filter</Tag>
+    <Tag {size} interactive>Interactive</Tag>
+    <Tag {size} href="#tag">Link</Tag>
+    <Tag {size} inline>Inline</Tag>
+    <OperationalTag {size}>Operational</OperationalTag>
+    <SelectableTag {size}>Selectable</SelectableTag>
+    <TagSkeleton {size} />
+  {/each}
+</div>
+
+<div data-testid="short-set" style="width: 480px">
+  <TagSet>
+    {#each regions as region (region)}
+      <Tag filter value={region}>{region}</Tag>
+    {/each}
+  </TagSet>
+</div>
+
+<div data-testid="tag-input" style="width: 480px">
+  <TagInput labelText="Regions" value={regions} />
 </div>
