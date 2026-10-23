@@ -35,9 +35,10 @@
   export let rounded = false;
 
   /**
-   * Specify an icon to render in the bottom-right corner, such as
-   * `ArrowRight` for a link within the app or `Launch` for an external
-   * link. The icon is decorative and hidden from assistive technology.
+   * Specify an icon to render in the bottom-right corner (bottom-left in
+   * right-to-left layouts), such as `ArrowRight` for a link within the app
+   * or `Launch` for an external link. The icon is decorative and hidden
+   * from assistive technology.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);

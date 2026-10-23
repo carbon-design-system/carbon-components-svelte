@@ -1,9 +1,9 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
-// Under `dir="rtl"`, the UI Shell, the list boxes and the menus mirror their
-// LTR layout: every part sits as far from the right edge as it sat from the
-// left one.
+// Under `dir="rtl"`, the UI Shell, the list boxes, the menus and the
+// ClickableTile icon mirror their LTR layout: every part sits as far from the
+// right edge as it sat from the left one.
 
 type Box = { left: number; right: number; width: number };
 
@@ -26,6 +26,7 @@ const PARTS = {
   multiSelectTagLabel: "[data-testid=multiselect] .bx--tag__label",
   multiSelectTagClose: "[data-testid=multiselect] .bx--tag__close-icon",
   multiSelectChevron: "[data-testid=multiselect] .bx--list-box__menu-icon",
+  clickableTileIcon: "[data-testid=clickable-tile] .bx--tile--icon",
 };
 
 function boxes(page: Page, parts: Record<string, string>) {
