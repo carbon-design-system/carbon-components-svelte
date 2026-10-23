@@ -25,6 +25,18 @@ describe("Truncate", () => {
       expect(element.style.getPropertyValue("--ccs-truncate-lines")).toBe("3");
     });
 
+    it.each([
+      ["button", "button"],
+      ["ol", "a"],
+    ] as const)("should pass type through to a %s", (tag, type) => {
+      render(Truncate, { props: { tag, attrs: { type } } });
+
+      const element = screen.getByText(/This is a long text/);
+      expect(element.tagName).toBe(tag.toUpperCase());
+      expect(element).toHaveAttribute("type", type);
+      expect(element).toHaveClass("bx--text-truncate--end");
+    });
+
     it("should default to a paragraph element", () => {
       render(Truncate);
 

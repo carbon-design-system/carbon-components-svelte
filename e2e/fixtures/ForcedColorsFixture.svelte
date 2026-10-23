@@ -27,6 +27,7 @@
     ToggleButton,
     ToggleButtonGroup,
     TreeView,
+    Truncate,
   } from "carbon-components-svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
 
@@ -87,6 +88,15 @@
   </StructuredList>
 
   <Toggle labelText="Toggle" />
+
+  <Truncate reveal="tooltip">
+    Failed to deploy revision 214: container image payments-api:2.4.1-rc3
+    exceeded the memory limit.
+  </Truncate>
+  <Truncate reveal="expand" lines={2}>
+    Failed to deploy revision 214: container image payments-api:2.4.1-rc3
+    exceeded the memory limit configured for the production namespace.
+  </Truncate>
 
   <ProgressBar labelText="Progress" value={50} />
   <ProgressBar labelText="Indeterminate" />
