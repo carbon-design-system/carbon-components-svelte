@@ -9,6 +9,7 @@ description: LayoutDirection sets the writing direction for part of a page, such
     CodeSnippet,
     Dropdown,
     LayoutDirection,
+    RangeSlider,
     Slider,
     Stack,
     Tab,
@@ -38,10 +39,26 @@ It matches Carbon React's `LayoutDirection`. To set the direction for the whole 
 
 ## Slider
 
-In RTL, `Slider` puts `min` at the right end of the track. Dragging, clicking the track, and the arrow keys follow it: <DocKbd label="ArrowLeft" /> raises the value.
+In RTL, `Slider` and `RangeSlider` put `min` at the right end of the track. Dragging, clicking the track, marks, and the arrow keys follow it: <DocKbd label="ArrowLeft" /> raises the value.
+
+A slider in a `LayoutDirection` follows its `dir` as it changes. Outside one, a slider reads the page direction when it mounts, and again when the pointer or keyboard focus reaches it.
 
 <LayoutDirection dir="rtl" lang="ar">
-  <Slider labelText="عدد النسخ" min={0} max={10} value={3} />
+  <Stack gap={7}>
+    <Slider labelText="عدد النسخ" min={0} max={10} value={3} />
+    <RangeSlider
+      labelText="نطاق النسخ"
+      min={0}
+      max={10}
+      value={2}
+      valueUpper={6}
+      marks={[
+        { value: 0, label: "٠" },
+        { value: 5, label: "٥" },
+        { value: 10, label: "١٠" },
+      ]}
+    />
+  </Stack>
 </LayoutDirection>
 
 ## Tabs
