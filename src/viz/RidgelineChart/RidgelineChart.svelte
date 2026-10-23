@@ -51,6 +51,12 @@
   /** Specify the height of a row, in pixels */
   export let rowHeight = 36;
 
+  /**
+   * Specify how many rows the loading and empty states reserve, so the chart
+   * holds its height until the data arrives.
+   */
+  export let placeholderRows = 4;
+
   /** Specify how far a ridge may rise into the row above, as a share of the row */
   export let overlap = 0.8;
 
@@ -226,6 +232,16 @@
     event.preventDefault();
     setActive(next);
   }
+
+  onMount(() => {
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) measuredWidth = rounded;
+    });
+  });
+  $: empty = !loading && data.length === 0;
+  $: placeholderHeight = placeholderRows * rowHeight + AXIS;
 </script>
 
 <figure
@@ -358,4 +374,25 @@
     </tbody>
   </table>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+    >
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
 </figure>

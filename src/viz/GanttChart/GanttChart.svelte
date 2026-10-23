@@ -323,6 +323,15 @@
     });
   });
 
+  /** @param {string} key */
+  function toggleGroup(key) {
+    const next = nextHidden(hidden, key, groupKeysAll.length);
+    if (!next) return;
+    hidden = next;
+    dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
+  }
+  $: empty = !loading && data.length === 0;
+  $: placeholderHeight = AXIS + placeholderRows * rowHeight + PAD;
 </script>
 
 <figure

@@ -106,6 +106,12 @@
   export let rowHeight = 40;
 
   /**
+   * Specify how many rows the loading and empty states reserve, so the chart
+   * holds its height until the data arrives.
+   */
+  export let placeholderRows = 4;
+
+  /**
    * Override the words used for assistive technology.
    * @type {{ message?: string; from?: string; to?: string; returns?: string; error?: string; self?: string }}
    */
@@ -275,6 +281,8 @@
     event.preventDefault();
     setActive(next);
   }
+  $: empty = !loading && data.length === 0;
+  $: placeholderHeight = placeholderRows * rowHeight + PAD;
 </script>
 
 <figure
@@ -393,7 +401,28 @@
       {/each}
     </g>
   </svg>
-  {#if legend && groupKeys.length > 0}
+  {#if loading}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+      aria-hidden="true"
+    >
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+      ></div>
+    </div>
+  {:else if empty}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+    >
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    </div>
+  {/if}
+  {#if legend && (groupKeys.length > 0 || loading || empty)}
     <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
       {#each groupKeys as key (key)}
         <li
