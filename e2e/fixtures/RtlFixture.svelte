@@ -54,6 +54,11 @@
         { id: "query", text: "SQL Query" },
       ],
     },
+    {
+      id: "storage",
+      text: "Storage",
+      nodes: [{ id: "object-storage", text: "Object Storage" }],
+    },
   ];
   const expandedIds = ["analytics", "engine"];
 

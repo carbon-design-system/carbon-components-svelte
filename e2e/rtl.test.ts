@@ -92,6 +92,37 @@ function barBoxes(page: Page, bars: Record<string, string>) {
   }, bars);
 }
 
+// A collapsed and an expanded caret in the recursive and virtualized trees.
+const CARETS = {
+  collapsed:
+    "[data-testid=tree] [data-tree-row-id=storage] > .bx--tree-node__label .bx--tree-parent-node__toggle-icon",
+  expanded:
+    "[data-testid=tree] [data-tree-row-id=engine] > .bx--tree-node__label .bx--tree-parent-node__toggle-icon",
+  virtualCollapsed:
+    "[data-testid=tree-virtual] [data-tree-row-id=storage] .bx--tree-parent-node__toggle-icon",
+  virtualExpanded:
+    "[data-testid=tree-virtual] [data-tree-row-id=engine] .bx--tree-parent-node__toggle-icon",
+};
+
+/** Each caret's rotation in degrees, read from its computed transform. */
+function caretAngles(page: Page) {
+  return page.evaluate((carets) => {
+    const result: Record<string, number | null> = {};
+    for (const [name, selector] of Object.entries(carets)) {
+      const node = document.querySelector(selector);
+      if (!node) {
+        result[name] = null;
+        continue;
+      }
+      const matrix = new DOMMatrix(getComputedStyle(node).transform);
+      result[name] = Math.round(
+        (Math.atan2(matrix.b, matrix.a) * 180) / Math.PI,
+      );
+    }
+    return result;
+  }, CARETS);
+}
+
 function setDirection(page: Page, dir: "rtl" | "ltr") {
   return page.evaluate((dir) => {
     document.documentElement.dir = dir;
@@ -193,6 +224,45 @@ test.describe("right-to-left layout", () => {
     await setDirection(page, "rtl");
     const rtl = await barBoxes(page, BARS);
     expectMirrored(rtl, mirror(ltr, viewportWidth));
+  });
+
+  test("points a collapsed TreeView caret toward the children", async ({
+    page,
+  }) => {
+    // The caret is a down chevron: -90 points right, 90 left, 0 down.
+    expect(await caretAngles(page)).toEqual({
+      collapsed: -90,
+      expanded: 0,
+      virtualCollapsed: -90,
+      virtualExpanded: 0,
+    });
+
+    await setDirection(page, "rtl");
+    await expect
+      .poll(() => caretAngles(page), { message: "carets settle" })
+      .toEqual({
+        collapsed: 90,
+        expanded: 0,
+        virtualCollapsed: 90,
+        virtualExpanded: 0,
+      });
+  });
+
+  test("expands a TreeView row with Left and collapses it with Right", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    for (const testId of ["tree", "tree-virtual"]) {
+      const row = page
+        .getByTestId(testId)
+        .locator("[data-tree-row-id=storage]");
+      // biome-ignore lint/performance/noAwaitInLoops: one tree at a time
+      await row.focus();
+      await page.keyboard.press("ArrowLeft");
+      await expect(row, testId).toHaveAttribute("aria-expanded", "true");
+      await page.keyboard.press("ArrowRight");
+      await expect(row, testId).toHaveAttribute("aria-expanded", "false");
+    }
   });
 
   test("keeps the Slider gaps beside the text input", async ({ page }) => {

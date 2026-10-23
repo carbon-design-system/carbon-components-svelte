@@ -115,6 +115,7 @@
     selectNode,
     focusNode,
     serverTabStopId,
+    treeKey,
   } = getContext("carbon:TreeView");
 
   function offset() {
@@ -212,7 +213,7 @@
         // `on:click`, which calls `clickNode`.
         if (event.key === "Enter") event.stopPropagation();
 
-        if (event.key === "ArrowLeft") {
+        if (treeKey(event) === "ArrowLeft") {
           const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
           if (parentNode) parentNode.focus();
         }
@@ -282,7 +283,7 @@
         event.stopPropagation();
       }
 
-      if (event.key === "ArrowLeft") {
+      if (treeKey(event) === "ArrowLeft") {
         const parentNode = findParentTreeNode(ref.parentNode);
         if (parentNode) parentNode.focus();
       }
