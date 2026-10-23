@@ -5,8 +5,7 @@
   export let filterable = true;
   export let emptyText: ComponentProps<MultiSelect>["emptyText"] = undefined;
   export let loading = false;
-
-  const items = [
+  export let items: ComponentProps<MultiSelect>["items"] = [
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
   ];
