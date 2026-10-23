@@ -279,6 +279,12 @@ Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it foll
 
 <FileSource src="/framed/Chart/VizPalettes" />
 
+## In a dashboard
+
+Charts sit on tiles inside a `Layer`, read its tokens, and fill their columns: KPI tiles in a row, charts beside each other, and a table with inline graphics in its cells.
+
+<FileSource src="/framed/Chart/ChartDashboard" />
+
 ## Conventions
 
 The presets share one vocabulary, so what you learn on one chart carries to the next.
