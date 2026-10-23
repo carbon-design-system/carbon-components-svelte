@@ -324,14 +324,16 @@
   };
 
   /**
-   * Specify the message shown in the menu when no items match the filter.
-   * Only used when `filterable` is `true`.
-   * Pass a function to build it from the typed value.
-   * Set to `""` to show no message; `filterResultsText` still announces
-   * the result count.
-   * @type {string | ((value: string) => string)}
+   * Specify the message shown in the open menu when no items match the
+   * filter, or, without `filterable`, when `items` is empty.
+   * Defaults to "No results" when `filterable` is `true` and "No options"
+   * otherwise. Pass a function to build it from the typed value.
+   * Set to `""` to show no message. When filterable, `filterResultsText`
+   * still announces the result count; otherwise the status live region
+   * announces this message, also when the `empty` slot replaces it.
+   * @type {undefined | string | ((value: string) => string)}
    */
-  export let emptyText = "No results";
+  export let emptyText = undefined;
 
   /**
    * Default group name for the hidden inputs that mirror the current
@@ -1384,14 +1386,26 @@
     announcedFilterCount = null;
     statusText = "";
   }
-  $: hasNoMatches = filterable && open && !loading && filterResultCount === 0;
+  // Without a filter, only an empty `items` list (a select-all item aside)
+  // leaves nothing to show, such as before async options arrive.
+  $: hasNoMatches =
+    open &&
+    !loading &&
+    (filterable
+      ? filterResultCount === 0
+      : items.every((item) => item.isSelectAll));
   $: emptyMessage = hasNoMatches
     ? typeof emptyText === "function"
       ? emptyText(value)
-      : emptyText
+      : (emptyText ?? (filterable ? "No results" : "No options"))
     : "";
   // A row after the options, not an option, so arrow keys never reach it.
   $: showEmpty = hasNoMatches && ($$slots.empty || emptyMessage !== "");
+  // The row is hidden from assistive tech. Filtering announces its result
+  // count; without a filter, the live region carries the message instead.
+  $: if (hasNoMatches && !filterable && emptyMessage) {
+    announceStatus(emptyMessage);
+  }
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
