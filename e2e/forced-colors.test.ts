@@ -284,6 +284,7 @@ test.describe("forced colors", () => {
       ".bx--progress-bar__track",
       ".bx--meter__track",
       ".bx--popover-contents",
+      ".bx--popover--border .bx--popover-contents",
       ".bx--overflow-menu-options",
       ".bx--menu",
     ];
@@ -299,6 +300,18 @@ test.describe("forced colors", () => {
         outline: "solid 1px",
         outlineColor: system.CanvasText,
       });
+    });
+
+    // The Canvas caret would read as a gap in the outline; its edge stays.
+    const carets = [
+      ".bx--popover--caret:not(.bx--popover--border) .bx--popover-contents",
+      ".bx--popover--caret.bx--popover--border .bx--popover-contents",
+    ];
+    const caretStyles = await Promise.all(
+      carets.map((caret) => style(page, caret, "::before")),
+    );
+    carets.forEach((caret, i) => {
+      expect.soft(caretStyles[i].background, caret).toBe(system.CanvasText);
     });
 
     expect

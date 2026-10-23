@@ -48,6 +48,12 @@
    */
   export let align = "top";
 
+  /** Set to `false` to remove the drop shadow */
+  export let dropShadow = true;
+
+  /** Set to `true` to draw a 1px border around the popover and its caret */
+  export let border = false;
+
   /** Set to `true` to enable the high contrast variant */
   export let highContrast = false;
 
@@ -123,6 +129,8 @@
   class:bx--popover={true}
   class:bx--popover--caret={caret}
   class:bx--popover--high-contrast={highContrast}
+  class:bx--popover--drop-shadow={dropShadow}
+  class:bx--popover--border={border}
   class:bx--popover--top={alignClass === "top"}
   class:bx--popover--top-left={alignClass === "top-left"}
   class:bx--popover--top-right={alignClass === "top-right"}
