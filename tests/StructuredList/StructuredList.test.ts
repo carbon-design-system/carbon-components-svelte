@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import axe from "axe-core";
 import type StructuredListComponent from "carbon-components-svelte/StructuredList/StructuredList.svelte";
 import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
 import CheckmarkOutline from "carbon-icons-svelte/lib/CheckmarkOutline.svelte";
@@ -87,14 +88,20 @@ describe("StructuredList", () => {
     }
   });
 
-  it("should give the selection-icon header cell accessible text", () => {
+  it("leaves the selection-icon header cell empty, since selection drops the table roles", async () => {
     const { container } = render(StructuredList, {
       props: { selection: true },
     });
 
     const headerCells = container.querySelectorAll(".bx--structured-list-th");
     const selectionHeaderCell = headerCells[headerCells.length - 1];
-    expect(selectionHeaderCell.textContent?.trim()).not.toBe("");
+    expect(selectionHeaderCell).not.toHaveAttribute("role");
+    expect(selectionHeaderCell.textContent?.trim()).toBe("");
+
+    const results = await axe.run(container, {
+      runOnly: ["empty-table-header", "aria-required-parent"],
+    });
+    expect(results.violations).toEqual([]);
   });
 
   it("should render a custom selection icon via the `icon` prop", () => {

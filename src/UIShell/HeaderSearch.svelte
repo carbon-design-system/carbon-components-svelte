@@ -421,7 +421,7 @@
     <button
       bind:this={searchButtonRef}
       type="button"
-      aria-label="Search"
+      aria-label={labelText}
       aria-expanded={active}
       tabindex={active ? "-1" : "0"}
       class:bx--header-search-button={true}
@@ -431,7 +431,7 @@
         active = true;
       }}
     >
-      <svelte:component this={icon} size={20} title="Search" />
+      <svelte:component this={icon} size={20} />
     </button>
     <input
       bind:this={ref}
@@ -549,7 +549,7 @@
       id={menuId}
       role="listbox"
       tabindex="-1"
-      aria-label="Search"
+      aria-labelledby={labelId}
       aria-busy={loading || undefined}
       hidden={!richMenuVisible}
       class:bx--header__search-menu-rich={true}

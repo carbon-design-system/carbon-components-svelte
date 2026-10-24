@@ -89,6 +89,7 @@
     useAutoWidth,
     useFullWidth,
     useDismissible,
+    useDismissText,
     hasSecondaryLabel,
     secondaryLabelSupported,
     useContainer,
@@ -287,7 +288,7 @@
       <button
         type="button"
         tabindex="-1"
-        aria-label={label ? `Dismiss ${label}` : "Dismiss tab"}
+        aria-label={$useDismissText(label ?? "")}
         class:bx--tabs__nav-item--close-icon={true}
         class:bx--tabs__nav-item--close-icon--disabled={disabled}
         {disabled}

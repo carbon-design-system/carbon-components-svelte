@@ -28,6 +28,7 @@
 
 <script>
   /**
+   * @typedef {"page" | "pageRange" | "selectPage"} PaginationNavTranslationId
    * @event change - Fires after every user interaction
    * @property {number} page
    * @event click:button--previous
@@ -63,11 +64,38 @@
    */
   export let tooltipPosition = "bottom";
 
+  /**
+   * Override the default translation ids. `page` names a page button,
+   * `pageRange` is announced when the page changes, and `selectPage`
+   * names the overflow select.
+   * @type {(id: PaginationNavTranslationId, data: { page: number; total: number }) => string}
+   */
+  export let translateWithId = function translateWithId(id, data) {
+    return defaultTranslations[id](data);
+  };
+
+  /**
+   * Default translation ids.
+   * @type {{ page: "page"; pageRange: "pageRange"; selectPage: "selectPage" }}
+   */
+  export const translationIds = {
+    page: "page",
+    pageRange: "pageRange",
+    selectPage: "selectPage",
+  };
+
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import PaginationItem from "./PaginationItem.svelte";
+
+  const defaultTranslations = {
+    [translationIds.page]: ({ page }) => `Page ${page}`,
+    [translationIds.pageRange]: ({ page, total }) => `Page ${page} of ${total}`,
+    [translationIds.selectPage]: () => "Select page number",
+  };
+
   import PaginationOverflow from "./PaginationOverflow.svelte";
 
   const dispatch = createEventDispatcher();
@@ -136,16 +164,17 @@
     {#if fit > MIN || (fit <= MIN && page <= 1)}
       <PaginationItem
         page={1}
+        label={translateWithId("page", { page: 1, total })}
         active={page === 1}
         on:click={() => {
           page = 1;
           dispatch("change", { page });
         }}
-      >
-        {page === 1 ? "Active, Page" : "Page"}
-      </PaginationItem>
+      />
     {/if}
     <PaginationOverflow
+      {total}
+      {translateWithId}
       fromIndex={startOffset}
       count={front}
       on:select={(event) => {
@@ -156,16 +185,17 @@
     {#each items as item (item)}
       <PaginationItem
         page={item + 1}
+        label={translateWithId("page", { page: item + 1, total })}
         active={page === item + 1}
         on:click={() => {
           page = item + 1;
           dispatch("change", { page });
         }}
-      >
-        {page === item + 1 ? "Active, Page" : "Page"}
-      </PaginationItem>
+      />
     {/each}
     <PaginationOverflow
+      {total}
+      {translateWithId}
       fromIndex={total - back - 1}
       count={back}
       on:select={(event) => {
@@ -176,14 +206,13 @@
     {#if total > 1}
       <PaginationItem
         page={total}
+        label={translateWithId("page", { page: total, total })}
         active={page === total}
         on:click={() => {
           page = total;
           dispatch("change", { page });
         }}
-      >
-        {page === total ? "Active, Page" : "Page"}
-      </PaginationItem>
+      />
     {/if}
     <li class:bx--pagination-nav__list-item={true}>
       <Button
@@ -211,6 +240,6 @@
     aria-atomic="true"
     class:bx--pagination-nav__accessibility-label={true}
   >
-    Page {page}{" of "}{total}
+    {translateWithId("pageRange", { page, total })}
   </div>
 </nav>

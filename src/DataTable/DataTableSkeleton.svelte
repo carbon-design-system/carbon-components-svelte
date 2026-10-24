@@ -59,7 +59,7 @@
     </div>
   {/if}
   {#if showToolbar}
-    <section aria-label="data table toolbar" class:bx--table-toolbar={true}>
+    <div class:bx--table-toolbar={true}>
       <div class:bx--toolbar-content={true}>
         <span
           class:bx--skeleton={true}
@@ -67,7 +67,7 @@
           class:bx--btn--sm={true}
         ></span>
       </div>
-    </section>
+    </div>
   {/if}
   <div class:bx--data-table-content={true}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->

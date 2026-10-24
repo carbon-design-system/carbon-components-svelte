@@ -8,5 +8,12 @@
 </script>
 
 <ul>
-  <PaginationOverflow {fromIndex} {count} on:select={onSelect} />
+  <PaginationOverflow
+    {fromIndex}
+    {count}
+    total={10}
+    translateWithId={(id, { page }) =>
+      id === "page" ? `Page ${page}` : "Select page number"}
+    on:select={onSelect}
+  />
 </ul>
