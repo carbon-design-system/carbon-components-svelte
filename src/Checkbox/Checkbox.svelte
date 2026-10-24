@@ -375,23 +375,26 @@
         >{readonlyText}</span
       >
     {/if}
-    <div class:bx--checkbox__validation-msg={true}>
-      {#if showInvalid}
-        <WarningFilled class="bx--checkbox__invalid-icon" />
-        {#if invalidText}
-          <div id={errorId} class:bx--form-requirement={true} role="alert">
-            {invalidText}
-          </div>
+    <!-- Hidden by CSS unless invalid or warning, so only built then. -->
+    {#if showInvalid || showWarn}
+      <div class:bx--checkbox__validation-msg={true}>
+        {#if showInvalid}
+          <WarningFilled class="bx--checkbox__invalid-icon" />
+          {#if invalidText}
+            <div id={errorId} class:bx--form-requirement={true} role="alert">
+              {invalidText}
+            </div>
+          {/if}
+        {:else}
+          <WarningAltFilled
+            class="bx--checkbox__invalid-icon bx--checkbox__invalid-icon--warning"
+          />
+          {#if warnText}
+            <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+          {/if}
         {/if}
-      {:else if showWarn}
-        <WarningAltFilled
-          class="bx--checkbox__invalid-icon bx--checkbox__invalid-icon--warning"
-        />
-        {#if warnText}
-          <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
-        {/if}
-      {/if}
-    </div>
+      </div>
+    {/if}
     {#if helperText && !showInvalid && !showWarn}
       <div
         id={helperId}
