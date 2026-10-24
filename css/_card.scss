@@ -44,6 +44,12 @@
     color: ccs-token("icon-interactive");
   }
 
+  // The default icon is an arrow to the destination. Any icon mirrors, as
+  // on ClickableTile.
+  .#{$prefix}--card__clickable-footer svg {
+    @include ccs-mirror-rtl;
+  }
+
   .#{$prefix}--card--disabled {
     border-color: $border-disabled;
     color: $text-disabled;
