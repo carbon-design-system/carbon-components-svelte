@@ -1,0 +1,12 @@
+<script>
+  import { Box, ScrollGradient } from "carbon-components-svelte";
+
+  export let raised = false;
+</script>
+
+<Box fill="layer-03">Raised</Box>
+<Box fill={raised ? "layer-03" : "layer-01"}>Maybe raised</Box>
+<ScrollGradient color="layer-03" background="layer-03" height="10rem">
+  <p>Content</p>
+</ScrollGradient>
+<Box fill="layer-02">Unchanged</Box>

@@ -1,0 +1,23 @@
+<script lang="ts">
+  import { Theme } from "carbon-components-svelte";
+  import { getTokens } from "./tokens";
+
+  const brand = {
+    "button-secondary": "#6f6f6f",
+    "ui-03": "#c6c6c6",
+    "layer-01": "#f4f4f4",
+  };
+</script>
+
+<Theme
+  tokens={{
+    "interactive-01": "#d02670",
+    "text-primary": "#161616",
+    "support-error": "#da1e28",
+    "button-primary": "#d02670",
+  }}
+/>
+
+<Theme tokens={brand} />
+
+<Theme tokens={getTokens()} />

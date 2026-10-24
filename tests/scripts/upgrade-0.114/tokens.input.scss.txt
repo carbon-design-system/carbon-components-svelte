@@ -1,0 +1,63 @@
+// Reads take the v11 token for what they paint.
+.card {
+  background: var(--cds-ui-01);
+  border: 1px solid var(--cds-ui-03);
+  color: var(--cds-text-01);
+  box-shadow: inset 0 0 0 1px var(--cds-active-ui);
+
+  &:hover {
+    background-color: var(--cds-hover-ui);
+    outline: 2px solid var(--cds-interactive-04);
+  }
+
+  svg {
+    fill: var(--cds-icon-01);
+    stroke: var(--cds-inverse-01);
+  }
+
+  /* a comment; with a semicolon */ background: var(--cds-ui-03);
+  color: var(--cds-disabled-02, var(--cds-text-02));
+}
+
+.accent {
+  background: var(--cds-ui-03);
+  color: var(--cds-inverse-01);
+}
+
+// Overrides rename one to one; split tokens are reported.
+:root {
+  --cds-interactive-02: #6f6f6f;
+  --cds-text-01: #161616;
+  --cds-interactive-01: #d02670;
+  --cds-ui-03: #c6c6c6;
+}
+
+// No CSS property to pick by: a split token is reported.
+$border: var(--cds-ui-03);
+.panel {
+  --panel-border: var(--cds-ui-03);
+  --panel-text: var(--cds-text-02);
+}
+
+// Type styles.
+.caption {
+  font-size: var(--cds-body-short-01-font-size);
+  line-height: var(--cds-expressive-heading-01-line-height);
+  letter-spacing: var(--cds-caption-02-letter-spacing);
+}
+.bx--type-productive-heading-03,
+.bx--type-display-01 {
+  margin: 0;
+}
+
+// Names that only look like v10 tokens stay.
+.own {
+  color: var(--cds-ui-010);
+  background: var(--app-cds-ui-01);
+  border-color: var(--cds-ui-01-custom);
+  --cds-text-01x: red;
+  content: "ui-01";
+}
+.body-short-01 {
+  margin: 0;
+}
