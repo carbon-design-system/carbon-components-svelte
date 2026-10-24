@@ -188,8 +188,24 @@
   function observeOverflow() {
     stopObserving();
     stopObserving = refTabList
-      ? observeResize(refTabList, updateOverflow)
+      ? observeResize(refTabList, handleListResize)
       : noop;
+  }
+
+  // The scroll buttons appear or hide once the list overflows, and that
+  // moves the list's edges after a tab was scrolled into view. Keys
+  // pressed before the first measurement leave the focused tab under a
+  // button, so bring it back on each resize.
+  function handleListResize() {
+    updateOverflow();
+    const focused = refTabList?.ownerDocument.activeElement;
+    if (
+      focused instanceof HTMLElement &&
+      focused.matches("[role='tab']") &&
+      refTabList.contains(focused)
+    ) {
+      scrollTabIntoView(focused);
+    }
   }
 
   function remeasureOverflow() {
