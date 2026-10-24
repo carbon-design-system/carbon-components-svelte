@@ -1635,6 +1635,19 @@ describe("ComboBox", () => {
     expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
   });
 
+  describe("maxHeight", () => {
+    it("should override the size-based default on a portaled menu", async () => {
+      render(ComboBox, {
+        props: { portalMenu: true, maxHeight: 200 },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getByRole("listbox");
+      expect(menu.style.maxHeight).toBe("200px");
+    });
+  });
+
   describe("portalMenu", () => {
     afterEach(() => {
       const existingPortals = document.querySelectorAll(
