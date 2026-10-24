@@ -4,7 +4,8 @@ description: Big number displays a single prominent statistic, such as a dashboa
 ---
 
 <script>
-  import { Stack, BigNumber, BigNumberSkeleton, Text } from "carbon-components-svelte";
+  import { Stack, BigNumber, BigNumberSkeleton, Button, Link, Text } from "carbon-components-svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
 ## Basic
@@ -15,19 +16,19 @@ Create a big number with `labelText` and `value`.
 
 ## Sizes
 
-Set `size` to control the visual weight of the value.
+Set `size` to control the visual weight of the value. The default is `"default"`. The total and percent sign step up with the value; the label steps up at extra large.
 
 ### Default
 
-<BigNumber labelText="Deployments" value={1240} />
+<BigNumber labelText="Deployments" value={1240} total={2000} />
 
 ### Large
 
-<BigNumber labelText="Deployments" value={1240} size="lg" />
+<BigNumber labelText="Deployments" value={1240} total={2000} size="lg" />
 
 ### Extra large
 
-<BigNumber labelText="Deployments" value={1240} size="xl" />
+<BigNumber labelText="Deployments" value={1240} total={2000} size="xl" />
 
 ## Custom label
 
@@ -155,6 +156,19 @@ Set `tooltipDescription` to render an information icon next to `labelText` with 
   percentage
   tooltipDescription="Percentage of requests that returned a 5xx status in the last 24 hours."
 />
+
+## Action
+
+Use the `action` slot to add an inline action after the value, such as an icon-only ghost button or a link to the full report. The action sits on the value's baseline: a link's text shares it, and an icon-only button's icon stands on it.
+
+<Stack gap={5}>
+  <BigNumber labelText="p95 latency" value={182} formatOptions={{ style: "unit", unit: "millisecond", unitDisplay: "short" }}>
+    <Button slot="action" kind="ghost" size="small" iconOnly icon={Launch} iconDescription="Open latency report" />
+  </BigNumber>
+  <BigNumber labelText="Open incidents" value={3}>
+    <Link slot="action" href="/components/BigNumber#action">View all</Link>
+  </BigNumber>
+</Stack>
 
 ## Footer
 
