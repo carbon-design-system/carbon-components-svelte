@@ -443,7 +443,7 @@
   }
 
   .#{$prefix}--date-picker__year--suffixed .#{$prefix}--date-picker__year-input {
-    padding-right: 0;
+    padding-inline-end: 0;
   }
 
   .#{$prefix}--date-picker__year--suffixed .#{$prefix}--date-picker__year-step {

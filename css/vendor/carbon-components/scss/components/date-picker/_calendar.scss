@@ -21,6 +21,10 @@
 } // ccs: opacity fade blended selected-day text/bg against the page during the transition, sampling below 4.5:1 mid-animation; transform-only keeps colors solid throughout
 
 @mixin date-picker-calendar {
+  // ccs: the calendar takes the page's direction instead of v10's
+  // `direction: ltr`, which Carbon flipped with rtlcss. In RTL the
+  // weekdays, days and month grids run from the right, and the previous
+  // arrow sits on the right, pointing right.
   .#{$prefix}--date-picker__calendar {
     position: absolute;
     box-sizing: border-box;
@@ -28,7 +32,6 @@
     max-height: 0;
     padding: 0;
     overflow: hidden;
-    direction: ltr;
     text-align: center;
     border: 0;
     border-radius: 0;
@@ -150,7 +153,6 @@
     text-decoration: none;
     background: none;
     border: 0;
-    transform: scale(1, 1) #{'/*rtl: scale(-1,1)*/'};
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive);
     fill: $icon-primary;
@@ -159,6 +161,12 @@
     &:focus {
       @include focus-outline('outline');
     }
+  }
+
+  // ccs: the arrows point to the inline start and end.
+  .#{$prefix}--date-picker__nav-button--previous svg,
+  .#{$prefix}--date-picker__nav-button--next svg {
+    @include ccs-mirror-rtl;
   }
 
   .#{$prefix}--date-picker__heading {
@@ -257,14 +265,16 @@
   .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up,
   .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--down {
     position: absolute;
-    left: 2.6rem;
     width: to-rem(12px);
     height: 50%;
-    padding: 0 to-rem(4px) 0 to-rem(2px);
+    padding-block: 0;
+    padding-inline-start: to-rem(2px);
+    padding-inline-end: to-rem(4px);
     line-height: 50%;
     border: none;
     cursor: pointer;
     opacity: 0;
+    @include ccs-inset-inline($start: 2.6rem);
 
     &::after {
       position: absolute;

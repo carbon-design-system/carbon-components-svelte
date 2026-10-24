@@ -1,6 +1,7 @@
 // @ts-check
 
 import { isImeComposition } from "../utils/ime-composition.js";
+import { resolveLayoutDirection } from "../utils/layout-direction.js";
 import {
   compareDays,
   DAY_MS,
@@ -65,6 +66,7 @@ const QUIET_OPTIONS = new Set([
   "positionElement",
   "prevLabel",
   "nextLabel",
+  "rtl",
 ]);
 
 /** Options that change only the field's text: `set` rewrites the value. */
@@ -76,7 +78,21 @@ const RANGE_START = "bx--date-picker__day--range-start";
 const RANGE_END = "bx--date-picker__day--range-end";
 
 /** Months and years are picked in a 3-wide grid of 12 cells. */
-const GRID_SHIFTS = { 37: -1, 39: 1, 40: 3, 38: -3 };
+const GRID_SHIFTS = { 40: 3, 38: -3 };
+
+/**
+ * The step ArrowLeft (37) or ArrowRight (39) takes through the cells: the
+ * next cell is to the right in LTR and to the left in RTL, as in React
+ * Aria's calendar. `0` for any other key.
+ *
+ * @param {number} code
+ * @param {boolean} rtl
+ * @returns {-1 | 0 | 1}
+ */
+export function inlineStep(code, rtl) {
+  if (code !== 37 && code !== 39) return 0;
+  return (code === 39) === rtl ? -1 : 1;
+}
 
 /**
  * The key code of a keyboard event. `keyCode` is deprecated, but it is what
@@ -218,6 +234,23 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   /** @param {string} message */
   const report = (message) => config.errorHandler(new Error(message));
+
+  /**
+   * Whether the calendar runs right to left: the `rtl` option, else the
+   * calendar's computed direction. Read when a key arrives or the calendar
+   * is placed, since nothing reports a `dir` change.
+   */
+  function isRtl() {
+    if (typeof config.rtl === "function") return !!config.rtl();
+    return (
+      resolveLayoutDirection(
+        undefined,
+        self.calendarContainer?.isConnected
+          ? self.calendarContainer
+          : self._input,
+      ) === "rtl"
+    );
+  }
 
   /** @type {import("./calendar-dates.js").ParseContext} */
   const parseContext = {
@@ -1828,9 +1861,14 @@ export function createCalendarEngine(element, userConfig = {}) {
     toggleClass(container, "arrowTop", !showOnTop);
     toggleClass(container, "arrowBottom", showOnTop);
     if (config.inline) return;
-    let left = window.pageXOffset + bounds.left;
     const center = horizontal === "center";
-    const right = horizontal === "right";
+    // `left` and `right` are physical. `start`, `end` and no alignment
+    // follow the direction: in RTL the calendar's right edge meets the
+    // anchor's.
+    const right =
+      horizontal === "right" ||
+      (horizontal !== "left" && !center && (horizontal === "end") !== isRtl());
+    let left = window.pageXOffset + bounds.left;
     if (center) left -= (width - bounds.width) / 2;
     else if (right) left -= width - bounds.width;
     toggleClass(container, "arrowLeft", !center && !right);
@@ -1839,6 +1877,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     const bodyWidth = document.body.offsetWidth;
     const rightEdge = bodyWidth - (window.pageXOffset + bounds.right);
     const rightMost = left + width > bodyWidth;
+    // Past the left edge, it lines up with the anchor's left edge instead,
+    // as past the right edge it lines up with the right one.
+    if (!rightMost && left < window.pageXOffset) {
+      left = window.pageXOffset + Math.max(0, bounds.left);
+    }
     toggleClass(container, "rightMost", rightMost);
     if (config.static) return;
     container.style.top = `${top}px`;
@@ -2051,7 +2094,7 @@ export function createCalendarEngine(element, userConfig = {}) {
             event.preventDefault();
             const active = /** @type {HTMLElement} */ (document.activeElement);
             if (allowInput === false || (active && isDayFocused(active))) {
-              const delta = code === 39 ? 1 : -1;
+              const delta = inlineStep(code, isRtl());
               if (event.ctrlKey) {
                 event.stopPropagation();
                 focusFirstOpenDayOfMonth(
@@ -2145,7 +2188,10 @@ export function createCalendarEngine(element, userConfig = {}) {
     // Space picks like Enter; PageUp/PageDown step the year (or decade).
     if (code === 32) code = 13;
     const page = code === 33 ? -1 : code === 34 ? 1 : 0;
-    const shift = /** @type {Record<number, number>} */ (GRID_SHIFTS)[code];
+    const shift =
+      code === 37 || code === 39
+        ? inlineStep(code, isRtl())
+        : /** @type {Record<number, number>} */ (GRID_SHIFTS)[code];
     if (shift === undefined && code !== 13 && !page) return;
     if (code !== keyCodeOf(event) || page) event.preventDefault();
     let cells = self.days?.children;

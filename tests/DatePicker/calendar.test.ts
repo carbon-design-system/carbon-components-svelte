@@ -3,6 +3,7 @@ import {
   type CalendarInstance,
   type CalendarOptions,
   createCalendarEngine,
+  inlineStep,
 } from "../../src/DatePicker/calendar.js";
 
 const instances: CalendarInstance[] = [];
@@ -536,6 +537,191 @@ describe("keyboard", () => {
     });
 
     expect(instance.currentMonth).toBe(3);
+  });
+});
+
+describe("right to left", () => {
+  const press = (key: string, keyCode: number, init: KeyboardEventInit = {}) =>
+    fireEvent.keyDown(document.activeElement as HTMLElement, {
+      key,
+      keyCode,
+      ...init,
+    });
+  const focusedDate = () =>
+    (
+      document.activeElement as HTMLElement & { dateObj?: Date }
+    ).dateObj?.toDateString();
+
+  it("maps ArrowLeft and ArrowRight to the next and previous cell", () => {
+    expect([inlineStep(37, false), inlineStep(39, false)]).toEqual([-1, 1]);
+    expect([inlineStep(37, true), inlineStep(39, true)]).toEqual([1, -1]);
+    expect([inlineStep(38, true), inlineStep(40, false)]).toEqual([0, 0]);
+  });
+
+  it("moves to the next day with ArrowLeft, and the next month with Ctrl", () => {
+    const { instance } = create({
+      defaultDate: "2024-03-10",
+      locale: { firstDayOfWeek: 1 },
+      rtl: () => true,
+    });
+    instance.open();
+    day(instance, 10).focus();
+
+    press("ArrowLeft", 37);
+    expect(focusedDate()).toBe(new Date(2024, 2, 11).toDateString());
+    press("ArrowRight", 39);
+    press("ArrowRight", 39);
+    expect(focusedDate()).toBe(new Date(2024, 2, 9).toDateString());
+    // Up and Down, Home and End keep their meaning: Home is the week's
+    // first day, at the inline start.
+    press("ArrowDown", 40);
+    expect(focusedDate()).toBe(new Date(2024, 2, 16).toDateString());
+    press("Home", 36);
+    expect(focusedDate()).toBe(new Date(2024, 2, 11).toDateString());
+    press("End", 35);
+    expect(focusedDate()).toBe(new Date(2024, 2, 17).toDateString());
+
+    press("ArrowLeft", 37, { ctrlKey: true });
+    expect(instance.currentMonth).toBe(3);
+  });
+
+  it("reads the direction on each key", () => {
+    let rtl = false;
+    const { instance } = create({
+      defaultDate: "2024-03-10",
+      rtl: () => rtl,
+    });
+    instance.open();
+    day(instance, 10).focus();
+
+    press("ArrowRight", 39);
+    expect(focusedDate()).toBe(new Date(2024, 2, 11).toDateString());
+    rtl = true;
+    press("ArrowRight", 39);
+    expect(focusedDate()).toBe(new Date(2024, 2, 10).toDateString());
+  });
+
+  it.each([
+    ["month", 2, 3],
+    ["quarter", 1, 2],
+    ["year", 4, 5],
+  ] as const)("moves to the next %s with ArrowLeft", (mode, from, to) => {
+    const { instance } = create({
+      mode,
+      defaultDate: "2024-03-01",
+      rtl: () => true,
+    });
+    instance.open();
+    const cells = instance.calendarContainer.querySelectorAll<HTMLElement>(
+      ".bx--date-picker__grid-cell",
+    );
+    cells[from].focus();
+
+    press("ArrowLeft", 37);
+    expect(document.activeElement).toBe(cells[to]);
+    press("ArrowRight", 39);
+    expect(document.activeElement).toBe(cells[from]);
+  });
+
+  it("follows the calendar's computed direction without the option", () => {
+    const { instance } = create({ defaultDate: "2024-03-10" });
+    instance.open();
+    day(instance, 10).focus();
+    document.documentElement.style.direction = "rtl";
+
+    try {
+      press("ArrowLeft", 37);
+      expect(focusedDate()).toBe(new Date(2024, 2, 11).toDateString());
+    } finally {
+      document.documentElement.style.removeProperty("direction");
+    }
+  });
+
+  it.each([
+    // Locale, first weekday (0 = Sunday), its name in the locale.
+    ["ar", 6, "السبت"],
+    ["he", 0, "יום ראשון"],
+    ["fa", 6, "شنبه"],
+  ])(
+    "starts an %s week on its own first day, named by Intl",
+    (locale, first, name) => {
+      const { instance } = create({ locale, defaultDate: "2024-03-15" });
+      const firstCell = instance.calendarContainer.querySelector(
+        ".bx--date-picker__week .bx--date-picker__day",
+      ) as HTMLElement & { dateObj: Date };
+
+      expect(instance.l10n.firstDayOfWeek).toBe(first);
+      expect(firstCell.dateObj.getDay()).toBe(first);
+      expect(instance.l10n.weekdays.longhand[first]).toBe(name);
+      expect(
+        instance.calendarContainer.querySelector(".bx--date-picker__weekday"),
+      ).toHaveTextContent(instance.l10n.weekdays.shorthand[first]);
+      expect(instance.l10n.months.longhand[2]).toBe(
+        new Intl.DateTimeFormat(`${locale}-u-ca-gregory`, {
+          month: "long",
+        }).format(new Date(2024, 2, 1)),
+      );
+    },
+  );
+
+  describe("placement", () => {
+    const place = (
+      options: CalendarOptions,
+      anchor: { left: number; right: number },
+      bodyWidth = 1000,
+    ) => {
+      Object.defineProperty(document.body, "offsetWidth", {
+        configurable: true,
+        value: bodyWidth,
+      });
+      const { instance, input } = create({ static: false, ...options });
+      input.getBoundingClientRect = () =>
+        ({
+          ...anchor,
+          top: 100,
+          bottom: 140,
+          width: anchor.right - anchor.left,
+          height: 40,
+        }) as DOMRect;
+      Object.defineProperty(instance.calendarContainer, "offsetWidth", {
+        configurable: true,
+        value: 288,
+      });
+      instance.open();
+      return instance.calendarContainer.style;
+    };
+
+    afterEach(() => {
+      Reflect.deleteProperty(document.body, "offsetWidth");
+    });
+
+    it("opens at the anchor's right edge in RTL", () => {
+      const style = place({ rtl: () => true }, { left: 500, right: 700 });
+      expect([style.left, style.right]).toEqual(["412px", "auto"]);
+    });
+
+    it("keeps the anchor's left edge in LTR", () => {
+      const style = place({ rtl: () => false }, { left: 500, right: 700 });
+      expect([style.left, style.right]).toEqual(["500px", "auto"]);
+    });
+
+    it("swaps start and end in RTL, and keeps left and right", () => {
+      const anchor = { left: 500, right: 700 };
+      expect(
+        place({ rtl: () => true, position: "below end" }, anchor).left,
+      ).toBe("500px");
+      expect(
+        place({ rtl: () => true, position: "below left" }, anchor).left,
+      ).toBe("500px");
+      expect(
+        place({ rtl: () => false, position: "below end" }, anchor).left,
+      ).toBe("412px");
+    });
+
+    it("lines up with the anchor's left edge when its right edge would push it out of view", () => {
+      const style = place({ rtl: () => true }, { left: 8, right: 128 });
+      expect([style.left, style.right]).toEqual(["8px", "auto"]);
+    });
   });
 });
 

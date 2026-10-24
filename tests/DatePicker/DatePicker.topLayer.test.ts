@@ -215,4 +215,40 @@ describe("positionFlatpickrCalendarFixed", () => {
     // input top (450) - calendar height (300) - 2px gap
     expect(calendarContainer.style.top).toBe("148px");
   });
+
+  describe("right to left", () => {
+    const place = (left: number, right: number) => {
+      window.innerHeight = 800;
+      stubClientWidth(1000);
+      const positionElement = {
+        getBoundingClientRect: () => ({ top: 100, bottom: 132, left, right }),
+        offsetHeight: 32,
+      } as unknown as HTMLElement;
+      const calendarContainer = document.createElement("div");
+      Object.defineProperty(calendarContainer, "offsetWidth", {
+        configurable: true,
+        value: 288,
+      });
+      calendarContainer.appendChild(document.createElement("div"));
+      positionFlatpickrCalendarFixed(
+        {
+          calendarContainer,
+          _positionElement: positionElement,
+          config: { rtl: () => true },
+        },
+        positionElement,
+      );
+      return calendarContainer.style;
+    };
+
+    it("opens at the input's right edge", () => {
+      const style = place(500, 700);
+      expect([style.left, style.right]).toEqual(["auto", "300px"]);
+    });
+
+    it("lines up with the input's left edge when the right one would push it out of view", () => {
+      const style = place(8, 128);
+      expect([style.left, style.right]).toEqual(["8px", "auto"]);
+    });
+  });
 });
