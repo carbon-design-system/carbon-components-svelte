@@ -21,12 +21,12 @@
   // The 16px checkmark sits 12px from the edge; 4px clears it. As specific
   // as the padding rule above, so it follows and wins.
   .#{$prefix}--tile.#{$prefix}--tile--selectable.#{$prefix}--tile--sm {
-    padding-right: $carbon--spacing-07;
+    padding-inline-end: $carbon--spacing-07;
   }
 
   .#{$prefix}--tile--sm .#{$prefix}--tile__checkmark {
     top: $carbon--spacing-04;
-    right: $carbon--spacing-04;
+    @include ccs-inset-inline($end: $carbon--spacing-04);
   }
 }
 
