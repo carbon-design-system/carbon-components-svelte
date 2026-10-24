@@ -150,10 +150,14 @@
   function updateOverflow() {
     if (!refTabList) return;
     const { scrollLeft, scrollWidth, clientWidth } = refTabList;
+    // forwardEpsilon absorbs sub-pixel widths, as in `Tabs`. A browser can
+    // report scrollWidth 1px larger than clientWidth plus scrollLeft with
+    // nowhere left to scroll.
     ({ canScrollBackward, canScrollForward } = computeScrollOverflow({
       scrollLeft,
       scrollWidth,
       clientWidth,
+      forwardEpsilon: 1,
     }));
   }
 
