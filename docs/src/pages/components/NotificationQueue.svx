@@ -11,6 +11,10 @@ description: Notification queues provide an imperative API for managing toast no
 
 Use `bind:this` to get a queue reference, then call `add()` to show notifications. The queue uses underlying [ToastNotification](ToastNotification) components, manages positioning, and removes notifications when they time out or are closed.
 
+While the pointer or focus is in the queue, every toast's timer pauses, so
+users can finish reading. Each timer then resumes with the time it had
+left.
+
 <FileSource src="/framed/NotificationQueue/NotificationQueueBasic" />
 
 ## Positioning
