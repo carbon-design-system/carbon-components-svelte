@@ -1,7 +1,9 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Row and Column cross-axis alignment utility classes.
+/// Row and Column cross-axis alignment utility classes. CssColumn uses the
+/// column classes too: in a grid, flex-start and flex-end act as start and
+/// end on the block axis.
 /// @access private
 /// @group components
 @mixin grid-align {

@@ -62,6 +62,17 @@ describe("CssColumn", () => {
     ]);
   });
 
+  it.each(["start", "center", "end", "stretch"] as const)(
+    "aligns the column with align=%s",
+    (align) => {
+      render(CssColumn, { props: { md: 4, align } });
+      expect(placement()).toEqual([
+        "bx--md:col-span-4",
+        `bx--col--align-${align}`,
+      ]);
+    },
+  );
+
   it("passes the classes to a custom element", () => {
     render(CssColumn, { props: { as: true, sm: 2 } });
     const col = screen.getByTestId("col");
