@@ -63,6 +63,10 @@
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { createInitOrder } from "../utils/init-order.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -73,6 +77,7 @@
   $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
   /**
    * @type {import("svelte/store").Writable<string | null>}
    */
@@ -438,6 +443,7 @@
   role="tablist"
   use:rovingFocus={{
     selector: "[role='tab']",
+    rtl: () => resolveLayoutDirection($layoutDirection, ref) === "rtl",
     skipDisabled: true,
     getItems: () =>
       switches

@@ -150,6 +150,10 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
@@ -166,6 +170,7 @@
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   /** @type {import("svelte/store").Writable<TagSetItem[]>} */
   const items = writable([]);
@@ -488,6 +493,7 @@
   {id}
   use:rovingFocus={{
     selector: "button, a[href]",
+    rtl: () => resolveLayoutDirection($layoutDirection, wrapperRef) === "rtl",
     getItems: () => rovingItems().map((entry) => entry.element),
     getActiveIndex: () =>
       Math.max(

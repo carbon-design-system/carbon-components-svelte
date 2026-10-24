@@ -1,12 +1,21 @@
 <script>
   import { getContext, onMount, setContext } from "svelte";
   import { readable } from "svelte/store";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { createMenubar } from "../utils/menubar.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
 
   // Top-level items register here so the bar is a single Tab stop that the
   // arrow keys rove through.
-  const menubar = createMenubar();
+  const layoutDirection = getLayoutDirection();
+  /** @type {HTMLUListElement | null} */
+  let menubarRef = null;
+  const menubar = createMenubar({
+    rtl: () => resolveLayoutDirection($layoutDirection, menubarRef) === "rtl",
+  });
   /** @type {(node: HTMLElement, submenu?: { isOpen: () => boolean; open: () => void; close: () => void }) => void} */
   const registerItem = menubar.register;
   /** @type {(node: HTMLElement) => void} */
@@ -47,6 +56,7 @@
   {...$$restProps}
 >
   <ul
+    bind:this={menubarRef}
     role="menubar"
     class:bx--header__menu-bar={true}
     on:keydown={menubar.handleKeydown}

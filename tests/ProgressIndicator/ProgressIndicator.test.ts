@@ -330,6 +330,23 @@ describe("ProgressIndicator", () => {
       expect(onchange).not.toHaveBeenCalled();
     });
 
+    it("swaps ArrowLeft and ArrowRight in RTL", async () => {
+      document.documentElement.style.direction = "rtl";
+      render(ProgressIndicator, { currentIndex: 1, steps: fourSteps });
+      const buttons = screen.getAllByRole("button");
+
+      try {
+        await user.tab();
+        await user.keyboard("{ArrowLeft}");
+        expect(buttons[1]).toHaveFocus();
+
+        await user.keyboard("{ArrowRight}{ArrowRight}");
+        expect(buttons[2]).toHaveFocus();
+      } finally {
+        document.documentElement.style.removeProperty("direction");
+      }
+    });
+
     it("prevents the default action of an unmodified ArrowRight", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,

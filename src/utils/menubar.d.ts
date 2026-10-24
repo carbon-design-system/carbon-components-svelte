@@ -14,6 +14,8 @@ export type MenubarSubmenu = {
  */
 export function createMenubar(options?: {
   orientation?: "horizontal" | "vertical";
+  /** Read on each ArrowLeft and ArrowRight in a horizontal bar. When it returns `true`, ArrowLeft moves to the next item. */
+  rtl?: () => boolean;
 }): {
   orientation: "horizontal" | "vertical";
   register: (node: HTMLElement, submenu?: MenubarSubmenu) => void;
