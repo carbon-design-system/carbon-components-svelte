@@ -861,6 +861,73 @@ test.describe("forced colors", () => {
     }
   });
 
+  // Forced colors leave an SVG fill alone. These rules outranked the base
+  // sheet's `svg { fill: ButtonText }`, so their icons kept a token color.
+  // [icon, color]
+  const icons: [string, SystemColor][] = [
+    [".bx--header__global .bx--header__action > svg", "ButtonText"],
+    [
+      "[data-testid=fluid-fields] [data-testid=search] .bx--search-magnifier-icon",
+      "ButtonText",
+    ],
+    [
+      "[data-testid=fields] [data-testid=copy] .bx--snippet__icon",
+      "ButtonText",
+    ],
+    [
+      "[data-testid=icons] .bx--content-switcher-btn:not(.bx--content-switcher--selected) svg",
+      "ButtonText",
+    ],
+    [".bx--disclosure__arrow", "ButtonText"],
+    ["[data-testid=icons] .bx--progress-step--complete svg", "ButtonText"],
+    ["[data-testid=icons] .bx--progress-step--incomplete svg", "ButtonText"],
+    [
+      "[data-testid=icons] .bx--tabs__nav-item--default .bx--tabs__nav-item--close-icon svg",
+      "ButtonText",
+    ],
+    [".bx--tile__chevron svg", "ButtonText"],
+    ["[data-testid=icons] .bx--toggle-button svg", "ButtonText"],
+    ["[data-testid=icons] .bx--tree-node__icon", "ButtonText"],
+    ["[data-testid=icons] .bx--tree-parent-node__toggle-icon", "ButtonText"],
+    [
+      "[data-testid=range-slider-drag] .bx--slider__thumb-icon:not(.bx--slider__thumb-icon--focus)",
+      "ButtonText",
+    ],
+    [
+      "[data-testid=icons] .bx--tile--is-selected .bx--tile__checkmark svg",
+      "Highlight",
+    ],
+    [
+      "[data-testid=icons] .bx--select--readonly .bx--select__arrow",
+      "GrayText",
+    ],
+    [
+      "[data-testid=icons] .bx--date-picker-input__wrapper--readonly .bx--date-picker__icon",
+      "GrayText",
+    ],
+    [
+      "[data-testid=icons] .bx--dropdown--readonly .bx--list-box__menu-icon svg",
+      "GrayText",
+    ],
+    ["[data-testid=icons] .bx--number__controls svg", "GrayText"],
+  ];
+
+  test("icons read ButtonText, or GrayText when disabled or read-only", async ({
+    page,
+  }) => {
+    const fills = await page.evaluate(
+      (selectors) =>
+        selectors.map((selector) => {
+          const el = document.querySelector(selector);
+          if (!el) throw new Error(`no ${selector}`);
+          return getComputedStyle(el).fill;
+        }),
+      icons.map(([icon]) => icon),
+    );
+    icons.forEach(([icon, color], i) => {
+      expect.soft(fills[i], icon).toBe(system[color]);
+    });
+  });
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so

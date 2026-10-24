@@ -352,19 +352,20 @@
 
 // carbon-components-svelte patch (tile-checkbox-forced-colors)
 
-/// `SelectableTile`'s checkbox in forced-colors mode
+/// `SelectableTile`'s checkbox and `RadioTile`'s checkmark in forced-colors mode
 /// @access private
 /// @group components
 @mixin tile-checkbox-forced-colors {
   // Forced colors leave an SVG fill alone, so the empty box kept its token
   // gray and a selected box its token fill. Follow the tile's text, fill a
-  // selected box with `Highlight`, and gray out a disabled tile's box.
+  // selected box with `Highlight`, and gray out a disabled tile's box. A
+  // selected RadioTile's checkmark fills with `Highlight` too.
   @media (forced-colors: active) {
     .#{$prefix}--tile__checkmark--persistent svg {
       fill: currentColor;
     }
 
-    .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark--persistent svg {
+    .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark svg {
       fill: Highlight;
     }
 
