@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { openTooltips } from "../utils/open-tooltips";
+import { describeTooltipHover } from "../utils/tooltip-hover";
 import ButtonEscape from "./Button.escape.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 
@@ -26,15 +27,22 @@ describe.each([
     const onParentKeydown = vi.fn();
     render(ButtonEscape, { props: { portalTooltip, onParentKeydown } });
     const button = screen.getByTestId("button");
-    // Inline, CSS shows the tooltip on hover or focus unless the
-    // `bx--tooltip--hidden` class holds it back.
     const shown = () =>
       portalTooltip
         ? openTooltips().length === 1
         : button.classList.contains("bx--tooltip__trigger") &&
-          !button.classList.contains("bx--tooltip--hidden");
+          button.classList.contains("bx--tooltip--visible");
     return { button, shown, onParentKeydown };
   }
+
+  describeTooltipHover(
+    "Button icon-only",
+    () => {
+      const { button, ...rest } = setup();
+      return { trigger: button, ...rest };
+    },
+    { portal: portalTooltip },
+  );
 
   it("hides a focused tooltip, keeps focus, and stops the key there", async () => {
     const { button, shown, onParentKeydown } = setup();

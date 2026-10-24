@@ -110,7 +110,7 @@
     group: getTooltipGroup(),
     enterDelayMs: () => enterDelayMs,
     leaveDelayMs: () => leaveDelayMs,
-    hoverable: true,
+    rich: true,
   });
   const tooltipOthersActive = tooltipHandoff.hidden;
   const tooltipInstant = tooltipHandoff.instant;

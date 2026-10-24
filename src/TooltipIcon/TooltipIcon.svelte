@@ -12,6 +12,8 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
+  import { closeOverControls } from "../utils/tooltip-cover.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -70,7 +72,8 @@
 
   /**
    * Specify the duration in milliseconds to delay before hiding the tooltip.
-   * Defaults to the enclosing `TooltipGroup`'s delay, or `0`.
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `100`, so the
+   * pointer can move onto the tooltip.
    * @type {number | undefined}
    */
   export let leaveDelayMs = undefined;
@@ -192,6 +195,27 @@
     };
   });
 
+  function handleMouseleave() {
+    if (clicked) return;
+    if (effectivePortalTooltip) {
+      tooltipHandoff.scheduleLeave(() => {
+        hovered = false;
+        if (!focused) hide();
+      });
+    } else {
+      tooltipHandoff.scheduleLeave(hide);
+    }
+  }
+
+  // The pointer moved onto a part of the tooltip that covers another
+  // control: close at once, so the pointer and the next click reach that
+  // control. Hidden as by Escape until the next pointer enter or focus.
+  function handleTooltipCover() {
+    tooltipHandoff.cancel();
+    hidden = true;
+    hide();
+  }
+
   // Runs in the capture phase so a visible tooltip is dismissed before any
   // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
   // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
@@ -226,6 +250,8 @@
 
 <button
   bind:this={ref}
+  use:ignoreTooltipClicks
+  use:closeOverControls={{ onCover: handleTooltipCover }}
   use:dismiss={{
     enabled: open || portalOpen,
     type: "keydown",
@@ -284,17 +310,7 @@
     }
   }}
   on:mouseleave
-  on:mouseleave={() => {
-    if (clicked) return;
-    if (effectivePortalTooltip) {
-      tooltipHandoff.scheduleLeave(() => {
-        hovered = false;
-        if (!focused) hide();
-      });
-    } else {
-      tooltipHandoff.scheduleLeave(hide);
-    }
-  }}
+  on:mouseleave={handleMouseleave}
   on:focus
   on:focus={() => {
     if (disabled) return;
@@ -315,7 +331,7 @@
   }}
 >
   {#if !effectivePortalTooltip}
-    <span {id} class:bx--assistive-text={true} style:pointer-events="none">
+    <span {id} class:bx--assistive-text={true}>
       <slot name="tooltipText">{tooltipText}</slot>
     </span>
   {/if}
@@ -337,6 +353,12 @@
     verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
     intrinsicAlign={align}
     {id}
+    on:mouseenter={() => {
+      // The pointer moved onto the tooltip: keep it open.
+      if (portalOpen) tooltipHandoff.cancel();
+    }}
+    on:mouseleave={handleMouseleave}
+    on:cover={handleTooltipCover}
   >
     <slot name="tooltipText">{tooltipText}</slot>
   </PortalTooltip>

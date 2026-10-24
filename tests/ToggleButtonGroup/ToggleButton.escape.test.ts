@@ -1,9 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import { describeTooltipEscape } from "../utils/tooltip-escape";
+import { describeTooltipHover } from "../utils/tooltip-hover";
 import ToggleButtonEscape from "./ToggleButton.escape.test.svelte";
 
-describeTooltipEscape("Icon-only ToggleButton", () => {
+function setup() {
   const onParentKeydown = vi.fn();
   render(ToggleButtonEscape, { props: { onParentKeydown } });
   return {
@@ -13,4 +14,7 @@ describeTooltipEscape("Icon-only ToggleButton", () => {
       openTooltips().some((tooltip) => tooltip.textContent === "Bold"),
     onParentKeydown,
   };
-});
+}
+
+describeTooltipEscape("Icon-only ToggleButton", setup);
+describeTooltipHover("Icon-only ToggleButton", setup);

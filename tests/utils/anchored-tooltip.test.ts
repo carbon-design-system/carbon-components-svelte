@@ -12,8 +12,11 @@ const group = () =>
     skipDelayMs: () => 0,
   });
 
-function setup(options: Parameters<typeof createAnchoredTooltip>[0] = {}) {
-  const node = document.createElement("p");
+function setup(
+  options: Parameters<typeof createAnchoredTooltip>[0] = {},
+  tag = "p",
+) {
+  const node = document.createElement(tag);
   document.body.append(node);
   const tooltip = createAnchoredTooltip({ group: group(), ...options });
   const detach = tooltip.attach(node);
@@ -261,5 +264,63 @@ describe("createAnchoredTooltip", () => {
     node.dispatchEvent(new FocusEvent("focus"));
 
     expect(open()).toBe(false);
+  });
+
+  it("waits the icon leave delay and stays while the pointer is on the tooltip", () => {
+    const { node, tooltip, open } = setup({ group: createTooltipGroup() });
+
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(100);
+    node.dispatchEvent(new MouseEvent("mouseleave"));
+    vi.advanceTimersByTime(99);
+    expect(open()).toBe(true);
+
+    tooltip.handleTooltipMouseenter();
+    vi.advanceTimersByTime(500);
+    expect(open()).toBe(true);
+
+    tooltip.handleTooltipMouseleave();
+    vi.advanceTimersByTime(99);
+    expect(open()).toBe(true);
+    vi.advanceTimersByTime(1);
+    expect(open()).toBe(false);
+  });
+
+  it("stays open when the pointer comes back from the tooltip", () => {
+    const { node, tooltip, open } = setup({ group: createTooltipGroup() });
+
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(100);
+    node.dispatchEvent(new MouseEvent("mouseleave"));
+    tooltip.handleTooltipMouseenter();
+    tooltip.handleTooltipMouseleave();
+    vi.advanceTimersByTime(50);
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(500);
+    expect(open()).toBe(true);
+  });
+
+  it("ignores the pointer on a tooltip that is closed", () => {
+    const { tooltip, open } = setup();
+
+    tooltip.handleTooltipMouseenter();
+    expect(open()).toBe(false);
+  });
+
+  it("keeps a click on an inline tooltip from reaching the anchor", () => {
+    const { node } = setup({ dismissOnClick: false }, "button");
+    const tip = document.createElement("span");
+    tip.className = "bx--assistive-text";
+    node.append(tip);
+    const onClick = vi.fn();
+    node.addEventListener("click", onClick);
+
+    const onTip = new MouseEvent("click", { bubbles: true, cancelable: true });
+    tip.dispatchEvent(onTip);
+    expect(onTip.defaultPrevented).toBe(true);
+    expect(onClick).not.toHaveBeenCalled();
+
+    node.click();
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

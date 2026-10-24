@@ -19,7 +19,8 @@ import {
  * @property {() => number} enterDelayMs
  * @property {() => number | undefined} leaveDelayMs The leave delay set on
  *   this group or an enclosing one. `undefined` leaves the default to each
- *   tooltip: icon labels hide at once, hoverable tooltips linger.
+ *   tooltip: `100` for icon tooltips, `300` for `Tooltip` and
+ *   `TooltipDefinition`.
  * @property {() => number} skipDelayMs
  */
 

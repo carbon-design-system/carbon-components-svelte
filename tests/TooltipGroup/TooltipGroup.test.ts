@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { TOOLTIP_ICON_LEAVE_DELAY_MS } from "../../src/constants/timing.js";
 import { openTooltips } from "../utils/open-tooltips";
 import TooltipGroup from "./TooltipGroup.test.svelte";
 import TooltipGroupInline from "./TooltipGroupInline.test.svelte";
@@ -81,22 +82,24 @@ describe("TooltipGroup", () => {
     await fireEvent.mouseLeave(edit);
     await fireEvent.mouseEnter(deleteButton);
     await tick();
-    // The group's tooltip hides as the pointer leaves; the outside one
-    // has not opened yet.
-    expect(texts()).toEqual([]);
+    // The group's tooltip waits out its leave delay, and the outside one
+    // its enter delay.
+    expect(texts()).toEqual(["Edit"]);
 
     await vi.advanceTimersByTimeAsync(100);
     expect(texts()).toEqual(["Delete"]);
   });
 
-  it("hides an icon tooltip as soon as the pointer leaves", async () => {
+  it("keeps an icon tooltip up for the leave delay after the pointer leaves", async () => {
     const { edit, list } = await setup();
 
     await fireEvent.mouseEnter(list);
     await vi.advanceTimersByTimeAsync(100);
     expect(texts()).toEqual(["List view"]);
     await fireEvent.mouseLeave(list);
-    await tick();
+    await vi.advanceTimersByTimeAsync(TOOLTIP_ICON_LEAVE_DELAY_MS - 1);
+    expect(texts()).toEqual(["List view"]);
+    await vi.advanceTimersByTimeAsync(1);
     expect(texts()).toEqual([]);
 
     // The skip window still carries the handoff to a neighbor.
@@ -123,7 +126,7 @@ describe("TooltipGroup", () => {
     await fireEvent.mouseEnter(edit);
     await vi.advanceTimersByTimeAsync(100);
     await fireEvent.mouseLeave(edit);
-    await tick();
+    await vi.advanceTimersByTimeAsync(TOOLTIP_ICON_LEAVE_DELAY_MS);
     expect(texts()).toEqual([]);
 
     await vi.advanceTimersByTimeAsync(400);
@@ -138,9 +141,10 @@ describe("TooltipGroup", () => {
     await fireEvent.mouseEnter(edit);
     await vi.advanceTimersByTimeAsync(100);
     await fireEvent.mouseLeave(edit);
-    await vi.advanceTimersByTimeAsync(50);
+    await vi.advanceTimersByTimeAsync(TOOLTIP_ICON_LEAVE_DELAY_MS + 50);
 
-    // Within the default 300ms window, which `skipDelayMs: 0` overrides.
+    // Within the default 300ms window after it closed, which
+    // `skipDelayMs: 0` overrides.
     await fireEvent.mouseEnter(list);
     await tick();
     expect(texts()).toEqual([]);

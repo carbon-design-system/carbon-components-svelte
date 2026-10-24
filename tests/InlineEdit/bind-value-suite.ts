@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { TOOLTIP_ICON_LEAVE_DELAY_MS } from "../../src/constants/timing.js";
 import { user } from "../utils/user";
 
 /**
@@ -70,6 +71,11 @@ export function describeBindValueInRow(
       expect(cancel()).toBeDisabled();
 
       await user.type(input(), "!");
+      // The Save tooltip from the click waits out its leave delay, and
+      // Escape would hide it before it reverts the field.
+      await new Promise((resolve) =>
+        setTimeout(resolve, TOOLTIP_ICON_LEAVE_DELAY_MS),
+      );
       await user.keyboard("{Escape}");
       expect(input()).toHaveValue("Widget Pro");
     });

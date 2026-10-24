@@ -1,4 +1,10 @@
 <script>
+  /**
+   * @event {null} cover Dispatched when the mouse moves onto a part of the
+   *   tooltip that covers another control. Close the tooltip at once.
+   */
+
+  import { createEventDispatcher } from "svelte";
   import FloatingPortal from "./FloatingPortal.svelte";
 
   /**
@@ -88,7 +94,9 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { closeOverControls } from "../utils/tooltip-cover.js";
 
+  const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
 
   // Read when the tooltip opens: nothing reports a `dir` change.
@@ -115,10 +123,19 @@
   lockDirection="after-flip"
   let:direction={actualDirection}
 >
+  <!-- The pointer can rest on the tooltip (WCAG 1.4.13). The owner keeps
+       it open while the pointer is on it, and closes it at once on `cover`. -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
+    use:closeOverControls={{
+      trigger: anchor,
+      onCover: () => dispatch("cover"),
+    }}
     class:bx--tooltip-portal={true}
     data-direction={actualDirection ?? direction}
     data-tooltip-type={tooltipType}
+    on:mouseenter
+    on:mouseleave
   >
     <span class:bx--tooltip-portal__caret={true}></span>
     <!-- The box lays out left to right (see _tooltip.scss); the text keeps

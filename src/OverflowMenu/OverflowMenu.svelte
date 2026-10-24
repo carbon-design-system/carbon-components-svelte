@@ -515,6 +515,16 @@
     dismissTooltip();
   }
 
+  // The pointer moved onto a part of the tooltip that covers another
+  // control: close at once, so the pointer and the next click reach that
+  // control. Hidden until the next pointer enter or focus.
+  function handleTooltipCover() {
+    tooltipHandoff.cancel();
+    dismissed = true;
+    hovered = false;
+    tooltipHandoff.release();
+  }
+
   function closeTooltip() {
     tooltipHandoff.cancel();
     hovered = false;
@@ -743,6 +753,12 @@
     gapBottom={tooltipGaps.gapBottom}
     verticalAlignOffsetLeft={tooltipGaps.verticalAlignOffsetLeft}
     verticalAlignOffsetRight={tooltipGaps.verticalAlignOffsetRight}
+    on:mouseenter={() => {
+      // The pointer moved onto the tooltip: keep it open.
+      if (tooltipOpen) tooltipHandoff.cancel();
+    }}
+    on:mouseleave={handleTooltipMouseleave}
+    on:cover={handleTooltipCover}
   />
 {/if}
 

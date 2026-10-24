@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { describeTooltipEscape, pressEscape } from "../utils/tooltip-escape";
+import { describeTooltipHover } from "../utils/tooltip-hover";
 import HeaderActionEscape from "./HeaderAction.escape.test.svelte";
 
 function setup(props: { isOpen?: boolean } = {}) {
@@ -9,20 +11,23 @@ function setup(props: { isOpen?: boolean } = {}) {
   return {
     trigger,
     other: screen.getByLabelText("Other control"),
-    // CSS shows the tooltip on hover or focus unless the
-    // `bx--tooltip--hidden` class holds it back.
-    shown: () => !trigger.classList.contains("bx--tooltip--hidden"),
+    shown: () => trigger.classList.contains("bx--tooltip--visible"),
     onParentKeydown,
   };
 }
 
 describeTooltipEscape("Icon-only HeaderAction", setup, { enterDelayMs: 0 });
+describeTooltipHover("Icon-only HeaderAction", setup, {
+  enterDelayMs: 0,
+  portal: false,
+});
 
 describe("HeaderAction tooltip with the panel open", () => {
   it("hides the tooltip and closes the panel with one Escape", async () => {
     const { trigger, shown } = setup({ isOpen: true });
 
     trigger.focus();
+    await tick();
     expect(shown()).toBe(true);
 
     await pressEscape();
