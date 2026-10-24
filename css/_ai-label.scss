@@ -657,7 +657,11 @@ $ai-label-sizes: (
     padding-right: $carbon--spacing-10;
   }
 
-  .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon
+  // A clear button beside an invalid or warn icon pushes the decorator out
+  // one more slot. Key off the button: the calendar wraps the input in
+  // `__anchor`, so the input is no sibling of the decorator.
+  .#{$prefix}--date-picker-input__wrapper--decorator
+    .#{$prefix}--date-picker__clear--with-icon
     ~ .#{$prefix}--date-picker-input-inner-wrapper--decorator {
     right: $carbon--spacing-10;
   }
