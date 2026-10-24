@@ -1,0 +1,79 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Field focus rings in forced-colors mode. Forced colors paint a field's
+/// resting `transparent` outline as a 2px `CanvasText` ring and its focus
+/// outline as `Highlight`, so focus only changed the ring's color, and some
+/// palettes draw `Highlight` close to `CanvasText`. Every field's focus ring
+/// grows to 4px, twice the resting ring, and stays inset so a clipping or
+/// adjacent container can't hide it. Carbon v11 widens only TextInput's and
+/// TextArea's ring, to 3px with 1px outside.
+///
+/// Each selector repeats the rule that draws that field's ring, so a ring
+/// moves only where one was already drawn. A partial, not one vendored patch
+/// per field: the rings come from a dozen vendored files and the fluid
+/// partials, which all emit earlier.
+/// @access private
+/// @group components
+@mixin field-focus-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--text-input:focus,
+    .#{$prefix}--text-input:active,
+    .#{$prefix}--text-area:focus,
+    .#{$prefix}--text-area:active,
+    .#{$prefix}--search-input:focus,
+    .#{$prefix}--select-input:focus,
+    .#{$prefix}--date-picker__input:focus,
+    .#{$prefix}--number input[type="number"]:focus,
+    .#{$prefix}--number input[type="text"]:focus,
+    .#{$prefix}--list-box__field:focus,
+    .#{$prefix}--multi-select .#{$prefix}--list-box__field--wrapper--input-focused,
+    .#{$prefix}--tag-input--focused,
+    .#{$prefix}--toolbar-search-container-persistent
+      .#{$prefix}--search-input:focus:not([disabled]),
+    .#{$prefix}--table-toolbar--small
+      .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-input:focus,
+    .#{$prefix}--table-toolbar--xs
+      .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-input:focus,
+    .#{$prefix}--form--fluid
+      .#{$prefix}--text-input__field-wrapper[data-invalid]
+      > .#{$prefix}--text-input--invalid:focus,
+    .#{$prefix}--text-input--fluid
+      .#{$prefix}--text-input__field-wrapper[data-invalid]:focus-within,
+    .#{$prefix}--text-input--fluid
+      .#{$prefix}--text-input__field-wrapper--warning:focus-within,
+    .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__field:focus,
+    .#{$prefix}--number-input--fluid.#{$prefix}--number-input--fluid--focus
+      .#{$prefix}--number,
+    .#{$prefix}--select--fluid .#{$prefix}--select-input__wrapper:focus-within,
+    .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--invalid):not(.#{$prefix}--time-picker--fluid--warning)
+      .#{$prefix}--time-picker__input
+      .#{$prefix}--text-input__field-wrapper:focus-within,
+    .#{$prefix}--search--fluid[data-invalid]:focus-within,
+    .#{$prefix}--search--fluid[data-warn]:focus-within,
+    .#{$prefix}--text-area--fluid
+      .#{$prefix}--text-area__wrapper:focus-within::after,
+    .#{$prefix}--text-area--fluid
+      .#{$prefix}--text-area__wrapper[data-invalid]:focus-within::after,
+    .#{$prefix}--list-box__wrapper--fluid
+      .#{$prefix}--list-box__field--wrapper--input-focused,
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
+      .#{$prefix}--date-picker__input:focus {
+      outline: 4px $focus-outline-style Highlight;
+      outline-offset: -4px;
+    }
+
+    // InlineEdit draws its ring on the wrapper and strips the input's.
+    .#{$prefix}--edit-in-place__text-input.#{$prefix}--text-input:focus,
+    .#{$prefix}--edit-in-place__text-input.#{$prefix}--text-input:active {
+      outline: none;
+    }
+  }
+}
+
+@include exports("field-focus-forced-colors") {
+  @include field-focus-forced-colors;
+}

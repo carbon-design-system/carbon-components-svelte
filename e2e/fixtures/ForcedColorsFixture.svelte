@@ -10,7 +10,12 @@
     ChatMessage,
     Checkbox,
     ClickableTile,
+    ComboBox,
     ContentSwitcher,
+    CopyInput,
+    DatePicker,
+    DatePickerInput,
+    Dropdown,
     Header,
     HeaderAction,
     HeaderGlobalAction,
@@ -23,18 +28,25 @@
     Menu,
     MenuItem,
     Meter,
+    MultiSelect,
     NotificationActionButton,
+    NumberInput,
     OverflowMenu,
     OverflowMenuItem,
+    PasswordInput,
+    PinCodeInput,
     Popover,
     ProgressBar,
     Prose,
     RadioTile,
     RangeSlider,
+    Search as SearchField,
     SearchMenu,
     SearchMenuItem,
+    Select,
     SelectableTag,
     SelectableTile,
+    SelectItem,
     ShapeIndicator,
     StructuredList,
     StructuredListBody,
@@ -47,6 +59,10 @@
     TableOfContentsItem,
     Tabs,
     Tag,
+    TagInput,
+    TextArea,
+    TextInput,
+    TimePicker,
     ToastNotification,
     Toggle,
     ToggleButton,
@@ -61,6 +77,12 @@
   import Search from "carbon-icons-svelte/lib/Search.svelte";
 
   let menuAnchor = null;
+
+  const regions = [
+    { id: "us-east", text: "US East" },
+    { id: "us-west", text: "US West" },
+    { id: "eu-central", text: "EU Central" },
+  ];
 </script>
 
 <Header companyName="E2E" platformName="Forced colors" href="/">
@@ -297,4 +319,97 @@
       <NotificationActionButton>Retry</NotificationActionButton>
     </svelte:fragment>
   </ToastNotification>
+
+  <div data-testid="fields">
+    <div data-testid="text"><TextInput labelText="Text input" /></div>
+    <div data-testid="password">
+      <PasswordInput labelText="Password input" />
+    </div>
+    <div data-testid="number">
+      <NumberInput labelText="Number input" value={1} />
+    </div>
+    <div data-testid="textarea"><TextArea labelText="Text area" /></div>
+    <div data-testid="search"><SearchField labelText="Search field" /></div>
+    <div data-testid="select">
+      <Select labelText="Select">
+        <SelectItem value="us-east" text="US East" />
+      </Select>
+    </div>
+    <div data-testid="combobox">
+      <ComboBox labelText="Combo box" items={regions} />
+    </div>
+    <div data-testid="dropdown">
+      <Dropdown labelText="Dropdown" items={regions} selectedId="us-east" />
+    </div>
+    <div data-testid="multiselect">
+      <MultiSelect labelText="Multi select" items={regions} />
+    </div>
+    <div data-testid="multiselect-filterable">
+      <MultiSelect
+        labelText="Filterable multi select"
+        filterable
+        items={regions}
+      />
+    </div>
+    <div data-testid="date">
+      <DatePicker datePickerType="single">
+        <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
+      </DatePicker>
+    </div>
+    <div data-testid="time"><TimePicker labelText="Time" /></div>
+    <div data-testid="tags"><TagInput labelText="Tags" /></div>
+    <div data-testid="copy">
+      <CopyInput labelText="Copy input" value="sk-live-4f2a" />
+    </div>
+    <div data-testid="pin"><PinCodeInput labelText="Pin code" /></div>
+  </div>
+
+  <div data-testid="fluid-fields">
+    <div data-testid="text">
+      <TextInput fluid labelText="Fluid text input" />
+    </div>
+    <div data-testid="password">
+      <PasswordInput fluid labelText="Fluid password input" />
+    </div>
+    <div data-testid="number">
+      <NumberInput fluid labelText="Fluid number input" value={1} />
+    </div>
+    <div data-testid="textarea">
+      <TextArea fluid labelText="Fluid text area" />
+    </div>
+    <div data-testid="search">
+      <SearchField fluid labelText="Fluid search field" />
+    </div>
+    <div data-testid="select">
+      <Select fluid labelText="Fluid select">
+        <SelectItem value="us-east" text="US East" />
+      </Select>
+    </div>
+    <div data-testid="combobox">
+      <ComboBox fluid labelText="Fluid combo box" items={regions} />
+    </div>
+    <div data-testid="dropdown">
+      <Dropdown
+        fluid
+        labelText="Fluid dropdown"
+        items={regions}
+        selectedId="us-east"
+      />
+    </div>
+    <div data-testid="multiselect">
+      <MultiSelect fluid labelText="Fluid multi select" items={regions} />
+    </div>
+    <div data-testid="date">
+      <DatePicker fluid datePickerType="single">
+        <DatePickerInput labelText="Fluid date" placeholder="mm/dd/yyyy" />
+      </DatePicker>
+    </div>
+    <div data-testid="time"><TimePicker fluid labelText="Fluid time" /></div>
+    <div data-testid="copy">
+      <CopyInput fluid labelText="Fluid copy input" value="sk-live-4f2a" />
+    </div>
+    <div data-testid="pin">
+      <PinCodeInput fluid labelText="Fluid pin code" />
+    </div>
+  </div>
 </main>
