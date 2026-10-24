@@ -56,6 +56,7 @@ export function focusActionableNotification(root) {
  *   handleMouseleave: (event: MouseEvent) => void,
  *   handleFocusIn: (event: FocusEvent) => void,
  *   handleFocusOut: (event: FocusEvent) => void,
+ *   setPaused: (paused: boolean) => void,
  *   dispose: () => void,
  * }}
  */
@@ -67,6 +68,8 @@ export function createDismissibleNotification({
 }) {
   const dismiss = createTimeoutDismiss();
 
+  let paused = false;
+
   const {
     handleMouseenter,
     handleMouseleave,
@@ -74,7 +77,7 @@ export function createDismissibleNotification({
     handleFocusOut,
     refresh,
     reset,
-  } = createHoverFocusPause(dismiss, getPauseOnHover);
+  } = createHoverFocusPause(dismiss, getPauseOnHover, () => paused);
 
   /** @type {HTMLElement | null} */
   let prevFocus = null;
@@ -201,6 +204,15 @@ export function createDismissibleNotification({
     }
   }
 
+  /**
+   * Hold the timer paused, or release it with the time it had left.
+   * @param {boolean} value
+   */
+  function setPaused(value) {
+    paused = value;
+    refresh();
+  }
+
   return {
     close,
     sync,
@@ -210,6 +222,7 @@ export function createDismissibleNotification({
     handleMouseleave,
     handleFocusIn: trackFocusIn,
     handleFocusOut: trackFocusOut,
+    setPaused,
     // Unmounting while focused (e.g. a queue `remove()`/`clear()`) drops
     // focus to `<body>`; by now the root may already be detached, so rely on
     // the tracked flag rather than `root.contains(document.activeElement)`.

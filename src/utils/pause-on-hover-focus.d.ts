@@ -12,4 +12,6 @@ export type HoverFocusPause = {
 export function createHoverFocusPause(
   dismiss: { pause: () => void; resume: () => void },
   getPauseOnHover: () => boolean,
+  /** Holds the timer paused regardless of hover and focus. */
+  getPaused?: () => boolean,
 ): HoverFocusPause;

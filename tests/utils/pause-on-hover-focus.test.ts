@@ -109,4 +109,29 @@ describe("createHoverFocusPause", () => {
 
     root.remove();
   });
+
+  it("holds the pause from getPaused through hover and focus changes", () => {
+    const dismiss = fakeDismiss();
+    let paused = true;
+    const { handleMouseenter, handleMouseleave, refresh } =
+      createHoverFocusPause(
+        dismiss,
+        () => false,
+        () => paused,
+      );
+    const root = document.createElement("div");
+
+    handleMouseenter();
+    const event = new MouseEvent("mouseleave", {
+      relatedTarget: document.body,
+    });
+    Object.defineProperty(event, "currentTarget", { value: root });
+    handleMouseleave(event);
+    expect(dismiss.pause).toHaveBeenCalledTimes(2);
+    expect(dismiss.resume).not.toHaveBeenCalled();
+
+    paused = false;
+    refresh();
+    expect(dismiss.resume).toHaveBeenCalledTimes(1);
+  });
 });

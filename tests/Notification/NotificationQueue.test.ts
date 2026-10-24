@@ -837,6 +837,130 @@ describe("NotificationQueue", () => {
     });
   });
 
+  describe("pause", () => {
+    function getRegion() {
+      return screen.getByRole("region", { name: "Notifications" });
+    }
+
+    async function advance(ms: number) {
+      vi.advanceTimersByTime(ms);
+      await tick();
+    }
+
+    it("pauses every timer while the pointer is in the queue", async () => {
+      const { component } = render(NotificationQueueTest);
+      getQueue(component.queue).add({ title: "Saved", timeout: 1000 });
+      getQueue(component.queue).add({ title: "Synced", timeout: 2000 });
+      await tick();
+
+      await advance(400);
+      await fireEvent.pointerEnter(getRegion(), { pointerType: "mouse" });
+      await advance(5000);
+      expect(screen.getByText("Saved")).toBeInTheDocument();
+      expect(screen.getByText("Synced")).toBeInTheDocument();
+
+      // Each toast resumes with the time it had left.
+      await fireEvent.pointerLeave(getRegion(), { pointerType: "mouse" });
+      await advance(599);
+      expect(screen.getByText("Saved")).toBeInTheDocument();
+      await advance(1);
+      expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+      await advance(999);
+      expect(screen.getByText("Synced")).toBeInTheDocument();
+      await advance(1);
+      expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+    });
+
+    it("does not pause for touch, which has no hover", async () => {
+      const { component } = render(NotificationQueueTest);
+      getQueue(component.queue).add({ title: "Saved", timeout: 1000 });
+      await tick();
+
+      await fireEvent.pointerEnter(getRegion(), { pointerType: "touch" });
+      await advance(1000);
+
+      expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+    });
+
+    it("stays paused while focus moves between toasts", async () => {
+      const { component } = render(NotificationQueueTest);
+      const before = document.createElement("button");
+      document.body.append(before);
+      onTestFinished(() => before.remove());
+      getQueue(component.queue).add({ title: "Saved", timeout: 1000 });
+      getQueue(component.queue).add({ title: "Synced", timeout: 1000 });
+      await tick();
+
+      const [first, second] = screen.getAllByRole("button", {
+        name: "Close notification",
+      });
+      first.focus();
+      await tick();
+      await advance(5000);
+      second.focus();
+      await tick();
+      await advance(5000);
+      expect(screen.getByText("Saved")).toBeInTheDocument();
+      expect(screen.getByText("Synced")).toBeInTheDocument();
+
+      before.focus();
+      await tick();
+      await advance(1000);
+      expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+      expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+    });
+
+    it("resumes when the focused toast is removed", async () => {
+      const { component } = render(NotificationQueueTest);
+      getQueue(component.queue).add({ title: "Saved" });
+      getQueue(component.queue).add({ title: "Synced", timeout: 1000 });
+      await tick();
+
+      const saved = screen.getByText("Saved").closest('[role="status"]');
+      assert(saved instanceof HTMLElement);
+      const close = within(saved).getByRole("button", {
+        name: "Close notification",
+      });
+      close.focus();
+      await fireEvent.click(close);
+      await tick();
+      await advance(1000);
+
+      expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+    });
+
+    it("starts a toast added while paused paused", async () => {
+      const { component } = render(NotificationQueueTest);
+      getQueue(component.queue).add({ title: "Saved", timeout: 1000 });
+      await tick();
+
+      await fireEvent.pointerEnter(getRegion(), { pointerType: "mouse" });
+      getQueue(component.queue).add({ title: "Synced", timeout: 1000 });
+      await tick();
+      await advance(5000);
+      expect(screen.getByText("Synced")).toBeInTheDocument();
+
+      await fireEvent.pointerLeave(getRegion(), { pointerType: "mouse" });
+      await advance(1000);
+      expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+    });
+
+    it("forgets the pointer when the queue empties", async () => {
+      const { component } = render(NotificationQueueTest);
+      getQueue(component.queue).add({ title: "Saved" });
+      await tick();
+
+      await fireEvent.pointerEnter(getRegion(), { pointerType: "mouse" });
+      getQueue(component.queue).clear();
+      await tick();
+      getQueue(component.queue).add({ title: "Synced", timeout: 1000 });
+      await tick();
+      await advance(1000);
+
+      expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+    });
+  });
+
   describe("landmark", () => {
     it("renders the queue as a region named Notifications", async () => {
       const { component } = render(NotificationQueueTest);

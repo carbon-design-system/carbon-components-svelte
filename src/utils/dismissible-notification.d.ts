@@ -11,6 +11,8 @@ export interface DismissibleNotification {
   handleMouseleave: (event: MouseEvent) => void;
   handleFocusIn: (event: FocusEvent) => void;
   handleFocusOut: (event: FocusEvent) => void;
+  /** Holds the timer paused, or releases it with the time it had left. */
+  setPaused: (paused: boolean) => void;
   dispose: () => void;
 }
 
