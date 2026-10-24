@@ -12,7 +12,7 @@ export const colorTokens = {
   "background-active": {
     white: "rgba(141, 141, 141, 0.5)",
     g10: "rgba(141, 141, 141, 0.5)",
-    g80: "#525252",
+    g80: "rgba(141, 141, 141, 0.4)",
     g90: "rgba(141, 141, 141, 0.4)",
     g100: "rgba(141, 141, 141, 0.4)",
   },
@@ -26,7 +26,7 @@ export const colorTokens = {
   "background-hover": {
     white: "rgba(141, 141, 141, 0.12)",
     g10: "rgba(141, 141, 141, 0.12)",
-    g80: "#474747",
+    g80: "rgba(141, 141, 141, 0.16)",
     g90: "rgba(141, 141, 141, 0.16)",
     g100: "rgba(141, 141, 141, 0.16)",
   },
@@ -47,14 +47,14 @@ export const colorTokens = {
   "background-selected": {
     white: "rgba(141, 141, 141, 0.2)",
     g10: "rgba(141, 141, 141, 0.2)",
-    g80: "#525252",
+    g80: "rgba(141, 141, 141, 0.24)",
     g90: "rgba(141, 141, 141, 0.24)",
     g100: "rgba(141, 141, 141, 0.24)",
   },
   "background-selected-hover": {
     white: "rgba(141, 141, 141, 0.32)",
     g10: "rgba(141, 141, 141, 0.32)",
-    g80: "#636363",
+    g80: "rgba(141, 141, 141, 0.32)",
     g90: "rgba(141, 141, 141, 0.32)",
     g100: "rgba(141, 141, 141, 0.32)",
   },
@@ -383,7 +383,7 @@ export const colorTokens = {
   "border-disabled": {
     white: "#c6c6c6",
     g10: "#c6c6c6",
-    g80: "#525252",
+    g80: "rgba(141, 141, 141, 0.5)",
     g90: "rgba(141, 141, 141, 0.5)",
     g100: "rgba(141, 141, 141, 0.5)",
   },
@@ -523,7 +523,7 @@ export const colorTokens = {
   "text-disabled": {
     white: "rgba(22, 22, 22, 0.25)",
     g10: "rgba(22, 22, 22, 0.25)",
-    g80: "#8d8d8d",
+    g80: "rgba(244, 244, 244, 0.25)",
     g90: "rgba(244, 244, 244, 0.25)",
     g100: "rgba(244, 244, 244, 0.25)",
   },
@@ -558,7 +558,7 @@ export const colorTokens = {
   "text-on-color-disabled": {
     white: "#8d8d8d",
     g10: "#8d8d8d",
-    g80: "#c6c6c6",
+    g80: "rgba(255, 255, 255, 0.25)",
     g90: "rgba(255, 255, 255, 0.25)",
     g100: "rgba(255, 255, 255, 0.25)",
   },
@@ -642,7 +642,7 @@ export const colorTokens = {
   "icon-disabled": {
     white: "rgba(22, 22, 22, 0.25)",
     g10: "rgba(22, 22, 22, 0.25)",
-    g80: "#8d8d8d",
+    g80: "rgba(244, 244, 244, 0.25)",
     g90: "rgba(244, 244, 244, 0.25)",
     g100: "rgba(244, 244, 244, 0.25)",
   },
@@ -670,7 +670,7 @@ export const colorTokens = {
   "icon-on-color-disabled": {
     white: "#8d8d8d",
     g10: "#8d8d8d",
-    g80: "#c6c6c6",
+    g80: "rgba(255, 255, 255, 0.25)",
     g90: "rgba(255, 255, 255, 0.25)",
     g100: "rgba(255, 255, 255, 0.25)",
   },
@@ -1048,21 +1048,21 @@ export const colorTokens = {
   "chat-button-active": {
     white: "rgba(141, 141, 141, 0.5)",
     g10: "rgba(141, 141, 141, 0.5)",
-    g80: "#525252",
+    g80: "rgba(141, 141, 141, 0.4)",
     g90: "rgba(141, 141, 141, 0.4)",
     g100: "rgba(141, 141, 141, 0.4)",
   },
   "chat-button-hover": {
     white: "rgba(141, 141, 141, 0.12)",
     g10: "rgba(141, 141, 141, 0.12)",
-    g80: "#474747",
+    g80: "rgba(141, 141, 141, 0.16)",
     g90: "rgba(141, 141, 141, 0.16)",
     g100: "rgba(141, 141, 141, 0.16)",
   },
   "chat-button-selected": {
     white: "rgba(141, 141, 141, 0.2)",
     g10: "rgba(141, 141, 141, 0.2)",
-    g80: "#525252",
+    g80: "rgba(141, 141, 141, 0.24)",
     g90: "rgba(141, 141, 141, 0.24)",
     g100: "rgba(141, 141, 141, 0.24)",
   },
@@ -1234,7 +1234,7 @@ export const componentTokens = {
   "button-disabled": {
     white: "#c6c6c6",
     g10: "#c6c6c6",
-    g80: "#8d8d8d",
+    g80: "rgba(141, 141, 141, 0.3)",
     g90: "rgba(141, 141, 141, 0.3)",
     g100: "rgba(141, 141, 141, 0.3)",
   },
