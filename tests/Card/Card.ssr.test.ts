@@ -18,6 +18,19 @@ describe("Card (server)", () => {
     ).not.toBeNull();
   });
 
+  // An AILabel sets the class through context after the card renders, so
+  // the server reads it from the filled slot.
+  it("renders the AI surface", () => {
+    const { document } = renderSSR(Card);
+
+    expect(document.querySelector("a.bx--card")?.classList).toContain(
+      "bx--card--ai-label",
+    );
+    expect(
+      document.querySelector("[data-testid=actions]")?.classList,
+    ).not.toContain("bx--card--ai-label");
+  });
+
   it.each([
     [false, "bx--aspect-ratio"],
     [true, "bx--card__media--horizontal"],
