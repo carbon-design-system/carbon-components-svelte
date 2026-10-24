@@ -55,6 +55,12 @@ export const DATA_TABLE_SIZE_ALIASES = new Map([
 /** DataTable `Toolbar`: v11 `lg` is the 48px default. */
 export const TOOLBAR_SIZE_ALIASES = new Map([["lg", "default"]]);
 
+/** ProgressBar: v11 `small` and `big`. */
+export const PROGRESS_BAR_SIZE_ALIASES = new Map([
+  ["small", "sm"],
+  ["big", "md"],
+]);
+
 /**
  * Resolve a size alias to the component's own name. Returns any other
  * value unchanged, including `undefined`.

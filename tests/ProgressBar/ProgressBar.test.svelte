@@ -17,6 +17,10 @@
 
 <ProgressBar size="md" value={60} data-testid="medium-progress" />
 
+<ProgressBar size="small" value={60} data-testid="v11-small-progress" />
+
+<ProgressBar size="big" value={60} data-testid="v11-big-progress" />
+
 <ProgressBar kind="inline" value={40} data-testid="inline-progress" />
 
 <ProgressBar kind="indented" value={40} data-testid="indented-progress" />

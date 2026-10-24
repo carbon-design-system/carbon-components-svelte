@@ -26,7 +26,8 @@
 
   /**
    * Specify the size.
-   * @type {"sm" | "md"}
+   * Also accepts Carbon v11's `"small"` (`"sm"`) and `"big"` (`"md"`).
+   * @type {"sm" | "md" | "small" | "big"}
    */
   export let size = "md";
 
@@ -62,6 +63,10 @@
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import {
+    normalizeSize,
+    PROGRESS_BAR_SIZE_ALIASES,
+  } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const statusIcons = {
@@ -80,6 +85,7 @@
   $: helperId = `${id}-helper`;
   $: statusDescriptionId = `${id}-status`;
 
+  $: resolvedSize = normalizeSize(size, PROGRESS_BAR_SIZE_ALIASES);
   $: indeterminate = value === undefined && status === "active";
   let capped;
   let upper;
@@ -122,8 +128,8 @@
 <div
   class:bx--progress-bar={true}
   class:bx--progress-bar--indeterminate={indeterminate}
-  class:bx--progress-bar--big={size === "md"}
-  class:bx--progress-bar--small={size === "sm"}
+  class:bx--progress-bar--big={resolvedSize === "md"}
+  class:bx--progress-bar--small={resolvedSize === "sm"}
   class:bx--progress-bar--inline={kind === "inline"}
   class:bx--progress-bar--indented={kind === "indented"}
   class:bx--progress-bar--error={status === "error"}

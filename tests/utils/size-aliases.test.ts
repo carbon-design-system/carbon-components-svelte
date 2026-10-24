@@ -4,6 +4,7 @@ import {
   DATA_TABLE_SIZE_ALIASES,
   FIELD_SIZE_ALIASES,
   normalizeSize,
+  PROGRESS_BAR_SIZE_ALIASES,
 } from "../../src/utils/size-aliases.js";
 
 describe("normalizeSize", () => {
@@ -12,6 +13,8 @@ describe("normalizeSize", () => {
     expect(normalizeSize("md", BUTTON_SIZE_ALIASES)).toBe("field");
     expect(normalizeSize("2xl", BUTTON_SIZE_ALIASES)).toBe("xl");
     expect(normalizeSize("lg", FIELD_SIZE_ALIASES)).toBe("xl");
+    expect(normalizeSize("small", PROGRESS_BAR_SIZE_ALIASES)).toBe("sm");
+    expect(normalizeSize("big", PROGRESS_BAR_SIZE_ALIASES)).toBe("md");
   });
 
   it("resolves an alias of the default size to undefined", () => {
