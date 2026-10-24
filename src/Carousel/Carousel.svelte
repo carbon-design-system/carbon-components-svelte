@@ -64,9 +64,14 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { initCarousel } from "../utils/carousel.js";
   import { returnFocus } from "../utils/focus.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   /** @type {import("svelte/store").Writable<Element[]>} */
   const views = writable([]);
@@ -208,7 +213,13 @@
     }
 
     event.preventDefault();
-    navigate(event.key === "ArrowLeft" ? -1 : 1);
+    // In RTL the previous button sits on the right, so Right goes back.
+    // Read the direction now: nothing reports a `dir` change on an ancestor.
+    const node =
+      event.currentTarget instanceof Element ? event.currentTarget : null;
+    const step = event.key === "ArrowLeft" ? -1 : 1;
+    const rtl = resolveLayoutDirection($layoutDirection, node) === "rtl";
+    navigate(rtl ? -step : step);
   }
 </script>
 
