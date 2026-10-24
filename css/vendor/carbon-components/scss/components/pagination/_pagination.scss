@@ -90,7 +90,9 @@ $css--helpers: true;
     width: auto;
     min-width: auto;
     height: 100%;
-    padding: 0 2.25rem 0 $spacing-05;
+    padding-block: 0;
+    padding-inline-start: $spacing-05;
+    padding-inline-end: 2.25rem;
     background-color: $layer;
     line-height: $size-md;
   }
@@ -124,6 +126,12 @@ $css--helpers: true;
   .#{$prefix}--pagination .#{$prefix}--select__arrow {
     top: 50%;
     transform: translate(-0.5rem, -50%);
+
+    // ccs: Select's chevron sits at the inline end, so the nudge toward
+    // the text flips with it.
+    [dir="rtl"] & {
+      transform: translate(0.5rem, -50%);
+    }
   }
 
   // ccs: the separators, gaps and padding on the inline axis are logical,
