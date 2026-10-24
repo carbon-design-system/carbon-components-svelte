@@ -232,6 +232,21 @@ describe("HeaderSearch", () => {
       expect(onActive).toHaveBeenCalledTimes(1);
     });
 
+    it("stays closed when the click event is cancelled", async () => {
+      const onActive = vi.fn();
+      const onClick = vi.fn((event: CustomEvent<MouseEvent>) =>
+        event.preventDefault(),
+      );
+      render(HeaderSearchTest, { props: { onActive, onClick } });
+
+      const button = screen.getByRole("button", { name: "Search" });
+      await user.click(button);
+
+      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(button).toHaveAttribute("aria-expanded", "false");
+      expect(onActive).not.toHaveBeenCalled();
+    });
+
     it("should dispatch inactive event when deactivated", async () => {
       const onInactive = vi.fn();
       render(HeaderSearchTest, { props: { active: true, onInactive } });
