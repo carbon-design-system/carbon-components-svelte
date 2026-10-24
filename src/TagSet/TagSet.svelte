@@ -86,7 +86,7 @@
    * Size of every tag, including the "+N" overflow indicator. Applies to
    * slotted `Tag` children without their own `size`.
    * Also accepts Carbon v11's `"md"` (`"default"`).
-   * @type {"sm" | "default" | "lg" | "md"}
+   * @type {"xs" | "sm" | "default" | "lg" | "md"}
    */
   export let size = undefined;
 

@@ -19,7 +19,7 @@ import { uniqueId } from "../utils/unique-id.js";
 /**
  * The parts of the `carbon:TagSet` context a member uses.
  * @typedef {Object} TagSetContext
- * @property {import("svelte/store").Readable<"sm" | "default" | "lg" | undefined>} size
+ * @property {import("svelte/store").Readable<"xs" | "sm" | "default" | "lg" | undefined>} size
  * @property {import("svelte/store").Readable<"tab" | "roving">} navigation
  * @property {import("svelte/store").Readable<Set<string>>} overflowIds
  * @property {import("svelte/store").Readable<string | null>} tabStopId
@@ -31,7 +31,7 @@ import { uniqueId } from "../utils/unique-id.js";
 
 /**
  * @typedef {Object} TagSetMember
- * @property {import("svelte/store").Readable<"sm" | "default" | "lg" | undefined>} size - The set's `size`.
+ * @property {import("svelte/store").Readable<"xs" | "sm" | "default" | "lg" | undefined>} size - The set's `size`.
  * @property {import("svelte/store").Readable<"tab" | "roving">} navigation - The set's `navigation`.
  * @property {import("svelte/store").Readable<boolean>} overflow - Whether the tag is collapsed into the "+N" indicator.
  * @property {import("svelte/store").Readable<"0" | "-1" | undefined>} tabindex - Roving `tabindex`; `undefined` keeps the native tab order.

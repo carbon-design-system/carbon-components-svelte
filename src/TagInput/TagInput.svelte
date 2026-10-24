@@ -185,7 +185,7 @@
   $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"
-      ? "sm"
+      ? effectiveSize
       : effectiveSize === "xl"
         ? "lg"
         : "default";
