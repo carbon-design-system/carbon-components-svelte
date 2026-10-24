@@ -599,8 +599,14 @@
   }
 
   // Allow pointer events on tooltip when tooltip is visible
+  // ccs: a definition tooltip is its trigger's sibling, which the first
+  // selector never reaches. Without the second, the pointer falls through
+  // the open tooltip and it closes (WCAG 1.4.13 hoverable). It ties the
+  // definition placement rule's `pointer-events: none` and wins on order.
   .#{$prefix}--tooltip__trigger:not(.#{$prefix}--tooltip--hidden)
-    .#{$prefix}--assistive-text {
+    .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--visible
+    + .#{$prefix}--assistive-text {
     pointer-events: all;
   }
 

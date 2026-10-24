@@ -27,6 +27,31 @@ test.describe("TooltipDefinition", () => {
       "Definition tooltip text",
     );
   });
+
+  test("stays open while the pointer moves onto the tooltip", async ({
+    page,
+  }) => {
+    const trigger = page.getByRole("button", { name: "Definition trigger" });
+    const tooltip = page.getByRole("tooltip");
+    // `clip` of the inline tooltip: `auto` while it shows.
+    const clip = () =>
+      tooltip.evaluate((element) => getComputedStyle(element).clip);
+
+    await trigger.hover();
+    await expect.poll(clip).toBe("auto");
+
+    const box = await tooltip.boundingBox();
+    if (!box) throw new Error("missing box");
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
+      steps: 10,
+    });
+    // Longer than the 300 ms leave delay.
+    await page.waitForTimeout(500);
+    expect(await clip()).toBe("auto");
+
+    await page.mouse.move(600, 600);
+    await expect.poll(clip).not.toBe("auto");
+  });
 });
 
 test.describe("TooltipDefinition in body text", () => {
