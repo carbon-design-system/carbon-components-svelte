@@ -1,0 +1,79 @@
+---
+components: ["SidePanel"]
+description: Side panels keep users in the context of a page while they view details, edit settings or work through a short flow.
+---
+
+<script>
+  import { Callout } from "carbon-components-svelte";
+</script>
+
+<Callout
+  title="Preview"
+  subtitle="SidePanel follows Carbon React's SidePanel from Carbon for IBM Products, which Carbon React does not export yet. Its API may change in a minor release."
+/>
+
+## Basic
+
+Bind `open` to show the panel. It docks under the UI Shell header and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. Put footer buttons in the `actions` slot; the panel lays them out in an [ActionSet](/components/ActionSet) sized to the panel.
+
+<FileSource src="/framed/SidePanel/SidePanel" />
+
+## Sizes
+
+Set `size` to control the panel width. The default is `"md"`, 480px. A panel never takes more than 75% of the window.
+
+<FileSource src="/framed/SidePanel/SidePanelSizes" />
+
+## Placement
+
+Set `placement` to `"start"` or `"end"` to choose the edge the panel docks to. The default is `"end"`, the right edge in a left-to-right layout and the left edge in a right-to-left one. Carbon React's `"left"` and `"right"` map to `"start"` and `"end"`.
+
+<FileSource src="/framed/SidePanel/SidePanelPlacement" />
+
+## Overlay
+
+Set `includeOverlay` to `true` to dim the page behind the panel. The panel is then modal: it keeps focus inside and stops the page from scrolling. Clicking the overlay closes a panel without actions. A panel with actions stays open, so a stray click can't discard a form; set `preventCloseOnClickOutside` to change either.
+
+<FileSource src="/framed/SidePanel/SidePanelOverlay" />
+
+## Slide-in
+
+Set `slideIn` to `true` to push the page content aside instead of covering it. Set `selectorPageContent` to the element to push, such as the UI Shell `Content`. A slide-in panel is part of the page: it leaves focus where it is and does not close on <DocKbd label="Escape" />.
+
+<FileSource src="/framed/SidePanel/SidePanelSlideIn" />
+
+## Resizable
+
+Set `resizable` to `true` to let users drag the panel's free edge, or move it with the arrow keys once it has focus. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the narrowest and widest widths, and a double click restores `size`. Bind `width` to read or persist the width; `resize` fires once per gesture. The handle hides on narrow screens.
+
+<FileSource src="/framed/SidePanel/SidePanelResizable" />
+
+## Multi-step
+
+Set `currentStep` to show a back button from the second step on. Listen for `back` to go to the previous step.
+
+<FileSource src="/framed/SidePanel/SidePanelMultiStep" />
+
+## Action toolbar
+
+Put buttons for the panel's content in the `toolbar` slot, below the title.
+
+<FileSource src="/framed/SidePanel/SidePanelToolbar" />
+
+## AI label
+
+Put an [AILabel](/components/AILabel) in the `decorator` slot to mark AI-generated content. The panel takes the AI surface.
+
+<FileSource src="/framed/SidePanel/SidePanelAILabel" />
+
+## Layering
+
+The panel starts a [Layer](/components/Layer) wherever it renders, like a modal. Its body sits one level up, so fields and tiles in it contrast with the panel, and a `Layer` inside steps up again.
+
+<FileSource src="/framed/SidePanel/SidePanelLayer" />
+
+## Right-to-left
+
+Inside a `dir="rtl"` page or a [LayoutDirection](/components/LayoutDirection), the panel mirrors: an end panel docks to the left, and the close and back buttons swap corners. The resize handle and its arrow keys follow the edge. To render the panel outside a transformed container, wrap it in a [Portal](/components/Portal), which keeps the direction and the [ThemeZone](/components/ThemeZone) theme.
+
+<FileSource src="/framed/SidePanel/SidePanelRtl" />
