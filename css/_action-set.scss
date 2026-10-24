@@ -20,6 +20,12 @@
     justify-content: flex-end;
   }
 
+  // Carbon v11 fills the set, so ghost actions sit on the same surface as
+  // the rest. Contextual, so a set on a layer steps up with it.
+  .#{$prefix}--action-set {
+    background-color: $layer;
+  }
+
   .#{$prefix}--action-set .#{$prefix}--btn {
     @include type-style('body-compact-01');
 
@@ -161,9 +167,11 @@
     min-width: 0;
   }
 
+  // Same label line as a plain ModalFooter's buttons.
   .#{$prefix}--modal-footer > .#{$prefix}--action-set .#{$prefix}--btn {
     height: 100%;
-    padding-top: $carbon--spacing-05;
+    align-items: baseline;
+    padding-top: calc(#{$carbon--spacing-05} - 2px);
     padding-bottom: $carbon--spacing-07;
   }
 

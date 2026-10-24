@@ -1,4 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { tick } from "svelte";
+import ActionSetKinds from "./ActionSet.kinds.test.svelte";
 import ActionSetSizeOverride from "./ActionSet.sizeOverride.test.svelte";
 import ActionSet from "./ActionSet.test.svelte";
 
@@ -109,4 +111,55 @@ describe("ActionSet", () => {
       );
     },
   );
+
+  describe("validation", () => {
+    it.each([
+      [["secondary", "primary"], "lg", []],
+      [["ghost", "secondary", "danger", "primary"], "xl", []],
+      [["primary", "primary"], "lg", ["takes at most one primary action"]],
+      [["ghost", "danger-ghost"], "lg", ["takes at most one ghost action"]],
+      [
+        ["ghost", "secondary", "tertiary", "danger", "primary"],
+        "xl",
+        ["takes at most four actions"],
+      ],
+      [
+        ["ghost", "primary"],
+        "sm",
+        ["can't stack a ghost action with other actions"],
+      ],
+      [
+        ["secondary", "tertiary", "danger", "primary"],
+        "sm",
+        ["takes at most three actions when they stack"],
+      ],
+    ] as const)(
+      "warns about %j at size %s: %j",
+      async (kinds, size, problems) => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+        render(ActionSetKinds, { props: { kinds: [...kinds], size } });
+        await tick();
+
+        expect(warn.mock.calls.map(([message]) => message)).toEqual(
+          problems.map(
+            (problem) => `[ActionSet.svelte] an action set ${problem}.`,
+          ),
+        );
+        warn.mockRestore();
+      },
+    );
+
+    it("warns about a problem once, however often the actions change", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const { rerender } = render(ActionSetKinds, {
+        props: { kinds: ["primary", "primary"] },
+      });
+      await tick();
+      await rerender({ kinds: ["primary", "primary", "secondary"] });
+      await tick();
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      warn.mockRestore();
+    });
+  });
 });
