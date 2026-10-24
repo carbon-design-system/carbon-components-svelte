@@ -129,6 +129,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
+  import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -192,22 +193,13 @@
       .filter(Boolean)
       .join(" ") || undefined;
 
-  let prevCount = measure(value ?? "", counterMode);
-  let limitAnnouncement = "";
+  const limitAnnouncement = createLimitAnnouncement(
+    measure(value ?? "", counterMode),
+  );
 
-  $: {
-    if (
-      typeof maxCount === "number" &&
-      maxCount > 0 &&
-      count === maxCount &&
-      prevCount !== maxCount
-    ) {
-      limitAnnouncement = resolvedLimitReachedText;
-    } else if (count !== maxCount) {
-      limitAnnouncement = "";
-    }
-    prevCount = count;
-  }
+  onMount(() => limitAnnouncement.cancel);
+
+  $: limitAnnouncement.track(count, maxCount, resolvedLimitReachedText);
 
   function handleFocus() {
     if (selectTextOnFocus && !disabled) {
@@ -426,7 +418,7 @@
   {/if}
   {#if typeof maxCount === "number"}
     <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
-      {limitAnnouncement}
+      {$limitAnnouncement}
     </div>
   {/if}
   <div
