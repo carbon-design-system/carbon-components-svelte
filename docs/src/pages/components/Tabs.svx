@@ -349,7 +349,7 @@ the label by default and shifts left when dismissible is enabled.
 
 Set `iconOnly` on Tabs to render compact, square tabs that display only an icon.
 Set icon and label on each Tab; the label is the accessible name and the tooltip
-shown on hover and focus.
+shown on hover and focus. Press <DocKbd label="Escape" /> to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
 
 #### Basic
 

@@ -74,7 +74,7 @@ Set `required` so the last pressed button can't be cleared. Works in both `multi
 
 ### Icon-only
 
-An icon-only button needs `iconDescription`, which becomes both the accessible label and the hover/focus tooltip text.
+An icon-only button needs `iconDescription`, which becomes both the accessible label and the hover/focus tooltip text. Press <DocKbd label="Escape" /> to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
 
 <ToggleButtonGroup labelText="Text formatting">
   <ToggleButton value="bold" icon={TextBold} iconDescription="Bold" />
