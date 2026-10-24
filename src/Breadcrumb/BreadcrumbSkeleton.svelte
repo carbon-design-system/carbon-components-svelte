@@ -47,7 +47,6 @@
     ? toCssString(separator)
     : "''"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

@@ -80,7 +80,6 @@
       class:bx--data-table--md={effectiveSize === "medium"}
       class:bx--data-table--tall={effectiveSize === "tall"}
       class:bx--data-table--zebra={zebra}
-      on:click
       on:mouseover
       on:mouseenter
       on:mouseleave

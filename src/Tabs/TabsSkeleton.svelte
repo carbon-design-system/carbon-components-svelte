@@ -32,7 +32,6 @@
   class:bx--layout--size-lg={resolvedSize === "lg"}
   class:bx--layout--size-xl={resolvedSize === "xl"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

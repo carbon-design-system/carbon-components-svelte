@@ -5,6 +5,7 @@ import MultiSelectReal from "carbon-components-svelte/MultiSelect/MultiSelect.sv
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import FluidMultiSelectSkeletonEvents from "./FluidMultiSelectSkeletonEvents.test.svelte";
 import { closeMenu, openMenu, toggleOption } from "./helpers";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
@@ -1744,6 +1745,24 @@ describe("MultiSelect", () => {
       expect(wrapper).not.toHaveClass(
         "bx--list-box__field--wrapper--input-focused",
       );
+    });
+  });
+
+  describe("FluidMultiSelectSkeleton", () => {
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(FluidMultiSelectSkeletonEvents);
+
+      const element = screen.getByTestId("fluid-multi-select-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
     });
   });
 });

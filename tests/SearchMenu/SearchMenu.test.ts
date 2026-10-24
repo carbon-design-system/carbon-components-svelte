@@ -12,6 +12,7 @@ import SearchMenuGroups from "./SearchMenuGroups.test.svelte";
 import SearchMenuHighlight from "./SearchMenuHighlight.test.svelte";
 import SearchMenuMatch from "./SearchMenuMatch.test.svelte";
 import SearchMenuNoResults from "./SearchMenuNoResults.test.svelte";
+import SearchMenuSkeletonEvents from "./SearchMenuSkeleton.events.test.svelte";
 import SearchMenuSkeleton from "./SearchMenuSkeleton.test.svelte";
 
 describe("SearchMenu", () => {
@@ -468,6 +469,24 @@ describe("SearchMenu groups", () => {
       "bx--search-menu__menu--sm",
     );
     expect(menu).not.toHaveClass("bx--search-menu__menu--xl");
+  });
+
+  it("SearchMenuSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SearchMenuSkeletonEvents);
+
+    const skeleton = document.querySelector(".bx--search-menu__menu");
+    expect(skeleton).not.toBeNull();
+    assert(skeleton instanceof HTMLElement);
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 
   it("keeps a filter:false group unfiltered and hides empty group headers", async () => {

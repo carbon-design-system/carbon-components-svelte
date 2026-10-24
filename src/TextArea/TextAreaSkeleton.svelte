@@ -10,7 +10,6 @@
   class:bx--form-item={true}
   style:--ccs-text-area-rows={rows}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

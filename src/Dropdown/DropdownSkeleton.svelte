@@ -29,7 +29,6 @@
   class:bx--dropdown__wrapper--inline={inline}
   class:bx--list-box__wrapper--inline={inline}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

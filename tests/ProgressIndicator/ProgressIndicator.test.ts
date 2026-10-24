@@ -7,6 +7,7 @@ import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
 import ProgressIndicatorSelectedId from "./ProgressIndicatorSelectedId.test.svelte";
+import ProgressIndicatorSkeletonEvents from "./ProgressIndicatorSkeleton.events.test.svelte";
 import ProgressStepIconSlot from "./ProgressStepIconSlot.test.svelte";
 import ProgressStepStandalone from "./ProgressStepStandalone.test.svelte";
 
@@ -132,6 +133,24 @@ describe("ProgressIndicator", () => {
       expect(list.classList.contains("bx--progress--vertical")).toBe(
         expected.vertical,
       );
+    });
+  });
+
+  describe("ProgressIndicatorSkeleton", () => {
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ProgressIndicatorSkeletonEvents);
+
+      const list = screen.getByRole("list");
+
+      await user.click(list);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(list);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(list);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
     });
   });
 

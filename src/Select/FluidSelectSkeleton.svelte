@@ -2,7 +2,6 @@
   class:bx--form-item={true}
   class:bx--select--fluid__skeleton={true}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

@@ -26,7 +26,6 @@
   class:bx--search-menu__menu--lg={effectiveSize === "lg"}
   class:bx--search-menu__menu--xl={effectiveSize === "xl"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

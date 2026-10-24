@@ -260,6 +260,16 @@ describe("TabsVertical", () => {
 });
 
 describe("TabsVerticalSkeleton", () => {
+  let consoleLog: Console["log"];
+
+  beforeEach(() => {
+    consoleLog = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each([
     [{}, "bx--tabs--vertical--responsive", 4],
     [{ orientation: "vertical" }, "bx--tabs--vertical--column", 4],
@@ -277,4 +287,22 @@ describe("TabsVerticalSkeleton", () => {
       );
     },
   );
+
+  it("does not forward click but forwards mouse events", async () => {
+    const { container } = render(TabsVerticalSkeleton);
+
+    const skeleton = container.querySelector(".bx--tabs--vertical");
+    if (!skeleton) {
+      throw new Error("Skeleton not found");
+    }
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
 });
