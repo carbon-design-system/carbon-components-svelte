@@ -18,6 +18,7 @@
     TextArea,
     TextInput,
     TimePicker,
+    TimePickerSelect,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
@@ -274,6 +275,18 @@
       invalid
       invalidText="Invalid"
     />
+  </div>
+  <div data-testid="fluid-time-picker-selects">
+    <TimePicker fluid labelText="Time" value="09:00">
+      <TimePickerSelect labelText="Period" value="am">
+        <SelectItem value="am" text="AM" />
+        <SelectItem value="pm" text="PM" />
+      </TimePickerSelect>
+      <TimePickerSelect labelText="Timezone" value="et">
+        <SelectItem value="et" text="Eastern Time (ET)" />
+        <SelectItem value="pt" text="Pacific Time (PT)" />
+      </TimePickerSelect>
+    </TimePicker>
   </div>
   <div data-testid="fluid-pin-code-invalid">
     <PinCodeInput
