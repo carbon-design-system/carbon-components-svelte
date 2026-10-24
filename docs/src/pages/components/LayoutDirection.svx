@@ -6,6 +6,10 @@ description: LayoutDirection sets the writing direction for part of a page, such
 <script>
   import {
     Button,
+    Card,
+    CardBody,
+    CardHeader,
+    CardTitle,
     ClickableTile,
     CopyInput,
     Dropdown,
@@ -131,13 +135,19 @@ In RTL, rows indent from the right and a collapsed caret points left. <DocKbd la
 
 ## Icons
 
-In RTL, icons that point forward or back mirror: Pagination, PaginationNav, Carousel and Tabs arrows, Stepper and InterstitialScreen buttons, the AILabel undo icon, submenu carets and the ClickableTile icon. Icons without a direction stay as they are, such as check marks, the search icon and the Launch icon of an outbound link.
+In RTL, icons that point forward or back mirror: Pagination, PaginationNav, Carousel and Tabs arrows, Stepper and InterstitialScreen buttons, the AILabel undo icon, submenu carets and the Card and ClickableTile icons. Icons without a direction stay as they are, such as check marks, the search icon and the Launch icon of an outbound link.
 
 Add the `bx--icon--mirror-rtl` class to mirror your own forward or back icon, such as an arrow in a link's `icon` slot. A `dir="ltr"` region inside an RTL page turns the mirror off again.
 
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={5}>
     <ClickableTile href="#" icon={ArrowRight}>إعدادات الفوترة</ClickableTile>
+    <Card clickable href="#" aria-label="إعدادات المشروع">
+      <CardHeader>
+        <CardTitle>إعدادات المشروع</CardTitle>
+      </CardHeader>
+      <CardBody>إدارة الأعضاء والصلاحيات والتكاملات.</CardBody>
+    </Card>
     <Link href="#">
       عرض سجل النشر
       <ArrowRight slot="icon" class="bx--icon--mirror-rtl" />

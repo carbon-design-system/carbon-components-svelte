@@ -88,7 +88,7 @@ Without `href`, the card renders as a button. <DocKbd label="Enter" /> and <DocK
 
 ### Icon
 
-Set `icon` to change the arrow, such as `Launch` for a link that leaves the app. The prop is `icon`, as on [ClickableTile](/components/ClickableTile). When you port code from Carbon React, use it for `renderFooterIcon`.
+Set `icon` to change the arrow, such as `Launch` for a link that leaves the app. In a right-to-left layout, the icon mirrors, so an arrow points left. The prop is `icon`, as on [ClickableTile](/components/ClickableTile). When you port code from Carbon React, use it for `renderFooterIcon`.
 
 <Box maxWidth="20rem">
   <Card
