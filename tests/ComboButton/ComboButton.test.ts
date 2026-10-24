@@ -74,6 +74,29 @@ describe("ComboButton", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("opens the menu with ArrowDown on the first item and ArrowUp on the last", async () => {
+    render(ComboButtonFixture);
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+
+    trigger.focus();
+    await user.keyboard("{ArrowDown}");
+    let items = screen.getAllByRole("menuitem");
+    expect(items[0]).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    await user.keyboard("{ArrowUp}");
+    items = screen.getAllByRole("menuitem");
+    expect(items[items.length - 1]).toHaveFocus();
+  });
+
+  it("doesn't open the menu from the primary action's arrow keys", async () => {
+    render(ComboButtonFixture);
+
+    screen.getAllByRole("button")[0].focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
   it("returns focus to the trigger button when Escape closes the menu", async () => {
     render(ComboButtonFixture);
 

@@ -104,7 +104,7 @@
     setContext,
     tick,
   } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, get, writable } from "svelte/store";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
@@ -114,7 +114,9 @@
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { MENU_OPEN_KEY } from "../utils/menu-arrow-open.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -199,6 +201,10 @@
   const parentCtx = getContext("carbon:Menu");
   const isSubmenu = !!parentCtx;
 
+  // Set by MenuButton and ComboButton when an arrow key opened the menu.
+  /** @type {undefined | import("svelte/store").Writable<null | "ArrowDown" | "ArrowUp">} */
+  const openKey = isSubmenu ? undefined : getContext(MENU_OPEN_KEY);
+
   // Ids of `selected` items a `MenuItemGroup` has already seeded. Items and
   // submenus remount on every open, so this lives on the root menu.
   /** @type {Set<string>} */
@@ -221,10 +227,13 @@
       tick().then(() => {
         // `ref` stays unset during server rendering, which has no DOM.
         if (!open || !ref) return;
-        const firstItem = ref.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
-        if (firstItem instanceof HTMLElement) {
-          focusIndex = 0;
-          focusMenuItem(firstItem);
+        const items = getEnabledItems();
+        const key = openKey ? get(openKey) : null;
+        openKey?.set(null);
+        const item = key ? pickEdgeMenuItem(key, items) : items[0];
+        if (item) {
+          focusIndex = items.indexOf(item);
+          focusMenuItem(item);
         } else {
           ref.focus({ preventScroll: true });
         }
@@ -323,7 +332,6 @@
     use:rovingFocus={{
       selector: NON_DISABLED_MENUITEM_SELECTOR,
       orientation: "vertical",
-      wrap: false,
       focusOnMove: false,
       getActiveIndex: () => focusIndex,
       onMove: (index, event) => {
