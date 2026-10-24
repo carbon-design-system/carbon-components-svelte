@@ -29,7 +29,9 @@
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select-input {
-    padding: to-rem(32px) to-rem(32px) to-rem(13px) $carbon--spacing-05;
+    padding-block: to-rem(32px) to-rem(13px);
+    padding-inline-start: $carbon--spacing-05;
+    padding-inline-end: to-rem(32px);
     min-block-size: to-rem(64px);
     outline: none;
     text-overflow: ellipsis;
@@ -38,7 +40,7 @@
   .#{$prefix}--select--fluid .#{$prefix}--select__arrow {
     block-size: to-rem(16px);
     inset-block-start: to-rem(34px);
-    right: $carbon--spacing-04;
+    @include ccs-inset-inline($end: $carbon--spacing-04);
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select__divider {

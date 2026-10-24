@@ -41,7 +41,9 @@
     display: block;
     width: 100%;
     height: to-rem(40px);
-    padding: 0 $spacing-09 0 $spacing-05;
+    padding-block: 0;
+    padding-inline-start: $spacing-05;
+    padding-inline-end: $spacing-09;
     border: none;
     border-bottom: 1px solid $border-strong;
     appearance: none;
@@ -101,7 +103,7 @@
 
   .#{$prefix}--select-input__wrapper[data-invalid] .#{$prefix}--select-input,
   .#{$prefix}--select--warning .#{$prefix}--select-input {
-    padding-right: carbon--mini-units(9);
+    padding-inline-end: carbon--mini-units(9);
   }
 
   .#{$prefix}--select-input:disabled ~ .#{$prefix}--select__arrow {
@@ -111,10 +113,10 @@
   .#{$prefix}--select__arrow {
     position: absolute;
     top: 0;
-    right: $spacing-05;
     height: 100%;
     fill: $layer-selected-inverse;
     pointer-events: none;
+    @include ccs-inset-inline($end: $spacing-05);
 
     // Windows, Firefox HCM Fix
     @media screen and (prefers-contrast) {
@@ -127,7 +129,7 @@
 
   .#{$prefix}--select__invalid-icon {
     position: absolute;
-    right: $spacing-08;
+    @include ccs-inset-inline($end: $spacing-08);
   }
 
   .#{$prefix}--select-input__wrapper[data-invalid]
@@ -172,18 +174,20 @@
 
   .#{$prefix}--select--inline .#{$prefix}--form__helper-text {
     margin-bottom: 0;
-    margin-left: $spacing-03;
+    margin-inline-start: $spacing-03;
   }
 
   .#{$prefix}--select--inline .#{$prefix}--label {
-    margin: 0 $carbon--spacing-03 0 0;
+    margin-block: 0;
+    margin-inline-start: 0;
+    margin-inline-end: $carbon--spacing-03;
     white-space: nowrap;
   }
 
   .#{$prefix}--select--inline .#{$prefix}--select-input {
     width: auto;
-    padding-right: $spacing-07;
-    padding-left: $carbon--spacing-03;
+    padding-inline-start: $carbon--spacing-03;
+    padding-inline-end: $spacing-07;
     border-bottom: none;
     background-color: transparent;
     color: $text-primary;
@@ -201,18 +205,18 @@
   }
 
   .#{$prefix}--select--inline .#{$prefix}--select__arrow {
-    right: $carbon--spacing-03;
+    @include ccs-inset-inline($end: $carbon--spacing-03);
   }
 
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
     .#{$prefix}--select-input {
-    padding-right: to-rem(56px);
+    padding-inline-end: to-rem(56px);
   }
 
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
     .#{$prefix}--select-input
     ~ .#{$prefix}--select__invalid-icon {
-    right: $spacing-07;
+    @include ccs-inset-inline($end: $spacing-07);
   }
 
   .#{$prefix}--select--inline .#{$prefix}--select-input:disabled {

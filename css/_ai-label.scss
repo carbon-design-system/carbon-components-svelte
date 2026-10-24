@@ -417,8 +417,7 @@ $ai-label-sizes: (
     display: none;
   }
 
-  // TextInput. The TextInput family flips under `[dir="rtl"]`; Select and
-  // DatePicker keep the physical base offset for now.
+  // TextInput
   .#{$prefix}--text-input__field-inner-wrapper--decorator {
     @include ccs-inset-inline($end: $carbon--spacing-05);
   }
@@ -474,33 +473,23 @@ $ai-label-sizes: (
   .#{$prefix}--select__inner-wrapper--decorator,
   .#{$prefix}--list-box__inner-wrapper--decorator {
     z-index: 1;
-    right: $carbon--spacing-09;
-  }
-
-  [dir="rtl"] .#{$prefix}--list-box__inner-wrapper--decorator {
-    right: auto;
-    left: $carbon--spacing-09;
+    @include ccs-inset-inline($end: $carbon--spacing-09);
   }
 
   .#{$prefix}--select__inner-wrapper--decorator::after,
   .#{$prefix}--list-box__inner-wrapper--decorator::after {
     position: absolute;
     top: 50%;
-    right: to-rem(-8px);
     width: 1px;
     height: $carbon--spacing-05;
     margin-top: to-rem(-8px);
     background-color: $border-subtle;
     content: "";
-  }
-
-  [dir="rtl"] .#{$prefix}--list-box__inner-wrapper--decorator::after {
-    right: auto;
-    left: to-rem(-8px);
+    @include ccs-inset-inline($end: to-rem(-8px));
   }
 
   .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select-input {
-    padding-right: to-rem(72px);
+    padding-inline-end: to-rem(72px);
   }
 
   .#{$prefix}--select-input__wrapper--decorator[data-invalid]
@@ -508,11 +497,11 @@ $ai-label-sizes: (
   .#{$prefix}--select--warning
     .#{$prefix}--select-input__wrapper--decorator
     .#{$prefix}--select-input {
-    padding-right: $carbon--spacing-12;
+    padding-inline-end: $carbon--spacing-12;
   }
 
   .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select__invalid-icon {
-    right: to-rem(72px);
+    @include ccs-inset-inline($end: to-rem(72px));
   }
 
   .#{$prefix}--select-input__wrapper--ai-label .#{$prefix}--select-input {
@@ -635,22 +624,22 @@ $ai-label-sizes: (
 
   // DatePicker: left of the calendar (or invalid) icon
   .#{$prefix}--date-picker-input-inner-wrapper--decorator {
-    right: $carbon--spacing-08;
+    @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
   .#{$prefix}--date-picker-input__wrapper--decorator
     .#{$prefix}--date-picker__input {
-    padding-right: $carbon--spacing-10;
+    padding-inline-end: $carbon--spacing-10;
   }
 
   .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon
     ~ .#{$prefix}--date-picker-input-inner-wrapper--decorator {
-    right: $carbon--spacing-10;
+    @include ccs-inset-inline($end: $carbon--spacing-10);
   }
 
   .#{$prefix}--date-picker-input__wrapper--decorator
     .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon {
-    padding-right: to-rem(88px);
+    padding-inline-end: to-rem(88px);
   }
 
   .#{$prefix}--date-picker-input__wrapper--ai-label

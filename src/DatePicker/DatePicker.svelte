@@ -309,7 +309,8 @@
   export let direction = "auto";
 
   /**
-   * How a portalled calendar lines up with its field.
+   * How a portalled calendar lines up with its field. `"start"` and `"end"`
+   * follow the writing direction: in RTL, `"start"` is the right edge.
    * @type {"start" | "center" | "end"}
    */
   export let align = "start";
@@ -473,7 +474,10 @@
   } from "../ThemeZone/theme-zone.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { getLayoutDirection } from "../utils/layout-direction.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -587,6 +591,16 @@
       );
     }
   }
+
+  // The calendar swaps ArrowLeft and ArrowRight, and opens at the field's
+  // right edge, in RTL. Read when needed: nothing reports a `dir` change.
+  const isRtl = () =>
+    resolveLayoutDirection(
+      $layoutDirection,
+      engine?.calendarContainer?.isConnected
+        ? engine.calendarContainer
+        : datePickerRef,
+    ) === "rtl";
 
   $: if (engine?.calendarContainer) {
     if (effectivePortalMenu && $layoutDirection) {
@@ -1352,6 +1366,7 @@
           // An empty `value` leaves the calendar without a selection.
           ...($inputValue !== "" && { defaultDate: $inputValue }),
           mode: $mode,
+          rtl: isRtl,
         },
         base: inputRef,
         input: inputRefTo,
@@ -1751,7 +1766,6 @@
       });
   }
   const POSITION_DIRECTION = { auto: "auto", bottom: "below", top: "above" };
-  const POSITION_ALIGN = { start: "left", center: "center", end: "right" };
 
   // Engine options that come from props: primitives, functions, elements,
   // and one flat array (`keepOpenFor`), so `sameValue` never recurses.
@@ -1765,7 +1779,7 @@
     position:
       direction === "auto" && align === "start"
         ? "auto"
-        : `${POSITION_DIRECTION[direction]} ${POSITION_ALIGN[align]}`,
+        : `${POSITION_DIRECTION[direction]} ${align}`,
     positionElement: anchor,
     allowInvalidPreload: keepOutOfRangeValue,
     animate,

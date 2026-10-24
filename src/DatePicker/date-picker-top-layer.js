@@ -1,4 +1,6 @@
 // @ts-check
+import { resolveLayoutDirection } from "../utils/layout-direction.js";
+
 /**
  * Native `<dialog>` / `[popover]` ancestors used when portalling the flatpickr
  * calendar with `portalMenu` so it participates in the correct top layer.
@@ -43,9 +45,14 @@ export function positionFlatpickrCalendarFixed(
   const top =
     inputBounds.top +
     (showOnTop ? -calendarHeight - 2 : anchor.offsetHeight + 2);
-  const left = inputBounds.left;
   const viewportWidth = document.documentElement.clientWidth;
-  const rightMost = left + calendarWidth > viewportWidth;
+  // The calendar opens at the anchor's inline start. Where that edge would
+  // push it out of view, it lines up with the anchor's other edge.
+  const rtl = isRtl(instance);
+  const rightMost = rtl
+    ? inputBounds.right - calendarWidth >= 0 ||
+      inputBounds.left + calendarWidth > viewportWidth
+    : inputBounds.left + calendarWidth > viewportWidth;
 
   calendarContainer.classList.toggle("arrowTop", !showOnTop);
   calendarContainer.classList.toggle("arrowBottom", showOnTop);
@@ -60,9 +67,23 @@ export function positionFlatpickrCalendarFixed(
     calendarContainer.style.left = "auto";
     calendarContainer.style.right = `${viewportWidth - inputBounds.right}px`;
   } else {
-    calendarContainer.style.left = `${left}px`;
+    calendarContainer.style.left = `${inputBounds.left}px`;
     calendarContainer.style.right = "auto";
   }
+}
+
+/**
+ * The calendar's `rtl` option, else its computed direction (a portalled
+ * calendar carries its `LayoutDirection` as `dir`).
+ *
+ * @param {import("./date-picker-top-layer.js").FlatpickrTopLayerPositionInstance} instance
+ */
+function isRtl(instance) {
+  const rtl = instance.config?.rtl;
+  if (typeof rtl === "function") return !!rtl();
+  return (
+    resolveLayoutDirection(undefined, instance.calendarContainer) === "rtl"
+  );
 }
 
 /**

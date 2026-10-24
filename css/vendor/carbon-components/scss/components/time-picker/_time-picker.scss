@@ -37,7 +37,7 @@
   .#{$prefix}--time-picker .#{$prefix}--select-input {
     width: auto;
     min-width: auto;
-    padding-right: to-rem(48px);
+    padding-inline-end: to-rem(48px);
     margin: 0;
   }
 
