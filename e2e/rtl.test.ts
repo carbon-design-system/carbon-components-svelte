@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
 // Under `dir="rtl"`, the UI Shell, the list boxes, the menus, the
@@ -1203,5 +1203,163 @@ test.describe("right-to-left buttons", () => {
         Object.entries(ltr.dividers).map(([name, x]) => [name, -x || 0]),
       ),
     );
+  });
+});
+
+type Rect = { left: number; right: number };
+
+/** A locator's left and right edges, rounded to whole pixels. */
+async function edges(locator: Locator): Promise<Rect> {
+  const box = await locator.boundingBox();
+  if (!box) throw new Error("no box");
+  return { left: Math.round(box.x), right: Math.round(box.x + box.width) };
+}
+
+function viewportWidth(page: Page) {
+  return page.evaluate(() => document.documentElement.clientWidth);
+}
+
+// Menus open toward the inline end and flip when there's no room; resize
+// handles and roving lists follow the direction when the event arrives.
+test.describe("right-to-left menus and keys", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/rtl-placement.html");
+    await setDirection(page, "rtl");
+  });
+
+  test("opens a submenu to the left and keeps it in view near the left edge", async ({
+    page,
+  }) => {
+    const actions = page.getByRole("button", { name: "Actions", exact: true });
+    await actions.click();
+    const menu = page.getByRole("menu", { name: "Actions", exact: true });
+    await page.getByRole("menuitem", { name: "Export as" }).focus();
+    // ArrowLeft opens a submenu in RTL, and ArrowRight closes it.
+    await page.keyboard.press("ArrowLeft");
+    const submenu = page.getByRole("menu", { name: "Export as" });
+    await expect(page.getByRole("menuitem", { name: "PDF" })).toBeFocused();
+
+    // The menu starts at the trigger's right edge; the submenu opens left.
+    await expect
+      .poll(async () => (await edges(menu)).right)
+      .toBe((await edges(actions)).right);
+    await expect
+      .poll(async () => (await edges(submenu)).right)
+      .toBe((await edges(menu)).left);
+    await page.keyboard.press("ArrowRight");
+    await expect(submenu).toBeHidden();
+    await expect(
+      page.getByRole("menuitem", { name: "Export as" }),
+    ).toBeFocused();
+    await page.keyboard.press("Escape");
+
+    // Near the left edge there's no room on the left, so it flips right.
+    const tools = page.getByRole("button", { name: "Tools" });
+    await tools.click();
+    const toolsMenu = page.getByRole("menu", { name: "Tools" });
+    await page.getByRole("menuitem", { name: "Share via" }).focus();
+    await page.keyboard.press("ArrowLeft");
+    const share = page.getByRole("menu", { name: "Share via" });
+    await expect(share).toBeVisible();
+    await expect
+      .poll(async () => (await edges(toolsMenu)).left)
+      .toBe((await edges(tools)).left);
+    await expect
+      .poll(async () => (await edges(share)).left)
+      .toBe((await edges(toolsMenu)).right);
+  });
+
+  test("opens a context menu and its submenu to the left of the pointer", async ({
+    page,
+  }) => {
+    const target = await page.getByTestId("context-target").boundingBox();
+    if (!target) throw new Error("no target");
+    const y = target.y + 20;
+    const width = await viewportWidth(page);
+    const menu = page.getByRole("menu", { name: "Page actions" });
+    const submenu = page.locator(".bx--menu[data-level='2']");
+
+    async function openAt(x: number) {
+      await page.mouse.click(x, y, { button: "right" });
+      await expect(menu).toBeVisible();
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("ArrowLeft");
+      await expect(
+        page.getByRole("menuitem", { name: "Archive" }),
+      ).toBeFocused();
+    }
+
+    await openAt(Math.round(width / 2));
+    expect((await edges(menu)).right).toBe(Math.round(width / 2));
+    expect((await edges(submenu)).right).toBe((await edges(menu)).left);
+    await page.keyboard.press("Escape");
+
+    await openAt(20);
+    const root = await edges(menu);
+    expect(root.left).toBe(20);
+    const sub = await edges(submenu);
+    expect(sub.left).toBe(root.right);
+    expect(sub.right).toBeLessThanOrEqual(width);
+  });
+
+  test("aligns OverflowMenu with the button's inline start, or end when flipped", async ({
+    page,
+  }) => {
+    const width = await viewportWidth(page);
+    const cases = [
+      ["overflow-right", "Row actions", "right"],
+      ["overflow-left", "Table actions", "left"],
+      ["overflow-portal-right", "Service actions", "right"],
+      ["overflow-portal-left", "Region actions", "left"],
+    ] as const;
+
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      for (const [testId, name, rtlSide] of cases) {
+        const button = page.getByTestId(testId).getByRole("button", { name });
+        // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+        await button.click();
+        const menu = page.getByRole("menu", { name });
+        await expect(menu).toBeVisible();
+        const [buttonBox, menuBox] = await Promise.all([
+          edges(button),
+          edges(menu),
+        ]);
+        // LTR is the mirror: the right-edge menu aligns on the left.
+        const side =
+          dir === "rtl" ? rtlSide : rtlSide === "right" ? "left" : "right";
+        expect.soft(menuBox[side], `${dir} ${testId}`).toBe(buttonBox[side]);
+        if (dir === "rtl") {
+          expect
+            .soft(menuBox.left, `${testId} in view`)
+            .toBeGreaterThanOrEqual(0);
+          expect
+            .soft(menuBox.right, `${testId} in view`)
+            .toBeLessThanOrEqual(width);
+        }
+        await page.keyboard.press("Escape");
+        await expect(menu).toBeHidden();
+      }
+    }
+  });
+
+  test("swaps ArrowLeft and ArrowRight in roving lists", async ({ page }) => {
+    const lists = [
+      page.getByTestId("content-switcher").getByRole("tab"),
+      page.getByTestId("toggle-group").getByRole("button"),
+      page.getByTestId("progress").locator(".bx--progress-step-button"),
+      page.getByTestId("tag-set").getByRole("button"),
+    ];
+
+    for (const items of lists) {
+      // biome-ignore lint/performance/noAwaitInLoops: focus moves one list at a time
+      await items.nth(0).focus();
+      await page.keyboard.press("ArrowLeft");
+      await expect(items.nth(1)).toBeFocused();
+      await page.keyboard.press("ArrowRight");
+      await expect(items.nth(0)).toBeFocused();
+    }
   });
 });
