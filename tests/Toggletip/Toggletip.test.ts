@@ -197,6 +197,10 @@ describe("Toggletip", () => {
   });
 
   describe("alignment", () => {
+    afterEach(() => {
+      document.documentElement.removeAttribute("style");
+    });
+
     const cases = [
       ["bottom", "start", "bottom-left", "left"],
       ["bottom", "center", "bottom", null],
@@ -232,6 +236,27 @@ describe("Toggletip", () => {
         } else {
           expect(style).not.toMatch(/calc/);
         }
+      },
+    );
+
+    it.each([
+      ["bottom", "start", "bottom-right", "right"],
+      ["top", "end", "top-left", "left"],
+      // Beside the button, `start` and `end` are on the block axis.
+      ["left", "start", "left-top", "top"],
+    ] as const)(
+      "maps direction %s and align %s to %s in RTL",
+      (direction, align, popoverAlign, edge) => {
+        document.documentElement.style.direction = "rtl";
+        const { container } = render(Toggletip, {
+          props: { direction, align, open: true },
+        });
+
+        const popover = container.querySelector<HTMLElement>(".bx--popover");
+        expect(popover).toHaveClass(`bx--popover--${popoverAlign}`);
+        expect(popover?.getAttribute("style")).toContain(
+          `${edge}: calc(50% - var(--ccs-toggletip-caret))`,
+        );
       },
     );
   });

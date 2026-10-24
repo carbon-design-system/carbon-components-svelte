@@ -72,6 +72,30 @@ describe("Popover", () => {
     ).toEqual([`bx--popover--${placement}`]);
   });
 
+  describe("in RTL", () => {
+    afterEach(() => {
+      document.documentElement.removeAttribute("style");
+    });
+
+    it.each([
+      ["top-start", "top-right"],
+      ["top-end", "top-left"],
+      ["bottom-start", "bottom-right"],
+      ["bottom-end", "bottom-left"],
+      ["left-start", "left-top"],
+      ["right-end", "right-bottom"],
+      ["top-left", "top-left"],
+      ["bottom-right", "bottom-right"],
+    ] as const)("places %s as %s", (align, placement) => {
+      document.documentElement.style.direction = "rtl";
+      render(Popover, { props: { open: true, align } });
+
+      expect(screen.getByTestId("parent").firstElementChild).toHaveClass(
+        `bx--popover--${placement}`,
+      );
+    });
+  });
+
   it("should render with caret", () => {
     render(Popover, {
       props: { open: true, caret: true },

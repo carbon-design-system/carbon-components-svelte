@@ -46,6 +46,8 @@
 
   /**
    * Set the alignment of the tooltip relative to the icon.
+   * Above and below the icon, `start` and `end` name inline sides, so they
+   * swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";

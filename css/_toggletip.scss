@@ -23,7 +23,7 @@
   .#{$prefix}--toggletip-label {
     @include type-style("label-01");
 
-    margin-right: $carbon--spacing-03;
+    margin-inline-end: $carbon--spacing-03;
     color: $text-secondary;
   }
 
