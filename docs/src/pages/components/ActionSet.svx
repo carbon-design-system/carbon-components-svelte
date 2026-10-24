@@ -11,7 +11,7 @@ Use `ActionSet` for custom footers you compose yourself, typically [ComposedModa
 
 ## Basic
 
-Compose `ActionSet` from ordinary `Button` children, the same way as [ButtonSet](/components/ButtonSet). `size` cascades to every child button that doesn't set its own `size`.
+Compose `ActionSet` from ordinary `Button` children, the same way as [ButtonSet](/components/ButtonSet). `size` cascades to every child button that doesn't set its own `size`. The set fills with the current layer color, so a ghost action sits on the same surface as the others.
 
 <ActionSet>
   <Button kind="secondary">Cancel</Button>
@@ -22,11 +22,13 @@ Compose `ActionSet` from ordinary `Button` children, the same way as [ButtonSet]
 
 Buttons are ordered automatically by `kind`: ghost and `"danger-ghost"` first, primary and danger last. Reversed when the set stacks, so the primary action stays closest to the reading direction's end in both layouts. DOM order does not matter.
 
-<ActionSet>
+<ActionSet size="lg">
   <Button kind="secondary">Cancel</Button>
   <Button kind="danger">Delete</Button>
   <Button kind="ghost">Learn more</Button>
 </ActionSet>
+
+`ActionSet` warns in the console when its actions break Carbon's rules: one primary and one ghost action at most, four actions at most (three once they stack), and no ghost action in a stack with others.
 
 ## Sizes
 
