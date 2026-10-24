@@ -123,6 +123,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { clippedBy } from "../utils/clipped-by.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
@@ -153,8 +154,14 @@
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
 
+  // Set for one open when the in-place menu turns out to be cut off by a
+  // box around it (a scrolling panel, an `overflow: hidden` card): the menu
+  // moves to a portal instead. Only when `portalMenu` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
 
   const dispatch = createEventDispatcher();
   /**
@@ -403,6 +410,10 @@
         if (ctxBreadcrumbItem) {
           menuRef.style.top = `${offsetTop + height + 10}px`;
           menuRef.style.left = `${offsetLeft - 11}px`;
+        }
+
+        if (portalMenu === undefined && clippedBy(menuRef)) {
+          portalWhenClipped = true;
         }
       } else if (flipped && menuRef) {
         menuRef.style.marginLeft = `${width - menuRef.offsetWidth}px`;
