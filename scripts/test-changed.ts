@@ -134,7 +134,10 @@ export function loadGraph(sources = loadSources()): Graph {
 }
 
 /** Compiles `entries` from the `css/` tree under `root`. */
-async function compileCss(root: string, entries: string[]): Promise<string[]> {
+export async function compileCss(
+  root: string,
+  entries: string[],
+): Promise<string[]> {
   const { default: config } = await import("../crassus.config");
   if (!config.compile) throw new Error("crassus.config.ts has no compile");
   const sheets = await config.compile(root, { entries });
@@ -142,7 +145,7 @@ async function compileCss(root: string, entries: string[]): Promise<string[]> {
 }
 
 /** The `css/` tree at `rev`, extracted into a temporary directory. */
-function checkoutCss(rev: string): string {
+export function checkoutCss(rev: string): string {
   const dir = mkdtempSync(join(tmpdir(), "test-changed-css-"));
   const archive = spawnSync("git", ["archive", rev, "css"], {
     cwd: ROOT,

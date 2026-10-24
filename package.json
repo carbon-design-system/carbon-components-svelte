@@ -65,6 +65,7 @@
     "build:syntax-tokens": "bun scripts/build-syntax-tokens.ts",
     "build:tokens": "bun scripts/build-tokens.ts",
     "check:css": "crassus diff --entry all",
+    "check:css:size": "bun scripts/check-css-size.ts",
     "check:css:overrides": "crassus dead",
     "check:css:snapshot": "crassus capture",
     "check:css:snapshot:diff": "crassus snapshot-diff",

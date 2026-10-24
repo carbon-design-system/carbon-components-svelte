@@ -634,6 +634,7 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 | Command | Use |
 | --- | --- |
 | `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref (`crassus diff`). Run for any refactor that should not change output. The base is built in a temporary worktree and cached by commit; `--no-cache` rebuilds it. Add `--confirm` to render each flagged flip in Chrome and drop the ones no fixture renders. |
+| `bun run check:css:size [--base <ref>]` | How much the branch grows `all.css` and `white.css` (minified and gzipped) against its merge base with the ref (default `origin/master`). Fails over the per-PR limit; see [Size growth](#size-growth). |
 | `bun run check:css:compare [--base <ref>]` | Ground truth for a CSS change (`crassus compare`): today's fixtures with the stylesheet at the ref and now, read only where a changed rule can reach. Fails on visible changes and on properties that stop following a `--cds-*` token. `--report <dir>` writes change cards (crops, the winning rule at its `.scss` line, a suggested fix) as `index.html`, `report.md` and `report.json`. Use it to verify a CSS-only change instead of writing a test. |
 | `bun run check:css:bisect <from>..<to>` | The commits in a range that changed what the fixtures render (`crassus bisect`). Use it to find which commit of a refactor caused a card. |
 | `bun run check:css:overrides` | Declarations that can never win (`crassus dead`), with their `.scss` line. Also runs in CI as `tests/css/overrides.test.ts`. |
@@ -648,17 +649,29 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 
 | Test | Holds |
 | --- | --- |
-| `size-budget.test.ts` | Minified and gzipped size of `all.css` and `white.css`, about 10% above measured. Guards bulk regressions; do not raise it to fit a feature. |
+| `size-budget.test.ts` | A floor under each sheet, so a compile that drops a module fails, and a ceiling on the opt-in `prose.css`. `all.css` and `white.css` growth is limited per PR instead; see [Size growth](#size-growth). |
 | `not-chains.test.ts` | Selectors with three or more `:not()`. |
 | `media-query-grouping.test.ts` | Number of `(any-hover: hover)` blocks. |
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
 | `conventions.test.ts` | Source rules, with exact baselines for what predates them. |
 
-Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets a `css-cascade` job whose summary shows the rule delta and size movement against the base branch and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
+Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets two jobs. `css-size` runs `check:css:size` and fails over the limit in [Size growth](#size-growth). `css-cascade` shows the rule delta against the base branch in its summary and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
 
 These come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes white --viewport 1280x900` or `--no-states`. They use Playwright's `chrome-headless-shell` when it's installed and half the cores, dropping to one tab while the machine is busy. `crassus --help` lists the options; `--format json` gives the same report as data.
 
 For an intended visual change, `crassus approve <id> --report <dir>` records its card in `crassus.approved.json`; `check:css:compare` then fails only on visible cards that file lacks. `crassus explain <id>`, `repro <id>`, `verify <id>` and `reduce <id>` (the fewest declaration edits that make the card) take the same `--report <dir>`.
+
+#### Size growth
+
+One PR may grow `all.css` or `white.css` by up to 25 kB minified and 3 kB gzipped, measured against its merge base. The biggest feature PR so far, the CSS Grid module, adds 18.7 kB and 2.1 kB. Undoing one pruning commit (the legacy Carbon selectors) adds 34.1 kB and 3.3 kB, and a re-synced vendored file far more. There is no fixed ceiling, so the limit does not fill up as features land.
+
+When a failure is a bulk regression, fix it. When the growth is intended, add a `CSS-Size-Growth` trailer to a commit message in the PR. Give the new limit for each sheet and, after a semicolon, the reason:
+
+```
+CSS-Size-Growth: 6 kB gzip, 40 kB min; adds the v11 chart styles to all.css
+```
+
+The failing run prints a trailer with the measured amounts. The trailer applies only to the commits between the merge base and the branch head, so it needs no clean-up after merge. `git log --grep CSS-Size-Growth` lists every PR that used one. A trailer with no amount or no reason fails the check.
 
 #### What belongs in tests/css
 
@@ -670,7 +683,7 @@ For an intended visual change, `crassus approve <id> --report <dir>` records its
 | Extend an existing invariant (`conventions`, `overrides`, `unrendered-*`) before writing a new file | One scan over the sheet is cheaper than another compile-and-find. |
 | Cover forced-colors and `prefers-contrast` fixes with a row in `e2e/forced-colors.test.ts`, not here | Chromium reports forced values from `getComputedStyle`, so the row checks what the user sees, hover and focus cascades included. One fixture page keeps it to a few seconds. |
 | Don't assert that a selector carries the declaration you just added | It fails only if someone deletes that line, breaks on harmless selector refactors, and says nothing about whether the rule wins the cascade (`overrides.test.ts` checks that for every rule). |
-| Don't raise `size-budget.test.ts` to fit a feature | It guards bulk regressions; the `css-cascade` job reports each PR's size movement. |
+| Don't raise a size limit to fit a feature | `css-size` limits each PR's growth. A PR that needs more says why in a `CSS-Size-Growth` trailer, which reviewers see. Raise `prose.css`'s ceiling only with the same kind of reason. |
 
 When `check:css:overrides` reports a pair, work out which of the two values is the intended one before deleting anything. The checker proves the earlier declaration never wins; it does not know whether the later one is right. Deleting the flagged half of a `right: $carbon--spacing-03` / `right: auto` pair is how the fluid `CopyInput` button lost its offset.
 
