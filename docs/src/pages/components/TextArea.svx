@@ -42,7 +42,7 @@ the field scrolls instead of growing further.
 
 Specify the max count with `maxCount`. It counts characters by default. A counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
-Screen readers hear the count read as words (for example, "2 of 100 characters"), and hear "Character limit reached" once the limit is hit. Override either message with the `counterText` and `limitReachedText` props.
+Screen readers hear the count read as words (for example, "2 of 100 characters"), and hear "Character limit reached" once typing pauses at the limit. Override either message with the `counterText` and `limitReachedText` props.
 
 <TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." maxCount={100} />
 
