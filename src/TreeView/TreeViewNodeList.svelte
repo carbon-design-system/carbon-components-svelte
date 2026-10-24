@@ -56,6 +56,7 @@
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
   import TreeViewNode, {
     computeTreeLeafDepth,
@@ -317,6 +318,7 @@
         <span
           id="{$treeId}-{id}__label"
           class:bx--tree-node__label__text={true}
+          use:titleWhenTruncated
         >
           <slot {node} />
         </span>
