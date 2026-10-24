@@ -632,6 +632,61 @@ test.describe("right-to-left layout", () => {
     });
   });
 
+  test("puts Pagination separators and gaps on the mirrored side", async ({
+    page,
+  }) => {
+    // Every part with a border, margin or padding on one inline side, in a
+    // Pagination, one with a page number input, and the skeleton.
+    const root = "[data-testid=pagination]";
+    const PAGINATION_PARTS = {
+      pageInput: `${root} .bx--pagination__page-number-input`,
+      backward: `${root} .bx--pagination__button--backward`,
+      forward: `${root} .bx--pagination__button--forward`,
+      left: `${root} .bx--pagination__left`,
+      pageSizeLabel: `${root} .bx--pagination__left label.bx--pagination__text`,
+      itemsCount: `${root} .bx--pagination__items-count`,
+      pageText: `${root} .bx--pagination__right .bx--pagination__text`,
+      skeletonText: `${root} .bx--skeleton .bx--skeleton__text`,
+    };
+
+    /** Each part's left and right border, margin and padding widths. */
+    function sides() {
+      return page.evaluate((parts) => {
+        const result: Record<string, string[] | null> = {};
+        for (const [name, selector] of Object.entries(parts)) {
+          const node = document.querySelector(selector);
+          if (!node) {
+            result[name] = null;
+            continue;
+          }
+          const style = getComputedStyle(node);
+          result[name] = [
+            style.borderLeftWidth,
+            style.borderRightWidth,
+            style.marginLeft,
+            style.marginRight,
+            style.paddingLeft,
+            style.paddingRight,
+          ];
+        }
+        return result;
+      }, PAGINATION_PARTS);
+    }
+
+    const ltr = await sides();
+    // The buttons' separator sits on their left in LTR.
+    expect(ltr.forward?.slice(0, 2)).toEqual(["1px", "0px"]);
+
+    await setDirection(page, "rtl");
+    const rtl = await sides();
+    for (const [name, values] of Object.entries(ltr)) {
+      expect.soft(values, `${name} renders`).not.toBeNull();
+      if (!values) continue;
+      const [bl, br, ml, mr, pl, pr] = values;
+      expect.soft(rtl[name], name).toEqual([br, bl, mr, ml, pr, pl]);
+    }
+  });
+
   test("mirrors the submenu caret", async ({ page }) => {
     const trigger = page.getByTestId("menu-button").getByRole("button");
     const caret = page.locator(".bx--menu-option__info > svg");
