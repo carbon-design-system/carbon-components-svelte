@@ -6,7 +6,6 @@ description: LayoutDirection sets the writing direction for part of a page, such
 <script>
   import {
     Button,
-    CodeSnippet,
     Dropdown,
     LayoutDirection,
     RangeSlider,
@@ -124,15 +123,15 @@ A menu or tooltip that renders in a portal leaves the subtree in the DOM, so it 
 
 ## Mixed directions
 
-Nest a `LayoutDirection` to switch back for one part, such as code or a log in an RTL page.
+Nest a `LayoutDirection` to switch back for one part, such as an English field in an RTL form. A `CodeSnippet` needs no wrapper: its code always reads left to right. See [CodeSnippet](/components/CodeSnippet#right-to-left).
 
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={5}>
-    <Text>شغّل هذا الأمر لنشر الخدمة:</Text>
+    <Text>أدخل عنوان الخادم باللغة الإنجليزية:</Text>
     <LayoutDirection dir="ltr" lang="en">
-      <CodeSnippet code="npm run deploy -- --service api-gateway" />
+      <TextInput labelText="Server URL" placeholder="https://api.example.com" />
     </LayoutDirection>
-    <Text>يظهر الرابط بعد اكتمال النشر.</Text>
+    <Text>نستخدم هذا العنوان في كل طلب.</Text>
   </Stack>
 </LayoutDirection>
 
