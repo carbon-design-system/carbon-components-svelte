@@ -128,6 +128,10 @@ Patterns:
 - Mirror the shadowed prop in the slot name. When a slot overrides the content a prop renders, name it after that prop. Svelte forbids a slot from matching an exported prop name exactly, so suffix it with `Children`: the `labelChildren` slot shadows the `labelText` prop. See `<slot name="labelChildren">` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
 - Set dynamic styles with the `style:` directive, not inline `style` strings or template literals: `style:left="{x}px"`. See [`ContextMenu.svelte`](src/ContextMenu/ContextMenu.svelte) and the thumb position in [`Slider.svelte`](src/Slider/Slider.svelte).
 - Swap arrow keys that act along the inline axis under `dir="rtl"`. Left raises a `Slider` and expands a `TreeView` row, as in React Aria. Resolve the direction with `resolveLayoutDirection` from [`layout-direction.js`](src/utils/layout-direction.js) when the key arrives: a `LayoutDirection` first, then the computed direction. Nothing reports a `dir` change on an ancestor, so a value read at mount goes stale. See `treeKey` in [`TreeView.svelte`](src/TreeView/TreeView.svelte).
+- Give text that mixes numbers, symbols, and Latin letters `dir="ltr"` when the page can be RTL. Under `dir="rtl"`, the bidi algorithm reorders strings like `#161616`, `16.4:1`, `+4`, and `58 × 287px` (they read as `161616#` and `4+`). Set it on the element that renders the string, or on the root of a tool whose whole UI is English measurements, such as [`LayoutInspector.svelte`](src/LayoutInspector/LayoutInspector.svelte). Leave layout that should mirror, such as a grid, in the page's direction.
+- Put a label at the inline end of what it labels by reading that element's computed `direction`, not the page's. One page can mix both directions.
+- Code that measures the page must measure again when `dir`, `lang`, `class`, or `style` changes on `<html>`. These move content without resizing the page, so a `ResizeObserver` misses them, and `<html>` is outside a `MutationObserver` on `document.body`. Observe `document.documentElement` too. See `measureTextBaselines` in [`GridOverlay.svelte`](src/Grid/GridOverlay.svelte).
+- A runtime `dir` change on `<html>` reaches everything except a `LayoutDirection` subtree, where the wrapper's own `dir` wins. Do not cache the page direction at mount; resolve it when you need it.
 
 The `{#if skeleton}` early-return pattern is being phased out. Follow it only when maintaining existing skeleton code.
 
@@ -566,6 +570,8 @@ Values:
 - Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
 - Spacing tokens: `$carbon--spacing-01` … `-13`. Not the `$spacing-0N` aliases.
 - Color: Carbon v11 theme tokens (`$layer-01`, `$field-01`, `$support-error`, …). No hex, and no v10 names (`$ui-01`, `$text-01`): `all.css` no longer declares them, and `tests/css/v11-tokens.test.ts` fails on any that reach the CSS. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
+  - Categorical colors with no semantic token (legends, annotations, data marks) come from the Tag token pairs: `get-token-value($tag-colors, "tag-background-magenta")` for the fill and `"tag-color-magenta"` for the line and text on it. Not palette colors such as `$carbon--orange-40`, which stay fixed in every theme. Each pair follows the theme and is contrast-checked as a pair.
+  - A surface that should match the `Layer` it sits on reads the contextual tokens (`$layer`, `$border-subtle`). At the root they equal the `-01` tokens.
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
@@ -597,6 +603,17 @@ Naming:
 - Token utilities are `bx--{block}-{property}-{step}` (`bx--box-p-5`, `bx--type-mono`). Docs, props and SCSS all use the same Carbon v11 token names (`layer-01` is `$layer-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss).
 
 Document the mixin with SassDoc (`/// @access private`, `/// @group components`) and use `//` for everything else. Use double quotes. When a partial overrides a single vendored component, say in its header why it could not live in the vendored file.
+
+#### Forced colors
+
+Forced colors (Windows contrast themes) repaint author colors with a few system colors (`Canvas`, `CanvasText`, `Highlight`, `GrayText`, …), drop `box-shadow` and `text-shadow`, and set `background-image` to `none`, so gradients vanish. Check every component that draws with a fill, a shadow, or a gradient.
+
+- A surface that only a shadow sets off from the page (menu, popover, floating bar, card) gets `outline: 1px solid transparent` inside `@include high-contrast-mode { … }`. Forced mode paints the outline in `CanvasText`.
+- Information drawn as a fill or a gradient (grid lines, hatching, chart areas) opts out with `forced-color-adjust: none` and draws in system colors, so it follows the user's palette. Do not keep theme colors when you opt out.
+- Do not tint a large area in forced mode. A system color such as `GrayText` is often bright (green in contrast-black), and a fill over the whole page washes it out. Keep lines and narrow bands.
+- Something that shows a real color, such as a color swatch, opts out and keeps that color. Give it a `CanvasText` edge.
+- Do not carry status in color alone. Off-scale, failing, or selected states also need words, shape, or an outline style, because forced mode can paint them all the same.
+- Put the `@media (forced-colors: active)` block last in the mixin. Cover each fix with a row in `e2e/forced-colors.test.ts`. A component that covers the whole viewport (an overlay) gets its own fixture page instead, so it does not hide the components that page screenshots. See [`dev-aids.test.ts`](e2e/dev-aids.test.ts).
 
 #### Winning the cascade
 
@@ -939,6 +956,8 @@ it("marks the `selected` option", () => {
 
 - `onMount`, `afterUpdate`, `bind:this`, and actions do not run on the server, and `window`, `document`, and DOM classes such as `HTMLElement` do not exist. A `$:` block does run, so guard browser APIs in it with `typeof window === "undefined"` or move them into `onMount` or an action such as `dismiss`.
 - A `tick().then()` queued from a `$:` block runs after a server render too. Return early when the element ref is unset; a rejection there is unhandled.
+- A component that measures the page (an overlay, an inspector) reads the DOM only in actions, `onMount`, and event handlers. Its module scope, `$:` blocks, and markup stay free of `window` and `document`, so it server-renders its shell and fills in after mount.
+- Read saved state (`localStorage`, `sessionStorage`) in `onMount`, not during init. The server cannot read it, so a value read at init makes the server and the first client render disagree. See `persist` in [`DevToolbar.svelte`](src/DevToolbar/DevToolbar.svelte).
 - When the server output is wrong, resolve the initial state synchronously (a registration index each child claims in script order) and let the store win once it is set. Do not move the work into `onMount`.
 - Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture, and there is no hydration check yet.
 - [`ssr-smoke.ssr.test.ts`](tests/ssr-smoke.ssr.test.ts) renders every component in [`src/index.js`](src/index.js) with default props, and again with `open` when it has one, and fails on a throw or on `undefined`, `[object Object]`, or `NaN` in the output. A new child component that needs its parent's context goes in its `NEEDS_PARENT` list.
