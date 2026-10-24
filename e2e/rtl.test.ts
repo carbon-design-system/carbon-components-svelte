@@ -65,7 +65,10 @@ const BARS = {
 };
 
 function boxes(page: Page, parts: Record<string, string>) {
-  return page.evaluate((parts) => {
+  return page.evaluate(async (parts) => {
+    // A label measured in the fallback font in LTR and in IBM Plex in RTL
+    // differs by a pixel, so wait for the fonts before every measurement.
+    await document.fonts.ready;
     const result: Record<string, Box | null> = {};
     for (const [name, selector] of Object.entries(parts)) {
       const rect = document.querySelector(selector)?.getBoundingClientRect();
@@ -82,7 +85,8 @@ function boxes(page: Page, parts: Record<string, string>) {
 }
 
 function barBoxes(page: Page, bars: Record<string, string>) {
-  return page.evaluate((bars) => {
+  return page.evaluate(async (bars) => {
+    await document.fonts.ready;
     const result: Record<string, Box | null> = {};
     for (const [name, selector] of Object.entries(bars)) {
       const label = document.querySelector(selector);
