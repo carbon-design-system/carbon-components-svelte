@@ -22,13 +22,17 @@
   // The overlap amount defaults to a spacing token. A negative `gap` overrides
   // it through the custom property.
   .#{$prefix}--user-avatar-group--overlap > * + * {
-    margin-left: var(--user-avatar-group-overlap, -#{$carbon--spacing-03});
+    margin-inline-start: var(
+      --user-avatar-group-overlap,
+      -#{$carbon--spacing-03}
+    );
   }
 
-  // A ring in the surrounding background color separates overlapping circles.
-  // `box-shadow` is not clipped by the avatar's `overflow: hidden` frame.
+  // A ring in the surface color separates overlapping circles, on a layer
+  // too. `box-shadow` is not clipped by the avatar's `overflow: hidden`
+  // frame.
   .#{$prefix}--user-avatar-group--overlap .#{$prefix}--user-avatar {
-    box-shadow: 0 0 0 $carbon--spacing-01 $background;
+    box-shadow: 0 0 0 $carbon--spacing-01 $layer-background;
   }
 
   // `stackOrder="first"`: reverse the default paint order so earlier avatars

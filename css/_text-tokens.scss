@@ -43,12 +43,13 @@ $ccs-text-colors: (
   @return white;
 }
 
-/// A library text color: `var(--ccs-*)` where the build emits custom
-/// properties (`all.css`), else the compiled theme's value.
+/// A library theme color from `$map`: `var(--ccs-*)` where the build emits
+/// custom properties (`all.css`), else the compiled theme's value.
 /// @access private
-/// @param {String} $name - Key in `$ccs-text-colors`
-@function ccs-text-color($name) {
-  $value: map-get(map-get($ccs-text-colors, $name), ccs-theme-name($carbon--theme));
+/// @param {Map} $map - Name to per-theme values, like `$ccs-text-colors`
+/// @param {String} $name - Key in `$map`
+@function ccs-theme-color($map, $name) {
+  $value: map-get(map-get($map, $name), ccs-theme-name($carbon--theme));
   @if feature-flag-enabled("enable-css-custom-properties") {
     // `all.css` declares every token on `:root`, so it drops the fallback.
     @if global-variable-exists("ccs-omit-token-fallbacks") and
@@ -61,14 +62,22 @@ $ccs-text-colors: (
   @return $value;
 }
 
-/// Declares the library text colors as `--ccs-*` custom properties for
+/// A library text color. See `ccs-theme-color`.
+/// @access private
+/// @param {String} $name - Key in `$ccs-text-colors`
+@function ccs-text-color($name) {
+  @return ccs-theme-color($ccs-text-colors, $name);
+}
+
+/// Declares the colors in `$map` as `--ccs-*` custom properties for
 /// `$theme`, skipping any that match `$base` when it's given.
+/// @param {Map} $map - Name to per-theme values, like `$ccs-text-colors`
 /// @param {Map} $theme - Theme to declare
 /// @param {Map} $base [null] - Theme the selector already inherits
 /// @access private
-/// @group type
-@mixin ccs-emit-text-colors($theme, $base: null) {
-  @each $name, $values in $ccs-text-colors {
+/// @group themes
+@mixin ccs-emit-theme-colors($map, $theme, $base: null) {
+  @each $name, $values in $map {
     $value: map-get($values, ccs-theme-name($theme));
     @if $base == null or map-get($values, ccs-theme-name($base)) != $value {
       --ccs-#{$name}: #{$value};

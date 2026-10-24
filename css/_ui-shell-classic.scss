@@ -1,6 +1,8 @@
 // Classic UI Shell: g100 header + white side nav. Requires all.css (CSS custom properties).
 
 @import "carbon-components/scss/globals/scss/vars";
+@import "./text-tokens";
+@import "./user-avatar-tokens";
 
 // Requires all.css (CSS custom properties), so this only emits when the
 // entry file sets `$ccs-theme-switching`.
@@ -23,6 +25,8 @@ $ccs-themes: (
     @include emit-component-tokens($content-switcher-colors, $ccs-themes);
     @include emit-component-tokens($status-colors, $ccs-themes);
   }
+  @include ccs-emit-theme-colors($ccs-text-colors, $carbon--theme--g100);
+  @include ccs-emit-theme-colors($ccs-user-avatar-colors, $carbon--theme--g100);
 
   // The header panel is always g100 (dark) in the classic variant, regardless of
   // the page theme, so force a dark color scheme rather than inheriting the root's.
@@ -61,5 +65,7 @@ html {
     @include emit-component-tokens($content-switcher-colors, $ccs-themes);
     @include emit-component-tokens($status-colors, $ccs-themes);
   }
+  @include ccs-emit-theme-colors($ccs-text-colors, $carbon--theme--white);
+  @include ccs-emit-theme-colors($ccs-user-avatar-colors, $carbon--theme--white);
 }
 }
