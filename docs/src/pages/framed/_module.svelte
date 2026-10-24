@@ -72,8 +72,14 @@
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 
-  :global(.framed :not(.bx--content) [class^="bx--col"]) {
+  :global(.framed :not(.bx--content) [class^="bx--col"]),
+  :global(.framed .bx--css-grid-column) {
     outline: 1px solid var(--cds-interactive);
+  }
+
+  /* A column that holds a subgrid is outlined by the subgrid's columns. */
+  :global(.framed .bx--css-grid-column:has(> .bx--subgrid)) {
+    outline: 0;
   }
 
   :global(.framed .bx--content [class^="bx--col"]) {

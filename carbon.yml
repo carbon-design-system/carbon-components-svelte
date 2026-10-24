@@ -402,6 +402,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Countdown
+  css-grid:
+    name: CSS grid
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/css-grid.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CssGrid
   data-table:
     status: stable
     framework: svelte
