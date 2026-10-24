@@ -1,12 +1,13 @@
 <script>
   import {
+    Box,
     Column,
     Grid,
+    Prose,
     Row,
     Stack,
     TableOfContents,
     TableOfContentsItem,
-    Text,
   } from "carbon-components-svelte";
 
   const sections = [
@@ -43,15 +44,12 @@
     <Column sm={4} md={6} lg={12}>
       <Stack gap={9}>
         {#each sections as section (section.id)}
-          <Stack
-            tag="section"
-            id={section.id}
-            gap={3}
-            style="min-height: 24rem"
-          >
-            <Text tag="h2" type="heading-04">{section.title}</Text>
-            <Text>{section.body}</Text>
-          </Stack>
+          <Box tag="section" id={section.id} minHeight="24rem">
+            <Prose>
+              <h2>{section.title}</h2>
+              <p>{section.body}</p>
+            </Prose>
+          </Box>
         {/each}
       </Stack>
     </Column>
