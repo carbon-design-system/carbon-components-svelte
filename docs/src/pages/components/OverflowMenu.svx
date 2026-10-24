@@ -161,7 +161,7 @@ Set `aria-label` to give the trigger and the menu a longer name than the tooltip
 
 ### Tooltip position
 
-Set `tooltipPosition` and `tooltipAlignment` to place the trigger's tooltip. The default is `"top"` and `"center"`. The tooltip shows on hover and focus, hides while the menu is open, and flips to the opposite side when there is not enough space.
+Set `tooltipPosition` and `tooltipAlignment` to place the trigger's tooltip. The default is `"top"` and `"center"`. The tooltip shows on hover and focus, hides while the menu is open, and flips to the opposite side when there is not enough space. It stays closed when the menu returns focus to the trigger.
 
 <OverflowMenu tooltipPosition="bottom" tooltipAlignment="start">
   <OverflowMenuItem text="Manage credentials" />
