@@ -44,7 +44,7 @@ Inside a [Modal](/components/Modal), portalling is on by default unless you set 
 
 ### Flipped
 
-Set `flipped` to `true` to position the menu to the left of the button.
+Set `flipped` to `true` to align the menu with the button's inline end: its right edge, or its left edge in a right-to-left layout.
 
 <OverflowMenu flipped>
   <OverflowMenuItem text="Manage credentials" />

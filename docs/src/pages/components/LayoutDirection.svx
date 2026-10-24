@@ -5,22 +5,30 @@ description: LayoutDirection sets the writing direction for part of a page, such
 
 <script>
   import {
+    Box,
     Button,
     Card,
     CardBody,
     CardHeader,
     CardTitle,
     ClickableTile,
+    ContentSwitcher,
     CopyInput,
     Dropdown,
     LayoutDirection,
     Link,
+    MenuButton,
+    MenuItem,
     NumberInput,
+    OverflowMenu,
+    OverflowMenuItem,
     PasswordInput,
     RangeSlider,
     Search,
     Slider,
+    Splitter,
     Stack,
+    Switch,
     Tab,
     TabContent,
     Tabs,
@@ -131,6 +139,53 @@ In RTL, rows indent from the right and a collapsed caret points left. <DocKbd la
       },
     ]}
   />
+</LayoutDirection>
+
+## Menus
+
+In RTL, a menu opens from the trigger's right edge, and a submenu opens to the left. When there is no room on the left, the submenu opens to the right instead. <DocKbd label="ArrowLeft" /> opens a submenu and <DocKbd label="ArrowRight" /> closes it. This covers `Menu`, `MenuButton`, `ComboButton`, `ContextMenu`, and `HeaderNavMenu`.
+
+In `MenuButton` and `ComboButton`, `intrinsicAlign` values `"start"` and `"end"` mean the trigger's inline start and end. An `OverflowMenu` lines up with the button's right edge, and with its left edge when `flipped`.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Stack orientation="horizontal" gap={5} align="center">
+    <MenuButton labelText="إجراءات">
+      <MenuItem labelText="نسخ" />
+      <MenuItem labelText="تصدير بصيغة">
+        <MenuItem labelText="PDF" />
+        <MenuItem labelText="PNG" />
+      </MenuItem>
+    </MenuButton>
+    <OverflowMenu iconDescription="خيارات">
+      <OverflowMenuItem text="إعادة التشغيل" />
+      <OverflowMenuItem text="إيقاف" />
+    </OverflowMenu>
+  </Stack>
+</LayoutDirection>
+
+## Arrow keys
+
+In RTL, <DocKbd label="ArrowLeft" /> moves to the next item and <DocKbd label="ArrowRight" /> to the previous one in `ContentSwitcher`, `ToggleButtonGroup`, `ProgressIndicator`, `TagSet` with `navigation="roving"`, and the `HeaderNav` menubar. Outside a `LayoutDirection`, each reads the page direction when the key arrives.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <ContentSwitcher>
+    <Switch text="الأحدث" />
+    <Switch text="الأكثر رواجًا" />
+    <Switch text="المحفوظة" />
+  </ContentSwitcher>
+</LayoutDirection>
+
+## Resizing
+
+In RTL, a resizable `SideNav` has its handle on its left edge, and a horizontal `Splitter` puts its start pane on the right. Dragging the handle or separator left widens the side nav or the start pane, and so does <DocKbd label="ArrowLeft" />.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Box height="10rem" border="subtle">
+    <Splitter size={35} separatorLabel="تغيير حجم قائمة الملفات">
+      <Box slot="start" padding={5}>الملفات</Box>
+      <Box slot="end" padding={5}>deploy.yaml</Box>
+    </Splitter>
+  </Box>
 </LayoutDirection>
 
 ## Icons
