@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import { type ComponentProps, tick } from "svelte";
+import { TOOLTIP_ICON_LEAVE_DELAY_MS } from "../../src/constants/timing.js";
 import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
 import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
@@ -162,8 +163,27 @@ describe("Button", () => {
     expect(icon).not.toHaveAttribute("aria-label");
 
     const assistiveText = btnA.querySelector(".bx--assistive-text");
-    assert(assistiveText instanceof HTMLElement);
-    expect(assistiveText.style.pointerEvents).toBe("none");
+    expect(assistiveText).toHaveTextContent("Add");
+  });
+
+  // The pointer can rest on the inline tooltip, which may cover a
+  // neighboring button. A click there must not press this one (#937).
+  it("should not activate an icon-only button from a click on its tooltip", () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const onClick = vi.fn();
+    btnA.addEventListener("click", onClick);
+    const assistiveText = btnA.querySelector(".bx--assistive-text");
+    assert(assistiveText);
+
+    const click = new MouseEvent("click", { bubbles: true, cancelable: true });
+    assistiveText.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(true);
+    expect(onClick).not.toHaveBeenCalled();
+
+    btnA.click();
+    expect(onClick).toHaveBeenCalledOnce();
   });
 
   it("should hide other icon-only button tooltips on mouseenter", async () => {
@@ -223,7 +243,13 @@ describe("Button", () => {
     await vi.advanceTimersByTimeAsync(100);
     expect(btnB).toHaveClass("bx--tooltip--hidden");
 
+    // The tooltip waits the leave delay, so the pointer can move onto it.
     await fireEvent.mouseLeave(btnA);
+    expect(btnA).toHaveClass("bx--tooltip--visible");
+    expect(btnB).toHaveClass("bx--tooltip--hidden");
+
+    await vi.advanceTimersByTimeAsync(TOOLTIP_ICON_LEAVE_DELAY_MS);
+    expect(btnA).not.toHaveClass("bx--tooltip--visible");
     expect(btnA).not.toHaveClass("bx--tooltip--hidden");
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
     vi.useRealTimers();

@@ -196,6 +196,18 @@
     if (!hovered) tooltipHandoff.release();
   }
 
+  // The pointer moved onto a part of the tooltip, or of the feedback that
+  // took its place, that covers another control: close at once, so the
+  // pointer and the next click reach that control. Hidden until the next
+  // pointer enter or focus.
+  function handleTooltipCover() {
+    tooltipHandoff.cancel();
+    dismissed = true;
+    hovered = false;
+    if (feedbackOpen) copyFeedback.dismiss();
+    tooltipHandoff.release();
+  }
+
   function dismissTooltip() {
     tooltipHandoff.cancel();
     hovered = false;
@@ -317,5 +329,11 @@
     gapBottom={portalGaps.gapBottom}
     verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
     verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
+    on:mouseenter={() => {
+      // The pointer moved onto the tooltip: keep it open.
+      if (tooltipHoverActive) tooltipHandoff.cancel();
+    }}
+    on:mouseleave={handleTooltipMouseLeave}
+    on:cover={handleTooltipCover}
   />
 {/if}

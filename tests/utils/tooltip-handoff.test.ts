@@ -222,16 +222,31 @@ describe("createTooltipHandoff", () => {
     vi.advanceTimersByTime(1);
     expect(onShow).toHaveBeenCalledTimes(1);
 
-    // An icon label hides at once.
+    // An icon tooltip waits long enough for the pointer to move onto it.
     const onHide = vi.fn();
     handoff.scheduleLeave(onHide);
+    vi.advanceTimersByTime(99);
+    expect(onHide).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(1);
     expect(onHide).toHaveBeenCalledTimes(1);
   });
 
-  it("a hoverable tooltip lingers for the shared leave delay", () => {
+  it("scheduleEnter() replaces a pending leave, so the tooltip stays", () => {
+    const handoff = createTooltipHandoff({ group: group() });
+    const onHide = vi.fn();
+
+    handoff.claim();
+    handoff.scheduleLeave(onHide);
+    handoff.scheduleEnter(vi.fn());
+    vi.advanceTimersByTime(300);
+    expect(onHide).not.toHaveBeenCalled();
+    expect(get(handoff.active)).toBe(true);
+  });
+
+  it("a rich tooltip waits the longer shared leave delay", () => {
     const handoff = createTooltipHandoff({
       group: createTooltipGroup(),
-      hoverable: true,
+      rich: true,
     });
     const onHide = vi.fn();
 
@@ -242,14 +257,14 @@ describe("createTooltipHandoff", () => {
     expect(onHide).toHaveBeenCalledTimes(1);
   });
 
-  it("a group's leave delay applies to icon labels and hoverable tooltips", () => {
+  it("a group's leave delay applies to icon and rich tooltips", () => {
     const shared = createTooltipGroup({ leaveDelayMs: () => 50 });
     const icon = createTooltipHandoff({ group: shared });
-    const hoverable = createTooltipHandoff({ group: shared, hoverable: true });
+    const rich = createTooltipHandoff({ group: shared, rich: true });
     const onHide = vi.fn();
 
     icon.scheduleLeave(onHide);
-    hoverable.scheduleLeave(onHide);
+    rich.scheduleLeave(onHide);
     vi.advanceTimersByTime(49);
     expect(onHide).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1);

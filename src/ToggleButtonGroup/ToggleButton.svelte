@@ -198,5 +198,8 @@
     horizontalGapRight={portalGaps.horizontalGapRight}
     gapTop={portalGaps.gapTop}
     gapBottom={portalGaps.gapBottom}
+    on:mouseenter={tooltip.handleTooltipMouseenter}
+    on:mouseleave={tooltip.handleTooltipMouseleave}
+    on:cover={tooltip.handleTooltipCover}
   />
 {/if}

@@ -105,7 +105,11 @@
     dismissOnClick: false,
     enterDelayMs: () => 0,
   });
-  const { hidden: tooltipHidden, instant: tooltipInstant } = tooltip;
+  const {
+    open: tooltipOpen,
+    hidden: tooltipHidden,
+    instant: tooltipInstant,
+  } = tooltip;
 
   let detachTooltip = noop;
 
@@ -129,6 +133,8 @@
     hasIconOnly && "bx--btn--icon-only--bottom",
     hasIconOnly && `bx--tooltip--align-${tooltipAlignment}`,
     hasIconOnly && $tooltipHidden && "bx--tooltip--hidden",
+    // Holds the tooltip through the leave delay after the pointer leaves.
+    hasIconOnly && $tooltipOpen && "bx--tooltip--visible",
     hasIconOnly && $tooltipInstant && "bx--tooltip--instant",
     $$restProps.class,
   ]

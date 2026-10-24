@@ -366,6 +366,7 @@
         class:bx--tooltip--align-center={tooltipAlignment === "center"}
         class:bx--tooltip--align-end={tooltipAlignment === "end"}
         class:bx--tooltip--hidden={!effectivePortalTooltip && $tooltipHidden}
+        class:bx--tooltip--visible={!effectivePortalTooltip && $tooltipOpen}
         class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
         aria-label={effectivePortalTooltip || disabled
           ? tooltipLabel
@@ -411,5 +412,8 @@
     direction={tooltipPosition === "top" ? "top" : "bottom"}
     open={$tooltipOpen}
     text={tooltipLabel}
+    on:mouseenter={tooltip.handleTooltipMouseenter}
+    on:mouseleave={tooltip.handleTooltipMouseleave}
+    on:cover={tooltip.handleTooltipCover}
   />
 {/if}

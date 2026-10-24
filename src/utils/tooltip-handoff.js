@@ -1,6 +1,9 @@
 // @ts-check
 import { derived, get, writable } from "svelte/store";
-import { TOOLTIP_LEAVE_DELAY_MS } from "../constants/timing.js";
+import {
+  TOOLTIP_ICON_LEAVE_DELAY_MS,
+  TOOLTIP_LEAVE_DELAY_MS,
+} from "../constants/timing.js";
 import { createDelayedSetter } from "./delayed-setter.js";
 import { activeTooltip, rootTooltipGroup } from "./tooltip-group.js";
 
@@ -20,17 +23,18 @@ import { activeTooltip, rootTooltipGroup } from "./tooltip-group.js";
  *   group's enter delay when it returns a number.
  * @param {() => number | undefined} [options.leaveDelayMs] Overrides the
  *   group's leave delay when it returns a number.
- * @param {boolean} [options.hoverable] Set for a tooltip the pointer can
- *   move onto. Without a leave delay from the group or the tooltip, a
- *   hoverable tooltip lingers for `TOOLTIP_LEAVE_DELAY_MS` so the pointer
- *   can reach it; an icon label hides at once, since the skip window, not
- *   the lingering tooltip, carries the handoff to its neighbor.
+ * @param {boolean} [options.rich] Set for `Tooltip` and
+ *   `TooltipDefinition`. Without a leave delay from the group or the
+ *   tooltip, they wait `TOOLTIP_LEAVE_DELAY_MS` before they close, and icon
+ *   tooltips `TOOLTIP_ICON_LEAVE_DELAY_MS`. Either way the pointer can
+ *   move onto the tooltip (WCAG 1.4.13). A neighbor in the group still
+ *   takes over at once, so the wait doesn't slow the handoff.
  */
 export function createTooltipHandoff({
   group = rootTooltipGroup,
   enterDelayMs,
   leaveDelayMs,
-  hoverable = false,
+  rich = false,
 } = {}) {
   const scheduleTooltip = createDelayedSetter();
   /** @type {import("./tooltip-group.js").TooltipToken} */
@@ -97,7 +101,8 @@ export function createTooltipHandoff({
 
   /**
    * Call `onShow` and claim the slot after the enter delay, or right away
-   * on a warm handoff.
+   * on a warm handoff. It replaces a pending leave, so a tooltip the
+   * pointer comes back to stays open.
    * @param {() => void} onShow
    */
   function scheduleEnter(onShow) {
@@ -116,7 +121,7 @@ export function createTooltipHandoff({
     scheduleTooltip(
       leaveDelayMs?.() ??
         group.leaveDelayMs() ??
-        (hoverable ? TOOLTIP_LEAVE_DELAY_MS : 0),
+        (rich ? TOOLTIP_LEAVE_DELAY_MS : TOOLTIP_ICON_LEAVE_DELAY_MS),
       onHide,
     );
   }

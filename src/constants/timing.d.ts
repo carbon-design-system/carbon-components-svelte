@@ -6,10 +6,16 @@
 export const TOOLTIP_ENTER_DELAY_MS: 100;
 
 /**
- * Default delay before a hoverable tooltip (`Tooltip`, `TooltipDefinition`)
- * closes, so the pointer can move onto it. Icon labels close at once.
+ * Default delay before a `Tooltip` or `TooltipDefinition` closes, so the
+ * pointer can move onto it (Carbon v11 `Tooltip`).
  */
 export const TOOLTIP_LEAVE_DELAY_MS: 300;
+
+/**
+ * Default delay before an icon tooltip closes, so the pointer can move
+ * onto it (WCAG 1.4.13, Carbon v11 `IconButton`).
+ */
+export const TOOLTIP_ICON_LEAVE_DELAY_MS: 100;
 
 /**
  * Default window after a tooltip closes during which the next tooltip in

@@ -577,6 +577,7 @@
         gapBottom={portalGaps.gapBottom}
         verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
         verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
+        on:cover={() => copyFeedback.dismiss()}
       />
     {/if}
   {/if}
