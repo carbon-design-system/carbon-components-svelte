@@ -8,6 +8,7 @@
   export let lg: ComponentProps<CssColumn>["lg"] = undefined;
   export let xlg: ComponentProps<CssColumn>["xlg"] = undefined;
   export let max: ComponentProps<CssColumn>["max"] = undefined;
+  export let align: ComponentProps<CssColumn>["align"] = undefined;
   export let as = false;
 </script>
 
@@ -16,7 +17,7 @@
     <article {...props}>Column content</article>
   </CssColumn>
 {:else}
-  <CssColumn {span} {sm} {md} {lg} {xlg} {max} data-testid="col">
+  <CssColumn {span} {sm} {md} {lg} {xlg} {max} {align} data-testid="col">
     Column content
   </CssColumn>
 {/if}

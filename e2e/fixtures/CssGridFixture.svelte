@@ -49,3 +49,18 @@
     </CssColumn>
   </CssGrid>
 </div>
+
+<CssGrid data-testid="align-grid">
+  <CssColumn data-testid="align-tall" span={2} style="block-size: 10rem">
+    Tall
+  </CssColumn>
+  <CssColumn data-testid="align-default" span={2}>Default</CssColumn>
+  <CssColumn data-testid="align-start" span={2} align="start">Start</CssColumn>
+  <CssColumn data-testid="align-center" span={2} align="center">
+    Center
+  </CssColumn>
+  <CssColumn data-testid="align-end" span={2} align="end">End</CssColumn>
+  <CssColumn data-testid="align-stretch" span={2} align="stretch">
+    Stretch
+  </CssColumn>
+</CssGrid>

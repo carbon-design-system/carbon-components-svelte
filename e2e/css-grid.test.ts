@@ -243,3 +243,57 @@ test("CssGrid takes v11's custom properties from any ancestor", async ({
     }
   }
 });
+
+test("CssColumn aligns itself in a row of mixed heights", async ({ page }) => {
+  await page.setViewportSize({ width: 1100, height: 720 });
+  await page.goto("/css-grid.html");
+
+  for (const dir of ["ltr", "rtl"]) {
+    // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+    const rows = await page.evaluate((dir) => {
+      document.documentElement.dir = dir;
+      const box = (name: string) =>
+        (
+          document.querySelector(`[data-testid="align-${name}"]`) as Element
+        ).getBoundingClientRect();
+      const row = box("tall");
+      const columns = ["default", "start", "center", "end", "stretch"];
+      return {
+        // The default column is the second one from the inline start.
+        afterTall:
+          dir === "rtl"
+            ? box("default").right <= row.left
+            : box("default").left >= row.right,
+        ...Object.fromEntries(
+          columns.map((name) => {
+            const b = box(name);
+            return [
+              name,
+              {
+                top: Math.round(b.top - row.top),
+                middle: Math.round((b.top + b.bottom) / 2 - row.top),
+                bottom: Math.round(b.bottom - row.top),
+              },
+            ];
+          }),
+        ),
+      };
+    }, dir);
+
+    // The tall column is 160px. A short column is one line of text.
+    const line = rows.start.bottom;
+    expect.soft(line, dir).toBeLessThan(160);
+    expect.soft(rows, dir).toEqual({
+      afterTall: true,
+      default: { top: 0, middle: 80, bottom: 160 },
+      start: { top: 0, middle: Math.round(line / 2), bottom: line },
+      center: {
+        top: Math.round(80 - line / 2),
+        middle: 80,
+        bottom: Math.round(80 + line / 2),
+      },
+      end: { top: 160 - line, middle: Math.round(160 - line / 2), bottom: 160 },
+      stretch: { top: 0, middle: 80, bottom: 160 },
+    });
+  }
+});

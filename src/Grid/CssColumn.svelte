@@ -60,6 +60,13 @@
   export let max = undefined;
 
   /**
+   * Set the block-axis alignment of the column in its row, as on `Column`.
+   * A column stretches to the height of its row by default.
+   * @type {"start" | "center" | "end" | "stretch" | undefined}
+   */
+  export let align = undefined;
+
+  /**
    * Classes for one breakpoint, as Carbon React builds them. `true` spans
    * the remaining columns, a percent strips its `%`, and an offset of N
    * starts the column at grid line N + 1. An offset or start of 0 is auto.
@@ -106,6 +113,9 @@
       ...classesFor("bx--lg:", lg),
       ...classesFor("bx--xlg:", xlg),
       ...classesFor("bx--max:", max),
+      // Shared with Column. In a grid, flex-start and flex-end act as start
+      // and end, so the column lines up with the block start or end.
+      align && `bx--col--align-${align}`,
     ]
       .filter(Boolean)
       .join(" "),

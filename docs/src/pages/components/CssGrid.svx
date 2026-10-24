@@ -57,6 +57,12 @@ Grid lines count from the inline start. Under `dir="rtl"`, line 1 is at the righ
 
 <FileSource src="/framed/CssGrid/CssGridRtl" />
 
+### Vertical alignment
+
+A column stretches to the height of the tallest column in its row. Set `align` to `"start"`, `"center"` or `"end"` to fit a column to its content and move it to the top, middle or bottom of the row. `"stretch"` is the default. The values are the same as `align` on the flexbox `Column`. Alignment is vertical, so `dir="rtl"` does not change it.
+
+<FileSource src="/framed/CssGrid/CssGridAlign" />
+
 ## Variants
 
 ### Narrow
