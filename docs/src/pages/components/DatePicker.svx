@@ -241,7 +241,7 @@ By default, clicking anywhere outside the calendar closes it. Pass the elements 
 
 ### Position relative to another element
 
-When `portalMenu` is enabled, set `anchor` to position the calendar against an element other than the input, and `align` (`"start"`, `"center"`, `"end"`) and `direction` (`"auto"`, `"bottom"`, `"top"`) to place it. They have no effect with the default static positioning, where the calendar is placed below the input by CSS.
+When `portalMenu` is enabled, set `anchor` to position the calendar against an element other than the input, and `align` (`"start"`, `"center"`, `"end"`; `"start"` is the right edge in a right-to-left layout) and `direction` (`"auto"`, `"bottom"`, `"top"`) to place it. They have no effect with the default static positioning, where the calendar is placed below the input by CSS.
 
 <FileSource src="/framed/DatePicker/DatePickerPositionElement" />
 
@@ -318,6 +318,12 @@ Pass any language tag; no locale module needs to be imported. The example below 
 For locales where `Intl.DateTimeFormat` orders the year before the month (for example Japanese), the calendar header automatically reorders to match—"2000年1月" instead of "January 2000".
 
 <FileSource src="/framed/DatePicker/DatePickerYearFirstLocale" />
+
+### Right-to-left
+
+In a right-to-left layout, the calendar runs from the right: the week starts at the right edge, and the previous month arrow sits on the right. <DocKbd label="ArrowLeft" /> moves to the next day and <DocKbd label="ArrowRight" /> to the previous one. The calendar icon, the clear button, and the invalid and warning icons sit at the field's left end. A right-to-left locale such as `"ar"` names the months and weekdays and starts the week on Saturday. See [LayoutDirection](/components/LayoutDirection).
+
+<FileSource src="/framed/DatePicker/DatePickerRightToLeft" />
 
 ## Portal
 
