@@ -101,7 +101,7 @@ Position the content with `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`)
 
 ### Alignment
 
-With `align` set to `"start"` or `"end"`, the caret points at the button's center whatever its size. If the content would run past its container, such as a table's scroll area, it opens toward the other side.
+With `align` set to `"start"` or `"end"`, the caret points at the button's center whatever its size. If the content would run past its container, such as a table's scroll area, it opens toward the other side. Above and below the button, `start` and `end` swap sides in RTL. See [LayoutDirection](/components/LayoutDirection#tooltips-and-popovers).
 
 <Stack orientation="horizontal" gap={10}>
   <Toggletip direction="bottom" align="start">start</Toggletip>
