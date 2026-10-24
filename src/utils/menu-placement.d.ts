@@ -15,11 +15,4 @@ export function fitMenuAxis(options: {
   reverse?: boolean;
 }): number;
 
-/**
- * The physical side of a `start` or `end` alignment along the inline axis:
- * `start` for the left edge, `end` for the right. They swap in RTL.
- */
-export function physicalAlign(
-  align: "start" | "center" | "end",
-  rtl: boolean,
-): "start" | "center" | "end";
+export { physicalAlign } from "./inline-align";

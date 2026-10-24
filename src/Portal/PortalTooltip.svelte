@@ -77,9 +77,27 @@
 
   /**
    * Align portalled tooltip to the anchor (see `FloatingPortal` `intrinsicAlign`).
+   * Above and below the anchor, `start` and `end` name inline sides, so they
+   * swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let intrinsicAlign = "center";
+
+  import { physicalAlign } from "../utils/inline-align.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
+
+  const layoutDirection = getLayoutDirection();
+
+  // Read when the tooltip opens: nothing reports a `dir` change.
+  $: rtl = open && resolveLayoutDirection($layoutDirection, anchor) === "rtl";
+  // `FloatingPortal` and the caret styles take the physical side.
+  $: sideAlign =
+    direction === "top" || direction === "bottom"
+      ? physicalAlign(intrinsicAlign, rtl)
+      : intrinsicAlign;
 </script>
 
 <FloatingPortal
@@ -92,7 +110,7 @@
   {gapBottom}
   {verticalAlignOffsetLeft}
   {verticalAlignOffsetRight}
-  {intrinsicAlign}
+  intrinsicAlign={sideAlign}
   intrinsicWidth={true}
   lockDirection="after-flip"
   let:direction={actualDirection}
@@ -103,10 +121,13 @@
     data-tooltip-type={tooltipType}
   >
     <span class:bx--tooltip-portal__caret={true}></span>
+    <!-- The box lays out left to right (see _tooltip.scss); the text keeps
+    the anchor's direction. -->
     <span
       class:bx--tooltip-portal__content={true}
       class:bx--assistive-text={Boolean(tooltipType)}
       role={id ? "tooltip" : undefined}
+      dir={rtl ? "rtl" : undefined}
       {id}
     >
       <slot>{text}</slot>

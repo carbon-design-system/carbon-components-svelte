@@ -8,6 +8,8 @@
 
   /**
    * Set the alignment of the tooltip relative to the icon.
+   * Above and below the icon, `start` and `end` name inline sides, so they
+   * swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";
@@ -121,11 +123,17 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { physicalAlign } from "../utils/inline-align.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
@@ -254,6 +262,13 @@
       iconHeight = icon.height;
     }
 
+    // The icon's right edge, from the label's left. The icon ends the label
+    // in LTR and starts it in RTL.
+    const iconRight =
+      refIcon && !hideIcon
+        ? refIcon.getBoundingClientRect().right - button.left
+        : button.width;
+
     let offsetX = 0;
     let offsetY = 0;
 
@@ -262,19 +277,19 @@
         if (hideIcon) {
           offsetX = -1 * (tooltip.width / 2 - button.width / 2);
         } else {
-          offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2);
+          offsetX = -1 * (tooltip.width / 2 - iconRight + iconWidth / 2);
         }
         offsetY = iconHeight / 2;
         break;
       case "right":
-        offsetX = button.width + 6;
+        offsetX = iconRight + 6;
         offsetY = -1 * (tooltip.height / 2 + iconWidth / 2 - 3);
         break;
       case "left":
         if (hideIcon) {
           offsetX = -1 * (tooltip.width + 6 + 1);
         } else {
-          offsetX = -1 * (tooltip.width - button.width + iconWidth + 8);
+          offsetX = -1 * (tooltip.width - iconRight + iconWidth + 8);
         }
         offsetY = -1 * (tooltip.height / 2 + button.height) - 2;
         break;
@@ -282,15 +297,44 @@
         if (hideIcon) {
           offsetX = -1 * (tooltip.width / 2 - button.width / 2);
         } else {
-          offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
+          // The 1px nudge mirrors too.
+          offsetX =
+            -1 *
+            (tooltip.width / 2 - iconRight + iconWidth / 2 + (rtl ? -1 : 1));
         }
         offsetY = -1 * (tooltip.height + button.height + iconWidth / 2 - 1);
         break;
     }
 
+    // `left` is from the containing block, which starts where the label
+    // does only in LTR.
+    const container = refTooltip.offsetParent;
+    if (container) {
+      offsetX +=
+        button.left -
+        container.getBoundingClientRect().left -
+        container.clientLeft;
+    }
+
     refTooltip.style.left = `${offsetX}px`;
     refTooltip.style.marginTop = `${offsetY}px`;
   }
+
+  /**
+   * Reads `ref` here, not in `$:`: see the repositioning block below.
+   * @param {"ltr" | "rtl" | undefined} contextDirection
+   */
+  function readRtl(contextDirection) {
+    return resolveLayoutDirection(contextDirection, ref) === "rtl";
+  }
+
+  // Read the direction when the tooltip opens: nothing reports a `dir`
+  // change. Above and below the icon, `start` and `end` are inline sides.
+  $: rtl = open && readRtl($layoutDirection);
+  $: sideAlign =
+    direction === "top" || direction === "bottom"
+      ? physicalAlign(align, rtl)
+      : align;
 
   // Reposition only when the tooltip opens or an input that affects its
   // geometry changes—not on every unrelated re-render of this component
@@ -305,6 +349,8 @@
   $: if (open && !effectivePortalTooltip) {
     void direction;
     void hideIcon;
+    void rtl;
+    void sideAlign;
     tick().then(position);
   }
 
@@ -398,9 +444,9 @@
       class:bx--tooltip--right={direction === "right"}
       class:bx--tooltip--bottom={direction === "bottom"}
       class:bx--tooltip--left={direction === "left"}
-      class:bx--tooltip--align-center={align === "center"}
-      class:bx--tooltip--align-start={align === "start"}
-      class:bx--tooltip--align-end={align === "end"}
+      class:bx--tooltip--align-center={sideAlign === "center"}
+      class:bx--tooltip--align-start={sideAlign === "start"}
+      class:bx--tooltip--align-end={sideAlign === "end"}
       style:width="max-content"
       on:mouseenter={handleMouseenter}
       on:focusout={handleFocusout}
@@ -448,9 +494,9 @@
         class:bx--tooltip--right={actualDirection === "right"}
         class:bx--tooltip--bottom={actualDirection === "bottom"}
         class:bx--tooltip--left={actualDirection === "left"}
-        class:bx--tooltip--align-center={align === "center"}
-        class:bx--tooltip--align-start={align === "start"}
-        class:bx--tooltip--align-end={align === "end"}
+        class:bx--tooltip--align-center={sideAlign === "center"}
+        class:bx--tooltip--align-start={sideAlign === "start"}
+        class:bx--tooltip--align-end={sideAlign === "end"}
         style="position: relative; transform: none; display: block; left: auto; margin-top: 0;"
         on:mouseenter={handleMouseenter}
         on:focusout={handleFocusout}

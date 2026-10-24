@@ -414,14 +414,18 @@ describe("Tooltip", () => {
   });
 
   describe("position offsets", () => {
-    // Distinct box sizes so each term of the offset math shows in the result.
-    const sizes = {
-      "bx--tooltip__label": rect({ width: 40, height: 20 }),
-      "bx--tooltip__trigger": rect({ width: 12, height: 10 }),
-      "bx--tooltip": rect({ width: 100, height: 50 }),
-    } as const;
+    afterEach(() => {
+      document.documentElement.removeAttribute("style");
+    });
 
-    function mockSizes() {
+    // Distinct box sizes so each term of the offset math shows in the result.
+    // The icon ends the label in LTR (left 28) and starts it in RTL (left 0).
+    function mockSizes(iconLeft = 28) {
+      const sizes = {
+        "bx--tooltip__label": rect({ width: 40, height: 20 }),
+        "bx--tooltip__trigger": rect({ left: iconLeft, width: 12, height: 10 }),
+        "bx--tooltip": rect({ width: 100, height: 50 }),
+      } as const;
       vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
         function (this: Element) {
           for (const [className, box] of Object.entries(sizes)) {
@@ -456,6 +460,53 @@ describe("Tooltip", () => {
           .closest<HTMLElement>(".bx--tooltip");
         expect(tooltip?.style.left).toBe(left);
         expect(tooltip?.style.marginTop).toBe(marginTop);
+      },
+    );
+
+    // Each LTR box mirrored around the label: the icon starts it in RTL.
+    it.each([
+      ["bottom", "-44px"],
+      ["top", "-43px"],
+      // `left` and `right` name physical sides, beside the icon.
+      ["right", "18px"],
+      ["left", "-108px"],
+    ] as const)(
+      "offsets a %s tooltip in RTL to left %s",
+      async (direction, left) => {
+        document.documentElement.style.direction = "rtl";
+        mockSizes(0);
+        render(Tooltip, {
+          props: { open: true, direction, iconDescription: "Info" },
+        });
+        await tick();
+        await tick();
+
+        const tooltip = screen
+          .getByRole("dialog")
+          .closest<HTMLElement>(".bx--tooltip");
+        expect(tooltip?.style.left).toBe(left);
+      },
+    );
+
+    it.each([
+      ["start", "bottom", "bx--tooltip--align-end"],
+      ["end", "top", "bx--tooltip--align-start"],
+      ["center", "bottom", "bx--tooltip--align-center"],
+      // Beside the icon, `start` and `end` are on the block axis.
+      ["start", "left", "bx--tooltip--align-start"],
+    ] as const)(
+      "aligns %s on a %s tooltip to the physical side in RTL",
+      async (align, direction, className) => {
+        document.documentElement.style.direction = "rtl";
+        render(Tooltip, {
+          props: { open: true, align, direction, iconDescription: "Info" },
+        });
+        await tick();
+
+        const tooltip = screen
+          .getByRole("dialog")
+          .closest<HTMLElement>(".bx--tooltip");
+        expect(tooltip).toHaveClass(className);
       },
     );
   });

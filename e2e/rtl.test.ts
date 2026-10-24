@@ -1363,3 +1363,254 @@ test.describe("right-to-left menus and keys", () => {
     }
   });
 });
+
+// Each floating case: what it points at, its surface, and its caret, either
+// an element or a pseudo-element of the surface. `inline` cases align to
+// `start` or `end`, or center on the trigger, so in RTL they mirror around
+// the trigger's center. The others name a physical side and stay.
+type FloatCase = {
+  anchor: string;
+  floating: string;
+  caret?: string;
+  caretPseudo?: "::after";
+  focus?: string;
+  inline: boolean;
+};
+
+const FLOAT_CASES: Record<string, FloatCase> = {
+  tooltipStart: {
+    anchor: "[data-testid=tooltip-start] .bx--tooltip__trigger",
+    floating: "#tooltip-start",
+    caret: "#tooltip-start .bx--tooltip__caret",
+    inline: true,
+  },
+  tooltipEnd: {
+    anchor: "[data-testid=tooltip-end] .bx--tooltip__trigger",
+    floating: "#tooltip-end",
+    caret: "#tooltip-end .bx--tooltip__caret",
+    inline: true,
+  },
+  tooltipCenter: {
+    anchor: "[data-testid=tooltip-center] .bx--tooltip__trigger",
+    floating: "#tooltip-center",
+    caret: "#tooltip-center .bx--tooltip__caret",
+    inline: true,
+  },
+  tooltipRight: {
+    anchor: "[data-testid=tooltip-right] .bx--tooltip__trigger",
+    floating: "#tooltip-right",
+    caret: "#tooltip-right .bx--tooltip__caret",
+    inline: false,
+  },
+  tooltipPortal: {
+    anchor: "[data-testid=tooltip-portal] .bx--tooltip__trigger",
+    floating: "#tooltip-portal",
+    caret: "#tooltip-portal .bx--tooltip__caret",
+    inline: true,
+  },
+  popoverTopStart: {
+    anchor: "[data-testid=popover-top-start] .anchor",
+    floating: "#popover-top-start .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: true,
+  },
+  popoverBottomEnd: {
+    anchor: "[data-testid=popover-bottom-end] .anchor",
+    floating: "#popover-bottom-end .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: true,
+  },
+  popoverTopLeft: {
+    anchor: "[data-testid=popover-top-left] .anchor",
+    floating: "#popover-top-left .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: false,
+  },
+  toggletipStart: {
+    anchor: "[data-testid=toggletip-start] .bx--toggletip-button",
+    floating: "#toggletip-start-content .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: true,
+  },
+  toggletipEnd: {
+    anchor: "[data-testid=toggletip-end] .bx--toggletip-button",
+    floating: "#toggletip-end-content .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: true,
+  },
+  toggletipPortal: {
+    anchor: "[data-testid=toggletip-portal] .bx--toggletip-button",
+    floating: "#toggletip-portal-content .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: true,
+  },
+  aiLabel: {
+    anchor: "[data-testid=ai-label] .bx--toggletip-button",
+    floating: "#ai-label-content .bx--popover-contents",
+    caretPseudo: "::after",
+    inline: true,
+  },
+  tooltipIconStart: {
+    anchor: "[data-testid=tooltip-icon-start] button",
+    focus: "[data-testid=tooltip-icon-start] button",
+    floating: "#tooltip-icon-start",
+    inline: true,
+  },
+  tooltipIconEnd: {
+    anchor: "[data-testid=tooltip-icon-end] button",
+    focus: "[data-testid=tooltip-icon-end] button",
+    floating: "#tooltip-icon-end",
+    inline: true,
+  },
+  tooltipIconPortal: {
+    anchor: "[data-testid=tooltip-icon-portal] button",
+    focus: "[data-testid=tooltip-icon-portal] button",
+    floating: "#tooltip-icon-portal",
+    caret:
+      ".bx--tooltip-portal:has(#tooltip-icon-portal) .bx--tooltip-portal__caret",
+    inline: true,
+  },
+  tooltipDefinition: {
+    anchor: "[data-testid=tooltip-definition] button",
+    focus: "[data-testid=tooltip-definition] button",
+    floating: "#tooltip-definition",
+    inline: true,
+  },
+  tooltipDefinitionPortal: {
+    anchor: "[data-testid=tooltip-definition-portal] button",
+    focus: "[data-testid=tooltip-definition-portal] button",
+    floating: "#tooltip-definition-portal",
+    caret:
+      ".bx--tooltip-portal:has(#tooltip-definition-portal) .bx--tooltip-portal__caret",
+    inline: true,
+  },
+  buttonTooltip: {
+    anchor: "[data-testid=button-tooltip] button",
+    focus: "[data-testid=button-tooltip] button",
+    floating: "[data-testid=button-tooltip] .bx--assistive-text",
+    inline: true,
+  },
+};
+
+type FloatOffsets = { start: number; end: number; caret: number | null };
+
+/**
+ * One case's surface edges and caret center, in px from the center of what
+ * it points at.
+ */
+function floatOffsets(page: Page, item: FloatCase) {
+  return page.evaluate(async (item) => {
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+    const anchor = document.querySelector(item.anchor);
+    const floating = document.querySelector(item.floating);
+    if (!anchor || !floating) return null;
+    const anchorRect = anchor.getBoundingClientRect();
+    const center = anchorRect.left + anchorRect.width / 2;
+    const rect = floating.getBoundingClientRect();
+    let caret: number | null = null;
+    if (item.caret) {
+      const caretRect = document
+        .querySelector(item.caret)
+        ?.getBoundingClientRect();
+      if (caretRect) caret = caretRect.left + caretRect.width / 2;
+    } else if (item.caretPseudo) {
+      // The caret's center: its box, then its own translation.
+      const style = getComputedStyle(floating, item.caretPseudo);
+      const width =
+        style.boxSizing === "border-box"
+          ? Number.parseFloat(style.width)
+          : Number.parseFloat(style.width) +
+            Number.parseFloat(style.borderLeftWidth) +
+            Number.parseFloat(style.borderRightWidth);
+      const shift =
+        style.transform === "none" ? 0 : new DOMMatrix(style.transform).e;
+      caret =
+        rect.left +
+        floating.clientLeft +
+        Number.parseFloat(style.left) +
+        width / 2 +
+        shift;
+    }
+    const round = (value: number) => Math.round(value * 2) / 2;
+    return {
+      start: round(rect.left - center),
+      end: round(rect.right - center),
+      caret: caret === null ? null : round(caret - center),
+    };
+  }, item);
+}
+
+async function allFloatOffsets(page: Page, cases: Record<string, FloatCase>) {
+  const result: Record<string, FloatOffsets | null> = {};
+  for (const [name, item] of Object.entries(cases)) {
+    // biome-ignore lint/performance/noAwaitInLoops: one tooltip shows at a time
+    if (item.focus) await page.locator(item.focus).focus();
+    result[name] = await floatOffsets(page, item);
+  }
+  return result;
+}
+
+function expectAlignedInline(
+  ltr: Record<string, FloatOffsets | null>,
+  rtl: Record<string, FloatOffsets | null>,
+  cases: Record<string, FloatCase>,
+) {
+  for (const [name, item] of Object.entries(cases)) {
+    const before = ltr[name];
+    const after = rtl[name];
+    expect.soft(before, `${name} in LTR`).not.toBeNull();
+    expect.soft(after, `${name} in RTL`).not.toBeNull();
+    if (!before || !after) continue;
+    const expected = item.inline
+      ? {
+          start: -before.end,
+          end: -before.start,
+          caret: before.caret === null ? null : -before.caret,
+        }
+      : before;
+    for (const key of ["start", "end", "caret"] as const) {
+      const value = after[key];
+      const target = expected[key];
+      if (target === null || value === null) {
+        expect.soft(value, `${name} ${key}`).toBe(target);
+      } else {
+        expect
+          .soft(Math.abs(value - target), `${name} ${key}`)
+          .toBeLessThanOrEqual(1);
+      }
+    }
+  }
+}
+
+test.describe("right-to-left tooltips and popovers", () => {
+  test("aligns start and end to the inline sides, carets included", async ({
+    page,
+  }) => {
+    await page.goto("/rtl-tooltips.html");
+    const ltr = await allFloatOffsets(page, FLOAT_CASES);
+    // Guard against a start case that reads the same mirrored.
+    expect(ltr.tooltipIconStart?.end).toBeGreaterThan(100);
+
+    await page.goto("/rtl-tooltips.html?dir=rtl");
+    const rtl = await allFloatOffsets(page, FLOAT_CASES);
+    expectAlignedInline(ltr, rtl, FLOAT_CASES);
+
+    // The text starts at the right edge too.
+    await page.locator(FLOAT_CASES.tooltipIconPortal.focus as string).focus();
+    const textAlign = await page.evaluate(() =>
+      [
+        "#tooltip-start p",
+        "#tooltip-icon-start",
+        "#tooltip-definition",
+        "[data-testid=button-tooltip] .bx--assistive-text",
+        "#tooltip-icon-portal",
+      ].map((selector) => {
+        const node = document.querySelector(selector);
+        return node && getComputedStyle(node).textAlign;
+      }),
+    );
+    expect(textAlign).toEqual(Array(5).fill("right"));
+  });
+});
