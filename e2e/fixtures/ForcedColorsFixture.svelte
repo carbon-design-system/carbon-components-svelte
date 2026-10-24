@@ -55,6 +55,7 @@
     SelectableTile,
     SelectItem,
     ShapeIndicator,
+    SidePanel,
     StructuredList,
     StructuredListBody,
     StructuredListCell,
@@ -87,6 +88,7 @@
   import Search from "carbon-icons-svelte/lib/Search.svelte";
 
   let menuAnchor = null;
+  let sidePanelOpen = false;
 
   const regions = [
     { id: "us-east", text: "US East" },
@@ -193,6 +195,13 @@
     </CardHeader>
   </Card>
   <Card data-testid="card-static"><CardBody>Static card</CardBody></Card>
+
+  <Button data-testid="side-panel-open" on:click={() => (sidePanelOpen = true)}>
+    Open side panel
+  </Button>
+  <SidePanel bind:open={sidePanelOpen} resizable title="Side panel">
+    Side panel
+  </SidePanel>
 
   <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
   <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>

@@ -25,6 +25,7 @@ import NotificationButton from "carbon-components-svelte/Notification/Notificati
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
+import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
@@ -410,6 +411,19 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(SelectableTileGroup, { props: { legendText: "Plans", ...attrs } }),
     target: () => screen.getByRole("group"),
+  },
+  {
+    name: "SidePanel",
+    render: (attrs) =>
+      render(SidePanel, {
+        props: {
+          open: true,
+          title: "Edit deployment",
+          subtitle: "Changes apply on the next deploy.",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "Toggletip",

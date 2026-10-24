@@ -269,6 +269,28 @@ test.describe("forced colors", () => {
     });
   });
 
+  // A side panel's shadow and AI edge drop, so it draws a CanvasText
+  // outline. Its resize line is a fill, so it reads Highlight on hover.
+  test("a side panel keeps an edge, and its resize line reads Highlight", async ({
+    page,
+  }) => {
+    // A click would leave later tests' scripted focus without a ring.
+    await page.getByTestId("side-panel-open").press("Enter");
+    await expect(page.locator(".bx--side-panel")).toBeVisible();
+    expect
+      .soft(await style(page, ".bx--side-panel"))
+      .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
+
+    await page.hover(".bx--side-panel__resize-handle");
+    await expect
+      .poll(
+        async () =>
+          (await style(page, ".bx--side-panel__resize-handle", "::after"))
+            .background,
+      )
+      .toBe(system.Highlight);
+  });
+
   // The empty and the checked box differ only in shape and fill, and the
   // forced border is the same either way, so the fill carries the state.
   test("selectable tile checkboxes follow the text, fill with Highlight when selected, or read GrayText when disabled", async ({
