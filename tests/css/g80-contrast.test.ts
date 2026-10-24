@@ -136,3 +136,43 @@ describe("Gray 80 background states", () => {
     30_000,
   );
 });
+
+// Tags are dark on a dark page, with light text at 4.5:1. A neutral tag
+// also needs to show its shape on the page and on layer-01, where a table
+// row or tile puts it; the hues show by color.
+const TAGS = [
+  "red",
+  "magenta",
+  "purple",
+  "blue",
+  "cyan",
+  "teal",
+  "green",
+  "gray",
+  "cool-gray",
+  "warm-gray",
+];
+const NEUTRAL_TAGS = new Set(["gray", "cool-gray", "warm-gray"]);
+
+describe("Gray 80 tags", () => {
+  it.each(TAGS)(
+    "%s tags are dark with readable text",
+    async (color) => {
+      const tokens = (await themeTokens()).themes.g80;
+      const fill = tokens[`--cds-tag-background-${color}`];
+      const text = tokens[`--cds-tag-color-${color}`];
+      expect(fill).toMatch(/^#[\da-f]{6}$/);
+      expect(contrast(fill, "#000000")).toBeLessThan(contrast(text, "#000000"));
+      expect(contrast(text, fill)).toBeGreaterThanOrEqual(4.5);
+      if (NEUTRAL_TAGS.has(color)) {
+        for (const surface of ["background", "layer-01"]) {
+          expect(
+            contrast(fill, tokens[`--cds-${surface}`]),
+            `on ${surface}`,
+          ).toBeGreaterThanOrEqual(1.5);
+        }
+      }
+    },
+    30_000,
+  );
+});
