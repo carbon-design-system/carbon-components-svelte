@@ -463,15 +463,15 @@ export function daysInMonth(year, month) {
 export { DAY_MS };
 
 /**
- * A year and month formatted by `locale` in the Gregorian calendar, like the
+ * Formats a year and month in `locale` with the Gregorian calendar, like the
  * grid: Persian dates put the year first, but the Gregorian dates `fa`
  * shows put the month first. `undefined` for English, which every caller
  * handles without `Intl` (its cold start costs a few ms on first mount).
  *
  * @param {unknown} locale
- * @returns {Intl.DateTimeFormatPart[] | undefined}
+ * @returns {Intl.DateTimeFormat | undefined}
  */
-function yearMonthParts(locale) {
+function yearMonthFormatter(locale) {
   if (typeof locale !== "string" || ENGLISH.test(locale)) return undefined;
   try {
     const gregorian = new Intl.Locale(locale, {
@@ -480,10 +480,37 @@ function yearMonthParts(locale) {
     return getDateTimeFormatter(gregorian, {
       year: "numeric",
       month: "long",
-    }).formatToParts(new Date(2000, 0, 1));
+    });
   } catch {
     return undefined;
   }
+}
+
+/**
+ * @param {unknown} locale
+ * @returns {Intl.DateTimeFormatPart[] | undefined}
+ */
+function yearMonthParts(locale) {
+  return yearMonthFormatter(locale)?.formatToParts(new Date(2000, 0, 1));
+}
+
+/**
+ * The month and year of `date` in `locale`'s order and words: "March
+ * 2024", "2024年3月", "2024년 3월". The year keeps Latin digits, like the
+ * grid. English and locale objects write `monthNames` then the year.
+ *
+ * @param {Date} date
+ * @param {unknown} locale
+ * @param {readonly string[]} monthNames
+ */
+export function formatMonthYear(date, locale, monthNames) {
+  const year = String(date.getFullYear());
+  const formatter = yearMonthFormatter(locale);
+  if (!formatter) return `${monthNames[date.getMonth()]} ${year}`;
+  return formatter
+    .formatToParts(date)
+    .map((part) => (part.type === "year" ? year : part.value))
+    .join("");
 }
 
 /** @param {Intl.DateTimeFormatPart[]} parts */
