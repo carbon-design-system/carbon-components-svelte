@@ -18,8 +18,8 @@
   /**
    * Specify the delay in milliseconds before an open tooltip closes.
    * Defaults to the enclosing group's delay. Without one, icon tooltips
-   * close at once and `Tooltip` and `TooltipDefinition` wait `300`, so
-   * the pointer can move onto them.
+   * wait `100` and `Tooltip` and `TooltipDefinition` wait `300`, so the
+   * pointer can move onto them.
    * @type {number | undefined}
    */
   export let leaveDelayMs = undefined;

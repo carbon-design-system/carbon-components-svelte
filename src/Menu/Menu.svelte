@@ -110,7 +110,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { returnFocus } from "../utils/focus.js";
+  import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -152,7 +152,9 @@
   function close(trigger) {
     if (!open) return;
     open = false;
-    if (trigger === "escape-key") anchor?.focus({ preventScroll: true });
+    if (trigger === "escape-key" && anchor) {
+      focusQuietly(anchor, { preventScroll: true });
+    }
     // The menu unmounts on close, so focus would fall to <body>. Return it to
     // the anchor unless the item's click handler already moved it elsewhere.
     if (trigger === "select") returnFocus(anchor, ref);

@@ -80,7 +80,7 @@
   import Switcher from "../icons/Switcher.svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { returnFocusOnClose } from "../utils/focus.js";
+  import { focusQuietly, returnFocusOnClose } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
@@ -105,7 +105,11 @@
     dismissOnClick: false,
     enterDelayMs: () => 0,
   });
-  const { hidden: tooltipHidden, instant: tooltipInstant } = tooltip;
+  const {
+    open: tooltipOpen,
+    hidden: tooltipHidden,
+    instant: tooltipInstant,
+  } = tooltip;
 
   let detachTooltip = noop;
 
@@ -129,6 +133,8 @@
     hasIconOnly && "bx--btn--icon-only--bottom",
     hasIconOnly && `bx--tooltip--align-${tooltipAlignment}`,
     hasIconOnly && $tooltipHidden && "bx--tooltip--hidden",
+    // Holds the tooltip through the leave delay after the pointer leaves.
+    hasIconOnly && $tooltipOpen && "bx--tooltip--visible",
     hasIconOnly && $tooltipInstant && "bx--tooltip--instant",
     $$restProps.class,
   ]
@@ -152,7 +158,7 @@
       if (isImeComposition(event)) return;
       isOpen = false;
       dispatch("close", { trigger: "escape-key" });
-      ref?.focus();
+      if (ref) focusQuietly(ref);
     }
   }
 

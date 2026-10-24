@@ -69,7 +69,7 @@ test.describe("TooltipGroup", () => {
     });
   });
 
-  test("an icon tooltip hides as soon as the pointer leaves", async ({
+  test("an icon tooltip hides once the leave delay passes", async ({
     page,
   }) => {
     const portalTooltips = page.locator(".bx--tooltip-portal__content");
@@ -77,6 +77,8 @@ test.describe("TooltipGroup", () => {
     await page.getByRole("tab", { name: "List view" }).hover();
     await expect(portalTooltips).toHaveText(["List view"]);
     await page.mouse.move(0, 0);
-    expect(await portalTooltips.count()).toBe(0);
+    // It waits so the pointer can move onto it, then hides.
+    expect(await portalTooltips.count()).toBe(1);
+    await expect(portalTooltips).toHaveCount(0);
   });
 });

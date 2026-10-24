@@ -57,10 +57,10 @@ describe("PasswordInput", () => {
       const input = screen.getByLabelText("Password");
       expect(input).toHaveAttribute("type", "password");
 
-      await user.click(screen.getByText("Show password"));
+      await user.click(screen.getByRole("button", { name: "Show password" }));
       expect(input).toHaveAttribute("type", "text");
 
-      await user.click(screen.getByText("Hide password"));
+      await user.click(screen.getByRole("button", { name: "Hide password" }));
       expect(input).toHaveAttribute("type", "password");
     });
 
@@ -101,9 +101,9 @@ describe("PasswordInput", () => {
       });
 
       expect(screen.getByLabelText("Password")).toBeInTheDocument();
-      await user.click(screen.getByText("Custom show"));
+      await user.click(screen.getByRole("button", { name: "Custom show" }));
       expect(screen.getByText("Custom hide")).toBeInTheDocument();
-      await user.click(screen.getByText("Custom hide"));
+      await user.click(screen.getByRole("button", { name: "Custom hide" }));
       expect(screen.getByText("Custom show")).toBeInTheDocument();
     });
   });
@@ -193,10 +193,10 @@ describe("PasswordInput", () => {
 
       expect(input).toHaveAttribute("type", "password");
 
-      await user.click(screen.getByText("Show password"));
+      await user.click(screen.getByRole("button", { name: "Show password" }));
       expect(input).toHaveAttribute("type", "text");
 
-      await user.click(screen.getByText("Hide password"));
+      await user.click(screen.getByRole("button", { name: "Hide password" }));
       expect(input).toHaveAttribute("type", "password");
     });
 

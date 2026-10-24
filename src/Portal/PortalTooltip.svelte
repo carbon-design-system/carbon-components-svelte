@@ -97,10 +97,15 @@
   lockDirection="after-flip"
   let:direction={actualDirection}
 >
+  <!-- The pointer can rest on the tooltip (WCAG 1.4.13). The owner keeps
+       it open while the pointer is on it. -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class:bx--tooltip-portal={true}
     data-direction={actualDirection ?? direction}
     data-tooltip-type={tooltipType}
+    on:mouseenter
+    on:mouseleave
   >
     <span class:bx--tooltip-portal__caret={true}></span>
     <span

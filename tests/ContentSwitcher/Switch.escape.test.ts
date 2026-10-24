@@ -1,9 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import { describeTooltipEscape } from "../utils/tooltip-escape";
+import { describeTooltipHover } from "../utils/tooltip-hover";
 import SwitchEscape from "./Switch.escape.test.svelte";
 
-describeTooltipEscape("Icon-only Switch", () => {
+function setup() {
   const onParentKeydown = vi.fn();
   render(SwitchEscape, { props: { onParentKeydown } });
   return {
@@ -13,4 +14,7 @@ describeTooltipEscape("Icon-only Switch", () => {
       openTooltips().some((tooltip) => tooltip.textContent === "Grid view"),
     onParentKeydown,
   };
-});
+}
+
+describeTooltipEscape("Icon-only Switch", setup);
+describeTooltipHover("Icon-only Switch", setup);

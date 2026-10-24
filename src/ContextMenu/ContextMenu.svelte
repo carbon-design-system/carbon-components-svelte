@@ -58,6 +58,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
+  import { focusQuietly } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -132,7 +133,9 @@
     focusIndex = -1;
 
     if (level === 1 && ref?.contains(document.activeElement)) {
-      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+      if (returnFocus?.isConnected) {
+        focusQuietly(returnFocus, { preventScroll: true });
+      }
       if (ref.contains(document.activeElement)) document.activeElement.blur();
     }
     returnFocus = null;
