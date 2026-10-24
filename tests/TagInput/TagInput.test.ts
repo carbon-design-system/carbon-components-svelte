@@ -356,6 +356,10 @@ describe("TagInput", () => {
   });
 
   describe("keyboard", () => {
+    afterEach(() => {
+      document.documentElement.removeAttribute("style");
+    });
+
     it("moves from an empty field to the last tag on Backspace, then deletes it", async () => {
       render(TagInput, { value: ["a", "b"] });
 
@@ -389,6 +393,20 @@ describe("TagInput", () => {
 
       await user.keyboard("{ArrowLeft}");
       expect(removeButton("a")).toHaveFocus();
+    });
+
+    it("swaps ArrowLeft and ArrowRight in RTL", async () => {
+      document.documentElement.style.direction = "rtl";
+      render(TagInput, { value: ["a", "b"] });
+
+      input().focus();
+      await user.keyboard("{ArrowLeft}");
+      expect(input()).toHaveFocus();
+      // The tags sit at the inline start, to the right.
+      await user.keyboard("{ArrowRight}");
+      expect(removeButton("b")).toHaveFocus();
+      await user.keyboard("{ArrowLeft}");
+      expect(input()).toHaveFocus();
     });
 
     it("returns to the field from the last tag, End, or Escape", async () => {
