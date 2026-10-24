@@ -42,8 +42,13 @@ $ccs-omit-token-fallbacks: true;
   $dark: lightness(map-get($theme, "background")) < 50%;
   $difference: if($base, ($base,), ());
 
+  // Both ways: a light theme on `<html>` must not inherit a page's
+  // `<meta name="color-scheme" content="light dark">` and get dark
+  // scrollbars and native controls on a dark system.
   @if $dark {
     color-scheme: dark;
+  } @else {
+    color-scheme: light;
   }
 
   @include carbon--theme($theme, true, if($base, $difference, false)) {
