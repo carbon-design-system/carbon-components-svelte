@@ -198,7 +198,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { initialFocus, restoreFocus } from "../utils/focus.js";
+  import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
@@ -226,9 +226,9 @@
         container,
       ],
     });
-    initialFocusTarget = target;
-    target?.focus();
-    initialFocusTarget = null;
+    // The user didn't ask for a tooltip on the first focus target, so a
+    // single Escape still closes the modal.
+    if (target) focusQuietly(target);
   }
 
   const lifecycle = createDialogLifecycle({
@@ -250,13 +250,7 @@
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
-  // The element initial focus is moving to, while it moves. An icon-only
-  // Button there keeps its tooltip closed, so a single Escape still closes
-  // the modal.
-  let initialFocusTarget = null;
-  setContext(MODAL_CONTEXT_KEY, {
-    isInitialFocus: (node) => node != null && node === initialFocusTarget,
-  });
+  setContext(MODAL_CONTEXT_KEY, {});
   // As in v11, the modal starts a layer at level 0 wherever it renders,
   // and its body is a layer at level 1, so a `Layer` inside sits at 2.
   setContext(LAYER_CONTEXT_KEY, readable(2));

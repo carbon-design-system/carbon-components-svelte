@@ -30,6 +30,42 @@ export function initialFocus({
 }
 
 /**
+ * The element the library is moving focus to on its own, while it moves.
+ * @type {Element | null}
+ */
+let quietTarget = null;
+
+/**
+ * Move focus to `target` on the library's own initiative: a dialog's first
+ * focus, or focus returned to a trigger as its panel closes. The user did
+ * not ask for the target's tooltip, so a tooltip on `target` stays closed
+ * until the next pointer enter or focus (see `isQuietFocus`).
+ *
+ * @param {HTMLElement} target
+ * @param {FocusOptions} [options]
+ * @returns {void}
+ */
+export function focusQuietly(target, options) {
+  quietTarget = target;
+  try {
+    target.focus(options);
+  } finally {
+    quietTarget = null;
+  }
+}
+
+/**
+ * Whether focus is moving to `node` through `focusQuietly`. Call it from a
+ * `focus` listener, which runs while focus moves.
+ *
+ * @param {Element | null | undefined} node
+ * @returns {boolean}
+ */
+export function isQuietFocus(node) {
+  return node != null && node === quietTarget;
+}
+
+/**
  * Save focus before an overlay opens and restore it on close when the element
  * is still connected. Pass the overlay as `region` to skip the restore when
  * focus has already moved outside it (e.g. a close handler opened another
@@ -51,7 +87,9 @@ export function restoreFocus() {
     },
     restore(region) {
       if (!prevFocus?.isConnected) return;
-      if (region === undefined || focusIsFree(region)) prevFocus.focus();
+      if (region === undefined || focusIsFree(region)) {
+        focusQuietly(prevFocus);
+      }
       prevFocus = null;
     },
   };
@@ -82,7 +120,7 @@ function focusIsFree(region) {
  */
 export function returnFocus(target, region) {
   if (!focusIsFree(region)) return;
-  if (target?.isConnected) target.focus({ preventScroll: true });
+  if (target?.isConnected) focusQuietly(target, { preventScroll: true });
 }
 
 /**

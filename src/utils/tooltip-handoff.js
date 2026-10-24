@@ -5,6 +5,7 @@ import {
   TOOLTIP_LEAVE_DELAY_MS,
 } from "../constants/timing.js";
 import { createDelayedSetter } from "./delayed-setter.js";
+import { isQuietFocus } from "./focus.js";
 import { activeTooltip, rootTooltipGroup } from "./tooltip-group.js";
 
 /**
@@ -100,6 +101,21 @@ export function createTooltipHandoff({
   }
 
   /**
+   * Claim the slot at once for focus on `node`, unless the library moved
+   * focus there itself (see `focusQuietly`), such as a dialog's first
+   * focus or focus returned to a trigger as its panel closes. The user
+   * didn't ask for the tooltip then, so nothing is claimed and the caller
+   * treats the tooltip as dismissed until the next pointer enter or focus.
+   * @param {Element | null | undefined} node
+   * @returns {boolean} `false` for focus the library moved.
+   */
+  function claimFocus(node) {
+    if (isQuietFocus(node)) return false;
+    claim({ instant: true });
+    return true;
+  }
+
+  /**
    * Call `onShow` and claim the slot after the enter delay, or right away
    * on a warm handoff. It replaces a pending leave, so a tooltip the
    * pointer comes back to stays open.
@@ -133,6 +149,7 @@ export function createTooltipHandoff({
     scheduleEnter,
     scheduleLeave,
     claim,
+    claimFocus,
     release,
     dismiss,
     cancel: scheduleTooltip.cancel,

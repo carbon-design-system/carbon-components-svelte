@@ -4,7 +4,8 @@ import type { TooltipGroup } from "./tooltip-group.js";
 /**
  * Hover and focus state for a tooltip anchored to an element. The pointer
  * can move onto the tooltip. Escape, or activating the anchor, hides it
- * until the next pointer enter or focus.
+ * until the next pointer enter or focus. Focus the library moves itself
+ * doesn't show it.
  */
 export function createAnchoredTooltip(options?: {
   group?: TooltipGroup;

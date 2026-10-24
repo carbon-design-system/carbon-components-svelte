@@ -80,7 +80,7 @@
   import Switcher from "../icons/Switcher.svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { returnFocusOnClose } from "../utils/focus.js";
+  import { focusQuietly, returnFocusOnClose } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
@@ -158,7 +158,7 @@
       if (isImeComposition(event)) return;
       isOpen = false;
       dispatch("close", { trigger: "escape-key" });
-      ref?.focus();
+      if (ref) focusQuietly(ref);
     }
   }
 
