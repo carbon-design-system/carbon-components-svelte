@@ -2,6 +2,7 @@
   import {
     Button,
     ClickableTile,
+    CodeSnippet,
     ComboBox,
     Content,
     Dropdown,
@@ -70,6 +71,28 @@
 
   /** @type {"ltr" | "rtl"} */
   let regionDir = "ltr";
+
+  const command = "npm install --save-dev carbon-components-svelte;";
+  // 18 lines, past the 15 a collapsed snippet shows, so it gets the expand
+  // button. Each line ends in punctuation, which RTL text moves to the left.
+  const script = `export async function deploy(region) {
+  const url = \`/api/regions/\${region}/deploy\`;
+  const response = await fetch(url, { method: "POST" });
+  if (!response.ok) {
+    throw new Error(\`Deploy failed: \${response.status}\`);
+  }
+  const { id, status } = await response.json();
+  console.info("Deploy started:", id);
+  return { id, status };
+}
+
+export async function rollback(region, id) {
+  const url = \`/api/regions/\${region}/deploys/\${id}\`;
+  const response = await fetch(url, { method: "DELETE" });
+  if (!response.ok) throw new Error("Rollback failed.");
+  console.info("Rolled back:", id);
+  return response.status;
+}`;
 </script>
 
 <Header companyName="E2E" platformName="RTL">
@@ -144,6 +167,24 @@
   </div>
   <div data-testid="clickable-tile" class="field">
     <ClickableTile href="#" icon={ArrowRight}>Billing settings</ClickableTile>
+  </div>
+  <div data-testid="code-snippets" class="field">
+    <CodeSnippet data-testid="snippet-single" code={command} />
+    <CodeSnippet data-testid="snippet-multi" type="multi" code={script} />
+    <CodeSnippet
+      data-testid="snippet-single-no-copy"
+      code={command}
+      hideCopyButton
+    />
+    <CodeSnippet
+      data-testid="snippet-multi-no-copy"
+      type="multi"
+      code={script}
+      hideCopyButton
+      showMoreLess={false}
+    />
+    <CodeSnippet data-testid="snippet-inline" type="inline" code="npm ci;" />
+    <CodeSnippet data-testid="snippet-skeleton" type="multi" skeleton />
   </div>
   <div data-testid="menu-button" class="field">
     <MenuButton labelText="Actions">

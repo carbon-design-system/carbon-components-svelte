@@ -183,6 +183,97 @@ function handleScales(page: Page, testId: string) {
     );
 }
 
+// The fixture's CodeSnippets, by test id. Each has a button only where its
+// name says so; the inline one is a button itself.
+const SNIPPETS = [
+  "snippet-single",
+  "snippet-multi",
+  "snippet-single-no-copy",
+  "snippet-multi-no-copy",
+  "snippet-inline",
+];
+
+type Span = { left: number; right: number };
+
+type SnippetLayout = {
+  width: number;
+  direction: string;
+  mask: string;
+  copy: Span | null;
+  expand: Span | null;
+  /** The first glyph and the last glyph of the first line. */
+  line: Span;
+  /** How far the second line's first glyph sits from the first line's. */
+  indent: number | null;
+};
+
+/** Each snippet's buttons and code, measured from its own left edge. */
+function snippetLayouts(page: Page) {
+  return page.evaluate((ids) => {
+    function glyph(code: Element, at: number) {
+      const walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT);
+      let node = walker.nextNode() as Text | null;
+      let offset = at;
+      while (node && offset >= node.length) {
+        offset -= node.length;
+        node = walker.nextNode() as Text | null;
+      }
+      if (!node) throw new Error(`no glyph at ${at}`);
+      const range = document.createRange();
+      range.setStart(node, offset);
+      range.setEnd(node, offset + 1);
+      return range.getBoundingClientRect();
+    }
+
+    const result: Record<string, SnippetLayout> = {};
+    for (const id of ids) {
+      const root = document.querySelector(`[data-testid=${id}]`);
+      const code = root?.querySelector("code");
+      if (!root || !code) throw new Error(`no ${id}`);
+      const origin = root.getBoundingClientRect();
+      const span = (rect: DOMRect | undefined) =>
+        rect
+          ? {
+              left: Math.round(rect.left - origin.left),
+              right: Math.round(rect.right - origin.left),
+            }
+          : null;
+
+      const text = code.textContent ?? "";
+      const lineEnd =
+        text.indexOf("\n") === -1 ? text.length : text.indexOf("\n");
+      const first = text.search(/\S/);
+      const last = text.slice(0, lineEnd).trimEnd().length - 1;
+      const second = text.slice(lineEnd + 1).search(/\S/);
+      const start = glyph(code, first);
+      const container = root.querySelector(".bx--snippet-container");
+
+      result[id] = {
+        width: Math.round(origin.width),
+        direction: getComputedStyle(code).direction,
+        mask: container ? getComputedStyle(container).maskImage : "",
+        copy: span(
+          root.querySelector(".bx--copy-btn")?.getBoundingClientRect(),
+        ),
+        expand: span(
+          root
+            .querySelector(".bx--snippet-btn--expand")
+            ?.getBoundingClientRect(),
+        ),
+        line: {
+          left: Math.round(start.left - origin.left),
+          right: Math.round(glyph(code, last).right - origin.left),
+        },
+        indent:
+          lineEnd < text.length
+            ? Math.round(glyph(code, lineEnd + 1 + second).left - start.left)
+            : null,
+      };
+    }
+    return result;
+  }, SNIPPETS);
+}
+
 test.describe("right-to-left layout", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/rtl.html");
@@ -377,6 +468,68 @@ test.describe("right-to-left layout", () => {
       expect.soft(Math.abs(actual.end + start), name).toBeLessThanOrEqual(1);
       expect.soft(Math.abs(actual.start + end), name).toBeLessThanOrEqual(1);
     }
+  });
+
+  test("keeps CodeSnippet code left to right and mirrors its buttons", async ({
+    page,
+  }) => {
+    // The expand button shows once the snippet measures its rows.
+    await expect(
+      page
+        .getByTestId("snippet-multi")
+        .getByRole("button", { name: "Show more" }),
+    ).toBeVisible();
+    const ltr = await snippetLayouts(page);
+    await setDirection(page, "rtl");
+    const rtl = await snippetLayouts(page);
+
+    for (const id of SNIPPETS) {
+      const before = ltr[id];
+      const after = rtl[id];
+      expect.soft(after.direction, `${id} code direction`).toBe("ltr");
+      // The line keeps its glyphs in order, so it spans the same width,
+      // and the multi-line code keeps its indents.
+      expect
+        .soft(after.line.right - after.line.left, `${id} line`)
+        .toBe(before.line.right - before.line.left);
+      expect.soft(after.indent, `${id} indent`).toBe(before.indent);
+      // Code starts at the left, as far past the copy button as it starts
+      // past the snippet's edge in LTR. The fade stays on the right.
+      if (id !== "snippet-inline") {
+        expect
+          .soft(after.line.left - (after.copy?.right ?? 0), `${id} start`)
+          .toBe(before.line.left);
+        expect.soft(after.mask, `${id} fade`).toBe(before.mask);
+      }
+
+      for (const part of ["copy", "expand"] as const) {
+        const box = before[part];
+        const actual = after[part];
+        expect.soft(actual === null, `${id} ${part}`).toBe(box === null);
+        if (!box || !actual) continue;
+        expect
+          .soft(actual.left, `${id} ${part} mirrors`)
+          .toBe(before.width - box.right);
+        expect
+          .soft(actual.right - actual.left, `${id} ${part} width`)
+          .toBe(box.right - box.left);
+      }
+    }
+    expect(ltr["snippet-single"].copy, "single copy button").not.toBeNull();
+
+    // Skeleton lines stand in for code, so they keep their LTR edges.
+    const skeleton = page.getByTestId("snippet-skeleton").locator("span");
+    const lines = () =>
+      skeleton.evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const rect = node.getBoundingClientRect();
+          const root = node.closest(".bx--snippet")?.getBoundingClientRect();
+          return Math.round(rect.left - (root?.left ?? 0));
+        }),
+      );
+    const rtlLines = await lines();
+    await setDirection(page, "ltr");
+    expect(rtlLines).toEqual(await lines());
   });
 
   test("puts the checkmark at the inline end of an open ComboBox", async ({
