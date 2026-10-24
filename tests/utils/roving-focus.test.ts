@@ -60,6 +60,33 @@ describe("rovingFocus", () => {
     expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
   });
 
+  it("swaps ArrowLeft and ArrowRight while `rtl` returns true", () => {
+    let rtl = true;
+    const { items, onMove } = setup(3, { rtl: () => rtl });
+    keydown(items[0], "ArrowLeft");
+    expect(onMove).toHaveBeenLastCalledWith(1, expect.any(KeyboardEvent));
+    keydown(items[1], "ArrowRight");
+    expect(onMove).toHaveBeenLastCalledWith(0, expect.any(KeyboardEvent));
+
+    // Read on each key, not once.
+    rtl = false;
+    keydown(items[0], "ArrowRight");
+    expect(onMove).toHaveBeenLastCalledWith(1, expect.any(KeyboardEvent));
+  });
+
+  it("keeps Up/Down and Home/End when `rtl` returns true", () => {
+    const { items, onMove } = setup(3, {
+      orientation: "both",
+      rtl: () => true,
+    });
+    keydown(items[0], "ArrowDown");
+    expect(onMove).toHaveBeenLastCalledWith(1, expect.any(KeyboardEvent));
+    keydown(items[1], "End");
+    expect(onMove).toHaveBeenLastCalledWith(2, expect.any(KeyboardEvent));
+    keydown(items[2], "Home");
+    expect(onMove).toHaveBeenLastCalledWith(0, expect.any(KeyboardEvent));
+  });
+
   it("horizontal orientation ignores ArrowUp/ArrowDown", () => {
     const { items, onMove } = setup(3);
     keydown(items[0], "ArrowDown");
