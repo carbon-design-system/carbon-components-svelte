@@ -145,14 +145,11 @@
     background-color: $layer-accent;
   }
 
-  .#{$prefix}--time-picker--fluid__wrapper
-    .#{$prefix}--select-input__wrapper::after {
-    right: 0;
-  }
-
+  // The divider at each select's inline start. v11 also sets an `::after`
+  // at the end, but nothing gives it content.
   .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select-input__wrapper::before {
-    left: 0;
+    @include ccs-inset-inline($start: 0);
   }
 
   .#{$prefix}--time-picker--fluid__wrapper .#{$prefix}--select-input__wrapper {
