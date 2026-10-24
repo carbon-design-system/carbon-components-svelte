@@ -51,7 +51,7 @@ Before importing components, you will need to first apply Carbon component style
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All five themes (White, Gray 10, Gray 80, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 
-Each StyleSheet is [compiled](scripts/build-css.ts) from Carbon v10 SCSS ([carbon-components@10.58](css/vendor/carbon-components), vendored) and this library's own partials in [css](css).
+Each StyleSheet is [compiled](scripts/build-css.ts) from Carbon's component SCSS ([carbon-components@10.58](css/vendor/carbon-components), vendored) themed with Carbon v11 tokens, and this library's own partials in [css](css).
 
 The compiled CSS is generated from the following `.scss` files:
 
@@ -90,7 +90,7 @@ import "carbon-components-svelte/css/all.css";
 
 Each precompiled StyleSheet contains the styles for every component. To ship only the styles your app uses, add [`optimizeCss`](#optimizecss) to your production build. Set `propAware: true` to also drop the styles of prop values your app never passes; see [prop-aware pruning](#prop-aware-pruning).
 
-The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yourself misses styles for components and variants that only this library provides.
+The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yourself gives v10 colors and type, and misses styles for components and variants that only this library provides.
 
 ### Dynamic theming
 
