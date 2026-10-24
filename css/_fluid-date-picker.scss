@@ -257,13 +257,15 @@
   }
 
   // Status icon aligned with first line of validation message; the base
-  // rule already sets right/pointer-events, so this can't take
-  // fluid-status-icon().
+  // rule already sets pointer-events, so this can't take
+  // fluid-status-icon(). The message row flips in RTL like the other fluid
+  // fields; the base offset is physical.
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
     .#{$prefix}--date-picker__icon--invalid,
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--warn
     .#{$prefix}--date-picker__icon--warn {
     inset-block-start: to-rem(80px);
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   // Simple variant hides the base icon; show it again for invalid/warn.

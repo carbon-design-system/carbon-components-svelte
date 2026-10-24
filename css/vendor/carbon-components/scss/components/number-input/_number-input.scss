@@ -41,8 +41,7 @@
     width: 100%;
     height: to-rem(40px);
     box-sizing: border-box;
-    padding-right: to-rem(128px);
-    padding-left: $carbon--spacing-05;
+    padding-inline: $carbon--spacing-05 to-rem(128px);
     border: 0;
     border-bottom: to-rem(1px) solid $border-strong;
 
@@ -78,20 +77,20 @@
   // ccs: no stepper room when `hideSteppers` removes the steppers
   .#{$prefix}--number--xl.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xl.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-right: to-rem(144px);
+    padding-inline-end: to-rem(144px);
   }
 
   // ccs: no stepper room when `hideSteppers` removes the steppers
   .#{$prefix}--number--sm.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--sm.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-right: to-rem(112px);
+    padding-inline-end: to-rem(112px);
   }
 
   // ccs: xs size (Carbon React `size="xs"`), two 24px steppers + 48px,
   // none when `hideSteppers` removes the steppers
   .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-right: to-rem(96px);
+    padding-inline-end: to-rem(96px);
   }
 
   // ccs: the padding above also holds the invalid or warning icon. Without
@@ -100,22 +99,22 @@
   // the later `--nosteppers` rule and the fluid variant still win over it.
   .#{$prefix}--number--neutral input[type='number'],
   .#{$prefix}--number--neutral input[type='text'] {
-    padding-right: to-rem(96px);
+    padding-inline-end: to-rem(96px);
   }
 
   .#{$prefix}--number--xl.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xl.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-right: to-rem(112px);
+    padding-inline-end: to-rem(112px);
   }
 
   .#{$prefix}--number--sm.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--sm.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-right: to-rem(80px);
+    padding-inline-end: to-rem(80px);
   }
 
   .#{$prefix}--number--xs.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xs.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-right: to-rem(64px);
+    padding-inline-end: to-rem(64px);
   }
 
   .#{$prefix}--number input[type='number']:disabled,
@@ -138,7 +137,6 @@
     position: absolute;
     // vertically center controls within parent container on IE11
     top: 50%;
-    right: 0;
     display: flex;
     width: to-rem(80px);
     height: 100%;
@@ -146,6 +144,7 @@
     align-items: center;
     justify-content: center;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: 0);
   }
 
   .#{$prefix}--number__control-btn {
@@ -172,11 +171,11 @@
     }
 
     &::before {
-      left: 0;
+      @include ccs-inset-inline($start: 0);
     }
 
     &::after {
-      right: 0;
+      @include ccs-inset-inline($end: 0);
     }
 
     svg {
@@ -321,8 +320,8 @@
 
   .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
-    left: 0;
     background-color: transparent;
+    @include ccs-inset-inline($start: 0);
   }
 
   .#{$prefix}--number__invalid
@@ -359,45 +358,45 @@
 
   .#{$prefix}--number__invalid {
     position: absolute;
-    right: to-rem(96px);
     fill: $support-error;
+    @include ccs-inset-inline($end: to-rem(96px));
   }
 
   .#{$prefix}--number--xl .#{$prefix}--number__invalid {
-    right: to-rem(112px);
+    @include ccs-inset-inline($end: to-rem(112px));
   }
 
   .#{$prefix}--number--sm .#{$prefix}--number__invalid {
-    right: to-rem(80px);
+    @include ccs-inset-inline($end: to-rem(80px));
   }
 
   // ccs: xs size
   .#{$prefix}--number--xs .#{$prefix}--number__invalid {
-    right: to-rem(64px);
+    @include ccs-inset-inline($end: to-rem(64px));
   }
 
   .#{$prefix}--number__invalid + .#{$prefix}--number__rule-divider {
     position: absolute;
-    right: to-rem(80px);
+    @include ccs-inset-inline($end: to-rem(80px));
   }
 
   .#{$prefix}--number--xl
     .#{$prefix}--number__invalid
     + .#{$prefix}--number__rule-divider {
-    right: to-rem(96px);
+    @include ccs-inset-inline($end: to-rem(96px));
   }
 
   .#{$prefix}--number--sm
     .#{$prefix}--number__invalid
     + .#{$prefix}--number__rule-divider {
-    right: to-rem(64px);
+    @include ccs-inset-inline($end: to-rem(64px));
   }
 
   // ccs: xs size
   .#{$prefix}--number--xs
     .#{$prefix}--number__invalid
     + .#{$prefix}--number__rule-divider {
-    right: to-rem(48px);
+    @include ccs-inset-inline($end: to-rem(48px));
   }
 
   .#{$prefix}--number__control-btn.down-icon:hover
@@ -489,17 +488,17 @@
 
   .#{$prefix}--number--nosteppers input[type='number'],
   .#{$prefix}--number--nosteppers input[type='text'] {
-    padding-right: to-rem(48px);
+    padding-inline-end: to-rem(48px);
   }
 
   // ccs: no steppers and no status icon: the regular field inset.
   .#{$prefix}--number--nosteppers.#{$prefix}--number--neutral input[type='number'],
   .#{$prefix}--number--nosteppers.#{$prefix}--number--neutral input[type='text'] {
-    padding-right: $carbon--spacing-05;
+    padding-inline-end: $carbon--spacing-05;
   }
 
   .#{$prefix}--number--nosteppers .#{$prefix}--number__invalid {
-    right: to-rem(16px);
+    @include ccs-inset-inline($end: to-rem(16px));
   }
 
   .#{$prefix}--number--readonly input[type='number'],
@@ -528,7 +527,7 @@
   // ccs: without steppers the read-only icon stays; keep text clear of it.
   .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers input[type='number'],
   .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers input[type='text'] {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--number.#{$prefix}--skeleton {

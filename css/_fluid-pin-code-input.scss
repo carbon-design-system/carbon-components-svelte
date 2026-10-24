@@ -186,8 +186,8 @@
     position: absolute;
     margin: 0;
     inset-block-start: $carbon--spacing-03;
-    right: $carbon--spacing-05;
     pointer-events: none;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--pin-code-input--fluid

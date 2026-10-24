@@ -46,7 +46,7 @@
   }
 
   .#{$prefix}--text-area--invalid {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-area__wrapper {
@@ -58,8 +58,8 @@
   .#{$prefix}--text-area__invalid-icon {
     position: absolute;
     top: $carbon--spacing-04;
-    right: $carbon--spacing-05;
     fill: $support-error;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--text-area:disabled {
@@ -127,7 +127,7 @@
 /// @group text-area
 @mixin text-area-warn {
   .#{$prefix}--text-area--warning {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-area__invalid-icon--warning {

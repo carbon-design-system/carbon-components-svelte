@@ -22,7 +22,7 @@
   block-size: to-rem(16px);
   inline-size: calc(100% - to-rem(32px));
   inset-block-start: to-rem(13px);
-  left: $carbon--spacing-05;
+  @include ccs-inset-inline($start: $carbon--spacing-05);
 }
 
 /// Slotted fluid label content (e.g. a toggletip button) can't end in an
@@ -59,7 +59,8 @@
 /// @access private
 /// @group components
 @mixin fluid-requirement-padding {
-  padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
+  padding-block: $carbon--spacing-03;
+  padding-inline: $carbon--spacing-05 to-rem(40px);
   margin: 0;
 }
 
@@ -69,8 +70,8 @@
 /// @group components
 @mixin fluid-status-icon($offset) {
   inset-block-start: $offset;
-  right: $carbon--spacing-05;
   pointer-events: none;
+  @include ccs-inset-inline($end: $carbon--spacing-05);
 }
 
 /// Full-width divider drawn as a `border-block-end` rule.
@@ -104,7 +105,7 @@
   block-size: to-rem(8px);
   inline-size: 25%;
   inset-block-start: $carbon--spacing-05;
-  left: $carbon--spacing-05;
+  @include ccs-inset-inline($start: $carbon--spacing-05);
 }
 
 /// Wider skeleton placeholder bar standing in for a fluid field's value.
@@ -116,5 +117,5 @@
   block-size: to-rem(8px);
   inline-size: 50%;
   inset-block-start: to-rem(36px);
-  left: $carbon--spacing-05;
+  @include ccs-inset-inline($start: $carbon--spacing-05);
 }

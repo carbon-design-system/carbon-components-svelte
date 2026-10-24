@@ -2,45 +2,62 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
+/// Room for the copy button at the page's inline end. The field has
+/// `dir="auto"`, so its own direction follows the value, not the page.
+/// Logical padding would resolve against the value and leave the room on
+/// the wrong side, so this side is physical, with a twin for an RTL page.
+/// 16px is the text input's own inline padding.
+/// @access private
+/// @group components
+@mixin copy-input-end-padding($value) {
+  padding-right: $value;
+
+  [dir="rtl"] & {
+    padding-right: $carbon--spacing-05;
+    padding-left: $value;
+  }
+}
+
 /// CopyInput: a read-only text input with a trailing copy button
 /// @access private
 /// @group components
 @mixin copy-input {
   // Reserve room so the value never sits under the copy button.
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input {
-    padding-right: to-rem(40px);
+    @include copy-input-end-padding(to-rem(40px));
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xs {
-    padding-right: to-rem(24px);
+    @include copy-input-end-padding(to-rem(24px));
   }
 
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
-    padding-right: to-rem(32px);
+    @include copy-input-end-padding(to-rem(32px));
   }
 
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xl {
-    padding-right: to-rem(48px);
+    @include copy-input-end-padding(to-rem(48px));
   }
 
-  // Fluid form shorthand padding must not collapse right padding below button width.
+  // Fluid form shorthand padding must not collapse the end padding below
+  // the button width.
   .#{$prefix}--form--fluid,
   .#{$prefix}--text-input--fluid {
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input {
-      padding-right: $carbon--spacing-08;
+      @include copy-input-end-padding($carbon--spacing-08);
     }
 
     // The fluid copy button stays 32px at every size.
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xs,
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
-      padding-right: $carbon--spacing-07;
+      @include copy-input-end-padding($carbon--spacing-07);
     }
 
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xl {
-      padding-right: $carbon--spacing-09;
+      @include copy-input-end-padding($carbon--spacing-09);
     }
   }
 
@@ -48,7 +65,6 @@
     @include focus-outline("reset");
 
     position: absolute;
-    right: 0;
     display: flex;
     width: to-rem(40px);
     height: 100%;
@@ -60,6 +76,7 @@
     border: 0;
     background: none;
     cursor: pointer;
+    @include ccs-inset-inline($end: 0);
 
     &:active {
       background: none;
@@ -127,9 +144,9 @@
       inline-size: to-rem(32px);
       min-height: to-rem(32px);
       inset-block-start: to-rem(26px);
-      right: $carbon--spacing-03;
       align-items: center;
       padding: 0;
+      @include ccs-inset-inline($end: $carbon--spacing-03);
     }
   }
 }

@@ -42,9 +42,9 @@
   }
 
   // Room for the status icon, which `bx--text-input__invalid-icon` pins to
-  // the right edge.
+  // the inline end.
   .#{$prefix}--tag-input--status {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--tag-input--invalid {

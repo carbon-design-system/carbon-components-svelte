@@ -32,16 +32,14 @@
     block-size: to-rem(16px);
     inset-block-start: to-rem(13px);
     inline-size: auto;
-    right: auto;
-    left: $carbon--spacing-05;
+    @include ccs-inset-inline($carbon--spacing-05, auto);
   }
 
   // The maxCount counter is a second `.bx--label` in the same wrapper, so
   // without this it inherits the label's own coordinates and the two overlap.
   // Carbon has no fluid counter to port from.
   .#{$prefix}--text-input--fluid .#{$prefix}--label.#{$prefix}--text-input__label-counter {
-    right: $carbon--spacing-05;
-    left: auto;
+    @include ccs-inset-inline(auto, $carbon--spacing-05);
   }
 
   .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input__field-wrapper .#{$prefix}--text-input {
@@ -108,7 +106,7 @@
   }
 
   // Status icon pinned to the first line of the message; the base rule
-  // already sets right/pointer-events, so this can't take
+  // already sets the inline offset, so this can't take
   // fluid-status-icon().
   .#{$prefix}--text-input--fluid .#{$prefix}--text-input__invalid-icon {
     inset-block-start: to-rem(80px);
@@ -142,14 +140,14 @@
   }
 
   .#{$prefix}--text-input--fluid.#{$prefix}--password-input-wrapper .#{$prefix}--text-input__invalid-icon {
-    right: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
     block-size: to-rem(32px);
     inline-size: to-rem(32px);
     inset-block-start: to-rem(26px);
-    right: $carbon--spacing-03;
+    @include ccs-inset-inline($end: $carbon--spacing-03);
   }
 
   .#{$prefix}--text-input--fluid__skeleton {
@@ -164,9 +162,9 @@
   }
 
   .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--label {
-    @include fluid-skeleton-field;
-
     margin-block-start: 0;
+
+    @include fluid-skeleton-field;
   }
 }
 

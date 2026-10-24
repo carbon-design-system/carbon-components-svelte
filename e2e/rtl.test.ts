@@ -854,3 +854,203 @@ test.describe("right-to-left icons", () => {
     }
   });
 });
+
+// Each text field case sits in a fixed-width box. In RTL every part sits
+// as far from the box's right edge as it sat from its left edge in LTR.
+// "text" is the input's content box, so it checks the reserved padding.
+const FIELD_CASES = [
+  "text-invalid",
+  "text-warn",
+  "text-readonly",
+  "text-decorator",
+  "text-inline",
+  "password",
+  "password-sm",
+  "password-invalid",
+  "password-readonly",
+  "copy",
+  "copy-sm",
+  "number",
+  "number-invalid",
+  "number-sm-warn",
+  "number-nosteppers-invalid",
+  "number-readonly-nosteppers",
+  "number-decorator",
+  "search",
+  "search-sm",
+  "search-xl-invalid",
+  "search-expandable",
+  "text-area-invalid",
+  "text-area-decorator",
+  "fluid-text-invalid",
+  "fluid-text-counter",
+  "fluid-password-invalid",
+  "fluid-copy",
+  "fluid-number-invalid",
+  "fluid-search",
+  "fluid-search-invalid",
+  "fluid-text-area-invalid",
+  "fluid-text-decorator",
+  "tag-input-invalid",
+  "time-picker-invalid",
+  "toolbar-search",
+  "contained-list-search",
+  "fluid-select-invalid",
+  "fluid-combo-box-invalid",
+  "fluid-date-picker-invalid",
+  "fluid-time-picker-invalid",
+  "fluid-pin-code-invalid",
+];
+
+const FIELD_PARTS = [
+  ".bx--text-input__invalid-icon",
+  ".bx--text-input__readonly-icon",
+  ".bx--text-input--password__visibility__toggle",
+  ".bx--copy-btn",
+  ".bx--number__controls",
+  ".bx--number__control-btn",
+  ".bx--number__invalid",
+  ".bx--number__rule-divider",
+  ".bx--search-magnifier",
+  ".bx--search-magnifier-icon",
+  ".bx--search-close",
+  ".bx--search__invalid-icon",
+  ".bx--text-area__invalid-icon",
+  ".bx--field-decorator",
+  ".bx--label",
+  ".bx--text-input__label-helper-wrapper",
+  ".bx--text-input__field-outer-wrapper",
+  // Message-row status icons of the other fluid fields.
+  ".bx--select__invalid-icon",
+  ".bx--list-box__invalid-icon",
+  ".bx--date-picker__icon--invalid",
+  ".bx--time-picker__icon",
+  ".bx--pin-code-input__icon",
+];
+
+// Parts whose content box matters: the text stops short of the icons.
+const FIELD_TEXT = [
+  "input:not([type=hidden])",
+  "textarea",
+  ".bx--form-requirement",
+];
+
+// Absolutely positioned pseudo-elements drawn at one side of a part.
+const FIELD_PSEUDOS = [
+  [".bx--number__control-btn", "::before"],
+  [".bx--number__control-btn", "::after"],
+  [".bx--search-close", "::before"],
+] as const;
+
+/** Every visible part of each case, as start and end offsets from its box. */
+function fieldOffsets(page: Page) {
+  return page.evaluate(
+    ({ cases, parts, text, pseudos }) => {
+      const result: Record<string, { start: number; end: number }> = {};
+      const rtl = document.documentElement.dir === "rtl";
+      for (const name of cases) {
+        const root = document.querySelector(`[data-testid="${name}"]`);
+        if (!root) continue;
+        const box = root.getBoundingClientRect();
+        const record = (key: string, left: number, right: number) => {
+          if (right - left <= 0) return;
+          // Offsets from the box's inline start, so LTR and RTL compare.
+          result[key] = rtl
+            ? {
+                start: Math.round(box.right - right),
+                end: Math.round(box.right - left),
+              }
+            : {
+                start: Math.round(left - box.left),
+                end: Math.round(right - box.left),
+              };
+        };
+        for (const selector of parts) {
+          root.querySelectorAll(selector).forEach((node, i) => {
+            const rect = node.getBoundingClientRect();
+            record(`${name} ${selector}[${i}]`, rect.left, rect.right);
+          });
+        }
+        for (const selector of text) {
+          root.querySelectorAll(selector).forEach((node, i) => {
+            const rect = node.getBoundingClientRect();
+            const style = getComputedStyle(node);
+            const px = (value: string) => Number.parseFloat(value) || 0;
+            record(
+              `${name} ${selector} content[${i}]`,
+              rect.left + px(style.borderLeftWidth) + px(style.paddingLeft),
+              rect.right - px(style.borderRightWidth) - px(style.paddingRight),
+            );
+          });
+        }
+        for (const [selector, pseudo] of pseudos) {
+          root.querySelectorAll(selector).forEach((node, i) => {
+            const style = getComputedStyle(node, pseudo);
+            if (style.content === "none" || style.position !== "absolute")
+              return;
+            const rect = node.getBoundingClientRect();
+            const left = rect.left + Number.parseFloat(style.left);
+            record(
+              `${name} ${selector}${pseudo}[${i}]`,
+              left,
+              left + Number.parseFloat(style.width),
+            );
+          });
+        }
+      }
+      return result;
+    },
+    {
+      cases: FIELD_CASES,
+      parts: FIELD_PARTS,
+      text: FIELD_TEXT,
+      pseudos: FIELD_PSEUDOS,
+    },
+  );
+}
+
+test.describe("right-to-left text fields", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/rtl-fields.html");
+  });
+
+  test("mirrors icons, buttons, steppers and padding", async ({ page }) => {
+    const ltr = await fieldOffsets(page);
+    // Guard against a selector that stops matching.
+    expect(Object.keys(ltr).length).toBeGreaterThan(100);
+
+    await setDirection(page, "rtl");
+    const rtl = await fieldOffsets(page);
+    expect.soft(Object.keys(rtl).sort()).toEqual(Object.keys(ltr).sort());
+    // One list, so a failure names every part that stayed put.
+    const unmirrored = Object.entries(ltr).flatMap(([name, box]) => {
+      const actual = rtl[name];
+      if (!actual) return [];
+      const off =
+        Math.abs(actual.start - box.start) > 1 ||
+        Math.abs(actual.end - box.end) > 1;
+      return off
+        ? [
+            `${name}: ${box.start}-${box.end} became ${actual.start}-${actual.end}`,
+          ]
+        : [];
+    });
+    expect(unmirrored).toEqual([]);
+  });
+
+  test("draws the fluid NumberInput focus edge at the inline end", async ({
+    page,
+  }) => {
+    const field = page.getByTestId("fluid-number-invalid");
+    const lastStepper = field.locator(".bx--number__control-btn").last();
+    const shadow = () =>
+      lastStepper.evaluate((node) => getComputedStyle(node).boxShadow);
+
+    await field.locator("input").focus();
+    const ltr = await shadow();
+    expect(ltr).toContain("-2px 0px");
+
+    await setDirection(page, "rtl");
+    expect(await shadow()).toBe(ltr.replace("-2px 0px", "2px 0px"));
+  });
+});
