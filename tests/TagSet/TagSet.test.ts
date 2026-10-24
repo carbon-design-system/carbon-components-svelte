@@ -233,6 +233,38 @@ describe("TagSet", () => {
     );
   });
 
+  it("announces a removed tag in a polite live region", async () => {
+    const { container } = render(TagSetFixture, {
+      dismissible: true,
+      removeOnClose: true,
+    });
+
+    const liveRegion = container.querySelector("[aria-live='polite']");
+    expect.assert(liveRegion instanceof HTMLElement);
+    expect(liveRegion).toHaveClass("bx--visually-hidden");
+    expect(liveRegion).toHaveTextContent("");
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    await user.click(closeButtons[0]);
+
+    await waitFor(() => {
+      expect(liveRegion).toHaveTextContent("Filter Tag 1 removed");
+    });
+  });
+
+  it("does not announce a removal when the consumer keeps the tag", async () => {
+    const { container } = render(TagSetFixture, { dismissible: true });
+
+    const liveRegion = container.querySelector("[aria-live='polite']");
+    expect.assert(liveRegion instanceof HTMLElement);
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    await user.click(closeButtons[0]);
+    await tick();
+
+    expect(liveRegion).toHaveTextContent("");
+  });
+
   it("dispatches click:overflow when the indicator is clicked", async () => {
     const onOverflowClick = vi.fn();
     const { container } = render(TagSetFixture, { onOverflowClick });
