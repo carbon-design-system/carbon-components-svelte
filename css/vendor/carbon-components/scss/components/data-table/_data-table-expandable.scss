@@ -242,13 +242,14 @@
     display: none;
   }
 
-  .#{$prefix}--data-table--zebra tbody tr[data-parent-row]:nth-child(4n + 3) td,
-  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 4) > td {
+  // ccs: v11 stripes the second pair, as flat tables stripe the second row
+  .#{$prefix}--data-table--zebra tbody tr[data-parent-row]:nth-child(4n + 1) td,
+  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 2) > td {
     border-bottom: 1px solid $layer;
   }
 
-  .#{$prefix}--data-table--zebra tbody tr[data-parent-row]:nth-child(4n + 1) td,
-  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 2) > td {
+  .#{$prefix}--data-table--zebra tbody tr[data-parent-row]:nth-child(4n + 3) td,
+  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 4) > td {
     border-top: 1px solid $data-table-zebra-color;
     border-bottom: 1px solid $data-table-zebra-color;
     background-color: $data-table-zebra-color;
