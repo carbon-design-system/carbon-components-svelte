@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import NotificationActionable from "./NotificationActionable.test.svelte";
@@ -110,6 +110,23 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
 
     await openFromTrigger();
     await user.keyboard("{Escape}");
+
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ["while composing", { isComposing: true }],
+    ["after Safari ends the composition", { keyCode: 229 }],
+  ])("stays open on an IME Escape %s", async (_, init) => {
+    const onClose = vi.fn();
+    render(NotificationActionable, { props: { type, onClose } });
+
+    await openFromTrigger();
+    await fireEvent.keyDown(screen.getByRole("button", { name: "Undo" }), {
+      key: "Escape",
+      ...init,
+    });
 
     expect(screen.getByRole("alertdialog")).toBeInTheDocument();
     expect(onClose).not.toHaveBeenCalled();

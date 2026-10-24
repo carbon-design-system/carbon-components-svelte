@@ -1,6 +1,7 @@
 // @ts-check
 import { tick } from "svelte";
 import { returnFocus } from "./focus.js";
+import { isImeComposition } from "./ime-composition.js";
 import { createHoverFocusPause } from "./pause-on-hover-focus.js";
 import { createTimeoutDismiss } from "./timeout-dismiss.js";
 import { selectorTabbable, trapFocus } from "./trap-focus.js";
@@ -191,7 +192,7 @@ export function createDismissibleNotification({
   function handleActionableKeydown(event, { closeOnEscape, hideCloseButton }) {
     if (event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
-      if (!closeOnEscape || event.isComposing || event.keyCode === 229) return;
+      if (!closeOnEscape || isImeComposition(event)) return;
       // Keep a surrounding modal or popover from closing on the same key.
       event.stopPropagation();
       close();
