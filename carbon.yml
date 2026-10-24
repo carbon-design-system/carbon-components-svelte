@@ -1117,6 +1117,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ShapeIndicator
+  side-panel:
+    name: Side panel
+    description: A panel that docks to the edge of the page for details, edits or a short flow, over the content or beside it.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/side-panel.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SidePanel
   skeleton-icon:
     name: Skeleton icon
     status: stable
