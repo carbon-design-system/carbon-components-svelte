@@ -7,6 +7,7 @@
     CardHeader,
     CardTitle,
     ChatButton,
+    ChatDivider,
     ChatMessage,
     Checkbox,
     ClickableTile,
@@ -426,4 +427,8 @@
       ]}
     />
   </div>
+
+  <ul style="list-style: none; padding: 0;">
+    <ChatDivider>Today</ChatDivider>
+  </ul>
 </main>

@@ -309,11 +309,13 @@
   }
 
   // Forced-colors mode drops the agent bubble's inset-shadow border, which
-  // left it looking like your own, and repaints the typing dots and the
-  // streaming caret as `Canvas`, which hid them. The agent bubble gets a
-  // transparent outline, repainted as a visible system color, inset like
-  // the shadow. The dots and caret paint in `CanvasText`. The doubled
-  // message class outranks the caret's `currentColor` in your own message.
+  // left it looking like your own, and repaints the typing dots, the
+  // streaming caret and the day divider's lines as `Canvas`, which hid
+  // them. The agent bubble gets a transparent outline, repainted as a
+  // visible system color, inset like the shadow. The dots and caret paint
+  // in `CanvasText`, and the divider's lines become `CanvasText` borders.
+  // The doubled message class outranks the caret's `currentColor` in your
+  // own message.
   @media (forced-colors: active) {
     .#{$prefix}--chat-message__bubble {
       outline: 1px solid transparent;
@@ -328,6 +330,12 @@
     .#{$prefix}--chat-message.#{$prefix}--chat-message--streaming
       .#{$prefix}--chat-message__bubble::after {
       background-color: CanvasText;
+    }
+
+    .#{$prefix}--chat-divider::before,
+    .#{$prefix}--chat-divider::after {
+      height: 0;
+      border-top: 1px solid CanvasText;
     }
   }
 }

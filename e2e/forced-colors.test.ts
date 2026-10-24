@@ -847,6 +847,20 @@ test.describe("forced colors", () => {
     ).toBe(system.Highlight);
   });
 
+  test("chat day dividers keep their lines", async ({ page }) => {
+    const lines = await page.evaluate(() =>
+      ["::before", "::after"].map((pseudo) => {
+        const divider = document.querySelector(".bx--chat-divider");
+        if (!divider) throw new Error("no .bx--chat-divider");
+        const s = getComputedStyle(divider, pseudo);
+        return `${s.borderTopStyle} ${s.borderTopWidth} ${s.borderTopColor}`;
+      }),
+    );
+    for (const line of lines) {
+      expect.soft(line).toBe(`solid 1px ${system.CanvasText}`);
+    }
+  });
+
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so
