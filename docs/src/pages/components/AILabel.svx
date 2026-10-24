@@ -217,9 +217,9 @@ In a tag, the label renders as inline text in the tag's color.
 
 ## Tiles
 
-Tiles, clickable tiles, selectable tiles, radio tiles, and expandable tiles show the AI surface and put the label in the top-right corner. On interactive tiles, the label sits outside the link, button, or label element.
+Tiles, clickable tiles, selectable tiles, radio tiles, and expandable tiles show the AI surface and put the label in the top-right corner (top-left in a right-to-left layout), with room kept clear for it so text never runs under it. On interactive tiles, the label sits outside the link, button, or label element.
 
-<Stack orientation="horizontal" gap={5}>
+<Stack orientation="horizontal" gap={5} wrap="wrap">
   <Box width="16rem">
     <Tile>
       <h4>Usage forecast</h4>
