@@ -34,19 +34,35 @@
    */
   export let labelAlign = "end";
 
-  import { setContext } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
 
   const sharedSize = writable(size);
   $: sharedSize.set(size);
 
+  let claimed = false;
+
+  /** @type {{ set: (value: undefined | "active" | "revert") => void }} */
+  const labelState = {
+    set(value) {
+      claimed = true;
+      state.set(value);
+    },
+  };
+
   setContext(AI_LABEL_HOST_CONTEXT_KEY, {
     size: sharedSize,
-    state,
+    state: labelState,
     labelSize,
     labelKind,
     labelAlign,
+  });
+
+  // A host starts its state at "active" when the slot is filled, so the AI
+  // surface is in the server render. Clear it when no AILabel claimed it.
+  onMount(() => {
+    if (!claimed) state.set(undefined);
   });
 </script>
 

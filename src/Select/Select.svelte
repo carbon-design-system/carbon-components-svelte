@@ -117,8 +117,12 @@
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
 
-  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
-  const aiLabelState = writable(undefined);
+  /**
+   * Starts active for a filled slot, so the server renders the AI surface.
+   * `Decorator` clears it when no `AILabel` claims the slot.
+   * @type {import("svelte/store").Writable<undefined | "active" | "revert">}
+   */
+  const aiLabelState = writable($$slots.decorator ? "active" : undefined);
   /**
    * @type {import("svelte/store").Writable<string | number | undefined>}
    */
