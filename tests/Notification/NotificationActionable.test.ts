@@ -184,6 +184,34 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
     expect(screen.getByRole("button", { name: "After" })).toHaveFocus();
   });
 
+  it("describes the action by the title when not actionable", () => {
+    render(NotificationActionable, {
+      props: { type, actionable: false, open: true },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Undo" }),
+    ).toHaveAccessibleDescription(TITLE);
+  });
+
+  it("does not describe the action without a title", () => {
+    render(NotificationActionable, {
+      props: { type, actionable: false, open: true, title: "" },
+    });
+
+    expect(screen.getByRole("button", { name: "Undo" })).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
+  it("does not repeat the dialog name on the action when actionable", () => {
+    render(NotificationActionable, { props: { type, open: true } });
+
+    expect(screen.getByRole("button", { name: "Undo" })).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
   it("keeps today's role, labels, focus, and keys when not actionable", async () => {
     const onClose = vi.fn();
     render(NotificationActionable, {
@@ -200,7 +228,10 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
     expect(region).not.toHaveAttribute("tabindex");
     expect(region).not.toHaveAttribute("aria-labelledby");
     expect(region).not.toHaveAttribute("aria-describedby");
-    expect(region?.querySelector("[id]")).toBeNull();
+    // The only id is the title's, which describes the action.
+    expect(
+      Array.from(region?.querySelectorAll("[id]") ?? [], (node) => node.id),
+    ).toEqual([screen.getByText(TITLE).closest("[id]")?.id]);
     expect(trigger).toHaveFocus();
 
     screen.getByRole("button", { name: "Undo" }).focus();
