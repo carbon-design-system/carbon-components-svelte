@@ -73,7 +73,7 @@
   }
 
   .#{$prefix}--search--sm .#{$prefix}--search-magnifier-icon {
-    left: to-rem(8px);
+    @include ccs-inset-inline($start: to-rem(8px));
   }
 
   // V11: change lg to md
@@ -87,7 +87,7 @@
 
   // V11: change lg to md
   .#{$prefix}--search--lg .#{$prefix}--search-magnifier-icon {
-    left: to-rem(12px);
+    @include ccs-inset-inline($start: to-rem(12px));
   }
 
   // V11: change xl to lg
@@ -103,12 +103,12 @@
     position: absolute;
     z-index: 2;
     top: 50%;
-    left: $spacing-05;
     width: to-rem(16px);
     height: to-rem(16px);
     fill: $icon-secondary;
     pointer-events: none;
     transform: translateY(-50%);
+    @include ccs-inset-inline($start: $spacing-05);
   }
 
   .#{$prefix}--search-close {
@@ -117,12 +117,11 @@
 
     position: absolute;
     top: 0;
-    right: 0;
+    @include ccs-inset-inline($end: 0);
 
     &::before {
       position: absolute;
       top: to-rem(1px);
-      left: 0;
       display: block;
       width: 2px;
       height: calc(100% - 2px);
@@ -130,6 +129,7 @@
       content: '';
       transition: background-color $duration--fast-02
         motion(standard, productive);
+      @include ccs-inset-inline($start: 0);
 
       @media screen and (prefers-reduced-motion: reduce) {
         transition: none;
@@ -359,7 +359,7 @@
   }
 
   .#{$prefix}--search--xs .#{$prefix}--search-magnifier-icon {
-    left: to-rem(4px);
+    @include ccs-inset-inline($start: to-rem(4px));
   }
 
   .#{$prefix}--search--xs {
@@ -422,16 +422,16 @@
 
   .#{$prefix}--search-input[data-invalid],
   .#{$prefix}--search-input[data-warn] {
-    padding-right: to-rem(64px);
+    padding-inline-end: to-rem(64px);
   }
 
   .#{$prefix}--search__invalid-icon {
     position: absolute;
     z-index: 2;
     top: 50%;
-    right: to-rem(40px);
     fill: $support-error;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: to-rem(40px));
   }
 
   .#{$prefix}--search__invalid-icon--warning {
@@ -445,29 +445,29 @@
 
   .#{$prefix}--search--sm .#{$prefix}--search-input[data-invalid],
   .#{$prefix}--search--sm .#{$prefix}--search-input[data-warn] {
-    padding-right: to-rem(56px);
+    padding-inline-end: to-rem(56px);
   }
 
   .#{$prefix}--search--sm .#{$prefix}--search__invalid-icon {
-    right: to-rem(32px);
+    @include ccs-inset-inline($end: to-rem(32px));
   }
 
   .#{$prefix}--search--xl .#{$prefix}--search-input[data-invalid],
   .#{$prefix}--search--xl .#{$prefix}--search-input[data-warn] {
-    padding-right: to-rem(72px);
+    padding-inline-end: to-rem(72px);
   }
 
   .#{$prefix}--search--xl .#{$prefix}--search__invalid-icon {
-    right: to-rem(48px);
+    @include ccs-inset-inline($end: to-rem(48px));
   }
 
   .#{$prefix}--search--xs .#{$prefix}--search-input[data-invalid],
   .#{$prefix}--search--xs .#{$prefix}--search-input[data-warn] {
-    padding-right: to-rem(44px);
+    padding-inline-end: to-rem(44px);
   }
 
   .#{$prefix}--search--xs .#{$prefix}--search__invalid-icon {
-    right: to-rem(24px);
+    @include ccs-inset-inline($end: to-rem(24px));
   }
 }
 

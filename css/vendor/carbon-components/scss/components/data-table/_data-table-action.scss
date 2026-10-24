@@ -71,11 +71,11 @@
 
   .#{$prefix}--toolbar-search-container-expandable
     .#{$prefix}--search-magnifier-icon {
-    left: 0;
     width: $spacing-09;
     height: $spacing-09;
     padding: $spacing-05;
     fill: $icon-primary;
+    @include ccs-inset-inline($start: 0);
   }
 
   .#{$prefix}--toolbar-search-container-expandable.#{$prefix}--search--disabled

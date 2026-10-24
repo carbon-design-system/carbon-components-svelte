@@ -325,7 +325,7 @@ describe("css partial conventions", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("pins the fluid CopyInput button with a real `right` offset, not `auto`", () => {
+  it("pins the fluid CopyInput button with a real end offset, not `auto`", () => {
     // Regression guard: a logical-inset cleanup swapped `inset-inline-end`
     // for `right: $carbon--spacing-03` but left an existing `right: auto`
     // in the same fluid rule. A later dead-declaration pass correctly
@@ -336,13 +336,15 @@ describe("css partial conventions", () => {
     // `block-size: to-rem(32px)` only appears once, inside the fluid
     // `.bx--form--fluid .bx--copy-btn` override (the non-fluid rule above
     // it uses `width`/`height` only), so anchoring here can't accidentally
-    // match the base rule's unrelated `right: 0`.
+    // match the base rule's unrelated `$end: 0`.
     const fluidRule = css.match(
       /block-size: to-rem\(32px\);[\s\S]*?\n\s*\}/,
     )?.[0];
     expect(fluidRule).toBeDefined();
     expect(fluidRule).not.toMatch(/right:\s*auto\s*;/);
-    expect(fluidRule).toMatch(/right:\s*\$carbon--spacing-\d\d;/);
+    expect(fluidRule).toMatch(
+      /ccs-inset-inline\(\$end:\s*\$carbon--spacing-\d\d\);/,
+    );
   });
 
   it("guards hover rules with (any-hover: hover)", () => {

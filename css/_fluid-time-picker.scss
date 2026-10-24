@@ -282,7 +282,7 @@
     position: absolute;
     display: block;
     inset-block-start: to-rem(72px);
-    right: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon {

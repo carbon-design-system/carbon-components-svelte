@@ -40,7 +40,8 @@
 
   .#{$prefix}--number-input--fluid input[type="number"],
   .#{$prefix}--number-input--fluid input[type="text"] {
-    padding: to-rem(32px) to-rem(80px) to-rem(13px) $carbon--spacing-05;
+    padding-block: to-rem(32px) to-rem(13px);
+    padding-inline: $carbon--spacing-05 to-rem(80px);
     background: transparent;
     min-block-size: to-rem(64px);
     outline: none;
@@ -110,6 +111,13 @@
     box-shadow:
       inset 0 -1px $focus,
       inset -2px 0 $focus;
+
+    // The last stepper ends the field, on the left in RTL.
+    [dir="rtl"] & {
+      box-shadow:
+        inset 0 -1px $focus,
+        inset 2px 0 $focus;
+    }
   }
 
   .#{$prefix}--number-input--fluid
@@ -157,6 +165,10 @@
     ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn:last-of-type {
     box-shadow: inset -2px 0 $focus;
+
+    [dir="rtl"] & {
+      box-shadow: inset 2px 0 $focus;
+    }
   }
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
@@ -172,6 +184,10 @@
       ~ .#{$prefix}--number__controls
       .#{$prefix}--number__control-btn:last-of-type:hover {
       box-shadow: inset -2px 0 $support-error;
+
+      [dir="rtl"] & {
+        box-shadow: inset 2px 0 $support-error;
+      }
     }
 
     .#{$prefix}--number-input--fluid

@@ -50,11 +50,11 @@
   }
 
   .#{$prefix}--password-input {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-input--sm.#{$prefix}--password-input {
-    padding-right: $carbon--spacing-07;
+    padding-inline-end: $carbon--spacing-07;
   }
 
   .#{$prefix}--text-input::placeholder {
@@ -72,8 +72,8 @@
     position: absolute;
     // top/transform used to center invalid icon in IE11
     top: 50%;
-    right: $carbon--spacing-05;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--text-input__invalid-icon {
@@ -93,7 +93,6 @@
     @include focus-outline('reset');
 
     position: absolute;
-    right: 0;
     display: flex;
     width: to-rem(40px);
     height: 100%;
@@ -104,6 +103,7 @@
     border: 0;
     background: none;
     cursor: pointer;
+    @include ccs-inset-inline($end: 0);
   }
 
   .#{$prefix}--text-input--sm
@@ -135,20 +135,20 @@
   .#{$prefix}--text-input--invalid,
   .#{$prefix}--text-input--warning,
   .#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-input--invalid.#{$prefix}--password-input {
-    padding-right: to-rem(64px);
+    padding-inline-end: to-rem(64px);
   }
 
   .#{$prefix}--text-input--invalid +
     .#{$prefix}--text-input--password__visibility__toggle {
-    right: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--password-input-wrapper .#{$prefix}--text-input__invalid-icon {
-    right: $carbon--spacing-08;
+    @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
   .#{$prefix}--text-input:disabled
@@ -197,7 +197,7 @@
     box-shadow: none;
 
     .#{$prefix}--text-input--password__visibility__toggle {
-      right: $carbon--spacing-08;
+      @include ccs-inset-inline($end: $carbon--spacing-08);
     }
   }
 
@@ -216,8 +216,8 @@
     position: absolute;
     z-index: 1;
     top: to-rem(13px);
-    left: $carbon--spacing-05;
     margin: 0;
+    @include ccs-inset-inline($start: $carbon--spacing-05);
   }
 
   .#{$prefix}--form--fluid .#{$prefix}--form__helper-text {
@@ -293,7 +293,7 @@
     max-width: to-rem(128px);
     flex: 2;
     flex-direction: column;
-    margin-right: to-rem(24px);
+    margin-inline-end: to-rem(24px);
     overflow-wrap: break-word;
   }
 
@@ -395,7 +395,7 @@
 /// @group components
 @mixin password-input-readonly-icon {
   .#{$prefix}--password-input-wrapper .#{$prefix}--text-input__readonly-icon {
-    right: $carbon--spacing-08;
+    @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 }
 

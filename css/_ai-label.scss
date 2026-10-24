@@ -408,14 +408,8 @@ $ai-label-sizes: (
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--field-decorator,
   .#{$prefix}--date-picker--fluid .#{$prefix}--field-decorator {
     top: to-rem(13px);
-    right: $carbon--spacing-05;
     bottom: auto;
-  }
-
-  // Of the fields, only the list boxes flip under `[dir="rtl"]` so far.
-  [dir="rtl"] .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--field-decorator {
-    right: auto;
-    left: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--field-decorator::after,
@@ -423,23 +417,28 @@ $ai-label-sizes: (
     display: none;
   }
 
-  // TextInput
+  // TextInput. The TextInput family flips under `[dir="rtl"]`; Select and
+  // DatePicker keep the physical base offset for now.
+  .#{$prefix}--text-input__field-inner-wrapper--decorator {
+    @include ccs-inset-inline($end: $carbon--spacing-05);
+  }
+
   .#{$prefix}--text-input__field-wrapper--decorator .#{$prefix}--text-input {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-input__field-wrapper--decorator
     .#{$prefix}--text-input--invalid,
   .#{$prefix}--text-input__field-wrapper--decorator
     .#{$prefix}--text-input--warning {
-    padding-right: $carbon--spacing-10;
+    padding-inline-end: $carbon--spacing-10;
   }
 
   .#{$prefix}--text-input__field-wrapper--decorator
     .#{$prefix}--text-input__invalid-icon,
   .#{$prefix}--text-input__field-wrapper--decorator
     .#{$prefix}--text-input__readonly-icon {
-    right: $carbon--spacing-08;
+    @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
   .#{$prefix}--text-input__field-wrapper--ai-label .#{$prefix}--text-input {
@@ -450,19 +449,20 @@ $ai-label-sizes: (
   .#{$prefix}--text-area__inner-wrapper--decorator {
     top: $carbon--spacing-04;
     bottom: auto;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
   .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area {
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area--invalid,
   .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area--warning {
-    padding-right: $carbon--spacing-10;
+    padding-inline-end: $carbon--spacing-10;
   }
 
   .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area__invalid-icon {
-    right: $carbon--spacing-08;
+    @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
   .#{$prefix}--text-area__wrapper--ai-label .#{$prefix}--text-area {
@@ -675,12 +675,12 @@ $ai-label-sizes: (
     );
 
     #{$scope}.#{$prefix}--number__inner-wrapper--decorator {
-      right: to-rem($steppers + 16px);
+      @include ccs-inset-inline($end: to-rem($steppers + 16px));
     }
 
     #{$scope}.#{$prefix}--number__input-wrapper--decorator
       .#{$prefix}--number__invalid {
-      right: to-rem($steppers + 40px);
+      @include ccs-inset-inline($end: to-rem($steppers + 40px));
     }
 
     // The base padding already leaves room for the decorator (steppers
@@ -693,7 +693,7 @@ $ai-label-sizes: (
       input[type="number"],
     #{$scope}.#{$prefix}--number__input-wrapper--decorator.#{$prefix}--number__input-wrapper--warning
       input[type="text"] {
-      padding-right: to-rem($steppers + 72px);
+      padding-inline-end: to-rem($steppers + 72px);
     }
   }
 

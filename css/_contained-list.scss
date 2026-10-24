@@ -73,7 +73,7 @@
   }
 
   .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-close {
-    border-right: 2px solid transparent;
+    border-inline-end: 2px solid transparent;
     outline: none;
 
     &:focus {
@@ -211,7 +211,7 @@
       .#{$prefix}--search-input:focus
       ~ .#{$prefix}--search-close:hover {
       border: 2px solid $focus;
-      border-left: 0;
+      border-inline-start: 0;
       outline: none;
     }
 
