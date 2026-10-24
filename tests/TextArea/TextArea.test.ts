@@ -93,7 +93,13 @@ describe("TextArea", () => {
     expect(screen.getByText("2/100")).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("announces the character limit only when the count reaches it", async () => {
+  it("announces the character limit once the count rests on it for 1s", async ({
+    onTestFinished,
+  }) => {
+    vi.useFakeTimers();
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
     render(TextArea, { props: { maxCount: 5, value: "" } });
 
     const liveRegion = document.querySelector('[aria-live="polite"]');
@@ -104,6 +110,10 @@ describe("TextArea", () => {
     assert(textarea instanceof HTMLTextAreaElement);
     textarea.value = "12345";
     await fireEvent.input(textarea);
+    await vi.advanceTimersByTimeAsync(999);
+    expect(liveRegion).toHaveTextContent("");
+
+    await vi.advanceTimersByTimeAsync(1);
     expect(liveRegion).toHaveTextContent("Character limit reached");
 
     textarea.value = "1234";
@@ -132,7 +142,13 @@ describe("TextArea", () => {
     expect(screen.getByText("2 chars remaining of 100")).toBeInTheDocument();
   });
 
-  it("uses a custom limitReachedText when the limit is reached", async () => {
+  it("uses a custom limitReachedText when the limit is reached", async ({
+    onTestFinished,
+  }) => {
+    vi.useFakeTimers();
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
     render(TextArea, {
       props: { maxCount: 5, value: "", limitReachedText: "No more room" },
     });
@@ -144,6 +160,7 @@ describe("TextArea", () => {
     assert(textarea instanceof HTMLTextAreaElement);
     textarea.value = "12345";
     await fireEvent.input(textarea);
+    await vi.advanceTimersByTimeAsync(1000);
 
     expect(liveRegion).toHaveTextContent("No more room");
   });
@@ -207,7 +224,13 @@ describe("TextArea", () => {
       expect(textarea.value.trim()).toBe("a b");
     });
 
-    it("announces the word limit when it is reached", async () => {
+    it("announces the word limit when it is reached", async ({
+      onTestFinished,
+    }) => {
+      vi.useFakeTimers();
+      onTestFinished(() => {
+        vi.useRealTimers();
+      });
       render(TextArea, {
         props: { counterMode: "word", maxCount: 3, value: "one two" },
       });
@@ -219,6 +242,7 @@ describe("TextArea", () => {
       assert(textarea instanceof HTMLTextAreaElement);
       textarea.value = "one two three";
       await fireEvent.input(textarea);
+      await vi.advanceTimersByTimeAsync(1000);
       expect(liveRegion).toHaveTextContent("Word limit reached");
 
       textarea.value = "one two three four";
@@ -226,7 +250,13 @@ describe("TextArea", () => {
       expect(liveRegion).toHaveTextContent("");
     });
 
-    it("uses limitReachedText over the word default", async () => {
+    it("uses limitReachedText over the word default", async ({
+      onTestFinished,
+    }) => {
+      vi.useFakeTimers();
+      onTestFinished(() => {
+        vi.useRealTimers();
+      });
       render(TextArea, {
         props: {
           counterMode: "word",
@@ -240,6 +270,7 @@ describe("TextArea", () => {
       assert(textarea instanceof HTMLTextAreaElement);
       textarea.value = "one two three";
       await fireEvent.input(textarea);
+      await vi.advanceTimersByTimeAsync(1000);
 
       expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
         "Stop",
