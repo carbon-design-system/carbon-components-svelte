@@ -610,6 +610,10 @@ describe("PinCodeInput", () => {
   });
 
   describe("arrow keys", () => {
+    afterEach(() => {
+      document.documentElement.removeAttribute("style");
+    });
+
     it("moves focus forward with ArrowRight", async () => {
       render(PinCodeInput);
       const inputs = getInputs();
@@ -617,6 +621,19 @@ describe("PinCodeInput", () => {
       inputs[0].focus();
       await user.keyboard("{ArrowRight}");
       expect(inputs[1]).toHaveFocus();
+    });
+
+    it("swaps ArrowLeft and ArrowRight in RTL", async () => {
+      document.documentElement.style.direction = "rtl";
+      render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      // The segments run right to left, so Left moves to the next one.
+      await user.keyboard("{ArrowLeft}");
+      expect(inputs[1]).toHaveFocus();
+      await user.keyboard("{ArrowRight}");
+      expect(inputs[0]).toHaveFocus();
     });
 
     it("keeps focus on ArrowLeft in the first segment", async () => {
