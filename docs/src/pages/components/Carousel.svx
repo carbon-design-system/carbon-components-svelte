@@ -26,7 +26,8 @@ Wrap each slide in a `CarouselItem`. Only the active slide is visible, and the
 previous and next buttons are disabled on the first and last slide unless
 `wrap` is set (see [Navigation](#navigation)). When focus is inside the carousel, press <DocKbd label="Left" />
 and <DocKbd label="Right" /> to move to the previous and next slide, except
-inside form fields, which keep their own arrow key behavior.
+inside form fields, which keep their own arrow key behavior. In RTL the keys
+swap: <DocKbd label="Left" /> moves to the next slide.
 
 <Carousel labelText="What's new in 4.2">
   <CarouselItem>
