@@ -628,6 +628,38 @@ test.describe("forced colors", () => {
     });
   });
 
+  // Forced colors drop the code block's surface; table rules, the quote's
+  // border and the divider are borders, which stay.
+  test("Prose code blocks, tables, quotes and rules keep their edges", async ({
+    page,
+  }) => {
+    const prose = '[data-testid="prose"]';
+    expect
+      .soft(await style(page, `${prose} pre`))
+      .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
+    const edges = await page.evaluate((prose) => {
+      const read = (selector: string, side: string) => {
+        const el = document.querySelector(`${prose} ${selector}`);
+        if (!el) throw new Error(`no ${selector}`);
+        const s = getComputedStyle(el);
+        return {
+          color: s.getPropertyValue(`border-${side}-color`),
+          width: s.getPropertyValue(`border-${side}-width`),
+        };
+      };
+      return {
+        th: read("th", "bottom"),
+        td: read("td", "bottom"),
+        blockquote: read("blockquote", "left"),
+        hr: read("hr", "top"),
+      };
+    }, prose);
+    for (const [element, edge] of Object.entries(edges)) {
+      expect.soft(edge.color, element).toBe(system.CanvasText);
+      expect.soft(edge.width, element).not.toBe("0px");
+    }
+  });
+
   test("a range drag shows both handles in their focus color", async ({
     page,
   }) => {

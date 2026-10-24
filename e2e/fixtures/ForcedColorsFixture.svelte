@@ -1,4 +1,5 @@
 <script>
+  import "carbon-components-svelte/css/prose.css";
   import {
     Button,
     Card,
@@ -27,6 +28,7 @@
     OverflowMenuItem,
     Popover,
     ProgressBar,
+    Prose,
     RadioTile,
     RangeSlider,
     SearchMenu,
@@ -263,6 +265,24 @@
   <UserAvatar name="Away" status="away" />
   <UserAvatar name="Busy" status="busy" />
   <UserAvatar name="Offline" status="offline" />
+
+  <Prose data-testid="prose">
+    <pre><code>npm i carbon-components-svelte</code></pre>
+    <blockquote><p>Regions can't be changed later.</p></blockquote>
+    <table>
+      <thead>
+        <tr>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Success</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+  </Prose>
 
   <RangeSlider
     data-testid="range-slider-drag"
