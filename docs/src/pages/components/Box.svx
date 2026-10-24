@@ -154,6 +154,17 @@ Set `marginTop`, `marginRight`, `marginBottom`, or `marginLeft` to offset a sing
   <Box fill="layer-01" padding={5} marginY={3} marginTop={9}>Extra space above only</Box>
 </Box>
 
+### Start and end
+
+Left and right are fixed to the screen. Start and end follow the reading direction: start is the left in a left-to-right page and the right in a right-to-left one. Set `paddingStart`, `paddingEnd`, `marginStart`, or `marginEnd` for space that belongs to the reading order, such as the space between an icon and its label. Use the left and right props only for space tied to the screen.
+
+A start or end prop overrides `padding` and `paddingX` (or `margin` and `marginX`) on its side, like the left and right props. Do not set a left or right prop and a start or end prop together.
+
+<Stack gap={5}>
+  <Box fill="layer-01" padding={5} paddingStart={9}>Extra space at the start</Box>
+  <Box fill="layer-01" padding={5} paddingStart={9} dir="rtl">Extra space at the start, right to left</Box>
+</Stack>
+
 ## Width
 
 Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as pixels. Use `fullWidth` to span the container (`width: 100%`).
@@ -430,6 +441,8 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-pr-{1-13}` | Right padding, overriding the all-sides and axis classes |
 | `bx--box-pb-{1-13}` | Bottom padding, overriding the all-sides and axis classes |
 | `bx--box-pl-{1-13}` | Left padding, overriding the all-sides and axis classes |
+| `bx--box-ps-{1-13}` | Inline-start padding, overriding the all-sides and axis classes |
+| `bx--box-pe-{1-13}` | Inline-end padding, overriding the all-sides and axis classes |
 | `bx--box-m-{1-13}` | Margin on all sides |
 | `bx--box-mx-{1-13}` | Horizontal margin |
 | `bx--box-my-{1-13}` | Vertical margin |
@@ -437,6 +450,8 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-mr-{1-13}` | Right margin, overriding the all-sides and axis classes |
 | `bx--box-mb-{1-13}` | Bottom margin, overriding the all-sides and axis classes |
 | `bx--box-ml-{1-13}` | Left margin, overriding the all-sides and axis classes |
+| `bx--box-ms-{1-13}` | Inline-start margin, overriding the all-sides and axis classes |
+| `bx--box-me-{1-13}` | Inline-end margin, overriding the all-sides and axis classes |
 | `bx--box-full-width` | Span the full container width |
 | `bx--box-height-{1-13}` | Height |
 | `bx--box-height-viewport` | Full viewport height (`100dvh`, `100vh` fallback) |

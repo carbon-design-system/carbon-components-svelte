@@ -23,7 +23,7 @@
     return undefined;
   }
 
-  /** @param {"p" | "px" | "py" | "pt" | "pr" | "pb" | "pl" | "m" | "mx" | "my" | "mt" | "mr" | "mb" | "ml" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
+  /** @param {"p" | "px" | "py" | "pt" | "pr" | "pb" | "pl" | "ps" | "pe" | "m" | "mx" | "my" | "mt" | "mr" | "mb" | "ml" | "ms" | "me" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
   function spacingClass(kind, value) {
     return scaleClass(kind, value, 1);
   }
@@ -144,6 +144,18 @@
   export let paddingLeft = undefined;
 
   /**
+   * Set the inline-start padding, overriding `padding` and `paddingX` on that side. Logical: it is the left padding in a left-to-right page and the right padding in a right-to-left one. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let paddingStart = undefined;
+
+  /**
+   * Set the inline-end padding, overriding `padding` and `paddingX` on that side. Logical: it is the right padding in a left-to-right page and the left padding in a right-to-left one. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let paddingEnd = undefined;
+
+  /**
    * Set margin on all sides. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
@@ -184,6 +196,18 @@
    * @type {SpacingValue | undefined}
    */
   export let marginLeft = undefined;
+
+  /**
+   * Set the inline-start margin, overriding `margin` and `marginX` on that side. Logical: it is the left margin in a left-to-right page and the right margin in a right-to-left one. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let marginStart = undefined;
+
+  /**
+   * Set the inline-end margin, overriding `margin` and `marginX` on that side. Logical: it is the right margin in a left-to-right page and the left margin in a right-to-left one. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let marginEnd = undefined;
 
   /**
    * Set the border using a Carbon border token.
@@ -406,6 +430,8 @@
     spacingClass("pr", paddingRight),
     spacingClass("pb", paddingBottom),
     spacingClass("pl", paddingLeft),
+    spacingClass("ps", paddingStart),
+    spacingClass("pe", paddingEnd),
     spacingClass("m", margin),
     spacingClass("mx", marginX),
     spacingClass("my", marginY),
@@ -413,6 +439,8 @@
     spacingClass("mr", marginRight),
     spacingClass("mb", marginBottom),
     spacingClass("ml", marginLeft),
+    spacingClass("ms", marginStart),
+    spacingClass("me", marginEnd),
     fullWidth && "bx--box-full-width",
     viewportClass("height", height),
     viewportClass("min-height", minHeight),
@@ -475,7 +503,12 @@
     paddingTop != null ||
     paddingRight != null ||
     paddingBottom != null ||
-    paddingLeft != null;
+    paddingLeft != null ||
+    paddingLogical;
+  // With a logical side set, `paddingX` and `padding` fill the inline axis
+  // logically too, so a physical and a logical declaration never compete
+  // for the same side.
+  $: paddingLogical = paddingStart != null || paddingEnd != null;
   $: resolvedPadding = paddingSplit ? undefined : spacingStyle(padding);
   $: resolvedPaddingTop = sideStyle(
     paddingSplit,
@@ -486,8 +519,7 @@
   $: resolvedPaddingRight = sideStyle(
     paddingSplit,
     paddingRight,
-    paddingX,
-    padding,
+    ...(paddingLogical ? [] : [paddingX, padding]),
   );
   $: resolvedPaddingBottom = sideStyle(
     paddingSplit,
@@ -498,26 +530,47 @@
   $: resolvedPaddingLeft = sideStyle(
     paddingSplit,
     paddingLeft,
-    paddingX,
-    padding,
+    ...(paddingLogical ? [] : [paddingX, padding]),
   );
+  $: resolvedPaddingStart = paddingLogical
+    ? sideStyle(paddingSplit, paddingStart, paddingX, padding)
+    : undefined;
+  $: resolvedPaddingEnd = paddingLogical
+    ? sideStyle(paddingSplit, paddingEnd, paddingX, padding)
+    : undefined;
   $: marginSplit =
     marginX != null ||
     marginY != null ||
     marginTop != null ||
     marginRight != null ||
     marginBottom != null ||
-    marginLeft != null;
+    marginLeft != null ||
+    marginLogical;
+  $: marginLogical = marginStart != null || marginEnd != null;
   $: resolvedMargin = marginSplit ? undefined : spacingStyle(margin);
   $: resolvedMarginTop = sideStyle(marginSplit, marginTop, marginY, margin);
-  $: resolvedMarginRight = sideStyle(marginSplit, marginRight, marginX, margin);
+  $: resolvedMarginRight = sideStyle(
+    marginSplit,
+    marginRight,
+    ...(marginLogical ? [] : [marginX, margin]),
+  );
   $: resolvedMarginBottom = sideStyle(
     marginSplit,
     marginBottom,
     marginY,
     margin,
   );
-  $: resolvedMarginLeft = sideStyle(marginSplit, marginLeft, marginX, margin);
+  $: resolvedMarginLeft = sideStyle(
+    marginSplit,
+    marginLeft,
+    ...(marginLogical ? [] : [marginX, margin]),
+  );
+  $: resolvedMarginStart = marginLogical
+    ? sideStyle(marginSplit, marginStart, marginX, margin)
+    : undefined;
+  $: resolvedMarginEnd = marginLogical
+    ? sideStyle(marginSplit, marginEnd, marginX, margin)
+    : undefined;
   $: resolvedHeight = viewportStyle(height);
   $: resolvedMinHeight = viewportStyle(minHeight);
   $: resolvedMaxHeight = spacingStyle(maxHeight);
@@ -546,11 +599,15 @@
   style:padding-right={resolvedPaddingRight}
   style:padding-bottom={resolvedPaddingBottom}
   style:padding-left={resolvedPaddingLeft}
+  style:padding-inline-start={resolvedPaddingStart}
+  style:padding-inline-end={resolvedPaddingEnd}
   style:margin={resolvedMargin}
   style:margin-top={resolvedMarginTop}
   style:margin-right={resolvedMarginRight}
   style:margin-bottom={resolvedMarginBottom}
   style:margin-left={resolvedMarginLeft}
+  style:margin-inline-start={resolvedMarginStart}
+  style:margin-inline-end={resolvedMarginEnd}
   style:height={resolvedHeight}
   style:min-height={resolvedMinHeight}
   style:max-height={resolvedMaxHeight}

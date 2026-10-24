@@ -411,6 +411,35 @@ test.describe("right-to-left layout", () => {
     }
   });
 
+  test("puts Box's logical sides at the inline start and end", async ({
+    page,
+  }) => {
+    const sides = () =>
+      page.evaluate(() =>
+        ["box-logical", "box-logical-custom"].map((id) => {
+          const style = getComputedStyle(
+            document.querySelector(`[data-testid=${id}]`) as Element,
+          );
+          return [
+            style.paddingLeft,
+            style.paddingRight,
+            style.marginLeft,
+            style.marginRight,
+          ];
+        }),
+      );
+    // paddingX={1} is 2px, paddingStart={5} is 16px, marginEnd={3} is 8px.
+    expect(await sides()).toEqual([
+      ["16px", "2px", "0px", "8px"],
+      ["0px", "0px", "20px", "2px"],
+    ]);
+    await setDirection(page, "rtl");
+    expect(await sides()).toEqual([
+      ["2px", "16px", "8px", "0px"],
+      ["0px", "0px", "2px", "20px"],
+    ]);
+  });
+
   test("keeps the Slider gaps beside the text input", async ({ page }) => {
     // Each pair is a part and the text input beside it, in the fixture's
     // Slider, hideRangeLabels Slider, RangeSlider and vertical RangeSlider.
