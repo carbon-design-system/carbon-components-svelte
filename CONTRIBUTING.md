@@ -574,7 +574,7 @@ Values:
 - Set one spelling of a box property per rule. `width` and `inline-size` (likewise `top`/`inset-block-start`, `height`/`block-size`) share a cascade slot, so the earlier one is dead; `check:css:overrides` reports it.
 - `z-index`: `z("floating")`, `z("dropdown")`, … for anything that floats over the page. A literal `1`/`-1` is fine for stacking inside the component's own box.
 - Breakpoints: `@include carbon--breakpoint(md)`, not a literal `min-width`.
-- Custom properties: `--cds-*` is reserved for Carbon theme tokens. Properties this library invents are `--ccs-*` (and Sass globals `$ccs-*`). A few older public hooks predate this rule (`--cds-scroll-gradient-color`, `--cds-popover-offset`, `--user-avatar-group-overlap`); do not add more. A hook Carbon v11 itself defines keeps its v11 name (`--cds-link-text-color`): read it with the theme token as the fallback, and list it in `V11_HOOKS` in `tests/css/v11-tokens.test.ts`.
+- Custom properties: `--cds-*` is reserved for Carbon theme tokens. Properties this library invents are `--ccs-*` (and Sass globals `$ccs-*`). A few older public hooks predate this rule (`--cds-scroll-gradient-color`, `--cds-popover-offset`, `--user-avatar-group-overlap`); do not add more. A hook Carbon v11 itself defines keeps its v11 name (`--cds-link-text-color`, `--cds-grid-gutter`): read it with the theme token or v11's default as the fallback, do not declare it, and list it in `V11_HOOKS` in `tests/css/v11-tokens.test.ts`. Mode values derived from it are `--ccs-*`.
 
 Selectors:
 
