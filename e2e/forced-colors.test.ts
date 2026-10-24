@@ -14,6 +14,7 @@ const SYSTEM_COLORS = [
   "GrayText",
   "LinkText",
   "ButtonText",
+  "ButtonBorder",
 ] as const;
 type SystemColor = (typeof SYSTEM_COLORS)[number];
 
@@ -722,13 +723,15 @@ test.describe("forced colors", () => {
   });
 
   // The action's ring is a box-shadow, which forced colors drop, so the
-  // button's own forced-colors outline has to win.
+  // button's own forced-colors outline has to win. Its edge is the
+  // browser's button border, ButtonBorder: ButtonText in Chromium, a mid
+  // gray in Firefox.
   test("a toast action keeps its edge and a Highlight focus ring", async ({
     page,
   }) => {
     const action = ".bx--toast-notification__action-button";
     expect.soft(await style(page, action)).toMatchObject({
-      borderColor: system.ButtonText,
+      borderColor: system.ButtonBorder,
       color: system.ButtonText,
     });
     await page.focus(action);
@@ -1000,6 +1003,10 @@ test("forced colors: read-only fields keep a non-color cue", async ({
 
 test("prefers-contrast: more dots the focus outline", async ({ page }) => {
   await page.emulateMedia({ contrast: "more" });
+  // A fresh document: the shared host page remounts fixtures in place, and
+  // Firefox keeps a live page's styles computed without a media query
+  // switched by emulation, though matchMedia reports it.
+  await page.goto("about:blank");
   await page.goto("/forced-colors.html");
   await page.focus(".bx--toggle-button--pressed");
   expect((await style(page, ".bx--toggle-button--pressed")).outline).toBe(
