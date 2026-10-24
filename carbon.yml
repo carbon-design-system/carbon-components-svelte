@@ -960,6 +960,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ProgressIndicator
+  prose:
+    name: Prose
+    description: Sets running copy written as plain HTML with Carbon type styles, spacing, and line length.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/prose.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Prose
   radio-button:
     status: stable
     framework: svelte

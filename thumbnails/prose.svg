@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>prose</title>
+    <g id="prose" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="heading" fill="var(--cds-text-secondary, #525252)" x="76" y="32" width="96" height="8"></rect>
+        <rect id="line-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="52" width="168" height="6"></rect>
+        <rect id="line-2-start" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="62" width="60" height="6"></rect>
+        <rect id="line-2-link" fill="var(--cds-background-brand, #0f62fe)" x="140" y="62" width="40" height="6"></rect>
+        <rect id="line-2-end" fill="var(--cds-layer-accent-active, #a8a8a8)" x="184" y="62" width="60" height="6"></rect>
+        <rect id="line-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="72" width="112" height="6"></rect>
+        <rect id="bullet-1" fill="var(--cds-text-secondary, #525252)" x="80" y="91" width="4" height="4"></rect>
+        <rect id="item-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="90" width="120" height="6"></rect>
+        <rect id="bullet-2" fill="var(--cds-text-secondary, #525252)" x="80" y="103" width="4" height="4"></rect>
+        <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="102" width="96" height="6"></rect>
+        <rect id="code-block" fill="var(--cds-field-01, #f4f4f4)" x="76" y="118" width="168" height="30"></rect>
+        <rect id="code-line-1" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="126" width="80" height="6"></rect>
+        <rect id="code-line-2" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="136" width="56" height="6"></rect>
+    </g>
+</svg>
