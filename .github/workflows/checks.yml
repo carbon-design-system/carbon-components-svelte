@@ -53,6 +53,7 @@ jobs:
       e2e: ${{ steps.filter.outputs.e2e }}
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
       css: ${{ steps.filter.outputs.css }}
+      css-size: ${{ steps.filter.outputs.css-size }}
       # `all`, `none`, or space-separated test files; empty (= all) off PRs.
       unit-tests: ${{ steps.select.outputs.unit-tests }}
       e2e-tests: ${{ steps.select.outputs.e2e-tests }}
@@ -91,6 +92,14 @@ jobs:
             css:
               - 'css/**'
               - 'crassus.config.ts'
+            css-size:
+              - 'css/**'
+              - 'crassus.config.ts'
+              - 'scripts/check-css-size.ts'
+              - 'scripts/lib/css-size.ts'
+              - 'scripts/lib/css-targets.ts'
+              - 'package.json'
+              - 'bun.lock'
             docs-deploy:
               - 'src/**'
               - 'css/**'
@@ -136,6 +145,25 @@ jobs:
         # One run: annotations on stdout, the human report (fenced, cut to
         # fit the 1 MiB summary limit) appended to the job summary.
         run: bun run check:css --base "origin/$BASE_REF" --format github --summary "$GITHUB_STEP_SUMMARY"
+
+  # Fails when the PR grows all.css or white.css by more than the per-PR
+  # limit (scripts/lib/css-size.ts) against the base branch. A PR that
+  # needs more names the amount and the reason in a CSS-Size-Growth commit
+  # trailer; see CONTRIBUTING, Guards.
+  css-size:
+    needs: [changes]
+    if: github.event_name == 'pull_request' && needs.changes.outputs.css-size == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci --ignore-scripts
+      - name: Size growth against the base branch
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: bun run check:css:size --base "origin/$BASE_REF" --format github --summary "$GITHUB_STEP_SUMMARY"
 
   test:
     name: test (${{ matrix.shard }}/2)
