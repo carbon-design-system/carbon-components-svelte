@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
+import { tick } from "svelte";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationActionsTest from "./ToastNotificationActions.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
@@ -138,6 +139,39 @@ describe("ToastNotification", () => {
         description: "Upload failed",
       }),
     ).toBeInTheDocument();
+  });
+
+  it("ignores timeout when it holds an action", async () => {
+    const onclose = vi.fn();
+    render(ToastNotificationActionsTest, { props: { timeout: 1000, onclose } });
+
+    vi.advanceTimersByTime(10_000);
+    await tick();
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
+  });
+
+  it("ignores timeout while actionable", async () => {
+    const onclose = vi.fn();
+    const { rerender } = render(ToastNotificationTest, {
+      props: {
+        title: "Upload failed",
+        timeout: 1000,
+        actionable: true,
+        onclose,
+      },
+    });
+
+    vi.advanceTimersByTime(10_000);
+    await tick();
+    expect(onclose).not.toHaveBeenCalled();
+
+    await rerender({ actionable: false });
+    vi.advanceTimersByTime(1000);
+    await tick();
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
   it("renders no actions wrapper without the actions slot", () => {
