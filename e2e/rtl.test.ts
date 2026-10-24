@@ -1659,4 +1659,22 @@ test.describe("right-to-left tooltips and popovers", () => {
     const rtl = await allFloatOffsets(page, cases);
     expectAlignedInline(ltr, rtl, cases);
   });
+
+  test("moves between TagInput's text and tags with the inline arrows", async ({
+    page,
+  }) => {
+    await page.goto("/rtl-tooltips.html?dir=rtl");
+    const field = page.getByTestId("tag-input");
+    const input = field.getByRole("textbox");
+    const lastTag = field.locator(".bx--tag__close-icon").last();
+
+    await input.focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(input).toBeFocused();
+    // The tags sit at the inline start, to the right.
+    await page.keyboard.press("ArrowRight");
+    await expect(lastTag).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await expect(input).toBeFocused();
+  });
 });
