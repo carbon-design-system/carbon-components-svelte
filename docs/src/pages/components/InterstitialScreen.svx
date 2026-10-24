@@ -32,6 +32,10 @@ Set `isFullScreen` to render a full-screen takeover instead. `InterstitialScreen
 
 <FileSource src="/framed/InterstitialScreen/FullScreen" />
 
+### Heading level
+
+The title is an `h1` in a full-screen takeover, or one level below an enclosing `Section`'s heading, and an `h2` in a modal. Set `headingLevel` on `InterstitialScreenHeader` to fit a different page outline. The subtitle is text, not a heading.
+
 ## Actions
 
 `InterstitialScreenFooter` dispatches a cancelable `action` event on every Skip/Back/Next/Get-Started press, before its default behavior (navigating a step, or closing the screen) runs.
