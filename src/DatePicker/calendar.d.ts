@@ -86,6 +86,11 @@ export interface CalendarOptions
   /** The date the calendar treats as today. Defaults to the current date. */
   now?: string | number | Date;
   parseDate?: (value: string, format: string) => Date | undefined;
+  /**
+   * `"auto"`, `"above"` or `"below"`, then an optional `"start"`,
+   * `"center"` or `"end"` (or physical `"left"`/`"right"`), or a function
+   * that places the calendar.
+   */
   position?:
     | string
     | ((instance: CalendarInstance, customElement?: HTMLElement) => void);
@@ -95,6 +100,13 @@ export interface CalendarOptions
   prevLabel?: string;
   /** Label of the next month (year, decade) button. */
   nextLabel?: string;
+  /**
+   * Read on each ArrowLeft/ArrowRight and each placement. When it returns
+   * `true`, ArrowLeft moves to the next day (month, year) and the calendar
+   * opens at the anchor's right edge. Defaults to the calendar's computed
+   * direction.
+   */
+  rtl?: () => boolean;
   secondInput?: HTMLInputElement;
   shorthandCurrentMonth?: boolean;
   showMonths?: number;
@@ -159,6 +171,12 @@ export interface CalendarInstance {
   onMouseOver(element?: HTMLElement): void;
   now: Date;
 }
+
+/**
+ * The step ArrowLeft (37) or ArrowRight (39) takes through the cells: `1`
+ * to the next cell, `-1` to the previous one, `0` for any other key code.
+ */
+export function inlineStep(code: number, rtl: boolean): -1 | 0 | 1;
 
 /**
  * Builds a calendar on `element`. Returns `null` when the engine cannot be

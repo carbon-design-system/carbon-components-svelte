@@ -1059,3 +1059,146 @@ test.describe("right-to-left text fields", () => {
     expect(await shadow()).toBe(ltr.replace("-2px 0px", "2px 0px"));
   });
 });
+
+// The calendar runs from the right in RTL: weekdays, days, month cells, the
+// header arrows and the range ends sit as far from the right edge as they
+// sat from the left one, and a calendar opens at its field's inline start.
+const DAY = (name: string, label: string) =>
+  `[data-testid=${name}] .bx--date-picker__day[aria-label="${label}"]`;
+
+const CALENDAR_PARTS = {
+  previous: "[data-testid=single] .bx--date-picker__nav-button--previous",
+  next: "[data-testid=single] .bx--date-picker__nav-button--next",
+  monthLabel: "[data-testid=single] .bx--date-picker__month-label",
+  year: "[data-testid=single] .bx--date-picker__year",
+  firstWeekday: "[data-testid=single] .bx--date-picker__weekday",
+  firstOfMonth: DAY("single", "Friday, March 1, 2024"),
+  selected: "[data-testid=single] .bx--date-picker__day--selected",
+  rangeStart: "[data-testid=range] .bx--date-picker__day--range-start",
+  inRange: "[data-testid=range] .bx--date-picker__day--in-range",
+  rangeEnd: "[data-testid=range] .bx--date-picker__day--range-end",
+  rangeEndInput: "[data-testid=range] .bx--date-picker-container + * input",
+  firstMonth: "[data-testid=month] .bx--date-picker__grid-cell",
+  selectedMonth: "[data-testid=month] .bx--date-picker__grid-cell--selected",
+};
+
+test.describe("right-to-left date picker", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/rtl-date-picker.html");
+    await expect(page.locator(CALENDAR_PARTS.selectedMonth)).toBeVisible();
+  });
+
+  const viewportWidth = (page: Page) =>
+    page.evaluate(async () => {
+      await document.fonts.ready;
+      return document.documentElement.clientWidth;
+    });
+
+  test("runs the grids, the arrows and the range from the right", async ({
+    page,
+  }) => {
+    const width = await viewportWidth(page);
+    const ltr = await boxes(page, CALENDAR_PARTS);
+    await setDirection(page, "rtl");
+    const rtl = await boxes(page, CALENDAR_PARTS);
+    expectMirrored(rtl, mirror(ltr, width));
+
+    // The range starts on the right, and the previous arrow sits on the
+    // right and points right.
+    expect((rtl.rangeStart as Box).left).toBeGreaterThan(
+      (rtl.rangeEnd as Box).left,
+    );
+    expect((rtl.previous as Box).left).toBeGreaterThan((rtl.next as Box).left);
+    expect(
+      await iconScales(page, {
+        previous: `${CALENDAR_PARTS.previous} svg`,
+        next: `${CALENDAR_PARTS.next} svg`,
+      }),
+    ).toEqual({ previous: -1, next: -1 });
+  });
+
+  test("swaps ArrowLeft and ArrowRight, and keeps Home at the inline start", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const day = (label: string) => page.locator(DAY("single", label));
+    await day("Friday, March 15, 2024").focus();
+
+    await page.keyboard.press("ArrowLeft");
+    await expect(day("Saturday, March 16, 2024")).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowRight");
+    await expect(day("Thursday, March 14, 2024")).toBeFocused();
+    await page.keyboard.press("Home");
+    const sunday = day("Sunday, March 10, 2024");
+    await expect(sunday).toBeFocused();
+    // The week's first day is its rightmost cell.
+    const row = await sunday.evaluate((node) => {
+      const cells = [...(node.parentElement?.children ?? [])];
+      return {
+        cell: Math.round(node.getBoundingClientRect().right),
+        max: Math.max(
+          ...cells.map((cell) =>
+            Math.round(cell.getBoundingClientRect().right),
+          ),
+        ),
+      };
+    });
+    expect(row.cell).toBe(row.max);
+
+    const months = page.locator(
+      "[data-testid=month] .bx--date-picker__grid-cell",
+    );
+    await months.nth(2).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(months.nth(3)).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowRight");
+    await expect(months.nth(1)).toBeFocused();
+  });
+
+  test("opens a calendar at its field's inline start and keeps it in view", async ({
+    page,
+  }) => {
+    const width = await viewportWidth(page);
+    const open = page.locator(
+      ".bx--date-picker__calendar.bx--date-picker__calendar--open",
+    );
+    async function measure() {
+      const result: Record<string, Box | null> = {};
+      for (const name of ["static", "portal", "portal-inset", "portal-end"]) {
+        // biome-ignore lint/performance/noAwaitInLoops: one calendar open at a time
+        await page
+          .getByTestId(name)
+          .getByRole("textbox", { name: "Start date" })
+          .click();
+        await expect(open).toBeVisible();
+        const box = await open.evaluate((node) => {
+          const rect = node.getBoundingClientRect();
+          return {
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            width: Math.round(rect.width),
+          };
+        });
+        result[name] = box;
+        await page.keyboard.press("Escape");
+        await expect(open).toHaveCount(0);
+      }
+      return result;
+    }
+
+    const ltr = await measure();
+    await setDirection(page, "rtl");
+    const rtl = await measure();
+    expectMirrored(rtl, mirror(ltr, width));
+    for (const [name, box] of Object.entries(rtl)) {
+      expect
+        .soft((box as Box).left, `${name} in view`)
+        .toBeGreaterThanOrEqual(0);
+      expect
+        .soft((box as Box).right, `${name} in view`)
+        .toBeLessThanOrEqual(width);
+    }
+  });
+});
