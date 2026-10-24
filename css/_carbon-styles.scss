@@ -45,6 +45,7 @@ $ccs-theme-switching: false !default;
 
 @import "carbon-components/scss/components/accordion/accordion";
 @import "carbon-components/scss/components/breadcrumb/breadcrumb";
+@import "./breadcrumb-overflow";
 @import "carbon-components/scss/components/button/button";
 @import "carbon-components/scss/components/checkbox/checkbox";
 @import "carbon-components/scss/components/code-snippet/code-snippet";
