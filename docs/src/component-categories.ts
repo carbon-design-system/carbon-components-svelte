@@ -124,6 +124,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ConfirmModal",
       "ComposedModal",
       "InterstitialScreen",
+      "SidePanel",
       "Popover",
       "Toggletip",
       "Tooltip",

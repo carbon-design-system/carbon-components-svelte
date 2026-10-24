@@ -14,6 +14,12 @@
 /// @access private
 /// @group components
 @mixin action-set {
+  // As upstream: actions that don't fill the row sit at the inline end,
+  // so the primary action stays in the trailing corner.
+  .#{$prefix}--action-set {
+    justify-content: flex-end;
+  }
+
   .#{$prefix}--action-set .#{$prefix}--btn {
     @include type-style('body-compact-01');
 
