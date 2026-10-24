@@ -15,6 +15,8 @@ description: LayoutDirection sets the writing direction for part of a page, such
     ClickableTile,
     ContentSwitcher,
     CopyInput,
+    DatePicker,
+    DatePickerInput,
     Dropdown,
     LayoutDirection,
     Link,
@@ -26,6 +28,8 @@ description: LayoutDirection sets the writing direction for part of a page, such
     PasswordInput,
     RangeSlider,
     Search,
+    Select,
+    SelectItem,
     Slider,
     Splitter,
     Stack,
@@ -64,7 +68,7 @@ It matches Carbon React's `LayoutDirection`. To set the direction for the whole 
 
 ## Text fields
 
-In RTL, a field's icons and buttons sit at its left end: the password toggle, the copy button, the number steppers, the clear button, and the invalid, warning, and read-only icons. The text keeps clear of them.
+In RTL, a field's icons and buttons sit at its left end: the password toggle, the copy button, the number steppers, the clear button, the select chevron, the calendar icon, and the invalid, warning, and read-only icons. The text keeps clear of them.
 
 `TagInput`'s tags sit at the right, so <DocKbd label="ArrowRight" /> at the start of the text moves to the last tag and <DocKbd label="ArrowLeft" /> moves back. `PinCodeInput`'s first segment is the rightmost one, and <DocKbd label="ArrowLeft" /> moves to the next segment.
 
@@ -79,6 +83,10 @@ In RTL, a field's icons and buttons sit at its left end: the password toggle, th
       invalidText="الحد الأقصى ١٠ نسخ"
     />
     <Search labelText="بحث في الحوادث" value="فشل النشر" />
+    <Select labelText="المنطقة" invalid invalidText="المنطقة غير متاحة">
+      <SelectItem value="us-east" text="شرق الولايات المتحدة" />
+      <SelectItem value="eu-west" text="غرب أوروبا" />
+    </Select>
   </Stack>
 </LayoutDirection>
 
@@ -102,6 +110,17 @@ In RTL, a button's label starts at its right edge and its icon sits at its left 
       <Button>نشر</Button>
     </ButtonSet>
   </Stack>
+</LayoutDirection>
+
+## Date picker
+
+In RTL, the calendar runs from the right: the week starts at the right edge, and the previous month arrow sits on the right and points right. <DocKbd label="ArrowLeft" /> moves to the next day, month, or year, and <DocKbd label="ArrowRight" /> to the previous one. <DocKbd label="Home" /> and <DocKbd label="End" /> still go to the first and last day of the week. A calendar in a portal opens at the field's right edge. Set `locale` to name the months and weekdays and to start the week on the locale's first day, such as Saturday for `"ar"`.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <DatePicker datePickerType="range" locale="ar">
+    <DatePickerInput labelText="بداية الفترة" placeholder="mm/dd/yyyy" />
+    <DatePickerInput labelText="نهاية الفترة" placeholder="mm/dd/yyyy" />
+  </DatePicker>
 </LayoutDirection>
 
 ## Slider
@@ -220,7 +239,7 @@ In RTL, a resizable `SideNav` has its handle on its left edge, and a horizontal 
 
 ## Icons
 
-In RTL, icons that point forward or back mirror: Pagination, PaginationNav, Carousel and Tabs arrows, Stepper and InterstitialScreen buttons, the AILabel undo icon, submenu carets and the Card and ClickableTile icons. Icons without a direction stay as they are, such as check marks, the search icon and the Launch icon of an outbound link.
+In RTL, icons that point forward or back mirror: Pagination, PaginationNav, Carousel, Tabs and DatePicker month arrows, Stepper and InterstitialScreen buttons, the AILabel undo icon, submenu carets and the Card and ClickableTile icons. Icons without a direction stay as they are, such as check marks, the search icon and the Launch icon of an outbound link.
 
 Add the `bx--icon--mirror-rtl` class to mirror your own forward or back icon, such as an arrow in a link's `icon` slot. A `dir="ltr"` region inside an RTL page turns the mirror off again.
 
