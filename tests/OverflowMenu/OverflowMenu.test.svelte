@@ -7,6 +7,7 @@
   export let direction: ComponentProps<OverflowMenu>["direction"] = "bottom";
   export let id: ComponentProps<OverflowMenu>["id"] = `ccs-${Math.random().toString(36)}`;
   export let portalMenu: ComponentProps<OverflowMenu>["portalMenu"] = false;
+  export let flipped: ComponentProps<OverflowMenu>["flipped"] = false;
   export let maxHeight: ComponentProps<OverflowMenu>["maxHeight"] = undefined;
   export let ariaLabel: ComponentProps<OverflowMenu>["aria-label"] = undefined;
   export let open = false;
@@ -31,6 +32,7 @@
   {direction}
   {id}
   {portalMenu}
+  {flipped}
   {maxHeight}
   on:close={(e) => {
     if (cancelClose) e.preventDefault();

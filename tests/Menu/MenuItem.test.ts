@@ -134,6 +134,64 @@ describe("MenuItem", () => {
       }
     });
 
+    describe("in RTL", () => {
+      beforeEach(() => {
+        document.documentElement.style.direction = "rtl";
+      });
+
+      afterEach(() => {
+        document.documentElement.style.removeProperty("direction");
+        vi.restoreAllMocks();
+      });
+
+      /** Open "Export as" with the parent item `left` px from the left edge. */
+      async function openSubmenu(left: number) {
+        render(MenuItemFixture);
+        await user.click(screen.getByRole("button", { name: "Trigger" }));
+        const parent = screen.getByRole("menuitem", { name: "Export as" });
+        vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+          function (this: Element) {
+            if (this === parent) {
+              return rect({ top: 100, height: 30, left, width: 200 });
+            }
+            return rect({ bottom: 200, right: 200 });
+          },
+        );
+        await user.click(parent);
+        return screen.getByRole("menu", { name: "Export as" });
+      }
+
+      it("opens the submenu to the left", async () => {
+        const submenu = await openSubmenu(400);
+        expect(submenu).toHaveAttribute("data-floating-menu-direction", "left");
+      });
+
+      it("flips the submenu to the right when there is no room on the left", async () => {
+        const submenu = await openSubmenu(10);
+        expect(submenu).toHaveAttribute(
+          "data-floating-menu-direction",
+          "right",
+        );
+      });
+
+      it("opens the submenu with ArrowLeft and closes it with ArrowRight", async () => {
+        render(MenuItemFixture);
+        await user.click(screen.getByRole("button", { name: "Trigger" }));
+        const parent = screen.getByRole("menuitem", { name: "Export as" });
+        parent.focus();
+
+        await user.keyboard("{ArrowRight}");
+        expect(parent).toHaveAttribute("aria-expanded", "false");
+
+        await user.keyboard("{ArrowLeft}");
+        expect(screen.getByRole("menuitem", { name: "PDF" })).toHaveFocus();
+
+        await user.keyboard("{ArrowRight}");
+        expect(parent).toHaveFocus();
+        expect(parent).toHaveAttribute("aria-expanded", "false");
+      });
+    });
+
     it("opens the submenu with ArrowRight and focuses the first item", async () => {
       render(MenuItemFixture);
 
