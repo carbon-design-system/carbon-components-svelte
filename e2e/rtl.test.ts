@@ -683,7 +683,34 @@ test.describe("right-to-left layout", () => {
       }, PAGINATION_PARTS);
     }
 
+    /** Each select's chevron, as offsets from the select's inline end. */
+    function chevrons() {
+      return page.evaluate((root) => {
+        const rtl = document.documentElement.dir === "rtl";
+        return [
+          ...document.querySelectorAll(`${root} .bx--select-input__wrapper`),
+        ].map((wrapper) => {
+          const box = wrapper.getBoundingClientRect();
+          const icon = wrapper
+            .querySelector(".bx--select__arrow")
+            ?.getBoundingClientRect();
+          if (!icon) return null;
+          return rtl
+            ? [
+                Math.round(icon.left - box.left),
+                Math.round(icon.right - box.left),
+              ]
+            : [
+                Math.round(box.right - icon.right),
+                Math.round(box.right - icon.left),
+              ];
+        });
+      }, root);
+    }
+
     const ltr = await sides();
+    const ltrChevrons = await chevrons();
+    expect(ltrChevrons.length).toBeGreaterThan(0);
     // In LTR the buttons' and page select's separators sit on their left,
     // and the page size select's on its right.
     expect(ltr.forward?.slice(0, 2)).toEqual(["1px", "0px"]);
@@ -696,16 +723,9 @@ test.describe("right-to-left layout", () => {
       expect.soft(values, `${name} renders`).not.toBeNull();
       if (!values) continue;
       const [bl, br, ml, mr, pl, pr] = values;
-      // The selects keep Select's physical chevron and padding for now;
-      // only their separators flip.
-      const flipped = name.endsWith("Select")
-        ? rtl[name]?.slice(0, 2)
-        : rtl[name];
-      const expected = name.endsWith("Select")
-        ? [br, bl]
-        : [br, bl, mr, ml, pr, pl];
-      expect.soft(flipped, name).toEqual(expected);
+      expect.soft(rtl[name], name).toEqual([br, bl, mr, ml, pr, pl]);
     }
+    expect(await chevrons()).toEqual(ltrChevrons);
   });
 
   test("mirrors the submenu caret", async ({ page }) => {
@@ -904,6 +924,20 @@ const FIELD_CASES = [
   "time-picker-invalid",
   "toolbar-search",
   "contained-list-search",
+  "date-picker",
+  "date-picker-invalid",
+  "date-picker-warn",
+  "date-picker-clearable",
+  "date-picker-clearable-invalid",
+  "date-picker-decorator",
+  "date-picker-range",
+  "select",
+  "select-invalid",
+  "select-warn",
+  "select-decorator",
+  "select-inline",
+  "select-inline-invalid",
+  "fluid-select",
   "fluid-select-invalid",
   "fluid-combo-box-invalid",
   "fluid-date-picker-invalid",
@@ -930,10 +964,14 @@ const FIELD_PARTS = [
   ".bx--label",
   ".bx--text-input__label-helper-wrapper",
   ".bx--text-input__field-outer-wrapper",
-  // Message-row status icons of the other fluid fields.
+  ".bx--date-picker__icon",
+  ".bx--date-picker__clear",
+  ".bx--date-picker-container",
+  ".bx--select__arrow",
   ".bx--select__invalid-icon",
+  ".bx--form__helper-text",
+  // Message-row status icons of the other fluid fields.
   ".bx--list-box__invalid-icon",
-  ".bx--date-picker__icon--invalid",
   ".bx--time-picker__icon",
   ".bx--pin-code-input__icon",
 ];
@@ -942,6 +980,7 @@ const FIELD_PARTS = [
 const FIELD_TEXT = [
   "input:not([type=hidden])",
   "textarea",
+  "select",
   ".bx--form-requirement",
 ];
 
@@ -952,6 +991,7 @@ const FIELD_PSEUDOS = [
   [".bx--search-close", "::before"],
   // The fluid TimePicker's dividers between its cells.
   [".bx--select-input__wrapper", "::before"],
+  [".bx--select__inner-wrapper--decorator", "::after"],
 ] as const;
 
 /** Every visible part of each case, as start and end offsets from its box. */
