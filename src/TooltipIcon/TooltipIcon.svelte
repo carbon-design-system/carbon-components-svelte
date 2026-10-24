@@ -301,9 +301,15 @@
   on:focus
   on:focus={() => {
     if (disabled) return;
+    // Focus shows the tooltip at once, without the fade-in. Focus the
+    // library moved here itself, such as a modal's first focus, did not
+    // ask for it: keep it hidden until the next pointer enter or focus.
+    if (!tooltipHandoff.claimFocus(ref)) {
+      hide();
+      hidden = true;
+      return;
+    }
     hidden = false;
-    // Focus shows the tooltip at once, without the fade-in.
-    tooltipHandoff.claim({ instant: true });
     if (effectivePortalTooltip) focused = true;
     show();
   }}

@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import { createAnchoredTooltip } from "../../src/utils/anchored-tooltip.js";
+import { focusQuietly } from "../../src/utils/focus.js";
 import {
   activeTooltip,
   createTooltipGroup,
@@ -305,6 +306,31 @@ describe("createAnchoredTooltip", () => {
 
     tooltip.handleTooltipMouseenter();
     expect(open()).toBe(false);
+  });
+
+  it("stays closed for focus the library moves, and opens for the user's", () => {
+    const { node, tooltip, open, hidden } = setup({}, "button");
+    const { event, stopPropagation } = escapeKey();
+
+    focusQuietly(node);
+    expect(open()).toBe(false);
+    expect(hidden()).toBe(true);
+    // Escape goes on, for example to close a dialog.
+    tooltip.handleKeydown(event);
+    expect(stopPropagation).not.toHaveBeenCalled();
+
+    node.blur();
+    node.focus();
+    expect(open()).toBe(true);
+  });
+
+  it("opens on hover after focus the library moved", () => {
+    const { node, open } = setup({}, "button");
+
+    focusQuietly(node);
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(100);
+    expect(open()).toBe(true);
   });
 
   it("keeps a click on an inline tooltip from reaching the anchor", () => {

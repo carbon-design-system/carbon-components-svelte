@@ -33,6 +33,12 @@ export function createTooltipHandoff(options?: {
    * without a warm handoff, e.g. on keyboard focus.
    */
   claim: (options?: { instant?: boolean }) => void;
+  /**
+   * Claim the slot at once for focus on `node`, unless the library moved
+   * focus there itself (`focusQuietly`). Returns `false` then, and the
+   * caller treats the tooltip as dismissed.
+   */
+  claimFocus: (node: Element | null | undefined) => boolean;
   release: () => void;
   /**
    * Hide on the user's request (Escape): cancel pending timers, clear the

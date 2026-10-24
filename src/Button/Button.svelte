@@ -292,21 +292,15 @@
     if (portalOpen) tooltipHandoff.cancel();
   }
 
-  // Focus shows the tooltip at once, without the fade-in.
+  // Focus shows the tooltip at once, without the fade-in. Focus the
+  // library moved here itself, such as a modal's first focus, did not ask
+  // for the tooltip. Treat it as dismissed, so Escape reaches the modal,
+  // until the next pointer enter or focus.
   function handleFocus() {
     if (!(hasTooltip || usePortal) || disabled) return;
     focused = true;
-    // A modal moving its initial focus here did not ask for the tooltip.
-    // Treat it as dismissed, so Escape reaches the modal, until the next
-    // pointer enter or focus.
-    if (insideModal?.isInitialFocus?.(ref)) {
-      dismissed = true;
-      tooltipShown = false;
-      return;
-    }
-    dismissed = false;
-    tooltipShown = true;
-    tooltipHandoff.claim({ instant: true });
+    dismissed = !tooltipHandoff.claimFocus(ref);
+    tooltipShown = !dismissed;
   }
 
   // Listens on `window` in the capture phase, as TooltipIcon does, so a

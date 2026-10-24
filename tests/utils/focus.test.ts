@@ -1,5 +1,7 @@
 import {
+  focusQuietly,
   initialFocus,
+  isQuietFocus,
   restoreFocus,
   returnFocus,
 } from "../../src/utils/focus.js";
@@ -192,5 +194,49 @@ describe("returnFocus", () => {
     returnFocus(detached);
     returnFocus(null);
     expect(document.activeElement).toBe(document.body);
+  });
+});
+
+describe("focusQuietly", () => {
+  /** Record `isQuietFocus` from the target's own focus listener. */
+  function watch(target: HTMLElement) {
+    const quiet: boolean[] = [];
+    target.addEventListener("focus", () => quiet.push(isQuietFocus(target)));
+    return quiet;
+  }
+
+  it("marks the move while it happens, and only then", () => {
+    const container = setup('<button id="trigger"></button>');
+    const trigger = container.querySelector<HTMLElement>("#trigger");
+    assert(trigger);
+    const quiet = watch(trigger);
+
+    focusQuietly(trigger);
+    expect(document.activeElement).toBe(trigger);
+    expect(isQuietFocus(trigger)).toBe(false);
+
+    trigger.blur();
+    trigger.focus();
+    expect(quiet).toEqual([true, false]);
+  });
+
+  it("marks focus that returnFocus and restoreFocus move", () => {
+    const container = setup(`
+      <button id="trigger"></button>
+      <div id="menu"><button id="item"></button></div>
+    `);
+    const trigger = container.querySelector<HTMLElement>("#trigger");
+    const item = container.querySelector<HTMLElement>("#item");
+    assert(trigger && item);
+    const quiet = watch(trigger);
+
+    item.focus();
+    returnFocus(trigger, container.querySelector("#menu"));
+
+    const focusReturn = restoreFocus();
+    focusReturn.save();
+    item.focus();
+    focusReturn.restore();
+    expect(quiet).toEqual([true, true]);
   });
 });

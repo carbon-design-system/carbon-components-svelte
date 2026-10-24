@@ -14,6 +14,8 @@ import { createTooltipHandoff } from "./tooltip-handoff.js";
  * The pointer can move from the anchor onto the tooltip, and the tooltip
  * stays while the pointer is on either. Escape hides it until the next
  * pointer enter or focus, as can activating the anchor (WCAG 1.4.13).
+ * Focus the library moves itself, such as a dialog's first focus, does
+ * not show it.
  *
  * @param {object} [options]
  * @param {import("./tooltip-group.js").TooltipGroup} [options.group]
@@ -82,11 +84,12 @@ export function createAnchoredTooltip({
     });
   }
 
-  function handleFocus() {
+  /** @param {Event} event */
+  function handleFocus(event) {
     if (!enabled()) return;
     focused.set(true);
-    dismissed.set(false);
-    handoff.claim({ instant: true });
+    const node = /** @type {Element} */ (event.currentTarget);
+    dismissed.set(!handoff.claimFocus(node));
   }
 
   /**
@@ -152,7 +155,7 @@ export function createAnchoredTooltip({
    * @returns {() => void} Removes the listeners.
    */
   function attach(node) {
-    /** @type {Array<[string, () => void]>} */
+    /** @type {Array<[string, (event: Event) => void]>} */
     const listeners = [
       ["mouseenter", handleMouseenter],
       ["mouseleave", handleMouseleave],

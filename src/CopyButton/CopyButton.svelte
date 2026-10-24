@@ -170,10 +170,12 @@
     });
   }
 
+  // Focus the library moved here itself, such as a modal's first focus,
+  // didn't ask for the tooltip: treat it as dismissed until the next
+  // pointer enter or focus.
   function handleTooltipFocus() {
     focused = true;
-    dismissed = false;
-    tooltipHandoff.claim();
+    dismissed = !tooltipHandoff.claimFocus(ref);
   }
 
   // Escape hides whatever the tooltip surface shows: the description, or

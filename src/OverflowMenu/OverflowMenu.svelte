@@ -125,7 +125,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { returnFocus } from "../utils/focus.js";
+  import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -458,12 +458,13 @@
     });
   }
 
+  // Focus the menu returns here as it closes didn't ask for the tooltip,
+  // so it counts as dismissed (see `dismissTooltip`).
   function handleTooltipFocus() {
     if (!hasTooltip || disabled) return;
     tooltipMounted = true;
     focused = true;
-    dismissed = false;
-    tooltipHandoff.claim({ instant: true });
+    dismissed = !tooltipHandoff.claimFocus(buttonRef);
   }
 
   function handleTooltipBlur() {
@@ -472,9 +473,9 @@
     if (!hovered) tooltipHandoff.release();
   }
 
-  // Also called after the menu hands focus back to the trigger, so the
-  // next Escape reaches an ancestor such as a Modal instead of hiding a
-  // tooltip that focus alone brought up.
+  // Also called after the menu closes, so the next Escape reaches an
+  // ancestor such as a Modal instead of hiding a tooltip that focus alone
+  // brought up, even when focus was already on the trigger.
   function dismissTooltip() {
     dismissed = true;
     tooltipHandoff.dismiss();
@@ -557,7 +558,7 @@
     );
     if (shouldContinue) {
       open = false;
-      buttonRef.focus({ preventScroll: true });
+      focusQuietly(buttonRef, { preventScroll: true });
       dismissTooltip();
     }
   }
