@@ -116,6 +116,11 @@
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import {
+    getLayoutDirection,
+    inlineKey,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
@@ -163,6 +168,9 @@
   function handleResizeStart(event) {
     resizing = true;
     resizeStartX = event.clientX;
+    // In RTL the handle is on the nav's left edge, so dragging left widens it.
+    resizeDirection =
+      resolveLayoutDirection($layoutDirection, navRef) === "rtl" ? -1 : 1;
     resizeStartWidth = renderedWidth;
     scheduleResizeHover.cancel();
     resizeHovered = true;
@@ -172,7 +180,9 @@
   }
 
   function handleResizeMove(event) {
-    width = clampWidth(resizeStartWidth + (event.clientX - resizeStartX));
+    width = clampWidth(
+      resizeStartWidth + resizeDirection * (event.clientX - resizeStartX),
+    );
   }
 
   function stopResizing() {
@@ -197,9 +207,11 @@
     const step = event.shiftKey
       ? RESIZE_KEYBOARD_LARGE_STEP
       : RESIZE_KEYBOARD_STEP;
+    // ArrowRight moves the handle toward the inline end, widening the nav.
+    const key = inlineKey(event.key, $layoutDirection, navRef);
     let next;
-    if (event.key === "ArrowLeft") next = renderedWidth - step;
-    else if (event.key === "ArrowRight") next = renderedWidth + step;
+    if (key === "ArrowLeft") next = renderedWidth - step;
+    else if (key === "ArrowRight") next = renderedWidth + step;
     else if (event.key === "Home") next = minWidth;
     else if (event.key === "End") next = maxWidth;
     else return;
@@ -241,6 +253,7 @@
   }
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   let navRef = undefined;
   let winWidth = undefined;
@@ -269,6 +282,7 @@
   let resizing = false;
   let resizeStartX = 0;
   let resizeStartWidth = 0;
+  let resizeDirection = 1;
   // Set once the pointer has rested on the handle for `resizeEnterDelayMs`,
   // and for the length of a drag.
   let resizeHovered = false;

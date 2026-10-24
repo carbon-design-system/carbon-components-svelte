@@ -360,6 +360,44 @@ describe("Splitter", () => {
     expect(onResize.mock.calls).toEqual([[{ size: 33.25 }]]);
   });
 
+  describe("in RTL", () => {
+    beforeEach(() => {
+      document.documentElement.style.direction = "rtl";
+    });
+
+    afterEach(() => {
+      document.documentElement.style.removeProperty("direction");
+    });
+
+    it("grows the start pane, on the right, as the separator is dragged left", async () => {
+      const { separator } = setup();
+
+      await drag(separator, 200, 100);
+
+      expect(separator).toHaveAttribute("aria-valuenow", "75");
+    });
+
+    it("grows the start pane with ArrowLeft and shrinks it with ArrowRight", async () => {
+      const { separator } = setup();
+
+      separator.focus();
+      await user.keyboard("{ArrowLeft}{ArrowLeft}{ArrowRight}");
+
+      expect(separator).toHaveAttribute("aria-valuenow", "51");
+    });
+
+    it("keeps a vertical drag and keys as they are", async () => {
+      const { separator } = setup({ orientation: "vertical" });
+
+      await drag(separator, 100, 150, "clientY");
+      expect(separator).toHaveAttribute("aria-valuenow", "75");
+
+      separator.focus();
+      await user.keyboard("{ArrowUp}{ArrowLeft}");
+      expect(separator).toHaveAttribute("aria-valuenow", "74");
+    });
+  });
+
   it("measures a vertical drag along the height", async () => {
     const { separator } = setup({ orientation: "vertical" });
 
