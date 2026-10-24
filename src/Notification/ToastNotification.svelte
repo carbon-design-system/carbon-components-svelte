@@ -83,6 +83,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import { joinDescribedBy } from "../utils/field-status.js";
@@ -98,8 +99,9 @@
   /** @type {null | HTMLDivElement} */
   let notificationRef = null;
 
-  // A `NotificationActionButton` in a toast renders as a tertiary button.
-  setContext("carbon:ToastNotification", {});
+  const describedBy = writable(undefined);
+
+  setContext("carbon:NotificationAction", { describedBy, toast: true });
 
   const {
     close,
@@ -134,6 +136,9 @@
   $: builtInLabelledBy = actionable && !ariaLabel ? labelId : undefined;
   $: builtInDescribedBy =
     actionable && hasTitle && hasSubtitle ? subtitleId : undefined;
+  // The title describes an action, as in a Callout. An actionable
+  // notification is a dialog named by its title, so the action skips it.
+  $: describedBy.set(hasTitle && !actionable ? titleId : undefined);
 
   onMount(() => dispose);
 </script>
@@ -192,10 +197,7 @@
     />
     <div class:bx--toast-notification__details={true}>
       {#if hasTitle}
-        <h3
-          id={actionable ? titleId : undefined}
-          class:bx--toast-notification__title={true}
-        >
+        <h3 id={titleId} class:bx--toast-notification__title={true}>
           <slot name="titleChildren">{title}</slot>
         </h3>
       {/if}

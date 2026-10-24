@@ -56,7 +56,7 @@
 
   const describedBy = writable(undefined);
 
-  setContext("carbon:Callout", { describedBy });
+  setContext("carbon:NotificationAction", { describedBy, toast: false });
 
   $: titled = Boolean(title || $$slots.titleChildren);
   $: describedBy.set(titled ? titleId : undefined);

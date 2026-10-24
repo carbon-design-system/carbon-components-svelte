@@ -5,10 +5,10 @@
   import Button from "../Button/Button.svelte";
   import { joinDescribedBy } from "../utils/field-status.js";
 
-  // Inside a `Callout`, the callout's title describes the action.
-  const calloutDescribedBy = getContext("carbon:Callout")?.describedBy;
-  // As in Carbon React, a toast's action is a tertiary button, not a ghost.
-  const toast = getContext("carbon:ToastNotification") !== undefined;
+  // The notification's title describes the action, so focusing it reads
+  // "Retry, button, Upload failed". As in Carbon React, a toast's action is
+  // a tertiary button, not a ghost.
+  const { describedBy, toast } = getContext("carbon:NotificationAction") ?? {};
 </script>
 
 <Button
@@ -24,7 +24,7 @@
     .filter(Boolean)
     .join(" ")}
   aria-describedby={joinDescribedBy(
-    $calloutDescribedBy,
+    $describedBy,
     $$restProps["aria-describedby"],
   )}
   on:click

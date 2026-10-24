@@ -80,7 +80,8 @@
    */
   export let open = true;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import { joinDescribedBy } from "../utils/field-status.js";
@@ -95,6 +96,10 @@
 
   /** @type {null | HTMLDivElement} */
   let notificationRef = null;
+
+  const describedBy = writable(undefined);
+
+  setContext("carbon:NotificationAction", { describedBy, toast: false });
 
   const {
     close,
@@ -129,6 +134,9 @@
   $: builtInLabelledBy = actionable && !ariaLabel ? labelId : undefined;
   $: builtInDescribedBy =
     actionable && hasTitle && hasSubtitle ? subtitleId : undefined;
+  // The title describes an action, as in a Callout. An actionable
+  // notification is a dialog named by its title, so the action skips it.
+  $: describedBy.set(hasTitle && !actionable ? titleId : undefined);
 
   onMount(() => dispose);
 </script>
@@ -190,10 +198,7 @@
       />
       <div class:bx--inline-notification__text-wrapper={true}>
         {#if hasTitle}
-          <p
-            id={actionable ? titleId : undefined}
-            class:bx--inline-notification__title={true}
-          >
+          <p id={titleId} class:bx--inline-notification__title={true}>
             <strong><slot name="titleChildren">{title}</slot></strong>
           </p>
         {/if}

@@ -129,6 +129,17 @@ describe("ToastNotification", () => {
     );
   });
 
+  it("describes the action by the title", () => {
+    render(ToastNotificationActionsTest);
+
+    expect(
+      screen.getByRole("button", {
+        name: "Retry",
+        description: "Upload failed",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("renders no actions wrapper without the actions slot", () => {
     render(ToastNotificationTest, { props: { title: "Saved" } });
 
