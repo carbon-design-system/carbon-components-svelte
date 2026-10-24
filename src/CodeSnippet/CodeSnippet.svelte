@@ -217,7 +217,9 @@
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { isImeComposition } from "../utils/ime-composition.js";
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -281,6 +283,17 @@
   }
 
   $: feedbackText = copyFailed ? errorFeedback : feedback;
+
+  // Escape hides the inline snippet's copy feedback, as it does
+  // CopyButton's. Listens on `window` in the capture phase, so an ancestor
+  // such as a Modal doesn't also see the Escape that hid it.
+  function handleFeedbackKeydown(event) {
+    if (event.key !== "Escape" || !feedbackOpen) return;
+    // Escape that cancels an IME composition is not a dismissal.
+    if (isImeComposition(event)) return;
+    event.stopPropagation();
+    copyFeedback.dismiss();
+  }
 
   /** @type {null | HTMLElement} */
   let inlineCodeRef = null;
@@ -488,6 +501,12 @@
   {:else}
     <button
       bind:this={copyRef}
+      use:dismiss={{
+        enabled: feedbackOpen,
+        type: "keydown",
+        handler: handleFeedbackKeydown,
+        options: { capture: true },
+      }}
       type="button"
       {disabled}
       aria-busy={copyPending || undefined}
