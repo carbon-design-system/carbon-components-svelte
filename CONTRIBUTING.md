@@ -50,6 +50,8 @@ The site serves at http://localhost:5173/ (or the next available port).
 
 Conventions used across `src/`. Follow them in new and changed code.
 
+Parity with Carbon v11 is the floor. Where this library can do better than Carbon React, in DX, implementation or performance, do it. Never accept a weaker design to get past a repo rule, a test or a budget. Change the rule explicitly instead, and say why. CssGrid reads v11's `--cds-grid-*` properties so a value on any ancestor wins, and the custom-property rule changed to allow v11's defaults as fallbacks ([#4083](https://github.com/carbon-design-system/carbon-components-svelte/pull/4083)). The grid then outgrew the fixed CSS size ceilings, so [#5000](https://github.com/carbon-design-system/carbon-components-svelte/pull/5000) replaced them with a per-PR growth limit rather than move the grid out of `all.css`.
+
 ### Code style
 
 Comments:
@@ -128,6 +130,8 @@ Patterns:
 - Mirror the shadowed prop in the slot name. When a slot overrides the content a prop renders, name it after that prop. Svelte forbids a slot from matching an exported prop name exactly, so suffix it with `Children`: the `labelChildren` slot shadows the `labelText` prop. See `<slot name="labelChildren">` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
 - Set dynamic styles with the `style:` directive, not inline `style` strings or template literals: `style:left="{x}px"`. See [`ContextMenu.svelte`](src/ContextMenu/ContextMenu.svelte) and the thumb position in [`Slider.svelte`](src/Slider/Slider.svelte).
 - Swap arrow keys that act along the inline axis under `dir="rtl"`. Left raises a `Slider` and expands a `TreeView` row, as in React Aria. Resolve the direction with `resolveLayoutDirection` from [`layout-direction.js`](src/utils/layout-direction.js) when the key arrives: a `LayoutDirection` first, then the computed direction. Nothing reports a `dir` change on an ancestor, so a value read at mount goes stale. See `treeKey` in [`TreeView.svelte`](src/TreeView/TreeView.svelte).
+- Keep state per instance. Do not write module-level stores or variables while a component renders: on a server, one request's values leak into the next, and two instances on one page share them. Put per-instance state in context (`setContext` in the owner). SideNav's rail state leaked across requests this way ([#4981](https://github.com/carbon-design-system/carbon-components-svelte/pull/4981)).
+- Check whether a difference from Carbon React is deliberate before you change it to match. Read the `// ccs:` comments, `git log -S`, the tests that pin the behavior, `e2e/forced-colors.test.ts`, and this file. If it is deliberate, keep it. Carbon React has bugs of its own, and this library is ahead in places: forced colors, the Toggletip caret, RTL keys in TreeView. Never regress a forced-colors row or an accessibility test for parity.
 
 The `{#if skeleton}` early-return pattern is being phased out. Follow it only when maintaining existing skeleton code.
 
@@ -565,7 +569,7 @@ Values:
 
 - Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
 - Spacing tokens: `$carbon--spacing-01` … `-13`. Not the `$spacing-0N` aliases.
-- Color: Carbon v11 theme tokens (`$layer-01`, `$field-01`, `$support-error`, …). No hex, and no v10 names (`$ui-01`, `$text-01`): `all.css` no longer declares them, and `tests/css/v11-tokens.test.ts` fails on any that reach the CSS. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
+- Color: Carbon v11 theme tokens (`$layer`, `$field`, `$support-error`, …). Prefer the contextual tokens (`$layer`, `$field`, `$border-subtle`), so a surface follows the `Layer` it sits in. Read a numbered one (`$layer-01`) only where v11 pins the level, and list it in `PINNED` in `tests/css/layer.test.ts`. No hex, and no v10 names (`$ui-01`, `$text-01`): `all.css` no longer declares them, and `tests/css/v11-tokens.test.ts` fails on any that reach the CSS. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
@@ -574,7 +578,7 @@ Values:
 - Set one spelling of a box property per rule. `width` and `inline-size` (likewise `top`/`inset-block-start`, `height`/`block-size`) share a cascade slot, so the earlier one is dead; `check:css:overrides` reports it.
 - `z-index`: `z("floating")`, `z("dropdown")`, … for anything that floats over the page. A literal `1`/`-1` is fine for stacking inside the component's own box.
 - Breakpoints: `@include carbon--breakpoint(md)`, not a literal `min-width`.
-- Custom properties: `--cds-*` is reserved for Carbon theme tokens. Properties this library invents are `--ccs-*` (and Sass globals `$ccs-*`). A few older public hooks predate this rule (`--cds-scroll-gradient-color`, `--cds-popover-offset`, `--user-avatar-group-overlap`); do not add more. A hook Carbon v11 itself defines keeps its v11 name (`--cds-link-text-color`, `--cds-grid-gutter`): read it with the theme token or v11's default as the fallback, do not declare it, and list it in `V11_HOOKS` in `tests/css/v11-tokens.test.ts`. Mode values derived from it are `--ccs-*`.
+- Custom properties: `--cds-*` is reserved for Carbon theme tokens. Properties this library invents are `--ccs-*` (and Sass globals `$ccs-*`). A few older public hooks predate this rule (`--cds-scroll-gradient-color`, `--cds-popover-offset`, `--user-avatar-group-overlap`); do not add more. Before you invent a `--ccs-*` variable for a color, check whether v11 has a token for it (`--cds-status-red`, `--cds-content-switcher-background`); use the token if it does. A hook Carbon v11 itself defines keeps its v11 name (`--cds-link-text-color`, `--cds-grid-gutter`): read it with the theme token or v11's default as the fallback, do not declare it, and list it in `V11_HOOKS` in `tests/css/v11-tokens.test.ts`. Mode values derived from it are `--ccs-*`.
 
 Selectors:
 
@@ -585,7 +589,7 @@ Selectors:
 - Do not pad specificity (repeated classes, `tag.class`, order-only `:not()`). If the rule you need to beat is in the vendored tree, edit it there. Repetition is tolerated only to preserve an existing cascade during a refactor, with a comment saying what it matches.
 - Hover rules go in **one** `@media (any-hover: hover)` block per partial, at the end of the mixin. Lightning CSS only merges adjacent blocks, and `tests/css/media-query-grouping.test.ts` budgets the total. Keep any equal-specificity `:focus` rule after the block, or a hover `outline: none` will erase the ring. Two shapes stay outside the block: a suppressor that lists `X:hover` beside its own `X` to restate the resting style, and any hover rule that competes with a base hover rule the vendored tree leaves unguarded (most of them). Guarding only your half lets the base hover through on touch; guard both or neither.
 - Use physical properties (`left`, `padding-right`, `height`) for new code, matching the v10 base. Several v11 backports use logical properties on the block axis; do not mix both for the same box in one rule.
-- The families that flip under `dir="rtl"` are the exception: UI Shell, menus, list boxes, TreeView, Pagination, the checkbox label and tag they render, the text fields (TextInput, PasswordInput, CopyInput, NumberInput, Search, TextArea, TagInput), and the label and message rows of every fluid field. There, inline-axis padding, margin and border are logical (`padding-inline-end`), and `left`/`right` go through `@include ccs-inset-inline($start, $end)`, which adds a `[dir="rtl"]` twin. Flip every rule that sets the same side of an element, in every partial: a physical rule left behind lands on the wrong side in RTL. Check with `e2e/rtl.test.ts`.
+- The families that flip under `dir="rtl"` are the exception: UI Shell, menus, list boxes, TreeView, Pagination, Slider and RangeSlider, Card, the ClickableTile icon, the UserAvatar badge, the checkbox label and tag they render, the text fields (TextInput, PasswordInput, CopyInput, NumberInput, Search, TextArea, TagInput), and the label and message rows of every fluid field. There, inline-axis padding, margin and border are logical (`padding-inline-end`), and `left`/`right` go through `@include ccs-inset-inline($start, $end)`, which adds a `[dir="rtl"]` twin. Flip every rule that sets the same side of an element, in every partial: a physical rule left behind lands on the wrong side in RTL. Check with `e2e/rtl.test.ts`.
 - Code reads left to right in any language. CodeSnippet's code area (`bx--snippet-container`, inline `code`) sets `direction: ltr`, and only the buttons around it flip. Logical properties inside that area resolve against LTR, so a side that follows a button there is physical, with a `[dir="rtl"]` twin (see the multi-line `pre` padding in the code snippet styles).
 - Mirror an icon in RTL when it points forward or back by meaning: previous and next, back, undo, a submenu caret, a link arrow. Add `@include ccs-mirror-rtl` to its rule, and pass the rule's own transform (`ccs-mirror-rtl(rotate(90deg))`) so the two compose. The mixin reads `--ccs-mirror-rtl`, which inherits from the nearest `dir`, so a `dir="ltr"` region turns it off. Leave alone icons with no direction or a fixed one: check marks, media controls, clocks, search, `Launch`, and chevrons that point up or down. Apps mirror their own icons with the `bx--icon--mirror-rtl` class.
 - Avoid syntax Lightning CSS downlevels by duplicating the rule: `inset-inline-start`/`-end`, `border-start-start-radius` and its siblings (each expands to `:lang()` RTL twins, about 900 bytes per declaration), a selector list inside `:not()` (write `:not(.a):not(.b)`, or better a marker class), and `:is()`/`:where()`. `tests/css/downlevel.test.ts` scans the vendored tree too.
@@ -1036,6 +1040,8 @@ Between tests the host unmounts the fixture and resets what a fresh page would n
 | Import from `@playwright/test` instead when a test needs `addInitScript`, `page.clock`, `test.use({ viewport })`, a route or its own context | Those apply on a page load, which the host skips. |
 | Poll a layout read (`expect.poll`, `toPass`) that follows an action scheduling work for the next frame | A read taken once races that frame. Slow page loads used to hide these races; on the host they fail. |
 | Keep `goto(` out of e2e comments | The test selector reads it as a navigation and makes the file depend on every page. |
+| Add new markup at the end of a shared fixture (`ForcedColorsFixture.svelte`, `RtlFixture.svelte`), and scope broad selectors | `style(page, ".bx--popover-contents")` reads the first match. A Toggletip added above the plain Popover changed what the caret test measured. |
+| Run `bun build:css` after you switch branches, before e2e | The compiled `css/all.css` is not committed. A sheet left from another branch fails tests that pass in CI. |
 
 A leak the reset misses shows up as a failure that depends on which tests ran earlier in the worker. Run the file with `--workers=1 --repeat-each=3` to reproduce it.
 
@@ -1258,9 +1264,24 @@ git checkout master
 git merge upstream/master
 ```
 
+### Resolve conflicts in shared test files
+
+`e2e/forced-colors.test.ts`, the shared e2e fixtures, `e2e/rtl.test.ts` and import lists conflict often, because many PRs append to them. Keeping both sides is usually right, but a merge tool that keeps both sides line by line can still break the file. After you resolve one, check that:
+
+- each new test sits inside the right `describe`, not inside another test
+- no list entry or import appears twice
+- imports are still sorted (`bunx biome check --write <file>`)
+- the spec still passes locally
+
 ### Open a PR
 
 Push your branch, then open a PR comparing `<YOUR_USER_ID>/feature` to `origin/master`.
+
+In the description:
+
+- Lead with the problem, then the fix, in a short paragraph.
+- For a visual change, add a Before/After table of screenshots: the same example and viewport, Before from `master`, in White and Gray 100. Add RTL or forced-colors shots when the change touches them.
+- For a stacked PR, say what it is stacked on and the merge order. Where you can, write tests that pass in either order, so the stack can merge in any order.
 
 ## Maintainer guide
 
