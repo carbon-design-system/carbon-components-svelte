@@ -168,6 +168,7 @@ Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/ut
 | DataTable, Table, DataTableSkeleton, ToolbarDensity | `compact` 24, `short` 32, `medium` 40, unset 48, `tall` 64 | `xs`, `sm`, `md`, `lg` → unset, `xl` | none |
 | Toolbar | `xs` 24, `sm` 32, `default` 48 | `lg` → `default` | none |
 | FileUploaderItem, FileDownloadItem | `xs`, `small` 32, `field` 40, `default` 48 | `sm` → `small`, `md` → `field`, `lg` → `default` | none |
+| ProgressBar | `sm`, `md` | `small` → `sm`, `big` → `md` | none |
 
 An explicit `md` on a field wins over a parent `Form` size, as any field size does. Components such as ActionSet, Tabs, ContainedList, Pagination and Menu already use v11 names.
 
