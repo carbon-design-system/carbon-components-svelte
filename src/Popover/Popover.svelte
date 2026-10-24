@@ -1,17 +1,3 @@
-<script context="module">
-  // Carbon v11 names map to the placement classes of the older names.
-  const ALIGN_CLASS = {
-    "top-start": "top-left",
-    "top-end": "top-right",
-    "bottom-start": "bottom-left",
-    "bottom-end": "bottom-right",
-    "left-start": "left-top",
-    "left-end": "left-bottom",
-    "right-start": "right-top",
-    "right-end": "right-bottom",
-  };
-</script>
-
 <script>
   /**
    * @event click:outside
@@ -42,8 +28,9 @@
   /**
    * Specify the alignment of the caret.
    * Prefer the Carbon v11 names (`"top-start"`, `"left-end"`, and so on).
-   * The older names (`"top-left"`, `"left-bottom"`, and so on) still work and
-   * give the same placement.
+   * On the top and bottom, `start` and `end` name inline sides, so they swap
+   * under `dir="rtl"`. The older names (`"top-left"`, `"left-bottom"`, and so
+   * on) still work and name physical sides, so they keep their place in RTL.
    * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | "top-left" | "top-right" | "bottom-left" | "bottom-right" | "left-bottom" | "left-top" | "right-bottom" | "right-top"}
    */
   export let align = "top";
@@ -63,13 +50,28 @@
   import { createEventDispatcher } from "svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { isInlineAlign, popoverPlacement } from "../utils/inline-align.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   let popoverRef = null;
 
-  $: alignClass = ALIGN_CLASS[align] ?? align;
+  // Read when the popover opens: nothing reports a `dir` change. A
+  // `bind:this` ref in `$:` would re-run it on every update, so a function
+  // reads `popoverRef`.
+  $: rtl = open && isInlineAlign(align) && readRtl($layoutDirection);
+
+  /** @param {"ltr" | "rtl" | undefined} contextDirection */
+  function readRtl(contextDirection) {
+    return resolveLayoutDirection(contextDirection, popoverRef) === "rtl";
+  }
+  $: alignClass = popoverPlacement(align, rtl);
 
   // A DatePicker nested in this popover may portal its flatpickr calendar to
   // `document.body` (outside `popoverRef`), so a click on it looks like an outside

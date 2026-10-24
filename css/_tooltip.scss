@@ -12,11 +12,15 @@
     display: none;
   }
 
+  // The portal places the box by physical side (`left`, `start` = left
+  // edge), so the caret and the content lay out left to right in RTL too.
+  // The content takes the trigger's direction back through `dir`.
   .#{$prefix}--tooltip-portal {
     display: flex;
     flex-direction: column;
     align-items: center;
     pointer-events: none;
+    direction: ltr;
   }
 
   [data-floating-portal][data-floating-direction="top"] .#{$prefix}--tooltip-portal {
@@ -197,4 +201,25 @@
 
 @include exports("tooltip-instant") {
   @include tooltip-instant;
+}
+
+/// Tooltip text starts at the inline start in RTL too. Carbon sets
+/// `text-align: left` on the tooltip body. The `[dir="rtl"]` ancestor ties
+/// or beats each of those rules, and this partial emits after them. A
+/// portalled body carries `dir` itself only when its trigger is RTL.
+/// @access private
+/// @group components
+@mixin tooltip-rtl-text {
+  [dir="rtl"] .#{$prefix}--tooltip p,
+  [dir="rtl"] .#{$prefix}--tooltip__trigger .#{$prefix}--assistive-text,
+  [dir="rtl"]
+    .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition
+    + .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip-portal .#{$prefix}--tooltip-portal__content[dir="rtl"] {
+    text-align: right;
+  }
+}
+
+@include exports("tooltip-rtl-text") {
+  @include tooltip-rtl-text;
 }

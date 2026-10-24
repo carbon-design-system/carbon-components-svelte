@@ -35,6 +35,7 @@
 
   // Translate the Carbon `direction` + `align` pair into the underlying
   // popover's combined alignment modifier (e.g. "bottom" + "start" -> "bottom-left").
+  // On the top and bottom, `intrinsic` is the physical side (see `physicalAlign`).
   function toPopoverAlign(dir, intrinsic) {
     if (intrinsic === "center") return dir;
     if (dir === "top" || dir === "bottom") {
@@ -59,6 +60,8 @@
 
   /**
    * Set the alignment of the content relative to the button.
+   * Above and below the button, `start` and `end` name inline sides, so
+   * they swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";
@@ -136,13 +139,19 @@
   import { joinDescribedBy } from "../utils/field-status.js";
   import { horizontalBounds, shouldFlipAlign } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { physicalAlign } from "../utils/inline-align.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
 
   let toggletipRef = null;
   let portalRef = null;
@@ -199,7 +208,26 @@
     }
   }
 
-  $: popoverAlign = toPopoverAlign(direction, effectiveAlign);
+  // Above and below the button, `start` and `end` are inline sides. Read the
+  // direction when the toggletip opens: nothing reports a `dir` change. A
+  // `bind:this` ref in `$:` would re-run it on every update, so a function
+  // reads `ref`.
+  $: inlineAxis = direction === "top" || direction === "bottom";
+  $: rtl =
+    open &&
+    inlineAxis &&
+    effectiveAlign !== "center" &&
+    readRtl($layoutDirection);
+
+  /** @param {"ltr" | "rtl" | undefined} contextDirection */
+  function readRtl(contextDirection) {
+    return resolveLayoutDirection(contextDirection, ref) === "rtl";
+  }
+  // The side the popover aligns to: physical above and below the button.
+  $: sideAlign = inlineAxis
+    ? physicalAlign(effectiveAlign, rtl)
+    : effectiveAlign;
+  $: popoverAlign = toPopoverAlign(direction, sideAlign);
   // Start and end alignment point the caret at the button's center (see
   // _toggletip.scss). A portalled popover can't measure the button in CSS.
   $: anchorHalf = open && ref ? ref.offsetWidth / 2 : 8;
@@ -278,7 +306,7 @@
 </script>
 
 <!-- Flex wrapper so the label and button align without an inter-element
-whitespace gap; the label's `margin-right` is then the only spacing. -->
+whitespace gap; the label's end margin is then the only spacing. -->
 <span class:bx--toggletip-container={true}>
   {#if labelText || $$slots.labelText}
     <span class:bx--toggletip-label={true}>
@@ -344,7 +372,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
     {direction}
     {open}
     intrinsicWidth
-    intrinsicAlign={effectiveAlign}
+    intrinsicAlign={sideAlign}
     gapTop={PORTAL_GAP}
     gapBottom={PORTAL_GAP}
     horizontalGapLeft={PORTAL_GAP}
@@ -354,7 +382,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
   >
     {@const popoverAlign = toPopoverAlign(
       actualDirection ?? direction,
-      effectiveAlign,
+      sideAlign,
     )}
     <Popover
       open

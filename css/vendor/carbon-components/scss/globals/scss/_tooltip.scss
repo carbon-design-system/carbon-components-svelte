@@ -573,10 +573,22 @@
     --cds-tooltip-body-left: 0;
     --cds-tooltip-body-right: auto;
     --cds-tooltip-body-tf: translate(0, #{$body-tf-y});
+
+    // ccs: `start` and `end` are inline sides, as in floating-ui, so they
+    // swap under `dir="rtl"`
+    [dir="rtl"] & {
+      --cds-tooltip-body-left: auto;
+      --cds-tooltip-body-right: 0;
+    }
   } @else if ($align == 'end') {
     --cds-tooltip-body-right: 0;
     --cds-tooltip-body-left: auto;
     --cds-tooltip-body-tf: translate(0, #{$body-tf-y});
+
+    [dir="rtl"] & {
+      --cds-tooltip-body-right: auto;
+      --cds-tooltip-body-left: 0;
+    }
   } @else {
     --cds-tooltip-body-left: 50%;
     --cds-tooltip-body-right: auto;

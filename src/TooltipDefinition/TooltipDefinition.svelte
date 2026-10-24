@@ -16,6 +16,7 @@
 
   /**
    * Set the alignment of the tooltip relative to the icon.
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";
@@ -72,11 +73,17 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { physicalAlign } from "../utils/inline-align.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
@@ -156,6 +163,17 @@
   $: shown = open && !$tooltipOthersActive;
 
   $: notifyOpenChange(open);
+
+  // The portal places the tooltip by physical side, and its caret styles
+  // follow. The in-place tooltip flips in CSS instead. Read when the tooltip
+  // shows: nothing reports a `dir` change. A `bind:this` ref in `$:` would
+  // re-run it on every update, so a function reads `ref`.
+  $: portalRtl = effectivePortalTooltip && shown && readRtl($layoutDirection);
+
+  /** @param {"ltr" | "rtl" | undefined} contextDirection */
+  function readRtl(contextDirection) {
+    return resolveLayoutDirection(contextDirection, ref) === "rtl";
+  }
 
   onMount(() => {
     return () => {
@@ -242,7 +260,7 @@
     open={shown}
     gapTop={direction === "top" ? PORTAL_VERTICAL_GAP_TOP_PX : 0}
     gapBottom={direction === "bottom" ? PORTAL_VERTICAL_GAP_BOTTOM_PX : 0}
-    intrinsicAlign={align}
+    intrinsicAlign={physicalAlign(align, portalRtl)}
     intrinsicWidth={true}
     let:direction={actualDirection}
   >
@@ -255,11 +273,14 @@
       on:mouseleave={clickToOpen ? undefined : scheduleHide}
     >
       <span class:bx--tooltip-portal__caret={true}></span>
+      <!-- The box lays out left to right (see _tooltip.scss); the text
+      keeps the trigger's direction. -->
       <span
         {id}
         role="tooltip"
         class:bx--tooltip-portal__content={true}
         class:bx--assistive-text={true}
+        dir={portalRtl ? "rtl" : undefined}
       >
         <slot name="tooltip">{tooltipText}</slot>
       </span>
