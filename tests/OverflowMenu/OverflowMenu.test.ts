@@ -828,3 +828,38 @@ describe("OverflowMenu window listeners", () => {
     expect(netListenerCalls(addSpy, removeSpy, "click")).toBe(0);
   });
 });
+
+describe("OverflowMenu in RTL", () => {
+  afterEach(() => {
+    document.documentElement.style.removeProperty("direction");
+  });
+
+  /**
+   * Whether the open menu lines up with the button's right edge, read from
+   * the flip class and, when portalled, the portal's physical alignment.
+   */
+  async function alignsRight(props: { flipped: boolean; portalMenu: boolean }) {
+    const { unmount } = render(OverflowMenu, { props });
+    await user.click(screen.getByRole("button"));
+    const menu = screen.getByRole("menu");
+    const flip = menu.classList.contains("bx--overflow-menu--flip");
+    const align = menu
+      .closest("[data-floating-portal]")
+      ?.getAttribute("data-floating-intrinsic-align");
+    if (props.portalMenu) expect(align).toBe(flip ? "end" : "start");
+    unmount();
+    return flip;
+  }
+
+  it.each([false, true])(
+    "aligns the menu with the inline start, or the end when flipped (portalMenu: %s)",
+    async (portalMenu) => {
+      expect(await alignsRight({ flipped: false, portalMenu })).toBe(false);
+      expect(await alignsRight({ flipped: true, portalMenu })).toBe(true);
+
+      document.documentElement.style.direction = "rtl";
+      expect(await alignsRight({ flipped: false, portalMenu })).toBe(true);
+      expect(await alignsRight({ flipped: true, portalMenu })).toBe(false);
+    },
+  );
+});

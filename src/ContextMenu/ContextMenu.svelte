@@ -61,7 +61,12 @@
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
+  import { fitMenuAxis } from "../utils/menu-placement.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
@@ -70,6 +75,7 @@
   } from "../utils/typeahead.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
   /**
    * @type {import("svelte/store").Writable<[number, number]>}
    */
@@ -145,20 +151,24 @@
     event.preventDefault();
     const { height, width } = ref.getBoundingClientRect();
 
+    // The menu opens toward the inline end of the pointer: the left in RTL.
     if (open || x === 0) {
-      if (window.innerWidth - width < event.x) {
-        x = event.x - width;
-      } else {
-        x = event.x;
-      }
+      x = fitMenuAxis({
+        before: event.x,
+        after: event.x,
+        size: width,
+        max: window.innerWidth,
+        reverse: resolveLayoutDirection($layoutDirection, ref) === "rtl",
+      });
     }
 
     if (open || y === 0) {
-      if (window.innerHeight - height < event.y) {
-        y = event.y - height;
-      } else {
-        y = event.y;
-      }
+      y = fitMenuAxis({
+        before: event.y,
+        after: event.y,
+        size: height,
+        max: window.innerHeight,
+      });
     }
     position.set([x, y]);
     open = true;

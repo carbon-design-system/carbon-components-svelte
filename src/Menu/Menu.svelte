@@ -78,6 +78,8 @@
 
   /**
    * When `intrinsicWidth` is true, align the menu to the anchor.
+   * With `direction` set to `"top"` or `"bottom"`, `start` and `end` are the
+   * anchor's inline start and end, which swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let intrinsicAlign = "center";
@@ -114,7 +116,12 @@
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
+  import { physicalAlign } from "../utils/menu-placement.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -134,8 +141,10 @@
     .join(",");
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   let focusIndex = -1;
+  let rtl = false;
   let prevOpen = false;
 
   const typeahead = createTypeaheadBuffer();
@@ -234,6 +243,14 @@
     prevOpen = open;
   }
 
+  // Read when the menu opens: nothing reports a `dir` change.
+  $: if (open) rtl = resolveLayoutDirection($layoutDirection, anchor) === "rtl";
+  // `start` and `end` along a top or bottom edge are inline sides. Along a
+  // left or right edge they are the top and bottom, which RTL leaves alone.
+  $: portalAlign =
+    direction === "top" || direction === "bottom"
+      ? physicalAlign(intrinsicAlign, rtl)
+      : intrinsicAlign;
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
   $: maxHeightStyle = toCssLength(maxHeight);
 
@@ -313,7 +330,7 @@
   {verticalAlignOffsetRight}
   {zIndex}
   {intrinsicWidth}
-  {intrinsicAlign}
+  intrinsicAlign={portalAlign}
   {target}
   lockDirection="always"
   let:direction={portalDirection}
@@ -343,6 +360,7 @@
     role="menu"
     tabindex="-1"
     data-floating-menu-direction={portalDirection}
+    data-carbon-align={intrinsicWidth ? portalAlign : undefined}
     style:position="relative"
     style:top="auto"
     style:left="auto"

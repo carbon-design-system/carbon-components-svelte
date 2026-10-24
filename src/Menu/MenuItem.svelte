@@ -82,16 +82,24 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    inlineKey,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
   const ctx = getContext("carbon:Menu");
   const ctxGroup = getContext("carbon:MenuItemGroup");
   const ctxRadioGroup = getContext("carbon:MenuItemRadioGroup");
 
   let submenuOpen = false;
+  /** @type {"left" | "right"} */
+  let submenuDirection = "right";
   const hoverIntent = createSubmenuHoverIntent(
     (value) => {
       submenuOpen = value;
@@ -103,6 +111,14 @@
   let selectedOnce = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
+  // A submenu opens toward the inline end: the left in RTL. Read when it
+  // opens, since nothing reports a `dir` change.
+  $: if (submenuOpen) {
+    submenuDirection =
+      resolveLayoutDirection($layoutDirection, ref) === "rtl"
+        ? "left"
+        : "right";
+  }
   $: if (selected) selectedOnce = true;
   $: isSelectable = !!ctxGroup || selectable || selectedOnce;
   $: isRadio = !!ctxRadioGroup;
@@ -212,7 +228,8 @@
 
     if (hasSubmenu) {
       if (
-        (event.key === "ArrowRight" && !hasModifierKey(event)) ||
+        (inlineKey(event.key, $layoutDirection, ref) === "ArrowRight" &&
+          !hasModifierKey(event)) ||
         event.key === " " ||
         event.key === "Enter"
       ) {
@@ -292,13 +309,16 @@
   {#if hasSubmenu}
     <Menu
       anchor={ref}
-      direction="right"
+      direction={submenuDirection}
       intrinsicWidth
       intrinsicAlign="start"
       bind:open={submenuOpen}
       {labelText}
       on:keydown={(event) => {
-        if (event.key === "ArrowLeft" && !hasModifierKey(event)) {
+        if (
+          inlineKey(event.key, $layoutDirection, ref) === "ArrowLeft" &&
+          !hasModifierKey(event)
+        ) {
           event.preventDefault();
           event.stopPropagation();
           submenuOpen = false;
