@@ -36,6 +36,20 @@ describe("HeaderAction tooltip with the panel open", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("keeps the tooltip closed when closing the panel returns focus", async () => {
+    const { trigger, shown } = setup({ isOpen: true });
+
+    screen.getByRole("link", { name: "Alert settings" }).focus();
+    await pressEscape();
+    await tick();
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(trigger).toHaveFocus();
+    expect(shown()).toBe(false);
+
+    await fireEvent.mouseEnter(trigger);
+    expect(shown()).toBe(true);
+  });
+
   it("closes the panel while the pointer is still on the trigger", async () => {
     vi.useFakeTimers();
     try {

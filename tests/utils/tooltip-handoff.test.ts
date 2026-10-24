@@ -1,4 +1,5 @@
 import { get } from "svelte/store";
+import { focusQuietly } from "../../src/utils/focus.js";
 import {
   activeTooltip,
   createTooltipGroup,
@@ -269,5 +270,35 @@ describe("createTooltipHandoff", () => {
     expect(onHide).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1);
     expect(onHide).toHaveBeenCalledTimes(2);
+  });
+
+  describe("claimFocus()", () => {
+    it("claims at once, without the fade-in, for focus by the user", () => {
+      const handoff = createTooltipHandoff({ group: group() });
+      const button = document.createElement("button");
+
+      expect(handoff.claimFocus(button)).toBe(true);
+      expect(get(handoff.active)).toBe(true);
+      expect(get(handoff.instant)).toBe(true);
+    });
+
+    it("claims nothing for focus the library moved", () => {
+      const handoff = createTooltipHandoff({ group: group() });
+      const button = document.createElement("button");
+      document.body.append(button);
+      let claimed: boolean | undefined;
+      button.addEventListener("focus", () => {
+        claimed = handoff.claimFocus(button);
+      });
+
+      focusQuietly(button);
+      expect(claimed).toBe(false);
+      expect(get(activeTooltip)).toBe(null);
+
+      button.blur();
+      button.focus();
+      expect(claimed).toBe(true);
+      button.remove();
+    });
   });
 });

@@ -189,7 +189,7 @@
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { initialFocus, restoreFocus } from "../utils/focus.js";
+  import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
     getLayoutDirection,
@@ -229,14 +229,9 @@
   });
   const { close, outsideDismiss } = lifecycle;
 
-  // The element initial focus is moving to, while it moves. An icon-only
-  // Button there keeps its tooltip closed, so one Escape closes the panel.
   // Inside the panel, menus and tooltips portal out of its scrolling body,
   // as they do in a modal.
-  let initialFocusTarget = null;
-  setContext(MODAL_CONTEXT_KEY, {
-    isInitialFocus: (node) => node != null && node === initialFocusTarget,
-  });
+  setContext(MODAL_CONTEXT_KEY, {});
 
   // As modals do in v11, the panel starts a layer at level 0 wherever it
   // renders. Its body is a layer at level 1, so a `Layer` inside sits at 2.
@@ -271,9 +266,9 @@
         fallbacks: [closeButtonRef, ref],
       });
     }
-    initialFocusTarget = target;
-    target?.focus();
-    initialFocusTarget = null;
+    // The user didn't ask for a tooltip on the first focus target, so one
+    // Escape still closes the panel.
+    if (target) focusQuietly(target);
   }
 
   function handleKeydown(event) {

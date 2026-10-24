@@ -1,5 +1,7 @@
 import { fireEvent } from "@testing-library/svelte";
 import { TOOLTIP_ICON_LEAVE_DELAY_MS } from "../../src/constants/timing.js";
+import { focusQuietly } from "../../src/utils/focus.js";
+import { pressEscape } from "./tooltip-escape";
 
 export type TooltipHoverSetup = () => {
   /** Element that opens the tooltip on hover and focus. */
@@ -18,10 +20,10 @@ function portalTooltip() {
 }
 
 /**
- * Pointer contract for an icon tooltip (WCAG 1.4.13): it waits out the
- * leave delay and stays while the pointer is on a portalled tooltip. An
- * inline tooltip sits inside its trigger, so the pointer on it never
- * leaves the trigger.
+ * Pointer and focus contract for an icon tooltip (WCAG 1.4.13): it waits
+ * out the leave delay, stays while the pointer is on a portalled tooltip,
+ * and stays closed for focus the library moves itself. An inline tooltip
+ * sits inside its trigger, so the pointer on it never leaves the trigger.
  */
 export function describeTooltipHover(
   name: string,
@@ -76,5 +78,23 @@ export function describeTooltipHover(
         expect(shown()).toBe(false);
       },
     );
+
+    it("stays closed for focus the library moves, and shows for the user's", async () => {
+      const { trigger, shown, onParentKeydown } = setup();
+
+      focusQuietly(trigger);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(trigger).toHaveFocus();
+      expect(shown()).toBe(false);
+
+      // Nothing to hide, so Escape reaches ancestors, such as a dialog.
+      await pressEscape();
+      expect(onParentKeydown).toHaveBeenCalledOnce();
+
+      trigger.blur();
+      trigger.focus();
+      await vi.advanceTimersByTimeAsync(0);
+      expect(shown()).toBe(true);
+    });
   });
 }
