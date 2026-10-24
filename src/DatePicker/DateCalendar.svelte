@@ -6,6 +6,10 @@
 
   import { createEventDispatcher, tick } from "svelte";
   import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
+  import {
     compareDays,
     formatMonthYear,
     getCalendarLocale,
@@ -71,6 +75,7 @@
   export let nextLabelText = "Next month";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   /** @type {HTMLElement | null} */
   let grid = null;
@@ -193,10 +198,13 @@
     const day = (/** @type {number} */ n) =>
       new Date(date.getFullYear(), date.getMonth(), date.getDate() + n);
     const weekday = (date.getDay() - firstDay + 7) % 7;
+    // In RTL the next day sits to the left. Read when the key arrives.
+    const next = () =>
+      resolveLayoutDirection($layoutDirection, grid) === "rtl" ? -1 : 1;
     /** @type {Record<string, () => Date>} */
     const moves = {
-      ArrowLeft: () => day(-1),
-      ArrowRight: () => day(1),
+      ArrowLeft: () => day(-next()),
+      ArrowRight: () => day(next()),
       ArrowUp: () => day(-7),
       ArrowDown: () => day(7),
       Home: () => day(-weekday),
