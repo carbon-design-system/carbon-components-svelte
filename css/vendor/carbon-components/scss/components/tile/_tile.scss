@@ -119,7 +119,8 @@
 
   .#{$prefix}--tile--selectable {
     position: relative;
-    padding-right: $carbon--spacing-09;
+    // ccs: the inline end, so the checkbox clears the text in RTL too
+    padding-inline-end: $carbon--spacing-09;
     border: 1px solid transparent;
   }
 
@@ -135,9 +136,10 @@
 
   .#{$prefix}--tile__checkmark {
     top: 1rem;
-    right: 1rem;
     height: 1rem;
     opacity: 0;
+    // ccs: the inline end, as in v11
+    @include ccs-inset-inline($end: 1rem);
 
     svg {
       border-radius: 50%;
