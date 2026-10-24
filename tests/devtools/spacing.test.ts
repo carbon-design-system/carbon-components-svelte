@@ -33,6 +33,8 @@ describe("spacingToken", () => {
   test.each([
     [0, "0"],
     [0.4, "0"],
+    [1, "hairline"],
+    [-1, "hairline"],
     [2, "spacing-01"],
     [8, "spacing-03"],
     [16, "spacing-05"],
@@ -42,6 +44,12 @@ describe("spacingToken", () => {
     [15, null],
   ])("%spx is %s", (px, token) => {
     expect(spacingToken(px)).toBe(token);
+  });
+
+  test("does not flag 1px border overlaps", () => {
+    expect(offScale(style({ marginTop: "-1px", paddingTop: "1px" }))).toEqual(
+      [],
+    );
   });
 
   test("follows the root font size", () => {

@@ -194,12 +194,15 @@ function pointToBox(x, y, box) {
  * passes when it is at least `size` pixels in both dimensions, or when it
  * is spaced: a circle of diameter `size` centered on it intersects no
  * other target and no other undersized target's circle. Targets nested
- * in each other count as one.
+ * in each other count as one. With `layers`, only targets in the same
+ * layer meet: a fixed header that scrolls over the page does not crowd
+ * the page's targets.
  * @param {Box[]} targets
  * @param {number} size
+ * @param {unknown[]} [layers] one key per target
  * @returns {number[]}
  */
-export function failingTargets(targets, size) {
+export function failingTargets(targets, size, layers) {
   const radius = size / 2;
   const small = targets.map((t) => t.width < size || t.height < size);
   const centers = targets.map((t) => [
@@ -212,7 +215,12 @@ export function failingTargets(targets, size) {
     if (!small[i]) return;
     const [cx, cy] = centers[i];
     const crowded = targets.some((other, j) => {
-      if (j === i || contains(target, other) || contains(other, target)) {
+      if (
+        j === i ||
+        (layers && layers[i] !== layers[j]) ||
+        contains(target, other) ||
+        contains(other, target)
+      ) {
         return false;
       }
       if (pointToBox(cx, cy, other) < radius - 0.01) return true;

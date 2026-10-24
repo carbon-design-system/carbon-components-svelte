@@ -59,6 +59,34 @@ export function fromPage(record) {
   );
 }
 
+/**
+ * Returns a lookup for the box an element moves with: the nearest
+ * ancestor (or the element) whose `position` is one of `positions`, or
+ * `null` for the page. Only positioned boxes can be fixed or sticky, so
+ * it walks the `offsetParent` chain. Use one lookup per scan; it caches
+ * each box's position.
+ * @param {string[]} positions such as `["fixed"]` or `["fixed", "sticky"]`
+ * @returns {(el: Element) => Element | null}
+ */
+export function createLayerLookup(positions) {
+  /** @type {Map<Element, boolean>} */
+  const cache = new Map();
+  return (el) => {
+    /** @type {Element | null} */
+    let node = el instanceof HTMLElement ? el : el.closest("*:not(svg *)");
+    while (node) {
+      let match = cache.get(node);
+      if (match === undefined) {
+        match = positions.includes(getComputedStyle(node).position);
+        cache.set(node, match);
+      }
+      if (match) return node;
+      node = /** @type {HTMLElement} */ (node).offsetParent;
+    }
+    return null;
+  };
+}
+
 /** @param {() => void} callback */
 function whenIdle(callback) {
   if (typeof requestIdleCallback === "function") {

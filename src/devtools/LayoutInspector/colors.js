@@ -97,6 +97,52 @@ export function contrastRatio(a, b) {
  * @typedef {Map<Element, Background>} BackgroundCache
  */
 
+/** Unscaled 2D transforms, such as `none` or a translate. */
+const MATRIX = /^matrix\(([^,]+),([^,]+),([^,]+),([^,]+),/;
+
+/**
+ * Whether a pseudo-element shows at all. Components hide an unselected
+ * fill with opacity, a zero scale, or a clip, and keep its color.
+ * @param {CSSStyleDeclaration} style
+ */
+function paints(style) {
+  if (style.display === "none" || style.visibility !== "visible") return false;
+  if (Number.parseFloat(style.opacity) < 0.5) return false;
+  if (style.clipPath !== "none") return false;
+  const matrix = style.transform.replace(/\s/g, "").match(MATRIX);
+  if (matrix) {
+    const [a, b, c, d] = matrix.slice(1).map(Number);
+    if (Math.hypot(a, b) < 0.5 || Math.hypot(c, d) < 0.5) return false;
+  }
+  return true;
+}
+
+/**
+ * Background color of a `::before` or `::after` that covers `el`. Some
+ * components paint their fill there, such as a selected
+ * `ContentSwitcher` button, so the element's own background reads as
+ * transparent.
+ * @param {Element} el
+ * @returns {Rgba | null}
+ */
+function pseudoBackground(el) {
+  for (const pseudo of ["::before", "::after"]) {
+    const style = getComputedStyle(el, pseudo);
+    if (style.content === "none" || style.content === "normal") continue;
+    if (!paints(style)) continue;
+    const color = toRgba(normalizeColor(style.backgroundColor));
+    if (!color || color[3] === 0) continue;
+    // Measured against the padding box, which an `inset: 0` pseudo fills.
+    if (
+      Number.parseFloat(style.width) >= el.clientWidth - 1 &&
+      Number.parseFloat(style.height) >= el.clientHeight - 1
+    ) {
+      return color;
+    }
+  }
+  return null;
+}
+
 /** @type {Background} */
 const PAGE = {
   color: [255, 255, 255, 1],
@@ -122,7 +168,11 @@ export function effectiveBackground(el, cache) {
   const style = getComputedStyle(el);
   const image = style.backgroundImage !== "none";
   const color = toRgba(normalizeColor(style.backgroundColor));
-  const own = color && color[3] > 0 ? color : null;
+  const box = color && color[3] > 0 ? color : null;
+  const layer = pseudoBackground(el);
+  /** @type {Rgba | null} */
+  let own = box;
+  if (layer) own = layer[3] >= 1 || !box ? layer : blend(layer, box);
   /** @type {Background} */
   let result;
   if (own && own[3] >= 1) {

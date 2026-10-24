@@ -196,6 +196,11 @@ $ccs-grid-overlay-opacity: $ccs-annotation-opacity * 0.5;
     );
   }
 
+  // Marks on fixed boxes, such as a UI Shell header, do not scroll.
+  .#{$prefix}--grid-overlay__text--pinned {
+    transform: none;
+  }
+
   .#{$prefix}--grid-overlay__text-mark {
     position: absolute;
     height: 0;

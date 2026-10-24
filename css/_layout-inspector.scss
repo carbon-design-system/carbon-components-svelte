@@ -337,6 +337,13 @@ $ccs-annotation-opacity: 0.6;
     );
   }
 
+  // Marks on fixed boxes, in viewport coordinates, do not scroll.
+  .#{$prefix}--layout-inspector__pinned {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
   .#{$prefix}--layout-inspector__mark--spacing {
     outline: 1px dashed var(--ccs-layout-inspector-spacing-ink);
   }

@@ -154,3 +154,14 @@ describe("failingTargets", () => {
     );
   });
 });
+
+describe("failingTargets layers", () => {
+  test("does not let a fixed header crowd the page below it", () => {
+    const radio = box(100, 20, 52, 22);
+    const headerLink = box(0, 0, 120, 47);
+    expect(failingTargets([radio, headerLink], 24)).toEqual([0]);
+    expect(failingTargets([radio, headerLink], 24, ["page", "header"])).toEqual(
+      [],
+    );
+  });
+});

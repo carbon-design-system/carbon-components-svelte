@@ -1,7 +1,10 @@
 /** Carbon spacing scale, in rem. */
 export const SPACING_REM: number[];
 
-/** Spacing token name for `px`, `"0"` for zero, or `null` when off the scale. */
+/**
+ * Spacing token name for `px`, `"0"` for zero, `"hairline"` for 1px, or
+ * `null` when off the scale.
+ */
 export function spacingToken(px: number, remPx?: number): string | null;
 
 /**

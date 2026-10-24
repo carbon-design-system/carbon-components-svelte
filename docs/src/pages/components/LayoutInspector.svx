@@ -94,6 +94,8 @@ Set `checkSpacing` to outline every element whose margin, padding, or gap is off
 
 Carbon uses a few deliberate off-scale values, so this check skips Carbon's components unless `checkCarbon` is set. Turn on the toggle in this example to see them.
 
+A 1px margin or padding reads as a hairline, not off-scale. The scale starts at 2px, and a `-1px` margin is how borders overlap.
+
 <FileSource src="/framed/LayoutInspector/LayoutInspectorLint" />
 
 Browsers report `auto` margins as pixel values, so the check cannot tell them apart from set ones. It skips equal left and right margins (centering) and margins wider than the largest token (160px). A one-sided `margin-left: auto` narrower than that is still flagged.
@@ -101,6 +103,8 @@ Browsers report `auto` margins as pixel values, so the check cannot tell them ap
 ## Contrast check
 
 Set `checkContrast` to outline all text below WCAG AA, labeled with its ratio and the ratio it needs. Text inside disabled controls is exempt, as WCAG allows.
+
+Some components paint a fill on a `::before` or `::after`, such as a selected `ContentSwitcher` button. The check counts a visible pseudo-element that covers the element as its background.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorContrast" />
 

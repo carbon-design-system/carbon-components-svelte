@@ -73,7 +73,12 @@
   import { createFrameJob } from "../../utils/frame-batch.js";
   import { addPooledListener } from "../../utils/window-listener-pool.js";
   import { rowDelta } from "../geometry.js";
-  import { DEV_TOOL, inBand, observePage } from "../page-scan.js";
+  import {
+    createLayerLookup,
+    DEV_TOOL,
+    inBand,
+    observePage,
+  } from "../page-scan.js";
 
   // 16 slots cover every breakpoint's column count (sm: 4, md: 8, lg/xlg/max: 16).
   // Each slot hides itself (span 0) once its index passes that breakpoint's
@@ -90,7 +95,7 @@
   const COLUMN_COUNT = { sm: 4, md: 8, lg: 16, xlg: 16, max: 16 };
 
   /**
-   * @typedef {{ key: string; x: number; y: number; width: number; rtl: boolean }} MeasuredLine
+   * @typedef {{ key: string; x: number; y: number; width: number; rtl: boolean; pinned: boolean }} MeasuredLine
    * @typedef {MeasuredLine & { delta: number | null }} TextBaselineMark
    */
 
@@ -141,7 +146,12 @@
   function sameLines(a, b) {
     return (
       a.length === b.length &&
-      a.every((line, i) => line.key === b[i].key && line.rtl === b[i].rtl)
+      a.every(
+        (line, i) =>
+          line.key === b[i].key &&
+          line.rtl === b[i].rtl &&
+          line.pinned === b[i].pinned,
+      )
     );
   }
 
@@ -161,11 +171,19 @@
     function applyDeltas() {
       // Page-anchored rows share the marks' page coordinates; viewport rows
       // are fixed on screen, so compare against the scrolled position.
-      const shift = anchor === "page" ? 0 : window.scrollY;
-      marks = measured.map((line) => ({
-        ...line,
-        delta: rowDelta(line.y - shift, step, offset),
-      }));
+      // Pinned marks are in viewport coordinates already.
+      const scrollY = window.scrollY;
+      marks = measured.map((line) => {
+        const pageY = line.pinned ? line.y + scrollY : line.y;
+        return {
+          ...line,
+          delta: rowDelta(
+            anchor === "page" ? pageY : pageY - scrollY,
+            step,
+            offset,
+          ),
+        };
+      });
     }
 
     /** @param {import("../page-scan.js").ScanBand} band */
@@ -194,6 +212,7 @@
         },
       );
       const range = document.createRange();
+      const fixedBox = createLayerLookup(["fixed"]);
       const scrollX = window.scrollX;
       const scrollY = window.scrollY;
 
@@ -209,12 +228,17 @@
         if (style.visibility === "hidden") continue;
         range.selectNodeContents(text);
         const ascent = measureAscent(node, style, ascents);
+        // Text in a fixed box stays put while the page scrolls, so its
+        // marks are in viewport coordinates.
+        const pinned = fixedBox(parent) !== null;
+        const dx = pinned ? 0 : scrollX;
+        const dy = pinned ? 0 : scrollY;
         for (const rect of range.getClientRects()) {
           if (rect.width < 1 || rect.height < 1) continue;
-          const x = Math.round((rect.left + scrollX) * 10) / 10;
-          const y = Math.round((rect.top + scrollY + ascent) * 10) / 10;
+          const x = Math.round((rect.left + dx) * 10) / 10;
+          const y = Math.round((rect.top + dy + ascent) * 10) / 10;
           const width = Math.round(rect.width * 10) / 10;
-          const base = `${x}|${y}|${width}`;
+          const base = `${pinned}|${x}|${y}|${width}`;
           const count = seen.get(base) ?? 0;
           seen.set(base, count + 1);
           next.push({
@@ -225,6 +249,7 @@
             // Right-to-left text ends on the left, so its offset label goes
             // there.
             rtl: style.direction === "rtl",
+            pinned,
           });
         }
       }
@@ -239,7 +264,11 @@
       (/** @type {[number, number]} */ [x, y]) => {
         node.style.setProperty("--ccs-grid-overlay-text-x", `${-x}px`);
         node.style.setProperty("--ccs-grid-overlay-text-y", `${-y}px`);
-        if (anchor === "viewport") applyDeltas();
+        // Viewport rows move against page marks, and page rows move
+        // against pinned marks.
+        if (anchor === "viewport" || measured.some((line) => line.pinned)) {
+          applyDeltas();
+        }
       },
     ]);
     const page = observePage(measure, { onScroll: scroll.schedule });
@@ -260,6 +289,8 @@
   }
 
   $: onRhythm = marks.filter((mark) => mark.delta === 0).length;
+  $: pageMarks = marks.filter((mark) => !mark.pinned);
+  $: pinnedMarks = marks.filter((mark) => mark.pinned);
 
   /** @type {import("../../Breakpoint/breakpoints").BreakpointSize | undefined} */
   let size = undefined;
@@ -393,7 +424,30 @@
           anchor: baselineAnchor,
         }}
       >
-        {#each marks as mark (mark.key)}
+        {#each pageMarks as mark (mark.key)}
+          <span
+            class="bx--grid-overlay__text-mark"
+            class:bx--grid-overlay__text-mark--on={mark.delta === 0}
+            class:bx--grid-overlay__text-mark--off={mark.delta !== null &&
+              mark.delta !== 0}
+            class:bx--grid-overlay__text-mark--rtl={mark.rtl}
+            style:left="{mark.x}px"
+            style:top="{mark.y}px"
+            style:width="{mark.width}px"
+          >
+            {#if mark.delta}
+              <span class="bx--grid-overlay__text-delta"
+                >{mark.delta > 0 ? "+" : ""}{mark.delta}</span
+              >
+            {/if}
+          </span>
+        {/each}
+      </div>
+      <div
+        class="bx--grid-overlay__text bx--grid-overlay__text--pinned"
+        dir="ltr"
+      >
+        {#each pinnedMarks as mark (mark.key)}
           <span
             class="bx--grid-overlay__text-mark"
             class:bx--grid-overlay__text-mark--on={mark.delta === 0}

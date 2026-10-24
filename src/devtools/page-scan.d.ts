@@ -30,3 +30,11 @@ export function observePage(
   callback: (band: ScanBand) => void,
   options?: { intervalMs?: number; onScroll?: () => void },
 ): { schedule: () => void; destroy: () => void };
+
+/**
+ * Returns a lookup for the nearest box, from the element up, whose
+ * `position` is one of `positions`, or `null` for the page.
+ */
+export function createLayerLookup(
+  positions: string[],
+): (el: Element) => Element | null;

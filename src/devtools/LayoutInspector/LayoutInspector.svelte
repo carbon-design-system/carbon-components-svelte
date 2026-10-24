@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {"spacing" | "contrast" | "targets" | "overflow"} LayoutInspectorCheck
-   * @typedef {{ key: string; check: LayoutInspectorCheck; x: number; y: number; width: number; height: number; text: string }} LayoutInspectorMark
+   * @typedef {{ key: string; check: LayoutInspectorCheck; x: number; y: number; width: number; height: number; text: string; pinned: boolean }} LayoutInspectorMark
    * @restProps {div}
    */
 
@@ -94,7 +94,12 @@
     failingTargets,
     ringLabels,
   } from "../geometry.js";
-  import { DEV_TOOL, inBand, observePage } from "../page-scan.js";
+  import {
+    createLayerLookup,
+    DEV_TOOL,
+    inBand,
+    observePage,
+  } from "../page-scan.js";
   import {
     formatPx,
     gaps,
@@ -747,34 +752,42 @@
   /** @type {Record<LayoutInspectorCheck, LayoutInspectorMark[]>} */
   let found = { spacing: [], contrast: [], targets: [], overflow: [] };
 
-  $: pageMarks = [
+  $: allMarks = [
     ...found.spacing,
     ...found.targets,
     ...found.contrast,
     ...found.overflow,
   ];
+  // Marks on fixed boxes, such as a UI Shell header, stay put while the
+  // page scrolls; the rest scroll with the page.
+  $: pageMarks = allMarks.filter((m) => !m.pinned);
+  $: pinnedMarks = allMarks.filter((m) => m.pinned);
 
   /**
+   * A mark in page coordinates, or in viewport coordinates when `el` sits
+   * in a fixed box.
    * @param {LayoutInspectorCheck} check
+   * @param {Element} el
    * @param {{ left: number; top: number; width: number; height: number }} rect viewport rect
    * @param {string} text
-   * @param {number} sx
-   * @param {number} sy
+   * @param {ScanContext} context
    * @returns {LayoutInspectorMark}
    */
-  function mark(check, rect, text, sx, sy) {
-    const x = Math.round((rect.left + sx) * 10) / 10;
-    const y = Math.round((rect.top + sy) * 10) / 10;
+  function mark(check, el, rect, text, context) {
+    const pinned = context.fixedBox(el) !== null;
+    const x = Math.round((rect.left + (pinned ? 0 : context.sx)) * 10) / 10;
+    const y = Math.round((rect.top + (pinned ? 0 : context.sy)) * 10) / 10;
     const width = Math.round(rect.width * 10) / 10;
     const height = Math.round(rect.height * 10) / 10;
     return {
-      key: `${check}|${x}|${y}|${width}|${height}|${text}`,
+      key: `${check}|${pinned}|${x}|${y}|${width}|${height}|${text}`,
       check,
       x,
       y,
       width,
       height,
       text,
+      pinned,
     };
   }
 
@@ -800,7 +813,7 @@
   }
 
   /**
-   * @typedef {{ band: import("../page-scan.js").ScanBand; sx: number; sy: number; carbon: boolean; ignore: string; targetSize: number }} ScanContext
+   * @typedef {{ band: import("../page-scan.js").ScanBand; sx: number; sy: number; carbon: boolean; ignore: string; targetSize: number; fixedBox: (el: Element) => Element | null; layer: (el: Element) => Element | null }} ScanContext
    */
 
   /**
@@ -822,7 +835,7 @@
    * @param {ScanContext} context
    */
   function scanSpacing(context) {
-    const { band, sx, sy } = context;
+    const { band, sy } = context;
     /** @type {LayoutInspectorMark[]} */
     const marks = [];
     for (const el of document.body.querySelectorAll("*")) {
@@ -840,12 +853,12 @@
       marks.push(
         mark(
           "spacing",
+          el,
           r,
           off.length > 3
             ? `${off.slice(0, 3).join(" · ")} · +${off.length - 3}`
             : off.join(" · "),
-          sx,
-          sy,
+          context,
         ),
       );
     }
@@ -859,9 +872,10 @@
    * @param {ScanContext} context
    */
   function scanTargets(context) {
-    const { band, sx, sy, targetSize } = context;
-    /** @type {{ rect: { left: number; top: number; width: number; height: number }; flag: boolean }[]} */
+    const { band, sy, targetSize } = context;
+    /** @type {{ el: Element; rect: { left: number; top: number; width: number; height: number }; flag: boolean; layer: Element | null }[]} */
     const targets = [];
+
     for (const el of document.body.querySelectorAll(INTERACTIVE)) {
       // Check the band on the element's own box first: reading `labels`
       // is slow, and most targets are far from the viewport. A label sits
@@ -888,22 +902,28 @@
       ) {
         continue;
       }
-      targets.push({ rect, flag: !skipped(el, CARBON_ELEMENTS, context) });
+      targets.push({
+        el,
+        rect,
+        flag: !skipped(el, CARBON_ELEMENTS, context),
+        layer: context.layer(el),
+      });
     }
     return failingTargets(
       targets.map((target) => target.rect),
       targetSize,
+      targets.map((target) => target.layer),
     )
       .filter((index) => targets[index].flag)
       .slice(0, MAX_MARKS)
       .map((index) => {
-        const { rect } = targets[index];
+        const { el, rect } = targets[index];
         return mark(
           "targets",
+          el,
           rect,
           `${formatPx(rect.width)} × ${formatPx(rect.height)}`,
-          sx,
-          sy,
+          context,
         );
       });
   }
@@ -914,7 +934,7 @@
    * @param {ScanContext} context
    */
   function scanContrast(context) {
-    const { band, sx, sy } = context;
+    const { band, sy } = context;
     /** @type {LayoutInspectorMark[]} */
     const marks = [];
     /** @type {Set<Element>} */
@@ -952,10 +972,10 @@
       marks.push(
         mark(
           "contrast",
+          el,
           r,
           `${formatRatio(result.ratio)} · needs ${result.aa}:1`,
-          sx,
-          sy,
+          context,
         ),
       );
     }
@@ -1015,7 +1035,13 @@
           }
           if (parentPast <= 0.5 && !contained) {
             marks.push(
-              mark("overflow", r, `${formatPx(past)}px past the page`, sx, sy),
+              mark(
+                "overflow",
+                el,
+                r,
+                `${formatPx(past)}px past the page`,
+                context,
+              ),
             );
             continue;
           }
@@ -1032,6 +1058,7 @@
       marks.push(
         mark(
           "overflow",
+          el,
           r,
           truncated
             ? `truncated · ${formatPx(overX)}px hidden`
@@ -1041,8 +1068,7 @@
               ]
                 .filter(Boolean)
                 .join(" · "),
-          sx,
-          sy,
+          context,
         ),
       );
     }
@@ -1099,6 +1125,10 @@
         carbon: current.carbon,
         ignore: current.ignore,
         targetSize: current.targetSize,
+        fixedBox: createLayerLookup(["fixed"]),
+        // A sticky box moves over the page too, so its targets do not
+        // crowd the page's.
+        layer: createLayerLookup(["fixed", "sticky"]),
       };
       /** @type {Record<LayoutInspectorCheck, LayoutInspectorMark[]>} */
       const next = {
@@ -1171,6 +1201,29 @@
         }}
       >
         {#each pageMarks as pageMark (pageMark.key)}
+          <div
+            class="bx--layout-inspector__mark"
+            class:bx--layout-inspector__mark--spacing={pageMark.check ===
+              "spacing"}
+            class:bx--layout-inspector__mark--target={pageMark.check ===
+              "targets"}
+            class:bx--layout-inspector__mark--contrast={pageMark.check ===
+              "contrast"}
+            class:bx--layout-inspector__mark--overflow={pageMark.check ===
+              "overflow"}
+            style:left="{pageMark.x}px"
+            style:top="{pageMark.y}px"
+            style:width="{pageMark.width}px"
+            style:height="{pageMark.height}px"
+          >
+            <span class="bx--layout-inspector__mark-label"
+              >{pageMark.text}</span
+            >
+          </div>
+        {/each}
+      </div>
+      <div class="bx--layout-inspector__pinned">
+        {#each pinnedMarks as pageMark (pageMark.key)}
           <div
             class="bx--layout-inspector__mark"
             class:bx--layout-inspector__mark--spacing={pageMark.check ===

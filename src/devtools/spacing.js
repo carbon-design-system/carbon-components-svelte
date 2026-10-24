@@ -6,8 +6,10 @@ export const SPACING_REM = [
 ];
 
 /**
- * Name of the spacing token for `px`, `"0"` for zero, or `null` when the
- * value is off the scale. Negative values match by magnitude.
+ * Name of the spacing token for `px`, `"0"` for zero, `"hairline"` for
+ * 1px, or `null` when the value is off the scale. Negative values match
+ * by magnitude. The scale starts at 2px; a 1px offset is how borders
+ * overlap (a `-1px` margin), not a spacing choice.
  * @param {number} px
  * @param {number} [remPx] root font size in pixels
  * @returns {string | null}
@@ -15,6 +17,7 @@ export const SPACING_REM = [
 export function spacingToken(px, remPx = 16) {
   const abs = Math.abs(px);
   if (abs < 0.5) return "0";
+  if (abs < 1.5) return "hairline";
   const index = SPACING_REM.findIndex(
     (rem) => Math.abs(rem * remPx - abs) < 0.5,
   );

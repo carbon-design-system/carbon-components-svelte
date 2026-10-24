@@ -66,6 +66,11 @@ export function distanceSegments(
 
 /**
  * Indexes of the targets that fail WCAG 2.2 target size (2.5.8): smaller
- * than `size` and not spaced from other targets.
+ * than `size` and not spaced from other targets. With `layers`, only
+ * targets with the same layer key are compared.
  */
-export function failingTargets(targets: Box[], size: number): number[];
+export function failingTargets(
+  targets: Box[],
+  size: number,
+  layers?: unknown[],
+): number[];
