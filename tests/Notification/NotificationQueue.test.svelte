@@ -19,6 +19,9 @@
   export let maxNotifications: ComponentProps<NotificationQueue>["maxNotifications"] =
     undefined;
 
+  export let labelText: ComponentProps<NotificationQueue>["labelText"] =
+    undefined;
+
   export let queue: NotificationQueueComponent | undefined = undefined;
 </script>
 
@@ -30,5 +33,6 @@
   {offsetRight}
   {zIndex}
   {maxNotifications}
+  {labelText}
   bind:this={queue}
 />

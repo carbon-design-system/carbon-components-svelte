@@ -52,4 +52,39 @@ test.describe("NotificationQueue", () => {
     await expect(page.locator(".bx--toast-notification")).toHaveCount(0);
     await expect(add).toBeFocused();
   });
+
+  test("F6 reaches a toast's action without moving focus on open", async ({
+    page,
+  }) => {
+    const add = page.getByTestId("nq-action");
+    await add.click();
+    const toast = toastWithText(page, "Report deleted");
+    await expect(toast).toBeVisible();
+    await expect(add).toBeFocused();
+
+    // The action keeps the toast past its timeout.
+    await page.waitForTimeout(800);
+    await expect(toast).toBeVisible();
+
+    await page.keyboard.press("F6");
+    await expect(toast.getByRole("button", { name: "Undo" })).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    await expect(toast).toHaveCount(0);
+    await expect(page.getByTestId("nq-undone")).toHaveText("Undone");
+    await expect(add).toBeFocused();
+  });
+
+  test("Shift+F6 returns focus from the queue", async ({ page }) => {
+    const add = page.getByTestId("nq-action");
+    await add.click();
+    await page.keyboard.press("F6");
+    await expect(page.getByRole("button", { name: "Undo" })).toBeFocused();
+
+    await page.keyboard.press("Shift+F6");
+    await expect(add).toBeFocused();
+    await expect(
+      page.getByRole("region", { name: "Notifications" }),
+    ).toBeVisible();
+  });
 });

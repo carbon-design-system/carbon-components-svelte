@@ -666,4 +666,258 @@ describe("NotificationQueue", () => {
       expect(notifications[1]).toHaveTextContent("Second");
     },
   );
+
+  describe("actions", () => {
+    function focusOutside() {
+      const before = document.createElement("button");
+      before.textContent = "Before";
+      document.body.append(before);
+      onTestFinished(() => before.remove());
+      before.focus();
+      return before;
+    }
+
+    it("renders the action as a tertiary button", async () => {
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({
+        title: "Upload failed",
+        action: { label: "Retry" },
+      });
+      await tick();
+
+      const toast = screen.getByRole("status");
+      const retry = within(toast).getByRole("button", { name: "Retry" });
+      expect(retry).toHaveClass(
+        "bx--toast-notification__action-button",
+        "bx--btn--tertiary",
+      );
+    });
+
+    it("renders an action with href as a link", async () => {
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({
+        title: "Export ready",
+        action: { label: "Download", href: "/exports/q3.csv" },
+      });
+      await tick();
+
+      expect(screen.getByRole("link", { name: "Download" })).toHaveAttribute(
+        "href",
+        "/exports/q3.csv",
+      );
+    });
+
+    it("renders no action row without an action", async () => {
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({ title: "Saved" });
+      await tick();
+
+      expect(
+        document.querySelector(".bx--toast-notification__actions"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("calls onClick, removes the toast, and returns focus", async () => {
+      const { component } = render(NotificationQueueTest);
+      const before = focusOutside();
+      const onClick = vi.fn();
+
+      getQueue(component.queue).add({
+        title: "Report deleted",
+        action: { label: "Undo", onClick },
+      });
+      await tick();
+
+      const undo = screen.getByRole("button", { name: "Undo" });
+      undo.focus();
+      await fireEvent.click(undo);
+      await tick();
+
+      expect(onClick).toHaveBeenCalledOnce();
+      expect(onClick.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
+      expect(screen.queryByText("Report deleted")).not.toBeInTheDocument();
+      expect(before).toHaveFocus();
+    });
+
+    it("keeps the toast open when onClick calls preventDefault", async () => {
+      const { component } = render(NotificationQueueTest);
+
+      const id = getQueue(component.queue).add({
+        title: "Upload failed",
+        action: {
+          label: "Retry",
+          onClick: (event) => {
+            event.preventDefault();
+            getQueue(component.queue).update(id, { title: "Retrying" });
+          },
+        },
+      });
+      await tick();
+
+      await fireEvent.click(screen.getByRole("button", { name: "Retry" }));
+      await tick();
+
+      expect(screen.getByText("Retrying")).toBeInTheDocument();
+    });
+
+    it("keeps focus where it is when a toast with an action opens", async () => {
+      const { component } = render(NotificationQueueTest);
+      const before = focusOutside();
+
+      getQueue(component.queue).add({
+        title: "Upload failed",
+        action: { label: "Retry" },
+      });
+      await tick();
+      await tick();
+
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      expect(before).toHaveFocus();
+    });
+
+    it.each([
+      ["an action", { action: { label: "Undo" } }],
+      ["actionable", { actionable: true, focusOnOpen: false }],
+    ] as const)("ignores timeout for %s", async (_, props) => {
+      const { component } = render(NotificationQueueTest);
+
+      const id = getQueue(component.queue).add({
+        title: "Report deleted",
+        timeout: 1000,
+        ...props,
+      });
+      await tick();
+      vi.advanceTimersByTime(5000);
+      await tick();
+      expect(screen.getByText("Report deleted")).toBeInTheDocument();
+
+      getQueue(component.queue).update(id, { timeout: 500 });
+      await tick();
+      vi.advanceTimersByTime(5000);
+      await tick();
+      expect(screen.getByText("Report deleted")).toBeInTheDocument();
+    });
+
+    it.each(["top-right", "bottom-right"] as const)(
+      "drops the oldest toast without an action first (%s)",
+      async (position) => {
+        const { component } = render(NotificationQueueTest, {
+          props: { position, maxNotifications: 2 },
+        });
+        const queue = getQueue(component.queue);
+
+        queue.add({ title: "Deleted", action: { label: "Undo" } });
+        queue.add({ title: "Saved" });
+        queue.add({ title: "Published" });
+        await tick();
+
+        expect(screen.getByText("Deleted")).toBeInTheDocument();
+        expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+        expect(screen.getByText("Published")).toBeInTheDocument();
+      },
+    );
+
+    it("drops the oldest toast when every older toast has an action", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 2 },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ title: "First", action: { label: "Undo" } });
+      queue.add({ title: "Second", action: { label: "Undo" } });
+      queue.add({ title: "Saved" });
+      await tick();
+
+      expect(screen.queryByText("First")).not.toBeInTheDocument();
+      expect(screen.getByText("Second")).toBeInTheDocument();
+      expect(screen.getByText("Saved")).toBeInTheDocument();
+    });
+  });
+
+  describe("landmark", () => {
+    it("renders the queue as a region named Notifications", async () => {
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({ title: "Saved" });
+      await tick();
+
+      expect(screen.getByRole("region", { name: "Notifications" })).toHaveClass(
+        "bx--notification-queue",
+      );
+    });
+
+    it("names the region with labelText", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { labelText: "Alerts" },
+      });
+
+      getQueue(component.queue).add({ title: "Saved" });
+      await tick();
+
+      expect(
+        screen.getByRole("region", { name: "Alerts" }),
+      ).toBeInTheDocument();
+    });
+
+    it.each(["top-right", "bottom-right"] as const)(
+      "moves focus to the newest toast on F6 and back on Shift+F6 (%s)",
+      async (position) => {
+        const { component } = render(NotificationQueueTest, {
+          props: { position },
+        });
+        const before = document.createElement("button");
+        document.body.append(before);
+        onTestFinished(() => before.remove());
+        before.focus();
+
+        getQueue(component.queue).add({
+          title: "First",
+          action: { label: "Undo first" },
+        });
+        getQueue(component.queue).add({
+          title: "Second",
+          action: { label: "Undo second" },
+        });
+        await tick();
+
+        await fireEvent.keyDown(before, { key: "F6" });
+        const undo = screen.getByRole("button", { name: "Undo second" });
+        expect(undo).toHaveFocus();
+
+        await fireEvent.keyDown(undo, { key: "F6", shiftKey: true });
+        expect(before).toHaveFocus();
+      },
+    );
+
+    it("focuses the close button of a toast without an action", async () => {
+      const { component } = render(NotificationQueueTest);
+      document.body.focus();
+
+      getQueue(component.queue).add({ title: "Saved" });
+      await tick();
+
+      await fireEvent.keyDown(document.body, { key: "F6" });
+      expect(
+        screen.getByRole("button", { name: "Close notification" }),
+      ).toHaveFocus();
+    });
+
+    it("leaves F6 to the browser when no toast has a control", async () => {
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({ title: "Saving", hideCloseButton: true });
+      await tick();
+
+      const event = new KeyboardEvent("keydown", {
+        key: "F6",
+        bubbles: true,
+        cancelable: true,
+      });
+      window.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(false);
+    });
+  });
 });
