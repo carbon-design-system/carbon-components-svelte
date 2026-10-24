@@ -16,7 +16,9 @@
     CopyInput,
     DatePicker,
     DatePickerInput,
+    Disclosure,
     Dropdown,
+    ExpandableTile,
     Header,
     HeaderAction,
     HeaderGlobalAction,
@@ -40,6 +42,8 @@
     PinCodeInput,
     Popover,
     ProgressBar,
+    ProgressIndicator,
+    ProgressStep,
     Prose,
     RadioTile,
     RangeSlider,
@@ -77,6 +81,9 @@
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import Folder from "carbon-icons-svelte/lib/Folder.svelte";
+  import Grid from "carbon-icons-svelte/lib/Grid.svelte";
+  import List from "carbon-icons-svelte/lib/List.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
 
   let menuAnchor = null;
@@ -416,6 +423,50 @@
     <div data-testid="pin">
       <PinCodeInput fluid labelText="Fluid pin code" />
     </div>
+  </div>
+
+  <div data-testid="icons">
+    <ContentSwitcher size="sm">
+      <Switch text="Grid view" icon={Grid} />
+      <Switch text="List view" icon={List} />
+    </ContentSwitcher>
+    <Disclosure summary="Deployment details">Region: US East</Disclosure>
+    <ProgressIndicator currentIndex={1}>
+      <ProgressStep complete label="Build" />
+      <ProgressStep label="Deploy" />
+      <ProgressStep label="Verify" />
+    </ProgressIndicator>
+    <Tabs dismissible>
+      <Tab label="Overview" />
+      <Tab label="Logs" />
+    </Tabs>
+    <ExpandableTile>
+      <div slot="above">Deployment</div>
+      <div slot="below">Region: US East</div>
+    </ExpandableTile>
+    <RadioTile value="us-east" checked>US East</RadioTile>
+    <ToggleButtonGroup labelText="View" selected={[]}>
+      <ToggleButton value="grid" icon={Grid} iconDescription="Grid" />
+    </ToggleButtonGroup>
+    <TreeView
+      labelText="Services"
+      nodes={[
+        {
+          id: "api",
+          text: "API",
+          icon: Folder,
+          nodes: [{ id: "payments", text: "payments" }],
+        },
+      ]}
+    />
+    <Select readonly labelText="Read-only select">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+    <DatePicker datePickerType="single">
+      <DatePickerInput readonly labelText="Read-only date" />
+    </DatePicker>
+    <Dropdown readonly labelText="Read-only dropdown" items={regions} />
+    <NumberInput disabled labelText="Disabled number input" value={1} />
   </div>
 
   <div style="height: 8rem;">

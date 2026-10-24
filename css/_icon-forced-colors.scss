@@ -1,0 +1,116 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Icon fills in forced-colors mode. Forced colors leave an SVG fill alone,
+/// so the base sheet paints every icon `ButtonText` there. A component rule
+/// that sets a theme fill outranks that `svg` rule, and its icon kept the
+/// token color: dark gray or blue on a dark `Canvas`, or the 25% alpha of a
+/// disabled icon, which hid it. These icons read `ButtonText`, `GrayText`
+/// when disabled or read-only, and a focused slider handle `Highlight`.
+///
+/// Each selector repeats the theme rule it replaces. Selected states that
+/// already fill `HighlightText` outrank them. A partial, not one vendored
+/// patch per component: the rules come from a dozen vendored files and
+/// partials, which all emit earlier.
+/// @access private
+/// @group components
+@mixin icon-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--search--fluid .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--search--expandable .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--search--expandable.#{$prefix}--search--expanded
+      .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--toolbar-search-container-expandable
+      .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--snippet-btn--expand .#{$prefix}--icon-chevron--down,
+    .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost .#{$prefix}--snippet__icon,
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--copy-btn .#{$prefix}--snippet__icon,
+    .#{$prefix}--copy-input__field-wrapper
+      .#{$prefix}--copy-btn:focus
+      .#{$prefix}--snippet__icon,
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--copy-btn:hover .#{$prefix}--snippet__icon,
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon svg,
+    .#{$prefix}--content-switcher--low-contrast
+      .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon
+      svg,
+    .#{$prefix}--disclosure__arrow,
+    .#{$prefix}--disclosure--open .#{$prefix}--disclosure__arrow,
+    .#{$prefix}--header-switcher__chevron > svg,
+    .#{$prefix}--header__action > svg,
+    .#{$prefix}--header__menu-trigger > svg,
+    .#{$prefix}--header__menu-arrow,
+    .#{$prefix}--progress-step svg,
+    .#{$prefix}--progress-step--incomplete svg,
+    .#{$prefix}--slider__thumb-icon,
+    .#{$prefix}--slider:not(.#{$prefix}--slider--disabled) .#{$prefix}--slider__thumb--lower .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus),
+    .#{$prefix}--slider:not(.#{$prefix}--slider--disabled) .#{$prefix}--slider__thumb--lower:hover .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus),
+    .#{$prefix}--slider:not(.#{$prefix}--slider--disabled) .#{$prefix}--slider__thumb--upper .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus),
+    .#{$prefix}--slider:not(.#{$prefix}--slider--disabled) .#{$prefix}--slider__thumb--upper:hover .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus),
+    .#{$prefix}--tabs--scrollable .#{$prefix}--tab--overflow-nav-button svg,
+    .#{$prefix}--tabs__nav-item--close-icon svg,
+    .#{$prefix}--tabs__nav-item--close-icon:focus svg,
+    .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled) svg,
+    .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover svg,
+    .#{$prefix}--tile__chevron svg,
+    .#{$prefix}--toggle-button svg,
+    .#{$prefix}--tree .#{$prefix}--tree-node__label .#{$prefix}--tree-parent-node__toggle-icon,
+    .#{$prefix}--tree .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-parent-node__toggle-icon,
+    .#{$prefix}--tree .#{$prefix}--tree-node__label .#{$prefix}--tree-node__icon,
+    .#{$prefix}--tree .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__icon {
+      fill: ButtonText;
+    }
+
+    .#{$prefix}--slider__thumb-icon--focus {
+      fill: Highlight;
+    }
+
+    .#{$prefix}--copy-input__field-wrapper
+      .#{$prefix}--copy-btn:disabled
+      .#{$prefix}--snippet__icon,
+    .#{$prefix}--snippet--disabled .#{$prefix}--snippet__icon,
+    .#{$prefix}--snippet--disabled
+      .#{$prefix}--snippet-btn--expand
+      .#{$prefix}--icon-chevron--down,
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon:disabled svg,
+    .#{$prefix}--date-picker-input__wrapper--disabled .#{$prefix}--date-picker__icon,
+    .#{$prefix}--date-picker-input__wrapper--readonly .#{$prefix}--date-picker__icon,
+    .#{$prefix}--date-picker__input:disabled ~ .#{$prefix}--date-picker__icon,
+    .#{$prefix}--list-box--disabled .#{$prefix}--list-box__menu-icon > svg,
+    .#{$prefix}--list-box--disabled .#{$prefix}--list-box__selection > svg,
+    .#{$prefix}--dropdown--disabled .#{$prefix}--list-box__menu-icon svg,
+    .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon svg,
+    .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon svg,
+    .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__selection svg,
+    .#{$prefix}--multi-select--readonly .#{$prefix}--list-box__menu-icon svg,
+    .#{$prefix}--number input[type="number"]:disabled ~ .#{$prefix}--number__controls svg,
+    .#{$prefix}--number input[type="text"]:disabled ~ .#{$prefix}--number__controls svg,
+    .#{$prefix}--progress-step--disabled svg,
+    .#{$prefix}--select--readonly .#{$prefix}--select__arrow,
+    .#{$prefix}--select-input:disabled ~ .#{$prefix}--select__arrow,
+    .#{$prefix}--time-picker--readonly .#{$prefix}--select__arrow,
+    .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select__arrow,
+    .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--lower .#{$prefix}--slider__thumb-icon,
+    .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--upper .#{$prefix}--slider__thumb-icon,
+    .#{$prefix}--tabs__nav-item--close-icon--disabled svg,
+    .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item--icon svg,
+    .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item--icon-left svg,
+    .#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--disabled
+      .#{$prefix}--tabs__nav-item--icon
+      svg,
+    .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--close-icon--disabled
+      svg,
+    .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--disabled
+      .#{$prefix}--tabs__nav-item--icon-left
+      svg {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("icon-forced-colors") {
+  @include icon-forced-colors;
+}
