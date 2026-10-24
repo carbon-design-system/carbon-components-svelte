@@ -204,6 +204,10 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import {
     normalizeSize,
@@ -215,6 +219,7 @@
   const formContext = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
   $: effectiveSize = normalizeSize(
     size ?? $formSize ?? "default",
     PIN_CODE_INPUT_SIZE_ALIASES,
@@ -391,9 +396,21 @@
     if (char && index < count - 1) focusInput(index + 1);
   }
 
+  /**
+   * The arrow key as an LTR page reads it. The segments run right to left
+   * under `dir="rtl"`, so ArrowLeft and ArrowRight swap there. Read when the
+   * key arrives.
+   * @param {string} key
+   */
+  function inlineArrow(key) {
+    if (key !== "ArrowLeft" && key !== "ArrowRight") return key;
+    if (resolveLayoutDirection($layoutDirection, ref) !== "rtl") return key;
+    return key === "ArrowLeft" ? "ArrowRight" : "ArrowLeft";
+  }
+
   /** @type {(index: number, event: KeyboardEvent) => void} */
   function handleKeydown(index, event) {
-    switch (event.key) {
+    switch (inlineArrow(event.key)) {
       case "Backspace":
         if (readonly || disabled) break;
         if (!code[index] && index > 0) {

@@ -6,6 +6,7 @@
     Button,
     OverflowMenu,
     OverflowMenuItem,
+    PinCodeInput,
     Popover,
     TagInput,
     Toggletip,
@@ -170,6 +171,9 @@
   </div>
   <div data-testid="tag-input">
     <TagInput labelText="المناطق" value={["أوريغون", "أوهايو"]} />
+  </div>
+  <div data-testid="pin-code">
+    <PinCodeInput labelText="الرمز" />
   </div>
 </div>
 

@@ -72,7 +72,7 @@
 
   .#{$prefix}--pin-code-input__icon {
     flex-shrink: 0;
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
     fill: $support-error;
   }
 

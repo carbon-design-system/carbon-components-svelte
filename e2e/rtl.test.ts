@@ -1677,4 +1677,18 @@ test.describe("right-to-left tooltips and popovers", () => {
     await page.keyboard.press("ArrowLeft");
     await expect(input).toBeFocused();
   });
+
+  test("moves between PinCodeInput segments with the inline arrows", async ({
+    page,
+  }) => {
+    await page.goto("/rtl-tooltips.html?dir=rtl");
+    const segments = page.getByTestId("pin-code").locator("input");
+
+    await segments.first().focus();
+    // The first segment is the rightmost one, so Left moves to the next.
+    await page.keyboard.press("ArrowLeft");
+    await expect(segments.nth(1)).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(segments.first()).toBeFocused();
+  });
 });
