@@ -1,5 +1,10 @@
 <script>
-  import { UserAvatar, UserAvatarGroup } from "carbon-components-svelte";
+  import {
+    Layer,
+    ThemeZone,
+    UserAvatar,
+    UserAvatarGroup,
+  } from "carbon-components-svelte";
 </script>
 
 <div data-testid="overlap">
@@ -82,5 +87,34 @@
       name="Dinesh Chugtai"
       tooltipText="Dinesh Chugtai"
     />
+  </UserAvatarGroup>
+</div>
+
+<div data-testid="sizes">
+  <UserAvatar size="sm" name="Monica Hall" />
+  <UserAvatar size="md" name="Monica Hall" />
+  <UserAvatar size="lg" name="Monica Hall" />
+  <UserAvatar size="xl" name="Monica Hall" />
+</div>
+
+<div data-testid="white">
+  <UserAvatar backgroundColor="red" name="Monica Hall" />
+</div>
+
+<ThemeZone theme="g100" data-testid="g100">
+  <UserAvatar backgroundColor="red" name="Monica Hall" />
+</ThemeZone>
+
+<Layer withBackground data-testid="layer">
+  <UserAvatarGroup max={0}>
+    <UserAvatar backgroundColor="auto" name="Monica" />
+    <UserAvatar backgroundColor="auto" name="Richard Hendricks" />
+  </UserAvatarGroup>
+</Layer>
+
+<div dir="rtl" data-testid="rtl">
+  <UserAvatarGroup max={0}>
+    <UserAvatar backgroundColor="auto" name="Monica" />
+    <UserAvatar backgroundColor="auto" name="Richard Hendricks" />
   </UserAvatarGroup>
 </div>

@@ -1,6 +1,7 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
+@import "./user-avatar-tokens";
 
 /// UserAvatar component styles (circular frame, sizes, color variants).
 /// @access private
@@ -13,7 +14,12 @@
     justify-content: center;
     overflow: hidden;
     border-radius: 50%;
-    color: $text-on-color;
+    // The dark themes lighten the fills, so the initials turn dark.
+    color: $text-inverse;
+  }
+
+  .#{$prefix}--user-avatar svg {
+    color: $icon-inverse;
   }
 
   // Reset native button/link chrome so `interactive` / `href` keep the circle.
@@ -50,8 +56,8 @@
   }
 
   .#{$prefix}--user-avatar--lg {
-    width: $carbon--spacing-08;
-    height: $carbon--spacing-08;
+    width: $carbon--spacing-09;
+    height: $carbon--spacing-09;
   }
 
   .#{$prefix}--user-avatar--xl {
@@ -68,51 +74,23 @@
   }
 
   .#{$prefix}--user-avatar--lg .#{$prefix}--user-avatar__text {
-    @include type-style("heading-compact-02");
+    @include type-style("heading-03");
   }
 
   .#{$prefix}--user-avatar--xl .#{$prefix}--user-avatar__text {
     @include type-style("heading-04");
   }
 
-  .#{$prefix}--user-avatar--red {
-    background-color: $red-60;
-  }
+  $colors: "red" "magenta" "purple" "blue" "cyan" "teal" "green" "gray"
+    "cool-gray" "warm-gray";
 
-  .#{$prefix}--user-avatar--magenta {
-    background-color: $magenta-60;
-  }
-
-  .#{$prefix}--user-avatar--purple {
-    background-color: $purple-60;
-  }
-
-  .#{$prefix}--user-avatar--blue {
-    background-color: $blue-60;
-  }
-
-  .#{$prefix}--user-avatar--cyan {
-    background-color: $cyan-60;
-  }
-
-  .#{$prefix}--user-avatar--teal {
-    background-color: $teal-60;
-  }
-
-  .#{$prefix}--user-avatar--green {
-    background-color: $green-60;
-  }
-
-  .#{$prefix}--user-avatar--gray {
-    background-color: $gray-60;
-  }
-
-  .#{$prefix}--user-avatar--cool-gray {
-    background-color: $cool-gray-60;
-  }
-
-  .#{$prefix}--user-avatar--warm-gray {
-    background-color: $warm-gray-60;
+  @each $color in $colors {
+    .#{$prefix}--user-avatar--#{$color} {
+      background-color: ccs-theme-color(
+        $ccs-user-avatar-colors,
+        "user-avatar-#{$color}"
+      );
+    }
   }
 
   // Status badge overlay at the bottom-right (presence indicator).
@@ -195,6 +173,13 @@
   // status would vanish. Keep the status colors, as the shape indicator keeps
   // its fills, and draw a CanvasText edge that shows on any Canvas.
   @media (forced-colors: active) {
+    // The fill turns Canvas, so only the initials would show. Draw the
+    // circle's edge.
+    .#{$prefix}--user-avatar {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
     .#{$prefix}--user-avatar__status {
       forced-color-adjust: none;
       outline: 1px solid CanvasText;
