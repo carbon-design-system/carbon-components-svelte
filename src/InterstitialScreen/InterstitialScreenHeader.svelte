@@ -1,9 +1,21 @@
 <script>
+  /**
+   * @slot {{}} - Custom header content, after the title and before the step progress indicator.
+   */
+
   /** Specify the header title */
   export let title = "";
 
   /** Specify the header subtitle */
   export let subTitle = "";
+
+  /**
+   * Specify the heading level of the title, to fit the page outline.
+   * A full-screen takeover defaults to 1, or one level below an enclosing
+   * `Section`'s heading. In a modal it defaults to 2, as a modal title.
+   * @type {1 | 2 | 3 | 4 | 5 | 6}
+   */
+  export let headingLevel = undefined;
 
   /** Set to `true` to hide the step progress indicator (only relevant when there is more than one `InterstitialScreenView`) */
   export let hideProgressIndicator = false;
@@ -12,67 +24,68 @@
   export let iconDescription = "Close";
 
   import { getContext } from "svelte";
+  import Button from "../Button/Button.svelte";
   import ModalHeader from "../ComposedModal/ModalHeader.svelte";
   import Close from "../icons/Close.svelte";
-  import ProgressIndicator from "../ProgressIndicator/ProgressIndicator.svelte";
-  import ProgressStep from "../ProgressIndicator/ProgressStep.svelte";
+  import InterstitialScreenHeaderContent from "./InterstitialScreenHeaderContent.svelte";
 
-  const { isFullScreen, progStep, views, handleClose } = getContext(
-    "carbon:InterstitialScreen",
-  );
+  const { isFullScreen, handleClose } = getContext("carbon:InterstitialScreen");
 
-  $: hasTitle = Boolean(title || subTitle);
-  $: isMultiStep = $views.length > 1;
+  /** @type {undefined | import("svelte/store").Readable<1 | 2 | 3 | 4 | 5 | 6>} */
+  const sectionLevel = getContext("carbon:Section");
+
+  $: headingTag = `h${
+    headingLevel ??
+    ($isFullScreen ? (sectionLevel ? Math.min($sectionLevel + 1, 6) : 1) : 2)
+  }`;
+  $: hasTitle = Boolean(title || subTitle || $$slots.default);
+  $: headerClass = [
+    "bx--interstitial-screen__header",
+    hasTitle && "bx--interstitial-screen__header--has-title",
+    $$restProps.class,
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 {#if $isFullScreen}
-  <header
-    class:bx--modal-header={true}
-    class:bx--interstitial-screen__header={true}
-    class:bx--interstitial-screen__header--has-title={hasTitle}
-    {...$$restProps}
-  >
-    {#if title}
-      <h3 class:bx--modal-header__heading={true} class:bx--type-beta={true}>
-        {title}
-      </h3>
-    {/if}
-    {#if subTitle}
-      <p class:bx--interstitial-screen__subtitle={true}>{subTitle}</p>
-    {/if}
-    <button
-      type="button"
-      aria-label={iconDescription}
-      class:bx--modal-close={true}
-      on:click={() => handleClose("close")}
+  <header class:bx--modal-header={true} {...$$restProps} class={headerClass}>
+    <InterstitialScreenHeaderContent
+      {title}
+      {subTitle}
+      {headingTag}
+      {hideProgressIndicator}
     >
-      <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
-    </button>
+      <slot />
+    </InterstitialScreenHeaderContent>
+    <div class:bx--modal-close-button={true}>
+      <Button
+        kind="ghost"
+        class="bx--modal-close"
+        {iconDescription}
+        aria-label={iconDescription}
+        tooltipPosition="left"
+        portalTooltip
+        on:click={() => handleClose("close")}
+      >
+        <Close
+          slot="icon"
+          size={20}
+          class="bx--modal-close__icon"
+          aria-hidden="true"
+        />
+      </Button>
+    </div>
   </header>
 {:else}
-  <ModalHeader {title} {iconDescription} {...$$restProps}>
-    {#if subTitle}
-      <p class:bx--interstitial-screen__subtitle={true}>{subTitle}</p>
-    {/if}
-  </ModalHeader>
-{/if}
-
-{#if !hideProgressIndicator && isMultiStep}
-  <div class:bx--interstitial-screen__progress={true}>
-    <ProgressIndicator
-      currentIndex={$progStep}
-      preventChangeOnClick
-      spaceEqually
+  <ModalHeader {iconDescription} {...$$restProps} class={headerClass}>
+    <InterstitialScreenHeaderContent
+      {title}
+      {subTitle}
+      {headingTag}
+      {hideProgressIndicator}
     >
-      {#each $views as view, index (view.id)}
-        <ProgressStep
-          label={view.stepTitle || `Step ${index + 1}`}
-          complete={index < $progStep}
-        />
-      {/each}
-    </ProgressIndicator>
-    <div aria-live="polite" aria-atomic="true" class:bx--visually-hidden={true}>
-      Step {$progStep + 1} of {$views.length}
-    </div>
-  </div>
+      <slot />
+    </InterstitialScreenHeaderContent>
+  </ModalHeader>
 {/if}
