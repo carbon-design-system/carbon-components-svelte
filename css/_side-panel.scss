@@ -1,0 +1,392 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+@import "carbon-components/scss/globals/scss/layout";
+@import "./ai-tokens";
+
+$ccs-side-panel-sizes: (
+  xs: 256px,
+  sm: 320px,
+  md: 480px,
+  lg: 640px,
+  xl: 1040px,
+  2xl: 1280px,
+);
+
+/// SidePanel styles, after Carbon React's `SidePanel` from Carbon for IBM
+/// Products (`packages/styles/scss/components/side-panel`), with its v11
+/// tokens, type styles, sizes and motion. As a modal does, the panel
+/// starts a layer at level 0 (`bx--layer-one`) and its body steps up to
+/// level 1, so the contextual tokens hold wherever it renders. The scroll-driven title
+/// collapse is out of scope, so the header is static, as upstream's
+/// `animateTitle={false}`. Marker classes stand in for upstream's
+/// `:has()`. Placement is logical: `--end` docks to the inline end, and a
+/// `[dir="rtl"]` ancestor flips the side and the slide.
+/// @access private
+/// @group components
+@mixin side-panel {
+  .#{$prefix}--side-panel {
+    position: fixed;
+    z-index: z("modal");
+    // Under the fixed UI Shell header by default. `--ccs-side-panel-top`
+    // docks it under another bar; see `--no-header` below.
+    top: var(--ccs-side-panel-top, #{$carbon--spacing-09});
+    bottom: 0;
+    display: grid;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: to-rem(256px);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    animation: side-panel-enter $duration--moderate-01
+      motion(entrance, productive);
+    background-color: $layer;
+    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
+    color: $text-primary;
+  }
+
+  // No `Header` is on the page, so the panel spans the full height. The
+  // component sets this after mount, so the server renders the default.
+  .#{$prefix}--side-panel--no-header {
+    top: var(--ccs-side-panel-top, 0);
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--side-panel {
+      max-width: 75vw;
+    }
+  }
+
+  @each $size, $width in $ccs-side-panel-sizes {
+    .#{$prefix}--side-panel--#{$size} {
+      width: to-rem($width);
+    }
+  }
+
+  // The panel slides in from the edge it docks to.
+  .#{$prefix}--side-panel--end {
+    --ccs-side-panel-shift: #{to-rem(320px)};
+
+    border-inline-start: 1px solid $border-subtle;
+    @include ccs-inset-inline($end: 0);
+
+    [dir="rtl"] & {
+      --ccs-side-panel-shift: #{to-rem(-320px)};
+    }
+  }
+
+  .#{$prefix}--side-panel--start {
+    --ccs-side-panel-shift: #{to-rem(-320px)};
+
+    border-inline-end: 1px solid $border-subtle;
+    @include ccs-inset-inline($start: 0);
+
+    [dir="rtl"] & {
+      --ccs-side-panel-shift: #{to-rem(320px)};
+    }
+  }
+
+  // A panel over an overlay, or beside the page, casts no shadow.
+  .#{$prefix}--side-panel--overlay,
+  .#{$prefix}--side-panel--slide-in {
+    box-shadow: none;
+  }
+
+  // The component unmounts the panel when this ends.
+  .#{$prefix}--side-panel--closing {
+    animation: side-panel-exit $duration--moderate-01 motion(exit, productive)
+      forwards;
+  }
+
+  @keyframes side-panel-enter {
+    from {
+      opacity: 0;
+      transform: translateX(var(--ccs-side-panel-shift));
+    }
+  }
+
+  @keyframes side-panel-exit {
+    to {
+      opacity: 0;
+      transform: translateX(var(--ccs-side-panel-shift));
+    }
+  }
+
+  @keyframes side-panel-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes side-panel-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  .#{$prefix}--side-panel__overlay {
+    position: fixed;
+    z-index: z("overlay");
+    animation: side-panel-fade-in $duration--moderate-01
+      motion(entrance, productive);
+    background-color: $overlay;
+    inset: 0;
+  }
+
+  .#{$prefix}--side-panel__overlay--closing {
+    animation: side-panel-fade-out $duration--moderate-01
+      motion(exit, productive) forwards;
+  }
+
+  // Header: the label, title and subtitle leave room for the close button
+  // and decorator in the inline-end corner.
+  .#{$prefix}--side-panel__header {
+    position: relative;
+    min-height: $carbon--spacing-08;
+    padding: $carbon--spacing-05 $carbon--spacing-05 0;
+  }
+
+  .#{$prefix}--side-panel__header--title {
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--side-panel__header--back {
+    padding-top: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--side-panel__header--back.#{$prefix}--side-panel__header--lg {
+    padding-top: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--side-panel__label,
+  .#{$prefix}--side-panel__title,
+  .#{$prefix}--side-panel__subtitle {
+    padding-inline-end: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--side-panel--decorator .#{$prefix}--side-panel__label,
+  .#{$prefix}--side-panel--decorator .#{$prefix}--side-panel__title,
+  .#{$prefix}--side-panel--decorator .#{$prefix}--side-panel__subtitle {
+    padding-inline-end: $carbon--spacing-10;
+  }
+
+  .#{$prefix}--side-panel__label {
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--side-panel__title {
+    @include type-style("heading-03");
+
+    padding-bottom: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--side-panel__header--subtitle .#{$prefix}--side-panel__title {
+    padding-bottom: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--side-panel__subtitle {
+    @include type-style("body-compact-01");
+
+    padding-bottom: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--side-panel__toolbar {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--side-panel__corner {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    display: flex;
+    align-items: center;
+    @include ccs-inset-inline($end: 0);
+  }
+
+  .#{$prefix}--side-panel__decorator {
+    display: flex;
+    padding: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--side-panel__back {
+    position: absolute;
+    top: 0;
+    @include ccs-inset-inline($start: 0);
+  }
+
+  .#{$prefix}--side-panel__back .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--side-panel__body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--side-panel__header--toolbar + .#{$prefix}--side-panel__body {
+    padding-top: $carbon--spacing-03;
+  }
+
+  // Footer buttons are 64px tall, or 48px when condensed, at every size.
+  .#{$prefix}--side-panel__actions {
+    border-top: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--side-panel__actions .#{$prefix}--btn {
+    height: $carbon--spacing-10;
+    min-height: 0;
+    padding-top: $carbon--spacing-05;
+    padding-bottom: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--side-panel--condensed-actions
+    .#{$prefix}--side-panel__actions
+    .#{$prefix}--btn {
+    height: $carbon--spacing-09;
+    padding-top: calc(#{to-rem(14px)} - 3px);
+    padding-bottom: calc(#{to-rem(14px)} - 3px);
+  }
+
+  // Resize handle: an 8px hit target over the free edge, with a 2px line
+  // drawn over the edge's border. `cursor` can't be delayed in CSS, so
+  // the component adds the hover class once `resizeEnterDelayMs` has
+  // passed. A narrow window has no room to resize, so the handle hides.
+  .#{$prefix}--side-panel__resize-handle {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    width: to-rem(8px);
+    height: 100%;
+    // Without these, a touch drag pans the page and a press selects text.
+    touch-action: none;
+    user-select: none;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background-color: transparent;
+      content: "";
+      transition: background-color $duration--fast-02
+        motion(standard, productive);
+    }
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--side-panel--end .#{$prefix}--side-panel__resize-handle {
+    @include ccs-inset-inline($start: to-rem(-4px));
+
+    &::after {
+      @include ccs-inset-inline($start: 3px);
+    }
+  }
+
+  .#{$prefix}--side-panel--start .#{$prefix}--side-panel__resize-handle {
+    @include ccs-inset-inline($end: to-rem(-4px));
+
+    &::after {
+      @include ccs-inset-inline($end: 3px);
+    }
+  }
+
+  .#{$prefix}--side-panel__resize-handle--hover {
+    cursor: col-resize;
+
+    &::after {
+      background-color: $border-interactive;
+    }
+  }
+
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--side-panel__resize-handle {
+      display: none;
+    }
+  }
+
+  // The component sets this on `<body>` for the length of a drag, so the
+  // cursor holds and page text doesn't select as the pointer crosses it.
+  .#{$prefix}--side-panel-resizing {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  .#{$prefix}--side-panel--resizing
+    .#{$prefix}--side-panel__resize-handle::after {
+    transition: none;
+  }
+
+  // A slide-in panel moves the page content's inline margin, and the
+  // content follows it at the panel's pace. A drag moves it at once.
+  .#{$prefix}--side-panel-page {
+    transition: margin $duration--moderate-01 motion(entrance, productive);
+  }
+
+  .#{$prefix}--side-panel-page--resizing {
+    transition: none;
+  }
+
+  // The AI surface, as on a modal: a transparent edge, an inner aura and
+  // a drop shadow.
+  .#{$prefix}--side-panel--ai-label {
+    border-color: transparent;
+    box-shadow:
+      inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px) ai-token("ai-inner-shadow"),
+      0 to-rem(4px) to-rem(10px) to-rem(2px) ai-token("ai-drop-shadow");
+  }
+
+  .#{$prefix}--side-panel--ai-label .#{$prefix}--side-panel__body {
+    background-image: linear-gradient(
+      to top,
+      ai-token("ai-aura-start") 0%,
+      15%,
+      ai-token("ai-aura-end") 50%
+    );
+  }
+
+  .#{$prefix}--side-panel__overlay--ai-label {
+    background-color: ai-token("ai-overlay");
+  }
+
+  // Reduced motion fades the panel in place.
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--side-panel {
+      animation-name: side-panel-fade-in;
+    }
+
+    .#{$prefix}--side-panel--closing {
+      animation-name: side-panel-fade-out;
+    }
+
+    .#{$prefix}--side-panel-page {
+      transition: none;
+    }
+  }
+
+  // Forced colors drop the shadow and the transparent AI edge, so the
+  // panel draws a CanvasText outline, and the handle's line reads
+  // Highlight.
+  @media (forced-colors: active) {
+    .#{$prefix}--side-panel {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
+    .#{$prefix}--side-panel__resize-handle--hover::after {
+      background-color: Highlight;
+    }
+  }
+}
+
+@include exports("side-panel") {
+  @include side-panel;
+}
