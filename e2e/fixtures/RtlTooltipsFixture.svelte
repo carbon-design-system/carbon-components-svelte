@@ -1,7 +1,11 @@
 <script>
   import {
     AILabel,
+    Breadcrumb,
+    BreadcrumbItem,
     Button,
+    OverflowMenu,
+    OverflowMenuItem,
     Popover,
     Toggletip,
     Tooltip,
@@ -150,6 +154,18 @@
       iconDescription="تعديل الخطة"
       tooltipAlignment="start"
     />
+  </div>
+  <div class="case" data-testid="breadcrumb">
+    <Breadcrumb noTrailingSlash>
+      <BreadcrumbItem href="#">المشاريع</BreadcrumbItem>
+      <BreadcrumbItem>
+        <OverflowMenu>
+          <OverflowMenuItem href="#" text="الفوترة" />
+          <OverflowMenuItem href="#" text="الاستخدام" />
+        </OverflowMenu>
+      </BreadcrumbItem>
+      <BreadcrumbItem href="#" isCurrentPage>الخطة</BreadcrumbItem>
+    </Breadcrumb>
   </div>
 </div>
 

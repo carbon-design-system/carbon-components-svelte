@@ -1309,4 +1309,50 @@ test.describe("right-to-left tooltips and popovers", () => {
     );
     expect(textAlign).toEqual(Array(5).fill("right"));
   });
+
+  test("mirrors the Breadcrumb trail, its overflow menu and caret", async ({
+    page,
+  }) => {
+    // Each item's edges, from the trail's start edge inward.
+    const items = (dir: "ltr" | "rtl") =>
+      page.evaluate((dir) => {
+        const trail = document
+          .querySelector("[data-testid=breadcrumb] .bx--breadcrumb")
+          ?.getBoundingClientRect();
+        if (!trail) return null;
+        return [
+          ...document.querySelectorAll(
+            "[data-testid=breadcrumb] .bx--breadcrumb-item",
+          ),
+        ].map((item) => {
+          const box = item.getBoundingClientRect();
+          return dir === "ltr"
+            ? [
+                Math.round(box.left - trail.left),
+                Math.round(box.right - trail.left),
+              ]
+            : [
+                Math.round(trail.right - box.right),
+                Math.round(trail.right - box.left),
+              ];
+        });
+      }, dir);
+    const menu: FloatCase = {
+      anchor: "[data-testid=breadcrumb] .bx--overflow-menu",
+      floating: "[data-testid=breadcrumb] .bx--overflow-menu-options",
+      caretPseudo: "::after",
+      inline: true,
+    };
+    const cases = { menu };
+    await page.goto("/rtl-tooltips.html");
+    const ltrItems = await items("ltr");
+    await page.locator(menu.anchor).click();
+    const ltr = await allFloatOffsets(page, cases);
+
+    await page.goto("/rtl-tooltips.html?dir=rtl");
+    expect(await items("rtl")).toEqual(ltrItems);
+    await page.locator(menu.anchor).click();
+    const rtl = await allFloatOffsets(page, cases);
+    expectAlignedInline(ltr, rtl, cases);
+  });
 });
