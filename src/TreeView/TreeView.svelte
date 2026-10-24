@@ -654,10 +654,7 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
-  import {
-    getLayoutDirection,
-    resolveLayoutDirection,
-  } from "../utils/layout-direction.js";
+  import { getLayoutDirection, inlineKey } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -1153,12 +1150,9 @@
    * @returns {string}
    */
   function treeKey(event) {
-    const { key } = event;
-    if (key !== "ArrowLeft" && key !== "ArrowRight") return key;
     const node =
       event.currentTarget instanceof Element ? event.currentTarget : null;
-    if (resolveLayoutDirection($layoutDirection, node) !== "rtl") return key;
-    return key === "ArrowLeft" ? "ArrowRight" : "ArrowLeft";
+    return inlineKey(event.key, $layoutDirection, node);
   }
 
   setContext("carbon:TreeView", {
