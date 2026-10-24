@@ -42,6 +42,30 @@ test.describe("Splitter", () => {
     await expect(page.getByTestId("resize-count")).toHaveText("1");
   });
 
+  test("grows the start pane, on the right, when dragged left in RTL", async ({
+    page,
+  }) => {
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    const separator = page.getByRole("separator", { name: "Resize file tree" });
+    const box = await separator.boundingBox();
+    const root = await page.getByTestId("splitter").boundingBox();
+    if (!box || !root) throw new Error("missing box");
+    // The start pane takes 30% from the right edge.
+    expect(root.x + root.width - (box.x + box.width / 2)).toBeCloseTo(180, 0);
+    const y = box.y + box.height / 4;
+
+    await page.mouse.move(box.x + box.width / 2, y);
+    await page.mouse.down();
+    await page.mouse.move(root.x + 300, y, { steps: 5 });
+    await page.mouse.up();
+    await expect(page.getByTestId("size-display")).toHaveText("50");
+
+    await separator.press("ArrowLeft");
+    await expect(page.getByTestId("size-display")).toHaveText("51");
+  });
+
   test("keeps the drag while the pointer crosses an iframe", async ({
     page,
   }) => {
