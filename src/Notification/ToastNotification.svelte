@@ -125,10 +125,7 @@
     getRef: () => notificationRef,
   });
 
-  // A toast that holds an action stays open until users act on it or close
-  // it, as Carbon's usage guidance says. A timer could remove the action
-  // before a keyboard or screen reader user reaches it (WCAG 2.2.1).
-  $: sync(open, actionable || $$slots.actions ? 0 : timeout);
+  $: sync(open, timeout, actionable || !!$$slots.actions);
   $: syncFocusOnOpen(open, actionable && focusOnOpen);
 
   $: hasTitle = !!(title || $$slots.titleChildren);

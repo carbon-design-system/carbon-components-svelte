@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
+import { tick } from "svelte";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
 import InlineNotificationActionHrefTest from "./InlineNotificationActionHref.test.svelte";
 import InlineNotificationCustomTest from "./InlineNotificationCustom.test.svelte";
@@ -129,6 +130,41 @@ describe("InlineNotification", () => {
     expect(
       screen.getByRole("button", { name: "Learn more" }),
     ).toBeInTheDocument();
+  });
+
+  it("ignores timeout when it holds an action", async () => {
+    const onclose = vi.fn();
+    render(InlineNotificationCustomTest, { props: { timeout: 1000, onclose } });
+
+    vi.advanceTimersByTime(10_000);
+    await tick();
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole("button", { name: "Learn more" }),
+    ).toBeInTheDocument();
+  });
+
+  it("ignores timeout while actionable", async () => {
+    const onclose = vi.fn();
+    const { rerender } = render(InlineNotificationTest, {
+      props: {
+        title: "Record deleted",
+        timeout: 1000,
+        actionable: true,
+        onclose,
+      },
+    });
+
+    vi.advanceTimersByTime(10_000);
+    await tick();
+    expect(onclose).not.toHaveBeenCalled();
+
+    await rerender({ actionable: false });
+    vi.advanceTimersByTime(1000);
+    await tick();
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
   it("should render action button with href", () => {

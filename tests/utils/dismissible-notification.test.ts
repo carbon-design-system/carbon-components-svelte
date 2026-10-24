@@ -87,6 +87,27 @@ describe("createDismissibleNotification", () => {
     expect(setOpen).toHaveBeenCalledWith(false);
   });
 
+  it("sync() ignores timeout when the notification has an action", () => {
+    const dispatch = vi.fn(() => true);
+    const notification = createDismissibleNotification({
+      dispatch,
+      getPauseOnHover: () => false,
+      setOpen: vi.fn(),
+    });
+
+    notification.sync(true, 100, true);
+    vi.advanceTimersByTime(1000);
+    expect(dispatch).not.toHaveBeenCalled();
+
+    notification.sync(true, 100, false);
+    vi.advanceTimersByTime(100);
+    expect(dispatch).toHaveBeenCalledWith(
+      "close",
+      { timeout: true },
+      { cancelable: true },
+    );
+  });
+
   it("sync() does not schedule a close when open is false", () => {
     const dispatch = vi.fn(() => true);
     const notification = createDismissibleNotification({
