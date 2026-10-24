@@ -85,6 +85,7 @@
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import Close from "../icons/Close.svelte";
+  import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -93,7 +94,6 @@
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
-  import TagTooltip from "./TagTooltip.svelte";
   import { observeTruncation } from "./tag-truncation.js";
 
   const dispatch = createEventDispatcher();
@@ -282,7 +282,12 @@
     >
       <Close />
     </button>
-    <TagTooltip anchor={closeRef} text={title} enabled={!disabled} />
+    <AnchoredTooltip
+      anchor={closeRef}
+      text={title}
+      enabled={!disabled}
+      passEscapeWhenFocused
+    />
   </div>
 {:else if href}
   <a
@@ -329,7 +334,12 @@
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
   </a>
-  <TagTooltip anchor={ref} text={truncationLabel} enabled={showHostTooltip} />
+  <AnchoredTooltip
+    anchor={ref}
+    text={truncationLabel}
+    enabled={showHostTooltip}
+    passEscapeWhenFocused
+  />
 {:else if interactive}
   <button
     bind:this={ref}
@@ -374,7 +384,12 @@
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
   </button>
-  <TagTooltip anchor={ref} text={truncationLabel} enabled={showHostTooltip} />
+  <AnchoredTooltip
+    anchor={ref}
+    text={truncationLabel}
+    enabled={showHostTooltip}
+    passEscapeWhenFocused
+  />
 {:else}
   <div
     bind:this={ref}

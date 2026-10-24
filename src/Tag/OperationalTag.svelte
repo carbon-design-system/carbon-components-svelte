@@ -100,6 +100,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Popover from "../Popover/Popover.svelte";
+  import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
@@ -110,7 +111,6 @@
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import TagTooltip from "./TagTooltip.svelte";
   import { observeTruncation } from "./tag-truncation.js";
 
   const dispatch = createEventDispatcher();
@@ -286,7 +286,8 @@
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}><slot /></span>
   </button>
-  <TagTooltip
+  <AnchoredTooltip
+    passEscapeWhenFocused
     anchor={ref}
     text={truncationLabel}
     enabled={truncated && !disabled && !open}

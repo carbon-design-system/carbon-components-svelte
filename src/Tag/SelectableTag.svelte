@@ -45,11 +45,11 @@
   export let id = uniqueId();
 
   import { createEventDispatcher, onMount } from "svelte";
+  import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import TagTooltip from "./TagTooltip.svelte";
   import { observeTruncation } from "./tag-truncation.js";
 
   const dispatch = createEventDispatcher();
@@ -147,7 +147,8 @@
   {/if}
   <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
 </button>
-<TagTooltip
+<AnchoredTooltip
+  passEscapeWhenFocused
   anchor={buttonRef}
   text={truncationLabel}
   enabled={truncated && !disabled}
