@@ -246,6 +246,87 @@
       <ContainedListItem>Jane Cooper</ContainedListItem>
     </ContainedList>
   </div>
+  <div data-testid="date-picker">
+    <DatePicker datePickerType="single" value="03/15/2024">
+      <DatePickerInput labelText="Start date" />
+    </DatePicker>
+  </div>
+  <div data-testid="date-picker-invalid">
+    <DatePicker datePickerType="single" value="03/15/2024">
+      <DatePickerInput labelText="Start date" invalid invalidText="Too early" />
+    </DatePicker>
+  </div>
+  <div data-testid="date-picker-warn">
+    <DatePicker datePickerType="single" value="03/15/2024">
+      <DatePickerInput labelText="Start date" warn warnText="A holiday" />
+    </DatePicker>
+  </div>
+  <div data-testid="date-picker-clearable">
+    <DatePicker datePickerType="single" value="03/15/2024" clearable>
+      <DatePickerInput labelText="Start date" />
+    </DatePicker>
+  </div>
+  <div data-testid="date-picker-clearable-invalid">
+    <DatePicker datePickerType="single" value="03/15/2024" clearable>
+      <DatePickerInput labelText="Start date" invalid invalidText="Too early">
+        <AILabel slot="decorator" />
+      </DatePickerInput>
+    </DatePicker>
+  </div>
+  <div data-testid="date-picker-decorator">
+    <DatePicker datePickerType="single" value="03/15/2024">
+      <DatePickerInput labelText="Start date">
+        <AILabel slot="decorator" />
+      </DatePickerInput>
+    </DatePicker>
+  </div>
+  <div data-testid="date-picker-range">
+    <DatePicker
+      datePickerType="range"
+      valueFrom="03/12/2024"
+      valueTo="03/14/2024"
+    >
+      <DatePickerInput labelText="Start date" />
+      <DatePickerInput labelText="End date" />
+    </DatePicker>
+  </div>
+  <div data-testid="select">
+    <Select labelText="Region">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+  </div>
+  <div data-testid="select-invalid">
+    <Select labelText="Region" invalid invalidText="Unavailable">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+  </div>
+  <div data-testid="select-warn">
+    <Select labelText="Region" warn warnText="Busy">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+  </div>
+  <div data-testid="select-decorator">
+    <Select labelText="Region" invalid invalidText="Unavailable">
+      <SelectItem value="us-east" text="US East" />
+      <AILabel slot="decorator" />
+    </Select>
+  </div>
+  <div data-testid="select-inline">
+    <Select inline labelText="Region" helperText="Closest first">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+  </div>
+  <div data-testid="select-inline-invalid">
+    <Select inline labelText="Region" invalid invalidText="Unavailable">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+  </div>
+  <div data-testid="fluid-select">
+    <Select fluid labelText="Region">
+      <SelectItem value="us-east" text="US East" />
+    </Select>
+  </div>
+
   <!-- Other fluid fields share the label and message rows. -->
   <div data-testid="fluid-select-invalid">
     <Select fluid labelText="Region" invalid invalidText="Unavailable">

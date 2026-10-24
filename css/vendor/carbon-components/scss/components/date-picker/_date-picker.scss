@@ -181,10 +181,10 @@
     z-index: 1;
     // vertically center icon within parent container on IE11
     top: 50%;
-    right: 1rem;
     fill: $icon-primary;
     pointer-events: none;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: 1rem);
   }
 
   .#{$prefix}--date-picker__icon--invalid,
@@ -210,7 +210,7 @@
   // order), so a sibling selector from the icon can't reach a preceding
   // input. This marker class is set whenever an icon renders instead.
   .#{$prefix}--date-picker__input--with-icon {
-    padding-right: $carbon--spacing-09;
+    padding-inline-end: $carbon--spacing-09;
   }
 
   .#{$prefix}--date-picker__input:disabled ~ .#{$prefix}--date-picker__icon {
@@ -220,7 +220,7 @@
 
   .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container:first-child {
-    margin-right: to-rem(1px);
+    margin-inline-end: to-rem(1px);
   }
 
   .#{$prefix}--date-picker--range .#{$prefix}--date-picker-container,
@@ -233,7 +233,7 @@
   // leaves a 143.5px range input ~80px of text, clipping a code-02
   // `mm/dd/yyyy` (~87px); 2rem still keeps the text clear of the icon.
   .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input--with-icon {
-    padding-right: $carbon--spacing-07;
+    padding-inline-end: $carbon--spacing-07;
   }
 
   .#{$prefix}--date-picker.#{$prefix}--skeleton input,
@@ -495,8 +495,6 @@
     position: absolute;
     z-index: 1;
     top: 50%;
-    // Centered where the 1rem icon at `right: 1rem` sits.
-    right: to-rem(12px);
     display: flex;
     width: $carbon--spacing-06;
     height: $carbon--spacing-06;
@@ -508,6 +506,8 @@
     cursor: pointer;
     fill: $icon-primary;
     transform: translateY(-50%);
+    // Centered where the 1rem icon 1rem from the end sits.
+    @include ccs-inset-inline($end: to-rem(12px));
 
     @media (any-hover: hover) {
       &:hover {
@@ -521,7 +521,7 @@
   }
 
   .#{$prefix}--date-picker__clear--with-icon {
-    right: to-rem(36px);
+    @include ccs-inset-inline($end: to-rem(36px));
   }
 
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__clear {
@@ -529,17 +529,17 @@
   }
 
   .#{$prefix}--date-picker__input--with-clear {
-    padding-right: $carbon--spacing-09;
+    padding-inline-end: $carbon--spacing-09;
   }
 
   // The clear button spans 12-36px from the right edge; see the range
   // `--with-icon` rule above. Must precede the clear+icon rule below.
   .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input--with-clear {
-    padding-right: to-rem(36px);
+    padding-inline-end: to-rem(36px);
   }
 
   .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon {
-    padding-right: to-rem(64px);
+    padding-inline-end: to-rem(64px);
   }
 }
 
