@@ -270,10 +270,22 @@
   export let id = uniqueId();
 
   /**
-   * Specify a name attribute for the input.
+   * Specify a name to submit `selectedId` with a form.
+   * Mounts a hidden input whose value mirrors `selectedId`
+   * (empty string when nothing is selected, or when the
+   * selected item is disabled). Omitted from submission
+   * when the combo box is disabled. Use `inputName` to
+   * also submit the typed text.
    * @type {string}
    */
   export let name = undefined;
+
+  /**
+   * Specify a name attribute for the text input.
+   * The typed or displayed text submits under this key.
+   * @type {string}
+   */
+  export let inputName = undefined;
 
   /**
    * Set to `true` to require a value. Sets `required` on the input, so a
@@ -797,6 +809,10 @@
   }
 
   $: itemsById = new Map(items.map((item) => [item.id, item]));
+  // Mirrors native `<select><option value>`: a disabled selection is not a
+  // successful control, so it serializes as empty like nothing being selected.
+  $: hiddenInputValue =
+    selectedId === undefined || selectedItem?.disabled ? "" : selectedId;
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
@@ -1132,6 +1148,9 @@
       <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
+  {#if name}
+    <input type="hidden" {name} value={hiddenInputValue} {disabled}>
+  {/if}
   <ListBox
     class={comboBoxListBoxClass}
     id={comboId}
@@ -1181,7 +1200,7 @@
           {readonly}
           {placeholder}
           {id}
-          {name}
+          name={inputName}
           {required}
           {...$$restProps}
           aria-describedby={joinDescribedBy(
