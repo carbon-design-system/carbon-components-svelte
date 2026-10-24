@@ -836,6 +836,15 @@ $ai-label-sizes: (
 /// @access private
 /// @group components
 @mixin ai-label-tiles {
+  // The decorator is an `xs` AILabel in the top inline-end corner, as in
+  // v11. A selectable tile's checkbox sits there too, so the decorator
+  // steps in from it. The tile's text reserves the room the decorator
+  // takes, plus a gap, as v11 leaves that to the tile's own padding and
+  // lets the text run under the label. The gap is a token (8px) and is
+  // not from v11.
+  $tile-decorator-size: to-rem(nth(map-get($ai-label-sizes, xs), 1));
+  $tile-decorator-gap: $carbon--spacing-03;
+
   .#{$prefix}--tile--decorator,
   .#{$prefix}--tile__wrapper--decorator {
     position: relative;
@@ -845,16 +854,32 @@ $ai-label-sizes: (
     position: absolute;
     z-index: 1;
     top: $carbon--spacing-05;
-    right: $carbon--spacing-05;
     display: flex;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
-  // Clear of the checkmark in the top-right corner
+  // Clear of the checkmark in the top inline-end corner
   .#{$prefix}--tile__wrapper--selectable .#{$prefix}--tile--inner-decorator,
   .#{$prefix}--tile__wrapper--radio
     .#{$prefix}--tile--is-selected
     + .#{$prefix}--tile--inner-decorator {
-    right: $carbon--spacing-08;
+    @include ccs-inset-inline($end: $carbon--spacing-08);
+  }
+
+  // Keep the text out from under the decorator. Padding on the tile
+  // reaches every kind, including those without a content wrapper. A
+  // `noPadding` tile lays out its own content.
+  .#{$prefix}--tile.#{$prefix}--tile--decorator:not(.#{$prefix}--tile--no-padding) {
+    padding-inline-end: $carbon--spacing-05 + $tile-decorator-size +
+      $tile-decorator-gap;
+  }
+
+  // A selectable tile also holds the checkbox. A radio tile reserves the
+  // room before it is selected, since the decorator moves over for the
+  // checkmark, and the text should not reflow when it does.
+  .#{$prefix}--tile.#{$prefix}--tile--selectable.#{$prefix}--tile--decorator {
+    padding-inline-end: $carbon--spacing-08 + $tile-decorator-size +
+      $tile-decorator-gap;
   }
 
   .#{$prefix}--tile--ai-label,
