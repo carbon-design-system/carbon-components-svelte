@@ -56,6 +56,8 @@ describe("ProgressBar", () => {
   it.each([
     ["small-progress", "bx--progress-bar--small"],
     ["medium-progress", "bx--progress-bar--big"],
+    ["v11-small-progress", "bx--progress-bar--small"],
+    ["v11-big-progress", "bx--progress-bar--big"],
     ["inline-progress", "bx--progress-bar--inline"],
     ["indented-progress", "bx--progress-bar--indented"],
   ])("renders %s with the %s class", (testId, className) => {

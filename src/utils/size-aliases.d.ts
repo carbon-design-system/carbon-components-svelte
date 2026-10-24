@@ -49,6 +49,12 @@ export const DATA_TABLE_SIZE_ALIASES: ReadonlyMap<
 /** DataTable `Toolbar`: v11 `lg` is the 48px default. */
 export const TOOLBAR_SIZE_ALIASES: ReadonlyMap<"lg", "default">;
 
+/** ProgressBar: v11 `small` and `big`. */
+export const PROGRESS_BAR_SIZE_ALIASES: ReadonlyMap<
+  "small" | "big",
+  "sm" | "md"
+>;
+
 /**
  * Resolve a size alias to the component's own name. Returns any other
  * value unchanged, including `undefined`.
