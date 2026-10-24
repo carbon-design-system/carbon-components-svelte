@@ -72,7 +72,7 @@
   /**
    * Set to `true` to render the popover in a portal,
    * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the popover is portalled when inside a `Modal`.
+   * By default, the popover is portalled when inside a `Modal` or `DataTable`.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;

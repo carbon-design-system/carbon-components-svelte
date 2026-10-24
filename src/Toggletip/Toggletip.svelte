@@ -106,7 +106,7 @@
   /**
    * Set to `true` to render the content in a portal,
    * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the content is portalled when inside a `Modal`.
+   * By default, the content is portalled when inside a `Modal` or `DataTable`.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;

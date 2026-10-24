@@ -19,7 +19,10 @@ export const FORM_SIZE_CONTEXT_KEY = "carbon:FormSize";
  */
 export const FORM_ITEM_CONTEXT_KEY = "carbon:FormItem";
 
-/** Set by `Modal` and `ComposedModal`; read by overlays inside them. */
+/**
+ * Set by `Modal`, `ComposedModal` and `DataTable`, containers that scroll
+ * or clip their content: overlays inside them portal by default.
+ */
 export const MODAL_CONTEXT_KEY = "carbon:Modal";
 
 /**

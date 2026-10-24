@@ -243,7 +243,7 @@
   /**
    * Set to `true` to render the dropdown menu in a portal,
    * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Inside a Modal or DataTable, defaults to `true` unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;

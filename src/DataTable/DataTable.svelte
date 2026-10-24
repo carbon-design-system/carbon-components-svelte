@@ -441,6 +441,7 @@
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
@@ -812,6 +813,11 @@
       return next;
     });
   }
+
+  // The table content scrolls, so a cell's Dropdown or DatePicker menu would
+  // be cut off by it and stretch its scroll area instead of opening over
+  // the page. Overlays inside a Modal portal for the same reason.
+  setContext(MODAL_CONTEXT_KEY, {});
 
   setContext("carbon:DataTable", {
     batchSelectedIds,
