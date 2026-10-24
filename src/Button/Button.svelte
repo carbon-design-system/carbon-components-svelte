@@ -174,6 +174,7 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
@@ -213,6 +214,11 @@
   // Set by Escape. The tooltip stays hidden while the button keeps hover
   // or focus, until the next pointer enter or focus (WCAG 1.4.13).
   let dismissed = false;
+  // CSS `:hover` shows the inline tooltip, so the hidden class holds it back
+  // while a hover waits out the group's enter delay, as TooltipIcon's does.
+  // A warm handoff from a neighbor opens it at once. Before hydration, and
+  // on the server, CSS alone shows it.
+  let tooltipShown = false;
 
   $: portalOpen =
     usePortal &&
@@ -220,12 +226,10 @@
     !dismissed &&
     (hovered || focused) &&
     $tooltipActive;
+  // `tooltipShown` holds through the leave delay, so the pointer can move
+  // onto the tooltip.
   $: inlineOpen =
-    hasTooltip &&
-    !disabled &&
-    !dismissed &&
-    (hovered || focused) &&
-    $tooltipActive;
+    hasTooltip && !disabled && !dismissed && tooltipShown && $tooltipActive;
 
   function dismissPortalTooltip() {
     tooltipHandoff.cancel();
@@ -247,12 +251,6 @@
   }
 
   $: tooltipHidden = hasTooltipContent && !hideTooltip && $tooltipOthersActive;
-
-  // CSS `:hover` shows the inline tooltip, so the hidden class holds it back
-  // while a hover waits out the group's enter delay, as TooltipIcon's does.
-  // A warm handoff from a neighbor opens it at once. Before hydration, and
-  // on the server, CSS alone shows it.
-  let tooltipShown = false;
 
   function handleMouseenter() {
     if (!hasTooltip) return;
@@ -287,6 +285,11 @@
       hovered = false;
       if (!focused) tooltipHandoff.release();
     });
+  }
+
+  // The pointer moved onto the portalled tooltip: keep it open.
+  function handleTooltipMouseenter() {
+    if (portalOpen) tooltipHandoff.cancel();
   }
 
   // Focus shows the tooltip at once, without the fade-in.
@@ -406,6 +409,7 @@
           (dismissed && (hovered || focused)) ||
           (hovered && !tooltipShown)) &&
         "bx--tooltip--hidden",
+      inlineOpen && "bx--tooltip--visible",
       hasTooltip && $tooltipInstant && "bx--tooltip--instant",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,
@@ -438,6 +442,7 @@
       <a
         bind:this={ref}
         use:dismiss={escapeListener}
+        use:ignoreTooltipClicks
         {...buttonProps}
         on:click={handleClick}
         on:click
@@ -455,7 +460,7 @@
         on:mouseleave={handlePortalMouseLeave}
       >
         {#if hasIconOnly && iconDescription && !loading}
-          <span class:bx--assistive-text={true} style:pointer-events="none">
+          <span class:bx--assistive-text={true}>
             {iconDescription}
           </span>
         {/if}
@@ -490,6 +495,7 @@
     <a
       bind:this={ref}
       use:dismiss={escapeListener}
+      use:ignoreTooltipClicks
       {...buttonProps}
       on:click={handleClick}
       on:click
@@ -507,7 +513,7 @@
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription && !loading}
-        <span class:bx--assistive-text={true} style:pointer-events="none">
+        <span class:bx--assistive-text={true}>
           {iconDescription}
         </span>
       {/if}
@@ -543,6 +549,7 @@
       type="button"
       bind:this={ref}
       use:dismiss={escapeListener}
+      use:ignoreTooltipClicks
       {...buttonProps}
       on:click={handleClick}
       on:click
@@ -560,7 +567,7 @@
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription && !loading}
-        <span class:bx--assistive-text={true} style:pointer-events="none">
+        <span class:bx--assistive-text={true}>
           {iconDescription}
         </span>
       {/if}
@@ -596,6 +603,7 @@
     type="button"
     bind:this={ref}
     use:dismiss={escapeListener}
+    use:ignoreTooltipClicks
     {...buttonProps}
     on:click={handleClick}
     on:click
@@ -613,7 +621,7 @@
     on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly && iconDescription && !loading}
-      <span class:bx--assistive-text={true} style:pointer-events="none">
+      <span class:bx--assistive-text={true}>
         {iconDescription}
       </span>
     {/if}
@@ -658,5 +666,7 @@
     gapBottom={portalGaps.gapBottom}
     verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
     verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
+    on:mouseenter={handleTooltipMouseenter}
+    on:mouseleave={handlePortalMouseLeave}
   />
 {/if}

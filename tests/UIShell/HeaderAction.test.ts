@@ -108,9 +108,13 @@ describe("HeaderAction", () => {
       expect(help).toHaveClass("bx--tooltip--hidden");
       expect(settings).not.toHaveClass("bx--tooltip--hidden");
 
+      // The focused tooltip comes back once the hovered one's leave
+      // delay ends.
       await fireEvent.mouseLeave(settings);
       await fireEvent.mouseLeave(help);
-      expect(notifications).not.toHaveClass("bx--tooltip--hidden");
+      await vi.waitFor(() => {
+        expect(notifications).not.toHaveClass("bx--tooltip--hidden");
+      });
     });
   });
 

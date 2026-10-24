@@ -1,7 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { TOOLTIP_ENTER_DELAY_MS } from "../../src/constants/timing.js";
+import {
+  TOOLTIP_ENTER_DELAY_MS,
+  TOOLTIP_ICON_LEAVE_DELAY_MS,
+} from "../../src/constants/timing.js";
 import { rootTooltipGroup } from "../../src/utils/tooltip-group.js";
 import { openTooltips } from "../utils/open-tooltips";
+import { describeTooltipHover } from "../utils/tooltip-hover";
 import OverflowMenuTrigger from "./OverflowMenu.trigger.test.svelte";
 
 function tooltipTexts() {
@@ -84,7 +88,9 @@ describe("OverflowMenu trigger tooltip", () => {
     expect(tooltipTexts()).toEqual(["Options"]);
 
     await fireEvent.mouseLeave(trigger);
-    await vi.advanceTimersByTimeAsync(0);
+    await vi.advanceTimersByTimeAsync(TOOLTIP_ICON_LEAVE_DELAY_MS - 1);
+    expect(tooltipTexts()).toEqual(["Options"]);
+    await vi.advanceTimersByTimeAsync(1);
     expect(openTooltips()).toHaveLength(0);
   });
 
@@ -209,4 +215,14 @@ describe("OverflowMenu trigger tooltip", () => {
       "bottom",
     );
   });
+});
+
+describeTooltipHover("OverflowMenu trigger", () => {
+  const onParentKeydown = vi.fn();
+  render(OverflowMenuTrigger, { props: { onParentKeydown } });
+  return {
+    trigger: screen.getByTestId("trigger"),
+    shown: () => openTooltips().length === 1,
+    onParentKeydown,
+  };
 });

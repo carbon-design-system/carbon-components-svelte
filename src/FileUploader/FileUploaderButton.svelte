@@ -174,7 +174,11 @@
     dismissOnClick: false,
     enterDelayMs: () => 0,
   });
-  const { hidden: tooltipHidden, instant: tooltipInstant } = tooltip;
+  const {
+    open: tooltipOpen,
+    hidden: tooltipHidden,
+    instant: tooltipInstant,
+  } = tooltip;
 
   let detachTooltip = noop;
 
@@ -282,6 +286,7 @@
     !hideTooltip &&
     tooltipAlignment === "end"}
   class:bx--tooltip--hidden={hasTooltip && $tooltipHidden}
+  class:bx--tooltip--visible={hasTooltip && $tooltipOpen}
   class:bx--tooltip--instant={hasTooltip && $tooltipInstant}
   on:keydown
 >

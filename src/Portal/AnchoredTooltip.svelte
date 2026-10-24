@@ -1,7 +1,7 @@
 <script>
   /**
    * Internal. An icon-style tooltip anchored to an element, shown on hover
-   * and focus and hidden by Escape. It renders in a portal, so a clipping
+   * and focus and hidden by Escape. It stays while the pointer is on it. It renders in a portal, so a clipping
    * container can't cut it off.
    */
 
@@ -80,4 +80,6 @@
   tooltipType="icon"
   intrinsicAlign={align}
   {...gaps}
+  on:mouseenter={tooltip.handleTooltipMouseenter}
+  on:mouseleave={tooltip.handleTooltipMouseleave}
 />

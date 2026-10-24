@@ -715,6 +715,11 @@
     gapBottom={tooltipGaps.gapBottom}
     verticalAlignOffsetLeft={tooltipGaps.verticalAlignOffsetLeft}
     verticalAlignOffsetRight={tooltipGaps.verticalAlignOffsetRight}
+    on:mouseenter={() => {
+      // The pointer moved onto the tooltip: keep it open.
+      if (tooltipOpen) tooltipHandoff.cancel();
+    }}
+    on:mouseleave={handleTooltipMouseleave}
   />
 {/if}
 

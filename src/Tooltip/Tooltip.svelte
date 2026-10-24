@@ -154,7 +154,7 @@
     group: getTooltipGroup(),
     enterDelayMs: () => enterDelayMs,
     leaveDelayMs: () => leaveDelayMs,
-    hoverable: true,
+    rich: true,
   });
 
   function handleMouseenter() {

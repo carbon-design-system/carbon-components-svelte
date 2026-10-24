@@ -14,11 +14,11 @@ export function createTooltipHandoff(options?: {
   /** Overrides the group's leave delay when it returns a number. */
   leaveDelayMs?: () => number | undefined;
   /**
-   * Set for a tooltip the pointer can move onto. Without a leave delay
-   * from the group or the tooltip, a hoverable tooltip lingers for
-   * `TOOLTIP_LEAVE_DELAY_MS`; an icon label hides at once.
+   * Set for `Tooltip` and `TooltipDefinition`. Without a leave delay from
+   * the group or the tooltip, they wait `TOOLTIP_LEAVE_DELAY_MS` before
+   * they close, and icon tooltips `TOOLTIP_ICON_LEAVE_DELAY_MS`.
    */
-  hoverable?: boolean;
+  rich?: boolean;
 }): {
   /** `true` while this tooltip holds the active slot. */
   active: Readable<boolean>;

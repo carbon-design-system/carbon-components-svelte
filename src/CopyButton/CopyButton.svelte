@@ -317,5 +317,10 @@
     gapBottom={portalGaps.gapBottom}
     verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
     verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
+    on:mouseenter={() => {
+      // The pointer moved onto the tooltip: keep it open.
+      if (tooltipHoverActive) tooltipHandoff.cancel();
+    }}
+    on:mouseleave={handleTooltipMouseLeave}
   />
 {/if}

@@ -2,6 +2,7 @@
 import { derived, get, writable } from "svelte/store";
 import { dismiss as windowListener } from "./dismiss.js";
 import { isImeComposition } from "./ime-composition.js";
+import { ignoreTooltipClicks } from "./tooltip-clicks.js";
 import { createTooltipHandoff } from "./tooltip-handoff.js";
 
 /**
@@ -10,8 +11,9 @@ import { createTooltipHandoff } from "./tooltip-handoff.js";
  * `Button`'s tooltip: after the group's enter delay on hover, at once on
  * focus, one at a time page-wide.
  *
- * Escape hides the tooltip until the next pointer enter or focus, as can
- * activating the anchor (WCAG 1.4.13).
+ * The pointer can move from the anchor onto the tooltip, and the tooltip
+ * stays while the pointer is on either. Escape hides it until the next
+ * pointer enter or focus, as can activating the anchor (WCAG 1.4.13).
  *
  * @param {object} [options]
  * @param {import("./tooltip-group.js").TooltipGroup} [options.group]
@@ -87,6 +89,16 @@ export function createAnchoredTooltip({
     handoff.claim({ instant: true });
   }
 
+  /**
+   * The pointer moved onto a portalled tooltip: keep it open. Inline
+   * tooltips sit inside the anchor and need no listener.
+   */
+  function handleTooltipMouseenter() {
+    if (!get(open)) return;
+    entered.set(true);
+    handoff.cancel();
+  }
+
   function handleBlur() {
     focused.set(false);
     if (!get(hovered)) handoff.release();
@@ -132,7 +144,8 @@ export function createAnchoredTooltip({
 
   /**
    * Listen for hover, focus and activation on `node`, and for Escape on
-   * `window` while the tooltip shows. The capture phase lets a tooltip
+   * `window` while the tooltip shows. A click on an inline tooltip inside
+   * `node` does nothing. The capture phase lets a tooltip
    * opened by hover hide while focus is elsewhere, before an ancestor sees
    * the key.
    * @param {HTMLElement} node
@@ -161,12 +174,14 @@ export function createAnchoredTooltip({
     const unsubscribe = open.subscribe(($open) => {
       escapeListener.update({ ...escapeOptions, enabled: $open });
     });
+    const tooltipClicks = ignoreTooltipClicks(node);
     return () => {
       for (const [type, listener] of listeners) {
         node.removeEventListener(type, listener);
       }
       unsubscribe();
       escapeListener.destroy();
+      tooltipClicks.destroy();
     };
   }
 
@@ -175,6 +190,8 @@ export function createAnchoredTooltip({
     hidden,
     instant: handoff.instant,
     attach,
+    handleTooltipMouseenter,
+    handleTooltipMouseleave: handleMouseleave,
     handleKeydown,
     dismiss,
     hide,
