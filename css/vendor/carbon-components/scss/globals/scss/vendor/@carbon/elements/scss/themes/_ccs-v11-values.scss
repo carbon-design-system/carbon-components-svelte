@@ -11,8 +11,7 @@
 // white field.
 // The v10 maps also hold the button-* component tokens. Each map ends with
 // the ones whose v11 value differs. g80 takes v11's primary hover, which is
-// the same in every v11 theme, and keeps its opaque disabled color, as it
-// keeps text-disabled and icon-disabled.
+// the same in every v11 theme, and g90's translucent disabled color.
 
 $ccs-v11-values: (
   white: (
@@ -639,6 +638,17 @@ $ccs-v11-values: (
     field-hover-02: #5e5e5e,
     border-subtle-02: #8d8d8d,
     border-subtle-selected-01: #a8a8a8,
+    // Background states and disabled colors are translucent, as in every v11
+    // dark theme.
+    background-active: rgba(141, 141, 141, 0.4),
+    background-hover: rgba(141, 141, 141, 0.16),
+    background-selected: rgba(141, 141, 141, 0.24),
+    background-selected-hover: rgba(141, 141, 141, 0.32),
+    border-disabled: rgba(141, 141, 141, 0.5),
+    icon-disabled: rgba(244, 244, 244, 0.25),
+    icon-on-color-disabled: rgba(255, 255, 255, 0.25),
+    text-disabled: rgba(244, 244, 244, 0.25),
+    text-on-color-disabled: rgba(255, 255, 255, 0.25),
     // Values g80 shared with g90 in v10 follow g90 to v11.
     highlight: #002d9c,
     overlay: rgba(0, 0, 0, 0.6),
@@ -673,9 +683,9 @@ $ccs-v11-values: (
     chat-bubble-user: #525252,
     chat-bubble-user-text: #f4f4f4,
     chat-button: #78a9ff,
-    chat-button-active: #525252,
-    chat-button-hover: #474747,
-    chat-button-selected: #525252,
+    chat-button-active: rgba(141, 141, 141, 0.4),
+    chat-button-hover: rgba(141, 141, 141, 0.16),
+    chat-button-selected: rgba(141, 141, 141, 0.24),
     chat-button-text-hover: #a6c8ff,
     chat-button-text-selected: #c6c6c6,
     chat-header-background: #393939,
@@ -692,6 +702,7 @@ $ccs-v11-values: (
     support-caution-major: #ff832b,
     support-caution-minor: #f1c21b,
     support-caution-undefined: #a56eff,
+    button-disabled: rgba(141, 141, 141, 0.3),
     button-primary-hover: #0050e6,
   ),
 );

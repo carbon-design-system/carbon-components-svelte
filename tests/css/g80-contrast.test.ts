@@ -97,3 +97,42 @@ describe("Gray 80 layer states", () => {
     30_000,
   );
 });
+
+/** `color` painted over the opaque `surface`, as `#rrggbb`. */
+function over(color: string, surface: string) {
+  const rgba = color.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)$/);
+  if (!rgba) return color;
+  const alpha = Number(rgba[4]);
+  return `#${[1, 2, 3]
+    .map((i) => {
+      const under = Number.parseInt(surface.slice(2 * i - 1, 2 * i + 1), 16);
+      const value = Math.round(alpha * Number(rgba[i]) + (1 - alpha) * under);
+      return value.toString(16).padStart(2, "0");
+    })
+    .join("")}`;
+}
+
+// Background states and disabled colors are translucent, as in every v11
+// dark theme. Over the page, each state still reads and keeps text-primary
+// at 4.5:1.
+describe("Gray 80 background states", () => {
+  it.each([
+    "background-hover",
+    "background-selected",
+    "background-selected-hover",
+    "background-active",
+  ])(
+    "%s reads on the background",
+    async (state) => {
+      const tokens = (await themeTokens()).themes.g80;
+      const background = tokens["--cds-background"];
+      expect(tokens[`--cds-${state}`]).toMatch(/^rgba\(/);
+      const fill = over(tokens[`--cds-${state}`], background);
+      expect(contrast(fill, background)).toBeGreaterThanOrEqual(1.2);
+      expect(
+        contrast(tokens["--cds-text-primary"], fill),
+      ).toBeGreaterThanOrEqual(4.5);
+    },
+    30_000,
+  );
+});
