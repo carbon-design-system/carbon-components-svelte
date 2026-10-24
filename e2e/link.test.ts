@@ -104,6 +104,18 @@ test.describe("Link", () => {
     }
   });
 
+  // A press outside one popover closes the other, so each gets a fresh page.
+  for (const testId of ["link-toggletip", "link-ai-label"]) {
+    test(`keeps the ${testId} color while pressed`, async ({ page }) => {
+      const link = page.getByTestId(testId);
+      const rest = await style(page, testId, "color");
+      await link.hover();
+      await page.mouse.down();
+      expect(await style(page, testId, "color")).toBe(rest);
+      await page.mouse.up();
+    });
+  }
+
   test("wraps a long inline link across lines", async ({ page }) => {
     const rects = await page
       .getByTestId("link-wrap")

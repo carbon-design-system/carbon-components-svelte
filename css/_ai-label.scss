@@ -246,13 +246,27 @@ $ai-label-sizes: (
     color: $link-primary;
   }
 
+  // A pressed link keeps its color, as in v11. The `:hover` entries restate
+  // it over the hover rules below.
   .#{$prefix}--ai-label-popover
     .#{$prefix}--toggletip-content
     .#{$prefix}--link:active,
   .#{$prefix}--ai-label-popover
     .#{$prefix}--toggletip-content
-    .#{$prefix}--link:active:visited {
-    color: $text-primary;
+    .#{$prefix}--link:active:visited,
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:active:hover,
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link:active:visited:hover {
+    color: $link-primary;
+  }
+
+  .#{$prefix}--ai-label-popover
+    .#{$prefix}--toggletip-content
+    .#{$prefix}--link--visited:visited {
+    color: $link-visited;
   }
 
   .#{$prefix}--ai-label-popover

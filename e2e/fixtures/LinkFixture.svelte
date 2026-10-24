@@ -1,5 +1,10 @@
 <script>
-  import { Link } from "carbon-components-svelte";
+  import {
+    AILabel,
+    Link,
+    Toggletip,
+    ToggletipFooter,
+  } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 </script>
 
@@ -84,3 +89,29 @@
 >
   Themed
 </Link>
+
+<Toggletip open>
+  Usage-based charges are calculated at the end of the cycle.
+  <ToggletipFooter>
+    <Link
+      data-testid="link-toggletip"
+      href="#"
+      on:click={(event) => event.preventDefault()}
+    >
+      View invoices
+    </Link>
+  </ToggletipFooter>
+</Toggletip>
+
+<div style="margin-top: 12rem;">
+  <AILabel open>
+    <p>Anomalies were flagged against the same hour last week.</p>
+    <Link
+      data-testid="link-ai-label"
+      href="#"
+      on:click={(event) => event.preventDefault()}
+    >
+      View details
+    </Link>
+  </AILabel>
+</div>
