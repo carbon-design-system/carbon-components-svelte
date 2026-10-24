@@ -55,6 +55,8 @@ It matches Carbon React's `LayoutDirection`. To set the direction for the whole 
 
 In RTL, a field's icons and buttons sit at its left end: the password toggle, the copy button, the number steppers, the clear button, and the invalid, warning, and read-only icons. The text keeps clear of them.
 
+`TagInput`'s tags sit at the right, so <DocKbd label="ArrowRight" /> at the start of the text moves to the last tag and <DocKbd label="ArrowLeft" /> moves back. `PinCodeInput`'s first segment is the rightmost one, and <DocKbd label="ArrowLeft" /> moves to the next segment.
+
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={6}>
     <PasswordInput labelText="مفتاح الواجهة البرمجية" value="sk-live-4242" />
