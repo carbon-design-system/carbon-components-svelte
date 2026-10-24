@@ -639,6 +639,8 @@ test.describe("right-to-left layout", () => {
     // Pagination, one with a page number input, and the skeleton.
     const root = "[data-testid=pagination]";
     const PAGINATION_PARTS = {
+      pageSizeSelect: `${root} .bx--select__item-count`,
+      pageSelect: `${root} .bx--select__page-number`,
       pageInput: `${root} .bx--pagination__page-number-input`,
       backward: `${root} .bx--pagination__button--backward`,
       forward: `${root} .bx--pagination__button--forward`,
@@ -674,8 +676,11 @@ test.describe("right-to-left layout", () => {
     }
 
     const ltr = await sides();
-    // The buttons' separator sits on their left in LTR.
+    // In LTR the buttons' and page select's separators sit on their left,
+    // and the page size select's on its right.
     expect(ltr.forward?.slice(0, 2)).toEqual(["1px", "0px"]);
+    expect(ltr.pageSelect?.slice(0, 2)).toEqual(["1px", "0px"]);
+    expect(ltr.pageSizeSelect?.slice(0, 2)).toEqual(["0px", "1px"]);
 
     await setDirection(page, "rtl");
     const rtl = await sides();
@@ -683,7 +688,15 @@ test.describe("right-to-left layout", () => {
       expect.soft(values, `${name} renders`).not.toBeNull();
       if (!values) continue;
       const [bl, br, ml, mr, pl, pr] = values;
-      expect.soft(rtl[name], name).toEqual([br, bl, mr, ml, pr, pl]);
+      // The selects keep Select's physical chevron and padding for now;
+      // only their separators flip.
+      const flipped = name.endsWith("Select")
+        ? rtl[name]?.slice(0, 2)
+        : rtl[name];
+      const expected = name.endsWith("Select")
+        ? [br, bl]
+        : [br, bl, mr, ml, pr, pl];
+      expect.soft(flipped, name).toEqual(expected);
     }
   });
 
