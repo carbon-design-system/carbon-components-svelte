@@ -66,7 +66,7 @@ A slider in a `LayoutDirection` follows its `dir` as it changes. Outside one, a 
 
 ## Tabs
 
-Tabs run from right to left.
+Tabs run from right to left. When the list overflows, the first tab sits at the right end, and the scroll buttons and edge fades follow it. This also holds for the row layout of `TabsVertical`.
 
 <LayoutDirection dir="rtl" lang="ar">
   <Tabs>
