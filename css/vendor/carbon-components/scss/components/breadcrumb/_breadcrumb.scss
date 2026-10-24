@@ -34,7 +34,7 @@
     min-width: 0; // ccs: an item wider than the trail wraps inside it
     max-width: 100%; // ccs: an item wider than the trail wraps inside it
     align-items: flex-end; // ccs: a wrapped item's separator ends its last line
-    margin-right: $carbon--spacing-03;
+    margin-inline-end: $carbon--spacing-03; // ccs: logical, so the trail mirrors in RTL
     word-break: break-word; // ccs: so does a word longer than the trail
   }
 
@@ -48,7 +48,7 @@
     display: inline-flex;
     flex-shrink: 0;
     align-self: center;
-    margin-right: $carbon--spacing-02;
+    margin-inline-end: $carbon--spacing-02; // ccs: logical, so the trail mirrors in RTL
 
     svg {
       fill: currentColor;
@@ -64,7 +64,7 @@
   }
 
   .#{$prefix}--breadcrumb-item::after {
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03; // ccs: logical, so the trail mirrors in RTL
     color: $text-primary;
     content: var(--ccs-separator, '/'); // ccs: configurable separator
   }
@@ -76,7 +76,7 @@
 
   .#{$prefix}--breadcrumb-item:last-child,
   .#{$prefix}--breadcrumb-item:last-child::after {
-    margin-right: 0;
+    margin-inline-end: 0; // ccs: logical, so the trail mirrors in RTL
   }
 
   .#{$prefix}--breadcrumb .#{$prefix}--link {
@@ -153,7 +153,6 @@
   $caret-size: to-rem(7px);
   .#{$prefix}--breadcrumb-menu-options.#{$prefix}--overflow-menu-options[data-floating-menu-direction='bottom']::after {
     top: -$caret-size;
-    left: $caret-size * 2;
     // ccs: `width: 0` is set by overflow-menu's breadcrumb caret patch, which
     // must emit after the overflow menu size variants
     height: 0;
@@ -162,6 +161,8 @@
     border-left: $caret-size solid transparent;
     margin: 0 auto;
     background: transparent;
+    // ccs: the menu mirrors around the trigger in RTL
+    @include ccs-inset-inline($start: $caret-size * 2);
   }
 
   // ccs: 75px, the width of other skeleton label bars and nearer a
@@ -195,7 +196,7 @@
   }
 
   .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item {
-    margin-right: $carbon--spacing-02;
+    margin-inline-end: $carbon--spacing-02;
   }
 
   .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item .#{$prefix}--link {
@@ -204,7 +205,7 @@
   }
 
   .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item::after {
-    margin-left: $carbon--spacing-02;
+    margin-inline-start: $carbon--spacing-02;
   }
 
   .#{$prefix}--breadcrumb--sm
@@ -256,8 +257,8 @@
 /// @group components
 @mixin breadcrumb-separator-icon {
   // The text-separator ::after above always renders, even with an empty
-  // `content`, and its own margin-left would otherwise double up with
-  // this node's margin-left.
+  // `content`, and its own start margin would otherwise double up with
+  // this node's start margin.
   .#{$prefix}--breadcrumb--separator-icon .#{$prefix}--breadcrumb-item::after {
     display: none;
   }
@@ -268,30 +269,30 @@
   .#{$prefix}--breadcrumb-item__separator {
     display: inline-flex;
     align-items: center;
-    margin-left: $carbon--spacing-02;
+    margin-inline-start: $carbon--spacing-02;
     color: $text-primary;
   }
 
   .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item__separator {
-    margin-left: $carbon--spacing-01;
+    margin-inline-start: $carbon--spacing-01;
   }
 
   // Match the item's own trailing margin to the halved separator margin
   // above, so the gap on both sides of the icon stays symmetric.
   .#{$prefix}--breadcrumb--separator-icon .#{$prefix}--breadcrumb-item {
-    margin-right: $carbon--spacing-02;
+    margin-inline-end: $carbon--spacing-02;
 
     &:last-child {
-      margin-right: 0;
+      margin-inline-end: 0;
     }
   }
 
   .#{$prefix}--breadcrumb--separator-icon.#{$prefix}--breadcrumb--sm
     .#{$prefix}--breadcrumb-item {
-    margin-right: $carbon--spacing-01;
+    margin-inline-end: $carbon--spacing-01;
 
     &:last-child {
-      margin-right: 0;
+      margin-inline-end: 0;
     }
   }
 
