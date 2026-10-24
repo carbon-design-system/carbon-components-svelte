@@ -83,7 +83,7 @@ change it, except that an empty list restores `labelText`.
 
 ### Icon-only
 
-Set `labelText` to an empty string to render an icon-only button. Provide an `iconDescription` for accessibility — it is used as the button's tooltip and screen reader label.
+Set `labelText` to an empty string to render an icon-only button. Provide an `iconDescription` for accessibility — it is used as the button's tooltip and screen reader label. Press <DocKbd label="Escape" /> to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
 
 <FileUploaderButton labelText="" iconDescription="Add file" icon={Add} />
 <FileUploaderButton labelText="" iconDescription="Upload document" icon={DocumentAdd} kind="secondary" />

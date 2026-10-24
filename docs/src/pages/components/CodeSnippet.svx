@@ -30,7 +30,7 @@ Code reads left to right in any language. In a right-to-left layout, each line k
 
 ## Inline
 
-Set `type="inline"` to display code inline with text.
+Set `type="inline"` to display code inline with text. Click the snippet to copy it. Press <DocKbd label="Escape" /> to hide the copy feedback early.
 
 <CodeSnippet type="inline" code="rm -rf node_modules/" />
 

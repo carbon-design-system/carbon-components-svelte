@@ -14,7 +14,7 @@ Display a basic definition tooltip with the default bottom-center alignment.
   SSO
 </TooltipDefinition>
 
-Focus or hover the term to show the tooltip. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle it. The term sets `aria-expanded` to match.
+Focus or hover the term to show the tooltip. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle it. The term sets `aria-expanded` to match. The tooltip stays open while the pointer moves onto it, so its text can be read or selected. Press <DocKbd label="Escape" /> to hide it without moving the pointer or focus.
 
 ## In body text
 
