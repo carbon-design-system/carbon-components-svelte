@@ -22,6 +22,12 @@ Place the component in a [`Layer`](/components/Layer) to put it on the next surf
   <CodeSnippet code="npm i carbon-components-svelte" />
 </Layer>
 
+## Right-to-left
+
+Code reads left to right in any language. In a right-to-left layout, each line keeps its order and starts at the left, and the copy and expand buttons move to the left. Inline code keeps its order inside right-to-left text. See [LayoutDirection](/components/LayoutDirection).
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetRightToLeft" />
+
 ## Inline
 
 Set `type="inline"` to display code inline with text.
