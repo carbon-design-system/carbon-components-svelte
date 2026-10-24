@@ -39,12 +39,17 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { keyBy } from "../utils/key-by.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
    */
@@ -226,6 +231,7 @@
   {...$$restProps}
   use:rovingFocus={{
     selector: ".bx--progress-step-button",
+    rtl: () => resolveLayoutDirection($layoutDirection, listRef) === "rtl",
     orientation: vertical ? "vertical" : "horizontal",
     skipDisabled: true,
     focusOnMove: false,

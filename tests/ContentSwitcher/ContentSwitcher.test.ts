@@ -208,6 +208,24 @@ describe("ContentSwitcher", () => {
     expect(document.activeElement).toBe(tabs[2]);
   });
 
+  it("swaps ArrowLeft and ArrowRight in RTL", async () => {
+    document.documentElement.style.direction = "rtl";
+    await renderAndFlush(ContentSwitcher);
+    const tabs = screen.getAllByRole("tab");
+
+    try {
+      await user.tab();
+      await user.keyboard("{ArrowLeft}");
+      expect(tabs[1]).toHaveFocus();
+      expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
+
+      await user.keyboard("{ArrowRight}{ArrowRight}");
+      expect(tabs[2]).toHaveFocus();
+    } finally {
+      document.documentElement.style.removeProperty("direction");
+    }
+  });
+
   it("ignores nested [role='tab'] elements inside switch slots when navigating", async () => {
     await renderAndFlush(ContentSwitcherNested);
 
