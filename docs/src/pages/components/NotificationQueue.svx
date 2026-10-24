@@ -45,7 +45,7 @@ Lower the value if the queue should render behind other fixed UI instead.
 
 The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.
 
-Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `pauseOnHover`, `role`, `fullWidth`, and `statusIconDescription` props.
+Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `pauseOnHover`, `role`, `fullWidth`, `statusIconDescription`, and `actionable` props.
 
 ### Deduplication
 
@@ -76,6 +76,18 @@ Customize the limit with `maxNotifications`.
 Use `remove(id)` to programmatically remove a specific notification, or `clear()` to remove all notifications at once.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueRemove" />
+
+## Actions
+
+Pass `action` to add one action, such as an undo or a retry, with a label and an `onClick` handler. Set `href` to render the action as a link. The toast closes after the handler runs. Call `event.preventDefault()` in the handler to keep it open, for example to show progress with [update](#update).
+
+A toast with an action does not time out, since a timer could remove it before a keyboard or screen reader user reaches it. It stays until the user acts or closes it, or the app removes it. When the queue is full, toasts without an action are removed first.
+
+The toast does not take focus when it opens, so focus stays where the user is working. The queue is a landmark named "Notifications" (set `labelText` to rename it). Press <DocKbd label="F6" /> to move focus to the newest toast, and <DocKbd label="F6" /> or <DocKbd label="Shift" />+<DocKbd label="F6" /> to return.
+
+Set `actionable` to `true` only when the toast answers something the user just did and needs a response. The toast then becomes an `alertdialog` and takes focus, as in [ToastNotification](/components/ToastNotification#actionable).
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueActions" />
 
 ## Persistent
 
