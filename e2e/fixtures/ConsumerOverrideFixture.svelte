@@ -51,6 +51,7 @@
     {headers}
     {rows}
     rowClass={() => "my-row"}
+    cellClass={({ row }) => (row.id === "r1" ? "my-cell" : undefined)}
     selectable
     selectedRowIds={["r2"]}
   />

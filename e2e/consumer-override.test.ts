@@ -128,6 +128,12 @@ const cases: Case[] = [
     value: PINK,
   },
   {
+    name: "data table cellClass color",
+    target: cell("table", 0),
+    property: "color",
+    value: RED,
+  },
+  {
     name: "data table selected row background",
     target: cell("table", 1),
     property: "background-color",
