@@ -25,15 +25,5 @@ export function fitMenuAxis({ before, after, size, max, reverse = false }) {
   return forward ?? backward ?? Math.max(0, max - size);
 }
 
-/**
- * The physical side of a `start` or `end` alignment along the inline axis.
- * They swap in RTL, where the inline start is the right. `center` stays.
- *
- * @param {"start" | "center" | "end"} align
- * @param {boolean} rtl
- * @returns {"start" | "center" | "end"} `start` for the left edge, `end` for the right.
- */
-export function physicalAlign(align, rtl) {
-  if (!rtl || align === "center") return align;
-  return align === "start" ? "end" : "start";
-}
+// One helper for menus, tooltips and popovers.
+export { physicalAlign } from "./inline-align.js";

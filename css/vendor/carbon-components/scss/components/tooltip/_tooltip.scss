@@ -55,7 +55,7 @@
 
   .#{$prefix}--tooltip__label .#{$prefix}--tooltip__trigger {
     // Override `margin: 0` from button-reset mixin
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03; // ccs: the icon follows the label in RTL too
   }
 
   .#{$prefix}--tooltip {
