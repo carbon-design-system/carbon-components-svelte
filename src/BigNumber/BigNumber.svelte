@@ -11,6 +11,7 @@
   /**
    * @restProps {figure}
    * @slot {{}}
+   * @slot {{}} action - An inline action after the value, such as an icon-only `Button` or a `Link`.
    */
 
   /**
@@ -151,7 +152,6 @@
   $: showDenominator =
     hasTotal &&
     (forceShowTotal || (!percentage && formattedValue !== formattedTotal));
-  $: displayValue = `${formattedValue ?? DASH}${percentage ? "%" : ""}`;
   const TREND_ICONS = { up: ArrowUp, down: ArrowDown, flat: Subtract };
   $: TrendIcon = TREND_ICONS[trend];
   $: resolvedTrendColor =
@@ -199,10 +199,15 @@
       {/if}
     </figcaption>
     <div class:bx--big-number__value-row={true}>
+      <!-- biome-ignore format: whitespace between these nodes renders as text -->
       <span
         class:bx--big-number__value={true}
         title={formattedValue === fullValue ? undefined : fullValue}
-        ><bdi dir={numberDir}>{displayValue}</bdi></span
+        ><bdi dir={numberDir}
+          >{formattedValue ?? DASH}{#if percentage}<span
+              class:bx--big-number__percentage-mark={true}>%</span
+            >{/if}</bdi
+        ></span
       >
       {#if TrendIcon}
         <svelte:component
@@ -220,6 +225,9 @@
           <span aria-hidden="true">/</span>
           <bdi dir={numberDir}>{formattedTotal}</bdi>
         </span>
+      {/if}
+      {#if $$slots.action}
+        <span class:bx--big-number__action={true}><slot name="action" /></span>
       {/if}
     </div>
     {#if typeof delta === "number"}
