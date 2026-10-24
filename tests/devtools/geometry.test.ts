@@ -4,6 +4,7 @@ import {
   crossCenter,
   distanceSegments,
   failingTargets,
+  mergeLabels,
   ringLabels,
   rowDelta,
 } from "../../src/devtools/geometry.js";
@@ -163,5 +164,45 @@ describe("failingTargets layers", () => {
     expect(failingTargets([radio, headerLink], 24, ["page", "header"])).toEqual(
       [],
     );
+  });
+});
+
+describe("mergeLabels", () => {
+  const mark = (x: number, y: number, text = "16 × 16", group = "targets") => ({
+    x,
+    y,
+    text,
+    group,
+  });
+
+  test("keeps labels that do not collide", () => {
+    expect(mergeLabels([mark(0, 0), mark(200, 0), mark(0, 100)])).toEqual([
+      "16 × 16",
+      "16 × 16",
+      "16 × 16",
+    ]);
+  });
+
+  test("merges a row of crowded labels onto the first", () => {
+    expect(mergeLabels([mark(40, 0), mark(0, 0), mark(20, 0)])).toEqual([
+      null,
+      "16 × 16 · +2 more",
+      null,
+    ]);
+  });
+
+  test("keeps groups apart", () => {
+    expect(
+      mergeLabels([mark(0, 0), mark(20, 0, "1.9:1 · needs 4.5:1", "contrast")]),
+    ).toEqual(["16 × 16", "1.9:1 · needs 4.5:1"]);
+  });
+
+  test("makes room for the longer merged label", () => {
+    // Clear of "16 × 16" alone, but not of "16 × 16 · +1 more".
+    expect(mergeLabels([mark(0, 0), mark(20, 0), mark(100, 0)])).toEqual([
+      "16 × 16 · +2 more",
+      null,
+      null,
+    ]);
   });
 });

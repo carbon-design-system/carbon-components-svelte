@@ -27,7 +27,7 @@ Turn on tools from the toolbar at the bottom of the page. Each row says what the
 | Inspect on hover | Hover a KPI tile, a table cell, or a form field. The card names the spacing, type, and color tokens. Hold <DocKbd label="Alt" /> and hover another element to measure between them. |
 | Off-scale spacing | Only the seeded card is flagged: 13px padding and a 20px gap. Everything else is Carbon's. |
 | Low contrast text | Only the faint helper text in the seeded card, at about 1.9:1. |
-| Small targets | Only the three 16px icon buttons, which sit 4px apart. |
+| Small targets | Only the three 16px icon buttons, which sit 4px apart. They share one label, "16 × 16 · +2 more", so the labels do not print over each other. |
 | Overflow | The ellipsis-truncated URL, and the 1600px banner that scrolls the page sideways. |
 | Right-to-left | The shell, the grid, and the form mirror. Measurements in the tools still read left to right. |
 
@@ -43,7 +43,8 @@ Turn on **Check Carbon too** to run the checks on Carbon's components as well. T
 
 - DataTable cells have 14px vertical padding.
 - Some menus and list items have 10px or 11px padding.
-- The collapsed side nav menu clips its hidden items, which is on purpose.
+
+The collapsed side nav menu is not flagged for overflow. It clips its items, but they are hidden anyway.
 
 Use this mode to check a custom theme or your own overrides of Carbon styles, not to fix Carbon itself.
 
@@ -55,5 +56,5 @@ In stress mode this page has about 4,000 elements. With text baselines and all f
 
 ## Known limits
 
-- When two flagged elements sit close together, their labels can overlap, as with the three seeded icon buttons.
+- Labels of different checks can still overlap. Labels of the same check merge when they would collide.
 - The checks see the page as it is now. A menu that is closed, or a tab that is not selected, is not checked until it opens.

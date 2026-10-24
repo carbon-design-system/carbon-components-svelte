@@ -233,3 +233,59 @@ export function failingTargets(targets, size, layers) {
   });
   return failing;
 }
+
+/**
+ * Labels for page marks, merging labels that would overlap. Each label
+ * sits above the top-left corner of its mark, so marks in a row, such as
+ * a toolbar of small icon buttons, would print over each other. Marks
+ * with the same `group` whose labels collide share one label on the
+ * first: "16 × 16 · +2 more". The others keep their outline but get no
+ * label (`null`). Label widths are estimated from the text length, so
+ * nothing is measured.
+ * @param {{ x: number; y: number; text: string; group: string }[]} marks
+ * @param {{ charWidth?: number; padding?: number; height?: number }} [metrics]
+ * @returns {(string | null)[]}
+ */
+export function mergeLabels(marks, metrics = {}) {
+  const { charWidth = 7, padding = 16, height = 20 } = metrics;
+  /** @param {string} text */
+  const width = (text) => text.length * charWidth + padding;
+  /** @type {(string | null)[]} */
+  const labels = marks.map((m) => m.text);
+  /** @type {{ group: string; y: number; right: number; lead: number; count: number }[]} */
+  const clusters = [];
+  const order = marks
+    .map((_, index) => index)
+    .sort((a, b) => marks[a].y - marks[b].y || marks[a].x - marks[b].x);
+  for (const index of order) {
+    const m = marks[index];
+    const cluster = clusters.find(
+      (c) =>
+        c.group === m.group && Math.abs(c.y - m.y) < height && m.x < c.right,
+    );
+    if (!cluster) {
+      clusters.push({
+        group: m.group,
+        y: m.y,
+        right: m.x + width(m.text),
+        lead: index,
+        count: 1,
+      });
+      continue;
+    }
+    cluster.count += 1;
+    labels[index] = null;
+    const lead = marks[cluster.lead];
+    cluster.right = Math.max(
+      cluster.right,
+      m.x + width(m.text),
+      // The merged label is longer than the lead's own.
+      lead.x + width(`${lead.text} · +${cluster.count - 1} more`),
+    );
+  }
+  for (const c of clusters) {
+    if (c.count > 1)
+      labels[c.lead] = `${marks[c.lead].text} · +${c.count - 1} more`;
+  }
+  return labels;
+}

@@ -88,6 +88,8 @@ By default, every check skips Carbon's own components: elements with a `bx--` cl
 
 The checks scan only near the viewport: the visible area plus one screen above and below. They scan again when the page changes, at most a few times a second while the browser is idle, and when scrolling leaves that area. So the counts in the badge are for that area, not the whole page.
 
+When marks of one check sit so close that their labels would collide, as in a row of small icon buttons, they share one label on the first mark, such as "16 × 16 · +2 more". Each mark keeps its outline.
+
 ## Spacing check
 
 Set `checkSpacing` to outline every element whose margin, padding, or gap is off the spacing scale, labeled with the values that missed.
@@ -124,6 +126,8 @@ Set `checkOverflow` to find two kinds of overflow:
 
 - **Horizontal page scroll.** When the page scrolls sideways, the inspector outlines the elements that cause it: those that reach past the page's edge while their parent does not, labeled with how far. Elements inside a box that clips or scrolls are left out, since they cannot widen the page.
 - **Clipped content.** Boxes with `overflow: hidden` or `clip` whose content does not fit, labeled with how much is hidden. Text cut off with `text-overflow: ellipsis` is labeled "truncated". Boxes that scroll are left alone, since their content is reachable.
+
+A box that clips content no one can see, such as a collapsed menu whose items are `inert` or `visibility: hidden`, is not flagged.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorOverflow" />
 

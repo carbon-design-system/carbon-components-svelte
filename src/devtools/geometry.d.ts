@@ -74,3 +74,12 @@ export function failingTargets(
   size: number,
   layers?: unknown[],
 ): number[];
+
+/**
+ * Labels for page marks, merging labels of the same `group` that would
+ * overlap into one label on the first mark. `null` hides a label.
+ */
+export function mergeLabels(
+  marks: { x: number; y: number; text: string; group: string }[],
+  metrics?: { charWidth?: number; padding?: number; height?: number },
+): (string | null)[];

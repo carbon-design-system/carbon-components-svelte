@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {"spacing" | "contrast" | "targets" | "overflow"} LayoutInspectorCheck
-   * @typedef {{ key: string; check: LayoutInspectorCheck; x: number; y: number; width: number; height: number; text: string; pinned: boolean }} LayoutInspectorMark
+   * @typedef {{ key: string; check: LayoutInspectorCheck; x: number; y: number; width: number; height: number; text: string; label: string | null; pinned: boolean }} LayoutInspectorMark
    * @restProps {div}
    */
 
@@ -92,6 +92,7 @@
     boxes,
     distanceSegments,
     failingTargets,
+    mergeLabels,
     ringLabels,
   } from "../geometry.js";
   import {
@@ -787,6 +788,7 @@
       width,
       height,
       text,
+      label: text,
       pinned,
     };
   }
@@ -983,6 +985,51 @@
   }
 
   const CLIPS = new Set(["hidden", "clip"]);
+
+  // Caps the descendants `clipsVisibleContent` reads per box.
+  const MAX_CLIP_DESCENDANTS = 300;
+
+  /**
+   * Whether a clipping box hides something a person could see: its own
+   * text (as with an ellipsis), or a visible descendant that reaches
+   * past its edges. A collapsed menu or disclosure clips content that is
+   * hidden anyway (`visibility: hidden`, `inert`, `hidden`, or
+   * `aria-hidden`), so it does not count.
+   * @param {Element} el
+   * @param {CSSStyleDeclaration} style
+   */
+  function clipsVisibleContent(el, style) {
+    if (style.visibility === "visible" && hasOwnText(el)) return true;
+    const box = el.getBoundingClientRect();
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, {
+      acceptNode(node) {
+        const child = /** @type {HTMLElement} */ (node);
+        if (
+          child.hidden ||
+          child.inert ||
+          child.getAttribute("aria-hidden") === "true"
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    let read = 0;
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      if (++read > MAX_CLIP_DESCENDANTS) return true;
+      const r = node.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) continue;
+      const outside =
+        r.right > box.right + 1 ||
+        r.bottom > box.bottom + 1 ||
+        r.left < box.left - 1 ||
+        r.top < box.top - 1;
+      if (outside && getComputedStyle(node).visibility === "visible") {
+        return true;
+      }
+    }
+    return false;
+  }
   const SCROLLS = new Set(["auto", "scroll", "hidden", "clip"]);
 
   /**
@@ -1054,6 +1101,7 @@
       const overX = clipsX ? el.scrollWidth - el.clientWidth : 0;
       const overY = clipsY ? el.scrollHeight - el.clientHeight : 0;
       if (overX <= 1 && overY <= 1) continue;
+      if (!clipsVisibleContent(el, style)) continue;
       const truncated = style.textOverflow === "ellipsis" && overX > 1;
       marks.push(
         mark(
@@ -1137,6 +1185,19 @@
         contrast: uniqueKeys(current.contrast ? scanContrast(context) : []),
         overflow: uniqueKeys(current.overflow ? scanOverflow(context) : []),
       };
+      // Crowded labels share one, so a row of small targets stays legible.
+      const all = [
+        ...next.spacing,
+        ...next.targets,
+        ...next.contrast,
+        ...next.overflow,
+      ];
+      const labels = mergeLabels(
+        all.map((m) => ({ ...m, group: `${m.check}|${m.pinned}` })),
+      );
+      all.forEach((m, index) => {
+        m.label = labels[index];
+      });
       if (
         sameMarks(found.spacing, next.spacing) &&
         sameMarks(found.targets, next.targets) &&
@@ -1216,9 +1277,11 @@
             style:width="{pageMark.width}px"
             style:height="{pageMark.height}px"
           >
-            <span class="bx--layout-inspector__mark-label"
-              >{pageMark.text}</span
-            >
+            {#if pageMark.label}
+              <span class="bx--layout-inspector__mark-label"
+                >{pageMark.label}</span
+              >
+            {/if}
           </div>
         {/each}
       </div>
@@ -1239,9 +1302,11 @@
             style:width="{pageMark.width}px"
             style:height="{pageMark.height}px"
           >
-            <span class="bx--layout-inspector__mark-label"
-              >{pageMark.text}</span
-            >
+            {#if pageMark.label}
+              <span class="bx--layout-inspector__mark-label"
+                >{pageMark.label}</span
+              >
+            {/if}
           </div>
         {/each}
       </div>
