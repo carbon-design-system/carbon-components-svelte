@@ -117,7 +117,6 @@
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { debounce } from "../utils/debounce.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -126,6 +125,7 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
+  import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -184,32 +184,13 @@
   $: resolvedCounterText = counterText ?? ((c, m) => `${c} of ${m} characters`);
   $: resolvedLimitReachedText = limitReachedText ?? "Character limit reached";
 
-  let prevCount = graphemeCount((value ?? "").toString());
-  let limitAnnouncement = "";
+  const limitAnnouncement = createLimitAnnouncement(
+    graphemeCount((value ?? "").toString()),
+  );
 
-  // Wait 1s, as Carbon does. A screen reader can drop a live update that
-  // lands while it echoes the last keystroke, and a quick backspace off the
-  // limit stays silent.
-  const announceLimit = debounce(() => {
-    limitAnnouncement = resolvedLimitReachedText;
-  }, 1000);
+  onMount(() => limitAnnouncement.cancel);
 
-  onMount(() => announceLimit.cancel);
-
-  $: {
-    if (
-      maxCount != null &&
-      maxCount > 0 &&
-      count === maxCount &&
-      prevCount !== maxCount
-    ) {
-      announceLimit();
-    } else if (count !== maxCount) {
-      announceLimit.cancel();
-      limitAnnouncement = "";
-    }
-    prevCount = count;
-  }
+  $: limitAnnouncement.track(count, maxCount, resolvedLimitReachedText);
 
   // NVDA ignores `readonly` on a number input and announces it as editable,
   // so a read-only number field renders as a text input.
@@ -306,7 +287,7 @@
     <!-- Polite, not assertive like Carbon's, so it never cuts off the
       screen reader's echo of what was just typed. -->
     <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
-      {limitAnnouncement}
+      {$limitAnnouncement}
     </div>
   {/if}
   <div
