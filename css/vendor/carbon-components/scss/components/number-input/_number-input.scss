@@ -311,7 +311,7 @@
     z-index: z('overlay');
     width: to-rem(1px);
     height: to-rem(16px);
-    background-color: $layer-accent;
+    background-color: $border-subtle;
 
     &:first-of-type {
       order: 0;
@@ -327,7 +327,7 @@
   .#{$prefix}--number__invalid
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
-    background-color: $layer-accent;
+    background-color: $border-subtle;
   }
 
   .#{$prefix}--number
@@ -349,7 +349,7 @@
     input[type='text']:disabled
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider {
-    background-color: $button-disabled;
+    background-color: $icon-disabled;
   }
 
   .#{$prefix}--number__control-btn:focus ~ .#{$prefix}--number__rule-divider {
