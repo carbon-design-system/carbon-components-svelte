@@ -414,7 +414,12 @@
 
         if (ctxBreadcrumbItem) {
           menuRef.style.top = `${offsetTop + height + 10}px`;
-          menuRef.style.left = `${offsetLeft - 11}px`;
+          // The caret sits 21px in from the menu's inline start, so the
+          // menu mirrors around the trigger in RTL.
+          menuRef.style.left =
+            resolveLayoutDirection($layoutDirection, buttonRef) === "rtl"
+              ? `${offsetLeft + width + 11 - menuWidth}px`
+              : `${offsetLeft - 11}px`;
         }
       }
     }
