@@ -60,8 +60,20 @@
   /** Set to `true` to use a relative position */
   export let relative = false;
 
-  import { createEventDispatcher } from "svelte";
+  /**
+   * Set to `true` to render the popover in a portal, so a box around it (a
+   * scrolling panel, an `overflow: hidden` card, a Modal's body) can't cut
+   * it off, or `false` to keep it in place. Left unset, it renders in place
+   * and moves to a portal for an open only when such a box would cut it off.
+   * @type {boolean | undefined}
+   */
+  export let portalPopover = undefined;
+
+  import { createEventDispatcher, tick } from "svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { clippedBy } from "../utils/clipped-by.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { fitPopoverAlign } from "../utils/fit-popover-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
 
@@ -69,7 +81,64 @@
 
   let popoverRef = null;
 
+  /** Marks the popover's place while it's portalled; its parent anchors it. */
+  let markerRef = null;
+
   $: alignClass = ALIGN_CLASS[align] ?? align;
+
+  // The align an open popover settles on: `align`, unless it runs past the
+  // window there and fits better on the other side or edge.
+  /** @type {null | string} */
+  let fittedAlign = null;
+  $: placement = fittedAlign ?? alignClass;
+
+  // Set for one open when the in-place popover turns out to be cut off by a
+  // box around it: it moves to a portal instead. Only when `portalPopover`
+  // is left unset.
+  let portalWhenClipped = false;
+  $: portalled =
+    !relative &&
+    (portalPopover === undefined ? portalWhenClipped : portalPopover);
+
+  $: if (!open) {
+    fittedAlign = null;
+    portalWhenClipped = false;
+  }
+
+  $: if (open && !portalled && !relative) {
+    void alignClass;
+    tick().then(fit);
+  }
+
+  async function fit() {
+    if (!(open && popoverRef?.parentElement) || portalled) return;
+    const mayPortal = portalPopover === undefined;
+    if (mayPortal && clippedBy(popoverRef)) {
+      portalWhenClipped = true;
+      return;
+    }
+    const next = fitPopoverAlign(
+      popoverRef,
+      popoverRef.parentElement,
+      alignClass,
+    );
+    if (next === placement) return;
+    fittedAlign = next;
+    await tick();
+    if (mayPortal && open && popoverRef && clippedBy(popoverRef)) {
+      portalWhenClipped = true;
+    }
+  }
+
+  // FloatingPortal places by side and by start/center/end along it.
+  $: [side, edge = ""] = placement.split("-");
+  $: intrinsicAlign =
+    edge === "left" || edge === "top"
+      ? "start"
+      : edge === "right" || edge === "bottom"
+        ? "end"
+        : "center";
+  $: gap = caret ? 8 : 0;
 
   // A DatePicker nested in this popover may portal its flatpickr calendar to
   // `document.body` (outside `popoverRef`), so a click on it looks like an outside
@@ -117,36 +186,75 @@
   }
 </script>
 
-<div
-  bind:this={popoverRef}
-  use:dismiss={{
-    enabled: open,
-    listeners: [
-      { type: "click", handler: handleOutsideClick },
-      { type: "keydown", handler: handleEscape },
-    ],
-  }}
-  class:bx--popover={true}
-  class:bx--popover--caret={caret}
-  class:bx--popover--high-contrast={highContrast}
-  class:bx--popover--drop-shadow={dropShadow}
-  class:bx--popover--border={border}
-  class:bx--popover--top={alignClass === "top"}
-  class:bx--popover--top-left={alignClass === "top-left"}
-  class:bx--popover--top-right={alignClass === "top-right"}
-  class:bx--popover--bottom={alignClass === "bottom"}
-  class:bx--popover--bottom-left={alignClass === "bottom-left"}
-  class:bx--popover--bottom-right={alignClass === "bottom-right"}
-  class:bx--popover--left={alignClass === "left"}
-  class:bx--popover--left-bottom={alignClass === "left-bottom"}
-  class:bx--popover--left-top={alignClass === "left-top"}
-  class:bx--popover--right={alignClass === "right"}
-  class:bx--popover--right-bottom={alignClass === "right-bottom"}
-  class:bx--popover--right-top={alignClass === "right-top"}
-  class:bx--popover--open={open}
-  class:bx--popover--relative={relative}
-  style:position={relative ? "relative" : undefined}
-  {...$$restProps}
->
-  <div class:bx--popover-contents={true}><slot /></div>
-</div>
+{#if portalled}
+  <span bind:this={markerRef} hidden></span>
+  {#if open && markerRef?.parentElement}
+    <FloatingPortal
+      anchor={markerRef.parentElement}
+      direction={side}
+      {open}
+      intrinsicWidth
+      {intrinsicAlign}
+      gapTop={gap}
+      gapBottom={gap}
+      horizontalGapLeft={gap}
+      horizontalGapRight={gap}
+      let:direction={portalSide}
+    >
+      <div
+        bind:this={popoverRef}
+        use:dismiss={{
+          enabled: open,
+          listeners: [
+            { type: "click", handler: handleOutsideClick },
+            { type: "keydown", handler: handleEscape },
+          ],
+        }}
+        class="bx--popover bx--popover--portal bx--popover--open bx--popover--{edge
+          ? `${portalSide}-${edge}`
+          : portalSide}"
+        class:bx--popover--caret={caret}
+        class:bx--popover--high-contrast={highContrast}
+        class:bx--popover--drop-shadow={dropShadow}
+        class:bx--popover--border={border}
+        {...$$restProps}
+      >
+        <div class:bx--popover-contents={true}><slot /></div>
+      </div>
+    </FloatingPortal>
+  {/if}
+{:else}
+  <div
+    bind:this={popoverRef}
+    use:dismiss={{
+      enabled: open,
+      listeners: [
+        { type: "click", handler: handleOutsideClick },
+        { type: "keydown", handler: handleEscape },
+      ],
+    }}
+    class:bx--popover={true}
+    class:bx--popover--caret={caret}
+    class:bx--popover--high-contrast={highContrast}
+    class:bx--popover--drop-shadow={dropShadow}
+    class:bx--popover--border={border}
+    class:bx--popover--top={placement === "top"}
+    class:bx--popover--top-left={placement === "top-left"}
+    class:bx--popover--top-right={placement === "top-right"}
+    class:bx--popover--bottom={placement === "bottom"}
+    class:bx--popover--bottom-left={placement === "bottom-left"}
+    class:bx--popover--bottom-right={placement === "bottom-right"}
+    class:bx--popover--left={placement === "left"}
+    class:bx--popover--left-bottom={placement === "left-bottom"}
+    class:bx--popover--left-top={placement === "left-top"}
+    class:bx--popover--right={placement === "right"}
+    class:bx--popover--right-bottom={placement === "right-bottom"}
+    class:bx--popover--right-top={placement === "right-top"}
+    class:bx--popover--open={open}
+    class:bx--popover--relative={relative}
+    style:position={relative ? "relative" : undefined}
+    {...$$restProps}
+  >
+    <div class:bx--popover-contents={true}><slot /></div>
+  </div>
+{/if}

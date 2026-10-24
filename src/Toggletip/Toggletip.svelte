@@ -319,10 +319,12 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       </slot>
     </button>
     {#if !effectivePortalTooltip}
+      <!-- `portalTooltip` decides the portal, not Popover. -->
       <Popover
         {open}
         align={popoverAlign}
         id={contentId}
+        portalPopover={false}
         caret
         highContrast
         class={["bx--toggletip-popover", popoverClass]
