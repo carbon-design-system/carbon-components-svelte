@@ -120,6 +120,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -127,10 +128,10 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
@@ -151,32 +152,38 @@
 
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;
-  let tooltipOpen = false;
 
   // The toggle's tooltip opens without a delay, but still takes the tooltip
   // group's active slot so it never overlaps another tooltip, and skips the
-  // fade-in when it takes over from a tooltip in the same group.
-  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
-  const tooltipOthersActive = tooltipHandoff.hidden;
-  const tooltipInstant = tooltipHandoff.instant;
+  // fade-in when it takes over from a tooltip in the same group. Escape
+  // hides it until the next hover or focus.
+  const tooltip = createAnchoredTooltip({
+    group: getTooltipGroup(),
+    enabled: () => !disabled,
+    dismissOnClick: false,
+    enterDelayMs: () => 0,
+  });
+  const {
+    open: tooltipOpen,
+    hidden: tooltipHidden,
+    instant: tooltipInstant,
+  } = tooltip;
 
-  function showTooltip() {
-    tooltipOpen = true;
-    tooltipHandoff.claim();
+  let detachTooltip = noop;
+
+  $: {
+    detachTooltip();
+    detachTooltip = toggleButtonRef ? tooltip.attach(toggleButtonRef) : noop;
   }
 
-  function hideTooltip() {
-    tooltipOpen = false;
-    tooltipHandoff.release();
-  }
+  $: if (disabled) tooltip.hide();
 
-  // Focus shows the tooltip at once, without the fade-in.
-  function showTooltipOnFocus() {
-    tooltipOpen = true;
-    tooltipHandoff.claim({ instant: true });
-  }
-
-  onMount(() => tooltipHandoff.release);
+  onMount(() => {
+    return () => {
+      detachTooltip();
+      tooltip.destroy();
+    };
+  });
 
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: tooltipLabel = type === "text" ? hidePasswordLabel : showPasswordLabel;
@@ -358,8 +365,7 @@
         class:bx--tooltip--align-start={tooltipAlignment === "start"}
         class:bx--tooltip--align-center={tooltipAlignment === "center"}
         class:bx--tooltip--align-end={tooltipAlignment === "end"}
-        class:bx--tooltip--hidden={!effectivePortalTooltip &&
-          $tooltipOthersActive}
+        class:bx--tooltip--hidden={!effectivePortalTooltip && $tooltipHidden}
         class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
         aria-label={effectivePortalTooltip || disabled
           ? tooltipLabel
@@ -367,10 +373,6 @@
         on:click={() => {
           type = type === "password" ? "text" : "password";
         }}
-        on:mouseenter={showTooltip}
-        on:mouseleave={hideTooltip}
-        on:focus={showTooltipOnFocus}
-        on:blur={hideTooltip}
       >
         {#if !disabled && !effectivePortalTooltip}
           <span class:bx--assistive-text={true}> {tooltipLabel} </span>
@@ -407,7 +409,7 @@
   <PortalTooltip
     anchor={toggleButtonRef}
     direction={tooltipPosition === "top" ? "top" : "bottom"}
-    open={tooltipOpen && !$tooltipOthersActive}
+    open={$tooltipOpen}
     text={tooltipLabel}
   />
 {/if}

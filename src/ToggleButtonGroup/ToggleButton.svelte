@@ -58,9 +58,9 @@
   import { get, readable } from "svelte/store";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
   // must not throw; `pressed` just stays `false` and clicks are inert.
@@ -116,52 +116,23 @@
 
   // Portalled (not CSS `:hover`/`:focus`) so it can't be clipped by an
   // overflow ancestor and never shares the flush-adjacent trigger's local
-  // stacking context - same technique ContentSwitcher's icon-only Switch
-  // uses, including the tooltip group's active-slot claim (only one
-  // tooltip shows at a time) and the warm-handoff delay skip.
+  // stacking context. Hover, focus and Escape work as for an icon-only
+  // Switch.
+  const tooltip = createAnchoredTooltip({
+    group: getTooltipGroup(),
+    enabled: () => hasTooltipContent && !isDisabled,
+    dismissOnClick: false,
+  });
+  const { open: tooltipOpen } = tooltip;
 
-  let hovered = false;
-  let focused = false;
-  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
-  const tooltipActive = tooltipHandoff.active;
+  let detachTooltip = noop;
 
-  $: tooltipOpen =
-    hasTooltipContent && !isDisabled && (hovered || focused) && $tooltipActive;
-
-  function showTooltip() {
-    tooltipHandoff.scheduleEnter(() => {
-      hovered = true;
-    });
+  $: {
+    detachTooltip();
+    detachTooltip = ref ? tooltip.attach(ref) : noop;
   }
 
-  function hideTooltip() {
-    tooltipHandoff.scheduleLeave(() => {
-      hovered = false;
-      if (!focused) tooltipHandoff.release();
-    });
-  }
-
-  function handleMouseenter() {
-    if (hasTooltipContent) showTooltip();
-  }
-
-  function handleMouseleave() {
-    if (hasTooltipContent) hideTooltip();
-  }
-
-  function handleFocus() {
-    if (hasTooltipContent) {
-      focused = true;
-      tooltipHandoff.claim();
-    }
-  }
-
-  function handleBlur() {
-    if (hasTooltipContent) {
-      focused = false;
-      if (!hovered) tooltipHandoff.release();
-    }
-  }
+  $: if (!hasTooltipContent || isDisabled) tooltip.hide();
 
   function handleClick() {
     if (isDisabled) return;
@@ -177,8 +148,8 @@
 
   onMount(() => {
     return () => {
-      tooltipHandoff.cancel();
-      tooltipHandoff.release();
+      detachTooltip();
+      tooltip.destroy();
       notifyUnmount(ref);
     };
   });
@@ -199,13 +170,9 @@
   on:click={handleClick}
   on:mouseover
   on:mouseenter
-  on:mouseenter={handleMouseenter}
   on:mouseleave
-  on:mouseleave={handleMouseleave}
   on:focus
-  on:focus={handleFocus}
   on:blur
-  on:blur={handleBlur}
 >
   {#if $$slots.icon}
     <slot name="icon" />
@@ -223,7 +190,7 @@
   <PortalTooltip
     anchor={ref}
     direction={effectiveTooltipPosition}
-    open={tooltipOpen}
+    open={$tooltipOpen}
     text={iconDescription}
     tooltipType="icon"
     intrinsicAlign={tooltipAlignment}

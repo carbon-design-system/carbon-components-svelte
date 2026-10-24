@@ -121,14 +121,17 @@
    */
   export let hideTooltip = false;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formReset } from "../utils/form-reset.js";
+  import { noop } from "../utils/noop.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -156,6 +159,38 @@
   // Determine if this is icon-only (has icon but no label content)
   $: hasIconOnly =
     icon && !$$slots.labelChildren && (!labelText || labelText === "");
+
+  $: hasTooltip = hasIconOnly && !hideTooltip;
+
+  /** @type {null | HTMLButtonElement} */
+  let buttonRef = null;
+
+  // CSS shows the icon-only tooltip on hover and focus at once. This takes
+  // the tooltip group's active slot so it never overlaps another tooltip,
+  // and lets Escape hide it until the next hover or focus.
+  const tooltip = createAnchoredTooltip({
+    group: getTooltipGroup(),
+    enabled: () => !!hasTooltip,
+    dismissOnClick: false,
+    enterDelayMs: () => 0,
+  });
+  const { hidden: tooltipHidden, instant: tooltipInstant } = tooltip;
+
+  let detachTooltip = noop;
+
+  $: {
+    detachTooltip();
+    detachTooltip = buttonRef ? tooltip.attach(buttonRef) : noop;
+  }
+
+  $: if (!hasTooltip) tooltip.hide();
+
+  onMount(() => {
+    return () => {
+      detachTooltip();
+      tooltip.destroy();
+    };
+  });
 
   $: iconProps = {
     "aria-hidden": "true",
@@ -201,6 +236,7 @@
 </script>
 
 <button
+  bind:this={buttonRef}
   type="button"
   on:click={() => ref?.click()}
   aria-label={ariaLabel}
@@ -245,6 +281,8 @@
   class:bx--tooltip--align-end={hasIconOnly &&
     !hideTooltip &&
     tooltipAlignment === "end"}
+  class:bx--tooltip--hidden={hasTooltip && $tooltipHidden}
+  class:bx--tooltip--instant={hasTooltip && $tooltipInstant}
   on:keydown
 >
   {#if hasIconOnly}

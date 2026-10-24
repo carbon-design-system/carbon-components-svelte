@@ -35,9 +35,11 @@
    */
   export let passEscapeWhenFocused = false;
 
+  /** Set to `false` to keep the tooltip open when the anchor is activated. */
+  export let dismissOnClick = true;
+
   import { onMount } from "svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { iconTooltipPortalGaps } from "./icon-tooltip-portal-gaps.js";
@@ -47,6 +49,7 @@
     group: getTooltipGroup(),
     enabled: () => enabled,
     passEscapeWhenFocused,
+    dismissOnClick,
   });
   const { open } = tooltip;
 
@@ -59,28 +62,11 @@
 
   $: if (!enabled) tooltip.hide();
 
-  // `window` capture, as `TooltipIcon` does, so a tooltip opened by hover
-  // hides even while focus is elsewhere.
-  const escapeListener = dismiss(null, {
-    enabled: false,
-    type: "keydown",
-    handler: tooltip.handleKeydown,
-    options: { capture: true },
-  });
-
-  $: escapeListener.update({
-    enabled: $open,
-    type: "keydown",
-    handler: tooltip.handleKeydown,
-    options: { capture: true },
-  });
-
   $: gaps = iconTooltipPortalGaps(direction, align);
 
   onMount(() => {
     return () => {
       detach();
-      escapeListener.destroy();
       tooltip.destroy();
     };
   });

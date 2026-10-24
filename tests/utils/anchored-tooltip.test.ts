@@ -12,14 +12,18 @@ const group = () =>
     skipDelayMs: () => 0,
   });
 
-function setup(
-  options: { enabled?: () => boolean; passEscapeWhenFocused?: boolean } = {},
-) {
+function setup(options: Parameters<typeof createAnchoredTooltip>[0] = {}) {
   const node = document.createElement("p");
   document.body.append(node);
   const tooltip = createAnchoredTooltip({ group: group(), ...options });
   const detach = tooltip.attach(node);
-  return { node, tooltip, detach, open: () => get(tooltip.open) };
+  return {
+    node,
+    tooltip,
+    detach,
+    open: () => get(tooltip.open),
+    hidden: () => get(tooltip.hidden),
+  };
 }
 
 function escapeKey(init: KeyboardEventInit = {}) {
@@ -103,6 +107,52 @@ describe("createAnchoredTooltip", () => {
     expect(open()).toBe(false);
   });
 
+  it("stays open on activation with dismissOnClick false", () => {
+    const { node, open } = setup({ dismissOnClick: false });
+
+    node.dispatchEvent(new FocusEvent("focus"));
+    node.dispatchEvent(new MouseEvent("click"));
+    expect(open()).toBe(true);
+  });
+
+  it("opens at once on hover with an enter delay of 0", () => {
+    const { node, open } = setup({ enterDelayMs: () => 0 });
+
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    expect(open()).toBe(true);
+  });
+
+  it("hides on Escape from anywhere, before a window listener sees it", () => {
+    const { node, open } = setup();
+    const onWindowKeydown = vi.fn();
+    window.addEventListener("keydown", onWindowKeydown);
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(100);
+
+    document.body.dispatchEvent(escapeKey().event);
+    window.removeEventListener("keydown", onWindowKeydown);
+
+    expect(open()).toBe(false);
+    expect(onWindowKeydown).not.toHaveBeenCalled();
+  });
+
+  it("marks the anchor hidden while hovered or focused but closed", () => {
+    const { node, tooltip, hidden } = setup();
+    expect(hidden()).toBe(false);
+
+    // Waiting out the enter delay.
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    expect(hidden()).toBe(true);
+    vi.advanceTimersByTime(100);
+    expect(hidden()).toBe(false);
+
+    tooltip.handleKeydown(escapeKey().event);
+    expect(hidden()).toBe(true);
+
+    node.dispatchEvent(new MouseEvent("mouseleave"));
+    expect(hidden()).toBe(false);
+  });
+
   it.each([
     ["hover", new MouseEvent("mouseenter")],
     ["focus", new FocusEvent("focus")],
@@ -132,6 +182,25 @@ describe("createAnchoredTooltip", () => {
     node.dispatchEvent(new FocusEvent("blur"));
     node.dispatchEvent(new FocusEvent("focus"));
     expect(open()).toBe(true);
+  });
+
+  it("passes Escape on, focused or not, while passEscape returns true", () => {
+    let pass = false;
+    const { node, tooltip } = setup({ passEscape: () => pass });
+
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(100);
+    const first = escapeKey();
+    tooltip.handleKeydown(first.event);
+    expect(first.stopPropagation).toHaveBeenCalledOnce();
+
+    pass = true;
+    node.dispatchEvent(new MouseEvent("mouseleave"));
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    vi.advanceTimersByTime(100);
+    const second = escapeKey();
+    tooltip.handleKeydown(second.event);
+    expect(second.stopPropagation).not.toHaveBeenCalled();
   });
 
   it.each([

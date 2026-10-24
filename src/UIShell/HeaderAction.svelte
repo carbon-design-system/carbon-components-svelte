@@ -78,12 +78,13 @@
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
+  import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocusOnClose } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -94,38 +95,33 @@
 
   // Only one tooltip shows at a time: hovering one header action while
   // another is focused hides the focused one's tooltip (mirrors Button).
-  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
-  const tooltipHidden = tooltipHandoff.hidden;
-  const tooltipInstant = tooltipHandoff.instant;
+  // Escape hides it until the next hover or focus. While the panel is open,
+  // the key goes on, so one press also closes the panel, even with the
+  // pointer still on the trigger.
+  const tooltip = createAnchoredTooltip({
+    group: getTooltipGroup(),
+    enabled: () => !!hasIconOnly,
+    passEscape: () => isOpen,
+    dismissOnClick: false,
+    enterDelayMs: () => 0,
+  });
+  const { hidden: tooltipHidden, instant: tooltipInstant } = tooltip;
 
-  let hovered = false;
-  let focused = false;
+  let detachTooltip = noop;
 
-  function handleMouseenter() {
-    if (!hasIconOnly) return;
-    hovered = true;
-    tooltipHandoff.claim();
+  $: {
+    detachTooltip();
+    detachTooltip = ref ? tooltip.attach(ref) : noop;
   }
 
-  function handleMouseleave() {
-    if (!hasIconOnly) return;
-    hovered = false;
-    if (!focused) tooltipHandoff.release();
-  }
+  $: if (!hasIconOnly) tooltip.hide();
 
-  function handleFocus() {
-    if (!hasIconOnly) return;
-    focused = true;
-    tooltipHandoff.claim({ instant: true });
-  }
-
-  function handleBlur() {
-    if (!hasIconOnly) return;
-    focused = false;
-    if (!hovered) tooltipHandoff.release();
-  }
-
-  onMount(() => tooltipHandoff.release);
+  onMount(() => {
+    return () => {
+      detachTooltip();
+      tooltip.destroy();
+    };
+  });
 
   $: buttonClass = [
     hasIconOnly && "bx--btn",
@@ -202,10 +198,6 @@
     isOpen = !isOpen;
     dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
   }}
-  on:mouseenter={handleMouseenter}
-  on:mouseleave={handleMouseleave}
-  on:focus={handleFocus}
-  on:blur={handleBlur}
 >
   {#if hasIconOnly}
     <span class:bx--assistive-text={true}>{iconDescription}</span>

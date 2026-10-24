@@ -1,16 +1,17 @@
 // @ts-check
 import { derived, get, writable } from "svelte/store";
+import { dismiss as windowListener } from "./dismiss.js";
 import { isImeComposition } from "./ime-composition.js";
 import { createTooltipHandoff } from "./tooltip-handoff.js";
 
 /**
- * Hover and focus state for a tooltip anchored to an element that has no
- * tooltip of its own, such as clipped text. Opens like an icon-only
+ * Hover and focus state for a tooltip anchored to an element, such as an
+ * icon-only control's label or clipped text. Opens like an icon-only
  * `Button`'s tooltip: after the group's enter delay on hover, at once on
  * focus, one at a time page-wide.
  *
- * Activating the anchor hides the tooltip, as does Escape. Either keeps it
- * hidden until the next pointer enter or focus.
+ * Escape hides the tooltip until the next pointer enter or focus, as can
+ * activating the anchor (WCAG 1.4.13).
  *
  * @param {object} [options]
  * @param {import("./tooltip-group.js").TooltipGroup} [options.group]
@@ -19,31 +20,60 @@ import { createTooltipHandoff } from "./tooltip-handoff.js";
  * @param {boolean} [options.passEscapeWhenFocused] Let Escape reach the
  *   focused anchor's own handlers after it hides the tooltip. Set it for an
  *   anchor that is a control with its own Escape behavior.
+ * @param {() => boolean} [options.passEscape] Let Escape go on after it
+ *   hides the tooltip while this returns `true`, focused or not. Set it
+ *   while something the anchor opened, such as a panel, closes on Escape.
+ * @param {boolean} [options.dismissOnClick] Set to `false` to keep the
+ *   tooltip open when the anchor is activated. Defaults to `true`.
+ * @param {() => number | undefined} [options.enterDelayMs] Overrides the
+ *   group's enter delay when it returns a number.
  */
 export function createAnchoredTooltip({
   group,
   enabled = () => true,
   passEscapeWhenFocused = false,
+  passEscape = () => false,
+  dismissOnClick = true,
+  enterDelayMs,
 } = {}) {
-  const handoff = createTooltipHandoff({ group });
+  const handoff = createTooltipHandoff({ group, enterDelayMs });
+  // `entered` follows the pointer at once; `hovered` waits out the delay.
+  const entered = writable(false);
   const hovered = writable(false);
   const focused = writable(false);
   const dismissed = writable(false);
 
-  /** `true` while the tooltip shows. */
+  /**
+   * `true` while the tooltip shows. Another tooltip holds it back while it
+   * has the active slot, and lets it show again once it lets go.
+   */
   const open = derived(
-    [hovered, focused, dismissed, handoff.active],
-    ([$hovered, $focused, $dismissed, $active]) =>
-      !$dismissed && ($hovered || $focused) && $active,
+    [hovered, focused, dismissed, handoff.hidden],
+    ([$hovered, $focused, $dismissed, $othersActive]) =>
+      !$dismissed && ($hovered || $focused) && !$othersActive,
+  );
+
+  /**
+   * `true` while the tooltip must not show: another tooltip has the active
+   * slot, or the anchor has the pointer or focus but the tooltip is closed
+   * (waiting out the delay, or hidden by Escape). A tooltip that CSS shows
+   * on `:hover` and `:focus` needs this to stay hidden.
+   */
+  const hidden = derived(
+    [entered, focused, open, handoff.hidden],
+    ([$entered, $focused, $open, $othersActive]) =>
+      $othersActive || (($entered || $focused) && !$open),
   );
 
   function handleMouseenter() {
     if (!enabled()) return;
+    entered.set(true);
     dismissed.set(false);
     handoff.scheduleEnter(() => hovered.set(true));
   }
 
   function handleMouseleave() {
+    entered.set(false);
     handoff.scheduleLeave(() => {
       hovered.set(false);
       if (!get(focused)) handoff.release();
@@ -72,26 +102,39 @@ export function createAnchoredTooltip({
   /**
    * Escape hides an open tooltip and stops there, so an ancestor such as a
    * `Modal` waits for the next Escape. With `passEscapeWhenFocused`, a
-   * focused anchor still gets the key.
+   * focused anchor still gets the key, and with `passEscape`, everything
+   * does. As with an icon-only `Button`, it
+   * also ends the group's skip window, so the next tooltip waits its delay.
    * @param {KeyboardEvent} event
    */
   function handleKeydown(event) {
     if (event.key !== "Escape" || !get(open)) return;
     if (isImeComposition(event)) return;
-    if (!(passEscapeWhenFocused && get(focused))) event.stopPropagation();
-    dismiss();
+    const pass = passEscape() || (passEscapeWhenFocused && get(focused));
+    if (!pass) event.stopPropagation();
+    dismissed.set(true);
+    handoff.dismiss();
+  }
+
+  /** @param {Event} event */
+  function handleWindowKeydown(event) {
+    handleKeydown(/** @type {KeyboardEvent} */ (event));
   }
 
   /** Close at once and forget hover and focus. */
   function hide() {
     handoff.cancel();
+    entered.set(false);
     hovered.set(false);
     focused.set(false);
     handoff.release();
   }
 
   /**
-   * Listen for hover, focus and activation on `node`.
+   * Listen for hover, focus and activation on `node`, and for Escape on
+   * `window` while the tooltip shows. The capture phase lets a tooltip
+   * opened by hover hide while focus is elsewhere, before an ancestor sees
+   * the key.
    * @param {HTMLElement} node
    * @returns {() => void} Removes the listeners.
    */
@@ -102,17 +145,39 @@ export function createAnchoredTooltip({
       ["mouseleave", handleMouseleave],
       ["focus", handleFocus],
       ["blur", handleBlur],
-      ["click", dismiss],
     ];
+    if (dismissOnClick) listeners.push(["click", dismiss]);
     for (const [type, listener] of listeners) {
       node.addEventListener(type, listener);
     }
+    /** @type {import("./dismiss.js").DismissParams} */
+    const escapeOptions = {
+      enabled: false,
+      type: "keydown",
+      handler: handleWindowKeydown,
+      options: { capture: true },
+    };
+    const escapeListener = windowListener(null, escapeOptions);
+    const unsubscribe = open.subscribe(($open) => {
+      escapeListener.update({ ...escapeOptions, enabled: $open });
+    });
     return () => {
       for (const [type, listener] of listeners) {
         node.removeEventListener(type, listener);
       }
+      unsubscribe();
+      escapeListener.destroy();
     };
   }
 
-  return { open, attach, handleKeydown, dismiss, hide, destroy: hide };
+  return {
+    open,
+    hidden,
+    instant: handoff.instant,
+    attach,
+    handleKeydown,
+    dismiss,
+    hide,
+    destroy: hide,
+  };
 }
