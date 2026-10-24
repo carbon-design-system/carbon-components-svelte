@@ -41,10 +41,12 @@
   import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
+  import { getNavStores } from "./nav-store.js";
 
-  // Follow the enclosing `SideNav`; the module stores cover a menu rendered
-  // outside one.
+  const { isSideNavCollapsed, isSideNavRail } = getNavStores();
+
+  // Follow the enclosing `SideNav`; the stores of the enclosing
+  // `UIShellContainer` (or the page's) cover a menu rendered outside one.
   const sideNav = getContext("carbon:SideNav");
   const rail = sideNav?.rail ?? isSideNavRail;
   const collapsed = sideNav?.collapsed ?? isSideNavCollapsed;

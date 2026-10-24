@@ -10,7 +10,8 @@
    */
 
   /**
-   * Determine the current Carbon grid breakpoint size.
+   * Determine the current Carbon grid breakpoint size: the window's, or
+   * inside a `UIShellContainer`, the container's.
    * @type {BreakpointSize}
    * @bindable readonly
    */

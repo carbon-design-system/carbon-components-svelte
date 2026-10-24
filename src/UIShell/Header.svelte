@@ -102,15 +102,27 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
-  import {
+  import { getNavStores } from "./nav-store.js";
+
+  // A `UIShellContainer`'s own stores, or the page-wide ones.
+  const {
     shouldRenderHamburgerMenu,
     trackHeaderRendered,
-  } from "./nav-store.js";
+    containerWidth,
+    contained,
+  } = getNavStores();
 
   onMount(() => trackHeaderRendered());
 
   /** @type {undefined | number} */
+  let windowWidth = undefined;
+  /**
+   * The width the shell responds to: its container's when contained,
+   * otherwise the window's.
+   * @type {undefined | number}
+   */
   let winWidth = undefined;
+  $: winWidth = contained ? $containerWidth : windowWidth;
   let wasAboveBreakpoint = undefined;
 
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
@@ -174,7 +186,7 @@
     ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
 </script>
 
-<svelte:window bind:innerWidth={winWidth} />
+<svelte:window bind:innerWidth={windowWidth} />
 
 <header
   aria-label={ariaLabel}

@@ -29,9 +29,31 @@ components:
     "Content",
     "SkipToContent",
     "HeaderGlobalAction",
+    "UIShellContainer",
   ]
 description: The UI shell provides components for building application shells and navigation — header, side navigation, and content areas.
 ---
+
+<script>
+  import {
+    Content,
+    Header,
+    HeaderGlobalAction,
+    HeaderUtilities,
+    SideNav,
+    SideNavItems,
+    SideNavLink,
+    UIShellContainer,
+  } from "carbon-components-svelte";
+  import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
+  import Help from "carbon-icons-svelte/lib/Help.svelte";
+  import Settings from "carbon-icons-svelte/lib/Settings.svelte";
+  import Maximize from "carbon-icons-svelte/lib/Maximize.svelte";
+  import Minimize from "carbon-icons-svelte/lib/Minimize.svelte";
+  import Rocket from "carbon-icons-svelte/lib/Rocket.svelte";
+
+  let expanded = false;
+</script>
 
 ## Header
 
@@ -485,6 +507,105 @@ Opening a modal while the mobile side nav overlay is also open keeps body scroll
 Integrate toasts with the UI Shell. This example triggers a toast, which appears in the top right corner, below the header.
 
 <FileSource src="/framed/UIShell/HeaderWithToast" />
+
+## Contained
+
+By default the shell spans the window: the header and side nav are fixed to it, and `Content` scrolls with the page. Wrap the shell in `UIShellContainer` to place it inside a box instead, such as a product preview in documentation, an app embedded in another app, or a pane in a split view.
+
+Inside a container, the header and side nav sit against the container's edges, the side nav's mobile overlay covers only the container, and `Content` scrolls below the header. The shell responds to the container's width rather than the window's, so it collapses behind the menu button when the container is narrower than `expansionBreakpoint`. Each container keeps its own open, collapsed and mobile state, so several shells can share a page. `Content` renders a `div`, since the page has its own `main`, with an id unique to the container that its `SkipToContent` links to.
+
+This example is narrower than `lg` on most screens, so its side nav opens from the menu button, whatever the window's width.
+
+<UIShellContainer height="24rem" role="region" aria-label="Example app" style="border: 1px solid var(--cds-border-subtle-01)">
+  <Header theme="classic" companyName="IBM" platformName="Cloud">
+    <HeaderUtilities>
+      <HeaderGlobalAction iconDescription="Help" tooltipAlignment="end" icon={Help} />
+    </HeaderUtilities>
+  </Header>
+  <SideNav theme="classic" border ariaLabel="Cloud sections">
+    <SideNavItems>
+      <SideNavLink icon={Dashboard} text="Dashboard" href="/" isSelected />
+      <SideNavLink icon={Rocket} text="Deployments" href="/" />
+      <SideNavLink icon={Settings} text="Settings" href="/" />
+    </SideNavItems>
+  </SideNav>
+  <Content>
+    <h3>Dashboard</h3>
+    <p>Content scrolls inside the container, below its header.</p>
+  </Content>
+</UIShellContainer>
+
+### Height
+
+Set `height` to a CSS length, or a number of pixels, to scroll `Content` inside the container. Leave it unset to grow the container with its content; the side nav still spans the container's full height.
+
+```svelte
+<UIShellContainer>
+  <Header companyName="IBM" platformName="Cloud" />
+  <SideNav ariaLabel="Cloud sections">...</SideNav>
+  <Content>...</Content>
+</UIShellContainer>
+```
+
+### Theme
+
+Set `theme` to give the shell and everything in it a Carbon theme of its own, apart from the page's: a dark app on a light page, or the same app in two themes side by side. Like the classic theme, this requires **carbon-components-svelte/css/all.css**.
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: var(--cds-spacing-05)">
+  {#each ["white", "g100"] as shellTheme}
+    <UIShellContainer theme={shellTheme} height="16rem" role="region" aria-label="Example app, {shellTheme}" style="border: 1px solid var(--cds-border-subtle-01)">
+      <Header companyName="IBM" platformName="Cloud" />
+      <SideNav ariaLabel="Cloud sections, {shellTheme}">
+        <SideNavItems>
+          <SideNavLink icon={Dashboard} text="Dashboard" href="/" isSelected />
+          <SideNavLink icon={Settings} text="Settings" href="/" />
+        </SideNavItems>
+      </SideNav>
+      <Content>
+        <h4>Theme {shellTheme}</h4>
+      </Content>
+    </UIShellContainer>
+  {/each}
+</div>
+
+### Expanded
+
+Bind `expanded` to fill the window with the shell, over the page and its own shell, and set it back to `false` to return the shell to the page. It's the same shell, so its open nav, scroll position and focus carry over. The page behind it doesn't scroll while it's expanded.
+
+<UIShellContainer bind:expanded height="16rem" role="region" aria-label="Expandable app" style="border: 1px solid var(--cds-border-subtle-01)">
+  <Header companyName="IBM" platformName="Cloud">
+    <HeaderUtilities>
+      <HeaderGlobalAction
+        iconDescription={expanded ? "Return to page" : "Expand"}
+        tooltipAlignment="end"
+        icon={expanded ? Minimize : Maximize}
+        on:click={() => (expanded = !expanded)}
+      />
+    </HeaderUtilities>
+  </Header>
+  <Content>
+    <h4>{expanded ? "Expanded" : "In the page"}</h4>
+  </Content>
+</UIShellContainer>
+
+### Breakpoints
+
+`Breakpoint` and `breakpointObserver` inside a container report the container's size, so content lays itself out for the space it has rather than the window's.
+
+```svelte
+<UIShellContainer>
+  <Header companyName="IBM" platformName="Cloud" />
+  <Content>
+    <Breakpoint let:size>
+      {size === "sm" ? "One column" : "Two columns"}
+    </Breakpoint>
+  </Content>
+</UIShellContainer>
+```
+
+### Overlays
+
+The container clips what its shell draws, and that includes fixed overlays inside it, such as a `Modal`: it covers the container rather than the window, with its dialog centered in the container. The dialog's width still follows the window's breakpoints. To cover the window, render the modal outside the container, or expand the shell first.
 
 ## Classic theme
 

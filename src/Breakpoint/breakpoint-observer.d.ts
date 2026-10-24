@@ -2,6 +2,12 @@ import type { Readable, Subscriber, Unsubscriber } from "svelte/store";
 import type { BreakpointSize } from "./breakpoints.js";
 
 /**
+ * Context key for a width store that stands in for the window's, set by
+ * `UIShellContainer` so breakpoints inside it follow the container.
+ */
+export declare const BREAKPOINT_WIDTH_CONTEXT: "carbon:BreakpointWidth";
+
+/**
  * Attaches `matchMedia` listeners for every breakpoint and invokes `callback`
  * with the current size immediately, then again on every subsequent change.
  * @param callback - Called with the current breakpoint size.
@@ -12,7 +18,9 @@ export function observeBreakpoint(
 ): () => void;
 
 /**
- * Creates a readable store that returns the current breakpoint size.
+ * Creates a readable store that returns the current breakpoint size: the
+ * window's, or inside a `UIShellContainer`, the container's. Call during
+ * component initialization.
  * It also provides functions for creating derived stores used to do comparisons.
  */
 export function breakpointObserver(): {

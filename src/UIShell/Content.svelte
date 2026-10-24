@@ -1,13 +1,27 @@
 <script>
-  /** Specify the id for the main element */
+  /**
+   * @restProps {main | div}
+   */
+
+  /**
+   * Specify the id for the content element: a `main`, or a `div` inside a
+   * `UIShellContainer`. Inside a container the default is unique to it.
+   */
   export let id = "main-content";
 
-  import {
+  import { getNavStores } from "./nav-store.js";
+
+  const {
     isSideNavCollapsed,
     isSideNavMobile,
     isSideNavRail,
     sideNavWidth,
-  } from "./nav-store.js";
+    contained,
+    contentId,
+  } = getNavStores();
+
+  // Two contained shells on a page can't both be `#main-content`.
+  $: resolvedId = contained && id === "main-content" ? contentId : id;
 
   /**
    * By default, the `SideNav` applies an inline-start margin of `3rem` to
@@ -35,12 +49,14 @@
     $sideNavWidth === undefined ? undefined : `${$sideNavWidth}px`;
 </script>
 
-<main
-  {id}
+<!-- A page has one main landmark; a contained shell is part of a page. -->
+<svelte:element
+  this={contained ? "div" : "main"}
+  id={resolvedId}
   class:bx--content={true}
   style:margin-inline-start={marginInlineStart}
   style:--ccs-side-nav-width={sideNavWidthStyle}
   {...$$restProps}
 >
   <slot />
-</main>
+</svelte:element>
