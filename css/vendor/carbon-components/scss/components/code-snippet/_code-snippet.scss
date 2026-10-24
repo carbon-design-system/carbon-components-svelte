@@ -48,6 +48,15 @@
     @include type-style('code-01');
   }
 
+  // ccs: code reads left to right in any language. In RTL the code area
+  // stays LTR, so its lines keep their order, start at the left and scroll
+  // to the right. Only the buttons, and the room kept for them, mirror. The
+  // fade stays on the right, where the clipped code is.
+  .#{$prefix}--snippet-container {
+    direction: ltr;
+    text-align: start;
+  }
+
   .#{$prefix}--snippet--inline {
     @include reset;
 
@@ -112,6 +121,9 @@
 
   .#{$prefix}--snippet--inline code {
     padding: 0 $spacing-03;
+    // ccs: left to right inside right-to-left text, as the code area above
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
   .#{$prefix}--snippet--inline.#{$prefix}--snippet--no-copy {
@@ -129,7 +141,7 @@
     display: flex;
     height: $carbon--spacing-08;
     align-items: center;
-    padding-right: $carbon--spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--snippet--single.#{$prefix}--snippet--no-copy {
@@ -201,12 +213,23 @@
   .#{$prefix}--snippet--multi .#{$prefix}--snippet-container pre {
     padding-right: $carbon--spacing-08;
     padding-bottom: to-rem(24px);
+
+    // ccs: the code area is LTR, so physical sides: in RTL the room for
+    // the copy button moves to the left, where the button is
+    [dir="rtl"] & {
+      padding-right: 0;
+      padding-left: $carbon--spacing-08;
+    }
   }
 
   .#{$prefix}--snippet--multi.#{$prefix}--snippet--no-copy
     .#{$prefix}--snippet-container
     pre {
     padding-right: 0;
+
+    [dir="rtl"] & {
+      padding-left: 0;
+    }
   }
 
   .#{$prefix}--snippet--multi .#{$prefix}--snippet-container pre code {
@@ -226,10 +249,10 @@
   .#{$prefix}--snippet .#{$prefix}--copy-btn {
     position: absolute;
     top: 0;
-    right: 0;
 
     // Override inherited rule in code snippet
     @include carbon--font-family('sans');
+    @include ccs-inset-inline($end: 0);
   }
 
   .#{$prefix}--snippet-btn--expand {
@@ -238,7 +261,6 @@
 
     position: absolute;
     z-index: 10;
-    right: 0;
     bottom: 0;
     display: inline-flex;
     align-items: center;
@@ -246,6 +268,7 @@
     border: 0;
     background-color: $field;
     color: $text-primary;
+    @include ccs-inset-inline($end: 0);
   }
 
   .#{$prefix}--snippet-btn--expand .#{$prefix}--snippet-btn--text {
@@ -254,7 +277,7 @@
   }
 
   .#{$prefix}--snippet-btn--expand .#{$prefix}--icon-chevron--down {
-    margin-left: $spacing-03;
+    margin-inline-start: $spacing-03;
     fill: $icon-primary;
     transform: rotate(0deg);
     // ccs: the rotation and the disabled fill, not `all`
@@ -292,9 +315,9 @@
   .#{$prefix}--snippet--multi .#{$prefix}--copy-btn {
     z-index: 10;
     top: $carbon--spacing-03;
-    right: $carbon--spacing-03;
     width: $carbon--spacing-07;
     height: $carbon--spacing-07;
+    @include ccs-inset-inline($end: $carbon--spacing-03);
   }
 
   // ccs: as tall as the snippets they stand in for. A multi snippet's
