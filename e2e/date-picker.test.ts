@@ -717,6 +717,33 @@ test.describe("DatePicker", () => {
     });
   });
 
+  test("AI label sits before the clear button and the status icon", async ({
+    page,
+  }) => {
+    const pickers = page
+      .getByTestId("date-picker-clear-ai-label")
+      .locator(".bx--date-picker-input__wrapper");
+    await expect(pickers).toHaveCount(2);
+
+    const cases = await Promise.all(
+      ["single, invalid", "simple, warn"].map(async (name, index) => {
+        const picker = pickers.nth(index);
+        const [decorator, clear] = await Promise.all([
+          picker
+            .locator(".bx--date-picker-input-inner-wrapper--decorator")
+            .boundingBox(),
+          picker.locator(".bx--date-picker__clear").boundingBox(),
+        ]);
+        if (!decorator || !clear) throw new Error("missing box");
+        return { name, decoratorEnd: decorator.x + decorator.width, clear };
+      }),
+    );
+
+    for (const { name, decoratorEnd, clear } of cases) {
+      expect.soft(decoratorEnd, name).toBeLessThanOrEqual(clear.x);
+    }
+  });
+
   test.describe("fullWidth", () => {
     for (const label of ["Invoice due", "Renewal", "Contract start"]) {
       test(`fills the container with a single input (${label})`, async ({

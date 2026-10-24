@@ -1,5 +1,9 @@
 <script>
-  import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+  import {
+    AILabel,
+    DatePicker,
+    DatePickerInput,
+  } from "carbon-components-svelte";
 
   /** @type {string[]} */
   let singleCloseTriggers = [];
@@ -206,5 +210,32 @@
   >
     <DatePickerInput labelText="Pick-up" placeholder="mm/dd/yyyy" />
     <DatePickerInput labelText="Return" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+</div>
+
+<div data-testid="date-picker-clear-ai-label">
+  <DatePicker datePickerType="single" clearable value="03/15/2024">
+    <DatePickerInput
+      labelText="Renewal date"
+      placeholder="mm/dd/yyyy"
+      invalid
+      invalidText="Pick a date after today."
+    >
+      <AILabel slot="decorator">
+        <p>Estimated from your current usage trend.</p>
+      </AILabel>
+    </DatePickerInput>
+  </DatePicker>
+  <DatePicker datePickerType="simple" clearable value="03/15/2024">
+    <DatePickerInput
+      labelText="Trial end"
+      placeholder="mm/dd/yyyy"
+      warn
+      warnText="Falls on a weekend."
+    >
+      <AILabel slot="decorator">
+        <p>Estimated from your current usage trend.</p>
+      </AILabel>
+    </DatePickerInput>
   </DatePicker>
 </div>
