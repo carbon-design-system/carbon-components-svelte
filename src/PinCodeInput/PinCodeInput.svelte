@@ -162,6 +162,19 @@
   export let selectTextOnFocus = false;
 
   /**
+   * Visually partition segments into groups with a decorative separator
+   * between each group.
+   *
+   * Each entry is the number of segments in that group. Values must be
+   * positive integers that sum to `count`. Invalid values are ignored and
+   * segments render as a single contiguous row. Separators are decorative
+   * only (`aria-hidden`); focus, paste, and value indices ignore them.
+   * @type {number[] | undefined}
+   * @example [3, 3]
+   */
+  export let groups = undefined;
+
+  /**
    * Override the accessible label of each segment.
    *
    * `position` is 1-based. The default returns, for example,
@@ -262,6 +275,8 @@
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
+  $: resolvedGroups = resolveGroups(groups, count);
+  $: segmentItems = buildSegmentItems(resolvedGroups, count);
 
   // Naming and description belong on the fieldset, not the wrapper.
   $: ({
@@ -298,6 +313,52 @@
     dispatch("clear");
   }
   $: if (anyValue) hadValue = true;
+
+  /**
+   * @param {number[] | undefined} groupSizes
+   * @param {number} segmentCount
+   * @returns {number[] | undefined}
+   */
+  function resolveGroups(groupSizes, segmentCount) {
+    if (!groupSizes || groupSizes.length === 0) return undefined;
+    if (!groupSizes.every((size) => Number.isInteger(size) && size > 0)) {
+      return undefined;
+    }
+    const sum = groupSizes.reduce((total, size) => total + size, 0);
+    if (sum !== segmentCount) return undefined;
+    return groupSizes;
+  }
+
+  /**
+   * @typedef {{ kind: "segment"; index: number } | { kind: "separator"; key: string }} SegmentItem
+   */
+
+  /**
+   * @param {number[] | undefined} groupSizes
+   * @param {number} segmentCount
+   * @returns {SegmentItem[]}
+   */
+  function buildSegmentItems(groupSizes, segmentCount) {
+    /** @type {SegmentItem[]} */
+    const items = [];
+    if (!groupSizes) {
+      for (let index = 0; index < segmentCount; index++) {
+        items.push({ kind: "segment", index });
+      }
+      return items;
+    }
+
+    let index = 0;
+    for (let groupIndex = 0; groupIndex < groupSizes.length; groupIndex++) {
+      for (let offset = 0; offset < groupSizes[groupIndex]; offset++) {
+        items.push({ kind: "segment", index: index++ });
+      }
+      if (groupIndex < groupSizes.length - 1) {
+        items.push({ kind: "separator", key: `sep-${groupIndex}` });
+      }
+    }
+    return items;
+  }
 
   // A form reset restores the segments without an input event, and the
   // hidden input keeps its value, so rebuild `code` from the segments.
@@ -583,44 +644,56 @@
       class:bx--pin-code-input__fields--warning={hasWarn}
     >
       <div class:bx--pin-code-input__segments={true}>
-        {#each code as char, index (index)}
-          <input
-            bind:this={inputs[index]}
-            use:preserveFocusSelection={selectTextOnFocus}
-            type="text"
-            inputmode={type === "numeric" ? "numeric" : "text"}
-            autocomplete={index === 0 ? "one-time-code" : "off"}
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            maxlength="1"
-            value={char}
-            placeholder={segmentPlaceholder || undefined}
-            id={index === 0 ? id : `${id}-${index}`}
-            {disabled}
-            {readonly}
-            {required}
-            {form}
-            aria-readonly={readonly || undefined}
-            aria-label={segmentLabelText(index + 1, count, labelText, type)}
-            aria-invalid={hasError || undefined}
-            aria-errormessage={hasError && invalidText ? errorId : undefined}
-            data-invalid={hasError || undefined}
-            data-warn={hasWarn || undefined}
-            class:bx--text-input={true}
-            class:bx--pin-code-input__field={true}
-            class:bx--pin-code-input__field--masked={mask}
-            class:bx--pin-code-input__field--uppercase={uppercase}
-            class:bx--text-input--invalid={hasError}
-            class:bx--text-input--warning={hasWarn}
-            class:bx--text-input--xs={effectiveSize === "xs"}
-            class:bx--text-input--sm={effectiveSize === "sm"}
-            class:bx--text-input--xl={effectiveSize === "xl"}
-            on:input={(event) => handleInput(index, event)}
-            on:keydown={(event) => handleKeydown(index, event)}
-            on:paste={(event) => handlePaste(index, event)}
-            on:focus={handleFocus}
-          >
+        {#each segmentItems as item (item.kind === "segment"
+          ? item.index
+          : item.key)}
+          {#if item.kind === "separator"}
+            <span
+              class:bx--pin-code-input__group-separator={true}
+              aria-hidden="true"
+              >–</span
+            >
+          {:else}
+            {@const index = item.index}
+            {@const char = code[index]}
+            <input
+              bind:this={inputs[index]}
+              use:preserveFocusSelection={selectTextOnFocus}
+              type="text"
+              inputmode={type === "numeric" ? "numeric" : "text"}
+              autocomplete={index === 0 ? "one-time-code" : "off"}
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              maxlength="1"
+              value={char}
+              placeholder={segmentPlaceholder || undefined}
+              id={index === 0 ? id : `${id}-${index}`}
+              {disabled}
+              {readonly}
+              {required}
+              {form}
+              aria-readonly={readonly || undefined}
+              aria-label={segmentLabelText(index + 1, count, labelText, type)}
+              aria-invalid={hasError || undefined}
+              aria-errormessage={hasError && invalidText ? errorId : undefined}
+              data-invalid={hasError || undefined}
+              data-warn={hasWarn || undefined}
+              class:bx--text-input={true}
+              class:bx--pin-code-input__field={true}
+              class:bx--pin-code-input__field--masked={mask}
+              class:bx--pin-code-input__field--uppercase={uppercase}
+              class:bx--text-input--invalid={hasError}
+              class:bx--text-input--warning={hasWarn}
+              class:bx--text-input--xs={effectiveSize === "xs"}
+              class:bx--text-input--sm={effectiveSize === "sm"}
+              class:bx--text-input--xl={effectiveSize === "xl"}
+              on:input={(event) => handleInput(index, event)}
+              on:keydown={(event) => handleKeydown(index, event)}
+              on:paste={(event) => handlePaste(index, event)}
+              on:focus={handleFocus}
+            >
+          {/if}
         {/each}
         {#if !isFluid}
           {#if hasError}
