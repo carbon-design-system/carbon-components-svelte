@@ -57,11 +57,19 @@
   $: ariaLabel =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 
-  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
-  const aiLabelState = writable(undefined);
-
   // Inside a DataTable, an active AI label marks the whole column.
   const setColumnAILabel = getContext("carbon:DataTable")?.setColumnAILabel;
+
+  /**
+   * Starts active for a filled slot, so the server renders the AI surface.
+   * `Decorator` clears it when no `AILabel` claims the slot. A DataTable
+   * fills every header's slot from `headerDecorator`, which can hold a label
+   * for some columns only, so it starts unset there.
+   * @type {import("svelte/store").Writable<undefined | "active" | "revert">}
+   */
+  const aiLabelState = writable(
+    $$slots.decorator && !setColumnAILabel ? "active" : undefined,
+  );
   $: setColumnAILabel?.(id, $aiLabelState === "active");
   onMount(() => () => setColumnAILabel?.(id, false));
 </script>

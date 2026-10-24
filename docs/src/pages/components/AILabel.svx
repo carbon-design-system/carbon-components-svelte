@@ -342,3 +342,7 @@ Set `portalTooltip` to `true` to render the explanation in a portal, so a contai
     <p>Generated from your last three billing cycles.</p>
   </AILabel>
 </Box>
+
+## Server rendering
+
+A filled `decorator` slot renders the AI surface on the server, so the surface does not pop in after the page loads. The server can't tell what the slot holds. If it holds another element, or a label with `revertActive` set, the surface drops once the page loads. Data table rows and `headerDecorator` columns can each differ, so their gradient appears once the page loads.

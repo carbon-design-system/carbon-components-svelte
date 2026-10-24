@@ -1212,10 +1212,12 @@
   /**
    * AI label state per row id, set by an `AILabel` in the `rowDecorator`
    * slot. Mutated in place: a Map is always "changed" to Svelte, so `set`
-   * still notifies.
-   * @type {import("svelte/store").Writable<Map<Row["id"], "active" | "revert">>}
+   * still notifies. `set` skips an unchanged value, since every row reads
+   * the store.
+   * @type {Map<Row["id"], "active" | "revert">}
    */
-  const rowAILabelStates = writable(new Map());
+  const rowAILabelMap = new Map();
+  const rowAILabelStates = writable(rowAILabelMap);
   /** @type {Map<Row["id"], { set: (value: undefined | "active" | "revert") => void }>} */
   const rowAILabelSetters = new Map();
 
@@ -1225,6 +1227,7 @@
     if (!setter) {
       setter = {
         set(value) {
+          if (rowAILabelMap.get(rowId) === value) return;
           rowAILabelStates.update((states) => {
             if (value === undefined) states.delete(rowId);
             else states.set(rowId, value);

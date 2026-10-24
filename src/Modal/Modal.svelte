@@ -301,8 +301,12 @@
       : "inactive";
   $: primaryBusy = primaryStatus !== "inactive";
 
-  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
-  const aiLabelState = writable(undefined);
+  /**
+   * Starts active for a filled slot, so the server renders the AI surface.
+   * `Decorator` clears it when no `AILabel` claims the slot.
+   * @type {import("svelte/store").Writable<undefined | "active" | "revert">}
+   */
+  const aiLabelState = writable($$slots.decorator ? "active" : undefined);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
