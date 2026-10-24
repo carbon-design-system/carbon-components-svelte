@@ -26,9 +26,12 @@ description: LayoutDirection sets the writing direction for part of a page, such
     Tabs,
     Text,
     TextInput,
+    Toggletip,
+    TooltipIcon,
     TreeView,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 ## Basic
@@ -163,6 +166,25 @@ Add the `bx--icon--mirror-rtl` class to mirror your own forward or back icon, su
   <Stack gap={6}>
     <CopyInput labelText="رابط الخدمة" value="https://api.example.com/v1/deployments/" />
     <CopyInput labelText="اسم الخدمة" value="بوابة الدفع (الإنتاج)" />
+  </Stack>
+</LayoutDirection>
+
+## Tooltips and popovers
+
+Above and below a trigger, `align="start"` and `align="end"` name inline sides, as in floating-ui, which Carbon React uses. In RTL they swap: a start-aligned tooltip lines up with the trigger's right edge, and its caret follows. `left`, `right`, and Popover's older names, such as `"top-left"`, name physical sides and stay put.
+
+This covers Tooltip, TooltipIcon, TooltipDefinition, Toggletip, the AILabel explanation, Popover, and the tooltips of icon-only buttons, in place and in a portal. A Breadcrumb's overflow menu opens from the right edge of its trigger. Outside a `LayoutDirection`, each reads the page direction when it opens.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Stack orientation="horizontal" gap={10}>
+    <Toggletip align="start" labelText="الخطة">
+      تُحسب الرسوم في بداية كل شهر.
+    </Toggletip>
+    <TooltipIcon
+      align="start"
+      tooltipText="تُحسب الرسوم شهريًا"
+      icon={Information}
+    />
   </Stack>
 </LayoutDirection>
 
