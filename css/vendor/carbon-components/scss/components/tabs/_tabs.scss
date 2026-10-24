@@ -315,15 +315,22 @@
       z-index: 1;
       width: $carbon--spacing-03;
       flex: 1 0 auto;
+
+      // ccs: in RTL each fade sits at the other end of the list, so its
+      // gradient turns around.
+      [dir="rtl"] & {
+        transform: scaleX(-1);
+      }
     }
 
+    // ccs: the fades overlap the list on its inline side in either direction.
     .#{$prefix}--tabs__overflow-indicator--left {
-      margin-right: -$carbon--spacing-03;
+      margin-inline-end: -$carbon--spacing-03;
       background-image: linear-gradient(to left, transparent, $background);
     }
 
     .#{$prefix}--tabs__overflow-indicator--right {
-      margin-left: -$carbon--spacing-03;
+      margin-inline-start: -$carbon--spacing-03;
       background-image: linear-gradient(to right, transparent, $background);
     }
 

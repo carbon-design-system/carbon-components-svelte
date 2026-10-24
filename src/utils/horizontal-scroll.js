@@ -1,11 +1,13 @@
 // @ts-check
+import { resolveLayoutDirection } from "./layout-direction.js";
 
 /**
  * Determine whether a horizontally scrollable element can still scroll
- * backward/forward from its current position.
+ * backward (toward the inline start) or forward from its current position.
  *
  * @param {Object} options
- * @param {number} options.scrollLeft
+ * @param {number} options.scrollLeft - Negative in an RTL element: browsers
+ *   count it from 0 at the start down to minus the scroll range at the end.
  * @param {number} options.scrollWidth
  * @param {number} options.clientWidth
  * @param {number} [options.forwardEpsilon=0] - extra px of slack before
@@ -20,23 +22,28 @@ export function computeScrollOverflow({
   clientWidth,
   forwardEpsilon = 0,
 }) {
+  const offset = Math.abs(scrollLeft);
   return {
-    canScrollBackward: scrollLeft > 0,
+    canScrollBackward: offset > 0,
     canScrollForward:
-      Math.ceil(scrollLeft + clientWidth) + forwardEpsilon < scrollWidth,
+      Math.ceil(offset + clientWidth) + forwardEpsilon < scrollWidth,
   };
 }
 
 /**
- * Scroll `node` by roughly 75% of its own width, in the given direction.
+ * Scroll `node` by roughly 75% of its own width, toward its inline end (`1`)
+ * or its inline start (`-1`).
  *
  * @param {HTMLElement | null | undefined} node
  * @param {1 | -1} direction
  */
 export function scrollByViewport(node, direction) {
   if (!node) return;
+  // The inline start is on the right in RTL, so `left` runs the other way.
+  // Read the direction at the click: nothing reports an ancestor's change.
+  const sign = resolveLayoutDirection(undefined, node) === "rtl" ? -1 : 1;
   node.scrollBy({
-    left: direction * node.clientWidth * 0.75,
+    left: sign * direction * node.clientWidth * 0.75,
     behavior: "smooth",
   });
 }
