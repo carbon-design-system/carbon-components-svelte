@@ -1,7 +1,33 @@
 // @vitest-environment node
+// @depends-on src/tokens/**
+import { existsSync, readFileSync } from "node:fs";
 import { packageContentProblems } from "../../scripts/lib/package-contents";
 
 const file = (path: string) => ({ path, size: 1 });
+
+describe("token exports", () => {
+  it("point at the files scripts/build-tokens.ts writes", () => {
+    const root = new URL("../../", import.meta.url);
+    const { exports } = JSON.parse(
+      readFileSync(new URL("package.json", root), "utf8"),
+    );
+    const targets = {
+      "./tailwind": {
+        types: "./src/tokens/tailwind.d.ts",
+        default: "./src/tokens/tailwind.js",
+      },
+      "./tailwind.css": "./src/tokens/tailwind.css",
+      "./tokens.json": "./src/tokens/tokens.json",
+    };
+
+    expect(exports).toMatchObject(targets);
+    for (const target of Object.values(targets).flatMap((value) =>
+      typeof value === "string" ? [value] : Object.values(value),
+    )) {
+      expect(existsSync(new URL(target, root)), target).toBe(true);
+    }
+  });
+});
 
 describe("packageContentProblems", () => {
   test("accepts the expected package files", () => {
@@ -16,6 +42,8 @@ describe("packageContentProblems", () => {
       "src/index.d.ts",
       "src/Button/Button.svelte",
       "src/Button/Button.svelte.d.ts",
+      "src/tokens/tailwind.css",
+      "src/tokens/tokens.json",
     ].map(file);
     expect(packageContentProblems(files, 1)).toEqual([]);
   });
@@ -39,6 +67,7 @@ describe("packageContentProblems", () => {
   test("rejects unexpected files", () => {
     const paths = [
       "src/data.json",
+      "src/tokens/nested/tokens.json",
       "src/Button/Button.test.ts",
       "css/_button.scss",
       "css/vendor/x.css",
