@@ -2,6 +2,13 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   /**
+   * @slot {{}} labelChildren - Custom label content. Overrides `labelText`.
+   * @slot {{}} action - Interactive control in the header (for example a button or expandable Search).
+   * @slot {{}} search - Search field below the header. Compose `Search` or expandable `Search`; filtering stays consumer-side.
+   * @slot {{}}
+   */
+
+  /**
    * Specify the kind of contained list.
    * @type {"on-page" | "disclosed"}
    */
@@ -78,6 +85,11 @@
           <slot name="action" />
         </div>
       {/if}
+    </div>
+  {/if}
+  {#if $$slots.search}
+    <div class:bx--contained-list__search="{true}">
+      <slot name="search" />
     </div>
   {/if}
   <ul

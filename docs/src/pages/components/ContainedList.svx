@@ -115,11 +115,11 @@ Add icons using the `icon` prop. Icons appear to the left of each item.
 
 ## Search
 
-Add a search input to filter list items.
+Use the `search` slot to compose [Search](/components/Search) below the list header. ContainedList does not filter items; bind the search value and filter the list in your app. The `action` slot can still hold a separate header control alongside search.
 
 ### Expandable
 
-Use the `action` slot on the list to add an expandable search control in the header. Set `size` to `"xl"` so the search fills the 48px header.
+Use the `action` slot on the list to add an expandable search control in the header. Set `size` to `"xl"` so the search fills the 48px header. Expandable Search in the `search` slot is a collapsible filter below the header instead.
 
 <ContainedList labelText="Team members">
   <Search slot="action" expandable size="xl" />
@@ -130,9 +130,15 @@ Use the `action` slot on the list to add an expandable search control in the hea
 
 ### Persistent
 
-Place the search as a direct child (not in the action slot) for a persistent filter below the title. The input is styled for list headers and works with sticky headers.
+Use a non-expandable Search in the `search` slot for a persistent filter below the title. The input uses list-search styling and works with sticky headers.
 
 <FileSource src="/framed/ContainedList/PersistentSearch" />
+
+### Filterable members
+
+Filter a member list by binding Search `value` and rendering only matching items.
+
+<FileSource src="/framed/ContainedList/FilterableMembers" />
 
 ## Clickable items
 

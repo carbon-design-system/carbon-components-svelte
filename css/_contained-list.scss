@@ -29,6 +29,15 @@
     width: 100%;
   }
 
+  // ccs: the search slot's wrapper is what sticks. A sticky element only
+  // sticks within its parent, and this wrapper is as tall as the search, so
+  // a Search inside it would scroll away with the list.
+  .#{$prefix}--contained-list__search {
+    position: sticky;
+    z-index: 1;
+    width: 100%;
+  }
+
   .#{$prefix}--contained-list .#{$prefix}--search {
     position: sticky;
     z-index: 1;
@@ -38,26 +47,34 @@
     }
   }
 
-  .#{$prefix}--contained-list--disclosed .#{$prefix}--search {
+  .#{$prefix}--contained-list--disclosed .#{$prefix}--search,
+  .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__search {
     top: to-rem(32px); // Fixed header height for disclosed variant
   }
 
-  .#{$prefix}--contained-list--on-page .#{$prefix}--search {
+  .#{$prefix}--contained-list--on-page .#{$prefix}--search,
+  .#{$prefix}--contained-list--on-page .#{$prefix}--contained-list__search {
     top: to-rem(48px); // Default md size header height
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--sm
-    .#{$prefix}--search {
+    .#{$prefix}--search,
+  .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--sm
+    .#{$prefix}--contained-list__search {
     top: to-rem(32px); // sm size header height
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--lg
-    .#{$prefix}--search {
+    .#{$prefix}--search,
+  .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--lg
+    .#{$prefix}--contained-list__search {
     top: to-rem(64px); // lg size header height
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--xl
-    .#{$prefix}--search {
+    .#{$prefix}--search,
+  .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--xl
+    .#{$prefix}--contained-list__search {
     top: to-rem(72px); // xl size header height
   }
 
