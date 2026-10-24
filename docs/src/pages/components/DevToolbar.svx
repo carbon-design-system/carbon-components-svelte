@@ -8,6 +8,8 @@ description: A floating toolbar that turns the development aids on and off, with
 
 It renders a [`GridOverlay`](/components/Grid#gridoverlay) and a [`LayoutInspector`](/components/LayoutInspector) for you, so you do not wire up either one.
 
+To try every tool on a full app page built from Carbon components, see the [dev tools kitchen sink](/dev-tools-kitchen-sink).
+
 ## Install
 
 The dev tools ship from their own entry, `carbon-components-svelte/devtools`, with their own stylesheet, so the main entry and the theme stylesheets carry none of their code. Load `devtools.css` with `all.css`, or the matching `devtools-<theme>.css` with a single-theme stylesheet, such as `devtools-g100.css` with `g100.css`.
