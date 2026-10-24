@@ -11,6 +11,52 @@
     xl: "lg",
     "2xl": "xl",
   };
+
+  const KINDS = [
+    "primary",
+    "secondary",
+    "tertiary",
+    "danger",
+    "danger-tertiary",
+    "ghost",
+    "danger-ghost",
+  ];
+
+  /**
+   * The kind of an action from its `bx--btn--{kind}` class, else "other".
+   * @param {Element} node
+   */
+  function kindOf(node) {
+    return (
+      KINDS.find((kind) => node.classList.contains(`bx--btn--${kind}`)) ??
+      "other"
+    );
+  }
+
+  /**
+   * Carbon's ActionSet rules for a set of action kinds.
+   * @param {string[]} kinds
+   * @param {boolean} stacking
+   * @returns {string[]}
+   */
+  function findProblems(kinds, stacking) {
+    const count = (/** @type {string[]} */ ...names) =>
+      kinds.filter((kind) => names.includes(kind)).length;
+    const ghosts = count("ghost", "danger-ghost");
+    return [
+      stacking &&
+        kinds.length > 3 &&
+        "takes at most three actions when they stack",
+      kinds.length > 4 && "takes at most four actions",
+      count("primary") > 1 && "takes at most one primary action",
+      ghosts > 1 && "takes at most one ghost action",
+      stacking &&
+        kinds.length > 1 &&
+        ghosts > 0 &&
+        "can't stack a ghost action with other actions",
+      count("other") > 0 && "takes only Button actions",
+    ].filter((problem) => typeof problem === "string");
+  }
 </script>
 
 <script>
@@ -52,10 +98,11 @@
   setContext("carbon:ActionSet", { size: buttonSize });
 
   let ref = null;
-  let actionCount = 0;
+  /** @type {string[]} */
+  let actionKinds = [];
 
   function syncActionCount() {
-    actionCount = ref?.children.length ?? 0;
+    actionKinds = Array.from(ref?.children ?? [], kindOf);
   }
 
   // Children are real, consumer-placed <Button>s, not a data array, so
@@ -69,8 +116,17 @@
     return () => observer.disconnect();
   });
 
+  $: actionCount = actionKinds.length;
   $: stacking =
     !disableStacking && (size === "sm" || (size === "md" && actionCount > 2));
+
+  // Warn once per problem, as the actions change.
+  const warned = new Set();
+  $: for (const problem of findProblems(actionKinds, stacking)) {
+    if (warned.has(problem)) continue;
+    warned.add(problem);
+    console.warn(`[ActionSet.svelte] an action set ${problem}.`);
+  }
   $: wrapperClass = [
     "bx--action-set",
     `bx--action-set--${size}`,
