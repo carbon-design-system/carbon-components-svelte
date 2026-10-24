@@ -11,7 +11,10 @@ description: LayoutDirection sets the writing direction for part of a page, such
     Dropdown,
     LayoutDirection,
     Link,
+    NumberInput,
+    PasswordInput,
     RangeSlider,
+    Search,
     Slider,
     Stack,
     Tab,
@@ -38,6 +41,24 @@ It matches Carbon React's `LayoutDirection`. To set the direction for the whole 
       <Button>نشر</Button>
       <Button kind="secondary">إلغاء</Button>
     </Stack>
+  </Stack>
+</LayoutDirection>
+
+## Text fields
+
+In RTL, a field's icons and buttons sit at its left end: the password toggle, the copy button, the number steppers, the clear button, and the invalid, warning, and read-only icons. The text keeps clear of them.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Stack gap={6}>
+    <PasswordInput labelText="مفتاح الواجهة البرمجية" value="sk-live-4242" />
+    <CopyInput labelText="رابط الإشعارات" value="https://hooks.example.com/42" />
+    <NumberInput
+      labelText="عدد النسخ"
+      value={12}
+      invalid
+      invalidText="الحد الأقصى ١٠ نسخ"
+    />
+    <Search labelText="بحث في الحوادث" value="فشل النشر" />
   </Stack>
 </LayoutDirection>
 
