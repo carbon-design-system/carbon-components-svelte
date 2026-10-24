@@ -36,7 +36,7 @@ Position the popover relative to its parent with `relative`.
 
 Customize popover alignment with `align`. Valid values include `"top"`, `"top-start"`, `"top-end"`, `"bottom"`, `"bottom-start"`, `"bottom-end"`, `"left"`, `"left-start"`, `"left-end"`, `"right"`, `"right-start"`, and `"right-end"`.
 
-The default is top. These are the Carbon v11 names. The older names (`"top-left"`, `"left-bottom"`, and so on) still work and give the same placement.
+The default is top. These are the Carbon v11 names. The older names (`"top-left"`, `"left-bottom"`, and so on) still work and give the same placement. In RTL, `start` and `end` on the top and bottom swap sides, as in floating-ui, while the older names keep their physical side. See [LayoutDirection](/components/LayoutDirection#tooltips-and-popovers).
 
 <Stack gap={10}>
 <div>
