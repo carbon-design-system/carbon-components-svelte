@@ -36,6 +36,16 @@ describe("computeScrollOverflow", () => {
     ).toBe(false);
   });
 
+  it.each([
+    ["start", 0, { canScrollBackward: false, canScrollForward: true }],
+    ["middle", -50, { canScrollBackward: true, canScrollForward: true }],
+    ["end", -100, { canScrollBackward: true, canScrollForward: false }],
+  ])("reads a negative RTL scrollLeft at the %s", (_, scrollLeft, expected) => {
+    expect(
+      computeScrollOverflow({ scrollLeft, scrollWidth: 300, clientWidth: 200 }),
+    ).toEqual(expected);
+  });
+
   it("forwardEpsilon absorbs a sub-pixel rounding gap", () => {
     const metrics = { scrollLeft: 0, scrollWidth: 201, clientWidth: 200 };
 
@@ -62,6 +72,22 @@ describe("scrollByViewport", () => {
 
     scrollByViewport(node, -1);
     expect(scrollBy).toHaveBeenCalledWith({ left: -300, behavior: "smooth" });
+  });
+
+  it("scrolls toward the inline end on the left in RTL", () => {
+    const node = document.createElement("div");
+    node.style.direction = "rtl";
+    document.body.append(node);
+    Object.defineProperty(node, "clientWidth", { value: 400 });
+    const scrollBy = vi.fn();
+    node.scrollBy = scrollBy;
+
+    scrollByViewport(node, 1);
+    expect(scrollBy).toHaveBeenCalledWith({ left: -300, behavior: "smooth" });
+
+    scrollByViewport(node, -1);
+    expect(scrollBy).toHaveBeenCalledWith({ left: 300, behavior: "smooth" });
+    node.remove();
   });
 });
 

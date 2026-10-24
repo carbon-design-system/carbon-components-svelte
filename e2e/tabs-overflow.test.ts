@@ -55,3 +55,65 @@ test.describe("Tabs overflow", () => {
     expect(visible).toBe(true);
   });
 });
+
+// In RTL the list starts at the right, and browsers report `scrollLeft`
+// from 0 there down to a negative value at the left end.
+for (const variant of ["", "&vertical"]) {
+  const name = variant ? "TabsVertical row" : "Tabs";
+
+  test.describe(`${name} overflow in RTL`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(`/tabs-overflow.html?dir=rtl${variant}`);
+    });
+
+    test("tracks the start, middle and end of the list", async ({ page }) => {
+      const nav = page.getByRole("tablist");
+      const prev = page.locator(PREV);
+      const next = page.locator(NEXT);
+      const hidden = new RegExp(HIDDEN);
+
+      // Start: only the button toward the end shows, at the left.
+      await expect(prev).toHaveClass(hidden);
+      await expect(next).not.toHaveClass(hidden);
+      const [navBox, nextBox] = await Promise.all([
+        nav.boundingBox(),
+        next.boundingBox(),
+      ]);
+      expect(nextBox && navBox && nextBox.x < navBox.x).toBe(true);
+
+      // Middle: the end button scrolls toward the left end.
+      await next.click();
+      await expect
+        .poll(() => nav.evaluate((node) => node.scrollLeft))
+        .toBeLessThan(0);
+      await expect(prev).not.toHaveClass(hidden);
+      await expect(next).not.toHaveClass(hidden);
+
+      // End: selecting the last tab scrolls it into view.
+      await page.getByRole("tab", { selected: true }).focus();
+      await page.keyboard.press("End");
+      const last = page.getByRole("tab", { name: "Tab label 10" });
+      await expect(last).toHaveAttribute("aria-selected", "true");
+      await expect(next).toHaveClass(hidden);
+      await expect(prev).not.toHaveClass(hidden);
+      const inside = await last.evaluate((tab) => {
+        const navRect = tab.closest("[role=tablist]")?.getBoundingClientRect();
+        const tabRect = tab.getBoundingClientRect();
+        return Boolean(
+          navRect &&
+            tabRect.left >= navRect.left - 1 &&
+            tabRect.right <= navRect.right + 1,
+        );
+      });
+      expect(inside).toBe(true);
+
+      // The start button scrolls back toward the right.
+      const end = await nav.evaluate((node) => node.scrollLeft);
+      await prev.click();
+      await expect
+        .poll(() => nav.evaluate((node) => node.scrollLeft))
+        .toBeGreaterThan(end);
+      await expect(next).not.toHaveClass(hidden);
+    });
+  });
+}

@@ -1,6 +1,7 @@
 /**
  * Determine whether a horizontally scrollable element can still scroll
- * backward/forward from its current position.
+ * backward (toward the inline start) or forward from its current position.
+ * `scrollLeft` is negative in an RTL element.
  */
 export function computeScrollOverflow(options: {
   scrollLeft: number;
@@ -10,7 +11,8 @@ export function computeScrollOverflow(options: {
 }): { canScrollBackward: boolean; canScrollForward: boolean };
 
 /**
- * Scroll `node` by roughly 75% of its own width, in the given direction.
+ * Scroll `node` by roughly 75% of its own width, toward its inline end (`1`)
+ * or its inline start (`-1`).
  */
 export function scrollByViewport(
   node: HTMLElement | null | undefined,
