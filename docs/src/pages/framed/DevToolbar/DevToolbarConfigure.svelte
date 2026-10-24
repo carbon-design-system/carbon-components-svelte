@@ -49,7 +49,7 @@
     baseline: true,
     textBaselines: false,
     inspect: true,
-    lint: false,
+    spacing: false,
     contrast: false,
     targets: false,
     overflow: false,

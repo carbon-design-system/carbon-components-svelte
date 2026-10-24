@@ -23,7 +23,7 @@
           >label-01, legal-01, and helper-text-01 share every value, so all
           match</Text
         >
-        <p style="font-size: 15px; line-height: 22px;">
+        <p class="hand-set">
           Hand-set 15/22 text matches no token, so the card says so.
         </p>
         <Text type="code-02">code-02 uses the mono family</Text>
@@ -33,3 +33,11 @@
 </Grid>
 
 <LayoutInspector open />
+
+<style>
+  /* Off the type scale on purpose. */
+  .hand-set {
+    font-size: 15px;
+    line-height: 22px;
+  }
+</style>

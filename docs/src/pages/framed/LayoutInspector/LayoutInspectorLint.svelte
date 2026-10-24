@@ -28,7 +28,12 @@
   </Row>
 </Grid>
 
-<LayoutInspector open spacing={false} lint lintCarbon={includeCarbon} />
+<LayoutInspector
+  open
+  spacing={false}
+  checkSpacing
+  checkCarbon={includeCarbon}
+/>
 
 <style>
   /* Each rule here has one value off the spacing scale. */

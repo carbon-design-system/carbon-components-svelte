@@ -1,6 +1,7 @@
 <script>
   /**
-   * @typedef {{ x: number; y: number; width: number; height: number; text: string }} LayoutInspectorMark
+   * @typedef {"spacing" | "contrast" | "targets" | "overflow"} LayoutInspectorCheck
+   * @typedef {{ key: string; check: LayoutInspectorCheck; x: number; y: number; width: number; height: number; text: string }} LayoutInspectorMark
    * @restProps {div}
    */
 
@@ -30,7 +31,7 @@
   export let cardPlacement = "cursor";
 
   /** Set to `false` to hide the Carbon type token of hovered text. */
-  export let type = true;
+  export let typography = true;
 
   /**
    * Set to `false` to hide colors from the card.
@@ -38,29 +39,33 @@
    */
   export let colors = true;
 
+  /** Set to `true` to outline every element whose margin, padding, or gap is not a Carbon spacing token. */
+  export let checkSpacing = false;
+
   /** Set to `true` to outline all text whose contrast against its background is below WCAG AA. */
-  export let contrast = false;
+  export let checkContrast = false;
+
+  /**
+   * Set to `true` to outline every interactive element that fails WCAG 2.2 target size (2.5.8).
+   * A target fails when it is smaller than `targetSize` in either dimension and a `targetSize` circle centered on it would touch another target, or another small target's circle.
+   */
+  export let checkTargets = false;
 
   /** Set to `true` to outline elements that push the page into horizontal scroll, and content clipped or truncated by `overflow: hidden`. */
-  export let overflow = false;
-
-  /** Set to `true` to outline every element whose margin, padding, or gap is not a Carbon spacing token. */
-  export let lint = false;
+  export let checkOverflow = false;
 
   /**
-   * Set to `true` to lint Carbon's own components too.
-   * By default, `lint` skips elements with a `bx--` class and their unstyled inner elements (such as the `<input>` inside `NumberInput`), so only your layout code is checked.
+   * Set to `true` to check Carbon's own components too.
+   * By default, the checks skip elements with a `bx--` class and their unstyled inner elements (such as the `<input>` inside `NumberInput`), so only your code is checked.
+   * Turn it on to check a custom theme.
    */
-  export let lintCarbon = false;
+  export let checkCarbon = false;
 
-  /** CSS selector for more elements for `lint` to skip, for example third-party widgets. */
-  export let lintIgnore = "";
-
-  /** Set to `true` to outline every interactive element smaller than `targetSize` in either dimension. */
-  export let targets = false;
+  /** CSS selector for elements the checks skip, along with everything inside them, for example third-party widgets. */
+  export let checkIgnore = "";
 
   /**
-   * Minimum target size in pixels for `targets`.
+   * Minimum target size in pixels for `checkTargets`.
    * `24` is the WCAG 2.2 AA minimum (2.5.8); `44` is the AAA size (2.5.5).
    */
   export let targetSize = 24;
@@ -80,6 +85,24 @@
   export let skipDelayMs = 300;
 
   import { tick } from "svelte";
+  import { createDelayedSetter } from "../../utils/delayed-setter.js";
+  import { createFrameJob } from "../../utils/frame-batch.js";
+  import { addPooledListener } from "../../utils/window-listener-pool.js";
+  import {
+    boxes,
+    distanceSegments,
+    failingTargets,
+    ringLabels,
+  } from "../geometry.js";
+  import { DEV_TOOL, inBand, observePage } from "../page-scan.js";
+  import {
+    formatPx,
+    gaps,
+    offScale,
+    paddingToken,
+    sideTokens,
+    spacingToken,
+  } from "../spacing.js";
   import {
     colorTokens,
     effectiveBackground,
@@ -89,13 +112,6 @@
     toHex,
     toRgba,
   } from "./colors.js";
-
-  // Dev tools mark their own roots with this attribute, so hover and page
-  // scans skip them (and each other).
-  const DEVTOOLS = "[data-ccs-dev-tool]";
-
-  // Carbon v10 spacing scale, in rem, so it tracks the root font size.
-  const SPACING_REM = [0.125, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 10];
 
   // Carbon v11 type styles, matching the library's `bx--type-*` classes.
   const TYPE_TOKENS = [
@@ -151,57 +167,25 @@
     "[tabindex]:not([tabindex='-1'])",
   ].join(", ");
 
-  const FLEX_OR_GRID = /flex|grid/;
-
+  // Carbon's own elements: anything with a `bx--` class, and the unstyled
+  // elements directly inside one, such as the `<input>` in `NumberInput`.
   const CARBON_ELEMENTS =
     "[class*='bx--'], [class*='bx--'] > :not([class]):not([style*=':'])";
 
-  // Caps page-wide scans so a huge page cannot stall the inspector.
+  // For text, only a `bx--` class of its own: a classless `<p>` in a Grid
+  // column is the app's text, not Carbon's.
+  const CARBON_TEXT = "[class*='bx--']";
+
+  // Caps each check so a huge page cannot stall the inspector.
   const MAX_MARKS = 500;
 
-  /** Root font size in px, refreshed on every measure. */
+  /** Root font size in px, read again on every hover and scan. */
   let remPx = 16;
 
-  /**
-   * Name of the spacing token for `px`, `"0"` for zero, or `null` when the
-   * value is off the scale. Negative values match by magnitude.
-   * @param {number} px
-   */
-  function spacingToken(px) {
-    const abs = Math.abs(px);
-    if (abs < 0.5) return "0";
-    const index = SPACING_REM.findIndex(
-      (rem) => Math.abs(rem * remPx - abs) < 0.5,
-    );
-    return index === -1
-      ? null
-      : `spacing-${String(index + 1).padStart(2, "0")}`;
-  }
-
-  const SIDES = ["top", "right", "bottom", "left"];
-
-  /**
-   * Spacing token for one padding side. Carbon specs padding from the
-   * outer edge, so a bordered control subtracts its border: a button's
-   * 15px left padding plus its 1px border is `spacing-05`. When the
-   * padding alone is off the scale but padding plus border is on it, the
-   * side counts as on the scale.
-   * @param {number} px padding
-   * @param {number} borderPx border on the same side
-   * @returns {{ token: string | null; withBorder: number }}
-   */
-  function paddingToken(px, borderPx) {
-    const token = spacingToken(px);
-    if (token !== null || !(borderPx > 0)) return { token, withBorder: 0 };
-    const outer = spacingToken(px + borderPx);
-    return outer === null
-      ? { token: null, withBorder: 0 }
-      : { token: outer, withBorder: borderPx };
-  }
-
-  /** @param {number} px */
-  function fmt(px) {
-    return String(Math.round(px * 10) / 10);
+  function readRemPx() {
+    remPx =
+      Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
+      16;
   }
 
   /**
@@ -219,17 +203,6 @@
   }
 
   /**
-   * Gap of a flex or grid container, or `null` for anything else.
-   * @param {CSSStyleDeclaration} style
-   */
-  function gaps(style) {
-    if (!FLEX_OR_GRID.test(style.display)) return null;
-    const row = Number.parseFloat(style.rowGap) || 0;
-    const column = Number.parseFloat(style.columnGap) || 0;
-    return row || column ? { row, column } : null;
-  }
-
-  /**
    * Type token table, measured from the library's own `bx--type-*` classes
    * at the current viewport, so fluid and responsive tokens match too.
    * @type {{ name: string; size: number; lineHeight: number; weight: string; letterSpacing: number; family: string }[] | null}
@@ -240,17 +213,21 @@
     const box = document.createElement("div");
     box.style.cssText =
       "position:absolute;visibility:hidden;pointer-events:none";
+    // Marked as a dev tool, so adding it does not trigger a page scan.
+    box.setAttribute("data-ccs-dev-tool", "");
     for (const name of TYPE_TOKENS) {
       const probe = document.createElement("span");
       probe.className = `bx--type-${name}`;
       probe.textContent = "x";
       box.append(probe);
     }
+    // In <body>, not in the inspector, so the probes inherit the page's
+    // font family.
     document.body.append(box);
-    typeTable = [...box.children].map((probe, i) => {
+    typeTable = [...box.children].map((probe, index) => {
       const style = getComputedStyle(probe);
       return {
-        name: TYPE_TOKENS[i],
+        name: TYPE_TOKENS[index],
         size: Number.parseFloat(style.fontSize),
         lineHeight: Number.parseFloat(style.lineHeight),
         weight: style.fontWeight,
@@ -274,14 +251,14 @@
     const letterSpacing = Number.parseFloat(style.letterSpacing) || 0;
     return (typeTable ?? [])
       .filter(
-        (t) =>
-          Math.abs(t.size - size) < 0.5 &&
-          Math.abs(t.lineHeight - lineHeight) < 0.5 &&
-          t.weight === style.fontWeight &&
-          Math.abs(t.letterSpacing - letterSpacing) < 0.05 &&
-          t.family === style.fontFamily,
+        (token) =>
+          Math.abs(token.size - size) < 0.5 &&
+          Math.abs(token.lineHeight - lineHeight) < 0.5 &&
+          token.weight === style.fontWeight &&
+          Math.abs(token.letterSpacing - letterSpacing) < 0.05 &&
+          token.family === style.fontFamily,
       )
-      .map((t) => t.name);
+      .map((token) => token.name);
   }
 
   /** @param {Element} el */
@@ -301,6 +278,32 @@
     return cls ? `${tag}.${cls}` : tag;
   }
 
+  /**
+   * @param {Element} el
+   * @param {string} selector
+   */
+  function matchesSafe(el, selector) {
+    if (!selector) return false;
+    try {
+      return el.matches(selector);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * @param {Element} el
+   * @param {string} selector
+   */
+  function closestSafe(el, selector) {
+    if (!selector) return false;
+    try {
+      return el.closest(selector) !== null;
+    } catch {
+      return false;
+    }
+  }
+
   // ---------------------------------------------------------------------
   // Hover: box model, type, and measuring
 
@@ -315,10 +318,11 @@
   let pointerY = 0;
 
   /** @type {HTMLElement | null} */
-  let cardEl = null;
+  let cardRef = null;
 
   // Which side of the pointer the card sits on. Flipping has hysteresis
-  // (see `placeCard`), so the card does not flip back and forth at an edge.
+  // (see `cardPosition`), so the card does not flip back and forth at an
+  // edge.
   let flipX = false;
   let flipY = false;
   let cornerLeft = false;
@@ -335,17 +339,17 @@
   const FLIP_SLACK = 48;
 
   /**
-   * Positions the single, reused card with a transform, without a
-   * re-render. "cursor" sits below-right of the pointer and flips to the
-   * other side when it would cross a viewport edge; it flips back only once
-   * there is `FLIP_SLACK` more room, so it does not jitter at the edge.
-   * "corner" docks bottom-right and moves bottom-left while the pointer
-   * is over its spot.
+   * Where the single, reused card goes. "cursor" sits below-right of the
+   * pointer and flips to the other side when it would cross a viewport
+   * edge; it flips back only once there is `FLIP_SLACK` more room, so it
+   * does not jitter at the edge. "corner" docks bottom-right and moves
+   * bottom-left while the pointer is over its spot. Reads layout only.
+   * @returns {{ left: number; top: number } | null}
    */
-  function placeCard() {
-    if (!cardEl) return;
-    const w = cardEl.offsetWidth;
-    const h = cardEl.offsetHeight;
+  function cardPosition() {
+    if (!cardRef) return null;
+    const w = cardRef.offsetWidth;
+    const h = cardRef.offsetHeight;
     const vw = document.documentElement.clientWidth;
     const vh = document.documentElement.clientHeight;
     let left;
@@ -372,143 +376,46 @@
       top = flipY ? pointerY - CARD_GAP - h : pointerY + CARD_GAP;
     }
 
-    left = Math.max(CARD_EDGE, Math.min(left, vw - w - CARD_EDGE));
-    top = Math.max(CARD_EDGE, Math.min(top, vh - h - CARD_EDGE));
-    cardEl.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
-    // Hidden until first placed, so it never flashes at the top-left.
-    cardEl.style.visibility = "visible";
+    return {
+      left: Math.round(Math.max(CARD_EDGE, Math.min(left, vw - w - CARD_EDGE))),
+      top: Math.round(Math.max(CARD_EDGE, Math.min(top, vh - h - CARD_EDGE))),
+    };
   }
 
   /**
-   * @typedef {{ left: number; top: number; width: number; height: number }} Box
-   * @typedef {{ side: string; value: number; x: number; y: number }} SideLabel
-   * @typedef {{ x1: number; y1: number; x2: number; y2: number; value: number }} Segment
+   * Moves the card with a transform, without a re-render.
+   * @param {{ left: number; top: number } | null} position
+   */
+  function moveCard(position) {
+    if (!cardRef || !position) return;
+    cardRef.style.transform = `translate(${position.left}px, ${position.top}px)`;
+    // Hidden until first placed, so it never flashes at the top-left.
+    cardRef.style.visibility = "visible";
+  }
+
+  /**
+   * @typedef {import("../geometry.js").Box} Box
+   * @typedef {import("../geometry.js").SideLabel} SideLabel
+   * @typedef {import("../geometry.js").Segment} Segment
    */
 
   /** @type {null | { rect: DOMRect; marginBox: Box; marginWidths: number[]; paddingBox: Box; paddingWidths: number[]; contentBox: Box; labels: (SideLabel & { kind: "margin" | "padding"; off: boolean })[]; info: { name: string; size: string; margin: number[]; padding: number[]; border: number[]; carbon: boolean; gap: { row: number; column: number } | null; type: string[] | null; typeSpec: string; colors: ColorInfo | null } }} */
   let hover = null;
 
-  /** @type {null | { a: DOMRect; b: DOMRect; segments: Segment[] }} */
+  /** @type {null | { a: DOMRect; b: DOMRect; segments: (Segment & { token: string | null })[] }} */
   let distance = null;
-
-  /**
-   * @param {DOMRect} rect
-   * @param {number[]} m
-   * @param {number[]} b
-   * @param {number[]} p
-   */
-  function boxes(rect, m, b, p) {
-    const [mt, mr, mb, ml] = m.map((v) => Math.max(0, v));
-    const marginBox = {
-      left: rect.left - ml,
-      top: rect.top - mt,
-      width: rect.width + ml + mr,
-      height: rect.height + mt + mb,
-    };
-    const paddingBox = {
-      left: rect.left + b[3],
-      top: rect.top + b[0],
-      width: Math.max(0, rect.width - b[1] - b[3]),
-      height: Math.max(0, rect.height - b[0] - b[2]),
-    };
-    const contentBox = {
-      left: paddingBox.left + p[3],
-      top: paddingBox.top + p[0],
-      width: Math.max(0, paddingBox.width - p[1] - p[3]),
-      height: Math.max(0, paddingBox.height - p[0] - p[2]),
-    };
-    return {
-      marginBox,
-      paddingBox,
-      contentBox,
-      marginWidths: [mt, mr, mb, ml],
-    };
-  }
-
-  /**
-   * Labels centered in each non-zero side of a ring between `outer` and
-   * `inner`.
-   * @param {Box} outer
-   * @param {Box} inner
-   * @param {number[]} values top, right, bottom, left (signed)
-   */
-  function ringLabels(outer, inner, values) {
-    const cx = inner.left + inner.width / 2;
-    const cy = inner.top + inner.height / 2;
-    /** @type {SideLabel[]} */
-    const labels = [];
-    const [t, r, b, l] = values;
-    if (t)
-      labels.push({
-        side: "top",
-        value: t,
-        x: cx,
-        y: (outer.top + inner.top) / 2,
-      });
-    if (r)
-      labels.push({
-        side: "right",
-        value: r,
-        x: (inner.left + inner.width + outer.left + outer.width) / 2,
-        y: cy,
-      });
-    if (b)
-      labels.push({
-        side: "bottom",
-        value: b,
-        x: cx,
-        y: (inner.top + inner.height + outer.top + outer.height) / 2,
-      });
-    if (l)
-      labels.push({
-        side: "left",
-        value: l,
-        x: (outer.left + inner.left) / 2,
-        y: cy,
-      });
-    return labels;
-  }
-
-  /**
-   * Distance segments between two rects along one axis. Separated rects
-   * get one segment across the gap; overlapping or nested rects get one
-   * segment per pair of edges that differ.
-   * @param {number} a1
-   * @param {number} a2
-   * @param {number} b1
-   * @param {number} b2
-   * @returns {[number, number][]}
-   */
-  function axisSegments(a1, a2, b1, b2) {
-    if (b1 >= a2) return [[a2, b1]];
-    if (a1 >= b2) return [[b2, a1]];
-    /** @type {[number, number][]} */
-    const out = [];
-    if (Math.abs(a1 - b1) >= 0.5)
-      out.push([Math.min(a1, b1), Math.max(a1, b1)]);
-    if (Math.abs(a2 - b2) >= 0.5)
-      out.push([Math.min(a2, b2), Math.max(a2, b2)]);
-    return out;
-  }
-
-  /**
-   * Where to draw a segment across the other axis: the middle of the
-   * overlap if there is one, else the middle of the anchor.
-   * @param {number} a1
-   * @param {number} a2
-   * @param {number} b1
-   * @param {number} b2
-   */
-  function crossCenter(a1, a2, b1, b2) {
-    const lo = Math.max(a1, b1);
-    const hi = Math.min(a2, b2);
-    return hi > lo ? (lo + hi) / 2 : (a1 + a2) / 2;
-  }
 
   /**
    * @typedef {{ key: string; label: string; hex: string; swatch: string; tokens: string[]; inherited?: boolean; note?: boolean }} ColorRow
    * @typedef {{ rows: ColorRow[]; contrast: { ratio: number; aa: number; aaa: number; large: boolean; approximate: boolean } | null; tokens: boolean }} ColorInfo
    */
+
+  /** @type {Record<string, string>} */
+  const COLOR_LABELS = {
+    text: "Text color",
+    bg: "Background",
+    border: "Border color",
+  };
 
   /**
    * Text, background, and border colors of `el`, each named with the
@@ -528,7 +435,7 @@
      * @param {import("./colors.js").ColorRole} role
      * @param {boolean} [inherited]
      */
-    const add = (key, value, role, inherited) => {
+    function add(key, value, role, inherited) {
       const rgba = toRgba(normalizeColor(value));
       if (!rgba || rgba[3] === 0) return;
       rows.push({
@@ -539,7 +446,7 @@
         tokens: colorTokens(el, value, role),
         inherited,
       });
-    };
+    }
     if (ownText) add("text", style.color, "text");
     const bg = effectiveBackground(el);
     if (bg.image) {
@@ -572,22 +479,13 @@
     };
   }
 
-  /** @type {Record<string, string>} */
-  const COLOR_LABELS = {
-    text: "Text color",
-    bg: "Background",
-    border: "Border color",
-  };
-
   /** @param {number} ratio */
-  function fmtRatio(ratio) {
+  function formatRatio(ratio) {
     return `${Math.floor(ratio * 10) / 10}:1`;
   }
 
   function updateHover() {
-    remPx =
-      Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
-      16;
+    readRemPx();
 
     if (
       measure &&
@@ -599,34 +497,20 @@
     ) {
       const a = anchor.getBoundingClientRect();
       const b = hovered.getBoundingClientRect();
-      const y = crossCenter(a.top, a.bottom, b.top, b.bottom);
-      const x = crossCenter(a.left, a.right, b.left, b.right);
       distance = {
         a,
         b,
-        segments: [
-          ...axisSegments(a.left, a.right, b.left, b.right).map(([x1, x2]) => ({
-            x1,
-            x2,
-            y1: y,
-            y2: y,
-            value: x2 - x1,
-          })),
-          ...axisSegments(a.top, a.bottom, b.top, b.bottom).map(([y1, y2]) => ({
-            x1: x,
-            x2: x,
-            y1,
-            y2,
-            value: y2 - y1,
-          })),
-        ],
+        segments: distanceSegments(a, b).map((segment) => ({
+          ...segment,
+          token: spacingToken(segment.value, remPx),
+        })),
       };
       hover = null;
       return;
     }
 
     distance = null;
-    if (!hovered?.isConnected || (!spacing && !type && !colors)) {
+    if (!hovered?.isConnected || (!spacing && !typography && !colors)) {
       hover = null;
       return;
     }
@@ -643,11 +527,11 @@
       padding,
     );
     const ownText = hasOwnText(hovered);
-    const showType = type && ownText;
     // Carbon's own elements keep a few deliberate off-scale values (the
     // small button's 60px icon gutter). Users cannot change them, so they
-    // read as "set by Carbon" rather than as errors, unless `lintCarbon`.
-    const carbon = !lintCarbon && matchesSafe(hovered, CARBON_ELEMENTS);
+    // read as "set by Carbon" rather than as errors, unless `checkCarbon`.
+    const carbon = !checkCarbon && matchesSafe(hovered, CARBON_ELEMENTS);
+    const sideIndex = ["top", "right", "bottom", "left"];
 
     hover = {
       rect,
@@ -658,87 +542,78 @@
       contentBox,
       labels: spacing
         ? [
-            ...ringLabels(marginBox, rect, margin).map((l) => ({
-              ...l,
+            ...ringLabels(marginBox, rect, margin).map((label) => ({
+              ...label,
               kind: /** @type {const} */ ("margin"),
-              off: !carbon && spacingToken(l.value) === null,
+              off: !carbon && spacingToken(label.value, remPx) === null,
             })),
-            ...ringLabels(paddingBox, contentBox, padding).map((l) => ({
-              ...l,
+            ...ringLabels(paddingBox, contentBox, padding).map((label) => ({
+              ...label,
               kind: /** @type {const} */ ("padding"),
               off:
                 !carbon &&
-                paddingToken(l.value, border[SIDES.indexOf(l.side)]).token ===
-                  null,
+                paddingToken(
+                  label.value,
+                  border[sideIndex.indexOf(label.side)],
+                  remPx,
+                ).token === null,
             })),
           ]
         : [],
       info: {
         name: describe(hovered),
-        size: `${fmt(rect.width)} × ${fmt(rect.height)}px`,
+        size: `${formatPx(rect.width)} × ${formatPx(rect.height)}px`,
         margin,
         padding,
         border,
         carbon,
         gap: gaps(style),
-        type: showType ? typeTokens(style) : null,
-        typeSpec: `${fmt(Number.parseFloat(style.fontSize))}/${fmt(Number.parseFloat(style.lineHeight) || 0)}px · weight ${style.fontWeight}`,
+        type: typography && ownText ? typeTokens(style) : null,
+        typeSpec: `${formatPx(Number.parseFloat(style.fontSize))}/${formatPx(Number.parseFloat(style.lineHeight) || 0)}px · weight ${style.fontWeight}`,
         colors: colors ? describeColors(hovered, style, border, ownText) : null,
       },
     };
   }
 
   /**
-   * Tracks the pointer and the Alt key while the inspector is open. The
-   * overlay is `pointer-events: none`, so the page stays fully usable and
-   * `event.target` is always a page element.
+   * Tracks the pointer and the measure key while the inspector is open.
+   * The overlay is `pointer-events: none`, so the page stays fully usable
+   * and `event.target` is always a page element.
    * @param {HTMLElement} _node
    */
   function trackPointer(_node) {
-    let frame = 0;
-    const schedule = () => {
-      if (!frame)
-        frame = requestAnimationFrame(() => {
-          frame = 0;
-          updateHover();
-          // The card's height can change with its content; place it once
-          // the DOM has updated.
-          tick().then(placeCard);
-        });
-    };
-
-    let cardFrame = 0;
-    const scheduleCard = () => {
-      if (!cardFrame)
-        cardFrame = requestAnimationFrame(() => {
-          cardFrame = 0;
-          placeCard();
-        });
-    };
+    // Reads the hovered element, then places the card once its new
+    // content has rendered.
+    const hoverJob = createFrameJob([
+      () => {
+        updateHover();
+        tick().then(() => moveCard(cardPosition()));
+      },
+    ]);
+    const cardJob = createFrameJob([cardPosition, moveCard]);
+    const enterDelay = createDelayedSetter();
+    const leaveDelay = createDelayedSetter();
 
     /** Element under the pointer, shown or not. */
     /** @type {Element | null} */
     let pointerTarget = null;
     let shown = false;
+    let leaving = false;
     let hiddenAt = Number.NEGATIVE_INFINITY;
-    /** @type {ReturnType<typeof setTimeout> | undefined} */
-    let enterTimer;
-    /** @type {ReturnType<typeof setTimeout> | undefined} */
-    let leaveTimer;
 
-    const show = () => {
-      enterTimer = undefined;
+    function show() {
       shown = true;
       hovered = pointerTarget;
-      schedule();
-    };
-    const hide = () => {
-      leaveTimer = undefined;
+      hoverJob.schedule();
+    }
+
+    function hide() {
+      leaving = false;
       shown = false;
       hiddenAt = performance.now();
       hovered = null;
-      schedule();
-    };
+      hoverJob.schedule();
+    }
 
     /**
      * Follows TooltipGroup timing: the first element shows after the
@@ -747,114 +622,116 @@
      * `leaveDelayMs`; coming back within `skipDelayMs` is instant again.
      * @param {Element | null} target
      */
-    const point = (target) => {
+    function point(target) {
       if (target === pointerTarget) return;
       pointerTarget = target;
 
       // Measuring tracks the pointer with no delay.
       if (measuring) {
         hovered = target;
-        schedule();
+        hoverJob.schedule();
         return;
       }
 
       if (target) {
-        clearTimeout(leaveTimer);
-        leaveTimer = undefined;
+        leaveDelay.cancel();
+        leaving = false;
         if (shown) {
           hovered = target;
-          schedule();
-        } else if (
-          enterDelayMs <= 0 ||
-          performance.now() - hiddenAt < skipDelayMs
-        ) {
-          show();
+          hoverJob.schedule();
+        } else if (performance.now() - hiddenAt < skipDelayMs) {
+          enterDelay(0, show);
         } else {
-          // Restart on every new element, so only a resting pointer shows.
-          clearTimeout(enterTimer);
-          enterTimer = setTimeout(show, enterDelayMs);
+          // Restarts on every new element, so only a resting pointer shows.
+          enterDelay(enterDelayMs, show);
         }
       } else {
-        clearTimeout(enterTimer);
-        enterTimer = undefined;
-        if (shown && leaveTimer === undefined) {
-          if (leaveDelayMs <= 0) hide();
-          else leaveTimer = setTimeout(hide, leaveDelayMs);
+        enterDelay.cancel();
+        if (shown && !leaving) {
+          leaving = true;
+          leaveDelay(leaveDelayMs, hide);
         }
       }
-    };
+    }
 
-    /** @param {PointerEvent} e */
-    const onMove = (e) => {
-      pointerX = e.clientX;
-      pointerY = e.clientY;
-      scheduleCard();
-      const target = /** @type {Element | null} */ (e.target);
+    /** @param {Event} event */
+    function handlePointermove(event) {
+      const { clientX, clientY, target } = /** @type {PointerEvent} */ (event);
+      pointerX = clientX;
+      pointerY = clientY;
+      cardJob.schedule();
       point(
-        target &&
+        target instanceof Element &&
           target !== document.documentElement &&
           target !== document.body &&
-          !target.closest(DEVTOOLS)
+          !target.closest(DEV_TOOL)
           ? target
           : null,
       );
-    };
-    const onLeave = () => point(null);
-    /** @param {KeyboardEvent} e */
-    const onKeyDown = (e) => {
-      if (!measure || e.key !== measureKey || measuring) return;
+    }
+
+    /** @param {Event} event */
+    function handlePointerout(event) {
+      // No related target: the pointer left the document.
+      if (!(/** @type {PointerEvent} */ (event).relatedTarget)) point(null);
+    }
+
+    /** @param {Event} event */
+    function handleKeydown(event) {
+      const { key } = /** @type {KeyboardEvent} */ (event);
+      if (!measure || key !== measureKey || measuring) return;
       measuring = true;
       anchor = hovered ?? pointerTarget;
       hovered = pointerTarget;
-      schedule();
-    };
-    /** @param {KeyboardEvent} e */
-    const onKeyUp = (e) => {
-      if (e.key !== measureKey || !measuring) return;
+      hoverJob.schedule();
+    }
+
+    /** @param {Event} event */
+    function handleKeyup(event) {
+      const { key } = /** @type {KeyboardEvent} */ (event);
+      if (key !== measureKey || !measuring) return;
       measuring = false;
       anchor = null;
       // Back to the box model of what is under the pointer, at once.
       shown = pointerTarget !== null;
       hovered = pointerTarget;
-      schedule();
-    };
-    const onBlur = () => {
+      hoverJob.schedule();
+    }
+
+    function handleBlur() {
       measuring = false;
       anchor = null;
-      schedule();
-    };
-    const onResize = () => {
-      typeTable = null;
-      schedule();
-    };
+      hoverJob.schedule();
+    }
 
-    document.addEventListener("pointermove", onMove, {
-      passive: true,
-      capture: true,
-    });
-    document.documentElement.addEventListener("pointerleave", onLeave);
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-    window.addEventListener("blur", onBlur);
-    window.addEventListener("scroll", schedule, {
-      passive: true,
-      capture: true,
-    });
-    window.addEventListener("resize", onResize, { passive: true });
+    function handleResize() {
+      typeTable = null;
+      hoverJob.schedule();
+    }
+
+    const cleanups = [
+      addPooledListener("pointermove", handlePointermove, {
+        passive: true,
+        capture: true,
+      }),
+      addPooledListener("pointerout", handlePointerout, { passive: true }),
+      addPooledListener("keydown", handleKeydown),
+      addPooledListener("keyup", handleKeyup),
+      addPooledListener("blur", handleBlur),
+      addPooledListener("scroll", hoverJob.schedule, {
+        passive: true,
+        capture: true,
+      }),
+      addPooledListener("resize", handleResize, { passive: true }),
+    ];
 
     return {
       destroy() {
-        document.removeEventListener("pointermove", onMove, { capture: true });
-        document.documentElement.removeEventListener("pointerleave", onLeave);
-        window.removeEventListener("keydown", onKeyDown);
-        window.removeEventListener("keyup", onKeyUp);
-        window.removeEventListener("blur", onBlur);
-        window.removeEventListener("scroll", schedule, { capture: true });
-        window.removeEventListener("resize", onResize);
-        if (frame) cancelAnimationFrame(frame);
-        if (cardFrame) cancelAnimationFrame(cardFrame);
-        clearTimeout(enterTimer);
-        clearTimeout(leaveTimer);
+        for (const cleanup of cleanups) cleanup();
+        hoverJob.cancel();
+        cardJob.cancel();
+        enterDelay.cancel();
+        leaveDelay.cancel();
         hovered = null;
         anchor = null;
         measuring = false;
@@ -865,80 +742,40 @@
   }
 
   // ---------------------------------------------------------------------
-  // Page scans: lint and target size
+  // Page checks
 
-  /** @type {LayoutInspectorMark[]} */
-  let lintMarks = [];
-  /** @type {LayoutInspectorMark[]} */
-  let targetMarks = [];
-  /** @type {LayoutInspectorMark[]} */
-  let contrastMarks = [];
-  /** @type {LayoutInspectorMark[]} */
-  let overflowMarks = [];
+  /** @type {Record<LayoutInspectorCheck, LayoutInspectorMark[]>} */
+  let found = { spacing: [], contrast: [], targets: [], overflow: [] };
 
-  const SPACING_PROPS = [
-    ["marginTop", "margin-top"],
-    ["marginRight", "margin-right"],
-    ["marginBottom", "margin-bottom"],
-    ["marginLeft", "margin-left"],
-    ["paddingTop", "padding-top"],
-    ["paddingRight", "padding-right"],
-    ["paddingBottom", "padding-bottom"],
-    ["paddingLeft", "padding-left"],
+  $: pageMarks = [
+    ...found.spacing,
+    ...found.targets,
+    ...found.contrast,
+    ...found.overflow,
   ];
 
   /**
-   * @param {Element} el
-   * @param {string} ignore
+   * @param {LayoutInspectorCheck} check
+   * @param {{ left: number; top: number; width: number; height: number }} rect viewport rect
+   * @param {string} text
+   * @param {number} sx
+   * @param {number} sy
+   * @returns {LayoutInspectorMark}
    */
-  function matchesSafe(el, ignore) {
-    if (!ignore) return false;
-    try {
-      return el.matches(ignore);
-    } catch {
-      return false;
-    }
-  }
-
-  /**
-   * Off-scale spacing on one element, as `prop value` strings.
-   * `getComputedStyle` reports `auto` margins as their used pixel value,
-   * so equal horizontal margins (centering) and margins wider than the
-   * largest token are treated as `auto` and skipped.
-   * @param {CSSStyleDeclaration} style
-   */
-  function offScale(style) {
-    /** @type {string[]} */
-    const found = [];
-    const ml = Number.parseFloat(style.marginLeft) || 0;
-    const mr = Number.parseFloat(style.marginRight) || 0;
-    const centered = ml > 0 && Math.abs(ml - mr) < 0.5;
-    const largest = SPACING_REM[SPACING_REM.length - 1] * remPx;
-    for (const [key, name] of SPACING_PROPS) {
-      const value = Number.parseFloat(style[key]) || 0;
-      if (name.startsWith("margin")) {
-        if (centered && (name === "margin-left" || name === "margin-right"))
-          continue;
-        if (Math.abs(value) > largest) continue;
-        if (spacingToken(value) === null) found.push(`${name} ${fmt(value)}`);
-      } else {
-        const side = key.slice("padding".length);
-        const borderPx = Number.parseFloat(style[`border${side}Width`]) || 0;
-        if (paddingToken(value, borderPx).token === null) {
-          found.push(`${name} ${fmt(value)}`);
-        }
-      }
-    }
-    const gap = gaps(style);
-    if (gap && gap.row === gap.column) {
-      if (spacingToken(gap.row) === null) found.push(`gap ${fmt(gap.row)}`);
-    } else if (gap) {
-      if (spacingToken(gap.row) === null) found.push(`row-gap ${fmt(gap.row)}`);
-      if (spacingToken(gap.column) === null) {
-        found.push(`column-gap ${fmt(gap.column)}`);
-      }
-    }
-    return found;
+  function mark(check, rect, text, sx, sy) {
+    const x = Math.round((rect.left + sx) * 10) / 10;
+    const y = Math.round((rect.top + sy) * 10) / 10;
+    const width = Math.round(rect.width * 10) / 10;
+    const height = Math.round(rect.height * 10) / 10;
+    return {
+      key: `${check}|${x}|${y}|${width}|${height}|${text}`,
+      check,
+      x,
+      y,
+      width,
+      height,
+      text,
+    };
   }
 
   /**
@@ -963,16 +800,127 @@
   }
 
   /**
+   * @typedef {{ band: import("../page-scan.js").ScanBand; sx: number; sy: number; carbon: boolean; ignore: string; targetSize: number }} ScanContext
+   */
+
+  /**
+   * Whether a check skips `el`: Carbon's own elements, unless
+   * `checkCarbon`, and anything inside `checkIgnore`.
+   * @param {Element} el
+   * @param {string} carbonSelector
+   * @param {ScanContext} context
+   */
+  function skipped(el, carbonSelector, context) {
+    return (
+      (!context.carbon && matchesSafe(el, carbonSelector)) ||
+      closestSafe(el, context.ignore)
+    );
+  }
+
+  /**
+   * Elements with off-scale margin, padding, or gap.
+   * @param {ScanContext} context
+   */
+  function scanSpacing(context) {
+    const { band, sx, sy } = context;
+    /** @type {LayoutInspectorMark[]} */
+    const marks = [];
+    for (const el of document.body.querySelectorAll("*")) {
+      if (marks.length >= MAX_MARKS) break;
+      const r = el.getBoundingClientRect();
+      if (r.width < 1 && r.height < 1) continue;
+      if (!inBand(r, band, sy)) continue;
+      if (el.closest(DEV_TOOL) || skipped(el, CARBON_ELEMENTS, context)) {
+        continue;
+      }
+      const style = getComputedStyle(el);
+      if (style.display === "none" || style.display === "contents") continue;
+      const off = offScale(style, remPx);
+      if (!off.length) continue;
+      marks.push(
+        mark(
+          "spacing",
+          r,
+          off.length > 3
+            ? `${off.slice(0, 3).join(" · ")} · +${off.length - 3}`
+            : off.join(" · "),
+          sx,
+          sy,
+        ),
+      );
+    }
+    return marks;
+  }
+
+  /**
+   * Interactive elements that fail WCAG 2.5.8. Every target near the
+   * viewport counts for spacing, including ignored ones, but only the
+   * others are flagged.
+   * @param {ScanContext} context
+   */
+  function scanTargets(context) {
+    const { band, sx, sy, targetSize } = context;
+    /** @type {{ rect: { left: number; top: number; width: number; height: number }; flag: boolean }[]} */
+    const targets = [];
+    for (const el of document.body.querySelectorAll(INTERACTIVE)) {
+      // Check the band on the element's own box first: reading `labels`
+      // is slow, and most targets are far from the viewport. A label sits
+      // next to its control, so the control's box is close enough.
+      if (!inBand(el.getBoundingClientRect(), band, sy)) continue;
+      if (el.closest(DEV_TOOL)) continue;
+      const rect = targetRect(el);
+      // Zero-size and visually hidden (1px) controls have no target of
+      // their own; their label is checked instead.
+      if (rect.width <= 1 || rect.height <= 1) continue;
+      if (
+        !inBand({ top: rect.top, bottom: rect.top + rect.height }, band, sy)
+      ) {
+        continue;
+      }
+      const style = getComputedStyle(el);
+      if (style.visibility === "hidden") continue;
+      // Targets in a sentence are exempt in WCAG 2.5.8: skip inline
+      // elements whose parent also holds running text.
+      if (
+        style.display.startsWith("inline") &&
+        el.parentElement &&
+        hasOwnText(el.parentElement)
+      ) {
+        continue;
+      }
+      targets.push({ rect, flag: !skipped(el, CARBON_ELEMENTS, context) });
+    }
+    return failingTargets(
+      targets.map((target) => target.rect),
+      targetSize,
+    )
+      .filter((index) => targets[index].flag)
+      .slice(0, MAX_MARKS)
+      .map((index) => {
+        const { rect } = targets[index];
+        return mark(
+          "targets",
+          rect,
+          `${formatPx(rect.width)} × ${formatPx(rect.height)}`,
+          sx,
+          sy,
+        );
+      });
+  }
+
+  /**
    * Text below WCAG AA contrast. Disabled controls are exempt in WCAG
    * 1.4.3, so text inside `disabled` or `aria-disabled` elements is skipped.
-   * @param {number} sx
-   * @param {number} sy
+   * @param {ScanContext} context
    */
-  function scanContrast(sx, sy) {
+  function scanContrast(context) {
+    const { band, sx, sy } = context;
     /** @type {LayoutInspectorMark[]} */
     const marks = [];
     /** @type {Set<Element>} */
     const seen = new Set();
+    /** @type {import("./colors.js").BackgroundCache} */
+    const backgrounds = new Map();
     const walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
@@ -985,26 +933,31 @@
       const el = text.parentElement;
       if (!el || seen.has(el) || !text.nodeValue?.trim()) continue;
       seen.add(el);
+      const r = el.getBoundingClientRect();
+      if (r.width <= 1 || r.height <= 1) continue;
+      if (!inBand(r, band, sy)) continue;
       if (
-        el.closest(DEVTOOLS) ||
-        el.closest("script, style, [disabled], [aria-disabled='true']")
+        el.closest(
+          `${DEV_TOOL}, script, style, [disabled], [aria-disabled='true']`,
+        ) ||
+        skipped(el, CARBON_TEXT, context)
       ) {
         continue;
       }
       const style = getComputedStyle(el);
-      if (style.visibility === "hidden" || style.display === "none") continue;
-      const r = el.getBoundingClientRect();
-      if (r.width <= 1 || r.height <= 1) continue;
-      const result = textContrast(el);
+      if (style.visibility === "hidden") continue;
+      const result = textContrast(el, backgrounds);
       // A background image hides the real background; leave it to a person.
       if (result.approximate || result.ratio >= result.aa) continue;
-      marks.push({
-        x: r.left + sx,
-        y: r.top + sy,
-        width: r.width,
-        height: r.height,
-        text: `${fmtRatio(result.ratio)} · needs ${result.aa}:1`,
-      });
+      marks.push(
+        mark(
+          "contrast",
+          r,
+          `${formatRatio(result.ratio)} · needs ${result.aa}:1`,
+          sx,
+          sy,
+        ),
+      );
     }
     return marks;
   }
@@ -1021,10 +974,10 @@
    *   larger than the box, including `text-overflow: ellipsis` truncation.
    *   Scrollable boxes are left alone, and so are 1px visually hidden
    *   helpers.
-   * @param {number} sx
-   * @param {number} sy
+   * @param {ScanContext} context
    */
-  function scanOverflow(sx, sy) {
+  function scanOverflow(context) {
+    const { band, sx, sy } = context;
     /** @type {LayoutInspectorMark[]} */
     const marks = [];
     const pageWidth = document.documentElement.clientWidth;
@@ -1032,11 +985,13 @@
 
     for (const el of document.body.querySelectorAll("*")) {
       if (marks.length >= MAX_MARKS) break;
-      if (el.closest(DEVTOOLS)) continue;
-      const style = getComputedStyle(el);
-      if (style.display === "none" || style.display === "contents") continue;
       const r = el.getBoundingClientRect();
       if (r.width <= 1 || r.height <= 1) continue;
+      if (!inBand(r, band, sy)) continue;
+      if (el.closest(DEV_TOOL) || skipped(el, CARBON_ELEMENTS, context)) {
+        continue;
+      }
+      const style = getComputedStyle(el);
 
       if (pageScrolls && style.position !== "fixed") {
         const right = r.right + sx - pageWidth;
@@ -1049,23 +1004,19 @@
             : 0;
           let contained = false;
           for (
-            let a = el.parentElement;
-            a && a !== document.body;
-            a = a.parentElement
+            let ancestor = el.parentElement;
+            ancestor && ancestor !== document.body;
+            ancestor = ancestor.parentElement
           ) {
-            if (SCROLLS.has(getComputedStyle(a).overflowX)) {
+            if (SCROLLS.has(getComputedStyle(ancestor).overflowX)) {
               contained = true;
               break;
             }
           }
           if (parentPast <= 0.5 && !contained) {
-            marks.push({
-              x: r.left + sx,
-              y: r.top + sy,
-              width: r.width,
-              height: r.height,
-              text: `${fmt(past)}px past the page`,
-            });
+            marks.push(
+              mark("overflow", r, `${formatPx(past)}px past the page`, sx, sy),
+            );
             continue;
           }
         }
@@ -1078,227 +1029,120 @@
       const overY = clipsY ? el.scrollHeight - el.clientHeight : 0;
       if (overX <= 1 && overY <= 1) continue;
       const truncated = style.textOverflow === "ellipsis" && overX > 1;
-      marks.push({
-        x: r.left + sx,
-        y: r.top + sy,
-        width: r.width,
-        height: r.height,
-        text: truncated
-          ? `truncated · ${fmt(overX)}px hidden`
-          : [
-              overX > 1 && `clips ${fmt(overX)}px across`,
-              overY > 1 && `clips ${fmt(overY)}px down`,
-            ]
-              .filter(Boolean)
-              .join(" · "),
-      });
+      marks.push(
+        mark(
+          "overflow",
+          r,
+          truncated
+            ? `truncated · ${formatPx(overX)}px hidden`
+            : [
+                overX > 1 && `clips ${formatPx(overX)}px across`,
+                overY > 1 && `clips ${formatPx(overY)}px down`,
+              ]
+                .filter(Boolean)
+                .join(" · "),
+          sx,
+          sy,
+        ),
+      );
     }
     return marks;
   }
 
   /**
-   * Scans the page for `lint` and `targets` marks, in page coordinates.
-   * Rescans when the page resizes or changes; scrolling only moves the
-   * layer.
-   * @param {HTMLElement} node
-   * @param {{ lint: boolean; ignore: string; targets: boolean; targetSize: number; contrast: boolean; overflow: boolean }} params
+   * Makes keys unique for the keyed `each`: two elements can share a box
+   * and a message.
+   * @param {LayoutInspectorMark[]} marks
    */
-  function scanPage(node, params) {
-    let current = params;
-    let scanFrame = 0;
-    let scrollFrame = 0;
-
-    const scan = () => {
-      scanFrame = 0;
-      remPx =
-        Number.parseFloat(
-          getComputedStyle(document.documentElement).fontSize,
-        ) || 16;
-      const sx = window.scrollX;
-      const sy = window.scrollY;
-      /** @type {LayoutInspectorMark[]} */
-      const nextLint = [];
-      /** @type {LayoutInspectorMark[]} */
-      const nextTargets = [];
-
-      if (current.lint) {
-        for (const el of document.body.querySelectorAll("*")) {
-          if (nextLint.length >= MAX_MARKS) break;
-          if (el.closest(DEVTOOLS) || matchesSafe(el, current.ignore)) continue;
-          const style = getComputedStyle(el);
-          if (style.display === "none" || style.display === "contents")
-            continue;
-          const found = offScale(style);
-          if (!found.length) continue;
-          const r = el.getBoundingClientRect();
-          if (r.width < 1 && r.height < 1) continue;
-          nextLint.push({
-            x: r.left + sx,
-            y: r.top + sy,
-            width: r.width,
-            height: r.height,
-            text:
-              found.length > 3
-                ? `${found.slice(0, 3).join(" · ")} · +${found.length - 3}`
-                : found.join(" · "),
-          });
-        }
-      }
-
-      if (current.targets) {
-        for (const el of document.body.querySelectorAll(INTERACTIVE)) {
-          if (nextTargets.length >= MAX_MARKS) break;
-          if (el.closest(DEVTOOLS)) continue;
-          const style = getComputedStyle(el);
-          if (style.visibility === "hidden") continue;
-          // Targets in a sentence are exempt in WCAG 2.5.8: skip inline
-          // elements whose parent also holds running text.
-          if (
-            style.display.startsWith("inline") &&
-            el.parentElement &&
-            hasOwnText(el.parentElement)
-          ) {
-            continue;
-          }
-          const r = targetRect(el);
-          // Zero-size and visually hidden (1px) controls have no target
-          // of their own; their label is checked instead.
-          if (r.width <= 1 || r.height <= 1) continue;
-          if (r.width >= current.targetSize && r.height >= current.targetSize)
-            continue;
-          nextTargets.push({
-            x: r.left + sx,
-            y: r.top + sy,
-            width: r.width,
-            height: r.height,
-            text: `${fmt(r.width)} × ${fmt(r.height)}`,
-          });
-        }
-      }
-
-      lintMarks = nextLint;
-      targetMarks = nextTargets;
-      contrastMarks = current.contrast ? scanContrast(sx, sy) : [];
-      overflowMarks = current.overflow ? scanOverflow(sx, sy) : [];
-      onScroll();
-    };
-
-    const schedule = () => {
-      if (!scanFrame) scanFrame = requestAnimationFrame(scan);
-    };
-
-    const onScroll = () => {
-      scrollFrame = 0;
-      node.style.setProperty(
-        "--ccs-layout-inspector-x",
-        `${-window.scrollX}px`,
-      );
-      node.style.setProperty(
-        "--ccs-layout-inspector-y",
-        `${-window.scrollY}px`,
-      );
-    };
-    const scheduleScroll = () => {
-      if (!scrollFrame) scrollFrame = requestAnimationFrame(onScroll);
-    };
-
-    // Ignore the inspector's own re-renders, or every mark would rescan.
-    const mutations = new MutationObserver((records) => {
-      if (
-        records.some(
-          (r) =>
-            !(
-              r.target instanceof Element ? r.target : r.target.parentElement
-            )?.closest(DEVTOOLS),
-        )
-      ) {
-        schedule();
-      }
-    });
-    mutations.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-      attributes: true,
-      attributeFilter: ["class", "style", "hidden", "dir"],
-    });
-    // A `dir`, `lang`, or theme change on <html> moves the whole page
-    // without resizing it, and <html> is outside the body subtree.
-    mutations.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["dir", "lang", "class", "style", "theme"],
-    });
-    const resizes = new ResizeObserver(schedule);
-    resizes.observe(document.documentElement);
-    window.addEventListener("scroll", scheduleScroll, { passive: true });
-    window.addEventListener("resize", schedule, { passive: true });
-    // Hover, focus, and press states animate in; rescan once they settle
-    // rather than reading colors mid-transition.
-    document.addEventListener("transitionend", schedule, true);
-    document.addEventListener("animationend", schedule, true);
-    document.fonts?.ready.then(schedule);
-    scan();
-
-    return {
-      /** @param {{ lint: boolean; ignore: string; targets: boolean; targetSize: number; contrast: boolean; overflow: boolean }} next */
-      update(next) {
-        current = next;
-        schedule();
-      },
-      destroy() {
-        mutations.disconnect();
-        resizes.disconnect();
-        window.removeEventListener("scroll", scheduleScroll);
-        window.removeEventListener("resize", schedule);
-        document.removeEventListener("transitionend", schedule, true);
-        document.removeEventListener("animationend", schedule, true);
-        if (scanFrame) cancelAnimationFrame(scanFrame);
-        if (scrollFrame) cancelAnimationFrame(scrollFrame);
-        lintMarks = [];
-        targetMarks = [];
-        contrastMarks = [];
-        overflowMarks = [];
-      },
-    };
+  function uniqueKeys(marks) {
+    /** @type {Map<string, number>} */
+    const seen = new Map();
+    for (const m of marks) {
+      const count = seen.get(m.key) ?? 0;
+      seen.set(m.key, count + 1);
+      if (count) m.key = `${m.key}|${count}`;
+    }
+    return marks;
   }
 
   /**
-   * Each distinct non-zero value in a set of side values, with its token
-   * name or "off-scale", one card line each. With `borders` (padding), a
-   * side that is on the scale only with its border says so.
-   * @param {number[]} values top, right, bottom, left
-   * @param {number[]} [borders] border widths on the same sides
-   * @param {boolean} [carbon] the element is Carbon's own; off-scale
-   *   values read "set by Carbon" instead of "off-scale"
+   * @param {LayoutInspectorMark[]} a
+   * @param {LayoutInspectorMark[]} b
    */
-  function sideTokens(values, borders, carbon = false) {
-    /** @type {Map<string, { value: string; token: string; off: boolean; withBorder: string | null }>} */
-    const lines = new Map();
-    values.forEach((v, i) => {
-      if (Math.abs(v) < 0.5) return;
-      const fit = borders
-        ? paddingToken(v, borders[i])
-        : { token: spacingToken(v), withBorder: 0 };
-      const key = `${fmt(v)}|${fit.withBorder}`;
-      if (lines.has(key)) return;
-      lines.set(key, {
-        value: fmt(v),
-        token: fit.token ?? (carbon ? "set by Carbon" : "off-scale"),
-        off: fit.token === null && !carbon,
-        withBorder: fit.withBorder ? fmt(fit.withBorder) : null,
-      });
-    });
-    return [...lines.values()];
+  function sameMarks(a, b) {
+    return a.length === b.length && a.every((m, i) => m.key === b[i].key);
   }
 
-  /** @param {Box} box */
-  function boxStyle(box) {
-    return `left: ${box.left}px; top: ${box.top}px; width: ${box.width}px; height: ${box.height}px;`;
+  /**
+   * @typedef {{ spacing: boolean; contrast: boolean; targets: boolean; overflow: boolean; carbon: boolean; ignore: string; targetSize: number }} ScanOptions
+   */
+
+  /**
+   * Runs the checks that are on near the viewport and stores the marks in
+   * page coordinates. Checks again when the page changes or scrolls far;
+   * scrolling only moves the layer. Marks that did not change keep their
+   * DOM nodes.
+   * @param {HTMLElement} node
+   * @param {ScanOptions} options
+   */
+  function scanPage(node, options) {
+    let current = options;
+
+    /** @param {import("../page-scan.js").ScanBand} band */
+    function scan(band) {
+      readRemPx();
+      /** @type {ScanContext} */
+      const context = {
+        band,
+        sx: window.scrollX,
+        sy: window.scrollY,
+        carbon: current.carbon,
+        ignore: current.ignore,
+        targetSize: current.targetSize,
+      };
+      /** @type {Record<LayoutInspectorCheck, LayoutInspectorMark[]>} */
+      const next = {
+        spacing: uniqueKeys(current.spacing ? scanSpacing(context) : []),
+        targets: uniqueKeys(current.targets ? scanTargets(context) : []),
+        contrast: uniqueKeys(current.contrast ? scanContrast(context) : []),
+        overflow: uniqueKeys(current.overflow ? scanOverflow(context) : []),
+      };
+      if (
+        sameMarks(found.spacing, next.spacing) &&
+        sameMarks(found.targets, next.targets) &&
+        sameMarks(found.contrast, next.contrast) &&
+        sameMarks(found.overflow, next.overflow)
+      ) {
+        return;
+      }
+      found = next;
+    }
+
+    const scroll = createFrameJob([
+      () => [window.scrollX, window.scrollY],
+      (/** @type {[number, number]} */ [x, y]) => {
+        node.style.setProperty("--ccs-layout-inspector-x", `${-x}px`);
+        node.style.setProperty("--ccs-layout-inspector-y", `${-y}px`);
+      },
+    ]);
+    const page = observePage(scan, { onScroll: scroll.schedule });
+    scroll.schedule();
+
+    return {
+      /** @param {ScanOptions} next */
+      update(next) {
+        current = next;
+        page.schedule();
+      },
+      destroy() {
+        page.destroy();
+        scroll.cancel();
+        found = { spacing: [], contrast: [], targets: [], overflow: [] };
+      },
+    };
   }
 
-  $: inspectorClass = [$$restProps.class, "bx--layout-inspector"]
-    .filter(Boolean)
-    .join(" ");
+  $: checking = checkSpacing || checkContrast || checkTargets || checkOverflow;
 </script>
 
 {#if open}
@@ -1307,76 +1151,44 @@
        physical pixels, so nothing else depends on the direction. -->
   <div
     {...$$restProps}
-    class={inspectorClass}
+    class:bx--layout-inspector={true}
     aria-hidden="true"
     dir="ltr"
     data-ccs-dev-tool
     use:trackPointer
   >
-    {#if lint || targets || contrast || overflow}
+    {#if checking}
       <div
         class="bx--layout-inspector__page"
         use:scanPage={{
-          lint,
-          ignore: [lintCarbon ? "" : CARBON_ELEMENTS, lintIgnore]
-            .filter(Boolean)
-            .join(", "),
-          targets,
+          spacing: checkSpacing,
+          contrast: checkContrast,
+          targets: checkTargets,
+          overflow: checkOverflow,
+          carbon: checkCarbon,
+          ignore: checkIgnore,
           targetSize,
-          contrast,
-          overflow,
         }}
       >
-        {#each lintMarks as mark, i (i)}
+        {#each pageMarks as pageMark (pageMark.key)}
           <div
-            class="bx--layout-inspector__mark bx--layout-inspector__mark--lint"
-            style={boxStyle({
-              left: mark.x,
-              top: mark.y,
-              width: mark.width,
-              height: mark.height,
-            })}
+            class="bx--layout-inspector__mark"
+            class:bx--layout-inspector__mark--spacing={pageMark.check ===
+              "spacing"}
+            class:bx--layout-inspector__mark--target={pageMark.check ===
+              "targets"}
+            class:bx--layout-inspector__mark--contrast={pageMark.check ===
+              "contrast"}
+            class:bx--layout-inspector__mark--overflow={pageMark.check ===
+              "overflow"}
+            style:left="{pageMark.x}px"
+            style:top="{pageMark.y}px"
+            style:width="{pageMark.width}px"
+            style:height="{pageMark.height}px"
           >
-            <span class="bx--layout-inspector__mark-label">{mark.text}</span>
-          </div>
-        {/each}
-        {#each targetMarks as mark, i (i)}
-          <div
-            class="bx--layout-inspector__mark bx--layout-inspector__mark--target"
-            style={boxStyle({
-              left: mark.x,
-              top: mark.y,
-              width: mark.width,
-              height: mark.height,
-            })}
-          >
-            <span class="bx--layout-inspector__mark-label">{mark.text}</span>
-          </div>
-        {/each}
-        {#each contrastMarks as mark, i (i)}
-          <div
-            class="bx--layout-inspector__mark bx--layout-inspector__mark--contrast"
-            style={boxStyle({
-              left: mark.x,
-              top: mark.y,
-              width: mark.width,
-              height: mark.height,
-            })}
-          >
-            <span class="bx--layout-inspector__mark-label">{mark.text}</span>
-          </div>
-        {/each}
-        {#each overflowMarks as mark, i (i)}
-          <div
-            class="bx--layout-inspector__mark bx--layout-inspector__mark--overflow"
-            style={boxStyle({
-              left: mark.x,
-              top: mark.y,
-              width: mark.width,
-              height: mark.height,
-            })}
-          >
-            <span class="bx--layout-inspector__mark-label">{mark.text}</span>
+            <span class="bx--layout-inspector__mark-label"
+              >{pageMark.text}</span
+            >
           </div>
         {/each}
       </div>
@@ -1386,35 +1198,48 @@
       {#if spacing}
         <div
           class="bx--layout-inspector__margin"
-          style="{boxStyle(hover.marginBox)} border-width: {hover.marginWidths
-            .map((v) => `${v}px`)
-            .join(" ")};"
+          style:left="{hover.marginBox.left}px"
+          style:top="{hover.marginBox.top}px"
+          style:width="{hover.marginBox.width}px"
+          style:height="{hover.marginBox.height}px"
+          style:border-width={hover.marginWidths.map((v) => `${v}px`).join(" ")}
         ></div>
         <div
           class="bx--layout-inspector__padding"
-          style="{boxStyle(hover.paddingBox)} border-width: {hover.paddingWidths
+          style:left="{hover.paddingBox.left}px"
+          style:top="{hover.paddingBox.top}px"
+          style:width="{hover.paddingBox.width}px"
+          style:height="{hover.paddingBox.height}px"
+          style:border-width={hover.paddingWidths
             .map((v) => `${Math.max(0, v)}px`)
-            .join(" ")};"
+            .join(" ")}
         ></div>
         <div
           class="bx--layout-inspector__content"
-          style={boxStyle(hover.contentBox)}
+          style:left="{hover.contentBox.left}px"
+          style:top="{hover.contentBox.top}px"
+          style:width="{hover.contentBox.width}px"
+          style:height="{hover.contentBox.height}px"
         ></div>
         {#each hover.labels as label (label.kind + label.side)}
           <span
             class="bx--layout-inspector__side bx--layout-inspector__side--{label.kind}"
             class:bx--layout-inspector__side--off={label.off}
-            style="left: {label.x}px; top: {label.y}px;"
-            >{fmt(label.value)}</span
+            style:left="{label.x}px"
+            style:top="{label.y}px"
+            >{formatPx(label.value)}</span
           >
         {/each}
       {:else}
         <div
           class="bx--layout-inspector__outline"
-          style={boxStyle(hover.rect)}
+          style:left="{hover.rect.left}px"
+          style:top="{hover.rect.top}px"
+          style:width="{hover.rect.width}px"
+          style:height="{hover.rect.height}px"
         ></div>
       {/if}
-      <div class="bx--layout-inspector__card" bind:this={cardEl}>
+      <div class="bx--layout-inspector__card" bind:this={cardRef}>
         <div class="bx--layout-inspector__card-header">
           <p class="bx--layout-inspector__card-title">{hover.info.name}</p>
           <p class="bx--layout-inspector__secondary">{hover.info.size}</p>
@@ -1439,11 +1264,11 @@
                   ]
                 : []),
             ] as group (group.key)}
-              {@const lines = sideTokens(
-                group.values,
-                group.borders,
-                hover.info.carbon,
-              )}
+              {@const lines = sideTokens(group.values, {
+                borders: group.borders,
+                carbon: hover.info.carbon,
+                remPx,
+              })}
               {#if lines.length}
                 <div class="bx--layout-inspector__item">
                   <dt
@@ -1499,7 +1324,7 @@
                   {:else}
                     <span
                       class="bx--layout-inspector__swatch"
-                      style="background: {row.swatch};"
+                      style:background={row.swatch}
                     ></span>
                     {row.hex}
                   {/if}
@@ -1537,7 +1362,7 @@
                     class="bx--layout-inspector__desc bx--layout-inspector__verdict"
                     class:bx--layout-inspector__off={c.ratio < c.aa}
                   >
-                    {fmtRatio(c.ratio)}
+                    {formatRatio(c.ratio)}
                     ·
                     {c.ratio >= c.aaa
                       ? "AAA"
@@ -1568,50 +1393,53 @@
     {#if distance}
       <div
         class="bx--layout-inspector__outline bx--layout-inspector__outline--anchor"
-        style={boxStyle(distance.a)}
+        style:left="{distance.a.left}px"
+        style:top="{distance.a.top}px"
+        style:width="{distance.a.width}px"
+        style:height="{distance.a.height}px"
       ></div>
       <div
         class="bx--layout-inspector__outline"
-        style={boxStyle(distance.b)}
+        style:left="{distance.b.left}px"
+        style:top="{distance.b.top}px"
+        style:width="{distance.b.width}px"
+        style:height="{distance.b.height}px"
       ></div>
-      {#each distance.segments as seg, i (i)}
+      {#each distance.segments as segment, i (i)}
         <div
           class="bx--layout-inspector__segment"
-          class:bx--layout-inspector__segment--vertical={seg.x1 === seg.x2}
-          style="left: {Math.min(seg.x1, seg.x2)}px; top: {Math.min(
-            seg.y1,
-            seg.y2,
-          )}px; width: {Math.abs(seg.x2 - seg.x1)}px; height: {Math.abs(
-            seg.y2 - seg.y1,
-          )}px;"
+          class:bx--layout-inspector__segment--vertical={segment.x1 ===
+            segment.x2}
+          style:left="{Math.min(segment.x1, segment.x2)}px"
+          style:top="{Math.min(segment.y1, segment.y2)}px"
+          style:width="{Math.abs(segment.x2 - segment.x1)}px"
+          style:height="{Math.abs(segment.y2 - segment.y1)}px"
         >
           <span
             class="bx--layout-inspector__segment-label"
-            class:bx--layout-inspector__side--off={spacingToken(seg.value) ===
-              null}
+            class:bx--layout-inspector__side--off={segment.token === null}
           >
-            {fmt(seg.value)}{spacingToken(seg.value) &&
-            spacingToken(seg.value) !== "0"
-              ? ` · ${spacingToken(seg.value)}`
+            {formatPx(segment.value)}{segment.token && segment.token !== "0"
+              ? ` · ${segment.token}`
               : ""}
           </span>
         </div>
       {/each}
     {/if}
 
-    {#if lint || targets || contrast || overflow}
+    {#if checking}
       <div class="bx--layout-inspector__summary">
-        {#if lint}
-          <span>{lintMarks.length} off-scale</span>
+        {#if checkSpacing}
+          <span>{found.spacing.length} off-scale</span>
         {/if}
-        {#if targets}
-          <span>{targetMarks.length} under {targetSize}px</span>
+        {#if checkTargets}
+          <span>{found.targets.length} small targets</span>
         {/if}
-        {#if contrast}
-          <span>{contrastMarks.length} low contrast</span>
+        {#if checkContrast}
+          <span>{found.contrast.length} low contrast</span>
         {/if}
-        {#if overflow}
-          <span>{overflowMarks.length} overflowing</span>
+        {#if checkOverflow}
+          <span>{found.overflow.length} overflowing</span>
         {/if}
       </div>
     {/if}

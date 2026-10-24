@@ -11,12 +11,15 @@
     Row,
     Stack,
     Text,
+    Toggle,
   } from "carbon-components-svelte";
   import { LayoutInspector } from "carbon-components-svelte/devtools";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
   let targetSize = 24;
+  let checkCarbon = false;
 </script>
 
 <Grid padding>
@@ -27,11 +30,27 @@
           <RadioButton labelText="24 (WCAG 2.2 AA)" value={24} />
           <RadioButton labelText="44 (WCAG 2.2 AAA)" value={44} />
         </RadioButtonGroup>
-        <Box display="flex" align="center" gap={5}>
+        <Toggle
+          labelText="Check Carbon components too"
+          size="sm"
+          bind:toggled={checkCarbon}
+        />
+        <Text>
+          Edit and Delete sit 4px apart, so their circles overlap and both fail.
+          Copy is just as small, but it has room around it, so it passes at 24.
+        </Text>
+        <Box display="flex" align="center" gap={2}>
           <button class="icon" type="button" aria-label="Edit"><Edit /></button>
           <button class="icon" type="button" aria-label="Delete">
             <TrashCan />
           </button>
+          <Box display="flex" marginLeft={7}>
+            <button class="icon" type="button" aria-label="Copy">
+              <Copy />
+            </button>
+          </Box>
+        </Box>
+        <Box display="flex" align="center" gap={5}>
           <Button size="small">Small button</Button>
           <Button>Default button</Button>
         </Box>
@@ -46,7 +65,7 @@
   </Row>
 </Grid>
 
-<LayoutInspector open spacing={false} targets {targetSize} />
+<LayoutInspector open spacing={false} checkTargets {targetSize} {checkCarbon} />
 
 <style>
   .icon {

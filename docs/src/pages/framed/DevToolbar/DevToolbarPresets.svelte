@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     ButtonSet,
     Column,
@@ -7,7 +8,6 @@
     Row,
     Stack,
     Text,
-    Tile,
   } from "carbon-components-svelte";
   import { DevToolbar } from "carbon-components-svelte/devtools";
 
@@ -16,7 +16,7 @@
     baseline: false,
     textBaselines: false,
     inspect: false,
-    lint: false,
+    spacing: false,
     contrast: false,
     targets: false,
     overflow: false,
@@ -35,7 +35,7 @@
             size="small"
             kind="tertiary"
             on:click={() =>
-              (tools = { ...none, grid: true, baseline: true, lint: true })}
+              (tools = { ...none, grid: true, baseline: true, spacing: true })}
           >
             Layout review
           </Button>
@@ -61,11 +61,9 @@
             .filter((k) => tools[k])
             .join(", ") || "none"}
         </Text>
-        <Tile style="padding: 15px;">
-          <p style="color: #8d8d8d;">
-            A tile with off-scale padding and faint text.
-          </p>
-        </Tile>
+        <Box fill="layer-01">
+          <p class="sample">A box with off-scale padding and faint text.</p>
+        </Box>
       </Stack>
     </Column>
   </Row>
@@ -73,14 +71,25 @@
 
 <DevToolbar persist={false} bind:tools />
 
-<!-- docs-only:start -->
 <style>
-  :global(body.framed) {
-    padding-inline: 0;
-  }
-
-  :global(body.framed :not(.bx--content) [class^="bx--col"]) {
-    box-shadow: none;
+  /* Off the spacing scale and low contrast on purpose, for the checks.
+     A plain element, since the checks skip Carbon's own components. */
+  .sample {
+    padding: 15px;
+    color: #8d8d8d;
   }
 </style>
+
+<!-- docs-only:start -->
+<svelte:head>
+  <style>
+    body.framed {
+      padding-inline: 0;
+    }
+
+    body.framed :not(.bx--content) [class^="bx--col"] {
+      box-shadow: none;
+    }
+  </style>
+</svelte:head>
 <!-- docs-only:end -->

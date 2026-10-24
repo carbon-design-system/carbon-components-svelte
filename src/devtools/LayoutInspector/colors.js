@@ -93,47 +93,64 @@ export function contrastRatio(a, b) {
 }
 
 /**
+ * @typedef {{ color: Rgba; own: Rgba | null; source: Element | null; image: boolean }} Background
+ * @typedef {Map<Element, Background>} BackgroundCache
+ */
+
+/** @type {Background} */
+const PAGE = {
+  color: [255, 255, 255, 1],
+  own: null,
+  source: null,
+  image: false,
+};
+
+/**
  * The background actually behind `el`: its own and its ancestors'
  * background colors, composited from the first opaque one up, over white.
  * `source` is the element whose background is nearest; `image` is true if
  * a background image or gradient sits in between, which this cannot see,
- * so the result is unreliable.
+ * so the result is unreliable. Pass one `cache` to a whole page scan, so
+ * shared ancestors are read once.
  * @param {Element} el
- * @returns {{ color: Rgba; own: Rgba | null; source: Element | null; image: boolean }}
+ * @param {BackgroundCache} [cache]
+ * @returns {Background}
  */
-export function effectiveBackground(el) {
-  /** @type {Rgba[]} */
-  const layers = [];
-  /** @type {Element | null} */
-  let source = null;
-  let image = false;
-  /** @type {Element | null} */
-  let node = el;
-  while (node) {
-    const style = getComputedStyle(node);
-    if (style.backgroundImage !== "none") image = true;
-    const color = toRgba(normalizeColor(style.backgroundColor));
-    if (color && color[3] > 0) {
-      if (!source) source = node;
-      layers.push(color);
-      if (color[3] >= 1) break;
-    }
-    node = node.parentElement;
+export function effectiveBackground(el, cache) {
+  const hit = cache?.get(el);
+  if (hit) return hit;
+  const style = getComputedStyle(el);
+  const image = style.backgroundImage !== "none";
+  const color = toRgba(normalizeColor(style.backgroundColor));
+  const own = color && color[3] > 0 ? color : null;
+  /** @type {Background} */
+  let result;
+  if (own && own[3] >= 1) {
+    result = { color: own, own, source: el, image };
+  } else {
+    const below = el.parentElement
+      ? effectiveBackground(el.parentElement, cache)
+      : PAGE;
+    result = {
+      color: own ? blend(own, below.color) : below.color,
+      own: own ?? below.own,
+      source: own ? el : below.source,
+      image: image || below.image,
+    };
   }
-  /** @type {Rgba} */
-  let base = [255, 255, 255, 1];
-  for (let i = layers.length - 1; i >= 0; i--) base = blend(layers[i], base);
-  return { color: base, own: layers[0] ?? null, source, image };
+  cache?.set(el, result);
+  return result;
 }
 
 /**
  * WCAG contrast check for the text of `el`. Large text (24px, or 18.66px
  * bold) needs 3:1 for AA and 4.5:1 for AAA; other text 4.5:1 and 7:1.
  * @param {Element} el
+ * @param {BackgroundCache} [cache]
  */
-export function textContrast(el) {
+export function textContrast(el, cache) {
   const style = getComputedStyle(el);
-  const bg = effectiveBackground(el);
+  const bg = effectiveBackground(el, cache);
   const fg = toRgba(normalizeColor(style.color)) ?? [0, 0, 0, 1];
   const ratio = contrastRatio(blend(fg, bg.color), bg.color);
   const size = Number.parseFloat(style.fontSize);
@@ -150,6 +167,7 @@ export function textContrast(el) {
 
 /** @type {string[] | null} */
 let tokenNames = null;
+let sheetCount = -1;
 
 /**
  * Every `--cds-*` custom property declared in the page's stylesheets.
@@ -185,13 +203,26 @@ function collectTokenNames() {
 let tokenCache = { key: "", map: new Map() };
 
 /**
+ * Token names, collected again when a stylesheet is added or removed,
+ * such as a theme loaded after the inspector opened.
+ */
+function currentTokenNames() {
+  if (!tokenNames || document.styleSheets.length !== sheetCount) {
+    sheetCount = document.styleSheets.length;
+    tokenNames = collectTokenNames();
+    tokenCache = { key: "", map: new Map() };
+  }
+  return tokenNames;
+}
+
+/**
  * Map from normalized color to the Carbon token names that resolve to it
  * for `el`. Rebuilt only when the theme changes. Empty when the page has
  * no `--cds-*` custom properties, as with the single-theme CSS builds.
  * @param {Element} el
  */
 function tokenMap(el) {
-  if (!tokenNames) tokenNames = collectTokenNames();
+  const names = currentTokenNames();
   const style = getComputedStyle(el);
   const key = ["--cds-background", "--cds-text-primary", "--cds-interactive"]
     .map((n) => style.getPropertyValue(n).trim())
@@ -199,7 +230,7 @@ function tokenMap(el) {
   if (key === tokenCache.key) return tokenCache.map;
   /** @type {Map<string, string[]>} */
   const map = new Map();
-  for (const name of tokenNames) {
+  for (const name of names) {
     const color = normalizeColor(style.getPropertyValue(name));
     if (!color) continue;
     const list = map.get(color);
@@ -213,8 +244,7 @@ function tokenMap(el) {
 
 /** Whether the page has any theme tokens to name colors with. */
 export function hasTokens() {
-  if (!tokenNames) tokenNames = collectTokenNames();
-  return tokenNames.length > 0;
+  return currentTokenNames().length > 0;
 }
 
 // Token name prefixes that fit each role, so a text color reads as

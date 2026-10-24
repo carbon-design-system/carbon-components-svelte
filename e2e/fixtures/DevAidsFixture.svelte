@@ -18,5 +18,5 @@
 </Stack>
 
 <GridOverlay open gutters margins label baseline={8} textBaselines />
-<LayoutInspector open enterDelayMs={0} lint targets />
+<LayoutInspector open enterDelayMs={0} checkSpacing checkTargets />
 <DevToolbar persist={false} />

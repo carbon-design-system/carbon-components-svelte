@@ -11,7 +11,7 @@ The inspector is a fixed, `pointer-events: none` layer, so the page stays fully 
 
 | Do | Why |
 | --- | --- |
-| Import it only in development | It reads computed styles of the hovered element on every pointer move, and the page scans walk the whole document |
+| Import it only in development | It reads computed styles of the hovered element on every pointer move, and the page checks scan again as the page changes |
 | Pair it with `GridOverlay` | The grid shows where things should go; the inspector shows the numbers behind where they are |
 
 ## Spacing
@@ -26,9 +26,9 @@ A card next to the element names the tokens, so `16` reads as `spacing-05`. For 
 
 The scale is checked in `rem`, so it follows the root font size. Negative margins match by size.
 
-Carbon measures padding from the outer edge, so a bordered control takes its border off its padding. A Carbon button has 15px of left padding and a 1px border: 16px, `spacing-05`. When padding alone is off the scale but padding plus border is on it, the card shows the token with "With its 1px border", and lint does not flag it.
+Carbon measures padding from the outer edge, so a bordered control takes its border off its padding. A Carbon button has 15px of left padding and a 1px border: 16px, `spacing-05`. When padding alone is off the scale but padding plus border is on it, the card shows the token with "With its 1px border", and `checkSpacing` does not flag it.
 
-Carbon's own components keep a few deliberate off-scale values, such as the small button's 60px right padding, which leaves room for an icon. You cannot change them, so on a Carbon element they read "set by Carbon" in neutral text instead of a red "off-scale". Set `lintCarbon` to flag them too.
+Carbon's own components keep a few deliberate off-scale values, such as the small button's 60px right padding, which leaves room for an icon. You cannot change them, so on a Carbon element they read "set by Carbon" in neutral text instead of a red "off-scale". Set `checkCarbon` to flag them too.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorSpacing" />
 
@@ -54,7 +54,7 @@ Hover text to see its Carbon type token. The inspector matches font size, line h
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorType" />
 
-Set `type={false}` to hide the type row.
+Set `typography={false}` to hide the type row.
 
 ## Colors and contrast
 
@@ -65,37 +65,63 @@ Hover an element to see its colors on the card:
 - **border**: the border color, if the element has a border.
 - **contrast**: the WCAG contrast of the text against that background, rated AAA, AA, or "fails AA". Large text (24px, or 18.66px bold) needs 3:1 for AA; other text needs 4.5:1.
 
-Each color is named with the Carbon theme token that resolves to it, best fit for its role first, so a text color reads as `text-primary` before `icon-primary`. A color that matches no token is "off-palette". Token names come from the page's `--cds-*` custom properties, so they need a stylesheet that defines them, such as `all.css`; with a single-theme stylesheet the card shows plain values.
+Each color is named with the Carbon theme token that resolves to it, best fit for its role first, so a text color reads as `text-primary` before `icon-primary`. A color that matches no token is "off-palette". Token names come from the page's `--cds-*` custom properties, so they need a stylesheet that defines them, such as `all.css`; with a single-theme stylesheet the card shows plain values. The names refresh when a stylesheet is added, such as a theme that loads later.
 
-The inspector cannot see what a background image or gradient looks like, so over one it reports the contrast as unknown, and the contrast lint skips that text. Check it by hand.
+The inspector cannot see what a background image or gradient looks like, so over one it reports the contrast as unknown, and `checkContrast` skips that text. Check it by hand.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorColors" />
 
 Set `colors={false}` to hide the color rows.
 
-## Contrast lint
+## Page checks
 
-Set `contrast` to outline all text below WCAG AA, labeled with its ratio and the ratio it needs. Text inside disabled controls is exempt, as WCAG allows.
+Four checks outline problems across the page, not only on the hovered element. Each one is off by default. A badge in the corner counts what each check finds.
 
-<FileSource src="/framed/LayoutInspector/LayoutInspectorContrast" />
+| Prop | Outlines |
+| --- | --- |
+| `checkSpacing` | Margin, padding, or gap off the spacing scale |
+| `checkContrast` | Text below WCAG AA contrast |
+| `checkTargets` | Interactive targets that are too small and too close to others |
+| `checkOverflow` | Elements that cause horizontal scroll, and clipped content |
 
-## Lint
+By default, every check skips Carbon's own components: elements with a `bx--` class and their unstyled inner elements, such as the `<input>` inside `NumberInput`. This keeps the checks on your code. Set `checkCarbon` to check Carbon's components too, for example to check a custom theme. Set `checkIgnore` to a CSS selector to skip more elements, and everything inside them, such as third-party widgets.
 
-Set `lint` to outline every element whose margin, padding, or gap is off the spacing scale, labeled with the values that missed. A badge in the corner counts them.
+The checks scan only near the viewport: the visible area plus one screen above and below. They scan again when the page changes, at most a few times a second while the browser is idle, and when scrolling leaves that area. So the counts in the badge are for that area, not the whole page.
 
-By default, lint skips Carbon's own components: elements with a `bx--` class and their unstyled inner elements, such as the `<input>` inside `NumberInput`. Carbon uses a few deliberate off-scale values, so this keeps the check on your layout code. Set `lintCarbon` to check them too, and set `lintIgnore` to a selector to skip more, such as third-party widgets.
+## Spacing check
+
+Set `checkSpacing` to outline every element whose margin, padding, or gap is off the spacing scale, labeled with the values that missed.
+
+Carbon uses a few deliberate off-scale values, so this check skips Carbon's components unless `checkCarbon` is set. Turn on the toggle in this example to see them.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorLint" />
 
-Browsers report `auto` margins as pixel values, so lint cannot tell them apart from set ones. It skips equal left and right margins (centering) and margins wider than the largest token (160px). A one-sided `margin-left: auto` narrower than that is still flagged.
+Browsers report `auto` margins as pixel values, so the check cannot tell them apart from set ones. It skips equal left and right margins (centering) and margins wider than the largest token (160px). A one-sided `margin-left: auto` narrower than that is still flagged.
+
+## Contrast check
+
+Set `checkContrast` to outline all text below WCAG AA, labeled with its ratio and the ratio it needs. Text inside disabled controls is exempt, as WCAG allows.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorContrast" />
 
 ## Target size
 
-Set `targets` to outline every interactive element smaller than `targetSize` in either direction, labeled with its size. The default `24` is the WCAG 2.2 AA minimum (2.5.8); `44` is the AAA size (2.5.5).
+Set `checkTargets` to outline interactive elements that fail WCAG 2.2 target size (2.5.8), labeled with their size. The default `targetSize` of `24` is the AA minimum; `44` is the AAA size (2.5.5).
 
-A control's `<label>` counts toward its target, so a Carbon `Checkbox` passes even though its input is visually hidden. Links inside running text are exempt, as WCAG allows: an inline element whose parent also holds text is skipped. WCAG's spacing exception, where a small target passes if nothing else is within 24px of it, is not checked.
+A target smaller than `targetSize` in either direction can still pass on spacing, as WCAG allows. Picture a circle `targetSize` wide centered on the small target. If that circle touches no other target, and no other small target's circle, the target passes. So a list of small controls with room between them is not flagged.
+
+A control's `<label>` counts toward its target, so a checkbox with a visually hidden input, like Carbon's `Checkbox`, still passes. Links inside running text are exempt, as WCAG allows: an inline element whose parent also holds text is skipped. Skipped elements, such as Carbon's components, still count as neighbors in the spacing test.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorTargets" />
+
+## Overflow
+
+Set `checkOverflow` to find two kinds of overflow:
+
+- **Horizontal page scroll.** When the page scrolls sideways, the inspector outlines the elements that cause it: those that reach past the page's edge while their parent does not, labeled with how far. Elements inside a box that clips or scrolls are left out, since they cannot widen the page.
+- **Clipped content.** Boxes with `overflow: hidden` or `clip` whose content does not fit, labeled with how much is hidden. Text cut off with `text-overflow: ellipsis` is labeled "truncated". Boxes that scroll are left alone, since their content is reachable.
+
+<FileSource src="/framed/LayoutInspector/LayoutInspectorOverflow" />
 
 ## Card
 
@@ -142,8 +168,8 @@ Override any color with custom properties on the inspector, through `class` or `
 | Content | `--ccs-layout-inspector-content-fill`: `$highlight` | `--ccs-layout-inspector-content-ink`: `$interactive` |
 | Measure | `--ccs-layout-inspector-measure-fill`: `tag-background-purple` | `--ccs-layout-inspector-measure-ink`: `tag-color-purple` |
 | Off-scale labels | `--ccs-layout-inspector-off-fill`: `tag-background-red` | `--ccs-layout-inspector-off-ink`: `tag-color-red` |
-| Lint | `--ccs-layout-inspector-lint-fill`: `tag-background-red` | `--ccs-layout-inspector-lint-ink`: `tag-color-red` |
-| Contrast | `--ccs-layout-inspector-contrast-fill`: `tag-background-cyan` | `--ccs-layout-inspector-contrast-ink`: `tag-color-cyan` |
+| Spacing check | `--ccs-layout-inspector-spacing-fill`: `tag-background-red` | `--ccs-layout-inspector-spacing-ink`: `tag-color-red` |
+| Contrast check | `--ccs-layout-inspector-contrast-fill`: `tag-background-cyan` | `--ccs-layout-inspector-contrast-ink`: `tag-color-cyan` |
 | Targets | `--ccs-layout-inspector-target-fill`: `tag-background-teal` | `--ccs-layout-inspector-target-ink`: `tag-color-teal` |
 | Overflow | `--ccs-layout-inspector-overflow-fill`: `tag-background-cool-gray` | `--ccs-layout-inspector-overflow-ink`: `tag-color-cool-gray` |
 
@@ -163,15 +189,6 @@ The `GridOverlay` breakpoint badge uses the same surface.
 In forced colors (Windows contrast themes), the card and summary get an outline, the box model draws margin in `Highlight` and padding in `GrayText`, labels read `CanvasText` on `Canvas`, and color swatches keep the real color they name. Off-scale labels invert, so they still stand out.
 
 On a right-to-left page, the card and labels still read left to right, so values like `#161616` and `16.4:1` keep their order.
-
-## Overflow
-
-Set `overflow` to find two kinds of overflow:
-
-- **Horizontal page scroll.** When the page scrolls sideways, the inspector outlines the elements that cause it: those that reach past the page's edge while their parent does not, labeled with how far. Elements inside a box that clips or scrolls are left out, since they cannot widen the page.
-- **Clipped content.** Boxes with `overflow: hidden` or `clip` whose content does not fit, labeled with how much is hidden. Text cut off with `text-overflow: ellipsis` is labeled "truncated". Boxes that scroll are left alone, since their content is reachable.
-
-<FileSource src="/framed/LayoutInspector/LayoutInspectorOverflow" />
 
 ## With GridOverlay
 

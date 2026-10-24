@@ -22,11 +22,11 @@
           on the wrong side.
         </Text>
         <Box display="flex" align="center">
-          <Information style="margin-inline-end: 0.5rem;" />
+          <Information class="logical-gap" />
           <span>Logical: margin-inline-end</span>
         </Box>
         <Box display="flex" align="center">
-          <Information style="margin-right: 0.5rem;" />
+          <Information class="physical-gap" />
           <span>Physical: margin-right</span>
         </Box>
       </Stack>
@@ -35,3 +35,15 @@
 </Grid>
 
 <DevToolbar persist={false} />
+
+<style>
+  /* The CSS under test. The physical side is wrong on purpose, so the RTL
+     tool has something to catch. */
+  :global(.logical-gap) {
+    margin-inline-end: 0.5rem;
+  }
+
+  :global(.physical-gap) {
+    margin-right: 0.5rem;
+  }
+</style>

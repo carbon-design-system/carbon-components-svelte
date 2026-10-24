@@ -31,13 +31,17 @@
   </Row>
   <Row>
     <Column>
-      <!-- The box margins are the distances you measure. -->
+      <!-- The margins between the boxes are the distances you measure. -->
       <div class="frame">
         <div class="box">A</div>
-        <div class="box" style="margin-left: 2rem;">B</div>
-        <div class="box" style="margin-left: 20px;">C</div>
+        <Box marginLeft={7}>
+          <div class="box">B</div>
+        </Box>
+        <div class="box off-scale">C</div>
       </div>
-      <div class="box" style="margin-top: 1.5rem;">D</div>
+      <Box marginTop={6}>
+        <div class="box">D</div>
+      </Box>
     </Column>
   </Row>
 </Grid>
@@ -59,5 +63,10 @@
     place-items: center;
     background: var(--cds-layer);
     outline: 1px solid var(--cds-border-subtle);
+  }
+
+  /* Off the spacing scale on purpose. */
+  .off-scale {
+    margin-left: 20px;
   }
 </style>

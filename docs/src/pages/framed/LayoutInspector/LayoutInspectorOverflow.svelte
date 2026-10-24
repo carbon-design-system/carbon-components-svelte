@@ -30,7 +30,7 @@
   </Row>
 </Grid>
 
-<LayoutInspector open spacing={false} overflow />
+<LayoutInspector open spacing={false} checkOverflow />
 
 <style>
   .banner {

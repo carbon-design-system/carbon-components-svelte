@@ -16,19 +16,19 @@
   </Row>
   <Row>
     <Column sm={4} md={8} lg={5}>
-      <div class="box" style="padding: 1rem; margin-bottom: 1.5rem;">
+      <Box fill="layer-01" padding={5} marginBottom={6}>
         padding 16 (spacing-05), margin-bottom 24 (spacing-06)
-      </div>
+      </Box>
     </Column>
     <Column sm={4} md={8} lg={5}>
-      <div class="box" style="padding: 15px 1rem; margin-bottom: 20px;">
+      <div class="off-scale">
         padding 15 / 16, margin-bottom 20: two values off the scale
       </div>
     </Column>
     <Column sm={4} md={8} lg={6}>
-      <div class="box" style="padding: 0.5rem 2rem 3rem;">
+      <Box fill="layer-01" paddingTop={3} paddingX={7} paddingBottom={9}>
         padding 8 / 32 / 48 / 32: mixed, all on the scale
-      </div>
+      </Box>
     </Column>
   </Row>
 </Grid>
@@ -36,8 +36,11 @@
 <LayoutInspector open />
 
 <style>
-  .box {
-    background: var(--cds-layer);
-    outline: 1px solid var(--cds-border-subtle);
+  /* Off the spacing scale on purpose. This is a plain element: on a Carbon
+     component such as Box, the card would read "set by Carbon". */
+  .off-scale {
+    margin-bottom: 20px;
+    padding: 15px 1rem;
+    background: var(--cds-layer-01);
   }
 </style>

@@ -60,30 +60,20 @@
   export let baselineAnchor = "page";
 
   /**
-   * Set to `true` to mark the real glyph baseline of every line of text on the page.
+   * Set to `true` to mark the real glyph baseline of every line of text near the viewport (the visible area and one screen above and below).
    * With `baseline` set, marks on a row are green and marks off a row are red, labeled with how far they miss.
    * CSS places the glyph baseline inside the line box by font metrics, so text whose line box sits on a row usually has its baseline between rows.
    */
   export let textBaselines = false;
 
-  /**
-   * Column color, as any CSS color.
-   * Replaces both the column fill (`$highlight` by default) and the column lines (`$interactive`).
-   * @type {string | undefined}
-   */
-  export let color = undefined;
-
-  /**
-   * Baseline row color, as any CSS color.
-   * Replaces both row colors, which default to the magenta Tag tokens.
-   * @type {string | undefined}
-   */
-  export let baselineColor = undefined;
-
   import { observeBreakpoint } from "../../Breakpoint/breakpoint-observer.js";
   import Column from "../../Grid/Column.svelte";
   import Grid from "../../Grid/Grid.svelte";
   import Row from "../../Grid/Row.svelte";
+  import { createFrameJob } from "../../utils/frame-batch.js";
+  import { addPooledListener } from "../../utils/window-listener-pool.js";
+  import { rowDelta } from "../geometry.js";
+  import { DEV_TOOL, inBand, observePage } from "../page-scan.js";
 
   // 16 slots cover every breakpoint's column count (sm: 4, md: 8, lg/xlg/max: 16).
   // Each slot hides itself (span 0) once its index passes that breakpoint's
@@ -100,7 +90,8 @@
   const COLUMN_COUNT = { sm: 4, md: 8, lg: 16, xlg: 16, max: 16 };
 
   /**
-   * @typedef {{ x: number; y: number; width: number; rtl: boolean; delta: number | null }} TextBaselineMark
+   * @typedef {{ key: string; x: number; y: number; width: number; rtl: boolean }} MeasuredLine
+   * @typedef {MeasuredLine & { delta: number | null }} TextBaselineMark
    */
 
   // Caps the number of marks so a huge page cannot stall the overlay.
@@ -111,14 +102,14 @@
 
   /**
    * Distance from the top of a font's content area to its alphabetic
-   * baseline. Measured once per font per pass with a zero-size
-   * inline-block, whose top edge sits on the baseline.
-   * @type {Map<string, number>}
+   * baseline, measured with a zero-size inline-block, whose top edge sits
+   * on the baseline. The probe goes inside the overlay, so adding it does
+   * not count as a page change.
+   * @param {HTMLElement} node
+   * @param {CSSStyleDeclaration} style
+   * @param {Map<string, number>} cache
    */
-  const ascentCache = new Map();
-
-  /** @param {CSSStyleDeclaration} style */
-  function measureAscent(style) {
+  function measureAscent(node, style, cache) {
     const font = [
       style.fontStyle,
       style.fontWeight,
@@ -126,7 +117,7 @@
       style.fontSize,
       style.fontFamily,
     ].join(" ");
-    const cached = ascentCache.get(font);
+    const cached = cache.get(font);
     if (cached !== undefined) return cached;
 
     const probe = document.createElement("span");
@@ -135,56 +126,56 @@
     const marker = document.createElement("span");
     marker.style.cssText = "display:inline-block;width:0;height:0";
     probe.append(marker);
-    document.body.append(probe);
+    node.append(probe);
     const ascent =
       marker.getBoundingClientRect().top - probe.getBoundingClientRect().top;
     probe.remove();
-    ascentCache.set(font, ascent);
+    cache.set(font, ascent);
     return ascent;
   }
 
   /**
-   * Signed distance from `y` to the nearest row, or `null` without rows.
-   * @param {number} y
-   * @param {number} step
-   * @param {number} offset
+   * @param {MeasuredLine[]} a
+   * @param {MeasuredLine[]} b
    */
-  function rowDelta(y, step, offset) {
-    if (!(step > 0)) return null;
-    const mod = (((y - offset) % step) + step) % step;
-    const delta = mod > step / 2 ? mod - step : mod;
-    return Math.round(delta * 10) / 10;
+  function sameLines(a, b) {
+    return (
+      a.length === b.length &&
+      a.every((line, i) => line.key === b[i].key && line.rtl === b[i].rtl)
+    );
   }
 
   /**
-   * Measures the baseline of every visible line of text outside the overlay
-   * and stores the marks in page coordinates. Re-measures when the page
-   * resizes, mutates, or loads fonts; scrolling only moves the layer.
+   * Measures the baseline of every line of text near the viewport, outside
+   * the dev tools, and stores the marks in page coordinates. Measures again
+   * when the page changes or scrolls far; scrolling only moves the layer.
+   * Marks that did not move keep their DOM nodes.
    * @param {HTMLElement} node
-   * @param {{ step: number; offset: number; anchor: GridOverlayBaselineAnchor }} params
+   * @param {{ step: number; offset: number; anchor: GridOverlayBaselineAnchor }} options
    */
-  function measureTextBaselines(node, params) {
-    let { step, offset, anchor } = params;
-    let measureFrame = 0;
-    let scrollFrame = 0;
-    /** @type {{ x: number; y: number; width: number; rtl: boolean }[]} */
+  function measureTextBaselines(node, options) {
+    let { step, offset, anchor } = options;
+    /** @type {MeasuredLine[]} */
     let measured = [];
 
-    const applyDeltas = () => {
+    function applyDeltas() {
       // Page-anchored rows share the marks' page coordinates; viewport rows
       // are fixed on screen, so compare against the scrolled position.
       const shift = anchor === "page" ? 0 : window.scrollY;
-      marks = measured.map((m) => ({
-        ...m,
-        delta: rowDelta(m.y - shift, step, offset),
+      marks = measured.map((line) => ({
+        ...line,
+        delta: rowDelta(line.y - shift, step, offset),
       }));
-    };
+    }
 
-    const measure = () => {
-      measureFrame = 0;
+    /** @param {import("../page-scan.js").ScanBand} band */
+    function measure(band) {
       // A font may have loaded since the last pass, changing its metrics.
-      ascentCache.clear();
-      /** @type {{ x: number; y: number; width: number }[]} */
+      /** @type {Map<string, number>} */
+      const ascents = new Map();
+      /** @type {Map<string, number>} */
+      const seen = new Map();
+      /** @type {MeasuredLine[]} */
       const next = [];
       const walker = document.createTreeWalker(
         document.body,
@@ -195,8 +186,7 @@
             if (!parent || !text.nodeValue?.trim()) {
               return NodeFilter.FILTER_REJECT;
             }
-            // Skip dev tools (this overlay, LayoutInspector, DevToolbar).
-            if (parent.closest("[data-ccs-dev-tool], script, style")) {
+            if (parent.closest(`${DEV_TOOL}, script, style`)) {
               return NodeFilter.FILTER_REJECT;
             }
             return NodeFilter.FILTER_ACCEPT;
@@ -213,16 +203,25 @@
         text = walker.nextNode()
       ) {
         const parent = /** @type {HTMLElement} */ (text.parentElement);
+        // Skip text far from the viewport before paying for its style.
+        if (!inBand(parent.getBoundingClientRect(), band, scrollY)) continue;
         const style = getComputedStyle(parent);
         if (style.visibility === "hidden") continue;
         range.selectNodeContents(text);
-        const ascent = measureAscent(style);
+        const ascent = measureAscent(node, style, ascents);
         for (const rect of range.getClientRects()) {
           if (rect.width < 1 || rect.height < 1) continue;
+          const x = Math.round((rect.left + scrollX) * 10) / 10;
+          const y = Math.round((rect.top + scrollY + ascent) * 10) / 10;
+          const width = Math.round(rect.width * 10) / 10;
+          const base = `${x}|${y}|${width}`;
+          const count = seen.get(base) ?? 0;
+          seen.set(base, count + 1);
           next.push({
-            x: rect.left + scrollX,
-            y: rect.top + scrollY + ascent,
-            width: rect.width,
+            key: count ? `${base}|${count}` : base,
+            x,
+            y,
+            width,
             // Right-to-left text ends on the left, so its offset label goes
             // there.
             rtl: style.direction === "rtl",
@@ -230,64 +229,21 @@
         }
       }
       range.detach();
+      if (sameLines(measured, next)) return;
       measured = next;
       applyDeltas();
-      onScroll();
-    };
+    }
 
-    const schedule = () => {
-      if (!measureFrame) measureFrame = requestAnimationFrame(measure);
-    };
-
-    const onScroll = () => {
-      scrollFrame = 0;
-      node.style.setProperty(
-        "--ccs-grid-overlay-text-x",
-        `${-window.scrollX}px`,
-      );
-      node.style.setProperty(
-        "--ccs-grid-overlay-text-y",
-        `${-window.scrollY}px`,
-      );
-      if (anchor === "viewport") applyDeltas();
-    };
-
-    const scheduleScroll = () => {
-      if (!scrollFrame) scrollFrame = requestAnimationFrame(onScroll);
-    };
-
-    // Ignore the overlay's own re-renders, or every mark would re-measure.
-    const mutations = new MutationObserver((records) => {
-      if (
-        records.some(
-          (r) =>
-            !(
-              r.target instanceof Element ? r.target : r.target.parentElement
-            )?.closest("[data-ccs-dev-tool]"),
-        )
-      ) {
-        schedule();
-      }
-    });
-    mutations.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-      attributes: true,
-      attributeFilter: ["class", "style", "hidden", "dir"],
-    });
-    // A `dir`, `lang`, or theme change on <html> moves the whole page
-    // without resizing it, and <html> is outside the body subtree.
-    mutations.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["dir", "lang", "class", "style", "theme"],
-    });
-    const resizes = new ResizeObserver(schedule);
-    resizes.observe(document.documentElement);
-    window.addEventListener("scroll", scheduleScroll, { passive: true });
-    window.addEventListener("resize", schedule, { passive: true });
-    document.fonts?.ready.then(schedule);
-    measure();
+    const scroll = createFrameJob([
+      () => [window.scrollX, window.scrollY],
+      (/** @type {[number, number]} */ [x, y]) => {
+        node.style.setProperty("--ccs-grid-overlay-text-x", `${-x}px`);
+        node.style.setProperty("--ccs-grid-overlay-text-y", `${-y}px`);
+        if (anchor === "viewport") applyDeltas();
+      },
+    ]);
+    const page = observePage(measure, { onScroll: scroll.schedule });
+    scroll.schedule();
 
     return {
       /** @param {{ step: number; offset: number; anchor: GridOverlayBaselineAnchor }} next */
@@ -296,18 +252,14 @@
         applyDeltas();
       },
       destroy() {
-        mutations.disconnect();
-        resizes.disconnect();
-        window.removeEventListener("scroll", scheduleScroll);
-        window.removeEventListener("resize", schedule);
-        if (measureFrame) cancelAnimationFrame(measureFrame);
-        if (scrollFrame) cancelAnimationFrame(scrollFrame);
+        page.destroy();
+        scroll.cancel();
         marks = [];
       },
     };
   }
 
-  $: onRhythm = marks.filter((m) => m.delta === 0).length;
+  $: onRhythm = marks.filter((mark) => mark.delta === 0).length;
 
   /** @type {import("../../Breakpoint/breakpoints").BreakpointSize | undefined} */
   let size = undefined;
@@ -318,18 +270,20 @@
    * @param {HTMLElement} _node
    */
   function trackViewport(_node) {
-    const onResize = () => {
+    function handleResize() {
       viewportWidth = window.innerWidth;
-    };
-    onResize();
-    window.addEventListener("resize", onResize, { passive: true });
-    const stop = observeBreakpoint((next) => {
+    }
+    handleResize();
+    const stopResize = addPooledListener("resize", handleResize, {
+      passive: true,
+    });
+    const stopBreakpoint = observeBreakpoint((next) => {
       size = next;
     });
     return {
       destroy() {
-        window.removeEventListener("resize", onResize);
-        stop();
+        stopResize();
+        stopBreakpoint();
       },
     };
   }
@@ -339,75 +293,55 @@
    * the top of the page ("page") or the viewport ("viewport"). Writes
    * custom properties directly, so scrolling never re-renders the component.
    * @param {HTMLElement} node
-   * @param {{ anchor: GridOverlayBaselineAnchor; offset: number }} params
+   * @param {{ anchor: GridOverlayBaselineAnchor; offset: number }} options
    */
-  function placeBaseline(node, params) {
-    let { anchor, offset } = params;
-    let frame = 0;
+  function placeBaseline(node, options) {
+    let { anchor, offset } = options;
 
-    const update = () => {
-      frame = 0;
-      const shift = anchor === "page" ? offset - window.scrollY : offset;
-      // Above the first row, the layer starts lower; once the first row has
-      // scrolled past the top, the layer fills the viewport and the pattern
-      // shifts up instead.
-      node.style.setProperty(
-        "--ccs-grid-overlay-baseline-top",
-        `${Math.max(0, shift)}px`,
-      );
-      node.style.setProperty(
-        "--ccs-grid-overlay-baseline-shift",
-        `${Math.min(0, shift)}px`,
-      );
-    };
+    const job = createFrameJob([
+      () => (anchor === "page" ? offset - window.scrollY : offset),
+      (/** @type {number} */ shift) => {
+        // Above the first row, the layer starts lower; once the first row
+        // has scrolled past the top, the layer fills the viewport and the
+        // pattern shifts up instead.
+        node.style.setProperty(
+          "--ccs-grid-overlay-baseline-top",
+          `${Math.max(0, shift)}px`,
+        );
+        node.style.setProperty(
+          "--ccs-grid-overlay-baseline-shift",
+          `${Math.min(0, shift)}px`,
+        );
+      },
+    ]);
 
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    job.schedule();
+    const stopScroll = addPooledListener("scroll", job.schedule, {
+      passive: true,
+    });
 
     return {
       /** @param {{ anchor: GridOverlayBaselineAnchor; offset: number }} next */
       update(next) {
         ({ anchor, offset } = next);
-        update();
+        job.schedule();
       },
       destroy() {
-        window.removeEventListener("scroll", onScroll);
-        if (frame) cancelAnimationFrame(frame);
+        stopScroll();
+        job.cancel();
       },
     };
   }
 
   $: emphasis = Math.max(1, Math.floor(baselineEmphasis) || 1);
-
-  $: overlayClass = [
-    $$restProps.class,
-    "bx--grid-overlay",
-    gutters && "bx--grid-overlay--gutters",
-    margins && "bx--grid-overlay--margins",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  $: overlayStyle = [
-    $$restProps.style,
-    color &&
-      `--ccs-grid-overlay-fill: ${color}; --ccs-grid-overlay-ink: ${color}`,
-    baselineColor &&
-      `--ccs-grid-overlay-row: ${baselineColor}; --ccs-grid-overlay-row-strong: ${baselineColor}`,
-  ]
-    .filter(Boolean)
-    .join("; ");
 </script>
 
 {#if open}
   <div
     {...$$restProps}
-    class={overlayClass}
-    style={overlayStyle || undefined}
+    class:bx--grid-overlay={true}
+    class:bx--grid-overlay--gutters={gutters}
+    class:bx--grid-overlay--margins={margins}
     aria-hidden="true"
     data-ccs-dev-tool
   >
@@ -442,8 +376,8 @@
     {#if baseline > 0}
       <div
         class="bx--grid-overlay__baseline"
-        style="--ccs-grid-overlay-baseline-step: {baseline}px; --ccs-grid-overlay-baseline-major: {baseline *
-          emphasis}px;"
+        style:--ccs-grid-overlay-baseline-step="{baseline}px"
+        style:--ccs-grid-overlay-baseline-major="{baseline * emphasis}px"
         use:placeBaseline={{ anchor: baselineAnchor, offset: baselineOffset }}
       ></div>
     {/if}
@@ -459,14 +393,16 @@
           anchor: baselineAnchor,
         }}
       >
-        {#each marks as mark, i (i)}
+        {#each marks as mark (mark.key)}
           <span
             class="bx--grid-overlay__text-mark"
             class:bx--grid-overlay__text-mark--on={mark.delta === 0}
             class:bx--grid-overlay__text-mark--off={mark.delta !== null &&
               mark.delta !== 0}
             class:bx--grid-overlay__text-mark--rtl={mark.rtl}
-            style="left: {mark.x}px; top: {mark.y}px; width: {mark.width}px;"
+            style:left="{mark.x}px"
+            style:top="{mark.y}px"
+            style:width="{mark.width}px"
           >
             {#if mark.delta}
               <span class="bx--grid-overlay__text-delta"

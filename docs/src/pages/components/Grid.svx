@@ -262,7 +262,7 @@ In this example, the dashed outlines are the elements. Their tops and bottoms la
 
 ### Text baselines in a layout
 
-`textBaselines` measures every line of text on the page, including text inside components such as inputs, tags, and buttons. It measures again when the page resizes, changes, or loads a font. Use it to find text that sits at an odd offset from its neighbors, or to check a layout that does set type on a baseline grid.
+`textBaselines` measures every line of text near the viewport, including text inside components such as inputs, tags, and buttons. "Near" means the visible area plus one screen above and below, so a long page stays fast. It measures again when the page resizes, changes, or loads a font, at most a few times a second while the browser is idle, and when scrolling leaves that area. The badge counts only those lines. Use it to find text that sits at an odd offset from its neighbors, or to check a layout that does set type on a baseline grid.
 
 Set `baseline` to `0` to show the marks without rows; they are drawn in a neutral blue.
 
@@ -306,11 +306,20 @@ Every overlay color is a Carbon theme token, so it adapts to the theme like the 
 | Text baseline marks | `$support-info` (no rows), `$support-success` (on a row), `$support-error` (off a row) |
 | Text baseline offset labels | the red Tag token pair |
 
-Tokens are opaque, so the fills fade as whole layers. If the page underneath uses the same colors, set `color` and `baselineColor` to any CSS color, or a token such as `var(--cds-support-warning)`.
+Tokens are opaque, so the fills fade as whole layers. If the page underneath uses the same colors, override them with custom properties. Each takes any CSS color, including another token such as `var(--cds-support-warning)`.
+
+| Custom property | What it colors |
+| --- | --- |
+| `--ccs-grid-overlay-fill` | Column fill |
+| `--ccs-grid-overlay-ink` | Column lines and numbers |
+| `--ccs-grid-overlay-row` | Baseline rows |
+| `--ccs-grid-overlay-row-strong` | Stronger baseline rows |
+
+Pass a `class` to the overlay and set the properties on that class:
 
 <FileSource src="/framed/Grid/GridOverlayColors" />
 
-You can also set the colors from CSS:
+To change every overlay at once, set them on `.bx--grid-overlay`:
 
 ```css
 .bx--grid-overlay {

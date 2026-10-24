@@ -40,8 +40,8 @@ $ccs-annotation-opacity: 0.6;
     --ccs-layout-inspector-measure-ink: #{get-token-value($tag-colors, "tag-color-purple")};
     --ccs-layout-inspector-off-fill: #{get-token-value($tag-colors, "tag-background-red")};
     --ccs-layout-inspector-off-ink: #{get-token-value($tag-colors, "tag-color-red")};
-    --ccs-layout-inspector-lint-fill: #{get-token-value($tag-colors, "tag-background-red")};
-    --ccs-layout-inspector-lint-ink: #{get-token-value($tag-colors, "tag-color-red")};
+    --ccs-layout-inspector-spacing-fill: #{get-token-value($tag-colors, "tag-background-red")};
+    --ccs-layout-inspector-spacing-ink: #{get-token-value($tag-colors, "tag-color-red")};
     --ccs-layout-inspector-contrast-fill: #{get-token-value($tag-colors, "tag-background-cyan")};
     --ccs-layout-inspector-contrast-ink: #{get-token-value($tag-colors, "tag-color-cyan")};
     --ccs-layout-inspector-target-fill: #{get-token-value($tag-colors, "tag-background-teal")};
@@ -337,8 +337,8 @@ $ccs-annotation-opacity: 0.6;
     );
   }
 
-  .#{$prefix}--layout-inspector__mark--lint {
-    outline: 1px dashed var(--ccs-layout-inspector-lint-ink);
+  .#{$prefix}--layout-inspector__mark--spacing {
+    outline: 1px dashed var(--ccs-layout-inspector-spacing-ink);
   }
 
   .#{$prefix}--layout-inspector__mark--target {
@@ -358,10 +358,10 @@ $ccs-annotation-opacity: 0.6;
     left: 0;
   }
 
-  .#{$prefix}--layout-inspector__mark--lint
+  .#{$prefix}--layout-inspector__mark--spacing
     .#{$prefix}--layout-inspector__mark-label {
-    background-color: var(--ccs-layout-inspector-lint-fill);
-    color: var(--ccs-layout-inspector-lint-ink);
+    background-color: var(--ccs-layout-inspector-spacing-fill);
+    color: var(--ccs-layout-inspector-spacing-ink);
   }
 
   .#{$prefix}--layout-inspector__mark--target
@@ -422,7 +422,7 @@ $ccs-annotation-opacity: 0.6;
     .#{$prefix}--layout-inspector__side,
     .#{$prefix}--layout-inspector__segment-label,
     .#{$prefix}--layout-inspector__mark-label,
-    .#{$prefix}--layout-inspector__mark--lint
+    .#{$prefix}--layout-inspector__mark--spacing
       .#{$prefix}--layout-inspector__mark-label,
     .#{$prefix}--layout-inspector__mark--target
       .#{$prefix}--layout-inspector__mark-label,

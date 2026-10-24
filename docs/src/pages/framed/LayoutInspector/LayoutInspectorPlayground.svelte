@@ -17,13 +17,13 @@
   let open = true;
   let spacing = true;
   let measure = true;
-  let type = true;
+  let typography = true;
   let colors = true;
-  let contrast = false;
-  let overflow = false;
-  let lint = true;
-  let includeCarbon = false;
-  let targets = true;
+  let checkSpacing = true;
+  let checkContrast = false;
+  let checkTargets = true;
+  let checkOverflow = false;
+  let checkCarbon = false;
   let targetSize = 24;
 </script>
 
@@ -37,16 +37,16 @@
             <Checkbox labelText="open" bind:checked={open} />
             <Checkbox labelText="spacing" bind:checked={spacing} />
             <Checkbox labelText="measure" bind:checked={measure} />
-            <Checkbox labelText="type" bind:checked={type} />
+            <Checkbox labelText="typography" bind:checked={typography} />
             <Checkbox labelText="colors" bind:checked={colors} />
-            <Checkbox labelText="lint" bind:checked={lint} />
-            <Checkbox
-              labelText="lint Carbon too"
-              bind:checked={includeCarbon}
-            />
-            <Checkbox labelText="targets" bind:checked={targets} />
-            <Checkbox labelText="contrast" bind:checked={contrast} />
-            <Checkbox labelText="overflow" bind:checked={overflow} />
+          </fieldset>
+          <fieldset class="bx--fieldset">
+            <legend class="bx--label">Checks</legend>
+            <Checkbox labelText="checkSpacing" bind:checked={checkSpacing} />
+            <Checkbox labelText="checkContrast" bind:checked={checkContrast} />
+            <Checkbox labelText="checkTargets" bind:checked={checkTargets} />
+            <Checkbox labelText="checkOverflow" bind:checked={checkOverflow} />
+            <Checkbox labelText="checkCarbon" bind:checked={checkCarbon} />
           </fieldset>
           <NumberInput
             labelText="targetSize"
@@ -76,13 +76,13 @@
   {open}
   {spacing}
   {measure}
-  {type}
+  {typography}
   {colors}
-  {contrast}
-  {overflow}
-  {lint}
-  lintCarbon={includeCarbon}
-  {targets}
+  {checkSpacing}
+  {checkContrast}
+  {checkTargets}
+  {checkOverflow}
+  {checkCarbon}
   targetSize={targetSize ?? 24}
 />
 

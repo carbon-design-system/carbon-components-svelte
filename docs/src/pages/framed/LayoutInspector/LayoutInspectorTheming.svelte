@@ -1,12 +1,12 @@
 <script>
   import {
+    Box,
     Column,
     Grid,
     Row,
     Stack,
     Text,
     Theme,
-    Tile,
     Toggle,
   } from "carbon-components-svelte";
   import { LayoutInspector } from "carbon-components-svelte/devtools";
@@ -21,17 +21,17 @@
         <Theme render="select" />
         <Toggle labelText="Custom colors" size="sm" bind:toggled={custom} />
         <Text>
-          Hover the tile. The card follows the theme, like a Popover. The toggle
+          Hover the box. The card follows the theme, like a Popover. The toggle
           overrides the annotation colors and switches the card to the inverse
           Tooltip colors with custom properties.
         </Text>
       </Stack>
     </Column>
     <Column sm={4} md={4} lg={6}>
-      <!-- The tile's own padding is what the inspector paints. -->
-      <Tile style="padding: 1.5rem;">
+      <!-- The box's own padding is what the inspector paints. -->
+      <Box fill="layer-01" padding={6}>
         <Text type="heading-compact-02">Hover me</Text>
-      </Tile>
+      </Box>
     </Column>
   </Row>
 </Grid>

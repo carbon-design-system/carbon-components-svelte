@@ -1,13 +1,15 @@
 <script>
   /**
-   * @typedef {"grid" | "baseline" | "textBaselines" | "inspect" | "lint" | "contrast" | "targets" | "overflow" | "rtl"} DevToolbarTool
+   * @typedef {"grid" | "baseline" | "textBaselines" | "inspect" | "spacing" | "contrast" | "targets" | "overflow" | "rtl"} DevToolbarTool
    * @typedef {Record<DevToolbarTool, boolean>} DevToolbarTools
-   * @restProps {div}
+   * @event {DevToolbarTools} change Fires when a tool turns on or off from the toolbar or a shortcut.
+   * @restProps {section}
    */
 
   /**
    * Which tools are on.
    * Bind to read or set them from outside, for example to turn on a preset.
+   * Listen to `change` to react only when a person turns a tool on or off.
    * @type {DevToolbarTools}
    * @bindable
    */
@@ -16,7 +18,7 @@
     baseline: false,
     textBaselines: false,
     inspect: false,
-    lint: false,
+    spacing: false,
     contrast: false,
     targets: false,
     overflow: false,
@@ -45,18 +47,18 @@
   /**
    * Props passed to the `GridOverlay` the toolbar renders, for example `{ condensed: true, baselineOffset: 48 }`.
    * The toolbar sets `open`, `columns`, `baseline`, and `textBaselines`; set `baseline` here to change the row step from 8.
-   * @type {Record<string, any>}
+   * @type {Partial<import("../GridOverlay/GridOverlay.svelte").GridOverlayProps>}
    */
   export let gridProps = {};
 
   /**
    * Props passed to the `LayoutInspector` the toolbar renders, for example `{ measureKey: "Shift", cardPlacement: "corner" }`.
    * The toolbar sets `open` and the props for each tool.
-   * @type {Record<string, any>}
+   * @type {Partial<import("../LayoutInspector/LayoutInspector.svelte").LayoutInspectorProps>}
    */
   export let inspectorProps = {};
 
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import BadgeIndicator from "../../BadgeIndicator/BadgeIndicator.svelte";
   import Button from "../../Button/Button.svelte";
   import Close from "../../icons/Close.svelte";
@@ -92,7 +94,7 @@
       key: "I",
       title: "Inspect on hover",
     },
-    { id: "lint", icon: Ruler, key: "L", title: "Off-scale spacing" },
+    { id: "spacing", icon: Ruler, key: "S", title: "Off-scale spacing" },
     {
       id: "contrast",
       icon: Contrast,
@@ -118,13 +120,15 @@
     { label: "Layout overlays", ids: ["grid", "baseline", "textBaselines"] },
     {
       label: "Checks",
-      ids: ["inspect", "lint", "contrast", "targets", "overflow"],
+      ids: ["inspect", "spacing", "contrast", "targets", "overflow"],
     },
     { label: "Direction", ids: ["rtl"] },
   ].map((group) => ({
     label: group.label,
     tools: TOOLS.filter((t) => group.ids.includes(t.id)),
   }));
+
+  const dispatch = createEventDispatcher();
 
   /** @param {{ title: string; key: string }} tool */
   const describe = (tool) =>
@@ -145,6 +149,7 @@
     const next = { ...tools };
     for (const id of ids) next[id] = selected.includes(id);
     tools = next;
+    dispatch("change", tools);
   }
 
   let mounted = false;
@@ -152,13 +157,22 @@
   /** @param {DevToolbarTool} id */
   function toggle(id) {
     tools = { ...tools, [id]: !tools[id] };
+    dispatch("change", tools);
   }
 
   onMount(() => {
     if (persist) {
       try {
         const saved = JSON.parse(localStorage.getItem(persistKey) ?? "null");
-        if (saved?.tools) tools = { ...tools, ...saved.tools };
+        if (saved?.tools) {
+          // Only known tools, so a key saved by an older version is dropped.
+          const next = { ...tools };
+          for (const { id } of TOOLS) {
+            if (typeof saved.tools[id] === "boolean")
+              next[id] = saved.tools[id];
+          }
+          tools = next;
+        }
         if (typeof saved?.expanded === "boolean") expanded = saved.expanded;
       } catch {
         // Ignore unreadable or blocked storage.
@@ -192,12 +206,18 @@
     setRtl = tools.rtl;
   }
 
-  /** @param {KeyboardEvent} e */
-  function onKeydown(e) {
-    if (!shortcuts || !e.altKey || !e.shiftKey || e.ctrlKey || e.metaKey) {
+  /** @param {KeyboardEvent} event */
+  function handleKeydown(event) {
+    if (
+      !shortcuts ||
+      !event.altKey ||
+      !event.shiftKey ||
+      event.ctrlKey ||
+      event.metaKey
+    ) {
       return;
     }
-    const target = /** @type {HTMLElement | null} */ (e.target);
+    const target = /** @type {HTMLElement | null} */ (event.target);
     if (
       target?.isContentEditable ||
       target?.closest?.("input, textarea, select")
@@ -205,34 +225,31 @@
       return;
     }
     // `code`, not `key`: Option+Shift on macOS turns letters into symbols.
-    const letter = e.code.startsWith("Key") ? e.code.slice(3) : "";
+    const letter = event.code.startsWith("Key") ? event.code.slice(3) : "";
     if (letter === "D") {
-      e.preventDefault();
+      event.preventDefault();
       expanded = !expanded;
       return;
     }
     const tool = TOOLS.find((t) => t.key === letter);
     if (tool) {
-      e.preventDefault();
+      event.preventDefault();
       toggle(tool.id);
     }
   }
 
   $: activeCount = TOOLS.filter((t) => tools[t.id]).length;
   $: inspecting = tools.inspect;
-  $: toolbarClass = [$$restProps.class, "bx--dev-toolbar"]
-    .filter(Boolean)
-    .join(" ");
 </script>
 
-<svelte:window on:keydown={onKeydown} />
+<svelte:window on:keydown={handleKeydown} />
 
 <!-- dir="ltr": the bar keeps its order when the RTL tool flips the page. -->
 <section
   aria-label="Developer tools"
   dir="ltr"
   {...$$restProps}
-  class={toolbarClass}
+  class:bx--dev-toolbar={true}
   data-ccs-dev-tool
 >
   <!-- One tooltip group for the whole bar: once a tooltip shows, moving
@@ -277,20 +294,24 @@
         on:click={() => (expanded = false)}
       />
     {:else}
-      <Button
-        kind="ghost"
-        size="small"
-        icon={Tools}
-        iconDescription={`Developer tools${activeCount ? `, ${activeCount} on` : ""}${shortcuts ? " (Alt+Shift+D)" : ""}`}
-        tooltipPosition="top"
-        tooltipAlignment="end"
-        aria-expanded="false"
-        on:click={() => (expanded = true)}
-      >
+      <!-- The badge sits beside the button, not in its `badge` slot: the
+           slot sizes the button to lg, and the bar keeps small buttons.
+           The button's name already says how many tools are on. -->
+      <span class="bx--btn__badge-wrapper">
+        <Button
+          kind="ghost"
+          size="small"
+          icon={Tools}
+          iconDescription={`Developer tools${activeCount ? `, ${activeCount} on` : ""}${shortcuts ? " (Alt+Shift+D)" : ""}`}
+          tooltipPosition="top"
+          tooltipAlignment="end"
+          aria-expanded="false"
+          on:click={() => (expanded = true)}
+        />
         {#if activeCount}
-          <BadgeIndicator slot="badge" count={activeCount} />
+          <BadgeIndicator count={activeCount} aria-hidden="true" />
         {/if}
-      </Button>
+      </span>
     {/if}
   </TooltipGroup>
 </section>
@@ -306,16 +327,16 @@
 <LayoutInspector
   {...inspectorProps}
   open={inspecting ||
-    tools.lint ||
+    tools.spacing ||
     tools.contrast ||
     tools.targets ||
     tools.overflow}
   spacing={inspecting}
-  type={inspecting}
+  typography={inspecting}
   colors={inspecting}
   measure={inspecting}
-  lint={tools.lint}
-  contrast={tools.contrast}
-  targets={tools.targets}
-  overflow={tools.overflow}
+  checkSpacing={tools.spacing}
+  checkContrast={tools.contrast}
+  checkTargets={tools.targets}
+  checkOverflow={tools.overflow}
 />

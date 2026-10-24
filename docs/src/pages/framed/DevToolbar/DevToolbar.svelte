@@ -36,10 +36,7 @@
         <Stack gap={3}>
           <Text type="label-01" color="secondary">Monthly cost</Text>
           <Text type="heading-05">$0.00</Text>
-          <!-- Low contrast on purpose, for the Contrast tool. -->
-          <p style="color: #a8a8a8; font-size: 0.75rem;">
-            Billed at the end of the month
-          </p>
+          <p class="faint">Billed at the end of the month</p>
         </Stack>
       </Tile>
     </Column>
@@ -48,16 +45,26 @@
 
 <DevToolbar />
 
-<!-- docs-only:start -->
 <style>
-  /* The overlay is fixed to the viewport, so drop the frame's side padding
-     to line the Grid up with it, and hide the frame's column guides. */
-  :global(body.framed) {
-    padding-inline: 0;
-  }
-
-  :global(body.framed :not(.bx--content) [class^="bx--col"]) {
-    box-shadow: none;
+  /* Low contrast on purpose, for the contrast check. */
+  .faint {
+    color: #a8a8a8;
+    font-size: 0.75rem;
   }
 </style>
+
+<!-- docs-only:start -->
+<svelte:head>
+  <style>
+    /* The overlay is fixed to the viewport, so drop the frame's side padding
+       to line the Grid up with it, and hide the frame's column guides. */
+    body.framed {
+      padding-inline: 0;
+    }
+
+    body.framed :not(.bx--content) [class^="bx--col"] {
+      box-shadow: none;
+    }
+  </style>
+</svelte:head>
 <!-- docs-only:end -->

@@ -47,14 +47,20 @@ The toolbar is built from this library's own components: each group of tools is 
 | Baseline rows | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="B" /> | 8px baseline rows |
 | Text baselines | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="A" /> | Text baseline marks |
 | Inspect on hover | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="I" /> | Box model, type and color tokens, contrast, and measuring on hover |
-| Off-scale spacing | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="L" /> | Off-scale spacing lint |
+| Off-scale spacing | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="S" /> | Margin, padding, and gap off the spacing scale |
 | Low contrast text | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="C" /> | Text below WCAG AA contrast |
-| Small targets | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="T" /> | Interactive targets under 24px |
+| Small targets | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="T" /> | Interactive targets under 24px that sit too close to others |
 | Overflow | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="O" /> | Horizontal scroll culprits and clipped content |
 | Right-to-left | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="R" /> | `dir="rtl"` on the page |
 | Show or hide the toolbar | <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="D" /> | |
 
 On macOS, <DocKbd label="Alt" /> is <DocKbd label="⌥ Option" />. Shortcuts are ignored while you type in a field. Set `shortcuts={false}` to turn them off.
+
+On Windows, <DocKbd label="Alt" />+<DocKbd label="Shift" /> alone switches the keyboard layout. The shortcuts with a letter still work. If the layout switch gets in the way, set `shortcuts={false}`.
+
+The toolbar's names and tooltips are in English only. That is fine for a developer tool, which only your team sees.
+
+The checks look only near the viewport, so their counts cover the visible area plus one screen above and below, not the whole page. See [Page checks](/components/LayoutInspector#page-checks).
 
 ## Saved state
 
@@ -62,17 +68,23 @@ The toolbar saves which tools are on, and whether it is expanded, to `localStora
 
 ## Configure the tools
 
-Pass props through to the overlay and the inspector with `gridProps` and `inspectorProps`. The toolbar owns `open` and the on/off props for each tool; everything else is yours. This example starts the rows below a 48px UI Shell header, measures with <DocKbd label="Shift" />, and docks the inspector card in the corner.
+Pass props through to the overlay and the inspector with `gridProps` and `inspectorProps`. The toolbar owns `open` and the on/off props for each tool; everything else is yours. Both are typed as the props of `GridOverlay` and `LayoutInspector`, so your editor completes them. This example starts the rows below a 48px UI Shell header, measures with <DocKbd label="Shift" />, and docks the inspector card in the corner.
 
 <FileSource src="/framed/DevToolbar/DevToolbarConfigure" />
 
-Set `baseline` in `gridProps` to change the row step from 8px. The inspector's color and type checks read the page's `--cds-*` custom properties, so token names need a stylesheet that defines them, such as `all.css`.
+Set `baseline` in `gridProps` to change the row step from 8px. To skip third-party widgets in the checks, set `checkIgnore` in `inspectorProps` to a selector that matches them. The inspector's color and type checks read the page's `--cds-*` custom properties, so token names need a stylesheet that defines them, such as `all.css`.
 
 ## Presets
 
 Bind `tools` to read or set the toolbar from outside, for example to turn on a set of tools at once.
 
 <FileSource src="/framed/DevToolbar/DevToolbarPresets" />
+
+To react only when a person turns a tool on or off, listen to `change`. It fires from a toolbar click or a shortcut, with the full `tools` object in `event.detail`. It does not fire when you set `tools` from outside.
+
+```svelte
+<DevToolbar on:change={(e) => console.log("Tools on:", e.detail)} />
+```
 
 ## Right-to-left
 
