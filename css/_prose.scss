@@ -781,6 +781,16 @@ $ccs-prose-variants: (
     border-block-start: 1px solid $border-subtle;
   }
 
+  // Firefox reverts the rule's forced color to its own gray for `hr`, not
+  // a system color, so the rule opts out of forcing and sets CanvasText.
+  // After the rule above, whose shorthand would reset the color.
+  @media (forced-colors: active) {
+    #{$p} hr#{$x} {
+      border-block-start-color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+
   #{$p} img#{$x} {
     max-width: 100%;
     height: auto;
