@@ -219,6 +219,41 @@ describe("SideNav resize", () => {
     await fireEvent.pointerUp(handle, { pointerId: 1 });
   });
 
+  describe("in RTL", () => {
+    beforeEach(() => {
+      document.documentElement.style.direction = "rtl";
+    });
+
+    afterEach(() => {
+      document.documentElement.style.removeProperty("direction");
+    });
+
+    it("widens the nav as the handle is dragged left", async () => {
+      render(SideNavResizeTest, { props: { resizable: true, width: 320 } });
+
+      const handle = getHandle();
+      await fireEvent.pointerDown(handle, { clientX: 400, pointerId: 1 });
+      await fireEvent.pointerMove(handle, { clientX: 300, pointerId: 1 });
+      expect(handle).toHaveAttribute("aria-valuenow", "420");
+
+      await fireEvent.pointerMove(handle, { clientX: 450, pointerId: 1 });
+      expect(handle).toHaveAttribute("aria-valuenow", "270");
+      await fireEvent.pointerUp(handle, { pointerId: 1 });
+    });
+
+    it("widens with ArrowLeft and narrows with ArrowRight", async () => {
+      render(SideNavResizeTest, { props: { resizable: true, width: 320 } });
+
+      const handle = getHandle();
+      await fireEvent.keyDown(handle, { key: "ArrowLeft" });
+      expect(handle).toHaveAttribute("aria-valuenow", "336");
+
+      await fireEvent.keyDown(handle, { key: "ArrowRight" });
+      await fireEvent.keyDown(handle, { key: "ArrowRight" });
+      expect(handle).toHaveAttribute("aria-valuenow", "304");
+    });
+  });
+
   it("rounds a fractional drag position to whole pixels", async () => {
     render(SideNavResizeTest, { props: { resizable: true, width: 256 } });
 
