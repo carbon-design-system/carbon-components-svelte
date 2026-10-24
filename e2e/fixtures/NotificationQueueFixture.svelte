@@ -2,6 +2,7 @@
   import { Button, NotificationQueue } from "carbon-components-svelte";
 
   let queue;
+  let undone = false;
 </script>
 
 <svelte:window
@@ -52,4 +53,17 @@
   >
     Add timed
   </Button>
+  <Button
+    data-testid="nq-action"
+    on:click={() => {
+      queue?.add({
+        title: "Report deleted",
+        timeout: 400,
+        action: { label: "Undo", onClick: () => (undone = true) },
+      });
+    }}
+  >
+    Add with action
+  </Button>
+  <p data-testid="nq-undone">{undone ? "Undone" : "Not undone"}</p>
 </div>

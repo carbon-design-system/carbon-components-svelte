@@ -14,9 +14,51 @@
   function isCenterPosition(value) {
     return value.endsWith("center");
   }
+
+  /**
+   * A toast that holds an action, or that is an `alertdialog`, persists
+   * until the user acts on it or closes it, as in Carbon's usage guidance
+   * and React Spectrum's toast queue. A timer could remove it before a
+   * keyboard or screen reader user reaches it (WCAG 2.2.1).
+   * @param {{ action?: unknown, actionable?: boolean, timeout?: number }} notification
+   * @returns {number}
+   */
+  function resolveTimeout({ action, actionable, timeout }) {
+    return persists({ action, actionable }) ? 0 : (timeout ?? 0);
+  }
+
+  /**
+   * @param {{ action?: unknown, actionable?: boolean }} notification
+   * @returns {boolean}
+   */
+  function persists({ action, actionable }) {
+    return !!action || !!actionable;
+  }
+
+  /**
+   * The toast to drop when the queue is full: the oldest one that does not
+   * persist, so a new toast does not push out an action the user has not
+   * reached. The newest toast always shows.
+   * @param {Array<{ action?: unknown, actionable?: boolean }>} list
+   * @param {boolean} top - Newest first, as in top positions
+   * @returns {number}
+   */
+  function dropIndex(list, top) {
+    const oldestFirst = list.map((_, index) => index);
+    if (top) oldestFirst.reverse();
+    const older = oldestFirst.slice(0, -1);
+    return older.find((index) => !persists(list[index])) ?? oldestFirst[0];
+  }
 </script>
 
 <script>
+  /**
+   * @typedef {object} NotificationAction
+   * @property {string} label - The action button text
+   * @property {(event: MouseEvent) => void} [onClick] - Called when the action is clicked. The toast then closes, unless the handler calls `event.preventDefault()`.
+   * @property {string} [href] - Render the action as a link
+   */
+
   /**
    * @typedef {object} NotificationData
    * @property {string} [id] - Optional id for deduplication
@@ -24,7 +66,7 @@
    * @property {string} [title]
    * @property {string} [subtitle]
    * @property {string} [caption]
-   * @property {number} [timeout]
+   * @property {number} [timeout] - Ignored when the notification has an `action` or is `actionable`
    * @property {boolean} [lowContrast]
    * @property {string} [closeButtonDescription]
    * @property {string} [statusIconDescription]
@@ -35,6 +77,7 @@
    * @property {boolean} [actionable] - Render as an `alertdialog` that takes focus and closes on Escape
    * @property {boolean} [focusOnOpen]
    * @property {boolean} [closeOnEscape]
+   * @property {NotificationAction} [action] - Add an action button. The toast keeps focus where it is and does not time out.
    */
 
   /**
@@ -64,10 +107,25 @@
   /**
    * Specify the maximum number of notifications to display.
    * When this limit is exceeded, the oldest notification is automatically removed.
+   * Notifications without an `action` or `actionable` go first.
    */
   export let maxNotifications = 3;
 
+  /** Specify the accessible name of the notifications landmark */
+  export let labelText = "Notifications";
+
+  import { focusActionableNotification } from "../utils/dismissible-notification.js";
+  import NotificationActionButton from "./NotificationActionButton.svelte";
   import ToastNotification from "./ToastNotification.svelte";
+
+  /** @type {null | HTMLDivElement} */
+  let queueRef = null;
+
+  /**
+   * Where F6 took focus from, so F6 inside the queue can send it back.
+   * @type {null | HTMLElement}
+   */
+  let prevFocus = null;
 
   /** @type {Array<NotificationData & { id: string }>} */
   let notifications = [];
@@ -95,16 +153,13 @@
     /** @type {NotificationData & { id: string }} */
     const newNotification = { ...notification, id };
 
-    if (isTopPosition(position)) {
-      notifications = [newNotification, ...notifications];
-      if (notifications.length > maxNotifications) {
-        notifications.splice(maxNotifications);
-      }
-    } else {
-      notifications = [...notifications, newNotification];
-      if (notifications.length > maxNotifications) {
-        notifications.splice(0, notifications.length - maxNotifications);
-      }
+    const top = isTopPosition(position);
+    notifications = top
+      ? [newNotification, ...notifications]
+      : [...notifications, newNotification];
+
+    while (notifications.length > Math.max(maxNotifications, 0)) {
+      notifications.splice(dropIndex(notifications, top), 1);
     }
     notifications = notifications;
 
@@ -147,10 +202,66 @@
   export function clear() {
     notifications = [];
   }
+
+  /**
+   * @param {string} id
+   * @param {NotificationAction} action
+   * @param {MouseEvent} event
+   */
+  function handleAction(id, action, event) {
+    action.onClick?.(event);
+    if (!event.defaultPrevented) remove(id);
+  }
+
+  /**
+   * F6 and Shift+F6 move focus into the queue and back, as with React
+   * Aria's toast region, so a toast's action is reachable without
+   * stealing focus when it opens.
+   * @param {KeyboardEvent} event
+   */
+  function handleWindowKeydown(event) {
+    if (event.key !== "F6" || event.defaultPrevented) return;
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (!queueRef) return;
+
+    const active = document.activeElement;
+
+    if (queueRef.contains(active)) {
+      if (!prevFocus?.isConnected) return;
+      event.preventDefault();
+      prevFocus.focus();
+      prevFocus = null;
+      return;
+    }
+
+    const toasts = Array.from(
+      queueRef.querySelectorAll(".bx--toast-notification"),
+    );
+    // The newest toast first: `add` puts it nearest the screen edge.
+    if (!isTopPosition(position)) toasts.reverse();
+
+    for (const toast of toasts) {
+      if (!(toast instanceof HTMLElement)) continue;
+      focusActionableNotification(toast);
+      if (queueRef.contains(document.activeElement)) {
+        event.preventDefault();
+        prevFocus =
+          active instanceof HTMLElement && active !== document.body
+            ? active
+            : null;
+        return;
+      }
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleWindowKeydown} />
 
 {#if notifications.length > 0}
   <div
+    bind:this={queueRef}
+    role="region"
+    aria-label={labelText}
     class:bx--notification-queue={true}
     class:bx--notification-queue--top-left={position === "top-left"}
     class:bx--notification-queue--top-center={position === "top-center"}
@@ -173,8 +284,30 @@
     style:z-index={zIndex}
   >
     <!-- `id` keys the queue; spreading it would set duplicate DOM ids across queues. -->
-    {#each notifications as { id, ...notification } (id)}
-      <ToastNotification {...notification} on:close={() => remove(id)} />
+    {#each notifications as { id, action, ...notification } (id)}
+      {@const timeout = resolveTimeout({ action, ...notification })}
+      {#if action}
+        <ToastNotification
+          {...notification}
+          {timeout}
+          on:close={() => remove(id)}
+        >
+          <svelte:fragment slot="actions">
+            <NotificationActionButton
+              href={action.href}
+              on:click={(event) => handleAction(id, action, event)}
+            >
+              {action.label}
+            </NotificationActionButton>
+          </svelte:fragment>
+        </ToastNotification>
+      {:else}
+        <ToastNotification
+          {...notification}
+          {timeout}
+          on:close={() => remove(id)}
+        />
+      {/if}
     {/each}
   </div>
 {/if}
