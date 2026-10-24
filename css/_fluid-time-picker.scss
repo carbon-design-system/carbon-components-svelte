@@ -344,23 +344,13 @@
     inline-size: calc(100% - to-rem(32px));
   }
 
-  .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--invalid):not(
-      .#{$prefix}--time-picker--fluid--warning
-    )
+  // The focused cell draws focus in every state, inside the composite
+  // field's invalid or warning outline, as a fluid range DatePicker's cells
+  // do; without it, a field in either state showed no focus at all.
+  .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--text-input__field-wrapper:focus-within {
     @include focus-outline("outline");
-  }
-
-  // Invalid/warn outlines are on the composite field; suppress per-cell
-  // focus rings from fluid-select while the group is in error/warn state.
-  .#{$prefix}--time-picker--fluid--invalid
-    .#{$prefix}--select--fluid
-    .#{$prefix}--select-input__wrapper:focus-within,
-  .#{$prefix}--time-picker--fluid--warning
-    .#{$prefix}--select--fluid
-    .#{$prefix}--select-input__wrapper:focus-within {
-    outline: none;
   }
 
   .#{$prefix}--time-picker--fluid--skeleton {
