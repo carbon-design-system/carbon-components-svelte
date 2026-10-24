@@ -515,7 +515,12 @@
   // Use CSS custom properties instead of dynamic style injection for better
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
-  $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
+  // The button's width per size until it's measured, so a menu open in the
+  // server's markup joins its button as it does once mounted.
+  const BUTTON_WIDTHS = { xs: "1.5rem", sm: "2rem", xl: "3rem" };
+  $: overflowMenuOptionsAfterWidth = buttonWidth
+    ? `${buttonWidth}px`
+    : (BUTTON_WIDTHS[effectiveSize] ?? "2.5rem");
   $: maxHeightStyle = toCssLength(maxHeight);
 
   function handleOutsideClick(event) {
