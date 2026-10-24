@@ -77,12 +77,15 @@
     row-gap: $carbon--spacing-05;
   }
 
-  // The content sits on the inverse (dark) popover surface, so links must use
-  // the inverse link color across every state to remain legible. Mirrors the
-  // link treatment Carbon applies inside `.bx--tooltip`.
+  // The content sits on the inverse (dark) popover surface, so links use
+  // the inverse link colors in every state, as v11's toggletip does.
   .#{$prefix}--toggletip-content .#{$prefix}--link,
   .#{$prefix}--toggletip-content .#{$prefix}--link:visited {
     color: $link-inverse;
+  }
+
+  .#{$prefix}--toggletip-content .#{$prefix}--link--visited:visited {
+    color: ccs-token("link-inverse-visited");
   }
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
@@ -93,17 +96,16 @@
 
     .#{$prefix}--toggletip-content .#{$prefix}--link:hover,
     .#{$prefix}--toggletip-content .#{$prefix}--link:visited:hover {
-      color: $link-inverse;
-    }
-
-    .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
-      color: $text-inverse;
+      color: ccs-token("link-inverse-hover");
     }
   }
 
+  // A pressed link keeps its color, as in v11. The `:hover` entry restates
+  // it over the base link's pressed hover rule.
   .#{$prefix}--toggletip-content .#{$prefix}--link:active,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited {
-    color: $text-inverse;
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
+    color: $link-inverse;
   }
 
   // A pressed link shows the focus ring too (v11), so it needs the inverse one.
