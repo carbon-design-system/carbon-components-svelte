@@ -437,7 +437,7 @@
     td,
   .#{$prefix}--data-table--selected:first-of-type td { // ccs: flatten
     // Top border acts as separator from thead
-    border-top: 1px solid $layer-active;
+    border-top: 1px solid $border-subtle-selected;
   }
 
   .#{$prefix}--data-table--zebra
