@@ -24,7 +24,7 @@ description: TooltipGroup groups tooltip triggers so that once one tooltip is op
 
 ## Basic
 
-Wrap related tooltip triggers in a `TooltipGroup`. The first tooltip opens after the enter delay. While it is open, or shortly after it closes, hovering or focusing another trigger in the group opens that one right away, without the fade-in, so it looks like one tooltip moving along the row. Moving the pointer off the row hides the tooltip at once. Tabbing through the row with the keyboard shows each tooltip immediately, also without the fade-in.
+Wrap related tooltip triggers in a `TooltipGroup`. The first tooltip opens after the enter delay. While it is open, or shortly after it closes, hovering or focusing another trigger in the group opens that one right away, without the fade-in, so it looks like one tooltip moving along the row. Moving the pointer off the row hides the tooltip after a short delay, so the pointer can also move onto the tooltip and rest there. Tabbing through the row with the keyboard shows each tooltip immediately, also without the fade-in.
 
 `TooltipGroup` renders no element of its own, so it doesn't affect layout. Use it inside or around whatever arranges the triggers.
 
@@ -108,7 +108,7 @@ Set `enterDelayMs`, `leaveDelayMs`, and `skipDelayMs` to change the timing for e
 | Prop | Default | Effect |
 | --- | --- | --- |
 | `enterDelayMs` | `100` | Delay before the first tooltip in the group opens |
-| `leaveDelayMs` | `0` for icon tooltips, `300` for `Tooltip` and `TooltipDefinition` | Delay before an open tooltip closes. `Tooltip` and `TooltipDefinition` wait so the pointer can move onto them |
+| `leaveDelayMs` | `100` for icon tooltips, `300` for `Tooltip` and `TooltipDefinition` | Delay before an open tooltip closes, so the pointer can move onto it |
 | `skipDelayMs` | `300` | How long after a tooltip closes that the next one in the group still opens instantly |
 
 In this group the first tooltip takes half a second to appear, and handoff keeps working for a full second after the last one closes.
