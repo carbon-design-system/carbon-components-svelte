@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import BigNumber from "./BigNumber.test.svelte";
 import BigNumberProps from "./BigNumberProps.test.svelte";
 
@@ -87,6 +87,22 @@ describe("BigNumber", () => {
       expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
         "42%",
       );
+    });
+
+    it("sets the percent sign apart so it takes the total's type", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("percentage");
+      expect(
+        el.querySelector(
+          ".bx--big-number__value .bx--big-number__percentage-mark",
+        ),
+      ).toHaveTextContent("%");
+      expect(
+        screen
+          .getByTestId("basic")
+          .querySelector(".bx--big-number__percentage-mark"),
+      ).toBeNull();
     });
 
     it("hides the total even when it would otherwise be shown", () => {
@@ -395,6 +411,32 @@ describe("BigNumber", () => {
 
       const el = screen.getByTestId("no-footer");
       expect(el.querySelector(".bx--big-number__footer")).toBeNull();
+    });
+  });
+
+  describe("action slot", () => {
+    it("renders the action at the end of the value row", () => {
+      render(BigNumber);
+
+      const row = screen
+        .getByTestId("action")
+        .querySelector<HTMLElement>(".bx--big-number__value-row");
+      assert(row);
+      const action = row.lastElementChild;
+      expect(action).toHaveClass("bx--big-number__action");
+      expect(
+        within(row).getByRole("link", { name: "View report" }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders no action wrapper without slot content", () => {
+      render(BigNumber);
+
+      expect(
+        screen
+          .getByTestId("no-footer")
+          .querySelector(".bx--big-number__action"),
+      ).toBeNull();
     });
   });
 

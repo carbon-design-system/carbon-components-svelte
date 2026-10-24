@@ -18,28 +18,79 @@
   .#{$prefix}--big-number__label {
     display: flex;
     align-items: center;
-    gap: $carbon--spacing-02;
-    margin-block-end: $carbon--spacing-02;
+    gap: $carbon--spacing-03;
     color: $text-secondary;
 
+    @include type-style("label-01");
+  }
+
+  // Carbon v11 sizes: the value, and the total and percent sign beside it,
+  // step up together; the label steps up at xl only.
+  //
+  // The row's gap steps up with them, since a fixed 4px gets lost beside
+  // 42px and 54px numerals. The gap is about 0.15 of the value's font size
+  // (4px, 6px, 8px) between the value, trend icon and total. The action
+  // sits twice as far, about 0.3 (8px, 12px, 16px).
+  .#{$prefix}--big-number__value-row {
+    --ccs-big-number-gap: #{$carbon--spacing-02};
+
+    display: flex;
+    align-items: baseline;
+    gap: var(--ccs-big-number-gap);
+    color: $text-primary;
+
+    @include type-style("heading-04");
+  }
+
+  .#{$prefix}--big-number__denominator,
+  .#{$prefix}--big-number__percentage-mark {
     @include type-style("body-compact-01");
   }
 
-  .#{$prefix}--big-number__value-row {
+  .#{$prefix}--big-number--lg {
+    .#{$prefix}--big-number__value-row {
+      --ccs-big-number-gap: #{$carbon--spacing-02 + $carbon--spacing-01};
+
+      @include type-style("heading-06");
+    }
+
+    .#{$prefix}--big-number__denominator,
+    .#{$prefix}--big-number__percentage-mark {
+      @include type-style("heading-03");
+    }
+  }
+
+  .#{$prefix}--big-number--xl {
+    .#{$prefix}--big-number__label {
+      @include type-style("body-compact-01");
+    }
+
+    .#{$prefix}--big-number__value-row {
+      --ccs-big-number-gap: #{$carbon--spacing-03};
+
+      @include type-style("heading-07");
+    }
+
+    .#{$prefix}--big-number__denominator,
+    .#{$prefix}--big-number__percentage-mark {
+      @include type-style("heading-04");
+    }
+  }
+
+  // The action shares the value's baseline, as the total does: a link's
+  // text sits on it, and an icon-only button, which has no text, gets
+  // a baseline synthesized from its icon's bottom edge, so the icon
+  // stands on the line like a glyph.
+  .#{$prefix}--big-number__action {
     display: flex;
     align-items: baseline;
-    gap: $carbon--spacing-02;
-    color: $text-primary;
-
-    @include type-style("heading-05");
+    margin-inline-start: var(--ccs-big-number-gap);
   }
 
-  .#{$prefix}--big-number--lg .#{$prefix}--big-number__value-row {
-    @include type-style("heading-06");
-  }
-
-  .#{$prefix}--big-number--xl .#{$prefix}--big-number__value-row {
-    @include type-style("heading-07");
+  // An icon-only button's padding already sets its icon apart, so the
+  // button sits at the row's gap, as Carbon's icon button does.
+  .#{$prefix}--big-number__action > .#{$prefix}--btn--icon-only {
+    margin-inline-start: calc(-1 * var(--ccs-big-number-gap));
   }
 
   // The tooltip icon has no trigger text next to it, so the vendor
@@ -59,12 +110,6 @@
   // caret lands 1px left of the icon's true center.
   .#{$prefix}--big-number__tooltip .#{$prefix}--tooltip--top {
     transform: translateX(1px);
-  }
-
-  .#{$prefix}--big-number__denominator {
-    color: $text-secondary;
-
-    @include type-style("body-compact-01");
   }
 
   .#{$prefix}--big-number__trend-icon {

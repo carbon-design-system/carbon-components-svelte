@@ -134,6 +134,10 @@
 </BigNumber>
 <BigNumber labelText="No footer" value={42} data-testid="no-footer" />
 
+<BigNumber labelText="Action" value={42} total={100} data-testid="action">
+  <a slot="action" href="/reports/latency">View report</a>
+</BigNumber>
+
 <BigNumber labelText="Loading" value={42} loading data-testid="loading" />
 
 <BigNumber
