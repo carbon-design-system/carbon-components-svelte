@@ -71,6 +71,19 @@ describe("all.css system theme", () => {
     }
   });
 
+  it("declares each page theme's color scheme, light ones included", () => {
+    for (const [theme, scheme] of [
+      ["white", "light"],
+      ["g10", "light"],
+      ["g80", "dark"],
+      ["g90", "dark"],
+      ["g100", "dark"],
+    ]) {
+      expect(page(rules, theme).get("color-scheme"), theme).toBe(scheme);
+    }
+    expect(system(false).get("color-scheme")).toBe("light");
+  });
+
   // The dark block reuses the Gray 100 mixin: it adds what Gray 100
   // changes from White, not a second full set.
   it("declares only Gray 100's difference from White in the media query", () => {
