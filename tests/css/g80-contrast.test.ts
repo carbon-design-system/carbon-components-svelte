@@ -50,3 +50,50 @@ describe("Gray 80 contrast", () => {
     30_000,
   );
 });
+
+// Gray 80's layer-01 is Gray 90's layer-02, so its states take Gray 90's
+// values for the same surface. Each one stands apart from the color it
+// replaces by 1.2:1, about Gray 90's smallest step, and a selected border
+// shows on a selected layer. Hovered and selected rows switch to
+// text-primary, so it holds 4.5:1 on all of them.
+const STATES: [state: string, surface: string, min: number][] = [
+  ["layer-hover", "layer", 1.2],
+  ["layer-selected", "layer", 1.2],
+  ["layer-selected-hover", "layer-selected", 1.2],
+  ["field-hover", "field", 1.2],
+  ["border-subtle-selected", "layer-selected", 1.5],
+];
+
+describe("Gray 80 layer states", () => {
+  it.each(["01", "02", "03"])(
+    "level %s states read on their surface",
+    async (level) => {
+      const tokens = (await themeTokens()).themes.g80;
+      const color = (name: string) => {
+        const value = tokens[`--cds-${name}-${level}`];
+        expect(value, `${name}-${level}`).toMatch(/^#[\da-f]{6}$/);
+        return value;
+      };
+      for (const [state, surface, min] of STATES) {
+        expect(
+          contrast(color(state), color(surface)),
+          `${state}-${level} on ${surface}-${level}`,
+        ).toBeGreaterThanOrEqual(min);
+      }
+      for (const fill of [
+        "layer",
+        "layer-hover",
+        "layer-selected",
+        "layer-selected-hover",
+        "field",
+        "field-hover",
+      ]) {
+        expect(
+          contrast(tokens["--cds-text-primary"], color(fill)),
+          `text-primary on ${fill}-${level}`,
+        ).toBeGreaterThanOrEqual(4.5);
+      }
+    },
+    30_000,
+  );
+});

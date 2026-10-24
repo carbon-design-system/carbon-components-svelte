@@ -1,9 +1,10 @@
 // ccs: Carbon v11 numbered layer tokens (layer-01, border-subtle-01, ...).
 // Tokens with a v10 source copy that token from each theme, so renaming a v10
 // reference to its v11 name changes no pixels. Net-new tokens take their
-// @carbon/themes v11 values. v11 has no g80 theme, so g80 values are derived:
-// each takes its g80 sibling (layer-03 <- layer-02) plus the step g90 has
-// between the same two siblings.
+// @carbon/themes v11 values. v11 has no g80 theme. Its surfaces are g90's one
+// level up (layer-01 is g90's layer-02), so each g80 token takes g90's value
+// for the same surface: level 3 matches g90's level 3, and fields sit one
+// step above the layer below them. See the g80 map in _ccs-v11-values.scss.
 
 $ccs-v11-derived-tokens: (
   layer-01: 'ui-01',
@@ -81,27 +82,27 @@ $ccs-v11-new-tokens: (
   ),
   g80: (
     layer-03: #6f6f6f,
-    layer-active-03: #525252,
-    layer-hover-03: #7a7a7a,
-    layer-selected-03: #6f6f6f,
-    layer-selected-hover-02: #7a7a7a,
-    layer-selected-hover-03: #5e5e5e,
-    layer-accent-02: #8d8d8d,
-    layer-accent-03: #a8a8a8,
-    layer-accent-active-02: #525252,
-    layer-accent-active-03: #6f6f6f,
-    layer-accent-hover-02: #7a7a7a,
-    layer-accent-hover-03: #999999,
-    field-03: #8d8d8d,
-    field-hover-03: #636363,
-    border-subtle-03: #6f6f6f,
+    layer-active-03: #393939,
+    layer-hover-03: #5e5e5e,
+    layer-selected-03: #525252,
+    layer-selected-hover-02: #5e5e5e,
+    layer-selected-hover-03: #636363,
+    layer-accent-02: #6f6f6f,
+    layer-accent-03: #8d8d8d,
+    layer-accent-active-02: #393939,
+    layer-accent-active-03: #525252,
+    layer-accent-hover-02: #5e5e5e,
+    layer-accent-hover-03: #7a7a7a,
+    field-03: #6f6f6f,
+    field-hover-03: #5e5e5e,
+    border-subtle-03: #8d8d8d,
     border-strong-02: #c6c6c6,
-    border-strong-03: #e0e0e0,
-    border-subtle-selected-02: #6f6f6f,
-    border-subtle-selected-03: #6f6f6f,
+    border-strong-03: #c6c6c6,
+    border-subtle-selected-02: #a8a8a8,
+    border-subtle-selected-03: #a8a8a8,
     border-tile-01: #8d8d8d,
-    border-tile-02: #a8a8a8,
-    border-tile-03: #c6c6c6,
+    border-tile-02: #8d8d8d,
+    border-tile-03: #a8a8a8,
   ),
   g90: (
     layer-03: #6f6f6f,
