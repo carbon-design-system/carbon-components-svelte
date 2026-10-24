@@ -49,8 +49,10 @@
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
+    // Previous and next point to the inline start and end.
     svg {
       fill: currentColor;
+      @include ccs-mirror-rtl;
     }
 
     &:focus {

@@ -666,3 +666,72 @@ test.describe("right-to-left layout", () => {
     expectMirrored(await boxes(page, parts), mirror(ltr, axis));
   });
 });
+
+// Icons that point forward or back, by meaning, mirror in RTL. A `dir="ltr"`
+// region inside an RTL page turns the mirror off again.
+const MIRRORED_ICONS = {
+  clickableTile: "[data-testid=clickable-tile] .bx--tile--icon",
+  paginationBack:
+    "[data-testid=pagination] .bx--pagination__button--backward svg",
+  paginationForward:
+    "[data-testid=pagination] .bx--pagination__button--forward svg",
+  paginationNavBack:
+    "[data-testid=pagination-nav] .bx--pagination-nav__list-item:first-child svg",
+  paginationNavForward:
+    "[data-testid=pagination-nav] .bx--pagination-nav__list-item:last-child svg",
+  carouselPrevious:
+    "[data-testid=carousel] .bx--carousel__button--previous svg",
+  carouselNext: "[data-testid=carousel] .bx--carousel__button--next svg",
+  tabsNext: "[data-testid=tabs] .bx--tab--overflow-nav-button--next svg",
+  stepperBack: "[data-testid=stepper] .bx--btn--ghost .bx--btn__icon",
+  stepperNext: "[data-testid=stepper] .bx--btn--primary .bx--btn__icon",
+  aiLabelRevert: "[data-testid=ai-label] .bx--ai-label__revert svg",
+  ownIcon: "[data-testid=own-icon] .bx--icon--mirror-rtl",
+};
+
+const UNMIRRORED_ICONS = {
+  launch: "[data-testid=own-icon] svg:not(.bx--icon--mirror-rtl)",
+  islandOwnIcon: "[data-testid=ltr-island] .bx--icon--mirror-rtl",
+  islandPaginationNav: "[data-testid=ltr-island] .bx--btn__icon",
+};
+
+/** Each icon's horizontal scale: -1 when mirrored, 1 when not. */
+function iconScales(page: Page, icons: Record<string, string>) {
+  return page.evaluate((icons) => {
+    const result: Record<string, number | null> = {};
+    for (const [name, selector] of Object.entries(icons)) {
+      const node = document.querySelector(selector);
+      result[name] = node
+        ? new DOMMatrix(getComputedStyle(node).transform).a
+        : null;
+    }
+    return result;
+  }, icons);
+}
+
+test.describe("right-to-left icons", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/rtl-icons.html");
+    await expect(
+      page.locator(MIRRORED_ICONS.tabsNext),
+      "tabs overflow",
+    ).toBeAttached();
+  });
+
+  test("mirrors forward and back icons, and nothing else", async ({ page }) => {
+    const all = { ...MIRRORED_ICONS, ...UNMIRRORED_ICONS };
+    const ltr = await iconScales(page, all);
+    for (const [name, scale] of Object.entries(ltr)) {
+      expect.soft(scale, `${name} in LTR`).toBe(1);
+    }
+
+    await setDirection(page, "rtl");
+    const rtl = await iconScales(page, all);
+    for (const name of Object.keys(MIRRORED_ICONS)) {
+      expect.soft(rtl[name], `${name} in RTL`).toBe(-1);
+    }
+    for (const name of Object.keys(UNMIRRORED_ICONS)) {
+      expect.soft(rtl[name], `${name} in RTL`).toBe(1);
+    }
+  });
+});

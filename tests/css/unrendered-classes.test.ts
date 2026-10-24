@@ -23,6 +23,7 @@ const PUBLIC_UTILITIES = new Set([
   "bx--hang--end",
   "bx--hang--left",
   "bx--hang--right",
+  "bx--icon--mirror-rtl",
 ]);
 
 // Styled but never rendered, as found when this check landed. Removing the

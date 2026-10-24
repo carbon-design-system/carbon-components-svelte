@@ -300,6 +300,11 @@ $ai-label-sizes: (
     padding: to-rem(3px);
   }
 
+  // The undo arrow points back, to the inline start.
+  .#{$prefix}--ai-label__revert .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
     .#{$prefix}--ai-label .#{$prefix}--toggletip-button:hover {

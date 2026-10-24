@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Sets the transform `ccs-mirror-rtl` reads from the nearest `dir`, and
+/// adds `bx--icon--mirror-rtl` so an app can mirror its own directional
+/// icons. A custom property, not a `[dir="rtl"]` selector alone, so a
+/// `dir="ltr"` region inside an RTL page stops the mirror. Emits last so the
+/// class wins a tie with a component's own icon rule.
+/// @access private
+/// @group components
+@mixin mirror-rtl {
+  [dir="rtl"] {
+    --ccs-mirror-rtl: scaleX(-1);
+  }
+
+  [dir="ltr"] {
+    --ccs-mirror-rtl: initial;
+  }
+
+  .#{$prefix}--icon--mirror-rtl {
+    @include ccs-mirror-rtl;
+  }
+}
+
+@include exports("mirror-rtl") {
+  @include mirror-rtl;
+}

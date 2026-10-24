@@ -304,3 +304,18 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
     }
   }
 }
+
+/// Mirrors a directional icon, such as a next arrow, under a `[dir="rtl"]`
+/// ancestor. `--ccs-mirror-rtl` holds `scaleX(-1)` and inherits from the
+/// nearest `dir`, so a nested `dir="ltr"` turns it off again. `$transform`
+/// is the element's own transform, such as a rotation; it applies first,
+/// and the mirror composes with it. Include it after the rule's
+/// declarations: Sass splits a rule around the nested one.
+/// @access private
+/// @group global-helpers
+/// @example @include ccs-mirror-rtl;
+@mixin ccs-mirror-rtl($transform: null) {
+  [dir="rtl"] & {
+    transform: var(--ccs-mirror-rtl,) $transform;
+  }
+}

@@ -217,6 +217,11 @@ $css--helpers: true;
     height: $size-lg;
   }
 
+  // ccs: previous and next point to the inline start and end.
+  .#{$prefix}--pagination__button .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
   .#{$prefix}--pagination__button:focus,
   .#{$prefix}--btn--ghost:focus.#{$prefix}--pagination__button {
     @include focus-outline('outline');

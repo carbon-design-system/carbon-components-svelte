@@ -390,6 +390,8 @@
 
     .#{$prefix}--tab--overflow-nav-button svg {
       fill: $icon-primary;
+      // ccs: the chevrons point to the start and end of the tab list.
+      @include ccs-mirror-rtl;
     }
 
     .#{$prefix}--tabs--scrollable__nav-item {

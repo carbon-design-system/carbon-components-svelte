@@ -413,6 +413,8 @@
     height: to-rem(20px);
     fill: ccs-token("icon-interactive");
     @include ccs-inset-inline($end: $carbon--spacing-04);
+    // Carbon's icon here is an arrow to the destination.
+    @include ccs-mirror-rtl;
   }
 
   .#{$prefix}--tile--clickable.#{$prefix}--link--disabled
